@@ -1,0 +1,145 @@
+import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:flutter/material.dart';
+import 'package:n42appv2/generated/l10n.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+class NavImportWallet extends StatefulWidget {
+  dynamic onTap;
+  NavImportWallet({this.onTap,super.key});
+
+  @override
+  State<NavImportWallet> createState() => _NavImportWalletState();
+}
+
+class _NavImportWalletState extends State<NavImportWallet> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        //导入方式
+        Text(
+          S.of(context).g_key_ex_keystore_16,
+          style: TextStyle(
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.mainTextColor.name),
+              fontWeight: FontWeight.bold,
+              fontSize: ScreenUtil().setSp(36.0)),
+        ),
+        SizedBox(
+          height: ScreenUtil().setWidth(20.0),
+        ),
+        InkWell(
+          onTap: (){
+            widget.onTap(1);
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0), vertical: ScreenUtil().setWidth(30.0)),
+            margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20.0)),
+                color: Colors.transparent,
+                border: Border.fromBorderSide(BorderSide(
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.itemLineColor.name),
+                    width: ScreenUtil().setWidth(1.0)))),
+            child: Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(right: ScreenUtil().setWidth(20.0)),
+                  height: ScreenUtil().setWidth(50.0),
+                  width:ScreenUtil().setWidth(50.0),
+                  child: Image.asset("assets/wallet/mnemonic.png",
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        S.of(context).g_key_12,
+                        style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                          fontSize: ScreenUtil().setSp(28.0),
+                        ),
+                      ),
+                      SizedBox(
+                        height: ScreenUtil().setWidth(12),
+                      ),
+
+                      /// "加密的私钥json",
+                      Text(
+                        S.of(context).w_key_8,
+                        style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                          fontSize: ScreenUtil().setSp(26.0),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        InkWell(
+          onTap: (){
+            widget.onTap(0);
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0), vertical: ScreenUtil().setWidth(30.0)),
+            margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20.0)),
+                color: Colors.transparent,
+                border: Border.fromBorderSide(BorderSide(
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.itemLineColor.name),
+                    width: ScreenUtil().setWidth(1.0)))),
+            child: Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(right: ScreenUtil().setWidth(20.0)),
+                  height: ScreenUtil().setWidth(50.0),
+                  width:ScreenUtil().setWidth(50.0),
+                  child: Image.asset("assets/wallet/keystore.png",
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Keystore",
+                        style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                          fontSize: ScreenUtil().setSp(28.0),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 6,
+                      ),
+
+                      /// "加密的私钥json",
+                      Text(
+                        S.of(context).g_key_ex_keystore_15,
+                        style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                          fontSize: ScreenUtil().setSp(26.0),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}

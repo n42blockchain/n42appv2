@@ -1,0 +1,193 @@
+name: n42appv2
+description: "A new Flutter project."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.2
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  #提供国际化和本地化工具，包括消息翻译、复数和性别、日期/数字格式和解析以及双向文本。
+  intl: 0.20.2
+  provider: ^6.1.4
+  #数据库
+  sqflite: ^2.4.1
+  path: ^1.9.0
+  #文件路径
+  path_provider: ^2.1.5
+  #.env文件配置
+  #flutter_dotenv: ^5.1.0
+  #缓存
+  shared_preferences: ^2.5.3
+  #屏幕适配
+  flutter_screenutil: ^5.9.3
+  #上拉加载 下拉刷新
+  #flutter_easyrefresh: ^2.2.1
+  easy_refresh: ^3.4.0
+
+  dio: ^5.7.0
+  #http: ^1.2.2
+  bitcoin_base: ^5.3.0
+  #监听网络状态 wifi / 4G 5G
+  connectivity_plus: 6.1.1
+  #图片缓存
+  cached_network_image: ^3.4.1
+  #数据类型验证，是否是double、int、datetiem、url等数据
+  validators: ^3.0.0
+  webview_flutter: ^4.13.0
+  #flutter_inappwebview: ^6.1.5
+  event_bus: ^2.0.1
+  #弹出提示信息
+  fluttertoast: ^8.2.12
+  #Dapp钱包连接
+  reown_walletkit: ^1.0.3
+  #小数计算
+  decimal: ^2.3.3
+  #Flutter常用工具类库
+  flustars_flutter3: ^3.0.0
+  #eip712 签名包
+  eth_sig_util: ^0.0.9
+  web3dart: ^2.7.3
+  fast_base58: ^0.2.1
+  bech32: ^0.2.2
+  #加密
+  crypto: ^3.0.6
+  protobuf: ^3.1.0
+  protoc_plugin: ^21.1.2
+  #扫描二维码
+  #scan: ^1.6.0
+  qr_code_scanner_plus: ^2.0.6
+  #权限管理
+  permission_handler: ^11.3.1
+  #item删除
+  flutter_slidable: ^3.1.2
+  #生成二维码
+  qr_flutter: ^4.1.0
+  #分享图片
+  #share_files_and_screenshot_widgets: ^1.0.6
+  #分享
+  share_plus: ^10.1.3
+  #日期格式化
+  date_format: ^2.0.9
+  #文本样式html转换
+  simple_html_css: ^5.0.0
+  #圆形单选框
+  roundcheckbox: ^2.0.5
+  #选择图片和拍照
+  image_picker: ^1.1.2
+  #选择文件
+  file_picker: ^8.1.6
+  #图片剪裁
+  #crop_your_image: ^2.0.0
+  pro_image_editor: ^7.1.0
+  #指纹、面部验证
+  local_auth: ^2.3.0
+  #打开商店
+  rate_us_on_store: ^0.0.4
+  #手机系统信息
+  device_info_plus: ^11.2.0
+  #包信息
+  package_info_plus: ^8.1.2
+  #获取视频缩略图
+  video_compress: ^3.1.4
+  #video_thumbnail: ^0.5.3
+  #视频播放器
+  video_player: ^2.9.2
+  chewie: ^1.8.5
+  #面部识别
+  flutter_face_api: ^7.2.407
+  flutter_face_core_basic: ^7.2.235
+  #自定义弹出菜单
+  custom_pop_up_menu: ^1.2.4
+  #本地消息通知
+  flutter_local_notifications: ^19.4.2
+  #折线图、柱状图登
+  fl_chart: ^0.70.0
+  #AES加密
+  encrypt: ^5.0.3
+  #aes文件加密
+  aes_crypt_null_safe: ^3.0.0
+  #文件拓展icon
+  file_icon: ^1.0.0
+  #图片浏览
+  extended_image: ^9.0.9
+  #打开本地文件
+  open_filex: ^4.6.0
+  #手势密码
+  gesture_password_widget: ^2.0.1
+  #深度连接
+  #app_links: ^3.4.3
+  app_links: ^6.1.1
+
+  firebase_core: ^3.6.0
+  #google 推送
+  firebase_messaging: ^15.1.3
+  #日志收集
+  firebase_crashlytics: ^4.2.0
+  #google分析
+  firebase_analytics: ^11.3.6
+  #角标
+  flutter_new_badger: ^1.1.0
+
+  #文件压缩
+  archive: ^4.0.2
+
+  #flutter_mining:
+    #path: plugins/flutter_mining
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  build_runner: ^2.1.7
+  json_serializable: ^6.1.5
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/home/
+    - assets/home/tabbar/
+    - assets/home/setting/
+    - assets/home/setting/scurity/
+    - assets/home/about/
+    - assets/img/
+    - assets/browser/
+    - assets/wallet/
+    - assets/wallet/swap/
+    - assets/face/
+    - assets/login/
+    - assets/mining/
+    - assets/chat/
+flutter_intl:
+  enabled: true
+

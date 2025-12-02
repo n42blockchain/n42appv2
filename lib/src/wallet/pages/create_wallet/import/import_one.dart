@@ -1,0 +1,273 @@
+import 'package:n42appv2/application.dart';
+import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/src/wallet/models/wallet_info.dart';
+import 'package:n42appv2/src/wallet/pages/create_wallet/create_finish.dart';
+import 'package:n42appv2/src/wallet/pages/create_wallet/create_password.dart';
+import 'package:n42appv2/src/wallet/pages/wallet_backup/backup_three.dart';
+import 'package:n42appv2/src/wallet/provider/trustdart.dart';
+import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42appv2/src/widgets/button_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42appv2/generated/l10n.dart';
+import 'package:provider/provider.dart';
+
+class ImportOne extends StatefulWidget {
+  const ImportOne({super.key});
+
+  @override
+  State<ImportOne> createState() => _ImportOneState();
+}
+
+class _ImportOneState extends State<ImportOne> with WidgetsBindingObserver{
+  TextEditingController inputEditingController=TextEditingController();
+  String inputMW="";
+  String errorMessage="";
+
+  checkInput(String value){
+    value=value.trim();
+    List<String> mws=value.split(" ");
+    String cValue="";
+    for(String mw in mws){
+      mw=mw.trim();
+      if(mw !=""){
+        cValue="${cValue} ${mw}";
+      }
+    }
+    setState(() {
+      inputMW=cValue.trim().toLowerCase();
+    });
+  }
+  void handlerCopyText() async {
+    // 读取复制文本
+    ClipboardData? clipboardData =
+    await Clipboard.getData(Clipboard.kTextPlain);
+    if (clipboardData != null) {
+      String? text = clipboardData.text;
+      if (text != null && text !="null" && text !="") {
+
+        checkInput(text);
+        bool checkMnemonic = await Trustdart().checkMnemonic(inputMW);
+        if(checkMnemonic){
+          inputEditingController.text=inputMW;
+        }else{
+          inputMW="";
+        }
+        Clipboard.setData(const ClipboardData(text: ""));
+        setState(() {});
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    handlerCopyText();
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+        title: Container(
+          alignment: Alignment.center,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: ScreenUtil().setWidth(10.0),
+                width: ScreenUtil().setWidth(144.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
+                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                ),
+              ),
+              SizedBox(width: ScreenUtil().setWidth(20.0),),
+              Container(
+                height: ScreenUtil().setWidth(10.0),
+                width: ScreenUtil().setWidth(144.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
+                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          SizedBox(width: ScreenUtil().setWidth(130.0),),
+        ],
+        leadingWidth: ScreenUtil().setWidth(130.0),
+      ),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: ScreenUtil().setWidth(30.0),bottom: ScreenUtil().setWidth(30.0),left: ScreenUtil().setWidth(30.0),right: ScreenUtil().setWidth(30.0),),
+                      alignment: Alignment.center,
+                      child: Text(
+                        S.of(context).g_key_wallet_c6,
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(40.0),
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(60.0),vertical: ScreenUtil().setWidth(60.0),),
+                      alignment: Alignment.center,
+                      child: Text(
+                        S.of(context).g_key_wallet_c7,
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(32.0),
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20),horizontal: ScreenUtil().setWidth(20)),
+                      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+                      decoration: BoxDecoration(
+                        color:  AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                      ),
+                      child: TextField(
+                        style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                          fontSize: ScreenUtil().setSp(32.0),
+                        ),
+                        controller: inputEditingController,
+                        textInputAction: TextInputAction.done,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          hintText: S.of(context).g_key_wallet_m21,
+                          border: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          isCollapsed: true,
+                          contentPadding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
+                        ),
+                        maxLines: 8,
+                        onChanged: (String value){
+                          checkInput(value);
+                        },
+                        onEditingComplete: (){
+                          FocusScope.of(context).requestFocus(FocusNode());
+                        },
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                      child: Text(
+                        inputMW,
+                        style: TextStyle(
+                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                            fontSize: ScreenUtil().setSp(32)
+                        ),
+                      ),
+                    ),
+                    if(errorMessage !="")
+                      Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                        margin: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
+                        decoration: BoxDecoration(
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorBgColor.name),
+                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                        ),
+                        child: Text(
+                          errorMessage,
+                          style: TextStyle(
+                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+                              fontSize: ScreenUtil().setSp(26)
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Column(
+                children: [
+                  Divider(
+                    height: 1,
+                    indent: 0,
+                    endIndent: 0,
+                  ),
+                  Container(
+                    height: ScreenUtil().setWidth(148.0),
+                    padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                    width: double.infinity,
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+                    child: ButtonStyle2(context,
+                          ()async{
+                        if(inputMW =="")return;
+                        bool checkMnemonic =
+                        await Trustdart().checkMnemonic(inputMW);
+                        if (checkMnemonic == false) {
+                          //助记词输入错误
+                          errorMessage=S.of(context).w_key_12;
+                          setState(() {
+                          });
+                          ToastUtils.show(errorMessage);
+                          return;
+                        }else{
+                          WalletInfo? fWalletInfo= Provider.of<WalletActionProvider>(context,listen: false).findWallet(mnemonic: inputMW);
+                          if(fWalletInfo ==null){
+                            errorMessage="";
+                          }else{
+                            errorMessage=S.of(context).g_key_214(fWalletInfo.walletName??"");
+                            setState(() {
+                            });
+                            ToastUtils.show(errorMessage);
+                            return;
+                          }
+                        }
+                        setState(() {
+                        });
+                        WalletInfo wInfo = WalletInfo(
+                            walletName: "",
+                            password: "",
+                            //path: WalletPath.init(),
+                            UUID: Provider.of<WalletActionProvider>(context,listen: false).UserUUID,
+                            mnemonic: inputMW
+                        );
+                        await Navigator.push(context,MaterialPageRoute(
+                            builder: (_) => CreatePassword(wInfo, createMetod: "Import",)));
+                        Navigator.pop(context);
+                      },
+                      S.of(context).g_key_11,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

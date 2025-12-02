@@ -1,0 +1,34 @@
+import 'package:n42appv2/application.dart';
+import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+Widget SuccessViewV1(String title) {
+  return Container(
+    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24.0), vertical: ScreenUtil().setWidth(48.0)),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24.0)),
+      // color: Colors.white,
+      color: AppThemeUtils.getColorByKey(Application.navigatorKey.currentContext, AppThemeKeys.alertBgColor.name),
+    ),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          height: ScreenUtil().setWidth(120.0),
+          width: ScreenUtil().setWidth(120.0),
+          padding: EdgeInsets.only(bottom:ScreenUtil().setWidth(30.0) ),
+          child: Image.asset("assets/img/alert1.png"),
+        ),
+        Text(
+          title,
+          style: TextStyle(
+              color: AppThemeUtils.getColorByKey(
+                  Application.navigatorKey.currentContext,
+                  AppThemeKeys.mainTextColor5.name),
+              fontSize: ScreenUtil().setSp(28.0)),
+        ),
+      ],
+    ),
+  );
+}

@@ -1,0 +1,84 @@
+
+
+import 'package:n42appv2/src/component/enums/coin_type.dart';
+import 'package:n42appv2/src/https/base_api.dart';
+import 'package:n42appv2/src/https/request_url.dart';
+import 'package:n42appv2/src/models/message_model.dart';
+
+class AptApi{
+  String url="";
+  AptApi({bool isTest=false}){
+    url=RequestUrl().getUrl2(CoinType.APT.name, "rpc",isTest: isTest);
+  }
+  getBalance(String address,{String contract="",String tokenName=""})async{
+    try{
+      MessageModel mm=MessageModel();
+      String uri=url+'accounts/${address}/balance/';
+      if(contract==""){
+        uri=uri+'0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>';
+      }else{
+        uri=uri+'0x1::coin::CoinStore<${contract}::celer_coin_manager::${tokenName}>';
+      }
+      final data=await BaseApi.RequestEmpty_h.get(uri, params: {},);
+      mm.data=BigInt.from(data);
+      return mm;
+    }catch(e){
+      MessageModel mm=MessageModel.error();
+      mm.data=e.toString();
+      return mm;
+    }
+  }
+  getGasPrice()async{
+    try{
+      MessageModel mm=MessageModel();
+      String uri=url+'estimate_gas_price';
+      final data=await BaseApi.RequestEmpty_h.get(uri, params: {},);
+      mm.data=BigInt.from(data['gas_estimate']);
+      return mm;
+    }catch(e){
+      MessageModel mm=MessageModel.error();
+      mm.data=e.toString();
+      return mm;
+    }
+  }
+  getAccountInfo(String address)async{
+    try{
+      MessageModel mm=MessageModel();
+      String uri=url+'accounts/$address';
+      final data=await BaseApi.RequestEmpty_h.get(uri, params: {},);
+      mm.data=int.parse(data['sequence_number']);
+      return mm;
+    }catch(e){
+      MessageModel mm=MessageModel.error();
+      mm.data=e.toString();
+      return mm;
+    }
+  }
+  getServiceInfo()async{
+    try{
+      MessageModel mm=MessageModel();
+      String uri=url+'ledger/info';
+      final data=await BaseApi.RequestEmpty_h.get(uri, params: {},);
+      mm.data=int.parse(data['ledger_timestamp']);
+      return mm;
+    }catch(e){
+      MessageModel mm=MessageModel.error();
+      mm.data=e.toString();
+      return mm;
+    }
+  }
+  sendTxHash(String txHash)async{
+    try{
+      MessageModel mm=MessageModel();
+      String uri=url+'transactions';
+
+      final data=await BaseApi.RequestEmpty_h.post(uri, params: {},data: txHash,header: {'content-type':'application/x.aptos.signed_transaction+bcs'});
+      mm.data=data['hash'];
+      return mm;
+    }catch(e){
+      MessageModel mm=MessageModel.error();
+      mm.data=e.toString();
+      return mm;
+    }
+  }
+}

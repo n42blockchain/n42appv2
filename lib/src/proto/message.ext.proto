@@ -1,0 +1,18 @@
+syntax = "proto3";
+package pb;
+option go_package = "../pb;pb";
+
+// 单条消息投递内容（估算大约100个字节）,todo 通知栏提醒
+message Message {
+  int64 message_id = 1; // 雪花算法，唯一id
+  int32 code = 2; // 推送码
+  bytes content = 3; // 推送内容
+  int64 seq = 4; // 用户消息发送序列号
+  int64 send_time = 5; // 消息发送时间戳，精确到毫秒
+  MessageStatus status = 6; // 消息状态
+}
+
+enum MessageStatus {
+  MS_NORMAL = 0; // 正常的
+  MS_RECALL = 1; // 撤回
+}

@@ -1,0 +1,25 @@
+import 'package:n42appv2/app_config.dart';
+import 'package:n42appv2/application.dart';
+import 'package:n42appv2/src/https/base_api.dart';
+
+class ExchangeApi{
+  late String url;
+  late Map<String,String> header;
+  ExchangeApi(){
+    url=AppConfig.getApiUrl_online('exchangeHost');
+    header={'content-type': 'application/x-www-form-urlencoded'};
+  }
+
+  //获取交易所账户的余额
+  Future exchangeBalance(String? coin, String? exchangeName) async {
+    Map<String, dynamic> params = {};
+    params["coin"] = coin;
+    params["platform"] = exchangeName ?? 'binance';
+    params["source"] = "app";
+    params["token"] = Application.userInfo?.token??"";
+    params["uuid"] = Application.userInfo?.uuid??"";
+    final data =
+    await BaseApi.RequestEmpty_h.get('$url/v1/user_account/list', params: params,addUserInfo: true,header: header,);
+    return data;
+  }
+}

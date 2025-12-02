@@ -1,0 +1,29 @@
+import 'package:flutter/cupertino.dart';
+import 'package:n42appv2/generated/l10n.dart';
+
+class Loading extends StatelessWidget {
+  final String? text;
+  final Color? textColor;
+
+  const Loading({Key? key, this.text, this.textColor}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.only(bottom: 100),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const CupertinoActivityIndicator(animating: true, radius: 18),
+          const SizedBox(width: 12),
+          Text(
+            text ?? "${S.of(context).g_key_106}...",
+            style: TextStyle(
+                color: textColor ?? const Color(0xff666666), fontSize: 16),
+          ),
+        ],
+      ),
+    );
+  }
+}

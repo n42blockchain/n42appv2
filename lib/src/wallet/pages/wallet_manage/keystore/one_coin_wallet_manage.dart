@@ -1,0 +1,669 @@
+import 'dart:convert';
+
+import 'package:n42appv2/src/component/enums/coin_type.dart';
+import 'package:n42appv2/src/component/enums/load.dart';
+import 'package:n42appv2/src/utils/regular.dart';
+import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/src/wallet/models/coin_model.dart';
+import 'package:n42appv2/src/wallet/models/wallet_info.dart';
+import 'package:n42appv2/src/wallet/pages/wallet_manage/keystore/export_keystore_desc.dart';
+import 'package:n42appv2/src/wallet/provider/trustdart.dart';
+import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42appv2/src/wallet/utils/chain_util.dart';
+import 'package:n42appv2/src/widgets/app_bar_widget.dart';
+import 'package:n42appv2/src/widgets/button_widget.dart';
+import 'package:n42appv2/src/widgets/comm_input.dart';
+import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_3.dart';
+import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_4.dart';
+import 'package:n42appv2/src/widgets/sheet_bottom.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:n42appv2/generated/l10n.dart';
+import 'package:web3dart/crypto.dart';
+
+class OneCoinWalletManage extends StatefulWidget {
+  final WalletInfo walletInfo;
+  final CoinModel model;
+  final int walletIndex;
+  const OneCoinWalletManage({required this.walletInfo, required this.model,required this.walletIndex,super.key});
+
+  @override
+  State<OneCoinWalletManage> createState() => _OneCoinWalletManageState();
+}
+
+class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
+  String? mnemonic;
+  String? coinPath;
+  String? addrType;
+  String? pk;
+  int pathIndex=0;
+  List<dynamic> pathList=[0];
+  Load load=Load.finish;
+  @override
+  void initState() {
+    super.initState();
+    initData();
+  }
+
+  initData() async {
+    mnemonic = widget.walletInfo.mnemonic;
+    addrType=widget.walletInfo.coinInfo![widget.model.coin['coinType']]['addrType'];
+    coinPath = widget.walletInfo.coinInfo![widget.model.coin['coinType']]['baseInfo']['path'][addrType];
+    pathList=widget.walletInfo.coinInfo![widget.model.coin['coinType']]['pathList']?? [0];
+    pathIndex=widget.walletInfo.coinInfo![widget.model.coin['coinType']]['pathIndex']?? 0;
+    pk=widget.walletInfo.privateKey;
+    setState(() {});
+  }
+
+  //添加 path index
+  addPath(){
+    if(pathList.length>=10){
+      return;
+    }
+    pathList.add(pathList[pathList.length-1]+1);
+    setState(() {});
+  }
+  removePath(int index){
+    pathList.removeAt(index);
+    setState(() {});
+  }
+  chagePath(int index){
+    pathIndex=pathList[index];
+    setState(() {});
+  }
+  saveCoin()async{
+    widget.walletInfo.coinInfo![widget.model.coin['coinType']]['pathList']=pathList;
+    widget.walletInfo.coinInfo![widget.model.coin['coinType']]['pathIndex']=pathIndex;
+    widget.walletInfo.coinInfo![widget.model.coin['coinType']]['addrType']=addrType;
+    await Provider.of<WalletActionProvider>(context,listen: false).saveWalletInfo(widget.walletInfo,widget.walletIndex);
+    if(Provider.of<WalletActionProvider>(context,listen: false).walletIndex == widget.walletIndex){
+      Provider.of<WalletActionProvider>(context,listen: false).reBuildCoin(widget.walletInfo,widget.model.coin['coinType']);
+    }
+    Navigator.pop(context,true);
+  }
+  jumpExportKeystoreDescPage({String? password})async{
+    setState(() {
+      load=Load.loading;
+    });
+    await Future.delayed(const Duration(milliseconds: 300));
+    if(password==null){
+      password=widget.walletInfo.password!;
+    }
+    final keystoreJson= await Trustdart().getKeyStore(
+      widget.model.coin['coinType']!,
+      getPathWithIndex(coinPath!, widget.walletInfo.coinInfo![widget.model.coin['coinType']]['pathIndex']??0),
+      widget.walletInfo.coinInfo![widget.model.coin['coinType']]['addrType'],
+      password,
+      mnemonic: mnemonic??"",
+      pk:pk??"",
+    );
+    //test 反推一下
+    //success：目前支持的有： eth ast matic ETC avax  ht  xDAI FTM celo clo poa
+    //反推之后的address大小写有些不一致：0x7Ac869Ff8b6232f7cfC4370A2df4a81641Cba3d9 返推的 0x7ac869ff8b6232f7cfc4370a2df4a81641cba3d9
+
+    if (keystoreJson != null) {
+      //keystore json 说明页面explain
+      Navigator.push(context,
+        MaterialPageRoute(
+            builder: (_) => ExportKeystoreDesc(
+              keystoreJson: keystoreJson,
+            )),
+      );
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBarWidget(
+        text: S.of(context).g_key_110,
+      ),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _buildWalletInfo(),
+                    if(widget.walletInfo.privateKey ==null)
+                    _buildExport(),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Column(
+                children: [
+                  Divider(
+                    height: ScreenUtil().setWidth(1),
+                    indent: 0,
+                    endIndent: 0,
+                  ),
+                  Container(
+                    height: ScreenUtil().setWidth(148),
+                    width: double.infinity,
+                    padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+                    child: ButtonStyle2(
+                      context,
+                      (){
+                        saveCoin();
+                      },
+                      S.of(context).g_key_115,),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _buildWalletInfo() {
+    int pathCount=1;
+    if(widget.model.coin['blockchainType']==BlockchainType.Bitcoin.name){
+      pathCount=(widget.model.coin['path'] as Map<String,dynamic>).length;
+    }
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0))),
+      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(30.0), horizontal: ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0), vertical: ScreenUtil().setWidth(20.0)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                widget.model.coin['name'] ?? '',
+                style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    fontSize: ScreenUtil().setSp(36.0)),
+              ),
+              Text(
+                " (${widget.model.coin['miniName'] ?? ''})",
+                style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                    fontSize: ScreenUtil().setSp(28.0)),
+              ),
+            ],
+          ),
+          Divider(
+            height: ScreenUtil().setWidth(48.0),
+            indent: 0,
+            endIndent: 0,
+          ),
+          Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Text(
+                  "${S.of(context).g_key_address}: ",
+                  style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.mainTextColor.name),
+                      fontSize: ScreenUtil().setSp(32.0)),
+                ),
+              ),
+              pathCount==1?
+              SizedBox():
+              InkWell(
+                onTap: (){
+                  showChangeAddress();
+                },
+                child:Container(
+                  margin: EdgeInsets.only(right: ScreenUtil().setWidth(20.0)),
+                  child: Row(
+                    children: [
+                      Text(
+                        '${widget.model.addrType}',
+                        style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                          fontSize: ScreenUtil().setSp(30.0),
+                        ),
+                      ),
+                      Icon(Icons.keyboard_arrow_down_outlined,size: ScreenUtil().setWidth(40.0),color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: ScreenUtil().setWidth(20.0),
+          ),
+          Text(
+            widget.model.address??"",
+            style: TextStyle(
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                fontSize: ScreenUtil().setSp(28.0)),
+          ),
+          if(widget.walletInfo.privateKey ==null)
+          Divider(
+            height: ScreenUtil().setWidth(48.0),
+            indent: 0,
+            endIndent: 0,
+          ),
+          if(widget.walletInfo.privateKey ==null)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "${S.of(context).g_key_wallet_k53}:",
+                style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.mainTextColor.name),
+                    fontSize: ScreenUtil().setSp(32.0)),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  "(${coinPath==null?"": getPathWithIndex(coinPath!, widget.walletInfo.coinInfo![widget.model.coin['coinType']]['pathIndex']??0)})",
+                  style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                      fontSize: ScreenUtil().setSp(28.0)),
+                ),
+              ),
+              InkWell(
+                onTap: (){
+                  addPath();
+                },
+                child: Container(
+                  height:ScreenUtil().setWidth(50.0),
+                  width:ScreenUtil().setWidth(50.0),
+                  padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
+                  child: Icon(
+                    Icons.add_circle_outline,
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                    size: ScreenUtil().setWidth(40.0),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          if(widget.walletInfo.privateKey ==null)
+          Container(
+            height: ScreenUtil().setWidth(101.0*(pathList.length>4?4:pathList.length)),
+            child: ListView.separated(
+              itemCount: pathList.length,
+              itemBuilder: (context,int index){
+                int pIndex=pathList[index];
+                String path=getPathWithIndex(widget.model.coin['path'][widget.model.addrType], pIndex);
+                return Container(
+                  alignment: Alignment.centerLeft,
+                  height: ScreenUtil().setWidth(100.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if(pIndex != pathIndex)
+                        InkWell(
+                          onTap: (){
+                            chagePath(index);
+                          },
+                          child:Container(
+                            margin: EdgeInsets.only(right: ScreenUtil().setWidth(10.0)),
+                            height:ScreenUtil().setWidth(50.0),
+                            width:ScreenUtil().setWidth(50.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),width: ScreenUtil().setWidth(1.0)),
+                            ),
+                          ),
+                        ),
+                      if(pIndex == pathIndex)
+                        Container(
+                          margin: EdgeInsets.only(right: ScreenUtil().setWidth(10.0)),
+                          height:ScreenUtil().setWidth(50.0),
+                          width:ScreenUtil().setWidth(50.0),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),width: ScreenUtil().setWidth(1.0)),
+                          ),
+                          child: Icon(
+                            Icons.check,
+                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                            size: ScreenUtil().setWidth(40.0),
+                          ),
+                        ),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          path,
+                          style: TextStyle(
+                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                            fontSize: ScreenUtil().setSp(28.0),
+                          ),
+                        ),
+                      ),
+                      if(pIndex !=0 && pIndex != pathIndex)
+                        InkWell(
+                          onTap: (){
+                            removePath(index);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(10.0),
+                            child: Icon(
+                              Icons.remove,
+                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                              size: ScreenUtil().setWidth(40.0),
+                            ),
+                          ),
+                        )
+                    ],
+                  ),
+                );
+              },
+              separatorBuilder: (context,int index){
+                return Divider(
+                  height: ScreenUtil().setWidth(1.0),
+                  endIndent: 0,
+                  indent: 0,
+                );
+              }, ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _buildExport() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0))),
+      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(30.0), horizontal: ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0), vertical: ScreenUtil().setWidth(20.0)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            S.of(context).g_key_181,
+            style: TextStyle(
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainTextColor.name),
+                fontSize: ScreenUtil().setSp(32.0)),
+          ),
+          Divider(
+            height: ScreenUtil().setWidth(48.0),
+            indent: 0,
+            endIndent: 0,
+          ),
+          InkWell(
+            onTap: () async {
+              try {
+                if(load==Load.loading)return;
+                //导出keystore json
+                if(widget.walletInfo.password==""){
+                  final TextEditingController controller = TextEditingController();
+                  final TextEditingController controller2 = TextEditingController();
+                  final flag = await TipsDialog3(context, Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
+                        color: AppThemeUtils.getColorByKey(
+                            context, AppThemeKeys.itemBgColor.name)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          child: Text(
+                            S.of(context).g_key_21,
+                            style: TextStyle(
+                                color: AppThemeUtils.getColorByKey(
+                                    context, AppThemeKeys.mainTextColor.name),
+                                fontSize: ScreenUtil().setSp(30.0)),
+                            textAlign: TextAlign.center,
+                          ),
+                          padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                          alignment: Alignment.center,
+                          width: double.infinity,
+                        ),
+                        Container(
+                          height: ScreenUtil().setWidth(80.0),
+                          width: double.infinity,
+                          padding:EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+                          decoration: BoxDecoration(
+                            color: AppThemeUtils.getColorByKey(
+                                context, AppThemeKeys.itemBgColor.name),
+                            //borderRadius: BorderRadius.circular(12)
+                          ),
+                          child: CommInput(
+                            type: InputFieldType.password,
+                            hintText:S.of(context).rest_Choose_password,
+                            controller: controller,
+                            maxLines: 1,
+                          ),
+                        ),
+                        Container(
+                          height: ScreenUtil().setWidth(80.0),
+                          width: double.infinity,
+                          padding:EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+                          decoration: BoxDecoration(
+                            color: AppThemeUtils.getColorByKey(
+                                context, AppThemeKeys.itemBgColor.name),
+                            //borderRadius: BorderRadius.circular(12)
+                          ),
+                          //padding: EdgeInsets.symmetric(horizontal: scr.setWidth(30.0)),
+                          margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0),bottom: ScreenUtil().setWidth(30.0),),
+                          child: CommInput(
+                            type: InputFieldType.password,
+                            hintText:S.of(context).repeatPassword,
+                            controller: controller2,
+                            maxLines: 1,
+                          ),
+                        ),
+                        Divider(
+                          endIndent: 0,
+                          indent: 0,
+                          height: ScreenUtil().setWidth(1),
+                        ),
+                        SizedBox(
+                          height: ScreenUtil().setWidth(80),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pop(false);
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      S.of(context).g_key_79,
+                                      style: TextStyle(
+                                          color: AppThemeUtils.getColorByKey(
+                                              context, AppThemeKeys.mainTextColor.name),
+                                          fontSize: ScreenUtil().setSp(30)),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                color: AppThemeUtils.getColorByKey(
+                                    context, AppThemeKeys.dividerColor.name),
+                                width: ScreenUtil().setWidth(1),
+                              ),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pop(true);
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    color: Colors.transparent,
+                                    child: Text(
+                                      S.of(context).g_key_78,
+                                      style: TextStyle(
+                                        // color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor),
+                                          color: AppThemeUtils.getColorByKey(
+                                              context, AppThemeKeys.mainBlueColor.name),
+                                          fontSize: ScreenUtil().setSp(30)),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ));
+                  if (flag != null && flag) {
+                    final password = controller.text.trim();
+                    final password2= controller2.text.trim();
+                    if (password.isEmpty) {
+                      ToastUtils.show(S.of(context).g_key_21);
+                      return;
+                    }
+                    //if (password.length < AppConfig.walletPasswordLength) {
+                    if (!Regular().isPassword(password)) {
+                      ToastUtils.show(S.of(context).rest_Choose_password);
+                      return;
+                    }
+                    if (password2.isEmpty) {
+                      ToastUtils.show(S.of(context).g_key_21);
+                      return;
+                    }
+                    if (password != password2) {
+                      ToastUtils.show(S.of(context).g_key_25);
+                      return;
+                    }
+                    jumpExportKeystoreDescPage(password:password);
+                  }
+                }
+                else{
+                  //密码验证
+                  final controller = TextEditingController();
+                  final flag = await TipsDialog4(
+                      context, null,
+                      controller: controller);
+                  if (flag != null && flag) {
+                    final password = controller.text.trim();
+                    debugPrint("password $password");
+
+                    if (password != widget.walletInfo.password) {
+                      //密码输入错误
+                      ToastUtils.show(S.of(context).g_key_146);
+                      return;
+                    }
+                    jumpExportKeystoreDescPage();
+                  }
+                }
+              } finally {
+                setState(() {
+                  load=Load.finish;
+                });
+              }
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0),),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if(load==Load.loading)
+                  Container(
+                    height: ScreenUtil().setWidth(40),
+                    width: ScreenUtil().setWidth(40),
+                    margin: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
+                    child: CircularProgressIndicator(),
+                  ),
+                  Text(
+                    S.of(context).g_key_ex_keystore,
+                    style: TextStyle(
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                        fontSize: ScreenUtil().setSp(28.0)),
+                  ),
+                  Icon(
+                    Icons.arrow_forward_ios_sharp,
+                    size: ScreenUtil().setWidth(40.0),
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                  )
+                ],
+              ),
+            ),
+          ),
+          Divider(
+            height: ScreenUtil().setWidth(48.0),
+            indent: 0,
+            endIndent: 0,
+          ),
+          if(widget.walletInfo.password != "")
+            InkWell(
+              onTap: ()async{
+                String pk=await Trustdart().getPrivateKey(mnemonic??"", widget.model.coin['coinType'], coinPath??"");
+                String pkHex=bytesToHex(base64Decode(pk));
+                Clipboard.setData(ClipboardData(text: pkHex));
+                ToastUtils.show(S.of(context).copy);
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0),),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      S.of(context).g_key_ex_keystore_19,
+                      style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                          fontSize: ScreenUtil().setSp(28.0)),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+  //显示切换地址类型
+  showChangeAddress(){
+    List<Widget> childs=[];
+    Map<String,dynamic> paths=widget.model.coin['path'];
+    List<String> keyList=paths.keys.toList();
+    for(int i=0;i<keyList.length;i++){
+      Color textColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+      if(widget.model.addrType==keyList[i]){
+        textColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name);
+      }
+      childs.add(
+          InkWell(
+            onTap: ()async{
+              if(widget.model.addrType==keyList[i]){
+
+              }else{
+                widget.model.addrType=keyList[i];
+                addrType=keyList[i];
+                widget.model.address=null;
+                await widget.model.buildWallet();
+                coinPath=widget.model.coin['path'][widget.model.addrType];
+                setState(() {});
+              }
+              Navigator.pop(context);
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+              alignment: Alignment.center,
+              child: Text(
+                '${keyList[i]}',
+                style: TextStyle(
+                  color: textColor,
+                  fontSize: ScreenUtil().setSp(32.0),
+                ),
+              ),
+            ),
+          )
+      );
+    }
+    SheetBottom(context, "", Column(
+      children: childs,
+    ));
+  }
+}

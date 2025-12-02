@@ -1,0 +1,1 @@
+enum HandType { restPassword, createAccount ,unRegister}

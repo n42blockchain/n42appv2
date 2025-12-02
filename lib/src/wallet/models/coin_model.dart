@@ -1,0 +1,253 @@
+import 'package:n42appv2/application.dart';
+import 'package:n42appv2/src/wallet/models/wallet_info.dart';
+import 'package:n42appv2/src/wallet/provider/trustdart.dart';
+import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42appv2/src/wallet/utils/chain_util.dart';
+import 'package:intl/intl.dart';
+import 'package:decimal/decimal.dart';
+import 'package:provider/provider.dart';
+class CoinModel {
+  //数字格式化实例
+  final NumberFormat _oCcy = NumberFormat("#,##0.####", "en_US");
+  Map<String, dynamic> coin = {};//主链基本信息
+  Map<String,dynamic> tokens={};//代币列表
+  ///提供计算属性 代替coin
+  /*CoinInfo get coinInfo {
+    return CoinInfo.fromJson(coin);
+  }*/
+  bool showList=true;//是否显示在主页列表上
+  String? privateKey;//是否时导入钱包
+  bool isTest=false;//是否是测试网，默认主网
+  bool supportTest=true;//是否支持测试
+  BigInt balance = BigInt.from(0); //余额
+  double coinPrice = 0; //币价
+  double value = 0; //价值 balance * coinPrice
+  double percentage = 0; //百分比
+  Map<String, dynamic> walletAddress = {};
+  var address;
+  Map<String,dynamic> addressType={};//地址类型legacy、segwit
+  String addrType="legacy";
+  int pathIndex=0;//path index
+  bool isRefresh = false;
+  bool loadError = false; //加载是否失败，如果失败钱包item会提示叹号
+  String? mainCoinIcon;//主链币图标地址
+  bool custom=false;
+
+  dynamic other;
+
+  CoinModel();
+  CoinModel.fromJson(Map<String,dynamic> json){
+    coin=json['coin'] as Map<String,dynamic>;
+    tokens=json['coin'] as Map<String,dynamic>;
+    showList=json['showList'] as bool;
+    privateKey=json['privateKey'] as String?;
+    isTest=json['isTest'] as bool;
+    supportTest=json['supportTest'] as bool;
+    balance=BigInt.parse(json['balance'] as String);
+    coinPrice=(json['coinPrice'] as num).toDouble();
+    value=(json['value'] as num).toDouble();
+    percentage=(json['percentage'] as num).toDouble();
+    walletAddress=json['walletAddress'] as Map<String,dynamic>;
+    address=json['address'];
+    addressType=json['addressType'] as Map<String,dynamic>;
+    addrType=json['addrType'] as String;
+    pathIndex=json['pathIndex'] as int;
+    mainCoinIcon=json['mainCoinIcon'] as String?;
+  }
+  toJson(){
+    return {
+      'coin': coin,
+      'tokens': tokens,
+      'showList': showList,
+      'privateKey': privateKey,
+      'isTest': isTest,
+      'supportTest': supportTest,
+      'balance': balance.toString(),
+      'coinPrice': coinPrice,
+      'value': value,
+      'percentage': percentage,
+      'walletAddress': walletAddress,
+      'address': address,
+      'addressType': addressType,
+      'addrType': addrType,
+      'pathIndex': pathIndex,
+      'isRefresh': isRefresh,
+      'loadError': loadError,
+      'mainCoinIcon': mainCoinIcon
+    };
+  }
+  /*Regular? regular;
+  Regular get _regular{
+    if(regular==null){
+      regular=Regular();
+    }
+    return regular!;
+  }*/
+  //获取balance的 浮点类型
+  /*double balance_double() {
+    double t=toEther(balance.toString(), coin['decimals']??0);
+    return _regular.formartNum_double(toEther(balance.toString(), coin['decimals']??0), 14,isCrop: true,isFill0: false);
+  }*/
+  double balance_double_all() {
+    return toEther(balance.toString(), coin['decimals']??0).toDouble();
+  }
+
+  //返回余额的 科学计数
+  String balance_string() {
+    return _oCcy.format(balance_double_all());
+  }
+  //返回余额的 全部位数
+  String balance_string_all(){
+    return Decimal.parse(balance_double_all().toString()).toString();
+  }
+
+  //返回value 的科学计数
+  String value_string() {
+    return _oCcy.format(value);
+  }
+  String coinPrice_string() {
+    return _oCcy.format(coinPrice);
+  }
+  CoinModel.fromMap(Map<String, dynamic> map, ) {
+    coin = map;
+  }
+  //setAddress,是否设置钱包的地址Map
+  buildWallet({String pk="",bool setAddress=true,int? walletIndex=null}) async {
+    String coinType = coin['coinType'];
+    if (address == null) {
+      if(walletIndex==null){
+        WalletActionProvider wap = Provider.of<WalletActionProvider>(Application.AppContext,listen: false);
+        WalletInfo info = wap.walletInfo;
+        Map<String, dynamic> pathMap = coin['path'];
+        Map<Object?, Object?> rm= await Trustdart().generateAddress(
+          coinType,
+          getPathWithIndex(pathMap[addrType], pathIndex),
+          pathMap[addrType],
+          mnemonic: info.mnemonic??"",
+          pk: privateKey??"",
+          isTest:isTest,
+        );
+        List<Object?> keyList=rm.keys.toList();
+        for(int i=0;i<keyList.length;i++){
+          String key=keyList[i] as String;
+          addressType[key]=rm[keyList[i]];
+        }
+        if ((rm[addrType] as String).isEmpty) {
+          loadError = true;
+          wap.notifyListeners();
+          return;
+        }
+        address = rm[addrType];
+        if(setAddress){
+          wap.setAddress(coinType, addressType);
+        }
+      }else{
+        WalletActionProvider wap = Provider.of<WalletActionProvider>(Application.AppContext,listen: false);
+        WalletInfo info = wap.walletInfoLsit[walletIndex];
+        Map<String, dynamic> pathMap = coin['path'];
+        Map<Object?, Object?> rm = await Trustdart().generateAddress(
+          coinType,
+          getPathWithIndex(pathMap[addrType], pathIndex),
+          pathMap[addrType],
+          mnemonic:  info.mnemonic??"",
+          pk: privateKey??"",
+          isTest: isTest,
+        );
+        List<Object?> keyList=rm.keys.toList();
+        for(int i=0;i<keyList.length;i++){
+          String key=keyList[i] as String;
+          addressType[key]=rm[keyList[i]];
+        }
+        if ((rm[addrType] as String).isEmpty) {
+          loadError = true;
+          return;
+        }
+        address = rm[addrType];
+      }
+    }
+  }
+  getBalance_default()async{
+    if(isTest){
+      balance=BigInt.parse(coin['balance_test']);
+    }else{
+      balance=BigInt.parse(coin['balance']);
+    }
+    percentage=coin['percentage'];
+    coinPrice=coin['coinPrice'];
+    value=balance_double_all()*coinPrice;
+  }
+  //是否是刷新，目前只有tron 链 使用
+  getBalance({bool getToken=true}) async {
+    try {
+      //如果币的地址为空，创建地址
+      WalletActionProvider wap = Provider.of<WalletActionProvider>(Application.AppContext,listen: false);
+      if (address == null) {
+        await buildWallet();
+      }
+      bool error=await wap.getBalance_withCoinModel(this);
+      if(error){
+        loadError = false;
+        Provider.of<WalletActionProvider>(Application.AppContext,listen: false).notifyListeners();
+        return false;
+      }else{
+        loadError = false;
+        wap.calculateBalance_widthCoinModel();
+        return true;
+      }
+    } catch (e) {
+      loadError = true;
+      isRefresh = false;
+      Provider.of<WalletActionProvider>(Application.AppContext,listen: false).notifyListeners();
+      return false;
+    }
+  }
+}
+
+
+class AlgoModel {
+  int? code;
+  BigInt minBalance=BigInt.from(100000);
+  AlgoModel.fromCode(this.code);
+  AlgoModel.fromMinBalance(this.minBalance);
+}
+class XrpModel{
+  int sequence=0;
+  bool account=false;
+  int ownerCount=0;
+  XrpModel(this.sequence,this.account,this.ownerCount);
+  //激活账户必须持有的最小值
+  int reserveBase=10000000;
+  //每添加一个对象（如 trust line、挂单、payment channel）需加锁
+  int reserveInc=2000000;
+  //理论最低手续费单位（网络空闲时）
+  int baseFee=10;
+  //固定值，表示最小负载因子基准，一般为 256（不能变）
+  int loadBase=256;
+  //当前节点对费用的整体乘数因子，用来估算“标准”费用。
+  // 👉 计算：实际费用 = base_fee × (load_factor / load_base)
+  int loadFactor=256;
+  setServiceState(Map<String,dynamic> data){
+    reserveBase=data['reserve_base'];
+    reserveInc=data['reserve_inc'];
+    baseFee=data['base_fee'];
+    loadBase=data['load_base'];
+    loadFactor=data['load_factor'];
+  }
+  int get getLockAmount{
+    int sum=reserveBase+ownerCount*reserveInc;
+    return sum;
+  }
+}
+class XlmModel{
+  bool account=false;
+  XlmModel(this.account);
+}
+class SolModel {
+  Map<String,dynamic> solanaTokenAccount={};
+  String selectSolanaTokenAccountKey="";
+  List<dynamic>? spl;//代币余额
+}
+class TrxModel extends CoinModel{
+  List<dynamic>? trc20;
+  TrxModel(this.trc20);
+}

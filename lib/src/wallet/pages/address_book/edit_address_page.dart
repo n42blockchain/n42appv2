@@ -1,0 +1,429 @@
+import 'package:n42appv2/src/component/enums/coin_type.dart';
+import 'package:n42appv2/src/component/pages/scan_page.dart';
+import 'package:n42appv2/src/models/message_model.dart';
+import 'package:n42appv2/src/utils/event_bus.dart';
+import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/src/wallet/api/address_book_api.dart';
+import 'package:n42appv2/src/wallet/api/token_view_api.dart';
+import 'package:n42appv2/src/wallet/models/address_book_model.dart';
+import 'package:n42appv2/src/wallet/models/coin_model.dart';
+import 'package:n42appv2/src/wallet/pages/address_book/choose_coins_page.dart';
+import 'package:n42appv2/src/wallet/provider/trustdart.dart';
+import 'package:n42appv2/src/widgets/app_bar_widget.dart';
+import 'package:n42appv2/src/widgets/container_widget.dart';
+import 'package:n42appv2/src/widgets/image_network.dart';
+import 'package:n42appv2/src/widgets/textField_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:n42appv2/generated/l10n.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+class EditAddressPage extends StatefulWidget {
+  final AddressBookModel info;
+  const EditAddressPage({required this.info,super.key});
+
+  @override
+  State<EditAddressPage> createState() => _EditAddressPageState();
+}
+
+class _EditAddressPageState extends State<EditAddressPage> {
+  final addressController = TextEditingController();
+  final nameController = TextEditingController();
+  final descController = TextEditingController();
+
+  final addressFocusNode= FocusNode();
+  final nameFocusNode= FocusNode();
+  final descFocusNode= FocusNode();
+
+  late AddressBookModel info;
+
+  /// 默认的coin
+  var coinName = 'BTC';
+  var coinIcon = '';
+  bool editStatus = false;
+  String errorMessage="";
+  @override
+  void initState() {
+    super.initState();
+    info = widget.info;
+    setState(() {
+      coinName = info.coinName ?? "BTC";
+      coinIcon = info.coinIcon ?? "";
+      addressController.text = info.address ?? "";
+      nameController.text = info.name ?? "";
+      if (info.desc != null) {
+        descController.text = info.desc ?? '';
+      }
+    });
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    addressController.dispose();
+    nameController.dispose();
+    descController.dispose();
+    addressFocusNode.dispose();
+    nameFocusNode.dispose();
+    descFocusNode.dispose();
+    super.dispose();
+  }
+
+  address_check(String addr)async{
+    if(addr==""){
+      errorMessage=S.current.g_key_41;
+      setState(() {});
+      return null;
+    }else{
+      List<String> addrList=addr.split(":");
+      if(addrList.length==2){
+        addr=addrList[1];
+      }
+      bool check=await Trustdart().validateAddress(coinName, addr);
+      if(check){
+        errorMessage="";
+        setState(() {});
+        return addr;
+      }else{
+        if(coinName==CoinType.ETH.name){
+          TokenViewApi tokenViewApi=TokenViewApi();
+          MessageModel rmm=await tokenViewApi.getEnsResolve(addr);
+          if(rmm.error){
+            errorMessage=S.current.g_key_t_50;
+            setState(() {});
+            return null;
+          }else{
+            errorMessage="";
+            setState(() {});
+            return rmm.data;
+          }
+        }else{
+          errorMessage=S.current.g_key_t_50;
+          setState(() {});
+          return null;
+        }
+
+      }
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBarWidget(
+        text: S.of(context).g_key_address_4,
+        actions: [
+          GestureDetector(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+              color: Colors.transparent,
+              child: Center(
+                child: Text(
+                  editStatus ? S.of(context).g_key_115 : S.of(context).Edit,
+                  style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.mainTextColor.name),
+                    fontSize: ScreenUtil().setSp(32.0),
+                  ),
+                ),
+              ),
+            ),
+            onTap: () async {
+              if (editStatus) {
+                // 编辑状态 提交数据
+                await handlerData();
+              } else {
+                setState(() {
+                  editStatus = true;
+                });
+              }
+            },
+          )
+        ],
+      ),
+      body: buildContentList(context),
+    );
+  }
+
+  buildContentList(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(left: ScreenUtil().setWidth(30.0),right: ScreenUtil().setWidth(30.0), top: ScreenUtil().setWidth(30.0),bottom: ScreenUtil().setWidth(36.0)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSelectItem(),
+          SizedBox(
+            height: ScreenUtil().setWidth(36.0),
+          ),
+          Text(
+            S.of(context).address_Information,
+            style: TextStyle(
+                color:
+                AppThemeUtils.getColorByKey(context, AppThemeKeys.ff888888.name),
+                fontSize: ScreenUtil().setSp(28.0)),
+          ),
+          SizedBox(
+            height: ScreenUtil().setWidth(20.0),
+          ),
+          _buildAddressView(context),
+          const Spacer(),
+          delete()
+        ],
+      ),
+    );
+  }
+
+  _buildSelectItem() {
+    return GestureDetector(
+      onTap: editStatus
+          ? () async {
+        final CoinModel? data = await Navigator.push(context,
+            MaterialPageRoute(builder: (_) => const ChooseCoinsPage()));
+        debugPrint("data ---->${data?.coin['icon']}");
+        if (data != null) {
+          setState(() {
+            coinName = data.coin["name"];
+            coinIcon = data.coin["icon"];
+          });
+        }
+      }
+          : null,
+      child: ContainerStyle1(
+        context,
+        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0),),
+        height: ScreenUtil().setWidth(88.0),
+        /*decoration: BoxDecoration(
+            color:
+                AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBoxColor),
+            borderRadius: BorderRadius.circular(scr.setWidth(16.0))),*/
+        child: Row(
+          children: [
+            Container(
+              width: ScreenUtil().setWidth(50.0),
+              height: ScreenUtil().setWidth(50.0),
+              child: (coinName == CoinType.N.name)
+                  ? Image.asset(
+                'assets/img/ast.png',
+                width: ScreenUtil().setWidth(50.0),
+                height: ScreenUtil().setWidth(50.0),
+                fit: BoxFit.cover,
+              )
+                  : ImageNetWork(imageUrl:
+                coinIcon,
+                width: ScreenUtil().setWidth(50.0),
+                height: ScreenUtil().setWidth(50.0),
+                placeholder: "assets/img/list_default.png",
+              ),
+            ),
+            SizedBox(
+              width: ScreenUtil().setWidth(24.0),
+            ),
+            Text(
+              coinName,
+              style: TextStyle(
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainTextColor.name),
+                  fontSize: ScreenUtil().setSp(28.0)),
+            ),
+            const Spacer(),
+            Icon(
+              Icons.arrow_forward_ios,
+              size: ScreenUtil().setWidth(40.0),
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _buildAddressView(BuildContext context) {
+    return ContainerStyle1(
+      context,
+      padding: EdgeInsets.symmetric(
+          vertical: ScreenUtil().setWidth(20.0)),
+      child: Column(
+        children: [
+          scanItem(),
+          Divider(
+            height: ScreenUtil().setWidth(6.0),
+            indent: ScreenUtil().setWidth(20.0),
+            endIndent: ScreenUtil().setWidth(20.0),
+          ),
+          name(),
+          Divider(
+            height: ScreenUtil().setWidth(6.0),
+            indent: ScreenUtil().setWidth(20.0),
+            endIndent: ScreenUtil().setWidth(20.0),
+          ),
+          desc(),
+
+        ],
+      ),
+    );
+  }
+
+  scanItem() {
+    return TextFieldStyle2(
+      context,
+      controller: addressController,
+      focusNode: addressFocusNode,
+      hintText: S.of(context).please_input_address,
+      errorMessage:errorMessage,
+      onEditingComplete: (){
+        FocusScope.of(context).requestFocus(nameFocusNode);
+      },
+      boxShadow:BoxShadow(
+        color: Color(0xff101828).withAlpha((0 * 255).round()),  //底色,阴影颜色
+        offset: Offset(0, 0), //阴影位置,从什么位置开始
+        blurRadius: ScreenUtil().setWidth(0),  // 阴影模糊层度
+        spreadRadius: 0, ),
+      messageMargin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+      rightWidget1: Image.asset(
+        "assets/wallet/scan.png",
+        color: AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.mainTextColor.name),
+        width: ScreenUtil().setWidth(50.0),
+        height: ScreenUtil().setWidth(50.0),
+      ),
+      rightOnTap1: () async {
+        /// 扫描
+        String? data = await Navigator
+            .push(context,MaterialPageRoute(builder: (_) => ScanPage()));
+        if(data != null){
+          setState(() {
+            addressController.text = data;
+          });
+        }
+      },
+      rightWidget2: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12,),
+        margin: EdgeInsets.only(left: 10,),
+        height: ScreenUtil().setWidth(60.0),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.mainBlueColor.name),
+            borderRadius: BorderRadius.all(Radius.circular(60.0))
+        ),
+        child: Text(
+          S.of(context).g_key_166,
+          style: TextStyle(
+            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
+            fontSize: ScreenUtil().setSp(26.0),
+          ),
+        ),
+      ),
+      rightOnTap2: () async {
+        //复制
+        //读取剪切板
+        ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
+        if (data != null) {
+          if (data.text != null && data.text != "null") {
+            addressController.text = data.text!;
+          }
+        }
+      },
+    );
+  }
+
+  name() {
+    return TextFieldStyle2(
+      context,
+      controller: nameController,
+      focusNode: nameFocusNode,
+      hintText: S.of(context).g_key_nft_2,
+      boxShadow:BoxShadow(
+        color: Color(0xff101828).withAlpha((0 * 255).round()),  //底色,阴影颜色
+        offset: Offset(0, 0), //阴影位置,从什么位置开始
+        blurRadius: ScreenUtil().setWidth(0),  // 阴影模糊层度
+        spreadRadius: 0, ),
+      onEditingComplete: (){
+        FocusScope.of(context).requestFocus(descFocusNode);
+      },
+    );
+  }
+
+  desc() {
+    return TextFieldStyle2(
+      context,
+      controller: descController,
+      focusNode: descFocusNode,
+      hintText: S.of(context).descO,
+      boxShadow:BoxShadow(
+        color: Color(0xff101828).withAlpha((0 * 255).round()),  //底色,阴影颜色
+        offset: Offset(0, 0), //阴影位置,从什么位置开始
+        blurRadius: ScreenUtil().setWidth(0),  // 阴影模糊层度
+        spreadRadius: 0, ),
+      onEditingComplete: (){
+        FocusScope.of(context).requestFocus(addressFocusNode);
+      },
+    );
+  }
+
+  handlerData() async {
+    final name = nameController.text.trim();
+    final desc = descController.text.trim();
+    String? address = addressController.text.trim();
+
+    address=await address_check(address);
+    if(address==null){
+      return;
+    }
+    if (coinName.isEmpty) {
+      ///选择币类型
+      ToastUtils.show(S.of(context).g_key_address_3);
+      return;
+    }
+    if (address.isEmpty) {
+      ToastUtils.show(S.of(context).g_key_address_2);
+      return;
+    }
+    if (name.isEmpty) {
+      ToastUtils.show(S.of(context).g_key_address_1);
+      return;
+    }
+
+    info.coinName = coinName;
+    info.coinIcon = coinIcon;
+    info.address = address;
+    info.name = name;
+    info.desc = desc;
+    try {
+      ///更新数据
+      final code = await AddressBookApi().updateAddressBookItem(info);
+      if (code != 0) {
+        eventBus.fire(EventPublic(EventPublicType.refreshData));
+        Navigator.of(context).pop(true);
+      } else {
+        //保存失败
+      }
+    } catch (err) {
+    }
+  }
+
+  delete() {
+    return GestureDetector(
+      onTap: () async{
+        // 删除数据
+        final data = await AddressBookApi().deleteAddressBookItem(info);
+        if(data != 0){
+          ToastUtils.show(S.of(context).g_key_address_5);
+          eventBus.fire(EventPublic(EventPublicType.refreshData));
+          Navigator.of(context).pop(true);
+        }
+      },
+      child: Container(
+        height: ScreenUtil().setWidth(80.0),
+        alignment:Alignment.center,
+        decoration: BoxDecoration(
+            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0))),
+        child: Text(
+          S.of(context).g_key_113,
+          style: TextStyle(color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
+              fontSize: ScreenUtil().setSp(32.0)),
+        ),
+      ),
+    );
+  }
+}
