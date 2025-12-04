@@ -31,7 +31,6 @@ class MiningTodayV2 extends StatefulWidget {
 }
 
 class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveClientMixin{
-  Load load=Load.finish;
   DataUtils? _dataUtils;
   DataUtils get dataUtils{
     if(_dataUtils==null){
@@ -97,23 +96,14 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
               child: Text(S.current.g_key_78),
               onPressed: () async {
                 try {
-                  setState(() {
-                    load=Load.loading;
-                  });
-
-                  dynamic data;
                   MiningV2Provider mp=Provider.of<MiningV2Provider>(context,listen: false);
                   await mp.createExitDepositUnsignedTx();
-                  debugPrint("unlock data：$data");
 
                 } catch (err) {
                   debugPrint("err:${err.toString()}");
                 } finally {
                   if (mounted) {
                     Navigator.of(dialogContext).pop(); // Dismiss alert dialog
-                    setState(() {
-                      load=Load.finish;
-                    });
                   }
                   //更新ui
                   initData();
@@ -480,12 +470,21 @@ Riesgo Alto*/
                               height: ScreenUtil().setWidth(88),
                               width: double.infinity,
                               margin: EdgeInsets.symmetric(vertical:ScreenUtil().setWidth(20),),
-                              child: ButtonStyle2(context, (){
-                                //解除质押
-                                unLockAstMining();
+                              child: ButtonStyle6(context, (){
+                                if(mpValue.exitDepositLoad==Load.finish){
+                                  //解除质押
+                                  unLockAstMining();
+                                }
                               },
                                 //"Redemption",
                                 S.of(context).g_mining_key_77,
+                                AppThemeUtils.getColorByKey(context,
+                                    mpValue.exitDepositLoad==Load.loading?
+                                    AppThemeKeys.mainButtonBgColor3.name:AppThemeKeys.mainButtonBgColor.name),
+                                AppThemeUtils.getColorByKey(context,
+                                    mpValue.exitDepositLoad==Load.loading?
+                                    AppThemeKeys.mainButtonTextColor3.name:AppThemeKeys.mainButtonTextColor.name),
+                                mpValue.exitDepositLoad==Load.loading,
                               ),//赎回
                             ),
                           SizedBox(

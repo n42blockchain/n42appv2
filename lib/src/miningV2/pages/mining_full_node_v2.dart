@@ -143,220 +143,210 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
         text:
         "${S.current.g_mining_key_37}:${S.of(context).g_mining_key_62}",
       ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: ListView(
-                          children: [
-                            NLevelWidget(
-                              nNum: widget.nNum,
-                            ),
-                            SizedBox(
-                              height: ScreenUtil().setWidth(90),
-                            ),
-                            Row(
+      body: Consumer<MiningV2Provider>(
+        builder: (context, mpValue, child) {
+          return SafeArea(
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+                    child: Column(
+                      children: [
+                        Expanded(
+                            child: ListView(
                               children: [
-                                Text(
-                                  // "Select the payment method",
-                                  S.current.g_mining_key_38,
-                                  style: TextStyle(
-                                      color: AppThemeUtils.getColorByKey(
-                                          context, AppThemeKeys.mainTextColor.name),
-                                      fontSize: ScreenUtil().setSp(30)),
+                                NLevelWidget(
+                                  nNum: widget.nNum,
                                 ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: ScreenUtil().setWidth(30),
-                            ),
-                            _buildPayMethod("assets/mining/pay_ast.png", S.of(context).g_mining_key_40,
-                                isSelected: _payType == 0, onTap: () {
-                                  setState(() {
-                                    _payType = 0;
-                                  });
-                                }),
-                            SizedBox(
-                              height: ScreenUtil().setWidth(24),
-                            ),
-                            Divider(
-                              color: AppThemeUtils.getColorByKey(
-                                  context, AppThemeKeys.itemLineColor.name),
-                            ),
-                            SizedBox(
-                              height: ScreenUtil().setWidth(24),
-                            ),
-                            Text(
-                              S.of(context).g_mining_key46,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: AppThemeUtils.getColorByKey(
-                                      context, AppThemeKeys.mainTextColor.name),
-                                  fontSize: ScreenUtil().setSp(26)),
-                            ),
-                            SizedBox(
-                              height: ScreenUtil().setWidth(90),
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  // "Payment Methods",
-                                  S.current.g_mining_key_39,
-                                  style: TextStyle(
-                                      color: AppThemeUtils.getColorByKey(
-                                          context, AppThemeKeys.mainTextColor.name),
-                                      fontSize: ScreenUtil().setSp(30)),
+                                SizedBox(
+                                  height: ScreenUtil().setWidth(90),
                                 ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: ScreenUtil().setWidth(24),
-                            ),
-                            _buildPayMethods(),
-                            if(nBalance != null && nBalance! > widget.nNum)
-                              Container(
-                                width: double.infinity,
-                                padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
-                                margin: EdgeInsets.only(top: ScreenUtil().setWidth(30),),
-                                decoration: BoxDecoration(
-                                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name),
-                                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                Row(
                                   children: [
-                                    Row(
-                                      children: [
-                                        Expanded(child: Text(
-                                          //Please save the verifier's public and private key pair first.
-                                          S.of(context).g_mining_key_78,
-                                          style: TextStyle(
-                                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
-                                            fontSize: ScreenUtil().setSp(32),
-                                          ),
-                                        ),),
-                                        Container(
-                                          width: ScreenUtil().setWidth(36),
-                                          height: ScreenUtil().setWidth(36),
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color:
-                                            savePrivateKey ? const Color(0xff32D74B) : Colors.transparent,
-                                            border: Border.all(
-                                              color: savePrivateKey
-                                                  ? Colors.transparent
-                                                  : AppThemeUtils.getColorByKey(
-                                                  context, AppThemeKeys.mainWhiteColor.name),
-                                              width: 1.0,
-                                            ),
-                                          ),
-                                          child: savePrivateKey
-                                              ? Icon(
-                                            Icons.check,
-                                            size: ScreenUtil().setWidth(24),
-                                            color: Colors.white,
-                                          )
-                                              : null,
-                                        ),
-                                      ],
+                                    Text(
+                                      // "Select the payment method",
+                                      S.current.g_mining_key_38,
+                                      style: TextStyle(
+                                          color: AppThemeUtils.getColorByKey(
+                                              context, AppThemeKeys.mainTextColor.name),
+                                          fontSize: ScreenUtil().setSp(30)),
                                     ),
-
-                                    Container(
-                                      height: ScreenUtil().setWidth(80),
-                                      width: double.infinity,
-                                      margin: EdgeInsets.only(top: ScreenUtil().setWidth(30),left: ScreenUtil().setWidth(30),right: ScreenUtil().setWidth(30)),
-                                      child: ButtonStyle2(context, () async {
-                                        final result = await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (_) => const MiningOutputTip()),
-                                        );
-                                        // 接收返回的 copyEncrypte 值并更新状态
-                                        if (result !=null && mounted) {
-                                          setState(() {
-                                            savePrivateKey = true;
-                                            encrypteData=result;
-                                          });
-                                        }
-                                      },
-                                          //"导出"
-                                        S.of(context).g_mining_key_79
-                                      ),
-                                    )
                                   ],
                                 ),
-                              )
-                          ],
-                        )),
-                    SizedBox(height: ScreenUtil().setWidth(148),),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Column(
-                children: [
-                  Divider(
-                    height: ScreenUtil().setWidth(1),
-                    indent: 0,
-                    endIndent: 0,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: ScreenUtil().setWidth(148),
-                    padding: EdgeInsets.all( ScreenUtil().setWidth(30)),
-                    child: ButtonStyle6(context, () async {
-                      if(load==Load.loading)return;
-                      if (_payType == 0) {
-                        if (_payMethod == 0) {
-                          if (nBalance == null || nBalance! < 32) {
-                            //如果获取余额失败 再次尝试获取
-                            await checkNBalance();
-                          }
-                          if (nBalance == null || nBalance! < 32) {
-                            //如果获取余额失败 再次尝试获取
-                            return;
-                          }
+                                SizedBox(
+                                  height: ScreenUtil().setWidth(30),
+                                ),
+                                _buildPayMethod("assets/mining/pay_ast.png", S.of(context).g_mining_key_40,
+                                    isSelected: _payType == 0, onTap: () {
+                                      setState(() {
+                                        _payType = 0;
+                                      });
+                                    }),
+                                SizedBox(
+                                  height: ScreenUtil().setWidth(24),
+                                ),
+                                Divider(
+                                  color: AppThemeUtils.getColorByKey(
+                                      context, AppThemeKeys.itemLineColor.name),
+                                ),
+                                SizedBox(
+                                  height: ScreenUtil().setWidth(24),
+                                ),
+                                Text(
+                                  S.of(context).g_mining_key46,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: AppThemeUtils.getColorByKey(
+                                          context, AppThemeKeys.mainTextColor.name),
+                                      fontSize: ScreenUtil().setSp(26)),
+                                ),
+                                SizedBox(
+                                  height: ScreenUtil().setWidth(90),
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      // "Payment Methods",
+                                      S.current.g_mining_key_39,
+                                      style: TextStyle(
+                                          color: AppThemeUtils.getColorByKey(
+                                              context, AppThemeKeys.mainTextColor.name),
+                                          fontSize: ScreenUtil().setSp(30)),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: ScreenUtil().setWidth(24),
+                                ),
+                                _buildPayMethods(),
+                                if(nBalance != null && nBalance! > widget.nNum)
+                                  Container(
+                                    width: double.infinity,
+                                    padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+                                    margin: EdgeInsets.only(top: ScreenUtil().setWidth(30),),
+                                    decoration: BoxDecoration(
+                                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name),
+                                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(child: Text(
+                                              //Please save the verifier's public and private key pair first.
+                                              S.of(context).g_mining_key_78,
+                                              style: TextStyle(
+                                                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
+                                                fontSize: ScreenUtil().setSp(32),
+                                              ),
+                                            ),),
+                                            Container(
+                                              width: ScreenUtil().setWidth(36),
+                                              height: ScreenUtil().setWidth(36),
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color:
+                                                savePrivateKey ? const Color(0xff32D74B) : Colors.transparent,
+                                                border: Border.all(
+                                                  color: savePrivateKey
+                                                      ? Colors.transparent
+                                                      : AppThemeUtils.getColorByKey(
+                                                      context, AppThemeKeys.mainWhiteColor.name),
+                                                  width: 1.0,
+                                                ),
+                                              ),
+                                              child: savePrivateKey
+                                                  ? Icon(
+                                                Icons.check,
+                                                size: ScreenUtil().setWidth(24),
+                                                color: Colors.white,
+                                              )
+                                                  : null,
+                                            ),
+                                          ],
+                                        ),
 
-                          if (nBalance! < widget.nNum) {
-                            return;
-                          }
-
-                          //计算解锁时间
-                          int currTime = DateTime.now().millisecondsSinceEpoch;
-                          int yearTime = 365 * 24 * 60 * 60 * 1000;
-                          int totalTime = currTime + yearTime;
-                          String lockTime = dataUtils.getTimeByTimeStamp(
-                              "$totalTime",
-                              format: "dd/MM/yyyy");
-                          showGroupConfirmDialog(
-                              this.context, widget.nNum, "0", () async {
-                            handlerData();
-                          });
-                        }
-                      } else {
-
-                      }
-                    },
-                      S.of(context).g_key_78,
-                      AppThemeUtils.getColorByKey(context, load==Load.loading?AppThemeKeys.mainButtonBgColor3.name:AppThemeKeys.mainButtonBgColor.name,),
-                      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
-                      load==Load.loading,
+                                        Container(
+                                          height: ScreenUtil().setWidth(80),
+                                          width: double.infinity,
+                                          margin: EdgeInsets.only(top: ScreenUtil().setWidth(30),left: ScreenUtil().setWidth(30),right: ScreenUtil().setWidth(30)),
+                                          child: ButtonStyle2(context, () async {
+                                            final result = await Navigator.push(
+                                              context,
+                                              MaterialPageRoute(builder: (_) => const MiningOutputTip()),
+                                            );
+                                            // 接收返回的 copyEncrypte 值并更新状态
+                                            if (result !=null && mounted) {
+                                              setState(() {
+                                                savePrivateKey = true;
+                                                encrypteData=result;
+                                              });
+                                            }
+                                          },
+                                              //"导出"
+                                              S.of(context).g_mining_key_79
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                              ],
+                            )),
+                        SizedBox(height: ScreenUtil().setWidth(148),),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Column(
+                    children: [
+                      Divider(
+                        height: ScreenUtil().setWidth(1),
+                        indent: 0,
+                        endIndent: 0,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: ScreenUtil().setWidth(148),
+                        padding: EdgeInsets.all( ScreenUtil().setWidth(30)),
+                        child: ButtonStyle6(context, () async {
+                          if(mpValue.depositLoad==Load.loading)return;
+                          if (_payType == 0) {
+                            if (_payMethod == 0) {
+                              if (nBalance == null || nBalance! < widget.nNum) {
+                                //如果获取余额失败 再次尝试获取
+                                await checkNBalance();
+                              }
+
+                              if (nBalance! < widget.nNum) {
+                                return;
+                              }
+                              showGroupConfirmDialog(
+                                  this.context, widget.nNum, '640s', () async {
+                                handlerData();
+                              });
+                            }
+                          }
+                        },
+                          S.of(context).g_key_78,
+                          AppThemeUtils.getColorByKey(context, load==Load.loading?AppThemeKeys.mainButtonBgColor3.name:AppThemeKeys.mainButtonBgColor.name,),
+                          AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
+                          mpValue.depositLoad==Load.loading,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -503,25 +493,14 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
   //开始质押
   handlerData() async {
     try {
-      ///设置质押数量
-      try {
-        setState(() {
-          load=Load.loading;
-        });
-        MiningV2Provider mp=Provider.of<MiningV2Provider>(Application.AppContext,listen: false);
-        await mp.createDepositUnsignedTx(widget.nNum, encrypteData!);
-      } catch (err) {
-        //RPCError: got code 3 with msg "execution reverted: 10 AST Deposit Limit has been reached".
-        debugPrint("质押失败：${err.toString()}");
-        if (err.toString().contains(S.of(context).g_mining_key_80)) {
-          ToastUtils.show(S.of(context).g_mining_key_80);
-        }
-        setState(() {
-          load=Load.finish;
-        });
-      }
+      MiningV2Provider mp=Provider.of<MiningV2Provider>(Application.AppContext,listen: false);
+      await mp.createDepositUnsignedTx(widget.nNum, encrypteData!);
     } catch (err) {
-      debugPrint(err.toString());
+      //RPCError: got code 3 with msg "execution reverted: 10 AST Deposit Limit has been reached".
+      debugPrint("质押失败：${err.toString()}");
+      if (err.toString().contains(S.of(context).g_mining_key_80)) {
+        ToastUtils.show(S.of(context).g_mining_key_80);
+      }
     }
   }
 }
