@@ -1,4 +1,4 @@
-package ai.n42.www.n42appv2
+package ai.n42.www
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.android.FlutterFragmentActivity

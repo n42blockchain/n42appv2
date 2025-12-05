@@ -1,4 +1,4 @@
-package ai.n42.www.n42appv2
+package ai.n42.www
 
 import kotlin.experimental.and
 

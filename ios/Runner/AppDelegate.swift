@@ -18,45 +18,40 @@ import WalletCore
         UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
       }
       GeneratedPluginRegistrant.register(with: self)
-      let controller = self.window.rootViewController as! FlutterViewController
-      let channel = FlutterMethodChannel.init(name: "trustdart", binaryMessenger: controller as! FlutterBinaryMessenger)
+      guard let controller = self.window?.rootViewController as? FlutterViewController else {
+          return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+      }
+      let channel = FlutterMethodChannel(name: "trustdart", binaryMessenger: controller as! any FlutterBinaryMessenger as FlutterBinaryMessenger)
       
       channel.setMethodCallHandler { (call, result) in
       switch call.method {
       case "generateMnemonic":
-          let args = call.arguments as! [String: Any]
-          let passphrase: String? = args["passphrase"] as? String
-          var leng: Int32? = args["length"] as? Int32
-          if(leng == nil){
-              leng=128
+          guard let args = call.arguments as? [String: Any] else {
+              result(FlutterError(code: "arguments_null", message: "arguments is null", details: nil))
+              break
           }
-          let wallet = HDWallet(strength: leng!, passphrase: passphrase!)
-          if wallet != nil {
-              result(wallet!.mnemonic)
+          let passphrase: String = (args["passphrase"] as? String) ?? ""
+          let leng: Int32 = (args["length"] as? Int32) ?? 128
+          if let wallet = HDWallet(strength: leng, passphrase: passphrase) {
+              result(wallet.mnemonic)
           } else {
-              result(FlutterError(
-                  code: "no_wallet",
-                  message: "Could not generate wallet, why?",
-                  details: nil))
+              result(FlutterError(code: "no_wallet", message: "Could not generate wallet", details: nil))
           }
       break
       case "checkMnemonic":
-          let args = call.arguments as! [String: String]
-          let mnemonic: String? = args["mnemonic"]
-          let passphrase: String? = args["passphrase"]
-          if mnemonic != nil {
-              let wallet = HDWallet(mnemonic: mnemonic!, passphrase: passphrase!)
-              if wallet != nil {
-                  result(true)
-              } else {
-                  result(FlutterError(code: "no_wallet",
-                      message: "Could not generate wallet, why?",
-                      details: nil))
-              }
+          guard let args = call.arguments as? [String: String] else {
+              result(FlutterError(code: "arguments_null", message: "arguments is null", details: nil))
+              break
+          }
+          guard let mnemonic = args["mnemonic"], !mnemonic.isEmpty else {
+              result(FlutterError(code: "arguments_null", message: "[mnemonic] cannot be null", details: nil))
+              break
+          }
+          let passphrase: String = args["passphrase"] ?? ""
+          if let wallet = HDWallet(mnemonic: mnemonic, passphrase: passphrase) {
+              result(true)
           } else {
-              result(FlutterError(code: "arguments_null",
-                  message: "[mnemonic] cannot be null",
-                  details: nil))
+              result(FlutterError(code: "no_wallet", message: "Could not generate wallet", details: nil))
           }
       break
       case "generateAddress":

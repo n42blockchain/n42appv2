@@ -1,6 +1,6 @@
-package ai.n42.www.n42appv2
+package ai.n42.www
 
-import ai.n42.www.n42appv2.R
+import ai.n42.www.R
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
