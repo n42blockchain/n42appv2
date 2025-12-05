@@ -6,9 +6,9 @@ import 'package:n42appv2/src/utils/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 
 class PlansWidget extends StatelessWidget {
-  dynamic onTap;
+  final VoidCallback? onTap;
 
-  PlansWidget({required this.onTap, Key? key}) : super(key: key);
+  PlansWidget({this.onTap, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +16,13 @@ class PlansWidget extends StatelessWidget {
     String buttonTitle = S.of(context).g_mining_key_7;
     return GestureDetector(
       onTap: () {
-        Navigator.push(context,MaterialPageRoute(
-          builder: (_) => const MiningPlansV2(),
-        ));
+        if(onTap!=null){
+          onTap!();
+        }else{
+          Navigator.push(context,MaterialPageRoute(
+            builder: (_) => const MiningPlansV2(),
+          ));
+        }
       },
       child: Container(
         height: ScreenUtil().setWidth(246),

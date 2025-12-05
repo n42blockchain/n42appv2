@@ -87,35 +87,37 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m26(value, value1) => "${value} N every ${value1} blocks mined";
 
-  static String m27(value) => "${value} Insufficient Balance.";
+  static String m27(value) => "Must be ${value} characters";
 
-  static String m28(value) => "${value} incoming...";
+  static String m28(value) => "${value} Insufficient Balance.";
 
-  static String m29(value) =>
+  static String m29(value) => "${value} incoming...";
+
+  static String m30(value) =>
       "${value} swapped in-app will be distributed shortly to your wallet and cannot be sold via this process. It can be used to run a node.";
 
-  static String m30(value) => "Max ${value} characters";
+  static String m31(value) => "Max ${value} characters";
 
-  static String m31(value) => "${value} chain APP is already supported!";
+  static String m32(value) => "${value} chain APP is already supported!";
 
-  static String m32(value) =>
+  static String m33(value) =>
       "${value} chain APP is already supported, do you want to add it?";
 
-  static String m33(value) => "${value} address test link failed!";
-
-  static String m34(value) =>
-      "The application will unlock in ${value} seconds.";
+  static String m34(value) => "${value} address test link failed!";
 
   static String m35(value) =>
+      "The application will unlock in ${value} seconds.";
+
+  static String m36(value) =>
       "Pattern password input error,you have ${value} chances";
 
-  static String m36(value) => "Password input error,you have ${value} chances";
+  static String m37(value) => "Password input error,you have ${value} chances";
 
-  static String m37(value) => "Password input error,you have ${value} chance";
+  static String m38(value) => "Password input error,you have ${value} chance";
 
-  static String m38(value) => "Enter ${value} password";
+  static String m39(value) => "Enter ${value} password";
 
-  static String m39(value) => "0~${value} characters";
+  static String m40(value) => "0~${value} characters";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -1085,6 +1087,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key_1": MessageLookupByLibrary.simpleMessage("Home"),
     "g_mining_key_10": MessageLookupByLibrary.simpleMessage("Today\'s reward"),
+    "g_mining_key_100": MessageLookupByLibrary.simpleMessage(
+      "Please treat the data below as an important key. We recommend copying and backing it up to a trusted location immediately.",
+    ),
+    "g_mining_key_101": MessageLookupByLibrary.simpleMessage("Copy Data"),
+    "g_mining_key_102": MessageLookupByLibrary.simpleMessage("Inactive"),
+    "g_mining_key_103": MessageLookupByLibrary.simpleMessage("Validator List"),
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage(
       "Yesterday’s Rewards",
     ),
@@ -1214,8 +1222,38 @@ class MessageLookup extends MessageLookupByLibrary {
       "Moderately High Risk",
     ),
     "g_mining_key_87": MessageLookupByLibrary.simpleMessage("High Risk"),
+    "g_mining_key_88": MessageLookupByLibrary.simpleMessage(
+      "The contract is loading and cannot be verified at this time. Please wait a moment!",
+    ),
+    "g_mining_key_89": MessageLookupByLibrary.simpleMessage("Safety Tips"),
     "g_mining_key_9": MessageLookupByLibrary.simpleMessage(
       "Background Verification",
+    ),
+    "g_mining_key_90": MessageLookupByLibrary.simpleMessage(
+      "Please keep your private key or mnemonic phrase safe.",
+    ),
+    "g_mining_key_91": MessageLookupByLibrary.simpleMessage(
+      "Your private key or mnemonic phrase is the only credential for accessing your wallet assets.",
+    ),
+    "g_mining_key_92": MessageLookupByLibrary.simpleMessage(
+      "Please keep it in a safe place (paper, password manager, etc.).",
+    ),
+    "g_mining_key_93": MessageLookupByLibrary.simpleMessage(
+      "Do not take screenshots, upload them to the internet, or share them with anyone.",
+    ),
+    "g_mining_key_94": MessageLookupByLibrary.simpleMessage(
+      "Once lost or compromised, your wallet assets cannot be recovered.",
+    ),
+    "g_mining_key_95": MessageLookupByLibrary.simpleMessage("Confirm and save"),
+    "g_mining_key_96": MessageLookupByLibrary.simpleMessage(
+      "Set a password and encrypt",
+    ),
+    "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
+      "Please enter the encryption password",
+    ),
+    "g_mining_key_98": m27,
+    "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
+      "Please re-enter your password to ensure it\'s correct",
     ),
     "g_notification_key_1": MessageLookupByLibrary.simpleMessage(
       "Notifications",
@@ -1244,7 +1282,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_9": MessageLookupByLibrary.simpleMessage(
       "Your referral stats",
     ),
-    "g_swap_key_14": m27,
+    "g_swap_key_14": m28,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Get coin price error.",
     ),
@@ -1258,7 +1296,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Your swap will be distributed shortly.Please be patient.",
     ),
-    "g_swap_key_20": m28,
+    "g_swap_key_20": m29,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Costs to run a node: Group Verification 1-49 N Basic Node: 50 N Premium Node: 100 N Pro Node: 500 N.",
     ),
@@ -1270,7 +1308,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("New Balance"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("You pay"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Date"),
-    "g_swap_key_31": m29,
+    "g_swap_key_31": m30,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Swaps can be viewed on the relevant chain explorers (Etherscan, BscScan, TRONSCAN and our own).",
     ),
@@ -1279,7 +1317,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_4": MessageLookupByLibrary.simpleMessage("You get"),
     "g_swap_key_5": MessageLookupByLibrary.simpleMessage("Preview Swap"),
     "g_swap_key_6": MessageLookupByLibrary.simpleMessage("Try again"),
-    "g_token_m_key_1": m30,
+    "g_token_m_key_1": m31,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Anyone can create a token, including creating fake versions of existing tokens. Always research a token before importing it.",
     ),
@@ -1297,9 +1335,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 uint"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Add Tokens"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Format Error!"),
-    "g_token_m_key_22": m31,
-    "g_token_m_key_23": m32,
-    "g_token_m_key_24": m33,
+    "g_token_m_key_22": m32,
+    "g_token_m_key_23": m33,
+    "g_token_m_key_24": m34,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Import tokens"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("All networks"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("Custom Token"),
@@ -1307,20 +1345,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_7": MessageLookupByLibrary.simpleMessage("Token symbol"),
     "g_token_m_key_8": MessageLookupByLibrary.simpleMessage("Token decimal"),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("Import"),
-    "g_unlock_key10": m34,
+    "g_unlock_key10": m35,
     "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
       "Fingerprint or face recognition is not enabled?",
     ),
     "g_unlock_key3": MessageLookupByLibrary.simpleMessage(
       "Draw pattern password",
     ),
-    "g_unlock_key4": m35,
+    "g_unlock_key4": m36,
     "g_unlock_key5": MessageLookupByLibrary.simpleMessage("Enter password"),
-    "g_unlock_key6": m36,
+    "g_unlock_key6": m37,
     "g_unlock_key7": MessageLookupByLibrary.simpleMessage(
       "Authentication failed",
     ),
-    "g_unlock_key8": m37,
+    "g_unlock_key8": m38,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("You can also "),
     "google_verification": MessageLookupByLibrary.simpleMessage(
       "Google Authentication",
@@ -1358,7 +1396,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "google_verification_message20": MessageLookupByLibrary.simpleMessage(
       "Enter E-mail verification code",
     ),
-    "google_verification_message21": m38,
+    "google_verification_message21": m39,
     "google_verification_message3": MessageLookupByLibrary.simpleMessage(
       "Failed to get google key",
     ),
@@ -1418,7 +1456,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_password": MessageLookupByLibrary.simpleMessage("Password"),
     "login_resend": MessageLookupByLibrary.simpleMessage("Resend"),
     "next": MessageLookupByLibrary.simpleMessage("Next"),
-    "nicknameMessage": m39,
+    "nicknameMessage": m40,
     "password_diff": MessageLookupByLibrary.simpleMessage(
       "Passwords don\'t match",
     ),

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/src/miningV2/pages/keyManagement/mining_output_pk.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
+import 'package:n42appv2/generated/l10n.dart';
 
 class MiningOutputTip extends StatelessWidget {
   const MiningOutputTip({super.key});
@@ -20,7 +21,7 @@ class MiningOutputTip extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBarWidget(
-          text: "安全提示",
+          text: S.of(context).g_mining_key_89,
         ),
         body: Padding(
           padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
@@ -28,7 +29,7 @@ class MiningOutputTip extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "请妥善保存你的私钥或助记词",
+                S.of(context).g_mining_key_90,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(44),
                   fontWeight: FontWeight.bold,
@@ -36,10 +37,19 @@ class MiningOutputTip extends StatelessWidget {
               ),
               SizedBox(height: ScreenUtil().setWidth(40)),
               Text(
-                "你的私钥或助记词是访问钱包资产的唯一凭证。\n"
-                    "请将它保存在安全的地方（纸张、密码管理器等），"
-                    "不要截屏，不要上传到网络，也不要分享给任何人。\n\n"
-                    "一旦丢失或泄露，钱包资产将无法恢复。",
+                S.of(context).g_mining_key_91,
+                style: TextStyle(fontSize: ScreenUtil().setSp(32), height: 1.5),
+              ),
+              Text(
+                S.of(context).g_mining_key_92,
+                style: TextStyle(fontSize: ScreenUtil().setSp(32), height: 1.5),
+              ),
+              Text(
+                S.of(context).g_mining_key_93,
+                style: TextStyle(fontSize: ScreenUtil().setSp(32), height: 1.5),
+              ),
+              Text(
+                S.of(context).g_mining_key_94,
                 style: TextStyle(fontSize: ScreenUtil().setSp(32), height: 1.5),
               ),
               const Spacer(),
@@ -63,7 +73,7 @@ class MiningOutputTip extends StatelessWidget {
               if (context.mounted) {
                 Navigator.of(context).pop(result);
               }
-            }, "我已知晓并确认保存",),
+            }, S.of(context).g_mining_key_95,),
           ),
         ),
       ),

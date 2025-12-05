@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-Future<bool?> showGroupConfirmDialog(BuildContext context, int num,
-    String lockDate, GestureTapCallback? sureCall) async {
-  return await showDialog(
+Future<bool?> showGroupConfirmDialog(
+    BuildContext context,
+    int num,
+    String lockDate,
+    GestureTapCallback? sureCall,
+) async {
+  return await showDialog<bool>(
     context: context,
     barrierDismissible: false,
     builder: (_) => AlertDialog(
@@ -58,7 +62,7 @@ class GroupConfirm extends StatelessWidget {
             height: ScreenUtil().setWidth(80),
           ),
           Text(
-            "Confirmation",
+            S.of(context).g_mining_key_77,
             style: TextStyle(
                 color: AppThemeUtils.getColorByKey(
                     context, AppThemeKeys.mainTextColor.name),
@@ -112,11 +116,13 @@ class GroupConfirm extends StatelessWidget {
                 ),
                 Expanded(
                   child: InkWell(
-                    onTap: () {
+                    onTap: () async {
                       if (sureCall != null) {
-                        sureCall!();
+                        await Future.sync(sureCall!);
                       }
-                      Navigator.of(context).pop(true);
+                      if (context.mounted) {
+                        Navigator.of(context).pop(true);
+                      }
                     },
                     child: Container(
                       decoration: BoxDecoration(

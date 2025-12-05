@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -37,14 +38,8 @@ class MiningFullNodeV2 extends StatefulWidget {
 }
 
 class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
-  DataUtils? _dataUtils;
-  DataUtils get dataUtils{
-    if(_dataUtils==null){
-      _dataUtils= DataUtils();
-    }
-    return _dataUtils!;
-  }
-  Load load=Load.finish;
+  final TokenViewApi _tokenViewApi = TokenViewApi();
+  StreamSubscription? _eventSubscription;
   int _payType = 0;
   int _payMethod = 0;
 
@@ -52,31 +47,27 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
   bool isLoadingNftBalance = false;
 
   double? nBalance;
-  String? nAddress;
-
   //nft50num (拥有多少个50面额的NFT)
   BigInt nft50num = BigInt.zero;
 
-  var eventBusFn;
   bool savePrivateKey=false;
   Map<String,dynamic>? encrypteData=null;
 
   @override
   void initState() {
     super.initState();
-    eventBusFn=eventBus.on().listen((event) {
+    _eventSubscription=eventBus.on().listen((event) {
       if (event is EventPublic &&
           event.type == EventPublicType.miningFullNode) {
-        setState(() {
-          load=Load.finish;
-        });
-        Navigator.pushReplacement(context,
-          MaterialPageRoute(
-              builder: (_) => ShareMining(
-                fromType: _payType == 0 ? 2 : 3,
-                astValue: widget.nNum,
-              )),
-        );
+        if(mounted){
+          Navigator.pushReplacement(context,
+            MaterialPageRoute(
+                builder: (_) => ShareMining(
+                  fromType: _payType == 0 ? 2 : 3,
+                  astValue: widget.nNum,
+                )),
+          );
+        }
       }
     });
     initData();
@@ -84,19 +75,21 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
 
   @override
   void dispose() {
+    _eventSubscription?.cancel();
     super.dispose();
-    eventBusFn.cancel();
   }
 
-  initData() async {
-    checkNBalance();
+  Future<void> initData() async {
+    await checkNBalance();
   }
 
-  checkNBalance() async {
+  Future<void> checkNBalance() async {
     try {
-      setState(() {
-        isLoadingAstBalance = true;
-      });
+      if(mounted){
+        setState(() {
+          isLoadingAstBalance = true;
+        });
+      }
       WalletActionProvider wap=Provider.of<WalletActionProvider>(Application.AppContext,listen: false);
       //MiningV2Provider mp=Provider.of<MiningV2Provider>(Application.AppContext,listen: false);
       //获取ast的 private key
@@ -111,8 +104,7 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
           CoinType.N.name, path, 'legacy',mnemonic: walletInfo.mnemonic??"",pk: walletInfo.privateKey??"");
       final astAddress = addressMap['legacy'];
       //final isMainChainMining = await MiningUtils.isMainChainMining();
-      TokenViewApi tokenViewApi=TokenViewApi();
-      MessageModel mm = await tokenViewApi.getBalance(
+      MessageModel mm = await _tokenViewApi.getBalance(
           BlockchainType.Ethereum.name,
           CoinType.N.name,
           astAddress ?? '',
@@ -130,9 +122,11 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
     } catch (err) {
       debugPrint("err:${err.toString()}");
     } finally {
-      setState(() {
-        isLoadingAstBalance = false;
-      });
+      if(mounted){
+        setState(() {
+          isLoadingAstBalance = false;
+        });
+      }
     }
   }
 
@@ -327,16 +321,16 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
                               if (nBalance! < widget.nNum) {
                                 return;
                               }
-                              showGroupConfirmDialog(
-                                  this.context, widget.nNum, '640s', () async {
-                                handlerData();
+                                showGroupConfirmDialog(
+                                    context, widget.nNum, '640s', () async {
+                                  await handlerData();
                               });
                             }
                           }
                         },
                           S.of(context).g_key_78,
-                          AppThemeUtils.getColorByKey(context, load==Load.loading?AppThemeKeys.mainButtonBgColor3.name:AppThemeKeys.mainButtonBgColor.name,),
-                          AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
+                          AppThemeUtils.getColorByKey(context, mpValue.depositLoad==Load.loading?AppThemeKeys.mainButtonBgColor3.name:AppThemeKeys.mainButtonBgColor.name,),
+                          AppThemeUtils.getColorByKey(context, mpValue.depositLoad==Load.loading?AppThemeKeys.mainButtonTextColor3.name:AppThemeKeys.mainButtonTextColor.name),
                           mpValue.depositLoad==Load.loading,
                         ),
                       ),
@@ -351,7 +345,7 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
     );
   }
 
-  _buildPayMethods() {
+  Widget _buildPayMethods() {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -368,7 +362,7 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
     );
   }
 
-  _buildPayMethod(String icon, String payType,
+  Widget _buildPayMethod(String icon, String payType,
       {bool isSelected = false, GestureTapCallback? onTap}) {
     return GestureDetector(
       onTap: onTap,
@@ -422,7 +416,7 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
     );
   }
 
-  _buildPayMethodv2(String icon, String payType,
+  Widget _buildPayMethodv2(String icon, String payType,
       {bool isSelected = false,
         GestureTapCallback? onTap,
         String? errTips,
@@ -491,7 +485,11 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
   }
 
   //开始质押
-  handlerData() async {
+  Future<void> handlerData() async {
+    if(encrypteData==null){
+      ToastUtils.show(S.of(context).g_mining_key_78);
+      return;
+    }
     try {
       MiningV2Provider mp=Provider.of<MiningV2Provider>(Application.AppContext,listen: false);
       await mp.createDepositUnsignedTx(widget.nNum, encrypteData!);

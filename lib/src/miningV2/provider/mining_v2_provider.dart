@@ -24,18 +24,18 @@ import 'package:n42appv2/generated/l10n.dart';
 
 class MiningV2Provider extends ChangeNotifier {
   MiningApi? mining=null;
-  MiningApi? get Mining{
+  MiningApi get Mining{
     if(mining==null){
       mining=MiningApi.init();
     }
-    return mining;
+    return mining!;
   }
   MiningWeb3? web3=null;
-  MiningWeb3? get Web3{
+  MiningWeb3 get Web3{
     if(web3==null){
       web3=MiningWeb3.init(privateKey??"");
     }
-    return web3;
+    return web3!;
   }
   //是否已经质押
   bool? depositsEnable=null;
@@ -132,7 +132,7 @@ class MiningV2Provider extends ChangeNotifier {
       notifyListeners();
     }
   }
-  loadMiningData()async {
+  Future<void> loadMiningData() async {
     if(depositsEnable==true){
       getMiningWithdrawalsDaily();
       getBeaconValidator();
@@ -157,7 +157,7 @@ class MiningV2Provider extends ChangeNotifier {
       endWithdrawalTimer();
     }
   }
-  getNprice(WalletActionProvider wap)async{
+  Future<void> getNprice(WalletActionProvider wap) async {
     Map<String,dynamic>? coinInfo=await wap.getCoinPriceWithUnit(CoinType.N.name);
     nPrice=coinInfo?['coinPrice']??0;
   }
@@ -177,7 +177,7 @@ class MiningV2Provider extends ChangeNotifier {
   }
   ///获取keypart
   Map<String,dynamic>? miningKeypart=null;
-  generateBls12381Keypair()async{
+  Future<void> generateBls12381Keypair() async {
     if(miningKeypart !=null){
       if(miningKeypart!['isMining']==true){
         return;
@@ -198,7 +198,7 @@ class MiningV2Provider extends ChangeNotifier {
       }
     });
   }
-  setMiningData_import(Map<String,dynamic> value)async{
+  Future<MessageModel> setMiningData_import(Map<String,dynamic> value) async {
     WalletActionProvider wap=Provider.of<WalletActionProvider>(Application.AppContext,listen: false);
     int index=wap.walletInfoLsit.indexWhere((test){
       if(test.privateKey==value['privateKey']){
@@ -214,10 +214,10 @@ class MiningV2Provider extends ChangeNotifier {
     //导入钱包
     if(index ==-1){
       if(value['mnemonicWords'] !=""){
-        bool checkMnemonic =await Trustdart().checkMnemonic(value['mnemonicWords']);
+        bool checkMnemonic = await Trustdart().checkMnemonic(value['mnemonicWords']);
         if (checkMnemonic == false) {
           //助记词输入错误
-          MessageModel rmm=MessageModel.error();
+          MessageModel rmm = MessageModel.error();
           rmm.data=S.current.w_key_12;
           return rmm ;
         }else{
@@ -236,19 +236,19 @@ class MiningV2Provider extends ChangeNotifier {
       wInfo.coinInfo=chainUrlMap;
       wInfo.timestamp = "${DateTime.now().millisecondsSinceEpoch}";
     }else{
-      wInfo=wap.walletInfoLsit[index];
+      wInfo = wap.walletInfoLsit[index];
     }
 
-    Map<String,dynamic> cInfo=wInfo.coinInfo?[CoinType.N.name];
+    Map<String,dynamic> cInfo = wInfo.coinInfo?[CoinType.N.name];
     Map<String, dynamic> pathMap = cInfo['baseInfo']['path'];
-    var rmAddress=await Trustdart().generateAddress(
+    var rmAddress = await Trustdart().generateAddress(
         CoinType.N.name,
         getPathWithIndex(pathMap[cInfo['addrType']], cInfo['pathIndex']),
         cInfo['addrType'],
         mnemonic: wInfo.mnemonic??"",
         pk: wInfo.privateKey??""
     );
-    importAddress=rmAddress[cInfo['addrType']];
+    importAddress = rmAddress[cInfo['addrType']];
     if(index ==-1){
       await wap.addWalletInfo(wInfo);
     }
@@ -266,16 +266,16 @@ class MiningV2Provider extends ChangeNotifier {
           wap.setWalletMiningIndex(index);
         }
       }
-      MessageModel rmm=MessageModel();
+      MessageModel rmm = MessageModel();
       return rmm;
     }else{
-      MessageModel rmm=MessageModel.error();
+      MessageModel rmm = MessageModel.error();
       //"验证者已经存在";
       rmm.data=S.current.g_mining_key_83;
       return rmm;
     }
   }
-  getMiningData()async{
+  Future<void> getMiningData() async {
     miningData=await SPUtil().getMiningData();
     depositsEnable=miningData?[address!]?['isMining']??false;
     miningKeypart=miningData?[address!]?['keypart']??{};
@@ -283,7 +283,7 @@ class MiningV2Provider extends ChangeNotifier {
 
   //质押
   Load depositLoad=Load.finish;
-  createDepositUnsignedTx(int amount,Map<String,dynamic> encrypteData)async{
+  Future<void> createDepositUnsignedTx(int amount,Map<String,dynamic> encrypteData) async {
     try{
       depositLoad=Load.loading;
       notifyListeners();
@@ -294,7 +294,7 @@ class MiningV2Provider extends ChangeNotifier {
         DataUtils().bigIntToHex(ethToWeiString('${amount}', 18)),
       );
       if(rData !=null){
-        MessageModel sendMM=await Web3?.sendDepositTransaction(jsonDecode(rData));
+        MessageModel sendMM=await Web3.sendDepositTransaction(jsonDecode(rData));
         if(sendMM.error==false){
           depositsNum=amount;
           setDepositTxHash(sendMM.data);
@@ -312,21 +312,21 @@ class MiningV2Provider extends ChangeNotifier {
     }
 
   }
-  startCheckDepositTxHash(String txHash){
+  void startCheckDepositTxHash(String txHash){
     _timer=Timer.periodic(const Duration(seconds: 5), (timer) async {
       if(await checkTxHash(txHash)==false){
         endCheckTxHash();
-        depositsEnable=true;
+        //depositsEnable=true;
         depositLoad=Load.finish;
         notifyListeners();
         setMiningData(miningKeypart!, true);
         eventBus.fire(EventPublic(EventPublicType.miningFullNode));
-        runMining();
+        checkAddressMiningStatus();
       }
     });
   }
   Load exitDepositLoad=Load.finish;
-  createExitDepositUnsignedTx()async{
+  Future<void> createExitDepositUnsignedTx() async {
     exitDepositLoad=Load.loading;
     notifyListeners();
     String? feeWeiInHexTx=await miningCreateGetExitFeeUnsignedTx();
@@ -336,7 +336,7 @@ class MiningV2Provider extends ChangeNotifier {
       notifyListeners();
       return;
     }
-    MessageModel feeMM=await Web3?.exitDepositRowCall(feeWeiInHexTx);
+    MessageModel feeMM=await Web3.exitDepositRowCall(feeWeiInHexTx);
     if(feeMM.error) {
       errorMessage=feeMM.data;
       exitDepositLoad=Load.finish;
@@ -344,7 +344,7 @@ class MiningV2Provider extends ChangeNotifier {
       return;
     }
     final exitSignDataStr=await miningCreateExitUnsignedTx(feeMM.data);
-    MessageModel sendMM=await Web3?.sendExitDepositTransaction(jsonDecode(exitSignDataStr));
+    MessageModel sendMM=await Web3.sendExitDepositTransaction(jsonDecode(exitSignDataStr??'{}'));
     if(sendMM.error==false){
       depositsNum=0;
       setExitDepositTxHash(sendMM.data);
@@ -355,7 +355,7 @@ class MiningV2Provider extends ChangeNotifier {
     }
     notifyListeners();
   }
-  startCheckExitDepositTxHash(String txHash){
+  void startCheckExitDepositTxHash(String txHash){
     _timer=Timer.periodic(const Duration(seconds: 5), (timer) async {
       if(await checkTxHash(txHash)==false){
         endCheckTxHash();
@@ -368,18 +368,17 @@ class MiningV2Provider extends ChangeNotifier {
       }
     });
   }
-  endCheckTxHash(){
+  void endCheckTxHash(){
     if(_timer !=null){
       _timer!.cancel();
       _timer=null;
     }
   }
-  checkTxHash(String txHash)async{
-    MessageModel rmm=await Web3?.getTransactionReceipt(txHash);
-
+  Future<bool> checkTxHash(String txHash) async {
+    MessageModel rmm = await Web3.getTransactionReceipt(txHash);
     return rmm.error;
   }
-  runMining()async{
+  Future<void> runMining() async {
     String? rData=await Mining?.runClent(
       miningKeypart?['privateKey']??"",
     );
@@ -411,17 +410,17 @@ class MiningV2Provider extends ChangeNotifier {
       //await getBalance(addList: true);
     });
   }
-  miningCreateGetExitFeeUnsignedTx()async{
-    String? rData=await Mining?.miningCreateGetExitFeeUnsignedTx();
+  Future<String?> miningCreateGetExitFeeUnsignedTx() async {
+    String? rData = await Mining?.miningCreateGetExitFeeUnsignedTx();
     return rData;
   }
-  miningCreateExitUnsignedTx(String feeWeiInHex)async{
-    String? rData=await Mining?.miningCreateExitUnsignedTx(feeWeiInHex,miningKeypart?['publicKey']??"");
+  Future<String?> miningCreateExitUnsignedTx(String feeWeiInHex) async {
+    String? rData = await Mining?.miningCreateExitUnsignedTx(feeWeiInHex,miningKeypart?['publicKey']??"");
     return rData;
   }
 
   String? privateKey=null;
-  getWalletPrivateKey()async{
+  Future<void> getWalletPrivateKey() async {
     WalletActionProvider wap=Provider.of<WalletActionProvider>(Application.AppContext,listen: false);
     String? pk=wap.walletInfoLsit[wap.walletMiningIndex].privateKey;
     if(pk==null){
@@ -451,7 +450,7 @@ class MiningV2Provider extends ChangeNotifier {
   bool isShowDefaultBar=true;
 
   Timer? withdrawalTimer=null;
-  startWithdrawalTimer(){
+  void startWithdrawalTimer(){
     if(withdrawalTimer !=null){
       if(withdrawalTimer!.isActive){
         return;
@@ -461,7 +460,7 @@ class MiningV2Provider extends ChangeNotifier {
       getMiningWithdrawalsDaily();
     });
   }
-  endWithdrawalTimer(){
+  void endWithdrawalTimer(){
     if(withdrawalTimer !=null){
       if(withdrawalTimer!.isActive){
         withdrawalTimer!.cancel();
@@ -469,7 +468,7 @@ class MiningV2Provider extends ChangeNotifier {
       }
     }
   }
-  getMiningWithdrawalsDaily()async{
+  Future<void> getMiningWithdrawalsDaily() async {
     if(isLoading7DayData)return;
     final DateTime today = DateTime.now();//今天
     final DateTime tomorrow =today.add(const Duration(days: 1));//后天
@@ -509,14 +508,14 @@ class MiningV2Provider extends ChangeNotifier {
     isLoading7DayData=false;
     notifyListeners();
   }
-  getTimeFormat(DateTime date){
+  List<String> getTimeFormat(DateTime date){
     final String year = date.year.toString();
     final String month = date.month.toString().padLeft(2, '0');
     final String day = date.day.toString().padLeft(2, '0');
     return ["$year-$month-$day","$day/$month"];
   }
   /// 将秒数转换为时分秒格式的字符串，并补齐两位
-  formatElapsedTime(int seconds) {
+  List<String> formatElapsedTime(int seconds) {
     int hours = seconds ~/ 3600;
     int minutes = (seconds % 3600) ~/ 60;
     int remainingSeconds = seconds % 60;
@@ -526,7 +525,7 @@ class MiningV2Provider extends ChangeNotifier {
     String secondsStr = remainingSeconds.toString().padLeft(2, '0');
     return [hoursStr, minutesStr, secondsStr];
   }
-  get7DaysValue(DateTime date){
+  void get7DaysValue(DateTime date){
     for(int i=0;i<7;i++){
       DateTime d1=date.add(Duration(days: -(6-i)));
       final List<String> d1Str = getTimeFormat(d1);
@@ -542,7 +541,7 @@ class MiningV2Provider extends ChangeNotifier {
     isShowDefaultBar=false;
   }
   //生成图标点击事件展示数据
-  generateBarTipData() {
+  void generateBarTipData() {
     if (barchartValues.isNotEmpty && barchartValues.length == 7) {
       barchartAlertMessageList = [];
       //计算奖励
@@ -615,8 +614,15 @@ class MiningV2Provider extends ChangeNotifier {
   String inactivityScorePercentage="0";
   String inactivityTitle="";
   bool showRedemption=false;
-  getBeaconValidator()async{
-    MessageModel rmm=await Mining?.getBeaconValidator(miningKeypart?['publicKey']??"");
+  Timer? beaconValidatorTimer=null;
+  starBeaconValidatorTimer(){
+    if(beaconValidatorTimer !=null)return;
+    beaconValidatorTimer=Timer(Duration(seconds: 640),(){
+      getBeaconValidator();
+    });
+  }
+  Future<void> getBeaconValidator() async {
+    MessageModel rmm=await Mining.getBeaconValidator(miningKeypart?['publicKey']??"");
     if(rmm.error ==false){
       inactivityScore=[0,0,0,0];
       balanceInBeacon=toEther((rmm.data?['balance_in_beacon']??0).toString(), 9).toDouble();
@@ -645,7 +651,13 @@ class MiningV2Provider extends ChangeNotifier {
         }
       }
       int timestamp=rmm.data['activation_timestamp'];
-      final int currentTimestamp=DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      if(timestamp==0){
+        showRedemption=false;
+        starBeaconValidatorTimer();
+      }else{
+        showRedemption=true;
+      }
+      /*final int currentTimestamp=DateTime.now().millisecondsSinceEpoch ~/ 1000;
       final int readyTimestamp=timestamp+640;
       if(readyTimestamp>currentTimestamp){
         showRedemption=false;
@@ -655,7 +667,7 @@ class MiningV2Provider extends ChangeNotifier {
         });
       }else{
         showRedemption=true;
-      }
+      }*/
       notifyListeners();
     }
   }

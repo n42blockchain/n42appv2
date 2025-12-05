@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -31,46 +33,41 @@ class MiningTodayV2 extends StatefulWidget {
 }
 
 class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveClientMixin{
-  DataUtils? _dataUtils;
-  DataUtils get dataUtils{
-    if(_dataUtils==null){
-      _dataUtils=DataUtils();
-    }
-    return _dataUtils!;
-  }
-  var eventBusFn;
+  final DataUtils dataUtils = DataUtils();
+  StreamSubscription? _eventSubscription;
 
   @override
   void initState() {
     super.initState();
-    eventBusFn=eventBus.on().listen((event) {
-      if (event is EventPublic && event.type == EventPublicType.selectWallet) {
-        initData_wallet(EventPublicType.selectWallet);
+    _eventSubscription=eventBus.on().listen((event) async {
+      if (event is! EventPublic) return;
+      if (event.type == EventPublicType.selectWallet) {
+        await initData_wallet(EventPublicType.selectWallet);
       }
-      if (event is EventPublic && event.type == EventPublicType.selectMiningWallet) {
-        initData_wallet(EventPublicType.selectMiningWallet);
+      if (event.type == EventPublicType.selectMiningWallet) {
+        await initData_wallet(EventPublicType.selectMiningWallet);
       }
     });
   }
 
-  initData() async {
+  Future<void> initData() async {
     var mv2=Provider.of<MiningV2Provider>(context,listen: false);
     await mv2.loadMiningData();
   }
-  initData_wallet(EventPublicType pt)async{
+  Future<void> initData_wallet(EventPublicType pt)async{
     MiningV2Provider mp=Provider.of<MiningV2Provider>(context,listen: false);
     if(pt==EventPublicType.selectWallet){
       if(mp.depositsEnable !=null)return;
     }
     mp.resetData();
     await mp.checkAddressMiningStatus();
-    initData();
+    await initData();
   }
 
   @override
   void dispose() {
+    _eventSubscription?.cancel();
     super.dispose();
-    eventBusFn.cancel();
   }
   ///解除质押
   unLockAstMining() {
@@ -106,7 +103,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                     Navigator.of(dialogContext).pop(); // Dismiss alert dialog
                   }
                   //更新ui
-                  initData();
+                  await initData();
 
                 }
               },
@@ -220,7 +217,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
               flex: 1,
               child: DetailRefreshWidget(
                 callback: () async {
-                  initData();
+                  await initData();
                 },
                 childWidget: SingleChildScrollView(
                   padding: EdgeInsets.only(
@@ -465,7 +462,7 @@ Riesgo Alto*/
                                   showTips: true),
                             ],
                           ),
-                          if(mpValue.depositsEnable==true)
+                          if(mpValue.showRedemption==true)
                             Container(
                               height: ScreenUtil().setWidth(88),
                               width: double.infinity,
@@ -487,8 +484,20 @@ Riesgo Alto*/
                                 mpValue.exitDepositLoad==Load.loading,
                               ),//赎回
                             ),
+                          if(mpValue.depositsEnable==true && mpValue.showRedemption==false)
+                            Container(
+                              padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+                              width: double.infinity,
+                              child: Text(
+                                S.of(context).g_mining_key_88,
+                                style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(30),
+                                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name),
+                                ),
+                              ),
+                            ),
                           SizedBox(
-                            height: ScreenUtil().setWidth(100),
+                            height: ScreenUtil().setWidth(140),
                           ),
                         ],
                       );
@@ -503,7 +512,7 @@ Riesgo Alto*/
       ),
     );
   }
-  miningStatusWidget(MiningV2Provider mpValue) {
+  Widget miningStatusWidget(MiningV2Provider mpValue) {
     return Container(
       margin: EdgeInsets.symmetric(
         vertical: ScreenUtil().setWidth(20),
@@ -657,9 +666,9 @@ Riesgo Alto*/
       ),
     );
   }
-  backgroundMiningWidget(MiningV2Provider mpValue) {
+  Widget backgroundMiningWidget(MiningV2Provider mpValue) {
     if (mpValue.depositsEnable == false){
-      return SizedBox();
+      return const SizedBox.shrink();
     }
     return Container(
       padding: EdgeInsets.symmetric(
@@ -839,7 +848,7 @@ Riesgo Alto*/
     );
   }
   */
-  miningDataBroad(String titleText, String value,
+  Widget miningDataBroad(String titleText, String value,
       {bool showTips = false, String? imagePath, String? tipsText}) {
     return Expanded(
       child: Container(
@@ -909,12 +918,13 @@ Riesgo Alto*/
                           context, AppThemeKeys.mainTextColor.name),
                       fontSize: ScreenUtil().setSp(30)),
                 ),
-                Image.asset(
-                  imagePath ?? '',
-                  width: ScreenUtil().setWidth(90),
-                  height: ScreenUtil().setWidth(90),
-                  fit: BoxFit.cover,
-                )
+                if(imagePath!=null && imagePath.isNotEmpty)
+                  Image.asset(
+                    imagePath,
+                    width: ScreenUtil().setWidth(90),
+                    height: ScreenUtil().setWidth(90),
+                    fit: BoxFit.cover,
+                  )
               ],
             ),
           ],
@@ -938,7 +948,7 @@ Riesgo Alto*/
   }
 
   //显示钱包列表
-  showChangeAddress() {
+  void showChangeAddress() {
     WalletActionProvider walletValue = Provider.of<WalletActionProvider>(context,listen: false);
     List<Widget> childs = [];
     childs.add(

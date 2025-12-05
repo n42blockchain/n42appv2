@@ -1,4 +1,3 @@
-import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/src/miningV2/pages/keyManagement/mining_output_tip.dart';
@@ -6,6 +5,7 @@ import 'package:n42appv2/src/utils/sp_util.dart';
 import 'package:n42appv2/src/utils/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/container_widget.dart';
+import 'package:n42appv2/generated/l10n.dart';
 
 class MiningKeyList extends StatefulWidget {
   const MiningKeyList({super.key});
@@ -43,7 +43,7 @@ class _MiningKeyListState extends State<MiningKeyList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text:"验证者列表",
+        text:S.of(context).g_mining_key_103,
       ),
       body: ListView.builder(
         padding: EdgeInsets.all(
@@ -69,7 +69,10 @@ class _MiningKeyListState extends State<MiningKeyList> {
                           fontSize: ScreenUtil().setSp(32),
                         ),
                       ),
-                      Text(isMining?"生效":"失效",
+                      Text(
+                        isMining?
+                        S.of(context).g_key_193:
+                        S.of(context).g_mining_key_102,
                         style: TextStyle(
                           color: AppThemeUtils.getColorByKey(context, isMining?AppThemeKeys.rightTextColor.name:AppThemeKeys.errorTextColor.name),
                           fontSize: ScreenUtil().setSp(30),

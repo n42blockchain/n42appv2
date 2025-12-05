@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:n42appv2/src/miningV2/api/mining_api.dart';
 import 'package:n42appv2/src/miningV2/pages/mining_full_node_v2.dart';
@@ -19,31 +21,35 @@ class MiningPlansV2 extends StatefulWidget {
 }
 
 class _MiningPlansV2State extends State<MiningPlansV2> {
-  var eventBusFn;
+  late final StreamSubscription _eventSubscription;
+  late final MiningApi _miningApi=MiningApi.init();
   int cReward=0;
   @override
   void initState() {
     super.initState();
-    eventBusFn=eventBus.on().listen((event) {
+    _eventSubscription=eventBus.on().listen((event) {
       if (event is EventPublic &&
           event.type == EventPublicType.selectMiningplansPop) {
-        Navigator.pop(context);
+        if(mounted){
+          Navigator.pop(context);
+        }
       }
     });
     calculateReward();
   }
-  calculateReward()async{
-    MessageModel rmm=await MiningApi.init().getTotalEffectiveBalance();
+  Future<void> calculateReward()async{
+    MessageModel rmm=await _miningApi.getTotalEffectiveBalance();
     if(rmm.error==false){
       int t=rmm.data;
       cReward=miningCalculateReward(t);
-      setState(() {});
+      if(mounted){
+        setState(() {});
+      }
     }
   }
   @override
   void dispose() {
-    // TODO: implement dispose
-    eventBusFn.cancel();
+    _eventSubscription.cancel();
     super.dispose();
   }
   @override

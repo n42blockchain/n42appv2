@@ -24,9 +24,9 @@ class NLevelWidget extends StatelessWidget {
     );
   }
 
-  _buildBoard(BuildContext context) {
-    String bigImage = "assets/mining/ast_50.png";
-    String levelText = S.of(context).g_mining_key_62;
+  Widget _buildBoard(BuildContext context) {
+    const String bigImage = "assets/mining/ast_50.png";
+    final String levelText = S.of(context).g_mining_key_62;
     //String times = "70";
     return Column(
       children: [

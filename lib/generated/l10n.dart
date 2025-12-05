@@ -3014,6 +3014,166 @@ class S {
     );
   }
 
+  /// `The contract is loading and cannot be verified at this time. Please wait a moment!`
+  String get g_mining_key_88 {
+    return Intl.message(
+      'The contract is loading and cannot be verified at this time. Please wait a moment!',
+      name: 'g_mining_key_88',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Safety Tips`
+  String get g_mining_key_89 {
+    return Intl.message(
+      'Safety Tips',
+      name: 'g_mining_key_89',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please keep your private key or mnemonic phrase safe.`
+  String get g_mining_key_90 {
+    return Intl.message(
+      'Please keep your private key or mnemonic phrase safe.',
+      name: 'g_mining_key_90',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your private key or mnemonic phrase is the only credential for accessing your wallet assets.`
+  String get g_mining_key_91 {
+    return Intl.message(
+      'Your private key or mnemonic phrase is the only credential for accessing your wallet assets.',
+      name: 'g_mining_key_91',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please keep it in a safe place (paper, password manager, etc.).`
+  String get g_mining_key_92 {
+    return Intl.message(
+      'Please keep it in a safe place (paper, password manager, etc.).',
+      name: 'g_mining_key_92',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do not take screenshots, upload them to the internet, or share them with anyone.`
+  String get g_mining_key_93 {
+    return Intl.message(
+      'Do not take screenshots, upload them to the internet, or share them with anyone.',
+      name: 'g_mining_key_93',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Once lost or compromised, your wallet assets cannot be recovered.`
+  String get g_mining_key_94 {
+    return Intl.message(
+      'Once lost or compromised, your wallet assets cannot be recovered.',
+      name: 'g_mining_key_94',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm and save`
+  String get g_mining_key_95 {
+    return Intl.message(
+      'Confirm and save',
+      name: 'g_mining_key_95',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Set a password and encrypt`
+  String get g_mining_key_96 {
+    return Intl.message(
+      'Set a password and encrypt',
+      name: 'g_mining_key_96',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter the encryption password`
+  String get g_mining_key_97 {
+    return Intl.message(
+      'Please enter the encryption password',
+      name: 'g_mining_key_97',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Must be {value} characters`
+  String g_mining_key_98(Object value) {
+    return Intl.message(
+      'Must be $value characters',
+      name: 'g_mining_key_98',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Please re-enter your password to ensure it's correct`
+  String get g_mining_key_99 {
+    return Intl.message(
+      'Please re-enter your password to ensure it\'s correct',
+      name: 'g_mining_key_99',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please treat the data below as an important key. We recommend copying and backing it up to a trusted location immediately.`
+  String get g_mining_key_100 {
+    return Intl.message(
+      'Please treat the data below as an important key. We recommend copying and backing it up to a trusted location immediately.',
+      name: 'g_mining_key_100',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copy Data`
+  String get g_mining_key_101 {
+    return Intl.message(
+      'Copy Data',
+      name: 'g_mining_key_101',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Inactive`
+  String get g_mining_key_102 {
+    return Intl.message(
+      'Inactive',
+      name: 'g_mining_key_102',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Validator List`
+  String get g_mining_key_103 {
+    return Intl.message(
+      'Validator List',
+      name: 'g_mining_key_103',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Rewards`
   String get g_mining_key1 {
     return Intl.message('Rewards', name: 'g_mining_key1', desc: '', args: []);

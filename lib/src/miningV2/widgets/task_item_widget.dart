@@ -2,18 +2,13 @@ import 'package:n42appv2/src/utils/theme_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class TaskItemWidget extends StatefulWidget {
+class TaskItemWidget extends StatelessWidget {
   final String? taskId;
   final String? astValue;
   final String? time;
   final String? status;
   const TaskItemWidget({this.taskId, this.astValue, this.time, this.status,super.key});
 
-  @override
-  State<TaskItemWidget> createState() => _TaskItemWidgetState();
-}
-
-class _TaskItemWidgetState extends State<TaskItemWidget> {
   @override
   Widget build(BuildContext context) {
     final textStyle = TextStyle(
@@ -30,7 +25,7 @@ class _TaskItemWidgetState extends State<TaskItemWidget> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  widget.taskId ?? "",
+                  taskId ?? "",
                   textAlign: TextAlign.center,
                   style: textStyle,
                 ),
@@ -39,7 +34,7 @@ class _TaskItemWidgetState extends State<TaskItemWidget> {
           ),
           Expanded(
             child: Text(
-              widget.astValue ?? "",
+              astValue ?? "",
               textAlign: TextAlign.center,
               style: textStyle,
             ),
@@ -49,7 +44,7 @@ class _TaskItemWidgetState extends State<TaskItemWidget> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  widget.time ?? "",
+                  time ?? "",
                   textAlign: TextAlign.center,
                   style: textStyle,
                 ),

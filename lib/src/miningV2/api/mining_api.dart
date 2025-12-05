@@ -7,11 +7,13 @@ import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 
 class MiningApi{
-  late Trustdart mining;
-  String wsUrl='ws://5.161.252.59:8546/';
   MiningApi.init(){
     mining=Trustdart();
   }
+  late Trustdart mining;
+  final String wsUrl='ws://5.161.252.59:8546/';
+  static const String _rpcUrl='http://5.161.252.59:8545';
+  static const String _depositContractAddress='0x0dcAE65dDB5df8f1817D35286beAC32b8994962B';
   Future<Map<String,String>?> generateBls12381Keypair()async{
     try{
       String? res=await mining.miningGenerateBls12381Keypair();
@@ -21,9 +23,8 @@ class MiningApi{
           'privateKey':dynamicArray[0],
           'publicKey':dynamicArray[1],
         };
-      }else{
-        return null;
       }
+      return null;
     }catch(e){
       return null;
     }
@@ -31,30 +32,22 @@ class MiningApi{
   Future<String?> createDepositUnsignedTx(String validatorPrivateKey,String withdrawalAddress,String depositValueWeiInHex)async{
     try{
       String? res=await mining.miningCreateDepositUnsignedTx({
-        "depositContractAddress": "0x0dcAE65dDB5df8f1817D35286beAC32b8994962B",
+        "depositContractAddress": _depositContractAddress,
         "validatorPrivateKey": validatorPrivateKey,
         "withdrawalAddress": withdrawalAddress,
         "depositValueWeiInHex": depositValueWeiInHex,
       });
-      if(res !=null){
-        return res;
-      }else{
-        return null;
-      }
+      return res;
     }catch(e){
       return null;
     }
   }
-  runClent(String validatorPrivateKey)async{
+  Future<String?> runClent(String validatorPrivateKey)async{
     try{
       String? res=await mining.miningRunClient({
         "wsUrl": wsUrl, "validatorPrivateKey": validatorPrivateKey
       });
-      if(res != null){
-        return res;
-      }else{
-        return null;
-      }
+      return res;
     }catch(e){
       return null;
     }
@@ -63,11 +56,7 @@ class MiningApi{
   Future<String?> miningCreateGetExitFeeUnsignedTx()async{
     try{
       String? res=await mining.miningCreateGetExitFeeUnsignedTx();
-      if(res !=null){
-        return res;
-      }else{
-        return null;
-      }
+      return res;
     }catch(e){
       return null;
     }
@@ -78,11 +67,7 @@ class MiningApi{
         "feeWeiInHex": feeWeiInHex,
         "validatorPublicKey": validatorPublicKey,
       });
-      if(res !=null){
-        return res;
-      }else{
-        return null;
-      }
+      return res;
     }catch(e){
       return null;
     }
@@ -127,32 +112,20 @@ class MiningApi{
       return mm;
     }
   }
-  getBeaconValidator(String pubKey)async{
-    try{
-      MessageModel mm=MessageModel();
-      Map<String,dynamic> postData={"jsonrpc":"2.0","method":"consensusBeaconExt_get_beacon_validator_by_pubkey","params":[pubKey],"id":Application.currentId++};
-
-      final data=await BaseApi.RequestEmpty_h.post('http://5.161.252.59:8545', params: {},data: postData);
-      if(data.containsKey('error')){
-        mm.error=true;
-        mm.data=data['error'];
-      }else{
-        mm.data=data['result'];
-      }
-      return mm;
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e.toString();
-      return mm;
-    }
+  Future<MessageModel> getBeaconValidator(String pubKey)async{
+    return await _postBeacon('consensusBeaconExt_get_beacon_validator_by_pubkey', [pubKey]);
   }
   ///consensusBeaconExt_get_total_effective_balance
-  getTotalEffectiveBalance()async{
+  Future<MessageModel> getTotalEffectiveBalance()async{
+    return await _postBeacon('consensusBeaconExt_get_total_effective_balance', []);
+  }
+
+  Future<MessageModel> _postBeacon(String method,List<dynamic> params)async{
     try{
       MessageModel mm=MessageModel();
-      Map<String,dynamic> postData={"jsonrpc":"2.0","method":"consensusBeaconExt_get_total_effective_balance","params":[],"id":Application.currentId++};
+      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":params,"id":Application.currentId++};
 
-      final data=await BaseApi.RequestEmpty_h.post('http://5.161.252.59:8545', params: {},data: postData);
+      final data=await BaseApi.RequestEmpty_h.post(_rpcUrl, params: {},data: postData);
       if(data.containsKey('error')){
         mm.error=true;
         mm.data=data['error'];

@@ -9,23 +9,19 @@ class MiningWeb3{
   MiningWeb3.init(String pk){
     credentials=EthPrivateKey.fromHex(bytesToHex(base64Decode(pk)));
   }
-  EthAPI? ethAPI=null;
-  EthAPI? get EAPI{
-    if(ethAPI==null){
-      ethAPI=EthAPI.init(null,'http://5.161.252.59:8545/',null);
-    }
-    return ethAPI;
-  }
+  static const String _rpcUrl='http://5.161.252.59:8545';
+  static const int _chainId=1142;
+  static const int _defaultMaxGas=6000000;
   EthPrivateKey? credentials=null;
   Web3Client? web3Client=null;
   Web3Client? get WClient{
     if(web3Client==null){
-      web3Client = Web3Client('http://5.161.252.59:8545', Client());
+      web3Client = Web3Client(_rpcUrl, Client());
     }
     return web3Client;
   }
 
-  Future getTransactionReceipt(String hashTx) async {
+  Future<MessageModel> getTransactionReceipt(String hashTx) async {
     TransactionReceipt? data= await WClient?.getTransactionReceipt(hashTx);
     MessageModel mm=MessageModel();
     if(data==null){
@@ -39,38 +35,34 @@ class MiningWeb3{
     return mm;
   }
 
-  Future getBlockNumber() async {
+  Future<int?> getBlockNumber() async {
     return await WClient?.getBlockNumber();
   }
-  sendDepositTransaction(Map<String,dynamic> signData)async{
-    final tx = Transaction(
-      to: EthereumAddress.fromHex(
-          signData['to']), // 目标合约
-      value: EtherAmount.inWei(BigInt.parse(signData['value'])), // 交易金额
-      data: hexToBytes(signData['data']),
-      gasPrice: await WClient?.getGasPrice(),
-      maxGas: 6000000, // 预估一个合理的 gas 上限
-    );
+
+  Future<MessageModel> sendDepositTransaction(Map<String,dynamic> signData)async{
+    final tx = await _buildTransaction(signData);
     return await sendTransaction(tx);
   }
-  sendExitDepositTransaction(Map<String,dynamic> signData)async{
-    final tx = Transaction(
-      to: EthereumAddress.fromHex(
-          signData['to']), // 目标合约
-      value: EtherAmount.inWei(BigInt.parse(signData['value'])), // 交易金额
-      data: hexToBytes(signData['data']),
-      gasPrice: await WClient?.getGasPrice(),
-      maxGas: 6000000, // 预估一个合理的 gas 上限
-    );
+  Future<MessageModel> sendExitDepositTransaction(Map<String,dynamic> signData)async{
+    final tx = await _buildTransaction(signData);
     return await sendTransaction(tx);
   }
-  sendTransaction(Transaction tx)async{
+
+  Future<Transaction> _buildTransaction(Map<String,dynamic> signData)async{
+    return Transaction(
+      to: EthereumAddress.fromHex(signData['to']),
+      value: EtherAmount.inWei(BigInt.parse(signData['value'])),
+      data: hexToBytes(signData['data']),
+      gasPrice: await WClient?.getGasPrice(),
+      maxGas: _defaultMaxGas,
+    );
+  }
+  Future<MessageModel> sendTransaction(Transaction tx)async{
     try{
-      // 4. 发送交易
       final txHash = await WClient!.sendTransaction(
         credentials!,
         tx,
-        chainId: 1142,
+        chainId: _chainId,
       );
       MessageModel rmm=MessageModel();
       rmm.data=txHash;
@@ -83,7 +75,7 @@ class MiningWeb3{
 
   }
 
-  exitDepositRowCall(String feeWeiInHexTx)async{
+  Future<MessageModel> exitDepositRowCall(String feeWeiInHexTx)async{
     try{
       final txMap= json.decode(feeWeiInHexTx);
       final to = EthereumAddress.fromHex(txMap['to']);

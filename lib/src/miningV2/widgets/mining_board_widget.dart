@@ -46,10 +46,9 @@ class MiningBoardWidget extends StatelessWidget {
     );
   }
 
-  _buildBoard(BuildContext context) {
-    String bigImage = "assets/mining/ast_50.png";
-    String levelText = S.of(context).g_mining_key_62;
-
+  Widget _buildBoard(BuildContext context) {
+    const String bigImage = "assets/mining/ast_50.png";
+    final String levelText = S.of(context).g_mining_key_62;
     return Column(
       children: [
         Row(
@@ -139,7 +138,7 @@ class MiningBoardWidget extends StatelessWidget {
     );
   }
 
-  _buildItems(BuildContext context) {
+  Widget _buildItems(BuildContext context) {
     /*String maxReward = nNum == 50
         ? "4.5"
         : nNum == 100
@@ -156,14 +155,14 @@ class MiningBoardWidget extends StatelessWidget {
         ? S.of(context).g_mining_key_71("0.5","1,500")
         : S.of(context).g_mining_key_71("0.625","300");*/
 
+    final String rewardPerVerification =
+        "${toEther('$cReward', 9)} ${CoinType.N.name}";
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         _buildItem(context, "assets/mining/medal-star.png",
-            // "Max Reward Annually",
-            //S.current.g_mining_key_33,
-            "Revenue per verification",
-            "${toEther('${cReward}', 9)} ${CoinType.N.name}"),
+            S.current.g_mining_key_33,
+            rewardPerVerification),
         Divider(
           color:
           AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name),
@@ -193,16 +192,15 @@ class MiningBoardWidget extends StatelessWidget {
           endIndent: 1,
         ),
         _buildItem(context, "assets/mining/grid-lock.png",
-            // "Reward Distribution",
             S.current.g_mining_key_34,
-            "128 seconds per reward"),
+            S.current.g_mining_key_74),
         //every 20,000 blocks mined
 
       ],
     );
   }
 
-  _buildItem(
+  Widget _buildItem(
       BuildContext context, String iconPath, String action, String desc) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(28)),

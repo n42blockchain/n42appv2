@@ -5,10 +5,12 @@ import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/miningV2/api/mining_api.dart';
 import 'package:n42appv2/src/miningV2/pages/keyManagement/data_encryption.dart';
 import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/src/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/textField_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:n42appv2/generated/l10n.dart';
 
 class MiningOutputPk extends StatefulWidget {
   const MiningOutputPk({super.key});
@@ -70,10 +72,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
 
   void _copyEncryptedData() {
     Clipboard.setData(ClipboardData(text: _encryptedData));
-    print(_encryptedData);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("已复制到剪贴板")),
-    );
+    //ToastUtils.show(S.of(context).copy);
     setState(() {
       copyEncrypte=true;
     });
@@ -100,7 +99,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
         }
       },
       child: Scaffold(
-      appBar: AppBar(title: const Text("设置密码并加密")),
+      appBar: AppBar(title: Text(S.of(context).g_mining_key_96)),
       body: Padding(
         padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
         child: Column(
@@ -108,17 +107,18 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
           children: [
             if (!_showEncryptResult) ...[
               Text(
-                "请输入加密密码",
+                S.of(context).g_mining_key_97,
                 style: TextStyle(
                     fontSize: ScreenUtil().setSp(32),
                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                 ),
               ),
+              SizedBox(height: ScreenUtil().setWidth(10)),
               TextFieldStyle3(
                   context,
                 controller: _pwdController,
                 focusNode: _pwdFocus,
-                hintText: '请输入8位密码',
+                hintText: S.of(context).g_mining_key_98(8),
                 textInputAction:TextInputAction.next,
                 errorMessage: pwdErrorMessage,
                 onEditingComplete: (){
@@ -143,17 +143,18 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
               ),
               SizedBox(height: ScreenUtil().setWidth(40)),
               Text(
-                "请再次输入密码",
+                S.of(context).g_mining_key_99,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(32),
                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                 ),
               ),
+              SizedBox(height: ScreenUtil().setWidth(10)),
               TextFieldStyle3(
                 context,
                 controller: _confirmController,
                 focusNode: _confirmFocus,
-                hintText: '确认密码',
+                hintText: S.of(context).rest_Confirm_password,
                 textInputAction:TextInputAction.done,
                 errorMessage: confirmErrorMessage,
                 onEditingComplete: (){
@@ -180,7 +181,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
 
             if (_showEncryptResult) ...[
               Text(
-                "加密后的数据：",
+                S.of(context).g_mining_key_100,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(36),
                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
@@ -215,7 +216,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
           child: ButtonStyle6(
             context,
             _showEncryptResult ? _copyEncryptedData : _onConfirm,
-            _showEncryptResult ? "复制加密数据" : "确认密码",
+            _showEncryptResult ? S.of(context).g_mining_key_101 : S.of(context).g_key_78,
             AppThemeUtils.getColorByKey(context, load==Load.loading?AppThemeKeys.mainButtonBgColor3.name:AppThemeKeys.mainButtonBgColor.name),
             AppThemeUtils.getColorByKey(context,load==Load.loading?AppThemeKeys.mainButtonTextColor3.name:AppThemeKeys.mainButtonTextColor.name),
             load==Load.loading,
