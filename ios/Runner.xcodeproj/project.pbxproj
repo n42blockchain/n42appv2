@@ -22,6 +22,11 @@
 		52B30CBE2CF46B76005C0363 /* N42Attributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B30CBD2CF46B76005C0363 /* N42Attributes.swift */; };
 		52B30CBF2CF46BC9005C0363 /* N42Attributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B30CBD2CF46B76005C0363 /* N42Attributes.swift */; };
 		52D8711E2C202EF100A5ACA8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 52D8711D2C202EF100A5ACA8 /* GoogleService-Info.plist */; };
+		69240F862EE6C4CD00C6CEE7 /* MobileSdk.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69240F822EE6C4CD00C6CEE7 /* MobileSdk.xcframework */; };
+		69240F872EE6C4CD00C6CEE7 /* MobileSdk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69240F832EE6C4CD00C6CEE7 /* MobileSdk.swift */; };
+		69240F882EE6C4CD00C6CEE7 /* MobileSdkModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69240F842EE6C4CD00C6CEE7 /* MobileSdkModule.swift */; };
+		69240F892EE6C54200C6CEE7 /* MobileSdk.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69240F822EE6C4CD00C6CEE7 /* MobileSdk.xcframework */; };
+		69240F8A2EE6C54200C6CEE7 /* MobileSdk.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 69240F822EE6C4CD00C6CEE7 /* MobileSdk.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
@@ -59,6 +64,17 @@
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		69240F8B2EE6C54200C6CEE7 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				69240F8A2EE6C54200C6CEE7 /* MobileSdk.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +100,10 @@
 		52B30CBD2CF46B76005C0363 /* N42Attributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = N42Attributes.swift; sourceTree = "<group>"; };
 		52D8711D2C202EF100A5ACA8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5CEF850D8EF31CADB3C4ACFE /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
+		69240F802EE6C4CD00C6CEE7 /* mobile_sdk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mobile_sdk.h; sourceTree = "<group>"; };
+		69240F822EE6C4CD00C6CEE7 /* MobileSdk.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = MobileSdk.xcframework; sourceTree = "<group>"; };
+		69240F832EE6C4CD00C6CEE7 /* MobileSdk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileSdk.swift; sourceTree = "<group>"; };
+		69240F842EE6C4CD00C6CEE7 /* MobileSdkModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileSdkModule.swift; sourceTree = "<group>"; };
 		6ED93140A99B2A24597153EB /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -123,6 +143,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69240F892EE6C54200C6CEE7 /* MobileSdk.xcframework in Frameworks */,
+				69240F862EE6C4CD00C6CEE7 /* MobileSdk.xcframework in Frameworks */,
 				F4EB2BC9D4EBE52A31CE291D /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -175,6 +197,23 @@
 			path = N42;
 			sourceTree = "<group>";
 		};
+		69240F812EE6C4CD00C6CEE7 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				69240F802EE6C4CD00C6CEE7 /* mobile_sdk.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		69240F852EE6C4CD00C6CEE7 /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				69240F832EE6C4CD00C6CEE7 /* MobileSdk.swift */,
+				69240F842EE6C4CD00C6CEE7 /* MobileSdkModule.swift */,
+			);
+			path = Swift;
+			sourceTree = "<group>";
+		};
 		9740EEB11CF90186004384FC /* Flutter */ = {
 			isa = PBXGroup;
 			children = (
@@ -189,6 +228,9 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
+				69240F812EE6C4CD00C6CEE7 /* include */,
+				69240F822EE6C4CD00C6CEE7 /* MobileSdk.xcframework */,
+				69240F852EE6C4CD00C6CEE7 /* Swift */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
 				52B30CAA2CF46B39005C0363 /* N42 */,
@@ -281,6 +323,7 @@
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
+				69240F8B2EE6C54200C6CEE7 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -378,13 +421,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -474,13 +513,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -513,6 +548,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69240F872EE6C4CD00C6CEE7 /* MobileSdk.swift in Sources */,
+				69240F882EE6C4CD00C6CEE7 /* MobileSdkModule.swift in Sources */,
 				526F3A0E2C10466E00FF9273 /* avPlay.swift in Sources */,
 				526F3A0C2C10463F00FF9273 /* permissionsUtil.swift in Sources */,
 				52B30CBE2CF46B76005C0363 /* N42Attributes.swift in Sources */,
@@ -742,6 +779,7 @@
 					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
 					"$(inherited)",
 					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
+					"$(PROJECT_DIR)/include/**",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1332,6 +1370,7 @@
 					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
 					"$(inherited)",
 					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
+					"$(PROJECT_DIR)/include/**",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1634,6 +1673,7 @@
 					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
 					"$(inherited)",
 					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
+					"$(PROJECT_DIR)/include/**",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;

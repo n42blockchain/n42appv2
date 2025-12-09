@@ -144,10 +144,21 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   //当前正在回复的消息
   ChatMessageModel? currentReplyModel;
   var eventBusFn;
+  
+  // 保存 ChatMessageProvider 的引用，避免在 dispose 中访问已停用的 context
+  ChatMessageProvider? _chatMessageProvider;
+  
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // 在 didChangeDependencies 中保存 Provider 引用
+    _chatMessageProvider = Provider.of<ChatMessageProvider>(context, listen: false);
+    //设置正在聊天的对象
+    _chatMessageProvider?.setTargetUuid(widget.targetUuid);
+  }
+  
   @override
   void initState() {
-    //设置正在聊天的对象
-    Provider.of<ChatMessageProvider>(context,listen: false).setTargetUuid(widget.targetUuid);
     super.initState();
     _textEditingController.addListener(() {
       bool flag = _textEditingController.text.isNotEmpty;
@@ -166,13 +177,14 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   @override
   void dispose() {
-    super.dispose();
-    Provider.of<ChatMessageProvider>(context,listen: false).setTargetUuid(null);
+    // 使用保存的引用而不是通过 context 访问，避免访问已停用的 widget
+    _chatMessageProvider?.setTargetUuid(null);
     _scrollController.dispose();
     _textEditingController.dispose();
     _addController.dispose();
     _focusNode.dispose();
-    eventBusFn.cancel();
+    eventBusFn?.cancel();
+    super.dispose();
   }
 
   addMessageListener() {

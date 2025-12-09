@@ -145,6 +145,7 @@ class MiningV2Provider extends ChangeNotifier {
       inactivityTitle="";
       //昨天挖矿时间
       yesterdayCycleRewardsValue=0;
+      todayCycleRewardsValue=0;
       barchartValues = [0, 0, 0, 0, 0, 0, 0];
       barchartAlertMessageList = [];
       barchartTitle=[];
@@ -304,6 +305,9 @@ class MiningV2Provider extends ChangeNotifier {
           depositLoad=Load.finish;
         }
         notifyListeners();
+      }else{
+        errorMessage="Error!";
+        depositLoad=Load.finish;
       }
     }catch(e){
       ToastUtils.show(e.toString());
@@ -548,32 +552,31 @@ class MiningV2Provider extends ChangeNotifier {
       //final stackAstNum = Provider.of<MiningProvider>(context,listen: false).depositsNum;
       for (var element in barchartValues) {
         //计算时间
-        int times = (element * 8).toInt();
-        final timeData = formatElapsedTime(times);
+        //int times = (element * 8).toInt();
+        //final timeData = formatElapsedTime(times);
         //final value = computeRewardsValueByTaskNum(element.toInt(), stackAstNum);
         // debugPrint("奖励值：$value");
         barchartAlertMessageList.add(
           AlertMessageGroup(
             titles: [
               S.current.g_mining_key_23,
-              "$timeData",
-              "",
-              S.current.g_mining_key_24,
-              "0N"
+              "${element.toInt()}",
+              //"",
               //"${dataUtils.formatNum(value, 4)} ${CoinType.N.name}"
             ],
             styles: [
               TextStyle(
                 fontSize: ScreenUtil().setSp(20),
                 color: AppThemeUtils.getColorByKey(
-                    Application.AppContext, AppThemeKeys.itemSubtitleTextColor.name),
+                    Application.AppContext, AppThemeKeys.mainWhiteColor.name),
               ),
               TextStyle(
                 fontSize: ScreenUtil().setSp(22),
-                color: Colors.black,
+                color: AppThemeUtils.getColorByKey(
+                    Application.AppContext, AppThemeKeys.mainWhiteColor.name),
                 fontWeight: FontWeight.bold,
               ),
-              TextStyle(
+              /*TextStyle(
                 fontSize: ScreenUtil().setSp(10),
                 color: AppThemeUtils.getColorByKey(
                     Application.AppContext, AppThemeKeys.itemTextColor.name),
@@ -602,7 +605,7 @@ class MiningV2Provider extends ChangeNotifier {
                 fontSize: ScreenUtil().setSp(22),
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
-              ),
+              ),*/
             ],
           ),
         );
@@ -617,9 +620,16 @@ class MiningV2Provider extends ChangeNotifier {
   Timer? beaconValidatorTimer=null;
   starBeaconValidatorTimer(){
     if(beaconValidatorTimer !=null)return;
-    beaconValidatorTimer=Timer(Duration(seconds: 640),(){
+    beaconValidatorTimer=Timer(Duration(seconds: 40),(){
       getBeaconValidator();
+      endBeaconValidatorTimer();
     });
+  }
+  endBeaconValidatorTimer(){
+    if(beaconValidatorTimer !=null){
+      beaconValidatorTimer!.cancel();
+      beaconValidatorTimer=null;
+    }
   }
   Future<void> getBeaconValidator() async {
     MessageModel rmm=await Mining.getBeaconValidator(miningKeypart?['publicKey']??"");

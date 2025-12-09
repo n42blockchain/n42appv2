@@ -2524,21 +2524,11 @@ class S {
     );
   }
 
-  /// `Verification Time`
+  /// `Validation count`
   String get g_mining_key_23 {
     return Intl.message(
-      'Verification Time',
+      'Validation count',
       name: 'g_mining_key_23',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Verified Value`
-  String get g_mining_key_24 {
-    return Intl.message(
-      'Verified Value',
-      name: 'g_mining_key_24',
       desc: '',
       args: [],
     );
@@ -3169,6 +3159,106 @@ class S {
     return Intl.message(
       'Validator List',
       name: 'g_mining_key_103',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import successful`
+  String get g_mining_key_104 {
+    return Intl.message(
+      'Import successful',
+      name: 'g_mining_key_104',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Encrypted data cannot be empty!`
+  String get g_mining_key_105 {
+    return Intl.message(
+      'Encrypted data cannot be empty!',
+      name: 'g_mining_key_105',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password cannot be empty!`
+  String get g_mining_key_106 {
+    return Intl.message(
+      'Password cannot be empty!',
+      name: 'g_mining_key_106',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Decryption failed. Please check if the password is correct!`
+  String get g_mining_key_107 {
+    return Intl.message(
+      'Decryption failed. Please check if the password is correct!',
+      name: 'g_mining_key_107',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unsupported encrypted data format!`
+  String get g_mining_key_108 {
+    return Intl.message(
+      'Unsupported encrypted data format!',
+      name: 'g_mining_key_108',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import failed:{value}`
+  String g_mining_key_109(Object value) {
+    return Intl.message(
+      'Import failed:$value',
+      name: 'g_mining_key_109',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Encrypted data`
+  String get g_mining_key_110 {
+    return Intl.message(
+      'Encrypted data',
+      name: 'g_mining_key_110',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import files`
+  String get g_mining_key_111 {
+    return Intl.message(
+      'Import files',
+      name: 'g_mining_key_111',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter encrypted data.`
+  String get g_mining_key_112 {
+    return Intl.message(
+      'Please enter encrypted data.',
+      name: 'g_mining_key_112',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Importing...`
+  String get g_mining_key_113 {
+    return Intl.message(
+      'Importing...',
+      name: 'g_mining_key_113',
       desc: '',
       args: [],
     );

@@ -423,7 +423,7 @@ Riesgo Alto*/
                           Row(
                             children: [
                               miningDataBroad(S.of(context).g_mining_key_10,
-                                  "${dataUtils.formatNum(mpValue.todayCycleRewardsValue, 4)} ${CoinType.N.name}",
+                                  "${dataUtils.formatNum(mpValue.todayCycleRewardsValue, 6)} ${CoinType.N.name}",
                                   imagePath: "assets/mining/broad_bg_4.png"),
                               SizedBox(
                                 width: ScreenUtil().setWidth(20),
@@ -431,7 +431,7 @@ Riesgo Alto*/
                               miningDataBroad(
                                 // "Last Rewards",
                                   S.of(context).g_mining_key_11,
-                                  "${dataUtils.formatNum(mpValue.yesterdayCycleRewardsValue, 4)} ${CoinType.N.name}",
+                                  "${dataUtils.formatNum(mpValue.yesterdayCycleRewardsValue, 6)} ${CoinType.N.name}",
                                   imagePath: "assets/mining/broad_bg_4.png",
                                   tipsText:
                                   // "Reward accumulates daily and is only sent to your AST wallet when it reaches ~0.5 AST.",
@@ -447,7 +447,7 @@ Riesgo Alto*/
                               miningDataBroad(
                                 // "Total Rewards:",
                                 S.of(context).g_mining_key_13,
-                                '${mpValue.miningTotalRevenue} ${CoinType.N.name}',
+                                '${dataUtils.formatNum(mpValue.miningTotalRevenue, 6)} ${CoinType.N.name}',
                                 imagePath: "assets/mining/broad_bg_1.png",
                               ),
                               SizedBox(

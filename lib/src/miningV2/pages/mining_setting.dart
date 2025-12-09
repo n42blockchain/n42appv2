@@ -25,6 +25,18 @@ class _MiningSettingState extends State<MiningSetting> {
       appBar: AppBarWidget(
         text:S.of(context).g_key_94,
       ),
+      bottomNavigationBar: SafeArea(child: Container(
+        width: double.infinity,
+        height: ScreenUtil().setWidth(88),
+        margin: EdgeInsets.symmetric(horizontal:ScreenUtil().setWidth(30) ),
+        child: ButtonStyle2(
+          context, (){
+          Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MiningImport()));
+        },
+          //"导入验证者",
+          S.of(context).g_mining_key_82,
+        ),
+      ),),
       body: SingleChildScrollView(
         padding: EdgeInsets.only(
           left: ScreenUtil().setWidth(30),
@@ -60,17 +72,6 @@ class _MiningSettingState extends State<MiningSetting> {
                   onTap: (){
                     Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MiningKeyList()));
                   }
-                ),
-                Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.only(top: ScreenUtil().setWidth(50)),
-                  child: ButtonStyle2(
-                    context, (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MiningImport()));
-                  },
-                    //"导入验证者",
-                    S.of(context).g_mining_key_82,
-                  ),
                 ),
               ],
             );

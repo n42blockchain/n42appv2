@@ -74,7 +74,7 @@ class TransactionApi {
         case "ARB":
         case "AURORA":
         case "METIS":
-          return await commonEthTransactionList(coinMiniName,address, page: page, offset: pageSize);
+          return await commonEthTransactionList(coinMiniName,address, page: page, offset: pageSize,isTest: isTest);
         case "OKT":
           return await commonEthTransactionList(coinMiniName,address, page: page, offset: pageSize);
         case "SOL":
@@ -378,10 +378,10 @@ class TransactionApi {
       {int? fromBlock = 0,
         int? endBlock = 99999999999,
         int? page = 1,
-        int? offset = 10}) async {
+        int? offset = 10,bool isTest=false}) async {
     MessageModel mm=MessageModel();
     try {
-      final hostUrl = getHostByCoinMiniName(miniName);
+      final hostUrl = getHostByCoinMiniName(miniName,isTest: isTest);
       if(hostUrl==""){
         mm.error=true;
         mm.data=null;

@@ -224,7 +224,11 @@ class WalletActionProvider extends ChangeNotifier{
       Map<String, dynamic>? walletUser=walletAll[UserUUID];
       if(walletUser !=null){
         walletIndex=walletAll[UserUUID]?['index'];
-        walletMiningIndex=walletAll[UserUUID]?['miningIndex']??walletIndex;
+        if(walletAll[UserUUID]?['miningIndex']==null || walletAll[UserUUID]?['miningIndex']==-1){
+          walletMiningIndex=walletIndex;
+        }else{
+          walletMiningIndex=walletAll[UserUUID]?['miningIndex'];
+        }
         List<dynamic> walletInfos =
             walletAll[UserUUID]?["wallet"]??[]; //await SPUtils.getWallsetInfo();
         _walletInfoLsit=[];
@@ -552,6 +556,9 @@ class WalletActionProvider extends ChangeNotifier{
       WalletInfo newWalletInfo = WalletInfo.fromJson(newMap);
       _walletInfoLsit.add(info);
       walletIndex=_walletInfoLsit.length-1;
+      if(walletMiningIndex ==-1){
+        walletIndex=walletIndex;
+      }
       await saveWalletInfo(newWalletInfo,walletIndex,isNewWallet: true);
       init_wallet(initCoinInfo: true);
       //await getPublicKeyAndPrivateKeyPair_AST();

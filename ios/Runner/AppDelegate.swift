@@ -603,6 +603,81 @@ import WalletCore
           let pubKey: String? = SolanaAddress(string: address!)?.defaultTokenAddress(tokenMintAddress: mintAddress!)
           result(pubKey ?? "")
           break
+      case "MiningGenerateBls12381Keypair":
+          let keyPairResult = MobileSdk.generateBls12381Keypair()
+          switch keyPairResult {
+          case .success(let keyPair):
+              result(keyPair)
+          case .failure(let error):
+              result(FlutterError(code: "DepositError", message: "\(error)", details: nil))
+          }
+          break
+      case "MiningCreateDepositUnsignedTx":
+          guard let args = call.arguments as? [String: Any],
+                let depositContractAddress = args["depositContractAddress"] as? String,
+                let validatorPrivateKey = args["validatorPrivateKey"] as? String,
+                let withdrawalAddress = args["withdrawalAddress"] as? String,
+                let depositValueWeiInHex = args["depositValueWeiInHex"] as? String else {
+              result(FlutterError(code: "arguments_null", message: "invalid arguments", details: nil))
+              break
+          }
+          let txResult = MobileSdk.createDepositUnsignedTx(
+              depositContractAddress: depositContractAddress,
+              validatorPrivateKey: validatorPrivateKey,
+              withdrawalAddress: withdrawalAddress,
+              depositValueInWei: depositValueWeiInHex
+          )
+          switch txResult {
+          case .success(let tx):
+              result(tx)
+          case .failure(let error):
+              result(FlutterError(code: "DepositError", message: "\(error)", details: nil))
+          }
+          break
+      case "MiningCreateExitUnsignedTx":
+          guard let args = call.arguments as? [String: Any],
+                let validatorPublicKey = args["validatorPublicKey"] as? String,
+                let feeWeiInHex = args["feeWeiInHex"] as? String else {
+              result(FlutterError(code: "arguments_null", message: "invalid arguments", details: nil))
+              break
+          }
+          let txResult = MobileSdk.createExitUnsignedTx(validatorPublicKey: validatorPublicKey, feeInWeiOrEmpty: feeWeiInHex)
+          switch txResult {
+          case .success(let tx):
+              result(tx)
+          case .failure(let error):
+              result(FlutterError(code: "ExitError", message: "\(error)", details: nil))
+          }
+          break
+      case "MiningCreateGetExitFeeUnsignedTx":
+          let txResult = MobileSdk.createGetExitFeeUnsignedTx()
+          switch txResult {
+          case .success(let tx):
+              result(tx)
+          case .failure(let error):
+              result(FlutterError(code: "DepositError", message: "\(error)", details: nil))
+          }
+          break
+      case "MiningRunClient":
+          guard let args = call.arguments as? [String: Any],
+                let wsUrl = args["wsUrl"] as? String,
+                let validatorPrivateKey = args["validatorPrivateKey"] as? String else {
+              result(FlutterError(code: "arguments_null", message: "invalid arguments", details: nil))
+              break
+          }
+          let flutterResult = result
+          MobileSdk.runClient(
+            wsUrl: wsUrl,
+            validatorPrivateKey: validatorPrivateKey,
+            completion:{ mobileResult in
+              switch mobileResult {
+              case .success:
+                  flutterResult("Client started")
+              case .failure(let err):
+                  flutterResult(FlutterError(code: "ClientError", message: "\(err)", details: nil))
+              }
+          })
+          break
       default:
           result(FlutterMethodNotImplemented)
       }

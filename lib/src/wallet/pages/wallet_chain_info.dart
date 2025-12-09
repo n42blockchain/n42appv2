@@ -687,6 +687,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
                   getTransactionData(Load.refresh);
                   getTransactionData_network(Load.refresh);
                   await widget.coinModel.getBalance();
+                  setState(() {});
                 },
                 backgroundColor: AppThemeUtils.getColorByKey(
                     context, AppThemeKeys.mainButtonBgColor.name),

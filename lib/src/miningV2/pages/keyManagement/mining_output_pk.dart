@@ -72,7 +72,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
 
   void _copyEncryptedData() {
     Clipboard.setData(ClipboardData(text: _encryptedData));
-    //ToastUtils.show(S.of(context).copy);
+    ToastUtils.show(S.of(context).copy);
     setState(() {
       copyEncrypte=true;
     });
@@ -100,7 +100,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
       },
       child: Scaffold(
       appBar: AppBar(title: Text(S.of(context).g_mining_key_96)),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

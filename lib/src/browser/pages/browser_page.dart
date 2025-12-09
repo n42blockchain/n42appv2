@@ -29,21 +29,31 @@ class BrowserPage extends StatefulWidget {
 }
 
 class _BrowserPageState extends State<BrowserPage> {
+  BrowserProvider? _browserProvider;
+  bool _inited = false;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    walletConnect();
+    // 延迟到首帧后再初始化，避免在构建阶段触发通知
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _browserProvider = Provider.of<BrowserProvider>(context, listen: false);
+      if (!_inited) {
+        _inited = true;
+        walletConnect();
+      }
+    });
   }
+
   @override
   void dispose() {
-
-    Provider.of<BrowserProvider>(context,listen: false).connectDAPPCallBack=null;
-    Provider.of<BrowserProvider>(context,listen: false).browser_dispose();
+    // 使用缓存引用，避免在已卸载状态下通过 context 查找祖先
+    _browserProvider?.connectDAPPCallBack = null;
+    _browserProvider?.browser_dispose();
     super.dispose();
   }
   walletConnect(){
-    BrowserProvider bp=Provider.of<BrowserProvider>(context,listen: false);
+    final bp = _browserProvider ?? Provider.of<BrowserProvider>(context, listen: false);
     bp.connectDAPPCallBack=(String url,bool connect){
       if(connect){
         Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletConnectPage(url)));

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/src/miningV2/pages/keyManagement/mining_output_tip.dart';
+import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
 import 'package:n42appv2/src/utils/sp_util.dart';
 import 'package:n42appv2/src/utils/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/container_widget.dart';
 import 'package:n42appv2/generated/l10n.dart';
+import 'package:provider/provider.dart';
 
 class MiningKeyList extends StatefulWidget {
   const MiningKeyList({super.key});
@@ -38,6 +40,7 @@ class _MiningKeyListState extends State<MiningKeyList> {
     miningData!.remove(miningKeyList[index]);
     await SPUtil().setMiningData(miningData!);
     getMiningData();
+    Provider.of<MiningV2Provider>(context,listen: false).getMiningData();
   }
   @override
   Widget build(BuildContext context) {

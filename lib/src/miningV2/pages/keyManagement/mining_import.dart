@@ -14,6 +14,7 @@ import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/textField_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:n42appv2/generated/l10n.dart';
 
 class MiningImport extends StatefulWidget {
   const MiningImport({super.key});
@@ -38,7 +39,7 @@ class _MiningImportState extends State<MiningImport> {
 
   // 常量
   static const int _passwordLength = 8;
-  static const double _fieldSpacing = 20.0;
+  static const double _fieldSpacing = 10.0;
 
   @override
   void dispose() {
@@ -76,7 +77,7 @@ class _MiningImportState extends State<MiningImport> {
       // 解密成功，可以在这里处理解密后的数据
       debugPrint("解密成功: ${jsonEncode(secretMap)}");
       MessageModel rmm=await Provider.of<MiningV2Provider>(context,listen: false).setMiningData_import(secretMap);
-      String messageStr="导入成功";
+      String messageStr=S.of(context).g_mining_key_104;
       if(rmm.error){
         messageStr=rmm.data as String;
       }
@@ -105,7 +106,7 @@ class _MiningImportState extends State<MiningImport> {
     final trimmedValue = value.trim();
     if (trimmedValue.isEmpty) {
       setState(() {
-        _encryptedDataErrorMessage = "加密数据不能为空！";
+        _encryptedDataErrorMessage = S.of(context).g_mining_key_105;
       });
       return false;
     }
@@ -120,13 +121,13 @@ class _MiningImportState extends State<MiningImport> {
     final trimmedValue = value.trim();
     if (trimmedValue.isEmpty) {
       setState(() {
-        _passwordErrorMessage = "密码不能为空！";
+        _passwordErrorMessage = S.of(context).g_mining_key_106;
       });
       return false;
     }
     if (trimmedValue.length != _passwordLength) {
       setState(() {
-        _passwordErrorMessage = "请输入$_passwordLength位密码！";
+        _passwordErrorMessage = S.of(context).g_mining_key_98(_passwordLength);//"请输入$_passwordLength位密码！";
       });
       return false;
     }
@@ -140,15 +141,15 @@ class _MiningImportState extends State<MiningImport> {
   String _getErrorMessage(dynamic error) {
     final errorStr = error.toString();
     if (errorStr.contains('解密失败')) {
-      return "解密失败，请检查密码是否正确";
+      return S.of(context).g_mining_key_107;//"解密失败，请检查密码是否正确!";
     }
     if (errorStr.contains('不支持的加密版本')) {
-      return "不支持的加密数据格式";
+      return S.of(context).g_mining_key_108;//"不支持的加密数据格式!";
     }
     if (errorStr.contains('ArgumentError')) {
       return errorStr.replaceAll('ArgumentError: ', '');
     }
-    return "导入失败: $errorStr";
+    return S.of(context).g_mining_key_109(errorStr);//"导入失败: $errorStr";
   }
 
   /// 从剪贴板粘贴
@@ -180,9 +181,7 @@ class _MiningImportState extends State<MiningImport> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("文件导入失败: $e")),
-        );
+        ToastUtils.show(S.of(context).g_mining_key_109(e));
       }
     }
   }
@@ -190,7 +189,7 @@ class _MiningImportState extends State<MiningImport> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text: "导入验证者",
+        text: S.of(context).g_mining_key_82,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
@@ -198,21 +197,22 @@ class _MiningImportState extends State<MiningImport> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildTitleWidget(
-              "加密数据",
+              S.of(context).g_mining_key_110,
               rightWidget: _buildActionButtons(),
             ),
             SizedBox(height: ScreenUtil().setWidth(_fieldSpacing)),
             _buildEncryptedDataField(),
             SizedBox(height: ScreenUtil().setWidth(_fieldSpacing)),
-            _buildTitleWidget("密码"),
+            _buildTitleWidget(S.of(context).login_password),
             SizedBox(height: ScreenUtil().setWidth(_fieldSpacing)),
             _buildPasswordField(),
             if (_errorMessage.isNotEmpty) _buildErrorMessage(),
             SizedBox(height: ScreenUtil().setWidth(_fieldSpacing)),
-            _buildImportButton(),
+            //_buildImportButton(),
           ],
         ),
       ),
+      bottomNavigationBar: _buildImportButton(),
     );
   }
 
@@ -246,12 +246,12 @@ class _MiningImportState extends State<MiningImport> {
     return Row(
       children: [
         _buildActionButton(
-          text: "粘贴",
+          text: S.of(context).g_key_166,
           onTap: _pasteFromClipboard,
         ),
         SizedBox(width: ScreenUtil().setWidth(20)),
         _buildActionButton(
-          text: "导入文件",
+          text: S.of(context).g_mining_key_111,
           onTap: _importFromFile,
         ),
       ],
@@ -295,7 +295,7 @@ class _MiningImportState extends State<MiningImport> {
       maxLines: 20,
       height: ScreenUtil().setWidth(500),
       errorMessage: _encryptedDataErrorMessage,
-      hintText: "请输入验证者的加密数据",
+      hintText: S.of(context).g_mining_key_112,
     );
   }
 
@@ -312,7 +312,7 @@ class _MiningImportState extends State<MiningImport> {
       },
       height: ScreenUtil().setWidth(88),
       errorMessage: _passwordErrorMessage,
-      hintText: "请输入$_passwordLength位密码",
+      hintText: S.of(context).g_mining_key_98(_passwordLength),//"请输入$_passwordLength位密码",
       obscure: obscure,
       rightWidget1: Container(
         width: ScreenUtil().setWidth(50.0),
@@ -361,14 +361,14 @@ class _MiningImportState extends State<MiningImport> {
   /// 构建导入按钮
   Widget _buildImportButton() {
     final isLoading = _load == Load.loading;
-    return Container(
+    return SafeArea(child: Container(
       height: ScreenUtil().setWidth(88),
       width: double.infinity,
-      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(_fieldSpacing)),
+      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(_fieldSpacing),horizontal: ScreenUtil().setWidth(30)),
       child: ButtonStyle6(
         context,
         _importPrivateKey,
-        isLoading ? "正在导入..." : "导入",
+        isLoading ? S.of(context).g_mining_key_113 : S.of(context).g_token_m_key_9,
         AppThemeUtils.getColorByKey(
           context,
           isLoading
@@ -383,6 +383,6 @@ class _MiningImportState extends State<MiningImport> {
         ),
         isLoading,
       ),
-    );
+    ));
   }
 }
