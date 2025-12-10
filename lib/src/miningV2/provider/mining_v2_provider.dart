@@ -248,7 +248,7 @@ class MiningV2Provider extends ChangeNotifier {
 
     if(miningData?[importAddress] == null){
       miningData![importAddress]={
-        'isMining':true,
+        'isMining':value['isMining'],
         'keypart':value['validator'],
         'redeem':false,
       };

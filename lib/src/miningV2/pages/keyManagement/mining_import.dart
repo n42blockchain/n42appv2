@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
+import 'package:n42appv2/src/miningV2/api/mining_api.dart';
 import 'package:n42appv2/src/miningV2/pages/keyManagement/data_encryption.dart';
 import 'package:n42appv2/src/miningV2/pages/keyManagement/file_import.dart';
 import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
@@ -76,6 +77,15 @@ class _MiningImportState extends State<MiningImport> {
 
       // 解密成功，可以在这里处理解密后的数据
       debugPrint("解密成功: ${jsonEncode(secretMap)}");
+      bool isMining=true;
+      MessageModel bvRmm= await MiningApi.init().getBeaconValidator(secretMap['validator']['publicKey']);
+      if(bvRmm.error==false){
+        int eTimestamp=bvRmm.data['exit_timestamp'];
+        if(eTimestamp!=0){
+          isMining=false;
+        }
+      }
+      secretMap['isMining']=isMining;
       MessageModel rmm=await Provider.of<MiningV2Provider>(context,listen: false).setMiningData_import(secretMap);
       String messageStr=S.of(context).g_mining_key_104;
       if(rmm.error){
