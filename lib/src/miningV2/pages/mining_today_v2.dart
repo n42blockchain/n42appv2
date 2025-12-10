@@ -462,7 +462,7 @@ Riesgo Alto*/
                                   showTips: true),
                             ],
                           ),
-                          if(mpValue.showRedemption==true)
+                          if(mpValue.showRedemption==true && mpValue.redeem==false)
                             Container(
                               height: ScreenUtil().setWidth(88),
                               width: double.infinity,
@@ -490,6 +490,18 @@ Riesgo Alto*/
                               width: double.infinity,
                               child: Text(
                                 S.of(context).g_mining_key_88,
+                                style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(30),
+                                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name),
+                                ),
+                              ),
+                            ),
+                          if(mpValue.depositsEnable==true && mpValue.redeem==true && mpValue.showRedemption2==true)
+                            Container(
+                              padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+                              width: double.infinity,
+                              child: Text(
+                                S.of(context).g_mining_key_115,
                                 style: TextStyle(
                                   fontSize: ScreenUtil().setSp(30),
                                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name),

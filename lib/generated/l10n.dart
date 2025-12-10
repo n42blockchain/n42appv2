@@ -109,11 +109,6 @@ class S {
     return Intl.message('All tokens', name: 'g_key_9', desc: '', args: []);
   }
 
-  /// `Create wallet`
-  String get g_key_10 {
-    return Intl.message('Create wallet', name: 'g_key_10', desc: '', args: []);
-  }
-
   /// `Import wallet`
   String get g_key_11 {
     return Intl.message('Import wallet', name: 'g_key_11', desc: '', args: []);
@@ -749,16 +744,6 @@ class S {
     );
   }
 
-  /// `HTTP error!`
-  String get g_key_error_2 {
-    return Intl.message(
-      'HTTP error!',
-      name: 'g_key_error_2',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Unknown error!`
   String get g_key_error_3 {
     return Intl.message(
@@ -794,16 +779,6 @@ class S {
     return Intl.message(
       'Request has been cancelled, please request again!',
       name: 'g_key_error_8',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Cannot connect. Please refresh or try again later!`
-  String get g_key_error_9 {
-    return Intl.message(
-      'Cannot connect. Please refresh or try again later!',
-      name: 'g_key_error_9',
       desc: '',
       args: [],
     );
@@ -1164,16 +1139,6 @@ class S {
     return Intl.message(
       'Please confirm connecting to DApp',
       name: 'g_browser_key14',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Search history`
-  String get g_browser_key15 {
-    return Intl.message(
-      'Search history',
-      name: 'g_browser_key15',
       desc: '',
       args: [],
     );
@@ -2224,16 +2189,6 @@ class S {
     );
   }
 
-  /// `Didn't receive code? `
-  String get login_message_3 {
-    return Intl.message(
-      'Didn\'t receive code? ',
-      name: 'login_message_3',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Resend code in `
   String get login_message_6 {
     return Intl.message(
@@ -2242,11 +2197,6 @@ class S {
       desc: '',
       args: [],
     );
-  }
-
-  /// `Resend`
-  String get login_resend {
-    return Intl.message('Resend', name: 'login_resend', desc: '', args: []);
   }
 
   /// `please log in first`
@@ -2359,26 +2309,6 @@ class S {
     );
   }
 
-  /// `Home`
-  String get g_mining_key_1 {
-    return Intl.message('Home', name: 'g_mining_key_1', desc: '', args: []);
-  }
-
-  /// `Activities`
-  String get g_mining_key_2 {
-    return Intl.message(
-      'Activities',
-      name: 'g_mining_key_2',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Summary`
-  String get g_mining_key_3 {
-    return Intl.message('Summary', name: 'g_mining_key_3', desc: '', args: []);
-  }
-
   /// `Verification Status`
   String get g_mining_key_5 {
     return Intl.message(
@@ -2404,16 +2334,6 @@ class S {
     return Intl.message(
       'Select a Plan',
       name: 'g_mining_key_7',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Today's Verification Time`
-  String get g_mining_key_8 {
-    return Intl.message(
-      'Today\'s Verification Time',
-      name: 'g_mining_key_8',
       desc: '',
       args: [],
     );
@@ -2484,41 +2404,6 @@ class S {
     return Intl.message(
       'Calculated based on market price of N * the total N rewards.',
       name: 'g_mining_key_15',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Summary`
-  String get g_mining_key_19 {
-    return Intl.message('Summary', name: 'g_mining_key_19', desc: '', args: []);
-  }
-
-  /// `Total Value Mined`
-  String get g_mining_key_20 {
-    return Intl.message(
-      'Total Value Mined',
-      name: 'g_mining_key_20',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Verification Since`
-  String get g_mining_key_21 {
-    return Intl.message(
-      'Verification Since',
-      name: 'g_mining_key_21',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Reward Distribution`
-  String get g_mining_key_22 {
-    return Intl.message(
-      'Reward Distribution',
-      name: 'g_mining_key_22',
       desc: '',
       args: [],
     );
@@ -2649,36 +2534,6 @@ class S {
     );
   }
 
-  /// `Deposit USDT to convert to N`
-  String get g_mining_key_44 {
-    return Intl.message(
-      'Deposit USDT to convert to N',
-      name: 'g_mining_key_44',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Are you sure you want to skip?`
-  String get g_mining_key_45 {
-    return Intl.message(
-      'Are you sure you want to skip?',
-      name: 'g_mining_key_45',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `You will not receive any verification rewards until you choose 1 of the plans.`
-  String get g_mining_key_46 {
-    return Intl.message(
-      'You will not receive any verification rewards until you choose 1 of the plans.',
-      name: 'g_mining_key_46',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Disabled`
   String get g_mining_key_47 {
     return Intl.message(
@@ -2687,11 +2542,6 @@ class S {
       desc: '',
       args: [],
     );
-  }
-
-  /// `Reward`
-  String get g_mining_key_48 {
-    return Intl.message('Reward', name: 'g_mining_key_48', desc: '', args: []);
   }
 
   /// `View more`
@@ -2704,89 +2554,9 @@ class S {
     );
   }
 
-  /// `To unlock`
-  String get g_mining_key_50 {
-    return Intl.message(
-      'To unlock',
-      name: 'g_mining_key_50',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Skip`
-  String get g_mining_key_52 {
-    return Intl.message('Skip', name: 'g_mining_key_52', desc: '', args: []);
-  }
-
-  /// `Past 7 Days`
-  String get g_mining_key_58 {
-    return Intl.message(
-      'Past 7 Days',
-      name: 'g_mining_key_58',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Accumulated Rewards`
-  String get g_mining_key_59 {
-    return Intl.message(
-      'Accumulated Rewards',
-      name: 'g_mining_key_59',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Rewards Received`
-  String get g_mining_key_60 {
-    return Intl.message(
-      'Rewards Received',
-      name: 'g_mining_key_60',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Advanced`
-  String get g_mining_key_61 {
-    return Intl.message(
-      'Advanced',
-      name: 'g_mining_key_61',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Entry`
   String get g_mining_key_62 {
     return Intl.message('Entry', name: 'g_mining_key_62', desc: '', args: []);
-  }
-
-  /// `Pro`
-  String get g_mining_key_63 {
-    return Intl.message('Pro', name: 'g_mining_key_63', desc: '', args: []);
-  }
-
-  /// `FULL NODE`
-  String get g_mining_key_64 {
-    return Intl.message(
-      'FULL NODE',
-      name: 'g_mining_key_64',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `MINS/DAY`
-  String get g_mining_key_65 {
-    return Intl.message(
-      'MINS/DAY',
-      name: 'g_mining_key_65',
-      desc: '',
-      args: [],
-    );
   }
 
   /// `Advanced Node`
@@ -2899,14 +2669,9 @@ class S {
     );
   }
 
-  /// `Redemption`
+  /// `Redeem`
   String get g_mining_key_77 {
-    return Intl.message(
-      'Redemption',
-      name: 'g_mining_key_77',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Redeem', name: 'g_mining_key_77', desc: '', args: []);
   }
 
   /// `Please save the verifier's public and private key pair first.`
@@ -3274,26 +3039,11 @@ class S {
     );
   }
 
-  /// `Rewards`
-  String get g_mining_key1 {
-    return Intl.message('Rewards', name: 'g_mining_key1', desc: '', args: []);
-  }
-
-  /// `Unlock Date`
-  String get g_mining_key7 {
+  /// `Redemption takes some time, please wait a moment!`
+  String get g_mining_key_115 {
     return Intl.message(
-      'Unlock Date',
-      name: 'g_mining_key7',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Task detail`
-  String get g_mining_key15 {
-    return Intl.message(
-      'Task detail',
-      name: 'g_mining_key15',
+      'Redemption takes some time, please wait a moment!',
+      name: 'g_mining_key_115',
       desc: '',
       args: [],
     );
@@ -3314,46 +3064,6 @@ class S {
     return Intl.message(
       'Cloud Verification Activity',
       name: 'g_mining_key31',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Verification Settings`
-  String get g_mining_key33 {
-    return Intl.message(
-      'Verification Settings',
-      name: 'g_mining_key33',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Background Verification Music`
-  String get g_mining_key34 {
-    return Intl.message(
-      'Background Verification Music',
-      name: 'g_mining_key34',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Default`
-  String get g_mining_key35 {
-    return Intl.message('Default', name: 'g_mining_key35', desc: '', args: []);
-  }
-
-  /// `Mute`
-  String get g_mining_key36 {
-    return Intl.message('Mute', name: 'g_mining_key36', desc: '', args: []);
-  }
-
-  /// `When background verification is enabled, the music will play in the background. If the music stops, verification will also stop.`
-  String get g_mining_key37 {
-    return Intl.message(
-      'When background verification is enabled, the music will play in the background. If the music stops, verification will also stop.',
-      name: 'g_mining_key37',
       desc: '',
       args: [],
     );
@@ -3441,31 +3151,6 @@ class S {
       name: 'g_mining_key76',
       desc: '',
       args: [value],
-    );
-  }
-
-  /// `Mineral`
-  String get g_mining_key82 {
-    return Intl.message('Mineral', name: 'g_mining_key82', desc: '', args: []);
-  }
-
-  /// `Node`
-  String get g_mining_key83 {
-    return Intl.message('Node', name: 'g_mining_key83', desc: '', args: []);
-  }
-
-  /// `Network`
-  String get g_mining_key84 {
-    return Intl.message('Network', name: 'g_mining_key84', desc: '', args: []);
-  }
-
-  /// `Switch between testnet and mainnet for cloud mining.`
-  String get g_mining_key85 {
-    return Intl.message(
-      'Switch between testnet and mainnet for cloud mining.',
-      name: 'g_mining_key85',
-      desc: '',
-      args: [],
     );
   }
 
@@ -3659,16 +3344,6 @@ class S {
     );
   }
 
-  /// `Should be at least 8 characters`
-  String get g_key_wallet_m18 {
-    return Intl.message(
-      'Should be at least 8 characters',
-      name: 'g_key_wallet_m18',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `{value} has unfinished transactions, please try again later.`
   String g_key_wallet_m19(Object value) {
     return Intl.message(
@@ -3699,49 +3374,9 @@ class S {
     );
   }
 
-  /// `Seed Phrase Wallet`
-  String get g_key_wallet_c1 {
-    return Intl.message(
-      'Seed Phrase Wallet',
-      name: 'g_key_wallet_c1',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Uses a series of words to generate and recover the wallet's private keys, providing a user-friendly way to access and secure digital assets.`
-  String get g_key_wallet_c2 {
-    return Intl.message(
-      'Uses a series of words to generate and recover the wallet\'s private keys, providing a user-friendly way to access and secure digital assets.',
-      name: 'g_key_wallet_c2',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Import with Seed Phrase`
-  String get g_key_wallet_c3 {
-    return Intl.message(
-      'Import with Seed Phrase',
-      name: 'g_key_wallet_c3',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Start`
   String get g_key_wallet_c4 {
     return Intl.message('Start', name: 'g_key_wallet_c4', desc: '', args: []);
-  }
-
-  /// `Other Methods?`
-  String get g_key_wallet_c5 {
-    return Intl.message(
-      'Other Methods?',
-      name: 'g_key_wallet_c5',
-      desc: '',
-      args: [],
-    );
   }
 
   /// `Check Seed Phrase`
@@ -3879,16 +3514,6 @@ class S {
     return Intl.message(
       'You can skip backing up the seed phrase for now, and do it again in Settings at any time if you needs it.',
       name: 'g_key_wallet_c19',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Create seed phrase`
-  String get g_key_wallet_c20 {
-    return Intl.message(
-      'Create seed phrase',
-      name: 'g_key_wallet_c20',
       desc: '',
       args: [],
     );
@@ -4469,71 +4094,6 @@ class S {
     return Intl.message('Back', name: 'g_key_nft_220', desc: '', args: []);
   }
 
-  /// `Interact with over 30 blockchains.`
-  String get g_guide_key5 {
-    return Intl.message(
-      'Interact with over 30 blockchains.',
-      name: 'g_guide_key5',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `True ownership to your digital assets.`
-  String get g_guide_key6 {
-    return Intl.message(
-      'True ownership to your digital assets.',
-      name: 'g_guide_key6',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `All-in-one digital wallet.`
-  String get g_guide_key8 {
-    return Intl.message(
-      'All-in-one digital wallet.',
-      name: 'g_guide_key8',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `We support Bitcoin, Ethereum, Solana, Binance Smart Chain, Tron, N42Chain and more.`
-  String get g_guide_key9 {
-    return Intl.message(
-      'We support Bitcoin, Ethereum, Solana, Binance Smart Chain, Tron, N42Chain and more.',
-      name: 'g_guide_key9',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `N42Wallet ensures your digital assets are secure and truly yours.  We do not have access to your private keys or secret phase.`
-  String get g_guide_key10 {
-    return Intl.message(
-      'N42Wallet ensures your digital assets are secure and truly yours.  We do not have access to your private keys or secret phase.',
-      name: 'g_guide_key10',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Your comprehensive Web3 ecosystem with Wallet, NFTs, Chat, and Browser, all in one platform.`
-  String get g_guide_key12 {
-    return Intl.message(
-      'Your comprehensive Web3 ecosystem with Wallet, NFTs, Chat, and Browser, all in one platform.',
-      name: 'g_guide_key12',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Manage wallet`
-  String get w_key_7 {
-    return Intl.message('Manage wallet', name: 'w_key_7', desc: '', args: []);
-  }
-
   /// `Enter the seed phrase for the wallet you want to import.`
   String get w_key_8 {
     return Intl.message(
@@ -4589,16 +4149,6 @@ class S {
     return Intl.message(
       'Face matching method',
       name: 'g_face_match_key1',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Initialization failed!`
-  String get g_face_match_key2 {
-    return Intl.message(
-      'Initialization failed!',
-      name: 'g_face_match_key2',
       desc: '',
       args: [],
     );
@@ -5024,16 +4574,6 @@ class S {
     return Intl.message(
       '6-digit number',
       name: 'g_lock_key13',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enter login password`
-  String get g_lock_key14 {
-    return Intl.message(
-      'Enter login password',
-      name: 'g_lock_key14',
       desc: '',
       args: [],
     );
@@ -5799,16 +5339,6 @@ class S {
     );
   }
 
-  /// `Seed phrase copied`
-  String get g_key_copy_mnemonic {
-    return Intl.message(
-      'Seed phrase copied',
-      name: 'g_key_copy_mnemonic',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Wallet edit`
   String get g_key_wallet_edit {
     return Intl.message(
@@ -5994,16 +5524,6 @@ class S {
     );
   }
 
-  /// `Terms and conditions apply.`
-  String get g_share_v2_key_3 {
-    return Intl.message(
-      'Terms and conditions apply.',
-      name: 'g_share_v2_key_3',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Share`
   String get g_share_v2_key_5 {
     return Intl.message('Share', name: 'g_share_v2_key_5', desc: '', args: []);
@@ -6067,56 +5587,6 @@ class S {
   /// `code`
   String get g_share_v3_key_8 {
     return Intl.message('code', name: 'g_share_v3_key_8', desc: '', args: []);
-  }
-
-  /// `Your referral stats`
-  String get g_share_v3_key_9 {
-    return Intl.message(
-      'Your referral stats',
-      name: 'g_share_v3_key_9',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Invited`
-  String get g_share_v3_key_10 {
-    return Intl.message(
-      'Invited',
-      name: 'g_share_v3_key_10',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Downloaded App`
-  String get g_share_v3_key_11 {
-    return Intl.message(
-      'Downloaded App',
-      name: 'g_share_v3_key_11',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Transacted`
-  String get g_share_v3_key_12 {
-    return Intl.message(
-      'Transacted',
-      name: 'g_share_v3_key_12',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Only new referrals after Nov 23, 2023 will qualify for N rewards`
-  String get g_share_v3_key_13 {
-    return Intl.message(
-      'Only new referrals after Nov 23, 2023 will qualify for N rewards',
-      name: 'g_share_v3_key_13',
-      desc: '',
-      args: [],
-    );
   }
 
   /// `Feedback`

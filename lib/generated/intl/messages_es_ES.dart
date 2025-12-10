@@ -190,9 +190,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_browser_key14": MessageLookupByLibrary.simpleMessage(
       "Confirma la conexión a la DApp",
     ),
-    "g_browser_key15": MessageLookupByLibrary.simpleMessage(
-      "Historial de búsqueda",
-    ),
     "g_browser_key16": MessageLookupByLibrary.simpleMessage("Cerrar todo"),
     "g_browser_key17": MessageLookupByLibrary.simpleMessage("Hecho"),
     "g_browser_key3": MessageLookupByLibrary.simpleMessage("Marcadores"),
@@ -379,9 +376,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_face_match_key19": MessageLookupByLibrary.simpleMessage(
       "¿Qué es la Vinculación Facial?",
     ),
-    "g_face_match_key2": MessageLookupByLibrary.simpleMessage(
-      "¡Falló la inicialización!",
-    ),
     "g_face_match_key20": MessageLookupByLibrary.simpleMessage(
       "La vinculación facial utiliza tecnología de reconocimiento facial para hacer coincidir tus características biométricas faciales con la dirección de tu billetera blockchain.",
     ),
@@ -441,24 +435,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Volver a seleccionar",
     ),
     "g_face_match_key9": MessageLookupByLibrary.simpleMessage("coincidencia"),
-    "g_guide_key10": MessageLookupByLibrary.simpleMessage(
-      "N42Wallet garantiza que sus activos digitales estén seguros y sean verdaderamente suyos. No tenemos acceso a sus claves privadas ni a su fase secreta.",
-    ),
-    "g_guide_key12": MessageLookupByLibrary.simpleMessage(
-      "Su completo ecosistema Web3 con Wallet, NFT, Chat y navegador, todo en una sola plataforma.",
-    ),
-    "g_guide_key5": MessageLookupByLibrary.simpleMessage(
-      "Interactúa con más de 30 blockchains.",
-    ),
-    "g_guide_key6": MessageLookupByLibrary.simpleMessage(
-      "Verdadera propiedad de sus activos digitales.",
-    ),
-    "g_guide_key8": MessageLookupByLibrary.simpleMessage(
-      "Monedero digital todo en uno.",
-    ),
-    "g_guide_key9": MessageLookupByLibrary.simpleMessage(
-      "Admitimos Bitcoin, Ethereum, Solana, Binance Smart Chain, Tron, N42Chain y más.",
-    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("Perfil"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("Noticias"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("Verificación"),
@@ -466,7 +442,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_home_key6": MessageLookupByLibrary.simpleMessage("Aprender"),
     "g_home_key9": MessageLookupByLibrary.simpleMessage("Invitar a un amigo"),
     "g_key_1": MessageLookupByLibrary.simpleMessage("¡Error al eliminar!"),
-    "g_key_10": MessageLookupByLibrary.simpleMessage("Crear wallet"),
     "g_key_100": MessageLookupByLibrary.simpleMessage("Enviar"),
     "g_key_101": MessageLookupByLibrary.simpleMessage("Límite de gas"),
     "g_key_105": MessageLookupByLibrary.simpleMessage("No más"),
@@ -598,9 +573,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_address_6": MessageLookupByLibrary.simpleMessage("Elegir monedas"),
     "g_key_address_7": MessageLookupByLibrary.simpleMessage("Buscar monedas"),
-    "g_key_copy_mnemonic": MessageLookupByLibrary.simpleMessage(
-      "Frase semilla copiada",
-    ),
     "g_key_error_1": MessageLookupByLibrary.simpleMessage(
       "¡Error al analizar los datos de respuesta!",
     ),
@@ -632,7 +604,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_error_19": MessageLookupByLibrary.simpleMessage(
       "El servicio no está disponible",
     ),
-    "g_key_error_2": MessageLookupByLibrary.simpleMessage("¡Error HTTP!"),
     "g_key_error_20": MessageLookupByLibrary.simpleMessage(
       "Tiempo de espera de la puerta de enlace",
     ),
@@ -671,9 +642,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_error_8": MessageLookupByLibrary.simpleMessage(
       "¡Se canceló la solicitud, vuelva a solicitarla!",
-    ),
-    "g_key_error_9": MessageLookupByLibrary.simpleMessage(
-      "No se puede conectar. Actualice o vuelva a intentarlo más tarde.",
     ),
     "g_key_ex_keystore": MessageLookupByLibrary.simpleMessage(
       "Exportar almacén de claves",
@@ -911,9 +879,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Nueva versión encontrada",
     ),
     "g_key_v_k4": MessageLookupByLibrary.simpleMessage("Ya la última versión"),
-    "g_key_wallet_c1": MessageLookupByLibrary.simpleMessage(
-      "Monedero de frase inicial",
-    ),
     "g_key_wallet_c10": MessageLookupByLibrary.simpleMessage(
       "Ver frase inicial",
     ),
@@ -935,12 +900,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_wallet_c19": MessageLookupByLibrary.simpleMessage(
       "Puede omitir la copia de seguridad de la frase inicial por ahora y volver a hacerlo en Configuración en cualquier momento si lo necesita.",
-    ),
-    "g_key_wallet_c2": MessageLookupByLibrary.simpleMessage(
-      "Utiliza una serie de palabras para generar y recuperar las claves privadas de la billetera, proporcionando una forma fácil de acceder y proteger los activos digitales.",
-    ),
-    "g_key_wallet_c20": MessageLookupByLibrary.simpleMessage(
-      "Crear frase inicial",
     ),
     "g_key_wallet_c21": MessageLookupByLibrary.simpleMessage(
       "Crear directamente",
@@ -968,9 +927,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_wallet_c29": MessageLookupByLibrary.simpleMessage(
       "Paso 3: Presione Exportar almacén de claves.",
-    ),
-    "g_key_wallet_c3": MessageLookupByLibrary.simpleMessage(
-      "Importar con frase inicial",
     ),
     "g_key_wallet_c30": MessageLookupByLibrary.simpleMessage(
       "Ir a Administrar Cartera",
@@ -1031,7 +987,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_c49": MessageLookupByLibrary.simpleMessage(
       "¡Primero haga una copia de seguridad de la frase inicial de su billetera!",
     ),
-    "g_key_wallet_c5": MessageLookupByLibrary.simpleMessage("¿Otros métodos?"),
     "g_key_wallet_c6": MessageLookupByLibrary.simpleMessage(
       "Comprobar frase inicial",
     ),
@@ -1064,9 +1019,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_wallet_m17": MessageLookupByLibrary.simpleMessage(
       "Ingrese el código de verificación de Google.",
-    ),
-    "g_key_wallet_m18": MessageLookupByLibrary.simpleMessage(
-      "Debe tener al menos 8 caracteres",
     ),
     "g_key_wallet_m19": m15,
     "g_key_wallet_m2": MessageLookupByLibrary.simpleMessage(
@@ -1111,9 +1063,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Confirmar nueva contraseña",
     ),
     "g_lock_key13": MessageLookupByLibrary.simpleMessage("Número de 6 dígitos"),
-    "g_lock_key14": MessageLookupByLibrary.simpleMessage(
-      "Ingrese la contraseña de inicio de sesión",
-    ),
     "g_lock_key15": MessageLookupByLibrary.simpleMessage(
       "Contraseñas y datos biométricos",
     ),
@@ -1158,24 +1107,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key9": MessageLookupByLibrary.simpleMessage(
       "Restablecer contraseña",
     ),
-    "g_mining_key1": MessageLookupByLibrary.simpleMessage("Recompensas"),
-    "g_mining_key15": MessageLookupByLibrary.simpleMessage(
-      "Detalle de la tarea",
-    ),
     "g_mining_key20": MessageLookupByLibrary.simpleMessage("¿Desbloquear N?"),
     "g_mining_key31": MessageLookupByLibrary.simpleMessage(
       "Registro de actividad de verificación en la nube",
-    ),
-    "g_mining_key33": MessageLookupByLibrary.simpleMessage(
-      "Ajustes de verificación",
-    ),
-    "g_mining_key34": MessageLookupByLibrary.simpleMessage(
-      "Música de verificación en segundo plano",
-    ),
-    "g_mining_key35": MessageLookupByLibrary.simpleMessage("Predeterminado"),
-    "g_mining_key36": MessageLookupByLibrary.simpleMessage("Silencio"),
-    "g_mining_key37": MessageLookupByLibrary.simpleMessage(
-      "Cuando la verificación en segundo plano esté habilitada, la música se reproducirá en segundo plano. Si la música se detiene, la verificación también se detendrá.",
     ),
     "g_mining_key38": MessageLookupByLibrary.simpleMessage("Tu nivel"),
     "g_mining_key46": MessageLookupByLibrary.simpleMessage(
@@ -1189,27 +1123,17 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Continuar"),
     "g_mining_key63": m23,
-    "g_mining_key7": MessageLookupByLibrary.simpleMessage(
-      "Fecha de desbloqueo",
-    ),
     "g_mining_key73": m24,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "Acabo de configurar un nodo en @N42aWallet y comencé a verificar en dispositivos móviles. ¡Únete a mí! ¡El futuro descentralizado es móvil!",
     ),
     "g_mining_key76": m25,
-    "g_mining_key82": MessageLookupByLibrary.simpleMessage("Minería"),
-    "g_mining_key83": MessageLookupByLibrary.simpleMessage("Nodo"),
-    "g_mining_key84": MessageLookupByLibrary.simpleMessage("Red"),
-    "g_mining_key85": MessageLookupByLibrary.simpleMessage(
-      "Cambiar entre la red de prueba y la red principal para la minería en la nube.",
-    ),
     "g_mining_key86": MessageLookupByLibrary.simpleMessage(
       "Canje disponible después de los 768.",
     ),
     "g_mining_key87": MessageLookupByLibrary.simpleMessage(
       "Las solicitudes anteriores no se procesarán.",
     ),
-    "g_mining_key_1": MessageLookupByLibrary.simpleMessage("Inicio"),
     "g_mining_key_10": MessageLookupByLibrary.simpleMessage(
       "La recompensa de hoy",
     ),
@@ -1249,6 +1173,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key_113": MessageLookupByLibrary.simpleMessage("Importador..."),
     "g_mining_key_114": MessageLookupByLibrary.simpleMessage("Confirmación"),
+    "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
+      "El canje tarda un poco, ¡por favor espera un momento!",
+    ),
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "La recompensa se acumula diariamente y solo se envía a tu Wallet N cuando alcanza ~0.5 N.",
     ),
@@ -1259,21 +1186,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_15": MessageLookupByLibrary.simpleMessage(
       "Calculado en base al precio de mercado de N * las recompensas totales de N.",
     ),
-    "g_mining_key_19": MessageLookupByLibrary.simpleMessage("Resumen"),
-    "g_mining_key_2": MessageLookupByLibrary.simpleMessage("Actividades"),
-    "g_mining_key_20": MessageLookupByLibrary.simpleMessage(
-      "Valor total extraído",
-    ),
-    "g_mining_key_21": MessageLookupByLibrary.simpleMessage(
-      "Verificación desde",
-    ),
-    "g_mining_key_22": MessageLookupByLibrary.simpleMessage(
-      "Historial de recompensas",
-    ),
     "g_mining_key_23": MessageLookupByLibrary.simpleMessage(
       "Recuento de validación",
     ),
-    "g_mining_key_3": MessageLookupByLibrary.simpleMessage("Resumen"),
     "g_mining_key_31": MessageLookupByLibrary.simpleMessage(
       "Seleccionar planes",
     ),
@@ -1302,38 +1217,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_43": MessageLookupByLibrary.simpleMessage(
       "No tienes suficiente N para esta transacción",
     ),
-    "g_mining_key_44": MessageLookupByLibrary.simpleMessage(
-      "Deposita USDT para convertir a N",
-    ),
-    "g_mining_key_45": MessageLookupByLibrary.simpleMessage(
-      "¿Estás seguro de que quieres saltar?",
-    ),
-    "g_mining_key_46": MessageLookupByLibrary.simpleMessage(
-      "No recibirás ninguna recompensa por la verificación hasta que elijas uno de los planes.",
-    ),
     "g_mining_key_47": MessageLookupByLibrary.simpleMessage("Desactivado"),
-    "g_mining_key_48": MessageLookupByLibrary.simpleMessage("Recompensa"),
     "g_mining_key_49": MessageLookupByLibrary.simpleMessage("Ver más"),
     "g_mining_key_5": MessageLookupByLibrary.simpleMessage(
       "Estado de verificación",
     ),
-    "g_mining_key_50": MessageLookupByLibrary.simpleMessage("Para desbloquear"),
-    "g_mining_key_52": MessageLookupByLibrary.simpleMessage("Saltar"),
-    "g_mining_key_58": MessageLookupByLibrary.simpleMessage("Últimos 7 días"),
-    "g_mining_key_59": MessageLookupByLibrary.simpleMessage(
-      "Recompensas Acumuladas",
-    ),
     "g_mining_key_6": MessageLookupByLibrary.simpleMessage(
       "Bloquea los N para comenzar a extraer recompensas.",
     ),
-    "g_mining_key_60": MessageLookupByLibrary.simpleMessage(
-      "Recompensas Recibidas",
-    ),
-    "g_mining_key_61": MessageLookupByLibrary.simpleMessage("Avanzado"),
     "g_mining_key_62": MessageLookupByLibrary.simpleMessage("Entrada"),
-    "g_mining_key_63": MessageLookupByLibrary.simpleMessage("Pro"),
-    "g_mining_key_64": MessageLookupByLibrary.simpleMessage("NODO COMPLETO"),
-    "g_mining_key_65": MessageLookupByLibrary.simpleMessage("MINS/DIA"),
     "g_mining_key_66": MessageLookupByLibrary.simpleMessage("Nodo Avanzado"),
     "g_mining_key_67": MessageLookupByLibrary.simpleMessage("Nodo De Entrada"),
     "g_mining_key_68": MessageLookupByLibrary.simpleMessage("Nodo Pro"),
@@ -1362,14 +1254,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_76": MessageLookupByLibrary.simpleMessage(
       "Puntuación de riesgo",
     ),
-    "g_mining_key_77": MessageLookupByLibrary.simpleMessage("Redención"),
+    "g_mining_key_77": MessageLookupByLibrary.simpleMessage("canjear"),
     "g_mining_key_78": MessageLookupByLibrary.simpleMessage(
       "Guarde primero el par de claves pública y privada del verificador.",
     ),
     "g_mining_key_79": MessageLookupByLibrary.simpleMessage("Exportar"),
-    "g_mining_key_8": MessageLookupByLibrary.simpleMessage(
-      "El tiempo de verificación de hoy",
-    ),
     "g_mining_key_80": MessageLookupByLibrary.simpleMessage(
       "Fondos insuficientes para la transferencia.",
     ),
@@ -1430,18 +1319,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_notification_key_1": MessageLookupByLibrary.simpleMessage(
       "Notificaciones",
     ),
-    "g_share_v2_key_3": MessageLookupByLibrary.simpleMessage(
-      "Se aplican términos y condiciones.",
-    ),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("Compartir"),
-    "g_share_v3_key_10": MessageLookupByLibrary.simpleMessage("Invitación"),
-    "g_share_v3_key_11": MessageLookupByLibrary.simpleMessage(
-      "Aplicación descargada",
-    ),
-    "g_share_v3_key_12": MessageLookupByLibrary.simpleMessage("Transacción"),
-    "g_share_v3_key_13": MessageLookupByLibrary.simpleMessage(
-      "Solo las nuevas recomendaciones después del 23 de noviembre de 2023 son elegibles para el Premio N.",
-    ),
     "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("Recomendación"),
     "g_share_v3_key_3": MessageLookupByLibrary.simpleMessage(
       "¡Recomienda amigos y obtén tokens N!",
@@ -1455,9 +1333,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Referir vía"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Enlace"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("código"),
-    "g_share_v3_key_9": MessageLookupByLibrary.simpleMessage(
-      "Tus estadísticas de referencias",
-    ),
     "g_swap_key_14": m29,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Obtener error en el precio de la moneda.",
@@ -1635,9 +1510,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_message_2": MessageLookupByLibrary.simpleMessage(
       "¿Ya tienes una cuenta?",
     ),
-    "login_message_3": MessageLookupByLibrary.simpleMessage(
-      "¿No recibiste el código?",
-    ),
     "login_message_6": MessageLookupByLibrary.simpleMessage(
       "Reenviar código en ",
     ),
@@ -1654,7 +1526,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Inicie sesión primero",
     ),
     "login_password": MessageLookupByLibrary.simpleMessage("Contraseña"),
-    "login_resend": MessageLookupByLibrary.simpleMessage("Reenviar"),
     "next": MessageLookupByLibrary.simpleMessage("Siguiente"),
     "nicknameMessage": m41,
     "password_diff": MessageLookupByLibrary.simpleMessage(
@@ -1721,7 +1592,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "w_key_12": MessageLookupByLibrary.simpleMessage(
       "Frase inicial incorrecta.",
     ),
-    "w_key_7": MessageLookupByLibrary.simpleMessage("Administrar Wallet"),
     "w_key_8": MessageLookupByLibrary.simpleMessage(
       "Ingrese la frase inicial para la Wallet que desea importar.",
     ),

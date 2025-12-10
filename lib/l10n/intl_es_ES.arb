@@ -8,7 +8,6 @@
   "g_key_7": "Privado y Seguro",
   "g_key_8": "Observación",
   "g_key_9": "Todos los tokens",
-  "g_key_10": "Crear wallet",
   "g_key_11": "Importar wallet",
   "g_key_12": "Crear/Importar wallet",
   "g_key_13": "Lista de billeteras",
@@ -84,7 +83,6 @@
   "g_key_212": "Vender",
   "g_key_213": "Información del mercado",
   "g_key_214": "La billetera ya existe, el nombre de la billetera es \"{value}\"",
-
   "g_key_u_2": "Apodo",
   "g_key_u_3": "Descripción",
   "g_key_u_5": "Información del artista",
@@ -100,9 +98,7 @@
   "g_key_u_15": "Plataformas de medios",
   "g_key_u_16": "Dirección de Wallet",
   "g_key_u_23": "Falló la carga del avatar",
-
   "g_key_error_1": "¡Error al analizar los datos de respuesta!",
-  "g_key_error_2": "¡Error HTTP!",
   "g_key_error_3": "¡Error desconocido!",
   "g_key_error_4": "¡Se agotó el tiempo de conexión de red, verifique la configuración de red!",
   "g_key_error_5": "El servidor es anormal. ¡Vuelve a intentarlo más tarde!",
@@ -129,7 +125,6 @@
   "g_key_error_28": "¡Error de configuración del código de estado!",
   "g_key_error_1301": "Cuenta o contraseña incorrecta",
   "g_key_error_1403": "Ya has iniciado sesión en otro teléfono y estás obligado a cerrar la sesión.",
-
   "s_key_1": "Gestionar Cartera",
   "s_key_2": "Direcciones de Cartera",
   "s_key_3": "Transaction",
@@ -137,7 +132,6 @@
   "s_key_5": "Tema",
   "s_key_10": "Acerca de la App",
   "s_key_11": "Seguridad",
-
   "g_browser_key1": "Por favor ingresa la URL",
   "g_browser_key3": "Marcadores",
   "g_browser_key4": "Aún no se han agregado marcadores",
@@ -154,7 +148,6 @@
   "g_browser_key15": "Historial de búsqueda",
   "g_browser_key16": "Cerrar todo",
   "g_browser_key17": "Hecho",
-
   "g_connect_key1": "Conectar",
   "g_connect_key2": "Desconectar",
   "g_connect_key3": "Rechazar",
@@ -162,7 +155,6 @@
   "g_connect_key12": "Signo de mensaje",
   "g_connect_key13": "Conectando",
   "g_connect_key14": "Se está emparejando, por favor espere.",
-
   "g_face_1": "Consejos para el escaneo biométrico",
   "g_face_2": "El escaneo biométrico no funcionó",
   "g_face_3": "Consejos",
@@ -173,7 +165,6 @@
   "g_face_8": "Regresar",
   "g_face_9": "Se recomienda volver a habilitar la biometría.",
   "g_face_10": "Escanea tu huella digital o tu rostro para autenticación.",
-
   "g_swap_key_3": "Tú pagas",
   "g_swap_key_4": "Obtienes",
   "g_swap_key_5": "Intercambio de vista previa",
@@ -197,13 +188,11 @@
   "g_swap_key_32": "Los swaps se pueden ver en los exploradores de cadena relevantes (Etherscan, BscScan, TRONSCAN y el nuestro).",
   "g_swap_key_33": "Cambiar a N",
   "g_swap_key_35": "Swap",
-
   "g_key_tran_1": "Transaction history",
   "g_key_tran_4": "Transaction Detail",
   "g_key_tran_6": "Por favor, vea los recibos de transacciones en el historial",
   "g_key_tran_7": "Monto gastado",
   "g_key_tran_8": "Obtener monto",
-
   "g_token_m_key_1": "Máximo {value} caracteres",
   "g_token_m_key_2": "0~18 unidades",
   "g_token_m_key_3": "Importar tokens",
@@ -228,10 +217,8 @@
   "g_token_m_key_22": "¡La aplicación {value} chain ya es compatible!",
   "g_token_m_key_23": "La aplicación {value} chain ya es compatible, ¿quieres agregarla?",
   "g_token_m_key_24": "¡El enlace de prueba de dirección {value} falló!",
-
   "g_app_share_key_1": "Los tokens solo se pueden enviar dentro de la misma red. El envío desde otras redes puede provocar pérdidas.",
   "g_app_share_key_2": "Escanear para recibir",
-
   "g_key_m_2": "Capacidad de mercado",
   "g_key_m_3": "Volumen de operaciones",
   "g_key_m_4": "Suministro total",
@@ -250,7 +237,6 @@
   "g_key_m_17": "Discord",
   "g_key_m_18": "Youtube",
   "g_key_m_19": "Instagram",
-
   "g_key_t_1": "Completado",
   "g_key_t_2": "Pendiente",
   "g_key_t_3": "Error",
@@ -281,14 +267,12 @@
   "g_key_t_52": "Mínimo {value} XRP para la primera transferencia",
   "g_key_t_53": "Si la dirección de recepción no tiene una cuenta, necesitas crear una cuenta para la dirección de recepción, lo que costará alrededor de {value}",
   "g_key_t_54": "La dirección de recepción no tiene una cuenta y la primera transferencia es de al menos 10XRP",
-
   "g_home_key1": "Perfil",
   "g_home_key2": "Noticias",
   "g_home_key3": "Verificación",
   "g_home_key5": "Mensajes",
   "g_home_key6": "Aprender",
   "g_home_key9": "Invitar a un amigo",
-
   "login_invite_code": "Código de referencia",
   "login_invite_code_title": "Código de referencia",
   "login_email": "Correo electrónico",
@@ -298,30 +282,21 @@
   "login_message_2": "¿Ya tienes una cuenta?",
   "login_message_3": "¿No recibiste el código?",
   "login_message_6": "Reenviar código en ",
-  "login_resend": "Reenviar",
   "login_need_login": "Inicie sesión primero",
   "login_message_7": "Código enviado con éxito",
   "login_message_8": "Correo electrónico no registrado",
   "login_message_9": "Error al enviar el código",
   "login_message_10": "Creado correctamente",
   "login_message_11": "Restablecer correctamente",
-
   "g_key_user_p1": "He leído y acepto ",
   "g_key_user_p2": "Términos de servicio",
   "g_key_user_p3": "Política de privacidad",
-
   "g_coin_key_1": "Transacciones",
-
   "g_notification_key_1": "Notificaciones",
-
-  "g_mining_key_1": "Inicio",
-  "g_mining_key_2": "Actividades",
-  "g_mining_key_3": "Resumen",
   "g_mining_key_4": "Grupos",
   "g_mining_key_5": "Estado de verificación",
   "g_mining_key_6": "Bloquea los N para comenzar a extraer recompensas.",
   "g_mining_key_7": "Seleccione un plan",
-  "g_mining_key_8": "El tiempo de verificación de hoy",
   "g_mining_key_9": "Verificación en segundo plano",
   "g_mining_key_10": "La recompensa de hoy",
   "g_mining_key_11": "Recompensas de ayer",
@@ -373,7 +348,7 @@
   "g_mining_key_74": "La cadena de pruebas se está actualizando y los bloques no se pueden verificar temporalmente.",
   "g_mining_key_75": "Si no se completan las tareas durante cuatro días consecutivos, no se obtendrán ganancias y existe el riesgo de recibir una penalización.",
   "g_mining_key_76": "Puntuación de riesgo",
-  "g_mining_key_77": "Redención",
+  "g_mining_key_77": "canjear",
   "g_mining_key_78": "Guarde primero el par de claves pública y privada del verificador.",
   "g_mining_key_79": "Exportar",
   "g_mining_key_80": "Fondos insuficientes para la transferencia.",
@@ -411,9 +386,8 @@
   "g_mining_key_112": "Por favor, introduzca datos cifrados.",
   "g_mining_key_113": "Importador...",
   "g_mining_key_114": "Confirmación",
-
+  "g_mining_key_115": "El canje tarda un poco, ¡por favor espera un momento!",
   "g_mining_key1": "Recompensas",
-  "g_mining_key7": "Fecha de desbloqueo",
   "g_mining_key15": "Detalle de la tarea",
   "g_mining_key20": "¿Desbloquear N?",
   "g_mining_key31": "Registro de actividad de verificación en la nube",
@@ -437,7 +411,6 @@
   "g_mining_key85": "Cambiar entre la red de prueba y la red principal para la minería en la nube.",
   "g_mining_key86": "Canje disponible después de los 768.",
   "g_mining_key87": "Las solicitudes anteriores no se procesarán.",
-
   "g_key_wallet_k25": "Hora",
   "g_key_wallet_k33": "Resultado",
   "g_key_wallet_k37": "Hash de transacción",
@@ -448,7 +421,6 @@
   "g_key_wallet_k56": "Nonce",
   "g_key_wallet_k57": "Acelerar",
   "g_key_wallet_k58": "Nota",
-
   "g_key_wallet_m1": "No se agregó ninguna cadena de {value}",
   "g_key_wallet_m2": "El token actual no ha sido agregado.",
   "g_key_wallet_m3": "No se encontró ninguna dirección para {value}.",
@@ -462,13 +434,9 @@
   "g_key_wallet_m13": "Confirmar cierre de sesión",
   "g_key_wallet_m17": "Ingrese el código de verificación de Google.",
   "g_key_wallet_m18": "Debe tener al menos 8 caracteres",
-  "g_key_wallet_m19":  "{value} tiene transacciones sin finalizar, inténtelo nuevamente más tarde.",
+  "g_key_wallet_m19": "{value} tiene transacciones sin finalizar, inténtelo nuevamente más tarde.",
   "g_key_wallet_m21": "Ingresa tu frase semilla con palabras separadas por espacios",
   "g_key_wallet_m22": "Importar Wallet",
-
-  "g_key_wallet_c1": "Monedero de frase inicial",
-  "g_key_wallet_c2": "Utiliza una serie de palabras para generar y recuperar las claves privadas de la billetera, proporcionando una forma fácil de acceder y proteger los activos digitales.",
-  "g_key_wallet_c3": "Importar con frase inicial",
   "g_key_wallet_c4": "Iniciar",
   "g_key_wallet_c5": "¿Otros métodos?",
   "g_key_wallet_c6": "Comprobar frase inicial",
@@ -515,9 +483,7 @@
   "g_key_wallet_c47": "Información de la billetera",
   "g_key_wallet_c48": "Nombre de la billetera",
   "g_key_wallet_c49": "¡Primero haga una copia de seguridad de la frase inicial de su billetera!",
-
   "g_key_wallet_manage": "Administrar Wallet",
-
   "g_key_ex_keystore": "Exportar almacén de claves",
   "g_key_ex_keystore_1": "Consejos para realizar copias de seguridad",
   "g_key_ex_keystore_2": "Obtener el almacén de claves y la contraseña le dará al titular control total sobre los activos de la Wallet.",
@@ -541,33 +507,27 @@
   "g_key_keystore_19": "Ya existe una wallet de moneda actual.",
   "g_key_keystore_21": "No se pudo leer el almacén de claves",
   "g_key_keystore_22": "Almacén de claves",
-
   "g_key_nft_2": "Nombre",
-  "g_key_nft_16":"Cámara",
-  "g_key_nft_17":"Seleccionar foto",
-  "g_key_nft_18":"Contenido",
+  "g_key_nft_16": "Cámara",
+  "g_key_nft_17": "Seleccionar foto",
+  "g_key_nft_18": "Contenido",
   "g_key_nft_41": "Transacción enviada",
   "g_key_nft_47": "Seleccionar vídeo",
   "g_key_nft_141": "Total",
   "g_key_nft_220": "Volver",
-
   "g_guide_key5": "Interactúa con más de 30 blockchains.",
   "g_guide_key6": "Verdadera propiedad de sus activos digitales.",
   "g_guide_key8": "Monedero digital todo en uno.",
   "g_guide_key9": "Admitimos Bitcoin, Ethereum, Solana, Binance Smart Chain, Tron, N42Chain y más.",
   "g_guide_key10": "N42Wallet garantiza que sus activos digitales estén seguros y sean verdaderamente suyos. No tenemos acceso a sus claves privadas ni a su fase secreta.",
   "g_guide_key12": "Su completo ecosistema Web3 con Wallet, NFT, Chat y navegador, todo en una sola plataforma.",
-
   "w_key_7": "Administrar Wallet",
   "w_key_8": "Ingrese la frase inicial para la Wallet que desea importar.",
   "w_key_12": "Frase inicial incorrecta.",
-
   "w_item_1": "Si pierdo mi frase secreta, mis fondos se perderán para siempre.",
   "w_item_2": "Si revelo o comparto mi frase inicial con alguien, mis fondos pueden ser robados.",
   "w_item_3": "Es mi responsabilidad mantener segura mi frase inicial.",
-
   "g_face_match_key1": "Método de coincidencia de caras",
-  "g_face_match_key2": "¡Falló la inicialización!",
   "g_face_match_key3": "¡La coincidencia falló!",
   "g_face_match_key4": "Coincidencia exitosa. Dirección: {value}.",
   "g_face_match_key5": "¡Dirección incorrecta!",
@@ -575,7 +535,7 @@
   "g_face_match_key7": "Coincidencia de caras",
   "g_face_match_key8": "Volver a seleccionar",
   "g_face_match_key9": "coincidencia",
-  "g_face_match_key10":"Usted ha sido vinculado y no puede volver a vincularse en este momento. Dirección de vinculación: {value}.",
+  "g_face_match_key10": "Usted ha sido vinculado y no puede volver a vincularse en este momento. Dirección de vinculación: {value}.",
   "g_face_match_key11": "Enlace exitoso. Dirección de enlace: {value}",
   "g_face_match_key12": "Volver a vincular",
   "g_face_match_key13": "Vincular",
@@ -601,7 +561,6 @@
   "g_face_match_key33": "Unbinding",
   "g_face_match_key34": "¡La verificación de datos faciales falló!",
   "g_face_match_key35": "Fallo de desvinculación de datos de cara!",
-
   "g_lock_key1": "Touch ID y Face ID",
   "g_lock_key3": "Página de pantalla de bloqueo",
   "g_lock_key4": "Bloqueo automático",
@@ -626,7 +585,6 @@
   "g_lock_key23": "Demasiadas entradas incorrectas, restablezca la contraseña",
   "g_lock_key24": "¿Agregar contraseña de billetera?",
   "g_lock_key25": "Error al ingresar la contraseña del patrón, tiene {value} posibilidades",
-
   "g_unlock_key1": "Si olvida su contraseña, inicie sesión.",
   "g_unlock_key2": "El reconocimiento de huellas dactilares o facial no está habilitado. Inicie sesión.",
   "g_unlock_key3": "Contraseña del patrón de dibujo",
@@ -637,7 +595,6 @@
   "g_unlock_key8": "Error al ingresar la contraseña, tienes {value} posibilidades",
   "g_unlock_key9": "También puedes ",
   "g_unlock_key10": "La aplicación se desbloqueará en {value} segundos.",
-
   "rest_your_password": "Restablecer su contraseña",
   "rest_Please_enter": "Ingres el código",
   "email_code_error": "Error al obtener el código de autenticación",
@@ -647,7 +604,6 @@
   "email_verification_message2": "¿Agregar verificación de correo electrónico?",
   "email_code_input_error": "Error del código de autenticación",
   "Create_your_account": "Cree su cuenta",
-
   "google_verification": "Autenticación de Google",
   "google_verification_message3": "Error al obtener la clave de Google",
   "google_verification_message5": "Autenticación de dos factores (2FA)",
@@ -667,7 +623,6 @@
   "google_verification_message19": "Ingresa el código de verificación de Google",
   "google_verification_message20": "Ingrese el código de verificación de correo electrónico",
   "google_verification_message21": "Ingrese {value} contraseña",
-
   "Create_account": "Crear cuenta",
   "g_key_login": "Iniciar Sesión",
   "g_key_logout": "Cerrar sesión",
@@ -705,7 +660,6 @@
   "login_password": "Contraseña",
   "importantNotice": "Aviso Importante",
   "file": "Archivo",
-
   "g_key_address": "Dirección",
   "g_key_address_1": "Por favor ingresa un nombre",
   "g_key_address_2": "Por favor ingresa la dirección",
@@ -715,12 +669,10 @@
   "g_key_address_6": "Elegir monedas",
   "g_key_address_7": "Buscar monedas",
   "g_key_mnemonic": "Por favor, introduzca la frase semilla",
-
   "g_key_v_k1": "Encontrar la última versión",
   "g_key_v_k2": "Actualizar inmediatamente",
   "g_key_v_k3": "Nueva versión encontrada",
   "g_key_v_k4": "Ya la última versión",
-
   "g_key_share_code": "Compartir código QR",
   "g_key_share_link": "Compartir enlace",
   "g_key_share_method": "Método compartir",
@@ -738,7 +690,6 @@
   "g_share_v3_key_11": "Aplicación descargada",
   "g_share_v3_key_12": "Transacción",
   "g_share_v3_key_13": "Solo las nuevas recomendaciones después del 23 de noviembre de 2023 son elegibles para el Premio N.",
-
   "g_key_feedback": "Comentarios",
   "g_key_feedback_1": "Por favor complete la información de comentarios",
   "g_key_feedback_2": "Hay archivos adjuntos no cargados",
@@ -749,7 +700,6 @@
   "g_key_feedback_7": "Error",
   "g_key_feedback_8": "Haz clic en intentar",
   "g_key_feedback_9": "Por favor inicia sesión",
-
   "g_chat_key_1": "Iniciar chat grupal",
   "g_chat_key_2": "Nuevo amigo",
   "g_chat_key_3": "Agregado",
@@ -811,14 +761,12 @@
   "g_chat_key_67": "El mensaje ha sido eliminado",
   "g_chat_key_68": "Alguien @ a mí",
   "g_chat_key_69": "Saluda",
-
   "g_key_squad": "Chat",
   "g_key_squad_k11": "El archivo es demasiado grande para cargarlo",
   "g_key_squad_k15": "¿Estás seguro de que deseas eliminar el contacto?",
   "g_key_squad_k18": "Agregar contacto",
   "g_key_squad_k24": "Contacto",
   "g_key_squad_k25": "Buscar por correo electrónico",
-
   "g_key_xml_0": "Reserved",
   "g_key_xml_1": "Base Reserve",
   "g_key_xml_11": "Every XRP account must reserve {value} XRP ({value1} drops) as a baseline, which cannot be spent.",

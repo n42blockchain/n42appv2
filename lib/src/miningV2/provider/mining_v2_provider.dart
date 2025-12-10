@@ -133,6 +133,8 @@ class MiningV2Provider extends ChangeNotifier {
     }
   }
   Future<void> loadMiningData() async {
+    endBeaconValidatorTimer();
+    endCheckTxHash();
     if(depositsEnable==true){
       getMiningWithdrawalsDaily();
       getBeaconValidator();
@@ -152,6 +154,7 @@ class MiningV2Provider extends ChangeNotifier {
       isLoading7DayData=false;
       isShowDefaultBar=true;
       showRedemption=false;
+      showRedemption2=false;
       exitDepositLoad=Load.finish;
       depositLoad=Load.finish;
 
@@ -178,26 +181,15 @@ class MiningV2Provider extends ChangeNotifier {
   }
   ///获取keypart
   Map<String,dynamic>? miningKeypart=null;
-  Future<void> generateBls12381Keypair() async {
-    if(miningKeypart !=null){
-      if(miningKeypart!['isMining']==true){
-        return;
-      }
-    }
-    Map<String,String>? rdata=await Mining?.generateBls12381Keypair();
-    if(rdata !=null){
-      miningKeypart=rdata;
-      //setMiningData(miningKeypart!,depositsEnable);
-    }
-  }
   Map<String,dynamic>? miningData;
-  setMiningData(Map<String,dynamic> keypart,bool isMining)async{
-    SPUtil().setMiningData({
-      address!:{
-        'isMining':isMining,
-        'keypart':keypart,
-      }
-    });
+  bool redeem=false;
+  setMiningData(Map<String,dynamic> keypart,bool isMining,{bool redeem=false})async{
+    miningData![address!]={
+      'isMining':isMining,
+      'keypart':keypart,
+      'redeem':redeem,
+    };
+    SPUtil().setMiningData(miningData!);
   }
   Future<MessageModel> setMiningData_import(Map<String,dynamic> value) async {
     WalletActionProvider wap=Provider.of<WalletActionProvider>(Application.AppContext,listen: false);
@@ -257,7 +249,8 @@ class MiningV2Provider extends ChangeNotifier {
     if(miningData?[importAddress] == null){
       miningData![importAddress]={
         'isMining':true,
-        'keypart':value['validator']
+        'keypart':value['validator'],
+        'redeem':false,
       };
       SPUtil().setMiningData(miningData!);
       if(depositsEnable == false){
@@ -280,6 +273,7 @@ class MiningV2Provider extends ChangeNotifier {
     miningData=await SPUtil().getMiningData();
     depositsEnable=miningData?[address!]?['isMining']??false;
     miningKeypart=miningData?[address!]?['keypart']??{};
+    redeem=miningData?[address!]?['redeem']??false;
   }
 
   //质押
@@ -362,13 +356,12 @@ class MiningV2Provider extends ChangeNotifier {
   void startCheckExitDepositTxHash(String txHash){
     _timer=Timer.periodic(const Duration(seconds: 5), (timer) async {
       if(await checkTxHash(txHash)==false){
-        endCheckTxHash();
-        depositsEnable=false;
-        miningStatus=false;
         exitDepositLoad=Load.finish;
-        loadMiningData();
+        redeem=true;
         notifyListeners();
-        setMiningData(miningKeypart!, false);
+        endCheckTxHash();
+        setMiningData(miningKeypart!, true,redeem: true);
+        getBeaconValidator();
       }
     });
   }
@@ -616,7 +609,8 @@ class MiningV2Provider extends ChangeNotifier {
   List<double> inactivityScore=[0,0,0,0];
   String inactivityScorePercentage="0";
   String inactivityTitle="";
-  bool showRedemption=false;
+  bool showRedemption=false;//质押成功的过度状态
+  bool showRedemption2=false;//解除质押成功后的过度状态
   Timer? beaconValidatorTimer=null;
   starBeaconValidatorTimer({int waitSeconds=200}){
     if(beaconValidatorTimer !=null)return;
@@ -675,17 +669,18 @@ class MiningV2Provider extends ChangeNotifier {
           showRedemption=true;
         }
       }
-      /*final int currentTimestamp=DateTime.now().millisecondsSinceEpoch ~/ 1000;
-      final int readyTimestamp=timestamp+640;
-      if(readyTimestamp>currentTimestamp){
-        showRedemption=false;
-        final int waitSeconds=readyTimestamp-currentTimestamp;
-        Future.delayed(Duration(seconds: waitSeconds),(){
-          getBeaconValidator();
-        });
+      int eTimestamp=rmm.data['exit_timestamp'];
+      if(eTimestamp==0){
+        showRedemption2=true;
+        starBeaconValidatorTimer();
       }else{
-        showRedemption=true;
-      }*/
+        showRedemption2=false;
+        depositsEnable=false;
+        miningStatus=false;
+        loadMiningData();
+        notifyListeners();
+        setMiningData(miningKeypart!, false,redeem: true);
+      }
       notifyListeners();
     }
   }

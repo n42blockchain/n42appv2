@@ -28,7 +28,7 @@ class _MiningSettingState extends State<MiningSetting> {
       bottomNavigationBar: SafeArea(child: Container(
         width: double.infinity,
         height: ScreenUtil().setWidth(88),
-        margin: EdgeInsets.symmetric(horizontal:ScreenUtil().setWidth(30) ),
+        margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
         child: ButtonStyle2(
           context, (){
           Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MiningImport()));
