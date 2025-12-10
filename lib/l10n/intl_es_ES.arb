@@ -410,6 +410,7 @@
   "g_mining_key_111": "Importar archivos",
   "g_mining_key_112": "Por favor, introduzca datos cifrados.",
   "g_mining_key_113": "Importador...",
+  "g_mining_key_114": "Confirmación",
 
   "g_mining_key1": "Recompensas",
   "g_mining_key7": "Fecha de desbloqueo",
@@ -429,11 +430,13 @@
   "g_mining_key63": "Has configurado correctamente un {value} y comenzarás a verificar con N42Wallet.",
   "g_mining_key73": "¡Únase a mi grupo {value} en @N42Wallet para ser uno de los primeros mineros de una cadena de Capa 1 y obtenga criptomonedas en su teléfono!",
   "g_mining_key74": "Acabo de configurar un nodo en @N42aWallet y comencé a verificar en dispositivos móviles. ¡Únete a mí! ¡El futuro descentralizado es móvil!",
-  "g_mining_key76": "¿Estás seguro de que deseas bloquear {value} N hasta {value1} para ejecutar un nodo?",
+  "g_mining_key76": "Bloquee {value} N para ejecutar un validador.",
   "g_mining_key82": "Minería",
   "g_mining_key83": "Nodo",
   "g_mining_key84": "Red",
   "g_mining_key85": "Cambiar entre la red de prueba y la red principal para la minería en la nube.",
+  "g_mining_key86": "Canje disponible después de los 768.",
+  "g_mining_key87": "Las solicitudes anteriores no se procesarán.",
 
   "g_key_wallet_k25": "Hora",
   "g_key_wallet_k33": "Resultado",

@@ -406,6 +406,7 @@
   "g_mining_key_111": "Import files",
   "g_mining_key_112": "Please enter encrypted data.",
   "g_mining_key_113": "Importing...",
+  "g_mining_key_114": "Confirmation",
 
   "g_mining_key1": "Rewards",
   "g_mining_key7": "Unlock Date",
@@ -425,11 +426,13 @@
   "g_mining_key63": "You have successfully set up a {value} and will begin verification with N42Wallet!",
   "g_mining_key73": "Join my {value} group on @N42Wallet to be an early miner of a Layer 1 chain, and get crypto on your phone!",
   "g_mining_key74": "I just set up a node on @N42Wallet and started verification on mobile devices! Come and join me. The decentralized future is mobile!",
-  "g_mining_key76": "Are you sure you want to lock {value} N until {value1} to run a node?",
+  "g_mining_key76": "Lock {value} N to run a validator.",
   "g_mining_key82": "Mineral",
   "g_mining_key83": "Node",
   "g_mining_key84": "Network",
   "g_mining_key85": "Switch between testnet and mainnet for cloud mining.",
+  "g_mining_key86": "Redemption available after 768s.",
+  "g_mining_key87": "Requests before that will not be processed.",
 
   "g_key_wallet_k25": "Time",
   "g_key_wallet_k33": "Result",

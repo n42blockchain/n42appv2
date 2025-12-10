@@ -55,14 +55,13 @@ class GroupConfirm extends StatelessWidget {
             'assets/img/ast_nft.png',
             width: ScreenUtil().setWidth(160),
             fit: BoxFit.cover,
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
+            //color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
           ),
           SizedBox(
             height: ScreenUtil().setWidth(80),
           ),
           Text(
-            S.of(context).g_mining_key_77,
+            S.of(context).g_mining_key_114,
             style: TextStyle(
                 color: AppThemeUtils.getColorByKey(
                     context, AppThemeKeys.mainTextColor.name),
@@ -73,7 +72,29 @@ class GroupConfirm extends StatelessWidget {
           ),
           Text(
             // "Are you sure you want to lock $num AsT until $lockDate to run a node?",
-            S.of(context).g_mining_key76(num,lockDate),
+            S.of(context).g_mining_key76(num),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainTextColor.name),
+                fontSize: ScreenUtil().setSp(28)),
+          ),
+          SizedBox(
+            height: ScreenUtil().setWidth(10),
+          ),
+          Text(
+            S.of(context).g_mining_key86,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainTextColor.name),
+                fontSize: ScreenUtil().setSp(28)),
+          ),
+          SizedBox(
+            height: ScreenUtil().setWidth(10),
+          ),
+          Text(
+            S.of(context).g_mining_key87,
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: AppThemeUtils.getColorByKey(

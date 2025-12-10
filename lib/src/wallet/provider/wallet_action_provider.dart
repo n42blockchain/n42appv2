@@ -557,7 +557,7 @@ class WalletActionProvider extends ChangeNotifier{
       _walletInfoLsit.add(info);
       walletIndex=_walletInfoLsit.length-1;
       if(walletMiningIndex ==-1){
-        walletIndex=walletIndex;
+        walletMiningIndex=walletIndex;
       }
       await saveWalletInfo(newWalletInfo,walletIndex,isNewWallet: true);
       init_wallet(initCoinInfo: true);

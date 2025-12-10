@@ -83,8 +83,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m24(value) =>
       "¡Únase a mi grupo ${value} en @N42Wallet para ser uno de los primeros mineros de una cadena de Capa 1 y obtenga criptomonedas en su teléfono!";
 
-  static String m25(value, value1) =>
-      "¿Estás seguro de que deseas bloquear ${value} N hasta ${value1} para ejecutar un nodo?";
+  static String m25(value) => "Bloquee ${value} N para ejecutar un validador.";
 
   static String m26(value) => "Error en la importación::${value}";
 
@@ -1204,6 +1203,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key85": MessageLookupByLibrary.simpleMessage(
       "Cambiar entre la red de prueba y la red principal para la minería en la nube.",
     ),
+    "g_mining_key86": MessageLookupByLibrary.simpleMessage(
+      "Canje disponible después de los 768.",
+    ),
+    "g_mining_key87": MessageLookupByLibrary.simpleMessage(
+      "Las solicitudes anteriores no se procesarán.",
+    ),
     "g_mining_key_1": MessageLookupByLibrary.simpleMessage("Inicio"),
     "g_mining_key_10": MessageLookupByLibrary.simpleMessage(
       "La recompensa de hoy",
@@ -1243,6 +1248,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Por favor, introduzca datos cifrados.",
     ),
     "g_mining_key_113": MessageLookupByLibrary.simpleMessage("Importador..."),
+    "g_mining_key_114": MessageLookupByLibrary.simpleMessage("Confirmación"),
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "La recompensa se acumula diariamente y solo se envía a tu Wallet N cuando alcanza ~0.5 N.",
     ),

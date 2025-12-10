@@ -618,9 +618,9 @@ class MiningV2Provider extends ChangeNotifier {
   String inactivityTitle="";
   bool showRedemption=false;
   Timer? beaconValidatorTimer=null;
-  starBeaconValidatorTimer(){
+  starBeaconValidatorTimer({int waitSeconds=200}){
     if(beaconValidatorTimer !=null)return;
-    beaconValidatorTimer=Timer(Duration(seconds: 40),(){
+    beaconValidatorTimer=Timer(Duration(seconds: waitSeconds),(){
       getBeaconValidator();
       endBeaconValidatorTimer();
     });
@@ -665,7 +665,15 @@ class MiningV2Provider extends ChangeNotifier {
         showRedemption=false;
         starBeaconValidatorTimer();
       }else{
-        showRedemption=true;
+        final int currentTimestamp=DateTime.now().millisecondsSinceEpoch ~/ 1000;
+        final int readyTimestamp=timestamp+128;
+        if(readyTimestamp>currentTimestamp){
+          showRedemption=false;
+          final int waitSeconds=readyTimestamp-currentTimestamp;
+          starBeaconValidatorTimer(waitSeconds: waitSeconds);
+        }else{
+          showRedemption=true;
+        }
       }
       /*final int currentTimestamp=DateTime.now().millisecondsSinceEpoch ~/ 1000;
       final int readyTimestamp=timestamp+640;

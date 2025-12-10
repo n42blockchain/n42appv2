@@ -82,8 +82,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m24(value) =>
       "Join my ${value} group on @N42Wallet to be an early miner of a Layer 1 chain, and get crypto on your phone!";
 
-  static String m25(value, value1) =>
-      "Are you sure you want to lock ${value} N until ${value1} to run a node?";
+  static String m25(value) => "Lock ${value} N to run a validator.";
 
   static String m26(value) => "Import failed:${value}";
 
@@ -1087,6 +1086,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key85": MessageLookupByLibrary.simpleMessage(
       "Switch between testnet and mainnet for cloud mining.",
     ),
+    "g_mining_key86": MessageLookupByLibrary.simpleMessage(
+      "Redemption available after 768s.",
+    ),
+    "g_mining_key87": MessageLookupByLibrary.simpleMessage(
+      "Requests before that will not be processed.",
+    ),
     "g_mining_key_1": MessageLookupByLibrary.simpleMessage("Home"),
     "g_mining_key_10": MessageLookupByLibrary.simpleMessage("Today\'s reward"),
     "g_mining_key_100": MessageLookupByLibrary.simpleMessage(
@@ -1120,6 +1125,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Please enter encrypted data.",
     ),
     "g_mining_key_113": MessageLookupByLibrary.simpleMessage("Importing..."),
+    "g_mining_key_114": MessageLookupByLibrary.simpleMessage("Confirmation"),
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "Reward accumulates daily and is only sent to your N wallet when it reaches ~0.5 N.",
     ),

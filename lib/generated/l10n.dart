@@ -3264,6 +3264,16 @@ class S {
     );
   }
 
+  /// `Confirmation`
+  String get g_mining_key_114 {
+    return Intl.message(
+      'Confirmation',
+      name: 'g_mining_key_114',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Rewards`
   String get g_mining_key1 {
     return Intl.message('Rewards', name: 'g_mining_key1', desc: '', args: []);
@@ -3424,13 +3434,13 @@ class S {
     );
   }
 
-  /// `Are you sure you want to lock {value} N until {value1} to run a node?`
-  String g_mining_key76(Object value, Object value1) {
+  /// `Lock {value} N to run a validator.`
+  String g_mining_key76(Object value) {
     return Intl.message(
-      'Are you sure you want to lock $value N until $value1 to run a node?',
+      'Lock $value N to run a validator.',
       name: 'g_mining_key76',
       desc: '',
-      args: [value, value1],
+      args: [value],
     );
   }
 
@@ -3454,6 +3464,26 @@ class S {
     return Intl.message(
       'Switch between testnet and mainnet for cloud mining.',
       name: 'g_mining_key85',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Redemption available after 768s.`
+  String get g_mining_key86 {
+    return Intl.message(
+      'Redemption available after 768s.',
+      name: 'g_mining_key86',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Requests before that will not be processed.`
+  String get g_mining_key87 {
+    return Intl.message(
+      'Requests before that will not be processed.',
+      name: 'g_mining_key87',
       desc: '',
       args: [],
     );
