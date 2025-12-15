@@ -152,6 +152,9 @@ class MiningV2Provider extends ChangeNotifier {
   Map<String,dynamic>? miningData;
   bool redeem=false;
   setMiningData(Map<String,dynamic> keypart,bool isMining,{bool redeem=false})async{
+    if(miningData==null){
+      miningData={};
+    }
     miningData![address!]={
       'isMining':isMining,
       'keypart':keypart,
@@ -213,7 +216,9 @@ class MiningV2Provider extends ChangeNotifier {
     if(index ==-1){
       await wap.addWalletInfo(wInfo);
     }
-
+    if(miningData==null){
+      miningData={};
+    }
     if(miningData?[importAddress] == null){
       miningData![importAddress]={
         'isMining':value['isMining'],
