@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:n42appv2/app_config.dart';
 import 'package:n42appv2/application.dart';
 import 'package:n42appv2/src/https/base_api.dart';
@@ -93,14 +94,20 @@ class UserInfoApi{
   }
   ///用户注销时 发送email code
   Future sendUnRegisterEmailCode() async {
-    Map params = {};
+    /*Map params = {};
     params["uuid"] = Application.userInfo?.uuid??"";
     params["token"] = Application.userInfo?.token??"";
-    params["source"] = "app";
+    params["source"] = "app";*/
+    final formData = FormData.fromMap({
+      'uuid': Application.userInfo?.uuid??"",
+      'token': Application.userInfo?.token??"",
+      'source': 'app',
+    });
+    Map<String,String> header_v2={'content-type': 'multipart/form-data'};
     final data = await BaseApi.RequestEmpty_h.post(
         '${url}/v1/l/user/send/account/cancel/email/code',
         params: {},
-        data: params,header: header);
+        data: formData,header: header_v2);
     return data;
   }
   ///发送验证码
