@@ -94,7 +94,8 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
               onPressed: () async {
                 try {
                   MiningV2Provider mp=Provider.of<MiningV2Provider>(context,listen: false);
-                  await mp.createExitDepositUnsignedTx();
+                  if(mp.exitDepositLoad==Load.loading)return;
+                  mp.createExitDepositUnsignedTx();
 
                 } catch (err) {
                   debugPrint("err:${err.toString()}");
@@ -103,7 +104,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                     Navigator.of(dialogContext).pop(); // Dismiss alert dialog
                   }
                   //更新ui
-                  await initData();
+                  //await initData();
 
                 }
               },
@@ -646,7 +647,7 @@ Riesgo Alto*/
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    S.of(context).g_mining_key38,
+                    S.of(context).g_key_29,
                     // "Your Tier",
                     style: TextStyle(
                       color: AppThemeUtils.getColorByKey(

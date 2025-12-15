@@ -6,7 +6,8 @@ import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class MiningOutputTip extends StatelessWidget {
-  const MiningOutputTip({super.key});
+  Map<String,dynamic>? value;
+  MiningOutputTip({this.value,super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +68,7 @@ class MiningOutputTip extends StatelessWidget {
               // 使用 push 而不是 pushReplacement，以便接收返回值
               final result = await Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const MiningOutputPk()),
+                MaterialPageRoute(builder: (_) => MiningOutputPk(value: value,)),
               );
               // 将结果传递回上一页
               if (context.mounted) {

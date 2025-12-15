@@ -270,7 +270,7 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
                                           child: ButtonStyle2(context, () async {
                                             final result = await Navigator.push(
                                               context,
-                                              MaterialPageRoute(builder: (_) => const MiningOutputTip()),
+                                              MaterialPageRoute(builder: (_) => MiningOutputTip()),
                                             );
                                             // 接收返回的 copyEncrypte 值并更新状态
                                             if (result !=null && mounted) {
@@ -492,7 +492,7 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
     }
     try {
       MiningV2Provider mp=Provider.of<MiningV2Provider>(Application.AppContext,listen: false);
-      await mp.createDepositUnsignedTx(widget.nNum, encrypteData!);
+      mp.createDepositUnsignedTx(widget.nNum, encrypteData!);
     } catch (err) {
       //RPCError: got code 3 with msg "execution reverted: 10 AST Deposit Limit has been reached".
       debugPrint("质押失败：${err.toString()}");

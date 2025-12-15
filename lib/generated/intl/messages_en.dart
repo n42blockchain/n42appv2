@@ -1002,7 +1002,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key31": MessageLookupByLibrary.simpleMessage(
       "Cloud Verification Activity",
     ),
-    "g_mining_key38": MessageLookupByLibrary.simpleMessage("Your Tier"),
     "g_mining_key46": MessageLookupByLibrary.simpleMessage(
       "Setup requires a small amount for gas.",
     ),

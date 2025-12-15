@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:n42appv2/application.dart';
+import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/https/base_api.dart';
+import 'package:n42appv2/src/https/request_url.dart';
 import 'package:n42appv2/src/miningV2/models/miningWithdrawalsDaily.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';

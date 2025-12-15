@@ -80,6 +80,85 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
   List<dynamic> transactionList = [];
   var eventBusFn;
 
+  WalletActionProvider get _walletProvider =>
+      Provider.of<WalletActionProvider>(context, listen: false);
+
+  Future<bool> _ensureWalletBackedUp() async {
+    final walletInfo = _walletProvider.walletInfo;
+    if (walletInfo.password!.isNotEmpty) {
+      return true;
+    }
+    final flag = await TipsDialog7(context);
+    if (flag == true) {
+      await Navigator.push(
+          context,
+          MaterialPageRoute(
+              settings: const RouteSettings(name: 'BackupOne'),
+              builder: (context) =>
+                  BackupOne(walletInfo, _walletProvider.walletIndex)));
+    }
+    return false;
+  }
+
+  Future<void> _handleSend({bool closeSheet = false}) async {
+    if (!await _ensureWalletBackedUp()) {
+      if (closeSheet) Navigator.pop(context);
+      return;
+    }
+    await _openSendPage();
+    await getTransactionData(Load.refresh);
+    if (closeSheet) Navigator.pop(context);
+  }
+
+  Future<void> _handleReceive({bool closeSheet = false}) async {
+    if (!await _ensureWalletBackedUp()) {
+      if (closeSheet) Navigator.pop(context);
+      return;
+    }
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => WalletReceiveQr(
+          chainCoinModel ?? widget.coinModel,
+          tokenCoinModel: chainCoinModel == null ? null : widget.coinModel,
+        ),
+      ),
+    );
+    if (closeSheet) Navigator.pop(context);
+  }
+
+  Future<void> _openSendPage() async {
+    final targetPage = _buildSendPage();
+    if (targetPage == null) return;
+    await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => targetPage));
+  }
+
+  Widget? _buildSendPage() {
+    switch (widget.coinModel.coin['blockchainType']) {
+      case "Bitcoin":
+        return WalletChainSendBtc(widget.coinModel);
+      case "Solana":
+        return WalletChainSendSol(widget.coinModel);
+      case "Tron":
+        return WalletChainSendTrx(widget.coinModel);
+      case "Algorand":
+        return WalletChainSendAlgo(widget.coinModel);
+      case "Ripple":
+        return WalletChainSendXrp(widget.coinModel);
+      case "Filecoin":
+        return WalletChainSendFil(widget.coinModel);
+      case "Polkadot":
+        return WalletChainSendDot(widget.coinModel);
+      case "Sui":
+        return WalletChainSendSui(widget.coinModel);
+      case "TheOpenNetwork":
+        return WalletChainSendTon(widget.coinModel);
+      default:
+        return WalletChainSend(widget.coinModel);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -144,30 +223,31 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
     getTransactionData_network(Load.refresh);
   }
 
-  getTransactionData(Load loadType) async {
-    if (load == Load.finish) {
-      if (loadType == Load.nextPage) {
-        if (lastPage) return;
-      }
-      if (loadType == Load.refresh) {
-        page = 1;
-      } else {
-        page += 1;
-      }
-      load = loadType;
-      String addr = widget.coinModel?.address.toString() ?? "";
-      String coinKey = widget.coinModel.coin['coinType'];
-      String contract = widget.coinModel.coin['contract'];
+  Future<void> getTransactionData(Load loadType) async {
+    if (load != Load.finish) return;
+    if (loadType == Load.nextPage && lastPage) return;
+
+    if (loadType == Load.refresh) {
+      page = 1;
+      lastPage = false;
+    } else {
+      page += 1;
+    }
+
+    load = loadType;
+    try {
+      final addr = widget.coinModel.address?.toString() ?? "";
+      final coinKey = widget.coinModel.coin['coinType'];
+      final contract = widget.coinModel.coin['contract'];
       var txList;
       if (widget.coinModel.coin['blockchainType'] ==
           BlockchainType.Bitcoin.name) {
-        txList = await db
-            .selectBtcTransationRecord(
+        txList = await db.selectBtcTransationRecord(
             Application.userInfo?.uuid ?? "", addr, coinKey, 0,
             pageSize: pageSize, pageNum: page);
       } else {
-        txList = await db
-            .selectTransationRecord_miniName(addr, coinKey, 0,
+        txList = await db.selectTransationRecord_miniName(
+            addr, coinKey, 0,
             contract: contract,
             pageSize: pageSize,
             pageNum: page,
@@ -176,11 +256,12 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
       if (loadType == Load.refresh) {
         transactionList = txList;
       } else {
-        transactionList.add(txList);
+        transactionList.addAll(txList);
       }
       if (txList.length < pageSize) {
         lastPage = true;
       }
+    } finally {
       setState(() {
         load = Load.finish;
       });
@@ -253,7 +334,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
           }
           await db.insertTransationRecord(transationRecordModel);
           isEdit=true;
-          getTxInfo_network(transationRecordModel);
+          //await getTxInfo_network(transationRecordModel);
         }
         else{
           TransationRecordModel transationRecordModel=rtrm[0];
@@ -304,7 +385,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
           transationRecordModel.isTest=widget.coinModel.isTest?1:0;
           await db.insertTransationRecord(transationRecordModel);
           isEdit=true;
-          getTxInfo_network(transationRecordModel);
+          //await getTxInfo_network(transationRecordModel);
         }
         else{
           TransationRecordModel transationRecordModel=rtrm[0];
@@ -684,8 +765,8 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () async {
-                  getTransactionData(Load.refresh);
-                  getTransactionData_network(Load.refresh);
+                  await getTransactionData(Load.refresh);
+                  await getTransactionData_network(Load.refresh);
                   await widget.coinModel.getBalance();
                   setState(() {});
                 },
@@ -704,120 +785,8 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
                       balanceDollarStr: '\$${widget.coinModel.value_string()}',
                       marketValueStr:
                       '\$${widget.coinModel.coinPrice_string()}',
-                      sendTap: () async {
-                        WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
-                        if(wap.walletInfo.password==""){
-                          final flag= await TipsDialog7(context);
-                          if (flag != null && flag) {
-                            Navigator.push(context, MaterialPageRoute(
-                                settings: RouteSettings(
-                                  name: 'BackupOne',
-                                ),
-                                builder: (context)=>BackupOne(wap.walletInfo,wap.walletIndex)));
-                          }
-                          return;
-                        }
-                        if (widget.coinModel.coin['blockchainType'] ==
-                            BlockchainType.Bitcoin.name) {
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    WalletChainSendBtc(widget.coinModel),
-                              ));
-                        } else if(widget.coinModel.coin['blockchainType']==BlockchainType.Solana.name){
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    WalletChainSendSol(widget.coinModel),
-                              ));
-                        }else if(widget.coinModel.coin['blockchainType']==BlockchainType.Tron.name){
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    WalletChainSendTrx(widget.coinModel),
-                              ));
-                        }else if(widget.coinModel.coin['blockchainType']==BlockchainType.Algorand.name){
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    WalletChainSendAlgo(widget.coinModel),
-                              ));
-                        }else if(widget.coinModel.coin['blockchainType']==BlockchainType.Ripple.name){
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    WalletChainSendXrp(widget.coinModel),
-                              ));
-                        }else if(widget.coinModel.coin['blockchainType']==BlockchainType.Filecoin.name){
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    WalletChainSendFil(widget.coinModel),
-                              ));
-                        }else if(widget.coinModel.coin['blockchainType']==BlockchainType.Polkadot.name){
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    WalletChainSendDot(widget.coinModel),
-                              ));
-                        }else if(widget.coinModel.coin['blockchainType']==BlockchainType.Sui.name){
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    WalletChainSendSui(widget.coinModel),
-                              ));
-                        }else if(widget.coinModel.coin['blockchainType']==BlockchainType.TheOpenNetwork.name){
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    WalletChainSendTon(widget.coinModel),
-                              ));
-                        }else {
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    WalletChainSend(widget.coinModel),
-                              ));
-                        }
-                        getTransactionData(Load.refresh);
-                      },
-                      receiveTap: () async{
-                        WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
-                        if(wap.walletInfo.password==""){
-                          final flag= await TipsDialog7(context);
-                          if (flag != null && flag) {
-                            Navigator.push(context, MaterialPageRoute(
-                                settings: RouteSettings(
-                                  name: 'BackupOne',
-                                ),
-                                builder: (context)=>BackupOne(wap.walletInfo,wap.walletIndex)));
-                          }
-                          return;
-                        }
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => WalletReceiveQr(
-                              chainCoinModel == null
-                                  ? widget.coinModel
-                                  : chainCoinModel!,
-                              tokenCoinModel: chainCoinModel == null
-                                  ? null
-                                  : widget.coinModel,
-                            ),
-                          ),
-                        );
-                      },
+                      sendTap: _handleSend,
+                      receiveTap: _handleReceive,
                       browserTap: () {
                         Navigator.push(
                             context,
@@ -913,7 +882,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
   transactionsWidget() {
     if (transactionList.isEmpty) {
       //IntrinsicHeight: Dynamically calculated height
-      return const IntrinsicHeight(
+      return IntrinsicHeight(
         child: Center(
           child: EmptyView(),
         ),
@@ -1087,92 +1056,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
     //send
     childs.add(InkWell(
       onTap: () async {
-        WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
-        if(wap.walletInfo.password==""){
-          final flag= await TipsDialog7(context);
-          if (flag != null && flag) {
-            await Navigator.push(context, MaterialPageRoute(
-                settings: RouteSettings(
-                  name: 'BackupOne',
-                ),
-                builder: (context)=>BackupOne(wap.walletInfo,wap.walletIndex)));
-          }
-          Navigator.pop(context);
-        }
-        if (widget.coinModel.coin['blockchainType'] ==
-            BlockchainType.Bitcoin.name) {
-          await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    WalletChainSendBtc(widget.coinModel),
-              ));
-        } else if(widget.coinModel.coin['blockchainType']==BlockchainType.Solana.name){
-          await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    WalletChainSendSol(widget.coinModel),
-              ));
-        }else if(widget.coinModel.coin['blockchainType']==BlockchainType.Tron.name){
-          await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    WalletChainSendTrx(widget.coinModel),
-              ));
-        }else if(widget.coinModel.coin['blockchainType']==BlockchainType.Algorand.name){
-          await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    WalletChainSendAlgo(widget.coinModel),
-              ));
-        }else if(widget.coinModel.coin['blockchainType']==BlockchainType.Ripple.name){
-          await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    WalletChainSendXrp(widget.coinModel),
-              ));
-        }else if(widget.coinModel.coin['blockchainType']==BlockchainType.Filecoin.name){
-          await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    WalletChainSendFil(widget.coinModel),
-              ));
-        }else if(widget.coinModel.coin['blockchainType']==BlockchainType.Polkadot.name){
-          await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    WalletChainSendDot(widget.coinModel),
-              ));
-        }else if(widget.coinModel.coin['blockchainType']==BlockchainType.Sui.name) {
-          await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    WalletChainSendSui(widget.coinModel),
-              ));
-        }else if(widget.coinModel.coin['blockchainType']==BlockchainType.TheOpenNetwork.name) {
-          await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    WalletChainSendTon(widget.coinModel),
-              ));
-        }else {
-          await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    WalletChainSend(widget.coinModel),
-              ));
-        }
-        getTransactionData(Load.refresh);
-        Navigator.pop(context);
+        await _handleSend(closeSheet: true);
       },
       child: Container(
           padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
@@ -1208,32 +1092,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
     //Receive
     childs.add(InkWell(
       onTap: () async{
-        WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
-        if(wap.walletInfo.password==""){
-          final flag= await TipsDialog7(context);
-          if (flag != null && flag) {
-            await Navigator.push(context, MaterialPageRoute(
-                settings: RouteSettings(
-                  name: 'BackupOne',
-                ),
-                builder: (context)=>BackupOne(wap.walletInfo,wap.walletIndex)));
-          }
-        }else{
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => WalletReceiveQr(
-                chainCoinModel == null
-                    ? widget.coinModel
-                    : chainCoinModel!,
-                tokenCoinModel: chainCoinModel == null
-                    ? null
-                    : widget.coinModel,
-              ),
-            ),
-          );
-        }
-        Navigator.pop(context);
+        await _handleReceive(closeSheet: true);
       },
       child: Container(
           padding: EdgeInsets.all(ScreenUtil().setWidth(30)),

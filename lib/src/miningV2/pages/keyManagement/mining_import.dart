@@ -80,7 +80,7 @@ class _MiningImportState extends State<MiningImport> {
       bool isMining=true;
       MessageModel bvRmm= await MiningApi.init().getBeaconValidator(secretMap['validator']['publicKey']);
       if(bvRmm.error==false){
-        int eTimestamp=bvRmm.data['exit_timestamp'];
+        int eTimestamp=bvRmm.data?['exit_timestamp']??0;
         if(eTimestamp!=0){
           isMining=false;
         }
@@ -374,7 +374,7 @@ class _MiningImportState extends State<MiningImport> {
     return SafeArea(child: Container(
       height: ScreenUtil().setWidth(88),
       width: double.infinity,
-      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(_fieldSpacing),horizontal: ScreenUtil().setWidth(30)),
+      margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
       child: ButtonStyle6(
         context,
         _importPrivateKey,

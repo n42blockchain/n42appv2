@@ -14,7 +14,6 @@ class Trustdart {
         'passphrase': passphrase,
         'length': length,
       });
-      print(mnemonic);
       return mnemonic;
     } catch (e) {
       return "";

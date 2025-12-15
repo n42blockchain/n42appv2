@@ -99,7 +99,7 @@ class _MiningKeyListState extends State<MiningKeyList> {
                 if(isMining)
                   InkWell(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>MiningOutputTip()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>MiningOutputTip(value: keyValue['keypart'],)));
                     },
                     child: Icon(
                       Icons.output_outlined,

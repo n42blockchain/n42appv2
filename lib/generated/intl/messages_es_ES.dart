@@ -1111,7 +1111,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key31": MessageLookupByLibrary.simpleMessage(
       "Registro de actividad de verificación en la nube",
     ),
-    "g_mining_key38": MessageLookupByLibrary.simpleMessage("Tu nivel"),
     "g_mining_key46": MessageLookupByLibrary.simpleMessage(
       "La configuración requiere una pequeña cantidad de gas.",
     ),

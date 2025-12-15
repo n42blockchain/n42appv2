@@ -51,33 +51,6 @@ class MiningV2Provider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool isLoadingMiningDeposits = false;
-
-  setLoadingDeposits(bool flag) {
-    isLoadingMiningDeposits = flag;
-    notifyListeners();
-  }
-
-  int depositsNum = 0;
-  double miningIncome = 0;
-
-  setDepositsNum(int num) {
-    depositsNum = num;
-    notifyListeners();
-  }
-
-  setMiningIncome(double num) {
-    miningIncome = num;
-    notifyListeners();
-  }
-
-  int mainChainMining = 0;
-
-  setMiningDev(int num) {
-    mainChainMining = num;
-    notifyListeners();
-  }
-
   String walletName="";
   String? address=null;
 
@@ -86,9 +59,6 @@ class MiningV2Provider extends ChangeNotifier {
     web3=null;
     depositsEnable = false;
     miningStatus = false;
-    isLoadingMiningDeposits = false;
-    depositsNum = 0;
-    miningIncome = 0;
     walletName="";
     address=null;
     notifyListeners();
@@ -115,7 +85,6 @@ class MiningV2Provider extends ChangeNotifier {
       );
       address =rm[cInfo['addrType']];
       await getWalletPrivateKey();
-      setLoadingDeposits(true);
       walletName=info.walletName??"";
       if (address == null) return;
       await getMiningData();
@@ -125,10 +94,9 @@ class MiningV2Provider extends ChangeNotifier {
       getNprice(wap);
       loadMiningData();
     } catch (err) {
-      setDepositsEnable(null);
+      setDepositsEnable(false);
       debugPrint("checkAddressMiningStatus err：${err.toString()}");
     } finally {
-      setLoadingDeposits(false);
       notifyListeners();
     }
   }
@@ -253,12 +221,10 @@ class MiningV2Provider extends ChangeNotifier {
         'redeem':false,
       };
       SPUtil().setMiningData(miningData!);
-      if(depositsEnable == false){
-        if(index ==-1){
-          wap.setWalletMiningIndex(wap.walletIndex);
-        }else{
-          wap.setWalletMiningIndex(index);
-        }
+      if(index ==-1){
+        wap.setWalletMiningIndex(wap.walletInfoLsit.length-1);
+      }else{
+        wap.setWalletMiningIndex(index);
       }
       MessageModel rmm = MessageModel();
       return rmm;
@@ -291,7 +257,6 @@ class MiningV2Provider extends ChangeNotifier {
       if(rData !=null){
         MessageModel sendMM=await Web3.sendDepositTransaction(jsonDecode(rData));
         if(sendMM.error==false){
-          depositsNum=amount;
           setDepositTxHash(sendMM.data);
           errorMessage="";
         }else{
@@ -344,7 +309,6 @@ class MiningV2Provider extends ChangeNotifier {
     final exitSignDataStr=await miningCreateExitUnsignedTx(feeMM.data);
     MessageModel sendMM=await Web3.sendExitDepositTransaction(jsonDecode(exitSignDataStr??'{}'));
     if(sendMM.error==false){
-      depositsNum=0;
       setExitDepositTxHash(sendMM.data);
       errorMessage="";
     }else{

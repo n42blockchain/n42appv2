@@ -13,7 +13,8 @@ import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class MiningOutputPk extends StatefulWidget {
-  const MiningOutputPk({super.key});
+  Map<String,dynamic>? value;
+  MiningOutputPk({this.value,super.key});
 
   @override
   State<MiningOutputPk> createState() => _MiningOutputPkState();
@@ -36,11 +37,13 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
 
   // 模拟加密函数：你可以替换成真实加密逻辑
   encryptData(String password) async{
-    Map<String,String>? rdata=await MiningApi.init().generateBls12381Keypair();
+    if(widget.value==null){
+      widget.value=await MiningApi.init().generateBls12381Keypair();
+    }
     if (!mounted) return "";
     WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
     wap.walletInfoLsit[wap.walletMiningIndex].mnemonic;
-    encrypteData={'validator':rdata,"privateKey": wap.walletInfoLsit[wap.walletMiningIndex].privateKey??"", "mnemonicWords": wap.walletInfoLsit[wap.walletMiningIndex].mnemonic??"",};
+    encrypteData={'validator':widget.value,"privateKey": wap.walletInfoLsit[wap.walletMiningIndex].privateKey??"", "mnemonicWords": wap.walletInfoLsit[wap.walletMiningIndex].mnemonic??"",};
     return await encryptSecret(data: encrypteData!, password: password);
   }
 

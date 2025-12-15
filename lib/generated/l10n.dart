@@ -3069,16 +3069,6 @@ class S {
     );
   }
 
-  /// `Your Tier`
-  String get g_mining_key38 {
-    return Intl.message(
-      'Your Tier',
-      name: 'g_mining_key38',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Setup requires a small amount for gas.`
   String get g_mining_key46 {
     return Intl.message(
