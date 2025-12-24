@@ -677,6 +677,7 @@ import WalletCore
                   flutterResult(FlutterError(code: "ClientError", message: "\(err)", details: nil))
               }
           })
+          flutterResult("Client started")
           break
       default:
           result(FlutterMethodNotImplemented)
