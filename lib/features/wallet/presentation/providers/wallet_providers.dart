@@ -7,7 +7,7 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
-import 'package:n42appv2/features/wallet/domain/entities/wallet_entity.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 
 /// Wallet Info Data for Provider
 /// Lightweight representation for state management
@@ -20,6 +20,11 @@ class WalletInfoData {
   final String? avatarUrl;
   final bool isMainWallet;
   final DateTime createdAt;
+  final String? timestamp;
+  final Map<String, dynamic>? coinInfo;
+  final Map<String, dynamic> coinSort;
+  final int networkIndex;
+  final bool? faceBinding;
 
   const WalletInfoData({
     required this.address,
@@ -30,7 +35,72 @@ class WalletInfoData {
     this.avatarUrl,
     this.isMainWallet = false,
     required this.createdAt,
+    this.timestamp,
+    this.coinInfo,
+    this.coinSort = const {"assets": 0, "name": -1},
+    this.networkIndex = -1,
+    this.faceBinding,
   });
+
+  /// Create from legacy WalletInfo JSON
+  factory WalletInfoData.fromLegacyJson(Map<String, dynamic> json) {
+    // Extract first address from coinInfo for display
+    String address = '';
+    final coinInfo = json['coinInfo'] as Map<String, dynamic>?;
+    if (coinInfo != null && coinInfo.isNotEmpty) {
+      // Try to get ETH address as primary
+      if (coinInfo['ETH'] != null) {
+        address = _extractAddress(coinInfo['ETH']);
+      } else {
+        // Use first available
+        final firstKey = coinInfo.keys.first;
+        address = _extractAddress(coinInfo[firstKey]);
+      }
+    }
+
+    return WalletInfoData(
+      address: address,
+      name: json['walletName'] as String? ?? 'Wallet',
+      chainType: 'multi', // Multi-chain wallet
+      mnemonic: json['mnemonic'] as String?,
+      privateKey: json['privateKey'] as String?,
+      isMainWallet: json['mainWallet'] as bool? ?? false,
+      createdAt: json['timestamp'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+              int.tryParse(json['timestamp'].toString()) ?? 0)
+          : DateTime.now(),
+      timestamp: json['timestamp'] as String?,
+      coinInfo: coinInfo,
+      coinSort: (json['coinSort'] as Map<String, dynamic>?) ?? {"assets": 0, "name": -1},
+      networkIndex: json['networkIndex'] as int? ?? -1,
+      faceBinding: json['faceBinding'] as bool?,
+    );
+  }
+
+  static String _extractAddress(dynamic coinData) {
+    if (coinData is Map) {
+      // Try to get address from baseInfo or direct
+      if (coinData['baseInfo'] != null && coinData['baseInfo']['address'] != null) {
+        return coinData['baseInfo']['address'].toString();
+      }
+    }
+    return '';
+  }
+
+  /// Convert to legacy format for storage
+  Map<String, dynamic> toLegacyJson() {
+    return {
+      'walletName': name,
+      'mnemonic': mnemonic,
+      'privateKey': privateKey,
+      'timestamp': timestamp,
+      'coinInfo': coinInfo,
+      'coinSort': coinSort,
+      'networkIndex': networkIndex,
+      'faceBinding': faceBinding,
+      'mainWallet': isMainWallet,
+    };
+  }
 
   WalletInfoData copyWith({
     String? address,
@@ -41,6 +111,11 @@ class WalletInfoData {
     String? avatarUrl,
     bool? isMainWallet,
     DateTime? createdAt,
+    String? timestamp,
+    Map<String, dynamic>? coinInfo,
+    Map<String, dynamic>? coinSort,
+    int? networkIndex,
+    bool? faceBinding,
   }) {
     return WalletInfoData(
       address: address ?? this.address,
@@ -51,6 +126,11 @@ class WalletInfoData {
       avatarUrl: avatarUrl ?? this.avatarUrl,
       isMainWallet: isMainWallet ?? this.isMainWallet,
       createdAt: createdAt ?? this.createdAt,
+      timestamp: timestamp ?? this.timestamp,
+      coinInfo: coinInfo ?? this.coinInfo,
+      coinSort: coinSort ?? this.coinSort,
+      networkIndex: networkIndex ?? this.networkIndex,
+      faceBinding: faceBinding ?? this.faceBinding,
     );
   }
 }
@@ -82,6 +162,9 @@ class CoinBalanceData {
 
 // ============ Providers ============
 
+/// SPUtil Provider
+final spUtilProvider = Provider<SPUtil>((ref) => SPUtil());
+
 /// Wallet List Provider (Async)
 final walletListProvider =
     AsyncNotifierProvider<WalletListNotifier, List<WalletInfoData>>(() {
@@ -91,74 +174,145 @@ final walletListProvider =
 class WalletListNotifier extends AsyncNotifier<List<WalletInfoData>> {
   @override
   Future<List<WalletInfoData>> build() async {
-    // Load wallets from storage
     return await _loadWallets();
   }
 
+  /// Load wallets from SPUtil storage
   Future<List<WalletInfoData>> _loadWallets() async {
-    final spUtil = SPUtil();
-    final walletAll = await spUtil.getWallsetInfo();
-    
+    final spUtil = ref.read(spUtilProvider);
+    final walletAll = await spUtil.getWalletInfo();
+
     if (walletAll == null) {
       return [];
     }
 
-    // Parse wallet data from storage
-    final List<WalletInfoData> wallets = [];
-    // TODO: Implement actual parsing based on storage format
+    // Get user UUID for wallet lookup
+    final userUUID = AppGlobals.userInfo?.uuid ?? 'AstranetWallet';
     
+    // Get user's wallet data
+    Map<String, dynamic>? walletUser = walletAll[userUUID];
+    
+    // Fallback to default wallet if user wallet not found
+    if (walletUser == null) {
+      walletUser = walletAll['AstranetWallet'];
+    }
+
+    if (walletUser == null) {
+      return [];
+    }
+
+    // Parse wallet list
+    final List<dynamic> walletInfos = walletUser['wallet'] ?? [];
+    final List<WalletInfoData> wallets = [];
+
+    for (final walletJson in walletInfos) {
+      if (walletJson is Map<String, dynamic>) {
+        wallets.add(WalletInfoData.fromLegacyJson(walletJson));
+      }
+    }
+
     return wallets;
   }
 
+  /// Refresh wallet list from storage
   Future<void> refresh() async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() => _loadWallets());
   }
 
+  /// Add a new wallet
   Future<void> addWallet(WalletInfoData wallet) async {
     final current = state.valueOrNull ?? [];
-    state = AsyncValue.data([...current, wallet]);
-    // TODO: Save to storage
+    final updated = [...current, wallet];
+    state = AsyncValue.data(updated);
+    await _saveWallets(updated);
   }
 
+  /// Remove a wallet by address
   Future<void> removeWallet(String address) async {
     final current = state.valueOrNull ?? [];
-    state = AsyncValue.data(
-      current.where((w) => w.address != address).toList(),
-    );
-    // TODO: Save to storage
+    final updated = current.where((w) => w.address != address).toList();
+    state = AsyncValue.data(updated);
+    await _saveWallets(updated);
   }
 
+  /// Update a wallet
   Future<void> updateWallet(WalletInfoData wallet) async {
     final current = state.valueOrNull ?? [];
-    final index = current.indexWhere((w) => w.address == wallet.address);
+    final index = current.indexWhere((w) => w.timestamp == wallet.timestamp);
     if (index != -1) {
       final updated = [...current];
       updated[index] = wallet;
       state = AsyncValue.data(updated);
-      // TODO: Save to storage
+      await _saveWallets(updated);
     }
+  }
+
+  /// Save wallets to storage
+  Future<void> _saveWallets(List<WalletInfoData> wallets) async {
+    final spUtil = ref.read(spUtilProvider);
+    final userUUID = AppGlobals.userInfo?.uuid ?? 'AstranetWallet';
+    
+    // Get current storage
+    final walletAll = await spUtil.getWalletInfo() ?? {};
+    
+    // Get current index
+    final currentIndex = ref.read(selectedWalletIndexProvider);
+    final miningIndex = ref.read(miningWalletIndexProvider);
+    
+    // Update wallet data
+    walletAll[userUUID] = {
+      'index': currentIndex,
+      'miningIndex': miningIndex,
+      'wallet': wallets.map((w) => w.toLegacyJson()).toList(),
+    };
+
+    await spUtil.setWalletInfo(walletAll);
   }
 }
 
 /// Selected Wallet Index Provider
 final selectedWalletIndexProvider =
     StateNotifierProvider<SelectedWalletIndexNotifier, int>((ref) {
-  return SelectedWalletIndexNotifier();
+  return SelectedWalletIndexNotifier(ref);
 });
 
 class SelectedWalletIndexNotifier extends StateNotifier<int> {
-  SelectedWalletIndexNotifier() : super(0) {
+  final Ref _ref;
+  
+  SelectedWalletIndexNotifier(this._ref) : super(0) {
     _loadFromStorage();
   }
 
   Future<void> _loadFromStorage() async {
-    // TODO: Load from SPUtil
+    final spUtil = _ref.read(spUtilProvider);
+    final walletAll = await spUtil.getWalletInfo();
+    
+    if (walletAll != null) {
+      final userUUID = AppGlobals.userInfo?.uuid ?? 'AstranetWallet';
+      final walletUser = walletAll[userUUID] ?? walletAll['AstranetWallet'];
+      if (walletUser != null) {
+        state = walletUser['index'] ?? 0;
+      }
+    }
   }
 
   void select(int index) {
     state = index;
-    // TODO: Save to storage
+    _saveToStorage();
+  }
+
+  Future<void> _saveToStorage() async {
+    final spUtil = _ref.read(spUtilProvider);
+    final walletAll = await spUtil.getWalletInfo();
+    
+    if (walletAll != null) {
+      final userUUID = AppGlobals.userInfo?.uuid ?? 'AstranetWallet';
+      if (walletAll[userUUID] != null) {
+        walletAll[userUUID]['index'] = state;
+        await spUtil.setWalletInfo(walletAll);
+      }
+    }
   }
 }
 
@@ -180,7 +334,8 @@ final walletBalanceProvider = FutureProvider.autoDispose<double>((ref) async {
   final wallet = ref.watch(currentWalletProvider);
   if (wallet == null) return 0.0;
 
-  // TODO: Fetch balance from API
+  // TODO: Implement actual balance fetching from API
+  // For now, return 0
   return 0.0;
 });
 
@@ -196,8 +351,32 @@ class CoinListNotifier extends AutoDisposeAsyncNotifier<List<CoinBalanceData>> {
     final wallet = ref.watch(currentWalletProvider);
     if (wallet == null) return [];
 
-    // TODO: Fetch coin list from API
-    return [];
+    // Build coin list from wallet's coinInfo
+    final List<CoinBalanceData> coins = [];
+    final coinInfo = wallet.coinInfo;
+    
+    if (coinInfo != null) {
+      for (final entry in coinInfo.entries) {
+        final coinKey = entry.key;
+        final coinData = entry.value as Map<String, dynamic>?;
+        
+        if (coinData != null && coinData['baseInfo'] != null) {
+          final baseInfo = coinData['baseInfo'] as Map<String, dynamic>;
+          coins.add(CoinBalanceData(
+            symbol: coinKey,
+            name: baseInfo['name']?.toString() ?? coinKey,
+            iconUrl: baseInfo['icon']?.toString() ?? '',
+            balance: 0.0, // TODO: Fetch actual balance
+            balanceUsd: 0.0,
+            price: 0.0,
+            priceChange24h: 0.0,
+            chainType: coinKey,
+          ));
+        }
+      }
+    }
+
+    return coins;
   }
 
   Future<void> refresh() async {
@@ -207,20 +386,52 @@ class CoinListNotifier extends AutoDisposeAsyncNotifier<List<CoinBalanceData>> {
 
   Future<void> refreshCoin(String symbol) async {
     // Refresh specific coin balance
+    // TODO: Implement
   }
 }
 
 /// Mining Wallet Index Provider
 final miningWalletIndexProvider =
     StateNotifierProvider<MiningWalletIndexNotifier, int>((ref) {
-  return MiningWalletIndexNotifier();
+  return MiningWalletIndexNotifier(ref);
 });
 
 class MiningWalletIndexNotifier extends StateNotifier<int> {
-  MiningWalletIndexNotifier() : super(0);
+  final Ref _ref;
+  
+  MiningWalletIndexNotifier(this._ref) : super(0) {
+    _loadFromStorage();
+  }
+
+  Future<void> _loadFromStorage() async {
+    final spUtil = _ref.read(spUtilProvider);
+    final walletAll = await spUtil.getWalletInfo();
+    
+    if (walletAll != null) {
+      final userUUID = AppGlobals.userInfo?.uuid ?? 'AstranetWallet';
+      final walletUser = walletAll[userUUID] ?? walletAll['AstranetWallet'];
+      if (walletUser != null) {
+        state = walletUser['miningIndex'] ?? walletUser['index'] ?? 0;
+      }
+    }
+  }
 
   void select(int index) {
     state = index;
+    _saveToStorage();
+  }
+
+  Future<void> _saveToStorage() async {
+    final spUtil = _ref.read(spUtilProvider);
+    final walletAll = await spUtil.getWalletInfo();
+    
+    if (walletAll != null) {
+      final userUUID = AppGlobals.userInfo?.uuid ?? 'AstranetWallet';
+      if (walletAll[userUUID] != null) {
+        walletAll[userUUID]['miningIndex'] = state;
+        await spUtil.setWalletInfo(walletAll);
+      }
+    }
   }
 }
 
@@ -237,3 +448,14 @@ final miningWalletProvider = Provider<WalletInfoData?>((ref) {
   );
 });
 
+/// Wallet Count Provider
+final walletCountProvider = Provider<int>((ref) {
+  final wallets = ref.watch(walletListProvider);
+  return wallets.valueOrNull?.length ?? 0;
+});
+
+/// Has Wallet Provider
+final hasWalletProvider = Provider<bool>((ref) {
+  final count = ref.watch(walletCountProvider);
+  return count > 0;
+});
