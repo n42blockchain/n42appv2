@@ -523,7 +523,7 @@ class _MessageListState extends ConsumerState<MessageList> {
             case "Homepage_normal":
               return transferItemWidget(title, "", createTime, "info",
                     () {
-                      Provider.of<PublicProvider>(context,listen: false).setSelectIndex(0);
+                      ref.read(mainTabSelectIndexProvider.notifier).state = 0;
                   Navigator.pop(context);
                 },map["showDate"],showData2,);
             case "AboutSettings_normal":

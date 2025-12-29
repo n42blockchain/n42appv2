@@ -329,13 +329,29 @@ flutter run
 | 阶段 | 完成度 | 备注 |
 |------|--------|------|
 | 基础设施准备 | ✅ 100% | Riverpod, Services, Events |
-| Settings Feature 迁移 | ✅ 100% | Theme, Language |
+| Settings Feature 迁移 | ✅ 100% | Theme, Language, Feedback, Security |
 | Chat Feature 修复 | ✅ 100% | 8 files - 使用 Services |
 | Mining Feature 修复 | 🟡 90% | 7/8 files - 1 file 待创建钱包迁移 |
 | Home Feature 迁移 | ✅ 100% | HomePage, UnlockPage, HomeDrawPage |
 | 公共组件迁移 | ✅ 100% | AppHomeTopBar |
-| Wallet Feature 内部 | ⬜ 10% | wallet_page 待处理 |
-| 其他 Feature | ⬜ 0% | 2 files |
+| WalletConnect Feature | ✅ 100% | Provider + Page 迁移完成 |
+| Login Feature | ✅ 100% | LoginPage, AccountCreateAndReset |
+| Notification Feature | ✅ 100% | MessageList, app_push_utils |
+| Wallet Feature 内部 | 🟡 5% | 187处通过 LegacyAdapter 工作 |
+
+### 最新更新 (2025-01-xx)
+
+**已完成:**
+- ✅ WalletConnectProvider 使用 IWalletService 获取钱包信息
+- ✅ WalletConnectPage 转换为 ConsumerStatefulWidget
+- ✅ MessageList 使用 Riverpod
+- ✅ LoginPage/AccountCreateAndReset 使用 currentUserProvider
+- ✅ app_push_utils 使用 globalProviderContainer
+
+**剩余工作:**
+- lock_screen_resetpassword.dart - 通过 LegacyAdapter 工作
+- personal_setting.dart - editUserInfo 通过 LegacyAdapter 工作
+- Wallet 模块内部 187 处 - 通过 LegacyAdapter 工作
 
 ---
 
