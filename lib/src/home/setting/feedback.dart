@@ -11,14 +11,13 @@ import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/utils/regular.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42appv2/core/di/service_locator_setup.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart' as fPicker;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:video_compress/video_compress.dart';
-import 'package:provider/provider.dart';
 
 class Feedback extends StatefulWidget {
   const Feedback({super.key});
@@ -153,8 +152,15 @@ class _FeedbackState extends State<Feedback> {
     setState(() {
       load=Load.loading;
     });
-    String? address=await Provider.of<WalletActionProvider>(context,listen: false).getMainWalletAddress_async(CoinType.N.name);
-    if(address==null)address="";
+    // Use IWalletService instead of WalletActionProvider
+    final walletService = ServiceLocatorSetup.walletService;
+    String address = "";
+    if (walletService != null) {
+      final mainWallet = walletService.getMainWallet();
+      if (mainWallet != null) {
+        address = walletService.getChainAddress(walletService.walletCount > 0 ? 0 : -1, CoinType.N.name) ?? "";
+      }
+    }
     UserInfoApi userInfoAPI=UserInfoApi();
     MessageModel mm=await userInfoAPI.submitFeedback(address,content,fjStr);
     setState(() {

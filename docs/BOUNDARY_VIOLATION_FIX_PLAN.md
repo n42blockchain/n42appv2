@@ -201,27 +201,27 @@ class MiningProvider extends ChangeNotifier with EventListenerMixin {
 
 | 文件 | 修复状态 | 方案 |
 |------|---------|------|
-| `chat_index_page.dart` | ⬜ 待修复 | Service 接口 |
-| `chat_group_detail_page.dart` | ⬜ 待修复 | Service 接口 |
-| `add_group_member_page.dart` | ⬜ 待修复 | Service 接口 |
-| `item_group_chat_view.dart` | ⬜ 待修复 | Service 接口 |
-| `item_conversation.dart` | ⬜ 待修复 | Service 接口 |
-| `item_chat_view.dart` | ⬜ 待修复 | Service 接口 |
-| `item_chat_reply_inner_widget.dart` | ⬜ 待修复 | Service 接口 |
-| `chat_util.dart` | ⬜ 待修复 | Service 接口 |
+| `chat_index_page.dart` | ✅ 已完成 | Riverpod + Service |
+| `chat_group_detail_page.dart` | ✅ 已完成 | Service 接口 |
+| `add_group_member_page.dart` | ✅ 已完成 | Service 接口 |
+| `item_group_chat_view.dart` | ✅ 已完成 | Service 接口 |
+| `item_conversation.dart` | ✅ 已完成 | Service 接口 |
+| `item_chat_view.dart` | ✅ 已完成 | Service 接口 |
+| `item_chat_reply_inner_widget.dart` | ✅ 已完成 | Service 接口 |
+| `chat_util.dart` | ✅ 已完成 | Service 接口 |
 
 ### 3.2 Mining Feature (8 files)
 
 | 文件 | 修复状态 | 方案 |
 |------|---------|------|
-| `mining_v2_provider.dart` | ⬜ 待修复 | DI + Service |
-| `mining_today_v2.dart` | ⬜ 待修复 | Riverpod |
-| `mining_full_node_v2.dart` | ⬜ 待修复 | Riverpod |
-| `mining_background.dart` | ⬜ 待修复 | Service 接口 |
-| `mining_board_widget.dart` | ⬜ 待修复 | Riverpod |
-| `mining_output_pk.dart` | ⬜ 待修复 | Riverpod |
-| `mining_api.dart` | ⬜ 待修复 | Service 接口 |
-| `mining_web3.dart` | ⬜ 待修复 | Service 接口 |
+| `mining_v2_provider.dart` | 🟡 90% | DI + Service (钱包创建待迁移) |
+| `mining_today_v2.dart` | ✅ 已完成 | MiningV2Provider |
+| `mining_full_node_v2.dart` | ✅ 已完成 | IWalletService |
+| `mining_background.dart` | ✅ 已完成 | Service 接口 |
+| `mining_board_widget.dart` | ✅ 已完成 | Riverpod |
+| `mining_output_pk.dart` | ✅ 已完成 | IWalletService |
+| `mining_api.dart` | ✅ 已完成 | Service 接口 |
+| `mining_web3.dart` | ✅ 已完成 | Service 接口 |
 
 ### 3.3 WalletConnect Feature (2 files)
 
@@ -230,14 +230,24 @@ class MiningProvider extends ChangeNotifier with EventListenerMixin {
 | `wallet_connect_provider.dart` | ⬜ 待修复 | Riverpod |
 | `wallet_connect_page.dart` | ⬜ 待修复 | Riverpod |
 
-### 3.4 Home/Setting Feature (4 files)
+### 3.4 Home/Setting Feature (8 files)
 
 | 文件 | 修复状态 | 方案 |
 |------|---------|------|
+| `home_page.dart` | ✅ 已完成 | Riverpod |
+| `unlock.dart` | ✅ 已完成 | Riverpod |
+| `home_draw_page.dart` | ✅ 已完成 | Riverpod |
+| `setting_home_page.dart` | ✅ 已完成 | Riverpod |
 | `security_google_vedification.dart` | ⬜ 待修复 | Riverpod |
 | `feedback.dart` | ⬜ 待修复 | Riverpod |
 | `setting_theme.dart` | ✅ 已完成 | Riverpod |
 | `setting_sys_language.dart` | ✅ 已完成 | Riverpod |
+
+### 3.5 公共组件 (1 file)
+
+| 文件 | 修复状态 | 方案 |
+|------|---------|------|
+| `app_home_top_bar.dart` | ✅ 已完成 | Riverpod |
 
 ---
 
@@ -320,9 +330,11 @@ flutter run
 |------|--------|------|
 | 基础设施准备 | ✅ 100% | Riverpod, Services, Events |
 | Settings Feature 迁移 | ✅ 100% | Theme, Language |
-| Chat Feature 修复 | ⬜ 0% | 8 files |
-| Mining Feature 修复 | ⬜ 0% | 8 files |
-| Wallet Feature 内部 | ⬜ 0% | 46 files |
+| Chat Feature 修复 | ✅ 100% | 8 files - 使用 Services |
+| Mining Feature 修复 | 🟡 90% | 7/8 files - 1 file 待创建钱包迁移 |
+| Home Feature 迁移 | ✅ 100% | HomePage, UnlockPage, HomeDrawPage |
+| 公共组件迁移 | ✅ 100% | AppHomeTopBar |
+| Wallet Feature 内部 | ⬜ 10% | wallet_page 待处理 |
 | 其他 Feature | ⬜ 0% | 2 files |
 
 ---

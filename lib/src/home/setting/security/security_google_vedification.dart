@@ -1,6 +1,7 @@
 ﻿import 'dart:async';
 
 import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/di/service_locator_setup.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
@@ -8,14 +9,12 @@ import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 
 class SecurityGoogleVedification extends StatefulWidget{
   @override
@@ -58,25 +57,19 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
     initWalletPassword();
     init_security();
   }
-  //加载钱包名
-  initWalletPassword()async{
-    WalletActionProvider wap=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
-    //获取ast的 private key
-    WalletInfo? walletInfo;
-    if(wap.walletInfo.mainWallet==true){
-      walletInfo=wap.walletInfo;
-    }else{
-      int index=wap.walletInfoLsit.indexWhere((e)=>e.mainWallet==true);
-      if(index !=-1){
-        walletInfo=wap.walletInfoLsit[index];
-      }else{
-        walletInfo=null;
-      }
+  // 加载钱包名 - 使用 IWalletService 替代 WalletActionProvider
+  initWalletPassword() async {
+    final walletService = ServiceLocatorSetup.walletService;
+    if (walletService == null) {
+      walletName = '${S.current.g_key_6} ';
+      setState(() {});
+      return;
     }
-    walletName='${S.current.g_key_6} ${walletInfo?.walletName??""}';
-    setState(() {
-
-    });
+    
+    // 获取主钱包
+    final mainWallet = walletService.getMainWallet();
+    walletName = '${S.current.g_key_6} ${mainWallet?.name ?? ""}';
+    setState(() {});
   }
   //加载安全设置爱
   init_security()async{
@@ -128,37 +121,37 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
     });
   }
 
-  //验证密码
-  checkPwd(){
-    String pwdStr=pwdTextEditingController.text;
-    if(pwdStr==""){
+  // 验证密码 - 使用 SPUtil 直接读取钱包信息验证密码
+  checkPwd() async {
+    String pwdStr = pwdTextEditingController.text;
+    if (pwdStr == "") {
       setState(() {
-        pwdErrorMessage=S.of(context).g_key_t_33;
+        pwdErrorMessage = S.of(context).g_key_t_33;
       });
       return false;
     }
-    WalletActionProvider wap=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
-    //获取ast的 private key
+    
+    // 从 SPUtil 获取钱包列表进行密码验证
+    List<WalletInfo> walletList = await SPUtil().getWalletInfoList_async();
     WalletInfo? walletInfo;
-    if(wap.walletInfo.mainWallet==true){
-      walletInfo=wap.walletInfo;
-    }else{
-      int index=wap.walletInfoLsit.indexWhere((e)=>e.mainWallet==true);
-      if(index !=-1){
-        walletInfo=wap.walletInfoLsit[index];
-      }else{
-        walletInfo= null;
-      }
+    
+    // 查找主钱包
+    int mainIndex = walletList.indexWhere((e) => e.mainWallet == true);
+    if (mainIndex != -1) {
+      walletInfo = walletList[mainIndex];
+    } else if (walletList.isNotEmpty) {
+      walletInfo = walletList.first;
     }
-    String oldPwdStr=walletInfo?.password??"";
-    if(oldPwdStr!=pwdStr){
+    
+    String oldPwdStr = walletInfo?.password ?? "";
+    if (oldPwdStr != pwdStr) {
       setState(() {
-        pwdErrorMessage=S.of(context).g_key_t_34;
+        pwdErrorMessage = S.of(context).g_key_t_34;
       });
       return false;
     }
     setState(() {
-      pwdErrorMessage="";
+      pwdErrorMessage = "";
     });
     return true;
   }
