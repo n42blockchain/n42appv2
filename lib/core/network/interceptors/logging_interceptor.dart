@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:n42appv2/core/security/security_config.dart';
 
 /// 日志拦截器
 /// 
 /// 仅在 Debug 模式下输出请求/响应日志
+/// 自动脱敏敏感信息
 class LoggingInterceptor extends Interceptor {
   /// 是否启用日志
   final bool enableLog;
@@ -24,7 +26,12 @@ class LoggingInterceptor extends Interceptor {
     this.printHeader = false,
     this.printRequestBody = true,
     this.printResponseBody = true,
-  });
+  }) {
+    // 确保在 Release 模式下不启用日志
+    if (kReleaseMode && enableLog) {
+      debugPrint('⚠️ WARNING: Logging should be disabled in Release mode');
+    }
+  }
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
@@ -51,6 +58,9 @@ class LoggingInterceptor extends Interceptor {
   }
 
   void _logRequest(RequestOptions options) {
+    // 在 Release 模式下禁止日志输出
+    if (kReleaseMode) return;
+    
     final buffer = StringBuffer()
       ..writeln('┌────────────────────────────────────────────────────────────')
       ..writeln('│ 🚀 REQUEST')
@@ -60,8 +70,8 @@ class LoggingInterceptor extends Interceptor {
     if (printHeader && options.headers.isNotEmpty) {
       buffer.writeln('│ Headers:');
       options.headers.forEach((key, value) {
-        // 隐藏敏感信息
-        final displayValue = _isSensitive(key) ? '******' : value.toString();
+        // 使用安全配置进行敏感信息脱敏
+        final displayValue = SecurityConfig.maskSensitiveData(key, value);
         buffer.writeln('│   $key: $displayValue');
       });
     }
@@ -69,7 +79,7 @@ class LoggingInterceptor extends Interceptor {
     if (printRequestBody && options.data != null) {
       buffer
         ..writeln('│ Body:')
-        ..writeln('│   ${_formatJson(options.data)}');
+        ..writeln('│   ${_formatAndMaskJson(options.data)}');
     }
     
     buffer.writeln('└────────────────────────────────────────────────────────────');
@@ -78,6 +88,9 @@ class LoggingInterceptor extends Interceptor {
   }
 
   void _logResponse(Response response) {
+    // 在 Release 模式下禁止日志输出
+    if (kReleaseMode) return;
+    
     final buffer = StringBuffer()
       ..writeln('┌────────────────────────────────────────────────────────────')
       ..writeln('│ ✅ RESPONSE [${response.statusCode}]')
@@ -85,7 +98,7 @@ class LoggingInterceptor extends Interceptor {
       ..writeln('│ ${response.requestOptions.method.toUpperCase()} ${response.requestOptions.uri}');
     
     if (printResponseBody && response.data != null) {
-      final data = _formatJson(response.data);
+      final data = _formatAndMaskJson(response.data);
       // 限制输出长度
       final truncated = data.length > 1000 
           ? '${data.substring(0, 1000)}... [truncated]' 
@@ -101,6 +114,9 @@ class LoggingInterceptor extends Interceptor {
   }
 
   void _logError(DioException err) {
+    // 在 Release 模式下禁止日志输出
+    if (kReleaseMode) return;
+    
     final buffer = StringBuffer()
       ..writeln('┌────────────────────────────────────────────────────────────')
       ..writeln('│ ❌ ERROR [${err.response?.statusCode ?? 'N/A'}]')
@@ -110,7 +126,7 @@ class LoggingInterceptor extends Interceptor {
       ..writeln('│ Message: ${err.message}');
     
     if (err.response?.data != null) {
-      buffer.writeln('│ Response: ${_formatJson(err.response?.data)}');
+      buffer.writeln('│ Response: ${_formatAndMaskJson(err.response?.data)}');
     }
     
     buffer.writeln('└────────────────────────────────────────────────────────────');
@@ -118,16 +134,36 @@ class LoggingInterceptor extends Interceptor {
     debugPrint(buffer.toString());
   }
 
-  bool _isSensitive(String key) {
-    final sensitiveKeys = ['token', 'authorization', 'password', 'secret'];
-    return sensitiveKeys.any((k) => key.toLowerCase().contains(k));
-  }
-
-  String _formatJson(dynamic data) {
+  /// 格式化 JSON 并脱敏敏感数据
+  String _formatAndMaskJson(dynamic data) {
     try {
       if (data is String) {
-        return data;
+        // 尝试解析为 JSON
+        try {
+          final parsed = jsonDecode(data);
+          return _formatAndMaskJson(parsed);
+        } catch (_) {
+          return data;
+        }
       }
+      
+      if (data is Map<String, dynamic>) {
+        // 脱敏 Map 数据
+        final masked = SecurityConfig.maskSensitiveMap(data);
+        const encoder = JsonEncoder.withIndent('  ');
+        return encoder.convert(masked);
+      }
+      
+      if (data is List) {
+        const encoder = JsonEncoder.withIndent('  ');
+        return encoder.convert(data.map((item) {
+          if (item is Map<String, dynamic>) {
+            return SecurityConfig.maskSensitiveMap(item);
+          }
+          return item;
+        }).toList());
+      }
+      
       const encoder = JsonEncoder.withIndent('  ');
       return encoder.convert(data);
     } catch (_) {

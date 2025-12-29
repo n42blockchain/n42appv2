@@ -1,10 +1,12 @@
 ﻿import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
+import 'package:flutter/foundation.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/security/security_config.dart';
 
 class BaseHttp {
   String baseUrl;
@@ -25,20 +27,26 @@ class BaseHttp {
   BaseHttp(this.baseUrl, this.baseUrl_test,this.headerMap, {this.headerThype=0,}) {
     _options = setBaseOptions();
     _dio = Dio(_options);
-    // 配置 HttpClientAdapter 来忽略 SSL 证书验证
+    // 配置 HttpClientAdapter 使用安全配置进行 SSL 证书验证
     _dio.httpClientAdapter = IOHttpClientAdapter()..createHttpClient=(){
-      HttpClient client=HttpClient()..badCertificateCallback = (X509Certificate cert, String host, int port) => true; // // 总是返回 true，表示信任所有证书
+      HttpClient client = HttpClient()
+        ..badCertificateCallback = (X509Certificate cert, String host, int port) {
+          // 使用统一的安全配置验证证书
+          return SecurityConfig.verifySslCertificate(cert, host, port);
+        };
       return client;
     };
-    //日志拦截器
-    /*_dio.interceptors.add(
-      DioLoggingInterceptor(
-        level: Application.isDebug ? Level.body : Level.none,
-        compact: true,
-      ),
-    );*/
-    //抓包地址
-    // setProxy("192.168.0.130:8888");
+    //日志拦截器 - 仅在 Debug 模式启用
+    /*if (kDebugMode) {
+      _dio.interceptors.add(
+        DioLoggingInterceptor(
+          level: Level.body,
+          compact: true,
+        ),
+      );
+    }*/
+    //抓包地址 - 仅在 Debug 模式启用
+    // if (kDebugMode) setProxy("192.168.0.130:8888");
   }
 
   /// 代理设置，方便抓包来进行接口调节 设置入口在main函数中

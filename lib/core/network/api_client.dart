@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 
 import '../security/secure_storage.dart';
+import '../security/security_config.dart';
 import 'interceptors/auth_interceptor.dart';
 import 'interceptors/error_interceptor.dart';
 import 'interceptors/logging_interceptor.dart';
@@ -64,38 +65,16 @@ class ApiClient {
 
   /// 配置 SSL Pinning
   void _configureSslPinning() {
-    if (kReleaseMode) {
-      _dio.httpClientAdapter = IOHttpClientAdapter(
-        createHttpClient: () {
-          final client = HttpClient();
-          client.badCertificateCallback = (cert, host, port) {
-            // 在生产环境中验证证书
-            return _verifyCertificate(cert, host);
-          };
-          return client;
-        },
-      );
-    } else {
-      // 开发环境允许自签名证书
-      _dio.httpClientAdapter = IOHttpClientAdapter(
-        createHttpClient: () {
-          final client = HttpClient();
-          client.badCertificateCallback = (cert, host, port) => true;
-          return client;
-        },
-      );
-    }
-  }
-
-  /// 验证证书
-  bool _verifyCertificate(X509Certificate cert, String host) {
-    // TODO: 实现证书指纹验证
-    // 生产环境应该验证证书指纹
-    // final sha256 = sha256.convert(cert.der).toString();
-    // return allowedCertFingerprints.contains(sha256);
-    
-    // 临时返回 true，后续实现完整的 SSL Pinning
-    return true;
+    _dio.httpClientAdapter = IOHttpClientAdapter(
+      createHttpClient: () {
+        final client = HttpClient();
+        client.badCertificateCallback = (cert, host, port) {
+          // 使用统一的安全配置进行证书验证
+          return SecurityConfig.verifySslCertificate(cert, host, port);
+        };
+        return client;
+      },
+    );
   }
 
   /// GET 请求
