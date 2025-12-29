@@ -1,6 +1,7 @@
 ﻿import 'dart:convert';
 
 import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/home/setting/about_app.dart';
@@ -10,39 +11,40 @@ import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/news/news_page.dart';
 import 'package:n42appv2/src/notification/pages/message_info.dart';
-import 'package:n42appv2/src/state/public_provider.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/utils/browser_txhash.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/base_list.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-class MessageList extends StatefulWidget {
+/// Message List Page - Migrated to Riverpod
+/// 
+/// Displays user notifications and messages
+class MessageList extends ConsumerStatefulWidget {
   const MessageList({super.key});
 
   @override
-  State<MessageList> createState() => _MessageListState();
+  ConsumerState<MessageList> createState() => _MessageListState();
 }
 
-class _MessageListState extends State<MessageList> {
+class _MessageListState extends ConsumerState<MessageList> {
   UserInfoApi? _userInfoApi;
-  UserInfoApi get userInfoApi{
-    if(_userInfoApi==null){
-      _userInfoApi=UserInfoApi();
-    }
+  UserInfoApi get userInfoApi {
+    _userInfoApi ??= UserInfoApi();
     return _userInfoApi!;
   }
+  
   @override
   void initState() {
     super.initState();
-    //You can't update the ui until the first frame is rendered
+    // Clear unread count when opening message list - using Riverpod
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<PublicProvider>(context,listen: false).setMessageNotReadCount(value: 0);
+      ref.read(unreadCountProvider.notifier).reset();
     });
   }
 
@@ -476,7 +478,7 @@ class _MessageListState extends State<MessageList> {
             case "ChatHome #2_normal":
               return transferItemWidget(title, "", createTime, "info",
                     () {
-                Provider.of<PublicProvider>(context,listen: false).setSelectIndex(2);
+                ref.read(mainTabSelectIndexProvider.notifier).state = 2;
                   Navigator.pop(context);
                 },map["showDate"],showData2,);
             case "News_normal":
@@ -489,7 +491,7 @@ class _MessageListState extends State<MessageList> {
             case "Login_normal":
               return transferItemWidget(title, "", createTime, "info",
                     () {
-                  Provider.of<PublicProvider>(context,listen: false).setSelectIndex(0);
+                  ref.read(mainTabSelectIndexProvider.notifier).state = 0;
                   Navigator.pop(context);
                 },map["showDate"],showData2,);
 
@@ -505,7 +507,7 @@ class _MessageListState extends State<MessageList> {
             case "WalletHome #2_normal":
               return transferItemWidget(title, "", createTime, "info",
                     () {
-                  Provider.of<PublicProvider>(context,listen: false).setSelectIndex(0);
+                  ref.read(mainTabSelectIndexProvider.notifier).state = 0;
                   Navigator.pop(context);
                 },map["showDate"],showData2,);
             case "SettingsProfile_normal":

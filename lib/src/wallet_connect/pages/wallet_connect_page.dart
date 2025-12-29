@@ -13,19 +13,24 @@ import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:n42appv2/src/widgets/loading_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-class WalletConnectPage extends StatefulWidget {
+/// WalletConnect Page - Migrated to Riverpod
+/// 
+/// Handles WalletConnect integration for DApp connections
+class WalletConnectPage extends ConsumerStatefulWidget {
   String uri;
-  WalletConnectPage(this.uri,{super.key});
+  WalletConnectPage(this.uri, {super.key});
 
   @override
-  State<WalletConnectPage> createState() => _WalletConnectPageState();
+  ConsumerState<WalletConnectPage> createState() => _WalletConnectPageState();
 }
 
-class _WalletConnectPageState extends State<WalletConnectPage> {
+class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
   @override
   void initState() {
     // TODO: implement initState
@@ -82,13 +87,14 @@ class _WalletConnectPageState extends State<WalletConnectPage> {
         connectChild=selectChainWidget(connectV2);
         title=S.of(context).g_connect_key11;
         titleRightWidget=InkWell(
-          onTap: ()async{
+          onTap: () async {
             bool r = await Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => WalletCoinAddAll("")));
             if (r) {
-              await Provider.of<WalletActionProvider>(context,listen: false).init_wallet(initCoinInfo: true);
+              // 刷新钱包列表 - 使用 Riverpod
+              ref.invalidate(walletListProvider);
             }
           },
           child: Container(

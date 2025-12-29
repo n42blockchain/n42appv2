@@ -1,6 +1,7 @@
 ﻿import 'dart:convert';
 
 import 'package:n42appv2/core/utils/toast_utils.dart';
+import 'package:n42appv2/core/di/service_locator_setup.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
@@ -18,7 +19,6 @@ import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:provider/provider.dart';
 import 'package:reown_walletkit/reown_walletkit.dart' as walletConnect;
-//import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart' as walletConnect;
 import 'package:web3dart/crypto.dart' as crypto;
 import 'package:web3dart/web3dart.dart' as web3;
 
@@ -230,22 +230,40 @@ class WalletConnectProvider with ChangeNotifier{
       viewState_deal(WalletConnectState.error,params: e.toString());
     }
   }
-  //创建web3实例
-  web3client_init()async{
-    try{
-      CoinModel cm=coinModels[coinModelsIndex];
-      web3client=web3.Web3Client(cm.isTest?cm.coin['service_test']:cm.coin['service'], Client());
-      WalletInfo wi = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo;
-      //wi = ProviderUtil.walletActionProvider().walletInfoLsit[ProviderUtil.walletActionProvider().walletIndex];
-      String? pKey=wi.privateKey;
-      if(pKey==null){
-        final mnemonic = await wi.mnemonic;
-        pKey=await trustdart.getPrivateKey(mnemonic!, cm.coin['coinType'], getPathWithIndex(cm.coin['path']['legacy'], cm.pathIndex));
+  // 创建web3实例 - 使用 IWalletService 获取钱包信息
+  web3client_init() async {
+    try {
+      CoinModel cm = coinModels[coinModelsIndex];
+      web3client = web3.Web3Client(cm.isTest ? cm.coin['service_test'] : cm.coin['service'], Client());
+      
+      // 使用 IWalletService 获取当前钱包的私钥和助记词
+      final walletService = ServiceLocatorSetup.walletService;
+      if (walletService == null) {
+        viewState_deal(WalletConnectState.error, params: "Wallet service not available");
+        return false;
       }
-      privateKey=web3.EthPrivateKey(base64Decode(pKey));
+      
+      final currentIndex = walletService.miningWalletIndex >= 0 
+          ? walletService.miningWalletIndex 
+          : 0;
+      String? pKey = await walletService.getPrivateKeyForWallet(currentIndex);
+      
+      if (pKey == null) {
+        final mnemonic = await walletService.getMnemonicForWallet(currentIndex);
+        if (mnemonic != null) {
+          pKey = await trustdart.getPrivateKey(mnemonic, cm.coin['coinType'], getPathWithIndex(cm.coin['path']['legacy'], cm.pathIndex));
+        }
+      }
+      
+      if (pKey == null) {
+        viewState_deal(WalletConnectState.error, params: "Could not get private key");
+        return false;
+      }
+      
+      privateKey = web3.EthPrivateKey(base64Decode(pKey));
       return true;
-    }catch(e){
-      viewState_deal(WalletConnectState.error,params: e.toString());
+    } catch (e) {
+      viewState_deal(WalletConnectState.error, params: e.toString());
       return false;
     }
   }
@@ -531,14 +549,19 @@ class WalletConnectProvider with ChangeNotifier{
           jsonData: requestParams[1],
           version: TypedDataVersion.V4,
         );
-      }else if (eventData.method == "tron_signMessage") {
+      } else if (eventData.method == "tron_signMessage") {
         final requestParams = eventData.params! as Map;
         final dataToSign = requestParams["message"];
-        CoinModel cm=coinModels[2];
-        WalletInfo wi = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo;
-        String path=getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
-        signedDataHex=await trustdart.signMessage(CoinType.TRX.name, path, dataToSign,mnemonic: wi.mnemonic??"", pk:wi.privateKey??"",);
-
+        CoinModel cm = coinModels[2];
+        
+        // 使用 IWalletService 获取私钥和助记词
+        final walletService = ServiceLocatorSetup.walletService;
+        final currentIndex = walletService?.miningWalletIndex ?? 0;
+        final mnemonic = await walletService?.getMnemonicForWallet(currentIndex) ?? "";
+        final pk = await walletService?.getPrivateKeyForWallet(currentIndex) ?? "";
+        
+        String path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
+        signedDataHex = await trustdart.signMessage(CoinType.TRX.name, path, dataToSign, mnemonic: mnemonic, pk: pk);
       }
       else {
         final requestParams =
@@ -572,11 +595,16 @@ class WalletConnectProvider with ChangeNotifier{
       if (eventData.method == "tron_signTransaction") {
         final requestParams = eventData.params! as Map;
         final dataToSign = requestParams["message"];
-        CoinModel cm=coinModels[2];
-        WalletInfo wi = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo;
-        final mnemonic = await wi.mnemonic;
-        String path=getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
-        String returnStr=await trustdart.signTransaction(CoinType.TRX.name, path, dataToSign, mnemonic: wi.mnemonic??"",pk:wi.privateKey??"",);
+        CoinModel cm = coinModels[2];
+        
+        // 使用 IWalletService 获取私钥和助记词
+        final walletService = ServiceLocatorSetup.walletService;
+        final currentIndex = walletService?.miningWalletIndex ?? 0;
+        final mnemonic = await walletService?.getMnemonicForWallet(currentIndex) ?? "";
+        final pk = await walletService?.getPrivateKeyForWallet(currentIndex) ?? "";
+        
+        String path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
+        String returnStr = await trustdart.signTransaction(CoinType.TRX.name, path, dataToSign, mnemonic: mnemonic, pk: pk);
         signClient!.respondSessionRequest(
           topic: eventData.topic!,
           response: walletConnect.JsonRpcResponse(
