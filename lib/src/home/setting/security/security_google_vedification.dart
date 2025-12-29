@@ -5,7 +5,7 @@ import 'package:n42appv2/core/di/service_locator_setup.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/core/storage/sp_util.dart';
+import 'package:n42appv2/src/utils/sp_util.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
@@ -132,15 +132,26 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
     }
     
     // 从 SPUtil 获取钱包列表进行密码验证
-    List<WalletInfo> walletList = await SPUtil().getWalletInfoList_async();
+    Map<String, dynamic>? walletAll = await SPUtil().getWallsetInfo();
     WalletInfo? walletInfo;
     
-    // 查找主钱包
-    int mainIndex = walletList.indexWhere((e) => e.mainWallet == true);
-    if (mainIndex != -1) {
-      walletInfo = walletList[mainIndex];
-    } else if (walletList.isNotEmpty) {
-      walletInfo = walletList.first;
+    if (walletAll != null) {
+      String userUUID = AppGlobals.userInfo?.uuid ?? "";
+      Map<String, dynamic>? walletUser = walletAll[userUUID];
+      if (walletUser != null) {
+        List<dynamic> walletInfos = walletUser["wallet"] ?? [];
+        List<WalletInfo> walletList = walletInfos
+            .map((e) => WalletInfo.fromJson(e as Map<String, dynamic>))
+            .toList();
+        
+        // 查找主钱包
+        int mainIndex = walletList.indexWhere((e) => e.mainWallet == true);
+        if (mainIndex != -1) {
+          walletInfo = walletList[mainIndex];
+        } else if (walletList.isNotEmpty) {
+          walletInfo = walletList.first;
+        }
+      }
     }
     
     String oldPwdStr = walletInfo?.password ?? "";
