@@ -351,7 +351,16 @@ flutter run
 **剩余工作:**
 - lock_screen_resetpassword.dart - 通过 LegacyAdapter 工作
 - personal_setting.dart - editUserInfo 通过 LegacyAdapter 工作
-- Wallet 模块内部 187 处 - 通过 LegacyAdapter 工作
+- security_setting.dart - 通过 LegacyAdapter 工作
+- gesture_password_setting.dart - 通过 LegacyAdapter 工作
+- application.dart - 已迁移，但保留部分 Legacy 调用
+- wallet_connect_provider.dart - coinModels 通过 LegacyAdapter 工作
+- Wallet 模块内部 176 处 - 通过 LegacyAdapter 正常工作
+
+**统计摘要:**
+- 总边界违规: 188 处 (55 文件)
+- Wallet 模块内部: 176 处 (已在模块内，非跨模块违规)
+- 需通过 LegacyAdapter 工作: 12 处 (已验证正常)
 
 ---
 
