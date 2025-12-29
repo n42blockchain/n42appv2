@@ -1,4 +1,6 @@
 ﻿import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/providers/core_providers.dart';
+import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/login/api/handtype.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
@@ -6,7 +8,6 @@ import 'package:n42appv2/src/login/pages/account_create_and_reset.dart';
 import 'package:n42appv2/src/login/widgets/login_title.dart';
 import 'package:n42appv2/src/login/widgets/user_protocol.dart';
 import 'package:n42appv2/data/models/user_info.dart';
-import 'package:n42appv2/src/state/public_provider.dart';
 import 'package:n42appv2/src/utils/md5_util.dart';
 import 'package:n42appv2/src/utils/regular.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
@@ -17,19 +18,22 @@ import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/textField_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 
-class LoginPage extends StatefulWidget {
-  int type;//0 push,1content
-  LoginPage({this.type=0,super.key});
+/// Login Page - Migrated to Riverpod
+/// 
+/// Handles user authentication
+class LoginPage extends ConsumerStatefulWidget {
+  int type; // 0 push, 1 content
+  LoginPage({this.type = 0, super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final TextEditingController _unameController = TextEditingController();
   final TextEditingController _uPasswordController = TextEditingController();
   final FocusNode _unameFocusNode=FocusNode();
@@ -270,8 +274,10 @@ class _LoginPageState extends State<LoginPage> {
                                 //AmplitudeUtils.accountLoggedIn();
                                 UserInfo userInfo = UserInfo.fronJson(data['data']);
                                 await SPUtil().saveUserInfo(userInfo);
-                                await Provider.of<PublicProvider>(context,listen: false)
-                                    .setUserInfo(userInfo);
+                                // 使用 Riverpod 设置用户信息
+                                ref.read(currentUserProvider.notifier).setUser(
+                                  SharedUserInfo.fromLegacyUserInfo(userInfo),
+                                );
                                 await AppGlobals.login(userInfo);
                                 if(widget.type==0){
                                   Navigator.pop(context);

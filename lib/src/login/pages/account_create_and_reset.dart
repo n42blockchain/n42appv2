@@ -1,12 +1,13 @@
 ﻿import 'dart:async';
 
 import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/providers/core_providers.dart';
+import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/login/api/handtype.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/login/widgets/login_title.dart';
 import 'package:n42appv2/data/models/user_info.dart';
-import 'package:n42appv2/src/state/public_provider.dart';
 import 'package:n42appv2/src/utils/device_info_util.dart';
 import 'package:n42appv2/src/utils/md5_util.dart';
 import 'package:n42appv2/src/utils/regular.dart';
@@ -18,20 +19,21 @@ import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/textField_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
-import 'package:provider/provider.dart';
 
-class AccountCreateAndReset extends StatefulWidget {
+/// Account Create and Reset Page - Migrated to Riverpod
+class AccountCreateAndReset extends ConsumerStatefulWidget {
   HandType type;
-  int pushType;//0 push,1content
-  AccountCreateAndReset({required this.type,this.pushType=0,super.key});
+  int pushType; // 0 push, 1 content
+  AccountCreateAndReset({required this.type, this.pushType = 0, super.key});
 
   @override
   State<AccountCreateAndReset> createState() => _AccountCreateAndResetState();
 }
 
-class _AccountCreateAndResetState extends State<AccountCreateAndReset> {
+class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
   final TextEditingController _unameController = TextEditingController();
   final TextEditingController _inviteCodeController = TextEditingController();
   final TextEditingController _uPasswordController = TextEditingController();
@@ -153,8 +155,10 @@ class _AccountCreateAndResetState extends State<AccountCreateAndReset> {
         UserInfo userInfo = UserInfo.fronJson(data['data']);
         await SPUtil().saveUserInfo(userInfo);
         AppGlobals.login(userInfo);
-        await Provider.of<PublicProvider>(context,listen: false)
-            .setUserInfo(userInfo);
+        // 使用 Riverpod 设置用户信息
+        ref.read(currentUserProvider.notifier).setUser(
+          SharedUserInfo.fromLegacyUserInfo(userInfo),
+        );
         return true;
       }
       else if (data["code"] == -403) {

@@ -3,6 +3,8 @@
 import 'dart:convert';
 
 import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/providers/core_providers.dart';
+import 'package:n42appv2/main.dart' show globalProviderContainer;
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/chat/models/file_item_info.dart';
 import 'package:n42appv2/src/chat/pages/chat_detail_page.dart';
@@ -15,16 +17,13 @@ import 'package:n42appv2/src/home/setting/setting_share.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/login/pages/login_page.dart';
 import 'package:n42appv2/src/notification/pages/message_info.dart';
-import 'package:n42appv2/src/state/public_provider.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/src/wallet/utils/browser_txhash.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_new_badger/flutter_new_badger.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 late AndroidNotificationChannel channel;
 
@@ -388,19 +387,20 @@ class AppPushUtils {
       //跳转聊天主页
       Navigator.of(AppGlobals.navigatorKey.currentContext!)
           .popUntil((route) => route.isFirst);
-      Provider.of<PublicProvider>(AppGlobals.navigatorKey.currentContext!,listen: false).setSelectIndex(2);
+      // 使用 Riverpod - 通过 globalProviderContainer
+      globalProviderContainer.read(mainTabSelectIndexProvider.notifier).state = 2;
     }
     else if (data['type'] == "News_normal") {
       //跳转新闻列表页面
       Navigator.of(AppGlobals.navigatorKey.currentContext!)
           .popUntil((route) => route.isFirst);
-      Provider.of<PublicProvider>(AppGlobals.navigatorKey.currentContext!,listen: false).setSelectIndex(0);
+      globalProviderContainer.read(mainTabSelectIndexProvider.notifier).state = 0;
     }
     else if (data['type'] == "Login_normal") {
       //跳转创建钱包
       Navigator.of(AppGlobals.navigatorKey.currentContext!)
           .popUntil((route) => route.isFirst);
-      Provider.of<PublicProvider>(AppGlobals.navigatorKey.currentContext!,listen: false).setSelectIndex(0);
+      globalProviderContainer.read(mainTabSelectIndexProvider.notifier).state = 0;
     }
     else if (data['type'] == "AboutSettings_normal") {
       //跳转关于我们页面
@@ -413,7 +413,7 @@ class AppPushUtils {
       //跳转钱包页面
       Navigator.of(AppGlobals.navigatorKey.currentContext!)
           .popUntil((route) => route.isFirst);
-      Provider.of<PublicProvider>(AppGlobals.navigatorKey.currentContext!,listen: false).setSelectIndex(0);
+      globalProviderContainer.read(mainTabSelectIndexProvider.notifier).state = 0;
     }
     else if (data['type'] == "SettingsProfile_normal") {
       //跳转设置个人信息页面
@@ -429,7 +429,7 @@ class AppPushUtils {
       //跳转主页
       Navigator.of(AppGlobals.navigatorKey.currentContext!)
           .popUntil((route) => route.isFirst);
-      Provider.of<PublicProvider>(AppGlobals.navigatorKey.currentContext!,listen: false).setSelectIndex(0);
+      globalProviderContainer.read(mainTabSelectIndexProvider.notifier).state = 0;
     }
     else if (data['type'] == 110) {
       flutterLocalNotificationsPlugin.cancel(110);
@@ -491,7 +491,8 @@ class AppPushUtils {
   //更新未读消息数
   static _updateBadgeCount() {
     FlutterNewBadger.incrementBadgeCount();
-    Provider.of<PublicProvider>(AppGlobals.navigatorKey.currentContext!,listen: false).setMessageNotReadCount();
+    // 使用 Riverpod 增加未读消息数
+    globalProviderContainer.read(unreadCountProvider.notifier).increment();
   }
 
   //清理未读消息数
