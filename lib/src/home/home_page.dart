@@ -3,29 +3,35 @@ import 'dart:ui';
 
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/src/chat/pages/chat_index_page.dart';
 import 'package:n42appv2/src/chat/widgets/chat_services.dart';
 import 'package:n42appv2/src/home/home_draw_page.dart';
 import 'package:n42appv2/src/home/unlock.dart';
 import 'package:n42appv2/src/miningV2/pages/mining_background.dart';
 import 'package:n42appv2/src/miningV2/pages/mining_today_v2.dart';
-import 'package:n42appv2/src/state/public_provider.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-class HomePage extends StatefulWidget {
+/// Home Page - Migrated to Riverpod
+/// 
+/// Uses ConsumerStatefulWidget with WidgetsBindingObserver for:
+/// - Home tab index via homeTabIndexProvider
+/// - Screen lock state via screenLockProvider
+/// - App lifecycle management
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
+class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver {
   List<Widget> _pages=[
     //NewsPage(),
     WalletPage(),
@@ -46,22 +52,23 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
     WidgetsBinding.instance.addObserver(this);
     initData();
   }
-  initData()async{
-    showTermsOfService=await SPUtil().getShowTermsOfService();
+  initData() async {
+    showTermsOfService = await SPUtil().getShowTermsOfService();
     setState(() {});
-    if(AppGlobals.userInfo==null)return;
-    PublicProvider pValue=Provider.of<PublicProvider>(context,listen: false);
-    //await pValue.getLockScreenData();
-    if (pValue.lockScreenMap['lock'] ||
-        pValue.lockScreenMap['face'] ||
-        pValue.lockScreenMap['gesture']) {
-      Timer(Duration(milliseconds:500),()async{
-        final rData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>Unlock()));
-        if(rData==true){
+    if (AppGlobals.userInfo == null) return;
+    
+    // Use Riverpod screenLockProvider
+    final lockState = ref.read(screenLockProvider);
+    
+    if (lockState.isLocked || lockState.faceEnabled || lockState.gestureEnabled) {
+      Timer(const Duration(milliseconds: 500), () async {
+        final rData = await Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const Unlock()));
+        if (rData == true) {
           AppGlobals.login(AppGlobals.userInfo!);
         }
       });
-    }else{
+    } else {
       AppGlobals.login(AppGlobals.userInfo!);
     }
   }
@@ -74,13 +81,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
   }
   @override
   Widget build(BuildContext context) {
+    // Watch home tab index from Riverpod
+    final homeCurrentIndex = ref.watch(homeTabIndexProvider);
+    
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Stack(
           children: [
             IndexedStack(
-              index: context.watch<PublicProvider>().homeCurrentIndex,
+              index: homeCurrentIndex,
               children: _pages,
             ),
             Positioned(
@@ -167,17 +177,18 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
 
   Widget _buildBottomItem(String title, int index, String imagePath, GlobalKey key) {
     double width = MediaQuery.of(context).size.width / _pages.length;
+    // Use Riverpod homeTabIndexProvider
+    final currentIndex = ref.watch(homeTabIndexProvider);
+    
     Widget child;
-    child= Image.asset(
+    child = Image.asset(
       imagePath,
       width: ScreenUtil().setWidth(36.0),
       height: ScreenUtil().setWidth(36.0),
       fit: BoxFit.cover,
-      color: context.watch<PublicProvider>().homeCurrentIndex == index
-          ? AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.mainBlueColor.name)
-          : AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.mainTextColor.name),
+      color: currentIndex == index
+          ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
+          : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
     );
     /*if(index==4){
       child=Consumer(builder: (context,ChatMessageProvider chatModel,child) {
@@ -222,15 +233,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
     }*/
     return InkWell(
       onTap: () {
-        PublicProvider value=Provider.of<PublicProvider>(context,listen: false);
-        if (index == value.homeCurrentIndex) return;
-        value.setHomeCurrentIndex(index);
-        /*
-        //tab 埋点
-        if (index == 2) {
-          //nft home page
-          AmplitudeUtils.nftHomePageVisited();
-        }*/
+        // Use Riverpod homeTabIndexProvider
+        if (index == currentIndex) return;
+        ref.read(homeTabIndexProvider.notifier).state = index;
       },
       child: Container(
         key: key,
@@ -246,11 +251,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(20.0),
                 height: 1.5,
-                color: context.watch<PublicProvider>().homeCurrentIndex == index
-                    ? AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name)
-                    : AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                color: currentIndex == index
+                    ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
+                    : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
               ),
             ),
           ],
@@ -259,56 +262,51 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
     );
   }
 
-  int pausedTime = 0; //记录切到后台的时间戳
+  int pausedTime = 0; // 记录切到后台的时间戳
+  bool _unlockIsPush = false;
+  
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
+    
+    // Use Riverpod screenLockProvider
+    final lockState = ref.read(screenLockProvider);
+    
     switch (state) {
       case AppLifecycleState.resumed:
         MiningBackground().background_end();
-        PublicProvider pp=Provider.of<PublicProvider>(context,listen: false);
-        if (pp.unlockIsPush == true) return;
-        //if (Application.isDebug) return;
-        if (pp.lockScreenMap['lock'] == false &&
-            pp.lockScreenMap['face'] == false &&
-            pp.lockScreenMap['gesture'] == false) {
+        if (_unlockIsPush == true) return;
+        
+        if (!lockState.isLocked && !lockState.faceEnabled && !lockState.gestureEnabled) {
           return;
         }
 
-        //进入应用时不会触发
-        //应用进入前台
+        // 进入应用时不会触发
+        // 应用进入前台
         if (pausedTime == 0) return;
         int resumedTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-        if (resumedTime - pausedTime >
-            pp.lockScreenMap['lockTime']) {
-          //print("resumed 前台弹窗");
-          //if (inputPWShow == false) {
-          if (AppGlobals.userInfo !=null) {
+        if (resumedTime - pausedTime > lockState.lockTimeSeconds) {
+          if (AppGlobals.userInfo != null) {
             pausedTime = 0;
-            //ProviderUtil.publicProvider().setCheckWalletPassword(false);
             await Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => Unlock()));
+                MaterialPageRoute(builder: (context) => const Unlock()));
           } else {
             pausedTime = 0;
           }
         }
         break;
       case AppLifecycleState.inactive:
-      //应用处于闲置状态，切换到后台会触发
+        // 应用处于闲置状态，切换到后台会触发
         break;
       case AppLifecycleState.detached:
-      //页面即将退出
+        // 页面即将退出
         break;
       case AppLifecycleState.paused:
-        PublicProvider pp=Provider.of<PublicProvider>(context,listen: false);
-      //应用处于不可见状态，后台
-        if (pp.unlockIsPush == true) return;
-        //if (Application.isDebug) return;
-        if (pp.lockScreenMap['lock'] == false &&
-            pp.lockScreenMap['face'] == false &&
-            pp.lockScreenMap['gesture'] == false) {
+        // 应用处于不可见状态，后台
+        if (_unlockIsPush == true) return;
+        
+        if (!lockState.isLocked && !lockState.faceEnabled && !lockState.gestureEnabled) {
           return;
         }
         pausedTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;

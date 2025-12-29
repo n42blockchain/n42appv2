@@ -1,25 +1,31 @@
 ﻿import 'dart:async';
 
 import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/src/home/widgets/face_recognition_public.dart';
 import 'package:n42appv2/src/home/widgets/gesture_password/gesture_password.dart';
 import 'package:n42appv2/src/login/pages/login_page.dart';
-import 'package:n42appv2/src/state/public_provider.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-class Unlock extends StatefulWidget{
-  Unlock({super.key});
+/// Unlock Page - Migrated to Riverpod
+/// 
+/// Uses ConsumerStatefulWidget for:
+/// - Screen lock state management via screenLockProvider
+/// - Biometric and password verification
+class Unlock extends ConsumerStatefulWidget {
+  const Unlock({super.key});
   @override
-  _UnlockState createState()=>_UnlockState();
+  ConsumerState<Unlock> createState() => _UnlockState();
 }
-class _UnlockState extends State<Unlock>{
+
+class _UnlockState extends ConsumerState<Unlock> {
   //TextEditingController inputEditingController=TextEditingController();
   //String pwdErrorMessage="";
   String inputPassword="";
@@ -40,59 +46,66 @@ class _UnlockState extends State<Unlock>{
     super.initState();
     initData();
   }
-  initData(){
-    faceShow=false;
-    gestureShow=false;
-    passwordShow=false;
-    gestureErrorCount=0;//手势输入错误次数
-    passwordErrorCount=0;//密码输入错误次数
-    passwordUnlock=60;//密码解锁倒计时
-    PublicProvider pp=Provider.of<PublicProvider>(context,listen: false);
-    int? dOld=pp.lockScreenMap['PWLock'];
-    if(dOld !=0){
-      int dNow=DateTime.now().millisecondsSinceEpoch~/1000;
-      if(dNow-dOld! <55){
+  initData() {
+    faceShow = false;
+    gestureShow = false;
+    passwordShow = false;
+    gestureErrorCount = 0; // 手势输入错误次数
+    passwordErrorCount = 0; // 密码输入错误次数
+    passwordUnlock = 60; // 密码解锁倒计时
+    
+    // Use Riverpod screenLockProvider
+    final lockState = ref.read(screenLockProvider);
+    final dOld = lockState.passwordLockTimestamp;
+    
+    if (dOld != 0) {
+      int dNow = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      if (dNow - dOld < 55) {
         setState(() {
-          passwordUnlock=60-(dNow-dOld!);
+          passwordUnlock = 60 - (dNow - dOld);
         });
         passwordLock(setData: false);
         return;
       }
     }
-    if(pp.lockScreenMap['face']){
+    
+    if (lockState.faceEnabled) {
       initFace();
-    }else{
-      faceShow=true;
+    } else {
+      faceShow = true;
     }
-    if(pp.lockScreenMap['gesture']==false){
-      gestureShow=true;
+    
+    if (!lockState.gestureEnabled) {
+      gestureShow = true;
     }
-    if(pp.lockScreenMap['lock']==false){
-      passwordShow=true;
+    
+    if (!lockState.isLocked) {
+      passwordShow = true;
     }
   }
-  initFace()async{
-    if(Provider.of<PublicProvider>(context,listen: false).lockScreenMap['face']){
-      FaceRecognitionPublic frp=FaceRecognitionPublic();
-      bool checkBiometrics=await frp.checkBiometrics();
-      if(checkBiometrics){
-        bool authenticate=await frp.authenticateWithBiometrics();
-        if(authenticate){
-          check=true;
+  initFace() async {
+    final lockState = ref.read(screenLockProvider);
+    if (lockState.faceEnabled) {
+      FaceRecognitionPublic frp = FaceRecognitionPublic();
+      bool checkBiometrics = await frp.checkBiometrics();
+      if (checkBiometrics) {
+        bool authenticate = await frp.authenticateWithBiometrics();
+        if (authenticate) {
+          check = true;
           back();
-        }else{
-          //验证失败
-          check=false;
+        } else {
+          // 验证失败
+          check = false;
           ToastUtils.show(S.of(context).g_unlock_key7);
         }
-      }else{
-        //无法使用生物识别
-        check=false;
+      } else {
+        // 无法使用生物识别
+        check = false;
         ToastUtils.show(S.of(context).g_lock_key7);
       }
     }
     setState(() {
-      faceShow=true;
+      faceShow = true;
     });
   }
   @override
@@ -108,51 +121,45 @@ class _UnlockState extends State<Unlock>{
   back(){
     Navigator.pop(context,true);
   }
-  //验证密码
-  checkPwd(){
-    String pwdStr=inputPassword;
-    //inputEditingController.text;
-    /*if(pwdStr==""){
+  // 验证密码
+  checkPwd() {
+    String pwdStr = inputPassword;
+    
+    // Use Riverpod screenLockProvider
+    final lockState = ref.read(screenLockProvider);
+    
+    if (!lockState.verifyPassword(pwdStr)) {
       setState(() {
-        pwdErrorMessage=S.of(context).g_key_t_33;
-      });
-      ToastUtils.show(pwdErrorMessage);
-      return false;
-    }*/
-    //Provider.of<PublicProvider>(context,listen: false).lockScreenMap['lockPW'];
-    String oldPwdStr=Provider.of<PublicProvider>(context,listen: false).lockScreenMap['lockPW'];
-    if(oldPwdStr!=pwdStr){
-      setState(() {
-        //pwdErrorMessage=S.of(context).g_key_t_34;
         passwordErrorCount++;
-        inputPassword="";
+        inputPassword = "";
       });
-      if(passwordErrorCount>=3){
+      if (passwordErrorCount >= 3) {
         setState(() {
-          passwordShow=true;
+          passwordShow = true;
         });
         passwordLock();
       }
       return false;
     }
-    /*setState(() {
-      pwdErrorMessage="";
-    });*/
-    check=true;
+    
+    check = true;
     back();
     return true;
   }
-  passwordLock({bool setData=true})async{
-    if(setData){
-      Provider.of<PublicProvider>(context,listen: false).lockScreenMap['PWLock']=DateTime.now().millisecondsSinceEpoch~/1000;
-      await Provider.of<PublicProvider>(context,listen: false).setLockScreenData();
+
+  passwordLock({bool setData = true}) async {
+    if (setData) {
+      // Update password lock timestamp via Riverpod
+      final timestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      await ref.read(screenLockProvider.notifier).setPasswordLockTimestamp(timestamp);
     }
-    passworldTimer=Timer.periodic(Duration(seconds: 1),(timer){
-      if(passwordUnlock>1){
+    
+    passworldTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (passwordUnlock > 1) {
         setState(() {
           passwordUnlock--;
         });
-      }else{
+      } else {
         passworldTimer!.cancel();
         initData();
         setState(() {});
@@ -172,21 +179,23 @@ class _UnlockState extends State<Unlock>{
   }
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return newWidget();
+    return _buildUnlockWidget();
   }
-  newWidget(){
-    return Consumer<PublicProvider>(
-      builder: (context,pValue,child){
-        String textspanStr=S.of(context).g_unlock_key2;
-        List<Widget> columns=[];
-        if(pValue.lockScreenMap['face'] && faceShow==false){
+
+  Widget _buildUnlockWidget() {
+    // Watch screen lock state from Riverpod
+    final lockState = ref.watch(screenLockProvider);
+    
+    String textspanStr = S.of(context).g_unlock_key2;
+    List<Widget> columns = [];
+    
+    if (lockState.faceEnabled && faceShow == false) {
           columns.add( Expanded(
             flex: 1,
             child: SizedBox(),
           ));
         }
-        else if(pValue.lockScreenMap['gesture'] && faceShow && gestureShow==false){
+        else if (lockState.gestureEnabled && faceShow && gestureShow == false) {
           columns.addAll([
             Container(
               margin: EdgeInsets.only(top: ScreenUtil().setWidth(60.0)),
@@ -228,28 +237,29 @@ class _UnlockState extends State<Unlock>{
                 child: Container(
                   height: ScreenUtil().setWidth(480.0),
                   width: ScreenUtil().setWidth(480.0),
-                  child: GesturePassword(
-                        (String value)async{
-                      if(value == pValue.lockScreenMap['gesturePW']){
-                        check=true;
+                  child:                   GesturePassword(
+                    (String value) async {
+                      // Use lockState from Riverpod
+                      if (lockState.verifyGesture(stringToIntArray(value))) {
+                        check = true;
                         back();
-                      }else{
+                      } else {
                         gestureErrorCount++;
-                        if(gestureErrorCount>=3){
+                        if (gestureErrorCount >= 3) {
                           setState(() {
-                            gestureShow=true;
+                            gestureShow = true;
                           });
                         }
                       }
                     },
                     ScreenUtil().setWidth(160.0),
-                    answer: stringToIntArray(pValue.lockScreenMap['gesturePW']),
+                    answer: lockState.gesturePassword,
                   ),
                 ),
               ),
             ),]);
         }
-        else if(pValue.lockScreenMap['lock'] && faceShow && gestureShow && passwordShow==false){
+        else if (lockState.isLocked && faceShow && gestureShow && passwordShow == false) {
           columns.addAll([
             Container(
               margin: EdgeInsets.only(top: ScreenUtil().setWidth(60.0)),
@@ -461,8 +471,6 @@ class _UnlockState extends State<Unlock>{
             body: stack,
           ),
         );
-      },
-    );
   }
   stringToIntArray(String answer){
     List<String> answerStrList=answer.split(',');
