@@ -5,55 +5,47 @@
 //
 // Author: Jiang Yiwei
 
-/// Shared Wallet Information Entity
+import 'package:equatable/equatable.dart';
+
+/// Shared Wallet Info
 ///
-/// This entity is shared across features that need basic wallet info
-/// without creating direct feature dependencies.
-class SharedWalletInfo {
+/// A lightweight wallet representation that can be used across features.
+/// Contains only the essential information needed by other features.
+class SharedWalletInfo extends Equatable {
   final String address;
   final String name;
-  final int index;
-  final String? chainType;
-  final bool isSelected;
+  final String chainType;
+  final String? avatarUrl;
 
   const SharedWalletInfo({
     required this.address,
     required this.name,
-    required this.index,
-    this.chainType,
-    this.isSelected = false,
+    required this.chainType,
+    this.avatarUrl,
   });
 
-  SharedWalletInfo copyWith({
-    String? address,
-    String? name,
-    int? index,
-    String? chainType,
-    bool? isSelected,
-  }) {
-    return SharedWalletInfo(
-      address: address ?? this.address,
-      name: name ?? this.name,
-      index: index ?? this.index,
-      chainType: chainType ?? this.chainType,
-      isSelected: isSelected ?? this.isSelected,
-    );
-  }
-
   @override
-  String toString() {
-    return 'SharedWalletInfo(address: $address, name: $name, index: $index)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is SharedWalletInfo &&
-        other.address == address &&
-        other.index == index;
-  }
-
-  @override
-  int get hashCode => address.hashCode ^ index.hashCode;
+  List<Object?> get props => [address, name, chainType, avatarUrl];
 }
 
+/// Shared User Info
+///
+/// A lightweight user representation for cross-feature use.
+class SharedUserInfo extends Equatable {
+  final String uuid;
+  final String email;
+  final String? name;
+  final String? avatarUrl;
+  final bool isLoggedIn;
+
+  const SharedUserInfo({
+    required this.uuid,
+    required this.email,
+    this.name,
+    this.avatarUrl,
+    this.isLoggedIn = true,
+  });
+
+  @override
+  List<Object?> get props => [uuid, email, name, avatarUrl, isLoggedIn];
+}

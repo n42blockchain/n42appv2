@@ -5,18 +5,19 @@
 //
 // Author: Jiang Yiwei
 
-/// Browser Feature
+/// Browser Feature Module
 ///
-/// Handles in-app web browsing, bookmarks, and history.
+/// This module handles all browser-related functionality:
+/// - Web browsing
+/// - History management
+/// - Bookmarks
+/// - DApp integration
+library browser;
 
-library;
+// Domain Layer
+export 'domain/entities/browser_entity.dart';
+export 'domain/repositories/browser_repository.dart';
 
-// TODO: Export actual implementations when files are migrated
-// Data Layer
-// export 'data/api/browser_api.dart';
-// export 'data/models/browser_collection_model.dart';
-// export 'data/models/browser_history_model.dart';
-
-// Presentation Layer
+// Presentation Layer - To be migrated from lib/src/browser/
 // export 'presentation/providers/browser_provider.dart';
 // export 'presentation/pages/browser_page.dart';

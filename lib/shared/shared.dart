@@ -5,22 +5,21 @@
 //
 // Author: Jiang Yiwei
 
-/// Shared Layer
+/// Shared Layer Module
 ///
-/// This barrel file exports all shared entities, interfaces, and utilities
-/// that can be used across features without creating direct dependencies.
+/// Contains shared entities, services, and events used across features.
+/// This layer enables loose coupling between feature modules.
+library shared;
 
-// Domain Entities
+// Domain - Shared Entities
 export 'domain/entities/wallet_info.dart';
-export 'domain/entities/balance_info.dart';
 
-// Service Interfaces
+// Domain - Service Interfaces
 export 'domain/services/wallet_service_interface.dart';
-export 'domain/services/mining_service_interface.dart';
 
 // Events
+export 'events/event_manager.dart';
 export 'events/cross_feature_events.dart';
 
 // Contracts
 export 'contracts/feature_contracts.dart';
-

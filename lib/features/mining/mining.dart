@@ -5,26 +5,20 @@
 //
 // Author: Jiang Yiwei
 
-/// Mining Feature
+/// Mining Feature Module
 ///
-/// Handles cryptocurrency mining functionality.
-
-library;
+/// This module handles all mining-related functionality:
+/// - Mining status and plans
+/// - Mining session management
+/// - Rewards claiming
+/// - Mining statistics
+library mining;
 
 // Domain Layer
 export 'domain/entities/mining_entity.dart';
+export 'domain/repositories/mining_repository.dart';
+export 'domain/usecases/start_mining.dart';
 
-// Data Layer
-export 'data/services/mining_service_impl.dart';
-
-// TODO: Export actual implementations when files are migrated
-// Data Layer
-// export 'data/api/mining_api.dart';
-// export 'data/models/mining_model.dart';
-
-// Domain Layer
-// export 'domain/usecases/start_mining.dart';
-
-// Presentation Layer
+// Presentation Layer - To be migrated from lib/src/miningV2/
 // export 'presentation/providers/mining_v2_provider.dart';
 // export 'presentation/pages/mining_today_v2.dart';

@@ -5,17 +5,19 @@
 //
 // Author: Jiang Yiwei
 
-/// Auth Feature
+/// Auth Feature Module
 ///
-/// Handles user authentication, login, registration, and account management.
+/// This module handles all authentication-related functionality:
+/// - User login and registration
+/// - Password management
+/// - Security settings
+/// - Google authenticator
+library auth;
 
-library;
+// Domain Layer
+export 'domain/entities/auth_entity.dart';
+export 'domain/repositories/auth_repository.dart';
 
-// TODO: Export actual implementations when files are migrated
-// Data Layer
-// export 'data/api/login_api.dart';
-// export 'data/api/user_info_api.dart';
-
-// Presentation Layer
+// Presentation Layer - To be migrated from lib/src/login/
+// export 'presentation/providers/auth_provider.dart';
 // export 'presentation/pages/login_page.dart';
-// export 'presentation/pages/account_create_and_reset.dart';

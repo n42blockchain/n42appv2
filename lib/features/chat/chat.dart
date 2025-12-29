@@ -5,26 +5,25 @@
 //
 // Author: Jiang Yiwei
 
-/// Chat Feature
+/// Chat Feature Module
 ///
-/// Handles messaging, conversations, and social interactions.
-
-library;
+/// This module handles all chat-related functionality:
+/// - Conversations management
+/// - Message sending and receiving
+/// - Group chat
+/// - WebSocket communication
+library chat;
 
 // Domain Layer
 export 'domain/entities/message_entity.dart';
 export 'domain/entities/conversation_entity.dart';
+export 'domain/repositories/chat_repository.dart';
+export 'domain/usecases/send_message.dart';
 
-// TODO: Export actual implementations when files are migrated
 // Data Layer
-// export 'data/api/chat_api.dart';
-// export 'data/api/chat_message_api.dart';
-// export 'data/models/chat_message_model.dart';
+export 'data/datasources/chat_local_datasource.dart';
+export 'data/datasources/chat_remote_datasource.dart';
 
-// Domain Layer
-// export 'domain/usecases/send_message.dart';
-
-// Presentation Layer
+// Presentation Layer - To be migrated from lib/src/chat/
 // export 'presentation/providers/chat_message_provider.dart';
 // export 'presentation/pages/chat_index_page.dart';
-// export 'presentation/pages/chat_detail_page.dart';

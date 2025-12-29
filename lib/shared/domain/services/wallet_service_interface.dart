@@ -6,41 +6,25 @@
 // Author: Jiang Yiwei
 
 import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
-import 'package:n42appv2/shared/domain/entities/balance_info.dart';
 
 /// Wallet Service Interface
 ///
-/// This interface allows other features (like Mining) to access wallet
-/// functionality without direct dependency on the Wallet feature.
-///
-/// The Wallet feature implements this interface, and other features
-/// depend only on this abstraction.
+/// Shared interface for wallet operations that can be used across features.
+/// This prevents circular dependencies between features while allowing
+/// access to wallet information.
 abstract class IWalletService {
   /// Get current selected wallet
-  SharedWalletInfo? get currentWallet;
-
-  /// Get all wallets
-  List<SharedWalletInfo> get wallets;
+  SharedWalletInfo? getCurrentWallet();
 
   /// Get wallet by address
   SharedWalletInfo? getWalletByAddress(String address);
 
-  /// Get wallet by index
-  SharedWalletInfo? getWalletByIndex(int index);
-
-  /// Get balance for specific coin
-  Future<SharedBalanceInfo?> getBalance(String address, String coinSymbol);
-
-  /// Get all balances for wallet
-  Future<List<SharedBalanceInfo>> getAllBalances(String address);
+  /// Get all wallets
+  List<SharedWalletInfo> getAllWallets();
 
   /// Check if wallet exists
-  bool hasWallet(String address);
-
-  /// Get wallet count
-  int get walletCount;
+  bool walletExists(String address);
 
   /// Stream of wallet changes
   Stream<SharedWalletInfo?> get currentWalletStream;
 }
-

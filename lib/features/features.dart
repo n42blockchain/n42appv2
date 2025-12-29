@@ -5,13 +5,11 @@
 //
 // Author: Jiang Yiwei
 
-/// Features Barrel File
+/// Features Module
 ///
-/// Exports all feature modules for easy importing.
+/// Re-exports all feature modules for convenient importing.
+library features;
 
-library;
-
-export 'feature_initializer.dart';
 export 'wallet/wallet.dart';
 export 'chat/chat.dart';
 export 'mining/mining.dart';
