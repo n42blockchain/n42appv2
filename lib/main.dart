@@ -23,6 +23,7 @@ import 'package:n42appv2/src/login/pages/login_page.dart';
 import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
 import 'package:n42appv2/src/state/public_provider.dart';
 import 'package:n42appv2/core/providers/legacy_public_adapter.dart';
+import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42appv2/src/utils/app_push_utils.dart';
 import 'package:n42appv2/src/utils/notfication_utils.dart';
 import 'package:n42appv2/src/wallet/pages/create_wallet/create/create_one.dart';
@@ -89,8 +90,9 @@ void main() async {
           ChangeNotifierProvider<WalletConnectProvider>(
             create: (_) => WalletConnectProvider(),
           ),
+          // Use Legacy Adapter to bridge WalletActionProvider with Riverpod
           ChangeNotifierProvider<WalletActionProvider>(
-            create: (_) => WalletActionProvider(),
+            create: (_) => LegacyWalletActionProviderAdapter(globalProviderContainer),
           ),
           ChangeNotifierProvider<TransactionRecordItemProvider>(
             create: (_) => TransactionRecordItemProvider(),
