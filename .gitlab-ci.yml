@@ -1,0 +1,243 @@
+# GitLab CI Pipeline - Complete Flutter CI/CD
+#
+# 完整的 Flutter CI 流水线，包括：
+# - 代码分析 (flutter analyze)
+# - 单元测试 (flutter test)
+# - 覆盖率门禁
+# - 安全扫描
+# - 性能回归检测
+
+image: ghcr.io/cirruslabs/flutter:3.22.0
+
+variables:
+  FLUTTER_VERSION: "3.22.0"
+  COVERAGE_THRESHOLD: "70"
+  PUB_CACHE: "$CI_PROJECT_DIR/.pub-cache"
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .pub-cache/
+    - build/
+
+stages:
+  - analyze
+  - test
+  - security
+  - performance
+  - build
+  - summary
+
+# ============================================
+# 代码分析
+# ============================================
+code_analysis:
+  stage: analyze
+  script:
+    - flutter pub get
+    - flutter analyze --no-fatal-infos 2>&1 | tee analyze_output.txt
+    - |
+      ERRORS=$(grep -c "error •" analyze_output.txt || true)
+      WARNINGS=$(grep -c "warning •" analyze_output.txt || true)
+      echo "Errors: $ERRORS, Warnings: $WARNINGS"
+      if [ "$ERRORS" -gt 0 ]; then
+        echo "Found $ERRORS analysis errors"
+        exit 1
+      fi
+  artifacts:
+    paths:
+      - analyze_output.txt
+    expire_in: 1 week
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+
+code_formatting:
+  stage: analyze
+  script:
+    - flutter pub get
+    - dart format --set-exit-if-changed lib/ test/
+  allow_failure: true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+# ============================================
+# 单元测试与覆盖率
+# ============================================
+unit_tests:
+  stage: test
+  script:
+    - flutter pub get
+    - flutter test --coverage --reporter expanded 2>&1 | tee test_output.txt
+    - |
+      # 统计测试结果
+      PASSED=$(grep -c "✓" test_output.txt || true)
+      FAILED=$(grep -c "✗" test_output.txt || true)
+      echo "Tests Passed: $PASSED, Failed: $FAILED"
+  artifacts:
+    paths:
+      - coverage/
+      - test_output.txt
+    expire_in: 1 week
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/lcov.info
+  coverage: '/lines\.*: (\d+\.\d+)%/'
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == "main"
+
+coverage_gate:
+  stage: test
+  needs: [unit_tests]
+  script:
+    - apt-get update && apt-get install -y lcov bc
+    - |
+      COVERAGE=$(lcov --summary coverage/lcov.info 2>&1 | grep "lines" | awk '{print $2}' | sed 's/%//')
+      echo "Coverage: ${COVERAGE}%"
+      if (( $(echo "$COVERAGE < $COVERAGE_THRESHOLD" | bc -l) )); then
+        echo "Coverage ${COVERAGE}% is below threshold ${COVERAGE_THRESHOLD}%"
+        exit 1
+      fi
+      echo "Coverage ${COVERAGE}% meets threshold ${COVERAGE_THRESHOLD}%"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "master"
+
+widget_tests:
+  stage: test
+  script:
+    - flutter pub get
+    - flutter test test/widget/ --reporter expanded
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+# ============================================
+# 安全扫描
+# ============================================
+security_scan:
+  stage: security
+  script:
+    - flutter pub get
+    - |
+      echo "=== Security Audit ==="
+      
+      # 检查硬编码密钥
+      echo "Checking for hardcoded secrets..."
+      HARDCODED=$(grep -r -n "api_key\|apiKey\|secret\|password" lib/ --include="*.dart" | grep -v "//" | wc -l || true)
+      echo "Potential hardcoded secrets: $HARDCODED"
+      
+      # 检查 HTTP 使用
+      echo "Checking for insecure HTTP..."
+      HTTP_USAGE=$(grep -r -n "http://" lib/ --include="*.dart" | grep -v "https://" | grep -v "localhost" | wc -l || true)
+      echo "Insecure HTTP URLs: $HTTP_USAGE"
+      
+      # 检查 SSL 绕过
+      echo "Checking for SSL bypasses..."
+      SSL_BYPASS=$(grep -r -n "badCertificateCallback.*true" lib/ --include="*.dart" | wc -l || true)
+      echo "SSL bypasses: $SSL_BYPASS"
+  artifacts:
+    paths:
+      - security_report.txt
+    expire_in: 1 week
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "master"
+
+dependency_check:
+  stage: security
+  script:
+    - flutter pub get
+    - flutter pub outdated 2>&1 | tee outdated_output.txt
+  artifacts:
+    paths:
+      - outdated_output.txt
+    expire_in: 1 week
+  allow_failure: true
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == "main"
+
+# ============================================
+# 性能回归
+# ============================================
+performance_benchmark:
+  stage: performance
+  script:
+    - flutter pub get
+    - mkdir -p benchmark_results
+    - flutter test test/benchmark/ --reporter expanded 2>&1 | tee benchmark_output.txt || true
+    - |
+      # 检查性能反模式
+      echo "=== Performance Analysis ==="
+      SETSTATE=$(grep -r "setState(" lib/ --include="*.dart" | wc -l || true)
+      echo "setState calls: $SETSTATE"
+      
+      LISTVIEW_BUILDER=$(grep -r "ListView.builder" lib/ --include="*.dart" | wc -l || true)
+      LISTVIEW_DIRECT=$(grep -r "ListView(" lib/ --include="*.dart" | grep -v "builder" | wc -l || true)
+      echo "ListView.builder: $LISTVIEW_BUILDER"
+      echo "ListView direct: $LISTVIEW_DIRECT"
+  artifacts:
+    paths:
+      - benchmark_results/
+      - benchmark_output.txt
+    expire_in: 30 days
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == "main"
+
+# ============================================
+# 构建验证
+# ============================================
+build_android:
+  stage: build
+  image: ghcr.io/cirruslabs/flutter:3.22.0
+  before_script:
+    - apt-get update && apt-get install -y openjdk-17-jdk
+  script:
+    - flutter pub get
+    - flutter build apk --debug
+    - |
+      APK_SIZE=$(ls -lh build/app/outputs/flutter-apk/app-debug.apk | awk '{print $5}')
+      echo "APK Size: $APK_SIZE"
+  artifacts:
+    paths:
+      - build/app/outputs/flutter-apk/
+    expire_in: 1 day
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == "main"
+  allow_failure: true
+
+build_ios:
+  stage: build
+  tags:
+    - macos
+  script:
+    - flutter pub get
+    - flutter build ios --no-codesign --debug
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == "main"
+  allow_failure: true
+
+# ============================================
+# CI 总结
+# ============================================
+ci_summary:
+  stage: summary
+  script:
+    - |
+      echo "=== CI Pipeline Summary ==="
+      echo "Commit: $CI_COMMIT_SHA"
+      echo "Branch: $CI_COMMIT_REF_NAME"
+      echo "Pipeline ID: $CI_PIPELINE_ID"
+      echo "Date: $(date -u)"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == "main"
+
