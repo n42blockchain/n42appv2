@@ -160,6 +160,9 @@ dependencies:
   # Functional Programming (Either pattern)
   dartz: ^0.10.1
   
+  # Value equality
+  equatable: ^2.0.5
+  
   # Immutable Data Classes (optional but recommended)
   freezed_annotation: ^2.4.1
   

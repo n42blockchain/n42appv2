@@ -14,6 +14,9 @@ import '../../../../core/usecase/usecase.dart';
 import '../../../../domain/repositories/wallet_repository.dart';
 import '../entities/wallet_entity.dart';
 
+// Re-export types for convenience
+export '../entities/wallet_entity.dart' show ChainType, AssetEntity;
+
 /// Get Balance Use Case
 ///
 /// Retrieves the balance for all assets in a wallet.

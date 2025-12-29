@@ -5,20 +5,17 @@
 //
 // Author: Jiang Yiwei
 
-/// Authentication Feature Module
+/// Auth Feature
 ///
-/// User authentication functionality including:
-/// - Email/password login
-/// - Registration
-/// - Password recovery
-/// - 2FA (Google Authenticator)
-library auth;
+/// Handles user authentication, login, registration, and account management.
 
+library;
+
+// TODO: Export actual implementations when files are migrated
 // Data Layer
-export 'data/api/login_api.dart';
-export 'data/api/user_info_api.dart';
+// export 'data/api/login_api.dart';
+// export 'data/api/user_info_api.dart';
 
 // Presentation Layer
-export 'presentation/pages/login_page.dart';
-export 'presentation/pages/account_create_and_reset.dart';
-
+// export 'presentation/pages/login_page.dart';
+// export 'presentation/pages/account_create_and_reset.dart';

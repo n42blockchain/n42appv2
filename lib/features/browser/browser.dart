@@ -5,21 +5,18 @@
 //
 // Author: Jiang Yiwei
 
-/// Browser Feature Module
+/// Browser Feature
 ///
-/// DApp browser functionality including:
-/// - WebView management
-/// - Bookmark/collection handling
-/// - History tracking
-/// - DApp interaction
-library browser;
+/// Handles in-app web browsing, bookmarks, and history.
 
+library;
+
+// TODO: Export actual implementations when files are migrated
 // Data Layer
-export 'data/api/browser_api.dart';
-export 'data/models/browser_collection_model.dart';
-export 'data/models/browser_history_model.dart';
+// export 'data/api/browser_api.dart';
+// export 'data/models/browser_collection_model.dart';
+// export 'data/models/browser_history_model.dart';
 
 // Presentation Layer
-export 'presentation/providers/browser_provider.dart';
-export 'presentation/pages/browser_page.dart';
-
+// export 'presentation/providers/browser_provider.dart';
+// export 'presentation/pages/browser_page.dart';

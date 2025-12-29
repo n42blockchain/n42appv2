@@ -5,19 +5,16 @@
 //
 // Author: Jiang Yiwei
 
-/// N42 Wallet Features
+/// Features Barrel File
 ///
-/// This library exports all feature modules for the N42 Wallet application.
-/// Each feature is self-contained with its own:
-/// - Data layer (API, models, repositories)
-/// - Domain layer (entities, usecases)
-/// - Presentation layer (pages, widgets, providers)
-library features;
+/// Exports all feature modules for easy importing.
 
+library;
+
+export 'feature_initializer.dart';
 export 'wallet/wallet.dart';
 export 'chat/chat.dart';
 export 'mining/mining.dart';
 export 'browser/browser.dart';
 export 'auth/auth.dart';
 export 'wallet_connect/wallet_connect.dart';
-

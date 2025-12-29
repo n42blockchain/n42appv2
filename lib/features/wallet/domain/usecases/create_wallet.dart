@@ -14,6 +14,9 @@ import '../../../../core/usecase/usecase.dart';
 import '../../../../domain/repositories/wallet_repository.dart';
 import '../entities/wallet_entity.dart';
 
+// Re-export ChainType for convenience
+export '../entities/wallet_entity.dart' show ChainType;
+
 /// Create Wallet Use Case
 ///
 /// Creates a new HD wallet with the given parameters.

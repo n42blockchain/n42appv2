@@ -234,3 +234,20 @@ enum TransactionStatus {
   failed,
 }
 
+/// Blockchain Chain Types
+enum ChainType {
+  ethereum,
+  bitcoin,
+  solana,
+  tron,
+  filecoin,
+  polkadot,
+  algorand,
+  aptos,
+  sui,
+  cosmos,
+  ripple,
+  tezos,
+  ton,
+}
+

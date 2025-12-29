@@ -5,26 +5,30 @@
 //
 // Author: Jiang Yiwei
 
-/// Wallet Feature Module
+/// Wallet Feature
 ///
-/// This module contains all wallet-related functionality including:
-/// - Wallet creation, import, and management
-/// - Transaction handling
+/// Handles cryptocurrency wallet functionality including:
+/// - Wallet creation and management
 /// - Balance tracking
-/// - Multi-chain support
-library wallet;
+/// - Transactions
+/// - Token management
 
-// Data Layer
-export 'data/api/wallet_api.dart';
-export 'data/models/wallet_info.dart';
-export 'data/models/coin_model.dart';
+library;
 
 // Domain Layer
 export 'domain/entities/wallet_entity.dart';
 export 'domain/usecases/create_wallet.dart';
 export 'domain/usecases/get_balance.dart';
 
-// Presentation Layer
-export 'presentation/providers/wallet_action_provider.dart';
-export 'presentation/pages/wallet_page.dart';
+// Data Layer
+export 'data/services/wallet_service_impl.dart';
 
+// TODO: Export actual implementations when files are migrated
+// Data Layer
+// export 'data/api/wallet_api.dart';
+// export 'data/models/wallet_info.dart';
+// export 'data/models/coin_model.dart';
+
+// Presentation Layer
+// export 'presentation/providers/wallet_action_provider.dart';
+// export 'presentation/pages/wallet_page.dart';
