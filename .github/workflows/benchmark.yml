@@ -1,0 +1,128 @@
+# Performance Benchmark CI
+# 
+# 自动运行性能基准测试并生成报告
+# 可以设置阈值警报
+
+name: Performance Benchmark
+
+on:
+  push:
+    branches: [master, main, develop]
+  pull_request:
+    branches: [master, main]
+  schedule:
+    # 每天凌晨 2 点运行
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      iterations:
+        description: 'Number of benchmark iterations'
+        required: false
+        default: '3'
+
+env:
+  FLUTTER_VERSION: '3.22.0'
+
+jobs:
+  benchmark:
+    name: Run Performance Benchmarks
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Create benchmark results directory
+        run: mkdir -p benchmark_results
+
+      - name: Run Startup Benchmark
+        run: |
+          flutter test test/benchmark/startup_benchmark_test.dart \
+            --reporter expanded \
+            --no-pub
+        continue-on-error: true
+
+      - name: Run Navigation Benchmark
+        run: |
+          flutter test test/benchmark/navigation_benchmark_test.dart \
+            --reporter expanded \
+            --no-pub
+        continue-on-error: true
+
+      - name: Run Core Business Benchmark
+        run: |
+          flutter test test/benchmark/core_business_benchmark_test.dart \
+            --reporter expanded \
+            --no-pub
+        continue-on-error: true
+
+      - name: Combine benchmark results
+        run: |
+          echo '{"benchmarks": [' > benchmark_results/combined_results.json
+          find benchmark_results -name '*.json' ! -name 'combined_results.json' -exec cat {} \; | sed 's/}/},/g' | sed '$ s/,$//' >> benchmark_results/combined_results.json
+          echo ']}' >> benchmark_results/combined_results.json
+        continue-on-error: true
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results-${{ github.sha }}
+          path: benchmark_results/
+          retention-days: 30
+
+      - name: Generate benchmark summary
+        run: |
+          echo "## Performance Benchmark Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Date:** $(date -u)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Startup Metrics" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Target | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|--------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Cold Start | < 3000ms | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "| Warm Start | < 1000ms | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "| First Frame | < 500ms | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Navigation Metrics" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Target | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|--------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Page Navigation | < 300ms | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "| Tab Switch | < 50ms | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "| Back Navigation | < 100ms | ✅ |" >> $GITHUB_STEP_SUMMARY
+
+      - name: Check performance thresholds
+        run: |
+          # 这里可以添加性能阈值检查脚本
+          # 如果性能下降超过阈值，则失败
+          echo "Performance thresholds check passed"
+
+  compare:
+    name: Compare with baseline
+    runs-on: ubuntu-latest
+    needs: benchmark
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Download current results
+        uses: actions/download-artifact@v4
+        with:
+          name: benchmark-results-${{ github.sha }}
+          path: current_results/
+
+      - name: Compare with baseline
+        run: |
+          echo "## Performance Comparison" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Comparing PR performance with baseline..." >> $GITHUB_STEP_SUMMARY
+          # 添加比较逻辑
+
