@@ -1,13 +1,13 @@
 ﻿import 'dart:ui';
 
 import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/home/setting/about_app.dart';
 import 'package:n42appv2/src/home/setting/personal_setting.dart';
 import 'package:n42appv2/src/home/setting/setting_home_page.dart';
 import 'package:n42appv2/src/home/setting/setting_share.dart';
 import 'package:n42appv2/src/notification/pages/message_list.dart';
-import 'package:n42appv2/src/state/public_provider.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/pages/address_book/address_book_List.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/wallet_list.dart';
@@ -15,19 +15,22 @@ import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_2.dart';
 import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_6.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/core/config/app_config.dart';
 
-class HomeDrawPage extends StatefulWidget {
+/// Home Drawer Page - Migrated to Riverpod
+/// 
+/// Uses ConsumerStatefulWidget for unread count notifications
+class HomeDrawPage extends ConsumerStatefulWidget {
   const HomeDrawPage({super.key});
 
   @override
-  State<HomeDrawPage> createState() => _HomeDrawPageState();
+  ConsumerState<HomeDrawPage> createState() => _HomeDrawPageState();
 }
 
-class _HomeDrawPageState extends State<HomeDrawPage> with AutomaticKeepAliveClientMixin{
+class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
@@ -43,66 +46,7 @@ class _HomeDrawPageState extends State<HomeDrawPage> with AutomaticKeepAliveClie
               children: [
                 Row(
                   children: [
-                    Consumer<PublicProvider>(
-                      builder: (context, value, child) {
-                        return InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const MessageList()));
-                          },
-                          child: Container(
-                            margin: EdgeInsets.only(left: ScreenUtil().setWidth(20.0)),
-                              width: ScreenUtil().setWidth(60.0),
-                              height: ScreenUtil().setWidth(60.0),
-                              // margin: EdgeInsets.only(right: scr.setWidth(30.0)),
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                    top: ScreenUtil().setWidth(10),
-                                    left: ScreenUtil().setWidth(10),
-                                    right: ScreenUtil().setWidth(10),
-                                    bottom: ScreenUtil().setWidth(10),
-                                    child: Image.asset(
-                                      "assets/home/notification.png",
-                                      width: ScreenUtil().setWidth(40),
-                                      color: AppThemeUtils.getColorByKey(
-                                          context, AppThemeKeys.mainBlueColor.name),
-                                    ),
-                                  ),
-                                  if (value.messageNotReadCount != 0)
-                                    Positioned(
-                                      top: 0,
-                                      right: 0,
-                                      child: Container(
-                                        width: ScreenUtil().setWidth(30),
-                                        height: ScreenUtil().setWidth(30),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                              ScreenUtil().setWidth(30)),
-                                          color: AppThemeUtils.getColorByKey(
-                                              context,
-                                              AppThemeKeys.errorTextColor.name),
-                                        ),
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          "${value.messageNotReadCount > 99 ? 99 : value.messageNotReadCount}",
-                                          style: TextStyle(
-                                            color: AppThemeUtils.getColorByKey(
-                                                context,
-                                                AppThemeKeys.mainWhiteColor.name),
-                                            fontSize: ScreenUtil().setSp(14),
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              )),
-                        );
-                      },
-                    ),
+                    _buildNotificationButton(),
                     const Spacer(),
                     IconButton(
                         onPressed: () {
@@ -483,6 +427,68 @@ class _HomeDrawPageState extends State<HomeDrawPage> with AutomaticKeepAliveClie
           ],
         ),
       ),
+    );
+  }
+
+  /// Notification button with unread count badge
+  Widget _buildNotificationButton() {
+    // Watch unread count from Riverpod
+    final messageNotReadCount = ref.watch(unreadCountProvider);
+    
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const MessageList()));
+      },
+      child: Container(
+          margin: EdgeInsets.only(left: ScreenUtil().setWidth(20.0)),
+          width: ScreenUtil().setWidth(60.0),
+          height: ScreenUtil().setWidth(60.0),
+          child: Stack(
+            children: [
+              Positioned(
+                top: ScreenUtil().setWidth(10),
+                left: ScreenUtil().setWidth(10),
+                right: ScreenUtil().setWidth(10),
+                bottom: ScreenUtil().setWidth(10),
+                child: Image.asset(
+                  "assets/home/notification.png",
+                  width: ScreenUtil().setWidth(40),
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainBlueColor.name),
+                ),
+              ),
+              if (messageNotReadCount != 0)
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    width: ScreenUtil().setWidth(30),
+                    height: ScreenUtil().setWidth(30),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                          ScreenUtil().setWidth(30)),
+                      color: AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.errorTextColor.name),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      "${messageNotReadCount > 99 ? 99 : messageNotReadCount}",
+                      style: TextStyle(
+                        color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.mainWhiteColor.name),
+                        fontSize: ScreenUtil().setSp(14),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+            ],
+          )),
     );
   }
 
