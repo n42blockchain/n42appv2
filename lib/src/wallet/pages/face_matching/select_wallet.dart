@@ -1,6 +1,6 @@
-import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+﻿import 'package:n42appv2/src/component/enums/coin_type.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/pages/face_matching/face_binding.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';

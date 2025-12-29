@@ -1,5 +1,5 @@
-import 'package:n42appv2/app_config.dart';
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 
 class ChatMessageApi {
@@ -11,8 +11,8 @@ class ChatMessageApi {
   }
   //根据用户email获取pub key
   Future getUserPubKey(String email) {
-    final userId = Application.userInfo?.uuid;
-    final token = Application.userInfo?.token;
+    final userId = AppGlobals.userInfo?.uuid;
+    final token = AppGlobals.userInfo?.token;
     Map<String, dynamic> params = {};
     params['uuid'] = userId;
     params['token'] = token;
@@ -23,8 +23,8 @@ class ChatMessageApi {
 
   //绑定用户公钥
   Future bindPubKey(String pubKey) async {
-    final userId = Application.userInfo?.uuid;
-    final token = Application.userInfo?.token;
+    final userId = AppGlobals.userInfo?.uuid;
+    final token = AppGlobals.userInfo?.token;
     Map<String,dynamic> params = {};
     params['uuid'] = userId;
     params['token'] = token;
@@ -49,8 +49,8 @@ class ChatMessageApi {
         required String file_uri,
         required String file_name,
         required String file_desc}) async {
-    final userId = Application.userInfo?.uuid;
-    final token = Application.userInfo?.token;
+    final userId = AppGlobals.userInfo?.uuid;
+    final token = AppGlobals.userInfo?.token;
     Map<String,dynamic> params = {};
     params['uuid'] = userId;
     params['token'] = token;
@@ -74,8 +74,8 @@ class ChatMessageApi {
   //获取聊天列表
   Future getChatList(
       {required int pageIndex, required int pageSize}) async {
-    final userId = Application.userInfo?.uuid;
-    final token = Application.userInfo?.token;
+    final userId = AppGlobals.userInfo?.uuid;
+    final token = AppGlobals.userInfo?.token;
     Map<String, dynamic> params = {};
     params['uuid'] = userId;
     params['token'] = token;
@@ -99,8 +99,8 @@ class ChatMessageApi {
       {required String otherUUID,
         required int pageIndex,
         required int pageSize}) async {
-    final userId = Application.userInfo?.uuid;
-    final token = Application.userInfo?.token;
+    final userId = AppGlobals.userInfo?.uuid;
+    final token = AppGlobals.userInfo?.token;
     Map<String, dynamic> params = {};
     params['r_uid'] = otherUUID;
     params['s_uid'] = userId;

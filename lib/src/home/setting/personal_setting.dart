@@ -1,18 +1,18 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:n42appv2/app_config.dart';
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/home/setting/account_logout_page.dart';
 import 'package:n42appv2/src/home/widgets/nav_select_image.dart';
 import 'package:n42appv2/src/home/widgets/nav_setting_item.dart';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/models/user_info.dart';
+import 'package:n42appv2/data/models/user_info.dart';
 import 'package:n42appv2/src/state/public_provider.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/container_widget.dart';
@@ -48,10 +48,10 @@ class _PersonalSettingState extends State<PersonalSetting> {
   @override
   void initState() {
     super.initState();
-    userInfo = Application.userInfo;
+    userInfo = AppGlobals.userInfo;
     nicknameEditingController.text = userInfo?.name??"";
     descriptionEditingController.text = userInfo?.desc??"";
-    artJson = json.decode(Application.userInfo?.art_json??"{}");
+    artJson = json.decode(AppGlobals.userInfo?.art_json??"{}");
     if(artJson==null){
       isArtist=false;
     }else{
@@ -435,7 +435,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
                         imgColor: Colors.blueAccent,
                         callback: () {
                           //钱包不存在或者未登录
-                          if (Application.userInfo ==null){
+                          if (AppGlobals.userInfo ==null){
                             ToastUtils.show(S.of(context).login_need_login);
                             return;
                           }
@@ -504,7 +504,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
                   MaterialPageRoute(
                       builder: (context) => BrowserPage(
                         //arts_share/index.html?username=1035748138@qq.com
-                        "${AppConfig.apiUrl['walletamazeBrowser']!}/arts_share/index.html?username=${Application.userInfo?.email??""}",
+                        "${AppConfig.apiUrl['walletamazeBrowser']!}/arts_share/index.html?username=${AppGlobals.userInfo?.email??""}",
                       )));
             },
             child: Container(

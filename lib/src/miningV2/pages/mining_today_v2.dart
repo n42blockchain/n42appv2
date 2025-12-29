@@ -1,9 +1,9 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:n42appv2/app_config.dart';
+import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/miningV2/pages/mining_background.dart';
@@ -12,8 +12,8 @@ import 'package:n42appv2/src/miningV2/pages/mining_setting.dart';
 import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
 import 'package:n42appv2/src/miningV2/widgets/plans_widget.dart';
 import 'package:n42appv2/src/utils/data_utils.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/app_home_top_bar.dart';

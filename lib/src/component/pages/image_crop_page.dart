@@ -1,7 +1,7 @@
-import 'dart:typed_data';
+﻿import 'dart:typed_data';
 
 import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/loading_page.dart';
 //import 'package:crop_your_image/crop_your_image.dart';

@@ -1,6 +1,6 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
@@ -12,8 +12,8 @@ import 'package:eth_sig_util/eth_sig_util.dart';
 import 'package:eth_sig_util/util/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
-import 'package:n42appv2/application.dart';
-import 'package:n42appv2/app_config.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:provider/provider.dart';
@@ -235,7 +235,7 @@ class WalletConnectProvider with ChangeNotifier{
     try{
       CoinModel cm=coinModels[coinModelsIndex];
       web3client=web3.Web3Client(cm.isTest?cm.coin['service_test']:cm.coin['service'], Client());
-      WalletInfo wi = Provider.of<WalletActionProvider>(Application.AppContext,listen: false).walletInfo;
+      WalletInfo wi = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo;
       //wi = ProviderUtil.walletActionProvider().walletInfoLsit[ProviderUtil.walletActionProvider().walletIndex];
       String? pKey=wi.privateKey;
       if(pKey==null){
@@ -275,7 +275,7 @@ class WalletConnectProvider with ChangeNotifier{
   //获取ETH类的主链
   coinModel_init({int chainId=-1}){
     try{
-      List<CoinModel> cms=Provider.of<WalletActionProvider>(Application.AppContext,listen: false).coinModels;
+      List<CoinModel> cms=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).coinModels;
       coinModels=[];
       for(CoinModel cm in cms){
         if(cm.coin['blockchainType']==BlockchainType.Ethereum.name){
@@ -535,7 +535,7 @@ class WalletConnectProvider with ChangeNotifier{
         final requestParams = eventData.params! as Map;
         final dataToSign = requestParams["message"];
         CoinModel cm=coinModels[2];
-        WalletInfo wi = Provider.of<WalletActionProvider>(Application.AppContext,listen: false).walletInfo;
+        WalletInfo wi = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo;
         String path=getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
         signedDataHex=await trustdart.signMessage(CoinType.TRX.name, path, dataToSign,mnemonic: wi.mnemonic??"", pk:wi.privateKey??"",);
 
@@ -573,7 +573,7 @@ class WalletConnectProvider with ChangeNotifier{
         final requestParams = eventData.params! as Map;
         final dataToSign = requestParams["message"];
         CoinModel cm=coinModels[2];
-        WalletInfo wi = Provider.of<WalletActionProvider>(Application.AppContext,listen: false).walletInfo;
+        WalletInfo wi = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo;
         final mnemonic = await wi.mnemonic;
         String path=getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
         String returnStr=await trustdart.signTransaction(CoinType.TRX.name, path, dataToSign, mnemonic: wi.mnemonic??"",pk:wi.privateKey??"",);
@@ -759,7 +759,7 @@ class WalletConnectProvider with ChangeNotifier{
   }
   showAlertWidget(){
     SheetBottom(
-      Application.navigatorKey.currentContext!,
+      AppGlobals.navigatorKey.currentContext!,
       "",
       WalletConnectAlertWidget(metadata!, actionDataMap!),
     );

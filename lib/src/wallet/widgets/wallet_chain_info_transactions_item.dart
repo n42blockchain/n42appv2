@@ -1,5 +1,5 @@
-import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+﻿import 'package:n42appv2/src/component/enums/coin_type.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/pages/transactions/transaction_detail_eth.dart';

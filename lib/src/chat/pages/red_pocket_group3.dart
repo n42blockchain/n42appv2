@@ -1,10 +1,10 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/models/chat_message_model.dart';
 import 'package:n42appv2/src/chat/models/red_pocket_claim_model.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +27,7 @@ class _RedPocketGroup3State extends State<RedPocketGroup3> {
     // TODO: implement initState
     super.initState();
     content=json.decode(widget.chatMessage?.decryptionMessageContent??"{}");
-    redPocketClaimModel=getClaim(Application.userInfo?.uuid??"");
+    redPocketClaimModel=getClaim(AppGlobals.userInfo?.uuid??"");
     if(redPocketClaimModel !=null){
       if(redPocketClaimModel?.status==0){
         message="You will receive the above amount in 20s";

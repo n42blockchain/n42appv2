@@ -1,6 +1,6 @@
-import 'dart:typed_data';
+﻿import 'dart:typed_data';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/models/friend_info.dart';
 import 'package:n42appv2/src/chat/models/group_data.dart';
@@ -11,9 +11,9 @@ import 'package:n42appv2/src/chat/widgets/contact_image.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/utils/base64_utils.dart';
 import 'package:n42appv2/src/utils/data_utils.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
@@ -135,7 +135,7 @@ class _AddGroupMemberPageState extends State<AddGroupMemberPage> {
 
         // 返回列表中 把自己排除在外
         friendList.removeWhere(
-                (element) => element.uuid == Application.userInfo?.uuid);
+                (element) => element.uuid == AppGlobals.userInfo?.uuid);
         if (friendList.isNotEmpty) {
           await checkExistsFriends();
         }
@@ -158,7 +158,7 @@ class _AddGroupMemberPageState extends State<AddGroupMemberPage> {
         name += "${selectedList[i].name}、";
       }
     }
-    return "${Application.userInfo?.name}、$name";
+    return "${AppGlobals.userInfo?.name}、$name";
   }
 
   @override
@@ -362,7 +362,7 @@ class _AddGroupMemberPageState extends State<AddGroupMemberPage> {
                       selectedList.map((e) => e.uuid).toList();
 
                       final data = await chatApi.addGroupMembers(widget.groupId,
-                          Application.userInfo?.uuid ?? '', groupMemberIds);
+                          AppGlobals.userInfo?.uuid ?? '', groupMemberIds);
 
                       if (data != null && data["code"] == 200) {
                         //更新会话列表

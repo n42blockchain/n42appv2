@@ -1,9 +1,9 @@
-import 'package:n42appv2/app_config.dart';
+﻿import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/browser/api/browser_api.dart';
 import 'package:n42appv2/src/browser/models/browser_collection_model.dart';
 import 'package:n42appv2/src/browser/pages/browser_collection.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
-import 'package:n42appv2/src/utils/sp_util.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
+import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';

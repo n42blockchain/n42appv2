@@ -1,8 +1,8 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:n42appv2/app_config.dart';
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
@@ -597,7 +597,7 @@ class TokenViewApi{
         //"value":"0x${value.toRadixString(16)}",
         "coin":coinType,
         "net_mode":isTest?"test":"main",
-        "id":Application.currentId++,
+        "id":AppGlobals.currentId++,
       };
       if(get1559WithChainSymbol(coinType)){
         params["maxFeePerGas"]='0x${gasPrice.toRadixString(16)}';
@@ -623,7 +623,7 @@ class TokenViewApi{
         "data": "0x${aaa}000000000000000000000000${toAddress}${valueHex}",
         "coin":coinType,
         "net_mode":isTest?"test":"main",
-        "id":Application.currentId++,
+        "id":AppGlobals.currentId++,
       };
       if(get1559WithChainSymbol(coinType)){
         params["maxFeePerGas"]='0x${gasPrice.toRadixString(16)}';
@@ -1269,7 +1269,7 @@ class TokenViewApi{
           "data": dataStr,
         },
       isTest:isTest,
-      id:Application.currentId++,);
+      id:AppGlobals.currentId++,);
   }
 */
   getBrowserPreviewUrl()async{

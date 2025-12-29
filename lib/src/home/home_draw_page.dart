@@ -1,6 +1,6 @@
-import 'dart:ui';
+﻿import 'dart:ui';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/home/setting/about_app.dart';
 import 'package:n42appv2/src/home/setting/personal_setting.dart';
@@ -8,7 +8,7 @@ import 'package:n42appv2/src/home/setting/setting_home_page.dart';
 import 'package:n42appv2/src/home/setting/setting_share.dart';
 import 'package:n42appv2/src/notification/pages/message_list.dart';
 import 'package:n42appv2/src/state/public_provider.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/pages/address_book/address_book_List.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/wallet_list.dart';
 import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_2.dart';
@@ -18,7 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/app_config.dart';
+import 'package:n42appv2/core/config/app_config.dart';
 
 class HomeDrawPage extends StatefulWidget {
   const HomeDrawPage({super.key});
@@ -119,7 +119,7 @@ class _HomeDrawPageState extends State<HomeDrawPage> with AutomaticKeepAliveClie
                         _menuItem(
                             "assets/home/profile.png", S.of(context).g_home_key1,
                             onTap: () async{
-                              if (Application.userInfo !=null) {
+                              if (AppGlobals.userInfo !=null) {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (_) => const PersonalSetting(),
@@ -150,7 +150,7 @@ class _HomeDrawPageState extends State<HomeDrawPage> with AutomaticKeepAliveClie
                             }),
                         _menuItem("assets/home/security.png", S.of(context).s_key_11,
                             onTap: () async{
-                              if(Application.userInfo ==null){
+                              if(AppGlobals.userInfo ==null){
                                 final flag = await TipsDialog6(context, title:S.of(context).login_need_login,);
                                 if (flag != null && flag) {
                                   await Navigator.pushNamed(context, "/LoginPage",);
@@ -239,16 +239,16 @@ class _HomeDrawPageState extends State<HomeDrawPage> with AutomaticKeepAliveClie
                         ),
                         _menuItem(
                             "assets/home/logout.png",
-                            Application.userInfo !=null
+                            AppGlobals.userInfo !=null
                                 ? S.of(context).g_key_logout
                                 : S.of(context).g_key_login, onTap: () async {
-                          if (Application.userInfo !=null) {
+                          if (AppGlobals.userInfo !=null) {
                             final res = await TipsDialog2(
                                 context, S.of(context).g_key_logout_sure);
                             if (res != null && res) {
                               try {
                                 //退出登陆
-                                await Application.logout();
+                                await AppGlobals.logout();
                                 Scaffold.of(context).closeDrawer();
                                 //退出第3方登录
                                 //await FireBaseUtils.signOut();
@@ -258,7 +258,7 @@ class _HomeDrawPageState extends State<HomeDrawPage> with AutomaticKeepAliveClie
                                 //AmplitudeUtils.logOut();
 
                                 /*Navigator.pushAndRemoveUntil(
-                                      Application.navigatorKey.currentContext!,
+                                      AppGlobals.navigatorKey.currentContext!,
                                       MaterialPageRoute(
                                           builder: (BuildContext context) =>
                                           const GuidePage()),
@@ -372,7 +372,7 @@ class _HomeDrawPageState extends State<HomeDrawPage> with AutomaticKeepAliveClie
             children: [
               GestureDetector(
                 onTap: () async {
-                  if(Application.userInfo ==null){
+                  if(AppGlobals.userInfo ==null){
                     final flag = await TipsDialog6(context, title:S.of(context).login_need_login,);
                     if (flag != null && flag) {
                       await Navigator.pushNamed(context, "/LoginPage",);
@@ -382,7 +382,7 @@ class _HomeDrawPageState extends State<HomeDrawPage> with AutomaticKeepAliveClie
                     }
                   }
                   /*String shareUrl = AppConfig.apiUrl['walletamazeBrowser']!;
-              shareUrl += "download?uuid=${Application.userInfo!.uuid}";*/
+              shareUrl += "download?uuid=${AppGlobals.userInfo!.uuid}";*/
                   Navigator.push(
                     context,
                     MaterialPageRoute(

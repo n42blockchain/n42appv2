@@ -1,7 +1,7 @@
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+﻿import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 
 class ToastUtils{
   static show(String s){
@@ -55,7 +55,7 @@ class ToastUtils{
         mainAxisSize: MainAxisSize.min,
         children:  [
           //const Icon(Icons.check),
-          Text(title,style: TextStyle(color: AppThemeUtils.getColorByKey(Application.navigatorKey.currentContext, AppThemeKeys.mainTextColor.name)),),
+          Text(title,style: TextStyle(color: AppThemeUtils.getColorByKey(AppGlobals.navigatorKey.currentContext, AppThemeKeys.mainTextColor.name)),),
         ],
       ),
     );

@@ -1,9 +1,9 @@
-//看板类型
+﻿//看板类型
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:n42appv2/application.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/widgets/board_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -173,9 +173,9 @@ class _WalletBoardState extends State<WalletBoard> {
         SizedBox(width: ScreenUtil().setWidth(30),),
       if(Platform.isAndroid)
         sellWidget(),
-      /*if(Application.userInfo !=null)
+      /*if(AppGlobals.userInfo !=null)
         SizedBox(width: ScreenUtil().setWidth(30),),
-        if(Application.userInfo !=null)
+        if(AppGlobals.userInfo !=null)
         paymentCodeWidget(),*/
       //emptyWidget(),
       //if(Platform.isAndroid)

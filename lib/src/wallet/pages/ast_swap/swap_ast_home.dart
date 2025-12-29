@@ -1,11 +1,11 @@
-import 'package:n42appv2/app_config.dart';
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/utils/regular.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/api/market_api.dart';
 import 'package:n42appv2/src/wallet/api/swap_ast_api.dart';
 import 'package:n42appv2/src/wallet/api/token_view_api.dart';
@@ -410,7 +410,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
       });
       MessageModel rOrderData = await swapAstApi.postNftOrAstAddOrder(
         getCoinModel!.address.toString(),
-        Application.userInfo?.uuid??"",
+        AppGlobals.userInfo?.uuid??"",
         youPay!.id ?? 0,
         2,
         double.parse(getTextEditingController.text),
@@ -443,7 +443,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
         load = Load.loading;
       });
       MessageModel rOrderData = await swapAstApi.postNftOrAstCancelOrder(
-        Application.userInfo?.uuid??"",
+        AppGlobals.userInfo?.uuid??"",
         orderId ?? 0,
       );
       if (rOrderData.error) {
@@ -484,7 +484,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
 
   postOrderTxHash(int orderId, String txHash) async {
     MessageModel rData = await swapAstApi.postNftOrAstCommitPay(
-        Application.userInfo?.uuid??"", orderId, txHash);
+        AppGlobals.userInfo?.uuid??"", orderId, txHash);
     if (rData.error) {
       errorMessage = rData.data;
       return false;

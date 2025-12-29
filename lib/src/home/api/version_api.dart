@@ -1,7 +1,7 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:io';
 
-import 'package:n42appv2/app_config.dart';
+import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/home/models/version_info_model.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 

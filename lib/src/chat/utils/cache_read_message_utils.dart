@@ -1,5 +1,5 @@
-import 'package:n42appv2/application.dart';
-import 'package:n42appv2/src/utils/sp_util.dart';
+﻿import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/storage/sp_util.dart';
 
 class CacheMessageIsReadUtils {
   Future saveUnReadMessageId(String uuid) async {
@@ -40,14 +40,14 @@ class CacheMessageIsReadUtils {
 
 
   generateSpKey() {
-    return "${Application.userInfo?.uuid}_message_read_list";
+    return "${AppGlobals.userInfo?.uuid}_message_read_list";
   }
 }
 
 //处理@功能工具
 class CacheGroupMentionUtils {
   generateSpKey() {
-    return "${Application.userInfo?.uuid}_mention_list";
+    return "${AppGlobals.userInfo?.uuid}_mention_list";
   }
 
   Future saveMentionGroupId(String groupId) async {

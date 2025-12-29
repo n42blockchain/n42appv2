@@ -1,6 +1,6 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/utils/data_utils.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:date_format/date_format.dart' as dformat;
@@ -35,7 +35,7 @@ class BtcTransactionRecodeModel{
   Map<String,dynamic> coin={};//币基本信息
   int isTest=0;//是否是测试地址，0不是，1是
   String testnetUri="";//测试网地址api地址
-  String userUuid=Application.userInfo?.uuid??"";//用户uuid
+  String userUuid=AppGlobals.userInfo?.uuid??"";//用户uuid
   int walletIndex =0;//钱包id
   bool max=false;//转账最大值
 

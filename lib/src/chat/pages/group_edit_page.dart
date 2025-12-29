@@ -1,11 +1,11 @@
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/models/group_info.dart';
 import 'package:n42appv2/src/chat/utils/chat_sp_util.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/comm_input.dart';
@@ -167,7 +167,7 @@ class _GroupEditPageState extends State<GroupEditPage> {
                         g_introduction: "",
                         g_uuid: widget.info.g_uuid,
                         group_name: nameText,
-                        m_uuid: Application.userInfo?.uuid ?? '');
+                        m_uuid: AppGlobals.userInfo?.uuid ?? '');
 
                     if (data != null && data["code"] == 200) {
                       //更新缓存

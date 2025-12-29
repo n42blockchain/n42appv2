@@ -1,6 +1,6 @@
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/utils/browser_address.dart';
 import 'package:n42appv2/src/wallet/utils/browser_txhash.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
@@ -81,7 +81,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
   @override
   void initState() {
     // TODO: implement initState
-    uuid=Application.userInfo?.uuid??"";
+    uuid=AppGlobals.userInfo?.uuid??"";
     super.initState();
   }
   @override

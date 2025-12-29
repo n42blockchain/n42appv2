@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,8 +9,8 @@ import 'package:n42appv2/src/miningV2/pages/keyManagement/data_encryption.dart';
 import 'package:n42appv2/src/miningV2/pages/keyManagement/file_import.dart';
 import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/textField_widget.dart';

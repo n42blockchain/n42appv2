@@ -1,6 +1,6 @@
-
-import 'package:n42appv2/app_config.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+﻿
+import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

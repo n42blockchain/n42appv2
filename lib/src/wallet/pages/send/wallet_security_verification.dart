@@ -1,13 +1,13 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:io';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/utils/sp_util.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/core/storage/sp_util.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/edit_wallet_password.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
@@ -70,10 +70,10 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
     super.dispose();
   }
   init_security()async{
-    //isGoogleAuth=Application.userInfo!.bind_google_auth_state ?? false;
+    //isGoogleAuth=AppGlobals.userInfo!.bind_google_auth_state ?? false;
     Map<String,dynamic>? s=await SPUtil().getSecurity();
     if(s!=null){
-      Map<String,dynamic>? userSecurityMap=s[Application.userInfo?.uuid??""];
+      Map<String,dynamic>? userSecurityMap=s[AppGlobals.userInfo?.uuid??""];
       if(userSecurityMap!=null){
         setState(() {
           securityMap['email']=userSecurityMap['email'];
@@ -551,7 +551,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
                   ),
                   InkWell(
                     onTap: (){
-                      if(Application.userInfo==null){
+                      if(AppGlobals.userInfo==null){
                         showLoginDialog();
                       }else{
                         pushEditWallet();
@@ -705,7 +705,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
                   ),
                   InkWell(
                     onTap: (){
-                      if(Application.userInfo==null){
+                      if(AppGlobals.userInfo==null){
                         showLoginDialog();
                       }else {
                         pushSetting();
@@ -840,7 +840,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
                   ),
                   InkWell(
                     onTap: ()async{
-                      if(Application.userInfo==null){
+                      if(AppGlobals.userInfo==null){
                         showLoginDialog();
                       }else {
                         pushSetting();

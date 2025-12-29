@@ -1,11 +1,11 @@
-import 'package:n42appv2/src/component/enums/load.dart';
+﻿import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/models/user_info.dart';
+import 'package:n42appv2/data/models/user_info.dart';
 import 'package:n42appv2/src/utils/data_utils.dart';
 import 'package:n42appv2/src/utils/regular.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/api/market_api.dart';
 import 'package:n42appv2/src/wallet/api/transfer_api.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';

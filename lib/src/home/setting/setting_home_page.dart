@@ -1,9 +1,9 @@
-import 'package:n42appv2/src/browser/pages/browser_setting.dart';
+﻿import 'package:n42appv2/src/browser/pages/browser_setting.dart';
 import 'package:n42appv2/src/home/setting/setting_sys_language.dart';
 import 'package:n42appv2/src/home/setting/setting_theme.dart';
 import 'package:n42appv2/src/home/widgets/nav_setting_item.dart';
-import 'package:n42appv2/src/utils/sp_util.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/core/storage/sp_util.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/generated/l10n.dart';

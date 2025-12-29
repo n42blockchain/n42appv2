@@ -1,7 +1,7 @@
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/api/swap_ast_api.dart';
 import 'package:n42appv2/src/wallet/models/ast_swap/swap_ast_order_model.dart';
 import 'package:n42appv2/src/wallet/pages/ast_swap/swap_ast_transaction_detail.dart';
@@ -159,7 +159,7 @@ class _SwapAstTransactionsState extends State<SwapAstTransactions> {
             );
           },
           getData: (int page, int pageSize) async {
-            MessageModel rData=await swapAstApi.getNftOrAstOrderList(2, Application.userInfo?.uuid??"",page: page,page_size: pageSize);
+            MessageModel rData=await swapAstApi.getNftOrAstOrderList(2, AppGlobals.userInfo?.uuid??"",page: page,page_size: pageSize);
             if(rData.error==false){
               return (rData.data as List).map((e) => SwapAstOrderModel.fromJson(e)).toList();
             }

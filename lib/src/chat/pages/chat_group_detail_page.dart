@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:io';
 
 import 'package:n42appv2/src/chat/pages/red_pocket_group3.dart';
@@ -8,7 +8,7 @@ import 'package:n42appv2/src/chat/widgets/bottom_input_chat_reply_widget.dart';
 import 'package:n42appv2/src/chat/widgets/item_group_chat_view.dart';
 import 'package:n42appv2/src/https/ipfs_api.dart';
 import 'package:flustars_flutter3/flustars_flutter3.dart' as flustars;
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/api/chat_db_api.dart';
@@ -37,9 +37,9 @@ import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/utils/base64_utils.dart';
 import 'package:n42appv2/src/utils/data_utils.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/browser_txhash.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
@@ -306,7 +306,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
         currentReplyModel = model;
         //对方的name、
         if (currentReplyModel?.direction == 1) {
-          replyUserName = Application.userInfo?.name;
+          replyUserName = AppGlobals.userInfo?.name;
         } else {
           //从缓存中找出用户
           FriendInfo? info = await ChatSPUtil().getNavUserInfo(
@@ -392,7 +392,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
     if (lastSeq != 0) {
       //群消息确认
       chatApi.groupMsgAck(
-          widget.targetUuid, Application.userInfo?.uuid ?? '', lastSeq);
+          widget.targetUuid, AppGlobals.userInfo?.uuid ?? '', lastSeq);
 
       // await getMessageDetail();
       //
@@ -410,7 +410,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
   //更新群成员的缓存
   updateGroupMember() async {
     final data = await chatApi.groupMembers(
-        widget.targetUuid, Application.userInfo?.uuid ?? '');
+        widget.targetUuid, AppGlobals.userInfo?.uuid ?? '');
     if (data != null && data["code"] == 200) {
       final list = data["data"];
       if (list != null && list is List) {
@@ -418,7 +418,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
             list.map((e) => GroupMemberInfo.fromJson(e)).toList();
         // 添加群成员缓存
         ChatSPUtil().saveGroupMembers(widget.targetUuid, groupMemberList);
-        groupMemberList.removeWhere((element) => element.memberId == Application.userInfo?.uuid);
+        groupMemberList.removeWhere((element) => element.memberId == AppGlobals.userInfo?.uuid);
         setState(() {});
       }
     }
@@ -449,18 +449,18 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
               final String? blackUuid = pushContent["black_uuid"];
 
               if (whiteUuid != null && whiteUuid.isNotEmpty) {
-                if (Application.userInfo?.uuid == whiteUuid) {
+                if (AppGlobals.userInfo?.uuid == whiteUuid) {
                   await saveGroupOfflineMessage(md);
                 }
               } else if (blackUuid != null && blackUuid.isNotEmpty) {
-                if (Application.userInfo?.uuid != blackUuid) {
+                if (AppGlobals.userInfo?.uuid != blackUuid) {
                   await saveGroupOfflineMessage(md);
                 }
               } else {
                 await saveGroupOfflineMessage(md);
               }
             } else {
-              if (md.from != Application.userInfo?.uuid) {
+              if (md.from != AppGlobals.userInfo?.uuid) {
                 md.direction = 0;
                 await saveGroupOfflineMessage(md);
               }
@@ -501,18 +501,18 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
                 final String? blackUuid = pushContent["black_uuid"];
 
                 if (whiteUuid != null && whiteUuid.isNotEmpty) {
-                  if (Application.userInfo?.uuid == whiteUuid) {
+                  if (AppGlobals.userInfo?.uuid == whiteUuid) {
                     await saveGroupOfflineMessage(md);
                   }
                 } else if (blackUuid != null && blackUuid.isNotEmpty) {
-                  if (Application.userInfo?.uuid != blackUuid) {
+                  if (AppGlobals.userInfo?.uuid != blackUuid) {
                     await saveGroupOfflineMessage(md);
                   }
                 } else {
                   await saveGroupOfflineMessage(md);
                 }
               } else {
-                if (md.from != Application.userInfo?.uuid) {
+                if (md.from != AppGlobals.userInfo?.uuid) {
                   md.direction = 0;
                   await saveGroupOfflineMessage(md);
                 }
@@ -637,7 +637,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
       //文本消息加密之后直接存在自己服务方便解析
       Map<String, dynamic> content = chatDataUtils.generateSendData(
           contentType: MessageContentType.Text,
-          fromID: Application.userInfo?.uuid ?? '',
+          fromID: AppGlobals.userInfo?.uuid ?? '',
           receiveId: widget.targetUuid ?? '',
           conversationType: 1,
           reply_id: currentReplyModel?.messageId,
@@ -667,7 +667,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
 
       try {
         final data = await chatApi.sendMessage(
-          fromUUID: Application.userInfo?.uuid ?? '',
+          fromUUID: AppGlobals.userInfo?.uuid ?? '',
           receiveId: widget.targetUuid,
           content: json.encode(content),
         );
@@ -779,7 +779,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
     // 构建消息结构
     Map<String, dynamic> content = chatDataUtils.generateSendData(
         contentType: contentType,
-        fromID: Application.userInfo?.uuid ?? '',
+        fromID: AppGlobals.userInfo?.uuid ?? '',
         receiveId: widget.targetUuid ?? '',
         conversationType: 1,
         direction: 1,
@@ -851,7 +851,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
 
       try {
         final data = await chatApi.sendMessage(
-          fromUUID: Application.userInfo?.uuid ?? '',
+          fromUUID: AppGlobals.userInfo?.uuid ?? '',
           receiveId: widget.targetUuid,
           content: json.encode(content),
         );
@@ -965,7 +965,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
       //文本消息加密之后直接存在自己服务方便解析
       Map<String, dynamic> content = chatDataUtils.generateSendData(
           contentType: MessageContentType.RedEnvelope,
-          fromID: Application.userInfo?.uuid ?? '',
+          fromID: AppGlobals.userInfo?.uuid ?? '',
           receiveId: widget.targetUuid ?? '',
           conversationType: 1,
           reply_id: currentReplyModel?.messageId,
@@ -996,7 +996,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
 
       try {
         final data = await chatApi.sendMessage_red(
-          fromUUID: Application.userInfo?.uuid ?? '',
+          fromUUID: AppGlobals.userInfo?.uuid ?? '',
           receiveId: widget.targetUuid,
           content: json.encode(content),
           count: redPocketModel.number??0,
@@ -1321,7 +1321,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
                               },
                               item: currentReplyModel!,
                               friendName: currentReplyModel!.direction == 1
-                                  ? Application.userInfo?.name
+                                  ? AppGlobals.userInfo?.name
                                   : replyUserName,
                             ),
                             // const SizedBox(height: 10,)
@@ -1831,7 +1831,7 @@ class _ShowMessageType10State extends State<ShowMessageType10> {
     );
   }
   userRedPocetOpened(){
-    RedPocketClaimModel? rpcm=getClaim(Application.userInfo?.uuid??"");
+    RedPocketClaimModel? rpcm=getClaim(AppGlobals.userInfo?.uuid??"");
     Map<String,dynamic> content=json.decode(widget.chatMessage?.decryptionMessageContent??"{}");
     String message="Error";
     if(rpcm !=null){
@@ -2004,7 +2004,7 @@ class _ShowMessageType10State extends State<ShowMessageType10> {
     );
   }
   userRedPocetFinish(){
-    //RedPocketClaimModel? rpcm=getClaim(Application.userInfo?.uuid??"");
+    //RedPocketClaimModel? rpcm=getClaim(AppGlobals.userInfo?.uuid??"");
     Map<String,dynamic> content=json.decode(widget.chatMessage?.decryptionMessageContent??"{}");
     String message="Hands are slow.";
     return Stack(

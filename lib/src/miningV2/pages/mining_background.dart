@@ -1,5 +1,5 @@
-import 'dart:io';
-import 'package:n42appv2/app_config.dart';
+﻿import 'dart:io';
+import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/src/utils/notfication_utils.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';

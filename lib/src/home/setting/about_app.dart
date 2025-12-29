@@ -1,13 +1,13 @@
-import 'package:n42appv2/app_config.dart';
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/home/api/version_api.dart';
 import 'package:n42appv2/src/home/models/version_info_model.dart';
 import 'package:n42appv2/src/home/setting/feedback.dart' as fb;
 import 'package:n42appv2/src/home/widgets/check_version_alert.dart';
 import 'package:n42appv2/src/home/widgets/nav_setting_item.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -303,7 +303,7 @@ class _AboutAppState extends State<AboutApp> {
             path: "assets/home/about/feedback.png",
             action: S.of(context).g_key_feedback,
             callback: () {
-              if (Application.userInfo == null) {
+              if (AppGlobals.userInfo == null) {
                 ToastUtils.show(S.of(context).g_key_feedback_9);
                 return;
               }

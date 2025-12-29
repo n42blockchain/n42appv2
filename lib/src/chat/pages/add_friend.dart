@@ -1,8 +1,8 @@
-import 'package:n42appv2/src/chat/api/chat_api.dart';
+﻿import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/models/friend_info.dart';
 import 'package:n42appv2/src/chat/pages/friend_detail.dart';
 import 'package:n42appv2/src/utils/regular.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/common_search_bar.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,6 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/api/chat_db_api.dart';
 import 'package:n42appv2/src/chat/models/chat_message_model.dart';
@@ -9,8 +9,8 @@ import 'package:n42appv2/src/chat/pages/add_friend.dart';
 import 'package:n42appv2/src/chat/provider/chat_message_provider.dart';
 import 'package:n42appv2/src/chat/provider/message_content_type.dart';
 import 'package:n42appv2/src/chat/utils/chat_data_util.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/detail_refresh_widget.dart';
 import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_5.dart';
@@ -396,7 +396,7 @@ class _NewFriendListPageState extends State<NewFriendListPage> {
       if (flag != null && flag) {
         final remarks = textEditController.text.trim();
         final data = await chatApi.friendAccept(
-            model.uuid ?? '', Application.userInfo?.uuid ?? '', remarks);
+            model.uuid ?? '', AppGlobals.userInfo?.uuid ?? '', remarks);
         //{code: 200, msg: OK, data: true}
         if (data != null && data["code"] == 200 && data["data"]) {
           model.status = 1;
@@ -407,7 +407,7 @@ class _NewFriendListPageState extends State<NewFriendListPage> {
             Map<String, dynamic> content = chatDataUtils.generateSendData(
                 contentType: MessageContentType.Text,
                 fromID: model.uuid!,
-                receiveId: Application.userInfo?.uuid ?? '',
+                receiveId: AppGlobals.userInfo?.uuid ?? '',
                 conversationType: 0,
                 direction: 0,
                 //这条消息不加密
@@ -419,7 +419,7 @@ class _NewFriendListPageState extends State<NewFriendListPage> {
 
             final data = await chatApi.sendMessage(
               fromUUID: model.uuid!,
-              receiveId: Application.userInfo?.uuid ?? '',
+              receiveId: AppGlobals.userInfo?.uuid ?? '',
               content: json.encode(content),
             );
           }
@@ -427,7 +427,7 @@ class _NewFriendListPageState extends State<NewFriendListPage> {
           Map<String, dynamic> content2 = chatDataUtils.generateSendData(
               contentType: MessageContentType.Tip_Notification,
               fromID: model.uuid!,
-              receiveId: Application.userInfo?.uuid ?? '',
+              receiveId: AppGlobals.userInfo?.uuid ?? '',
               conversationType: 0,
               direction: 0,
               // msg: "you are now friends and can start chatting");
@@ -439,7 +439,7 @@ class _NewFriendListPageState extends State<NewFriendListPage> {
 
           final data2 = await chatApi.sendMessage(
             fromUUID: model.uuid!,
-            receiveId: Application.userInfo?.uuid ?? '',
+            receiveId: AppGlobals.userInfo?.uuid ?? '',
             content: json.encode(content2),
           );
 

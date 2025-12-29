@@ -1,12 +1,12 @@
-
-import 'package:n42appv2/application.dart';
+﻿
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/home/setting/security/gesture_password_setting.dart';
 import 'package:n42appv2/src/home/setting/security/lock_screen_resetpassword.dart';
 import 'package:n42appv2/src/home/setting/security/security_edit.dart';
 import 'package:n42appv2/src/home/widgets/face_recognition_public.dart';
 import 'package:n42appv2/src/state/public_provider.dart';
-import 'package:n42appv2/src/utils/sp_util.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/core/storage/sp_util.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +37,7 @@ class _SecuritySettingState extends State<SecuritySetting>{
   init()async{
     Map<String,dynamic>? s=await SPUtil().getSecurity();
     if(s!=null){
-      Map<String,dynamic>? userSecurityMap=s[Application.userInfo?.uuid??""];
+      Map<String,dynamic>? userSecurityMap=s[AppGlobals.userInfo?.uuid??""];
       if(userSecurityMap!=null){
         setState(() {
           securityMap['email']=userSecurityMap['email'];
@@ -60,7 +60,7 @@ class _SecuritySettingState extends State<SecuritySetting>{
     if(s==null){
       s={};
     }
-    s[Application.userInfo?.uuid??""]=securityMap;
+    s[AppGlobals.userInfo?.uuid??""]=securityMap;
     await sPUtils.setSecurity(s);
     setState(() {
     });

@@ -1,10 +1,10 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/login/api/handtype.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

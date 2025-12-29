@@ -1,8 +1,8 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/pay/moonpay/create_url.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';

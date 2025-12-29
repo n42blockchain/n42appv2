@@ -1,12 +1,12 @@
-import 'dart:async';
+﻿import 'dart:async';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/home/widgets/face_recognition_public.dart';
 import 'package:n42appv2/src/home/widgets/gesture_password/gesture_password.dart';
 import 'package:n42appv2/src/login/pages/login_page.dart';
 import 'package:n42appv2/src/state/public_provider.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -425,10 +425,10 @@ class _UnlockState extends State<Unlock>{
                   recognizer: TapGestureRecognizer()
                     ..onTap = () async {
                       //退出登陆
-                      String tokenId=Application.userInfo?.token??"";
+                      String tokenId=AppGlobals.userInfo?.token??"";
                       await Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
-                      if(Application.userInfo !=null){
-                        if((Application.userInfo?.token??"") !=tokenId){
+                      if(AppGlobals.userInfo !=null){
+                        if((AppGlobals.userInfo?.token??"") !=tokenId){
                           check=true;
                           back();
                           /*if(widget.type =="resumed"){

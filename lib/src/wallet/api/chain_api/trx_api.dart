@@ -1,7 +1,7 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/https/request_url.dart';
@@ -265,7 +265,7 @@ class TrxApi{
   BaseRPC_eth(String method,var value,{bool? isTest=null})async{
     try{
       MessageModel mm=MessageModel();
-      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":Application.currentId++};
+      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};
       String urlStr=RequestUrl().getUrl2("TRX", "rpc",isTest: isTest)+"/jsonrpc";
       final data=await BaseApi.RequestEmpty_h.post(urlStr, params: {},data: postData,header: header,);
       if(data.containsKey('error')){

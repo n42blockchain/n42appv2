@@ -1,8 +1,8 @@
-// android通知的通道
+﻿// android通知的通道
 
 import 'dart:convert';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/chat/models/file_item_info.dart';
 import 'package:n42appv2/src/chat/pages/chat_detail_page.dart';
@@ -16,7 +16,7 @@ import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/login/pages/login_page.dart';
 import 'package:n42appv2/src/notification/pages/message_info.dart';
 import 'package:n42appv2/src/state/public_provider.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/src/wallet/utils/browser_txhash.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -213,7 +213,7 @@ class AppPushUtils {
     try {
       // 绑定token
       debugPrint('new token : $newToken');
-      if (newToken != null && Application.userInfo != null) {
+      if (newToken != null && AppGlobals.userInfo != null) {
         UserInfoApi loginApi=UserInfoApi();
         final data = await loginApi.bindPushUserToken(newToken);
         if (data != null && data["code"] == 200) {
@@ -249,8 +249,8 @@ class AppPushUtils {
   ///对消息统一处理
   static void _handleMessage(Map<String, dynamic> data) {
     // 未登录 统一去登录
-    if (Application.userInfo==null) {
-      Navigator.push(Application.navigatorKey.currentContext!,
+    if (AppGlobals.userInfo==null) {
+      Navigator.push(AppGlobals.navigatorKey.currentContext!,
           MaterialPageRoute(builder: (_) => LoginPage()));
       return;
     }
@@ -265,12 +265,12 @@ class AppPushUtils {
       debugPrint("itemMap : $itemMap");
       FileItemInfo item = FileItemInfo.fromJson(itemMap);
 
-      final isSender = item.s_email == Application.userInfo?.email;
+      final isSender = item.s_email == AppGlobals.userInfo?.email;
       final nickName = isSender ? item.r_name : item.s_name;
       final email = (isSender ? item.r_email : item.s_email) ?? '';
       final uuid = isSender ? item.r_uuid : item.s_uuid;
       /*Navigator.push(
-        Application.navigatorKey.currentContext!,
+        AppGlobals.navigatorKey.currentContext!,
         MaterialPageRoute(
           builder: (_) => ChatPageV2(
             email: email,
@@ -293,7 +293,7 @@ class AppPushUtils {
       String bUri = getBrowser_txHash(
           txContent['coin'], txContent['hash'] ?? "",
           isTest: isTest);
-      Navigator.push(Application.navigatorKey.currentContext!,
+      Navigator.push(AppGlobals.navigatorKey.currentContext!,
           MaterialPageRoute(builder: (_) => BrowserPage(bUri,
             //"Transaction"
           )));
@@ -311,7 +311,7 @@ class AppPushUtils {
       String bUri = getBrowser_txHash(
           txContent['coin'], txContent['hash'] ?? "",
           isTest: isTest);
-      Navigator.push(Application.navigatorKey.currentContext!,
+      Navigator.push(AppGlobals.navigatorKey.currentContext!,
           MaterialPageRoute(builder: (_) => BrowserPage(bUri,
             //"Transaction"
           )));
@@ -333,7 +333,7 @@ class AppPushUtils {
         "content": content,
         "created": dateFormat.format(DateTime.now()),
       };
-      Navigator.push(Application.navigatorKey.currentContext!,
+      Navigator.push(AppGlobals.navigatorKey.currentContext!,
           MaterialPageRoute(builder: (_) => MessageInfo(infoMap)));
     }
     /*
@@ -343,7 +343,7 @@ class AppPushUtils {
         txContent = json.decode(data['data']);
       } catch (e) {}
       Navigator.push(
-          Application.navigatorKey.currentContext!,
+          AppGlobals.navigatorKey.currentContext!,
           MaterialPageRoute(
               builder: (_) => NftUserHome(
                 user_uuid: txContent['follow_uuid'] ?? "",
@@ -352,7 +352,7 @@ class AppPushUtils {
     }
     else if (data['type'] == "normal_trending") {
       Navigator.push(
-          Application.navigatorKey.currentContext!,
+          AppGlobals.navigatorKey.currentContext!,
           MaterialPageRoute(
               builder: (_) => NftSearch(
                 searchMap: {"specify_24h_like": true},
@@ -361,7 +361,7 @@ class AppPushUtils {
     */
     else if (data['type'] == "tell_friends") {
       Navigator.push(
-          Application.navigatorKey.currentContext!,
+          AppGlobals.navigatorKey.currentContext!,
           MaterialPageRoute(
             builder: (_) => SettingShare(),
           ));
@@ -370,7 +370,7 @@ class AppPushUtils {
         data['type'] == "Tell Friends #2_normal") {
       //跳转分享页
       Navigator.push(
-          Application.navigatorKey.currentContext!,
+          AppGlobals.navigatorKey.currentContext!,
           MaterialPageRoute(
             builder: (_) => SettingShare(),
           ));
@@ -379,47 +379,47 @@ class AppPushUtils {
     else if (data['type'] == "NFTHome #1_normal" ||
         data['type'] == "NFTHome #2_normal") {
       //跳转NFT主页
-      Navigator.of(Application.navigatorKey.currentContext!)
+      Navigator.of(AppGlobals.navigatorKey.currentContext!)
           .popUntil((route) => route.isFirst);
       ProviderUtil.publicProvider().setSelectIndex(2);
     } */
     else if (data['type'] == "ChatHome #1_normal" ||
         data['type'] == "ChatHome #2_normal") {
       //跳转聊天主页
-      Navigator.of(Application.navigatorKey.currentContext!)
+      Navigator.of(AppGlobals.navigatorKey.currentContext!)
           .popUntil((route) => route.isFirst);
-      Provider.of<PublicProvider>(Application.navigatorKey.currentContext!,listen: false).setSelectIndex(2);
+      Provider.of<PublicProvider>(AppGlobals.navigatorKey.currentContext!,listen: false).setSelectIndex(2);
     }
     else if (data['type'] == "News_normal") {
       //跳转新闻列表页面
-      Navigator.of(Application.navigatorKey.currentContext!)
+      Navigator.of(AppGlobals.navigatorKey.currentContext!)
           .popUntil((route) => route.isFirst);
-      Provider.of<PublicProvider>(Application.navigatorKey.currentContext!,listen: false).setSelectIndex(0);
+      Provider.of<PublicProvider>(AppGlobals.navigatorKey.currentContext!,listen: false).setSelectIndex(0);
     }
     else if (data['type'] == "Login_normal") {
       //跳转创建钱包
-      Navigator.of(Application.navigatorKey.currentContext!)
+      Navigator.of(AppGlobals.navigatorKey.currentContext!)
           .popUntil((route) => route.isFirst);
-      Provider.of<PublicProvider>(Application.navigatorKey.currentContext!,listen: false).setSelectIndex(0);
+      Provider.of<PublicProvider>(AppGlobals.navigatorKey.currentContext!,listen: false).setSelectIndex(0);
     }
     else if (data['type'] == "AboutSettings_normal") {
       //跳转关于我们页面
-      Navigator.push(Application.navigatorKey.currentContext!,
+      Navigator.push(AppGlobals.navigatorKey.currentContext!,
           MaterialPageRoute(
             builder: (_) => AboutApp(),));
     }
     else if (data['type'] == "WalletHome #1_normal" ||
         data['type'] == "WalletHome #2_normal") {
       //跳转钱包页面
-      Navigator.of(Application.navigatorKey.currentContext!)
+      Navigator.of(AppGlobals.navigatorKey.currentContext!)
           .popUntil((route) => route.isFirst);
-      Provider.of<PublicProvider>(Application.navigatorKey.currentContext!,listen: false).setSelectIndex(0);
+      Provider.of<PublicProvider>(AppGlobals.navigatorKey.currentContext!,listen: false).setSelectIndex(0);
     }
     else if (data['type'] == "SettingsProfile_normal") {
       //跳转设置个人信息页面
-      if (Application.userInfo !=null) {
+      if (AppGlobals.userInfo !=null) {
         Navigator.push(
-            Application.navigatorKey.currentContext!,
+            AppGlobals.navigatorKey.currentContext!,
             MaterialPageRoute(
               builder: (_) => PersonalSetting(),
             ));
@@ -427,14 +427,14 @@ class AppPushUtils {
     }
     else if (data['type'] == "Homepage_normal") {
       //跳转主页
-      Navigator.of(Application.navigatorKey.currentContext!)
+      Navigator.of(AppGlobals.navigatorKey.currentContext!)
           .popUntil((route) => route.isFirst);
-      Provider.of<PublicProvider>(Application.navigatorKey.currentContext!,listen: false).setSelectIndex(0);
+      Provider.of<PublicProvider>(AppGlobals.navigatorKey.currentContext!,listen: false).setSelectIndex(0);
     }
     else if (data['type'] == 110) {
       flutterLocalNotificationsPlugin.cancel(110);
       //好友申请
-      Navigator.of(Application.navigatorKey.currentContext!).push(
+      Navigator.of(AppGlobals.navigatorKey.currentContext!).push(
         MaterialPageRoute(
           builder: (_) => const NewFriendListPage(),
         ),
@@ -446,7 +446,7 @@ class AppPushUtils {
         return;
       }
       flutterLocalNotificationsPlugin.cancel(100);
-      Navigator.of(Application.navigatorKey.currentContext!).push(
+      Navigator.of(AppGlobals.navigatorKey.currentContext!).push(
         MaterialPageRoute(
           builder: (_) => ChatDetailPage(
             targetUuid: jsonData["targetUuid"],
@@ -461,7 +461,7 @@ class AppPushUtils {
         return;
       }
       flutterLocalNotificationsPlugin.cancel(101);
-      Navigator.of(Application.navigatorKey.currentContext!).push(
+      Navigator.of(AppGlobals.navigatorKey.currentContext!).push(
         MaterialPageRoute(
           builder: (_) => ChatGroupDetailPage(
             targetUuid: jsonData["targetUuid"],
@@ -491,7 +491,7 @@ class AppPushUtils {
   //更新未读消息数
   static _updateBadgeCount() {
     FlutterNewBadger.incrementBadgeCount();
-    Provider.of<PublicProvider>(Application.navigatorKey.currentContext!,listen: false).setMessageNotReadCount();
+    Provider.of<PublicProvider>(AppGlobals.navigatorKey.currentContext!,listen: false).setMessageNotReadCount();
   }
 
   //清理未读消息数

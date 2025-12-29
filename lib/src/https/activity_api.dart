@@ -1,4 +1,4 @@
-import 'package:n42appv2/app_config.dart';
+﻿import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 
@@ -98,7 +98,7 @@ class ActivityApi {
   //点赞活动报名
   static likeEnroll(int actionId) async {
     try {
-      String uuid = Application.userInfo!.uuid;
+      String uuid = AppGlobals.userInfo!.uuid;
       MessageModel mm = MessageModel();
       Map<String, dynamic> postData = {"activityId": actionId, "userId": uuid};
       final data = await Api.nftActivity
@@ -124,7 +124,7 @@ class ActivityApi {
   //查询点赞活动是否报名
   static enrollStatus(int actionId) async {
     try {
-      String uuid = Application.userInfo!.uuid;
+      String uuid = AppGlobals.userInfo!.uuid;
       MessageModel mm = MessageModel();
       final data = await Api.nftActivity.get(
           '/activity/enroll/status?activity_id=${actionId}&user_id=${uuid}',
@@ -146,7 +146,7 @@ class ActivityApi {
   //激活/取消激活 参赛nft
   static activateStatus(actionId) async {
     try {
-      String uuid = Application.userInfo!.uuid;
+      String uuid = AppGlobals.userInfo!.uuid;
       MessageModel mm = MessageModel();
       Map<String, dynamic> postData = {
         "activity_nft_like_list_id": actionId,
@@ -172,7 +172,7 @@ class ActivityApi {
   //点赞，取消点赞
   static nftLike(int itemId) async {
     try {
-      String uuid = Application.userInfo!.uuid;
+      String uuid = AppGlobals.userInfo!.uuid;
       MessageModel mm = MessageModel();
       Map<String, dynamic> postData = {
         "activityNFTLikeListId": itemId,
@@ -201,7 +201,7 @@ class ActivityApi {
     try {
       String uuid = "";
       if (type == 1) {
-        uuid = '&user_id=' + Application.userInfo!.uuid;
+        uuid = '&user_id=' + AppGlobals.userInfo!.uuid;
       }
       if (activite != 0) {
         uuid += '&activate=' + activite.toString();

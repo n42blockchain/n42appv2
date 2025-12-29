@@ -1,8 +1,8 @@
-import 'package:n42appv2/src/chat/api/chat_api.dart';
+﻿import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/models/friend_info.dart';
 import 'package:n42appv2/src/chat/widgets/contact_empty.dart';
 import 'package:n42appv2/src/chat/widgets/contact_image.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/detail_refresh_widget.dart';
 import 'package:n42appv2/src/widgets/loading.dart';

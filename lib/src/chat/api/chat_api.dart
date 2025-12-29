@@ -1,7 +1,7 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
-import 'package:n42appv2/app_config.dart';
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 
@@ -18,7 +18,7 @@ class ChatApi{
       ) async {
     Map<String, dynamic> params = {};
     params["last_msg_id"] = last_msg_id;
-    params["uuid"] = Application.userInfo?.uuid;
+    params["uuid"] = AppGlobals.userInfo?.uuid;
     final data =
     await BaseApi.RequestEmpty_h.post('$url/v1/chat/msg/list', data: params, params: {},header: header,);
     return data;
@@ -27,7 +27,7 @@ class ChatApi{
   //离线消息 不支持漫游
   Future offlineMsg() async {
     Map<String, dynamic> params = {};
-    params["uuid"] = Application.userInfo?.uuid;
+    params["uuid"] = AppGlobals.userInfo?.uuid;
     final data = await BaseApi.RequestEmpty_h
         .post('$url/v1/chat/msg/offline', params: params, data: params,header: header,);
     return data;
@@ -76,8 +76,8 @@ class ChatApi{
     Map<String, dynamic> params = {
       "message_id":messageId,
       "Source":"app",
-      "Uuid":Application.userInfo!.uuid,
-      "Token":Application.userInfo!.token,
+      "Uuid":AppGlobals.userInfo!.uuid,
+      "Token":AppGlobals.userInfo!.token,
     };
     final data =
     await BaseApi.RequestEmpty_h.post('$url/v1/red/details', params: params, data: params,header: header,);
@@ -99,8 +99,8 @@ class ChatApi{
     Map<String, dynamic> params = {
       "message_id":messageId,
       "Source":"app",
-      "Uuid":Application.userInfo!.uuid,
-      "Token":Application.userInfo!.token,
+      "Uuid":AppGlobals.userInfo!.uuid,
+      "Token":AppGlobals.userInfo!.token,
     };
     final data =
     await BaseApi.RequestEmpty_h.post('$url/v1/red/receive', params: params, data: params,header: header,);
@@ -147,7 +147,7 @@ class ChatApi{
   //好友申请列表
   Future friendApplyList() async {
     Map<String, dynamic> params = {};
-    params["uuid"] = Application.userInfo?.uuid;
+    params["uuid"] = AppGlobals.userInfo?.uuid;
     final data = await BaseApi.RequestEmpty_h
         .post('$url/v1/friend/apply/list', params: params, data: params,header: header,);
     return data;
@@ -156,7 +156,7 @@ class ChatApi{
   //好友列表
   Future friendList() async {
     Map<String, dynamic> params = {};
-    params["uuid"] = Application.userInfo?.uuid;
+    params["uuid"] = AppGlobals.userInfo?.uuid;
     final data =
     await BaseApi.RequestEmpty_h.post('$url/v1/friend/list', params: params, data: params,header: header,);
     return data;
@@ -184,7 +184,7 @@ class ChatApi{
   Future deleteFriend(String user_id) async {
     Map<String, dynamic> params = {};
     params["friend"] = user_id;
-    params["uuid"] = Application.userInfo?.uuid;
+    params["uuid"] = AppGlobals.userInfo?.uuid;
     final data =
     await BaseApi.RequestEmpty_h.post('$url/v1/friend/delete', params: {}, data: params,header: header,);
     return data;
@@ -194,7 +194,7 @@ class ChatApi{
   Future blockFriend(String friendId) async {
     Map<String, dynamic> params = {};
     params["friend"] = friendId;
-    params["uuid"] = Application.userInfo?.uuid;
+    params["uuid"] = AppGlobals.userInfo?.uuid;
     final data =
     await BaseApi.RequestEmpty_h.post('$url/v1/friend/block', params: {}, data: params,header: header,);
     return data;
@@ -204,7 +204,7 @@ class ChatApi{
   Future removeBlockFriend(String friendId) async {
     Map<String, dynamic> params = {};
     params["friend"] = friendId;
-    params["uuid"] = Application.userInfo?.uuid;
+    params["uuid"] = AppGlobals.userInfo?.uuid;
     final data = await BaseApi.RequestEmpty_h
         .post('$url/v1/friend/blacklist/remove', params: {}, data: params,header: header,);
     return data;
@@ -213,7 +213,7 @@ class ChatApi{
   //查询当前用户的黑名单列表
   Future blockFriendList() async {
     Map<String, dynamic> params = {};
-    params["uuid"] = Application.userInfo?.uuid;
+    params["uuid"] = AppGlobals.userInfo?.uuid;
     final data =
     await BaseApi.RequestEmpty_h.post('$url/v1/friend/blacklist', params: {}, data: params,header: header,);
     return data;
@@ -249,7 +249,7 @@ class ChatApi{
   Future groupInfo(String gid) async {
     Map<String, dynamic> params = {};
     params["g_uuid"] = gid;
-    params["m_uuid"] = Application.userInfo?.uuid;
+    params["m_uuid"] = AppGlobals.userInfo?.uuid;
     final data = await BaseApi.RequestEmpty_h
         .post('$url/v1/group/info/query', params: params, data: params,header: header,);
     return data;
@@ -298,7 +298,7 @@ class ChatApi{
   // }
   Future deleteGroupMembers(String g_uuid, List members) async {
     Map<String, dynamic> params = {};
-    params["admin"] = Application.userInfo?.uuid;
+    params["admin"] = AppGlobals.userInfo?.uuid;
     params["g_uuid"] = g_uuid;
     params["members"] = members;
     final data = await BaseApi.RequestEmpty_h
@@ -360,7 +360,7 @@ class ChatApi{
   //测试 实际返回的群的最后一条消息，跟离线消息没有关系
   Future groupOfflineLastMsg() async {
     Map<String, dynamic> params = {};
-    params["uuid"] = Application.userInfo?.uuid;
+    params["uuid"] = AppGlobals.userInfo?.uuid;
     final data = await BaseApi.RequestEmpty_h
         .post('$url/v1/group/msg/offline/last', params: params, data: params,header: header,);
     return data;
@@ -371,7 +371,7 @@ class ChatApi{
     Map<String, dynamic> params = {};
     params["g_uuid"] = g_uuid;
     params["last_seq"] = last_seq;
-    params["m_uuid"] = Application.userInfo?.uuid;
+    params["m_uuid"] = AppGlobals.userInfo?.uuid;
     final data = await BaseApi.RequestEmpty_h
         .post('$url/v1/group/msg/offline/total', params: params, data: params,header: header,);
     return data;
@@ -392,7 +392,7 @@ class ChatApi{
   Future checkGroupSSById(String g_uuid) async {
     Map<String, dynamic> params = {};
     params["g_uuid"] = g_uuid;
-    params["m_uuid"] = Application.userInfo?.uuid;
+    params["m_uuid"] = AppGlobals.userInfo?.uuid;
     final data =
     await BaseApi.RequestEmpty_h.post('$url/v1/group/query/ss', params: params, data: params,header: header,);
     return data;
@@ -404,7 +404,7 @@ class ChatApi{
     Map<String, dynamic> params = {};
     params["g_uuid"] = g_uuid;
     params["last_seq"] = last_seq;
-    params["m_uuid"] = Application.userInfo?.uuid;
+    params["m_uuid"] = AppGlobals.userInfo?.uuid;
     params["msg_num"] = 100;
     final data = await BaseApi.RequestEmpty_h
         .post('$url/v1/group/msg/offline/part', params: params, data: params,header: header,);
@@ -417,8 +417,8 @@ class ChatApi{
     Map<String, dynamic> params = {};
     params["message_id"] = messageId;
     params["reason"] = reportReason;
-    params["uuid"] = Application.userInfo?.uuid;
-    params["email"] = Application.userInfo?.email;
+    params["uuid"] = AppGlobals.userInfo?.uuid;
+    params["email"] = AppGlobals.userInfo?.email;
     params["tag"] = tag;
     params["target_uuid"] = targetUuid;
     final data = await BaseApi.RequestEmpty_h

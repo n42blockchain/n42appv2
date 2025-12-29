@@ -1,4 +1,4 @@
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/https/request_url.dart';
@@ -70,7 +70,7 @@ class SolApi{
   BaseRPC_sol(String method,var value,{bool? isTest=null})async{
     try{
       MessageModel mm=MessageModel();
-      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":Application.currentId++};
+      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};
       String url=RequestUrl().getUrl2(CoinType.SOL.name, "rpc",isTest: isTest);
       final data=await BaseApi.RequestEmpty_h.post(url, params: {},data: postData);
       if(data.containsKey('error')){

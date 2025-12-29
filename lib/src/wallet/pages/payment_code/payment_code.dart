@@ -1,6 +1,6 @@
-import 'package:n42appv2/app_config.dart';
-import 'package:n42appv2/application.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+﻿import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/pages/payment_code/payment_history.dart';
 import 'package:n42appv2/src/wallet/pages/payment_code/set_amount.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
@@ -69,12 +69,12 @@ class _PaymentCodeState extends State<PaymentCode> {
                 ),
                 child: Column(
                   children: [
-                    if((Application.userInfo?.name??"") !="")
+                    if((AppGlobals.userInfo?.name??"") !="")
                     Container(
                       padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(30)),
                       alignment: Alignment.center,
                       child: Text(
-                        Application.userInfo?.name??"未设置",
+                        AppGlobals.userInfo?.name??"未设置",
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(30),
                           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlockColor.name),
@@ -106,7 +106,7 @@ class _PaymentCodeState extends State<PaymentCode> {
                       child: QrImageView(
                         padding: EdgeInsets.all(20.0),
                         backgroundColor: const Color(0xffffffff),
-                        data: "${AppConfig.apiUrl['walletamazeBrowser']}?type=payment&amount=${amount?['amount']??""}&coinType=${amount?['coinType']??""}&address=${amount?['address']??""}&user=${Application.userInfo?.uuid??""}",
+                        data: "${AppConfig.apiUrl['walletamazeBrowser']}?type=payment&amount=${amount?['amount']??""}&coinType=${amount?['coinType']??""}&address=${amount?['address']??""}&user=${AppGlobals.userInfo?.uuid??""}",
                         version: QrVersions.min + 7,
                         embeddedImage:Image.network("${AppConfig.apiUrl['walletamazeBrowser']}/static/ast.png").image,
                         embeddedImageStyle: QrEmbeddedImageStyle(

@@ -1,10 +1,10 @@
-import 'package:dio/dio.dart';
+﻿import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'dart:io';
 import 'dart:convert';
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/app_config.dart';
+import 'package:n42appv2/core/config/app_config.dart';
 
 class BaseHttp {
   String baseUrl;
@@ -185,9 +185,9 @@ class BaseHttp {
             /*if (mData["code"] != null &&  mData["code"] == -1403) {
               // debugPrint("path: $path");
               // 从新登录 清除状态
-              //Application.logout();
+              //AppGlobals.logout();
               /*Navigator.pushAndRemoveUntil(
-                  Application.navigatorKey.currentContext!,
+                  AppGlobals.navigatorKey.currentContext!,
                   MaterialPageRoute(
                       builder: (BuildContext context) => const LoginPage()),
                       (route) => false);*/
@@ -392,11 +392,11 @@ class BaseHttp {
   }
   //获取用户信息
   getUserToken(){
-    if(Application.userInfo !=null){
+    if(AppGlobals.userInfo !=null){
       Map<String,String> rmm= {
         "Source":"app",
-        "Uuid":Application.userInfo?.uuid??"",
-        "Token":Application.userInfo?.token??"",
+        "Uuid":AppGlobals.userInfo?.uuid??"",
+        "Token":AppGlobals.userInfo?.token??"",
       };
       return rmm;
     }else{

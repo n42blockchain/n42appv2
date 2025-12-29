@@ -1,7 +1,7 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
-import 'package:n42appv2/application.dart';
-import 'package:n42appv2/src/models/user_info.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/data/models/user_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SPUtil{
@@ -141,11 +141,11 @@ class SPUtil{
     String? r = await prefs?.getString(SPkey.lockScreen.name);
     if(r==null){
       prefs?.setString(SPkey.lockScreen.name, json.encode({
-        "${Application.userInfo?.uuid??""}":value,
+        "${AppGlobals.userInfo?.uuid??""}":value,
       }));
     }else{
       Map<String,dynamic> ls=json.decode(r);
-      ls["${Application.userInfo?.uuid??""}"]=value;
+      ls["${AppGlobals.userInfo?.uuid??""}"]=value;
       prefs?.setString(SPkey.lockScreen.name, json.encode(ls));
     }
 
@@ -159,7 +159,7 @@ class SPUtil{
       return null;
     }else{
       Map<String,dynamic> ls=json.decode(r);
-      return ls[Application.userInfo?.uuid??""];
+      return ls[AppGlobals.userInfo?.uuid??""];
     }
   }
 
@@ -178,11 +178,11 @@ class SPUtil{
     String? r = await prefs?.getString(SPkey.miningData.name);
     if(r==null){
       prefs?.setString(SPkey.miningData.name, json.encode({
-        "${Application.userInfo?.uuid??""}":value,
+        "${AppGlobals.userInfo?.uuid??""}":value,
       }));
     }else{
       Map<String,dynamic> ls=json.decode(r);
-      ls["${Application.userInfo?.uuid??""}"]=value;
+      ls["${AppGlobals.userInfo?.uuid??""}"]=value;
       prefs?.setString(SPkey.miningData.name, json.encode(ls));
     }
   }
@@ -194,7 +194,7 @@ class SPUtil{
       return null;
     }else{
       Map<String,dynamic> ls=json.decode(r);
-      return ls[Application.userInfo?.uuid??""];
+      return ls[AppGlobals.userInfo?.uuid??""];
     }
   }
   /// put object.

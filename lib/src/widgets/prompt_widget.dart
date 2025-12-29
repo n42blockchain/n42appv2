@@ -1,5 +1,5 @@
-import 'package:n42appv2/application.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+﻿import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -9,7 +9,7 @@ Widget SuccessViewV1(String title) {
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24.0)),
       // color: Colors.white,
-      color: AppThemeUtils.getColorByKey(Application.navigatorKey.currentContext, AppThemeKeys.alertBgColor.name),
+      color: AppThemeUtils.getColorByKey(AppGlobals.navigatorKey.currentContext, AppThemeKeys.alertBgColor.name),
     ),
     child: Column(
       mainAxisSize: MainAxisSize.min,
@@ -24,7 +24,7 @@ Widget SuccessViewV1(String title) {
           title,
           style: TextStyle(
               color: AppThemeUtils.getColorByKey(
-                  Application.navigatorKey.currentContext,
+                  AppGlobals.navigatorKey.currentContext,
                   AppThemeKeys.mainTextColor5.name),
               fontSize: ScreenUtil().setSp(28.0)),
         ),

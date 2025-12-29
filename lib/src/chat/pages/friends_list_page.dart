@@ -1,4 +1,4 @@
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/models/friend_info.dart';
 import 'package:n42appv2/src/chat/pages/add_friend.dart';
@@ -8,7 +8,7 @@ import 'package:n42appv2/src/chat/pages/new_friend_list_page.dart';
 import 'package:n42appv2/src/chat/provider/chat_message_provider.dart';
 import 'package:n42appv2/src/chat/utils/chat_sp_util.dart';
 import 'package:n42appv2/src/chat/widgets/item_contact.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/detail_refresh_widget.dart';
 import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_2.dart';
@@ -76,7 +76,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
       List<FriendInfo> list =
       (data["data"] as List).map((e) => FriendInfo.fromJson(e)).toList();
       // 返回列表中 把自己排除在外
-      list.removeWhere((element) => element.uuid == Application.userInfo?.uuid);
+      list.removeWhere((element) => element.uuid == AppGlobals.userInfo?.uuid);
       setState(() {
         friendList = list;
       });

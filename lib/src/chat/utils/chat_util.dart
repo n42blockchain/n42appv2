@@ -1,8 +1,8 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/src/utils/sp_util.dart';
+import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
@@ -33,7 +33,7 @@ class ChatUtil {
   }
 
   Future<String?> getAstPrivateKey() async {
-    WalletActionProvider wap=Provider.of<WalletActionProvider>(Application.AppContext,listen: false);
+    WalletActionProvider wap=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
     //获取ast的 private key
     WalletInfo walletInfo;
     if(wap.walletInfo.mainWallet==true){
@@ -48,7 +48,7 @@ class ChatUtil {
     }
 
 
-    //WalletInfo walletInfo = Provider.of<WalletActionProvider>(Application.AppContext,listen: false).walletInfo;
+    //WalletInfo walletInfo = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo;
     final Map<String, dynamic>? map = walletInfo.coinInfo;
     final astMap = map?[CoinType.N.name];
     if (astMap != null) {
@@ -69,7 +69,7 @@ class ChatUtil {
 
   Future<String?> getAstPubKey() async {
     //获取ast的 private key
-    WalletActionProvider wap=Provider.of<WalletActionProvider>(Application.AppContext,listen: false);
+    WalletActionProvider wap=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
     //获取ast的 private key
     WalletInfo walletInfo;
     if(wap.walletInfo.mainWallet==true){
@@ -82,7 +82,7 @@ class ChatUtil {
         return "";
       }
     }
-    //WalletInfo walletInfo = Provider.of<WalletActionProvider>(Application.AppContext,listen: false).walletInfo;
+    //WalletInfo walletInfo = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo;
     final Map<String, dynamic>? map = walletInfo.coinInfo;
     final astMap = map?[CoinType.N.name];
     if (astMap != null) {
@@ -102,7 +102,7 @@ class ChatUtil {
   }
 
   Future cacheChatMessage(String key, String message) async {
-    final chatCacheKey = "${Application.userInfo?.uuid}_chatKey";
+    final chatCacheKey = "${AppGlobals.userInfo?.uuid}_chatKey";
     final data = await getChatCacheMessage();
     Map<String, dynamic> map = {};
     map[key] = message;
@@ -113,7 +113,7 @@ class ChatUtil {
   }
 
   Future getChatCacheMessage() async {
-    final chatCacheKey = "${Application.userInfo?.uuid}_chatKey";
+    final chatCacheKey = "${AppGlobals.userInfo?.uuid}_chatKey";
     return await SPUtil().getObject(chatCacheKey);
   }
 }

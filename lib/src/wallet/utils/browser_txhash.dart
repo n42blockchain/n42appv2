@@ -1,5 +1,5 @@
-//获取浏览器地址，根据交易hash
-import 'package:n42appv2/application.dart';
+﻿//获取浏览器地址，根据交易hash
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/https/request_url.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 getBrowser_txHash(String coinType,String txHash,{bool? isTest}){
   coinType=coinType.toUpperCase();
   if(isTest==null){
-    Map<String,dynamic> coinMap=Provider.of<WalletActionProvider>(Application.AppContext,listen: false).walletMap[coinType];
+    Map<String,dynamic> coinMap=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletMap[coinType];
     isTest=coinMap['isTest'];
   }
   String path=RequestUrl().getUrl2(coinType, "browser",isTest: isTest);

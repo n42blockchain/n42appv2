@@ -1,17 +1,17 @@
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/login/api/handtype.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/login/pages/account_create_and_reset.dart';
 import 'package:n42appv2/src/login/widgets/login_title.dart';
 import 'package:n42appv2/src/login/widgets/user_protocol.dart';
-import 'package:n42appv2/src/models/user_info.dart';
+import 'package:n42appv2/data/models/user_info.dart';
 import 'package:n42appv2/src/state/public_provider.dart';
 import 'package:n42appv2/src/utils/md5_util.dart';
 import 'package:n42appv2/src/utils/regular.dart';
-import 'package:n42appv2/src/utils/sp_util.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/core/storage/sp_util.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/textField_widget.dart';
@@ -272,7 +272,7 @@ class _LoginPageState extends State<LoginPage> {
                                 await SPUtil().saveUserInfo(userInfo);
                                 await Provider.of<PublicProvider>(context,listen: false)
                                     .setUserInfo(userInfo);
-                                await Application.login(userInfo);
+                                await AppGlobals.login(userInfo);
                                 if(widget.type==0){
                                   Navigator.pop(context);
                                 }

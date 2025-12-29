@@ -1,9 +1,9 @@
-import 'package:n42appv2/src/component/enums/load.dart';
+﻿import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/home/setting/security/security_google_vedification.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/prompt_widget.dart';

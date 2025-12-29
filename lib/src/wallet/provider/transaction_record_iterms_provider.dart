@@ -1,11 +1,11 @@
-import 'dart:async';
+﻿import 'dart:async';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/sqlite/app_database.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/core/storage/app_database.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/algo_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/btc_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/fil_api.dart';
@@ -47,8 +47,8 @@ class TransactionRecordItemProvider with ChangeNotifier{
   }
   //查询未完成的交易
   selectUndoneTr()async{
-    _unDoneTrModelList=await db.selectTransationRecord_unDone(Application.userInfo?.uuid??"");
-    _trUndoneList=await db.selectBtcTransationRecord_byUUID(Application.userInfo?.uuid??"", 2);
+    _unDoneTrModelList=await db.selectTransationRecord_unDone(AppGlobals.userInfo?.uuid??"");
+    _trUndoneList=await db.selectBtcTransationRecord_byUUID(AppGlobals.userInfo?.uuid??"", 2);
     if(_unDoneTrModelList.length!=0){
       //开启timer，循环请求数据
       timerStart();
@@ -229,7 +229,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
       await db.updateTransationRecord(trm);
       ToastUtils.show(S.current.g_key_140);
       //发出交易成功通知
-      Provider.of<WalletActionProvider>(Application.AppContext,listen: false).refreshCoinBalance(trm.coin['coinType'],contract:trm.contract);
+      Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).refreshCoinBalance(trm.coin['coinType'],contract:trm.contract);
       eventBus.fire(EventPublic(EventPublicType.transferOk));
       /**if(trm.contract!=""){
           ProviderUtil.coinInfoProvider().getBalance_main();
@@ -419,7 +419,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         if(trm.state==1){
           //ProviderUtil.btcCoinInfoProvider().getBalance();
           //发出交易成功通知
-          await Provider.of<WalletActionProvider>(Application.AppContext,listen: false).refreshCoinBalance(trm.coin['coinType'],contract:"");
+          await Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).refreshCoinBalance(trm.coin['coinType'],contract:"");
           eventBus.fire(EventPublic(EventPublicType.transferOk));
           _trUndoneList.remove(trm);
           checkUndoneList();

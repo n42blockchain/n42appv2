@@ -1,7 +1,7 @@
-import 'package:n42appv2/src/browser/models/browser_collection_model.dart';
+﻿import 'package:n42appv2/src/browser/models/browser_collection_model.dart';
 import 'package:n42appv2/src/browser/models/browser_history_model.dart';
 import 'package:n42appv2/src/browser/models/browser_search_history_model.dart';
-import 'package:n42appv2/src/sqlite/app_database.dart';
+import 'package:n42appv2/core/storage/app_database.dart';
 
 class BrowserApi{
   AppDatabase? _db;

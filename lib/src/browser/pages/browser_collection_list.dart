@@ -1,9 +1,9 @@
-import 'package:n42appv2/src/browser/api/browser_api.dart';
+﻿import 'package:n42appv2/src/browser/api/browser_api.dart';
 import 'package:n42appv2/src/browser/models/browser_collection_model.dart';
 import 'package:n42appv2/src/browser/pages/browser_collection_info.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:flutter/material.dart';

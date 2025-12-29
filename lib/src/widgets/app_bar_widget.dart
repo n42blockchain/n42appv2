@@ -1,5 +1,5 @@
-import 'package:n42appv2/application.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+﻿import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -22,7 +22,7 @@ class AppBarWidget extends AppBar{
           fontWeight: FontWeight.normal,
           fontSize: ScreenUtil().setSp(32.0),
           color: AppThemeUtils.getColorByKey(
-              Application.navigatorKey.currentContext,
+              AppGlobals.navigatorKey.currentContext,
               AppThemeKeys.mainTextColor.name)
       ),
     ):titleWidget,
@@ -32,7 +32,7 @@ class AppBarWidget extends AppBar{
     actions: actions,
     bottom: bottom,
     backgroundColor: backgroundColor ?? AppThemeUtils.getColorByKey(
-        Application.navigatorKey.currentContext,
+        AppGlobals.navigatorKey.currentContext,
         AppThemeKeys.backGroundColor.name) ,
     elevation: 0,
     // flexibleSpace: const Image(

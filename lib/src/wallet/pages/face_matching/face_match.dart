@@ -1,11 +1,11 @@
-import 'dart:io';
+﻿import 'dart:io';
 import 'dart:typed_data';
 import 'package:n42appv2/src/component/pages/image_crop_page.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/api/face_api.dart';
 import 'package:n42appv2/src/wallet/models/image_upload_model.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';

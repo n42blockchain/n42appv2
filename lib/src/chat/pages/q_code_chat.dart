@@ -1,13 +1,13 @@
-import 'dart:io';
+﻿import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/app_config.dart';
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
@@ -113,7 +113,7 @@ class _QCodeChatState extends State<QCodeChat> {
               ),
               SizedBox(height: ScreenUtil().setWidth(44)),
               Text(
-                Application.userInfo?.name ?? Application.userInfo?.email ?? '',
+                AppGlobals.userInfo?.name ?? AppGlobals.userInfo?.email ?? '',
                 style: TextStyle(
                   color: AppThemeUtils.getColorByKey(
                       context, AppThemeKeys.mainBlueColor.name),
@@ -164,7 +164,7 @@ class _QCodeChatState extends State<QCodeChat> {
         GestureDetector(
           onTap: () {
             Share.share(
-              "${S.of(context).g_chat_key_64} ${Application.userInfo?.email} \n${AppConfig.apiUrl['walletamazeBrowser']}?type=friendCard&email=${Application.userInfo?.email}",
+              "${S.of(context).g_chat_key_64} ${AppGlobals.userInfo?.email} \n${AppConfig.apiUrl['walletamazeBrowser']}?type=friendCard&email=${AppGlobals.userInfo?.email}",
               subject: AppConfig.apiUrl['walletName'],
             );
           },

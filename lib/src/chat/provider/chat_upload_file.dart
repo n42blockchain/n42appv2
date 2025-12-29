@@ -1,7 +1,7 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
-import 'package:n42appv2/app_config.dart';
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/api/chat_db_api.dart';
 import 'package:n42appv2/src/chat/models/chat_message_model.dart';
@@ -35,7 +35,7 @@ class ChatUploadFile{
       ChatApi chatApi=ChatApi();
       try {
         final data = await chatApi.sendMessage(
-          fromUUID: Application.userInfo?.uuid ?? '',
+          fromUUID: AppGlobals.userInfo?.uuid ?? '',
           receiveId: targetUuid,
           content: json.encode(content),
         );

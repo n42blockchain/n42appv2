@@ -1,6 +1,6 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/https/request_url.dart';
@@ -125,7 +125,7 @@ class MiningApi{
   Future<MessageModel> _postBeacon(String method,List<dynamic> params)async{
     try{
       MessageModel mm=MessageModel();
-      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":params,"id":Application.currentId++};
+      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":params,"id":AppGlobals.currentId++};
 
       final data=await BaseApi.RequestEmpty_h.post(_rpcUrl, params: {},data: postData);
       if(data.containsKey('error')){

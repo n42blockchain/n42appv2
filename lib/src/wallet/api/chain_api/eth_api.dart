@@ -1,6 +1,6 @@
-import 'dart:typed_data';
+﻿import 'dart:typed_data';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/https/request_url.dart';
 import 'package:n42appv2/src/models/message_model.dart';
@@ -164,7 +164,7 @@ class EthAPI{
         "value":"0x${value.toRadixString(16)}",
         //"coin":coinType??cType??"",
         //"net_mode":isTest?"test":"main",
-        //"id":Application.currentId++,
+        //"id":AppGlobals.currentId++,
       };
       //params["gasPrice"]='0x${gasPrice.toRadixString(16)}';
       if(get1559WithChainSymbol(coinType??cType??"")){
@@ -217,7 +217,7 @@ class EthAPI{
         "data": "0x${aaa}000000000000000000000000${toAddress}${valueHex}",
         //"coin":coinType??cType??"",
         //"net_mode":isTest?"test":"main",
-        "id":Application.currentId++,
+        "id":AppGlobals.currentId++,
       };
       if(get1559WithChainSymbol(coinType??cType??"")){
         params["maxFeePerGas"]='0x${gasPrice.toRadixString(16)}';
@@ -274,7 +274,7 @@ class EthAPI{
   BaseRPC_eth(String method,var value,{String? coinType,bool? isTest=null})async{
     try{
       MessageModel mm=MessageModel();
-      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":Application.currentId++};
+      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};
       String url;
       if(coinType==null){
         url=rpc??"";

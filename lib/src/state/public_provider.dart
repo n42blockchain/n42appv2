@@ -1,16 +1,16 @@
-import 'package:n42appv2/app_config.dart';
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/home/unlock.dart';
 import 'package:n42appv2/src/https/ipfs_api.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/utils/app_push_utils.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
-import 'package:n42appv2/src/utils/sp_util.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
+import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:n42appv2/src/models/user_info.dart';
+import 'package:n42appv2/data/models/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:provider/provider.dart';
@@ -41,13 +41,13 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
       var userInfo = await sPUtils.getUserInfo();
       if (userInfo != null) {
         UserInfo info = UserInfo.fronJson(userInfo);
-        //Application.login(info);
+        //AppGlobals.login(info);
         setUserInfo(info);
-        //Application.userInfo!.createWallet = await checkWallet();
+        //AppGlobals.userInfo!.createWallet = await checkWallet();
         UserInfo? ruInfo = await getUserInfoFromServer(info);
         if (ruInfo != null) {
           //ruInfo.createWallet = info.createWallet;
-          Application.userInfo = ruInfo;
+          AppGlobals.userInfo = ruInfo;
           setUserInfo(info);
           await sPUtils.saveUserInfo(ruInfo);
           //ProviderUtil.walletActionProvider().init();
@@ -323,7 +323,7 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
     mm = await userInfoAPI.updateUserInfo(uMap);
     if (mm.error == false) {
       await SPUtil().saveUserInfo(uInfo);
-      Application.userInfo = uInfo;
+      AppGlobals.userInfo = uInfo;
       setUserInfo(uInfo);
       notifyListeners();
     }

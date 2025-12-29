@@ -1,8 +1,8 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:ui';
 
-import 'package:n42appv2/app_config.dart';
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/pages/chat_index_page.dart';
 import 'package:n42appv2/src/chat/widgets/chat_services.dart';
 import 'package:n42appv2/src/home/home_draw_page.dart';
@@ -10,8 +10,8 @@ import 'package:n42appv2/src/home/unlock.dart';
 import 'package:n42appv2/src/miningV2/pages/mining_background.dart';
 import 'package:n42appv2/src/miningV2/pages/mining_today_v2.dart';
 import 'package:n42appv2/src/state/public_provider.dart';
-import 'package:n42appv2/src/utils/sp_util.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/core/storage/sp_util.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
   initData()async{
     showTermsOfService=await SPUtil().getShowTermsOfService();
     setState(() {});
-    if(Application.userInfo==null)return;
+    if(AppGlobals.userInfo==null)return;
     PublicProvider pValue=Provider.of<PublicProvider>(context,listen: false);
     //await pValue.getLockScreenData();
     if (pValue.lockScreenMap['lock'] ||
@@ -58,11 +58,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
       Timer(Duration(milliseconds:500),()async{
         final rData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>Unlock()));
         if(rData==true){
-          Application.login(Application.userInfo!);
+          AppGlobals.login(AppGlobals.userInfo!);
         }
       });
     }else{
-      Application.login(Application.userInfo!);
+      AppGlobals.login(AppGlobals.userInfo!);
     }
   }
   @override
@@ -283,7 +283,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
             pp.lockScreenMap['lockTime']) {
           //print("resumed 前台弹窗");
           //if (inputPWShow == false) {
-          if (Application.userInfo !=null) {
+          if (AppGlobals.userInfo !=null) {
             pausedTime = 0;
             //ProviderUtil.publicProvider().setCheckWalletPassword(false);
             await Navigator.push(

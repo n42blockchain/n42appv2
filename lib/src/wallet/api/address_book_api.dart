@@ -1,4 +1,4 @@
-import 'package:n42appv2/src/sqlite/app_database.dart';
+﻿import 'package:n42appv2/core/storage/app_database.dart';
 import 'package:n42appv2/src/wallet/models/address_book_model.dart';
 import 'package:sqflite/sqflite.dart';
 

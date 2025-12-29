@@ -1,4 +1,4 @@
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
@@ -55,7 +55,7 @@ class Notification {
           'nftWallet_channelId', //id可以随意一点
           ///这个会显示在手机设置 通知管理 app 通知设置列表中 不要瞎写
           // '重要通知',
-          S.of(Application.navigatorKey.currentContext!).importantNotice,
+          S.of(AppGlobals.navigatorKey.currentContext!).importantNotice,
 
           ///通知的级别
           importance: Importance.max,
@@ -99,7 +99,7 @@ class Notification {
         'nftWallet_channelId', //id可以随意一点
         ///这个会显示在手机设置 通知管理 app 通知设置列表中 不要瞎写
         // '重要通知',
-        S.of(Application.navigatorKey.currentContext!).importantNotice,
+        S.of(AppGlobals.navigatorKey.currentContext!).importantNotice,
 
         ///通知的级别
         importance: Importance.high,

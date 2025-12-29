@@ -1,6 +1,6 @@
-import 'dart:typed_data';
+﻿import 'dart:typed_data';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/models/friend_info.dart';
 import 'package:n42appv2/src/chat/utils/chat_util.dart';
@@ -8,8 +8,8 @@ import 'package:n42appv2/src/chat/utils/password_gen.dart';
 import 'package:n42appv2/src/chat/widgets/contact_image.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/utils/base64_utils.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:eth_sig_util/util/utils.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +60,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
 
         // 返回列表中 把自己排除在外
         friendList.removeWhere(
-                (element) => element.uuid == Application.userInfo?.uuid);
+                (element) => element.uuid == AppGlobals.userInfo?.uuid);
       }
     } finally {
       if (mounted) {
@@ -80,7 +80,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
       }
     }
     name=name.substring(0,name.length-1);
-    return "${Application.userInfo?.name}、$name";
+    return "${AppGlobals.userInfo?.name}、$name";
   }
 
   @override
@@ -267,7 +267,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                       final groupName = generateGroupName();
 
                       final data = await chatApi.createGroup('', groupName, '',
-                          Application.userInfo?.uuid ?? '', groupMemberIds);
+                          AppGlobals.userInfo?.uuid ?? '', groupMemberIds);
 
                       if (data != null && data["code"] == 200) {
                         final groupId = data["data"];
@@ -285,7 +285,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
 
                         //对群成员生成群成员
                         Map<String, dynamic> params = {};
-                        params["${Application.userInfo?.uuid}"] =
+                        params["${AppGlobals.userInfo?.uuid}"] =
                             Base64Utils().encodeBase64(mSecrtData ?? '');
 
                         for (var element in selectedList) {

@@ -1,6 +1,6 @@
-import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+﻿import 'package:n42appv2/src/component/enums/coin_type.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/api/address_book_api.dart';
 import 'package:n42appv2/src/wallet/models/address_book_model.dart';
 import 'package:n42appv2/src/wallet/pages/address_book/add_address_page.dart';

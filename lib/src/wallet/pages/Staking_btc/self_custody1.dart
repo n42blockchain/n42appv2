@@ -1,10 +1,10 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/https/request_url.dart';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 import 'package:n42appv2/src/wallet/api/transfer_api.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';

@@ -1,14 +1,14 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:math';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
-import 'package:n42appv2/src/utils/sp_util.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
+import 'package:n42appv2/core/storage/sp_util.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/api/market_api.dart';
 import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
@@ -29,10 +29,10 @@ class WalletActionProvider extends ChangeNotifier{
   Map<int,dynamic> coinRefreshMap={};
   String defaultWalletUUID="AstranetWallet";
   String get UserUUID{
-    if(Application.userInfo==null){
+    if(AppGlobals.userInfo==null){
       return defaultWalletUUID;
     }else{
-      return Application.userInfo?.uuid??"";
+      return AppGlobals.userInfo?.uuid??"";
     }
   }
   TokenViewApi? _tokenViewApi;
@@ -297,7 +297,7 @@ class WalletActionProvider extends ChangeNotifier{
     }
     notifyListeners();
     await buildCoinModelInfo();
-    Provider.of<TransactionRecordItemProvider>(Application.AppContext,listen: false).selectUndoneTr();
+    Provider.of<TransactionRecordItemProvider>(AppGlobals.appContext,listen: false).selectUndoneTr();
   }
   buildCoinModelInfo() async {
     coinList=[];
@@ -593,7 +593,7 @@ class WalletActionProvider extends ChangeNotifier{
           pk: _walletInfoLsit[rIndex].privateKey??""
       );
       String miningAddress=rmAddress[cInfo['addrType']];
-      var miningData=Provider.of<MiningV2Provider>(Application.AppContext,listen: false).miningData?[miningAddress];
+      var miningData=Provider.of<MiningV2Provider>(AppGlobals.appContext,listen: false).miningData?[miningAddress];
       if(miningData !=null){
         if(miningData['isMining']==true){
           MessageModel rmm=MessageModel.error();

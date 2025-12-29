@@ -1,11 +1,11 @@
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/models/friend_info.dart';
 import 'package:n42appv2/src/chat/models/group_member_info.dart';
 import 'package:n42appv2/src/chat/widgets/contact_image.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -58,7 +58,7 @@ class _DeleteGroupMemberPageState extends State<DeleteGroupMemberPage> {
       }
       // 返回列表中 把自己排除在外
       _groupMemberList.removeWhere(
-              (element) => element.memberId == Application.userInfo?.uuid);
+              (element) => element.memberId == AppGlobals.userInfo?.uuid);
       setState(() {});
     } catch (err) {
       //err

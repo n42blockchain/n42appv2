@@ -1,23 +1,23 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/models/friend_info.dart';
 import 'package:n42appv2/src/chat/models/group_data.dart';
 import 'package:n42appv2/src/chat/models/group_info.dart';
 import 'package:n42appv2/src/chat/models/group_member_info.dart';
-import 'package:n42appv2/src/utils/sp_util.dart';
+import 'package:n42appv2/core/storage/sp_util.dart';
 
 class ChatSPUtil {
 
   //保存用户好友列表
   Future saveFriendsList(List<FriendInfo> list) async {
-    final chatCacheKey = "${Application.userInfo?.uuid}_friend_list";
+    final chatCacheKey = "${AppGlobals.userInfo?.uuid}_friend_list";
     return await SPUtil().putObject(chatCacheKey, list);
   }
 
   //获取用户好友列表
   Future<List<FriendInfo>> getFriendList() async {
-    final chatCacheKey = "${Application.userInfo?.uuid}_friend_list";
+    final chatCacheKey = "${AppGlobals.userInfo?.uuid}_friend_list";
     Object? cacheData = await SPUtil().getListObject(chatCacheKey);
 
     if (cacheData != null && cacheData is List) {
@@ -39,7 +39,7 @@ class ChatSPUtil {
 
   //保存或者更新FriendInfo
   Future saveOrUpdateFriendInfo(FriendInfo info) async {
-    final chatCacheKey = "${Application.userInfo?.uuid}_friend_list";
+    final chatCacheKey = "${AppGlobals.userInfo?.uuid}_friend_list";
     final list = await getFriendList();
     int index = list.indexWhere((element) => element.uuid == info.uuid);
     if (index != -1) {

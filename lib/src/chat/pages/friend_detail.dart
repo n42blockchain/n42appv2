@@ -1,11 +1,11 @@
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/models/friend_info.dart';
 import 'package:n42appv2/src/chat/pages/chat_detail_page.dart';
 import 'package:n42appv2/src/chat/utils/chat_sp_util.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
@@ -52,7 +52,7 @@ class _FriendDetailState extends State<FriendDetail> {
       List<FriendInfo> list =
       (data["data"] as List).map((e) => FriendInfo.fromJson(e)).toList();
       // 返回列表中 把自己排除在外
-      list.removeWhere((element) => element.uuid == Application.userInfo?.uuid);
+      list.removeWhere((element) => element.uuid == AppGlobals.userInfo?.uuid);
       int fIndex=list.indexWhere((element) => element.uuid == widget.info.uuid);
       if(fIndex !=-1){
         isFriend=true;
@@ -68,8 +68,8 @@ class _FriendDetailState extends State<FriendDetail> {
   @override
   void initState() {
     super.initState();
-    if (Application.userInfo?.name != null) {
-      reasonText = S.current.g_chat_key_10(Application.userInfo?.name ?? '');
+    if (AppGlobals.userInfo?.name != null) {
+      reasonText = S.current.g_chat_key_10(AppGlobals.userInfo?.name ?? '');
     }
     updateFriendData();
   }
@@ -150,7 +150,7 @@ class _FriendDetailState extends State<FriendDetail> {
                 ),
               ),
             ),
-            if(load==Load.finish && Application.userInfo?.email != widget.info.email)
+            if(load==Load.finish && AppGlobals.userInfo?.email != widget.info.email)
             Positioned(
               left: 0,
               right: 0,
@@ -179,7 +179,7 @@ class _FriendDetailState extends State<FriendDetail> {
   }
 
   _buildHandlerView() {
-    if (Application.userInfo?.uuid == widget.info.uuid ||
+    if (AppGlobals.userInfo?.uuid == widget.info.uuid ||
         load==Load.loading ||
         isFriend
     ) {
@@ -283,7 +283,7 @@ class _FriendDetailState extends State<FriendDetail> {
         }
         final remarks = _remarksTextController.text.trim();
         final data = await chatApi.friendAdd(reasonData ?? '', remarks,
-            Application.userInfo?.uuid ?? '', widget.info.uuid ?? '');
+            AppGlobals.userInfo?.uuid ?? '', widget.info.uuid ?? '');
         if (data != null && data["code"] == 200) {
           Navigator.of(context).pop();
         } else {

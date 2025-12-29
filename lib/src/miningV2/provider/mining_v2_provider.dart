@@ -1,7 +1,7 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/miningV2/api/mining_api.dart';
@@ -9,10 +9,10 @@ import 'package:n42appv2/src/miningV2/api/mining_web3.dart';
 import 'package:n42appv2/src/miningV2/models/miningWithdrawalsDaily.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/utils/data_utils.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
-import 'package:n42appv2/src/utils/sp_util.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
+import 'package:n42appv2/core/storage/sp_util.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
@@ -72,7 +72,7 @@ class MiningV2Provider extends ChangeNotifier {
   /// 新增：FUJI NFT 质押
   Future<void> checkAddressMiningStatus() async {
     try {
-      WalletActionProvider wap=Provider.of<WalletActionProvider>(Application.AppContext,listen: false);
+      WalletActionProvider wap=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
       Map<String,dynamic> cInfo=wap.walletInfoLsit[wap.walletMiningIndex].coinInfo?[CoinType.N.name];
       WalletInfo info = wap.walletInfoLsit[wap.walletMiningIndex];
       Map<String, dynamic> pathMap = cInfo['baseInfo']['path'];
@@ -163,7 +163,7 @@ class MiningV2Provider extends ChangeNotifier {
     SPUtil().setMiningData(miningData!);
   }
   Future<MessageModel> setMiningData_import(Map<String,dynamic> value) async {
-    WalletActionProvider wap=Provider.of<WalletActionProvider>(Application.AppContext,listen: false);
+    WalletActionProvider wap=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
     int index=wap.walletInfoLsit.indexWhere((test){
       if(test.privateKey==value['privateKey']){
         return true;
@@ -387,7 +387,7 @@ class MiningV2Provider extends ChangeNotifier {
 
   String? privateKey=null;
   Future<void> getWalletPrivateKey() async {
-    WalletActionProvider wap=Provider.of<WalletActionProvider>(Application.AppContext,listen: false);
+    WalletActionProvider wap=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
     String? pk=wap.walletInfoLsit[wap.walletMiningIndex].privateKey;
     if(pk==null){
       Map<String,dynamic> nCoinInfo=wap.walletInfoLsit[wap.walletMiningIndex].coinInfo![CoinType.N.name];
@@ -530,23 +530,23 @@ class MiningV2Provider extends ChangeNotifier {
               TextStyle(
                 fontSize: ScreenUtil().setSp(20),
                 color: AppThemeUtils.getColorByKey(
-                    Application.AppContext, AppThemeKeys.mainWhiteColor.name),
+                    AppGlobals.appContext, AppThemeKeys.mainWhiteColor.name),
               ),
               TextStyle(
                 fontSize: ScreenUtil().setSp(22),
                 color: AppThemeUtils.getColorByKey(
-                    Application.AppContext, AppThemeKeys.mainWhiteColor.name),
+                    AppGlobals.appContext, AppThemeKeys.mainWhiteColor.name),
                 fontWeight: FontWeight.bold,
               ),
               /*TextStyle(
                 fontSize: ScreenUtil().setSp(10),
                 color: AppThemeUtils.getColorByKey(
-                    Application.AppContext, AppThemeKeys.itemTextColor.name),
+                    AppGlobals.appContext, AppThemeKeys.itemTextColor.name),
               ),
               TextStyle(
                 fontSize: ScreenUtil().setSp(20),
                 color: AppThemeUtils.getColorByKey(
-                    Application.AppContext, AppThemeKeys.itemSubtitleTextColor.name),
+                    AppGlobals.appContext, AppThemeKeys.itemSubtitleTextColor.name),
               ),
               TextStyle(
                 fontSize: ScreenUtil().setSp(22),
@@ -556,12 +556,12 @@ class MiningV2Provider extends ChangeNotifier {
               TextStyle(
                 fontSize: ScreenUtil().setSp(10),
                 color: AppThemeUtils.getColorByKey(
-                    Application.AppContext, AppThemeKeys.itemTextColor.name),
+                    AppGlobals.appContext, AppThemeKeys.itemTextColor.name),
               ),
               TextStyle(
                 fontSize: ScreenUtil().setSp(20),
                 color: AppThemeUtils.getColorByKey(
-                    Application.AppContext, AppThemeKeys.itemSubtitleTextColor.name),
+                    AppGlobals.appContext, AppThemeKeys.itemSubtitleTextColor.name),
               ),
               TextStyle(
                 fontSize: ScreenUtil().setSp(22),

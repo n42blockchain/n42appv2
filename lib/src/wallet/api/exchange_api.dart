@@ -1,5 +1,5 @@
-import 'package:n42appv2/app_config.dart';
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 
 class ExchangeApi{
@@ -16,8 +16,8 @@ class ExchangeApi{
     params["coin"] = coin;
     params["platform"] = exchangeName ?? 'binance';
     params["source"] = "app";
-    params["token"] = Application.userInfo?.token??"";
-    params["uuid"] = Application.userInfo?.uuid??"";
+    params["token"] = AppGlobals.userInfo?.token??"";
+    params["uuid"] = AppGlobals.userInfo?.uuid??"";
     final data =
     await BaseApi.RequestEmpty_h.get('$url/v1/user_account/list', params: params,addUserInfo: true,header: header,);
     return data;

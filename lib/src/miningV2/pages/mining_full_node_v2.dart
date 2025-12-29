@@ -1,8 +1,8 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/miningV2/pages/keyManagement/mining_output_tip.dart';
@@ -12,9 +12,9 @@ import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
 import 'package:n42appv2/src/miningV2/widgets/n_level_widget.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/utils/data_utils.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/pages/ast_swap/swap_ast_home.dart';
@@ -90,8 +90,8 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
           isLoadingAstBalance = true;
         });
       }
-      WalletActionProvider wap=Provider.of<WalletActionProvider>(Application.AppContext,listen: false);
-      //MiningV2Provider mp=Provider.of<MiningV2Provider>(Application.AppContext,listen: false);
+      WalletActionProvider wap=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
+      //MiningV2Provider mp=Provider.of<MiningV2Provider>(AppGlobals.appContext,listen: false);
       //获取ast的 private key
       WalletInfo walletInfo=wap.walletInfoLsit[wap.walletMiningIndex];
       final Map<String, dynamic>? map = walletInfo.coinInfo;
@@ -491,7 +491,7 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
       return;
     }
     try {
-      MiningV2Provider mp=Provider.of<MiningV2Provider>(Application.AppContext,listen: false);
+      MiningV2Provider mp=Provider.of<MiningV2Provider>(AppGlobals.appContext,listen: false);
       mp.createDepositUnsignedTx(widget.nNum, encrypteData!);
     } catch (err) {
       //RPCError: got code 3 with msg "execution reverted: 10 AST Deposit Limit has been reached".

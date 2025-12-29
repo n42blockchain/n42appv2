@@ -1,6 +1,6 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/models/friend_info.dart';
 import 'package:n42appv2/src/chat/models/group_info.dart';
 import 'package:n42appv2/src/chat/models/red_pocket_detail_model.dart';
@@ -48,7 +48,7 @@ class ChatMessageModel{
   //代表和我聊天的对象（user_id 或者 group_id）
   String getTargetId() {
     if (conversationType == 0) {
-      if (Application.userInfo?.uuid == from) {
+      if (AppGlobals.userInfo?.uuid == from) {
         return target;
       }
       return from;

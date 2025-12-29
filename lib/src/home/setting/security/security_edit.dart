@@ -1,7 +1,7 @@
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/home/setting/security/security_google_download.dart';
-import 'package:n42appv2/src/utils/sp_util.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/core/storage/sp_util.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/generated/l10n.dart';
@@ -27,7 +27,7 @@ class _SecurityEditState extends State<SecurityEdit>{
   init()async{
     Map<String,dynamic>? s=await SPUtil().getSecurity();
     if(s!=null){
-      Map<String,dynamic>? userSecurityMap=s[Application.userInfo?.uuid??""];
+      Map<String,dynamic>? userSecurityMap=s[AppGlobals.userInfo?.uuid??""];
       if(userSecurityMap!=null){
         setState(() {
           securityMap['email']=userSecurityMap['email'];
@@ -48,14 +48,14 @@ class _SecurityEditState extends State<SecurityEdit>{
       if(securityMap["google"]==true){
 
       }else{
-        s[Application.userInfo?.uuid??""]=securityMap;
+        s[AppGlobals.userInfo?.uuid??""]=securityMap;
         await sPUtils.setSecurity(s);
         setState(() {
         });
       }
     }else{
 
-      s[Application.userInfo?.uuid??""]=securityMap;
+      s[AppGlobals.userInfo?.uuid??""]=securityMap;
       await sPUtils.setSecurity(s);
       setState(() {
       });

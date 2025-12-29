@@ -1,4 +1,4 @@
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/models/group_info.dart';
 import 'package:n42appv2/src/chat/models/group_member_info.dart';
@@ -7,8 +7,8 @@ import 'package:n42appv2/src/chat/pages/delete_group_member_page.dart';
 import 'package:n42appv2/src/chat/pages/group_all_members_page.dart';
 import 'package:n42appv2/src/chat/pages/group_edit_page.dart';
 import 'package:n42appv2/src/chat/utils/chat_sp_util.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_2.dart';
@@ -72,7 +72,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
         isLoading = true;
       });
       final data = await chatApi.groupMembers(
-          widget.info.g_uuid, Application.userInfo?.uuid ?? '');
+          widget.info.g_uuid, AppGlobals.userInfo?.uuid ?? '');
       if (data != null && data["code"] == 200) {
         final list = data["data"];
         if (list != null && list is List) {
@@ -104,7 +104,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
 
     //判断是群成员还是群主
     for (var element in groupMemberList) {
-      if (element.memberId == Application.userInfo?.uuid) {
+      if (element.memberId == AppGlobals.userInfo?.uuid) {
         isGroupMember = true;
         if (element.type == 1) {
           isGroupOwner = true;
@@ -395,7 +395,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                       //解散群
                       final data = await chatApi.groupDisband(
                           widget.info.g_uuid,
-                          Application.userInfo?.uuid ?? '');
+                          AppGlobals.userInfo?.uuid ?? '');
                       //{code: 200, msg: OK, data: true}
                       if (data != null && data["code"] == 200) {
                         if (data["data"] != null && data["data"]) {
@@ -416,7 +416,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                       //退出群
                       final data = await chatApi.leaveGroup(
                           widget.info.g_uuid,
-                          Application.userInfo?.uuid ?? '');
+                          AppGlobals.userInfo?.uuid ?? '');
                       //{code: 400, msg: Bad Request, data: {l_uuid: l_uuid is a required field}}
                       //{code: 200, msg: OK, data: true}
                       if (data != null && data["code"] == 200) {

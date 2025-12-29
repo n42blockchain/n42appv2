@@ -1,6 +1,6 @@
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/models/chat_message_model.dart';
-import 'package:n42appv2/src/sqlite/app_database.dart';
+import 'package:n42appv2/core/storage/app_database.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ChatDBApi{
@@ -14,7 +14,7 @@ class ChatDBApi{
   ///保存数据
   Future<int> saveMessage(ChatMessageModel info) async {
     Database db = await appDatabase.database;
-    final userId = Application.userInfo?.uuid;
+    final userId = AppGlobals.userInfo?.uuid;
     Map<String, dynamic> map = info.toMap();
     map["user_id"] = userId;
     var raw = await db.insert("Messages", map,
@@ -25,7 +25,7 @@ class ChatDBApi{
   ///会话列表查询
   Future<List<Map<String, dynamic>>> getChatConversations() async {
     Database db = await appDatabase.database;
-    String userId = Application.userInfo?.uuid ?? '';
+    String userId = AppGlobals.userInfo?.uuid ?? '';
     return await db.rawQuery('''
     SELECT m.*
     FROM Messages m
@@ -52,7 +52,7 @@ class ChatDBApi{
   //   Database db = await WalletDatabaseProvider.dbProvider.database;
   //   int offset = pageIndex * pageSize;
   //   debugPrint("offset===:$offset");
-  //   String userId = Application.userInfo?.uuid ?? '';
+  //   String userId = AppGlobals.userInfo?.uuid ?? '';
   //   var response = await db.query(
   //     "Messages",
   //     columns: null,
@@ -77,7 +77,7 @@ class ChatDBApi{
         int pageSize = 20,
       }) async {
     Database db = await appDatabase.database;
-    String userId = Application.userInfo?.uuid ?? '';
+    String userId = AppGlobals.userInfo?.uuid ?? '';
     var response = await db.query(
       "Messages",
       columns: null,
@@ -112,7 +112,7 @@ class ChatDBApi{
       String targetUuid,
       ) async {
     Database db = await appDatabase.database;
-    String userId = Application.userInfo?.uuid ?? '';
+    String userId = AppGlobals.userInfo?.uuid ?? '';
     var raw = await db.delete(
       "Messages",
       where: "user_id = ? and targetId = ?",

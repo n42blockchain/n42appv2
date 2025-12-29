@@ -1,8 +1,8 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/api/chat_db_api.dart';
 import 'package:n42appv2/src/chat/api/file_api.dart';
@@ -28,9 +28,9 @@ import 'package:n42appv2/src/https/ipfs_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/utils/base64_utils.dart';
 import 'package:n42appv2/src/utils/data_utils.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_1.dart';
 import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_2.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
@@ -254,7 +254,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       if(userData.error){
         if(userData.type==MessageErrorType.E1403){
           await TipsDialog1(context, S.of(context).g_key_error_1403);
-          Application.logout();
+          AppGlobals.logout();
           Navigator.pop(context);
         }else{
           ToastUtils.show(userData.data);
@@ -345,7 +345,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           if(userData.error){
             if(userData.type==MessageErrorType.E1403){
               await TipsDialog1(context, S.of(context).g_key_error_1403);
-              Application.logout();
+              AppGlobals.logout();
               Navigator.pop(context);
             }else{
               ToastUtils.show(userData.data);
@@ -379,7 +379,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       // 构建消息结构
       Map<String, dynamic> content = chatDataUtils.generateSendData(
           contentType: MessageContentType.Text,
-          fromID: Application.userInfo?.uuid ?? '',
+          fromID: AppGlobals.userInfo?.uuid ?? '',
           receiveId: widget.targetUuid ?? '',
           conversationType: 0,
           reply_id: currentReplyModel?.messageId,
@@ -414,7 +414,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
       try {
         final data = await chatApi.sendMessage(
-          fromUUID: Application.userInfo?.uuid ?? '',
+          fromUUID: AppGlobals.userInfo?.uuid ?? '',
           receiveId: widget.targetUuid,
           content: json.encode(content),
         );
@@ -477,7 +477,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           if(userData.error){
             if(userData.type==MessageErrorType.E1403){
               await TipsDialog1(context, S.of(context).g_key_error_1403);
-              Application.logout();
+              AppGlobals.logout();
               Navigator.pop(context);
             }else{
               ToastUtils.show(userData.data);
@@ -563,7 +563,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     // 构建消息结构
     Map<String, dynamic> content = chatDataUtils.generateSendData(
         contentType: contentType,
-        fromID: Application.userInfo?.uuid ?? '',
+        fromID: AppGlobals.userInfo?.uuid ?? '',
         receiveId: widget.targetUuid ?? '',
         conversationType: 0,
         direction: 1,
@@ -644,7 +644,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
       try {
         final data = await chatApi.sendMessage(
-          fromUUID: Application.userInfo?.uuid ?? '',
+          fromUUID: AppGlobals.userInfo?.uuid ?? '',
           receiveId: widget.targetUuid,
           content: json.encode(content),
         );
@@ -710,7 +710,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           if(userData.error){
             if(userData.type==MessageErrorType.E1403){
               await TipsDialog1(context, S.of(context).g_key_error_1403);
-              Application.logout();
+              AppGlobals.logout();
               Navigator.pop(context);
             }else{
               ToastUtils.show(userData.data);
@@ -756,7 +756,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           if(userData.error){
             if(userData.type==MessageErrorType.E1403){
               await TipsDialog1(context, S.of(context).g_key_error_1403);
-              Application.logout();
+              AppGlobals.logout();
               Navigator.pop(context);
             }else{
               ToastUtils.show(userData.data);
@@ -794,7 +794,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       // 构建消息结构
       Map<String, dynamic> content = chatDataUtils.generateSendData(
           contentType: MessageContentType.RedEnvelope,
-          fromID: Application.userInfo?.uuid ?? '',
+          fromID: AppGlobals.userInfo?.uuid ?? '',
           receiveId: widget.targetUuid ?? '',
           conversationType: 0,
           reply_id: currentReplyModel?.messageId,
@@ -830,7 +830,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
       try {
         final data = await chatApi.sendMessage(
-          fromUUID: Application.userInfo?.uuid ?? '',
+          fromUUID: AppGlobals.userInfo?.uuid ?? '',
           receiveId: widget.targetUuid,
           content: json.encode(content),
         );
@@ -1231,7 +1231,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                       },
                       item: currentReplyModel!,
                       friendName: currentReplyModel!.direction == 1
-                          ? Application.userInfo?.name
+                          ? AppGlobals.userInfo?.name
                           : friendName,
                     ),
 

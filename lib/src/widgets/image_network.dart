@@ -1,4 +1,4 @@
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+﻿import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:n42appv2/src/widgets/esoImage_cachemanager.dart';

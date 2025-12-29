@@ -1,7 +1,7 @@
-import 'package:n42appv2/src/browser/pages/browser_page.dart';
+﻿import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/utils/regular.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/api/market_api.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/widgets/about_show_dialog.dart';

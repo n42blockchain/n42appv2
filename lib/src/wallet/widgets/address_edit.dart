@@ -1,5 +1,5 @@
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+﻿import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/address_book_model.dart';
 import 'package:n42appv2/src/wallet/pages/address_book/edit_address_page.dart';
 import 'package:n42appv2/src/widgets/prompt_widget.dart';

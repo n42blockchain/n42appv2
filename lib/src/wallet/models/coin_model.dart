@@ -1,4 +1,4 @@
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
@@ -116,7 +116,7 @@ class CoinModel {
     String coinType = coin['coinType'];
     if (address == null) {
       if(walletIndex==null){
-        WalletActionProvider wap = Provider.of<WalletActionProvider>(Application.AppContext,listen: false);
+        WalletActionProvider wap = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
         WalletInfo info = wap.walletInfo;
         Map<String, dynamic> pathMap = coin['path'];
         Map<Object?, Object?> rm= await Trustdart().generateAddress(
@@ -142,7 +142,7 @@ class CoinModel {
           wap.setAddress(coinType, addressType);
         }
       }else{
-        WalletActionProvider wap = Provider.of<WalletActionProvider>(Application.AppContext,listen: false);
+        WalletActionProvider wap = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
         WalletInfo info = wap.walletInfoLsit[walletIndex];
         Map<String, dynamic> pathMap = coin['path'];
         Map<Object?, Object?> rm = await Trustdart().generateAddress(
@@ -180,14 +180,14 @@ class CoinModel {
   getBalance({bool getToken=true}) async {
     try {
       //如果币的地址为空，创建地址
-      WalletActionProvider wap = Provider.of<WalletActionProvider>(Application.AppContext,listen: false);
+      WalletActionProvider wap = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
       if (address == null) {
         await buildWallet();
       }
       bool error=await wap.getBalance_withCoinModel(this);
       if(error){
         loadError = false;
-        Provider.of<WalletActionProvider>(Application.AppContext,listen: false).notifyListeners();
+        Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).notifyListeners();
         return false;
       }else{
         loadError = false;
@@ -197,7 +197,7 @@ class CoinModel {
     } catch (e) {
       loadError = true;
       isRefresh = false;
-      Provider.of<WalletActionProvider>(Application.AppContext,listen: false).notifyListeners();
+      Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).notifyListeners();
       return false;
     }
   }

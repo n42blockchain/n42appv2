@@ -1,8 +1,8 @@
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/models/group_member_info.dart';
 import 'package:n42appv2/src/chat/utils/chat_sp_util.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -40,12 +40,12 @@ class _BottomGroupMemberDialogState extends State<BottomGroupMemberDialog> {
       if (groupList.isNotEmpty) {
         groupMemberList = groupList;
         // 返回列表中 把自己排除在外
-        groupMemberList.removeWhere((element) => element.memberId == Application.userInfo?.uuid);
+        groupMemberList.removeWhere((element) => element.memberId == AppGlobals.userInfo?.uuid);
         setState(() {});
       }
 
       final data = await chatApi.groupMembers(
-          widget.groupId, Application.userInfo?.uuid ?? '');
+          widget.groupId, AppGlobals.userInfo?.uuid ?? '');
       if (data != null && data["code"] == 200) {
         final list = data["data"];
         if (list != null && list is List) {
@@ -53,7 +53,7 @@ class _BottomGroupMemberDialogState extends State<BottomGroupMemberDialog> {
               list.map((e) => GroupMemberInfo.fromJson(e)).toList();
           // 添加群成员缓存
           ChatSPUtil().saveGroupMembers(widget.groupId, groupMemberList);
-          groupMemberList.removeWhere((element) => element.memberId == Application.userInfo?.uuid);
+          groupMemberList.removeWhere((element) => element.memberId == AppGlobals.userInfo?.uuid);
           setState(() {});
         }
       }

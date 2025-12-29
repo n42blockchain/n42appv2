@@ -1,4 +1,4 @@
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+﻿import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';

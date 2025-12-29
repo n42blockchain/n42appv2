@@ -1,11 +1,11 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:n42appv2/app_config.dart';
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/models/user_info.dart';
+import 'package:n42appv2/data/models/user_info.dart';
 
 class UserInfoApi{
   late String url;
@@ -31,9 +31,9 @@ class UserInfoApi{
   getEmailVerification()async{
     try{
       Map<String,dynamic> postMap={
-        "uuid":Application.userInfo?.uuid??"",
+        "uuid":AppGlobals.userInfo?.uuid??"",
         "source":"app",
-        "token":Application.userInfo?.token??"",
+        "token":AppGlobals.userInfo?.token??"",
       };
       MessageModel mm=MessageModel();
       final data=await BaseApi.RequestEmpty_h.post('${url}/v1/l/user/send/pay/email/code', params:{},data: postMap,header: header);
@@ -54,10 +54,10 @@ class UserInfoApi{
   checkEmailVerification(String code)async{
     try{
       Map<String,dynamic> postMap={
-        "uuid":Application.userInfo?.uuid??"",
+        "uuid":AppGlobals.userInfo?.uuid??"",
         "code":code,
         "source":"app",
-        "token":Application.userInfo?.token??"",
+        "token":AppGlobals.userInfo?.token??"",
       };
       MessageModel mm=MessageModel();
       final data=await BaseApi.RequestEmpty_h.post('${url}/v1/l/user/verify/pay/email/code', params:{},data: postMap,header: header);
@@ -95,12 +95,12 @@ class UserInfoApi{
   ///用户注销时 发送email code
   Future sendUnRegisterEmailCode() async {
     /*Map params = {};
-    params["uuid"] = Application.userInfo?.uuid??"";
-    params["token"] = Application.userInfo?.token??"";
+    params["uuid"] = AppGlobals.userInfo?.uuid??"";
+    params["token"] = AppGlobals.userInfo?.token??"";
     params["source"] = "app";*/
     final formData = FormData.fromMap({
-      'uuid': Application.userInfo?.uuid??"",
-      'token': Application.userInfo?.token??"",
+      'uuid': AppGlobals.userInfo?.uuid??"",
+      'token': AppGlobals.userInfo?.token??"",
       'source': 'app',
     });
     Map<String,String> header_v2={'content-type': 'multipart/form-data'};
@@ -147,9 +147,9 @@ class UserInfoApi{
   }
   updateUserInfo(Map<String,dynamic> userInfo)async{
     try{
-      userInfo['uuid']=Application.userInfo?.uuid??"";
+      userInfo['uuid']=AppGlobals.userInfo?.uuid??"";
       userInfo['source']="app";
-      userInfo['token']=Application.userInfo?.token??"";
+      userInfo['token']=AppGlobals.userInfo?.token??"";
       MessageModel mm=MessageModel();
       final data=await BaseApi.RequestEmpty_h.post(
         '${url}/v1/l/user/info',
@@ -175,8 +175,8 @@ class UserInfoApi{
   Future unRegisterAccount(String code) async {
     Map<String, dynamic> params = {};
     params["code"] = code;
-    params["token"] = Application.userInfo?.token??"";
-    params["uuid"] = Application.userInfo?.uuid??"";
+    params["token"] = AppGlobals.userInfo?.token??"";
+    params["uuid"] = AppGlobals.userInfo?.uuid??"";
     params["source"] = "app";
     final data = await BaseApi.RequestEmpty_h
         .post('${url}/v1/l/user/account/cancel', params: {}, data: params,header: header);
@@ -246,8 +246,8 @@ class UserInfoApi{
   //提交反馈信息,address钱包地址，content反馈内容，extra附件地址
   submitFeedback(String address,String content,String extra)async{
     try{
-      String token=Application.userInfo?.token??"";
-      String uuid=Application.userInfo?.uuid??"";
+      String token=AppGlobals.userInfo?.token??"";
+      String uuid=AppGlobals.userInfo?.uuid??"";
       MessageModel mm=MessageModel();
       Map<String,dynamic> dt={
         "uuid": uuid,
@@ -312,11 +312,11 @@ class UserInfoApi{
       MessageModel mm = MessageModel();
       final data =
       await BaseApi.RequestEmpty_h.get('${url}/v1/lr/get/msg/notice/list', params: {
-        "uuid":Application.userInfo?.uuid??"",
+        "uuid":AppGlobals.userInfo?.uuid??"",
         "page":page,
         "page_size":pageSize,
         "msg_type":msgType,
-        "token":Application.userInfo?.token??"",
+        "token":AppGlobals.userInfo?.token??"",
         "source":"app"
       },header: header);
       if (data['code'] == 200) {
@@ -336,9 +336,9 @@ class UserInfoApi{
   bindGoogle()async{
     try{
       Map<String,dynamic> postMap={
-        "uuid":Application.userInfo?.uuid??"",
+        "uuid":AppGlobals.userInfo?.uuid??"",
         "source":"app",
-        "token":Application.userInfo?.token??"",
+        "token":AppGlobals.userInfo?.token??"",
       };
       MessageModel mm=MessageModel();
       final data=await BaseApi.RequestEmpty_h.post('${url}/v1/l/user/bind/google/auth/code', params:{},data: postMap,header: header);
@@ -359,9 +359,9 @@ class UserInfoApi{
   checkGoogle(String code)async{
     try{
       Map<String,dynamic> postMap={
-        "uuid":Application.userInfo?.uuid??"",
+        "uuid":AppGlobals.userInfo?.uuid??"",
         "code":code,
-        "token":Application.userInfo?.token??"",
+        "token":AppGlobals.userInfo?.token??"",
         "source":"app",
       };
       MessageModel mm=MessageModel();
@@ -383,8 +383,8 @@ class UserInfoApi{
   Future bindPushUserToken(String pushToken) async {
     Map params = {};
     params["firebase_token"] = pushToken;
-    params["uuid"] = Application.userInfo?.uuid??"";
-    params["token"] = Application.userInfo?.token??"";
+    params["uuid"] = AppGlobals.userInfo?.uuid??"";
+    params["token"] = AppGlobals.userInfo?.token??"";
     params["source"] = "app";
     final data = await BaseApi.RequestEmpty_h.post(
         '${url}/v1/l/file/bind/firebase/token',

@@ -1,7 +1,7 @@
-import 'dart:io';
+﻿import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/api/chat_db_api.dart';
 import 'package:n42appv2/src/chat/api/file_api.dart';
@@ -12,7 +12,7 @@ import 'package:n42appv2/src/chat/utils/chat_sp_util.dart';
 import 'package:n42appv2/src/chat/widgets/file_aes_crypt_utils.dart';
 import 'package:n42appv2/src/chat/widgets/file_utils.dart';
 import 'package:n42appv2/src/https/ipfs_api.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/file_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -84,8 +84,8 @@ class _ItemGroupChatReplyInnerWidgetState extends State<ItemGroupChatReplyInnerW
   updateUserInfo() async {
     try {
       if (widget.isCurrentUser) {
-        name = Application.userInfo?.name??"";
-        image = Application.userInfo?.image??"";
+        name = AppGlobals.userInfo?.name??"";
+        image = AppGlobals.userInfo?.image??"";
       } else {
         final targetId = _item.from;
         FriendInfo? info = await ChatSPUtil().getNavUserInfo(targetId);

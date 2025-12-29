@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:n42appv2/src/miningV2/api/mining_api.dart';
@@ -6,8 +6,8 @@ import 'package:n42appv2/src/miningV2/pages/mining_full_node_v2.dart';
 import 'package:n42appv2/src/miningV2/utils/mining_utils.dart';
 import 'package:n42appv2/src/miningV2/widgets/mining_board_widget.dart';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

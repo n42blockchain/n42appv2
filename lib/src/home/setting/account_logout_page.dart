@@ -1,12 +1,12 @@
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/home/models/exchange_account_model.dart';
 import 'package:n42appv2/src/login/api/handtype.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/login/widgets/input_field.dart';
 import 'package:n42appv2/src/utils/regular.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/api/exchange_api.dart';
 import 'package:n42appv2/src/wallet/api/market_api.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
@@ -76,7 +76,7 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
   /*initData() async {
     Map<String, dynamic>? s = await SPUtil().getSecurity();
     if (s != null) {
-      Map<String, dynamic>? userSecurityMap = s[Application.userInfo?.uuid??""];
+      Map<String, dynamic>? userSecurityMap = s[AppGlobals.userInfo?.uuid??""];
       if (userSecurityMap != null) {
         if (userSecurityMap['google']) {
           openGoogleAuth = true;
@@ -205,7 +205,7 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
                     //这里如果是验证码输入框
                     onCaptcha: () {
                       FocusManager.instance.primaryFocus?.unfocus();
-                      return Application.userInfo?.email;
+                      return AppGlobals.userInfo?.email;
                     },
                   ),
                 ),
@@ -260,7 +260,7 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
                 try {
                   ToastUtils.show("Account has been cancelled");
                   //退出登陆
-                  await Application.logout();
+                  await AppGlobals.logout();
                   //退出第3方登录
                   //await FireBaseUtils.signOut();
                   /*Navigator.pushAndRemoveUntil(

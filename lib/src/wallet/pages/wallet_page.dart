@@ -1,13 +1,13 @@
-import 'dart:math';
+﻿import 'dart:math';
 
-import 'package:n42appv2/app_config.dart';
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/component/pages/scan_page.dart';
 import 'package:n42appv2/src/pay/moonpay/moonpay.dart';
 import 'package:n42appv2/src/utils/regular.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/pages/Staking_btc/wallet_chain_info_btc.dart';
@@ -69,7 +69,7 @@ class _WalletPageState extends State<WalletPage> {
   @override
   void initState() {
     // TODO: implement initState
-    if(Application.userInfo==null){
+    if(AppGlobals.userInfo==null){
       Provider.of<WalletActionProvider>(context,listen: false).init_wallet(initCoinInfo:true);
     }/*else{
       Timer(Duration(seconds: 1),(){

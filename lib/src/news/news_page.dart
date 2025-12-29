@@ -1,7 +1,7 @@
-
+﻿
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/news/api/news_api.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/app_home_top_bar.dart';
 import 'package:n42appv2/src/widgets/base_list.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';

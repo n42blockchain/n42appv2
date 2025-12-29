@@ -1,6 +1,6 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/api/chat_db_api.dart';
 import 'package:n42appv2/src/chat/models/chat_message_model.dart';
@@ -10,7 +10,7 @@ import 'package:n42appv2/src/chat/models/group_info.dart';
 import 'package:n42appv2/src/chat/utils/cache_read_message_utils.dart';
 import 'package:n42appv2/src/chat/utils/chat_data_util.dart';
 import 'package:n42appv2/src/chat/utils/chat_sp_util.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -124,7 +124,7 @@ class ChatMessageProvider extends ChangeNotifier {
         (data["data"] as List).map((e) => FriendInfo.fromJson(e)).toList();
         // 返回列表中 把自己排除在外
         list.removeWhere(
-                (element) => element.uuid == Application.userInfo?.uuid);
+                (element) => element.uuid == AppGlobals.userInfo?.uuid);
         //本地缓存好友列表
         final flag = await chatSPUtil.saveFriendsList(list);
         if (flag) {
@@ -181,7 +181,7 @@ class ChatMessageProvider extends ChangeNotifier {
         }
 
         //ChatSPUtils().setNewFriendStatus(index != -1);
-        Provider.of<ChatMessageProvider>(Application.AppContext,listen: false).setNewFriendStatus(index);
+        Provider.of<ChatMessageProvider>(AppGlobals.appContext,listen: false).setNewFriendStatus(index);
       }
     }catch(err){
       //err:
@@ -270,11 +270,11 @@ class ChatMessageProvider extends ChangeNotifier {
               final String? blackUuid = pushContent["black_uuid"];
 
               if (whiteUuid != null && whiteUuid.isNotEmpty) {
-                if (Application.userInfo?.uuid == whiteUuid) {
+                if (AppGlobals.userInfo?.uuid == whiteUuid) {
                   await saveGroupOfflineMessage(md);
                 }
               } else if (blackUuid != null && blackUuid.isNotEmpty) {
-                if (Application.userInfo?.uuid != blackUuid) {
+                if (AppGlobals.userInfo?.uuid != blackUuid) {
                   await saveGroupOfflineMessage(md);
                 }
               } else {
@@ -284,7 +284,7 @@ class ChatMessageProvider extends ChangeNotifier {
               CacheMessageIsReadUtils().saveUnReadMessageId(md.getTargetId());
 
             } else {
-              if (md.from != Application.userInfo?.uuid) {
+              if (md.from != AppGlobals.userInfo?.uuid) {
                 await saveGroupOfflineMessage(md);
                 //设置消息未读
                 CacheMessageIsReadUtils().saveUnReadMessageId(md.getTargetId());
@@ -294,7 +294,7 @@ class ChatMessageProvider extends ChangeNotifier {
                   List<dynamic> list = md.mentioned_user_ids != null ? json.decode(md.mentioned_user_ids! ) : [];
                   bool flag = false;
                   for (var element in list) {
-                    if(element == Application.userInfo?.uuid){
+                    if(element == AppGlobals.userInfo?.uuid){
                       flag = true;
                     }
                   }

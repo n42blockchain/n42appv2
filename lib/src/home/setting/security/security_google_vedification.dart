@@ -1,12 +1,12 @@
-import 'dart:async';
+﻿import 'dart:async';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/utils/sp_util.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/core/storage/sp_util.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
@@ -60,7 +60,7 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
   }
   //加载钱包名
   initWalletPassword()async{
-    WalletActionProvider wap=Provider.of<WalletActionProvider>(Application.AppContext,listen: false);
+    WalletActionProvider wap=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
     //获取ast的 private key
     WalletInfo? walletInfo;
     if(wap.walletInfo.mainWallet==true){
@@ -82,7 +82,7 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
   init_security()async{
     Map<String,dynamic>? s=await SPUtil().getSecurity();
     if(s!=null){
-      Map<String,dynamic>? userSecurityMap=s[Application.userInfo?.uuid??""];
+      Map<String,dynamic>? userSecurityMap=s[AppGlobals.userInfo?.uuid??""];
       if(userSecurityMap!=null){
         setState(() {
           //securityMap=userSecurityMap;
@@ -137,7 +137,7 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
       });
       return false;
     }
-    WalletActionProvider wap=Provider.of<WalletActionProvider>(Application.AppContext,listen: false);
+    WalletActionProvider wap=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
     //获取ast的 private key
     WalletInfo? walletInfo;
     if(wap.walletInfo.mainWallet==true){
@@ -212,9 +212,9 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
       });
       return false;
     }else{
-      if(Application.userInfo!.bind_google_auth_state==false){
-        Application.userInfo!.bind_google_auth_state=true;
-        await SPUtil().saveUserInfo(Application.userInfo!);
+      if(AppGlobals.userInfo!.bind_google_auth_state==false){
+        AppGlobals.userInfo!.bind_google_auth_state=true;
+        await SPUtil().saveUserInfo(AppGlobals.userInfo!);
       }
       setState(() {
         googleErrorMessage="";
@@ -230,7 +230,7 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
     if(s==null){
       s={};
     }
-    s[Application.userInfo?.uuid??""]=securityMap;
+    s[AppGlobals.userInfo?.uuid??""]=securityMap;
     await sPUtils.setSecurity(s);
     setState(() {
     });

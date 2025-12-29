@@ -1,6 +1,6 @@
-import 'package:n42appv2/src/component/enums/load.dart';
+﻿import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/login/widgets/login_title.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';

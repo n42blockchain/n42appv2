@@ -1,9 +1,18 @@
+// Copyright 2021-2026 N42 Inc. All rights reserved.
+// Use of this source code is governed by a dual license:
+// Apache License 2.0 and MIT License.
+// See LICENSE file in the project root for full license information.
+//
+// Author: Jiang Yiwei
 
 import 'dart:async';
 
 import 'package:app_links/app_links.dart';
-import 'package:n42appv2/app_config.dart';
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/di/injection.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/browser/provider/browser_provider.dart';
 import 'package:n42appv2/src/chat/pages/add_friend.dart';
 import 'package:n42appv2/src/chat/provider/chat_message_provider.dart';
@@ -14,9 +23,7 @@ import 'package:n42appv2/src/login/pages/login_page.dart';
 import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
 import 'package:n42appv2/src/state/public_provider.dart';
 import 'package:n42appv2/src/utils/app_push_utils.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
 import 'package:n42appv2/src/utils/notfication_utils.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/pages/create_wallet/create/create_one.dart';
 import 'package:n42appv2/src/wallet/pages/create_wallet/import/import_one.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/keystore/import_privatekey.dart';
@@ -28,21 +35,19 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-//import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-//import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-void main() async{
-  //Load sensitive information securely
+void main() async {
+  // Initialize Flutter bindings
   WidgetsFlutterBinding.ensureInitialized();
-  /*if (InAppWebViewPlatform.instance == null) {
-    // 设置平台实现
-    InAppWebViewPlatform.instance = InAppWebViewFlutterPlatform(); // 手动设置
-  }*/
-  //await dotenv.load(fileName: ".env");
+
+  // Initialize dependency injection
+  await configureDependencies(kReleaseMode ? Env.prod : Env.dev);
+
+  // Initialize Firebase
   await Firebase.initializeApp();
   await notification.init();
   //HttpOverrides.global = new MyHttpOverrides();
@@ -96,9 +101,10 @@ class _n42appv2State extends State<n42appv2> {
   StreamSubscription<Uri>? _linkSubscription;
   @override
   void initState() {
-    // TODO: implement initState
-    Application.AppContext=context;
-    Provider.of<PublicProvider>(context,listen: false).checkData();
+    // Initialize global context (deprecated - use DI instead)
+    // ignore: deprecated_member_use_from_same_package
+    AppGlobals.appContext = context;
+    Provider.of<PublicProvider>(context, listen: false).checkData();
     initDeepLinks();
     ///是否打开FirebaseCrashlytics日志收集
     ///release + online 开启
@@ -160,9 +166,9 @@ class _n42appv2State extends State<n42appv2> {
         // https://astrawallet.com?type=friendCard&userid=20&email=zhc@163.com
         final userId = params["userid"];
         final userEmail = params["email"];
-        if (Application.userInfo !=null) {
-          Navigator.of(Application.navigatorKey.currentContext!).push(
-              MaterialPageRoute(builder: (_) => AddFriend(email: userEmail,)));
+        if (AppGlobals.userInfo != null) {
+          Navigator.of(AppGlobals.navigatorKey.currentContext!).push(
+              MaterialPageRoute(builder: (_) => AddFriend(email: userEmail)));
         }
       }
     }
@@ -227,7 +233,7 @@ class _n42appv2State extends State<n42appv2> {
                   GlobalCupertinoLocalizations.delegate,
                   S.delegate,
                 ],
-                navigatorKey: Application.navigatorKey,
+                navigatorKey: AppGlobals.navigatorKey,
                 supportedLocales: S.delegate.supportedLocales,
                 themeMode: pValue.themeMode,
                 theme: ThemeAdapter.themeDataLight,
@@ -239,7 +245,7 @@ class _n42appv2State extends State<n42appv2> {
                 title: 'N42Wallet',
                 home: _widgetPage(pValue),
                 routes: routes,
-                navigatorObservers: <NavigatorObserver>[Application.routeObserver],
+                navigatorObservers: <NavigatorObserver>[AppGlobals.routeObserver],
                 /*onGenerateRoute: (RouteSettings settings){
                   final String? name=settings.name;
                   print("settings.name:${settings.name}");

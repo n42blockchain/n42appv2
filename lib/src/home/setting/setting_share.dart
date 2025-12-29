@@ -1,16 +1,16 @@
-import 'dart:typed_data';
+﻿import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/app_config.dart';
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/src/home/widgets/share_list.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/prompt_widget.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
@@ -43,7 +43,7 @@ class _SettingShareState extends State<SettingShare> {
   void initState() {
     super.initState();
     linkStr =
-    '${AppConfig.apiUrl['walletamazeBrowser']!}/download?uuid=${Application.userInfo?.uuid ?? ""}&code=${Application.userInfo?.invite_code ?? ""}';
+    '${AppConfig.apiUrl['walletamazeBrowser']!}/download?uuid=${AppGlobals.userInfo?.uuid ?? ""}&code=${AppGlobals.userInfo?.invite_code ?? ""}';
     getInviteeListDownload();
     getInviteeList();
     getInviteeMiningCount();
@@ -51,9 +51,9 @@ class _SettingShareState extends State<SettingShare> {
   }
 
   getInviteeMiningInfo() async {
-    if (Application.userInfo != null) {
+    if (AppGlobals.userInfo != null) {
       var dataList =
-      await loginApi.getInviteeMiningInfo(Application.userInfo?.uuid ?? '');
+      await loginApi.getInviteeMiningInfo(AppGlobals.userInfo?.uuid ?? '');
       if (dataList != null) {
         rewardTotal =
             double.parse((dataList['total_reward'] ?? "0.0").toString());
@@ -63,9 +63,9 @@ class _SettingShareState extends State<SettingShare> {
   }
 
   getInviteeMiningCount() async {
-    if (Application.userInfo != null) {
+    if (AppGlobals.userInfo != null) {
       var dataList =
-      await loginApi.getInviteeMiningCount(Application.userInfo?.uuid ?? '');
+      await loginApi.getInviteeMiningCount(AppGlobals.userInfo?.uuid ?? '');
       if (dataList != null) {
         miningTotal = int.parse((dataList['total'] ?? 0).toString());
         setState(() {});
@@ -74,9 +74,9 @@ class _SettingShareState extends State<SettingShare> {
   }
 
   getInviteeListDownload() async {
-    if (Application.userInfo != null) {
+    if (AppGlobals.userInfo != null) {
       var dataList =
-      await loginApi.getInviteeDownloadList(Application.userInfo?.uuid ?? '');
+      await loginApi.getInviteeDownloadList(AppGlobals.userInfo?.uuid ?? '');
       if (dataList != null) {
         inviteeTotalDown = int.parse(dataList['total'].toString());
         setState(() {});
@@ -85,9 +85,9 @@ class _SettingShareState extends State<SettingShare> {
   }
 
   getInviteeList() async {
-    if (Application.userInfo != null) {
+    if (AppGlobals.userInfo != null) {
       var dataList =
-      await loginApi.getInviteeList(Application.userInfo?.uuid ?? '');
+      await loginApi.getInviteeList(AppGlobals.userInfo?.uuid ?? '');
       if (dataList != null) {
         inviteeTotal = int.parse(dataList['total'].toString());
         setState(() {});
@@ -323,7 +323,7 @@ class _SettingShareState extends State<SettingShare> {
                   ),
                   Expanded(
                     child: Text(
-                      Application.userInfo?.invite_code ?? "",
+                      AppGlobals.userInfo?.invite_code ?? "",
                       textAlign: TextAlign.end,
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(26.0),
@@ -337,7 +337,7 @@ class _SettingShareState extends State<SettingShare> {
                     onTap: () {
                       ToastUtils.init(context);
                       Clipboard.setData(
-                          ClipboardData(text: Application.userInfo?.invite_code ?? ""));
+                          ClipboardData(text: AppGlobals.userInfo?.invite_code ?? ""));
                       ToastUtils.showFtToast(
                         child: SuccessViewV1(S.of(context).copy),
                         duration: 3,

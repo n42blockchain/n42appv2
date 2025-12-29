@@ -1,8 +1,8 @@
-import 'package:n42appv2/src/browser/pages/browser_collection_list.dart';
+﻿import 'package:n42appv2/src/browser/pages/browser_collection_list.dart';
 import 'package:n42appv2/src/browser/pages/browser_setting.dart';
 import 'package:n42appv2/src/browser/provider/browser_provider.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet_connect/pages/wallet_connect_page.dart';
 //import 'package:n42appv2/src/wallet_connect/pages/wallet_connect_page.dart';
 //import 'package:n42appv2/src/wallet_connect/provider/wallet_connect_provider.dart';

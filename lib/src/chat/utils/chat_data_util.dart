@@ -1,11 +1,11 @@
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/api/chat_db_api.dart';
 import 'package:n42appv2/src/chat/models/chat_message_model.dart';
 import 'package:n42appv2/src/chat/models/friend_info.dart';
 import 'package:n42appv2/src/chat/utils/cache_read_message_utils.dart';
 import 'package:n42appv2/src/chat/utils/chat_sp_util.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
 
 class ChatDataUtil {
   Map<String, dynamic> generateSendData({
@@ -68,7 +68,7 @@ class ChatDataUtil {
   handleMessage(int pushCode, ChatMessageModel model) async {
     try {
       // 0 接收 1 发出
-      int direction = model.from == Application.userInfo?.uuid ? 1 : 0;
+      int direction = model.from == AppGlobals.userInfo?.uuid ? 1 : 0;
       // userID 或者 groupId
       String targetId = model.getTargetId();
       switch (pushCode) {

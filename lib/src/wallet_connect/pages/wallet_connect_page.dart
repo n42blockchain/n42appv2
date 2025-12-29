@@ -1,9 +1,9 @@
-import 'package:n42appv2/src/browser/pages/browser_page.dart';
+﻿import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/component/pages/scan_page.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/pages/add_token/wallet_coin_add_all.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';

@@ -1,9 +1,9 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:n42appv2/app_config.dart';
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_db_api.dart';
 import 'package:n42appv2/src/chat/models/chat_message_model.dart';
 import 'package:n42appv2/src/chat/models/group_info.dart';
@@ -13,7 +13,7 @@ import 'package:n42appv2/src/chat/utils/chat_sp_util.dart';
 import 'package:n42appv2/src/proto/connect.ext.pb.dart';
 import 'package:n42appv2/src/proto/message.ext.pb.dart';
 import 'package:n42appv2/src/proto/push.ext.pb.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/src/utils/notfication_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -70,8 +70,8 @@ class WebSocketUtil {
   }
 
   generateSocketUrl() {
-    final uuid = Application.userInfo?.uuid;
-    final token = Application.userInfo?.token;
+    final uuid = AppGlobals.userInfo?.uuid;
+    final token = AppGlobals.userInfo?.token;
     final socUrl =
         '${AppConfig.getApiUrl_online('imWsHost')}/connect?uuid=$uuid&token=$token&source=app';
     return socUrl;
@@ -175,7 +175,7 @@ class WebSocketUtil {
       // debugPrint("收到消息 id: ${model?.messageId ?? "数据不存在"}");
       //判断是自己发送的还是接收的消息
       int direction = 0;
-      if (md.from == Application.userInfo?.uuid) {
+      if (md.from == AppGlobals.userInfo?.uuid) {
         // 0 接收 1 发出
         direction = 1;
       } else {
@@ -201,14 +201,14 @@ class WebSocketUtil {
       }
 
       ///对方发消息给我时：
-      if (md.from != Application.userInfo?.uuid) {
+      if (md.from != AppGlobals.userInfo?.uuid) {
         //发送消息给监听页面
         eventBus.fire(EventPublic(EventPublicType.chatMessage, param: md));
         //设置消息未读
         CacheMessageIsReadUtils().saveUnReadMessageId(targetId);
 
         //如果当前聊天的对象已经打开 就不在显示本地通知
-        if( Provider.of<ChatMessageProvider>(Application.AppContext,listen: false).currOpenChatTargetUuid != md.getTargetId()){
+        if( Provider.of<ChatMessageProvider>(AppGlobals.appContext,listen: false).currOpenChatTargetUuid != md.getTargetId()){
           //这里不做消息的解密 只展示收到消息的通知栏 具体消息内容点击查看
           final data = json.encode({
             "type": 100,
@@ -242,12 +242,12 @@ class WebSocketUtil {
         final String? blackUuid = pushContent["black_uuid"];
 
         if (whiteUuid != null && whiteUuid.isNotEmpty) {
-          if (Application.userInfo?.uuid == whiteUuid) {
+          if (AppGlobals.userInfo?.uuid == whiteUuid) {
             //保存到本地数据库
             final raw = await chatDBApi.saveMessage(md);
           }
         } else if (blackUuid != null && blackUuid.isNotEmpty) {
-          if (Application.userInfo?.uuid != blackUuid) {
+          if (AppGlobals.userInfo?.uuid != blackUuid) {
             //保存到本地数据库
             final raw = await chatDBApi.saveMessage(md);
           }
@@ -260,7 +260,7 @@ class WebSocketUtil {
         eventBus.fire(EventPublic(EventPublicType.chatMessage, param: md));
       }
       else {
-        if (md.from != Application.userInfo?.uuid) {
+        if (md.from != AppGlobals.userInfo?.uuid) {
           //不是自己发送的 保存到本地数据库
           md.direction = 0;
           final raw = await chatDBApi.saveMessage(md);
@@ -270,7 +270,7 @@ class WebSocketUtil {
           CacheMessageIsReadUtils().saveUnReadMessageId(md.getTargetId());
 
           //如果当前聊天的对象已经打开 就不在显示本地通知
-          if( Provider.of<ChatMessageProvider>(Application.AppContext,listen: false).currOpenChatTargetUuid != md.getTargetId()){
+          if( Provider.of<ChatMessageProvider>(AppGlobals.appContext,listen: false).currOpenChatTargetUuid != md.getTargetId()){
             final data = json.encode({
               "type": 101,
               "data": {
@@ -288,7 +288,7 @@ class WebSocketUtil {
             List<dynamic> list = md.mentioned_user_ids != null ? json.decode(md.mentioned_user_ids! ) : [];
             bool flag = false;
             for (var element in list) {
-              if(element == Application.userInfo?.uuid){
+              if(element == AppGlobals.userInfo?.uuid){
                 flag = true;
               }
             }
@@ -309,7 +309,7 @@ class WebSocketUtil {
     else if (pushCode == 110) {
       AddFriendPush afp = AddFriendPush.fromBuffer(message.content);
       //ChatSPUtils().setNewFriendStatus(true);
-      Provider.of<ChatMessageProvider>(Application.AppContext,listen: false).setNewFriendStatus_add();
+      Provider.of<ChatMessageProvider>(AppGlobals.appContext,listen: false).setNewFriendStatus_add();
       //弹出添加好友通知
       final data = json.encode({
         "type": 110,

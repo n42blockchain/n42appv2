@@ -1,16 +1,16 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/app_config.dart';
+import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/home/models/appendix_model.dart';
 import 'package:n42appv2/src/https/ipfs_api.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/utils/regular.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:dio/dio.dart';

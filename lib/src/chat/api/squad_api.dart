@@ -1,5 +1,5 @@
-import 'package:n42appv2/app_config.dart';
-import 'package:n42appv2/application.dart';
+﻿import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 
@@ -12,8 +12,8 @@ class SquadApi {
   }
   //根据用户email获取pub key
   Future<MessageModel> getUserPubKey(String email) async{
-    final userId = Application.userInfo?.uuid;
-    final token = Application.userInfo?.token;
+    final userId = AppGlobals.userInfo?.uuid;
+    final token = AppGlobals.userInfo?.token;
     Map<String, dynamic> params = {};
     params['uuid'] = userId;
     params['token'] = token;
@@ -41,8 +41,8 @@ class SquadApi {
 
   //绑定用户公钥
   Future bindPubKey(String pubKey) async {
-    final userId = Application.userInfo?.uuid;
-    final token = Application.userInfo?.token;
+    final userId = AppGlobals.userInfo?.uuid;
+    final token = AppGlobals.userInfo?.token;
     Map<String,dynamic> params = {};
     params['uuid'] = userId;
     params['token'] = token;
@@ -84,8 +84,8 @@ class SquadApi {
         required String file_uri,
         required String file_name,
         required String file_desc}) async {
-    final userId = Application.userInfo?.uuid;
-    final token = Application.userInfo?.token;
+    final userId = AppGlobals.userInfo?.uuid;
+    final token = AppGlobals.userInfo?.token;
     Map<String,dynamic> params = {};
     params['uuid'] = userId;
     params['token'] = token;
@@ -109,8 +109,8 @@ class SquadApi {
 //获取用户发送列表
   Future sendFileList(
       {required int pageIndex, required int pageSize}) async {
-    final userId = Application.userInfo?.uuid;
-    final token = Application.userInfo?.token;
+    final userId = AppGlobals.userInfo?.uuid;
+    final token = AppGlobals.userInfo?.token;
     Map<String, dynamic> params = {};
     params['uuid'] = userId;
     params['token'] = token;
@@ -133,8 +133,8 @@ class SquadApi {
   //获取用户接收列表
   Future receiveFileList(
       {required int pageIndex, required int pageSize}) async {
-    final userId = Application.userInfo?.uuid;
-    final token = Application.userInfo?.token;
+    final userId = AppGlobals.userInfo?.uuid;
+    final token = AppGlobals.userInfo?.token;
     Map<String, dynamic> params = {};
     params['uuid'] = userId;
     params['token'] = token;
@@ -156,8 +156,8 @@ class SquadApi {
 
   //文件删除
   Future deleteFile(String fileId) {
-    final userId = Application.userInfo?.uuid;
-    final token = Application.userInfo?.token;
+    final userId = AppGlobals.userInfo?.uuid;
+    final token = AppGlobals.userInfo?.token;
     Map<String, dynamic> params = {};
     params['uuid'] = userId;
     params['token'] = token;

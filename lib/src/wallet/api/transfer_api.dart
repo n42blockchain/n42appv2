@@ -1,8 +1,8 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/https/activity_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
@@ -93,7 +93,7 @@ class TransferApi {
   transfer(
       String chainSymbol ,String toAddress, double value,
       {String contractAddress = "", String fromAddress = "",bool isTest=false,bool maxValue=true,String? message}) async {
-    WalletActionProvider wap = Provider.of(Application.AppContext,listen: false);
+    WalletActionProvider wap = Provider.of(AppGlobals.appContext,listen: false);
     chainSymbol=symbolDealWith(chainSymbol);
     Map<String, dynamic>? txChainMap =
     wap.walletMap[chainSymbol.toString().toUpperCase()];
@@ -235,7 +235,7 @@ class TransferApi {
     }
     if (txmm.error == false) {
       Map<String, dynamic> pushMap = {
-        "uuid": Application.userInfo?.uuid??"",
+        "uuid": AppGlobals.userInfo?.uuid??"",
         "coin": coinType,
         "tx": txmm.data['txHash'],
         "network":isTest?"test":"main",
@@ -459,7 +459,7 @@ class TransferApi {
     }
     if (txmm.error == false) {
       Map<String, dynamic> pushMap = {
-        "uuid": Application.userInfo?.uuid??"",
+        "uuid": AppGlobals.userInfo?.uuid??"",
         "coin": coinType,
         "tx": txmm.data,
         "network":network,
@@ -480,7 +480,7 @@ class TransferApi {
             coinType.toUpperCase(),
             path,
             signData,
-            mnemonic: Provider.of<WalletActionProvider>(Application.AppContext,listen: false).walletInfo.mnemonic??"",
+            mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
           );
         }else{
           rStr = await trustdart.signTransaction_maxValue(coinType.toUpperCase(), "", signData, pk: privateKey??"",);
@@ -607,7 +607,7 @@ class TransferApi {
         coinType,
         path,
         signMap,
-        mnemonic: Provider.of<WalletActionProvider>(Application.AppContext,listen: false).walletInfo.mnemonic??"",
+        mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
       );
     }else{
       signStr = await trustdart.signTransaction(coinType, path, signMap, pk:privateKey??"",);
@@ -644,7 +644,7 @@ class TransferApi {
         coinType,
         path,
         signMap,
-        mnemonic: Provider.of<WalletActionProvider>(Application.AppContext,listen: false).walletInfo.mnemonic??"",
+        mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
       );
     }else{
       signStr = await trustdart.signTransaction(coinType, path, signMap, pk:privateKey??"",);
@@ -787,7 +787,7 @@ class TransferApi {
         coinType,
         path,
         signMap,
-        mnemonic: Provider.of<WalletActionProvider>(Application.AppContext,listen: false).walletInfo.mnemonic??"",
+        mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
       );
     }else{
       signStr = await trustdart.signTransaction(coinType, path, signMap, pk:privateKey??"",);
@@ -919,7 +919,7 @@ class TransferApi {
         CoinType.ATOM.name,
         path,
         signMap,
-        mnemonic: Provider.of<WalletActionProvider>(Application.AppContext,listen: false).walletInfo.mnemonic??"",
+        mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
       );
     }else{
       signStr = await trustdart.signTransaction(CoinType.ATOM.name, path, signMap, pk:privateKey??"",);
@@ -1063,7 +1063,7 @@ class TransferApi {
         CoinType.TRX.name,
         path,
         txData,
-        mnemonic: Provider.of<WalletActionProvider>(Application.AppContext,listen: false).walletInfo.mnemonic??"",
+        mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
       );
     }else{
       signStr = await trustdart.signTransaction(CoinType.TRX.name, path, txData, pk:privateKey??"",);
@@ -1245,7 +1245,7 @@ class TransferApi {
         CoinType.SOL.name,
         path,
         txData,
-        mnemonic: Provider.of<WalletActionProvider>(Application.AppContext,listen: false).walletInfo.mnemonic??"",
+        mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
       );
     }else{
       signStr = await trustdart.signTransaction(CoinType.SOL.name, path, txData,  pk:privateKey??"",);
@@ -1275,7 +1275,7 @@ class TransferApi {
     if(coinType==null){
       coinType=CoinType.ETH.name;
     }
-    WalletActionProvider wap = Provider.of<WalletActionProvider>(Application.AppContext,listen: false);
+    WalletActionProvider wap = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
     Map<String, dynamic>? txChainMap = wap.walletMap[coinType];
     if (txChainMap == null) {
       MessageModel mm = MessageModel.error();
@@ -1650,7 +1650,7 @@ class TransferApi {
         coinType,
         path,
         signMap,
-        mnemonic: Provider.of<WalletActionProvider>(Application.AppContext,listen: false).walletInfo.mnemonic??"",
+        mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
       );
     }else{
       signStr = await trustdart.signTransaction(coinType, path, signMap,  pk:privateKey??"",);
@@ -1713,7 +1713,7 @@ class TransferApi {
     List<Map<String, dynamic>> utxos = [];
     String utxoAddress=fromAddress;
     if(coinType.toUpperCase()==CoinType.BCH.name){
-      utxoAddress=Provider.of<WalletActionProvider>(Application.AppContext,listen: false).getAddress(coinType,addrType: "legacy");
+      utxoAddress=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).getAddress(coinType,addrType: "legacy");
     }
     MessageModel mmutxo = await getUTXO(coinType.toUpperCase(), value, utxoAddress,
         utxos, 0, averageValue, 1000, 1,allValue,isTest: isTest=="main"?false:true);
@@ -1771,7 +1771,7 @@ class TransferApi {
         coinType.toUpperCase(),
         path,
         btcTxMap,
-        mnemonic: Provider.of<WalletActionProvider>(Application.AppContext,listen: false).walletInfo.mnemonic??"",
+        mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
       );
     }else{
       signStr = await trustdart.signTransaction(coinType.toUpperCase(), path, btcTxMap,  pk:privateKey??"",);
@@ -2004,7 +2004,7 @@ class TransferApi {
         CoinType.ALGO.name,
         path,
         txData,
-        mnemonic: Provider.of<WalletActionProvider>(Application.AppContext,listen: false).walletInfo.mnemonic??"",
+        mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
       );
     }else{
       rValue = await trustdart.signTransaction_byteArray(CoinType.ALGO.name, path, txData,  pk:privateKey!,);
@@ -2103,7 +2103,7 @@ class TransferApi {
     }else{
       signMap['reveal']=mmReveal.data;
     }
-    WalletInfo wi = Provider.of<WalletActionProvider>(Application.AppContext,listen: false).walletInfo;
+    WalletInfo wi = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo;
     String signStr=await trustdart.signTransaction(
       CoinType.XTZ.name,
       path,
@@ -2221,7 +2221,7 @@ class TransferApi {
     }else{
       signMap['ledgerIndex']=mmLedgerIndex.data;
     }
-    WalletInfo wi = Provider.of<WalletActionProvider>(Application.AppContext,listen: false).walletInfo;
+    WalletInfo wi = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo;
     String signStr=await trustdart.signTransaction(CoinType.XRP.name, path, signMap,mnemonic: wi.mnemonic??"",pk: wi.privateKey??"",);
 
     if(signStr==""){
@@ -2257,7 +2257,7 @@ class TransferApi {
         CoinType.FIL.name,
         path,
         signMap,
-        mnemonic: Provider.of<WalletActionProvider>(Application.AppContext,listen: false).walletInfo.mnemonic??"",
+        mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
       );
     }else{
       signStr = await trustdart.signTransaction(CoinType.FIL.name, path, signMap, pk:privateKey??"",);
@@ -2279,7 +2279,7 @@ class TransferApi {
       {String contractAddress = "",
         String address = "",
         bool returnDoubleValue = false}) async {
-    WalletActionProvider wap = Provider.of<WalletActionProvider>(Application.AppContext,listen: false);
+    WalletActionProvider wap = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
     if(chainSymbol == "BSC"){
       chainSymbol = "BNB";
     }
@@ -2440,7 +2440,7 @@ class TransferApi {
 
   getBalance_btc(String coinType, String fromAddress,{bool isTest=false}) async {
     if(coinType==CoinType.BCH.name){
-      fromAddress=Provider.of<WalletActionProvider>(Application.AppContext,listen: false).getAddress(coinType,addrType: 'legacy');
+      fromAddress=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).getAddress(coinType,addrType: 'legacy');
     }
     MessageModel mm = await tokenViewApi.getBalance(
         BlockchainType.Bitcoin.name, coinType, fromAddress,
@@ -2500,13 +2500,13 @@ class TransferApi {
   //btc 比特币类
   getTxList_btc(String coinType, String fromAddress,{int pageNum=1,int pageSize=20})async{
     if(coinType==CoinType.BCH.name){
-      fromAddress=Provider.of<WalletActionProvider>(Application.AppContext,listen: false).getAddress(coinType,addrType: 'legacy');
+      fromAddress=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).getAddress(coinType,addrType: 'legacy');
     }
     return await tokenViewApi.getTxList_btc( coinType, fromAddress,pageNum: 1,pageSize: 1);
   }
   //获取地址列表
   getAddressList(List<dynamic> chainMap) async {
-    WalletInfo wi = Provider.of<WalletActionProvider>(Application.AppContext,listen: false).walletInfo;
+    WalletInfo wi = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo;
 
     List<Map<String, dynamic>> addrssList = [];
 

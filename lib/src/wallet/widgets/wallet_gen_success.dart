@@ -1,6 +1,6 @@
-
-import 'package:n42appv2/application.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+﻿
+import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
 
 Widget successView(String title) {
@@ -9,7 +9,7 @@ Widget successView(String title) {
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(12.0),
       // color: Colors.white,
-      color: AppThemeUtils.getColorByKey(Application.navigatorKey.currentContext, AppThemeKeys.itemBgColor.name),
+      color: AppThemeUtils.getColorByKey(AppGlobals.navigatorKey.currentContext, AppThemeKeys.itemBgColor.name),
     ),
     child: Column(
       mainAxisSize: MainAxisSize.min,
@@ -23,7 +23,7 @@ Widget successView(String title) {
           title,
           style: TextStyle(
               color: AppThemeUtils.getColorByKey(
-                  Application.navigatorKey.currentContext,
+                  AppGlobals.navigatorKey.currentContext,
                   AppThemeKeys.mainTextColor.name),
               fontSize: 15),
         ),
@@ -39,7 +39,7 @@ Widget createWalletErrView(String title) {
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(12.0),
       // color: Colors.white,
-      color: AppThemeUtils.getColorByKey(Application.navigatorKey.currentContext, AppThemeKeys.itemBgColor.name),
+      color: AppThemeUtils.getColorByKey(AppGlobals.navigatorKey.currentContext, AppThemeKeys.itemBgColor.name),
     ),
     child: Column(
       mainAxisSize: MainAxisSize.min,
@@ -53,7 +53,7 @@ Widget createWalletErrView(String title) {
           title,
           style: TextStyle(
               color: AppThemeUtils.getColorByKey(
-                  Application.navigatorKey.currentContext,
+                  AppGlobals.navigatorKey.currentContext,
                   AppThemeKeys.mainTextColor.name),
               fontSize: 15),
         ),

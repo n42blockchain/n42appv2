@@ -1,8 +1,8 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/api/chat_db_api.dart';
 import 'package:n42appv2/src/chat/api/file_api.dart';
@@ -22,9 +22,9 @@ import 'package:n42appv2/src/component/pages/show_image.dart';
 import 'package:n42appv2/src/https/ipfs_api.dart';
 import 'package:n42appv2/src/utils/base64_utils.dart';
 import 'package:n42appv2/src/utils/data_utils.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/file_icon.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
@@ -177,8 +177,8 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
   updateUserInfo() async {
     try {
       if (widget.isCurrentUser) {
-        name = Application.userInfo?.name;
-        image = Application.userInfo?.image;
+        name = AppGlobals.userInfo?.name;
+        image = AppGlobals.userInfo?.image;
       } else {
         final targetId = _item.from;
         FriendInfo? info = await ChatSPUtil().getNavUserInfo(targetId);

@@ -1,5 +1,5 @@
-import 'package:n42appv2/app_config.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+﻿import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
@@ -40,12 +40,12 @@ class _EditWalletState extends State<EditWallet> {
                 //保存钱包
                 // Map<String,dynamic>? walletAll=await SPUtils.getWallsetInfo();
                 // if(walletAll==null){
-                //   await SPUtils.setWalletInfo({Application.userInfo!.uuid:[widget.walletInfo.toJson()]});
+                //   await SPUtils.setWalletInfo({AppGlobals.userInfo!.uuid:[widget.walletInfo.toJson()]});
                 // }else{
-                //   walletAll[Application.userInfo!.uuid]=[widget.walletInfo.toJson()];
+                //   walletAll[AppGlobals.userInfo!.uuid]=[widget.walletInfo.toJson()];
                 // }
                 await Provider.of<WalletActionProvider>(context,listen: false).saveWalletInfo(widget.walletInfo,widget.walletIndex);
-                //await SPUtils.setWalletInfo({Application.userInfo!.uuid:[widget.walletInfo.toJson()]});
+                //await SPUtils.setWalletInfo({AppGlobals.userInfo!.uuid:[widget.walletInfo.toJson()]});
 
                 ///更新一下provider中的数据
                 //Provider.of<WalletActionProvider>(context,listen: false).updateWalletInfo(widget.walletInfo);
@@ -88,12 +88,12 @@ class _EditWalletState extends State<EditWallet> {
                   //保存钱包
                   // Map<String,dynamic>? walletAll=await SPUtils.getWallsetInfo();
                   // if(walletAll==null){
-                  //   await SPUtils.setWalletInfo({Application.userInfo!.uuid:[widget.walletInfo.toJson()]});
+                  //   await SPUtils.setWalletInfo({AppGlobals.userInfo!.uuid:[widget.walletInfo.toJson()]});
                   // }else{
-                  //   walletAll[Application.userInfo!.uuid]=[widget.walletInfo.toJson()];
+                  //   walletAll[AppGlobals.userInfo!.uuid]=[widget.walletInfo.toJson()];
                   // }
                   await Provider.of<WalletActionProvider>(context,listen: false).saveWalletInfo(widget.walletInfo,widget.walletIndex);
-                  //await SPUtils.setWalletInfo({Application.userInfo!.uuid:[widget.walletInfo.toJson()]});
+                  //await SPUtils.setWalletInfo({AppGlobals.userInfo!.uuid:[widget.walletInfo.toJson()]});
 
                   ///更新一下provider中的数据
                   //Provider.of<WalletActionProvider>(context,listen: false).updateWalletInfo(widget.walletInfo);

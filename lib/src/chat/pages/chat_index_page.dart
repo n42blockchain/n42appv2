@@ -1,8 +1,8 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 
-import 'package:n42appv2/app_config.dart';
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/api/chat_db_api.dart';
 import 'package:n42appv2/src/chat/api/squad_api.dart';
@@ -24,9 +24,9 @@ import 'package:n42appv2/src/component/pages/scan_page.dart';
 import 'package:n42appv2/src/login/pages/login_page.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/state/public_provider.dart';
-import 'package:n42appv2/src/utils/event_bus.dart';
-import 'package:n42appv2/src/utils/sp_util.dart';
-import 'package:n42appv2/src/utils/theme_adapter.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
+import 'package:n42appv2/core/storage/sp_util.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/app_home_top_bar.dart';
 import 'package:n42appv2/src/widgets/custom_popup_menu_wrap.dart';
@@ -70,7 +70,7 @@ class _ChatIndexPageState extends State<ChatIndexPage> {
       if(wa.walletIndex==-1){
         return Loading();
       }
-      if(Application.userInfo ==null){
+      if(AppGlobals.userInfo ==null){
         return Padding(
           padding: EdgeInsets.only(
             bottom: ScreenUtil().setWidth(120),
@@ -169,7 +169,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
     MessageModel data = await squadApi.bindPubKey(pubKey!);
     if(data.error){
       if(data.type==MessageErrorType.E1403){
-        Application.logout();
+        AppGlobals.logout();
       }
     }
   }
@@ -266,10 +266,10 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
                   ),
                   onTap: () async {
                     List params = [
-                      Application.userInfo?.image,
-                      Application.userInfo?.name,
-                      Application.userInfo?.email,
-                      Application.userInfo?.uuid,
+                      AppGlobals.userInfo?.image,
+                      AppGlobals.userInfo?.name,
+                      AppGlobals.userInfo?.email,
+                      AppGlobals.userInfo?.uuid,
                     ];
                     String qrContent =
                     json.encode({"chat_message": params});

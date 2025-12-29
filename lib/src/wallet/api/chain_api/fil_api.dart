@@ -1,6 +1,6 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
-import 'package:n42appv2/application.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/https/request_url.dart';
 import 'package:n42appv2/src/models/message_model.dart';
@@ -103,7 +103,7 @@ class FilApi{
   BaseRPC(String method,var value,{bool? isTest=false})async{
     try{
       MessageModel mm=MessageModel();
-      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":Application.currentId++};
+      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};
       final data=await BaseApi.RequestEmpty_h.post(RequestUrl().getUrl2("FIL", "rpc",isTest: isTest), params: {},data: postData);
       if(data.containsKey('error')){
         mm.error=true;
