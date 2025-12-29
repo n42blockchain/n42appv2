@@ -6,11 +6,16 @@
 // Author: Jiang Yiwei
 
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:injectable/injectable.dart';
 import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
 import 'package:n42appv2/shared/domain/services/wallet_service_interface.dart';
 import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42appv2/src/component/enums/coin_type.dart';
+import 'package:n42appv2/src/wallet/provider/trustdart.dart';
+import 'package:n42appv2/src/wallet/utils/chain_util.dart';
+import 'package:web3dart/crypto.dart';
 
 /// Implementation of IWalletService using Riverpod
 ///
@@ -41,6 +46,12 @@ class WalletServiceImpl implements IWalletService {
     );
   }
 
+  /// Get all wallets data
+  List<WalletInfoData> _getAllWalletsData() {
+    final wallets = _container.read(walletListProvider);
+    return wallets.whenOrNull(data: (list) => list) ?? [];
+  }
+
   @override
   SharedWalletInfo? getCurrentWallet() {
     final wallets = _container.read(walletListProvider);
@@ -61,6 +72,14 @@ class WalletServiceImpl implements IWalletService {
   }
 
   @override
+  SharedWalletInfo? getMainWallet() {
+    final wallets = _getAllWalletsData();
+    final mainWallet = wallets.where((w) => w.isMainWallet).firstOrNull;
+    if (mainWallet == null) return wallets.isNotEmpty ? _toSharedInfo(wallets.first) : null;
+    return _toSharedInfo(mainWallet);
+  }
+
+  @override
   SharedWalletInfo? getWalletByAddress(String address) {
     final wallets = _container.read(walletListProvider);
 
@@ -68,32 +87,30 @@ class WalletServiceImpl implements IWalletService {
       data: (list) {
         final wallet = list.where((w) => w.address == address).firstOrNull;
         if (wallet == null) return null;
-        return SharedWalletInfo(
-          address: wallet.address,
-          name: wallet.name,
-          chainType: wallet.chainType,
-          avatarUrl: wallet.avatarUrl,
-        );
+        return _toSharedInfo(wallet);
       },
     );
   }
 
   @override
   List<SharedWalletInfo> getAllWallets() {
-    final wallets = _container.read(walletListProvider);
-
-    return wallets.whenOrNull(
-          data: (list) => list
-              .map((w) => SharedWalletInfo(
-                    address: w.address,
-                    name: w.name,
-                    chainType: w.chainType,
-                    avatarUrl: w.avatarUrl,
-                  ))
-              .toList(),
-        ) ??
-        [];
+    final wallets = _getAllWalletsData();
+    return wallets.map((w) => _toSharedInfo(w)).toList();
   }
+
+  @override
+  int get walletCount => _getAllWalletsData().length;
+
+  @override
+  SharedWalletInfo? getMiningWallet() {
+    final wallets = _getAllWalletsData();
+    final miningIndex = _container.read(miningWalletIndexProvider);
+    if (miningIndex < 0 || miningIndex >= wallets.length) return null;
+    return _toSharedInfo(wallets[miningIndex]);
+  }
+
+  @override
+  int get miningWalletIndex => _container.read(miningWalletIndexProvider);
 
   @override
   bool walletExists(String address) {
@@ -103,6 +120,76 @@ class WalletServiceImpl implements IWalletService {
   @override
   Stream<SharedWalletInfo?> get currentWalletStream =>
       _walletStreamController.stream;
+
+  @override
+  Future<String?> getChainAddress(String walletId, String chainType) async {
+    // Find wallet by ID (using timestamp or address as ID)
+    final wallets = _getAllWalletsData();
+    final wallet = wallets.where((w) => w.timestamp == walletId || w.address == walletId).firstOrNull;
+    if (wallet == null) return null;
+
+    final coinInfo = wallet.coinInfo?[chainType];
+    if (coinInfo == null) return null;
+
+    return coinInfo['baseInfo']?['address']?.toString();
+  }
+
+  @override
+  Map<String, dynamic>? getCoinInfoForWallet(int walletIndex) {
+    final wallets = _getAllWalletsData();
+    if (walletIndex < 0 || walletIndex >= wallets.length) return null;
+    return wallets[walletIndex].coinInfo;
+  }
+
+  @override
+  Future<String?> getPrivateKeyForWallet(int walletIndex) async {
+    final wallets = _getAllWalletsData();
+    if (walletIndex < 0 || walletIndex >= wallets.length) return null;
+    
+    final wallet = wallets[walletIndex];
+    
+    // Return stored private key if available
+    if (wallet.privateKey != null && wallet.privateKey!.isNotEmpty) {
+      return wallet.privateKey;
+    }
+    
+    // Generate from mnemonic if no private key stored
+    if (wallet.mnemonic != null && wallet.mnemonic!.isNotEmpty) {
+      final coinInfo = wallet.coinInfo?[CoinType.N.name];
+      if (coinInfo == null) return null;
+      
+      final pathMap = coinInfo['baseInfo']?['path'] as Map<String, dynamic>?;
+      if (pathMap == null) return null;
+      
+      final addrType = coinInfo['addrType'] ?? 'legacy';
+      final pathIndex = coinInfo['pathIndex'] ?? 0;
+      final path = getPathWithIndex(pathMap[addrType], pathIndex);
+      
+      return await Trustdart().getPrivateKey(
+        wallet.mnemonic!,
+        CoinType.N.name,
+        path,
+      );
+    }
+    
+    return null;
+  }
+
+  @override
+  Future<String?> getMnemonicForWallet(int walletIndex) async {
+    final wallets = _getAllWalletsData();
+    if (walletIndex < 0 || walletIndex >= wallets.length) return null;
+    return wallets[walletIndex].mnemonic;
+  }
+
+  SharedWalletInfo _toSharedInfo(WalletInfoData wallet) {
+    return SharedWalletInfo(
+      address: wallet.address,
+      name: wallet.name,
+      chainType: wallet.chainType,
+      avatarUrl: wallet.avatarUrl,
+    );
+  }
 
   void dispose() {
     _walletStreamController.close();

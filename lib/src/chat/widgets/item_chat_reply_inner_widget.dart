@@ -12,10 +12,9 @@ import 'package:n42appv2/src/https/ipfs_api.dart';
 import 'package:n42appv2/src/utils/base64_utils.dart';
 import 'package:n42appv2/src/utils/data_utils.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42appv2/shared/di/service_locator.dart';
 import 'package:n42appv2/src/widgets/file_icon.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:video_compress/video_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
@@ -218,7 +217,12 @@ class _ItemChatReplyInnerWidgetState extends State<ItemChatReplyInnerWidget>
     } else {
       mPubKey = _item.content.receiverPubKey;
     }
-    Map<String,String> keyMap =await Provider.of<WalletActionProvider>(context,listen: false).publicKeyAndPrivateKeyPair();
+    // Use IChatCryptoService instead of WalletActionProvider
+    final cryptoService = ServiceLocatorSetup.chatCryptoService;
+    Map<String, String> keyMap = {};
+    if (cryptoService != null) {
+      keyMap = await cryptoService.getPublicKeyAndPrivateKeyPairs();
+    }
     final privateKey = keyMap["$mPubKey"];
 
     //这里使用查询出的私钥

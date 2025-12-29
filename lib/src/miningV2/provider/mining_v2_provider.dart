@@ -15,11 +15,10 @@ import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42appv2/shared/di/service_locator.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/src/widgets/chart_histogram.dart';
-import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class MiningV2Provider extends ChangeNotifier {
@@ -72,26 +71,38 @@ class MiningV2Provider extends ChangeNotifier {
   /// 新增：FUJI NFT 质押
   Future<void> checkAddressMiningStatus() async {
     try {
-      WalletActionProvider wap=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
-      Map<String,dynamic> cInfo=wap.walletInfoLsit[wap.walletMiningIndex].coinInfo?[CoinType.N.name];
-      WalletInfo info = wap.walletInfoLsit[wap.walletMiningIndex];
+      // Use IWalletService instead of WalletActionProvider
+      final walletService = ServiceLocatorSetup.walletService;
+      if (walletService == null) return;
+      
+      final miningIndex = walletService.miningWalletIndex;
+      Map<String, dynamic>? cInfo = walletService.getCoinInfoForWallet(miningIndex)?[CoinType.N.name];
+      if (cInfo == null) return;
+      
+      final mnemonic = await walletService.getMnemonicForWallet(miningIndex);
+      final pk = await walletService.getPrivateKeyForWallet(miningIndex);
+      
       Map<String, dynamic> pathMap = cInfo['baseInfo']['path'];
-      var rm=await Trustdart().generateAddress(
+      var rm = await Trustdart().generateAddress(
           CoinType.N.name,
           getPathWithIndex(pathMap[cInfo['addrType']], cInfo['pathIndex']),
           cInfo['addrType'],
-          mnemonic: info.mnemonic??"",
-          pk: info.privateKey??""
+          mnemonic: mnemonic ?? "",
+          pk: pk ?? ""
       );
-      address =rm[cInfo['addrType']];
+      address = rm[cInfo['addrType']];
       await getWalletPrivateKey();
-      walletName=info.walletName??"";
+      
+      // Get wallet name from service
+      final miningWallet = walletService.getMiningWallet();
+      walletName = miningWallet?.name ?? "";
+      
       if (address == null) return;
       await getMiningData();
-      if(depositsEnable==true){
+      if (depositsEnable == true) {
         runMining();
       }
-      getNprice(wap);
+      // Note: getNprice requires price service, skipping for now
       loadMiningData();
     } catch (err) {
       setDepositsEnable(false);
@@ -387,17 +398,36 @@ class MiningV2Provider extends ChangeNotifier {
 
   String? privateKey=null;
   Future<void> getWalletPrivateKey() async {
-    WalletActionProvider wap=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
-    String? pk=wap.walletInfoLsit[wap.walletMiningIndex].privateKey;
-    if(pk==null){
-      Map<String,dynamic> nCoinInfo=wap.walletInfoLsit[wap.walletMiningIndex].coinInfo![CoinType.N.name];
-      Map<String, dynamic> pathMap = nCoinInfo['baseInfo']['path'];
-      privateKey=await Trustdart().getPrivateKey(wap.walletInfoLsit[wap.walletMiningIndex].mnemonic!, CoinType.N.name, getPathWithIndex(pathMap['legacy'], nCoinInfo['pathIndex']),);
-    }else{
-      privateKey=pk;
+    // Use IWalletService instead of WalletActionProvider
+    final walletService = ServiceLocatorSetup.walletService;
+    if (walletService == null) {
+      errorMessage = "Wallet service not available!";
+      notifyListeners();
+      return;
     }
-    if(privateKey==null){
-      errorMessage="PrivateKey not null!";
+    
+    final miningIndex = walletService.miningWalletIndex;
+    String? pk = await walletService.getPrivateKeyForWallet(miningIndex);
+    
+    if (pk == null) {
+      // Try to generate from mnemonic
+      Map<String, dynamic>? nCoinInfo = walletService.getCoinInfoForWallet(miningIndex)?[CoinType.N.name];
+      final mnemonic = await walletService.getMnemonicForWallet(miningIndex);
+      
+      if (nCoinInfo != null && mnemonic != null) {
+        Map<String, dynamic> pathMap = nCoinInfo['baseInfo']['path'];
+        privateKey = await Trustdart().getPrivateKey(
+          mnemonic,
+          CoinType.N.name,
+          getPathWithIndex(pathMap['legacy'], nCoinInfo['pathIndex']),
+        );
+      }
+    } else {
+      privateKey = pk;
+    }
+    
+    if (privateKey == null) {
+      errorMessage = "PrivateKey not null!";
       notifyListeners();
     }
   }

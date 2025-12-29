@@ -24,7 +24,7 @@ import 'package:n42appv2/src/utils/data_utils.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42appv2/shared/di/service_locator.dart';
 import 'package:n42appv2/src/widgets/file_icon.dart';
 import 'package:n42appv2/src/widgets/reply_empty_widget.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
@@ -34,7 +34,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:open_filex/open_filex.dart';
-import 'package:provider/provider.dart';
 import 'package:video_compress/video_compress.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/src/chat/widgets/report_post.dart';
@@ -288,7 +287,12 @@ class _ItemChatViewState extends State<ItemChatView>
     } else {
       mPubKey = _item.content.receiverPubKey;
     }
-    Map<String,String> keyMap =await Provider.of<WalletActionProvider>(context,listen: false).publicKeyAndPrivateKeyPair();
+    // Use IChatCryptoService instead of WalletActionProvider
+    final cryptoService = ServiceLocatorSetup.chatCryptoService;
+    Map<String, String> keyMap = {};
+    if (cryptoService != null) {
+      keyMap = await cryptoService.getPublicKeyAndPrivateKeyPairs();
+    }
     final privateKey = keyMap["$mPubKey"];
 
     // final decode = await ChatUtils.chatDecode(

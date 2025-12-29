@@ -36,21 +36,31 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:n42appv2/generated/l10n.dart';
+
+/// Global ProviderContainer for Riverpod
+/// This is used during the migration phase to bridge Provider and Riverpod
+late ProviderContainer globalProviderContainer;
 
 void main() async {
   // Initialize Flutter bindings
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize dependency injection
-  await configureDependencies(kReleaseMode ? Env.prod : Env.dev);
-
   // Initialize Firebase
   await Firebase.initializeApp();
   await notification.init();
-  //HttpOverrides.global = new MyHttpOverrides();
+
+  // Create Riverpod ProviderContainer
+  globalProviderContainer = ProviderContainer();
+
+  // Initialize dependency injection with Riverpod container
+  await configureDependencies(
+    kReleaseMode ? Env.prod : Env.dev,
+    container: globalProviderContainer,
+  );
 
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
@@ -60,43 +70,53 @@ void main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
+
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider<PublicProvider>(
-          create: (_) => PublicProvider(),
-        ),
-        ChangeNotifierProvider<BrowserProvider>(
-          create: (_)=>BrowserProvider(),
-        ),
-        ChangeNotifierProvider<WalletConnectProvider>(
-          create: (_)=>WalletConnectProvider(),
-        ),
-        ChangeNotifierProvider<WalletActionProvider>(
-          create: (_)=>WalletActionProvider(),
-        ),
-        ChangeNotifierProvider<TransactionRecordItemProvider>(
-          create: (_)=>TransactionRecordItemProvider(),
-        ),
-        ChangeNotifierProvider<MiningV2Provider>(
-          create: (_)=>MiningV2Provider(),
-        ),
-        ChangeNotifierProvider<ChatMessageProvider>(
-          create: (_)=>ChatMessageProvider(),
-        ),
-      ],
-      child: n42appv2(),
+    // Wrap with ProviderScope for Riverpod
+    UncontrolledProviderScope(
+      container: globalProviderContainer,
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider<PublicProvider>(
+            create: (_) => PublicProvider(),
+          ),
+          ChangeNotifierProvider<BrowserProvider>(
+            create: (_) => BrowserProvider(),
+          ),
+          ChangeNotifierProvider<WalletConnectProvider>(
+            create: (_) => WalletConnectProvider(),
+          ),
+          ChangeNotifierProvider<WalletActionProvider>(
+            create: (_) => WalletActionProvider(),
+          ),
+          ChangeNotifierProvider<TransactionRecordItemProvider>(
+            create: (_) => TransactionRecordItemProvider(),
+          ),
+          ChangeNotifierProvider<MiningV2Provider>(
+            create: (_) => MiningV2Provider(),
+          ),
+          ChangeNotifierProvider<ChatMessageProvider>(
+            create: (_) => ChatMessageProvider(),
+          ),
+        ],
+        child: const N42AppV2(),
+      ),
     ),
   );
 }
-class n42appv2 extends StatefulWidget {
-  const n42appv2({super.key});
+/// Main Application Widget
+///
+/// Uses a hybrid Provider + Riverpod architecture during migration phase.
+/// Provider: Legacy state management (to be gradually removed)
+/// Riverpod: New state management (being migrated to)
+class N42AppV2 extends StatefulWidget {
+  const N42AppV2({super.key});
 
   @override
-  State<n42appv2> createState() => _n42appv2State();
+  State<N42AppV2> createState() => _N42AppV2State();
 }
 
-class _n42appv2State extends State<n42appv2> {
+class _N42AppV2State extends State<N42AppV2> {
   late AppLinks _appLinks;
   StreamSubscription<Uri>? _linkSubscription;
   @override

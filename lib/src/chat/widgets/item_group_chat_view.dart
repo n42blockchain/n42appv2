@@ -25,7 +25,7 @@ import 'package:n42appv2/src/utils/data_utils.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42appv2/shared/di/service_locator.dart';
 import 'package:n42appv2/src/widgets/file_icon.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:n42appv2/src/widgets/item_group_chat_reply_inner_widget.dart';
@@ -35,7 +35,6 @@ import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:open_filex/open_filex.dart';
-import 'package:provider/provider.dart';
 import 'package:video_compress/video_compress.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -156,7 +155,12 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
             final ss = map["ss"];
 
             ///兼容多钱包 根据pubKey找出对应钱包的privateKey
-            Map<String,String> keyMap =await Provider.of<WalletActionProvider>(context,listen: false).publicKeyAndPrivateKeyPair();
+            // Use IChatCryptoService instead of WalletActionProvider
+            final cryptoService = ServiceLocatorSetup.chatCryptoService;
+            Map<String, String> keyMap = {};
+            if (cryptoService != null) {
+              keyMap = await cryptoService.getPublicKeyAndPrivateKeyPairs();
+            }
             final privateKey = keyMap["$pubKey"];
             if (privateKey == null) {
               return;

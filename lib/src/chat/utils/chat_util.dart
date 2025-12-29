@@ -1,106 +1,66 @@
-﻿import 'dart:convert';
+﻿// Copyright 2021-2026 N42 Inc. All rights reserved.
+// Use of this source code is governed by a dual license:
+// Apache License 2.0 and MIT License.
+// See LICENSE file in the project root for full license information.
+//
+// Author: Jiang Yiwei
 
 import 'package:n42appv2/core/app/app_globals.dart';
-import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
-import 'package:n42appv2/src/wallet/models/wallet_info.dart';
-import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
-import 'package:n42appv2/src/wallet/utils/chain_util.dart';
-//import 'package:flutter_mining/flutter_mining.dart';
-import 'package:provider/provider.dart';
-import 'package:web3dart/crypto.dart';
+import 'package:n42appv2/shared/di/service_locator.dart';
+import 'package:n42appv2/shared/domain/services/wallet_service_interface.dart';
 
-//final _flutterMiningPlugin = FlutterMining();
-
+/// Chat Utility Class
+///
+/// Provides encryption/decryption and caching utilities for chat feature.
+/// Uses IChatCryptoService for wallet key operations (boundary compliant).
 class ChatUtil {
+  /// Get the chat crypto service from service locator
+  IChatCryptoService? get _cryptoService =>
+      ServiceLocatorSetup.chatCryptoService;
+
+  /// Encrypt a message using recipient's public key
   Future<String?> chatEnCode(String pubKey, String msg) async {
-    final Map<String,dynamic> params = {};
-    params["type"] = "encrypt";
-    params["val"] = {"public_key": pubKey, "msg": msg};
-    final evmRes = await Trustdart().evmEmit(params);
-    //_flutterMiningPlugin.emit(json.encode(params));
-    return evmRes?["data"];
+    final service = _cryptoService;
+    if (service == null) {
+      // Fallback: service not initialized
+      return null;
+    }
+    return await service.encryptMessage(pubKey, msg);
   }
 
+  /// Decrypt a message using wallet's private key
   Future<String?> chatDecode(String privateKey, String msg) async {
-    final Map<String,dynamic> params = {};
-    params["type"] = "decrypt";
-    params["val"] = {"priv_key": privateKey, "msg": msg};
-    final evmRes = await await Trustdart().evmEmit(params);
-    //_flutterMiningPlugin.emit(json.encode(params));
-    return evmRes?["data"];
+    final service = _cryptoService;
+    if (service == null) {
+      return null;
+    }
+    return await service.decryptMessage(msg);
   }
 
+  /// Get AST/N chain private key for chat encryption
+  ///
+  /// Uses IChatCryptoService to get the key securely.
   Future<String?> getAstPrivateKey() async {
-    WalletActionProvider wap=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
-    //获取ast的 private key
-    WalletInfo walletInfo;
-    if(wap.walletInfo.mainWallet==true){
-      walletInfo=wap.walletInfo;
-    }else{
-      int index=wap.walletInfoLsit.indexWhere((e)=>e.mainWallet==true);
-      if(index !=-1){
-        walletInfo=wap.walletInfoLsit[index];
-      }else{
-        return "";
-      }
+    final service = _cryptoService;
+    if (service == null) {
+      return "";
     }
-
-
-    //WalletInfo walletInfo = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo;
-    final Map<String, dynamic>? map = walletInfo.coinInfo;
-    final astMap = map?[CoinType.N.name];
-    if (astMap != null) {
-      int pathIndex = astMap['pathIndex'] ?? 0;
-      final path =
-      getPathWithIndex(astMap["baseInfo"]["path"]["legacy"], pathIndex);
-      String? privateKey=walletInfo.privateKey;
-      if(walletInfo.privateKey ==null){
-        privateKey=await Trustdart().getPrivateKey(walletInfo.mnemonic!, CoinType.N.name, path,);
-      }
-      final pk = base64Decode(privateKey!);
-      return bytesToHex(pk);
-        //HexUtils().uint8ToHex(pk);
-    }
-
-    return null;
+    return await service.getPrivateKeyForChat();
   }
 
+  /// Get AST/N chain public key for chat encryption
+  ///
+  /// Uses IChatCryptoService to get the key securely.
   Future<String?> getAstPubKey() async {
-    //获取ast的 private key
-    WalletActionProvider wap=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
-    //获取ast的 private key
-    WalletInfo walletInfo;
-    if(wap.walletInfo.mainWallet==true){
-      walletInfo=wap.walletInfo;
-    }else{
-      int index=wap.walletInfoLsit.indexWhere((e)=>e.mainWallet==true);
-      if(index !=-1){
-        walletInfo=wap.walletInfoLsit[index];
-      }else{
-        return "";
-      }
+    final service = _cryptoService;
+    if (service == null) {
+      return "";
     }
-    //WalletInfo walletInfo = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo;
-    final Map<String, dynamic>? map = walletInfo.coinInfo;
-    final astMap = map?[CoinType.N.name];
-    if (astMap != null) {
-      int pathIndex = astMap['pathIndex'] ?? 0;
-      final path =
-      getPathWithIndex(astMap["baseInfo"]["path"]["legacy"], pathIndex);
-      String privateKey=await Trustdart().getPublicKey(
-        CoinType.N.name,
-        path,
-        mnemonic: walletInfo.mnemonic??"",
-        pk:walletInfo.privateKey??"",
-      );
-      final pk = base64Decode(privateKey);
-      return bytesToHex(pk);
-    }
-    return null;
+    return await service.getPublicKeyForChat();
   }
 
+  /// Cache a chat message locally
   Future cacheChatMessage(String key, String message) async {
     final chatCacheKey = "${AppGlobals.userInfo?.uuid}_chatKey";
     final data = await getChatCacheMessage();
@@ -112,6 +72,7 @@ class ChatUtil {
     return await SPUtil().putObject(chatCacheKey, map);
   }
 
+  /// Get cached chat messages
   Future getChatCacheMessage() async {
     final chatCacheKey = "${AppGlobals.userInfo?.uuid}_chatKey";
     return await SPUtil().getObject(chatCacheKey);

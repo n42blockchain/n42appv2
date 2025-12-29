@@ -40,7 +40,7 @@ import 'package:n42appv2/src/utils/data_utils.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42appv2/shared/di/service_locator.dart';
 import 'package:n42appv2/src/wallet/utils/browser_txhash.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:n42appv2/src/widgets/loading.dart';
@@ -215,7 +215,12 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
             final pubKey = map["public_key"];
             final ss = map["ss"];
             //兼容多钱包 根据pubKey找出对应钱包的privateKey
-            Map<String,String> keyMap =await Provider.of<WalletActionProvider>(context,listen: false).publicKeyAndPrivateKeyPair();
+            // Use IChatCryptoService instead of WalletActionProvider
+            final cryptoService = ServiceLocatorSetup.chatCryptoService;
+            Map<String, String> keyMap = {};
+            if (cryptoService != null) {
+              keyMap = await cryptoService.getPublicKeyAndPrivateKeyPairs();
+            }
             debugPrint("keyMap===:$keyMap");
             final privateKey = keyMap["$pubKey"];
             if (privateKey == null) {

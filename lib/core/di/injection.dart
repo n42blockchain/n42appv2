@@ -5,8 +5,8 @@
 //
 // Author: Jiang Yiwei
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/core/storage/app_database.dart';
 import 'package:n42appv2/shared/di/service_locator.dart';
@@ -14,6 +14,7 @@ import 'package:n42appv2/shared/domain/services/wallet_service_interface.dart';
 import 'package:n42appv2/shared/domain/services/mining_service_interface.dart';
 import 'package:n42appv2/features/wallet/data/services/wallet_service_impl.dart';
 import 'package:n42appv2/features/mining/data/services/mining_service_impl.dart';
+import 'package:n42appv2/features/chat/data/services/chat_crypto_service_impl.dart';
 
 /// Dependency Injection Container
 final GetIt getIt = GetIt.instance;
@@ -21,30 +22,72 @@ final GetIt getIt = GetIt.instance;
 /// Environment Types
 enum Env { dev, staging, prod }
 
+/// Global ProviderContainer reference (set during initialization)
+ProviderContainer? _providerContainer;
+
+/// Get the global ProviderContainer
+ProviderContainer get providerContainer {
+  if (_providerContainer == null) {
+    throw StateError(
+      'ProviderContainer not initialized. Call configureDependencies() first.',
+    );
+  }
+  return _providerContainer!;
+}
+
 /// Configure Dependencies
 ///
 /// Call this at app startup to initialize all dependencies.
-Future<void> configureDependencies(Env env) async {
+///
+/// [env] - The environment (dev, staging, prod)
+/// [container] - The Riverpod ProviderContainer for bridging state
+Future<void> configureDependencies(
+  Env env, {
+  required ProviderContainer container,
+}) async {
+  // Store Riverpod container reference
+  _providerContainer = container;
+
   // ============ Core Services ============
-  
+
   // Storage
-  getIt.registerLazySingleton<SPUtil>(() => SPUtil());
-  getIt.registerLazySingleton<AppDatabase>(() => AppDatabase.instance);
+  if (!getIt.isRegistered<SPUtil>()) {
+    getIt.registerLazySingleton<SPUtil>(() => SPUtil());
+  }
+  if (!getIt.isRegistered<AppDatabase>()) {
+    getIt.registerLazySingleton<AppDatabase>(() => AppDatabase.instance);
+  }
+
+  // Register ProviderContainer
+  if (!getIt.isRegistered<ProviderContainer>()) {
+    getIt.registerSingleton<ProviderContainer>(container);
+  }
 
   // ============ Shared Services ============
-  
+
   // Initialize shared service locator
   await ServiceLocatorSetup.initialize();
 
-  // Register wallet service
-  final walletService = WalletServiceImpl();
-  getIt.registerSingleton<WalletServiceImpl>(walletService);
-  ServiceLocatorSetup.registerWalletService(walletService);
+  // Register wallet service with ProviderContainer
+  if (!getIt.isRegistered<WalletServiceImpl>()) {
+    final walletService = WalletServiceImpl(container);
+    getIt.registerSingleton<WalletServiceImpl>(walletService);
+    ServiceLocatorSetup.registerWalletService(walletService);
+  }
 
   // Register mining service
-  final miningService = MiningServiceImpl();
-  getIt.registerSingleton<MiningServiceImpl>(miningService);
-  ServiceLocatorSetup.registerMiningService(miningService);
+  if (!getIt.isRegistered<MiningServiceImpl>()) {
+    final miningService = MiningServiceImpl();
+    getIt.registerSingleton<MiningServiceImpl>(miningService);
+    ServiceLocatorSetup.registerMiningService(miningService);
+  }
+
+  // Register chat crypto service
+  if (!getIt.isRegistered<ChatCryptoServiceImpl>()) {
+    final chatCryptoService = ChatCryptoServiceImpl(container);
+    getIt.registerSingleton<ChatCryptoServiceImpl>(chatCryptoService);
+    ServiceLocatorSetup.registerChatCryptoService(chatCryptoService);
+  }
 
   // ============ Feature-specific registrations ============
   // These would be added as features are migrated
@@ -54,6 +97,7 @@ Future<void> configureDependencies(Env env) async {
 Future<void> resetDependencies() async {
   await getIt.reset();
   await ServiceLocatorSetup.reset();
+  _providerContainer = null;
 }
 
 /// Convenience accessors

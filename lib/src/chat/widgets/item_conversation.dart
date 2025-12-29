@@ -11,12 +11,11 @@ import 'package:n42appv2/src/chat/utils/chat_util.dart';
 import 'package:n42appv2/src/utils/base64_utils.dart';
 import 'package:n42appv2/src/utils/data_utils.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42appv2/shared/di/service_locator.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:eth_sig_util/util/utils.dart';
 import 'package:flustars_flutter3/flustars_flutter3.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart' as screen;
 import 'package:n42appv2/generated/l10n.dart';
 
@@ -166,7 +165,12 @@ class _ItemConversationState extends State<ItemConversation>
               } else {
                 mPubKey = _item.content.receiverPubKey;
               }
-              Map<String,String> keyMap = await Provider.of<WalletActionProvider>(context,listen: false).publicKeyAndPrivateKeyPair();
+              // Use IChatCryptoService instead of WalletActionProvider
+              final cryptoService = ServiceLocatorSetup.chatCryptoService;
+              Map<String, String> keyMap = {};
+              if (cryptoService != null) {
+                keyMap = await cryptoService.getPublicKeyAndPrivateKeyPairs();
+              }
               final privateKey = keyMap["$mPubKey"];
 
               final decode = await chatUtil.chatDecode(
@@ -191,9 +195,13 @@ class _ItemConversationState extends State<ItemConversation>
                     final pubKey = map["public_key"];
                     final ss = map["ss"];
                     //兼容多钱包 根据pubKey找出对应钱包的privateKey
-                    Map<String,String> keyMap = await Provider.of<WalletActionProvider>(context,listen: false)
-                        .publicKeyAndPrivateKeyPair();
-                    final privateKey = keyMap["$pubKey"];
+                    // Use IChatCryptoService instead of WalletActionProvider
+                    final cryptoSvc = ServiceLocatorSetup.chatCryptoService;
+                    Map<String, String> keyMap2 = {};
+                    if (cryptoSvc != null) {
+                      keyMap2 = await cryptoSvc.getPublicKeyAndPrivateKeyPairs();
+                    }
+                    final privateKey = keyMap2["$pubKey"];
                     if (privateKey == null) {
                       return;
                     }
