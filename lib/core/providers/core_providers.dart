@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
-import 'package:n42appv2/shared/domain/services/wallet_service_interface.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 
 /// SPUtil Provider
@@ -266,6 +265,18 @@ class ScreenLockState {
       'gesturePW': gesturePassword,
       'PWLock': passwordLockTimestamp,
     };
+  }
+
+  /// Verify password
+  bool verifyPassword(String password) => lockPassword == password;
+
+  /// Verify gesture pattern
+  bool verifyGesture(List<int> gesture) {
+    if (gesturePassword.length != gesture.length) return false;
+    for (int i = 0; i < gesture.length; i++) {
+      if (gesturePassword[i] != gesture[i]) return false;
+    }
+    return true;
   }
 
   factory ScreenLockState.fromMap(Map<String, dynamic>? map) {

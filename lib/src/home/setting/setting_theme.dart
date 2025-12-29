@@ -26,17 +26,6 @@ class SettingTheme extends ConsumerWidget {
     }
   }
 
-  /// Convert int to ThemeMode
-  ThemeMode _intToThemeMode(int value) {
-    switch (value) {
-      case 1:
-        return ThemeMode.light;
-      case 2:
-        return ThemeMode.dark;
-      default:
-        return ThemeMode.system;
-    }
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
