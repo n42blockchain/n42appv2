@@ -6,129 +6,116 @@
 // Author: Jiang Yiwei
 
 import 'dart:async';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:injectable/injectable.dart';
 import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
-import 'package:n42appv2/shared/domain/entities/balance_info.dart';
 import 'package:n42appv2/shared/domain/services/wallet_service_interface.dart';
-import 'package:n42appv2/shared/events/event_manager.dart';
-import 'package:n42appv2/shared/events/cross_feature_events.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 
-/// Wallet Service Implementation
+/// Implementation of IWalletService using Riverpod
 ///
-/// Implements IWalletService to provide wallet data to other features.
-/// This allows Mining and other features to access wallet info without
-/// directly depending on Wallet feature internals.
+/// This implementation bridges the Riverpod state with the
+/// interface-based service layer for cross-feature communication.
+@LazySingleton(as: IWalletService)
 class WalletServiceImpl implements IWalletService {
+  final ProviderContainer _container;
   final StreamController<SharedWalletInfo?> _walletStreamController =
       StreamController<SharedWalletInfo?>.broadcast();
 
-  List<SharedWalletInfo> _wallets = [];
-  SharedWalletInfo? _currentWallet;
-
-  WalletServiceImpl() {
-    // Listen for wallet events from the legacy provider
-    // This bridges the old system to the new interface
+  WalletServiceImpl(this._container) {
+    // Listen to wallet changes and broadcast
+    _container.listen<AsyncValue<List<WalletInfoData>>>(
+      walletListProvider,
+      (_, next) {
+        final wallet = getCurrentWallet();
+        _walletStreamController.add(wallet);
+      },
+    );
+    
+    _container.listen<int>(
+      selectedWalletIndexProvider,
+      (_, __) {
+        final wallet = getCurrentWallet();
+        _walletStreamController.add(wallet);
+      },
+    );
   }
 
   @override
-  SharedWalletInfo? get currentWallet => _currentWallet;
+  SharedWalletInfo? getCurrentWallet() {
+    final wallets = _container.read(walletListProvider);
+    final index = _container.read(selectedWalletIndexProvider);
 
-  @override
-  List<SharedWalletInfo> get wallets => List.unmodifiable(_wallets);
+    return wallets.whenOrNull(
+      data: (list) {
+        if (index < 0 || index >= list.length) return null;
+        final wallet = list[index];
+        return SharedWalletInfo(
+          address: wallet.address,
+          name: wallet.name,
+          chainType: wallet.chainType,
+          avatarUrl: wallet.avatarUrl,
+        );
+      },
+    );
+  }
 
   @override
   SharedWalletInfo? getWalletByAddress(String address) {
-    try {
-      return _wallets.firstWhere((w) => w.address == address);
-    } catch (_) {
-      return null;
-    }
+    final wallets = _container.read(walletListProvider);
+
+    return wallets.whenOrNull(
+      data: (list) {
+        final wallet = list.where((w) => w.address == address).firstOrNull;
+        if (wallet == null) return null;
+        return SharedWalletInfo(
+          address: wallet.address,
+          name: wallet.name,
+          chainType: wallet.chainType,
+          avatarUrl: wallet.avatarUrl,
+        );
+      },
+    );
   }
 
   @override
-  SharedWalletInfo? getWalletByIndex(int index) {
-    if (index < 0 || index >= _wallets.length) return null;
-    return _wallets[index];
+  List<SharedWalletInfo> getAllWallets() {
+    final wallets = _container.read(walletListProvider);
+
+    return wallets.whenOrNull(
+          data: (list) => list
+              .map((w) => SharedWalletInfo(
+                    address: w.address,
+                    name: w.name,
+                    chainType: w.chainType,
+                    avatarUrl: w.avatarUrl,
+                  ))
+              .toList(),
+        ) ??
+        [];
   }
 
   @override
-  Future<SharedBalanceInfo?> getBalance(
-    String address,
-    String coinSymbol,
-  ) async {
-    // TODO: Implement by calling the actual wallet provider/API
-    // This is a placeholder that should be connected to the real implementation
-    return null;
+  bool walletExists(String address) {
+    return getWalletByAddress(address) != null;
   }
-
-  @override
-  Future<List<SharedBalanceInfo>> getAllBalances(String address) async {
-    // TODO: Implement by calling the actual wallet provider/API
-    return [];
-  }
-
-  @override
-  bool hasWallet(String address) {
-    return _wallets.any((w) => w.address == address);
-  }
-
-  @override
-  int get walletCount => _wallets.length;
 
   @override
   Stream<SharedWalletInfo?> get currentWalletStream =>
       _walletStreamController.stream;
 
-  // ============ Internal Update Methods ============
-
-  /// Update wallet list from legacy provider
-  void updateWallets(List<SharedWalletInfo> wallets) {
-    _wallets = wallets;
-  }
-
-  /// Update current wallet selection
-  void updateCurrentWallet(SharedWalletInfo? wallet) {
-    _currentWallet = wallet;
-    _walletStreamController.add(wallet);
-
-    // Emit cross-feature event
-    if (wallet != null) {
-      eventManager.emitWalletSelected(wallet);
-    }
-  }
-
-  /// Notify balance update
-  void notifyBalanceUpdate({
-    required String walletAddress,
-    required String coinSymbol,
-    required String newBalance,
-  }) {
-    eventManager.emitWalletBalanceUpdated(
-      walletAddress: walletAddress,
-      coinSymbol: coinSymbol,
-      newBalance: newBalance,
-    );
-  }
-
-  /// Notify transaction completion
-  void notifyTransactionCompleted({
-    required String walletAddress,
-    required String txHash,
-    required String amount,
-    required String coinSymbol,
-    required bool isSuccess,
-  }) {
-    eventManager.emitTransactionCompleted(
-      walletAddress: walletAddress,
-      txHash: txHash,
-      amount: amount,
-      coinSymbol: coinSymbol,
-      isSuccess: isSuccess,
-    );
-  }
-
-  /// Dispose resources
   void dispose() {
     _walletStreamController.close();
   }
 }
 
+/// Provider for IWalletService
+final walletServiceProvider = Provider<IWalletService>((ref) {
+  final container = ProviderContainer();
+  final service = WalletServiceImpl(container);
+  ref.onDispose(() {
+    service.dispose();
+    container.dispose();
+  });
+  return service;
+});
