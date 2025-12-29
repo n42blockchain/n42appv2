@@ -6,10 +6,9 @@ import 'package:n42appv2/src/miningV2/api/mining_api.dart';
 import 'package:n42appv2/src/miningV2/pages/keyManagement/data_encryption.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42appv2/shared/di/service_locator.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/textField_widget.dart';
-import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class MiningOutputPk extends StatefulWidget {
@@ -41,9 +40,20 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
       widget.value=await MiningApi.init().generateBls12381Keypair();
     }
     if (!mounted) return "";
-    WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
-    wap.walletInfoLsit[wap.walletMiningIndex].mnemonic;
-    encrypteData={'validator':widget.value,"privateKey": wap.walletInfoLsit[wap.walletMiningIndex].privateKey??"", "mnemonicWords": wap.walletInfoLsit[wap.walletMiningIndex].mnemonic??"",};
+    
+    // Use IWalletService instead of WalletActionProvider
+    final walletService = ServiceLocatorSetup.walletService;
+    if (walletService == null) return "";
+    
+    final miningIndex = walletService.miningWalletIndex;
+    final privateKey = await walletService.getPrivateKeyForWallet(miningIndex);
+    final mnemonic = await walletService.getMnemonicForWallet(miningIndex);
+    
+    encrypteData = {
+      'validator': widget.value,
+      "privateKey": privateKey ?? "",
+      "mnemonicWords": mnemonic ?? "",
+    };
     return await encryptSecret(data: encrypteData!, password: password);
   }
 

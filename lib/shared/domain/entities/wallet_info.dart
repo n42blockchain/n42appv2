@@ -36,6 +36,9 @@ class SharedUserInfo extends Equatable {
   final String email;
   final String? name;
   final String? avatarUrl;
+  final String? token;
+  final String? image;
+  final String? desc;
   final bool isLoggedIn;
 
   const SharedUserInfo({
@@ -43,9 +46,38 @@ class SharedUserInfo extends Equatable {
     required this.email,
     this.name,
     this.avatarUrl,
+    this.token,
+    this.image,
+    this.desc,
     this.isLoggedIn = true,
   });
 
+  factory SharedUserInfo.fromJson(Map<String, dynamic> json) {
+    return SharedUserInfo(
+      uuid: json['uuid'] ?? '',
+      email: json['email'] ?? '',
+      name: json['name'],
+      avatarUrl: json['image'] ?? json['avatarUrl'],
+      token: json['token'],
+      image: json['image'],
+      desc: json['desc'],
+      isLoggedIn: json['isLoggedIn'] ?? true,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'uuid': uuid,
+      'email': email,
+      'name': name,
+      'avatarUrl': avatarUrl,
+      'token': token,
+      'image': image,
+      'desc': desc,
+      'isLoggedIn': isLoggedIn,
+    };
+  }
+
   @override
-  List<Object?> get props => [uuid, email, name, avatarUrl, isLoggedIn];
+  List<Object?> get props => [uuid, email, name, avatarUrl, token, image, desc, isLoggedIn];
 }

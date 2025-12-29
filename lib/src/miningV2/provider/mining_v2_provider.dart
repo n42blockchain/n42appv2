@@ -63,6 +63,54 @@ class MiningV2Provider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // ============================================
+  // Wallet List Management (via IWalletService)
+  // ============================================
+  
+  /// Get all wallets that support N chain (for mining)
+  List<MiningWalletInfo> get miningWalletList {
+    final walletService = ServiceLocatorSetup.walletService;
+    if (walletService == null) return [];
+    
+    List<MiningWalletInfo> result = [];
+    int count = walletService.walletCount;
+    
+    for (int i = 0; i < count; i++) {
+      final coinInfo = walletService.getCoinInfoForWallet(i);
+      if (coinInfo == null) continue;
+      
+      // Only include wallets that support N chain
+      if (coinInfo[CoinType.N.name] != null) {
+        final wallets = walletService.getAllWallets();
+        if (i < wallets.length) {
+          final wallet = wallets[i];
+          result.add(MiningWalletInfo(
+            index: i,
+            name: wallet.name,
+            address: wallet.address,
+            isMainWallet: i == 0, // First wallet is usually main
+            hasCoinN: true,
+          ));
+        }
+      }
+    }
+    return result;
+  }
+
+  /// Current selected mining wallet index
+  int get currentMiningWalletIndex {
+    final walletService = ServiceLocatorSetup.walletService;
+    return walletService?.miningWalletIndex ?? -1;
+  }
+
+  /// Set mining wallet by index
+  Future<void> setMiningWalletByIndex(int index) async {
+    // This triggers the event via WalletActionProvider
+    // We need to use the event bus to communicate this
+    eventBus.fire(EventPublic(EventPublicType.selectMiningWallet, intValue: index));
+    notifyListeners();
+  }
+
 
 
 
@@ -173,7 +221,14 @@ class MiningV2Provider extends ChangeNotifier {
     };
     SPUtil().setMiningData(miningData!);
   }
+  /// Import mining data with wallet creation
+  /// 
+  /// TODO: This method still uses WalletActionProvider for wallet creation.
+  /// Needs to be refactored to use IWalletService when wallet creation
+  /// functionality is added to the service interface.
   Future<MessageModel> setMiningData_import(Map<String,dynamic> value) async {
+    // NOTE: Keep using WalletActionProvider for wallet creation operations
+    // This will be migrated when IWalletService supports wallet creation
     WalletActionProvider wap=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
     int index=wap.walletInfoLsit.indexWhere((test){
       if(test.privateKey==value['privateKey']){
@@ -683,4 +738,23 @@ class MiningV2Provider extends ChangeNotifier {
       notifyListeners();
     }
   }
+}
+
+/// Mining-specific wallet info
+/// 
+/// Used for displaying wallet list in mining UI
+class MiningWalletInfo {
+  final int index;
+  final String name;
+  final String address;
+  final bool isMainWallet;
+  final bool hasCoinN;
+
+  MiningWalletInfo({
+    required this.index,
+    required this.name,
+    required this.address,
+    required this.isMainWallet,
+    required this.hasCoinN,
+  });
 }

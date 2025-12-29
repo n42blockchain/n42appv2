@@ -14,7 +14,6 @@ import 'package:n42appv2/src/miningV2/widgets/plans_widget.dart';
 import 'package:n42appv2/src/utils/data_utils.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/shared/di/service_locator.dart';
 import 'package:n42appv2/src/widgets/app_home_top_bar.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
@@ -123,8 +122,8 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
           children: [
             AppHomeTopBar(
               title: S.current.g_home_key3,
-              titleChild: Consumer2<WalletActionProvider,MiningV2Provider>(
-                  builder: (context, wpValue,mpValue, child) {
+              titleChild: Consumer<MiningV2Provider>(
+                  builder: (context, mpValue, child) {
                     return InkWell(
                     onTap: (){
                       showChangeAddress();
@@ -962,7 +961,11 @@ Riesgo Alto*/
 
   //显示钱包列表
   void showChangeAddress() {
-    WalletActionProvider walletValue = Provider.of<WalletActionProvider>(context,listen: false);
+    // Use MiningV2Provider instead of WalletActionProvider
+    MiningV2Provider miningProvider = Provider.of<MiningV2Provider>(context, listen: false);
+    final walletList = miningProvider.miningWalletList;
+    final currentIndex = miningProvider.currentMiningWalletIndex;
+    
     List<Widget> childs = [];
     childs.add(
       Container(
@@ -995,26 +998,22 @@ Riesgo Alto*/
         horizontal: ScreenUtil().setWidth(30.0),
       ),
       child: ListView.builder(
-        itemCount: walletValue.walletInfoLsit.length,
-        itemBuilder: (context, int index) {
-          WalletInfo wInfo = walletValue.walletInfoLsit[index];
+        itemCount: walletList.length,
+        itemBuilder: (context, int listIndex) {
+          MiningWalletInfo wInfo = walletList[listIndex];
           Color walletColor = AppThemeUtils.getColorByKey(
               context, AppThemeKeys.itemSubtitleTextColor.name);
-          if (index == walletValue.walletMiningIndex) {
+          if (wInfo.index == currentIndex) {
             walletColor = AppThemeUtils.getColorByKey(
                 context, AppThemeKeys.mainBlueColor.name);
-          }
-          if(wInfo.coinInfo?[CoinType.N.name]==null){
-            return SizedBox();
           }
           return Column(
             children: [
               InkWell(
                 onTap: () {
                   Navigator.pop(context);
-                  if (index == walletValue.walletMiningIndex) {
-                  } else {
-                    walletValue.setWalletMiningIndex(index);
+                  if (wInfo.index != currentIndex) {
+                    miningProvider.setMiningWalletByIndex(wInfo.index);
                   }
                 },
                 child: Container(
@@ -1023,7 +1022,7 @@ Riesgo Alto*/
                   child: Row(
                     children: [
                       Text(
-                        wInfo.mainWallet?S.of(context).g_key_14:S.of(context).g_key_6,
+                        wInfo.isMainWallet ? S.of(context).g_key_14 : S.of(context).g_key_6,
                         style: TextStyle(
                           color: walletColor,
                           fontSize: ScreenUtil().setSp(36.0),
@@ -1035,7 +1034,7 @@ Riesgo Alto*/
                         width: ScreenUtil().setWidth(20.0),
                       ),
                       Text(
-                        wInfo.walletName??"",
+                        wInfo.name,
                         style: TextStyle(
                           color: walletColor,
                           fontSize: ScreenUtil().setSp(36.0),

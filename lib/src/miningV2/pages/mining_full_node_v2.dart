@@ -16,11 +16,10 @@ import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/api/token_view_api.dart';
-import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/pages/ast_swap/swap_ast_home.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42appv2/shared/di/service_locator.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -90,26 +89,35 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
           isLoadingAstBalance = true;
         });
       }
-      WalletActionProvider wap=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
-      //MiningV2Provider mp=Provider.of<MiningV2Provider>(AppGlobals.appContext,listen: false);
-      //获取ast的 private key
-      WalletInfo walletInfo=wap.walletInfoLsit[wap.walletMiningIndex];
-      final Map<String, dynamic>? map = walletInfo.coinInfo;
-      final astMap = map?[CoinType.N.name];
+      
+      // Use IWalletService instead of WalletActionProvider
+      final walletService = ServiceLocatorSetup.walletService;
+      if (walletService == null) return;
+      
+      final miningIndex = walletService.miningWalletIndex;
+      final coinInfo = walletService.getCoinInfoForWallet(miningIndex);
+      if (coinInfo == null) return;
+      
+      final mnemonic = await walletService.getMnemonicForWallet(miningIndex);
+      final privateKey = await walletService.getPrivateKeyForWallet(miningIndex);
+      
+      final astMap = coinInfo[CoinType.N.name];
+      if (astMap == null) return;
+      
       int pathIndex = astMap['pathIndex'] ?? 0;
-      final path =
-      getPathWithIndex(astMap["baseInfo"]["path"]["legacy"], pathIndex);
-      Trustdart trustdart=Trustdart();
-      var addressMap=await trustdart.generateAddress(
-          CoinType.N.name, path, 'legacy',mnemonic: walletInfo.mnemonic??"",pk: walletInfo.privateKey??"");
+      final path = getPathWithIndex(astMap["baseInfo"]["path"]["legacy"], pathIndex);
+      
+      Trustdart trustdart = Trustdart();
+      var addressMap = await trustdart.generateAddress(
+          CoinType.N.name, path, 'legacy', mnemonic: mnemonic ?? "", pk: privateKey ?? "");
       final astAddress = addressMap['legacy'];
-      //final isMainChainMining = await MiningUtils.isMainChainMining();
+      
       MessageModel mm = await _tokenViewApi.getBalance(
           BlockchainType.Ethereum.name,
           CoinType.N.name,
           astAddress ?? '',
-          isTest: true,//!isMainChainMining,
-          rpc: 'http://5.161.252.59:8545/'//"http://5.161.252.59:8545"
+          isTest: true,
+          rpc: 'http://5.161.252.59:8545/'
       );
       if (mm.error) {
       } else {

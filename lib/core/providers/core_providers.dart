@@ -10,9 +10,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
 import 'package:n42appv2/shared/domain/services/wallet_service_interface.dart';
+import 'package:n42appv2/src/component/enums/load.dart';
 
 /// SPUtil Provider
 final spUtilProvider = Provider<SPUtil>((ref) => SPUtil());
+
+// ============================================
+// Theme Provider
+// ============================================
 
 /// Theme Mode Provider
 final themeModeProvider = StateNotifierProvider<ThemeModeNotifier, ThemeMode>((ref) {
@@ -59,6 +64,10 @@ class ThemeModeNotifier extends StateNotifier<ThemeMode> {
   }
 }
 
+// ============================================
+// Locale Provider
+// ============================================
+
 /// Locale Provider
 final localeProvider = StateNotifierProvider<LocaleNotifier, Locale>((ref) {
   return LocaleNotifier(ref.watch(spUtilProvider));
@@ -89,21 +98,68 @@ class LocaleNotifier extends StateNotifier<Locale> {
     if (code == 'es_ES') return const Locale('es', 'ES');
     return Locale(code);
   }
+  
+  /// Get locale info for display
+  Map<String, String> getLocaleInfo(Locale locale) {
+    final code = locale.languageCode;
+    switch (code) {
+      case "en":
+        return {"icon": "assets/setting/english.png", "title": "English"};
+      case "ja":
+        return {"icon": "assets/setting/japanese.png", "title": "日本語"};
+      case "es":
+        return {"icon": "assets/setting/spanish.png", "title": "España"};
+      case "zh":
+        if (locale.countryCode == 'CN') {
+          return {"icon": "assets/setting/chinese.png", "title": "中文简体"};
+        }
+        return {"icon": "assets/setting/chinese_tw.png", "title": "中文繁體"};
+      default:
+        return {"icon": "assets/setting/english.png", "title": "English"};
+    }
+  }
 }
+
+// ============================================
+// Navigation & Tab Providers
+// ============================================
 
 /// Home Tab Index Provider
 final homeTabIndexProvider = StateProvider<int>((ref) => 0);
 
+/// Main Tab Select Index (for guide pages)
+final mainTabSelectIndexProvider = StateProvider<int>((ref) => 0);
+
+// ============================================
+// User & Auth Providers
+// ============================================
+
 /// Current User Provider
 final currentUserProvider = StateNotifierProvider<CurrentUserNotifier, SharedUserInfo?>((ref) {
-  return CurrentUserNotifier();
+  return CurrentUserNotifier(ref.watch(spUtilProvider));
 });
 
 class CurrentUserNotifier extends StateNotifier<SharedUserInfo?> {
-  CurrentUserNotifier() : super(null);
+  final SPUtil _spUtil;
+  
+  CurrentUserNotifier(this._spUtil) : super(null) {
+    _loadFromStorage();
+  }
+  
+  Future<void> _loadFromStorage() async {
+    try {
+      final userJson = await _spUtil.getUserInfo();
+      if (userJson != null) {
+        state = SharedUserInfo.fromJson(userJson);
+      }
+    } catch (e) {
+      // Ignore loading errors
+    }
+  }
   
   void setUser(SharedUserInfo user) {
     state = user;
+    _spUtil.saveUserInfoJson(user.toJson());
   }
   
   void clearUser() {
@@ -113,9 +169,183 @@ class CurrentUserNotifier extends StateNotifier<SharedUserInfo?> {
   bool get isLoggedIn => state != null;
 }
 
+/// Wallet Password Verification State
+final walletPasswordVerifiedProvider = StateProvider<bool>((ref) => false);
+
+// ============================================
+// Message & Notification Providers
+// ============================================
+
 /// Unread Message Count Provider
-final unreadCountProvider = StateProvider<int>((ref) => 0);
+final unreadCountProvider = StateNotifierProvider<UnreadCountNotifier, int>((ref) {
+  return UnreadCountNotifier();
+});
+
+class UnreadCountNotifier extends StateNotifier<int> {
+  UnreadCountNotifier() : super(0);
+  
+  void increment() {
+    state++;
+  }
+  
+  void setCount(int count) {
+    state = count;
+  }
+  
+  void reset() {
+    state = 0;
+  }
+}
+
+// ============================================
+// App State Providers
+// ============================================
+
+/// App Load State Provider
+final appLoadStateProvider = StateProvider<Load>((ref) => Load.loading);
 
 /// App Initialization State Provider
 final appInitializedProvider = StateProvider<bool>((ref) => false);
+
+/// Screen Lock State Provider
+final screenLockProvider = StateNotifierProvider<ScreenLockNotifier, ScreenLockState>((ref) {
+  return ScreenLockNotifier(ref.watch(spUtilProvider));
+});
+
+class ScreenLockState {
+  final bool isLocked;
+  final String lockPassword;
+  final bool faceEnabled;
+  final bool fingerprintEnabled;
+  final int lockTimeSeconds;
+  final bool gestureEnabled;
+  final List<int> gesturePassword;
+  final int passwordLockTimestamp;
+
+  const ScreenLockState({
+    this.isLocked = false,
+    this.lockPassword = '',
+    this.faceEnabled = false,
+    this.fingerprintEnabled = false,
+    this.lockTimeSeconds = 30,
+    this.gestureEnabled = false,
+    this.gesturePassword = const [],
+    this.passwordLockTimestamp = 0,
+  });
+
+  ScreenLockState copyWith({
+    bool? isLocked,
+    String? lockPassword,
+    bool? faceEnabled,
+    bool? fingerprintEnabled,
+    int? lockTimeSeconds,
+    bool? gestureEnabled,
+    List<int>? gesturePassword,
+    int? passwordLockTimestamp,
+  }) {
+    return ScreenLockState(
+      isLocked: isLocked ?? this.isLocked,
+      lockPassword: lockPassword ?? this.lockPassword,
+      faceEnabled: faceEnabled ?? this.faceEnabled,
+      fingerprintEnabled: fingerprintEnabled ?? this.fingerprintEnabled,
+      lockTimeSeconds: lockTimeSeconds ?? this.lockTimeSeconds,
+      gestureEnabled: gestureEnabled ?? this.gestureEnabled,
+      gesturePassword: gesturePassword ?? this.gesturePassword,
+      passwordLockTimestamp: passwordLockTimestamp ?? this.passwordLockTimestamp,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'lock': isLocked,
+      'lockPW': lockPassword,
+      'face': faceEnabled,
+      'fingerprint': fingerprintEnabled,
+      'lockTime': lockTimeSeconds,
+      'gesture': gestureEnabled,
+      'gesturePW': gesturePassword,
+      'PWLock': passwordLockTimestamp,
+    };
+  }
+
+  factory ScreenLockState.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return const ScreenLockState();
+    return ScreenLockState(
+      isLocked: map['lock'] ?? false,
+      lockPassword: map['lockPW'] ?? '',
+      faceEnabled: map['face'] ?? false,
+      fingerprintEnabled: map['fingerprint'] ?? false,
+      lockTimeSeconds: map['lockTime'] ?? 30,
+      gestureEnabled: map['gesture'] ?? false,
+      gesturePassword: List<int>.from(map['gesturePW'] ?? []),
+      passwordLockTimestamp: map['PWLock'] ?? 0,
+    );
+  }
+}
+
+class ScreenLockNotifier extends StateNotifier<ScreenLockState> {
+  final SPUtil _spUtil;
+
+  ScreenLockNotifier(this._spUtil) : super(const ScreenLockState()) {
+    _loadFromStorage();
+  }
+
+  Future<void> _loadFromStorage() async {
+    final data = await _spUtil.getLockScreen();
+    state = ScreenLockState.fromMap(data);
+  }
+
+  Future<void> setLockEnabled(bool enabled) async {
+    state = state.copyWith(isLocked: enabled);
+    await _saveToStorage();
+  }
+
+  Future<void> setLockPassword(String password) async {
+    state = state.copyWith(lockPassword: password, isLocked: password.isNotEmpty);
+    await _saveToStorage();
+  }
+
+  Future<void> setFaceEnabled(bool enabled) async {
+    state = state.copyWith(faceEnabled: enabled);
+    await _saveToStorage();
+  }
+
+  Future<void> setFingerprintEnabled(bool enabled) async {
+    state = state.copyWith(fingerprintEnabled: enabled);
+    await _saveToStorage();
+  }
+
+  Future<void> setLockTime(int seconds) async {
+    state = state.copyWith(lockTimeSeconds: seconds);
+    await _saveToStorage();
+  }
+
+  Future<void> setGestureEnabled(bool enabled) async {
+    state = state.copyWith(gestureEnabled: enabled);
+    await _saveToStorage();
+  }
+
+  Future<void> setGesturePassword(List<int> password) async {
+    state = state.copyWith(gesturePassword: password, gestureEnabled: password.isNotEmpty);
+    await _saveToStorage();
+  }
+
+  Future<void> setPasswordLockTimestamp(int timestamp) async {
+    state = state.copyWith(passwordLockTimestamp: timestamp);
+    await _saveToStorage();
+  }
+
+  Future<void> _saveToStorage() async {
+    await _spUtil.setLockScreen(state.toMap());
+  }
+
+  bool get hasAnyLockEnabled => 
+      state.isLocked || state.gestureEnabled || state.faceEnabled || state.fingerprintEnabled;
+
+  bool verifyPassword(String password) => state.lockPassword == password;
+  
+  bool verifyGesture(List<int> gesture) => 
+      state.gesturePassword.length == gesture.length &&
+      List.generate(gesture.length, (i) => state.gesturePassword[i] == gesture[i]).every((e) => e);
+}
 

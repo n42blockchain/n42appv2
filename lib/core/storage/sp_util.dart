@@ -109,6 +109,12 @@ class SPUtil {
     await putObject(SPkey.userInfo.name, info);
   }
 
+  // 保存用户信息 (JSON format for SharedUserInfo)
+  Future<void> saveUserInfoJson(Map<String, dynamic> info) async {
+    await initPrefs();
+    prefs?.setString(SPkey.userInfo.name, json.encode(info));
+  }
+
   // 获取缓存的用户信息
   Future<Map<String, dynamic>?> getUserInfo() async {
     return await getObject(SPkey.userInfo.name);

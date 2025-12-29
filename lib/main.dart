@@ -22,6 +22,7 @@ import 'package:n42appv2/src/home/setting/security/security_setting.dart';
 import 'package:n42appv2/src/login/pages/login_page.dart';
 import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
 import 'package:n42appv2/src/state/public_provider.dart';
+import 'package:n42appv2/core/providers/legacy_public_adapter.dart';
 import 'package:n42appv2/src/utils/app_push_utils.dart';
 import 'package:n42appv2/src/utils/notfication_utils.dart';
 import 'package:n42appv2/src/wallet/pages/create_wallet/create/create_one.dart';
@@ -77,8 +78,10 @@ void main() async {
       container: globalProviderContainer,
       child: MultiProvider(
         providers: [
+          // Use Legacy Adapter to bridge PublicProvider with Riverpod
+          // This allows gradual migration while maintaining backward compatibility
           ChangeNotifierProvider<PublicProvider>(
-            create: (_) => PublicProvider(),
+            create: (_) => LegacyPublicProviderAdapter(globalProviderContainer),
           ),
           ChangeNotifierProvider<BrowserProvider>(
             create: (_) => BrowserProvider(),
