@@ -1,45 +1,48 @@
-﻿import 'package:n42appv2/src/state/public_provider.dart';
-import 'package:n42appv2/core/storage/sp_util.dart';
+﻿import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-class SettingTheme extends StatefulWidget {
+/// Setting Theme Page - Migrated to Riverpod
+/// 
+/// This page demonstrates Riverpod integration:
+/// - Uses ConsumerWidget instead of StatefulWidget
+/// - Watches themeModeProvider for current theme
+/// - Updates theme via ref.read(themeModeProvider.notifier).setTheme()
+class SettingTheme extends ConsumerWidget {
   const SettingTheme({super.key});
 
-  @override
-  State<SettingTheme> createState() => _SettingThemeState();
-}
-
-class _SettingThemeState extends State<SettingTheme> {
-  int themeModeType = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _init();
-  }
-
-  _init() async {
-    int? tmt = await SPUtil().getThemeMode();
-    if(tmt != null) {
-      setState(() {
-        themeModeType = tmt;
-      });
+  /// Convert ThemeMode to int for legacy compatibility
+  int _themeModeToInt(ThemeMode mode) {
+    switch (mode) {
+      case ThemeMode.light:
+        return 1;
+      case ThemeMode.dark:
+        return 2;
+      case ThemeMode.system:
+        return 0;
     }
   }
 
-  swichTheme(int i) {
-    Provider.of<PublicProvider>(context,listen: false).switchTheme(i);
-    setState(() {
-      themeModeType = i;
-    });
+  /// Convert int to ThemeMode
+  ThemeMode _intToThemeMode(int value) {
+    switch (value) {
+      case 1:
+        return ThemeMode.light;
+      case 2:
+        return ThemeMode.dark;
+      default:
+        return ThemeMode.system;
+    }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Watch theme mode from Riverpod
+    final themeMode = ref.watch(themeModeProvider);
+    final themeModeType = _themeModeToInt(themeMode);
     return Scaffold(
       appBar: AppBarWidget(
         text: S.of(context).g_key_126,
@@ -50,18 +53,36 @@ class _SettingThemeState extends State<SettingTheme> {
         children: [
           Column(
             children: [
-              buildItem(context, "assets/home/setting/dark_model.png",
-                  S.of(context).g_key_129, themeModeType == 2, () {
-                    swichTheme(2);
-                  },backGroundColor:const Color(0xff1E1E1E),fontColor: const Color(0xffffffff)),
-              buildItem(context, "assets/home/setting/light_model.png",
-                  S.of(context).g_key_128, themeModeType == 1, () {
-                    swichTheme(1);
-                  },backGroundColor:const Color(0xffffffff),fontColor: const Color(0xff121212)),
-              buildItem(context, "assets/home/setting/sys_m.png",
-                  S.of(context).g_key_127, themeModeType == 0, () {
-                    swichTheme(0);
-                  },backGroundColor:const Color(0xffBEBEBE),fontColor: const Color(0xff373739)),
+              _buildItem(
+                context, 
+                ref,
+                "assets/home/setting/dark_model.png",
+                S.of(context).g_key_129, 
+                themeModeType == 2, 
+                () => ref.read(themeModeProvider.notifier).setTheme(ThemeMode.dark),
+                backGroundColor: const Color(0xff1E1E1E),
+                fontColor: const Color(0xffffffff),
+              ),
+              _buildItem(
+                context, 
+                ref,
+                "assets/home/setting/light_model.png",
+                S.of(context).g_key_128, 
+                themeModeType == 1, 
+                () => ref.read(themeModeProvider.notifier).setTheme(ThemeMode.light),
+                backGroundColor: const Color(0xffffffff),
+                fontColor: const Color(0xff121212),
+              ),
+              _buildItem(
+                context, 
+                ref,
+                "assets/home/setting/sys_m.png",
+                S.of(context).g_key_127, 
+                themeModeType == 0, 
+                () => ref.read(themeModeProvider.notifier).setTheme(ThemeMode.system),
+                backGroundColor: const Color(0xffBEBEBE),
+                fontColor: const Color(0xff373739),
+              ),
             ],
           )
         ],
@@ -69,8 +90,8 @@ class _SettingThemeState extends State<SettingTheme> {
     );
   }
 
-  buildItem(BuildContext context, String path, String model, bool isSelected,
-      VoidCallback callback,{Color? backGroundColor,Color? fontColor}) {
+  Widget _buildItem(BuildContext context, WidgetRef ref, String path, String model, bool isSelected,
+      VoidCallback callback, {Color? backGroundColor, Color? fontColor}) {
     return GestureDetector(
       onTap: callback,
       child: Container(

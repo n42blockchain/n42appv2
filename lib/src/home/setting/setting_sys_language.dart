@@ -1,21 +1,26 @@
-﻿import 'package:n42appv2/src/state/public_provider.dart';
+﻿import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-class SettingSysLanguage extends StatefulWidget {
-  String appSysLang;
-  SettingSysLanguage(this.appSysLang,{super.key});
+/// Setting System Language Page - Migrated to Riverpod
+/// 
+/// Uses ConsumerStatefulWidget because:
+/// 1. Needs to accept initial language parameter
+/// 2. Returns selected language on pop
+class SettingSysLanguage extends ConsumerStatefulWidget {
+  final String appSysLang;
+  const SettingSysLanguage(this.appSysLang, {super.key});
 
   @override
-  State<SettingSysLanguage> createState() => _SettingSysLanguageState();
+  ConsumerState<SettingSysLanguage> createState() => _SettingSysLanguageState();
 }
 
-class _SettingSysLanguageState extends State<SettingSysLanguage> {
-  String appSysLang = "en";
+class _SettingSysLanguageState extends ConsumerState<SettingSysLanguage> {
+  late String appSysLang;
 
   @override
   void initState() {
@@ -23,22 +28,23 @@ class _SettingSysLanguageState extends State<SettingSysLanguage> {
     appSysLang = widget.appSysLang;
   }
 
-  swichSysLang(String langType) {
-    Provider.of<PublicProvider>(context,listen: false).switchLocale(langType);
+  void switchSysLang(String langType) {
+    // Update locale via Riverpod
+    ref.read(localeProvider.notifier).setLocale(langType);
     appSysLang = langType;
-    pagePop();
+    _pagePop();
   }
 
-  pagePop() {
+  void _pagePop() {
     Navigator.pop(context, appSysLang);
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        pagePop();
-        return true;
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) _pagePop();
       },
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
@@ -54,20 +60,20 @@ class _SettingSysLanguageState extends State<SettingSysLanguage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               //英语
-              buildItem(context,
+              _buildItem(context,
                   "assets/home/setting/english.png",
                   "English",
                   "English",
                   appSysLang == "en", () {
-                    swichSysLang('en');
+                    switchSysLang('en');
                   }),
               //西班牙语，西班牙
-              buildItem(context,
+              _buildItem(context,
                   "assets/home/setting/spanish.png",
                   "Español",
                   "España",
                   appSysLang == "es_ES", () {
-                    swichSysLang('es_ES');
+                    switchSysLang('es_ES');
                   }),
               /*//日语，日本
               buildItem(context,
@@ -291,7 +297,7 @@ class _SettingSysLanguageState extends State<SettingSysLanguage> {
     );
   }
 
-  buildItem(
+  Widget _buildItem(
       BuildContext context,
       String path,
       String g,
