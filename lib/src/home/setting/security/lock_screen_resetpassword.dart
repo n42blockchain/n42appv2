@@ -1,4 +1,4 @@
-﻿import 'package:n42appv2/src/state/public_provider.dart';
+﻿import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/src/utils/regular.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
@@ -6,15 +6,15 @@ import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LockScreenResetPassword extends StatefulWidget{
-  int type;//0 设置新密码，1重设密码
-  LockScreenResetPassword(this.type,{Key? key}):super(key: key);
+class LockScreenResetPassword extends ConsumerStatefulWidget{
+  final int type;//0 设置新密码，1重设密码
+  const LockScreenResetPassword(this.type,{Key? key}):super(key: key);
   @override
-  _LockScreenResetPasswordState createState()=>_LockScreenResetPasswordState();
+  ConsumerState<LockScreenResetPassword> createState()=>_LockScreenResetPasswordState();
 }
-class _LockScreenResetPasswordState extends State<LockScreenResetPassword>{
+class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPassword>{
   TextEditingController oldEditingController=TextEditingController();//旧密码
   TextEditingController newEditingController=TextEditingController();//新密码
   TextEditingController confirmEditingController=TextEditingController();//确认密码
@@ -45,6 +45,8 @@ class _LockScreenResetPasswordState extends State<LockScreenResetPassword>{
     super.dispose();
   }
   sure(){
+    final screenLockState = ref.read(screenLockProvider);
+    
     if(widget.type==1){
       //旧密码
       String oldStr=oldEditingController.text;
@@ -57,7 +59,7 @@ class _LockScreenResetPasswordState extends State<LockScreenResetPassword>{
         });
         return;
       }
-      if(oldStr==Provider.of<PublicProvider>(context,listen: false).lockScreenMap['lockPW']){
+      if(oldStr==screenLockState.lockPassword){
         oldErrorMessage="";
       }
       else{
@@ -116,10 +118,7 @@ class _LockScreenResetPasswordState extends State<LockScreenResetPassword>{
       });
       return;
     }
-    PublicProvider pp=Provider.of<PublicProvider>(context,listen: false);
-    pp.lockScreenMap['lockPW']=confirmStr;
-    pp.notifyListeners();
-    pp.setLockScreenData();
+    ref.read(screenLockProvider.notifier).setLockPassword(confirmStr);
     Navigator.pop(context,true);
   }
   //检查输入字符串的位数

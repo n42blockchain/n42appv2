@@ -1,10 +1,9 @@
-﻿
-import 'package:n42appv2/core/app/app_globals.dart';
+﻿import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/home/setting/security/gesture_password_setting.dart';
 import 'package:n42appv2/src/home/setting/security/lock_screen_resetpassword.dart';
 import 'package:n42appv2/src/home/setting/security/security_edit.dart';
 import 'package:n42appv2/src/home/widgets/face_recognition_public.dart';
-import 'package:n42appv2/src/state/public_provider.dart';
+import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
@@ -13,14 +12,14 @@ import 'package:flutter/material.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SecuritySetting extends StatefulWidget{
+class SecuritySetting extends ConsumerStatefulWidget{
   @override
-  _SecuritySettingState createState()=>_SecuritySettingState();
+  ConsumerState<SecuritySetting> createState()=>_SecuritySettingState();
 }
 
-class _SecuritySettingState extends State<SecuritySetting>{
+class _SecuritySettingState extends ConsumerState<SecuritySetting>{
   List<String> lockTimeList=["10","30","60","120","180","240","300","600"];
   Map<String,dynamic> securityMap={
     "email":false,
@@ -159,29 +158,29 @@ class _SecuritySettingState extends State<SecuritySetting>{
                   ],
                 ),
               ),
-              Container(
-                child: Consumer<PublicProvider>(
-                    builder: (context,pValue,child){
-                      return Column(
-                        children: [
-                          Container(
-                            height: ScreenUtil().setWidth(60.0),
-                            margin: EdgeInsets.only(top: ScreenUtil().setWidth(40.0)),
-                            child: Text(
-                              S.of(context).g_lock_key15,
-                              style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                                fontSize: ScreenUtil().setSp(30.0),
-                              ),
-                            ),
-                            alignment: Alignment.centerLeft,
+              Builder(
+                builder: (context) {
+                  final screenLockState = ref.watch(screenLockProvider);
+                  return Column(
+                    children: [
+                      Container(
+                        height: ScreenUtil().setWidth(60.0),
+                        margin: EdgeInsets.only(top: ScreenUtil().setWidth(40.0)),
+                        child: Text(
+                          S.of(context).g_lock_key15,
+                          style: TextStyle(
+                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                            fontSize: ScreenUtil().setSp(30.0),
                           ),
-                          openLockScreenWidget(pValue),
-                          openGesturePasswordWidget(pValue),
-                          openFaceWidget(pValue),
-                        ],
-                      );
-                    }),
+                        ),
+                        alignment: Alignment.centerLeft,
+                      ),
+                      openLockScreenWidget(screenLockState),
+                      openGesturePasswordWidget(screenLockState),
+                      openFaceWidget(screenLockState),
+                    ],
+                  );
+                },
               ),
               SizedBox(height: ScreenUtil().setWidth(100),),
             ],
@@ -232,7 +231,7 @@ class _SecuritySettingState extends State<SecuritySetting>{
   }
 
   //打开或关闭锁屏功能
-  openLockScreenWidget(PublicProvider pValue){
+  openLockScreenWidget(ScreenLockState screenLockState){
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
       decoration: BoxDecoration(
@@ -246,23 +245,21 @@ class _SecuritySettingState extends State<SecuritySetting>{
         children: [
           openWidget(
             S.of(context).g_lock_key3,
-            pValue.lockScreenMap["lock"],
+            screenLockState.isLockEnabled,
                 (bool value)async{
-              if(pValue.lockScreenMap["lock"]==false){
+              if(!screenLockState.isLockEnabled){
                 bool? r=await Navigator.push(context, MaterialPageRoute(builder: (context)=>LockScreenResetPassword(0)));
                 if(r==true){
-                  pValue.lockScreenMap["lock"]=value;
+                  ref.read(screenLockProvider.notifier).setLockEnabled(value);
                 }
               }else{
-                pValue.lockScreenMap["lock"]=value;
+                ref.read(screenLockProvider.notifier).setLockEnabled(value);
               }
-              pValue.notifyListeners();
-              pValue.setLockScreenData();
             },
           ),
-          if(pValue.lockScreenMap["lock"])
-            lockTime(pValue),
-          if(pValue.lockScreenMap["lock"])
+          if(screenLockState.isLockEnabled)
+            lockTime(screenLockState),
+          if(screenLockState.isLockEnabled)
             resetPassword(
                     (){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>LockScreenResetPassword(1)));
@@ -273,7 +270,7 @@ class _SecuritySettingState extends State<SecuritySetting>{
     );
   }
   //打开或关闭手势密码功能
-  openGesturePasswordWidget(PublicProvider pValue){
+  openGesturePasswordWidget(ScreenLockState screenLockState){
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
       decoration: BoxDecoration(
@@ -287,28 +284,24 @@ class _SecuritySettingState extends State<SecuritySetting>{
         children: [
           openWidget(
             S.of(context).g_lock_key16,
-            pValue.lockScreenMap["gesture"],
+            screenLockState.isGestureEnabled,
                 (bool value)async{
-              if(pValue.lockScreenMap["gesture"]==false){
+              if(!screenLockState.isGestureEnabled){
                 String? r=await Navigator.push(context, MaterialPageRoute(builder: (context)=>GesturePasswordSetting(0)));
                 if(r != null){
-                  pValue.lockScreenMap["gesture"]=true;
-                  pValue.lockScreenMap["gesturePW"]=r;
+                  ref.read(screenLockProvider.notifier).setGestureEnabled(true);
+                  ref.read(screenLockProvider.notifier).setGesturePassword(r);
                 }
               }else{
-                pValue.lockScreenMap["gesture"]=value;
+                ref.read(screenLockProvider.notifier).setGestureEnabled(value);
               }
-              pValue.notifyListeners();
-              pValue.setLockScreenData();
             },
           ),
-          if(pValue.lockScreenMap["gesture"])
+          if(screenLockState.isGestureEnabled)
             resetPassword(()async{
-              String? r=await Navigator.push(context, MaterialPageRoute(builder: (context)=>GesturePasswordSetting(1,oldPassword: pValue.lockScreenMap['gesturePW'],)));
+              String? r=await Navigator.push(context, MaterialPageRoute(builder: (context)=>GesturePasswordSetting(1,oldPassword: screenLockState.gesturePassword,)));
               if(r != null){
-                pValue.lockScreenMap["gesturePW"]=r;
-                pValue.notifyListeners();
-                pValue.setLockScreenData();
+                ref.read(screenLockProvider.notifier).setGesturePassword(r);
               }
             }),
         ],
@@ -316,7 +309,7 @@ class _SecuritySettingState extends State<SecuritySetting>{
     );
   }
   //打开或关闭面部识别
-  openFaceWidget(PublicProvider pValue){
+  openFaceWidget(ScreenLockState screenLockState){
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
       decoration: BoxDecoration(
@@ -328,12 +321,10 @@ class _SecuritySettingState extends State<SecuritySetting>{
         children: [
           openWidget(
             S.of(context).g_lock_key1,
-            pValue.lockScreenMap["face"],
+            screenLockState.isFaceEnabled,
                 (bool value){
               if(checkBiometrics){
-                pValue.lockScreenMap["face"]=value;
-                pValue.notifyListeners();
-                pValue.setLockScreenData();
+                ref.read(screenLockProvider.notifier).setFaceEnabled(value);
               }
               setState(() {});
             },
@@ -407,10 +398,10 @@ class _SecuritySettingState extends State<SecuritySetting>{
   }
 
   //锁屏时间
-  lockTime(PublicProvider pValue){
+  lockTime(ScreenLockState screenLockState){
     return InkWell(
       onTap: (){
-        showNFTSheet(pValue);
+        showNFTSheet(screenLockState);
       },
       child: Container(
         //margin: EdgeInsets.only(bottom: scr.setWidth(10.0)),
@@ -431,7 +422,7 @@ class _SecuritySettingState extends State<SecuritySetting>{
                 ),
               ),),
             Text(
-              "${pValue.lockScreenMap['lockTime']} s",
+              "${screenLockState.lockTime} s",
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                 fontSize: ScreenUtil().setSp(30.0),
@@ -447,7 +438,7 @@ class _SecuritySettingState extends State<SecuritySetting>{
       ),
     );
   }
-  showNFTSheet(PublicProvider pValue){
+  showNFTSheet(ScreenLockState screenLockState){
     SheetBottom(
       context,
       S.of(context).g_lock_key4,
@@ -460,16 +451,14 @@ class _SecuritySettingState extends State<SecuritySetting>{
             String title=lockTimeList[index];
             Color titleColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
             bool isSame=false;
-            if(title==pValue.lockScreenMap['lockTime'].toString()){
+            if(title==screenLockState.lockTime.toString()){
               titleColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
               isSame=true;
             }
             return InkWell(
               onTap: (){
-                if(title!=pValue.lockScreenMap['lockTime'].toString()){
-                  pValue.lockScreenMap['lockTime']=int.parse(title);
-                  pValue.notifyListeners();
-                  pValue.setLockScreenData();
+                if(title!=screenLockState.lockTime.toString()){
+                  ref.read(screenLockProvider.notifier).setLockTime(int.parse(title));
                 }
                 Navigator.pop(context);
               },

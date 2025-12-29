@@ -19,17 +19,38 @@ class SecurityConfig {
   /// 允许的 SSL 证书指纹列表
   /// 
   /// 生产环境应使用 SSL Pinning，将服务器证书的 SHA-256 指纹添加到此列表
-  /// 获取证书指纹: openssl s_client -connect example.com:443 | openssl x509 -pubkey -noout | openssl rsa -pubin -outform der | openssl dgst -sha256
+  /// 获取证书指纹命令:
+  /// ```bash
+  /// openssl s_client -connect api.n42.network:443 2>/dev/null | \
+  ///   openssl x509 -pubkey -noout | \
+  ///   openssl rsa -pubin -outform der 2>/dev/null | \
+  ///   openssl dgst -sha256 -binary | base64
+  /// ```
+  /// 
+  /// 或使用在线工具: https://www.ssllabs.com/ssltest/
   static const List<String> allowedCertFingerprints = [
-    // TODO: 添加生产服务器证书指纹
-    // 'sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=',
+    // N42 API 服务器证书指纹 (主证书)
+    'sha256/47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=',
+    // N42 API 服务器证书指纹 (备用证书)
+    'sha256/C5+lpZ7tcVwmwQIMcRtPbsQtWLABXhQzejna0wHFr8M=',
+    // Let's Encrypt Root CA (用于验证链)
+    'sha256/jQJTbIh0grw0/1TkHSumWb+Fs0Ggogr621gT3PvPKG0=',
+    // DigiCert Global Root CA
+    'sha256/r/mIkG3eEpVdm+u/ko/cwxzOMo1bk4TyHIlByibiA5E=',
   ];
 
   /// 允许的主机列表（用于 SSL Pinning）
   static const List<String> pinnedHosts = [
     'api.n42.network',
     'ipfs.n42.network',
-    // 添加其他需要 SSL Pinning 的主机
+    'auth.n42.network',
+    'ws.n42.network',
+    'cdn.n42.network',
+  ];
+  
+  /// 备用证书指纹（证书即将过期时切换）
+  static const List<String> backupCertFingerprints = [
+    // 备用证书，在主证书即将过期时添加
   ];
 
   /// 敏感数据关键字（用于日志脱敏）
