@@ -37,66 +37,77 @@ import 'package:n42appv2/src/widgets/loading.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 
-class ChatIndexPage extends StatefulWidget {
+/// Chat Index Page - Migrated to Riverpod
+/// 
+/// Shows chat list or login/service terms pages based on state
+class ChatIndexPage extends ConsumerStatefulWidget {
   const ChatIndexPage({super.key});
 
   @override
-  State<ChatIndexPage> createState() => _ChatIndexPageState();
+  ConsumerState<ChatIndexPage> createState() => _ChatIndexPageState();
 }
 
-class _ChatIndexPageState extends State<ChatIndexPage> {
-  //是否已经阅读了服务条款
+class _ChatIndexPageState extends ConsumerState<ChatIndexPage> {
+  // 是否已经阅读了服务条款
   bool isReadChatService = false;
+  
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     readChatService();
   }
+  
   readChatService() async {
     isReadChatService = await SPUtil().hasAcceptedTerms();
     if (mounted) {
       setState(() {});
     }
   }
+  
   @override
   Widget build(BuildContext context) {
-    return Consumer2<PublicProvider,WalletActionProvider>(builder: (context,value,wa,child){
-      if(wa.walletIndex==-1){
-        return Loading();
-      }
-      if(AppGlobals.userInfo ==null){
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: ScreenUtil().setWidth(120),
-          ),
-          child: LoginPage(type: 1,),
-        );
-      }
-      if(isReadChatService==false){
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: ScreenUtil().setWidth(120),
-          ),
-          child: ChatServices(
-            '${AppConfig.apiUrl['walletamazeBrowser']}/static/chat_policy.html?theme=${Theme.of(context).brightness == Brightness.dark ? "dark" : ""}',
-            agreeCallBack: () {
-              SPUtil().setHasAcceptedTerms(true);
-              isReadChatService = true;
-              if (mounted) {
-                setState(() {});
-              }
-            },
-          ),
-        );
-      }
-      return ChatList();
-    });
+    // Watch wallet list state from Riverpod
+    final walletListAsync = ref.watch(walletListProvider);
+    final selectedWalletIndex = ref.watch(selectedWalletIndexProvider);
+    
+    // Check if wallet is ready
+    if (selectedWalletIndex == -1 || walletListAsync.isLoading) {
+      return Loading();
+    }
+    
+    if (AppGlobals.userInfo == null) {
+      return Padding(
+        padding: EdgeInsets.only(
+          bottom: ScreenUtil().setWidth(120),
+        ),
+        child: LoginPage(type: 1),
+      );
+    }
+    
+    if (isReadChatService == false) {
+      return Padding(
+        padding: EdgeInsets.only(
+          bottom: ScreenUtil().setWidth(120),
+        ),
+        child: ChatServices(
+          '${AppConfig.apiUrl['walletamazeBrowser']}/static/chat_policy.html?theme=${Theme.of(context).brightness == Brightness.dark ? "dark" : ""}',
+          agreeCallBack: () {
+            SPUtil().setHasAcceptedTerms(true);
+            isReadChatService = true;
+            if (mounted) {
+              setState(() {});
+            }
+          },
+        ),
+      );
+    }
+    return ChatList();
   }
 }
 
