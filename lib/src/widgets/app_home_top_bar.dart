@@ -1,12 +1,14 @@
-﻿import 'package:n42appv2/src/state/public_provider.dart';
+﻿import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 
-///@description: 主页面顶部统一appbar
-class AppHomeTopBar extends StatefulWidget {
+/// Home Top Bar - Migrated to Riverpod
+/// 
+/// Common app bar for main pages with user avatar and notification badge
+class AppHomeTopBar extends ConsumerStatefulWidget {
   final GestureTapCallback? onLeftImageClick;
   final String? onLeftImageUri;
   final bool isText;
@@ -14,115 +16,39 @@ class AppHomeTopBar extends StatefulWidget {
   final List<Widget>? actions;
   final Widget? titleChild;
 
-  const AppHomeTopBar(
-      {Key? key,
-        this.onLeftImageClick,
-        this.onLeftImageUri,
-        this.isText = true,
-        this.title,
-        this.actions,
-        this.titleChild,
-      })
-      : super(key: key);
+  const AppHomeTopBar({
+    super.key,
+    this.onLeftImageClick,
+    this.onLeftImageUri,
+    this.isText = true,
+    this.title,
+    this.actions,
+    this.titleChild,
+  });
 
   @override
-  State<AppHomeTopBar> createState() => _AppHomeTopBarState();
+  ConsumerState<AppHomeTopBar> createState() => _AppHomeTopBarState();
 }
 
-class _AppHomeTopBarState extends State<AppHomeTopBar> {
+class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
   @override
   Widget build(BuildContext context) {
+    // Watch user info and unread count from Riverpod
+    final userInfo = ref.watch(currentUserProvider);
+    final messageNotReadCount = ref.watch(unreadCountProvider);
+    
     return Container(
       color: Colors.transparent,
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0) ,),
-      height: ScreenUtil().setWidth(110.0) ,// 375 * MediaQuery.of(context).size.width,
+      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+      height: ScreenUtil().setWidth(110.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
               child: Row(
                 children: [
-                  //左侧都显示头像
-                  Consumer<PublicProvider>(builder: (
-                      BuildContext context,
-                      value,
-                      Widget? child,
-                      ) {
-                    Widget child;
-                    if(widget.onLeftImageUri ==null){
-                      child=GestureDetector(
-                        onTap: widget.onLeftImageClick,
-                        child: Container(
-                          width: ScreenUtil().setWidth(64.0) ,// 375 * MediaQuery.of(context).size.width,
-                          height: ScreenUtil().setWidth(64.0) ,// 375 * MediaQuery.of(context).size.width,
-                          //超出部分，可裁剪
-                          clipBehavior: Clip.hardEdge,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              ScreenUtil().setWidth(32.0) ,// 375 * MediaQuery.of(context).size.width),
-                            ),
-                          ),
-                          child: ImageNetWork(
-                            imageUrl: value.userInfo?.image ?? '',
-                            placeholder: "assets/img/person_def_1.png",
-                          ),
-                        ),
-                      );
-                    }else{
-                      child=GestureDetector(
-                        onTap: widget.onLeftImageClick,
-                        child: Container(
-                          margin: EdgeInsets.all(ScreenUtil().setWidth(12)),
-                          width: ScreenUtil().setWidth(40.0) ,
-                          height: ScreenUtil().setWidth(40.0) ,
-                          alignment: Alignment.center,
-                          child: Image.asset(
-                            widget.onLeftImageUri??"",
-                            width: ScreenUtil().setWidth(40),
-                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                          ),
-                        ),
-                      );
-                    }
-                    return Container(
-                      width: ScreenUtil().setWidth(64.0),
-                      height: ScreenUtil().setWidth(64.0),
-                      child: Stack(
-                        children: [
-                          Positioned.fill(
-                            child: child,
-                          ),
-                          if (value.messageNotReadCount != 0)
-                            Positioned(
-                              top: 0,
-                              right: 0,
-                              child: Container(
-                                width: ScreenUtil().setWidth(30),
-                                height: ScreenUtil().setWidth(30),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      ScreenUtil().setWidth(30)),
-                                  color: AppThemeUtils.getColorByKey(
-                                      context,
-                                      AppThemeKeys.errorTextColor.name),
-                                ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "${value.messageNotReadCount > 99 ? 99 : value.messageNotReadCount}",
-                                  style: TextStyle(
-                                    color: AppThemeUtils.getColorByKey(
-                                        context,
-                                        AppThemeKeys.mainWhiteColor.name),
-                                    fontSize: ScreenUtil().setSp(14),
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                    );
-                  }),
+                  // 左侧都显示头像
+                  _buildLeftWidget(userInfo?.image, messageNotReadCount),
                 ],
               )),
           if(widget.titleChild ==null)
@@ -160,6 +86,79 @@ class _AppHomeTopBarState extends State<AppHomeTopBar> {
                     )
                 ],
               ))
+        ],
+      ),
+    );
+  }
+
+  /// Build left widget with avatar and notification badge
+  Widget _buildLeftWidget(String? userImage, int messageNotReadCount) {
+    Widget child;
+    if (widget.onLeftImageUri == null) {
+      child = GestureDetector(
+        onTap: widget.onLeftImageClick,
+        child: Container(
+          width: ScreenUtil().setWidth(64.0),
+          height: ScreenUtil().setWidth(64.0),
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(
+              ScreenUtil().setWidth(32.0),
+            ),
+          ),
+          child: ImageNetWork(
+            imageUrl: userImage ?? '',
+            placeholder: "assets/img/person_def_1.png",
+          ),
+        ),
+      );
+    } else {
+      child = GestureDetector(
+        onTap: widget.onLeftImageClick,
+        child: Container(
+          margin: EdgeInsets.all(ScreenUtil().setWidth(12)),
+          width: ScreenUtil().setWidth(40.0),
+          height: ScreenUtil().setWidth(40.0),
+          alignment: Alignment.center,
+          child: Image.asset(
+            widget.onLeftImageUri ?? "",
+            width: ScreenUtil().setWidth(40),
+            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+          ),
+        ),
+      );
+    }
+    
+    return Container(
+      width: ScreenUtil().setWidth(64.0),
+      height: ScreenUtil().setWidth(64.0),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: child,
+          ),
+          if (messageNotReadCount != 0)
+            Positioned(
+              top: 0,
+              right: 0,
+              child: Container(
+                width: ScreenUtil().setWidth(30),
+                height: ScreenUtil().setWidth(30),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
+                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  "${messageNotReadCount > 99 ? 99 : messageNotReadCount}",
+                  style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
+                    fontSize: ScreenUtil().setSp(14),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
         ],
       ),
     );
