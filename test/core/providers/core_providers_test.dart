@@ -9,11 +9,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42appv2/core/providers/core_providers.dart';
+import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   // Initialize Flutter binding for tests
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  // 初始化 SharedPreferences mock
+  setUpAll(() async {
+    SharedPreferences.setMockInitialValues({});
+  });
 
   group('HomeTabIndexProvider', () {
     late ProviderContainer container;
@@ -41,26 +48,29 @@ void main() {
   group('CurrentUserNotifier', () {
     late ProviderContainer container;
 
-    setUp(() {
+    setUp(() async {
       container = ProviderContainer();
+      // 等待异步初始化完成
+      await Future.delayed(const Duration(milliseconds: 50));
     });
 
     tearDown(() {
       container.dispose();
     });
 
-    test('should start with null user', () {
+    test('should start with null user', () async {
       final user = container.read(currentUserProvider);
       expect(user, isNull);
     });
 
-    test('should set user', () {
+    test('should set user', () async {
       const user = SharedUserInfo(
         uuid: 'test-uuid',
         email: 'test@example.com',
         name: 'Test User',
       );
       container.read(currentUserProvider.notifier).setUser(user);
+      await Future.delayed(const Duration(milliseconds: 10));
 
       final currentUser = container.read(currentUserProvider);
       expect(currentUser, isNotNull);
@@ -68,19 +78,22 @@ void main() {
       expect(currentUser.email, 'test@example.com');
     });
 
-    test('should clear user', () {
+    test('should clear user', () async {
       const user = SharedUserInfo(
         uuid: 'test-uuid',
         email: 'test@example.com',
       );
       container.read(currentUserProvider.notifier).setUser(user);
+      await Future.delayed(const Duration(milliseconds: 10));
       container.read(currentUserProvider.notifier).clearUser();
+      await Future.delayed(const Duration(milliseconds: 10));
 
       final currentUser = container.read(currentUserProvider);
       expect(currentUser, isNull);
     });
 
-    test('isLoggedIn should reflect user state', () {
+    test('isLoggedIn should reflect user state', () async {
+      await Future.delayed(const Duration(milliseconds: 10));
       expect(container.read(currentUserProvider.notifier).isLoggedIn, false);
 
       const user = SharedUserInfo(
@@ -88,6 +101,7 @@ void main() {
         email: 'test@example.com',
       );
       container.read(currentUserProvider.notifier).setUser(user);
+      await Future.delayed(const Duration(milliseconds: 10));
 
       expect(container.read(currentUserProvider.notifier).isLoggedIn, true);
     });

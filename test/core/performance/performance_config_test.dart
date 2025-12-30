@@ -137,6 +137,11 @@ void main() {
   });
 
   group('ImageCacheConfig', () {
+    setUpAll(() {
+      // 需要 Flutter 绑定初始化
+      TestWidgetsFlutterBinding.ensureInitialized();
+    });
+
     test('should configure cache', () {
       expect(
         () => ImageCacheConfig.configure(maxCacheSize: 100, maxCacheWidth: 1000),
