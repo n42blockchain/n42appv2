@@ -88,7 +88,7 @@ class LegacyPublicProviderAdapter extends ChangeNotifier with DiagnosticableTree
       currentUserProvider,
       (_, next) {
         if (next != null) {
-          _userInfo = UserInfo.fronJson(next.toJson());
+          _userInfo = UserInfo.fromJson(next.toJson());
         } else {
           _userInfo = null;
         }
@@ -115,7 +115,7 @@ class LegacyPublicProviderAdapter extends ChangeNotifier with DiagnosticableTree
     
     final user = _container.read(currentUserProvider);
     if (user != null) {
-      _userInfo = UserInfo.fronJson(user.toJson());
+      _userInfo = UserInfo.fromJson(user.toJson());
     }
     
     checkWalletPassword = _container.read(walletPasswordVerifiedProvider);
@@ -259,7 +259,7 @@ class LegacyPublicProviderAdapter extends ChangeNotifier with DiagnosticableTree
     try {
       var userInfoJson = await _spUtil.getUserInfo();
       if (userInfoJson != null) {
-        _userInfo = UserInfo.fronJson(userInfoJson);
+        _userInfo = UserInfo.fromJson(userInfoJson);
         setUserInfo(_userInfo);
       }
       await getLockScreenData();

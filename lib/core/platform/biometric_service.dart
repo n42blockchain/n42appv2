@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
-import 'package:local_auth/local_auth.dart';
+import 'package:local_auth/local_auth.dart' as local_auth;
 
 /// 生物识别类型
 enum BiometricType {
@@ -74,9 +74,9 @@ enum BiometricErrorCode {
 /// 确保 Android 和 iOS 行为一致
 @singleton
 class BiometricService {
-  final LocalAuthentication _localAuth;
+  final local_auth.LocalAuthentication _localAuth;
 
-  BiometricService() : _localAuth = LocalAuthentication();
+  BiometricService() : _localAuth = local_auth.LocalAuthentication();
 
   /// 检查设备是否支持生物识别
   Future<bool> isAvailable() async {
@@ -113,7 +113,7 @@ class BiometricService {
     try {
       final authenticated = await _localAuth.authenticate(
         localizedReason: reason,
-        options: AuthenticationOptions(
+        options: local_auth.AuthenticationOptions(
           useErrorDialogs: useErrorDialogs,
           stickyAuth: stickyAuth,
           biometricOnly: biometricOnly,
@@ -176,17 +176,17 @@ class BiometricService {
   }
 
   /// 映射生物识别类型
-  BiometricType _mapBiometricType(BiometricType type) {
+  BiometricType _mapBiometricType(local_auth.BiometricType type) {
     switch (type) {
-      case BiometricType.fingerprint:
+      case local_auth.BiometricType.fingerprint:
         return BiometricType.fingerprint;
-      case BiometricType.face:
+      case local_auth.BiometricType.face:
         return BiometricType.face;
-      case BiometricType.iris:
+      case local_auth.BiometricType.iris:
         return BiometricType.iris;
-      case BiometricType.strong:
+      case local_auth.BiometricType.strong:
         return BiometricType.strong;
-      case BiometricType.weak:
+      case local_auth.BiometricType.weak:
         return BiometricType.weak;
     }
   }

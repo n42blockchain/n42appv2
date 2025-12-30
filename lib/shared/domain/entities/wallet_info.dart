@@ -65,6 +65,20 @@ class SharedUserInfo extends Equatable {
     );
   }
 
+  /// Create from legacy UserInfo model
+  factory SharedUserInfo.fromLegacyUserInfo(dynamic userInfo) {
+    return SharedUserInfo(
+      uuid: userInfo.uuid ?? '',
+      email: userInfo.email ?? '',
+      name: userInfo.name,
+      avatarUrl: userInfo.image,
+      token: userInfo.token,
+      image: userInfo.image,
+      desc: userInfo.desc,
+      isLoggedIn: true,
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'uuid': uuid,

@@ -200,14 +200,15 @@ class AppMonitor {
   }) {
     debugPrint('❌ Error tracked: $error');
     
+    final Iterable<Object>? infoList = information?.entries
+        .map<Object>((e) => '${e.key}: ${e.value}');
+    
     _crashlytics.recordError(
       error,
       stack,
       fatal: fatal,
       reason: reason,
-      information: information?.entries
-          .map((e) => '${e.key}: ${e.value}')
-          .toList(),
+      information: infoList,
     );
   }
 
@@ -251,9 +252,13 @@ class AppMonitor {
     required String name,
     Map<String, dynamic>? parameters,
   }) async {
+    // Convert dynamic values to Object for Firebase Analytics
+    final Map<String, Object>? params = parameters?.map(
+      (key, value) => MapEntry(key, value as Object),
+    );
     await _analytics.logEvent(
       name: name,
-      parameters: parameters,
+      parameters: params,
     );
   }
 

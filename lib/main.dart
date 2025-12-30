@@ -37,7 +37,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as provider_pkg;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -77,30 +77,30 @@ void main() async {
     // Wrap with ProviderScope for Riverpod
     UncontrolledProviderScope(
       container: globalProviderContainer,
-      child: MultiProvider(
+      child: provider_pkg.MultiProvider(
         providers: [
           // Use Legacy Adapter to bridge PublicProvider with Riverpod
           // This allows gradual migration while maintaining backward compatibility
-          ChangeNotifierProvider<PublicProvider>(
+          provider_pkg.ChangeNotifierProvider<PublicProvider>(
             create: (_) => LegacyPublicProviderAdapter(globalProviderContainer),
           ),
-          ChangeNotifierProvider<BrowserProvider>(
+          provider_pkg.ChangeNotifierProvider<BrowserProvider>(
             create: (_) => BrowserProvider(),
           ),
-          ChangeNotifierProvider<WalletConnectProvider>(
+          provider_pkg.ChangeNotifierProvider<WalletConnectProvider>(
             create: (_) => WalletConnectProvider(),
           ),
           // Use Legacy Adapter to bridge WalletActionProvider with Riverpod
-          ChangeNotifierProvider<WalletActionProvider>(
+          provider_pkg.ChangeNotifierProvider<WalletActionProvider>(
             create: (_) => LegacyWalletActionProviderAdapter(globalProviderContainer),
           ),
-          ChangeNotifierProvider<TransactionRecordItemProvider>(
+          provider_pkg.ChangeNotifierProvider<TransactionRecordItemProvider>(
             create: (_) => TransactionRecordItemProvider(),
           ),
-          ChangeNotifierProvider<MiningV2Provider>(
+          provider_pkg.ChangeNotifierProvider<MiningV2Provider>(
             create: (_) => MiningV2Provider(),
           ),
-          ChangeNotifierProvider<ChatMessageProvider>(
+          provider_pkg.ChangeNotifierProvider<ChatMessageProvider>(
             create: (_) => ChatMessageProvider(),
           ),
         ],
@@ -129,7 +129,7 @@ class _N42AppV2State extends State<N42AppV2> {
     // Initialize global context (deprecated - use DI instead)
     // ignore: deprecated_member_use_from_same_package
     AppGlobals.appContext = context;
-    Provider.of<PublicProvider>(context, listen: false).checkData();
+    provider_pkg.Provider.of<PublicProvider>(context, listen: false).checkData();
     initDeepLinks();
     ///是否打开FirebaseCrashlytics日志收集
     ///release + online 开启
@@ -243,7 +243,7 @@ class _N42AppV2State extends State<N42AppV2> {
       splitScreenMode: true,
       // Use builder only if you need to use library outside ScreenUtilInit context
       builder: (_ , child) {
-        return Consumer<PublicProvider>(
+        return provider_pkg.Consumer<PublicProvider>(
           builder: (context, pValue, child) {
             return GestureDetector(
               onTap: () {

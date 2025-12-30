@@ -138,3 +138,11 @@ class UnknownFailure extends Failure {
   });
 }
 
+/// 意外失败（用于捕获未预期的异常）
+class UnexpectedFailure extends Failure {
+  const UnexpectedFailure({
+    required super.message,
+    super.code = 'UNEXPECTED_ERROR',
+  });
+}
+
