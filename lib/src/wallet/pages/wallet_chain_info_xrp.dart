@@ -1,4 +1,4 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
@@ -6,7 +6,7 @@ import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/pay/moonpay/moonpay.dart';
-import 'package:n42appv2/core/storage/app_database.dart';
+import 'package:n42appv2/src/sqlite/app_database.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';

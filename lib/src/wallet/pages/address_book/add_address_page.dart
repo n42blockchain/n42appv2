@@ -1,4 +1,4 @@
-﻿import 'package:n42appv2/src/component/enums/coin_type.dart';
+import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/pages/scan_page.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';

@@ -1,4 +1,4 @@
-﻿import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/container_widget.dart';
 import 'package:n42appv2/src/widgets/prompt_widget.dart';

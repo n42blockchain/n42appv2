@@ -1,4 +1,4 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:n42appv2/core/app/app_globals.dart';
@@ -217,7 +217,7 @@ class WalletActionProvider extends ChangeNotifier{
   getWalletInfo() async {
     //if (walletInfoLsit.isNotEmpty) return;
     //await checkWalletInfo();
-    Map<String, dynamic>? walletAll=await SPUtil().getWallsetInfo();
+    Map<String, dynamic>? walletAll=await SPUtil().getWalletInfo();
     if (walletAll == null){
       await createWallet();
     }else{
@@ -230,7 +230,7 @@ class WalletActionProvider extends ChangeNotifier{
           walletMiningIndex=walletAll[UserUUID]?['miningIndex'];
         }
         List<dynamic> walletInfos =
-            walletAll[UserUUID]?["wallet"]??[]; //await SPUtils.getWallsetInfo();
+            walletAll[UserUUID]?["wallet"]??[]; //await SPUtils.getWalletInfo();
         _walletInfoLsit=[];
         //await getCoinSort();//获取当前钱包币的排序缓存
         for (int i = 0; i < walletInfos.length; i++) {
@@ -245,7 +245,7 @@ class WalletActionProvider extends ChangeNotifier{
         if(walletDefault !=null){
           walletIndex=walletDefault['index'];
           walletMiningIndex=walletDefault['miningIndex']??walletIndex;
-          List<dynamic> walletInfos = walletDefault["wallet"]??[]; //await SPUtils.getWallsetInfo();
+          List<dynamic> walletInfos = walletDefault["wallet"]??[]; //await SPUtils.getWalletInfo();
           _walletInfoLsit=[];
           //await getCoinSort();//获取当前钱包币的排序缓存
           for (int i = 0; i < walletInfos.length; i++) {
@@ -481,7 +481,7 @@ class WalletActionProvider extends ChangeNotifier{
   saveWalletInfo(WalletInfo newWalletInfo,int wIndex,{bool isNewWallet=false}) async{
     try{
       SPUtil sPUtils=SPUtil();
-      Map<String, dynamic>? walletAll = await sPUtils.getWallsetInfo();
+      Map<String, dynamic>? walletAll = await sPUtils.getWalletInfo();
       if (walletAll == null) {
         Map<String,dynamic> wallet=newWalletInfo.toJson();
         await sPUtils.setWalletInfo({
@@ -520,7 +520,7 @@ class WalletActionProvider extends ChangeNotifier{
   //保存钱包数据
   saveWalletInfo_All()async{
     SPUtil sPUtils=SPUtil();
-    Map<String, dynamic>? walletAll = await sPUtils.getWallsetInfo();
+    Map<String, dynamic>? walletAll = await sPUtils.getWalletInfo();
     if (walletAll != null) {
       walletAll[UserUUID]['wallet']=walletInfoLsit.map((e) => e.toJson()).toList();
       walletAll[UserUUID]['index']=walletIndex;

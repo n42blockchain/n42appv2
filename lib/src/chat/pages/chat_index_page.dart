@@ -38,6 +38,7 @@ import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart' as legacy_provider;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:n42appv2/generated/l10n.dart';
@@ -192,7 +193,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
       });
       await bindUserPubKey();
       //先处理完离线消息
-      ChatMessageProvider cmp=Provider.of<ChatMessageProvider>(context,listen: false);
+      ChatMessageProvider cmp=legacy_provider.Provider.of<ChatMessageProvider>(context,listen: false);
       await cmp.initData();
 
 
@@ -234,7 +235,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
   }
 
   getChatConversationList() async {
-    await Provider.of<ChatMessageProvider>(context,listen: false).getChatConversationList();
+    await legacy_provider.Provider.of<ChatMessageProvider>(context,listen: false).getChatConversationList();
 
     //会话列表更新完成之后 更新未读消息
     checkUnReadMessage();
@@ -302,7 +303,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
                           fit: BoxFit.cover,
                         ),
                         //是否有未处理的消息
-                        Consumer(builder: (
+                        legacy_provider.Consumer<ChatMessageProvider>(builder: (
                             BuildContext context,
                             ChatMessageProvider value,
                             Widget? child,
@@ -366,7 +367,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
                                           fit: BoxFit.cover,
                                           color: Colors.white,
                                         ),
-                                        Consumer(builder: (
+                                        legacy_provider.Consumer<ChatMessageProvider>(builder: (
                                             BuildContext context,
                                             ChatMessageProvider value,
                                             Widget? child,
@@ -561,12 +562,12 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
 
   buildContent() {
     return Expanded(
-      child: isLoading ? Loading(): Consumer(
+      child: isLoading ? Loading(): legacy_provider.Consumer<ChatMessageProvider>(
         builder: (BuildContext context, ChatMessageProvider value, Widget? child) {
             return DetailRefreshWidget(
               callback: () async {
                 //先处理完离线消息
-                ChatMessageProvider cmp=Provider.of<ChatMessageProvider>(context,listen: false);
+                ChatMessageProvider cmp=legacy_provider.Provider.of<ChatMessageProvider>(context,listen: false);
                 await cmp.initData();
                 await cmp.getChatConversationList();
               },
@@ -602,7 +603,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
                                   await chatDBApi
                                       .deleteMessageByTargetId(
                                       cm.getTargetId());
-                                  await Provider.of<ChatMessageProvider>(context,listen: false)
+                                  await legacy_provider.Provider.of<ChatMessageProvider>(context,listen: false)
                                       .getChatConversationList();
                                 },
                                 backgroundColor:
@@ -641,7 +642,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
                               }
                               //更新未读消息
                               checkUnReadMessage();
-                              Provider.of<ChatMessageProvider>(context,listen: false).updateUnReadMessNum();
+                              legacy_provider.Provider.of<ChatMessageProvider>(context,listen: false).updateUnReadMessNum();
                             },
                             onLongPress: () async {
                               //长按弹出删除对话框
@@ -657,7 +658,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
                                 // await ProviderUtil
                                 //         .chatMessageProvider()
                                 //     .initData();
-                                await Provider.of<ChatMessageProvider>(context,listen: false)
+                                await legacy_provider.Provider.of<ChatMessageProvider>(context,listen: false)
                                     .getChatConversationList();
                               }
                             },

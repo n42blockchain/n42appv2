@@ -51,7 +51,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
     userInfo = AppGlobals.userInfo;
     nicknameEditingController.text = userInfo?.name??"";
     descriptionEditingController.text = userInfo?.desc??"";
-    artJson = json.decode(AppGlobals.userInfo?.art_json??"{}");
+    artJson = json.decode(AppGlobals.userInfo?.artJson??"{}");
     if(artJson==null){
       isArtist=false;
     }else{

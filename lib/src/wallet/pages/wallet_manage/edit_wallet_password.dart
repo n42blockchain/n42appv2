@@ -1,4 +1,4 @@
-﻿import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/login/widgets/login_title.dart';

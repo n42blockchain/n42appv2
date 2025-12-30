@@ -278,7 +278,7 @@ class UserInfoApi{
         params: params,header: header
     );
     if (data["code"] == 200 && data["data"] != null) {
-      return UserInfo.fronJson(data["data"]);
+      return UserInfo.fromJson(data["data"]);
     }
     return null;
   }

@@ -156,9 +156,11 @@ class _FeedbackState extends State<Feedback> {
     final walletService = ServiceLocatorSetup.walletService;
     String address = "";
     if (walletService != null) {
-      final mainWallet = walletService.getMainWallet();
+      final mainWallet = await walletService.getMainWallet();
       if (mainWallet != null) {
-        address = walletService.getChainAddress(walletService.walletCount > 0 ? 0 : -1, CoinType.N.name) ?? "";
+        // getChainAddress 需要 walletId (String) 和 chainType
+        // 使用钱包地址作为标识符
+        address = await walletService.getChainAddress(mainWallet.address, CoinType.N.name) ?? "";
       }
     }
     UserInfoApi userInfoAPI=UserInfoApi();

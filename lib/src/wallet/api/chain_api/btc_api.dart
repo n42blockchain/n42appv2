@@ -42,7 +42,7 @@ class BtcApi{
     try{
       var data= await BaseApi.RequestEmpty_h.get("${uri}tx/$txid",
         params: {},
-        defaultReutrn: false,
+        defaultReturn: false,
         header: {
           "Content-Type":"application/json",
         },
@@ -60,7 +60,7 @@ class BtcApi{
     try{
       var data= await BaseApi.RequestEmpty_h.get("${uri}address/${address}",
         params: {},
-        defaultReutrn: false,
+        defaultReturn: false,
         header: {
           "Content-Type":"application/json",
         },
@@ -115,7 +115,7 @@ class BtcApi{
     try{
       var data= await BaseApi.RequestEmpty_h.post("${uri}tx",
           params: {},
-          defaultReutrn: false,
+          defaultReturn: false,
           header: {
             "Content-Type":"text/plain",
           },
@@ -135,7 +135,7 @@ class BtcApi{
     try{
       var data= await BaseApi.RequestEmpty_h.get("${uri}tx/${txId}/status",
         params: {},
-        defaultReutrn: false,
+        defaultReturn: false,
         header: {
           "Content-Type":"application/json",
         },

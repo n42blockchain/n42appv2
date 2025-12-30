@@ -95,3 +95,25 @@ class SharedUserInfo extends Equatable {
   @override
   List<Object?> get props => [uuid, email, name, avatarUrl, token, image, desc, isLoggedIn];
 }
+
+/// Wallet Balance Info
+///
+/// Represents wallet balance for a specific coin type.
+class WalletBalanceInfo extends Equatable {
+  final String address;
+  final String coinType;
+  final double balance;
+  final double? usdValue;
+  final DateTime? lastUpdated;
+
+  const WalletBalanceInfo({
+    required this.address,
+    required this.coinType,
+    required this.balance,
+    this.usdValue,
+    this.lastUpdated,
+  });
+
+  @override
+  List<Object?> get props => [address, coinType, balance, usdValue, lastUpdated];
+}

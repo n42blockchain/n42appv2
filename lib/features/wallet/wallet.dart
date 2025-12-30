@@ -15,11 +15,14 @@
 library wallet;
 
 // Domain Layer
-export 'domain/entities/wallet_entity.dart';
+export 'domain/entities/wallet_entity.dart' hide ChainType;
 export 'domain/repositories/wallet_repository.dart';
-export 'domain/usecases/create_wallet.dart';
-export 'domain/usecases/get_balance.dart';
+export 'domain/usecases/create_wallet.dart' hide ChainType;
+export 'domain/usecases/get_balance.dart' hide ChainType;
 export 'domain/usecases/send_transaction.dart';
+
+// Export ChainType from a single source
+export 'package:n42appv2/domain/entities/wallet.dart' show ChainType;
 
 // Data Layer
 export 'data/repositories/wallet_repository_impl.dart';

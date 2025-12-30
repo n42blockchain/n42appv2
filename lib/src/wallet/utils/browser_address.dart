@@ -1,4 +1,4 @@
-﻿//获取浏览器地址，根据币类型和地址
+//获取浏览器地址，根据币类型和地址
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/https/request_url.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';

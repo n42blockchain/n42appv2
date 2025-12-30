@@ -1,4 +1,4 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/utils/data_utils.dart';

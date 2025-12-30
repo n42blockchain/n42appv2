@@ -182,6 +182,26 @@ class WalletServiceImpl implements IWalletService {
     return wallets[walletIndex].mnemonic;
   }
 
+  @override
+  Future<WalletBalanceInfo?> getBalance(String address, String coinType) async {
+    // TODO: Implement actual balance fetching from blockchain or API
+    // For now, return a placeholder implementation
+    try {
+      final wallet = getWalletByAddress(address);
+      if (wallet == null) return null;
+      
+      // Placeholder: In real implementation, this should fetch from blockchain
+      return WalletBalanceInfo(
+        address: address,
+        coinType: coinType,
+        balance: 0.0,
+        lastUpdated: DateTime.now(),
+      );
+    } catch (e) {
+      return null;
+    }
+  }
+
   SharedWalletInfo _toSharedInfo(WalletInfoData wallet) {
     return SharedWalletInfo(
       address: wallet.address,

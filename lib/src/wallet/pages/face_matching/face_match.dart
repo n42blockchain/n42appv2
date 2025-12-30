@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:n42appv2/src/component/pages/image_crop_page.dart';
 import 'package:n42appv2/generated/l10n.dart';

@@ -1,4 +1,4 @@
-﻿import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';

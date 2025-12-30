@@ -229,12 +229,9 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
   }
 
   _userAccount() {
-    return Consumer(builder: (
-        BuildContext context,
-        PublicProvider value,
-        Widget? child,
-        ) {
-      return Column(
+    // 使用 AppGlobals.userInfo 替代已废弃的 Consumer<PublicProvider>
+    final userInfo = AppGlobals.userInfo;
+    return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
@@ -255,7 +252,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                       ),
                     ),
                     child: ImageNetWork(
-                      imageUrl: value.userInfo?.image ?? '',
+                      imageUrl: userInfo?.image ?? '',
                       placeholder: "assets/img/person_def_1.png",
                     ),
                   ),
@@ -279,7 +276,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      value.userInfo?.name ?? '-',
+                      userInfo?.name ?? '-',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -292,7 +289,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                       height: ScreenUtil().setWidth(12.0),
                     ),
                     Text(
-                      value.userInfo?.email ?? '-',
+                      userInfo?.email ?? '-',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -378,7 +375,6 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
           ),
         ],
       );
-    });
   }
 
   _menuItem(String iconPath, String actionName,

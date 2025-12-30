@@ -1,4 +1,4 @@
-﻿//看板类型
+//看板类型
 import 'dart:io';
 import 'dart:ui';
 

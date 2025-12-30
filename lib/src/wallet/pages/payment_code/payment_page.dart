@@ -1,4 +1,4 @@
-﻿import 'package:n42appv2/src/component/enums/load.dart';
+import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/data/models/user_info.dart';

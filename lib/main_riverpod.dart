@@ -37,14 +37,23 @@ import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+/// Global ProviderContainer for Riverpod
+late ProviderContainer globalProviderContainer;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Firebase
   await Firebase.initializeApp();
 
+  // Create Riverpod ProviderContainer
+  globalProviderContainer = ProviderContainer();
+
   // Initialize Dependency Injection
-  await configureDependencies(Env.prod);
+  await configureDependencies(
+    Env.prod,
+    container: globalProviderContainer,
+  );
 
   // Setup error handling
   FlutterError.onError = (errorDetails) {
@@ -56,8 +65,9 @@ void main() async {
   };
 
   runApp(
-    // Wrap with ProviderScope for Riverpod
-    ProviderScope(
+    // Wrap with UncontrolledProviderScope for Riverpod
+    UncontrolledProviderScope(
+      container: globalProviderContainer,
       child: legacy_provider.MultiProvider(
         // Keep legacy providers during migration
         providers: [

@@ -55,7 +55,7 @@ class SettingLanguagePage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBarWidget(
-        text: S.of(context).g_key_124,
+        text: S.of(context).s_key_4, // "Language"
       ),
       body: ListView.builder(
         padding: EdgeInsets.symmetric(

@@ -40,7 +40,7 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
       SPUtil sPUtils=SPUtil();
       var userInfo = await sPUtils.getUserInfo();
       if (userInfo != null) {
-        UserInfo info = UserInfo.fronJson(userInfo);
+        UserInfo info = UserInfo.fromJson(userInfo);
         //AppGlobals.login(info);
         setUserInfo(info);
         //AppGlobals.userInfo!.createWallet = await checkWallet();

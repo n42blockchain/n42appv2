@@ -1,4 +1,4 @@
-﻿//获取浏览器地址，根据交易hash
+//获取浏览器地址，根据交易hash
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/https/request_url.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';

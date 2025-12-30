@@ -15,11 +15,13 @@ import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
+import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/shared/di/service_locator.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/src/widgets/chart_histogram.dart';
 import 'package:n42appv2/generated/l10n.dart';
+import 'package:provider/provider.dart';
 
 class MiningV2Provider extends ChangeNotifier {
   MiningApi? mining=null;

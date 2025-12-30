@@ -12,10 +12,12 @@ import 'package:injectable/injectable.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecase/usecase.dart';
 import '../../../../domain/repositories/wallet_repository.dart';
-import '../entities/wallet_entity.dart';
+import '../../../../domain/entities/wallet.dart' show ChainType;
+import '../entities/wallet_entity.dart' hide ChainType;
 
 // Re-export types for convenience
-export '../entities/wallet_entity.dart' show ChainType, AssetEntity;
+export '../../../../domain/entities/wallet.dart' show ChainType;
+export '../entities/wallet_entity.dart' show AssetEntity;
 
 /// Get Balance Use Case
 ///

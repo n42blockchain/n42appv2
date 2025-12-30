@@ -16,7 +16,7 @@ class XtzApi{
   getBalance_xtz(String address,String contract,String valueType,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XTZ.name,'api',isTest:isTest);
-      var data=await BaseApi.RequestEmpty_h.get('${uri}explorer/account/$address', params: {},defaultReutrn: false);
+      var data=await BaseApi.RequestEmpty_h.get('${uri}explorer/account/$address', params: {},defaultReturn: false);
       MessageModel mm=MessageModel();
       if(valueType=="balance"){
         mm.data=ethToWeiString(data['spendable_balance'].toString(), 6);
@@ -52,7 +52,7 @@ class XtzApi{
   getCounter_xtz(String address,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XTZ.name,'rpc',isTest:isTest);
-      var data=await BaseApi.RequestEmpty_h.get('${uri}chains/main/blocks/head/context/contracts/$address/counter', params: {},defaultReutrn: false);
+      var data=await BaseApi.RequestEmpty_h.get('${uri}chains/main/blocks/head/context/contracts/$address/counter', params: {},defaultReturn: false);
       MessageModel mm=MessageModel();
       mm.data=data;
       return mm;
@@ -65,7 +65,7 @@ class XtzApi{
   getBranch_xgz(bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XTZ.name,'rpc',isTest:isTest);
-      var data=await BaseApi.RequestEmpty_h.get('${uri}chains/main/blocks/head/hash', params: {},defaultReutrn: false);
+      var data=await BaseApi.RequestEmpty_h.get('${uri}chains/main/blocks/head/hash', params: {},defaultReturn: false);
       MessageModel mm=MessageModel();
       mm.data=data;
       return mm;
@@ -92,7 +92,7 @@ class XtzApi{
   getTxInfo_xtz(String txHash,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XTZ.name,'api',isTest:isTest);
-      var data=await BaseApi.RequestEmpty_h.get('${uri}explorer/op/$txHash', params: {},defaultReutrn: false);
+      var data=await BaseApi.RequestEmpty_h.get('${uri}explorer/op/$txHash', params: {},defaultReturn: false);
       MessageModel mm=MessageModel();
       mm.data=data;
       return mm;
@@ -106,7 +106,7 @@ class XtzApi{
   sendTx_xtz(String signAddress,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XTZ.name, "rpc",isTest:isTest);
-      var data=await BaseApi.RequestEmpty_h.post('${uri}injection/operation?chain=main', params: {},data: json.encode(signAddress),defaultReutrn: false);
+      var data=await BaseApi.RequestEmpty_h.post('${uri}injection/operation?chain=main', params: {},data: json.encode(signAddress),defaultReturn: false);
       MessageModel mm=MessageModel();
       mm.data=data;
       return mm;

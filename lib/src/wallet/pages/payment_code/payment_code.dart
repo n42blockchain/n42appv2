@@ -1,4 +1,4 @@
-﻿import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/pages/payment_code/payment_history.dart';

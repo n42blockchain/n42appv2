@@ -1,9 +1,9 @@
-﻿import 'dart:async';
+import 'dart:async';
 
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/core/storage/app_database.dart';
+import 'package:n42appv2/src/sqlite/app_database.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/algo_api.dart';

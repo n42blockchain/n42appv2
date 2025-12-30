@@ -11,7 +11,7 @@ class AtomApi{
       var data=await BaseApi.RequestEmpty_h.get(
         uri,
         params: {},
-        defaultReutrn: false,
+        defaultReturn: false,
         header: {
           "Content-Type":"application/json",
           //"x-api-key":'200968d8-1f1a-4d25-a7b6-e5768e723a10',//"bc0a6024-148a-4c6e-8188-0a0523f3f713",
@@ -52,7 +52,7 @@ class AtomApi{
       var data=await await BaseApi.RequestEmpty_h.get(
         '${uri}cosmos/auth/v1beta1/accounts/$address',
         params: {},
-        defaultReutrn: false,
+        defaultReturn: false,
         header: {
           "Content-Type":"application/json",
           //"x-api-key":"bc0a6024-148a-4c6e-8188-0a0523f3f713",
@@ -75,7 +75,7 @@ class AtomApi{
       var data=await await BaseApi.RequestEmpty_h.get(
         '${uri}cosmos/bank/v1beta1/denoms_metadata/$denom',
         params: {},
-        defaultReutrn: false,
+        defaultReturn: false,
         header: {
           "Content-Type":"application/json",
           //"x-api-key":"bc0a6024-148a-4c6e-8188-0a0523f3f713",
@@ -98,7 +98,7 @@ class AtomApi{
       var data=await await BaseApi.RequestEmpty_h.get(
         '${uri}cosmos/tx/v1beta1/txs/$txHash',
         params: {},
-        defaultReutrn: false,
+        defaultReturn: false,
         header: {
           "Content-Type":"application/json",
           //"x-api-key":"bc0a6024-148a-4c6e-8188-0a0523f3f713",
@@ -125,7 +125,7 @@ class AtomApi{
           "tx_bytes":rawTx,
           "mode":"BROADCAST_MODE_SYNC"
         },
-        defaultReutrn: false,
+        defaultReturn: false,
         header: {
           "Content-Type":"application/json",
           //"x-api-key":"bc0a6024-148a-4c6e-8188-0a0523f3f713",
@@ -156,7 +156,7 @@ class AtomApi{
           "tx_bytes":rawTx,
           "mode":"BROADCAST_MODE_SYNC"
         },
-        defaultReutrn: false,
+        defaultReturn: false,
         header: {
           "Content-Type":"application/json",
           //"x-api-key":"bc0a6024-148a-4c6e-8188-0a0523f3f713",
@@ -207,7 +207,7 @@ version: IBC 协议的版本，通常会标明使用的版本号（如 ics20-1�
       var data=await await BaseApi.RequestEmpty_h.get(
         '${uri}ibc/core/channel/v1/channels',
         params: {},
-        defaultReutrn: false,
+        defaultReturn: false,
         header: {
           "Content-Type":"application/json",
           //"x-api-key":"bc0a6024-148a-4c6e-8188-0a0523f3f713",

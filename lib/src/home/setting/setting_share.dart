@@ -43,7 +43,7 @@ class _SettingShareState extends State<SettingShare> {
   void initState() {
     super.initState();
     linkStr =
-    '${AppConfig.apiUrl['walletamazeBrowser']!}/download?uuid=${AppGlobals.userInfo?.uuid ?? ""}&code=${AppGlobals.userInfo?.invite_code ?? ""}';
+    '${AppConfig.apiUrl['walletamazeBrowser']!}/download?uuid=${AppGlobals.userInfo?.uuid ?? ""}&code=${AppGlobals.userInfo?.inviteCode ?? ""}';
     getInviteeListDownload();
     getInviteeList();
     getInviteeMiningCount();
@@ -323,7 +323,7 @@ class _SettingShareState extends State<SettingShare> {
                   ),
                   Expanded(
                     child: Text(
-                      AppGlobals.userInfo?.invite_code ?? "",
+                      AppGlobals.userInfo?.inviteCode ?? "",
                       textAlign: TextAlign.end,
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(26.0),
@@ -337,7 +337,7 @@ class _SettingShareState extends State<SettingShare> {
                     onTap: () {
                       ToastUtils.init(context);
                       Clipboard.setData(
-                          ClipboardData(text: AppGlobals.userInfo?.invite_code ?? ""));
+                          ClipboardData(text: AppGlobals.userInfo?.inviteCode ?? ""));
                       ToastUtils.showFtToast(
                         child: SuccessViewV1(S.of(context).copy),
                         duration: 3,

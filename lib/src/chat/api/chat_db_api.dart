@@ -4,13 +4,7 @@ import 'package:n42appv2/core/storage/app_database.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ChatDBApi{
-  AppDatabase? _appDatabase;
-  AppDatabase get appDatabase{
-    if(_appDatabase==null) {
-      _appDatabase=AppDatabase();
-    }
-    return _appDatabase!;
-  }
+  AppDatabase get appDatabase => AppDatabase.instance;
   ///保存数据
   Future<int> saveMessage(ChatMessageModel info) async {
     Database db = await appDatabase.database;

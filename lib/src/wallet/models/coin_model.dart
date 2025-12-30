@@ -1,4 +1,4 @@
-﻿import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';

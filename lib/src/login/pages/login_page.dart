@@ -272,7 +272,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             if (data != null) {
                               if (data["code"] == 200) {
                                 //AmplitudeUtils.accountLoggedIn();
-                                UserInfo userInfo = UserInfo.fronJson(data['data']);
+                                UserInfo userInfo = UserInfo.fromJson(data['data']);
                                 await SPUtil().saveUserInfo(userInfo);
                                 // 使用 Riverpod 设置用户信息
                                 ref.read(currentUserProvider.notifier).setUser(
@@ -361,7 +361,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     setState(() {});
     final data = await sPUtils.getUserInfo();
     if (data != null) {
-      UserInfo info = UserInfo.fronJson(data!);
+      UserInfo info = UserInfo.fromJson(data!);
       if (data != null) {
         _unameController.text = info.email??"";
       }

@@ -290,7 +290,9 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
                 String? r=await Navigator.push(context, MaterialPageRoute(builder: (context)=>GesturePasswordSetting(0)));
                 if(r != null){
                   ref.read(screenLockProvider.notifier).setGestureEnabled(true);
-                  ref.read(screenLockProvider.notifier).setGesturePassword(r);
+                  // 将逗号分隔的字符串转换为 List<int>
+                  final passwordList = r.split(',').map(int.parse).toList();
+                  ref.read(screenLockProvider.notifier).setGesturePassword(passwordList);
                 }
               }else{
                 ref.read(screenLockProvider.notifier).setGestureEnabled(value);
@@ -301,7 +303,9 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
             resetPassword(()async{
               String? r=await Navigator.push(context, MaterialPageRoute(builder: (context)=>GesturePasswordSetting(1,oldPassword: screenLockState.gesturePassword.join(','),)));
               if(r != null){
-                ref.read(screenLockProvider.notifier).setGesturePassword(r);
+                // 将逗号分隔的字符串转换为 List<int>
+                final passwordList = r.split(',').map(int.parse).toList();
+                ref.read(screenLockProvider.notifier).setGesturePassword(passwordList);
               }
             }),
         ],

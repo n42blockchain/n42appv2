@@ -4,7 +4,7 @@ class MiningWithdrawalsDaily{
   String? day;
   String? total_amount;
   MiningWithdrawalsDaily(this.count,this.day,this.total_amount);
-  MiningWithdrawalsDaily.fronJson(Map<String, dynamic> json){
+  MiningWithdrawalsDaily.fromJson(Map<String, dynamic> json){
     count=json['count'] as int?;
     day=json['day'] as String?;
     total_amount=json['total_amount'] as String?;

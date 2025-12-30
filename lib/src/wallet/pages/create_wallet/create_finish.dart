@@ -1,4 +1,4 @@
-﻿import 'package:n42appv2/src/component/enums/load.dart';
+import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';

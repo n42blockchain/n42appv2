@@ -834,7 +834,7 @@ SighashType	1 字节	签名哈希类型（例如 SIGHASH_ALL，默认值为 0x00
       String uri="https://mempool.space/testnet4/api/tx/$txid";
       var data= await BaseApi.RequestEmpty_h.get(uri,
         params: {},
-        defaultReutrn: false,
+        defaultReturn: false,
         header: {
           "Content-Type":"application/json",
           //"x-api-key":"bc0a6024-148a-4c6e-8188-0a0523f3f713",

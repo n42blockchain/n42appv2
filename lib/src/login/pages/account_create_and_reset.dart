@@ -30,7 +30,7 @@ class AccountCreateAndReset extends ConsumerStatefulWidget {
   AccountCreateAndReset({required this.type, this.pushType = 0, super.key});
 
   @override
-  State<AccountCreateAndReset> createState() => _AccountCreateAndResetState();
+  ConsumerState<AccountCreateAndReset> createState() => _AccountCreateAndResetState();
 }
 
 class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
@@ -152,7 +152,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
     if (data != null) {
       if (data["code"] == 200) {
         //AmplitudeUtils.accountLoggedIn();
-        UserInfo userInfo = UserInfo.fronJson(data['data']);
+        UserInfo userInfo = UserInfo.fromJson(data['data']);
         await SPUtil().saveUserInfo(userInfo);
         AppGlobals.login(userInfo);
         // 使用 Riverpod 设置用户信息
@@ -175,7 +175,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
   void init() async {
     final data = await SPUtil().getUserInfo();
     if (data != null) {
-      UserInfo info = UserInfo.fronJson(data);
+      UserInfo info = UserInfo.fromJson(data);
       _unameController.text = info.email??"";
       if (mounted) {
         setState(() {});

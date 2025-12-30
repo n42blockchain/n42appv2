@@ -1,6 +1,6 @@
-﻿import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/core/storage/app_database.dart';
+import 'package:n42appv2/src/sqlite/app_database.dart';
 import 'package:n42appv2/src/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/models/transation_record_model.dart';

@@ -1,4 +1,4 @@
-﻿import 'package:n42appv2/src/login/widgets/login_title.dart';
+import 'package:n42appv2/src/login/widgets/login_title.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/src/utils/regular.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';

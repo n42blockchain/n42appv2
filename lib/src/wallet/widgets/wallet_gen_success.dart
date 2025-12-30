@@ -1,4 +1,4 @@
-﻿
+
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';

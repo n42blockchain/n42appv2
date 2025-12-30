@@ -61,7 +61,7 @@ class UserInfo{
       this.createWallet,
       this.invite_code);
 
-  UserInfo.fronJson(Map<String, dynamic> json){
+  UserInfo.fromJson(Map<String, dynamic> json){
     email=json['email'] as String?;
     token=json['token'] as String?;
     uuid=json['uuid'] as String?;

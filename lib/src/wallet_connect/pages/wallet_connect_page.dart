@@ -15,7 +15,7 @@ import 'package:n42appv2/src/widgets/loading_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as legacy_provider;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
@@ -35,15 +35,15 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
   void initState() {
     // TODO: implement initState
     if(widget.uri !=""){
-      Provider.of<WalletConnectProvider>(context,listen: false).pageOpen=true;
-      Provider.of<WalletConnectProvider>(context,listen: false).viewState_deal(WalletConnectState.loading,params: widget.uri);
+      legacy_provider.Provider.of<WalletConnectProvider>(context,listen: false).pageOpen=true;
+      legacy_provider.Provider.of<WalletConnectProvider>(context,listen: false).viewState_deal(WalletConnectState.loading,params: widget.uri);
     }
     super.initState();
   }
   @override
   void dispose() {
     // TODO: implement dispose
-    Provider.of<WalletConnectProvider>(context,listen: false).pageOpen=false;
+    legacy_provider.Provider.of<WalletConnectProvider>(context,listen: false).pageOpen=false;
     super.dispose();
   }
   //扫码
@@ -58,7 +58,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return Consumer<WalletConnectProvider>(builder: (context,connectV2,child){
+    return legacy_provider.Consumer<WalletConnectProvider>(builder: (context,connectV2,child){
       return Scaffold(
         appBar: AppBarWidget(
           text: connectV2.metadata==null?"Wallet Connect":connectV2.metadata!.name,

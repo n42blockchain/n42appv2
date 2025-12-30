@@ -273,3 +273,114 @@ enum NodeStatus {
   error,
 }
 
+/// Mining Status Entity
+///
+/// Represents the current overall mining status for a wallet.
+class MiningStatusEntity extends Equatable {
+  /// Whether mining is currently active
+  final bool isActive;
+
+  /// Current active session (if any)
+  final MiningSessionEntity? currentSession;
+
+  /// Total hashrate/mining power
+  final double totalPower;
+
+  /// Last update time
+  final DateTime lastUpdated;
+
+  const MiningStatusEntity({
+    required this.isActive,
+    this.currentSession,
+    required this.totalPower,
+    required this.lastUpdated,
+  });
+
+  @override
+  List<Object?> get props => [isActive, currentSession, totalPower, lastUpdated];
+}
+
+/// Mining Rewards Entity
+///
+/// Aggregated rewards information for a wallet.
+class MiningRewardsEntity extends Equatable {
+  /// Total earned rewards (all time)
+  final double totalEarned;
+
+  /// Claimable rewards (not yet claimed)
+  final double claimableAmount;
+
+  /// Claimed rewards
+  final double claimedAmount;
+
+  /// Token symbol
+  final String tokenSymbol;
+
+  /// List of individual rewards
+  final List<MiningRewardEntity> rewards;
+
+  const MiningRewardsEntity({
+    required this.totalEarned,
+    required this.claimableAmount,
+    required this.claimedAmount,
+    required this.tokenSymbol,
+    this.rewards = const [],
+  });
+
+  @override
+  List<Object?> get props => [
+        totalEarned,
+        claimableAmount,
+        claimedAmount,
+        tokenSymbol,
+        rewards,
+      ];
+}
+
+/// Mining Statistics Entity
+///
+/// Mining statistics and analytics for a wallet.
+class MiningStatisticsEntity extends Equatable {
+  /// Total mining sessions
+  final int totalSessions;
+
+  /// Total active days
+  final int totalActiveDays;
+
+  /// Average daily rewards
+  final double averageDailyRewards;
+
+  /// Best daily rewards
+  final double bestDailyRewards;
+
+  /// Total rewards earned
+  final double totalRewards;
+
+  /// Token symbol
+  final String tokenSymbol;
+
+  /// Mining start date
+  final DateTime? miningStartDate;
+
+  const MiningStatisticsEntity({
+    required this.totalSessions,
+    required this.totalActiveDays,
+    required this.averageDailyRewards,
+    required this.bestDailyRewards,
+    required this.totalRewards,
+    required this.tokenSymbol,
+    this.miningStartDate,
+  });
+
+  @override
+  List<Object?> get props => [
+        totalSessions,
+        totalActiveDays,
+        averageDailyRewards,
+        bestDailyRewards,
+        totalRewards,
+        tokenSymbol,
+        miningStartDate,
+      ];
+}
+

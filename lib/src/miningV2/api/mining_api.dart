@@ -83,7 +83,7 @@ class MiningApi{
       List<dynamic>? items=data['items'];
       if(items != null){
         final List<MiningWithdrawalsDaily> withdrawalsList = items
-            .map((item) => MiningWithdrawalsDaily.fronJson(item as Map<String, dynamic>))
+            .map((item) => MiningWithdrawalsDaily.fromJson(item as Map<String, dynamic>))
             .toList();
         mm.data = withdrawalsList;
         return mm;

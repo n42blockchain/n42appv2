@@ -139,6 +139,17 @@ enum MessageStatus {
   failed,
 }
 
+/// Message Type
+enum MessageType {
+  text,
+  image,
+  file,
+  redPocket,
+  system,
+  voice,
+  video,
+}
+
 /// Message Content Base Class
 abstract class MessageContent extends Equatable {
   const MessageContent();

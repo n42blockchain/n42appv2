@@ -1,4 +1,4 @@
-﻿import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/keystore/import_keystore.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/keystore/import_privatekey.dart';
 import 'package:n42appv2/src/wallet/widgets/Choose_import_coin.dart';

@@ -59,6 +59,11 @@ abstract class IWalletService {
   ///
   /// Returns the mnemonic for the wallet at the given index
   Future<String?> getMnemonicForWallet(int walletIndex);
+
+  /// Get balance for a wallet
+  ///
+  /// Returns the balance info for the specified wallet address and coin type
+  Future<WalletBalanceInfo?> getBalance(String address, String coinType);
 }
 
 /// Chat Crypto Service Interface
