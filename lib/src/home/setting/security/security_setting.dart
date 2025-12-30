@@ -245,9 +245,9 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
         children: [
           openWidget(
             S.of(context).g_lock_key3,
-            screenLockState.isLockEnabled,
+            screenLockState.isLocked,
                 (bool value)async{
-              if(!screenLockState.isLockEnabled){
+              if(!screenLockState.isLocked){
                 bool? r=await Navigator.push(context, MaterialPageRoute(builder: (context)=>LockScreenResetPassword(0)));
                 if(r==true){
                   ref.read(screenLockProvider.notifier).setLockEnabled(value);
@@ -257,9 +257,9 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
               }
             },
           ),
-          if(screenLockState.isLockEnabled)
+          if(screenLockState.isLocked)
             lockTime(screenLockState),
-          if(screenLockState.isLockEnabled)
+          if(screenLockState.isLocked)
             resetPassword(
                     (){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>LockScreenResetPassword(1)));
@@ -284,9 +284,9 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
         children: [
           openWidget(
             S.of(context).g_lock_key16,
-            screenLockState.isGestureEnabled,
+            screenLockState.gestureEnabled,
                 (bool value)async{
-              if(!screenLockState.isGestureEnabled){
+              if(!screenLockState.gestureEnabled){
                 String? r=await Navigator.push(context, MaterialPageRoute(builder: (context)=>GesturePasswordSetting(0)));
                 if(r != null){
                   ref.read(screenLockProvider.notifier).setGestureEnabled(true);
@@ -297,9 +297,9 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
               }
             },
           ),
-          if(screenLockState.isGestureEnabled)
+          if(screenLockState.gestureEnabled)
             resetPassword(()async{
-              String? r=await Navigator.push(context, MaterialPageRoute(builder: (context)=>GesturePasswordSetting(1,oldPassword: screenLockState.gesturePassword,)));
+              String? r=await Navigator.push(context, MaterialPageRoute(builder: (context)=>GesturePasswordSetting(1,oldPassword: screenLockState.gesturePassword.join(','),)));
               if(r != null){
                 ref.read(screenLockProvider.notifier).setGesturePassword(r);
               }
@@ -321,7 +321,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
         children: [
           openWidget(
             S.of(context).g_lock_key1,
-            screenLockState.isFaceEnabled,
+            screenLockState.faceEnabled,
                 (bool value){
               if(checkBiometrics){
                 ref.read(screenLockProvider.notifier).setFaceEnabled(value);
@@ -422,7 +422,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
                 ),
               ),),
             Text(
-              "${screenLockState.lockTime} s",
+              "${screenLockState.lockTimeSeconds} s",
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                 fontSize: ScreenUtil().setSp(30.0),
@@ -451,13 +451,13 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
             String title=lockTimeList[index];
             Color titleColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
             bool isSame=false;
-            if(title==screenLockState.lockTime.toString()){
+            if(title==screenLockState.lockTimeSeconds.toString()){
               titleColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
               isSame=true;
             }
             return InkWell(
               onTap: (){
-                if(title!=screenLockState.lockTime.toString()){
+                if(title!=screenLockState.lockTimeSeconds.toString()){
                   ref.read(screenLockProvider.notifier).setLockTime(int.parse(title));
                 }
                 Navigator.pop(context);

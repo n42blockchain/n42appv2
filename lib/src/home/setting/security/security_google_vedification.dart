@@ -216,8 +216,8 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
       });
       return false;
     }else{
-      if(AppGlobals.userInfo!.bind_google_auth_state==false){
-        AppGlobals.userInfo!.bind_google_auth_state=true;
+      if(AppGlobals.userInfo!.bindGoogleAuthState==false){
+        AppGlobals.userInfo!.bindGoogleAuthState=true;
         await SPUtil().saveUserInfo(AppGlobals.userInfo!);
       }
       setState(() {
