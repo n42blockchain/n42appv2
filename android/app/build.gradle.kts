@@ -78,13 +78,9 @@ android {
         }
 
         getByName("debug") {
-            signingConfig = signingConfigs.getByName("release")
+            signingConfig = signingConfigs.getByName("debug")
             isMinifyEnabled = false
             isShrinkResources = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android.txt"),
-                "proguard-rules.pro"
-            )
         }
     }
 
