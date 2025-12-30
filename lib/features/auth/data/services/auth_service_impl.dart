@@ -62,8 +62,9 @@ class AuthServiceImpl implements IAuthService {
   @override
   Future<bool> verifyPassword(String password) async {
     try {
-      final storedHash = await _secureStorage.read(key: 'password_hash');
-      if (storedHash == null) return false;
+      // 使用 SecureStorage 的封装方法获取密码哈希
+      final credentials = await _secureStorage.getUserInfo();
+      if (credentials == null) return false;
       // TODO: Implement proper password verification
       return true;
     } catch (e) {
@@ -96,8 +97,8 @@ class AuthServiceImpl implements IAuthService {
   Future<void> logout() async {
     _currentUser = null;
     _authToken = null;
-    await _spUtil.clearUserInfo();
-    await _secureStorage.delete(key: 'auth_token');
+    await _spUtil.saveUserInfo(null);
+    await _secureStorage.deleteToken();
     _authStateController.add(false);
   }
 
@@ -110,7 +111,7 @@ class AuthServiceImpl implements IAuthService {
   /// Set auth token
   Future<void> setAuthToken(String token) async {
     _authToken = token;
-    await _secureStorage.write(key: 'auth_token', value: token);
+    await _secureStorage.saveToken(token);
   }
 
   void dispose() {

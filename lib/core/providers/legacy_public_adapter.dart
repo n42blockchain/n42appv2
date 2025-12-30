@@ -13,6 +13,7 @@ import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/data/models/user_info.dart';
 import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
+import 'package:n42appv2/src/state/public_provider.dart';
 
 /// Legacy Public Provider Adapter
 ///
@@ -24,7 +25,7 @@ import 'package:n42appv2/src/component/enums/load.dart';
 /// - In the app's MultiProvider, replace PublicProvider with this adapter
 /// - Pass a ProviderContainer to the adapter
 /// - The adapter will sync state between old and new systems
-class LegacyPublicProviderAdapter extends ChangeNotifier with DiagnosticableTreeMixin {
+class LegacyPublicProviderAdapter extends PublicProvider {
   final ProviderContainer _container;
   final SPUtil _spUtil = SPUtil();
   

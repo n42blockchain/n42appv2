@@ -200,8 +200,8 @@ class AppMonitor {
   }) {
     debugPrint('❌ Error tracked: $error');
     
-    final Iterable<Object>? infoList = information?.entries
-        .map<Object>((e) => '${e.key}: ${e.value}');
+    final Iterable<Object> infoList = information?.entries
+        .map<Object>((e) => '${e.key}: ${e.value}') ?? [];
     
     _crashlytics.recordError(
       error,
