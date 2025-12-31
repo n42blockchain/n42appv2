@@ -26,6 +26,7 @@ import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/state/public_provider.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
+import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/app_home_top_bar.dart';
@@ -77,12 +78,16 @@ class _ChatIndexPageState extends ConsumerState<ChatIndexPage> {
     final walletListAsync = ref.watch(walletListProvider);
     final selectedWalletIndex = ref.watch(selectedWalletIndexProvider);
     
+    // Watch user state from Riverpod - this will trigger rebuild when user logs in
+    final currentUser = ref.watch(currentUserProvider);
+    
     // Check if wallet is ready
     if (selectedWalletIndex == -1 || walletListAsync.isLoading) {
       return Loading();
     }
     
-    if (AppGlobals.userInfo == null) {
+    // Use Riverpod state for user check instead of AppGlobals
+    if (currentUser == null || AppGlobals.userInfo == null) {
       return Padding(
         padding: EdgeInsets.only(
           bottom: ScreenUtil().setWidth(120),
