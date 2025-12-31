@@ -35,6 +35,10 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    
+    // Watch user state from Riverpod - triggers rebuild on login/logout
+    final currentUser = ref.watch(currentUserProvider);
+    
     return ClipRRect(
         borderRadius:BorderRadius.circular(ScreenUtil().setWidth(16.0)),
         child: Container(
@@ -55,7 +59,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                         icon: const Icon(Icons.close))
                   ],
                 ),
-                _userAccount(),
+                _userAccount(currentUser),
                 Expanded(
                     child: ListView(
                       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
@@ -183,10 +187,10 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                         ),
                         _menuItem(
                             "assets/home/logout.png",
-                            AppGlobals.userInfo !=null
+                            currentUser != null
                                 ? S.of(context).g_key_logout
                                 : S.of(context).g_key_login, onTap: () async {
-                          if (AppGlobals.userInfo !=null) {
+                          if (currentUser != null) {
                             final res = await TipsDialog2(
                                 context, S.of(context).g_key_logout_sure);
                             if (res != null && res) {
@@ -228,8 +232,9 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
 
   }
 
-  _userAccount() {
-    // 使用 AppGlobals.userInfo 替代已废弃的 Consumer<PublicProvider>
+  _userAccount(dynamic currentUser) {
+    // 使用 Riverpod currentUser 响应登录状态变化
+    // 同时保留 AppGlobals.userInfo 用于获取完整用户信息
     final userInfo = AppGlobals.userInfo;
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -252,7 +257,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                       ),
                     ),
                     child: ImageNetWork(
-                      imageUrl: userInfo?.image ?? '',
+                      imageUrl: currentUser?.image ?? userInfo?.image ?? '',
                       placeholder: "assets/img/person_def_1.png",
                     ),
                   ),
@@ -276,7 +281,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      userInfo?.name ?? '-',
+                      currentUser?.name ?? userInfo?.name ?? '-',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -289,7 +294,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                       height: ScreenUtil().setWidth(12.0),
                     ),
                     Text(
-                      userInfo?.email ?? '-',
+                      currentUser?.email ?? userInfo?.email ?? '-',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
