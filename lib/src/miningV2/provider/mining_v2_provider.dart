@@ -66,43 +66,43 @@ class MiningV2Provider extends ChangeNotifier {
   }
 
   // ============================================
-  // Wallet List Management (via IWalletService)
+  // Wallet List Management (via WalletActionProvider)
   // ============================================
   
   /// Get all wallets that support N chain (for mining)
   List<MiningWalletInfo> get miningWalletList {
-    final walletService = ServiceLocatorSetup.walletService;
-    if (walletService == null) return [];
-    
-    List<MiningWalletInfo> result = [];
-    int count = walletService.walletCount;
-    
-    for (int i = 0; i < count; i++) {
-      final coinInfo = walletService.getCoinInfoForWallet(i);
-      if (coinInfo == null) continue;
+    try {
+      WalletActionProvider wap = Provider.of<WalletActionProvider>(AppGlobals.appContext, listen: false);
+      List<MiningWalletInfo> result = [];
       
-      // Only include wallets that support N chain
-      if (coinInfo[CoinType.N.name] != null) {
-        final wallets = walletService.getAllWallets();
-        if (i < wallets.length) {
-          final wallet = wallets[i];
+      for (int i = 0; i < wap.walletInfoLsit.length; i++) {
+        WalletInfo wInfo = wap.walletInfoLsit[i];
+        // Only include wallets that support N chain
+        if (wInfo.coinInfo?[CoinType.N.name] != null) {
           result.add(MiningWalletInfo(
             index: i,
-            name: wallet.name,
-            address: wallet.address,
-            isMainWallet: i == 0, // First wallet is usually main
+            name: wInfo.walletName ?? 'Account${i + 1}',
+            address: wInfo.coinInfo?[CoinType.N.name]?['address'] ?? '',
+            isMainWallet: wInfo.mainWallet ?? false,
             hasCoinN: true,
           ));
         }
       }
+      return result;
+    } catch (e) {
+      debugPrint('miningWalletList error: $e');
+      return [];
     }
-    return result;
   }
 
   /// Current selected mining wallet index
   int get currentMiningWalletIndex {
-    final walletService = ServiceLocatorSetup.walletService;
-    return walletService?.miningWalletIndex ?? -1;
+    try {
+      WalletActionProvider wap = Provider.of<WalletActionProvider>(AppGlobals.appContext, listen: false);
+      return wap.walletMiningIndex;
+    } catch (e) {
+      return -1;
+    }
   }
 
   /// Set mining wallet by index
@@ -121,31 +121,29 @@ class MiningV2Provider extends ChangeNotifier {
   /// 新增：FUJI NFT 质押
   Future<void> checkAddressMiningStatus() async {
     try {
-      // Use IWalletService instead of WalletActionProvider
-      final walletService = ServiceLocatorSetup.walletService;
-      if (walletService == null) return;
+      WalletActionProvider wap = Provider.of<WalletActionProvider>(AppGlobals.appContext, listen: false);
+      if (wap.walletInfoLsit.isEmpty) return;
       
-      final miningIndex = walletService.miningWalletIndex;
-      Map<String, dynamic>? cInfo = walletService.getCoinInfoForWallet(miningIndex)?[CoinType.N.name];
+      final miningIndex = wap.walletMiningIndex;
+      if (miningIndex < 0 || miningIndex >= wap.walletInfoLsit.length) return;
+      
+      WalletInfo wInfo = wap.walletInfoLsit[miningIndex];
+      Map<String, dynamic>? cInfo = wInfo.coinInfo?[CoinType.N.name];
       if (cInfo == null) return;
-      
-      final mnemonic = await walletService.getMnemonicForWallet(miningIndex);
-      final pk = await walletService.getPrivateKeyForWallet(miningIndex);
       
       Map<String, dynamic> pathMap = cInfo['baseInfo']['path'];
       var rm = await Trustdart().generateAddress(
           CoinType.N.name,
           getPathWithIndex(pathMap[cInfo['addrType']], cInfo['pathIndex']),
           cInfo['addrType'],
-          mnemonic: mnemonic ?? "",
-          pk: pk ?? ""
+          mnemonic: wInfo.mnemonic ?? "",
+          pk: wInfo.privateKey ?? ""
       );
       address = rm[cInfo['addrType']];
       await getWalletPrivateKey();
       
-      // Get wallet name from service
-      final miningWallet = walletService.getMiningWallet();
-      walletName = miningWallet?.name ?? "";
+      // Get wallet name from WalletActionProvider
+      walletName = wInfo.walletName ?? "";
       
       if (address == null) return;
       await getMiningData();
@@ -455,36 +453,47 @@ class MiningV2Provider extends ChangeNotifier {
 
   String? privateKey=null;
   Future<void> getWalletPrivateKey() async {
-    // Use IWalletService instead of WalletActionProvider
-    final walletService = ServiceLocatorSetup.walletService;
-    if (walletService == null) {
-      errorMessage = "Wallet service not available!";
-      notifyListeners();
-      return;
-    }
-    
-    final miningIndex = walletService.miningWalletIndex;
-    String? pk = await walletService.getPrivateKeyForWallet(miningIndex);
-    
-    if (pk == null) {
-      // Try to generate from mnemonic
-      Map<String, dynamic>? nCoinInfo = walletService.getCoinInfoForWallet(miningIndex)?[CoinType.N.name];
-      final mnemonic = await walletService.getMnemonicForWallet(miningIndex);
-      
-      if (nCoinInfo != null && mnemonic != null) {
-        Map<String, dynamic> pathMap = nCoinInfo['baseInfo']['path'];
-        privateKey = await Trustdart().getPrivateKey(
-          mnemonic,
-          CoinType.N.name,
-          getPathWithIndex(pathMap['legacy'], nCoinInfo['pathIndex']),
-        );
+    try {
+      WalletActionProvider wap = Provider.of<WalletActionProvider>(AppGlobals.appContext, listen: false);
+      if (wap.walletInfoLsit.isEmpty) {
+        errorMessage = "Wallet not available!";
+        notifyListeners();
+        return;
       }
-    } else {
-      privateKey = pk;
-    }
-    
-    if (privateKey == null) {
-      errorMessage = "PrivateKey not null!";
+      
+      final miningIndex = wap.walletMiningIndex;
+      if (miningIndex < 0 || miningIndex >= wap.walletInfoLsit.length) {
+        errorMessage = "Mining wallet index invalid!";
+        notifyListeners();
+        return;
+      }
+      
+      WalletInfo wInfo = wap.walletInfoLsit[miningIndex];
+      String? pk = wInfo.privateKey;
+      
+      if (pk == null || pk.isEmpty) {
+        // Try to generate from mnemonic
+        Map<String, dynamic>? nCoinInfo = wInfo.coinInfo?[CoinType.N.name];
+        final mnemonic = wInfo.mnemonic;
+        
+        if (nCoinInfo != null && mnemonic != null && mnemonic.isNotEmpty) {
+          Map<String, dynamic> pathMap = nCoinInfo['baseInfo']['path'];
+          privateKey = await Trustdart().getPrivateKey(
+            mnemonic,
+            CoinType.N.name,
+            getPathWithIndex(pathMap['legacy'], nCoinInfo['pathIndex']),
+          );
+        }
+      } else {
+        privateKey = pk;
+      }
+      
+      if (privateKey == null) {
+        errorMessage = "PrivateKey not found!";
+        notifyListeners();
+      }
+    } catch (e) {
+      errorMessage = "Error getting private key: $e";
       notifyListeners();
     }
   }

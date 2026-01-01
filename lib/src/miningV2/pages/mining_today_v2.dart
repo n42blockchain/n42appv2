@@ -923,18 +923,22 @@ Riesgo Alto*/
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  value,
-                  style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(30)),
+                Flexible(
+                  child: Text(
+                    value,
+                    style: TextStyle(
+                        color: AppThemeUtils.getColorByKey(
+                            context, AppThemeKeys.mainTextColor.name),
+                        fontSize: ScreenUtil().setSp(30)),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
                 ),
                 if(imagePath!=null && imagePath.isNotEmpty)
                   Image.asset(
                     imagePath,
-                    width: ScreenUtil().setWidth(90),
-                    height: ScreenUtil().setWidth(90),
+                    width: ScreenUtil().setWidth(80),
+                    height: ScreenUtil().setWidth(80),
                     fit: BoxFit.cover,
                   )
               ],
