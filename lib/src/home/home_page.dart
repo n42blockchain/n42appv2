@@ -45,9 +45,8 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     return [
       const WalletPage(),
       const MiningTodayV2(),
-      // 暂时强制使用旧版聊天，因为 N42Chat 模块还在开发中
-      // TODO: 当 N42Chat 模块完成后改回: useNewChat ? N42Chat.chatWidget() : const ChatIndexPage()
-      const ChatIndexPage(),
+      // 根据设置切换新旧聊天模块
+      useNewChat ? N42Chat.chatWidget() : const ChatIndexPage(),
     ];
   }
   @override

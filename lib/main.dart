@@ -78,6 +78,12 @@ void main() async {
     final currentTheme = globalProviderContainer.read(themeModeProvider);
     N42Chat.setThemeMode(currentTheme);
     
+    // 监听 N42Chat 未读消息数，更新主应用的未读计数
+    N42Chat.unreadCountStream.listen((count) {
+      globalProviderContainer.read(unreadCountProvider.notifier).setCount(count);
+      debugPrint('N42Chat unread count updated: $count');
+    });
+    
     debugPrint('N42Chat initialized successfully with theme: $currentTheme');
   } catch (e) {
     debugPrint('N42Chat initialization failed: $e');

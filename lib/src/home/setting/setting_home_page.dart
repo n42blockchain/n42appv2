@@ -132,9 +132,8 @@ class SettingHomePage extends ConsumerWidget {
             ],
           ),
         ),
-        // New Chat 设置 (暂时隐藏，模块开发中)
-        // TODO: 当 N42Chat 模块完成后重新启用
-        // _buildNewChatSwitch(context, ref),
+        // New Chat 设置
+        _buildNewChatSwitch(context, ref),
       ],
     );
   }
