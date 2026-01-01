@@ -525,147 +525,133 @@ Riesgo Alto*/
     );
   }
   Widget miningStatusWidget(MiningV2Provider mpValue) {
+    final isActive = mpValue.miningStatus == true;
+    final statusColor = isActive ? const Color(0xff32D74B) : const Color(0xffEB5851);
+    
     return Container(
-      margin: EdgeInsets.symmetric(
-        vertical: ScreenUtil().setWidth(20),
-      ),
+      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
       child: Row(
         children: [
+          // 挖矿状态卡片
           Expanded(
-            flex: 1,
             child: Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(30),
-                vertical: ScreenUtil().setWidth(26),
-              ),
+              padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
               decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemBgColor.name),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                border: Border.all(
+                  color: statusColor.withOpacity(0.2),
+                  width: 1,
+                ),
               ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // 标题行
                   Row(
                     children: [
-                      Expanded(
-                        child: Text(
-                          // "Mining Status",
-                          S.of(context).g_mining_key_5,
-                          maxLines: 2,
-                          style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.itemSubtitleTextColor.name),
-                            fontSize: ScreenUtil().setSp(24),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: ScreenUtil().setWidth(32),
-                        width: ScreenUtil().setWidth(32),
-                        margin: EdgeInsets.only(left: ScreenUtil().setWidth(10)),
-                        padding: EdgeInsets.all(ScreenUtil().setWidth(8)),
-                        decoration: BoxDecoration(
-                          color: mpValue.miningStatus == true
-                              ? const Color.fromRGBO(50, 215, 75, 0.2)
-                              : const Color.fromRGBO(235, 88, 81, 0.2),
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-                        ),
-                        child: Container(
-                          height: ScreenUtil().setWidth(16),
-                          width: ScreenUtil().setWidth(16),
-                          decoration: BoxDecoration(
-                            color: mpValue.miningStatus == true
-                                ? const Color(0xff32D74B)
-                                : const Color(0xffEB5851),
-                            borderRadius:
-                            BorderRadius.circular(ScreenUtil().setWidth(16)),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: ScreenUtil().setWidth(30),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(mpValue.miningStatus == true
-                            ? S.current.g_key_193
-                            : S.current.g_mining_key_47,
+                      Text(
+                        S.of(context).g_mining_key_5,
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.itemTextColor.name),
-                          fontSize: ScreenUtil().setSp(32),
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                          fontSize: ScreenUtil().setSp(22),
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () async {
-                        },
-                        child: Container(
-                          height: ScreenUtil().setWidth(40),
-                          width: ScreenUtil().setWidth(40),
-                          child: Image.asset(
-                            "assets/mining/${mpValue.miningStatus == true ? 'stop' : 'play'}.png",
-                            color: AppThemeUtils.getColorByKey(
-                                context,
-                                    mpValue.miningStatus == true
-                                    ? AppThemeKeys.mainBlueColor.name
-                                    : AppThemeKeys.iconTextDisableColor.name),
-                            height: ScreenUtil().setWidth(40),
-                            width: ScreenUtil().setWidth(40),
-                          ),
+                      const Spacer(),
+                      // 状态指示器
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil().setWidth(10),
+                          vertical: ScreenUtil().setWidth(4),
+                        ),
+                        decoration: BoxDecoration(
+                          color: statusColor.withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: ScreenUtil().setWidth(8),
+                              height: ScreenUtil().setWidth(8),
+                              decoration: BoxDecoration(
+                                color: statusColor,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                            SizedBox(width: ScreenUtil().setWidth(6)),
+                            Text(
+                              isActive ? 'Active' : 'Inactive',
+                              style: TextStyle(
+                                color: statusColor,
+                                fontSize: ScreenUtil().setSp(20),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
+                  ),
+                  SizedBox(height: ScreenUtil().setWidth(16)),
+                  // 状态文字
+                  Text(
+                    isActive ? S.current.g_key_193 : S.current.g_mining_key_47,
+                    style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                      fontSize: ScreenUtil().setSp(28),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ),
             ),
           ),
-          SizedBox(
-            width: ScreenUtil().setWidth(22),
-          ),
+          SizedBox(width: ScreenUtil().setWidth(16)),
+          // 余额卡片
           Expanded(
             child: Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(30),
-                vertical: ScreenUtil().setWidth(26),
-              ),
+              padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
               decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemBgColor.name),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                border: Border.all(
+                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.2),
+                  width: 1,
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     S.of(context).g_key_29,
-                    // "Your Tier",
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemSubtitleTextColor.name),
-                      fontSize: ScreenUtil().setSp(24),
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                      fontSize: ScreenUtil().setSp(22),
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(
-                    height: ScreenUtil().setWidth(30),
-                  ),
+                  SizedBox(height: ScreenUtil().setWidth(16)),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
                     children: [
                       Text(
-                        '${mpValue.depositsEnable??false?mpValue.balanceInBeacon:0} ${CoinType.N.name}',
+                        '${mpValue.depositsEnable ?? false ? mpValue.balanceInBeacon : 0}',
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.itemTextColor.name),
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                           fontSize: ScreenUtil().setSp(32),
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      SizedBox(width: ScreenUtil().setWidth(6)),
+                      Text(
+                        CoinType.N.name,
+                        style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                          fontSize: ScreenUtil().setSp(24),
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
@@ -865,83 +851,77 @@ Riesgo Alto*/
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
-            color:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16))),
-        padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(30), ScreenUtil().setWidth(30),
-            ScreenUtil().setWidth(10), ScreenUtil().setWidth(10)),
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        ),
+        padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            IntrinsicWidth(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      titleText,
-                      maxLines: 2,
-                      style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.ff888888.name),
-                          fontSize: ScreenUtil().setSp(22)),
+            // 标题行
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    titleText,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                      fontSize: ScreenUtil().setSp(22),
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                  if (showTips)
-                    CustomPopupMenuWrap(
-                        key: ValueKey(titleText),
-                        verticalMargin: ScreenUtil().setWidth(24),
-                        defView: Padding(
-                          padding: EdgeInsets.only(left: ScreenUtil().setWidth(12)),
-                          child: Image.asset(
-                            "assets/mining/tips_icon.png",
-                            width: ScreenUtil().setWidth(20),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        menuItemView: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(50)),
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.itemBgColor.name),
-                          ),
-                          margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(100)),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: ScreenUtil().setWidth(28), vertical: ScreenUtil().setWidth(30)),
-                          child: Text(
-                            tipsText ?? '',
-                            style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(
-                                    context, AppThemeKeys.mainTextColor.name),
-                                fontSize: ScreenUtil().setSp(24)),
-                          ),
-                        ))
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: Text(
-                    value,
-                    style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainTextColor.name),
-                        fontSize: ScreenUtil().setSp(30)),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
                 ),
-                if(imagePath!=null && imagePath.isNotEmpty)
-                  Image.asset(
-                    imagePath,
-                    width: ScreenUtil().setWidth(80),
-                    height: ScreenUtil().setWidth(80),
-                    fit: BoxFit.cover,
-                  )
+                if (showTips)
+                  CustomPopupMenuWrap(
+                    key: ValueKey(titleText),
+                    verticalMargin: ScreenUtil().setWidth(24),
+                    defView: Container(
+                      padding: EdgeInsets.all(ScreenUtil().setWidth(4)),
+                      child: Icon(
+                        Icons.info_outline_rounded,
+                        size: ScreenUtil().setWidth(18),
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                      ),
+                    ),
+                    menuItemView: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(60)),
+                      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+                      child: Text(
+                        tipsText ?? '',
+                        style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                          fontSize: ScreenUtil().setSp(24),
+                        ),
+                      ),
+                    ),
+                  ),
               ],
+            ),
+            SizedBox(height: ScreenUtil().setWidth(12)),
+            // 数值行
+            Text(
+              value,
+              style: TextStyle(
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                fontSize: ScreenUtil().setSp(28),
+                fontWeight: FontWeight.w700,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
           ],
         ),
@@ -1071,3 +1051,4 @@ Riesgo Alto*/
   @override
   bool get wantKeepAlive => true;
 }
+

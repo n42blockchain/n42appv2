@@ -464,163 +464,168 @@ class _WalletPageState extends State<WalletPage> {
   Widget coinListHeaderWidget(WalletActionProvider waValue) {
     String networkStr = S.of(context).g_token_m_key_4;
     if (waValue.walletInfo.networkIndex != -1) {
-      networkStr =
-          waValue.coinModels[waValue.walletInfo.networkIndex].coin['name'] ?? "";
+      networkStr = waValue.coinModels[waValue.walletInfo.networkIndex].coin['name'] ?? "";
     }
     return SliverPersistentHeader(
-      pinned: true, //是否固定在顶部
+      pinned: true,
       floating: true,
       delegate: _SliverAppBarDelegate(
-        minHeight: ScreenUtil().setWidth(160.0), //收起的高度 - 增加高度避免溢出
-        maxHeight: ScreenUtil().setWidth(160.0),
+        minHeight: ScreenUtil().setWidth(140.0),
+        maxHeight: ScreenUtil().setWidth(140.0),
         child: Container(
           width: double.infinity,
-          height: ScreenUtil().setWidth(160.0),
-          padding: EdgeInsets.only(
-              left: ScreenUtil().setWidth(30.0),
-              right: ScreenUtil().setWidth(30.0),
-              top: ScreenUtil().setWidth(20.0)),
+          padding: EdgeInsets.symmetric(
+            horizontal: ScreenUtil().setWidth(24),
+            vertical: ScreenUtil().setWidth(16),
+          ),
           decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.backGroundColor.name),
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(ScreenUtil().setWidth(50.0)),
-                topLeft: Radius.circular(ScreenUtil().setWidth(50.0)),
+            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(ScreenUtil().setWidth(28)),
+              topLeft: Radius.circular(ScreenUtil().setWidth(28)),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.03),
+                blurRadius: 8,
+                offset: const Offset(0, -2),
               ),
-              border: Border.all(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.backGroundColor.name),
-                  width: 2)),
+            ],
+          ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              // 顶部行：Tokens标题 + 添加按钮 + 网络选择
               Row(
                 children: [
                   Text(
                     S.of(context).g_token_m_key_11,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(30.0),
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
+                      fontSize: ScreenUtil().setSp(32),
+                      fontWeight: FontWeight.w600,
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                     ),
                   ),
-                  InkWell(
-                    onTap: () {
-                      showAddToken();
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(left: 5),
-                      width: ScreenUtil().setWidth(50.0),
-                      height: ScreenUtil().setWidth(50.0),
-                      decoration: BoxDecoration(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainButtonBgColor.name),
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(ScreenUtil().setWidth(50.0))),
-                      ),
-                      padding: EdgeInsets.all(ScreenUtil().setWidth(6.0)),
-                      alignment: Alignment.center,
-                      child: Icon(
-                        Icons.add,
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainButtonTextColor.name),
-                        size: ScreenUtil().setWidth(38.0),
+                  SizedBox(width: ScreenUtil().setWidth(12)),
+                  // 添加代币按钮
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () => showAddToken(),
+                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                      child: Container(
+                        width: ScreenUtil().setWidth(36),
+                        height: ScreenUtil().setWidth(36),
+                        decoration: BoxDecoration(
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                        ),
+                        child: Icon(
+                          Icons.add_rounded,
+                          color: Colors.white,
+                          size: ScreenUtil().setWidth(22),
+                        ),
                       ),
                     ),
                   ),
-                  Spacer(),
-                  InkWell(
-                    onTap: () {
-                      showChangeNetwork(waValue);
-                    },
-                    child: Container(
-                      child: Row(
-                        children: [
-                          Text(
-                            networkStr,
-                            style: TextStyle(
-                              fontSize: ScreenUtil().setSp(30.0),
-                              color: AppThemeUtils.getColorByKey(
-                                  context, AppThemeKeys.mainBlueColor.name),
+                  const Spacer(),
+                  // 网络选择器
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () => showChangeNetwork(waValue),
+                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil().setWidth(14),
+                          vertical: ScreenUtil().setWidth(8),
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              networkStr,
+                              style: TextStyle(
+                                fontSize: ScreenUtil().setSp(24),
+                                fontWeight: FontWeight.w500,
+                                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                              ),
                             ),
-                          ),
-                          Container(
-                            width: ScreenUtil().setWidth(40.0),
-                            height: ScreenUtil().setWidth(40.0),
-                            child: Icon(
-                              Icons.arrow_drop_down,
-                              color: AppThemeUtils.getColorByKey(
-                                  context, AppThemeKeys.mainBlueColor.name),
-                              size: ScreenUtil().setWidth(40.0),
+                            Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                              size: ScreenUtil().setWidth(22),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
+              // 底部行：排序选项
               Row(
                 children: [
-                  InkWell(
-                    onTap: () {
-                      waValue.setCoinSort_assets("name");
-                    },
-                    child: Container(
-                      height: ScreenUtil().setWidth(60.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            S.of(context).g_browser_key6,
-                            style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(
-                                  context, AppThemeKeys.itemSubtitleTextColor.name),
-                              fontSize: ScreenUtil().setSp(28),
-                            ),
-                          ),
-                          Container(
-                            width: ScreenUtil().setWidth(24),
-                            height: ScreenUtil().setWidth(28),
-                            margin: EdgeInsets.only(left: ScreenUtil().setWidth(8)),
-                            child: Image.asset(
-                              "assets/wallet/assets${waValue.walletInfo.coinSort['name']??-1}.png",
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  // 按名称排序
+                  _buildSortButton(
+                    S.of(context).g_browser_key6,
+                    "name",
+                    waValue.walletInfo.coinSort['name'] ?? -1,
+                    () => waValue.setCoinSort_assets("name"),
                   ),
-                  Spacer(),
-                  InkWell(
-                    onTap: () {
-                      waValue.setCoinSort_assets("assets");
-                    },
-                    child: Container(
-                      height: ScreenUtil().setWidth(60.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            S.of(context).g_key_198,
-                            style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(
-                                  context, AppThemeKeys.itemSubtitleTextColor.name),
-                              fontSize: ScreenUtil().setSp(28),
-                            ),
-                          ),
-                          Container(
-                            width: ScreenUtil().setWidth(24),
-                            height: ScreenUtil().setWidth(28),
-                            margin: EdgeInsets.only(left: ScreenUtil().setWidth(8)),
-                            child: Image.asset(
-                              "assets/wallet/assets${waValue.walletInfo.coinSort['assets']}.png",
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  SizedBox(width: ScreenUtil().setWidth(24)),
+                  // 按资产排序
+                  _buildSortButton(
+                    S.of(context).g_key_198,
+                    "assets",
+                    waValue.walletInfo.coinSort['assets'] ?? -1,
+                    () => waValue.setCoinSort_assets("assets"),
                   ),
+                  const Spacer(),
                 ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// 排序按钮组件
+  Widget _buildSortButton(String label, String key, int sortValue, VoidCallback onTap) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: ScreenUtil().setWidth(8),
+            vertical: ScreenUtil().setWidth(6),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                  fontSize: ScreenUtil().setSp(24),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(width: ScreenUtil().setWidth(4)),
+              SizedBox(
+                width: ScreenUtil().setWidth(16),
+                height: ScreenUtil().setWidth(16),
+                child: Image.asset(
+                  "assets/wallet/assets$sortValue.png",
+                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                ),
               ),
             ],
           ),
@@ -814,91 +819,112 @@ class _WalletPageState extends State<WalletPage> {
           ],
         ),
         child: Container(
-          height: ScreenUtil().setWidth(140.0),
+          padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              // 错误/加载指示器
               refreshWidget,
+              // 币种图标
               Container(
-                width: ScreenUtil().setWidth(52.0),
-                height: ScreenUtil().setWidth(72.0),
-                margin: EdgeInsets.only(right: ScreenUtil().setWidth(10.0)),
+                width: ScreenUtil().setWidth(48),
+                height: ScreenUtil().setWidth(48),
+                margin: EdgeInsets.only(right: ScreenUtil().setWidth(14)),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.08),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
                 child: Stack(
                   children: [
-                    Positioned(
-                      top: ScreenUtil().setWidth(10.0),
-                      bottom: ScreenUtil().setWidth(10.0),
-                      left: 0,
-                      right: 0,
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
                       child: image,
                     ),
                     if (mainImage != null)
                       Positioned(
-                        top: 0,
-                        left: 0,
-                        height: ScreenUtil().setWidth(22.0),
-                        width: ScreenUtil().setWidth(22.0),
-                        child: mainImage,
+                        top: -2,
+                        left: -2,
+                        height: ScreenUtil().setWidth(20),
+                        width: ScreenUtil().setWidth(20),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+                            border: Border.all(
+                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+                              width: 1.5,
+                            ),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                            child: mainImage,
+                          ),
+                        ),
                       ),
                   ],
                 ),
               ),
+              // 币种信息
               Expanded(
-                flex: 1,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // 第一行：币种名称 + 余额数量
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            coinInfo.coin['miniName'],
-                            style: TextStyle(
-                                fontSize: ScreenUtil().setSp(30.0),
-                                color: AppThemeUtils.getColorByKey(
-                                    context, "mainTextColor"),
-                                fontWeight: FontWeight.bold),
+                        Text(
+                          coinInfo.coin['miniName'],
+                          style: TextStyle(
+                            fontSize: ScreenUtil().setSp(30),
+                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.3,
                           ),
                         ),
-                        Expanded(
-                          flex: 1,
-                          child: Text("${valueBalanceStr}",
-                            style: TextStyle(
-                              fontSize: ScreenUtil().setSp(30.0),
-                              color: AppThemeUtils.getColorByKey(
-                                  context, AppThemeKeys.mainTextColor.name),
-                            ),
-                            textAlign: TextAlign.right,
+                        Text(
+                          valueBalanceStr,
+                          style: TextStyle(
+                            fontSize: ScreenUtil().setSp(30),
+                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                            fontWeight: FontWeight.w600,
                           ),
-                        )
+                          textAlign: TextAlign.right,
+                        ),
                       ],
                     ),
+                    SizedBox(height: ScreenUtil().setWidth(6)),
+                    // 第二行：单价+涨跌幅 + 总价值
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        Row(
+                          children: [
+                            Text(
+                              "\$${coinInfo.coinPrice_string()}",
+                              style: TextStyle(
+                                fontSize: ScreenUtil().setSp(24),
+                                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                              ),
+                            ),
+                            SizedBox(width: ScreenUtil().setWidth(8)),
+                            percentageWidget(context, coinInfo.percentage),
+                          ],
+                        ),
                         Text(
-                          "\$${coinInfo.coinPrice_string()}",
+                          "\$${balanceStr}",
                           style: TextStyle(
-                            fontSize: ScreenUtil().setSp(30.0),
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.itemSubtitleTextColor.name),
+                            fontSize: ScreenUtil().setSp(24),
+                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
                           ),
                         ),
-                        const SizedBox(
-                          width: 6,
-                        ),
-                        percentageWidget(context, coinInfo.percentage),
-                        const Expanded(flex: 1, child: SizedBox()),
-                        Text("\$${balanceStr}",
-                            style: TextStyle(
-                              fontSize: ScreenUtil().setSp(30.0),
-                              color: AppThemeUtils.getColorByKey(
-                                  context, AppThemeKeys.itemSubtitleTextColor.name),
-                            )),
                       ],
                     ),
                   ],
@@ -911,8 +937,35 @@ class _WalletPageState extends State<WalletPage> {
     );
   }
 
-  //bi 的涨跌幅百分比
+  /// 涨跌幅百分比
   Widget percentageWidget(BuildContext context, var percentage) {
+    final isPositive = percentage >= 0;
+    final color = isPositive
+        ? AppThemeUtils.getColorByKey(context, AppThemeKeys.rightTextColor.name)
+        : AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
+    
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(8),
+        vertical: ScreenUtil().setWidth(3),
+      ),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+      ),
+      child: Text(
+        "${isPositive ? '+' : ''}${percentage.toStringAsFixed(2)}%",
+        style: TextStyle(
+          fontSize: ScreenUtil().setSp(22),
+          color: color,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
+  // 保留旧的百分比组件（向后兼容）
+  Widget _oldPercentageWidget(BuildContext context, var percentage) {
     if (percentage >= 0) {
       return Text("${percentage.toStringAsFixed(2)}%",
           style: TextStyle(
