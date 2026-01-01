@@ -185,7 +185,7 @@ class SettingHomePage extends ConsumerWidget {
                 ),
                 SizedBox(height: ScreenUtil().setWidth(6.0)),
                 Text(
-                  "Enable N42 Matrix Chat module",
+                  "Enable enhanced Chat experience",
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.ff888888.name),
