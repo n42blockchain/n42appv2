@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_chat/n42_chat.dart';
 
 /// Home Page - Migrated to Riverpod
 /// 
@@ -32,19 +33,22 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver {
-  List<Widget> _pages=[
-    //NewsPage(),
-    WalletPage(),
-    //MiningHomePage(),
-    MiningTodayV2(),
-    ChatIndexPage()
-  ];
   //final GlobalKey _tabOne = GlobalKey();
   final GlobalKey _tabTwo = GlobalKey();
   final GlobalKey _tabThree = GlobalKey();
   final GlobalKey _tabfour = GlobalKey();
   //final GlobalKey _tabfive = GlobalKey();
   bool? showTermsOfService;
+  
+  /// Build pages list based on chat mode setting
+  List<Widget> _buildPages(bool useNewChat) {
+    return [
+      const WalletPage(),
+      const MiningTodayV2(),
+      // Switch between legacy chat and new N42 Chat
+      useNewChat ? N42Chat.chatWidget() : const ChatIndexPage(),
+    ];
+  }
   @override
   void initState() {
     // TODO: implement initState
@@ -83,6 +87,9 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
   Widget build(BuildContext context) {
     // Watch home tab index from Riverpod
     final homeCurrentIndex = ref.watch(homeTabIndexProvider);
+    // Watch chat mode setting
+    final useNewChat = ref.watch(useNewChatProvider);
+    final pages = _buildPages(useNewChat);
     
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -91,7 +98,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
           children: [
             IndexedStack(
               index: homeCurrentIndex,
-              children: _pages,
+              children: pages,
             ),
             Positioned(
               bottom: 0,
@@ -130,22 +137,26 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
                         S.of(context).g_home_key2,
                         0,
                         "assets/home/tabbar/news.png",
-                        _tabOne),*/
+                        _tabOne,
+                        pages.length),*/
                     _buildBottomItem(
                         S.of(context).g_key_6,
                         0,
                         "assets/home/tabbar/wallet.png",
-                        _tabTwo),
+                        _tabTwo,
+                        pages.length),
                     _buildBottomItem(
                         S.of(context).g_home_key3,
                         1,
                         "assets/home/tabbar/earn.png",
-                        _tabThree),
+                        _tabThree,
+                        pages.length),
                     _buildBottomItem(
                         S.of(context).g_key_squad,
                         2,
                         "assets/home/tabbar/chat.png",
-                        _tabfour),
+                        _tabfour,
+                        pages.length),
                   ],
                 ),
               ),
@@ -175,8 +186,8 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     );
   }
 
-  Widget _buildBottomItem(String title, int index, String imagePath, GlobalKey key) {
-    double width = MediaQuery.of(context).size.width / _pages.length;
+  Widget _buildBottomItem(String title, int index, String imagePath, GlobalKey key, int pagesLength) {
+    double width = MediaQuery.of(context).size.width / pagesLength;
     // Use Riverpod homeTabIndexProvider
     final currentIndex = ref.watch(homeTabIndexProvider);
     

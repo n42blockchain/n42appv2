@@ -42,6 +42,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_chat/n42_chat.dart';
 
 /// Global ProviderContainer for Riverpod
 /// This is used during the migration phase to bridge Provider and Riverpod
@@ -63,6 +64,18 @@ void main() async {
     kReleaseMode ? Env.prod : Env.dev,
     container: globalProviderContainer,
   );
+
+  // Initialize N42 Chat module
+  try {
+    await N42Chat.initialize(const N42ChatConfig(
+      defaultHomeserver: 'https://matrix.n42.network',
+      enableEncryption: true,
+      enablePushNotifications: true,
+    ));
+    debugPrint('N42Chat initialized successfully');
+  } catch (e) {
+    debugPrint('N42Chat initialization failed: $e');
+  }
 
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);

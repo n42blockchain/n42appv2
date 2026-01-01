@@ -76,7 +76,7 @@ dependencies:
   file_picker: ^8.3.7
   video_compress: ^3.1.4
   video_player: ^2.10.1
-  pro_image_editor: ^7.6.5
+  pro_image_editor: ^11.15.2
   open_filex: ^4.6.0
   share_plus: ^10.1.4
 
@@ -118,6 +118,10 @@ dependencies:
   dartz: ^0.10.1
   equatable: ^2.0.7
   freezed_annotation: ^2.4.4
+
+  # === N42 Chat Module ===
+  n42_chat:
+    path: D:/N42/n42_chat
 
 dev_dependencies:
   flutter_test:

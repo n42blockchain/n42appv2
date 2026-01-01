@@ -181,6 +181,17 @@ class SPUtil {
     return prefs?.getBool(SPkey.showTermsOfService.name) ?? false;
   }
 
+  // 是否使用新聊天模块 (N42 Chat)
+  Future<void> setUseNewChat(bool value) async {
+    await initPrefs();
+    await prefs?.setBool(SPkey.useNewChat.name, value);
+  }
+
+  Future<bool> getUseNewChat() async {
+    await initPrefs();
+    return prefs?.getBool(SPkey.useNewChat.name) ?? false;
+  }
+
   // 临时存储，挖矿信息
   Future<void> setMiningData(Map<String, dynamic> value) async {
     await initPrefs();
@@ -267,5 +278,6 @@ enum SPkey {
   showTermsOfService, // 显示服务条款
   miningData, // 临时存储，挖矿信息
   readLoginClause,
+  useNewChat, // 是否使用新聊天模块
 }
 
