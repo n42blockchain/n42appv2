@@ -80,10 +80,10 @@ class WalletActionProvider extends ChangeNotifier{
     eventBus.fire(EventPublic(EventPublicType.selectMiningWallet,
         intValue: walletMiningIndex));
   }
-  Map<String,String>? _publicKeyAndPrivateKeyPair;//_walletInfoLsit所有钱包AST的公钥私钥对
+  Map<String,String>? _publicKeyAndPrivateKeyPair;//_walletInfoLsit所有钱包N的公钥私钥对
   Future<Map<String,String>> publicKeyAndPrivateKeyPair() async{
     if(_publicKeyAndPrivateKeyPair==null){
-      await getPublicKeyAndPrivateKeyPair_AST();
+      await getPublicKeyAndPrivateKeyPair_N();
     }
     return _publicKeyAndPrivateKeyPair!;
   }
@@ -236,7 +236,7 @@ class WalletActionProvider extends ChangeNotifier{
         for (int i = 0; i < walletInfos.length; i++) {
           _walletInfoLsit.add(WalletInfo.fromJson(walletInfos[i]));
         }
-        //await getPublicKeyAndPrivateKeyPair_AST();
+        //await getPublicKeyAndPrivateKeyPair_N();
         //await createWallet();
         //existWallet = true;
       }
@@ -251,7 +251,7 @@ class WalletActionProvider extends ChangeNotifier{
           for (int i = 0; i < walletInfos.length; i++) {
             _walletInfoLsit.add(WalletInfo.fromJson(walletInfos[i]));
           }
-          //await getPublicKeyAndPrivateKeyPair_AST();
+          //await getPublicKeyAndPrivateKeyPair_N();
           walletAll[UserUUID]=walletDefault;
           walletAll.remove("AstranetWallet");
           await SPUtil().setWalletInfo(walletAll);
@@ -561,7 +561,7 @@ class WalletActionProvider extends ChangeNotifier{
       }
       await saveWalletInfo(newWalletInfo,walletIndex,isNewWallet: true);
       init_wallet(initCoinInfo: true);
-      //await getPublicKeyAndPrivateKeyPair_AST();
+      //await getPublicKeyAndPrivateKeyPair_N();
       notifyListeners();
     }catch(e){
       ToastUtils.show(e.toString());
@@ -646,7 +646,7 @@ class WalletActionProvider extends ChangeNotifier{
     }
   }
   //返回公钥、私钥对
-  getPublicKeyAndPrivateKeyPair_AST()async{
+  getPublicKeyAndPrivateKeyPair_N()async{
     _publicKeyAndPrivateKeyPair={};
     Trustdart trustdart=Trustdart();
     for(WalletInfo wInfo in walletInfoLsit){

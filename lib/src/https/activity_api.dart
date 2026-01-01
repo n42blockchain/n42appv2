@@ -9,7 +9,7 @@ class ActivityApi {
     url=AppConfig.getApiUrl_online('activiteHost');
     header={'content-type': 'application/json'};
   }
-  //数据收集接口，收集用户创建的NFT和交易AST的记录，event create_nft,wallet_transfer
+  //数据收集接口，收集用户创建的NFT和交易N的记录，event create_nft,wallet_transfer
   collectPush(String nftData,{String event="create_nft"}) async {
     try {
       MessageModel mm = MessageModel();

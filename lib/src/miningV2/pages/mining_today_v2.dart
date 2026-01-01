@@ -434,7 +434,7 @@ Riesgo Alto*/
                                   "${dataUtils.formatNum(mpValue.yesterdayCycleRewardsValue, 6)} ${CoinType.N.name}",
                                   imagePath: "assets/mining/broad_bg_4.png",
                                   tipsText:
-                                  // "Reward accumulates daily and is only sent to your AST wallet when it reaches ~0.5 AST.",
+                                  // "Reward accumulates daily and is only sent to your N wallet when it reaches ~0.5 N.",
                                   S.of(context).g_mining_key_12,
                                   showTips: true),
                             ],
@@ -457,7 +457,7 @@ Riesgo Alto*/
                                   "\$${NumberFormat("#,##0.0#", "en_US").format((mpValue.nPrice * mpValue.miningTotalRevenue))}",
                                   imagePath: "assets/mining/broad_bg_2.png",
                                   tipsText:
-                                  // "Calculated based on market price of AST * the total AST rewards.",
+                                  // "Calculated based on market price of N * the total N rewards.",
                                   S.of(context).g_mining_key_15,
                                   showTips: true),
                             ],

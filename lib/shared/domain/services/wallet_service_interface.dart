@@ -40,7 +40,7 @@ abstract class IWalletService {
   /// Stream of wallet changes
   Stream<SharedWalletInfo?> get currentWalletStream;
 
-  /// Get AST/N chain address for a wallet
+  /// Get N chain address for a wallet
   ///
   /// Returns the address for the specified chain type
   Future<String?> getChainAddress(String walletId, String chainType);

@@ -1184,11 +1184,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("Share"),
     "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("Referral"),
     "g_share_v3_key_3": MessageLookupByLibrary.simpleMessage(
-      "Refer friends and get AST Tokens!",
+      "Refer friends and get N Tokens!",
     ),
     "g_share_v3_key_4": MessageLookupByLibrary.simpleMessage("You get up to "),
     "g_share_v3_key_5": MessageLookupByLibrary.simpleMessage(
-      " AST when your referral starts verification!",
+      " N when your referral starts verification!",
     ),
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Refer via"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Link"),

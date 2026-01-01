@@ -91,7 +91,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     getTextEditingController.text = "${widget.getAstNum??0}";
     init();
 
-    //埋点：用户选择交换AST或查看交换AST界面。
+    //埋点：用户选择交换N或查看交换N界面。
     //AmplitudeUtils.walletFundingStarted();
 
     super.initState();
@@ -467,7 +467,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
       String? txHash = await web3Transaction();
       if (txHash != null) {
 
-        //埋点：用户成功发送交换订单，等待AsT或AST发送成功时触发事件。
+        //埋点：用户成功发送交换订单，等待N发送成功时触发事件。
         //AmplitudeUtils.walletFundingSucceeded();
 
         bool rData = await postOrderTxHash(orderId ?? 0, txHash);
@@ -1107,7 +1107,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
       double pc = 0;
       pc = yPrice / gCoinPrice;
       text =
-      "1${youPay?.pay_coin ?? ""} = ${regular.formartNum_double(dec.Decimal.parse(pc.toString()).toDouble(), 8, isCrop: true, isFill0: false)}AST";
+      "1${youPay?.pay_coin ?? ""} = ${regular.formartNum_double(dec.Decimal.parse(pc.toString()).toDouble(), 8, isCrop: true, isFill0: false)}${CoinType.N.name}";
     } else {
       text = "??${youPay?.pay_coin ?? ""} = ??${CoinType.N.name}";
     }

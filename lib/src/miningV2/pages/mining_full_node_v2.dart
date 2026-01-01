@@ -359,7 +359,7 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
       children: [
         _buildPayMethodv2("assets/mining/pay_wallet.png",
             "${S.current.g_mining_key_42}: ${nBalance ?? 0} ${CoinType.N.name}",
-            // errTips: "You do not have enough AST for this transaction",
+            // errTips: "You do not have enough N for this transaction",
             errTips: S.current.g_mining_key_43,
             isSelected: _payMethod == 0, onTap: () {
               setState(() {
@@ -502,7 +502,7 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
       MiningV2Provider mp=Provider.of<MiningV2Provider>(AppGlobals.appContext,listen: false);
       mp.createDepositUnsignedTx(widget.nNum, encrypteData!);
     } catch (err) {
-      //RPCError: got code 3 with msg "execution reverted: 10 AST Deposit Limit has been reached".
+      //RPCError: got code 3 with msg "execution reverted: 10 N Deposit Limit has been reached".
       debugPrint("质押失败：${err.toString()}");
       if (err.toString().contains(S.of(context).g_mining_key_80)) {
         ToastUtils.show(S.of(context).g_mining_key_80);

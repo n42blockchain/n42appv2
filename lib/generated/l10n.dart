@@ -5529,10 +5529,10 @@ class S {
     );
   }
 
-  /// `Refer friends and get AST Tokens!`
+  /// `Refer friends and get N Tokens!`
   String get g_share_v3_key_3 {
     return Intl.message(
-      'Refer friends and get AST Tokens!',
+      'Refer friends and get N Tokens!',
       name: 'g_share_v3_key_3',
       desc: '',
       args: [],
@@ -5549,10 +5549,10 @@ class S {
     );
   }
 
-  /// ` AST when your referral starts verification!`
+  /// ` N when your referral starts verification!`
   String get g_share_v3_key_5 {
     return Intl.message(
-      ' AST when your referral starts verification!',
+      ' N when your referral starts verification!',
       name: 'g_share_v3_key_5',
       desc: '',
       args: [],

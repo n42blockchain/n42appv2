@@ -67,7 +67,7 @@ class RedeemToken extends _i1.GeneratedContract {
     return await read(function, params, null);
   }
 /*
-  ///获取全网总计的质押的AST数量
+  ///获取全网总计的质押的N数量
   Future depositCount(
       {required _i1.Credentials credentials,
         _i1.Transaction? transaction}) async {

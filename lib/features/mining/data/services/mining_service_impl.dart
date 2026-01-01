@@ -114,7 +114,7 @@ class MiningServiceImpl implements IMiningService {
 
     final balanceInfo = await walletService.getBalance(
       _miningWalletAddress!,
-      'AST', // Mining reward coin
+      'N', // Mining reward coin
     );
     return balanceInfo?.balance.toString();
   }

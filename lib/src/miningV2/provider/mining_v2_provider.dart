@@ -117,7 +117,7 @@ class MiningV2Provider extends ChangeNotifier {
 
 
 
-  /// 抱团挖矿/质押NFT/质押AST
+  /// 抱团挖矿/质押NFT/质押N
   /// 新增：FUJI NFT 质押
   Future<void> checkAddressMiningStatus() async {
     try {

@@ -743,7 +743,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
                 }
               },
               rightTaoChangeNetworkWidget:
-              (widget.coinModel.coin['coinType'] == CoinType.AST.name &&
+              (widget.coinModel.coin['coinType'] == CoinType.N.name &&
                   widget.coinModel.privateKey == null)
                   ? InkWell(
                 onTap: () async {

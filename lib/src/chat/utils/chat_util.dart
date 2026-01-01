@@ -38,7 +38,7 @@ class ChatUtil {
     return await service.decryptMessage(msg);
   }
 
-  /// Get AST/N chain private key for chat encryption
+  /// Get N chain private key for chat encryption
   ///
   /// Uses IChatCryptoService to get the key securely.
   Future<String?> getAstPrivateKey() async {
@@ -49,7 +49,7 @@ class ChatUtil {
     return await service.getPrivateKeyForChat();
   }
 
-  /// Get AST/N chain public key for chat encryption
+  /// Get N chain public key for chat encryption
   ///
   /// Uses IChatCryptoService to get the key securely.
   Future<String?> getAstPubKey() async {
