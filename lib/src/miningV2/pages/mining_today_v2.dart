@@ -869,7 +869,7 @@ Riesgo Alto*/
             AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
             borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16))),
         padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(30), ScreenUtil().setWidth(30),
-            ScreenUtil().setWidth(0), ScreenUtil().setWidth(0)),
+            ScreenUtil().setWidth(10), ScreenUtil().setWidth(10)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,

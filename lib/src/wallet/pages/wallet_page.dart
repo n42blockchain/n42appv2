@@ -471,11 +471,11 @@ class _WalletPageState extends State<WalletPage> {
       pinned: true, //是否固定在顶部
       floating: true,
       delegate: _SliverAppBarDelegate(
-        minHeight: ScreenUtil().setWidth(140.0), //收起的高度
-        maxHeight: ScreenUtil().setWidth(140.0),
+        minHeight: ScreenUtil().setWidth(160.0), //收起的高度 - 增加高度避免溢出
+        maxHeight: ScreenUtil().setWidth(160.0),
         child: Container(
           width: double.infinity,
-          height: ScreenUtil().setWidth(140.0),
+          height: ScreenUtil().setWidth(160.0),
           padding: EdgeInsets.only(
               left: ScreenUtil().setWidth(30.0),
               right: ScreenUtil().setWidth(30.0),
