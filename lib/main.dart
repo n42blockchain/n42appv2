@@ -42,6 +42,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42_chat/n42_chat.dart';
 
 /// Global ProviderContainer for Riverpod
@@ -72,7 +73,12 @@ void main() async {
       enableEncryption: true,
       enablePushNotifications: true,
     ));
-    debugPrint('N42Chat initialized successfully');
+    
+    // 同步当前主题到 n42_chat
+    final currentTheme = globalProviderContainer.read(themeModeProvider);
+    N42Chat.setThemeMode(currentTheme);
+    
+    debugPrint('N42Chat initialized successfully with theme: $currentTheme');
   } catch (e) {
     debugPrint('N42Chat initialization failed: $e');
   }

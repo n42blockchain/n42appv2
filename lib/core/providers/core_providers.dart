@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
+import 'package:n42_chat/n42_chat.dart';
 
 /// SPUtil Provider
 final spUtilProvider = Provider<SPUtil>((ref) => SPUtil());
@@ -33,11 +34,22 @@ class ThemeModeNotifier extends StateNotifier<ThemeMode> {
   Future<void> _loadFromStorage() async {
     final mode = await _spUtil.getThemeMode();
     state = _intToThemeMode(mode ?? 0);
+    // 同步主题到 n42_chat
+    _syncToN42Chat(state);
   }
   
   void setTheme(ThemeMode mode) {
     state = mode;
     _spUtil.setThemeMode(_themeModeToInt(mode));
+    // 同步主题到 n42_chat
+    _syncToN42Chat(mode);
+  }
+  
+  /// 同步主题到 n42_chat 模块
+  void _syncToN42Chat(ThemeMode mode) {
+    if (N42Chat.isInitialized) {
+      N42Chat.setThemeMode(mode);
+    }
   }
   
   ThemeMode _intToThemeMode(int value) {
