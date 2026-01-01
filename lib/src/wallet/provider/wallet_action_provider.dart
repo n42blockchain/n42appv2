@@ -676,16 +676,29 @@ class WalletActionProvider extends ChangeNotifier{
     for(CoinModel cm in coinList){
       coinSelectPriceKeys+="${cm.coin['miniName'].toString().toLowerCase()},";
     }
+    debugPrint('WalletActionProvider: Getting coin info for: $coinSelectPriceKeys');
+    
     //查询coins中的币种信息
     var list = await MarketApi().getWalletCoinsInfo(coinSelectPriceKeys);
     //判断查询是否成功
-    if (list['error']) {
+    if (list['error'] == true) {
       //查询失败，设置当前操作状态为error，并设置错误信息
+      debugPrint('WalletActionProvider: getCoinInfo failed: ${list['data']}');
       ToastUtils.show(S.current.g_key_5);
       notifyListeners();
     } else {
       //查询成功，将币的信息赋值到_coinslist
-      _coinMarketInfo = list['data']['data'];
+      final data = list['data'];
+      if (data != null && data['data'] != null) {
+        _coinMarketInfo = data['data'];
+        debugPrint('WalletActionProvider: Loaded ${_coinMarketInfo.length} coins market info');
+        // 遍历并设置每个币的价格
+        for(CoinModel cm in coinList){
+          getCoinPrice(cm);
+        }
+      } else {
+        debugPrint('WalletActionProvider: No market data in response');
+      }
     }
     //getBalance_main();
     addCoinRefreshMap();
