@@ -705,22 +705,37 @@ class WalletActionProvider extends ChangeNotifier{
   }
   //获取币的 美元价格
   getCoinPrice(CoinModel cm) {
-    String keyStr = cm.coin['unit'].toString().toLowerCase();
-    /*if (keyStr == 'zeta') {
-      keyStr = 'eos';
-    }*/
+    // 使用 miniName 作为主要匹配键 (与 API 请求参数一致)
+    String miniName = cm.coin['miniName']?.toString().toLowerCase() ?? '';
+    String unit = cm.coin['unit']?.toString().toLowerCase() ?? '';
+    
     for (var element in _coinMarketInfo) {
-      if (element['coin'].toString().toLowerCase() == keyStr) {
-        /*if(keyStr=="eos"){
-        } else {
+      String coinSymbol = element['coin']?.toString().toLowerCase() ?? '';
+      
+      // 尝试多种匹配方式：miniName、unit、或者币种符号
+      if (coinSymbol == miniName || 
+          coinSymbol == unit ||
+          miniName.contains(coinSymbol) ||
+          coinSymbol.contains(miniName)) {
+        
+        // 设置图标
+        if (element['image'] != null) {
           cm.coin["icon"] = element['image'];
-        }*/
-        cm.coin["icon"] = element['image'];
-        //设置币价
-        cm.coinPrice = element['price'] * 1.0;
-        //设置涨跌幅
-        cm.percentage = element['price_change_per_24h'] * 1.0;
-
+        }
+        
+        // 设置币价 (安全转换)
+        final price = element['price'];
+        if (price != null) {
+          cm.coinPrice = (price is num) ? price.toDouble() : double.tryParse(price.toString()) ?? 0.0;
+        }
+        
+        // 设置涨跌幅 (安全转换)
+        final change = element['price_change_per_24h'];
+        if (change != null) {
+          cm.percentage = (change is num) ? change.toDouble() : double.tryParse(change.toString()) ?? 0.0;
+        }
+        
+        debugPrint('WalletActionProvider: Matched ${cm.coin['miniName']} -> $coinSymbol, price=${cm.coinPrice}, change=${cm.percentage}');
         break;
       }
     }

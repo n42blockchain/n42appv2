@@ -535,91 +535,72 @@ Riesgo Alto*/
           // 挖矿状态卡片
           Expanded(
             child: Container(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+              padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
               decoration: BoxDecoration(
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-                border: Border.all(
-                  color: statusColor.withOpacity(0.2),
-                  width: 1,
-                ),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 标题行
+                  // 标题
+                  Text(
+                    S.of(context).g_mining_key_5,
+                    style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                      fontSize: ScreenUtil().setSp(22),
+                      fontWeight: FontWeight.w500,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: ScreenUtil().setWidth(12)),
+                  // 状态文字 + 状态指示器
                   Row(
                     children: [
-                      Text(
-                        S.of(context).g_mining_key_5,
-                        style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                          fontSize: ScreenUtil().setSp(22),
-                          fontWeight: FontWeight.w500,
+                      Expanded(
+                        child: Text(
+                          isActive ? S.current.g_key_193 : S.current.g_mining_key_47,
+                          style: TextStyle(
+                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                            fontSize: ScreenUtil().setSp(28),
+                            fontWeight: FontWeight.w600,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      const Spacer(),
-                      // 状态指示器
+                      SizedBox(width: ScreenUtil().setWidth(8)),
+                      // 状态指示点
                       Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(10),
-                          vertical: ScreenUtil().setWidth(4),
-                        ),
+                        width: ScreenUtil().setWidth(12),
+                        height: ScreenUtil().setWidth(12),
                         decoration: BoxDecoration(
-                          color: statusColor.withOpacity(0.15),
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: ScreenUtil().setWidth(8),
-                              height: ScreenUtil().setWidth(8),
-                              decoration: BoxDecoration(
-                                color: statusColor,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                            SizedBox(width: ScreenUtil().setWidth(6)),
-                            Text(
-                              isActive ? 'Active' : 'Inactive',
-                              style: TextStyle(
-                                color: statusColor,
-                                fontSize: ScreenUtil().setSp(20),
-                                fontWeight: FontWeight.w600,
-                              ),
+                          color: statusColor,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: statusColor.withOpacity(0.4),
+                              blurRadius: 6,
+                              spreadRadius: 1,
                             ),
                           ],
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(16)),
-                  // 状态文字
-                  Text(
-                    isActive ? S.current.g_key_193 : S.current.g_mining_key_47,
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(28),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
                 ],
               ),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: ScreenUtil().setWidth(12)),
           // 余额卡片
           Expanded(
             child: Container(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+              padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
               decoration: BoxDecoration(
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-                border: Border.all(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.2),
-                  width: 1,
-                ),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -632,25 +613,27 @@ Riesgo Alto*/
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(16)),
+                  SizedBox(height: ScreenUtil().setWidth(12)),
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    textBaseline: TextBaseline.alphabetic,
                     children: [
-                      Text(
-                        '${mpValue.depositsEnable ?? false ? mpValue.balanceInBeacon : 0}',
-                        style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                          fontSize: ScreenUtil().setSp(32),
-                          fontWeight: FontWeight.w700,
+                      Flexible(
+                        child: Text(
+                          '${mpValue.depositsEnable ?? false ? mpValue.balanceInBeacon : 0}',
+                          style: TextStyle(
+                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                            fontSize: ScreenUtil().setSp(28),
+                            fontWeight: FontWeight.w700,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      SizedBox(width: ScreenUtil().setWidth(6)),
+                      SizedBox(width: ScreenUtil().setWidth(4)),
                       Text(
                         CoinType.N.name,
                         style: TextStyle(
                           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                          fontSize: ScreenUtil().setSp(24),
+                          fontSize: ScreenUtil().setSp(22),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
