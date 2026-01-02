@@ -230,7 +230,7 @@ final useNewChatProvider = StateNotifierProvider<UseNewChatNotifier, bool>((ref)
 class UseNewChatNotifier extends StateNotifier<bool> {
   final SPUtil _spUtil;
   
-  UseNewChatNotifier(this._spUtil) : super(false) {
+  UseNewChatNotifier(this._spUtil) : super(true) {
     _loadFromStorage();
   }
   

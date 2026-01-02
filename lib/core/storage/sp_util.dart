@@ -189,7 +189,7 @@ class SPUtil {
 
   Future<bool> getUseNewChat() async {
     await initPrefs();
-    return prefs?.getBool(SPkey.useNewChat.name) ?? false;
+    return prefs?.getBool(SPkey.useNewChat.name) ?? true;
   }
 
   // 临时存储，挖矿信息
