@@ -696,6 +696,9 @@ class WalletActionProvider extends ChangeNotifier{
         for(CoinModel cm in coinList){
           getCoinPrice(cm);
         }
+        // 价格更新后重新计算总余额并通知UI刷新
+        calculateBalance_widthCoinModel();
+        notifyListeners();
       } else {
         debugPrint('WalletActionProvider: No market data in response');
       }
@@ -709,6 +712,7 @@ class WalletActionProvider extends ChangeNotifier{
     String miniName = cm.coin['miniName']?.toString().toLowerCase() ?? '';
     String unit = cm.coin['unit']?.toString().toLowerCase() ?? '';
     
+    bool found = false;
     for (var element in _coinMarketInfo) {
       String coinSymbol = element['coin']?.toString().toLowerCase() ?? '';
       
@@ -735,9 +739,21 @@ class WalletActionProvider extends ChangeNotifier{
           cm.percentage = (change is num) ? change.toDouble() : double.tryParse(change.toString()) ?? 0.0;
         }
         
-        debugPrint('WalletActionProvider: Matched ${cm.coin['miniName']} -> $coinSymbol, price=${cm.coinPrice}, change=${cm.percentage}');
+        // 更新 coin 对象中的价格信息（供其他地方使用）
+        cm.coin['coinPrice'] = cm.coinPrice;
+        cm.coin['percentage'] = cm.percentage;
+        
+        // 重新计算价值 (余额 * 币价)
+        cm.value = cm.balance_double_all() * cm.coinPrice;
+        
+        debugPrint('WalletActionProvider: ✓ Matched ${cm.coin['miniName']} -> $coinSymbol, price=\$${cm.coinPrice}, change=${cm.percentage}%, value=\$${cm.value}');
+        found = true;
         break;
       }
+    }
+    
+    if (!found) {
+      debugPrint('WalletActionProvider: ✗ No match for ${cm.coin['miniName']} (unit=$unit) in ${_coinMarketInfo.length} market items');
     }
   }
   //获取币的 美元价格
@@ -748,11 +764,15 @@ class WalletActionProvider extends ChangeNotifier{
         Map<String,dynamic> rMap={};
         rMap["icon"] = element['image'];
         //设置币价
-        rMap['coinPrice']=Decimal.parse(element['price'].toString()).toDouble();
-        rMap['percentage']=Decimal.parse(element['price_change_per_24h'].toString()).toDouble();
+        final price = Decimal.parse(element['price'].toString()).toDouble();
+        final percentage = Decimal.parse(element['price_change_per_24h'].toString()).toDouble();
+        rMap['coinPrice'] = price;
+        rMap['percentage'] = percentage;
+        debugPrint('WalletActionProvider: getCoinPriceWithUnit($unit) -> price=\$$price, change=$percentage%');
         return rMap;
       }
     }
+    debugPrint('WalletActionProvider: getCoinPriceWithUnit($unit) -> NOT FOUND in ${_coinMarketInfo.length} items');
     return null;
   }
   //获取币的 全部信息
@@ -1105,22 +1125,27 @@ class WalletActionProvider extends ChangeNotifier{
       //coinModel.custom?coinModel.isTest?coinModel.coin['service_test']:coinModel.coin['service']:null
     );
     if(mm.error){
-      //coinModel.isRefresh=false;
-      //coinModel.loadError=true;
-      //notifyListeners();
+      // 网络请求失败，使用缓存的余额数据
+      debugPrint('WalletActionProvider: Balance fetch failed for ${coinModel.coin['miniName']}, using cached balance');
       BigInt balance=BigInt.zero;
-      if(coinModel.isTest){
-        balance=BigInt.parse(coinModel.coin['balance_test']);
-      }else{
-        balance=BigInt.parse(coinModel.coin['balance']);
+      try {
+        if(coinModel.isTest){
+          balance=BigInt.parse(coinModel.coin['balance_test']?.toString() ?? '0');
+        }else{
+          balance=BigInt.parse(coinModel.coin['balance']?.toString() ?? '0');
+        }
+      } catch (e) {
+        balance = BigInt.zero;
       }
+      
+      // 尝试从市场数据更新价格信息
       Map<String,dynamic>? coinInfo=getCoinPriceWithUnit(coinModel.coin['unit'].toString());
       if(coinInfo != null){
         coinModel.coin['percentage']=coinInfo['percentage'];
         coinModel.coin['coinPrice']=coinModel.isTest?0.0:coinInfo['coinPrice'];
         coinModel.coin['icon']=coinInfo['icon'];
-        //baseInfo['name']=coinInfo['name'];
       }
+      
       if(coinModel.coin['isContract']==false){
         walletMap[coinModel.coin['coinType']]['baseInfo']=coinModel.coin;
       }else{
@@ -1131,6 +1156,8 @@ class WalletActionProvider extends ChangeNotifier{
         }
       }
       coinModel.getBalance_default();
+      // 不设置 loadError，因为我们已经使用了缓存数据
+      coinModel.loadError = false;
       return true;
     }
     else{
@@ -1268,14 +1295,10 @@ class WalletActionProvider extends ChangeNotifier{
         if(coinRefreshMap[index]["coinList"] !=null && coinRefreshMap[index]["coinList"].length !=0){
           coinRefreshMap[index]["coinList"].first.isRefresh=true;
           notifyListeners();
-          bool r=await getBalance_withCoinModel(coinRefreshMap[index]["coinList"].first);
-          if(r){
-            coinRefreshMap[index]["coinList"].first.loadError=true;
-            notifyListeners();
-          }else{
-            coinRefreshMap[index]["coinList"].first.loadError=false;
-            notifyListeners();
-          }
+          bool hasError = await getBalance_withCoinModel(coinRefreshMap[index]["coinList"].first);
+          // 网络临时失败时不显示错误图标，因为已经使用了缓存数据
+          // 只有在完全无法获取数据时才显示错误
+          coinRefreshMap[index]["coinList"].first.loadError = false;
           coinRefreshMap[index]["coinList"].first.isRefresh=false;
           notifyListeners();
           coinRefreshMap[index]["coinList"].removeAt(0);

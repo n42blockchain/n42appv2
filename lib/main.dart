@@ -19,6 +19,7 @@ import 'package:n42appv2/src/chat/provider/chat_message_provider.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/home/home_page.dart';
 import 'package:n42appv2/src/home/setting/security/security_setting.dart';
+import 'package:n42appv2/src/splash/splash_page.dart';
 import 'package:n42appv2/src/login/pages/login_page.dart';
 import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
 import 'package:n42appv2/src/state/public_provider.dart';
@@ -228,37 +229,31 @@ class _N42AppV2State extends State<N42AppV2> {
     _linkSubscription?.cancel();
     super.dispose();
   }
+  bool _splashComplete = false;
+  
   Widget _widgetPage(PublicProvider pValue) {
-    if (pValue.load == Load.loading) {
-      return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: const SystemUiOverlayStyle(
-          systemNavigationBarColor: Colors.black,
-        ),
-        child: Container(
-          //alignment: Alignment.center,
-          width: double.infinity,
-          height: double.infinity,
-          color: Colors.black,
-          child: Image.asset(
-            'assets/img/splash_bg.png',
-            //width: double.infinity,
-            fit: BoxFit.fitHeight,
-          ),
-        ),
+    // 显示启动页，直到加载完成
+    if (pValue.load == Load.loading || !_splashComplete) {
+      return SplashPage(
+        onInit: () async {
+          // 等待 PublicProvider 加载完成
+          int waitCount = 0;
+          while (pValue.load == Load.loading && waitCount < 100) {
+            await Future.delayed(const Duration(milliseconds: 100));
+            waitCount++;
+          }
+        },
+        onComplete: () {
+          if (mounted) {
+            setState(() {
+              _splashComplete = true;
+            });
+          }
+        },
       );
-    } else {
-      /*PublicProvider pValue=Provider.of<PublicProvider>(context,listen: false);
-      if (pValue.lockScreenMap['lock'] ||
-          pValue.lockScreenMap['face'] ||
-          pValue.lockScreenMap['gesture']) {
-        if(pValue.checkWalletPassword==false){
-          return Unlock(
-            null,
-          );
-        }
-      }*/
-      return HomePage();
     }
+    
+    return HomePage();
   }
   @override
   Widget build(BuildContext context) {

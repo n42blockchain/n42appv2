@@ -247,134 +247,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                             ),
                           miningStatusWidget(mpValue),
                           if(mpValue.depositsEnable==true)
-                            Container(
-                            decoration: BoxDecoration(
-                                color: AppThemeUtils.getColorByKey(
-                                    context, AppThemeKeys.itemBgColor.name),
-                                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16))),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: ScreenUtil().setWidth(30), vertical: ScreenUtil().setWidth(44)),
-                            margin: EdgeInsets.only(bottom:ScreenUtil().setWidth(20),),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: ScreenUtil().setWidth(112),
-                                      height: ScreenUtil().setWidth(112),
-                                      decoration: BoxDecoration(
-                                        color: AppThemeUtils.getColorByKey(
-                                            context, AppThemeKeys.ff444444.name),
-                                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(56)),
-                                      ),
-                                      padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
-                                      margin: EdgeInsets.only(right: ScreenUtil().setWidth(20)),
-                                      child: Image.asset('assets/mining/Mascot.png'),
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          /*
-                                          * Low Risk
-
-Moderately Low Risk
-
-Moderately High Risk
-
-High Risk
-*
-*
-*
-* Riesgo Bajo
-
-Riesgo Moderadamente Bajo
-
-Riesgo Moderadamente Alto
-
-Riesgo Alto*/
-                                          Text(
-                                            // "High Risk",
-                                            mpValue.inactivityTitle,
-                                            style: TextStyle(
-                                                color: AppThemeUtils.getColorByKey(
-                                                    context, AppThemeKeys.itemTextColor.name),
-                                                fontSize: ScreenUtil().setSp(30),
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            // "Failing to complete tasks for four consecutive days will result in no earnings and a risk of penalty.,
-                                            S.of(context).g_mining_key_75,
-                                            style: TextStyle(
-                                              color: AppThemeUtils.getColorByKey(
-                                                  context, AppThemeKeys.itemSubtitleTextColor.name),
-                                              fontSize: ScreenUtil().setSp(20),
-                                            ),
-                                          ),
-
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil().setWidth(32),
-                                ),
-                                Row(
-                                  children: [
-                                    inactivityScoreWidget(mpValue.inactivityScore[0]),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    inactivityScoreWidget(mpValue.inactivityScore[1]),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    inactivityScoreWidget(mpValue.inactivityScore[2]),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    inactivityScoreWidget(mpValue.inactivityScore[3]),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil().setWidth(32),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      // "Risk Score",
-                                      S.of(context).g_mining_key_76,
-                                      style: TextStyle(
-                                        color: AppThemeUtils.getColorByKey(
-                                            context, AppThemeKeys.itemTextColor.name),
-                                        fontSize: ScreenUtil().setSp(30),
-                                      ),
-                                    ),
-                                    Expanded(child: SizedBox()),
-                                    Container(
-                                      width: ScreenUtil().setWidth(40),
-                                      height: ScreenUtil().setWidth(40),
-                                      padding: EdgeInsets.all(ScreenUtil().setWidth(4)),
-                                      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10),),
-                                      child: Image.asset('assets/img/error.png',),
-                                    ),
-                                    Text(
-                                      "${mpValue.inactivityScorePercentage}%",
-                                      style: TextStyle(
-                                          color: AppThemeUtils.getColorByKey(
-                                              context, AppThemeKeys.mainTextColor.name),
-                                          fontSize: ScreenUtil().setSp(28),
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
+                            _buildRiskCard(mpValue),
                           if(mpValue.depositsEnable==true)
                           // 柱状图展示历史7天挖矿数据
                             ChartHistogram(
@@ -527,6 +400,7 @@ Riesgo Alto*/
   Widget miningStatusWidget(MiningV2Provider mpValue) {
     final isActive = mpValue.miningStatus == true;
     final statusColor = isActive ? const Color(0xff32D74B) : const Color(0xffEB5851);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     
     return Container(
       margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
@@ -535,26 +409,48 @@ Riesgo Alto*/
           // 挖矿状态卡片
           Expanded(
             child: Container(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+              padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
               decoration: BoxDecoration(
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                border: Border.all(
+                  color: isDark ? Colors.white.withOpacity(0.06) : Colors.black.withOpacity(0.04),
+                  width: 1,
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 标题
-                  Text(
-                    S.of(context).g_mining_key_5,
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                      fontSize: ScreenUtil().setSp(22),
-                      fontWeight: FontWeight.w500,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  // 标题行
+                  Row(
+                    children: [
+                      Container(
+                        width: ScreenUtil().setWidth(36),
+                        height: ScreenUtil().setWidth(36),
+                        decoration: BoxDecoration(
+                          color: statusColor.withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+                        ),
+                        child: Icon(
+                          isActive ? Icons.verified_outlined : Icons.pause_circle_outline,
+                          size: ScreenUtil().setWidth(20),
+                          color: statusColor,
+                        ),
+                      ),
+                      SizedBox(width: ScreenUtil().setWidth(10)),
+                      Text(
+                        S.of(context).g_mining_key_5,
+                        style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                          fontSize: ScreenUtil().setSp(22),
+                          fontWeight: FontWeight.w500,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(12)),
+                  SizedBox(height: ScreenUtil().setWidth(16)),
                   // 状态文字 + 状态指示器
                   Row(
                     children: [
@@ -562,27 +458,26 @@ Riesgo Alto*/
                         child: Text(
                           isActive ? S.current.g_key_193 : S.current.g_mining_key_47,
                           style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                            fontSize: ScreenUtil().setSp(28),
-                            fontWeight: FontWeight.w600,
+                            color: statusColor,
+                            fontSize: ScreenUtil().setSp(30),
+                            fontWeight: FontWeight.w700,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      SizedBox(width: ScreenUtil().setWidth(8)),
                       // 状态指示点
                       Container(
-                        width: ScreenUtil().setWidth(12),
-                        height: ScreenUtil().setWidth(12),
+                        width: ScreenUtil().setWidth(14),
+                        height: ScreenUtil().setWidth(14),
                         decoration: BoxDecoration(
                           color: statusColor,
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: statusColor.withOpacity(0.4),
-                              blurRadius: 6,
-                              spreadRadius: 1,
+                              color: statusColor.withOpacity(0.5),
+                              blurRadius: 8,
+                              spreadRadius: 2,
                             ),
                           ],
                         ),
@@ -593,47 +488,73 @@ Riesgo Alto*/
               ),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: ScreenUtil().setWidth(16)),
           // 余额卡片
           Expanded(
             child: Container(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+              padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
               decoration: BoxDecoration(
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                border: Border.all(
+                  color: isDark ? Colors.white.withOpacity(0.06) : Colors.black.withOpacity(0.04),
+                  width: 1,
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    S.of(context).g_key_29,
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                      fontSize: ScreenUtil().setSp(22),
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(height: ScreenUtil().setWidth(12)),
+                  // 标题行
                   Row(
+                    children: [
+                      Container(
+                        width: ScreenUtil().setWidth(36),
+                        height: ScreenUtil().setWidth(36),
+                        decoration: BoxDecoration(
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+                        ),
+                        child: Icon(
+                          Icons.account_balance_wallet_outlined,
+                          size: ScreenUtil().setWidth(20),
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                        ),
+                      ),
+                      SizedBox(width: ScreenUtil().setWidth(10)),
+                      Text(
+                        S.of(context).g_key_29,
+                        style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                          fontSize: ScreenUtil().setSp(22),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: ScreenUtil().setWidth(16)),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
                     children: [
                       Flexible(
                         child: Text(
-                          '${mpValue.depositsEnable ?? false ? mpValue.balanceInBeacon : 0}',
+                          mpValue.depositsEnable ?? false 
+                              ? '${mpValue.balanceInBeacon}' 
+                              : '${mpValue.walletNBalance.toStringAsFixed(2)}',
                           style: TextStyle(
                             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                            fontSize: ScreenUtil().setSp(28),
+                            fontSize: ScreenUtil().setSp(32),
                             fontWeight: FontWeight.w700,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      SizedBox(width: ScreenUtil().setWidth(4)),
                       Text(
                         CoinType.N.name,
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                          fontSize: ScreenUtil().setSp(22),
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                          fontSize: ScreenUtil().setSp(24),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -651,60 +572,119 @@ Riesgo Alto*/
     if (mpValue.depositsEnable == false){
       return const SizedBox.shrink();
     }
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isEnabled = mpValue.depositsEnable == true;
+    
     return Container(
-      padding: EdgeInsets.symmetric(
-        vertical: ScreenUtil().setWidth(18),
-        horizontal: ScreenUtil().setWidth(30),
-      ),
-      margin: EdgeInsets.only(bottom:ScreenUtil().setWidth(20) ),
+      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        gradient: isEnabled 
+            ? LinearGradient(
+                colors: [
+                  AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.08),
+                  AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.02),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              )
+            : null,
+        color: isEnabled ? null : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        border: Border.all(
+          color: isEnabled 
+              ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.2)
+              : (isDark ? Colors.white.withOpacity(0.06) : Colors.black.withOpacity(0.04)),
+          width: 1,
+        ),
       ),
       child: Row(
         children: [
-          Image.asset(
-            'assets/mining/backgroundmining.png',
-            height: ScreenUtil().setWidth(84),
-            width: ScreenUtil().setWidth(84),
-          ),
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(16),
-              ),
-              child: Text(
-                // 'Background Mining',
-                S.of(context).g_mining_key_9,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemTextColor.name),
-                  fontWeight: FontWeight.w600,
-                ),
+          // 图标容器
+          Container(
+            width: ScreenUtil().setWidth(72),
+            height: ScreenUtil().setWidth(72),
+            decoration: BoxDecoration(
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.12),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(18)),
+            ),
+            child: Center(
+              child: Image.asset(
+                'assets/mining/backgroundmining.png',
+                height: ScreenUtil().setWidth(44),
+                width: ScreenUtil().setWidth(44),
               ),
             ),
           ),
-          ButtonStyle3(
-            context,
-                () {
-              if (mpValue.depositsEnable == true) {
-                MiningBackground().background_start();
-              }
-            },
-            S.of(context).g_key_wallet_c4,
-            mpValue.depositsEnable == true
-                ? const Color(0xffD1E4FE)
-                : const Color(0xffEDEFF2),
-            mpValue.depositsEnable == true
-                ? const Color(0xff1976F9)
-                : const Color(0xffBAC2CC),
-            height: ScreenUtil().setWidth(55),
-            borderRadius: ScreenUtil().setWidth(55),
-            fontSize: ScreenUtil().setSp(22),
-            paddingV:ScreenUtil().setWidth(12.0),
-            paddingH: ScreenUtil().setWidth(32.0),
+          SizedBox(width: ScreenUtil().setWidth(16)),
+          // 标题和状态
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  S.of(context).g_mining_key_9,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(28),
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: ScreenUtil().setWidth(6)),
+                Text(
+                  isEnabled ? 'Available' : 'Requires staking',
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(22),
+                    color: isEnabled 
+                        ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
+                        : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // 启动按钮
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: isEnabled ? () => MiningBackground().background_start() : null,
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: ScreenUtil().setWidth(28),
+                  vertical: ScreenUtil().setWidth(14),
+                ),
+                decoration: BoxDecoration(
+                  gradient: isEnabled 
+                      ? LinearGradient(
+                          colors: [
+                            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.85),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        )
+                      : null,
+                  color: isEnabled ? null : const Color(0xFFE0E0E0),
+                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
+                  boxShadow: isEnabled ? [
+                    BoxShadow(
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ] : null,
+                ),
+                child: Text(
+                  S.of(context).g_key_wallet_c4,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    fontWeight: FontWeight.w600,
+                    color: isEnabled ? Colors.white : const Color(0xFFBAC2CC),
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -831,13 +811,39 @@ Riesgo Alto*/
   */
   Widget miningDataBroad(String titleText, String value,
       {bool showTips = false, String? imagePath, String? tipsText}) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
+    // 根据标题选择不同的主题色
+    Color accentColor;
+    IconData iconData;
+    if (titleText.contains('Today') || titleText.toLowerCase().contains('今日')) {
+      accentColor = const Color(0xFF4CAF50); // 绿色 - 今日奖励
+      iconData = Icons.today_outlined;
+    } else if (titleText.contains('Yesterday') || titleText.contains('Last') || titleText.toLowerCase().contains('昨日')) {
+      accentColor = const Color(0xFFFF9800); // 橙色 - 昨日奖励
+      iconData = Icons.history_outlined;
+    } else if (titleText.contains('Total') || titleText.toLowerCase().contains('总')) {
+      accentColor = const Color(0xFF2196F3); // 蓝色 - 总奖励
+      iconData = Icons.account_balance_outlined;
+    } else if (titleText.contains('Value') || titleText.toLowerCase().contains('价值')) {
+      accentColor = const Color(0xFF9C27B0); // 紫色 - 价值
+      iconData = Icons.attach_money_outlined;
+    } else {
+      accentColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+      iconData = Icons.analytics_outlined;
+    }
+    
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(18)),
+          border: Border.all(
+            color: isDark ? Colors.white.withOpacity(0.06) : Colors.black.withOpacity(0.04),
+            width: 1,
+          ),
         ),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+        padding: EdgeInsets.all(ScreenUtil().setWidth(18)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -845,6 +851,20 @@ Riesgo Alto*/
             // 标题行
             Row(
               children: [
+                Container(
+                  width: ScreenUtil().setWidth(32),
+                  height: ScreenUtil().setWidth(32),
+                  decoration: BoxDecoration(
+                    color: accentColor.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  ),
+                  child: Icon(
+                    iconData,
+                    size: ScreenUtil().setWidth(18),
+                    color: accentColor,
+                  ),
+                ),
+                SizedBox(width: ScreenUtil().setWidth(8)),
                 Expanded(
                   child: Text(
                     titleText,
@@ -852,7 +872,7 @@ Riesgo Alto*/
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                      fontSize: ScreenUtil().setSp(22),
+                      fontSize: ScreenUtil().setSp(20),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -871,30 +891,31 @@ Riesgo Alto*/
                     ),
                     menuItemView: Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
                         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 12,
-                            offset: const Offset(0, 4),
+                            color: Colors.black.withOpacity(0.12),
+                            blurRadius: 16,
+                            offset: const Offset(0, 6),
                           ),
                         ],
                       ),
-                      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(60)),
-                      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+                      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(50)),
+                      padding: EdgeInsets.all(ScreenUtil().setWidth(18)),
                       child: Text(
                         tipsText ?? '',
                         style: TextStyle(
                           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                           fontSize: ScreenUtil().setSp(24),
+                          height: 1.4,
                         ),
                       ),
                     ),
                   ),
               ],
             ),
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: ScreenUtil().setWidth(14)),
             // 数值行
             Text(
               value,
@@ -911,6 +932,214 @@ Riesgo Alto*/
       ),
     );
   }
+  /// 美化后的风险卡片
+  Widget _buildRiskCard(MiningV2Provider mpValue) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    // 根据风险等级设置颜色
+    final scoreValue = double.tryParse(mpValue.inactivityScorePercentage) ?? 0.0;
+    Color riskColor;
+    if (scoreValue <= 25) {
+      riskColor = const Color(0xFF4CAF50); // 绿色 - 低风险
+    } else if (scoreValue <= 50) {
+      riskColor = const Color(0xFFFF9800); // 橙色 - 中低风险
+    } else if (scoreValue <= 75) {
+      riskColor = const Color(0xFFFF5722); // 深橙 - 中高风险
+    } else {
+      riskColor = const Color(0xFFF44336); // 红色 - 高风险
+    }
+
+    return Container(
+      margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
+      decoration: BoxDecoration(
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        boxShadow: isDark ? null : [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          // 顶部区域 - 风险图标和标题
+          Padding(
+            padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+            child: Row(
+              children: [
+                // 风险图标
+                Container(
+                  width: ScreenUtil().setWidth(80),
+                  height: ScreenUtil().setWidth(80),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        riskColor.withOpacity(0.2),
+                        riskColor.withOpacity(0.1),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                  ),
+                  child: Center(
+                    child: Image.asset(
+                      'assets/mining/Mascot.png',
+                      width: ScreenUtil().setWidth(50),
+                      height: ScreenUtil().setWidth(50),
+                    ),
+                  ),
+                ),
+                SizedBox(width: ScreenUtil().setWidth(20)),
+                // 风险标题和描述
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            mpValue.inactivityTitle,
+                            style: TextStyle(
+                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                              fontSize: ScreenUtil().setSp(30),
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          SizedBox(width: ScreenUtil().setWidth(8)),
+                          Container(
+                            width: ScreenUtil().setWidth(12),
+                            height: ScreenUtil().setWidth(12),
+                            decoration: BoxDecoration(
+                              color: riskColor,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: ScreenUtil().setWidth(8)),
+                      Text(
+                        S.of(context).g_mining_key_75,
+                        style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                          fontSize: ScreenUtil().setSp(22),
+                          height: 1.4,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // 风险进度条
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
+            child: Row(
+              children: List.generate(4, (index) {
+                return Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(right: index < 3 ? ScreenUtil().setWidth(8) : 0),
+                    child: _buildProgressBar(mpValue.inactivityScore[index], riskColor),
+                  ),
+                );
+              }),
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(20)),
+          // 风险分数
+          Container(
+            margin: EdgeInsets.fromLTRB(
+              ScreenUtil().setWidth(24),
+              0,
+              ScreenUtil().setWidth(24),
+              ScreenUtil().setWidth(24),
+            ),
+            padding: EdgeInsets.symmetric(
+              horizontal: ScreenUtil().setWidth(20),
+              vertical: ScreenUtil().setWidth(16),
+            ),
+            decoration: BoxDecoration(
+              color: isDark
+                  ? Colors.white.withOpacity(0.04)
+                  : riskColor.withOpacity(0.06),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.shield_outlined,
+                      size: ScreenUtil().setWidth(28),
+                      color: riskColor,
+                    ),
+                    SizedBox(width: ScreenUtil().setWidth(10)),
+                    Text(
+                      S.of(context).g_mining_key_76,
+                      style: TextStyle(
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                        fontSize: ScreenUtil().setSp(26),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: ScreenUtil().setWidth(16),
+                    vertical: ScreenUtil().setWidth(8),
+                  ),
+                  decoration: BoxDecoration(
+                    color: riskColor.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                  ),
+                  child: Text(
+                    "${mpValue.inactivityScorePercentage}%",
+                    style: TextStyle(
+                      color: riskColor,
+                      fontSize: ScreenUtil().setSp(26),
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 美化后的进度条
+  Widget _buildProgressBar(double value, Color color) {
+    return Container(
+      height: ScreenUtil().setWidth(12),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+      ),
+      child: FractionallySizedBox(
+        alignment: Alignment.centerLeft,
+        widthFactor: value.clamp(0.0, 1.0),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [color.withOpacity(0.8), color],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget inactivityScoreWidget(double iScore){
     return Expanded(
       flex: 1,

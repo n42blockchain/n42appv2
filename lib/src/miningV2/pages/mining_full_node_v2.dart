@@ -164,134 +164,171 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
                                 SizedBox(
                                   height: ScreenUtil().setWidth(90),
                                 ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      // "Select the payment method",
-                                      S.current.g_mining_key_38,
-                                      style: TextStyle(
-                                          color: AppThemeUtils.getColorByKey(
-                                              context, AppThemeKeys.mainTextColor.name),
-                                          fontSize: ScreenUtil().setSp(30)),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil().setWidth(30),
-                                ),
+                                // 支付方式标题
+                                _buildSectionTitle(context, S.current.g_mining_key_38),
+                                SizedBox(height: ScreenUtil().setWidth(20)),
+                                // 支付方式选择
                                 _buildPayMethod("assets/mining/pay_ast.png", S.of(context).g_mining_key_40,
                                     isSelected: _payType == 0, onTap: () {
                                       setState(() {
                                         _payType = 0;
                                       });
                                     }),
-                                SizedBox(
-                                  height: ScreenUtil().setWidth(24),
-                                ),
-                                Divider(
-                                  color: AppThemeUtils.getColorByKey(
-                                      context, AppThemeKeys.itemLineColor.name),
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil().setWidth(24),
-                                ),
-                                Text(
-                                  S.of(context).g_mining_key46,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: AppThemeUtils.getColorByKey(
-                                          context, AppThemeKeys.mainTextColor.name),
-                                      fontSize: ScreenUtil().setSp(26)),
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil().setWidth(90),
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      // "Payment Methods",
-                                      S.current.g_mining_key_39,
-                                      style: TextStyle(
-                                          color: AppThemeUtils.getColorByKey(
-                                              context, AppThemeKeys.mainTextColor.name),
-                                          fontSize: ScreenUtil().setSp(30)),
+                                SizedBox(height: ScreenUtil().setWidth(20)),
+                                // 提示文字
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: ScreenUtil().setWidth(20),
+                                    vertical: ScreenUtil().setWidth(16),
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.06),
+                                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                                    border: Border.all(
+                                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.15),
+                                      width: 1,
                                     ),
-                                  ],
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.info_outline,
+                                        size: ScreenUtil().setWidth(32),
+                                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                                      ),
+                                      SizedBox(width: ScreenUtil().setWidth(12)),
+                                      Expanded(
+                                        child: Text(
+                                          S.of(context).g_mining_key46,
+                                          style: TextStyle(
+                                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                                            fontSize: ScreenUtil().setSp(24),
+                                            height: 1.4,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                SizedBox(
-                                  height: ScreenUtil().setWidth(24),
-                                ),
+                                SizedBox(height: ScreenUtil().setWidth(50)),
+                                // 支付方式标题
+                                _buildSectionTitle(context, S.current.g_mining_key_39),
+                                SizedBox(height: ScreenUtil().setWidth(20)),
                                 _buildPayMethods(),
                                 if(nBalance != null && nBalance! > widget.nNum)
                                   Container(
                                     width: double.infinity,
-                                    padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
-                                    margin: EdgeInsets.only(top: ScreenUtil().setWidth(30),),
+                                    margin: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
                                     decoration: BoxDecoration(
-                                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name),
-                                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                                      gradient: const LinearGradient(
+                                        colors: [Color(0xFFFF6B35), Color(0xFFFF8E53)],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      ),
+                                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: const Color(0xFFFF6B35).withOpacity(0.3),
+                                          blurRadius: 12,
+                                          offset: const Offset(0, 4),
+                                        ),
+                                      ],
                                     ),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Row(
-                                          children: [
-                                            Expanded(child: Text(
-                                              //Please save the verifier's public and private key pair first.
-                                              S.of(context).g_mining_key_78,
-                                              style: TextStyle(
-                                                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
-                                                fontSize: ScreenUtil().setSp(32),
-                                              ),
-                                            ),),
-                                            Container(
-                                              width: ScreenUtil().setWidth(36),
-                                              height: ScreenUtil().setWidth(36),
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color:
-                                                savePrivateKey ? const Color(0xff32D74B) : Colors.transparent,
-                                                border: Border.all(
-                                                  color: savePrivateKey
-                                                      ? Colors.transparent
-                                                      : AppThemeUtils.getColorByKey(
-                                                      context, AppThemeKeys.mainWhiteColor.name),
-                                                  width: 1.0,
+                                        Padding(
+                                          padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                width: ScreenUtil().setWidth(44),
+                                                height: ScreenUtil().setWidth(44),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white.withOpacity(0.2),
+                                                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                                                ),
+                                                child: Icon(
+                                                  Icons.vpn_key_outlined,
+                                                  color: Colors.white,
+                                                  size: ScreenUtil().setWidth(24),
                                                 ),
                                               ),
-                                              child: savePrivateKey
-                                                  ? Icon(
-                                                Icons.check,
-                                                size: ScreenUtil().setWidth(24),
-                                                color: Colors.white,
-                                              )
-                                                  : null,
-                                            ),
-                                          ],
-                                        ),
-
-                                        Container(
-                                          height: ScreenUtil().setWidth(80),
-                                          width: double.infinity,
-                                          margin: EdgeInsets.only(top: ScreenUtil().setWidth(30),left: ScreenUtil().setWidth(30),right: ScreenUtil().setWidth(30)),
-                                          child: ButtonStyle2(context, () async {
-                                            final result = await Navigator.push(
-                                              context,
-                                              MaterialPageRoute(builder: (_) => MiningOutputTip()),
-                                            );
-                                            // 接收返回的 copyEncrypte 值并更新状态
-                                            if (result !=null && mounted) {
-                                              setState(() {
-                                                savePrivateKey = true;
-                                                encrypteData=result;
-                                              });
-                                            }
-                                          },
-                                              //"导出"
-                                              S.of(context).g_mining_key_79
+                                              SizedBox(width: ScreenUtil().setWidth(16)),
+                                              Expanded(
+                                                child: Text(
+                                                  S.of(context).g_mining_key_78,
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: ScreenUtil().setSp(28),
+                                                    fontWeight: FontWeight.w500,
+                                                    height: 1.4,
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(width: ScreenUtil().setWidth(12)),
+                                              Container(
+                                                width: ScreenUtil().setWidth(36),
+                                                height: ScreenUtil().setWidth(36),
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: savePrivateKey ? Colors.white : Colors.transparent,
+                                                  border: Border.all(
+                                                    color: Colors.white,
+                                                    width: 2.0,
+                                                  ),
+                                                ),
+                                                child: savePrivateKey
+                                                    ? Icon(
+                                                        Icons.check,
+                                                        size: ScreenUtil().setWidth(22),
+                                                        color: const Color(0xFFFF6B35),
+                                                      )
+                                                    : null,
+                                              ),
+                                            ],
                                           ),
-                                        )
+                                        ),
+                                        Container(
+                                          width: double.infinity,
+                                          margin: EdgeInsets.fromLTRB(
+                                            ScreenUtil().setWidth(24),
+                                            0,
+                                            ScreenUtil().setWidth(24),
+                                            ScreenUtil().setWidth(24),
+                                          ),
+                                          child: ElevatedButton(
+                                            onPressed: () async {
+                                              final result = await Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (_) => MiningOutputTip()),
+                                              );
+                                              if (result != null && mounted) {
+                                                setState(() {
+                                                  savePrivateKey = true;
+                                                  encrypteData = result;
+                                                });
+                                              }
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.white,
+                                              foregroundColor: const Color(0xFFFF6B35),
+                                              elevation: 0,
+                                              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                                              ),
+                                            ),
+                                            child: Text(
+                                              S.of(context).g_mining_key_79,
+                                              style: TextStyle(
+                                                fontSize: ScreenUtil().setSp(28),
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   )
@@ -353,46 +390,116 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
     );
   }
 
-  Widget _buildPayMethods() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+  Widget _buildSectionTitle(BuildContext context, String title) {
+    return Row(
       children: [
-        _buildPayMethodv2("assets/mining/pay_wallet.png",
+        Container(
+          width: ScreenUtil().setWidth(6),
+          height: ScreenUtil().setWidth(28),
+          decoration: BoxDecoration(
+            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(3)),
+          ),
+        ),
+        SizedBox(width: ScreenUtil().setWidth(12)),
+        Text(
+          title,
+          style: TextStyle(
+            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+            fontSize: ScreenUtil().setSp(30),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPayMethods() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isEnough = nBalance != null && nBalance! > widget.nNum;
+    
+    return Container(
+      decoration: BoxDecoration(
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        border: Border.all(
+          color: isDark 
+              ? Colors.white.withOpacity(0.06) 
+              : Colors.black.withOpacity(0.04),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildPayMethodv2(
+            "assets/mining/pay_wallet.png",
             "${S.current.g_mining_key_42}: ${nBalance ?? 0} ${CoinType.N.name}",
-            // errTips: "You do not have enough N for this transaction",
             errTips: S.current.g_mining_key_43,
-            isSelected: _payMethod == 0, onTap: () {
+            isSelected: _payMethod == 0,
+            onTap: () {
               setState(() {
                 _payMethod = 0;
               });
-            }, isEnough: nBalance != null && nBalance! > widget.nNum),
-      ],
+            },
+            isEnough: isEnough,
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildPayMethod(String icon, String payType,
       {bool isSelected = false, GestureTapCallback? onTap}) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30), vertical: ScreenUtil().setWidth(24)),
+        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+        decoration: BoxDecoration(
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          border: Border.all(
+            color: isSelected 
+                ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
+                : (isDark ? Colors.white.withOpacity(0.08) : Colors.black.withOpacity(0.06)),
+            width: isSelected ? 2 : 1,
+          ),
+        ),
         child: Row(
           children: [
-            Image.asset(
-              icon,
-              width: ScreenUtil().setWidth(68),
-              fit: BoxFit.cover,
+            Container(
+              width: ScreenUtil().setWidth(60),
+              height: ScreenUtil().setWidth(60),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    const Color(0xFFFF9A9E).withOpacity(0.3),
+                    const Color(0xFFFECFEF).withOpacity(0.3),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+              ),
+              child: Center(
+                child: Image.asset(
+                  icon,
+                  width: ScreenUtil().setWidth(36),
+                  fit: BoxFit.contain,
+                ),
+              ),
             ),
-            SizedBox(
-              width: ScreenUtil().setWidth(26),
-            ),
+            SizedBox(width: ScreenUtil().setWidth(20)),
             Expanded(
               child: Text(
                 payType,
                 style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(30)),
+                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                  fontSize: ScreenUtil().setSp(28),
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
             Container(
@@ -400,22 +507,20 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
               height: ScreenUtil().setWidth(36),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color:
-                isSelected ? const Color(0xff32D74B) : Colors.transparent,
+                color: isSelected ? const Color(0xff32D74B) : Colors.transparent,
                 border: Border.all(
                   color: isSelected
                       ? Colors.transparent
-                      : AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                  width: 1.0,
+                      : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                  width: 2.0,
                 ),
               ),
               child: isSelected
                   ? Icon(
-                Icons.check,
-                size: ScreenUtil().setWidth(24),
-                color: Colors.white,
-              )
+                      Icons.check,
+                      size: ScreenUtil().setWidth(22),
+                      color: Colors.white,
+                    )
                   : null,
             ),
           ],
@@ -431,59 +536,85 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
         bool isEnough = true}) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30), vertical: ScreenUtil().setWidth(24)),
+      child: Padding(
+        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         child: Row(
           children: [
-            Image.asset(
-              icon,
-              width: ScreenUtil().setWidth(44),
-              fit: BoxFit.cover,
+            Container(
+              width: ScreenUtil().setWidth(52),
+              height: ScreenUtil().setWidth(52),
+              decoration: BoxDecoration(
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+              ),
+              child: Center(
+                child: Image.asset(
+                  icon,
+                  width: ScreenUtil().setWidth(28),
+                  fit: BoxFit.contain,
+                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                ),
+              ),
             ),
-            SizedBox(
-              width: ScreenUtil().setWidth(26),
-            ),
+            SizedBox(width: ScreenUtil().setWidth(16)),
             Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      payType,
-                      style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
-                          fontSize: ScreenUtil().setSp(30)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    payType,
+                    style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                      fontSize: ScreenUtil().setSp(28),
+                      fontWeight: FontWeight.w500,
                     ),
-                    if (!isEnough)
-                      Text(
-                        errTips ?? '',
-                        style:
-                        TextStyle(color: Color(0xffEB5851), fontSize: ScreenUtil().setSp(20)),
+                  ),
+                  if (!isEnough)
+                    Padding(
+                      padding: EdgeInsets.only(top: ScreenUtil().setWidth(6)),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.warning_amber_rounded,
+                            size: ScreenUtil().setWidth(20),
+                            color: const Color(0xFFEB5851),
+                          ),
+                          SizedBox(width: ScreenUtil().setWidth(6)),
+                          Flexible(
+                            child: Text(
+                              errTips ?? '',
+                              style: TextStyle(
+                                color: const Color(0xFFEB5851),
+                                fontSize: ScreenUtil().setSp(22),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                  ],
-                )),
+                    ),
+                ],
+              ),
+            ),
             Container(
               width: ScreenUtil().setWidth(36),
               height: ScreenUtil().setWidth(36),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color:
-                isSelected ? const Color(0xff32D74B) : Colors.transparent,
+                color: isSelected ? const Color(0xff32D74B) : Colors.transparent,
                 border: Border.all(
                   color: isSelected
                       ? Colors.transparent
-                      : AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                  width: 1.0,
+                      : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                  width: 2.0,
                 ),
               ),
               child: isSelected
                   ? Icon(
-                Icons.check,
-                size: ScreenUtil().setWidth(24),
-                color: Colors.white,
-              )
+                      Icons.check,
+                      size: ScreenUtil().setWidth(22),
+                      color: Colors.white,
+                    )
                   : null,
             ),
           ],

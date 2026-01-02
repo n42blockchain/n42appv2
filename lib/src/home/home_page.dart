@@ -40,14 +40,32 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
   //final GlobalKey _tabfive = GlobalKey();
   bool? showTermsOfService;
   
-  /// Build pages list based on chat mode setting
-  List<Widget> _buildPages(bool useNewChat) {
+  /// Build pages list (不包含 Chat，Chat 作为独立页面跳转)
+  List<Widget> _buildPages() {
     return [
       const WalletPage(),
       const MiningTodayV2(),
-      // 根据设置切换新旧聊天模块
-      useNewChat ? N42Chat.chatWidget() : const ChatIndexPage(),
     ];
+  }
+  
+  /// 跳转到聊天页面
+  void _navigateToChat() {
+    final useNewChat = ref.read(useNewChatProvider);
+    if (useNewChat) {
+      // 跳转到新的 N42Chat 模块（全屏，有自己的底部 Tab）
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => N42Chat.chatWidget(),
+        ),
+      );
+    } else {
+      // 跳转到旧的聊天页面
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => const ChatIndexPage(),
+        ),
+      );
+    }
   }
   @override
   void initState() {
@@ -87,9 +105,10 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
   Widget build(BuildContext context) {
     // Watch home tab index from Riverpod
     final homeCurrentIndex = ref.watch(homeTabIndexProvider);
-    // Watch chat mode setting
-    final useNewChat = ref.watch(useNewChatProvider);
-    final pages = _buildPages(useNewChat);
+    final pages = _buildPages();
+    
+    // 限制 index 在有效范围内（只有钱包和挖矿两个页面）
+    final safeIndex = homeCurrentIndex.clamp(0, pages.length - 1);
     
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -97,7 +116,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
         child: Stack(
           children: [
             IndexedStack(
-              index: homeCurrentIndex,
+              index: safeIndex,
               children: pages,
             ),
             Positioned(
@@ -133,30 +152,26 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    /*_buildBottomItem(
-                        S.of(context).g_home_key2,
-                        0,
-                        "assets/home/tabbar/news.png",
-                        _tabOne,
-                        pages.length),*/
+                    // 钱包
                     _buildBottomItem(
                         S.of(context).g_key_6,
                         0,
                         "assets/home/tabbar/wallet.png",
                         _tabTwo,
-                        pages.length),
+                        3), // 总共3个tab
+                    // 挖矿
                     _buildBottomItem(
                         S.of(context).g_home_key3,
                         1,
                         "assets/home/tabbar/earn.png",
                         _tabThree,
-                        pages.length),
-                    _buildBottomItem(
+                        3),
+                    // 聊天 - 点击跳转到独立页面
+                    _buildChatBottomItem(
                         S.of(context).g_key_squad,
-                        2,
                         "assets/home/tabbar/chat.png",
                         _tabfour,
-                        pages.length),
+                        3),
                   ],
                 ),
               ),
@@ -186,10 +201,50 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     );
   }
 
+  /// 构建聊天 Tab（点击跳转到独立页面）
+  Widget _buildChatBottomItem(String title, String imagePath, GlobalKey key, int pagesLength) {
+    double width = MediaQuery.of(context).size.width / pagesLength;
+    
+    // 聊天 tab 始终显示未选中状态（因为它是跳转而不是切换）
+    Widget child = Image.asset(
+      imagePath,
+      width: ScreenUtil().setWidth(36.0),
+      height: ScreenUtil().setWidth(36.0),
+      fit: BoxFit.cover,
+      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+    );
+    
+    return InkWell(
+      onTap: _navigateToChat,
+      child: Container(
+        key: key,
+        width: width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            child,
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(20.0),
+                height: 1.5,
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildBottomItem(String title, int index, String imagePath, GlobalKey key, int pagesLength) {
     double width = MediaQuery.of(context).size.width / pagesLength;
     // Use Riverpod homeTabIndexProvider
     final currentIndex = ref.watch(homeTabIndexProvider);
+    // 限制在有效范围内
+    final safeCurrentIndex = currentIndex.clamp(0, 1);
     
     Widget child;
     child = Image.asset(
@@ -197,7 +252,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
       width: ScreenUtil().setWidth(36.0),
       height: ScreenUtil().setWidth(36.0),
       fit: BoxFit.cover,
-      color: currentIndex == index
+      color: safeCurrentIndex == index
           ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
           : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
     );
@@ -245,7 +300,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     return InkWell(
       onTap: () {
         // Use Riverpod homeTabIndexProvider
-        if (index == currentIndex) return;
+        if (index == safeCurrentIndex) return;
         ref.read(homeTabIndexProvider.notifier).state = index;
       },
       child: Container(
@@ -262,7 +317,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(20.0),
                 height: 1.5,
-                color: currentIndex == index
+                color: safeCurrentIndex == index
                     ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
                     : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
               ),

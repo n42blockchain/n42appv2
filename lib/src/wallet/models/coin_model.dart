@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
@@ -184,17 +185,22 @@ class CoinModel {
       if (address == null) {
         await buildWallet();
       }
-      bool error=await wap.getBalance_withCoinModel(this);
-      if(error){
+      // getBalance_withCoinModel 返回 true 表示有错误，false 表示成功
+      bool hasError = await wap.getBalance_withCoinModel(this);
+      if(hasError){
+        // 获取余额失败，但不设置 loadError，因为已经使用了缓存的余额
+        // loadError 只在完全无法获取数据时设置
         loadError = false;
         Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).notifyListeners();
         return false;
       }else{
+        // 获取余额成功
         loadError = false;
         wap.calculateBalance_widthCoinModel();
         return true;
       }
     } catch (e) {
+      debugPrint('CoinModel.getBalance error: $e');
       loadError = true;
       isRefresh = false;
       Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).notifyListeners();

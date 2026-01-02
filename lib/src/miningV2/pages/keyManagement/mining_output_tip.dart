@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/src/miningV2/pages/keyManagement/mining_output_pk.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:n42appv2/src/widgets/button_widget.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class MiningOutputTip extends StatelessWidget {
-  Map<String,dynamic>? value;
-  MiningOutputTip({this.value,super.key});
+  final Map<String,dynamic>? value;
+  const MiningOutputTip({this.value, super.key});
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
-        // 返回时传递 false（用户未完成操作）
         if (context.mounted) {
           Navigator.of(context).pop(false);
         }
@@ -24,60 +25,168 @@ class MiningOutputTip extends StatelessWidget {
         appBar: AppBarWidget(
           text: S.of(context).g_mining_key_89,
         ),
-        body: Padding(
+        body: SingleChildScrollView(
           padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                S.of(context).g_mining_key_90,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(44),
-                  fontWeight: FontWeight.bold,
+              // 顶部图标
+              Center(
+                child: Container(
+                  width: ScreenUtil().setWidth(120),
+                  height: ScreenUtil().setWidth(120),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        const Color(0xFFFFB74D).withOpacity(0.2),
+                        const Color(0xFFFF9800).withOpacity(0.1),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.shield_outlined,
+                      size: ScreenUtil().setWidth(56),
+                      color: const Color(0xFFFF9800),
+                    ),
+                  ),
                 ),
               ),
               SizedBox(height: ScreenUtil().setWidth(40)),
+              // 标题
               Text(
-                S.of(context).g_mining_key_91,
-                style: TextStyle(fontSize: ScreenUtil().setSp(32), height: 1.5),
+                S.of(context).g_mining_key_90,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(40),
+                  fontWeight: FontWeight.w700,
+                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                  height: 1.3,
+                ),
               ),
-              Text(
-                S.of(context).g_mining_key_92,
-                style: TextStyle(fontSize: ScreenUtil().setSp(32), height: 1.5),
+              SizedBox(height: ScreenUtil().setWidth(36)),
+              // 提示内容卡片
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+                decoration: BoxDecoration(
+                  color: isDark 
+                      ? Colors.white.withOpacity(0.04)
+                      : Colors.grey.withOpacity(0.04),
+                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                  border: Border.all(
+                    color: isDark 
+                        ? Colors.white.withOpacity(0.08)
+                        : Colors.black.withOpacity(0.06),
+                    width: 1,
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildTipItem(
+                      context,
+                      Icons.key,
+                      S.of(context).g_mining_key_91,
+                      const Color(0xFF5C6BC0),
+                    ),
+                    SizedBox(height: ScreenUtil().setWidth(20)),
+                    _buildTipItem(
+                      context,
+                      Icons.folder_special_outlined,
+                      S.of(context).g_mining_key_92,
+                      const Color(0xFF26A69A),
+                    ),
+                    SizedBox(height: ScreenUtil().setWidth(20)),
+                    _buildTipItem(
+                      context,
+                      Icons.no_photography_outlined,
+                      S.of(context).g_mining_key_93,
+                      const Color(0xFFFF7043),
+                    ),
+                    SizedBox(height: ScreenUtil().setWidth(20)),
+                    _buildTipItem(
+                      context,
+                      Icons.warning_amber_rounded,
+                      S.of(context).g_mining_key_94,
+                      const Color(0xFFEF5350),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                S.of(context).g_mining_key_93,
-                style: TextStyle(fontSize: ScreenUtil().setSp(32), height: 1.5),
-              ),
-              Text(
-                S.of(context).g_mining_key_94,
-                style: TextStyle(fontSize: ScreenUtil().setSp(32), height: 1.5),
-              ),
-              const Spacer(),
             ],
           ),
         ),
-
         // 底部固定按钮
         bottomNavigationBar: SafeArea(
           child: Container(
             margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
-            width: double.infinity,
-            height: ScreenUtil().setWidth(88),
-            child: ButtonStyle2(context, () async {
-              // 使用 push 而不是 pushReplacement，以便接收返回值
-              final result = await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => MiningOutputPk(value: value,)),
-              );
-              // 将结果传递回上一页
-              if (context.mounted) {
-                Navigator.of(context).pop(result);
-              }
-            }, S.of(context).g_mining_key_95,),
+            child: ElevatedButton(
+              onPressed: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => MiningOutputPk(value: value)),
+                );
+                if (context.mounted) {
+                  Navigator.of(context).pop(result);
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                foregroundColor: Colors.white,
+                elevation: 0,
+                padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                ),
+              ),
+              child: Text(
+                S.of(context).g_mining_key_95,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(30),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTipItem(BuildContext context, IconData icon, String text, Color color) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: ScreenUtil().setWidth(44),
+          height: ScreenUtil().setWidth(44),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.12),
+            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+          ),
+          child: Center(
+            child: Icon(
+              icon,
+              size: ScreenUtil().setWidth(24),
+              color: color,
+            ),
+          ),
+        ),
+        SizedBox(width: ScreenUtil().setWidth(16)),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(28),
+              height: 1.5,
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

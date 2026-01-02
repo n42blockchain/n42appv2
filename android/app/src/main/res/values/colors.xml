@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 启动页背景色 - 深蓝色 -->
+    <color name="splash_background">#0D1B2A</color>
+</resources>
+

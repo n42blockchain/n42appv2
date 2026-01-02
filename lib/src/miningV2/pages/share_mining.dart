@@ -1,7 +1,6 @@
 ﻿import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,12 +25,37 @@ class ShareMining extends StatefulWidget {
   State<ShareMining> createState() => _ShareMiningState();
 }
 
-class _ShareMiningState extends State<ShareMining> {
+class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.elasticOut),
+    );
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
+    );
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   String _generateTipsContent() {
     if (widget.fromType == 0 || widget.fromType == 1) {
       return S.of(context).g_mining_key60;
     }
-    //括号内三种级别Entry, Advanced, Pro。
     String topS = widget.astValue == 50
         ? S.of(context).g_mining_key_67
         : widget.astValue == 100
@@ -44,112 +68,210 @@ class _ShareMiningState extends State<ShareMining> {
     if (widget.fromType == 0 || widget.fromType == 1) {
       final shareUrl =
           "${AppConfig.apiUrl['walletamazeBrowser']}?type=group_mining&id=${widget.groupId}";
-
       return "${S.of(context).g_mining_key73(widget.groupName ?? '')} $shareUrl";
     }
-
     final shareUrl = "${AppConfig.apiUrl['walletamazeBrowser']}?type=full_node";
     return "${S.of(context).g_mining_key74} $shareUrl";
   }
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
+      onWillPop: () async => false,
       child: Scaffold(
         body: Container(
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(
-                    "assets/mining/group_share_bg.png",
-                  ))),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: isDark
+                  ? [const Color(0xFF1A1A2E), const Color(0xFF16213E)]
+                  : [const Color(0xFFF8FAFC), const Color(0xFFE2E8F0)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          child: SafeArea(
             child: Column(
               children: [
-                SizedBox(
-                  height: ScreenUtil().setWidth(60) + MediaQuery.of(context).padding.top,
-                ),
-                Image.asset(
-                  "assets/mining/medal_star.png",
-                  width: ScreenUtil().setWidth(170),
-                  fit: BoxFit.cover,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                ),
-                SizedBox(
-                  height: ScreenUtil().setWidth(100),
-                ),
-                Text(
-                  "Congratulations!",
-                  style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(30)),
-                ),
-                SizedBox(
-                  height: ScreenUtil().setWidth(40),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(44)),
-                  child: Text(
-                    _generateTipsContent(),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainTextColor.name),
-                        height: 1.2,
-                        fontSize: ScreenUtil().setSp(30)),
+                Expanded(
+                  child: Center(
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(40)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(height: ScreenUtil().setWidth(40)),
+                          // 勋章图标 - 带动画
+                          AnimatedBuilder(
+                            animation: _animationController,
+                            builder: (context, child) {
+                              return Transform.scale(
+                                scale: _scaleAnimation.value,
+                                child: Opacity(
+                                  opacity: _fadeAnimation.value,
+                                  child: Container(
+                                    width: ScreenUtil().setWidth(200),
+                                    height: ScreenUtil().setWidth(200),
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          const Color(0xFFFFD700).withOpacity(0.2),
+                                          const Color(0xFFFFA500).withOpacity(0.1),
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      ),
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: const Color(0xFFFFD700).withOpacity(0.3),
+                                          blurRadius: 30,
+                                          spreadRadius: 5,
+                                        ),
+                                      ],
+                                    ),
+                                    child: Center(
+                                      child: Image.asset(
+                                        "assets/mining/medal_star.png",
+                                        width: ScreenUtil().setWidth(120),
+                                        fit: BoxFit.contain,
+                                        color: isDark ? Colors.white : AppThemeUtils.getColorByKey(
+                                            context, AppThemeKeys.mainTextColor.name),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          SizedBox(height: ScreenUtil().setWidth(50)),
+                          // 标题
+                          FadeTransition(
+                            opacity: _fadeAnimation,
+                            child: Text(
+                              "Congratulations!",
+                              style: TextStyle(
+                                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                                fontSize: ScreenUtil().setSp(44),
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: ScreenUtil().setWidth(30)),
+                          // 描述文字
+                          FadeTransition(
+                            opacity: _fadeAnimation,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: ScreenUtil().setWidth(30),
+                                vertical: ScreenUtil().setWidth(20),
+                              ),
+                              decoration: BoxDecoration(
+                                color: isDark
+                                    ? Colors.white.withOpacity(0.06)
+                                    : Colors.black.withOpacity(0.03),
+                                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                              ),
+                              child: Text(
+                                _generateTipsContent(),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                                  height: 1.5,
+                                  fontSize: ScreenUtil().setSp(28),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: ScreenUtil().setWidth(60)),
+                          // 分享按钮
+                          FadeTransition(
+                            opacity: _fadeAnimation,
+                            child: GestureDetector(
+                              onTap: () {
+                                Share.share(
+                                  generateShareText(),
+                                  subject: AppConfig.apiUrl['walletamazeBrowser'],
+                                );
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: ScreenUtil().setWidth(40),
+                                  vertical: ScreenUtil().setWidth(20),
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
+                                  border: Border.all(
+                                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.3),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.share_outlined,
+                                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                                      size: ScreenUtil().setWidth(36),
+                                    ),
+                                    SizedBox(width: ScreenUtil().setWidth(12)),
+                                    Text(
+                                      S.of(context).g_mining_key61,
+                                      style: TextStyle(
+                                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                                        fontSize: ScreenUtil().setSp(28),
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-                Expanded(
-                    child: Center(
-                      child: GestureDetector(
-                        onTap: () {
-                          Share.share(
-                            generateShareText(),
-                            subject: AppConfig.apiUrl['walletamazeBrowser'],
-                          );
-                        },
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.share,
-                              color: AppThemeUtils.getColorByKey(
-                                  context, AppThemeKeys.mainBlueColor.name),
-                            ),
-                            SizedBox(
-                              height: ScreenUtil().setWidth(24),
-                            ),
-                            Text(
-                              S.of(context).g_mining_key61,
-                              style: TextStyle(
-                                  color: AppThemeUtils.getColorByKey(
-                                      context, AppThemeKeys.mainBlueColor.name),
-                                  fontSize: ScreenUtil().setSp(30)),
-                            ),
-                          ],
+                // 底部分割线
+                Container(
+                  height: 1,
+                  color: isDark
+                      ? Colors.white.withOpacity(0.08)
+                      : Colors.black.withOpacity(0.06),
+                ),
+                // 底部按钮
+                Padding(
+                  padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        eventBus.fire(EventPublic(EventPublicType.refreshMiningData));
+                        eventBus.fire(EventPublic(EventPublicType.selectMiningplansPop));
+                        Navigator.pop(context, true);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
                         ),
                       ),
-                    )),
-                Divider(
-                  height: ScreenUtil().setWidth(1),
-                  indent: 0,
-                  endIndent: 0,
-                ),
-                SafeArea(
-                  child: Container(
-                    height: ScreenUtil().setWidth(88),
-                    width: double.infinity,
-                    margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(30),),
-                    child: ButtonStyle2(context, () async {
-                      eventBus.fire(EventPublic(EventPublicType.refreshMiningData));
-                      eventBus.fire(EventPublic(EventPublicType.selectMiningplansPop));
-                      Navigator.pop(context,true);
-                    }, S.of(context).g_mining_key62,
+                      child: Text(
+                        S.of(context).g_mining_key62,
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(30),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ),
                 ),

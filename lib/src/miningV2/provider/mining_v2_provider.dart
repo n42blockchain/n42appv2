@@ -152,6 +152,9 @@ class MiningV2Provider extends ChangeNotifier {
       }
       // Note: getNprice requires price service, skipping for now
       loadMiningData();
+      
+      // 获取钱包中 N 币余额
+      await getWalletNBalance();
     } catch (err) {
       setDepositsEnable(false);
       debugPrint("checkAddressMiningStatus err：${err.toString()}");
@@ -191,6 +194,40 @@ class MiningV2Provider extends ChangeNotifier {
   Future<void> getNprice(WalletActionProvider wap) async {
     Map<String,dynamic>? coinInfo=await wap.getCoinPriceWithUnit(CoinType.N.name);
     nPrice=coinInfo?['coinPrice']??0;
+  }
+  
+  /// 钱包中 N 币的可用余额（未质押时显示）
+  double walletNBalance = 0;
+  
+  /// 获取钱包中 N 币余额
+  Future<void> getWalletNBalance() async {
+    try {
+      final walletActionProvider = Provider.of<WalletActionProvider>(AppGlobals.appContext, listen: false);
+      
+      // 在 coinList 中查找 N 币
+      for (var coin in walletActionProvider.coinList) {
+        if (coin.coin['coinType'] == CoinType.N.name && coin.coin['isContract'] == false) {
+          walletNBalance = coin.balance_double_all();
+          debugPrint('MiningV2Provider: Wallet N balance = $walletNBalance');
+          notifyListeners();
+          return;
+        }
+      }
+      
+      // 如果在 coinList 中没找到，尝试从 coinModels 中查找
+      for (var coin in walletActionProvider.coinModels) {
+        if (coin.coin['coinType'] == CoinType.N.name) {
+          walletNBalance = coin.balance_double_all();
+          debugPrint('MiningV2Provider: Wallet N balance from coinModels = $walletNBalance');
+          notifyListeners();
+          return;
+        }
+      }
+      
+      debugPrint('MiningV2Provider: N coin not found in wallet');
+    } catch (e) {
+      debugPrint('MiningV2Provider: Error getting wallet N balance: $e');
+    }
   }
   ///错误信息
   String errorMessage="";
