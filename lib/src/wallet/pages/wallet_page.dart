@@ -470,13 +470,13 @@ class _WalletPageState extends State<WalletPage> {
       pinned: true,
       floating: true,
       delegate: _SliverAppBarDelegate(
-        minHeight: ScreenUtil().setWidth(160.0),
-        maxHeight: ScreenUtil().setWidth(160.0),
+        minHeight: ScreenUtil().setWidth(165.0),
+        maxHeight: ScreenUtil().setWidth(165.0),
         child: Container(
           width: double.infinity,
           padding: EdgeInsets.symmetric(
             horizontal: ScreenUtil().setWidth(24),
-            vertical: ScreenUtil().setWidth(20),
+            vertical: ScreenUtil().setWidth(18),
           ),
           decoration: BoxDecoration(
             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
