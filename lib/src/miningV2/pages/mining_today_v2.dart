@@ -438,15 +438,17 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                         ),
                       ),
                       SizedBox(width: ScreenUtil().setWidth(10)),
-                      Text(
-                        S.of(context).g_mining_key_5,
-                        style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                          fontSize: ScreenUtil().setSp(22),
-                          fontWeight: FontWeight.w500,
+                      Expanded(
+                        child: Text(
+                          S.of(context).g_mining_key_5,
+                          style: TextStyle(
+                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                            fontSize: ScreenUtil().setSp(22),
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
@@ -521,12 +523,16 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                         ),
                       ),
                       SizedBox(width: ScreenUtil().setWidth(10)),
-                      Text(
-                        S.of(context).g_key_29,
-                        style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                          fontSize: ScreenUtil().setSp(22),
-                          fontWeight: FontWeight.w500,
+                      Expanded(
+                        child: Text(
+                          S.of(context).g_key_29,
+                          style: TextStyle(
+                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                            fontSize: ScreenUtil().setSp(22),
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
