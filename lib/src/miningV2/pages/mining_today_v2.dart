@@ -15,6 +15,7 @@ import 'package:n42appv2/src/utils/data_utils.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/shared/di/service_locator.dart';
+import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/app_home_top_bar.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/chart_histogram.dart';
@@ -1215,7 +1216,8 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                 onTap: () {
                   Navigator.pop(context);
                   if (wInfo.index != currentIndex) {
-                    miningProvider.setMiningWalletByIndex(wInfo.index);
+                    Provider.of<WalletActionProvider>(context,listen: false).setWalletMiningIndex(wInfo.index);
+                    //miningProvider.setMiningWalletByIndex(wInfo.index);
                   }
                 },
                 child: Container(

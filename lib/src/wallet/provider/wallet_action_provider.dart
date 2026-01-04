@@ -77,8 +77,7 @@ class WalletActionProvider extends ChangeNotifier{
     if(index==walletMiningIndex)return;
     walletMiningIndex=index;
     await saveWalletInfo(walletInfoLsit[walletIndex], walletIndex);
-    eventBus.fire(EventPublic(EventPublicType.selectMiningWallet,
-        intValue: walletMiningIndex));
+    //eventBus.fire(EventPublic(EventPublicType.selectMiningWallet, intValue: walletMiningIndex));
   }
   Map<String,String>? _publicKeyAndPrivateKeyPair;//_walletInfoLsit所有钱包N的公钥私钥对
   Future<Map<String,String>> publicKeyAndPrivateKeyPair() async{

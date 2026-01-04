@@ -13,6 +13,7 @@ import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
+import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
@@ -146,6 +147,7 @@ class MiningV2Provider extends ChangeNotifier {
       walletName = wInfo.walletName ?? "";
       
       if (address == null) return;
+
       await getMiningData();
       if (depositsEnable == true) {
         runMining();
@@ -154,7 +156,7 @@ class MiningV2Provider extends ChangeNotifier {
       loadMiningData();
       
       // 获取钱包中 N 币余额
-      await getWalletNBalance();
+      await getWalletNBalance(address??"",cInfo);
     } catch (err) {
       setDepositsEnable(false);
       debugPrint("checkAddressMiningStatus err：${err.toString()}");
@@ -200,9 +202,13 @@ class MiningV2Provider extends ChangeNotifier {
   double walletNBalance = 0;
   
   /// 获取钱包中 N 币余额
-  Future<void> getWalletNBalance() async {
+  Future<void> getWalletNBalance(String add,Map coinInfo,) async {
     try {
-      final walletActionProvider = Provider.of<WalletActionProvider>(AppGlobals.appContext, listen: false);
+      MessageModel rmm=await TokenViewApi().getBalance(BlockchainType.Ethereum.name, CoinType.N.name, add,isTest: coinInfo['isTest'],rpc: coinInfo['isTest']?coinInfo['baseInfo']['service_test']:coinInfo['baseInfo']['service']);
+      if(rmm.error==false){
+        walletNBalance=toEther(rmm.data.toString(), coinInfo['baseInfo']['decimals']).toDouble();
+      }
+      /*final walletActionProvider = Provider.of<WalletActionProvider>(AppGlobals.appContext, listen: false);
       
       // 在 coinList 中查找 N 币
       for (var coin in walletActionProvider.coinList) {
@@ -222,7 +228,7 @@ class MiningV2Provider extends ChangeNotifier {
           notifyListeners();
           return;
         }
-      }
+      }*/
       
       debugPrint('MiningV2Provider: N coin not found in wallet');
     } catch (e) {
