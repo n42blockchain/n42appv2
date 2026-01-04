@@ -273,18 +273,18 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                               bottomTitle: BottomTitle(
                                 titles: mpValue.isShowDefaultBar?['/','/','/','/','/','/','/']:mpValue.barchartTitle,
                                 style: TextStyle(
-                                  fontSize: ScreenUtil().setSp(22),
+                                  fontSize: ScreenUtil().setSp(18),
                                   color: AppThemeUtils.getColorByKey(
                                       context, AppThemeKeys.itemSubtitleTextColor.name),
                                 ),
                                 // specialIndex: getMaxRewardIndex(),
                                 specialStyle: TextStyle(
-                                  fontSize: ScreenUtil().setSp(24),
+                                  fontSize: ScreenUtil().setSp(20),
                                   color: AppThemeUtils.getColorByKey(
                                       context, AppThemeKeys.itemTextColor.name),
                                   fontWeight: FontWeight.w600,
                                 ),
-                                space: ScreenUtil().setWidth(36),
+                                space: ScreenUtil().setWidth(30),
                               ),
                               alertMessageGroups: mpValue.barchartAlertMessageList,
                             ),
