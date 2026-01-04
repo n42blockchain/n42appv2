@@ -645,18 +645,9 @@ class _WalletPageState extends State<WalletPage> {
   }
 
   Widget coinListWidget1(WalletActionProvider waValue) {
-    double cHeight = 0;
-    if (waValue.coinList.isEmpty) {
-      cHeight = ScreenUtil().setWidth(300.0);
-    } else {
-      cHeight = waValue.coinList.length * ScreenUtil().setWidth(140)+10;
-    }
-    if(waValue.loadBalance==Load.loading){
-      cHeight+=ScreenUtil().setWidth(60.0);
-    }
+    // 使用 shrinkWrap 和自适应高度，避免固定高度导致溢出
     return Container(
       width: double.infinity,
-      height: cHeight,
       alignment: Alignment.topCenter,
       decoration: BoxDecoration(
           color: AppThemeUtils.getColorByKey(
@@ -666,7 +657,10 @@ class _WalletPageState extends State<WalletPage> {
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.backGroundColor.name))),
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+      // 添加底部安全边距，避免被底部导航栏遮挡
+      margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           if(waValue.loadBalance==Load.loading)
           Container(
@@ -684,30 +678,23 @@ class _WalletPageState extends State<WalletPage> {
               ),
             ),
           ),
-          ListView(
-            padding: EdgeInsets.zero,
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            children: [
-              if (waValue.coinList.isEmpty)
-                Container(
-                  height: ScreenUtil().setWidth(300.0),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.backGroundColor.name),
-                  child: const EmptyView(),
-                ),
-              if (waValue.coinList.isNotEmpty)
-                ListView.builder(
-                  padding: EdgeInsets.zero,
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: waValue.coinList.length,
-                  itemBuilder: (context, int index) {
-                    return _mainCoin(waValue.coinList[index],"c${index}","coin_list");
-                  },
-                ),
-            ],
-          ),
+          if (waValue.coinList.isEmpty)
+            Container(
+              height: ScreenUtil().setWidth(300.0),
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.backGroundColor.name),
+              child: const EmptyView(),
+            ),
+          if (waValue.coinList.isNotEmpty)
+            ListView.builder(
+              padding: EdgeInsets.zero,
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: waValue.coinList.length,
+              itemBuilder: (context, int index) {
+                return _mainCoin(waValue.coinList[index],"c${index}","coin_list");
+              },
+            ),
         ],
       ),
     );
