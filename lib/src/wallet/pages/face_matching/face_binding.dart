@@ -32,12 +32,14 @@ class FaceBinding extends StatefulWidget {
 }
 
 
-class _FaceBindingState extends State<FaceBinding> {
+class _FaceBindingState extends State<FaceBinding> with WidgetsBindingObserver{
   var faceSdk = FaceSDK.instance;
   Load load=Load.finish;
   bool cameraOK=false;
   var img1 = Image.asset('assets/face/portrait.png');
   String errorMessage="";
+  bool _openedSystemSettings = false;
+  bool _isUsingCamera = false;
   // If 'assets/regula.license' exists, init using license(enables offline match)
   // otherwise init without license.
   Future<bool> initialize() async {
@@ -62,14 +64,24 @@ class _FaceBindingState extends State<FaceBinding> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     initCamera();
+  }
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
   init()async{
     if (!await initialize()) return;
     useCamera();
   }
   useCamera() async{
+    if (_isUsingCamera) return;
+
+    _isUsingCamera = true;
     var response = await faceSdk.startLiveness();
+    _isUsingCamera = false;
     var image = response.image;
     if (image != null) {
       setState(() {
@@ -256,8 +268,10 @@ class _FaceBindingState extends State<FaceBinding> {
               ),
               SizedBox(height: ScreenUtil().setWidth(36.0),),
               TextButton(onPressed: ()async{
-                await openAppSettings();
-                initCamera();
+                if (_openedSystemSettings==false) {
+                  _openedSystemSettings = true;
+                  await openAppSettings();
+                }
               }, child: Text(
                 S.of(context).g_face_5,
                 style: TextStyle(
@@ -269,5 +283,18 @@ class _FaceBindingState extends State<FaceBinding> {
           ),
         )
     );
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // 如果是相机 SDK 导致的 resumed，忽略
+      if (_isUsingCamera) return;
+
+      // 只有从系统设置回来，才重新检查权限
+      if (_openedSystemSettings) {
+        _openedSystemSettings = false;
+        initCamera();
+      }
+    }
   }
 }

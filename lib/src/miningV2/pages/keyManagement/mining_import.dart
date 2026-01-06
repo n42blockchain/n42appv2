@@ -43,6 +43,12 @@ class _MiningImportState extends State<MiningImport> {
   static const double _fieldSpacing = 10.0;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    _encryptedDataController.text='{"version":"1","timestamp":"2026-01-06T06:17:27.242127Z","kdf":{"name":"pbkdf2","params":{"iterations":150000,"dklen":32},"salt":"tsYiFXiXMvEYZooGWPgttA=="},"cipher":{"name":"aes-256-gcm","iv":"bS/oYySmQN06y8V6"},"ciphertext":"QTdTjLDB50YcTW+rBObQoKDBlvTYBIv6lNR4TgdHdSI4Mq4yvsrcgBgyIDCsTkMMthpz3QHO21yplLBtZQcz6K60arMrTWV0AkREiDxw3bH6/dsa5l+qTV7ridijom8dwSUGKSMYLEYzRAwSdx2L7HPoG8ImvQZZiwhm+sTzmLQ/TH47zpS7UzeMVrKLCmh2tTxuPzR0DO7LmQvLRz8JlaX29mvLmeIEKpLTTne9pC8QAySjc7LutjsBPSEekxRYUFTGNhykkn4ahAMZjbiFGVJTyvnly4VDPDA4BfILW+444HmQrVuy+BJX6z4g69r62HsFGic5TmwhVo66/Eh6PFLqR+OXsae7WfKezozrmCJsWrsVeyozu53kRK9rWFUMaZgDKX60ymzx4TyM1O4zCDCv1sN/luS3xinOtkm3wqMR79C4Xx5tMo3I46ODrUArrb8RRAOBHZbEewX3RynDfnqgnMY++q7NA0is","tag":"4UX62Xy5HPal1AtekQFQIQ=="}';
+    super.initState();
+  }
+  @override
   void dispose() {
     _encryptedDataController.dispose();
     _encryptedDataFocusNode.dispose();
@@ -86,7 +92,7 @@ class _MiningImportState extends State<MiningImport> {
         }
       }
       secretMap['isMining']=isMining;
-      MessageModel rmm=await Provider.of<MiningV2Provider>(context,listen: false).setMiningData_import(secretMap);
+      MessageModel rmm=await Provider.of<MiningV2Provider>(context,listen: false).setMiningData_import(secretMap,password);
       String messageStr=S.of(context).g_mining_key_104;
       if(rmm.error){
         messageStr=rmm.data as String;

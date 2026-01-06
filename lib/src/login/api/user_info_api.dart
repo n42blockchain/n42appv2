@@ -150,12 +150,14 @@ class UserInfoApi{
       userInfo['uuid']=AppGlobals.userInfo?.uuid??"";
       userInfo['source']="app";
       userInfo['token']=AppGlobals.userInfo?.token??"";
+      final formData = FormData.fromMap(userInfo);
+      Map<String,String> header_v2={'content-type': 'multipart/form-data'};
       MessageModel mm=MessageModel();
       final data=await BaseApi.RequestEmpty_h.post(
         '${url}/v1/l/user/info',
         params: {},
-        data: userInfo,
-        header: header,
+        data: formData,
+        header: header_v2,
         addUserInfo: true
       );
       if(data['code']==200){

@@ -269,7 +269,7 @@ class MiningV2Provider extends ChangeNotifier {
   /// TODO: This method still uses WalletActionProvider for wallet creation.
   /// Needs to be refactored to use IWalletService when wallet creation
   /// functionality is added to the service interface.
-  Future<MessageModel> setMiningData_import(Map<String,dynamic> value) async {
+  Future<MessageModel> setMiningData_import(Map<String,dynamic> value,String password) async {
     // NOTE: Keep using WalletActionProvider for wallet creation operations
     // This will be migrated when IWalletService supports wallet creation
     WalletActionProvider wap=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
@@ -298,14 +298,15 @@ class MiningV2Provider extends ChangeNotifier {
             mnemonic: value['mnemonicWords'],
           );
         }
+        wInfo.password=password;
       }else{
         wInfo = WalletInfo(
           privateKey: value['privateKey'],
         );
+        wInfo.password='';
       }
       wInfo.walletName="Account${wap.walletInfoLsit.length+1}";
       wInfo.UUID=wap.UserUUID;
-      wInfo.password="";
       wInfo.coinInfo=chainUrlMap;
       wInfo.timestamp = "${DateTime.now().millisecondsSinceEpoch}";
     }else{

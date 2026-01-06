@@ -202,6 +202,16 @@ class WalletServiceImpl implements IWalletService {
     }
   }
 
+  @override
+  Future<void> refreshWallets() async {
+    try {
+      // Refresh the wallet list from storage
+      await _container.read(walletListProvider.notifier).refresh();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   SharedWalletInfo _toSharedInfo(WalletInfoData wallet) {
     return SharedWalletInfo(
       address: wallet.address,

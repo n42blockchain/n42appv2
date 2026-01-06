@@ -9,6 +9,7 @@ import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
+import 'package:n42appv2/shared/di/service_locator.dart';
 import 'package:n42appv2/src/wallet/api/market_api.dart';
 import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
@@ -211,6 +212,7 @@ class WalletActionProvider extends ChangeNotifier{
           intValue: walletIndex,stringValue: "wallet"));
       init_coinInfo();
     }
+    await refreshWalletListNotifier();
   }
   //读取钱包信息
   getWalletInfo() async {
@@ -512,8 +514,11 @@ class WalletActionProvider extends ChangeNotifier{
         }
         await sPUtils.setWalletInfo(walletAll);
       }
+      await refreshWalletListNotifier();
+
     }catch(e){
       //ToastUtils.show3(e.toString());
+      debugPrint("saveWalletInfo error: $e");
     }
   }
   //保存钱包数据
@@ -525,6 +530,23 @@ class WalletActionProvider extends ChangeNotifier{
       walletAll[UserUUID]['index']=walletIndex;
       walletAll[UserUUID]['miningIndex']=walletMiningIndex;
       await sPUtils.setWalletInfo(walletAll);
+      await refreshWalletListNotifier();
+    }
+  }
+  //刷新缓存
+  refreshWalletListNotifier()async{
+    // 刷新 WalletListNotifier 以同步数据
+    try {
+      final walletService = ServiceLocatorSetup.walletService;
+      if (walletService != null) {
+        await walletService.refreshWallets();
+        debugPrint("saveWalletInfo: WalletListNotifier refreshed successfully");
+      } else {
+        debugPrint("saveWalletInfo: WalletService not available, skipping refresh");
+      }
+    } catch (refreshError) {
+      debugPrint("saveWalletInfo: Error refreshing WalletListNotifier: $refreshError");
+      // 不抛出异常，因为保存已经成功
     }
   }
   //保存币的排序缓存

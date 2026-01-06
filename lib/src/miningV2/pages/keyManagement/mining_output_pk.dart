@@ -84,6 +84,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
   }
 
   void _copyEncryptedData() {
+    debugPrint(_encryptedData);
     Clipboard.setData(ClipboardData(text: _encryptedData));
     ToastUtils.show(S.of(context).copy);
     setState(() {

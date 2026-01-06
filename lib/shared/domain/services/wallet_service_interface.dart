@@ -64,6 +64,12 @@ abstract class IWalletService {
   ///
   /// Returns the balance info for the specified wallet address and coin type
   Future<WalletBalanceInfo?> getBalance(String address, String coinType);
+
+  /// Refresh wallet list from storage
+  ///
+  /// Call this after modifying wallet data in SharedPreferences to sync
+  /// the WalletListNotifier state with the latest data.
+  Future<void> refreshWallets();
 }
 
 /// Chat Crypto Service Interface

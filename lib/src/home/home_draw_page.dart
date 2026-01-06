@@ -220,10 +220,10 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                 height: ScreenUtil().setWidth(72),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(ScreenUtil().setWidth(36)),
-                  border: Border.all(
+                  /*border: Border.all(
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
                     width: 2,
-                  ),
+                  ),*/
                   boxShadow: [
                     BoxShadow(
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.2),

@@ -69,9 +69,10 @@ class _WalletPageState extends State<WalletPage> {
   @override
   void initState() {
     // TODO: implement initState
-    if(AppGlobals.userInfo==null){
+    Provider.of<WalletActionProvider>(context,listen: false).init_wallet(initCoinInfo:true);
+    /*if(AppGlobals.userInfo==null){
       Provider.of<WalletActionProvider>(context,listen: false).init_wallet(initCoinInfo:true);
-    }/*else{
+    }else{
       Timer(Duration(seconds: 1),(){
         eventBus.fire(EventPublic(EventPublicType.selectWallet,
             intValue: 1));

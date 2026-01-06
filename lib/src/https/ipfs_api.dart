@@ -45,13 +45,10 @@ class IpfsApi{
       FormData fd=FormData.fromMap({"path":type==0?
       await MultipartFile.fromFile(file,filename: filename):
       await MultipartFile.fromBytes(file,filename: filename)});
-      /*MultipartFile f;
-      if(type==0){
-        f=await MultipartFile.fromFile(file,filename: filename);
-      }else{
-        f=await MultipartFile.fromBytes(file,filename: filename);
-      }
-      FormData fd=FormData.fromMap({"file":f});*/
+      String username = 'n42';
+      String password = 'Z,p7=f#|q5JkmeyL';
+      String basicAuth =
+          'Basic ${base64Encode(utf8.encode('$username:$password'))}';
       var data=await BaseApi.RequestEmpty_h.post(
         //"${AppConfig.apiUrl['ipfsHost']}/upload",///ipfs/api/v0/add
         "${AppConfig.apiUrl['ipfsHost']}/ipfsapi/api/v0/add",
@@ -59,7 +56,10 @@ class IpfsApi{
         data: fd,
         sendProgress: sendProgress,
         cancelToken: cancelToken,
-        header:header,
+        header:{
+          'content-type': 'multipart/form-data',
+          'Authorization':basicAuth
+        },
       );
       if(data["Hash"]!=null){
         Map<String, dynamic> rData = {

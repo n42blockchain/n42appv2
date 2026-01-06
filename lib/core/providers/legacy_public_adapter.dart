@@ -8,6 +8,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/data/models/user_info.dart';
@@ -262,6 +263,7 @@ class LegacyPublicProviderAdapter extends PublicProvider {
       if (userInfoJson != null) {
         _userInfo = UserInfo.fromJson(userInfoJson);
         setUserInfo(_userInfo);
+        await AppGlobals.login(_userInfo!);
       }
       await getLockScreenData();
       load = Load.finish;

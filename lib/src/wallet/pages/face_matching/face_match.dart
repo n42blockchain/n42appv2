@@ -25,13 +25,14 @@ class FaceMatch extends StatefulWidget {
   State<FaceMatch> createState() => _FaceMatchState();
 }
 
-class _FaceMatchState extends State<FaceMatch> {
+class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver{
   Load load=Load.finish;
   var img2 = Image.asset('assets/face/portrait.png');
   ImageUploadModel createModel = ImageUploadModel();
   bool photoOK=false;
   bool cameraOK=false;
   String _errorMessage1 = "";
+  bool _openedSystemSettings = false;
   init(){
     if(widget.matchType==1){
       getImageFromGallery();
@@ -199,7 +200,13 @@ class _FaceMatchState extends State<FaceMatch> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     initPermissions();
+  }
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
   initPermissions(){
     if(widget.matchType==1){
@@ -282,8 +289,10 @@ class _FaceMatchState extends State<FaceMatch> {
               ),
               SizedBox(height: ScreenUtil().setWidth(36.0),),
               TextButton(onPressed: ()async{
-                await openAppSettings();
-                initPhoto();
+                if(_openedSystemSettings==false){
+                  _openedSystemSettings=true;
+                  await openAppSettings();
+                }
               }, child: Text(
                 S.of(context).g_face_5,
                 style: TextStyle(
@@ -315,8 +324,10 @@ class _FaceMatchState extends State<FaceMatch> {
               ),
               SizedBox(height: ScreenUtil().setWidth(36.0),),
               TextButton(onPressed: ()async{
-                await openAppSettings();
-                initPermissions();
+                if(_openedSystemSettings==false){
+                  _openedSystemSettings=true;
+                  await openAppSettings();
+                }
               }, child: Text(
                 S.of(context).g_face_5,
                 style: TextStyle(
@@ -328,5 +339,14 @@ class _FaceMatchState extends State<FaceMatch> {
           ),
         )
     );
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      if (_openedSystemSettings) {
+        _openedSystemSettings = false;
+        initPermissions();
+      }
+    }
   }
 }
