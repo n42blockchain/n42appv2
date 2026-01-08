@@ -368,7 +368,26 @@ class _AddGroupMemberPageState extends State<AddGroupMemberPage> {
                       final data = await chatApi.addGroupMembers(widget.groupId,
                           AppGlobals.userInfo?.uuid ?? '', groupMemberIds);
 
-                      if (data != null && data["code"] == 200) {
+                      if (data == null) {
+                        ToastUtils.show("Network error");
+                        return;
+                      }
+
+                      if (data["code"] != 200) {
+                        // 显示具体错误信息
+                        String errorMsg = data["msg"] ?? "Invite failed";
+                        if (data["data"] != null && data["data"] is Map) {
+                          final errorData = data["data"] as Map;
+                          if (errorData.isNotEmpty) {
+                            errorMsg = errorData.values.first?.toString() ?? errorMsg;
+                          }
+                        }
+                        ToastUtils.show(errorMsg);
+                        return;
+                      }
+
+                      // code == 200, 邀请成功
+                      {
                         //更新会话列表
                         eventBus.fire(EventPublic(
                             EventPublicType.updateChatConversationList));

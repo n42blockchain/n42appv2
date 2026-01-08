@@ -93,15 +93,6 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
   }
 
   handleData() async {
-    //判断群成员数量大于9 在集合末尾添加一个+ （邀请好友进群）
-    if (groupMemberList.isNotEmpty && groupMemberList.length > 9) {
-      showGroupMemberList = groupMemberList.sublist(0, 8);
-      isShowMoreGroupMember = true;
-    } else {
-      showGroupMemberList = groupMemberList;
-      isShowMoreGroupMember = false;
-    }
-
     //判断是群成员还是群主
     for (var element in groupMemberList) {
       if (element.memberId == AppGlobals.userInfo?.uuid) {
@@ -111,6 +102,23 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
         }
         break;
       }
+    }
+
+    // 计算需要预留的按钮位置数量（+ 按钮和 - 按钮）
+    int buttonCount = 0;
+    if (isGroupMember) buttonCount++; // + 按钮
+    if (isGroupOwner) buttonCount++;  // - 按钮
+
+    // 一行5个，最多显示3行（15个位置），减去按钮位置后的最大成员数
+    int maxMemberDisplay = 15 - buttonCount;
+
+    //判断群成员数量是否超过最大显示数
+    if (groupMemberList.isNotEmpty && groupMemberList.length > maxMemberDisplay) {
+      showGroupMemberList = groupMemberList.sublist(0, maxMemberDisplay);
+      isShowMoreGroupMember = true;
+    } else {
+      showGroupMemberList = List.from(groupMemberList);
+      isShowMoreGroupMember = false;
     }
 
     //群成员都可以邀请其他人进群
