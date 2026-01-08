@@ -205,6 +205,19 @@ class BaseHttp {
       case DioExceptionType.badCertificate:
         return S.current.g_key_error_27;
       case DioExceptionType.badResponse:
+        final response = error.response;
+        if (response != null) {
+          final data = response.data;
+          if (data is Map && data.containsKey('error')) {
+            final errorData = data['error'];
+            if (errorData is Map && errorData.containsKey('message')) {
+              return errorData['message'].toString();
+            } else if (errorData is String) {
+              return errorData;
+            }
+          }
+          return _handleHttpError(response.statusCode);
+        }
         return S.current.g_key_error_28;
       case DioExceptionType.cancel:
         return S.current.g_key_error_8;
