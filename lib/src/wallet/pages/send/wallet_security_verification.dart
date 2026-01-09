@@ -259,8 +259,12 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
       return;
     }
     setState(() {
-      faceErrorMessage="";
       faceCheck=authenticated?1:2;
+      if(authenticated){
+        faceErrorMessage="";
+      }else{
+        faceErrorMessage=S.of(context).g_lock_key6;
+      }
     });
   }
   //跳转 设置安全设置页
