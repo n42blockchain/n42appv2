@@ -38,11 +38,12 @@ class _ChatServicesState extends State<ChatServices> {
   }
 
   initController() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     _webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..addJavaScriptChannel("WalletChat", onMessageReceived: (message) {
       })
-      ..setBackgroundColor(const Color(0x00000000))
+      ..setBackgroundColor(isDark ? const Color(0xFF1C1C1E) : Colors.white)
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {
@@ -67,20 +68,91 @@ class _ChatServicesState extends State<ChatServices> {
     });
   }
 
+  void _scrollToBottom() {
+    _webViewController.runJavaScript('window.scrollTo(0, document.body.scrollHeight);');
+  }
+
+  void _scrollToTop() {
+    _webViewController.runJavaScript('window.scrollTo(0, 0);');
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-      //padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(40)),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      child: Stack(
         children: [
-          Expanded(child: WebViewWidget(controller: _webViewController)),
-          Container(
-            height: ScreenUtil().setWidth(88),
-            margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
-            width: double.infinity,
-            child: ButtonStyle2(context, _isBottom ? widget.agreeCallBack : null, S.of(context).g_chat_key_50),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(child: WebViewWidget(controller: _webViewController)),
+              Container(
+                height: ScreenUtil().setWidth(88),
+                margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                width: double.infinity,
+                child: ButtonStyle2(context, _isBottom ? widget.agreeCallBack : null, S.of(context).g_chat_key_50),
+              ),
+            ],
+          ),
+          // 滚动到底部按钮
+          Positioned(
+            right: ScreenUtil().setWidth(30),
+            bottom: ScreenUtil().setWidth(180),
+            child: Column(
+              children: [
+                // 滚动到顶部
+                GestureDetector(
+                  onTap: _scrollToTop,
+                  child: Container(
+                    width: ScreenUtil().setWidth(80),
+                    height: ScreenUtil().setWidth(80),
+                    decoration: BoxDecoration(
+                      color: isDark ? Colors.grey[800] : Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.keyboard_arrow_up,
+                      size: ScreenUtil().setWidth(48),
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                    ),
+                  ),
+                ),
+                SizedBox(height: ScreenUtil().setWidth(16)),
+                // 滚动到底部
+                GestureDetector(
+                  onTap: _scrollToBottom,
+                  child: Container(
+                    width: ScreenUtil().setWidth(80),
+                    height: ScreenUtil().setWidth(80),
+                    decoration: BoxDecoration(
+                      color: isDark ? Colors.grey[800] : Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.keyboard_arrow_down,
+                      size: ScreenUtil().setWidth(48),
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

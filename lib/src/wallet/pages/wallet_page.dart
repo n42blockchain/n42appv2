@@ -210,6 +210,71 @@ class _WalletPageState extends State<WalletPage> {
                           },
                           onLeftImageUri: "assets/img/menu.png",
                           actions: [
+                            // QR Code 图标 - 扫描和显示二维码
+                            PopupMenuButton<int>(
+                              icon: Icon(
+                                Icons.qr_code_rounded,
+                                size: ScreenUtil().setWidth(52.0),
+                                color: AppThemeUtils.getColorByKey(
+                                    context, AppThemeKeys.mainBlueColor.name),
+                              ),
+                              offset: Offset(0, ScreenUtil().setWidth(80)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                              ),
+                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+                              onSelected: (value) async {
+                                if (value == 0) {
+                                  // 扫描二维码
+                                  walletConnect();
+                                } else if (value == 1) {
+                                  // 显示我的二维码（接收）
+                                  showSearchCoin(1);
+                                }
+                              },
+                              itemBuilder: (context) => [
+                                PopupMenuItem<int>(
+                                  value: 0,
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.qr_code_scanner,
+                                        size: ScreenUtil().setWidth(40),
+                                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                                      ),
+                                      SizedBox(width: ScreenUtil().setWidth(20)),
+                                      Text(
+                                        S.of(context).g_key_4,  // Scan QR code
+                                        style: TextStyle(
+                                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                                          fontSize: ScreenUtil().setSp(28),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                PopupMenuItem<int>(
+                                  value: 1,
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.qr_code,
+                                        size: ScreenUtil().setWidth(40),
+                                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                                      ),
+                                      SizedBox(width: ScreenUtil().setWidth(20)),
+                                      Text(
+                                        S.of(context).g_key_33,  // Receive
+                                        style: TextStyle(
+                                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                                          fontSize: ScreenUtil().setSp(28),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                             Consumer<WalletConnectProvider>(builder: (context,wc,child){
                               return InkWell(
                                 onTap: () {

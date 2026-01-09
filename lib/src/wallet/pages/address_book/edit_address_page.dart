@@ -41,7 +41,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
   /// 默认的coin
   var coinName = 'BTC';
   var coinIcon = '';
-  bool editStatus = false;
+  bool editStatus = true;  // 默认为编辑状态，直接显示 Save
   String errorMessage="";
   @override
   void initState() {
