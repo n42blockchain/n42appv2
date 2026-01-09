@@ -155,7 +155,6 @@ class _N42AppV2State extends State<N42AppV2> {
     // Initialize global context (deprecated - use DI instead)
     // ignore: deprecated_member_use_from_same_package
     AppGlobals.appContext = context;
-    provider_pkg.Provider.of<PublicProvider>(context, listen: false).checkData();
     initDeepLinks();
     ///是否打开FirebaseCrashlytics日志收集
     ///release + online 开启
@@ -168,7 +167,7 @@ class _N42AppV2State extends State<N42AppV2> {
       /// FCM推送设置
       /// ios 通过fcm集成的apns推送 同样需要开启vpn
       await AppPushUtils.init();
-
+      await provider_pkg.Provider.of<PublicProvider>(context, listen: false).checkData();
     } catch (err) {
       debugPrint("FCM推送初始化失败");
     }

@@ -63,9 +63,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Widget build(BuildContext context) {
     ToastUtils.init(context);
     return Scaffold(
-      appBar: AppBarWidget(
+      appBar: widget.type==0?AppBarWidget(
         text: S.of(context).login_button_text,
-      ),
+      ):null,
       // backgroundColor: Theme.of(context).primaryColor,
       resizeToAvoidBottomInset: false,
       body: GestureDetector(
@@ -76,7 +76,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               Positioned.fill(
                 child: SingleChildScrollView(
                   child: Container(
-                    padding:  EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+                    padding:  EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0),vertical: ScreenUtil().setWidth(60.0)),
                     color: Colors.transparent,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

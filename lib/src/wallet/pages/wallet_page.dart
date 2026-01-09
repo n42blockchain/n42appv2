@@ -701,11 +701,7 @@ class _WalletPageState extends State<WalletPage> {
     );
   }
 
-  Widget _mainCoin(
-      CoinModel coinInfo,
-      String key,
-      String group,
-      ) {
+  Widget _mainCoin(CoinModel coinInfo, String key, String group,) {
     String balanceStr = "";
     double balance = coinInfo.value;
     if (balance >= 1000000000) {

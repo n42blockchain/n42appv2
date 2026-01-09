@@ -37,7 +37,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
   final GlobalKey _tabTwo = GlobalKey();
   final GlobalKey _tabThree = GlobalKey();
   final GlobalKey _tabfour = GlobalKey();
-  //final GlobalKey _tabfive = GlobalKey();
+  final GlobalKey _tabfive = GlobalKey();
   bool? showTermsOfService;
   
   /// Build pages list (不包含 Chat，Chat 作为独立页面跳转)
@@ -45,6 +45,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     return [
       const WalletPage(),
       const MiningTodayV2(),
+      const ChatIndexPage(),
     ];
   }
   
@@ -109,6 +110,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     
     // 限制 index 在有效范围内（只有钱包和挖矿两个页面）
     final safeIndex = homeCurrentIndex.clamp(0, pages.length - 1);
+    final useNewChat = ref.read(useNewChatProvider);
     
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -167,11 +169,17 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
                         _tabThree,
                         3),
                     // 聊天 - 点击跳转到独立页面
-                    _buildChatBottomItem(
+                    useNewChat?_buildChatBottomItem(
                         S.of(context).g_key_squad,
                         "assets/home/tabbar/chat.png",
                         _tabfour,
-                        3),
+                        3):
+                    _buildBottomItem(
+                        S.of(context).g_key_squad,
+                        2,
+                        "assets/home/tabbar/chat.png",
+                        _tabfive,
+                        3)
                   ],
                 ),
               ),
@@ -244,7 +252,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     // Use Riverpod homeTabIndexProvider
     final currentIndex = ref.watch(homeTabIndexProvider);
     // 限制在有效范围内
-    final safeCurrentIndex = currentIndex.clamp(0, 1);
+    //final safeCurrentIndex = currentIndex.clamp(0, 1);
     
     Widget child;
     child = Image.asset(
@@ -252,7 +260,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
       width: ScreenUtil().setWidth(36.0),
       height: ScreenUtil().setWidth(36.0),
       fit: BoxFit.cover,
-      color: safeCurrentIndex == index
+      color: currentIndex == index
           ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
           : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
     );
@@ -300,7 +308,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     return InkWell(
       onTap: () {
         // Use Riverpod homeTabIndexProvider
-        if (index == safeCurrentIndex) return;
+        if (index == currentIndex) return;
         ref.read(homeTabIndexProvider.notifier).state = index;
       },
       child: Container(
@@ -317,7 +325,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(20.0),
                 height: 1.5,
-                color: safeCurrentIndex == index
+                color: currentIndex == index
                     ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
                     : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
               ),

@@ -461,14 +461,24 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
                 result.success(pubKey)
             }
             "EvmEmit" ->{
-                val paramsJson:String? = call.arguments as String?
-                //执行sdk的通用方法
-                val responseStringJson = Evmsdk.emit(paramsJson)
-                if(responseStringJson != null){
-                    result.success(responseStringJson)
-                }else{
-                    result.error("Evm","evm response no data",null)
+                try {
+                    val params = call.arguments<Map<String, Any>>()
+                    if (params == null) {
+                        result.error("Evm", "params is null", null)
+                        return
+                    }
+                    val paramsJson = JSONObject(params).toString()
+                    //执行sdk的通用方法
+                    val responseStringJson = Evmsdk.emit(paramsJson)
+                    if(responseStringJson != null){
+                        result.success(responseStringJson)
+                    }else{
+                        result.error("Evm","evm response no data",null)
+                    }
+                }catch (e: Exception) {
+                    result.error("Evm", e.message, null)
                 }
+
             }
             "MiningGenerateBls12381Keypair" ->{
                 try {

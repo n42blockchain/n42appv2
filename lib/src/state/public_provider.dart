@@ -1,19 +1,17 @@
 ﻿import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:n42appv2/src/home/unlock.dart';
 import 'package:n42appv2/src/https/ipfs_api.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/utils/app_push_utils.dart';
-import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:n42appv2/data/models/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/generated/l10n.dart';
-import 'package:provider/provider.dart';
+
 
 class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
   bool unlockIsPush = false; //是否已经锁屏

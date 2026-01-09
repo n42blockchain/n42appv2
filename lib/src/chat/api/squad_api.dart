@@ -1,4 +1,5 @@
-﻿import 'package:n42appv2/core/config/app_config.dart';
+﻿import 'package:dio/dio.dart';
+import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
@@ -8,7 +9,8 @@ class SquadApi {
   late Map<String,String> header;
   SquadApi(){
     url=AppConfig.getApiUrl_online('userInfoHost');
-    header={'content-type': 'application/x-www-form-urlencoded'};
+    header={'content-type': 'application/json'};
+    //header={'content-type': 'application/x-www-form-urlencoded'};
   }
   //根据用户email获取pub key
   Future<MessageModel> getUserPubKey(String email) async{
@@ -48,10 +50,12 @@ class SquadApi {
     params['token'] = token;
     params['source'] = 'app';
     params['pub_key'] = pubKey;
+    final formData = FormData.fromMap(params);
     MessageModel mm=MessageModel();
+
     try {
       final rData = await BaseApi.RequestEmpty_h
-          .post('${url}/v1/l/file/bindPubKey', params: {}, data: params,header: header);
+          .post('${url}/v1/l/file/bindPubKey', params: {}, data: formData,header: header,addUserInfo: true);
       if(rData !=null){
         if (rData["code"] == 200) {
           mm.data="True";
