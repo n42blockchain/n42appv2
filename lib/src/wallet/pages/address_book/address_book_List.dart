@@ -147,28 +147,37 @@ class _AddressBookListState extends State<AddressBookList> {
                   Text(
                     info.name ?? '',
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                      fontSize: ScreenUtil().setSp(28.0),
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                      fontSize: ScreenUtil().setSp(30.0),
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   SizedBox(
-                    height: 5,
+                    height: ScreenUtil().setWidth(8),
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          info.address ?? "",
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                            fontSize: ScreenUtil().setSp(26.0),
-                          ),
-                        ),
+                  Text(
+                    info.address ?? "",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                      fontSize: ScreenUtil().setSp(24.0),
+                    ),
+                  ),
+                  if (info.desc != null && info.desc!.isNotEmpty) ...[
+                    SizedBox(
+                      height: ScreenUtil().setWidth(6),
+                    ),
+                    Text(
+                      info.desc!,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.ff888888.name),
+                        fontSize: ScreenUtil().setSp(24.0),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ],
               ),
             )

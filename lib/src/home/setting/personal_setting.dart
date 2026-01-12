@@ -88,8 +88,10 @@ class _PersonalSettingState extends State<PersonalSetting> {
       }
       MessageModel r = await Provider.of<PublicProvider>(context,listen: false).editUserInfo(userInfo!, imageData: imageEdit);
       if (r.error == false) {
-        ToastUtils.show(S.of(context).g_key_185);
-        Navigator.pop(context);
+        ToastUtils.showSuccess(S.of(context).g_key_185);
+        if (mounted) {
+          Navigator.pop(context);
+        }
       } else {
         ToastUtils.show(r.data);
       }

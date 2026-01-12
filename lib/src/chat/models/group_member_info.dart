@@ -23,11 +23,11 @@ class GroupMemberInfo {
   }
 
   GroupMemberInfo.fromJson(Map<String, dynamic> map)
-      : memberId = map['memberId'],
-        displayName = map['displayName'],
-        avatarUrl = map['avatarUrl'],
+      : memberId = map['member_id'] ?? map['memberId'],
+        displayName = map['display_name'] ?? map['displayName'],
+        avatarUrl = map['avatar_url'] ?? map['avatarUrl'],
         type = map['type'],
-        updateDt = map['updateDt'],
+        updateDt = map['update_dt'] ?? map['updateDt'],
         email = map['email'];
 
 }

@@ -1,5 +1,4 @@
 ﻿import 'package:n42appv2/core/config/app_config.dart';
-import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:flutter/gestures.dart';
@@ -7,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:roundcheckbox/roundcheckbox.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class UserProtocol extends StatefulWidget {
   final ValueChanged<bool>? onChanged;
@@ -39,7 +39,7 @@ class _UserProtocolState extends State<UserProtocol> {
         children: [
           RoundCheckBox(
             isChecked: flag,
-            size: ScreenUtil().setWidth(50),
+            size: ScreenUtil().setWidth(60),  // Increased size for better accessibility
             onTap: (selected) {
               setState(() {
                 flag = !flag;
@@ -51,7 +51,7 @@ class _UserProtocolState extends State<UserProtocol> {
             checkedWidget: Center(
               child: Icon(
                 Icons.check,
-                size: ScreenUtil().setWidth(32),
+                size: ScreenUtil().setWidth(40),  // Increased icon size
                 color: Colors.white,
               ),
             ),
@@ -85,18 +85,15 @@ class _UserProtocolState extends State<UserProtocol> {
                             context, AppThemeKeys.mainBlueColor.name),
                         decoration: TextDecoration.underline,
                       ),
-                      // 设置点击事件
+                      // 设置点击事件 - 在外部浏览器打开
                       recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.push(context,
-                            MaterialPageRoute(
-                              builder: (_) => BrowserPage(
-                                //"${AppConfig.walletamazeBrowser}share/protocol/service.html",
-                                "${AppConfig.apiUrl['walletamazeBrowser']!}/static/terms_of_use.html",
-                                //S.of(context).g_key_user_p2
-                              ),
-                            ),
+                        ..onTap = () async {
+                          final url = Uri.parse(
+                            "${AppConfig.apiUrl['walletamazeBrowser']!}/static/terms_of_use.html",
                           );
+                          if (await canLaunchUrl(url)) {
+                            await launchUrl(url, mode: LaunchMode.externalApplication);
+                          }
                         },
                     ),
                     /*TextSpan(
