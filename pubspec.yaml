@@ -125,8 +125,8 @@ dependencies:
 
   # === N42 Chat Module ===
   n42_chat:
-    git: https://github.com/n42blockchain/n42_chat
-    #path: D:/N42/n42_chat
+    #git: https://github.com/n42blockchain/n42_chat
+    path: D:/n42/n42_chat
 
 dev_dependencies:
   flutter_test:
@@ -144,6 +144,7 @@ dev_dependencies:
   json_serializable: ^6.7.1
   injectable_generator: ^2.4.1
   freezed: ^2.4.7
+  intl_utils: ^2.8.7
 
   # === Testing ===
   mockito: ^5.4.6
@@ -170,3 +171,17 @@ flutter:
 
 flutter_intl:
   enabled: true
+  locales:
+    - en
+    - es_ES
+    - ko
+    - ja
+    - vi
+    - pt
+    - tr
+    - ru
+    - id
+    - de
+    - fr
+    - it
+    - pl

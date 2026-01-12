@@ -1,11 +1,14 @@
 package ai.n42.www
 
+import android.app.Activity
 import android.content.Context
 import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -16,20 +19,37 @@ import io.flutter.plugin.common.MethodChannel.Result
  *
  * 提供系统铃声的获取和播放功能
  */
-class RingtonePlugin : FlutterPlugin, MethodCallHandler {
+class RingtonePlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private lateinit var channel: MethodChannel
-    private lateinit var context: Context
+    private lateinit var applicationContext: Context
+    private var activity: Activity? = null
     private var currentRingtone: Ringtone? = null
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(binding.binaryMessenger, "n42_chat/ringtone")
         channel.setMethodCallHandler(this)
-        context = binding.applicationContext
+        applicationContext = binding.applicationContext
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
         stopCurrentRingtone()
+    }
+
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        activity = binding.activity
+    }
+
+    override fun onDetachedFromActivityForConfigChanges() {
+        activity = null
+    }
+
+    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+        activity = binding.activity
+    }
+
+    override fun onDetachedFromActivity() {
+        activity = null
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
@@ -53,56 +73,188 @@ class RingtonePlugin : FlutterPlugin, MethodCallHandler {
     }
 
     /**
+     * 获取可用的 Context（优先使用 Activity）
+     */
+    private fun getContext(): Context {
+        return activity ?: applicationContext
+    }
+
+    /**
      * 获取系统可用的铃声列表
      */
     private fun getAvailableRingtones(result: Result) {
         try {
             val ringtones = mutableListOf<Map<String, Any?>>()
+            val addedUris = mutableSetOf<String>()
+            val ctx = getContext()
 
-            // 获取默认铃声 URI
-            val defaultUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
-            val defaultUriString = defaultUri?.toString() ?: ""
+            android.util.Log.d("RingtonePlugin", "Getting ringtones with context: ${ctx.javaClass.simpleName}")
+            android.util.Log.d("RingtonePlugin", "Activity available: ${activity != null}")
 
-            // 使用 RingtoneManager 获取铃声列表
-            val ringtoneManager = RingtoneManager(context)
-            ringtoneManager.setType(RingtoneManager.TYPE_RINGTONE)
+            // 获取默认通知铃声 URI
+            val defaultNotificationUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+            val defaultRingtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+            android.util.Log.d("RingtonePlugin", "Default notification URI: $defaultNotificationUri")
+            android.util.Log.d("RingtonePlugin", "Default ringtone URI: $defaultRingtoneUri")
 
-            val cursor = ringtoneManager.cursor
+            // 获取通知铃声
+            try {
+                val manager = RingtoneManager(ctx)
+                manager.setType(RingtoneManager.TYPE_NOTIFICATION)
+                val cursor = manager.cursor
+                val count = cursor.count
+                android.util.Log.d("RingtonePlugin", "Notification ringtones cursor count: $count")
 
-            while (cursor.moveToNext()) {
-                try {
-                    val id = cursor.getString(RingtoneManager.ID_COLUMN_INDEX)
-                    val title = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX)
-                    val uri = ringtoneManager.getRingtoneUri(cursor.position)?.toString() ?: continue
+                if (count > 0) {
+                    cursor.moveToFirst()
+                    do {
+                        try {
+                            val position = cursor.position
+                            val id = cursor.getString(RingtoneManager.ID_COLUMN_INDEX) ?: position.toString()
+                            val title = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX) ?: "Unknown"
+                            val uri = manager.getRingtoneUri(position)?.toString()
 
-                    val isDefault = uri == defaultUriString
+                            if (uri != null && !addedUris.contains(uri)) {
+                                addedUris.add(uri)
+                                val isDefault = uri == defaultNotificationUri?.toString()
+                                ringtones.add(mapOf(
+                                    "id" to id,
+                                    "title" to title,
+                                    "uri" to uri,
+                                    "isDefault" to isDefault
+                                ))
+                                android.util.Log.d("RingtonePlugin", "Added notification: $title -> $uri")
+                            }
+                        } catch (e: Exception) {
+                            android.util.Log.e("RingtonePlugin", "Error reading notification item: ${e.message}")
+                        }
+                    } while (cursor.moveToNext())
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("RingtonePlugin", "Error getting notification ringtones: ${e.message}")
+                e.printStackTrace()
+            }
 
-                    ringtones.add(mapOf(
-                        "id" to id,
-                        "title" to title,
-                        "uri" to uri,
-                        "isDefault" to isDefault
-                    ))
-                } catch (e: Exception) {
-                    // 跳过无法读取的铃声
-                    continue
+            // 获取来电铃声
+            try {
+                val manager = RingtoneManager(ctx)
+                manager.setType(RingtoneManager.TYPE_RINGTONE)
+                val cursor = manager.cursor
+                val count = cursor.count
+                android.util.Log.d("RingtonePlugin", "Ringtone cursor count: $count")
+
+                if (count > 0) {
+                    cursor.moveToFirst()
+                    do {
+                        try {
+                            val position = cursor.position
+                            val id = cursor.getString(RingtoneManager.ID_COLUMN_INDEX) ?: position.toString()
+                            val title = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX) ?: "Unknown"
+                            val uri = manager.getRingtoneUri(position)?.toString()
+
+                            if (uri != null && !addedUris.contains(uri)) {
+                                addedUris.add(uri)
+                                val isDefault = uri == defaultRingtoneUri?.toString()
+                                ringtones.add(mapOf(
+                                    "id" to id,
+                                    "title" to title,
+                                    "uri" to uri,
+                                    "isDefault" to isDefault
+                                ))
+                                android.util.Log.d("RingtonePlugin", "Added ringtone: $title -> $uri")
+                            }
+                        } catch (e: Exception) {
+                            android.util.Log.e("RingtonePlugin", "Error reading ringtone item: ${e.message}")
+                        }
+                    } while (cursor.moveToNext())
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("RingtonePlugin", "Error getting ringtones: ${e.message}")
+                e.printStackTrace()
+            }
+
+            // 获取闹钟铃声
+            try {
+                val manager = RingtoneManager(ctx)
+                manager.setType(RingtoneManager.TYPE_ALARM)
+                val cursor = manager.cursor
+                val count = cursor.count
+                android.util.Log.d("RingtonePlugin", "Alarm ringtones cursor count: $count")
+
+                if (count > 0) {
+                    cursor.moveToFirst()
+                    do {
+                        try {
+                            val position = cursor.position
+                            val id = cursor.getString(RingtoneManager.ID_COLUMN_INDEX) ?: position.toString()
+                            val title = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX) ?: "Unknown"
+                            val uri = manager.getRingtoneUri(position)?.toString()
+
+                            if (uri != null && !addedUris.contains(uri)) {
+                                addedUris.add(uri)
+                                ringtones.add(mapOf(
+                                    "id" to id,
+                                    "title" to title,
+                                    "uri" to uri,
+                                    "isDefault" to false
+                                ))
+                                android.util.Log.d("RingtonePlugin", "Added alarm: $title -> $uri")
+                            }
+                        } catch (e: Exception) {
+                            android.util.Log.e("RingtonePlugin", "Error reading alarm item: ${e.message}")
+                        }
+                    } while (cursor.moveToNext())
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("RingtonePlugin", "Error getting alarm ringtones: ${e.message}")
+            }
+
+            // 如果列表仍为空，添加默认铃声
+            if (ringtones.isEmpty()) {
+                android.util.Log.w("RingtonePlugin", "Ringtone list is empty, adding defaults")
+
+                // 添加默认通知铃声
+                if (defaultNotificationUri != null) {
+                    try {
+                        val ringtone = RingtoneManager.getRingtone(ctx, defaultNotificationUri)
+                        val title = ringtone?.getTitle(ctx) ?: "Default Notification"
+                        ringtones.add(mapOf(
+                            "id" to "default_notification",
+                            "title" to title,
+                            "uri" to defaultNotificationUri.toString(),
+                            "isDefault" to true
+                        ))
+                        android.util.Log.d("RingtonePlugin", "Added default notification: $title")
+                    } catch (e: Exception) {
+                        android.util.Log.e("RingtonePlugin", "Error adding default notification: ${e.message}")
+                    }
+                }
+
+                // 添加默认来电铃声
+                if (defaultRingtoneUri != null) {
+                    try {
+                        val ringtone = RingtoneManager.getRingtone(ctx, defaultRingtoneUri)
+                        val title = ringtone?.getTitle(ctx) ?: "Default Ringtone"
+                        if (!addedUris.contains(defaultRingtoneUri.toString())) {
+                            ringtones.add(mapOf(
+                                "id" to "default_ringtone",
+                                "title" to title,
+                                "uri" to defaultRingtoneUri.toString(),
+                                "isDefault" to false
+                            ))
+                            android.util.Log.d("RingtonePlugin", "Added default ringtone: $title")
+                        }
+                    } catch (e: Exception) {
+                        android.util.Log.e("RingtonePlugin", "Error adding default ringtone: ${e.message}")
+                    }
                 }
             }
 
-            // 如果列表为空，至少添加默认铃声
-            if (ringtones.isEmpty() && defaultUri != null) {
-                val defaultRingtone = RingtoneManager.getRingtone(context, defaultUri)
-                val title = defaultRingtone?.getTitle(context) ?: "Default"
-                ringtones.add(mapOf(
-                    "id" to "default",
-                    "title" to title,
-                    "uri" to defaultUriString,
-                    "isDefault" to true
-                ))
-            }
-
+            android.util.Log.d("RingtonePlugin", "Total ringtones found: ${ringtones.size}")
             result.success(ringtones)
         } catch (e: Exception) {
+            android.util.Log.e("RingtonePlugin", "Error in getAvailableRingtones: ${e.message}")
+            e.printStackTrace()
             result.error("GET_RINGTONES_ERROR", e.message, null)
         }
     }
@@ -116,7 +268,7 @@ class RingtonePlugin : FlutterPlugin, MethodCallHandler {
             stopCurrentRingtone()
 
             val uri = if (uriString == "default") {
-                RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+                RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             } else {
                 Uri.parse(uriString)
             }
@@ -126,7 +278,7 @@ class RingtonePlugin : FlutterPlugin, MethodCallHandler {
                 return
             }
 
-            currentRingtone = RingtoneManager.getRingtone(context, uri)
+            currentRingtone = RingtoneManager.getRingtone(getContext(), uri)
 
             if (currentRingtone == null) {
                 result.error("RINGTONE_NOT_FOUND", "Could not get ringtone for URI: $uriString", null)
@@ -167,7 +319,7 @@ class RingtonePlugin : FlutterPlugin, MethodCallHandler {
      */
     private fun getDefaultRingtoneUri(result: Result) {
         try {
-            val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+            val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             result.success(uri?.toString())
         } catch (e: Exception) {
             result.error("GET_DEFAULT_ERROR", e.message, null)
