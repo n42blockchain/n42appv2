@@ -115,18 +115,35 @@ class LocaleNotifier extends StateNotifier<Locale> {
     final code = locale.languageCode;
     switch (code) {
       case "en":
-        return {"icon": "assets/setting/english.png", "title": "English"};
+        return {"icon": "assets/home/setting/english.png", "title": "English"};
       case "ja":
-        return {"icon": "assets/setting/japanese.png", "title": "日本語"};
+        return {"icon": "assets/home/setting/japanese.png", "title": "日本語"};
+      case "ko":
+        return {"icon": "assets/home/setting/korean.png", "title": "한국어"};
       case "es":
-        return {"icon": "assets/setting/spanish.png", "title": "España"};
+        return {"icon": "assets/home/setting/spanish.png", "title": "Español"};
+      case "fr":
+        return {"icon": "assets/home/setting/french.png", "title": "Français"};
+      case "de":
+        return {"icon": "assets/home/setting/german.png", "title": "Deutsch"};
+      case "it":
+        return {"icon": "assets/home/setting/italian.png", "title": "Italiano"};
+      case "pt":
+        return {"icon": "assets/home/setting/portuguese.png", "title": "Português"};
+      case "ru":
+        return {"icon": "assets/home/setting/russian.png", "title": "Русский"};
+      case "vi":
+        return {"icon": "assets/home/setting/vietnamese.png", "title": "Tiếng Việt"};
+      case "id":
+        return {"icon": "assets/home/setting/indonesian.png", "title": "Bahasa Indonesia"};
+      case "tr":
+        return {"icon": "assets/home/setting/turkish.png", "title": "Türkçe"};
+      case "pl":
+        return {"icon": "assets/home/setting/polish.png", "title": "Polski"};
       case "zh":
-        if (locale.countryCode == 'CN') {
-          return {"icon": "assets/setting/chinese.png", "title": "中文简体"};
-        }
-        return {"icon": "assets/setting/chinese_tw.png", "title": "中文繁體"};
+        return {"icon": "assets/home/setting/chinese.png", "title": "中文"};
       default:
-        return {"icon": "assets/setting/english.png", "title": "English"};
+        return {"icon": "assets/home/setting/english.png", "title": "English"};
     }
   }
 }

@@ -27,21 +27,19 @@ class LanguageItem {
 
 /// Available languages
 const List<LanguageItem> _languages = [
-  LanguageItem(code: 'en', name: 'English', icon: 'assets/setting/english.png'),
-  LanguageItem(code: 'zh_CN', name: '中文简体', icon: 'assets/setting/chinese.png'),
-  LanguageItem(code: 'zh_TW', name: '中文繁體', icon: 'assets/setting/chinese_tw.png'),
-  LanguageItem(code: 'ja', name: '日本語', icon: 'assets/setting/japanese.png'),
-  LanguageItem(code: 'ko', name: '한국어', icon: 'assets/setting/korean.png'),
-  LanguageItem(code: 'es_ES', name: 'Español', icon: 'assets/setting/spanish.png'),
-  LanguageItem(code: 'fr', name: 'Français', icon: 'assets/setting/french.png'),
-  LanguageItem(code: 'de', name: 'Deutsch', icon: 'assets/setting/german.png'),
-  LanguageItem(code: 'it', name: 'Italiano', icon: 'assets/setting/italian.png'),
-  LanguageItem(code: 'pt', name: 'Português', icon: 'assets/setting/portuguese.png'),
-  LanguageItem(code: 'ru', name: 'Русский', icon: 'assets/setting/russian.png'),
-  LanguageItem(code: 'vi', name: 'Tiếng Việt', icon: 'assets/setting/vietnamese.png'),
-  LanguageItem(code: 'th', name: 'ไทย', icon: 'assets/setting/thai.png'),
-  LanguageItem(code: 'id', name: 'Bahasa Indonesia', icon: 'assets/setting/indonesian.png'),
-  LanguageItem(code: 'tr', name: 'Türkçe', icon: 'assets/setting/turkish.png'),
+  LanguageItem(code: 'en', name: 'English', icon: 'assets/home/setting/english.png'),
+  LanguageItem(code: 'ja', name: '日本語', icon: 'assets/home/setting/japanese.png'),
+  LanguageItem(code: 'ko', name: '한국어', icon: 'assets/home/setting/korean.png'),
+  LanguageItem(code: 'es_ES', name: 'Español', icon: 'assets/home/setting/spanish.png'),
+  LanguageItem(code: 'fr', name: 'Français', icon: 'assets/home/setting/french.png'),
+  LanguageItem(code: 'de', name: 'Deutsch', icon: 'assets/home/setting/german.png'),
+  LanguageItem(code: 'it', name: 'Italiano', icon: 'assets/home/setting/italian.png'),
+  LanguageItem(code: 'pt', name: 'Português', icon: 'assets/home/setting/portuguese.png'),
+  LanguageItem(code: 'ru', name: 'Русский', icon: 'assets/home/setting/russian.png'),
+  LanguageItem(code: 'vi', name: 'Tiếng Việt', icon: 'assets/home/setting/vietnamese.png'),
+  LanguageItem(code: 'id', name: 'Bahasa Indonesia', icon: 'assets/home/setting/indonesian.png'),
+  LanguageItem(code: 'tr', name: 'Türkçe', icon: 'assets/home/setting/turkish.png'),
+  LanguageItem(code: 'pl', name: 'Polski', icon: 'assets/home/setting/polish.png'),
 ];
 
 /// Language Setting Page - Riverpod Version

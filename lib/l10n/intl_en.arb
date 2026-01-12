@@ -1,4 +1,5 @@
 {
+  "@@locale": "en",
   "g_key_1": "Failed to remove!",
   "g_key_2": "The ledger is empty!",
   "g_key_3": "Failed to add!",
@@ -131,6 +132,8 @@
   "s_key_5": "Theme",
   "s_key_10": "About App",
   "s_key_11": "Security",
+  "s_key_12": "Use New Chat",
+  "s_key_13": "Enable enhanced Chat experience",
   "g_browser_key1": "Please enter the URL",
   "g_browser_key3": "Bookmarks",
   "g_browser_key4": "No bookmarks added yet",

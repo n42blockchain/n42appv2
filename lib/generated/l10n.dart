@@ -1034,6 +1034,21 @@ class S {
     return Intl.message('Security', name: 's_key_11', desc: '', args: []);
   }
 
+  /// `Use New Chat`
+  String get s_key_12 {
+    return Intl.message('Use New Chat', name: 's_key_12', desc: '', args: []);
+  }
+
+  /// `Enable enhanced Chat experience`
+  String get s_key_13 {
+    return Intl.message(
+      'Enable enhanced Chat experience',
+      name: 's_key_13',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Please enter the URL`
   String get g_browser_key1 {
     return Intl.message(
@@ -6311,7 +6326,18 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
   List<Locale> get supportedLocales {
     return const <Locale>[
       Locale.fromSubtags(languageCode: 'en'),
+      Locale.fromSubtags(languageCode: 'de'),
       Locale.fromSubtags(languageCode: 'es', countryCode: 'ES'),
+      Locale.fromSubtags(languageCode: 'fr'),
+      Locale.fromSubtags(languageCode: 'id'),
+      Locale.fromSubtags(languageCode: 'it'),
+      Locale.fromSubtags(languageCode: 'ja'),
+      Locale.fromSubtags(languageCode: 'ko'),
+      Locale.fromSubtags(languageCode: 'pl'),
+      Locale.fromSubtags(languageCode: 'pt'),
+      Locale.fromSubtags(languageCode: 'ru'),
+      Locale.fromSubtags(languageCode: 'tr'),
+      Locale.fromSubtags(languageCode: 'vi'),
     ];
   }
 

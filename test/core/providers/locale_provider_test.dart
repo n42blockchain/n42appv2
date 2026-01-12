@@ -82,17 +82,17 @@ void main() {
     test('should get correct locale info for Chinese Simplified', () async {
       final notifier = container.read(localeProvider.notifier);
       final info = notifier.getLocaleInfo(const Locale('zh', 'CN'));
-      
-      expect(info['title'], '中文简体');
+
+      expect(info['title'], '中文');
       expect(info['icon'], contains('chinese'));
     });
 
     test('should get correct locale info for Chinese Traditional', () async {
       final notifier = container.read(localeProvider.notifier);
       final info = notifier.getLocaleInfo(const Locale('zh', 'TW'));
-      
-      expect(info['title'], '中文繁體');
-      expect(info['icon'], contains('chinese_tw'));
+
+      expect(info['title'], '中文');
+      expect(info['icon'], contains('chinese'));
     });
 
     test('should get correct locale info for Japanese', () async {

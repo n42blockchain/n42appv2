@@ -176,7 +176,7 @@ class SettingHomePage extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Use New Chat",
+                  S.of(context).s_key_12,
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.mainTextColor.name),
@@ -185,7 +185,7 @@ class SettingHomePage extends ConsumerWidget {
                 ),
                 SizedBox(height: ScreenUtil().setWidth(6.0)),
                 Text(
-                  "Enable enhanced Chat experience",
+                  S.of(context).s_key_13,
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.ff888888.name),

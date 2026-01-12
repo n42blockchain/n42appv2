@@ -63,13 +63,13 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m17(value) => "Saldo insuficiente de ${value}.";
 
   static String m18(value, value1) =>
-      "Every XRP account must reserve ${value} XRP (${value1} drops) as a baseline, which cannot be spent.";
+      "Cada cuenta XRP debe reservar ${value} XRP (${value1} drops) como mínimo base, el cual no se puede gastar.";
 
   static String m19(value, value1) =>
-      "For every object the account owns, ${value} XRP (${value1} drops) is added to the reserve.";
+      "Por cada objeto que posee la cuenta, se agregan ${value} XRP (${value1} drops) a la reserva.";
 
   static String m20(value, value1) =>
-      "This account owns ${value} objects, which means an additional ${value1} XRP is reserved.";
+      "Esta cuenta posee ${value} objetos, lo que significa que se reservan ${value1} XRP adicionales.";
 
   static String m21(value) =>
       "Error al ingresar el patrón de contraseña, tienes ${value} posibilidades";
@@ -834,8 +834,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_t_6": MessageLookupByLibrary.simpleMessage("Gas usado"),
     "g_key_t_7": MessageLookupByLibrary.simpleMessage("Gas"),
-    "g_key_tran_1": MessageLookupByLibrary.simpleMessage("Transaction history"),
-    "g_key_tran_4": MessageLookupByLibrary.simpleMessage("Transaction Detail"),
+    "g_key_tran_1": MessageLookupByLibrary.simpleMessage(
+      "Historial de transacciones",
+    ),
+    "g_key_tran_4": MessageLookupByLibrary.simpleMessage(
+      "Detalle de transacción",
+    ),
     "g_key_tran_6": MessageLookupByLibrary.simpleMessage(
       "Por favor, vea los recibos de transacciones en el historial",
     ),
@@ -1043,18 +1047,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_manage": MessageLookupByLibrary.simpleMessage(
       "Administrar Wallet",
     ),
-    "g_key_xml_0": MessageLookupByLibrary.simpleMessage("Reserved"),
-    "g_key_xml_1": MessageLookupByLibrary.simpleMessage("Base Reserve"),
+    "g_key_xml_0": MessageLookupByLibrary.simpleMessage("Reservado"),
+    "g_key_xml_1": MessageLookupByLibrary.simpleMessage("Reserva base"),
     "g_key_xml_11": m18,
-    "g_key_xml_2": MessageLookupByLibrary.simpleMessage("Incremental Reserve"),
+    "g_key_xml_2": MessageLookupByLibrary.simpleMessage("Reserva incremental"),
     "g_key_xml_22": m19,
-    "g_key_xml_3": MessageLookupByLibrary.simpleMessage("Owned Objects Count"),
+    "g_key_xml_3": MessageLookupByLibrary.simpleMessage(
+      "Cantidad de objetos poseídos",
+    ),
     "g_key_xml_33": m20,
     "g_key_xml_4": MessageLookupByLibrary.simpleMessage(
-      "How to calculate total reserved amount",
+      "Cómo calcular el monto total reservado",
     ),
     "g_key_xml_44": MessageLookupByLibrary.simpleMessage(
-      "Total Reserve = Base Reserve + (Owned Objects Count × Incremental Reserve)",
+      "Reserva total = Reserva base + (Cantidad de objetos poseídos × Reserva incremental)",
     ),
     "g_lock_key1": MessageLookupByLibrary.simpleMessage("Touch ID y Face ID"),
     "g_lock_key10": MessageLookupByLibrary.simpleMessage("Contraseña actual"),
@@ -1277,7 +1283,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_86": MessageLookupByLibrary.simpleMessage(
       "Riesgo moderadamente alto",
     ),
-    "g_mining_key_87": MessageLookupByLibrary.simpleMessage("High Risk"),
+    "g_mining_key_87": MessageLookupByLibrary.simpleMessage("Riesgo alto"),
     "g_mining_key_88": MessageLookupByLibrary.simpleMessage(
       "El contrato se está cargando y no se puede verificar en este momento. ¡Espere un momento!",
     ),
@@ -1550,7 +1556,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Repita la contraseña",
     ),
     "rest_Choose_password": MessageLookupByLibrary.simpleMessage(
-      "Choose password(8~18 characters)",
+      "Elige una contraseña (8~18 caracteres)",
     ),
     "rest_Confirm_password": MessageLookupByLibrary.simpleMessage(
       "Confirmar contraseña",
@@ -1570,8 +1576,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "s_key_1": MessageLookupByLibrary.simpleMessage("Gestionar Cartera"),
     "s_key_10": MessageLookupByLibrary.simpleMessage("Acerca de la App"),
     "s_key_11": MessageLookupByLibrary.simpleMessage("Seguridad"),
+    "s_key_12": MessageLookupByLibrary.simpleMessage("Usar nuevo Chat"),
+    "s_key_13": MessageLookupByLibrary.simpleMessage(
+      "Habilitar experiencia de Chat mejorada",
+    ),
     "s_key_2": MessageLookupByLibrary.simpleMessage("Direcciones de Cartera"),
-    "s_key_3": MessageLookupByLibrary.simpleMessage("Transaction"),
+    "s_key_3": MessageLookupByLibrary.simpleMessage("Transacción"),
     "s_key_4": MessageLookupByLibrary.simpleMessage("Idioma"),
     "s_key_5": MessageLookupByLibrary.simpleMessage("Tema"),
     "search": MessageLookupByLibrary.simpleMessage("Buscar"),

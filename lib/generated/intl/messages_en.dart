@@ -1399,6 +1399,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "s_key_1": MessageLookupByLibrary.simpleMessage("Manage Wallet"),
     "s_key_10": MessageLookupByLibrary.simpleMessage("About App"),
     "s_key_11": MessageLookupByLibrary.simpleMessage("Security"),
+    "s_key_12": MessageLookupByLibrary.simpleMessage("Use New Chat"),
+    "s_key_13": MessageLookupByLibrary.simpleMessage(
+      "Enable enhanced Chat experience",
+    ),
     "s_key_2": MessageLookupByLibrary.simpleMessage("Wallet Addresses"),
     "s_key_3": MessageLookupByLibrary.simpleMessage("Transaction"),
     "s_key_4": MessageLookupByLibrary.simpleMessage("Language"),

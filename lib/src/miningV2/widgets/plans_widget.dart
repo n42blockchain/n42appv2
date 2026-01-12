@@ -25,7 +25,7 @@ class PlansWidget extends StatelessWidget {
         }
       },
       child: Container(
-        height: ScreenUtil().setWidth(246),
+        height: ScreenUtil().setWidth(270),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             colors: <Color>[
