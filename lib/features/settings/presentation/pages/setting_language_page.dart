@@ -8,39 +8,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42appv2/core/constants/language_constants.dart';
 import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/generated/l10n.dart';
-
-/// Language data model
-class LanguageItem {
-  final String code;
-  final String name;
-  final String icon;
-
-  const LanguageItem({
-    required this.code,
-    required this.name,
-    required this.icon,
-  });
-}
-
-/// Available languages
-const List<LanguageItem> _languages = [
-  LanguageItem(code: 'en', name: 'English', icon: 'assets/home/setting/english.png'),
-  LanguageItem(code: 'ja', name: '日本語', icon: 'assets/home/setting/japanese.png'),
-  LanguageItem(code: 'ko', name: '한국어', icon: 'assets/home/setting/korean.png'),
-  LanguageItem(code: 'es_ES', name: 'Español', icon: 'assets/home/setting/spanish.png'),
-  LanguageItem(code: 'fr', name: 'Français', icon: 'assets/home/setting/french.png'),
-  LanguageItem(code: 'de', name: 'Deutsch', icon: 'assets/home/setting/german.png'),
-  LanguageItem(code: 'it', name: 'Italiano', icon: 'assets/home/setting/italian.png'),
-  LanguageItem(code: 'pt', name: 'Português', icon: 'assets/home/setting/portuguese.png'),
-  LanguageItem(code: 'ru', name: 'Русский', icon: 'assets/home/setting/russian.png'),
-  LanguageItem(code: 'vi', name: 'Tiếng Việt', icon: 'assets/home/setting/vietnamese.png'),
-  LanguageItem(code: 'id', name: 'Bahasa Indonesia', icon: 'assets/home/setting/indonesian.png'),
-  LanguageItem(code: 'tr', name: 'Türkçe', icon: 'assets/home/setting/turkish.png'),
-  LanguageItem(code: 'pl', name: 'Polski', icon: 'assets/home/setting/polish.png'),
-];
 
 /// Language Setting Page - Riverpod Version
 class SettingLanguagePage extends ConsumerWidget {
@@ -60,9 +31,9 @@ class SettingLanguagePage extends ConsumerWidget {
           horizontal: ScreenUtil().setWidth(30),
           vertical: ScreenUtil().setWidth(20),
         ),
-        itemCount: _languages.length,
+        itemCount: kSupportedLanguages.length,
         itemBuilder: (context, index) {
-          final language = _languages[index];
+          final language = kSupportedLanguages[index];
           final isSelected = currentCode == language.code;
 
           return _LanguageOptionItem(

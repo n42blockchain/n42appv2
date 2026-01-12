@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42appv2/core/constants/language_constants.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
@@ -112,39 +113,8 @@ class LocaleNotifier extends StateNotifier<Locale> {
   
   /// Get locale info for display
   Map<String, String> getLocaleInfo(Locale locale) {
-    final code = locale.languageCode;
-    switch (code) {
-      case "en":
-        return {"icon": "assets/home/setting/english.png", "title": "English"};
-      case "ja":
-        return {"icon": "assets/home/setting/japanese.png", "title": "日本語"};
-      case "ko":
-        return {"icon": "assets/home/setting/korean.png", "title": "한국어"};
-      case "es":
-        return {"icon": "assets/home/setting/spanish.png", "title": "Español"};
-      case "fr":
-        return {"icon": "assets/home/setting/french.png", "title": "Français"};
-      case "de":
-        return {"icon": "assets/home/setting/german.png", "title": "Deutsch"};
-      case "it":
-        return {"icon": "assets/home/setting/italian.png", "title": "Italiano"};
-      case "pt":
-        return {"icon": "assets/home/setting/portuguese.png", "title": "Português"};
-      case "ru":
-        return {"icon": "assets/home/setting/russian.png", "title": "Русский"};
-      case "vi":
-        return {"icon": "assets/home/setting/vietnamese.png", "title": "Tiếng Việt"};
-      case "id":
-        return {"icon": "assets/home/setting/indonesian.png", "title": "Bahasa Indonesia"};
-      case "tr":
-        return {"icon": "assets/home/setting/turkish.png", "title": "Türkçe"};
-      case "pl":
-        return {"icon": "assets/home/setting/polish.png", "title": "Polski"};
-      case "zh":
-        return {"icon": "assets/home/setting/chinese.png", "title": "中文"};
-      default:
-        return {"icon": "assets/home/setting/english.png", "title": "English"};
-    }
+    final lang = getLanguageByCode(locale.languageCode);
+    return {"icon": lang.icon, "title": lang.name};
   }
 }
 
