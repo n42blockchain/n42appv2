@@ -72,4 +72,8 @@ coverage/
 *.lcov
 
 # Logs
-*.logtmpclaude-*
+*.log
+
+# Temp files
+tmpclaude-*
+nul
