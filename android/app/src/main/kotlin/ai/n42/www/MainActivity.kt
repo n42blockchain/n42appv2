@@ -8,5 +8,6 @@ class MainActivity: FlutterFragmentActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         flutterEngine.plugins.add(TrustdartPlugin())
+        flutterEngine.plugins.add(RingtonePlugin())
     }
 }
