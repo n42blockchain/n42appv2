@@ -157,7 +157,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Email Address Authentication",
     ),
     "email_verification_message1": MessageLookupByLibrary.simpleMessage(
-      "The Email Address Authenticator app protects your withdrawals and N42Wallet accout.",
+      "The Email Address Authenticator app protects your withdrawals and N42Wallet account.",
     ),
     "email_verification_message2": MessageLookupByLibrary.simpleMessage(
       "Add Email verification?",
@@ -337,7 +337,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_face_match_key13": MessageLookupByLibrary.simpleMessage("Bind"),
     "g_face_match_key14": MessageLookupByLibrary.simpleMessage("Verify"),
     "g_face_match_key15": MessageLookupByLibrary.simpleMessage(
-      "You can bind your facial data to a wallet address directly(if you have previously bound one, the old wallet address will be overwritten), or if you have previously bound a wallet address, you can alse manually verify to retrieve the bound wallet address.",
+      "You can bind your facial data to a wallet address directly (if you have previously bound one, the old wallet address will be overwritten), or if you have previously bound a wallet address, you can also manually verify to retrieve the bound wallet address.",
     ),
     "g_face_match_key16": MessageLookupByLibrary.simpleMessage(
       "The wallet address linked to your facial data has been detected as follows, but you have not yet imported this wallet into your wallet list.",
@@ -613,7 +613,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Obtaining Keystore and password will give the holder full control over wallet assets.",
     ),
     "g_key_ex_keystore_3": MessageLookupByLibrary.simpleMessage(
-      "Record carefully and store in a secure location. Keeping mutliple physical copies is the safest storage method.",
+      "Record carefully and store in a secure location. Keeping multiple physical copies is the safest storage method.",
     ),
     "g_key_ex_keystore_4": MessageLookupByLibrary.simpleMessage(
       "If your private key is lost, it cannot be retrieved. Back it up physically and store it securely.",
@@ -644,7 +644,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_feedback_4": MessageLookupByLibrary.simpleMessage(
       "Submitted successfully",
     ),
-    "g_key_feedback_5": MessageLookupByLibrary.simpleMessage("Appendixs"),
+    "g_key_feedback_5": MessageLookupByLibrary.simpleMessage("Attachments"),
     "g_key_feedback_6": MessageLookupByLibrary.simpleMessage(
       "Upload up to 5 attachments, each attachment cannot be larger than 100MB",
     ),
@@ -808,7 +808,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_c17": MessageLookupByLibrary.simpleMessage("Get Started"),
     "g_key_wallet_c18": MessageLookupByLibrary.simpleMessage("Skip for now"),
     "g_key_wallet_c19": MessageLookupByLibrary.simpleMessage(
-      "You can skip backing up the seed phrase for now, and do it again in Settings at any time if you needs it.",
+      "You can skip backing up the seed phrase for now, and do it again in Settings at any time if you need to.",
     ),
     "g_key_wallet_c21": MessageLookupByLibrary.simpleMessage("Create directly"),
     "g_key_wallet_c22": MessageLookupByLibrary.simpleMessage(
@@ -935,7 +935,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Account cancellation",
     ),
     "g_key_wallet_m9": MessageLookupByLibrary.simpleMessage(
-      "Enter email veriflcation code.",
+      "Enter email verification code.",
     ),
     "g_key_wallet_manage": MessageLookupByLibrary.simpleMessage(
       "Manage Wallet",
@@ -961,7 +961,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_lock_key13": MessageLookupByLibrary.simpleMessage("6-digit number"),
     "g_lock_key15": MessageLookupByLibrary.simpleMessage(
-      "Passwords and biometrice",
+      "Passwords and biometrics",
     ),
     "g_lock_key16": MessageLookupByLibrary.simpleMessage("Pattern password"),
     "g_lock_key17": MessageLookupByLibrary.simpleMessage(
@@ -1318,7 +1318,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "To protect your account,it is recommended to turn on at least one 2FA.",
     ),
     "google_verification_message7": MessageLookupByLibrary.simpleMessage(
-      "The Google Authenticator app protects your withdrawals and N42Wallet accout.",
+      "The Google Authenticator app protects your withdrawals and N42Wallet account.",
     ),
     "google_verification_message8": MessageLookupByLibrary.simpleMessage(
       "Download And Install",

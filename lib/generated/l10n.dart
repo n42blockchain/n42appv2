@@ -3294,10 +3294,10 @@ class S {
     );
   }
 
-  /// `Enter email veriflcation code.`
+  /// `Enter email verification code.`
   String get g_key_wallet_m9 {
     return Intl.message(
-      'Enter email veriflcation code.',
+      'Enter email verification code.',
       name: 'g_key_wallet_m9',
       desc: '',
       args: [],
@@ -3499,10 +3499,10 @@ class S {
     );
   }
 
-  /// `You can skip backing up the seed phrase for now, and do it again in Settings at any time if you needs it.`
+  /// `You can skip backing up the seed phrase for now, and do it again in Settings at any time if you need to.`
   String get g_key_wallet_c19 {
     return Intl.message(
-      'You can skip backing up the seed phrase for now, and do it again in Settings at any time if you needs it.',
+      'You can skip backing up the seed phrase for now, and do it again in Settings at any time if you need to.',
       name: 'g_key_wallet_c19',
       desc: '',
       args: [],
@@ -3839,10 +3839,10 @@ class S {
     );
   }
 
-  /// `Record carefully and store in a secure location. Keeping mutliple physical copies is the safest storage method.`
+  /// `Record carefully and store in a secure location. Keeping multiple physical copies is the safest storage method.`
   String get g_key_ex_keystore_3 {
     return Intl.message(
-      'Record carefully and store in a secure location. Keeping mutliple physical copies is the safest storage method.',
+      'Record carefully and store in a secure location. Keeping multiple physical copies is the safest storage method.',
       name: 'g_key_ex_keystore_3',
       desc: '',
       args: [],
@@ -4254,10 +4254,10 @@ class S {
     );
   }
 
-  /// `You can bind your facial data to a wallet address directly(if you have previously bound one, the old wallet address will be overwritten), or if you have previously bound a wallet address, you can alse manually verify to retrieve the bound wallet address.`
+  /// `You can bind your facial data to a wallet address directly (if you have previously bound one, the old wallet address will be overwritten), or if you have previously bound a wallet address, you can also manually verify to retrieve the bound wallet address.`
   String get g_face_match_key15 {
     return Intl.message(
-      'You can bind your facial data to a wallet address directly(if you have previously bound one, the old wallet address will be overwritten), or if you have previously bound a wallet address, you can alse manually verify to retrieve the bound wallet address.',
+      'You can bind your facial data to a wallet address directly (if you have previously bound one, the old wallet address will be overwritten), or if you have previously bound a wallet address, you can also manually verify to retrieve the bound wallet address.',
       name: 'g_face_match_key15',
       desc: '',
       args: [],
@@ -4569,10 +4569,10 @@ class S {
     );
   }
 
-  /// `Passwords and biometrice`
+  /// `Passwords and biometrics`
   String get g_lock_key15 {
     return Intl.message(
-      'Passwords and biometrice',
+      'Passwords and biometrics',
       name: 'g_lock_key15',
       desc: '',
       args: [],
@@ -4819,10 +4819,10 @@ class S {
     );
   }
 
-  /// `The Email Address Authenticator app protects your withdrawals and N42Wallet accout.`
+  /// `The Email Address Authenticator app protects your withdrawals and N42Wallet account.`
   String get email_verification_message1 {
     return Intl.message(
-      'The Email Address Authenticator app protects your withdrawals and N42Wallet accout.',
+      'The Email Address Authenticator app protects your withdrawals and N42Wallet account.',
       name: 'email_verification_message1',
       desc: '',
       args: [],
@@ -4899,10 +4899,10 @@ class S {
     );
   }
 
-  /// `The Google Authenticator app protects your withdrawals and N42Wallet accout.`
+  /// `The Google Authenticator app protects your withdrawals and N42Wallet account.`
   String get google_verification_message7 {
     return Intl.message(
-      'The Google Authenticator app protects your withdrawals and N42Wallet accout.',
+      'The Google Authenticator app protects your withdrawals and N42Wallet account.',
       name: 'google_verification_message7',
       desc: '',
       args: [],
@@ -5624,10 +5624,10 @@ class S {
     );
   }
 
-  /// `Appendixs`
+  /// `Attachments`
   String get g_key_feedback_5 {
     return Intl.message(
-      'Appendixs',
+      'Attachments',
       name: 'g_key_feedback_5',
       desc: '',
       args: [],

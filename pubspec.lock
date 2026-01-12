@@ -1663,9 +1663,11 @@ packages:
   n42_chat:
     dependency: "direct main"
     description:
-      path: "D:/N42/n42_chat"
-      relative: false
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: "2d433b7500d5a9c14dd4c914b15a0b47102d24f8"
+      url: "https://github.com/n42blockchain/n42_chat"
+    source: git
     version: "0.1.0"
   nested:
     dependency: transitive
@@ -2155,6 +2157,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.27.7"
+  saver_gallery:
+    dependency: transitive
+    description:
+      name: saver_gallery
+      sha256: "5f4123ec1cd5ed9fcd93198ab30ffe0c7746afcbf6846445432de93240fa7b4e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.6"
   scrollable_positioned_list:
     dependency: transitive
     description:
