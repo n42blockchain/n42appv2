@@ -22,10 +22,10 @@
 		52B30CBE2CF46B76005C0363 /* N42Attributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B30CBD2CF46B76005C0363 /* N42Attributes.swift */; };
 		52B30CBF2CF46BC9005C0363 /* N42Attributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B30CBD2CF46B76005C0363 /* N42Attributes.swift */; };
 		52D8711E2C202EF100A5ACA8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 52D8711D2C202EF100A5ACA8 /* GoogleService-Info.plist */; };
-		69240F862EE6C4CD00C6CEE7 /* MobileSdk.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69240F822EE6C4CD00C6CEE7 /* MobileSdk.xcframework */; };
-		69240F872EE6C4CD00C6CEE7 /* MobileSdk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69240F832EE6C4CD00C6CEE7 /* MobileSdk.swift */; };
-		69240F882EE6C4CD00C6CEE7 /* MobileSdkModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69240F842EE6C4CD00C6CEE7 /* MobileSdkModule.swift */; };
-		69240F892EE6C54200C6CEE7 /* MobileSdk.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69240F822EE6C4CD00C6CEE7 /* MobileSdk.xcframework */; };
+		690ACF652F1628AA00F9B66D /* MobileSdk.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69240F822EE6C4CD00C6CEE7 /* MobileSdk.xcframework */; };
+		690ACF662F1628CC00F9B66D /* MobileSdk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69240F832EE6C4CD00C6CEE7 /* MobileSdk.swift */; };
+		69D7DAC12F15E36E004CA1FA /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D7DAC02F15E36E004CA1FA /* WebSocketManager.swift */; };
+		69D7DAC32F15EC6F004CA1FA /* TrustdartPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D7DAC22F15EC6F004CA1FA /* TrustdartPlugin.swift */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
@@ -91,9 +91,10 @@
 		69240F802EE6C4CD00C6CEE7 /* mobile_sdk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mobile_sdk.h; sourceTree = "<group>"; };
 		69240F822EE6C4CD00C6CEE7 /* MobileSdk.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = MobileSdk.xcframework; sourceTree = "<group>"; };
 		69240F832EE6C4CD00C6CEE7 /* MobileSdk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileSdk.swift; sourceTree = "<group>"; };
-		69240F842EE6C4CD00C6CEE7 /* MobileSdkModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileSdkModule.swift; sourceTree = "<group>"; };
 		69D5E1C02EFA6F6400CAF028 /* libmobile_sdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmobile_sdk.a; path = "../../../Downloads/n42 doc/mobile-sdk-ios/MobileSdk.xcframework/ios-arm64/libmobile_sdk.a"; sourceTree = "<group>"; };
 		69D5E1C22EFA6F7800CAF028 /* libmobile_sdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmobile_sdk.a; path = "../../../Downloads/n42 doc/mobile-sdk-ios/MobileSdk.xcframework/ios-x86_64-simulator/libmobile_sdk.a"; sourceTree = "<group>"; };
+		69D7DAC02F15E36E004CA1FA /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
+		69D7DAC22F15EC6F004CA1FA /* TrustdartPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustdartPlugin.swift; sourceTree = "<group>"; };
 		6ED93140A99B2A24597153EB /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -133,8 +134,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				69240F892EE6C54200C6CEE7 /* MobileSdk.xcframework in Frameworks */,
-				69240F862EE6C4CD00C6CEE7 /* MobileSdk.xcframework in Frameworks */,
+				690ACF652F1628AA00F9B66D /* MobileSdk.xcframework in Frameworks */,
 				F4EB2BC9D4EBE52A31CE291D /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -201,7 +201,6 @@
 			isa = PBXGroup;
 			children = (
 				69240F832EE6C4CD00C6CEE7 /* MobileSdk.swift */,
-				69240F842EE6C4CD00C6CEE7 /* MobileSdkModule.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -246,6 +245,8 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				69D7DAC22F15EC6F004CA1FA /* TrustdartPlugin.swift */,
+				69D7DAC02F15E36E004CA1FA /* WebSocketManager.swift */,
 				52A9AA832C33A48D00A68381 /* Runner.entitlements */,
 				52D8711D2C202EF100A5ACA8 /* GoogleService-Info.plist */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
@@ -412,13 +413,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -508,13 +505,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -547,9 +540,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				69240F872EE6C4CD00C6CEE7 /* MobileSdk.swift in Sources */,
-				69240F882EE6C4CD00C6CEE7 /* MobileSdkModule.swift in Sources */,
+				690ACF662F1628CC00F9B66D /* MobileSdk.swift in Sources */,
+				69D7DAC32F15EC6F004CA1FA /* TrustdartPlugin.swift in Sources */,
 				526F3A0E2C10466E00FF9273 /* avPlay.swift in Sources */,
+				69D7DAC12F15E36E004CA1FA /* WebSocketManager.swift in Sources */,
 				526F3A0C2C10463F00FF9273 /* permissionsUtil.swift in Sources */,
 				52B30CBE2CF46B76005C0363 /* N42Attributes.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
@@ -682,7 +676,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/app_links\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/connectivity_plus\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/device_info_plus\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/emoji_picker_flutter\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/file_picker\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_analytics\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_core\"",
@@ -704,7 +697,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/shared_preferences_foundation\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/sqflite_darwin\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/url_launcher_ios\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/vibration\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/video_player_avfoundation\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/wakelock_plus\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/webview_flutter_wkwebview\"",
@@ -747,7 +739,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/app_links/app_links.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/connectivity_plus/connectivity_plus.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/device_info_plus/device_info_plus.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/emoji_picker_flutter/emoji_picker_flutter.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/file_picker/file_picker.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_analytics/firebase_analytics.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_core/firebase_core.framework/Headers\"",
@@ -770,7 +761,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/shared_preferences_foundation/shared_preferences_foundation.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/sqflite_darwin/sqflite_darwin.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/url_launcher_ios/url_launcher_ios.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/vibration/vibration.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/video_player_avfoundation/video_player_avfoundation.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/wakelock_plus/wakelock_plus.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/webview_flutter_wkwebview/webview_flutter_wkwebview.framework/Headers\"",
@@ -781,7 +771,7 @@
 					"$(PROJECT_DIR)/include/**",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -878,8 +868,6 @@
 					"-framework",
 					"\"device_info_plus\"",
 					"-framework",
-					"\"emoji_picker_flutter\"",
-					"-framework",
 					"\"file_picker\"",
 					"-framework",
 					"\"firebase_analytics\"",
@@ -923,8 +911,6 @@
 					"\"sqflite_darwin\"",
 					"-framework",
 					"\"url_launcher_ios\"",
-					"-framework",
-					"\"vibration\"",
 					"-framework",
 					"\"video_player_avfoundation\"",
 					"-framework",
@@ -1275,7 +1261,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/app_links\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/connectivity_plus\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/device_info_plus\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/emoji_picker_flutter\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/file_picker\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_analytics\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_core\"",
@@ -1297,7 +1282,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/shared_preferences_foundation\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/sqflite_darwin\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/url_launcher_ios\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/vibration\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/video_player_avfoundation\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/wakelock_plus\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/webview_flutter_wkwebview\"",
@@ -1340,7 +1324,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/app_links/app_links.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/connectivity_plus/connectivity_plus.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/device_info_plus/device_info_plus.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/emoji_picker_flutter/emoji_picker_flutter.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/file_picker/file_picker.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_analytics/firebase_analytics.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_core/firebase_core.framework/Headers\"",
@@ -1363,7 +1346,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/shared_preferences_foundation/shared_preferences_foundation.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/sqflite_darwin/sqflite_darwin.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/url_launcher_ios/url_launcher_ios.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/vibration/vibration.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/video_player_avfoundation/video_player_avfoundation.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/wakelock_plus/wakelock_plus.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/webview_flutter_wkwebview/webview_flutter_wkwebview.framework/Headers\"",
@@ -1374,7 +1356,7 @@
 					"$(PROJECT_DIR)/include/**",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1471,8 +1453,6 @@
 					"-framework",
 					"\"device_info_plus\"",
 					"-framework",
-					"\"emoji_picker_flutter\"",
-					"-framework",
 					"\"file_picker\"",
 					"-framework",
 					"\"firebase_analytics\"",
@@ -1516,8 +1496,6 @@
 					"\"sqflite_darwin\"",
 					"-framework",
 					"\"url_launcher_ios\"",
-					"-framework",
-					"\"vibration\"",
 					"-framework",
 					"\"video_player_avfoundation\"",
 					"-framework",
@@ -1580,7 +1558,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/app_links\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/connectivity_plus\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/device_info_plus\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/emoji_picker_flutter\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/file_picker\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_analytics\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_core\"",
@@ -1602,7 +1579,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/shared_preferences_foundation\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/sqflite_darwin\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/url_launcher_ios\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/vibration\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/video_player_avfoundation\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/wakelock_plus\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/webview_flutter_wkwebview\"",
@@ -1645,7 +1621,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/app_links/app_links.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/connectivity_plus/connectivity_plus.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/device_info_plus/device_info_plus.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/emoji_picker_flutter/emoji_picker_flutter.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/file_picker/file_picker.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_analytics/firebase_analytics.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_core/firebase_core.framework/Headers\"",
@@ -1668,7 +1643,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/shared_preferences_foundation/shared_preferences_foundation.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/sqflite_darwin/sqflite_darwin.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/url_launcher_ios/url_launcher_ios.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/vibration/vibration.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/video_player_avfoundation/video_player_avfoundation.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/wakelock_plus/wakelock_plus.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/webview_flutter_wkwebview/webview_flutter_wkwebview.framework/Headers\"",
@@ -1679,7 +1653,7 @@
 					"$(PROJECT_DIR)/include/**",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1776,8 +1750,6 @@
 					"-framework",
 					"\"device_info_plus\"",
 					"-framework",
-					"\"emoji_picker_flutter\"",
-					"-framework",
 					"\"file_picker\"",
 					"-framework",
 					"\"firebase_analytics\"",
@@ -1821,8 +1793,6 @@
 					"\"sqflite_darwin\"",
 					"-framework",
 					"\"url_launcher_ios\"",
-					"-framework",
-					"\"vibration\"",
 					"-framework",
 					"\"video_player_avfoundation\"",
 					"-framework",

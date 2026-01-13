@@ -742,6 +742,7 @@ class MiningV2Provider extends ChangeNotifier {
       inactivityScore=[0,0,0,0];
       balanceInBeacon=toEther((rmm.data?['balance_in_beacon']??0).toString(), 9).toDouble();
       int iscore=rmm.data?['inactivity_score']??0;
+      iscore=iscore>3600?3600:iscore;
       double isp=((iscore/3600)*100);
       inactivityScorePercentage=isp.toStringAsFixed(2);
       if(isp<=25){

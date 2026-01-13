@@ -18,11 +18,15 @@ import WalletCore
         UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
       }
       GeneratedPluginRegistrant.register(with: self)
+      // ⭐️⭐️⭐️ 关键
+          TrustdartPlugin.register(
+            with: self.registrar(forPlugin: "TrustdartPlugin")!
+          )
       guard let controller = self.window?.rootViewController as? FlutterViewController else {
           return super.application(application, didFinishLaunchingWithOptions: launchOptions)
       }
       let channel = FlutterMethodChannel(name: "trustdart", binaryMessenger: controller as! any FlutterBinaryMessenger as FlutterBinaryMessenger)
-      
+
       channel.setMethodCallHandler { (call, result) in
       switch call.method {
       case "generateMnemonic":
@@ -683,6 +687,7 @@ import WalletCore
           result(FlutterMethodNotImplemented)
       }
       }
+      
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
     public func getKeyStore(wallet: HDWallet, path: String,coin: String,passphrase:String,addressType:String)->String{
@@ -2304,3 +2309,4 @@ import WalletCore
         return Data(hexString: hexStr1)
     }
 }
+

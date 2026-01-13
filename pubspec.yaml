@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-
+  mobile_scanner: ^6.0.11
   # === UI Components ===
   cupertino_icons: ^1.0.8
   flutter_screenutil: ^5.9.3
@@ -125,8 +125,8 @@ dependencies:
 
   # === N42 Chat Module ===
   n42_chat:
-    #git: https://github.com/n42blockchain/n42_chat
-    path: D:/n42/n42_chat
+    git: https://github.com/n42blockchain/n42_chat
+    #path: D:/n42/n42_chat
 
 dev_dependencies:
   flutter_test:
