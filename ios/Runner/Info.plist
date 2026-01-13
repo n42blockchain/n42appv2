@@ -57,6 +57,10 @@
 	<string>Your consent is required for the APP to use the microphone</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This APP needs to access the photo album, user upload profile picture, file transfer and other functions, allowed?</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs access to your location to share your location with contacts.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app needs access to your location to share your location with contacts.</string>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
@@ -66,6 +70,7 @@
 		<string>audio</string>
 		<string>fetch</string>
 		<string>remote-notification</string>
+		<string>voip</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
