@@ -1,6 +1,5 @@
 package ai.n42.www
 
-import ai.n42.www.R
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
@@ -45,29 +44,561 @@ import wallet.core.jni.proto.TheOpenNetwork
 import wallet.core.jni.proto.Tron
 import wallet.core.jni.proto.Utxo
 import java.math.BigInteger
-import kotlin.text.toHexString
 import evmsdk.Evmsdk
 import com.mobileSdk.Api
+import io.flutter.plugin.common.EventChannel
 
 class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
 
     init {
         System.loadLibrary("TrustWalletCore")
     }
-
     /// The MethodChannel that will the communication between Flutter and native Android
     ///
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
     /// when the Flutter Engine is detached from the Activity
     private lateinit var channel : MethodChannel
+    private lateinit var channel2 : MethodChannel
+    private lateinit var eventChannel: EventChannel
     private lateinit var context:Context
 
     override  fun onAttachedToEngine( flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "trustdart")
-        channel.setMethodCallHandler(this)
+        //channel.setMethodCallHandler(this)
+        channel.setMethodCallHandler { call, result ->
+            handleCoreCall(call, result)
+        }
+        channel2 = MethodChannel(flutterPluginBinding.binaryMessenger, "trustdart_mining")
+        //channel2.setMethodCallHandler(this)
+        channel2.setMethodCallHandler { call, result ->
+            handleCoreCall2(call, result)
+        }
         context =flutterPluginBinding.applicationContext
+
+        // ✅ 新增 EventChannel（专门给 WebSocket 推事件）
+        eventChannel = EventChannel(
+            flutterPluginBinding.binaryMessenger,
+            "trustdart_ws_events"
+        )
+        eventChannel.setStreamHandler(WebSocketEventChannelHandler)
+    }
+    fun handleCoreCall(call: MethodCall, result: MethodChannel.Result) {
+        when(call.method) {
+            "generateMnemonic" -> {
+                val passphrase: String? = call.argument("passphrase")
+                var leng: Int? = call.argument("length")
+                if(leng == null){
+                    leng=128
+                }
+                val wallet = HDWallet(leng, passphrase)
+                result.success(wallet.mnemonic())
+            }
+            "checkMnemonic" -> {
+                val mnemonic: String? = call.argument("mnemonic")
+                val passphrase: String? = call.argument("passphrase")
+                if (mnemonic != "") {
+                    val wallet : HDWallet?= HDWallet(mnemonic, passphrase)
+                    if (wallet != null) {
+                        result.success(true)
+                    } else {
+                        result.error("no_wallet",
+                            "Could not generate wallet, why?", null)
+                    }
+                } else {
+                    result.error("arguments_null", "[mnemonic] cannot be null", null)
+                }
+            }
+            "generateAddress" -> {
+                val path: String? = call.argument("path")
+                val coin: String? = call.argument("coin")
+                val mnemonic: String? = call.argument("mnemonic")
+                val passphrase: String? = call.argument("passphrase")
+                val addressType: String? = call.argument("addressType")
+                val pkStr: String? = call.argument("pk")
+                val isImport: String? = call.argument("isImport")
+                val isTest: String? = call.argument("isTest")
+                if (path != null && coin != null && mnemonic != null && pkStr!=null) {
+
+                    if(mnemonic != "" ){
+                        val wallet = HDWallet(mnemonic, passphrase)
+                        val address: Map<String, String?>? = generateAddress(wallet, path, coin, addressType!!,isTest!!)
+                        if (address == null) result.error("address_null", "failed to generate address", null) else result.success(address)
+                    }
+                    else if(pkStr!=""){
+                        val pk = if(isImport == "true"){
+                            Numeric.hexStringToByteArray(pkStr)
+                        }else{
+                            aBase64.decode(pkStr,64)
+                        }
+                        val privateKey:PrivateKey?= getPrivateKey(pk)
+                        if(privateKey==null){
+                            result.error("privateKey", "failed to privateKey", null)
+                        }else{
+                            val address: Map<String, String?>? = generateAddressPK(privateKey, coin, addressType!!,null,isTest!!)
+                            if (address == null) result.error("address_null", "failed to generate address", null) else result.success(address)
+                        }
+                    }else{
+                        result.error("arguments_null", "[privateKey] cannot be null", null)
+                    }
+
+
+                } else {
+                    result.error("arguments_null", "[path] and [coin] and [mnemonic] and [privateKey] cannot be null", null)
+                }
+            }
+            "validateAddress" -> {
+                val address: String? = call.argument("address")
+                val coin: String? = call.argument("coin")
+                if (address != null && coin != null) {
+                    val isValid: Boolean = validateAddress(coin, address)
+                    result.success(isValid)
+                } else {
+                    result.error("arguments_null", "$address and $coin cannot be null", null)
+                }
+            }
+            "signTransaction" -> {
+                val coin: String? = call.argument("coin")
+                val path: String? = call.argument("path")
+                val mnemonic: String? = call.argument("mnemonic")
+                val passphrase: String? = call.argument("passphrase")
+                val txData: Map<String, Any>? = call.argument("txData")
+                val pkStr: String? = call.argument("pk")
+                if (txData != null && path != null && coin != null && mnemonic != null && pkStr!=null) {
+                    if(mnemonic != ""){
+                        val wallet = HDWallet(mnemonic, passphrase)
+                        val txHash: String? = signTransaction(wallet, coin, path, txData,null)
+                        if (txHash == null) result.error("txhash_null", "failed to buid and sign transaction", null) else result.success(txHash)
+                    }
+                    else if(pkStr!=""){
+                        val pk : ByteArray = aBase64.decode(pkStr,64)
+
+                        val privateKey:PrivateKey?= getPrivateKey(pk)
+                        if(privateKey==null){
+                            result.error("privateKey", "failed to privateKey", null)
+                        }else{
+                            val txHash: String? = signTransaction(null, coin, path, txData,privateKey)
+                            if (txHash == null) result.error("txhash_null", "failed to buid and sign transaction", null) else result.success(txHash)
+                        }
+
+                    }else{
+                        result.error("no_wallet",
+                            "Could not generate wallet, why?", null)
+                    }
+                } else {
+                    result.error("arguments_null", "[txData], [coin] and [path] and [mnemonic] and [privateKey] cannot be null", null)
+                }
+            }
+            "signTransaction_g" -> {
+                val coin: String? = call.argument("coin")
+                val path: String? = call.argument("path")
+                val mnemonic: String? = call.argument("mnemonic")
+                val passphrase: String? = call.argument("passphrase")
+                val txData: Map<String, Any>? = call.argument("txData")
+                val pkStr: String? = call.argument("pk")
+                if (txData != null && path != null && coin != null && mnemonic != null && pkStr!=null) {
+                    if(mnemonic != ""){
+                        val wallet = HDWallet(mnemonic, passphrase)
+                        val coinType:CoinType= getCoinTypeWithCoinString(coin)
+                        val txHash: String? = signEthereumTransactionWithData(wallet, path, txData, coinType,null)
+                        if (txHash == null) result.error("txhash_null", "failed to buid and sign transaction", null) else result.success(txHash)
+                    }
+                    else if(pkStr!=""){
+                        val pk : ByteArray = aBase64.decode(pkStr,64)
+
+                        val privateKey:PrivateKey?= getPrivateKey(pk)
+                        if(privateKey==null){
+                            result.error("privateKey", "failed to privateKey", null)
+                        }else{
+                            val coinType:CoinType= getCoinTypeWithCoinString(coin)
+                            val txHash: String? = signEthereumTransactionWithData(null, path, txData,coinType,privateKey)
+                            if (txHash == null) result.error("txhash_null", "failed to buid and sign transaction", null) else result.success(txHash)
+                        }
+
+                    }else{
+                        result.error("no_wallet",
+                            "Could not generate wallet, why?", null)
+                    }
+                } else {
+                    result.error("arguments_null", "[txData], [coin] and [path] and [mnemonic] and [privateKey] cannot be null", null)
+                }
+            }
+            "signTransaction_btc_p2wsh" -> {
+                val coin: String? = call.argument("coin")
+                val path: String? = call.argument("path")
+                val mnemonic: String? = call.argument("mnemonic")
+                val passphrase: String? = call.argument("passphrase")
+                val txData: Map<String, Any>? = call.argument("txData")
+                val pkStr: String? = call.argument("pk")
+                if (txData != null && path != null && coin != null && mnemonic != null && pkStr!=null) {
+                    if(mnemonic != ""){
+                        val wallet = HDWallet(mnemonic, passphrase)
+                        val txHash: String = signBitcoinTransactionP2wsh(wallet,path,txData,null)
+                        result.success(txHash)
+                    }
+                    else if(pkStr!=""){
+                        val pk : ByteArray = aBase64.decode(pkStr,64)
+
+                        val privateKey= PrivateKey(pk)
+                        val txHash: String = signBitcoinTransactionP2wsh(null, path, txData,privateKey)
+                        result.success(txHash)
+
+                    }else{
+                        result.error("no_wallet",
+                            "Could not generate wallet, why?", null)
+                    }
+                } else {
+                    result.error("arguments_null", "[txData], [coin] and [path] and [mnemonic] and [privateKey] cannot be null", null)
+                }
+            }
+            "signTransaction_byteArray" ->{
+                val coin: String? = call.argument("coin")
+                val path: String? = call.argument("path")
+                val mnemonic: String? = call.argument("mnemonic")
+                val passphrase: String? = call.argument("passphrase")
+                val txData: Map<String, Any>? = call.argument("txData")
+                val pkStr: String? = call.argument("pk")
+                if (txData != null && path != null && coin != null && mnemonic != null && pkStr!=null) {
+
+                    if(mnemonic != ""){
+                        val wallet = HDWallet(mnemonic, passphrase)
+                        val txHash: String? = signTransactionByteArray(wallet, coin, path, txData,null)
+                        if (txHash == null){
+                            result.error("txhash_null", "failed to buid and sign transaction", null)
+                        }
+                        else {
+                            result.success(txHash)
+                        }
+                    }
+                    else if(pkStr!=""){
+                        val pk : ByteArray = aBase64.decode(pkStr,64)
+                        val privateKey= PrivateKey(pk)
+                        val txHash: String? = signTransactionByteArray(null, coin, path, txData,privateKey)
+                        if (txHash == null)
+                            result.error("txhash_null", "failed to buid and sign transaction", null)
+                        else result.success(txHash)
+
+                    }else{
+                        result.error("no_wallet",
+                            "Could not generate wallet, why?", null)
+                    }
+                } else {
+                    result.error("arguments_null", "[txData], [coin] and [path] and [mnemonic] and [privateKey] cannot be null", null)
+                }
+            }
+            "signMessage" ->{
+                val coin: String? = call.argument("coin")
+                val path: String? = call.argument("path")
+                val mnemonic: String? = call.argument("mnemonic")
+                val passphrase: String? = call.argument("passphrase")
+                val txData: String? = call.argument("txData")
+                val pkStr: String? = call.argument("pk")
+                if (txData != null && path != null && coin != null && mnemonic != null && pkStr!=null) {
+
+                    if(mnemonic != ""){
+                        val wallet = HDWallet(mnemonic, passphrase)
+                        val txHash: String? = signMessage(wallet, coin, path, txData,null)
+                        if (txHash == null) result.error("txhash_null", "failed to buid and sign message", null) else result.success(txHash)
+                    }
+                    else if(pkStr!=""){
+                        val pk : ByteArray = aBase64.decode(pkStr,64)
+                        val privateKey= PrivateKey(pk)
+                        val txHash: String? = signMessage(null, coin, path, txData,privateKey)
+                        if (txHash == null) result.error("txhash_null", "failed to buid and sign messagee", null) else result.success(txHash)
+
+                    }else{
+                        result.error("no_wallet",
+                            "Could not generate wallet, why?", null)
+                    }
+                } else {
+                    result.error("arguments_null", "[txData], [coin] and [path] and [mnemonic] and [privateKey] cannot be null", null)
+                }
+            }
+            "getPublicKey" -> {
+                val path: String? = call.argument("path")
+                val coin: String? = call.argument("coin")
+                val mnemonic: String? = call.argument("mnemonic")
+                val passphrase: String? = call.argument("passphrase")
+                val pkStr: String? = call.argument("pk")
+                if (path != null && coin != null ) {
+                    val wallet: HDWallet?
+                    if(mnemonic != ""){
+                        wallet = HDWallet(mnemonic, passphrase)
+                    }
+                    else if(pkStr!=""){
+                        val pk : ByteArray = aBase64.decode(pkStr,64)
+                        wallet =HDWallet(pk, passphrase)
+                    }else{
+                        wallet=null
+                    }
+                    if (wallet != null) {
+                        val publicKey: String? = getPublicKey(wallet, coin, path)
+                        if (publicKey == null) result.error("address_null", "failed to generate address", null) else result.success(publicKey)
+                    } else {
+                        result.error("no_wallet",
+                            "Could not generate wallet, why?", null)
+                    }
+                } else {
+                    result.error("arguments_null", "[path] and [coin] and [mnemonic] cannot be null", null)
+                }
+            }
+            "getPrivateKey" -> {
+                val path: String? = call.argument("path")
+                val coin: String? = call.argument("coin")
+                val mnemonic: String? = call.argument("mnemonic")
+                val passphrase: String? = call.argument("passphrase")
+                if (path != null && coin != null && mnemonic != null) {
+                    val wallet: HDWallet? = if(mnemonic != ""){
+                        HDWallet(mnemonic, passphrase)
+                    }else{
+                        null
+                    }
+                    if (wallet != null) {
+                        val privateKey: String? = getPrivateKey(wallet, coin, path)
+                        if (privateKey == null) result.error("address_null", "failed to generate address", null) else result.success(privateKey)
+                    } else {
+                        result.error("no_wallet",
+                            "Could not generate wallet, why?", null)
+                    }
+                } else {
+                    result.error("arguments_null", "[path] and [coin] and [mnemonic] cannot be null", null)
+                }
+            }
+            "getKeyStore" -> {
+                val path: String? = call.argument("path")
+                val coin: String? = call.argument("coin")
+                val mnemonic: String? = call.argument("mnemonic")
+                val passphrase: String? = call.argument("passphrase")
+                val addressType: String? = call.argument("addressType")
+                val pkStr: String?= call.argument("pk")
+                if (path != null && coin != null && passphrase != null && addressType!=null) {
+
+                    val wallet: HDWallet?
+                    if(mnemonic ==""){
+                        val pk : ByteArray = aBase64.decode(pkStr,64)
+                        wallet =HDWallet(pk, "")
+                    }else{
+                        wallet = HDWallet(mnemonic, "")
+                    }
+                    val keystore: String = getKeyStore(wallet,path,coin,passphrase,addressType)
+                    if (keystore == "") result.error("KeyStore_error", "failed to get KeyStore", null) else result.success(keystore)
+                } else {
+                    result.error("arguments_null", "[path] and [coin] and [mnemonic] and [passphrase] cannot be null", null)
+                }
+            }
+            "getWalletInfoWithKeyStore" ->{
+                val keyStore: String? = call.argument("keyStore")
+                val coin: String? = call.argument("coin")
+                val passphrase: String? = call.argument("passphrase")
+                if (keyStore != null && coin != null && passphrase != null) {
+                    val keystore: Map<String,Any?> = getWalletInfoWithKeyStore(keyStore,passphrase,coin)
+                    result.success(keystore)
+                } else {
+                    result.error("arguments_null", "[keyStore] and [coin] and [passphrase] cannot be null", null)
+                }
+            }
+            "getTransactionMaxValue" ->{
+                //返回转账最大金额
+                val coin: String? = call.argument("coin")
+                val path: String? = call.argument("path")
+                val mnemonic: String? = call.argument("mnemonic")
+                val passphrase: String? = call.argument("passphrase")
+                val txData: Map<String, Any>? = call.argument("txData")
+                val pkStr: String? = call.argument("pk")
+                if (txData != null && path != null && coin != null && mnemonic != null && pkStr!=null) {
+
+                    if(mnemonic != ""){
+                        val wallet = HDWallet(mnemonic, passphrase)
+                        val txHash: String? = signTransactionMaxValue(wallet, coin, path, txData,null)
+                        if (txHash == null) result.error("txhash_null", "failed to buid and sign transaction", null) else result.success(txHash)
+                    }
+                    else if(pkStr!=""){
+                        val pk : ByteArray = aBase64.decode(pkStr,64)
+
+                        val privateKey = PrivateKey(pk)
+                        val txHash: String? = signTransactionMaxValue(null, coin, path, txData,privateKey)
+                        if (txHash == null) result.error("txhash_null", "failed to buid and sign transaction", null) else result.success(txHash)
+
+                    }else{
+                        result.error("no_wallet",
+                            "Could not generate wallet, why?", null)
+                    }
+                } else {
+                    result.error("arguments_null", "[txData], [coin] and [path] and [mnemonic] and [privateKey] cannot be null", null)
+                }
+            }
+            "getPrivateKeyAndPublicKey" ->{
+                val path: String? = call.argument("path")
+                val coin: String? = call.argument("coin")
+                val mnemonic: String? = call.argument("mnemonic")
+                val pkStr: String? = call.argument("privateKey")
+                val passphrase: String? = call.argument("passphrase")
+                if (path != null && coin != null ) {
+                    val wallet: HDWallet?
+                    if (mnemonic != "") {
+                        wallet = HDWallet(mnemonic, passphrase)
+                        val privateKey: String? = getPrivateKey(wallet, coin, path)
+                        val publicKey: String? = getPublicKey(wallet,coin,path)
+                        if (privateKey == null) result.error("address_null", "failed to generate address", null) else {
+                            val rValue :Map<String,String?> = mapOf("publicKey" to publicKey,"privateKey" to privateKey)
+                            result.success(JSONObject(rValue).toString())
+                        }
+                    } else if(pkStr !=""){
+                        val pk : ByteArray = aBase64.decode(pkStr,64)
+                        wallet =HDWallet(pk, passphrase)
+                        val privateKey: String? = getPrivateKey(wallet, coin, path)
+                        val publicKey: String? = getPublicKey(wallet,coin,path)
+                        val rValue :Map<String,String?> = mapOf("publicKey" to publicKey,"privateKey" to privateKey)
+                        result.success(JSONObject(rValue).toString())
+                    }
+                    else {
+                        result.error("no_wallet",
+                            "Could not generate wallet, why?", null)
+                    }
+                } else {
+                    result.error("arguments_null", "[path] and [coin] and [mnemonic] cannot be null", null)
+                }
+            }
+            "LiveActivityStart" ->{
+                val rString : String = playAudio()
+                result.success(rString)
+            }
+            "LiveActivityEnd" ->{
+                val rString : String = playAudioEnd()
+                result.success(rString)
+            }
+            "getPubKeySOL" ->{
+                //返回代币账户
+                val mintAddress: String? = call.argument("mintAddress")
+                val address: String? = call.argument("address")
+                val pubKey : String = SolanaAddress(address).defaultTokenAddress(mintAddress)
+                result.success(pubKey)
+            }
+            "EvmEmit" ->{
+                try {
+                    val params = call.arguments<Map<String, Any>>()
+                    if (params == null) {
+                        result.error("Evm", "params is null", null)
+                        return
+                    }
+                    val paramsJson = JSONObject(params).toString()
+                    //执行sdk的通用方法
+                    val responseStringJson = Evmsdk.emit(paramsJson)
+                    if(responseStringJson != null){
+                        result.success(responseStringJson)
+                    }else{
+                        result.error("Evm","evm response no data",null)
+                    }
+                }catch (e: Exception) {
+                    result.error("Evm", e.message, null)
+                }
+
+            }
+            "MiningGenerateBls12381Keypair" ->{
+                try {
+                    val keyPair = Api.generateBls12381Keypair()
+                    result.success(keyPair)
+                }catch (e: Exception) {
+                    result.error("DepositError", e.message, null)
+                }
+            }
+            "MiningCreateDepositUnsignedTx" ->{
+                val args = call.arguments as Map<String, Any>
+                val depositContractAddress = args["depositContractAddress"] as String
+                val validatorPrivateKey = args["validatorPrivateKey"] as String
+                val withdrawalAddress = args["withdrawalAddress"] as String
+                val depositValueWeiInHex = args["depositValueWeiInHex"] as String
+
+                try {
+                    val tx = Api.createDepositUnsignedTx(
+                        depositContractAddress,
+                        validatorPrivateKey,
+                        withdrawalAddress,
+                        depositValueWeiInHex
+                    )
+                    result.success(tx)
+                } catch (e: Exception) {
+                    result.error("DepositError", e.message, null)
+                }
+            }
+            "MiningCreateExitUnsignedTx" ->{
+                val args = call.arguments as Map<String, Any>
+                val validatorPublicKey = args["validatorPublicKey"] as String
+                val feeWeiInHex = args["feeWeiInHex"] as String
+
+                try {
+                    val exitTx = Api.createExitUnsignedTx(
+                        validatorPublicKey,
+                        feeWeiInHex
+                    )
+                    result.success(exitTx)
+                } catch (e: Exception) {
+                    result.error("ExitError", e.message, null)
+                }
+            }
+            "MiningCreateGetExitFeeUnsignedTx" ->{
+                try {
+                    val tx = Api.createGetExitFeeUnsignedTx()
+                    result.success(tx)
+                }catch (e: Exception) {
+                    result.error("DepositError", e.message, null)
+                }
+            }
+            "MiningRunClient" ->{
+                val args = call.arguments as Map<String, Any>
+                val wsUrl = args["wsUrl"] as String
+                val validatorPrivateKey = args["validatorPrivateKey"] as String
+
+                try {
+                    Api.runClient(wsUrl, validatorPrivateKey)
+                        .thenRun {
+                            channel.invokeMethod("onClientDone", null) // 通知 Flutter
+                        }
+                        .exceptionally { ex ->
+                            channel.invokeMethod("onClientError", ex.message)
+                            null
+                        }
+                    result.success("Client started")
+                } catch (e: Exception) {
+                    result.error("ClientError", e.message, null)
+                }
+            }
+
+            else -> result.notImplemented()
+        }
     }
 
+    fun handleCoreCall2(call: MethodCall, result: MethodChannel.Result) {
+        when(call.method) {
+            "connectWebSocket" -> {
+                val args = call.arguments as Map<String, Any>
+                val wsUrl = args["wsUrl"] as? String
+                val pubkey = args["validatorPubkey"] as? String
+                val privateKey = args["validatorPrivateKey"] as? String
+                if (wsUrl == null || pubkey == null) {
+                    result.error("arguments_null", "wsUrl and validatorPubkey cannot be null", null)
+                    return
+                }
+
+                val intent = Intent(context, WebSocketService::class.java)
+                intent.putExtra("wsUrl", wsUrl)
+                intent.putExtra("validatorPubkey", pubkey)
+                intent.putExtra("validatorPrivateKey", privateKey)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.startForegroundService(intent)
+                } else {
+                    context.startService(intent)
+                }
+                result.success("WebSocket connecting...")
+            }
+            "disconnectWebSocket" -> {
+                val intent = Intent(context, WebSocketService::class.java)
+                context.stopService(intent)
+                result.success("WebSocket disconnected")
+            }
+
+            else -> result.notImplemented()
+        }
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onMethodCall( call: MethodCall,  result: MethodChannel.Result) {
         when(call.method) {
@@ -549,12 +1080,39 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
                     result.error("ClientError", e.message, null)
                 }
             }
+            "connectWebSocket" -> {
+                val args = call.arguments as Map<String, Any>
+                val wsUrl = args["wsUrl"] as? String
+                val pubkey = args["validatorPubkey"] as? String
+                if (wsUrl == null || pubkey == null) {
+                    result.error("arguments_null", "wsUrl and validatorPubkey cannot be null", null)
+                    return
+                }
+
+                val intent = Intent(context, WebSocketService::class.java)
+                intent.putExtra("wsUrl", wsUrl)
+                intent.putExtra("validatorPubkey", pubkey)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.startForegroundService(intent)
+                } else {
+                    context.startService(intent)
+                }
+                result.success("WebSocket connecting...")
+            }
+            "disconnectWebSocket" -> {
+                val intent = Intent(context, WebSocketService::class.java)
+                context.stopService(intent)
+                result.success("WebSocket disconnected")
+            }
+
             else -> result.notImplemented()
         }
     }
 
     override fun onDetachedFromEngine( binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
+        channel2.setMethodCallHandler(null)
+        eventChannel.setStreamHandler(null)
     }
     //创建私钥
     private fun getPrivateKey(pk: ByteArray):PrivateKey? {
@@ -666,7 +1224,7 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
         return coinType.validate(address)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    //@RequiresApi(Build.VERSION_CODES.O)
     private fun getPublicKey(wallet: HDWallet, coin: String, path: String): String? {
         val chainType:String =getChainTypeWithCoinString(coin)
         if(chainType == ""){
@@ -708,7 +1266,7 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    //@RequiresApi(Build.VERSION_CODES.O)
     private fun getPrivateKey(wallet: HDWallet, coin: String, path: String): String? {
         val coinType:CoinType=getCoinTypeWithCoinString(coin)
         val privateKey = wallet.getKey(coinType, path)
@@ -2113,5 +2671,27 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
             return "false"
         }
 
+    }
+
+}
+
+object WebSocketEventChannelHandler : EventChannel.StreamHandler {
+
+    private var eventSink: EventChannel.EventSink? = null
+
+    override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+        eventSink = events
+    }
+
+    override fun onCancel(arguments: Any?) {
+        eventSink = null
+    }
+
+    fun send(message: String) {
+        eventSink?.success(message)
+    }
+
+    fun sendError(code: String, message: String, details: Any? = null) {
+        eventSink?.error(code, message, details)
     }
 }

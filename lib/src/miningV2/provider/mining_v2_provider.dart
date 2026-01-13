@@ -7,6 +7,7 @@ import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/miningV2/api/mining_api.dart';
 import 'package:n42appv2/src/miningV2/api/mining_web3.dart';
 import 'package:n42appv2/src/miningV2/models/miningWithdrawalsDaily.dart';
+import 'package:n42appv2/src/miningV2/provider/mining_webSocketBridge.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/utils/data_utils.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
@@ -150,7 +151,8 @@ class MiningV2Provider extends ChangeNotifier {
 
       await getMiningData();
       if (depositsEnable == true) {
-        runMining();
+        connectWebSocket(wsUrl: 'ws://5.161.252.59:8546/',validatorPrivateKey:miningKeypart?['privateKey']??"",validatorPubkey:miningKeypart?['publicKey']??"",);
+        //runMining();
       }
       // Note: getNprice requires price service, skipping for now
       loadMiningData();
@@ -792,6 +794,77 @@ class MiningV2Provider extends ChangeNotifier {
       }
       notifyListeners();
     }
+  }
+
+
+
+  // ================= WebSocket 相关 =================
+  NativeWebSocketBridge? _wsBridge;
+  StreamSubscription<String>? _wsSubscription;
+
+  /// WebSocket 连接状态
+  bool wsConnected = false;
+
+  /// 初始化 WebSocket
+  void initWebSocket() {
+    _wsBridge ??= NativeWebSocketBridge();
+  }
+
+  /// 连接 WebSocket
+  Future<void> connectWebSocket({
+    required String wsUrl,
+    required String validatorPubkey,
+    required String validatorPrivateKey,
+  }) async {
+    try {
+      initWebSocket();
+      // 监听 WebSocket 消息
+      _wsSubscription?.cancel();
+      _wsSubscription = _wsBridge!.messages.listen((message) {
+        //debugPrint('WebSocket message: $message');
+        handleWebSocketMessage(message);
+      });
+      await _wsBridge!.connect(
+        wsUrl: wsUrl,
+        validatorPubkey: validatorPubkey,
+        validatorPrivateKey: validatorPrivateKey,
+      );
+      wsConnected = true;
+      notifyListeners();
+
+    } catch (e) {
+      wsConnected = false;
+      debugPrint('WebSocket connect error: $e');
+      notifyListeners();
+    }
+  }
+
+  /// 断开 WebSocket
+  Future<void> disconnectWebSocket() async {
+    try {
+      await _wsBridge?.disconnect();
+    } catch (e) {
+      debugPrint('WebSocket disconnect error: $e');
+    }
+    _wsSubscription?.cancel();
+    _wsSubscription = null;
+    wsConnected = false;
+    notifyListeners();
+  }
+
+  /// 处理 WebSocket 消息
+  void handleWebSocketMessage(String message) {
+    // 这里可以根据消息内容做不同处理
+    // 例如更新 miningStatus、taskList、balanceInBeacon 等
+    debugPrint('Received WS: $message');
+    // TODO: 解析 message 并更新状态
+  }
+
+  @override
+  void dispose() {
+    _wsSubscription?.cancel();
+    _wsBridge?.disconnect();
+    super.dispose();
   }
 }
 
