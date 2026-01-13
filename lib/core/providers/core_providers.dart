@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42appv2/core/constants/language_constants.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
+import 'package:n42appv2/core/utils/theme_mode_utils.dart';
 import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42_chat/n42_chat.dart';
@@ -34,45 +35,18 @@ class ThemeModeNotifier extends StateNotifier<ThemeMode> {
   
   Future<void> _loadFromStorage() async {
     final mode = await _spUtil.getThemeMode();
-    state = _intToThemeMode(mode ?? 0);
-    // 同步主题到 n42_chat
+    state = ThemeModeUtils.fromInt(mode ?? 0);
     _syncToN42Chat(state);
   }
-  
+
   void setTheme(ThemeMode mode) {
     state = mode;
-    _spUtil.setThemeMode(_themeModeToInt(mode));
-    // 同步主题到 n42_chat
+    _spUtil.setThemeMode(ThemeModeUtils.toInt(mode));
     _syncToN42Chat(mode);
   }
-  
-  /// 同步主题到 n42_chat 模块
+
   void _syncToN42Chat(ThemeMode mode) {
-    if (N42Chat.isInitialized) {
-      N42Chat.setThemeMode(mode);
-    }
-  }
-  
-  ThemeMode _intToThemeMode(int value) {
-    switch (value) {
-      case 1:
-        return ThemeMode.light;
-      case 2:
-        return ThemeMode.dark;
-      default:
-        return ThemeMode.system;
-    }
-  }
-  
-  int _themeModeToInt(ThemeMode mode) {
-    switch (mode) {
-      case ThemeMode.light:
-        return 1;
-      case ThemeMode.dark:
-        return 2;
-      case ThemeMode.system:
-        return 0;
-    }
+    if (N42Chat.isInitialized) N42Chat.setThemeMode(mode);
   }
 }
 

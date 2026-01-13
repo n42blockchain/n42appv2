@@ -1,16 +1,18 @@
-﻿import 'package:n42appv2/core/config/app_config.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/constants/language_constants.dart';
+import 'package:n42appv2/core/storage/sp_util.dart';
+import 'package:n42appv2/core/utils/theme_mode_utils.dart';
+import 'package:n42appv2/data/models/user_info.dart';
+import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/https/ipfs_api.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/utils/app_push_utils.dart';
-import 'package:n42appv2/core/storage/sp_util.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:n42appv2/data/models/user_info.dart';
-import 'package:flutter/material.dart';
-import 'package:n42appv2/generated/l10n.dart';
 
 
 class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
@@ -78,195 +80,55 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
     notifyListeners();
   }
 
-  //切换系统语言,start
-  //当前系统语言，默认是英语
-  Locale _locale = const Locale.fromSubtags(languageCode: 'en');
-
+  // 系统语言
+  Locale _locale = const Locale('en');
   Locale get locale => _locale;
 
-  //切换系统语言
-  switchLocale(String code) {
-    switch (code) {
-      case "fr": //法语
-        _locale = const Locale('fr');
-        break;
-      case "en": //英语
-        _locale = const Locale('en');
-        break;
-      case "bn": //孟加拉语
-        _locale = const Locale('bn');
-        break;
-      case "nl": //荷兰语
-        _locale = const Locale('nl');
-        break;
-      case "tl": //菲律宾语
-        _locale = const Locale('tl');
-        break;
-      case "de": //德语
-        _locale = const Locale('de');
-        break;
-      case "el": //希腊语
-        _locale = const Locale('el');
-        break;
-      case "hi": //印地语
-        _locale = const Locale('hi');
-        break;
-      case "id": //印度尼西亚语，印尼
-        _locale = const Locale('id');
-        break;
-      case "ga": //爱尔兰语
-        _locale = const Locale('ga');
-        break;
-      case "it": //意大利语
-        _locale = const Locale('it');
-        break;
-      case "ja": //日语
-        _locale = const Locale('ja');
-        break;
-      case "ko": //韩语
-        _locale = const Locale('ko');
-        break;
-      case "ms": //马来语
-        _locale = const Locale('ms');
-        break;
-      case "no": //挪威语
-        _locale = const Locale('no');
-        break;
-      case "fa": //波斯语
-        _locale = const Locale('fa');
-        break;
-      case "pt": //葡萄牙语
-        _locale = const Locale('pt');
-        break;
-      case "ro": //罗马尼亚语
-        _locale = const Locale('ro');
-        break;
-      case "ru": //俄语
-        _locale = const Locale('ru');
-        break;
-      case "es_ES": //西班牙语
-        _locale = const Locale('es',"ES");
-        break;
-      case "sw": //斯瓦希里语
-        _locale = const Locale('sw');
-        break;
-      case "sv": //瑞典语
-        _locale = const Locale('sv');
-        break;
-      case "th": //泰国语
-        _locale = const Locale('th');
-        break;
-      case "tr": //土耳其语
-        _locale = const Locale('tr');
-        break;
-      case "uk": //乌克兰语
-        _locale = const Locale('uk');
-        break;
-      case "ur": //印度乌尔都语
-        _locale = const Locale('ur');
-        break;
-      case "vi": //越南语
-        _locale = const Locale('vi');
-        break;
-      case "zh_TW": //中文
-        _locale = const Locale('zh','TW');
-        break;
-      case "zh_CN": //中文
-        _locale = const Locale('zh','CN');
-        break;
-      default:
-        _locale = const Locale('en');
-    }
+  /// 切换系统语言 - 使用共享语言常量
+  void switchLocale(String code) {
+    _locale = _codeToLocale(code);
     SPUtil().setSysLang(code);
     notifyListeners();
   }
-  Map<String,dynamic> get getLocaleInfo {
-    String code=_locale.languageCode;
-    switch (code) {
-      case "en":
-        return {"icon":"assets/home/setting/english.png", "title":"English"};
-      case "ja":
-        return {"icon":"assets/home/setting/japanese.png", "title":"日本語"};
-      case "ko":
-        return {"icon":"assets/home/setting/korean.png", "title":"한국어"};
-      case "es":
-        return {"icon":"assets/home/setting/spanish.png", "title":"Español"};
-      case "fr":
-        return {"icon":"assets/home/setting/french.png", "title":"Français"};
-      case "de":
-        return {"icon":"assets/home/setting/german.png", "title":"Deutsch"};
-      case "it":
-        return {"icon":"assets/home/setting/italian.png", "title":"Italiano"};
-      case "pt":
-        return {"icon":"assets/home/setting/portuguese.png", "title":"Português"};
-      case "ru":
-        return {"icon":"assets/home/setting/russian.png", "title":"Русский"};
-      case "vi":
-        return {"icon":"assets/home/setting/vietnamese.png", "title":"Tiếng Việt"};
-      case "id":
-        return {"icon":"assets/home/setting/indonesian.png", "title":"Bahasa Indonesia"};
-      case "tr":
-        return {"icon":"assets/home/setting/turkish.png", "title":"Türkçe"};
-      case "pl":
-        return {"icon":"assets/home/setting/polish.png", "title":"Polski"};
-      case "zh":
-        return {"icon":"assets/home/setting/chinese.png", "title":"中文"};
-      default:
-        return {"icon":"assets/home/setting/english.png", "title":"English"};
-    }
+
+  /// 获取当前语言信息 - 使用共享语言常量
+  Map<String, dynamic> get getLocaleInfo {
+    final lang = getLanguageByCode(_locale.languageCode);
+    return {"icon": lang.icon, "title": lang.name};
   }
 
-  //获取系统语言
-  _getSysLangType() async {
-    var sysLangType = await SPUtil().getSysLang();
-    if (sysLangType == null) {
-      switchLocale('en');
-    } else {
-      if(sysLangType=="zh_TW"){
-        _locale = Locale("zh","TW");
-      }else if(sysLangType=="zh_CN"){
-        _locale = Locale("zh","CN");
-      }else if(sysLangType=="es_ES"){
-        _locale = Locale("es","ES");
-      }else{
-        _locale = Locale(sysLangType);
-      }
+  /// 语言代码转 Locale
+  Locale _codeToLocale(String code) {
+    if (code.contains('_')) {
+      final parts = code.split('_');
+      return Locale(parts[0], parts[1]);
     }
+    return Locale(code);
+  }
+
+  /// 获取系统语言
+  Future<void> _getSysLangType() async {
+    final sysLangType = await SPUtil().getSysLang();
+    _locale = _codeToLocale(sysLangType ?? 'en');
     notifyListeners();
   }
 
-  //切换系统主题样式,start
-  //当前系统的主题，默认是跟随系统
+  // 主题模式
   ThemeMode _themeMode = ThemeMode.system;
-
   ThemeMode get themeMode => _themeMode;
 
-  switchTheme(int type) {
-    if (type == 0) {
-      //系统默认
-      _themeMode = ThemeMode.system;
-      SPUtil().setThemeMode(0);
-    } else if (type == 1) {
-      //亮色
-      _themeMode = ThemeMode.light;
-      SPUtil().setThemeMode(1);
-    } else if (type == 2) {
-      //暗色
-      _themeMode = ThemeMode.dark;
-      SPUtil().setThemeMode(2);
-    }
+  /// 切换主题 - 使用共享工具类
+  void switchTheme(int type) {
+    _themeMode = ThemeModeUtils.fromInt(type);
+    SPUtil().setThemeMode(type);
     notifyListeners();
   }
 
-  //获取系统主题模式
-  _getThemeModeType() async {
-    SPUtil sPUtils=SPUtil();
-    var themeModeT = await sPUtils.getThemeMode();
-    if (themeModeT == null) {
-      themeModeT = 0;
-      sPUtils.setThemeMode(0);
-    }
-    switchTheme(themeModeT);
+  /// 获取系统主题模式
+  Future<void> _getThemeModeType() async {
+    final type = await SPUtil().getThemeMode() ?? 0;
+    _themeMode = ThemeModeUtils.fromInt(type);
+    notifyListeners();
   }
 
   //主页面 tabbar 索引
