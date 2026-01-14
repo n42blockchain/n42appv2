@@ -70,7 +70,24 @@ class WebSocketService : Service() {
         return START_STICKY
     }
 
+    /*private fun startWebSocket(url: String, pubkey: String, privateKey: String) {
+        Log.i("WebSocketService", "Connecting to $url")
+        val request = Request.Builder().url(url).build()
+        ws = client.newWebSocket(
+            request,
+            MyWebSocketListener(pubkey, privateKey) {
+                ws = null
+                handler.postDelayed(reconnectRunnable, reconnectDelay)
+            }
+        )
+    }*/
+    @Synchronized
     private fun startWebSocket(url: String, pubkey: String, privateKey: String) {
+        if (ws != null) {
+            Log.w("WebSocketService", "WebSocket already running, ignore start")
+            return
+        }
+
         Log.i("WebSocketService", "Connecting to $url")
         val request = Request.Builder().url(url).build()
         ws = client.newWebSocket(
@@ -81,6 +98,7 @@ class WebSocketService : Service() {
             }
         )
     }
+
 
     private fun stopWebSocket() {
         ws?.close(1000, "Manual disconnect")

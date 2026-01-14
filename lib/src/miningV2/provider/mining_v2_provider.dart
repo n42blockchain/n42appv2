@@ -817,7 +817,7 @@ class MiningV2Provider extends ChangeNotifier {
     try {
       initWebSocket();
       // 监听 WebSocket 消息
-      _wsSubscription?.cancel();
+      await disconnectWebSocket();
       _wsSubscription = _wsBridge!.messages.listen((message) {
         //debugPrint('WebSocket message: $message');
         handleWebSocketMessage(message);

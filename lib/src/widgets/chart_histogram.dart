@@ -54,7 +54,7 @@ class _ChartHistogramState extends State<ChartHistogram> {
               style: TextStyle(
                 color:AppThemeUtils.getColorByKey(context,AppThemeKeys.itemTextColor.name),
                 fontSize: ScreenUtil().setSp(32),
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
