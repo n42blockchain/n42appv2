@@ -47,8 +47,8 @@ class PlansWidget extends StatelessWidget {
               child: Image.asset('assets/mining/miningv3_coin.png'),
             ),
             Positioned(
-              top: ScreenUtil().setWidth(26),
-              bottom: ScreenUtil().setWidth(26),
+              top: ScreenUtil().setWidth(20),
+              bottom: ScreenUtil().setWidth(18),
               left: ScreenUtil().setWidth(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

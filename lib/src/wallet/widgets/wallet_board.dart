@@ -65,9 +65,12 @@ class _WalletBoardState extends State<WalletBoard> {
               textAlign: TextAlign.center,
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: buttonList(),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: buttonList(),
+            ),
           ),
           SizedBox(height: ScreenUtil().setWidth(30),),
           Divider(
@@ -162,17 +165,17 @@ class _WalletBoardState extends State<WalletBoard> {
   }
   List<Widget> buttonList(){
     return[
-      sendWidget(),
-      SizedBox(width: ScreenUtil().setWidth(30),),
-      receiveWidget(),
+      Flexible(child: sendWidget()),
+      SizedBox(width: ScreenUtil().setWidth(20),),
+      Flexible(child: receiveWidget()),
       if(Platform.isAndroid)
-        SizedBox(width: ScreenUtil().setWidth(30),),
+        SizedBox(width: ScreenUtil().setWidth(20),),
       if(Platform.isAndroid)
-        buyWidget(),
+        Flexible(child: buyWidget()),
       if(Platform.isAndroid)
-        SizedBox(width: ScreenUtil().setWidth(30),),
+        SizedBox(width: ScreenUtil().setWidth(20),),
       if(Platform.isAndroid)
-        sellWidget(),
+        Flexible(child: sellWidget()),
       /*if(AppGlobals.userInfo !=null)
         SizedBox(width: ScreenUtil().setWidth(30),),
         if(AppGlobals.userInfo !=null)
