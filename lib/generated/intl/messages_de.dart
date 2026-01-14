@@ -979,7 +979,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_15": MessageLookupByLibrary.simpleMessage(
             "Berechnet basierend auf dem Marktpreis von N * die gesamten N-Belohnungen."),
         "g_mining_key_23":
-            MessageLookupByLibrary.simpleMessage("Validierungsanzahl"),
+            MessageLookupByLibrary.simpleMessage("Anzahl der Gewinne"),
         "g_mining_key_31":
             MessageLookupByLibrary.simpleMessage("Plaene auswaehlen"),
         "g_mining_key_32": MessageLookupByLibrary.simpleMessage(
@@ -1049,9 +1049,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_84":
             MessageLookupByLibrary.simpleMessage("Niedriges Risiko"),
         "g_mining_key_85":
-            MessageLookupByLibrary.simpleMessage("Maessig niedriges Risiko"),
-        "g_mining_key_86":
-            MessageLookupByLibrary.simpleMessage("Maessig hohes Risiko"),
+            MessageLookupByLibrary.simpleMessage("Maessig Risiko"),
+        "g_mining_key_86": MessageLookupByLibrary.simpleMessage(
+            "Belohnungen der letzten 7 Tage"),
         "g_mining_key_87": MessageLookupByLibrary.simpleMessage("Hohes Risiko"),
         "g_mining_key_88": MessageLookupByLibrary.simpleMessage(
             "Der Vertrag wird geladen und kann derzeit nicht verifiziert werden. Bitte warten Sie einen Moment!"),

@@ -790,7 +790,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_14": MessageLookupByLibrary.simpleMessage("マイニング価値"),
         "g_mining_key_15":
             MessageLookupByLibrary.simpleMessage("Nの市場価格 × 累計N報酬に基づいて計算されます。"),
-        "g_mining_key_23": MessageLookupByLibrary.simpleMessage("検証回数"),
+        "g_mining_key_23": MessageLookupByLibrary.simpleMessage("利益回数"),
         "g_mining_key_31": MessageLookupByLibrary.simpleMessage("プランを選択"),
         "g_mining_key_32":
             MessageLookupByLibrary.simpleMessage("アンロック期間：いつでもアンロック可能"),
@@ -839,8 +839,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_83":
             MessageLookupByLibrary.simpleMessage("バリデーターは既に存在します"),
         "g_mining_key_84": MessageLookupByLibrary.simpleMessage("低リスク"),
-        "g_mining_key_85": MessageLookupByLibrary.simpleMessage("やや低リスク"),
-        "g_mining_key_86": MessageLookupByLibrary.simpleMessage("やや高リスク"),
+        "g_mining_key_85": MessageLookupByLibrary.simpleMessage("中程度のリスク"),
+        "g_mining_key_86": MessageLookupByLibrary.simpleMessage("過去7日間の報酬"),
         "g_mining_key_87": MessageLookupByLibrary.simpleMessage("高リスク"),
         "g_mining_key_88": MessageLookupByLibrary.simpleMessage(
             "コントラクトを読み込み中のため、現在認証できません。しばらくお待ちください！"),

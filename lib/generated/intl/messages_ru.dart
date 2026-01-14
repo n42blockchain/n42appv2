@@ -962,7 +962,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_15": MessageLookupByLibrary.simpleMessage(
             "Рассчитывается на основе рыночной цены N * общее количество вознаграждений N."),
         "g_mining_key_23":
-            MessageLookupByLibrary.simpleMessage("Количество валидаций"),
+            MessageLookupByLibrary.simpleMessage("Количество прибылей"),
         "g_mining_key_31": MessageLookupByLibrary.simpleMessage("Выбор планов"),
         "g_mining_key_32": MessageLookupByLibrary.simpleMessage(
             "Период разблокировки: Разблокировка в любое время"),
@@ -1025,9 +1025,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Валидатор уже существует"),
         "g_mining_key_84": MessageLookupByLibrary.simpleMessage("Низкий риск"),
         "g_mining_key_85":
-            MessageLookupByLibrary.simpleMessage("Умеренно низкий риск"),
-        "g_mining_key_86":
-            MessageLookupByLibrary.simpleMessage("Умеренно высокий риск"),
+            MessageLookupByLibrary.simpleMessage("Умеренно риск"),
+        "g_mining_key_86": MessageLookupByLibrary.simpleMessage(
+            "Вознаграждения за последние 7 дней"),
         "g_mining_key_87": MessageLookupByLibrary.simpleMessage("Высокий риск"),
         "g_mining_key_88": MessageLookupByLibrary.simpleMessage(
             "Контракт загружается, в данный момент верификация невозможна. Пожалуйста, подождите!"),

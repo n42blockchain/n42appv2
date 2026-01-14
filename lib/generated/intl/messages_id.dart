@@ -940,7 +940,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_15": MessageLookupByLibrary.simpleMessage(
             "Dihitung berdasarkan harga pasar N * total hadiah N."),
         "g_mining_key_23":
-            MessageLookupByLibrary.simpleMessage("Jumlah validasi"),
+            MessageLookupByLibrary.simpleMessage("Jumlah keuntungan"),
         "g_mining_key_31": MessageLookupByLibrary.simpleMessage("Pilih Paket"),
         "g_mining_key_32": MessageLookupByLibrary.simpleMessage(
             "Periode Buka Kunci: Dapat dibuka kapan saja"),
@@ -1003,10 +1003,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Validator sudah ada"),
         "g_mining_key_84":
             MessageLookupByLibrary.simpleMessage("Risiko Rendah"),
-        "g_mining_key_85":
-            MessageLookupByLibrary.simpleMessage("Risiko Cukup Rendah"),
+        "g_mining_key_85": MessageLookupByLibrary.simpleMessage("Risiko Cukup"),
         "g_mining_key_86":
-            MessageLookupByLibrary.simpleMessage("Risiko Cukup Tinggi"),
+            MessageLookupByLibrary.simpleMessage("Hadiah 7 hari terakhir"),
         "g_mining_key_87":
             MessageLookupByLibrary.simpleMessage("Risiko Tinggi"),
         "g_mining_key_88": MessageLookupByLibrary.simpleMessage(

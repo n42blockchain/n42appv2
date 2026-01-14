@@ -717,7 +717,7 @@ class MiningV2Provider extends ChangeNotifier {
     }
   }
   double balanceInBeacon=0;
-  List<double> inactivityScore=[0,0,0,0];
+  List<double> inactivityScore=[0,0,0];
   String inactivityScorePercentage="0";
   String inactivityTitle="";
   bool showRedemption=false;//质押成功的过度状态
@@ -739,25 +739,22 @@ class MiningV2Provider extends ChangeNotifier {
   Future<void> getBeaconValidator() async {
     MessageModel rmm=await Mining.getBeaconValidator(miningKeypart?['publicKey']??"");
     if(rmm.error ==false){
-      inactivityScore=[0,0,0,0];
+      inactivityScore=[0,0,0];
       balanceInBeacon=toEther((rmm.data?['balance_in_beacon']??0).toString(), 9).toDouble();
       int iscore=rmm.data?['inactivity_score']??0;
-      iscore=iscore>3600?3600:iscore;
-      double isp=((iscore/3600)*100);
+      iscore=iscore>2700?2700:iscore;
+      double isp=((iscore/2700)*100);
       inactivityScorePercentage=isp.toStringAsFixed(2);
-      if(isp<=25){
+      if(isp<=33.33){
         inactivityTitle=S.current.g_mining_key_84;//"Low Risk";
-      }else if(isp<=50){
-        inactivityTitle=S.current.g_mining_key_85;//"Moderately Low Risk";
-      }
-      else if(isp<=75){
-        inactivityTitle=S.current.g_mining_key_86;//"Moderately High Risk";
+      }else if(isp<=66.66){
+        inactivityTitle=S.current.g_mining_key_85;//"Moderately Risk";
       }
       else{
         inactivityTitle=S.current.g_mining_key_87;//"High Risk";
       }
       if(iscore!=0){
-        for(int i=0;i<4;i++){
+        for(int i=0;i<3;i++){
           if(iscore-(i+1)*900<=0){
             inactivityScore[i]=(iscore-(i)*900)/900;
             break;

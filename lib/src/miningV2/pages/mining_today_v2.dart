@@ -945,12 +945,10 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
     // 根据风险等级设置颜色
     final scoreValue = double.tryParse(mpValue.inactivityScorePercentage) ?? 0.0;
     Color riskColor;
-    if (scoreValue <= 25) {
+    if (scoreValue <= 33.33) {
       riskColor = const Color(0xFF4CAF50); // 绿色 - 低风险
-    } else if (scoreValue <= 50) {
-      riskColor = const Color(0xFFFF9800); // 橙色 - 中低风险
-    } else if (scoreValue <= 75) {
-      riskColor = const Color(0xFFFF5722); // 深橙 - 中高风险
+    } else if (scoreValue <= 66.66) {
+      riskColor = const Color(0xFFFF9800); // 橙色 - 中风险
     } else {
       riskColor = const Color(0xFFF44336); // 红色 - 高风险
     }
@@ -1046,7 +1044,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
           Padding(
             padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
             child: Row(
-              children: List.generate(4, (index) {
+              children: List.generate(3, (index) {
                 return Expanded(
                   child: Container(
                     margin: EdgeInsets.only(right: index < 3 ? ScreenUtil().setWidth(8) : 0),

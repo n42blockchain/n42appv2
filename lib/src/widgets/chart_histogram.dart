@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:n42appv2/generated/l10n.dart';
 
 class ChartHistogram extends StatefulWidget {
   TitleModel titleModel; //标题，主标题、副标题如果没有可以不传，
@@ -39,54 +40,76 @@ class _ChartHistogramState extends State<ChartHistogram> {
         BorderRadius.circular(ScreenUtil().setWidth(16)),
 
       ),
-      child: AspectRatio(
-        // aspectRatio: 1.5,
-        aspectRatio: 2,
-        child: Stack(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(top: ScreenUtil().setWidth(32),bottom: ScreenUtil().setWidth(24)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  if (widget.titleModel.title != null)
-                    Text(
-                      widget.titleModel.title!,
-                      style: widget.titleModel.titleStyle,
-                    ),
-                  if (widget.titleModel.title != null)
-                    SizedBox(
-                      height: widget.titleModel.tsSpace,
-                    ),
-                  if (widget.titleModel.subtitle != null)
-                    Text(
-                      widget.titleModel.subtitle!,
-                      style: widget.titleModel.subtitleStyle,
-                    ),
-                  if (widget.titleModel.subtitle != null ||
-                      widget.titleModel.title != null)
-                    SizedBox(
-                      height: widget.titleModel.bottomSpace,
-                    ),
-                  Expanded(
-                    child: BarChart(
-                      mainBarData(),
-                      swapAnimationDuration: animDuration,
-                    ),
-                  ),
-                ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(
+              left: ScreenUtil().setWidth(32),
+              right: ScreenUtil().setWidth(32),
+              top: ScreenUtil().setWidth(20),
+            ),
+            child: Text(
+              S.of(context).g_mining_key_86,
+              style: TextStyle(
+                color:AppThemeUtils.getColorByKey(context,AppThemeKeys.itemTextColor.name),
+                fontSize: ScreenUtil().setSp(32),
+                fontWeight: FontWeight.w800,
               ),
             ),
+          ),
 
-            if(widget.isLoading)
-              Center(child: Padding(
-                padding:  EdgeInsets.only(bottom: ScreenUtil().setWidth(24)),
-                child:  CupertinoActivityIndicator(animating: true, radius: ScreenUtil().setWidth(24)),
-              ))
+          AspectRatio(
+            // aspectRatio: 1.5,
+            aspectRatio: 2,
+            child: Stack(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(top: ScreenUtil().setWidth(32),bottom: ScreenUtil().setWidth(24)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      if (widget.titleModel.title != null)
+                        Text(
+                          widget.titleModel.title!,
+                          style: widget.titleModel.titleStyle,
+                        ),
+                      if (widget.titleModel.title != null)
+                        SizedBox(
+                          height: widget.titleModel.tsSpace,
+                        ),
+                      if (widget.titleModel.subtitle != null)
+                        Text(
+                          widget.titleModel.subtitle!,
+                          style: widget.titleModel.subtitleStyle,
+                        ),
+                      if (widget.titleModel.subtitle != null ||
+                          widget.titleModel.title != null)
+                        SizedBox(
+                          height: widget.titleModel.bottomSpace,
+                        ),
+                      Expanded(
+                        child: BarChart(
+                          mainBarData(),
+                          swapAnimationDuration: animDuration,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
 
-          ],
-        ),
+                if(widget.isLoading)
+                  Center(child: Padding(
+                    padding:  EdgeInsets.only(bottom: ScreenUtil().setWidth(24)),
+                    child:  CupertinoActivityIndicator(animating: true, radius: ScreenUtil().setWidth(24)),
+                  ))
+
+              ],
+            ),
+          ),
+        ],
       ),
+
     );
   }
 

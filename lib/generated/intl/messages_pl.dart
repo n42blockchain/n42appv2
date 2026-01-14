@@ -960,7 +960,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_15": MessageLookupByLibrary.simpleMessage(
             "Obliczone na podstawie ceny rynkowej N * łączne nagrody N."),
         "g_mining_key_23":
-            MessageLookupByLibrary.simpleMessage("Liczba walidacji"),
+            MessageLookupByLibrary.simpleMessage("Liczba zysków"),
         "g_mining_key_31":
             MessageLookupByLibrary.simpleMessage("Wybierz plany"),
         "g_mining_key_32": MessageLookupByLibrary.simpleMessage(
@@ -1027,9 +1027,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_84":
             MessageLookupByLibrary.simpleMessage("Niskie ryzyko"),
         "g_mining_key_85":
-            MessageLookupByLibrary.simpleMessage("Umiarkowanie niskie ryzyko"),
+            MessageLookupByLibrary.simpleMessage("Umiarkowanie ryzyko"),
         "g_mining_key_86":
-            MessageLookupByLibrary.simpleMessage("Umiarkowanie wysokie ryzyko"),
+            MessageLookupByLibrary.simpleMessage("Nagrody z ostatnich 7 dni"),
         "g_mining_key_87":
             MessageLookupByLibrary.simpleMessage("Wysokie ryzyko"),
         "g_mining_key_88": MessageLookupByLibrary.simpleMessage(

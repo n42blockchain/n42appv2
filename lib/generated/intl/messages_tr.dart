@@ -933,8 +933,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Kazılan Değer"),
         "g_mining_key_15": MessageLookupByLibrary.simpleMessage(
             "N\'nin piyasa fiyatı * toplam N ödüllerine göre hesaplanır."),
-        "g_mining_key_23":
-            MessageLookupByLibrary.simpleMessage("Doğrulama sayısı"),
+        "g_mining_key_23": MessageLookupByLibrary.simpleMessage("Kâr sayısı"),
         "g_mining_key_31": MessageLookupByLibrary.simpleMessage("Plan Seç"),
         "g_mining_key_32": MessageLookupByLibrary.simpleMessage(
             "Kilit Açma Süresi: Her zaman kilidi açılabilir"),
@@ -995,10 +994,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_83":
             MessageLookupByLibrary.simpleMessage("Doğrulayıcı zaten mevcut"),
         "g_mining_key_84": MessageLookupByLibrary.simpleMessage("Düşük Risk"),
-        "g_mining_key_85":
-            MessageLookupByLibrary.simpleMessage("Orta Düşük Risk"),
+        "g_mining_key_85": MessageLookupByLibrary.simpleMessage("Orta Risk"),
         "g_mining_key_86":
-            MessageLookupByLibrary.simpleMessage("Orta Yüksek Risk"),
+            MessageLookupByLibrary.simpleMessage("Son 7 günün ödülleri"),
         "g_mining_key_87": MessageLookupByLibrary.simpleMessage("Yüksek Risk"),
         "g_mining_key_88": MessageLookupByLibrary.simpleMessage(
             "Sözleşme yükleniyor ve şu anda doğrulama yapılamıyor. Lütfen bir süre bekleyin!"),

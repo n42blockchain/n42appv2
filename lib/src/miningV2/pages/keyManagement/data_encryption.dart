@@ -90,7 +90,6 @@ Future<String> encryptSecret({
       "ciphertext": base64Encode(encrypted.cipherText),
       "tag": base64Encode(encrypted.mac.bytes),
     };
-
     return jsonEncode(jsonMap);
   } catch (e) {
     throw Exception('加密失败: $e');

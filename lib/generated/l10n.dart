@@ -3050,10 +3050,10 @@ class S {
     );
   }
 
-  /// `Validation count`
+  /// `Profit count`
   String get g_mining_key_23 {
     return Intl.message(
-      'Validation count',
+      'Profit count',
       name: 'g_mining_key_23',
       desc: '',
       args: [],
@@ -3400,20 +3400,20 @@ class S {
     );
   }
 
-  /// `Moderately Low Risk`
+  /// `Moderately Risk`
   String get g_mining_key_85 {
     return Intl.message(
-      'Moderately Low Risk',
+      'Moderately Risk',
       name: 'g_mining_key_85',
       desc: '',
       args: [],
     );
   }
 
-  /// `Moderately High Risk`
+  /// `7-Day Rewards`
   String get g_mining_key_86 {
     return Intl.message(
-      'Moderately High Risk',
+      '7-Day Rewards',
       name: 'g_mining_key_86',
       desc: '',
       args: [],

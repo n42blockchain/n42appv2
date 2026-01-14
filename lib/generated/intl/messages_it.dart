@@ -974,7 +974,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_15": MessageLookupByLibrary.simpleMessage(
             "Calcolato in base al prezzo di mercato di N * le ricompense totali in N."),
         "g_mining_key_23":
-            MessageLookupByLibrary.simpleMessage("Conteggio validazioni"),
+            MessageLookupByLibrary.simpleMessage("Numero di profitti"),
         "g_mining_key_31":
             MessageLookupByLibrary.simpleMessage("Seleziona piani"),
         "g_mining_key_32": MessageLookupByLibrary.simpleMessage(
@@ -1040,9 +1040,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_84":
             MessageLookupByLibrary.simpleMessage("Rischio basso"),
         "g_mining_key_85":
-            MessageLookupByLibrary.simpleMessage("Rischio moderatamente basso"),
-        "g_mining_key_86":
-            MessageLookupByLibrary.simpleMessage("Rischio moderatamente alto"),
+            MessageLookupByLibrary.simpleMessage("Rischio moderatamente"),
+        "g_mining_key_86": MessageLookupByLibrary.simpleMessage(
+            "Ricompense degli ultimi 7 giorni"),
         "g_mining_key_87": MessageLookupByLibrary.simpleMessage("Rischio alto"),
         "g_mining_key_88": MessageLookupByLibrary.simpleMessage(
             "Il contratto è in caricamento e non può essere verificato in questo momento. Attendi un momento!"),

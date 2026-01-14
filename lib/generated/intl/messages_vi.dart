@@ -925,7 +925,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_15": MessageLookupByLibrary.simpleMessage(
             "Tính toán dựa trên giá thị trường của N nhân tổng phần thưởng N."),
         "g_mining_key_23":
-            MessageLookupByLibrary.simpleMessage("Số lượng xác thực"),
+            MessageLookupByLibrary.simpleMessage("Số lần lợi nhuận"),
         "g_mining_key_31": MessageLookupByLibrary.simpleMessage("Chọn gói"),
         "g_mining_key_32": MessageLookupByLibrary.simpleMessage(
             "Thời gian mở khóa: Có thể mở khóa bất kỳ lúc nào"),
@@ -987,9 +987,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Người xác thực đã tồn tại"),
         "g_mining_key_84": MessageLookupByLibrary.simpleMessage("Rủi ro thấp"),
         "g_mining_key_85":
-            MessageLookupByLibrary.simpleMessage("Rủi ro tương đối thấp"),
-        "g_mining_key_86":
-            MessageLookupByLibrary.simpleMessage("Rủi ro tương đối cao"),
+            MessageLookupByLibrary.simpleMessage("Rủi ro trung bình"),
+        "g_mining_key_86": MessageLookupByLibrary.simpleMessage(
+            "Phần thưởng trong 7 ngày qua"),
         "g_mining_key_87": MessageLookupByLibrary.simpleMessage("Rủi ro cao"),
         "g_mining_key_88": MessageLookupByLibrary.simpleMessage(
             "Hợp đồng đang tải và không thể xác minh vào lúc này. Vui lòng đợi một lát!"),

@@ -975,7 +975,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_15": MessageLookupByLibrary.simpleMessage(
             "Calculado com base no preço de mercado de N * total de recompensas em N."),
         "g_mining_key_23":
-            MessageLookupByLibrary.simpleMessage("Contagem de validações"),
+            MessageLookupByLibrary.simpleMessage("Número de lucros"),
         "g_mining_key_31":
             MessageLookupByLibrary.simpleMessage("Selecionar Planos"),
         "g_mining_key_32": MessageLookupByLibrary.simpleMessage(
@@ -1039,9 +1039,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("O validador já existe"),
         "g_mining_key_84": MessageLookupByLibrary.simpleMessage("Risco Baixo"),
         "g_mining_key_85":
-            MessageLookupByLibrary.simpleMessage("Risco Moderadamente Baixo"),
-        "g_mining_key_86":
-            MessageLookupByLibrary.simpleMessage("Risco Moderadamente Alto"),
+            MessageLookupByLibrary.simpleMessage("Risco Moderadamente"),
+        "g_mining_key_86": MessageLookupByLibrary.simpleMessage(
+            "Recompensas dos últimos 7 dias"),
         "g_mining_key_87": MessageLookupByLibrary.simpleMessage("Risco Alto"),
         "g_mining_key_88": MessageLookupByLibrary.simpleMessage(
             "O contrato está carregando e não pode ser verificado no momento. Por favor, aguarde um momento!"),

@@ -766,7 +766,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_14": MessageLookupByLibrary.simpleMessage("채굴 가치"),
         "g_mining_key_15": MessageLookupByLibrary.simpleMessage(
             "N 시장 가격 * 총 N 보상을 기준으로 계산됩니다."),
-        "g_mining_key_23": MessageLookupByLibrary.simpleMessage("검증 횟수"),
+        "g_mining_key_23": MessageLookupByLibrary.simpleMessage("수익 횟수"),
         "g_mining_key_31": MessageLookupByLibrary.simpleMessage("플랜 선택"),
         "g_mining_key_32":
             MessageLookupByLibrary.simpleMessage("잠금 해제 기간: 언제든지 잠금 해제 가능"),
@@ -812,8 +812,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_83":
             MessageLookupByLibrary.simpleMessage("검증자가 이미 존재합니다"),
         "g_mining_key_84": MessageLookupByLibrary.simpleMessage("저위험"),
-        "g_mining_key_85": MessageLookupByLibrary.simpleMessage("중저위험"),
-        "g_mining_key_86": MessageLookupByLibrary.simpleMessage("중고위험"),
+        "g_mining_key_85": MessageLookupByLibrary.simpleMessage("중간 위험"),
+        "g_mining_key_86": MessageLookupByLibrary.simpleMessage("최근 7일 보상"),
         "g_mining_key_87": MessageLookupByLibrary.simpleMessage("고위험"),
         "g_mining_key_88": MessageLookupByLibrary.simpleMessage(
             "계약을 로딩 중이며 현재 검증할 수 없습니다. 잠시만 기다려 주세요!"),

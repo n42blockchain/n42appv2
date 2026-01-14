@@ -918,8 +918,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_14": MessageLookupByLibrary.simpleMessage("Mined Value"),
         "g_mining_key_15": MessageLookupByLibrary.simpleMessage(
             "Calculated based on market price of N * the total N rewards."),
-        "g_mining_key_23":
-            MessageLookupByLibrary.simpleMessage("Validation count"),
+        "g_mining_key_23": MessageLookupByLibrary.simpleMessage("Profit count"),
         "g_mining_key_31": MessageLookupByLibrary.simpleMessage("Select Plans"),
         "g_mining_key_32": MessageLookupByLibrary.simpleMessage(
             "Unlock Period: Unlockable at any time"),
@@ -980,9 +979,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "The validator already exists"),
         "g_mining_key_84": MessageLookupByLibrary.simpleMessage("Low Risk"),
         "g_mining_key_85":
-            MessageLookupByLibrary.simpleMessage("Moderately Low Risk"),
+            MessageLookupByLibrary.simpleMessage("Moderately Risk"),
         "g_mining_key_86":
-            MessageLookupByLibrary.simpleMessage("Moderately High Risk"),
+            MessageLookupByLibrary.simpleMessage("7-Day Rewards"),
         "g_mining_key_87": MessageLookupByLibrary.simpleMessage("High Risk"),
         "g_mining_key_88": MessageLookupByLibrary.simpleMessage(
             "The contract is loading and cannot be verified at this time. Please wait a moment!"),
