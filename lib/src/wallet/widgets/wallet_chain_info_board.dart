@@ -143,13 +143,13 @@ class WalletChainInfoBoard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               //buttonWidget(context,'assets/wallet/w_send.png',S.of(context).g_key_48,sendTap),
-              buttonWidgetV2(context,S.of(context).g_key_48,sendTap),
-              SizedBox(width: ScreenUtil().setWidth(30),),
+              Expanded(child: buttonWidgetV2(context,S.of(context).g_key_48,sendTap)),
+              SizedBox(width: ScreenUtil().setWidth(20),),
               //buttonWidget(context,'assets/wallet/w_receive.png',S.of(context).g_key_33,receiveTap),
-              buttonWidgetV2(context,S.of(context).g_key_33,receiveTap),
-              SizedBox(width: ScreenUtil().setWidth(30),),
+              Expanded(child: buttonWidgetV2(context,S.of(context).g_key_33,receiveTap)),
+              SizedBox(width: ScreenUtil().setWidth(20),),
               //buttonWidget(context,'assets/wallet/mainnet.png',S.of(context).g_key_196,browserTap),
-              buttonWidgetV2(context,S.of(context).g_key_196,browserTap),
+              Expanded(child: buttonWidgetV2(context,S.of(context).g_key_196,browserTap)),
             ],
           ),
           /*
@@ -214,7 +214,7 @@ class WalletChainInfoBoard extends StatelessWidget {
       onTap: tap,
       child: Container(
         height: ScreenUtil().setWidth(80),
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30),),
+        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(16),),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
@@ -224,8 +224,10 @@ class WalletChainInfoBoard extends StatelessWidget {
           lable,
           style: TextStyle(
             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
-            fontSize: ScreenUtil().setSp(30),
+            fontSize: ScreenUtil().setSp(26),
           ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
       ),
     );

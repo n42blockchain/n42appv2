@@ -303,6 +303,8 @@
   "g_mining_key_23": "Numero di profitti",
   "g_mining_key_31": "Seleziona piani",
   "g_mining_key_32": "Periodo di sblocco: sbloccabile in qualsiasi momento",
+  "g_mining_unlock_period": "Periodo di sblocco:",
+  "g_mining_unlockable_anytime": "Sbloccabile in qualsiasi momento",
   "g_mining_key_33": "Ricompensa massima annuale",
   "g_mining_key_34": "Distribuzione ricompense",
   "g_mining_key_35": "Limite giornaliero",

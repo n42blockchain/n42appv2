@@ -25,7 +25,7 @@ class PlansWidget extends StatelessWidget {
         }
       },
       child: Container(
-        height: ScreenUtil().setWidth(270),
+        height: ScreenUtil().setWidth(290),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             colors: <Color>[
@@ -65,6 +65,8 @@ class PlansWidget extends StatelessWidget {
                         fontSize: ScreenUtil().setSp(30),
                         fontWeight: FontWeight.bold,
                       ),
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   Spacer(),

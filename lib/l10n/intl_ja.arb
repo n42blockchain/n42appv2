@@ -303,6 +303,8 @@
   "g_mining_key_23": "利益回数",
   "g_mining_key_31": "プランを選択",
   "g_mining_key_32": "アンロック期間：いつでもアンロック可能",
+  "g_mining_unlock_period": "アンロック期間:",
+  "g_mining_unlockable_anytime": "いつでもアンロック可能",
   "g_mining_key_33": "年間最大報酬",
   "g_mining_key_34": "報酬配布",
   "g_mining_key_35": "1日の上限",

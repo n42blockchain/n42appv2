@@ -303,6 +303,8 @@
   "g_mining_key_23": "Profit count",
   "g_mining_key_31": "Select Plans",
   "g_mining_key_32": "Unlock Period: Unlockable at any time",
+  "g_mining_unlock_period": "Unlock Period:",
+  "g_mining_unlockable_anytime": "Unlockable at any time",
   "g_mining_key_33": "Max Reward Annually",
   "g_mining_key_34": "Reward Distribution",
   "g_mining_key_35": "Daily Limit",

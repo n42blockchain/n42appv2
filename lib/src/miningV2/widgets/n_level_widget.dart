@@ -161,14 +161,14 @@ class NLevelWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Unlock Period:",
+                            S.of(context).g_mining_unlock_period,
                             style: TextStyle(
                               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
                               fontSize: ScreenUtil().setSp(18),
                             ),
                           ),
                           Text(
-                            "Unlockable at any time",
+                            S.of(context).g_mining_unlockable_anytime,
                             style: TextStyle(
                               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                               fontSize: ScreenUtil().setSp(20),

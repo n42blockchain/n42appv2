@@ -303,6 +303,8 @@
   "g_mining_key_23": "Nombre de gains",
   "g_mining_key_31": "Sélectionner les plans",
   "g_mining_key_32": "Période de déverrouillage : Déverrouillable à tout moment",
+  "g_mining_unlock_period": "Période de déverrouillage:",
+  "g_mining_unlockable_anytime": "Déverrouillable à tout moment",
   "g_mining_key_33": "Récompense maximale annuelle",
   "g_mining_key_34": "Distribution des récompenses",
   "g_mining_key_35": "Limite quotidienne",
