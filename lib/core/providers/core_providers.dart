@@ -61,21 +61,27 @@ final localeProvider = StateNotifierProvider<LocaleNotifier, Locale>((ref) {
 
 class LocaleNotifier extends StateNotifier<Locale> {
   final SPUtil _spUtil;
-  
+
   LocaleNotifier(this._spUtil) : super(const Locale('en')) {
     _loadFromStorage();
   }
-  
+
   Future<void> _loadFromStorage() async {
     final code = await _spUtil.getSysLang();
     if (code != null) {
       state = _codeToLocale(code);
+      _syncToN42Chat(state);
     }
   }
-  
+
   void setLocale(String code) {
     state = _codeToLocale(code);
     _spUtil.setSysLang(code);
+    _syncToN42Chat(state);
+  }
+
+  void _syncToN42Chat(Locale locale) {
+    if (N42Chat.isInitialized) N42Chat.setLocale(locale);
   }
   
   Locale _codeToLocale(String code) {

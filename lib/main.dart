@@ -45,6 +45,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42_chat/n42_chat.dart';
+import 'package:n42_chat/l10n/app_localizations.dart' as chat_l10n;
 
 /// Global ProviderContainer for Riverpod
 /// This is used during the migration phase to bridge Provider and Riverpod
@@ -78,6 +79,10 @@ void main() async {
     // 同步当前主题到 n42_chat
     final currentTheme = globalProviderContainer.read(themeModeProvider);
     N42Chat.setThemeMode(currentTheme);
+
+    // 同步当前语言到 n42_chat
+    final currentLocale = globalProviderContainer.read(localeProvider);
+    N42Chat.setLocale(currentLocale);
     
     // 监听 N42Chat 未读消息数，更新主应用的未读计数
     N42Chat.unreadCountStream.listen((count) {
@@ -271,11 +276,12 @@ class _N42AppV2State extends State<N42AppV2> {
               },
               child: MaterialApp(
                 locale: pValue.locale,
-                localizationsDelegates: const [
+                localizationsDelegates: [
                   GlobalMaterialLocalizations.delegate,
                   GlobalWidgetsLocalizations.delegate,
                   GlobalCupertinoLocalizations.delegate,
                   S.delegate,
+                  chat_l10n.S.delegate,
                 ],
                 navigatorKey: AppGlobals.navigatorKey,
                 supportedLocales: S.delegate.supportedLocales,
