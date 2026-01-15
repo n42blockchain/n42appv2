@@ -366,6 +366,7 @@
   "g_mining_key_113": "Importando...",
   "g_mining_key_114": "Confirmação",
   "g_mining_key_115": "O resgate leva algum tempo, por favor aguarde um momento!",
+  "g_mining_key_116":"É necessário um saldo de staking de pelo menos {value} para receber recompensas.",
   "g_mining_key20": "Desbloquear N?",
   "g_mining_key31": "Atividade de Verificação na Nuvem",
   "g_mining_key46": "A configuração requer uma pequena quantidade para gás.",

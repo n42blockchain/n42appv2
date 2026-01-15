@@ -1,5 +1,4 @@
 package ai.n42.www
-
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -8,12 +7,14 @@ import android.content.Intent
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 
 class WebSocketService : Service() {
 
@@ -21,14 +22,24 @@ class WebSocketService : Service() {
         private const val CHANNEL_ID = "ws_foreground_channel"
         private const val NOTIFICATION_ID = 1001
     }
-
     private var ws: WebSocket? = null
+
     private var wsUrl: String? = null
     private var validatorPubkey: String? = null
     private var validatorPrivateKey: String? = null
 
+    /** Service 级主动关闭 */
+    @Volatile
+    private var manualClose = false
+
+    /** 给 WebSocketListener 用的线程安全标记 */
+    private val manuallyClosed = AtomicBoolean(false)
+
+    @Volatile
+    private var connectionId = 0
+
     private val reconnectDelay = 5000L
-    private val handler = Handler()
+    private val handler = Handler(Looper.getMainLooper())
 
     private val client by lazy {
         OkHttpClient.Builder()
@@ -36,79 +47,90 @@ class WebSocketService : Service() {
             .build()
     }
 
-    private val reconnectRunnable = object : Runnable {
-        override fun run() {
-            if (ws == null) {
-                val url = wsUrl
-                val pubkey = validatorPubkey
-                val privateKey = validatorPrivateKey
+    private val reconnectRunnable = Runnable {
+        if (manualClose) {
+            Log.i("WebSocketService", "Manual close, skip reconnect")
+            return@Runnable
+        }
 
-                if (url != null && pubkey != null && privateKey != null) {
-                    Log.i("WebSocketService", "Reconnecting...")
-                    startWebSocket(url, pubkey, privateKey)
-                }
-            }
+        if (ws == null && wsUrl != null) {
+            Log.i("WebSocketService", "Reconnecting...")
+            startWebSocket(wsUrl!!, validatorPubkey!!, validatorPrivateKey!!)
         }
     }
 
     override fun onCreate() {
         super.onCreate()
-
-        // ⭐ 核心：立刻进入前台
         startForeground(NOTIFICATION_ID, createNotification())
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        wsUrl = intent?.getStringExtra("wsUrl")
-        validatorPubkey = intent?.getStringExtra("validatorPubkey")
-        validatorPrivateKey = intent?.getStringExtra("validatorPrivateKey")
+        val newUrl = intent?.getStringExtra("wsUrl")
+        val newPubkey = intent?.getStringExtra("validatorPubkey")
+        val newPrivKey = intent?.getStringExtra("validatorPrivateKey")
 
-        if (wsUrl != null && validatorPubkey != null && validatorPrivateKey != null) {
-            startWebSocket(wsUrl!!, validatorPubkey!!, validatorPrivateKey!!)
+        if (newUrl == null || newPubkey == null || newPrivKey == null) {
+            return START_NOT_STICKY
         }
 
-        return START_STICKY
+        val walletChanged =
+            newUrl != wsUrl ||
+                    newPubkey != validatorPubkey ||
+                    newPrivKey != validatorPrivateKey
+
+        if (walletChanged) {
+            stopWebSocket(manual = true)
+        }
+
+        wsUrl = newUrl
+        validatorPubkey = newPubkey
+        validatorPrivateKey = newPrivKey
+
+        startWebSocket(newUrl, newPubkey, newPrivKey)
+
+        return START_NOT_STICKY
     }
 
-    /*private fun startWebSocket(url: String, pubkey: String, privateKey: String) {
-        Log.i("WebSocketService", "Connecting to $url")
-        val request = Request.Builder().url(url).build()
-        ws = client.newWebSocket(
-            request,
-            MyWebSocketListener(pubkey, privateKey) {
-                ws = null
-                handler.postDelayed(reconnectRunnable, reconnectDelay)
-            }
-        )
-    }*/
     @Synchronized
     private fun startWebSocket(url: String, pubkey: String, privateKey: String) {
-        if (ws != null) {
-            Log.w("WebSocketService", "WebSocket already running, ignore start")
-            return
-        }
+        if (ws != null) return
 
-        Log.i("WebSocketService", "Connecting to $url")
+        manualClose = false
+        manuallyClosed.set(false)
+
+        val currentId = ++connectionId
         val request = Request.Builder().url(url).build()
+
         ws = client.newWebSocket(
             request,
-            MyWebSocketListener(pubkey, privateKey) {
+            MyWebSocketListener(
+                pubkey,
+                privateKey,
+                manuallyClosed
+            ) {
+                if (currentId != connectionId) return@MyWebSocketListener
+
                 ws = null
-                handler.postDelayed(reconnectRunnable, reconnectDelay)
+                if (!manualClose) {
+                    handler.postDelayed(reconnectRunnable, reconnectDelay)
+                }
             }
         )
     }
 
+    private fun stopWebSocket(manual: Boolean) {
+        manualClose = manual
+        manuallyClosed.set(manual)
 
-    private fun stopWebSocket() {
-        ws?.close(1000, "Manual disconnect")
-        ws = null
         handler.removeCallbacks(reconnectRunnable)
+
+        ws?.close(1000, "Service stop")
+        ws = null
     }
 
     override fun onDestroy() {
+        stopWebSocket(manual = true)
         super.onDestroy()
-        stopWebSocket()
     }
 
     override fun onBind(intent: Intent?): IBinder? = null

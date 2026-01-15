@@ -14,6 +14,11 @@ final class WebSocketManager {
     private let reconnectDelay: TimeInterval = 5
     private var isReconnecting = false
 
+    // ⭐ 对齐 Android
+    private var manualClose = false
+    private var connectionId: Int = 0
+    private var tCount = 1
+
     private init() {}
 
     // MARK: - Connect
@@ -23,11 +28,28 @@ final class WebSocketManager {
         validatorPubkey: String,
         validatorPrivateKey: String
     ) {
-        disconnect()
+        let walletChanged =
+            self.wsUrl != wsUrl ||
+            self.validatorPubkey != validatorPubkey ||
+            self.validatorPrivateKey != validatorPrivateKey
+
+        if walletChanged {
+            // ⭐ 切钱包：主动关闭旧连接
+            stopWebSocket(manual: true)
+        }
 
         self.wsUrl = wsUrl
         self.validatorPubkey = validatorPubkey
         self.validatorPrivateKey = validatorPrivateKey
+
+        // 已有连接且钱包没变 → 什么都不做
+        if task != nil {
+            return
+        }
+
+        manualClose = false
+        connectionId += 1
+        let currentId = connectionId
 
         guard let url = URL(string: wsUrl) else { return }
 
@@ -36,9 +58,11 @@ final class WebSocketManager {
         task?.resume()
 
         sendToFlutter("onOpen")
+
         sendSubscribe()
-        receiveLoop()
+        receiveLoop(connectionId: currentId)
     }
+
 
     // MARK: - Subscribe
 
@@ -48,7 +72,7 @@ final class WebSocketManager {
         let json: [String: Any] = [
             "jsonrpc": "2.0",
             "method": "consensusBeaconExt_subscribeToVerificationRequest",
-            "id": 1,
+            "id": incrementTCount(),
             "params": [pubkey]
         ]
 
@@ -57,24 +81,37 @@ final class WebSocketManager {
 
     // MARK: - Receive Loop
 
-    private func receiveLoop() {
+    private func receiveLoop(connectionId: Int) {
         task?.receive { [weak self] result in
             guard let self = self else { return }
+
+            // 忽略旧连接回调
+            if connectionId != self.connectionId {
+                return
+            }
 
             switch result {
             case .success(let message):
                 if case .string(let text) = message {
                     self.handleMessage(text)
                 }
-                self.receiveLoop()
+                self.receiveLoop(connectionId: connectionId)
 
             case .failure(let error):
                 print("WebSocket receive error:", error)
+                self.task = nil
+
+                if self.manualClose {
+                    self.sendToFlutter("onClosed")
+                    return
+                }
+
                 self.sendToFlutter("onFailure")
                 self.scheduleReconnect()
             }
         }
     }
+
 
     // MARK: - Handle Message
 
@@ -130,7 +167,7 @@ final class WebSocketManager {
         let submit: [String: Any] = [
             "jsonrpc": "2.0",
             "method": "consensusBeaconExt_submitVerification",
-            "id": 1,
+            "id": incrementTCount(),
             "params": [
                 pubkey,
                 signature,
@@ -164,6 +201,7 @@ final class WebSocketManager {
 
     private func scheduleReconnect() {
         guard
+            !manualClose,
             !isReconnecting,
             let url = wsUrl,
             let pubkey = validatorPubkey,
@@ -183,14 +221,23 @@ final class WebSocketManager {
         }
     }
 
+
     // MARK: - Disconnect
 
-    func disconnect() {
+    private func stopWebSocket(manual: Bool) {
+        manualClose = manual
+        isReconnecting = false
+
         task?.cancel(with: .goingAway, reason: nil)
         task = nil
         session = nil
+    }
+
+    func disconnect() {
+        stopWebSocket(manual: true)
         sendToFlutter("onClosed")
     }
+
 
     // MARK: - Flutter Event
 
@@ -198,5 +245,10 @@ final class WebSocketManager {
         DispatchQueue.main.async {
             TrustdartPlugin.eventSink?(message)
         }
+    }
+    // 辅助函数
+    private func incrementTCount() -> Int {
+        tCount += 1
+        return tCount
     }
 }

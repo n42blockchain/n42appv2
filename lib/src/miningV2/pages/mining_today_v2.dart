@@ -450,6 +450,30 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
+                      if(mpValue.depositsEnable==true)
+                      InkWell(
+                        onTap: (){
+                          if(isActive){
+                            mpValue.disconnectWebSocket();
+                          }
+                          else{
+                            mpValue.checkAddressMiningStatus();
+                          }
+                        },
+                        child: Container(
+                          width: ScreenUtil().setWidth(36),
+                          height: ScreenUtil().setWidth(36),
+                          /*decoration: BoxDecoration(
+                            color: const Color(0xffEB5851).withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+                          ),*/
+                          child: Icon(
+                            isActive?Icons.pause_circle_outline:Icons.play_circle_outline,
+                            size: ScreenUtil().setWidth(36),
+                            color: isActive?const Color(0xffEB5851):const Color(0xff32D74B),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(height: ScreenUtil().setWidth(16)),
@@ -472,6 +496,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                       Container(
                         width: ScreenUtil().setWidth(14),
                         height: ScreenUtil().setWidth(14),
+                        margin: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
                         decoration: BoxDecoration(
                           color: statusColor,
                           shape: BoxShape.circle,
@@ -1111,6 +1136,44 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                     ),
                   ),
                 ),
+              ],
+            ),
+          ),
+          //提醒
+          if(mpValue.balanceInBeacon<32)
+          Container(
+            margin: EdgeInsets.fromLTRB(
+              ScreenUtil().setWidth(24),
+              0,
+              ScreenUtil().setWidth(24),
+              ScreenUtil().setWidth(24),
+            ),
+            padding: EdgeInsets.symmetric(
+              horizontal: ScreenUtil().setWidth(20),
+              vertical: ScreenUtil().setWidth(26),
+            ),
+            decoration: BoxDecoration(
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name).withOpacity(0.2),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.warning_rounded,
+                  size: ScreenUtil().setWidth(28),
+                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name),
+                ),
+                SizedBox(width: ScreenUtil().setWidth(10)),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                  S.of(context).g_mining_key_116(32),
+                  style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name),
+                    fontSize: ScreenUtil().setSp(26),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),),
               ],
             ),
           ),

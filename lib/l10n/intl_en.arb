@@ -366,6 +366,7 @@
   "g_mining_key_113": "Importing...",
   "g_mining_key_114": "Confirmation",
   "g_mining_key_115": "Redemption takes some time, please wait a moment!",
+  "g_mining_key_116": "A staking balance of at least {value} is required to earn rewards.",
   "g_mining_key20": "Unlock N?",
   "g_mining_key31": "Cloud Verification Activity",
   "g_mining_key46": "Setup requires a small amount for gas.",

@@ -366,6 +366,7 @@
   "g_mining_key_113": "Importation en cours...",
   "g_mining_key_114": "Confirmation",
   "g_mining_key_115": "Le rachat prend du temps, veuillez patienter !",
+  "g_mining_key_116":"Un solde de staking d'au moins {value} est requis pour recevoir des récompenses.",
   "g_mining_key20": "Déverrouiller N ?",
   "g_mining_key31": "Activité de vérification cloud",
   "g_mining_key46": "La configuration nécessite une petite quantité pour le gas.",

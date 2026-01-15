@@ -86,41 +86,44 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m26(value) => "İçe aktarma başarısız:${value}";
 
-  static String m27(value, value1) =>
+  static String m27(value) =>
+      "Ödül kazanmak için en az ${value} staking bakiyesi gereklidir.";
+
+  static String m28(value, value1) =>
       "Her ${value1} blok kazıldığında ${value} N";
 
-  static String m28(value) => "${value} karakter olmalı";
+  static String m29(value) => "${value} karakter olmalı";
 
-  static String m29(value) => "${value} Yetersiz Bakiye.";
+  static String m30(value) => "${value} Yetersiz Bakiye.";
 
-  static String m30(value) => "${value} geliyor...";
+  static String m31(value) => "${value} geliyor...";
 
-  static String m31(value) =>
+  static String m32(value) =>
       "Uygulama içinde takas edilen ${value}, kısa süre içinde cüzdanınıza dağıtılacak ve bu işlemle satılamaz. Düğüm çalıştırmak için kullanılabilir.";
 
-  static String m32(value) => "Maksimum ${value} karakter";
-
-  static String m33(value) =>
-      "${value} zinciri uygulama tarafından zaten destekleniyor!";
+  static String m33(value) => "Maksimum ${value} karakter";
 
   static String m34(value) =>
+      "${value} zinciri uygulama tarafından zaten destekleniyor!";
+
+  static String m35(value) =>
       "${value} zinciri uygulama tarafından zaten destekleniyor, eklemek istiyor musunuz?";
 
-  static String m35(value) => "${value} adres test bağlantısı başarısız!";
-
-  static String m36(value) =>
-      "Uygulama ${value} saniye içinde kilidini açacak.";
+  static String m36(value) => "${value} adres test bağlantısı başarısız!";
 
   static String m37(value) =>
-      "Desen şifresi giriş hatası, ${value} hakkınız kaldı";
+      "Uygulama ${value} saniye içinde kilidini açacak.";
 
-  static String m38(value) => "Şifre giriş hatası, ${value} hakkınız kaldı";
+  static String m38(value) =>
+      "Desen şifresi giriş hatası, ${value} hakkınız kaldı";
 
   static String m39(value) => "Şifre giriş hatası, ${value} hakkınız kaldı";
 
-  static String m40(value) => "${value} şifresini girin";
+  static String m40(value) => "Şifre giriş hatası, ${value} hakkınız kaldı";
 
-  static String m41(value) => "0~${value} karakter";
+  static String m41(value) => "${value} şifresini girin";
+
+  static String m42(value) => "0~${value} karakter";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -925,6 +928,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_114": MessageLookupByLibrary.simpleMessage("Onay"),
         "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
             "Kullanım biraz zaman alır, lütfen bekleyin!"),
+        "g_mining_key_116": m27,
         "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
             "Ödül her gün birikir ve yalnızca ~0.5 N\'ye ulaştığında N cüzdanınıza gönderilir."),
         "g_mining_key_13":
@@ -971,7 +975,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_7": MessageLookupByLibrary.simpleMessage("Plan Seç"),
         "g_mining_key_70":
             MessageLookupByLibrary.simpleMessage("100 blok/gün~15 dakika"),
-        "g_mining_key_71": m27,
+        "g_mining_key_71": m28,
         "g_mining_key_72":
             MessageLookupByLibrary.simpleMessage("Kontrol başına 128 saniye"),
         "g_mining_key_73":
@@ -1020,7 +1024,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Şifre belirle ve şifrele"),
         "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
             "Lütfen şifreleme şifresini girin"),
-        "g_mining_key_98": m28,
+        "g_mining_key_98": m29,
         "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
             "Doğruluğundan emin olmak için lütfen şifrenizi tekrar girin"),
         "g_notification_key_1":
@@ -1037,7 +1041,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Şununla davet et"),
         "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Bağlantı"),
         "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("kod"),
-        "g_swap_key_14": m29,
+        "g_swap_key_14": m30,
         "g_swap_key_15":
             MessageLookupByLibrary.simpleMessage("Coin fiyatı alınamadı."),
         "g_swap_key_16": MessageLookupByLibrary.simpleMessage(
@@ -1047,7 +1051,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_swap_key_18": MessageLookupByLibrary.simpleMessage("Bitir"),
         "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
             "Takasınız kısa süre içinde dağıtılacaktır. Lütfen sabırlı olun."),
-        "g_swap_key_20": m30,
+        "g_swap_key_20": m31,
         "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
             "Düğüm çalıştırma maliyetleri: Grup Doğrulaması 1-49 N Temel Düğüm: 50 N Premium Düğüm: 100 N Pro Düğüm: 500 N."),
         "g_swap_key_22": MessageLookupByLibrary.simpleMessage("Süresi doldu"),
@@ -1059,7 +1063,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Yeni Bakiye"),
         "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Ödediğiniz"),
         "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Tarih"),
-        "g_swap_key_31": m31,
+        "g_swap_key_31": m32,
         "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
             "Takaslar ilgili zincir gezginlerinde (Etherscan, BscScan, TRONSCAN ve kendi gezginimiz) görüntülenebilir."),
         "g_swap_key_33": MessageLookupByLibrary.simpleMessage("N\'ye Takas Et"),
@@ -1068,7 +1072,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_swap_key_5":
             MessageLookupByLibrary.simpleMessage("Takas Önizlemesi"),
         "g_swap_key_6": MessageLookupByLibrary.simpleMessage("Tekrar dene"),
-        "g_token_m_key_1": m32,
+        "g_token_m_key_1": m33,
         "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
             "Herkes mevcut tokenlerin sahte sürümleri dahil token oluşturabilir. İçe aktarmadan önce her zaman bir tokeni araştırın."),
         "g_token_m_key_11": MessageLookupByLibrary.simpleMessage("Tokenlar"),
@@ -1086,9 +1090,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Token Ekle"),
         "g_token_m_key_21":
             MessageLookupByLibrary.simpleMessage("Biçim Hatası!"),
-        "g_token_m_key_22": m33,
-        "g_token_m_key_23": m34,
-        "g_token_m_key_24": m35,
+        "g_token_m_key_22": m34,
+        "g_token_m_key_23": m35,
+        "g_token_m_key_24": m36,
         "g_token_m_key_3":
             MessageLookupByLibrary.simpleMessage("Token içe aktar"),
         "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Tüm ağlar"),
@@ -1099,17 +1103,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_token_m_key_8":
             MessageLookupByLibrary.simpleMessage("Token ondalık"),
         "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("İçe Aktar"),
-        "g_unlock_key10": m36,
+        "g_unlock_key10": m37,
         "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
             "Parmak izi veya yüz tanıma etkin değil mi?"),
         "g_unlock_key3":
             MessageLookupByLibrary.simpleMessage("Desen şifresi çiz"),
-        "g_unlock_key4": m37,
+        "g_unlock_key4": m38,
         "g_unlock_key5": MessageLookupByLibrary.simpleMessage("Şifre girin"),
-        "g_unlock_key6": m38,
+        "g_unlock_key6": m39,
         "g_unlock_key7":
             MessageLookupByLibrary.simpleMessage("Kimlik doğrulama başarısız"),
-        "g_unlock_key8": m39,
+        "g_unlock_key8": m40,
         "g_unlock_key9": MessageLookupByLibrary.simpleMessage("Ayrıca "),
         "google_verification":
             MessageLookupByLibrary.simpleMessage("Google Doğrulama"),
@@ -1135,7 +1139,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Google doğrulama kodunu girin"),
         "google_verification_message20": MessageLookupByLibrary.simpleMessage(
             "E-posta doğrulama kodunu girin"),
-        "google_verification_message21": m40,
+        "google_verification_message21": m41,
         "google_verification_message3":
             MessageLookupByLibrary.simpleMessage("Google anahtarı alınamadı"),
         "google_verification_message5": MessageLookupByLibrary.simpleMessage(
@@ -1177,7 +1181,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("lütfen önce giriş yapın"),
         "login_password": MessageLookupByLibrary.simpleMessage("Şifre"),
         "next": MessageLookupByLibrary.simpleMessage("Sonraki"),
-        "nicknameMessage": m41,
+        "nicknameMessage": m42,
         "password_diff":
             MessageLookupByLibrary.simpleMessage("Şifreler eşleşmiyor"),
         "personalInformation":

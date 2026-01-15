@@ -366,6 +366,7 @@
   "g_mining_key_113": "İçe aktarılıyor...",
   "g_mining_key_114": "Onay",
   "g_mining_key_115": "Kullanım biraz zaman alır, lütfen bekleyin!",
+  "g_mining_key_116":"Ödül kazanmak için en az {value} staking bakiyesi gereklidir.",
   "g_mining_key20": "N kilidini aç?",
   "g_mining_key31": "Bulut Doğrulama Etkinliği",
   "g_mining_key46": "Kurulum gas için küçük bir miktar gerektirir.",

@@ -362,6 +362,7 @@
   "g_mining_key_113": "Importiere...",
   "g_mining_key_114": "Bestaetigung",
   "g_mining_key_115": "Die Einloesung dauert einige Zeit, bitte warten Sie einen Moment!",
+  "g_mining_key_116":"Für den Erhalt von Belohnungen ist ein Mindest-Staking-Betrag von {value} erforderlich.",
   "g_mining_key20": "N entsperren?",
   "g_mining_key31": "Cloud-Verifizierungsaktivitaet",
   "g_mining_key46": "Einrichtung erfordert eine kleine Menge fuer Gas.",

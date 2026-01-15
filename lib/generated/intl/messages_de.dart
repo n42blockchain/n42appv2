@@ -90,43 +90,46 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m26(value) => "Import fehlgeschlagen: ${value}";
 
-  static String m27(value, value1) =>
+  static String m27(value) =>
+      "Für den Erhalt von Belohnungen ist ein Mindest-Staking-Betrag von ${value} erforderlich.";
+
+  static String m28(value, value1) =>
       "${value} N alle ${value1} geminte Bloecke";
 
-  static String m28(value) => "Muss ${value} Zeichen sein";
+  static String m29(value) => "Muss ${value} Zeichen sein";
 
-  static String m29(value) => "${value} Unzureichendes Guthaben.";
+  static String m30(value) => "${value} Unzureichendes Guthaben.";
 
-  static String m30(value) => "${value} eingehend...";
+  static String m31(value) => "${value} eingehend...";
 
-  static String m31(value) =>
+  static String m32(value) =>
       "${value} in der App getauscht wird in Kuerze an Ihr Wallet verteilt und kann nicht ueber diesen Prozess verkauft werden. Es kann zum Betrieb eines Knotens verwendet werden.";
 
-  static String m32(value) => "Max. ${value} Zeichen";
-
-  static String m33(value) =>
-      "${value} Blockchain wird bereits von der App unterstuetzt!";
+  static String m33(value) => "Max. ${value} Zeichen";
 
   static String m34(value) =>
+      "${value} Blockchain wird bereits von der App unterstuetzt!";
+
+  static String m35(value) =>
       "${value} Blockchain wird bereits von der App unterstuetzt, moechten Sie sie hinzufuegen?";
 
-  static String m35(value) => "${value} Adresstestverbindung fehlgeschlagen!";
-
-  static String m36(value) =>
-      "Die Anwendung wird in ${value} Sekunden entsperrt.";
+  static String m36(value) => "${value} Adresstestverbindung fehlgeschlagen!";
 
   static String m37(value) =>
-      "Muster-Passwort-Eingabefehler, Sie haben noch ${value} Versuche";
+      "Die Anwendung wird in ${value} Sekunden entsperrt.";
 
   static String m38(value) =>
-      "Passwort-Eingabefehler, Sie haben noch ${value} Versuche";
+      "Muster-Passwort-Eingabefehler, Sie haben noch ${value} Versuche";
 
   static String m39(value) =>
+      "Passwort-Eingabefehler, Sie haben noch ${value} Versuche";
+
+  static String m40(value) =>
       "Passwort-Eingabefehler, Sie haben noch ${value} Versuch";
 
-  static String m40(value) => "${value}-Passwort eingeben";
+  static String m41(value) => "${value}-Passwort eingeben";
 
-  static String m41(value) => "0-${value} Zeichen";
+  static String m42(value) => "0-${value} Zeichen";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -970,6 +973,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Bestaetigung"),
         "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
             "Die Einloesung dauert einige Zeit, bitte warten Sie einen Moment!"),
+        "g_mining_key_116": m27,
         "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
             "Belohnung sammelt sich taeglich an und wird erst an Ihr N-Wallet gesendet, wenn sie ~0,5 N erreicht."),
         "g_mining_key_13":
@@ -1023,7 +1027,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Plan auswaehlen"),
         "g_mining_key_70":
             MessageLookupByLibrary.simpleMessage("100 Bloecke/Tag ~ 15 Min."),
-        "g_mining_key_71": m27,
+        "g_mining_key_71": m28,
         "g_mining_key_72":
             MessageLookupByLibrary.simpleMessage("128 Sekunden pro Pruefung"),
         "g_mining_key_73": MessageLookupByLibrary.simpleMessage(
@@ -1075,7 +1079,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Passwort setzen und verschluesseln"),
         "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
             "Bitte Verschluesselungspasswort eingeben"),
-        "g_mining_key_98": m28,
+        "g_mining_key_98": m29,
         "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
             "Bitte geben Sie Ihr Passwort erneut ein, um es zu bestaetigen"),
         "g_notification_key_1":
@@ -1092,7 +1096,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Werben ueber"),
         "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Link"),
         "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("Code"),
-        "g_swap_key_14": m29,
+        "g_swap_key_14": m30,
         "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
             "Fehler beim Abrufen des Coin-Preises."),
         "g_swap_key_16": MessageLookupByLibrary.simpleMessage(
@@ -1102,7 +1106,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_swap_key_18": MessageLookupByLibrary.simpleMessage("Abschliessen"),
         "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
             "Ihr Swap wird in Kuerze verteilt. Bitte haben Sie Geduld."),
-        "g_swap_key_20": m30,
+        "g_swap_key_20": m31,
         "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
             "Kosten fuer den Betrieb eines Knotens: Gruppenverifizierung 1-49 N Basis-Knoten: 50 N Premium-Knoten: 100 N Pro-Knoten: 500 N."),
         "g_swap_key_22": MessageLookupByLibrary.simpleMessage("Abgelaufen"),
@@ -1115,7 +1119,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Neues Guthaben"),
         "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Sie zahlen"),
         "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Datum"),
-        "g_swap_key_31": m31,
+        "g_swap_key_31": m32,
         "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
             "Swaps koennen auf den entsprechenden Blockchain-Explorern (Etherscan, BscScan, TRONSCAN und unserem eigenen) eingesehen werden."),
         "g_swap_key_33": MessageLookupByLibrary.simpleMessage("Zu N tauschen"),
@@ -1124,7 +1128,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_swap_key_5": MessageLookupByLibrary.simpleMessage("Swap-Vorschau"),
         "g_swap_key_6":
             MessageLookupByLibrary.simpleMessage("Erneut versuchen"),
-        "g_token_m_key_1": m32,
+        "g_token_m_key_1": m33,
         "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
             "Jeder kann Token erstellen, einschliesslich gefaelschter Versionen bestehender Token. Recherchieren Sie immer einen Token, bevor Sie ihn importieren."),
         "g_token_m_key_11": MessageLookupByLibrary.simpleMessage("Token"),
@@ -1146,9 +1150,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Token hinzufuegen"),
         "g_token_m_key_21":
             MessageLookupByLibrary.simpleMessage("Formatfehler!"),
-        "g_token_m_key_22": m33,
-        "g_token_m_key_23": m34,
-        "g_token_m_key_24": m35,
+        "g_token_m_key_22": m34,
+        "g_token_m_key_23": m35,
+        "g_token_m_key_24": m36,
         "g_token_m_key_3":
             MessageLookupByLibrary.simpleMessage("Token importieren"),
         "g_token_m_key_4":
@@ -1161,18 +1165,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_token_m_key_8":
             MessageLookupByLibrary.simpleMessage("Token-Dezimalstellen"),
         "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("Importieren"),
-        "g_unlock_key10": m36,
+        "g_unlock_key10": m37,
         "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
             "Fingerabdruck- oder Gesichtserkennung nicht aktiviert?"),
         "g_unlock_key3":
             MessageLookupByLibrary.simpleMessage("Muster-Passwort zeichnen"),
-        "g_unlock_key4": m37,
+        "g_unlock_key4": m38,
         "g_unlock_key5":
             MessageLookupByLibrary.simpleMessage("Passwort eingeben"),
-        "g_unlock_key6": m38,
+        "g_unlock_key6": m39,
         "g_unlock_key7": MessageLookupByLibrary.simpleMessage(
             "Authentifizierung fehlgeschlagen"),
-        "g_unlock_key8": m39,
+        "g_unlock_key8": m40,
         "g_unlock_key9":
             MessageLookupByLibrary.simpleMessage("Sie koennen auch "),
         "google_verification":
@@ -1199,7 +1203,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Google-Verifizierungscode eingeben"),
         "google_verification_message20": MessageLookupByLibrary.simpleMessage(
             "E-Mail-Verifizierungscode eingeben"),
-        "google_verification_message21": m40,
+        "google_verification_message21": m41,
         "google_verification_message3": MessageLookupByLibrary.simpleMessage(
             "Google-Schluessel konnte nicht abgerufen werden"),
         "google_verification_message5": MessageLookupByLibrary.simpleMessage(
@@ -1242,7 +1246,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Bitte zuerst anmelden"),
         "login_password": MessageLookupByLibrary.simpleMessage("Passwort"),
         "next": MessageLookupByLibrary.simpleMessage("Weiter"),
-        "nicknameMessage": m41,
+        "nicknameMessage": m42,
         "password_diff": MessageLookupByLibrary.simpleMessage(
             "Passwoerter stimmen nicht ueberein"),
         "personalInformation":

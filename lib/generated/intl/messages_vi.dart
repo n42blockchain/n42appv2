@@ -83,37 +83,40 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m26(value) => "Nhập thất bại:${value}";
 
-  static String m27(value, value1) => "${value} N mỗi ${value1} khối đã đào";
+  static String m27(value) =>
+      "Cần có số dư staking tối thiểu ${value} để nhận phần thưởng.";
 
-  static String m28(value) => "Phải có ${value} ký tự";
+  static String m28(value, value1) => "${value} N mỗi ${value1} khối đã đào";
 
-  static String m29(value) => "${value} Số dư không đủ.";
+  static String m29(value) => "Phải có ${value} ký tự";
 
-  static String m30(value) => "${value} đang đến...";
+  static String m30(value) => "${value} Số dư không đủ.";
 
-  static String m31(value) =>
+  static String m31(value) => "${value} đang đến...";
+
+  static String m32(value) =>
       "${value} hoán đổi trong ứng dụng sẽ được phân phối đến ví của bạn trong thời gian ngắn và không thể bán qua quy trình này. Có thể sử dụng để vận hành node.";
 
-  static String m32(value) => "Tối đa ${value} ký tự";
+  static String m33(value) => "Tối đa ${value} ký tự";
 
-  static String m33(value) => "Ứng dụng đã hỗ trợ chuỗi ${value}!";
+  static String m34(value) => "Ứng dụng đã hỗ trợ chuỗi ${value}!";
 
-  static String m34(value) =>
+  static String m35(value) =>
       "Ứng dụng đã hỗ trợ chuỗi ${value}, bạn có muốn thêm không?";
 
-  static String m35(value) => "Kết nối thử nghiệm địa chỉ ${value} thất bại!";
+  static String m36(value) => "Kết nối thử nghiệm địa chỉ ${value} thất bại!";
 
-  static String m36(value) => "Ứng dụng sẽ mở khóa sau ${value} giây.";
+  static String m37(value) => "Ứng dụng sẽ mở khóa sau ${value} giây.";
 
-  static String m37(value) => "Nhập sai mật khẩu hình vẽ, bạn còn ${value} lần";
-
-  static String m38(value) => "Nhập sai mật khẩu, bạn còn ${value} lần";
+  static String m38(value) => "Nhập sai mật khẩu hình vẽ, bạn còn ${value} lần";
 
   static String m39(value) => "Nhập sai mật khẩu, bạn còn ${value} lần";
 
-  static String m40(value) => "Nhập mật khẩu ${value}";
+  static String m40(value) => "Nhập sai mật khẩu, bạn còn ${value} lần";
 
-  static String m41(value) => "0~${value} ký tự";
+  static String m41(value) => "Nhập mật khẩu ${value}";
+
+  static String m42(value) => "0~${value} ký tự";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -916,6 +919,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_114": MessageLookupByLibrary.simpleMessage("Xác nhận"),
         "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
             "Đổi thưởng cần một chút thời gian, vui lòng đợi một lát!"),
+        "g_mining_key_116": m27,
         "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
             "Phần thưởng tích lũy hàng ngày và chỉ được gửi đến ví N của bạn khi đạt ~0.5 N."),
         "g_mining_key_13":
@@ -963,7 +967,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_7": MessageLookupByLibrary.simpleMessage("Chọn gói"),
         "g_mining_key_70":
             MessageLookupByLibrary.simpleMessage("100 khối/ngày~15 phút"),
-        "g_mining_key_71": m27,
+        "g_mining_key_71": m28,
         "g_mining_key_72":
             MessageLookupByLibrary.simpleMessage("128 giây mỗi lần kiểm tra"),
         "g_mining_key_73":
@@ -1011,7 +1015,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Đặt mật khẩu và mã hóa"),
         "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
             "Vui lòng nhập mật khẩu mã hóa"),
-        "g_mining_key_98": m28,
+        "g_mining_key_98": m29,
         "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
             "Vui lòng nhập lại mật khẩu để đảm bảo chính xác"),
         "g_notification_key_1":
@@ -1028,7 +1032,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Giới thiệu qua"),
         "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Liên kết"),
         "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("mã"),
-        "g_swap_key_14": m29,
+        "g_swap_key_14": m30,
         "g_swap_key_15":
             MessageLookupByLibrary.simpleMessage("Lỗi lấy giá coin."),
         "g_swap_key_16": MessageLookupByLibrary.simpleMessage(
@@ -1038,7 +1042,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_swap_key_18": MessageLookupByLibrary.simpleMessage("Hoàn tất"),
         "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
             "Giao dịch hoán đổi của bạn sẽ được phân phối trong thời gian ngắn. Vui lòng kiên nhẫn."),
-        "g_swap_key_20": m30,
+        "g_swap_key_20": m31,
         "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
             "Chi phí vận hành node: Xác minh nhóm 1-49 N Node cơ bản: 50 N Node cao cấp: 100 N Node Pro: 500 N."),
         "g_swap_key_22": MessageLookupByLibrary.simpleMessage("Hết hạn"),
@@ -1052,7 +1056,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Số dư mới"),
         "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Bạn trả"),
         "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Ngày"),
-        "g_swap_key_31": m31,
+        "g_swap_key_31": m32,
         "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
             "Các giao dịch hoán đổi có thể xem trên các trình duyệt chuỗi liên quan (Etherscan, BscScan, TRONSCAN và của chúng tôi)."),
         "g_swap_key_33":
@@ -1062,7 +1066,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_swap_key_5":
             MessageLookupByLibrary.simpleMessage("Xem trước hoán đổi"),
         "g_swap_key_6": MessageLookupByLibrary.simpleMessage("Thử lại"),
-        "g_token_m_key_1": m32,
+        "g_token_m_key_1": m33,
         "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
             "Bất kỳ ai cũng có thể tạo token, bao gồm cả việc tạo phiên bản giả của token hiện có. Luôn nghiên cứu token trước khi nhập."),
         "g_token_m_key_11": MessageLookupByLibrary.simpleMessage("Token"),
@@ -1082,9 +1086,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Thêm token"),
         "g_token_m_key_21":
             MessageLookupByLibrary.simpleMessage("Lỗi định dạng!"),
-        "g_token_m_key_22": m33,
-        "g_token_m_key_23": m34,
-        "g_token_m_key_24": m35,
+        "g_token_m_key_22": m34,
+        "g_token_m_key_23": m35,
+        "g_token_m_key_24": m36,
         "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Nhập token"),
         "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Tất cả mạng"),
         "g_token_m_key_5":
@@ -1096,17 +1100,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_token_m_key_8":
             MessageLookupByLibrary.simpleMessage("Số thập phân token"),
         "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("Nhập"),
-        "g_unlock_key10": m36,
+        "g_unlock_key10": m37,
         "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
             "Chưa bật nhận dạng vân tay hoặc khuôn mặt?"),
         "g_unlock_key3":
             MessageLookupByLibrary.simpleMessage("Vẽ mật khẩu hình vẽ"),
-        "g_unlock_key4": m37,
+        "g_unlock_key4": m38,
         "g_unlock_key5": MessageLookupByLibrary.simpleMessage("Nhập mật khẩu"),
-        "g_unlock_key6": m38,
+        "g_unlock_key6": m39,
         "g_unlock_key7":
             MessageLookupByLibrary.simpleMessage("Xác thực thất bại"),
-        "g_unlock_key8": m39,
+        "g_unlock_key8": m40,
         "g_unlock_key9":
             MessageLookupByLibrary.simpleMessage("Bạn cũng có thể "),
         "google_verification":
@@ -1133,7 +1137,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Nhập mã xác minh Google"),
         "google_verification_message20":
             MessageLookupByLibrary.simpleMessage("Nhập mã xác minh email"),
-        "google_verification_message21": m40,
+        "google_verification_message21": m41,
         "google_verification_message3":
             MessageLookupByLibrary.simpleMessage("Không thể lấy khóa Google"),
         "google_verification_message5":
@@ -1176,7 +1180,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("vui lòng đăng nhập trước"),
         "login_password": MessageLookupByLibrary.simpleMessage("Mật khẩu"),
         "next": MessageLookupByLibrary.simpleMessage("Tiếp theo"),
-        "nicknameMessage": m41,
+        "nicknameMessage": m42,
         "password_diff":
             MessageLookupByLibrary.simpleMessage("Mật khẩu không khớp"),
         "personalInformation":

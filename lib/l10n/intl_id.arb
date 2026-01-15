@@ -366,6 +366,7 @@
   "g_mining_key_113": "Mengimpor...",
   "g_mining_key_114": "Konfirmasi",
   "g_mining_key_115": "Penukaran membutuhkan waktu, silakan tunggu sebentar!",
+  "g_mining_key_116":"Dibutuhkan saldo staking minimal {value} untuk mendapatkan hadiah.",
   "g_mining_key20": "Buka kunci N?",
   "g_mining_key31": "Aktivitas Verifikasi Cloud",
   "g_mining_key46": "Pengaturan memerlukan sedikit biaya gas.",

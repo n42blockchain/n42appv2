@@ -366,6 +366,7 @@
   "g_mining_key_113": "Importowanie...",
   "g_mining_key_114": "Potwierdzenie",
   "g_mining_key_115": "Odbiór zajmuje trochę czasu, proszę chwilę poczekać!",
+  "g_mining_key_116":"Aby otrzymać nagrody, wymagane jest saldo stakingowe wynoszące co najmniej {value}.",
   "g_mining_key20": "Odblokować N?",
   "g_mining_key31": "Aktywność weryfikacji w chmurze",
   "g_mining_key46": "Konfiguracja wymaga niewielkiej ilości na opłatę za gaz.",

@@ -366,6 +366,7 @@
   "g_mining_key_113": "Đang nhập...",
   "g_mining_key_114": "Xác nhận",
   "g_mining_key_115": "Đổi thưởng cần một chút thời gian, vui lòng đợi một lát!",
+  "g_mining_key_116":"Cần có số dư staking tối thiểu {value} để nhận phần thưởng.",
   "g_mining_key20": "Mở khóa N?",
   "g_mining_key31": "Hoạt động xác minh đám mây",
   "g_mining_key46": "Thiết lập cần một lượng nhỏ để trả phí gas.",

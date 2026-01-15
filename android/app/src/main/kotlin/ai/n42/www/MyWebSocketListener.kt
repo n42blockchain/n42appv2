@@ -11,17 +11,13 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.util.concurrent.atomic.AtomicBoolean
 
-/**
- * WebSocketListener 实现，用于订阅验证请求并提交验证结果。
- * 消息会通过 WebSocketEventChannelHandler 发送到 Flutter。
- *
- * @param validatorPubkey 验证者公钥
- * @param validatorPrivateKey 验证者私钥
- * @param onDisconnected WebSocket 断开连接回调
- */
 class MyWebSocketListener(
     private val validatorPubkey: String,
     private val validatorPrivateKey: String,
+
+    // ⭐ 关键：由 Manager 传入，用于区分主动/被动断开
+    private val manuallyClosed: AtomicBoolean,
+
     private val onDisconnected: () -> Unit
 ) : WebSocketListener() {
 
@@ -33,7 +29,6 @@ class MyWebSocketListener(
         Log.i("WebSocket", "Connected")
         sendToFlutter("WebSocket connected")
 
-        // 构建订阅验证请求的 JSON
         val subscribeJson = JSONObject().apply {
             put("jsonrpc", "2.0")
             put("method", "consensusBeaconExt_subscribeToVerificationRequest")
@@ -55,26 +50,25 @@ class MyWebSocketListener(
             return
         }
 
-        // 只处理订阅验证请求
         if (json.optString("method") != "subscribeToVerificationRequest") return
 
         val result = try {
             json.getJSONObject("params").getJSONObject("result")
         } catch (e: Exception) {
-            Log.e("WebSocket", "Missing result in params", e)
+            Log.e("WebSocket", "Missing result", e)
             return
         }
 
-        // 在子线程中生成验证结果并提交
         Thread {
             try {
                 val verifyResultStr =
                     Api.genBlockVerifyResult(result.toString(), validatorPrivateKey).join()
+
                 val verifyResult = JSONObject(verifyResultStr)
 
                 val submit = JSONObject().apply {
-                    put("id", tCount++)
                     put("jsonrpc", "2.0")
+                    put("id", tCount++)
                     put("method", "consensusBeaconExt_submitVerification")
                     put(
                         "params",
@@ -89,6 +83,7 @@ class MyWebSocketListener(
 
                 val ok = webSocket.send(submit.toString())
                 Log.i("WebSocket", "submitVerification sent: $ok")
+
             } catch (e: Exception) {
                 Log.e("WebSocket", "verify failed", e)
             }
@@ -97,12 +92,24 @@ class MyWebSocketListener(
 
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
         Log.e("WebSocket", "onFailure", t)
+
+        if (manuallyClosed.get()) {
+            Log.i("WebSocket", "Ignore onFailure: manually closed")
+            return
+        }
+
         sendToFlutter("onFailure")
         notifyDisconnectedOnce()
     }
 
     override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
         Log.i("WebSocket", "onClosed: $reason")
+
+        if (manuallyClosed.get()) {
+            Log.i("WebSocket", "Closed manually, no reconnect")
+            return
+        }
+
         sendToFlutter("onClosed")
         notifyDisconnectedOnce()
     }

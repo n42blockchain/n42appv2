@@ -3710,6 +3710,16 @@ class S {
     );
   }
 
+  /// `A staking balance of at least {value} is required to earn rewards.`
+  String g_mining_key_116(Object value) {
+    return Intl.message(
+      'A staking balance of at least $value is required to earn rewards.',
+      name: 'g_mining_key_116',
+      desc: '',
+      args: [value],
+    );
+  }
+
   /// `Unlock N?`
   String get g_mining_key20 {
     return Intl.message(

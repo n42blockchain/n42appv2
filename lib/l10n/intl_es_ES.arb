@@ -390,6 +390,7 @@
   "g_mining_key_113": "Importador...",
   "g_mining_key_114": "Confirmación",
   "g_mining_key_115": "El canje tarda un poco, ¡por favor espera un momento!",
+  "g_mining_key_116":"Se requiere un saldo de staking de al menos {value} para obtener recompensas.",
   "g_mining_key1": "Recompensas",
   "g_mining_key15": "Detalle de la tarea",
   "g_mining_key20": "¿Desbloquear N?",

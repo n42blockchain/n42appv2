@@ -568,37 +568,74 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
     }
 
     fun handleCoreCall2(call: MethodCall, result: MethodChannel.Result) {
-        when(call.method) {
+        when (call.method) {
+
+            /**
+             * connectWebSocket
+             * - 首次调用：启动 ForegroundService + 建立 WS
+             * - 再次调用（切钱包）：Service 仍在 → onStartCommand → 内部自动重启 WS
+             */
             "connectWebSocket" -> {
-                val args = call.arguments as Map<String, Any>
-                val wsUrl = args["wsUrl"] as? String
-                val pubkey = args["validatorPubkey"] as? String
-                val privateKey = args["validatorPrivateKey"] as? String
-                if (wsUrl == null || pubkey == null) {
-                    result.error("arguments_null", "wsUrl and validatorPubkey cannot be null", null)
+                val args = call.arguments as? Map<*, *>
+                if (args == null) {
+                    result.error("arguments_error", "arguments is null", null)
                     return
                 }
 
-                val intent = Intent(context, WebSocketService::class.java)
-                intent.putExtra("wsUrl", wsUrl)
-                intent.putExtra("validatorPubkey", pubkey)
-                intent.putExtra("validatorPrivateKey", privateKey)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    context.startForegroundService(intent)
-                } else {
-                    context.startService(intent)
+                val wsUrl = args["wsUrl"] as? String
+                val pubkey = args["validatorPubkey"] as? String
+                val privateKey = args["validatorPrivateKey"] as? String
+
+                if (wsUrl.isNullOrBlank() ||
+                    pubkey.isNullOrBlank() ||
+                    privateKey.isNullOrBlank()
+                ) {
+                    result.error(
+                        "arguments_null",
+                        "wsUrl / validatorPubkey / validatorPrivateKey cannot be null",
+                        null
+                    )
+                    return
                 }
-                result.success("WebSocket connecting...")
+
+                val intent = Intent(context, WebSocketService::class.java).apply {
+                    putExtra("wsUrl", wsUrl)
+                    putExtra("validatorPubkey", pubkey)
+                    putExtra("validatorPrivateKey", privateKey)
+                }
+
+                try {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        context.startForegroundService(intent)
+                    } else {
+                        context.startService(intent)
+                    }
+                    result.success("WebSocketService started / updated")
+                } catch (e: Exception) {
+                    result.error("service_start_failed", e.message, null)
+                }
             }
+
+            /**
+             * disconnectWebSocket
+             * - 明确是“用户主动断开”
+             * - Service.onDestroy -> stopWebSocket(manual=true)
+             * - 不触发自动重连
+             */
             "disconnectWebSocket" -> {
-                val intent = Intent(context, WebSocketService::class.java)
-                context.stopService(intent)
-                result.success("WebSocket disconnected")
+                try {
+                    val intent = Intent(context, WebSocketService::class.java)
+                    context.stopService(intent)
+                    result.success("WebSocketService stopped")
+                } catch (e: Exception) {
+                    result.error("service_stop_failed", e.message, null)
+                }
             }
 
             else -> result.notImplemented()
         }
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onMethodCall( call: MethodCall,  result: MethodChannel.Result) {
         when(call.method) {

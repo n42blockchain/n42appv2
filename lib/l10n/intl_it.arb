@@ -366,6 +366,7 @@
   "g_mining_key_113": "Importazione in corso...",
   "g_mining_key_114": "Conferma",
   "g_mining_key_115": "Il riscatto richiede un po' di tempo, attendi un momento!",
+  "g_mining_key_116":"È necessario un saldo di staking di almeno {value} per ricevere ricompense.",
   "g_mining_key20": "Sbloccare N?",
   "g_mining_key31": "Attività di verifica cloud",
   "g_mining_key46": "La configurazione richiede una piccola quantità per il gas.",

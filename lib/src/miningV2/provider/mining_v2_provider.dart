@@ -552,6 +552,7 @@ class MiningV2Provider extends ChangeNotifier {
   double yesterdayCycleRewardsValue=0;
   double nPrice=0;
   List<double> barchartValues = [0, 0, 0, 0, 0, 0, 0];
+  List<String> barchartValues2 = ["0", "0", "0", "0", "0", "0", "0"];
   List<AlertMessageGroup> barchartAlertMessageList = [];
   List<String> barchartTitle=[];
   bool isLoading7DayData=false;
@@ -641,8 +642,10 @@ class MiningV2Provider extends ChangeNotifier {
       int tIndex=taskList.indexWhere((e)=>e.day==d1Str[0]);
       if(tIndex !=-1){
         barchartValues[i]=(taskList[tIndex].count??0).toDouble();
+        barchartValues2[i]=taskList[tIndex].total_amount??"0";
       }else{
         barchartValues[i]=0;
+        barchartValues2[i]="0";
       }
     }
     generateBarTipData();
@@ -654,7 +657,7 @@ class MiningV2Provider extends ChangeNotifier {
       barchartAlertMessageList = [];
       //计算奖励
       //final stackAstNum = Provider.of<MiningProvider>(context,listen: false).depositsNum;
-      for (var element in barchartValues) {
+      for (int i=0;i<barchartValues.length;i++) {
         //计算时间
         //int times = (element * 8).toInt();
         //final timeData = formatElapsedTime(times);
@@ -664,9 +667,9 @@ class MiningV2Provider extends ChangeNotifier {
           AlertMessageGroup(
             titles: [
               S.current.g_mining_key_23,
-              "${element.toInt()}",
-              //"",
-              //"${dataUtils.formatNum(value, 4)} ${CoinType.N.name}"
+              "${barchartValues[i].toInt()}",
+              S.current.g_mining_key_13,
+              "${toEther(barchartValues2[i], 16)} ${CoinType.N.name}",
             ],
             styles: [
               TextStyle(
@@ -680,36 +683,18 @@ class MiningV2Provider extends ChangeNotifier {
                     AppGlobals.appContext, AppThemeKeys.mainWhiteColor.name),
                 fontWeight: FontWeight.bold,
               ),
-              /*TextStyle(
-                fontSize: ScreenUtil().setSp(10),
-                color: AppThemeUtils.getColorByKey(
-                    AppGlobals.appContext, AppThemeKeys.itemTextColor.name),
-              ),
               TextStyle(
                 fontSize: ScreenUtil().setSp(20),
                 color: AppThemeUtils.getColorByKey(
-                    AppGlobals.appContext, AppThemeKeys.itemSubtitleTextColor.name),
+                    AppGlobals.appContext, AppThemeKeys.mainWhiteColor.name),
               ),
               TextStyle(
                 fontSize: ScreenUtil().setSp(22),
-                color: Colors.black,
+                color: AppThemeUtils.getColorByKey(
+                    AppGlobals.appContext, AppThemeKeys.mainWhiteColor.name),
                 fontWeight: FontWeight.bold,
               ),
-              TextStyle(
-                fontSize: ScreenUtil().setSp(10),
-                color: AppThemeUtils.getColorByKey(
-                    AppGlobals.appContext, AppThemeKeys.itemTextColor.name),
-              ),
-              TextStyle(
-                fontSize: ScreenUtil().setSp(20),
-                color: AppThemeUtils.getColorByKey(
-                    AppGlobals.appContext, AppThemeKeys.itemSubtitleTextColor.name),
-              ),
-              TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),*/
+
             ],
           ),
         );
@@ -742,6 +727,7 @@ class MiningV2Provider extends ChangeNotifier {
       inactivityScore=[0,0,0];
       balanceInBeacon=toEther((rmm.data?['balance_in_beacon']??0).toString(), 9).toDouble();
       int iscore=rmm.data?['inactivity_score']??0;
+      print('iscore:$iscore');
       iscore=iscore>2700?2700:iscore;
       double isp=((iscore/2700)*100);
       inactivityScorePercentage=isp.toStringAsFixed(2);
@@ -808,7 +794,7 @@ class MiningV2Provider extends ChangeNotifier {
     _wsBridge ??= NativeWebSocketBridge();
   }
 
-  /// 连接 WebSocket
+  /// 连接 / 切换 WebSocket（首连 + 切钱包共用）
   Future<void> connectWebSocket({
     required String wsUrl,
     required String validatorPubkey,
@@ -816,47 +802,79 @@ class MiningV2Provider extends ChangeNotifier {
   }) async {
     try {
       initWebSocket();
-      // 监听 WebSocket 消息
-      await disconnectWebSocket();
-      _wsSubscription = _wsBridge!.messages.listen((message) {
-        //debugPrint('WebSocket message: $message');
-        handleWebSocketMessage(message);
-      });
+
+      // ⭐ 只初始化一次监听
+      _wsSubscription ??= _wsBridge!.messages.listen(
+        handleWebSocketMessage,
+        onError: (e) {
+          debugPrint('WS stream error: $e');
+          wsConnected = false;
+          miningStatus = false;
+          notifyListeners();
+        },
+      );
+
+      // ⭐ 不要先 disconnect
       await _wsBridge!.connect(
         wsUrl: wsUrl,
         validatorPubkey: validatorPubkey,
         validatorPrivateKey: validatorPrivateKey,
       );
+
+      // 注意：这里只表示“已请求连接”
       wsConnected = true;
+      miningStatus = true;
       notifyListeners();
 
     } catch (e) {
       wsConnected = false;
+      miningStatus = false;
       debugPrint('WebSocket connect error: $e');
       notifyListeners();
     }
   }
 
-  /// 断开 WebSocket
+
+  /// 用户主动断开（退出挖矿 / 登出）
   Future<void> disconnectWebSocket() async {
     try {
-      await _wsBridge?.disconnect();
+      await _wsBridge?.disconnect(); // stopService
     } catch (e) {
       debugPrint('WebSocket disconnect error: $e');
     }
+
     _wsSubscription?.cancel();
     _wsSubscription = null;
+
     wsConnected = false;
+    miningStatus = false;
     notifyListeners();
   }
 
-  /// 处理 WebSocket 消息
+
   void handleWebSocketMessage(String message) {
-    // 这里可以根据消息内容做不同处理
-    // 例如更新 miningStatus、taskList、balanceInBeacon 等
     debugPrint('Received WS: $message');
-    // TODO: 解析 message 并更新状态
+
+    switch (message) {
+      case 'WebSocket connected':
+        wsConnected = true;
+        miningStatus = true;
+        notifyListeners();
+        break;
+
+      case 'onFailure':
+      case 'onClosed':
+        wsConnected = false;
+        miningStatus = false;
+        notifyListeners();
+        break;
+
+      default:
+      // TODO: 正常业务消息解析
+        break;
+    }
   }
+
 
   @override
   void dispose() {

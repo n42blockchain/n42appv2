@@ -78,36 +78,38 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m26(value) => "インポートに失敗しました：${value}";
 
-  static String m27(value, value1) => "${value1}ブロックマイニングごとに${value} N";
+  static String m27(value) => "報酬を得るには、最低${value}のステーキング残高が必要です。";
 
-  static String m28(value) => "${value}文字である必要があります";
+  static String m28(value, value1) => "${value1}ブロックマイニングごとに${value} N";
 
-  static String m29(value) => "${value}の残高が不足しています。";
+  static String m29(value) => "${value}文字である必要があります";
 
-  static String m30(value) => "${value}を受取中...";
+  static String m30(value) => "${value}の残高が不足しています。";
 
-  static String m31(value) =>
+  static String m31(value) => "${value}を受取中...";
+
+  static String m32(value) =>
       "アプリ内でスワップされた${value}はまもなくウォレットに配布され、このプロセスでは売却できません。ノードの運用に使用できます。";
 
-  static String m32(value) => "最大${value}文字";
+  static String m33(value) => "最大${value}文字";
 
-  static String m33(value) => "${value}チェーンは既にアプリでサポートされています！";
+  static String m34(value) => "${value}チェーンは既にアプリでサポートされています！";
 
-  static String m34(value) => "${value}チェーンは既にアプリでサポートされています。追加しますか？";
+  static String m35(value) => "${value}チェーンは既にアプリでサポートされています。追加しますか？";
 
-  static String m35(value) => "${value}アドレスのテストリンクに失敗しました！";
+  static String m36(value) => "${value}アドレスのテストリンクに失敗しました！";
 
-  static String m36(value) => "アプリケーションは${value}秒後にロック解除されます。";
+  static String m37(value) => "アプリケーションは${value}秒後にロック解除されます。";
 
-  static String m37(value) => "パターンパスワードの入力エラー、あと${value}回試行できます";
-
-  static String m38(value) => "パスワードの入力エラー、あと${value}回試行できます";
+  static String m38(value) => "パターンパスワードの入力エラー、あと${value}回試行できます";
 
   static String m39(value) => "パスワードの入力エラー、あと${value}回試行できます";
 
-  static String m40(value) => "${value}パスワードを入力";
+  static String m40(value) => "パスワードの入力エラー、あと${value}回試行できます";
 
-  static String m41(value) => "0〜${value}文字";
+  static String m41(value) => "${value}パスワードを入力";
+
+  static String m42(value) => "0〜${value}文字";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -784,6 +786,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_114": MessageLookupByLibrary.simpleMessage("確認"),
         "g_mining_key_115":
             MessageLookupByLibrary.simpleMessage("引き換えには時間がかかります。しばらくお待ちください！"),
+        "g_mining_key_116": m27,
         "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
             "報酬は毎日蓄積され、約0.5 Nに達した時にのみNウォレットに送信されます。"),
         "g_mining_key_13": MessageLookupByLibrary.simpleMessage("累計報酬"),
@@ -819,7 +822,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_mining_key_7": MessageLookupByLibrary.simpleMessage("プランを選択"),
         "g_mining_key_70":
             MessageLookupByLibrary.simpleMessage("1日100ブロック〜約15分"),
-        "g_mining_key_71": m27,
+        "g_mining_key_71": m28,
         "g_mining_key_72": MessageLookupByLibrary.simpleMessage("128秒ごとにチェック"),
         "g_mining_key_73":
             MessageLookupByLibrary.simpleMessage("クラウド認証が開始されました"),
@@ -861,7 +864,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("パスワードを設定して暗号化"),
         "g_mining_key_97":
             MessageLookupByLibrary.simpleMessage("暗号化パスワードを入力してください"),
-        "g_mining_key_98": m28,
+        "g_mining_key_98": m29,
         "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
             "正確であることを確認するために、パスワードを再入力してください"),
         "g_notification_key_1": MessageLookupByLibrary.simpleMessage("通知"),
@@ -875,7 +878,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("紹介方法"),
         "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("リンク"),
         "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("コード"),
-        "g_swap_key_14": m29,
+        "g_swap_key_14": m30,
         "g_swap_key_15": MessageLookupByLibrary.simpleMessage("コイン価格の取得エラー。"),
         "g_swap_key_16":
             MessageLookupByLibrary.simpleMessage("続行すると、以下に同意したことになります："),
@@ -883,7 +886,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_swap_key_18": MessageLookupByLibrary.simpleMessage("完了"),
         "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
             "スワップはまもなく配布されます。しばらくお待ちください。"),
-        "g_swap_key_20": m30,
+        "g_swap_key_20": m31,
         "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
             "ノード運用コスト：グループ認証 1-49 N、ベーシックノード：50 N、プレミアムノード：100 N、プロノード：500 N。"),
         "g_swap_key_22": MessageLookupByLibrary.simpleMessage("期限切れ"),
@@ -894,7 +897,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_swap_key_29": MessageLookupByLibrary.simpleMessage("新残高"),
         "g_swap_key_3": MessageLookupByLibrary.simpleMessage("支払い"),
         "g_swap_key_30": MessageLookupByLibrary.simpleMessage("日付"),
-        "g_swap_key_31": m31,
+        "g_swap_key_31": m32,
         "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
             "スワップは関連するチェーンエクスプローラー（Etherscan、BscScan、TRONSCAN、および当社独自のエクスプローラー）で確認できます。"),
         "g_swap_key_33": MessageLookupByLibrary.simpleMessage("Nにスワップ"),
@@ -902,7 +905,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_swap_key_4": MessageLookupByLibrary.simpleMessage("受取"),
         "g_swap_key_5": MessageLookupByLibrary.simpleMessage("スワッププレビュー"),
         "g_swap_key_6": MessageLookupByLibrary.simpleMessage("再試行"),
-        "g_token_m_key_1": m32,
+        "g_token_m_key_1": m33,
         "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
             "誰でもトークンを作成できます。既存のトークンの偽バージョンを作成することも可能です。インポートする前に必ずトークンを調査してください。"),
         "g_token_m_key_11": MessageLookupByLibrary.simpleMessage("トークン"),
@@ -917,9 +920,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0〜18の整数"),
         "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("トークンを追加"),
         "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("フォーマットエラー！"),
-        "g_token_m_key_22": m33,
-        "g_token_m_key_23": m34,
-        "g_token_m_key_24": m35,
+        "g_token_m_key_22": m34,
+        "g_token_m_key_23": m35,
+        "g_token_m_key_24": m36,
         "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("トークンをインポート"),
         "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("全てのネットワーク"),
         "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("カスタムトークン"),
@@ -927,15 +930,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "g_token_m_key_7": MessageLookupByLibrary.simpleMessage("トークンシンボル"),
         "g_token_m_key_8": MessageLookupByLibrary.simpleMessage("トークン桁数"),
         "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("インポート"),
-        "g_unlock_key10": m36,
+        "g_unlock_key10": m37,
         "g_unlock_key2":
             MessageLookupByLibrary.simpleMessage("指紋または顔認証が有効になっていませんか？"),
         "g_unlock_key3": MessageLookupByLibrary.simpleMessage("パターンパスワードを描画"),
-        "g_unlock_key4": m37,
+        "g_unlock_key4": m38,
         "g_unlock_key5": MessageLookupByLibrary.simpleMessage("パスワードを入力"),
-        "g_unlock_key6": m38,
+        "g_unlock_key6": m39,
         "g_unlock_key7": MessageLookupByLibrary.simpleMessage("認証に失敗しました"),
-        "g_unlock_key8": m39,
+        "g_unlock_key8": m40,
         "g_unlock_key9": MessageLookupByLibrary.simpleMessage("または"),
         "google_verification": MessageLookupByLibrary.simpleMessage("Google認証"),
         "google_verification_message10":
@@ -960,7 +963,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Google認証コードを入力"),
         "google_verification_message20":
             MessageLookupByLibrary.simpleMessage("メール認証コードを入力"),
-        "google_verification_message21": m40,
+        "google_verification_message21": m41,
         "google_verification_message3":
             MessageLookupByLibrary.simpleMessage("Googleキーの取得に失敗しました"),
         "google_verification_message5":
@@ -998,7 +1001,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("まずログインしてください"),
         "login_password": MessageLookupByLibrary.simpleMessage("パスワード"),
         "next": MessageLookupByLibrary.simpleMessage("次へ"),
-        "nicknameMessage": m41,
+        "nicknameMessage": m42,
         "password_diff": MessageLookupByLibrary.simpleMessage("パスワードが一致しません"),
         "personalInformation": MessageLookupByLibrary.simpleMessage("プロフィール編集"),
         "photograph": MessageLookupByLibrary.simpleMessage("撮影"),
