@@ -303,6 +303,8 @@
   "g_mining_key_23": "수익 횟수",
   "g_mining_key_31": "플랜 선택",
   "g_mining_key_32": "잠금 해제 기간: 언제든지 잠금 해제 가능",
+  "g_mining_unlock_period": "잠금 해제 기간:",
+  "g_mining_unlockable_anytime": "언제든지 잠금 해제 가능",
   "g_mining_key_33": "연간 최대 보상",
   "g_mining_key_34": "보상 분배",
   "g_mining_key_35": "일일 한도",

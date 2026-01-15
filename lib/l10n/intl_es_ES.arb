@@ -314,6 +314,8 @@
   "g_mining_key_23": "Número de beneficios",
   "g_mining_key_31": "Seleccionar planes",
   "g_mining_key_32": "Período de desbloqueo: Desbloqueable en cualquier momento",
+  "g_mining_unlock_period": "Período de desbloqueo:",
+  "g_mining_unlockable_anytime": "Desbloqueable en cualquier momento",
   "g_mining_key_33": "Recompensa máxima anual",
   "g_mining_key_34": "Distribución de recompensas",
   "g_mining_key_35": "Límite diario",

@@ -276,7 +276,7 @@ class _WalletListState extends State<WalletList> {
             Expanded(
               flex: 1,
               child: faceBindButton(
-                "${S.of(context).g_face_match_key13}(${S.of(context).g_face_match_key12})",
+                S.of(context).g_face_match_key13,
                 bind,),
             ),
             SizedBox(width: ScreenUtil().setWidth(30),),

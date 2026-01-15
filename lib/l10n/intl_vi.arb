@@ -303,6 +303,8 @@
   "g_mining_key_23": "Số lần lợi nhuận",
   "g_mining_key_31": "Chọn gói",
   "g_mining_key_32": "Thời gian mở khóa: Có thể mở khóa bất kỳ lúc nào",
+  "g_mining_unlock_period": "Thời gian mở khóa:",
+  "g_mining_unlockable_anytime": "Có thể mở khóa bất kỳ lúc nào",
   "g_mining_key_33": "Phần thưởng tối đa hàng năm",
   "g_mining_key_34": "Phân phối phần thưởng",
   "g_mining_key_35": "Giới hạn hàng ngày",

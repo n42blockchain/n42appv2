@@ -160,7 +160,9 @@ class _BackupOneState extends State<BackupOne> {
                       ),
                       AppThemeUtils.getColorByKey(
                           context,
-                          AppThemeKeys.mainButtonTextColor.name
+                          showMnemonic?
+                          AppThemeKeys.mainButtonTextColor.name:
+                          AppThemeKeys.mainButtonTextColor3.name
                       ),
                       false,
                     ),

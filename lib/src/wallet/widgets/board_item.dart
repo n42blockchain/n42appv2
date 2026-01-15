@@ -22,17 +22,21 @@ class BoardItem extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: ScreenUtil().setWidth(80),
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30),),
+        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(16),),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30),),
         ),
-        child: Text(
-          action,
-          style: TextStyle(
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
-            fontSize: ScreenUtil().setSp(30),
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            action,
+            maxLines: 1,
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
+              fontSize: ScreenUtil().setSp(28),
+            ),
           ),
         ),
       ),

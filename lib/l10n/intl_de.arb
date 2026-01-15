@@ -299,6 +299,8 @@
   "g_mining_key_23": "Anzahl der Gewinne",
   "g_mining_key_31": "Plaene auswaehlen",
   "g_mining_key_32": "Entsperrungszeitraum: Jederzeit entsperrbar",
+  "g_mining_unlock_period": "Entsperrungszeitraum:",
+  "g_mining_unlockable_anytime": "Jederzeit entsperrbar",
   "g_mining_key_33": "Maximale jaehrliche Belohnung",
   "g_mining_key_34": "Belohnungsverteilung",
   "g_mining_key_35": "Taegliches Limit",

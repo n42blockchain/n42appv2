@@ -303,6 +303,8 @@
   "g_mining_key_23": "Kâr sayısı",
   "g_mining_key_31": "Plan Seç",
   "g_mining_key_32": "Kilit Açma Süresi: Her zaman kilidi açılabilir",
+  "g_mining_unlock_period": "Kilit Açma Süresi:",
+  "g_mining_unlockable_anytime": "Her zaman kilidi açılabilir",
   "g_mining_key_33": "Yıllık Maksimum Ödül",
   "g_mining_key_34": "Ödül Dağıtımı",
   "g_mining_key_35": "Günlük Limit",

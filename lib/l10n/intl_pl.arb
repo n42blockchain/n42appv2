@@ -303,6 +303,8 @@
   "g_mining_key_23": "Liczba zysków",
   "g_mining_key_31": "Wybierz plany",
   "g_mining_key_32": "Okres odblokowania: Można odblokować w dowolnym momencie",
+  "g_mining_unlock_period": "Okres odblokowania:",
+  "g_mining_unlockable_anytime": "Można odblokować w dowolnym momencie",
   "g_mining_key_33": "Maks. roczna nagroda",
   "g_mining_key_34": "Dystrybucja nagród",
   "g_mining_key_35": "Dzienny limit",

@@ -25,5 +25,4 @@ plugins {
 }
 
 include(":app")
-include(":mylibrary")
  

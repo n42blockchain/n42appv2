@@ -25,7 +25,7 @@ class PlansWidget extends StatelessWidget {
         }
       },
       child: Container(
-        height: ScreenUtil().setWidth(270),
+        height: ScreenUtil().setWidth(290),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             colors: <Color>[
@@ -47,8 +47,8 @@ class PlansWidget extends StatelessWidget {
               child: Image.asset('assets/mining/miningv3_coin.png'),
             ),
             Positioned(
-              top: ScreenUtil().setWidth(26),
-              bottom: ScreenUtil().setWidth(26),
+              top: ScreenUtil().setWidth(20),
+              bottom: ScreenUtil().setWidth(18),
               left: ScreenUtil().setWidth(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,6 +65,8 @@ class PlansWidget extends StatelessWidget {
                         fontSize: ScreenUtil().setSp(30),
                         fontWeight: FontWeight.bold,
                       ),
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   Spacer(),

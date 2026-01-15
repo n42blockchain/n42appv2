@@ -303,6 +303,8 @@
   "g_mining_key_23": "Jumlah keuntungan",
   "g_mining_key_31": "Pilih Paket",
   "g_mining_key_32": "Periode Buka Kunci: Dapat dibuka kapan saja",
+  "g_mining_unlock_period": "Periode Buka Kunci:",
+  "g_mining_unlockable_anytime": "Dapat dibuka kapan saja",
   "g_mining_key_33": "Hadiah Maksimal Tahunan",
   "g_mining_key_34": "Distribusi Hadiah",
   "g_mining_key_35": "Batas Harian",

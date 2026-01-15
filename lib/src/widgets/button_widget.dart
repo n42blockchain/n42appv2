@@ -127,12 +127,17 @@ Widget ButtonStyle5(BuildContext context,dynamic onTap,String title,Color backgr
       ),
       alignment: Alignment.center,
     ),
-    child: Text(title,
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(32.0),
-        color: textColor,
+    child: Padding(
+      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(8.0)),
+      child: Text(title,
+        style: TextStyle(
+          fontSize: ScreenUtil().setSp(28.0),
+          color: textColor,
+        ),
+        textAlign: TextAlign.center,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
       ),
-      textAlign: TextAlign.center,
     ),
   );
 }
@@ -165,26 +170,33 @@ Widget ButtonStyle6(BuildContext context,
       ),
       alignment: Alignment.center,
     ),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        if(load)
-          Container(
-            height: ScreenUtil().setWidth(30.0),
-            width: ScreenUtil().setWidth(30.0),
-            margin: EdgeInsets.only(right: ScreenUtil().setWidth(10.0)),
-            child: CircularProgressIndicator(
-              color: textColor,
+    child: Padding(
+      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(8.0)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if(load)
+            Container(
+              height: ScreenUtil().setWidth(30.0),
+              width: ScreenUtil().setWidth(30.0),
+              margin: EdgeInsets.only(right: ScreenUtil().setWidth(10.0)),
+              child: CircularProgressIndicator(
+                color: textColor,
+              ),
+            ),
+          Flexible(
+            child: Text(title,
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(28.0),
+                color: textColor,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
-        Text(title,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(32.0),
-            color: textColor,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ],
+        ],
+      ),
     ),
   );
 }
