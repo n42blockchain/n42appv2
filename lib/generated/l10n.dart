@@ -18,8 +18,10 @@ class S {
   static S? _current;
 
   static S get current {
-    assert(_current != null,
-        'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.');
+    assert(
+      _current != null,
+      'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.',
+    );
     return _current!;
   }
 
@@ -41,8 +43,10 @@ class S {
 
   static S of(BuildContext context) {
     final instance = S.maybeOf(context);
-    assert(instance != null,
-        'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?');
+    assert(
+      instance != null,
+      'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?',
+    );
     return instance!;
   }
 
@@ -72,82 +76,42 @@ class S {
 
   /// `Failed to add!`
   String get g_key_3 {
-    return Intl.message(
-      'Failed to add!',
-      name: 'g_key_3',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Failed to add!', name: 'g_key_3', desc: '', args: []);
   }
 
   /// `Scan QR code`
   String get g_key_4 {
-    return Intl.message(
-      'Scan QR code',
-      name: 'g_key_4',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Scan QR code', name: 'g_key_4', desc: '', args: []);
   }
 
   /// `Failed to load!`
   String get g_key_5 {
-    return Intl.message(
-      'Failed to load!',
-      name: 'g_key_5',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Failed to load!', name: 'g_key_5', desc: '', args: []);
   }
 
   /// `Wallet`
   String get g_key_6 {
-    return Intl.message(
-      'Wallet',
-      name: 'g_key_6',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Wallet', name: 'g_key_6', desc: '', args: []);
   }
 
   /// `Create`
   String get g_key_7 {
-    return Intl.message(
-      'Create',
-      name: 'g_key_7',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Create', name: 'g_key_7', desc: '', args: []);
   }
 
   /// `Remark`
   String get g_key_8 {
-    return Intl.message(
-      'Remark',
-      name: 'g_key_8',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Remark', name: 'g_key_8', desc: '', args: []);
   }
 
   /// `All tokens`
   String get g_key_9 {
-    return Intl.message(
-      'All tokens',
-      name: 'g_key_9',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('All tokens', name: 'g_key_9', desc: '', args: []);
   }
 
   /// `Import wallet`
   String get g_key_11 {
-    return Intl.message(
-      'Import wallet',
-      name: 'g_key_11',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Import wallet', name: 'g_key_11', desc: '', args: []);
   }
 
   /// `Create/Import wallet`
@@ -162,22 +126,12 @@ class S {
 
   /// `Wallet List`
   String get g_key_13 {
-    return Intl.message(
-      'Wallet List',
-      name: 'g_key_13',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Wallet List', name: 'g_key_13', desc: '', args: []);
   }
 
   /// `Main Wallet`
   String get g_key_14 {
-    return Intl.message(
-      'Main Wallet',
-      name: 'g_key_14',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Main Wallet', name: 'g_key_14', desc: '', args: []);
   }
 
   /// `Set as Main Wallet`
@@ -202,12 +156,7 @@ class S {
 
   /// `Choose Chain`
   String get g_key_17 {
-    return Intl.message(
-      'Choose Chain',
-      name: 'g_key_17',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Choose Chain', name: 'g_key_17', desc: '', args: []);
   }
 
   /// `Enter wallet password`
@@ -232,42 +181,22 @@ class S {
 
   /// `Balance`
   String get g_key_29 {
-    return Intl.message(
-      'Balance',
-      name: 'g_key_29',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Balance', name: 'g_key_29', desc: '', args: []);
   }
 
   /// `Receive`
   String get g_key_33 {
-    return Intl.message(
-      'Receive',
-      name: 'g_key_33',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Receive', name: 'g_key_33', desc: '', args: []);
   }
 
   /// `Transfer`
   String get g_key_37 {
-    return Intl.message(
-      'Transfer',
-      name: 'g_key_37',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Transfer', name: 'g_key_37', desc: '', args: []);
   }
 
   /// `To`
   String get g_key_38 {
-    return Intl.message(
-      'To',
-      name: 'g_key_38',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('To', name: 'g_key_38', desc: '', args: []);
   }
 
   /// `Enter a wallet address`
@@ -292,12 +221,7 @@ class S {
 
   /// `Amount`
   String get g_key_44 {
-    return Intl.message(
-      'Amount',
-      name: 'g_key_44',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Amount', name: 'g_key_44', desc: '', args: []);
   }
 
   /// `Enter an amount more than {value}.`
@@ -322,212 +246,107 @@ class S {
 
   /// `Send`
   String get g_key_48 {
-    return Intl.message(
-      'Send',
-      name: 'g_key_48',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Send', name: 'g_key_48', desc: '', args: []);
   }
 
   /// `From`
   String get g_key_75 {
-    return Intl.message(
-      'From',
-      name: 'g_key_75',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('From', name: 'g_key_75', desc: '', args: []);
   }
 
   /// `Confirm`
   String get g_key_78 {
-    return Intl.message(
-      'Confirm',
-      name: 'g_key_78',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Confirm', name: 'g_key_78', desc: '', args: []);
   }
 
   /// `Cancel`
   String get g_key_79 {
-    return Intl.message(
-      'Cancel',
-      name: 'g_key_79',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Cancel', name: 'g_key_79', desc: '', args: []);
   }
 
   /// `Seed phrase`
   String get g_key_85 {
-    return Intl.message(
-      'Seed phrase',
-      name: 'g_key_85',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Seed phrase', name: 'g_key_85', desc: '', args: []);
   }
 
   /// `Settings`
   String get g_key_94 {
-    return Intl.message(
-      'Settings',
-      name: 'g_key_94',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Settings', name: 'g_key_94', desc: '', args: []);
   }
 
   /// `Send`
   String get g_key_100 {
-    return Intl.message(
-      'Send',
-      name: 'g_key_100',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Send', name: 'g_key_100', desc: '', args: []);
   }
 
   /// `Gas limit`
   String get g_key_101 {
-    return Intl.message(
-      'Gas limit',
-      name: 'g_key_101',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Gas limit', name: 'g_key_101', desc: '', args: []);
   }
 
   /// `No more`
   String get g_key_105 {
-    return Intl.message(
-      'No more',
-      name: 'g_key_105',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('No more', name: 'g_key_105', desc: '', args: []);
   }
 
   /// `Loading `
   String get g_key_106 {
-    return Intl.message(
-      'Loading ',
-      name: 'g_key_106',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Loading ', name: 'g_key_106', desc: '', args: []);
   }
 
   /// `Address Book`
   String get g_key_108 {
-    return Intl.message(
-      'Address Book',
-      name: 'g_key_108',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Address Book', name: 'g_key_108', desc: '', args: []);
   }
 
   /// `Manage`
   String get g_key_110 {
-    return Intl.message(
-      'Manage',
-      name: 'g_key_110',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Manage', name: 'g_key_110', desc: '', args: []);
   }
 
   /// `New address`
   String get g_key_112 {
-    return Intl.message(
-      'New address',
-      name: 'g_key_112',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('New address', name: 'g_key_112', desc: '', args: []);
   }
 
   /// `Delete`
   String get g_key_113 {
-    return Intl.message(
-      'Delete',
-      name: 'g_key_113',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Delete', name: 'g_key_113', desc: '', args: []);
   }
 
   /// `Save`
   String get g_key_115 {
-    return Intl.message(
-      'Save',
-      name: 'g_key_115',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Save', name: 'g_key_115', desc: '', args: []);
   }
 
   /// `Copy`
   String get g_key_119 {
-    return Intl.message(
-      'Copy',
-      name: 'g_key_119',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Copy', name: 'g_key_119', desc: '', args: []);
   }
 
   /// `Theme`
   String get g_key_126 {
-    return Intl.message(
-      'Theme',
-      name: 'g_key_126',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Theme', name: 'g_key_126', desc: '', args: []);
   }
 
   /// `System`
   String get g_key_127 {
-    return Intl.message(
-      'System',
-      name: 'g_key_127',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('System', name: 'g_key_127', desc: '', args: []);
   }
 
   /// `Light`
   String get g_key_128 {
-    return Intl.message(
-      'Light',
-      name: 'g_key_128',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Light', name: 'g_key_128', desc: '', args: []);
   }
 
   /// `Dark`
   String get g_key_129 {
-    return Intl.message(
-      'Dark',
-      name: 'g_key_129',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Dark', name: 'g_key_129', desc: '', args: []);
   }
 
   /// `No data`
   String get g_key_132 {
-    return Intl.message(
-      'No data',
-      name: 'g_key_132',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('No data', name: 'g_key_132', desc: '', args: []);
   }
 
   /// `Amount not valid`
@@ -572,22 +391,12 @@ class S {
 
   /// `Testnet`
   String get g_key_147 {
-    return Intl.message(
-      'Testnet',
-      name: 'g_key_147',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Testnet', name: 'g_key_147', desc: '', args: []);
   }
 
   /// `Mainnet`
   String get g_key_148 {
-    return Intl.message(
-      'Mainnet',
-      name: 'g_key_148',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Mainnet', name: 'g_key_148', desc: '', args: []);
   }
 
   /// `System language`
@@ -602,12 +411,7 @@ class S {
 
   /// `Submit`
   String get g_key_154 {
-    return Intl.message(
-      'Submit',
-      name: 'g_key_154',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Submit', name: 'g_key_154', desc: '', args: []);
   }
 
   /// `Wallet address`
@@ -632,32 +436,17 @@ class S {
 
   /// `Add`
   String get g_key_159 {
-    return Intl.message(
-      'Add',
-      name: 'g_key_159',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Add', name: 'g_key_159', desc: '', args: []);
   }
 
   /// `Symbol`
   String get g_key_163 {
-    return Intl.message(
-      'Symbol',
-      name: 'g_key_163',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Symbol', name: 'g_key_163', desc: '', args: []);
   }
 
   /// `Paste`
   String get g_key_166 {
-    return Intl.message(
-      'Paste',
-      name: 'g_key_166',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Paste', name: 'g_key_166', desc: '', args: []);
   }
 
   /// `Transaction failed`
@@ -682,12 +471,7 @@ class S {
 
   /// `Other`
   String get g_key_181 {
-    return Intl.message(
-      'Other',
-      name: 'g_key_181',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Other', name: 'g_key_181', desc: '', args: []);
   }
 
   /// `Successfully saved`
@@ -702,12 +486,7 @@ class S {
 
   /// `Success`
   String get g_key_191 {
-    return Intl.message(
-      'Success',
-      name: 'g_key_191',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Success', name: 'g_key_191', desc: '', args: []);
   }
 
   /// `Are you sure you want to delete the wallet?`
@@ -722,12 +501,7 @@ class S {
 
   /// `Active`
   String get g_key_193 {
-    return Intl.message(
-      'Active',
-      name: 'g_key_193',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Active', name: 'g_key_193', desc: '', args: []);
   }
 
   /// `No permission to access the camera.`
@@ -742,32 +516,17 @@ class S {
 
   /// `Explorer`
   String get g_key_196 {
-    return Intl.message(
-      'Explorer',
-      name: 'g_key_196',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Explorer', name: 'g_key_196', desc: '', args: []);
   }
 
   /// `Max`
   String get g_key_197 {
-    return Intl.message(
-      'Max',
-      name: 'g_key_197',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Max', name: 'g_key_197', desc: '', args: []);
   }
 
   /// `Assets`
   String get g_key_198 {
-    return Intl.message(
-      'Assets',
-      name: 'g_key_198',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Assets', name: 'g_key_198', desc: '', args: []);
   }
 
   /// `Transaction Overview`
@@ -802,22 +561,12 @@ class S {
 
   /// `Password Edit`
   String get g_key_206 {
-    return Intl.message(
-      'Password Edit',
-      name: 'g_key_206',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Password Edit', name: 'g_key_206', desc: '', args: []);
   }
 
   /// `Old Password`
   String get g_key_207 {
-    return Intl.message(
-      'Old Password',
-      name: 'g_key_207',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Old Password', name: 'g_key_207', desc: '', args: []);
   }
 
   /// `Syncing balances...`
@@ -832,12 +581,7 @@ class S {
 
   /// `Private Key`
   String get g_key_209 {
-    return Intl.message(
-      'Private Key',
-      name: 'g_key_209',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Private Key', name: 'g_key_209', desc: '', args: []);
   }
 
   /// `Private key error`
@@ -852,22 +596,12 @@ class S {
 
   /// `Buy`
   String get g_key_211 {
-    return Intl.message(
-      'Buy',
-      name: 'g_key_211',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Buy', name: 'g_key_211', desc: '', args: []);
   }
 
   /// `Sell`
   String get g_key_212 {
-    return Intl.message(
-      'Sell',
-      name: 'g_key_212',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Sell', name: 'g_key_212', desc: '', args: []);
   }
 
   /// `Market Information`
@@ -892,22 +626,12 @@ class S {
 
   /// `Nickname`
   String get g_key_u_2 {
-    return Intl.message(
-      'Nickname',
-      name: 'g_key_u_2',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Nickname', name: 'g_key_u_2', desc: '', args: []);
   }
 
   /// `Description`
   String get g_key_u_3 {
-    return Intl.message(
-      'Description',
-      name: 'g_key_u_3',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Description', name: 'g_key_u_3', desc: '', args: []);
   }
 
   /// `Artist information`
@@ -942,62 +666,32 @@ class S {
 
   /// `Name`
   String get g_key_u_8 {
-    return Intl.message(
-      'Name',
-      name: 'g_key_u_8',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Name', name: 'g_key_u_8', desc: '', args: []);
   }
 
   /// `Revenue`
   String get g_key_u_9 {
-    return Intl.message(
-      'Revenue',
-      name: 'g_key_u_9',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Revenue', name: 'g_key_u_9', desc: '', args: []);
   }
 
   /// `NFT Types`
   String get g_key_u_10 {
-    return Intl.message(
-      'NFT Types',
-      name: 'g_key_u_10',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('NFT Types', name: 'g_key_u_10', desc: '', args: []);
   }
 
   /// `Followers`
   String get g_key_u_11 {
-    return Intl.message(
-      'Followers',
-      name: 'g_key_u_11',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Followers', name: 'g_key_u_11', desc: '', args: []);
   }
 
   /// `User Types`
   String get g_key_u_12 {
-    return Intl.message(
-      'User Types',
-      name: 'g_key_u_12',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('User Types', name: 'g_key_u_12', desc: '', args: []);
   }
 
   /// `Website`
   String get g_key_u_13 {
-    return Intl.message(
-      'Website',
-      name: 'g_key_u_13',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Website', name: 'g_key_u_13', desc: '', args: []);
   }
 
   /// `Products link`
@@ -1302,12 +996,7 @@ class S {
 
   /// `Manage Wallet`
   String get s_key_1 {
-    return Intl.message(
-      'Manage Wallet',
-      name: 's_key_1',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Manage Wallet', name: 's_key_1', desc: '', args: []);
   }
 
   /// `Wallet Addresses`
@@ -1322,62 +1011,32 @@ class S {
 
   /// `Transaction`
   String get s_key_3 {
-    return Intl.message(
-      'Transaction',
-      name: 's_key_3',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Transaction', name: 's_key_3', desc: '', args: []);
   }
 
   /// `Language`
   String get s_key_4 {
-    return Intl.message(
-      'Language',
-      name: 's_key_4',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Language', name: 's_key_4', desc: '', args: []);
   }
 
   /// `Theme`
   String get s_key_5 {
-    return Intl.message(
-      'Theme',
-      name: 's_key_5',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Theme', name: 's_key_5', desc: '', args: []);
   }
 
   /// `About App`
   String get s_key_10 {
-    return Intl.message(
-      'About App',
-      name: 's_key_10',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('About App', name: 's_key_10', desc: '', args: []);
   }
 
   /// `Security`
   String get s_key_11 {
-    return Intl.message(
-      'Security',
-      name: 's_key_11',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Security', name: 's_key_11', desc: '', args: []);
   }
 
   /// `Use New Chat`
   String get s_key_12 {
-    return Intl.message(
-      'Use New Chat',
-      name: 's_key_12',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Use New Chat', name: 's_key_12', desc: '', args: []);
   }
 
   /// `Enable enhanced Chat experience`
@@ -1422,22 +1081,12 @@ class S {
 
   /// `Bookmark`
   String get g_browser_key5 {
-    return Intl.message(
-      'Bookmark',
-      name: 'g_browser_key5',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Bookmark', name: 'g_browser_key5', desc: '', args: []);
   }
 
   /// `Name`
   String get g_browser_key6 {
-    return Intl.message(
-      'Name',
-      name: 'g_browser_key6',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Name', name: 'g_browser_key6', desc: '', args: []);
   }
 
   /// `Please enter the Name`
@@ -1452,12 +1101,7 @@ class S {
 
   /// `URL`
   String get g_browser_key8 {
-    return Intl.message(
-      'URL',
-      name: 'g_browser_key8',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('URL', name: 'g_browser_key8', desc: '', args: []);
   }
 
   /// `Description`
@@ -1482,12 +1126,7 @@ class S {
 
   /// `Browser`
   String get g_browser_key11 {
-    return Intl.message(
-      'Browser',
-      name: 'g_browser_key11',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Browser', name: 'g_browser_key11', desc: '', args: []);
   }
 
   /// `Clear Browser Cache`
@@ -1532,22 +1171,12 @@ class S {
 
   /// `Done`
   String get g_browser_key17 {
-    return Intl.message(
-      'Done',
-      name: 'g_browser_key17',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Done', name: 'g_browser_key17', desc: '', args: []);
   }
 
   /// `Connect`
   String get g_connect_key1 {
-    return Intl.message(
-      'Connect',
-      name: 'g_connect_key1',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Connect', name: 'g_connect_key1', desc: '', args: []);
   }
 
   /// `Disconnect`
@@ -1562,12 +1191,7 @@ class S {
 
   /// `Reject`
   String get g_connect_key3 {
-    return Intl.message(
-      'Reject',
-      name: 'g_connect_key3',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Reject', name: 'g_connect_key3', desc: '', args: []);
   }
 
   /// `Available Networks`
@@ -1632,12 +1256,7 @@ class S {
 
   /// `Tips`
   String get g_face_3 {
-    return Intl.message(
-      'Tips',
-      name: 'g_face_3',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Tips', name: 'g_face_3', desc: '', args: []);
   }
 
   /// `Biometric scan success`
@@ -1652,12 +1271,7 @@ class S {
 
   /// `To set`
   String get g_face_5 {
-    return Intl.message(
-      'To set',
-      name: 'g_face_5',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('To set', name: 'g_face_5', desc: '', args: []);
   }
 
   /// `You haven't set biometric login. Go to System Settings to set it.`
@@ -1682,12 +1296,7 @@ class S {
 
   /// `Return`
   String get g_face_8 {
-    return Intl.message(
-      'Return',
-      name: 'g_face_8',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Return', name: 'g_face_8', desc: '', args: []);
   }
 
   /// `It is recommended that you re-enable biometrics.`
@@ -1712,22 +1321,12 @@ class S {
 
   /// `You pay`
   String get g_swap_key_3 {
-    return Intl.message(
-      'You pay',
-      name: 'g_swap_key_3',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('You pay', name: 'g_swap_key_3', desc: '', args: []);
   }
 
   /// `You get`
   String get g_swap_key_4 {
-    return Intl.message(
-      'You get',
-      name: 'g_swap_key_4',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('You get', name: 'g_swap_key_4', desc: '', args: []);
   }
 
   /// `Preview Swap`
@@ -1742,12 +1341,7 @@ class S {
 
   /// `Try again`
   String get g_swap_key_6 {
-    return Intl.message(
-      'Try again',
-      name: 'g_swap_key_6',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Try again', name: 'g_swap_key_6', desc: '', args: []);
   }
 
   /// `{value} Insufficient Balance.`
@@ -1792,12 +1386,7 @@ class S {
 
   /// `Finish`
   String get g_swap_key_18 {
-    return Intl.message(
-      'Finish',
-      name: 'g_swap_key_18',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Finish', name: 'g_swap_key_18', desc: '', args: []);
   }
 
   /// `Your swap will be distributed shortly.Please be patient.`
@@ -1832,22 +1421,12 @@ class S {
 
   /// `Expire`
   String get g_swap_key_22 {
-    return Intl.message(
-      'Expire',
-      name: 'g_swap_key_22',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Expire', name: 'g_swap_key_22', desc: '', args: []);
   }
 
   /// `Unpaid`
   String get g_swap_key_23 {
-    return Intl.message(
-      'Unpaid',
-      name: 'g_swap_key_23',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Unpaid', name: 'g_swap_key_23', desc: '', args: []);
   }
 
   /// `Confirming payment`
@@ -1892,12 +1471,7 @@ class S {
 
   /// `Date`
   String get g_swap_key_30 {
-    return Intl.message(
-      'Date',
-      name: 'g_swap_key_30',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Date', name: 'g_swap_key_30', desc: '', args: []);
   }
 
   /// `{value} swapped in-app will be distributed shortly to your wallet and cannot be sold via this process. It can be used to run a node.`
@@ -1922,22 +1496,12 @@ class S {
 
   /// `Swap to N`
   String get g_swap_key_33 {
-    return Intl.message(
-      'Swap to N',
-      name: 'g_swap_key_33',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Swap to N', name: 'g_swap_key_33', desc: '', args: []);
   }
 
   /// `Swap`
   String get g_swap_key_35 {
-    return Intl.message(
-      'Swap',
-      name: 'g_swap_key_35',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Swap', name: 'g_swap_key_35', desc: '', args: []);
   }
 
   /// `Transaction history`
@@ -1982,12 +1546,7 @@ class S {
 
   /// `Get amount`
   String get g_key_tran_8 {
-    return Intl.message(
-      'Get amount',
-      name: 'g_key_tran_8',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Get amount', name: 'g_key_tran_8', desc: '', args: []);
   }
 
   /// `Max {value} characters`
@@ -2072,12 +1631,7 @@ class S {
 
   /// `Import`
   String get g_token_m_key_9 {
-    return Intl.message(
-      'Import',
-      name: 'g_token_m_key_9',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Import', name: 'g_token_m_key_9', desc: '', args: []);
   }
 
   /// `Anyone can create a token, including creating fake versions of existing tokens. Always research a token before importing it.`
@@ -2092,12 +1646,7 @@ class S {
 
   /// `Tokens`
   String get g_token_m_key_11 {
-    return Intl.message(
-      'Tokens',
-      name: 'g_token_m_key_11',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Tokens', name: 'g_token_m_key_11', desc: '', args: []);
   }
 
   /// `Search Token`
@@ -2152,22 +1701,12 @@ class S {
 
   /// `RPC`
   String get g_token_m_key_17 {
-    return Intl.message(
-      'RPC',
-      name: 'g_token_m_key_17',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('RPC', name: 'g_token_m_key_17', desc: '', args: []);
   }
 
   /// `API`
   String get g_token_m_key_18 {
-    return Intl.message(
-      'API',
-      name: 'g_token_m_key_18',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('API', name: 'g_token_m_key_18', desc: '', args: []);
   }
 
   /// `Add custom chain`
@@ -2252,12 +1791,7 @@ class S {
 
   /// `Market Cap`
   String get g_key_m_2 {
-    return Intl.message(
-      'Market Cap',
-      name: 'g_key_m_2',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Market Cap', name: 'g_key_m_2', desc: '', args: []);
   }
 
   /// `Trading Volume`
@@ -2272,12 +1806,7 @@ class S {
 
   /// `Total Supply`
   String get g_key_m_4 {
-    return Intl.message(
-      'Total Supply',
-      name: 'g_key_m_4',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Total Supply', name: 'g_key_m_4', desc: '', args: []);
   }
 
   /// `In Circulation`
@@ -2292,212 +1821,107 @@ class S {
 
   /// `About`
   String get g_key_m_6 {
-    return Intl.message(
-      'About',
-      name: 'g_key_m_6',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('About', name: 'g_key_m_6', desc: '', args: []);
   }
 
   /// `More`
   String get g_key_m_7 {
-    return Intl.message(
-      'More',
-      name: 'g_key_m_7',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('More', name: 'g_key_m_7', desc: '', args: []);
   }
 
   /// `Links`
   String get g_key_m_8 {
-    return Intl.message(
-      'Links',
-      name: 'g_key_m_8',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Links', name: 'g_key_m_8', desc: '', args: []);
   }
 
   /// `Website`
   String get g_key_m_9 {
-    return Intl.message(
-      'Website',
-      name: 'g_key_m_9',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Website', name: 'g_key_m_9', desc: '', args: []);
   }
 
   /// `Facebook`
   String get g_key_m_10 {
-    return Intl.message(
-      'Facebook',
-      name: 'g_key_m_10',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Facebook', name: 'g_key_m_10', desc: '', args: []);
   }
 
   /// `Twitter`
   String get g_key_m_11 {
-    return Intl.message(
-      'Twitter',
-      name: 'g_key_m_11',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Twitter', name: 'g_key_m_11', desc: '', args: []);
   }
 
   /// `Reddit`
   String get g_key_m_14 {
-    return Intl.message(
-      'Reddit',
-      name: 'g_key_m_14',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Reddit', name: 'g_key_m_14', desc: '', args: []);
   }
 
   /// `Browser`
   String get g_key_m_15 {
-    return Intl.message(
-      'Browser',
-      name: 'g_key_m_15',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Browser', name: 'g_key_m_15', desc: '', args: []);
   }
 
   /// `Telegram`
   String get g_key_m_16 {
-    return Intl.message(
-      'Telegram',
-      name: 'g_key_m_16',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Telegram', name: 'g_key_m_16', desc: '', args: []);
   }
 
   /// `Discord`
   String get g_key_m_17 {
-    return Intl.message(
-      'Discord',
-      name: 'g_key_m_17',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Discord', name: 'g_key_m_17', desc: '', args: []);
   }
 
   /// `Youtube`
   String get g_key_m_18 {
-    return Intl.message(
-      'Youtube',
-      name: 'g_key_m_18',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Youtube', name: 'g_key_m_18', desc: '', args: []);
   }
 
   /// `Instagram`
   String get g_key_m_19 {
-    return Intl.message(
-      'Instagram',
-      name: 'g_key_m_19',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Instagram', name: 'g_key_m_19', desc: '', args: []);
   }
 
   /// `Complete`
   String get g_key_t_1 {
-    return Intl.message(
-      'Complete',
-      name: 'g_key_t_1',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Complete', name: 'g_key_t_1', desc: '', args: []);
   }
 
   /// `Pending`
   String get g_key_t_2 {
-    return Intl.message(
-      'Pending',
-      name: 'g_key_t_2',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Pending', name: 'g_key_t_2', desc: '', args: []);
   }
 
   /// `Failure`
   String get g_key_t_3 {
-    return Intl.message(
-      'Failure',
-      name: 'g_key_t_3',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Failure', name: 'g_key_t_3', desc: '', args: []);
   }
 
   /// `Transfer out`
   String get g_key_t_4 {
-    return Intl.message(
-      'Transfer out',
-      name: 'g_key_t_4',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Transfer out', name: 'g_key_t_4', desc: '', args: []);
   }
 
   /// `Transfer in`
   String get g_key_t_5 {
-    return Intl.message(
-      'Transfer in',
-      name: 'g_key_t_5',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Transfer in', name: 'g_key_t_5', desc: '', args: []);
   }
 
   /// `Gas Used`
   String get g_key_t_6 {
-    return Intl.message(
-      'Gas Used',
-      name: 'g_key_t_6',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Gas Used', name: 'g_key_t_6', desc: '', args: []);
   }
 
   /// `Gas`
   String get g_key_t_7 {
-    return Intl.message(
-      'Gas',
-      name: 'g_key_t_7',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Gas', name: 'g_key_t_7', desc: '', args: []);
   }
 
   /// `Gas price`
   String get g_key_t_15 {
-    return Intl.message(
-      'Gas price',
-      name: 'g_key_t_15',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Gas price', name: 'g_key_t_15', desc: '', args: []);
   }
 
   /// `Max gas fee`
   String get g_key_t_16 {
-    return Intl.message(
-      'Max gas fee',
-      name: 'g_key_t_16',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Max gas fee', name: 'g_key_t_16', desc: '', args: []);
   }
 
   /// `Max fee per gas`
@@ -2522,22 +1946,12 @@ class S {
 
   /// `Miner Fee`
   String get g_key_t_30 {
-    return Intl.message(
-      'Miner Fee',
-      name: 'g_key_t_30',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Miner Fee', name: 'g_key_t_30', desc: '', args: []);
   }
 
   /// `Proceed`
   String get g_key_t_31 {
-    return Intl.message(
-      'Proceed',
-      name: 'g_key_t_31',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Proceed', name: 'g_key_t_31', desc: '', args: []);
   }
 
   /// `Wallet password`
@@ -2582,12 +1996,7 @@ class S {
 
   /// `Gas Fee Rate`
   String get g_key_t_36 {
-    return Intl.message(
-      'Gas Fee Rate',
-      name: 'g_key_t_36',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Gas Fee Rate', name: 'g_key_t_36', desc: '', args: []);
   }
 
   /// `The latest block Gas Fee Rate average`
@@ -2642,22 +2051,12 @@ class S {
 
   /// `Find`
   String get g_key_t_47 {
-    return Intl.message(
-      'Find',
-      name: 'g_key_t_47',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Find', name: 'g_key_t_47', desc: '', args: []);
   }
 
   /// `No account`
   String get g_key_t_49 {
-    return Intl.message(
-      'No account',
-      name: 'g_key_t_49',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('No account', name: 'g_key_t_49', desc: '', args: []);
   }
 
   /// `Invalid address`
@@ -2702,22 +2101,12 @@ class S {
 
   /// `Profile`
   String get g_home_key1 {
-    return Intl.message(
-      'Profile',
-      name: 'g_home_key1',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Profile', name: 'g_home_key1', desc: '', args: []);
   }
 
   /// `News`
   String get g_home_key2 {
-    return Intl.message(
-      'News',
-      name: 'g_home_key2',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('News', name: 'g_home_key2', desc: '', args: []);
   }
 
   /// `Verification`
@@ -2732,22 +2121,12 @@ class S {
 
   /// `Messages`
   String get g_home_key5 {
-    return Intl.message(
-      'Messages',
-      name: 'g_home_key5',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Messages', name: 'g_home_key5', desc: '', args: []);
   }
 
   /// `Learn`
   String get g_home_key6 {
-    return Intl.message(
-      'Learn',
-      name: 'g_home_key6',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Learn', name: 'g_home_key6', desc: '', args: []);
   }
 
   /// `Invite a friend`
@@ -2782,12 +2161,7 @@ class S {
 
   /// `Email`
   String get login_email {
-    return Intl.message(
-      'Email',
-      name: 'login_email',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Email', name: 'login_email', desc: '', args: []);
   }
 
   /// `Sign in`
@@ -3132,12 +2506,7 @@ class S {
 
   /// `Speed`
   String get g_mining_key_36 {
-    return Intl.message(
-      'Speed',
-      name: 'g_mining_key_36',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Speed', name: 'g_mining_key_36', desc: '', args: []);
   }
 
   /// `Verification Plans`
@@ -3222,12 +2591,7 @@ class S {
 
   /// `Entry`
   String get g_mining_key_62 {
-    return Intl.message(
-      'Entry',
-      name: 'g_mining_key_62',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Entry', name: 'g_mining_key_62', desc: '', args: []);
   }
 
   /// `Advanced Node`
@@ -3342,12 +2706,7 @@ class S {
 
   /// `Redeem`
   String get g_mining_key_77 {
-    return Intl.message(
-      'Redeem',
-      name: 'g_mining_key_77',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Redeem', name: 'g_mining_key_77', desc: '', args: []);
   }
 
   /// `Please save the verifier's public and private key pair first.`
@@ -3362,12 +2721,7 @@ class S {
 
   /// `Export`
   String get g_mining_key_79 {
-    return Intl.message(
-      'Export',
-      name: 'g_mining_key_79',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Export', name: 'g_mining_key_79', desc: '', args: []);
   }
 
   /// `Insufficient funds for transfer.`
@@ -3792,12 +3146,7 @@ class S {
 
   /// `Continue`
   String get g_mining_key62 {
-    return Intl.message(
-      'Continue',
-      name: 'g_mining_key62',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Continue', name: 'g_mining_key62', desc: '', args: []);
   }
 
   /// `You have successfully set up a {value} and will begin verification with N42Wallet!`
@@ -3862,22 +3211,12 @@ class S {
 
   /// `Time`
   String get g_key_wallet_k25 {
-    return Intl.message(
-      'Time',
-      name: 'g_key_wallet_k25',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Time', name: 'g_key_wallet_k25', desc: '', args: []);
   }
 
   /// `Result`
   String get g_key_wallet_k33 {
-    return Intl.message(
-      'Result',
-      name: 'g_key_wallet_k33',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Result', name: 'g_key_wallet_k33', desc: '', args: []);
   }
 
   /// `Transaction hash`
@@ -3892,52 +3231,27 @@ class S {
 
   /// `Add`
   String get g_key_wallet_k47 {
-    return Intl.message(
-      'Add',
-      name: 'g_key_wallet_k47',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Add', name: 'g_key_wallet_k47', desc: '', args: []);
   }
 
   /// `Path`
   String get g_key_wallet_k53 {
-    return Intl.message(
-      'Path',
-      name: 'g_key_wallet_k53',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Path', name: 'g_key_wallet_k53', desc: '', args: []);
   }
 
   /// `Block`
   String get g_key_wallet_k54 {
-    return Intl.message(
-      'Block',
-      name: 'g_key_wallet_k54',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Block', name: 'g_key_wallet_k54', desc: '', args: []);
   }
 
   /// `Value`
   String get g_key_wallet_k55 {
-    return Intl.message(
-      'Value',
-      name: 'g_key_wallet_k55',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Value', name: 'g_key_wallet_k55', desc: '', args: []);
   }
 
   /// `Nonce`
   String get g_key_wallet_k56 {
-    return Intl.message(
-      'Nonce',
-      name: 'g_key_wallet_k56',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Nonce', name: 'g_key_wallet_k56', desc: '', args: []);
   }
 
   /// `Accelerate`
@@ -3952,12 +3266,7 @@ class S {
 
   /// `Note`
   String get g_key_wallet_k58 {
-    return Intl.message(
-      'Note',
-      name: 'g_key_wallet_k58',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Note', name: 'g_key_wallet_k58', desc: '', args: []);
   }
 
   /// `No {value} chain added.`
@@ -4102,12 +3411,7 @@ class S {
 
   /// `Start`
   String get g_key_wallet_c4 {
-    return Intl.message(
-      'Start',
-      name: 'g_key_wallet_c4',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Start', name: 'g_key_wallet_c4', desc: '', args: []);
   }
 
   /// `Check Seed Phrase`
@@ -4772,22 +4076,12 @@ class S {
 
   /// `Name`
   String get g_key_nft_2 {
-    return Intl.message(
-      'Name',
-      name: 'g_key_nft_2',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Name', name: 'g_key_nft_2', desc: '', args: []);
   }
 
   /// `Camera`
   String get g_key_nft_16 {
-    return Intl.message(
-      'Camera',
-      name: 'g_key_nft_16',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Camera', name: 'g_key_nft_16', desc: '', args: []);
   }
 
   /// `Select photo`
@@ -4802,12 +4096,7 @@ class S {
 
   /// `Content`
   String get g_key_nft_18 {
-    return Intl.message(
-      'Content',
-      name: 'g_key_nft_18',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Content', name: 'g_key_nft_18', desc: '', args: []);
   }
 
   /// `Transaction submitted`
@@ -4832,22 +4121,12 @@ class S {
 
   /// `Total`
   String get g_key_nft_141 {
-    return Intl.message(
-      'Total',
-      name: 'g_key_nft_141',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Total', name: 'g_key_nft_141', desc: '', args: []);
   }
 
   /// `Back`
   String get g_key_nft_220 {
-    return Intl.message(
-      'Back',
-      name: 'g_key_nft_220',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Back', name: 'g_key_nft_220', desc: '', args: []);
   }
 
   /// `Enter the seed phrase for the wallet you want to import.`
@@ -4972,12 +4251,7 @@ class S {
 
   /// `Match`
   String get g_face_match_key9 {
-    return Intl.message(
-      'Match',
-      name: 'g_face_match_key9',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Match', name: 'g_face_match_key9', desc: '', args: []);
   }
 
   /// `You have been bound and cannot be re-bound at the moment. Binding address: {value}.`
@@ -5012,12 +4286,7 @@ class S {
 
   /// `Bind`
   String get g_face_match_key13 {
-    return Intl.message(
-      'Bind',
-      name: 'g_face_match_key13',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Bind', name: 'g_face_match_key13', desc: '', args: []);
   }
 
   /// `Verify`
@@ -5262,32 +4531,17 @@ class S {
 
   /// `Auto-lock`
   String get g_lock_key4 {
-    return Intl.message(
-      'Auto-lock',
-      name: 'g_lock_key4',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Auto-lock', name: 'g_lock_key4', desc: '', args: []);
   }
 
   /// `Succeeded`
   String get g_lock_key5 {
-    return Intl.message(
-      'Succeeded',
-      name: 'g_lock_key5',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Succeeded', name: 'g_lock_key5', desc: '', args: []);
   }
 
   /// `Failed`
   String get g_lock_key6 {
-    return Intl.message(
-      'Failed',
-      name: 'g_lock_key6',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Failed', name: 'g_lock_key6', desc: '', args: []);
   }
 
   /// `Biometric recognition is not enabled`
@@ -5842,32 +5096,17 @@ class S {
 
   /// `Sign up`
   String get Create_account {
-    return Intl.message(
-      'Sign up',
-      name: 'Create_account',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Sign up', name: 'Create_account', desc: '', args: []);
   }
 
   /// `Log In`
   String get g_key_login {
-    return Intl.message(
-      'Log In',
-      name: 'g_key_login',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Log In', name: 'g_key_login', desc: '', args: []);
   }
 
   /// `Log Out`
   String get g_key_logout {
-    return Intl.message(
-      'Log Out',
-      name: 'g_key_logout',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Log Out', name: 'g_key_logout', desc: '', args: []);
   }
 
   /// `Are you sure you want to exit the app?`
@@ -5922,12 +5161,7 @@ class S {
 
   /// `Next`
   String get next {
-    return Intl.message(
-      'Next',
-      name: 'next',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Next', name: 'next', desc: '', args: []);
   }
 
   /// `Choose a password(8~18 characters)`
@@ -5992,12 +5226,7 @@ class S {
 
   /// `Search`
   String get search {
-    return Intl.message(
-      'Search',
-      name: 'search',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Search', name: 'search', desc: '', args: []);
   }
 
   /// `Copied successfully`
@@ -6012,12 +5241,7 @@ class S {
 
   /// `Photograph`
   String get photograph {
-    return Intl.message(
-      'Photograph',
-      name: 'photograph',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Photograph', name: 'photograph', desc: '', args: []);
   }
 
   /// `0~{value} characters`
@@ -6032,12 +5256,7 @@ class S {
 
   /// `Edit`
   String get Edit {
-    return Intl.message(
-      'Edit',
-      name: 'Edit',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Edit', name: 'Edit', desc: '', args: []);
   }
 
   /// `Copy Address`
@@ -6142,12 +5361,7 @@ class S {
 
   /// `Edit photo`
   String get editPhoto {
-    return Intl.message(
-      'Edit photo',
-      name: 'editPhoto',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Edit photo', name: 'editPhoto', desc: '', args: []);
   }
 
   /// `Select from phone gallery`
@@ -6172,12 +5386,7 @@ class S {
 
   /// `Password`
   String get login_password {
-    return Intl.message(
-      'Password',
-      name: 'login_password',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Password', name: 'login_password', desc: '', args: []);
   }
 
   /// `Important Notice`
@@ -6192,22 +5401,12 @@ class S {
 
   /// `File`
   String get file {
-    return Intl.message(
-      'File',
-      name: 'file',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('File', name: 'file', desc: '', args: []);
   }
 
   /// `Address`
   String get g_key_address {
-    return Intl.message(
-      'Address',
-      name: 'g_key_address',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Address', name: 'g_key_address', desc: '', args: []);
   }
 
   /// `Please enter a name`
@@ -6362,12 +5561,7 @@ class S {
 
   /// `Share`
   String get g_share_v2_key_5 {
-    return Intl.message(
-      'Share',
-      name: 'g_share_v2_key_5',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Share', name: 'g_share_v2_key_5', desc: '', args: []);
   }
 
   /// `Referral`
@@ -6422,32 +5616,17 @@ class S {
 
   /// `Link`
   String get g_share_v3_key_7 {
-    return Intl.message(
-      'Link',
-      name: 'g_share_v3_key_7',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Link', name: 'g_share_v3_key_7', desc: '', args: []);
   }
 
   /// `code`
   String get g_share_v3_key_8 {
-    return Intl.message(
-      'code',
-      name: 'g_share_v3_key_8',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('code', name: 'g_share_v3_key_8', desc: '', args: []);
   }
 
   /// `Feedback`
   String get g_key_feedback {
-    return Intl.message(
-      'Feedback',
-      name: 'g_key_feedback',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Feedback', name: 'g_key_feedback', desc: '', args: []);
   }
 
   /// `Please fill in the feedback information`
@@ -6512,12 +5691,7 @@ class S {
 
   /// `Failed`
   String get g_key_feedback_7 {
-    return Intl.message(
-      'Failed',
-      name: 'g_key_feedback_7',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Failed', name: 'g_key_feedback_7', desc: '', args: []);
   }
 
   /// `Click try`
@@ -6552,22 +5726,12 @@ class S {
 
   /// `New friend`
   String get g_chat_key_2 {
-    return Intl.message(
-      'New friend',
-      name: 'g_chat_key_2',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('New friend', name: 'g_chat_key_2', desc: '', args: []);
   }
 
   /// `Added`
   String get g_chat_key_3 {
-    return Intl.message(
-      'Added',
-      name: 'g_chat_key_3',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Added', name: 'g_chat_key_3', desc: '', args: []);
   }
 
   /// `Have expired`
@@ -6582,12 +5746,7 @@ class S {
 
   /// `Wait`
   String get g_chat_key_5 {
-    return Intl.message(
-      'Wait',
-      name: 'g_chat_key_5',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Wait', name: 'g_chat_key_5', desc: '', args: []);
   }
 
   /// `Are you sure you want to add {value} as a friend`
@@ -6652,12 +5811,7 @@ class S {
 
   /// `Finish`
   String get g_chat_key_13 {
-    return Intl.message(
-      'Finish',
-      name: 'g_chat_key_13',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Finish', name: 'g_chat_key_13', desc: '', args: []);
   }
 
   /// `Select at least 2 contacts`
@@ -6732,12 +5886,7 @@ class S {
 
   /// `Ungroup`
   String get g_chat_key_22 {
-    return Intl.message(
-      'Ungroup',
-      name: 'g_chat_key_22',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Ungroup', name: 'g_chat_key_22', desc: '', args: []);
   }
 
   /// `Leave group`
@@ -6772,12 +5921,7 @@ class S {
 
   /// `Finish`
   String get g_chat_key_26 {
-    return Intl.message(
-      'Finish',
-      name: 'g_chat_key_26',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Finish', name: 'g_chat_key_26', desc: '', args: []);
   }
 
   /// `Friend add request`
@@ -6822,12 +5966,7 @@ class S {
 
   /// `agree`
   String get g_chat_key_31 {
-    return Intl.message(
-      'agree',
-      name: 'g_chat_key_31',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('agree', name: 'g_chat_key_31', desc: '', args: []);
   }
 
   /// `Chat member({value})`
@@ -6882,42 +6021,22 @@ class S {
 
   /// `Report`
   String get g_chat_key_40 {
-    return Intl.message(
-      'Report',
-      name: 'g_chat_key_40',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Report', name: 'g_chat_key_40', desc: '', args: []);
   }
 
   /// `New Chat`
   String get g_chat_key_41 {
-    return Intl.message(
-      'New Chat',
-      name: 'g_chat_key_41',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('New Chat', name: 'g_chat_key_41', desc: '', args: []);
   }
 
   /// `New Group`
   String get g_chat_key_42 {
-    return Intl.message(
-      'New Group',
-      name: 'g_chat_key_42',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('New Group', name: 'g_chat_key_42', desc: '', args: []);
   }
 
   /// `QR Code`
   String get g_chat_key_43 {
-    return Intl.message(
-      'QR Code',
-      name: 'g_chat_key_43',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('QR Code', name: 'g_chat_key_43', desc: '', args: []);
   }
 
   /// `Report and Block`
@@ -6942,22 +6061,12 @@ class S {
 
   /// `Video`
   String get g_chat_key_46 {
-    return Intl.message(
-      'Video',
-      name: 'g_chat_key_46',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Video', name: 'g_chat_key_46', desc: '', args: []);
   }
 
   /// `Photo`
   String get g_chat_key_47 {
-    return Intl.message(
-      'Photo',
-      name: 'g_chat_key_47',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Photo', name: 'g_chat_key_47', desc: '', args: []);
   }
 
   /// `Delete Message`
@@ -6982,12 +6091,7 @@ class S {
 
   /// `Agree`
   String get g_chat_key_50 {
-    return Intl.message(
-      'Agree',
-      name: 'g_chat_key_50',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Agree', name: 'g_chat_key_50', desc: '', args: []);
   }
 
   /// `Report Reason`
@@ -7032,22 +6136,12 @@ class S {
 
   /// `Blacklist`
   String get g_chat_key_58 {
-    return Intl.message(
-      'Blacklist',
-      name: 'g_chat_key_58',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Blacklist', name: 'g_chat_key_58', desc: '', args: []);
   }
 
   /// `Remove`
   String get g_chat_key_59 {
-    return Intl.message(
-      'Remove',
-      name: 'g_chat_key_59',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Remove', name: 'g_chat_key_59', desc: '', args: []);
   }
 
   /// `No contact yet`
@@ -7062,12 +6156,7 @@ class S {
 
   /// `Today`
   String get g_chat_key_61 {
-    return Intl.message(
-      'Today',
-      name: 'g_chat_key_61',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Today', name: 'g_chat_key_61', desc: '', args: []);
   }
 
   /// `Over 3 days ago`
@@ -7082,12 +6171,7 @@ class S {
 
   /// `Block`
   String get g_chat_key_63 {
-    return Intl.message(
-      'Block',
-      name: 'g_chat_key_63',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Block', name: 'g_chat_key_63', desc: '', args: []);
   }
 
   /// `Hey, I’m using N42Wallet to chat and send money. Install Wallet and message me at`
@@ -7102,12 +6186,7 @@ class S {
 
   /// `Reply`
   String get g_chat_key_66 {
-    return Intl.message(
-      'Reply',
-      name: 'g_chat_key_66',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Reply', name: 'g_chat_key_66', desc: '', args: []);
   }
 
   /// `The message has been deleted`
@@ -7132,22 +6211,12 @@ class S {
 
   /// `Say hi`
   String get g_chat_key_69 {
-    return Intl.message(
-      'Say hi',
-      name: 'g_chat_key_69',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Say hi', name: 'g_chat_key_69', desc: '', args: []);
   }
 
   /// `Chat`
   String get g_key_squad {
-    return Intl.message(
-      'Chat',
-      name: 'g_key_squad',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Chat', name: 'g_key_squad', desc: '', args: []);
   }
 
   /// `The file is too large to upload`
@@ -7182,12 +6251,7 @@ class S {
 
   /// `Contact`
   String get g_key_squad_k24 {
-    return Intl.message(
-      'Contact',
-      name: 'g_key_squad_k24',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Contact', name: 'g_key_squad_k24', desc: '', args: []);
   }
 
   /// `Search by email`
@@ -7202,12 +6266,7 @@ class S {
 
   /// `Reserved`
   String get g_key_xml_0 {
-    return Intl.message(
-      'Reserved',
-      name: 'g_key_xml_0',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Reserved', name: 'g_key_xml_0', desc: '', args: []);
   }
 
   /// `Base Reserve`
