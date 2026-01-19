@@ -104,7 +104,6 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
-    //implementation(files("libs/mobile-sdk-release.aar"))
     implementation(files("libs/mobile-sdk-android.aar"))
     implementation(files("libs/evm.aar"))
 }

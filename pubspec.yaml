@@ -118,7 +118,7 @@ dependencies:
   firebase_analytics: ^11.6.0
 
   # === Enterprise Architecture ===
-  get_it: ^7.6.0
+  get_it: ^9.2.0
   injectable: ^2.7.1+4
   go_router: ^14.8.1
   dartz: ^0.10.1
