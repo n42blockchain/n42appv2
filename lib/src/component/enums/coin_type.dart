@@ -89,7 +89,82 @@ enum CoinType{
   //Cardano
   ADA,
   //MultiversX (Elrond)
-  EGLD
+  EGLD,
+  //Layer 2 chains
+  ZKSYNC,  //zkSync Era
+  LINEA,   //Linea
+  SCROLL,  //Scroll
+  MNT,     //Mantle
+  BLAST,   //Blast
+  //Additional L2/EVM chains
+  MANTA,   //Manta Pacific
+  MODE,    //Mode
+  ZORA,    //Zora
+  TAIKO,   //Taiko
+  ZIRCUIT, //Zircuit
+  ZKPOLYGON, //Polygon zkEVM
+  OPBNB,   //opBNB
+  FRAX,    //Fraxtal
+  KROMA,   //Kroma
+  LISK,    //Lisk
+  BOB,     //BOB
+  UNICHAIN,//Unichain
+  INK,     //Ink
+  METAL,   //Metal L2
+  ZKFAIR,  //zkFair
+  XLAYER,  //X Layer
+  //Exchange chains
+  GT,      //Gate Chain
+  //Gaming/NFT chains
+  RON,     //Ronin
+  IMX,     //Immutable zkEVM
+  APE,     //ApeChain
+  BONE,    //Shibarium
+  CHZ,     //Chiliz
+  DOGECHAIN,//Dogechain
+  WLD,     //World Chain
+  //Bitcoin L2
+  RBTC,    //Rootstock
+  MERLIN,  //Merlin Chain
+  BEVM,    //BEVM
+  CORE,    //Core DAO
+  BITLAYER,//Bitlayer
+  //Other EVM chains
+  CFX,     //Conflux eSpace
+  TLOS,    //Telos
+  ASTR,    //Astar
+  SDN,     //Shiden
+  BNC,     //Bifrost
+  FSN,     //Fusion
+  PALM,    //Palm
+  EWT,     //Energy Web
+  BRISE,   //Bitgert
+  REEF,    //Reef
+  BTT,     //BitTorrent Chain
+  FX,      //Function X
+  ISLM,    //Haqq Network
+  DYM,     //Dymension
+  PLUME,   //Plume
+  NEON,    //Neon EVM
+  SYS,     //Syscoin
+  ELA,     //Elastos
+  HEMI,    //Hemi
+  HSK,     //HashKey
+  CYBER,   //Cyber
+  GRAVITY, //Gravity
+  SWAN,    //Swan Chain
+  MINT,    //Mint
+  FUSE,    //Fuse
+  CANTO,   //Canto
+  ROSE,    //Oasis Emerald
+  PLS,     //PulseChain
+  FLR,     //Flare
+  SGB,     //Songbird
+  HBAR,    //Hedera
+  BERA,    //Berachain
+  SEI,     //Sei
+  GNOSIS,  //Gnosis Chain
+  NOVA     //Arbitrum Nova
 }
 //区块链类型
 enum BlockchainType{
