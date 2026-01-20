@@ -215,7 +215,27 @@ enum CoinType{
   MARS,    //Mars Protocol
   CMDX,    //Comdex
   //Phase 3: ZK/unique architecture chains
-  STRK     //Starknet
+  STRK,    //Starknet
+  //Phase 4: Other important chains
+  EOS,     //EOS
+  WAX,     //WAX (EOSIO-based)
+  WAVES,   //Waves
+  NEO,     //NEO
+  GAS,     //GAS (NEO gas token)
+  IOST,    //IOST
+  ONT,     //Ontology
+  ONG,     //Ontology Gas
+  ZEN,     //Horizen
+  DCR,     //Decred
+  XEM,     //NEM
+  XYM,     //Symbol
+  LSK,     //Lisk (non-EVM version)
+  ARK,     //Ark
+  QTUM2,   //Qtum
+  ICX,     //ICON
+  NANO,    //Nano
+  HIVE,    //Hive
+  STEEM    //Steem
 }
 //区块链类型
 enum BlockchainType{
@@ -241,5 +261,18 @@ enum BlockchainType{
   Theta,//Theta网络
   Cardano,//卡尔达诺
   MultiversX,//MultiversX (原Elrond)
-  Starknet//Starknet (Cairo/STARK)
+  Starknet,//Starknet (Cairo/STARK)
+  //Phase 4 blockchain types
+  EOSIO,//EOS/WAX
+  Waves,//Waves
+  Neo,//NEO/GAS
+  Ontology,//ONT/ONG
+  NEM,//XEM/XYM
+  Nano,//Nano (DAG)
+  Decred,//Decred
+  ICON,//ICON
+  IOST,//IOST
+  Ark,//Ark
+  Qtum,//Qtum
+  Hive//Hive/Steem
 }
