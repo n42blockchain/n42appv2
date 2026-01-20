@@ -71,7 +71,25 @@ enum CoinType{
   //Sui
   SUI,
   //TheOpenNetwork
-  TON
+  TON,
+  //Stellar
+  XLM,
+  //VeChain
+  VET,
+  //Harmony
+  ONE,
+  //IoTeX
+  IOTX,
+  //NEAR Protocol
+  NEAR,
+  //Zilliqa
+  ZIL,
+  //Theta
+  THETA,
+  //Cardano
+  ADA,
+  //MultiversX (Elrond)
+  EGLD
 }
 //区块链类型
 enum BlockchainType{
@@ -87,5 +105,14 @@ enum BlockchainType{
   Polkadot,
   Aptos,
   Sui,
-  TheOpenNetwork
+  TheOpenNetwork,
+  Stellar,//恒星
+  VeChain,//唯链
+  Harmony,//和谐链
+  IoTeX,//物联网链
+  Near,//NEAR协议
+  Zilliqa,//Zilliqa
+  Theta,//Theta网络
+  Cardano,//卡尔达诺
+  MultiversX//MultiversX (原Elrond)
 }

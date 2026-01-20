@@ -39,10 +39,13 @@ import 'features/wallet/domain/usecases/create_wallet_test.dart' as create_walle
 import 'features/wallet/domain/usecases/get_balance_test.dart' as get_balance_test;
 import 'features/wallet/domain/usecases/send_transaction_test.dart' as send_transaction_test;
 import 'features/wallet/providers/wallet_providers_test.dart' as wallet_providers_test;
+import 'features/wallet/chain_config_test.dart' as chain_config_test;
+import 'features/wallet/address_validation_test.dart' as address_validation_test;
 
 // Widget Tests
 import 'widget/theme_test.dart' as theme_test;
 import 'widget/platform_test.dart' as platform_test;
+import 'widget/chain_ui_test.dart' as chain_ui_test;
 
 // Localization Tests
 import 'l10n/localization_test.dart' as localization_test;
@@ -85,10 +88,13 @@ void main() {
   get_balance_test.main();
   send_transaction_test.main();
   wallet_providers_test.main();
+  chain_config_test.main();
+  address_validation_test.main();
 
   // Widget Tests
   theme_test.main();
   platform_test.main();
+  chain_ui_test.main();
 
   // Localization Tests
   localization_test.main();

@@ -220,14 +220,15 @@ class WalletChainInfoBoard extends StatelessWidget {
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30),),
         ),
-        child: Text(
-          lable,
-          style: TextStyle(
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
-            fontSize: ScreenUtil().setSp(26),
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            lable,
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
+              fontSize: ScreenUtil().setSp(26),
+            ),
           ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
         ),
       ),
     );

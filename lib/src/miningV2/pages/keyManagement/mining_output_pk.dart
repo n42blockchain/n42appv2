@@ -76,11 +76,29 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
     }
     pwdErrorMessage="";
     confirmErrorMessage="";
-    _encryptedData = await encryptData(pwd);
-    // 执行加密
+
+    // 显示加载状态
     setState(() {
-      _showEncryptResult = true; // 切换状态
+      load = Load.loading;
     });
+
+    try {
+      _encryptedData = await encryptData(pwd);
+      // 执行加密
+      if (mounted) {
+        setState(() {
+          load = Load.finish;
+          _showEncryptResult = true; // 切换状态
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          load = Load.finish;
+        });
+        ToastUtils.show('加密失败: $e');
+      }
+    }
   }
 
   void _copyEncryptedData() {

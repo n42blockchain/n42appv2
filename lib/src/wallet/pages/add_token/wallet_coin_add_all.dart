@@ -1054,7 +1054,8 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
                         importType == 0
                             ? AppThemeKeys.mainBlueColor.name
                             : AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setWidth(importType == 0 ? 32.0 : 30.0),
+                    fontSize: ScreenUtil().setWidth(30.0),
+                    fontWeight: importType == 0 ? FontWeight.w600 : FontWeight.normal,
                   ),
                 ),
               ),
@@ -1089,7 +1090,8 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
                         importType == 1
                             ? AppThemeKeys.mainBlueColor.name
                             : AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setWidth(importType == 1 ? 32.0 : 30.0),
+                    fontSize: ScreenUtil().setWidth(30.0),
+                    fontWeight: importType == 1 ? FontWeight.w600 : FontWeight.normal,
                   ),
                 ),
               ),

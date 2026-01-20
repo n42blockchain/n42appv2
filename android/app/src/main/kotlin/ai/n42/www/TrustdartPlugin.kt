@@ -35,14 +35,23 @@ import wallet.core.jni.proto.BitcoinV2
 import wallet.core.jni.proto.Cosmos
 import wallet.core.jni.proto.Ethereum
 import wallet.core.jni.proto.Filecoin
+import wallet.core.jni.proto.Harmony
+import wallet.core.jni.proto.IoTeX
 import wallet.core.jni.proto.Polkadot
 import wallet.core.jni.proto.Ripple
 import wallet.core.jni.proto.Solana
+import wallet.core.jni.proto.Stellar
 import wallet.core.jni.proto.Sui
 import wallet.core.jni.proto.Tezos
 import wallet.core.jni.proto.TheOpenNetwork
 import wallet.core.jni.proto.Tron
 import wallet.core.jni.proto.Utxo
+import wallet.core.jni.proto.VeChain
+import wallet.core.jni.proto.NEAR
+import wallet.core.jni.proto.Zilliqa
+import wallet.core.jni.proto.Theta
+import wallet.core.jni.proto.Cardano
+import wallet.core.jni.proto.MultiversX
 import java.math.BigInteger
 import evmsdk.Evmsdk
 import com.mobileSdk.Api
@@ -1294,6 +1303,27 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
             "Filecoin" ->{
                 privateKey.getPublicKeySecp256k1(true)
             }
+            "Stellar" ->{
+                privateKey.publicKeyEd25519
+            }
+            "VeChain" ->{
+                privateKey.getPublicKeySecp256k1(true)
+            }
+            "Near" ->{
+                privateKey.publicKeyEd25519
+            }
+            "Zilliqa" ->{
+                privateKey.getPublicKeySecp256k1(true)
+            }
+            "Theta" ->{
+                privateKey.getPublicKeySecp256k1(true)
+            }
+            "Cardano" ->{
+                privateKey.publicKeyEd25519Cardano
+            }
+            "MultiversX" ->{
+                privateKey.publicKeyEd25519
+            }
             else -> null
         }
         return if(publicKey==null){
@@ -1373,6 +1403,27 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
             }
             "Ton"->{
                 signTonTransaction(wallet, path, txData, pk)
+            }
+            "Stellar"->{
+                signStellarTransaction(wallet, path, txData, pk)
+            }
+            "VeChain"->{
+                signVeChainTransaction(wallet, path, txData, pk)
+            }
+            "Near"->{
+                signNearTransaction(wallet, path, txData, pk)
+            }
+            "Zilliqa"->{
+                signZilliqaTransaction(wallet, path, txData, pk)
+            }
+            "Theta"->{
+                signThetaTransaction(wallet, path, txData, pk)
+            }
+            "Cardano"->{
+                signCardanoTransaction(wallet, path, txData, pk)
+            }
+            "MultiversX"->{
+                signMultiversXTransaction(wallet, path, txData, pk)
             }
             else -> null
         }
@@ -2438,6 +2489,240 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
         }
     }
 
+    private fun signStellarTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String? {
+        val privateKey = pk ?: wallet!!.getKey(CoinType.STELLAR, path)
+
+        val toAddress: String = txData["toAddress"] as String
+        val amount: Long = (txData["amount"] as String).toLong()
+        val fee: Int = (txData["fee"] as String).toInt()
+        val sequence: Long = (txData["sequence"] as String).toLong()
+        val memo: String? = txData["memo"] as String?
+        val passphrase: String = txData["passphrase"] as String? ?: "Public Global Stellar Network ; September 2015"
+
+        val opPayment = Stellar.OperationPayment.newBuilder()
+            .setDestination(toAddress)
+            .setAmount(amount)
+            .build()
+
+        val op = Stellar.Operation.newBuilder()
+            .setOpPayment(opPayment)
+            .build()
+
+        val inputBuilder = Stellar.SigningInput.newBuilder()
+            .setPassphrase(passphrase)
+            .setFee(fee)
+            .setSequence(sequence)
+            .setPrivateKey(ByteString.copyFrom(privateKey.data()))
+            .addOperations(op)
+
+        if (!memo.isNullOrEmpty()) {
+            inputBuilder.setMemoText(Stellar.MemoText.newBuilder().setText(memo).build())
+        }
+
+        val output = AnySigner.sign(inputBuilder.build(), CoinType.STELLAR, Stellar.SigningOutput.parser())
+        return output.signature
+    }
+
+    private fun signVeChainTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String? {
+        val privateKey = pk ?: wallet!!.getKey(CoinType.VECHAIN, path)
+
+        val toAddress: String = txData["toAddress"] as String
+        val amount: ByteArray = Numeric.hexStringToByteArray(txData["amount"] as String)
+        val chainTag: Int = (txData["chainTag"] as String).toInt()
+        val blockRef: Long = (txData["blockRef"] as String).toLong()
+        val expiration: Int = (txData["expiration"] as String).toInt()
+        val gas: Int = (txData["gas"] as String).toInt()
+        val nonce: Long = (txData["nonce"] as String).toLong()
+        val data: String = txData["data"] as String? ?: ""
+
+        val clause = VeChain.Clause.newBuilder()
+            .setTo(toAddress)
+            .setValue(ByteString.copyFrom(amount))
+            .setData(ByteString.copyFrom(Numeric.hexStringToByteArray(data)))
+            .build()
+
+        val input = VeChain.SigningInput.newBuilder()
+            .setChainTag(chainTag)
+            .setBlockRef(blockRef)
+            .setExpiration(expiration)
+            .addClauses(clause)
+            .setGas(gas)
+            .setNonce(nonce)
+            .setPrivateKey(ByteString.copyFrom(privateKey.data()))
+            .build()
+
+        val output = AnySigner.sign(input, CoinType.VECHAIN, VeChain.SigningOutput.parser())
+        return Numeric.toHexString(output.encoded.toByteArray())
+    }
+
+    private fun signNearTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String? {
+        val privateKey = pk ?: wallet!!.getKey(CoinType.NEAR, path)
+
+        val signerId: String = txData["signerId"] as String
+        val receiverId: String = txData["receiverId"] as String
+        val nonce: Long = (txData["nonce"] as String).toLong()
+        val blockHash: String = txData["blockHash"] as String
+        val amount: String = txData["amount"] as String
+
+        val transfer = NEAR.Transfer.newBuilder()
+            .setDeposit(ByteString.copyFrom(Numeric.hexStringToByteArray(amount)))
+            .build()
+
+        val action = NEAR.Action.newBuilder()
+            .setTransfer(transfer)
+            .build()
+
+        val input = NEAR.SigningInput.newBuilder()
+            .setSignerId(signerId)
+            .setReceiverId(receiverId)
+            .setNonce(nonce)
+            .setBlockHash(ByteString.copyFrom(Numeric.hexStringToByteArray(blockHash)))
+            .addActions(action)
+            .setPrivateKey(ByteString.copyFrom(privateKey.data()))
+            .build()
+
+        val output = AnySigner.sign(input, CoinType.NEAR, NEAR.SigningOutput.parser())
+        return aBase64.encodeToString(output.signedTransaction.toByteArray(), aBase64.NO_WRAP)
+    }
+
+    private fun signZilliqaTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String? {
+        val privateKey = pk ?: wallet!!.getKey(CoinType.ZILLIQA, path)
+
+        val toAddress: String = txData["toAddress"] as String
+        val amount: ByteArray = Numeric.hexStringToByteArray(txData["amount"] as String)
+        val gasPrice: ByteArray = Numeric.hexStringToByteArray(txData["gasPrice"] as String)
+        val gasLimit: Long = (txData["gasLimit"] as String).toLong()
+        val nonce: Long = (txData["nonce"] as String).toLong()
+        val code: String = txData["code"] as String? ?: ""
+        val data: String = txData["data"] as String? ?: ""
+
+        val input = Zilliqa.SigningInput.newBuilder()
+            .setVersion(65537) // Mainnet version
+            .setNonce(nonce)
+            .setToAddress(toAddress)
+            .setAmount(ByteString.copyFrom(amount))
+            .setGasPrice(ByteString.copyFrom(gasPrice))
+            .setGasLimit(gasLimit)
+            .setCode(code)
+            .setData(data)
+            .setPrivateKey(ByteString.copyFrom(privateKey.data()))
+            .build()
+
+        val output = AnySigner.sign(input, CoinType.ZILLIQA, Zilliqa.SigningOutput.parser())
+        return output.json
+    }
+
+    private fun signThetaTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String? {
+        val privateKey = pk ?: wallet!!.getKey(CoinType.THETA, path)
+
+        val toAddress: String = txData["toAddress"] as String
+        val thetaAmount: ByteArray = Numeric.hexStringToByteArray(txData["thetaAmount"] as String? ?: "0x0")
+        val tfuelAmount: ByteArray = Numeric.hexStringToByteArray(txData["tfuelAmount"] as String)
+        val sequence: Long = (txData["sequence"] as String).toLong()
+        val fee: ByteArray = Numeric.hexStringToByteArray(txData["fee"] as String)
+
+        val input = Theta.SigningInput.newBuilder()
+            .setToAddress(toAddress)
+            .setThetaAmount(ByteString.copyFrom(thetaAmount))
+            .setTfuelAmount(ByteString.copyFrom(tfuelAmount))
+            .setSequence(sequence)
+            .setFee(ByteString.copyFrom(fee))
+            .setPrivateKey(ByteString.copyFrom(privateKey.data()))
+            .build()
+
+        val output = AnySigner.sign(input, CoinType.THETA, Theta.SigningOutput.parser())
+        return Numeric.toHexString(output.encoded.toByteArray())
+    }
+
+    private fun signCardanoTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String? {
+        val privateKey = pk ?: wallet!!.getKey(CoinType.CARDANO, path)
+
+        val toAddress: String = txData["toAddress"] as String
+        val amount: Long = (txData["amount"] as String).toLong()
+        val ttl: Long = (txData["ttl"] as String).toLong()
+        val utxos: List<Map<String, Any>> = txData["utxos"] as List<Map<String, Any>>
+
+        val inputBuilder = Cardano.SigningInput.newBuilder()
+            .setTtl(ttl)
+
+        // Add private keys
+        inputBuilder.addPrivateKey(ByteString.copyFrom(privateKey.data()))
+
+        // Add UTXOs
+        for (utxo in utxos) {
+            val txHash: String = utxo["txHash"] as String
+            val outputIndex: Int = (utxo["outputIndex"] as Number).toInt()
+            val utxoAmount: Long = (utxo["amount"] as String).toLong()
+            val utxoAddress: String = utxo["address"] as String
+
+            inputBuilder.addUtxos(
+                Cardano.TxInput.newBuilder()
+                    .setOutPoint(
+                        Cardano.OutPoint.newBuilder()
+                            .setTxHash(ByteString.copyFrom(Numeric.hexStringToByteArray(txHash)))
+                            .setOutputIndex(outputIndex)
+                    )
+                    .setAddress(utxoAddress)
+                    .setAmount(utxoAmount)
+            )
+        }
+
+        // Create transfer message
+        val transferMsg = Cardano.Transfer.newBuilder()
+            .setToAddress(toAddress)
+            .setChangeAddress(CoinType.CARDANO.deriveAddress(privateKey))
+            .setAmount(amount)
+            .setUseMaxAmount(false)
+            .build()
+
+        inputBuilder.setTransferMessage(transferMsg)
+
+        val output = AnySigner.sign(inputBuilder.build(), CoinType.CARDANO, Cardano.SigningOutput.parser())
+
+        if (output.errorMessage.isNotEmpty()) {
+            return null
+        }
+
+        return Numeric.toHexString(output.encoded.toByteArray())
+    }
+
+    private fun signMultiversXTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String? {
+        val privateKey = pk ?: wallet!!.getKey(CoinType.MULTIVERSX, path)
+
+        val toAddress: String = txData["toAddress"] as String
+        val amount: String = txData["amount"] as String
+        val nonce: Long = (txData["nonce"] as String).toLong()
+        val gasPrice: Long = (txData["gasPrice"] as String).toLong()
+        val gasLimit: Long = (txData["gasLimit"] as String).toLong()
+        val data: String = txData["data"] as String? ?: ""
+        val chainId: String = txData["chainId"] as String? ?: "1"
+        val version: Int = (txData["version"] as String? ?: "1").toInt()
+
+        val sender = CoinType.MULTIVERSX.deriveAddress(privateKey)
+
+        val input = MultiversX.SigningInput.newBuilder()
+            .setPrivateKey(ByteString.copyFrom(privateKey.data()))
+            .setGenericAction(
+                MultiversX.GenericAction.newBuilder()
+                    .setAccounts(
+                        MultiversX.Accounts.newBuilder()
+                            .setSenderNonce(nonce)
+                            .setSender(sender)
+                            .setReceiver(toAddress)
+                    )
+                    .setValue(amount)
+                    .setData(data)
+                    .setVersion(version)
+                    .setGasPrice(gasPrice)
+                    .setGasLimit(gasLimit)
+            )
+            .setChainId(chainId)
+            .build()
+
+        val output = AnySigner.sign(input, CoinType.MULTIVERSX, MultiversX.SigningOutput.parser())
+        return output.encoded
+    }
+
     //获取CoinType 根据 coin symbol
     private fun getCoinTypeWithCoinString(coin:String):CoinType{
         return when(coin) {
@@ -2618,6 +2903,33 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
             "S" -> {
                 CoinType.ETHEREUM
             }
+            "XLM" -> {
+                CoinType.STELLAR
+            }
+            "VET" -> {
+                CoinType.VECHAIN
+            }
+            "ONE" -> {
+                CoinType.HARMONY
+            }
+            "IOTX" -> {
+                CoinType.IOTEX
+            }
+            "NEAR" -> {
+                CoinType.NEAR
+            }
+            "ZIL" -> {
+                CoinType.ZILLIQA
+            }
+            "THETA" -> {
+                CoinType.THETA
+            }
+            "ADA" -> {
+                CoinType.CARDANO
+            }
+            "EGLD" -> {
+                CoinType.MULTIVERSX
+            }
             else -> CoinType.ETHEREUM
         }
     }
@@ -2683,6 +2995,15 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
             "SUI" -> "Sui"
             "TON" -> "Ton"
             "S" -> "Ethereum"
+            "XLM" -> "Stellar"
+            "VET" -> "VeChain"
+            "ONE" -> "Ethereum"
+            "IOTX" -> "Ethereum"
+            "NEAR" -> "Near"
+            "ZIL" -> "Zilliqa"
+            "THETA" -> "Theta"
+            "ADA" -> "Cardano"
+            "EGLD" -> "MultiversX"
             else -> "Ethereum"
         }
     }

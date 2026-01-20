@@ -326,6 +326,51 @@ class RequestUrl{
       'api':"",
       'browser':"https://testnet.bbscan.io",
       'rpc':"https://fullnode-testnet.bouncebitapi.com"
+    },
+    'XLM':{
+      'api':'https://horizon-testnet.stellar.org/',
+      'browser':'https://stellar.expert/explorer/testnet/',
+      'rpc':'https://horizon-testnet.stellar.org'
+    },
+    'VET':{
+      'api':'https://testnet.veblocks.net/',
+      'browser':'https://explore-testnet.vechain.org/',
+      'rpc':'https://testnet.veblocks.net'
+    },
+    'ONE':{
+      'api':'https://api.s0.b.hmny.io/',
+      'browser':'https://explorer.pops.one/',
+      'rpc':'https://api.s0.b.hmny.io'
+    },
+    'IOTX':{
+      'api':'https://api.testnet.iotex.one/',
+      'browser':'https://testnet.iotexscan.io/',
+      'rpc':'https://babel-api.testnet.iotex.io'
+    },
+    'NEAR':{
+      'api':'https://rpc.testnet.near.org/',
+      'browser':'https://explorer.testnet.near.org/',
+      'rpc':'https://rpc.testnet.near.org'
+    },
+    'ZIL':{
+      'api':'https://dev-api.zilliqa.com/',
+      'browser':'https://viewblock.io/zilliqa?network=testnet/',
+      'rpc':'https://dev-api.zilliqa.com'
+    },
+    'THETA':{
+      'api':'https://testnet-explorer.thetatoken.org:8443/api/',
+      'browser':'https://testnet-explorer.thetatoken.org/',
+      'rpc':'https://eth-rpc-api-testnet.thetatoken.org/rpc'
+    },
+    'ADA':{
+      'api':'https://cardano-preprod.blockfrost.io/api/v0/',
+      'browser':'https://preprod.cardanoscan.io/',
+      'rpc':'https://cardano-preprod.blockfrost.io/api/v0'
+    },
+    'EGLD':{
+      'api':'https://devnet-api.multiversx.com/',
+      'browser':'https://devnet-explorer.multiversx.com/',
+      'rpc':'https://devnet-gateway.multiversx.com'
     }
   };
   Map<String,dynamic> RequestUrl_main1={
@@ -628,6 +673,51 @@ class RequestUrl{
       'api':"",
       'browser':"https://bbscan.io/",
       'rpc':"https://fullnode-mainnet.bouncebitapi.com"
+    },
+    'XLM':{
+      'api':'https://horizon.stellar.org/',
+      'browser':'https://stellar.expert/explorer/public/',
+      'rpc':'https://horizon.stellar.org'
+    },
+    'VET':{
+      'api':'https://mainnet.veblocks.net/',
+      'browser':'https://explore.vechain.org/',
+      'rpc':'https://mainnet.veblocks.net'
+    },
+    'ONE':{
+      'api':'https://api.s0.t.hmny.io/',
+      'browser':'https://explorer.harmony.one/',
+      'rpc':'https://api.harmony.one'
+    },
+    'IOTX':{
+      'api':'https://api.iotex.one/',
+      'browser':'https://iotexscan.io/',
+      'rpc':'https://babel-api.mainnet.iotex.io'
+    },
+    'NEAR':{
+      'api':'https://rpc.mainnet.near.org/',
+      'browser':'https://explorer.near.org/',
+      'rpc':'https://rpc.mainnet.near.org'
+    },
+    'ZIL':{
+      'api':'https://api.zilliqa.com/',
+      'browser':'https://viewblock.io/zilliqa/',
+      'rpc':'https://api.zilliqa.com'
+    },
+    'THETA':{
+      'api':'https://explorer.thetatoken.org:8443/api/',
+      'browser':'https://explorer.thetatoken.org/',
+      'rpc':'https://eth-rpc-api.thetatoken.org/rpc'
+    },
+    'ADA':{
+      'api':'https://cardano-mainnet.blockfrost.io/api/v0/',
+      'browser':'https://cardanoscan.io/',
+      'rpc':'https://cardano-mainnet.blockfrost.io/api/v0'
+    },
+    'EGLD':{
+      'api':'https://api.multiversx.com/',
+      'browser':'https://explorer.multiversx.com/',
+      'rpc':'https://gateway.multiversx.com'
     }
   };
 }

@@ -127,8 +127,8 @@ dependencies:
 
   # === N42 Chat Module ===
   n42_chat:
-    git: https://github.com/n42blockchain/n42_chat
-    #path: D:/n42/n42_chat
+    #git: https://github.com/n42blockchain/n42_chat
+    path: D:/n42/n42_chat
 
 dev_dependencies:
   flutter_test:
