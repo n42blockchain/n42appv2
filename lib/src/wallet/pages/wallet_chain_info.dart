@@ -28,6 +28,7 @@ import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_sui.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_ton.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_trx.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_xrp.dart';
+import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_zil.dart';
 import 'package:n42appv2/src/wallet/pages/transactions/transaction_detail_eth.dart';
 import 'package:n42appv2/src/wallet/pages/transactions/transaction_history_list.dart';
 import 'package:n42appv2/src/wallet/pages/transactions/transaction_retry.dart';
@@ -154,6 +155,8 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
         return WalletChainSendSui(widget.coinModel);
       case "TheOpenNetwork":
         return WalletChainSendTon(widget.coinModel);
+      case "Zilliqa":
+        return WalletChainSendZil(widget.coinModel);
       default:
         return WalletChainSend(widget.coinModel);
     }
@@ -1292,6 +1295,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
         || widget.coinModel.coin['coinType'] == CoinType.ETH.name
         || widget.coinModel.coin['coinType'] == CoinType.BTC.name
         || widget.coinModel.coin['coinType'] == CoinType.DOT.name
+        || widget.coinModel.coin['coinType'] == CoinType.ZIL.name
     ){
       bool isTest = widget.coinModel.isTest;
       Color mainColor =

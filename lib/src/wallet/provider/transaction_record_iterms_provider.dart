@@ -11,6 +11,7 @@ import 'package:n42appv2/src/wallet/api/chain_api/btc_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/fil_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/xrp_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/xtz_api.dart';
+import 'package:n42appv2/src/wallet/api/chain_api/zil_api.dart';
 import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 import 'package:n42appv2/src/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42appv2/src/wallet/models/transation_record_model.dart';
@@ -262,7 +263,18 @@ class TransactionRecordItemProvider with ChangeNotifier{
         // TODO: Handle this case.
         break;
       case BlockchainType.Zilliqa:
-        // TODO: Handle this case.
+        ZilApi zilApi = ZilApi(isTest: trm.isTest==0?false:true);
+        MessageModel mm = await zilApi.getTransaction(trm.txHash);
+        if(mm.error==false){
+          // Transaction found and confirmed
+          if(mm.data['receipt'] != null){
+            if(mm.data['receipt']['success'] == true){
+              trm.state=1;
+            }else{
+              trm.state=2;
+            }
+          }
+        }
         break;
       case BlockchainType.Theta:
         // EVM compatible - uses Ethereum RPC
@@ -485,7 +497,18 @@ class TransactionRecordItemProvider with ChangeNotifier{
         // TODO: Handle this case.
         break;
       case BlockchainType.Zilliqa:
-        // TODO: Handle this case.
+        ZilApi zilApi = ZilApi(isTest: trm.isTest==0?false:true);
+        MessageModel mm = await zilApi.getTransaction(trm.txHash);
+        if(mm.error==false){
+          // Transaction found and confirmed
+          if(mm.data['receipt'] != null){
+            if(mm.data['receipt']['success'] == true){
+              trm.state=1;
+            }else{
+              trm.state=2;
+            }
+          }
+        }
         break;
       case BlockchainType.Theta:
         // EVM compatible - uses Ethereum RPC

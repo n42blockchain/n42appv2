@@ -657,6 +657,52 @@ Map<String,dynamic> chainUrlMap={
     "testnetContract":{
     },
   },
+  CoinType.ZIL.name: <String,dynamic>{
+    "showList":true,//主链币是否显示在主页列表中
+    "isTest": false,
+    "supportTest": true,
+    "addrType": "legacy",
+    "pathIndex": 0,
+    "pathList": [0],
+    "baseInfo": {
+      "blockchainType": "Zilliqa",
+      "coinType": "ZIL",
+      "icon": "https://www.n42.ai/static/zil.png",
+      "name": "Zilliqa",
+      "miniName": "ZIL",
+      "unit": "zil",
+      "decimals": 12,
+      "balance": "0",
+      "balance_test": "0",
+      "coinPrice": 0.0,
+      "percentage": 0.0,
+      "isContract": false,
+      "mKey": "ZIL",
+      "path": {
+        "legacy": "m/44'/313'/0'/0/0"
+      },
+      "service": "https://api.zilliqa.com",
+      "service_test": "https://dev-api.zilliqa.com",
+      "chainId": 1,
+      "chainId_test": 333,
+      "contract": "",
+      "contract_test": "",
+      "canEdit": true,
+      "rules": "ZRC2"
+    },
+    "mainnetChainID": 1,
+    "testnetChainID": 333,
+    "testnetIndex": 0,
+    "testnets": [{
+      "testnetWS": "",
+      "testnetRPC": "https://dev-api.zilliqa.com",
+      "testnetChainID": 333,
+      "testnetContract": <String,dynamic>{}
+    }],
+    "mainnets": <String,dynamic>{},
+    "mainnetContract": {},
+    "testnetContract": {}
+  },
 
   /*CoinType.ACA.name:{
     "isTest":false,//是否时正式链

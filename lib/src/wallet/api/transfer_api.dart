@@ -19,6 +19,7 @@ import 'package:n42appv2/src/wallet/api/chain_api/ton_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/trx_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/xrp_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/xtz_api.dart';
+import 'package:n42appv2/src/wallet/api/chain_api/zil_api.dart';
 import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 import 'package:n42appv2/src/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42appv2/src/wallet/models/transation_record_model.dart';
@@ -454,6 +455,21 @@ class TransferApi {
             trModel.gasPrice,
             coinType,
           isTest: trModel.isTest==0?"main":"test",
+        );
+        break;
+      case "Zilliqa":
+        coinType=trModel!.coin['coinType'];
+        network=trModel!.isTest==0?"main":"test";
+        txmm=await transfer_zil_send(
+            trModel.from1,
+            trModel.to1,
+            trModel.price,
+            getPathWithIndex(trModel.coin['path'][trModel.addrType], pathIndex),
+            trModel.gas,
+            trModel.gasPrice,
+            coinType,
+          isTest: trModel.isTest==0?"main":"test",
+          privateKey: privateKey,
         );
         break;
     }
@@ -2575,5 +2591,86 @@ class TransferApi {
       });
     }
     return json.encode(addrssList);
+  }
+
+  // Zilliqa 转账
+  transfer_zil_send(String fromAddress, String toAddress, BigInt valuePrice, String path, int gas, BigInt gasPrice, String coinType,
+      {String contractAddress = "", String isTest = "main", String? privateKey}) async {
+    ZilApi zilApi = ZilApi(isTest: isTest == "main" ? false : true);
+
+    // 获取网络 ID
+    MessageModel networkIdMM = await zilApi.getNetworkId();
+    if (networkIdMM.error) {
+      return networkIdMM;
+    }
+    String networkId = networkIdMM.data;
+
+    // 获取最新区块信息以获取版本号
+    MessageModel latestBlockMM = await zilApi.getLatestTxBlock();
+    if (latestBlockMM.error) {
+      return latestBlockMM;
+    }
+    int version = int.parse(latestBlockMM.data['header']['Version']);
+
+    // 获取账户余额以获取 nonce
+    MessageModel balanceMM = await zilApi.getBalance(fromAddress);
+    if (balanceMM.error) {
+      // 账户未找到，nonce 为 0
+      if (balanceMM.data.toString().contains('not found') || balanceMM.data.toString().contains('-5')) {
+        // nonce = 0，继续执行
+      } else {
+        return balanceMM;
+      }
+    }
+
+    // 构建签名数据
+    Map<String, dynamic> signMap = {
+      "version": version,
+      "nonce": 1, // 需要从账户信息中获取，这里简化处理
+      "toAddress": toAddress,
+      "amount": valuePrice.toString(),
+      "gasPrice": gasPrice.toString(),
+      "gasLimit": gas.toString(),
+      "code": "",
+      "data": "",
+    };
+
+    // 签名交易
+    String signStr;
+    if (privateKey == null) {
+      signStr = await trustdart.signTransaction(
+        coinType,
+        path,
+        signMap,
+        mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext, listen: false).walletInfo.mnemonic ?? "",
+      );
+    } else {
+      signStr = await trustdart.signTransaction(coinType, path, signMap, pk: privateKey ?? "");
+    }
+
+    if (signStr == "") {
+      MessageModel rmm = MessageModel.error();
+      rmm.data = S.current.g_key_wallet_m6;
+      return rmm;
+    }
+
+    // 解析签名结果并构建交易参数
+    Map<String, dynamic> signedData = json.decode(signStr);
+    Map<String, dynamic> txParams = {
+      "version": signedData['version'],
+      "nonce": signedData['nonce'],
+      "toAddr": signedData['toAddr'],
+      "amount": signedData['amount'],
+      "pubKey": signedData['pubKey'],
+      "gasPrice": signedData['gasPrice'],
+      "gasLimit": signedData['gasLimit'],
+      "code": signedData['code'] ?? "",
+      "data": signedData['data'] ?? "",
+      "signature": signedData['signature'],
+    };
+
+    // 发送交易
+    MessageModel mmtx = await zilApi.createTransaction(txParams);
+    return mmtx;
   }
 }

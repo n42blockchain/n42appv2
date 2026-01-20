@@ -19,6 +19,7 @@ import 'package:n42appv2/src/wallet/api/chain_api/ton_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/trx_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/xrp_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/xtz_api.dart';
+import 'package:n42appv2/src/wallet/api/chain_api/zil_api.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/utils/chain_1559.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
@@ -247,6 +248,9 @@ class TokenViewApi{
       case "TheOpenNetwork":
         TonApi tonApi=TonApi(isTest: isTest);
         return await tonApi.getBalance_ton(address);
+      case "Zilliqa":
+        ZilApi zilApi=ZilApi(isTest: isTest);
+        return await zilApi.getBalance(address);
     }
     return null;
   }
@@ -267,6 +271,9 @@ class TokenViewApi{
       case "Algorand":
         AlgoApi algoApi=AlgoApi();
         return await algoApi.sendTx(signHash,isTest: netMode=="main"?false:true);
+      case "Zilliqa":
+        ZilApi zilApi=ZilApi(isTest: netMode=="main"?false:true);
+        return await zilApi.createTransaction(signHash);
     }
     return null;
   }
@@ -305,6 +312,9 @@ class TokenViewApi{
       case "Sui":
         SuiApi suiApi=SuiApi(isTest: isTest);
         return await suiApi.getGasPrice_sui();
+      case "Zilliqa":
+        ZilApi zilApi=ZilApi(isTest: isTest);
+        return await zilApi.getMinimumGasPrice();
     }
     return null;
   }
