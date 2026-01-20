@@ -3393,7 +3393,7 @@ Map<String,dynamic> allChainUrlMap=<String,dynamic>{
       "isContract": false,
       "mKey": "BNC",
       "path": {"legacy": "m/44'/60'/0'/0/0"},
-      "service": "https://hk.p.]ifrost.app/rpc",
+      "service": "https://hk.p.bifrost.app/rpc",
       "service_test": "",
       "chainId": 996,
       "chainId_test": 0,
