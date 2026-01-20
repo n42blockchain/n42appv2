@@ -284,6 +284,9 @@ class TransactionRecordItemProvider with ChangeNotifier{
       case BlockchainType.MultiversX:
         // TODO: Handle this case.
         break;
+      case BlockchainType.Starknet:
+        // TODO: Handle this case.
+        break;
     }
     if(trm.state==1){
       await db.updateTransationRecord(trm);
@@ -505,6 +508,9 @@ class TransactionRecordItemProvider with ChangeNotifier{
         // TODO: Handle this case.
         break;
       case BlockchainType.MultiversX:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Starknet:
         // TODO: Handle this case.
         break;
     }

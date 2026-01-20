@@ -213,7 +213,9 @@ enum CoinType{
   CRE,     //Crescent
   SOMM,    //Sommelier
   MARS,    //Mars Protocol
-  CMDX     //Comdex
+  CMDX,    //Comdex
+  //Phase 3: ZK/unique architecture chains
+  STRK     //Starknet
 }
 //区块链类型
 enum BlockchainType{
@@ -238,5 +240,6 @@ enum BlockchainType{
   Zilliqa,//Zilliqa
   Theta,//Theta网络
   Cardano,//卡尔达诺
-  MultiversX//MultiversX (原Elrond)
+  MultiversX,//MultiversX (原Elrond)
+  Starknet//Starknet (Cairo/STARK)
 }

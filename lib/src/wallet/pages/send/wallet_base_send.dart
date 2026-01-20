@@ -114,6 +114,8 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
         gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 6)} ${widget.mainCoinUnit}';
       case BlockchainType.MultiversX:
         gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 18)} ${widget.mainCoinUnit}';
+      case BlockchainType.Starknet:
+        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 18)} ${widget.mainCoinUnit}';
     }
 
   }
