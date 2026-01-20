@@ -195,7 +195,25 @@ enum CoinType{
   SHAPE,   //Shape (NFT L2)
   SUPERPOSITION, //Superposition
   POLYNOMIAL, //Polynomial
-  LENSNETWORK //Lens Network
+  LENSNETWORK, //Lens Network
+  //Phase 2: Cosmos ecosystem
+  INJ,     //Injective
+  TIA,     //Celestia
+  DYDX,    //dYdX Chain
+  OSMO,    //Osmosis
+  AKT,     //Akash
+  NTRN,    //Neutron
+  SCRT,    //Secret Network
+  STRD,    //Stride
+  JUNO,    //Juno
+  KUJI,    //Kujira
+  XPRT,    //Persistence
+  RUNE,    //THORChain
+  KAVA2,   //Kava (Cosmos version)
+  CRE,     //Crescent
+  SOMM,    //Sommelier
+  MARS,    //Mars Protocol
+  CMDX     //Comdex
 }
 //区块链类型
 enum BlockchainType{
