@@ -224,6 +224,66 @@ class TransactionRecordItemProvider with ChangeNotifier{
       case BlockchainType.TheOpenNetwork:
         // TODO: Handle this case.
         break;
+      case BlockchainType.Stellar:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.VeChain:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Harmony:
+        // EVM compatible - uses Ethereum RPC
+        MessageModel mmHarmony = await tokenViewApi.getTransactionReceipt_eth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
+        if(mmHarmony.error==false){
+          if(mmHarmony.data['error']['code']!=0){
+            return;
+          }
+          if(mmHarmony.data['result']['status']=="0x1"){
+            trm.state=1;
+          }else if(mmHarmony.data['result']['status']=="0x0"){
+            trm.state=2;
+          }
+        }
+        break;
+      case BlockchainType.IoTeX:
+        // EVM compatible - uses Ethereum RPC
+        MessageModel mmIotex = await tokenViewApi.getTransactionReceipt_eth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
+        if(mmIotex.error==false){
+          if(mmIotex.data['error']['code']!=0){
+            return;
+          }
+          if(mmIotex.data['result']['status']=="0x1"){
+            trm.state=1;
+          }else if(mmIotex.data['result']['status']=="0x0"){
+            trm.state=2;
+          }
+        }
+        break;
+      case BlockchainType.Near:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Zilliqa:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Theta:
+        // EVM compatible - uses Ethereum RPC
+        MessageModel mmTheta = await tokenViewApi.getTransactionReceipt_eth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
+        if(mmTheta.error==false){
+          if(mmTheta.data['error']['code']!=0){
+            return;
+          }
+          if(mmTheta.data['result']['status']=="0x1"){
+            trm.state=1;
+          }else if(mmTheta.data['result']['status']=="0x0"){
+            trm.state=2;
+          }
+        }
+        break;
+      case BlockchainType.Cardano:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.MultiversX:
+        // TODO: Handle this case.
+        break;
     }
     if(trm.state==1){
       await db.updateTransationRecord(trm);
@@ -385,6 +445,66 @@ class TransactionRecordItemProvider with ChangeNotifier{
         // TODO: Handle this case.
         break;
       case BlockchainType.TheOpenNetwork:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Stellar:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.VeChain:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Harmony:
+        // EVM compatible - uses Ethereum RPC
+        MessageModel mmHarmony = await tokenViewApi.getTransactionReceipt_eth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
+        if(mmHarmony.error==false){
+          if(mmHarmony.data['error']['code']!=0){
+            return;
+          }
+          if(mmHarmony.data['result']['status']=="0x1"){
+            trm.state=1;
+          }else if(mmHarmony.data['result']['status']=="0x0"){
+            trm.state=2;
+          }
+        }
+        break;
+      case BlockchainType.IoTeX:
+        // EVM compatible - uses Ethereum RPC
+        MessageModel mmIotex = await tokenViewApi.getTransactionReceipt_eth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
+        if(mmIotex.error==false){
+          if(mmIotex.data['error']['code']!=0){
+            return;
+          }
+          if(mmIotex.data['result']['status']=="0x1"){
+            trm.state=1;
+          }else if(mmIotex.data['result']['status']=="0x0"){
+            trm.state=2;
+          }
+        }
+        break;
+      case BlockchainType.Near:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Zilliqa:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Theta:
+        // EVM compatible - uses Ethereum RPC
+        MessageModel mmTheta = await tokenViewApi.getTransactionReceipt_eth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
+        if(mmTheta.error==false){
+          if(mmTheta.data['error']['code']!=0){
+            return;
+          }
+          if(mmTheta.data['result']['status']=="0x1"){
+            trm.state=1;
+          }else if(mmTheta.data['result']['status']=="0x0"){
+            trm.state=2;
+          }
+        }
+        break;
+      case BlockchainType.Cardano:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.MultiversX:
         // TODO: Handle this case.
         break;
     }

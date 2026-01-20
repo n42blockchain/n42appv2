@@ -2504,16 +2504,12 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
             .setAmount(amount)
             .build()
 
-        val op = Stellar.Operation.newBuilder()
-            .setOpPayment(opPayment)
-            .build()
-
         val inputBuilder = Stellar.SigningInput.newBuilder()
             .setPassphrase(passphrase)
             .setFee(fee)
             .setSequence(sequence)
             .setPrivateKey(ByteString.copyFrom(privateKey.data()))
-            .addOperations(op)
+            .setOpPayment(opPayment)
 
         if (!memo.isNullOrEmpty()) {
             inputBuilder.setMemoText(Stellar.MemoText.newBuilder().setText(memo).build())
@@ -2531,7 +2527,7 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
         val chainTag: Int = (txData["chainTag"] as String).toInt()
         val blockRef: Long = (txData["blockRef"] as String).toLong()
         val expiration: Int = (txData["expiration"] as String).toInt()
-        val gas: Int = (txData["gas"] as String).toInt()
+        val gas: Long = (txData["gas"] as String).toLong()
         val nonce: Long = (txData["nonce"] as String).toLong()
         val data: String = txData["data"] as String? ?: ""
 
@@ -2596,15 +2592,20 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
         val code: String = txData["code"] as String? ?: ""
         val data: String = txData["data"] as String? ?: ""
 
+        val transaction = Zilliqa.Transaction.newBuilder()
+            .setTransfer(
+                Zilliqa.Transaction.Transfer.newBuilder()
+                    .setAmount(ByteString.copyFrom(amount))
+            )
+            .build()
+
         val input = Zilliqa.SigningInput.newBuilder()
             .setVersion(65537) // Mainnet version
             .setNonce(nonce)
-            .setToAddress(toAddress)
-            .setAmount(ByteString.copyFrom(amount))
+            .setTo(toAddress)
             .setGasPrice(ByteString.copyFrom(gasPrice))
             .setGasLimit(gasLimit)
-            .setCode(code)
-            .setData(data)
+            .setTransaction(transaction)
             .setPrivateKey(ByteString.copyFrom(privateKey.data()))
             .build()
 
@@ -2651,7 +2652,7 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
         // Add UTXOs
         for (utxo in utxos) {
             val txHash: String = utxo["txHash"] as String
-            val outputIndex: Int = (utxo["outputIndex"] as Number).toInt()
+            val outputIndex: Long = (utxo["outputIndex"] as Number).toLong()
             val utxoAmount: Long = (utxo["amount"] as String).toLong()
             val utxoAddress: String = utxo["address"] as String
 
@@ -2700,23 +2701,23 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
 
         val sender = CoinType.MULTIVERSX.deriveAddress(privateKey)
 
+        val genericAction = MultiversX.GenericAction.newBuilder()
+            .setAccounts(
+                MultiversX.Accounts.newBuilder()
+                    .setSenderNonce(nonce)
+                    .setSender(sender)
+                    .setReceiver(toAddress)
+            )
+            .setValue(amount)
+            .setData(data)
+            .setVersion(version)
+
         val input = MultiversX.SigningInput.newBuilder()
             .setPrivateKey(ByteString.copyFrom(privateKey.data()))
-            .setGenericAction(
-                MultiversX.GenericAction.newBuilder()
-                    .setAccounts(
-                        MultiversX.Accounts.newBuilder()
-                            .setSenderNonce(nonce)
-                            .setSender(sender)
-                            .setReceiver(toAddress)
-                    )
-                    .setValue(amount)
-                    .setData(data)
-                    .setVersion(version)
-                    .setGasPrice(gasPrice)
-                    .setGasLimit(gasLimit)
-            )
+            .setGasPrice(gasPrice)
+            .setGasLimit(gasLimit)
             .setChainId(chainId)
+            .setGenericAction(genericAction)
             .build()
 
         val output = AnySigner.sign(input, CoinType.MULTIVERSX, MultiversX.SigningOutput.parser())

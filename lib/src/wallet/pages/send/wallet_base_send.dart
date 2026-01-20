@@ -96,6 +96,24 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
       case BlockchainType.TheOpenNetwork:
         // TODO: Handle this case.
         gasPrice="0";
+      case BlockchainType.Stellar:
+        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 7)} ${widget.mainCoinUnit}';
+      case BlockchainType.VeChain:
+        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 18)} ${widget.mainCoinUnit}';
+      case BlockchainType.Harmony:
+        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 18)} ${widget.mainCoinUnit}';
+      case BlockchainType.IoTeX:
+        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 18)} ${widget.mainCoinUnit}';
+      case BlockchainType.Near:
+        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 24)} ${widget.mainCoinUnit}';
+      case BlockchainType.Zilliqa:
+        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 12)} ${widget.mainCoinUnit}';
+      case BlockchainType.Theta:
+        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 18)} ${widget.mainCoinUnit}';
+      case BlockchainType.Cardano:
+        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 6)} ${widget.mainCoinUnit}';
+      case BlockchainType.MultiversX:
+        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 18)} ${widget.mainCoinUnit}';
     }
 
   }
