@@ -207,13 +207,13 @@ class AdaApi {
   /// Submit signed transaction
   Future<MessageModel> submitTransaction(String signedTxHex) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.postRaw(
+      final response = await BaseApi.RequestEmpty_h.post(
         '$_baseUrl/tx/submit',
         data: signedTxHex,
         header: {
           'Content-Type': 'application/cbor',
           'project_id': _apiKey,
-        },
+        }, params: {},
       );
 
       MessageModel mm = MessageModel();
