@@ -164,7 +164,23 @@ enum CoinType{
   BERA,    //Berachain
   SEI,     //Sei
   GNOSIS,  //Gnosis Chain
-  NOVA     //Arbitrum Nova
+  NOVA,    //Arbitrum Nova
+  //Additional chains batch 7
+  ZKLINK,  //zkLink Nova
+  REDSTONE,//Redstone
+  ANCIENT8,//Ancient8
+  STRATO,  //StratoVM
+  SAAKURU, //Saakuru
+  DFI,     //DeFiChain
+  NUM,     //Numbers
+  MILKOMEDA,//Milkomeda C1
+  GOAT,    //GOAT Network
+  BOBAETH, //BOB (Build on Bitcoin)
+  EDU,     //Open Campus Codex
+  KATANA,  //Katana
+  TEMPO,   //Tempo
+  BOBBNB,  //Boba BNB
+  ZETA2    //Zeta Chain
 }
 //区块链类型
 enum BlockchainType{
