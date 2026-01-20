@@ -89,7 +89,153 @@ enum CoinType{
   //Cardano
   ADA,
   //MultiversX (Elrond)
-  EGLD
+  EGLD,
+  //Layer 2 chains
+  ZKSYNC,  //zkSync Era
+  LINEA,   //Linea
+  SCROLL,  //Scroll
+  MNT,     //Mantle
+  BLAST,   //Blast
+  //Additional L2/EVM chains
+  MANTA,   //Manta Pacific
+  MODE,    //Mode
+  ZORA,    //Zora
+  TAIKO,   //Taiko
+  ZIRCUIT, //Zircuit
+  ZKPOLYGON, //Polygon zkEVM
+  OPBNB,   //opBNB
+  FRAX,    //Fraxtal
+  KROMA,   //Kroma
+  LISK,    //Lisk
+  BOB,     //BOB
+  UNICHAIN,//Unichain
+  INK,     //Ink
+  METAL,   //Metal L2
+  ZKFAIR,  //zkFair
+  XLAYER,  //X Layer
+  //Exchange chains
+  GT,      //Gate Chain
+  //Gaming/NFT chains
+  RON,     //Ronin
+  IMX,     //Immutable zkEVM
+  APE,     //ApeChain
+  BONE,    //Shibarium
+  CHZ,     //Chiliz
+  DOGECHAIN,//Dogechain
+  WLD,     //World Chain
+  //Bitcoin L2
+  RBTC,    //Rootstock
+  MERLIN,  //Merlin Chain
+  BEVM,    //BEVM
+  CORE,    //Core DAO
+  BITLAYER,//Bitlayer
+  //Other EVM chains
+  CFX,     //Conflux eSpace
+  TLOS,    //Telos
+  ASTR,    //Astar
+  SDN,     //Shiden
+  BNC,     //Bifrost
+  FSN,     //Fusion
+  PALM,    //Palm
+  EWT,     //Energy Web
+  BRISE,   //Bitgert
+  REEF,    //Reef
+  BTT,     //BitTorrent Chain
+  FX,      //Function X
+  ISLM,    //Haqq Network
+  DYM,     //Dymension
+  PLUME,   //Plume
+  NEON,    //Neon EVM
+  SYS,     //Syscoin
+  ELA,     //Elastos
+  HEMI,    //Hemi
+  HSK,     //HashKey
+  CYBER,   //Cyber
+  GRAVITY, //Gravity
+  SWAN,    //Swan Chain
+  MINT,    //Mint
+  FUSE,    //Fuse
+  CANTO,   //Canto
+  ROSE,    //Oasis Emerald
+  PLS,     //PulseChain
+  FLR,     //Flare
+  SGB,     //Songbird
+  HBAR,    //Hedera
+  BERA,    //Berachain
+  SEI,     //Sei
+  GNOSIS,  //Gnosis Chain
+  NOVA,    //Arbitrum Nova
+  //Additional chains batch 7
+  ZKLINK,  //zkLink Nova
+  REDSTONE,//Redstone
+  ANCIENT8,//Ancient8
+  STRATO,  //StratoVM
+  SAAKURU, //Saakuru
+  DFI,     //DeFiChain
+  NUM,     //Numbers
+  MILKOMEDA,//Milkomeda C1
+  GOAT,    //GOAT Network
+  BOBAETH, //BOB (Build on Bitcoin)
+  EDU,     //Open Campus Codex
+  KATANA,  //Katana
+  TEMPO,   //Tempo
+  BOBBNB,  //Boba BNB
+  ZETA2,   //Zeta Chain
+  //Phase 1: High priority new chains
+  HYPE,    //Hyperliquid
+  MON,     //Monad
+  ABSTRACT,//Abstract
+  IP,      //Story Protocol
+  MEGAETH, //MegaETH
+  WORLD,   //Worldcoin (World Chain已有WLD)
+  SONEIUM, //Soneium (Sony L2)
+  CORN,    //Corn (BTC yield L2)
+  INK2,    //Ink (Kraken L2) - 补充
+  APECHAIN,//ApeChain mainnet
+  SHAPE,   //Shape (NFT L2)
+  SUPERPOSITION, //Superposition
+  POLYNOMIAL, //Polynomial
+  LENSNETWORK, //Lens Network
+  //Phase 2: Cosmos ecosystem
+  INJ,     //Injective
+  TIA,     //Celestia
+  DYDX,    //dYdX Chain
+  OSMO,    //Osmosis
+  AKT,     //Akash
+  NTRN,    //Neutron
+  SCRT,    //Secret Network
+  STRD,    //Stride
+  JUNO,    //Juno
+  KUJI,    //Kujira
+  XPRT,    //Persistence
+  RUNE,    //THORChain
+  KAVA2,   //Kava (Cosmos version)
+  CRE,     //Crescent
+  SOMM,    //Sommelier
+  MARS,    //Mars Protocol
+  CMDX,    //Comdex
+  //Phase 3: ZK/unique architecture chains
+  STRK,    //Starknet
+  //Phase 4: Other important chains
+  EOS,     //EOS
+  WAX,     //WAX (EOSIO-based)
+  WAVES,   //Waves
+  NEO,     //NEO
+  GAS,     //GAS (NEO gas token)
+  IOST,    //IOST
+  ONT,     //Ontology
+  ONG,     //Ontology Gas
+  ZEN,     //Horizen
+  DCR,     //Decred
+  XEM,     //NEM
+  XYM,     //Symbol
+  LSK,     //Lisk (non-EVM version)
+  ARK,     //Ark
+  QTUM2,   //Qtum
+  ICX,     //ICON
+  NANO,    //Nano
+  HIVE,    //Hive
+  STEEM    //Steem
 }
 //区块链类型
 enum BlockchainType{
@@ -114,5 +260,19 @@ enum BlockchainType{
   Zilliqa,//Zilliqa
   Theta,//Theta网络
   Cardano,//卡尔达诺
-  MultiversX//MultiversX (原Elrond)
+  MultiversX,//MultiversX (原Elrond)
+  Starknet,//Starknet (Cairo/STARK)
+  //Phase 4 blockchain types
+  EOSIO,//EOS/WAX
+  Waves,//Waves
+  Neo,//NEO/GAS
+  Ontology,//ONT/ONG
+  NEM,//XEM/XYM
+  Nano,//Nano (DAG)
+  Decred,//Decred
+  ICON,//ICON
+  IOST,//IOST
+  Ark,//Ark
+  Qtum,//Qtum
+  Hive//Hive/Steem
 }

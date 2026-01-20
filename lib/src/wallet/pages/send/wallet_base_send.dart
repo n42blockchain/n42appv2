@@ -114,6 +114,32 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
         gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 6)} ${widget.mainCoinUnit}';
       case BlockchainType.MultiversX:
         gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 18)} ${widget.mainCoinUnit}';
+      case BlockchainType.Starknet:
+        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 18)} ${widget.mainCoinUnit}';
+      case BlockchainType.EOSIO:
+        gasPrice='0 ${widget.mainCoinUnit}'; // EOS uses resource model
+      case BlockchainType.Waves:
+        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 8)} ${widget.mainCoinUnit}';
+      case BlockchainType.Neo:
+        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 8)} ${widget.mainCoinUnit}';
+      case BlockchainType.Ontology:
+        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 9)} ${widget.mainCoinUnit}';
+      case BlockchainType.NEM:
+        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 6)} ${widget.mainCoinUnit}';
+      case BlockchainType.Nano:
+        gasPrice='0 ${widget.mainCoinUnit}'; // Nano is feeless
+      case BlockchainType.Decred:
+        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 8)} ${widget.mainCoinUnit}';
+      case BlockchainType.ICON:
+        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 18)} ${widget.mainCoinUnit}';
+      case BlockchainType.IOST:
+        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 8)} ${widget.mainCoinUnit}';
+      case BlockchainType.Ark:
+        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 8)} ${widget.mainCoinUnit}';
+      case BlockchainType.Qtum:
+        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 8)} ${widget.mainCoinUnit}';
+      case BlockchainType.Hive:
+        gasPrice='0 ${widget.mainCoinUnit}'; // Hive uses resource credits
     }
 
   }

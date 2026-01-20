@@ -296,6 +296,45 @@ class TransactionRecordItemProvider with ChangeNotifier{
       case BlockchainType.MultiversX:
         // TODO: Handle this case.
         break;
+      case BlockchainType.Starknet:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.EOSIO:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Waves:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Neo:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Ontology:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.NEM:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Nano:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Decred:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.ICON:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.IOST:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Ark:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Qtum:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Hive:
+        // TODO: Handle this case.
+        break;
     }
     if(trm.state==1){
       await db.updateTransationRecord(trm);
@@ -528,6 +567,45 @@ class TransactionRecordItemProvider with ChangeNotifier{
         // TODO: Handle this case.
         break;
       case BlockchainType.MultiversX:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Starknet:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.EOSIO:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Waves:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Neo:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Ontology:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.NEM:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Nano:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Decred:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.ICON:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.IOST:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Ark:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Qtum:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.Hive:
         // TODO: Handle this case.
         break;
     }
