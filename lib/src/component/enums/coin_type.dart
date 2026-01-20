@@ -180,7 +180,22 @@ enum CoinType{
   KATANA,  //Katana
   TEMPO,   //Tempo
   BOBBNB,  //Boba BNB
-  ZETA2    //Zeta Chain
+  ZETA2,   //Zeta Chain
+  //Phase 1: High priority new chains
+  HYPE,    //Hyperliquid
+  MON,     //Monad
+  ABSTRACT,//Abstract
+  IP,      //Story Protocol
+  MEGAETH, //MegaETH
+  WORLD,   //Worldcoin (World Chain已有WLD)
+  SONEIUM, //Soneium (Sony L2)
+  CORN,    //Corn (BTC yield L2)
+  INK2,    //Ink (Kraken L2) - 补充
+  APECHAIN,//ApeChain mainnet
+  SHAPE,   //Shape (NFT L2)
+  SUPERPOSITION, //Superposition
+  POLYNOMIAL, //Polynomial
+  LENSNETWORK //Lens Network
 }
 //区块链类型
 enum BlockchainType{
