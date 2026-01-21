@@ -94,6 +94,9 @@ getBrowser_token_address(String coinType,String address,String token,{bool? isTe
     case "APT":
       path+='account/${address}?network=${isTest!?"testnet":"mainnet"}';
       break;
+    case "ZIL":
+      path+='address/${address}?network=${isTest!?"testnet":"mainnet"}';
+      break;
     default:
       path="";
       break;

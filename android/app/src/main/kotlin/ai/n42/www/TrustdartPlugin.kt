@@ -2588,7 +2588,8 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
         val amount: ByteArray = Numeric.hexStringToByteArray(txData["amount"] as String)
         val gasPrice: ByteArray = Numeric.hexStringToByteArray(txData["gasPrice"] as String)
         val gasLimit: Long = (txData["gasLimit"] as String).toLong()
-        val nonce: Long = (txData["nonce"] as String).toLong()
+        val nonce: Long = (txData["nonce"] as Int).toLong()
+        val version:Int = txData["version"] as Int
         val code: String = txData["code"] as String? ?: ""
         val data: String = txData["data"] as String? ?: ""
 
@@ -2600,7 +2601,7 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
             .build()
 
         val input = Zilliqa.SigningInput.newBuilder()
-            .setVersion(65537) // Mainnet version
+            .setVersion(version) // Mainnet version
             .setNonce(nonce)
             .setTo(toAddress)
             .setGasPrice(ByteString.copyFrom(gasPrice))

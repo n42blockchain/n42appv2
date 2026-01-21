@@ -100,6 +100,9 @@ getBrowser_address(String coinType,String address,{bool? isTest}){
     case "TON":
       path+='address/${address}';
       break;
+    case "ZIL":
+      path+='address/${address}?network=${isTest!?"testnet":"mainnet"}';
+      break;
     default:
       path="";
       break;

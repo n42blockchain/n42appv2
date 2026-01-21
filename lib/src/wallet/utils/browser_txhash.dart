@@ -102,6 +102,9 @@ getBrowser_txHash(String coinType,String txHash,{bool? isTest}){
     case "APT":
       path+='txn/${txHash}?network=${isTest!?"testnet":"mainnet"}';
       break;
+    case "ZIL":
+      path+='tx/${txHash}?network=${isTest!?"testnet":"mainnet"}';
+      break;
     default:
       path="";
       break;

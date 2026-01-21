@@ -354,7 +354,7 @@ class RequestUrl{
     },
     'ZIL':{
       'api':'https://dev-api.zilliqa.com/',
-      'browser':'https://viewblock.io/zilliqa?network=testnet/',
+      'browser':'https://viewblock.io/zilliqa/',
       'rpc':'https://dev-api.zilliqa.com'
     },
     'THETA':{

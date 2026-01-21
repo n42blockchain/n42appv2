@@ -118,6 +118,13 @@ GetCoinGas(String coinType,{bool contract=false}){
     case CoinType.APT:
       _gas=100;
       break;
+    case CoinType.ZIL:
+      if(contract==false){
+        _gas=1;
+      }else{
+        _gas=8000;
+      }
+      break;
     default:
     _gas=0;
       break;

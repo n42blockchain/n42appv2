@@ -2610,10 +2610,10 @@ class TransferApi {
     if (latestBlockMM.error) {
       return latestBlockMM;
     }
-    int version = int.parse(latestBlockMM.data['header']['Version']);
+    int version = latestBlockMM.data['header']['Version'];
 
     // 获取账户余额以获取 nonce
-    MessageModel balanceMM = await zilApi.getBalance(fromAddress);
+    MessageModel balanceMM = await zilApi.getBalance(fromAddress,nonce: true);
     if (balanceMM.error) {
       // 账户未找到，nonce 为 0
       if (balanceMM.data.toString().contains('not found') || balanceMM.data.toString().contains('-5')) {
@@ -2626,7 +2626,7 @@ class TransferApi {
     // 构建签名数据
     Map<String, dynamic> signMap = {
       "version": version,
-      "nonce": 1, // 需要从账户信息中获取，这里简化处理
+      "nonce": balanceMM.data['nonce']+1, // 需要从账户信息中获取，这里简化处理
       "toAddress": toAddress,
       "amount": valuePrice.toString(),
       "gasPrice": gasPrice.toString(),

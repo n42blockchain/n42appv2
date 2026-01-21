@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 
@@ -8,29 +10,37 @@ class ZilApi {
 
   ZilApi({this.isTest = false}) {
     _baseUrl = isTest
-        ? 'https://dev-api.zilliqa.com'
+        ? 'https://api.testnet.zilliqa.com'
         : 'https://api.zilliqa.com';
   }
 
   /// Get account balance
-  Future<MessageModel> getBalance(String address) async {
+  Future<MessageModel> getBalance(String address,{bool nonce=false}) async {
     try {
+      Map<String,dynamic> params={
+    'id': '1',
+    'jsonrpc': '2.0',
+    'method': 'GetBalance',
+    'params': [address]
+    };
       final response = await BaseApi.RequestEmpty_h.post(
         _baseUrl,
         params: {},
-        data: {
-          'id': '1',
-          'jsonrpc': '2.0',
-          'method': 'GetBalance',
-          'params': [address]
-        },
+        data: params,
         header: {'Content-Type': 'application/json'},
       );
 
       MessageModel mm = MessageModel();
       if (response != null && response['result'] != null) {
         // ZIL balance is in Qa (10^-12 ZIL)
-        mm.data = BigInt.parse(response['result']['balance'] ?? '0');
+        if(nonce){
+          mm.data={
+            'balance':BigInt.parse(response['result']['balance'] ?? '0'),
+            'nonce':response['result']['nonce']
+          };
+        }else{
+          mm.data = BigInt.parse(response['result']['balance'] ?? '0');
+        }
       } else if (response != null && response['error'] != null) {
         // Account not found means balance is 0
         if (response['error']['code'] == -5) {

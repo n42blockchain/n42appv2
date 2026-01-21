@@ -903,6 +903,9 @@ import WalletCore
         case "Ton":
             txHash = signTonTransaction(wallet: wallet, path: path, txData: txData, privateKey: pk)
             break
+        case "Zilliqa":
+            txHash = signZilTransaction(wallet: wallet, path: path, txData: txData, privateKey: pk)
+            break
         default:
             txHash=nil
         }
@@ -1932,6 +1935,45 @@ import WalletCore
         }
         
       }
+    func signZilTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],privateKey: PrivateKey?) -> String? {
+
+        var pk: PrivateKey
+        if privateKey == nil{
+            pk=wallet!.getKey(coin: CoinType.ton, derivationPath: path)
+        }else{
+            pk = privateKey!
+        }
+        let toAddress : String = txData["toAddress"] as! String
+        let amount : String = txData["amount"] as! String
+        let gasPrice : String = txData["gasPrice"] as! String
+        
+        let gasLimit : String = txData["gasLimit"] as! String
+        let nonce : UInt64 = txData["nonce"] as! UInt64
+        let version : UInt32 = txData["version"] as! UInt32
+        
+        
+                //val amount: ByteArray = Numeric.hexStringToByteArray(txData["amount"] as String)
+                //val gasPrice: ByteArray = Numeric.hexStringToByteArray(txData["gasPrice"] as String)
+                //val gasLimit: Long = (txData["gasLimit"] as String).toLong()
+                //val code: String = txData["code"] as String? ?: ""
+                //val data: String = txData["data"] as String? ?: ""
+        let input = ZilliqaSigningInput.with{
+            $0.gasLimit=UInt64(gasLimit)!
+            $0.gasPrice=Data.init(base64Encoded: gasPrice)!
+            $0.nonce=nonce
+            $0.privateKey=pk.data
+            $0.to=toAddress
+            $0.version=version
+            $0.
+            $0.transaction=ZilliqaTransaction.with{
+                $0.transfer=ZilliqaTransaction.Transfer.with{
+                    $0.amount=Data.init(base64Encoded: amount)!
+                }
+            }
+        }
+        let output: ZilliqaSigningOutput = AnySigner.sign(input: input, coin: CoinType.zilliqa)
+        return output.json
+      }
     //获取CoinType 根据 coin symbol
     public func getCoinTypeWithCoinString(coin: String) -> CoinType?{
         var coinType: CoinType? = nil
@@ -2109,6 +2151,9 @@ import WalletCore
             break
         case "TON":
             coinType=CoinType.ton
+            break
+        case "ZIL":
+            coinType=CoinType.zilliqa
             break
         default:
             coinType = nil
@@ -2293,6 +2338,8 @@ import WalletCore
         case "TON":
             chainType="Ton"
             break
+        case "ZIL":
+            chainType="Zilliqa"
         default:
             chainType = "Ethereum"
         }
