@@ -101,7 +101,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     super.dispose();
   }
 
-  init() async {
+  Future<void> init() async {
     getAstChainModel();
     bool ok1 = await getAstList();
     if (ok1) {
@@ -123,7 +123,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     setState(() {});
   }
 
-  getAstChainModel() async {
+  Future<void> getAstChainModel() async {
     WalletActionProvider wa = Provider.of<WalletActionProvider>(context,listen: false);
     Map<String, dynamic> astModel = wa.walletMap[CoinType.N.name];
     CoinModel cm = CoinModel.fromMap(astModel['baseInfo']);
@@ -139,7 +139,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
   }
 
   //获取商品列表
-  getAstList() async {
+  Future<bool> getAstList() async {
     MessageModel rData = await swapAstApi.getNftOrAstList(2);
     if (rData.error) {
       setState(() {
@@ -183,7 +183,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     }
   }
 
-  getChainCoinModel(String symbol) {
+  CoinModel? getChainCoinModel(String symbol) {
     if (symbol == "BSC") {
       symbol = CoinType.BNB.name;
     }
@@ -195,7 +195,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     return null;
   }
 
-  getUsdtMap(String chainSymbol, String contractAddress) {
+  void getUsdtMap(String chainSymbol, String contractAddress) {
     token = null;
     if (contractAddress != "") {
       Map<String, dynamic>? txChainMap = Provider.of<WalletActionProvider>(context,listen: false)
@@ -210,7 +210,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     setState(() {});
   }
 
-  getBalanceChainPay() async {
+  Future<void> getBalanceChainPay() async {
     if (payCoinModel != null) {
       if (payLoad == Load.loading) return;
       setState(() {
@@ -232,7 +232,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     }
   }
 
-  getBalancePay() async {
+  Future<void> getBalancePay() async {
     if (youPay != null && payCoinModel != null) {
       setState(() {
         youPay!.load = Load.loading;
@@ -254,7 +254,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     }
   }
 
-  getBalanceGet() async {
+  Future<void> getBalanceGet() async {
     if (getCoinModel != null) {
       if (getLoad == Load.loading) return;
       setState(() {
@@ -277,7 +277,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
   }
 
   //获取旷工费
-  getGasPrice() async {
+  Future<bool> getGasPrice() async {
     if (payCoinModel == null) {
       errorMessage = "Error";
       return false;
@@ -302,7 +302,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     return true;
   }
 
-  getCoinPrice() async {
+  Future<bool> getCoinPrice() async {
     String keys = "n";
     keys = '$keys,${youPay!.payCoin ?? "".toLowerCase()}';
     //查询coins中的币种信息
@@ -322,7 +322,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     }
   }
 
-  setCoinModelPrice() {
+  void setCoinModelPrice() {
     int index = coinMarketInfo.indexWhere((element) {
       if (element['coin'] == "n") {
         return true;
@@ -342,7 +342,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     setState(() {});
   }
 
-  payInput({String? value}) {
+  void payInput({String? value}) {
     value ??= payTextEditingController.text;
     bool checkNum = regular.regularNums(value);
     bool checkDouble = regular.regularDouble(value);
@@ -356,7 +356,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     setState(() {});
   }
 
-  getInput({String? value}) {
+  void getInput({String? value}) {
     value ??= getTextEditingController.text;
     bool checkNum = regular.regularNums(value);
     bool checkDouble = regular.regularDouble(value);
@@ -370,7 +370,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     setState(() {});
   }
 
-  checkPayInput() {
+  bool checkPayInput() {
     String value = payTextEditingController.text;
     bool checkNum = regular.regularNums(value);
     bool checkDouble = regular.regularDouble(value);
@@ -383,7 +383,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     return true;
   }
 
-  percentTap(int value) {
+  void percentTap(int value) {
     if (load == Load.finish) {
       double ypBalance = youPay?.balance ?? 0;
       if (ypBalance > 0) {
@@ -395,7 +395,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     }
   }
 
-  newOrder() async {
+  Future<bool> newOrder() async {
     if (load == Load.finish) {
       setState(() {
         load = Load.loading;
@@ -427,9 +427,10 @@ class _SwapAstHomeState extends State<SwapAstHome> {
         return true;
       }
     }
+    return false;
   }
 
-  cancelOrder() async {
+  Future<void> cancelOrder() async {
     if (load == Load.finish) {
       setState(() {
         load = Load.loading;
@@ -450,7 +451,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     }
   }
 
-  payTap() async {
+  Future<void> payTap() async {
     if (load == Load.finish) {
       if (orderId == null) return;
       setState(() {
@@ -477,7 +478,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     }
   }
 
-  postOrderTxHash(int orderId, String txHash) async {
+  Future<bool> postOrderTxHash(int orderId, String txHash) async {
     MessageModel rData = await swapAstApi.postNftOrAstCommitPay(
         AppGlobals.userInfo?.uuid??"", orderId, txHash);
     if (rData.error) {
@@ -489,7 +490,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     }
   }
 
-  web3Transaction() async {
+  Future<String?> web3Transaction() async {
     TransferApi transferApi=TransferApi();
     MessageModel rData = await transferApi.transfer(
       payCoinModel!.coin['coinType'],
@@ -509,7 +510,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
   }
 
   //eth 模拟交易
-  estimateGasEth() async {
+  Future<bool> estimateGasEth() async {
     if (payCoinModel!.balance == BigInt.zero) {
       errorMessage = S.of(context).g_key_t_29(payCoinModel!.coin['coinType']);
       setState(() {});
@@ -576,7 +577,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
   }
 
   //关闭键盘
-  closeKeyboard() {
+  void closeKeyboard() {
     FocusScope.of(context).requestFocus(FocusNode());
   }
 
@@ -668,7 +669,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     );
   }
 
-  errorWidget() {
+  Widget errorWidget() {
     return Container(
       margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
       padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
@@ -689,7 +690,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     );
   }
 
-  youPayWidget() {
+  Widget youPayWidget() {
     Color balanceColor = AppThemeUtils.getColorByKey(
         context, AppThemeKeys.errorTextColor.name);
     if (checkPayInput() == true) {
@@ -971,7 +972,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     );
   }
 
-  youGetWidget() {
+  Widget youGetWidget() {
     return Container(
       margin: EdgeInsets.only(
         top: ScreenUtil().setWidth(20),
@@ -1101,7 +1102,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     );
   }
 
-  priceWidget() {
+  Widget priceWidget() {
     String text = "";
     double gCoinPrice = getCoinModel?.coinPrice ?? 0;
     double yPrice = youPay?.price ?? 0;
@@ -1130,7 +1131,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     );
   }
 
-  percentWidget() {
+  Widget percentWidget() {
     double itemWidth =
         (MediaQuery.of(context).size.width - ScreenUtil().setWidth(60)) / 4;
     return Container(
@@ -1167,7 +1168,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     );
   }
 
-  checkWidget() {
+  Widget checkWidget() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
       width: double.infinity,
@@ -1235,7 +1236,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     );
   }
 
-  previewSwapWidget() {
+  Widget previewSwapWidget() {
     Color backgroundColor =
     AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name);
     if (load == Load.loading) {
@@ -1315,7 +1316,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
   }
 
   //旷工费
-  minerFeeWidget() {
+  Widget minerFeeWidget() {
     if (payCoinModel == null) return SizedBox();
     String title = payCoinModel!.coin['coinType'];
     String totalGasPriceStr = "";
@@ -1505,14 +1506,14 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     );
   }
 
-  tryAgainButton() {
+  Widget tryAgainButton() {
     return buttonStyle2(context, () {
       init();
     }, S.of(context).g_swap_key_6,);
 
   }
 
-  queryWidget() {
+  void queryWidget() {
     sheetBottom(
         context,
         "",

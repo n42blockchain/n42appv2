@@ -46,12 +46,12 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
     inputEditingController.dispose();
     super.dispose();
   }
-  init(){
+  void init(){
     if(widget.coinModel.tokens.isNotEmpty) {
       symbols=widget.coinModel.tokens.keys.toList();
     }
   }
-  checkSymbol(String symStr){
+  bool checkSymbol(String symStr){
     var checks=symbols.where((element){
       if(element.toUpperCase()==symStr.toUpperCase()){
         return true;
@@ -62,7 +62,7 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
     if(checks.isEmpty)return false;
     return true;
   }
-  addCoin(Map<String,dynamic> coinMap)async{
+  Future<void> addCoin(Map<String,dynamic> coinMap)async{
     try {
       if(coinMap['edit']==true)return;
       setState(() {
@@ -98,7 +98,7 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
       });
     }
   }
-  removeCoin(Map<String,dynamic> coinMap)async{
+  Future<void> removeCoin(Map<String,dynamic> coinMap)async{
     try{
       if(coinMap['edit']==true)return;
       setState(() {
@@ -120,7 +120,7 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
     }
   }
   //查询方法
-  seachCoin()async{
+  Future<void> seachCoin()async{
     if(inputEditingController.text!=""){
       try{
         coinlistSeach=[];
@@ -140,7 +140,7 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
     setState(() {
     });
   }
-  getTokenList()async{
+  Future<void> getTokenList()async{
     setState(() {
       load=Load.loading;
     });
@@ -175,7 +175,7 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
     }
   }
   //关闭键盘
-  closeKeyboard(){
+  void closeKeyboard(){
     FocusScope.of(context).requestFocus(FocusNode());
   }
   Future<bool> _pageBack(){
@@ -313,7 +313,7 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
       ),
     );
   }
-  coinListWidget(){
+  Widget coinListWidget(){
     if(inputEditingController.text==""){
       return RefreshIndicator(
         onRefresh: ()async{
@@ -360,7 +360,7 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
       );
     }
   }
-  coinItem(Map<String,dynamic> rowValue){
+  Widget coinItem(Map<String,dynamic> rowValue){
     //Widget imgWidget=ImageWidget(rowValue['icon']);
     String icon='https://api-wallet.walletamaze.com/market/v1/r/coinImage/${rowValue['coin_name']}.png';
     String fullname = rowValue['fullname'];

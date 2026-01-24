@@ -79,7 +79,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     super.dispose();
   }
 
-  addressCheck(String addr)async{
+  Future<String?> addressCheck(String addr) async {
     if(addr==""){
       errorMessage=S.current.g_key_41;
       setState(() {});
@@ -148,7 +148,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     );
   }
 
-  buildContentList(BuildContext context) {
+  Widget buildContentList(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30), vertical: ScreenUtil().setWidth(30.0)),
       child: Column(
@@ -175,7 +175,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     );
   }
 
-  _buildSelectItem() {
+  Widget _buildSelectItem() {
     return GestureDetector(
       onTap: () async {
         final CoinModel? data = await Navigator
@@ -236,7 +236,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     );
   }
 
-  _buildAddressView(BuildContext context) {
+  Widget _buildAddressView(BuildContext context) {
     return containerStyle1(
       context,
       padding: EdgeInsets.symmetric(
@@ -261,7 +261,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     );
   }
 
-  scanItem() {
+  Widget scanItem() {
     return textFieldStyle2(
       context,
       controller: addressController,
@@ -344,7 +344,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     );
   }
 
-  name() {
+  Widget name() {
     return textFieldStyle2(
       context,
       controller: nameController,
@@ -362,7 +362,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     );
   }
 
-  desc() {
+  Widget desc() {
     return textFieldStyle2(
       context,
       controller: descController,
@@ -424,7 +424,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
       // 错误安全忽略
     }
   }
-  faceMatchTypeWidget(){
+  void faceMatchTypeWidget() {
     Widget child=Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [

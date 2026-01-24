@@ -40,7 +40,7 @@ class _ChooseCoinsPageState extends State<ChooseCoinsPage> {
     });
   }
 
-  initData() async {
+  Future<void> initData() async {
     List<CoinModel> list =
         Provider.of<WalletActionProvider>(context, listen: false)
             .coinModels;
@@ -118,7 +118,7 @@ class _ChooseCoinsPageState extends State<ChooseCoinsPage> {
     );
   }
 
-  buildContentList(BuildContext context) {
+  Widget buildContentList(BuildContext context) {
     if (mList.isEmpty) {
       return const Center(
         child: EmptyView(),
@@ -131,7 +131,7 @@ class _ChooseCoinsPageState extends State<ChooseCoinsPage> {
         });
   }
 
-  _buildItem(BuildContext context, int index, List<CoinModel> list) {
+  Widget _buildItem(BuildContext context, int index, List<CoinModel> list) {
     CoinModel model = list[index];
     return item(context, model.coin['icon'] ?? "", model.coin['name'] ?? "",
         model.coin['miniName'] ?? "", index == selectIndex, () {
@@ -142,7 +142,7 @@ class _ChooseCoinsPageState extends State<ChooseCoinsPage> {
         });
   }
 
-  item(BuildContext context, String path, String g, String l, bool isSelected,
+  Widget item(BuildContext context, String path, String g, String l, bool isSelected,
       VoidCallback callback) {
     return GestureDetector(
       onTap: callback,

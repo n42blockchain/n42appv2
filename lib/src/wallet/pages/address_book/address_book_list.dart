@@ -31,7 +31,7 @@ class _AddressBookListState extends State<AddressBookList> {
     return _addressBookApi!;
   }
   StreamSubscription? eventBusFn;
-  initData() async {
+  Future<void> initData() async {
     try {
       String coinName=widget.coinName;
       List<AddressBookModel> list = await addressBookApi.getAddressBookList(coinName);
@@ -85,7 +85,7 @@ class _AddressBookListState extends State<AddressBookList> {
       body: buildContentList(),
     );
   }
-  buildContentList() {
+  Widget buildContentList() {
     if (list.isEmpty) {
       return const Center(
         child: EmptyView(),
@@ -99,7 +99,7 @@ class _AddressBookListState extends State<AddressBookList> {
     );
   }
 
-  _buildItem(BuildContext context, int index) {
+  Widget _buildItem(BuildContext context, int index) {
     AddressBookModel info = list[index];
     // debugPrint("id ${info.id}");
     return GestureDetector(

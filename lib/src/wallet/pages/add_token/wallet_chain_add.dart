@@ -135,7 +135,7 @@ class _WalletChainAddState extends State<WalletChainAdd> {
     //apiNode.dispose();
     super.dispose();
   }
-  addChain()async{
+  Future<void> addChain()async{
     //if(load==Load.loading)return;
     String mKey=symbolController.text.toUpperCase();
     String chainIdStr=chainIdController.text;
@@ -261,7 +261,7 @@ class _WalletChainAddState extends State<WalletChainAdd> {
     });
     Navigator.pop(context,true);
   }
-  checkChain(String symbol,int chainId)async{
+  Future<bool> checkChain(String symbol,int chainId)async{
     Map<String,dynamic>? chainMap= allChainUrlMap[symbol];
     if(chainMap==null){
       return false;
@@ -269,7 +269,7 @@ class _WalletChainAddState extends State<WalletChainAdd> {
       return true;
     }
   }
-  addDefaultChain(String symbol)async{
+  Future<void> addDefaultChain(String symbol)async{
     await Provider.of<WalletActionProvider>(context,listen: false).addWalletChain(allChainUrlMap[symbol]);
     if (!mounted) return;
     Navigator.pop(context,true);

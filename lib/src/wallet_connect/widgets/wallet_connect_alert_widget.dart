@@ -53,7 +53,7 @@ class WalletConnectAlertWidget extends StatelessWidget {
       ),
     );
   }
-  titleWidget(BuildContext context){
+  Widget titleWidget(BuildContext context){
     String title="";
     if(actionDataMap['signType']=="message"){
       title=S.of(context).g_connect_key12;
@@ -73,7 +73,7 @@ class WalletConnectAlertWidget extends StatelessWidget {
       ),
     );
   }
-  dAppConnectWidget(BuildContext context){
+  Widget dAppConnectWidget(BuildContext context){
     Widget connectChild;
     if(actionDataMap['signType']=="message"){
       connectChild=messageSignOKWidget(context);
@@ -82,7 +82,7 @@ class WalletConnectAlertWidget extends StatelessWidget {
     }
     return Expanded(child: connectChild);
   }
-  transactionOKWidget(BuildContext context){
+  Widget transactionOKWidget(BuildContext context){
     return Column(
       children: [
         itemWidget(context,"Network",actionDataMap['network']??""),
@@ -118,7 +118,7 @@ class WalletConnectAlertWidget extends StatelessWidget {
       ],
     );
   }
-  transactionOKButton(BuildContext context){
+  Widget transactionOKButton(BuildContext context){
     return Container(
       height: ScreenUtil().setWidth(150.0),
       width: double.infinity,
@@ -150,7 +150,7 @@ class WalletConnectAlertWidget extends StatelessWidget {
       ),
     );
   }
-  messageSignOKWidget(BuildContext context){
+  Widget messageSignOKWidget(BuildContext context){
     return Column(
       children: [
         itemWidget(context,"Network",actionDataMap['network']??""),
@@ -182,7 +182,7 @@ class WalletConnectAlertWidget extends StatelessWidget {
       ],
     );
   }
-  messageSignOKButton(BuildContext context){
+  Widget messageSignOKButton(BuildContext context){
     return Container(
       height: ScreenUtil().setWidth(150.0),
       width: double.infinity,
@@ -214,7 +214,7 @@ class WalletConnectAlertWidget extends StatelessWidget {
       ),
     );
   }
-  buttonWidget(BuildContext context,String title,dynamic onTap){
+  Widget buttonWidget(BuildContext context,String title,dynamic onTap){
     return SizedBox(
       width: double.infinity,
       height: ScreenUtil().setWidth(88.0),
@@ -223,7 +223,7 @@ class WalletConnectAlertWidget extends StatelessWidget {
       }, title),
     );
   }
-  itemWidget(BuildContext context,String title,String value){
+  Widget itemWidget(BuildContext context,String title,String value){
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(30.0),),
       child: Row(

@@ -69,7 +69,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
     super.dispose();
   }
 
-  addressCheck(String addr)async{
+  Future<String?> addressCheck(String addr) async {
     if(addr==""){
       errorMessage=S.current.g_key_41;
       setState(() {});
@@ -144,7 +144,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
     );
   }
 
-  buildContentList(BuildContext context) {
+  Widget buildContentList(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(left: ScreenUtil().setWidth(30.0),right: ScreenUtil().setWidth(30.0), top: ScreenUtil().setWidth(30.0),bottom: ScreenUtil().setWidth(36.0)),
       child: Column(
@@ -172,7 +172,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
     );
   }
 
-  _buildSelectItem() {
+  Widget _buildSelectItem() {
     return GestureDetector(
       onTap: editStatus
           ? () async {
@@ -237,7 +237,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
     );
   }
 
-  _buildAddressView(BuildContext context) {
+  Widget _buildAddressView(BuildContext context) {
     return containerStyle1(
       context,
       padding: EdgeInsets.symmetric(
@@ -263,7 +263,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
     );
   }
 
-  scanItem() {
+  Widget scanItem() {
     return textFieldStyle2(
       context,
       controller: addressController,
@@ -328,7 +328,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
     );
   }
 
-  name() {
+  Widget name() {
     return textFieldStyle2(
       context,
       controller: nameController,
@@ -345,7 +345,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
     );
   }
 
-  desc() {
+  Widget desc() {
     return textFieldStyle2(
       context,
       controller: descController,
@@ -362,7 +362,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
     );
   }
 
-  handlerData() async {
+  Future<void> handlerData() async {
     final name = nameController.text.trim();
     final desc = descController.text.trim();
     String? address = addressController.text.trim();
@@ -406,7 +406,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
     }
   }
 
-  delete() {
+  Widget delete() {
     return GestureDetector(
       onTap: () async{
         // 删除数据
