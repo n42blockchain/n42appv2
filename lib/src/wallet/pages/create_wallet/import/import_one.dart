@@ -1,10 +1,7 @@
-import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
-import 'package:n42appv2/src/wallet/pages/create_wallet/create_finish.dart';
 import 'package:n42appv2/src/wallet/pages/create_wallet/create_password.dart';
-import 'package:n42appv2/src/wallet/pages/wallet_backup/backup_three.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
@@ -33,7 +30,7 @@ class _ImportOneState extends State<ImportOne> with WidgetsBindingObserver{
     for(String mw in mws){
       mw=mw.trim();
       if(mw !=""){
-        cValue="${cValue} ${mw}";
+        cValue="$cValue $mw";
       }
     }
     setState(() {
@@ -44,12 +41,14 @@ class _ImportOneState extends State<ImportOne> with WidgetsBindingObserver{
     // 读取复制文本
     ClipboardData? clipboardData =
     await Clipboard.getData(Clipboard.kTextPlain);
+    if (!mounted) return;
     if (clipboardData != null) {
       String? text = clipboardData.text;
       if (text != null && text !="null" && text !="") {
 
         checkInput(text);
         bool checkMnemonic = await Trustdart().checkMnemonic(inputMW);
+        if (!mounted) return;
         if(checkMnemonic){
           inputEditingController.text=inputMW;
         }else{
@@ -227,19 +226,20 @@ class _ImportOneState extends State<ImportOne> with WidgetsBindingObserver{
                         if(inputMW =="")return;
                         bool checkMnemonic =
                         await Trustdart().checkMnemonic(inputMW);
+                        if (!mounted) return;
                         if (checkMnemonic == false) {
                           //助记词输入错误
-                          errorMessage=S.of(context).w_key_12;
+                          errorMessage=S.of(this.context).w_key_12;
                           setState(() {
                           });
                           ToastUtils.show(errorMessage);
                           return;
                         }else{
-                          WalletInfo? fWalletInfo= Provider.of<WalletActionProvider>(context,listen: false).findWallet(mnemonic: inputMW);
+                          WalletInfo? fWalletInfo= Provider.of<WalletActionProvider>(this.context,listen: false).findWallet(mnemonic: inputMW);
                           if(fWalletInfo ==null){
                             errorMessage="";
                           }else{
-                            errorMessage=S.of(context).g_key_214(fWalletInfo.walletName??"");
+                            errorMessage=S.of(this.context).g_key_214(fWalletInfo.walletName??"");
                             setState(() {
                             });
                             ToastUtils.show(errorMessage);
@@ -252,12 +252,13 @@ class _ImportOneState extends State<ImportOne> with WidgetsBindingObserver{
                             walletName: "",
                             password: "",
                             //path: WalletPath.init(),
-                            UUID: Provider.of<WalletActionProvider>(context,listen: false).UserUUID,
+                            UUID: Provider.of<WalletActionProvider>(this.context,listen: false).UserUUID,
                             mnemonic: inputMW
                         );
-                        await Navigator.push(context,MaterialPageRoute(
+                        await Navigator.push(this.context,MaterialPageRoute(
                             builder: (_) => CreatePassword(wInfo, createMetod: "Import",)));
-                        Navigator.pop(context);
+                        if (!mounted) return;
+                        Navigator.pop(this.context);
                       },
                       S.of(context).g_key_11,
                     ),

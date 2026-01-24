@@ -9,12 +9,12 @@ class RoundRefreshIcon extends StatefulWidget {
   final double? padding;
 
   const RoundRefreshIcon({
-    Key? key,
+    super.key,
     this.refreshData,
     this.width,
     this.height,
     this.padding,
-  }) : super(key: key);
+  });
 
   @override
   State<RoundRefreshIcon> createState() => _RoundRefreshIconState();

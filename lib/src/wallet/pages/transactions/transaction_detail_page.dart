@@ -19,7 +19,7 @@ class TransactionDetailPage extends StatefulWidget {
 
   //交易的金额
   final String? value;
-  TransactionDetailPage({this.time,
+  const TransactionDetailPage({this.time,
     this.from,
     this.to,
     this.txHash,

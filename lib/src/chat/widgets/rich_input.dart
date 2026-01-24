@@ -2,100 +2,55 @@ import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 /// Expanded textfield support @someone #subjects with highlighting display.
 class RichInput extends TextField {
   const RichInput({
-    Key? key,
-    RichInputController? controller,
-    FocusNode? focusNode,
-    InputDecoration decoration = const InputDecoration(),
-    TextInputType? keyboardType,
-    TextInputAction? textInputAction,
-    TextCapitalization textCapitalization = TextCapitalization.none,
-    TextStyle? style,
-    StrutStyle? strutStyle,
-    TextAlign textAlign = TextAlign.start,
-    TextAlignVertical? textAlignVertical,
-    TextDirection? textDirection,
-    bool readOnly = false,
-    ToolbarOptions? toolbarOptions,
-    bool? showCursor,
-    bool autofocus = false,
-    bool obscureText = false,
-    bool autocorrect = true,
-    SmartDashesType? smartDashesType,
-    SmartQuotesType? smartQuotesType,
-    bool enableSuggestions = true,
-    int maxLines = 1,
-    int? minLines,
-    bool expands = false,
-    int? maxLength,
+    super.key,
+    RichInputController? super.controller,
+    super.focusNode,
+    super.decoration = const InputDecoration(),
+    super.keyboardType,
+    super.textInputAction,
+    super.textCapitalization = TextCapitalization.none,
+    super.style,
+    super.strutStyle,
+    super.textAlign = TextAlign.start,
+    super.textAlignVertical,
+    super.textDirection,
+    super.readOnly = false,
+    super.toolbarOptions,
+    super.showCursor,
+    super.autofocus = false,
+    super.obscureText = false,
+    super.autocorrect = true,
+    super.smartDashesType,
+    super.smartQuotesType,
+    super.enableSuggestions = true,
+    super.maxLines = 1,
+    super.minLines,
+    super.expands = false,
+    super.maxLength,
     bool maxLengthEnforced = true,
-    void Function(String)? onChanged,
-    void Function()? onEditingComplete,
-    void Function(String)? onSubmitted,
-    List<TextInputFormatter>? inputFormatters,
-    bool? enabled,
-    double cursorWidth = 2.0,
-    Radius? cursorRadius,
-    Color? cursorColor,
-    BoxHeightStyle selectionHeightStyle = BoxHeightStyle.tight,
-    BoxWidthStyle selectionWidthStyle = BoxWidthStyle.tight,
-    Brightness? keyboardAppearance,
-    EdgeInsets scrollPadding = const EdgeInsets.all(20),
-    DragStartBehavior dragStartBehavior = DragStartBehavior.start,
-    bool enableInteractiveSelection = true,
-    void Function()? onTap,
-    final InputCounterWidgetBuilder? buildCounter,
-    ScrollController? scrollController,
-    ScrollPhysics? scrollPhysics,
-  }) : super(
-    controller: controller,
-    key: key,
-    focusNode: focusNode,
-    decoration: decoration,
-    keyboardType: keyboardType,
-    textInputAction: textInputAction,
-    textCapitalization: textCapitalization,
-    style: style,
-    strutStyle: strutStyle,
-    textAlign: textAlign,
-    textAlignVertical: textAlignVertical,
-    textDirection: textDirection,
-    readOnly: readOnly,
-    toolbarOptions: toolbarOptions,
-    showCursor: showCursor,
-    autofocus: autofocus,
-    obscureText: obscureText,
-    autocorrect: autocorrect,
-    smartDashesType: smartDashesType,
-    smartQuotesType: smartQuotesType,
-    enableSuggestions: enableSuggestions,
-    maxLines: maxLines,
-    minLines: minLines,
-    expands: expands,
-    maxLength: maxLength,
-    onChanged: onChanged,
-    onEditingComplete: onEditingComplete,
-    onSubmitted: onSubmitted,
-    inputFormatters: inputFormatters,
-    enabled: enabled,
-    cursorWidth: cursorWidth,
-    cursorRadius: cursorRadius,
-    cursorColor: cursorColor,
-    selectionHeightStyle: selectionHeightStyle,
-    selectionWidthStyle: selectionWidthStyle,
-    keyboardAppearance: keyboardAppearance,
-    scrollPadding: scrollPadding,
-    dragStartBehavior: dragStartBehavior,
-    enableInteractiveSelection: enableInteractiveSelection,
-    onTap: onTap,
-    buildCounter: buildCounter,
-    scrollController: scrollController,
-    scrollPhysics: scrollPhysics,
-  );
+    super.onChanged,
+    super.onEditingComplete,
+    super.onSubmitted,
+    super.inputFormatters,
+    super.enabled,
+    super.cursorWidth = 2.0,
+    super.cursorRadius,
+    super.cursorColor,
+    super.selectionHeightStyle = BoxHeightStyle.tight,
+    super.selectionWidthStyle = BoxWidthStyle.tight,
+    super.keyboardAppearance,
+    super.scrollPadding = const EdgeInsets.all(20),
+    super.dragStartBehavior = DragStartBehavior.start,
+    super.enableInteractiveSelection = true,
+    super.onTap,
+    super.buildCounter,
+    super.scrollController,
+    super.scrollPhysics,
+  });
 }
 
 /// Expanded from TextEditingController,add insertBlock,insertText method and data property.
@@ -104,7 +59,7 @@ class RichInputController extends TextEditingController {
   RegExp? _exp;
   TextEditingValue? _focusValue;
 
-  RichInputController({String? text}) : super(text: text);
+  RichInputController({super.text});
 
   /// Insert a rich media [RichBlock] in the cursor position
   void insertBlock(RichBlock block) {
@@ -168,7 +123,9 @@ class RichInputController extends TextEditingController {
       TextEditingValue oldValue, TextEditingValue newValue) {
     if (oldValue == newValue ||
         newValue.text.length >= oldValue.text.length ||
-        newValue.selection.baseOffset == -1) return newValue;
+        newValue.selection.baseOffset == -1) {
+      return newValue;
+    }
     final oldText = oldValue.text;
     final delLength = oldText.length - newValue.text.length;
     String? char;
@@ -189,9 +146,9 @@ class RichInputController extends TextEditingController {
       final oldStr = oldText.substring(0, offset);
       final delStr = "$oldStr{#del#}";
       String str = delStr;
-      _blocks.forEach((element) {
+      for (var element in _blocks) {
         str = str.replaceFirst("${element.text}{#del#}", "");
-      });
+      }
       if (str != delStr && str != oldStr) {
         str += newValue.selection.textInside(newText) +
             newValue.selection.textAfter(newText);
@@ -212,9 +169,9 @@ class RichInputController extends TextEditingController {
   /// Get extended data information
   String get data {
     String str = text;
-    _blocks.forEach((element) {
+    for (var element in _blocks) {
       str = str.replaceAll(element._key, element.data);
-    });
+    }
     return str;
   }
 

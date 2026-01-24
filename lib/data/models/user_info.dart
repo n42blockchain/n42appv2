@@ -26,9 +26,9 @@ class UserInfo {
   String? walletAddr;
   String? inviteCode;
 
-  bool _follower = false;
-  bool _following = false;
-  bool _followAction = false;
+  bool follower = false;
+  bool following = false;
+  bool followAction = false;
   bool? _isArtist;
 
   UserInfo({
@@ -87,18 +87,6 @@ class UserInfo {
       'invite_code': inviteCode,
     };
   }
-
-  // Follower state
-  bool get follower => _follower;
-  set follower(bool value) => _follower = value;
-
-  // Following state
-  bool get following => _following;
-  set following(bool value) => _following = value;
-
-  // Follow action state
-  bool get followAction => _followAction;
-  set followAction(bool value) => _followAction = value;
 
   /// Check if user is an artist
   bool get isArtist {

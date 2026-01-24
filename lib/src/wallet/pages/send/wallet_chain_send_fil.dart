@@ -10,7 +10,7 @@ import 'package:n42appv2/src/wallet/api/chain_api/fil_api.dart';
 import 'package:n42appv2/src/wallet/api/transfer_api.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/models/transation_record_model.dart';
-import 'package:n42appv2/src/wallet/pages/address_book/address_book_List.dart';
+import 'package:n42appv2/src/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42appv2/src/wallet/provider/transaction_record_iterms_provider.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
@@ -28,8 +28,8 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:decimal/decimal.dart' as dec;
 
 class WalletChainSendFil extends StatefulWidget {
-  CoinModel coinModel;
-  WalletChainSendFil(this.coinModel,{super.key});
+  final CoinModel coinModel;
+  const WalletChainSendFil(this.coinModel,{super.key});
 
   @override
   State<WalletChainSendFil> createState() => _WalletChainSendFilState();
@@ -39,9 +39,7 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
   CoinModel? chainModel;
   Regular? _regular;
   Regular get regular{
-    if(_regular==null){
-      _regular=Regular();
-    }
+    _regular ??= Regular();
     return _regular!;
   }
   final oCcy =  NumberFormat("#,##0.00########", "en_US");
@@ -248,6 +246,7 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
     }
     FilApi filApi=FilApi();
     MessageModel rData_nonce=await filApi.getNonce(widget.coinModel.address.toString(),isTest:widget.coinModel.isTest);
+    if (!mounted) return;
     if(rData_nonce.error){
       setState(() {
         errorMessage=rData_nonce.data;
@@ -258,7 +257,7 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
     TransationRecordModel trModel=TransationRecordModel();
     trModel.address=widget.coinModel.address.toString();
     trModel.from1=widget.coinModel.address.toString();
-    trModel.to1=toAddr??"";//toTextEditingController.text;
+    trModel.to1=toAddr;//toTextEditingController.text;
     trModel.addrType=widget.coinModel.addrType;
     trModel.coin=widget.coinModel.coin;
     trModel.coinMiniName=widget.coinModel.coin['coinType'];
@@ -274,6 +273,7 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
     //trModel.coinId=widget.coinModel.isTest?widget.coinModel.coin['chainId_test']:widget.coinModel.coin['chainId'];
 
     bool check=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletBaseSend(trModel,null,widget.coinModel.coin['unit'])));
+    if (!mounted) return;
     if(check){
       signTx(trModel);
     }else{
@@ -290,11 +290,13 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
           trModel: trModel,
           privateKey: widget.coinModel.privateKey,
           pathIndex: widget.coinModel.pathIndex);
+      if (!mounted) return;
       if(mm.error){
         errorMessage=mm.data;
       }else{
         trModel.txHash=mm.data['/'];
         trModel.trId=await AppDatabase().insertTransationRecord(trModel);
+        if (!mounted) return;
         Provider.of<TransactionRecordItemProvider>(context,listen: false).addUndoneTr(trModel,1);
         ToastUtils.show(S.current.g_key_nft_41);
         Navigator.pop(context);
@@ -360,6 +362,7 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
   }
   void scanQR() async{
     String? scanValue =await Navigator.push(context, MaterialPageRoute(builder: (context)=>ScanPage()));
+    if (!mounted) return;
     if(scanValue !=null){
       toTextEditingController.text=scanValue;
       toAddress_check(scanValue);
@@ -695,7 +698,7 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
   amountBalanceWidget(){
     String unit=widget.coinModel.coin['unit'];
     return Text(
-      '${widget.coinModel.balance_string_all()} ${unit}',
+      '${widget.coinModel.balance_string_all()} $unit',
       style: TextStyle(
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
         fontSize: ScreenUtil().setSp(28.0),
@@ -739,7 +742,7 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
     Widget gasLimitWidget=Container();
     int decimals=widget.coinModel.coin['decimals'];
     String unit=widget.coinModel.coin['unit'];
-    totalGasPriceStr='${dec.Decimal.parse(toEther(totalGasPrice.toString(),decimals).toString())}${unit}';
+    totalGasPriceStr='${dec.Decimal.parse(toEther(totalGasPrice.toString(),decimals).toString())}$unit';
     //gasPriceStr='${dec.Decimal.parse(toEther(gasPrice.toString(),decimals).toString()) }${unit}';
     gasLimitWidget=Container(
       margin: EdgeInsets.only(top: ScreenUtil().setWidth(30.0)),
@@ -756,7 +759,7 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
           ),
           SizedBox(width: ScreenUtil().setWidth(10),),
           Expanded(flex: 1,child: Text(
-            "${gas}",
+            "$gas",
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
               fontSize: ScreenUtil().setSp(28.0),

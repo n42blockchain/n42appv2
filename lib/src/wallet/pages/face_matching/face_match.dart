@@ -14,12 +14,12 @@ import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/loading_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_picker/image_picker.dart' as iPicker;
+import 'package:image_picker/image_picker.dart' as i_picker;
 import 'package:permission_handler/permission_handler.dart';
 
 class FaceMatch extends StatefulWidget {
-  int matchType;//1相册，2相机
-  FaceMatch(this.matchType,{super.key});
+  final int matchType;//1相册，2相机
+  const FaceMatch(this.matchType,{super.key});
 
   @override
   State<FaceMatch> createState() => _FaceMatchState();
@@ -31,7 +31,6 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver{
   ImageUploadModel createModel = ImageUploadModel();
   bool photoOK=false;
   bool cameraOK=false;
-  String _errorMessage1 = "";
   bool _openedSystemSettings = false;
   init(){
     if(widget.matchType==1){
@@ -43,15 +42,14 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver{
   //拍照isImgMini
   Future getImageFromCamera() async {
     try {
-      final iPicker.ImagePicker _picker = iPicker.ImagePicker();
-      iPicker.XFile? img =
-      await _picker.pickImage(source: iPicker.ImageSource.camera);
+      final i_picker.ImagePicker picker = i_picker.ImagePicker();
+      i_picker.XFile? img =
+      await picker.pickImage(source: i_picker.ImageSource.camera);
       if (img != null) {
         createModel.imgType=getImageType(img.path);
         createModel.imageFile = img;
-        createModel.imgFile = await File(createModel.imageFile!.path);
+        createModel.imgFile = File(createModel.imageFile!.path);
         createModel.imgTotal = await img.length() * 1.0;
-        _errorMessage1 = "";
         //createModel.imageInfo.nftType = 0;
         setState(() {
         });
@@ -64,9 +62,9 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver{
   //相册选择
   Future getImageFromGallery() async {
     try {
-      final iPicker.ImagePicker _picker = iPicker.ImagePicker();
-      iPicker.XFile? img =
-      await _picker.pickImage(source: iPicker.ImageSource.gallery);
+      final i_picker.ImagePicker picker = i_picker.ImagePicker();
+      i_picker.XFile? img =
+      await picker.pickImage(source: i_picker.ImageSource.gallery);
       if (img != null) {
         bool edit=false;
         if(createModel.imageFile==null){
@@ -83,12 +81,11 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver{
           }
           createModel.imgType=getImageType(img.path);
           createModel.imageFile = img;
-          createModel.imgFile = await File(createModel.imageFile!.path);
+          createModel.imgFile = File(createModel.imageFile!.path);
           createModel.imgTotal = await img.length() * 1.0;
           createModel.imgCount = 0;
           //createModel.imageInfo.nftType = 0;
           createModel.imgMini = null;
-          _errorMessage1 = "";
           setState(() {
           });
           imageCrop();
@@ -120,6 +117,7 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver{
       load=Load.loading;
     });
     MessageModel rmm=await FaceApi().match(createModel.imgMini, "face2.jpg",type: 1);
+    if (!mounted) return;
     setState(() {
       load=Load.finish;
     });
@@ -252,7 +250,7 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver{
                   init();
                 }, S.of(context).g_face_match_key8),
               ),
-              Container(
+              SizedBox(
                 width: ScreenUtil().setWidth(300.0),
                 height: ScreenUtil().setWidth(88.0),
                 child: ButtonStyle2(context, (){

@@ -4,8 +4,8 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class NavImportWallet extends StatefulWidget {
-  dynamic onTap;
-  NavImportWallet({this.onTap,super.key});
+  final dynamic onTap;
+  const NavImportWallet({this.onTap,super.key});
 
   @override
   State<NavImportWallet> createState() => _NavImportWalletState();

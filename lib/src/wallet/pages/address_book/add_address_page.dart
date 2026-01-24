@@ -15,7 +15,7 @@ import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/container_widget.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
-import 'package:n42appv2/src/widgets/textField_widget.dart';
+import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter/services.dart';
@@ -51,6 +51,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     super.initState();
     /// 取出第一个币 作为本页默认的币种
     Future.microtask(() async {
+      if (!mounted) return;
       List<CoinModel> list =
           Provider.of<WalletActionProvider>(context, listen: false)
               .coinModels;
@@ -179,6 +180,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
       onTap: () async {
         final CoinModel? data = await Navigator
             .push(context,MaterialPageRoute(builder: (_) => const ChooseCoinsPage()));
+        if (!mounted) return;
         debugPrint("data -name--->${data?.coin['name']}");
         if (data != null) {
           setState(() {
@@ -216,7 +218,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
               width: ScreenUtil().setWidth(24.0),
             ),
             Text(
-              '${coinFullName} (${coinName})',
+              '$coinFullName ($coinName)',
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                 fontSize: ScreenUtil().setWidth(32.0),
@@ -304,6 +306,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
         /// 扫描
         String? data = await Navigator
             .push(context,MaterialPageRoute(builder: (_) => ScanPage()));
+        if (!mounted) return;
         if(data != null){
           setState(() {
             addressController.text = data;
@@ -383,6 +386,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     String? address = addressController.text.trim();
 
     address=await address_check(address);
+    if (!mounted) return;
     if(address==null){
       return;
     }
@@ -410,12 +414,14 @@ class _AddAddressPageState extends State<AddAddressPage> {
     try {
       /// save 到数据库中去
       final code = await AddressBookApi().saveAddressBookItem(info);
+      if (!mounted) return;
       if (code != 0) {
         Navigator.of(context).pop(true);
       } else {
         //保存失败
       }
-    } catch (err) {
+    } catch (_) {
+      // 错误安全忽略
     }
   }
   faceMatchTypeWidget(){
@@ -426,6 +432,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
           onTap: ()async{
             String? address=await Navigator.push(context,
                 MaterialPageRoute(builder: (_) => FaceMatch(1)));
+            if (!mounted) return;
             if(address !=null){
               setState(() {
                 addressController.text = address;
@@ -433,7 +440,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
             }
             Navigator.pop(context);
           },
-          child: Container(
+          child: SizedBox(
             height: ScreenUtil().setWidth(88.0),
             width: double.infinity,
             child: Text(
@@ -450,12 +457,13 @@ class _AddAddressPageState extends State<AddAddressPage> {
           onTap: ()async{
             String? address=await Navigator.push(context,
                 MaterialPageRoute(builder: (_) => FaceMatch(2)));
+            if (!mounted) return;
             if(address !=null){
               addressController.text = address;
             }
             Navigator.pop(context);
           },
-          child: Container(
+          child: SizedBox(
             height: ScreenUtil().setWidth(88.0),
             width: double.infinity,
             child: Text(

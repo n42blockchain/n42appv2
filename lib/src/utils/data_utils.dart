@@ -13,7 +13,7 @@ class DataUtils{
 
   //添加十六进制前面的0x
   String add0x(String hex) {
-    hex = '0x' + hex;
+    hex = '0x$hex';
     return hex;
   }
 
@@ -68,8 +68,8 @@ class DataUtils{
     return newArr;
   }
   int getRandomInt(int min, int max) {
-    final _random = Random();
-    return _random.nextInt((max - min).floor()) + min;
+    final random = Random();
+    return random.nextInt((max - min).floor()) + min;
   }
   /// 比较2个集合是否完全一样
   bool sameList(List first, List second) {

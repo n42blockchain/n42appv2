@@ -1,8 +1,6 @@
 //看板类型
 import 'dart:io';
-import 'dart:ui';
 
-import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/widgets/board_item.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +25,7 @@ class WalletBoard extends StatefulWidget {
   final GestureTapCallback? sellTap;
 
   const WalletBoard(
-      {Key? key,
+      {super.key,
         required this.accountPrice,
         this.swapTap,
         this.walletName,
@@ -36,8 +34,7 @@ class WalletBoard extends StatefulWidget {
         this.paymentCodeTap,
         this.buyTap,
         this.sellTap,
-      })
-      : super(key: key);
+      });
 
   @override
   State<WalletBoard> createState() => _WalletBoardState();
@@ -48,7 +45,7 @@ class _WalletBoardState extends State<WalletBoard> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

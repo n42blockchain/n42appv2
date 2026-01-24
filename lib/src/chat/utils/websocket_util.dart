@@ -168,7 +168,6 @@ class WebSocketUtil {
       // debugPrint("push content : ${json.encode(content)}");
       ChatMessageModel md = ChatMessageModel.fromMap(content);
       md.sMessageId=message.messageId.toInt();
-      MessageContent mc = md.content;
       //1 根据message id 查询数据库 存在的话更新数据库 不存在保存消息
       ChatMessageModel? model =
       await chatDBApi.getMessageByMessageId(md.messageId);
@@ -189,14 +188,14 @@ class WebSocketUtil {
         model.direction = direction;
         model.targetId = model.getTargetId();
         targetId = model.getTargetId();
-        final raw = await chatDBApi.updateMessage(model);
+        await chatDBApi.updateMessage(model);
         // debugPrint("单聊更新 status:$raw ${raw == 0 ? "失败" : "成功"}");
       } else {
         md.status = 1;
         md.direction = direction;
         md.targetId = md.getTargetId();
         targetId = md.getTargetId();
-        final raw = await chatDBApi.saveMessage(md);
+        await chatDBApi.saveMessage(md);
         // debugPrint("单聊消息保存 status:$raw ${raw == 0 ? "失败" : "成功"}");
       }
 
@@ -208,7 +207,8 @@ class WebSocketUtil {
         CacheMessageIsReadUtils().saveUnReadMessageId(targetId);
 
         //如果当前聊天的对象已经打开 就不在显示本地通知
-        if( Provider.of<ChatMessageProvider>(AppGlobals.appContext,listen: false).currOpenChatTargetUuid != md.getTargetId()){
+        if (AppGlobals.appContext.mounted &&
+            Provider.of<ChatMessageProvider>(AppGlobals.appContext,listen: false).currOpenChatTargetUuid != md.getTargetId()){
           //这里不做消息的解密 只展示收到消息的通知栏 具体消息内容点击查看
           final data = json.encode({
             "type": 100,
@@ -244,16 +244,16 @@ class WebSocketUtil {
         if (whiteUuid != null && whiteUuid.isNotEmpty) {
           if (AppGlobals.userInfo?.uuid == whiteUuid) {
             //保存到本地数据库
-            final raw = await chatDBApi.saveMessage(md);
+            await chatDBApi.saveMessage(md);
           }
         } else if (blackUuid != null && blackUuid.isNotEmpty) {
           if (AppGlobals.userInfo?.uuid != blackUuid) {
             //保存到本地数据库
-            final raw = await chatDBApi.saveMessage(md);
+            await chatDBApi.saveMessage(md);
           }
         } else {
           //保存到本地数据库
-          final raw = await chatDBApi.saveMessage(md);
+          await chatDBApi.saveMessage(md);
           // debugPrint("群聊提示消息 status:$raw ${raw == 0 ? "失败" : "成功"}");
         }
         //发送消息给监听页面
@@ -263,14 +263,15 @@ class WebSocketUtil {
         if (md.from != AppGlobals.userInfo?.uuid) {
           //不是自己发送的 保存到本地数据库
           md.direction = 0;
-          final raw = await chatDBApi.saveMessage(md);
+          await chatDBApi.saveMessage(md);
           //发送消息给监听页面
           eventBus.fire(EventPublic(EventPublicType.chatMessage, param: md));
           //设置消息未读
           CacheMessageIsReadUtils().saveUnReadMessageId(md.getTargetId());
 
           //如果当前聊天的对象已经打开 就不在显示本地通知
-          if( Provider.of<ChatMessageProvider>(AppGlobals.appContext,listen: false).currOpenChatTargetUuid != md.getTargetId()){
+          if (AppGlobals.appContext.mounted &&
+              Provider.of<ChatMessageProvider>(AppGlobals.appContext,listen: false).currOpenChatTargetUuid != md.getTargetId()){
             final data = json.encode({
               "type": 101,
               "data": {

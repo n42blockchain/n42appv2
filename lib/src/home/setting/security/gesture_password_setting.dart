@@ -9,9 +9,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class GesturePasswordSetting extends StatefulWidget{
-  int type;//0新密码，1重设密码
-  String? oldPassword;
-  GesturePasswordSetting(this.type,{this.oldPassword,Key? key}):super(key: key);
+  final int type;//0新密码，1重设密码
+  final String? oldPassword;
+  const GesturePasswordSetting(this.type,{this.oldPassword,super.key});
   @override
   _GesturePasswordSettingState createState()=>_GesturePasswordSettingState();
 }
@@ -73,7 +73,7 @@ class _GesturePasswordSettingState extends State<GesturePasswordSetting>{
           alignment: Alignment.center,
           height: ScreenUtil().setWidth(540.0),
           width: double.infinity,
-          child: Container(
+          child: SizedBox(
             height: ScreenUtil().setWidth(540.0),
             width: ScreenUtil().setWidth(540.0),
             child: GesturePassword(
@@ -98,6 +98,7 @@ class _GesturePasswordSettingState extends State<GesturePasswordSetting>{
                       if(cachedData['0']["errorCount"]==3){
                         //三次输入错误，重置内容
                         final flag=await TipsDialog1(context, S.of(context).g_lock_key23);
+                        if (!mounted) return;
                         if (flag != null && flag) {
                           cachedData['0']["index"]="1";
                           cachedData['0']["errorCount"]=0;
@@ -119,6 +120,7 @@ class _GesturePasswordSettingState extends State<GesturePasswordSetting>{
                       if(cachedData['1']["1"]["errorCount"]==3){
                         //输入三次错误，提示输入错误次数过多返回上一页
                         final flag=await TipsDialog1(context, S.of(context).g_lock_key23);
+                        if (!mounted) return;
                         if (flag != null && flag) {
                           cachedData['1']["1"]["errorCount"]=0;
                           Navigator.pop(context);
@@ -146,6 +148,7 @@ class _GesturePasswordSettingState extends State<GesturePasswordSetting>{
                       if(cachedData['1']["errorCount"]==3){
                         //三次输入错误，重置内容
                         final flag=await TipsDialog1(context, S.of(context).g_lock_key23);
+                        if (!mounted) return;
                         if (flag != null && flag) {
                           cachedData['1']["index"]="1";
                           cachedData['1']["errorCount"]=0;

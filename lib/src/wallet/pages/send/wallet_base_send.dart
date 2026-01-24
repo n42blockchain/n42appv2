@@ -16,11 +16,11 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class WalletBaseSend extends StatefulWidget {
-  TransationRecordModel? transationRecordModel;
-  BtcTransactionRecodeModel? btcTransactionRecodeModel;
-  String mainCoinUnit;
-  bool isNft;
-  WalletBaseSend(
+  final TransationRecordModel? transationRecordModel;
+  final BtcTransactionRecodeModel? btcTransactionRecodeModel;
+  final String mainCoinUnit;
+  final bool isNft;
+  const WalletBaseSend(
       this.transationRecordModel,
       this.btcTransactionRecodeModel,
       this.mainCoinUnit,
@@ -191,8 +191,12 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
       }
     }
     // TODO: implement build
-    return WillPopScope(
-      onWillPop: _pageBack,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        _pageBack();
+      },
       child:Scaffold(
         appBar: AppBarWidget(
           text: S.of(context).s_key_3,
@@ -260,7 +264,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                         height: ScreenUtil().setWidth(148),
                         child: Row(
                           children: [
-                            Expanded(child: Container(
+                            Expanded(child: SizedBox(
                               width: double.infinity,
                               height: ScreenUtil().setWidth(88.0),
                               child: ButtonStyle5(context, (){
@@ -273,11 +277,12 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                               ),
                             ),),
                             SizedBox(width: ScreenUtil().setWidth(30.0),),
-                            Expanded(child: Container(
+                            Expanded(child: SizedBox(
                               width: double.infinity,
                               height: ScreenUtil().setWidth(88.0),
                               child: ButtonStyle2(context, ()async{
                                 bool r=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletSecurityVerification()));
+                                if (!context.mounted) return;
                                 if(r){
                                   Navigator.pop(context,true);
                                 }

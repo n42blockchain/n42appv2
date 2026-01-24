@@ -4,7 +4,6 @@ import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/mess_mnemonic_words_item.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_backup/backup_three.dart';
-import 'package:n42appv2/src/wallet/pages/wallet_manage/edit_wallet_password.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
@@ -12,9 +11,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class BackupTwo extends StatefulWidget {
-  WalletInfo walletInfo;
-  int walletIndex;
-  BackupTwo(this.walletInfo,this.walletIndex,{super.key});
+  final WalletInfo walletInfo;
+  final int walletIndex;
+  const BackupTwo(this.walletInfo,this.walletIndex,{super.key});
   @override
   State<BackupTwo> createState() => _BackupTwoState();
 }
@@ -22,9 +21,7 @@ class BackupTwo extends StatefulWidget {
 class _BackupTwoState extends State<BackupTwo> {
   DataUtils? _dataUtils;
   DataUtils get dataUtils{
-    if(_dataUtils==null){
-      _dataUtils= DataUtils();
-    }
+    _dataUtils ??= DataUtils();
     return _dataUtils!;
   }
   //原始集合

@@ -9,7 +9,7 @@ import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
-import 'package:n42appv2/src/widgets/textField_widget.dart';
+import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
@@ -17,7 +17,7 @@ import 'package:n42appv2/generated/l10n.dart';
 class FriendDetail extends StatefulWidget {
   final FriendInfo info;
 
-  const FriendDetail({Key? key, required this.info}) : super(key: key);
+  const FriendDetail({super.key, required this.info});
 
   @override
   State<FriendDetail> createState() => _FriendDetailState();
@@ -32,17 +32,15 @@ class FriendDetail extends StatefulWidget {
 class _FriendDetailState extends State<FriendDetail> {
   ChatApi? _chatApi;
   ChatApi get chatApi{
-    if(_chatApi==null){
-      _chatApi=ChatApi();
-    }
+    _chatApi ??= ChatApi();
     return _chatApi!;
   }
   Load load=Load.loading;
   bool isFriend=false;
   final _remarksTextController = TextEditingController();
   final _reasonTextController = TextEditingController();
-  FocusNode _remarksFocusNode=FocusNode();
-  FocusNode _reasonFocusNode=FocusNode();
+  final FocusNode _remarksFocusNode=FocusNode();
+  final FocusNode _reasonFocusNode=FocusNode();
 
   String? reasonText;
 
@@ -192,7 +190,7 @@ class _FriendDetailState extends State<FriendDetail> {
         SizedBox(
           height: ScreenUtil().setWidth(60),
         ),
-        Container(
+        SizedBox(
           height: ScreenUtil().setWidth(60),
           width: double.infinity,
           child: Text(
@@ -226,7 +224,7 @@ class _FriendDetailState extends State<FriendDetail> {
         SizedBox(
           height: ScreenUtil().setWidth(40),
         ),
-        Container(
+        SizedBox(
           height: ScreenUtil().setWidth(60),
           width: double.infinity,
           child: Text(
@@ -284,6 +282,7 @@ class _FriendDetailState extends State<FriendDetail> {
         final remarks = _remarksTextController.text.trim();
         final data = await chatApi.friendAdd(reasonData ?? '', remarks,
             AppGlobals.userInfo?.uuid ?? '', widget.info.uuid ?? '');
+        if (!mounted) return;
         if (data != null && data["code"] == 200) {
           Navigator.of(context).pop();
         } else {

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
@@ -53,7 +52,8 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
           //ProviderUtil.walletActionProvider().init();
         }
       }
-    } catch (e) {
+    } catch (_) {
+      // 错误安全忽略
     }
   }
 

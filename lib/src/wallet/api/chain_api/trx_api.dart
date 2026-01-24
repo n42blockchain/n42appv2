@@ -23,7 +23,7 @@ class TrxApi{
   getBalance_trx(String address,String contract,{bool isTest=false})async{
     address= getAddress_tron(address);
     if(contract==""){
-      MessageModel mm=await BaseRPC_eth("eth_getBalance",["0x${address}","latest"]);
+      MessageModel mm=await BaseRPC_eth("eth_getBalance",["0x$address","latest"]);
       if(mm.error==false){
         mm.data=hexToInt(mm.data);
       }
@@ -31,8 +31,8 @@ class TrxApi{
     }else{
       contract=getAddress_tron(contract);
       String addr=strip0x(address);
-      MessageModel mm=await BaseRPC_eth("eth_call",[{"from": "0x${address}",
-        "to": "0x${contract}", "data": "0x70a082310000000000000000000000${addr}"
+      MessageModel mm=await BaseRPC_eth("eth_call",[{"from": "0x$address",
+        "to": "0x$contract", "data": "0x70a082310000000000000000000000$addr"
       },"latest"]);
       if(mm.error==false){
         mm.data=hexToInt(mm.data);
@@ -156,11 +156,11 @@ class TrxApi{
       String valueHex=hex(valueList).toLowerCase();
       MessageModel mm= await BaseRPC_eth(
           "eth_estimateGas",
-          [{"from": "0x${from}",
-            "to": "0x${contract}",
+          [{"from": "0x$from",
+            "to": "0x$contract",
             "gasPrice":'0x${gasPrice.toRadixString(16)}',
             "gas":"0x${gas.toRadixString(16)}",
-            "data": "0x${aaa}0000000000000000000000${to}${valueHex}",
+            "data": "0x${aaa}0000000000000000000000$to$valueHex",
           }],isTest:isTest);
       if(mm.error==false){
         mm.data=hexToInt(mm.data);
@@ -172,7 +172,7 @@ class TrxApi{
   getBlockNow_trx({bool isTest=false})async{
     try{
       String urlStr=RequestUrl().getUrl2(CoinType.TRX.name, 'rpc',isTest: isTest);
-      var data=await BaseApi.RequestEmpty_h.post('${urlStr}/wallet/getnowblock', params: {},header: header);
+      var data=await BaseApi.RequestEmpty_h.post('$urlStr/wallet/getnowblock', params: {},header: header);
       if(data['block_header']==null){
         MessageModel mm=MessageModel.error();
         mm.data=data['message'];
@@ -198,7 +198,7 @@ class TrxApi{
         "amount": amount,
         "visible": true
       };
-      final rData=await BaseApi.RequestEmpty_h.post('${url}/wallet/createtransaction', params: {},data: map);
+      final rData=await BaseApi.RequestEmpty_h.post('$url/wallet/createtransaction', params: {},data: map);
       MessageModel mm=MessageModel();
       if(rData['result']==false){
         mm.error=true;
@@ -217,7 +217,7 @@ class TrxApi{
   sendTx_trx(String signStr,{bool isTest=false})async{
     try{
       String urlStr=RequestUrl().getUrl2(CoinType.TRX.name, 'api',isTest: isTest);
-      final rData=await BaseApi.RequestEmpty_h.post('${urlStr}/wallet/broadcasttransaction', params: {},data: jsonDecode(signStr),header: header);
+      final rData=await BaseApi.RequestEmpty_h.post('$urlStr/wallet/broadcasttransaction', params: {},data: jsonDecode(signStr),header: header);
       MessageModel mm=MessageModel();
       if(rData['result']==false){
         mm.error=true;
@@ -262,7 +262,7 @@ class TrxApi{
     }
   }
   */
-  BaseRPC_eth(String method,var value,{bool? isTest=null})async{
+  BaseRPC_eth(String method,var value,{bool? isTest})async{
     try{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};

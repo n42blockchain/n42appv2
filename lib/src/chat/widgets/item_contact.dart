@@ -12,14 +12,13 @@ class ItemContact extends StatefulWidget {
   final bool showLine;
 
   const ItemContact(
-      {Key? key,
+      {super.key,
         this.faceUrl,
         this.name,
         this.email,
         this.onTap,
         this.onLongPress,
-        this.showLine = false})
-      : super(key: key);
+        this.showLine = false});
 
   @override
   State<ItemContact> createState() => _ItemContactState();

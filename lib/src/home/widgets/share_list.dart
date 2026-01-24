@@ -10,8 +10,7 @@ class ShareList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
+    return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
@@ -50,7 +49,6 @@ class ShareList extends StatelessWidget {
             Navigator.of(context).pop();
           }),
         ],
-      ),
     );
   }
 

@@ -8,11 +8,9 @@ import 'package:n42appv2/src/wallet_connect/pages/wallet_connect_page.dart';
 //import 'package:n42appv2/src/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/empty.dart';
-import 'package:n42appv2/src/widgets/image_network.dart';
-import 'package:n42appv2/src/widgets/loading.dart';
 import 'package:n42appv2/src/widgets/prompt_widget.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
-import 'package:n42appv2/src/widgets/textField_widget.dart';
+import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,8 +19,8 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class BrowserPage extends StatefulWidget {
-  String openUrl;
-  BrowserPage(this.openUrl,{super.key});
+  final String openUrl;
+  const BrowserPage(this.openUrl,{super.key});
 
   @override
   State<BrowserPage> createState() => _BrowserPageState();
@@ -184,7 +182,7 @@ class _BrowserPageState extends State<BrowserPage> {
             child: webViewWidget(bValue),
           ),
           if(bValue.showWList==false && bValue.wListIndex !=-1)
-            if(bValue.wInfoList?[bValue.wListIndex]?['load']??false)
+            if(bValue.wInfoList[bValue.wListIndex]['load']??false)
             LinearProgressIndicator(
               value: bValue.wInfoList[bValue.wListIndex]['progress']??0,
               backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor3.name),
@@ -217,7 +215,7 @@ class _BrowserPageState extends State<BrowserPage> {
                     child: InkWell(
                       onTap: ()async{
                         WebViewController wv=bValue.wvcList[bValue.wListIndex];
-                        await wv!.reload();
+                        await wv.reload();
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -236,11 +234,12 @@ class _BrowserPageState extends State<BrowserPage> {
                     Expanded(child: InkWell(
                       onTap: ()async{
                         WebViewController wv=bValue.wvcList[bValue.wListIndex];
-                        bool back=await wv!.canGoBack();
+                        bool back=await wv.canGoBack();
                         if (back){
-                          await wv!.goBack();
+                          await wv.goBack();
                         }else{
-                          Navigator.pop(context);
+                          if (!mounted) return;
+                          Navigator.pop(this.context);
                         }
                       },
                       child: Container(
@@ -260,9 +259,9 @@ class _BrowserPageState extends State<BrowserPage> {
                     Expanded(child: InkWell(
                       onTap: ()async{
                         WebViewController wv=bValue.wvcList[bValue.wListIndex];
-                        bool forward=await wv!.canGoForward();
+                        bool forward=await wv.canGoForward();
                         if (forward){
-                          await wv!.goForward();
+                          await wv.goForward();
                         }
                       },
                       child: Container(
@@ -303,7 +302,7 @@ class _BrowserPageState extends State<BrowserPage> {
                       String? url=await Navigator.push(context, MaterialPageRoute(builder: (context)=>BrowserCollectionList()));
                       if(url !=null){
                         WebViewController wv=bValue.wvcList[bValue.wListIndex];
-                        wv!.loadRequest(Uri.parse(url));
+                        wv.loadRequest(Uri.parse(url));
                       }
                     },
                     child: Container(
@@ -496,6 +495,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
+                                    flex: 1,
                                     child: Padding(
                                       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
                                       child: Text(
@@ -508,7 +508,6 @@ class _BrowserPageState extends State<BrowserPage> {
                                         overflow: TextOverflow.clip,
                                       ),
                                     ),
-                                    flex: 1,
                                   ),
                                   InkWell(
                                     onTap: (){
@@ -594,7 +593,7 @@ class _BrowserPageState extends State<BrowserPage> {
             ),
           ),
         ),
-        Container(
+        SizedBox(
           height: ScreenUtil().setWidth(88),
           child: Row(
             children: [

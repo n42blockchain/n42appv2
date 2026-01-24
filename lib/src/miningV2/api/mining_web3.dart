@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/wallet/api/chain_api/eth_api.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:http/http.dart';
@@ -12,12 +11,10 @@ class MiningWeb3{
   static const String _rpcUrl='http://5.161.252.59:8545';
   static const int _chainId=1142;
   static const int _defaultMaxGas=6000000;
-  EthPrivateKey? credentials=null;
-  Web3Client? web3Client=null;
+  EthPrivateKey? credentials;
+  Web3Client? web3Client;
   Web3Client? get WClient{
-    if(web3Client==null){
-      web3Client = Web3Client(_rpcUrl, Client());
-    }
+    web3Client ??= Web3Client(_rpcUrl, Client());
     return web3Client;
   }
 
@@ -29,7 +26,7 @@ class MiningWeb3{
       return mm;
     }
 
-    if(data?.status==false){
+    if(data.status==false){
       mm.error=true;
     }
     return mm;

@@ -5,8 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class MessageInfo extends StatelessWidget {
-  Map<String,dynamic> infoMap;
-  MessageInfo(this.infoMap,{super.key});
+  final Map<String,dynamic> infoMap;
+  const MessageInfo(this.infoMap,{super.key});
 
   @override
   Widget build(BuildContext context) {

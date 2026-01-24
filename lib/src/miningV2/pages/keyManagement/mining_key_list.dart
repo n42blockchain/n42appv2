@@ -42,6 +42,7 @@ class _MiningKeyListState extends State<MiningKeyList> {
     miningData!.remove(miningKeyList[index]);
     await SPUtil().setMiningData(miningData!);
     getMiningData();
+    if (!mounted) return;
     Provider.of<MiningV2Provider>(context,listen: false).getMiningData();
   }
   @override
@@ -120,30 +121,28 @@ class _MiningKeyListState extends State<MiningKeyList> {
                   indent: 0,
                   endIndent: 0,
                 ),
-                Container(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text('PublicKey:${keyValue['keypart']['publicKey']}',
-                        style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name),
-                          fontSize: ScreenUtil().setSp(32),
-                        ),
-                      ),),
-                      SizedBox(width: 10,),
-                      InkWell(
-                        onTap: (){
-                          Clipboard.setData(ClipboardData(text: keyValue['keypart']['publicKey']));
-                          ToastUtils.show(S.of(context).copy);
-                        },
-                        child: Icon(
-                          Icons.copy,
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                          size: ScreenUtil().setWidth(40),
-                        ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text('PublicKey:${keyValue['keypart']['publicKey']}',
+                      style: TextStyle(
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name),
+                        fontSize: ScreenUtil().setSp(32),
                       ),
-                    ],
-                  ),
+                    ),),
+                    SizedBox(width: 10,),
+                    InkWell(
+                      onTap: (){
+                        Clipboard.setData(ClipboardData(text: keyValue['keypart']['publicKey']));
+                        ToastUtils.show(S.of(context).copy);
+                      },
+                      child: Icon(
+                        Icons.copy,
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                        size: ScreenUtil().setWidth(40),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

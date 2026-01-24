@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:n42appv2/core/app/app_globals.dart';
@@ -26,9 +27,7 @@ import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_fil.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_sol.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_trx.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_xrp.dart';
-import 'package:n42appv2/src/wallet/pages/transactions/transaction_detail_eth.dart';
 import 'package:n42appv2/src/wallet/pages/transactions/transaction_history_list.dart';
-import 'package:n42appv2/src/wallet/pages/transactions/transaction_retry.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_receive_qr.dart';
 import 'package:n42appv2/src/wallet/provider/transaction_record_iterms_provider.dart';
@@ -50,8 +49,8 @@ import 'package:web3dart/crypto.dart';
 import 'package:intl/intl.dart';
 
 class WalletChainInfoXRP extends StatefulWidget {
-  CoinModel coinModel;
-  WalletChainInfoXRP(this.coinModel,{super.key});
+  final CoinModel coinModel;
+  const WalletChainInfoXRP(this.coinModel,{super.key});
 
   @override
   State<WalletChainInfoXRP> createState() => _WalletChainInfoXRPState();
@@ -61,9 +60,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
   final NumberFormat _oCcy = NumberFormat("#,##0.####", "en_US");
   AppDatabase? _db;
   AppDatabase get db{
-    if(_db==null){
-      _db=AppDatabase();
-    }
+    _db ??= AppDatabase();
     return _db!;
   }
   String chainName = "";
@@ -79,7 +76,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
   int page = 1;
   bool lastPage = false;
   List<dynamic> transactionList = [];
-  var eventBusFn;
+  StreamSubscription? eventBusFn;
 
   @override
   void initState() {
@@ -124,8 +121,8 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
       Provider.of<WalletActionProvider>(context,listen: false).coinModels[cIndex];
       chainName = chainCoinModel?.coin['name'];
       chainSymbol = chainCoinModel?.coin['miniName'];
-      tokenName = widget.coinModel?.coin['name'];
-      tokenSymbol = widget.coinModel?.coin['miniName'];
+      tokenName = widget.coinModel.coin['name'];
+      tokenSymbol = widget.coinModel.coin['miniName'];
       browserUrl = getBrowser_token_address(
         widget.coinModel.coin['coinType'],
         widget.coinModel.address,
@@ -148,6 +145,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
   //获取xrp服务器信息，主要获取 基础说定额度和每个对象的锁定额度
   getServiceState()async{
     MessageModel mm=await XrpApi().getServerState_xrp(isTest: widget.coinModel.isTest);
+    if (!mounted) return;
     if(mm.error==false){
       widget.coinModel.other?.setServiceState(mm.data);
     }else{
@@ -167,10 +165,10 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
         page += 1;
       }
       load = loadType;
-      String addr = widget.coinModel?.address.toString() ?? "";
+      String addr = widget.coinModel.address.toString();
       String coinKey = widget.coinModel.coin['coinType'];
       String contract = widget.coinModel.coin['contract'];
-      var txList;
+      List<dynamic>? txList;
       if (widget.coinModel.coin['blockchainType'] ==
           BlockchainType.Bitcoin.name) {
         txList = await db
@@ -200,7 +198,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
   }
 
   getTransactionData_network(Load LoadType)async{
-    String addr = widget.coinModel?.address.toString() ?? "";
+    String addr = widget.coinModel.address.toString();
     String coinKey = widget.coinModel.coin['coinType'];
     String contract = widget.coinModel.coin['contract'];
     //List<CommonResponseItemModel>? cril;
@@ -230,7 +228,8 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
       for(int i=cril.length-1;i>=0;i--){
         CommonResponseItemModel cri=cril[i];
         List<TransationRecordModel> rtrm=await db.selectTransationRecord_txHash(cri.hash??"0x",widget.coinModel.address);
-        if(rtrm.length==0){
+        if (!mounted) return;
+        if(rtrm.isEmpty){
           TransationRecordModel transationRecordModel=TransationRecordModel();
           transationRecordModel.coinId=widget.coinModel.isTest?widget.coinModel.coin['chainId_test']:widget.coinModel.coin['chainId'];
           transationRecordModel.coin=widget.coinModel.coin;
@@ -241,7 +240,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           transationRecordModel.contract=(widget.coinModel.coin['contract']??"").toLowerCase();
           transationRecordModel.walletIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
           transationRecordModel.nonce=cri.nonce;
-          transationRecordModel.txHash=cri.hash??"0x";
+          transationRecordModel.txHash=cri.hash;
           transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
           transationRecordModel.gas=int.parse(cri.gas??"0");
           transationRecordModel.txTime=cri.timeStamp??"0";
@@ -296,7 +295,8 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           continue;
         }
         List<TransationRecordModel> rtrm=await db.selectTransationRecord_txHash(cri.hash??"0x",widget.coinModel.address);
-        if(rtrm.length==0){
+        if (!mounted) return;
+        if(rtrm.isEmpty){
           TransationRecordModel transationRecordModel=TransationRecordModel();
           transationRecordModel.coinId=widget.coinModel.isTest?widget.coinModel.coin['chainId_test']:widget.coinModel.coin['chainId'];
           transationRecordModel.coin=widget.coinModel.coin;
@@ -307,7 +307,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           transationRecordModel.contract=(widget.coinModel.coin['contract']??"").toLowerCase();
           transationRecordModel.walletIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
           transationRecordModel.nonce=cri.nonce;
-          transationRecordModel.txHash=cri.hash??"0x";
+          transationRecordModel.txHash=cri.hash;
           transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
           transationRecordModel.gas=int.parse(cri.gas??"0");
           transationRecordModel.txTime=cri.timeStamp??"0";
@@ -344,7 +344,8 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
       for(int i=cril.length-1;i>=0;i--){
         BtcTranDetail cri=cril[i];
         List<BtcTransactionRecodeModel> rtrm=await db.selectBtcTransationRecord_txHash(cri.hash);
-        if(rtrm.length==0){
+        if (!mounted) return;
+        if(rtrm.isEmpty){
           BtcTransactionRecodeModel transationRecordModel=BtcTransactionRecodeModel();
           transationRecordModel.addrType=widget.coinModel.addrType;
           transationRecordModel.coin=widget.coinModel.coin;
@@ -354,7 +355,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           transationRecordModel.to1="";
           transationRecordModel.walletIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
           //transationRecordModel.nonce="0";
-          transationRecordModel.txHash=cri.hash??"0x";
+          transationRecordModel.txHash=cri.hash;
           //transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
           //transationRecordModel.gas=int.parse(cri.gas??"0");
           transationRecordModel.txTime=(DateTime.parse(cri.confirmed??"").millisecondsSinceEpoch~/1000).toString();
@@ -418,7 +419,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
         else{
           BtcTransactionRecodeModel transationRecordModel=rtrm[0];
           String cDate=(DateTime.parse(cri.confirmed??"").millisecondsSinceEpoch~/1000).toString();
-          if(transationRecordModel.InputsAddress?.length==0){
+          if(transationRecordModel.InputsAddress.isEmpty){
             if(cri.inputs!=null){
               transationRecordModel.inputModels=[];
               for(Input input in cri.inputs!){
@@ -477,7 +478,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           transationRecordModel.contract=(widget.coinModel.coin['contract']??"").toLowerCase();
           transationRecordModel.walletIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
           transationRecordModel.nonce=cri.nonce;
-          transationRecordModel.txHash=cri.hash??"0x";
+          transationRecordModel.txHash=cri.hash;
           transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
           transationRecordModel.gas=int.parse(cri.gas??"0");
           transationRecordModel.txTime=cri.timeStamp??"0";
@@ -631,13 +632,13 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
                         WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
                         if(wap.walletInfo.password==""){
                           final flag= await TipsDialog7(context);
-                          if (flag != null && flag) {
-                            Navigator.push(context, MaterialPageRoute(
-                                settings: RouteSettings(
-                                  name: 'BackupOne',
-                                ),
-                                builder: (context)=>BackupOne(wap.walletInfo,wap.walletIndex)));
-                          }
+                          if (!context.mounted) return;
+                          if (flag == null || !flag) return;
+                          Navigator.push(context, MaterialPageRoute(
+                              settings: RouteSettings(
+                                name: 'BackupOne',
+                              ),
+                              builder: (context)=>BackupOne(wap.walletInfo,wap.walletIndex)));
                           return;
                         }
                         await Navigator.push(
@@ -646,19 +647,20 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
                               builder: (context) =>
                                   WalletChainSendXrp(widget.coinModel),
                             ));
+                        if (!mounted) return;
                         getTransactionData(Load.refresh);
                       },
                       receiveTap: () async{
                         WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
                         if(wap.walletInfo.password==""){
                           final flag= await TipsDialog7(context);
-                          if (flag != null && flag) {
-                            Navigator.push(context, MaterialPageRoute(
-                                settings: RouteSettings(
-                                  name: 'BackupOne',
-                                ),
-                                builder: (context)=>BackupOne(wap.walletInfo,wap.walletIndex)));
-                          }
+                          if (!context.mounted) return;
+                          if (flag == null || !flag) return;
+                          Navigator.push(context, MaterialPageRoute(
+                              settings: RouteSettings(
+                                name: 'BackupOne',
+                              ),
+                              builder: (context)=>BackupOne(wap.walletInfo,wap.walletIndex)));
                           return;
                         }
                         Navigator.push(
@@ -810,6 +812,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
         WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
         if(wap.walletInfo.password==""){
           final flag= await TipsDialog7(context);
+          if (!mounted) return;
           if (flag != null && flag) {
             await Navigator.push(context, MaterialPageRoute(
                 settings: RouteSettings(
@@ -817,6 +820,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
                 ),
                 builder: (context)=>BackupOne(wap.walletInfo,wap.walletIndex)));
           }
+          if (!mounted) return;
           Navigator.pop(context);
         }
         if (widget.coinModel.coin['blockchainType'] ==
@@ -870,6 +874,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
                     WalletChainSend(widget.coinModel),
               ));
         }
+        if (!mounted) return;
         getTransactionData(Load.refresh);
         Navigator.pop(context);
       },
@@ -878,7 +883,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
-              Container(
+              SizedBox(
                 width: ScreenUtil().setWidth(40.0),
                 height: ScreenUtil().setWidth(40.0),
                 child: Image.asset(
@@ -910,6 +915,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
         WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
         if(wap.walletInfo.password==""){
           final flag= await TipsDialog7(context);
+          if (!mounted) return;
           if (flag != null && flag) {
             await Navigator.push(context, MaterialPageRoute(
                 settings: RouteSettings(
@@ -932,6 +938,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
             ),
           );
         }
+        if (!mounted) return;
         Navigator.pop(context);
       },
       child: Container(
@@ -939,7 +946,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
-              Container(
+              SizedBox(
                 width: ScreenUtil().setWidth(40.0),
                 height: ScreenUtil().setWidth(40.0),
                 child: Image.asset(
@@ -975,6 +982,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
                   browserUrl,
                   //S.of(context).g_key_m_15
                 )));
+        if (!mounted) return;
         Navigator.pop(context);
       },
       child: Container(
@@ -982,7 +990,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
-              Container(
+              SizedBox(
                 width: ScreenUtil().setWidth(40.0),
                 height: ScreenUtil().setWidth(40.0),
                 child: Image.asset(
@@ -1012,6 +1020,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
     childs.add(InkWell(
       onTap: () async{
         await Navigator.push(context, MaterialPageRoute(builder: (context)=>Moonpay(coinModel:widget.coinModel)));
+        if (!mounted) return;
         Navigator.pop(context);
       },
       child: Container(
@@ -1019,7 +1028,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
-              Container(
+              SizedBox(
                 width: ScreenUtil().setWidth(40.0),
                 height: ScreenUtil().setWidth(40.0),
                 child: Image.asset(
@@ -1049,6 +1058,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
     childs.add(InkWell(
       onTap: () async{
         await Navigator.push(context, MaterialPageRoute(builder: (context)=>Moonpay(coinModel:widget.coinModel,type: 1,)));
+        if (!mounted) return;
         Navigator.pop(context);
       },
       child: Container(
@@ -1056,7 +1066,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
-              Container(
+              SizedBox(
                 width: ScreenUtil().setWidth(40.0),
                 height: ScreenUtil().setWidth(40.0),
                 child: Image.asset(
@@ -1095,6 +1105,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
               MaterialPageRoute(
                   builder: (context) => WalletCoinTokenAdd2(
                     widget.coinModel,)));
+          if (!mounted) return;
           if (r) {
             Provider.of<WalletActionProvider>(context).init_wallet(initCoinInfo: true);
           }
@@ -1105,7 +1116,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
             alignment: Alignment.centerLeft,
             child: Row(
               children: [
-                Container(
+                SizedBox(
                   width: ScreenUtil().setWidth(40.0),
                   height: ScreenUtil().setWidth(40.0),
                   child: Image.asset(
@@ -1164,7 +1175,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
                   alignment: Alignment.centerLeft,
                   child: Row(
                     children: [
-                      Container(
+                      SizedBox(
                         width: ScreenUtil().setWidth(40.0),
                         height: ScreenUtil().setWidth(40.0),
                         child: Image.asset(
@@ -1200,7 +1211,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
                   alignment: Alignment.centerLeft,
                   child: Row(
                     children: [
-                      Container(
+                      SizedBox(
                         width: ScreenUtil().setWidth(40.0),
                         height: ScreenUtil().setWidth(40.0),
                         child: Image.asset(
@@ -1236,6 +1247,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
         childs.add(InkWell(
           onTap: () async{
             await Navigator.push(context, MaterialPageRoute(builder: (context) => MarketCoinInfo(marketInfo ?? {})));
+            if (!mounted) return;
             Navigator.pop(context);
           },
           child: Container(
@@ -1243,7 +1255,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
               alignment: Alignment.centerLeft,
               child: Row(
                 children: [
-                  Container(
+                  SizedBox(
                     width: ScreenUtil().setWidth(40.0),
                     height: ScreenUtil().setWidth(40.0),
                     child: Image.asset(
@@ -1319,7 +1331,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           Row(
             children: [
               Text(
-                "${title}:",
+                "$title:",
                 style: TextStyle(
                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
                   fontSize: ScreenUtil().setSp(28),

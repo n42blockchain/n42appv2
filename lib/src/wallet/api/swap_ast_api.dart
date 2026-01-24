@@ -102,7 +102,7 @@ class SwapAstApi{
 
     try{
       MessageModel mm = MessageModel();
-      final data = await BaseApi.RequestEmpty_h.post("$url/v1/nft-amt/cancel/order", params:{}, data: request_params,header: header);
+      await BaseApi.RequestEmpty_h.post("$url/v1/nft-amt/cancel/order", params:{}, data: request_params,header: header);
       mm.data = true;
       return mm;
     }catch(e){
@@ -126,7 +126,7 @@ class SwapAstApi{
 
     try{
       MessageModel mm = MessageModel();
-      final data = await BaseApi.RequestEmpty_h.post("$url/v1/nft-amt/commit/pay/tx", params: {}, data: request_params,header: header);
+      await BaseApi.RequestEmpty_h.post("$url/v1/nft-amt/commit/pay/tx", params: {}, data: request_params,header: header);
       mm.data=true;
       return mm;
     }catch(e){

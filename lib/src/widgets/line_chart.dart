@@ -3,31 +3,42 @@ import 'dart:ui' as ui;
 import 'dart:math';
 
 class LineChart extends StatefulWidget{
-  List<dynamic> values;//折线图数据
-  double height;//控件高度
-  double bottomMargin=0;//绘制折线图时，距离最底边的距离
-  double maxValue=0.0;//折线图点 最大值
-  double minValue=0.0;//折线图点 最小值
-  bool isUp;//是涨还是跌，涨绿色图，跌红色图
+  final List<dynamic> values;//折线图数据
+  final double height;//控件高度
+  final double bottomMargin;//绘制折线图时，距离最底边的距离
+  final double maxValue;//折线图点 最大值
+  final double minValue;//折线图点 最小值
+  final bool isUp;//是涨还是跌，涨绿色图，跌红色图
 
-  double difference=0;//最大值和最小值之间的差值
+  final double difference;//最大值和最小值之间的差值
 
-  LineChart(this.values,this.isUp,this.height,this.bottomMargin){
-
-    minValue=0;
-    if(values.length>0){
-      minValue=values[0]*1.0;
-    }
-    for(int i=0;i<values.length;i++){
-      if(maxValue<values[i]){
-        maxValue=values[i]*1.0;
-      }
-      if(minValue>values[i]){
-        minValue=values[i]*1.0;
+  static double _calcMaxValue(List<dynamic> values) {
+    double maxVal = 0.0;
+    for(int i = 0; i < values.length; i++){
+      if(maxVal < values[i]){
+        maxVal = values[i] * 1.0;
       }
     }
-    difference=maxValue-minValue;
+    return maxVal;
   }
+
+  static double _calcMinValue(List<dynamic> values) {
+    double minVal = 0.0;
+    if(values.isNotEmpty){
+      minVal = values[0] * 1.0;
+    }
+    for(int i = 0; i < values.length; i++){
+      if(minVal > values[i]){
+        minVal = values[i] * 1.0;
+      }
+    }
+    return minVal;
+  }
+
+  LineChart(this.values,this.isUp,this.height,this.bottomMargin, {super.key})
+    : maxValue = _calcMaxValue(values),
+      minValue = _calcMinValue(values),
+      difference = _calcMaxValue(values) - _calcMinValue(values);
   @override
   _LineChartState createState()=>_LineChartState();
 }

@@ -43,6 +43,7 @@ class Application {
       globalProviderContainer.read(currentUserProvider.notifier).clearUser();
       globalProviderContainer.invalidate(walletListProvider);
       // 通过 Legacy Provider 清理
+      if (!AppContext.mounted) return;
       Provider.of<WalletActionProvider>(AppContext, listen: false).init_wallet();
       Provider.of<WalletConnectProvider>(AppContext, listen: false).cleannData_loginout();
     } catch (err) {

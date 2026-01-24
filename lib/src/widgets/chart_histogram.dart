@@ -1,25 +1,23 @@
 ﻿import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class ChartHistogram extends StatefulWidget {
-  TitleModel titleModel; //标题，主标题、副标题如果没有可以不传，
-  List<AlertMessageGroup>? alertMessageGroups; //长按柱状条，弹出的内容提示
-  BottomTitle bottomTitle; //底部标签
-  BarChartModel barChartModel; //柱状图数据
+  final TitleModel titleModel; //标题，主标题、副标题如果没有可以不传，
+  final List<AlertMessageGroup>? alertMessageGroups; //长按柱状条，弹出的内容提示
+  final BottomTitle bottomTitle; //底部标签
+  final BarChartModel barChartModel; //柱状图数据
   final bool isLoading;
 
-  ChartHistogram(
+  const ChartHistogram(
       {required this.titleModel,
         required this.barChartModel,
         required this.bottomTitle,
         this.alertMessageGroups,
         this.isLoading = false,
-        Key? key})
-      : super(key: key);
+        super.key});
 
   @override
   State<StatefulWidget> createState() => _ChartHistogramState();
@@ -297,9 +295,9 @@ class BarChartModel {
           maxNumber = values[i];
         }
       }
-      this.maxValue = maxNumber;
-      if(this.maxValue==0){
-        this.maxValue=1;
+      maxValue = maxNumber;
+      if(maxValue==0){
+        maxValue=1;
       }
     }
   }

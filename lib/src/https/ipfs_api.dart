@@ -40,11 +40,11 @@ class IpfsApi{
 
   }
   //ipfs上传图片type 0文件地址上传，1 List<int>上传
-  uploadIPFSImage(var file,String filename,dynamic sendProgress,{int type=0,var cancelToken=null})async{
+  uploadIPFSImage(var file,String filename,dynamic sendProgress,{int type=0,var cancelToken})async{
     try{
       FormData fd=FormData.fromMap({"path":type==0?
-      await MultipartFile.fromFile(file,filename: filename):
-      await MultipartFile.fromBytes(file,filename: filename)});
+      MultipartFile.fromFile(file,filename: filename):
+      MultipartFile.fromBytes(file,filename: filename)});
       String username = 'n42';
       String password = 'Z,p7=f#|q5JkmeyL';
       String basicAuth =
@@ -85,7 +85,7 @@ class IpfsApi{
   //上传图片信息
   uploadIPFSImageInfo(Map<String,dynamic> map,String filename)async{
     try{
-      MultipartFile f=await MultipartFile.fromString(json.encode(map),filename: filename);
+      MultipartFile f=MultipartFile.fromString(json.encode(map),filename: filename);
       FormData fd=FormData.fromMap({"file":f});
       var data=await BaseApi.RequestEmpty_h.post(
         "${AppConfig.apiUrl['ipfsHost']}/upload",
@@ -108,16 +108,16 @@ class IpfsApi{
   Future downLoadFile(String urlPath, String savePath,
       {bool showError = false, ProgressCallback? receiveProgress}) async {
     try {
-      var _dio = Dio(BaseOptions(
+      var dio = Dio(BaseOptions(
         connectTimeout: Duration(milliseconds: 10000),
         receiveTimeout: Duration(milliseconds: 5000),
       ));
       // 配置 HttpClientAdapter 来忽略 SSL 证书验证
-      _dio.httpClientAdapter = IOHttpClientAdapter()..createHttpClient=(){
+      dio.httpClientAdapter = IOHttpClientAdapter()..createHttpClient=(){
         HttpClient client=HttpClient()..badCertificateCallback = (X509Certificate cert, String host, int port) => true; // // 总是返回 true，表示信任所有证书
         return client;
       };
-      var response = await _dio.download(urlPath, savePath,
+      var response = await dio.download(urlPath, savePath,
           onReceiveProgress: receiveProgress);
       var data = response.data;
       if (data != null && data.statusCode == 200) {
@@ -127,7 +127,7 @@ class IpfsApi{
       }
     } catch (error) {
       //const errorInfo = '文件下载失败';
-      throw error;
+      rethrow;
     }
   }
 }

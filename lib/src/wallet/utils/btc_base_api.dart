@@ -37,10 +37,10 @@ class BitcoinApiService implements ApiService {
   T _readResponse<T>(http.Response response) {
     final String toString = _readBody(response);
     switch (T) {
-      case String:
+      case const (String):
         return toString as T;
-      case List:
-      case Map:
+      case const (List):
+      case const (Map):
         return jsonDecode(toString) as T;
       default:
         try {
@@ -64,8 +64,9 @@ class BitcoinApiService implements ApiService {
       if (toString.isNotEmpty) {
         errorResult = StringUtils.toJson(toString);
       }
-      // ignore: empty_catches
-    } catch (e) {}
+    } catch (_) {
+      // JSON 解析失败时 errorResult 保持为 null，安全忽略
+    }
     toString = toString.isEmpty ? "request_error" : toString;
     throw ApiProviderException(toString, response.statusCode, errorResult);
   }

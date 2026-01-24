@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:file_icon/src/data.dart';
+import 'package:file_icon/file_icon.dart' show iconSetMap;
 
 class FileIcon extends StatelessWidget {
   final String fileName;
   final double? size;
   final Color? iconColor;
 
-  FileIcon(String fileName, {Key? key, this.size, this.iconColor})
-      : fileName = fileName.toLowerCase(),
-        super(key: key);
+  FileIcon(String fileName, {super.key, this.size, this.iconColor})
+      : fileName = fileName.toLowerCase();
 
   @override
   Widget build(BuildContext context) {

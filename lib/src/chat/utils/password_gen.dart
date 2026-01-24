@@ -12,9 +12,9 @@ String generatePassword({
   const special = '@#%^*>\$@?/[]=+';
 
   String chars = "";
-  if (letter) chars += '$letterLowerCase$letterUpperCase';
-  if (isNumber) chars += '$number';
-  if (isSpecial) chars += '$special';
+  if (letter) chars += letterLowerCase + letterUpperCase;
+  if (isNumber) chars += number;
+  if (isSpecial) chars += special;
 
 
   return List.generate(length, (index) {

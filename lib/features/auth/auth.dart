@@ -5,14 +5,13 @@
 //
 // Author: Jiang Yiwei
 
-/// Auth Feature Module
-///
-/// This module handles all authentication-related functionality:
-/// - User login and registration
-/// - Password management
-/// - Security settings
-/// - Google authenticator
-library auth;
+// Auth Feature Module
+//
+// This module handles all authentication-related functionality:
+// - User login and registration
+// - Password management
+// - Security settings
+// - Google authenticator
 
 // Domain Layer
 export 'domain/entities/auth_entity.dart';

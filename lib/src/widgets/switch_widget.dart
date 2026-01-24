@@ -20,7 +20,7 @@ class _SwitchWidgetState extends State<SwitchWidget> {
           ///关闭时颜色
           trackColor:  Colors.grey,
           ///打开时颜色
-          activeColor: Colors.blueAccent,
+          activeTrackColor: Colors.blueAccent,
           ///圆形小按钮颜色
           thumbColor: Colors.white,
           onChanged: (bool val) {

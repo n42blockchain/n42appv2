@@ -17,6 +17,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SecurityGoogleVedification extends StatefulWidget{
+  const SecurityGoogleVedification({super.key});
+
   @override
   _SecurityGoogleVedificationState createState()=>_SecurityGoogleVedificationState();
 }
@@ -45,9 +47,7 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
   };
   UserInfoApi? _userInfoAPI;
   UserInfoApi get userInfoAPI{
-    if(_userInfoAPI==null){
-      _userInfoAPI=UserInfoApi();
-    }
+    _userInfoAPI ??= UserInfoApi();
     return _userInfoAPI!;
   }
   @override
@@ -81,7 +81,7 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
           //securityMap=userSecurityMap;
           securityMap['email']=userSecurityMap['email'];
           securityMap['google']=userSecurityMap['google'];
-          securityMap['face']=userSecurityMap['face']==null?false:userSecurityMap['face'];
+          securityMap['face']=userSecurityMap['face']??false;
         });
       }
     }
@@ -94,6 +94,7 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
       emailLoad=Load.loading;
     });
     MessageModel mm=await userInfoAPI.getEmailVerification();
+    if (!mounted) return;
     if(mm.error){
       ToastUtils.show(S.of(context).email_code_error);
     }else{
@@ -111,7 +112,7 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
       setState(() {
         emailSendWaitNum--;
       });
-      print(emailSendWaitNum);
+      debugPrint('$emailSendWaitNum');
       if(emailSendWaitNum<=0){
         emailSendWaitNum=60;
         emailSendWait=false;
@@ -231,9 +232,7 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
   saveSecurity()async{
     SPUtil sPUtils=SPUtil();
     Map<String,dynamic>? s=await sPUtils.getSecurity();
-    if(s==null){
-      s={};
-    }
+    s ??= {};
     s[AppGlobals.userInfo?.uuid??""]=securityMap;
     await sPUtils.setSecurity(s);
     setState(() {
@@ -314,6 +313,7 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
                 setState(() {
                   load=Load.finish;
                 });
+                if (!context.mounted) return;
                 Navigator.popUntil(context, ModalRoute.withName('/securitySetting'));
               }, S.of(context).g_key_154,),
             ),
@@ -325,8 +325,7 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
 
   //钱包密码
   Widget walletPassword(){
-    return Container(
-      child: Column(
+    return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -383,7 +382,7 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
                       obscure=!obscure;
                     });
                   },
-                  child: Container(
+                  child: SizedBox(
                     height: 22,
                     width: 22,
                     child: Image.asset(
@@ -413,15 +412,13 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
           ),
           SizedBox(height: ScreenUtil().setWidth(40.0),),
         ],
-      ),
     );
   }
 
   //邮箱验证
   Widget walletEmail(){
     if(securityMap['email']){
-      return Container(
-        child: Column(
+      return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
@@ -494,7 +491,6 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
             ),
             SizedBox(height: ScreenUtil().setWidth(40.0),),
           ],
-        ),
       );
     }
     else{
@@ -507,7 +503,7 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
     Widget leftWidget=SizedBox();
     if(emailLoad==Load.loading){
       //bgColor=AppThemeUtils.getColorByKey(context,AppThemeKeys.itemBorderColor);
-      leftWidget=Container(
+      leftWidget=SizedBox(
         height: ScreenUtil().setWidth(30.0),
         width: ScreenUtil().setWidth(30.0),
         child: CircularProgressIndicator(color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),),
@@ -517,7 +513,7 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
       leftWidget=Container(
         padding: EdgeInsets.only(right: ScreenUtil().setWidth(6.0)),
         child: Text(
-          '(${emailSendWaitNum})',
+          '($emailSendWaitNum)',
           style: TextStyle(
             fontSize: ScreenUtil().setSp(30.0),
             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
@@ -554,8 +550,7 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
 
   //谷歌验证控件
   Widget walletGoogle(){
-    return Container(
-      child: Column(
+    return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -653,7 +648,6 @@ class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>
           ),
           SizedBox(height: ScreenUtil().setWidth(40.0),),
         ],
-      ),
     );
   }
 }

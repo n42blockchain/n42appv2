@@ -68,7 +68,9 @@ class _SelectWalletState extends State<SelectWallet> {
                 mnemonic: info.mnemonic??"",
                 pk:info.privateKey??"",
             );
+            if (!context.mounted) return;
             final rdata=await Navigator.of(context).push(MaterialPageRoute(builder: (_) => FaceBinding(1,address: addressMap['legacy'],walletIndex: index,)));
+            if (!context.mounted) return;
             Navigator.pop(context,rdata);
           },
           child: ContainerStyle1(

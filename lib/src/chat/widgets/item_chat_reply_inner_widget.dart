@@ -2,7 +2,6 @@
 import 'dart:typed_data';
 
 import 'package:n42appv2/src/chat/api/chat_db_api.dart';
-import 'package:n42appv2/src/chat/api/file_api.dart';
 import 'package:n42appv2/src/chat/models/chat_message_model.dart';
 import 'package:n42appv2/src/chat/utils/aes_utils.dart';
 import 'package:n42appv2/src/chat/utils/chat_util.dart';
@@ -17,7 +16,6 @@ import 'package:n42appv2/src/widgets/file_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:video_compress/video_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
 
 ///嵌入到消息item的内部回复消息
 class ItemChatReplyInnerWidget extends StatefulWidget {
@@ -40,23 +38,17 @@ class _ItemChatReplyInnerWidgetState extends State<ItemChatReplyInnerWidget>
     with AutomaticKeepAliveClientMixin {
   ChatDBApi? _chatDBUtils;
   ChatDBApi get chatDBUtils{
-    if(_chatDBUtils==null){
-      _chatDBUtils=ChatDBApi();
-    }
+    _chatDBUtils ??= ChatDBApi();
     return _chatDBUtils!;
   }
   ChatUtil? _chatUtils;
   ChatUtil get chatUtils{
-    if(_chatUtils==null){
-      _chatUtils= ChatUtil();
-    }
+    _chatUtils ??= ChatUtil();
     return _chatUtils!;
   }
   FileUtils? _fileUtils;
   FileUtils get fileUtils{
-    if(_fileUtils==null){
-      _fileUtils= FileUtils();
-    }
+    _fileUtils ??= FileUtils();
     return _fileUtils!;
   }
   late ChatMessageModel _item;
@@ -105,7 +97,8 @@ class _ItemChatReplyInnerWidgetState extends State<ItemChatReplyInnerWidget>
             await chatDBUtils.updateMessage(_item);
 
             setState(() {});
-          } catch (err) {
+          } catch (_) {
+            // 文本消息解密失败时安全忽略，显示默认图标
           }
         }
       } else {
@@ -144,9 +137,6 @@ class _ItemChatReplyInnerWidgetState extends State<ItemChatReplyInnerWidget>
           if (fileName == null || fileUrl == null) return;
 
           String savePath = await fileUtils.getTempDirByName(fileName);
-          String openFileName =
-          fileName.substring(0, fileName.lastIndexOf('.'));
-          String openFilepath = await fileUtils.getTempDirByName(openFileName);
           //File openFile = File(openFilepath);
 
 
@@ -188,13 +178,14 @@ class _ItemChatReplyInnerWidgetState extends State<ItemChatReplyInnerWidget>
 
               setState(() {});
             } else {
+              // 文件解密失败时安全忽略，显示默认图标
             }
           }
         }
       }
       setState(() {});
-    } catch (err) {
-      //err
+    } catch (_) {
+      // 消息处理过程中的错误安全忽略，显示默认图标
     }
   }
 

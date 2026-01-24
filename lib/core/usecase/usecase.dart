@@ -7,7 +7,7 @@ import '../error/failures.dart';
 /// 
 /// 所有业务用例都应该继承此类
 /// 
-/// [Type] 返回值类型
+/// [T] 返回值类型
 /// [Params] 参数类型
 /// 
 /// 使用示例：
@@ -23,8 +23,8 @@ import '../error/failures.dart';
 ///   }
 /// }
 /// ```
-abstract class UseCase<Type, Params> {
-  Future<Either<Failure, Type>> call(Params params);
+abstract class UseCase<T, Params> {
+  Future<Either<Failure, T>> call(Params params);
 }
 
 /// 无参数用例
@@ -44,8 +44,8 @@ abstract class UseCase<Type, Params> {
 ///   }
 /// }
 /// ```
-abstract class UseCaseNoParams<Type> {
-  Future<Either<Failure, Type>> call();
+abstract class UseCaseNoParams<T> {
+  Future<Either<Failure, T>> call();
 }
 
 /// 流用例
@@ -65,25 +65,25 @@ abstract class UseCaseNoParams<Type> {
 ///   }
 /// }
 /// ```
-abstract class StreamUseCase<Type, Params> {
-  Stream<Either<Failure, Type>> call(Params params);
+abstract class StreamUseCase<T, Params> {
+  Stream<Either<Failure, T>> call(Params params);
 }
 
 /// 无参数流用例
-abstract class StreamUseCaseNoParams<Type> {
-  Stream<Either<Failure, Type>> call();
+abstract class StreamUseCaseNoParams<T> {
+  Stream<Either<Failure, T>> call();
 }
 
 /// 同步用例
 /// 
 /// 用于不需要异步操作的用例
-abstract class SyncUseCase<Type, Params> {
-  Either<Failure, Type> call(Params params);
+abstract class SyncUseCase<T, Params> {
+  Either<Failure, T> call(Params params);
 }
 
 /// 空参数
 /// 
-/// 当用例需要符合 UseCase<Type, Params> 接口但不需要参数时使用
+/// 当用例需要符合 `UseCase<Type, Params>` 接口但不需要参数时使用
 class NoParams extends Equatable {
   const NoParams();
   

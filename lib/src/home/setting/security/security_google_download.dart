@@ -10,6 +10,8 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SecurityGoogleDownload extends StatefulWidget {
+  const SecurityGoogleDownload({super.key});
+
   @override
   _SecurityGoogleDownloadState createState() => _SecurityGoogleDownloadState();
 }

@@ -13,11 +13,11 @@ class AptApi{
   getBalance(String address,{String contract="",String tokenName=""})async{
     try{
       MessageModel mm=MessageModel();
-      String uri=url+'accounts/${address}/balance/';
+      String uri='${url}accounts/$address/balance/';
       if(contract==""){
-        uri=uri+'0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>';
+        uri='${uri}0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>';
       }else{
-        uri=uri+'0x1::coin::CoinStore<${contract}::celer_coin_manager::${tokenName}>';
+        uri='${uri}0x1::coin::CoinStore<$contract::celer_coin_manager::$tokenName>';
       }
       final data=await BaseApi.RequestEmpty_h.get(uri, params: {},);
       mm.data=BigInt.from(data);
@@ -31,7 +31,7 @@ class AptApi{
   getGasPrice()async{
     try{
       MessageModel mm=MessageModel();
-      String uri=url+'estimate_gas_price';
+      String uri='${url}estimate_gas_price';
       final data=await BaseApi.RequestEmpty_h.get(uri, params: {},);
       mm.data=BigInt.from(data['gas_estimate']);
       return mm;
@@ -44,7 +44,7 @@ class AptApi{
   getAccountInfo(String address)async{
     try{
       MessageModel mm=MessageModel();
-      String uri=url+'accounts/$address';
+      String uri='${url}accounts/$address';
       final data=await BaseApi.RequestEmpty_h.get(uri, params: {},);
       mm.data=int.parse(data['sequence_number']);
       return mm;
@@ -57,7 +57,7 @@ class AptApi{
   getServiceInfo()async{
     try{
       MessageModel mm=MessageModel();
-      String uri=url+'ledger/info';
+      String uri='${url}ledger/info';
       final data=await BaseApi.RequestEmpty_h.get(uri, params: {},);
       mm.data=int.parse(data['ledger_timestamp']);
       return mm;
@@ -70,7 +70,7 @@ class AptApi{
   sendTxHash(String txHash)async{
     try{
       MessageModel mm=MessageModel();
-      String uri=url+'transactions';
+      String uri='${url}transactions';
 
       final data=await BaseApi.RequestEmpty_h.post(uri, params: {},data: txHash,header: {'content-type':'application/x.aptos.signed_transaction+bcs'});
       mm.data=data['hash'];

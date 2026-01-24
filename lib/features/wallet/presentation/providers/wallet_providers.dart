@@ -193,9 +193,7 @@ class WalletListNotifier extends AsyncNotifier<List<WalletInfoData>> {
     Map<String, dynamic>? walletUser = walletAll[userUUID];
     
     // Fallback to default wallet if user wallet not found
-    if (walletUser == null) {
-      walletUser = walletAll['AstranetWallet'];
-    }
+    walletUser ??= walletAll['AstranetWallet'];
 
     if (walletUser == null) {
       return [];

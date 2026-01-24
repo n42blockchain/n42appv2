@@ -129,6 +129,13 @@ class AppConfig {
     
     // Face API
     'face': 'https://api.n42.ai/face',
+
+    // BTC Staking WebView URL
+    // TODO: Replace with production URL when available
+    'btcStaking': {
+      'main': 'https://staking.n42.ai',
+      'test': 'https://staking-test.n42.ai',
+    },
   };
 
   // ============ Helper Methods ============

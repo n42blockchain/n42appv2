@@ -16,8 +16,7 @@ class DeleteGroupMemberPage extends StatefulWidget {
   final List<GroupMemberInfo> groupMemberList;
 
   const DeleteGroupMemberPage(
-      {Key? key, required this.groupId, required this.groupMemberList})
-      : super(key: key);
+      {super.key, required this.groupId, required this.groupMemberList});
 
   @override
   State<DeleteGroupMemberPage> createState() => _DeleteGroupMemberPageState();
@@ -26,15 +25,13 @@ class DeleteGroupMemberPage extends StatefulWidget {
 class _DeleteGroupMemberPageState extends State<DeleteGroupMemberPage> {
   ChatApi? _chatApi;
   ChatApi get chatApi{
-    if(_chatApi==null){
-      _chatApi=ChatApi();
-    }
+    _chatApi ??= ChatApi();
     return _chatApi!;
   }
   List<FriendInfo> friendList = [];
   List<GroupMemberInfo> selectedList = [];
 
-  List<GroupMemberInfo> _groupMemberList = [];
+  final List<GroupMemberInfo> _groupMemberList = [];
 
   Load load=Load.finish;
 
@@ -75,8 +72,7 @@ class _DeleteGroupMemberPageState extends State<DeleteGroupMemberPage> {
         text: S.of(context).g_chat_key_35,
       ),
       body: SafeArea(
-        child: Container(
-          child: Column(
+        child: Column(
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,6 +246,7 @@ class _DeleteGroupMemberPageState extends State<DeleteGroupMemberPage> {
                       final data = await chatApi.deleteGroupMembers(
                           widget.groupId, groupMemberIds);
 
+                      if (!mounted) return;
                       if (data != null && data["code"] == 200) {
                         //更新会话列表
                         eventBus.fire(EventPublic(
@@ -281,7 +278,6 @@ class _DeleteGroupMemberPageState extends State<DeleteGroupMemberPage> {
                 ),
               )
             ],
-          ),
         ),
       ),
     );

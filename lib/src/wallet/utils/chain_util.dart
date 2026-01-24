@@ -1407,9 +1407,9 @@ String getPathWithIndex(String path,int index){
       rPath+="${paths[i]}/";
     }
     if(indexOf==-1){
-      rPath+="${index}";
+      rPath+="$index";
     }else{
-      rPath+="${index}'";
+      rPath+="$index'";
     }
     return rPath;
   }else{
@@ -1441,7 +1441,7 @@ Decimal toEther(String wei,int decimal) {
   int weiLength=wei.length;
   if(weiLength>decimal){
     String wei1=wei.substring(0,weiLength-decimal);
-    String wei2="0."+wei.substring(weiLength-decimal);
+    String wei2="0.${wei.substring(weiLength-decimal)}";
     return Decimal.parse(wei1)+Decimal.parse(wei2);
   }else{
     Decimal dd=(Decimal.parse(wei) / Decimal.parse(decimalMap[decimal.toString()]!)).toDecimal();

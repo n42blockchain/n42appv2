@@ -11,7 +11,7 @@ import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 import 'package:n42appv2/src/wallet/api/transfer_api.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/models/transation_record_model.dart';
-import 'package:n42appv2/src/wallet/pages/address_book/address_book_List.dart';
+import 'package:n42appv2/src/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42appv2/src/wallet/provider/transaction_record_iterms_provider.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
@@ -22,7 +22,7 @@ import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/container_widget.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
-import 'package:n42appv2/src/widgets/textField_widget.dart';
+import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,8 +32,8 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:decimal/decimal.dart' as dec;
 
 class WalletChainSendXrp extends StatefulWidget {
-  CoinModel coinModel;
-  WalletChainSendXrp(this.coinModel,{super.key});
+  final CoinModel coinModel;
+  const WalletChainSendXrp(this.coinModel,{super.key});
 
   @override
   State<WalletChainSendXrp> createState() => _WalletChainSendXrpState();
@@ -43,9 +43,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
   CoinModel? chainModel;
   Regular? _regular;
   Regular get regular{
-    if(_regular==null){
-      _regular=Regular();
-    }
+    _regular ??= Regular();
     return _regular!;
   }
   final oCcy =  NumberFormat("#,##0.00########", "en_US");
@@ -281,6 +279,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
     }
 
     await amount_check();
+    if (!mounted) return;
     if(widget.coinModel.balance==BigInt.zero){
       setState(() {
         load=Load.finish;
@@ -309,7 +308,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
     TransationRecordModel trModel=TransationRecordModel();
     trModel.address=widget.coinModel.address.toString();
     trModel.from1=widget.coinModel.address.toString();
-    trModel.to1=toAddr??"";//toTextEditingController.text;
+    trModel.to1=toAddr;//toTextEditingController.text;
     trModel.addrType=widget.coinModel.addrType;
     trModel.coin=widget.coinModel.coin;
     trModel.coinMiniName=widget.coinModel.coin['coinType'];
@@ -324,6 +323,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
     //trModel.coinId=widget.coinModel.isTest?widget.coinModel.coin['chainId_test']:widget.coinModel.coin['chainId'];
 
     bool check=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletBaseSend(trModel,null,widget.coinModel.coin['unit'])));
+    if (!mounted) return;
     if(check){
       signTx(trModel);
     }else{
@@ -345,6 +345,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
       }else{
         trModel.txHash=mm.data;
         trModel.trId=await AppDatabase().insertTransationRecord(trModel);
+        if (!mounted) return;
         Provider.of<TransactionRecordItemProvider>(context,listen: false).addUndoneTr(trModel,1);
         ToastUtils.show(S.current.g_key_nft_41);
         Navigator.pop(context);
@@ -354,7 +355,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
       ToastUtils.show(e.toString());
     }finally{
       load=Load.finish;
-      setState(() {});
+      if (mounted) setState(() {});
     }
   }
   signTx_check(){
@@ -374,6 +375,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
   }
   void scanQR() async{
     String? scanValue =await Navigator.push(context, MaterialPageRoute(builder: (context)=>ScanPage()));
+    if (!mounted) return;
     if(scanValue !=null){
       toTextEditingController.text=scanValue;
       toAddress_check(scanValue);
@@ -631,45 +633,42 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
       if(tBalance>lockValue.toDouble()){
         uBalance=dec.Decimal.parse(tBalance.toString())-lockValue;
       }
-      return Container(
-        //height: scr.setWidth(80.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              '${S.of(context).g_key_29}:${dec.Decimal.parse(tBalance.toString())} ${unit}',
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                fontSize: ScreenUtil().setSp(28.0),
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            '${S.of(context).g_key_29}:${dec.Decimal.parse(tBalance.toString())} $unit',
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+              fontSize: ScreenUtil().setSp(28.0),
             ),
-            Text(
-              '${S.of(context).g_key_xml_0}:${lockValue} ${unit}',
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
-                fontSize: ScreenUtil().setSp(28.0),
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          Text(
+            '${S.of(context).g_key_xml_0}:$lockValue $unit',
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+              fontSize: ScreenUtil().setSp(28.0),
             ),
-            Text(
-              '${S.of(context).g_key_43}:${dec.Decimal.parse(uBalance.toString())} ${unit}',
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.rightTextColor.name),
-                fontSize: ScreenUtil().setSp(28.0),
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            )
-          ],
-        ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          Text(
+            '${S.of(context).g_key_43}:${dec.Decimal.parse(uBalance.toString())} $unit',
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.rightTextColor.name),
+              fontSize: ScreenUtil().setSp(28.0),
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          )
+        ],
       );
     }
     else{
       return Text(
-        '${widget.coinModel.balance_string_all()} ${unit}',
+        '${widget.coinModel.balance_string_all()} $unit',
         style: TextStyle(
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
           fontSize: ScreenUtil().setSp(28.0),
@@ -718,8 +717,8 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
     if(widget.coinModel.coin['isContract']){
       decimals=chainModel?.coin['decimals']??0;
     }
-    totalGasPriceStr='${toEther(totalGasPrice.toString(),decimals)} ${title}';
-    gasPriceStr='${toEther(gasPrice.toString(),decimals) } ${title}';
+    totalGasPriceStr='${toEther(totalGasPrice.toString(),decimals)} $title';
+    gasPriceStr='${toEther(gasPrice.toString(),decimals) } $title';
 
     return ContainerStyle1(
       context,
@@ -820,7 +819,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           account_xrp['load']==Load.loading?
-                          Container(
+                          SizedBox(
                             height: ScreenUtil().setWidth(30.0),
                             width: ScreenUtil().setWidth(30.0),
                             child: CircularProgressIndicator(color:AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),),
@@ -935,12 +934,13 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
         onTap: ()async{
           final value =await Navigator.push(context, MaterialPageRoute(
               builder: (context)=> AddressBookList(coinName: widget.coinModel.coin['coinType'],)));
+          if (!mounted) return;
           if(value !=null){
             toTextEditingController.text=value;
           }
           Navigator.pop(context);
         },
-        child: Container(
+        child: SizedBox(
           height: ScreenUtil().setWidth(88),
           width: double.infinity,
           child: Row(
@@ -977,7 +977,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
       ),
       InkWell(
         onTap: scanQR,
-        child: Container(
+        child: SizedBox(
           height: ScreenUtil().setWidth(88),
           width: double.infinity,
           child: Row(
@@ -1015,6 +1015,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
       InkWell(
         onTap: ()async{
           ClipboardData? cd = await Clipboard.getData(Clipboard.kTextPlain);
+          if (!mounted) return;
           if(cd !=null){
             if(cd.text !=null && cd.text != "null"){
               toTextEditingController.text=cd.text??"";
@@ -1025,7 +1026,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
           }
           Navigator.pop(context);
         },
-        child: Container(
+        child: SizedBox(
           height: ScreenUtil().setWidth(88),
           width: double.infinity,
           child: Row(

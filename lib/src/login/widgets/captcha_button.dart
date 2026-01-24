@@ -10,7 +10,7 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// 点击事件，返回true继续后续操作，返回false不再倒计时
-typedef String? OnTap();
+typedef OnTap = String? Function();
 class CaptchaButton extends StatefulWidget {
   final OnTap onTap;
   final HandType? codeType;
@@ -28,9 +28,7 @@ class _CaptchaButtonState extends State<CaptchaButton> with WidgetsBindingObserv
   DateTime? last;
   UserInfoApi? _loginApi;
   UserInfoApi get loginApi{
-    if(_loginApi==null){
-      _loginApi=UserInfoApi();
-    }
+    _loginApi ??= UserInfoApi();
     return _loginApi!;
   }
   Load load=Load.finish;
@@ -167,7 +165,7 @@ class _CaptchaButtonState extends State<CaptchaButton> with WidgetsBindingObserv
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
         ),
         alignment: Alignment.center,
-        child: Container(
+        child: SizedBox(
           width: ScreenUtil().setWidth(40.0),
           height: ScreenUtil().setWidth(40.0),
           child: CircularProgressIndicator(),

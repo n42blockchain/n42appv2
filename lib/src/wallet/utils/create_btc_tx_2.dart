@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';
 import 'package:web3dart/crypto.dart';
 class CreateBtcTX2{
@@ -43,13 +44,13 @@ class CreateBtcTX2{
     }
 
     tx = tx.copyWith(witnesses: signaturs);
-    print(tx.serialize());
+    if (kDebugMode) debugPrint(tx.serialize());
     return tx.serialize();
     /*//print(signedTx2);
     //expect(tx.serialize(), signedTx2);
     final decode = BtcTransaction.fromRaw(tx.serialize());
-    print(decode.serialize());
-    print(tx.serialize());*/
+    if (kDebugMode) debugPrint(decode.serialize());
+    if (kDebugMode) debugPrint(tx.serialize());*/
   }
   create_segwit(ECPrivate fromPriv2,List<TxInput>txInputs,List<BigInt>txInputAmount,List<Script>txInputScript,List<TxOutput> txOutputs,){
     //BitcoinOutput bitcoinOutput=BitcoinOutput(address: P2wshAddress.fromScript(script: txOutputs[0].scriptPubKey), value: txOutputs[0].amount);
@@ -66,14 +67,14 @@ class CreateBtcTX2{
     /*//print(signedTx2);
     //expect(tx.serialize(), signedTx2);
     final decode = BtcTransaction.fromRaw(tx.serialize());
-    print(decode.serialize());
-    print(tx.serialize());*/
+    if (kDebugMode) debugPrint(decode.serialize());
+    if (kDebugMode) debugPrint(tx.serialize());*/
   }
   create_message(ECPrivate fromPriv2,String message,ECPublic pub){
     String sign=fromPriv2.signMessage(message.codeUnits);
-    print(sign);
+    if (kDebugMode) debugPrint(sign);
     bool v=pub.verify(message.codeUnits, hexToBytes(sign));
-    print(v);
+    if (kDebugMode) debugPrint(v.toString());
   }
   create_segwitV2(ECPrivate fromPriv2,P2wshAddress out1){
     const network = BitcoinCashNetwork.mainnet;

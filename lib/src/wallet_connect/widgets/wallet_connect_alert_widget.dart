@@ -5,22 +5,22 @@ import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:reown_walletkit/reown_walletkit.dart' as walletConnect;
+import 'package:reown_walletkit/reown_walletkit.dart' as wallet_connect;
 import 'package:n42appv2/generated/l10n.dart';
 class WalletConnectAlertWidget extends StatelessWidget {
-  final walletConnect.PairingMetadata metadata;
+  final wallet_connect.PairingMetadata metadata;
   final Map<String,dynamic> actionDataMap;
-  const WalletConnectAlertWidget(this.metadata,this.actionDataMap,{Key? key}) : super(key: key);
+  const WalletConnectAlertWidget(this.metadata,this.actionDataMap,{super.key});
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Container(
+      child: SizedBox(
         height: ScreenUtil().setWidth(1000),
         child: Column(
           children: [
             //metadata
-            Container(
+            SizedBox(
               height: ScreenUtil().setWidth(100),
               width: double.infinity,
               child: Row(
@@ -28,12 +28,12 @@ class WalletConnectAlertWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   ImageNetWork(
-                    imageUrl: metadata!.icons.length!=0?metadata!.icons[0]:"",
+                    imageUrl: metadata.icons.isNotEmpty?metadata.icons[0]:"",
                     height: ScreenUtil().setWidth(80),
                     width: ScreenUtil().setWidth(80),
                     placeholder: "assets/img/list_default.png",
                   ),
-                  //ImageWidget(metadata!.icons.length!=0?metadata!.icons[0]:"",height: ScreenUtil().setWidth(80),width: ScreenUtil().setWidth(80),),
+                  //ImageWidget(metadata!.icons.isNotEmpty?metadata!.icons[0]:"",height: ScreenUtil().setWidth(80),width: ScreenUtil().setWidth(80),),
                   SizedBox(width: ScreenUtil().setWidth(10),),
                   Text(
                     metadata.name,
@@ -215,7 +215,7 @@ class WalletConnectAlertWidget extends StatelessWidget {
     );
   }
   buttonWidget(BuildContext context,String title,dynamic onTap){
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: ScreenUtil().setWidth(88.0),
       child: ButtonStyle2(context, (){

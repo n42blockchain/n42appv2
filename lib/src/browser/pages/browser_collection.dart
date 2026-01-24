@@ -8,10 +8,10 @@ import 'package:n42appv2/src/browser/api/browser_api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BrowserCollection extends StatefulWidget {
-  String title;
-  String url;
+  final String title;
+  final String url;
 
-  BrowserCollection(this.title, this.url);
+  const BrowserCollection(this.title, this.url, {super.key});
 
   @override
   _BrowserCollectionState createState() => _BrowserCollectionState();
@@ -146,7 +146,7 @@ class _BrowserCollectionState extends State<BrowserCollection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
+          SizedBox(
             height: ScreenUtil().setWidth(40.0),
             child: Text(
               S.of(context).g_browser_key6,
@@ -219,7 +219,7 @@ class _BrowserCollectionState extends State<BrowserCollection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
+          SizedBox(
             height: ScreenUtil().setWidth(40.0),
             child: Text(
               S.of(context).g_browser_key8,
@@ -292,7 +292,7 @@ class _BrowserCollectionState extends State<BrowserCollection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
+          SizedBox(
             height: ScreenUtil().setWidth(40.0),
             child: Text(
               S.of(context).g_browser_key9,

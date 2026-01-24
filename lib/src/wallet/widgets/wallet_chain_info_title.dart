@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 class WalletChainInfoTitle extends StatelessWidget {
 
-  Widget? title; //主标题
-  Widget? subtitle; //副标题
-  Widget? rightWidget; //右侧按钮
-  String? rightImgUrl;
-  Widget? rightTaoChangeNetworkWidget; //切换网络widget
+  final Widget? title; //主标题
+  final Widget? subtitle; //副标题
+  final Widget? rightWidget; //右侧按钮
+  final String? rightImgUrl;
+  final Widget? rightTaoChangeNetworkWidget; //切换网络widget
 
-  GestureTapCallback? rightTao; //去行情页点击事件
-  WalletChainInfoTitle({
+  final GestureTapCallback? rightTao; //去行情页点击事件
+  const WalletChainInfoTitle({
     @required this.title,
     @required this.subtitle,
     @required this.rightWidget,

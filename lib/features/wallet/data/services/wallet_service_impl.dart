@@ -6,7 +6,6 @@
 // Author: Jiang Yiwei
 
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:injectable/injectable.dart';
 import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
@@ -15,7 +14,6 @@ import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
-import 'package:web3dart/crypto.dart';
 
 /// Implementation of IWalletService using Riverpod
 ///
@@ -39,7 +37,7 @@ class WalletServiceImpl implements IWalletService {
     
     _container.listen<int>(
       selectedWalletIndexProvider,
-      (_, __) {
+      (_, _) {
         final wallet = getCurrentWallet();
         _walletStreamController.add(wallet);
       },

@@ -91,11 +91,11 @@ class _MessageListState extends ConsumerState<MessageList> {
           switch (msg_type) {
             case "tokens_received":
               String content =
-                  "Transaction hash ${txContent['hash']}, ${txContent['from']} to you ${txContent['num']}${coin}";
+                  "Transaction hash ${txContent['hash']}, ${txContent['from']} to you ${txContent['num']}$coin";
               return transferItemWidget(title, content, createTime, "transfer",
                     () {
                   String? isTestStr=txContent['network'];
-                  bool? isTest=null;
+                  bool? isTest;
                   if(isTestStr !=null){
                     isTest=isTestStr=="test"?true:false;
                   }
@@ -110,11 +110,11 @@ class _MessageListState extends ConsumerState<MessageList> {
                 },map["showDate"],showData2,);
             case "tokens_sent":
               String content =
-                  "Transaction hash ${txContent['hash']}, you sent ${txContent['num']}${coin} to ${txContent['to']} ";
+                  "Transaction hash ${txContent['hash']}, you sent ${txContent['num']}$coin to ${txContent['to']} ";
               return transferItemWidget(title, content, createTime, "transfer",
                     () {
                   String? isTestStr=txContent['network'];
-                  bool? isTest=null;
+                  bool? isTest;
                   if(isTestStr !=null){
                     isTest=isTestStr=="test"?true:false;
                   }
@@ -133,7 +133,7 @@ class _MessageListState extends ConsumerState<MessageList> {
               return transferItemWidget(title, content, createTime, "transfer",
                     () {
                   String? isTestStr=txContent['network'];
-                  bool? isTest=null;
+                  bool? isTest;
                   if(isTestStr !=null){
                     isTest=isTestStr=="test"?true:false;
                   }
@@ -387,7 +387,7 @@ class _MessageListState extends ConsumerState<MessageList> {
               double percentage = double.parse((txContent['percentage'] ?? 0).toString());
               String chain = txContent['chain'] ?? "";
               String content =
-                  "Over ${percentage}% change in the price of ${chain.toUpperCase()} within 24 hours. ";
+                  "Over $percentage% change in the price of ${chain.toUpperCase()} within 24 hours. ";
               return transferItemWidget(
                 title,
                 content,
@@ -463,8 +463,6 @@ class _MessageListState extends ConsumerState<MessageList> {
                       MaterialPageRoute(
                         builder: (_) => SettingShare(),));
                 },map["showDate"],showData2,);
-
-              break;
             case "NFTHome #1_normal":
             case "NFTHome #2_normal":
               return SizedBox();
@@ -525,16 +523,6 @@ class _MessageListState extends ConsumerState<MessageList> {
                     () {
                       ref.read(mainTabSelectIndexProvider.notifier).state = 0;
                   Navigator.pop(context);
-                },map["showDate"],showData2,);
-            case "AboutSettings_normal":
-            //跳转关于我们页面
-              return transferItemWidget(title, "", createTime, "info",
-                    () {
-                  if(AppGlobals.userInfo !=null){
-                    Navigator.push(context,
-                        MaterialPageRoute(
-                          builder: (_) => AboutApp(),));
-                  }
                 },map["showDate"],showData2,);
             default:
               return Container();

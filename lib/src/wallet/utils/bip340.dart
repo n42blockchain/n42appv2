@@ -1,17 +1,13 @@
 import 'dart:typed_data';
 import 'package:eth_sig_util/util/bigint.dart';
-import 'package:pointycastle/ecc/curves/secp256k1.dart';
-import 'package:pointycastle/api.dart';
-import 'package:pointycastle/digests/sha256.dart';
-import 'package:pointycastle/random/fortuna_random.dart';
 import 'dart:math';
 import 'package:pointycastle/export.dart';
 import 'package:convert/convert.dart';
 
 class Bip340{
   var curve = ECCurve_secp256k1();
-  var G ;
-  var n ;
+  ECPoint? G ;
+  BigInt? n ;
 
   /// 生成随机私钥
   BigInt generatePrivateKey() {
@@ -23,7 +19,7 @@ class Bip340{
 
   /// 计算公钥
   ECPoint getPublicKey(BigInt privateKey) {
-    return G * privateKey;
+    return (G * privateKey)!;
   }
 
   /// 计算 SHA256 哈希

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/https/request_url.dart';
 import 'package:n42appv2/src/models/message_model.dart';
@@ -20,9 +18,7 @@ class TransactionApi {
   }
   AppDatabase? _db;
   AppDatabase get db{
-    if(_db==null){
-      _db=AppDatabase();
-    }
+    _db ??= AppDatabase();
     return _db!;
   }
   /// 非合约 交易列表
@@ -36,7 +32,6 @@ class TransactionApi {
         case "GLMR":
         case "MTR":
         case "LTC":
-        case "BTC":
         case "DASH":
         case "DOGE":
           //final data =
@@ -61,10 +56,7 @@ class TransactionApi {
         case "TT":
         case "GO":
         case "WAN":
-          case "MTR":
         case "KLAY":
-        case "GLMR":
-        case "MOVR":
         case "EVMOS":
         case "BOBA":
         case "KCS":
@@ -82,7 +74,8 @@ class TransactionApi {
         case "TRX":
           return await trxTransactionList(address, page: page, offset: pageSize);
       }
-    } catch (err) {
+    } catch (_) {
+      // 错误安全忽略
     } finally {}
     return MessageModel();
   }
@@ -136,7 +129,8 @@ class TransactionApi {
         default:
           break;
       }
-    } catch (err) {
+    } catch (_) {
+      // 错误安全忽略
     } finally {}
     return MessageModel();
   }
@@ -174,8 +168,8 @@ class TransactionApi {
         List<BtcTranDetail> list = [];
         for (var element in txrefs) {
           List<BtcTransactionRecodeModel> rtrm=await db.selectBtcTransationRecord_txHash(element.tx_hash);
-          if(rtrm.length!=0){
-            if(rtrm.first.outputModels?.length !=0){
+          if(rtrm.isNotEmpty){
+            if(rtrm.first.outputModels?.isNotEmpty ?? false){
               continue;
             }
           }
@@ -220,26 +214,21 @@ class TransactionApi {
     MessageModel mm=MessageModel();
     try {
       final hostUrl = getHostByCoinMiniName('SOL');
-      final isTestApi = false;
-      if (isTestApi) {
-        mm.error=true;
+      //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE3MjI4NDg0NTUxODAsImVtYWlsIjoiamlhbmd5aXdlaUBzdGFybGluay13b3JsZC5jbiIsImFjdGlvbiI6InRva2VuLWFwaSIsImFwaVZlcnNpb24iOiJ2MSIsImlhdCI6MTcyMjg0ODQ1NX0.nN1kusKNvwXb_SUnpFrhsHoYfUuArbiLqC4HHk5UnNI
+      String requestUrl =
+          '${hostUrl}account/solTransfers?account=$address&limit=$offset&offset=$page';
+      Map<String,String> h=header;
+      h['token']="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE3MjI4NDg0NTUxODAsImVtYWlsIjoiamlhbmd5aXdlaUBzdGFybGluay13b3JsZC5jbiIsImFjdGlvbiI6InRva2VuLWFwaSIsImFwaVZlcnNpb24iOiJ2MSIsImlhdCI6MTcyMjg0ODQ1NX0.nN1kusKNvwXb_SUnpFrhsHoYfUuArbiLqC4HHk5UnNI";
+      var data = await BaseApi.RequestEmpty_h.get(requestUrl, params: {},header: h);
+      if (data != null) {
+        final res = data['data'];
+        List<SOLTransactionItem> list =
+        (res as List).map((e) => SOLTransactionItem.fromJson(e)).toList();
+        mm.data=list;
       } else {
-        //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE3MjI4NDg0NTUxODAsImVtYWlsIjoiamlhbmd5aXdlaUBzdGFybGluay13b3JsZC5jbiIsImFjdGlvbiI6InRva2VuLWFwaSIsImFwaVZlcnNpb24iOiJ2MSIsImlhdCI6MTcyMjg0ODQ1NX0.nN1kusKNvwXb_SUnpFrhsHoYfUuArbiLqC4HHk5UnNI
-        String requestUrl =
-            '${hostUrl}account/solTransfers?account=${address}&limit=${offset}&offset=${page}';
-        Map<String,String> h=header;
-        h['token']="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE3MjI4NDg0NTUxODAsImVtYWlsIjoiamlhbmd5aXdlaUBzdGFybGluay13b3JsZC5jbiIsImFjdGlvbiI6InRva2VuLWFwaSIsImFwaVZlcnNpb24iOiJ2MSIsImlhdCI6MTcyMjg0ODQ1NX0.nN1kusKNvwXb_SUnpFrhsHoYfUuArbiLqC4HHk5UnNI";
-        var data = await BaseApi.RequestEmpty_h.get(requestUrl, params: {},header: h);
-        if (data != null) {
-          final res = data['data'];
-          List<SOLTransactionItem> list =
-          (res as List).map((e) => SOLTransactionItem.fromJson(e)).toList();
-          mm.data=list;
-        } else {
-          mm.error=true;
-          mm.data=data["message"];
-          //final err = data["message"];
-        }
+        mm.error=true;
+        mm.data=data["message"];
+        //final err = data["message"];
       }
     } catch (e) {
       mm.error=true;
@@ -392,7 +381,7 @@ class TransactionApi {
         endblockStr='&endblock=$endBlock';
       }
       String requestUrl =
-          '${hostUrl}module=account&action=txlist&address=$address&startblock=$fromBlock&page=$page&offset=$offset&sort=desc'+endblockStr;
+          '${hostUrl}module=account&action=txlist&address=$address&startblock=$fromBlock&page=$page&offset=$offset&sort=desc$endblockStr';
       var data = await BaseApi.RequestEmpty_h.get(requestUrl, params: {},header: header);
 
       if (data != null && data["status"] == '1') {

@@ -79,6 +79,7 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
     widget.walletInfo.coinInfo![widget.model.coin['coinType']]['pathIndex']=pathIndex;
     widget.walletInfo.coinInfo![widget.model.coin['coinType']]['addrType']=addrType;
     await Provider.of<WalletActionProvider>(context,listen: false).saveWalletInfo(widget.walletInfo,widget.walletIndex);
+    if (!mounted) return;
     if(Provider.of<WalletActionProvider>(context,listen: false).walletIndex == widget.walletIndex){
       Provider.of<WalletActionProvider>(context,listen: false).reBuildCoin(widget.walletInfo,widget.model.coin['coinType']);
     }
@@ -89,9 +90,8 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
       load=Load.loading;
     });
     await Future.delayed(const Duration(milliseconds: 300));
-    if(password==null){
-      password=widget.walletInfo.password!;
-    }
+    if (!mounted) return;
+    password ??= widget.walletInfo.password!;
     final keystoreJson= await Trustdart().getKeyStore(
       widget.model.coin['coinType']!,
       getPathWithIndex(coinPath!, widget.walletInfo.coinInfo![widget.model.coin['coinType']]['pathIndex']??0),
@@ -100,19 +100,18 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
       mnemonic: mnemonic??"",
       pk:pk??"",
     );
+    if (!mounted) return;
     //test 反推一下
     //success：目前支持的有： eth ast matic ETC avax  ht  xDAI FTM celo clo poa
     //反推之后的address大小写有些不一致：0x7Ac869Ff8b6232f7cfC4370A2df4a81641Cba3d9 返推的 0x7ac869ff8b6232f7cfc4370a2df4a81641cba3d9
 
-    if (keystoreJson != null) {
-      //keystore json 说明页面explain
-      Navigator.push(context,
-        MaterialPageRoute(
-            builder: (_) => ExportKeystoreDesc(
-              keystoreJson: keystoreJson,
-            )),
-      );
-    }
+    //keystore json 说明页面explain
+    Navigator.push(context,
+      MaterialPageRoute(
+          builder: (_) => ExportKeystoreDesc(
+            keystoreJson: keystoreJson,
+          )),
+    );
   }
   @override
   Widget build(BuildContext context) {
@@ -225,7 +224,7 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
                   child: Row(
                     children: [
                       Text(
-                        '${widget.model.addrType}',
+                        widget.model.addrType,
                         style: TextStyle(
                           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
                           fontSize: ScreenUtil().setSp(30.0),
@@ -291,7 +290,7 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
             ],
           ),
           if(widget.walletInfo.privateKey ==null)
-          Container(
+          SizedBox(
             height: ScreenUtil().setWidth(101.0*(pathList.length>4?4:pathList.length)),
             child: ListView.separated(
               itemCount: pathList.length,
@@ -414,6 +413,9 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
+                          padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                          alignment: Alignment.center,
+                          width: double.infinity,
                           child: Text(
                             S.of(context).g_key_21,
                             style: TextStyle(
@@ -422,9 +424,6 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
                                 fontSize: ScreenUtil().setSp(30.0)),
                             textAlign: TextAlign.center,
                           ),
-                          padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                          alignment: Alignment.center,
-                          width: double.infinity,
                         ),
                         Container(
                           height: ScreenUtil().setWidth(80.0),
@@ -517,6 +516,7 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
                       ],
                     ),
                   ));
+                  if (!mounted) return;
                   if (flag != null && flag) {
                     final password = controller.text.trim();
                     final password2= controller2.text.trim();
@@ -546,6 +546,7 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
                   final flag = await TipsDialog4(
                       context, null,
                       controller: controller);
+                  if (!mounted) return;
                   if (flag != null && flag) {
                     final password = controller.text.trim();
                     debugPrint("password $password");
@@ -570,10 +571,9 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   if(load==Load.loading)
-                  Container(
+                  SizedBox(
                     height: ScreenUtil().setWidth(40),
                     width: ScreenUtil().setWidth(40),
-                    margin: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
                     child: CircularProgressIndicator(),
                   ),
                   Text(
@@ -600,6 +600,7 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
             InkWell(
               onTap: ()async{
                 String pk=await Trustdart().getPrivateKey(mnemonic??"", widget.model.coin['coinType'], coinPath??"");
+                if (!mounted) return;
                 String pkHex=bytesToHex(base64Decode(pk));
                 Clipboard.setData(ClipboardData(text: pkHex));
                 ToastUtils.show(S.of(context).copy);
@@ -643,6 +644,7 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
                 addrType=keyList[i];
                 widget.model.address=null;
                 await widget.model.buildWallet();
+                if (!mounted) return;
                 coinPath=widget.model.coin['path'][widget.model.addrType];
                 setState(() {});
               }
@@ -652,7 +654,7 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
               padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
               alignment: Alignment.center,
               child: Text(
-                '${keyList[i]}',
+                keyList[i],
                 style: TextStyle(
                   color: textColor,
                   fontSize: ScreenUtil().setSp(32.0),

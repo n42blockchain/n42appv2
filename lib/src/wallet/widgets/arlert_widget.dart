@@ -12,7 +12,7 @@ Future<void> alertWidget(context) async {
       return AlertDialog(
         content: StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            return Container(
+            return SizedBox(
               height: ScreenUtil().setWidth(460),
               width: double.infinity,
               child: Column(
@@ -25,15 +25,13 @@ Future<void> alertWidget(context) async {
                         fontSize: ScreenUtil().setSp(40)
                     ),
                   ),
-                  Container(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(60), vertical: ScreenUtil().setWidth(40)),
-                      child: Image.asset(
-                        "assets/home/swap/medal.png",
-                        fit: BoxFit.cover,
-                        height: ScreenUtil().setWidth(120),
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                      ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(60), vertical: ScreenUtil().setWidth(40)),
+                    child: Image.asset(
+                      "assets/home/swap/medal.png",
+                      fit: BoxFit.cover,
+                      height: ScreenUtil().setWidth(120),
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
                     ),
                   ),
                   Text(

@@ -3,7 +3,6 @@
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/core/di/service_locator_setup.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
-import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
@@ -18,7 +17,7 @@ import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:provider/provider.dart';
-import 'package:reown_walletkit/reown_walletkit.dart' as walletConnect;
+import 'package:reown_walletkit/reown_walletkit.dart' as wallet_connect;
 import 'package:web3dart/crypto.dart' as crypto;
 import 'package:web3dart/web3dart.dart' as web3;
 
@@ -32,13 +31,11 @@ class WalletConnectProvider with ChangeNotifier{
   }*/
   Trustdart? _trustdart;
   Trustdart get trustdart{
-    if(_trustdart==null){
-      _trustdart=Trustdart();
-    }
+    _trustdart ??= Trustdart();
     return _trustdart!;
   }
   bool pageOpen=false;
-  walletConnect.ReownWalletKit? signClient;
+  wallet_connect.ReownWalletKit? signClient;
   //Web3Wallet? wcClient;
   web3.Web3Client? web3client;
   String? dAppTopic;
@@ -56,16 +53,16 @@ class WalletConnectProvider with ChangeNotifier{
     'chainChanged',
     'accountsChanged'
   ];
-  //walletConnect.ProposalRequiredNamespaces? namespace_optional;
-  Map<String, walletConnect.Namespace>? namespace;
+  //wallet_connect.ProposalRequiredNamespaces? namespace_optional;
+  Map<String, wallet_connect.Namespace>? namespace;
   WalletConnectState walletConnectState=WalletConnectState.loading;
   String errorMessage="";
-  walletConnect.PairingMetadata ? metadata;
+  wallet_connect.PairingMetadata ? metadata;
   Load load=Load.finish;
   dynamic actionData;
   Map<String,dynamic>? actionDataMap;
   //dataType: transaction,message
-  setActionDataMap(walletConnect.SessionRequestEvent eventData
+  setActionDataMap(wallet_connect.SessionRequestEvent eventData
       //SessionRequestEvent data
       )async{
     //final session = signClient!.session.get(eventData.topic!);
@@ -204,9 +201,9 @@ class WalletConnectProvider with ChangeNotifier{
   }
   connect_init()async{
     try{
-      signClient=await walletConnect.ReownWalletKit.createInstance(
+      signClient=await wallet_connect.ReownWalletKit.createInstance(
         projectId: "18a60a7cb862aad161fecd764ecc736a",
-        metadata: walletConnect.PairingMetadata(
+        metadata: wallet_connect.PairingMetadata(
           name: AppConfig.apiUrl['walletName'],
           description: AppConfig.apiUrl['walletName'],
           url: AppConfig.apiUrl['walletamazeBrowser']!,
@@ -314,7 +311,7 @@ class WalletConnectProvider with ChangeNotifier{
           }
         }
       }
-      if(coinModels.length >0 && chainId ==-1){
+      if(coinModels.isNotEmpty && chainId ==-1){
         setCoinModelsIndex(0);
       }
     }catch(e){
@@ -327,7 +324,7 @@ class WalletConnectProvider with ChangeNotifier{
       String cId="";
       if(element.coin['blockchainType']==BlockchainType.Ethereum.name){
         dynamic id=element.isTest?element.coin['chainId_test']:element.coin['chainId'];
-        cId="eip155:${id}";
+        cId="eip155:$id";
       }else if(element.coin['blockchainType']==BlockchainType.Tron.name){
         cId="tron:0x2b6653dc";
       }
@@ -352,13 +349,13 @@ class WalletConnectProvider with ChangeNotifier{
   setChainInfo(){
     try{
       if(signClient !=null){
-        signClient!.onSessionProposal.subscribe((walletConnect.SessionProposalEvent? args)async{
-          //final eventData= args as walletConnect.SessionProposalEvent<walletConnect.RequestSessionPropose>;
+        signClient!.onSessionProposal.subscribe((wallet_connect.SessionProposalEvent? args)async{
+          //final eventData= args as wallet_connect.SessionProposalEvent<wallet_connect.RequestSessionPropose>;
           if(args !=null){
             actionData=args;
-            metadata=args.params!.proposer.metadata;
-            Map<String,walletConnect.RequiredNamespace> optional=args.params.optionalNamespaces;
-            Map<String,walletConnect.RequiredNamespace> required=args.params.requiredNamespaces;
+            metadata=args.params.proposer.metadata;
+            Map<String,wallet_connect.RequiredNamespace> optional=args.params.optionalNamespaces;
+            Map<String,wallet_connect.RequiredNamespace> required=args.params.requiredNamespaces;
             List<String> chainType=optional.keys.toList();
             List<String> chainType_required=required.keys.toList();
             List<String> accounts=[];
@@ -387,7 +384,7 @@ class WalletConnectProvider with ChangeNotifier{
               if(chain=="eip155"){
                 if(required[chain]!.chains==null)continue;
                 for(int i=0;i<required[chain]!.chains!.length;i++){
-                  if(optional.length !=0){
+                  if(optional.isNotEmpty){
                     int fIndex=optional[chain]!.chains!.indexWhere((element) => required[chain]!.chains![i]==element);
                     if(fIndex !=-1){
                       continue;
@@ -418,7 +415,7 @@ class WalletConnectProvider with ChangeNotifier{
             for(int i=coinModels.length-1;i>=0;i--){
               if(coinModels[i].coin['blockchainType']==BlockchainType.Ethereum.name){
                 String chainId="eip155:${coinModels[i].isTest?coinModels[i].coin['chainId_test']:coinModels[i].coin['chainId']}";
-                accounts.add("${chainId}:${coinModels[i].address.toString()}");
+                accounts.add("$chainId:${coinModels[i].address.toString()}");
                 signClient!.registerRequestHandler(chainId: chainId, method: "eth_sendTransaction");
                 signClient!.registerRequestHandler(chainId: chainId, method: "eth_signTransaction");
                 signClient!.registerRequestHandler(chainId: chainId, method: "eth_sign");
@@ -439,7 +436,7 @@ class WalletConnectProvider with ChangeNotifier{
 
             }
             namespace={
-              "eip155":walletConnect.Namespace(
+              "eip155":wallet_connect.Namespace(
                 accounts: accounts,
                 methods: [
                   "eth_sendTransaction",
@@ -455,8 +452,8 @@ class WalletConnectProvider with ChangeNotifier{
                 ],
               ),
             };
-            if(accounts_tron.length !=0){
-              namespace!['tron']=walletConnect.Namespace(
+            if(accounts_tron.isNotEmpty){
+              namespace!['tron']=wallet_connect.Namespace(
                 accounts: accounts_tron,
                 methods: [
                   "tron_signTransaction",
@@ -476,16 +473,16 @@ class WalletConnectProvider with ChangeNotifier{
         });
         //signClient!.registerRequestHandler(chainId: "tron:0xcd8690dc", method: "tron_signTransaction");
         //signClient!.registerAccount(chainId: "tron:0xcd8690dc", accountAddress: accountAddress);
-        signClient!.onSessionRequest.subscribe((walletConnect.SessionRequestEvent? args) async{
-          setActionDataMap(args!);
+        signClient!.onSessionRequest.subscribe((wallet_connect.SessionRequestEvent? args) async{
+          setActionDataMap(args);
         });
         signClient!.onSessionDelete.subscribe(( args) async{
           //print(args!.topic);
-          if(dAppTopic !=null && dAppTopic==args!.topic){
+          if(dAppTopic !=null && dAppTopic==args.topic){
             viewState_deal(WalletConnectState.disconnect);
           }
         });
-        signClient!.onSessionProposalError.subscribe((walletConnect.SessionProposalErrorEvent? args) async{
+        signClient!.onSessionProposalError.subscribe((wallet_connect.SessionProposalErrorEvent? args) async{
           viewState_deal(WalletConnectState.error,params: args?.error.message??"Error");
         });
         signClient!.onSessionConnect.subscribe((args) async{
@@ -499,7 +496,7 @@ class WalletConnectProvider with ChangeNotifier{
         signClient!.onSessionExpire.subscribe((args) async{
           //print('');
         });
-        signClient!.onProposalExpire.subscribe((walletConnect.SessionProposalEvent? args) async{
+        signClient!.onProposalExpire.subscribe((wallet_connect.SessionProposalEvent? args) async{
           //print('');
         });
       }
@@ -512,7 +509,7 @@ class WalletConnectProvider with ChangeNotifier{
     try {
       if(walletConnectState==WalletConnectState.messageSign)return;
       viewState_deal(WalletConnectState.messageSign);
-      final eventData = actionData as walletConnect.SessionRequestEvent;
+      final eventData = actionData as wallet_connect.SessionRequestEvent;
       String signedDataHex;
       if(eventData.method == "personal_sign"){
         final requestParams =
@@ -570,7 +567,7 @@ class WalletConnectProvider with ChangeNotifier{
         dataToSign=crypto.strip0x(dataToSign);
         if(coinModels[coinModelsIndex].coin['coinType']==CoinType.N.name){
           signedDataHex=await trustdart.signMessage(CoinType.N.name, "", dataToSign, pk: base64Encode(privateKey.privateKey));
-          signedDataHex="0x"+signedDataHex;
+          signedDataHex="0x$signedDataHex";
         }else{
           final encodedMessage =  crypto.hexToBytes(dataToSign);
           final signedData =
@@ -578,7 +575,7 @@ class WalletConnectProvider with ChangeNotifier{
           signedDataHex = bytesToHex(signedData,include0x: true);
         }
       }
-      signClient!.respondSessionRequest(topic: eventData.topic!, response: walletConnect.JsonRpcResponse(id: eventData.id!,
+      signClient!.respondSessionRequest(topic: eventData.topic, response: wallet_connect.JsonRpcResponse(id: eventData.id,
         result: signedDataHex,));
       viewState_deal(WalletConnectState.connect);
     } catch (e) {
@@ -589,7 +586,7 @@ class WalletConnectProvider with ChangeNotifier{
     try {
       if(walletConnectState==WalletConnectState.transaction)return;
       viewState_deal(WalletConnectState.transaction);
-      final eventData = actionData as walletConnect.SessionRequestEvent;
+      final eventData = actionData as wallet_connect.SessionRequestEvent;
       bool initOk=await web3client_init_fromChainId(eventData.chainId);
       if(initOk==false)return;
       if (eventData.method == "tron_signTransaction") {
@@ -606,15 +603,15 @@ class WalletConnectProvider with ChangeNotifier{
         String path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
         String returnStr = await trustdart.signTransaction(CoinType.TRX.name, path, dataToSign, mnemonic: mnemonic, pk: pk);
         signClient!.respondSessionRequest(
-          topic: eventData.topic!,
-          response: walletConnect.JsonRpcResponse(
-            id: eventData.id!,
+          topic: eventData.topic,
+          response: wallet_connect.JsonRpcResponse(
+            id: eventData.id,
             result: returnStr,
           ),);
         viewState_deal(WalletConnectState.connect);
         return ;
       }
-      Map<String,dynamic> parameters=eventData.params!.first;
+      Map<String,dynamic> parameters=eventData.params.first;
       String from=parameters['from'];
       String? to=parameters['to'];
       String? value=parameters['value'];
@@ -669,9 +666,9 @@ class WalletConnectProvider with ChangeNotifier{
         );
       }
       signClient!.respondSessionRequest(
-        topic: eventData.topic!,
-        response: walletConnect.JsonRpcResponse(
-          id: eventData.id!,
+        topic: eventData.topic,
+        response: wallet_connect.JsonRpcResponse(
+          id: eventData.id,
           result: returnStr,
         ),);
       viewState_deal(WalletConnectState.connect);
@@ -699,12 +696,12 @@ class WalletConnectProvider with ChangeNotifier{
   //取消交易或签名等
   cancelTap(WalletConnectState state)async{
     viewState_deal(state);
-    final eventData = actionData as walletConnect.SessionRequestEvent;
+    final eventData = actionData as wallet_connect.SessionRequestEvent;
     signClient!
         .respondSessionRequest(
-        topic: eventData.topic!,
-        response: walletConnect.JsonRpcResponse(id: eventData.id!,
-            error: walletConnect.JsonRpcError(
+        topic: eventData.topic,
+        response: wallet_connect.JsonRpcResponse(id: eventData.id,
+            error: wallet_connect.JsonRpcError(
                 code: 4001,
                 message: "User rejected."
             ))).then((value){
@@ -722,7 +719,7 @@ class WalletConnectProvider with ChangeNotifier{
   disconnectOnTap()async{
     await signClient!.disconnectSession(
         topic: dAppTopic??"",
-      reason: walletConnect.Errors.getSdkError(walletConnect.Errors.USER_DISCONNECTED).toSignError(),
+      reason: wallet_connect.Errors.getSdkError(wallet_connect.Errors.USER_DISCONNECTED).toSignError(),
     );
   }
   viewState_deal(WalletConnectState state,{dynamic params})async{
@@ -738,7 +735,7 @@ class WalletConnectProvider with ChangeNotifier{
       case WalletConnectState.connectOK:
       //chainRegister();
       //SessionProposalEvent args=actionData as SessionProposalEvent;
-        walletConnect.SessionProposalEvent args=actionData as walletConnect.SessionProposalEvent;
+        wallet_connect.SessionProposalEvent args=actionData as wallet_connect.SessionProposalEvent;
         try{
           signClient!.approveSession(id:args.id,namespaces:namespace! ).then((value)
           async{
@@ -758,7 +755,7 @@ class WalletConnectProvider with ChangeNotifier{
       case WalletConnectState.connect:
         break;
       case WalletConnectState.disconnect:
-      //await signClient!.disconnectSession(topic: dAppTopic??"", reason: walletConnect.Errors.getSdkError(walletConnect.Errors.USER_DISCONNECTED));
+      //await signClient!.disconnectSession(topic: dAppTopic??"", reason: wallet_connect.Errors.getSdkError(wallet_connect.Errors.USER_DISCONNECTED));
         cleanData();
         break;
       case WalletConnectState.reconnect:
@@ -781,7 +778,7 @@ class WalletConnectProvider with ChangeNotifier{
       case WalletConnectState.error:
         errorMessage=params as String;
         break;
-    };
+    }
     walletConnectState=state;
     notifyListeners();
   }

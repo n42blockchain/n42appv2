@@ -1,7 +1,6 @@
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/utils/browser_address.dart';
 import 'package:n42appv2/src/wallet/utils/browser_txhash.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
@@ -150,16 +149,14 @@ class _PaymentHistoryState extends State<PaymentHistory> {
                           String openUrl=getBrowser_txHash(data['chainSymbol'], data['txHash']);
                           Navigator.push(context, MaterialPageRoute(builder: (context)=>BrowserPage(openUrl)));
                         },
-                        child: Container(
-                          child: Text(
-                            data['txHash'],
-                            style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                              fontSize: ScreenUtil().setSp(28),
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                        child: Text(
+                          data['txHash'],
+                          style: TextStyle(
+                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                            fontSize: ScreenUtil().setSp(28),
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ),

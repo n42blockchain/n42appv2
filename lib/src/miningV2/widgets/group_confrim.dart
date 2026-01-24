@@ -38,8 +38,7 @@ class GroupConfirm extends StatelessWidget {
   final GestureTapCallback? sureCall;
 
   const GroupConfirm(
-      {Key? key, required this.num, required this.lockDate, this.sureCall})
-      : super(key: key);
+      {super.key, required this.num, required this.lockDate, this.sureCall});
 
   @override
   Widget build(BuildContext context) {

@@ -33,7 +33,7 @@ class SolApi{
       MessageModel mm=await BaseRPC_sol("getTokenAccountsByOwner",[address,{"mint": contract},{"encoding": "jsonParsed"}],isTest: isTest);
       if(mm.error==false){
         List<Map<String,dynamic>> valueMap=mm.data['value'];
-        if(valueMap.length !=0){
+        if(valueMap.isNotEmpty){
           mm.data=BigInt.from(valueMap[0]['account']['data']['parsed']['info']['tokenAmount']['amount']);
         }
       }
@@ -67,7 +67,7 @@ class SolApi{
   sendTransaction(String signMessage,{isTest=false})async{
     return await BaseRPC_sol("sendTransaction",[signMessage,{"encoding":"base58"}],isTest: isTest);
   }
-  BaseRPC_sol(String method,var value,{bool? isTest=null})async{
+  BaseRPC_sol(String method,var value,{bool? isTest})async{
     try{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};

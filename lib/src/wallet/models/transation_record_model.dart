@@ -37,17 +37,17 @@ class TransationRecordModel{
 
   //获取double 类型的 price 转出金额
   double price_double(){
-    if(price==0){
+    if(price==BigInt.zero){
       return 0;
     }else{
       return toEther(price.toString(),coin['decimals']).toDouble();
     }
   }
   double gasPrice_double(){
-    if(gasPrice==0){
+    if(gasPrice==BigInt.zero){
       return 0;
     }else{
-      if(coin.length==0){
+      if(coin.isEmpty){
         return 0;
       }
       return toEther(gasPrice.toString(),coin['decimals']).toDouble();

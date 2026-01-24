@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/api/chat_db_api.dart';
-import 'package:n42appv2/src/chat/api/file_api.dart';
 import 'package:n42appv2/src/chat/models/chat_message_model.dart';
 import 'package:n42appv2/src/chat/models/friend_info.dart';
 import 'package:n42appv2/src/chat/utils/aes_utils.dart';
@@ -37,23 +36,17 @@ class _ItemGroupChatReplyInnerWidgetState extends State<ItemGroupChatReplyInnerW
     with AutomaticKeepAliveClientMixin {
   ChatApi? _chatApi;
   ChatApi get chatApi{
-    if(_chatApi==null){
-      _chatApi=ChatApi();
-    }
+    _chatApi ??= ChatApi();
     return _chatApi!;
   }
   ChatDBApi? _chatDBApi;
   ChatDBApi get chatDBApi{
-    if(_chatDBApi==null){
-      _chatDBApi=ChatDBApi();
-    }
+    _chatDBApi ??= ChatDBApi();
     return _chatDBApi!;
   }
   FileUtils? fileUtils;
   FileUtils get _fileUtils{
-    if(fileUtils==null){
-      fileUtils= FileUtils();
-    }
+    fileUtils ??= FileUtils();
     return fileUtils!;
   }
   late ChatMessageModel _item;
@@ -106,7 +99,8 @@ class _ItemGroupChatReplyInnerWidgetState extends State<ItemGroupChatReplyInnerW
       if (mounted) {
         setState(() {});
       }
-    } catch (err) {
+    } catch (_) {
+      // 错误安全忽略
     }
   }
 
@@ -136,7 +130,8 @@ class _ItemGroupChatReplyInnerWidgetState extends State<ItemGroupChatReplyInnerW
             await chatDBApi.updateMessage(_item);
 
             setState(() {});
-          } catch (err) {
+          } catch (_) {
+            // 错误安全忽略
           }
         }
       } else {
@@ -175,9 +170,6 @@ class _ItemGroupChatReplyInnerWidgetState extends State<ItemGroupChatReplyInnerW
 
           String savePath = await _fileUtils.getTempDirByName(fileName);
           debugPrint("savePath : $savePath");
-          String openFileName =
-          fileName.substring(0, fileName.lastIndexOf('.'));
-          String openFilepath = await _fileUtils.getTempDirByName(openFileName);
 
           //File openFile = File(openFilepath);
 

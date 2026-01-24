@@ -12,8 +12,9 @@ class FileAesCryptUtils {
     try {
       encFilepath = await crypt.encryptFile(path);
     } on AesCryptExceptionType {
-
-    } catch (e) {
+      // AES 加密类型异常安全忽略，返回 null 表示加密失败
+    } catch (_) {
+      // 加密过程中的其他错误安全忽略，返回 null 表示加密失败
     }
     return encFilepath;
   }
@@ -50,8 +51,8 @@ class FileAesCryptUtils {
     try {
       decFilepath = await crypt.decryptFile(path,'');
 
-    } catch (e) {
-
+    } catch (_) {
+      // 解密过程中的错误安全忽略，返回 null 表示解密失败
     }
     return decFilepath;
   }

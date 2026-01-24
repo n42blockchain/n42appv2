@@ -17,7 +17,7 @@ import 'package:n42appv2/generated/l10n.dart';
 class GroupEditPage extends StatefulWidget {
   final GroupInfo info;
 
-  const GroupEditPage({Key? key, required this.info}) : super(key: key);
+  const GroupEditPage({super.key, required this.info});
 
   @override
   State<GroupEditPage> createState() => _GroupEditPageState();
@@ -26,9 +26,7 @@ class GroupEditPage extends StatefulWidget {
 class _GroupEditPageState extends State<GroupEditPage> {
   ChatApi? _chatApi;
   ChatApi get chatApi{
-    if(_chatApi==null){
-      _chatApi=ChatApi();
-    }
+    _chatApi ??= ChatApi();
     return _chatApi!;
   }
   Load load=Load.finish;
@@ -53,7 +51,7 @@ class _GroupEditPageState extends State<GroupEditPage> {
         text: "",
       ),
       body: SafeArea(
-        child: Container(
+        child: SizedBox(
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
@@ -130,7 +128,7 @@ class _GroupEditPageState extends State<GroupEditPage> {
                     Expanded(
                         child: CommInput(
                           type: InputFieldType.account,
-                          hintText: widget.info.name ?? '',
+                          hintText: widget.info.name,
                           controller: _nameTextEditController,
                         ))
                   ],
@@ -178,7 +176,8 @@ class _GroupEditPageState extends State<GroupEditPage> {
                       //更新群聊天ui的 group name 展示
                       eventBus.fire(EventPublic(EventPublicType.updateGroupInfo));
 
-                      Navigator.of(context).pop(true);
+                      if (!mounted) return;
+                      Navigator.of(this.context).pop(true);
                     } else {
                       ToastUtils.show(data["msg"]);
                     }

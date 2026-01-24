@@ -80,7 +80,7 @@ class ChatDataUtil {
             //设置为 接收类型
             model.direction = 0;
             model.targetId = model.getTargetId();
-            final raw = await ChatDBApi().saveMessage(model);
+            await ChatDBApi().saveMessage(model);
             //发送消息给监听页面
             eventBus.fire(EventPublic(EventPublicType.chatMessage, param: model));
             //设置消息未读
@@ -89,7 +89,8 @@ class ChatDataUtil {
 
           break;
       }
-    }catch(err){
+    }catch(_){
+      // 消息处理失败时安全忽略，避免影响其他消息
     }
   }
 
@@ -113,8 +114,8 @@ class ChatDataUtil {
               final friendData = await chatApi.getUserInfo(element);
               FriendInfo fInfo = FriendInfo.fromJson(friendData["data"]);
               replacement += "${fInfo.name}、";
-            }catch(err){
-              //err
+            }catch(_){
+              // 获取用户信息失败时安全忽略，继续处理其他用户
             }
           }
         }

@@ -5,9 +5,7 @@ import 'package:sqflite/sqflite.dart';
 class AddressBookApi{
   AppDatabase? _appDatabase;
   AppDatabase get appDatabase{
-    if(_appDatabase==null){
-      _appDatabase=AppDatabase();
-    }
+    _appDatabase ??= AppDatabase();
     return _appDatabase!;
   }
   ///保存数据
@@ -20,7 +18,7 @@ class AddressBookApi{
   ///列表查询
   Future<List<AddressBookModel>> getAddressBookList(String coinName) async {
     final db = await appDatabase.database;
-    var response = await db.query("AddressBook",where: coinName==""?"1=1":"coinName = '${coinName}'");
+    var response = await db.query("AddressBook",where: coinName==""?"1=1":"coinName = '$coinName'");
     List<AddressBookModel> list = response.map((c) => AddressBookModel.fromJson(c)).toList();
     return list;
   }

@@ -1,9 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/https/request_url.dart';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/btc_api.dart';
 import 'package:n42appv2/src/wallet/api/redeem_token.dart';
@@ -25,8 +26,8 @@ import 'package:http/http.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';
 
 class Redeem extends StatefulWidget {
-  CoinModel coinModel;
-  Redeem(this.coinModel,{super.key});
+  final CoinModel coinModel;
+  const Redeem(this.coinModel,{super.key});
 
   @override
   State<Redeem> createState() => _RedeemState();
@@ -36,16 +37,12 @@ class _RedeemState extends State<Redeem> {
   late WebViewController _controller;
   TransferApi? _transferApi;
   TransferApi get transferApi{
-    if(_transferApi==null){
-      _transferApi=TransferApi();
-    }
+    _transferApi ??= TransferApi();
     return _transferApi!;
   }
   TokenViewApi? _tokenViewApi;
   TokenViewApi get tokenViewApi{
-    if(_tokenViewApi==null){
-      _tokenViewApi=TokenViewApi();
-    }
+    _tokenViewApi ??= TokenViewApi();
     return _tokenViewApi!;
   }
   @override
@@ -63,7 +60,7 @@ class _RedeemState extends State<Redeem> {
     }
     _controller =
         WebViewController.fromPlatformCreationParams(params);
-    _controller!
+    _controller
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor( const Color(0xFF121212))
       ..setNavigationDelegate(
@@ -90,13 +87,13 @@ class _RedeemState extends State<Redeem> {
           },
         ),
       )
-      ..loadRequest(Uri.parse('http://192.168.31.26:5174/redeem?walletAddress=${widget.coinModel.address}'))
+      ..loadRequest(Uri.parse('${AppConfig.getApiUrlOnline('btcStaking')}/redeem?walletAddress=${widget.coinModel.address}'))
       ..addJavaScriptChannel("N42APP", onMessageReceived: (JavaScriptMessage message) async{
         Map<String,dynamic>?rdata=jsonDecode(message.message);
         if(rdata !=null){
           if(rdata['type']=="redeem"){
             String signStr=await redeem(rdata['p2wsh_address'],rdata['lock_time']);
-            _controller.runJavaScript('request_withdraw_vbtc("${rdata['p2wsh_address']}","${signStr}");');
+            _controller.runJavaScript('request_withdraw_vbtc("${rdata['p2wsh_address']}","$signStr");');
           }else if(rdata['type']=="request_withdraw_vbtc"){
             _controller.runJavaScript('alert("来自Flutter的消息，我收到了:${rdata['result']}");');
           }
@@ -110,6 +107,8 @@ class _RedeemState extends State<Redeem> {
   }
   int gasFeeRate=4;
   int gasFees=0;
+  int input2Price=0;//实际输入金额
+  bool inputValueOK=false;
   List<Map<String,dynamic>> inputUTXO=[];
   redeem(String address,int lockTime)async{
     //await redeem_eth(address);
@@ -145,11 +144,11 @@ class _RedeemState extends State<Redeem> {
     }else{
       privateKey=bytesToHex(base64Decode(widget.coinModel.privateKey??""));
     }
-    EthPrivateKey credentials = EthPrivateKey.fromHex(privateKey!);
-    print(credentials.address.hex);
+    EthPrivateKey credentials = EthPrivateKey.fromHex(privateKey);
+    if (kDebugMode) debugPrint(credentials.address.hex);
     RedeemToken rt=RedeemToken.init(address: EthereumAddress.fromHex("0x6c30A50430cC615C4659DF2dBe3E42036583bE7E"), client: Web3Client(serviceUrl, Client()),chainId: 11155111);
     final rData=await rt.reedem(p2wshAddress,credentials: credentials);
-    print(rData);
+    if (kDebugMode) debugPrint(rData);
   }
   createP2WSH(int lockTime,{String? uPubKey,String? cPubKey})async{
     // 1️⃣ 用户 & Canister 公钥 (HEX 格式)
@@ -167,9 +166,7 @@ class _RedeemState extends State<Redeem> {
       //k/xE3jp/loh7QVm8m4YKtwGvouAGugPHIKZAswxa/YE=
       //1743037697
     }
-    if(cPubKey==null){
-      cPubKey='02a075b5988699e95802fe94590908de9370588cacc750d6f538d76fe6e9b8d6ad';
-    }
+    cPubKey ??= '02a075b5988699e95802fe94590908de9370588cacc750d6f538d76fe6e9b8d6ad';
     //cPubKey='03ed20061b9a0417a06ab80d063962c12ed80c9924b1d4da3628705b5b9ac9cecb';
     // 2️⃣ 质押时间（秒级时间戳）
     //int stakeTime = 1742981833; // 例如: 2023-11-14 12:00:00 UTC
@@ -191,7 +188,7 @@ class _RedeemState extends State<Redeem> {
     /*print(newScript.toHex());
     // 5️⃣ 生成 P2WSH 地址（主网示例）
     p2wshAddress =P2wshAddress.fromScript(script: newScript);
-    print(p2wshAddress!.toAddress(BitcoinNetwork.testnet));
+    if (kDebugMode) debugPrint(p2wshAddress!.toAddress(BitcoinNetwork.testnet));
     return p2wshAddress!.toAddress(BitcoinNetwork.testnet);*/
   }
   //获取 比特币的gasFee等级
@@ -213,8 +210,8 @@ class _RedeemState extends State<Redeem> {
       "change":0,
       "max":true
     };
-    print(json.encode(btcTxMap));
-    String signHash=await Trustdart().signTransaction_btc_p2wsh(CoinType.BTC.name, "m/84'/4'/0'/0/0", btcTxMap,pk: Provider.of<WalletActionProvider>(context,listen: false).walletInfo.privateKey??"");
+    if (kDebugMode) debugPrint(json.encode(btcTxMap));
+    await Trustdart().signTransaction_btc_p2wsh(CoinType.BTC.name, "m/84'/4'/0'/0/0", btcTxMap,pk: Provider.of<WalletActionProvider>(context,listen: false).walletInfo.privateKey??"");
   }
   //交易打包
   //unspents 未消费列表
@@ -229,8 +226,6 @@ class _RedeemState extends State<Redeem> {
         "change":0,
       };
       //List<Map<String,dynamic>> utxos=[];//输出账单
-      int input2Price=0;//实际输入金额
-      int output2Price=0;//找零金额
       btcTransactionRecodeModel.inputModels=[];
       for(Map<String,dynamic> unspent in inputUTXO){
         input2Price+=int.parse(unspent['value']);
@@ -319,8 +314,6 @@ class _RedeemState extends State<Redeem> {
   }
   calculateGasFee(List<dynamic> unspents)async{
     List<Map<String,dynamic>> utxos=[];//输出账单
-    int input2Price=0;//实际输入金额
-    bool inputValueOK=false;
     for(Map<String,dynamic> unspent in unspents){
       if(widget.coinModel.isTest){
         if(unspent['hex']==null){
@@ -359,17 +352,17 @@ class _RedeemState extends State<Redeem> {
     setState(() {});
   }
   initEthToken(String p2wshAddr)async{
-    Web3Client _client = Web3Client("https://eth-sepolia.public.blastapi.io", Client());
-    RedeemToken _token = RedeemToken.init(
-        address: EthereumAddress.fromHex("0x6c30A50430cC615C4659DF2dBe3E42036583bE7E"), client: _client!);
+    Web3Client client = Web3Client("https://eth-sepolia.public.blastapi.io", Client());
+    RedeemToken token = RedeemToken.init(
+        address: EthereumAddress.fromHex("0x6c30A50430cC615C4659DF2dBe3E42036583bE7E"), client: client);
     WalletInfo walletInfo=Provider.of<WalletActionProvider>(context,listen: false).walletInfo;
     String privateKey=walletInfo.privateKey??"";
     if(privateKey==""){
       privateKey=await Trustdart().getPrivateKey(walletInfo.mnemonic??"", CoinType.ETH.name, "m/44'/60'/0'/0/0",);
     }
     EthPrivateKey epk=EthPrivateKey(base64Decode(privateKey));
-    final rData=await _token.getDepositAmount(p2wshAddr, credentials: epk);
-    print(rData);
+    final rData=await token.getDepositAmount(p2wshAddr, credentials: epk);
+    if (kDebugMode) debugPrint(rData);
   }
   @override
   Widget build(BuildContext context) {

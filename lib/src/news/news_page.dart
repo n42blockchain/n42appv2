@@ -121,7 +121,7 @@ class _NewsPageState extends State<NewsPage> {
                     height: ScreenUtil().setWidth(12.0),
                   ),
                   Text(
-                    time ?? '',
+                    time,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: AppThemeUtils.getColorByKey(
@@ -146,7 +146,7 @@ class _NewsPageState extends State<NewsPage> {
                 ),
                 child: ImageNetWork(
                   key: ValueKey(imageUrl),
-                  imageUrl: imageUrl ?? '',
+                  imageUrl: imageUrl,
                   fit: BoxFit.cover,
                   placeholder: "assets/img/default_img.png",
                 ),

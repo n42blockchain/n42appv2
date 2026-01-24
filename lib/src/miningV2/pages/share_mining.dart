@@ -14,12 +14,11 @@ class ShareMining extends StatefulWidget {
   final String? groupId;
 
   const ShareMining(
-      {Key? key,
+      {super.key,
         this.fromType = 0,
         this.astValue,
         this.groupName,
-        this.groupId})
-      : super(key: key);
+        this.groupId});
 
   @override
   State<ShareMining> createState() => _ShareMiningState();
@@ -78,8 +77,8 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         body: Container(
           width: double.infinity,
@@ -118,8 +117,8 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                                     decoration: BoxDecoration(
                                       gradient: LinearGradient(
                                         colors: [
-                                          const Color(0xFFFFD700).withOpacity(0.2),
-                                          const Color(0xFFFFA500).withOpacity(0.1),
+                                          const Color(0xFFFFD700).withValues(alpha:0.2),
+                                          const Color(0xFFFFA500).withValues(alpha:0.1),
                                         ],
                                         begin: Alignment.topLeft,
                                         end: Alignment.bottomRight,
@@ -127,7 +126,7 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                                       shape: BoxShape.circle,
                                       boxShadow: [
                                         BoxShadow(
-                                          color: const Color(0xFFFFD700).withOpacity(0.3),
+                                          color: const Color(0xFFFFD700).withValues(alpha:0.3),
                                           blurRadius: 30,
                                           spreadRadius: 5,
                                         ),
@@ -172,8 +171,8 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                               ),
                               decoration: BoxDecoration(
                                 color: isDark
-                                    ? Colors.white.withOpacity(0.06)
-                                    : Colors.black.withOpacity(0.03),
+                                    ? Colors.white.withValues(alpha:0.06)
+                                    : Colors.black.withValues(alpha:0.03),
                                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
                               ),
                               child: Text(
@@ -204,10 +203,10 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                                   vertical: ScreenUtil().setWidth(20),
                                 ),
                                 decoration: BoxDecoration(
-                                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.1),
+                                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.1),
                                   borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
                                   border: Border.all(
-                                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.3),
+                                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.3),
                                     width: 1,
                                   ),
                                 ),
@@ -242,8 +241,8 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                 Container(
                   height: 1,
                   color: isDark
-                      ? Colors.white.withOpacity(0.08)
-                      : Colors.black.withOpacity(0.06),
+                      ? Colors.white.withValues(alpha:0.08)
+                      : Colors.black.withValues(alpha:0.06),
                 ),
                 // 底部按钮
                 Padding(

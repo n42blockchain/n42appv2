@@ -19,16 +19,16 @@ class FileApi {
   Future downLoadFile(String urlPath, String savePath,
       {bool showError = false, ProgressCallback? receiveProgress}) async {
     try {
-      var _dio = Dio(BaseOptions(
+      var dio = Dio(BaseOptions(
         connectTimeout: Duration(milliseconds: 10000),
         receiveTimeout: Duration(milliseconds: 5000),
       ));
       // 配置 HttpClientAdapter 来忽略 SSL 证书验证
-      _dio.httpClientAdapter = IOHttpClientAdapter()..createHttpClient=(){
+      dio.httpClientAdapter = IOHttpClientAdapter()..createHttpClient=(){
         HttpClient client=HttpClient()..badCertificateCallback = (X509Certificate cert, String host, int port) => true; // // 总是返回 true，表示信任所有证书
         return client;
       };
-      var response = await _dio.download(urlPath, savePath,
+      var response = await dio.download(urlPath, savePath,
           onReceiveProgress: receiveProgress);
       var data = response.data;
       if (data != null && data.statusCode == 200) {
@@ -37,8 +37,7 @@ class FileApi {
         throw '文件下载失败';
       }
     } catch (error) {
-      const errorInfo = '文件下载失败';
-      throw error;
+      rethrow;
     }
   }
 
@@ -54,7 +53,7 @@ class FileApi {
       //String fileName = f.filename!;
       FormData fd = FormData.fromMap({"path": f});
       var data = await BaseApi.RequestEmpty_h.post(
-        "${url}/ipfsapi/api/v0/add",
+        "$url/ipfsapi/api/v0/add",
         //"${AppConfig.apiUrl['ipfsHost']}/upload",
         params: {},
         data: fd,
@@ -95,11 +94,11 @@ class FileApi {
   //上传message 到ipfs
   uploadMessageToIpfs(Map<String, dynamic> map) async {
     try {
-      MultipartFile f = await MultipartFile.fromString(json.encode(map),
+      MultipartFile f = MultipartFile.fromString(json.encode(map),
           filename: "squad_message.json");
       FormData fd = FormData.fromMap({"file": f});
       var data = await BaseApi.RequestEmpty_h.post(
-        "${url}/ipfsapi/api/v0/add",
+        "$url/ipfsapi/api/v0/add",
         //"${getUrl('ipfs')}v0/add?stream-channels=false&progress=false",
         params: {}, data: fd,header: header,
       );
@@ -123,7 +122,7 @@ class FileApi {
       } else {
         return {"error": true, "data": data['error']['message']};
       }*/
-    } on DioException catch (err) {
+    } on DioException catch (_) {
       throw "Network exception,send failed";
     } catch (e) {
       return {"error": true, "data": e};
@@ -135,7 +134,7 @@ class FileApi {
     try {
       var data = await BaseApi.RequestEmpty_h.get(uri, params: {});
       return {"error": false, "data": data};
-    } on DioException catch (err) {
+    } on DioException catch (_) {
       throw "Network exception";
     } catch (e) {
       return {"error": true, "data": e};

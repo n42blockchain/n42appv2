@@ -1,12 +1,8 @@
 class RequestUrl{
   getUrl2(String coinKey,String uriKey,{bool? isTest}){
     coinKey=coinKey.toUpperCase();
-    if(isTest==null){
-      isTest=false;
-      //Map<String,dynamic> coinMap=ProviderUtil.walletActionProvider().walletMap[coinKey];
-      //isTest=coinMap['isTest'];
-    }
-    if(isTest!){
+    isTest ??= false;
+    if(isTest){
       return RequestUrl_test1[coinKey]?[uriKey]??"";
     }else{
       return RequestUrl_main1[coinKey]?[uriKey]??"";

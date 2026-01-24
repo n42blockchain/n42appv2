@@ -17,9 +17,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class TransactionDetailTrx extends StatefulWidget {
-  String txHash;
-  CoinModel coinModel;
-  TransactionDetailTrx(this.coinModel,this.txHash,{super.key});
+  final String txHash;
+  final CoinModel coinModel;
+  const TransactionDetailTrx(this.coinModel,this.txHash,{super.key});
 
   @override
   State<TransactionDetailTrx> createState() => _TransactionDetailTrxState();
@@ -28,16 +28,12 @@ class TransactionDetailTrx extends StatefulWidget {
 class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
   TransactionApi? _transactionApi;
   TransactionApi get transactionApi{
-    if(_transactionApi==null){
-      _transactionApi=TransactionApi();
-    }
+    _transactionApi ??= TransactionApi();
     return _transactionApi!;
   }
   AppDatabase? _db;
   AppDatabase get db{
-    if(_db==null){
-      _db=AppDatabase();
-    }
+    _db ??= AppDatabase();
     return _db!;
   }
   TextEditingController searchEditingController=TextEditingController();
@@ -46,31 +42,31 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
   TransationRecordModel trm=TransationRecordModel();
   TokenViewApi? _tokenViewApi;
   TokenViewApi get tokenViewApi{
-    if(_tokenViewApi==null){
-      _tokenViewApi=TokenViewApi();
-    }
+    _tokenViewApi ??= TokenViewApi();
     return _tokenViewApi!;
   }
+  late String _txHash;
   @override
   void initState() {
     // TODO: implement initState
-    searchEditingController.text=widget.txHash;
+    _txHash = _txHash;
+    searchEditingController.text=_txHash;
     init();
     super.initState();
   }
   init()async{
-    if(widget.txHash==""){
-      widget.txHash=searchEditingController.text;
+    if(_txHash==""){
+      _txHash=searchEditingController.text;
     }
-    if(widget.txHash==""){
+    if(_txHash==""){
       owner=false;
       return;
     }
     setState(() {
       load=Load.loading;
     });
-    List<TransationRecordModel> trModelList=await db.selectTransationRecord_txHash(widget.txHash,widget.coinModel.address);
-    if(trModelList.length!=0){
+    List<TransationRecordModel> trModelList=await db.selectTransationRecord_txHash(_txHash,widget.coinModel.address);
+    if(trModelList.isNotEmpty){
       trm=trModelList[0];
     }
     bool r=await getTransactionByHash();
@@ -93,7 +89,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
   bool owner=true;//是否时自己的交易信息
   getTransactionByHash()async{
     MessageModel rData=await transactionApi.trxTransactionInfo_hash(
-        widget.txHash);
+        _txHash);
     if(rData.error==false){
       if(rData.data==null){
         errorMessage="Not found";

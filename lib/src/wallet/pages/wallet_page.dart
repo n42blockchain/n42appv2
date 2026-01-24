@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:n42appv2/core/config/app_config.dart';
-import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/component/pages/scan_page.dart';
@@ -10,10 +9,8 @@ import 'package:n42appv2/src/utils/regular.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
-import 'package:n42appv2/src/wallet/pages/Staking_btc/wallet_chain_info_btc.dart';
 import 'package:n42appv2/src/wallet/pages/add_token/wallet_chain_add.dart';
 import 'package:n42appv2/src/wallet/pages/add_token/wallet_coin_add_all.dart';
-import 'package:n42appv2/src/wallet/pages/add_token/wallet_coin_token_add2.dart';
 import 'package:n42appv2/src/wallet/pages/ast_swap/swap_ast_home.dart';
 import 'package:n42appv2/src/wallet/pages/face_matching/face_user_notice.dart';
 import 'package:n42appv2/src/wallet/pages/payment_code/payment_page.dart';
@@ -22,7 +19,6 @@ import 'package:n42appv2/src/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_chain_info.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_chain_info_xrp.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/wallet_list.dart';
-import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/widgets/create_wallet_button.dart';
 import 'package:n42appv2/src/wallet/widgets/wallet_board.dart';
@@ -52,9 +48,7 @@ class WalletPage extends StatefulWidget {
 class _WalletPageState extends State<WalletPage> {
   Regular? _regular;
   Regular get regular{
-    if(_regular==null){
-      _regular=Regular();
-    }
+    _regular ??= Regular();
     return _regular!;
   }
   final oCcy = NumberFormat("#,##0.0#", "en_US");
@@ -100,11 +94,13 @@ class _WalletPageState extends State<WalletPage> {
         walletConnectProvider.walletConnectState ==
             WalletConnectState.connectOK) {
       String scanStr = await scan();
+      if (!mounted) return;
       if (scanStr.contains('relay-protocol') && scanStr.contains('symKey')) {
         await Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => WalletConnectPage(scanStr)));
+        if (!mounted) return;
         walletConnectProvider.notifyListeners();
       } else {
         if (scanStr != ""){
@@ -125,6 +121,7 @@ class _WalletPageState extends State<WalletPage> {
     } else {
       await Navigator.push(context,
           MaterialPageRoute(builder: (context) => WalletConnectPage("")));
+      if (!mounted) return;
       walletConnectProvider.notifyListeners();
     }
   }
@@ -144,10 +141,12 @@ class _WalletPageState extends State<WalletPage> {
       body: SafeArea(
         child: Consumer<WalletActionProvider>(
           builder: (context, waValue, child){
-            if(waValue.walletIndex==-1)
+            if(waValue.walletIndex==-1) {
               return Loading();
-            if(waValue.buildwallet)
+            }
+            if(waValue.buildwallet) {
               return Loading();
+            }
             return Stack(
               children: [
                 /*Positioned(
@@ -179,7 +178,7 @@ class _WalletPageState extends State<WalletPage> {
                             onTap: (){
                               showChangeAddress();
                             },
-                            child: Container(
+                            child: SizedBox(
                               height: ScreenUtil().setWidth(60),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -280,17 +279,16 @@ class _WalletPageState extends State<WalletPage> {
                                 onTap: () {
                                   walletConnect();
                                 },
-                                child: Container(
+                                child: SizedBox(
                                   width: ScreenUtil().setWidth(60.0),
                                   height: ScreenUtil().setWidth(60.0),
-                                  // margin: EdgeInsets.only(right: scr.setWidth(30.0)),
                                   child: (wc.walletConnectState !=
                                       WalletConnectState.disconnect &&
                                       wc.dAppTopic != null)
                                       ? ImageNetWork(
-                                    imageUrl:wc.metadata!.icons.length == 0
+                                    imageUrl:wc.metadata!.icons.isEmpty
                                         ? ""
-                                        : wc.metadata!.icons[0] ?? "",
+                                        : wc.metadata!.icons[0],
                                     placeholder: "assets/img/list_default.png",
                                   )
                                       : Image.asset(
@@ -353,9 +351,10 @@ class _WalletPageState extends State<WalletPage> {
                                       walletName: waValue.WalletName,
                                       sendTap: () async{
                                         if(waValue.walletInfo.password==""){
-                                          final flag= await TipsDialog7(context);
+                                          final flag= await TipsDialog7(this.context);
+                                          if (!mounted) return;
                                           if (flag != null && flag) {
-                                            Navigator.push(context, MaterialPageRoute(
+                                            Navigator.push(this.context, MaterialPageRoute(
                                                 settings: RouteSettings(
                                                   name: 'BackupOne',
                                                 ),
@@ -368,9 +367,10 @@ class _WalletPageState extends State<WalletPage> {
                                       },
                                       receiveTap: () async{
                                         if(waValue.walletInfo.password==""){
-                                          final flag= await TipsDialog7(context);
+                                          final flag= await TipsDialog7(this.context);
+                                          if (!mounted) return;
                                           if (flag != null && flag) {
-                                            Navigator.push(context, MaterialPageRoute(
+                                            Navigator.push(this.context, MaterialPageRoute(
                                                 settings: RouteSettings(
                                                   name: 'BackupOne',
                                                 ),
@@ -383,9 +383,10 @@ class _WalletPageState extends State<WalletPage> {
                                       },
                                       swapTap: () async{
                                         if(waValue.walletInfo.password==""){
-                                          final flag= await TipsDialog7(context);
+                                          final flag= await TipsDialog7(this.context);
+                                          if (!mounted) return;
                                           if (flag != null && flag) {
-                                            Navigator.push(context, MaterialPageRoute(
+                                            Navigator.push(this.context, MaterialPageRoute(
                                                 settings: RouteSettings(
                                                   name: 'BackupOne',
                                                 ),
@@ -552,7 +553,7 @@ class _WalletPageState extends State<WalletPage> {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.03),
+                color: Colors.black.withValues(alpha:0.03),
                 blurRadius: 8,
                 offset: const Offset(0, -2),
               ),
@@ -607,7 +608,7 @@ class _WalletPageState extends State<WalletPage> {
                           vertical: ScreenUtil().setWidth(8),
                         ),
                         decoration: BoxDecoration(
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.1),
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.1),
                           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
                         ),
                         child: Row(
@@ -758,7 +759,7 @@ class _WalletPageState extends State<WalletPage> {
               shrinkWrap: true,
               itemCount: waValue.coinList.length,
               itemBuilder: (context, int index) {
-                return _mainCoin(waValue.coinList[index],"c${index}","coin_list");
+                return _mainCoin(waValue.coinList[index],"c$index","coin_list");
               },
             ),
         ],
@@ -883,7 +884,7 @@ class _WalletPageState extends State<WalletPage> {
                   borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.08),
+                      color: Colors.black.withValues(alpha:0.08),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -968,7 +969,7 @@ class _WalletPageState extends State<WalletPage> {
                           ],
                         ),
                         Text(
-                          "\$${balanceStr}",
+                          "\$$balanceStr",
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(24),
                             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
@@ -999,7 +1000,7 @@ class _WalletPageState extends State<WalletPage> {
         vertical: ScreenUtil().setWidth(3),
       ),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withValues(alpha:0.12),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
       ),
       child: Text(
@@ -1014,6 +1015,7 @@ class _WalletPageState extends State<WalletPage> {
   }
 
   // 保留旧的百分比组件（向后兼容）
+  // ignore: unused_element
   Widget _oldPercentageWidget(BuildContext context, var percentage) {
     if (percentage >= 0) {
       return Text("${percentage.toStringAsFixed(2)}%",
@@ -1127,6 +1129,7 @@ class _WalletPageState extends State<WalletPage> {
                     child: image,
                   ),
                   Expanded(
+                    flex: 1,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -1147,7 +1150,6 @@ class _WalletPageState extends State<WalletPage> {
                             )),
                       ],
                     ),
-                    flex: 1,
                   ),
                   if (selected)
                     Icon(
@@ -1186,6 +1188,7 @@ class _WalletPageState extends State<WalletPage> {
       Container(
         height: ScreenUtil().setWidth(80),
         width: double.infinity,
+        alignment: Alignment.centerLeft,
         child: Row(
           children: [
             Text(
@@ -1208,7 +1211,6 @@ class _WalletPageState extends State<WalletPage> {
             ),
           ],
         ),
-        alignment: Alignment.centerLeft,
       ),
     );
     childs.add(
@@ -1331,6 +1333,7 @@ class _WalletPageState extends State<WalletPage> {
           MaterialPageRoute(
               builder: (context) => WalletCoinAddAll("",coinType: cType,)
           ));
+      if (!mounted) return;
       if (r==true) {
         Provider.of<WalletActionProvider>(context,listen: false).init_wallet(initCoinInfo: true);
       }
@@ -1354,6 +1357,7 @@ class _WalletPageState extends State<WalletPage> {
                   MaterialPageRoute(
                       builder: (context) => WalletCoinAddAll("",coinType: cType,)
                   ));
+              if (!mounted) return;
               if (r==true) {
                 Provider.of<WalletActionProvider>(context,listen: false).init_wallet(initCoinInfo: true);
               }
@@ -1384,6 +1388,7 @@ class _WalletPageState extends State<WalletPage> {
                   MaterialPageRoute(
                       builder: (context) => WalletChainAdd()
                   ));
+              if (!mounted) return;
               if (r==true) {
                 Provider.of<WalletActionProvider>(context,listen: false).init_wallet(initCoinInfo: true);
               }
@@ -1412,8 +1417,6 @@ class _WalletPageState extends State<WalletPage> {
     );
   }
 
-  @override
-  bool get wantKeepAlive => true;
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {

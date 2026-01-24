@@ -1,5 +1,4 @@
 ﻿import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
@@ -11,20 +10,16 @@ import 'package:n42appv2/src/miningV2/widgets/group_confrim.dart';
 import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
 import 'package:n42appv2/src/miningV2/widgets/n_level_widget.dart';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/utils/data_utils.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/api/token_view_api.dart';
-import 'package:n42appv2/src/wallet/pages/ast_swap/swap_ast_home.dart';
-import 'package:n42appv2/src/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/shared/di/service_locator.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
-import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_7.dart';
 import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
@@ -50,7 +45,7 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
   BigInt nft50num = BigInt.zero;
 
   bool savePrivateKey=false;
-  Map<String,dynamic>? encrypteData=null;
+  Map<String,dynamic>? encrypteData;
 
   @override
   void initState() {
@@ -182,10 +177,10 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
                                     vertical: ScreenUtil().setWidth(16),
                                   ),
                                   decoration: BoxDecoration(
-                                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.06),
+                                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.06),
                                     borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
                                     border: Border.all(
-                                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.15),
+                                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.15),
                                       width: 1,
                                     ),
                                   ),
@@ -228,7 +223,7 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
                                       borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: const Color(0xFFFF6B35).withOpacity(0.3),
+                                          color: const Color(0xFFFF6B35).withValues(alpha:0.3),
                                           blurRadius: 12,
                                           offset: const Offset(0, 4),
                                         ),
@@ -246,7 +241,7 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
                                                 width: ScreenUtil().setWidth(44),
                                                 height: ScreenUtil().setWidth(44),
                                                 decoration: BoxDecoration(
-                                                  color: Colors.white.withOpacity(0.2),
+                                                  color: Colors.white.withValues(alpha:0.2),
                                                   borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
                                                 ),
                                                 child: Icon(
@@ -362,12 +357,13 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
                                 //如果获取余额失败 再次尝试获取
                                 await checkNBalance();
                               }
+                              if (!mounted) return;
 
                               if (nBalance! < widget.nNum) {
                                 return;
                               }
                                 showGroupConfirmDialog(
-                                    context, widget.nNum, '640s', () async {
+                                    this.context, widget.nNum, '640s', () async {
                                   await handlerData();
                               });
                             }
@@ -424,8 +420,8 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
         border: Border.all(
           color: isDark 
-              ? Colors.white.withOpacity(0.06) 
-              : Colors.black.withOpacity(0.04),
+              ? Colors.white.withValues(alpha:0.06) 
+              : Colors.black.withValues(alpha:0.04),
           width: 1,
         ),
       ),
@@ -463,7 +459,7 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
           border: Border.all(
             color: isSelected 
                 ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-                : (isDark ? Colors.white.withOpacity(0.08) : Colors.black.withOpacity(0.06)),
+                : (isDark ? Colors.white.withValues(alpha:0.08) : Colors.black.withValues(alpha:0.06)),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -475,8 +471,8 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    const Color(0xFFFF9A9E).withOpacity(0.3),
-                    const Color(0xFFFECFEF).withOpacity(0.3),
+                    const Color(0xFFFF9A9E).withValues(alpha:0.3),
+                    const Color(0xFFFECFEF).withValues(alpha:0.3),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -544,7 +540,7 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
               width: ScreenUtil().setWidth(52),
               height: ScreenUtil().setWidth(52),
               decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.1),
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.1),
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
               ),
               child: Center(

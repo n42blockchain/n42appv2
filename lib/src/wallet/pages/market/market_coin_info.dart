@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/utils/regular.dart';
@@ -14,8 +15,8 @@ import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class MarketCoinInfo extends StatefulWidget {
-  Map<String, dynamic> coin;
-  MarketCoinInfo(this.coin,{super.key});
+  final Map<String, dynamic> coin;
+  const MarketCoinInfo(this.coin,{super.key});
 
   @override
   State<MarketCoinInfo> createState() => _MarketCoinInfoState();
@@ -28,37 +29,40 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
   Load load=Load.loading;
   String website="";//官网
   List<dynamic> browsers=[];//浏览器
-  String? reddit=null;//红迪
-  String? twitter=null;//推特
-  String? facebook=null;//脸书
+  String? reddit;//红迪
+  String? twitter;//推特
+  String? facebook;//脸书
   //String errorMessage="";
   String lang='en';
   Regular regular=Regular();
+  late Map<String, dynamic> coin;
   @override
   void initState() {
     super.initState();
-    price_change_percentage_24h=(widget.coin['price_change_per_24h']==null || widget.coin['price_change_per_24h']=='')?0.0:widget.coin['price_change_per_24h']*1.0;
+    coin = Map<String, dynamic>.from(coin);
+    price_change_percentage_24h=(coin['price_change_per_24h']==null || coin['price_change_per_24h']=='')?0.0:coin['price_change_per_24h']*1.0;
     getCoinInfo();
   }
   getCoinInfo()async{
-    if(widget.coin.length==0)return;
-    var list = await MarketApi().getWalletCoinsInfo(widget.coin['coin']);
+    if(coin.isEmpty)return;
+    var list = await MarketApi().getWalletCoinsInfo(coin['coin']);
     //判断查询是否成功
     if (list['error']==false) {
       //查询成功，将币的信息赋值到_coinslist
       List<dynamic>? coins= list['data']['data'];
-      if(coins !=null && coins.length >=1){
+      if(coins !=null && coins.isNotEmpty){
         for(dynamic c in coins){
-          if(c['coin']==widget.coin['coin']){
+          if(c['coin']==coin['coin']){
             setState(() {
-              widget.coin=c;
+              coin=Map<String, dynamic>.from(c);
             });
             break;
           }
         }
       }
     }
-    coinInfo=await Provider.of<WalletActionProvider>(context,listen: false).getCoinsBaseInfo(widget.coin['coin_gecko_id']);
+    if (!mounted) return;
+    coinInfo=await Provider.of<WalletActionProvider>(context,listen: false).getCoinsBaseInfo(coin['coin_gecko_id']);
     if(coinInfo==null){
       load=Load.error;
     }else{
@@ -74,12 +78,12 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
       reddit=coinInfo!['links']['subreddit_url']??"";//红迪
       String? tt =coinInfo!['links']['twitter_screen_name'];//推特
       if(tt!=null){
-        twitter="https://twitter.com/"+tt;
+        twitter="https://twitter.com/$tt";
       }
       //脸书
       String? fb=coinInfo!['links']['facebook_username'];
       if(fb!=null){
-        facebook="https://www.facebook.com/"+fb;
+        facebook="https://www.facebook.com/$fb";
       }
     }
     if(mounted){
@@ -102,7 +106,7 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
                     onTap: (){
                       Navigator.pop(context);
                     },
-                    child: Container(
+                    child: SizedBox(
                       height: ScreenUtil().setWidth(80.0),
                       width: ScreenUtil().setWidth(80.0),
                       child: Icon(
@@ -117,12 +121,12 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
                     width: ScreenUtil().setWidth(80.0),
                     padding: EdgeInsets.all(ScreenUtil().setWidth(10.0)),
                     child: ImageNetWork(imageUrl:
-                        widget.coin['image']??"",
+                        coin['image']??"",
                       placeholder: "assets/img/list.default.png",
                     ),
                   ),
                   Text(
-                    '${(widget.coin['coin']??"").toString().toUpperCase()}',
+                    (coin['coin']??"").toString().toUpperCase(),
                     style: TextStyle(
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                       fontSize: ScreenUtil().setSp(36.0),
@@ -132,7 +136,7 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      '(${widget.coin['name']??""})',
+                      '(${coin['name']??""})',
                       style: TextStyle(
                         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
                         fontSize: ScreenUtil().setSp(20.0),
@@ -163,13 +167,13 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
                       height: ScreenUtil().setWidth(440.0),
                       child: Column(
                         children: [
-                          Container(
+                          SizedBox(
                             height: ScreenUtil().setWidth(100.0),
                             child: Row(
                               children: [
                                 Expanded(
                                   child: Text(
-                                    '\$${oCcy.format(widget.coin['price']??0)}',
+                                    '\$${oCcy.format(coin['price']??0)}',
                                     style: TextStyle(
                                       fontSize: ScreenUtil().setWidth(40.0),
                                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
@@ -189,8 +193,8 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
                               ],
                             ),
                           ),
-                          LineChart(widget.coin['kline_default']??[], price_change_percentage_24h > 0?true:false,ScreenUtil().setWidth(240.0),ScreenUtil().setWidth(20.0)),
-                          Container(
+                          LineChart(coin['kline_default']??[], price_change_percentage_24h > 0?true:false,ScreenUtil().setWidth(240.0),ScreenUtil().setWidth(20.0)),
+                          SizedBox(
                             height: ScreenUtil().setWidth(40.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -236,7 +240,7 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
                                 ),
                                 Expanded(
                                   flex: 1,
-                                  child: Text('\$${regular.getMoneyAbbreviation(widget.coin['market_cap']??0*1.0,)}',
+                                  child: Text('\$${regular.getMoneyAbbreviation(coin['market_cap']??0*1.0,)}',
                                     style: TextStyle(
                                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
                                       fontSize: ScreenUtil().setSp(30.0),
@@ -262,7 +266,7 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
                                 ),
                                 Expanded(
                                   flex: 1,
-                                  child: Text('\$${regular.getMoneyAbbreviation(widget.coin['volume_24h']??0*1.0,)}',
+                                  child: Text('\$${regular.getMoneyAbbreviation(coin['volume_24h']??0*1.0,)}',
                                     style: TextStyle(
                                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
                                       fontSize: ScreenUtil().setSp(30.0),
@@ -289,8 +293,8 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
                                 Expanded(
                                   flex: 1,
                                   child: Text(
-                                    '${regular.getMoneyAbbreviation(widget.coin['total_supply']??0*1.0)} ${(widget.coin['coin']??"").toString().toUpperCase()}',
-                                    //widget.coin['total_supply'].toString(),
+                                    '${regular.getMoneyAbbreviation(coin['total_supply']??0*1.0)} ${(coin['coin']??"").toString().toUpperCase()}',
+                                    //coin['total_supply'].toString(),
                                     style: TextStyle(
                                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
                                       fontSize: ScreenUtil().setSp(30.0),
@@ -316,7 +320,7 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
                                 ),
                                 Expanded(
                                   flex: 1,
-                                  child: Text('${regular.getMoneyAbbreviation(widget.coin['circulating_supply']??0*1.0)} ${(widget.coin['coin']??"").toString().toUpperCase()}',
+                                  child: Text('${regular.getMoneyAbbreviation(coin['circulating_supply']??0*1.0)} ${(coin['coin']??"").toString().toUpperCase()}',
                                     style: TextStyle(
                                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
                                       fontSize: ScreenUtil().setSp(30.0),
@@ -445,7 +449,7 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
                                               //S.of(context).g_key_m_9
                                             )));
                                           },
-                                          child: Container(
+                                          child: SizedBox(
                                             height: ScreenUtil().setWidth(85.0),
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.start,
@@ -484,7 +488,7 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
                                               //S.of(context).g_key_m_10
                                             )));
                                           },
-                                          child: Container(
+                                          child: SizedBox(
                                             height: ScreenUtil().setWidth(85.0),
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.start,
@@ -523,7 +527,7 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
                                               //S.of(context).g_key_m_11
                                             )));
                                           },
-                                          child: Container(
+                                          child: SizedBox(
                                             height: ScreenUtil().setWidth(85.0),
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.start,
@@ -562,7 +566,7 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
                                               //S.of(context).g_key_m_14
                                             )));
                                           },
-                                          child: Container(
+                                          child: SizedBox(
                                             height: ScreenUtil().setWidth(85.0),
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.start,
@@ -614,10 +618,11 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
     );
   }
   _browserWidget() {
-    if (browsers.length == 0)
+    if (browsers.isEmpty) {
       return SizedBox();
+    }
     List<Widget> childs = [];
-    childs.add(Container(
+    childs.add(SizedBox(
       height: ScreenUtil().setWidth(85.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -647,14 +652,14 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
     ),);
     for (String b in browsers) {
       if (b != "") {
-        print(b);
+        if (kDebugMode) debugPrint(b);
         childs.add(InkWell(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) =>
                 BrowserPage(b,
                 )));
           },
-          child: Container(
+          child: SizedBox(
             height: ScreenUtil().setWidth(85.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,

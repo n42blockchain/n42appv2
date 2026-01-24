@@ -13,22 +13,19 @@ import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 import 'package:n42appv2/src/wallet/api/transfer_api.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/models/transation_record_model.dart';
-import 'package:n42appv2/src/wallet/pages/address_book/address_book_List.dart';
+import 'package:n42appv2/src/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42appv2/src/wallet/pages/face_matching/face_match.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42appv2/src/wallet/provider/transaction_record_iterms_provider.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
-import 'package:n42appv2/src/wallet/utils/chain_1559.dart';
-import 'package:n42appv2/src/wallet/utils/chain_ethLayer2.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/wallet/utils/coin_gas.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/container_widget.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
-import 'package:n42appv2/src/widgets/textField_widget.dart';
-import 'package:decimal/decimal.dart';
+import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -38,8 +35,8 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:web3dart/crypto.dart';
 
 class WalletChainSendTon extends StatefulWidget {
-  CoinModel coinModel;
-  WalletChainSendTon(this.coinModel,{super.key});
+  final CoinModel coinModel;
+  const WalletChainSendTon(this.coinModel,{super.key});
 
   @override
   State<WalletChainSendTon> createState() => _WalletChainSendTonState();
@@ -49,16 +46,12 @@ class _WalletChainSendTonState extends State<WalletChainSendTon> {
   CoinModel? chainModel;
   Regular? regular;
   Regular get _regular{
-    if(regular==null){
-      regular=Regular();
-    }
+    regular ??= Regular();
     return regular!;
   }
   DataUtils? _dataUtils;
   DataUtils get dataUtils{
-    if(_dataUtils==null){
-      _dataUtils=DataUtils();
-    }
+    _dataUtils ??= DataUtils();
     return _dataUtils!;
   }
   final oCcy =  NumberFormat("#,##0.00########", "en_US");
@@ -86,9 +79,7 @@ class _WalletChainSendTonState extends State<WalletChainSendTon> {
   Load gasLimitLoad=Load.finish;
   TokenViewApi? _tokenViewApi;
   TokenViewApi get tokenViewApi{
-    if(_tokenViewApi==null){
-      _tokenViewApi=TokenViewApi();
-    }
+    _tokenViewApi ??= TokenViewApi();
     return _tokenViewApi!;
   }
   @override
@@ -130,6 +121,7 @@ class _WalletChainSendTonState extends State<WalletChainSendTon> {
       });
       chainModel=wap.coinModels[cIndex];
       await chainModel?.getBalance();
+      if (!mounted) return;
       setState(() {});
     }
     gas=BigInt.from(GetCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
@@ -142,6 +134,7 @@ class _WalletChainSendTonState extends State<WalletChainSendTon> {
       load=Load.loading;
     });
     bool isOk=await widget.coinModel.getBalance(getToken: false);
+    if (!mounted) return;
     if(isOk==false){
       load=Load.finish;
       errorMessage=S.current.g_key_t_44;
@@ -259,7 +252,7 @@ class _WalletChainSendTonState extends State<WalletChainSendTon> {
             || widget.coinModel.coin['coinType']==CoinType.OP.name){
           gas=BigInt.from(gas.toInt()*1.5);
         }
-        if(widget.coinModel.coin['blockchainType']==BlockchainType.Ethereum.name && widget.coinModel?.coin['isContract']==false){
+        if(widget.coinModel.coin['blockchainType']==BlockchainType.Ethereum.name && widget.coinModel.coin['isContract']==false){
           String note=noteTextEditingController.text.trim();
           if(note !=""){
             String noteHex=bytesToHex(note.codeUnits);
@@ -398,11 +391,12 @@ class _WalletChainSendTonState extends State<WalletChainSendTon> {
       });
       return;
     }
+    if (!mounted) return;
     transferValue=ethToWeiString(valueTextEditingController.text,widget.coinModel.coin['decimals']);
     TransationRecordModel trModel=TransationRecordModel();
     trModel.address=widget.coinModel.address.toString();
     trModel.from1=widget.coinModel.address.toString();
-    trModel.to1=toAddr??"";//toTextEditingController.text;
+    trModel.to1=toAddr;//toTextEditingController.text;
     trModel.addrType=widget.coinModel.addrType;
     trModel.coin=widget.coinModel.coin;
     trModel.coinMiniName=widget.coinModel.coin['coinType'];
@@ -414,6 +408,7 @@ class _WalletChainSendTonState extends State<WalletChainSendTon> {
     trModel.gasPriceValue=gasPrice;
     trModel.price=transferValue;
     bool check=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletBaseSend(trModel,null,chainModel==null?widget.coinModel.coin['unit'].toString().toUpperCase():chainModel!.coin['unit'].toString().toUpperCase())));
+    if (!mounted) return;
     if(check){
       signTx(trModel);
     }else{
@@ -430,12 +425,14 @@ class _WalletChainSendTonState extends State<WalletChainSendTon> {
         privateKey: widget.coinModel.privateKey,
         pathIndex: widget.coinModel.pathIndex,
       );
+      if (!mounted) return;
       if(mm.error){
         errorMessage=mm.data;
       }else{
         trModel.txHash=mm.data;
         AppDatabase appDatabase =AppDatabase();
         trModel.trId=await appDatabase.insertTransationRecord(trModel);
+        if (!mounted) return;
         Provider.of<TransactionRecordItemProvider>(context,listen: false).addUndoneTr(trModel,1);
         ToastUtils.show(S.current.g_key_nft_41);
         Navigator.pop(context);
@@ -445,11 +442,12 @@ class _WalletChainSendTonState extends State<WalletChainSendTon> {
       ToastUtils.show(e.toString());
     }finally{
       load=Load.finish;
-      setState(() {});
+      if (mounted) setState(() {});
     }
   }
   void scanQR() async{
     String? scanValue =await Navigator.push(context, MaterialPageRoute(builder: (context)=>ScanPage()));
+    if (!mounted) return;
     if(scanValue !=null){
       toTextEditingController.text=scanValue;
       toAddress_check(scanValue);
@@ -553,7 +551,7 @@ class _WalletChainSendTonState extends State<WalletChainSendTon> {
     );
   }
   noteWidget(){
-    if(widget.coinModel?.coin['blockchainType']==BlockchainType.Ethereum.name && widget.coinModel?.coin['isContract']==false)
+    if(widget.coinModel.coin['blockchainType']==BlockchainType.Ethereum.name && widget.coinModel.coin['isContract']==false) {
       return Container(
         margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
         child: Column(
@@ -599,6 +597,7 @@ class _WalletChainSendTonState extends State<WalletChainSendTon> {
           ],
         ),
       );
+    }
     return SizedBox();
   }
   amountWidget(){
@@ -711,7 +710,7 @@ class _WalletChainSendTonState extends State<WalletChainSendTon> {
   amountBalanceWidget(){
     String unit=widget.coinModel.coin['unit'].toString().toUpperCase();
     return Text(
-      '${widget.coinModel.balance_string_all()} ${unit}',
+      '${widget.coinModel.balance_string_all()} $unit',
       style: TextStyle(
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
         fontSize: ScreenUtil().setSp(28.0),
@@ -760,8 +759,8 @@ class _WalletChainSendTonState extends State<WalletChainSendTon> {
     if(widget.coinModel.coin['isContract']){
       decimals=chainModel?.coin['decimals']??0;
     }
-    totalGasPriceStr='${toEther(totalGasPrice.toString(),decimals)} ${title}';
-    gasPriceStr='${toEther(gasPrice.toString(),decimals) } ${title}';
+    totalGasPriceStr='${toEther(totalGasPrice.toString(),decimals)} $title';
+    gasPriceStr='${toEther(gasPrice.toString(),decimals) } $title';
 
     return ContainerStyle1(
       context,
@@ -920,13 +919,14 @@ class _WalletChainSendTonState extends State<WalletChainSendTon> {
           onTap: ()async{
             String? address=await Navigator.push(context,
                 MaterialPageRoute(builder: (_) => FaceMatch(1)));
+            if (!mounted) return;
             if(address !=null){
               toTextEditingController.text=address;
               toAddress_check(address);
             }
             Navigator.pop(context);
           },
-          child: Container(
+          child: SizedBox(
             height: ScreenUtil().setWidth(88.0),
             width: double.infinity,
             child: Text(
@@ -943,13 +943,14 @@ class _WalletChainSendTonState extends State<WalletChainSendTon> {
           onTap: ()async{
             String? address=await Navigator.push(context,
                 MaterialPageRoute(builder: (_) => FaceMatch(2)));
+            if (!mounted) return;
             if(address !=null){
               toTextEditingController.text=address;
               toAddress_check(address);
             }
             Navigator.pop(context);
           },
-          child: Container(
+          child: SizedBox(
             height: ScreenUtil().setWidth(88.0),
             width: double.infinity,
             child: Text(
@@ -972,12 +973,13 @@ class _WalletChainSendTonState extends State<WalletChainSendTon> {
         onTap: ()async{
           final value =await Navigator.push(context, MaterialPageRoute(
               builder: (context)=> AddressBookList(coinName: widget.coinModel.coin['coinType'],)));
+          if (!mounted) return;
           if(value !=null){
             toTextEditingController.text=value;
           }
           Navigator.pop(context);
         },
-        child: Container(
+        child: SizedBox(
           height: ScreenUtil().setWidth(88),
           width: double.infinity,
           child: Row(
@@ -1014,7 +1016,7 @@ class _WalletChainSendTonState extends State<WalletChainSendTon> {
       ),
       InkWell(
         onTap: scanQR,
-        child: Container(
+        child: SizedBox(
           height: ScreenUtil().setWidth(88),
           width: double.infinity,
           child: Row(
@@ -1052,6 +1054,7 @@ class _WalletChainSendTonState extends State<WalletChainSendTon> {
       InkWell(
         onTap: ()async{
           ClipboardData? cd = await Clipboard.getData(Clipboard.kTextPlain);
+          if (!mounted) return;
           if(cd !=null){
             if(cd.text !=null && cd.text != "null"){
               toTextEditingController.text=cd.text??"";
@@ -1062,7 +1065,7 @@ class _WalletChainSendTonState extends State<WalletChainSendTon> {
           }
           Navigator.pop(context);
         },
-        child: Container(
+        child: SizedBox(
           height: ScreenUtil().setWidth(88),
           width: double.infinity,
           child: Row(
@@ -1103,13 +1106,14 @@ class _WalletChainSendTonState extends State<WalletChainSendTon> {
           onTap: ()async{
             String? address=await Navigator.push(context,
                 MaterialPageRoute(builder: (_) => FaceMatch(1)));
+            if (!mounted) return;
             if(address !=null){
               toTextEditingController.text=address;
               toAddress_check(address);
             }
             Navigator.pop(context);
           },
-          child: Container(
+          child: SizedBox(
             height: ScreenUtil().setWidth(88),
             width: double.infinity,
             child: Row(
@@ -1147,13 +1151,14 @@ class _WalletChainSendTonState extends State<WalletChainSendTon> {
           onTap: ()async{
             String? address=await Navigator.push(context,
                 MaterialPageRoute(builder: (_) => FaceMatch(2)));
+            if (!mounted) return;
             if(address !=null){
               toTextEditingController.text=address;
               toAddress_check(address);
             }
             Navigator.pop(context);
           },
-          child: Container(
+          child: SizedBox(
             height: ScreenUtil().setWidth(88),
             width: double.infinity,
             child: Row(

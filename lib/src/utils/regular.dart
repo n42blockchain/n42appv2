@@ -30,13 +30,13 @@ class Regular{
       String r=formartNum(money/1000000000000, 2,isCrop: true);
       //NumUtil.getNumByValueDouble(money/1000000000000, 3)!.toString();
       rStr=r;//.substring(0,r.length-1);
-      return rStr+"T";
+      return "${rStr}T";
     }
     if(money>=1000000000){
       String r=formartNum(money/1000000000, 2,isCrop: true);
       //NumUtil.getNumByValueDouble(money/1000000000, 3)!.toString();
       rStr=r;//.substring(0,r.length-1);
-      return rStr+"B";
+      return "${rStr}B";
     }
     return oCcy.format(money);
   }
@@ -49,19 +49,17 @@ class Regular{
       if(ms[i]=="0"){
         l++;
       }else{
-        rStr+="${l}}${moneyStr.substring(i)}";
+        rStr+="$l}${moneyStr.substring(i)}";
         break;
       }
     }
     return rStr;
   }
 
-  /**
-   * target  要转换的数字
-   * postion 要保留的位数
-   * isCrop  true 直接裁剪 false 四舍五入
-   * isFill0 小数位不足是否补0,true 补0 false 不补0
-   */
+  /// target  要转换的数字
+  /// postion 要保留的位数
+  /// isCrop  true 直接裁剪 false 四舍五入
+  /// isFill0 小数位不足是否补0,true 补0 false 不补0
   String formartNum(num target, int postion, {bool isCrop = false,isFill0=true}) {
     String t = target.toString();
     // 如果要保留的长度小于等于0 直接返回当前字符串

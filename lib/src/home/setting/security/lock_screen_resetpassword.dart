@@ -10,7 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LockScreenResetPassword extends ConsumerStatefulWidget{
   final int type;//0 设置新密码，1重设密码
-  const LockScreenResetPassword(this.type,{Key? key}):super(key: key);
+  const LockScreenResetPassword(this.type,{super.key});
   @override
   ConsumerState<LockScreenResetPassword> createState()=>_LockScreenResetPasswordState();
 }
@@ -337,7 +337,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
             onTap: (){
               obscureChange();
             },
-            child: Container(
+            child: SizedBox(
               height: ScreenUtil().setSp(40.0),
               width: ScreenUtil().setSp(40.0),
               child: Image.asset(

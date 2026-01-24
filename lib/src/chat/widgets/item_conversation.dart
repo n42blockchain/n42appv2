@@ -13,7 +13,6 @@ import 'package:n42appv2/src/utils/data_utils.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/shared/di/service_locator.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
-import 'package:eth_sig_util/util/utils.dart';
 import 'package:flustars_flutter3/flustars_flutter3.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart' as screen;
@@ -27,13 +26,12 @@ class ItemConversation extends StatefulWidget {
   final GestureLongPressCallback? onLongPress;
 
   const ItemConversation(
-      {Key? key,
+      {super.key,
         required this.item,
         required this.mPrivateKey,
         this.isRead = true,
         this.onTap,
-        this.onLongPress})
-      : super(key: key);
+        this.onLongPress});
 
   @override
   State<ItemConversation> createState() => _ItemConversationState();
@@ -43,30 +41,22 @@ class _ItemConversationState extends State<ItemConversation>
     with AutomaticKeepAliveClientMixin {
   ChatApi? _chatApi;
   ChatApi get chatApi{
-    if(_chatApi==null){
-      _chatApi=ChatApi();
-    }
+    _chatApi ??= ChatApi();
     return _chatApi!;
   }
   DataUtils? _dataUtils;
   DataUtils get dataUtils{
-    if(_dataUtils==null){
-      _dataUtils= DataUtils();
-    }
+    _dataUtils ??= DataUtils();
     return _dataUtils!;
   }
   ChatDBApi? _chatDBApi;
   ChatDBApi get chatDBApi{
-    if(_chatDBApi==null){
-      _chatDBApi=ChatDBApi();
-    }
+    _chatDBApi ??= ChatDBApi();
     return _chatDBApi!;
   }
   ChatUtil? _chatUtil;
   ChatUtil get chatUtil{
-    if(_chatUtil==null){
-      _chatUtil= ChatUtil();
-    }
+    _chatUtil ??= ChatUtil();
     return _chatUtil!;
   }
   //1 = text 、6= video、3= image、Location = 4   File = 5  Tip_Notification = 90 提示文本
@@ -210,7 +200,7 @@ class _ItemConversationState extends State<ItemConversation>
                     password = dataUtils.toStringFromHex(decode ?? '');
                     //保存group pwd
                     ChatSPUtil().saveGroupDataIfNotExists(
-                        GroupData(_item.getTargetId(), password ?? ''));
+                        GroupData(_item.getTargetId(), password));
                   }
                 }
               }

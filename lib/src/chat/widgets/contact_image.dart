@@ -7,8 +7,7 @@ class ContactImage extends StatelessWidget {
   final String? faceUrl;
   final String? placeholder;
 
-  const ContactImage({Key? key, this.faceUrl, this.placeholder})
-      : super(key: key);
+  const ContactImage({super.key, this.faceUrl, this.placeholder});
 
   @override
   Widget build(BuildContext context) {

@@ -26,8 +26,7 @@ class AddGroupMemberPage extends StatefulWidget {
   final List<GroupMemberInfo> groupMemberList;
 
   const AddGroupMemberPage(
-      {Key? key, required this.groupId, required this.groupMemberList})
-      : super(key: key);
+      {super.key, required this.groupId, required this.groupMemberList});
 
   @override
   State<AddGroupMemberPage> createState() => _AddGroupMemberPageState();
@@ -36,23 +35,17 @@ class AddGroupMemberPage extends StatefulWidget {
 class _AddGroupMemberPageState extends State<AddGroupMemberPage> {
   ChatApi? _chatApi;
   ChatApi get chatApi{
-    if(_chatApi==null){
-      _chatApi=ChatApi();
-    }
+    _chatApi ??= ChatApi();
     return _chatApi!;
   }
   DataUtils? _dataUtils;
   DataUtils get dataUtils{
-    if(_dataUtils==null){
-      _dataUtils= DataUtils();
-    }
+    _dataUtils ??= DataUtils();
     return _dataUtils!;
   }
   ChatUtil? chatUtils;
   ChatUtil get _chatUtils{
-    if(chatUtils==null){
-      chatUtils= ChatUtil();
-    }
+    chatUtils ??= ChatUtil();
     return chatUtils!;
   }
   List<FriendInfo> friendList = [];
@@ -172,8 +165,7 @@ class _AddGroupMemberPageState extends State<AddGroupMemberPage> {
         text: S.of(context).g_chat_key_11,
       ),
       body: SafeArea(
-        child: Container(
-          child: Column(
+        child: Column(
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -407,6 +399,7 @@ class _AddGroupMemberPageState extends State<AddGroupMemberPage> {
 
                         final uploadSSData = await chatApi.uploadGroupMemberSS(
                             widget.groupId, params);
+                        if (!mounted) return;
                         if (uploadSSData != null && uploadSSData["code"] == 200) {
                           Navigator.of(this.context).pop(true);
                         }
@@ -436,7 +429,6 @@ class _AddGroupMemberPageState extends State<AddGroupMemberPage> {
                 ),
               )
             ],
-          ),
         ),
       ),
     );

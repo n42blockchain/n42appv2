@@ -12,7 +12,7 @@ import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 import 'package:n42appv2/src/wallet/api/transfer_api.dart';
 import 'package:n42appv2/src/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
-import 'package:n42appv2/src/wallet/pages/address_book/address_book_List.dart';
+import 'package:n42appv2/src/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42appv2/src/wallet/provider/transaction_record_iterms_provider.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
@@ -23,7 +23,7 @@ import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/container_widget.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
-import 'package:n42appv2/src/widgets/textField_widget.dart';
+import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -35,10 +35,10 @@ import 'package:provider/provider.dart';
 import 'package:validators/validators.dart';
 
 class WalletChainSendBtc extends StatefulWidget {
-  CoinModel coinModel;
-  String? toAmount;
-  String? toAddress;
-  WalletChainSendBtc(this.coinModel,{this.toAddress,this.toAmount,super.key});
+  final CoinModel coinModel;
+  final String? toAmount;
+  final String? toAddress;
+  const WalletChainSendBtc(this.coinModel,{this.toAddress,this.toAmount,super.key});
 
   @override
   State<WalletChainSendBtc> createState() => _WalletChainSendBtcState();
@@ -47,30 +47,22 @@ class WalletChainSendBtc extends StatefulWidget {
 class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
   TransferApi? _transferApi;
   TransferApi get transferApi{
-    if(_transferApi==null){
-      _transferApi=TransferApi();
-    }
+    _transferApi ??= TransferApi();
     return _transferApi!;
   }
   Regular? _regular;
   Regular get regular{
-    if(_regular==null){
-      _regular=Regular();
-    }
+    _regular ??= Regular();
     return _regular!;
   }
   DataUtils? _dataUtils;
   DataUtils get dataUtils{
-    if(_dataUtils==null){
-      _dataUtils=DataUtils();
-    }
+    _dataUtils ??= DataUtils();
     return _dataUtils!;
   }
   TokenViewApi? _tokenViewApi;
   TokenViewApi get tokenViewApi{
-    if(_tokenViewApi==null){
-      _tokenViewApi=TokenViewApi();
-    }
+    _tokenViewApi ??= TokenViewApi();
     return _tokenViewApi!;
   }
   final oCcy =  NumberFormat("#,##0.00########", "en_US");
@@ -245,7 +237,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
       setState(() {});
       return;
     }
-    if(unspents.length==0){
+    if(unspents.isEmpty){
       getUTXO();
       return;
     }
@@ -310,7 +302,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
       return;
     }
     List<Map<String,dynamic>> utxos=[];//输出账单
-    if(unspents.length==0){
+    if(unspents.isEmpty){
       getUTXO();
       return;
     }
@@ -437,13 +429,15 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
   signTx(BtcTransactionRecodeModel trModel)async{
     load=Load.loading;
     setState(() {});
-    if(unspents.length==0) {
+    if(unspents.isEmpty) {
       ToastUtils.show(S.current.g_key_2);
       return;
     }
     trModel=await transatroinBuilder1To1(trModel, unspents);
+    if (!mounted) return;
     if(trModel.txHash != ""){
       await AppDatabase().insertBtcTransactionRecord(trModel);
+      if (!mounted) return;
       Provider.of<TransactionRecordItemProvider>(context,listen: false).addUndoneTr(trModel,0);
       ToastUtils.show(S.current.g_key_nft_41);
       if(toTextFieldEnabel==false){
@@ -578,6 +572,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
 
   void scanQR() async{
     String? scanValue =await Navigator.push(context, MaterialPageRoute(builder: (context)=>ScanPage()));
+    if (!mounted) return;
     if(scanValue != null){
       toTextEditingController.text=scanValue;
       toAddress_check(scanValue);
@@ -845,7 +840,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
   amountBalanceWidget(){
     String unit=widget.coinModel.coin['unit'];
     return Text(
-      '${dec.Decimal.parse(widget.coinModel.balance_double_all().toString())} ${unit}',
+      '${dec.Decimal.parse(widget.coinModel.balance_double_all().toString())} $unit',
       style: TextStyle(
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
         fontSize: ScreenUtil().setSp(28.0),
@@ -908,7 +903,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
           ),
           Expanded(
             flex: 1,
-            child: Text('${gasFees} ${coinTypeName}',
+            child: Text('$gasFees $coinTypeName',
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                 fontSize: ScreenUtil().setSp(30.0),
@@ -949,7 +944,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
               flex: 1,
               child: SizedBox()),
           Text(
-            '${gasFees} ${widget.coinModel.coin['unit']}',
+            '$gasFees ${widget.coinModel.coin['unit']}',
             style: TextStyle(
               color: textColor,
               fontSize: ScreenUtil().setSp(30.0),
@@ -1152,6 +1147,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
               if(errorMessage !=""){
                 return;
               }
+              if (!mounted) return;
               BtcTransactionRecodeModel trModel=BtcTransactionRecodeModel();//交易数据
               trModel.address=widget.coinModel.address;
               trModel.to1=toTextEditingController.text.trim();
@@ -1161,6 +1157,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
               trModel.price=price;
               trModel.gasPrice=gasFeeLevel['gasFees'];
               bool check=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletBaseSend(null,trModel,widget.coinModel.coin['unit'])));
+              if (!mounted) return;
               if(check){
                 signTx(trModel);
               }
@@ -1185,12 +1182,13 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
         onTap: ()async{
           final value =await Navigator.push(context, MaterialPageRoute(
               builder: (context)=> AddressBookList(coinName: widget.coinModel.coin['coinType'],)));
+          if (!mounted) return;
           if(value !=null){
             toTextEditingController.text=value;
           }
           Navigator.pop(context);
         },
-        child: Container(
+        child: SizedBox(
           height: ScreenUtil().setWidth(88),
           width: double.infinity,
           child: Row(
@@ -1227,7 +1225,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
       ),
       InkWell(
         onTap: scanQR,
-        child: Container(
+        child: SizedBox(
           height: ScreenUtil().setWidth(88),
           width: double.infinity,
           child: Row(
@@ -1265,6 +1263,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
       InkWell(
         onTap: ()async{
           ClipboardData? cd = await Clipboard.getData(Clipboard.kTextPlain);
+          if (!mounted) return;
           if(cd !=null){
             if(cd.text !=null && cd.text != "null"){
               toTextEditingController.text=cd.text??"";
@@ -1275,7 +1274,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
           }
           Navigator.pop(context);
         },
-        child: Container(
+        child: SizedBox(
           height: ScreenUtil().setWidth(88),
           width: double.infinity,
           child: Row(

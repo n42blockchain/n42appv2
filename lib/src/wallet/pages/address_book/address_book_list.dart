@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
@@ -15,7 +17,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddressBookList extends StatefulWidget {
   final String coinName;
-  AddressBookList({this.coinName = "",super.key});
+  const AddressBookList({this.coinName = "",super.key});
 
   @override
   State<AddressBookList> createState() => _AddressBookListState();
@@ -25,12 +27,10 @@ class _AddressBookListState extends State<AddressBookList> {
   List<AddressBookModel> list = [];
   AddressBookApi? _addressBookApi;
   AddressBookApi get addressBookApi{
-    if(_addressBookApi==null){
-      _addressBookApi=AddressBookApi();
-    }
+    _addressBookApi ??= AddressBookApi();
     return _addressBookApi!;
   }
-  var eventBusFn;
+  StreamSubscription? eventBusFn;
   initData() async {
     try {
       String coinName=widget.coinName;

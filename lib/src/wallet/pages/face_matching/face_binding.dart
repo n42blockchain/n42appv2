@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'dart:io' as io;
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
@@ -22,10 +21,10 @@ import 'package:provider/provider.dart';
 
 
 class FaceBinding extends StatefulWidget {
-  int type;//1绑定，2验证
-  String? address;
-  int? walletIndex;
-  FaceBinding(this.type,{this.address,this.walletIndex,super.key});
+  final int type;//1绑定，2验证
+  final String? address;
+  final int? walletIndex;
+  const FaceBinding(this.type,{this.address,this.walletIndex,super.key});
 
   @override
   State<FaceBinding> createState() => _FaceBindingState();
@@ -44,7 +43,7 @@ class _FaceBindingState extends State<FaceBinding> with WidgetsBindingObserver{
   // otherwise init without license.
   Future<bool> initialize() async {
     var license = await loadAssetIfExists("assets/regula.license");
-    InitConfig? config = null;
+    InitConfig? config;
     if (license != null) config = InitConfig(license);
     //var success,error;
     var result = await faceSdk.initialize(config: config);
@@ -115,6 +114,7 @@ class _FaceBindingState extends State<FaceBinding> with WidgetsBindingObserver{
         img1=Image.memory(img);
       });
       MessageModel rmm=await FaceApi().binding(addr, img, "face2.jpg",type: 1);
+      if (!mounted) return;
       if(rmm.error){
         //ToastUtils.show(rmm.data);
         Navigator.pop(context,rmm);
@@ -127,6 +127,7 @@ class _FaceBindingState extends State<FaceBinding> with WidgetsBindingObserver{
         }else{
           //ToastUtils.show(S.of(context).g_face_match_key11(cm.address));
           await Provider.of<WalletActionProvider>(context,listen: false).setWalletFaceBinding(widget.walletIndex);
+          if (!mounted) return;
           MessageModel mm=MessageModel();
           mm.data=S.of(context).g_face_match_key11(addr);
           Navigator.pop(context,mm);
@@ -139,6 +140,7 @@ class _FaceBindingState extends State<FaceBinding> with WidgetsBindingObserver{
         img1=Image.memory(img);
       });
       MessageModel rmm=await FaceApi().match(img, "face2.jpg",type: 1);
+      if (!mounted) return;
       if(rmm.error){
         //ToastUtils.show(S.of(context).g_face_match_key3);
         Navigator.pop(context,rmm);

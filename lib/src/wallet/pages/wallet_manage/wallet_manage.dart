@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
@@ -18,15 +18,14 @@ import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class WalletManage extends StatefulWidget {
-  WalletInfo walletInfo;
-  int walletIndex;
-  WalletManage({required this.walletInfo,required this.walletIndex,super.key});
+  final WalletInfo walletInfo;
+  final int walletIndex;
+  const WalletManage({required this.walletInfo,required this.walletIndex,super.key});
 
   @override
   State<WalletManage> createState() => _WalletManageState();
@@ -41,12 +40,12 @@ class _WalletManageState extends State<WalletManage> {
   Load load=Load.finish;
   bool showMainWallet=false;
 
-  var eventBusFn;
+  StreamSubscription? eventBusFn;
   initEventBus(){
     eventBusFn=eventBus.on().listen((event) {
       if (event is EventPublic && event.type == EventPublicType.backup) {
         setState(() {
-          widget.walletInfo=event.param as WalletInfo;
+          walletInfo=event.param as WalletInfo;
         });
       }
     });
@@ -83,7 +82,7 @@ class _WalletManageState extends State<WalletManage> {
     if(walletInfo?.mainWallet==false){
       List<String>? keys = walletInfo?.coinInfo?.keys.toList();
       if(keys !=null){
-        int index=keys!.indexWhere((e)=>e.toString()==CoinType.N.name);
+        int index=keys.indexWhere((e)=>e.toString()==CoinType.N.name);
         if(index !=-1){
           showMainWallet=true;
         }
@@ -102,7 +101,7 @@ class _WalletManageState extends State<WalletManage> {
       CoinModel cm = CoinModel.fromMap(walletInfo!.coinInfo![keym[i]]['baseInfo']);
       cm.isTest=walletInfo!.coinInfo![keym[i]]['isTest'];
       cm.addrType=walletInfo!.coinInfo![keym[i]]['addrType'];
-      cm.pathIndex=walletInfo!.coinInfo![keym[i]]['pathIndex']==null?0:walletInfo!.coinInfo![keym[i]]['pathIndex'];
+      cm.pathIndex=walletInfo!.coinInfo![keym[i]]['pathIndex']??0;
       cm.privateKey=walletInfo!.privateKey;
       await cm.buildWallet(setAddress: false,walletIndex: widget.walletIndex);
       coinList!.add(cm);
@@ -163,6 +162,7 @@ class _WalletManageState extends State<WalletManage> {
   }
   deleteWallet()async{
     MessageModel? rmm=await Provider.of<WalletActionProvider>(context,listen: false).deleteWalletInfo(info:walletInfo);
+    if (!mounted) return;
     if(rmm==null){
       Navigator.pop(context);
     }else{
@@ -207,17 +207,17 @@ class _WalletManageState extends State<WalletManage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   _walletName(context, "${S.of(context).g_key_nft_2}: ", walletInfo!.walletName??""),
-                  if(widget.walletInfo.password != "")
+                  if(walletInfo!.password != "")
                     _itemWidget(S.of(context).g_key_206,()async{
                       WalletInfo? info=await Navigator.push(context,MaterialPageRoute(
                           builder: (_) => EditWalletPassword(walletInfo!,widget.walletIndex)));
                       if(info !=null){
                         setState(() {
-                          widget.walletInfo=info;
+                          walletInfo=info;
                         });
                       }
                     }),
-                  if(widget.walletInfo.password=="")
+                  if(walletInfo!.password=="")
                     _itemWidget(S.of(context).g_key_wallet_c38,()async{
                       initEventBus();
                       await Navigator.push(context,MaterialPageRoute(
@@ -246,6 +246,7 @@ class _WalletManageState extends State<WalletManage> {
               child: ButtonStyle2(
                 context, ()async{
                   MessageModel mm=await Provider.of<WalletActionProvider>(context,listen: false).setMainWallet(widget.walletIndex);
+                  if (!context.mounted) return;
                   if(mm.error){
                     ToastUtils.show(mm.data);
                   }else{
@@ -383,68 +384,6 @@ class _WalletManageState extends State<WalletManage> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  _mnemonic(BuildContext context, String title, String value) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0), vertical: ScreenUtil().setWidth(10.0)),
-      decoration: BoxDecoration(
-          color:
-          AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0))),
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0),horizontal: ScreenUtil().setWidth(30.0)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(32.0),),
-              ),
-              TextButton(
-                  onPressed: () {
-                    Clipboard.setData(ClipboardData(text: value));
-                  },
-                  style: ButtonStyle(
-                    backgroundColor:  MaterialStateProperty.all(
-                      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
-                    ),
-                    shape:MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(40.0))),
-                    )),
-                  ),
-                  child: Text(
-                    S.of(context).g_key_119,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28.0),
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
-                    ),
-                  ))
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  value,
-                  maxLines: 5,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainGreyColor.name),
-                    fontSize: ScreenUtil().setSp(28.0),),
-                ),
-              ),
-            ],
-          )
-        ],
       ),
     );
   }

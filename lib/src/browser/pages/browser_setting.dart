@@ -7,8 +7,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class BrowserSetting extends StatefulWidget {
-  WebViewController? webViewController;
-  BrowserSetting({this.webViewController,super.key});
+  final WebViewController? webViewController;
+  const BrowserSetting({this.webViewController,super.key});
 
   @override
   State<BrowserSetting> createState() => _BrowserSettingState();
@@ -48,7 +48,7 @@ class _BrowserSettingState extends State<BrowserSetting> {
           padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 height: ScreenUtil().setWidth(100),
                 width: double.infinity,
                 child: Row(
@@ -64,14 +64,12 @@ class _BrowserSettingState extends State<BrowserSetting> {
                         textAlign: TextAlign.left,
                       ),
                     ),
-                    Container(
-                      child: Switch(
-                        value: browser['connectDApp'],
-                        activeColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                        onChanged: (value){
-                          setBrowser_connectDApp(value);
-                        },
-                      ),
+                    Switch(
+                      value: browser['connectDApp'],
+                      activeTrackColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                      onChanged: (value){
+                        setBrowser_connectDApp(value);
+                      },
                     ),
                   ],
                 ),
@@ -89,7 +87,7 @@ class _BrowserSettingState extends State<BrowserSetting> {
                       widget.webViewController!.clearLocalStorage();
                     }
                   },
-                  child: Container(
+                  child: SizedBox(
                     height: ScreenUtil().setWidth(100),
                     width: double.infinity,
                     child: Row(

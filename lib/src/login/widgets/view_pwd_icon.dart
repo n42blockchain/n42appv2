@@ -32,9 +32,7 @@ class _ViewPwdIconState extends State<ViewPwdIcon> {
       ),
       onTap: () {
         setState(() => isPressed = !isPressed);
-        if (widget.onTap != null) {
-          widget.onTap();
-        }
+        widget.onTap();
       },
     );
   }

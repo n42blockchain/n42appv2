@@ -1,6 +1,5 @@
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/src/widgets/container_widget.dart';
 import 'package:n42appv2/src/widgets/prompt_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,19 +7,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class WalletChainInfoBoard extends StatelessWidget {
-  String? address;//地址
-  String? balanceStr;//token 余额
-  String? balanceDollarStr;//美元余额
-  String? marketValueStr;//市值
-  String? lockAmountStr;//锁定额度
-  GestureTapCallback? xmlLockInfoTap;// xml(ripple)锁定额度详情点击事件
-  GestureTapCallback? sendTap;//交易点击
-  GestureTapCallback? receiveTap;//收款码点击
-  GestureTapCallback? browserTap;//浏览器点击
-  GestureTapCallback? tokenAddTap;//添加代币按钮
-  GestureTapCallback? swapAddTap;//添加兑换按钮
-  GestureTapCallback? sellAddTap;//卖按钮
-  WalletChainInfoBoard({@required this.address,
+  final String? address;//地址
+  final String? balanceStr;//token 余额
+  final String? balanceDollarStr;//美元余额
+  final String? marketValueStr;//市值
+  final String? lockAmountStr;//锁定额度
+  final GestureTapCallback? xmlLockInfoTap;// xml(ripple)锁定额度详情点击事件
+  final GestureTapCallback? sendTap;//交易点击
+  final GestureTapCallback? receiveTap;//收款码点击
+  final GestureTapCallback? browserTap;//浏览器点击
+  final GestureTapCallback? tokenAddTap;//添加代币按钮
+  final GestureTapCallback? swapAddTap;//添加兑换按钮
+  final GestureTapCallback? sellAddTap;//卖按钮
+  const WalletChainInfoBoard({@required this.address,
     @required this.balanceStr,
     @required this.balanceDollarStr,
     @required this.marketValueStr,
@@ -112,7 +111,7 @@ class WalletChainInfoBoard extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   height: ScreenUtil().setWidth(40),
                   child: Text(
                     "${S.of(context).g_key_xml_0}: ${lockAmountStr??""} ",

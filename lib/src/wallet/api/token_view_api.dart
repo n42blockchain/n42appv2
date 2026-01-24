@@ -69,7 +69,7 @@ class TokenViewApi{
       //chains="Amaze Chain";
       String condition="";
       if(chains!=""){
-        condition="?chains=${chains}";
+        condition="?chains=$chains";
       }
       if(coins!=""){
         if(condition==""){
@@ -77,9 +77,9 @@ class TokenViewApi{
         }else{
           condition+="&";
         }
-        condition+="coins=${coins}";
+        condition+="coins=$coins";
       }
-      String path='${url}v2/chains/coins/v2${condition}';
+      String path='${url}v2/chains/coins/v2$condition';
       final a=await BaseApi.RequestEmpty_h.get(path, params: {},header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
@@ -118,12 +118,12 @@ class TokenViewApi{
   //获取某个主链币的所有代币
   getTokenList_fullname(String fullname)async{
     try{
-      final a=await BaseApi.RequestEmpty_h.get('${url}v1/chains/coins?chains=${fullname}', params: {},header:header,);
+      final a=await BaseApi.RequestEmpty_h.get('${url}v1/chains/coins?chains=$fullname', params: {},header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
         List<dynamic> rData=a['data'];
         mm.error=false;
-        if(rData.length==0){
+        if(rData.isEmpty){
           mm.data=[];
         }else{
           mm.data=rData[0]['coins'];
@@ -161,7 +161,7 @@ class TokenViewApi{
   //获取某笔交易的确认数
   getTxConfirmation(String coinType,String txHash)async{
     try{
-      final a=await BaseApi.RequestEmpty_h.get('${url}v1/vipapi/tx/confirmation?coin=${coinType.toLowerCase()}&tx_hash=${txHash}', params: {},header:header,);
+      final a=await BaseApi.RequestEmpty_h.get('${url}v1/vipapi/tx/confirmation?coin=${coinType.toLowerCase()}&tx_hash=$txHash', params: {},header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==1){
         mm.error=false;
@@ -358,7 +358,7 @@ class TokenViewApi{
   //获取btc类的余额
   getBalance_btc(String coinType,String address,{bool returnDouble=false})async{
     try{
-      final a=await BaseApi.RequestEmpty_h.get('${url}v1/vipapi/account/balance?coin=${coinType.toLowerCase()}&addr=${address}', params: {},header:header,);
+      final a=await BaseApi.RequestEmpty_h.get('${url}v1/vipapi/account/balance?coin=${coinType.toLowerCase()}&addr=$address', params: {},header:header,);
       MessageModel mm=MessageModel();
       if(a['code']==200){
         if(returnDouble){
@@ -383,7 +383,7 @@ class TokenViewApi{
       if(isTest){
         return await BtcApi(test: isTest).getUtxos(address);
       }else{
-        final a=await BaseApi.RequestEmpty_h.get('${url}v1/vipapi/utxo/tx/list?coin=${coinType.toLowerCase()}&addr=${address}&page=${pageNum}&page_size=${pageSize}', params: {},header:header,);
+        final a=await BaseApi.RequestEmpty_h.get('${url}v1/vipapi/utxo/tx/list?coin=${coinType.toLowerCase()}&addr=$address&page=$pageNum&page_size=$pageSize', params: {},header:header,);
         MessageModel mm=MessageModel.error();
         if(a['code']==200){
           mm.error=false;
@@ -405,7 +405,7 @@ class TokenViewApi{
   //获取btc类的交易记录
   getTxList_btc(String coinType,String address,{int pageSize=20,int pageNum=1})async{
     try{
-      final a=await BaseApi.RequestEmpty_h.get('${url}v1/vipapi/address/tx/list?coin=${coinType.toLowerCase()}&addr=${address}&page=${pageNum}&page_size=${pageSize}', params: {},header:header,);
+      final a=await BaseApi.RequestEmpty_h.get('${url}v1/vipapi/address/tx/list?coin=${coinType.toLowerCase()}&addr=$address&page=$pageNum&page_size=$pageSize', params: {},header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
         mm.error=false;
@@ -460,7 +460,7 @@ class TokenViewApi{
   getBalance_eth(String coinType,String address,String contract,{bool returnDouble=false,bool isTest=false,String? rpc})async{
     try{
       if(rpc==null){
-        var a;
+        dynamic a;
         if(contract==""){
           Map<String,dynamic> params={
             "address":address,
@@ -630,7 +630,7 @@ class TokenViewApi{
         //"gas_price":'0x${gasPrice.toRadixString(16)}',
         //"gasPrice":'0x${gasPrice.toRadixString(16)}',
         "gas":"0x${gas.toRadixString(16)}",
-        "data": "0x${aaa}000000000000000000000000${toAddress}${valueHex}",
+        "data": "0x${aaa}000000000000000000000000$toAddress$valueHex",
         "coin":coinType,
         "net_mode":isTest?"test":"main",
         "id":AppGlobals.currentId++,
@@ -770,7 +770,7 @@ class TokenViewApi{
   }
   getEnsResolve(String domain)async{
     try{
-      final a=await BaseApi.RequestEmpty_h.get('${url}v1/ens/resolve?domain=${domain}', params: {},header:header,);
+      final a=await BaseApi.RequestEmpty_h.get('${url}v1/ens/resolve?domain=$domain', params: {},header:header,);
       MessageModel mm=MessageModel();
       if(a['code']==200){
         mm.data=a['data'];
@@ -793,7 +793,7 @@ class TokenViewApi{
   //获取余额
   getBalance_solana(String coinType,String address,String contract,{bool returnDouble=false,bool isTest=false})async{
     try{
-      var a;
+      dynamic a;
       if(contract==""){
         Map<String,dynamic> params={
           "pubkey":address,

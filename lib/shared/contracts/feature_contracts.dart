@@ -5,10 +5,10 @@
 //
 // Author: Jiang Yiwei
 
-/// Feature Contracts
-///
-/// Defines the contracts/interfaces that features must implement
-/// to participate in cross-feature communication.
+// Feature Contracts
+//
+// Defines the contracts/interfaces that features must implement
+// to participate in cross-feature communication.
 
 /// Navigation Contract
 ///

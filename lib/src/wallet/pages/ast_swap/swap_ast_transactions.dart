@@ -22,9 +22,7 @@ class SwapAstTransactions extends StatefulWidget {
 class _SwapAstTransactionsState extends State<SwapAstTransactions> {
   SwapAstApi? _swapAstApi;
   SwapAstApi get swapAstApi{
-    if(_swapAstApi==null){
-      _swapAstApi=SwapAstApi();
-    }
+    _swapAstApi ??= SwapAstApi();
     return _swapAstApi!;
   }
 

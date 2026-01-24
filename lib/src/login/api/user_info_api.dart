@@ -1,6 +1,4 @@
-﻿import 'dart:convert';
-
-import 'package:dio/dio.dart';
+﻿import 'package:dio/dio.dart';
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/https/base_api.dart';
@@ -24,7 +22,7 @@ class UserInfoApi{
     params["pwd"] = password;
     params["source"] = "app";
     final data =
-    await BaseApi.RequestEmpty_h.post('${url}/v1/user/loginEmail', params: {}, data: params,header: header);
+    await BaseApi.RequestEmpty_h.post('$url/v1/user/loginEmail', params: {}, data: params,header: header);
     return data;
   }
   //获取支付验证码
@@ -36,7 +34,7 @@ class UserInfoApi{
         "token":AppGlobals.userInfo?.token??"",
       };
       MessageModel mm=MessageModel();
-      final data=await BaseApi.RequestEmpty_h.post('${url}/v1/l/user/send/pay/email/code', params:{},data: postMap,header: header);
+      final data=await BaseApi.RequestEmpty_h.post('$url/v1/l/user/send/pay/email/code', params:{},data: postMap,header: header);
       if(data['code']==200){
         mm.data=true;
       }else{
@@ -60,7 +58,7 @@ class UserInfoApi{
         "token":AppGlobals.userInfo?.token??"",
       };
       MessageModel mm=MessageModel();
-      final data=await BaseApi.RequestEmpty_h.post('${url}/v1/l/user/verify/pay/email/code', params:{},data: postMap,header: header);
+      final data=await BaseApi.RequestEmpty_h.post('$url/v1/l/user/verify/pay/email/code', params:{},data: postMap,header: header);
       if(data['code']==200){
         mm.data=true;
       }else{
@@ -83,7 +81,7 @@ class UserInfoApi{
     params["mobile_name"] = mobileName;
     params["os"] = os;
     final data = await BaseApi.RequestEmpty_h.get(
-        '${url}/v1/r/user/inviter/code',
+        '$url/v1/r/user/inviter/code',
         params: params,header: header
     );
     if (data["code"] == 200 && data["data"] != null) {
@@ -105,7 +103,7 @@ class UserInfoApi{
     });
     Map<String,String> header_v2={'content-type': 'multipart/form-data'};
     final data = await BaseApi.RequestEmpty_h.post(
-        '${url}/v1/l/user/send/account/cancel/email/code',
+        '$url/v1/l/user/send/account/cancel/email/code',
         params: {},
         data: formData,header: header_v2);
     return data;
@@ -117,7 +115,7 @@ class UserInfoApi{
     params["email"] = email;
     params["type"] = type;
     final data = await BaseApi.RequestEmpty_h
-        .post('${url}/v1/user/sendEmailCode', params: {}, data: params,header: header);
+        .post('$url/v1/user/sendEmailCode', params: {}, data: params,header: header);
     return data;
   }
   /// 邮箱注册
@@ -131,7 +129,7 @@ class UserInfoApi{
     //params["invite"] = inviteCode;
     params["invite_code"] = inviteCode;
     final data = await BaseApi.RequestEmpty_h
-        .post('${url}/v1/user/registerEmail', params: {}, data: params,header: header);
+        .post('$url/v1/user/registerEmail', params: {}, data: params,header: header);
     return data;
   }
   ///邮箱重置密码
@@ -142,7 +140,7 @@ class UserInfoApi{
     params["pwd"] = password;
     params["code"] = code;
     final data = await BaseApi.RequestEmpty_h
-        .post('${url}/v1/user/emailResetPwd', params: {}, data: params,header: header);
+        .post('$url/v1/user/emailResetPwd', params: {}, data: params,header: header);
     return data;
   }
   updateUserInfo(Map<String,dynamic> userInfo)async{
@@ -154,7 +152,7 @@ class UserInfoApi{
       Map<String,String> header_v2={'content-type': 'multipart/form-data'};
       MessageModel mm=MessageModel();
       final data=await BaseApi.RequestEmpty_h.post(
-        '${url}/v1/l/user/info',
+        '$url/v1/l/user/info',
         params: {},
         data: formData,
         header: header_v2,
@@ -181,7 +179,7 @@ class UserInfoApi{
     params["uuid"] = AppGlobals.userInfo?.uuid??"";
     params["source"] = "app";
     final data = await BaseApi.RequestEmpty_h
-        .post('${url}/v1/l/user/account/cancel', params: {}, data: params,header: header);
+        .post('$url/v1/l/user/account/cancel', params: {}, data: params,header: header);
     return data;
   }
   //获取邀请用户，挖矿收益
@@ -190,7 +188,7 @@ class UserInfoApi{
       "uuid": uuid,
     };
     final data = await BaseApi.RequestEmpty_h.get(
-        '${url}/v1/r/user/invitee/mining/fullnode',
+        '$url/v1/r/user/invitee/mining/fullnode',
         params: params,header: header
     );
     if (data["code"] == 200 && data["data"] != null) {
@@ -204,7 +202,7 @@ class UserInfoApi{
       "uuid": uuid,
     };
     final data = await BaseApi.RequestEmpty_h.get(
-        '${url}/v1/r/user/invitee/mining',
+        '$url/v1/r/user/invitee/mining',
         params: params,header: header
     );
     if (data["code"] == 200 && data["data"] != null) {
@@ -222,7 +220,7 @@ class UserInfoApi{
       "page_num": pagenum,
     };
     final data = await BaseApi.RequestEmpty_h.get(
-        '${url}/v1/r/user/invitee/list/download',
+        '$url/v1/r/user/invitee/list/download',
         params: params,header: header
     );
     if (data["code"] == 200 && data["data"] != null) {
@@ -236,7 +234,7 @@ class UserInfoApi{
     Map<String, dynamic> params = {};
     params["uuid"] = uuid;
     final data = await BaseApi.RequestEmpty_h.get(
-        '${url}/v1/r/user/invitee/list',
+        '$url/v1/r/user/invitee/list',
         params: params,header: header
     );
     if (data["code"] == 200 && data["data"] != null) {
@@ -260,7 +258,7 @@ class UserInfoApi{
         "extra":extra,
       };
 
-      mm.data=await BaseApi.RequestEmpty_h.post('${url}/v1/l/feedback',params: {},data:dt ,header: header,addUserInfo: true);
+      mm.data=await BaseApi.RequestEmpty_h.post('$url/v1/l/feedback',params: {},data:dt ,header: header,addUserInfo: true);
       return mm;
     }catch(e){
       MessageModel mm=MessageModel.error();
@@ -276,7 +274,7 @@ class UserInfoApi{
     params["token"] = token;
     params["source"] = "app";
     final data = await BaseApi.RequestEmpty_h.get(
-        '${url}/v1/r/user/getUserInfo',
+        '$url/v1/r/user/getUserInfo',
         params: params,header: header
     );
     if (data["code"] == 200 && data["data"] != null) {
@@ -294,7 +292,7 @@ class UserInfoApi{
         params['chain']=chain;
       }
       MessageModel mm=MessageModel();
-      final data=await BaseApi.RequestEmpty_h.get('${url}/v1/r/user/info', params: params,header: header);
+      final data=await BaseApi.RequestEmpty_h.get('$url/v1/r/user/info', params: params,header: header);
       if(data['code']==200){
         mm.data=data['data'];
       }else{
@@ -313,7 +311,7 @@ class UserInfoApi{
     try {
       MessageModel mm = MessageModel();
       final data =
-      await BaseApi.RequestEmpty_h.get('${url}/v1/lr/get/msg/notice/list', params: {
+      await BaseApi.RequestEmpty_h.get('$url/v1/lr/get/msg/notice/list', params: {
         "uuid":AppGlobals.userInfo?.uuid??"",
         "page":page,
         "page_size":pageSize,
@@ -343,7 +341,7 @@ class UserInfoApi{
         "token":AppGlobals.userInfo?.token??"",
       };
       MessageModel mm=MessageModel();
-      final data=await BaseApi.RequestEmpty_h.post('${url}/v1/l/user/bind/google/auth/code', params:{},data: postMap,header: header);
+      final data=await BaseApi.RequestEmpty_h.post('$url/v1/l/user/bind/google/auth/code', params:{},data: postMap,header: header);
       if(data['code']==200){
         mm.data=data['data'];
       }else{
@@ -367,7 +365,7 @@ class UserInfoApi{
         "source":"app",
       };
       MessageModel mm=MessageModel();
-      final data=await BaseApi.RequestEmpty_h.post('${url}/v1/l/user/verify/google/auth/code', params:{},data: postMap,header: header);
+      final data=await BaseApi.RequestEmpty_h.post('$url/v1/l/user/verify/google/auth/code', params:{},data: postMap,header: header);
       if(data['code']==200){
         mm.data=true;
       }else{
@@ -389,7 +387,7 @@ class UserInfoApi{
     params["token"] = AppGlobals.userInfo?.token??"";
     params["source"] = "app";
     final data = await BaseApi.RequestEmpty_h.post(
-        '${url}/v1/l/file/bind/firebase/token',
+        '$url/v1/l/file/bind/firebase/token',
         params: {},
         data: params,header: header
     );

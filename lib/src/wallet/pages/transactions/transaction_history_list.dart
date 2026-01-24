@@ -12,8 +12,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class TransactionHistoryList extends StatefulWidget {
-  CoinModel coinModel;
-  TransactionHistoryList(this.coinModel,{super.key});
+  final CoinModel coinModel;
+  const TransactionHistoryList(this.coinModel,{super.key});
 
   @override
   State<TransactionHistoryList> createState() => _TransactionHistoryListState();
@@ -22,9 +22,7 @@ class TransactionHistoryList extends StatefulWidget {
 class _TransactionHistoryListState extends State<TransactionHistoryList> {
   AppDatabase? _db;
   AppDatabase get db{
-    if(_db==null){
-      _db=AppDatabase();
-    }
+    _db ??= AppDatabase();
     return _db!;
   }
   @override
@@ -53,8 +51,8 @@ class _TransactionHistoryListState extends State<TransactionHistoryList> {
               }
             },
             getData: (int page, int pageSize) async {
-              var txList;
-              String addr = widget.coinModel?.address.toString() ?? "";
+              List<dynamic>? txList;
+              String addr = widget.coinModel.address.toString();
               String coinKey = widget.coinModel.coin['coinType'];
               String contract = widget.coinModel.coin['contract'];
               if (widget.coinModel.coin['blockchainType'] ==

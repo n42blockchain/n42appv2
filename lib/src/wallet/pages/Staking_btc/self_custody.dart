@@ -5,13 +5,13 @@ import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
-import 'package:n42appv2/src/widgets/textField_widget.dart';
+import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SelfCustody extends StatefulWidget {
   final CoinModel coinModel;
-  SelfCustody(this.coinModel,{super.key});
+  const SelfCustody(this.coinModel,{super.key});
 
   @override
   State<SelfCustody> createState() => _SelfCustodyState();

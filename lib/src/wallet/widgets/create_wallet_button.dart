@@ -1,25 +1,28 @@
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/keystore/import_keystore.dart';
-import 'package:n42appv2/src/wallet/pages/wallet_manage/keystore/import_privatekey.dart';
-import 'package:n42appv2/src/wallet/widgets/Choose_import_coin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-class CreateWalletButton extends StatelessWidget {
-  dynamic onTap_back;
-  CreateWalletButton({this.onTap_back=null,super.key});
+class CreateWalletButton extends StatefulWidget {
+  final dynamic onTap_back;
+  const CreateWalletButton({this.onTap_back,super.key});
 
   @override
+  State<CreateWalletButton> createState() => _CreateWalletButtonState();
+}
+
+class _CreateWalletButtonState extends State<CreateWalletButton> {
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
           Container(
             height: ScreenUtil().setWidth(80),
             width: double.infinity,
+            alignment: Alignment.centerLeft,
             child: Text(
               S.of(context).g_key_wallet_c32,
               style: TextStyle(
@@ -28,7 +31,6 @@ class CreateWalletButton extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            alignment: Alignment.centerLeft,
           ),
           Divider(
             height: ScreenUtil().setWidth(1),
@@ -38,10 +40,11 @@ class CreateWalletButton extends StatelessWidget {
           ),
           InkWell(
             onTap: ()async{
-              await Navigator.pushNamed(context, '/CreateOne');
-              Navigator.of(context).pop();
-              if(onTap_back!=null){
-                onTap_back();
+              await Navigator.pushNamed(this.context, '/CreateOne');
+              if (!mounted) return;
+              Navigator.of(this.context).pop();
+              if(widget.onTap_back!=null){
+                widget.onTap_back();
               }
             },
             child: Container(
@@ -97,10 +100,11 @@ class CreateWalletButton extends StatelessWidget {
           ),
           InkWell(
             onTap: ()async{
-              await Navigator.pushNamed(context, '/ImportOne');
-              Navigator.of(context).pop();
-              if(onTap_back!=null){
-                onTap_back();
+              await Navigator.pushNamed(this.context, '/ImportOne');
+              if (!mounted) return;
+              Navigator.of(this.context).pop();
+              if(widget.onTap_back!=null){
+                widget.onTap_back();
               }
             },
             child: Container(
@@ -157,11 +161,12 @@ class CreateWalletButton extends StatelessWidget {
           ),
           InkWell(
             onTap: ()async{
-              await Navigator.of(context).push(MaterialPageRoute(
+              await Navigator.of(this.context).push(MaterialPageRoute(
                   builder: (_) => ImportKeystore()));
-              Navigator.of(context).pop();
-              if(onTap_back!=null){
-                onTap_back();
+              if (!mounted) return;
+              Navigator.of(this.context).pop();
+              if(widget.onTap_back!=null){
+                widget.onTap_back();
               }
             },
             child: Container(
@@ -217,10 +222,11 @@ class CreateWalletButton extends StatelessWidget {
           ),
           InkWell(
             onTap: ()async{
-              await Navigator.pushNamed(context, '/ImportPrivatekey');
-              Navigator.of(context).pop();
-              if(onTap_back!=null){
-                onTap_back();
+              await Navigator.pushNamed(this.context, '/ImportPrivatekey');
+              if (!mounted) return;
+              Navigator.of(this.context).pop();
+              if(widget.onTap_back!=null){
+                widget.onTap_back();
               }
             },
             child: Container(
@@ -269,7 +275,6 @@ class CreateWalletButton extends StatelessWidget {
             ),
           ),
         ],
-      ),
     );
   }
 }

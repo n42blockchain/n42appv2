@@ -1,5 +1,4 @@
 ﻿import 'dart:async';
-import 'dart:ui';
 
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
@@ -224,7 +223,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     
     return InkWell(
       onTap: _navigateToChat,
-      child: Container(
+      child: SizedBox(
         key: key,
         width: width,
         child: Column(
@@ -253,7 +252,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     final currentIndex = ref.watch(homeTabIndexProvider);
     // 限制在有效范围内
     //final safeCurrentIndex = currentIndex.clamp(0, 1);
-    
+
     Widget child;
     child = Image.asset(
       imagePath,
@@ -311,7 +310,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
         if (index == currentIndex) return;
         ref.read(homeTabIndexProvider.notifier).state = index;
       },
-      child: Container(
+      child: SizedBox(
         key: key,
         width: width,
         child: Column(
@@ -337,7 +336,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
   }
 
   int pausedTime = 0; // 记录切到后台的时间戳
-  bool _unlockIsPush = false;
+  final bool _unlockIsPush = false;
   
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {

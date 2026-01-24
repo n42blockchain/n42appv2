@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 class AppendixModel{
   String name="";
   String path="";
-  Uint8List? imgMini=null;
+  Uint8List? imgMini;
   String url="";
   CancelToken? cancelToken;
   int upCount=0;

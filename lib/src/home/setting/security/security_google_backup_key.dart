@@ -14,6 +14,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class SecurityGoogleBackupKey extends StatefulWidget{
+  const SecurityGoogleBackupKey({super.key});
+
   @override
   _SecurityGoogleBackupKeyState createState()=>_SecurityGoogleBackupKeyState();
 }
@@ -32,6 +34,7 @@ class _SecurityGoogleBackupKeyState extends State<SecurityGoogleBackupKey>{
     load=Load.loading;
     UserInfoApi userInfoAPI=UserInfoApi();
     MessageModel mm=await userInfoAPI.bindGoogle();
+    if (!mounted) return;
     if(mm.error){
       ToastUtils.show(S.of(context).google_verification_message3);
     }else{
@@ -89,7 +92,7 @@ class _SecurityGoogleBackupKeyState extends State<SecurityGoogleBackupKey>{
               height: ScreenUtil().setWidth(500.0),
               child: QrImageView(
                 backgroundColor: Color(0xffffffff),
-                data: "otpauth://totp/AmazaWallet?secret=${googleAuthStr}",
+                data: "otpauth://totp/AmazaWallet?secret=$googleAuthStr",
                 version: QrVersions.min + 7,
               ),
             ),

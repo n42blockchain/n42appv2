@@ -81,8 +81,9 @@ Widget TextFieldStyle2(
             if(leftWidget !=null)
               InkWell(
                 onTap: (){
-                  if(leftOnTap !=null)
+                  if(leftOnTap !=null) {
                     leftOnTap();
+                  }
                 },
                 child: leftWidget,
               ),
@@ -111,40 +112,46 @@ Widget TextFieldStyle2(
                 ),
                 maxLines: maxLines??1,
                 onEditingComplete: () {
-                  if(onEditingComplete !=null)
+                  if(onEditingComplete !=null) {
                     onEditingComplete();
+                  }
                 },
                 onChanged: (value) {
-                  if(onChanged !=null)
+                  if(onChanged !=null) {
                     onChanged(value);
+                  }
                 },
                 onSubmitted: (value){
-                  if(onSubmitted !=null)
+                  if(onSubmitted !=null) {
                     onSubmitted(value);
+                  }
                 },
               ),
             ),
             if(rightWidget3 !=null)
               InkWell(
                 onTap: (){
-                  if(rightOnTap2 !=null)
+                  if(rightOnTap2 !=null) {
                     rightOnTap3();
+                  }
                 },
                 child: rightWidget3,
               ),
             if(rightWidget1 !=null)
               InkWell(
                 onTap: (){
-                  if(rightOnTap1 !=null)
+                  if(rightOnTap1 !=null) {
                     rightOnTap1();
+                  }
                 },
                 child: rightWidget1,
               ),
             if(rightWidget2 !=null)
               InkWell(
                 onTap: (){
-                  if(rightOnTap2 !=null)
+                  if(rightOnTap2 !=null) {
                     rightOnTap2();
+                  }
                 },
                 child: rightWidget2,
               ),
@@ -259,8 +266,9 @@ Widget TextFieldStyle3(
             if(leftWidget !=null)
               InkWell(
                 onTap: (){
-                  if(leftOnTap !=null)
+                  if(leftOnTap !=null) {
                     leftOnTap();
+                  }
                 },
                 child: leftWidget,
               ),
@@ -291,32 +299,37 @@ Widget TextFieldStyle3(
                 maxLines: maxLines??1,
                 maxLength: maxLengths,
                 onEditingComplete: () {
-                  if(onEditingComplete !=null)
+                  if(onEditingComplete !=null) {
                     onEditingComplete();
+                  }
                 },
                 onChanged: (value) {
-                  if(onChanged !=null)
+                  if(onChanged !=null) {
                     onChanged(value);
+                  }
                 },
                 onSubmitted: (value){
-                  if(onSubmitted !=null)
+                  if(onSubmitted !=null) {
                     onSubmitted(value);
+                  }
                 },
               ),
             ),
             if(rightWidget1 !=null)
               InkWell(
                 onTap: (){
-                  if(rightOnTap1 !=null)
+                  if(rightOnTap1 !=null) {
                     rightOnTap1();
+                  }
                 },
                 child: rightWidget1,
               ),
             if(rightWidget2 !=null)
               InkWell(
                 onTap: (){
-                  if(rightOnTap2 !=null)
+                  if(rightOnTap2 !=null) {
                     rightOnTap2();
+                  }
                 },
                 child: rightWidget2,
               ),

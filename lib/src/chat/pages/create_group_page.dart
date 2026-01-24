@@ -26,16 +26,12 @@ class CreateGroupPage extends StatefulWidget {
 class _CreateGroupPageState extends State<CreateGroupPage> {
   ChatApi? _chatApi;
   ChatApi get chatApi{
-    if(_chatApi==null){
-      _chatApi=ChatApi();
-    }
+    _chatApi ??= ChatApi();
     return _chatApi!;
   }
   ChatUtil? _chatUtils;
   ChatUtil get chatUtils{
-    if(_chatUtils==null){
-      _chatUtils= ChatUtil();
-    }
+    _chatUtils ??= ChatUtil();
     return _chatUtils!;
   }
   List<FriendInfo> friendList = [];
@@ -90,8 +86,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
         text: S.of(context).g_chat_key_1,
       ),
       body: SafeArea(
-        child: Container(
-          child: Column(
+        child: Column(
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -298,12 +293,14 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                         }
                         final uploadSSData =
                         await chatApi.uploadGroupMemberSS(groupId, params);
+                        if (!mounted) return;
                         if (uploadSSData != null && uploadSSData["code"] == 200) {
                           Navigator.of(this.context).pop();
                         }
 
                       }
-                    } catch (err) {
+                    } catch (_) {
+                      // 创建群组过程中的错误安全忽略，finally 块会重置加载状态
                     } finally {
                       setState(() {
                         load=Load.finish;
@@ -327,7 +324,6 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                 ),
               ),
             ],
-          ),
         ),
       ),
     );

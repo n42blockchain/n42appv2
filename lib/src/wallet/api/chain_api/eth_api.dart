@@ -115,7 +115,7 @@ class EthAPI{
     }else{
       String addr=strip0x(address);
       MessageModel mm=await BaseRPC_eth("eth_call",[{"from": address,
-        "to": contract, "data": "0x70a08231000000000000000000000000${addr}"
+        "to": contract, "data": "0x70a08231000000000000000000000000$addr"
       },"latest"],coinType: coinType??cType,isTest: isTest);
       if(mm.error==false){
         mm.data=hexToInt(mm.data);
@@ -201,7 +201,7 @@ class EthAPI{
         "to": contract,
         "gasPrice":'0x${gasPrice.toRadixString(16)}',
         "gas":"0x${gas.toRadixString(16)}",
-        "data": "0x${aaa}000000000000000000000000${toAddress}${valueHex}",
+        "data": "0x${aaa}000000000000000000000000$toAddress$valueHex",
         //"maxPriorityFee":"0x0",
         //"maxFeePerGas":'0x${gasPrice.toRadixString(16)}'
       });
@@ -214,7 +214,7 @@ class EthAPI{
         //"gasPrice":'0x${gasPrice.toRadixString(16)}',
         "gas":"0x${gas.toRadixString(16)}",
         //"maxFeePerGas":'0x${gasPrice.toRadixString(16)}',
-        "data": "0x${aaa}000000000000000000000000${toAddress}${valueHex}",
+        "data": "0x${aaa}000000000000000000000000$toAddress$valueHex",
         //"coin":coinType??cType??"",
         //"net_mode":isTest?"test":"main",
         "id":AppGlobals.currentId++,
@@ -271,7 +271,7 @@ class EthAPI{
     return await BaseRPC_eth("eth_sendRawTransaction",[value],coinType: coinType??cType,isTest: isTest);
   }
 
-  BaseRPC_eth(String method,var value,{String? coinType,bool? isTest=null})async{
+  BaseRPC_eth(String method,var value,{String? coinType,bool? isTest})async{
     try{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};

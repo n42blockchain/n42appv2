@@ -15,13 +15,13 @@ class FaceApi{
       MessageModel mm = MessageModel();
       MultipartFile f;
       if(type==0){
-        f=await MultipartFile.fromFile(file,filename: filename);
+        f=MultipartFile.fromFile(file,filename: filename);
       }else{
-        f=await MultipartFile.fromBytes(file,filename: filename);
+        f=MultipartFile.fromBytes(file,filename: filename);
       }
       FormData fd=FormData.fromMap({"face":f,"address":address,});
       var data=await BaseApi.RequestEmpty_h.post(
-        '${url}/address_upload_face',
+        '$url/address_upload_face',
         params: {},
         data: fd,
         header:header,
@@ -40,13 +40,13 @@ class FaceApi{
       MessageModel mm = MessageModel();
       MultipartFile f;
       if(type==0){
-        f=await MultipartFile.fromFile(file,filename: filename);
+        f=MultipartFile.fromFile(file,filename: filename);
       }else{
-        f=await MultipartFile.fromBytes(file,filename: filename);
+        f=MultipartFile.fromBytes(file,filename: filename);
       }
       FormData fd=FormData.fromMap({"face":f});
       var data=await BaseApi.RequestEmpty_h.post(
-        '${url}/detect_face',
+        '$url/detect_face',
         params: {},
         data: fd,
         header:header,
@@ -64,7 +64,7 @@ class FaceApi{
     try{
       MessageModel mm = MessageModel();
       var data=await BaseApi.RequestEmpty_h.delete(
-        '${url}/delete_face',
+        '$url/delete_face',
         params: {
           "address":address
         },

@@ -222,7 +222,6 @@ class BaseHttp {
       case DioExceptionType.cancel:
         return S.current.g_key_error_8;
       case DioExceptionType.unknown:
-      default:
         return S.current.g_key_error_10;
     }
   }

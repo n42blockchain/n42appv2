@@ -8,12 +8,12 @@ import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/shared/di/service_locator.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
-import 'package:n42appv2/src/widgets/textField_widget.dart';
+import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class MiningOutputPk extends StatefulWidget {
-  Map<String,dynamic>? value;
-  MiningOutputPk({this.value,super.key});
+  final Map<String,dynamic>? value;
+  const MiningOutputPk({this.value,super.key});
 
   @override
   State<MiningOutputPk> createState() => _MiningOutputPkState();
@@ -32,25 +32,24 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
   bool obscure=true;
   Load load=Load.finish;
   bool copyEncrypte=false;
-  Map<String,dynamic>? encrypteData=null;
+  Map<String,dynamic>? encrypteData;
+  Map<String,dynamic>? _localValue;
 
   // 模拟加密函数：你可以替换成真实加密逻辑
   encryptData(String password) async{
-    if(widget.value==null){
-      widget.value=await MiningApi.init().generateBls12381Keypair();
-    }
+    _localValue ??= widget.value ?? await MiningApi.init().generateBls12381Keypair();
     if (!mounted) return "";
-    
+
     // Use IWalletService instead of WalletActionProvider
     final walletService = ServiceLocatorSetup.walletService;
     if (walletService == null) return "";
-    
+
     final miningIndex = walletService.miningWalletIndex;
     final privateKey = await walletService.getPrivateKeyForWallet(miningIndex);
     final mnemonic = await walletService.getMnemonicForWallet(miningIndex);
-    
+
     encrypteData = {
-      'validator': widget.value,
+      'validator': _localValue,
       "privateKey": privateKey ?? "",
       "mnemonicWords": mnemonic ?? "",
     };

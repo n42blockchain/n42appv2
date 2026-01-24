@@ -12,8 +12,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 class BrowserCollectionList extends StatefulWidget {
-  int type;//0点击列表项，立刻返回上一页，并带回地址；1点击列表项，跳转收藏详情页
-  BrowserCollectionList({this.type=0,super.key});
+  final int type;//0点击列表项，立刻返回上一页，并带回地址；1点击列表项，跳转收藏详情页
+  const BrowserCollectionList({this.type=0,super.key});
 
   @override
   State<BrowserCollectionList> createState() => _BrowserCollectionListState();
@@ -22,9 +22,7 @@ class BrowserCollectionList extends StatefulWidget {
 class _BrowserCollectionListState extends State<BrowserCollectionList> {
   BrowserApi? _browserApi;
   BrowserApi get browserApi{
-    if(_browserApi==null){
-      _browserApi=BrowserApi();
-    }
+    _browserApi ??= BrowserApi();
     return _browserApi!;
   }
   List<BrowserCollectionModel> collectionList=[];
@@ -83,7 +81,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
         backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
         displacement: ScreenUtil().setWidth(72.0),
-        child: collectionList.length==0?
+        child: collectionList.isEmpty?
         noDataWidget():
         listWidget(),
       ),
@@ -210,7 +208,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
                       onTap: (){
                         deleteCollection(index);
                       },
-                      child: Container(
+                      child: SizedBox(
                         height: ScreenUtil().setWidth(40.0),
                         width: ScreenUtil().setWidth(40.0),
                         child: Icon(
@@ -231,7 +229,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
                           setState(() {});
                         }
                       },
-                      child: Container(
+                      child: SizedBox(
                         height: ScreenUtil().setWidth(40.0),
                         width: ScreenUtil().setWidth(40.0),
                         child: Icon(

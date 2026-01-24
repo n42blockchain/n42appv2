@@ -15,7 +15,7 @@ import 'package:n42appv2/core/di/service_locator_setup.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart' as fPicker;
+import 'package:file_picker/file_picker.dart' as f_picker;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:video_compress/video_compress.dart';
 
@@ -29,9 +29,7 @@ class Feedback extends StatefulWidget {
 class _FeedbackState extends State<Feedback> {
   Regular? _regular;
   Regular get regular{
-    if(_regular==null){
-      _regular=Regular();
-    }
+    _regular ??= Regular();
     return _regular!;
   }
   TextEditingController inputEditingController=TextEditingController();
@@ -50,16 +48,16 @@ class _FeedbackState extends State<Feedback> {
   }
   //选择文件，音频或者视频type,0图片，1视频
   Future getFile(int type)async{
-    fPicker.FilePickerResult? result = await fPicker.FilePicker.platform.pickFiles(
+    f_picker.FilePickerResult? result = await f_picker.FilePicker.platform.pickFiles(
       allowMultiple:true,
-      type: type==0?fPicker.FileType.image:fPicker.FileType.video,
+      type: type==0?f_picker.FileType.image:f_picker.FileType.video,
     );
     if(result==null)return;
     int fjCount=result.files.length;
     if(fjCount>5)fjCount=5-appendixs.length;
 
     for(int i=0;i<fjCount;i++){
-      fPicker.PlatformFile pf=result.files[i];
+      f_picker.PlatformFile pf=result.files[i];
       AppendixModel am=AppendixModel();
       am.name=pf.name;
       am.path=pf.path.toString();
@@ -88,7 +86,7 @@ class _FeedbackState extends State<Feedback> {
   //上传图片
   uploadFile(AppendixModel am)async{
     try{
-      File file=await File(am.path);
+      File file=File(am.path);
       am.cancelToken=CancelToken();
       setState(() {
         am.state=1;
@@ -143,7 +141,7 @@ class _FeedbackState extends State<Feedback> {
 
         break;
       }
-      fjStr+=am.url+";";
+      fjStr+="${am.url};";
     }
     if(fjUpload==false){
       ToastUtils.show(S.of(context).g_key_feedback_2);//"有未上传的附件"
@@ -156,7 +154,7 @@ class _FeedbackState extends State<Feedback> {
     final walletService = ServiceLocatorSetup.walletService;
     String address = "";
     if (walletService != null) {
-      final mainWallet = await walletService.getMainWallet();
+      final mainWallet = walletService.getMainWallet();
       if (mainWallet != null) {
         // getChainAddress 需要 walletId (String) 和 chainType
         // 使用钱包地址作为标识符
@@ -168,6 +166,7 @@ class _FeedbackState extends State<Feedback> {
     setState(() {
       load=Load.finish;
     });
+    if (!mounted) return;
     if(mm.error){
       ToastUtils.show(S.of(context).g_key_feedback_3);//"提交失败"
     }else{
@@ -191,7 +190,7 @@ class _FeedbackState extends State<Feedback> {
           Container(
             width:ScreenUtil().setWidth(40.0),
             alignment: Alignment.center,
-            child: Container(
+            child: SizedBox(
               width:ScreenUtil().setWidth(40.0),
               height: ScreenUtil().setWidth(40.0),
               child: CircularProgressIndicator(),
@@ -341,8 +340,7 @@ class _FeedbackState extends State<Feedback> {
                         }else{
                           imgWidget=Image.memory(am.imgMini!,fit: BoxFit.cover,);
                         }
-                        return Container(
-                          child: Stack(
+                        return Stack(
                             children: [
                               Positioned(
                                 top: ScreenUtil().setWidth(10.0),
@@ -407,7 +405,6 @@ class _FeedbackState extends State<Feedback> {
                                   visible: am.state==3,
                                   child: InkWell(
                                     onTap: (){
-                                      if(am.state==1)return;
                                       uploadFile(am);
                                     },
                                     child: Container(
@@ -461,7 +458,6 @@ class _FeedbackState extends State<Feedback> {
                                 ),
                               )
                             ],
-                          ),
                         );
                       }),),
 

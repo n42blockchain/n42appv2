@@ -200,7 +200,7 @@ class SettingHomePage extends ConsumerWidget {
             onChanged: (value) {
               ref.read(useNewChatProvider.notifier).setUseNewChat(value);
             },
-            activeColor: Colors.blueAccent,
+            activeTrackColor: Colors.blueAccent,
           ),
         ],
       ),

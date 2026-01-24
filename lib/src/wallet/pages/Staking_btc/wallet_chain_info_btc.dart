@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:n42appv2/core/app/app_globals.dart';
@@ -9,7 +10,6 @@ import 'package:n42appv2/src/sqlite/app_database.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/src/wallet/api/chain_api/btc_api.dart';
 import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 import 'package:n42appv2/src/wallet/api/transaction_api.dart';
 import 'package:n42appv2/src/wallet/models/btc_transaction_recode_model.dart';
@@ -20,15 +20,12 @@ import 'package:n42appv2/src/wallet/pages/Staking_btc/redeem.dart';
 import 'package:n42appv2/src/wallet/pages/Staking_btc/self_custody1.dart';
 import 'package:n42appv2/src/wallet/pages/market/market_coin_info.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_btc.dart';
-import 'package:n42appv2/src/wallet/pages/transactions/transaction_detail_eth.dart';
 import 'package:n42appv2/src/wallet/pages/transactions/transaction_history_list.dart';
-import 'package:n42appv2/src/wallet/pages/transactions/transaction_retry.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_receive_qr.dart';
 import 'package:n42appv2/src/wallet/provider/transaction_record_iterms_provider.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/browser_address.dart';
-import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/wallet/widgets/wallet_chain_info_transactions_item.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
@@ -38,10 +35,10 @@ import 'package:n42appv2/src/widgets/prompt_widget.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:crypto/crypto.dart';
 import 'package:eth_sig_util/util/utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';
@@ -49,27 +46,22 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 class WalletChainInfoBtc extends StatefulWidget {
-  CoinModel coinModel;
-  WalletChainInfoBtc(this.coinModel,{super.key});
+  final CoinModel coinModel;
+  const WalletChainInfoBtc(this.coinModel,{super.key});
 
   @override
   State<WalletChainInfoBtc> createState() => _WalletChainInfoBtcState();
 }
 
 class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
-  final NumberFormat _oCcy = NumberFormat("#,##0.####", "en_US");
   AppDatabase? _db;
   AppDatabase get db{
-    if(_db==null){
-      _db=AppDatabase();
-    }
+    _db ??= AppDatabase();
     return _db!;
   }
   TokenViewApi? _tokenViewApi;
   TokenViewApi get tokenViewApi{
-    if(_tokenViewApi==null){
-      _tokenViewApi=TokenViewApi();
-    }
+    _tokenViewApi ??= TokenViewApi();
     return _tokenViewApi!;
   }
   late WebViewController _controller;
@@ -87,7 +79,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
   int page = 1;
   bool lastPage = false;
   List<dynamic> transactionList = [];
-  var eventBusFn;
+  StreamSubscription? eventBusFn;
 
   @override
   void initState() {
@@ -148,7 +140,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
     }
     _controller =
         WebViewController.fromPlatformCreationParams(params);
-    _controller!
+    _controller
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
       ..setNavigationDelegate(
@@ -198,7 +190,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
 
     // 3️⃣ 生成比特币地址（P2PKH）
     final address = publicKey.toSegwitAddress();
-    print(address.toAddress(BitcoinNetwork.testnet));
+    debugPrint(address.toAddress(BitcoinNetwork.testnet));
   }
   //获取余额
   getBalance()async{
@@ -209,8 +201,9 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
         setState(() {});
         return;
       }
-    }catch(e){
-    }finally{
+    } catch (_) {
+      // 错误安全忽略
+    } finally {
       load=Load.finish;
       setState(() {});
     }
@@ -300,10 +293,10 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
         page += 1;
       }
       load = loadType;
-      String addr = widget.coinModel?.address.toString() ?? "";
+      String addr = widget.coinModel.address.toString();
       String coinKey = widget.coinModel.coin['coinType'];
       String contract = widget.coinModel.coin['contract'];
-      var txList;
+      List<dynamic>? txList;
       if (widget.coinModel.coin['blockchainType'] ==
           BlockchainType.Bitcoin.name) {
         txList = await db
@@ -333,7 +326,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
   }
 
   getTransactionData_network(Load LoadType)async{
-    String addr = widget.coinModel?.address.toString() ?? "";
+    String addr = widget.coinModel.address.toString();
     String coinKey = widget.coinModel.coin['coinType'];
     String contract = widget.coinModel.coin['contract'];
     //List<CommonResponseItemModel>? cril;
@@ -356,7 +349,8 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
       for(int i=cril.length-1;i>=0;i--){
         BtcTranDetail cri=cril[i];
         List<BtcTransactionRecodeModel> rtrm=await db.selectBtcTransationRecord_txHash(cri.hash);
-        if(rtrm.length==0){
+        if (!mounted) return;
+        if(rtrm.isEmpty){
           BtcTransactionRecodeModel transationRecordModel=BtcTransactionRecodeModel();
           transationRecordModel.addrType=widget.coinModel.addrType;
           transationRecordModel.coin=widget.coinModel.coin;
@@ -366,7 +360,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
           transationRecordModel.to1="";
           transationRecordModel.walletIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
           //transationRecordModel.nonce="0";
-          transationRecordModel.txHash=cri.hash??"0x";
+          transationRecordModel.txHash=cri.hash;
           //transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
           //transationRecordModel.gas=int.parse(cri.gas??"0");
           transationRecordModel.txTime=(DateTime.parse(cri.confirmed??"").millisecondsSinceEpoch~/1000).toString();
@@ -430,7 +424,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
         else{
           BtcTransactionRecodeModel transationRecordModel=rtrm[0];
           String cDate=(DateTime.parse(cri.confirmed??"").millisecondsSinceEpoch~/1000).toString();
-          if(transationRecordModel.InputsAddress?.length==0){
+          if(transationRecordModel.InputsAddress.isEmpty){
             if(cri.inputs!=null){
               transationRecordModel.inputModels=[];
               for(Input input in cri.inputs!){
@@ -500,7 +494,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
 
     // 生成 P2WSH 地址
     final p2wshAddress = createP2WSHAddress(scriptHash);
-    print("p2wsh:${p2wshAddress}:${p2wshAddress.length}");
+    debugPrint("p2wsh:$p2wshAddress:${p2wshAddress.length}");
   }
   /// 构建锁定脚本
   Uint8List buildRedeemScript(Uint8List userPubKey, Uint8List canisterPubKey, int lockTime) {
@@ -541,11 +535,11 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
   String createP2WSHAddress(Uint8List scriptHash) {
     // 生成 P2WSH 地址
     final p2wshAddress = bech32Encode('bc', scriptHash);
-    print('P2WSH Address: $p2wshAddress');
+    debugPrint('P2WSH Address: $p2wshAddress');
     return p2wshAddress;
   }
   /// Bech32 字符集
-  String _charset = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
+  final String _charset = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
 
   /// Bech32 编码
   String bech32Encode(String hrp, Uint8List data) {
@@ -672,7 +666,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
               onTap: () async {
                 showtestAndMainnetWidget();
               },
-              child: Container(
+              child: SizedBox(
                 width: ScreenUtil().setWidth(40.0),
                 height: ScreenUtil().setWidth(40.0),
                 //padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
@@ -1097,6 +1091,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
                     WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
                     if(wap.walletInfo.password==""){
                       final flag= await TipsDialog7(context);
+                      if (!mounted) return;
                       if (flag != null && flag) {
                         Navigator.push(context, MaterialPageRoute(
                             settings: RouteSettings(
@@ -1134,6 +1129,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
                     WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
                     if(wap.walletInfo.password==""){
                       final flag= await TipsDialog7(context);
+                      if (!mounted) return;
                       if (flag != null && flag) {
                         Navigator.push(context, MaterialPageRoute(
                             settings: RouteSettings(
@@ -1293,7 +1289,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
-              Container(
+              SizedBox(
                 width: ScreenUtil().setWidth(40.0),
                 height: ScreenUtil().setWidth(40.0),
                 child: Image.asset(
@@ -1328,7 +1324,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
-              Container(
+              SizedBox(
                 width: ScreenUtil().setWidth(40.0),
                 height: ScreenUtil().setWidth(40.0),
                 child: Image.asset(

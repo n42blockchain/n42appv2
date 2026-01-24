@@ -7,26 +7,26 @@ import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
-import 'package:n42appv2/src/widgets/textField_widget.dart';
+import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
 class BackupThree extends StatefulWidget {
-  WalletInfo walletInfo;
-  int walletIndex;
-  BackupThree(this.walletInfo,this.walletIndex,{super.key});
+  final WalletInfo walletInfo;
+  final int walletIndex;
+  const BackupThree(this.walletInfo,this.walletIndex,{super.key});
 
   @override
   State<BackupThree> createState() => _BackupThreeState();
 }
 
 class _BackupThreeState extends State<BackupThree> {
-  TextEditingController _uPasswordController = TextEditingController();
-  TextEditingController _uPasswordConfirmController = TextEditingController();
-  FocusNode _uPasswordFocusNode = FocusNode();
-  FocusNode _uPasswordConfirmFocusNode = FocusNode();
+  final TextEditingController _uPasswordController = TextEditingController();
+  final TextEditingController _uPasswordConfirmController = TextEditingController();
+  final FocusNode _uPasswordFocusNode = FocusNode();
+  final FocusNode _uPasswordConfirmFocusNode = FocusNode();
   String uPasswordErrorMessage="";
   String uPasswordConfirmErrorMessage="";
   bool showPwd1=true;
@@ -57,7 +57,7 @@ class _BackupThreeState extends State<BackupThree> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     LoginTitle(
-                      title: '${S.of(context).login_password}',
+                      title: S.of(context).login_password,
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor10.name),
                       must: true,
                     ),
@@ -203,14 +203,15 @@ class _BackupThreeState extends State<BackupThree> {
                           uPasswordConfirmErrorMessage="";
                         });
                         widget.walletInfo.password=password;
-                        WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
+                        WalletActionProvider wap=Provider.of<WalletActionProvider>(this.context,listen: false);
                         await wap.saveWalletInfo(widget.walletInfo,widget.walletIndex);
+                        if (!mounted) return;
                         if(widget.walletIndex==wap.walletIndex){
-                          Provider.of<WalletActionProvider>(context,listen: false).init_wallet();
+                          Provider.of<WalletActionProvider>(this.context,listen: false).init_wallet();
                         }
-                        ToastUtils.show(S.of(context).g_key_185);
+                        ToastUtils.show(S.of(this.context).g_key_185);
                         eventBus.fire(EventPublic(EventPublicType.backup,param: widget.walletInfo));
-                        Navigator.pop(context);
+                        Navigator.pop(this.context);
                       },
                       S.of(context).g_key_115,
                       AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),

@@ -1,9 +1,7 @@
 ﻿import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
-import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/home/setting/account_logout_page.dart';
 import 'package:n42appv2/src/home/widgets/nav_select_image.dart';
@@ -15,7 +13,6 @@ import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
-import 'package:n42appv2/src/widgets/container_widget.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:flutter/material.dart';
@@ -87,6 +84,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
         }
       }
       MessageModel r = await Provider.of<PublicProvider>(context,listen: false).editUserInfo(userInfo!, imageData: imageEdit);
+      if (!mounted) return;
       if (r.error == false) {
         ToastUtils.showSuccess(S.of(context).g_key_185);
         if (mounted) {

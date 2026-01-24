@@ -34,8 +34,8 @@ import 'package:decimal/decimal.dart' as dec;
 import 'package:date_format/date_format.dart' as dformat;
 
 class SwapAstHome extends StatefulWidget {
-  double? getAstNum;
-  SwapAstHome({this.getAstNum,super.key});
+  final double? getAstNum;
+  const SwapAstHome({this.getAstNum,super.key});
 
   @override
   State<SwapAstHome> createState() => _SwapAstHomeState();
@@ -44,9 +44,7 @@ class SwapAstHome extends StatefulWidget {
 class _SwapAstHomeState extends State<SwapAstHome> {
   Regular? _regular;
   Regular get regular{
-    if(_regular==null){
-      _regular=Regular();
-    }
+    _regular ??= Regular();
     return _regular!;
   }
   Load load = Load.loading;
@@ -64,7 +62,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
   List<SwapAstModel> swapAstList = [];
   List<dynamic> coinMarketInfo = [];
   bool readStatement = false;
-  Map<String, dynamic>? token = null;
+  Map<String, dynamic>? token;
   int? orderId;
 
   BigInt totalGasPrice = BigInt.zero;
@@ -72,16 +70,12 @@ class _SwapAstHomeState extends State<SwapAstHome> {
   BigInt gas = BigInt.zero;
   SwapAstApi? _swapAstApi;
   SwapAstApi get swapAstApi{
-    if(_swapAstApi==null){
-      _swapAstApi=SwapAstApi();
-    }
+    _swapAstApi ??= SwapAstApi();
     return _swapAstApi!;
   }
   TokenViewApi? _tokenViewApi;
   TokenViewApi get tokenViewApi{
-    if(_tokenViewApi==null){
-      _tokenViewApi=TokenViewApi();
-    }
+    _tokenViewApi ??= TokenViewApi();
     return _tokenViewApi!;
   }
   @override
@@ -156,7 +150,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     } else {
       swapAstList =
           (rData.data as List).map((e) => SwapAstModel.fromJson(e)).toList();
-      if (swapAstList.length != 0) {
+      if (swapAstList.isNotEmpty) {
         if (youPay != null) {
           int ypIndex = swapAstList.indexWhere((element) {
             if (youPay!.pay_chain == element.pay_chain) {
@@ -182,6 +176,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
         getBalance_pay();
         return true;
       }else{
+        if (!mounted) return false;
         errorMessage = S.of(context).g_key_132;
         return false;
       }
@@ -194,7 +189,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     }
     List<CoinModel> rList = Provider.of<WalletActionProvider>(context,listen: false)
         .getCoinModelWithSymbols(symbols: symbol);
-    if (rList.length != 0) {
+    if (rList.isNotEmpty) {
       return rList[0];
     }
     return null;
@@ -309,9 +304,10 @@ class _SwapAstHomeState extends State<SwapAstHome> {
 
   getCoinPrice() async {
     String keys = "n";
-    keys = '${keys},${youPay!.pay_coin ?? "".toLowerCase()}';
+    keys = '$keys,${youPay!.pay_coin ?? "".toLowerCase()}';
     //查询coins中的币种信息
     var list = await MarketApi().getWalletCoinsInfo(keys);
+    if (!mounted) return false;
     //判断查询是否成功
     if (list['error']) {
       //查询失败，设置当前操作状态为error，并设置错误信息
@@ -347,13 +343,11 @@ class _SwapAstHomeState extends State<SwapAstHome> {
   }
 
   payInput({String? value}) {
-    if (value == null) {
-      value = payTextEditingController.text;
-    }
+    value ??= payTextEditingController.text;
     bool checkNum = regular.regular_nums(value);
     bool checkDouble = regular.regular_double(value);
     if (checkNum == false && checkDouble == false) return;
-    if (value == 0) return;
+    if (value == "0") return;
     double getValue = dec.Decimal.parse(value).toDouble() *
         ((youPay?.price ?? 0) / (getCoinModel?.coinPrice ?? 0));
     getTextEditingController.text =
@@ -363,13 +357,11 @@ class _SwapAstHomeState extends State<SwapAstHome> {
   }
 
   getInput({String? value}) {
-    if (value == null) {
-      value = getTextEditingController.text;
-    }
+    value ??= getTextEditingController.text;
     bool checkNum = regular.regular_nums(value);
     bool checkDouble = regular.regular_double(value);
     if (checkNum == false && checkDouble == false) return;
-    if (value == 0) return;
+    if (value == "0") return;
     double p = (getCoinModel?.coinPrice ?? 0) / (youPay?.price ?? 0);
     double payValue = double.parse(value) * p;
     payTextEditingController.text =
@@ -471,11 +463,14 @@ class _SwapAstHomeState extends State<SwapAstHome> {
         //AmplitudeUtils.walletFundingSucceeded();
 
         bool rData = await postOrderTxHash(orderId ?? 0, txHash);
+        if (!mounted) return;
         if (rData) {
           await alertWidget(context);
+          if (!mounted) return;
           Navigator.pop(context);
         }
       }
+      if (!mounted) return;
       setState(() {
         load = Load.finish;
       });
@@ -545,6 +540,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
         contract: youPay!.pay_coin_contract!,
         isTest: false,
       );
+      if (!mounted) return false;
       if (ethMessage.error == false) {
         gas = ethMessage.data;
         totalGasPrice = gasPrice * gas;
@@ -570,9 +566,11 @@ class _SwapAstHomeState extends State<SwapAstHome> {
       }
     } catch (e) {
       errorMessage = e.toString();
-      setState(() {
-        load = Load.finish;
-      });
+      if (mounted) {
+        setState(() {
+          load = Load.finish;
+        });
+      }
       return false;
     }
   }
@@ -597,7 +595,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                     MaterialPageRoute(
                         builder: (context) => SwapAstTransactions()));
               },
-              child: Container(
+              child: SizedBox(
                 height: ScreenUtil().setWidth(44),
                 width: ScreenUtil().setWidth(44),
                 child: Image.asset(
@@ -740,7 +738,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
               )
             ],
           ),
-          Container(
+          SizedBox(
             height: ScreenUtil().setWidth(100),
             width: double.infinity,
             child: Row(
@@ -790,6 +788,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                         MaterialPageRoute(
                             builder: (context) =>
                                 SwapAstSelectChain(swapAstList)));
+                    if (!mounted) return;
                     if (rModel != null) {
                       youPay = rModel;
                       payCoinModel = getChainCoinModel(
@@ -802,8 +801,10 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                       getBalance_chain_pay();
                       getBalance_pay();
                       bool rCoinPrice = await getCoinPrice();
+                      if (!mounted) return;
                       if (rCoinPrice) {
                         bool rGasPrice = await getGasPrice();
+                        if (!mounted) return;
                         if (rGasPrice) {
                           await estimateGas_eth();
                         }
@@ -815,7 +816,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                     margin: EdgeInsets.only(left: ScreenUtil().setWidth(20)),
                     child: Row(
                       children: [
-                        Container(
+                        SizedBox(
                           width: ScreenUtil().setWidth(52),
                           height: ScreenUtil().setWidth(52),
                           child: ImageNetWork(imageUrl:
@@ -837,7 +838,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                             textAlign: TextAlign.center,
                           ),
                         ),
-                        Container(
+                        SizedBox(
                           width: ScreenUtil().setWidth(40),
                           child: Icon(
                             Icons.arrow_forward_ios,
@@ -858,7 +859,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "${S.of(context).g_swap_key_14(youPay?.pay_chain ?? "")}",
+                  S.of(context).g_swap_key_14(youPay?.pay_chain ?? ""),
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.errorTextColor.name),
@@ -872,6 +873,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => WalletCoinAddAll(youPay?.pay_chain ?? "",)));
+                    if (!mounted) return;
                     if (r) {
                       await Provider.of<WalletActionProvider>(context,listen: false).init_wallet(initCoinInfo: true);
                       init();
@@ -910,7 +912,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                   ),
                 ),
                 if (youPay?.load == Load.loading)
-                  Container(
+                  SizedBox(
                     width: ScreenUtil().setWidth(26),
                     height: ScreenUtil().setWidth(26),
                     child: CircularProgressIndicator(),
@@ -922,7 +924,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "${S.of(context).g_swap_key_14(youPay?.pay_coin ?? "")}",
+                  S.of(context).g_swap_key_14(youPay?.pay_coin ?? ""),
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.errorTextColor.name),
@@ -937,6 +939,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                         MaterialPageRoute(
                             builder: (context) => WalletCoinAddAll(youPay?.pay_coin ?? "",
                             )));
+                    if (!mounted) return;
                     if (r) {
                       await Provider.of<WalletActionProvider>(context,listen: false).init_wallet(initCoinInfo: true);
                       init();
@@ -992,7 +995,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
               fontSize: ScreenUtil().setSp(30),
             ),
           ),
-          Container(
+          SizedBox(
             height: ScreenUtil().setWidth(100),
             width: double.infinity,
             child: Row(
@@ -1040,7 +1043,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
+                      SizedBox(
                         width: ScreenUtil().setWidth(52),
                         height: ScreenUtil().setWidth(52),
                         child: Image.asset('assets/img/ast.png'),
@@ -1059,7 +1062,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: ScreenUtil().setWidth(40),
                         child: Icon(
                           Icons.arrow_forward_ios,
@@ -1086,7 +1089,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                 ),
               ),
               if (getLoad == Load.loading)
-                Container(
+                SizedBox(
                   width: ScreenUtil().setWidth(26),
                   height: ScreenUtil().setWidth(26),
                   child: CircularProgressIndicator(),
@@ -1150,7 +1153,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
               width: itemWidth,
               alignment: Alignment.center,
               child: Text(
-                "${percent}%",
+                "$percent%",
                 style: TextStyle(
                   color: AppThemeUtils.getColorByKey(
                       context, AppThemeKeys.mainBlueColor.name),
@@ -1178,7 +1181,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                 readStatement = !readStatement;
               });
             },
-            child: Container(
+            child: SizedBox(
               height: ScreenUtil().setWidth(60),
               width: ScreenUtil().setWidth(60),
               child: readStatement
@@ -1194,7 +1197,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
               ),
             ),
           ),
-          Container(
+          SizedBox(
             width: ScreenUtil().setWidth(500),
             child: RichText(
               text: TextSpan(
@@ -1254,9 +1257,11 @@ class _SwapAstHomeState extends State<SwapAstHome> {
             if (readStatement == false) return;
             if (checkPayInput() == true) {
               bool r = await estimateGas_eth();
+              if (!mounted) return;
               if (r == false) return;
               if (errorMessage != "") return;
               bool rOrder=await newOrder();
+              if (!mounted) return;
               if(rOrder==false)return;
               if (checkPayInput() == false) {
                 return;
@@ -1290,6 +1295,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                   MaterialPageRoute(
                       builder: (context) => SwapAstSummary(
                           send, receive, balance, date)));
+              if (!mounted) return;
               if (rData == true) {
                 //埋点：用户点击确认交换按钮
                 //AmplitudeUtils.walletFundingSubmitted();
@@ -1322,13 +1328,13 @@ class _SwapAstHomeState extends State<SwapAstHome> {
       String unit = payCoinModel!.coin['unit'];
       decimals = payCoinModel!.coin['decimals'] ?? 0;
       //unit=payCoinModel!.coin['unit']??"";
-      BigInt chainBalance = payCoinModel!.balance ?? BigInt.zero;
+      BigInt chainBalance = payCoinModel!.balance;
       if (totalGasPrice > chainBalance) {
         totalGasPriceColor = AppThemeUtils.getColorByKey(
             context, AppThemeKeys.errorTextColor.name);
       }
       totalGasPriceStr =
-      '${dec.Decimal.parse(toEther(totalGasPrice.toString(), decimals).toString())}${unit}';
+      '${dec.Decimal.parse(toEther(totalGasPrice.toString(), decimals).toString())}$unit';
       gasPriceStr =
       '${dec.Decimal.parse(toGWei(gasPrice.toString()).toString())}Gwei';
       gasLimitWidget = Container(
@@ -1348,7 +1354,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
             ),
             Expanded(flex: 1, child: Container()),
             Text(
-              "${gas}",
+              "$gas",
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(
                     context, AppThemeKeys.mainTextColor.name),
@@ -1362,14 +1368,14 @@ class _SwapAstHomeState extends State<SwapAstHome> {
         BlockchainType.Tron.name) {
       decimals = payCoinModel!.coin['decimals'] ?? 0;
       if (toEther(totalGasPrice.toString(), decimals).toDouble() >
-          (payCoinModel!.balance_double_all() ?? 0)) {
+          payCoinModel!.balance_double_all()) {
         totalGasPriceColor = AppThemeUtils.getColorByKey(
             context, AppThemeKeys.errorTextColor.name);
       }
       totalGasPriceStr =
-      '${dec.Decimal.parse(toEther(totalGasPrice.toString(), decimals).toString())} ${title}';
+      '${dec.Decimal.parse(toEther(totalGasPrice.toString(), decimals).toString())} $title';
       gasPriceStr =
-      '${dec.Decimal.parse(toEther(gasPrice.toString(), decimals).toString())} ${title}';
+      '${dec.Decimal.parse(toEther(gasPrice.toString(), decimals).toString())} $title';
       gasLimitWidget = Container(
         margin: EdgeInsets.only(top: ScreenUtil().setWidth(32.0)),
         alignment: Alignment.center,
@@ -1386,7 +1392,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
             ),
             Expanded(flex: 1, child: Container()),
             Text(
-              "${gas}",
+              "$gas",
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(
                     context, AppThemeKeys.mainTextColor.name),
@@ -1401,8 +1407,8 @@ class _SwapAstHomeState extends State<SwapAstHome> {
         decimals = payCoinModel!.coin['decimals'] ?? 0;
       }
       totalGasPriceStr =
-      '${toEther(totalGasPrice.toString(), decimals)} ${title}';
-      gasPriceStr = '${toEther(gasPrice.toString(), decimals)} ${title}';
+      '${toEther(totalGasPrice.toString(), decimals)} $title';
+      gasPriceStr = '${toEther(gasPrice.toString(), decimals)} $title';
     }
 
     return Container(

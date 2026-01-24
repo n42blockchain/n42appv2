@@ -136,7 +136,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
                     borderRadius: BorderRadius.circular(ScreenUtil().setWidth(40)),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF4FC3F7).withOpacity(0.3),
+                        color: const Color(0xFF4FC3F7).withValues(alpha:0.3),
                         blurRadius: 30,
                         spreadRadius: 5,
                       ),
@@ -190,7 +190,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
                   'Your Gateway to Web3',
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(28),
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white.withValues(alpha:0.7),
                     letterSpacing: 1,
                   ),
                 ),
@@ -215,7 +215,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
                   _loadingText,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
-                    color: Colors.white.withOpacity(0.6),
+                    color: Colors.white.withValues(alpha:0.6),
                   ),
                 ),
                 
@@ -226,7 +226,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
                   '© 2021-2026 N42 Inc.',
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(22),
-                    color: Colors.white.withOpacity(0.4),
+                    color: Colors.white.withValues(alpha:0.4),
                   ),
                 ),
                 

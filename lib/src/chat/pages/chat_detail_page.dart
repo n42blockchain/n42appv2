@@ -1,11 +1,10 @@
-﻿import 'dart:convert';
+﻿import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/api/chat_db_api.dart';
-import 'package:n42appv2/src/chat/api/file_api.dart';
 import 'package:n42appv2/src/chat/api/squad_api.dart';
 import 'package:n42appv2/src/chat/models/chat_message_model.dart';
 import 'package:n42appv2/src/chat/models/friend_info.dart';
@@ -63,44 +62,32 @@ class ChatDetailPage extends StatefulWidget {
 class _ChatDetailPageState extends State<ChatDetailPage> {
   ChatApi? _chatApi;
   ChatApi get chatApi{
-    if(_chatApi==null){
-      _chatApi=ChatApi();
-    }
+    _chatApi ??= ChatApi();
     return _chatApi!;
   }
   ChatDataUtil? _chatDataUtils;
   ChatDataUtil get chatDataUtils{
-    if(_chatDataUtils==null){
-      _chatDataUtils=ChatDataUtil();
-    }
+    _chatDataUtils ??= ChatDataUtil();
     return _chatDataUtils!;
   }
   DataUtils? _dataUtils;
   DataUtils get dataUtils{
-    if(_dataUtils==null){
-      _dataUtils= DataUtils();
-    }
+    _dataUtils ??= DataUtils();
     return _dataUtils!;
   }
   ChatDBApi? _chatDBApi;
   ChatDBApi get chatDBApi{
-    if(_chatDBApi==null){
-      _chatDBApi=ChatDBApi();
-    }
+    _chatDBApi ??= ChatDBApi();
     return _chatDBApi!;
   }
   ChatUtil? _chatUtil;
   ChatUtil get chatUtil{
-    if(_chatUtil==null){
-      _chatUtil= ChatUtil();
-    }
+    _chatUtil ??= ChatUtil();
     return _chatUtil!;
   }
   SquadApi? _squadApi;
   SquadApi get squadApi{
-    if(_squadApi==null){
-      _squadApi= SquadApi();
-    }
+    _squadApi ??= SquadApi();
     return _squadApi!;
   }
   final CustomPopupMenuController _addController = CustomPopupMenuController();
@@ -143,7 +130,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   //当前正在回复的消息
   ChatMessageModel? currentReplyModel;
-  var eventBusFn;
+  StreamSubscription? eventBusFn;
   
   // 保存 ChatMessageProvider 的引用，避免在 dispose 中访问已停用的 context
   ChatMessageProvider? _chatMessageProvider;
@@ -253,7 +240,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       MessageModel userData = await squadApi.getUserPubKey(friendEmail ?? '');
       if(userData.error){
         if(userData.type==MessageErrorType.E1403){
+          if (!mounted) return;
           await TipsDialog1(context, S.of(context).g_key_error_1403);
+          if (!mounted) return;
           AppGlobals.logout();
           Navigator.pop(context);
         }else{
@@ -344,7 +333,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           MessageModel userData = await squadApi.getUserPubKey(friendEmail ?? '');
           if(userData.error){
             if(userData.type==MessageErrorType.E1403){
+              if (!mounted) return;
               await TipsDialog1(context, S.of(context).g_key_error_1403);
+              if (!mounted) return;
               AppGlobals.logout();
               Navigator.pop(context);
             }else{
@@ -380,7 +371,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       Map<String, dynamic> content = chatDataUtils.generateSendData(
           contentType: MessageContentType.Text,
           fromID: AppGlobals.userInfo?.uuid ?? '',
-          receiveId: widget.targetUuid ?? '',
+          receiveId: widget.targetUuid,
           conversationType: 0,
           reply_id: currentReplyModel?.messageId,
           direction: 1,
@@ -476,7 +467,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           MessageModel userData = await squadApi.getUserPubKey(friendEmail ?? '');
           if(userData.error){
             if(userData.type==MessageErrorType.E1403){
+              if (!mounted) return;
               await TipsDialog1(context, S.of(context).g_key_error_1403);
+              if (!mounted) return;
               AppGlobals.logout();
               Navigator.pop(context);
             }else{
@@ -525,7 +518,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
         await handlerFile(file, contentType);
       }
-    } catch (err) {
+    } catch (_) {
+      // 文件选择或发送过程中的错误安全忽略
     }
   }
 
@@ -536,8 +530,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     String fileNavPath = filePath;
     FileUtils fileUtils=FileUtils();
     String fileNavName = fileUtils.getFileNameByPath(filePath);
-
-    String fileSize = fileUtils.computerFileSize(fileNavPath);
 
     //定义临界值 最大支持100M
     int flagSize = 100 * 1024 * 1024;
@@ -564,7 +556,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     Map<String, dynamic> content = chatDataUtils.generateSendData(
         contentType: contentType,
         fromID: AppGlobals.userInfo?.uuid ?? '',
-        receiveId: widget.targetUuid ?? '',
+        receiveId: widget.targetUuid,
         conversationType: 0,
         direction: 1,
         // reply_id: currentReplyModel?.messageId,图片或者文件类型的消息并不能作为回复消息
@@ -709,7 +701,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           MessageModel userData = await squadApi.getUserPubKey(friendEmail ?? '');
           if(userData.error){
             if(userData.type==MessageErrorType.E1403){
+              if (!mounted) return;
               await TipsDialog1(context, S.of(context).g_key_error_1403);
+              if (!mounted) return;
               AppGlobals.logout();
               Navigator.pop(context);
             }else{
@@ -738,7 +732,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         handlerFile(file, MessageContentType.Image);
       }
     }
-    catch (err) {
+    catch (_) {
+      // 拍照或发送过程中的错误安全忽略
     }
   }
   //发送红包
@@ -755,7 +750,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           MessageModel userData = await squadApi.getUserPubKey(friendEmail ?? '');
           if(userData.error){
             if(userData.type==MessageErrorType.E1403){
+              if (!mounted) return;
               await TipsDialog1(context, S.of(context).g_key_error_1403);
+              if (!mounted) return;
               AppGlobals.logout();
               Navigator.pop(context);
             }else{
@@ -795,7 +792,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       Map<String, dynamic> content = chatDataUtils.generateSendData(
           contentType: MessageContentType.RedEnvelope,
           fromID: AppGlobals.userInfo?.uuid ?? '',
-          receiveId: widget.targetUuid ?? '',
+          receiveId: widget.targetUuid,
           conversationType: 0,
           reply_id: currentReplyModel?.messageId,
           direction: 1,
@@ -1216,7 +1213,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               endIndent: 1,
               indent: 1,
             ),
-            Container(
+            SizedBox(
               width: double.infinity,
               child: Column(
                 mainAxisSize: MainAxisSize.min,

@@ -23,9 +23,7 @@ import 'package:provider/provider.dart';
 class TransactionRecordItemProvider with ChangeNotifier{
   AppDatabase? _db;
   AppDatabase get db{
-    if(_db==null){
-      _db=AppDatabase();
-    }
+    _db ??= AppDatabase();
     return _db!;
   }
   //未完成的列表
@@ -41,20 +39,18 @@ class TransactionRecordItemProvider with ChangeNotifier{
   Timer? _timer_btc;
   TokenViewApi? _tokenViewApi;
   TokenViewApi get tokenViewApi{
-    if(_tokenViewApi==null){
-      _tokenViewApi=TokenViewApi();
-    }
+    _tokenViewApi ??= TokenViewApi();
     return _tokenViewApi!;
   }
   //查询未完成的交易
   selectUndoneTr()async{
     _unDoneTrModelList=await db.selectTransationRecord_unDone(AppGlobals.userInfo?.uuid??"");
     _trUndoneList=await db.selectBtcTransationRecord_byUUID(AppGlobals.userInfo?.uuid??"", 2);
-    if(_unDoneTrModelList.length!=0){
+    if(_unDoneTrModelList.isNotEmpty){
       //开启timer，循环请求数据
       timerStart();
     }
-    if(_trUndoneList.length!=0){
+    if(_trUndoneList.isNotEmpty){
       timerStart_btc();
     }
   }
@@ -71,12 +67,12 @@ class TransactionRecordItemProvider with ChangeNotifier{
   timerStart(){
     if(_timer!=null)return;
     _timer=Timer.periodic(Duration(seconds: 10), (timer) {
-      if(_unDoneTrModelList.length !=0){
+      if(_unDoneTrModelList.isNotEmpty){
         for(int i=0;i<_unDoneTrModelList.length;i++){
           checkUndoneTr(_unDoneTrModelList[i]);
         }
       }
-      if(_unDoneTrModelList.length==0 && _timer !=null ){
+      if(_unDoneTrModelList.isEmpty && _timer !=null ){
         _timer!.cancel();
         _timer=null;
       }
@@ -85,12 +81,12 @@ class TransactionRecordItemProvider with ChangeNotifier{
   timerStart_btc(){
     if(_timer_btc!=null)return;
     _timer_btc=Timer.periodic(Duration(seconds: 180), (timer) {
-      if(_trUndoneList.length !=0){
+      if(_trUndoneList.isNotEmpty){
         for(int i=0;i<_trUndoneList.length;i++){
           checkUndoneTr_btc(_trUndoneList[i]);
         }
       }
-      if(_trUndoneList.length==0 && _timer_btc !=null){
+      if(_trUndoneList.isEmpty && _timer_btc !=null){
         _timer_btc!.cancel();
         _timer_btc=null;
       }
@@ -180,7 +176,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         MessageModel mm=await xtzApi.getTxInfo_xtz(trm.txHash,trm.isTest==0?false:true);
         if(mm.error==false){
           List<dynamic> rData=mm.data;
-          if(rData.length!=0){
+          if(rData.isNotEmpty){
             if(rData[0]['is_success']==true){
               trm.state=1;
               //await WalletDatabaseProvider.dbProvider.updateTransationRecord(trm);
@@ -340,6 +336,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
       await db.updateTransationRecord(trm);
       ToastUtils.show(S.current.g_key_140);
       //发出交易成功通知
+      if (!AppGlobals.appContext.mounted) return;
       Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).refreshCoinBalance(trm.coin['coinType'],contract:trm.contract);
       eventBus.fire(EventPublic(EventPublicType.transferOk));
       /**if(trm.contract!=""){
@@ -453,7 +450,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         MessageModel mm=await xtzApi.getTxInfo_xtz(trm.txHash,trm.isTest==0?false:true);
         if(mm.error==false){
           List<dynamic> rData=mm.data;
-          if(rData.length!=0){
+          if(rData.isNotEmpty){
             if(rData[0]['is_success']==true){
               trm.state=1;
               //await WalletDatabaseProvider.dbProvider.updateTransationRecord(trm);
@@ -632,7 +629,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
       if(mm.error){
       }else{
         int? confirmations=mm.data;
-        trm.confirmations=confirmations==null?0:confirmations;
+        trm.confirmations=confirmations??0;
         if(trm.confirmations>=6){
           trm.state=1;
         }
@@ -640,6 +637,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         if(trm.state==1){
           //ProviderUtil.btcCoinInfoProvider().getBalance();
           //发出交易成功通知
+          if (!AppGlobals.appContext.mounted) return;
           await Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).refreshCoinBalance(trm.coin['coinType'],contract:"");
           eventBus.fire(EventPublic(EventPublicType.transferOk));
           _trUndoneList.remove(trm);
@@ -667,7 +665,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
       if(mm.error){
       }else{
         int? confirmations=mm.data;
-        trm.confirmations=confirmations==null?0:confirmations;
+        trm.confirmations=confirmations??0;
         if(trm.confirmations>=6){
           trm.state=1;
         }
@@ -678,11 +676,11 @@ class TransactionRecordItemProvider with ChangeNotifier{
 
   }
   checkUndoneList(){
-    if(_trUndoneList.length==0 && _timer_btc !=null){
+    if(_trUndoneList.isEmpty && _timer_btc !=null){
       _timer_btc!.cancel();
       _timer_btc=null;
     }
-    if(_unDoneTrModelList.length==0 && _timer !=null){
+    if(_unDoneTrModelList.isEmpty && _timer !=null){
       _timer!.cancel();
       _timer=null;
     }

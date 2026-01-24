@@ -14,12 +14,12 @@ class ImageNetWorkSSL extends StatelessWidget {
   const ImageNetWorkSSL(
       {
         required this.imageUrl,
-        Key? key,
+        super.key,
         this.placeholder = "assets/img/list_default.png",
         this.width,
         this.height,
         this.fit = BoxFit.cover,
-      }) : super(key: key);
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -105,9 +105,9 @@ class NetworkImageSSL extends ImageProvider<NetworkImageSSL> {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (other.runtimeType != runtimeType) return false;
-    final NetworkImageSSL typedOther = other;
+    final NetworkImageSSL typedOther = other as NetworkImageSSL;
     return url == typedOther.url && scale == typedOther.scale;
   }
 

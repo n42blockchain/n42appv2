@@ -33,7 +33,7 @@ class ToastUtils {
       msg: message,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
-      backgroundColor: Colors.green.withOpacity(0.8),
+      backgroundColor: Colors.green.withValues(alpha:0.8),
       textColor: Colors.white,
       fontSize: 14.0,
     );
@@ -45,7 +45,7 @@ class ToastUtils {
       msg: message,
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.CENTER,
-      backgroundColor: Colors.red.withOpacity(0.8),
+      backgroundColor: Colors.red.withValues(alpha:0.8),
       textColor: Colors.white,
       fontSize: 14.0,
     );
@@ -57,7 +57,7 @@ class ToastUtils {
       msg: message,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
-      backgroundColor: Colors.orange.withOpacity(0.8),
+      backgroundColor: Colors.orange.withValues(alpha:0.8),
       textColor: Colors.white,
       fontSize: 14.0,
     );

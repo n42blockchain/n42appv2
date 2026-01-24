@@ -5,10 +5,10 @@
 //
 // Author: Jiang Yiwei
 
-/// Example main.dart with Riverpod integration
-///
-/// This demonstrates the migration path from Provider to Riverpod.
-/// During migration, both systems can coexist.
+// Example main.dart with Riverpod integration
+//
+// This demonstrates the migration path from Provider to Riverpod.
+// During migration, both systems can coexist.
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';

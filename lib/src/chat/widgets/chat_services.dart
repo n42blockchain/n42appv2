@@ -1,5 +1,4 @@
-﻿
-import 'package:n42appv2/core/config/app_config.dart';
+
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
@@ -134,7 +133,7 @@ class _ChatServicesState extends State<ChatServices> {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
+                          color: Colors.black.withValues(alpha:0.2),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
@@ -159,7 +158,7 @@ class _ChatServicesState extends State<ChatServices> {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
+                          color: Colors.black.withValues(alpha:0.2),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),

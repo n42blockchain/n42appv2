@@ -19,9 +19,7 @@ class SPUtil {
   SharedPreferences? prefs;
 
   Future<SharedPreferences> initPrefs() async {
-    if (prefs == null) {
-      prefs = await SharedPreferences.getInstance();
-    }
+    prefs ??= await SharedPreferences.getInstance();
     return prefs!;
   }
 

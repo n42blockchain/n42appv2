@@ -51,51 +51,51 @@ getBrowser_token_address(String coinType,String address,String token,{bool? isTe
     case "FIL":
     case "N":
     case "S":
-      path+='address/${address}';
+      path+='address/$address';
       break;
     case "CELO":
     case "CLO":
-      path+='address/${address}/transactions';
+      path+='address/$address/transactions';
       break;
     case "HT":
-      path+='en-us/address/${address}?tab=Transactions';
+      path+='en-us/address/$address?tab=Transactions';
       break;
     case "GO":
-      path+='addr/${address}';
+      path+='addr/$address';
       break;
     case "KAVA":
     case "EVMOS":
     case "MOVR":
     case "GLMR":
     case "KLAY":
-      path+='account/${address}';
+      path+='account/$address';
       break;
     case "SOL":
-      path+='account/${address}${isTest! ?"?cluster=testnet":""}';
+      path+='account/$address${isTest! ?"?cluster=testnet":""}';
       break;
     case "OKT":
-      path+='en/okc/address/${address}';
+      path+='en/okc/address/$address';
       break;
     case "XTZ":
       path+=address;
       break;
     case "ATOM":
     case "XRP":
-      path+='accounts/${address}';
+      path+='accounts/$address';
       break;
     case "DASH":
-      path+='address.dws?${address}.htm';
+      path+='address.dws?$address.htm';
       break;
     case "DOT":
     case "ACA":
     case "KSM":
-      path+='account/${address}';
+      path+='account/$address';
       break;
     case "APT":
-      path+='account/${address}?network=${isTest!?"testnet":"mainnet"}';
+      path+='account/$address?network=${isTest!?"testnet":"mainnet"}';
       break;
     case "ZIL":
-      path+='address/${address}?network=${isTest!?"testnet":"mainnet"}';
+      path+='address/$address?network=${isTest!?"testnet":"mainnet"}';
       break;
     default:
       path="";

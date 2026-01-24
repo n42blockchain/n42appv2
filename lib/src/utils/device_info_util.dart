@@ -18,9 +18,9 @@ class DeviceInfoUtil{
       }
       else{
         IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-        rMap["mobileModel"]=DataUtils().formatNum(double.parse(iosInfo.systemVersion!), 1);
+        rMap["mobileModel"]=DataUtils().formatNum(double.parse(iosInfo.systemVersion), 1);
         rMap["mobileName"]="Apple";
-        rMap["os"]=iosInfo.systemName!;
+        rMap["os"]=iosInfo.systemName;
       }
       return rMap;
     }catch(e){

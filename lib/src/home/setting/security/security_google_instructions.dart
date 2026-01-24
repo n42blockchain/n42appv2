@@ -7,6 +7,8 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SecurityGoogleInstructions extends StatelessWidget{
+  const SecurityGoogleInstructions({super.key});
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -38,13 +40,11 @@ class SecurityGoogleInstructions extends StatelessWidget{
                     ),
                   ),
                 ),
-                Expanded(child: Container(
-                  child: Text(
-                    S.of(context).google_verification_message13,
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(26.0),
-                    ),
+                Expanded(child: Text(
+                  S.of(context).google_verification_message13,
+                  style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    fontSize: ScreenUtil().setSp(26.0),
                   ),
                 ),),
               ],
@@ -205,16 +205,12 @@ class SecurityGoogleInstructions extends StatelessWidget{
                     ],
                   ),
                 ),
-                Expanded(child: Container(
-                  //margin: EdgeInsets.only(top: scr.setWidth(4.0)),
-                  child: Text(
-                    S.of(context).google_verification_message16,
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(26.0),
-                    ),
+                Expanded(child: Text(
+                  S.of(context).google_verification_message16,
+                  style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    fontSize: ScreenUtil().setSp(26.0),
                   ),
-
                 ),),
               ],
             ),
@@ -237,7 +233,7 @@ class SecurityGoogleInstructions extends StatelessWidget{
 class MySeparator extends StatelessWidget{
   final double width;
   final Color color;
-  MySeparator(this.width,this.color);
+  const MySeparator(this.width,this.color, {super.key});
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -248,6 +244,8 @@ class MySeparator extends StatelessWidget{
           final dashWidth=width;
           final int dashCount= (boxHeight/(2*dashHeight).floor()).toInt();
           return Flex(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            direction: Axis.vertical,
             children: List.generate(dashCount, (_){
               return SizedBox(
                 width: dashWidth,
@@ -257,8 +255,6 @@ class MySeparator extends StatelessWidget{
                 ),
               );
             }),
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            direction: Axis.vertical,
           );
         }
     );

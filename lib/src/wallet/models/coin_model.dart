@@ -25,7 +25,7 @@ class CoinModel {
   double value = 0; //价值 balance * coinPrice
   double percentage = 0; //百分比
   Map<String, dynamic> walletAddress = {};
-  var address;
+  dynamic address;
   Map<String,dynamic> addressType={};//地址类型legacy、segwit
   String addrType="legacy";
   int pathIndex=0;//path index
@@ -113,7 +113,7 @@ class CoinModel {
     coin = map;
   }
   //setAddress,是否设置钱包的地址Map
-  buildWallet({String pk="",bool setAddress=true,int? walletIndex=null}) async {
+  buildWallet({String pk="",bool setAddress=true,int? walletIndex}) async {
     String coinType = coin['coinType'];
     if (address == null) {
       if(walletIndex==null){
@@ -187,6 +187,7 @@ class CoinModel {
       }
       // getBalance_withCoinModel 返回 true 表示有错误，false 表示成功
       bool hasError = await wap.getBalance_withCoinModel(this);
+      if (!AppGlobals.appContext.mounted) return false;
       if(hasError){
         // 获取余额失败，但不设置 loadError，因为已经使用了缓存的余额
         // loadError 只在完全无法获取数据时设置

@@ -9,8 +9,8 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BrowserCollectionInfo extends StatefulWidget {
-  BrowserCollectionModel collectionModel;
-  BrowserCollectionInfo(this.collectionModel,{super.key});
+  final BrowserCollectionModel collectionModel;
+  const BrowserCollectionInfo(this.collectionModel,{super.key});
 
   @override
   State<BrowserCollectionInfo> createState() => _BrowserCollectionInfoState();
@@ -19,9 +19,7 @@ class BrowserCollectionInfo extends StatefulWidget {
 class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
   BrowserApi? _browserApi;
   BrowserApi get browserApi{
-    if(_browserApi==null){
-      _browserApi=BrowserApi();
-    }
+    _browserApi ??= BrowserApi();
     return _browserApi!;
   }
   TextEditingController titleEditingController=TextEditingController();
@@ -138,7 +136,7 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
+          SizedBox(
             height: ScreenUtil().setWidth(40.0),
             child: Text(
               S.of(context).g_browser_key6,
@@ -203,7 +201,7 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
+          SizedBox(
             height: ScreenUtil().setWidth(40.0),
             child: Text(
               S.of(context).g_browser_key8,
@@ -268,7 +266,7 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
+          SizedBox(
             height: ScreenUtil().setWidth(40.0),
             child: Text(
               S.of(context).g_browser_key9,

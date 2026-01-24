@@ -13,7 +13,7 @@ import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
-import 'package:n42appv2/src/widgets/textField_widget.dart';
+import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
@@ -93,7 +93,9 @@ class _MiningImportState extends State<MiningImport> {
         }
       }
       secretMap['isMining']=isMining;
+      if (!mounted) return;
       MessageModel rmm=await Provider.of<MiningV2Provider>(context,listen: false).setMiningData_import(secretMap,password);
+      if (!mounted) return;
       String messageStr=S.of(context).g_mining_key_104;
       if(rmm.error){
         messageStr=rmm.data as String;

@@ -5,14 +5,13 @@
 //
 // Author: Jiang Yiwei
 
-/// Chat Feature Module
-///
-/// This module handles all chat-related functionality:
-/// - Conversations management
-/// - Message sending and receiving
-/// - Group chat
-/// - WebSocket communication
-library chat;
+// Chat Feature Module
+//
+// This module handles all chat-related functionality:
+// - Conversations management
+// - Message sending and receiving
+// - Group chat
+// - WebSocket communication
 
 // Domain Layer
 export 'domain/entities/message_entity.dart';

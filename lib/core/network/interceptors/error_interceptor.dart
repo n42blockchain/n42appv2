@@ -61,7 +61,6 @@ class ErrorInterceptor extends Interceptor {
         );
       
       case DioExceptionType.unknown:
-      default:
         if (err.error is SocketException) {
           return const NetworkException(
             message: '网络连接失败，请检查网络设置',

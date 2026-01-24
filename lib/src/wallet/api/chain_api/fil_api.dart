@@ -123,7 +123,7 @@ class FilApi{
     try{
       MessageModel mm=MessageModel();
       String url=RequestUrl().getUrl2("FIL", "api",isTest: isTest);
-      url=url+'message/${mId}';
+      url='${url}message/$mId';
       final data=await BaseApi.RequestEmpty_h.get(url, params: {});
       if(data['receipt']['exitCode']??-1 !=0){
         mm.error=true;

@@ -11,7 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class AddressEdit extends StatelessWidget {
   final AddressBookModel info;
   final VoidCallback? callback;
-  const AddressEdit(this.info, {Key? key, this.callback}) : super(key: key);
+  const AddressEdit(this.info, {super.key, this.callback});
 
   @override
   Widget build(BuildContext context) {

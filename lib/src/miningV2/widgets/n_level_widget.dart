@@ -7,7 +7,7 @@ import 'package:n42appv2/generated/l10n.dart';
 class NLevelWidget extends StatelessWidget {
   final int nNum;
 
-  const NLevelWidget({Key? key, required this.nNum}) : super(key: key);
+  const NLevelWidget({super.key, required this.nNum});
 
   @override
   Widget build(BuildContext context) {
@@ -19,15 +19,15 @@ class NLevelWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
         boxShadow: isDark ? null : [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha:0.04),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
         ],
         border: Border.all(
           color: isDark 
-              ? Colors.white.withOpacity(0.06) 
-              : Colors.black.withOpacity(0.04),
+              ? Colors.white.withValues(alpha:0.06) 
+              : Colors.black.withValues(alpha:0.04),
           width: 1,
         ),
       ),
@@ -41,7 +41,7 @@ class NLevelWidget extends StatelessWidget {
               gradient: LinearGradient(
                 colors: [
                   AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                  AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.6),
+                  AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.6),
                 ],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
@@ -75,8 +75,8 @@ class NLevelWidget extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                const Color(0xFF4FACFE).withOpacity(0.12),
-                const Color(0xFF00F2FE).withOpacity(0.08),
+                const Color(0xFF4FACFE).withValues(alpha:0.12),
+                const Color(0xFF00F2FE).withValues(alpha:0.08),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -133,8 +133,8 @@ class NLevelWidget extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: isDark 
-                      ? Colors.white.withOpacity(0.06)
-                      : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.06),
+                      ? Colors.white.withValues(alpha:0.06)
+                      : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.06),
                   borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
                 ),
                 child: Row(

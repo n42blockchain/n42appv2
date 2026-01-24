@@ -1,20 +1,16 @@
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/models/coin_model.dart';
-import 'package:n42appv2/src/wallet/pages/wallet_manage/keystore/import_keystore.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/all_chain.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class ChooseImportCoin extends StatefulWidget {
-  Map<String,dynamic>? selectChain;
-  ChooseImportCoin({this.selectChain,super.key});
+  final Map<String,dynamic>? selectChain;
+  const ChooseImportCoin({this.selectChain,super.key});
 
   @override
   State<ChooseImportCoin> createState() => _ChooseImportCoinState();

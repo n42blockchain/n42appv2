@@ -8,9 +8,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class BackupOne extends StatefulWidget {
-  WalletInfo walletInfo;
-  int walletIndex;
-  BackupOne(this.walletInfo,this.walletIndex,{super.key});
+  final WalletInfo walletInfo;
+  final int walletIndex;
+  const BackupOne(this.walletInfo,this.walletIndex,{super.key});
 
   @override
   State<BackupOne> createState() => _BackupOneState();
@@ -176,7 +176,7 @@ class _BackupOneState extends State<BackupOne> {
     );
   }
   _buildGridView() {
-    if(showMnemonic)
+    if(showMnemonic) {
       return GridView.builder(
         padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
         itemCount: mnemonicWordsList.length,
@@ -214,6 +214,7 @@ class _BackupOneState extends State<BackupOne> {
           );
         },
       );
+    }
     return InkWell(
       onTap: (){
         setState(() {

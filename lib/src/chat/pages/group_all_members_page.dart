@@ -9,8 +9,7 @@ import 'package:n42appv2/generated/l10n.dart';
 class GroupAllMembersPage extends StatefulWidget {
   final List<GroupMemberInfo> groupMemberList;
 
-  const GroupAllMembersPage({Key? key, required this.groupMemberList})
-      : super(key: key);
+  const GroupAllMembersPage({super.key, required this.groupMemberList});
 
   @override
   State<GroupAllMembersPage> createState() => _GroupAllMembersPageState();

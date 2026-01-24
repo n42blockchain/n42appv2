@@ -127,18 +127,20 @@ class LegacyPublicProviderAdapter extends PublicProvider {
   // Legacy Properties & Methods
   // ============================================
 
-  bool unlockIsPush = false;
-  bool checkWalletPassword = false;
-  
+  // unlockIsPush 和 checkWalletPassword 继承自父类，不需要重复声明
+
+  @override
   setCheckWalletPassword(bool value) {
     _container.read(walletPasswordVerifiedProvider.notifier).state = value;
   }
 
-  Load load = Load.loading;
+  // load 继承自父类，不需要重复声明
 
   UserInfo? _userInfo;
+  @override
   UserInfo? get userInfo => _userInfo;
-  
+
+  @override
   setUserInfo(UserInfo? info) {
     if (info != null) {
       final sharedInfo = SharedUserInfo(
@@ -156,9 +158,9 @@ class LegacyPublicProviderAdapter extends PublicProvider {
     }
   }
 
-  // Message count
-  int messageNotReadCount = 0;
-  
+  // Message count - messageNotReadCount 继承自父类，不需要重复声明
+
+  @override
   setMessageNotReadCount({int? value}) {
     final notifier = _container.read(unreadCountProvider.notifier);
     if (value == null) {
@@ -170,20 +172,25 @@ class LegacyPublicProviderAdapter extends PublicProvider {
 
   // Locale
   Locale _locale = const Locale('en');
+  @override
   Locale get locale => _locale;
-  
+
+  @override
   switchLocale(String code) {
     _container.read(localeProvider.notifier).setLocale(code);
   }
   
+  @override
   Map<String, dynamic> get getLocaleInfo {
     return _container.read(localeProvider.notifier).getLocaleInfo(_locale);
   }
 
   // Theme
   ThemeMode _themeMode = ThemeMode.system;
+  @override
   ThemeMode get themeMode => _themeMode;
-  
+
+  @override
   switchTheme(int type) {
     ThemeMode mode;
     switch (type) {
@@ -199,16 +206,16 @@ class LegacyPublicProviderAdapter extends PublicProvider {
     _container.read(themeModeProvider.notifier).setTheme(mode);
   }
 
-  // Home tab index
-  int homeCurrentIndex = 0;
-  
+  // Home tab index - homeCurrentIndex 继承自父类，不需要重复声明
+
+  @override
   setHomeCurrentIndex(int value) {
     _container.read(homeTabIndexProvider.notifier).state = value;
   }
 
-  // Select index (for guide pages)
-  int selectIndex = 0;
-  
+  // Select index (for guide pages) - selectIndex 继承自父类，不需要重复声明
+
+  @override
   setSelectIndex(int value) {
     selectIndex = value;
     _container.read(mainTabSelectIndexProvider.notifier).state = value;
@@ -227,8 +234,10 @@ class LegacyPublicProviderAdapter extends PublicProvider {
     "PWLock": 0,
   };
   
+  @override
   Map<String, dynamic> get lockScreenMap => _lockScreenMap;
-  
+
+  @override
   set lockScreenMap(Map<String, dynamic> value) {
     _lockScreenMap = value;
     // Update Riverpod state
@@ -236,11 +245,13 @@ class LegacyPublicProviderAdapter extends PublicProvider {
     _container.read(screenLockProvider.notifier).setLockEnabled(state.isLocked);
   }
 
+  @override
   Future<void> getLockScreenData() async {
     // Data is loaded from Riverpod provider
     _lockScreenMap = _container.read(screenLockProvider).toMap();
   }
 
+  @override
   Future<void> setLockScreenData() async {
     await _spUtil.setLockScreen(_lockScreenMap);
     // Also update Riverpod state
@@ -257,6 +268,7 @@ class LegacyPublicProviderAdapter extends PublicProvider {
   }
 
   /// Check data on init
+  @override
   Future<void> checkData() async {
     try {
       var userInfoJson = await _spUtil.getUserInfo();

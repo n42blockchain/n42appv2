@@ -38,8 +38,8 @@ class MiningOutputTip extends StatelessWidget {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        const Color(0xFFFFB74D).withOpacity(0.2),
-                        const Color(0xFFFF9800).withOpacity(0.1),
+                        const Color(0xFFFFB74D).withValues(alpha:0.2),
+                        const Color(0xFFFF9800).withValues(alpha:0.1),
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -73,13 +73,13 @@ class MiningOutputTip extends StatelessWidget {
                 padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
                 decoration: BoxDecoration(
                   color: isDark 
-                      ? Colors.white.withOpacity(0.04)
-                      : Colors.grey.withOpacity(0.04),
+                      ? Colors.white.withValues(alpha:0.04)
+                      : Colors.grey.withValues(alpha:0.04),
                   borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
                   border: Border.all(
                     color: isDark 
-                        ? Colors.white.withOpacity(0.08)
-                        : Colors.black.withOpacity(0.06),
+                        ? Colors.white.withValues(alpha:0.08)
+                        : Colors.black.withValues(alpha:0.06),
                     width: 1,
                   ),
                 ),
@@ -164,7 +164,7 @@ class MiningOutputTip extends StatelessWidget {
           width: ScreenUtil().setWidth(44),
           height: ScreenUtil().setWidth(44),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.12),
+            color: color.withValues(alpha:0.12),
             borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
           ),
           child: Center(

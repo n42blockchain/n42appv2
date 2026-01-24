@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:gesture_password_widget/gesture_password_widget.dart';
 
 class GesturePassword extends StatelessWidget{
-  Function completeEvent;
-  double identifySize;
-  GesturePassword(this.completeEvent,this.identifySize,{this.answer,Key? key}):super(key: key);
-  List<int>? answer;
+  final Function completeEvent;
+  final double identifySize;
+  final List<int>? answer;
+  const GesturePassword(this.completeEvent,this.identifySize,{this.answer,super.key});
   @override
   Widget build(BuildContext context) {
     double bigWidth=identifySize/2;

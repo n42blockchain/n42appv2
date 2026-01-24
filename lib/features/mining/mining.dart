@@ -5,14 +5,13 @@
 //
 // Author: Jiang Yiwei
 
-/// Mining Feature Module
-///
-/// This module handles all mining-related functionality:
-/// - Mining status and plans
-/// - Mining session management
-/// - Rewards claiming
-/// - Mining statistics
-library mining;
+// Mining Feature Module
+//
+// This module handles all mining-related functionality:
+// - Mining status and plans
+// - Mining session management
+// - Rewards claiming
+// - Mining statistics
 
 // Domain Layer
 export 'domain/entities/mining_entity.dart';

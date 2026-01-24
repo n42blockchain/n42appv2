@@ -8,7 +8,7 @@ import 'package:n42appv2/src/widgets/button_widget.dart';
 class PlansWidget extends StatelessWidget {
   final VoidCallback? onTap;
 
-  PlansWidget({this.onTap, Key? key}) : super(key: key);
+  const PlansWidget({this.onTap, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,7 @@ class PlansWidget extends StatelessWidget {
                     ),
                   ),
                   Spacer(),
-                  Container(
+                  SizedBox(
                     //margin: EdgeInsets.only(top: scr.setWidth(16)),
                     height: ScreenUtil().setWidth(56),
                     child: ButtonStyle3(

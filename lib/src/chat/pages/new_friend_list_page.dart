@@ -22,7 +22,7 @@ import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class NewFriendListPage extends StatefulWidget {
-  const NewFriendListPage({Key? key}) : super(key: key);
+  const NewFriendListPage({super.key});
 
   @override
   State<NewFriendListPage> createState() => _NewFriendListPageState();
@@ -31,16 +31,12 @@ class NewFriendListPage extends StatefulWidget {
 class _NewFriendListPageState extends State<NewFriendListPage> {
   ChatApi? _chatApi;
   ChatApi get chatApi{
-    if(_chatApi==null){
-      _chatApi=ChatApi();
-    }
+    _chatApi ??= ChatApi();
     return _chatApi!;
   }
   ChatDBApi? _chatDBApi;
   ChatDBApi get chatDBApi{
-    if(_chatDBApi==null){
-      _chatDBApi=ChatDBApi();
-    }
+    _chatDBApi ??= ChatDBApi();
     return _chatDBApi!;
   }
 
@@ -415,9 +411,9 @@ class _NewFriendListPageState extends State<NewFriendListPage> {
                 msg: model.reason!);
 
             ChatMessageModel cm = ChatMessageModel.fromMap(content);
-            final raw = await chatDBApi.saveMessage(cm);
+            await chatDBApi.saveMessage(cm);
 
-            final data = await chatApi.sendMessage(
+            await chatApi.sendMessage(
               fromUUID: model.uuid!,
               receiveId: AppGlobals.userInfo?.uuid ?? '',
               content: json.encode(content),
@@ -435,7 +431,7 @@ class _NewFriendListPageState extends State<NewFriendListPage> {
               "Be careful opening external links. Never share your password, private key, or recovery phrase.");
 
           ChatMessageModel cm = ChatMessageModel.fromMap(content2);
-          final raw = await chatDBApi.saveMessage(cm);
+          await chatDBApi.saveMessage(cm);
 
           final data2 = await chatApi.sendMessage(
             fromUUID: model.uuid!,
@@ -446,7 +442,8 @@ class _NewFriendListPageState extends State<NewFriendListPage> {
           if (data2 != null && data2["code"] == 200) {}
 
           ///更新一下全局的红点提示
-          Provider.of<ChatMessageProvider>(context,listen: false).updateNewFriendStatus();
+          if (!mounted) return;
+          Provider.of<ChatMessageProvider>(this.context,listen: false).updateNewFriendStatus();
         } else {
           ToastUtils.show(data["msg"]);
         }

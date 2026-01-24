@@ -1,4 +1,3 @@
-import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/pages/create_wallet/create/create_two.dart';
@@ -182,6 +181,7 @@ class _CreateOneState extends State<CreateOne> {
                                     UUID: Provider.of<WalletActionProvider>(context,listen: false).UserUUID,
                                   );
                                   await Navigator.push(context, MaterialPageRoute(builder: (context)=>CreateTwo(wInfo)));
+                                  if (!context.mounted) return;
                                   Navigator.pop(context);
                                 }
                               },
@@ -206,6 +206,7 @@ class _CreateOneState extends State<CreateOne> {
                           child: ButtonStyle5(context,
                                 ()async{
                               await Navigator.push(context, MaterialPageRoute(builder: (context)=>CreateFinish()));
+                              if (!context.mounted) return;
                               Navigator.pop(context);
                             },
                             S.of(context).g_key_wallet_c21,

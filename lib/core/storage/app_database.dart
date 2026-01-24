@@ -5,16 +5,37 @@
 //
 // Author: Jiang Yiwei
 
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
+import 'dart:io';
+import 'dart:math';
 
-/// Application SQLite Database
+import 'package:flutter/foundation.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:path/path.dart';
+import 'package:sqflite_sqlcipher/sqflite.dart';
+
+/// 加密数据库管理器
 ///
-/// Provides centralized database access with version management and migrations.
-/// Uses singleton pattern to ensure single database connection.
+/// 使用 SQLCipher 提供 AES-256 加密保护
+/// 密钥安全存储在 Keychain/Keystore 中
 class AppDatabase {
   static AppDatabase? _instance;
   static Database? _database;
+
+  /// 安全存储实例
+  static const FlutterSecureStorage _secureStorage = FlutterSecureStorage(
+    aOptions: AndroidOptions(
+      encryptedSharedPreferences: true,
+      sharedPreferencesName: 'n42_db_secure',
+      preferencesKeyPrefix: 'db_',
+    ),
+    iOptions: IOSOptions(
+      accessibility: KeychainAccessibility.first_unlock_this_device,
+      accountName: 'n42wallet_db',
+    ),
+  );
+
+  /// 数据库密钥存储键名
+  static const String _dbKeyStorageKey = 'database_encryption_key';
 
   AppDatabase._();
 
@@ -25,10 +46,13 @@ class AppDatabase {
   }
 
   /// Database version for migrations
-  static const int _dbVersion = 2;
-  
+  static const int _dbVersion = 3; // 升级版本以触发迁移
+
   /// Database file name
   static const String _dbName = 'astranet.db';
+
+  /// 加密数据库文件名
+  static const String _encryptedDbName = 'astranet_encrypted.db';
 
   /// Get database instance
   Future<Database> get database async {
@@ -36,17 +60,133 @@ class AppDatabase {
     return _database!;
   }
 
+  /// 获取或生成数据库加密密钥
+  Future<String> _getOrCreateEncryptionKey() async {
+    // 尝试从安全存储获取现有密钥
+    String? existingKey = await _secureStorage.read(key: _dbKeyStorageKey);
+
+    if (existingKey != null && existingKey.isNotEmpty) {
+      return existingKey;
+    }
+
+    // 生成新的 256 位密钥 (32 字节 -> 64 字符十六进制)
+    final random = Random.secure();
+    final keyBytes = List<int>.generate(32, (_) => random.nextInt(256));
+    final newKey = keyBytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
+
+    // 安全存储密钥
+    await _secureStorage.write(key: _dbKeyStorageKey, value: newKey);
+
+    if (kDebugMode) {
+      debugPrint('[AppDatabase] Generated new encryption key');
+    }
+
+    return newKey;
+  }
+
   /// Initialize database connection
   Future<Database> _initDatabase() async {
     final directory = await getDatabasesPath();
-    final path = join(directory, _dbName);
+    final encryptedPath = join(directory, _encryptedDbName);
+    final legacyPath = join(directory, _dbName);
 
+    // 获取加密密钥
+    final encryptionKey = await _getOrCreateEncryptionKey();
+
+    // 检查是否需要从非加密数据库迁移
+    final legacyDbExists = await File(legacyPath).exists();
+    final encryptedDbExists = await File(encryptedPath).exists();
+
+    if (legacyDbExists && !encryptedDbExists) {
+      await _migrateFromUnencryptedDatabase(
+        legacyPath,
+        encryptedPath,
+        encryptionKey,
+      );
+    }
+
+    // 打开加密数据库
     return await openDatabase(
-      path,
+      encryptedPath,
+      password: encryptionKey,
       version: _dbVersion,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
+  }
+
+  /// 从非加密数据库迁移到加密数据库
+  Future<void> _migrateFromUnencryptedDatabase(
+    String legacyPath,
+    String encryptedPath,
+    String encryptionKey,
+  ) async {
+    if (kDebugMode) {
+      debugPrint('[AppDatabase] Migrating from unencrypted to encrypted database...');
+    }
+
+    try {
+      // 打开旧的非加密数据库
+      final legacyDb = await openDatabase(legacyPath, readOnly: true);
+
+      // 创建新的加密数据库
+      final encryptedDb = await openDatabase(
+        encryptedPath,
+        password: encryptionKey,
+        version: _dbVersion,
+        onCreate: _onCreate,
+      );
+
+      // 获取所有表名
+      final tables = await legacyDb.rawQuery(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE 'android_%'",
+      );
+
+      // 迁移每个表的数据
+      for (final table in tables) {
+        final tableName = table['name'] as String;
+        try {
+          final rows = await legacyDb.query(tableName);
+          for (final row in rows) {
+            await encryptedDb.insert(
+              tableName,
+              row,
+              conflictAlgorithm: ConflictAlgorithm.replace,
+            );
+          }
+          if (kDebugMode) {
+            debugPrint('[AppDatabase] Migrated table: $tableName (${rows.length} rows)');
+          }
+        } catch (e) {
+          // 表可能在新数据库中不存在，跳过
+          if (kDebugMode) {
+            debugPrint('[AppDatabase] Skipped table $tableName: $e');
+          }
+        }
+      }
+
+      // 关闭数据库
+      await legacyDb.close();
+      await encryptedDb.close();
+
+      // 备份并删除旧数据库
+      final backupPath = '$legacyPath.backup';
+      await File(legacyPath).rename(backupPath);
+
+      if (kDebugMode) {
+        debugPrint('[AppDatabase] Migration completed. Legacy database backed up to: $backupPath');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('[AppDatabase] Migration failed: $e');
+      }
+      // 如果迁移失败，删除可能部分创建的加密数据库
+      final encryptedFile = File(encryptedPath);
+      if (await encryptedFile.exists()) {
+        await encryptedFile.delete();
+      }
+      rethrow;
+    }
   }
 
   /// Create database tables
@@ -67,13 +207,14 @@ class AppDatabase {
       // Add message field to TransactionRecord
       await db.execute('ALTER TABLE TransationRecord ADD COLUMN message TEXT');
     }
+    // Version 3: 加密数据库，结构无变化
   }
 
   // ============ Table Creation Methods ============
 
   Future<void> _createTransactionRecordTable(Database db) async {
     await db.execute('''
-      CREATE TABLE TransationRecord (
+      CREATE TABLE IF NOT EXISTS TransationRecord (
         trId INTEGER PRIMARY KEY AUTOINCREMENT,
         address TEXT,
         coinId INTEGER,
@@ -98,7 +239,7 @@ class AppDatabase {
 
   Future<void> _createBtcTransactionRecordTable(Database db) async {
     await db.execute('''
-      CREATE TABLE BtcTransactionRecord (
+      CREATE TABLE IF NOT EXISTS BtcTransactionRecord (
         trId INTEGER PRIMARY KEY AUTOINCREMENT,
         address TEXT,
         to1 TEXT,
@@ -125,7 +266,7 @@ class AppDatabase {
 
   Future<void> _createAddressBookTable(Database db) async {
     await db.execute('''
-      CREATE TABLE AddressBook (
+      CREATE TABLE IF NOT EXISTS AddressBook (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         coinIcon TEXT,
         coinName TEXT,
@@ -139,7 +280,7 @@ class AppDatabase {
   Future<void> _createBrowserTables(Database db) async {
     // Browser Collection
     await db.execute('''
-      CREATE TABLE browserCollection (
+      CREATE TABLE IF NOT EXISTS browserCollection (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
         url TEXT,
@@ -149,7 +290,7 @@ class AppDatabase {
 
     // Browser History
     await db.execute('''
-      CREATE TABLE browserHistory (
+      CREATE TABLE IF NOT EXISTS browserHistory (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         url TEXT,
         time TEXT
@@ -158,7 +299,7 @@ class AppDatabase {
 
     // Browser Search History
     await db.execute('''
-      CREATE TABLE browserSearchHistory (
+      CREATE TABLE IF NOT EXISTS browserSearchHistory (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         search TEXT,
         searchCount INTEGER
@@ -168,7 +309,7 @@ class AppDatabase {
 
   Future<void> _createMessagesTable(Database db) async {
     await db.execute('''
-      CREATE TABLE Messages (
+      CREATE TABLE IF NOT EXISTS Messages (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         conversationType INTEGER,
         direction INTEGER,
@@ -198,7 +339,7 @@ class AppDatabase {
 
   Future<void> _createGroupInfoTable(Database db) async {
     await db.execute('''
-      CREATE TABLE GroupInfo (
+      CREATE TABLE IF NOT EXISTS GroupInfo (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         groupId TEXT,
         name TEXT,
@@ -216,7 +357,7 @@ class AppDatabase {
 
   Future<void> _createAccountTable(Database db) async {
     await db.execute('''
-      CREATE TABLE Account (
+      CREATE TABLE IF NOT EXISTS Account (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         uid TEXT,
         name TEXT,
@@ -228,7 +369,7 @@ class AppDatabase {
 
   Future<void> _createBlocklistTable(Database db) async {
     await db.execute('''
-      CREATE TABLE Blocklist (
+      CREATE TABLE IF NOT EXISTS Blocklist (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         uid TEXT,
         name TEXT,
@@ -249,5 +390,26 @@ class AppDatabase {
       _database = null;
     }
   }
-}
 
+  /// 检查数据库是否已加密
+  Future<bool> isEncrypted() async {
+    final directory = await getDatabasesPath();
+    final encryptedPath = join(directory, _encryptedDbName);
+    return await File(encryptedPath).exists();
+  }
+
+  /// 获取数据库状态信息（仅调试用）
+  Future<Map<String, dynamic>> getDatabaseStatus() async {
+    final directory = await getDatabasesPath();
+    final encryptedPath = join(directory, _encryptedDbName);
+    final legacyPath = join(directory, _dbName);
+
+    return {
+      'isEncrypted': await File(encryptedPath).exists(),
+      'hasLegacyDb': await File(legacyPath).exists(),
+      'encryptedDbPath': encryptedPath,
+      'legacyDbPath': legacyPath,
+      'dbVersion': _dbVersion,
+    };
+  }
+}

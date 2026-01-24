@@ -5,7 +5,6 @@
 //
 // Author: Jiang Yiwei
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';

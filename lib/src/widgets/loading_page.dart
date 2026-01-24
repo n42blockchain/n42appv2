@@ -10,7 +10,7 @@ class LoadingPage extends StatelessWidget {
         child: Container(
           width: ScreenUtil().setWidth(200.0),
           alignment: Alignment.center,
-          child: Container(
+          child: SizedBox(
             width: ScreenUtil().setWidth(60.0),
             height: ScreenUtil().setWidth(60.0),
             child: CircularProgressIndicator(),

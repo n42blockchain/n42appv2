@@ -15,7 +15,7 @@ import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
-import 'package:n42appv2/src/widgets/textField_widget.dart';
+import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,8 +26,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 /// 
 /// Handles user authentication
 class LoginPage extends ConsumerStatefulWidget {
-  int type; // 0 push, 1 content
-  LoginPage({this.type = 0, super.key});
+  final int type; // 0 push, 1 content
+  const LoginPage({this.type = 0, super.key});
 
   @override
   ConsumerState<LoginPage> createState() => _LoginPageState();
@@ -191,9 +191,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                       ),
                                       recognizer: TapGestureRecognizer()
                                         ..onTap = () async {
-                                          bool? rData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>AccountCreateAndReset(type: HandType.createAccount,pushType: widget.type,)));
+                                          bool? rData=await Navigator.push(this.context, MaterialPageRoute(builder: (context)=>AccountCreateAndReset(type: HandType.createAccount,pushType: widget.type,)));
+                                          if (!mounted) return;
                                           if(rData==true){
-                                            Navigator.pop(context);
+                                            Navigator.pop(this.context);
                                           }
                                         }
                                   ),
@@ -269,18 +270,21 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             UserInfoApi loginApi=UserInfoApi();
                             final data = await loginApi.login(
                                 email, Md5Util().generateMd5(password));
+                            if (!mounted) return;
                             if (data != null) {
                               if (data["code"] == 200) {
                                 //AmplitudeUtils.accountLoggedIn();
                                 UserInfo userInfo = UserInfo.fromJson(data['data']);
                                 await SPUtil().saveUserInfo(userInfo);
+                                if (!mounted) return;
                                 // 使用 Riverpod 设置用户信息
                                 ref.read(currentUserProvider.notifier).setUser(
                                   SharedUserInfo.fromLegacyUserInfo(userInfo),
                                 );
                                 await AppGlobals.login(userInfo);
+                                if (!mounted) return;
                                 if(widget.type==0){
-                                  Navigator.pop(context);
+                                  Navigator.pop(this.context);
                                 }
                                 /*Navigator.pushAndRemoveUntil(this.context,
                                     MaterialPageRoute(builder: (_) => App()),
@@ -323,7 +327,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Widget _buildText(BuildContext context) {
     Color textColor =
     AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
       // color: Colors.red,
       child: Row(
@@ -338,13 +342,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     style: TextStyle(fontSize: ScreenUtil().setSp(32.0), color: textColor,fontWeight: FontWeight.w500),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () async{
-                        bool? rData=await Navigator.push(context,MaterialPageRoute(
+                        bool? rData=await Navigator.push(this.context,MaterialPageRoute(
                             builder: (_) =>  AccountCreateAndReset(
                               type: HandType.restPassword,
                               pushType: widget.type,
                             )));
+                        if (!mounted) return;
                         if(rData==true){
-                          Navigator.pop(context);
+                          Navigator.pop(this.context);
                         }
                       },
                   ),
@@ -361,10 +366,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     setState(() {});
     final data = await sPUtils.getUserInfo();
     if (data != null) {
-      UserInfo info = UserInfo.fromJson(data!);
-      if (data != null) {
-        _unameController.text = info.email??"";
-      }
+      UserInfo info = UserInfo.fromJson(data);
+      _unameController.text = info.email??"";
       if (mounted) {
         setState(() {});
       }

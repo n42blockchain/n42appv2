@@ -11,10 +11,10 @@ class MiningBoardWidget extends StatelessWidget {
   final int cReward;//单次验证收益
 
   const MiningBoardWidget({
-    Key? key,
+    super.key,
     required this.nNum,
     required this.cReward,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class MiningBoardWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
         boxShadow: isDark ? null : [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),
@@ -46,7 +46,7 @@ class MiningBoardWidget extends StatelessWidget {
               gradient: LinearGradient(
                 colors: [
                   AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                  AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.8),
+                  AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.8),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -96,8 +96,8 @@ class MiningBoardWidget extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                const Color(0xFF4FACFE).withOpacity(0.15),
-                const Color(0xFF00F2FE).withOpacity(0.1),
+                const Color(0xFF4FACFE).withValues(alpha:0.15),
+                const Color(0xFF00F2FE).withValues(alpha:0.1),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -151,8 +151,8 @@ class MiningBoardWidget extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: isDark 
-                      ? Colors.white.withOpacity(0.08)
-                      : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.08),
+                      ? Colors.white.withValues(alpha:0.08)
+                      : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.08),
                   borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
                 ),
                 child: Row(
@@ -213,8 +213,8 @@ class MiningBoardWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).brightness == Brightness.dark
-            ? Colors.white.withOpacity(0.03)
-            : Colors.grey.withOpacity(0.03),
+            ? Colors.white.withValues(alpha:0.03)
+            : Colors.grey.withValues(alpha:0.03),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
       ),
       child: Column(
@@ -250,7 +250,7 @@ class MiningBoardWidget extends StatelessWidget {
 
   Widget _buildDivider(BuildContext context) {
     return Divider(
-      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name).withOpacity(0.5),
+      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name).withValues(alpha:0.5),
       height: 1,
       indent: ScreenUtil().setWidth(70),
       endIndent: ScreenUtil().setWidth(16),
@@ -271,7 +271,7 @@ class MiningBoardWidget extends StatelessWidget {
             width: ScreenUtil().setWidth(48),
             height: ScreenUtil().setWidth(48),
             decoration: BoxDecoration(
-              color: iconBgColor.withOpacity(0.15),
+              color: iconBgColor.withValues(alpha:0.15),
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
             ),
             child: Center(
@@ -319,7 +319,7 @@ class MiningBoardWidget extends StatelessWidget {
                   width: ScreenUtil().setWidth(24),
                   height: ScreenUtil().setWidth(24),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF4CAF50).withOpacity(0.15),
+                    color: const Color(0xFF4CAF50).withValues(alpha:0.15),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(

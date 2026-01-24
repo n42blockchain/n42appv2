@@ -3,7 +3,7 @@ import 'package:n42appv2/src/component/enums/coin_type.dart';
 
 GetCoinGas(String coinType,{bool contract=false}){
   int index=CoinType.values.indexWhere((element) => element.name==coinType?true:false);
-  int _gas=0;
+  int gas=0;
   if(index==-1)return 50000;
   CoinType ct=CoinType.values[index];
   switch(ct){
@@ -36,16 +36,15 @@ GetCoinGas(String coinType,{bool contract=false}){
     case CoinType.BNB:
     case CoinType.METIS:
     case CoinType.ZETA:
-    case CoinType.MOVE:
     case CoinType.BOBA:
     case CoinType.OP:
     case CoinType.BASE:
     case CoinType.ARB:
     case CoinType.S:
       if(contract==false){
-        _gas=50000;
+        gas=50000;
       }else{
-        _gas=500000;
+        gas=500000;
       }
       break;
 
@@ -68,36 +67,36 @@ GetCoinGas(String coinType,{bool contract=false}){
       }
       break;*/
     case CoinType.SOL:
-      _gas=1;
+      gas=1;
       break;
     case CoinType.TRX:
       if(contract==false){
-        _gas=21000;
+        gas=21000;
       }else{
-        _gas=70000;
+        gas=70000;
       }
       break;
     case CoinType.BTC:
-      _gas=5;
+      gas=5;
       break;
     case CoinType.LTC:
-      _gas=3;
+      gas=3;
       break;
     case CoinType.BCH:
-      _gas=3;
+      gas=3;
       break;
     case CoinType.DOGE:
-      _gas=1000;
+      gas=1000;
       break;
     case CoinType.DASH:
-      _gas=10;
+      gas=10;
       break;
     case CoinType.VIA:
     case CoinType.DGB:
     case CoinType.MONA:
     case CoinType.BTG:
     case CoinType.RVN:
-      _gas=10;
+      gas=10;
       break;
     case CoinType.XTZ:
     case CoinType.XRP:
@@ -105,29 +104,29 @@ GetCoinGas(String coinType,{bool contract=false}){
     case CoinType.ATOM:
     case CoinType.SUI:
     case CoinType.TON:
-      _gas=1;
+      gas=1;
       break;
     case CoinType.FIL:
-      _gas=10000000;
+      gas=10000000;
       break;
     case CoinType.DOT:
     case CoinType.ACA:
     case CoinType.KSM:
-      _gas=1;
+      gas=1;
       break;
     case CoinType.APT:
-      _gas=100;
+      gas=100;
       break;
     case CoinType.ZIL:
       if(contract==false){
-        _gas=1;
+        gas=1;
       }else{
-        _gas=8000;
+        gas=8000;
       }
       break;
     default:
-    _gas=0;
+    gas=0;
       break;
   }
-  return _gas;
+  return gas;
 }

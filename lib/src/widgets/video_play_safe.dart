@@ -8,11 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlaySafe extends StatefulWidget {
-  String url;
-  String? title;
-  bool play;
-  String dataType;//数据源类型，本地local，网络net
-  VideoPlaySafe(this.url,{this.title,this.play=true,this.dataType="local",super.key});
+  final String url;
+  final String? title;
+  final bool play;
+  final String dataType;//数据源类型，本地local，网络net
+  const VideoPlaySafe(this.url,{this.title,this.play=true,this.dataType="local",super.key});
 
   @override
   State<VideoPlaySafe> createState() => _VideoPlaySafeState();

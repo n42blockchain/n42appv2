@@ -23,11 +23,11 @@ import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class PaymentPage extends StatefulWidget {
-  String? amount;
-  String? address;
-  String? coinType;
-  String? uuid;
-  PaymentPage(this.amount,this.uuid,this.coinType,this.address,{super.key});
+  final String? amount;
+  final String? address;
+  final String? coinType;
+  final String? uuid;
+  const PaymentPage(this.amount,this.uuid,this.coinType,this.address,{super.key});
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -48,9 +48,7 @@ class _PaymentPageState extends State<PaymentPage> {
   String errorMessage="";
   Regular? _regular;
   Regular get regular{
-    if(_regular==null){
-      _regular=Regular();
-    }
+    _regular ??= Regular();
     return _regular!;
   }
   final oCcy = NumberFormat("#,##0.0#", "en_US");
@@ -72,7 +70,7 @@ class _PaymentPageState extends State<PaymentPage> {
   }
   initUserInfo()async{
     UserInfoApi uApi=UserInfoApi();
-    MessageModel mm = await uApi.getUserInfoWithUUID(uuid??"");
+    MessageModel mm = await uApi.getUserInfoWithUUID(uuid);
     if(mm.error==false){
       userInfo=mm.data;
     }
@@ -92,9 +90,9 @@ class _PaymentPageState extends State<PaymentPage> {
       });
     } else {
       //查询成功，将币的信息赋值到_coinslist
-      List<dynamic>_coinMarketInfo = list['data']['data'];
+      List<dynamic> coinMarketInfo = list['data']['data'];
       String keyStr = "usdt";
-      for (var element in _coinMarketInfo) {
+      for (var element in coinMarketInfo) {
         if (element['coin'].toString().toLowerCase() == keyStr) {
           Map<String,dynamic> rMap={};
           rMap["icon"] = element['image'];
@@ -109,7 +107,7 @@ class _PaymentPageState extends State<PaymentPage> {
     double uAmount=0;
     double coinPrice=usdtInfo?['coinPrice']??0.0;
     if(coinPrice>1){
-      uAmount=(amount==""?0.0:double.parse(amount))*usdtInfo?['coinPrice']??0.0;
+      uAmount=(amount==""?0.0:double.parse(amount))*coinPrice;
     }else{
       double am=amount==""?0.0:double.parse(amount);
       uAmount=am+am*(1-coinPrice);
@@ -126,7 +124,7 @@ class _PaymentPageState extends State<PaymentPage> {
         }
       }
     }
-    if(coinModels.length !=0){
+    if(coinModels.isNotEmpty){
       coinModelIndex=0;
       double c1=coinModels[coinModelIndex].balance_double_all();
       double c2=double.parse(usdtAmount);
@@ -193,6 +191,7 @@ class _PaymentPageState extends State<PaymentPage> {
         load=Load.finish;
       });
       ToastUtils.show("支付成功！");
+      if (!mounted) return;
       Navigator.pop(context);
     }
   }
@@ -220,43 +219,35 @@ class _PaymentPageState extends State<PaymentPage> {
                       child: Column(
                         children: [
                           if((userInfo?.name??"") != "")
-                            Container(
-                              child: Text(
-                                userInfo?.name??"",
-                                style: TextStyle(
-                                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                                  fontSize: ScreenUtil().setSp(30),
-                                ),
-                              ),
-                            ),
-                          Container(
-                            child: Text(
-                              address,
+                            Text(
+                              userInfo?.name??"",
                               style: TextStyle(
                                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                                 fontSize: ScreenUtil().setSp(30),
-                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ),
-                          Container(
-                            child: Text(
-                              "\$ ${amount}",
-                              style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                                fontSize: ScreenUtil().setSp(100),
-                                fontWeight: FontWeight.bold,
-                              ),
+                          Text(
+                            address,
+                            style: TextStyle(
+                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                              fontSize: ScreenUtil().setSp(30),
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Container(
-                            child: Text(
-                              "约 ${usdtAmount} USDT",
-                              style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                                fontSize: ScreenUtil().setSp(60),
-                                fontWeight: FontWeight.bold,
-                              ),
+                          Text(
+                            "\$ $amount",
+                            style: TextStyle(
+                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                              fontSize: ScreenUtil().setSp(100),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            "约 $usdtAmount USDT",
+                            style: TextStyle(
+                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                              fontSize: ScreenUtil().setSp(60),
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
@@ -335,7 +326,7 @@ class _PaymentPageState extends State<PaymentPage> {
   Widget usdtCoin() {
     return Expanded(
       flex: 1,
-      child: coinModels.length==0?
+      child: coinModels.isEmpty?
       EmptyView():
       ListView.builder(
         itemCount: coinModels.length,
@@ -445,7 +436,7 @@ class _PaymentPageState extends State<PaymentPage> {
                             ),
                             Expanded(
                               flex: 1,
-                              child: Text("${valueBalanceStr}",
+                              child: Text(valueBalanceStr,
                                 style: TextStyle(
                                   fontSize: ScreenUtil().setSp(30.0),
                                   color: AppThemeUtils.getColorByKey(
@@ -473,7 +464,7 @@ class _PaymentPageState extends State<PaymentPage> {
                             ),
                             //percentageWidget(context, coinInfo.percentage),
                             const Expanded(flex: 1, child: SizedBox()),
-                            Text("\$${balanceStr}",
+                            Text("\$$balanceStr",
                                 style: TextStyle(
                                   fontSize: ScreenUtil().setSp(30.0),
                                   color: AppThemeUtils.getColorByKey(

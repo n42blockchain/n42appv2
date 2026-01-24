@@ -1,38 +1,28 @@
 import 'dart:convert';
 
+import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/https/base_api.dart';
-import 'package:n42appv2/src/https/request_url.dart';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 import 'package:n42appv2/src/wallet/api/transfer_api.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_btc.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
-import 'package:n42appv2/src/wallet/utils/btc_base_api.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
-import 'package:n42appv2/src/wallet/utils/create_btc_tx.dart';
 import 'package:n42appv2/src/wallet/utils/create_btc_tx_1.dart';
 import 'package:n42appv2/src/wallet/utils/create_btc_tx_2.dart';
-import 'package:n42appv2/src/wallet/utils/create_p2wsh.dart';
-import 'package:crypto/crypto.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reown_walletkit/reown_walletkit.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';
-import 'package:blockchain_utils/blockchain_utils.dart';
-import 'package:crypto/crypto.dart';
 class SelfCustody1 extends StatefulWidget {
-  CoinModel coinModel;
-  SelfCustody1(this.coinModel,{super.key});
+  final CoinModel coinModel;
+  const SelfCustody1(this.coinModel,{super.key});
 
   @override
   State<SelfCustody1> createState() => _SelfCustody1State();
@@ -43,9 +33,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
   late WebViewController _controller;
   TransferApi? _transferApi;
   TransferApi get transferApi{
-    if(_transferApi==null){
-      _transferApi=TransferApi();
-    }
+    _transferApi ??= TransferApi();
     return _transferApi!;
   }
   String? address;
@@ -56,10 +44,11 @@ class _SelfCustody1State extends State<SelfCustody1> {
   //String? lockTimeStr;
   int? lockTimeInt;
   String? publicKey;
-  /*getTestAddress(){
-    String tbAddress=widget.coinModel.address.toString().substring(2,widget.coinModel.address.toString().length);
-    return "tb$tbAddress";
-  }*/
+
+  /// 获取 Staking WebView URL
+  String _getStakingUrl() {
+    return AppConfig.getApiUrlOnline('btcStaking');
+  }
 
   @override
   void initState() {
@@ -77,7 +66,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
     }
     _controller =
         WebViewController.fromPlatformCreationParams(params);
-    _controller!
+    _controller
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor( const Color(0xFF121212))
       ..setNavigationDelegate(
@@ -104,7 +93,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
           },
         ),
       )
-      ..loadRequest(Uri.parse('http://192.168.31.26:5174/'))
+      ..loadRequest(Uri.parse(_getStakingUrl()))
       ..addJavaScriptChannel("N42APP", onMessageReceived: (JavaScriptMessage message) async{
         Map<String,dynamic>?rdata=jsonDecode(message.message);
         if(rdata !=null){
@@ -117,18 +106,19 @@ class _SelfCustody1State extends State<SelfCustody1> {
             String? p2wshAddress=await createP2WSH(nowTime,cPubKey: pKey);
             //CreateP2WSH().p2wsh(rdata['lockupTime']);
             lockAmount=rdata['amount'];
-            _controller.runJavaScript('is_p2wsh_address_valid("${p2wshAddress}");');
+            _controller.runJavaScript('is_p2wsh_address_valid("$p2wshAddress");');
           }else if(rdata['type']=="is_p2wsh_address_valid"){
             if(rdata["result"]==true){
               String p2wshAddr=p2wshAddress!.toAddress(BitcoinNetwork.testnet);
               final value=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletChainSendBtc(widget.coinModel,toAddress: p2wshAddr,toAmount: lockAmount!,)));
+              if (!mounted) return;
               if(value !=null){
 
                 String ethAddress=Provider.of<WalletActionProvider>(context,listen: false).getAddress(CoinType.N.name);
                 BigInt lockAmountInt=ethToWeiString(lockAmount!, 8);
                 //String alertStr='requestMintVbtc("${p2wshAddr}","${ethAddress}",${lockAmountInt},"${value}","${widget.coinModel.address}",${lockTimeInt},"${publicKey}");';
-                String alertStr='requestMintVbtc("${p2wshAddr}","${ethAddress}",${lockAmountInt},"${widget.coinModel.address}",${lockTimeInt},"${publicKey}");';
-                print(alertStr);
+                String alertStr='requestMintVbtc("$p2wshAddr","$ethAddress",$lockAmountInt,"${widget.coinModel.address}",$lockTimeInt,"$publicKey");';
+                if (kDebugMode) debugPrint(alertStr);
                 _controller.runJavaScript(alertStr);
               }
             }
@@ -145,8 +135,9 @@ class _SelfCustody1State extends State<SelfCustody1> {
     int nowTime=(DateTime.now().millisecondsSinceEpoch~/1000)+(0.005*86400).toInt();
     lockTimeInt=nowTime;
     await createP2WSH(nowTime);
+    if (!mounted) return;
     String p2wshAddr=p2wshAddress!.toAddress(BitcoinNetwork.testnet);
-    final value=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletChainSendBtc(widget.coinModel,toAddress: p2wshAddr,toAmount: "0.0012",)));
+    await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletChainSendBtc(widget.coinModel,toAddress: p2wshAddr,toAmount: "0.0012",)));
 
   }
 
@@ -194,10 +185,11 @@ class _SelfCustody1State extends State<SelfCustody1> {
     if(uPubKey==null){
       //Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic;
       //String pk=await Trustdart().getPrivateKey(Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic??"", CoinType.BTC.name, "m/84'/4'/0'/0/0");
-      String pubKey=await Trustdart().getPublicKey(CoinType.BTC.name, "m/84'/4'/0'/0/0",mnemonic: Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic??"",pk: Provider.of<WalletActionProvider>(context,listen: false).walletInfo.privateKey??"");
+      if (!mounted) return;
+      final wap = Provider.of<WalletActionProvider>(context,listen: false);
+      String pubKey=await Trustdart().getPublicKey(CoinType.BTC.name, "m/84'/4'/0'/0/0",mnemonic: wap.walletInfo.mnemonic??"",pk: wap.walletInfo.privateKey??"");
       publicKey=bytesToHex(base64Decode(pubKey));
-      String privatKey1=await Trustdart().getPrivateKey(Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic??"",CoinType.BTC.name, "m/84'/4'/0'/0/0",);
-      String privatKeyStr=bytesToHex(base64Decode(privatKey1));
+      await Trustdart().getPrivateKey(wap.walletInfo.mnemonic??"",CoinType.BTC.name, "m/84'/4'/0'/0/0",);
       uPubKey = publicKey;
           //privateKey!.getPublic().toHex();
       //03ed20061b9a0417a06ab80d063962c12ed80c9924b1d4da3628705b5b9ac9cecb
@@ -205,9 +197,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
       //k/xE3jp/loh7QVm8m4YKtwGvouAGugPHIKZAswxa/YE=
       //1743037697
     }
-    if(cPubKey==null){
-      cPubKey='03ed20061b9a0417a06ab80d063962c12ed80c9924b1d4da3628705b5b9ac9cecb';
-    }
+    cPubKey ??= '03ed20061b9a0417a06ab80d063962c12ed80c9924b1d4da3628705b5b9ac9cecb';
     //cPubKey='03ed20061b9a0417a06ab80d063962c12ed80c9924b1d4da3628705b5b9ac9cecb';
     //print(lockTime);
     // 2️⃣ 质押时间（秒级时间戳）
@@ -226,10 +216,10 @@ class _SelfCustody1State extends State<SelfCustody1> {
       cPubKey,
       2,
       'OP_CHECKMULTISIG']);
-    print(newScript.toHex());
+    if (kDebugMode) debugPrint(newScript.toHex());
     // 5️⃣ 生成 P2WSH 地址（主网示例）
     p2wshAddress =P2wshAddress.fromScript(script: newScript);
-    print(p2wshAddress!.toAddress(BitcoinNetwork.testnet));
+    if (kDebugMode) debugPrint(p2wshAddress!.toAddress(BitcoinNetwork.testnet));
     return p2wshAddress!.toAddress(BitcoinNetwork.testnet);
     //Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic;
     //String pk=await Trustdart().getPrivateKey(Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic??"", CoinType.BTC.name, "m/84'/4'/0'/0/0");
@@ -279,7 +269,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
     //print(scriptPubKey.toHex());
     Script scriptPubkey1=p2wshAddress!.toScriptPubKey();
     String p=p2wshAddress!.toAddress(BitcoinNetwork.mainnet);
-    print(p);
+    if (kDebugMode) debugPrint(p);
     //print(scriptPubkey1.toHex());
     //print(txInputScript[0].toHex());
     //P2wshAddress.fromAddress(address: p2wshAddress!.toAddress(BitcoinNetwork.testnet), network: BitcoinNetwork.testnet).toScriptPubKey();
@@ -291,7 +281,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
     //txInputScript.add(privateKey!.getPublic().toSegwitAddress().toScriptPubKey());
     //String txHash=CreateBtcTX2().create_segwit(privateKey!,selectedUTXOs,txAmount,txInputScript,txOutputs);
     String txHash=CreateBtcTX2().create_segwitV2(privateKey!,p2wshAddress!);
-    print(txHash);
+    if (kDebugMode) debugPrint(txHash);
   }
   sendTrx2(Script scriptP2wsh)async{
 
@@ -337,7 +327,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
     //txInputScript.add(privateKey!.getPublic().toSegwitAddress().toScriptPubKey());
     //txInputScript.add(privateKey!.getPublic().toSegwitAddress().toScriptPubKey());
     String txHash=CreateBtcTX2().create_segwit(privateKey!,selectedUTXOs,txAmount,txInputScript,txOutputs);
-    print(txHash);
+    if (kDebugMode) debugPrint(txHash);
   }
   sendTrx()async{
     String hex=await CreateBTCTXV1().create_v2(
@@ -398,7 +388,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
   }
   getUTXO(String address)async{
     try{
-      String uri="https://mempool.space/testnet4/api/address/${address}/utxo";
+      String uri="https://mempool.space/testnet4/api/address/$address/utxo";
       var data= await BaseApi.RequestEmpty_h.get(uri,
         params: {},
         defaultReturn: false,
@@ -458,7 +448,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
       setState(() {});
       return;
     }
-    if(unspents.length==0){
+    if(unspents.isEmpty){
       getUTXO(address??"");
       return;
     }

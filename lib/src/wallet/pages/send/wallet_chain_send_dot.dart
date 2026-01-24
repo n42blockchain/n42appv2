@@ -8,27 +8,23 @@ import 'package:n42appv2/src/utils/regular.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/dot_api.dart';
-import 'package:n42appv2/src/wallet/api/chain_api/eth_api.dart';
-import 'package:n42appv2/src/wallet/api/chain_api/trx_api.dart';
 import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 import 'package:n42appv2/src/wallet/api/transfer_api.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/models/transation_record_model.dart';
-import 'package:n42appv2/src/wallet/pages/address_book/address_book_List.dart';
+import 'package:n42appv2/src/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42appv2/src/wallet/pages/face_matching/face_match.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42appv2/src/wallet/provider/transaction_record_iterms_provider.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
-import 'package:n42appv2/src/wallet/utils/chain_1559.dart';
-import 'package:n42appv2/src/wallet/utils/chain_ethLayer2.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/wallet/utils/coin_gas.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/container_widget.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
-import 'package:n42appv2/src/widgets/textField_widget.dart';
+import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,11 +32,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
-import 'package:web3dart/crypto.dart';
 
 class WalletChainSendDot extends StatefulWidget {
-  CoinModel coinModel;
-  WalletChainSendDot(this.coinModel,{super.key});
+  final CoinModel coinModel;
+  const WalletChainSendDot(this.coinModel,{super.key});
 
   @override
   State<WalletChainSendDot> createState() => _WalletChainSendDotState();
@@ -50,23 +45,17 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
   CoinModel? chainModel;
   Regular? regular;
   Regular get _regular{
-    if(regular==null){
-      regular=Regular();
-    }
+    regular ??= Regular();
     return regular!;
   }
   DataUtils? _dataUtils;
   DataUtils get dataUtils{
-    if(_dataUtils==null){
-      _dataUtils=DataUtils();
-    }
+    _dataUtils ??= DataUtils();
     return _dataUtils!;
   }
   DotApi? _dotApi;
   DotApi get dotApi{
-    if(_dotApi==null){
-      _dotApi=DotApi();
-    }
+    _dotApi ??= DotApi();
     return _dotApi!;
   }
   final oCcy =  NumberFormat("#,##0.00########", "en_US");
@@ -94,9 +83,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
   Load gasLimitLoad=Load.finish;
   TokenViewApi? _tokenViewApi;
   TokenViewApi get tokenViewApi{
-    if(_tokenViewApi==null){
-      _tokenViewApi=TokenViewApi();
-    }
+    _tokenViewApi ??= TokenViewApi();
     return _tokenViewApi!;
   }
   @override
@@ -138,6 +125,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
       });
       chainModel=wap.coinModels[cIndex];
       await chainModel?.getBalance();
+      if (!mounted) return;
       setState(() {});
     }
     gas=BigInt.from(GetCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
@@ -154,6 +142,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
       load=Load.loading;
     });
     bool isOk=await widget.coinModel.getBalance(getToken: false);
+    if (!mounted) return;
     if(isOk==false){
       load=Load.finish;
       errorMessage=S.current.g_key_t_44;
@@ -169,6 +158,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
       load=Load.loading;
     });
     MessageModel rmm= await dotApi.getGasPrice(txHash,isTest: widget.coinModel.isTest);
+    if (!mounted) return;
     if(rmm.error==false){
       totalGasPrice=BigInt.parse(rmm.data['partialFee']);
     }else{
@@ -277,6 +267,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
       load=Load.loading;
     });
     String? toAddr=await toAddress_check(toTextEditingController.text.trim());
+    if (!mounted) return;
     if(toAddr == null) {
       setState(() {
         load=Load.finish;
@@ -287,7 +278,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
     TransationRecordModel trModel=TransationRecordModel();
     trModel.address=widget.coinModel.address.toString();
     trModel.from1=widget.coinModel.address.toString();
-    trModel.to1=toAddr??"";//toTextEditingController.text;
+    trModel.to1=toAddr;//toTextEditingController.text;
     trModel.addrType=widget.coinModel.addrType;
     trModel.coin=widget.coinModel.coin;
     trModel.coinMiniName=widget.coinModel.coin['coinType'];
@@ -301,6 +292,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
     trModel.returnSignHash=true;
     String txHash=await signTx(trModel);
     await getGasPrice(txHash);
+    if (!mounted) return;
     if(errorMessage != ""){
       setState(() {
         load=Load.finish;
@@ -325,6 +317,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
     }
 
     bool check=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletBaseSend(trModel,null,chainModel==null?widget.coinModel.coin['unit'].toString().toUpperCase():chainModel!.coin['unit'].toString().toUpperCase())));
+    if (!mounted) return;
     trModel.returnSignHash=false;
     if(check){
       signTx(trModel);
@@ -352,6 +345,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
           trModel.txHash=mm.data;
           AppDatabase appDatabase =AppDatabase();
           trModel.trId=await appDatabase.insertTransationRecord(trModel);
+          if (!mounted) return;
           Provider.of<TransactionRecordItemProvider>(context,listen: false).addUndoneTr(trModel,1);
           ToastUtils.show(S.current.g_key_nft_41);
           Navigator.pop(context);
@@ -364,11 +358,12 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
       ToastUtils.show(e.toString());
     }finally{
       load=Load.finish;
-      setState(() {});
+      if (mounted) setState(() {});
     }
   }
   void scanQR() async{
     String? scanValue =await Navigator.push(context, MaterialPageRoute(builder: (context)=>ScanPage()));
+    if (!mounted) return;
     if(scanValue !=null){
       toTextEditingController.text=scanValue;
       toAddress_check(scanValue);
@@ -383,8 +378,8 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
       //estimateGas_eth_local();
     }else{
       valueTextEditingController.text=widget.coinModel.balance_string_all();
-      bool? rOK=true;//await estimateGas_eth_local();
-      if(rOK != null && rOK){
+      bool rOK=true;//await estimateGas_eth_local();
+      if(rOK){
         transferValue=widget.coinModel.balance-totalGasPrice;
         valueTextEditingController.text=_regular.formartNum(toEther(transferValue.toString(),widget.coinModel.coin['decimals']).toDouble(), 14,isCrop: true,isFill0: false);
       }
@@ -576,7 +571,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
     );
   }
   noteWidget(){
-    if(widget.coinModel?.coin['blockchainType']==BlockchainType.Ethereum.name && widget.coinModel?.coin['isContract']==false)
+    if(widget.coinModel.coin['blockchainType']==BlockchainType.Ethereum.name && widget.coinModel.coin['isContract']==false) {
       return Container(
         margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
         child: Column(
@@ -622,6 +617,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
           ],
         ),
       );
+    }
     return SizedBox();
   }
   amountWidget(){
@@ -734,7 +730,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
   amountBalanceWidget(){
     String unit=widget.coinModel.coin['unit'].toString().toUpperCase();
     return Text(
-      '${widget.coinModel.balance_string_all()} ${unit}',
+      '${widget.coinModel.balance_string_all()} $unit',
       style: TextStyle(
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
         fontSize: ScreenUtil().setSp(28.0),
@@ -793,7 +789,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
           totalGasPriceColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
         }
       }
-      totalGasPriceStr='${Decimal.parse(toEther(totalGasPrice.toString(),decimals).toString())}${unit}';
+      totalGasPriceStr='${Decimal.parse(toEther(totalGasPrice.toString(),decimals).toString())}$unit';
       gasPriceStr='${Decimal.parse(toGWei(gasPrice.toString()).toString()) }Gwei';
       gasLimitWidget=Container(
         margin: EdgeInsets.only(top: ScreenUtil().setWidth(30.0)),
@@ -810,7 +806,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
             ),
             SizedBox(width: ScreenUtil().setWidth(10),),
             Expanded(flex: 1,child: Text(
-              "${gas}",
+              "$gas",
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                 fontSize: ScreenUtil().setSp(28.0),
@@ -828,8 +824,8 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
           totalGasPriceColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
         }
       }
-      totalGasPriceStr='${toEther(totalGasPrice.toString(),decimals)} ${title}';
-      gasPriceStr='${toEther(gasPrice.toString(),decimals) } ${title}';
+      totalGasPriceStr='${toEther(totalGasPrice.toString(),decimals)} $title';
+      gasPriceStr='${toEther(gasPrice.toString(),decimals) } $title';
       gasLimitWidget=Container(
         margin: EdgeInsets.only(top: ScreenUtil().setWidth(30.0)),
         alignment: Alignment.center,
@@ -845,7 +841,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
             ),
             Expanded(flex: 1,child: Container()),
             Text(
-              "${gas}",
+              "$gas",
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                 fontSize: ScreenUtil().setSp(28.0),
@@ -859,8 +855,8 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
       if(widget.coinModel.coin['isContract']){
         decimals=chainModel?.coin['decimals']??0;
       }
-      totalGasPriceStr='${toEther(totalGasPrice.toString(),decimals)} ${title}';
-      gasPriceStr='${toEther(gasPrice.toString(),decimals) } ${title}';
+      totalGasPriceStr='${toEther(totalGasPrice.toString(),decimals)} $title';
+      gasPriceStr='${toEther(gasPrice.toString(),decimals) } $title';
     }
 
     return ContainerStyle1(
@@ -1020,13 +1016,14 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
           onTap: ()async{
             String? address=await Navigator.push(context,
                 MaterialPageRoute(builder: (_) => FaceMatch(1)));
+            if (!mounted) return;
             if(address !=null){
               toTextEditingController.text=address;
               toAddress_check(address);
             }
             Navigator.pop(context);
           },
-          child: Container(
+          child: SizedBox(
             height: ScreenUtil().setWidth(88.0),
             width: double.infinity,
             child: Text(
@@ -1043,13 +1040,14 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
           onTap: ()async{
             String? address=await Navigator.push(context,
                 MaterialPageRoute(builder: (_) => FaceMatch(2)));
+            if (!mounted) return;
             if(address !=null){
               toTextEditingController.text=address;
               toAddress_check(address);
             }
             Navigator.pop(context);
           },
-          child: Container(
+          child: SizedBox(
             height: ScreenUtil().setWidth(88.0),
             width: double.infinity,
             child: Text(
@@ -1072,12 +1070,13 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
         onTap: ()async{
           final value =await Navigator.push(context, MaterialPageRoute(
               builder: (context)=> AddressBookList(coinName: widget.coinModel.coin['coinType'],)));
+          if (!mounted) return;
           if(value !=null){
             toTextEditingController.text=value;
           }
           Navigator.pop(context);
         },
-        child: Container(
+        child: SizedBox(
           height: ScreenUtil().setWidth(88),
           width: double.infinity,
           child: Row(
@@ -1114,7 +1113,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
       ),
       InkWell(
         onTap: scanQR,
-        child: Container(
+        child: SizedBox(
           height: ScreenUtil().setWidth(88),
           width: double.infinity,
           child: Row(
@@ -1152,6 +1151,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
       InkWell(
         onTap: ()async{
           ClipboardData? cd = await Clipboard.getData(Clipboard.kTextPlain);
+          if (!mounted) return;
           if(cd !=null){
             if(cd.text !=null && cd.text != "null"){
               toTextEditingController.text=cd.text??"";
@@ -1162,7 +1162,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
           }
           Navigator.pop(context);
         },
-        child: Container(
+        child: SizedBox(
           height: ScreenUtil().setWidth(88),
           width: double.infinity,
           child: Row(
@@ -1203,13 +1203,14 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
           onTap: ()async{
             String? address=await Navigator.push(context,
                 MaterialPageRoute(builder: (_) => FaceMatch(1)));
+            if (!mounted) return;
             if(address !=null){
               toTextEditingController.text=address;
               toAddress_check(address);
             }
             Navigator.pop(context);
           },
-          child: Container(
+          child: SizedBox(
             height: ScreenUtil().setWidth(88),
             width: double.infinity,
             child: Row(
@@ -1247,13 +1248,14 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
           onTap: ()async{
             String? address=await Navigator.push(context,
                 MaterialPageRoute(builder: (_) => FaceMatch(2)));
+            if (!mounted) return;
             if(address !=null){
               toTextEditingController.text=address;
               toAddress_check(address);
             }
             Navigator.pop(context);
           },
-          child: Container(
+          child: SizedBox(
             height: ScreenUtil().setWidth(88),
             width: double.infinity,
             child: Row(

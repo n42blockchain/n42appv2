@@ -1,6 +1,5 @@
 import 'package:n42appv2/src/utils/regular.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/pages/payment_code/payment_code.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
@@ -8,16 +7,16 @@ import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
-import 'package:n42appv2/src/widgets/textField_widget.dart';
+import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class SetAmount extends StatefulWidget {
-  int type;//0默认 跳转并替换PaymentCode页面，1返回上一个页面
-  Map<String,String>? amount;
-  SetAmount({this.type=0,this.amount,super.key});
+  final int type;//0默认 跳转并替换PaymentCode页面，1返回上一个页面
+  final Map<String,String>? amount;
+  const SetAmount({this.type=0,this.amount,super.key});
 
   @override
   State<SetAmount> createState() => _SetAmountState();
@@ -26,9 +25,7 @@ class SetAmount extends StatefulWidget {
 class _SetAmountState extends State<SetAmount> {
   Regular? _regular;
   Regular get regular{
-    if(_regular==null){
-      _regular=Regular();
-    }
+    _regular ??= Regular();
     return _regular!;
   }
   final oCcy = NumberFormat("#,##0.0#", "en_US");
@@ -55,7 +52,7 @@ class _SetAmountState extends State<SetAmount> {
         coinList.add(cm);
       }
     }
-    if(coinList.length !=0){
+    if(coinList.isNotEmpty){
       if(widget.amount !=null){
         int index=coinList.indexWhere((e){
           if(widget.amount!['coinType']==e.coin['coinType'] && widget.amount!['address']==e.address){
@@ -306,7 +303,7 @@ class _SetAmountState extends State<SetAmount> {
                       ),
                       Expanded(
                         flex: 1,
-                        child: Text("${valueBalanceStr}",
+                        child: Text(valueBalanceStr,
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(30.0),
                             color: AppThemeUtils.getColorByKey(
@@ -334,7 +331,7 @@ class _SetAmountState extends State<SetAmount> {
                       ),
                       //percentageWidget(context, coinInfo.percentage),
                       const Expanded(flex: 1, child: SizedBox()),
-                      Text("\$${balanceStr}",
+                      Text("\$$balanceStr",
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(30.0),
                             color: AppThemeUtils.getColorByKey(

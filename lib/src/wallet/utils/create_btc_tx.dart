@@ -8,8 +8,6 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pointycastle/export.dart';
 import 'package:convert/convert.dart';
-import 'package:bech32/bech32.dart';
-import 'package:pointycastle/random/fortuna_random.dart';
 import 'package:web3dart/crypto.dart';
 
 class CreateBTCTX {
@@ -68,11 +66,11 @@ class CreateBTCTX {
     ByteData data2=ByteData(4);
     data2.setUint32(0, 0xffffffff, Endian.little);
     Uint8List rawTx2=Uint8List.fromList(rawTx+data2.buffer.asUint8List(0, 4)+data1.buffer.asUint8List(0, 4));
-    print("原始交易: ${txHashStr}");
+    if (kDebugMode) debugPrint("原始交易: $txHashStr");
     Uint8List txHash=signWithPrivateKey(rawTx2,privateKey);
     //String witness=bytesToHex(sha256s(scriptByte));
     //print(witness);
-    String witness=bytesToHex(txHash)+pubKeyStr+"00000000";
+    String witness="${bytesToHex(txHash)}${pubKeyStr}00000000";
     //witness+=bytesToHex(txHash);
     //print(witness);
     //witness+=pubKeyStr;
@@ -139,11 +137,11 @@ class CreateBTCTX {
     offset += 1;
     data.setUint8(offset, 0x01);
     offset += 1;
-    print(bytesToHex(data.buffer.asUint8List(0, offset)));
+    if (kDebugMode) debugPrint(bytesToHex(data.buffer.asUint8List(0, offset)));
     // 输入数量
     data.setUint8(offset, inputs.length);
     offset += 1;
-    print(bytesToHex(data.buffer.asUint8List(0, offset)));
+    if (kDebugMode) debugPrint(bytesToHex(data.buffer.asUint8List(0, offset)));
     // 处理输入
     for (var input in inputs) {
       Uint8List txidBytes = Uint8List.fromList(hex.decode(input['txid']).reversed.toList());
@@ -166,11 +164,11 @@ class CreateBTCTX {
       data.setUint32(offset, 0xffffffff, Endian.little);
       offset += 4;
     }
-    print(bytesToHex(data.buffer.asUint8List(0, offset)));
+    if (kDebugMode) debugPrint(bytesToHex(data.buffer.asUint8List(0, offset)));
     // 输出数量
     data.setUint8(offset, changeAmount > 0 ? 2 : 1);
     offset += 1;
-    print(bytesToHex(data.buffer.asUint8List(0, offset)));
+    if (kDebugMode) debugPrint(bytesToHex(data.buffer.asUint8List(0, offset)));
     // 发送金额和 scriptPubKey
     data.setUint64(offset, sendAmount, Endian.little);
     offset += 8;
@@ -178,10 +176,10 @@ class CreateBTCTX {
     //getP2WPKHScript(recipient);
     data.setUint8(offset, scriptPubKey.length);
     offset += 1;
-    print(bytesToHex(data.buffer.asUint8List(0, offset)));
+    if (kDebugMode) debugPrint(bytesToHex(data.buffer.asUint8List(0, offset)));
     data.buffer.asUint8List().setRange(offset, offset + scriptPubKey.length, scriptPubKey);
     offset += scriptPubKey.length;
-    print(bytesToHex(data.buffer.asUint8List(0, offset)));
+    if (kDebugMode) debugPrint(bytesToHex(data.buffer.asUint8List(0, offset)));
 
     // 找零
     if (changeAmount > 0) {
@@ -193,7 +191,7 @@ class CreateBTCTX {
       data.buffer.asUint8List().setRange(offset, offset + changeScript.length, changeScript);
       offset += changeScript.length;
     }
-    print(bytesToHex(data.buffer.asUint8List(0, offset)));
+    if (kDebugMode) debugPrint(bytesToHex(data.buffer.asUint8List(0, offset)));
     return data.buffer.asUint8List(0, offset);
     // locktime
     //data.setUint32(offset, 1800000000, Endian.little);

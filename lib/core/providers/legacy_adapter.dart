@@ -5,7 +5,6 @@
 //
 // Author: Jiang Yiwei
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
@@ -24,21 +23,21 @@ class WalletProviderAdapter extends ChangeNotifier {
     _subscriptions.add(
       _container.listen(
         walletListProvider,
-        (_, __) => notifyListeners(),
+        (_, _) => notifyListeners(),
       ),
     );
 
     _subscriptions.add(
       _container.listen(
         selectedWalletIndexProvider,
-        (_, __) => notifyListeners(),
+        (_, _) => notifyListeners(),
       ),
     );
 
     _subscriptions.add(
       _container.listen(
         coinListProvider,
-        (_, __) => notifyListeners(),
+        (_, _) => notifyListeners(),
       ),
     );
   }
@@ -112,21 +111,21 @@ class PublicProviderAdapter extends ChangeNotifier {
     _subscriptions.add(
       _container.listen(
         themeModeProvider,
-        (_, __) => notifyListeners(),
+        (_, _) => notifyListeners(),
       ),
     );
 
     _subscriptions.add(
       _container.listen(
         localeProvider,
-        (_, __) => notifyListeners(),
+        (_, _) => notifyListeners(),
       ),
     );
 
     _subscriptions.add(
       _container.listen(
         currentUserProvider,
-        (_, __) => notifyListeners(),
+        (_, _) => notifyListeners(),
       ),
     );
   }

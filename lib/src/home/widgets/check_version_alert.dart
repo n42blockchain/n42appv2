@@ -9,23 +9,19 @@ class CheckVersionAlert extends StatelessWidget {
   final String introduction;
   final int isForce;
 
-  CheckVersionAlert(
-      {Key? key,
+  const CheckVersionAlert(
+      {super.key,
         required this.newVersion,
         required this.introduction,
-        required this.isForce})
-      : super(key: key);
+        required this.isForce});
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (isForce != 1) {
-          Navigator.of(context).pop(true);
-          return true;
-        }
-        //强制更新
-        return false;
+    return PopScope(
+      canPop: isForce != 1,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        // 强制更新时阻止返回
       },
       child: AlertDialog(
         shape: const RoundedRectangleBorder(

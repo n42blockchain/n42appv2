@@ -11,7 +11,7 @@ import 'package:n42appv2/src/wallet/utils/all_chain.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_2.dart';
-import 'package:n42appv2/src/widgets/textField_widget.dart';
+import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -144,7 +144,7 @@ class _WalletChainAddState extends State<WalletChainAdd> {
     String rpcStr=rpcController.text;
     //String apiStr=apiController.text;
     Regular reg=Regular();
-    if(name.length==0){
+    if(name.isEmpty){
       setState(() {
         nameErrorMessage=S.of(context).g_token_m_key_1(30);
       });
@@ -156,7 +156,7 @@ class _WalletChainAddState extends State<WalletChainAdd> {
       });
       return;
     }
-    if(mKey.length==0){
+    if(mKey.isEmpty){
       setState(() {
         symbolErrorMessage=S.of(context).g_token_m_key_1(10);
       });
@@ -215,11 +215,14 @@ class _WalletChainAddState extends State<WalletChainAdd> {
       }
     }*/
     bool exist=await checkChain(mKey,chainId);
+    if (!mounted) return;
     if(exist){
       errorMessage=S.of(context).g_token_m_key_22(name);
       bool? r=await TipsDialog2(context, S.of(context).g_token_m_key_23(name),);
+      if (!mounted) return;
       if(r==true){
         await addDefaultChain(mKey);
+        if (!mounted) return;
         Navigator.pop(context,true);
       }
       return;
@@ -230,6 +233,7 @@ class _WalletChainAddState extends State<WalletChainAdd> {
       load=Load.loading;
     });
     MessageModel rmm=await EthAPI.init(null, rpcController.text, null).getGasPrice();
+    if (!mounted) return;
     if(rmm.error==false){
       errorMessage="";
     }else{
@@ -251,6 +255,7 @@ class _WalletChainAddState extends State<WalletChainAdd> {
     ethMap['baseInfo']['service']=rpcStr;
     //ethMap['baseInfo']['api']=apiStr;
     await Provider.of<WalletActionProvider>(context,listen: false).addWalletChain(ethMap);
+    if (!mounted) return;
     setState(() {
       load=Load.finish;
     });
@@ -266,6 +271,7 @@ class _WalletChainAddState extends State<WalletChainAdd> {
   }
   addDefaultChain(String symbol)async{
     await Provider.of<WalletActionProvider>(context,listen: false).addWalletChain(allChainUrlMap[symbol]);
+    if (!mounted) return;
     Navigator.pop(context,true);
   }
   @override

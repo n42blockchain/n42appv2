@@ -9,8 +9,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class NavSelectImage extends StatelessWidget {
-  dynamic returnImage;//选择好图片后，返回，返回类型未uint8List
-  NavSelectImage({this.returnImage=null,super.key});
+  final dynamic returnImage;//选择好图片后，返回，返回类型未uint8List
+  const NavSelectImage({this.returnImage,super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +21,14 @@ class NavSelectImage extends StatelessWidget {
             //拍照
             XFile? result =
             await ImagePicker().pickImage(source: ImageSource.camera);
+            if(!context.mounted) return;
             if (result != null) {
               File file = File(result.path);
               debugPrint("file path-->  ${file.path}");
               //final filePath = file.absolute.path;
               Uint8List imageData=file.readAsBytesSync();
               Uint8List? rImageData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageCropPage(imageData)));
+              if(!context.mounted) return;
               if(returnImage!=null)returnImage(rImageData);
             }
           },
@@ -53,12 +55,14 @@ class NavSelectImage extends StatelessWidget {
             //从相册选择
             FilePickerResult? result =
             await FilePicker.platform.pickFiles(type: FileType.image);
+            if(!context.mounted) return;
             if (result != null) {
               File file = File(result.files.single.path!);
               debugPrint("file path-->  ${file.path}");
               //final filePath = file.absolute.path;
               Uint8List imageData=file.readAsBytesSync();
               Uint8List? rImageData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageCropPage(imageData)));
+              if(!context.mounted) return;
               if(returnImage!=null)returnImage(rImageData);
             }
           },

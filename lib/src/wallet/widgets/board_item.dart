@@ -9,12 +9,11 @@ class BoardItem extends StatelessWidget {
   final Color? color;
 
   const BoardItem(
-      {Key? key,
+      {super.key,
         required this.imagePath,
         required this.action,
         this.onTap,
-        this.color})
-      : super(key: key);
+        this.color});
 
   @override
   Widget build(BuildContext context) {

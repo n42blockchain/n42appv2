@@ -17,23 +17,20 @@ import 'package:flutter/scheduler.dart';
 class PerformanceConfig {
   PerformanceConfig._();
 
-  static bool _isEnabled = kDebugMode;
+  /// 是否启用性能监控
+  static bool isEnabled = kDebugMode;
   static final Map<String, _TimingData> _timings = {};
   static final List<FrameTimingRecord> _frameTimings = [];
 
-  /// 是否启用性能监控
-  static bool get isEnabled => _isEnabled;
-  static set isEnabled(bool value) => _isEnabled = value;
-
   /// 开始计时
   static void startTiming(String label) {
-    if (!_isEnabled) return;
+    if (!isEnabled) return;
     _timings[label] = _TimingData(DateTime.now());
   }
 
   /// 结束计时并返回耗时（毫秒）
   static int? endTiming(String label) {
-    if (!_isEnabled) return null;
+    if (!isEnabled) return null;
     final timing = _timings.remove(label);
     if (timing == null) return null;
     
@@ -46,7 +43,7 @@ class PerformanceConfig {
 
   /// 测量异步操作耗时
   static Future<T> measureAsync<T>(String label, Future<T> Function() operation) async {
-    if (!_isEnabled) return operation();
+    if (!isEnabled) return operation();
     
     startTiming(label);
     try {
@@ -58,7 +55,7 @@ class PerformanceConfig {
 
   /// 测量同步操作耗时
   static T measureSync<T>(String label, T Function() operation) {
-    if (!_isEnabled) return operation();
+    if (!isEnabled) return operation();
     
     startTiming(label);
     try {
@@ -70,7 +67,7 @@ class PerformanceConfig {
 
   /// 记录帧渲染时间
   static void recordFrameTiming(FrameTiming timing) {
-    if (!_isEnabled) return;
+    if (!isEnabled) return;
     
     final record = FrameTimingRecord(
       buildDuration: timing.buildDuration.inMicroseconds,

@@ -5,7 +5,6 @@ import 'package:n42appv2/src/miningV2/pages/keyManagement/mining_key_list.dart';
 import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:n42appv2/src/widgets/app_home_top_bar.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/container_widget.dart';

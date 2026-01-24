@@ -20,7 +20,6 @@ class Notification {
         iOS: ios);
     await np.initialize(initializationSettings,
         onDidReceiveNotificationResponse:(NotificationResponse details) {
-          String? payload = details.payload;
           switch (details.notificationResponseType) {
             case NotificationResponseType.selectedNotification:
               break;
@@ -90,7 +89,8 @@ class Notification {
       await np.show(notificationId ?? DateTime.now().millisecondsSinceEpoch >> 10,
           title, body, details,
           payload: params);
-    }catch(err){
+    } catch (_) {
+      // 错误安全忽略
     }
   }
 

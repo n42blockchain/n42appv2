@@ -1,11 +1,8 @@
-import 'dart:convert';
-
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/https/request_url.dart';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:crypto/crypto.dart';
 
 class DotApi{
   //获取余额
@@ -45,7 +42,7 @@ class DotApi{
     }
   }
   //GenesisHash=0和BlockHash=nll
-  getGenesisHash({int? index=null,bool isTest=false})async {
+  getGenesisHash({int? index,bool isTest=false})async {
     return await BaseRPC("chain_getBlockHash",index==null?[]:[index],isTest: isTest);
   }
   getNonce(String address,{bool isTest=false})async{

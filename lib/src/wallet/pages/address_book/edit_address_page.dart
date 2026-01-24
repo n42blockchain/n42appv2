@@ -13,7 +13,7 @@ import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/container_widget.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
-import 'package:n42appv2/src/widgets/textField_widget.dart';
+import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter/services.dart';
@@ -178,6 +178,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
           ? () async {
         final CoinModel? data = await Navigator.push(context,
             MaterialPageRoute(builder: (_) => const ChooseCoinsPage()));
+        if (!mounted) return;
         debugPrint("data ---->${data?.coin['icon']}");
         if (data != null) {
           setState(() {
@@ -197,7 +198,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
             borderRadius: BorderRadius.circular(scr.setWidth(16.0))),*/
         child: Row(
           children: [
-            Container(
+            SizedBox(
               width: ScreenUtil().setWidth(50.0),
               height: ScreenUtil().setWidth(50.0),
               child: (coinName == CoinType.N.name)
@@ -289,6 +290,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
         /// 扫描
         String? data = await Navigator
             .push(context,MaterialPageRoute(builder: (_) => ScanPage()));
+        if (!mounted) return;
         if(data != null){
           setState(() {
             addressController.text = data;
@@ -366,6 +368,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
     String? address = addressController.text.trim();
 
     address=await address_check(address);
+    if (!mounted) return;
     if(address==null){
       return;
     }
@@ -391,13 +394,15 @@ class _EditAddressPageState extends State<EditAddressPage> {
     try {
       ///更新数据
       final code = await AddressBookApi().updateAddressBookItem(info);
+      if (!mounted) return;
       if (code != 0) {
         eventBus.fire(EventPublic(EventPublicType.refreshData));
         Navigator.of(context).pop(true);
       } else {
         //保存失败
       }
-    } catch (err) {
+    } catch (_) {
+      // 错误安全忽略
     }
   }
 
@@ -406,6 +411,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
       onTap: () async{
         // 删除数据
         final data = await AddressBookApi().deleteAddressBookItem(info);
+        if (!mounted) return;
         if(data != 0){
           ToastUtils.show(S.of(context).g_key_address_5);
           eventBus.fire(EventPublic(EventPublicType.refreshData));

@@ -19,7 +19,7 @@ class WalletApi{
       //chains="Amaze Chain";
       String condition="";
       if(chains!=""){
-        condition="?chains=${chains}";
+        condition="?chains=$chains";
       }
       if(coins!=""){
         if(condition==""){
@@ -27,9 +27,9 @@ class WalletApi{
         }else{
           condition+="&";
         }
-        condition+="coins=${coins}";
+        condition+="coins=$coins";
       }
-      String path='${url}v2/chains/coins/v2${condition}';
+      String path='${url}v2/chains/coins/v2$condition';
       final a=await BaseApi.RequestEmpty_h.get(path, params: {},header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
@@ -48,12 +48,12 @@ class WalletApi{
   //获取某个主链币的所有代币
   getTokenList_fullname(String fullname)async{
     try{
-      final a=await BaseApi.RequestEmpty_h.get('${url}v1/chains/coins?chains=${fullname}', params: {},header:header,);
+      final a=await BaseApi.RequestEmpty_h.get('${url}v1/chains/coins?chains=$fullname', params: {},header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
         List<dynamic> rData=a['data'];
         mm.error=false;
-        if(rData.length==0){
+        if(rData.isEmpty){
           mm.data=[];
         }else{
           mm.data=rData[0]['coins'];

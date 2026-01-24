@@ -13,7 +13,6 @@ import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_2.dart';
 import 'package:n42appv2/src/widgets/loading_page.dart';
-import 'package:n42appv2/src/widgets/textField_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,9 +27,7 @@ class AccountLogoutPage extends StatefulWidget {
 class _AccountLogoutPageState extends State<AccountLogoutPage> {
   Regular? _regular;
   Regular get regular{
-    if(_regular==null){
-      _regular=Regular();
-    }
+    _regular ??= Regular();
     return _regular!;
   }
   Load load=Load.finish;
@@ -215,7 +212,7 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
             ),
           ),
         ),
-        Container(
+        SizedBox(
           height: ScreenUtil().setWidth(88),
           width: double.infinity,
           child: ButtonStyle2(context, ()async{

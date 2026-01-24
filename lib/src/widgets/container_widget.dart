@@ -24,7 +24,7 @@ Widget ContainerStyle1(
       padding: padding,
       alignment: alignment,
       decoration: BoxDecoration(
-        color: bgColor==null?AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name):bgColor,
+        color: bgColor??AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
         boxShadow: [
           BoxShadow(

@@ -9,15 +9,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class PaymentCode extends StatefulWidget {
-  Map<String,String>? amount;
-  PaymentCode({this.amount,super.key});
+  final Map<String,String>? amount;
+  const PaymentCode({this.amount,super.key});
 
   @override
   State<PaymentCode> createState() => _PaymentCodeState();
 }
 
 class _PaymentCodeState extends State<PaymentCode> {
-  Map<String,String>? amount=null;
+  Map<String,String>? amount;
   @override
   void initState() {
     // TODO: implement initState
@@ -125,7 +125,7 @@ class _PaymentCodeState extends State<PaymentCode> {
                         Map<String,String>? rAmount=await Navigator.push(context, MaterialPageRoute(builder: (context)=>SetAmount(type: 1,amount: amount,)));
                         if(rAmount !=null){
                           setState(() {
-                            amount=rAmount??{};
+                            amount=rAmount;
                           });
                         }
                       },

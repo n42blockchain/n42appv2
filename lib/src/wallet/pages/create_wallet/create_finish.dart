@@ -15,9 +15,9 @@ import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class CreateFinish extends StatefulWidget {
-  WalletInfo? wInfo;
-  String createMetod;//Create,Import,PrivateKey
-  CreateFinish({this.wInfo,this.createMetod="Create",super.key});
+  final WalletInfo? wInfo;
+  final String createMetod;//Create,Import,PrivateKey
+  const CreateFinish({this.wInfo,this.createMetod="Create",super.key});
 
   @override
   State<CreateFinish> createState() => _CreateFinishState();
@@ -28,6 +28,7 @@ class _CreateFinishState extends State<CreateFinish> {
   bool exportKeystore=false;
   //bool isSelectedUserProtocol = false;
   String pageName="/CreateOne";
+  WalletInfo? _wInfo;
 
   Future<bool> _pageBack(){
     if(Navigator.canPop(context)){
@@ -43,23 +44,23 @@ class _CreateFinishState extends State<CreateFinish> {
   }
   createWallet()async{
     final walletActionProvider =Provider.of<WalletActionProvider>(context,listen: false);
-    if(widget.wInfo==null){
-      widget.wInfo=WalletInfo(
+    if(_wInfo==null){
+      _wInfo=WalletInfo(
         walletName: "",
         password: "",
         UUID: walletActionProvider.UserUUID,
       );
-      widget.wInfo!.mnemonic= await Trustdart().generateMnemonic();
+      _wInfo!.mnemonic= await Trustdart().generateMnemonic();
     }
     //String walletName="Account${walletActionProvider.walletMap.length}";
-    if(widget.wInfo!.walletName==""){
-      widget.wInfo!.walletName="Account${walletActionProvider.walletInfoLsit.length+1}";
+    if(_wInfo!.walletName==""){
+      _wInfo!.walletName="Account${walletActionProvider.walletInfoLsit.length+1}";
     }
-    if(widget.wInfo!.coinInfo==null){
-      widget.wInfo!.coinInfo = chainUrlMap;
+    if(_wInfo!.coinInfo==null){
+      _wInfo!.coinInfo = chainUrlMap;
     }
     //根据导入时间设置时间戳 标记钱包的唯一标识
-    widget.wInfo!.timestamp = "${DateTime.now().millisecondsSinceEpoch}";
+    _wInfo!.timestamp = "${DateTime.now().millisecondsSinceEpoch}";
 
     ///生成钱包
     int code = -1;
@@ -69,7 +70,7 @@ class _CreateFinishState extends State<CreateFinish> {
       });
       //await Future.delayed(const Duration(microseconds: 600), () {});
       if(widget.createMetod=="Import"){
-        code = await walletActionProvider.checkWalletMnemonic(widget.wInfo!);
+        code = await walletActionProvider.checkWalletMnemonic(_wInfo!);
       }else{
         code=0;
       }
@@ -79,7 +80,7 @@ class _CreateFinishState extends State<CreateFinish> {
         //await info.saveMnemonicToStorage();
 
         ///更新一下provider中的数据
-        await walletActionProvider.addWalletInfo(widget.wInfo!);
+        await walletActionProvider.addWalletInfo(_wInfo!);
         //walletActionProvider.addDefaultToken();
         //刷新一下首页的nft 和wallet 数据
         //walletActionProvider.notifyWalletState(true);
@@ -110,6 +111,7 @@ class _CreateFinishState extends State<CreateFinish> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _wInfo = _wInfo;
     if(widget.createMetod=="Import"){
       pageName="/ImportOne";
     }else if(widget.createMetod=="PrivateKey"){
@@ -119,7 +121,13 @@ class _CreateFinishState extends State<CreateFinish> {
   }
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(child: Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        _pageBack();
+      },
+      child: Scaffold(
       appBar: AppBar(
         backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
         actions: [
@@ -236,7 +244,7 @@ class _CreateFinishState extends State<CreateFinish> {
                             child: Stack(
                               children: [
                                 Positioned.fill(
-                                  child: Container(
+                                  child: SizedBox(
                                     height: ScreenUtil().setWidth(100.0),
                                     width: ScreenUtil().setWidth(100.0),
                                     child: CircularProgressIndicator(),
@@ -278,7 +286,7 @@ class _CreateFinishState extends State<CreateFinish> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
+                      SizedBox(
                         height: ScreenUtil().setWidth(560.0),
                         width: double.infinity,
                         child: Stack(
@@ -455,7 +463,7 @@ class _CreateFinishState extends State<CreateFinish> {
           ],
         ),
       ),
-    ), onWillPop: _pageBack);
+    ));
   }
   exportKeystoreWidget(){
     return Stack(
@@ -564,6 +572,7 @@ class _CreateFinishState extends State<CreateFinish> {
                   child: ButtonStyle2(context,
                         ()async{
                       await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletList()));
+                      if (!mounted) return;
                       //eventBus.fire(EventPublic(EventPublicType.finishPage));
                       Navigator.popUntil(context,ModalRoute.withName(pageName));
                     },

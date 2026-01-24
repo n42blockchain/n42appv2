@@ -129,7 +129,7 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
       );
     }
     
-    return Container(
+    return SizedBox(
       width: ScreenUtil().setWidth(64.0),
       height: ScreenUtil().setWidth(64.0),
       child: Stack(

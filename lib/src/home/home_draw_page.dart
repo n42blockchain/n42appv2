@@ -1,6 +1,4 @@
-﻿import 'dart:ui';
-
-import 'package:n42appv2/core/app/app_globals.dart';
+﻿import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/home/setting/about_app.dart';
@@ -9,7 +7,7 @@ import 'package:n42appv2/src/home/setting/setting_home_page.dart';
 import 'package:n42appv2/src/home/setting/setting_share.dart';
 import 'package:n42appv2/src/notification/pages/message_list.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/pages/address_book/address_book_List.dart';
+import 'package:n42appv2/src/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/wallet_list.dart';
 import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_2.dart';
 import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_6.dart';
@@ -92,7 +90,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                       // 账户管理分组
                       _sectionTitle(S.of(context).g_home_key1),
                       _menuItem(
-                        "assets/home/profile.png", 
+                        "assets/home/profile.png",
                         S.of(context).g_home_key1,
                         onTap: () async {
                           if (AppGlobals.userInfo != null) {
@@ -100,9 +98,12 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                               MaterialPageRoute(builder: (_) => const PersonalSetting()),
                             );
                           } else {
-                            final flag = await TipsDialog6(context, title: S.of(context).login_need_login);
+                            final loginNeededTitle = S.of(context).login_need_login;
+                            final flag = await TipsDialog6(context, title: loginNeededTitle);
+                            if (!context.mounted) return;
                             if (flag != null && flag) {
                               await Navigator.pushNamed(context, "/LoginPage");
+                              if (!context.mounted) return;
                               Navigator.popUntil(context, ModalRoute.withName("/"));
                             }
                           }
@@ -127,13 +128,16 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                       // 安全与设置分组
                       _sectionTitle(S.of(context).g_key_94),
                       _menuItem(
-                        "assets/home/security.png", 
+                        "assets/home/security.png",
                         S.of(context).s_key_11,
                         onTap: () async {
                           if (AppGlobals.userInfo == null) {
-                            final flag = await TipsDialog6(context, title: S.of(context).login_need_login);
+                            final loginNeededTitle = S.of(context).login_need_login;
+                            final flag = await TipsDialog6(context, title: loginNeededTitle);
+                            if (!context.mounted) return;
                             if (flag != null && flag) {
                               await Navigator.pushNamed(context, "/LoginPage");
+                              if (!context.mounted) return;
                               Navigator.popUntil(context, ModalRoute.withName("/"));
                             }
                           } else {
@@ -197,15 +201,15 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.1),
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.05),
+            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.1),
+            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.05),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
         border: Border.all(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.1),
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.1),
           width: 1,
         ),
       ),
@@ -226,7 +230,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                   ),*/
                   boxShadow: [
                     BoxShadow(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.2),
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.2),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -277,9 +281,12 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
           GestureDetector(
             onTap: () async {
               if (AppGlobals.userInfo == null) {
-                final flag = await TipsDialog6(context, title: S.of(context).login_need_login);
+                final loginNeededTitle = S.of(context).login_need_login;
+                final flag = await TipsDialog6(context, title: loginNeededTitle);
+                if (!mounted) return;
                 if (flag != null && flag) {
                   await Navigator.pushNamed(context, "/LoginPage");
+                  if (!mounted) return;
                   Navigator.popUntil(context, ModalRoute.withName("/"));
                 }
                 return;
@@ -350,7 +357,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                 width: ScreenUtil().setWidth(44),
                 height: ScreenUtil().setWidth(44),
                 decoration: BoxDecoration(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.1),
+                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
                 ),
                 alignment: Alignment.center,
@@ -485,9 +492,11 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
           onTap: () async {
             if (isLoggedIn) {
               final res = await TipsDialog2(context, S.of(context).g_key_logout_sure);
+              if (!mounted) return;
               if (res != null && res) {
                 try {
                   await AppGlobals.logout();
+                  if (!mounted) return;
                   Scaffold.of(context).closeDrawer();
                 } catch (err) {
                   debugPrint("logout err：${err.toString()}");
@@ -506,13 +515,13 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
             ),
             decoration: BoxDecoration(
               color: isLoggedIn 
-                  ? AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name).withOpacity(0.1)
-                  : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.1),
+                  ? AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name).withValues(alpha:0.1)
+                  : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.1),
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
               border: Border.all(
                 color: isLoggedIn
-                    ? AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name).withOpacity(0.3)
-                    : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.3),
+                    ? AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name).withValues(alpha:0.3)
+                    : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.3),
                 width: 1,
               ),
             ),

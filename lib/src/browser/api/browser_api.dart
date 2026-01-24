@@ -6,9 +6,7 @@ import 'package:n42appv2/src/sqlite/app_database.dart';
 class BrowserApi{
   AppDatabase? _db;
   AppDatabase get db{
-    if(_db==null){
-      _db=AppDatabase();
-    }
+    _db ??= AppDatabase();
     return _db!;
   }
   //将浏览历史，保存到浏览历史表

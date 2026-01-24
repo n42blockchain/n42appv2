@@ -49,61 +49,61 @@ getBrowser_txHash(String coinType,String txHash,{bool? isTest}){
     case "KLAY":
     case "ZETA":
     case "BASE":
-      path+='tx/${txHash}';
+      path+='tx/$txHash';
       break;
     case "ATOM":
     case "XRP":
     case "TT":
-      path+='transactions/${txHash}';
+      path+='transactions/$txHash';
       break;
     case "TRX":
-      path+='transaction/${txHash}';
+      path+='transaction/$txHash';
       break;
     case "BCH":
     case "BTC":
-      path+='explorer/transactions/${coinType}/${txHash}';
+      path+='explorer/transactions/$coinType/$txHash';
       break;
     case "BTG":
-      path+='insight/tx/${txHash}';
+      path+='insight/tx/$txHash';
       break;
     case "HT":
-      path+='en-us/tx/${txHash}';
+      path+='en-us/tx/$txHash';
       break;
     case "EVMOS":
     case "KAVA":
-      path+='txs/${txHash}';
+      path+='txs/$txHash';
       break;
     case "SOL":
-      path+='tx/${txHash}${isTest! ?"?cluster=testnet":""}';
+      path+='tx/$txHash${isTest! ?"?cluster=testnet":""}';
       break;
     case "OKT":
-      path+='okc/tx/${txHash}';
+      path+='okc/tx/$txHash';
       break;
     case "XTZ":
       path+=txHash;
       break;
     case "DASH":
-      path+='tx.dws?${txHash}.htm';
+      path+='tx.dws?$txHash.htm';
       break;
     case "METIS":
-      path+='en/tx/${txHash}';
+      path+='en/tx/$txHash';
       break;
     case "RVN":
-      path+='rvn/transaction/${txHash}';
+      path+='rvn/transaction/$txHash';
       break;
     case "FIL":
-      path+='message/${txHash}';
+      path+='message/$txHash';
       break;
     case "DOT":
     case "ACA":
     case "KSM":
-      path+='extrinsic/${txHash}';
+      path+='extrinsic/$txHash';
       break;
     case "APT":
-      path+='txn/${txHash}?network=${isTest!?"testnet":"mainnet"}';
+      path+='txn/$txHash?network=${isTest!?"testnet":"mainnet"}';
       break;
     case "ZIL":
-      path+='tx/${txHash}?network=${isTest!?"testnet":"mainnet"}';
+      path+='tx/$txHash?network=${isTest!?"testnet":"mainnet"}';
       break;
     default:
       path="";

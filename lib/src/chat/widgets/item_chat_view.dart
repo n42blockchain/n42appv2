@@ -1,11 +1,9 @@
 ﻿import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/api/chat_db_api.dart';
-import 'package:n42appv2/src/chat/api/file_api.dart';
 import 'package:n42appv2/src/chat/models/chat_message_model.dart';
 import 'package:n42appv2/src/chat/models/friend_info.dart';
 import 'package:n42appv2/src/chat/utils/aes_utils.dart';
@@ -49,14 +47,13 @@ class ItemChatView extends StatefulWidget {
   final FriendInfo? info;
 
   const ItemChatView(
-      {Key? key,
+      {super.key,
         required this.isCurrentUser,
         required this.item,
         this.time,
         required this.mPrivateKey,
         this.info,
-        this.friendName})
-      : super(key: key);
+        this.friendName});
 
   @override
   State<ItemChatView> createState() => _ItemChatViewState();
@@ -66,30 +63,22 @@ class _ItemChatViewState extends State<ItemChatView>
     with AutomaticKeepAliveClientMixin {
   ChatApi? _chatApi;
   ChatApi get chatApi{
-    if(_chatApi==null){
-      _chatApi=ChatApi();
-    }
+    _chatApi ??= ChatApi();
     return _chatApi!;
   }
   ChatDBApi? _chatDBApi;
   ChatDBApi get chatDBApi{
-    if(_chatDBApi==null){
-      _chatDBApi=ChatDBApi();
-    }
+    _chatDBApi ??= ChatDBApi();
     return _chatDBApi!;
   }
   ChatUtil? chatUtils;
   ChatUtil get _chatUtils{
-    if(chatUtils==null){
-      chatUtils= ChatUtil();
-    }
+    chatUtils ??= ChatUtil();
     return chatUtils!;
   }
   FileUtils? fileUtils;
   FileUtils get _fileUtils{
-    if(fileUtils==null){
-      fileUtils= FileUtils();
-    }
+    fileUtils ??= FileUtils();
     return fileUtils!;
   }
 
@@ -131,7 +120,8 @@ class _ItemChatViewState extends State<ItemChatView>
         replyChatItem =
         await chatDBApi.getMessageByMessageId(_item.reply_id!);
       }
-    } catch (err) {
+    } catch (_) {
+      // 查找回复消息失败时安全忽略，显示空占位
     }
   }
 
@@ -181,7 +171,8 @@ class _ItemChatViewState extends State<ItemChatView>
               await chatDBApi.updateMessage(_item);
 
               setState(() {});
-            } catch (err) {
+            } catch (_) {
+              // 文本消息解密失败时安全忽略，显示默认图标
             }
           }
         } else {
@@ -193,6 +184,7 @@ class _ItemChatViewState extends State<ItemChatView>
             if (!await File(filePath).exists()) {
               _item.decryptionMessageContent = null;
             } else {
+              // 文件存在，不需要重新下载
             }
           }
 
@@ -217,10 +209,6 @@ class _ItemChatViewState extends State<ItemChatView>
             if (fileName == null || fileUrl == null) return;
             String savePath = await _fileUtils.getTempDirByName(fileName);
             debugPrint("savePath : $savePath");
-            String openFileName =
-            fileName.substring(0, fileName.lastIndexOf('.'));
-            String openFilepath =
-            await _fileUtils.getTempDirByName(openFileName);
             //File openFile = File(openFilepath);
 
 
@@ -258,6 +246,7 @@ class _ItemChatViewState extends State<ItemChatView>
 
                 setState(() {});
               } else {
+                // 文件解密失败时安全忽略，显示默认图标
               }
             }
           }
@@ -388,7 +377,8 @@ class _ItemChatViewState extends State<ItemChatView>
                           else {
                             OpenFilex.open(content!);
                           }
-                        } catch (err) {
+                        } catch (_) {
+                          // 打开文件失败时安全忽略
                         }
                       }
                       if (content == null) {
@@ -458,9 +448,10 @@ class _ItemChatViewState extends State<ItemChatView>
                                   FriendInfo? info =
                                   await ChatSPUtil().getNavUserInfo(
                                       _item.getTargetId());
+                                  if (!mounted) return;
                                   //底部弹出举报框
                                   SheetBottom(
-                                    context,
+                                    this.context,
                                     "",
                                     ReportWidget(
                                       name: info?.name ?? '',
@@ -502,12 +493,12 @@ class _ItemChatViewState extends State<ItemChatView>
                                                       showReportMessage = false;
                                                     });
                                                     //举报成功之后拉黑用户
-                                                    final blockUser =
                                                     await chatApi
                                                         .blockFriend(
                                                         _item.targetId);
                                                   }
                                                 } finally {
+                                                  // 清理操作已完成，无需额外处理
                                                 }
                                               },
                                               controller: controller,
@@ -674,7 +665,7 @@ class _ItemChatViewState extends State<ItemChatView>
   }
 
   _buildItem(BuildContext context) {
-    BorderRadiusGeometry? _borderRadius = widget.isCurrentUser
+    BorderRadiusGeometry? borderRadius = widget.isCurrentUser
         ? BorderRadius.only(
         topLeft: Radius.circular( ScreenUtil().setWidth(16)),
         topRight: Radius.circular( ScreenUtil().setWidth(16)),
@@ -701,7 +692,7 @@ class _ItemChatViewState extends State<ItemChatView>
                   color: widget.isCurrentUser
                       ? const Color(0xff1976F9)
                       : Colors.grey[300],
-                  borderRadius: _borderRadius,
+                  borderRadius: borderRadius,
                 ),
                 child: Padding(
                     padding: EdgeInsets.all( ScreenUtil().setWidth(24)),
@@ -728,7 +719,7 @@ class _ItemChatViewState extends State<ItemChatView>
                     color: widget.isCurrentUser
                         ? const Color(0xff1976F9)
                         : Colors.grey[300],
-                    borderRadius: _borderRadius,
+                    borderRadius: borderRadius,
                   ),
                   child: Padding(
                       padding: EdgeInsets.all( ScreenUtil().setWidth(24)),

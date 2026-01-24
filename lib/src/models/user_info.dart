@@ -41,7 +41,7 @@ class UserInfo{
     if(artJson==null){
       _isArtist=false;
     }else{
-      _isArtist=artJson!['_id']==null?false:true;
+      _isArtist=artJson['_id']==null?false:true;
     }
     return _isArtist!;
   }

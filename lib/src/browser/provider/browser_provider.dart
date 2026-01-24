@@ -4,7 +4,6 @@ import 'package:n42appv2/src/browser/models/browser_collection_model.dart';
 import 'package:n42appv2/src/browser/pages/browser_collection.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -22,9 +21,7 @@ class BrowserProvider extends ChangeNotifier{
   }
   BrowserApi? _browserApi;
   BrowserApi get browserApi{
-    if(_browserApi==null){
-      _browserApi=BrowserApi();
-    }
+    _browserApi ??= BrowserApi();
     return _browserApi!;
   }
   Map<String,dynamic> browser={
@@ -93,7 +90,7 @@ class BrowserProvider extends ChangeNotifier{
 
     webViewController =
         WebViewController.fromPlatformCreationParams(params);
-    webViewController!
+    webViewController
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
       ..setNavigationDelegate(
@@ -139,12 +136,12 @@ class BrowserProvider extends ChangeNotifier{
       ..loadRequest(Uri.parse(url));
 
     // #docregion platform_features
-    if (webViewController!.platform is AndroidWebViewController) {
+    if (webViewController.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);
-      (webViewController!.platform as AndroidWebViewController)
+      (webViewController.platform as AndroidWebViewController)
           .setMediaPlaybackRequiresUserGesture(false);
     }
-    Widget wv=WebViewWidget(controller: webViewController!);
+    Widget wv=WebViewWidget(controller: webViewController);
     wList.add(wv);
     wvcList.add(webViewController);
     wInfoList.add({
@@ -161,7 +158,7 @@ class BrowserProvider extends ChangeNotifier{
     if(url=="")return;
     url=checkHttp(url);
     WebViewController wv=wvcList[wListIndex];
-    wv!.loadRequest(Uri.parse(url));
+    wv.loadRequest(Uri.parse(url));
     wInfoList[wListIndex]['openUrl']=url;
     //notifyListeners();
   }
@@ -200,7 +197,7 @@ class BrowserProvider extends ChangeNotifier{
   //查询收藏缓存 条件 url
   getCollection_url(String url)async{
     List<BrowserCollectionModel> list=await browserApi.selectBrowserCollection_url(url);
-    if(list.length ==0){
+    if(list.isEmpty){
       collect=false;
     }else{
       collect=true;
@@ -209,7 +206,7 @@ class BrowserProvider extends ChangeNotifier{
   }
   getTitle()async{
     WebViewController wv=wvcList[wListIndex];
-    String? t=await wv?.getTitle();
+    String? t=await wv.getTitle();
     if(t !=null){
       wInfoList[wListIndex]['title']=t;
       notifyListeners();
@@ -218,21 +215,19 @@ class BrowserProvider extends ChangeNotifier{
   gotoGoogle(){
     WebViewController wv=wvcList[wListIndex];
     String url=wInfoList[wListIndex]['openUrl'];
-    wInfoList[wListIndex]['openUrl']="https://www.google.com/search?q=${url}";
-    wv?.loadRequest(Uri.parse(openUrl));
+    wInfoList[wListIndex]['openUrl']="https://www.google.com/search?q=$url";
+    wv.loadRequest(Uri.parse(openUrl));
   }
   //检查是否可以 上一页，或者下一页
   checkCanGo()async{
     WebViewController wv=wvcList[wListIndex];
-    canBack=await wv!.canGoBack();
-    canForward=await wv!.canGoForward();
+    canBack=await wv.canGoBack();
+    canForward=await wv.canGoForward();
     notifyListeners();
   }
   clearCache(){
     WebViewController wv=wvcList[wListIndex];
-    if(wv !=null){
-      wv!.clearCache();
-    }
+    wv.clearCache();
   }
   checkUrl(String url){
     if(_blockUri !=""){
@@ -271,12 +266,12 @@ class BrowserProvider extends ChangeNotifier{
         httpIndex=url.indexOf("http://",0);
       }
       if(httpIndex!=0){
-        returnUrl='https://${url}';
+        returnUrl='https://$url';
       }else{
         returnUrl=url;
       }
     }else{
-      returnUrl="https://www.google.com/search?q=${url}";
+      returnUrl="https://www.google.com/search?q=$url";
     }
     return returnUrl;
   }
@@ -288,9 +283,9 @@ class BrowserProvider extends ChangeNotifier{
   //添加收藏
   addBrowserCollection(context)async{
     WebViewController wv=wvcList[wListIndex];
-    String? currentUrl=await wv!.currentUrl();
-    String? title=await wv!.getTitle();
-    await Navigator.push(context, MaterialPageRoute(builder: (context)=>BrowserCollection(title==null?"":title!,currentUrl==null?"":currentUrl!,)));
+    String? currentUrl=await wv.currentUrl();
+    String? title=await wv.getTitle();
+    await Navigator.push(context, MaterialPageRoute(builder: (context)=>BrowserCollection(title ?? "",currentUrl ?? "",)));
     getCollection_url(wInfoList[wListIndex]['openUrl']);
   }
   cleanWList(){

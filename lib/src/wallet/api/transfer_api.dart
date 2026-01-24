@@ -12,7 +12,6 @@ import 'package:n42appv2/src/wallet/api/chain_api/apt_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/atom_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/btc_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/dot_api.dart';
-import 'package:n42appv2/src/wallet/api/chain_api/eth_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/fil_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/sol_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/ton_api.dart';
@@ -38,23 +37,17 @@ import 'package:provider/provider.dart';
 class TransferApi {
   TokenViewApi? _tokenViewApi;
   TokenViewApi get tokenViewApi{
-    if(_tokenViewApi==null){
-      _tokenViewApi=TokenViewApi();
-    }
+    _tokenViewApi ??= TokenViewApi();
     return _tokenViewApi!;
   }
   DataUtils? _dataUtils;
   DataUtils get dataUtils{
-    if(_dataUtils==null){
-      _dataUtils=DataUtils();
-    }
+    _dataUtils ??= DataUtils();
     return _dataUtils!;
   }
   Trustdart? _trustdart;
   Trustdart get trustdart{
-    if(_trustdart==null){
-      _trustdart=Trustdart();
-    }
+    _trustdart ??= Trustdart();
     return _trustdart!;
   }
   //地址处理
@@ -103,7 +96,7 @@ class TransferApi {
       mm.data = S.current.g_key_wallet_m1(chainSymbol);
       return mm;
     }
-    Map<String, dynamic>? token = null;
+    Map<String, dynamic>? token;
     if (contractAddress != "") {
       if(isTest){
         if (txChainMap['testnets']['testnetContract'].length != 0) {
@@ -416,8 +409,8 @@ class TransferApi {
         );
         break;
       case "Polkadot":
-        coinType=trModel!.coin['coinType'];
-        network=trModel!.isTest==0?"main":"test";
+        coinType=trModel.coin['coinType'];
+        network=trModel.isTest==0?"main":"test";
         txmm= await transfer_dot_send(
           trModel.from1,
           trModel.to1,
@@ -432,8 +425,8 @@ class TransferApi {
         );
         break;
       case "Aptos":
-        coinType=trModel!.coin['coinType'];
-        network=trModel!.isTest==0?"main":"test";
+        coinType=trModel.coin['coinType'];
+        network=trModel.isTest==0?"main":"test";
         txmm=await transfer_apt_send(
             trModel.from1,
             trModel.to1,
@@ -444,8 +437,8 @@ class TransferApi {
             coinType, trModel.coinId);
         break;
       case "TheOpenNetwork":
-        coinType=trModel!.coin['coinType'];
-        network=trModel!.isTest==0?"main":"test";
+        coinType=trModel.coin['coinType'];
+        network=trModel.isTest==0?"main":"test";
         txmm=await transfer_ton_send(
             trModel.from1,
             trModel.to1,
@@ -458,8 +451,8 @@ class TransferApi {
         );
         break;
       case "Zilliqa":
-        coinType=trModel!.coin['coinType'];
-        network=trModel!.isTest==0?"main":"test";
+        coinType=trModel.coin['coinType'];
+        network=trModel.isTest==0?"main":"test";
         txmm=await transfer_zil_send(
             trModel.from1,
             trModel.to1,
@@ -499,7 +492,7 @@ class TransferApi {
             mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
           );
         }else{
-          rStr = await trustdart.signTransaction_maxValue(coinType.toUpperCase(), "", signData, pk: privateKey??"",);
+          rStr = await trustdart.signTransaction_maxValue(coinType.toUpperCase(), "", signData, pk: privateKey,);
         }
         break;
 
@@ -619,6 +612,9 @@ class TransferApi {
     };
     String signStr;
     if(privateKey ==null){
+      if (!AppGlobals.appContext.mounted) {
+        return MessageModel.error()..data = 'Context is no longer valid';
+      }
       signStr = await trustdart.signTransaction(
         coinType,
         path,
@@ -626,7 +622,7 @@ class TransferApi {
         mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
       );
     }else{
-      signStr = await trustdart.signTransaction(coinType, path, signMap, pk:privateKey??"",);
+      signStr = await trustdart.signTransaction(coinType, path, signMap, pk:privateKey,);
     }
     if(signStr==""){
       MessageModel rmm=MessageModel.error();
@@ -656,6 +652,9 @@ class TransferApi {
     };
     String signStr;
     if(privateKey ==null){
+      if (!AppGlobals.appContext.mounted) {
+        return MessageModel.error()..data = 'Context is no longer valid';
+      }
       signStr = await trustdart.signTransaction(
         coinType,
         path,
@@ -663,7 +662,7 @@ class TransferApi {
         mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
       );
     }else{
-      signStr = await trustdart.signTransaction(coinType, path, signMap, pk:privateKey??"",);
+      signStr = await trustdart.signTransaction(coinType, path, signMap, pk:privateKey,);
     }
     if(signStr==""){
       MessageModel rmm=MessageModel.error();
@@ -799,6 +798,9 @@ class TransferApi {
     }
     String signStr;
     if(privateKey ==null){
+      if (!AppGlobals.appContext.mounted) {
+        return MessageModel.error()..data = 'Context is no longer valid';
+      }
       signStr = await trustdart.signTransaction(
         coinType,
         path,
@@ -806,7 +808,7 @@ class TransferApi {
         mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
       );
     }else{
-      signStr = await trustdart.signTransaction(coinType, path, signMap, pk:privateKey??"",);
+      signStr = await trustdart.signTransaction(coinType, path, signMap, pk:privateKey,);
     }
     if(signStr==""){
       MessageModel rmm=MessageModel.error();
@@ -931,6 +933,9 @@ class TransferApi {
     }
     String signStr;
     if(privateKey ==null){
+      if (!AppGlobals.appContext.mounted) {
+        return MessageModel.error()..data = 'Context is no longer valid';
+      }
       signStr = await trustdart.signTransaction(
         CoinType.ATOM.name,
         path,
@@ -938,7 +943,7 @@ class TransferApi {
         mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
       );
     }else{
-      signStr = await trustdart.signTransaction(CoinType.ATOM.name, path, signMap, pk:privateKey??"",);
+      signStr = await trustdart.signTransaction(CoinType.ATOM.name, path, signMap, pk:privateKey,);
     }
     if(signStr==""){
       MessageModel rmm=MessageModel.error();
@@ -1075,6 +1080,9 @@ class TransferApi {
 
     String signStr;
     if(privateKey ==null){
+      if (!AppGlobals.appContext.mounted) {
+        return MessageModel.error()..data = 'Context is no longer valid';
+      }
       signStr = await trustdart.signTransaction(
         CoinType.TRX.name,
         path,
@@ -1082,7 +1090,7 @@ class TransferApi {
         mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
       );
     }else{
-      signStr = await trustdart.signTransaction(CoinType.TRX.name, path, txData, pk:privateKey??"",);
+      signStr = await trustdart.signTransaction(CoinType.TRX.name, path, txData, pk:privateKey,);
     }
     if(signStr==""){
       MessageModel rmm=MessageModel.error();
@@ -1255,8 +1263,10 @@ class TransferApi {
       };
     }
     String signStr;
-    WalletInfo wi;
     if(privateKey ==null){
+      if (!AppGlobals.appContext.mounted) {
+        return MessageModel.error()..data = 'Context is no longer valid';
+      }
       signStr = await trustdart.signTransaction(
         CoinType.SOL.name,
         path,
@@ -1264,7 +1274,7 @@ class TransferApi {
         mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
       );
     }else{
-      signStr = await trustdart.signTransaction(CoinType.SOL.name, path, txData,  pk:privateKey??"",);
+      signStr = await trustdart.signTransaction(CoinType.SOL.name, path, txData,  pk:privateKey,);
     }
     if(signStr==""){
       MessageModel rmm=MessageModel.error();
@@ -1288,9 +1298,7 @@ class TransferApi {
     String? coinType,
     bool isTest=false,
   })async{
-    if(coinType==null){
-      coinType=CoinType.ETH.name;
-    }
+    coinType ??= CoinType.ETH.name;
     WalletActionProvider wap = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
     Map<String, dynamic>? txChainMap = wap.walletMap[coinType];
     if (txChainMap == null) {
@@ -1423,7 +1431,7 @@ class TransferApi {
       rmm.data=S.current.g_key_wallet_m6;
       return rmm;
     }
-    signStr = "0x" + signStr;
+    signStr = "0x$signStr";
     return await tokenViewApi.sendTx(
         BlockchainType.Ethereum.name, coinType, signStr,
         netMode: isTest?"test":"main");
@@ -1479,17 +1487,6 @@ class TransferApi {
     }
     //gas费消耗最大数
     BigInt totalGasPrice = BigInt.zero;
-    bool addLatest=true;
-    if(coinType==CoinType.GO.name
-        || coinType==CoinType.OKT.name
-        || coinType==CoinType.METIS.name
-        || coinType==CoinType.MTR.name
-        || coinType==CoinType.VIC.name
-        || coinType==CoinType.OP.name
-        || coinType==CoinType.BOBA.name
-    ){
-      addLatest=true;
-    }
     /*else{
       MessageModel estimate_mm=await TokenViewApi.getGasEstimate_eth_v2(
           fromAddress,
@@ -1638,8 +1635,6 @@ class TransferApi {
       }
     }
 
-    //data:image/png;base64,
-    String imageData="";
     //"data:image/png;base64,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";
 
     Map<String, String> signMap = {
@@ -1662,6 +1657,9 @@ class TransferApi {
     String signStr;
     //从keystore中取出助记词
     if(privateKey ==null){
+      if (!AppGlobals.appContext.mounted) {
+        return MessageModel.error()..data = 'Context is no longer valid';
+      }
       signStr = await trustdart.signTransaction(
         coinType,
         path,
@@ -1669,7 +1667,7 @@ class TransferApi {
         mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
       );
     }else{
-      signStr = await trustdart.signTransaction(coinType, path, signMap,  pk:privateKey??"",);
+      signStr = await trustdart.signTransaction(coinType, path, signMap,  pk:privateKey,);
     }
 
     if(signStr==""){
@@ -1677,7 +1675,7 @@ class TransferApi {
       rmm.data=S.current.g_key_wallet_m6;
       return rmm;
     }
-    signStr = "0x" + signStr;
+    signStr = "0x$signStr";
     if(returnSignHash){
       MessageModel rmm=MessageModel();
       rmm.data=signStr;
@@ -1729,6 +1727,9 @@ class TransferApi {
     List<Map<String, dynamic>> utxos = [];
     String utxoAddress=fromAddress;
     if(coinType.toUpperCase()==CoinType.BCH.name){
+      if (!AppGlobals.appContext.mounted) {
+        return MessageModel.error()..data = 'Context is no longer valid';
+      }
       utxoAddress=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).getAddress(coinType,addrType: "legacy");
     }
     MessageModel mmutxo = await getUTXO(coinType.toUpperCase(), value, utxoAddress,
@@ -1783,6 +1784,9 @@ class TransferApi {
     };
     String signStr;
     if(privateKey ==null || privateKey==""){
+      if (!AppGlobals.appContext.mounted) {
+        return MessageModel.error()..data = 'Context is no longer valid';
+      }
       signStr = await trustdart.signTransaction(
         coinType.toUpperCase(),
         path,
@@ -1790,7 +1794,7 @@ class TransferApi {
         mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
       );
     }else{
-      signStr = await trustdart.signTransaction(coinType.toUpperCase(), path, btcTxMap,  pk:privateKey??"",);
+      signStr = await trustdart.signTransaction(coinType.toUpperCase(), path, btcTxMap,  pk:privateKey,);
     }
     if (signStr == "") {
       MessageModel rmm = MessageModel.error();
@@ -1863,7 +1867,6 @@ class TransferApi {
     int valuePrice = ethToWeiString(value.toString(), 8).toInt();
     //List<Map<String,dynamic>> utxos=[];//输出账单
     //int input2Price=0;//实际输入金额
-    bool ok = false; //是否满足条件默认false；
     for (Map<String, dynamic> unspent in unspents) {
       if(isTest){
         if(unspent['hex']==null){
@@ -1895,14 +1898,10 @@ class TransferApi {
 
       if (byteSizeFees + valuePrice <= input2Price) {
         //如果 当前input gas费+转账金额+output gas费 == 账单金额; 退出循环，返回 outputByteSizeFess +inputByteSizeFees
-        ok = true;
         break;
       }
     }
     MessageModel rmm = MessageModel();
-    if (ok = false) {
-      rmm.error = true;
-    }
     rmm.data = {
       "utxo": utxos,
       "inputPrice": input2Price,
@@ -2016,6 +2015,9 @@ class TransferApi {
 
     Map<dynamic,dynamic> rValue;
     if(privateKey !=null){
+      if (!AppGlobals.appContext.mounted) {
+        return MessageModel.error()..data = 'Context is no longer valid';
+      }
       rValue = await trustdart.signTransaction_byteArray(
         CoinType.ALGO.name,
         path,
@@ -2118,6 +2120,9 @@ class TransferApi {
       return mmReveal;
     }else{
       signMap['reveal']=mmReveal.data;
+    }
+    if (!AppGlobals.appContext.mounted) {
+      return MessageModel.error()..data = 'Context is no longer valid';
     }
     WalletInfo wi = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo;
     String signStr=await trustdart.signTransaction(
@@ -2237,6 +2242,9 @@ class TransferApi {
     }else{
       signMap['ledgerIndex']=mmLedgerIndex.data;
     }
+    if (!AppGlobals.appContext.mounted) {
+      return MessageModel.error()..data = 'Context is no longer valid';
+    }
     WalletInfo wi = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo;
     String signStr=await trustdart.signTransaction(CoinType.XRP.name, path, signMap,mnemonic: wi.mnemonic??"",pk: wi.privateKey??"",);
 
@@ -2269,6 +2277,9 @@ class TransferApi {
     String signStr;
     //从keystore中取出助记词
     if(privateKey ==null){
+      if (!AppGlobals.appContext.mounted) {
+        return MessageModel.error()..data = 'Context is no longer valid';
+      }
       signStr = await trustdart.signTransaction(
         CoinType.FIL.name,
         path,
@@ -2276,7 +2287,7 @@ class TransferApi {
         mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
       );
     }else{
-      signStr = await trustdart.signTransaction(CoinType.FIL.name, path, signMap, pk:privateKey??"",);
+      signStr = await trustdart.signTransaction(CoinType.FIL.name, path, signMap, pk:privateKey,);
     }
 
     if(signStr==""){
@@ -2284,7 +2295,7 @@ class TransferApi {
       rmm.data=S.current.g_key_wallet_m6;
       return rmm;
     }
-    //signStr = "0x" + signStr;
+    //signStr = "0x$signStr";
     FilApi filApi=FilApi();
     return await filApi.sendTx(signStr,isTest:isTest);
   }
@@ -2312,7 +2323,7 @@ class TransferApi {
       mm.data = S.current.g_key_wallet_m1(chainSymbol);
       return mm;
     }
-    Map<String, dynamic>? token = null;
+    Map<String, dynamic>? token;
     if (contractAddress != "") {
       if (txChainMap['mainnets'].length != 0) {
         token = txChainMap['mainnets'][contractAddress.toUpperCase()];
@@ -2603,7 +2614,6 @@ class TransferApi {
     if (networkIdMM.error) {
       return networkIdMM;
     }
-    String networkId = networkIdMM.data;
 
     // 获取最新区块信息以获取版本号
     MessageModel latestBlockMM = await zilApi.getLatestTxBlock();
@@ -2638,6 +2648,9 @@ class TransferApi {
     // 签名交易
     String signStr;
     if (privateKey == null) {
+      if (!AppGlobals.appContext.mounted) {
+        return MessageModel.error()..data = 'Context is no longer valid';
+      }
       signStr = await trustdart.signTransaction(
         coinType,
         path,
@@ -2645,7 +2658,7 @@ class TransferApi {
         mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext, listen: false).walletInfo.mnemonic ?? "",
       );
     } else {
-      signStr = await trustdart.signTransaction(coinType, path, signMap, pk: privateKey ?? "");
+      signStr = await trustdart.signTransaction(coinType, path, signMap, pk: privateKey);
     }
 
     if (signStr == "") {

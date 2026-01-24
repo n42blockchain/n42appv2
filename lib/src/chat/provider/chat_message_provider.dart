@@ -12,35 +12,26 @@ import 'package:n42appv2/src/chat/utils/chat_data_util.dart';
 import 'package:n42appv2/src/chat/utils/chat_sp_util.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ChatMessageProvider extends ChangeNotifier {
   ChatApi? _chatApi;
   ChatApi get chatApi{
-    if(_chatApi==null){
-      _chatApi= ChatApi();
-    }
+    _chatApi ??= ChatApi();
     return _chatApi!;
   }
   ChatDataUtil? _chatDataUtil;
   ChatDataUtil get chatDataUtil{
-    if(_chatDataUtil==null){
-      _chatDataUtil= ChatDataUtil();
-    }
+    _chatDataUtil ??= ChatDataUtil();
     return _chatDataUtil!;
   }
   ChatDBApi? _chatDBApi;
   ChatDBApi get chatDBApi{
-    if(_chatDBApi==null){
-      _chatDBApi=ChatDBApi();
-    }
+    _chatDBApi ??= ChatDBApi();
     return _chatDBApi!;
   }
   ChatSPUtil? _chatSPUtil;
   ChatSPUtil get chatSPUtil{
-    if(_chatSPUtil==null){
-      _chatSPUtil=ChatSPUtil();
-    }
+    _chatSPUtil ??= ChatSPUtil();
     return _chatSPUtil!;
   }
   int _haveNewFriend = 0;
@@ -181,7 +172,7 @@ class ChatMessageProvider extends ChangeNotifier {
         }
 
         //ChatSPUtils().setNewFriendStatus(index != -1);
-        Provider.of<ChatMessageProvider>(AppGlobals.appContext,listen: false).setNewFriendStatus(index);
+        setNewFriendStatus(index);
       }
     }catch(err){
       //err:
@@ -249,7 +240,6 @@ class ChatMessageProvider extends ChangeNotifier {
       if (list != null && list is List) {
         for (var element in list) {
           try{
-            final pushCode = element["last_msg"]["code"];
             final base64Content = element["last_msg"]["content"];
             List<int> byteData = base64.decode(base64Content);
             String jsonStr = utf8.decode(byteData);

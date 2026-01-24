@@ -115,6 +115,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
   }
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -150,7 +151,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                               ),
                               if(AppConfig.isMainChainMining==false)
                                 Text(
-                                  "${AppConfig.isMainChainMining==true?S.of(context).g_key_148:S.of(context).g_key_147}",
+                                  "AppConfig.isMainChainMining==true?S.of(context).g_key_148:S.of(context).g_key_147",
                                   style: TextStyle(
                                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
                                     fontSize: ScreenUtil().setSp(20),
@@ -414,7 +415,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
                 border: Border.all(
-                  color: isDark ? Colors.white.withOpacity(0.06) : Colors.black.withOpacity(0.04),
+                  color: isDark ? Colors.white.withValues(alpha:0.06) : Colors.black.withValues(alpha:0.04),
                   width: 1,
                 ),
               ),
@@ -428,7 +429,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                         width: ScreenUtil().setWidth(36),
                         height: ScreenUtil().setWidth(36),
                         decoration: BoxDecoration(
-                          color: statusColor.withOpacity(0.15),
+                          color: statusColor.withValues(alpha:0.15),
                           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
                         ),
                         child: Icon(
@@ -460,11 +461,11 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                             mpValue.checkAddressMiningStatus();
                           }
                         },
-                        child: Container(
+                        child: SizedBox(
                           width: ScreenUtil().setWidth(36),
                           height: ScreenUtil().setWidth(36),
                           /*decoration: BoxDecoration(
-                            color: const Color(0xffEB5851).withOpacity(0.15),
+                            color: const Color(0xffEB5851).withValues(alpha:0.15),
                             borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
                           ),*/
                           child: Icon(
@@ -502,7 +503,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: statusColor.withOpacity(0.5),
+                              color: statusColor.withValues(alpha:0.5),
                               blurRadius: 8,
                               spreadRadius: 2,
                             ),
@@ -524,7 +525,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
                 border: Border.all(
-                  color: isDark ? Colors.white.withOpacity(0.06) : Colors.black.withOpacity(0.04),
+                  color: isDark ? Colors.white.withValues(alpha:0.06) : Colors.black.withValues(alpha:0.04),
                   width: 1,
                 ),
               ),
@@ -538,7 +539,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                         width: ScreenUtil().setWidth(36),
                         height: ScreenUtil().setWidth(36),
                         decoration: BoxDecoration(
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.15),
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.15),
                           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
                         ),
                         child: Icon(
@@ -571,7 +572,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                         child: Text(
                           mpValue.depositsEnable ?? false 
                               ? '${mpValue.balanceInBeacon}' 
-                              : '${mpValue.walletNBalance.toStringAsFixed(2)}',
+                              : mpValue.walletNBalance.toStringAsFixed(2),
                           style: TextStyle(
                             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                             fontSize: ScreenUtil().setSp(32),
@@ -613,8 +614,8 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
         gradient: isEnabled 
             ? LinearGradient(
                 colors: [
-                  AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.08),
-                  AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.02),
+                  AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.08),
+                  AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.02),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -624,8 +625,8 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
         border: Border.all(
           color: isEnabled 
-              ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.2)
-              : (isDark ? Colors.white.withOpacity(0.06) : Colors.black.withOpacity(0.04)),
+              ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.2)
+              : (isDark ? Colors.white.withValues(alpha:0.06) : Colors.black.withValues(alpha:0.04)),
           width: 1,
         ),
       ),
@@ -636,7 +637,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
             width: ScreenUtil().setWidth(72),
             height: ScreenUtil().setWidth(72),
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.12),
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.12),
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(18)),
             ),
             child: Center(
@@ -690,7 +691,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                       ? LinearGradient(
                           colors: [
                             AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.85),
+                            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.85),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -700,7 +701,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                   borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
                   boxShadow: isEnabled ? [
                     BoxShadow(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.3),
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.3),
                       blurRadius: 8,
                       offset: const Offset(0, 4),
                     ),
@@ -870,7 +871,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(18)),
           border: Border.all(
-            color: isDark ? Colors.white.withOpacity(0.06) : Colors.black.withOpacity(0.04),
+            color: isDark ? Colors.white.withValues(alpha:0.06) : Colors.black.withValues(alpha:0.04),
             width: 1,
           ),
         ),
@@ -886,7 +887,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                   width: ScreenUtil().setWidth(32),
                   height: ScreenUtil().setWidth(32),
                   decoration: BoxDecoration(
-                    color: accentColor.withOpacity(0.12),
+                    color: accentColor.withValues(alpha:0.12),
                     borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
                   ),
                   child: Icon(
@@ -926,7 +927,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.12),
+                            color: Colors.black.withValues(alpha:0.12),
                             blurRadius: 16,
                             offset: const Offset(0, 6),
                           ),
@@ -984,7 +985,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
         boxShadow: isDark ? null : [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha:0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -1004,8 +1005,8 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        riskColor.withOpacity(0.2),
-                        riskColor.withOpacity(0.1),
+                        riskColor.withValues(alpha:0.2),
+                        riskColor.withValues(alpha:0.1),
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -1093,8 +1094,8 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
             ),
             decoration: BoxDecoration(
               color: isDark
-                  ? Colors.white.withOpacity(0.04)
-                  : riskColor.withOpacity(0.06),
+                  ? Colors.white.withValues(alpha:0.04)
+                  : riskColor.withValues(alpha:0.06),
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
             ),
             child: Row(
@@ -1124,7 +1125,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                     vertical: ScreenUtil().setWidth(8),
                   ),
                   decoration: BoxDecoration(
-                    color: riskColor.withOpacity(0.15),
+                    color: riskColor.withValues(alpha:0.15),
                     borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
                   ),
                   child: Text(
@@ -1153,7 +1154,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
               vertical: ScreenUtil().setWidth(26),
             ),
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name).withOpacity(0.2),
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name).withValues(alpha:0.2),
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
             ),
             child: Row(
@@ -1187,7 +1188,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
     return Container(
       height: ScreenUtil().setWidth(12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
+        color: color.withValues(alpha:0.15),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
       ),
       child: FractionallySizedBox(
@@ -1196,7 +1197,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [color.withOpacity(0.8), color],
+              colors: [color.withValues(alpha:0.8), color],
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
             ),
@@ -1234,6 +1235,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
       Container(
         height: ScreenUtil().setWidth(80),
         width: double.infinity,
+        alignment: Alignment.centerLeft,
         child: Text(
           S.of(context).g_key_16,
           style: TextStyle(
@@ -1242,7 +1244,6 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
             fontWeight: FontWeight.bold,
           ),
         ),
-        alignment: Alignment.centerLeft,
       ),
     );
     childs.add(

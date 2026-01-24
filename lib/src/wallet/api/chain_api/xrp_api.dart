@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/https/request_url.dart';
@@ -270,7 +268,6 @@ Fee: 交易费用（10-12 drops）*/
       };
       var data=await BaseApi.RequestEmpty_h.post(uri, params: {},data: pData);
       MessageModel mm=MessageModel();
-      String a=json.encode(data);
       if(data['result']['status']=="success"){
         if(data['result']['engine_result'].toString().startsWith('tes')){
           mm.data=data['result']['tx_json']['hash'];

@@ -5,14 +5,13 @@
 //
 // Author: Jiang Yiwei
 
-/// Browser Feature Module
-///
-/// This module handles all browser-related functionality:
-/// - Web browsing
-/// - History management
-/// - Bookmarks
-/// - DApp integration
-library browser;
+// Browser Feature Module
+//
+// This module handles all browser-related functionality:
+// - Web browsing
+// - History management
+// - Bookmarks
+// - DApp integration
 
 // Domain Layer
 export 'domain/entities/browser_entity.dart';

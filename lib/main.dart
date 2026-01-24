@@ -172,11 +172,11 @@ class _N42AppV2State extends State<N42AppV2> {
       /// FCM推送设置
       /// ios 通过fcm集成的apns推送 同样需要开启vpn
       await AppPushUtils.init();
+      if (!mounted) return;
       await provider_pkg.Provider.of<PublicProvider>(context, listen: false).checkData();
     } catch (err) {
       debugPrint("FCM推送初始化失败");
     }
-
   }
   Future<void> initDeepLinks() async {
     _appLinks = AppLinks();
@@ -219,7 +219,7 @@ class _N42AppV2State extends State<N42AppV2> {
 
       }else if(params["type"] == "friendCard"){
         // https://astrawallet.com?type=friendCard&userid=20&email=zhc@163.com
-        final userId = params["userid"];
+        final _ = params["userid"];
         final userEmail = params["email"];
         if (AppGlobals.userInfo != null) {
           Navigator.of(AppGlobals.navigatorKey.currentContext!).push(

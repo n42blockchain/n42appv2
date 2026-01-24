@@ -20,13 +20,26 @@ class DeviceSecurityService {
   
   DeviceSecurityService._();
 
+  /// 是否强制在 Debug 模式下也执行检测
+  bool _forceCheckInDebug = false;
+
+  /// 设置是否在 Debug 模式下也执行安全检测
+  void setForceCheckInDebug(bool force) {
+    _forceCheckInDebug = force;
+  }
+
   /// 检测设备是否被 Root/Jailbreak
+  ///
+  /// 注意: Debug 模式下默认跳过检测，但会记录日志
+  /// 可通过 [setForceCheckInDebug] 强制启用
   Future<bool> isDeviceCompromised() async {
-    if (kDebugMode) {
-      // 在调试模式下跳过检测
+    if (kDebugMode && !_forceCheckInDebug) {
+      // 在调试模式下记录警告但不阻止
+      debugPrint('⚠️ [DeviceSecurity] Debug mode: Root/Jailbreak check skipped');
+      debugPrint('⚠️ [DeviceSecurity] Call setForceCheckInDebug(true) to enable in debug');
       return false;
     }
-    
+
     try {
       if (Platform.isAndroid) {
         return await _checkAndroidRoot();
@@ -36,7 +49,8 @@ class DeviceSecurityService {
       return false;
     } catch (e) {
       debugPrint('Device security check failed: $e');
-      return false;
+      // 安全起见，检测失败时返回 true（可能被攻击）
+      return kReleaseMode;
     }
   }
 
@@ -177,11 +191,15 @@ class DeviceSecurityService {
   }
 
   /// 检测是否在模拟器中运行
+  ///
+  /// 注意: Debug 模式下默认跳过检测
+  /// 可通过 [setForceCheckInDebug] 强制启用
   Future<bool> isRunningOnEmulator() async {
-    if (kDebugMode) {
-      return false; // 调试模式下不检测
+    if (kDebugMode && !_forceCheckInDebug) {
+      debugPrint('⚠️ [DeviceSecurity] Debug mode: Emulator check skipped');
+      return false;
     }
-    
+
     try {
       final result = await _channel.invokeMethod<bool>('isEmulator');
       return result ?? false;

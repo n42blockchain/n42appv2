@@ -1,6 +1,5 @@
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/pages/transactions/transaction_detail_eth.dart';
 import 'package:n42appv2/src/wallet/pages/transactions/transaction_detail_page.dart';
@@ -11,11 +10,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class WalletChainInfoTransactionsItem extends StatelessWidget {
-  int? type;//0 BTC类型的 1 除了btc其它类型的
-  dynamic transactionModel;
-  CoinModel? coinModel;
-  dynamic onBack;
-  WalletChainInfoTransactionsItem({@required this.type,
+  final int? type;//0 BTC类型的 1 除了btc其它类型的
+  final dynamic transactionModel;
+  final CoinModel? coinModel;
+  final dynamic onBack;
+  const WalletChainInfoTransactionsItem({@required this.type,
     @required this.transactionModel,
     @required this.coinModel,
     @required this.onBack,super.key});
@@ -189,50 +188,48 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                 ),
                 Visibility(
                   visible: transactionModel.state == 2,
-                  child: Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Divider(
-                          height: ScreenUtil().setWidth(20.0),
-                          indent: 0,
-                          endIndent: 0,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Divider(
+                        height: ScreenUtil().setWidth(20.0),
+                        indent: 0,
+                        endIndent: 0,
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(ScreenUtil().setWidth(20.0)),
+                        alignment: Alignment.centerLeft,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(ScreenUtil().setWidth(20.0))),
+                          color: AppThemeUtils.getColorByKey(
+                              context, AppThemeKeys.errorBgColor.name),
                         ),
-                        Container(
-                          padding: EdgeInsets.all(ScreenUtil().setWidth(20.0)),
-                          alignment: Alignment.centerLeft,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                                Radius.circular(ScreenUtil().setWidth(20.0))),
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.errorBgColor.name),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                "assets/img/remind.png",
-                                width: ScreenUtil().setWidth(30.0),
-                                height: ScreenUtil().setWidth(32.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              "assets/img/remind.png",
+                              width: ScreenUtil().setWidth(30.0),
+                              height: ScreenUtil().setWidth(32.0),
+                            ),
+                            SizedBox(
+                              width: ScreenUtil().setWidth(10.0),
+                            ),
+                            Text(
+                              transactionModel.errorMessage,
+                              maxLines: null,
+                              style: TextStyle(
+                                color: AppThemeUtils.getColorByKey(
+                                    context,
+                                    AppThemeKeys.errorTextColor.name),
+                                fontSize: ScreenUtil().setSp(24.0),
                               ),
-                              SizedBox(
-                                width: ScreenUtil().setWidth(10.0),
-                              ),
-                              Text(
-                                transactionModel.errorMessage,
-                                maxLines: null,
-                                style: TextStyle(
-                                  color: AppThemeUtils.getColorByKey(
-                                      context,
-                                      AppThemeKeys.errorTextColor.name),
-                                  fontSize: ScreenUtil().setSp(24.0),
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -432,50 +429,48 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                 ),
                 Visibility(
                   visible: transactionModel.state == 2,
-                  child: Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Divider(
-                          height: ScreenUtil().setWidth(20.0),
-                          indent: 0,
-                          endIndent: 0,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Divider(
+                        height: ScreenUtil().setWidth(20.0),
+                        indent: 0,
+                        endIndent: 0,
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(ScreenUtil().setWidth(20.0)),
+                        alignment: Alignment.centerLeft,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(ScreenUtil().setWidth(20.0))),
+                          color: AppThemeUtils.getColorByKey(
+                              context, AppThemeKeys.errorBgColor.name),
                         ),
-                        Container(
-                          padding: EdgeInsets.all(ScreenUtil().setWidth(20.0)),
-                          alignment: Alignment.centerLeft,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                                Radius.circular(ScreenUtil().setWidth(20.0))),
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.errorBgColor.name),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                "assets/img/error.png",
-                                width: ScreenUtil().setWidth(30.0),
-                                height: ScreenUtil().setWidth(32.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              "assets/img/error.png",
+                              width: ScreenUtil().setWidth(30.0),
+                              height: ScreenUtil().setWidth(32.0),
+                            ),
+                            SizedBox(
+                              width: ScreenUtil().setWidth(10.0),
+                            ),
+                            Text(
+                              transactionModel.errorMessage,
+                              maxLines: null,
+                              style: TextStyle(
+                                color: AppThemeUtils.getColorByKey(
+                                    context,
+                                    AppThemeKeys.errorTextColor.name),
+                                fontSize: ScreenUtil().setSp(24.0),
                               ),
-                              SizedBox(
-                                width: ScreenUtil().setWidth(10.0),
-                              ),
-                              Text(
-                                transactionModel.errorMessage,
-                                maxLines: null,
-                                style: TextStyle(
-                                  color: AppThemeUtils.getColorByKey(
-                                      context,
-                                      AppThemeKeys.errorTextColor.name),
-                                  fontSize: ScreenUtil().setSp(24.0),
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ],

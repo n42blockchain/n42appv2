@@ -24,8 +24,7 @@ class _NFTSheet extends StatelessWidget {
   final String? title;
   final Widget child;
 
-  const _NFTSheet({Key? key, this.title, required this.child})
-      : super(key: key);
+  const _NFTSheet({this.title, required this.child});
 
   @override
   Widget build(BuildContext context) {

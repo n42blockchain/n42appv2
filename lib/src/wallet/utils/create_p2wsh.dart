@@ -5,12 +5,8 @@ import 'package:web3dart/crypto.dart';
 class CreateP2WSH{
   String? p2wsh(int lockTime,{String? uPubKey,String? cPubKey}) {
     // 示例：用户公钥和 Canister 公钥
-    if(uPubKey==null){
-      uPubKey='02a50eb66887d03fe186b608f477d99bc7631f56e34e3a4843565c55f1aa0c043a';
-    }
-    if(cPubKey==null){
-      cPubKey='03cc9054981c2c0c891db4d99818dde7e4a7d0b272b4464a48e5c03de8652fc721';
-    }
+    uPubKey ??= '02a50eb66887d03fe186b608f477d99bc7631f56e34e3a4843565c55f1aa0c043a';
+    cPubKey ??= '03cc9054981c2c0c891db4d99818dde7e4a7d0b272b4464a48e5c03de8652fc721';
     final userPubKey = Uint8List.fromList(hexToBytes(uPubKey));
     final canisterPubKey = Uint8List.fromList(hexToBytes(cPubKey));
 
@@ -64,11 +60,11 @@ class CreateP2WSH{
   String createP2WSHAddress(Uint8List scriptHash) {
     // 生成 P2WSH 地址
     final p2wshAddress = bech32Encode('bc', scriptHash);
-    print('P2WSH Address: $p2wshAddress');
+    if (kDebugMode) debugPrint('P2WSH Address: $p2wshAddress');
     return p2wshAddress;
   }
   /// Bech32 字符集
-  String _charset = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
+  final String _charset = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
 
   /// Bech32 编码
   String bech32Encode(String hrp, Uint8List data) {

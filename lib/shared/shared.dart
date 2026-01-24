@@ -5,11 +5,10 @@
 //
 // Author: Jiang Yiwei
 
-/// Shared Layer Module
-///
-/// Contains shared entities, services, and events used across features.
-/// This layer enables loose coupling between feature modules.
-library shared;
+// Shared Layer Module
+//
+// Contains shared entities, services, and events used across features.
+// This layer enables loose coupling between feature modules.
 
 // Domain - Shared Entities
 export 'domain/entities/wallet_info.dart';

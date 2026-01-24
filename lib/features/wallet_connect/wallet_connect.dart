@@ -5,13 +5,12 @@
 //
 // Author: Jiang Yiwei
 
-/// WalletConnect Feature Module
-///
-/// This module handles DApp connection functionality:
-/// - WalletConnect protocol
-/// - DApp session management
-/// - Transaction signing requests
-library wallet_connect;
+// WalletConnect Feature Module
+//
+// This module handles DApp connection functionality:
+// - WalletConnect protocol
+// - DApp session management
+// - Transaction signing requests
 
 // Presentation Layer - To be migrated from lib/src/wallet_connect/
 // export 'presentation/providers/wallet_connect_provider.dart';

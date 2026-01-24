@@ -10,8 +10,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class CreateTwo extends StatefulWidget {
-  WalletInfo wInfo;
-  CreateTwo(this.wInfo,{super.key});
+  final WalletInfo wInfo;
+  const CreateTwo(this.wInfo,{super.key});
 
   @override
   State<CreateTwo> createState() => _CreateTwoState();
@@ -20,9 +20,7 @@ class CreateTwo extends StatefulWidget {
 class _CreateTwoState extends State<CreateTwo> {
   Trustdart? trustdart;
   Trustdart get _trustdart{
-    if(trustdart==null){
-      trustdart=Trustdart();
-    }
+    trustdart ??= Trustdart();
     return trustdart!;
   }
   bool showMnemonic=false;
@@ -170,7 +168,7 @@ class _CreateTwoState extends State<CreateTwo> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
+                          SizedBox(
                             width: ScreenUtil().setWidth(164.0),
                             height: ScreenUtil().setWidth(60.0),
                             child: ButtonStyle5(
@@ -185,7 +183,7 @@ class _CreateTwoState extends State<CreateTwo> {
                             ),
                           ),
                           SizedBox(width: ScreenUtil().setWidth(40.0),),
-                          Container(
+                          SizedBox(
                             width: ScreenUtil().setWidth(164.0),
                             height: ScreenUtil().setWidth(60.0),
                             child: ButtonStyle5(
@@ -333,7 +331,7 @@ class _CreateTwoState extends State<CreateTwo> {
     );
   }
   _buildGridView() {
-    if(showMnemonic)
+    if(showMnemonic) {
       return GridView.builder(
         padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
         itemCount: mnemonicWordsList.length,
@@ -371,6 +369,7 @@ class _CreateTwoState extends State<CreateTwo> {
           );
         },
       );
+    }
     return InkWell(
       onTap: (){
         setState(() {
@@ -497,7 +496,7 @@ class _CreateTwoState extends State<CreateTwo> {
                 textAlign: TextAlign.center,
               ),
             ),
-            Container(
+            SizedBox(
               width: double.infinity,
               height: ScreenUtil().setWidth(80.0),
               child: ButtonStyle2(context, (){
@@ -505,7 +504,7 @@ class _CreateTwoState extends State<CreateTwo> {
               }, S.of(context).g_mining_key62,),
             ),
             SizedBox(height: ScreenUtil().setWidth(30.0),),
-            Container(
+            SizedBox(
               width: double.infinity,
               height: ScreenUtil().setWidth(80.0),
               child: ButtonStyle5(context, (){
@@ -520,6 +519,7 @@ class _CreateTwoState extends State<CreateTwo> {
       ),
     );
     final flag=await TipsDialog3(context,child);
+    if (!mounted) return;
     if (flag != null && flag) {
       widget.wInfo.mnemonic=mnemonicWords;
       Navigator.push(context, MaterialPageRoute(builder: (context)=>CreateFinish(wInfo:widget.wInfo)));

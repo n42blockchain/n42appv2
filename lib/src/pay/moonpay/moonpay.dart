@@ -10,9 +10,9 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Moonpay extends StatefulWidget {
-  CoinModel? coinModel;
-  int type; // 0 buy, 1 sell
-  Moonpay({this.coinModel, this.type = 0, super.key});
+  final CoinModel? coinModel;
+  final int type; // 0 buy, 1 sell
+  const Moonpay({this.coinModel, this.type = 0, super.key});
 
   @override
   State<Moonpay> createState() => _MoonpayState();
@@ -142,6 +142,7 @@ class _MoonpayState extends State<Moonpay> {
                         if (await webViewController.canGoBack()) {
                           webViewController.goBack();
                         } else {
+                          if (!context.mounted) return;
                           Navigator.pop(context);
                         }
                       },

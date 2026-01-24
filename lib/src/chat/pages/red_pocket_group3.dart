@@ -11,8 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RedPocketGroup3 extends StatefulWidget {
-  ChatMessageModel? chatMessage;
-  RedPocketGroup3(this.chatMessage,{super.key});
+  final ChatMessageModel? chatMessage;
+  const RedPocketGroup3(this.chatMessage,{super.key});
 
   @override
   State<RedPocketGroup3> createState() => _RedPocketGroup3State();
@@ -72,7 +72,7 @@ class _RedPocketGroup3State extends State<RedPocketGroup3> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
+                  SizedBox(
                     height: ScreenUtil().setWidth(850.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -142,7 +142,7 @@ class _RedPocketGroup3State extends State<RedPocketGroup3> {
                             textAlign: TextAlign.center,
                           ),
                         ),
-                        Container(
+                        SizedBox(
                           width: ScreenUtil().setWidth(96.0),
                           height: ScreenUtil().setWidth(96.0),
                           child: Image.asset("assets/img/ast.png",fit: BoxFit.cover,),
@@ -258,7 +258,7 @@ class _RedPocketGroup3State extends State<RedPocketGroup3> {
                               if(redUrl !="")
                                 Padding(
                                   padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
-                                  child: Image.asset("assets/chat/${redUrl}.png",width: ScreenUtil().setWidth(48.0),height: ScreenUtil().setWidth(48.0),),
+                                  child: Image.asset("assets/chat/$redUrl.png",width: ScreenUtil().setWidth(48.0),height: ScreenUtil().setWidth(48.0),),
                                 ),
                               Expanded(
                                 flex: 1,

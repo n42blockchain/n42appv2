@@ -1,13 +1,10 @@
 ﻿import 'package:n42appv2/core/config/app_config.dart';
-import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/home/api/version_api.dart';
 import 'package:n42appv2/src/home/models/version_info_model.dart';
-import 'package:n42appv2/src/home/setting/feedback.dart' as fb;
 import 'package:n42appv2/src/home/widgets/check_version_alert.dart';
 import 'package:n42appv2/src/home/widgets/nav_setting_item.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -280,41 +277,6 @@ class _AboutAppState extends State<AboutApp> {
               }));
             },
             imgColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-          ),
-        ],
-      ),
-    );
-  }
-
-  _buildNavEnter3() {
-    return Container(
-      alignment: Alignment.centerLeft,
-      margin: EdgeInsets.symmetric(
-          vertical: ScreenUtil().setWidth(10.0)),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
-            Radius.circular(ScreenUtil().setWidth(16.0))),
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-
-      ),
-      child: Column(
-        children: [
-          NavSettingItem(
-            path: "assets/home/about/feedback.png",
-            action: S.of(context).g_key_feedback,
-            callback: () {
-              if (AppGlobals.userInfo == null) {
-                ToastUtils.show(S.of(context).g_key_feedback_9);
-                return;
-              }
-              /*if (ProviderUtil.walletActionProvider().existWallet == false) {
-                ToastUtils.show(S.of(context).g_key_feedback_10);
-                return;
-              }*/
-              Navigator.push(context,MaterialPageRoute(builder: (context) {
-                return fb.Feedback();
-              }));
-            },
           ),
         ],
       ),

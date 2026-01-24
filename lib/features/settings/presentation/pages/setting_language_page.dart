@@ -89,7 +89,7 @@ class _LanguageOptionItem extends StatelessWidget {
               : null,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha:0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -105,7 +105,7 @@ class _LanguageOptionItem extends StatelessWidget {
                 width: ScreenUtil().setWidth(48),
                 height: ScreenUtil().setWidth(32),
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
+                errorBuilder: (_, _, _) => Container(
                   width: ScreenUtil().setWidth(48),
                   height: ScreenUtil().setWidth(32),
                   color: Colors.grey[300],

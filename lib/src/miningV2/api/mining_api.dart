@@ -1,10 +1,8 @@
 ﻿import 'dart:convert';
 
 import 'package:n42appv2/core/app/app_globals.dart';
-import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/https/base_api.dart';
-import 'package:n42appv2/src/https/request_url.dart';
-import 'package:n42appv2/src/miningV2/models/miningWithdrawalsDaily.dart';
+import 'package:n42appv2/src/miningV2/models/mining_withdrawals_daily.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 
@@ -78,7 +76,7 @@ class MiningApi{
   Future<MessageModel> getMiningWithdrawalsDaily(String dayStr,String address)async{
     try {
       //https://testnet2.n42.world/api/v2/addresses/0x8157AC6F0C0eb1F465D14f62917e151637Ee47cC/withdrawals-daily?day=2025-11-12
-      var data = await BaseApi.RequestEmpty_h.get("https://testnet2.n42.world/api/v2/addresses/${address}/withdrawals-daily?day=${dayStr}", params: {});
+      var data = await BaseApi.RequestEmpty_h.get("https://testnet2.n42.world/api/v2/addresses/$address/withdrawals-daily?day=$dayStr", params: {});
       MessageModel mm=MessageModel();
       List<dynamic>? items=data['items'];
       if(items != null){
@@ -100,7 +98,7 @@ class MiningApi{
   Future<MessageModel> getMiningWithdrawalsDailySummary(String address)async{
     try {
       //https://testnet2.n42.world/api/v2/addresses/0xCC5BC02C7cD8E7bda6D17128f3B20949040c5131/withdrawals-daily/summary
-      var data = await BaseApi.RequestEmpty_h.get("https://testnet2.n42.world/api/v2/addresses/${address}/withdrawals-daily/summary", params: {});
+      var data = await BaseApi.RequestEmpty_h.get("https://testnet2.n42.world/api/v2/addresses/$address/withdrawals-daily/summary", params: {});
       MessageModel mm=MessageModel();
       if(data != null){
         mm.data = data['total_amount'];

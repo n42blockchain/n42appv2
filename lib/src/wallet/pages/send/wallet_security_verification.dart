@@ -19,8 +19,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:local_auth_android/local_auth_android.dart' as authAndroid;
-import 'package:local_auth_darwin/local_auth_darwin.dart' as authIos;
+import 'package:local_auth_android/local_auth_android.dart' as auth_android;
+import 'package:local_auth_darwin/local_auth_darwin.dart' as auth_ios;
 
 class WalletSecurityVerification extends StatefulWidget {
   const WalletSecurityVerification({super.key});
@@ -78,10 +78,11 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
         setState(() {
           securityMap['email']=userSecurityMap['email'];
           //securityMap['google']=userSecurityMap['google'];
-          securityMap['face']=userSecurityMap['face']==null?false:userSecurityMap['face'];
+          securityMap['face']=userSecurityMap['face']??false;
         });
       }
     }
+    if (!mounted) return;
     if(Provider.of<WalletActionProvider>(context,listen: false).walletInfo.password!=""){
       showWalletPassword=true;
     }
@@ -121,6 +122,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
       emailLoad=Load.loading;
     });
     MessageModel mm=await userInfoApi.getEmailVerification();
+    if (!mounted) return;
     if(mm.error){
       ToastUtils.show(S.of(context).email_code_error);
     }else{
@@ -185,14 +187,14 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
     late bool canCheckBiometrics;
     try {
       canCheckBiometrics = await auth.canCheckBiometrics;
-    } on PlatformException catch (e) {
+    } on PlatformException catch (_) {
       canCheckBiometrics = false;
     }
     if(canCheckBiometrics){
       final List<BiometricType> availableBiometrics =
       await auth.getAvailableBiometrics();
 
-      if (availableBiometrics.length==0) {
+      if (availableBiometrics.isEmpty) {
         canCheckBiometrics=false;
       }
       if(availableBiometrics.contains(BiometricType.face) ||
@@ -219,9 +221,9 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
   Future<void> _authenticateWithBiometrics(LocalAuthentication auth) async {
     bool authenticated = false;
     try {
-      var authMessage;
+      dynamic authMessage;
       if(Platform.isIOS){
-        authMessage=authIos.IOSAuthMessages(
+        authMessage=auth_ios.IOSAuthMessages(
           lockOut: S.of(context).g_face_9,
           goToSettingsButton: S.of(context).g_face_5,
           goToSettingsDescription: S.of(context).g_face_6,
@@ -229,7 +231,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
           localizedFallbackTitle: S.of(context).g_face_8,
         );
       }else{
-        authMessage=authAndroid.AndroidAuthMessages(
+        authMessage=auth_android.AndroidAuthMessages(
           biometricHint: S.of(context).g_face_1,
           biometricNotRecognized: S.of(context).g_face_2,
           biometricRequiredTitle: S.of(context).g_face_3,
@@ -288,8 +290,12 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return WillPopScope(
-      onWillPop: _pageBack,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        _pageBack();
+      },
       child: Scaffold(
         appBar: AppBarWidget(
           text: S.of(context).s_key_11,
@@ -339,7 +345,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
                       child: Row(
                         children: [
                           Expanded(
-                            child: Container(
+                            child: SizedBox(
                               width: double.infinity,
                               height: ScreenUtil().setWidth(88.0),
                               child: ButtonStyle5(context, (){
@@ -356,14 +362,18 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
                           ),
                           SizedBox(width: ScreenUtil().setWidth(30.0),),
                           Expanded(
-                            child: Container(
+                            child: SizedBox(
                               width: double.infinity,
                               height: ScreenUtil().setWidth(88.0),
                               child: ButtonStyle6(context, ()async{
                                 closeKeyboard();
-                                if(load==Load.loading)return;
+                                if(load==Load.loading) {
+                                  return;
+                                }
                                 if(showWalletPassword==false && securityMap['face']==false && securityMap['email']==false //&& securityMap['google']==false
-                                )return;
+                                ) {
+                                  return;
+                                }
                                 if(securityMap['face']){
                                   if(faceCheck != 1){
                                     faceErrorMessage=S.of(context).verification;
@@ -390,6 +400,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
                                 }
                                 if(securityMap['email']){
                                   rValue=await checkEmailVerification();
+                                  if (!context.mounted) return;
                                   if(rValue==false){
                                     setState(() {
                                       load=Load.finish;
@@ -397,6 +408,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
                                     return;
                                   }
                                 }
+                                if (!context.mounted) return;
                                 setState(() {
                                   load=Load.finish;
                                 });
@@ -493,7 +505,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
                         obscure=!obscure;
                       });
                     },
-                    child: Container(
+                    child: SizedBox(
                       height: ScreenUtil().setWidth(40.0),
                       width: ScreenUtil().setWidth(40.0),
                       child: Image.asset(
@@ -879,7 +891,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
     Widget leftWidget=SizedBox();
     if(emailLoad==Load.loading){
       bgColor=AppThemeUtils.getColorByKey(context,AppThemeKeys.itemBorderColor.name);
-      leftWidget=Container(
+      leftWidget=SizedBox(
         height: ScreenUtil().setWidth(30.0),
         width: ScreenUtil().setWidth(30.0),
         child: CircularProgressIndicator(color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),),
@@ -889,7 +901,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
       leftWidget=Container(
         padding: EdgeInsets.only(right: ScreenUtil().setWidth(6.0)),
         child: Text(
-          '(${emailSendWaitNum})',
+          '($emailSendWaitNum)',
           style: TextStyle(
             fontSize: ScreenUtil().setSp(24.0),
             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
@@ -926,8 +938,10 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
   //登录提醒
   showLoginDialog()async{
     final flag = await TipsDialog6(context, title:S.of(context).login_need_login,);
+    if (!mounted) return;
     if (flag != null && flag) {
       await Navigator.pushNamed(context, "/LoginPage",);
+      if (!mounted) return;
       Navigator.popUntil(context, ModalRoute.withName("/"));
     }
   }

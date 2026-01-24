@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -17,9 +16,9 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
 class WalletReceiveQr extends StatefulWidget {
-  CoinModel chainCoinModel;
-  CoinModel? tokenCoinModel;
-  WalletReceiveQr(this.chainCoinModel, {this.tokenCoinModel, super.key});
+  final CoinModel chainCoinModel;
+  final CoinModel? tokenCoinModel;
+  const WalletReceiveQr(this.chainCoinModel, {this.tokenCoinModel, super.key});
 
   @override
   State<WalletReceiveQr> createState() => _WalletReceiveQrState();
@@ -68,6 +67,7 @@ class _WalletReceiveQrState extends State<WalletReceiveQr> {
       await File('${tempDir.path}/NFTShare.png').create(recursive: true);
       await file.writeAsBytes(pngBytes);
 
+      if (!mounted) return;
       await Share.shareXFiles(
         [XFile(file.path, mimeType: "image/png")],
         subject: S.of(context).g_key_156,

@@ -39,13 +39,17 @@ class CommInput extends StatefulWidget {
     this.contentPadding,  this.isCollapsed = false,super.key});
 
   @override
-  State<CommInput> createState() => _CommInputState(type == InputFieldType.password);
+  State<CommInput> createState() => _CommInputState();
 }
 
 class _CommInputState extends State<CommInput> {
-  bool obscure;
+  late bool obscure;
 
-  _CommInputState(this.obscure);
+  @override
+  void initState() {
+    super.initState();
+    obscure = widget.type == InputFieldType.password;
+  }
 
   @override
   Widget build(BuildContext context) {

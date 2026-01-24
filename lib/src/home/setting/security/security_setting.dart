@@ -15,6 +15,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SecuritySetting extends ConsumerStatefulWidget{
+  const SecuritySetting({super.key});
+
   @override
   ConsumerState<SecuritySetting> createState()=>_SecuritySettingState();
 }
@@ -41,7 +43,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
         setState(() {
           securityMap['email']=userSecurityMap['email'];
           securityMap['google']=userSecurityMap['google'];
-          securityMap['face']=userSecurityMap['face']==null?false:userSecurityMap['face'];
+          securityMap['face']=userSecurityMap['face']??false;
         });
       }
     }
@@ -56,9 +58,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
   saveSecurity()async{
     SPUtil sPUtils=SPUtil();
     Map<String,dynamic>? s=await sPUtils.getSecurity();
-    if(s==null){
-      s={};
-    }
+    s ??= {};
     s[AppGlobals.userInfo?.uuid??""]=securityMap;
     await sPUtils.setSecurity(s);
     setState(() {
@@ -166,6 +166,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
                       Container(
                         height: ScreenUtil().setWidth(60.0),
                         margin: EdgeInsets.only(top: ScreenUtil().setWidth(40.0)),
+                        alignment: Alignment.centerLeft,
                         child: Text(
                           S.of(context).g_lock_key15,
                           style: TextStyle(
@@ -173,7 +174,6 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
                             fontSize: ScreenUtil().setSp(30.0),
                           ),
                         ),
-                        alignment: Alignment.centerLeft,
                       ),
                       openLockScreenWidget(screenLockState),
                       openGesturePasswordWidget(screenLockState),
@@ -390,7 +390,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
               ),
             ),),
           Switch(
-            activeColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
+            activeTrackColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
             value: value,
             onChanged: (bool value){
               valueChange(value);
@@ -466,20 +466,20 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
                 }
                 Navigator.pop(context);
               },
-              child: Container(
+              child: SizedBox(
                 height: ScreenUtil().setWidth(88.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "${title} s",
+                      "$title s",
                       style: TextStyle(
                         color: titleColor,
                         fontSize: ScreenUtil().setSp(28.0),
                       ),
                     ),
                     isSame?
-                    Container(
+                    SizedBox(
                       height: ScreenUtil().setWidth(40.0),
                       width: ScreenUtil().setWidth(40.0),
                       child: Icon(

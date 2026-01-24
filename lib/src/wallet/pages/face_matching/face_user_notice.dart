@@ -1,5 +1,4 @@
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/pages/face_matching/face_binding.dart';
 import 'package:n42appv2/src/wallet/pages/face_matching/select_wallet.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
@@ -85,6 +84,7 @@ class _FaceUserNoticeState extends State<FaceUserNotice> {
                 child: ButtonStyle2(
                   context, ()async{
                   final rData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>SelectWallet()));
+                  if (!context.mounted) return;
                   Navigator.pop(context,rData);
                   },
                   S.of(context).g_face_match_key30,

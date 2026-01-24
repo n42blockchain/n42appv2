@@ -11,7 +11,7 @@ import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 import 'package:n42appv2/src/wallet/api/transfer_api.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/models/transation_record_model.dart';
-import 'package:n42appv2/src/wallet/pages/address_book/address_book_List.dart';
+import 'package:n42appv2/src/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42appv2/src/wallet/provider/transaction_record_iterms_provider.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
@@ -29,8 +29,8 @@ import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class WalletChainSendAlgo extends StatefulWidget {
-  CoinModel coinModel;
-  WalletChainSendAlgo(this.coinModel,{super.key});
+  final CoinModel coinModel;
+  const WalletChainSendAlgo(this.coinModel,{super.key});
 
   @override
   State<WalletChainSendAlgo> createState() => _WalletChainSendAlgoState();
@@ -40,16 +40,12 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
   CoinModel? chainModel;
   Regular? _regular;
   Regular get regular{
-    if(_regular==null){
-      _regular=Regular();
-    }
+    _regular ??= Regular();
     return _regular!;
   }
   TokenViewApi? _tokenViewApi;
   TokenViewApi get tokenViewApi{
-    if(_tokenViewApi==null){
-      _tokenViewApi=TokenViewApi();
-    }
+    _tokenViewApi ??= TokenViewApi();
     return _tokenViewApi!;
   }
   final oCcy =  NumberFormat("#,##0.00########", "en_US");
@@ -247,6 +243,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       return;
     }
     String? toAddr=await toAddress_check(toTextEditingController.text);
+    if (!mounted) return;
     if(toAddr == null) {
       setState(() {
         load=Load.finish;
@@ -255,6 +252,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
     }
     AlgoApi algoApi=AlgoApi();
     MessageModel toBalanceMM=await algoApi.getBalance(toAddr,assetId: widget.coinModel.isTest?widget.coinModel.coin['contract_test']:widget.coinModel.coin['contract'],isTest:widget.coinModel.isTest);
+    if (!mounted) return;
     if(toBalanceMM.error){
       setState(() {
         errorMessage=toBalanceMM.data;
@@ -264,7 +262,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
     }else{
       if(toBalanceMM.data['code']==404){
         setState(() {
-          errorMessage='To Address (${toAddr}) did not add USDC (${widget.coinModel.isTest?widget.coinModel.coin['contract_test']:widget.coinModel.coin['contract']}) and cannot be traded.';
+          errorMessage='To Address ($toAddr) did not add USDC (${widget.coinModel.isTest?widget.coinModel.coin['contract_test']:widget.coinModel.coin['contract']}) and cannot be traded.';
           load=Load.finish;
         });
         return;
@@ -299,7 +297,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
     TransationRecordModel trModel=TransationRecordModel();
     trModel.address=widget.coinModel.address.toString();
     trModel.from1=widget.coinModel.address.toString();
-    trModel.to1=toAddr??"";//toTextEditingController.text;
+    trModel.to1=toAddr;//toTextEditingController.text;
     trModel.addrType=widget.coinModel.addrType;
     trModel.coin=widget.coinModel.coin;
     trModel.coinMiniName=widget.coinModel.coin['coinType'];
@@ -313,6 +311,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
     //trModel.coinId=widget.coinModel.isTest?widget.coinModel.coin['chainId_test']:widget.coinModel.coin['chainId'];
 
     bool check=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletBaseSend(trModel,null,chainModel==null?widget.coinModel.coin['unit']:chainModel!.coin['unit'])));
+    if (!mounted) return;
     if(check){
       signTx(trModel);
     }else{
@@ -361,6 +360,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
     trModel.other=AlgoTrModel(add?"Add":"Delete");//添加代币还是删除代币
 
     bool check=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletBaseSend(trModel,null,chainModel==null?widget.coinModel.coin['unit']:chainModel!.coin['unit'])));
+    if (!mounted) return;
     if(check){
       signTx(trModel);
     }else{
@@ -381,6 +381,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       }else{
         trModel.txHash=mm.data;
         trModel.trId=await AppDatabase().insertTransationRecord(trModel);
+        if (!mounted) return;
         Provider.of<TransactionRecordItemProvider>(context,listen: false).addUndoneTr(trModel,1);
         ToastUtils.show(S.current.g_key_nft_41);
         Navigator.pop(context);
@@ -390,11 +391,12 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       ToastUtils.show(e.toString());
     }finally{
       load=Load.finish;
-      setState(() {});
+      if (mounted) setState(() {});
     }
   }
   void scanQR() async{
     String? scanValue =await Navigator.push(context, MaterialPageRoute(builder: (context)=>ScanPage()));
+    if (!mounted) return;
     if(scanValue !=null){
       toTextEditingController.text=scanValue;
       toAddress_check(scanValue);
@@ -778,7 +780,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
     double availableBalance=widget.coinModel.balance_double_all()-minBalance;
     if(widget.coinModel.coin['isContract']){
       return Text(
-        '${widget.coinModel.balance_string_all()} ${unit}',
+        '${widget.coinModel.balance_string_all()} $unit',
         style: TextStyle(
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
           fontSize: ScreenUtil().setSp(28.0),
@@ -788,43 +790,41 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
         textAlign: TextAlign.right,
       );
     }else{
-      return Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              'Balance:${widget.coinModel.balance_string_all()} ${unit}',
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                fontSize: ScreenUtil().setSp(28.0),
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.right,
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            'Balance:${widget.coinModel.balance_string_all()} $unit',
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+              fontSize: ScreenUtil().setSp(28.0),
             ),
-            Text(
-              'Min balance:${regular.formartNum_double(minBalance, 14,isCrop: true,isFill0: false)} ${unit}',
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
-                fontSize: ScreenUtil().setSp(28.0),
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.right,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.right,
+          ),
+          Text(
+            'Min balance:${regular.formartNum_double(minBalance, 14,isCrop: true,isFill0: false)} $unit',
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+              fontSize: ScreenUtil().setSp(28.0),
             ),
-            //available balance
-            Text(
-              'Available balance:${regular.formartNum_double(availableBalance, 14,isCrop: true,isFill0: false)} ${unit}',
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.rightTextColor.name),
-                fontSize: ScreenUtil().setSp(28.0),
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.right,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.right,
+          ),
+          //available balance
+          Text(
+            'Available balance:${regular.formartNum_double(availableBalance, 14,isCrop: true,isFill0: false)} $unit',
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.rightTextColor.name),
+              fontSize: ScreenUtil().setSp(28.0),
             ),
-          ],
-        ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.right,
+          ),
+        ],
       );
     }
   }
@@ -865,8 +865,8 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
     if(widget.coinModel.coin['isContract']){
       decimals=chainModel?.coin['decimals']??0;
     }
-    totalGasPriceStr='${toEther(totalGasPrice.toString(),decimals)} ${title}';
-    gasPriceStr='${toEther(gasPrice.toString(),decimals) } ${title}';
+    totalGasPriceStr='${toEther(totalGasPrice.toString(),decimals)} $title';
+    gasPriceStr='${toEther(gasPrice.toString(),decimals) } $title';
 
     return Container(
       alignment: Alignment.center,
@@ -954,7 +954,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
               ),
               Expanded(flex: 1,child: Container()),
               Text(
-                '${chainModel?.balance_double_all()??0} ${unit}',
+                '${chainModel?.balance_double_all()??0} $unit',
                 style: TextStyle(
                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
                   fontSize: ScreenUtil().setSp(28.0),
@@ -974,7 +974,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
               ),
               Expanded(flex: 1,child: Container()),
               Text(
-                '${regular.formartNum_double(minBalance, 14,isCrop: true,isFill0: false)} ${unit}',
+                '${regular.formartNum_double(minBalance, 14,isCrop: true,isFill0: false)} $unit',
                 style: TextStyle(
                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
                   fontSize: ScreenUtil().setSp(28.0),
@@ -994,7 +994,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
               ),
               Expanded(flex: 1,child: Container()),
               Text(
-                '${regular.formartNum_double(availableBalance, 14,isCrop: true,isFill0: false)} ${unit}',
+                '${regular.formartNum_double(availableBalance, 14,isCrop: true,isFill0: false)} $unit',
                 style: TextStyle(
                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.rightTextColor.name),
                   fontSize: ScreenUtil().setSp(28.0),
@@ -1079,12 +1079,13 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
         onTap: ()async{
           final value =await Navigator.push(context, MaterialPageRoute(
               builder: (context)=> AddressBookList(coinName: widget.coinModel.coin['coinType'],)));
+          if (!mounted) return;
           if(value !=null){
             toTextEditingController.text=value;
           }
           Navigator.pop(context);
         },
-        child: Container(
+        child: SizedBox(
           height: ScreenUtil().setWidth(88),
           width: double.infinity,
           child: Row(
@@ -1121,7 +1122,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       ),
       InkWell(
         onTap: scanQR,
-        child: Container(
+        child: SizedBox(
           height: ScreenUtil().setWidth(88),
           width: double.infinity,
           child: Row(
@@ -1159,6 +1160,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       InkWell(
         onTap: ()async{
           ClipboardData? cd = await Clipboard.getData(Clipboard.kTextPlain);
+          if (!mounted) return;
           if(cd !=null){
             if(cd.text !=null && cd.text != "null"){
               toTextEditingController.text=cd.text??"";
@@ -1169,7 +1171,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
           }
           Navigator.pop(context);
         },
-        child: Container(
+        child: SizedBox(
           height: ScreenUtil().setWidth(88),
           width: double.infinity,
           child: Row(

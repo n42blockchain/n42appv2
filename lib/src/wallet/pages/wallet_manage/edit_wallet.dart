@@ -11,9 +11,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class EditWallet extends StatefulWidget {
-  WalletInfo walletInfo;
-  int walletIndex;
-  EditWallet({required this.walletInfo,required this.walletIndex,super.key});
+  final WalletInfo walletInfo;
+  final int walletIndex;
+  const EditWallet({required this.walletInfo,required this.walletIndex,super.key});
 
   @override
   State<EditWallet> createState() => _EditWalletState();
@@ -97,6 +97,7 @@ class _EditWalletState extends State<EditWallet> {
 
                   ///更新一下provider中的数据
                   //Provider.of<WalletActionProvider>(context,listen: false).updateWalletInfo(widget.walletInfo);
+                  if (!context.mounted) return;
                   Navigator.of(context).pop(widget.walletInfo);
                 }, S.of(context).g_key_115,),
               ),

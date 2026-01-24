@@ -88,8 +88,10 @@ class _UnlockState extends ConsumerState<Unlock> {
     if (lockState.faceEnabled) {
       FaceRecognitionPublic frp = FaceRecognitionPublic();
       bool checkBiometrics = await frp.checkBiometrics();
+      if (!mounted) return;
       if (checkBiometrics) {
         bool authenticate = await frp.authenticateWithBiometrics();
+        if (!mounted) return;
         if (authenticate) {
           check = true;
           back();
@@ -234,7 +236,7 @@ class _UnlockState extends ConsumerState<Unlock> {
             Expanded(
               flex: 1,
               child: Center(
-                child: Container(
+                child: SizedBox(
                   height: ScreenUtil().setWidth(480.0),
                   width: ScreenUtil().setWidth(480.0),
                   child:                   GesturePassword(
@@ -358,7 +360,7 @@ class _UnlockState extends ConsumerState<Unlock> {
                               inputPassword=inputPassword.substring(0,inputPassword.length-1);
                             }
                           }else{
-                            inputPassword='${inputPassword}${title}';
+                            inputPassword='$inputPassword$title';
                             if(inputPassword.length==6){
                               checkPwd();
                             }
@@ -464,8 +466,12 @@ class _UnlockState extends ConsumerState<Unlock> {
             ),
           ],
         );
-        return WillPopScope(
-          onWillPop: _pageBack,
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) {
+            if (didPop) return;
+            _pageBack();
+          },
           child: Scaffold(
             backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
             body: stack,

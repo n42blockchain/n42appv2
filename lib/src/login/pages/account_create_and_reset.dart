@@ -16,7 +16,7 @@ import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
-import 'package:n42appv2/src/widgets/textField_widget.dart';
+import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,9 +25,9 @@ import 'package:n42appv2/generated/l10n.dart';
 
 /// Account Create and Reset Page - Migrated to Riverpod
 class AccountCreateAndReset extends ConsumerStatefulWidget {
-  HandType type;
-  int pushType; // 0 push, 1 content
-  AccountCreateAndReset({required this.type, this.pushType = 0, super.key});
+  final HandType type;
+  final int pushType; // 0 push, 1 content
+  const AccountCreateAndReset({required this.type, this.pushType = 0, super.key});
 
   @override
   ConsumerState<AccountCreateAndReset> createState() => _AccountCreateAndResetState();
@@ -56,16 +56,16 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
   int _countdown = 61;
   Load codeLoad=Load.finish;
   Load sendLoad=Load.finish;
+  late HandType _currentType;
   UserInfoApi? _userInfoApi;
   UserInfoApi get userInfoApi{
-    if(_userInfoApi==null){
-      _userInfoApi=UserInfoApi();
-    }
+    _userInfoApi ??= UserInfoApi();
     return _userInfoApi!;
   }
   @override
   void initState() {
     super.initState();
+    _currentType = _currentType;
     init();
     getInviterEmail();
     /*eventBusFn=eventBus.on().listen((event) {
@@ -128,6 +128,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
       });
       //发送 获取验证码接口
       final data = await userInfoApi.sendEmailCode(email, type);
+      if (!mounted) return;
       if (data["code"] == 200) {
         //success
         setState(() => _countdown -= 1);
@@ -149,11 +150,13 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
   login(String email,String password)async{
     final data = await userInfoApi.login(
         email, Md5Util().generateMd5(password));
+    if (!mounted) return false;
     if (data != null) {
       if (data["code"] == 200) {
         //AmplitudeUtils.accountLoggedIn();
         UserInfo userInfo = UserInfo.fromJson(data['data']);
         await SPUtil().saveUserInfo(userInfo);
+        if (!mounted) return false;
         AppGlobals.login(userInfo);
         // 使用 Riverpod 设置用户信息
         ref.read(currentUserProvider.notifier).setUser(
@@ -163,7 +166,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
       }
       else if (data["code"] == -403) {
         ToastUtils.showFtToast(
-            title: S.of(this.context).code_403);
+            title: S.of(context).code_403);
         return false;
       } else {
         ToastUtils.showFtToast(title: data["err"]);
@@ -225,7 +228,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBarWidget(
-        text: widget.type == HandType.restPassword ? S.of(context).rest_your_password : S.of(context).Create_your_account,
+        text: _currentType == HandType.restPassword ? S.of(context).rest_your_password : S.of(context).Create_your_account,
       ),
       body: SafeArea(
         child: GestureDetector(
@@ -245,7 +248,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
                         alignment: Alignment.center,
                         margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(50.0)),
                         child: Text(
-                          widget.type == HandType.restPassword
+                          _currentType == HandType.restPassword
                               ? S.of(context).rest_your_password
                               : S.of(context).Create_your_account,
                           style: TextStyle(
@@ -285,7 +288,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
                         height: ScreenUtil().setWidth(20),
                       ),
                       LoginTitle(
-                        title: widget.type == HandType.restPassword?S.of(context).g_lock_key11:S.of(context).login_password,
+                        title: _currentType == HandType.restPassword?S.of(context).g_lock_key11:S.of(context).login_password,
                         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor10.name),
                         must: true,
                       ),
@@ -330,7 +333,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
                         height: ScreenUtil().setHeight(20),
                       ),
                       LoginTitle(
-                        title: widget.type == HandType.restPassword?S.of(context).g_lock_key12:S.of(context).rest_Confirm_password,
+                        title: _currentType == HandType.restPassword?S.of(context).g_lock_key12:S.of(context).rest_Confirm_password,
                         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor10.name),
                         must: true,
                       ),
@@ -340,7 +343,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
                       TextFieldStyle3(
                           context,
                           onEditingComplete:(){
-                            if (widget.type == HandType.createAccount){
+                            if (_currentType == HandType.createAccount){
                               FocusScope.of(context).requestFocus(_inviteCodeFocusNode);
                             }
                             else{
@@ -376,7 +379,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
                             });
                           }
                       ),
-                      if (widget.type == HandType.createAccount)
+                      if (_currentType == HandType.createAccount)
                         _buildInviteView(context),
                       SizedBox(
                         height: ScreenUtil().setHeight(20),
@@ -413,7 +416,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
                       SizedBox(
                         height: ScreenUtil().setWidth(44),
                       ),
-                      if (widget.type == HandType.createAccount)
+                      if (_currentType == HandType.createAccount)
                         _buildText(context),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0),vertical: ScreenUtil().setWidth(60.0)),
@@ -533,7 +536,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
                             ToastUtils.show(S.of(context).please_enter_code);
                             return;
                           }
-                          if (widget.type == HandType.createAccount) {
+                          if (_currentType == HandType.createAccount) {
                             if (!regular.isCaptcha(code)) {
                               setState(() {
                                 uCodeErrorMessage=S.of(context).code_err_tips;
@@ -557,14 +560,16 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
                             setState(() {
                               sendLoad=Load.loading;
                             });
-                            if (widget.type == HandType.createAccount) {
+                            if (_currentType == HandType.createAccount) {
                               final data = await userInfoApi.registerEmail(email,
                                   Md5Util().generateMd5(password), code,
                                   inviteCode: inviteCode);
+                              if (!context.mounted) return;
                               if (data["code"] == 200) {
                                 //AmplitudeUtils.accountCreated(AccountStatus.created);
                                 ToastUtils.show(S.of(context).login_message_10);
                                 bool rData=await login(email,password);
+                                if (!context.mounted) return;
                                 if(rData==true){
                                   if(widget.pushType==0){
                                     Navigator.pop(context, true);
@@ -586,10 +591,12 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
                             } else {
                               final data = await userInfoApi.emailResetPwd(email,
                                   Md5Util().generateMd5(password), code);
+                              if (!context.mounted) return;
                               if (data["code"] == 200) {
                                 //AmplitudeUtils.accountCreated(AccountStatus.missing);
                                 ToastUtils.show(S.of(context).login_message_11);
                                 bool rData=await login(email,password);
+                                if (!context.mounted) return;
                                 if(rData==true){
                                   if(widget.pushType==0){
                                     Navigator.pop(context, true);
@@ -636,7 +643,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
   Widget _buildText(BuildContext context) {
     Color textColor =
     AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
       // color: Colors.red,
       child: Row(
@@ -652,7 +659,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                       setState(() {
-                        widget.type=HandType.restPassword;
+                        _currentType=HandType.restPassword;
                       });
                         /*Navigator.pushReplacement(context,MaterialPageRoute(
                             builder: (_) => AccountCreateAndReset(
@@ -693,7 +700,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
                     return;
                   }
                   unameErrorMessage="";
-                  sendEmailCode(email,widget.type == HandType.restPassword ? "resetPwd" : "register");
+                  sendEmailCode(email,_currentType == HandType.restPassword ? "resetPwd" : "register");
                 }
               },
               child: Container(
@@ -709,7 +716,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
               ),
             ),
           if(codeLoad==Load.loading)
-            Container(
+            SizedBox(
               width: ScreenUtil().setWidth(40.0),
               height: ScreenUtil().setWidth(40.0),
               child: CircularProgressIndicator(),
@@ -718,7 +725,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
             Container(
               alignment: Alignment.center,
               child: Text(
-                "${S.of(context).login_message_6} ${_countdown}",
+                "${S.of(context).login_message_6} $_countdown",
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(32.0),
                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor3.name),

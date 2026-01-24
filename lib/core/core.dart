@@ -5,9 +5,9 @@
 //
 // Author: Jiang Yiwei
 
-/// Core Layer
-///
-/// This barrel file exports all core infrastructure components.
+// Core Layer
+//
+// This barrel file exports all core infrastructure components.
 
 // App
 export 'app/app_globals.dart';

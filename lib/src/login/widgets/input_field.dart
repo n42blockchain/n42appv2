@@ -50,18 +50,17 @@ class InputField extends StatefulWidget {
         : TextInputType.visiblePassword;
   }
   @override
-  State<InputField> createState() => _InputFieldState(type == InputFieldType.password);
+  State<InputField> createState() => _InputFieldState();
 }
 
 class _InputFieldState extends State<InputField> {
-  bool obscure;
+  late bool obscure;
   bool cleanable = false;
-
-  _InputFieldState(this.obscure);
 
   @override
   void initState() {
     super.initState();
+    obscure = widget.type == InputFieldType.password;
     widget.controller.addListener(() {
       bool isNotEmpty = widget.controller.text.isNotEmpty;
       if (widget.cleanable && cleanable != isNotEmpty) {
@@ -89,7 +88,7 @@ class _InputFieldState extends State<InputField> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: ScreenUtil().setWidth(96),
       child: Row(
         children: [

@@ -4,7 +4,6 @@ import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/mess_mnemonic_words_item.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
-import 'package:n42appv2/src/wallet/pages/create_wallet/create_finish.dart';
 import 'package:n42appv2/src/wallet/pages/create_wallet/create_password.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
@@ -13,8 +12,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class CreateThree extends StatefulWidget {
-  WalletInfo wInfo;
-  CreateThree(this.wInfo,{super.key});
+  final WalletInfo wInfo;
+  const CreateThree(this.wInfo,{super.key});
 
   @override
   State<CreateThree> createState() => _CreateThreeState();
@@ -23,9 +22,7 @@ class CreateThree extends StatefulWidget {
 class _CreateThreeState extends State<CreateThree> {
   DataUtils? _dataUtils;
   DataUtils get dataUtils{
-    if(_dataUtils==null){
-      _dataUtils= DataUtils();
-    }
+    _dataUtils ??= DataUtils();
     return _dataUtils!;
   }
   /// 助记词

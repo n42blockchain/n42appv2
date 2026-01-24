@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:n42appv2/core/app/app_globals.dart';
@@ -51,8 +52,8 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:web3dart/crypto.dart';
 
 class WalletChainInfo extends StatefulWidget {
-  CoinModel coinModel;
-  WalletChainInfo(this.coinModel,{super.key});
+  final CoinModel coinModel;
+  const WalletChainInfo(this.coinModel,{super.key});
 
   @override
   State<WalletChainInfo> createState() => _WalletChainInfoState();
@@ -61,9 +62,7 @@ class WalletChainInfo extends StatefulWidget {
 class _WalletChainInfoState extends State<WalletChainInfo> {
   AppDatabase? _db;
   AppDatabase get db{
-    if(_db==null){
-      _db=AppDatabase();
-    }
+    _db ??= AppDatabase();
     return _db!;
   }
   String chainName = "";
@@ -79,7 +78,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
   int page = 1;
   bool lastPage = false;
   List<dynamic> transactionList = [];
-  var eventBusFn;
+  StreamSubscription? eventBusFn;
 
   WalletActionProvider get _walletProvider =>
       Provider.of<WalletActionProvider>(context, listen: false);
@@ -90,6 +89,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
       return true;
     }
     final flag = await TipsDialog7(context);
+    if (!mounted) return false;
     if (flag == true) {
       await Navigator.push(
           context,
@@ -103,19 +103,24 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
 
   Future<void> _handleSend({bool closeSheet = false}) async {
     if (!await _ensureWalletBackedUp()) {
+      if (!mounted) return;
       if (closeSheet) Navigator.pop(context);
       return;
     }
+    if (!mounted) return;
     await _openSendPage();
     await getTransactionData(Load.refresh);
+    if (!mounted) return;
     if (closeSheet) Navigator.pop(context);
   }
 
   Future<void> _handleReceive({bool closeSheet = false}) async {
     if (!await _ensureWalletBackedUp()) {
+      if (!mounted) return;
       if (closeSheet) Navigator.pop(context);
       return;
     }
+    if (!mounted) return;
     await Navigator.push(
       context,
       MaterialPageRoute(
@@ -125,6 +130,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
         ),
       ),
     );
+    if (!mounted) return;
     if (closeSheet) Navigator.pop(context);
   }
 
@@ -205,8 +211,8 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
       Provider.of<WalletActionProvider>(context,listen: false).coinModels[cIndex];
       chainName = chainCoinModel?.coin['name'];
       chainSymbol = chainCoinModel?.coin['miniName'];
-      tokenName = widget.coinModel?.coin['name'];
-      tokenSymbol = widget.coinModel?.coin['miniName'];
+      tokenName = widget.coinModel.coin['name'];
+      tokenSymbol = widget.coinModel.coin['miniName'];
       browserUrl = getBrowser_token_address(
         widget.coinModel.coin['coinType'],
         widget.coinModel.address,
@@ -242,7 +248,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
       final addr = widget.coinModel.address?.toString() ?? "";
       final coinKey = widget.coinModel.coin['coinType'];
       final contract = widget.coinModel.coin['contract'];
-      var txList;
+      List<dynamic>? txList;
       if (widget.coinModel.coin['blockchainType'] ==
           BlockchainType.Bitcoin.name) {
         txList = await db.selectBtcTransationRecord(
@@ -272,7 +278,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
   }
 
   getTransactionData_network(Load LoadType)async{
-    String addr = widget.coinModel?.address.toString() ?? "";
+    String addr = widget.coinModel.address.toString();
     String coinKey = widget.coinModel.coin['coinType'];
     String contract = widget.coinModel.coin['contract'];
     //List<CommonResponseItemModel>? cril;
@@ -302,7 +308,8 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
       for(int i=cril.length-1;i>=0;i--){
         CommonResponseItemModel cri=cril[i];
         List<TransationRecordModel> rtrm=await db.selectTransationRecord_txHash(cri.hash??"0x",widget.coinModel.address);
-        if(rtrm.length==0){
+        if (!mounted) return;
+        if(rtrm.isEmpty){
           TransationRecordModel transationRecordModel=TransationRecordModel();
           transationRecordModel.coinId=widget.coinModel.isTest?widget.coinModel.coin['chainId_test']:widget.coinModel.coin['chainId'];
           transationRecordModel.coin=widget.coinModel.coin;
@@ -313,7 +320,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
           transationRecordModel.contract=(widget.coinModel.coin['contract']??"").toLowerCase();
           transationRecordModel.walletIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
           transationRecordModel.nonce=cri.nonce;
-          transationRecordModel.txHash=cri.hash??"0x";
+          transationRecordModel.txHash=cri.hash;
           transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
           transationRecordModel.gas=int.parse(cri.gas??"0");
           transationRecordModel.txTime=cri.timeStamp??"0";
@@ -366,9 +373,10 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
         CommonResponseItemModel cri=cril[i];
         if(widget.coinModel.coin['contract'].toString().toUpperCase() != (cri.contractAddress??"").toUpperCase()){
           continue;
-        } 
+        }
         List<TransationRecordModel> rtrm=await db.selectTransationRecord_txHash(cri.hash??"0x",widget.coinModel.address);
-        if(rtrm.length==0){
+        if (!mounted) return;
+        if(rtrm.isEmpty){
           TransationRecordModel transationRecordModel=TransationRecordModel();
           transationRecordModel.coinId=widget.coinModel.isTest?widget.coinModel.coin['chainId_test']:widget.coinModel.coin['chainId'];
           transationRecordModel.coin=widget.coinModel.coin;
@@ -379,7 +387,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
           transationRecordModel.contract=(widget.coinModel.coin['contract']??"").toLowerCase();
           transationRecordModel.walletIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
           transationRecordModel.nonce=cri.nonce;
-          transationRecordModel.txHash=cri.hash??"0x";
+          transationRecordModel.txHash=cri.hash;
           transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
           transationRecordModel.gas=int.parse(cri.gas??"0");
           transationRecordModel.txTime=cri.timeStamp??"0";
@@ -416,7 +424,8 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
       for(int i=cril.length-1;i>=0;i--){
         BtcTranDetail cri=cril[i];
         List<BtcTransactionRecodeModel> rtrm=await db.selectBtcTransationRecord_txHash(cri.hash);
-        if(rtrm.length==0){
+        if (!mounted) return;
+        if(rtrm.isEmpty){
           BtcTransactionRecodeModel transationRecordModel=BtcTransactionRecodeModel();
           transationRecordModel.addrType=widget.coinModel.addrType;
           transationRecordModel.coin=widget.coinModel.coin;
@@ -426,7 +435,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
           transationRecordModel.to1="";
           transationRecordModel.walletIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
           //transationRecordModel.nonce="0";
-          transationRecordModel.txHash=cri.hash??"0x";
+          transationRecordModel.txHash=cri.hash;
           //transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
           //transationRecordModel.gas=int.parse(cri.gas??"0");
           transationRecordModel.txTime=(DateTime.parse(cri.confirmed??"").millisecondsSinceEpoch~/1000).toString();
@@ -490,7 +499,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
         else{
           BtcTransactionRecodeModel transationRecordModel=rtrm[0];
           String cDate=(DateTime.parse(cri.confirmed??"").millisecondsSinceEpoch~/1000).toString();
-          if(transationRecordModel.InputsAddress?.length==0){
+          if(transationRecordModel.InputsAddress.isEmpty){
             if(cri.inputs!=null){
               transationRecordModel.inputModels=[];
               for(Input input in cri.inputs!){
@@ -549,7 +558,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
           transationRecordModel.contract=(widget.coinModel.coin['contract']??"").toLowerCase();
           transationRecordModel.walletIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
           transationRecordModel.nonce=cri.nonce;
-          transationRecordModel.txHash=cri.hash??"0x";
+          transationRecordModel.txHash=cri.hash;
           transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
           transationRecordModel.gas=int.parse(cri.gas??"0");
           transationRecordModel.txTime=cri.timeStamp??"0";
@@ -1066,7 +1075,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
-              Container(
+              SizedBox(
                 width: ScreenUtil().setWidth(40.0),
                 height: ScreenUtil().setWidth(40.0),
                 child: Image.asset(
@@ -1102,7 +1111,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
-              Container(
+              SizedBox(
                 width: ScreenUtil().setWidth(40.0),
                 height: ScreenUtil().setWidth(40.0),
                 child: Image.asset(
@@ -1138,6 +1147,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
                   browserUrl,
                   //S.of(context).g_key_m_15
                 )));
+        if (!mounted) return;
         Navigator.pop(context);
       },
       child: Container(
@@ -1145,7 +1155,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
-              Container(
+              SizedBox(
                 width: ScreenUtil().setWidth(40.0),
                 height: ScreenUtil().setWidth(40.0),
                 child: Image.asset(
@@ -1175,6 +1185,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
     childs.add(InkWell(
       onTap: () async{
         await Navigator.push(context, MaterialPageRoute(builder: (context)=>Moonpay(coinModel:widget.coinModel)));
+        if (!mounted) return;
         Navigator.pop(context);
       },
       child: Container(
@@ -1182,7 +1193,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
-              Container(
+              SizedBox(
                 width: ScreenUtil().setWidth(40.0),
                 height: ScreenUtil().setWidth(40.0),
                 child: Image.asset(
@@ -1212,6 +1223,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
     childs.add(InkWell(
       onTap: () async{
         await Navigator.push(context, MaterialPageRoute(builder: (context)=>Moonpay(coinModel:widget.coinModel,type: 1,)));
+        if (!mounted) return;
         Navigator.pop(context);
       },
       child: Container(
@@ -1219,7 +1231,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
-              Container(
+              SizedBox(
                 width: ScreenUtil().setWidth(40.0),
                 height: ScreenUtil().setWidth(40.0),
                 child: Image.asset(
@@ -1258,6 +1270,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
               MaterialPageRoute(
                   builder: (context) => WalletCoinTokenAdd2(
                     widget.coinModel,)));
+          if (!mounted) return;
           if (r) {
             Provider.of<WalletActionProvider>(context).init_wallet(initCoinInfo: true);
           }
@@ -1268,7 +1281,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
             alignment: Alignment.centerLeft,
             child: Row(
               children: [
-                Container(
+                SizedBox(
                   width: ScreenUtil().setWidth(40.0),
                   height: ScreenUtil().setWidth(40.0),
                   child: Image.asset(
@@ -1333,7 +1346,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
                     alignment: Alignment.centerLeft,
                     child: Row(
                       children: [
-                        Container(
+                        SizedBox(
                           width: ScreenUtil().setWidth(40.0),
                           height: ScreenUtil().setWidth(40.0),
                           child: Image.asset(
@@ -1369,7 +1382,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
                     alignment: Alignment.centerLeft,
                     child: Row(
                       children: [
-                        Container(
+                        SizedBox(
                           width: ScreenUtil().setWidth(40.0),
                           height: ScreenUtil().setWidth(40.0),
                           child: Image.asset(
@@ -1406,6 +1419,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
         childs.add(InkWell(
           onTap: () async{
             await Navigator.push(context, MaterialPageRoute(builder: (context) => MarketCoinInfo(marketInfo ?? {})));
+            if (!mounted) return;
             Navigator.pop(context);
           },
           child: Container(
@@ -1413,7 +1427,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
               alignment: Alignment.centerLeft,
               child: Row(
                 children: [
-                  Container(
+                  SizedBox(
                     width: ScreenUtil().setWidth(40.0),
                     height: ScreenUtil().setWidth(40.0),
                     child: Image.asset(

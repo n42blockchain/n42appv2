@@ -7,7 +7,7 @@ class LoginTitle extends StatelessWidget {
   final Color? color;
   final bool must;
 
-  const LoginTitle({Key? key, required this.title, this.color,this.must=false}) : super(key: key);
+  const LoginTitle({super.key, required this.title, this.color,this.must=false});
 
   @override
   Widget build(BuildContext context) {

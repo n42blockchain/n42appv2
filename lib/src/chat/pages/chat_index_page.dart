@@ -23,12 +23,10 @@ import 'package:n42appv2/src/chat/widgets/item_conversation.dart';
 import 'package:n42appv2/src/component/pages/scan_page.dart';
 import 'package:n42appv2/src/login/pages/login_page.dart';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/state/public_provider.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/app_home_top_bar.dart';
 import 'package:n42appv2/src/widgets/custom_popup_menu_wrap.dart';
 import 'package:n42appv2/src/widgets/detail_refresh_widget.dart';
@@ -127,23 +125,17 @@ class ChatList extends StatefulWidget {
 class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
   ChatApi? _chatApi;
   ChatApi get chatApi{
-    if(_chatApi==null){
-      _chatApi=ChatApi();
-    }
+    _chatApi ??= ChatApi();
     return _chatApi!;
   }
   ChatDBApi? _chatDBApi;
   ChatDBApi get chatDBApi{
-    if(_chatDBApi==null){
-      _chatDBApi=ChatDBApi();
-    }
+    _chatDBApi ??= ChatDBApi();
     return _chatDBApi!;
   }
   ChatUtil? _chatUtil;
   ChatUtil get chatUtil{
-    if(_chatUtil==null){
-      _chatUtil= ChatUtil();
-    }
+    _chatUtil ??= ChatUtil();
     return _chatUtil!;
   }
   final CustomPopupMenuController _popupMenuController =
@@ -155,7 +147,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
   String? mPrivateKey;
 
 
-  var eventBusFn;
+  StreamSubscription? eventBusFn;
   @override
   void initState() {
     super.initState();
@@ -197,6 +189,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
         isLoading = true;
       });
       await bindUserPubKey();
+      if (!mounted) return;
       //先处理完离线消息
       ChatMessageProvider cmp=legacy_provider.Provider.of<ChatMessageProvider>(context,listen: false);
       await cmp.initData();
@@ -327,6 +320,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
                                     shape: BoxShape.circle),
                                 width: ScreenUtil().setWidth(30.0),
                                 height: ScreenUtil().setWidth(30.0),
+                                alignment: Alignment.center,
                                 child:Text(
                                   "${value.haveNewFriend}",
                                   style: TextStyle(
@@ -334,7 +328,6 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
                                     color: Colors.white,
                                   ),
                                 ),
-                                alignment: Alignment.center,
                               ),
                             ),
 
@@ -391,6 +384,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
                                                     shape: BoxShape.circle),
                                                 width: ScreenUtil().setWidth(30.0),
                                                 height: ScreenUtil().setWidth(30.0),
+                                                alignment: Alignment.center,
                                                 child: Text(
                                                   "${value.haveNewFriend}",
                                                   style: TextStyle(
@@ -398,7 +392,6 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
                                                     color: Colors.white,
                                                   ),
                                                 ),
-                                                alignment: Alignment.center,
                                               ),
                                             ),
                                           );
@@ -438,27 +431,26 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
                                   vertical: ScreenUtil().setWidth(16.0),),
-                                child: Container(
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Image.asset(
-                                          "assets/chat/start_chat.png",
-                                          width: ScreenUtil().setWidth(48.0),
-                                          fit: BoxFit.cover,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Image.asset(
+                                      "assets/chat/start_chat.png",
+                                      width: ScreenUtil().setWidth(48.0),
+                                      fit: BoxFit.cover,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: ScreenUtil().setWidth(24.0),
+                                    ),
+                                    Text(
+                                      S.of(context).g_chat_key_42,
+                                      style: TextStyle(
                                           color: Colors.white,
-                                        ),
-                                        SizedBox(
-                                          width: ScreenUtil().setWidth(24.0),
-                                        ),
-                                        Text(
-                                          S.of(context).g_chat_key_42,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: ScreenUtil().setSp(30.0)),
-                                        )
-                                      ],
-                                    )),
+                                          fontSize: ScreenUtil().setSp(30.0)),
+                                    )
+                                  ],
+                                ),
                               ),
                               onTap: () async {
                                 _popupMenuController.hideMenu();
@@ -481,27 +473,26 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
                                   vertical: ScreenUtil().setWidth(16.0),),
-                                child: Container(
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Image.asset(
-                                          "assets/wallet/scan.png",
-                                          width: ScreenUtil().setWidth(48.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Image.asset(
+                                      "assets/wallet/scan.png",
+                                      width: ScreenUtil().setWidth(48.0),
+                                      color: Colors.white,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    SizedBox(
+                                      width: ScreenUtil().setWidth(24.0),
+                                    ),
+                                    Text(
+                                      S.of(context).g_chat_key_43,
+                                      style: TextStyle(
                                           color: Colors.white,
-                                          fit: BoxFit.cover,
-                                        ),
-                                        SizedBox(
-                                          width: ScreenUtil().setWidth(24.0),
-                                        ),
-                                        Text(
-                                          S.of(context).g_chat_key_43,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: ScreenUtil().setSp(30.0)),
-                                        )
-                                      ],
-                                    )),
+                                          fontSize: ScreenUtil().setSp(30.0)),
+                                    )
+                                  ],
+                                ),
                               ),
                               onTap: () async {
                                 _popupMenuController.hideMenu();
@@ -521,18 +512,13 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
                                     "map_message ; ${map["chat_message"]}");
                                 if (map["chat_message"] != null &&
                                     map["chat_message"] is List) {
-                                  String? faceUrl =
-                                  map["chat_message"][0];
-                                  String? name =
-                                  map["chat_message"][1];
-                                  String? email =
-                                  map["chat_message"][2];
                                   String? uuid =
                                   map["chat_message"][3];
 
                                   final friendData =
                                   await chatApi.getUserInfo(
                                       uuid ?? '');
+                                  if (!mounted) return;
                                   if (friendData != null &&
                                       friendData["code"] == 200) {
                                     FriendInfo fInfo =
@@ -576,8 +562,8 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
                 await cmp.initData();
                 await cmp.getChatConversationList();
               },
-              childWidget: value.chatConversationList.length==0?
-              Container(
+              childWidget: value.chatConversationList.isEmpty?
+              SizedBox(
                 height: ScreenUtil().screenHeight-240,
                 child: EmptyView(),
               ) :
@@ -604,10 +590,11 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
                             // dismissible: DismissiblePane(onDismissed: () {}),
                             children: [
                               SlidableAction(
-                                onPressed: (context) async {
+                                onPressed: (slidableContext) async {
                                   await chatDBApi
                                       .deleteMessageByTargetId(
                                       cm.getTargetId());
+                                  if (!context.mounted) return;
                                   await legacy_provider.Provider.of<ChatMessageProvider>(context,listen: false)
                                       .getChatConversationList();
                                 },
@@ -630,7 +617,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
                                 await Navigator.of(context)
                                     .push(MaterialPageRoute(
                                   builder: (_) => ChatDetailPage(
-                                    targetUuid: cm.targetId ?? '',
+                                    targetUuid: cm.targetId,
                                     conversationType:
                                     cm.conversationType,
                                   ),
@@ -639,12 +626,13 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
                                 await Navigator.of(context)
                                     .push(MaterialPageRoute(
                                   builder: (_) => ChatGroupDetailPage(
-                                    targetUuid: cm.targetId ?? '',
+                                    targetUuid: cm.targetId,
                                     conversationType:
                                     cm.conversationType,
                                   ),
                                 ));
                               }
+                              if (!context.mounted) return;
                               //更新未读消息
                               checkUnReadMessage();
                               legacy_provider.Provider.of<ChatMessageProvider>(context,listen: false).updateUnReadMessNum();
@@ -655,6 +643,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
                                 context,
                                 S.current.g_chat_key_34,
                               );
+                              if (!context.mounted) return;
                               if (flagResult != null && flagResult) {
                                 await chatDBApi
                                     .deleteMessageByTargetId(
@@ -663,6 +652,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
                                 // await ProviderUtil
                                 //         .chatMessageProvider()
                                 //     .initData();
+                                if (!context.mounted) return;
                                 await legacy_provider.Provider.of<ChatMessageProvider>(context,listen: false)
                                     .getChatConversationList();
                               }

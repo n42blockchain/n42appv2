@@ -28,7 +28,7 @@ class BtcApi{
   }
   getUtxos(String address)async{
     try{
-      var data=await BaseApi.RequestEmpty_h.get('${uri}address/${address}/utxo', params: {});
+      var data=await BaseApi.RequestEmpty_h.get('${uri}address/$address/utxo', params: {});
       MessageModel mm=MessageModel();
       mm.data=data;
       return mm;
@@ -58,7 +58,7 @@ class BtcApi{
   }
   getBalance(String address)async{
     try{
-      var data= await BaseApi.RequestEmpty_h.get("${uri}address/${address}",
+      var data= await BaseApi.RequestEmpty_h.get("${uri}address/$address",
         params: {},
         defaultReturn: false,
         header: {
@@ -133,7 +133,7 @@ class BtcApi{
   }
   getTxState(String txId)async{
     try{
-      var data= await BaseApi.RequestEmpty_h.get("${uri}tx/${txId}/status",
+      var data= await BaseApi.RequestEmpty_h.get("${uri}tx/$txId/status",
         params: {},
         defaultReturn: false,
         header: {

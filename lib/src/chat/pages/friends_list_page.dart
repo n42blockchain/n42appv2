@@ -20,7 +20,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
 class FriendsListPage extends StatefulWidget {
-  const FriendsListPage({Key? key}) : super(key: key);
+  const FriendsListPage({super.key});
 
   @override
   State<FriendsListPage> createState() => _FriendsListPageState();
@@ -29,9 +29,7 @@ class FriendsListPage extends StatefulWidget {
 class _FriendsListPageState extends State<FriendsListPage> {
   ChatApi? _chatApi;
   ChatApi get chatApi{
-    if(_chatApi==null){
-      _chatApi=ChatApi();
-    }
+    _chatApi ??= ChatApi();
     return _chatApi!;
   }
   final controller = TextEditingController();
@@ -363,7 +361,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
   friendDelete(FriendInfo model)async{
     final res = await TipsDialog2(
       context,
-      "${S.current.g_key_squad_k15(model.name??"")}",
+      S.current.g_key_squad_k15(model.name??""),
     );
     if (res != null && res) {
       //删除好友

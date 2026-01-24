@@ -1,4 +1,5 @@
-﻿import 'dart:convert';
+﻿import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:n42appv2/src/chat/pages/red_pocket_group3.dart';
@@ -12,7 +13,6 @@ import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/api/chat_db_api.dart';
-import 'package:n42appv2/src/chat/api/file_api.dart';
 import 'package:n42appv2/src/chat/models/chat_message_model.dart';
 import 'package:n42appv2/src/chat/models/friend_info.dart';
 import 'package:n42appv2/src/chat/models/group_data.dart';
@@ -47,7 +47,6 @@ import 'package:n42appv2/src/widgets/loading.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -70,37 +69,27 @@ class ChatGroupDetailPage extends StatefulWidget {
 class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
   ChatApi? _chatApi;
   ChatApi get chatApi{
-    if(_chatApi==null){
-      _chatApi=ChatApi();
-    }
+    _chatApi ??= ChatApi();
     return _chatApi!;
   }
   ChatDataUtil? _chatDataUtils;
   ChatDataUtil get chatDataUtils{
-    if(_chatDataUtils==null){
-      _chatDataUtils=ChatDataUtil();
-    }
+    _chatDataUtils ??= ChatDataUtil();
     return _chatDataUtils!;
   }
   DataUtils? _dataUtils;
   DataUtils get dataUtils{
-    if(_dataUtils==null){
-      _dataUtils= DataUtils();
-    }
+    _dataUtils ??= DataUtils();
     return _dataUtils!;
   }
   ChatDBApi? _chatDBApi;
   ChatDBApi get chatDBApi{
-    if(_chatDBApi==null){
-      _chatDBApi=ChatDBApi();
-    }
+    _chatDBApi ??= ChatDBApi();
     return _chatDBApi!;
   }
   ChatUtil? _chatUtil;
   ChatUtil get chatUtils{
-    if(_chatUtil==null){
-      _chatUtil= ChatUtil();
-    }
+    _chatUtil ??= ChatUtil();
     return _chatUtil!;
   }
   final CustomPopupMenuController _addController = CustomPopupMenuController();
@@ -166,7 +155,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
 
   //点开的红包
   ChatMessageModel? redPocketMessage;
-  var eventBusFn;
+  StreamSubscription? eventBusFn;
   @override
   void initState() {
     //设置正在聊天的对象
@@ -473,8 +462,8 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
           }
         }
       }
-    } catch (err) {
-      // debugPrint("err:${err.toString()}");
+    } catch (_) {
+      // 获取群最新消息失败时安全忽略，不影响正常使用
     }
   }
 
@@ -524,8 +513,8 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
               }
               eventBus.fire(
                   EventPublic(EventPublicType.updateChatConversationList));
-            } catch (err) {
-              //err
+            } catch (_) {
+              // 解析单条离线消息失败时安全忽略，继续处理其他消息
             }
           }
         }
@@ -546,7 +535,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
   //群聊的离线消息 如果用户没有执行 ack 操作 每次登录都会获取到 不能重复插入数据库
   saveGroupOfflineMessage(ChatMessageModel model) async {
     if (await chatDBApi.getMessageByMessageId(model.messageId) == null) {
-      final raw = await chatDBApi.saveMessage(model);
+      await chatDBApi.saveMessage(model);
       // debugPrint(
       //     "saveGroupOfflineMessage status:$raw ${raw == 0 ? "失败" : "成功"}");
     }
@@ -563,7 +552,8 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
         // pageIndex++;
         lastPointTime = newData[0].timestamp;
       }
-    } catch (err) {
+    } catch (_) {
+      // 获取聊天详情失败时安全忽略，使用空列表
     }
   }
 
@@ -643,7 +633,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
       Map<String, dynamic> content = chatDataUtils.generateSendData(
           contentType: MessageContentType.Text,
           fromID: AppGlobals.userInfo?.uuid ?? '',
-          receiveId: widget.targetUuid ?? '',
+          receiveId: widget.targetUuid,
           conversationType: 1,
           reply_id: currentReplyModel?.messageId,
           direction: 1,
@@ -772,8 +762,6 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
     FileUtils fileUtils=FileUtils();
     String fileNavName = fileUtils.getFileNameByPath(filePath);
 
-    String fileSize = fileUtils.computerFileSize(fileNavPath);
-
     //定义临界值 最大支持100M
     int flagSize = 100 * 1024 * 1024;
     if (File(fileNavPath).lengthSync() > flagSize) {
@@ -785,7 +773,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
     Map<String, dynamic> content = chatDataUtils.generateSendData(
         contentType: contentType,
         fromID: AppGlobals.userInfo?.uuid ?? '',
-        receiveId: widget.targetUuid ?? '',
+        receiveId: widget.targetUuid,
         conversationType: 1,
         direction: 1,
         originalFileName: fileNavName,
@@ -971,7 +959,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
       Map<String, dynamic> content = chatDataUtils.generateSendData(
           contentType: MessageContentType.RedEnvelope,
           fromID: AppGlobals.userInfo?.uuid ?? '',
-          receiveId: widget.targetUuid ?? '',
+          receiveId: widget.targetUuid,
           conversationType: 1,
           reply_id: currentReplyModel?.messageId,
           direction: 1,
@@ -1343,7 +1331,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
                                 onTap: (){
                                   bottomWidget();
                                 },
-                                child: Container(
+                                child: SizedBox(
                                   width: ScreenUtil().setWidth(48.0),
                                   height: ScreenUtil().setWidth(48.0),
                                   child: Image.asset(
@@ -1616,9 +1604,9 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
   }
 }
 class ShowMessageType10 extends StatefulWidget {
-  ChatMessageModel? chatMessage;
-  dynamic closeOnTap;
-  ShowMessageType10(this.chatMessage,this.closeOnTap,{super.key});
+  final ChatMessageModel? chatMessage;
+  final dynamic closeOnTap;
+  const ShowMessageType10(this.chatMessage,this.closeOnTap,{super.key});
 
   @override
   State<ShowMessageType10> createState() => _ShowMessageType10State();
@@ -1627,9 +1615,7 @@ class ShowMessageType10 extends StatefulWidget {
 class _ShowMessageType10State extends State<ShowMessageType10> {
   ChatApi? _chatApi;
   ChatApi get chatApi{
-    if(_chatApi==null){
-      _chatApi=ChatApi();
-    }
+    _chatApi ??= ChatApi();
     return _chatApi!;
   }
   Load loadOpen=Load.finish;
@@ -1641,7 +1627,6 @@ class _ShowMessageType10State extends State<ShowMessageType10> {
   @override
   Widget build(BuildContext context) {
     if(widget.chatMessage==null)return SizedBox();
-    String type2Message1="You will receive the above amount in 20s ";
     Widget child;
     if(widget.chatMessage!.redPocketDetailModel?.claimed == 1) {
       //当前用户已经领取了红包
@@ -1824,7 +1809,7 @@ class _ShowMessageType10State extends State<ShowMessageType10> {
           child: Visibility(
             visible: loadOpen==Load.loading,
             child: Center(
-              child: Container(
+              child: SizedBox(
                 width: ScreenUtil().setWidth(60.0),
                 height: ScreenUtil().setWidth(60.0),
                 child: CircularProgressIndicator(),
@@ -1882,7 +1867,7 @@ class _ShowMessageType10State extends State<ShowMessageType10> {
                     ),
                   ],
                 ),
-                Container(
+                SizedBox(
                   width: ScreenUtil().setWidth(96.0),
                   height: ScreenUtil().setWidth(96.0),
                   child: Image.asset("assets/img/ast.png",fit: BoxFit.cover,),
@@ -1923,7 +1908,7 @@ class _ShowMessageType10State extends State<ShowMessageType10> {
                   margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(30.0)),
                   child: RichText(
                     text: TextSpan(
-                        text: "${message} ",
+                        text: "$message ",
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(28.0),
                           fontWeight: FontWeight.w400,
@@ -2046,7 +2031,7 @@ class _ShowMessageType10State extends State<ShowMessageType10> {
                     ),
                   ],
                 ),
-                Container(
+                SizedBox(
                   width: ScreenUtil().setWidth(96.0),
                   height: ScreenUtil().setWidth(96.0),
                   child: Image.asset("assets/img/ast.png",fit: BoxFit.cover,),

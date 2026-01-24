@@ -22,9 +22,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class WalletCoinAddAll extends StatefulWidget {
-  String? coinType;
-  String seachStr;
-  WalletCoinAddAll(this.seachStr,{this.coinType,super.key});
+  final String? coinType;
+  final String seachStr;
+  const WalletCoinAddAll(this.seachStr,{this.coinType,super.key});
 
   @override
   State<WalletCoinAddAll> createState() => _WalletCoinAddAllState();
@@ -33,9 +33,7 @@ class WalletCoinAddAll extends StatefulWidget {
 class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   Regular? _regular;
   Regular get regular{
-    if(_regular==null){
-      _regular=Regular();
-    }
+    _regular ??= Regular();
     return _regular!;
   }
   TextEditingController inputEditingController = TextEditingController();
@@ -131,14 +129,14 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
 
   setChainsToken_withNetwork() {
     List<String> cKeys = chains_token.keys.toList();
-    if (cKeys.length != 0) {
+    if (cKeys.isNotEmpty) {
       networkName_token =
       chains_token[cKeys[networkIndex_token]]["baseInfo"]['name'];
     }else{
       return;
     }
     Map<String, dynamic> chainMap = chains_token[cKeys[networkIndex_token]];
-    var mainnets;
+    dynamic mainnets;
     if (chainMap['isTest']) {
       mainnets = chainMap['testnets'][0]['testnetContract'];
     } else {
@@ -191,9 +189,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
       });
       Map<String, dynamic>? chainInfoMap =
       netChains[chainMap['coin_name'].toString().toUpperCase()];
-      if (chainInfoMap == null) {
-        chainInfoMap = dealChain(chainMap);
-      }
+      chainInfoMap ??= dealChain(chainMap);
       if (chainInfoMap == null) {
         ToastUtils.show(S.of(context).g_key_3);
         setState(() {
@@ -209,7 +205,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
           chainInfoMap['sort']=0;
         }*/
         addSymbol =
-        '${addSymbol},${chainMap['coin_name'].toString().toLowerCase()}';
+        '$addSymbol,${chainMap['coin_name'].toString().toLowerCase()}';
         await wap.addWalletChain(chainInfoMap);
         chains = wap.walletMap;
         setState(() {
@@ -248,6 +244,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
           await addCoin(cIndex, showList: false);
         }
       }
+      if (!mounted) return;
       chain = chains![symbolStr];
       WalletActionProvider wap = Provider.of<WalletActionProvider>(context,listen: false);
       String baseTokenStr = json.encode(chain!['baseInfo']);
@@ -267,7 +264,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
       baseToken['customer'] = false; //是否时用户自定义添加
       baseToken['decimals'] = coinMap['decimals'];
       baseToken['canEdit']=true;
-      addSymbol = '${addSymbol},${coinMap['coin_name'].toString()}';
+      addSymbol = '$addSymbol,${coinMap['coin_name'].toString()}';
       wap.addWalletChain_token(baseToken);
       setState(() {
         coinMap['isAdd'] = true;
@@ -298,12 +295,11 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     if (ct == null) return null;*/
     CoinType ct=CoinType.values[ctIndex];
     coinType = ct.name;
-    BlockchainType? bct = BlockchainType.values.firstWhere((element) =>
+    BlockchainType bct = BlockchainType.values.firstWhere((element) =>
     element.name.toLowerCase() ==
         chainMap['class_name'].toString().toLowerCase()
         ? true
         : false);
-    if (bct == null) return null;
     blockchainType = bct.name;
     Map<String, dynamic> path = {};
 
@@ -357,7 +353,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
       }
     }
     String fullname = chainMap['fullname'];
-    String icon="https://api-wallet.walletamaze.com/market/v1/r/coinImage/${fullname}.png";
+    String icon="https://api-wallet.walletamaze.com/market/v1/r/coinImage/$fullname.png";
 
     if(fullname=="LoveCoin"){
       icon=chainMap['icon'];
@@ -548,6 +544,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     if (coinsData.error) {
       ToastUtils.show(coinsData.data);
     } else {
+      if (!mounted) return;
       coinlist = [];
       List<dynamic> returnData = coinsData.data;
       Map<String, dynamic> chains =
@@ -645,7 +642,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     String tokenAddress = tokenEditingController.text;
     Map<String, dynamic> chain =
     chains_token[chains_token.keys.toList()[networkIndex_token]];
-    String symbolStr = chain!['baseInfo']['miniName'].toString().toUpperCase();
+    String symbolStr = chain['baseInfo']['miniName'].toString().toUpperCase();
     int cIndex = coinlist.indexWhere((element) {
       if (element['contract'] == "") return false;
       if (element['coin_name'].toString().toUpperCase() != symbolStr) {
@@ -683,9 +680,9 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
       });
       return;
     }
-
+    if (!mounted) return;
     WalletActionProvider wap = Provider.of<WalletActionProvider>(context,listen: false);
-    String baseTokenStr = json.encode(chain!['baseInfo']);
+    String baseTokenStr = json.encode(chain['baseInfo']);
     Map<String, dynamic> baseToken = json.decode(baseTokenStr);
     baseToken['isContract'] = true;
     baseToken['contract'] = tokenAddress;
@@ -702,7 +699,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     baseToken['decimals'] = int.parse(decimalEditingController.text);
     baseToken['customer'] = true; //是否是用户自定义添加
     baseToken['canEdit']=true;
-    addSymbol = '${addSymbol},${symbolEditingController.text}';
+    addSymbol = '$addSymbol,${symbolEditingController.text}';
     await wap.addWalletChain_token(baseToken);
     init();
     ToastUtils.show("Successfully added");
@@ -805,8 +802,12 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _pageBack,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        _pageBack();
+      },
       child: Scaffold(
         backgroundColor:
         AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
@@ -862,7 +863,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
             Container(
               alignment: Alignment.center,
               margin: EdgeInsets.only(right: ScreenUtil().setWidth(30.0)),
-              child: Container(
+              child: SizedBox(
                 height: ScreenUtil().setWidth(40.0),
                 width: ScreenUtil().setWidth(40.0),
                 child: load == Load.loading
@@ -1233,74 +1234,71 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   }
 
   symbolWidget() {
-    return Container(
-      //margin: EdgeInsets.symmetric(vertical: scr.setWidth(30.0)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            S.of(context).g_token_m_key_7,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          S.of(context).g_token_m_key_7,
+          style: TextStyle(
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.mainTextColor.name),
+            fontSize: ScreenUtil().setSp(28.0),
+          ),
+        ),
+        Container(
+          alignment: Alignment.center,
+          padding: EdgeInsets.only(
+            left: ScreenUtil().setWidth(30.0),
+            right: ScreenUtil().setWidth(10.0),
+          ),
+          margin: EdgeInsets.only(
+            top: ScreenUtil().setWidth(20.0),
+          ),
+          decoration: BoxDecoration(
+            borderRadius:
+            BorderRadius.all(Radius.circular(ScreenUtil().setWidth(8.0))),
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.itemBgColor.name),
+          ),
+          height: ScreenUtil().setWidth(88.0),
+          child: TextField(
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(28.0),
+              fontSize: ScreenUtil().setWidth(30.0),
             ),
+            controller: symbolEditingController,
+            focusNode: symbolFocusNode,
+            textInputAction: TextInputAction.next,
+            keyboardType: TextInputType.text,
+            decoration: InputDecoration(
+              hintText: S.of(context).g_token_m_key_7,
+              border: InputBorder.none,
+              errorBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              isCollapsed: true,
+              contentPadding:
+              EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
+            ),
+            maxLines: 1,
+            onEditingComplete: () {
+              FocusScope.of(context).requestFocus(decimalFocusNode);
+            },
           ),
+        ),
+        if (symbolErrorMessage != "")
           Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.only(
-              left: ScreenUtil().setWidth(30.0),
-              right: ScreenUtil().setWidth(10.0),
-            ),
-            margin: EdgeInsets.only(
-              top: ScreenUtil().setWidth(20.0),
-            ),
-            decoration: BoxDecoration(
-              borderRadius:
-              BorderRadius.all(Radius.circular(ScreenUtil().setWidth(8.0))),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor.name),
-            ),
-            height: ScreenUtil().setWidth(88.0),
-            child: TextField(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              symbolErrorMessage,
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setWidth(30.0),
+                    context, AppThemeKeys.errorTextColor.name),
+                fontSize: ScreenUtil().setSp(24.0),
               ),
-              controller: symbolEditingController,
-              focusNode: symbolFocusNode,
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                hintText: S.of(context).g_token_m_key_7,
-                border: InputBorder.none,
-                errorBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                isCollapsed: true,
-                contentPadding:
-                EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
-              ),
-              maxLines: 1,
-              onEditingComplete: () {
-                FocusScope.of(context).requestFocus(decimalFocusNode);
-              },
             ),
           ),
-          if (symbolErrorMessage != "")
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                symbolErrorMessage,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.errorTextColor.name),
-                  fontSize: ScreenUtil().setSp(24.0),
-                ),
-              ),
-            ),
-        ],
-      ),
+      ],
     );
   }
 
@@ -1377,7 +1375,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   }
 
   AddButtonWidget() {
-    return Container(
+    return SizedBox(
       height: ScreenUtil().setWidth(88.0),
       width: double.infinity,
       child: ButtonStyle6(
@@ -1401,7 +1399,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   }
 
   ImportButtonWidget() {
-    return Container(
+    return SizedBox(
       height: ScreenUtil().setWidth(88.0),
       width: double.infinity,
       child: Row(
@@ -1498,7 +1496,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
         ),
       );
     } else {
-      if (coinlist_seach.length == 0) return const EmptyView();
+      if (coinlist_seach.isEmpty) return const EmptyView();
       return ListView.builder(
         itemCount: coinlist_seach.length,
         itemBuilder: (context, int index) {
@@ -1583,7 +1581,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
                 ),
                 RichText(
                   text: TextSpan(
-                    text: '${symbol}  ',
+                    text: '$symbol  ',
                     style: TextStyle(
                       fontSize: ScreenUtil().setWidth(26.0),
                       color: AppThemeUtils.getColorByKey(
@@ -1665,7 +1663,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   }
 
   coinListTokenWidget() {
-    if (coinlist_token.length == 0 || showImportWidget) {
+    if (coinlist_token.isEmpty || showImportWidget) {
       return importTokenWidget();
     } else {
       return Column(
@@ -1792,7 +1790,6 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   showChangeNetwork() {
     if (load == Load.loading) return;
     List<Widget> childs = [];
-    String netc=json.encode(netChains);
     childs.add(Container(
       constraints: BoxConstraints(
         maxHeight: ScreenUtil().setWidth(600.0),
@@ -1901,6 +1898,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
                     child: image,
                   ),
                   Expanded(
+                    flex: 1,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -1921,7 +1919,6 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
                             )),
                       ],
                     ),
-                    flex: 1,
                   ),
                   if (selected)
                     Icon(

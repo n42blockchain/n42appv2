@@ -7,8 +7,8 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SwapAstSelectChain extends StatefulWidget {
-  List<SwapAstModel> swapAsts;
-  SwapAstSelectChain(this.swapAsts,{super.key});
+  final List<SwapAstModel> swapAsts;
+  const SwapAstSelectChain(this.swapAsts,{super.key});
 
   @override
   State<SwapAstSelectChain> createState() => _SwapAstSelectChainState();

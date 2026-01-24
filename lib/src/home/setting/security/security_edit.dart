@@ -8,8 +8,8 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SecurityEdit extends StatefulWidget{
-  String type;
-  SecurityEdit(this.type);
+  final String type;
+  const SecurityEdit(this.type, {super.key});
   @override
   _SecurityEditState createState()=>_SecurityEditState();
 }
@@ -32,7 +32,7 @@ class _SecurityEditState extends State<SecurityEdit>{
         setState(() {
           securityMap['email']=userSecurityMap['email'];
           securityMap['google']=userSecurityMap['google'];
-          securityMap['face']=userSecurityMap['face']==null?false:userSecurityMap['face'];
+          securityMap['face']=userSecurityMap['face']??false;
         });
       }
     }
@@ -41,9 +41,7 @@ class _SecurityEditState extends State<SecurityEdit>{
   saveSecurity()async{
     SPUtil sPUtils=SPUtil();
     Map<String,dynamic>? s=await sPUtils.getSecurity();
-    if(s==null){
-      s={};
-    }
+    s ??= {};
     if(widget.type=="google"){
       if(securityMap["google"]==true){
 
@@ -100,7 +98,7 @@ class _SecurityEditState extends State<SecurityEdit>{
                     ),
                   ),
                   Switch(
-                    activeColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
+                    activeTrackColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
                     value: securityMap[widget.type],
                     onChanged: (bool value){
                       if(widget.type=="google"){

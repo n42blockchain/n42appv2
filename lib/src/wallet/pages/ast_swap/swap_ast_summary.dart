@@ -8,11 +8,11 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SwapAstSummary extends StatefulWidget {
-  String send;
-  String receive;
-  String balance;
-  String date;
-  SwapAstSummary(this.send,this.receive,this.balance,this.date ,{super.key});
+  final String send;
+  final String receive;
+  final String balance;
+  final String date;
+  const SwapAstSummary(this.send,this.receive,this.balance,this.date ,{super.key});
 
   @override
   State<SwapAstSummary> createState() => _SwapAstSummaryState();
@@ -189,6 +189,7 @@ class _SwapAstSummaryState extends State<SwapAstSummary> {
                       context,
                           ()async{
                         bool r=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletSecurityVerification()));
+                        if (!context.mounted) return;
                         if(r){
                           Navigator.pop(context,true);
                         }

@@ -2,7 +2,7 @@
 class MessageModel{
   bool error=false;
   MessageErrorType type=MessageErrorType.Default;
-  dynamic data=null;
+  dynamic data;
   MessageModel();
   MessageModel.error(){
     error=true;

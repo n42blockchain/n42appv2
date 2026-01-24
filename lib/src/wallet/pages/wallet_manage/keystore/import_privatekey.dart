@@ -11,7 +11,7 @@ import 'package:n42appv2/src/wallet/pages/create_wallet/create_password.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/all_chain.dart';
-import 'package:n42appv2/src/wallet/widgets/Choose_import_coin.dart';
+import 'package:n42appv2/src/wallet/widgets/choose_import_coin.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/comm_input.dart';
@@ -167,6 +167,7 @@ class _ImportPrivatekeyState extends State<ImportPrivatekey> {
                         InkWell(
                           onTap: ()async{
                             ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
+                            if (!mounted) return;
                             if (data != null) {
                               if (data.text != null && data.text != "null") {
                                 _keystoreController.text = data.text!;
@@ -268,6 +269,7 @@ class _ImportPrivatekeyState extends State<ImportPrivatekey> {
                       ),
                       onTap: ()async{
                         Map<String,dynamic>? rData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>ChooseImportCoin(selectChain: selectChain,)));
+                        if (!mounted) return;
                         if(rData !=null){
                           setState(() {
                             selectChain=rData;
@@ -329,8 +331,9 @@ class _ImportPrivatekeyState extends State<ImportPrivatekey> {
                             return;
                           }
                           MessageModel mm=await checkPraviteKey(keystoreJson);
+                          if (!mounted) return;
                           if(mm.error){
-                            errorMessage=S.of(context).g_key_210;
+                            errorMessage=S.of(this.context).g_key_210;
                             setState(() {});
                             ToastUtils.show(errorMessage);
                             return;
@@ -346,12 +349,13 @@ class _ImportPrivatekeyState extends State<ImportPrivatekey> {
                             pk: keystoreJson,
                             isImport: true,
                           );
+                          if (!mounted) return;
                           if(rm['legacy']!=""){
                             Uint8List ksjByte=hexToBytes(keystoreJson);
                             String base64Str=base64Encode(ksjByte);
-                            WalletInfo? findWalletInfo=Provider.of<WalletActionProvider>(context,listen: false).findWallet(pk: base64Str);
+                            WalletInfo? findWalletInfo=Provider.of<WalletActionProvider>(this.context,listen: false).findWallet(pk: base64Str);
                             if(findWalletInfo != null){
-                              errorMessage=S.of(context).g_key_214(findWalletInfo.walletName??"");
+                              errorMessage=S.of(this.context).g_key_214(findWalletInfo.walletName??"");
                               setState(() {});
                               //The wallet already exists, the wallet name is "Armani"
                               ToastUtils.show(errorMessage);
@@ -361,18 +365,19 @@ class _ImportPrivatekeyState extends State<ImportPrivatekey> {
                                 walletName: "",
                                 password: "",
                                 //path: WalletPath.init(),
-                                UUID: Provider.of<WalletActionProvider>(context,listen: false).UserUUID,
+                                UUID: Provider.of<WalletActionProvider>(this.context,listen: false).UserUUID,
                                 mnemonic: "",
                               privateKey: base64Str,
                               coinInfo: {selectChain['baseInfo']['mKey']:selectChain},
                             );
                             errorMessage="";
                             setState(() {});
-                            await Navigator.push(context,MaterialPageRoute(
+                            await Navigator.push(this.context,MaterialPageRoute(
                                 builder: (_) => CreatePassword(wInfo, createMetod: "PrivateKey",)));
-                            Navigator.of(context).pop(true);
+                            if (!mounted) return;
+                            Navigator.of(this.context).pop(true);
                           }else{
-                            errorMessage=S.of(context).g_key_210;
+                            errorMessage=S.of(this.context).g_key_210;
                             setState(() {});
                             ToastUtils.show(errorMessage);
                           }

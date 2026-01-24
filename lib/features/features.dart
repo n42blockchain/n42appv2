@@ -5,10 +5,9 @@
 //
 // Author: Jiang Yiwei
 
-/// Features Module
-///
-/// Re-exports all feature modules for convenient importing.
-library features;
+// Features Module
+//
+// Re-exports all feature modules for convenient importing.
 
 export 'wallet/wallet.dart';
 export 'chat/chat.dart';

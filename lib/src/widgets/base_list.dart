@@ -1,5 +1,4 @@
 ﻿import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 
@@ -56,7 +55,7 @@ class BaseList extends StatefulWidget {
   final int pageSize;
 
   const BaseList(
-      {Key? key,
+      {super.key,
         required this.buildItem,
         required this.getData,
         this.refreshController,
@@ -71,8 +70,7 @@ class BaseList extends StatefulWidget {
         this.crossAxisSpacing = 10,
         this.pageIndex = 1,
         this.pageSize = 10,
-        this.emptyView})
-      : super(key: key);
+        this.emptyView});
 
   @override
   State<BaseList> createState() => BaseListState();
@@ -119,9 +117,6 @@ class BaseListState extends State<BaseList> {
             context, AppThemeKeys.refreshBGColor.name),
         valueColor: AlwaysStoppedAnimation(AppThemeUtils.getColorByKey(
             context, AppThemeKeys.refreshValueColor.name)));
-
-    // 显示empty视图
-    final showEmpty = (listData == null || listData.isEmpty) && !isFirst;
 
     return EasyRefresh(
       child: _buildListOrGridView(),

@@ -70,15 +70,13 @@ Future<bool?> TipsDialog4(
                     onTap: () {
                       Navigator.of(context).pop(false);
                     },
-                    child: Container(
-                      child: Center(
-                        child: Text(
-                          S.of(context).g_key_79,
-                          style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(
-                                  context, AppThemeKeys.itemSubtitleTextColor.name),
-                              fontSize: ScreenUtil().setSp(30)),
-                        ),
+                    child: Center(
+                      child: Text(
+                        S.of(context).g_key_79,
+                        style: TextStyle(
+                            color: AppThemeUtils.getColorByKey(
+                                context, AppThemeKeys.itemSubtitleTextColor.name),
+                            fontSize: ScreenUtil().setSp(30)),
                       ),
                     ),
                   ),

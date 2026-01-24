@@ -20,9 +20,7 @@ class AddFriend extends StatefulWidget {
 class _AddFriendState extends State<AddFriend> {
   ChatApi? _chatApi;
   ChatApi get chatApi{
-    if(_chatApi==null){
-      _chatApi=ChatApi();
-    }
+    _chatApi ??= ChatApi();
     return _chatApi!;
   }
   String? searchKey;

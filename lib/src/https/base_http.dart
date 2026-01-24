@@ -1,6 +1,5 @@
 ﻿import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
-import 'package:flutter/foundation.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:n42appv2/core/app/app_globals.dart';
@@ -99,9 +98,9 @@ class BaseHttp {
       {required String method,
         required Map<String,dynamic> params,
         data,
-        dynamic? sendProgress = null,
-        dynamic? receiveProgress = null,
-        var cancelToken=null, //String? contentType,
+        dynamic sendProgress,
+        dynamic receiveProgress,
+        var cancelToken, //String? contentType,
         Map<String,dynamic>? header,
         bool defaultReturn=true,//默认方式返回数据，
         Map<String,String>? userInfo,//加到header里的用户信息source=app，uuid，token
@@ -182,11 +181,8 @@ class BaseHttp {
       if (response.statusCode == 200 || response.statusCode == 201 || response.statusCode == 202) {
         try {
           var data = response.data;
-          dynamic mData;
           if(data is String){
-            mData = json.decode(data.toString());
-          }else{
-            mData = data;
+            json.decode(data.toString());
           }
           if(defaultReturn){
             /// token过期处理
@@ -219,9 +215,9 @@ class BaseHttp {
         String message=_handleHttpError(response.statusCode);
         return Future.error(message);
       }
-    } on DioException catch (e, s) {
+    } on DioException catch (e) {
       return Future.error(_dioError(e));
-    } catch (e, s) {
+    } catch (e) {
       return Future.error(S.current.g_key_error_3);
     }
   }
@@ -258,8 +254,6 @@ class BaseHttp {
       case DioExceptionType.cancel:
         return S.current.g_key_error_8;
       case DioExceptionType.unknown:
-        return S.current.g_key_error_10;
-      default:
         return S.current.g_key_error_10;
     }
   }
@@ -347,9 +341,9 @@ class BaseHttp {
   Future<T> post<T>(String path,
       {required Map<String,dynamic> params,
         data,
-        dynamic? sendProgress = null,
-        dynamic? receiveProgress = null,
-        var cancelToken=null,
+        dynamic sendProgress,
+        dynamic receiveProgress,
+        var cancelToken,
         //String? contentType,
         Map<String,dynamic>? header,
         bool defaultReutrn=true,

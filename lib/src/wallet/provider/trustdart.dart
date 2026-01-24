@@ -5,7 +5,7 @@ import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:flutter/services.dart';
 
 class Trustdart {
-  MethodChannel _channel = const MethodChannel('trustdart');
+  final MethodChannel _channel = const MethodChannel('trustdart');
   //生成12个助记词 128 默认，生成15个助记词 160,生成18个助记词 192,生成21个助记词 228,生成24个助记词 256，
   Future<String> generateMnemonic({String passphrase = "",int length = 128}) async {
     try {

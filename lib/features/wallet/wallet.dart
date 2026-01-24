@@ -5,14 +5,13 @@
 //
 // Author: Jiang Yiwei
 
-/// Wallet Feature Module
-///
-/// This module handles all wallet-related functionality:
-/// - Wallet creation and import
-/// - Balance management
-/// - Transaction handling
-/// - Token management
-library wallet;
+// Wallet Feature Module
+//
+// This module handles all wallet-related functionality:
+// - Wallet creation and import
+// - Balance management
+// - Transaction handling
+// - Token management
 
 // Domain Layer
 export 'domain/entities/wallet_entity.dart' hide ChainType;

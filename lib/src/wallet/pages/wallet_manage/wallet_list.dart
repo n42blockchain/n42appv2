@@ -84,6 +84,7 @@ class _WalletListState extends State<WalletList> {
           mnemonic: info.mnemonic??"",
           pk:info.privateKey??"",
       );
+      if (!mounted) return;
       if(addr.toUpperCase()==addressMap['legacy'].toString().toUpperCase()){
         fbwCheck=true;
         fbwIndex=i;
@@ -97,6 +98,7 @@ class _WalletListState extends State<WalletList> {
   verify()async{
     if(load==Load.loading)return;
     String? rData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>FaceMatch(2)));
+    if (!mounted) return;
     if(rData !=null){
       checkFaceBindAddress(rData);
     }else{
@@ -107,6 +109,7 @@ class _WalletListState extends State<WalletList> {
     if(load==Load.loading)return;
 
     String? rData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>FaceMatch(2)));
+    if (!mounted) return;
     if(rData ==null) {
       ToastUtils.show(S.of(context).g_face_match_key34);
       return;
@@ -127,6 +130,7 @@ class _WalletListState extends State<WalletList> {
       pk:info.privateKey??"",
     );
     MessageModel rmm=await FaceApi().deleteBinding(addressMap['legacy'].toString());
+    if (!mounted) return;
     if(rmm.error){
       ToastUtils.show(S.of(context).g_face_match_key35);
     }else{
@@ -140,6 +144,7 @@ class _WalletListState extends State<WalletList> {
   bind()async{
     if(load==Load.loading)return;
     MessageModel? rData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>FaceUserNotice()));
+    if (!mounted) return;
     if(rData !=null){
       if(rData.error==false){
         initData();
@@ -295,7 +300,7 @@ class _WalletListState extends State<WalletList> {
           c4]);
       }
       else{
-        Widget c1=Container(
+        Widget c1=SizedBox(
           width: double.infinity,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -396,7 +401,7 @@ class _WalletListState extends State<WalletList> {
     );
   }
   faceBindButton(String title,onTap){
-    return Container(
+    return SizedBox(
       height: ScreenUtil().setWidth(80),
       width: double.infinity,
       child: ButtonStyle2(context, onTap, title),
@@ -434,6 +439,7 @@ class _WalletListState extends State<WalletList> {
             final controller = TextEditingController();
             final flag = await TipsDialog4(context, null,
                 controller: controller);
+            if (!context.mounted) return;
             if (flag != null && flag) {
               final password = controller.text.trim();
               if (password != info.password) {

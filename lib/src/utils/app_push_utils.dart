@@ -262,12 +262,8 @@ class AppPushUtils {
       }
       final itemMap = json.decode(jsonData);
       debugPrint("itemMap : $itemMap");
-      FileItemInfo item = FileItemInfo.fromJson(itemMap);
+      FileItemInfo.fromJson(itemMap);
 
-      final isSender = item.s_email == AppGlobals.userInfo?.email;
-      final nickName = isSender ? item.r_name : item.s_name;
-      final email = (isSender ? item.r_email : item.s_email) ?? '';
-      final uuid = isSender ? item.r_uuid : item.s_uuid;
       /*Navigator.push(
         AppGlobals.navigatorKey.currentContext!,
         MaterialPageRoute(
@@ -283,9 +279,11 @@ class AppPushUtils {
       Map<String, dynamic> txContent = {};
       try {
         txContent = json.decode(data['data']);
-      } catch (e) {}
+      } catch (_) {
+        // JSON 解析失败时使用空 map，安全忽略
+      }
       String? isTestStr = txContent['network'];
-      bool? isTest = null;
+      bool? isTest;
       if (isTestStr != null) {
         isTest = isTestStr == "test" ? true : false;
       }
@@ -301,9 +299,11 @@ class AppPushUtils {
       Map<String, dynamic> txContent = {};
       try {
         txContent = json.decode(data['data']);
-      } catch (e) {}
+      } catch (_) {
+        // JSON 解析失败时使用空 map，安全忽略
+      }
       String? isTestStr = txContent['network'];
-      bool? isTest = null;
+      bool? isTest;
       if (isTestStr != null) {
         isTest = isTestStr == "test" ? true : false;
       }
@@ -319,11 +319,13 @@ class AppPushUtils {
       Map<String, dynamic> txContent = {};
       try {
         txContent = json.decode(data['data']);
-      } catch (e) {}
+      } catch (_) {
+        // JSON 解析失败时使用空 map，安全忽略
+      }
       String chain = (txContent['chain'] ?? "").toUpperCase();
       double percentage = txContent['percentage'] ?? 0;
       String content =
-          "Over ${percentage}% change in the price of ${chain} within 24 hours. ";
+          "Over $percentage% change in the price of $chain within 24 hours. ";
       //int created = (txContent['created']??0) as int;
       //String createTime=DateTime.fromMicrosecondsSinceEpoch(created*1000).toString();
       DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
@@ -340,7 +342,9 @@ class AppPushUtils {
       Map<String, dynamic> txContent = {};
       try {
         txContent = json.decode(data['data']);
-      } catch (e) {}
+      } catch (_) {
+        // JSON 解析失败时使用空 map，安全忽略
+      }
       Navigator.push(
           AppGlobals.navigatorKey.currentContext!,
           MaterialPageRoute(

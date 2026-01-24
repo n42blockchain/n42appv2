@@ -6,7 +6,6 @@ import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/pages/add_token/wallet_coin_add_all.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
@@ -23,8 +22,8 @@ import 'package:n42appv2/generated/l10n.dart';
 /// 
 /// Handles WalletConnect integration for DApp connections
 class WalletConnectPage extends ConsumerStatefulWidget {
-  String uri;
-  WalletConnectPage(this.uri, {super.key});
+  final String uri;
+  const WalletConnectPage(this.uri, {super.key});
 
   @override
   ConsumerState<WalletConnectPage> createState() => _WalletConnectPageState();
@@ -78,7 +77,6 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
   dAppConnectWidget(WalletConnectProvider connectV2){
     Widget connectChild=Container();
     String title="";
-    Widget? titleRightWidget;
     switch(connectV2.walletConnectState){
       case WalletConnectState.loading:
         connectChild=partWidget();
@@ -86,7 +84,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       case WalletConnectState.selectChain:
         connectChild=selectChainWidget(connectV2);
         title=S.of(context).g_connect_key11;
-        titleRightWidget=InkWell(
+        InkWell(
           onTap: () async {
             bool r = await Navigator.push(
                 context,
@@ -170,7 +168,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
     String dAppWebUrl="";
     String dAppDesc="";
     if(connectV2.metadata !=null){
-      iconUrl=connectV2.metadata!.icons.length!=0?connectV2.metadata!.icons[0]:"";
+      iconUrl=connectV2.metadata!.icons.isNotEmpty?connectV2.metadata!.icons[0]:"";
       dAppName=connectV2.metadata!.name;
       dAppWebUrl=connectV2.metadata!.url;
       dAppDesc=connectV2.metadata!.description;
@@ -183,7 +181,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if(iconUrl !="")
-            Container(
+            SizedBox(
               height: ScreenUtil().setWidth(90),
               width: ScreenUtil().setWidth(90),
               child: ImageNetWork(imageUrl:
@@ -192,7 +190,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
               ),
             ),
           if(dAppName !="")
-            Container(
+            SizedBox(
               height: ScreenUtil().setWidth(60),
               width: double.infinity,
               child: Text(
@@ -230,7 +228,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
                   //dAppName
                 )));
               },
-              child: Container(
+              child: SizedBox(
                 height: ScreenUtil().setWidth(60),
                 width: double.infinity,
                 child: Text(
@@ -293,7 +291,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
                   placeholder: "assets/img/list_default.png",
                 );
               }
-              return Container(
+              return SizedBox(
                 height: ScreenUtil().setWidth(120),
                 width: double.infinity,
                 child: Row(
@@ -418,7 +416,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
         Expanded(
           flex: 1,
           child: Center(
-            child: Container(
+            child: SizedBox(
               height: ScreenUtil().setWidth(160),
               width: ScreenUtil().setWidth(160),
               child: Image.asset("assets/wallet/icon_net.png",color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),),
@@ -457,6 +455,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
             child: buttonWidget(
               S.of(context).g_key_4, ()async{
               String scanStr=await scan();
+              if (!mounted) return;
               if(scanStr.contains('relay-protocol') && scanStr.contains('symKey')){
                 connectV2.viewState_deal(WalletConnectState.loading,params: scanStr);
               }else{
@@ -509,7 +508,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
     );
   }
   transactionOKButton(WalletConnectProvider connectV2){
-    if(connectV2.walletConnectState==WalletConnectState.transactionOK)
+    if(connectV2.walletConnectState==WalletConnectState.transactionOK) {
       return Container(
         height: ScreenUtil().setWidth(150),
         width: double.infinity,
@@ -538,8 +537,10 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
           ],
         ),
       );
-    if(connectV2.walletConnectState==WalletConnectState.transaction)
+    }
+    if(connectV2.walletConnectState==WalletConnectState.transaction) {
       return buttonLoadingWidget("${S.of(context).g_key_106}...");
+    }
   }
   messageSignOKWidget(WalletConnectProvider connectV2){
     return Column(
@@ -574,7 +575,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
     );
   }
   messageSignOKButton(WalletConnectProvider connectV2){
-    if(connectV2.walletConnectState==WalletConnectState.messageSignOK)
+    if(connectV2.walletConnectState==WalletConnectState.messageSignOK) {
       return Container(
         height: ScreenUtil().setWidth(150),
         width: double.infinity,
@@ -603,8 +604,10 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
           ],
         ),
       );
-    if(connectV2.walletConnectState==WalletConnectState.messageSign)
+    }
+    if(connectV2.walletConnectState==WalletConnectState.messageSign) {
       return buttonLoadingWidget("${S.of(context).g_key_106}...");
+    }
   }
   errorWidget(WalletConnectProvider connectV2){
     return Column(
@@ -648,7 +651,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
     );
   }
   buttonWidget(String title,dynamic onTap){
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: ScreenUtil().setWidth(88.0),
       child: ButtonStyle2(context, (){

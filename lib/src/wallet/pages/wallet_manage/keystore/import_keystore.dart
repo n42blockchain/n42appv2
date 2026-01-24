@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
@@ -8,7 +6,7 @@ import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/all_chain.dart';
-import 'package:n42appv2/src/wallet/widgets/Choose_import_coin.dart';
+import 'package:n42appv2/src/wallet/widgets/choose_import_coin.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/comm_input.dart';
@@ -22,7 +20,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class ImportKeystore extends StatefulWidget {
-  ImportKeystore({super.key});
+  const ImportKeystore({super.key});
 
   @override
   State<ImportKeystore> createState() => _ImportKeystoreState();
@@ -222,6 +220,7 @@ class _ImportKeystoreState extends State<ImportKeystore> {
                       ),
                       onTap: ()async{
                         Map<String,dynamic>? rData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>ChooseImportCoin(selectChain: selectChain,)));
+                        if (!mounted) return;
                         if(rData !=null){
                           setState(() {
                             selectChain=rData;
@@ -389,7 +388,7 @@ class _ImportKeystoreState extends State<ImportKeystore> {
     SheetBottom(
         context,
         S.of(context).g_key_17,
-        Container(
+        SizedBox(
           width: double.infinity,
           height: ScreenUtil().setWidth(1000),
           child: child,
@@ -403,6 +402,7 @@ class _ImportKeystoreState extends State<ImportKeystore> {
 
       //if(selectIndex ==-1)return;
       Map<dynamic,dynamic> walletInfo=await Trustdart().getWalletInfoWithKeyStore(keystoreJson, cInfo['baseInfo']['coinType']!, password);
+      if (!mounted) return;
       if(walletInfo['privateKey']!=""){
         //这里能生成Wallet对象说明是导入成功的success
         //生成本地walletInfo对象 在列表中展示
@@ -431,6 +431,7 @@ class _ImportKeystoreState extends State<ImportKeystore> {
         // 添加到集合中
         final res = await Provider.of<WalletActionProvider>(context,listen: false)
             .addImportWalletInfo(info);
+        if (!mounted) return;
         if (res) {
           //关闭页面
           Navigator.of(context).pop(true);

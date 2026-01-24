@@ -22,9 +22,9 @@ class GroupDetailPage extends StatefulWidget {
   final GroupInfo info;
 
   const GroupDetailPage({
-    Key? key,
+    super.key,
     required this.info,
-  }) : super(key: key);
+  });
 
   @override
   State<GroupDetailPage> createState() => _GroupDetailPageState();
@@ -33,9 +33,7 @@ class GroupDetailPage extends StatefulWidget {
 class _GroupDetailPageState extends State<GroupDetailPage> {
   ChatApi? _chatApi;
   ChatApi get chatApi{
-    if(_chatApi==null){
-      _chatApi=ChatApi();
-    }
+    _chatApi ??= ChatApi();
     return _chatApi!;
   }
   List<GroupMemberInfo> groupMemberList = [];
@@ -415,8 +413,9 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                           //更新群聊天ui的底部按钮
                           eventBus.fire(EventPublic(
                               EventPublicType.updateGroupInfo));
+                          if (!mounted) return;
                           setState(() {});
-                          Navigator.pop(context);
+                          Navigator.pop(this.context);
                         }
                       }
                     }
@@ -438,8 +437,9 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                           //更新群聊天ui的底部按钮
                           eventBus.fire(EventPublic(
                               EventPublicType.updateGroupInfo));
+                          if (!mounted) return;
                           setState(() {});
-                          Navigator.pop(context);
+                          Navigator.pop(this.context);
                         }
                       }
                     }

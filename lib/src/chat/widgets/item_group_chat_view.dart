@@ -1,11 +1,9 @@
 ﻿import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/api/chat_db_api.dart';
-import 'package:n42appv2/src/chat/api/file_api.dart';
 import 'package:n42appv2/src/chat/models/chat_message_model.dart';
 import 'package:n42appv2/src/chat/models/friend_info.dart';
 import 'package:n42appv2/src/chat/models/group_data.dart';
@@ -41,19 +39,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ItemGroupChatView extends StatefulWidget {
   final bool isCurrentUser;
-  ChatMessageModel item;
+  final ChatMessageModel item;
   final String? time;
   final String mPrivateKey;
-  dynamic type10OnTap;
+  final dynamic type10OnTap;
 
-  ItemGroupChatView(
-      {Key? key,
+  const ItemGroupChatView(
+      {super.key,
         required this.isCurrentUser,
         required this.item,
         this.time,
         required this.mPrivateKey,
-        this.type10OnTap})
-      : super(key: key);
+        this.type10OnTap});
 
   @override
   State<ItemGroupChatView> createState() => _ItemGroupChatViewState();
@@ -63,23 +60,17 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
     with AutomaticKeepAliveClientMixin {
   ChatApi? _chatApi;
   ChatApi get chatApi{
-    if(_chatApi==null){
-      _chatApi=ChatApi();
-    }
+    _chatApi ??= ChatApi();
     return _chatApi!;
   }
   ChatDBApi? _chatDBApi;
   ChatDBApi get chatDBApi{
-    if(_chatDBApi==null){
-      _chatDBApi=ChatDBApi();
-    }
+    _chatDBApi ??= ChatDBApi();
     return _chatDBApi!;
   }
   FileUtils? fileUtils;
   FileUtils get _fileUtils{
-    if(fileUtils==null){
-      fileUtils= FileUtils();
-    }
+    fileUtils ??= FileUtils();
     return fileUtils!;
   }
   //1 = text 、2= video、3= image、Location = 4   File = 5  RedEnvelope = 10  Tip_Notification = 90 提示文本
@@ -173,7 +164,8 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
           }
         }
       }
-    } catch (err) {
+    } catch (_) {
+      // 获取群密码失败时安全忽略，无法解密消息时显示默认图标
     }
   }
 
@@ -203,8 +195,8 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
       if (mounted) {
         setState(() {});
       }
-    } catch (err) {
-
+    } catch (_) {
+      // 更新用户信息失败时安全忽略，使用默认头像
     }
   }
 
@@ -261,7 +253,8 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
               if (mounted) {
                 setState(() {});
               }
-            } catch (err) {
+            } catch (_) {
+              // 文本消息解密失败时安全忽略，显示默认图标
             }
           }
         }else if(messageType == 10){
@@ -289,7 +282,8 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
               if (mounted) {
                 setState(() {});
               }
-            } catch (err) {
+            } catch (_) {
+              // 红包消息解密失败时安全忽略，显示默认图标
             }
           }
         }
@@ -328,11 +322,6 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
 
             String savePath = await _fileUtils.getTempDirByName(fileName);
             debugPrint("savePath : $savePath");
-            String openFileName =
-            fileName.substring(0, fileName.lastIndexOf('.'));
-            String openFilepath =
-            await _fileUtils.getTempDirByName(openFileName);
-            File openFile = File(openFilepath);
 
 
             ///Perform file download
@@ -368,12 +357,14 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
 
                 setState(() {});
               } else {
+                // 文件解密失败时安全忽略，显示默认图标
               }
             }
           }
         }
       }
-    } catch (err) {
+    } catch (_) {
+      // 消息处理过程中的错误安全忽略，显示默认图标
     } finally {
       isLoading = false;
     }
@@ -772,7 +763,7 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
   }
 
   _buildItem(BuildContext context) {
-    BorderRadiusGeometry? _borderRadius = widget.isCurrentUser
+    BorderRadiusGeometry? borderRadius = widget.isCurrentUser
         ? const BorderRadius.only(
         topLeft: Radius.circular(8),
         topRight: Radius.circular(8),
@@ -799,7 +790,7 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
                   color: widget.isCurrentUser
                       ? const Color(0xff1976F9)
                       : Colors.grey[300],
-                  borderRadius: _borderRadius,
+                  borderRadius: borderRadius,
                 ),
                 child: Padding(
                     padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
@@ -827,7 +818,7 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
                     color: widget.isCurrentUser
                         ? const Color(0xff1976F9)
                         : Colors.grey[300],
-                    borderRadius: _borderRadius,
+                    borderRadius: borderRadius,
                   ),
                   child: Padding(
                       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),

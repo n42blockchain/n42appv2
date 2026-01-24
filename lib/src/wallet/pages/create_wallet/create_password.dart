@@ -7,16 +7,16 @@ import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/pages/create_wallet/create_finish.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
-import 'package:n42appv2/src/widgets/textField_widget.dart';
+import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
 class CreatePassword extends StatefulWidget {
-  WalletInfo wInfo;
-  String createMetod;//Create,Import,PrivateKey
-  CreatePassword(this.wInfo,{this.createMetod="Create",super.key});
+  final WalletInfo wInfo;
+  final String createMetod;//Create,Import,PrivateKey
+  const CreatePassword(this.wInfo,{this.createMetod="Create",super.key});
 
   @override
   State<CreatePassword> createState() => _CreatePasswordState();
@@ -24,11 +24,11 @@ class CreatePassword extends StatefulWidget {
 
 class _CreatePasswordState extends State<CreatePassword> {
   final TextEditingController _titleController = TextEditingController();
-  TextEditingController _uPasswordController = TextEditingController();
-  TextEditingController _uPasswordConfirmController = TextEditingController();
-  FocusNode _uPasswordFocusNode = FocusNode();
-  FocusNode _titleFocusNode = FocusNode();
-  FocusNode _uPasswordConfirmFocusNode = FocusNode();
+  final TextEditingController _uPasswordController = TextEditingController();
+  final TextEditingController _uPasswordConfirmController = TextEditingController();
+  final FocusNode _uPasswordFocusNode = FocusNode();
+  final FocusNode _titleFocusNode = FocusNode();
+  final FocusNode _uPasswordConfirmFocusNode = FocusNode();
   String titleErrorMessage="";
   String uPasswordErrorMessage="";
   String uPasswordConfirmErrorMessage="";
@@ -165,7 +165,7 @@ class _CreatePasswordState extends State<CreatePassword> {
                       ),
                     ),
                     LoginTitle(
-                      title: '${S.of(context).login_password}',
+                      title: S.of(context).login_password,
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor10.name),
                       must: true,
                     ),

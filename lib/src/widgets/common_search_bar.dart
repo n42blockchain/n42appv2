@@ -14,13 +14,12 @@ class CommonSearchBar extends StatefulWidget {
   final bool isCanClear;
 
   const CommonSearchBar(
-      {Key? key,
+      {super.key,
         this.controller,
         this.placeholder,
         this.onTap,
         this.isCanClear = true,
-        this.onDelete})
-      : super(key: key);
+        this.onDelete});
 
   @override
   State<CommonSearchBar> createState() => _CommonSearchBarState();

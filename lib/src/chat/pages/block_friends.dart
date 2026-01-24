@@ -20,9 +20,7 @@ class BlockFriends extends StatefulWidget {
 class _BlockFriendsState extends State<BlockFriends> {
   ChatApi? _chatApi;
   ChatApi get chatApi{
-    if(_chatApi==null){
-      _chatApi=ChatApi();
-    }
+    _chatApi ??= ChatApi();
     return _chatApi!;
   }
   List<FriendInfo> blockFriends = [];

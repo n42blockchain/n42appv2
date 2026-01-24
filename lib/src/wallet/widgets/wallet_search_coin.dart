@@ -24,7 +24,7 @@ import 'package:n42appv2/generated/l10n.dart';
 
 class WalletSearchCoin extends StatefulWidget {
   final int type;//0转账，1收币
-  WalletSearchCoin(this.type,{super.key});
+  const WalletSearchCoin(this.type,{super.key});
 
   @override
   State<WalletSearchCoin> createState() => _WalletSearchCoinState();
@@ -33,9 +33,7 @@ class WalletSearchCoin extends StatefulWidget {
 class _WalletSearchCoinState extends State<WalletSearchCoin> {
   Regular? _regular;
   Regular get regular{
-    if(_regular==null){
-      _regular=Regular();
-    }
+    _regular ??= Regular();
     return _regular!;
   }
   final oCcy = NumberFormat("#,##0.0#", "en_US");
@@ -83,7 +81,7 @@ class _WalletSearchCoinState extends State<WalletSearchCoin> {
     // TODO: implement build
     return Consumer<WalletActionProvider>(
         builder: (context, waValue, child) {
-          return Container(
+          return SizedBox(
             height: ScreenUtil().setWidth(800.0),
             width: double.infinity,
             child: Column(
@@ -182,7 +180,7 @@ class _WalletSearchCoinState extends State<WalletSearchCoin> {
         },
       );
     }else{
-      if(coinlist_seach.length==0){
+      if(coinlist_seach.isEmpty){
         return const EmptyView();
       }else{
         return ListView.builder(
@@ -264,7 +262,9 @@ class _WalletSearchCoinState extends State<WalletSearchCoin> {
               },
             ),
           );
+          if (!mounted) return;
         }else{
+          if (!mounted) return;
           if(coinInfo.coin['isContract']){
             int cIndex=Provider.of<WalletActionProvider>(context,listen: false).coinModels.indexWhere((element){
               if(element.coin['coinType']==coinInfo.coin['coinType']){
@@ -279,6 +279,7 @@ class _WalletSearchCoinState extends State<WalletSearchCoin> {
                 builder: (context)=>WalletReceiveQr(chainCoinModel,tokenCoinModel: coinInfo,),
               ),
             );
+            if (!mounted) return;
           }
           else{
             await Navigator.push(
@@ -287,6 +288,7 @@ class _WalletSearchCoinState extends State<WalletSearchCoin> {
                 builder: (context)=>WalletReceiveQr(coinInfo),
               ),
             );
+            if (!mounted) return;
           }
         }
         Navigator.pop(context);
@@ -333,6 +335,7 @@ class _WalletSearchCoinState extends State<WalletSearchCoin> {
               ),
             ),
             Expanded(
+              flex: 1,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -351,7 +354,7 @@ class _WalletSearchCoinState extends State<WalletSearchCoin> {
                               fontWeight: FontWeight.bold),
                         ),
                       ),
-                      Text("\$${balanceStr}",
+                      Text("\$$balanceStr",
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(30.0),
                             color: AppThemeUtils.getColorByKey(
@@ -380,7 +383,6 @@ class _WalletSearchCoinState extends State<WalletSearchCoin> {
                   ),
                 ],
               ),
-              flex: 1,
             ),
           ],
         ),

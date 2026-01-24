@@ -146,7 +146,7 @@ class AppDatabase{
       whereStr = " and state=0";
     }
     var response = await db.query("BtcTransactionRecord",
-        where: 'coinMiniName="${coinKey}" and address="${address}" ${whereStr}',
+        where: 'coinMiniName="$coinKey" and address="$address" $whereStr',
         orderBy: "txTime desc",
         limit: pageSize,
         offset: (pageNum - 1) * pageSize);
@@ -168,7 +168,7 @@ class AppDatabase{
     } else if (selectType == 2) {
       whereStr = " and state=0";
     }
-    var where = 'address="${address}" and contract="${contract.toLowerCase()}" and isTest=${isTest} and coinMiniName="${miniName}"${whereStr}';
+    var where = 'address="$address" and contract="${contract.toLowerCase()}" and isTest=$isTest and coinMiniName="$miniName"$whereStr';
     var response = await db.query("TransationRecord",
         where: where,
         orderBy: "txTime desc",
@@ -210,7 +210,7 @@ class AppDatabase{
       String txHash,String address) async {
     final db = await database;
     var response =
-    await db.query("TransationRecord", where: 'txHash="${txHash}" and address="${address}"');
+    await db.query("TransationRecord", where: 'txHash="$txHash" and address="$address"');
     List<TransationRecordModel> list =
     response.map((c) => TransationRecordModel.fromMap(c)).toList();
     return list;
@@ -220,7 +220,7 @@ class AppDatabase{
       String userUuid) async {
     final db = await database;
     var response = await db.query("TransationRecord",
-        where: 'state=0 and userUuid="${userUuid}"',);
+        where: 'state=0 and userUuid="$userUuid"',);
     List<TransationRecordModel> list =
     response.map((c) => TransationRecordModel.fromMap(c)).toList();
     return list;
@@ -235,7 +235,7 @@ class AppDatabase{
       whereStr = " and state=0";
     }
     var response = await db.query("BtcTransactionRecord",
-        where: 'userUuid="${userUuid}" ${whereStr}', orderBy: "trId desc");
+        where: 'userUuid="$userUuid" $whereStr', orderBy: "trId desc");
     List<BtcTransactionRecodeModel> list =
     response.map((c) => BtcTransactionRecodeModel.fromMap(c)).toList();
     return list;
@@ -244,7 +244,7 @@ class AppDatabase{
       String txHash) async {
     final db = await database;
     var response = await db.query("BtcTransactionRecord",
-        where: 'txHash="${txHash}"',);
+        where: 'txHash="$txHash"',);
     List<BtcTransactionRecodeModel> list =
     response.map((c) => BtcTransactionRecodeModel.fromMap(c)).toList();
     return list;
@@ -261,19 +261,19 @@ class AppDatabase{
   //修改浏览器收藏表
   updateBrowserCollection(Map<String, dynamic> map, int id) async {
     final db = await database;
-    var response = await db.update("browserCollection", map, where: "id=${id}");
+    var response = await db.update("browserCollection", map, where: "id=$id");
     return response;
   }
 
   //删除浏览器收藏表
   deleteBrowserCollection(int id) async {
     final db = await database;
-    await db.delete("browserCollection", where: "id=${id}");
+    await db.delete("browserCollection", where: "id=$id");
   }
 
   deleteBrowserCollection_url(String url) async {
     final db = await database;
-    return await db.delete("browserCollection", where: 'url="${url}"');
+    return await db.delete("browserCollection", where: 'url="$url"');
   }
 
   selectBrowserCollection({int pageSize = 10, int pageNum = 1}) async {
@@ -287,7 +287,7 @@ class AppDatabase{
 
   selectBrowserCollection_url(String url) async {
     final db = await database;
-    var response = await db.query("browserCollection", where: 'url="${url}"');
+    var response = await db.query("browserCollection", where: 'url="$url"');
     List<BrowserCollectionModel> list =
     response.map((c) => BrowserCollectionModel.fromJson(c)).toList();
     return list;
@@ -307,7 +307,7 @@ class AppDatabase{
     var response = await db.query("browserHistory",
         columns: ["url"],
         distinct: true,
-        where: 'url like "%${urlStr}%"',
+        where: 'url like "%$urlStr%"',
         orderBy: "id desc",
         limit: pageSize,
         offset: (pageNum - 1) * pageSize);
@@ -341,14 +341,14 @@ class AppDatabase{
     );
     List<BrowserSearchHistoryModel> list =
     response.map((c) => BrowserSearchHistoryModel.fromJson(c)).toList();
-    if (list.length == 0) {
+    if (list.isEmpty) {
       var raw = await db.insert("browserSearchHistory", map,
           conflictAlgorithm: ConflictAlgorithm.rollback);
       return raw;
     } else {
       BrowserSearchHistoryModel bshm = list[0];
       bshm.searchCount = bshm.searchCount! + 1;
-      var raw = await db.update('browserSearchHistory', bshm.getMap(),
+      await db.update('browserSearchHistory', bshm.getMap(),
           where: 'id=${bshm.id}');
     }
   }

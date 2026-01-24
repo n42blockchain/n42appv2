@@ -20,9 +20,7 @@ class BottomGroupMemberDialog extends StatefulWidget {
 class _BottomGroupMemberDialogState extends State<BottomGroupMemberDialog> {
   ChatApi? _chatApi;
   ChatApi get chatApi{
-    if(_chatApi==null){
-      _chatApi=ChatApi();
-    }
+    _chatApi ??= ChatApi();
     return _chatApi!;
   }
   List<GroupMemberInfo> groupMemberList = [];

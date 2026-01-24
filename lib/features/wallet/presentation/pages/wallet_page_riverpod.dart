@@ -106,7 +106,7 @@ class _BalanceCard extends StatelessWidget {
                 height: 40,
                 child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
               ),
-              error: (_, __) => Text(
+              error: (_, _) => Text(
                 '\$0.00',
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                       fontWeight: FontWeight.bold,

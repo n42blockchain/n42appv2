@@ -29,9 +29,9 @@ import 'package:provider/provider.dart';
 import 'package:web3dart/crypto.dart';
 
 class TransactionRetry extends StatefulWidget {
-  String txHash;
-  CoinModel coinModel;
-  TransactionRetry(this.coinModel,this.txHash,{super.key});
+  final String txHash;
+  final CoinModel coinModel;
+  const TransactionRetry(this.coinModel,this.txHash,{super.key});
 
   @override
   State<TransactionRetry> createState() => _TransactionRetryState();
@@ -40,16 +40,12 @@ class TransactionRetry extends StatefulWidget {
 class _TransactionRetryState extends State<TransactionRetry> {
   EthAPI? _ethAPI;
   EthAPI get ethAPI{
-    if(_ethAPI==null){
-      _ethAPI=EthAPI();
-    }
+    _ethAPI ??= EthAPI();
     return _ethAPI!;
   }
   AppDatabase? _db;
   AppDatabase get db{
-    if(_db==null){
-      _db=AppDatabase();
-    }
+    _db ??= AppDatabase();
     return _db!;
   }
   TextEditingController searchEditingController=TextEditingController();
@@ -57,10 +53,12 @@ class _TransactionRetryState extends State<TransactionRetry> {
   String errorMessage="";
   TransationRecordModel trm=TransationRecordModel();
   late TokenViewApi tokenViewApi;
+  late String _txHash;
   @override
   void initState() {
     // TODO: implement initState
-    searchEditingController.text=widget.txHash;
+    _txHash = _txHash;
+    searchEditingController.text=_txHash;
     init();
     super.initState();
   }
@@ -74,18 +72,19 @@ class _TransactionRetryState extends State<TransactionRetry> {
     super.dispose();
   }
   init()async{
-    if(widget.txHash==""){
-      widget.txHash=searchEditingController.text;
+    if(_txHash==""){
+      _txHash=searchEditingController.text;
     }
-    if(widget.txHash==""){
+    if(_txHash==""){
       owner=false;
       return;
     }
     setState(() {
       load=Load.loading;
     });
-    List<TransationRecordModel> trModelList=await db.selectTransationRecord_txHash(widget.txHash,widget.coinModel.address);
-    if(trModelList.length!=0){
+    List<TransationRecordModel> trModelList=await db.selectTransationRecord_txHash(_txHash,widget.coinModel.address);
+    if (!mounted) return;
+    if(trModelList.isNotEmpty){
       trm=trModelList[0];
     }
     else{
@@ -129,7 +128,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
   Timer? timer;
   getTransactionByHash()async{
     MessageModel rData=await ethAPI.getTransactionByHash(
-        widget.txHash,
+        _txHash,
         coinType: widget.coinModel.coin['coinType'],);
     if(rData.error==false){
       if(rData.data==null){
@@ -161,12 +160,14 @@ class _TransactionRetryState extends State<TransactionRetry> {
           trm.message="";
           String input=transactionInfo!['input'];
           String to=input.substring(10,74).substring(24);
-          trm.to1="0x${to}";
+          trm.to1="0x$to";
           //String match=input.substring(0,10);
           String valueStr=input.substring(74,138);
           trm.price=hexToInt(valueStr);
           value='${toEther(trm.price.toString(), widget.coinModel.coin['decimals'])} ${widget.coinModel.coin['unit']}';
-        }catch(e){}
+        } catch (_) {
+          // 错误安全忽略
+        }
       }
       if(trm.from1.toLowerCase() != (transactionInfo?['from']??"").toString().toLowerCase()){
         owner=false;
@@ -182,7 +183,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
   }
   getTransactionReceipt()async{
     MessageModel rData=await ethAPI.getTransactionReceipt(
-        widget.txHash,
+        _txHash,
         coinType: widget.coinModel.coin['coinType'],);
     if(rData.error==false){
       transactionInfoReceipt=rData.data;
@@ -246,6 +247,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
         contract: widget.coinModel.isTest?widget.coinModel.coin['contract_test']:widget.coinModel.coin['contract'],
         isTest: widget.coinModel.isTest,
       );
+      if (!mounted) return;
       if(ethMessage.error==false){
         trm.gas=(ethMessage.data as BigInt).toInt();
         trm.gasPrice=trm.gasPriceValue*BigInt.from(trm.gas);
@@ -255,6 +257,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
       }
 
       bool check=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletBaseSend(trm,null,trm.coin['unit'])));
+      if (!mounted) return;
       if(check==false){
         setState(() {
           load=Load.finish;
@@ -266,15 +269,18 @@ class _TransactionRetryState extends State<TransactionRetry> {
           trModel: trm,
           privateKey: widget.coinModel.privateKey,
           pathIndex: widget.coinModel.pathIndex);
+      if (!mounted) return;
       if(mm.error){
         ToastUtils.show(ethMessage.data);
       }else{
         trm.txHash=mm.data;
         if(trm.trId==0){
           trm.trId=await db.insertTransationRecord(trm);
+          if (!mounted) return;
           Provider.of<TransactionRecordItemProvider>(context,listen: false).addUndoneTr(trm,1);
         }else{
           await db.updateTransationRecord(trm);
+          if (!mounted) return;
           Provider.of<TransactionRecordItemProvider>(context,listen: false).selectUndoneTr();
         }
         ToastUtils.show(S.current.g_key_nft_41);

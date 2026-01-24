@@ -20,16 +20,12 @@ class BtcTransactionRecodeModel{
   String contract="";
   List<InputModel>? inputModels;
   List<InputModel> get InputModels{
-    if(inputModels==null){
-      inputModels=[];
-    }
+    inputModels ??= [];
     return inputModels!;
   }
   List<OutputModel>? outputModels;
   List<OutputModel> get OutputModels{
-    if(outputModels==null){
-      outputModels=[];
-    }
+    outputModels ??= [];
     return outputModels!;
   }
   Map<String,dynamic> coin={};//币基本信息
@@ -71,7 +67,7 @@ class BtcTransactionRecodeModel{
       for(String addr in InputsAddress){
         if(address.toUpperCase() != addr.toUpperCase()){
           String addrf=DataUtils().addressFarmat(addr);
-          inputAddressStr='${inputAddressStr}${addrf} ';
+          inputAddressStr='$inputAddressStr$addrf ';
         }
       }
       inputAddressStr=inputAddressStr!.trimRight();
@@ -85,7 +81,7 @@ class BtcTransactionRecodeModel{
       for(String addr in OutputsAddress){
         if(address.toUpperCase() != addr.toUpperCase()){
           String addrf=DataUtils().addressFarmat(addr);
-          outputAddressStr='${outputAddressStr}${addrf} ';
+          outputAddressStr='$outputAddressStr$addrf ';
         }
       }
       outputAddressStr=outputAddressStr!.trimRight();
@@ -104,7 +100,7 @@ class BtcTransactionRecodeModel{
   }
   //获取 的转出utxo btc总和
   int inputPrice(){
-    if(InputModels.length==0){
+    if(InputModels.isEmpty){
       return 0;
     }else{
       int inputPrice=0;
@@ -116,7 +112,7 @@ class BtcTransactionRecodeModel{
   }
   //获取double类型的 转出utxo btc总和
   double inputPrice_double(){
-    if(InputModels.length==0){
+    if(InputModels.isEmpty){
       return 0.0;
     }else{
       double inputPrice=0.0;

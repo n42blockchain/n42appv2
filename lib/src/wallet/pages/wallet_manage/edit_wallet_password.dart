@@ -1,39 +1,34 @@
-import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/login/widgets/login_title.dart';
-import 'package:n42appv2/data/models/user_info.dart';
-import 'package:n42appv2/src/utils/md5_util.dart';
 import 'package:n42appv2/src/utils/regular.dart';
-import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
-import 'package:n42appv2/src/widgets/textField_widget.dart';
+import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class EditWalletPassword extends StatefulWidget {
-  WalletInfo walletInfo;
-  int walletIndex;
-  EditWalletPassword(this.walletInfo,this.walletIndex,{super.key});
+  final WalletInfo walletInfo;
+  final int walletIndex;
+  const EditWalletPassword(this.walletInfo,this.walletIndex,{super.key});
 
   @override
   State<EditWalletPassword> createState() => _EditWalletPasswordState();
 }
 
 class _EditWalletPasswordState extends State<EditWalletPassword> {
-  TextEditingController _uPasswordController = TextEditingController();
-  TextEditingController _uPasswordConfirmController = TextEditingController();
-  TextEditingController _lPasswordController = TextEditingController();
-  FocusNode _uPasswordFocusNode = FocusNode();
-  FocusNode _uPasswordConfirmFocusNode = FocusNode();
-  FocusNode _lPasswordFocusNode = FocusNode();
+  final TextEditingController _uPasswordController = TextEditingController();
+  final TextEditingController _uPasswordConfirmController = TextEditingController();
+  final TextEditingController _lPasswordController = TextEditingController();
+  final FocusNode _uPasswordFocusNode = FocusNode();
+  final FocusNode _uPasswordConfirmFocusNode = FocusNode();
+  final FocusNode _lPasswordFocusNode = FocusNode();
   String uPasswordErrorMessage="";
   String uPasswordConfirmErrorMessage="";
   String lPasswordErrorMessage="";
@@ -121,7 +116,7 @@ class _EditWalletPasswordState extends State<EditWalletPassword> {
                       ),
                     ),
                     LoginTitle(
-                      title: '${S.of(context).login_password}',
+                      title: S.of(context).login_password,
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor10.name),
                       must: true,
                     ),
@@ -285,8 +280,11 @@ class _EditWalletPasswordState extends State<EditWalletPassword> {
                             load=Load.loading;
                           });
                           widget.walletInfo.password=password;
-                          await Provider.of<WalletActionProvider>(context,listen: false).saveWalletInfo(widget.walletInfo,widget.walletIndex);
-                          ToastUtils.show(S.of(context).g_key_185);
+                          final wap = Provider.of<WalletActionProvider>(context,listen: false);
+                          final successMessage = S.of(context).g_key_185;
+                          await wap.saveWalletInfo(widget.walletInfo,widget.walletIndex);
+                          if (!context.mounted) return;
+                          ToastUtils.show(successMessage);
                           Navigator.pop(context,widget.walletInfo);
                         } catch (err) {
                           ToastUtils.show(err.toString());

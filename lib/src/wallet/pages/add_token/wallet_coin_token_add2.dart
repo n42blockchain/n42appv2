@@ -17,9 +17,9 @@ import 'package:n42appv2/generated/l10n.dart';
 
 class WalletCoinTokenAdd2 extends StatefulWidget {
   //Map<String,dynamic> coinMap;
-  CoinModel coinModel;
+  final CoinModel coinModel;
   //int isImport;
-  WalletCoinTokenAdd2(this.coinModel,{super.key});
+  const WalletCoinTokenAdd2(this.coinModel,{super.key});
 
   @override
   State<WalletCoinTokenAdd2> createState() => _WalletCoinTokenAdd2State();
@@ -47,8 +47,9 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
     super.dispose();
   }
   init(){
-    if(widget.coinModel.tokens.length!=0)
-    symbols=widget.coinModel.tokens.keys.toList();
+    if(widget.coinModel.tokens.isNotEmpty) {
+      symbols=widget.coinModel.tokens.keys.toList();
+    }
   }
   checkSymbol(String symStr){
     var checks=symbols.where((element){
@@ -58,7 +59,7 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
         return false;
       }
     });
-    if(checks.length==0)return false;
+    if(checks.isEmpty)return false;
     return true;
   }
   addCoin(Map<String,dynamic> coinMap)async{
@@ -84,7 +85,7 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
       baseToken['unit']=coinMap['coin_name'].toString();
       baseToken['decimals']=coinMap['decimals'];
       baseToken['canEdit']=true;
-      addSymbol='${addSymbol},${coinMap['coin_name'].toString()}';
+      addSymbol='$addSymbol,${coinMap['coin_name'].toString()}';
       wap.addWalletChain_token(baseToken);
       setState(() {
         coinMap['isAdd']=true;
@@ -192,8 +193,12 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return WillPopScope(
-      onWillPop: _pageBack,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        _pageBack();
+      },
       child: Scaffold(
         backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
         appBar: AppBar(
@@ -208,7 +213,7 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
             load==Load.loading?Container(
               alignment: Alignment.center,
               margin: EdgeInsets.only(right: ScreenUtil().setWidth(30.0)),
-              child: Container(
+              child: SizedBox(
                 height: ScreenUtil().setWidth(40.0),
                 width: ScreenUtil().setWidth(40.0),
                 child: CircularProgressIndicator(),
@@ -312,8 +317,9 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
     if(inputEditingController.text==""){
       return RefreshIndicator(
         onRefresh: ()async{
-          if(load==Load.finish)
+          if(load==Load.finish) {
             await getTokenList();
+          }
         },
         backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
@@ -335,8 +341,9 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
       );
     }
     else{
-      if(coinlist_seach.length==0)
+      if(coinlist_seach.isEmpty) {
         return const EmptyView();
+      }
       return ListView.separated(
         itemCount: coinlist_seach.length,
         itemBuilder: (context,int index){
