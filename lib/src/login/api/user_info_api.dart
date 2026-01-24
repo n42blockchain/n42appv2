@@ -26,7 +26,7 @@ class UserInfoApi{
     return data;
   }
   //获取支付验证码
-  getEmailVerification()async{
+  Future<MessageModel> getEmailVerification()async{
     try{
       Map<String,dynamic> postMap={
         "uuid":AppGlobals.userInfo?.uuid??"",
@@ -49,7 +49,7 @@ class UserInfoApi{
     }
   }
   //验证邮箱验证码
-  checkEmailVerification(String code)async{
+  Future<MessageModel> checkEmailVerification(String code)async{
     try{
       Map<String,dynamic> postMap={
         "uuid":AppGlobals.userInfo?.uuid??"",
@@ -143,7 +143,7 @@ class UserInfoApi{
         .post('$url/v1/user/emailResetPwd', params: {}, data: params,header: header);
     return data;
   }
-  updateUserInfo(Map<String,dynamic> userInfo)async{
+  Future<MessageModel> updateUserInfo(Map<String,dynamic> userInfo)async{
     try{
       userInfo['uuid']=AppGlobals.userInfo?.uuid??"";
       userInfo['source']="app";
@@ -244,7 +244,7 @@ class UserInfoApi{
     return null;
   }
   //提交反馈信息,address钱包地址，content反馈内容，extra附件地址
-  submitFeedback(String address,String content,String extra)async{
+  Future<MessageModel> submitFeedback(String address,String content,String extra)async{
     try{
       String token=AppGlobals.userInfo?.token??"";
       String uuid=AppGlobals.userInfo?.uuid??"";
@@ -283,7 +283,7 @@ class UserInfoApi{
     return null;
   }
   //获取用户信息，根据uuid
-  getUserInfoWithUUID(String uuid,{String? chain})async{
+  Future<MessageModel> getUserInfoWithUUID(String uuid,{String? chain})async{
     try{
       Map<String,dynamic> params={
         "uuid":uuid,
@@ -307,7 +307,7 @@ class UserInfoApi{
     }
   }
   //获取 消息列表
-  getMsgNoticeList({int page=1,int pageSize=10,String msgType=""})async{
+  Future<MessageModel> getMsgNoticeList({int page=1,int pageSize=10,String msgType=""})async{
     try {
       MessageModel mm = MessageModel();
       final data =
@@ -333,7 +333,7 @@ class UserInfoApi{
     }
   }
   //绑定谷歌验证
-  bindGoogle()async{
+  Future<MessageModel> bindGoogle()async{
     try{
       Map<String,dynamic> postMap={
         "uuid":AppGlobals.userInfo?.uuid??"",
@@ -356,7 +356,7 @@ class UserInfoApi{
     }
   }
   //验证谷歌验证
-  checkGoogle(String code)async{
+  Future<MessageModel> checkGoogle(String code)async{
     try{
       Map<String,dynamic> postMap={
         "uuid":AppGlobals.userInfo?.uuid??"",

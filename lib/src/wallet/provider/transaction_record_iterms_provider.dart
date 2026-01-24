@@ -43,7 +43,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
     return _tokenViewApi!;
   }
   //查询未完成的交易
-  selectUndoneTr()async{
+  Future<void> selectUndoneTr()async{
     _unDoneTrModelList=await db.selectTransationRecordUnDone(AppGlobals.userInfo?.uuid??"");
     _trUndoneList=await db.selectBtcTransationRecordByUUID(AppGlobals.userInfo?.uuid??"", 2);
     if(_unDoneTrModelList.isNotEmpty){
@@ -55,7 +55,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
     }
   }
   //添加未完成的交易，type：0比特币类，1其它类型
-  addUndoneTr(dynamic trm,int type){
+  void addUndoneTr(dynamic trm,int type){
     if(type==1){
       _unDoneTrModelList.add(trm);
       timerStart();
@@ -64,7 +64,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
       timerStartBtc();
     }
   }
-  timerStart(){
+  void timerStart(){
     if(_timer!=null)return;
     _timer=Timer.periodic(Duration(seconds: 10), (timer) {
       if(_unDoneTrModelList.isNotEmpty){
@@ -78,7 +78,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
       }
     });
   }
-  timerStartBtc(){
+  void timerStartBtc(){
     if(_timerBtc!=null)return;
     _timerBtc=Timer.periodic(Duration(seconds: 180), (timer) {
       if(_trUndoneList.isNotEmpty){
@@ -93,7 +93,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
     });
   }
   //检查未完成的交易
-  checkUndoneTr(TransationRecordModel trm)async{
+  Future<void> checkUndoneTr(TransationRecordModel trm)async{
     BlockchainType bt=BlockchainType.values.firstWhere((element) => element.name==trm.coin['blockchainType']?true:false);
     switch(bt){
       case BlockchainType.Ethereum:
@@ -369,7 +369,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
     }
     checkUndoneList();
   }
-  checkUndoneTrReturn(TransationRecordModel trm)async{
+  Future<TransationRecordModel?> checkUndoneTrReturn(TransationRecordModel trm)async{
     BlockchainType bt=BlockchainType.values.firstWhere((element) => element.name==trm.coin['blockchainType']?true:false);
     switch(bt){
       case BlockchainType.Ethereum:
@@ -384,7 +384,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
             }
           }else{
             if(mm.data['error']['code']!=0){
-              return;
+              return null;
             }
             if(mm.data['result']['status']=="0x1"){
               trm.state=1;
@@ -417,7 +417,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         MessageModel mm= await tokenViewApi.getTransactionReceiptTrx(trm.txHash,isTest:trm.isTest==0?false:true);
         if(mm.error==false){
           if(mm.data['error']['code']!=0){
-            return;
+            return null;
           }
           if(mm.data['result']['status']=="0x1"){
             trm.state=1;
@@ -506,7 +506,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         MessageModel mmHarmony = await tokenViewApi.getTransactionReceiptEth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
         if(mmHarmony.error==false){
           if(mmHarmony.data['error']['code']!=0){
-            return;
+            return null;
           }
           if(mmHarmony.data['result']['status']=="0x1"){
             trm.state=1;
@@ -520,7 +520,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         MessageModel mmIotex = await tokenViewApi.getTransactionReceiptEth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
         if(mmIotex.error==false){
           if(mmIotex.data['error']['code']!=0){
-            return;
+            return null;
           }
           if(mmIotex.data['result']['status']=="0x1"){
             trm.state=1;
@@ -551,7 +551,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         MessageModel mmTheta = await tokenViewApi.getTransactionReceiptEth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
         if(mmTheta.error==false){
           if(mmTheta.data['error']['code']!=0){
-            return;
+            return null;
           }
           if(mmTheta.data['result']['status']=="0x1"){
             trm.state=1;
@@ -610,7 +610,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
     return trm;
   }
   //检查未完成的交易
-  checkUndoneTrBtc(BtcTransactionRecodeModel trm)async{
+  Future<void> checkUndoneTrBtc(BtcTransactionRecodeModel trm)async{
     if(trm.isTest==1){
       MessageModel mm=await BtcApi(test: trm.isTest==1?true:false).getTxState(trm.txHash);
       if(mm.error){
@@ -646,7 +646,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
       }
     }
   }
-  checkUndoneTrBtcReturn(BtcTransactionRecodeModel trm)async{
+  Future<BtcTransactionRecodeModel?> checkUndoneTrBtcReturn(BtcTransactionRecodeModel trm)async{
     if(trm.isTest==1){
       MessageModel mm=await BtcApi(test: trm.isTest==1?true:false).getTxState(trm.txHash);
       if(mm.error){
@@ -673,9 +673,9 @@ class TransactionRecordItemProvider with ChangeNotifier{
       }
       return trm;
     }
-
+    return null;
   }
-  checkUndoneList(){
+  void checkUndoneList(){
     if(_trUndoneList.isEmpty && _timerBtc !=null){
       _timerBtc!.cancel();
       _timerBtc=null;

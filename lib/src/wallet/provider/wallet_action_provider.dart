@@ -66,7 +66,7 @@ class WalletActionProvider extends ChangeNotifier{
     return walletInfo.walletName??"";
   }
   int walletIndex=-1;//钱包索引
-  setWalletIndex(int index)async{
+  Future<void> setWalletIndex(int index)async{
     if(index==walletIndex)return;
     removeConRefreshMap(walletIndex);
     walletIndex=index;
@@ -77,7 +77,7 @@ class WalletActionProvider extends ChangeNotifier{
 
   }
   int walletMiningIndex=-1;//钱包挖矿索引
-  setWalletMiningIndex(int index)async{
+  Future<void> setWalletMiningIndex(int index)async{
     if(index==walletMiningIndex)return;
     walletMiningIndex=index;
     await saveWalletInfo(walletInfoLsit[walletIndex], walletIndex);
@@ -102,13 +102,13 @@ class WalletActionProvider extends ChangeNotifier{
   //可用余额，美刀
   double _balanceTotal = 0.0;
   double get balanceTotal => _balanceTotal;
-  setBalanceTotal(double price) {
+  void setBalanceTotal(double price) {
     //if(existWallet==false)return;
     _balanceTotal = price;
     notifyListeners();
   }
   //获取外国余额，美刀形式
-  getBalanceTotal() {
+  String getBalanceTotal() {
     return _oCcy.format(_balanceTotal);
   }
 //市场上 币的信息，价格、涨跌幅、名称、名称缩写、icon地址
@@ -117,11 +117,11 @@ class WalletActionProvider extends ChangeNotifier{
   final Map<String, dynamic> _addrsss = {};
   Map<String, dynamic> get address => _addrsss;
   //根据 key 获取 币的地址
-  getAddress(String coinKey,{String addrType='legacy'}) {
+  dynamic getAddress(String coinKey,{String addrType='legacy'}) {
     Map<Object?, Object?>? addrs = _addrsss[coinKey];
     return addrs?[addrType];
   }
-  getMainWalletAddressAsync(String coinKey,{String addrType='legacy'}) async{
+  Future<dynamic> getMainWalletAddressAsync(String coinKey,{String addrType='legacy'}) async{
     int index=walletInfoLsit.indexWhere((e)=>e.mainWallet==true);
     if(index==-1)return "";
     Map<String,dynamic>? nCoinInfo=walletInfoLsit[index].coinInfo![coinKey];
@@ -137,7 +137,7 @@ class WalletActionProvider extends ChangeNotifier{
     return rm[addrType];
   }
   //输入的是小写的coinKey
-  getAddressCoinKeyLowerCase(String coinKey, String contract) {
+  CoinModel? getAddressCoinKeyLowerCase(String coinKey, String contract) {
     CoinModel? returnCM;
     if (contract == "") {
       for (CoinModel cm in _coinModels) {
@@ -165,11 +165,11 @@ class WalletActionProvider extends ChangeNotifier{
     return returnCM;
   }
   //添加币到 集合中
-  setAddress(String key, Map<String, dynamic> value) {
+  void setAddress(String key, Map<String, dynamic> value) {
     _addrsss[key] = value;
   }
   //返回 coinType 的主链 coinmodel
-  getCoinModelWithCoinType(String coinType){
+  CoinModel? getCoinModelWithCoinType(String coinType){
     CoinModel? rCoinModel;
     int index=_coinModels.indexWhere((element){
       if(element.coin['coinType']==coinType){
@@ -183,7 +183,7 @@ class WalletActionProvider extends ChangeNotifier{
     return rCoinModel;
   }
 //返回对应symbol 的coinmodel 列表
-  getCoinModelWithSymbols({String symbols="ETH,BNB,TRX,OKT"}){
+  List<CoinModel> getCoinModelWithSymbols({String symbols="ETH,BNB,TRX,OKT"}){
     List<String> symbolList=symbols.split(",");
     List<CoinModel> cList=[];
     for(String symbol in symbolList){
@@ -200,7 +200,7 @@ class WalletActionProvider extends ChangeNotifier{
     return cList;
   }
 
-  initWallet({bool shouldInitCoinInfo=false})async{
+  Future<void> initWallet({bool shouldInitCoinInfo=false})async{
     if(buildwallet==true)return;
     buildwallet=true;
     await getWalletInfo();
@@ -218,7 +218,7 @@ class WalletActionProvider extends ChangeNotifier{
     await refreshWalletListNotifier();
   }
   //读取钱包信息
-  getWalletInfo() async {
+  Future<void> getWalletInfo() async {
     //if (walletInfoLsit.isNotEmpty) return;
     //await checkWalletInfo();
     Map<String, dynamic>? walletAll=await SPUtil().getWalletInfo();
@@ -269,7 +269,7 @@ class WalletActionProvider extends ChangeNotifier{
     notifyListeners();
   }
   //构建 币模型
-  buildCoinModel() async {
+  Future<void> buildCoinModel() async {
     if (_walletInfoLsit.isEmpty) return;
     List<dynamic> keym =walletMap.keys.toList();
 
@@ -304,7 +304,7 @@ class WalletActionProvider extends ChangeNotifier{
     if (!AppGlobals.appContext.mounted) return;
     Provider.of<TransactionRecordItemProvider>(AppGlobals.appContext,listen: false).selectUndoneTr();
   }
-  buildCoinModelInfo() async {
+  Future<void> buildCoinModelInfo() async {
     coinList=[];
     for (int i = 0; i < _coinModels.length; i++) {
       CoinModel mm = _coinModels[i];
@@ -341,7 +341,7 @@ class WalletActionProvider extends ChangeNotifier{
     return cm;
   }
   //加载指定network的币
-  buildCoinModelInfoWithCoin() async {
+  Future<void> buildCoinModelInfoWithCoin() async {
     coinList=[];
     if(walletInfo.networkIndex==-1){
       for (int i = 0; i < _coinModels.length; i++) {
@@ -377,7 +377,7 @@ class WalletActionProvider extends ChangeNotifier{
     addCoinRefreshMap();
   }
   //币列表排序
-  setCoinSortAssets(String type){
+  void setCoinSortAssets(String type){
     if(type=="assets"){
       if(walletInfo.coinSort['assets'] == 0){
         walletInfo.coinSort['assets']=1;
@@ -403,7 +403,7 @@ class WalletActionProvider extends ChangeNotifier{
     notifyListeners();
   }
   //排序type all\keystore\main
-  coinSortAssets(){
+  void coinSortAssets(){
     if(walletInfo.coinSort['assets']==0){
       coinList.sort((a, b,)=>(b.value).compareTo(a.value));
     }else if(walletInfo.coinSort['assets']==1){
@@ -438,7 +438,7 @@ class WalletActionProvider extends ChangeNotifier{
       }
     }*/
   }
-  sortString(String aName,String bName){
+  int sortString(String aName,String bName){
     int minCount=min(aName.length, bName.length);
     for(int i=0;i<minCount;i++){
       final l1=aName.codeUnitAt(i);
@@ -460,7 +460,7 @@ class WalletActionProvider extends ChangeNotifier{
     }
   }
   //设置主钱包
-  setMainWallet(int wIndex){
+  MessageModel setMainWallet(int wIndex){
     int index=walletInfoLsit.indexWhere((e){
       if(e.mainWallet==true){
         return true;
@@ -483,7 +483,7 @@ class WalletActionProvider extends ChangeNotifier{
   }
   //保存钱包修改到SPUtil
   //isNewWallet，是否是添加新钱包
-  saveWalletInfo(WalletInfo newWalletInfo,int wIndex,{bool isNewWallet=false}) async{
+  Future<void> saveWalletInfo(WalletInfo newWalletInfo,int wIndex,{bool isNewWallet=false}) async{
     try{
       SPUtil sPUtils=SPUtil();
       Map<String, dynamic>? walletAll = await sPUtils.getWalletInfo();
@@ -526,7 +526,7 @@ class WalletActionProvider extends ChangeNotifier{
     }
   }
   //保存钱包数据
-  saveWalletInfoAll()async{
+  Future<void> saveWalletInfoAll()async{
     SPUtil sPUtils=SPUtil();
     Map<String, dynamic>? walletAll = await sPUtils.getWalletInfo();
     if (walletAll != null) {
@@ -538,7 +538,7 @@ class WalletActionProvider extends ChangeNotifier{
     }
   }
   //刷新缓存
-  refreshWalletListNotifier()async{
+  Future<void> refreshWalletListNotifier()async{
     // 刷新 WalletListNotifier 以同步数据
     try {
       final walletService = ServiceLocatorSetup.walletService;
@@ -554,11 +554,11 @@ class WalletActionProvider extends ChangeNotifier{
     }
   }
   //保存币的排序缓存
-  saveCoinSort()async{
+  Future<void> saveCoinSort()async{
     saveWalletInfo(walletInfo,walletIndex);
   }
   //创建钱包
-  createWallet()async{
+  Future<void> createWallet()async{
     WalletInfo wInfo=WalletInfo(
       walletName: "",
       password: "",
@@ -573,7 +573,7 @@ class WalletActionProvider extends ChangeNotifier{
     await addWalletInfo(wInfo);
   }
   ///添加钱包
-  addWalletInfo(WalletInfo info) async {
+  Future<void> addWalletInfo(WalletInfo info) async {
     try{
       // 为了安全 存储时不在sp工具中存储助记词
       //克隆一份数据 不污染数据源
@@ -594,7 +594,7 @@ class WalletActionProvider extends ChangeNotifier{
 
   }
   ///删除一个钱包
-  deleteWalletInfo({WalletInfo? info}) async{
+  Future<MessageModel?> deleteWalletInfo({WalletInfo? info}) async{
     if (_walletInfoLsit.isEmpty) return null;
     if (info == null) {
       //不传 默认移除第一个
@@ -671,7 +671,7 @@ class WalletActionProvider extends ChangeNotifier{
     }
   }
   //返回公钥、私钥对
-  getPublicKeyAndPrivateKeyPairN()async{
+  Future<void> getPublicKeyAndPrivateKeyPairN()async{
     _publicKeyAndPrivateKeyPair={};
     Trustdart trustdart=Trustdart();
     for(WalletInfo wInfo in walletInfoLsit){
@@ -691,11 +691,11 @@ class WalletActionProvider extends ChangeNotifier{
       _publicKeyAndPrivateKeyPair![pubKey] = privateKey;
     }
   }
-  getPrivateKeyWithPublicKey(String publicKey){
+  String? getPrivateKeyWithPublicKey(String publicKey){
     return _publicKeyAndPrivateKeyPair?[publicKey];
   }
   ///获取钱包 币的基本数据，成功后初始化主页币列表
-  getCoinInfo() async {
+  Future<void> getCoinInfo() async {
     //钱包币列表，默认查询币种的当前价格等基本信息
     String coinSelectPriceKeys="";
     for(CoinModel cm in coinList){
@@ -732,7 +732,7 @@ class WalletActionProvider extends ChangeNotifier{
     addCoinRefreshMap();
   }
   //获取币的 美元价格
-  getCoinPrice(CoinModel cm) {
+  void getCoinPrice(CoinModel cm) {
     // 使用 miniName 作为主要匹配键 (与 API 请求参数一致)
     String miniName = cm.coin['miniName']?.toString().toLowerCase() ?? '';
     String unit = cm.coin['unit']?.toString().toLowerCase() ?? '';
@@ -811,7 +811,7 @@ class WalletActionProvider extends ChangeNotifier{
     return null;
   }
   //获取币的基本信息
-  getCoinsBaseInfo(String coinName)async{
+  Future<dynamic> getCoinsBaseInfo(String coinName)async{
     Map<String,dynamic> m=await MarketApi().getWalletCoinsBaseInfo(coinName);
     if(m['error']){
       return null;
@@ -820,7 +820,7 @@ class WalletActionProvider extends ChangeNotifier{
     }
   }
 
-  setNetworkIndex(int value){
+  void setNetworkIndex(int value){
     if(walletInfo.networkIndex==value)return;
     walletInfo.networkIndex=value;
     if(walletInfo.networkIndex==-1){
@@ -831,7 +831,7 @@ class WalletActionProvider extends ChangeNotifier{
     saveWalletInfo(walletInfo, walletIndex);
   }
   //修改面部数据绑定钱包
-  setWalletFaceBinding(int? setIndex,{bool faceBinding=true}){
+  void setWalletFaceBinding(int? setIndex,{bool faceBinding=true}){
     if(faceBinding){
       int cancelIndex=walletInfoLsit.indexWhere((e)=>e.faceBinding==true);
       if(cancelIndex !=-1){
@@ -846,14 +846,14 @@ class WalletActionProvider extends ChangeNotifier{
   }
 
   //refresh 是否刷新
-  initCoinInfo({bool refresh=true})async{
+  Future<void> initCoinInfo({bool refresh=true})async{
     if(refresh){
       setBalanceTotal(0);
     }
     refreshWalletCoinInfo(refresh:refresh);
   }
   //刷新钱包中币的余额与当前价格
-  refreshWalletCoinInfo({bool refresh=true}) async {
+  Future<void> refreshWalletCoinInfo({bool refresh=true}) async {
     if(refresh){
       _load = Load.refresh;
       notifyListeners();
@@ -865,7 +865,7 @@ class WalletActionProvider extends ChangeNotifier{
     }
   }
 //重新加载当前钱包的 某个 coin
-  reBuildCoin(WalletInfo wInfo,String coinType)async{
+  Future<void> reBuildCoin(WalletInfo wInfo,String coinType)async{
     _walletInfoLsit[walletIndex]=wInfo;
     saveWalletInfo(walletInfo, walletIndex);
     int cIndex = _coinModels.indexWhere((element){
@@ -912,7 +912,7 @@ class WalletActionProvider extends ChangeNotifier{
     notifyListeners();
   }
   //添加主链币
-  addWalletChain(Map<String,dynamic> chainMap)async{
+  Future<void> addWalletChain(Map<String,dynamic> chainMap)async{
     Map<String,dynamic>? cMap=walletMap[chainMap['baseInfo']['mKey']];
     if(cMap != null){
       int index=_coinModels.indexWhere((element) {
@@ -957,7 +957,7 @@ class WalletActionProvider extends ChangeNotifier{
   }
   //将币从当前钱包中移除
   //mKey 币的 map key值
-  removeWalletChain(String mKey,String unit){
+  void removeWalletChain(String mKey,String unit){
     int tokenCount=walletMap[mKey]['mainnets'].length;
     if(tokenCount==0){
       walletMap.remove(mKey);
@@ -983,7 +983,7 @@ class WalletActionProvider extends ChangeNotifier{
     notifyListeners();
   }
   //添加代币
-  addWalletChainToken(Map<String,dynamic> token){
+  void addWalletChainToken(Map<String,dynamic> token){
     String symbolStr=token['coinType'].toString().toUpperCase();
     Map<dynamic,dynamic>t;
     if(walletMap[symbolStr]['isTest']){
@@ -1038,7 +1038,7 @@ class WalletActionProvider extends ChangeNotifier{
     notifyListeners();
   }
   //将代币从当前钱包中移除
-  removeWalletChainToken(Map<String,dynamic> token,{String? symbol,String? miniName}){
+  void removeWalletChainToken(Map<String,dynamic> token,{String? symbol,String? miniName}){
     String symbolStr;
     if(symbol==null){
       symbolStr=token['symbol'].toUpperCase();
@@ -1094,7 +1094,7 @@ class WalletActionProvider extends ChangeNotifier{
   }
 
   //计算余额
-  calculateBalanceWidthCoinModel(){
+  void calculateBalanceWidthCoinModel(){
     double tBalance=0.0;
     for(int i=0;i<coinList.length;i++){
       tBalance +=coinList[i].value;
@@ -1102,7 +1102,7 @@ class WalletActionProvider extends ChangeNotifier{
     setBalanceTotal(tBalance);
     //getTokens_top();
   }
-  getBalanceWithCoinModel(CoinModel coinModel)async{
+  Future<bool> getBalanceWithCoinModel(CoinModel coinModel)async{
     //获取coin 的地址
     String address=coinModel.address;
     if(coinModel.coin['coinType']==CoinType.BCH.name){
@@ -1204,7 +1204,7 @@ class WalletActionProvider extends ChangeNotifier{
     }
   }
   //获取algo 链 代币
-  getBalanceTokenAlgoWithCoinModel(CoinModel coinModel)async{
+  Future<bool> getBalanceTokenAlgoWithCoinModel(CoinModel coinModel)async{
     //获取 合约地址
     String contract="";
     if(coinModel.isTest){
@@ -1256,7 +1256,7 @@ class WalletActionProvider extends ChangeNotifier{
   }
 
 
-  addCoinRefreshMap(){
+  void addCoinRefreshMap(){
     if(coinRefreshMap[walletIndex] !=null)return;
     List<CoinModel> rList=[];
     for(int i=0;i<coinList.length;i++){
@@ -1270,7 +1270,7 @@ class WalletActionProvider extends ChangeNotifier{
     coinRefresh(walletIndex);
   }
   /// coinType:币类型，contract:合约地址，isTest:是否时测试
-  refreshCoinBalance(String coinType,{String contract=""})async{
+  Future<void> refreshCoinBalance(String coinType,{String contract=""})async{
     int cmIndex=coinList.indexWhere((element) {
       if(element.coin['coinType']==coinType ){
         if(contract==""){
@@ -1291,12 +1291,12 @@ class WalletActionProvider extends ChangeNotifier{
     }
   }
 
-  removeConRefreshMap(int index){
+  void removeConRefreshMap(int index){
     loadBalance=Load.finish;
     notifyListeners();
     coinRefreshMap.remove(index);
   }
-  coinRefresh(int index)async{
+  Future<void> coinRefresh(int index)async{
     try{
       if(coinRefreshMap[index]!=null){
         if(coinRefreshMap[index]["coinList"] !=null && coinRefreshMap[index]["coinList"].length !=0){
