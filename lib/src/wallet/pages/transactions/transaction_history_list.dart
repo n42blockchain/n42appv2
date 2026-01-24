@@ -42,7 +42,7 @@ class _TransactionHistoryListState extends State<TransactionHistoryList> {
                 BtcTransactionRecodeModel trm = results[index];
                 return WalletChainInfoTransactionsItem(
                   coinModel: widget.coinModel,
-                    type: 0, transactionModel: trm);
+                    type: 0, transactionModel: trm, onBack: (){});
               } else {
                 TransationRecordModel trm = results[index];
                 return WalletChainInfoTransactionsItem(

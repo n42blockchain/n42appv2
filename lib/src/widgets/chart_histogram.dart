@@ -89,7 +89,7 @@ class _ChartHistogramState extends State<ChartHistogram> {
                       Expanded(
                         child: BarChart(
                           mainBarData(),
-                          swapAnimationDuration: animDuration,
+                          duration: animDuration,
                         ),
                       ),
                     ],
@@ -188,6 +188,7 @@ class _ChartHistogramState extends State<ChartHistogram> {
               return BarTooltipItem('${amg.titles[0]}\n', amg.styles[0],
                   children: spans);
             }
+            return null;
           },
         ),
         touchCallback: (FlTouchEvent event, barTouchResponse) {

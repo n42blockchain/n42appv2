@@ -797,6 +797,11 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
                       balanceDollarStr: '\$${widget.coinModel.value_string()}',
                       marketValueStr:
                       '\$${widget.coinModel.coinPrice_string()}',
+                      lockAmountStr: null,
+                      xmlLockInfoTap: null,
+                      tokenAddTap: null,
+                      swapAddTap: null,
+                      sellAddTap: null,
                       sendTap: _handleSend,
                       receiveTap: _handleReceive,
                       browserTap: () {
@@ -808,25 +813,6 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
                                   //S.of(context).g_key_m_15
                                 )));
                       },
-                      /*tokenAddTap: (widget.coinModel.privateKey == null ||
-                          widget.coinModel.coin['blockchainType'] ==
-                              BlockchainType.Bitcoin.name ||
-                          widget.coinModel.coin['isContract'] == true)
-                          ? null
-                          : () async {
-                        bool r = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => WalletCoinTokenAdd2(
-                                    widget.coinModel,)));
-                        if (r) {
-                          Provider.of<WalletActionProvider>(context).init_wallet(initCoinInfo: true);
-                          Navigator.pop(context);
-                        }
-                      },
-                      swapAddTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Moonpay(widget.coinModel)));
-                      },*/
                     ),
                     Divider(
                       height: ScreenUtil().setWidth(1),
@@ -936,7 +922,9 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
             BlockchainType.Bitcoin.name) {
           BtcTransactionRecodeModel trm = transactionList[index];
           return WalletChainInfoTransactionsItem(
-            coinModel: widget.coinModel, type: 0, transactionModel: trm);
+            coinModel: widget.coinModel, type: 0, transactionModel: trm, onBack: (){
+              getTransactionData(Load.refresh);
+            });
         } else {
           TransationRecordModel trm = transactionList[index];
           return WalletChainInfoTransactionsItem(

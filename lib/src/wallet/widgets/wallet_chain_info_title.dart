@@ -11,12 +11,12 @@ class WalletChainInfoTitle extends StatelessWidget {
 
   final GestureTapCallback? rightTao; //去行情页点击事件
   const WalletChainInfoTitle({
-    @required this.title,
-    @required this.subtitle,
-    @required this.rightWidget,
-    @required this.rightImgUrl,
-    @required this.rightTao,
-    @required this.rightTaoChangeNetworkWidget,
+    required this.title,
+    required this.subtitle,
+    required this.rightWidget,
+    required this.rightImgUrl,
+    required this.rightTao,
+    required this.rightTaoChangeNetworkWidget,
     super.key});
 
   @override

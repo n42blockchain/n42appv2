@@ -93,7 +93,6 @@ class _CommInputState extends State<CommInput> {
                   : TextInputType.text,
               autofocus: widget.autofocus,
               focusNode: widget.focusNode,
-              toolbarOptions: null,
               inputFormatters: widget.inputFormatters,
               enabled: widget.enabled,
               maxLength: widget.maxLength,

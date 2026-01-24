@@ -37,9 +37,11 @@ class _QCodeChatState extends State<QCodeChat> {
       final file = await File('${tempDir.path}/qrcode.png').create();
       await file.writeAsBytes(pngBytes);
 
-      await Share.shareXFiles(
-        [XFile(file.path, mimeType: 'image/png')],
-        text: AppConfig.apiUrl['walletName'],
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(file.path, mimeType: 'image/png')],
+          text: AppConfig.apiUrl['walletName'],
+        ),
       );
     } catch (e) {
       debugPrint("Error sharing screenshot: $e");
@@ -103,10 +105,13 @@ class _QCodeChatState extends State<QCodeChat> {
                   child: QrImageView(
                     backgroundColor: Colors.transparent,
                     data: widget.content,
-                    foregroundColor: const Color(0xff1976F9),
                     eyeStyle: const QrEyeStyle(
                       eyeShape: QrEyeShape.square,
-                      color: Colors.black,
+                      color: Color(0xff1976F9),
+                    ),
+                    dataModuleStyle: const QrDataModuleStyle(
+                      dataModuleShape: QrDataModuleShape.square,
+                      color: Color(0xff1976F9),
                     ),
                   ),
                 ),
@@ -163,9 +168,11 @@ class _QCodeChatState extends State<QCodeChat> {
         /// 按钮：分享链接
         GestureDetector(
           onTap: () {
-            Share.share(
-              "${S.of(context).g_chat_key_64} ${AppGlobals.userInfo?.email} \n${AppConfig.apiUrl['walletamazeBrowser']}?type=friendCard&email=${AppGlobals.userInfo?.email}",
-              subject: AppConfig.apiUrl['walletName'],
+            SharePlus.instance.share(
+              ShareParams(
+                text: "${S.of(context).g_chat_key_64} ${AppGlobals.userInfo?.email} \n${AppConfig.apiUrl['walletamazeBrowser']}?type=friendCard&email=${AppGlobals.userInfo?.email}",
+                subject: AppConfig.apiUrl['walletName'],
+              ),
             );
           },
           child: Container(

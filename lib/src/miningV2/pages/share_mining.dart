@@ -192,9 +192,11 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                             opacity: _fadeAnimation,
                             child: GestureDetector(
                               onTap: () {
-                                Share.share(
-                                  generateShareText(),
-                                  subject: AppConfig.apiUrl['walletamazeBrowser'],
+                                SharePlus.instance.share(
+                                  ShareParams(
+                                    text: generateShareText(),
+                                    subject: AppConfig.apiUrl['walletamazeBrowser'],
+                                  ),
                                 );
                               },
                               child: Container(

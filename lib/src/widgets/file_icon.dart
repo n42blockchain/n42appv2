@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:file_icon/file_icon.dart' show iconSetMap;
+// ignore: implementation_imports
+import 'package:file_icon/src/data.dart' show iconSetMap;
 
 class FileIcon extends StatelessWidget {
   final String fileName;

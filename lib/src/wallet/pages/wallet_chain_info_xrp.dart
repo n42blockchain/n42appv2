@@ -686,6 +686,9 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
                                   //S.of(context).g_key_m_15
                                 )));
                       },
+                      tokenAddTap: null,
+                      swapAddTap: null,
+                      sellAddTap: null,
                     ),
                     Divider(
                       height: ScreenUtil().setWidth(1),
@@ -773,7 +776,9 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
             BlockchainType.Bitcoin.name) {
           BtcTransactionRecodeModel trm = transactionList[index];
           return WalletChainInfoTransactionsItem(
-              coinModel: widget.coinModel, type: 0, transactionModel: trm);
+              coinModel: widget.coinModel, type: 0, transactionModel: trm, onBack: (){
+                getTransactionData(Load.refresh);
+              });
         } else {
           TransationRecordModel trm = transactionList[index];
           return WalletChainInfoTransactionsItem(

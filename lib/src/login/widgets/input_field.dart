@@ -122,9 +122,7 @@ class _InputFieldState extends State<InputField> {
               obscureText: obscure,
               keyboardType: widget.keyboardType,
               textInputAction: TextInputAction.done,
-              toolbarOptions: widget.type == InputFieldType.password
-                  ? const ToolbarOptions()
-                  : null,
+              enableInteractiveSelection: widget.type != InputFieldType.password,
               inputFormatters: widget.type == InputFieldType.captcha
                   ? [LengthLimitingTextInputFormatter(widget.inputLength)]
                   : null,

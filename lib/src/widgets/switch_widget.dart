@@ -18,7 +18,7 @@ class _SwitchWidgetState extends State<SwitchWidget> {
       child: CupertinoSwitch(
           value: widget.isSwitched,
           ///关闭时颜色
-          trackColor:  Colors.grey,
+          inactiveTrackColor:  Colors.grey,
           ///打开时颜色
           activeTrackColor: Colors.blueAccent,
           ///圆形小按钮颜色

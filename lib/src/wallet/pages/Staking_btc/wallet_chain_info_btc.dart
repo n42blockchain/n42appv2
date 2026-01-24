@@ -1234,7 +1234,9 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
               BlockchainType.Bitcoin.name) {
             BtcTransactionRecodeModel trm = transactionList[index];
             return WalletChainInfoTransactionsItem(
-                coinModel: widget.coinModel, type: 0, transactionModel: trm);
+                coinModel: widget.coinModel, type: 0, transactionModel: trm, onBack: (){
+                  getTransactionData(Load.refresh);
+                });
           } else {
             TransationRecordModel trm = transactionList[index];
             return WalletChainInfoTransactionsItem(

@@ -19,18 +19,18 @@ class WalletChainInfoBoard extends StatelessWidget {
   final GestureTapCallback? tokenAddTap;//添加代币按钮
   final GestureTapCallback? swapAddTap;//添加兑换按钮
   final GestureTapCallback? sellAddTap;//卖按钮
-  const WalletChainInfoBoard({@required this.address,
-    @required this.balanceStr,
-    @required this.balanceDollarStr,
-    @required this.marketValueStr,
-    @required this.lockAmountStr,
-    @required this.sendTap,
-    @required this.receiveTap,
-    @required this.browserTap,
-    @required this.tokenAddTap,
-    @required this.swapAddTap,
-    @required this.sellAddTap,
-    @required this.xmlLockInfoTap,
+  const WalletChainInfoBoard({required this.address,
+    required this.balanceStr,
+    required this.balanceDollarStr,
+    required this.marketValueStr,
+    required this.lockAmountStr,
+    required this.sendTap,
+    required this.receiveTap,
+    required this.browserTap,
+    required this.tokenAddTap,
+    required this.swapAddTap,
+    required this.sellAddTap,
+    required this.xmlLockInfoTap,
     super.key});
 
   @override

@@ -32,7 +32,6 @@ import 'package:decimal/decimal.dart';
 import 'package:eth_sig_util/util/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
-import 'package:provider/provider.dart';
 
 class TransferApi {
   TokenViewApi? _tokenViewApi;

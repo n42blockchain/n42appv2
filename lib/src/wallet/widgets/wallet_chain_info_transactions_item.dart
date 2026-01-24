@@ -14,10 +14,10 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
   final dynamic transactionModel;
   final CoinModel? coinModel;
   final dynamic onBack;
-  const WalletChainInfoTransactionsItem({@required this.type,
-    @required this.transactionModel,
-    @required this.coinModel,
-    @required this.onBack,super.key});
+  const WalletChainInfoTransactionsItem({required this.type,
+    required this.transactionModel,
+    required this.coinModel,
+    required this.onBack,super.key});
 
   @override
   Widget build(BuildContext context) {

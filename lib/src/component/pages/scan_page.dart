@@ -31,8 +31,7 @@ class _ScanPageState extends State<ScanPage> {
   }
   @override
   void dispose() {
-    // TODO: implement dispose
-    controller?.dispose();
+    // QRViewController is no longer necessary to dispose - it self-disposes when QRView is un-mounted
     super.dispose();
   }
   @override

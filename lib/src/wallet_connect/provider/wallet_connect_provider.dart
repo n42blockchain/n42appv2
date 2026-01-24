@@ -519,7 +519,7 @@ class WalletConnectProvider with ChangeNotifier{
         //final address = requestParams[1];
         final encodedMessage = crypto.hexToBytes(dataToSign);
         final signedData =
-        await privateKey.signPersonalMessage(encodedMessage);
+        await privateKey.signPersonalMessageToUint8List(encodedMessage);
         signedDataHex = bytesToHex(signedData,include0x: true);
       }
       else if (eventData.method == "eth_signTypedData") {
@@ -571,7 +571,7 @@ class WalletConnectProvider with ChangeNotifier{
         }else{
           final encodedMessage =  crypto.hexToBytes(dataToSign);
           final signedData =
-          await privateKey.signPersonalMessage(encodedMessage);
+          await privateKey.signPersonalMessageToUint8List(encodedMessage);
           signedDataHex = bytesToHex(signedData,include0x: true);
         }
       }

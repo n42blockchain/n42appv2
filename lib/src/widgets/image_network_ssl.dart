@@ -72,8 +72,7 @@ class NetworkImageSSL extends ImageProvider<NetworkImageSSL> {
   }
 
   @override
-  ImageStreamCompleter loadBuffer(NetworkImageSSL key, DecoderBufferCallback decode
-      ) {
+  ImageStreamCompleter loadImage(NetworkImageSSL key, ImageDecoderCallback decode) {
     return MultiFrameImageStreamCompleter(
         codec: _loadAsync(key), scale: key.scale);
   }

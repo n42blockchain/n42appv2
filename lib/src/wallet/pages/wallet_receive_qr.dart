@@ -68,10 +68,12 @@ class _WalletReceiveQrState extends State<WalletReceiveQr> {
       await file.writeAsBytes(pngBytes);
 
       if (!mounted) return;
-      await Share.shareXFiles(
-        [XFile(file.path, mimeType: "image/png")],
-        subject: S.of(context).g_key_156,
-        text: S.of(context).g_key_179,
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(file.path, mimeType: "image/png")],
+          subject: S.of(context).g_key_156,
+          text: S.of(context).g_key_179,
+        ),
       );
     } catch (e) {
       debugPrint("分享失败: $e");

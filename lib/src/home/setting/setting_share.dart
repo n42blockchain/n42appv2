@@ -106,17 +106,19 @@ class _SettingShareState extends State<SettingShare> {
 
       if (!mounted) return;
       final box = context.findRenderObject() as RenderBox?;
-      await Share.shareXFiles(
-        [
-          XFile.fromData(
-            pngBytes,
-            name: "invite.png",
-            mimeType: "image/png",
-          ),
-        ],
-        text:
-        "${S.of(context).g_share_v3_key_3} ${S.of(context).g_share_v3_key_4} 25 ${S.of(context).g_share_v3_key_5}",
-        sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [
+            XFile.fromData(
+              pngBytes,
+              name: "invite.png",
+              mimeType: "image/png",
+            ),
+          ],
+          text:
+          "${S.of(context).g_share_v3_key_3} ${S.of(context).g_share_v3_key_4} 25 ${S.of(context).g_share_v3_key_5}",
+          sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+        ),
       );
     } catch (e) {
       debugPrint("分享截图失败: $e");
@@ -131,9 +133,11 @@ class _SettingShareState extends State<SettingShare> {
         if (shareType == 0) {
           _shareScreenshot();
         } else {
-          Share.share(
-            "${S.of(context).g_share_v3_key_3} ${S.of(context).g_share_v3_key_4} 25 ${S.of(context).g_share_v3_key_5} ${S.of(context).g_share_v3_key_7}: $linkStr",
-            subject: AppConfig.apiUrl['walletamazeBrowser'],
+          SharePlus.instance.share(
+            ShareParams(
+              text: "${S.of(context).g_share_v3_key_3} ${S.of(context).g_share_v3_key_4} 25 ${S.of(context).g_share_v3_key_5} ${S.of(context).g_share_v3_key_7}: $linkStr",
+              subject: AppConfig.apiUrl['walletamazeBrowser'],
+            ),
           );
         }
       }),

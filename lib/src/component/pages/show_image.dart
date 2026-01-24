@@ -9,7 +9,7 @@ class ShowImage extends StatelessWidget{
   final dynamic img;
   final String type;//图片来源类型 network,file,memory
   final String watermark;
-  const ShowImage(@required this.title,@required this.img,{this.watermark="AstraWallet",this.type="network",super.key});
+  const ShowImage(this.title, this.img, {this.watermark="AstraWallet",this.type="network",super.key});
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
