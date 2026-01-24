@@ -139,7 +139,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
         widget.coinModel.coin['coinType'],
         isTest:widget.coinModel.isTest,
       rpc: widget.coinModel.custom?widget.coinModel.coin['service']:null,
-    );
+    ) ?? MessageModel.error();
     if(mm.error==false){
       gasPrice=BigInt.from(mm.data['min-fee']);
     }else{

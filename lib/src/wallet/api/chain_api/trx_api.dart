@@ -266,7 +266,7 @@ class TrxApi{
     try{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};
-      String urlStr=RequestUrl().getUrl2("TRX", "rpc",isTest: isTest)+"/jsonrpc";
+      String urlStr="${RequestUrl().getUrl2("TRX", "rpc",isTest: isTest)}/jsonrpc";
       final data=await BaseApi.requestEmptyH.post(urlStr, params: {},data: postData,header: header,);
       if(data.containsKey('error')){
         mm.error=true;

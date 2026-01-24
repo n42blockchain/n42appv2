@@ -424,7 +424,7 @@ class _ImportKeystoreState extends State<ImportKeystore> {
         WalletInfo info = WalletInfo(
           walletName: name,
           password: password,
-          walletUuid: Provider.of<WalletActionProvider>(context,listen: false).UserUUID,
+          walletUuid: Provider.of<WalletActionProvider>(context,listen: false).userUUID,
           privateKey: privateKey,
           coinInfo: {selectChain['baseInfo']['mKey']:selectChain},
         );

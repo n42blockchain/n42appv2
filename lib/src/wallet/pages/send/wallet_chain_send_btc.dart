@@ -338,7 +338,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
   }*/
   //检查转账地址是否正确
   Future<void> toAddressCheck(String addr)async{
-    if(widget.coinModel.isTest)return true;
+    if(widget.coinModel.isTest)return;
     if(addr==""){
       toErrorMessage=S.current.g_key_41;
     }else{

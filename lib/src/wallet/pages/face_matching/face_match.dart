@@ -75,8 +75,8 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver{
           }
         }
         if(edit){
-          String imgType=getImageType(img.path);
-          if(imgType.toLowerCase()=="gif"){
+          String? imgType=getImageType(img.path);
+          if(imgType?.toLowerCase()=="gif"){
             return ;
           }
           createModel.imgType=getImageType(img.path);

@@ -590,7 +590,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       return;
     }
 
-    MessageModel mm=await ChatUploadFile.handlerFile(widget.targetUuid, newPath, cm, content);
+    MessageModel mm=await ChatUploadFile.handlerFile(widget.targetUuid, newPath, cm, content) ?? MessageModel.error();
     if(mm.error==true){
       setState(() {
         int index = newData.indexOf(cm);

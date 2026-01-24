@@ -221,7 +221,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
             BlockchainType.Ethereum.name,
             trm.coinMiniName,
           rpc: widget.coinModel.coin['custom']==true?widget.coinModel.coin['service']:null,
-        );
+        ) ?? MessageModel.error();
         if(rGasPrice.error==false){
           trm.gasPriceValue=rGasPrice.data*BigInt.from(gasPricePercent);
         }else{

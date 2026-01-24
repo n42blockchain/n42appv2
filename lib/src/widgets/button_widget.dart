@@ -31,11 +31,11 @@ Widget buttonStyle1(BuildContext context, VoidCallback onTap, String title) {
     ),
   );
 }
-Widget buttonStyle2(BuildContext context, VoidCallback onTap, String title) {
+Widget buttonStyle2(BuildContext context, VoidCallback? onTap, String title) {
   return TextButton(
-    onPressed: (){
+    onPressed: onTap != null ? (){
       onTap();
-    },
+    } : null,
     style: ButtonStyle(
       backgroundColor: ButtonStyleButton.allOrNull<Color>(
         AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name)
@@ -62,7 +62,7 @@ Widget buttonStyle2(BuildContext context, VoidCallback onTap, String title) {
 //按钮样式3 白色背景，蓝色字体，圆形圆角
 Widget buttonStyle3(
     BuildContext context,
-    VoidCallback onTap,
+    VoidCallback? onTap,
     String title,
     Color backgroundColor,
     Color textColor,

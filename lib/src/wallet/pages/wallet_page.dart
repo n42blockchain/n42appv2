@@ -184,7 +184,7 @@ class _WalletPageState extends State<WalletPage> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    waValue.WalletName,
+                                    waValue.walletName,
                                     style: TextStyle(
                                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
                                       fontSize: ScreenUtil().setSp(30),
@@ -348,7 +348,7 @@ class _WalletPageState extends State<WalletPage> {
                                   // ),
                                   child: WalletBoard(
                                       accountPrice: waValue.balanceTotal,
-                                      walletName: waValue.WalletName,
+                                      walletName: waValue.walletName,
                                       sendTap: () async{
                                         if(waValue.walletInfo.password==""){
                                           final flag= await tipsDialog7(this.context);

@@ -126,7 +126,7 @@ class _FaceBindingState extends State<FaceBinding> with WidgetsBindingObserver{
           Navigator.pop(context,mm);
         }else{
           //ToastUtils.show(S.of(context).g_face_match_key11(cm.address));
-          await Provider.of<WalletActionProvider>(context,listen: false).setWalletFaceBinding(widget.walletIndex);
+          Provider.of<WalletActionProvider>(context,listen: false).setWalletFaceBinding(widget.walletIndex);
           if (!mounted) return;
           MessageModel mm=MessageModel();
           mm.data=S.of(context).g_face_match_key11(addr);

@@ -102,7 +102,7 @@ class _RedeemState extends State<Redeem> {
     super.initState();
   }
   Future<void> testData()async{
-    redeem("tb1q229k7jwjlq6n3tdc0gmmhyxylze24ddvl9qext78sd2t3cyj9xvql3r07k",1742812372);
+    await redeem("tb1q229k7jwjlq6n3tdc0gmmhyxylze24ddvl9qext78sd2t3cyj9xvql3r07k",1742812372);
     //await redeem("tb1qxk5fqvludl0ec3zuy7m90u6w0v8sw993738qudpr68dad9ctaxjs5lavda");
   }
   int gasFeeRate=4;
@@ -110,7 +110,7 @@ class _RedeemState extends State<Redeem> {
   int input2Price=0;//实际输入金额
   bool inputValueOK=false;
   List<Map<String,dynamic>> inputUTXO=[];
-  Future<void> redeem(String address,int lockTime)async{
+  Future<String> redeem(String address,int lockTime)async{
     //await redeemEth(address);
     await getGasFeeBtc();
     //address="tb1qw39qrupll6xwmazqplpjgaclexjsd48jms2gwzk2xeuhqen9qxusem966j";
@@ -125,7 +125,7 @@ class _RedeemState extends State<Redeem> {
     String witnessScriptValue=await createP2WSH(lockTime);
     inputUTXO[0]['witnessValue']=witnessScriptValue;
     inputUTXO[0]['lockTime']=lockTime;
-    signP2WSH();
+    return await signP2WSH();
     /*BtcTransactionRecodeModel trModel=BtcTransactionRecodeModel();//交易数据
     trModel.address=widget.coinModel.address;
     trModel.to1=widget.coinModel.address;
@@ -200,7 +200,7 @@ class _RedeemState extends State<Redeem> {
     }
     setState(() {});
   }
-  Future<void> signP2WSH()async{
+  Future<String> signP2WSH()async{
     Map<String,dynamic> btcTxMap={
       "utxo":inputUTXO,
       "toAddress":widget.coinModel.address,
@@ -211,7 +211,7 @@ class _RedeemState extends State<Redeem> {
       "max":true
     };
     if (kDebugMode) debugPrint(json.encode(btcTxMap));
-    await Trustdart().signTransactionBtcP2wsh(CoinType.BTC.name, "m/84'/4'/0'/0/0", btcTxMap,pk: Provider.of<WalletActionProvider>(context,listen: false).walletInfo.privateKey??"");
+    return await Trustdart().signTransactionBtcP2wsh(CoinType.BTC.name, "m/84'/4'/0'/0/0", btcTxMap,pk: Provider.of<WalletActionProvider>(context,listen: false).walletInfo.privateKey??"");
   }
   //交易打包
   //unspents 未消费列表

@@ -146,7 +146,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
         widget.coinModel.coin['blockchainType'],
         widget.coinModel.coin['coinType'],
         isTest:widget.coinModel.isTest,
-    );
+    ) ?? MessageModel.error();
     if(mm.error==false){
       gasPrice=mm.data;
     }else{
@@ -278,7 +278,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
       return;
     }
 
-    await amountCheck();
+    amountCheck();
     if (!mounted) return;
     if(widget.coinModel.balance==BigInt.zero){
       setState(() {

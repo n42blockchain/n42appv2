@@ -201,7 +201,7 @@ class MiningV2Provider extends ChangeNotifier {
   /// 获取钱包中 N 币余额
   Future<void> getWalletNBalance(String add,Map coinInfo,) async {
     try {
-      MessageModel rmm=await TokenViewApi().getBalance(BlockchainType.Ethereum.name, CoinType.N.name, add,isTest: coinInfo['isTest'],rpc: coinInfo['isTest']?coinInfo['baseInfo']['service_test']:coinInfo['baseInfo']['service']);
+      MessageModel rmm=await TokenViewApi().getBalance(BlockchainType.Ethereum.name, CoinType.N.name, add,isTest: coinInfo['isTest'],rpc: coinInfo['isTest']?coinInfo['baseInfo']['service_test']:coinInfo['baseInfo']['service']) ?? MessageModel.error();
       if(rmm.error==false){
         walletNBalance=toEther(rmm.data.toString(), coinInfo['baseInfo']['decimals']).toDouble();
       }
@@ -301,7 +301,7 @@ class MiningV2Provider extends ChangeNotifier {
         wInfo.password='';
       }
       wInfo.walletName="Account${wap.walletInfoLsit.length+1}";
-      wInfo.walletUuid=wap.UserUUID;
+      wInfo.walletUuid=wap.userUUID;
       wInfo.coinInfo=chainUrlMap;
       wInfo.timestamp = "${DateTime.now().millisecondsSinceEpoch}";
     }else{

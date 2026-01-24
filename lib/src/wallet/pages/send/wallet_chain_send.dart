@@ -159,7 +159,7 @@ class _WalletChainSendState extends State<WalletChainSend> {
         widget.coinModel.coin['coinType'],
         isTest:widget.coinModel.isTest,
       rpc: rpc,
-    );
+    ) ?? MessageModel.error();
     if(mm.error==false){
       gasPrice=mm.data;
       if(get1559WithChainSymbol(widget.coinModel.coin['coinType']) && widget.coinModel.coin['blockchainType']==BlockchainType.Ethereum.name){
@@ -184,7 +184,7 @@ class _WalletChainSendState extends State<WalletChainSend> {
       CoinType.ETH.name,
       isTest:false,
       rpc: rpc,
-    );
+    ) ?? MessageModel.error();
     if(mm.error==false){
       gasPriceEth=mm.data;
     }else{

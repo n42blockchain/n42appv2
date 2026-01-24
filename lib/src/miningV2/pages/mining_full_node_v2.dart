@@ -113,7 +113,7 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
           astAddress ?? '',
           isTest: true,
           rpc: 'http://5.161.252.59:8545/'
-      );
+      ) ?? MessageModel.error();
       if (mm.error) {
       } else {
         nBalance = toEther(mm.data.toString(), 18).toDouble();

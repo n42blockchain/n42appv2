@@ -314,20 +314,20 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
   }
   Future<bool?> estimateGasEthLocal()async{
     closeKeyboard();
-    if(gasLimitLoad==Load.loading)return;
+    if(gasLimitLoad==Load.loading)return null;
     setState(() {
       gasLimitLoad=Load.loading;
     });
     try{
-      if(amountErrorMessage !="")return;
+      if(amountErrorMessage !="")return null;
       String? toAddr=await toAddressCheck(toTextEditingController.text);
       if(toAddr==null){
-        return;
+        return null;
       }
-      if(toErrorMessage !="")return;
+      if(toErrorMessage !="")return null;
       String price=valueTextEditingController.text;
       if(price==""){
-        return;
+        return null;
       }
       BigInt gaslimit=BigInt.from(getCoinGas(widget.coinModel.coin['coinType'],));
       FilApi filApi=FilApi();

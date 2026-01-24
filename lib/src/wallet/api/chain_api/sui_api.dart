@@ -33,7 +33,7 @@ class SuiApi{
     return rmm;
   }
   //用户所有的对象，NFT，合约等
-  Future<void> getOwnedObjects(String address)async{
+  Future<List<dynamic>> getOwnedObjects(String address)async{
     MessageModel rmm= await baseRPCSui(
       "suix_getOwnedObjects",
       [address, {
@@ -56,8 +56,9 @@ class SuiApi{
       }],
     );
     if(rmm.error==false){
-      rmm.data=rmm.data['data'];
+      return rmm.data['data'] ?? [];
     }
+    return [];
   }
   //模拟交易
   Future<MessageModel> dryRunTransactionBlock(String signStr)async{

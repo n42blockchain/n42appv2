@@ -48,7 +48,7 @@ class _CreateFinishState extends State<CreateFinish> {
       _wInfo=WalletInfo(
         walletName: "",
         password: "",
-        walletUuid: walletActionProvider.UserUUID,
+        walletUuid: walletActionProvider.userUUID,
       );
       _wInfo!.mnemonic= await Trustdart().generateMnemonic();
     }

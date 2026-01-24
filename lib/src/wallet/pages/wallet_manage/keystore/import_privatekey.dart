@@ -365,7 +365,7 @@ class _ImportPrivatekeyState extends State<ImportPrivatekey> {
                                 walletName: "",
                                 password: "",
                                 //path: WalletPath.init(),
-                                walletUuid: Provider.of<WalletActionProvider>(this.context,listen: false).UserUUID,
+                                walletUuid: Provider.of<WalletActionProvider>(this.context,listen: false).userUUID,
                                 mnemonic: "",
                               privateKey: base64Str,
                               coinInfo: {selectChain['baseInfo']['mKey']:selectChain},

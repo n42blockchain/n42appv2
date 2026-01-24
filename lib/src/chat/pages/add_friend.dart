@@ -56,6 +56,7 @@ class _AddFriendState extends State<AddFriend> {
     // updateDt: 605}}
     if (data != null && data['code'] == 200) {
       FriendInfo info = FriendInfo.fromJson(data["data"]);
+      if (!context.mounted) return;
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (_) => FriendDetail(info: info)));
     }

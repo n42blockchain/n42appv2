@@ -285,6 +285,7 @@ class BrowserProvider extends ChangeNotifier{
     WebViewController wv=wvcList[wListIndex];
     String? currentUrl=await wv.currentUrl();
     String? title=await wv.getTitle();
+    if (!context.mounted) return;
     await Navigator.push(context, MaterialPageRoute(builder: (context)=>BrowserCollection(title ?? "",currentUrl ?? "",)));
     getCollectionUrl(wInfoList[wListIndex]['openUrl']);
   }

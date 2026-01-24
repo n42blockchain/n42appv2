@@ -15,7 +15,7 @@ class BrowserApi{
     db.insertBrowserHistory(bhm.getMapDb());
   }
   //模糊搜索 浏览历史表
-  Future<List<Map<String,dynamic>>> selectBrowserHistoryLike(String url)async{
+  Future<List<BrowserHistoryModel>> selectBrowserHistoryLike(String url)async{
     return await db.selectBrowserHistoryLike(url);
   }
   //添加浏览收藏表
@@ -28,11 +28,11 @@ class BrowserApi{
     db.updateBrowserCollection(bcm.getMapDb(), bcm.id!);
   }
   //获取 浏览器收藏列表
-  Future<List<Map<String,dynamic>>> selectBrowserCollection({int pageSize=10,int pageNum=1})async{
+  Future<List<BrowserCollectionModel>> selectBrowserCollection({int pageSize=10,int pageNum=1})async{
     return await db.selectBrowserCollection(pageSize: pageSize,pageNum: pageNum);
   }
   //获取 浏览器收藏列表，条件 url
-  Future<List<Map<String,dynamic>>> selectBrowserCollectionUrl(String url)async{
+  Future<List<BrowserCollectionModel>> selectBrowserCollectionUrl(String url)async{
     return await db.selectBrowserCollectionUrl(url);
   }
   //删除 浏览器收藏
@@ -44,11 +44,11 @@ class BrowserApi{
     return await db.deleteBrowserCollectionUrl(url);
   }
   //获取 浏览器 搜索列表
-  Future<List<Map<String,dynamic>>> selectBrowserSearchHistory({int pageSize=10,int pageNum=1})async{
+  Future<List<BrowserSearchHistoryModel>> selectBrowserSearchHistory({int pageSize=10,int pageNum=1})async{
     return await db.selectBrowserSearchHistory(pageSize: pageSize,pageNum: pageNum);
   }
   //添加浏览器搜索列表
-  Future<int> insertBrowserSearchHistory(String search)async{
+  Future<int?> insertBrowserSearchHistory(String search)async{
     BrowserSearchHistoryModel bshm=BrowserSearchHistoryModel(search);
     return await db.insertBrowserSearchHistory(bshm.getMapDb());
   }

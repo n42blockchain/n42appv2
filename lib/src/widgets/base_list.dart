@@ -119,7 +119,6 @@ class BaseListState extends State<BaseList> {
             context, AppThemeKeys.refreshValueColor.name)));
 
     return EasyRefresh(
-      child: _buildListOrGridView(),
       header: header,
       footer: footer,
       controller: _refreshController,
@@ -130,6 +129,7 @@ class BaseListState extends State<BaseList> {
       onLoad: widget.canLoadMore && pageIndex != widget.pageIndex
           ? () async => loadMore()
           : null,
+      child: _buildListOrGridView(),
     );
     /*return EasyRefresh(
         firstRefresh: widget.firstRefresh ?? false,

@@ -606,7 +606,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
   }
   */
   Future<void> getTxInfoNetwork(TransationRecordModel transationRecordModel)async{
-    TransationRecordModel rtrm=await Provider.of<TransactionRecordItemProvider>(context,listen: false).checkUndoneTrReturn(transationRecordModel);
+    TransationRecordModel rtrm=await Provider.of<TransactionRecordItemProvider>(context,listen: false).checkUndoneTrReturn(transationRecordModel) ?? transationRecordModel;
     transactionList.firstWhere((element){
       TransationRecordModel trm=element as TransationRecordModel;
       if(trm.txHash==rtrm.txHash){
@@ -618,7 +618,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
     setState(() {});
   }
   Future<void> getTxInfoNetworkBtc(BtcTransactionRecodeModel transationRecordModel)async{
-    BtcTransactionRecodeModel rtrm=await Provider.of<TransactionRecordItemProvider>(context,listen: false).checkUndoneTrBtcReturn(transationRecordModel);
+    BtcTransactionRecodeModel rtrm=await Provider.of<TransactionRecordItemProvider>(context,listen: false).checkUndoneTrBtcReturn(transationRecordModel) ?? transationRecordModel;
     transactionList.firstWhere((element){
       TransationRecordModel trm=element as TransationRecordModel;
       if(trm.txHash==rtrm.txHash){

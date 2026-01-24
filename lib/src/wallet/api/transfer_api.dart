@@ -538,7 +538,7 @@ class TransferApi {
     BigInt gasPrice = BigInt.zero; //当前旷工费
     MessageModel mmg = await tokenViewApi.getGasPrice(
         BlockchainType.Cosmos.name, CoinType.ATOM.name,
-        isTest: false);
+        isTest: false) ?? MessageModel.error();
     if (mmg.error == true) {
       return mmg;
     } else {
@@ -712,7 +712,7 @@ class TransferApi {
     BigInt gasPrice = BigInt.zero; //当前旷工费
     MessageModel mmg = await tokenViewApi.getGasPrice(
         BlockchainType.Cosmos.name, CoinType.ATOM.name,
-        isTest: false);
+        isTest: false) ?? MessageModel.error();
     if (mmg.error == true) {
       return mmg;
     } else {
@@ -858,7 +858,7 @@ class TransferApi {
     BigInt gasPrice = BigInt.zero; //当前旷工费
     MessageModel mmg = await tokenViewApi.getGasPrice(
         BlockchainType.Cosmos.name, CoinType.ATOM.name,
-        isTest: false);
+        isTest: false) ?? MessageModel.error();
     if (mmg.error == true) {
       return mmg;
     } else {
@@ -993,7 +993,7 @@ class TransferApi {
     BigInt gasPrice = BigInt.zero; //当前旷工费
     MessageModel mmg = await tokenViewApi.getGasPrice(
         BlockchainType.Tron.name, CoinType.TRX.name,
-        isTest: false);
+        isTest: false) ?? MessageModel.error();
     if (mmg.error == true) {
       return mmg;
     } else {
@@ -1151,7 +1151,7 @@ class TransferApi {
     BigInt gasPrice = BigInt.zero;
     MessageModel mmgas = await tokenViewApi.getGasPrice(
         BlockchainType.Solana.name, CoinType.SOL.name,
-        isTest: false);
+        isTest: false) ?? MessageModel.error();
     if (mmgas.error) {
       return mmgas;
     } else {
@@ -1278,7 +1278,7 @@ class TransferApi {
     if(signStr==""){
       MessageModel rmm=MessageModel.error();
       rmm.data=S.current.g_key_wallet_m6;
-      return;
+      return rmm;
     }
     //发送交易
     return await solApi.sendTransaction(signStr,isTest: isTest=="main"?false:true);
@@ -1351,7 +1351,7 @@ class TransferApi {
     BigInt gasPrice2 = BigInt.zero; //当前旷工费
     MessageModel mmg = await tokenViewApi.getGasPrice(
         BlockchainType.Ethereum.name, coinType,
-        isTest: isTest);
+        isTest: isTest) ?? MessageModel.error();
     if (mmg.error == true) {
       return mmg;
     } else {
@@ -1433,7 +1433,7 @@ class TransferApi {
     signStr = "0x$signStr";
     return await tokenViewApi.sendTx(
         BlockchainType.Ethereum.name, coinType, signStr,
-        netMode: isTest?"test":"main");
+        netMode: isTest?"test":"main") ?? MessageModel.error();
   }
   Future<MessageModel> transferEth(int chainId, String coinType, String fromAddress,
       String toAddress, double value, int decimals, String path,
@@ -1474,7 +1474,7 @@ class TransferApi {
     BigInt gasPrice2 = BigInt.zero; //当前旷工费
     MessageModel mmg = await tokenViewApi.getGasPrice(
         BlockchainType.Ethereum.name, coinType,
-        isTest: isTest);
+        isTest: isTest) ?? MessageModel.error();
     if (mmg.error == true) {
       return mmg;
     } else {
@@ -1682,7 +1682,7 @@ class TransferApi {
     }
     return await tokenViewApi.sendTx(
         BlockchainType.Ethereum.name, coinType, signStr,
-        netMode: isTest,rpc: rpc);
+        netMode: isTest,rpc: rpc) ?? MessageModel.error();
   }
 
   Future<MessageModel> transferBtc(String coinType, String fromAddress, String toAddress,
@@ -1802,7 +1802,7 @@ class TransferApi {
     }
     //发送交易
     return await tokenViewApi.sendTx(
-        BlockchainType.Bitcoin.name, coinType.toUpperCase(), signStr,netMode: isTest);
+        BlockchainType.Bitcoin.name, coinType.toUpperCase(), signStr,netMode: isTest) ?? MessageModel.error();
   }
   Future<MessageModel> getUTXO(
       String coinType,
@@ -1963,7 +1963,7 @@ class TransferApi {
     BigInt gasPrice = BigInt.zero; //当前旷工费
     MessageModel mmg = await tokenViewApi.getGasPrice(
         BlockchainType.Algorand.name, "ALGO",
-        isTest: false);
+        isTest: false) ?? MessageModel.error();
     if (mmg.error == true) {
       return mmg;
     } else {
@@ -2034,7 +2034,7 @@ class TransferApi {
       rmm.data = S.current.g_key_wallet_m6;
       return rmm;
     }
-    return await tokenViewApi.sendTx(BlockchainType.Algorand.name,"ALGO" , signStr,netMode: isTest);
+    return await tokenViewApi.sendTx(BlockchainType.Algorand.name,"ALGO" , signStr,netMode: isTest) ?? MessageModel.error();
   }
 
   //Tezos转账
@@ -2059,7 +2059,7 @@ class TransferApi {
     BigInt gasPrice = BigInt.zero; //当前旷工费
     MessageModel mmg = await tokenViewApi.getGasPrice(
         BlockchainType.Algorand.name, "XTZ",
-        isTest: false);
+        isTest: false) ?? MessageModel.error();
     if (mmg.error == true) {
       return mmg;
     } else {
@@ -2134,7 +2134,7 @@ class TransferApi {
     if(signStr==""){
       MessageModel rmm=MessageModel.error();
       rmm.data=S.current.g_key_wallet_m6;
-      return;
+      return rmm;
     }
     return await xtzApi.sendTxXtz(signStr,isTest);
   }
@@ -2181,7 +2181,7 @@ class TransferApi {
     BigInt gasPrice = BigInt.zero; //当前旷工费
     MessageModel mmg = await tokenViewApi.getGasPrice(
         BlockchainType.Algorand.name, "XRP",
-        isTest: false);
+        isTest: false) ?? MessageModel.error();
     if (mmg.error == true) {
       return mmg;
     } else {
@@ -2250,7 +2250,7 @@ class TransferApi {
     if(signStr==""){
       MessageModel rmm=MessageModel.error();
       rmm.data=S.current.g_key_wallet_m6;
-      return;
+      return rmm;
     }
     return await xrpApi.sendTxXrp(signStr,isTest);
   }
@@ -2389,7 +2389,7 @@ class TransferApi {
       {String contractAddress = ""}) async {
     MessageModel mm = await tokenViewApi.getBalance(
         BlockchainType.Tron.name, CoinType.TRX.name, fromAddress,
-        isTest: false);
+        isTest: false) ?? MessageModel.error();
     //获取余额
     BigInt balance = BigInt.zero;
     if (mm.error == true) {
@@ -2424,14 +2424,14 @@ class TransferApi {
       {String contractAddress = ""}) async {
     MessageModel mm = await tokenViewApi.getBalance(
         BlockchainType.Tron.name, CoinType.TRX.name, fromAddress,contract: contractAddress,
-        isTest: false);
+        isTest: false) ?? MessageModel.error();
     return mm;
   }
 
   //获取余额 solana
   Future<MessageModel> getBalanceSol(String fromAddress,
       {String contractAddress = ""}) async {
-    MessageModel rData= await tokenViewApi.getBalance(BlockchainType.Solana.name, "", fromAddress,contract: contractAddress);
+    MessageModel rData= await tokenViewApi.getBalance(BlockchainType.Solana.name, "", fromAddress,contract: contractAddress) ?? MessageModel.error();
     /*if(contractAddress !=""){
       BigInt balance=BigInt.zero;
       if(rData.data.length !=0){
@@ -2460,7 +2460,7 @@ class TransferApi {
       {String contractAddress = "",bool isTest=false}) async {
     MessageModel mm = await tokenViewApi.getBalance(
         BlockchainType.Ethereum.name, coinType, fromAddress,contract:contractAddress,
-        isTest: isTest);
+        isTest: isTest) ?? MessageModel.error();
     return mm;
   }
 
@@ -2470,25 +2470,25 @@ class TransferApi {
     }
     MessageModel mm = await tokenViewApi.getBalance(
         BlockchainType.Bitcoin.name, coinType, fromAddress,
-        isTest: isTest);
+        isTest: isTest) ?? MessageModel.error();
     return mm;
   }
   Future<MessageModel> getBalanceAlgo(String fromAddress) async {
     MessageModel mm = await tokenViewApi.getBalance(
         BlockchainType.Algorand.name, "ALGO", fromAddress,
-        isTest: false);
+        isTest: false) ?? MessageModel.error();
     return mm;
   }
   Future<MessageModel> getBalanceXtz(String fromAddress) async {
     MessageModel mm = await tokenViewApi.getBalance(
         BlockchainType.Tezos.name, "XTZ", fromAddress,
-        isTest: false);
+        isTest: false) ?? MessageModel.error();
     return mm;
   }
   Future<MessageModel> getBalanceXrp(String fromAddress) async {
     MessageModel mm = await tokenViewApi.getBalance(
         BlockchainType.Ripple.name, "XRP", fromAddress,
-        isTest: false);
+        isTest: false) ?? MessageModel.error();
     return mm;
   }
 

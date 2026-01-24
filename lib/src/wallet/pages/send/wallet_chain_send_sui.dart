@@ -156,7 +156,7 @@ class _WalletChainSendSuiState extends State<WalletChainSendSui> {
       widget.coinModel.coin['coinType'],
       isTest:widget.coinModel.isTest,
       rpc: rpc,
-    );
+    ) ?? MessageModel.error();
     if (!mounted) return;
     if(mm.error==false){
       gasPrice=mm.data;

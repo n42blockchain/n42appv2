@@ -324,7 +324,7 @@ class _NewFriendListPageState extends State<NewFriendListPage> {
                                   : EdgeInsets.symmetric(
                                   horizontal: 0, vertical: ScreenUtil().setWidth(10)),
                               child: Text(
-                                requestBtnMessage(model),
+                                requestBtnMessage(model) ?? '',
                                 style: TextStyle(
                                     color: model.status == 0
                                         ? Colors.white
@@ -379,6 +379,7 @@ class _NewFriendListPageState extends State<NewFriendListPage> {
         return S.of(context).g_chat_key_5;
       }
     }
+    return null;
   }
 
   //同意好友申请

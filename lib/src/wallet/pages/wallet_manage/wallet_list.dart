@@ -134,7 +134,7 @@ class _WalletListState extends State<WalletList> {
     if(rmm.error){
       ToastUtils.show(S.of(context).g_face_match_key35);
     }else{
-      await Provider.of<WalletActionProvider>(context,listen: false).setWalletFaceBinding(fbwIndex,faceBinding: false);
+      Provider.of<WalletActionProvider>(context,listen: false).setWalletFaceBinding(fbwIndex,faceBinding: false);
       fbwIndex=-1;
     }
     setState(() {

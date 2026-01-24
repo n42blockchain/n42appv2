@@ -34,7 +34,7 @@ class WalletActionProvider extends ChangeNotifier{
   //刷新coin 余额
   Map<int,dynamic> coinRefreshMap={};
   String defaultWalletUUID="AstranetWallet";
-  String get UserUUID{
+  String get userUUID{
     if(AppGlobals.userInfo==null){
       return defaultWalletUUID;
     }else{
@@ -61,7 +61,7 @@ class WalletActionProvider extends ChangeNotifier{
     return _walletInfoLsit[walletIndex];
   }
   //获取用户设置的钱包名字
-  String get WalletName {
+  String get walletName {
     if (_walletInfoLsit.isEmpty) return "";
     return walletInfo.walletName??"";
   }
@@ -225,16 +225,16 @@ class WalletActionProvider extends ChangeNotifier{
     if (walletAll == null){
       await createWallet();
     }else{
-      Map<String, dynamic>? walletUser=walletAll[UserUUID];
+      Map<String, dynamic>? walletUser=walletAll[userUUID];
       if(walletUser !=null){
-        walletIndex=walletAll[UserUUID]?['index'];
-        if(walletAll[UserUUID]?['miningIndex']==null || walletAll[UserUUID]?['miningIndex']==-1){
+        walletIndex=walletAll[userUUID]?['index'];
+        if(walletAll[userUUID]?['miningIndex']==null || walletAll[userUUID]?['miningIndex']==-1){
           walletMiningIndex=walletIndex;
         }else{
-          walletMiningIndex=walletAll[UserUUID]?['miningIndex'];
+          walletMiningIndex=walletAll[userUUID]?['miningIndex'];
         }
         List<dynamic> walletInfos =
-            walletAll[UserUUID]?["wallet"]??[]; //await SPUtils.getWalletInfo();
+            walletAll[userUUID]?["wallet"]??[]; //await SPUtils.getWalletInfo();
         _walletInfoLsit=[];
         //await getCoinSort();//获取当前钱包币的排序缓存
         for (int i = 0; i < walletInfos.length; i++) {
@@ -256,7 +256,7 @@ class WalletActionProvider extends ChangeNotifier{
             _walletInfoLsit.add(WalletInfo.fromJson(walletInfos[i]));
           }
           //await getPublicKeyAndPrivateKeyPairN();
-          walletAll[UserUUID]=walletDefault;
+          walletAll[userUUID]=walletDefault;
           walletAll.remove("AstranetWallet");
           await SPUtil().setWalletInfo(walletAll);
           //saveWalletInfo(walletInfo, walletIndex,isNewWallet: true);
@@ -490,16 +490,16 @@ class WalletActionProvider extends ChangeNotifier{
       if (walletAll == null) {
         Map<String,dynamic> wallet=newWalletInfo.toJson();
         await sPUtils.setWalletInfo({
-          UserUUID: {
+          userUUID: {
             "index":0,
             "miningIndex":0,
             "wallet":[wallet],
           }
         });
       } else {
-        Map<String,dynamic>? userWallets=walletAll[UserUUID];
+        Map<String,dynamic>? userWallets=walletAll[userUUID];
         if(userWallets==null){
-          walletAll[UserUUID] = {
+          walletAll[userUUID] = {
             "index":0,
             "miningIndex":0,
             "wallet":[newWalletInfo.toJson()],
@@ -514,7 +514,7 @@ class WalletActionProvider extends ChangeNotifier{
           }
           userWallets['index']=wIndex;
           userWallets['miningIndex']=walletMiningIndex;
-          walletAll[UserUUID]=userWallets;
+          walletAll[userUUID]=userWallets;
         }
         await sPUtils.setWalletInfo(walletAll);
       }
@@ -530,9 +530,9 @@ class WalletActionProvider extends ChangeNotifier{
     SPUtil sPUtils=SPUtil();
     Map<String, dynamic>? walletAll = await sPUtils.getWalletInfo();
     if (walletAll != null) {
-      walletAll[UserUUID]['wallet']=walletInfoLsit.map((e) => e.toJson()).toList();
-      walletAll[UserUUID]['index']=walletIndex;
-      walletAll[UserUUID]['miningIndex']=walletMiningIndex;
+      walletAll[userUUID]['wallet']=walletInfoLsit.map((e) => e.toJson()).toList();
+      walletAll[userUUID]['index']=walletIndex;
+      walletAll[userUUID]['miningIndex']=walletMiningIndex;
       await sPUtils.setWalletInfo(walletAll);
       await refreshWalletListNotifier();
     }
@@ -562,7 +562,7 @@ class WalletActionProvider extends ChangeNotifier{
     WalletInfo wInfo=WalletInfo(
       walletName: "",
       password: "",
-      walletUuid: UserUUID,
+      walletUuid: userUUID,
     );
     wInfo.mnemonic= await Trustdart().generateMnemonic();
     wInfo.walletName="Account${walletInfoLsit.length+1}";
@@ -1140,7 +1140,7 @@ class WalletActionProvider extends ChangeNotifier{
       //coinModel.custom?coinModel.isTest?coinModel.coin['service_test']:coinModel.coin['service']:null
       //"http://5.161.252.59:8545"
       //coinModel.custom?coinModel.isTest?coinModel.coin['service_test']:coinModel.coin['service']:null
-    );
+    ) ?? MessageModel.error();
     if(mm.error){
       // 网络请求失败，使用缓存的余额数据
       debugPrint('WalletActionProvider: Balance fetch failed for ${coinModel.coin['miniName']}, using cached balance');
@@ -1220,7 +1220,7 @@ class WalletActionProvider extends ChangeNotifier{
       return true;
     }
     BigInt balance=BigInt.zero;
-    MessageModel rBalance=await tokenViewApi.getBalance(BlockchainType.Algorand.name, coinModel.coin['coinType'], coinModel.address,contract: contract,isTest: coinModel.isTest);
+    MessageModel rBalance=await tokenViewApi.getBalance(BlockchainType.Algorand.name, coinModel.coin['coinType'], coinModel.address,contract: contract,isTest: coinModel.isTest) ?? MessageModel.error();
     if(rBalance.error){
       coinModel.isRefresh=false;
       coinModel.loadError=true;

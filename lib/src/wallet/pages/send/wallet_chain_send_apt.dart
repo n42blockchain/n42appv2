@@ -153,7 +153,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
       widget.coinModel.coin['blockchainType'],
       widget.coinModel.coin['coinType'],
       isTest:widget.coinModel.isTest,
-    );
+    ) ?? MessageModel.error();
     if (!mounted) return;
     if(mm.error==false){
       gas=mm.data;

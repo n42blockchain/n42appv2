@@ -351,6 +351,7 @@ class AppDatabase{
       await db.update('browserSearchHistory', bshm.getMap(),
           where: 'id=${bshm.id}');
     }
+    return null;
   }
 
   //删除搜索历史

@@ -172,7 +172,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
     final publicKey = privateKey!.getPublic();
     // 3️⃣ 生成比特币地址（P2PKH）
     address = publicKey.toSegwitAddress().toAddress(BitcoinNetwork.mainnet);
-    MessageModel rdata=await getUTXO2(address??"");
+    MessageModel rdata=await getUTXO2(address??"") ?? MessageModel.error();
     if(rdata.error==false){
       unspents=rdata.data;
     }
@@ -185,7 +185,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
     if(uPubKey==null){
       //Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic;
       //String pk=await Trustdart().getPrivateKey(Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic??"", CoinType.BTC.name, "m/84'/4'/0'/0/0");
-      if (!mounted) return;
+      if (!mounted) return null;
       final wap = Provider.of<WalletActionProvider>(context,listen: false);
       String pubKey=await Trustdart().getPublicKey(CoinType.BTC.name, "m/84'/4'/0'/0/0",mnemonic: wap.walletInfo.mnemonic??"",pk: wap.walletInfo.privateKey??"");
       publicKey=bytesToHex(base64Decode(pubKey));
@@ -362,7 +362,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
     }catch(e){
       setState(() {});
     }
-
+    return null;
   }
 
   Future<MessageModel> getUTXOTxid(String txid)async{

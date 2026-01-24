@@ -243,7 +243,7 @@ class _WalletManageState extends State<WalletManage> {
               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
               child: buttonStyle2(
                 context, ()async{
-                  MessageModel mm=await Provider.of<WalletActionProvider>(context,listen: false).setMainWallet(widget.walletIndex);
+                  MessageModel mm=Provider.of<WalletActionProvider>(context,listen: false).setMainWallet(widget.walletIndex);
                   if (!context.mounted) return;
                   if(mm.error){
                     ToastUtils.show(mm.data);

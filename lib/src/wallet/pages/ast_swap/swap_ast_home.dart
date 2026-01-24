@@ -219,7 +219,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
       MessageModel rData = await tokenViewApi.getBalance(
           payCoinModel!.coin['blockchainType'],
           payCoinModel!.coin['coinType'],
-          payCoinModel!.address.toString());
+          payCoinModel!.address.toString()) ?? MessageModel.error();
       if (rData.error) {
         payCoinModel!.balance = BigInt.zero;
       } else {
@@ -241,7 +241,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
           payCoinModel!.coin['blockchainType'],
           (payCoinModel!.coin['coinType'] ?? "").toUpperCase(),
           payCoinModel?.address ?? "",
-          contract: youPay?.payCoinContract ?? "");
+          contract: youPay?.payCoinContract ?? "") ?? MessageModel.error();
       if (rData.error) {
         youPay!.balance = 0;
       } else {
@@ -263,7 +263,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
       MessageModel rData = await tokenViewApi.getBalance(
           BlockchainType.Ethereum.name,
           CoinType.N.name,
-          getCoinModel!.address.toString());
+          getCoinModel!.address.toString()) ?? MessageModel.error();
       if (rData.error) {
         getCoinModel!.balance = BigInt.zero;
       } else {
@@ -288,7 +288,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
         payCoinModel!.coin['blockchainType'], payCoinModel!.coin['coinType'],
         isTest: false,
       rpc: payCoinModel!.custom?payCoinModel!.coin['service']:null,
-    );
+    ) ?? MessageModel.error();
     if (mm.error == false) {
       gasPrice = mm.data;
       if(get1559WithChainSymbol(payCoinModel!.coin['coinType'])){
