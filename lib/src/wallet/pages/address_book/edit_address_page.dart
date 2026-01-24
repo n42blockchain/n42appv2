@@ -69,7 +69,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
     super.dispose();
   }
 
-  address_check(String addr)async{
+  addressCheck(String addr)async{
     if(addr==""){
       errorMessage=S.current.g_key_41;
       setState(() {});
@@ -367,7 +367,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
     final desc = descController.text.trim();
     String? address = addressController.text.trim();
 
-    address=await address_check(address);
+    address=await addressCheck(address);
     if (!mounted) return;
     if(address==null){
       return;

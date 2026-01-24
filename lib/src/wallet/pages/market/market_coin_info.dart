@@ -24,7 +24,7 @@ class MarketCoinInfo extends StatefulWidget {
 
 class _MarketCoinInfoState extends State<MarketCoinInfo> {
   final oCcy = NumberFormat("#,##0.00########", "en_US");
-  double price_change_percentage_24h=0.0;
+  double priceChangePercentage24h=0.0;
   Map<String,dynamic>? coinInfo;
   Load load=Load.loading;
   String website="";//官网
@@ -40,7 +40,7 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
   void initState() {
     super.initState();
     coin = Map<String, dynamic>.from(coin);
-    price_change_percentage_24h=(coin['price_change_per_24h']==null || coin['price_change_per_24h']=='')?0.0:coin['price_change_per_24h']*1.0;
+    priceChangePercentage24h=(coin['price_change_per_24h']==null || coin['price_change_per_24h']=='')?0.0:coin['price_change_per_24h']*1.0;
     getCoinInfo();
   }
   getCoinInfo()async{
@@ -183,17 +183,17 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
                                 ),
                                 SizedBox(width: ScreenUtil().setWidth(20.0),),
                                 Text(
-                                  "${price_change_percentage_24h > 0 ? "+" : ""}${regular.formartNum(price_change_percentage_24h, 2,isCrop: true)}%",
+                                  "${priceChangePercentage24h > 0 ? "+" : ""}${regular.formartNum(priceChangePercentage24h, 2,isCrop: true)}%",
                                   style: TextStyle(
                                     fontSize:ScreenUtil().setWidth(30.0),
-                                    color:AppThemeUtils.getColorByKey(context, price_change_percentage_24h > 0?AppThemeKeys.rightTextColor.name:AppThemeKeys.errorTextColor.name),
+                                    color:AppThemeUtils.getColorByKey(context, priceChangePercentage24h > 0?AppThemeKeys.rightTextColor.name:AppThemeKeys.errorTextColor.name),
                                     height: 1.3,
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          LineChart(coin['kline_default']??[], price_change_percentage_24h > 0?true:false,ScreenUtil().setWidth(240.0),ScreenUtil().setWidth(20.0)),
+                          LineChart(coin['kline_default']??[], priceChangePercentage24h > 0?true:false,ScreenUtil().setWidth(240.0),ScreenUtil().setWidth(20.0)),
                           SizedBox(
                             height: ScreenUtil().setWidth(40.0),
                             child: Row(

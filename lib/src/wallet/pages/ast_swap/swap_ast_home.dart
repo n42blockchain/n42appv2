@@ -109,7 +109,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
       if (ok1) {
         ok1 = await getGasPrice();
         if (ok1) {
-          estimateGas_eth();
+          estimateGasEth();
           load = Load.finish;
         } else {
           load = Load.error;
@@ -135,7 +135,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     await getCoinModel!.buildWallet();
     getCoinModel!.getBalanceDefault();
     setState(() {});
-    getBalance_get();
+    getBalanceGet();
   }
 
   //获取商品列表
@@ -254,7 +254,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     }
   }
 
-  getBalance_get() async {
+  getBalanceGet() async {
     if (getCoinModel != null) {
       if (getLoad == Load.loading) return;
       setState(() {
@@ -331,13 +331,13 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     });
     Map<String, dynamic> astCoinInfo = coinMarketInfo[index];
     getCoinModel!.coinPrice = astCoinInfo['price'] * 1.0;
-    int index_pay = coinMarketInfo.indexWhere((element) {
+    int indexPay = coinMarketInfo.indexWhere((element) {
       if (element['coin'] == (youPay?.payCoin ?? "").toLowerCase()) {
         return true;
       }
       return false;
     });
-    Map<String, dynamic> payCoinInfo = coinMarketInfo[index_pay];
+    Map<String, dynamic> payCoinInfo = coinMarketInfo[indexPay];
     youPay!.price = payCoinInfo['price'] * 1.0;
     setState(() {});
   }
@@ -509,7 +509,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
   }
 
   //eth 模拟交易
-  estimateGas_eth() async {
+  estimateGasEth() async {
     if (payCoinModel!.balance == BigInt.zero) {
       errorMessage = S.of(context).g_key_t_29(payCoinModel!.coin['coinType']);
       setState(() {});
@@ -806,7 +806,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                         bool rGasPrice = await getGasPrice();
                         if (!mounted) return;
                         if (rGasPrice) {
-                          await estimateGas_eth();
+                          await estimateGasEth();
                         }
                       }
                     }
@@ -1256,7 +1256,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
           if (load == Load.finish) {
             if (readStatement == false) return;
             if (checkPayInput() == true) {
-              bool r = await estimateGas_eth();
+              bool r = await estimateGasEth();
               if (!mounted) return;
               if (r == false) return;
               if (errorMessage != "") return;

@@ -51,7 +51,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
       coinInfo=widget.transationRecordModel!.coin;
     }
     init();
-    init_security();
+    initSecurity();
   }
   init(){
     //计算gasPrice
@@ -143,7 +143,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     }
 
   }
-  init_security()async{
+  initSecurity()async{
     Map<String,dynamic>? s=await SPUtil().getSecurity();
     if(s!=null){
       Map<String,dynamic>? userSecurityMap=s[AppGlobals.userInfo?.uuid??""];

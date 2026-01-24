@@ -28,7 +28,7 @@ class WalletCoinTokenAdd2 extends StatefulWidget {
 class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
   TextEditingController inputEditingController=TextEditingController();
   List<dynamic> coinlist=[];
-  List<dynamic> coinlist_seach=[];
+  List<dynamic> coinlistSeach=[];
   Load load=Load.finish;
   List<String> symbols=[];
   String addSymbol="";//添加的代币
@@ -123,14 +123,14 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
   seachCoin()async{
     if(inputEditingController.text!=""){
       try{
-        coinlist_seach=[];
+        coinlistSeach=[];
         String inputStr=inputEditingController.text.toLowerCase();
         for(Map<String,dynamic> m in coinlist){
           int fullnameIndex=m['fullname'].toString().indexOf(inputStr);
           String symbolStr=m['coin_name'].toString();
           int symbolIndex=symbolStr.indexOf(inputStr);
           if(symbolIndex!=-1 || fullnameIndex!=-1){
-            coinlist_seach.add(m);
+            coinlistSeach.add(m);
           }
         }
       }catch(e){
@@ -341,13 +341,13 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
       );
     }
     else{
-      if(coinlist_seach.isEmpty) {
+      if(coinlistSeach.isEmpty) {
         return const EmptyView();
       }
       return ListView.separated(
-        itemCount: coinlist_seach.length,
+        itemCount: coinlistSeach.length,
         itemBuilder: (context,int index){
-          Map<String,dynamic> rowValue = coinlist_seach[index];
+          Map<String,dynamic> rowValue = coinlistSeach[index];
           return coinItem(rowValue);
         },
         separatorBuilder: (context,int index){

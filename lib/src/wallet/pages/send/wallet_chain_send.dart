@@ -72,9 +72,9 @@ class _WalletChainSendState extends State<WalletChainSend> {
 
   BigInt totalGasPrice=BigInt.zero;
   BigInt gasPrice=BigInt.zero;
-  BigInt gasPrice_eth=BigInt.zero;
+  BigInt gasPriceEth=BigInt.zero;
   BigInt gas=BigInt.zero;
-  BigInt gas_eth=BigInt.zero;
+  BigInt gasEth=BigInt.zero;
   BigInt transferValue=BigInt.zero;//转账金额
 
 
@@ -130,8 +130,8 @@ class _WalletChainSendState extends State<WalletChainSend> {
     await getBalance();
     await getGasPrice();
     if(getEthLayer2(widget.coinModel.coin['coinType'])){
-      gas_eth=BigInt.from(GetCoinGas(CoinType.ETH.name));
-      await getGasPrice_layer2();
+      gasEth=BigInt.from(GetCoinGas(CoinType.ETH.name));
+      await getGasPriceLayer2();
     }
   }
   //获取余额
@@ -174,7 +174,7 @@ class _WalletChainSendState extends State<WalletChainSend> {
     setState(() {});
   }
   //获取旷工费 ETH链，当操作的是ETH Layer2的时候调用
-  getGasPrice_layer2()async{
+  getGasPriceLayer2()async{
     setState(() {
       load=Load.loading;
     });
@@ -186,18 +186,18 @@ class _WalletChainSendState extends State<WalletChainSend> {
       rpc: rpc,
     );
     if(mm.error==false){
-      gasPrice_eth=mm.data;
+      gasPriceEth=mm.data;
     }else{
       errorMessage=mm.data.toString();
       ToastUtils.show(errorMessage);
     }
 
-    totalGasPrice=totalGasPrice+BigInt.from((100 * gasPrice_eth.toInt() * 2100)/16);
+    totalGasPrice=totalGasPrice+BigInt.from((100 * gasPriceEth.toInt() * 2100)/16);
     load=Load.finish;
     setState(() {});
   }
   //eth 模拟交易
-  estimateGas_eth_local({bool checkAddress=true})async{
+  estimateGasEthLocal({bool checkAddress=true})async{
     closeKeyboard();
     if(gasLimitLoad==Load.loading)return;
     setState(() {
@@ -424,7 +424,7 @@ class _WalletChainSendState extends State<WalletChainSend> {
       });
       return;
     }
-    await estimateGas_eth_local(checkAddress: false);
+    await estimateGasEthLocal(checkAddress: false);
     if(errorMessage != ""){
       setState(() {
         load=Load.finish;
@@ -533,11 +533,11 @@ class _WalletChainSendState extends State<WalletChainSend> {
     if(widget.coinModel.coin['isContract']){
       valueTextEditingController.text=widget.coinModel.balanceStringAll();
       transferValue=widget.coinModel.balance;
-      estimateGas_eth_local();
+      estimateGasEthLocal();
     }else{
       if(widget.coinModel.coin['blockchainType']==BlockchainType.Ethereum.name || widget.coinModel.coin['blockchainType']==BlockchainType.Tron.name){
         valueTextEditingController.text=widget.coinModel.balanceStringAll();
-        bool? rOK=await estimateGas_eth_local();
+        bool? rOK=await estimateGasEthLocal();
         if(rOK != null && rOK){
           transferValue=widget.coinModel.balance-totalGasPrice;
           valueTextEditingController.text=_regular.formartNum(toEther(transferValue.toString(),widget.coinModel.coin['decimals']).toDouble(), 14,isCrop: true,isFill0: false);

@@ -60,7 +60,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   int networkIndex = -1;
   String networkName = "";
   int networkIndexToken = 0;
-  String networkName_token = "";
+  String networkNameToken = "";
 
   setNetworkIndex(int value, String name) {
     if (importType == 0) {
@@ -74,9 +74,9 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
       if (value == networkIndexToken) return;
       setState(() {
         networkIndexToken = value;
-        networkName_token = name;
+        networkNameToken = name;
       });
-      setChainsToken_withNetwork();
+      setChainsTokenWithNetwork();
     }
   }
 
@@ -124,13 +124,13 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
         }
       }
     }
-    setChainsToken_withNetwork();
+    setChainsTokenWithNetwork();
   }
 
-  setChainsToken_withNetwork() {
+  setChainsTokenWithNetwork() {
     List<String> cKeys = chainsToken.keys.toList();
     if (cKeys.isNotEmpty) {
-      networkName_token =
+      networkNameToken =
       chainsToken[cKeys[networkIndexToken]]["baseInfo"]['name'];
     }else{
       return;
@@ -223,7 +223,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     }
   }
 
-  addCoin_token(Map<String, dynamic> coinMap) async {
+  addCoinToken(Map<String, dynamic> coinMap) async {
     try {
       if (coinMap['edit'] == true) return;
       setState(() {
@@ -334,10 +334,10 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
         }
       }
     }
-    String test_net_url = chainMap['test_net_url'];
-    String main_net_url = chainMap['main_net_url'];
-    int main_chain_id = chainMap['main_chain_id'];
-    int test_chain_id = chainMap['test_chain_id'];
+    String testNetUrl = chainMap['test_net_url'];
+    String mainNetUrl = chainMap['main_net_url'];
+    int mainChainId = chainMap['main_chain_id'];
+    int testChainId = chainMap['test_chain_id'];
     String rules = chainMap['rules'];
     bool supportTest = true;
     if (bct == BlockchainType.Bitcoin) {
@@ -348,7 +348,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
         addrType = "segwit";
       }
     } else {
-      if (test_net_url == "") {
+      if (testNetUrl == "") {
         supportTest = false;
       }
     }
@@ -383,23 +383,23 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
         "isContract": false,
         "mKey": coinType,
         "path": path,
-        "service": main_net_url,
-        "service_test": test_net_url,
-        "chainId": main_chain_id,
-        "chainId_test": test_chain_id,
+        "service": mainNetUrl,
+        "service_test": testNetUrl,
+        "chainId": mainChainId,
+        "chainId_test": testChainId,
         "contract": "",
         "contract_test": "",
         "canEdit": widget.coinType==null?true:false,
         "rules": rules,
       },
-      "mainnetChainID": main_chain_id,
-      "testnetChainID": test_chain_id,
+      "mainnetChainID": mainChainId,
+      "testnetChainID": testChainId,
       "testnetIndex": 0, //当前选择的测试网络 索引值
       "testnets": [
         {
           "testnetWS": "",
-          "testnetRPC": test_net_url,
-          "testnetChainID": test_chain_id,
+          "testnetRPC": testNetUrl,
+          "testnetChainID": testChainId,
           "testnetContract": {}
         },
       ],
@@ -454,7 +454,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     }
   }
 
-  removeCoin_token(Map<String, dynamic> coinMap) async {
+  removeCoinToken(Map<String, dynamic> coinMap) async {
     try {
       if (coinMap['edit'] == true) return;
       setState(() {
@@ -516,7 +516,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   }
 
   //检查转账地址是否正确
-  address_check(String addr) async {
+  addressCheck(String addr) async {
     if (addr == "") {
       tokenErrorMessage = S.of(context).g_key_41;
       return false;
@@ -561,9 +561,9 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
 
   //链 币 数据处理
   coinDeal(List<dynamic> returnData, Map<String, dynamic> chains,
-      {String rules = "", String chain_name = "", String symbol = ""}) {
+      {String rules = "", String chainName = "", String symbol = ""}) {
     for (Map<String, dynamic> r in returnData) {
-      if (chain_name == "") {
+      if (chainName == "") {
         if(widget.coinType !=null){
           if(widget.coinType != r['coin_name'].toString().toUpperCase()){
             continue;
@@ -578,7 +578,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
         if (r['contract'] == "") {
           continue;
         }
-        r['chain_name'] = chain_name;
+        r['chain_name'] = chainName;
       }
       if (rules != "") {
         r['rules'] = rules;
@@ -588,7 +588,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
         r['symbol'] = symbol;
       }
       String checkStr = symbol;
-      if (chain_name == "") {
+      if (chainName == "") {
         checkStr = r['coin_name'].toString();
       }
       r['isAdd'] =
@@ -599,7 +599,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
         if (chainMap == null) {
           r['canEdit'] = false;
         } else {
-          if (chain_name != "") {
+          if (chainName != "") {
             r['canEdit'] = true;
           } else {
             r['canEdit'] = chainMap['baseInfo']['canEdit'];
@@ -617,7 +617,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
       if (coins != null) {
         coinDeal(coins, chains,
             rules: r['rules'],
-            chain_name: r['chain_name'],
+            chainName: r['chain_name'],
             symbol: r['coin_name']);
       }
     }
@@ -628,7 +628,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
         context, MaterialPageRoute(builder: (context) => ScanPage()));
     if (scanValue != null) {
       tokenEditingController.text = scanValue;
-      address_check(scanValue);
+      addressCheck(scanValue);
       setState(() {});
     }
   }
@@ -658,7 +658,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
       if (coinlist[cIndex]['isAdd']) {
         ToastUtils.show("Already exists");
       } else {
-        await addCoin_token(coinlist[cIndex]);
+        await addCoinToken(coinlist[cIndex]);
         ToastUtils.show("Successfully added");
       }
       setState(() {
@@ -708,7 +708,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     });
   }
 
-  removeCustomerCoin_token(Map<String, dynamic> coinMap) async {
+  removeCustomerCoinToken(Map<String, dynamic> coinMap) async {
     try {
       if (coinMap['edit'] == true) return;
       setState(() {
@@ -754,7 +754,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   }
 
   Future<bool> checkTokenInput() async {
-    bool cOK = await address_check(tokenEditingController.text);
+    bool cOK = await addressCheck(tokenEditingController.text);
     if (cOK == false) return false;
     String symbol = symbolEditingController.text;
     if (symbol == "") {
@@ -838,7 +838,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
                             ? (networkName == ""
                             ? S.of(context).g_token_m_key_4
                             : networkName)
-                            : networkName_token,
+                            : networkNameToken,
                         style: TextStyle(
                           color: AppThemeUtils.getColorByKey(
                               context, AppThemeKeys.mainBlueColor.name),
@@ -1160,7 +1160,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
                     maxLines: 1,
                     onEditingComplete: () {
                       FocusScope.of(context).requestFocus(symbolFocusNode);
-                      address_check(tokenEditingController.text);
+                      addressCheck(tokenEditingController.text);
                       setState(() {});
                     },
                   ),
@@ -1185,7 +1185,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
                     if (cd != null) {
                       if (cd.text != null && cd.text != "null") {
                         tokenEditingController.text = cd.text!;
-                        address_check(cd.text!);
+                        addressCheck(cd.text!);
                         setState(() {});
                       }
                     }
@@ -1374,7 +1374,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     );
   }
 
-  AddButtonWidget() {
+  addButtonWidget() {
     return SizedBox(
       height: ScreenUtil().setWidth(88.0),
       width: double.infinity,
@@ -1398,7 +1398,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     );
   }
 
-  ImportButtonWidget() {
+  importButtonWidget() {
     return SizedBox(
       height: ScreenUtil().setWidth(88.0),
       width: double.infinity,
@@ -1621,7 +1621,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
                 if (rowValue['contract'] == "") {
                   addCoin(rowValue);
                 } else {
-                  addCoin_token(rowValue);
+                  addCoinToken(rowValue);
                 }
               },
               child: Container(
@@ -1643,7 +1643,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
                 if (rowValue['contract'] == "") {
                   removeCoin(rowValue);
                 } else {
-                  removeCoin_token(rowValue);
+                  removeCoinToken(rowValue);
                 }
               },
               child: Container(
@@ -1674,7 +1674,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
               itemCount: coinlistToken.length,
               itemBuilder: (context, int index) {
                 Map<String, dynamic> rowValue = coinlistToken[index];
-                return coinItem_token(rowValue);
+                return coinItemToken(rowValue);
               },
               separatorBuilder: (context, int index) {
                 return Divider(
@@ -1686,13 +1686,13 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
               },
             ),
           ),
-          AddButtonWidget(),
+          addButtonWidget(),
         ],
       );
     }
   }
 
-  coinItem_token(Map<String, dynamic> rowValue) {
+  coinItemToken(Map<String, dynamic> rowValue) {
     String symbol = rowValue['miniName'].toString();
     return Container(
       padding: EdgeInsets.only(
@@ -1726,7 +1726,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
           if (rowValue['edit'] == false)
             InkWell(
               onTap: () {
-                removeCustomerCoin_token(rowValue);
+                removeCustomerCoinToken(rowValue);
               },
               child: Container(
                 padding: EdgeInsets.all(ScreenUtil().setWidth(20.0)),
@@ -1780,7 +1780,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
           left: 0,
           right: 0,
           bottom: 0,
-          child: ImportButtonWidget(),
+          child: importButtonWidget(),
         ),
       ],
     );
