@@ -169,7 +169,7 @@ class _WalletChainAddState extends State<WalletChainAdd> {
       return;
     }
     int chainId=int.parse(chainIdStr);
-    if(!reg.regular_nums(chainIdStr)){
+    if(!reg.regularNums(chainIdStr)){
       setState(() {
         chainIdErrorMessage=S.of(context).g_token_m_key_21;
       });
@@ -187,7 +187,7 @@ class _WalletChainAddState extends State<WalletChainAdd> {
       });
       return;
     }
-    if(!reg.regular_nums(decimalStr)){
+    if(!reg.regularNums(decimalStr)){
       setState(() {
         decimalErrorMessage=S.of(context).g_token_m_key_21;
       });

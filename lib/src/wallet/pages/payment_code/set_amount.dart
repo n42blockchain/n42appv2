@@ -100,8 +100,8 @@ class _SetAmountState extends State<SetAmount> {
                 onEditingComplete: (){
                   FocusScope.of(context).requestFocus(FocusNode());
                   String amountStr=amountController.text;
-                  if(regular.regular_double(amountStr)==false){
-                    if(regular.regular_nums(amountStr)==false){
+                  if(regular.regularDouble(amountStr)==false){
+                    if(regular.regularNums(amountStr)==false){
                       amountErrorMessage="收款金额格式错误";
                     }else{
                       amountErrorMessage="";
@@ -112,8 +112,8 @@ class _SetAmountState extends State<SetAmount> {
                   setState(() {});
                 },
                 onChanged: (String value){
-                  if(regular.regular_double(value)==false){
-                    if(regular.regular_nums(value)==false){
+                  if(regular.regularDouble(value)==false){
+                    if(regular.regularNums(value)==false){
                       amountErrorMessage="收款金额格式错误";
                     }else{
                       amountErrorMessage="";
@@ -168,8 +168,8 @@ class _SetAmountState extends State<SetAmount> {
               child: ButtonStyle6(
                 context, (){
                   String amountStr=amountController.text;
-                  if(regular.regular_double(amountStr)==false){
-                    if(regular.regular_nums(amountStr)==false){
+                  if(regular.regularDouble(amountStr)==false){
+                    if(regular.regularNums(amountStr)==false){
                       setState(() {
                         amountErrorMessage="收款金额格式错误";
                       });
@@ -209,7 +209,7 @@ class _SetAmountState extends State<SetAmount> {
     if (balance >= 1000000000) {
       balanceStr = regular.getMoneyAbbreviation(balance);
     }else if(balance>0 && balance <0.0000000009){
-      balanceStr=regular.getMoneyAbbreviation_decimal(balance);
+      balanceStr=regular.getMoneyAbbreviationDecimal(balance);
     } else {
       balanceStr = oCcy.format(balance);
     }
@@ -218,7 +218,7 @@ class _SetAmountState extends State<SetAmount> {
     if(valueBalance>1000000000){
       valueBalanceStr=regular.getMoneyAbbreviation(valueBalance);
     }else if(valueBalance>0 && valueBalance <0.0000000009){
-      valueBalanceStr=regular.getMoneyAbbreviation_decimal(valueBalance);
+      valueBalanceStr=regular.getMoneyAbbreviationDecimal(valueBalance);
     }else{
       valueBalanceStr=coinInfo.balanceString();
     }

@@ -87,7 +87,7 @@ class CoinModel {
   //获取balance的 浮点类型
   /*double balance_double() {
     double t=toEther(balance.toString(), coin['decimals']??0);
-    return _regular.formartNum_double(toEther(balance.toString(), coin['decimals']??0), 14,isCrop: true,isFill0: false);
+    return _regular.formartNumDouble(toEther(balance.toString(), coin['decimals']??0), 14,isCrop: true,isFill0: false);
   }*/
   double balanceDoubleAll() {
     return toEther(balance.toString(), coin['decimals']??0).toDouble();

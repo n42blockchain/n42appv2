@@ -192,7 +192,7 @@ class AppDatabase{
         where: "trId=${trm.trId}");
     return response;
   }
-  updateTransationRecord_txhash(TransationRecordModel trm) async {
+  updateTransationRecordTxhash(TransationRecordModel trm) async {
     final db = await database;
     var response = await db.update("TransationRecord", trm.toMapDb(),
         where: 'txHash="${trm.txHash}"');
@@ -206,7 +206,7 @@ class AppDatabase{
     return response;
   }
   //查询交易记录，txhash交易hash
-  Future<List<TransationRecordModel>> selectTransationRecord_txHash(
+  Future<List<TransationRecordModel>> selectTransationRecordTxHash(
       String txHash,String address) async {
     final db = await database;
     var response =
@@ -216,7 +216,7 @@ class AppDatabase{
     return list;
   }
   //查询交易记录，全部未完成的
-  Future<List<TransationRecordModel>> selectTransationRecord_unDone(
+  Future<List<TransationRecordModel>> selectTransationRecordUnDone(
       String userUuid) async {
     final db = await database;
     var response = await db.query("TransationRecord",
@@ -225,7 +225,7 @@ class AppDatabase{
     response.map((c) => TransationRecordModel.fromMap(c)).toList();
     return list;
   }
-  Future<List<BtcTransactionRecodeModel>> selectBtcTransationRecord_byUUID(
+  Future<List<BtcTransactionRecodeModel>> selectBtcTransationRecordByUUID(
       String userUuid, int selectType) async {
     final db = await database;
     String whereStr = "";
@@ -240,7 +240,7 @@ class AppDatabase{
     response.map((c) => BtcTransactionRecodeModel.fromMap(c)).toList();
     return list;
   }
-  Future<List<BtcTransactionRecodeModel>> selectBtcTransationRecord_txHash(
+  Future<List<BtcTransactionRecodeModel>> selectBtcTransationRecordTxHash(
       String txHash) async {
     final db = await database;
     var response = await db.query("BtcTransactionRecord",

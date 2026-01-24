@@ -138,8 +138,8 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
       setState(() {});
       return;
     }
-    bool checkValue=regular.regular_double(value.toString());
-    bool checkValue1=regular.regular_nums(value.toString());
+    bool checkValue=regular.regularDouble(value.toString());
+    bool checkValue1=regular.regularNums(value.toString());
     //print(toEther(totalGasPrice.toString()));
     if(checkValue==false && checkValue1==false){
       amountErrorMessage= S.of(context).g_key_134;

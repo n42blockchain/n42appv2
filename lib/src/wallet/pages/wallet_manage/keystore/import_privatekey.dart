@@ -52,23 +52,23 @@ class _ImportPrivatekeyState extends State<ImportPrivatekey> {
       if(sStr.toLowerCase()!="0x"){
         mm.error=true;
       }else{
-        if(!Regular().regular_hex(pk)){
+        if(!Regular().regularHex(pk)){
           mm.error=true;
         }
       }
     }else if(pk.length == 64){
-      if(!Regular().regular_hex(pk)){
+      if(!Regular().regularHex(pk)){
         mm.error=true;
       }
     }else if(pk.length == 51 || pk.length == 52){
-      if(!Regular().regular_base58(pk)){
+      if(!Regular().regularBase58(pk)){
         mm.error=true;
       }else{
         mm=decodeWIF(pk);
         return mm;
       }
     }else{
-      if(!Regular().regular_base58(pk)){
+      if(!Regular().regularBase58(pk)){
         mm.error=true;
       }else{
         mm=decodeBase58(pk);

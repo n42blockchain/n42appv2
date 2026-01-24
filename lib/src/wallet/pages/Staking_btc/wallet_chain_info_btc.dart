@@ -91,13 +91,13 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
       var pixel = scrollController.position.pixels;
       if (pixel > maxScroll - 200) {
         getTransactionData(Load.nextPage);
-        getTransactionData_network(Load.nextPage);
+        getTransactionDataNetwork(Load.nextPage);
       }
     });
     eventBusFn = eventBus.on().listen((event) async {
       if (event is EventPublic && event.type == EventPublicType.transferOk) {
         getTransactionData(Load.refresh);
-        getTransactionData_network(Load.refresh);
+        getTransactionDataNetwork(Load.refresh);
         await widget.coinModel.getBalance();
         setState(() {});
       }
@@ -121,7 +121,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
     marketInfo = Provider.of<WalletActionProvider>(context,listen: false)
         .getCoinPriceWithUnit_all(widget.coinModel.coin['unit']);
     getTransactionData(Load.refresh);
-    getTransactionData_network(Load.refresh);
+    getTransactionDataNetwork(Load.refresh);
     await getBalance();
     /*if(widget.coinModel.balance !=0){
       getUTXO();
@@ -325,7 +325,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
     }
   }
 
-  getTransactionData_network(Load LoadType)async{
+  getTransactionDataNetwork(Load loadType)async{
     String addr = widget.coinModel.address.toString();
     String coinKey = widget.coinModel.coin['coinType'];
     String contract = widget.coinModel.coin['contract'];
@@ -339,16 +339,16 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
     if(mm.error==false){
       //cril=mm.data;
       if(widget.coinModel.coin['blockchainType'] ==BlockchainType.Bitcoin.name){
-        getTransactionData_network_btc(mm.data);
+        getTransactionDataNetworkBtc(mm.data);
       }
     }
   }
-  getTransactionData_network_btc(List<BtcTranDetail>? cril)async{
+  getTransactionDataNetworkBtc(List<BtcTranDetail>? cril)async{
     if(cril !=null){
       bool isEdit=false;
       for(int i=cril.length-1;i>=0;i--){
         BtcTranDetail cri=cril[i];
-        List<BtcTransactionRecodeModel> rtrm=await db.selectBtcTransationRecord_txHash(cri.hash);
+        List<BtcTransactionRecodeModel> rtrm=await db.selectBtcTransationRecordTxHash(cri.hash);
         if (!mounted) return;
         if(rtrm.isEmpty){
           BtcTransactionRecodeModel transationRecordModel=BtcTransactionRecodeModel();
@@ -466,7 +466,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
     }
   }
 
-  getTxInfo_network_btc(BtcTransactionRecodeModel transationRecordModel)async{
+  getTxInfoNetworkBtc(BtcTransactionRecodeModel transationRecordModel)async{
     BtcTransactionRecodeModel rtrm=await Provider.of<TransactionRecordItemProvider>(context,listen: false).checkUndoneTr_btc_return(transationRecordModel);
     transactionList.firstWhere((element){
       TransationRecordModel trm=element as TransationRecordModel;
@@ -708,7 +708,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
               child: RefreshIndicator(
                 onRefresh: () async {
                   getTransactionData(Load.refresh);
-                  getTransactionData_network(Load.refresh);
+                  getTransactionDataNetwork(Load.refresh);
                   await widget.coinModel.getBalance();
                 },
                 backgroundColor: AppThemeUtils.getColorByKey(

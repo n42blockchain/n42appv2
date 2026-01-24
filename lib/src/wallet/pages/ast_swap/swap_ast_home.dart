@@ -344,36 +344,36 @@ class _SwapAstHomeState extends State<SwapAstHome> {
 
   payInput({String? value}) {
     value ??= payTextEditingController.text;
-    bool checkNum = regular.regular_nums(value);
-    bool checkDouble = regular.regular_double(value);
+    bool checkNum = regular.regularNums(value);
+    bool checkDouble = regular.regularDouble(value);
     if (checkNum == false && checkDouble == false) return;
     if (value == "0") return;
     double getValue = dec.Decimal.parse(value).toDouble() *
         ((youPay?.price ?? 0) / (getCoinModel?.coinPrice ?? 0));
     getTextEditingController.text =
-    '${regular.formartNum_double(dec.Decimal.parse(getValue.toString()).toDouble(), 8, isCrop: true, isFill0: false)}';
+    '${regular.formartNumDouble(dec.Decimal.parse(getValue.toString()).toDouble(), 8, isCrop: true, isFill0: false)}';
     //dec.Decimal.parse(getValue.toString()).toString();
     setState(() {});
   }
 
   getInput({String? value}) {
     value ??= getTextEditingController.text;
-    bool checkNum = regular.regular_nums(value);
-    bool checkDouble = regular.regular_double(value);
+    bool checkNum = regular.regularNums(value);
+    bool checkDouble = regular.regularDouble(value);
     if (checkNum == false && checkDouble == false) return;
     if (value == "0") return;
     double p = (getCoinModel?.coinPrice ?? 0) / (youPay?.price ?? 0);
     double payValue = double.parse(value) * p;
     payTextEditingController.text =
-    '${regular.formartNum_double(dec.Decimal.parse(payValue.toString()).toDouble(), 8, isCrop: true, isFill0: false)}';
+    '${regular.formartNumDouble(dec.Decimal.parse(payValue.toString()).toDouble(), 8, isCrop: true, isFill0: false)}';
     //dec.Decimal.parse(payValue.toString()).toString();
     setState(() {});
   }
 
   checkPayInput() {
     String value = payTextEditingController.text;
-    bool checkNum = regular.regular_nums(value);
-    bool checkDouble = regular.regular_double(value);
+    bool checkNum = regular.regularNums(value);
+    bool checkDouble = regular.regularDouble(value);
     if (checkNum == false && checkDouble == false) return false;
     double pay = double.parse(value);
     if (pay == 0) return false;
@@ -388,7 +388,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
       double ypBalance = youPay?.balance ?? 0;
       if (ypBalance > 0) {
         payTextEditingController.text =
-        '${regular.formartNum_double(ypBalance * (value / 100), 8, isCrop: true, isFill0: false)}';
+        '${regular.formartNumDouble(ypBalance * (value / 100), 8, isCrop: true, isFill0: false)}';
         //(ypBalance*(value/100)).toString();
         payInput(value: (ypBalance * (value / 100)).toString());
       }
@@ -905,7 +905,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "${S.of(context).g_key_29}:${regular.formartNum_double(dec.Decimal.parse((youPay?.balance ?? 0).toString()).toDouble(), 14, isCrop: true, isFill0: false)}",
+                  "${S.of(context).g_key_29}:${regular.formartNumDouble(dec.Decimal.parse((youPay?.balance ?? 0).toString()).toDouble(), 14, isCrop: true, isFill0: false)}",
                   style: TextStyle(
                     color: balanceColor,
                     fontSize: ScreenUtil().setSp(26),
@@ -1110,7 +1110,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
       double pc = 0;
       pc = yPrice / gCoinPrice;
       text =
-      "1${youPay?.payCoin ?? ""} = ${regular.formartNum_double(dec.Decimal.parse(pc.toString()).toDouble(), 8, isCrop: true, isFill0: false)}${CoinType.N.name}";
+      "1${youPay?.payCoin ?? ""} = ${regular.formartNumDouble(dec.Decimal.parse(pc.toString()).toDouble(), 8, isCrop: true, isFill0: false)}${CoinType.N.name}";
     } else {
       text = "??${youPay?.payCoin ?? ""} = ??${CoinType.N.name}";
     }

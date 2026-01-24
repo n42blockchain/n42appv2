@@ -8,7 +8,7 @@ class MiningBackground{
   backgroundStart(){
     Trustdart().LiveActivity_Start();
     if(Platform.isAndroid){
-      notification.send_android(AppConfig.apiUrl['walletamazeBrowser'], S.current.g_mining_key_73,notificationId:10086);
+      notification.sendAndroid(AppConfig.apiUrl['walletamazeBrowser'], S.current.g_mining_key_73,notificationId:10086);
     }
   }
   backgroundEnd(){

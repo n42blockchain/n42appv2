@@ -367,8 +367,8 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
       setState(() {});
       return;
     }
-    bool checkValue=regular.regular_double(value.toString());
-    bool checkValue1=regular.regular_nums(value.toString());
+    bool checkValue=regular.regularDouble(value.toString());
+    bool checkValue1=regular.regularNums(value.toString());
     dec.Decimal transactionTotal=dec.Decimal.parse(value)+dec.Decimal.parse(toEther(gasFeeLevel['gasFees'].toString(), 8).toString());
     if(checkValue==false && checkValue1==false){
       amountErrorMessage= S.of(context).g_key_134;

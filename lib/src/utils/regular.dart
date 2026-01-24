@@ -2,22 +2,22 @@ import 'package:intl/intl.dart';
 import 'package:decimal/decimal.dart';
 class Regular{
   //是否是十六进制字符串
-  bool regular_hex(String str){
+  bool regularHex(String str){
     bool r=RegExp(r'^(0x)?[0-9a-fA-F]+$').hasMatch(str);
     return r;
   }
   //判断base58
-  bool regular_base58(String str){
+  bool regularBase58(String str){
     bool r=RegExp(r'^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]+$').hasMatch(str);
     return r;
   }
   //验证是否是浮点数
-  bool regular_double(String str){
+  bool regularDouble(String str){
     bool r=RegExp(r'^\d+(\.)?[0-9]').hasMatch(str);
     return r;
   }
   //验证数字
-  bool regular_nums(String str){
+  bool regularNums(String str){
     return RegExp(r"^[0-9]+$").hasMatch(str);
   }
   //返回钱的缩写
@@ -41,7 +41,7 @@ class Regular{
     return oCcy.format(money);
   }
   //返回小数缩写
-  String getMoneyAbbreviation_decimal(dynamic money,{int l=8}){
+  String getMoneyAbbreviationDecimal(dynamic money,{int l=8}){
     String moneyStr=Decimal.parse(money.toString()).toString();
     List<String> ms=moneyStr.split("");
     String rStr="0.0{";
@@ -100,7 +100,7 @@ class Regular{
       return t + t3;
     }
   }
-  double formartNum_double(num target,int postion,{bool isCrop = false,isFill0=true}){
+  double formartNumDouble(num target,int postion,{bool isCrop = false,isFill0=true}){
     return double.parse(formartNum(target,postion,isCrop:isCrop,isFill0:isFill0));
   }
   //十六进制字符串转int

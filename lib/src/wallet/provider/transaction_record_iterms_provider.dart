@@ -44,8 +44,8 @@ class TransactionRecordItemProvider with ChangeNotifier{
   }
   //查询未完成的交易
   selectUndoneTr()async{
-    _unDoneTrModelList=await db.selectTransationRecord_unDone(AppGlobals.userInfo?.uuid??"");
-    _trUndoneList=await db.selectBtcTransationRecord_byUUID(AppGlobals.userInfo?.uuid??"", 2);
+    _unDoneTrModelList=await db.selectTransationRecordUnDone(AppGlobals.userInfo?.uuid??"");
+    _trUndoneList=await db.selectBtcTransationRecordByUUID(AppGlobals.userInfo?.uuid??"", 2);
     if(_unDoneTrModelList.isNotEmpty){
       //开启timer，循环请求数据
       timerStart();
@@ -606,7 +606,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         // TODO: Handle this case.
         break;
     }
-    await db.updateTransationRecord_txhash(trm);
+    await db.updateTransationRecordTxhash(trm);
     return trm;
   }
   //检查未完成的交易

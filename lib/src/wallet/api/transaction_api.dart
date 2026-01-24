@@ -167,7 +167,7 @@ class TransactionApi {
         List<Txref> txrefs = res.txrefs;
         List<BtcTranDetail> list = [];
         for (var element in txrefs) {
-          List<BtcTransactionRecodeModel> rtrm=await db.selectBtcTransationRecord_txHash(element.txHash);
+          List<BtcTransactionRecodeModel> rtrm=await db.selectBtcTransationRecordTxHash(element.txHash);
           if(rtrm.isNotEmpty){
             if(rtrm.first.outputModels?.isNotEmpty ?? false){
               continue;

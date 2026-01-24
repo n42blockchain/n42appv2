@@ -161,8 +161,8 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       setState(() {});
       return;
     }
-    bool checkValue=regular.regular_double(value.toString());
-    bool checkValue1=regular.regular_nums(value.toString());
+    bool checkValue=regular.regularDouble(value.toString());
+    bool checkValue1=regular.regularNums(value.toString());
     //print(toEther(totalGasPrice.toString()));
     if(checkValue==false && checkValue1==false){
       amountErrorMessage= S.of(context).g_key_134;
@@ -804,7 +804,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
             textAlign: TextAlign.right,
           ),
           Text(
-            'Min balance:${regular.formartNum_double(minBalance, 14,isCrop: true,isFill0: false)} $unit',
+            'Min balance:${regular.formartNumDouble(minBalance, 14,isCrop: true,isFill0: false)} $unit',
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
               fontSize: ScreenUtil().setSp(28.0),
@@ -815,7 +815,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
           ),
           //available balance
           Text(
-            'Available balance:${regular.formartNum_double(availableBalance, 14,isCrop: true,isFill0: false)} $unit',
+            'Available balance:${regular.formartNumDouble(availableBalance, 14,isCrop: true,isFill0: false)} $unit',
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.rightTextColor.name),
               fontSize: ScreenUtil().setSp(28.0),
@@ -974,7 +974,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
               ),
               Expanded(flex: 1,child: Container()),
               Text(
-                '${regular.formartNum_double(minBalance, 14,isCrop: true,isFill0: false)} $unit',
+                '${regular.formartNumDouble(minBalance, 14,isCrop: true,isFill0: false)} $unit',
                 style: TextStyle(
                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
                   fontSize: ScreenUtil().setSp(28.0),
@@ -994,7 +994,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
               ),
               Expanded(flex: 1,child: Container()),
               Text(
-                '${regular.formartNum_double(availableBalance, 14,isCrop: true,isFill0: false)} $unit',
+                '${regular.formartNumDouble(availableBalance, 14,isCrop: true,isFill0: false)} $unit',
                 style: TextStyle(
                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.rightTextColor.name),
                   fontSize: ScreenUtil().setSp(28.0),

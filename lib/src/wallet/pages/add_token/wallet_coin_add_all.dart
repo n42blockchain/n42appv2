@@ -46,20 +46,20 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   int importType = 0; //导入token类型 0，1
   bool showImportWidget = false;
   List<dynamic> coinlist = [];
-  List<dynamic> coinlist_seach = [];
-  List<dynamic> coinlist_token = [];
+  List<dynamic> coinlistSeach = [];
+  List<dynamic> coinlistToken = [];
   Load load = Load.finish;
 
   //List<String> symbols=[];
   String addSymbol = ""; //添加的主链币
   bool isEdit = false;
-  late Map<String, dynamic> chains_token;
+  late Map<String, dynamic> chainsToken;
   Map<String, dynamic>? chains; //现有的主链币
   Map<String, dynamic> netChains = {}; //api获取的主链币
   //int sort=0;//当前列表中最后一个币的sort
   int networkIndex = -1;
   String networkName = "";
-  int networkIndex_token = 0;
+  int networkIndexToken = 0;
   String networkName_token = "";
 
   setNetworkIndex(int value, String name) {
@@ -71,9 +71,9 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
       });
       seachCoin();
     } else {
-      if (value == networkIndex_token) return;
+      if (value == networkIndexToken) return;
       setState(() {
-        networkIndex_token = value;
+        networkIndexToken = value;
         networkName_token = name;
       });
       setChainsToken_withNetwork();
@@ -110,7 +110,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   }
 
   setChainsToken() {
-    chains_token = {};
+    chainsToken = {};
     if (chains != null) {
       List<String> cKeys = chains!.keys.toList();
       for (String key in cKeys) {
@@ -120,7 +120,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
             chain['baseInfo']["blockchainType"] !=
                 BlockchainType.Algorand.name &&
             chain['baseInfo']["coinType"] != CoinType.N.name) {
-          chains_token[key] = chain;
+          chainsToken[key] = chain;
         }
       }
     }
@@ -128,21 +128,21 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   }
 
   setChainsToken_withNetwork() {
-    List<String> cKeys = chains_token.keys.toList();
+    List<String> cKeys = chainsToken.keys.toList();
     if (cKeys.isNotEmpty) {
       networkName_token =
-      chains_token[cKeys[networkIndex_token]]["baseInfo"]['name'];
+      chainsToken[cKeys[networkIndexToken]]["baseInfo"]['name'];
     }else{
       return;
     }
-    Map<String, dynamic> chainMap = chains_token[cKeys[networkIndex_token]];
+    Map<String, dynamic> chainMap = chainsToken[cKeys[networkIndexToken]];
     dynamic mainnets;
     if (chainMap['isTest']) {
       mainnets = chainMap['testnets'][0]['testnetContract'];
     } else {
       mainnets = chainMap['mainnets'];
     }
-    coinlist_token = [];
+    coinlistToken = [];
     if (mainnets.length != 0) {
       List<String> mainnetKeys =
       (mainnets as Map<String, dynamic>).keys.toList();
@@ -150,7 +150,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
         Map<String, dynamic> mainnet = mainnets[key];
         if (mainnet['customer'] != null && mainnet['customer'] == true) {
           mainnet["edit"] = false;
-          coinlist_token.add(mainnet);
+          coinlistToken.add(mainnet);
         }
       }
     }
@@ -489,7 +489,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   seachCoin() async {
     if (inputEditingController.text != "" || networkIndex != -1) {
       try {
-        coinlist_seach = [];
+        coinlistSeach = [];
         String inputStr = inputEditingController.text.toLowerCase();
         /*if (inputStr == "ast") {
           inputStr = "  ";
@@ -505,7 +505,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
           int fullnameIndex = m['fullname'].toString().toLowerCase().indexOf(inputStr);
           int symbolIndex = symbolStr.indexOf(inputStr);
           if (symbolIndex != -1 || fullnameIndex != -1) {
-            coinlist_seach.add(m);
+            coinlistSeach.add(m);
           }
         }
       } catch (e) {
@@ -521,9 +521,9 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
       tokenErrorMessage = S.of(context).g_key_41;
       return false;
     } else {
-      List<String> cKeys = chains_token.keys.toList();
+      List<String> cKeys = chainsToken.keys.toList();
       String coinType =
-      chains_token[cKeys[networkIndex_token]]["baseInfo"]['coinType'];
+      chainsToken[cKeys[networkIndexToken]]["baseInfo"]['coinType'];
       bool check = await Trustdart().validateAddress(coinType, addr);
       if (check) {
         tokenErrorMessage = "";
@@ -641,7 +641,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     });
     String tokenAddress = tokenEditingController.text;
     Map<String, dynamic> chain =
-    chains_token[chains_token.keys.toList()[networkIndex_token]];
+    chainsToken[chainsToken.keys.toList()[networkIndexToken]];
     String symbolStr = chain['baseInfo']['miniName'].toString().toUpperCase();
     int cIndex = coinlist.indexWhere((element) {
       if (element['contract'] == "") return false;
@@ -771,7 +771,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
       decimalErrorMessage = S.current.g_key_41;
       return false;
     }
-    bool dOK = regular.regular_nums(decimals);
+    bool dOK = regular.regularNums(decimals);
     if (dOK == false) {
       decimalErrorMessage = S.current.g_token_m_key_2;
       return false;
@@ -1496,11 +1496,11 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
         ),
       );
     } else {
-      if (coinlist_seach.isEmpty) return const EmptyView();
+      if (coinlistSeach.isEmpty) return const EmptyView();
       return ListView.builder(
-        itemCount: coinlist_seach.length,
+        itemCount: coinlistSeach.length,
         itemBuilder: (context, int index) {
-          Map<String, dynamic> rowValue = coinlist_seach[index];
+          Map<String, dynamic> rowValue = coinlistSeach[index];
           if(rowValue['unit'] ==null || rowValue['unit'] ==""){
             return coinItem(rowValue);
           }else{
@@ -1663,7 +1663,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   }
 
   coinListTokenWidget() {
-    if (coinlist_token.isEmpty || showImportWidget) {
+    if (coinlistToken.isEmpty || showImportWidget) {
       return importTokenWidget();
     } else {
       return Column(
@@ -1671,9 +1671,9 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
           Expanded(
             flex: 1,
             child: ListView.separated(
-              itemCount: coinlist_token.length,
+              itemCount: coinlistToken.length,
               itemBuilder: (context, int index) {
-                Map<String, dynamic> rowValue = coinlist_token[index];
+                Map<String, dynamic> rowValue = coinlistToken[index];
                 return coinItem_token(rowValue);
               },
               separatorBuilder: (context, int index) {
@@ -1795,7 +1795,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
         maxHeight: ScreenUtil().setWidth(600.0),
       ),
       child: ListView.separated(
-        itemCount: importType == 0 ? netChains.length + 1 : chains_token.length,
+        itemCount: importType == 0 ? netChains.length + 1 : chainsToken.length,
         itemBuilder: (context, int index) {
           bool selected = false;
           Map<String, dynamic>? coinInfo;
@@ -1847,10 +1847,10 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
             }
             coinInfo = netChains[netChains.keys.toList()[index - 1]];
           } else {
-            if (networkIndex_token == index) {
+            if (networkIndexToken == index) {
               selected = true;
             }
-            coinInfo = netChains[chains_token.keys.toList()[index]];
+            coinInfo = netChains[chainsToken.keys.toList()[index]];
           }
           if (coinInfo == null) return Container();
           Widget image;

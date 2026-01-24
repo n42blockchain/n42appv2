@@ -312,16 +312,16 @@ class _WalletChainSendState extends State<WalletChainSend> {
     }
     bool checkValue1=false;
     if(widget.coinModel.coin['decimals']==0){
-      checkValue1=_regular.regular_nums(value.toString());
+      checkValue1=_regular.regularNums(value.toString());
       if(checkValue1==false){
         amountErrorMessage= S.of(context).g_key_134;
         setState(() {});
         return;
       }
     }else{
-      checkValue1=_regular.regular_nums(value.toString());
+      checkValue1=_regular.regularNums(value.toString());
     }
-    bool checkValue=_regular.regular_double(value.toString());
+    bool checkValue=_regular.regularDouble(value.toString());
     double dValue=double.parse(value);
     if(checkValue==false && checkValue1==false){
       amountErrorMessage= S.of(context).g_key_134;

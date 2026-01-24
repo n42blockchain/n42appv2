@@ -94,7 +94,7 @@ class Notification {
     }
   }
 
-  void send_android(String title ,String body ,{int? notificationId, String? params,bool playSound = true}){
+  void sendAndroid(String title ,String body ,{int? notificationId, String? params,bool playSound = true}){
     var androidDetails = AndroidNotificationDetails(
         'nftWallet_channelId', //id可以随意一点
         ///这个会显示在手机设置 通知管理 app 通知设置列表中 不要瞎写

@@ -82,7 +82,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
     setState(() {
       load=Load.loading;
     });
-    List<TransationRecordModel> trModelList=await db.selectTransationRecord_txHash(_txHash,widget.coinModel.address);
+    List<TransationRecordModel> trModelList=await db.selectTransationRecordTxHash(_txHash,widget.coinModel.address);
     if (!mounted) return;
     if(trModelList.isNotEmpty){
       trm=trModelList[0];

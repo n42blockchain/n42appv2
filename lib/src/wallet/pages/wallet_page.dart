@@ -773,7 +773,7 @@ class _WalletPageState extends State<WalletPage> {
     if (balance >= 1000000000) {
       balanceStr = regular.getMoneyAbbreviation(balance);
     }else if(balance>0 && balance <0.0000000009){
-      balanceStr=regular.getMoneyAbbreviation_decimal(balance);
+      balanceStr=regular.getMoneyAbbreviationDecimal(balance);
     } else {
       balanceStr = oCcy.format(balance);
     }
@@ -782,7 +782,7 @@ class _WalletPageState extends State<WalletPage> {
     if(valueBalance>1000000000){
       valueBalanceStr=regular.getMoneyAbbreviation(valueBalance);
     }else if(valueBalance>0 && valueBalance <0.0000000009){
-      valueBalanceStr=regular.getMoneyAbbreviation_decimal(valueBalance);
+      valueBalanceStr=regular.getMoneyAbbreviationDecimal(valueBalance);
     }else{
       valueBalanceStr=coinInfo.balanceString();
     }

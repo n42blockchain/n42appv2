@@ -111,7 +111,7 @@ class _RedeemState extends State<Redeem> {
   bool inputValueOK=false;
   List<Map<String,dynamic>> inputUTXO=[];
   redeem(String address,int lockTime)async{
-    //await redeem_eth(address);
+    //await redeemEth(address);
     await getGasFeeBtc();
     //address="tb1qw39qrupll6xwmazqplpjgaclexjsd48jms2gwzk2xeuhqen9qxusem966j";
     //lockTime=1743160567;
@@ -135,7 +135,7 @@ class _RedeemState extends State<Redeem> {
     trModel.price=100000;
     transatroinBuilder1To1(trModel,);*/
   }
-  redeem_eth(String p2wshAddress)async{
+  redeemEth(String p2wshAddress)async{
     String serviceUrl=RequestUrl().getUrl2(CoinType.ETH.name, 'rpc',isTest: widget.coinModel.isTest);
     String privateKey;
     if(widget.coinModel.privateKey==null || widget.coinModel.privateKey==""){

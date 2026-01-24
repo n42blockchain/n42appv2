@@ -81,7 +81,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
       return;
     }
     Regular regular=Regular();
-    newOk=regular.regular_nums(newStr);
+    newOk=regular.regularNums(newStr);
     if(newOk){
       newErrorMessage="";
     }else{
@@ -101,7 +101,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
       });
       return;
     }
-    confirmOk=regular.regular_nums(confirmStr);
+    confirmOk=regular.regularNums(confirmStr);
     if(confirmOk){
       confirmErrorMessage="";
     }else{

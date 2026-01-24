@@ -227,7 +227,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
       bool isEdit=false;
       for(int i=cril.length-1;i>=0;i--){
         CommonResponseItemModel cri=cril[i];
-        List<TransationRecordModel> rtrm=await db.selectTransationRecord_txHash(cri.hash??"0x",widget.coinModel.address);
+        List<TransationRecordModel> rtrm=await db.selectTransationRecordTxHash(cri.hash??"0x",widget.coinModel.address);
         if (!mounted) return;
         if(rtrm.isEmpty){
           TransationRecordModel transationRecordModel=TransationRecordModel();
@@ -294,7 +294,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
         if(widget.coinModel.coin['contract'].toString().toUpperCase() != (cri.contractAddress??"").toUpperCase()){
           continue;
         }
-        List<TransationRecordModel> rtrm=await db.selectTransationRecord_txHash(cri.hash??"0x",widget.coinModel.address);
+        List<TransationRecordModel> rtrm=await db.selectTransationRecordTxHash(cri.hash??"0x",widget.coinModel.address);
         if (!mounted) return;
         if(rtrm.isEmpty){
           TransationRecordModel transationRecordModel=TransationRecordModel();
@@ -343,7 +343,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
       bool isEdit=false;
       for(int i=cril.length-1;i>=0;i--){
         BtcTranDetail cri=cril[i];
-        List<BtcTransactionRecodeModel> rtrm=await db.selectBtcTransationRecord_txHash(cri.hash);
+        List<BtcTransactionRecodeModel> rtrm=await db.selectBtcTransationRecordTxHash(cri.hash);
         if (!mounted) return;
         if(rtrm.isEmpty){
           BtcTransactionRecodeModel transationRecordModel=BtcTransactionRecodeModel();
@@ -466,7 +466,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
       bool isEdit=false;
       for(int i=cril.length-1;i>=0;i--){
         SOLTransactionItem cri=cril[i];
-        List<TransationRecordModel> rtrm=await db.selectTransationRecord_txHash(cri.txHash??"0x");
+        List<TransationRecordModel> rtrm=await db.selectTransationRecordTxHash(cri.txHash??"0x");
         if(rtrm.length==0){
           TransationRecordModel transationRecordModel=TransationRecordModel();
           transationRecordModel.coinId=widget.coinModel.isTest?widget.coinModel.coin['chainId_test']:widget.coinModel.coin['chainId'];
