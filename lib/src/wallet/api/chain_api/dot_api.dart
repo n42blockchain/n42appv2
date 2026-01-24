@@ -6,7 +6,7 @@ import 'package:n42appv2/src/models/message_model.dart';
 
 class DotApi{
   //获取余额
-  getTokens(String address,String coinType,{bool isTest=false})async{
+  Future<MessageModel> getTokens(String address,String coinType,{bool isTest=false})async{
     try{
       MessageModel mm=MessageModel();
       String url=RequestUrl().getUrl2(coinType, "api",isTest: isTest);
@@ -42,17 +42,17 @@ class DotApi{
     }
   }
   //GenesisHash=0和BlockHash=nll
-  getGenesisHash({int? index,bool isTest=false})async {
+  Future<MessageModel> getGenesisHash({int? index,bool isTest=false})async {
     return await baseRPC("chain_getBlockHash",index==null?[]:[index],isTest: isTest);
   }
-  getNonce(String address,{bool isTest=false})async{
+  Future<MessageModel> getNonce(String address,{bool isTest=false})async{
     return await baseRPC("system_accountNextIndex",[address],isTest: isTest);
   }
-  getChainHeader({bool isTest=false})async{
+  Future<MessageModel> getChainHeader({bool isTest=false})async{
     return await baseRPC("chain_getHeader",[],isTest: isTest);
   }
   //获取specVersion、TransactionVersion
-  getRuntimeVersion({bool isTest=false})async {
+  Future<MessageModel> getRuntimeVersion({bool isTest=false})async {
     return await baseRPC("state_getRuntimeVersion",[],isTest: isTest);
     /*{
   "jsonrpc": "2.0",
@@ -70,15 +70,15 @@ class DotApi{
 }
     * */
   }
-  submitTxHash(String hash,{bool isTest=false})async{
+  Future<MessageModel> submitTxHash(String hash,{bool isTest=false})async{
     //author_submitExtrinsic
     return await baseRPC("author_submitExtrinsic",[hash],isTest: isTest);
   }
   //估算gas费
-  getGasPrice(String txHash,{bool isTest=false})async{
+  Future<MessageModel> getGasPrice(String txHash,{bool isTest=false})async{
     return await baseRPC("payment_queryInfo",[txHash],isTest: isTest);
   }
-  baseRPC(String method,var value,{bool? isTest=false})async{
+  Future<MessageModel> baseRPC(String method,var value,{bool? isTest=false})async{
     try{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};

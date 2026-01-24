@@ -6,7 +6,7 @@ import 'package:n42appv2/generated/l10n.dart';
 class WalletApi{
   late String url;
   late Map<String,String> header;
-  tokenViewApi(){
+  void tokenViewApi(){
     url=AppConfig.getApiUrlOnline('tokenViewUri');
     header={'content-type': 'application/json'};
   }
@@ -14,7 +14,7 @@ class WalletApi{
   ///获取币列表，主链加代币
   ///chains 返回特定的主链 主链币全名 solna,bitcoin,
   ///coins 返回特定的代币 代币的symbol eth,bnb,ast
-  getChainListAll({String chains="",String coins=""})async{
+  Future<MessageModel> getChainListAll({String chains="",String coins=""})async{
     try{
       //chains="Amaze Chain";
       String condition="";
@@ -46,7 +46,7 @@ class WalletApi{
     }
   }
   //获取某个主链币的所有代币
-  getTokenListFullname(String fullname)async{
+  Future<MessageModel> getTokenListFullname(String fullname)async{
     try{
       final a=await BaseApi.requestEmptyH.get('${url}v1/chains/coins?chains=$fullname', params: {},header:header,);
       MessageModel mm=MessageModel.error();

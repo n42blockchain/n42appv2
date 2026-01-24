@@ -12,13 +12,13 @@ class BrowserHistoryModel{
     url=map["url"];
     time=map["time"];
   }
-  getMapDb(){
+  Map<String, dynamic> getMapDb(){
     return {
       "url":url,
       "time":time,
     };
   }
-  getMap(){
+  Map<String, dynamic> getMap(){
     return {
       "id":id,
       "url":url,

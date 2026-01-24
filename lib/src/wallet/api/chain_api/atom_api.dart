@@ -4,7 +4,7 @@ import 'package:n42appv2/src/https/request_url.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 
 class AtomApi{
-  getBalance(String address,String token)async{
+  Future<MessageModel> getBalance(String address,String token)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
       uri+='cosmos/bank/v1beta1/balances/$address';
@@ -46,7 +46,7 @@ class AtomApi{
     }
   }
   //cosmos/auth/v1beta1/accounts/
-  getAccounts(String address)async{
+  Future<MessageModel> getAccounts(String address)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
       var data=await await BaseApi.requestEmptyH.get(
@@ -69,7 +69,7 @@ class AtomApi{
     }
   }
   //cosmos/bank/v1beta1/denoms_metadata/
-  getMetadata(String denom)async{
+  Future<MessageModel> getMetadata(String denom)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
       var data=await await BaseApi.requestEmptyH.get(
@@ -92,7 +92,7 @@ class AtomApi{
     }
   }
   //cosmos/tx/v1beta1/txs/
-  getTxs(String txHash)async{
+  Future<MessageModel> getTxs(String txHash)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
       var data=await await BaseApi.requestEmptyH.get(
@@ -115,7 +115,7 @@ class AtomApi{
     }
   }
   //cosmos/tx/v1beta1/txs
-  sendTxs(var rawTx)async{
+  Future<MessageModel> sendTxs(var rawTx)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
       var data=await BaseApi.requestEmptyH.post(
@@ -146,7 +146,7 @@ class AtomApi{
     }
   }
   //cosmos/tx/v1beta1/simulate
-  sendTxsSimulate(var rawTx)async{
+  Future<MessageModel> sendTxsSimulate(var rawTx)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
       var data=await BaseApi.requestEmptyH.post(
@@ -201,7 +201,7 @@ connection_hops: 连接跳跃，表示通道之间的连接路径。
 version: IBC 协议的版本，通常会标明使用的版本号（如 ics20-1）。
         * */
   ///ibc/core/channel/v1/channels
-  getChannels()async{
+  Future<MessageModel> getChannels()async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
       var data=await await BaseApi.requestEmptyH.get(

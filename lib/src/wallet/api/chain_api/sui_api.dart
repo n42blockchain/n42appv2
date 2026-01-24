@@ -9,7 +9,7 @@ class SuiApi{
   SuiApi({bool isTest=false}){
     url=RequestUrl().getUrl2(CoinType.SUI.name, "rpc",isTest: isTest);
   }
-  getBalanceSui(String address)async{
+  Future<MessageModel> getBalanceSui(String address)async{
     MessageModel rmm=await baseRPCSui(
       "suix_getBalance",
       [
@@ -22,7 +22,7 @@ class SuiApi{
     }
     return rmm;
   }
-  getGasPriceSui()async{
+  Future<MessageModel> getGasPriceSui()async{
     MessageModel rmm= await baseRPCSui(
       "suix_getReferenceGasPrice",
       [],
@@ -33,7 +33,7 @@ class SuiApi{
     return rmm;
   }
   //用户所有的对象，NFT，合约等
-  getOwnedObjects(String address)async{
+  Future<void> getOwnedObjects(String address)async{
     MessageModel rmm= await baseRPCSui(
       "suix_getOwnedObjects",
       [address, {
@@ -60,7 +60,7 @@ class SuiApi{
     }
   }
   //模拟交易
-  dryRunTransactionBlock(String signStr)async{
+  Future<MessageModel> dryRunTransactionBlock(String signStr)async{
     MessageModel rmm= await baseRPCSui(
       "sui_dryRunTransactionBlock",
       [signStr],
@@ -77,7 +77,7 @@ class SuiApi{
     return rmm;
   }
   //交易商链
-  submit(String transactionBlock,String signStr)async{
+  Future<MessageModel> submit(String transactionBlock,String signStr)async{
     return await baseRPCSui("sui_executeTransactionBlock", [
       transactionBlock,
       [signStr],
@@ -89,7 +89,7 @@ class SuiApi{
     ]);
   }
   //查询交易信息
-  getTransactionBlock(String txHash)async{
+  Future<MessageModel> getTransactionBlock(String txHash)async{
     return await baseRPCSui("sui_getTransactionBlock", [
       txHash,
       {
@@ -103,7 +103,7 @@ class SuiApi{
       },
     ]);
   }
-  baseRPCSui(String method,var value)async{
+  Future<MessageModel> baseRPCSui(String method,var value)async{
     try{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};

@@ -13,7 +13,7 @@ import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 ///explorer/op/{hash}获取交易信息
 class XtzApi{
   //valueType: "balance"spendable_balance;"revealed"is_revealed
-  getBalanceXtz(String address,String contract,String valueType,bool isTest)async{
+  Future<MessageModel> getBalanceXtz(String address,String contract,String valueType,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XTZ.name,'api',isTest:isTest);
       var data=await BaseApi.requestEmptyH.get('${uri}explorer/account/$address', params: {},defaultReturn: false);
@@ -49,7 +49,7 @@ class XtzApi{
   }
   */
   //counter 获取计数
-  getCounterXtz(String address,bool isTest)async{
+  Future<MessageModel> getCounterXtz(String address,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XTZ.name,'rpc',isTest:isTest);
       var data=await BaseApi.requestEmptyH.get('${uri}chains/main/blocks/head/context/contracts/$address/counter', params: {},defaultReturn: false);
@@ -62,7 +62,7 @@ class XtzApi{
       return mm;
     }
   }
-  getBranchXgz(bool isTest)async{
+  Future<MessageModel> getBranchXgz(bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XTZ.name,'rpc',isTest:isTest);
       var data=await BaseApi.requestEmptyH.get('${uri}chains/main/blocks/head/hash', params: {},defaultReturn: false);
@@ -89,7 +89,7 @@ class XtzApi{
     }
   }
   */
-  getTxInfoXtz(String txHash,bool isTest)async{
+  Future<MessageModel> getTxInfoXtz(String txHash,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XTZ.name,'api',isTest:isTest);
       var data=await BaseApi.requestEmptyH.get('${uri}explorer/op/$txHash', params: {},defaultReturn: false);
@@ -103,7 +103,7 @@ class XtzApi{
     }
   }
   //广播
-  sendTxXtz(String signAddress,bool isTest)async{
+  Future<MessageModel> sendTxXtz(String signAddress,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XTZ.name, "rpc",isTest:isTest);
       var data=await BaseApi.requestEmptyH.post('${uri}injection/operation?chain=main', params: {},data: json.encode(signAddress),defaultReturn: false);

@@ -11,7 +11,7 @@ class SwapAstApi{
   }
   //获取商品列表
   //type 1nft 2ast
-  getNftOrAstList(int type)async{
+  Future<MessageModel> getNftOrAstList(int type)async{
     try{
       MessageModel mm=MessageModel();
       final data=await BaseApi.requestEmptyH.get("$url/v1/nft-amt/list", params: {"type":type},header: header);
@@ -25,7 +25,7 @@ class SwapAstApi{
   }
 
   //获取订单详情
-  getNftOrAstDetail(int orderId)async{
+  Future<MessageModel> getNftOrAstDetail(int orderId)async{
     try{
       MessageModel mm=MessageModel();
       final data=await BaseApi.requestEmptyH.get("$url/v1/nft-amt/order/detail", params: {"order_id": orderId},header: header);
@@ -40,7 +40,7 @@ class SwapAstApi{
 
   //获取订单列表
   //type 1nft 2ast
-  getNftOrAstOrderList(int type, String uuid, {int page = 1, int pageSize = 10})async{
+  Future<MessageModel> getNftOrAstOrderList(int type, String uuid, {int page = 1, int pageSize = 10})async{
     Map<String, dynamic> getParams = {
       "type":type,
       "uuid":uuid,
@@ -61,7 +61,7 @@ class SwapAstApi{
   }
 
   //新增订单
-  postNftOrAstAddOrder(
+  Future<MessageModel> postNftOrAstAddOrder(
       String bAddr,
       String bUuid,
       int astId,
@@ -94,7 +94,7 @@ class SwapAstApi{
   }
 
   //取消订单
-  postNftOrAstCancelOrder(String bUuid,int orderId)async{
+  Future<MessageModel> postNftOrAstCancelOrder(String bUuid,int orderId)async{
     Map<String, dynamic> requestParams = {
       "b_uuid": bUuid,
       "nft_amt_order_id": orderId,
@@ -113,7 +113,7 @@ class SwapAstApi{
   }
 
   //提交支付哈希
-  postNftOrAstCommitPay(
+  Future<MessageModel> postNftOrAstCommitPay(
       String bUuid,
       int orderId,
       String txHash,

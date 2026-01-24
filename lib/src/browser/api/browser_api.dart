@@ -10,50 +10,50 @@ class BrowserApi{
     return _db!;
   }
   //将浏览历史，保存到浏览历史表
-  insertBrowserHistory(String url){
+  void insertBrowserHistory(String url){
     BrowserHistoryModel bhm=BrowserHistoryModel(url);
     db.insertBrowserHistory(bhm.getMapDb());
   }
   //模糊搜索 浏览历史表
-  selectBrowserHistoryLike(String url)async{
+  Future<List<Map<String,dynamic>>> selectBrowserHistoryLike(String url)async{
     return await db.selectBrowserHistoryLike(url);
   }
   //添加浏览收藏表
-  insertBrowserCollection(String name,String url,{String desc=""})async{
+  Future<void> insertBrowserCollection(String name,String url,{String desc=""})async{
     BrowserCollectionModel bcm=BrowserCollectionModel(url, name, desc);
     db.insertBrowserCollection(bcm.getMapDb());
   }
   //修改浏览收藏表
-  updateBrowsercollection(BrowserCollectionModel bcm)async{
+  Future<void> updateBrowsercollection(BrowserCollectionModel bcm)async{
     db.updateBrowserCollection(bcm.getMapDb(), bcm.id!);
   }
   //获取 浏览器收藏列表
-  selectBrowserCollection({int pageSize=10,int pageNum=1})async{
+  Future<List<Map<String,dynamic>>> selectBrowserCollection({int pageSize=10,int pageNum=1})async{
     return await db.selectBrowserCollection(pageSize: pageSize,pageNum: pageNum);
   }
   //获取 浏览器收藏列表，条件 url
-  selectBrowserCollectionUrl(String url)async{
+  Future<List<Map<String,dynamic>>> selectBrowserCollectionUrl(String url)async{
     return await db.selectBrowserCollectionUrl(url);
   }
   //删除 浏览器收藏
-  deleteBrowserCollection(int id)async{
+  Future<void> deleteBrowserCollection(int id)async{
     db.deleteBrowserCollection(id);
   }
   //删除 浏览器收藏 条件 url
-  deleteBrowserCollectionUrl(String url)async{
+  Future<int> deleteBrowserCollectionUrl(String url)async{
     return await db.deleteBrowserCollectionUrl(url);
   }
   //获取 浏览器 搜索列表
-  selectBrowserSearchHistory({int pageSize=10,int pageNum=1})async{
+  Future<List<Map<String,dynamic>>> selectBrowserSearchHistory({int pageSize=10,int pageNum=1})async{
     return await db.selectBrowserSearchHistory(pageSize: pageSize,pageNum: pageNum);
   }
   //添加浏览器搜索列表
-  insertBrowserSearchHistory(String search)async{
+  Future<int> insertBrowserSearchHistory(String search)async{
     BrowserSearchHistoryModel bshm=BrowserSearchHistoryModel(search);
     return await db.insertBrowserSearchHistory(bshm.getMapDb());
   }
   //删除浏览器搜索内容
-  deleteBrowserSearchHistory()async{
+  Future<int> deleteBrowserSearchHistory()async{
     return await db.deleteBrowserSearchHistory();
   }
 

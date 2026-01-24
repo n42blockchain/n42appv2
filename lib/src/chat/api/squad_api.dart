@@ -48,7 +48,7 @@ class SquadApi {
   }
 
   /// 绑定用户公钥
-  Future bindPubKey(String pubKey) async {
+  Future<MessageModel> bindPubKey(String pubKey) async {
     final userId = AppGlobals.userInfo?.uuid;
     final token = AppGlobals.userInfo?.token;
     Map<String, dynamic> params = {};
@@ -93,7 +93,7 @@ class SquadApi {
   }
 
   /// 向其他用户发送文件
-  Future sendFile({
+  Future<dynamic> sendFile({
     required String pubKey,
     required String rEmail,
     required String sAesSecret,
@@ -133,7 +133,7 @@ class SquadApi {
   }
 
   /// 获取用户发送列表
-  Future sendFileList({
+  Future<dynamic> sendFileList({
     required int pageIndex,
     required int pageSize,
   }) async {
@@ -161,7 +161,7 @@ class SquadApi {
   }
 
   /// 获取用户接收列表
-  Future receiveFileList({
+  Future<dynamic> receiveFileList({
     required int pageIndex,
     required int pageSize,
   }) async {
@@ -189,7 +189,7 @@ class SquadApi {
   }
 
   /// 文件删除
-  Future deleteFile(String fileId) {
+  Future<dynamic> deleteFile(String fileId) {
     final userId = AppGlobals.userInfo?.uuid;
     final token = AppGlobals.userInfo?.token;
     Map<String, dynamic> params = {};

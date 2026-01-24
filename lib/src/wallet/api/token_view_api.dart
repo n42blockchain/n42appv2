@@ -64,7 +64,7 @@ class TokenViewApi{
   ///获取币列表，主链加代币
   ///chains 返回特定的主链 主链币全名 solna,bitcoin,
   ///coins 返回特定的代币 代币的symbol eth,bnb,ast
-  getChainListAll({String chains="",String coins=""})async{
+  Future<MessageModel> getChainListAll({String chains="",String coins=""})async{
     try{
       //chains="Amaze Chain";
       String condition="";
@@ -116,7 +116,7 @@ class TokenViewApi{
   }
   */
   //获取某个主链币的所有代币
-  getTokenListFullname(String fullname)async{
+  Future<MessageModel> getTokenListFullname(String fullname)async{
     try{
       final a=await BaseApi.requestEmptyH.get('${url}v1/chains/coins?chains=$fullname', params: {},header:header,);
       MessageModel mm=MessageModel.error();
@@ -159,7 +159,7 @@ class TokenViewApi{
   }
    */
   //获取某笔交易的确认数
-  getTxConfirmation(String coinType,String txHash)async{
+  Future<MessageModel> getTxConfirmation(String coinType,String txHash)async{
     try{
       final a=await BaseApi.requestEmptyH.get('${url}v1/vipapi/tx/confirmation?coin=${coinType.toLowerCase()}&tx_hash=$txHash', params: {},header:header,);
       MessageModel mm=MessageModel.error();
@@ -197,7 +197,7 @@ class TokenViewApi{
   }
   */
   //获取币的 余额
-  getBalance(String blockchain,String coinType,String address,{String contract="",bool returnDouble=false,bool isTest=false,String? rpc})async{
+  Future<MessageModel?> getBalance(String blockchain,String coinType,String address,{String contract="",bool returnDouble=false,bool isTest=false,String? rpc})async{
     switch(blockchain){
       case "Bitcoin":
         if(isTest){
@@ -255,7 +255,7 @@ class TokenViewApi{
     return null;
   }
   //发送交易
-  sendTx(String blockchain,String coinType,dynamic signHash,{String netMode="main",String? rpc})async{
+  Future<MessageModel?> sendTx(String blockchain,String coinType,dynamic signHash,{String netMode="main",String? rpc})async{
     switch(blockchain){
       case "Bitcoin":
         return await sendTxBtc(coinType,signHash,isTest: netMode=="main"?false:true);
@@ -278,7 +278,7 @@ class TokenViewApi{
     return null;
   }
   //获取gasprice
-  getGasPrice(String blockchain,String coinType,{bool isTest=false,String? rpc,String signMessage=""})async{
+  Future<MessageModel?> getGasPrice(String blockchain,String coinType,{bool isTest=false,String? rpc,String signMessage=""})async{
     switch(blockchain){
       case "Bitcoin":
       //return await getBalanceBtc(coinType,address,returnDouble: returnDouble);
@@ -333,7 +333,7 @@ class TokenViewApi{
     }
   }*/
   //获取比特币的gasfee 等级数据，只是比特币的
-  getGasFeeBtc({bool isTest=false})async{
+  Future<MessageModel> getGasFeeBtc({bool isTest=false})async{
     try{
       if(isTest){
         return await BtcApi(test: isTest).getGasfee();
@@ -356,7 +356,7 @@ class TokenViewApi{
     }
   }
   //获取btc类的余额
-  getBalanceBtc(String coinType,String address,{bool returnDouble=false})async{
+  Future<MessageModel> getBalanceBtc(String coinType,String address,{bool returnDouble=false})async{
     try{
       final a=await BaseApi.requestEmptyH.get('${url}v1/vipapi/account/balance?coin=${coinType.toLowerCase()}&addr=$address', params: {},header:header,);
       MessageModel mm=MessageModel();
@@ -378,7 +378,7 @@ class TokenViewApi{
     }
   }
   //获取btc类的utxo
-  getUTXOBtc(String coinType,String address,{int pageSize=100,int pageNum=1,bool isTest=false})async{
+  Future<MessageModel> getUTXOBtc(String coinType,String address,{int pageSize=100,int pageNum=1,bool isTest=false})async{
     try{
       if(isTest){
         return await BtcApi(test: isTest).getUtxos(address);
@@ -403,7 +403,7 @@ class TokenViewApi{
     }
   }
   //获取btc类的交易记录
-  getTxListBtc(String coinType,String address,{int pageSize=20,int pageNum=1})async{
+  Future<MessageModel> getTxListBtc(String coinType,String address,{int pageSize=20,int pageNum=1})async{
     try{
       final a=await BaseApi.requestEmptyH.get('${url}v1/vipapi/address/tx/list?coin=${coinType.toLowerCase()}&addr=$address&page=$pageNum&page_size=$pageSize', params: {},header:header,);
       MessageModel mm=MessageModel.error();
@@ -429,7 +429,7 @@ class TokenViewApi{
 
   //广播交易，比特币类、以太坊类和
   //btc、eth、etc
-  sendTxBtc(String coinType,String signHash,{bool isTest=false})async{
+  Future<MessageModel> sendTxBtc(String coinType,String signHash,{bool isTest=false})async{
     try{
       if(isTest){
         return await BtcApi(test: isTest).sendTxHttp(signHash);
@@ -457,7 +457,7 @@ class TokenViewApi{
 
 
   ////////////////////////////eth
-  getBalanceEth(String coinType,String address,String contract,{bool returnDouble=false,bool isTest=false,String? rpc})async{
+  Future<MessageModel> getBalanceEth(String coinType,String address,String contract,{bool returnDouble=false,bool isTest=false,String? rpc})async{
     try{
       if(rpc==null){
         dynamic a;
@@ -542,7 +542,7 @@ class TokenViewApi{
   }
 */
   //获取eth 类 某个地址的所有代币余额
-  getAllTokenBalanceEth(String coinType,String address)async{
+  Future<MessageModel> getAllTokenBalanceEth(String coinType,String address)async{
     try{
       final a=await BaseApi.requestEmptyH.get('${url}v1/vipapi/eth-class/address/balance?coin=${coinType.toLowerCase()}&address=${address.toLowerCase()}', params: {},header:header,);
       MessageModel mm=MessageModel.error();
@@ -570,7 +570,7 @@ class TokenViewApi{
   }
 
   //eth、etc 预估gas花费
-  getGasEstimateEth(Map<String,dynamic> params)async{
+  Future<MessageModel> getGasEstimateEth(Map<String,dynamic> params)async{
     try{
       final a=await BaseApi.requestEmptyH.post('${url}v2/eth/estimate/gas', params: params,data: params,header:header,);
       MessageModel mm=MessageModel.error();
@@ -592,7 +592,7 @@ class TokenViewApi{
       return mm;
     }
   }
-  getGasEstimateEthV2(String from,String to,BigInt gasPrice,BigInt value,BigInt gas,String coinType,{String contract="",String data="",bool isTest=false})async{
+  Future<MessageModel> getGasEstimateEthV2(String from,String to,BigInt gasPrice,BigInt value,BigInt gas,String coinType,{String contract="",String data="",bool isTest=false})async{
     if(coinType==CoinType.TRX.name){
       TrxApi trxApi=TrxApi();
       return await trxApi.getGasEstimateTrx(from, to, gasPrice, value, gas,contract:contract,isTest:isTest);
@@ -645,7 +645,7 @@ class TokenViewApi{
   }
   //返回交易数量 nonic值
   //netMode= main,test
-  getTransactionCountEth(String coinType,String address,{String netMode="main",String? rpc})async{
+  Future<MessageModel> getTransactionCountEth(String coinType,String address,{String netMode="main",String? rpc})async{
     try{
       if(rpc==null){
         Map<String,dynamic> params={
@@ -680,7 +680,7 @@ class TokenViewApi{
     }
   }
   //发送交易
-  sendTxEth(String coinType,String signHash,String netMode,{String? rpc})async{
+  Future<MessageModel> sendTxEth(String coinType,String signHash,String netMode,{String? rpc})async{
     try{
       if(rpc==null){
         Map<String,dynamic> params={
@@ -712,7 +712,7 @@ class TokenViewApi{
     }
   }
   //获取交易的收据
-  getTransactionReceiptEth(String coinType,String txHash,{bool isTest=false,String? rpc})async{
+  Future<MessageModel> getTransactionReceiptEth(String coinType,String txHash,{bool isTest=false,String? rpc})async{
     try{
       if(rpc==null){
         Map<String,dynamic> params={
@@ -738,7 +738,7 @@ class TokenViewApi{
       return mm;
     }
   }
-  getGasPriceEth(String coinType,{bool isTest=false,String? rpc})async{
+  Future<MessageModel> getGasPriceEth(String coinType,{bool isTest=false,String? rpc})async{
     try{
       if(rpc ==null){
         Map<String,dynamic> params={
@@ -768,7 +768,7 @@ class TokenViewApi{
       return mm;
     }
   }
-  getEnsResolve(String domain)async{
+  Future<MessageModel> getEnsResolve(String domain)async{
     try{
       final a=await BaseApi.requestEmptyH.get('${url}v1/ens/resolve?domain=$domain', params: {},header:header,);
       MessageModel mm=MessageModel();
@@ -791,7 +791,7 @@ class TokenViewApi{
   ////////////////////////////
   //solana
   //获取余额
-  getBalanceSolana(String coinType,String address,String contract,{bool returnDouble=false,bool isTest=false})async{
+  Future<MessageModel> getBalanceSolana(String coinType,String address,String contract,{bool returnDouble=false,bool isTest=false})async{
     try{
       dynamic a;
       if(contract==""){
@@ -841,7 +841,7 @@ class TokenViewApi{
     }
   }
   //获取当前用户 某个合约的全部账号
-  getTokenAccountsByOwnerSolana(String address,String contract,{bool isTest=false})async{
+  Future<MessageModel> getTokenAccountsByOwnerSolana(String address,String contract,{bool isTest=false})async{
     try{
       Map<String,dynamic> params={
         "mint":contract,
@@ -868,7 +868,7 @@ class TokenViewApi{
     }
   }
   //获取指定 地址的 账户信息
-  getAccountInfoSolana(String address,{bool isTest=false})async{
+  Future<MessageModel> getAccountInfoSolana(String address,{bool isTest=false})async{
     try{
       Map<String,dynamic> params={
         "net_mode":isTest?"test":"main",
@@ -890,7 +890,7 @@ class TokenViewApi{
     }
   }
   //获取最新块hash
-  getRecentBlockhashSolana({bool isTest=false})async{
+  Future<MessageModel> getRecentBlockhashSolana({bool isTest=false})async{
     try{
       Map<String,dynamic> params={
         "net_mode":isTest?"test":"main",
@@ -911,7 +911,7 @@ class TokenViewApi{
     }
   }
   //发送交易
-  sendTxSolana(String signHash,String netMode)async{
+  Future<MessageModel> sendTxSolana(String signHash,String netMode)async{
     try{
       Map<String,dynamic> params={
         "net_mode":netMode,
@@ -937,7 +937,7 @@ class TokenViewApi{
     }
   }
   //获取gasfee
-  getGasPriceSolana({bool isTest=false})async{
+  Future<MessageModel> getGasPriceSolana({bool isTest=false})async{
     try{
       Map<String,dynamic> params={
         "net_mode":isTest?"test":"main",
@@ -958,7 +958,7 @@ class TokenViewApi{
     }
   }
   //根据交易hash 返回交易信息
-  getTransactionSolana(String txHash,String netMode)async{
+  Future<MessageModel> getTransactionSolana(String txHash,String netMode)async{
     try{
       Map<String,dynamic> params={
         "net_mode":netMode,
@@ -1050,7 +1050,7 @@ class TokenViewApi{
   }
   */
   //获取gas费
-  getGasPriceTrx({bool isTest=false})async{
+  Future<MessageModel> getGasPriceTrx({bool isTest=false})async{
     try{
       Map<String,dynamic> params={
         "net_mode":isTest?"test":"main",
@@ -1076,7 +1076,7 @@ class TokenViewApi{
     }
   }
   //获取交易的收据
-  getTransactionReceiptTrx(String txHash,{bool isTest=false})async{
+  Future<MessageModel> getTransactionReceiptTrx(String txHash,{bool isTest=false})async{
     try{
       Map<String,dynamic> params={
         "tx_hash":txHash,
@@ -1098,7 +1098,7 @@ class TokenViewApi{
     }
   }
   //获取最新块信息
-  getLatestBlockNumberTrx({bool isTest=false})async{
+  Future<MessageModel> getLatestBlockNumberTrx({bool isTest=false})async{
     try{
       Map<String,dynamic> params={
         "net_mode":isTest?"test":"main",
@@ -1119,7 +1119,7 @@ class TokenViewApi{
     }
   }
   //创建交易
-  createTxTrx(String sendAddress,String toAddress,int amount, netMode)async{
+  Future<MessageModel> createTxTrx(String sendAddress,String toAddress,int amount, dynamic netMode)async{
     try{
       Map<String,dynamic> params={
         "coin":"trx",
@@ -1199,7 +1199,7 @@ class TokenViewApi{
     }
   }
   */
-  sendTxTrx(String signHash,String netMode)async{
+  Future<MessageModel> sendTxTrx(String signHash,String netMode)async{
     try{
       Map<String,dynamic> sign=json.decode(signHash);
       /*MessageModel cmm=await createTx_trx(
@@ -1282,7 +1282,7 @@ class TokenViewApi{
       id:AppGlobals.currentId++,);
   }
 */
-  getBrowserPreviewUrl()async{
+  Future<MessageModel> getBrowserPreviewUrl()async{
     try{
       final rData=await BaseApi.requestEmptyH.get('${url}v1/preview/url', params: {},header: header);
       MessageModel mm=MessageModel.error();

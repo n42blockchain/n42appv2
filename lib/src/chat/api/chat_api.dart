@@ -11,7 +11,7 @@ class ChatApi{
     header={'content-type': 'application/json'};
   }
   ///   ---------------   消息    ---------------------
-  Future msgList(
+  Future<dynamic> msgList(
       int lastMsgId,
       ) async {
     Map<String, dynamic> params = {};
@@ -23,7 +23,7 @@ class ChatApi{
   }
 
   //离线消息 不支持漫游
-  Future offlineMsg() async {
+  Future<dynamic> offlineMsg() async {
     Map<String, dynamic> params = {};
     params["uuid"] = AppGlobals.userInfo?.uuid;
     final data = await BaseApi.requestEmptyH
@@ -32,7 +32,7 @@ class ChatApi{
   }
 
   // send message
-  Future sendMessage(
+  Future<dynamic> sendMessage(
       {required String fromUUID,
         required String receiveId,
         required String content}) async {
@@ -44,7 +44,7 @@ class ChatApi{
     await BaseApi.requestEmptyH.post('$url/v1/chat/send/one', params: params, data: params,header: header,);
     return data;
   }
-  Future sendMessageRed({
+  Future<dynamic> sendMessageRed({
     required String fromUUID,
     required String receiveId,
     required String content,
@@ -68,7 +68,7 @@ class ChatApi{
     return data;
   }
   //获取红包详情
-  Future getRedDetails({
+  Future<MessageModel> getRedDetails({
     required int messageId,
   })async{
     Map<String, dynamic> params = {
@@ -90,7 +90,7 @@ class ChatApi{
     }
   }
   //领取红包
-  Future getRedReceive({
+  Future<MessageModel> getRedReceive({
     required int messageId,
   })async{
     Map<String, dynamic> params = {
@@ -115,7 +115,7 @@ class ChatApi{
 
   ///   ---------------   好友    ---------------------
   // 同意
-  Future friendAccept(
+  Future<dynamic> friendAccept(
       String senderUuid, String targetUuid, String remarks) async {
     Map<String, dynamic> params = {};
     params["sender_uuid"] = senderUuid;
@@ -129,7 +129,7 @@ class ChatApi{
   //reason 申请理由
   // remarks备注昵称
   // target_uuid 好友请求接收者的uuid
-  Future friendAdd(String reason, String remarks, String senderUuid,
+  Future<dynamic> friendAdd(String reason, String remarks, String senderUuid,
       String targetUuid) async {
     Map<String, dynamic> params = {};
     params["reason"] = reason;
@@ -142,7 +142,7 @@ class ChatApi{
   }
 
   //好友申请列表
-  Future friendApplyList() async {
+  Future<dynamic> friendApplyList() async {
     Map<String, dynamic> params = {};
     params["uuid"] = AppGlobals.userInfo?.uuid;
     final data = await BaseApi.requestEmptyH
@@ -151,7 +151,7 @@ class ChatApi{
   }
 
   //好友列表
-  Future friendList() async {
+  Future<dynamic> friendList() async {
     Map<String, dynamic> params = {};
     params["uuid"] = AppGlobals.userInfo?.uuid;
     final data =
@@ -160,7 +160,7 @@ class ChatApi{
   }
 
   //搜索好友
-  Future searchFriend(String email) async {
+  Future<dynamic> searchFriend(String email) async {
     Map<String, dynamic> params = {};
     params["email"] = email;
     final data =
@@ -169,7 +169,7 @@ class ChatApi{
   }
 
   //获取用户信息
-  Future getUserInfo(String userId) async {
+  Future<dynamic> getUserInfo(String userId) async {
     Map<String, dynamic> params = {};
     params["uuid"] = userId;
     final data =
@@ -178,7 +178,7 @@ class ChatApi{
   }
 
   //删除好友
-  Future deleteFriend(String userId) async {
+  Future<dynamic> deleteFriend(String userId) async {
     Map<String, dynamic> params = {};
     params["friend"] = userId;
     params["uuid"] = AppGlobals.userInfo?.uuid;
@@ -188,7 +188,7 @@ class ChatApi{
   }
 
   //拉黑好友
-  Future blockFriend(String friendId) async {
+  Future<dynamic> blockFriend(String friendId) async {
     Map<String, dynamic> params = {};
     params["friend"] = friendId;
     params["uuid"] = AppGlobals.userInfo?.uuid;
@@ -198,7 +198,7 @@ class ChatApi{
   }
 
   //移除黑名单
-  Future removeBlockFriend(String friendId) async {
+  Future<dynamic> removeBlockFriend(String friendId) async {
     Map<String, dynamic> params = {};
     params["friend"] = friendId;
     params["uuid"] = AppGlobals.userInfo?.uuid;
@@ -208,7 +208,7 @@ class ChatApi{
   }
 
   //查询当前用户的黑名单列表
-  Future blockFriendList() async {
+  Future<dynamic> blockFriendList() async {
     Map<String, dynamic> params = {};
     params["uuid"] = AppGlobals.userInfo?.uuid;
     final data =
@@ -229,7 +229,7 @@ class ChatApi{
   // string]
   // o_uuid*	string
   //创建群组
-  Future createGroup(String extra, String groupName,
+  Future<dynamic> createGroup(String extra, String groupName,
       String introduction, String oUuid, List<String?> uuids) async {
     Map<String, dynamic> params = {};
     params["o_uuid"] = oUuid;
@@ -243,7 +243,7 @@ class ChatApi{
   }
 
   //查询群组信息
-  Future groupInfo(String gid) async {
+  Future<dynamic> groupInfo(String gid) async {
     Map<String, dynamic> params = {};
     params["g_uuid"] = gid;
     params["m_uuid"] = AppGlobals.userInfo?.uuid;
@@ -253,7 +253,7 @@ class ChatApi{
   }
 
   //修改群组信息
-  Future updateGroupInfo(
+  Future<dynamic> updateGroupInfo(
       {required String gIntroduction,
         required String gUuid,
         required String groupName,
@@ -274,7 +274,7 @@ class ChatApi{
   // "members": [
   // "string"
   // ]
-  Future addGroupMembers(
+  Future<dynamic> addGroupMembers(
       String gUuid, String inviter, List members) async {
     Map<String, dynamic> params = {};
     params["g_uuid"] = gUuid;
@@ -293,7 +293,7 @@ class ChatApi{
   //     "string"
   //   ]
   // }
-  Future deleteGroupMembers(String gUuid, List members) async {
+  Future<dynamic> deleteGroupMembers(String gUuid, List members) async {
     Map<String, dynamic> params = {};
     params["admin"] = AppGlobals.userInfo?.uuid;
     params["g_uuid"] = gUuid;
@@ -304,7 +304,7 @@ class ChatApi{
   }
 
   //查询群组成员
-  Future groupMembers(
+  Future<dynamic> groupMembers(
       String gUuid,
       String mUuid,
       ) async {
@@ -317,7 +317,7 @@ class ChatApi{
   }
 
   //解散群
-  Future groupDisband(
+  Future<dynamic> groupDisband(
       String gUuid,
       String mUuid,
       ) async {
@@ -330,7 +330,7 @@ class ChatApi{
   }
 
   //退出群聊
-  Future leaveGroup(
+  Future<dynamic> leaveGroup(
       String gUuid,
       String mUuid,
       ) async {
@@ -343,7 +343,7 @@ class ChatApi{
   }
 
 //群消息确认
-  Future groupMsgAck(String gUuid, String mUuid, int seq) async {
+  Future<dynamic> groupMsgAck(String gUuid, String mUuid, int seq) async {
     Map<String, dynamic> params = {};
     params["g_uuid"] = gUuid;
     params["user_id"] = mUuid;
@@ -355,7 +355,7 @@ class ChatApi{
 
   //拉取各个群的最后一条离线消息
   //测试 实际返回的群的最后一条消息，跟离线消息没有关系
-  Future groupOfflineLastMsg() async {
+  Future<dynamic> groupOfflineLastMsg() async {
     Map<String, dynamic> params = {};
     params["uuid"] = AppGlobals.userInfo?.uuid;
     final data = await BaseApi.requestEmptyH
@@ -364,7 +364,7 @@ class ChatApi{
   }
 
   //拉取某个群的所有离线消息
-  Future groupOfflineMsg(String gUuid, int lastSeq) async {
+  Future<dynamic> groupOfflineMsg(String gUuid, int lastSeq) async {
     Map<String, dynamic> params = {};
     params["g_uuid"] = gUuid;
     params["last_seq"] = lastSeq;
@@ -375,7 +375,7 @@ class ChatApi{
   }
 
   //创建群之后上传群成员秘文
-  Future uploadGroupMemberSS(
+  Future<dynamic> uploadGroupMemberSS(
       String gUuid, Map<String, dynamic> ssList) async {
     Map<String, dynamic> params = {};
     params["g_uuid"] = gUuid;
@@ -386,7 +386,7 @@ class ChatApi{
   }
 
   //查询用户在当前群中的SS
-  Future checkGroupSSById(String gUuid) async {
+  Future<dynamic> checkGroupSSById(String gUuid) async {
     Map<String, dynamic> params = {};
     params["g_uuid"] = gUuid;
     params["m_uuid"] = AppGlobals.userInfo?.uuid;
@@ -397,7 +397,7 @@ class ChatApi{
 
   //从后往前拉取 这个接口主要是进入群聊时先调取一次最新消息，显示给用户
   //因为上边的群离线消息获取是从起始开始拉取 数据大会太过耗时
-  Future getGroupOfflineLastMessage(String gUuid, int lastSeq) async {
+  Future<dynamic> getGroupOfflineLastMessage(String gUuid, int lastSeq) async {
     Map<String, dynamic> params = {};
     params["g_uuid"] = gUuid;
     params["last_seq"] = lastSeq;
@@ -409,7 +409,7 @@ class ChatApi{
   }
 
   //举报用户违规
-  Future reportUser(String reportReason,
+  Future<dynamic> reportUser(String reportReason,
       {int tag = 1,int? messageId, String? targetUuid}) async {
     Map<String, dynamic> params = {};
     params["message_id"] = messageId;

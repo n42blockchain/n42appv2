@@ -75,7 +75,7 @@ class TransationRecordModel{
     message=map['message'];
   }
   //转为数据库需要的map
-  Map<String,dynamic>toMapDb(){
+  Map<String, dynamic> toMapDb(){
     return {
       "address":address,
       "coinId":coinId,
@@ -97,7 +97,7 @@ class TransationRecordModel{
     };
   }
   //转为map
-  Map<String,dynamic>toMap(){
+  Map<String, dynamic> toMap(){
     return {
       "trId":trId,
       "address":address,
@@ -119,7 +119,7 @@ class TransationRecordModel{
       'message':message,
     };
   }
-  getTxTimeStr(){
+  String getTxTimeStr(){
     if(txTimeStr==null){
       int tt=0;
       if(txTime.length==13){

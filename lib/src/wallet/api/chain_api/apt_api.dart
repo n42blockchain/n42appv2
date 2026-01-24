@@ -10,7 +10,7 @@ class AptApi{
   AptApi({bool isTest=false}){
     url=RequestUrl().getUrl2(CoinType.APT.name, "rpc",isTest: isTest);
   }
-  getBalance(String address,{String contract="",String tokenName=""})async{
+  Future<MessageModel> getBalance(String address,{String contract="",String tokenName=""})async{
     try{
       MessageModel mm=MessageModel();
       String uri='${url}accounts/$address/balance/';
@@ -28,7 +28,7 @@ class AptApi{
       return mm;
     }
   }
-  getGasPrice()async{
+  Future<MessageModel> getGasPrice()async{
     try{
       MessageModel mm=MessageModel();
       String uri='${url}estimate_gas_price';
@@ -41,7 +41,7 @@ class AptApi{
       return mm;
     }
   }
-  getAccountInfo(String address)async{
+  Future<MessageModel> getAccountInfo(String address)async{
     try{
       MessageModel mm=MessageModel();
       String uri='${url}accounts/$address';
@@ -54,7 +54,7 @@ class AptApi{
       return mm;
     }
   }
-  getServiceInfo()async{
+  Future<MessageModel> getServiceInfo()async{
     try{
       MessageModel mm=MessageModel();
       String uri='${url}ledger/info';
@@ -67,7 +67,7 @@ class AptApi{
       return mm;
     }
   }
-  sendTxHash(String txHash)async{
+  Future<MessageModel> sendTxHash(String txHash)async{
     try{
       MessageModel mm=MessageModel();
       String uri='${url}transactions';

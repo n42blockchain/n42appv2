@@ -55,7 +55,7 @@ class CoinModel {
     pathIndex=json['pathIndex'] as int;
     mainCoinIcon=json['mainCoinIcon'] as String?;
   }
-  toJson(){
+  Map<String, dynamic> toJson(){
     return {
       'coin': coin,
       'tokens': tokens,
@@ -113,7 +113,7 @@ class CoinModel {
     coin = map;
   }
   //setAddress,是否设置钱包的地址Map
-  buildWallet({String pk="",bool setAddress=true,int? walletIndex}) async {
+  Future<void> buildWallet({String pk="",bool setAddress=true,int? walletIndex}) async {
     String coinType = coin['coinType'];
     if (address == null) {
       if(walletIndex==null){
@@ -167,7 +167,7 @@ class CoinModel {
       }
     }
   }
-  getBalanceDefault()async{
+  Future<void> getBalanceDefault()async{
     if(isTest){
       balance=BigInt.parse(coin['balance_test']);
     }else{
@@ -178,7 +178,7 @@ class CoinModel {
     value=balanceDoubleAll()*coinPrice;
   }
   //是否是刷新，目前只有tron 链 使用
-  getBalance({bool getToken=true}) async {
+  Future<bool> getBalance({bool getToken=true}) async {
     try {
       //如果币的地址为空，创建地址
       WalletActionProvider wap = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
@@ -233,7 +233,7 @@ class XrpModel{
   //当前节点对费用的整体乘数因子，用来估算“标准”费用。
   // 👉 计算：实际费用 = base_fee × (load_factor / load_base)
   int loadFactor=256;
-  setServiceState(Map<String,dynamic> data){
+  void setServiceState(Map<String,dynamic> data){
     reserveBase=data['reserve_base'];
     reserveInc=data['reserve_inc'];
     baseFee=data['base_fee'];

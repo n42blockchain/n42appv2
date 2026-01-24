@@ -20,7 +20,7 @@ class TrxApi{
   }
   //trx,Tron
   //获取余额
-  getBalanceTrx(String address,String contract,{bool isTest=false})async{
+  Future<MessageModel> getBalanceTrx(String address,String contract,{bool isTest=false})async{
     address= getAddressTron(address);
     if(contract==""){
       MessageModel mm=await baseRPCEth("eth_getBalance",["0x$address","latest"]);
@@ -40,7 +40,7 @@ class TrxApi{
       return mm;
     }
   }
-  getGasPriceTrx({bool isTest=false})async{
+  Future<MessageModel> getGasPriceTrx({bool isTest=false})async{
     MessageModel mm=await baseRPCEth("eth_gasPrice",[],isTest: isTest);
     if(mm.error==false){
       mm.data=hexToInt(mm.data);
@@ -131,7 +131,7 @@ class TrxApi{
     }
   }
   */
-  getGasEstimateTrx(String from,String to,BigInt gasPrice,BigInt value,BigInt gas,{String contract="",bool isTest=false})async{
+  Future<MessageModel> getGasEstimateTrx(String from,String to,BigInt gasPrice,BigInt value,BigInt gas,{String contract="",bool isTest=false})async{
     from=getAddressTron(from);
     to=getAddressTron(to);
     if(contract==""){
@@ -169,7 +169,7 @@ class TrxApi{
     }
   }
   //或去最新块信息
-  getBlockNowTrx({bool isTest=false})async{
+  Future<MessageModel> getBlockNowTrx({bool isTest=false})async{
     try{
       String urlStr=RequestUrl().getUrl2(CoinType.TRX.name, 'rpc',isTest: isTest);
       var data=await BaseApi.requestEmptyH.post('$urlStr/wallet/getnowblock', params: {},header: header);
@@ -189,7 +189,7 @@ class TrxApi{
       return mm;
     }
   }
-  createTransaction(String fromAddress,String toAddress,int amount,{bool isTest=false})async{
+  Future<MessageModel> createTransaction(String fromAddress,String toAddress,int amount,{bool isTest=false})async{
     try{
       String url=RequestUrl().getUrl2(CoinType.TRX.name, 'api',isTest: isTest);
       Map<String,dynamic> map={
@@ -214,7 +214,7 @@ class TrxApi{
     }
   }
   //广播交易
-  sendTxTrx(String signStr,{bool isTest=false})async{
+  Future<MessageModel> sendTxTrx(String signStr,{bool isTest=false})async{
     try{
       String urlStr=RequestUrl().getUrl2(CoinType.TRX.name, 'api',isTest: isTest);
       final rData=await BaseApi.requestEmptyH.post('$urlStr/wallet/broadcasttransaction', params: {},data: jsonDecode(signStr),header: header);
@@ -262,7 +262,7 @@ class TrxApi{
     }
   }
   */
-  baseRPCEth(String method,var value,{bool? isTest})async{
+  Future<MessageModel> baseRPCEth(String method,var value,{bool? isTest})async{
     try{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};

@@ -13,7 +13,7 @@ class ChatMessageApi {
   }
 
   /// 根据用户email获取pub key
-  Future getUserPubKey(String email) {
+  Future<dynamic> getUserPubKey(String email) {
     final userId = AppGlobals.userInfo?.uuid;
     final token = AppGlobals.userInfo?.token;
     Map<String, dynamic> params = {};
@@ -26,7 +26,7 @@ class ChatMessageApi {
   }
 
   /// 绑定用户公钥
-  Future bindPubKey(String pubKey) async {
+  Future<dynamic> bindPubKey(String pubKey) async {
     final userId = AppGlobals.userInfo?.uuid;
     final token = AppGlobals.userInfo?.token;
     Map<String, dynamic> params = {};
@@ -51,7 +51,7 @@ class ChatMessageApi {
   }
 
   /// 向其他用户发送文件
-  Future sendFile({
+  Future<dynamic> sendFile({
     required String pubKey,
     required String rEmail,
     required String sAesSecret,
@@ -91,7 +91,7 @@ class ChatMessageApi {
   }
 
   /// 获取聊天列表
-  Future getChatList({
+  Future<dynamic> getChatList({
     required int pageIndex,
     required int pageSize,
   }) async {
@@ -119,7 +119,7 @@ class ChatMessageApi {
   }
 
   /// 获取和某个人的聊天记录
-  Future getChatMessageByUserEmail({
+  Future<dynamic> getChatMessageByUserEmail({
     required String otherUUID,
     required int pageIndex,
     required int pageSize,

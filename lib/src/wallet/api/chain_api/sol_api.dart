@@ -6,7 +6,7 @@ import 'package:n42appv2/src/models/message_model.dart';
 
 class SolApi{
   //获取账号信息
-  getAccountInfo(String address,{bool isTest=false,})async{
+  Future<MessageModel> getAccountInfo(String address,{bool isTest=false,})async{
     MessageModel mm=await baseRPCSol("getAccountInfo",[address,{"encoding": "base64"}],isTest: isTest);
     if(mm.error==false){
       mm.data=mm.data['value']['data'];
@@ -14,7 +14,7 @@ class SolApi{
     return mm;
   }
   //获取最新区块hash
-  getLatestBlockhash({bool isTest=false,})async{
+  Future<MessageModel> getLatestBlockhash({bool isTest=false,})async{
     MessageModel mm=await baseRPCSol("getLatestBlockhash",[],isTest: isTest);
     if(mm.error==false){
       mm.data=mm.data['value']['blockhash'];
@@ -22,7 +22,7 @@ class SolApi{
     return mm;
   }
   //获取余额
-  getBalance(String address,String contract,{bool isTest=false,})async{
+  Future<MessageModel> getBalance(String address,String contract,{bool isTest=false,})async{
     if(contract==""){
       MessageModel mm=await baseRPCSol("getBalance",[address],isTest: isTest);
       if(mm.error==false){
@@ -41,7 +41,7 @@ class SolApi{
     }
   }
   //计算gas费
-  getFeeForMessage(String signMessage,{isTest=false})async{
+  Future<MessageModel> getFeeForMessage(String signMessage,{bool isTest=false})async{
     MessageModel mm=await baseRPCSol("getFeeForMessage",[signMessage,
       /*{
       "commitment":"processed"
@@ -53,7 +53,7 @@ class SolApi{
     return mm;
   }
   //虚拟交易
-  simulateTransaction(String signMessage,{isTest=false})async{
+  Future<MessageModel> simulateTransaction(String signMessage,{bool isTest=false})async{
     MessageModel mm=await baseRPCSol("simulateTransaction",[signMessage,{
       "sigVerify": true
       //"encoding":"base64"
@@ -64,10 +64,10 @@ class SolApi{
     return mm;
   }
   //发起交易
-  sendTransaction(String signMessage,{isTest=false})async{
+  Future<MessageModel> sendTransaction(String signMessage,{bool isTest=false})async{
     return await baseRPCSol("sendTransaction",[signMessage,{"encoding":"base58"}],isTest: isTest);
   }
-  baseRPCSol(String method,var value,{bool? isTest})async{
+  Future<MessageModel> baseRPCSol(String method,var value,{bool? isTest})async{
     try{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};

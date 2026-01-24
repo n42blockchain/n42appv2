@@ -10,7 +10,7 @@ import 'package:dio/dio.dart';
 class AlgoApi{
   //static test
   //获取余额
-  getBalance(String address,{String assetId="",bool isTest=false})async{
+  Future<MessageModel> getBalance(String address,{String assetId="",bool isTest=false})async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ALGO.name,'api',isTest:isTest);
       if(assetId!=""){
@@ -46,7 +46,7 @@ class AlgoApi{
     }
   }
   //获取签名用的数据
-  getTransactionsParams({bool isTest=false})async{
+  Future<MessageModel> getTransactionsParams({bool isTest=false})async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ALGO.name,'api',isTest:isTest);
       var data=await BaseApi.requestEmptyH.get('${uri}v2/transactions/params', params: {});
@@ -60,7 +60,7 @@ class AlgoApi{
     }
   }
   //发送交易
-  sendTx(Uint8List txHash,{bool isTest=false})async{
+  Future<MessageModel> sendTx(Uint8List txHash,{bool isTest=false})async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ALGO.name,'api',isTest:isTest);
       //Uint8List dataUint =DataUtils.hexStringToUint8List(txHash);
@@ -128,7 +128,7 @@ class AlgoApi{
   }
   */
   //根据txid获取交易信息
-  getTransactionsInfo(String txId,{bool isTest=false})async{
+  Future<MessageModel> getTransactionsInfo(String txId,{bool isTest=false})async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ALGO.name,'api',isTest:isTest);
       var data=await BaseApi.requestEmptyH.get('${uri}v2/transactions/pending/$txId', params: {});

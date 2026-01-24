@@ -91,7 +91,7 @@ class BtcTransactionRecodeModel{
   }
   String? txTimeStr;
 
-  List<Map<String,dynamic>> inputModelsMap(){
+  List<Map<String, dynamic>> inputModelsMap(){
     List<Map<String,dynamic>> utxo=[];
     for(InputModel im in inputModelsList){
       utxo.add(im.toMap());
@@ -139,10 +139,10 @@ class BtcTransactionRecodeModel{
     }
   }
   //赋值gas
-  setGasDouble(double g){
+  void setGasDouble(double g){
     gas=BigInt.from(g*100000000).toInt();
   }
-  getTxTimeStr(){
+  String getTxTimeStr(){
     if(txTimeStr==null){
       int tt=0;
       if(txTime.length==13){
@@ -199,7 +199,7 @@ class BtcTransactionRecodeModel{
     walletIndex=map['walletIndex'];
     gasPrice=map['gasPrice'];
   }
-  Map<String,dynamic> toMapDb(){
+  Map<String, dynamic> toMapDb(){
     List<String> inputs=[];
     for(InputModel im in inputModelsList){
       inputs.add(jsonEncode(im.toMap()));
@@ -230,7 +230,7 @@ class BtcTransactionRecodeModel{
       'gasPrice':gasPrice
     };
   }
-  Map<String,dynamic> toMap(){
+  Map<String, dynamic> toMap(){
     List<String> inputs=[];
     for(InputModel im in inputModelsList){
       inputs.add(jsonEncode(im.toMap()));
@@ -291,7 +291,7 @@ class InputModel{
       address.add(a.toString());
     }
   }
-  Map<String,dynamic> toMap(){
+  Map<String, dynamic> toMap(){
     return {
       "value":value.toString(),
       "txid":txid,
@@ -324,7 +324,7 @@ class OutputModel{
     price=map['price'];
     script=map['script'];
   }
-  Map<String,dynamic> toMap(){
+  Map<String, dynamic> toMap(){
     return {
       "address":address,
       "price":price,

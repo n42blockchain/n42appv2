@@ -8,7 +8,7 @@ class ChainBrowserUrlModel{
     testApi=map['testApi'] as String?;
     documentUrl=map['documentUrl'] as String?;
   }
-  toJson(){
+  Map<String, dynamic> toJson(){
     return {
       "api":api,
       "testApi":testApi,

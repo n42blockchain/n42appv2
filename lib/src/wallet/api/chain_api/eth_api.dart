@@ -105,7 +105,7 @@ class EthAPI{
   }*/
   */
   //获取余额
-  getBalance(String address,String contract,{bool isTest=false,String? coinType})async{
+  Future<MessageModel> getBalance(String address,String contract,{bool isTest=false,String? coinType})async{
     if(contract==""){
       MessageModel mm=await baseRPCEth("eth_getBalance",[address,"latest"],coinType:coinType??cType,isTest: isTest);
       if(mm.error==false){
@@ -124,7 +124,7 @@ class EthAPI{
     }
   }
   //获取gasPrice
-  getGasPrice({bool isTest=false,String? coinType,})async{
+  Future<MessageModel> getGasPrice({bool isTest=false,String? coinType,})async{
     MessageModel mm=await baseRPCEth("eth_gasPrice",[],coinType: coinType??cType,isTest: isTest);
     if(mm.error==false){
       mm.data=hexToInt(mm.data);
@@ -132,7 +132,7 @@ class EthAPI{
     return mm;
   }
   //获取预估值
-  getGasLimit(
+  Future<MessageModel> getGasLimit(
       String from,
       String to,
       BigInt gasPrice,
@@ -238,7 +238,7 @@ class EthAPI{
       return mm;
     }
   }
-  getGasLimitByMap(Map<String,dynamic> map,{String? coinType,bool isTest=false,bool addLatest=true})async{
+  Future<MessageModel> getGasLimitByMap(Map<String,dynamic> map,{String? coinType,bool isTest=false,bool addLatest=true})async{
     List param=[map];
     if(addLatest){
       param.add("latest");
@@ -250,15 +250,15 @@ class EthAPI{
     return mm;
   }
   //获取交易收据
-  getTransactionReceipt(String txHash,{String? coinType,bool isTest=false})async{
+  Future<MessageModel> getTransactionReceipt(String txHash,{String? coinType,bool isTest=false})async{
     return await baseRPCEth("eth_getTransactionReceipt",[txHash],coinType: coinType??cType,isTest: isTest);
   }
   //获取交易信息
-  getTransactionByHash(String txHash, {String? coinType,bool isTest=false})async{
+  Future<MessageModel> getTransactionByHash(String txHash, {String? coinType,bool isTest=false})async{
     return await baseRPCEth("eth_getTransactionByHash",[txHash],coinType: coinType??cType,isTest: isTest);
   }
   //获取nonce值
-  getTransactionCount(String address,{String? coinType,bool isTest=false})async{
+  Future<MessageModel> getTransactionCount(String address,{String? coinType,bool isTest=false})async{
     MessageModel mm=await baseRPCEth("eth_getTransactionCount",[address,"latest"],coinType: coinType??cType,isTest: isTest);
     if(mm.error==false){
       mm.data=hexToInt(mm.data);
@@ -267,11 +267,11 @@ class EthAPI{
   }
 
   //发送交易，返回交易hash
-  sendTransaction(String value,{String? coinType,bool isTest=false})async{
+  Future<MessageModel> sendTransaction(String value,{String? coinType,bool isTest=false})async{
     return await baseRPCEth("eth_sendRawTransaction",[value],coinType: coinType??cType,isTest: isTest);
   }
 
-  baseRPCEth(String method,var value,{String? coinType,bool? isTest})async{
+  Future<MessageModel> baseRPCEth(String method,var value,{String? coinType,bool? isTest})async{
     try{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};
@@ -345,7 +345,7 @@ class EthAPI{
 */
 
   //获取 address 的交易列表
-  getTxList(String address,{String? coinType,String contractAddress="",bool isTest=false,int page=1,int offset=10})async{
+  Future<MessageModel> getTxList(String address,{String? coinType,String contractAddress="",bool isTest=false,int page=1,int offset=10})async{
     //?module=账户&action= txlist &address={地址哈希}
     try{
       MessageModel mm=MessageModel();

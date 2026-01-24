@@ -127,7 +127,7 @@ class AppDatabase{
   }
 
   //查询btc交易记录
-  insertBtcTransactionRecord(BtcTransactionRecodeModel btcm) async {
+  Future<int> insertBtcTransactionRecord(BtcTransactionRecodeModel btcm) async {
     final db = await database;
     var raw = await db.insert("BtcTransactionRecord", btcm.toMapDb(),
         conflictAlgorithm: ConflictAlgorithm.rollback);
@@ -179,27 +179,27 @@ class AppDatabase{
     return list;
   }
   //创建一个交易记录
-  insertTransationRecord(TransationRecordModel trm) async {
+  Future<int> insertTransationRecord(TransationRecordModel trm) async {
     final db = await database;
     var raw = await db.insert("TransationRecord", trm.toMapDb(),
         conflictAlgorithm: ConflictAlgorithm.rollback);
     return raw;
   }
   //修改交易记录
-  updateTransationRecord(TransationRecordModel trm) async {
+  Future<int> updateTransationRecord(TransationRecordModel trm) async {
     final db = await database;
     var response = await db.update("TransationRecord", trm.toMapDb(),
         where: "trId=${trm.trId}");
     return response;
   }
-  updateTransationRecordTxhash(TransationRecordModel trm) async {
+  Future<int> updateTransationRecordTxhash(TransationRecordModel trm) async {
     final db = await database;
     var response = await db.update("TransationRecord", trm.toMapDb(),
         where: 'txHash="${trm.txHash}"');
     return response;
   }
   //修改btc交易记录
-  updateBtcTransactionRecord(BtcTransactionRecodeModel btcm) async {
+  Future<int> updateBtcTransactionRecord(BtcTransactionRecodeModel btcm) async {
     final db = await database;
     var response = await db.update("BtcTransactionRecord", btcm.toMapDb(),
         where: "trId=${btcm.trId}");
@@ -251,7 +251,7 @@ class AppDatabase{
   }
 
   //添加浏览器收藏表
-  insertBrowserCollection(Map<String, dynamic> map) async {
+  Future<int> insertBrowserCollection(Map<String, dynamic> map) async {
     final db = await database;
     var raw = await db.insert("browserCollection", map,
         conflictAlgorithm: ConflictAlgorithm.rollback);
@@ -259,24 +259,24 @@ class AppDatabase{
   }
 
   //修改浏览器收藏表
-  updateBrowserCollection(Map<String, dynamic> map, int id) async {
+  Future<int> updateBrowserCollection(Map<String, dynamic> map, int id) async {
     final db = await database;
     var response = await db.update("browserCollection", map, where: "id=$id");
     return response;
   }
 
   //删除浏览器收藏表
-  deleteBrowserCollection(int id) async {
+  Future<void> deleteBrowserCollection(int id) async {
     final db = await database;
     await db.delete("browserCollection", where: "id=$id");
   }
 
-  deleteBrowserCollectionUrl(String url) async {
+  Future<int> deleteBrowserCollectionUrl(String url) async {
     final db = await database;
     return await db.delete("browserCollection", where: 'url="$url"');
   }
 
-  selectBrowserCollection({int pageSize = 10, int pageNum = 1}) async {
+  Future<List<BrowserCollectionModel>> selectBrowserCollection({int pageSize = 10, int pageNum = 1}) async {
     final db = await database;
     var response = await db.query("browserCollection",
         orderBy: "id desc", limit: pageSize, offset: (pageNum - 1) * pageSize);
@@ -285,7 +285,7 @@ class AppDatabase{
     return list;
   }
 
-  selectBrowserCollectionUrl(String url) async {
+  Future<List<BrowserCollectionModel>> selectBrowserCollectionUrl(String url) async {
     final db = await database;
     var response = await db.query("browserCollection", where: 'url="$url"');
     List<BrowserCollectionModel> list =
@@ -294,14 +294,14 @@ class AppDatabase{
   }
 
   //添加浏览器浏览历史
-  insertBrowserHistory(Map<String, dynamic> map) async {
+  Future<int> insertBrowserHistory(Map<String, dynamic> map) async {
     final db = await database;
     var raw = await db.insert("browserHistory", map,
         conflictAlgorithm: ConflictAlgorithm.rollback);
     return raw;
   }
   //查询 浏览器历史
-  selectBrowserHistoryLike(String urlStr,
+  Future<List<BrowserHistoryModel>> selectBrowserHistoryLike(String urlStr,
       {int pageSize = 10, int pageNum = 1}) async {
     final db = await database;
     var response = await db.query("browserHistory",
@@ -317,7 +317,7 @@ class AppDatabase{
   }
 
   //查询搜索历史
-  selectBrowserSearchHistory({int pageSize = 10, int pageNum = 1}) async {
+  Future<List<BrowserSearchHistoryModel>> selectBrowserSearchHistory({int pageSize = 10, int pageNum = 1}) async {
     final db = await database;
     var response = await db.query("browserSearchHistory",
         columns: ["search"],
@@ -330,7 +330,7 @@ class AppDatabase{
     return list;
   }
   //添加搜索历史
-  insertBrowserSearchHistory(Map<String, dynamic> map) async {
+  Future<int?> insertBrowserSearchHistory(Map<String, dynamic> map) async {
     final db = await database;
     var response = await db.query(
       "browserSearchHistory",
@@ -354,7 +354,7 @@ class AppDatabase{
   }
 
   //删除搜索历史
-  deleteBrowserSearchHistory() async {
+  Future<int> deleteBrowserSearchHistory() async {
     final db = await database;
     var raw = await db.delete('browserSearchHistory');
     return raw;

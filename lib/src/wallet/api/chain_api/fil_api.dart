@@ -7,14 +7,14 @@ import 'package:n42appv2/src/models/message_model.dart';
 import 'package:web3dart/crypto.dart';
 
 class FilApi{
-  getBalance(String address,{bool isTest=false})async{
+  Future<MessageModel> getBalance(String address,{bool isTest=false})async{
     MessageModel mm=await baseRPC("Filecoin.WalletBalance",[address],isTest: isTest);
     if(mm.error==false){
       mm.data=BigInt.parse(mm.data.toString());
     }
     return mm;
   }
-  getGasPrice({bool isTest=false})async{
+  Future<MessageModel> getGasPrice({bool isTest=false})async{
     MessageModel mm=await baseRPC("Filecoin.EthGasPrice",[],isTest: isTest);
     if(mm.error==false){
       mm.data=hexToInt(mm.data);
@@ -30,7 +30,7 @@ class FilApi{
     return mm;
   }
   */
-  getNonce(String address,{bool isTest=false})async{
+  Future<MessageModel> getNonce(String address,{bool isTest=false})async{
     MessageModel mm=await baseRPC("Filecoin.MpoolGetNonce",[address],isTest: isTest);
     if(mm.error==false){
       mm.data=mm.data.toString();
@@ -65,7 +65,7 @@ class FilApi{
         isTest: isTest);
   }
   */
-  getGasLimit(
+  Future<MessageModel> getGasLimit(
       String from,
       String to,
       BigInt gas,
@@ -92,7 +92,7 @@ class FilApi{
         param,
         isTest: isTest);
   }
-  sendTx(String txHash,{bool isTest=false})async{
+  Future<MessageModel> sendTx(String txHash,{bool isTest=false})async{
     Map<String,dynamic> pMap=json.decode(txHash);
     pMap['Message']['Nonce']=(pMap['Message']['Nonce'] as int);
     return await baseRPC(
@@ -100,7 +100,7 @@ class FilApi{
         [pMap],
         isTest: isTest);
   }
-  baseRPC(String method,var value,{bool? isTest=false})async{
+  Future<MessageModel> baseRPC(String method,var value,{bool? isTest=false})async{
     try{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};
@@ -119,7 +119,7 @@ class FilApi{
     }
   }
 
-  getMessageInfo(String mId,{bool isTest=false})async{
+  Future<MessageModel> getMessageInfo(String mId,{bool isTest=false})async{
     try{
       MessageModel mm=MessageModel();
       String url=RequestUrl().getUrl2("FIL", "api",isTest: isTest);

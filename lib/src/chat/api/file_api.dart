@@ -16,7 +16,7 @@ class FileApi {
     };
   }
   ///下载文件
-  Future downLoadFile(String urlPath, String savePath,
+  Future<dynamic> downLoadFile(String urlPath, String savePath,
       {bool showError = false, ProgressCallback? receiveProgress}) async {
     try {
       var dio = Dio(BaseOptions(
@@ -44,7 +44,7 @@ class FileApi {
   /// -------使用ipfs文件上传-------------
 
   //ipfs文件上传
-  upLoadFileToIpfs(String filePath, ProgressCallback? sendProgress,
+  Future<Map<String, dynamic>?> upLoadFileToIpfs(String filePath, ProgressCallback? sendProgress,
       {int type = 0, CancelToken? cancelToken}) async {
     try {
       MultipartFile f = await MultipartFile.fromFile(
@@ -92,7 +92,7 @@ class FileApi {
   }
 
   //上传message 到ipfs
-  uploadMessageToIpfs(Map<String, dynamic> map) async {
+  Future<Map<String, dynamic>> uploadMessageToIpfs(Map<String, dynamic> map) async {
     try {
       MultipartFile f = MultipartFile.fromString(json.encode(map),
           filename: "squad_message.json");
@@ -130,7 +130,7 @@ class FileApi {
   }
 
   //根据 uri 获取上传到ipfs的信息
-  getMessageByUriFromIpfs(String uri) async {
+  Future<Map<String, dynamic>> getMessageByUriFromIpfs(String uri) async {
     try {
       var data = await BaseApi.requestEmptyH.get(uri, params: {});
       return {"error": false, "data": data};

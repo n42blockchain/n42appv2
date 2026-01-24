@@ -59,7 +59,7 @@ class CommonResponseItemModel{
     gasUsed=map['gasUsed'] as String?;
     confirmations=map['confirmations'] as String?;
   }
-  toJson(){
+  Map<String, dynamic> toJson(){
     return {
       "blockNumber":blockNumber,
       "timeStamp":timeStamp,

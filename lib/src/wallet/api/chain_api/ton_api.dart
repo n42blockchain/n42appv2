@@ -15,7 +15,7 @@ class TonApi{
       apiKey="39b7ef60a7dfdaaefe04484218e249d9b18547dee3a32170a25bd24ad928a732";
     }
   }
-  getBalanceTon(String address)async{
+  Future<MessageModel> getBalanceTon(String address)async{
     MessageModel rmm=await baseRPCTon(
       "getAddressBalance",
       {
@@ -28,7 +28,7 @@ class TonApi{
     }
     return rmm;
   }
-  getSeqnoTon(String address)async{
+  Future<MessageModel> getSeqnoTon(String address)async{
     MessageModel rmm=await baseRPC2Ton(
       {
         "address": address,
@@ -46,7 +46,7 @@ class TonApi{
     }
     return rmm;
   }
-  submitTon(String signStr)async{
+  Future<MessageModel> submitTon(String signStr)async{
     MessageModel rmm= await baseRPC2Ton(
       {
         "boc": signStr,
@@ -58,7 +58,7 @@ class TonApi{
     }
     return rmm;
   }
-  baseRPCTon(String method,var value,String path)async{
+  Future<MessageModel> baseRPCTon(String method,var value,String path)async{
     try{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};
@@ -77,7 +77,7 @@ class TonApi{
       return mm;
     }
   }
-  baseRPC2Ton(var value,String path)async{
+  Future<MessageModel> baseRPC2Ton(var value,String path)async{
     try{
       MessageModel mm=MessageModel();
 

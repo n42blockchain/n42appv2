@@ -13,7 +13,7 @@ class BtcApi{
     isTest=test;
     uri=RequestUrl().getUrl2(CoinType.BTC.name,'api',isTest:isTest);
   }
-  getGasfee()async{
+  Future<MessageModel> getGasfee()async{
     //https://mempool.space/testnet4/api/v1/fees/recommended
     try{
       var data=await BaseApi.requestEmptyH.get('${uri}v1/fees/recommended', params: {});
@@ -26,7 +26,7 @@ class BtcApi{
       return mm;
     }
   }
-  getUtxos(String address)async{
+  Future<MessageModel> getUtxos(String address)async{
     try{
       var data=await BaseApi.requestEmptyH.get('${uri}address/$address/utxo', params: {});
       MessageModel mm=MessageModel();
@@ -38,7 +38,7 @@ class BtcApi{
       return mm;
     }
   }
-  getUTXOTxid(String txid)async{
+  Future<MessageModel> getUTXOTxid(String txid)async{
     try{
       var data= await BaseApi.requestEmptyH.get("${uri}tx/$txid",
         params: {},
@@ -56,7 +56,7 @@ class BtcApi{
       return mm;
     }
   }
-  getBalance(String address)async{
+  Future<MessageModel> getBalance(String address)async{
     try{
       var data= await BaseApi.requestEmptyH.get("${uri}address/$address",
         params: {},
@@ -84,7 +84,7 @@ class BtcApi{
       return mm;
     }
   }
-  sendTxHttp(String signHase)async{
+  Future<MessageModel> sendTxHttp(String signHase)async{
     HttpOverrides.global = MyHttpOverrides();
     String url = "${uri}tx"; // 替换为你的 API 地址
     try {
@@ -111,7 +111,7 @@ class BtcApi{
       return mm;
     }
   }
-  sendTx(String signHase)async{
+  Future<MessageModel> sendTx(String signHase)async{
     try{
       var data= await BaseApi.requestEmptyH.post("${uri}tx",
           params: {},
@@ -131,7 +131,7 @@ class BtcApi{
       return mm;
     }
   }
-  getTxState(String txId)async{
+  Future<MessageModel> getTxState(String txId)async{
     try{
       var data= await BaseApi.requestEmptyH.get("${uri}tx/$txId/status",
         params: {},

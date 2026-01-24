@@ -10,7 +10,7 @@ class FaceApi{
     url=AppConfig.apiUrl['face'];//'http://192.168.31.119:2000';
     header={'content-type': 'application/x-www-form-urlencoded'};
   }
-  binding(String address,var file,String filename,{int type=0})async{
+  Future<MessageModel> binding(String address,var file,String filename,{int type=0})async{
     try{
       MessageModel mm = MessageModel();
       MultipartFile f;
@@ -35,7 +35,7 @@ class FaceApi{
       return rmm;
     }
   }
-  match(var file,String filename,{int type=0})async{
+  Future<MessageModel> match(var file,String filename,{int type=0})async{
     try{
       MessageModel mm = MessageModel();
       MultipartFile f;
@@ -60,7 +60,7 @@ class FaceApi{
       return rmm;
     }
   }
-  deleteBinding(String address)async{
+  Future<MessageModel> deleteBinding(String address)async{
     try{
       MessageModel mm = MessageModel();
       var data=await BaseApi.requestEmptyH.delete(

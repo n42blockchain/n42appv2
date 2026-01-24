@@ -16,14 +16,14 @@ class BrowserCollectionModel{
     name=map["name"];
     desc=map["desc"];
   }
-  getMapDb(){
+  Map<String, dynamic> getMapDb(){
     return {
       "url":url,
       "name":name,
       "desc":desc,
     };
   }
-  getMap(){
+  Map<String, dynamic> getMap(){
     return {
       "id":id,
       "url":url,

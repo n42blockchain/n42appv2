@@ -55,7 +55,7 @@ class XrpApi{
     }
   }
   */
-  getAccountInfoXrp(String address,bool isTest)async{
+  Future<MessageModel> getAccountInfoXrp(String address,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XRP.name,'rpc',isTest:isTest);
       Map<String,dynamic> pData={
@@ -106,7 +106,7 @@ class XrpApi{
       return mm;
     }
   }
-  getGasPriceXrp(bool isTest)async{
+  Future<MessageModel> getGasPriceXrp(bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XRP.name,'rpc',isTest:isTest);
       Map<String,dynamic> pData={
@@ -128,7 +128,7 @@ class XrpApi{
       return mm;
     }
   }
-  getTxInfoXrp(String txHash,bool isTest)async{
+  Future<MessageModel> getTxInfoXrp(String txHash,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XRP.name,'rpc',isTest:isTest);
       Map<String,dynamic> pData={
@@ -154,7 +154,7 @@ class XrpApi{
     }
   }
   //获取服务器信息
-  getServerStateXrp({bool isTest=false})async{
+  Future<MessageModel> getServerStateXrp({bool isTest=false})async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XRP.name,'rpc',isTest:isTest);
       Map<String,dynamic> pData={
@@ -187,7 +187,7 @@ class XrpApi{
     }
   }
   //获取当前账本信息
-  getLedgerXrp({bool isTest=false})async{
+  Future<MessageModel> getLedgerXrp({bool isTest=false})async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XRP.name,'rpc',isTest:isTest);
       Map<String,dynamic> pData={
@@ -229,7 +229,7 @@ class XrpApi{
   /*TransactionType: 交易类型（Payment = 发送 XRP, TrustSet = 信任设置, AMMDeposit = AMM 交易）
 Amount: 交易金额（单位 drops，1 XRP = 1,000,000 drops）
 Fee: 交易费用（10-12 drops）*/
-  getTxsXrp(String address,{int ledgerIndexMin=-1,int limit=10,bool isTest=false})async{
+  Future<MessageModel> getTxsXrp(String address,{int ledgerIndexMin=-1,int limit=10,bool isTest=false})async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XRP.name,'rpc',isTest:isTest);
       Map<String,dynamic> pData={
@@ -257,7 +257,7 @@ Fee: 交易费用（10-12 drops）*/
     }
   }
   //广播
-  sendTxXrp(String signHash,bool isTest)async{
+  Future<MessageModel> sendTxXrp(String signHash,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XRP.name,'rpc',isTest:isTest);
       Map<String,dynamic> pData={
@@ -311,7 +311,7 @@ Fee: 交易费用（10-12 drops）*/
   * HookNamespace: 合约的命名空间
 HookParameters: 传递给合约的参数
 Flags: 合约的状态标志*/
-  getHookInfo(String address,{bool isTest=false})async{
+  Future<MessageModel> getHookInfo(String address,{bool isTest=false})async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XRP.name,'rpc',isTest:isTest);
       Map<String,dynamic> pData={
@@ -355,7 +355,7 @@ Flags: 合约的状态标志*/
 Amount: XRP 储备
 Amount2: USDT 储备
 TradingFee: 交易费用（单位 basis points，即 30 = 0.3%）*/
-  getAMMInfo(Map<String,dynamic> ammInfo,{bool isTest=false})async{
+  Future<MessageModel> getAMMInfo(Map<String,dynamic> ammInfo,{bool isTest=false})async{
     /*Map<String,dynamic> ammInfo={
       "asset":{
         "currency":"XRP",
@@ -403,7 +403,7 @@ TradingFee: 交易费用（单位 basis points，即 30 = 0.3%）*/
 account: 代币发行者
 balance: 账户持有的 USDT 数量
 limit: 账户信任额度（最多持有 1000 USDT）*/
-  getTrustline(String address,{bool isTest=false})async{
+  Future<MessageModel> getTrustline(String address,{bool isTest=false})async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XRP.name,'rpc',isTest:isTest);
       Map<String,dynamic> pData={
@@ -428,7 +428,7 @@ limit: 账户信任额度（最多持有 1000 USDT）*/
     }
   }
 
-  getTxHistory(String address,{int limit=10,bool isTest=false})async{
+  Future<MessageModel> getTxHistory(String address,{int limit=10,bool isTest=false})async{
     //tx_history
     try{
       String uri=RequestUrl().getUrl2(CoinType.XRP.name,'rpc',isTest:isTest);
