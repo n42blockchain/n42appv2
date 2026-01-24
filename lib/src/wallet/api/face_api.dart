@@ -15,7 +15,7 @@ class FaceApi{
       MessageModel mm = MessageModel();
       MultipartFile f;
       if(type==0){
-        f=MultipartFile.fromFile(file,filename: filename);
+        f=await MultipartFile.fromFile(file,filename: filename);
       }else{
         f=MultipartFile.fromBytes(file,filename: filename);
       }
@@ -40,7 +40,7 @@ class FaceApi{
       MessageModel mm = MessageModel();
       MultipartFile f;
       if(type==0){
-        f=MultipartFile.fromFile(file,filename: filename);
+        f=await MultipartFile.fromFile(file,filename: filename);
       }else{
         f=MultipartFile.fromBytes(file,filename: filename);
       }

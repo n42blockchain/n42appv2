@@ -240,7 +240,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           transationRecordModel.contract=(widget.coinModel.coin['contract']??"").toLowerCase();
           transationRecordModel.walletIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
           transationRecordModel.nonce=cri.nonce;
-          transationRecordModel.txHash=cri.hash;
+          transationRecordModel.txHash=cri.hash??"";
           transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
           transationRecordModel.gas=int.parse(cri.gas??"0");
           transationRecordModel.txTime=cri.timeStamp??"0";
@@ -307,7 +307,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           transationRecordModel.contract=(widget.coinModel.coin['contract']??"").toLowerCase();
           transationRecordModel.walletIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
           transationRecordModel.nonce=cri.nonce;
-          transationRecordModel.txHash=cri.hash;
+          transationRecordModel.txHash=cri.hash??"";
           transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
           transationRecordModel.gas=int.parse(cri.gas??"0");
           transationRecordModel.txTime=cri.timeStamp??"0";

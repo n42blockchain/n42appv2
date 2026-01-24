@@ -40,9 +40,9 @@ class LineChart extends StatefulWidget{
       minValue = _calcMinValue(values),
       difference = _calcMaxValue(values) - _calcMinValue(values);
   @override
-  _LineChartState createState()=>_LineChartState();
+  LineChartState createState()=>LineChartState();
 }
-class _LineChartState extends State<LineChart> with TickerProviderStateMixin{
+class LineChartState extends State<LineChart> with TickerProviderStateMixin{
   GlobalKey<State<StatefulWidget>> anchorKey = GlobalKey();
   late DrawLineChart drawLineChart;
   @override

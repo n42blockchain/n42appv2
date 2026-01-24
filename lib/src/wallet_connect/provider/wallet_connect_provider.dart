@@ -474,7 +474,9 @@ class WalletConnectProvider with ChangeNotifier{
         //signClient!.registerRequestHandler(chainId: "tron:0xcd8690dc", method: "tron_signTransaction");
         //signClient!.registerAccount(chainId: "tron:0xcd8690dc", accountAddress: accountAddress);
         signClient!.onSessionRequest.subscribe((wallet_connect.SessionRequestEvent? args) async{
-          setActionDataMap(args);
+          if (args != null) {
+            setActionDataMap(args);
+          }
         });
         signClient!.onSessionDelete.subscribe(( args) async{
           //print(args!.topic);
@@ -519,7 +521,7 @@ class WalletConnectProvider with ChangeNotifier{
         //final address = requestParams[1];
         final encodedMessage = crypto.hexToBytes(dataToSign);
         final signedData =
-        await privateKey.signPersonalMessageToUint8List(encodedMessage);
+        privateKey.signPersonalMessageToUint8List(encodedMessage);
         signedDataHex = bytesToHex(signedData,include0x: true);
       }
       else if (eventData.method == "eth_signTypedData") {
@@ -571,7 +573,7 @@ class WalletConnectProvider with ChangeNotifier{
         }else{
           final encodedMessage =  crypto.hexToBytes(dataToSign);
           final signedData =
-          await privateKey.signPersonalMessageToUint8List(encodedMessage);
+          privateKey.signPersonalMessageToUint8List(encodedMessage);
           signedDataHex = bytesToHex(signedData,include0x: true);
         }
       }

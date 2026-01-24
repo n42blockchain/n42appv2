@@ -20,9 +20,9 @@ class SecurityGoogleVedification extends StatefulWidget{
   const SecurityGoogleVedification({super.key});
 
   @override
-  _SecurityGoogleVedificationState createState()=>_SecurityGoogleVedificationState();
+  SecurityGoogleVedificationState createState()=>SecurityGoogleVedificationState();
 }
-class _SecurityGoogleVedificationState extends State<SecurityGoogleVedification>{
+class SecurityGoogleVedificationState extends State<SecurityGoogleVedification>{
   TextEditingController pwdTextEditingController=TextEditingController();
   TextEditingController emailTextEditingController=TextEditingController();
   TextEditingController googleTextEditingController=TextEditingController();

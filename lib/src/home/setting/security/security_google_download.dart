@@ -13,10 +13,10 @@ class SecurityGoogleDownload extends StatefulWidget {
   const SecurityGoogleDownload({super.key});
 
   @override
-  _SecurityGoogleDownloadState createState() => _SecurityGoogleDownloadState();
+  SecurityGoogleDownloadState createState() => SecurityGoogleDownloadState();
 }
 
-class _SecurityGoogleDownloadState extends State<SecurityGoogleDownload> {
+class SecurityGoogleDownloadState extends State<SecurityGoogleDownload> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

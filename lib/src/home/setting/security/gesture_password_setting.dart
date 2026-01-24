@@ -13,10 +13,10 @@ class GesturePasswordSetting extends StatefulWidget{
   final String? oldPassword;
   const GesturePasswordSetting(this.type,{this.oldPassword,super.key});
   @override
-  _GesturePasswordSettingState createState()=>_GesturePasswordSettingState();
+  GesturePasswordSettingState createState()=>GesturePasswordSettingState();
 }
 
-class _GesturePasswordSettingState extends State<GesturePasswordSetting>{
+class GesturePasswordSettingState extends State<GesturePasswordSetting>{
   Map<String,dynamic> cachedData={
     //0：新密码操作步骤
     "0":{

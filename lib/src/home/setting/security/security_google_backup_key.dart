@@ -17,9 +17,9 @@ class SecurityGoogleBackupKey extends StatefulWidget{
   const SecurityGoogleBackupKey({super.key});
 
   @override
-  _SecurityGoogleBackupKeyState createState()=>_SecurityGoogleBackupKeyState();
+  SecurityGoogleBackupKeyState createState()=>SecurityGoogleBackupKeyState();
 }
-class _SecurityGoogleBackupKeyState extends State<SecurityGoogleBackupKey>{
+class SecurityGoogleBackupKeyState extends State<SecurityGoogleBackupKey>{
   String googleAuthStr="";
   Load load=Load.finish;
   @override

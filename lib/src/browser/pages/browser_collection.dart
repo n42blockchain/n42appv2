@@ -14,10 +14,10 @@ class BrowserCollection extends StatefulWidget {
   const BrowserCollection(this.title, this.url, {super.key});
 
   @override
-  _BrowserCollectionState createState() => _BrowserCollectionState();
+  BrowserCollectionState createState() => BrowserCollectionState();
 }
 
-class _BrowserCollectionState extends State<BrowserCollection> {
+class BrowserCollectionState extends State<BrowserCollection> {
   TextEditingController titleEditingController = TextEditingController();
   FocusNode titleNode = FocusNode();
   TextEditingController urlEditingController = TextEditingController();

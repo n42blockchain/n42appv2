@@ -14,7 +14,7 @@ class Bip340{
     var random = FortunaRandom();
     var seed = Uint8List.fromList(List.generate(32, (_) => Random().nextInt(256)));
     random.seed(KeyParameter(seed));
-    return decodeBigInt(random.nextBytes(32)) % n;
+    return decodeBigInt(random.nextBytes(32)) % n!
   }
 
   /// 计算公钥
@@ -25,7 +25,7 @@ class Bip340{
   /// 计算 SHA256 哈希
   BigInt hashMessage(Uint8List message) {
     var sha256 = SHA256Digest();
-    return decodeBigInt(sha256.process(message)) % n;
+    return decodeBigInt(sha256.process(message)) % n!
   }
 
   /// Schnorr 签名
@@ -35,14 +35,14 @@ class Bip340{
     n = curve.n;
     // 生成随机数 k
     BigInt k = generatePrivateKey();
-    ECPoint R = G * k;
+    ECPoint R = (G! * k)!;
 
     // 计算挑战 e = H(R || P || m)
     ECPoint P = getPublicKey(privateKey);
     var e = hashMessage(Uint8List.fromList([...R.getEncoded(), ...P.getEncoded(), ...message]));
 
     // 计算 s = k + e * d mod n
-    BigInt s = (k + e * privateKey) % n;
+    BigInt s = (k + e * privateKey) % n!;
     return getWitnessSignature(hex.encode(R.getEncoded()),s.toRadixString(16));
     /*return {
       'R': hex.encode(R.getEncoded()),
@@ -70,7 +70,7 @@ class Bip340{
     var e = hashMessage(Uint8List.fromList([...R.getEncoded(), ...publicKey.getEncoded(), ...message]));
 
     // 计算 R' = s * G - e * P
-    ECPoint R_prime = (G * s)! - (publicKey * e)!;
+    ECPoint R_prime = ((G! * s)! - (publicKey * e)!)!;
 
     return R == R_prime;
   }

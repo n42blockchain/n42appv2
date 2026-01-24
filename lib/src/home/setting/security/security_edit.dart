@@ -11,9 +11,9 @@ class SecurityEdit extends StatefulWidget{
   final String type;
   const SecurityEdit(this.type, {super.key});
   @override
-  _SecurityEditState createState()=>_SecurityEditState();
+  SecurityEditState createState()=>SecurityEditState();
 }
-class _SecurityEditState extends State<SecurityEdit>{
+class SecurityEditState extends State<SecurityEdit>{
   Map<String,dynamic> securityMap={
     "email":false,
     "google":false,
