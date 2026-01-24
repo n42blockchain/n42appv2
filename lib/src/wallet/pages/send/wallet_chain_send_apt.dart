@@ -125,7 +125,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
     }else{
       totalGasPrice=BigInt.from(5000);
     }
-    gas=BigInt.from(GetCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
+    gas=BigInt.from(getCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
     await getBalance();
     await getGasPrice();
   }

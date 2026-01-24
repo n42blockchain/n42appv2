@@ -265,7 +265,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
       baseToken['decimals'] = coinMap['decimals'];
       baseToken['canEdit']=true;
       addSymbol = '$addSymbol,${coinMap['coin_name'].toString()}';
-      wap.addWalletChain_token(baseToken);
+      wap.addWalletChainToken(baseToken);
       setState(() {
         coinMap['isAdd'] = true;
         coinMap['edit'] = false;
@@ -470,7 +470,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
         return;
       }
       addSymbol = addSymbol.replaceFirst(',${coinMap['coin_name']}', '');
-      wap.removeWalletChain_token(coinMap);
+      wap.removeWalletChainToken(coinMap);
       setState(() {
         coinMap['isAdd'] = false;
         coinMap['edit'] = false;
@@ -700,7 +700,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     baseToken['customer'] = true; //是否是用户自定义添加
     baseToken['canEdit']=true;
     addSymbol = '$addSymbol,${symbolEditingController.text}';
-    await wap.addWalletChain_token(baseToken);
+    await wap.addWalletChainToken(baseToken);
     init();
     ToastUtils.show("Successfully added");
     setState(() {
@@ -737,7 +737,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
       }
 
       addSymbol = addSymbol.replaceFirst(',${coinMap['miniName']}', '');
-      await Provider.of<WalletActionProvider>(context,listen: false).removeWalletChain_token(coinMap,
+      await Provider.of<WalletActionProvider>(context,listen: false).removeWalletChainToken(coinMap,
           symbol: coinMap['coinType'], miniName: coinMap['miniName']);
       setState(() {
         coinMap['edit'] = false;

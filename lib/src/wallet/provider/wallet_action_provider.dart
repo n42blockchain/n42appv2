@@ -72,7 +72,7 @@ class WalletActionProvider extends ChangeNotifier{
     walletIndex=index;
     await saveWalletInfo(walletInfoLsit[walletIndex], walletIndex);
 
-    await init_wallet(initCoinInfo: true);
+    await initWallet(initCoinInfo: true);
     notifyListeners();
 
   }
@@ -86,7 +86,7 @@ class WalletActionProvider extends ChangeNotifier{
   Map<String,String>? _publicKeyAndPrivateKeyPair;//_walletInfoLsit所有钱包N的公钥私钥对
   Future<Map<String,String>> publicKeyAndPrivateKeyPair() async{
     if(_publicKeyAndPrivateKeyPair==null){
-      await getPublicKeyAndPrivateKeyPair_N();
+      await getPublicKeyAndPrivateKeyPairN();
     }
     return _publicKeyAndPrivateKeyPair!;
   }
@@ -121,7 +121,7 @@ class WalletActionProvider extends ChangeNotifier{
     Map<Object?, Object?>? addrs = _addrsss[coinKey];
     return addrs?[addrType];
   }
-  getMainWalletAddress_async(String coinKey,{String addrType='legacy'}) async{
+  getMainWalletAddressAsync(String coinKey,{String addrType='legacy'}) async{
     int index=walletInfoLsit.indexWhere((e)=>e.mainWallet==true);
     if(index==-1)return "";
     Map<String,dynamic>? nCoinInfo=walletInfoLsit[index].coinInfo![coinKey];
@@ -137,7 +137,7 @@ class WalletActionProvider extends ChangeNotifier{
     return rm[addrType];
   }
   //输入的是小写的coinKey
-  getAddress_coinKey_lowerCase(String coinKey, String contract) {
+  getAddressCoinKeyLowerCase(String coinKey, String contract) {
     CoinModel? returnCM;
     if (contract == "") {
       for (CoinModel cm in _coinModels) {
@@ -200,7 +200,7 @@ class WalletActionProvider extends ChangeNotifier{
     return cList;
   }
 
-  init_wallet({bool initCoinInfo=false})async{
+  initWallet({bool initCoinInfo=false})async{
     if(buildwallet==true)return;
     buildwallet=true;
     await getWalletInfo();
@@ -213,7 +213,7 @@ class WalletActionProvider extends ChangeNotifier{
       ///发送一个event事件 对挖矿进行初始化
       eventBus.fire(EventPublic(EventPublicType.selectWallet,
           intValue: walletIndex,stringValue: "wallet"));
-      init_coinInfo();
+      initCoinInfo();
     }
     await refreshWalletListNotifier();
   }
@@ -240,7 +240,7 @@ class WalletActionProvider extends ChangeNotifier{
         for (int i = 0; i < walletInfos.length; i++) {
           _walletInfoLsit.add(WalletInfo.fromJson(walletInfos[i]));
         }
-        //await getPublicKeyAndPrivateKeyPair_N();
+        //await getPublicKeyAndPrivateKeyPairN();
         //await createWallet();
         //existWallet = true;
       }
@@ -255,7 +255,7 @@ class WalletActionProvider extends ChangeNotifier{
           for (int i = 0; i < walletInfos.length; i++) {
             _walletInfoLsit.add(WalletInfo.fromJson(walletInfos[i]));
           }
-          //await getPublicKeyAndPrivateKeyPair_N();
+          //await getPublicKeyAndPrivateKeyPairN();
           walletAll[UserUUID]=walletDefault;
           walletAll.remove("AstranetWallet");
           await SPUtil().setWalletInfo(walletAll);
@@ -322,8 +322,8 @@ class WalletActionProvider extends ChangeNotifier{
       }
       notifyListeners();
     }
-    //coinSort_Assets();
-    calculateBalance_widthCoinModel();
+    //coinSortAssets();
+    calculateBalanceWidthCoinModel();
     saveCoinSort();
   }
   CoinModel buildTokenCoinModel(CoinModel mainChain,Map<String,dynamic> token){
@@ -341,7 +341,7 @@ class WalletActionProvider extends ChangeNotifier{
     return cm;
   }
   //加载指定network的币
-  buildCoinModelInfo_withCoin() async {
+  buildCoinModelInfoWithCoin() async {
     coinList=[];
     if(walletInfo.networkIndex==-1){
       for (int i = 0; i < _coinModels.length; i++) {
@@ -371,13 +371,13 @@ class WalletActionProvider extends ChangeNotifier{
         coinList.add(cm);
       }
     }
-    coinSort_Assets();
+    coinSortAssets();
     notifyListeners();
-    calculateBalance_widthCoinModel();
+    calculateBalanceWidthCoinModel();
     addCoinRefreshMap();
   }
   //币列表排序
-  setCoinSort_assets(String type){
+  setCoinSortAssets(String type){
     if(type=="assets"){
       if(walletInfo.coinSort['assets'] == 0){
         walletInfo.coinSort['assets']=1;
@@ -399,11 +399,11 @@ class WalletActionProvider extends ChangeNotifier{
     }
 
     //setCoinSort();
-    coinSort_Assets();
+    coinSortAssets();
     notifyListeners();
   }
   //排序type all\keystore\main
-  coinSort_Assets(){
+  coinSortAssets(){
     if(walletInfo.coinSort['assets']==0){
       coinList.sort((a, b,)=>(b.value).compareTo(a.value));
     }else if(walletInfo.coinSort['assets']==1){
@@ -474,7 +474,7 @@ class WalletActionProvider extends ChangeNotifier{
     }else{
       walletInfoLsit[index].mainWallet=false;
       walletInfoLsit[wIndex].mainWallet=true;
-      saveWalletInfo_All();
+      saveWalletInfoAll();
       eventBus.fire(EventPublic(EventPublicType.selectWallet,
           intValue: -1,stringValue: "mainwallet"));
       MessageModel rmm=MessageModel();
@@ -526,7 +526,7 @@ class WalletActionProvider extends ChangeNotifier{
     }
   }
   //保存钱包数据
-  saveWalletInfo_All()async{
+  saveWalletInfoAll()async{
     SPUtil sPUtils=SPUtil();
     Map<String, dynamic>? walletAll = await sPUtils.getWalletInfo();
     if (walletAll != null) {
@@ -585,8 +585,8 @@ class WalletActionProvider extends ChangeNotifier{
         walletMiningIndex=walletIndex;
       }
       await saveWalletInfo(newWalletInfo,walletIndex,isNewWallet: true);
-      init_wallet(initCoinInfo: true);
-      //await getPublicKeyAndPrivateKeyPair_N();
+      initWallet(initCoinInfo: true);
+      //await getPublicKeyAndPrivateKeyPairN();
       notifyListeners();
     }catch(e){
       ToastUtils.show(e.toString());
@@ -634,7 +634,7 @@ class WalletActionProvider extends ChangeNotifier{
       }else{
         _walletInfoLsit.remove(info);
       }
-      saveWalletInfo_All();
+      saveWalletInfoAll();
       return null;
     }
   }
@@ -671,7 +671,7 @@ class WalletActionProvider extends ChangeNotifier{
     }
   }
   //返回公钥、私钥对
-  getPublicKeyAndPrivateKeyPair_N()async{
+  getPublicKeyAndPrivateKeyPairN()async{
     _publicKeyAndPrivateKeyPair={};
     Trustdart trustdart=Trustdart();
     for(WalletInfo wInfo in walletInfoLsit){
@@ -722,7 +722,7 @@ class WalletActionProvider extends ChangeNotifier{
           getCoinPrice(cm);
         }
         // 价格更新后重新计算总余额并通知UI刷新
-        calculateBalance_widthCoinModel();
+        calculateBalanceWidthCoinModel();
         notifyListeners();
       } else {
         debugPrint('WalletActionProvider: No market data in response');
@@ -801,7 +801,7 @@ class WalletActionProvider extends ChangeNotifier{
     return null;
   }
   //获取币的 全部信息
-  Map<String,dynamic>? getCoinPriceWithUnit_all(String unit) {
+  Map<String,dynamic>? getCoinPriceWithUnitAll(String unit) {
     String keyStr = unit.toLowerCase();
     for (var element in _coinMarketInfo) {
       if (element['coin'].toString().toLowerCase() == keyStr) {
@@ -826,7 +826,7 @@ class WalletActionProvider extends ChangeNotifier{
     if(walletInfo.networkIndex==-1){
       buildCoinModelInfo();
     }else{
-      buildCoinModelInfo_withCoin();
+      buildCoinModelInfoWithCoin();
     }
     saveWalletInfo(walletInfo, walletIndex);
   }
@@ -840,13 +840,13 @@ class WalletActionProvider extends ChangeNotifier{
       }
     }
     setIndex ??= walletIndex;
-    WalletInfo wi_set=walletInfoLsit[setIndex];
-    wi_set.faceBinding=faceBinding;
-    saveWalletInfo_All();
+    WalletInfo wiSet=walletInfoLsit[setIndex];
+    wiSet.faceBinding=faceBinding;
+    saveWalletInfoAll();
   }
 
   //refresh 是否刷新
-  init_coinInfo({bool refresh=true})async{
+  initCoinInfo({bool refresh=true})async{
     if(refresh){
       setBalanceTotal(0);
     }
@@ -983,7 +983,7 @@ class WalletActionProvider extends ChangeNotifier{
     notifyListeners();
   }
   //添加代币
-  addWalletChain_token(Map<String,dynamic> token){
+  addWalletChainToken(Map<String,dynamic> token){
     String symbolStr=token['coinType'].toString().toUpperCase();
     Map<dynamic,dynamic>t;
     if(walletMap[symbolStr]['isTest']){
@@ -1038,7 +1038,7 @@ class WalletActionProvider extends ChangeNotifier{
     notifyListeners();
   }
   //将代币从当前钱包中移除
-  removeWalletChain_token(Map<String,dynamic> token,{String? symbol,String? miniName}){
+  removeWalletChainToken(Map<String,dynamic> token,{String? symbol,String? miniName}){
     String symbolStr;
     if(symbol==null){
       symbolStr=token['symbol'].toUpperCase();
@@ -1069,11 +1069,11 @@ class WalletActionProvider extends ChangeNotifier{
   Future<bool> addImportWalletInfo(WalletInfo info) async {
     //if( haveOne(info))return false;
     try{
-      Map<String,dynamic> chainMap_wallet=walletMap[info.walletName!.toUpperCase()];
-      List<String> chainMap_wallet_keys=chainMap_wallet.keys.toList();
+      Map<String,dynamic> chainMapWallet=walletMap[info.walletName!.toUpperCase()];
+      List<String> chainMapWalletKeys=chainMapWallet.keys.toList();
       Map<String,dynamic> chainMap={};
-      for(String key in chainMap_wallet_keys){
-        chainMap[key]=chainMap_wallet[key];
+      for(String key in chainMapWalletKeys){
+        chainMap[key]=chainMapWallet[key];
       }
       chainMap['baseInfo']['isTest']=false;
       chainMap['baseInfo']['mainnets']={};
@@ -1085,7 +1085,7 @@ class WalletActionProvider extends ChangeNotifier{
       };
       //walletInfo.importWallets.add(info);
       await saveWalletInfo(info, walletInfoLsit.length,isNewWallet: true);
-      init_wallet();
+      initWallet();
       return true;
     }catch(e){
       return false;
@@ -1094,7 +1094,7 @@ class WalletActionProvider extends ChangeNotifier{
   }
 
   //计算余额
-  calculateBalance_widthCoinModel(){
+  calculateBalanceWidthCoinModel(){
     double tBalance=0.0;
     for(int i=0;i<coinList.length;i++){
       tBalance +=coinList[i].value;
@@ -1102,7 +1102,7 @@ class WalletActionProvider extends ChangeNotifier{
     setBalanceTotal(tBalance);
     //getTokens_top();
   }
-  getBalance_withCoinModel(CoinModel coinModel)async{
+  getBalanceWithCoinModel(CoinModel coinModel)async{
     //获取coin 的地址
     String address=coinModel.address;
     if(coinModel.coin['coinType']==CoinType.BCH.name){
@@ -1120,7 +1120,7 @@ class WalletActionProvider extends ChangeNotifier{
       }
     }
     if(coinModel.coin['isContract'] && coinModel.coin['coinType']==CoinType.ALGO.name){
-      return await getBalance_token_algo_withCoinModel(coinModel);
+      return await getBalanceTokenAlgoWithCoinModel(coinModel);
     }
     /*String rpc;
     if(coinModel.isTest){
@@ -1204,7 +1204,7 @@ class WalletActionProvider extends ChangeNotifier{
     }
   }
   //获取algo 链 代币
-  getBalance_token_algo_withCoinModel(CoinModel coinModel)async{
+  getBalanceTokenAlgoWithCoinModel(CoinModel coinModel)async{
     //获取 合约地址
     String contract="";
     if(coinModel.isTest){
@@ -1302,7 +1302,7 @@ class WalletActionProvider extends ChangeNotifier{
         if(coinRefreshMap[index]["coinList"] !=null && coinRefreshMap[index]["coinList"].length !=0){
           coinRefreshMap[index]["coinList"].first.isRefresh=true;
           notifyListeners();
-          await getBalance_withCoinModel(coinRefreshMap[index]["coinList"].first);
+          await getBalanceWithCoinModel(coinRefreshMap[index]["coinList"].first);
           // 网络临时失败时不显示错误图标，因为已经使用了缓存数据
           // 只有在完全无法获取数据时才显示错误
           coinRefreshMap[index]["coinList"].first.loadError = false;
@@ -1313,7 +1313,7 @@ class WalletActionProvider extends ChangeNotifier{
         }
         else{
           saveWalletInfo(walletInfo, walletIndex);
-          calculateBalance_widthCoinModel();
+          calculateBalanceWidthCoinModel();
           removeConRefreshMap(index);
         }
       }

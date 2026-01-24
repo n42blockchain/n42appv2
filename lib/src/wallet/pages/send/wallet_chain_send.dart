@@ -126,11 +126,11 @@ class _WalletChainSendState extends State<WalletChainSend> {
       await chainModel?.getBalance();
       setState(() {});
     }
-    gas=BigInt.from(GetCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
+    gas=BigInt.from(getCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
     await getBalance();
     await getGasPrice();
     if(getEthLayer2(widget.coinModel.coin['coinType'])){
-      gasEth=BigInt.from(GetCoinGas(CoinType.ETH.name));
+      gasEth=BigInt.from(getCoinGas(CoinType.ETH.name));
       await getGasPriceLayer2();
     }
   }
@@ -233,7 +233,7 @@ class _WalletChainSendState extends State<WalletChainSend> {
         addLatest=false;
       }
       //await getGasPrice();
-      BigInt gaslimit=BigInt.from(GetCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
+      BigInt gaslimit=BigInt.from(getCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
       MessageModel ethMessage;
       if(widget.coinModel.coin['blockchainType'] ==BlockchainType.Tron.name){
         TrxApi trxApi=TrxApi();

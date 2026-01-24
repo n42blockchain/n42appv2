@@ -105,7 +105,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
       await chainModel?.getBalance();
       setState(() {});
     }
-    gas=BigInt.from(GetCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
+    gas=BigInt.from(getCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
     await getBalance();
     await getGasPrice();
     await getServiceState();

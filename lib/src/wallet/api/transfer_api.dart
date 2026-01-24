@@ -503,7 +503,7 @@ class TransferApi {
       int decimals, String path,String coinType,int chainId,
       {String contractAddress = "",int tokenDecimals=0,bool maxValue=true,String? privateKey})async{
     //获取每个byte 消耗多少gas
-    int gas = GetCoinGas(coinType,
+    int gas = getCoinGas(coinType,
         contract: contractAddress == "" ? false : true);
     DotApi dotApi=DotApi();
     MessageModel mm = await dotApi.getTokens(fromAddress, coinType,isTest: false);
@@ -677,7 +677,7 @@ class TransferApi {
       int decimals, String path,String coinType,
       {String contractAddress = "",int tokenDecimals=0,bool maxValue=true,String? privateKey})async{
     //获取每个byte 消耗多少gas
-    int gas = GetCoinGas(coinType,
+    int gas = getCoinGas(coinType,
         contract: contractAddress == "" ? false : true);
     DotApi dotApi=DotApi();
     MessageModel mm = await dotApi.getTokens(fromAddress, coinType,isTest: false);
@@ -822,7 +822,7 @@ class TransferApi {
       int decimals, String path,
       {String contractAddress = "",int tokenDecimals=0,bool maxValue=true,String? privateKey})async{
     //获取每个byte 消耗多少gas
-    int gas = GetCoinGas(CoinType.ATOM.name,
+    int gas = getCoinGas(CoinType.ATOM.name,
         contract: contractAddress == "" ? false : true);
     MessageModel mm =
     await getBalanceAllTrx(fromAddress);
@@ -957,7 +957,7 @@ class TransferApi {
       int decimals, String path,
       {String contractAddress = "",int tokenDecimals=0,bool maxValue=true}) async {
     //获取每个byte 消耗多少gas
-    int gas = GetCoinGas(CoinType.TRX.name,
+    int gas = getCoinGas(CoinType.TRX.name,
         contract: contractAddress == "" ? false : true);
     MessageModel mm =
     await getBalanceAllTrx(fromAddress);
@@ -1120,7 +1120,7 @@ class TransferApi {
       int decimals, String path,
       {String contractAddress = "",int tokenDecimals=0,bool maxValue=true}) async {
     //获取每个byte 消耗多少gas
-    int gas = GetCoinGas(CoinType.SOL.name,
+    int gas = getCoinGas(CoinType.SOL.name,
         contract: contractAddress == "" ? false : true);
     BigInt balance = BigInt.zero;
     BigInt chainBalance  = BigInt.zero;
@@ -1318,7 +1318,7 @@ class TransferApi {
     }
     //获取每个byte 消耗多少gas
     int gas =
-    GetCoinGas(coinType, contract: true);
+    getCoinGas(coinType, contract: true);
     /*MessageModel mm = await getBalanceEth(coinType, fromAddress,
         contractAddress: "");*/
     //获取余额
@@ -1439,7 +1439,7 @@ class TransferApi {
       String toAddress, double value, int decimals, String path,
       {String contractAddress = "",int tokenDecimals=0,bool isTest=false,bool maxValue=true,String? message,}) async {
     //获取每个byte 消耗多少gas
-    int gas = GetCoinGas(coinType, contract: contractAddress == "" ? false : true);
+    int gas = getCoinGas(coinType, contract: contractAddress == "" ? false : true);
     //获取余额
     BigInt balance = BigInt.zero;
     BigInt chainBalance = BigInt.zero;
@@ -1702,7 +1702,7 @@ class TransferApi {
         averageValue = gasFeeMM.data;
       }
     } else {
-      averageValue = GetCoinGas(coinType.toUpperCase());
+      averageValue = getCoinGas(coinType.toUpperCase());
     }
 
     //获取余额
@@ -1945,7 +1945,7 @@ class TransferApi {
   transferAlgo( String fromAddress,
       String toAddress, double value, int decimals, String path,{bool maxValue=true}) async {
     //获取每个byte 消耗多少gas
-    int gas = GetCoinGas("ALGO", contract: false);
+    int gas = getCoinGas("ALGO", contract: false);
     //获取余额
     BigInt chainBalance = BigInt.zero;
     MessageModel mmchain = await getBalanceAlgo(fromAddress);
@@ -2017,14 +2017,14 @@ class TransferApi {
       if (!AppGlobals.appContext.mounted) {
         return MessageModel.error()..data = 'Context is no longer valid';
       }
-      rValue = await trustdart.signTransaction_byteArray(
+      rValue = await trustdart.signTransactionByteArray(
         CoinType.ALGO.name,
         path,
         txData,
         mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
       );
     }else{
-      rValue = await trustdart.signTransaction_byteArray(CoinType.ALGO.name, path, txData,  pk:privateKey!,);
+      rValue = await trustdart.signTransactionByteArray(CoinType.ALGO.name, path, txData,  pk:privateKey!,);
     }
     Uint8List signStr;
     if(rValue['result']==true){
@@ -2041,7 +2041,7 @@ class TransferApi {
   transferXtz( String fromAddress,
       String toAddress, double value, int decimals, String path,{bool maxValue=true}) async {
     //获取每个byte 消耗多少gas
-    int gas = GetCoinGas("XTZ", contract: false);
+    int gas = getCoinGas("XTZ", contract: false);
     //获取余额
     BigInt chainBalance = BigInt.zero;
     MessageModel mmchain = await getBalanceXtz(fromAddress);
@@ -2163,7 +2163,7 @@ class TransferApi {
     }
 
     //获取每个byte 消耗多少gas
-    int gas = GetCoinGas("XRP", contract: false);
+    int gas = getCoinGas("XRP", contract: false);
     //获取余额
     BigInt chainBalance = BigInt.zero;
     MessageModel mmchain = await getBalanceXtz(fromAddress);

@@ -128,11 +128,11 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
       if (!mounted) return;
       setState(() {});
     }
-    gas=BigInt.from(GetCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
+    gas=BigInt.from(getCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
     await getBalance();
     /*await getGasPrice();
     if(getEthLayer2(widget.coinModel.coin['coinType'])){
-      gasEth=BigInt.from(GetCoinGas(CoinType.ETH.name));
+      gasEth=BigInt.from(getCoinGas(CoinType.ETH.name));
       await getGasPrice_layer2();
     }*/
   }

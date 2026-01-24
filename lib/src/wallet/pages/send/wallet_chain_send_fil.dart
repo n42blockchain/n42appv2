@@ -103,7 +103,7 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
       await chainModel?.getBalance();
       setState(() {});
     }
-    gas=BigInt.from(GetCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
+    gas=BigInt.from(getCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
     await getBalance();
     //await getGasPrice();
   }
@@ -329,7 +329,7 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
       if(price==""){
         return;
       }
-      BigInt gaslimit=BigInt.from(GetCoinGas(widget.coinModel.coin['coinType'],));
+      BigInt gaslimit=BigInt.from(getCoinGas(widget.coinModel.coin['coinType'],));
       FilApi filApi=FilApi();
       MessageModel ethMessage=await filApi.getGasLimit(
         widget.coinModel.address,

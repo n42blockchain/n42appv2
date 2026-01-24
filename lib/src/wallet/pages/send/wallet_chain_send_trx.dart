@@ -121,7 +121,7 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
       if (!mounted) return;
       setState(() {});
     }
-    gas=BigInt.from(GetCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
+    gas=BigInt.from(getCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
     await getBalance();
     await getGasPrice();
   }
@@ -182,7 +182,7 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
       if(price==""){
         return;
       }
-      BigInt gaslimit=BigInt.from(GetCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
+      BigInt gaslimit=BigInt.from(getCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
       MessageModel ethMessage;
       TrxApi trxApi=TrxApi();
       ethMessage=await trxApi.getGasEstimateTrx(

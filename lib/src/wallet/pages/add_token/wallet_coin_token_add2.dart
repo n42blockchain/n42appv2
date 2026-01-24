@@ -86,7 +86,7 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
       baseToken['decimals']=coinMap['decimals'];
       baseToken['canEdit']=true;
       addSymbol='$addSymbol,${coinMap['coin_name'].toString()}';
-      wap.addWalletChain_token(baseToken);
+      wap.addWalletChainToken(baseToken);
       setState(() {
         coinMap['isAdd']=true;
         coinMap['edit']=false;
@@ -105,7 +105,7 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
         coinMap['edit']=true;
       });
       WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
-      wap.removeWalletChain_token(coinMap);
+      wap.removeWalletChainToken(coinMap);
       coinMap['isAdd']=false;
       removeSymbol=true;
 

@@ -1924,7 +1924,7 @@ class _ShowMessageType10State extends State<ShowMessageType10> {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                String openUrl=getBrowser_txHash(CoinType.N.name, rpcm?.txHash??"");
+                                String openUrl=getBrowserTxHash(CoinType.N.name, rpcm?.txHash??"");
                                 Navigator.push(context, MaterialPageRoute(builder: (context)=>BrowserPage(openUrl)));
                               },
                           ),

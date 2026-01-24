@@ -123,7 +123,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
       chainSymbol = chainCoinModel?.coin['miniName'];
       tokenName = widget.coinModel.coin['name'];
       tokenSymbol = widget.coinModel.coin['miniName'];
-      browserUrl = getBrowser_token_address(
+      browserUrl = getBrowserTokenAddress(
         widget.coinModel.coin['coinType'],
         widget.coinModel.address,
         widget.coinModel.coin['contract'],
@@ -132,13 +132,13 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
     } else {
       chainName = widget.coinModel.coin['name'];
       chainSymbol = widget.coinModel.coin['miniName'];
-      browserUrl = getBrowser_address(
+      browserUrl = getBrowserAddress(
           widget.coinModel.coin['coinType'], widget.coinModel.address,
           isTest: widget.coinModel.isTest);
       getServiceState();
     }
     marketInfo = Provider.of<WalletActionProvider>(context,listen: false)
-        .getCoinPriceWithUnit_all(widget.coinModel.coin['unit']);
+        .getCoinPriceWithUnitAll(widget.coinModel.coin['unit']);
     getTransactionData(Load.refresh);
     getTransactionDataNetwork(Load.refresh);
   }
@@ -1112,7 +1112,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
                     widget.coinModel,)));
           if (!mounted) return;
           if (r) {
-            Provider.of<WalletActionProvider>(context).init_wallet(initCoinInfo: true);
+            Provider.of<WalletActionProvider>(context).initWallet(initCoinInfo: true);
           }
           Navigator.pop(context);
         },

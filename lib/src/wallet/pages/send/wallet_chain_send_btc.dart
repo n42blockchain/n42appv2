@@ -157,7 +157,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
       }
       gasFeeLevel['loading']=false;
     }else{
-      int averageValue=GetCoinGas(widget.coinModel.coin['coinType']);
+      int averageValue=getCoinGas(widget.coinModel.coin['coinType']);
       gasFeeLevel['averageValue']=averageValue;
       gasFeeLevel['gasFeeRate']=averageValue;
     }

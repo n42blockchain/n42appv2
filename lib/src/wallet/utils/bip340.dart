@@ -50,28 +50,28 @@ class Bip340{
     };*/
   }
   /// 获取 Witness 签名数据
-  Uint8List getWitnessSignature(String R_hex, String s_hex) {
+  Uint8List getWitnessSignature(String rHex, String sHex) {
     // 解析 R 并提取 x 坐标
-    Uint8List R_bytes = Uint8List.fromList(hex.decode(R_hex));
-    Uint8List R_x = R_bytes.sublist(1, 33); // 截取 x 坐标（去掉前缀字节）
+    Uint8List rBytes = Uint8List.fromList(hex.decode(rHex));
+    Uint8List rX = rBytes.sublist(1, 33); // 截取 x 坐标（去掉前缀字节）
 
     // 解析 s
-    Uint8List s_bytes = Uint8List.fromList(hex.decode(s_hex));
+    Uint8List sBytes = Uint8List.fromList(hex.decode(sHex));
 
-    // 组合成 Witness 签名格式 (R_x || s)
-    return Uint8List.fromList([...R_x, ...s_bytes]);
+    // 组合成 Witness 签名格式 (rX || s)
+    return Uint8List.fromList([...rX, ...sBytes]);
   }
   /// Schnorr 验证
-  bool schnorrVerify(ECPoint publicKey, Uint8List message, String R_hex, String s_hex) {
-    ECPoint R = curve.curve.decodePoint(hex.decode(R_hex))!;
-    BigInt s = BigInt.parse(s_hex, radix: 16);
+  bool schnorrVerify(ECPoint publicKey, Uint8List message, String rHex, String sHex) {
+    ECPoint r = curve.curve.decodePoint(hex.decode(rHex))!;
+    BigInt s = BigInt.parse(sHex, radix: 16);
 
     // 计算挑战 e
-    var e = hashMessage(Uint8List.fromList([...R.getEncoded(), ...publicKey.getEncoded(), ...message]));
+    var e = hashMessage(Uint8List.fromList([...r.getEncoded(), ...publicKey.getEncoded(), ...message]));
 
     // 计算 R' = s * G - e * P
-    ECPoint R_prime = ((G! * s)! - (publicKey * e)!)!;
+    ECPoint rPrime = ((G! * s)! - (publicKey * e)!)!;
 
-    return R == R_prime;
+    return r == rPrime;
   }
 }

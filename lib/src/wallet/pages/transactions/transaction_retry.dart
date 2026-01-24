@@ -236,7 +236,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
       trm.to1=toAddress;
       trm.nonce=transactionInfo!['nonce'];
 
-      BigInt gaslimit=BigInt.from(GetCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
+      BigInt gaslimit=BigInt.from(getCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
       MessageModel ethMessage=await tokenViewApi.getGasEstimateEthV2(//EthAPI.getGasLimit(
         widget.coinModel.address,
         trm.to1,

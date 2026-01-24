@@ -287,7 +287,7 @@ class AppPushUtils {
       if (isTestStr != null) {
         isTest = isTestStr == "test" ? true : false;
       }
-      String bUri = getBrowser_txHash(
+      String bUri = getBrowserTxHash(
           txContent['coin'], txContent['hash'] ?? "",
           isTest: isTest);
       Navigator.push(AppGlobals.navigatorKey.currentContext!,
@@ -307,7 +307,7 @@ class AppPushUtils {
       if (isTestStr != null) {
         isTest = isTestStr == "test" ? true : false;
       }
-      String bUri = getBrowser_txHash(
+      String bUri = getBrowserTxHash(
           txContent['coin'], txContent['hash'] ?? "",
           isTest: isTest);
       Navigator.push(AppGlobals.navigatorKey.currentContext!,

@@ -1255,7 +1255,7 @@ class TokenViewApi{
       }
     }
     if(gas==null){
-      gas=BigInt.from(GetCoinGas("TRX",contract:true));
+      gas=BigInt.from(getCoinGas("TRX",contract:true));
     }
     String aaa=hex(keccakAscii(method));
     aaa=aaa.substring(0,8).toLowerCase();

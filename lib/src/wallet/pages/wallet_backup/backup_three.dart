@@ -207,7 +207,7 @@ class _BackupThreeState extends State<BackupThree> {
                         await wap.saveWalletInfo(widget.walletInfo,widget.walletIndex);
                         if (!mounted) return;
                         if(widget.walletIndex==wap.walletIndex){
-                          Provider.of<WalletActionProvider>(this.context,listen: false).init_wallet();
+                          Provider.of<WalletActionProvider>(this.context,listen: false).initWallet();
                         }
                         ToastUtils.show(S.of(this.context).g_key_185);
                         eventBus.fire(EventPublic(EventPublicType.backup,param: widget.walletInfo));

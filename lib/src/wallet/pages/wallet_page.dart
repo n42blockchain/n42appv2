@@ -63,9 +63,9 @@ class _WalletPageState extends State<WalletPage> {
   @override
   void initState() {
     // TODO: implement initState
-    Provider.of<WalletActionProvider>(context,listen: false).init_wallet(initCoinInfo:true);
+    Provider.of<WalletActionProvider>(context,listen: false).initWallet(initCoinInfo:true);
     /*if(AppGlobals.userInfo==null){
-      Provider.of<WalletActionProvider>(context,listen: false).init_wallet(initCoinInfo:true);
+      Provider.of<WalletActionProvider>(context,listen: false).initWallet(initCoinInfo:true);
     }else{
       Timer(Duration(seconds: 1),(){
         eventBus.fire(EventPublic(EventPublicType.selectWallet,
@@ -642,7 +642,7 @@ class _WalletPageState extends State<WalletPage> {
                     S.of(context).g_browser_key6,
                     "name",
                     waValue.walletInfo.coinSort['name'] ?? -1,
-                    () => waValue.setCoinSort_assets("name"),
+                    () => waValue.setCoinSortAssets("name"),
                   ),
                   SizedBox(width: ScreenUtil().setWidth(24)),
                   // 按资产排序
@@ -650,7 +650,7 @@ class _WalletPageState extends State<WalletPage> {
                     S.of(context).g_key_198,
                     "assets",
                     waValue.walletInfo.coinSort['assets'] ?? -1,
-                    () => waValue.setCoinSort_assets("assets"),
+                    () => waValue.setCoinSortAssets("assets"),
                   ),
                   const Spacer(),
                 ],
@@ -853,7 +853,7 @@ class _WalletPageState extends State<WalletPage> {
               onPressed: (context) async {
                 if(coinInfo.coin['canEdit']==true){
                   if(coinInfo.coin['isContract']){
-                    Provider.of<WalletActionProvider>(context,listen: false).removeWalletChain_token(coinInfo.coin,symbol:coinInfo.coin["coinType"],miniName:coinInfo.coin['miniName']);
+                    Provider.of<WalletActionProvider>(context,listen: false).removeWalletChainToken(coinInfo.coin,symbol:coinInfo.coin["coinType"],miniName:coinInfo.coin['miniName']);
                   }else{
                     Provider.of<WalletActionProvider>(context,listen: false).removeWalletChain(coinInfo.coin['mKey'],coinInfo.coin['unit']);
                   }
@@ -1335,7 +1335,7 @@ class _WalletPageState extends State<WalletPage> {
           ));
       if (!mounted) return;
       if (r==true) {
-        Provider.of<WalletActionProvider>(context,listen: false).init_wallet(initCoinInfo: true);
+        Provider.of<WalletActionProvider>(context,listen: false).initWallet(initCoinInfo: true);
       }
       return;
     }
@@ -1359,7 +1359,7 @@ class _WalletPageState extends State<WalletPage> {
                   ));
               if (!mounted) return;
               if (r==true) {
-                Provider.of<WalletActionProvider>(context,listen: false).init_wallet(initCoinInfo: true);
+                Provider.of<WalletActionProvider>(context,listen: false).initWallet(initCoinInfo: true);
               }
               Navigator.pop(context);
             },
@@ -1390,7 +1390,7 @@ class _WalletPageState extends State<WalletPage> {
                   ));
               if (!mounted) return;
               if (r==true) {
-                Provider.of<WalletActionProvider>(context,listen: false).init_wallet(initCoinInfo: true);
+                Provider.of<WalletActionProvider>(context,listen: false).initWallet(initCoinInfo: true);
               }
               Navigator.pop(context);
             },

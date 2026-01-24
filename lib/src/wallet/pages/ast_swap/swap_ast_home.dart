@@ -283,7 +283,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
       return false;
     }
     gas =
-        BigInt.from(GetCoinGas(payCoinModel!.coin['coinType'], contract: true));
+        BigInt.from(getCoinGas(payCoinModel!.coin['coinType'], contract: true));
     MessageModel mm = await tokenViewApi.getGasPrice(
         payCoinModel!.coin['blockchainType'], payCoinModel!.coin['coinType'],
         isTest: false,
@@ -875,7 +875,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                             builder: (context) => WalletCoinAddAll(youPay?.payChain ?? "",)));
                     if (!mounted) return;
                     if (r) {
-                      await Provider.of<WalletActionProvider>(context,listen: false).init_wallet(initCoinInfo: true);
+                      await Provider.of<WalletActionProvider>(context,listen: false).initWallet(initCoinInfo: true);
                       init();
                     }
                   },
@@ -941,7 +941,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                             )));
                     if (!mounted) return;
                     if (r) {
-                      await Provider.of<WalletActionProvider>(context,listen: false).init_wallet(initCoinInfo: true);
+                      await Provider.of<WalletActionProvider>(context,listen: false).initWallet(initCoinInfo: true);
                       init();
                     }
                   },

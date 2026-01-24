@@ -185,8 +185,8 @@ class CoinModel {
       if (address == null) {
         await buildWallet();
       }
-      // getBalance_withCoinModel 返回 true 表示有错误，false 表示成功
-      bool hasError = await wap.getBalance_withCoinModel(this);
+      // getBalanceWithCoinModel 返回 true 表示有错误，false 表示成功
+      bool hasError = await wap.getBalanceWithCoinModel(this);
       if (!AppGlobals.appContext.mounted) return false;
       if(hasError){
         // 获取余额失败，但不设置 loadError，因为已经使用了缓存的余额
@@ -197,7 +197,7 @@ class CoinModel {
       }else{
         // 获取余额成功
         loadError = false;
-        wap.calculateBalance_widthCoinModel();
+        wap.calculateBalanceWidthCoinModel();
         return true;
       }
     } catch (e) {

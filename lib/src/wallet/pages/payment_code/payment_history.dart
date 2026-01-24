@@ -146,7 +146,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
                       flex: 1,
                       child: InkWell(
                         onTap: (){
-                          String openUrl=getBrowser_txHash(data['chainSymbol'], data['txHash']);
+                          String openUrl=getBrowserTxHash(data['chainSymbol'], data['txHash']);
                           Navigator.push(context, MaterialPageRoute(builder: (context)=>BrowserPage(openUrl)));
                         },
                         child: Text(

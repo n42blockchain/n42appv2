@@ -217,7 +217,7 @@ class Trustdart {
       return '';
     }
   }
-  Future<Map> signTransaction_byteArray(
+  Future<Map> signTransactionByteArray(
       String coin,
       String path,
       Map txData,
@@ -310,7 +310,7 @@ class Trustdart {
     }
   }
   //启动 ios LiveActivity 功能
-  Future<MessageModel> LiveActivity_Start()async{
+  Future<MessageModel> liveActivityStart()async{
     try {
       int? type=await SPUtil().getBackgroundMiningMusic();
       final String rData =
@@ -328,7 +328,7 @@ class Trustdart {
       return rmm;
     }
   }
-  Future<MessageModel> LiveActivity_Update(int value)async{
+  Future<MessageModel> liveActivityUpdate(int value)async{
     try {
       final String rData =
       await _channel.invokeMethod('LiveActivityUpdate',<String,dynamic>{"value":value});
@@ -343,7 +343,7 @@ class Trustdart {
       return rmm;
     }
   }
-  Future<MessageModel> LiveActivity_End(int value)async{
+  Future<MessageModel> liveActivityEnd(int value)async{
     try {
       final String rData =
       await _channel.invokeMethod('LiveActivityEnd',<String,dynamic>{"value":value});

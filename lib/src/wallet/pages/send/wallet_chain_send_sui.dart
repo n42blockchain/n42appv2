@@ -124,7 +124,7 @@ class _WalletChainSendSuiState extends State<WalletChainSendSui> {
       if (!mounted) return;
       setState(() {});
     }
-    gas=BigInt.from(GetCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
+    gas=BigInt.from(getCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
     await getBalance();
     await getGasPrice();
     await getOwnerObjects();

@@ -31,7 +31,7 @@ class Application {
     // 刷新钱包列表
     globalProviderContainer.invalidate(walletListProvider);
     // 通过 Legacy Provider 初始化钱包
-    Provider.of<WalletActionProvider>(AppContext, listen: false).init_wallet(initCoinInfo: true);
+    Provider.of<WalletActionProvider>(AppContext, listen: false).initWallet(initCoinInfo: true);
     Provider.of<WalletConnectProvider>(AppContext, listen: false).cleannData_loginout();
   }
   
@@ -45,7 +45,7 @@ class Application {
       globalProviderContainer.invalidate(walletListProvider);
       // 通过 Legacy Provider 清理
       if (!AppContext.mounted) return;
-      Provider.of<WalletActionProvider>(AppContext, listen: false).init_wallet();
+      Provider.of<WalletActionProvider>(AppContext, listen: false).initWallet();
       Provider.of<WalletConnectProvider>(AppContext, listen: false).cleannData_loginout();
     } catch (err) {
       debugPrint('Logout error: $err');
