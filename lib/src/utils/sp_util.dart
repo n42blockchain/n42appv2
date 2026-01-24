@@ -24,12 +24,12 @@ class SPUtil {
   // ==================== 非敏感设置 ====================
 
   /// 是否阅读了登录、安全条款
-  setReadLoginClause(bool value) async {
+  Future<void> setReadLoginClause(bool value) async {
     await initPrefs();
     prefs?.setBool(SPkey.readLoginClause.name, value);
   }
 
-  getReadLoginClause() async {
+  Future<bool> getReadLoginClause() async {
     await initPrefs();
     bool? value = prefs?.getBool(SPkey.readLoginClause.name);
     if (value == null) {
@@ -40,36 +40,34 @@ class SPUtil {
   }
 
   /// app主题模式 0系统，1亮，2暗
-  setThemeMode(int value) async {
+  Future<void> setThemeMode(int value) async {
     await initPrefs();
     prefs?.setInt(SPkey.themeMode.name, value);
   }
 
-  getThemeMode() async {
+  Future<int?> getThemeMode() async {
     await initPrefs();
-    var r = prefs?.get(SPkey.themeMode.name);
-    return r;
+    return prefs?.getInt(SPkey.themeMode.name);
   }
 
   /// app系统语言 en,zh-CN
-  setSysLang(String value) async {
+  Future<void> setSysLang(String value) async {
     await initPrefs();
     prefs?.setString(SPkey.sysLang.name, value);
   }
 
-  getSysLang() async {
+  Future<String?> getSysLang() async {
     await initPrefs();
-    var r = prefs?.get(SPkey.sysLang.name);
-    return r;
+    return prefs?.getString(SPkey.sysLang.name);
   }
 
   /// 浏览器设置
-  setBrowserSetting(Map<String, dynamic> value) async {
+  Future<void> setBrowserSetting(Map<String, dynamic> value) async {
     await initPrefs();
     prefs?.setString(SPkey.browserSetting.name, json.encode(value));
   }
 
-  getBrowserSetting() async {
+  Future<Map<String, dynamic>?> getBrowserSetting() async {
     await initPrefs();
     String? r = prefs?.getString(SPkey.browserSetting.name);
     if (r == null) {

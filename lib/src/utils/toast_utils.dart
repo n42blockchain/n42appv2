@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
 
 class ToastUtils{
-  static show(String s){
+  static void show(String s) {
     Fluttertoast.showToast(
         msg: s,
         toastLength: Toast.LENGTH_SHORT,
@@ -21,14 +21,14 @@ class ToastUtils{
   static  FToast? fToast;
 
   /// 1 、使用时先init
-  static  init(BuildContext context){
+  static void init(BuildContext context) {
     fToast ??= FToast();
     fToast?.init(context);
 
   }
 
   ///2 、可修改样式的toast
-  static showFtToast({Widget? child,String? title,int duration=2}){
+  static void showFtToast({Widget? child, String? title, int duration = 2}) {
     fToast?.showToast(
       child:child ??  _buildChild(title ??""),
       gravity: ToastGravity.CENTER,
@@ -38,7 +38,7 @@ class ToastUtils{
   }
 
   /// 3 、destory
-  static dispose(){
+  static void dispose() {
     if(fToast != null){
       fToast!.removeCustomToast();
     }

@@ -208,7 +208,7 @@ class AppPushUtils {
   }
 
   //绑定用户推送的token
-  static bindUserPushToken(newToken) async {
+  static Future<void> bindUserPushToken(dynamic newToken) async {
     try {
       // 绑定token
       debugPrint('new token : $newToken');
@@ -480,7 +480,7 @@ class AppPushUtils {
   }
 
   ///清除所有通知
-  static cleanNotification() {
+  static void cleanNotification() {
     flutterLocalNotificationsPlugin.cancelAll();
   }
 
@@ -493,20 +493,20 @@ class AppPushUtils {
   }
 
   //更新未读消息数
-  static _updateBadgeCount() {
+  static void _updateBadgeCount() {
     FlutterNewBadger.incrementBadgeCount();
     // 使用 Riverpod 增加未读消息数
     globalProviderContainer.read(unreadCountProvider.notifier).increment();
   }
 
   //清理未读消息数
-  static removeBadgeCount() {
+  static void removeBadgeCount() {
     FlutterNewBadger.removeBadge();
     cleanNotification();
   }
 
   //显示本地通知 test
-  static Future showLocalNotifications() async {
+  static Future<void> showLocalNotifications() async {
 
     var androidDetails = AndroidNotificationDetails(
         'nftWallet_channelId', //id可以随意一点

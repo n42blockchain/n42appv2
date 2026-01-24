@@ -13,7 +13,7 @@ class MiningWeb3{
   static const int _defaultMaxGas=6000000;
   EthPrivateKey? credentials;
   Web3Client? web3Client;
-  Web3Client? get wClient{
+  Web3Client? get wClient {
     web3Client ??= Web3Client(_rpcUrl, Client());
     return web3Client;
   }

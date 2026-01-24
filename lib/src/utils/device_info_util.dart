@@ -6,7 +6,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 
 class DeviceInfoUtil{
   //手机名称、系统、手机型号
-  getDeviceInfo()async{
+  Future<Map<String, dynamic>?> getDeviceInfo() async {
     try{
       Map<String,dynamic> rMap={};
       DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();

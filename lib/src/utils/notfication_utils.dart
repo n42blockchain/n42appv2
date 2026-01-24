@@ -6,7 +6,7 @@ class Notification {
   final FlutterLocalNotificationsPlugin np = FlutterLocalNotificationsPlugin();
 
   /// main 初始化
-  init() async {
+  Future<void> init() async {
     const AndroidInitializationSettings android =  AndroidInitializationSettings("@mipmap/ic_launcher");
     // var ios = const IOSInitializationSettings();
     DarwinInitializationSettings ios = const DarwinInitializationSettings(
