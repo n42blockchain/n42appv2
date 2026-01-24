@@ -99,7 +99,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
     super.dispose();
   }
 
-  initData()async{
+  Future<void> initData()async{
     //判断是否是代币
     if(widget.coinModel.coin['isContract']){
       WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
@@ -130,7 +130,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
     await getGasPrice();
   }
   //获取余额
-  getBalance()async{
+  Future<void> getBalance()async{
     setState(() {
       load=Load.loading;
     });
@@ -145,7 +145,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
     }
   }
   //获取旷工费
-  getGasPrice()async{
+  Future<void> getGasPrice()async{
     setState(() {
       load=Load.loading;
     });
@@ -165,7 +165,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
     setState(() {});
   }
   //检查 amount 输入是否正确
-  amountCheck({String value=""}){
+  void amountCheck({String value=""}){
     if(value==""){
       value=valueTextEditingController.text;
     }
@@ -227,7 +227,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
     setState(() {});
   }
   //检查转账地址是否正确
-  toAddressCheck(String addr)async{
+  Future<String?> toAddressCheck(String addr)async{
     if(addr==""){
       toErrorMessage=S.current.g_key_41;
       setState(() {});
@@ -255,7 +255,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
       }
     }
   }
-  sendTransaction()async{
+  Future<void> sendTransaction()async{
     if(load==Load.loading){
       ToastUtils.show("loading");
       return;
@@ -320,7 +320,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
       });
     }
   }
-  signTx(TransationRecordModel trModel)async{
+  Future<void> signTx(TransationRecordModel trModel)async{
     if(signTxCheck()==false)return;
     try{
       TransferApi transferApi=TransferApi();
@@ -349,7 +349,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
       if (mounted) setState(() {});
     }
   }
-  signTxCheck(){
+  bool signTxCheck(){
     if(widget.coinModel.coin['blockchainType']==BlockchainType.Ethereum.name){
       if(widget.coinModel.coin['isContract']){
         BigInt chainBalance=chainModel?.balance??BigInt.zero;
@@ -373,7 +373,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
     }
     Navigator.pop(context);
   }
-  maxTag()async{
+  Future<void> maxTag()async{
     if(gasLimitLoad==Load.loading)return;
     if(widget.coinModel.coin['isContract']){
       valueTextEditingController.text=widget.coinModel.balanceStringAll();
@@ -386,7 +386,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
     setState(() {});
   }
   //关闭键盘
-  closeKeyboard(){
+  void closeKeyboard(){
     FocusScope.of(context).requestFocus(FocusNode());
   }
   @override
@@ -412,7 +412,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
       ),
     );
   }
-  coinTypeWidget(){
+  Widget coinTypeWidget(){
     List<Widget> cChildren=[
       /*
       WalletChainInfoTitle(
@@ -450,7 +450,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
       children: cChildren,
     );
   }
-  toWidget(){
+  Widget toWidget(){
     return Container(
       margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       child: Column(
@@ -546,7 +546,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
       ),
     );
   }
-  noteWidget(){
+  Widget noteWidget(){
     if(widget.coinModel.coin['blockchainType']==BlockchainType.Ethereum.name && widget.coinModel.coin['isContract']==false) {
       return Container(
         margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
@@ -596,7 +596,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
     }
     return SizedBox();
   }
-  amountWidget(){
+  Widget amountWidget(){
     return containerStyle1(
       context,
       margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
@@ -703,7 +703,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
       ),
     );
   }
-  amountBalanceWidget(){
+  Widget amountBalanceWidget(){
     String unit=widget.coinModel.coin['unit'].toString().toUpperCase();
     return Text(
       '${widget.coinModel.balanceStringAll()} $unit',
@@ -717,7 +717,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
     );
   }
   //返回账户地址
-  ownerAddress(){
+  Widget ownerAddress(){
     String addr="";
     if(widget.coinModel.coin['blockchainType']==BlockchainType.Ethereum.name){
       addr=widget.coinModel.address.toString();
@@ -745,7 +745,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
     );
   }
   //旷工费
-  minerFeeWidget(){
+  Widget minerFeeWidget(){
     String title=widget.coinModel.coin['coinType'];
     String totalGasPriceStr="";
     String gasPriceStr="";
@@ -922,7 +922,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
       ),
     );
   }
-  errorMessageWidget(){
+  Widget errorMessageWidget(){
     if(errorMessage==""){
       return SizedBox();
     }else{
@@ -946,7 +946,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
 
   }
   //提交按钮
-  sendButtonWidget(){
+  Widget sendButtonWidget(){
     String title=S.of(context).g_key_48;
     return Positioned(
       left: 0,
@@ -981,7 +981,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
       ),
     );
   }
-  faceMatchTypeWidget(){
+  void faceMatchTypeWidget(){
     Widget child=Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -1037,7 +1037,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
     );
     sheetBottom(context, S.of(context).g_face_match_key1, child);
   }
-  searchToAddressWidget(){
+  void searchToAddressWidget(){
     List<Widget> childs=[
       InkWell(
         onTap: ()async{

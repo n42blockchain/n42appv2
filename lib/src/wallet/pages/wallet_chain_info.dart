@@ -197,7 +197,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
     super.dispose();
   }
 
-  initData() {
+  void initData() {
     if (widget.coinModel.coin['isContract']) {
       int cIndex = Provider.of<WalletActionProvider>(context,listen: false)
           .coinModels
@@ -277,7 +277,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
     }
   }
 
-  getTransactionDataNetwork(Load loadType)async{
+  Future<void> getTransactionDataNetwork(Load loadType)async{
     String addr = widget.coinModel.address.toString();
     String coinKey = widget.coinModel.coin['coinType'];
     String contract = widget.coinModel.coin['contract'];
@@ -302,7 +302,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
       }
     }
   }
-  getTransactionDataNetworkEth(List<CommonResponseItemModel>? cril)async{
+  Future<void> getTransactionDataNetworkEth(List<CommonResponseItemModel>? cril)async{
     if(cril !=null){
       bool isEdit=false;
       for(int i=cril.length-1;i>=0;i--){
@@ -366,7 +366,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
       }
     }
   }
-  getTransactionDataNetworkTrx(List<CommonResponseItemModel>? cril)async{
+  Future<void> getTransactionDataNetworkTrx(List<CommonResponseItemModel>? cril)async{
     if(cril !=null){
       bool isEdit=false;
       for(int i=cril.length-1;i>=0;i--){
@@ -418,7 +418,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
       }
     }
   }
-  getTransactionDataNetworkBtc(List<BtcTranDetail>? cril)async{
+  Future<void> getTransactionDataNetworkBtc(List<BtcTranDetail>? cril)async{
     if(cril !=null){
       bool isEdit=false;
       for(int i=cril.length-1;i>=0;i--){
@@ -605,7 +605,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
     }
   }
   */
-  getTxInfoNetwork(TransationRecordModel transationRecordModel)async{
+  Future<void> getTxInfoNetwork(TransationRecordModel transationRecordModel)async{
     TransationRecordModel rtrm=await Provider.of<TransactionRecordItemProvider>(context,listen: false).checkUndoneTrReturn(transationRecordModel);
     transactionList.firstWhere((element){
       TransationRecordModel trm=element as TransationRecordModel;
@@ -617,7 +617,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
     });
     setState(() {});
   }
-  getTxInfoNetworkBtc(BtcTransactionRecodeModel transationRecordModel)async{
+  Future<void> getTxInfoNetworkBtc(BtcTransactionRecodeModel transationRecordModel)async{
     BtcTransactionRecodeModel rtrm=await Provider.of<TransactionRecordItemProvider>(context,listen: false).checkUndoneTrBtcReturn(transationRecordModel);
     transactionList.firstWhere((element){
       TransationRecordModel trm=element as TransationRecordModel;
@@ -877,7 +877,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
     );
   }
 
-  transactionsWidget() {
+  Widget transactionsWidget() {
     if (transactionList.isEmpty) {
       //IntrinsicHeight: Dynamically calculated height
       return IntrinsicHeight(
@@ -1033,7 +1033,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
   }
   */
   //切换网络，测试网络还是主网
-  changeNet(bool isTest, Load loadType) async {
+  Future<void> changeNet(bool isTest, Load loadType) async {
     try {
       WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
       wap.walletMap[widget.coinModel.coin['coinType']]['isTest'] = isTest;
@@ -1051,7 +1051,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
   }
 
   //显示操作按钮列表
-  showActionButtonListWidget(){
+  void showActionButtonListWidget(){
     List<Widget> childs = [];
     //send
     childs.add(InkWell(

@@ -5,9 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 Widget textFieldStyle2(
     BuildContext context,
     {
-      dynamic onChanged,
-      dynamic onEditingComplete,
-      dynamic onSubmitted,
+      ValueChanged<String>? onChanged,
+      VoidCallback? onEditingComplete,
+      ValueChanged<String>? onSubmitted,
       TextEditingController? controller,
       FocusNode? focusNode,
       bool enabled=true,
@@ -31,14 +31,14 @@ Widget textFieldStyle2(
       double borderWidth=0,
       Color? borderColor,
       Widget? rightWidget1,
-      dynamic rightOnTap1,
+      VoidCallback? rightOnTap1,
       Widget? rightWidget2,
-      dynamic rightOnTap2,
+      VoidCallback? rightOnTap2,
       Widget? rightWidget3,
-      dynamic rightOnTap3,
+      VoidCallback? rightOnTap3,
       Widget? leftWidget,
-      dynamic leftOnTap,
-    }){
+      VoidCallback? leftOnTap,
+    }) {
   Color bdColor=borderColor??AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBorderColor.name);
   Color textColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name);
   if(errorMessage !=""){
@@ -130,11 +130,7 @@ Widget textFieldStyle2(
             ),
             if(rightWidget3 !=null)
               InkWell(
-                onTap: (){
-                  if(rightOnTap2 !=null) {
-                    rightOnTap3();
-                  }
-                },
+                onTap: rightOnTap3,
                 child: rightWidget3,
               ),
             if(rightWidget1 !=null)
@@ -190,9 +186,9 @@ Widget textFieldStyle2(
 Widget textFieldStyle3(
     BuildContext context,
     {
-      dynamic onChanged,
-      dynamic onEditingComplete,
-      dynamic onSubmitted,
+      ValueChanged<String>? onChanged,
+      VoidCallback? onEditingComplete,
+      ValueChanged<String>? onSubmitted,
       TextEditingController? controller,
       FocusNode? focusNode,
       bool enabled=true,
@@ -218,12 +214,12 @@ Widget textFieldStyle3(
       Color? borderColor,
       bool obscure=false,
       Widget? rightWidget1,
-      dynamic rightOnTap1,
+      VoidCallback? rightOnTap1,
       Widget? rightWidget2,
-      dynamic rightOnTap2,
+      VoidCallback? rightOnTap2,
       Widget? leftWidget,
-      dynamic leftOnTap,
-    }){
+      VoidCallback? leftOnTap,
+    }) {
   Color bdColor=borderColor??AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBorderColor.name);
   Color textColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name);
   if(errorMessage !=""){

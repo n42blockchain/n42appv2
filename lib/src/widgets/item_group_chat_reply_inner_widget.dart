@@ -74,7 +74,7 @@ class _ItemGroupChatReplyInnerWidgetState extends State<ItemGroupChatReplyInnerW
   }
 
   //用户头像渲染
-  updateUserInfo() async {
+  Future<void> updateUserInfo() async {
     try {
       if (widget.isCurrentUser) {
         name = AppGlobals.userInfo?.name??"";
@@ -104,7 +104,7 @@ class _ItemGroupChatReplyInnerWidgetState extends State<ItemGroupChatReplyInnerW
     }
   }
 
-  handlerMessage() async {
+  Future<void> handlerMessage() async {
     try {
       if (messageType == 1) {
         //文本消息
@@ -263,7 +263,7 @@ class _ItemGroupChatReplyInnerWidgetState extends State<ItemGroupChatReplyInnerW
     );
   }
 
-  _buildMessageView() {
+  Widget _buildMessageView() {
     if (content != null && content!.isNotEmpty) {
       if (messageType == 1) {
         return Column(
@@ -419,7 +419,7 @@ class _ItemGroupChatReplyInnerWidgetState extends State<ItemGroupChatReplyInnerW
   }
 
   //1 = text 、6= video、3= image、Location = 4   File = 5  Tip_Notification = 90 提示文本
-  _buildDefaultIcon() {
+  Widget _buildDefaultIcon() {
     if (messageType == 1) {
       return const Icon(
         Icons.text_fields,

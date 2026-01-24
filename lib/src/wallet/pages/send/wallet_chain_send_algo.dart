@@ -86,7 +86,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
     super.dispose();
   }
 
-  initData()async{
+  Future<void> initData()async{
     //判断是否是代币
     if(widget.coinModel.coin['isContract']){
       WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
@@ -116,7 +116,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
   }
 
   //获取余额
-  getBalance()async{
+  Future<void> getBalance()async{
     setState(() {
       load=Load.loading;
     });
@@ -130,7 +130,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
     }
   }
   //获取旷工费
-  getGasPrice()async{
+  Future<void> getGasPrice()async{
     setState(() {
       load=Load.loading;
     });
@@ -152,7 +152,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
   }
 
   //检查 amount 输入是否正确
-  amountCheck({String value=""}){
+  void amountCheck({String value=""}){
     if(value==""){
       value=valueTextEditingController.text;
     }
@@ -186,7 +186,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
     setState(() {});
   }
   //检查转账地址是否正确
-  toAddressCheck(String addr)async{
+  Future<String?> toAddressCheck(String addr)async{
     if(addr==""){
       toErrorMessage=S.current.g_key_41;
       setState(() {});
@@ -217,7 +217,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
 
   bool algoTokenAdd=true;
   //检查Algo 用户是否添加了当前代币
-  checkTokenAddAlgo()async{
+  Future<void> checkTokenAddAlgo()async{
     if(widget.coinModel.other==null){
       return;
     }
@@ -228,7 +228,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       });
     }
   }
-  sendTransaction()async{
+  Future<void> sendTransaction()async{
     if(load==Load.loading){
       ToastUtils.show("loading");
       return;
@@ -320,7 +320,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       });
     }
   }
-  sendTransactionAlgoTokenEdit(bool add)async{
+  Future<void> sendTransactionAlgoTokenEdit(bool add)async{
     if(load==Load.loading){
       ToastUtils.show("loading");
       return;
@@ -369,7 +369,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       });
     }
   }
-  signTx(TransationRecordModel trModel)async{
+  Future<void> signTx(TransationRecordModel trModel)async{
     try{
       TransferApi transferApi=TransferApi();
       MessageModel mm=await transferApi.transferWallet(
@@ -402,7 +402,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       toAddressCheck(scanValue);
     }
   }
-  maxTag()async{
+  Future<void> maxTag()async{
     if(gasLimitLoad==Load.loading)return;
     if(widget.coinModel.coin['isContract']){
       valueTextEditingController.text=widget.coinModel.balanceStringAll();
@@ -415,7 +415,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
     setState(() {});
   }
   //关闭键盘
-  closeKeyboard(){
+  void closeKeyboard(){
     FocusScope.of(context).requestFocus(FocusNode());
   }
   @override
@@ -464,7 +464,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       ),
     );
   }
-  coinTypeWidget(){
+  Widget coinTypeWidget(){
     List<Widget> cChildren=[];
     /*cChildren.add(
       WalletChainInfoTitle(
@@ -515,7 +515,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       children: cChildren,
     );
   }
-  algoAddToken(){
+  Widget algoAddToken(){
     return Container(
         margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
         alignment: Alignment.center,
@@ -543,7 +543,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
         )
     );
   }
-  toWidget(){
+  Widget toWidget(){
     return Container(
       margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       child: Column(
@@ -657,7 +657,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       ),
     );
   }
-  amountWidget(){
+  Widget amountWidget(){
     return Container(
       margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       child: Column(
@@ -774,7 +774,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       ),
     );
   }
-  amountBalanceWidget(){
+  Widget amountBalanceWidget(){
     String unit=widget.coinModel.coin['unit'];
     double minBalance=toEther(widget.coinModel.other.minBalance.toString(), widget.coinModel.coin['decimals']??0).toDouble();
     double availableBalance=widget.coinModel.balanceDoubleAll()-minBalance;
@@ -829,7 +829,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
     }
   }
   //返回账户地址
-  ownerAddress(){
+  Widget ownerAddress(){
     String addr="";
     if(widget.coinModel.coin['blockchainType']==BlockchainType.Ethereum.name){
       addr=widget.coinModel.address.toString();
@@ -855,7 +855,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
     );
   }
   //旷工费
-  minerFeeWidget(){
+  Widget minerFeeWidget(){
     String title=widget.coinModel.coin['coinType'];
     String totalGasPriceStr="";
     String gasPriceStr="";
@@ -933,7 +933,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       ),
     );
   }
-  minerFeeWidgetChainBalance(){
+  Widget minerFeeWidgetChainBalance(){
     String unit=chainModel?.coin['unit']??"";
     double minBalance=toEther((chainModel?.other.minBalance??BigInt.zero).toString(), chainModel?.coin['decimals']??0).toDouble();
     double availableBalance=(chainModel?.balanceDoubleAll()??0)-minBalance;
@@ -1006,7 +1006,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       ),
     );
   }
-  errorMessageWidget(){
+  Widget errorMessageWidget(){
     if(errorMessage==""){
       return SizedBox();
     }else{
@@ -1031,7 +1031,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
   }
 
   //提交按钮
-  sendButtonWidget(){
+  Widget sendButtonWidget(){
     String title=S.of(context).g_key_48;
     if(algoTokenAdd==false){
       title=S.of(context).g_key_159;
@@ -1073,7 +1073,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       ),
     );
   }
-  searchToAddressWidget(){
+  void searchToAddressWidget(){
     List<Widget> childs=[
       InkWell(
         onTap: ()async{

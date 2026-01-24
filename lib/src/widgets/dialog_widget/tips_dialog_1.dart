@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 ///常用风格的提示框 只有（标题 确定）
-tipsDialog1(
+Future<bool?> tipsDialog1(
     BuildContext context, String title,{
       String? sureText
     }) async {

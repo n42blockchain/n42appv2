@@ -111,7 +111,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
     super.dispose();
   }
 
-  initData() async{
+  Future<void> initData() async{
     //createWallet();
     chainName = widget.coinModel.coin['name'];
     chainSymbol = widget.coinModel.coin['miniName'];
@@ -128,7 +128,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
     }
     p2wsh();*/
   }
-  initWebView(){
+  void initWebView(){
     late final PlatformWebViewControllerCreationParams params;
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
       params = WebKitWebViewControllerCreationParams(
@@ -183,7 +183,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
 
       });
   }
-  createWallet(){
+  void createWallet(){
     final privateKey =
     ECPrivate.fromWif("cVbQm3SVhN3sHD2mhbucpyz99mH6WNRcAKhzur3SP5hX4Ca53m15", netVersion: BitcoinNetwork.testnet.wifNetVer);
     final publicKey = privateKey.getPublic();
@@ -193,7 +193,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
     debugPrint(address.toAddress(BitcoinNetwork.testnet));
   }
   //获取余额
-  getBalance()async{
+  Future<void> getBalance()async{
     try{
       bool isOk=await widget.coinModel.getBalance();
       if(isOk==false){
@@ -282,7 +282,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
     });
   }
 */
-  getTransactionData(Load loadType) async {
+  Future<void> getTransactionData(Load loadType) async {
     if (load == Load.finish) {
       if (loadType == Load.nextPage) {
         if (lastPage) return;
@@ -325,7 +325,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
     }
   }
 
-  getTransactionDataNetwork(Load loadType)async{
+  Future<void> getTransactionDataNetwork(Load loadType)async{
     String addr = widget.coinModel.address.toString();
     String coinKey = widget.coinModel.coin['coinType'];
     String contract = widget.coinModel.coin['contract'];
@@ -343,7 +343,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
       }
     }
   }
-  getTransactionDataNetworkBtc(List<BtcTranDetail>? cril)async{
+  Future<void> getTransactionDataNetworkBtc(List<BtcTranDetail>? cril)async{
     if(cril !=null){
       bool isEdit=false;
       for(int i=cril.length-1;i>=0;i--){
@@ -466,7 +466,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
     }
   }
 
-  getTxInfoNetworkBtc(BtcTransactionRecodeModel transationRecordModel)async{
+  Future<void> getTxInfoNetworkBtc(BtcTransactionRecodeModel transationRecordModel)async{
     BtcTransactionRecodeModel rtrm=await Provider.of<TransactionRecordItemProvider>(context,listen: false).checkUndoneTrBtcReturn(transationRecordModel);
     transactionList.firstWhere((element){
       TransationRecordModel trm=element as TransationRecordModel;
@@ -925,7 +925,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
 
     );
   }
-  Widget chainInfoBoard(){
+  Widget chainInfoBoard() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0),vertical: ScreenUtil().setWidth(30.0),),
       child: Column(
@@ -1188,7 +1188,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
       ),
     );
   }
-  transactionsWidget() {
+  Widget transactionsWidget() {
     if(txListIndex==0){
       if (transactionList.isEmpty) {
         //IntrinsicHeight: Dynamically calculated height
@@ -1261,7 +1261,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
   }
 
   //显示切换主网和测试网的弹层
-  showtestAndMainnetWidget() {
+  void showtestAndMainnetWidget() {
     List<Widget> childs = [];
     bool isTest = widget.coinModel.isTest;
     Color mainColor =
@@ -1355,7 +1355,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
         ));
   }
   //切换网络，测试网络还是主网
-  changeNet(bool isTest, Load loadType) async {
+  Future<void> changeNet(bool isTest, Load loadType) async {
     try {
       WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
       wap.walletMap[widget.coinModel.coin['coinType']]['isTest'] = isTest;

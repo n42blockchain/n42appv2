@@ -149,7 +149,7 @@ class BaseListState extends State<BaseList> {
     */
   }
 
-  _buildListOrGridView() {
+  Widget _buildListOrGridView() {
     if (widget.isGridview) {
       return GridView.builder(
         itemCount: listData.length,
@@ -258,7 +258,7 @@ class BaseListState extends State<BaseList> {
   }
 
   /// 加载更多
-  loadMore() {
+  void loadMore() {
     requestListDataAndRefresh(false);
   }
 }

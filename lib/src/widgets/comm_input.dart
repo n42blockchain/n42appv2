@@ -105,7 +105,7 @@ class _CommInputState extends State<CommInput> {
   }
 
   /// 密码右侧的显示隐藏按钮
-  _buildRightView() {
+  Widget _buildRightView() {
     return ViewPwdIcon(
       onTap: () => setState(() => obscure = !obscure),
     );

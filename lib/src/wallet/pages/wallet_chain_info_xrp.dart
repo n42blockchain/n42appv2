@@ -107,7 +107,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
     super.dispose();
   }
 
-  initData() {
+  void initData() {
     if (widget.coinModel.coin['isContract']) {
       int cIndex = Provider.of<WalletActionProvider>(context,listen: false)
           .coinModels
@@ -143,7 +143,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
     getTransactionDataNetwork(Load.refresh);
   }
   //获取xrp服务器信息，主要获取 基础说定额度和每个对象的锁定额度
-  getServiceState()async{
+  Future<void> getServiceState()async{
     MessageModel mm=await XrpApi().getServerStateXrp(isTest: widget.coinModel.isTest);
     if (!mounted) return;
     if(mm.error==false){
@@ -154,7 +154,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
     setState(() {});
   }
 
-  getTransactionData(Load loadType) async {
+  Future<void> getTransactionData(Load loadType) async {
     if (load == Load.finish) {
       if (loadType == Load.nextPage) {
         if (lastPage) return;
@@ -197,7 +197,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
     }
   }
 
-  getTransactionDataNetwork(Load loadType)async{
+  Future<void> getTransactionDataNetwork(Load loadType)async{
     String addr = widget.coinModel.address.toString();
     String coinKey = widget.coinModel.coin['coinType'];
     String contract = widget.coinModel.coin['contract'];
@@ -222,7 +222,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
       }
     }
   }
-  getTransactionDataNetworkEth(List<CommonResponseItemModel>? cril)async{
+  Future<void> getTransactionDataNetworkEth(List<CommonResponseItemModel>? cril)async{
     if(cril !=null){
       bool isEdit=false;
       for(int i=cril.length-1;i>=0;i--){
@@ -286,7 +286,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
       }
     }
   }
-  getTransactionDataNetworkTrx(List<CommonResponseItemModel>? cril)async{
+  Future<void> getTransactionDataNetworkTrx(List<CommonResponseItemModel>? cril)async{
     if(cril !=null){
       bool isEdit=false;
       for(int i=cril.length-1;i>=0;i--){
@@ -338,7 +338,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
       }
     }
   }
-  getTransactionDataNetworkBtc(List<BtcTranDetail>? cril)async{
+  Future<void> getTransactionDataNetworkBtc(List<BtcTranDetail>? cril)async{
     if(cril !=null){
       bool isEdit=false;
       for(int i=cril.length-1;i>=0;i--){
@@ -525,7 +525,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
     }
   }
   */
-  getTxInfoNetwork(TransationRecordModel transationRecordModel)async{
+  Future<void> getTxInfoNetwork(TransationRecordModel transationRecordModel)async{
     TransationRecordModel rtrm=await Provider.of<TransactionRecordItemProvider>(context,listen: false).checkUndoneTrReturn(transationRecordModel);
     transactionList.firstWhere((element){
       TransationRecordModel trm=element as TransationRecordModel;
@@ -537,7 +537,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
     });
     setState(() {});
   }
-  getTxInfoNetworkBtc(BtcTransactionRecodeModel transationRecordModel)async{
+  Future<void> getTxInfoNetworkBtc(BtcTransactionRecodeModel transationRecordModel)async{
     BtcTransactionRecodeModel rtrm=await Provider.of<TransactionRecordItemProvider>(context,listen: false).checkUndoneTrBtcReturn(transationRecordModel);
     transactionList.firstWhere((element){
       TransationRecordModel trm=element as TransationRecordModel;
@@ -731,7 +731,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
     );
   }
 
-  transactionsWidget() {
+  Widget transactionsWidget() {
     if (transactionList.isEmpty) {
       //IntrinsicHeight: Dynamically calculated height
       return const IntrinsicHeight(
@@ -791,7 +791,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
     );
   }
   //切换网络，测试网络还是主网
-  changeNet(bool isTest, Load loadType) async {
+  Future<void> changeNet(bool isTest, Load loadType) async {
     try {
       WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
       wap.walletMap[widget.coinModel.coin['coinType']]['isTest'] = isTest;
@@ -809,7 +809,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
   }
 
   //显示操作按钮列表
-  showActionButtonListWidget(){
+  void showActionButtonListWidget(){
     List<Widget> childs = [];
     //send
     childs.add(InkWell(
@@ -1291,7 +1291,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
         ));
   }
   //显示XML锁定金额信息
-  showXMLLockAmountWidget(){
+  void showXMLLockAmountWidget(){
     List<Widget> childs=[];
     //reserve base
     childs.add(

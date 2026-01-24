@@ -33,7 +33,7 @@ class _VideoPlaySafeState extends State<VideoPlaySafe> {
     }
     initChewie();
   }
-  initChewie()async{
+  Future<void> initChewie() async {
     await videoPlayerController!.initialize();
     chewieController=ChewieController(
       videoPlayerController: videoPlayerController!,

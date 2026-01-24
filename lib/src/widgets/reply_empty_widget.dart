@@ -52,7 +52,7 @@ class ReplyEmptyWidget extends StatelessWidget {
     );
   }
 
-  _buildMessageView(BuildContext context) {
+  Widget _buildMessageView(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
