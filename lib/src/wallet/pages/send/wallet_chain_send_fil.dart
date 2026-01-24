@@ -129,7 +129,7 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
 
 
   //检查 amount 输入是否正确
-  amount_check({String value=""}){
+  amountCheck({String value=""}){
     if(value==""){
       value=valueTextEditingController.text;
     }
@@ -151,29 +151,29 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
       return;
     }
     if(widget.coinModel.coin['blockchainType']==BlockchainType.Ripple.name){
-      BigInt value_bi=ethToWeiString(value, widget.coinModel.coin['decimals']);
-      if (value_bi + totalGasPrice> widget.coinModel.balance-ethToWeiString("10", widget.coinModel.coin['decimals'])) {
+      BigInt valueBi=ethToWeiString(value, widget.coinModel.coin['decimals']);
+      if (valueBi + totalGasPrice> widget.coinModel.balance-ethToWeiString("10", widget.coinModel.coin['decimals'])) {
         amountErrorMessage= S.of(context).g_key_47;
         setState(() {});
         return;
       }
     }
     else{
-      BigInt value_bi=ethToWeiString(value, widget.coinModel.coin['decimals']);
+      BigInt valueBi=ethToWeiString(value, widget.coinModel.coin['decimals']);
       if(widget.coinModel.coin['isContract']==false){
-        if (value_bi+totalGasPrice > widget.coinModel.balance) {
+        if (valueBi+totalGasPrice > widget.coinModel.balance) {
           amountErrorMessage= S.of(context).g_key_47;
           setState(() {});
           return;
         }
       }
-      transferValue=value_bi;
+      transferValue=valueBi;
     }
     amountErrorMessage="";
     setState(() {});
   }
   //检查转账地址是否正确
-  toAddress_check(String addr)async{
+  toAddressCheck(String addr)async{
     if(addr==""){
       toErrorMessage=S.current.g_key_41;
       setState(() {});
@@ -207,21 +207,21 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
       return;
     }
     closeKeyboard();
-    amount_check();
+    amountCheck();
     if(amountErrorMessage !=""){
       return;
     }
     setState(() {
       load=Load.loading;
     });
-    String? toAddr=await toAddress_check(toTextEditingController.text);
+    String? toAddr=await toAddressCheck(toTextEditingController.text);
     if(toAddr == null) {
       setState(() {
         load=Load.finish;
       });
       return;
     }
-    await estimateGas_eth_local();
+    await estimateGasEthLocal();
     if(errorMessage != ""){
       setState(() {
         load=Load.finish;
@@ -245,11 +245,11 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
       return;
     }
     FilApi filApi=FilApi();
-    MessageModel rData_nonce=await filApi.getNonce(widget.coinModel.address.toString(),isTest:widget.coinModel.isTest);
+    MessageModel rDataNonce=await filApi.getNonce(widget.coinModel.address.toString(),isTest:widget.coinModel.isTest);
     if (!mounted) return;
-    if(rData_nonce.error){
+    if(rDataNonce.error){
       setState(() {
-        errorMessage=rData_nonce.data;
+        errorMessage=rDataNonce.data;
         load=Load.finish;
       });
       return;
@@ -269,7 +269,7 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
     trModel.gasPriceValue=BigInt.zero;//gasPrice;
     trModel.price=transferValue;
     trModel.other=FilTrModel(gasFeeCap, gasPremium);
-    trModel.nonce=rData_nonce.data.toString();
+    trModel.nonce=rDataNonce.data.toString();
     //trModel.coinId=widget.coinModel.isTest?widget.coinModel.coin['chainId_test']:widget.coinModel.coin['chainId'];
 
     bool check=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletBaseSend(trModel,null,widget.coinModel.coin['unit'])));
@@ -283,7 +283,7 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
     }
   }
   signTx(TransationRecordModel trModel)async{
-    if(signTx_check()==false)return;
+    if(signTxCheck()==false)return;
     try{
       TransferApi transferApi=TransferApi();
       MessageModel mm=await transferApi.transferWallet(
@@ -309,10 +309,10 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
       setState(() {});
     }
   }
-  signTx_check(){
+  signTxCheck(){
     return true;
   }
-  estimateGas_eth_local()async{
+  estimateGasEthLocal()async{
     closeKeyboard();
     if(gasLimitLoad==Load.loading)return;
     setState(() {
@@ -320,7 +320,7 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
     });
     try{
       if(amountErrorMessage !="")return;
-      String? toAddr=await toAddress_check(toTextEditingController.text);
+      String? toAddr=await toAddressCheck(toTextEditingController.text);
       if(toAddr==null){
         return;
       }
@@ -365,13 +365,13 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
     if (!mounted) return;
     if(scanValue !=null){
       toTextEditingController.text=scanValue;
-      toAddress_check(scanValue);
+      toAddressCheck(scanValue);
     }
   }
   maxTag()async{
     if(gasLimitLoad==Load.loading)return;
     valueTextEditingController.text=widget.coinModel.balanceStringAll();
-    bool? rOK=await estimateGas_eth_local();
+    bool? rOK=await estimateGasEthLocal();
     if(rOK != null && rOK){
       transferValue=widget.coinModel.balance-totalGasPrice;
       valueTextEditingController.text=toEther(transferValue.toString(),widget.coinModel.coin['decimals']).toString();
@@ -515,7 +515,7 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
                     maxLines: 1,
                     onEditingComplete: (){
                       FocusScope.of(context).requestFocus(valueNode);
-                      toAddress_check(toTextEditingController.text);
+                      toAddressCheck(toTextEditingController.text);
                     },
                   ),
                 ),
@@ -539,7 +539,7 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
                         toTextEditingController.text=cd.text??"";
                         setState(() {
                         });
-                        toAddress_check(cd.text??"");
+                        toAddressCheck(cd.text??"");
                       }
                     }
                   },
@@ -639,10 +639,10 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
                         ),
                         maxLines: 1,
                         onChanged: (value){
-                          amount_check(value: value);
+                          amountCheck(value: value);
                         },
                         onEditingComplete: (){
-                          amount_check();
+                          amountCheck();
                           FocusScope.of(context).requestFocus(toNode);
                         },
                       ),

@@ -160,7 +160,7 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
     setState(() {});
   }
   //eth 模拟交易
-  estimateGas_eth_local({bool checkAddress=true})async{
+  estimateGasEthLocal({bool checkAddress=true})async{
     closeKeyboard();
     if(gasLimitLoad==Load.loading)return;
     setState(() {
@@ -170,7 +170,7 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
       String? toAddr;
       if(checkAddress){
         if(amountErrorMessage !="")return;
-        toAddr=await toAddress_check(toTextEditingController.text.trim());
+        toAddr=await toAddressCheck(toTextEditingController.text.trim());
         if(toAddr==null){
           return;
         }
@@ -215,7 +215,7 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
     }
   }
   //检查 amount 输入是否正确
-  amount_check({String value=""}){
+  amountCheck({String value=""}){
     if(value==""){
       value=valueTextEditingController.text;
     }
@@ -254,20 +254,20 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
       setState(() {});
       return;
     }
-    BigInt value_bi=ethToWeiString(value, widget.coinModel.coin['decimals']);
+    BigInt valueBi=ethToWeiString(value, widget.coinModel.coin['decimals']);
     if(widget.coinModel.coin['isContract']==false){
-      if (value_bi+totalGasPrice > widget.coinModel.balance) {
+      if (valueBi+totalGasPrice > widget.coinModel.balance) {
         amountErrorMessage= S.of(context).g_key_47;
         setState(() {});
         return;
       }
     }
-    transferValue=value_bi;
+    transferValue=valueBi;
     amountErrorMessage="";
     setState(() {});
   }
   //检查转账地址是否正确
-  toAddress_check(String addr)async{
+  toAddressCheck(String addr)async{
     if(addr==""){
       toErrorMessage=S.current.g_key_41;
       setState(() {});
@@ -305,21 +305,21 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
     }
     if(amountErrorMessage !="")return;
     closeKeyboard();
-    amount_check();
+    amountCheck();
     if(amountErrorMessage !=""){
       return;
     }
     setState(() {
       load=Load.loading;
     });
-    String? toAddr=await toAddress_check(toTextEditingController.text.trim());
+    String? toAddr=await toAddressCheck(toTextEditingController.text.trim());
     if(toAddr == null) {
       setState(() {
         load=Load.finish;
       });
       return;
     }
-    await estimateGas_eth_local(checkAddress: false);
+    await estimateGasEthLocal(checkAddress: false);
     if(errorMessage != ""){
       setState(() {
         load=Load.finish;
@@ -400,7 +400,7 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
     if (!mounted) return;
     if(scanValue !=null){
       toTextEditingController.text=scanValue;
-      toAddress_check(scanValue);
+      toAddressCheck(scanValue);
     }
     Navigator.pop(context);
   }
@@ -409,10 +409,10 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
     if(widget.coinModel.coin['isContract']){
       valueTextEditingController.text=widget.coinModel.balanceStringAll();
       transferValue=widget.coinModel.balance;
-      estimateGas_eth_local();
+      estimateGasEthLocal();
     }else{
       valueTextEditingController.text=widget.coinModel.balanceStringAll();
-      bool? rOK=await estimateGas_eth_local();
+      bool? rOK=await estimateGasEthLocal();
       if (!mounted) return;
       if(rOK != null && rOK){
         transferValue=widget.coinModel.balance-totalGasPrice;
@@ -530,7 +530,7 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
             hintText: S.of(context).g_key_155,
             onEditingComplete: (){
               FocusScope.of(context).requestFocus(valueNode);
-              toAddress_check(toTextEditingController.text.trim());
+              toAddressCheck(toTextEditingController.text.trim());
             },
             maxLines: 3,
             height: ScreenUtil().setWidth(170.0),
@@ -595,7 +595,7 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
                   toTextEditingController.text=cd.text??"";
                   setState(() {
                   });
-                  toAddress_check(cd.text??"");
+                  toAddressCheck(cd.text??"");
                 }
               }
             },
@@ -700,10 +700,10 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
                   ),
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                   onChanged: (value){
-                    amount_check(value: value);
+                    amountCheck(value: value);
                   },
                   onEditingComplete: (){
-                    amount_check();
+                    amountCheck();
                     FocusScope.of(context).requestFocus(toNode);
                   },
                   fontSize: ScreenUtil().setWidth(70.0),
@@ -1046,7 +1046,7 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
             if (!mounted) return;
             if(address !=null){
               toTextEditingController.text=address;
-              toAddress_check(address);
+              toAddressCheck(address);
             }
             Navigator.pop(context);
           },
@@ -1070,7 +1070,7 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
             if (!mounted) return;
             if(address !=null){
               toTextEditingController.text=address;
-              toAddress_check(address);
+              toAddressCheck(address);
             }
             Navigator.pop(context);
           },
@@ -1184,7 +1184,7 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
               toTextEditingController.text=cd.text??"";
               setState(() {
               });
-              toAddress_check(cd.text??"");
+              toAddressCheck(cd.text??"");
             }
           }
           Navigator.pop(context);
@@ -1233,7 +1233,7 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
             if (!mounted) return;
             if(address !=null){
               toTextEditingController.text=address;
-              toAddress_check(address);
+              toAddressCheck(address);
             }
             Navigator.pop(context);
           },
@@ -1278,7 +1278,7 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
             if (!mounted) return;
             if(address !=null){
               toTextEditingController.text=address;
-              toAddress_check(address);
+              toAddressCheck(address);
             }
             Navigator.pop(context);
           },

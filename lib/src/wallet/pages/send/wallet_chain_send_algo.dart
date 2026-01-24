@@ -112,7 +112,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
     showMaxButton=true;
     await getBalance();
     await getGasPrice();
-    checkTokenAdd_Algo();
+    checkTokenAddAlgo();
   }
 
   //获取余额
@@ -152,7 +152,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
   }
 
   //检查 amount 输入是否正确
-  amount_check({String value=""}){
+  amountCheck({String value=""}){
     if(value==""){
       value=valueTextEditingController.text;
     }
@@ -173,20 +173,20 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       setState(() {});
       return;
     }
-    BigInt value_bi=ethToWeiString(value, widget.coinModel.coin['decimals']);
+    BigInt valueBi=ethToWeiString(value, widget.coinModel.coin['decimals']);
     if(widget.coinModel.coin['isContract']==false){
-      if (value_bi+totalGasPrice > widget.coinModel.balance) {
+      if (valueBi+totalGasPrice > widget.coinModel.balance) {
         amountErrorMessage= S.of(context).g_key_47;
         setState(() {});
         return;
       }
     }
-    transferValue=value_bi;
+    transferValue=valueBi;
     amountErrorMessage="";
     setState(() {});
   }
   //检查转账地址是否正确
-  toAddress_check(String addr)async{
+  toAddressCheck(String addr)async{
     if(addr==""){
       toErrorMessage=S.current.g_key_41;
       setState(() {});
@@ -217,7 +217,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
 
   bool algoTokenAdd=true;
   //检查Algo 用户是否添加了当前代币
-  checkTokenAdd_Algo()async{
+  checkTokenAddAlgo()async{
     if(widget.coinModel.other==null){
       return;
     }
@@ -238,11 +238,11 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       load=Load.loading;
     });
     closeKeyboard();
-    amount_check();
+    amountCheck();
     if(amountErrorMessage !=""){
       return;
     }
-    String? toAddr=await toAddress_check(toTextEditingController.text);
+    String? toAddr=await toAddressCheck(toTextEditingController.text);
     if (!mounted) return;
     if(toAddr == null) {
       setState(() {
@@ -320,7 +320,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       });
     }
   }
-  sendTransaction_algoTokenEdit(bool add)async{
+  sendTransactionAlgoTokenEdit(bool add)async{
     if(load==Load.loading){
       ToastUtils.show("loading");
       return;
@@ -399,7 +399,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
     if (!mounted) return;
     if(scanValue !=null){
       toTextEditingController.text=scanValue;
-      toAddress_check(scanValue);
+      toAddressCheck(scanValue);
     }
   }
   maxTag()async{
@@ -593,7 +593,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
                     maxLines: 1,
                     onEditingComplete: (){
                       FocusScope.of(context).requestFocus(valueNode);
-                      toAddress_check(toTextEditingController.text);
+                      toAddressCheck(toTextEditingController.text);
                     },
                   ),
                 ),
@@ -617,7 +617,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
                         toTextEditingController.text=cd.text??"";
                         setState(() {
                         });
-                        toAddress_check(cd.text??"");
+                        toAddressCheck(cd.text??"");
                       }
                     }
                   },
@@ -717,10 +717,10 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
                         ),
                         maxLines: 1,
                         onChanged: (value){
-                          amount_check(value: value);
+                          amountCheck(value: value);
                         },
                         onEditingComplete: (){
-                          amount_check();
+                          amountCheck();
                           FocusScope.of(context).requestFocus(toNode);
                         },
                       ),
@@ -879,7 +879,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       child: Column(
         children: [
           if(widget.coinModel.coin['isContract'])
-            minerFeeWidget_chainBalance(),
+            minerFeeWidgetChainBalance(),
           Container(
             alignment: Alignment.center,
             child: Row(
@@ -933,7 +933,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
       ),
     );
   }
-  minerFeeWidget_chainBalance(){
+  minerFeeWidgetChainBalance(){
     String unit=chainModel?.coin['unit']??"";
     double minBalance=toEther((chainModel?.other.minBalance??BigInt.zero).toString(), chainModel?.coin['decimals']??0).toDouble();
     double availableBalance=(chainModel?.balanceDoubleAll()??0)-minBalance;
@@ -1054,7 +1054,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
             child: ButtonStyle6(
               context, ()async{
               if(algoTokenAdd==false){
-                sendTransaction_algoTokenEdit(true);
+                sendTransactionAlgoTokenEdit(true);
               }else{
                 sendTransaction();
               }
@@ -1166,7 +1166,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
               toTextEditingController.text=cd.text??"";
               setState(() {
               });
-              toAddress_check(cd.text??"");
+              toAddressCheck(cd.text??"");
             }
           }
           Navigator.pop(context);

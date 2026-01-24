@@ -159,7 +159,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
   }
 
   //检查 amount 输入是否正确
-  amount_check({String value=""}){
+  amountCheck({String value=""}){
     if(value==""){
       value=valueTextEditingController.text;
     }
@@ -180,20 +180,20 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
       setState(() {});
       return;
     }
-    BigInt value_bi=ethToWeiString(value, widget.coinModel.coin['decimals']);
+    BigInt valueBi=ethToWeiString(value, widget.coinModel.coin['decimals']);
 
     BigInt vb1=widget.coinModel.balance-BigInt.from(widget.coinModel.other?.getLockAmount??0);
-    if (value_bi + totalGasPrice>= vb1) {
+    if (valueBi + totalGasPrice>= vb1) {
       amountErrorMessage= S.of(context).g_key_47;
       setState(() {});
       return;
     }
-    transferValue=value_bi;
+    transferValue=valueBi;
     amountErrorMessage="";
     setState(() {});
   }
   //检查转账地址是否正确
-  toAddress_check(String addr)async{
+  toAddressCheck(String addr)async{
     if(addr==""){
       toErrorMessage=S.current.g_key_41;
       setState(() {});
@@ -210,7 +210,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
           setState(() {});
           return null;
         }else{
-          await checkAccount_XRP(addr);
+          await checkAccountXRP(addr);
           toErrorMessage="";
           setState(() {});
           return addr;
@@ -224,7 +224,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
   }
 
   //检查瑞波币，是否创建了账号
-  Map<String,dynamic> account_xrp={
+  Map<String,dynamic> accountXrp={
     "address":"",
     "error":"",
     "account":"",
@@ -232,27 +232,27 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
     "isCreate":false
   };
   //瑞波币接收方是否创建了账号
-  checkAccount_XRP(String addr)async{
-    if(account_xrp['load']==Load.loading)return;
-    account_xrp['load']=Load.loading;
+  checkAccountXRP(String addr)async{
+    if(accountXrp['load']==Load.loading)return;
+    accountXrp['load']=Load.loading;
     setState(() {});
     XrpApi xrpApi=XrpApi();
     MessageModel mm=await xrpApi.getAccountInfoXrp(addr, widget.coinModel.isTest);
     if(mm.error){
-      account_xrp['error']=S.current.g_key_t_45(addr);
-      account_xrp['load']=Load.finish;
+      accountXrp['error']=S.current.g_key_t_45(addr);
+      accountXrp['load']=Load.finish;
       setState(() {});
     }else{
-      account_xrp['address']=addr;
+      accountXrp['address']=addr;
       if(mm.data['account']==false){
-        account_xrp['account']=S.current.g_key_t_49;
-        account_xrp['isCreate']=false;
+        accountXrp['account']=S.current.g_key_t_49;
+        accountXrp['isCreate']=false;
       }else{
-        account_xrp['account']=S.current.g_key_t_51;
-        account_xrp['isCreate']=true;
+        accountXrp['account']=S.current.g_key_t_51;
+        accountXrp['isCreate']=true;
       }
-      account_xrp['error']="";
-      account_xrp['load']=Load.finish;
+      accountXrp['error']="";
+      accountXrp['load']=Load.finish;
     }
     setState(() {});
   }
@@ -263,14 +263,14 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
       return;
     }
     closeKeyboard();
-    amount_check();
+    amountCheck();
     if(amountErrorMessage !=""){
       return;
     }
     setState(() {
       load=Load.loading;
     });
-    String? toAddr=await toAddress_check(toTextEditingController.text);
+    String? toAddr=await toAddressCheck(toTextEditingController.text);
     if(toAddr == null) {
       setState(() {
         load=Load.finish;
@@ -278,7 +278,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
       return;
     }
 
-    await amount_check();
+    await amountCheck();
     if (!mounted) return;
     if(widget.coinModel.balance==BigInt.zero){
       setState(() {
@@ -286,7 +286,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
       });
       return;
     }
-    if(account_xrp['isCreate']==false){
+    if(accountXrp['isCreate']==false){
       if(transferValue<BigInt.from(widget.coinModel.other.reserveBase)){
         errorMessage=S.of(context).g_key_t_52(widget.coinModel.other.reserveBase);
         setState(() {
@@ -333,7 +333,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
     }
   }
   signTx(TransationRecordModel trModel)async{
-    if(signTx_check()==false)return;
+    if(signTxCheck()==false)return;
     try{
       TransferApi transferApi=TransferApi();
       MessageModel mm=await transferApi.transferWallet(
@@ -358,7 +358,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
       if (mounted) setState(() {});
     }
   }
-  signTx_check(){
+  signTxCheck(){
     if(widget.coinModel.coin['blockchainType']==BlockchainType.Ethereum.name){
       if(widget.coinModel.coin['isContract']){
         BigInt chainBalance=chainModel?.balance??BigInt.zero;
@@ -378,7 +378,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
     if (!mounted) return;
     if(scanValue !=null){
       toTextEditingController.text=scanValue;
-      toAddress_check(scanValue);
+      toAddressCheck(scanValue);
     }
   }
   maxTag()async{
@@ -467,7 +467,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
       ),*/
       toWidget(),
       amountWidget(),
-      minerFeeWidget_RippleXRP(),
+      minerFeeWidgetRippleXRP(),
       toAddressAccount(),
       errorMessageWidget(),
       SizedBox(height: 100,),
@@ -496,7 +496,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
             hintText: S.of(context).g_key_155,
             onEditingComplete: (){
               FocusScope.of(context).requestFocus(valueNode);
-              toAddress_check(toTextEditingController.text.trim());
+              toAddressCheck(toTextEditingController.text.trim());
             },
             maxLines: 3,
             errorMessage: toErrorMessage,
@@ -571,10 +571,10 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
                   ),
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                   onChanged: (value){
-                    amount_check(value: value);
+                    amountCheck(value: value);
                   },
                   onEditingComplete: (){
-                    amount_check();
+                    amountCheck();
                     FocusScope.of(context).requestFocus(toNode);
                   },
                   fontSize: ScreenUtil().setWidth(70.0),
@@ -707,7 +707,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
     );
   }
   //旷工费
-  minerFeeWidget_RippleXRP(){
+  minerFeeWidgetRippleXRP(){
     String title=widget.coinModel.coin['coinType'];
     String totalGasPriceStr="";
     String gasPriceStr="";
@@ -780,7 +780,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
     );
   }
   toAddressAccount(){
-    if(account_xrp['address'] !=""){
+    if(accountXrp['address'] !=""){
       return Container(
         alignment: Alignment.center,
         margin: EdgeInsets.only(top:ScreenUtil().setWidth(30.0),left: ScreenUtil().setWidth(30.0),right: ScreenUtil().setWidth(30.0) ),
@@ -806,8 +806,8 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
                 ),
                 InkWell(
                   onTap: (){
-                    if(account_xrp['load']==Load.loading)return;
-                    checkAccount_XRP(toTextEditingController.text);
+                    if(accountXrp['load']==Load.loading)return;
+                    checkAccountXRP(toTextEditingController.text);
                   },
                   child: Container(
                       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0),horizontal: ScreenUtil().setWidth(20.0)),
@@ -818,7 +818,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          account_xrp['load']==Load.loading?
+                          accountXrp['load']==Load.loading?
                           SizedBox(
                             height: ScreenUtil().setWidth(30.0),
                             width: ScreenUtil().setWidth(30.0),
@@ -847,7 +847,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
             Container(
               padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
               child: Text(
-                account_xrp['account'],
+                accountXrp['account'],
                 style: TextStyle(
                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
                   fontSize: ScreenUtil().setSp(24.0),
@@ -855,7 +855,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
               ),
             ),
             Text(
-              account_xrp['error'],
+              accountXrp['error'],
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
                 fontSize: ScreenUtil().setSp(22.0),
@@ -1021,7 +1021,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
               toTextEditingController.text=cd.text??"";
               setState(() {
               });
-              toAddress_check(cd.text??"");
+              toAddressCheck(cd.text??"");
             }
           }
           Navigator.pop(context);

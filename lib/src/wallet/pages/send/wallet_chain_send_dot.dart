@@ -73,9 +73,9 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
 
   BigInt totalGasPrice=BigInt.zero;
   BigInt gasPrice=BigInt.zero;
-  BigInt gasPrice_eth=BigInt.zero;
+  BigInt gasPriceEth=BigInt.zero;
   BigInt gas=BigInt.zero;
-  BigInt gas_eth=BigInt.zero;
+  BigInt gasEth=BigInt.zero;
   BigInt transferValue=BigInt.zero;//转账金额
 
 
@@ -132,7 +132,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
     await getBalance();
     /*await getGasPrice();
     if(getEthLayer2(widget.coinModel.coin['coinType'])){
-      gas_eth=BigInt.from(GetCoinGas(CoinType.ETH.name));
+      gasEth=BigInt.from(GetCoinGas(CoinType.ETH.name));
       await getGasPrice_layer2();
     }*/
   }
@@ -169,7 +169,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
   }
 
   //检查 amount 输入是否正确
-  amount_check({String value=""}){
+  amountCheck({String value=""}){
     if(value==""){
       value=valueTextEditingController.text;
     }
@@ -208,20 +208,20 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
       setState(() {});
       return;
     }
-    BigInt value_bi=ethToWeiString(value, widget.coinModel.coin['decimals']);
+    BigInt valueBi=ethToWeiString(value, widget.coinModel.coin['decimals']);
     if(widget.coinModel.coin['isContract']==false){
-      if (value_bi+totalGasPrice > widget.coinModel.balance) {
+      if (valueBi+totalGasPrice > widget.coinModel.balance) {
         amountErrorMessage= S.of(context).g_key_47;
         setState(() {});
         return;
       }
     }
-    transferValue=value_bi;
+    transferValue=valueBi;
     amountErrorMessage="";
     setState(() {});
   }
   //检查转账地址是否正确
-  toAddress_check(String addr)async{
+  toAddressCheck(String addr)async{
     if(addr==""){
       toErrorMessage=S.current.g_key_41;
       setState(() {});
@@ -259,14 +259,14 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
     }
     if(amountErrorMessage !="")return;
     closeKeyboard();
-    amount_check();
+    amountCheck();
     if(amountErrorMessage !=""){
       return;
     }
     setState(() {
       load=Load.loading;
     });
-    String? toAddr=await toAddress_check(toTextEditingController.text.trim());
+    String? toAddr=await toAddressCheck(toTextEditingController.text.trim());
     if (!mounted) return;
     if(toAddr == null) {
       setState(() {
@@ -366,7 +366,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
     if (!mounted) return;
     if(scanValue !=null){
       toTextEditingController.text=scanValue;
-      toAddress_check(scanValue);
+      toAddressCheck(scanValue);
     }
     Navigator.pop(context);
   }
@@ -495,7 +495,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
             hintText: S.of(context).g_key_155,
             onEditingComplete: (){
               FocusScope.of(context).requestFocus(valueNode);
-              toAddress_check(toTextEditingController.text.trim());
+              toAddressCheck(toTextEditingController.text.trim());
             },
             maxLines: 3,
             height: ScreenUtil().setWidth(170.0),
@@ -560,7 +560,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
                   toTextEditingController.text=cd.text??"";
                   setState(() {
                   });
-                  toAddress_check(cd.text??"");
+                  toAddressCheck(cd.text??"");
                 }
               }
             },
@@ -673,10 +673,10 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
                   ),
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                   onChanged: (value){
-                    amount_check(value: value);
+                    amountCheck(value: value);
                   },
                   onEditingComplete: (){
-                    amount_check();
+                    amountCheck();
                     FocusScope.of(context).requestFocus(toNode);
                   },
                   fontSize: ScreenUtil().setWidth(70.0),
@@ -1019,7 +1019,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
             if (!mounted) return;
             if(address !=null){
               toTextEditingController.text=address;
-              toAddress_check(address);
+              toAddressCheck(address);
             }
             Navigator.pop(context);
           },
@@ -1043,7 +1043,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
             if (!mounted) return;
             if(address !=null){
               toTextEditingController.text=address;
-              toAddress_check(address);
+              toAddressCheck(address);
             }
             Navigator.pop(context);
           },
@@ -1157,7 +1157,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
               toTextEditingController.text=cd.text??"";
               setState(() {
               });
-              toAddress_check(cd.text??"");
+              toAddressCheck(cd.text??"");
             }
           }
           Navigator.pop(context);
@@ -1206,7 +1206,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
             if (!mounted) return;
             if(address !=null){
               toTextEditingController.text=address;
-              toAddress_check(address);
+              toAddressCheck(address);
             }
             Navigator.pop(context);
           },
@@ -1251,7 +1251,7 @@ class _WalletChainSendDotState extends State<WalletChainSendDot> {
             if (!mounted) return;
             if(address !=null){
               toTextEditingController.text=address;
-              toAddress_check(address);
+              toAddressCheck(address);
             }
             Navigator.pop(context);
           },

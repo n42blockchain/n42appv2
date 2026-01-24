@@ -337,7 +337,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
     setState(() {});
   }*/
   //检查转账地址是否正确
-  toAddress_check(String addr)async{
+  toAddressCheck(String addr)async{
     if(widget.coinModel.isTest)return true;
     if(addr==""){
       toErrorMessage=S.current.g_key_41;
@@ -357,7 +357,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
   }
 
   //检查输入金额
-  amount_check({String value=""}){
+  amountCheck({String value=""}){
     if(gasFeeLevel['maxValue'] !=0)return;
     if(value==""){
       value=valueTextEditingController.text;
@@ -397,7 +397,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
     setState(() {});
   }
   //检查输入的 byteFee
-  byteFee_check({String value=""}){
+  byteFeeCheck({String value=""}){
     if(value==""){
       value=byteFeeTextEditingController.text;
     }
@@ -516,7 +516,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
   }
 
   maxTag()async{
-    //await toAddress_check(toTextEditingController.text);
+    //await toAddressCheck(toTextEditingController.text);
     //if(toErrorMessage != "")return;
     price=widget.coinModel.balance.toInt();
     await getUTXO(allUTXO: true);
@@ -546,7 +546,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
   }
   //计算 打包 字段数
   getSignByteSize(List<Map<String,dynamic>> utxos,{bool max=false})async{
-    //await toAddress_check(toTextEditingController.text);
+    //await toAddressCheck(toTextEditingController.text);
     //if(toErrorMessage !="")return;
     Map<String,dynamic> btcTxMap={
       "utxo":utxos,
@@ -575,7 +575,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
     if (!mounted) return;
     if(scanValue != null){
       toTextEditingController.text=scanValue;
-      toAddress_check(scanValue);
+      toAddressCheck(scanValue);
     }
     Navigator.pop(context);
   }
@@ -647,9 +647,9 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
                       */
                       toWidget(),
                       amountWidget(),
-                      gasFeeWidget_price(),
+                      gasFeeWidgetPrice(),
                       totalPriceWidgegt(),
-                      gasFeeWidget_btc(),
+                      gasFeeWidgetBtc(),
                       errorMessageWidget(),
                       SizedBox(height: ScreenUtil().setWidth(100.0),),
                     ],
@@ -684,7 +684,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
             hintText: S.of(context).g_key_155,
             onEditingComplete: (){
               FocusScope.of(context).requestFocus(valueNode);
-              toAddress_check(toTextEditingController.text.trim());
+              toAddressCheck(toTextEditingController.text.trim());
             },
             enabled: toTextFieldEnabel,
             errorMessage: toErrorMessage,
@@ -737,7 +737,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
                   toTextEditingController.text=cd.text??"";
                   setState(() {
                   });
-                  toAddress_check(cd.text??"");
+                  toAddressCheck(cd.text??"");
                 }
               }
             },
@@ -783,10 +783,10 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
                   enabled: toTextFieldEnabel,
                   maxLines: 1,
                   onChanged: (value){
-                    amount_check(value: value);
+                    amountCheck(value: value);
                   },
                   onEditingComplete: (){
-                    amount_check();
+                    amountCheck();
                     FocusScope.of(context).requestFocus(toNode);
                   },
                   fontSize: ScreenUtil().setWidth(70.0),
@@ -872,7 +872,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
     );
   }
 
-  gasFeeWidget_price(){
+  gasFeeWidgetPrice(){
     String coinTypeName=widget.coinModel.coin['coinType'];
     if(coinTypeName != CoinType.BTC.name)return Container();
     double gasFees=0;
@@ -960,7 +960,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
       ),
     );
   }
-  gasFeeWidget_btc(){
+  gasFeeWidgetBtc(){
     return Container(
       margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       child: Column(
@@ -1027,11 +1027,11 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
                   focusNode: byteFeeNode,
                   hintText: S.of(context).g_key_t_43,
                   onChanged: (value){
-                    byteFee_check(value: value);
+                    byteFeeCheck(value: value);
                   },
                   onEditingComplete: (){
                     FocusScope.of(context).requestFocus(valueNode);
-                    byteFee_check();
+                    byteFeeCheck();
                   },
                   errorMessage: bytefeeErrorMessage,
                   boxShadow:BoxShadow(
@@ -1133,11 +1133,11 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
               context, ()async{
               if(load==Load.loading)return;
               closeKeyboard();
-              amount_check();
+              amountCheck();
               if(amountErrorMessage !=""){
                 return;
               }
-              await toAddress_check(toTextEditingController.text.trim());
+              await toAddressCheck(toTextEditingController.text.trim());
               if(toErrorMessage !="")return;
 
               //await getSignByteSize(inputUTXO);
@@ -1269,7 +1269,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
               toTextEditingController.text=cd.text??"";
               setState(() {
               });
-              toAddress_check(cd.text??"");
+              toAddressCheck(cd.text??"");
             }
           }
           Navigator.pop(context);
