@@ -44,7 +44,7 @@ class _DeleteGroupMemberPageState extends State<DeleteGroupMemberPage> {
     initData();
   }
 
-  initData() async {
+  Future<void> initData() async {
     try {
       for (var element in widget.groupMemberList) {
         // 跳过特殊类型的元素（添加按钮和删除按钮）

@@ -44,7 +44,7 @@ class _FriendDetailState extends State<FriendDetail> {
 
   String? reasonText;
 
-  updateFriendData() async {
+  Future<void> updateFriendData() async {
     final data = await chatApi.friendList();
     if (data != null && data["code"] == 200) {
       List<FriendInfo> list =
@@ -176,7 +176,7 @@ class _FriendDetailState extends State<FriendDetail> {
     );
   }
 
-  _buildHandlerView() {
+  Widget _buildHandlerView() {
     if (AppGlobals.userInfo?.uuid == widget.info.uuid ||
         load==Load.loading ||
         isFriend
@@ -262,7 +262,7 @@ class _FriendDetailState extends State<FriendDetail> {
       ],
     );
   }
-  buttonWidget(){
+  Widget buttonWidget(){
     String title=S.of(context).g_chat_key_8;
     if(isFriend){
       title=S.of(context).g_key_squad;

@@ -39,7 +39,7 @@ class _AddFriendState extends State<AddFriend> {
 
   }
 
-  searchFriend(context) async {
+  Future<void> searchFriend(BuildContext context) async {
     if (searchKey == null) return;
     if (!Regular().isEmail(searchKey!)) {
       ToastUtils.show(S.of(context).email_error);

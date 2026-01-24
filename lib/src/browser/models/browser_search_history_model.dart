@@ -12,13 +12,13 @@ class BrowserSearchHistoryModel{
     search=map["search"];
     searchCount=map["searchCount"];
   }
-  getMapDb(){
+  Map<String, dynamic> getMapDb(){
     return {
       "search":search,
       "searchCount":searchCount,
     };
   }
-  getMap(){
+  Map<String, dynamic> getMap(){
     return {
       "id":id,
       "search":search,

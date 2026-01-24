@@ -63,7 +63,7 @@ class _ChatIndexPageState extends ConsumerState<ChatIndexPage> {
     readChatService();
   }
   
-  readChatService() async {
+  Future<void> readChatService() async {
     isReadChatService = await SPUtil().hasAcceptedTerms();
     if (mounted) {
       setState(() {});
@@ -171,7 +171,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
   }
 
   //绑定用户的钱包公钥匙
-  bindUserPubKey() async {
+  Future<void> bindUserPubKey() async {
     SquadApi squadApi=SquadApi();
     mPrivateKey = await chatUtil.getAstPrivateKey();
     final pubKey = await chatUtil.getAstPubKey();
@@ -183,7 +183,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
     }
   }
 
-  initData() async {
+  Future<void> initData() async {
     try {
       setState(() {
         isLoading = true;
@@ -205,7 +205,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
     checkUnReadMessage();
   }
 
-  checkUnReadMessage() async {
+  Future<void> checkUnReadMessage() async {
     // final list = await SPUtils.getListObject("message_read_list");
     final list = await CacheMessageIsReadUtils().getUnReadIds();
     if (list != null && list is List) {
@@ -232,7 +232,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
     }
   }
 
-  getChatConversationList() async {
+  Future<void> getChatConversationList() async {
     await legacy_provider.Provider.of<ChatMessageProvider>(context,listen: false).getChatConversationList();
 
     //会话列表更新完成之后 更新未读消息
@@ -551,7 +551,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
     );
   }
 
-  buildContent() {
+  Widget buildContent() {
     return Expanded(
       child: isLoading ? Loading(): legacy_provider.Consumer<ChatMessageProvider>(
         builder: (BuildContext context, ChatMessageProvider value, Widget? child) {

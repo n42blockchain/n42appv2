@@ -50,7 +50,7 @@ class _BrowserPageState extends State<BrowserPage> {
     _browserProvider?.browserDispose();
     super.dispose();
   }
-  walletConnect(){
+  void walletConnect(){
     final bp = _browserProvider ?? Provider.of<BrowserProvider>(context, listen: false);
     bp.connectDAPPCallBack=(String url,bool connect){
       if(connect){
@@ -75,7 +75,7 @@ class _BrowserPageState extends State<BrowserPage> {
       ),
     );
   }
-  listWebViewWidget(){
+  Widget listWebViewWidget(){
     return Consumer<BrowserProvider>(builder: (context,bValue,child){
       return Column(
         children: [
@@ -437,7 +437,7 @@ class _BrowserPageState extends State<BrowserPage> {
       );
     });
   }
-  webViewWidget(BrowserProvider bValue){
+  Widget webViewWidget(BrowserProvider bValue){
     if(bValue.showWList){
       return GridView.builder(
         padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
@@ -553,7 +553,7 @@ class _BrowserPageState extends State<BrowserPage> {
       return bValue.wList[bValue.wListIndex];
     }
   }
-  showAlertWidgetConnectDapp(String uri){
+  void showAlertWidgetConnectDapp(String uri){
     sheetBottom(context, S.of(context).g_browser_key14, Column(
       children: [
         Container(

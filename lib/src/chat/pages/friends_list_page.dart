@@ -46,7 +46,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
     getFriendList(isShowLoading: true);
   }
 
-  getFriendList({bool isShowLoading = false}) async {
+  Future<void> getFriendList({bool isShowLoading = false}) async {
     try {
       if (isShowLoading) {
         isLoading = true;
@@ -68,7 +68,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
     }
   }
 
-  updateFriendData() async {
+  Future<void> updateFriendData() async {
     final data = await chatApi.friendList();
     if (data != null && data["code"] == 200) {
       List<FriendInfo> list =
@@ -276,7 +276,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
     );
   }
 
-  _buildFriendView() {
+  Widget _buildFriendView() {
     if (isLoading) {
       return SizedBox(
           height: MediaQuery.of(context).size.height,
@@ -358,7 +358,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
       ),
     );
   }
-  friendDelete(FriendInfo model)async{
+  Future<void> friendDelete(FriendInfo model)async{
     final res = await tipsDialog2(
       context,
       S.current.g_key_squad_k15(model.name??""),

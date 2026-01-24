@@ -174,7 +174,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     super.dispose();
   }
 
-  addMessageListener() {
+  void addMessageListener() {
     eventBusFn=eventBus.on().listen((event) {
       if (event is EventPublic && event.type == EventPublicType.chatMessage) {
         // debugPrint("EventPublicType.chatMessage: 收到监听消息了");
@@ -226,7 +226,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     });
   }
 
-  initData() async {
+  Future<void> initData() async {
     //获取聊天记录
     await getMessageDetail();
     //移除未读消息
@@ -256,7 +256,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   }
 
   //根据群ID或者对方的uuid 分页找出聊天记录
-  getMessageDetail() async {
+  Future<void> getMessageDetail() async {
     try {
       setState(() {
         load=Load.loading;
@@ -300,7 +300,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   bool isFriend = true;
 
   //获取用户详情
-  getFriendDetail() async {
+  Future<void> getFriendDetail() async {
     info = await ChatSPUtil().getNavUserInfo(widget.targetUuid);
     if (info != null) {
       friendEmail = info!.email;
@@ -875,7 +875,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   }
 
   //File upload is encapsulated as a top-level function
-  Future<dynamic> upLoadFile(filePath) async {
+  Future<dynamic> upLoadFile(String filePath) async {
     return await IpfsApi().uploadIPFSImage(filePath, "a", (int count, int total) {},type: 0);
     /*FileApi fileApi=FileApi();
     final data =
@@ -1347,7 +1347,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     );
   }
 
-  rightIcon() {
+  Widget rightIcon() {
     return GestureDetector(
       child: Image.asset(
         "assets/chat/send.png",

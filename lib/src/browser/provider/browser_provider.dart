@@ -27,7 +27,7 @@ class BrowserProvider extends ChangeNotifier{
   Map<String,dynamic> browser={
     "connectDApp":false,
   };
-  getBrowserSetting()async{
+  Future<void> getBrowserSetting()async{
     Map<String,dynamic>? b=await SPUtil().getBrowserSetting();
     if(b !=null){
       browser=b;
@@ -39,12 +39,12 @@ class BrowserProvider extends ChangeNotifier{
   List<Map<String,dynamic>> wInfoList=[];
   int wListIndex=-1;
   bool showWList=false;
-  setShowWList(bool value){
+  void setShowWList(bool value){
     showWList=value;
     notifyListeners();
   }
   String _blockUri="";//需要拦截的地址
-  setBlockUri(String value){
+  void setBlockUri(String value){
     _blockUri=value;
   }
 
@@ -57,22 +57,22 @@ class BrowserProvider extends ChangeNotifier{
   bool canBack=false;
   bool canForward=false;
   bool collect=false;
-  browserInit(){
+  void browserInit(){
     titleEditingController=TextEditingController();
     titleFocusNode=FocusNode();
     titleFocusNode?.addListener(() {
       notifyListeners();
     });
   }
-  browserDispose(){
+  void browserDispose(){
     titleEditingController?.dispose();
     titleFocusNode?.dispose();
   }
-  addUrl(String url){
+  void addUrl(String url){
     String rUrl=checkHttp(url);
     wListAdd(url:rUrl);
   }
-  wListAdd({String url=""}){
+  void wListAdd({String url=""}){
     if(url==""){
       url=AppConfig.apiUrl['walletamazeBrowser']!;
     }
@@ -151,7 +151,7 @@ class BrowserProvider extends ChangeNotifier{
     wListIndex=wList.length-1;
     notifyListeners();
   }
-  loadRequest({String url=""}){
+  void loadRequest({String url=""}){
     if(url==""){
       url=titleEditingController?.text??"";
     }
@@ -163,7 +163,7 @@ class BrowserProvider extends ChangeNotifier{
     //notifyListeners();
   }
   //显示webView
-  wListShow(int index){
+  void wListShow(int index){
     wListIndex=index;
     showWList=false;
     titleEditingController?.text=wInfoList[wListIndex]['openUrl'];
@@ -171,7 +171,7 @@ class BrowserProvider extends ChangeNotifier{
     getCollectionUrl(wInfoList[wListIndex]['openUrl']);
   }
   //删除一个 webView
-  wListDelete(int index){
+  void wListDelete(int index){
     if(index==0){
       //第一位
       if(wList.length==1){
@@ -195,7 +195,7 @@ class BrowserProvider extends ChangeNotifier{
     notifyListeners();
   }
   //查询收藏缓存 条件 url
-  getCollectionUrl(String url)async{
+  Future<void> getCollectionUrl(String url)async{
     List<BrowserCollectionModel> list=await browserApi.selectBrowserCollectionUrl(url);
     if(list.isEmpty){
       collect=false;
@@ -204,7 +204,7 @@ class BrowserProvider extends ChangeNotifier{
     }
     notifyListeners();
   }
-  getTitle()async{
+  Future<void> getTitle()async{
     WebViewController wv=wvcList[wListIndex];
     String? t=await wv.getTitle();
     if(t !=null){
@@ -212,24 +212,24 @@ class BrowserProvider extends ChangeNotifier{
       notifyListeners();
     }
   }
-  gotoGoogle(){
+  void gotoGoogle(){
     WebViewController wv=wvcList[wListIndex];
     String url=wInfoList[wListIndex]['openUrl'];
     wInfoList[wListIndex]['openUrl']="https://www.google.com/search?q=$url";
     wv.loadRequest(Uri.parse(openUrl));
   }
   //检查是否可以 上一页，或者下一页
-  checkCanGo()async{
+  Future<void> checkCanGo()async{
     WebViewController wv=wvcList[wListIndex];
     canBack=await wv.canGoBack();
     canForward=await wv.canGoForward();
     notifyListeners();
   }
-  clearCache(){
+  void clearCache(){
     WebViewController wv=wvcList[wListIndex];
     wv.clearCache();
   }
-  checkUrl(String url){
+  bool checkUrl(String url){
     if(_blockUri !=""){
       if(_blockUri == url){
         eventBus.fire(EventPublic(EventPublicType.blockUri));
@@ -257,7 +257,7 @@ class BrowserProvider extends ChangeNotifier{
     }
     return true;
   }
-  checkHttp(String url){
+  String checkHttp(String url){
     String returnUrl="";
     bool isHttp=isURL(url,);
     if(isHttp){
@@ -276,19 +276,19 @@ class BrowserProvider extends ChangeNotifier{
     return returnUrl;
   }
   //删除收藏url
-  deleteBrowserCollectionUrl()async{
+  Future<void> deleteBrowserCollectionUrl()async{
     await browserApi.deleteBrowserCollectionUrl(wInfoList[wListIndex]['openUrl']);
     getCollectionUrl(wInfoList[wListIndex]['openUrl']);
   }
   //添加收藏
-  addBrowserCollection(context)async{
+  Future<void> addBrowserCollection(context)async{
     WebViewController wv=wvcList[wListIndex];
     String? currentUrl=await wv.currentUrl();
     String? title=await wv.getTitle();
     await Navigator.push(context, MaterialPageRoute(builder: (context)=>BrowserCollection(title ?? "",currentUrl ?? "",)));
     getCollectionUrl(wInfoList[wListIndex]['openUrl']);
   }
-  cleanWList(){
+  void cleanWList(){
     showWList=false;
     wListIndex=-1;
     wList=[];

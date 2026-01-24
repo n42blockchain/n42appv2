@@ -187,7 +187,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
     _focusNode.dispose();
   }
 
-  getGroupPwd() async {
+  Future<void> getGroupPwd() async {
     try {
       // 从缓存取出group pwd
       GroupData? gd =
@@ -230,7 +230,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
     }
   }
 
-  addMessageListener() {
+  void addMessageListener() {
     eventBusFn=eventBus.on().listen((event) async {
       /*if (event is EventPublic && event.type == EventPublicType.groupRedPocket) {
         RedPocketModel rpm=event.param as RedPocketModel;
@@ -315,7 +315,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
     });
   }
 
-  resetGroupStatus() {
+  void resetGroupStatus() {
     //判断当前用户是否是群主
     isGroupOwner = false;
     //是否还在群里
@@ -331,7 +331,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
     });
   }
 
-  initData() async {
+  Future<void> initData() async {
     try {
       setState(() {
         _isLoading = true;
@@ -380,7 +380,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
   }
 
   //可以延迟更新的数据
-  asyncInitData() async {
+  Future<void> asyncInitData() async {
     await getGroupOfflineMessage();
 
     if (lastSeq != 0) {
@@ -402,7 +402,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
   }
 
   //更新群成员的缓存
-  updateGroupMember() async {
+  Future<void> updateGroupMember() async {
     final data = await chatApi.groupMembers(
         widget.targetUuid, AppGlobals.userInfo?.uuid ?? '');
     if (data != null && data["code"] == 200) {
@@ -418,7 +418,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
     }
   }
 
-  getGroupNewMessageFromNet() async {
+  Future<void> getGroupNewMessageFromNet() async {
     try {
       final groupData =
       await chatApi.getGroupOfflineLastMessage(widget.targetUuid, lastSeq);
@@ -468,7 +468,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
   }
 
   //获取群离线消息
-  getGroupOfflineMessage() async {
+  Future<void> getGroupOfflineMessage() async {
     try {
       final groupOfflineData =
       await chatApi.groupOfflineMsg(widget.targetUuid, lastSeq);
@@ -533,7 +533,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
   }
 
   //群聊的离线消息 如果用户没有执行 ack 操作 每次登录都会获取到 不能重复插入数据库
-  saveGroupOfflineMessage(ChatMessageModel model) async {
+  Future<void> saveGroupOfflineMessage(ChatMessageModel model) async {
     if (await chatDBApi.getMessageByMessageId(model.messageId) == null) {
       await chatDBApi.saveMessage(model);
       // debugPrint(
@@ -542,7 +542,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
   }
 
   //根据群ID或者对方的uuid 分页找出聊天记录
-  getMessageDetail() async {
+  Future<void> getMessageDetail() async {
     try {
       List<ChatMessageModel>? list =
       await chatDBApi.getChatDetailByFromAndTarget(
@@ -558,7 +558,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
   }
 
   //获取群信息详情
-  getGroupDetail() async {
+  Future<void> getGroupDetail() async {
     try {
       //1 从缓存中获取群信息
       final GroupInfo? gInfo =
@@ -925,7 +925,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
   }
 
   //File upload is encapsulated as a top-level function
-  Future<dynamic> upLoadFile(filePath) async {
+  Future<dynamic> upLoadFile(String filePath) async {
     return await IpfsApi().uploadIPFSImage(filePath, "a", (int count, int total) {},type: 0);
     /*FileApi fileApi=FileApi();
     final data =
@@ -1452,7 +1452,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
 
     );
   }
-  bottomWidget(){
+  void bottomWidget(){
     Widget swapWidget = Container(
       alignment: Alignment.topCenter,
       child: Column(
@@ -1478,7 +1478,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
       swapWidget,
     );
   }
-  bottomItem(String imgStr,String title,dynamic onTap){
+  Widget bottomItem(String imgStr,String title,dynamic onTap){
     return InkWell(
       onTap: (){
         onTap();
@@ -1512,7 +1512,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
       ),
     );
   }
-  rightIcon() {
+  Widget rightIcon() {
     return GestureDetector(
       child: Image.asset(
         "assets/chat/send.png",
@@ -1662,7 +1662,7 @@ class _ShowMessageType10State extends State<ShowMessageType10> {
       ),
     );
   }
-  userRedPocketOpen(){
+  Widget userRedPocketOpen(){
     Map<String,dynamic> content=json.decode(widget.chatMessage?.decryptionMessageContent??"{}");
     return Stack(
       children: [
@@ -1820,7 +1820,7 @@ class _ShowMessageType10State extends State<ShowMessageType10> {
       ],
     );
   }
-  userRedPocetOpened(){
+  Widget userRedPocetOpened(){
     RedPocketClaimModel? rpcm=getClaim(AppGlobals.userInfo?.uuid??"");
     Map<String,dynamic> content=json.decode(widget.chatMessage?.decryptionMessageContent??"{}");
     String message="Error";
@@ -1993,7 +1993,7 @@ class _ShowMessageType10State extends State<ShowMessageType10> {
       ],
     );
   }
-  userRedPocetFinish(){
+  Widget userRedPocetFinish(){
     //RedPocketClaimModel? rpcm=getClaim(AppGlobals.userInfo?.uuid??"");
     Map<String,dynamic> content=json.decode(widget.chatMessage?.decryptionMessageContent??"{}");
     String message="Hands are slow.";
@@ -2140,7 +2140,7 @@ class _ShowMessageType10State extends State<ShowMessageType10> {
       ],
     );
   }
-  getClaim(String uuid){
+  RedPocketClaimModel? getClaim(String uuid){
     int? index = widget.chatMessage?.redPocketDetailModel?.redClaim?.indexWhere((element) {
       if(element.uuid==uuid){
         return true;

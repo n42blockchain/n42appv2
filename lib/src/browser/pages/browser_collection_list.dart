@@ -36,7 +36,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
     refreshCollectionList();
   }
   //刷新
-  refreshCollectionList()async{
+  Future<void> refreshCollectionList()async{
     if (loading==Load.loading) {
       return;
     }
@@ -47,21 +47,21 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
     setState(() {});
   }
   //加载更多
-  moreCollectionList()async{
+  Future<void> moreCollectionList()async{
     loading=Load.loading;
     pageNum++;
     await getCollectionList();
     loading=Load.finish;
     setState(() {});
   }
-  getCollectionList()async{
+  Future<void> getCollectionList()async{
     List<BrowserCollectionModel> cList=await browserApi.selectBrowserCollection(pageNum: pageNum,pageSize: pageSize);
     if(cList.length<pageSize){
       lastPage=true;
     }
     collectionList.addAll(cList);
   }
-  deleteCollection(int index)async{
+  Future<void> deleteCollection(int index)async{
     BrowserCollectionModel bcm=collectionList[index];
     browserApi.deleteBrowserCollection(bcm.id!);
     collectionList.remove(bcm);
@@ -87,7 +87,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
       ),
     );
   }
-  listWidget(){
+  Widget listWidget(){
     return ListView.builder(
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
       itemCount: collectionList.length+1,
@@ -248,7 +248,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
       },
     );
   }
-  noDataWidget(){
+  Widget noDataWidget(){
     return EmptyView(
       type: EmptyType.noData,
       canRefresh: true,

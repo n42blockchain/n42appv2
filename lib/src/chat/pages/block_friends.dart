@@ -33,7 +33,7 @@ class _BlockFriendsState extends State<BlockFriends> {
     getBlockFriends();
   }
 
-  getBlockFriends({bool showLoading = true}) async {
+  Future<void> getBlockFriends({bool showLoading = true}) async {
     try {
       if (showLoading) {
         setState(() {
@@ -68,7 +68,7 @@ class _BlockFriendsState extends State<BlockFriends> {
     );
   }
 
-  _buildContent() {
+  Widget _buildContent() {
     if (isLoading) {
       return SizedBox(
           height: MediaQuery.of(context).size.height,

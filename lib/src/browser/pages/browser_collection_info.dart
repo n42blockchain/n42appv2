@@ -51,14 +51,14 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
     super.dispose();
   }
 
-  deleteCollection()async{
+  Future<void> deleteCollection()async{
     browserApi.deleteBrowserCollection(widget.collectionModel.id!);
     setState(() {});
     ToastUtils.show(S.of(context).g_key_address_5);
     Navigator.pop(context,"delete");
   }
   //保存 当前 url
-  _saveUrl()async{
+  Future<void> _saveUrl()async{
     widget.collectionModel.name=titleEditingController.text;
     if(widget.collectionModel.name==""){
       setState(() {
@@ -127,7 +127,7 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
       ),
     );
   }
-  titleWidget(){
+  Widget titleWidget(){
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(30.0),
@@ -192,7 +192,7 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
       ),
     );
   }
-  urlWidget(){
+  Widget urlWidget(){
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(30.0),
@@ -257,7 +257,7 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
       ),
     );
   }
-  descWidget(){
+  Widget descWidget(){
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(30.0),
@@ -322,7 +322,7 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
       ),
     );
   }
-  saveWidget(){
+  Widget saveWidget(){
     return Container(
       height: ScreenUtil().setWidth(148.0),
       width: double.infinity,

@@ -45,7 +45,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
     getFriendList();
   }
 
-  getFriendList() async {
+  Future<void> getFriendList() async {
     try {
       load = Load.loading;
       setState(() {});

@@ -55,7 +55,7 @@ class _NewFriendListPageState extends State<NewFriendListPage> {
     getNewFriendList();
   }
 
-  getNewFriendList({bool showLoading = true}) async {
+  Future<void> getNewFriendList({bool showLoading = true}) async {
     try {
       if (showLoading) {
         setState(() {
@@ -156,7 +156,7 @@ class _NewFriendListPageState extends State<NewFriendListPage> {
     );
   }
 
-  _buildContent() {
+  Widget _buildContent() {
     if (friendList.isEmpty) {
       return Center(
         child: Column(
@@ -227,7 +227,7 @@ class _NewFriendListPageState extends State<NewFriendListPage> {
     );
   }
 
-  listView(BuildContext context, List list) {
+  Widget listView(BuildContext context, List list) {
     return Container(
       decoration: BoxDecoration(
           color:
@@ -363,7 +363,7 @@ class _NewFriendListPageState extends State<NewFriendListPage> {
   // direction为1表示”我“申请添加别人为好友的记录，应查询用户friend_id的信息
   // 别人申请添加”我“为好友的记录，在前端显示包括3种状态：接受、已过期、已添加
   // ”我“申请添加别人为好友的记录，在前端显示包括3种状态：待验证、已过期、已添加
-  requestBtnMessage(FriendApplyInfo model) {
+  String? requestBtnMessage(FriendApplyInfo model) {
     if (model.status == 1) {
       // return "已添加";
       return S.of(context).g_chat_key_3;
@@ -382,7 +382,7 @@ class _NewFriendListPageState extends State<NewFriendListPage> {
   }
 
   //同意好友申请
-  handleFriendRequest(BuildContext context, FriendApplyInfo model) async {
+  Future<void> handleFriendRequest(BuildContext context, FriendApplyInfo model) async {
     if (model.direction == 0 && model.status == 0) {
       //弹出备注昵称ui
       final textEditController = TextEditingController();

@@ -40,7 +40,7 @@ class _RedPocketGroup3State extends State<RedPocketGroup3> {
       message="Hands are slow";
     }
   }
-  getClaim(String uuid){
+  RedPocketClaimModel? getClaim(String uuid){
     widget.chatMessage?.redPocketDetailModel?.redClaim?.sort((RedPocketClaimModel a,RedPocketClaimModel b)=>b.value!.compareTo(a.value!));
     int? index = widget.chatMessage?.redPocketDetailModel?.redClaim?.indexWhere((element) {
       if(element.uuid==uuid){

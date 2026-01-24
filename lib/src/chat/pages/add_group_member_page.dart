@@ -68,7 +68,7 @@ class _AddGroupMemberPageState extends State<AddGroupMemberPage> {
   }
 
   //找出好友列表中已经进群的好友 进行标记 不能点击
-  checkExistsFriends() async {
+  Future<void> checkExistsFriends() async {
     try {
       for (var element in friendList) {
         final flag = _groupMemberList.any((e) => e.memberId == element.uuid);
@@ -81,7 +81,7 @@ class _AddGroupMemberPageState extends State<AddGroupMemberPage> {
     }
   }
 
-  getGroupPwd() async {
+  Future<void> getGroupPwd() async {
     try {
       // 从缓存取出group pwd
       GroupData? gd = await ChatSPUtil().getGroupDataByGroupId(widget.groupId);
@@ -120,7 +120,7 @@ class _AddGroupMemberPageState extends State<AddGroupMemberPage> {
     }
   }
 
-  getFriendList() async {
+  Future<void> getFriendList() async {
     try {
       setState(() {
         load=Load.loading;

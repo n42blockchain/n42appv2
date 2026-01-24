@@ -37,7 +37,7 @@ class BrowserCollectionState extends State<BrowserCollection> {
   }
 
   //保存 当前 url
-  _saveUrl() async {
+  Future<void> _saveUrl() async {
     String title = titleEditingController.text;
     if (title == "") {
       setState(() {
@@ -137,7 +137,7 @@ class BrowserCollectionState extends State<BrowserCollection> {
     );
   }
 
-  titleWidget() {
+  Widget titleWidget() {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(30.0),
@@ -210,7 +210,7 @@ class BrowserCollectionState extends State<BrowserCollection> {
     );
   }
 
-  urlWidget() {
+  Widget urlWidget() {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(30.0),
@@ -283,7 +283,7 @@ class BrowserCollectionState extends State<BrowserCollection> {
     );
   }
 
-  descWidget() {
+  Widget descWidget() {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(30.0),
@@ -356,7 +356,7 @@ class BrowserCollectionState extends State<BrowserCollection> {
     );
   }
 
-  saveWidget() {
+  Widget saveWidget() {
     return Container(
       height: ScreenUtil().setWidth(148.0),
       width: double.infinity,

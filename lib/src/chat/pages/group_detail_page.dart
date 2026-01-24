@@ -60,11 +60,11 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
     initData();
   }
 
-  initData() async {
+  Future<void> initData() async {
     getGroupMembers();
   }
 
-  getGroupMembers() async {
+  Future<void> getGroupMembers() async {
     try {
       setState(() {
         isLoading = true;
@@ -90,7 +90,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
     }
   }
 
-  handleData() async {
+  Future<void> handleData() async {
     //判断是群成员还是群主
     for (var element in groupMemberList) {
       if (element.memberId == AppGlobals.userInfo?.uuid) {
