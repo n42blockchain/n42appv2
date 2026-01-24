@@ -49,7 +49,7 @@ class _ChooseImportCoinState extends State<ChooseImportCoin> {
     );
   }
 
-  buildContentList(BuildContext context) {
+  Widget buildContentList(BuildContext context) {
     if (mMap.isEmpty) {
       return const Center(
         child: EmptyView(),
@@ -70,7 +70,7 @@ class _ChooseImportCoinState extends State<ChooseImportCoin> {
     );
   }
 
-  _buildItem(BuildContext context, Map<String,dynamic> cInfo,int index) {
+  Widget _buildItem(BuildContext context, Map<String,dynamic> cInfo,int index) {
     return item(context, cInfo['baseInfo']['icon'] ?? "", cInfo['baseInfo']['name'] ?? "",
         cInfo['baseInfo']['miniName'] ?? "", index == selectIndex, () async{
           setState(() {
@@ -80,7 +80,7 @@ class _ChooseImportCoinState extends State<ChooseImportCoin> {
         },coinPath: cInfo['baseInfo']['path']![cInfo['addrType']]);
   }
 
-  item(BuildContext context, String path, String g, String l, bool isSelected,
+  Widget item(BuildContext context, String path, String g, String l, bool isSelected,
       VoidCallback callback,{String? coinPath}) {
     return GestureDetector(
       onTap: callback,

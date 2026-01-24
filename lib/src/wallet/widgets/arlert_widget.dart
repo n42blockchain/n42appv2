@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-Future<void> alertWidget(context) async {
+Future<void> alertWidget(BuildContext context) async {
   return showDialog<void>(
     context: context,
     barrierDismissible: true, // user must tap button!

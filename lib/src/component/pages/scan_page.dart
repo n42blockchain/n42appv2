@@ -143,7 +143,7 @@ class _ScanPageState extends State<ScanPage> {
     });
   }
   bool back=false;
-  pop(String code){
+  void pop(String code){
     back=true;
     controller?.stopCamera();
     Navigator.pop(context,code);

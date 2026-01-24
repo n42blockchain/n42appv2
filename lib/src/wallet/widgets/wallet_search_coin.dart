@@ -51,7 +51,7 @@ class _WalletSearchCoinState extends State<WalletSearchCoin> {
     super.dispose();
   }
   //查询方法
-  seachCoin(WalletActionProvider waValue)async{
+  Future<void> seachCoin(WalletActionProvider waValue)async{
     if(inputEditingController.text!=""){
       try{
         coinlistSearch=[];
@@ -73,7 +73,7 @@ class _WalletSearchCoinState extends State<WalletSearchCoin> {
     });
   }
   //关闭键盘
-  closeKeyboard(){
+  void closeKeyboard(){
     FocusScope.of(context).requestFocus(FocusNode());
   }
   @override
@@ -171,7 +171,7 @@ class _WalletSearchCoinState extends State<WalletSearchCoin> {
         }
     );
   }
-  coinListWidget(WalletActionProvider waValue){
+  Widget coinListWidget(WalletActionProvider waValue){
     if(inputEditingController.text==""){
       return ListView.builder(
         itemCount: waValue.coinList.length,

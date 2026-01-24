@@ -97,7 +97,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
     super.dispose();
   }
 
-  getInviterEmail() async {
+  Future<void> getInviterEmail() async {
     DeviceInfoUtil deviceInfoUtil = DeviceInfoUtil();
     Map<String, dynamic>? infoMap = await deviceInfoUtil.getDeviceInfo();
     if (infoMap != null) {
@@ -147,7 +147,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
       //EasyLoading.dismiss();
     }
   }
-  login(String email,String password)async{
+  Future<bool> login(String email,String password)async{
     final data = await userInfoApi.login(
         email, Md5Util().generateMd5(password));
     if (!mounted) return false;
@@ -186,7 +186,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
     }
   }
 
-  _buildInviteView(context) {
+  Widget _buildInviteView(context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -673,7 +673,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
       ),
     );
   }
-  otpRightWidget(){
+  Widget otpRightWidget(){
     return Container(
       alignment: Alignment.center,
       child: Column(

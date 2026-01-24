@@ -53,7 +53,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     init();
     initSecurity();
   }
-  init(){
+  void init(){
     //计算gasPrice
     BlockchainType bt=BlockchainType.values.firstWhere((element) => element.name==coinInfo['blockchainType']?true:false);
     switch(bt){
@@ -143,7 +143,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     }
 
   }
-  initSecurity()async{
+  Future<void> initSecurity()async{
     Map<String,dynamic>? s=await SPUtil().getSecurity();
     if(s!=null){
       Map<String,dynamic>? userSecurityMap=s[AppGlobals.userInfo?.uuid??""];
@@ -160,7 +160,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     super.dispose();
   }
   //关闭键盘
-  closeKeyboard(){
+  void closeKeyboard(){
     FocusScope.of(context).requestFocus(FocusNode());
   }
   Future<bool> _pageBack(){

@@ -208,7 +208,7 @@ class WalletChainInfoBoard extends StatelessWidget {
     );
   }
   */
-  buttonWidgetV2(context,String lable,GestureTapCallback? tap){
+  Widget buttonWidgetV2(BuildContext context,String lable,GestureTapCallback? tap){
     return InkWell(
       onTap: tap,
       child: Container(

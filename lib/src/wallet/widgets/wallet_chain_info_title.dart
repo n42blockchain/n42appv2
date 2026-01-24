@@ -58,8 +58,8 @@ class WalletChainInfoTitle extends StatelessWidget {
     );
   }
 
-  rightButton(
-      context,
+  Widget rightButton(
+      BuildContext context,
       ) {
     if (rightImgUrl != null) {
       return InkWell(
@@ -76,7 +76,7 @@ class WalletChainInfoTitle extends StatelessWidget {
         ),
       );
     } else if (rightWidget != null) {
-      return rightWidget;
+      return rightWidget!;
     } else {
       return SizedBox(
         width: rightTaoChangeNetworkWidget == null ? ScreenUtil().setWidth(50.0) : 0,
@@ -84,9 +84,9 @@ class WalletChainInfoTitle extends StatelessWidget {
     }
   }
 
-  rightChangeNetworkButton(context) {
+  Widget rightChangeNetworkButton(BuildContext context) {
     if (rightTaoChangeNetworkWidget != null) {
-      return rightTaoChangeNetworkWidget;
+      return rightTaoChangeNetworkWidget!;
     } else {
       return SizedBox();
     }

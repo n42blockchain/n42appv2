@@ -57,7 +57,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     init();
     super.initState();
   }
-  init()async{
+  Future<void> init()async{
     errorMessage="";
     if(_txHash==""){
       _txHash=searchEditingController.text;
@@ -93,7 +93,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
   String gasLimit='';
   String nonce="";
   bool owner=true;//是否时自己的交易信息
-  getTransactionByHash()async{
+  Future<bool> getTransactionByHash()async{
     MessageModel rData=await ethAPI.getTransactionByHash(
         _txHash,
         coinType: widget.coinModel.coin['coinType'],);
@@ -148,7 +148,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
       return false;
     }
   }
-  getTransactionReceipt()async{
+  Future<void> getTransactionReceipt()async{
     MessageModel rData=await ethAPI.getTransactionReceipt(
         _txHash,
         coinType: widget.coinModel.coin['coinType'],);
@@ -171,7 +171,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     }
   }
   //关闭键盘
-  closeKeyboard(){
+  void closeKeyboard(){
     FocusScope.of(context).requestFocus(FocusNode());
   }
   @override
@@ -183,7 +183,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
       body: bodyWidget(),
     );
   }
-  bodyWidget(){
+  Widget bodyWidget(){
     return SafeArea(
       child: Stack(
         children: [
@@ -203,7 +203,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
       ),
     );
   }
-  errorWidget(){
+  Widget errorWidget(){
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -223,7 +223,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
       ],
     );
   }
-  txDataWidget(){
+  Widget txDataWidget(){
     if(transactionInfo==null){
       return const IntrinsicHeight(
         child: Center(
@@ -300,7 +300,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
       ),
     );
   }
-  searchWidget(){
+  Widget searchWidget(){
     return Container(
       margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
       padding: EdgeInsets.only(left: ScreenUtil().setWidth(20)),
@@ -359,7 +359,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
       ),
     );
   }
-  errorMessageWidget(){
+  Widget errorMessageWidget(){
     if(errorMessage==""){
       return SizedBox();
     }else{
@@ -384,7 +384,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     }
 
   }
-  itemWidget(String title,String value,{bool copy=false}){
+  Widget itemWidget(String title,String value,{bool copy=false}){
     return Container(
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),

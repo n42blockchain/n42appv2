@@ -42,7 +42,7 @@ class _CreateFinishState extends State<CreateFinish> {
     }
     return Future.value(false);
   }
-  createWallet()async{
+  Future<void> createWallet()async{
     final walletActionProvider =Provider.of<WalletActionProvider>(context,listen: false);
     if(_wInfo==null){
       _wInfo=WalletInfo(
@@ -465,7 +465,7 @@ class _CreateFinishState extends State<CreateFinish> {
       ),
     ));
   }
-  exportKeystoreWidget(){
+  Widget exportKeystoreWidget(){
     return Stack(
       children: [
         Positioned.fill(

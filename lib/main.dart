@@ -167,7 +167,7 @@ class _N42AppV2State extends State<N42AppV2> {
     initData();
     super.initState();
   }
-  void initData() async {
+  Future<void> initData() async {
     try {
       /// FCM推送设置
       /// ios 通过fcm集成的apns推送 同样需要开启vpn
@@ -184,7 +184,7 @@ class _N42AppV2State extends State<N42AppV2> {
       jumpPage(uri);
     });
   }
-  jumpPage(Uri? uri) {
+  void jumpPage(Uri? uri) {
     if (uri == null) return;
     if (uri.path == "/wc") {
       String param = uri.queryParameters['uri'] ?? "";

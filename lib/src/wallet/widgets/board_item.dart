@@ -41,7 +41,7 @@ class BoardItem extends StatelessWidget {
       ),
     );
   }
-  oldWidget(BuildContext context){
+  Widget oldWidget(BuildContext context){
     return GestureDetector(
       onTap: onTap,
       child: Column(

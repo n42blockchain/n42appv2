@@ -25,7 +25,7 @@ class _UserProtocolState extends State<UserProtocol> {
     init();
   }
 
-  init() async {
+  Future<void> init() async {
     flag = await SPUtil().getReadLoginClause();
     setState(() {});
   }

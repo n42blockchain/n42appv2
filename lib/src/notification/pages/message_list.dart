@@ -552,7 +552,7 @@ class _MessageListState extends ConsumerState<MessageList> {
     );
   }
 
-  transferItemWidget(String title, String content, String createTime,
+  Widget transferItemWidget(String title, String content, String createTime,
       String mType, dynamic onTap,String showDate1,String showDate2,
       {String? imgUrl}) {
     Widget item= InkWell(

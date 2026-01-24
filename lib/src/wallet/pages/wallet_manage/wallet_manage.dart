@@ -41,7 +41,7 @@ class _WalletManageState extends State<WalletManage> {
   bool showMainWallet=false;
 
   StreamSubscription? eventBusFn;
-  initEventBus(){
+  void initEventBus(){
     eventBusFn=eventBus.on().listen((event) {
       if (event is EventPublic && event.type == EventPublicType.backup) {
         setState(() {
@@ -60,7 +60,7 @@ class _WalletManageState extends State<WalletManage> {
     super.dispose();
     eventBusFn?.cancel();
   }
-  void initData() async {
+  Future<void> initData() async {
     // final list = ProviderUtil.walletActionProvider().walletInfoLsit;
     //coinList = ProviderUtil.walletActionProvider().coinModels_main;
     walletInfo = widget.walletInfo;
@@ -92,7 +92,7 @@ class _WalletManageState extends State<WalletManage> {
     setCoinList();
     setState(() {});
   }
-  setCoinList()async{
+  Future<void> setCoinList()async{
     List<dynamic> keym =walletInfo!.coinInfo!.keys.toList();
     coinList=[];
     for (int i = 0; i < keym.length; i++) {
@@ -106,7 +106,7 @@ class _WalletManageState extends State<WalletManage> {
       setState(() { });
     }
   }
-  deleteWalletAlert(){
+  void deleteWalletAlert(){
     showDialog(
       context: context,
       builder: (context){
@@ -158,7 +158,7 @@ class _WalletManageState extends State<WalletManage> {
       },
     );
   }
-  deleteWallet()async{
+  Future<void> deleteWallet()async{
     MessageModel? rmm=await Provider.of<WalletActionProvider>(context,listen: false).deleteWalletInfo(info:walletInfo);
     if (!mounted) return;
     if(rmm==null){
@@ -260,7 +260,7 @@ class _WalletManageState extends State<WalletManage> {
     );
   }
 
-  _walletName(BuildContext context, String title, String value) {
+  Widget _walletName(BuildContext context, String title, String value) {
     return InkWell(
       onTap: ()async{
         ///单独设置一个编辑页面
@@ -350,7 +350,7 @@ class _WalletManageState extends State<WalletManage> {
     );
   }
   */
-  _itemWidget(String title,Function onTap) {
+  Widget _itemWidget(String title,Function onTap) {
     return InkWell(
       onTap: (){
         ///单独设置一个编辑页面
@@ -386,7 +386,7 @@ class _WalletManageState extends State<WalletManage> {
     );
   }
 
-  _buildCoinList(
+  Widget _buildCoinList(
       BuildContext context,
       ) {
     if (coinList == null) return const EmptyView();

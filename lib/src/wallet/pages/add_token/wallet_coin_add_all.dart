@@ -62,7 +62,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   int networkIndexToken = 0;
   String networkNameToken = "";
 
-  setNetworkIndex(int value, String name) {
+  void setNetworkIndex(int value, String name) {
     if (importType == 0) {
       if (value == networkIndex) return;
       setState(() {
@@ -104,12 +104,12 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     super.dispose();
   }
 
-  init() {
+  void init() {
     chains = Provider.of<WalletActionProvider>(context,listen: false).walletMap;
     setChainsToken();
   }
 
-  setChainsToken() {
+  void setChainsToken() {
     chainsToken = {};
     if (chains != null) {
       List<String> cKeys = chains!.keys.toList();
@@ -127,7 +127,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     setChainsTokenWithNetwork();
   }
 
-  setChainsTokenWithNetwork() {
+  void setChainsTokenWithNetwork() {
     List<String> cKeys = chainsToken.keys.toList();
     if (cKeys.isNotEmpty) {
       networkNameToken =
@@ -157,7 +157,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   }
 
   //检查主链币，或者代币是否已经添加
-  checkSymbol(String contract, String symbol) {
+  bool checkSymbol(String contract, String symbol) {
     Map<String, dynamic>? chain = chains![symbol.toUpperCase()];
     if (chain == null) {
       return false;
@@ -182,7 +182,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   /*添加主链币
   showList 是否显示在列表中
   * */
-  addCoin(Map<String, dynamic> chainMap, {bool showList = true}) async {
+  Future<void> addCoin(Map<String, dynamic> chainMap, {bool showList = true}) async {
     try {
       setState(() {
         chainMap['edit'] = true;
@@ -223,7 +223,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     }
   }
 
-  addCoinToken(Map<String, dynamic> coinMap) async {
+  Future<void> addCoinToken(Map<String, dynamic> coinMap) async {
     try {
       if (coinMap['edit'] == true) return;
       setState(() {
@@ -410,7 +410,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     return chainInfoMap;
   }
 
-  removeCoin(Map<String, dynamic> chainMap) async {
+  Future<void> removeCoin(Map<String, dynamic> chainMap) async {
     try {
       if (chainMap['edit'] == true) return;
       setState(() {
@@ -454,7 +454,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     }
   }
 
-  removeCoinToken(Map<String, dynamic> coinMap) async {
+  Future<void> removeCoinToken(Map<String, dynamic> coinMap) async {
     try {
       if (coinMap['edit'] == true) return;
       setState(() {
@@ -486,7 +486,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   }
 
 //查询方法
-  seachCoin() async {
+  Future<void> seachCoin() async {
     if (inputEditingController.text != "" || networkIndex != -1) {
       try {
         coinlistSeach = [];
@@ -516,7 +516,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   }
 
   //检查转账地址是否正确
-  addressCheck(String addr) async {
+  Future<bool> addressCheck(String addr) async {
     if (addr == "") {
       tokenErrorMessage = S.of(context).g_key_41;
       return false;
@@ -535,7 +535,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     }
   }
 
-  getChainList() async {
+  Future<void> getChainList() async {
     setState(() {
       load = Load.loading;
     });
@@ -560,7 +560,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   }
 
   //链 币 数据处理
-  coinDeal(List<dynamic> returnData, Map<String, dynamic> chains,
+  void coinDeal(List<dynamic> returnData, Map<String, dynamic> chains,
       {String rules = "", String chainName = "", String symbol = ""}) {
     for (Map<String, dynamic> r in returnData) {
       if (chainName == "") {
@@ -633,7 +633,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     }
   }
 
-  importButton() async {
+  Future<void> importButton() async {
     bool c = await checkTokenInput();
     if (c == false) return;
     setState(() {
@@ -708,7 +708,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     });
   }
 
-  removeCustomerCoinToken(Map<String, dynamic> coinMap) async {
+  Future<void> removeCustomerCoinToken(Map<String, dynamic> coinMap) async {
     try {
       if (coinMap['edit'] == true) return;
       setState(() {
@@ -787,7 +787,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   }
 
   //关闭键盘
-  closeKeyboard() {
+  void closeKeyboard() {
     FocusScope.of(context).requestFocus(FocusNode());
   }
 
@@ -1014,7 +1014,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     );
   }
 
-  tagWidget() {
+  Widget tagWidget() {
     return Container(
       height: ScreenUtil().setWidth(100.0),
       width: double.infinity,
@@ -1103,7 +1103,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     );
   }
 
-  addressWidget() {
+  Widget addressWidget() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(30.0)),
       child: Column(
@@ -1233,7 +1233,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     );
   }
 
-  symbolWidget() {
+  Widget symbolWidget() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1302,7 +1302,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     );
   }
 
-  decimalWidget() {
+  Widget decimalWidget() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(30.0)),
       child: Column(
@@ -1374,7 +1374,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     );
   }
 
-  addButtonWidget() {
+  Widget addButtonWidget() {
     return SizedBox(
       height: ScreenUtil().setWidth(88.0),
       width: double.infinity,
@@ -1398,7 +1398,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     );
   }
 
-  importButtonWidget() {
+  Widget importButtonWidget() {
     return SizedBox(
       height: ScreenUtil().setWidth(88.0),
       width: double.infinity,
@@ -1459,7 +1459,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     );
   }
 
-  coinListWidget() {
+  Widget coinListWidget() {
     if (inputEditingController.text == "" && networkIndex == -1) {
       return RefreshIndicator(
         onRefresh: () async {
@@ -1523,7 +1523,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     }
   }
 
-  coinItem(Map<String, dynamic> rowValue) {
+  Widget coinItem(Map<String, dynamic> rowValue) {
     String icon='https://api-wallet.walletamaze.com/market/v1/r/coinImage/${rowValue['fullname']}.png';
     String fullname = rowValue['fullname'];
     if(fullname=="LoveCoin"){
@@ -1662,7 +1662,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     );
   }
 
-  coinListTokenWidget() {
+  Widget coinListTokenWidget() {
     if (coinlistToken.isEmpty || showImportWidget) {
       return importTokenWidget();
     } else {
@@ -1692,7 +1692,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     }
   }
 
-  coinItemToken(Map<String, dynamic> rowValue) {
+  Widget coinItemToken(Map<String, dynamic> rowValue) {
     String symbol = rowValue['miniName'].toString();
     return Container(
       padding: EdgeInsets.only(
@@ -1744,7 +1744,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     );
   }
 
-  importTokenWidget() {
+  Widget importTokenWidget() {
     return Stack(
       children: [
         Positioned.fill(
@@ -1787,7 +1787,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   }
 
   //切换网络
-  showChangeNetwork() {
+  void showChangeNetwork() {
     if (load == Load.loading) return;
     List<Widget> childs = [];
     childs.add(Container(

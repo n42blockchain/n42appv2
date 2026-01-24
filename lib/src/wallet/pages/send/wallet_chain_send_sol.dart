@@ -97,7 +97,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
     super.dispose();
   }
 
-  initData()async{
+  Future<void> initData()async{
     //判断是否是代币
     if(widget.coinModel.coin['isContract']){
       WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
@@ -125,7 +125,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
     await getGasPrice();
   }
   //获取余额
-  getBalance()async{
+  Future<void> getBalance()async{
     setState(() {
       load=Load.loading;
     });
@@ -140,7 +140,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
     });
   }
   //获取旷工费
-  getGasPrice()async{
+  Future<void> getGasPrice()async{
     if (widget.coinModel.coin['isContract']==false){
       totalGasPrice=BigInt.from(5000)*gas;
     }else{
@@ -224,7 +224,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
     setState(() {});*/
   }
   //模拟交易
-  simulateTransaction()async{
+  Future<bool> simulateTransaction()async{
     MessageModel bhmm=await SolApi().getLatestBlockhash(isTest: widget.coinModel.isTest);
     if (!mounted) return false;
     if(bhmm.error){
@@ -287,7 +287,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
     }
   }
   //检查 amount 输入是否正确
-  amountCheck({String value=""}){
+  void amountCheck({String value=""}){
     if(value==""){
       value=valueTextEditingController.text;
     }
@@ -339,7 +339,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
     setState(() {});
   }
   //检查转账地址是否正确
-  toAddressCheck(String addr)async{
+  Future<String?> toAddressCheck(String addr)async{
     if(addr==""){
       toErrorMessage=S.current.g_key_41;
       setState(() {});
@@ -367,7 +367,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
       }
     }
   }
-  sendTransaction()async{
+  Future<void> sendTransaction()async{
     if(load==Load.loading){
       ToastUtils.show("loading");
       return;
@@ -437,7 +437,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
       });
     }
   }
-  signTx(TransationRecordModel trModel)async{
+  Future<void> signTx(TransationRecordModel trModel)async{
     try{
       TransferApi transferApi=TransferApi();
       MessageModel mm=await transferApi.transferWallet(
@@ -473,7 +473,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
     }
     Navigator.pop(context);
   }
-  maxTag()async{
+  Future<void> maxTag()async{
     if(gasLimitLoad==Load.loading)return;
     if(widget.coinModel.coin['isContract']){
       valueTextEditingController.text=widget.coinModel.balanceStringAll();
@@ -487,7 +487,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
     setState(() {});
   }
   //关闭键盘
-  closeKeyboard(){
+  void closeKeyboard(){
     FocusScope.of(context).requestFocus(FocusNode());
   }
   @override
@@ -535,7 +535,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
       ),
     );
   }
-  coinTypeWidget(){
+  Widget coinTypeWidget(){
     List<Widget> cChildren=[
       toWidget(),
       amountWidget(),
@@ -547,7 +547,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
       children: cChildren,
     );
   }
-  toWidget(){
+  Widget toWidget(){
     return Container(
       margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       child: Column(
@@ -643,7 +643,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
       ),
     );
   }
-  amountWidget(){
+  Widget amountWidget(){
     return Container(
       margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       child: Column(
@@ -742,7 +742,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
       ),
     );
   }
-  amountBalanceWidget(){
+  Widget amountBalanceWidget(){
     String unit=widget.coinModel.coin['unit'].toString().toUpperCase();
     return Text(
       '${widget.coinModel.balanceStringAll()} $unit',
@@ -756,7 +756,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
     );
   }
   //返回账户地址
-  ownerAddress(){
+  Widget ownerAddress(){
     String addr="";
     if(widget.coinModel.coin['blockchainType']==BlockchainType.Ethereum.name){
       addr=widget.coinModel.address.toString();
@@ -784,7 +784,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
     );
   }
   //旷工费
-  minerFeeWidget(){
+  Widget minerFeeWidget(){
     String title=widget.coinModel.coin['coinType'];
     String totalGasPriceStr="";
     Color totalGasPriceColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
@@ -885,7 +885,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
       ),
     );
   }
-  errorMessageWidget(){
+  Widget errorMessageWidget(){
     if(errorMessage==""){
       return SizedBox();
     }else{
@@ -909,7 +909,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
 
   }
   //提交按钮
-  sendButtonWidget(){
+  Widget sendButtonWidget(){
     String title=S.of(context).g_key_48;
     return Positioned(
       left: 0,
@@ -944,7 +944,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
       ),
     );
   }
-  faceMatchTypeWidget(){
+  void faceMatchTypeWidget(){
     Widget child=Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -1000,7 +1000,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
     );
     sheetBottom(context, S.of(context).g_face_match_key1, child);
   }
-  searchToAddressWidget(){
+  void searchToAddressWidget(){
     List<Widget> childs=[
       InkWell(
         onTap: ()async{

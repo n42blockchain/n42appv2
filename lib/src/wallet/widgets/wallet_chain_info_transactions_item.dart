@@ -481,7 +481,7 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
     }
   }
   //获取购买状态文本
-  getBuyStateText(int state){
+  String getBuyStateText(int state){
     if(state==0){
       return S.current.g_key_t_2;
     }else if(state==1){

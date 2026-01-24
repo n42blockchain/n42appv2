@@ -21,7 +21,7 @@ class ItemWallet extends StatefulWidget {
 }
 
 class _ItemWalletState extends State<ItemWallet> {
-  _buildImage() {
+  Widget _buildImage() {
     if (widget.coinType == CoinType.N.name) {
       return Image.asset(
         'assets/img/ast.png',

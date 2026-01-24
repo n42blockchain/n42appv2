@@ -126,14 +126,14 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
     byteFeeNode.dispose();
     super.dispose();
   }
-  initData()async{
+  Future<void> initData()async{
     await checkLastTx();
     await getGasFeeBtc();
     await getBalance();
   }
 
   //验证上一笔交易是否成功
-  checkLastTx()async{
+  Future<void> checkLastTx()async{
     MessageModel checkLastModel=await transferApi.checkLastTxBtc(widget.coinModel.coin['coinType'], widget.coinModel.address);
     if(checkLastModel.error){
       errorMessage=checkLastModel.data;
@@ -141,7 +141,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
     setState(() {});
   }
   //获取 比特币的gasFee等级
-  getGasFeeBtc()async{
+  Future<void> getGasFeeBtc()async{
     if(widget.coinModel.coin['coinType']==CoinType.BTC.name){
       if(gasFeeLevel['loading'])return;
       gasFeeLevel['loading']=true;
@@ -165,7 +165,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
     setState(() {});
   }
   //获取余额
-  getBalance()async{
+  Future<void> getBalance()async{
     try{
       bool isOk=await widget.coinModel.getBalance();
       /*if(widget.coinModel.isImport!=-1){
@@ -189,7 +189,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
     }
   }
   //获取 账簿
-  getUTXO({bool allUTXO=false})async{
+  Future<void> getUTXO({bool allUTXO=false})async{
     try{
       if(utxoLoad==Load.loading)return;
       if(utxoLastPage)return;
@@ -231,7 +231,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
   }
 
   //计算gas费
-  calculateGasFee()async{
+  Future<void> calculateGasFee()async{
     if(price==0){
       gasFeeLevel['gasFees']=0;
       setState(() {});
@@ -337,7 +337,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
     setState(() {});
   }*/
   //检查转账地址是否正确
-  toAddressCheck(String addr)async{
+  Future<void> toAddressCheck(String addr)async{
     if(widget.coinModel.isTest)return true;
     if(addr==""){
       toErrorMessage=S.current.g_key_41;
@@ -357,7 +357,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
   }
 
   //检查输入金额
-  amountCheck({String value=""}){
+  void amountCheck({String value=""}){
     if(gasFeeLevel['maxValue'] !=0)return;
     if(value==""){
       value=valueTextEditingController.text;
@@ -397,7 +397,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
     setState(() {});
   }
   //检查输入的 byteFee
-  byteFeeCheck({String value=""}){
+  void byteFeeCheck({String value=""}){
     if(value==""){
       value=byteFeeTextEditingController.text;
     }
@@ -426,7 +426,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
     }
   }
   //签名
-  signTx(BtcTransactionRecodeModel trModel)async{
+  Future<void> signTx(BtcTransactionRecodeModel trModel)async{
     load=Load.loading;
     setState(() {});
     if(unspents.isEmpty) {
@@ -515,7 +515,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
     }
   }
 
-  maxTag()async{
+  Future<void> maxTag()async{
     //await toAddressCheck(toTextEditingController.text);
     //if(toErrorMessage != "")return;
     price=widget.coinModel.balance.toInt();
@@ -545,7 +545,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
     setState(() {});
   }
   //计算 打包 字段数
-  getSignByteSize(List<Map<String,dynamic>> utxos,{bool max=false})async{
+  Future<int> getSignByteSize(List<Map<String,dynamic>> utxos,{bool max=false})async{
     //await toAddressCheck(toTextEditingController.text);
     //if(toErrorMessage !="")return;
     Map<String,dynamic> btcTxMap={
@@ -580,7 +580,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
     Navigator.pop(context);
   }
   //关闭键盘
-  closeKeyboard(){
+  void closeKeyboard(){
     FocusScope.of(context).requestFocus(FocusNode());
   }
   @override
@@ -663,7 +663,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
       ),
     );
   }
-  toWidget(){
+  Widget toWidget(){
     return Container(
       margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       child: Column(
@@ -747,7 +747,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
       ),
     );
   }
-  amountWidget(){
+  Widget amountWidget(){
     return Container(
       margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       child: Column(
@@ -837,7 +837,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
       ),
     );
   }
-  amountBalanceWidget(){
+  Widget amountBalanceWidget(){
     String unit=widget.coinModel.coin['unit'];
     return Text(
       '${dec.Decimal.parse(widget.coinModel.balanceDoubleAll().toString())} $unit',
@@ -851,7 +851,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
     );
   }
   //返回账户地址
-  ownerAddress(){
+  Widget ownerAddress(){
     String addr=widget.coinModel.address.toString();
     addr=dataUtils.addressFarmat(addr);
     return Container(
@@ -872,7 +872,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
     );
   }
 
-  gasFeeWidgetPrice(){
+  Widget gasFeeWidgetPrice(){
     String coinTypeName=widget.coinModel.coin['coinType'];
     if(coinTypeName != CoinType.BTC.name)return Container();
     double gasFees=0;
@@ -918,7 +918,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
     );
   }
   //价格合计
-  totalPriceWidgegt(){
+  Widget totalPriceWidgegt(){
     int gasFeesInt=gasFeeLevel['gasFees']+price;
     double gasFees=gasFeesInt/100000000;
     Color textColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name);
@@ -960,7 +960,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
       ),
     );
   }
-  gasFeeWidgetBtc(){
+  Widget gasFeeWidgetBtc(){
     return Container(
       margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       child: Column(
@@ -1089,7 +1089,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
       ),
     );
   }
-  errorMessageWidget(){
+  Widget errorMessageWidget(){
     if(errorMessage==""){
       return SizedBox();
     }else{
@@ -1113,7 +1113,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
 
   }
 
-  sendButtonWidget(){
+  Widget sendButtonWidget(){
     return Positioned(
       left: 0,
       right: 0,
@@ -1176,7 +1176,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
       ),
     );
   }
-  searchToAddressWidget(){
+  void searchToAddressWidget(){
     List<Widget> childs=[
       InkWell(
         onTap: ()async{

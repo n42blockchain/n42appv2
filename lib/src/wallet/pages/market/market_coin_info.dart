@@ -43,7 +43,7 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
     priceChangePercentage24h=(coin['price_change_per_24h']==null || coin['price_change_per_24h']=='')?0.0:coin['price_change_per_24h']*1.0;
     getCoinInfo();
   }
-  getCoinInfo()async{
+  Future<void> getCoinInfo()async{
     if(coin.isEmpty)return;
     var list = await MarketApi().getWalletCoinsInfo(coin['coin']);
     //判断查询是否成功
@@ -617,7 +617,7 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
       ),
     );
   }
-  _browserWidget() {
+  Widget _browserWidget() {
     if (browsers.isEmpty) {
       return SizedBox();
     }
