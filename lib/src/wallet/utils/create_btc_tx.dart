@@ -11,7 +11,7 @@ import 'package:convert/convert.dart';
 import 'package:web3dart/crypto.dart';
 
 class CreateBTCTX {
-  create(
+  Future<String> create(
       String wifPrivateKey,
       String recipientAddress,
       double sendValue,
@@ -332,7 +332,7 @@ class CreateBTCTX {
     return bytes;
   }
 
-  getUTXOTxid(String txid)async{
+  Future<MessageModel> getUTXOTxid(String txid)async{
     try{
       String uri="https://mempool.space/testnet4/api/tx/$txid";
       var data= await BaseApi.requestEmptyH.get(uri,

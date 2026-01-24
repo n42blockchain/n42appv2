@@ -32,7 +32,7 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver{
   bool photoOK=false;
   bool cameraOK=false;
   bool _openedSystemSettings = false;
-  init(){
+  void init(){
     if(widget.matchType==1){
       getImageFromGallery();
     }else{
@@ -40,7 +40,7 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver{
     }
   }
   //拍照isImgMini
-  Future getImageFromCamera() async {
+  Future<void> getImageFromCamera() async {
     try {
       final i_picker.ImagePicker picker = i_picker.ImagePicker();
       i_picker.XFile? img =
@@ -60,7 +60,7 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver{
     }
   }
   //相册选择
-  Future getImageFromGallery() async {
+  Future<void> getImageFromGallery() async {
     try {
       final i_picker.ImagePicker picker = i_picker.ImagePicker();
       i_picker.XFile? img =
@@ -95,7 +95,7 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver{
       ToastUtils.show(e.toString());
     }
   }
-  imageCrop()async{
+  Future<void> imageCrop()async{
     Uint8List imageData=createModel.imgFile!.readAsBytesSync();
     Uint8List? rImageData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageCropPage(imageData)));
     if(rImageData !=null){
@@ -105,12 +105,12 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver{
       });
     }
   }
-  getImageType(String path){
+  String? getImageType(String path){
     int dotIndex=path.lastIndexOf(".");
     if(dotIndex==-1)return null;
     return path.substring(dotIndex+1);
   }
-  binding()async{
+  Future<void> binding()async{
     if(load==Load.loading)return;
     if(createModel.imgMini==null)return;
     setState(() {
@@ -206,7 +206,7 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver{
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
-  initPermissions(){
+  void initPermissions(){
     if(widget.matchType==1){
       initPhoto();
     }else{
@@ -268,7 +268,7 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver{
     );
   }
 
-  photoWidget(){
+  Widget photoWidget(){
     return Scaffold(
         appBar: AppBarWidget(
           text: S.of(context).g_face_match_key7,
@@ -303,7 +303,7 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver{
         )
     );
   }
-  cameraWidget(){
+  Widget cameraWidget(){
     return Scaffold(
         appBar: AppBarWidget(
           text: S.of(context).g_face_match_key6,

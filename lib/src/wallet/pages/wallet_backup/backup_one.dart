@@ -175,7 +175,7 @@ class _BackupOneState extends State<BackupOne> {
       ),
     );
   }
-  _buildGridView() {
+  Widget _buildGridView() {
     if(showMnemonic) {
       return GridView.builder(
         padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),

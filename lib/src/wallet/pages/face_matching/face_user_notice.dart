@@ -96,7 +96,7 @@ class _FaceUserNoticeState extends State<FaceUserNotice> {
       ),
     );
   }
-  textWidget(String value){
+  Widget textWidget(String value){
     return Text(
       value,
       style: TextStyle(

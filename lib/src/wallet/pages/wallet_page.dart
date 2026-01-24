@@ -54,7 +54,7 @@ class _WalletPageState extends State<WalletPage> {
   final oCcy = NumberFormat("#,##0.0#", "en_US");
   late ScrollController _scrollController;
   bool showAddTokenButton = false; //显示底部添加代币按钮
-  setShowAddTokenButton(bool value) {
+  void setShowAddTokenButton(bool value) {
     if (showAddTokenButton == value) return;
     setState(() {
       showAddTokenButton = value;
@@ -85,7 +85,7 @@ class _WalletPageState extends State<WalletPage> {
     super.initState();
   }
 
-  walletConnect() async {
+  Future<void> walletConnect() async {
     WalletConnectProvider walletConnectProvider=Provider.of<WalletConnectProvider>(context,listen: false);
     if (walletConnectProvider.walletConnectState ==
         WalletConnectState.disconnect ||
@@ -126,7 +126,7 @@ class _WalletPageState extends State<WalletPage> {
     }
   }
   //扫码
-  scan() async {
+  Future<String> scan() async {
     String? scanValue = await Navigator.push(
         context, MaterialPageRoute(builder: (context) => ScanPage()));
     if (scanValue != null) {
@@ -1036,7 +1036,7 @@ class _WalletPageState extends State<WalletPage> {
     }
   }
   //切换网络
-  showChangeNetwork(WalletActionProvider walletValue) {
+  void showChangeNetwork(WalletActionProvider walletValue) {
     List<Widget> childs = [];
     childs.add(Container(
       constraints: BoxConstraints(
@@ -1180,7 +1180,7 @@ class _WalletPageState extends State<WalletPage> {
         ));
   }
   //显示钱包列表
-  showChangeAddress() {
+  void showChangeAddress() {
     //WalletInfo nowWalletInfo=walletValue.walletInfoLsit[walletValue.walletIndex];
     WalletActionProvider walletValue = Provider.of<WalletActionProvider>(context,listen: false);
     List<Widget> childs = [];
@@ -1316,7 +1316,7 @@ class _WalletPageState extends State<WalletPage> {
 
 
   //显示选择币列表
-  showSearchCoin(int type) {
+  void showSearchCoin(int type) {
     sheetBottom(
       context,
       S.of(context).g_token_m_key_12,
@@ -1324,7 +1324,7 @@ class _WalletPageState extends State<WalletPage> {
     );
   }
   //显示添加代币和链
-  showAddToken()async{
+  Future<void> showAddToken()async{
     WalletInfo wi=Provider.of<WalletActionProvider>(context,listen: false).walletInfo;
     if(wi.privateKey !=null){
       String? cType=wi.coinInfo?.keys.toList()[0];

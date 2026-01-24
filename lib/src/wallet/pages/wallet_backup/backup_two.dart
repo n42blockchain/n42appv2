@@ -135,7 +135,7 @@ class _BackupTwoState extends State<BackupTwo> {
     );
   }
   //根据用户点击顺序生成的list
-  _buildUserHandList() {
+  Widget _buildUserHandList() {
     return GridView.builder(
         itemCount: messMnemonicWordsList.length,//userHandList.length,
         shrinkWrap: true,
@@ -218,7 +218,7 @@ class _BackupTwoState extends State<BackupTwo> {
         });
   }
 
-  _buildGridView() {
+  Widget _buildGridView() {
     return GridView.builder(
         padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
         itemCount: messMnemonicWordsList.length,

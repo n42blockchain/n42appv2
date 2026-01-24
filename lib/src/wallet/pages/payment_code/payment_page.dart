@@ -63,12 +63,12 @@ class _PaymentPageState extends State<PaymentPage> {
     initData();
     super.initState();
   }
-  initData()async{
+  Future<void> initData()async{
     initUserInfo();
     await initCoinInfo();
     initCoinModel();
   }
-  initUserInfo()async{
+  Future<void> initUserInfo()async{
     UserInfoApi uApi=UserInfoApi();
     MessageModel mm = await uApi.getUserInfoWithUUID(uuid);
     if(mm.error==false){
@@ -76,7 +76,7 @@ class _PaymentPageState extends State<PaymentPage> {
     }
     setState(() {});
   }
-  initCoinInfo()async{
+  Future<void> initCoinInfo()async{
     usdtInfo=Provider.of<WalletActionProvider>(context,listen: false).getCoinPriceWithUnit("usdt");
     //查询coins中的币种信息
     var list = await MarketApi().getWalletCoinsInfo("usdt");
@@ -115,7 +115,7 @@ class _PaymentPageState extends State<PaymentPage> {
     usdtAmount=DataUtils().formatNum(uAmount,2);
     setState(() {});
   }
-  initCoinModel(){
+  void initCoinModel(){
     WalletActionProvider wap =Provider.of<WalletActionProvider>(context,listen: false);
     for(CoinModel cm in wap.coinList){
       if(cm.coin['coinType'].toString().toLowerCase()==coinType.toLowerCase()){
@@ -139,7 +139,7 @@ class _PaymentPageState extends State<PaymentPage> {
       load=Load.finish;
     });
   }
-  initCoinMainModel()async{
+  Future<void> initCoinMainModel()async{
     WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
     int cIndex=wap.coinModels.indexWhere((element){
       if(element.coin['coinType']==coinModels[coinModelIndex].coin['coinType']){
@@ -167,7 +167,7 @@ class _PaymentPageState extends State<PaymentPage> {
     setState(() {});
   }
 
-  web3Transaction() async {
+  Future<void> web3Transaction() async {
     setState(() {
       load=Load.loading;
     });

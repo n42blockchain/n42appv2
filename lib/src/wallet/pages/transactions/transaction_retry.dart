@@ -71,7 +71,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
     }
     super.dispose();
   }
-  init()async{
+  Future<void> init()async{
     if(_txHash==""){
       _txHash=searchEditingController.text;
     }
@@ -126,7 +126,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
   String nonce="";
   bool owner=true;//是否时自己的交易信息
   Timer? timer;
-  getTransactionByHash()async{
+  Future<bool> getTransactionByHash()async{
     MessageModel rData=await ethAPI.getTransactionByHash(
         _txHash,
         coinType: widget.coinModel.coin['coinType'],);
@@ -181,7 +181,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
       return false;
     }
   }
-  getTransactionReceipt()async{
+  Future<void> getTransactionReceipt()async{
     MessageModel rData=await ethAPI.getTransactionReceipt(
         _txHash,
         coinType: widget.coinModel.coin['coinType'],);
@@ -204,12 +204,12 @@ class _TransactionRetryState extends State<TransactionRetry> {
     }
     timerInit();
   }
-  timerInit(){
+  void timerInit(){
     timer=Timer(Duration(seconds: 3), () {
       getTransactionReceipt();
     });
   }
-  send(String toAddress,BigInt value,double gasPricePercent)async{
+  Future<void> send(String toAddress,BigInt value,double gasPricePercent)async{
     try{
       if(load==Load.loading)return;
       if(errorMessage !="")return;
@@ -296,7 +296,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
     }
   }
   //关闭键盘
-  closeKeyboard(){
+  void closeKeyboard(){
     FocusScope.of(context).requestFocus(FocusNode());
   }
   @override
@@ -308,7 +308,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
       body: bodyWidget(),
     );
   }
-  bodyWidget(){
+  Widget bodyWidget(){
     return SafeArea(
       child: Stack(
         children: [
@@ -330,7 +330,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
       ),
     );
   }
-  errorWidget(){
+  Widget errorWidget(){
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -350,7 +350,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
       ],
     );
   }
-  txDataWidget(){
+  Widget txDataWidget(){
     if(transactionInfo==null){
       return const IntrinsicHeight(
         child: Center(
@@ -427,7 +427,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
       ),
     );
   }
-  searchWidget(){
+  Widget searchWidget(){
     return Container(
       margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
       padding: EdgeInsets.only(left: ScreenUtil().setWidth(20)),
@@ -486,7 +486,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
       ),
     );
   }
-  errorMessageWidget(){
+  Widget errorMessageWidget(){
     if(errorMessage==""){
       return SizedBox();
     }else{
@@ -511,7 +511,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
     }
 
   }
-  itemWidget(String title,String value,{bool copy=false}){
+  Widget itemWidget(String title,String value,{bool copy=false}){
     return Container(
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
@@ -559,7 +559,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
       ),
     );
   }
-  bottomButton(){
+  Widget bottomButton(){
     if(load==Load.loading){
       return loadingButton();
     }
@@ -592,7 +592,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
       SizedBox(),
     );
   }
-  loadingButton(){
+  Widget loadingButton(){
     return Positioned(
       left: 0,
       right: 0,
@@ -626,7 +626,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
       ),
     );
   }
-  buttonWidget(String title,dynamic onTap,){
+  Widget buttonWidget(String title,dynamic onTap,){
     return buttonStyle2(context, ()async{
       onTap();
     }, title);

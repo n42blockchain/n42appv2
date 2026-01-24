@@ -299,7 +299,7 @@ class _ImportKeystoreState extends State<ImportKeystore> {
     );
   }
   int selectIndex=-1;
-  showChooseCoin(String? chainName){
+  void showChooseCoin(String? chainName){
     Map<String,dynamic> mMap={};
     if(chainName !=null){
       allChainUrlMap.forEach((key,value){
@@ -394,7 +394,7 @@ class _ImportKeystoreState extends State<ImportKeystore> {
           child: child,
         ));
   }
-  createWallet(Map<String,dynamic> cInfo,String keystoreJson,String password)async{
+  Future<void> createWallet(Map<String,dynamic> cInfo,String keystoreJson,String password)async{
     try {
       setState(() {
         load=Load.loading;

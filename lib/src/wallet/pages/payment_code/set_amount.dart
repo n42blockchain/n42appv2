@@ -45,7 +45,7 @@ class _SetAmountState extends State<SetAmount> {
     amountController.dispose();
     super.dispose();
   }
-  initCoin(){
+  void initCoin(){
     WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
     for(CoinModel cm in wap.coinList){
       if(cm.coin['miniName'].toString().toLowerCase()=="usdt"){

@@ -23,7 +23,7 @@ class _ImportOneState extends State<ImportOne> with WidgetsBindingObserver{
   String inputMW="";
   String errorMessage="";
 
-  checkInput(String value){
+  void checkInput(String value){
     value=value.trim();
     List<String> mws=value.split(" ");
     String cValue="";

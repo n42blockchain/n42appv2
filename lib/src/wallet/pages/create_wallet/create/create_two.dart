@@ -28,7 +28,7 @@ class _CreateTwoState extends State<CreateTwo> {
   late String mnemonicWords;
   var mnemonicWordsList = [];
   int mnemonicWordsCount = 12; //助记词个数
-  resetMnemonicWordsCount({int value = 12}) async {
+  Future<void> resetMnemonicWordsCount({int value = 12}) async {
     mnemonicWordsCount = value;
     mnemonicWords = await _trustdart.generateMnemonic(
         length: (value * 10 + value / 3 * 2).toInt());
@@ -330,7 +330,7 @@ class _CreateTwoState extends State<CreateTwo> {
       ),
     );
   }
-  _buildGridView() {
+  Widget _buildGridView() {
     if(showMnemonic) {
       return GridView.builder(
         padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
@@ -457,7 +457,7 @@ class _CreateTwoState extends State<CreateTwo> {
     );
   }
   */
-  showSkipWidget()async{
+  Future<void> showSkipWidget()async{
     Widget child=Center(
       child: Container(
         padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),

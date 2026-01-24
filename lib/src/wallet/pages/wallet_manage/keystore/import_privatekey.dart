@@ -45,7 +45,7 @@ class _ImportPrivatekeyState extends State<ImportPrivatekey> {
     //_keystoreController.text='CVFM5HyKx2b35Z2eLvGQ4QDLA5mB7mCowYmqwPtx12k';
     super.initState();
   }
-  checkPraviteKey(String pk)async{
+  Future<MessageModel> checkPraviteKey(String pk)async{
     MessageModel mm=MessageModel();
     if(pk.length == 66){
       String sStr=pk.substring(0,2);
@@ -87,13 +87,13 @@ class _ImportPrivatekeyState extends State<ImportPrivatekey> {
     final second = sha256.convert(first).bytes;
     return Uint8List.fromList(second);
   }
-  decodeBase58(String bs58){
+  MessageModel decodeBase58(String bs58){
     MessageModel mm=MessageModel();
     final decoded = Uint8List.fromList(fast.Base58Decode(bs58));
     mm.data=bytesToHex(decoded);
     return mm;
   }
-  decodeWIF(String wif) {
+  MessageModel decodeWIF(String wif) {
     MessageModel mm=MessageModel();
     final decoded = Uint8List.fromList(fast.Base58Decode(wif));
     if (decoded.length < 37) {

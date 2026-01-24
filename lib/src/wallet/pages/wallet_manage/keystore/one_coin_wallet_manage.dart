@@ -48,7 +48,7 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
     initData();
   }
 
-  initData() async {
+  Future<void> initData() async {
     mnemonic = widget.walletInfo.mnemonic;
     addrType=widget.walletInfo.coinInfo![widget.model.coin['coinType']]['addrType'];
     coinPath = widget.walletInfo.coinInfo![widget.model.coin['coinType']]['baseInfo']['path'][addrType];
@@ -59,22 +59,22 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
   }
 
   //添加 path index
-  addPath(){
+  void addPath(){
     if(pathList.length>=10){
       return;
     }
     pathList.add(pathList[pathList.length-1]+1);
     setState(() {});
   }
-  removePath(int index){
+  void removePath(int index){
     pathList.removeAt(index);
     setState(() {});
   }
-  chagePath(int index){
+  void chagePath(int index){
     pathIndex=pathList[index];
     setState(() {});
   }
-  saveCoin()async{
+  Future<void> saveCoin()async{
     widget.walletInfo.coinInfo![widget.model.coin['coinType']]['pathList']=pathList;
     widget.walletInfo.coinInfo![widget.model.coin['coinType']]['pathIndex']=pathIndex;
     widget.walletInfo.coinInfo![widget.model.coin['coinType']]['addrType']=addrType;
@@ -85,7 +85,7 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
     }
     Navigator.pop(context,true);
   }
-  jumpExportKeystoreDescPage({String? password})async{
+  Future<void> jumpExportKeystoreDescPage({String? password})async{
     setState(() {
       load=Load.loading;
     });
@@ -165,7 +165,7 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
     );
   }
 
-  _buildWalletInfo() {
+  Widget _buildWalletInfo() {
     int pathCount=1;
     if(widget.model.coin['blockchainType']==BlockchainType.Bitcoin.name){
       pathCount=(widget.model.coin['path'] as Map<String,dynamic>).length;
@@ -372,7 +372,7 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
     );
   }
 
-  _buildExport() {
+  Widget _buildExport() {
     return Container(
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
@@ -625,7 +625,7 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
     );
   }
   //显示切换地址类型
-  showChangeAddress(){
+  void showChangeAddress(){
     List<Widget> childs=[];
     Map<String,dynamic> paths=widget.model.coin['path'];
     List<String> keyList=paths.keys.toList();

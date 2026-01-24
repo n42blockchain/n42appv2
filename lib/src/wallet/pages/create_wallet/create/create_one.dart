@@ -227,7 +227,7 @@ class _CreateOneState extends State<CreateOne> {
       ),
     );
   }
-  checkWidget(String value,bool check,dynamic onTap){
+  Widget checkWidget(String value,bool check,dynamic onTap){
     return Container(
       margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0),),
       child: Row(

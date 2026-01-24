@@ -131,7 +131,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
 
     super.initState();
   }
-  testdata()async{
+  Future<void> testdata()async{
     int nowTime=(DateTime.now().millisecondsSinceEpoch~/1000)+(0.005*86400).toInt();
     lockTimeInt=nowTime;
     await createP2WSH(nowTime);
@@ -141,7 +141,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
 
   }
 
-  createWallet()async{
+  Future<void> createWallet()async{
     //9804a241a85bba9480c7e99b23a201f30b48c0d5e990f42e1ed32b19117d99b1
     privateKey = ECPrivate.fromWif("cVbQm3SVhN3sHD2mhbucpyz99mH6WNRcAKhzur3SP5hX4Ca53m15", netVersion: BitcoinNetwork.mainnet.wifNetVer);
     //String mm=Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic??"";
@@ -161,7 +161,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
     //sendTrx1();
 
   }
-  createWallet2()async{
+  Future<void> createWallet2()async{
     Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic;
     String pk=await Trustdart().getPrivateKey(Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic??"", CoinType.BTC.name, "m/84'/4'/0'/0/0");
     bytesToHex(base64.decode(pk));
@@ -180,7 +180,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
     //sendTrx1();
 
   }
-  createP2WSH(int lockTime,{String? uPubKey,String? cPubKey})async{
+  Future<String?> createP2WSH(int lockTime,{String? uPubKey,String? cPubKey})async{
     // 1️⃣ 用户 & Canister 公钥 (HEX 格式)
     if(uPubKey==null){
       //Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic;
@@ -228,7 +228,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
     //CreateBtcTX2().createMessage(privateKey!, "Hello", privateKey!.getPublic());
     //sendTrx1(newScript);
   }
-  sendTrx1(Script scriptP2wsh)async{
+  Future<void> sendTrx1(Script scriptP2wsh)async{
 
     int sendAmount = ethToWeiString('0.001', 8).toInt();
     int fee = 1000;
@@ -283,7 +283,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
     String txHash=CreateBtcTX2().createSegwitV2(privateKey!,p2wshAddress!);
     if (kDebugMode) debugPrint(txHash);
   }
-  sendTrx2(Script scriptP2wsh)async{
+  Future<void> sendTrx2(Script scriptP2wsh)async{
 
     int sendAmount = ethToWeiString('0.0001', 8).toInt();
     int fee = 1000;
@@ -329,7 +329,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
     String txHash=CreateBtcTX2().createSegwit(privateKey!,selectedUTXOs,txAmount,txInputScript,txOutputs);
     if (kDebugMode) debugPrint(txHash);
   }
-  sendTrx()async{
+  Future<void> sendTrx()async{
     String hex=await CreateBTCTXV1().createV2(
       //privateKey!.toWif(),
       'cVbQm3SVhN3sHD2mhbucpyz99mH6WNRcAKhzur3SP5hX4Ca53m15',
@@ -350,7 +350,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
     sendTx(hex);
   }
 
-  getUTXO2(String address)async{
+  Future<MessageModel?> getUTXO2(String address)async{
     try{
       MessageModel mm=await TokenViewApi().getUTXOBtc(widget.coinModel.coin['coinType'],address,pageSize: 10,pageNum: 1);
       if(mm.error){
@@ -365,7 +365,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
 
   }
 
-  getUTXOTxid(String txid)async{
+  Future<MessageModel> getUTXOTxid(String txid)async{
     try{
       String uri="https://mempool.space/testnet4/api/tx/$txid";
       var data= await BaseApi.requestEmptyH.get(uri,
@@ -386,7 +386,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
       return mm;
     }
   }
-  getUTXO(String address)async{
+  Future<MessageModel> getUTXO(String address)async{
     try{
       String uri="https://mempool.space/testnet4/api/address/$address/utxo";
       var data= await BaseApi.requestEmptyH.get(uri,
@@ -407,7 +407,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
       return mm;
     }
   }
-  sendTx(String hex)async{
+  Future<MessageModel> sendTx(String hex)async{
     try{
       String uri="https://mempool.space/testnet4/api/tx";
       var data= await BaseApi.requestEmptyH.post(uri,
@@ -442,7 +442,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
     "maxValue":0,//全部转出的金额
   };
   //计算gas费
-  calculateGasFee()async{
+  Future<void> calculateGasFee()async{
     if(price==0){
       gasFeeLevel['gasFees']=0;
       setState(() {});
@@ -490,7 +490,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
     }
   }
   //计算 打包 字段数
-  getSignByteSize(List<Map<String,dynamic>> utxos,{bool max=false})async{
+  Future<int> getSignByteSize(List<Map<String,dynamic>> utxos,{bool max=false})async{
     //await toAddress_check(toTextEditingController.text);
     //if(toErrorMessage !="")return;
     Map<String,dynamic> btcTxMap={

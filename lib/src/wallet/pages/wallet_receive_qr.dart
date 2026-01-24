@@ -37,7 +37,7 @@ class _WalletReceiveQrState extends State<WalletReceiveQr> {
     initData();
   }
 
-  initData() {
+  void initData() {
     network = widget.chainCoinModel.coin['name'];
     logoUrl = widget.chainCoinModel.coin['icon'];
     if (widget.tokenCoinModel == null) {

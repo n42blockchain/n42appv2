@@ -79,7 +79,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
       ),
     );
   }
-  _buildItem(String? title, String? content, {bool copy = false}) {
+  Widget _buildItem(String? title, String? content, {bool copy = false}) {
     if (content == null || content.isEmpty) {
       return const SizedBox(
         width: 0,

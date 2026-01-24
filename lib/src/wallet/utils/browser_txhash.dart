@@ -4,7 +4,7 @@ import 'package:n42appv2/src/https/request_url.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:provider/provider.dart';
 
-getBrowserTxHash(String coinType,String txHash,{bool? isTest}){
+String getBrowserTxHash(String coinType,String txHash,{bool? isTest}){
   coinType=coinType.toUpperCase();
   if(isTest==null){
     Map<String,dynamic> coinMap=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletMap[coinType];

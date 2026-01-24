@@ -15,7 +15,7 @@ import 'package:convert/convert.dart';
 import 'package:web3dart/crypto.dart';
 
 class CreateBTCTXV1 {
-  create(
+  Future<String> create(
       String wifPrivateKey,
       String recipientAddress,
       double sendValue,
@@ -120,7 +120,7 @@ class CreateBTCTXV1 {
     //print("签名后的交易: ${hex.encode(signedTx)}");
     //return txHashStr+witness;
   }
-  createV2(
+  Future<String> createV2(
       String wifPrivateKey,
       String recipientAddress,
       double sendValue,
@@ -826,7 +826,7 @@ SighashType	1 字节	签名哈希类型（例如 SIGHASH_ALL，默认值为 0x00
     return bytes.skipWhile((b) => b == 0).toList(); // 去除前导 0
   }
 
-  getUTXOTxid(String txid)async{
+  Future<MessageModel> getUTXOTxid(String txid)async{
     try{
       String uri="https://mempool.space/testnet4/api/tx/$txid";
       var data= await BaseApi.requestEmptyH.get(uri,

@@ -71,11 +71,11 @@ class _FaceBindingState extends State<FaceBinding> with WidgetsBindingObserver{
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
-  init()async{
+  Future<void> init()async{
     if (!await initialize()) return;
     useCamera();
   }
-  useCamera() async{
+  Future<void> useCamera() async{
     if (_isUsingCamera) return;
 
     _isUsingCamera = true;
@@ -93,7 +93,7 @@ class _FaceBindingState extends State<FaceBinding> with WidgetsBindingObserver{
       });
     }
   }
-  binding(Uint8List img)async{
+  Future<void> binding(Uint8List img)async{
     if(widget.type==1){
       String addr;
       if(widget.address !=null){
@@ -195,7 +195,7 @@ class _FaceBindingState extends State<FaceBinding> with WidgetsBindingObserver{
     faceWidget():
     cameraWidget();
   }
-  faceWidget(){
+  Widget faceWidget(){
     return Scaffold(
       body: Stack(
         children: [
@@ -251,7 +251,7 @@ class _FaceBindingState extends State<FaceBinding> with WidgetsBindingObserver{
       ),
     );
   }
-  cameraWidget(){
+  Widget cameraWidget(){
     return Scaffold(
         appBar: AppBarWidget(
           text: S.of(context).g_face_match_key6,

@@ -4,7 +4,7 @@ import 'package:n42appv2/src/https/request_url.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:provider/provider.dart';
 
-getBrowserTokenAddress(String coinType,String address,String token,{bool? isTest}){
+String getBrowserTokenAddress(String coinType,String address,String token,{bool? isTest}){
   coinType=coinType.toUpperCase();
   if(isTest==null){
     Map<String,dynamic> coinMap= Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletMap[coinType];

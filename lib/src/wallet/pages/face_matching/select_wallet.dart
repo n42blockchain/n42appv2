@@ -28,7 +28,7 @@ class _SelectWalletState extends State<SelectWallet> {
     super.initState();
     initData();
   }
-  initData() async {
+  Future<void> initData() async {
     walletList = Provider.of<WalletActionProvider>(context,listen: false).walletInfoLsit;
     setState(() {});
   }
@@ -43,7 +43,7 @@ class _SelectWalletState extends State<SelectWallet> {
       ),
     );
   }
-  _buildList() {
+  Widget _buildList() {
     if (walletList.isEmpty) return const EmptyView();
     return ListView.builder(
       padding: EdgeInsets.all(ScreenUtil().setWidth(30)),

@@ -101,7 +101,7 @@ class _RedeemState extends State<Redeem> {
       });
     super.initState();
   }
-  testData()async{
+  Future<void> testData()async{
     redeem("tb1q229k7jwjlq6n3tdc0gmmhyxylze24ddvl9qext78sd2t3cyj9xvql3r07k",1742812372);
     //await redeem("tb1qxk5fqvludl0ec3zuy7m90u6w0v8sw993738qudpr68dad9ctaxjs5lavda");
   }
@@ -110,7 +110,7 @@ class _RedeemState extends State<Redeem> {
   int input2Price=0;//实际输入金额
   bool inputValueOK=false;
   List<Map<String,dynamic>> inputUTXO=[];
-  redeem(String address,int lockTime)async{
+  Future<void> redeem(String address,int lockTime)async{
     //await redeemEth(address);
     await getGasFeeBtc();
     //address="tb1qw39qrupll6xwmazqplpjgaclexjsd48jms2gwzk2xeuhqen9qxusem966j";
@@ -135,7 +135,7 @@ class _RedeemState extends State<Redeem> {
     trModel.price=100000;
     transatroinBuilder1To1(trModel,);*/
   }
-  redeemEth(String p2wshAddress)async{
+  Future<void> redeemEth(String p2wshAddress)async{
     String serviceUrl=RequestUrl().getUrl2(CoinType.ETH.name, 'rpc',isTest: widget.coinModel.isTest);
     String privateKey;
     if(widget.coinModel.privateKey==null || widget.coinModel.privateKey==""){
@@ -150,7 +150,7 @@ class _RedeemState extends State<Redeem> {
     final rData=await rt.reedem(p2wshAddress,credentials: credentials);
     if (kDebugMode) debugPrint(rData);
   }
-  createP2WSH(int lockTime,{String? uPubKey,String? cPubKey})async{
+  Future<String> createP2WSH(int lockTime,{String? uPubKey,String? cPubKey})async{
     // 1️⃣ 用户 & Canister 公钥 (HEX 格式)
     if(uPubKey==null){
       //Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic;
@@ -192,7 +192,7 @@ class _RedeemState extends State<Redeem> {
     return p2wshAddress!.toAddress(BitcoinNetwork.testnet);*/
   }
   //获取 比特币的gasFee等级
-  getGasFeeBtc()async{
+  Future<void> getGasFeeBtc()async{
     MessageModel gasFeeMM=await tokenViewApi.getGasFeeBtc(isTest: widget.coinModel.isTest);
     if(gasFeeMM.error){
     }else{
@@ -200,7 +200,7 @@ class _RedeemState extends State<Redeem> {
     }
     setState(() {});
   }
-  signP2WSH()async{
+  Future<void> signP2WSH()async{
     Map<String,dynamic> btcTxMap={
       "utxo":inputUTXO,
       "toAddress":widget.coinModel.address,
@@ -273,7 +273,7 @@ class _RedeemState extends State<Redeem> {
       return btcTransactionRecodeModel;
     }
   }
-  getSignByteSize(List<Map<String,dynamic>> utxos,{bool max=true})async{
+  Future<int> getSignByteSize(List<Map<String,dynamic>> utxos,{bool max=true})async{
     //await toAddress_check(toTextEditingController.text);
     //if(toErrorMessage !="")return;
     Map<String,dynamic> btcTxMap={
@@ -298,7 +298,7 @@ class _RedeemState extends State<Redeem> {
     }
   }
 //获取 账簿
-  getUTXO(String address)async{
+  Future<void> getUTXO(String address)async{
     try{
       MessageModel mm=await tokenViewApi.getUTXOBtc(widget.coinModel.coin['coinType'], address,pageSize: 1,pageNum: 10,isTest: widget.coinModel.isTest);
       if(mm.error){
@@ -312,7 +312,7 @@ class _RedeemState extends State<Redeem> {
       setState(() {});
     }
   }
-  calculateGasFee(List<dynamic> unspents)async{
+  Future<void> calculateGasFee(List<dynamic> unspents)async{
     List<Map<String,dynamic>> utxos=[];//输出账单
     for(Map<String,dynamic> unspent in unspents){
       if(widget.coinModel.isTest){
@@ -351,7 +351,7 @@ class _RedeemState extends State<Redeem> {
     inputUTXO=utxos;
     setState(() {});
   }
-  initEthToken(String p2wshAddr)async{
+  Future<void> initEthToken(String p2wshAddr)async{
     Web3Client client = Web3Client("https://eth-sepolia.public.blastapi.io", Client());
     RedeemToken token = RedeemToken.init(
         address: EthereumAddress.fromHex("0x6c30A50430cC615C4659DF2dBe3E42036583bE7E"), client: client);

@@ -1,7 +1,7 @@
 //判断是否支持1559
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 
-get1559WithChainSymbol(String symbol){
+bool get1559WithChainSymbol(String symbol){
   if(symbol==CoinType.GO.name
       || symbol==CoinType.OKT.name
       || symbol==CoinType.KCS.name

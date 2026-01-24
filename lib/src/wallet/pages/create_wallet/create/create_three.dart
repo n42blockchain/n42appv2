@@ -261,7 +261,7 @@ class _CreateThreeState extends State<CreateThree> {
     );
   }
   //根据用户点击顺序生成的list
-  _buildUserHandList(BuildContext context) {
+  Widget _buildUserHandList(BuildContext context) {
     return GridView.builder(
         itemCount: messMnemonicWordsList.length,//userHandList.length,
         shrinkWrap: true,
@@ -344,7 +344,7 @@ class _CreateThreeState extends State<CreateThree> {
         });
   }
 
-  _buildGridView(BuildContext context) {
+  Widget _buildGridView(BuildContext context) {
     return GridView.builder(
         padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
         itemCount: messMnemonicWordsList.length,

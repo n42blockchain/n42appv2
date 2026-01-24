@@ -103,7 +103,7 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
     );
   }
 
-  buildItem(BuildContext context, String title, String action) {
+  Widget buildItem(BuildContext context, String title, String action) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20),),
       child: Column(
