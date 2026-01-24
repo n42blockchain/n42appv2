@@ -69,7 +69,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
     super.dispose();
   }
   ///解除质押
-  unLockAstMining() {
+  void unLockAstMining() {
     showDialog<void>(
       context: context,
       barrierDismissible: false,

@@ -52,7 +52,7 @@ class ShareList extends StatelessWidget {
     );
   }
 
-  Widget _buildItem(context, payTypeName, GestureTapCallback? onTap) {
+  Widget _buildItem(BuildContext context, String payTypeName, GestureTapCallback? onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Container(

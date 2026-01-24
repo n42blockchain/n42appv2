@@ -46,7 +46,7 @@ class _ChatServicesState extends State<ChatServices> {
     super.dispose();
   }
 
-  initController() {
+  void initController() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final initialHost = Uri.parse(widget.url).host;
 
@@ -179,7 +179,7 @@ class _ChatServicesState extends State<ChatServices> {
     );
   }
 
-  buildItemTitle(String title) {
+  Widget buildItemTitle(String title) {
     return Text(
       title,
       style: TextStyle(
@@ -190,7 +190,7 @@ class _ChatServicesState extends State<ChatServices> {
     );
   }
 
-  buildItemContent(String content) {
+  Widget buildItemContent(String content) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

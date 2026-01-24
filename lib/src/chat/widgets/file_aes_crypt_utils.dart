@@ -4,7 +4,7 @@ import 'package:aes_crypt_null_safe/aes_crypt_null_safe.dart';
 
 class FileAesCryptUtils {
   ///文件异步加密 -- 不开启线程的方式
-  Future<String?> encryptFile(String path, String password) async {
+  static Future<String?> encryptFile(String path, String password) async {
     AesCrypt crypt = AesCrypt();
     crypt.setOverwriteMode(AesCryptOwMode.rename);
     crypt.setPassword(password);
@@ -30,7 +30,7 @@ class FileAesCryptUtils {
     return answer.first;
   }
 
-  void cryptFile(SendPort port) {
+  static void cryptFile(SendPort port) {
     final rPort = ReceivePort();
     port.send(rPort.sendPort);
     rPort.listen((message) async {
@@ -43,7 +43,7 @@ class FileAesCryptUtils {
   }
 
   ///文件解密 --不开启线程的方式
-  Future<String?> decryptFile(String path, String password) async {
+  static Future<String?> decryptFile(String path, String password) async {
     AesCrypt crypt = AesCrypt();
     crypt.setOverwriteMode(AesCryptOwMode.rename);
     crypt.setPassword(password);
@@ -69,7 +69,7 @@ class FileAesCryptUtils {
     return answer.first;
   }
 
-  void isoDecryptFile(SendPort port) {
+  static void isoDecryptFile(SendPort port) {
     final rPort = ReceivePort();
     port.send(rPort.sendPort);
     rPort.listen((message) async {

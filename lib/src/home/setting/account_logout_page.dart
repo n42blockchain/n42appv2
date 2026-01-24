@@ -86,7 +86,7 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
   }*/
 
   //检查交易所是否还有余额
-  checkExchangeBalance() async {
+  Future<void> checkExchangeBalance() async {
     try {
       setState(() {
         loading = true;
@@ -106,7 +106,7 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
     }
   }
 
-  getCoinInfo(List<ExchangeAccountModel> eams) async {
+  Future<void> getCoinInfo(List<ExchangeAccountModel> eams) async {
     String searchStr = "";
     for (ExchangeAccountModel eam in eams) {
       searchStr += "${eam.coin!.toLowerCase()},";
@@ -140,7 +140,7 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
     return 0.0;
   }
 
-  checkStatus() {
+  void checkStatus() {
     if (//googleCode.isNotEmpty &&
         //password.isNotEmpty &&
         emailCode.isNotEmpty &&
@@ -169,7 +169,7 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
     );
   }
 
-  _buildContent(BuildContext context) {
+  Widget _buildContent(BuildContext context) {
     return Column(
       children: [
         Expanded(

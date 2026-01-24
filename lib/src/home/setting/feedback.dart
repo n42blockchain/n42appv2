@@ -47,7 +47,7 @@ class _FeedbackState extends State<Feedback> {
     super.dispose();
   }
   //选择文件，音频或者视频type,0图片，1视频
-  Future getFile(int type)async{
+  Future<void> getFile(int type)async{
     f_picker.FilePickerResult? result = await f_picker.FilePicker.platform.pickFiles(
       allowMultiple:true,
       type: type==0?f_picker.FileType.image:f_picker.FileType.video,
@@ -73,7 +73,7 @@ class _FeedbackState extends State<Feedback> {
     });
   }
   //生成视频的缩略图
-  createVideoImageMini(AppendixModel am)async{
+  Future<void> createVideoImageMini(AppendixModel am)async{
     am.imgMini = await VideoCompress.getByteThumbnail(
         am.path,
         quality: 25, // default(100)
@@ -84,7 +84,7 @@ class _FeedbackState extends State<Feedback> {
     });
   }
   //上传图片
-  uploadFile(AppendixModel am)async{
+  Future<void> uploadFile(AppendixModel am)async{
     try{
       File file=File(am.path);
       am.cancelToken=CancelToken();
@@ -118,14 +118,14 @@ class _FeedbackState extends State<Feedback> {
   }
 
   //删除附件
-  deleteFile(AppendixModel am){
+  void deleteFile(AppendixModel am){
     if(am.state==1)am.cancelToken!.cancel();
     appendixs.remove(am);
     setState(() {
 
     });
   }
-  submit()async{
+  Future<void> submit()async{
     FocusScope.of(context).requestFocus(FocusNode());
     String content=inputEditingController.text;
     if(content==""){
@@ -269,7 +269,7 @@ class _FeedbackState extends State<Feedback> {
       ),
     ),);
   }
-  _listWidget(){
+  Widget _listWidget(){
     return Container(
       padding: EdgeInsets.only(
         left: ScreenUtil().setWidth(30.0),
@@ -470,7 +470,7 @@ class _FeedbackState extends State<Feedback> {
     );
   }
   //选择文件弹出框，type，选择文件的类型，0全部，1图片；isImgMini是否上传缩略图
-  selectFileDailog(){
+  void selectFileDailog(){
     FocusScope.of(context).requestFocus(FocusNode());
     List<Widget> childs=[];
     childs.addAll([SimpleDialogOption(

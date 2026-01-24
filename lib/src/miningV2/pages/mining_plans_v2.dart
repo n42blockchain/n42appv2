@@ -36,7 +36,7 @@ class _MiningPlansV2State extends State<MiningPlansV2> {
     });
     calculateReward();
   }
-  Future<void> calculateReward()async{
+  Future<void> calculateReward() async {
     MessageModel rmm=await _miningApi.getTotalEffectiveBalance();
     if(rmm.error==false){
       int t=rmm.data;

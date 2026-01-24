@@ -114,7 +114,7 @@ class _ItemChatViewState extends State<ItemChatView>
     handlerMessage();
   }
 
-  findReplyMessage() async {
+  Future<void> findReplyMessage() async {
     try {
       if (isReply) {
         replyChatItem =
@@ -125,7 +125,7 @@ class _ItemChatViewState extends State<ItemChatView>
     }
   }
 
-  handlerMessage() async {
+  Future<void> handlerMessage() async {
     try {
       isLoading = true;
 
@@ -664,7 +664,7 @@ class _ItemChatViewState extends State<ItemChatView>
     );
   }
 
-  _buildItem(BuildContext context) {
+  Widget _buildItem(BuildContext context) {
     BorderRadiusGeometry? borderRadius = widget.isCurrentUser
         ? BorderRadius.only(
         topLeft: Radius.circular( ScreenUtil().setWidth(16)),
@@ -865,7 +865,7 @@ class _ItemChatViewState extends State<ItemChatView>
   }
 
   ///构建回复消息
-  buildReplyInnerWidget() {
+  Widget buildReplyInnerWidget() {
     if (isReply) {
       if (replyChatItem != null) {
         return Column(
@@ -895,7 +895,7 @@ class _ItemChatViewState extends State<ItemChatView>
     return const SizedBox();
   }
 
-  buildMessageStatus() {
+  Widget buildMessageStatus() {
     if (widget.isCurrentUser) {
       if (_item.status == 0) {
         return SizedBox(
@@ -918,7 +918,7 @@ class _ItemChatViewState extends State<ItemChatView>
   }
 
   //1 = text 、6= video、3= image、Location = 4   File = 5  Tip_Notification = 90 提示文本
-  _buildDefaultIcon() {
+  Widget _buildDefaultIcon() {
     if (messageType == 1) {
       return const Icon(
         Icons.text_fields,

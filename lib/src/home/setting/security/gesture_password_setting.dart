@@ -59,7 +59,7 @@ class GesturePasswordSettingState extends State<GesturePasswordSetting>{
           }),
     );
   }
-  gesturePasswordWidget(){
+  Widget gesturePasswordWidget(){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -168,7 +168,7 @@ class GesturePasswordSettingState extends State<GesturePasswordSetting>{
       ],
     );
   }
-  tipTextWidget(){
+  Widget tipTextWidget(){
     String titleStr="";
     String subtitleStr="";
     if(widget.type==0){
@@ -235,7 +235,7 @@ class GesturePasswordSettingState extends State<GesturePasswordSetting>{
       ],
     );
   }
-  getAnswer(){
+  List<int>? getAnswer(){
     if(widget.type==0){
       if(cachedData['0']['index']=="1"){
         return null;
@@ -252,7 +252,7 @@ class GesturePasswordSettingState extends State<GesturePasswordSetting>{
       }
     }
   }
-  stringToIntArray(String answer){
+  List<int> stringToIntArray(String answer){
     List<String> answerStrList=answer.split(',');
     List<int> answerIntList=[];
     for(String value in answerStrList){

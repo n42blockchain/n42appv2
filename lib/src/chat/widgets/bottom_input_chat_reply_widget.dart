@@ -36,7 +36,7 @@ class _BottomInputChatReplyWidgetState extends State<BottomInputChatReplyWidget>
     handlerMessage();
   }
 
-  handlerMessage() async {
+  Future<void> handlerMessage() async {
     try {
       _item = widget.item;
       messageType = _item.content.type;
@@ -157,7 +157,7 @@ class _BottomInputChatReplyWidgetState extends State<BottomInputChatReplyWidget>
     );
   }
 
-  _buildMessage() {
+  Widget _buildMessage() {
     if (messageType == 1) {
       return Text(
         content ?? '',
@@ -207,7 +207,7 @@ class _BottomInputChatReplyWidgetState extends State<BottomInputChatReplyWidget>
     );
   }
 
-  _buildFileIcon() {
+  Widget _buildFileIcon() {
     if(content != null){
       if (messageType == 1) {
         return const SizedBox();

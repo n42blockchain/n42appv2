@@ -178,7 +178,7 @@ class RichInputController extends TextEditingController {
   ///Get blocks
   List<RichBlock> get blocks => _blocks;
 
-  clearBlocks() {
+  void clearBlocks() {
     _blocks.clear();
   }
 

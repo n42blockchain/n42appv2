@@ -35,7 +35,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
     super.initState();
     init();
   }
-  init()async{
+  Future<void> init()async{
     Map<String,dynamic>? s=await SPUtil().getSecurity();
     if(s!=null){
       Map<String,dynamic>? userSecurityMap=s[AppGlobals.userInfo?.uuid??""];
@@ -49,13 +49,13 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
     }
     initFace();
   }
-  initFace()async{
+  Future<void> initFace()async{
     FaceRecognitionPublic frp=FaceRecognitionPublic();
     checkBiometrics=await frp.checkBiometrics();
     setState(() {});
   }
   //保存设置
-  saveSecurity()async{
+  Future<void> saveSecurity()async{
     SPUtil sPUtils=SPUtil();
     Map<String,dynamic>? s=await sPUtils.getSecurity();
     s ??= {};
@@ -189,7 +189,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
       ),
     );
   }
-  rowItemNew(String title,bool open,Function callback){
+  Widget rowItemNew(String title,bool open,Function callback){
     return InkWell(
       onTap: (){
         callback();
@@ -231,7 +231,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
   }
 
   //打开或关闭锁屏功能
-  openLockScreenWidget(ScreenLockState screenLockState){
+  Widget openLockScreenWidget(ScreenLockState screenLockState){
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
       decoration: BoxDecoration(
@@ -270,7 +270,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
     );
   }
   //打开或关闭手势密码功能
-  openGesturePasswordWidget(ScreenLockState screenLockState){
+  Widget openGesturePasswordWidget(ScreenLockState screenLockState){
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
       decoration: BoxDecoration(
@@ -313,7 +313,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
     );
   }
   //打开或关闭面部识别
-  openFaceWidget(ScreenLockState screenLockState){
+  Widget openFaceWidget(ScreenLockState screenLockState){
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
       decoration: BoxDecoration(
@@ -372,7 +372,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
     );
   }
   //打开通用控件
-  openWidget(String title,bool value,Function valueChange){
+  Widget openWidget(String title,bool value,Function valueChange){
     return Container(
       height: ScreenUtil().setWidth(88.0),
       padding: EdgeInsets.symmetric(
@@ -402,7 +402,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
   }
 
   //锁屏时间
-  lockTime(ScreenLockState screenLockState){
+  Widget lockTime(ScreenLockState screenLockState){
     return InkWell(
       onTap: (){
         showNFTSheet(screenLockState);
@@ -442,7 +442,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
       ),
     );
   }
-  showNFTSheet(ScreenLockState screenLockState){
+  void showNFTSheet(ScreenLockState screenLockState){
     sheetBottom(
       context,
       S.of(context).g_lock_key4,
@@ -505,7 +505,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
   }
 
   //重置密码
-  resetPassword(Function onTap){
+  Widget resetPassword(Function onTap){
     return InkWell(
       onTap: (){
         onTap();

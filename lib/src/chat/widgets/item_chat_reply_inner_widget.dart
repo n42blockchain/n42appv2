@@ -68,7 +68,7 @@ class _ItemChatReplyInnerWidgetState extends State<ItemChatReplyInnerWidget>
     handlerMessage();
   }
 
-  handlerMessage() async {
+  Future<void> handlerMessage() async {
     try {
       if (messageType == 1) {
         //文本消息
@@ -270,7 +270,7 @@ class _ItemChatReplyInnerWidgetState extends State<ItemChatReplyInnerWidget>
     );
   }
 
-  _buildMessageView() {
+  Widget _buildMessageView() {
     if (content != null && content!.isNotEmpty) {
       if (messageType == 1) {
         return Column(
@@ -427,7 +427,7 @@ class _ItemChatReplyInnerWidgetState extends State<ItemChatReplyInnerWidget>
   }
 
   //1 = text 、6= video、3= image、Location = 4   File = 5  Tip_Notification = 90 提示文本
-  _buildDefaultIcon() {
+  Widget _buildDefaultIcon() {
     if (messageType == 1) {
       return const Icon(
         Icons.text_fields,

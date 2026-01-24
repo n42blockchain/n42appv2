@@ -49,7 +49,7 @@ class _SettingShareState extends State<SettingShare> {
     getInviteeMiningInfo();
   }
 
-  getInviteeMiningInfo() async {
+  Future<void> getInviteeMiningInfo() async {
     if (AppGlobals.userInfo != null) {
       var dataList =
       await loginApi.getInviteeMiningInfo(AppGlobals.userInfo?.uuid ?? '');
@@ -61,7 +61,7 @@ class _SettingShareState extends State<SettingShare> {
     }
   }
 
-  getInviteeMiningCount() async {
+  Future<void> getInviteeMiningCount() async {
     if (AppGlobals.userInfo != null) {
       var dataList =
       await loginApi.getInviteeMiningCount(AppGlobals.userInfo?.uuid ?? '');
@@ -72,7 +72,7 @@ class _SettingShareState extends State<SettingShare> {
     }
   }
 
-  getInviteeListDownload() async {
+  Future<void> getInviteeListDownload() async {
     if (AppGlobals.userInfo != null) {
       var dataList =
       await loginApi.getInviteeDownloadList(AppGlobals.userInfo?.uuid ?? '');
@@ -83,7 +83,7 @@ class _SettingShareState extends State<SettingShare> {
     }
   }
 
-  getInviteeList() async {
+  Future<void> getInviteeList() async {
     if (AppGlobals.userInfo != null) {
       var dataList =
       await loginApi.getInviteeList(AppGlobals.userInfo?.uuid ?? '');

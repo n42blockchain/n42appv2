@@ -58,7 +58,7 @@ class SecurityGoogleVedificationState extends State<SecurityGoogleVedification>{
     initSecurity();
   }
   // 加载钱包名 - 使用 IWalletService 替代 WalletActionProvider
-  initWalletPassword() async {
+  Future<void> initWalletPassword() async {
     final walletService = ServiceLocatorSetup.walletService;
     if (walletService == null) {
       walletName = '${S.current.g_key_6} ';
@@ -72,7 +72,7 @@ class SecurityGoogleVedificationState extends State<SecurityGoogleVedification>{
     setState(() {});
   }
   //加载安全设置爱
-  initSecurity()async{
+  Future<void> initSecurity()async{
     Map<String,dynamic>? s=await SPUtil().getSecurity();
     if(s!=null){
       Map<String,dynamic>? userSecurityMap=s[AppGlobals.userInfo?.uuid??""];
@@ -87,7 +87,7 @@ class SecurityGoogleVedificationState extends State<SecurityGoogleVedification>{
     }
   }
   //获取邮箱验证码
-  getEmailVerification()async{
+  Future<void> getEmailVerification()async{
     if(emailLoad==Load.loading)return;
     if(emailSendWait)return;//是否正在等待
     setState(() {
@@ -107,7 +107,7 @@ class SecurityGoogleVedificationState extends State<SecurityGoogleVedification>{
     });
   }
   //开启emailsendwait倒计时
-  starEmailSendWait(){
+  void starEmailSendWait(){
     Timer(Duration(seconds: 1),(){
       setState(() {
         emailSendWaitNum--;
@@ -123,7 +123,7 @@ class SecurityGoogleVedificationState extends State<SecurityGoogleVedification>{
   }
 
   // 验证密码 - 使用 SPUtil 直接读取钱包信息验证密码
-  checkPwd() async {
+  Future<bool> checkPwd() async {
     String pwdStr = pwdTextEditingController.text;
     if (pwdStr == "") {
       setState(() {
@@ -168,7 +168,7 @@ class SecurityGoogleVedificationState extends State<SecurityGoogleVedification>{
     return true;
   }
   //验证邮箱验证码
-  checkEmailVerification()async{
+  Future<bool> checkEmailVerification()async{
     String codeStr=emailTextEditingController.text;
     if(codeStr==""){
       setState(() {
@@ -196,7 +196,7 @@ class SecurityGoogleVedificationState extends State<SecurityGoogleVedification>{
     }
   }
   //谷歌验证
-  checkGoogleVerification()async{
+  Future<bool> checkGoogleVerification()async{
     String codeStr=googleTextEditingController.text;
     if(codeStr==""){
       setState(() {
@@ -229,7 +229,7 @@ class SecurityGoogleVedificationState extends State<SecurityGoogleVedification>{
   }
 
   //保存设置
-  saveSecurity()async{
+  Future<void> saveSecurity()async{
     SPUtil sPUtils=SPUtil();
     Map<String,dynamic>? s=await sPUtils.getSecurity();
     s ??= {};
@@ -240,7 +240,7 @@ class SecurityGoogleVedificationState extends State<SecurityGoogleVedification>{
   }
 
   //关闭键盘
-  closeKeyboard(){
+  void closeKeyboard(){
     FocusScope.of(context).requestFocus(FocusNode());
   }
 
@@ -283,7 +283,7 @@ class SecurityGoogleVedificationState extends State<SecurityGoogleVedification>{
                 setState(() {
                   load=Load.loading;
                 });
-                bool rValue=checkPwd();
+                bool rValue=await checkPwd();
                 if(rValue==false){
                   setState(() {
                     load=Load.finish;

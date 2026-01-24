@@ -24,7 +24,7 @@ class SecurityEditState extends State<SecurityEdit>{
     super.initState();
     init();
   }
-  init()async{
+  Future<void> init()async{
     Map<String,dynamic>? s=await SPUtil().getSecurity();
     if(s!=null){
       Map<String,dynamic>? userSecurityMap=s[AppGlobals.userInfo?.uuid??""];
@@ -38,7 +38,7 @@ class SecurityEditState extends State<SecurityEdit>{
     }
   }
   //保存设置
-  saveSecurity()async{
+  Future<void> saveSecurity()async{
     SPUtil sPUtils=SPUtil();
     Map<String,dynamic>? s=await sPUtils.getSecurity();
     s ??= {};

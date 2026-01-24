@@ -36,7 +36,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
   Map<String,dynamic>? _localValue;
 
   // 模拟加密函数：你可以替换成真实加密逻辑
-  encryptData(String password) async{
+  Future<String> encryptData(String password) async {
     _localValue ??= widget.value ?? await MiningApi.init().generateBls12381Keypair();
     if (!mounted) return "";
 

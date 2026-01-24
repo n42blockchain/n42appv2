@@ -30,7 +30,7 @@ class _AboutAppState extends State<AboutApp> {
     initData();
   }
 
-  initData() async {
+  Future<void> initData() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     setState(() {
       appVersion = packageInfo.version;
@@ -43,7 +43,7 @@ class _AboutAppState extends State<AboutApp> {
   }
 
   ///检查更新
-  checkAppLastVersion() async {
+  Future<void> checkAppLastVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     versionInfo = await VersionApi().getVersionInfo();
     if (versionInfo != null) {
@@ -90,7 +90,7 @@ class _AboutAppState extends State<AboutApp> {
     );
   }
 
-  _buildNavEnter1() {
+  Widget _buildNavEnter1() {
     return Container(
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.symmetric(
@@ -117,7 +117,7 @@ class _AboutAppState extends State<AboutApp> {
     );
   }
 
-  _buildNavEnter2() {
+  Widget _buildNavEnter2() {
     return Container(
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.symmetric(
@@ -283,7 +283,7 @@ class _AboutAppState extends State<AboutApp> {
     );
   }
 
-  _buildVersion() {
+  Widget _buildVersion() {
     return Container(
       padding:
       EdgeInsets.only(top: ScreenUtil().setWidth(20.0), bottom: ScreenUtil().setWidth(40.0)),
@@ -328,7 +328,7 @@ class _AboutAppState extends State<AboutApp> {
     );
   }
 
-  buildNewVersion(BuildContext context) {
+  Widget buildNewVersion(BuildContext context) {
     if (findNewVersion) {
       return GestureDetector(
         child: Row(

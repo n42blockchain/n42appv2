@@ -190,7 +190,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
 
   }
 
-  _userAccount(dynamic currentUser) {
+  Widget _userAccount(dynamic currentUser) {
     // 使用 Riverpod currentUser 响应登录状态变化
     final userInfo = AppGlobals.userInfo;
     final isLoggedIn = currentUser != null || userInfo != null;
@@ -331,7 +331,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
     );
   }
 
-  _menuItem(String iconPath, String actionName,
+  Widget _menuItem(String iconPath, String actionName,
       {Widget? rightWidget, GestureTapCallback? onTap}) {
     return Material(
       color: Colors.transparent,

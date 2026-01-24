@@ -74,7 +74,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     WidgetsBinding.instance.addObserver(this);
     initData();
   }
-  initData() async {
+  Future<void> initData() async {
     showTermsOfService = await SPUtil().getShowTermsOfService();
     setState(() {});
     if (AppGlobals.userInfo == null) return;

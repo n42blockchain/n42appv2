@@ -29,7 +29,7 @@ class SecurityGoogleBackupKeyState extends State<SecurityGoogleBackupKey>{
     bindGoogleVerification();
   }
   //绑定谷歌验证
-  bindGoogleVerification()async{
+  Future<void> bindGoogleVerification()async{
     if(load==Load.loading)return;
     load=Load.loading;
     UserInfoApi userInfoAPI=UserInfoApi();

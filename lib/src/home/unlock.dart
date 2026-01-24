@@ -46,7 +46,7 @@ class _UnlockState extends ConsumerState<Unlock> {
     super.initState();
     initData();
   }
-  initData() {
+  void initData() {
     faceShow = false;
     gestureShow = false;
     passwordShow = false;
@@ -83,7 +83,7 @@ class _UnlockState extends ConsumerState<Unlock> {
       passwordShow = true;
     }
   }
-  initFace() async {
+  Future<void> initFace() async {
     final lockState = ref.read(screenLockProvider);
     if (lockState.faceEnabled) {
       FaceRecognitionPublic frp = FaceRecognitionPublic();
@@ -120,11 +120,11 @@ class _UnlockState extends ConsumerState<Unlock> {
     super.dispose();
   }
 
-  back(){
+  void back(){
     Navigator.pop(context,true);
   }
   // 验证密码
-  checkPwd() {
+  bool checkPwd() {
     String pwdStr = inputPassword;
     
     // Use Riverpod screenLockProvider
@@ -149,7 +149,7 @@ class _UnlockState extends ConsumerState<Unlock> {
     return true;
   }
 
-  passwordLock({bool setData = true}) async {
+  Future<void> passwordLock({bool setData = true}) async {
     if (setData) {
       // Update password lock timestamp via Riverpod
       final timestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
@@ -478,7 +478,7 @@ class _UnlockState extends ConsumerState<Unlock> {
           ),
         );
   }
-  stringToIntArray(String answer){
+  List<int> stringToIntArray(String answer){
     List<String> answerStrList=answer.split(',');
     List<int> answerIntList=[];
     for(String value in answerStrList){

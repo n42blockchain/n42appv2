@@ -83,7 +83,7 @@ class _ItemConversationState extends State<ItemConversation>
     initData();
   }
 
-  initData() async {
+  Future<void> initData() async {
     _item = widget.item;
     _isRead = widget.isRead;
     messageType = _item.content.type;
@@ -95,7 +95,7 @@ class _ItemConversationState extends State<ItemConversation>
     parserMessage();
   }
 
-  handlerMentionData() async {
+  Future<void> handlerMentionData() async {
     //群聊有人@我了
     if (_item.conversationType == 1) {
       isMention = await CacheGroupMentionUtils().isMention(_item.getTargetId());
@@ -112,7 +112,7 @@ class _ItemConversationState extends State<ItemConversation>
   }
 
   //解析加密消息
-  parserMessage() async {
+  Future<void> parserMessage() async {
     if (messageType == 90) {
       // 0 单聊 1群组
       if (_item.conversationType == 1) {
@@ -240,7 +240,7 @@ class _ItemConversationState extends State<ItemConversation>
   }
 
   //更新头像信息
-  updateImageAndName() async {
+  Future<void> updateImageAndName() async {
     // 0 单聊 1群组
     if (_item.conversationType == 1) {
       GroupInfo? gi = _item.groupInfo;
@@ -266,7 +266,7 @@ class _ItemConversationState extends State<ItemConversation>
     );
   }
 
-  _buildChatConversationItem(String image, String name, String content,
+  Widget _buildChatConversationItem(String image, String name, String content,
       {GestureTapCallback? onTap,
         bool isRead = true,
         GestureLongPressCallback? onLongPress}) {

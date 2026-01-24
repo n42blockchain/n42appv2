@@ -31,7 +31,7 @@ class _BottomGroupMemberDialogState extends State<BottomGroupMemberDialog> {
     getGroupMembers();
   }
 
-  getGroupMembers() async {
+  Future<void> getGroupMembers() async {
     try {
       List<GroupMemberInfo> groupList =
       await ChatSPUtil().getGroupMembersById(widget.groupId);
@@ -81,7 +81,7 @@ class _BottomGroupMemberDialogState extends State<BottomGroupMemberDialog> {
     );
   }
 
-  _buildITem(GroupMemberInfo item) {
+  Widget _buildITem(GroupMemberInfo item) {
     return GestureDetector(
       onTap: () {
         if(widget.callBack != null){

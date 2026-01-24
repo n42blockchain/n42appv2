@@ -39,12 +39,12 @@ class MiningV2Provider extends ChangeNotifier {
   bool? depositsEnable;
   bool miningStatus = false;
 
-  setDepositsEnable(bool? flag) {
+  void setDepositsEnable(bool? flag) {
     depositsEnable = flag??false;
     notifyListeners();
   }
 
-  setMiningStatus(bool status) {
+  void setMiningStatus(bool status) {
     miningStatus = status;
     notifyListeners();
   }
@@ -52,7 +52,7 @@ class MiningV2Provider extends ChangeNotifier {
   String walletName="";
   String? address;
 
-  resetData() {
+  void resetData() {
     _mining=null;
     _web3=null;
     depositsEnable = false;
@@ -236,13 +236,13 @@ class MiningV2Provider extends ChangeNotifier {
   String errorMessage="";
   ///质押操作返回的交易hash
   String depositTxHash="";
-  setDepositTxHash(String txHash){
+  void setDepositTxHash(String txHash) {
     depositTxHash=txHash;
     startCheckDepositTxHash(depositTxHash);
   }
   ///质押操作返回的交易hash
   String exitDepositTxHash="";
-  setExitDepositTxHash(String txHash){
+  void setExitDepositTxHash(String txHash) {
     exitDepositTxHash=txHash;
     startCheckExitDepositTxHash(exitDepositTxHash);
   }
@@ -250,7 +250,7 @@ class MiningV2Provider extends ChangeNotifier {
   Map<String,dynamic>? miningKeypart;
   Map<String,dynamic>? miningData;
   bool redeem=false;
-  setMiningData(Map<String,dynamic> keypart,bool isMining,{bool redeem=false})async{
+  Future<void> setMiningData(Map<String,dynamic> keypart, bool isMining, {bool redeem = false}) async {
     miningData ??= {};
     miningData![address!]={
       'isMining':isMining,
@@ -621,7 +621,7 @@ class MiningV2Provider extends ChangeNotifier {
     String secondsStr = remainingSeconds.toString().padLeft(2, '0');
     return [hoursStr, minutesStr, secondsStr];
   }
-  void get7DaysValue(DateTime date){
+  void get7DaysValue(DateTime date) {
     for(int i=0;i<7;i++){
       DateTime d1=date.add(Duration(days: -(6-i)));
       final List<String> d1Str = getTimeFormat(d1);
@@ -695,14 +695,14 @@ class MiningV2Provider extends ChangeNotifier {
   bool showRedemption=false;//质押成功的过度状态
   bool showRedemption2=false;//解除质押成功后的过度状态
   Timer? beaconValidatorTimer;
-  starBeaconValidatorTimer({int waitSeconds=200}){
+  void starBeaconValidatorTimer({int waitSeconds = 200}) {
     if(beaconValidatorTimer !=null)return;
     beaconValidatorTimer=Timer(Duration(seconds: waitSeconds),(){
       getBeaconValidator();
       endBeaconValidatorTimer();
     });
   }
-  endBeaconValidatorTimer(){
+  void endBeaconValidatorTimer() {
     if(beaconValidatorTimer !=null){
       beaconValidatorTimer!.cancel();
       beaconValidatorTimer=null;

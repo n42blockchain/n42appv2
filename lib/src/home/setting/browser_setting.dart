@@ -24,14 +24,14 @@ class _BrowserSettingState extends State<BrowserSetting> {
     getBrowserSetting();
     super.initState();
   }
-  getBrowserSetting()async{
+  Future<void> getBrowserSetting()async{
     Map<String,dynamic>? b=await SPUtil().getBrowserSetting();
     if(b !=null){
       browser=b;
       setState(() {});
     }
   }
-  setBrowserConnectDApp(bool value){
+  void setBrowserConnectDApp(bool value){
     browser['connectDApp']=value;
     SPUtil().setBrowserSetting(browser);
     setState(() {

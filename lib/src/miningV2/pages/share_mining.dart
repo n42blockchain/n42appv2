@@ -63,7 +63,7 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
     return S.of(context).g_mining_key63(topS);
   }
 
-  generateShareText() {
+  String generateShareText() {
     if (widget.fromType == 0 || widget.fromType == 1) {
       final shareUrl =
           "${AppConfig.apiUrl['walletamazeBrowser']}?type=group_mining&id=${widget.groupId}";

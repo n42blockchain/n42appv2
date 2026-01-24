@@ -15,7 +15,7 @@ class VersionInfoModel{
     updateContent=map['updateContent'] as String?;
     isForce=map['isForce'] as bool?;
   }
-  toJson(){
+  Map<String, dynamic> toJson(){
     return {
       "versionName":versionName,
       "versionCode":versionCode,

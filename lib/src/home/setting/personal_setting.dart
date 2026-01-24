@@ -56,7 +56,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
     }
   }
 
-  saveUserInfo() async {
+  Future<void> saveUserInfo() async {
     try {
       if (load == Load.loading) return;
       setState(() {

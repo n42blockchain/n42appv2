@@ -30,7 +30,7 @@ class _MiningKeyListState extends State<MiningKeyList> {
     getMiningData();
   }
 
-  getMiningData()async{
+  Future<void> getMiningData() async {
     miningData=await SPUtil().getMiningData();
     if(miningData !=null){
       miningList=miningData!.values.toList();
@@ -38,7 +38,7 @@ class _MiningKeyListState extends State<MiningKeyList> {
     }
     setState(() {});
   }
-  removeKey(int index)async{
+  Future<void> removeKey(int index) async {
     miningData!.remove(miningKeyList[index]);
     await SPUtil().setMiningData(miningData!);
     getMiningData();

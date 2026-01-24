@@ -108,7 +108,7 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
     initData();
   }
 
-  initData() async {
+  Future<void> initData() async {
     _item = widget.item;
     messageType = _item.content.type;
     isReply = _item.replyId != null;
@@ -118,7 +118,7 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
     updateUserInfo();
   }
 
-  findReplyMessage() async {
+  Future<void> findReplyMessage() async {
     try {
       if (isReply) {
         replyChatItem =
@@ -130,7 +130,7 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
     }
   }
 
-  getGroupPwd() async {
+  Future<void> getGroupPwd() async {
     try {
       GroupData? gd =
       await ChatSPUtil().getGroupDataByGroupId(_item.getTargetId());
@@ -170,7 +170,7 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
   }
 
   //用户头像渲染
-  updateUserInfo() async {
+  Future<void> updateUserInfo() async {
     try {
       if (widget.isCurrentUser) {
         name = AppGlobals.userInfo?.name;
@@ -200,7 +200,7 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
     }
   }
 
-  handlerMessage() async {
+  Future<void> handlerMessage() async {
     try {
       isLoading = true;
       if (messageType == 90) {
@@ -762,7 +762,7 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
     );
   }
 
-  _buildItem(BuildContext context) {
+  Widget _buildItem(BuildContext context) {
     BorderRadiusGeometry? borderRadius = widget.isCurrentUser
         ? const BorderRadius.only(
         topLeft: Radius.circular(8),
@@ -1080,7 +1080,7 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
         ));
   }
 
-  buildReplyInnerWidget() {
+  Widget buildReplyInnerWidget() {
     if (isReply) {
       if (replyChatItem != null) {
         return Column(
@@ -1111,7 +1111,7 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
 
 
 
-  buildMessageStatus() {
+  Widget buildMessageStatus() {
     if (widget.isCurrentUser) {
       if (_item.status == 0) {
         return SizedBox(
@@ -1134,7 +1134,7 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
   }
 
   //1 = text 、2= video、3= image、Location = 4   File = 5  Tip_Notification = 90 提示文本
-  _buildDefaultIcon() {
+  Widget _buildDefaultIcon() {
     if (messageType == 1) {
       return const Icon(
         Icons.text_fields,

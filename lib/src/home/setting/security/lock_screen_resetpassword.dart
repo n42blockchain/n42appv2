@@ -44,7 +44,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
     confirmFocusNode.dispose();
     super.dispose();
   }
-  sure(){
+  void sure(){
     final screenLockState = ref.read(screenLockProvider);
     
     if(widget.type==1){
@@ -122,7 +122,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
     Navigator.pop(context,true);
   }
   //检查输入字符串的位数
-  checkStrLength(String inputStr){
+  bool checkStrLength(String inputStr){
     int len=inputStr.length;
     if(len ==6){
       return true;
@@ -143,7 +143,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
 
     );
   }
-  oldWidget(){
+  Widget oldWidget(){
     return Stack(
       children: [
         Positioned.fill(
@@ -196,7 +196,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
     );
   }
   //旧密码
-  oldPWWidget(){
+  Widget oldPWWidget(){
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
       child: Column(
@@ -228,7 +228,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
     );
   }
   //旧密码
-  newPWWidget(){
+  Widget newPWWidget(){
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
       child: Column(
@@ -259,7 +259,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
     );
   }
   //旧密码
-  confirmPWWidget(){
+  Widget confirmPWWidget(){
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
       child: Column(
@@ -294,7 +294,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
       ),
     );
   }
-  titleWidget(String title){
+  Widget titleWidget(String title){
     return Text(
       title,
       style: TextStyle(
@@ -303,7 +303,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
       ),
     );
   }
-  passwordWidget(
+  Widget passwordWidget(
       TextEditingController controller,
       FocusNode fn,
       String hintStr,
@@ -354,7 +354,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
       ),
     );
   }
-  errorMessageWidget(String message){
+  Widget errorMessageWidget(String message){
     if(message==""){
       return SizedBox();
     }
