@@ -70,7 +70,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
     super.dispose();
   }
   init_security()async{
-    //isGoogleAuth=AppGlobals.userInfo!.bind_google_auth_state ?? false;
+    //isGoogleAuth=AppGlobals.userInfo!.bindGoogleAuthState ?? false;
     Map<String,dynamic>? s=await SPUtil().getSecurity();
     if(s!=null){
       Map<String,dynamic>? userSecurityMap=s[AppGlobals.userInfo?.uuid??""];

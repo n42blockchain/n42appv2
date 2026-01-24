@@ -174,7 +174,7 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
     Map<String, dynamic> uMap = {
       //"art_json":artStr,
       "desc": uInfo.desc ?? "",
-      //"idx_email_hash":uInfo.idx_email_hash==null?"":uInfo.idx_email_hash,
+      //"idx_email_hash":uInfo.idxEmailHash==null?"":uInfo.idxEmailHash,
       "image": uInfo.image ?? "",
       "name": uInfo.name ?? "",
     };

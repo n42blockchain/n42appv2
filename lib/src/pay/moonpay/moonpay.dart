@@ -90,7 +90,7 @@ class _MoonpayState extends State<Moonpay> {
     if (rdatas.isNotEmpty && rdatas[0] != null) {
       if (rdatas[0]['type'] == "get_moonpay_signature") {
         if (widget.coinModel != null) {
-          String url = CreateUrl(
+          String url = createUrl(
               widget.coinModel!.coin['miniName'],
               widget.coinModel!.address,
               rdatas[0]['url'],

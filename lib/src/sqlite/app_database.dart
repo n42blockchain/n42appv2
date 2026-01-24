@@ -155,7 +155,7 @@ class AppDatabase{
     return list;
   }
   //查询交易记录,contract合约地址，主链币没有合约地址，默认为空字符串
-  Future<List<TransationRecordModel>> selectTransationRecord_miniName(
+  Future<List<TransationRecordModel>> selectTransationRecordMiniName(
       String address, String miniName, int selectType,
       {String contract = "",
         int pageSize = 10,

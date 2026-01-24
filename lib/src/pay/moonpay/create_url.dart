@@ -74,7 +74,7 @@ class MoonpayService {
 /// [address] 钱包地址
 /// [url] 原始 URL
 /// [mode] 环境模式 ('prod' 或 'test')
-String CreateUrl(String coinType, String address, String url, String mode) {
+String createUrl(String coinType, String address, String url, String mode) {
   final secretKey = MoonpayService._getSecretKey(mode);
 
   Uri uri = Uri.parse(url);

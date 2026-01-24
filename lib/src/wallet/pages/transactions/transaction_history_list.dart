@@ -63,7 +63,7 @@ class _TransactionHistoryListState extends State<TransactionHistoryList> {
                     pageSize: pageSize, pageNum: page);
               } else {
                 txList = await db
-                    .selectTransationRecord_miniName(addr, coinKey, 0,
+                    .selectTransationRecordMiniName(addr, coinKey, 0,
                     contract: contract,
                     pageSize: pageSize,
                     pageNum: page,

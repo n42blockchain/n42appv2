@@ -172,8 +172,8 @@ class _SwapAstHomeState extends State<SwapAstHome> {
         }
         errorMessage = "";
         setState(() {});
-        getBalance_chain_pay();
-        getBalance_pay();
+        getBalanceChainPay();
+        getBalancePay();
         return true;
       }else{
         if (!mounted) return false;
@@ -210,7 +210,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     setState(() {});
   }
 
-  getBalance_chain_pay() async {
+  getBalanceChainPay() async {
     if (payCoinModel != null) {
       if (payLoad == Load.loading) return;
       setState(() {
@@ -232,7 +232,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     }
   }
 
-  getBalance_pay() async {
+  getBalancePay() async {
     if (youPay != null && payCoinModel != null) {
       setState(() {
         youPay!.load = Load.loading;
@@ -798,8 +798,8 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                             youPay?.payCoinContract ?? "");
                       }
                       setState(() {});
-                      getBalance_chain_pay();
-                      getBalance_pay();
+                      getBalanceChainPay();
+                      getBalancePay();
                       bool rCoinPrice = await getCoinPrice();
                       if (!mounted) return;
                       if (rCoinPrice) {

@@ -87,8 +87,8 @@ class _MessageListState extends ConsumerState<MessageList> {
           if (coin == CoinType.N.name) {
             coin = CoinType.N.name;
           }
-          String msg_type = map['msg_type'] ?? "";
-          switch (msg_type) {
+          String msgType = map['msg_type'] ?? "";
+          switch (msgType) {
             case "tokens_received":
               String content =
                   "Transaction hash ${txContent['hash']}, ${txContent['from']} to you ${txContent['num']}$coin";

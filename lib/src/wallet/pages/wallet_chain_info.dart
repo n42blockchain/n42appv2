@@ -255,7 +255,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
             AppGlobals.userInfo?.uuid ?? "", addr, coinKey, 0,
             pageSize: pageSize, pageNum: page);
       } else {
-        txList = await db.selectTransationRecord_miniName(
+        txList = await db.selectTransationRecordMiniName(
             addr, coinKey, 0,
             contract: contract,
             pageSize: pageSize,

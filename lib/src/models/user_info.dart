@@ -5,16 +5,16 @@ class UserInfo{
   String? token;
   String? uuid;
   int? created;
-  String? idx_email_hash;
+  String? idxEmailHash;
   String? source;
   String? image;
   String? name;
   String? desc;
-  String? art_json;
-  bool? bind_google_auth_state;
+  String? artJson;
+  bool? bindGoogleAuthState;
   bool? createWallet;//是否创建了钱包
-  String? wallet_addr;
-  String? invite_code;
+  String? walletAddr;
+  String? inviteCode;
 
   bool _follower=false;//是否是追随者
   setFollower(bool value){
@@ -36,12 +36,12 @@ class UserInfo{
   bool? _isArtist;
   bool get isArtist{
     if(_isArtist !=null)return _isArtist!;
-    Map<String, dynamic>? artJson = json.decode(art_json!);
+    Map<String, dynamic>? artData = json.decode(artJson!);
     _isArtist=true;
-    if(artJson==null){
+    if(artData==null){
       _isArtist=false;
     }else{
-      _isArtist=artJson['_id']==null?false:true;
+      _isArtist=artData['_id']==null?false:true;
     }
     return _isArtist!;
   }
@@ -54,12 +54,12 @@ class UserInfo{
       this.image,
       this.name,
       this.desc,
-      this.art_json,
-      this.idx_email_hash,
+      this.artJson,
+      this.idxEmailHash,
       this.source,
-      this.bind_google_auth_state,
+      this.bindGoogleAuthState,
       this.createWallet,
-      this.invite_code);
+      this.inviteCode);
 
   UserInfo.fromJson(Map<String, dynamic> json){
     email=json['email'] as String?;
@@ -69,13 +69,13 @@ class UserInfo{
     image=json['image'] as String?;
     name=json['name'] as String?;
     desc=json['desc'] as String?;
-    art_json=json['art_json'] as String?;
-    idx_email_hash=json['idx_email_hash'] as String?;
+    artJson=json['art_json'] as String?;
+    idxEmailHash=json['idx_email_hash'] as String?;
     source=json['source'] as String?;
-    bind_google_auth_state=json['bind_google_auth_state'] as bool?;
+    bindGoogleAuthState=json['bind_google_auth_state'] as bool?;
     createWallet=json['createWallet'] as bool?;
-    invite_code=json['invite_code'] as String?;
-    wallet_addr=json['wallet_addr'] as String?;
+    inviteCode=json['invite_code'] as String?;
+    walletAddr=json['wallet_addr'] as String?;
   }
   Map<String, dynamic> toJson(){
     return{
@@ -83,16 +83,16 @@ class UserInfo{
       'token': token,
       'uuid': uuid,
       'created': created,
-      'idx_email_hash': idx_email_hash,
+      'idx_email_hash': idxEmailHash,
       'source': source,
       'image': image,
       'name': name,
       'desc': desc,
-      'art_json': art_json,
-      'bind_google_auth_state': bind_google_auth_state,
+      'art_json': artJson,
+      'bind_google_auth_state': bindGoogleAuthState,
       'createWallet': createWallet,
-      'wallet_addr': wallet_addr,
-      'invite_code': invite_code,
+      'wallet_addr': walletAddr,
+      'invite_code': inviteCode,
     };
   }
 }
