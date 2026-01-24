@@ -484,14 +484,14 @@ class TransferApi {
     switch (blockchain) {
       case "Bitcoin":
         if(privateKey ==null){
-          rStr = await trustdart.signTransaction_maxValue(
+          rStr = await trustdart.signTransactionMaxValue(
             coinType.toUpperCase(),
             path,
             signData,
             mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletInfo.mnemonic??"",
           );
         }else{
-          rStr = await trustdart.signTransaction_maxValue(coinType.toUpperCase(), "", signData, pk: privateKey,);
+          rStr = await trustdart.signTransactionMaxValue(coinType.toUpperCase(), "", signData, pk: privateKey,);
         }
         break;
 

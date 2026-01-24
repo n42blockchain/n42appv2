@@ -135,7 +135,7 @@ class Trustdart {
     }
   }
   ///返回最大交易金额
-  Future<String> signTransaction_maxValue(
+  Future<String> signTransactionMaxValue(
       String coin,
       String path,
       Map txData,
@@ -177,7 +177,7 @@ class Trustdart {
       return '';
     }
   }
-  Future<String> signTransaction_g(
+  Future<String> signTransactionG(
       String coin,
       String path,
       Map txData,
@@ -197,7 +197,7 @@ class Trustdart {
       return '';
     }
   }
-  Future<String> signTransaction_btc_p2wsh(
+  Future<String> signTransactionBtcP2wsh(
       String coin,
       String path,
       Map txData,

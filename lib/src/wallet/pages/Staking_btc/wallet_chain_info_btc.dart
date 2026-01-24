@@ -467,7 +467,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
   }
 
   getTxInfoNetworkBtc(BtcTransactionRecodeModel transationRecordModel)async{
-    BtcTransactionRecodeModel rtrm=await Provider.of<TransactionRecordItemProvider>(context,listen: false).checkUndoneTr_btc_return(transationRecordModel);
+    BtcTransactionRecodeModel rtrm=await Provider.of<TransactionRecordItemProvider>(context,listen: false).checkUndoneTrBtcReturn(transationRecordModel);
     transactionList.firstWhere((element){
       TransationRecordModel trm=element as TransationRecordModel;
       if(trm.txHash==rtrm.txHash){

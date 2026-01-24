@@ -36,7 +36,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
   int timerCount=0;
 
   Timer? _timer;
-  Timer? _timer_btc;
+  Timer? _timerBtc;
   TokenViewApi? _tokenViewApi;
   TokenViewApi get tokenViewApi{
     _tokenViewApi ??= TokenViewApi();
@@ -51,7 +51,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
       timerStart();
     }
     if(_trUndoneList.isNotEmpty){
-      timerStart_btc();
+      timerStartBtc();
     }
   }
   //添加未完成的交易，type：0比特币类，1其它类型
@@ -61,7 +61,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
       timerStart();
     }else{
       _trUndoneList.add(trm);
-      timerStart_btc();
+      timerStartBtc();
     }
   }
   timerStart(){
@@ -78,17 +78,17 @@ class TransactionRecordItemProvider with ChangeNotifier{
       }
     });
   }
-  timerStart_btc(){
-    if(_timer_btc!=null)return;
-    _timer_btc=Timer.periodic(Duration(seconds: 180), (timer) {
+  timerStartBtc(){
+    if(_timerBtc!=null)return;
+    _timerBtc=Timer.periodic(Duration(seconds: 180), (timer) {
       if(_trUndoneList.isNotEmpty){
         for(int i=0;i<_trUndoneList.length;i++){
-          checkUndoneTr_btc(_trUndoneList[i]);
+          checkUndoneTrBtc(_trUndoneList[i]);
         }
       }
-      if(_trUndoneList.isEmpty && _timer_btc !=null){
-        _timer_btc!.cancel();
-        _timer_btc=null;
+      if(_trUndoneList.isEmpty && _timerBtc !=null){
+        _timerBtc!.cancel();
+        _timerBtc=null;
       }
     });
   }
@@ -369,7 +369,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
     }
     checkUndoneList();
   }
-  checkUndoneTr_return(TransationRecordModel trm)async{
+  checkUndoneTrReturn(TransationRecordModel trm)async{
     BlockchainType bt=BlockchainType.values.firstWhere((element) => element.name==trm.coin['blockchainType']?true:false);
     switch(bt){
       case BlockchainType.Ethereum:
@@ -610,7 +610,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
     return trm;
   }
   //检查未完成的交易
-  checkUndoneTr_btc(BtcTransactionRecodeModel trm)async{
+  checkUndoneTrBtc(BtcTransactionRecodeModel trm)async{
     if(trm.isTest==1){
       MessageModel mm=await BtcApi(test: trm.isTest==1?true:false).getTxState(trm.txHash);
       if(mm.error){
@@ -646,7 +646,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
       }
     }
   }
-  checkUndoneTr_btc_return(BtcTransactionRecodeModel trm)async{
+  checkUndoneTrBtcReturn(BtcTransactionRecodeModel trm)async{
     if(trm.isTest==1){
       MessageModel mm=await BtcApi(test: trm.isTest==1?true:false).getTxState(trm.txHash);
       if(mm.error){
@@ -676,9 +676,9 @@ class TransactionRecordItemProvider with ChangeNotifier{
 
   }
   checkUndoneList(){
-    if(_trUndoneList.isEmpty && _timer_btc !=null){
-      _timer_btc!.cancel();
-      _timer_btc=null;
+    if(_trUndoneList.isEmpty && _timerBtc !=null){
+      _timerBtc!.cancel();
+      _timerBtc=null;
     }
     if(_unDoneTrModelList.isEmpty && _timer !=null){
       _timer!.cancel();

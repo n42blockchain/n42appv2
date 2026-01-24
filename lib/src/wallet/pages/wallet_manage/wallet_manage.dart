@@ -106,7 +106,7 @@ class _WalletManageState extends State<WalletManage> {
       setState(() { });
     }
   }
-  deleteWallet_alert(){
+  deleteWalletAlert(){
     showDialog(
       context: context,
       builder: (context){
@@ -177,7 +177,7 @@ class _WalletManageState extends State<WalletManage> {
           showDelete?
           InkWell(
             onTap: (){
-              deleteWallet_alert();
+              deleteWalletAlert();
             },
             child: Container(
               alignment: Alignment.center,

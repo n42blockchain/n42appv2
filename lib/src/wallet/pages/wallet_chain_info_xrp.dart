@@ -87,13 +87,13 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
       var pixel = scrollController.position.pixels;
       if (pixel > maxScroll - 200) {
         getTransactionData(Load.nextPage);
-        getTransactionData_network(Load.nextPage);
+        getTransactionDataNetwork(Load.nextPage);
       }
     });
     eventBusFn = eventBus.on().listen((event) async {
       if (event is EventPublic && event.type == EventPublicType.transferOk) {
         getTransactionData(Load.refresh);
-        getTransactionData_network(Load.refresh);
+        getTransactionDataNetwork(Load.refresh);
         await widget.coinModel.getBalance();
         setState(() {});
       }
@@ -140,7 +140,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
     marketInfo = Provider.of<WalletActionProvider>(context,listen: false)
         .getCoinPriceWithUnit_all(widget.coinModel.coin['unit']);
     getTransactionData(Load.refresh);
-    getTransactionData_network(Load.refresh);
+    getTransactionDataNetwork(Load.refresh);
   }
   //获取xrp服务器信息，主要获取 基础说定额度和每个对象的锁定额度
   getServiceState()async{
@@ -197,7 +197,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
     }
   }
 
-  getTransactionData_network(Load LoadType)async{
+  getTransactionDataNetwork(Load loadType)async{
     String addr = widget.coinModel.address.toString();
     String coinKey = widget.coinModel.coin['coinType'];
     String contract = widget.coinModel.coin['contract'];
@@ -211,18 +211,18 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
     if(mm.error==false){
       //cril=mm.data;
       if(widget.coinModel.coin['blockchainType'] ==BlockchainType.Ethereum.name){
-        getTransactionData_network_eth(mm.data);
+        getTransactionDataNetworkEth(mm.data);
       }
       else if(widget.coinModel.coin['blockchainType'] ==BlockchainType.Bitcoin.name){
-        getTransactionData_network_btc(mm.data);
+        getTransactionDataNetworkBtc(mm.data);
       }else if(widget.coinModel.coin['blockchainType'] ==BlockchainType.Tron.name){
-        getTransactionData_network_trx(mm.data);
+        getTransactionDataNetworkTrx(mm.data);
       }else if(widget.coinModel.coin['blockchainType'] ==BlockchainType.Solana.name){
-        //getTransactionData_network_sol(mm.data);
+        //getTransactionDataNetworkSol(mm.data);
       }
     }
   }
-  getTransactionData_network_eth(List<CommonResponseItemModel>? cril)async{
+  getTransactionDataNetworkEth(List<CommonResponseItemModel>? cril)async{
     if(cril !=null){
       bool isEdit=false;
       for(int i=cril.length-1;i>=0;i--){
@@ -264,7 +264,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           }
           await db.insertTransationRecord(transationRecordModel);
           isEdit=true;
-          getTxInfo_network(transationRecordModel);
+          getTxInfoNetwork(transationRecordModel);
         }
         else{
           TransationRecordModel transationRecordModel=rtrm[0];
@@ -286,7 +286,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
       }
     }
   }
-  getTransactionData_network_trx(List<CommonResponseItemModel>? cril)async{
+  getTransactionDataNetworkTrx(List<CommonResponseItemModel>? cril)async{
     if(cril !=null){
       bool isEdit=false;
       for(int i=cril.length-1;i>=0;i--){
@@ -316,7 +316,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           transationRecordModel.isTest=widget.coinModel.isTest?1:0;
           await db.insertTransationRecord(transationRecordModel);
           isEdit=true;
-          getTxInfo_network(transationRecordModel);
+          getTxInfoNetwork(transationRecordModel);
         }
         else{
           TransationRecordModel transationRecordModel=rtrm[0];
@@ -338,7 +338,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
       }
     }
   }
-  getTransactionData_network_btc(List<BtcTranDetail>? cril)async{
+  getTransactionDataNetworkBtc(List<BtcTranDetail>? cril)async{
     if(cril !=null){
       bool isEdit=false;
       for(int i=cril.length-1;i>=0;i--){
@@ -414,7 +414,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
 
           await db.insertBtcTransactionRecord(transationRecordModel);
           isEdit=true;
-          //getTxInfo_network(transationRecordModel);
+          //getTxInfoNetwork(transationRecordModel);
         }
         else{
           BtcTransactionRecodeModel transationRecordModel=rtrm[0];
@@ -461,7 +461,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
     }
   }
   /*
-  getTransactionData_network_sol(List<SOLTransactionItem>? cril)async{
+  getTransactionDataNetworkSol(List<SOLTransactionItem>? cril)async{
     if(cril !=null){
       bool isEdit=false;
       for(int i=cril.length-1;i>=0;i--){
@@ -502,7 +502,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           }
           await db.insertTransationRecord(transationRecordModel);
           isEdit=true;
-          getTxInfo_network(transationRecordModel);
+          getTxInfoNetwork(transationRecordModel);
         }
         else{
           TransationRecordModel transationRecordModel=rtrm[0];
@@ -525,8 +525,8 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
     }
   }
   */
-  getTxInfo_network(TransationRecordModel transationRecordModel)async{
-    TransationRecordModel rtrm=await Provider.of<TransactionRecordItemProvider>(context,listen: false).checkUndoneTr_return(transationRecordModel);
+  getTxInfoNetwork(TransationRecordModel transationRecordModel)async{
+    TransationRecordModel rtrm=await Provider.of<TransactionRecordItemProvider>(context,listen: false).checkUndoneTrReturn(transationRecordModel);
     transactionList.firstWhere((element){
       TransationRecordModel trm=element as TransationRecordModel;
       if(trm.txHash==rtrm.txHash){
@@ -537,8 +537,8 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
     });
     setState(() {});
   }
-  getTxInfo_network_btc(BtcTransactionRecodeModel transationRecordModel)async{
-    BtcTransactionRecodeModel rtrm=await Provider.of<TransactionRecordItemProvider>(context,listen: false).checkUndoneTr_btc_return(transationRecordModel);
+  getTxInfoNetworkBtc(BtcTransactionRecodeModel transationRecordModel)async{
+    BtcTransactionRecodeModel rtrm=await Provider.of<TransactionRecordItemProvider>(context,listen: false).checkUndoneTrBtcReturn(transationRecordModel);
     transactionList.firstWhere((element){
       TransationRecordModel trm=element as TransationRecordModel;
       if(trm.txHash==rtrm.txHash){
@@ -605,7 +605,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
               child: RefreshIndicator(
                 onRefresh: () async {
                   getTransactionData(Load.refresh);
-                  getTransactionData_network(Load.refresh);
+                  getTransactionDataNetwork(Load.refresh);
                   await widget.coinModel.getBalance();
                 },
                 backgroundColor: AppThemeUtils.getColorByKey(

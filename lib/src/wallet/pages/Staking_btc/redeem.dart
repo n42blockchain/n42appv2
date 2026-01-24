@@ -211,7 +211,7 @@ class _RedeemState extends State<Redeem> {
       "max":true
     };
     if (kDebugMode) debugPrint(json.encode(btcTxMap));
-    await Trustdart().signTransaction_btc_p2wsh(CoinType.BTC.name, "m/84'/4'/0'/0/0", btcTxMap,pk: Provider.of<WalletActionProvider>(context,listen: false).walletInfo.privateKey??"");
+    await Trustdart().signTransactionBtcP2wsh(CoinType.BTC.name, "m/84'/4'/0'/0/0", btcTxMap,pk: Provider.of<WalletActionProvider>(context,listen: false).walletInfo.privateKey??"");
   }
   //交易打包
   //unspents 未消费列表

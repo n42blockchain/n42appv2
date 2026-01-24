@@ -58,7 +58,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
     // TODO: implement initState
     super.initState();
     userInfoApi=UserInfoApi();
-    init_security();
+    initSecurity();
   }
   @override
   void dispose() {
@@ -69,7 +69,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
     emailSendWaitNum=0;
     super.dispose();
   }
-  init_security()async{
+  initSecurity()async{
     //isGoogleAuth=AppGlobals.userInfo!.bindGoogleAuthState ?? false;
     Map<String,dynamic>? s=await SPUtil().getSecurity();
     if(s!=null){
@@ -272,12 +272,12 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
   //跳转 设置安全设置页
   pushSetting()async{
     await Navigator.pushNamed(context, "securitySetting");
-    init_security();
+    initSecurity();
   }
   pushEditWallet()async{
     int wIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
     await Navigator.push(context, MaterialPageRoute(builder: (context)=>EditWalletPassword(Provider.of<WalletActionProvider>(context,listen: false).walletInfo, wIndex)));
-    init_security();
+    initSecurity();
   }
   Future<bool> _pageBack(){
     if(Navigator.canPop(context)){
@@ -801,7 +801,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
                       },
                     ),
                   ),
-                  walletEmail_verification(),
+                  walletEmailVerification(),
                 ],
               ),
             ),
@@ -886,7 +886,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
     }
   }
   //发送邮箱验证码按钮
-  Widget walletEmail_verification(){
+  Widget walletEmailVerification(){
     Color bgColor=AppThemeUtils.getColorByKey(context,AppThemeKeys.mainButtonBgColor.name);
     Widget leftWidget=SizedBox();
     if(emailLoad==Load.loading){

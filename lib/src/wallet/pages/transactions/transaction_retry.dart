@@ -202,9 +202,9 @@ class _TransactionRetryState extends State<TransactionRetry> {
     }else{
       errorMessage=rData.data.toString();
     }
-    timer_init();
+    timerInit();
   }
-  timer_init(){
+  timerInit(){
     timer=Timer(Duration(seconds: 3), () {
       getTransactionReceipt();
     });
