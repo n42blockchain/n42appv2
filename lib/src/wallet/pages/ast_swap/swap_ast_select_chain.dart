@@ -27,7 +27,7 @@ class _SwapAstSelectChainState extends State<SwapAstSelectChain> {
     );
   }
 
-  tokenListWidget(){
+  Widget tokenListWidget() {
     return ListView.separated(
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       itemBuilder: (context,int index){

@@ -43,12 +43,12 @@ class _WalletListState extends State<WalletList> {
     initData();
   }
 
-  initData() async {
+  Future<void> initData() async {
     walletList = Provider.of<WalletActionProvider>(context,listen: false).walletInfoLsit;
     checkFaceBindingWallet();
     setState(() {});
   }
-  checkFaceBindingWallet(){
+  void checkFaceBindingWallet() {
     fbwIndex=-1;
     fbwCheck=true;//验证钱包地址是否成功，默认成功
     fbwCheckAddress="";//验证钱包地址后，返回的地址
@@ -59,7 +59,7 @@ class _WalletListState extends State<WalletList> {
       return false;
     });
   }
-  jumpWalletInfoPage(WalletInfo info,int index)async{
+  Future<void> jumpWalletInfoPage(WalletInfo info, int index) async {
     //本应用创建的钱包
     await Navigator.of(context).push(MaterialPageRoute(
         builder: (_) => WalletManage(
@@ -68,7 +68,7 @@ class _WalletListState extends State<WalletList> {
         )));
     initData();
   }
-  checkFaceBindAddress(String addr)async{
+  Future<void> checkFaceBindAddress(String addr) async {
     fbwCheck=false;
     fbwIndex=-1;
     for(int i=0;i<walletList.length;i++){
@@ -95,7 +95,7 @@ class _WalletListState extends State<WalletList> {
     fbwCheckAddress=addr;
     setState(() {});
   }
-  verify()async{
+  Future<void> verify() async {
     if(load==Load.loading)return;
     String? rData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>FaceMatch(2)));
     if (!mounted) return;
@@ -105,7 +105,7 @@ class _WalletListState extends State<WalletList> {
       ToastUtils.show(S.of(context).g_face_match_key34);
     }
   }
-  unbind()async{
+  Future<void> unbind() async {
     if(load==Load.loading)return;
 
     String? rData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>FaceMatch(2)));
@@ -141,7 +141,7 @@ class _WalletListState extends State<WalletList> {
       load=Load.finish;
     });
   }
-  bind()async{
+  Future<void> bind() async {
     if(load==Load.loading)return;
     MessageModel? rData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>FaceUserNotice()));
     if (!mounted) return;
@@ -270,7 +270,7 @@ class _WalletListState extends State<WalletList> {
     );
   }
 */
-  _buildFaceBind(){
+  Widget _buildFaceBind() {
     List<Widget> cList=[];
     if(fbwIndex==-1){
       //未绑定
@@ -400,14 +400,14 @@ class _WalletListState extends State<WalletList> {
       ),
     );
   }
-  faceBindButton(String title,onTap){
+  Widget faceBindButton(String title, VoidCallback onTap) {
     return SizedBox(
       height: ScreenUtil().setWidth(80),
       width: double.infinity,
       child: buttonStyle2(context, onTap, title),
     );
   }
-  faceBindText(String value,{EdgeInsetsGeometry? margin}){
+  Widget faceBindText(String value, {EdgeInsetsGeometry? margin}) {
     return Container(
       alignment: Alignment.centerLeft,
       margin: margin??EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
@@ -421,7 +421,7 @@ class _WalletListState extends State<WalletList> {
     );
   }
 
-  _buildList() {
+  Widget _buildList() {
     if (walletList.isEmpty) return const EmptyView();
     return ListView.builder(
       itemCount: walletList.length,

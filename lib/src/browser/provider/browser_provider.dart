@@ -57,22 +57,22 @@ class BrowserProvider extends ChangeNotifier{
   bool canBack=false;
   bool canForward=false;
   bool collect=false;
-  void browserInit(){
+  void browserInit() {
     titleEditingController=TextEditingController();
     titleFocusNode=FocusNode();
     titleFocusNode?.addListener(() {
       notifyListeners();
     });
   }
-  void browserDispose(){
+  void browserDispose() {
     titleEditingController?.dispose();
     titleFocusNode?.dispose();
   }
-  void addUrl(String url){
+  void addUrl(String url) {
     String rUrl=checkHttp(url);
     wListAdd(url:rUrl);
   }
-  void wListAdd({String url=""}){
+  void wListAdd({String url=""}) {
     if(url==""){
       url=AppConfig.apiUrl['walletamazeBrowser']!;
     }
@@ -151,7 +151,7 @@ class BrowserProvider extends ChangeNotifier{
     wListIndex=wList.length-1;
     notifyListeners();
   }
-  void loadRequest({String url=""}){
+  void loadRequest({String url=""}) {
     if(url==""){
       url=titleEditingController?.text??"";
     }
@@ -163,7 +163,7 @@ class BrowserProvider extends ChangeNotifier{
     //notifyListeners();
   }
   //显示webView
-  void wListShow(int index){
+  void wListShow(int index) {
     wListIndex=index;
     showWList=false;
     titleEditingController?.text=wInfoList[wListIndex]['openUrl'];
@@ -171,7 +171,7 @@ class BrowserProvider extends ChangeNotifier{
     getCollectionUrl(wInfoList[wListIndex]['openUrl']);
   }
   //删除一个 webView
-  void wListDelete(int index){
+  void wListDelete(int index) {
     if(index==0){
       //第一位
       if(wList.length==1){
@@ -212,7 +212,7 @@ class BrowserProvider extends ChangeNotifier{
       notifyListeners();
     }
   }
-  void gotoGoogle(){
+  void gotoGoogle() {
     WebViewController wv=wvcList[wListIndex];
     String url=wInfoList[wListIndex]['openUrl'];
     wInfoList[wListIndex]['openUrl']="https://www.google.com/search?q=$url";
@@ -225,11 +225,11 @@ class BrowserProvider extends ChangeNotifier{
     canForward=await wv.canGoForward();
     notifyListeners();
   }
-  void clearCache(){
+  void clearCache() {
     WebViewController wv=wvcList[wListIndex];
     wv.clearCache();
   }
-  bool checkUrl(String url){
+  bool checkUrl(String url) {
     if(_blockUri !=""){
       if(_blockUri == url){
         eventBus.fire(EventPublic(EventPublicType.blockUri));
@@ -257,7 +257,7 @@ class BrowserProvider extends ChangeNotifier{
     }
     return true;
   }
-  String checkHttp(String url){
+  String checkHttp(String url) {
     String returnUrl="";
     bool isHttp=isURL(url,);
     if(isHttp){
@@ -281,14 +281,14 @@ class BrowserProvider extends ChangeNotifier{
     getCollectionUrl(wInfoList[wListIndex]['openUrl']);
   }
   //添加收藏
-  Future<void> addBrowserCollection(context)async{
+  Future<void> addBrowserCollection(BuildContext context) async {
     WebViewController wv=wvcList[wListIndex];
     String? currentUrl=await wv.currentUrl();
     String? title=await wv.getTitle();
     await Navigator.push(context, MaterialPageRoute(builder: (context)=>BrowserCollection(title ?? "",currentUrl ?? "",)));
     getCollectionUrl(wInfoList[wListIndex]['openUrl']);
   }
-  void cleanWList(){
+  void cleanWList() {
     showWList=false;
     wListIndex=-1;
     wList=[];

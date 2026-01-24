@@ -40,7 +40,7 @@ class IpfsApi{
 
   }
   //ipfs上传图片type 0文件地址上传，1 List<int>上传
-  Future<Map<String, dynamic>> uploadIPFSImage(var file,String filename,dynamic sendProgress,{int type=0,var cancelToken}) async{
+  Future<Map<String, dynamic>> uploadIPFSImage(dynamic file, String filename, dynamic sendProgress, {int type = 0, CancelToken? cancelToken}) async {
     try{
       FormData fd=FormData.fromMap({"path":type==0?
       MultipartFile.fromFile(file,filename: filename):

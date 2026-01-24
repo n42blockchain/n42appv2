@@ -31,7 +31,7 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
     getOrderDetail();
     super.initState();
   }
-  getOrderDetail()async{
+  Future<void> getOrderDetail() async {
     SwapAstApi swapAstApi=SwapAstApi();
     MessageModel rData=await swapAstApi.getNftOrAstDetail(_orderModel.id??0);
     if(rData.error==false){
@@ -49,7 +49,7 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
       body: bodyWidget(),
     );
   }
-  bodyWidget(){
+  Widget bodyWidget() {
     createStr=dformat.formatDate(
         DateTime.now(), [
       dformat.yyyy,
@@ -96,7 +96,7 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
       return processingWidget();
     }
   }
-  processingWidget(){
+  Widget processingWidget() {
     return Padding(
       padding: EdgeInsets.all(ScreenUtil().setWidth(30),),
       child: Column(
@@ -251,7 +251,7 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
       ),
     );
   }
-  pRowWidget(String title,){
+  Widget pRowWidget(String title) {
     return Expanded(
       flex: 1,
       child: Column(
@@ -268,7 +268,7 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
       ),
     );
   }
-  successWidget(){
+  Widget successWidget() {
     return Column(
       children: [
         Container(
@@ -363,7 +363,7 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
       ],
     );
   }
-  rowWidget(String title, String value){
+  Widget rowWidget(String title, String value) {
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: ScreenUtil().setWidth(10),

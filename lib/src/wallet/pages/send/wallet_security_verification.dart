@@ -69,7 +69,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
     emailSendWaitNum=0;
     super.dispose();
   }
-  initSecurity()async{
+  Future<void> initSecurity() async {
     //isGoogleAuth=AppGlobals.userInfo!.bindGoogleAuthState ?? false;
     Map<String,dynamic>? s=await SPUtil().getSecurity();
     if(s!=null){
@@ -90,7 +90,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
   }
 
   //验证密码
-  checkPwd(){
+  bool checkPwd() {
     String pwdStr=pwdTextEditingController.text;
     /*if(pwdStr==""){
       setState(() {
@@ -111,11 +111,11 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
     return true;
   }
   //关闭键盘
-  closeKeyboard(){
+  void closeKeyboard() {
     FocusScope.of(context).requestFocus(FocusNode());
   }
   //获取邮箱验证码
-  getEmailVerification()async{
+  Future<void> getEmailVerification() async {
     if(emailLoad==Load.loading)return;
     if(emailSendWait)return;//是否正在等待
     setState(() {
@@ -135,7 +135,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
     });
   }
   //开启emailsendwait倒计时
-  starEmailSendWait(){
+  void starEmailSendWait() {
     Timer(Duration(seconds: 1),(){
       setState(() {
         emailSendWaitNum--;
@@ -150,7 +150,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
     });
   }
   //验证邮箱验证码
-  checkEmailVerification()async{
+  Future<bool> checkEmailVerification() async {
     String codeStr=emailTextEditingController.text;
     if(codeStr==""){
       setState(() {
@@ -178,7 +178,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
     }
   }
   //生物识别
-  faceVerification()async{
+  Future<void> faceVerification() async {
     final LocalAuthentication auth = LocalAuthentication();
     _checkBiometrics(auth);
   }
@@ -270,11 +270,11 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
     });
   }
   //跳转 设置安全设置页
-  pushSetting()async{
+  Future<void> pushSetting() async {
     await Navigator.pushNamed(context, "securitySetting");
     initSecurity();
   }
-  pushEditWallet()async{
+  Future<void> pushEditWallet() async {
     int wIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
     await Navigator.push(context, MaterialPageRoute(builder: (context)=>EditWalletPassword(Provider.of<WalletActionProvider>(context,listen: false).walletInfo, wIndex)));
     initSecurity();
@@ -936,7 +936,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
     );
   }
   //登录提醒
-  showLoginDialog()async{
+  Future<void> showLoginDialog() async {
     final flag = await tipsDialog6(context, title:S.of(context).login_need_login,);
     if (!mounted) return;
     if (flag != null && flag) {

@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 class BtcApi{
   String? uri;
   bool isTest=false;
-  BtcApi({test=false}){
+  BtcApi({bool test = false}) {
     isTest=test;
     uri=RequestUrl().getUrl2(CoinType.BTC.name,'api',isTest:isTest);
   }

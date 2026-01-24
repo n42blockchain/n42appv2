@@ -35,7 +35,7 @@ class FaceApi{
       return rmm;
     }
   }
-  Future<MessageModel> match(var file,String filename,{int type=0})async{
+  Future<MessageModel> match(dynamic file, String filename, {int type = 0}) async {
     try{
       MessageModel mm = MessageModel();
       MultipartFile f;

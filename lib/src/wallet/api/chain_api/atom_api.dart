@@ -115,7 +115,7 @@ class AtomApi{
     }
   }
   //cosmos/tx/v1beta1/txs
-  Future<MessageModel> sendTxs(var rawTx)async{
+  Future<MessageModel> sendTxs(dynamic rawTx) async {
     try{
       String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
       var data=await BaseApi.requestEmptyH.post(
@@ -146,7 +146,7 @@ class AtomApi{
     }
   }
   //cosmos/tx/v1beta1/simulate
-  Future<MessageModel> sendTxsSimulate(var rawTx)async{
+  Future<MessageModel> sendTxsSimulate(dynamic rawTx) async {
     try{
       String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
       var data=await BaseApi.requestEmptyH.post(

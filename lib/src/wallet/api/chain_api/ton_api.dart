@@ -77,7 +77,7 @@ class TonApi{
       return mm;
     }
   }
-  Future<MessageModel> baseRPC2Ton(var value,String path)async{
+  Future<MessageModel> baseRPC2Ton(dynamic value, String path) async {
     try{
       MessageModel mm=MessageModel();
 

@@ -186,7 +186,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
     }
   }
 
-  Widget _buildInviteView(context) {
+  Widget _buildInviteView(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
