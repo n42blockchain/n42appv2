@@ -89,7 +89,7 @@ class _SelfCustodyState extends State<SelfCustody> {
                       ],
                     ),
                     SizedBox(height: ScreenUtil().setWidth(10),),
-                    TextFieldStyle2(
+                    textFieldStyle2(
                       context,
                       controller: valueEditingController,
                       focusNode: valueNode,
@@ -107,7 +107,7 @@ class _SelfCustodyState extends State<SelfCustody> {
                     SizedBox(height: ScreenUtil().setWidth(30),),
                     LoginTitle(title: "Lockup",color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),),
                     SizedBox(height: ScreenUtil().setWidth(10),),
-                    TextFieldStyle2(
+                    textFieldStyle2(
                       context,
                       controller: valueEditingController,
                       focusNode: valueNode,
@@ -142,7 +142,7 @@ class _SelfCustodyState extends State<SelfCustody> {
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
                     height: ScreenUtil().setWidth(148),
-                    child: ButtonStyle6(
+                    child: buttonStyle6(
                       context,
                       (){
 

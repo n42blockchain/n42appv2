@@ -241,7 +241,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       if(userData.error){
         if(userData.type==MessageErrorType.E1403){
           if (!mounted) return;
-          await TipsDialog1(context, S.of(context).g_key_error_1403);
+          await tipsDialog1(context, S.of(context).g_key_error_1403);
           if (!mounted) return;
           AppGlobals.logout();
           Navigator.pop(context);
@@ -334,7 +334,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           if(userData.error){
             if(userData.type==MessageErrorType.E1403){
               if (!mounted) return;
-              await TipsDialog1(context, S.of(context).g_key_error_1403);
+              await tipsDialog1(context, S.of(context).g_key_error_1403);
               if (!mounted) return;
               AppGlobals.logout();
               Navigator.pop(context);
@@ -468,7 +468,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           if(userData.error){
             if(userData.type==MessageErrorType.E1403){
               if (!mounted) return;
-              await TipsDialog1(context, S.of(context).g_key_error_1403);
+              await tipsDialog1(context, S.of(context).g_key_error_1403);
               if (!mounted) return;
               AppGlobals.logout();
               Navigator.pop(context);
@@ -702,7 +702,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           if(userData.error){
             if(userData.type==MessageErrorType.E1403){
               if (!mounted) return;
-              await TipsDialog1(context, S.of(context).g_key_error_1403);
+              await tipsDialog1(context, S.of(context).g_key_error_1403);
               if (!mounted) return;
               AppGlobals.logout();
               Navigator.pop(context);
@@ -751,7 +751,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           if(userData.error){
             if(userData.type==MessageErrorType.E1403){
               if (!mounted) return;
-              await TipsDialog1(context, S.of(context).g_key_error_1403);
+              await tipsDialog1(context, S.of(context).g_key_error_1403);
               if (!mounted) return;
               AppGlobals.logout();
               Navigator.pop(context);
@@ -972,7 +972,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                         try {
                           //长按弹出删除对话框
                           final flagResult =
-                          await TipsDialog2(
+                          await tipsDialog2(
                             context,
                             "${S.of(context).g_chat_key_63} $friendName？",
                           );
@@ -1011,7 +1011,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                         menuPopController.hideMenu();
                         final controller = TextEditingController();
                         //底部弹出举报框
-                        SheetBottom(
+                        sheetBottom(
                             context,
                             isDismissible: false,
                             "",

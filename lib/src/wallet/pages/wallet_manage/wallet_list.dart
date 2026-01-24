@@ -160,8 +160,8 @@ class _WalletListState extends State<WalletList> {
         actions: [
           IconButton(
               onPressed: () async {
-                SheetBottom(context, "", CreateWalletButton(
-                  onTap_back: (){
+                sheetBottom(context, "", CreateWalletButton(
+                  onTapBack: (){
                     initData();
                   },
                 ),);
@@ -391,7 +391,7 @@ class _WalletListState extends State<WalletList> {
 
       ]);
     }
-    return ContainerStyle1(
+    return containerStyle1(
       context,
       padding: EdgeInsets.all(ScreenUtil().setWidth(20.0)),
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0), vertical: ScreenUtil().setWidth(20.0)),
@@ -404,7 +404,7 @@ class _WalletListState extends State<WalletList> {
     return SizedBox(
       height: ScreenUtil().setWidth(80),
       width: double.infinity,
-      child: ButtonStyle2(context, onTap, title),
+      child: buttonStyle2(context, onTap, title),
     );
   }
   faceBindText(String value,{EdgeInsetsGeometry? margin}){
@@ -437,7 +437,7 @@ class _WalletListState extends State<WalletList> {
             }
             //密码验证
             final controller = TextEditingController();
-            final flag = await TipsDialog4(context, null,
+            final flag = await tipsDialog4(context, null,
                 controller: controller);
             if (!context.mounted) return;
             if (flag != null && flag) {
@@ -450,7 +450,7 @@ class _WalletListState extends State<WalletList> {
               jumpWalletInfoPage(info,index);
             }
           },
-          child: ContainerStyle1(
+          child: containerStyle1(
             context,
             padding: EdgeInsets.all(ScreenUtil().setWidth(20.0)),
             margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0), vertical: ScreenUtil().setWidth(20.0)),

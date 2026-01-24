@@ -97,7 +97,7 @@ class GesturePasswordSettingState extends State<GesturePasswordSetting>{
                       cachedData['0']["errorCount"]=cachedData['0']["errorCount"]+1;
                       if(cachedData['0']["errorCount"]==3){
                         //三次输入错误，重置内容
-                        final flag=await TipsDialog1(context, S.of(context).g_lock_key23);
+                        final flag=await tipsDialog1(context, S.of(context).g_lock_key23);
                         if (!mounted) return;
                         if (flag != null && flag) {
                           cachedData['0']["index"]="1";
@@ -119,7 +119,7 @@ class GesturePasswordSettingState extends State<GesturePasswordSetting>{
                       cachedData['1']["1"]["errorCount"]=cachedData['1']["1"]["errorCount"]+1;
                       if(cachedData['1']["1"]["errorCount"]==3){
                         //输入三次错误，提示输入错误次数过多返回上一页
-                        final flag=await TipsDialog1(context, S.of(context).g_lock_key23);
+                        final flag=await tipsDialog1(context, S.of(context).g_lock_key23);
                         if (!mounted) return;
                         if (flag != null && flag) {
                           cachedData['1']["1"]["errorCount"]=0;
@@ -147,7 +147,7 @@ class GesturePasswordSettingState extends State<GesturePasswordSetting>{
                       cachedData['1']["errorCount"]=cachedData['1']["errorCount"]+1;
                       if(cachedData['1']["errorCount"]==3){
                         //三次输入错误，重置内容
-                        final flag=await TipsDialog1(context, S.of(context).g_lock_key23);
+                        final flag=await tipsDialog1(context, S.of(context).g_lock_key23);
                         if (!mounted) return;
                         if (flag != null && flag) {
                           cachedData['1']["index"]="1";

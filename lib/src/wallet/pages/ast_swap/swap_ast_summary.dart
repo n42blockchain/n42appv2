@@ -171,7 +171,7 @@ class _SwapAstSummaryState extends State<SwapAstSummary> {
               child: Row(
                 children: [
                   Expanded(
-                    child: ButtonStyle5(
+                    child: buttonStyle5(
                       context,
                           ()async{
                         Navigator.pop(context);
@@ -185,7 +185,7 @@ class _SwapAstSummaryState extends State<SwapAstSummary> {
                     width: ScreenUtil().setWidth(30),
                   ),
                   Expanded(
-                    child: ButtonStyle2(
+                    child: buttonStyle2(
                       context,
                           ()async{
                         bool r=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletSecurityVerification()));

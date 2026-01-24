@@ -386,7 +386,7 @@ class _NewFriendListPageState extends State<NewFriendListPage> {
     if (model.direction == 0 && model.status == 0) {
       //弹出备注昵称ui
       final textEditController = TextEditingController();
-      final flag = await TipsDialog5(context,
+      final flag = await tipsDialog5(context,
           controller: textEditController,
           title: S.of(context).g_chat_key_6(model.name ?? ''));
       if (flag != null && flag) {

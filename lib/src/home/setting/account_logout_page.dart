@@ -215,7 +215,7 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
         SizedBox(
           height: ScreenUtil().setWidth(88),
           width: double.infinity,
-          child: ButtonStyle2(context, ()async{
+          child: buttonStyle2(context, ()async{
             final code = _uCodeController.text.trim();
             if (code.isEmpty) {
               ToastUtils.show(S.of(context).please_enter_code);
@@ -243,7 +243,7 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
               }
             }*/
 
-            final res = await TipsDialog2(
+            final res = await tipsDialog2(
                 this.context, S.of(this.context).g_key_wallet_m11,
                 cancelText: S.of(this.context).g_key_79,
                 sureText: S.of(this.context).g_key_wallet_m13);

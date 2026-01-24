@@ -63,9 +63,9 @@ class _WalletPageState extends State<WalletPage> {
   @override
   void initState() {
     // TODO: implement initState
-    Provider.of<WalletActionProvider>(context,listen: false).initWallet(initCoinInfo:true);
+    Provider.of<WalletActionProvider>(context,listen: false).initWallet(shouldInitCoinInfo:true);
     /*if(AppGlobals.userInfo==null){
-      Provider.of<WalletActionProvider>(context,listen: false).initWallet(initCoinInfo:true);
+      Provider.of<WalletActionProvider>(context,listen: false).initWallet(shouldInitCoinInfo:true);
     }else{
       Timer(Duration(seconds: 1),(){
         eventBus.fire(EventPublic(EventPublicType.selectWallet,
@@ -351,7 +351,7 @@ class _WalletPageState extends State<WalletPage> {
                                       walletName: waValue.WalletName,
                                       sendTap: () async{
                                         if(waValue.walletInfo.password==""){
-                                          final flag= await TipsDialog7(this.context);
+                                          final flag= await tipsDialog7(this.context);
                                           if (!mounted) return;
                                           if (flag != null && flag) {
                                             Navigator.push(this.context, MaterialPageRoute(
@@ -367,7 +367,7 @@ class _WalletPageState extends State<WalletPage> {
                                       },
                                       receiveTap: () async{
                                         if(waValue.walletInfo.password==""){
-                                          final flag= await TipsDialog7(this.context);
+                                          final flag= await tipsDialog7(this.context);
                                           if (!mounted) return;
                                           if (flag != null && flag) {
                                             Navigator.push(this.context, MaterialPageRoute(
@@ -383,7 +383,7 @@ class _WalletPageState extends State<WalletPage> {
                                       },
                                       swapTap: () async{
                                         if(waValue.walletInfo.password==""){
-                                          final flag= await TipsDialog7(this.context);
+                                          final flag= await tipsDialog7(this.context);
                                           if (!mounted) return;
                                           if (flag != null && flag) {
                                             Navigator.push(this.context, MaterialPageRoute(
@@ -1172,7 +1172,7 @@ class _WalletPageState extends State<WalletPage> {
         },
       ),
     ));
-    SheetBottom(
+    sheetBottom(
         context,
         "",
         Column(
@@ -1297,7 +1297,7 @@ class _WalletPageState extends State<WalletPage> {
       Container(
         height: ScreenUtil().setWidth(88.0),
         width: double.infinity,
-        child: ButtonStyle2(context, () async {
+        child: buttonStyle2(context, () async {
           Navigator.pop(context);
           //添加钱包
           await Navigator.pushNamed(
@@ -1306,7 +1306,7 @@ class _WalletPageState extends State<WalletPage> {
       )
     );*/
 
-    SheetBottom(
+    sheetBottom(
         context,
         "",
         Column(
@@ -1317,7 +1317,7 @@ class _WalletPageState extends State<WalletPage> {
 
   //显示选择币列表
   showSearchCoin(int type) {
-    SheetBottom(
+    sheetBottom(
       context,
       S.of(context).g_token_m_key_12,
       WalletSearchCoin(type),
@@ -1335,7 +1335,7 @@ class _WalletPageState extends State<WalletPage> {
           ));
       if (!mounted) return;
       if (r==true) {
-        Provider.of<WalletActionProvider>(context,listen: false).initWallet(initCoinInfo: true);
+        Provider.of<WalletActionProvider>(context,listen: false).initWallet(shouldInitCoinInfo: true);
       }
       return;
     }
@@ -1359,7 +1359,7 @@ class _WalletPageState extends State<WalletPage> {
                   ));
               if (!mounted) return;
               if (r==true) {
-                Provider.of<WalletActionProvider>(context,listen: false).initWallet(initCoinInfo: true);
+                Provider.of<WalletActionProvider>(context,listen: false).initWallet(shouldInitCoinInfo: true);
               }
               Navigator.pop(context);
             },
@@ -1390,7 +1390,7 @@ class _WalletPageState extends State<WalletPage> {
                   ));
               if (!mounted) return;
               if (r==true) {
-                Provider.of<WalletActionProvider>(context,listen: false).initWallet(initCoinInfo: true);
+                Provider.of<WalletActionProvider>(context,listen: false).initWallet(shouldInitCoinInfo: true);
               }
               Navigator.pop(context);
             },
@@ -1410,7 +1410,7 @@ class _WalletPageState extends State<WalletPage> {
         ],
       ),
     );
-    SheetBottom(
+    sheetBottom(
       context,
       "",
       child,

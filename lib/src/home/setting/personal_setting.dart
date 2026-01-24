@@ -152,7 +152,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
                     child: TextButton(
                       onPressed: () {
                         ///更换头像
-                        SheetBottom(context, "", NavSelectImage(returnImage: (img) {
+                        sheetBottom(context, "", NavSelectImage(returnImage: (img) {
                           setState(() {
                             imageEdit = img;
                             isEdit = true;
@@ -405,7 +405,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
                         children: [
                           Expanded(
                             flex: 1,
-                            child: ButtonStyle1(context, (){
+                            child: buttonStyle1(context, (){
                               if(load==Load.loading)return;
                               Navigator.pop(context);
                             },
@@ -416,7 +416,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
                           ),
                           Expanded(
                             flex: 1,
-                            child: ButtonStyle6(
+                            child: buttonStyle6(
                                 context, (){
                               saveUserInfo();
                             },
@@ -455,7 +455,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
   }
 /*
   artistWidget() {
-    return ContainerStyle1(
+    return containerStyle1(
       context,
       margin: EdgeInsets.symmetric( vertical: ScreenUtil().setWidth(24.0)),
       /*decoration: BoxDecoration(

@@ -225,7 +225,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
     //String pk=await Trustdart().getPrivateKey(Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic??"", CoinType.BTC.name, "m/84'/4'/0'/0/0");
     //Trustdart().testSign_btc('cVbQm3SVhN3sHD2mhbucpyz99mH6WNRcAKhzur3SP5hX4Ca53m15');
     //Trustdart().testSign_btc(pk);
-    //CreateBtcTX2().create_message(privateKey!, "Hello", privateKey!.getPublic());
+    //CreateBtcTX2().createMessage(privateKey!, "Hello", privateKey!.getPublic());
     //sendTrx1(newScript);
   }
   sendTrx1(Script scriptP2wsh)async{
@@ -279,8 +279,8 @@ class _SelfCustody1State extends State<SelfCustody1> {
     
     //txInputScript.add(privateKey!.getPublic().toSegwitAddress().toScriptPubKey());
     //txInputScript.add(privateKey!.getPublic().toSegwitAddress().toScriptPubKey());
-    //String txHash=CreateBtcTX2().create_segwit(privateKey!,selectedUTXOs,txAmount,txInputScript,txOutputs);
-    String txHash=CreateBtcTX2().create_segwitV2(privateKey!,p2wshAddress!);
+    //String txHash=CreateBtcTX2().createSegwit(privateKey!,selectedUTXOs,txAmount,txInputScript,txOutputs);
+    String txHash=CreateBtcTX2().createSegwitV2(privateKey!,p2wshAddress!);
     if (kDebugMode) debugPrint(txHash);
   }
   sendTrx2(Script scriptP2wsh)async{
@@ -326,11 +326,11 @@ class _SelfCustody1State extends State<SelfCustody1> {
 
     //txInputScript.add(privateKey!.getPublic().toSegwitAddress().toScriptPubKey());
     //txInputScript.add(privateKey!.getPublic().toSegwitAddress().toScriptPubKey());
-    String txHash=CreateBtcTX2().create_segwit(privateKey!,selectedUTXOs,txAmount,txInputScript,txOutputs);
+    String txHash=CreateBtcTX2().createSegwit(privateKey!,selectedUTXOs,txAmount,txInputScript,txOutputs);
     if (kDebugMode) debugPrint(txHash);
   }
   sendTrx()async{
-    String hex=await CreateBTCTXV1().create_v2(
+    String hex=await CreateBTCTXV1().createV2(
       //privateKey!.toWif(),
       'cVbQm3SVhN3sHD2mhbucpyz99mH6WNRcAKhzur3SP5hX4Ca53m15',
       //p2wshAddress!.toAddress(BitcoinNetwork.testnet),

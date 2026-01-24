@@ -73,7 +73,7 @@ class PlansWidget extends StatelessWidget {
                   SizedBox(
                     //margin: EdgeInsets.only(top: scr.setWidth(16)),
                     height: ScreenUtil().setWidth(56),
-                    child: ButtonStyle3(
+                    child: buttonStyle3(
                       context, null,
                       buttonTitle,
                       AppThemeUtils.getColorByKey(

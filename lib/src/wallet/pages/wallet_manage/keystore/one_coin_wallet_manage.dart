@@ -149,7 +149,7 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
                     width: double.infinity,
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                    child: ButtonStyle2(
+                    child: buttonStyle2(
                       context,
                       (){
                         saveCoin();
@@ -403,7 +403,7 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
                 if(widget.walletInfo.password==""){
                   final TextEditingController controller = TextEditingController();
                   final TextEditingController controller2 = TextEditingController();
-                  final flag = await TipsDialog3(context, Container(
+                  final flag = await tipsDialog3(context, Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
                         color: AppThemeUtils.getColorByKey(
@@ -543,7 +543,7 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
                 else{
                   //密码验证
                   final controller = TextEditingController();
-                  final flag = await TipsDialog4(
+                  final flag = await tipsDialog4(
                       context, null,
                       controller: controller);
                   if (!mounted) return;
@@ -664,7 +664,7 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
           )
       );
     }
-    SheetBottom(context, "", Column(
+    sheetBottom(context, "", Column(
       children: childs,
     ));
   }

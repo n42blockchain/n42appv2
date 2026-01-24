@@ -35,7 +35,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
     // TODO: implement initState
     if(widget.uri !=""){
       legacy_provider.Provider.of<WalletConnectProvider>(context,listen: false).pageOpen=true;
-      legacy_provider.Provider.of<WalletConnectProvider>(context,listen: false).viewState_deal(WalletConnectState.loading,params: widget.uri);
+      legacy_provider.Provider.of<WalletConnectProvider>(context,listen: false).viewStateDeal(WalletConnectState.loading,params: widget.uri);
     }
     super.initState();
   }
@@ -363,7 +363,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
             flex: 1,
             child: buttonWidget(
               S.of(context).g_connect_key1, (){
-              connectV2.viewState_deal(WalletConnectState.connectOK);
+              connectV2.viewStateDeal(WalletConnectState.connectOK);
             },
             ),
           ),
@@ -457,7 +457,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
               String scanStr=await scan();
               if (!mounted) return;
               if(scanStr.contains('relay-protocol') && scanStr.contains('symKey')){
-                connectV2.viewState_deal(WalletConnectState.loading,params: scanStr);
+                connectV2.viewStateDeal(WalletConnectState.loading,params: scanStr);
               }else{
                 ToastUtils.show(S.of(context).g_key_203);
               }
@@ -642,7 +642,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
           child: buttonWidget(
             S.of(context).g_key_nft_220, (){
-            connectV2.cleannData_loginout();
+            connectV2.cleanDataLogout();
             Navigator.pop(context,false);
           },
           ),
@@ -654,7 +654,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
     return SizedBox(
       width: double.infinity,
       height: ScreenUtil().setWidth(88.0),
-      child: ButtonStyle2(context, (){
+      child: buttonStyle2(context, (){
         onTap();
       }, title),
     );

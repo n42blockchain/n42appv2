@@ -143,7 +143,7 @@ class _CreatePasswordState extends State<CreatePassword> {
                       ),
                       margin: EdgeInsets.only(top: ScreenUtil().setWidth(10),bottom: ScreenUtil().setWidth(20),),
                       width: double.infinity,
-                      child: TextFieldStyle3(
+                      child: textFieldStyle3(
                         context,
                         onEditingComplete:(){
                           FocusScope.of(context).requestFocus(_uPasswordFocusNode);
@@ -175,7 +175,7 @@ class _CreatePasswordState extends State<CreatePassword> {
                       ),
                       margin: EdgeInsets.only(top: ScreenUtil().setWidth(10),bottom: ScreenUtil().setWidth(20),),
                       width: double.infinity,
-                      child: TextFieldStyle3(
+                      child: textFieldStyle3(
                           context,
                           onEditingComplete:(){
                             FocusScope.of(context).requestFocus(_uPasswordConfirmFocusNode);
@@ -222,7 +222,7 @@ class _CreatePasswordState extends State<CreatePassword> {
                       ),
                       margin: EdgeInsets.only(top: ScreenUtil().setWidth(10),),
                       width: double.infinity,
-                      child: TextFieldStyle3(
+                      child: textFieldStyle3(
                           context,
                           onEditingComplete:(){
                             FocusScope.of(context).requestFocus(FocusNode());
@@ -279,7 +279,7 @@ class _CreatePasswordState extends State<CreatePassword> {
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
                     width: double.infinity,
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                    child: ButtonStyle6(context,
+                    child: buttonStyle6(context,
                             ()async{
                       String wName=_titleController.text.trim();
                       if(wName.isEmpty){

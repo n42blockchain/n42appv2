@@ -1051,7 +1051,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
             padding: EdgeInsets.all( ScreenUtil().setWidth(30.0)),
             height: ScreenUtil().setWidth(148.0),
             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-            child: ButtonStyle6(
+            child: buttonStyle6(
               context, ()async{
               if(algoTokenAdd==false){
                 sendTransactionAlgoTokenEdit(true);
@@ -1201,7 +1201,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
         ),
       ),
     ];
-    SheetBottom(context, S.of(context).g_face_match_key1, Column(
+    sheetBottom(context, S.of(context).g_face_match_key1, Column(
       children: childs,
     ));
   }

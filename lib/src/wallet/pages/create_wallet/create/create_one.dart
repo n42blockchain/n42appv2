@@ -172,7 +172,7 @@ class _CreateOneState extends State<CreateOne> {
                           ),
                           width: double.infinity,
                           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                          child: ButtonStyle6(context,
+                          child: buttonStyle6(context,
                                   ()async{
                                 if(checkOne && checkTow && checkThree){
                                   wInfo=WalletInfo(
@@ -203,7 +203,7 @@ class _CreateOneState extends State<CreateOne> {
                             top: ScreenUtil().setWidth(30.0),
                             bottom: ScreenUtil().setWidth(30.0),
                           ),
-                          child: ButtonStyle5(context,
+                          child: buttonStyle5(context,
                                 ()async{
                               await Navigator.push(context, MaterialPageRoute(builder: (context)=>CreateFinish()));
                               if (!context.mounted) return;

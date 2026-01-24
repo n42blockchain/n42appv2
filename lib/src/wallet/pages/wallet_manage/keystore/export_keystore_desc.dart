@@ -91,7 +91,7 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
                     width: double.infinity,
                     height: ScreenUtil().setWidth(148),
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30),),
-                    child: ButtonStyle2(context, () {
+                    child: buttonStyle2(context, () {
                       Navigator.push(context,MaterialPageRoute(
                           builder: (_) => ExportKeystorePage(
                             keystoreJson: widget.keystoreJson,

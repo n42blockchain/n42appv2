@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-Widget TextFieldStyle2(
+Widget textFieldStyle2(
     BuildContext context,
     {
       dynamic onChanged,
@@ -187,7 +187,7 @@ Widget TextFieldStyle2(
     ],
   );
 }
-Widget TextFieldStyle3(
+Widget textFieldStyle3(
     BuildContext context,
     {
       dynamic onChanged,

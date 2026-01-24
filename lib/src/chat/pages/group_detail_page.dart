@@ -388,9 +388,9 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                   width: double.infinity,
                   height: ScreenUtil().setWidth(88),
                   margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                  child: ButtonStyle2(context, () async {
+                  child: buttonStyle2(context, () async {
                     final flag =
-                    await TipsDialog2(
+                    await tipsDialog2(
                         context,
                         isGroupOwner
                             ? S.of(context).g_chat_key_20

@@ -202,7 +202,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
           height: ScreenUtil().setWidth(10),
         ),
         //邀请码
-        TextFieldStyle3(
+        textFieldStyle3(
           context,
           onEditingComplete:(){
             FocusScope.of(context).requestFocus(FocusNode());
@@ -266,7 +266,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
                       SizedBox(
                         height: ScreenUtil().setWidth(10),
                       ),
-                      TextFieldStyle3(
+                      textFieldStyle3(
                         context,
                         onEditingComplete:(){
                           FocusScope.of(context).requestFocus(_uPasswordFocusNode);
@@ -295,7 +295,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
                       SizedBox(
                         height: ScreenUtil().setWidth(10),
                       ),
-                      TextFieldStyle3(
+                      textFieldStyle3(
                           context,
                           onEditingComplete:(){
                             FocusScope.of(context).requestFocus(_uPasswordConfirmFocusNode);
@@ -340,7 +340,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
                       SizedBox(
                         height: ScreenUtil().setWidth(10),
                       ),
-                      TextFieldStyle3(
+                      textFieldStyle3(
                           context,
                           onEditingComplete:(){
                             if (_currentType == HandType.createAccount){
@@ -392,7 +392,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
                       SizedBox(
                         height: ScreenUtil().setWidth(10),
                       ),
-                      TextFieldStyle3(
+                      textFieldStyle3(
                         context,
                         onEditingComplete:(){
                           FocusScope.of(context).requestFocus(FocusNode());
@@ -472,7 +472,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
                       width: double.infinity,
                       padding: EdgeInsets.all(ScreenUtil().setWidth(30.0),),
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                      child: ButtonStyle6(
+                      child: buttonStyle6(
                         context,
                             ()async{
                           final email = _unameController.value.text.trim();

@@ -284,7 +284,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
                     String qrContent =
                     json.encode({"chat_message": params});
                     // debugPrint("qr code content: ${qrContent.toString()}");
-                    SheetBottom(
+                    sheetBottom(
                         context,
                         "",
                         QCodeChat(
@@ -639,7 +639,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
                             },
                             onLongPress: () async {
                               //长按弹出删除对话框
-                              final flagResult = await TipsDialog2(
+                              final flagResult = await tipsDialog2(
                                 context,
                                 S.current.g_chat_key_34,
                               );

@@ -102,7 +102,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         SizedBox(
                           height: ScreenUtil().setWidth(10),
                         ),
-                        TextFieldStyle3(
+                        textFieldStyle3(
                           context,
                           onEditingComplete:(){
                             FocusScope.of(context).requestFocus(_uPasswordFocusNode);
@@ -131,7 +131,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         SizedBox(
                           height: ScreenUtil().setWidth(10),
                         ),
-                        TextFieldStyle3(
+                        textFieldStyle3(
                             context,
                             onEditingComplete:(){
                               FocusScope.of(context).requestFocus(FocusNode());
@@ -230,7 +230,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       height: ScreenUtil().setWidth(148),
                       padding: EdgeInsets.all(ScreenUtil().setWidth(30.0),),
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                      child: ButtonStyle6(
+                      child: buttonStyle6(
                         context,
                             () async {
                           final email = _unameController.value.text.trim();

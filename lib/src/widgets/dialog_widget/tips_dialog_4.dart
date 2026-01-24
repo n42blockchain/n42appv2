@@ -6,9 +6,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 ///密码输入确认
-Future<bool?> TipsDialog4(
+Future<bool?> tipsDialog4(
     BuildContext context, String? title,{TextEditingController? controller,String? hintText}) async {
-  return await TipsDialog3(
+  return await tipsDialog3(
     context,
     Container(
       decoration: BoxDecoration(

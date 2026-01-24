@@ -105,7 +105,7 @@ class _AddressBookListState extends State<AddressBookList> {
     return GestureDetector(
       onTap: () {
         if (widget.coinName == "") {
-          SheetBottom(context, "", AddressEdit(info));
+          sheetBottom(context, "", AddressEdit(info));
         } else {
           Navigator.pop(context, info.address);
         }

@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';
 import 'package:web3dart/crypto.dart';
 class CreateBtcTX2{
-  create_tapRoot(ECPrivate fromPriv2,List<TxInput>txInputs,List<BigInt>txInputAmount,List<Script>txInputScript,List<TxOutput> txOutputs,){
+  createTapRoot(ECPrivate fromPriv2,List<TxInput>txInputs,List<BigInt>txInputAmount,List<Script>txInputScript,List<TxOutput> txOutputs,){
     //ECPrivate privkeyTrScript1 = ECPrivate.fromWif('cSW2kQbqC9zkqagw8oTYKFTozKuZ214zd6CMTDs4V32cMfH3dgKa', netVersion: BitcoinNetwork.testnet.wifNetVer);
     //ECPublic pubkeyTrScript1 = privkeyTrScript1.getPublic();
     //Script trScriptP2pk1 = Script(script: [pubkeyTrScript1.toXOnlyHex(), 'OP_CHECKSIG']);
@@ -52,7 +52,7 @@ class CreateBtcTX2{
     if (kDebugMode) debugPrint(decode.serialize());
     if (kDebugMode) debugPrint(tx.serialize());*/
   }
-  create_segwit(ECPrivate fromPriv2,List<TxInput>txInputs,List<BigInt>txInputAmount,List<Script>txInputScript,List<TxOutput> txOutputs,){
+  createSegwit(ECPrivate fromPriv2,List<TxInput>txInputs,List<BigInt>txInputAmount,List<Script>txInputScript,List<TxOutput> txOutputs,){
     //BitcoinOutput bitcoinOutput=BitcoinOutput(address: P2wshAddress.fromScript(script: txOutputs[0].scriptPubKey), value: txOutputs[0].amount);
     var tx =
     BtcTransaction(inputs: txInputs, outputs: txOutputs, hasSegwit: true);
@@ -70,13 +70,13 @@ class CreateBtcTX2{
     if (kDebugMode) debugPrint(decode.serialize());
     if (kDebugMode) debugPrint(tx.serialize());*/
   }
-  create_message(ECPrivate fromPriv2,String message,ECPublic pub){
+  createMessage(ECPrivate fromPriv2,String message,ECPublic pub){
     String sign=fromPriv2.signMessage(message.codeUnits);
     if (kDebugMode) debugPrint(sign);
     bool v=pub.verify(message.codeUnits, hexToBytes(sign));
     if (kDebugMode) debugPrint(v.toString());
   }
-  create_segwitV2(ECPrivate fromPriv2,P2wshAddress out1){
+  createSegwitV2(ECPrivate fromPriv2,P2wshAddress out1){
     const network = BitcoinCashNetwork.mainnet;
     final examplePublicKey = fromPriv2.getPublic();
     final out2 = examplePublicKey.toSegwitAddress();

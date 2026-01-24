@@ -204,7 +204,7 @@ class _WalletReceiveQrState extends State<WalletReceiveQr> {
                     ToastUtils.init(context);
                     Clipboard.setData(ClipboardData(text: address));
                     ToastUtils.showFtToast(
-                        child: SuccessViewV1(S.of(context).g_key_119),
+                        child: successViewV1(S.of(context).g_key_119),
                         duration: 3);
                   },
                   child: Container(

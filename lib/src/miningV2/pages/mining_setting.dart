@@ -28,7 +28,7 @@ class _MiningSettingState extends State<MiningSetting> {
         width: double.infinity,
         height: ScreenUtil().setWidth(88),
         margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
-        child: ButtonStyle2(
+        child: buttonStyle2(
           context, (){
           Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MiningImport()));
         },
@@ -46,7 +46,7 @@ class _MiningSettingState extends State<MiningSetting> {
           builder: (context, mpValue, child) {
             return Column(
               children: [
-                ContainerStyle1(
+                containerStyle1(
                   context,
                   padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                   child: Row(

@@ -38,7 +38,7 @@ class _WalletSearchCoinState extends State<WalletSearchCoin> {
   }
   final oCcy = NumberFormat("#,##0.0#", "en_US");
   TextEditingController inputEditingController=TextEditingController();
-  List<CoinModel> coinlist_seach=[];
+  List<CoinModel> coinlistSearch=[];
   @override
   void initState() {
     // TODO: implement initState
@@ -54,7 +54,7 @@ class _WalletSearchCoinState extends State<WalletSearchCoin> {
   seachCoin(WalletActionProvider waValue)async{
     if(inputEditingController.text!=""){
       try{
-        coinlist_seach=[];
+        coinlistSearch=[];
         String inputStr=inputEditingController.text.toLowerCase();
 
         for(CoinModel cm in waValue.coinList){
@@ -62,7 +62,7 @@ class _WalletSearchCoinState extends State<WalletSearchCoin> {
           int fullnameIndex=cm.coin['name'].toString().toLowerCase().indexOf(inputStr);
           int symbolIndex=symbolStr.indexOf(inputStr);
           if(symbolIndex!=-1 || fullnameIndex!=-1){
-            coinlist_seach.add(cm);
+            coinlistSearch.add(cm);
           }
         }
       }catch(e){
@@ -180,13 +180,13 @@ class _WalletSearchCoinState extends State<WalletSearchCoin> {
         },
       );
     }else{
-      if(coinlist_seach.isEmpty){
+      if(coinlistSearch.isEmpty){
         return const EmptyView();
       }else{
         return ListView.builder(
-          itemCount: coinlist_seach.length,
+          itemCount: coinlistSearch.length,
           itemBuilder: (context,int index){
-            return _mainCoin(coinlist_seach[index]);
+            return _mainCoin(coinlistSearch[index]);
           },
         );
       }

@@ -94,7 +94,7 @@ class _MiningPlansV2State extends State<MiningPlansV2> {
                     width: double.infinity,
                     height: ScreenUtil().setWidth(148),
                     padding: EdgeInsets.all( ScreenUtil().setWidth(30)),
-                    child: ButtonStyle2(context, ()async {
+                    child: buttonStyle2(context, ()async {
                       Navigator.push(context,MaterialPageRoute(
                           builder: (_) => MiningFullNodeV2(
                             nNum: 32,

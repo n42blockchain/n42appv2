@@ -349,7 +349,7 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
                         width: double.infinity,
                         height: ScreenUtil().setWidth(148),
                         padding: EdgeInsets.all( ScreenUtil().setWidth(30)),
-                        child: ButtonStyle6(context, () async {
+                        child: buttonStyle6(context, () async {
                           if(mpValue.depositLoad==Load.loading)return;
                           if (_payType == 0) {
                             if (_payMethod == 0) {

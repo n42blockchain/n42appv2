@@ -6,9 +6,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 // 修改备注
 // 备注过长最好不要超过15个字符
-Future<bool?> TipsDialog5(BuildContext context,
+Future<bool?> tipsDialog5(BuildContext context,
     {TextEditingController? controller, String? title}) async {
-  return await TipsDialog3(
+  return await tipsDialog3(
     context,
     Container(
       decoration: BoxDecoration(
@@ -58,7 +58,7 @@ Future<bool?> TipsDialog5(BuildContext context,
                 color: AppThemeUtils.getColorByKey(
                     context, AppThemeKeys.itemBgColor.name),
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16))),
-            child: TextFieldStyle3(
+            child: textFieldStyle3(
               context,
               controller: controller,
               hintText: S.of(context).g_key_8,

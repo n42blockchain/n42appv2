@@ -385,7 +385,7 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
                                         children: [
                                           InkWell(
                                             onTap: (){
-                                              AboutShowDialog(context,coinInfo!['description'][lang]??"",S.of(context).g_key_m_6);
+                                              aboutShowDialog(context,coinInfo!['description'][lang]??"",S.of(context).g_key_m_6);
                                             },
                                             child: Container(
                                               alignment: Alignment.centerRight,

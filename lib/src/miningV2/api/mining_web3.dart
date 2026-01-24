@@ -13,13 +13,13 @@ class MiningWeb3{
   static const int _defaultMaxGas=6000000;
   EthPrivateKey? credentials;
   Web3Client? web3Client;
-  Web3Client? get WClient{
+  Web3Client? get wClient{
     web3Client ??= Web3Client(_rpcUrl, Client());
     return web3Client;
   }
 
   Future<MessageModel> getTransactionReceipt(String hashTx) async {
-    TransactionReceipt? data= await WClient?.getTransactionReceipt(hashTx);
+    TransactionReceipt? data= await wClient?.getTransactionReceipt(hashTx);
     MessageModel mm=MessageModel();
     if(data==null){
       mm.error=true;
@@ -33,7 +33,7 @@ class MiningWeb3{
   }
 
   Future<int?> getBlockNumber() async {
-    return await WClient?.getBlockNumber();
+    return await wClient?.getBlockNumber();
   }
 
   Future<MessageModel> sendDepositTransaction(Map<String,dynamic> signData)async{
@@ -50,13 +50,13 @@ class MiningWeb3{
       to: EthereumAddress.fromHex(signData['to']),
       value: EtherAmount.inWei(BigInt.parse(signData['value'])),
       data: hexToBytes(signData['data']),
-      gasPrice: await WClient?.getGasPrice(),
+      gasPrice: await wClient?.getGasPrice(),
       maxGas: _defaultMaxGas,
     );
   }
   Future<MessageModel> sendTransaction(Transaction tx)async{
     try{
-      final txHash = await WClient!.sendTransaction(
+      final txHash = await wClient!.sendTransaction(
         credentials!,
         tx,
         chainId: _chainId,
@@ -77,7 +77,7 @@ class MiningWeb3{
       final txMap= json.decode(feeWeiInHexTx);
       final to = EthereumAddress.fromHex(txMap['to']);
       // 构造 Call 请求
-      final feeWeiInHex = await WClient!.callRaw(
+      final feeWeiInHex = await wClient!.callRaw(
         contract: to,
         data: hexToBytes(txMap['data']),
       );

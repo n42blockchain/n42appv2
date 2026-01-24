@@ -5,8 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class CreateWalletButton extends StatefulWidget {
-  final dynamic onTap_back;
-  const CreateWalletButton({this.onTap_back,super.key});
+  final dynamic onTapBack;
+  const CreateWalletButton({this.onTapBack,super.key});
 
   @override
   State<CreateWalletButton> createState() => _CreateWalletButtonState();
@@ -43,8 +43,8 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
               await Navigator.pushNamed(this.context, '/CreateOne');
               if (!mounted) return;
               Navigator.of(this.context).pop();
-              if(widget.onTap_back!=null){
-                widget.onTap_back();
+              if(widget.onTapBack!=null){
+                widget.onTapBack();
               }
             },
             child: Container(
@@ -103,8 +103,8 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
               await Navigator.pushNamed(this.context, '/ImportOne');
               if (!mounted) return;
               Navigator.of(this.context).pop();
-              if(widget.onTap_back!=null){
-                widget.onTap_back();
+              if(widget.onTapBack!=null){
+                widget.onTapBack();
               }
             },
             child: Container(
@@ -165,8 +165,8 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
                   builder: (_) => ImportKeystore()));
               if (!mounted) return;
               Navigator.of(this.context).pop();
-              if(widget.onTap_back!=null){
-                widget.onTap_back();
+              if(widget.onTapBack!=null){
+                widget.onTapBack();
               }
             },
             child: Container(
@@ -225,8 +225,8 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
               await Navigator.pushNamed(this.context, '/ImportPrivatekey');
               if (!mounted) return;
               Navigator.of(this.context).pop();
-              if(widget.onTap_back!=null){
-                widget.onTap_back();
+              if(widget.onTapBack!=null){
+                widget.onTapBack();
               }
             },
             child: Container(

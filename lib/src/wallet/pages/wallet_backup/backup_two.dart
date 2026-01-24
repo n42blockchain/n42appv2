@@ -102,7 +102,7 @@ class _BackupTwoState extends State<BackupTwo> {
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
                     height: ScreenUtil().setWidth(148),
-                    child: ButtonStyle6(
+                    child: buttonStyle6(
                       context,
                           (){
                         if (isCanClick) {

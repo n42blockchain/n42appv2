@@ -58,7 +58,7 @@ class WalletChainInfoBoard extends StatelessWidget {
                 onTap: (){
                   ToastUtils.init(context);
                   Clipboard.setData(ClipboardData(text: address ?? ""));
-                  ToastUtils.showFtToast(child:SuccessViewV1(S.of(context).copy),duration: 3);
+                  ToastUtils.showFtToast(child:successViewV1(S.of(context).copy),duration: 3);
                 },
                 child: Container(
                   margin: EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),

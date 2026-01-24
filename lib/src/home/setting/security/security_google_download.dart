@@ -116,7 +116,7 @@ class SecurityGoogleDownloadState extends State<SecurityGoogleDownload> {
               height: ScreenUtil().setWidth(88.0),
               width: double.infinity,
               margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(6.0)),
-              child: ButtonStyle2(context, () {
+              child: buttonStyle2(context, () {
                 //跳转
                 Navigator.push(
                     context,

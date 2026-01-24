@@ -81,7 +81,7 @@ class _FaceUserNoticeState extends State<FaceUserNotice> {
                 padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                 width: double.infinity,
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                child: ButtonStyle2(
+                child: buttonStyle2(
                   context, ()async{
                   final rData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>SelectWallet()));
                   if (!context.mounted) return;

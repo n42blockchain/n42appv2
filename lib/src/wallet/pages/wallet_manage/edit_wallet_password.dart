@@ -79,7 +79,7 @@ class _EditWalletPasswordState extends State<EditWalletPassword> {
                       ),
                       margin: EdgeInsets.only(top: ScreenUtil().setWidth(10),bottom: ScreenUtil().setWidth(20)),
                       width: double.infinity,
-                      child: TextFieldStyle3(
+                      child: textFieldStyle3(
                           context,
                           onEditingComplete:(){
                             FocusScope.of(context).requestFocus(_uPasswordFocusNode);
@@ -126,7 +126,7 @@ class _EditWalletPasswordState extends State<EditWalletPassword> {
                       ),
                       margin: EdgeInsets.only(top: ScreenUtil().setWidth(10),bottom: ScreenUtil().setWidth(20)),
                       width: double.infinity,
-                      child: TextFieldStyle3(
+                      child: textFieldStyle3(
                           context,
                           onEditingComplete:(){
                             FocusScope.of(context).requestFocus(_uPasswordConfirmFocusNode);
@@ -173,7 +173,7 @@ class _EditWalletPasswordState extends State<EditWalletPassword> {
                       ),
                       margin: EdgeInsets.only(top: ScreenUtil().setWidth(10),),
                       width: double.infinity,
-                      child: TextFieldStyle3(
+                      child: textFieldStyle3(
                           context,
                           onEditingComplete:(){
                             FocusScope.of(context).requestFocus(FocusNode());
@@ -229,7 +229,7 @@ class _EditWalletPasswordState extends State<EditWalletPassword> {
                     height: ScreenUtil().setWidth(148.0),
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
                     width: double.infinity,
-                    child: ButtonStyle6(context,
+                    child: buttonStyle6(context,
                           ()async{
                         // 数据的校验
                         final password = _uPasswordController.text.trim();

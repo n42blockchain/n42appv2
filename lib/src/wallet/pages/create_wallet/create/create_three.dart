@@ -182,7 +182,7 @@ class _CreateThreeState extends State<CreateThree> {
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
                     width: double.infinity,
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                    child: ButtonStyle6(context,
+                    child: buttonStyle6(context,
                             ()async{
                           if (isCanClick) {
                             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CreatePassword(widget.wInfo)));

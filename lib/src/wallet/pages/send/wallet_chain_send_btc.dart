@@ -677,7 +677,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(20.0),),
-          TextFieldStyle2(
+          textFieldStyle2(
             context,
             controller: toTextEditingController,
             focusNode: toNode,
@@ -765,13 +765,13 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
               Expanded(flex: 1,child: amountBalanceWidget(),),
             ],
           ),
-          ContainerStyle1(
+          containerStyle1(
             context,
             margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextFieldStyle2(
+                textFieldStyle2(
                   context,
                   controller: valueTextEditingController,
                   focusNode: valueNode,
@@ -879,7 +879,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
     if(gasFeeLevel['gasFees'] !=0){
       gasFees=flustars.NumUtil.divide(gasFeeLevel['gasFees'],100000000);
     }
-    return ContainerStyle1(
+    return containerStyle1(
       context,
       alignment: Alignment.center,
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0),),
@@ -1016,12 +1016,12 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
               ],
             ),
           ),
-          ContainerStyle1(
+          containerStyle1(
             context,
             margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
             child: Column(
               children: [
-                TextFieldStyle2(
+                textFieldStyle2(
                   context,
                   controller: byteFeeTextEditingController,
                   focusNode: byteFeeNode,
@@ -1129,7 +1129,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
             padding: EdgeInsets.all( ScreenUtil().setWidth(30.0)),
             height: ScreenUtil().setWidth(148.0),
             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-            child: ButtonStyle6(
+            child: buttonStyle6(
               context, ()async{
               if(load==Load.loading)return;
               closeKeyboard();
@@ -1304,7 +1304,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
         ),
       ),
     ];
-    SheetBottom(context, S.of(context).g_face_match_key1, Column(
+    sheetBottom(context, S.of(context).g_face_match_key1, Column(
       children: childs,
     ));
   }

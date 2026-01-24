@@ -31,8 +31,8 @@ class Application {
     // 刷新钱包列表
     globalProviderContainer.invalidate(walletListProvider);
     // 通过 Legacy Provider 初始化钱包
-    Provider.of<WalletActionProvider>(AppContext, listen: false).initWallet(initCoinInfo: true);
-    Provider.of<WalletConnectProvider>(AppContext, listen: false).cleannData_loginout();
+    Provider.of<WalletActionProvider>(AppContext, listen: false).initWallet(shouldInitCoinInfo: true);
+    Provider.of<WalletConnectProvider>(AppContext, listen: false).cleanDataLogout();
   }
   
   /// 用户退出
@@ -46,7 +46,7 @@ class Application {
       // 通过 Legacy Provider 清理
       if (!AppContext.mounted) return;
       Provider.of<WalletActionProvider>(AppContext, listen: false).initWallet();
-      Provider.of<WalletConnectProvider>(AppContext, listen: false).cleannData_loginout();
+      Provider.of<WalletConnectProvider>(AppContext, listen: false).cleanDataLogout();
     } catch (err) {
       debugPrint('Logout error: $err');
     }

@@ -112,7 +112,7 @@ class _ChatServicesState extends State<ChatServices> {
                 height: ScreenUtil().setWidth(88),
                 margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
                 width: double.infinity,
-                child: ButtonStyle2(context, _isBottom ? widget.agreeCallBack : null, S.of(context).g_chat_key_50),
+                child: buttonStyle2(context, _isBottom ? widget.agreeCallBack : null, S.of(context).g_chat_key_50),
               ),
             ],
           ),

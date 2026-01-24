@@ -144,7 +144,7 @@ class _BackupOneState extends State<BackupOne> {
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
                     height: ScreenUtil().setWidth(148),
-                    child: ButtonStyle6(
+                    child: buttonStyle6(
                       context,
                           (){
                         if(showMnemonic){

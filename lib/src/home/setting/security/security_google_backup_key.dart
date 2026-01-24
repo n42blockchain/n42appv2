@@ -123,7 +123,7 @@ class SecurityGoogleBackupKeyState extends State<SecurityGoogleBackupKey>{
                     onTap: (){
                       ToastUtils.init(context);
                       Clipboard.setData(ClipboardData(text: googleAuthStr));
-                      ToastUtils.showFtToast(child:SuccessViewV1(S.of(context).copy),duration: 3);
+                      ToastUtils.showFtToast(child:successViewV1(S.of(context).copy),duration: 3);
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0),horizontal: ScreenUtil().setWidth(20.0)),
@@ -144,7 +144,7 @@ class SecurityGoogleBackupKeyState extends State<SecurityGoogleBackupKey>{
               height: ScreenUtil().setWidth(88.0),
               width: double.infinity,
               margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(6.0)),
-              child: ButtonStyle2(
+              child: buttonStyle2(
                 context,
                     (){
                   //跳转

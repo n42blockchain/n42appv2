@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-Widget ContainerStyle1(
+Widget containerStyle1(
     BuildContext context,
     {
       double? height,

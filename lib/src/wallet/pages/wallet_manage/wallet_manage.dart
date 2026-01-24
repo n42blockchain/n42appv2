@@ -241,7 +241,7 @@ class _WalletManageState extends State<WalletManage> {
               width: double.infinity,
               padding: EdgeInsets.all(ScreenUtil().setWidth(30.0),),
               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-              child: ButtonStyle2(
+              child: buttonStyle2(
                 context, ()async{
                   MessageModel mm=await Provider.of<WalletActionProvider>(context,listen: false).setMainWallet(widget.walletIndex);
                   if (!context.mounted) return;

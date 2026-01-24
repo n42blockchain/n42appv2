@@ -43,8 +43,8 @@ class AppGlobals {
   /// Sets up user state and initializes related services.
   static Future<void> login(UserInfo info) async {
     userInfo = info;
-    Provider.of<WalletActionProvider>(appContext,listen: false).initWallet(initCoinInfo: true);
-    Provider.of<WalletConnectProvider>(appContext,listen: false).cleannData_loginout();
+    Provider.of<WalletActionProvider>(appContext,listen: false).initWallet(shouldInitCoinInfo: true);
+    Provider.of<WalletConnectProvider>(appContext,listen: false).cleanDataLogout();
     // Note: Provider access should be done through proper DI
     // The following calls should be refactored to use events or DI
   }

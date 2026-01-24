@@ -221,7 +221,7 @@ class _ImportOneState extends State<ImportOne> with WidgetsBindingObserver{
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
                     width: double.infinity,
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                    child: ButtonStyle2(context,
+                    child: buttonStyle2(context,
                           ()async{
                         if(inputMW =="")return;
                         bool checkMnemonic =

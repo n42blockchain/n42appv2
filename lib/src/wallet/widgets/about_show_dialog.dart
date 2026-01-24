@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_html_css/simple_html_css.dart';
 
-AboutShowDialog(context,String aboutStr,String title){
+aboutShowDialog(context,String aboutStr,String title){
   showModalBottomSheet(
     isScrollControlled: true,
     shape: RoundedRectangleBorder(

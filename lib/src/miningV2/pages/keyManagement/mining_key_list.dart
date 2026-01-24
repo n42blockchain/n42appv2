@@ -58,7 +58,7 @@ class _MiningKeyListState extends State<MiningKeyList> {
         itemBuilder: (BuildContext context,index){
           Map<String,dynamic> keyValue=miningList[index] as Map<String,dynamic>;
           bool isMining=keyValue['isMining']??false;
-          return ContainerStyle1(
+          return containerStyle1(
             context,
             padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
             margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),

@@ -631,7 +631,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
                       sendTap: () async {
                         WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
                         if(wap.walletInfo.password==""){
-                          final flag= await TipsDialog7(context);
+                          final flag= await tipsDialog7(context);
                           if (!context.mounted) return;
                           if (flag == null || !flag) return;
                           Navigator.push(context, MaterialPageRoute(
@@ -653,7 +653,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
                       receiveTap: () async{
                         WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
                         if(wap.walletInfo.password==""){
-                          final flag= await TipsDialog7(context);
+                          final flag= await tipsDialog7(context);
                           if (!context.mounted) return;
                           if (flag == null || !flag) return;
                           Navigator.push(context, MaterialPageRoute(
@@ -816,7 +816,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
       onTap: () async {
         WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
         if(wap.walletInfo.password==""){
-          final flag= await TipsDialog7(context);
+          final flag= await tipsDialog7(context);
           if (!mounted) return;
           if (flag != null && flag) {
             await Navigator.push(context, MaterialPageRoute(
@@ -919,7 +919,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
       onTap: () async{
         WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
         if(wap.walletInfo.password==""){
-          final flag= await TipsDialog7(context);
+          final flag= await tipsDialog7(context);
           if (!mounted) return;
           if (flag != null && flag) {
             await Navigator.push(context, MaterialPageRoute(
@@ -1112,7 +1112,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
                     widget.coinModel,)));
           if (!mounted) return;
           if (r) {
-            Provider.of<WalletActionProvider>(context).initWallet(initCoinInfo: true);
+            Provider.of<WalletActionProvider>(context).initWallet(shouldInitCoinInfo: true);
           }
           Navigator.pop(context);
         },
@@ -1283,7 +1283,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
         ));
       }
     }
-    SheetBottom(
+    sheetBottom(
         context,
         "",
         Column(
@@ -1321,7 +1321,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
             "",
             S.of(context).g_key_xml_44)
     );
-    SheetBottom(
+    sheetBottom(
         context,
         "",
         Column(

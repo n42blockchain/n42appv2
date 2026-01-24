@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 //文本提醒
-Future<bool?> TipsDialog6(BuildContext context,
+Future<bool?> tipsDialog6(BuildContext context,
     { String? title}) async {
-  return await TipsDialog3(
+  return await tipsDialog3(
     context,
     Container(
       decoration: BoxDecoration(

@@ -258,7 +258,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                                   ? BarChartModel(
                                 bgColor: const Color.fromRGBO(25, 118, 249, 0.1),
                                 fgColor: const Color.fromRGBO(25, 118, 249, 0.1),
-                                fgColor_max: const Color.fromRGBO(25, 118, 249, 0.1),
+                                fgColorMax: const Color.fromRGBO(25, 118, 249, 0.1),
                                 touchColor: const Color.fromRGBO(25, 118, 249, 0.1),
                                 width: ScreenUtil().setWidth(20),
                                 values: [10, 10, 10, 10, 10, 10, 10],
@@ -266,7 +266,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                                   : BarChartModel(
                                 bgColor: const Color.fromRGBO(25, 118, 249, 0.1),
                                 fgColor: const Color.fromRGBO(25, 118, 249, 1),
-                                fgColor_max: const Color.fromRGBO(50, 215, 75, 1),
+                                fgColorMax: const Color.fromRGBO(50, 215, 75, 1),
                                 touchColor: Colors.yellowAccent,
                                 width: ScreenUtil().setWidth(20),
                                 values: mpValue.barchartValues,
@@ -341,7 +341,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                               height: ScreenUtil().setWidth(88),
                               width: double.infinity,
                               margin: EdgeInsets.symmetric(vertical:ScreenUtil().setWidth(20),),
-                              child: ButtonStyle6(context, (){
+                              child: buttonStyle6(context, (){
                                 if(mpValue.exitDepositLoad==Load.finish){
                                   //解除质押
                                   unLockAstMining();
@@ -1321,7 +1321,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
         },
       ),
     ));
-    SheetBottom(
+    sheetBottom(
         context,
         "",
         Column(

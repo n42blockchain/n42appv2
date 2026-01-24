@@ -520,7 +520,7 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
                           GestureDetector(
                               onTap: () async {
                                 controller.hideMenu();
-                                SheetBottom(
+                                sheetBottom(
                                   context,
                                   "",
                                   ReportWidget(
@@ -533,7 +533,7 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
                                       final controller =
                                       TextEditingController();
                                       //底部弹出举报框
-                                      SheetBottom(
+                                      sheetBottom(
                                           context,
                                           isDismissible: false,
                                           "",
@@ -659,7 +659,7 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
                             ),
                             onTap: () async {
                               controller.hideMenu();
-                              SheetBottom(context, "", ChatDeleteDialog(
+                              sheetBottom(context, "", ChatDeleteDialog(
                                 deleteCallBack: () async {
                                   Navigator.of(context).pop();
                                   final raw =

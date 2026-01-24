@@ -1378,7 +1378,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
     return SizedBox(
       height: ScreenUtil().setWidth(88.0),
       width: double.infinity,
-      child: ButtonStyle6(
+      child: buttonStyle6(
         context,
             () {
           setState(() {
@@ -1410,7 +1410,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
               child: SizedBox(
                 height: ScreenUtil().setWidth(88.0),
                 //44 / 375 *  MediaQuery.of(context).size.width,
-                child: ButtonStyle5(
+                child: buttonStyle5(
                   context,
                       () {
                     setState(() {
@@ -1437,7 +1437,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
             child: SizedBox(
               height: ScreenUtil().setWidth(88.0),
               //44 / 375 *  MediaQuery.of(context).size.width,
-              child: ButtonStyle6(
+              child: buttonStyle6(
                 context,
                     () {
                   importButton();
@@ -1942,7 +1942,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
         },
       ),
     ));
-    SheetBottom(
+    sheetBottom(
         context,
         "",
         Column(

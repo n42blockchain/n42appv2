@@ -88,7 +88,7 @@ class _BrowserPageState extends State<BrowserPage> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: TextFieldStyle2(
+                  child: textFieldStyle2(
                     context,
                     controller: bValue.titleEditingController,
                     focusNode: bValue.titleFocusNode,
@@ -554,7 +554,7 @@ class _BrowserPageState extends State<BrowserPage> {
     }
   }
   showAlertWidgetConnectDapp(String uri){
-    SheetBottom(context, S.of(context).g_browser_key14, Column(
+    sheetBottom(context, S.of(context).g_browser_key14, Column(
       children: [
         Container(
           padding: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
@@ -575,7 +575,7 @@ class _BrowserPageState extends State<BrowserPage> {
                   Clipboard.setData(ClipboardData(
                       text: uri));
                   //toast 已经复制
-                  ToastUtils.showFtToast(child:SuccessViewV1(S.of(context).copy),duration: 3);
+                  ToastUtils.showFtToast(child:successViewV1(S.of(context).copy),duration: 3);
                 },
                 icon: Icon(Icons.copy,color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),),
               ),
@@ -597,11 +597,11 @@ class _BrowserPageState extends State<BrowserPage> {
           height: ScreenUtil().setWidth(88),
           child: Row(
             children: [
-              Expanded(child: ButtonStyle1(context, (){
+              Expanded(child: buttonStyle1(context, (){
                 Navigator.pop(context);
               }, S.of(context).g_key_79),),
               SizedBox(width: ScreenUtil().setWidth(30),),
-              Expanded(child: ButtonStyle2(context, ()async{
+              Expanded(child: buttonStyle2(context, ()async{
                 //await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletConnectPage(uri)));
                 Navigator.pop(context);
               }, S.of(context).g_key_78),),

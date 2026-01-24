@@ -26,7 +26,7 @@ class AddressEdit extends StatelessWidget {
                   /// copy 地址
                   ToastUtils.init(context);
                   Clipboard.setData(ClipboardData(text: info.address ?? ''));
-                  ToastUtils.showFtToast(child:SuccessViewV1(S.of(context).copy),duration: 3);
+                  ToastUtils.showFtToast(child:successViewV1(S.of(context).copy),duration: 3);
                   Navigator.of(context).pop();
                 },
                 child: Container(

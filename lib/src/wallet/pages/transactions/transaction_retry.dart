@@ -544,7 +544,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
                   onTap: (){
                     ToastUtils.init(context);
                     Clipboard.setData(ClipboardData(text: value));
-                    ToastUtils.showFtToast(child:SuccessViewV1(S.of(context).copy),duration: 3);
+                    ToastUtils.showFtToast(child:successViewV1(S.of(context).copy),duration: 3);
                   },
                   child: Container(
                     height: ScreenUtil().setWidth(50),
@@ -627,7 +627,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
     );
   }
   buttonWidget(String title,dynamic onTap,){
-    return ButtonStyle2(context, ()async{
+    return buttonStyle2(context, ()async{
       onTap();
     }, title);
   }

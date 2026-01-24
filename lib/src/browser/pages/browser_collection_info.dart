@@ -328,7 +328,7 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
       width: double.infinity,
       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
       padding: EdgeInsets.all( ScreenUtil().setWidth(30.0)),
-      child: ButtonStyle2(
+      child: buttonStyle2(
         context,
             (){
           _saveUrl();

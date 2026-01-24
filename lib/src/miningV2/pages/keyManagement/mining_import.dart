@@ -302,7 +302,7 @@ class _MiningImportState extends State<MiningImport> {
 
   /// 构建加密数据输入框
   Widget _buildEncryptedDataField() {
-    return TextFieldStyle2(
+    return textFieldStyle2(
       context,
       controller: _encryptedDataController,
       focusNode: _encryptedDataFocusNode,
@@ -320,7 +320,7 @@ class _MiningImportState extends State<MiningImport> {
 
   /// 构建密码输入框
   Widget _buildPasswordField() {
-    return TextFieldStyle3(
+    return textFieldStyle3(
       context,
       controller: _passwordController,
       focusNode: _passwordFocusNode,
@@ -384,7 +384,7 @@ class _MiningImportState extends State<MiningImport> {
       height: ScreenUtil().setWidth(88),
       width: double.infinity,
       margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
-      child: ButtonStyle6(
+      child: buttonStyle6(
         context,
         _importPrivateKey,
         isLoading ? S.of(context).g_mining_key_113 : S.of(context).g_token_m_key_9,

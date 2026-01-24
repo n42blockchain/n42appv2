@@ -359,7 +359,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
     );
   }
   friendDelete(FriendInfo model)async{
-    final res = await TipsDialog2(
+    final res = await tipsDialog2(
       context,
       S.current.g_key_squad_k15(model.name??""),
     );

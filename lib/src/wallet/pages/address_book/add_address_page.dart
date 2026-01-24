@@ -194,7 +194,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
           });
         }
       },
-      child: ContainerStyle1(
+      child: containerStyle1(
         context,
         padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0),),
         height: ScreenUtil().setWidth(88.0),
@@ -237,7 +237,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
   }
 
   _buildAddressView(BuildContext context) {
-    return ContainerStyle1(
+    return containerStyle1(
       context,
       padding: EdgeInsets.symmetric(
           vertical: ScreenUtil().setWidth(20.0)),
@@ -262,7 +262,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
   }
 
   scanItem() {
-    return TextFieldStyle2(
+    return textFieldStyle2(
       context,
       controller: addressController,
       focusNode: addressFocusNode,
@@ -345,7 +345,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
   }
 
   name() {
-    return TextFieldStyle2(
+    return textFieldStyle2(
       context,
       controller: nameController,
       focusNode: nameFocusNode,
@@ -363,7 +363,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
   }
 
   desc() {
-    return TextFieldStyle2(
+    return textFieldStyle2(
       context,
       controller: descController,
       focusNode: descFocusNode,
@@ -478,6 +478,6 @@ class _AddAddressPageState extends State<AddAddressPage> {
         ),
       ],
     );
-    SheetBottom(context, S.of(context).g_face_match_key1, child);
+    sheetBottom(context, S.of(context).g_face_match_key1, child);
   }
 }

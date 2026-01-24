@@ -72,7 +72,7 @@ class WalletActionProvider extends ChangeNotifier{
     walletIndex=index;
     await saveWalletInfo(walletInfoLsit[walletIndex], walletIndex);
 
-    await initWallet(initCoinInfo: true);
+    await initWallet(shouldInitCoinInfo: true);
     notifyListeners();
 
   }
@@ -200,7 +200,7 @@ class WalletActionProvider extends ChangeNotifier{
     return cList;
   }
 
-  initWallet({bool initCoinInfo=false})async{
+  initWallet({bool shouldInitCoinInfo=false})async{
     if(buildwallet==true)return;
     buildwallet=true;
     await getWalletInfo();
@@ -209,7 +209,7 @@ class WalletActionProvider extends ChangeNotifier{
     await buildCoinModel();
     buildwallet=false;
     notifyListeners();
-    if(initCoinInfo){
+    if(shouldInitCoinInfo){
       ///发送一个event事件 对挖矿进行初始化
       eventBus.fire(EventPublic(EventPublicType.selectWallet,
           intValue: walletIndex,stringValue: "wallet"));
@@ -585,7 +585,7 @@ class WalletActionProvider extends ChangeNotifier{
         walletMiningIndex=walletIndex;
       }
       await saveWalletInfo(newWalletInfo,walletIndex,isNewWallet: true);
-      initWallet(initCoinInfo: true);
+      initWallet(shouldInitCoinInfo: true);
       //await getPublicKeyAndPrivateKeyPairN();
       notifyListeners();
     }catch(e){

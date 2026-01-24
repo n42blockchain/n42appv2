@@ -85,7 +85,7 @@ class _SetAmountState extends State<SetAmount> {
             Container(
               width: double.infinity,
               margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
-              child: TextFieldStyle2(
+              child: textFieldStyle2(
                 context,
                 controller: amountController,
                 height: ScreenUtil().setWidth(150.0),
@@ -165,7 +165,7 @@ class _SetAmountState extends State<SetAmount> {
               height: ScreenUtil().setWidth(148),
               width: double.infinity,
               padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-              child: ButtonStyle6(
+              child: buttonStyle6(
                 context, (){
                   String amountStr=amountController.text;
                   if(regular.regularDouble(amountStr)==false){

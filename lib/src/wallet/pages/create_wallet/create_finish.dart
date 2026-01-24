@@ -426,7 +426,7 @@ class _CreateFinishState extends State<CreateFinish> {
                       padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
                       width: double.infinity,
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                      child: ButtonStyle2(context,
+                      child: buttonStyle2(context,
                             (){
                           //eventBus.fire(EventPublic(EventPublicType.finishPage));
                               Navigator.popUntil(context,ModalRoute.withName(pageName));
@@ -569,7 +569,7 @@ class _CreateFinishState extends State<CreateFinish> {
                   padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
                   width: double.infinity,
                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                  child: ButtonStyle2(context,
+                  child: buttonStyle2(context,
                         ()async{
                       await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletList()));
                       if (!mounted) return;

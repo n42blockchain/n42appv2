@@ -464,7 +464,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(20.0),),
-          TextFieldStyle2(
+          textFieldStyle2(
             context,
             controller: toTextEditingController,
             focusNode: toNode,
@@ -561,7 +561,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
               ),
             ),
             SizedBox(height: ScreenUtil().setWidth(20.0),),
-            TextFieldStyle2(
+            textFieldStyle2(
               context,
               controller: noteTextEditingController,
               focusNode: noteNode,
@@ -597,7 +597,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
     return SizedBox();
   }
   amountWidget(){
-    return ContainerStyle1(
+    return containerStyle1(
       context,
       margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       child: Column(
@@ -638,7 +638,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextFieldStyle2(
+                textFieldStyle2(
                   context,
                   controller: valueTextEditingController,
                   focusNode: valueNode,
@@ -832,7 +832,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
       gasPriceStr='${toEther(gasPrice.toString(),decimals) } $title';
     }
 
-    return ContainerStyle1(
+    return containerStyle1(
       context,
       alignment: Alignment.center,
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
@@ -963,7 +963,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
             padding: EdgeInsets.all( ScreenUtil().setWidth(30.0)),
             height: ScreenUtil().setWidth(148.0),
             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-            child: ButtonStyle6(
+            child: buttonStyle6(
               context, ()async{
               sendTransaction();
             },
@@ -1035,7 +1035,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
         ),
       ],
     );
-    SheetBottom(context, S.of(context).g_face_match_key1, child);
+    sheetBottom(context, S.of(context).g_face_match_key1, child);
   }
   searchToAddressWidget(){
     List<Widget> childs=[
@@ -1259,7 +1259,7 @@ class _WalletChainSendAptState extends State<WalletChainSendApt> {
         ),
       ]);
     }
-    SheetBottom(context, S.of(context).g_face_match_key1, Column(
+    sheetBottom(context, S.of(context).g_face_match_key1, Column(
       children: childs,
     ));
   }

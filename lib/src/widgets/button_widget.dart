@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-Widget ButtonStyle1(BuildContext context,dynamic onTap,String title){
+Widget buttonStyle1(BuildContext context,dynamic onTap,String title){
   return TextButton(
     onPressed: (){
       onTap();
@@ -31,7 +31,7 @@ Widget ButtonStyle1(BuildContext context,dynamic onTap,String title){
     ),
   );
 }
-Widget ButtonStyle2(BuildContext context,dynamic onTap,String title){
+Widget buttonStyle2(BuildContext context,dynamic onTap,String title){
   return TextButton(
     onPressed: (){
       onTap();
@@ -60,7 +60,7 @@ Widget ButtonStyle2(BuildContext context,dynamic onTap,String title){
   );
 }
 //按钮样式3 白色背景，蓝色字体，圆形圆角
-Widget ButtonStyle3(
+Widget buttonStyle3(
     BuildContext context,
     dynamic onTap,
     String title,
@@ -106,7 +106,7 @@ Widget ButtonStyle3(
   );
 }
 //自定义 颜色
-Widget ButtonStyle5(BuildContext context,dynamic onTap,String title,Color backgroundColor,Color textColor,{Color? borderColor,double? circular}){
+Widget buttonStyle5(BuildContext context,dynamic onTap,String title,Color backgroundColor,Color textColor,{Color? borderColor,double? circular}){
   return TextButton(
     onPressed: (){
       onTap();
@@ -143,7 +143,7 @@ Widget ButtonStyle5(BuildContext context,dynamic onTap,String title,Color backgr
 }
 
 //自定义 颜色 加载等待
-Widget ButtonStyle6(BuildContext context,
+Widget buttonStyle6(BuildContext context,
     dynamic onTap,
     String title,
     Color backgroundColor,

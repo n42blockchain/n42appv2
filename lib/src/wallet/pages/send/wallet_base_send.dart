@@ -267,7 +267,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                             Expanded(child: SizedBox(
                               width: double.infinity,
                               height: ScreenUtil().setWidth(88.0),
-                              child: ButtonStyle5(context, (){
+                              child: buttonStyle5(context, (){
                                 Navigator.pop(context,false);
                               },
                                 S.of(context).g_key_79,
@@ -280,7 +280,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                             Expanded(child: SizedBox(
                               width: double.infinity,
                               height: ScreenUtil().setWidth(88.0),
-                              child: ButtonStyle2(context, ()async{
+                              child: buttonStyle2(context, ()async{
                                 bool r=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletSecurityVerification()));
                                 if (!context.mounted) return;
                                 if(r){
@@ -337,7 +337,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                   onTap: (){
                     ToastUtils.init(context);
                     Clipboard.setData(ClipboardData(text: value));
-                    ToastUtils.showFtToast(child:SuccessViewV1(S.of(context).copy),duration: 3);
+                    ToastUtils.showFtToast(child:successViewV1(S.of(context).copy),duration: 3);
                   },
                   child: Container(
                     margin: EdgeInsets.only(left: ScreenUtil().setWidth(20.0)),

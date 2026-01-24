@@ -88,7 +88,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
     if (walletInfo.password!.isNotEmpty) {
       return true;
     }
-    final flag = await TipsDialog7(context);
+    final flag = await tipsDialog7(context);
     if (!mounted) return false;
     if (flag == true) {
       await Navigator.push(
@@ -1024,7 +1024,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
             ],
           )),
     ));
-    SheetBottom(
+    sheetBottom(
         context,
         "",
         Column(
@@ -1260,7 +1260,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
                     widget.coinModel,)));
           if (!mounted) return;
           if (r) {
-            Provider.of<WalletActionProvider>(context).initWallet(initCoinInfo: true);
+            Provider.of<WalletActionProvider>(context).initWallet(shouldInitCoinInfo: true);
           }
           Navigator.pop(context);
         },
@@ -1438,7 +1438,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
         ));
       }
     }
-    SheetBottom(
+    sheetBottom(
         context,
         "",
         Column(

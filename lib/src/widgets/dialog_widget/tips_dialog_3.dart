@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 //自定义
-Future TipsDialog3(BuildContext context,child)async{
+Future tipsDialog3(BuildContext context,child)async{
   return await showDialog(
     context: context,
     barrierDismissible: false,

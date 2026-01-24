@@ -121,7 +121,7 @@ class _ImportKeystoreState extends State<ImportKeystore> {
                       },
                     ),*/
                   ]),
-                  ContainerStyle1(
+                  containerStyle1(
                     context,
                     height: ScreenUtil().setWidth(440),
                     padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
@@ -147,7 +147,7 @@ class _ImportKeystoreState extends State<ImportKeystore> {
                         fontWeight: FontWeight.bold,
                         fontSize: ScreenUtil().setSp(32)),
                   ),
-                  ContainerStyle1(
+                  containerStyle1(
                       context,
                     height: ScreenUtil().setWidth(120),
                     padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
@@ -172,7 +172,7 @@ class _ImportKeystoreState extends State<ImportKeystore> {
                         fontWeight: FontWeight.bold,
                         fontSize: ScreenUtil().setSp(32)),
                   ),
-                  ContainerStyle1(
+                  containerStyle1(
                       context,
                       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
                       margin: EdgeInsets.symmetric( vertical: ScreenUtil().setWidth(20)),
@@ -248,7 +248,7 @@ class _ImportKeystoreState extends State<ImportKeystore> {
                     height: ScreenUtil().setWidth(148),
                     width: double.infinity,
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                    child: ButtonStyle6(
+                    child: buttonStyle6(
                         context,
                             () async {
                           if(load==Load.loading)return;
@@ -385,7 +385,7 @@ class _ImportKeystoreState extends State<ImportKeystore> {
         );
       },
     );
-    SheetBottom(
+    sheetBottom(
         context,
         S.of(context).g_key_17,
         SizedBox(

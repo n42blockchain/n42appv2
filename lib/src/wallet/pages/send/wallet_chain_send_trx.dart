@@ -523,7 +523,7 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(20.0),),
-          TextFieldStyle2(
+          textFieldStyle2(
             context,
             controller: toTextEditingController,
             focusNode: toNode,
@@ -620,7 +620,7 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
               ),
             ),
             SizedBox(height: ScreenUtil().setWidth(20.0),),
-            TextFieldStyle2(
+            textFieldStyle2(
               context,
               controller: noteTextEditingController,
               focusNode: noteNode,
@@ -689,7 +689,7 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextFieldStyle2(
+                textFieldStyle2(
                   context,
                   controller: valueTextEditingController,
                   focusNode: valueNode,
@@ -886,7 +886,7 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
       gasPriceStr='${toEther(gasPrice.toString(),decimals) } $title';
     }
 
-    return ContainerStyle1(
+    return containerStyle1(
       context,
       alignment: Alignment.center,
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
@@ -1017,7 +1017,7 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
             padding: EdgeInsets.all( ScreenUtil().setWidth(30.0)),
             height: ScreenUtil().setWidth(148.0),
             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-            child: ButtonStyle6(
+            child: buttonStyle6(
               context, ()async{
               sendTransaction();
             },
@@ -1089,7 +1089,7 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
         ),
       ],
     );
-    SheetBottom(context, S.of(context).g_face_match_key1, child);
+    sheetBottom(context, S.of(context).g_face_match_key1, child);
   }
   searchToAddressWidget(){
     List<Widget> childs=[
@@ -1313,7 +1313,7 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
         ),
       ]);
     }
-    SheetBottom(context, S.of(context).g_face_match_key1, Column(
+    sheetBottom(context, S.of(context).g_face_match_key1, Column(
       children: childs,
     ));
   }

@@ -218,7 +218,7 @@ class WalletConnectAlertWidget extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       height: ScreenUtil().setWidth(88.0),
-      child: ButtonStyle2(context, (){
+      child: buttonStyle2(context, (){
         onTap();
       }, title),
     );

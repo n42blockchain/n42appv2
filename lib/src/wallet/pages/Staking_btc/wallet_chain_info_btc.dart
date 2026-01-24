@@ -730,7 +730,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
                       sendTap: () async {
                         WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
                         if(wap.walletInfo.password==""){
-                          final flag= await TipsDialog7(context);
+                          final flag= await tipsDialog7(context);
                           if (flag != null && flag) {
                             Navigator.push(context, MaterialPageRoute(
                                 settings: RouteSettings(
@@ -796,7 +796,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
                       receiveTap: () async{
                         WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
                         if(wap.walletInfo.password==""){
-                          final flag= await TipsDialog7(context);
+                          final flag= await tipsDialog7(context);
                           if (flag != null && flag) {
                             Navigator.push(context, MaterialPageRoute(
                                 settings: RouteSettings(
@@ -841,7 +841,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
                                 builder: (context) => WalletCoinTokenAdd2(
                                   widget.coinModel,)));
                         if (r) {
-                          Provider.of<WalletActionProvider>(context).initWallet(initCoinInfo: true);
+                          Provider.of<WalletActionProvider>(context).initWallet(shouldInitCoinInfo: true);
                           Navigator.pop(context);
                         }
                       },
@@ -949,7 +949,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
                 onTap: (){
                   ToastUtils.init(context);
                   Clipboard.setData(ClipboardData(text: widget.coinModel.address));
-                  ToastUtils.showFtToast(child:SuccessViewV1(S.of(context).copy),duration: 3);
+                  ToastUtils.showFtToast(child:successViewV1(S.of(context).copy),duration: 3);
                 },
                 child: Container(
                   margin: EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
@@ -1045,7 +1045,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
                 ),
                 height: ScreenUtil().setWidth(80.0),
                 child:
-                ButtonStyle3(
+                buttonStyle3(
                   context,
                       (){
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>SelfCustody1(widget.coinModel)));
@@ -1062,7 +1062,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
                   horizontal: ScreenUtil().setWidth(30.0),
                 ),
                 height: ScreenUtil().setWidth(80.0),
-                child: ButtonStyle3(
+                child: buttonStyle3(
                   context,
                       (){
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>Redeem(widget.coinModel)));
@@ -1085,12 +1085,12 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
                 height: ScreenUtil().setWidth(80),
                 padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30),),
                 alignment: Alignment.center,
-                child: ButtonStyle3(
+                child: buttonStyle3(
                   context,
                       ()async {
                     WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
                     if(wap.walletInfo.password==""){
-                      final flag= await TipsDialog7(context);
+                      final flag= await tipsDialog7(context);
                       if (!mounted) return;
                       if (flag != null && flag) {
                         Navigator.push(context, MaterialPageRoute(
@@ -1123,12 +1123,12 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
                 height: ScreenUtil().setWidth(80),
                 padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30),),
                 alignment: Alignment.center,
-                child: ButtonStyle3(
+                child: buttonStyle3(
                   context,
                       () async{
                     WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
                     if(wap.walletInfo.password==""){
-                      final flag= await TipsDialog7(context);
+                      final flag= await tipsDialog7(context);
                       if (!mounted) return;
                       if (flag != null && flag) {
                         Navigator.push(context, MaterialPageRoute(
@@ -1164,7 +1164,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
                 height: ScreenUtil().setWidth(80),
                 padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30),),
                 alignment: Alignment.center,
-                child: ButtonStyle3(
+                child: buttonStyle3(
                   context,
                       () {
                     Navigator.push(
@@ -1347,7 +1347,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
             ],
           )),
     ));
-    SheetBottom(
+    sheetBottom(
         context,
         "",
         Column(

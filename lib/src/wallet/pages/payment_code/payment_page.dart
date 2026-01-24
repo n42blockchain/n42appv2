@@ -297,7 +297,7 @@ class _PaymentPageState extends State<PaymentPage> {
                     padding: EdgeInsets.all( ScreenUtil().setWidth(30.0)),
                     height: ScreenUtil().setWidth(148.0),
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                    child: ButtonStyle6(
+                    child: buttonStyle6(
                       context, ()async{
                         if(errorMessage !="" && load !=Load.refresh)return;
                       bool? r=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletSecurityVerification()));

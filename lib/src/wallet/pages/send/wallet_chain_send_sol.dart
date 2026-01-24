@@ -561,7 +561,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(20.0),),
-          TextFieldStyle2(
+          textFieldStyle2(
             context,
             controller: toTextEditingController,
             focusNode: toNode,
@@ -677,7 +677,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextFieldStyle2(
+                textFieldStyle2(
                   context,
                   controller: valueTextEditingController,
                   focusNode: valueNode,
@@ -795,7 +795,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
     }
     totalGasPriceStr='${toEther(totalGasPrice.toString(),decimals)} $title';
 
-    return ContainerStyle1(
+    return containerStyle1(
       context,
       alignment: Alignment.center,
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
@@ -926,7 +926,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
             padding: EdgeInsets.all( ScreenUtil().setWidth(30.0)),
             height: ScreenUtil().setWidth(148.0),
             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-            child: ButtonStyle6(
+            child: buttonStyle6(
               context, ()async{
               sendTransaction();
             },
@@ -998,7 +998,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
         ),
       ],
     );
-    SheetBottom(context, S.of(context).g_face_match_key1, child);
+    sheetBottom(context, S.of(context).g_face_match_key1, child);
   }
   searchToAddressWidget(){
     List<Widget> childs=[
@@ -1222,7 +1222,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
         ),
       ]);
     }
-    SheetBottom(context, S.of(context).g_face_match_key1, Column(
+    sheetBottom(context, S.of(context).g_face_match_key1, Column(
       children: childs,
     ));
   }

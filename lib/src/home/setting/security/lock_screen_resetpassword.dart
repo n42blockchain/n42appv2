@@ -181,7 +181,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
                   ScreenUtil().setWidth(30.0),
                 ),
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                child:ButtonStyle2(
+                child:buttonStyle2(
                   context,
                       ()async{
                     sure();

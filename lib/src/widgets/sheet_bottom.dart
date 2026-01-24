@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 /// 应用通用的底部弹框体
 /// title 不传 没有标题
 /// child 根据需求自定义实现
-void SheetBottom(BuildContext context, String title, Widget child,
+void sheetBottom(BuildContext context, String title, Widget child,
     {bool enableDrag = true,bool isDismissible = true}) {
   showModalBottomSheet(
     context: context,

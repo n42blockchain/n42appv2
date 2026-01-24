@@ -450,7 +450,7 @@ class _ItemChatViewState extends State<ItemChatView>
                                       _item.getTargetId());
                                   if (!mounted) return;
                                   //底部弹出举报框
-                                  SheetBottom(
+                                  sheetBottom(
                                     this.context,
                                     "",
                                     ReportWidget(
@@ -460,7 +460,7 @@ class _ItemChatViewState extends State<ItemChatView>
                                         final controller =
                                         TextEditingController();
                                         //底部弹出举报框
-                                        SheetBottom(
+                                        sheetBottom(
                                             context,
                                             isDismissible: false,
                                             "",
@@ -509,7 +509,7 @@ class _ItemChatViewState extends State<ItemChatView>
                                         final controller =
                                         TextEditingController();
                                         //底部弹出举报框
-                                        SheetBottom(
+                                        sheetBottom(
                                             context,
                                             isDismissible: false,
                                             "",
@@ -637,7 +637,7 @@ class _ItemChatViewState extends State<ItemChatView>
                               ),
                               onTap: () async {
                                 controller.hideMenu();
-                                SheetBottom(context, "", ChatDeleteDialog(
+                                sheetBottom(context, "", ChatDeleteDialog(
                                   deleteCallBack: () async {
                                     Navigator.of(context).pop();
                                     final raw =

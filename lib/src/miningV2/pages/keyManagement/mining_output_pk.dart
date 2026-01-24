@@ -145,7 +145,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
                 ),
               ),
               SizedBox(height: ScreenUtil().setWidth(10)),
-              TextFieldStyle3(
+              textFieldStyle3(
                   context,
                 controller: _pwdController,
                 focusNode: _pwdFocus,
@@ -181,7 +181,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
                 ),
               ),
               SizedBox(height: ScreenUtil().setWidth(10)),
-              TextFieldStyle3(
+              textFieldStyle3(
                 context,
                 controller: _confirmController,
                 focusNode: _confirmFocus,
@@ -244,7 +244,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
           margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
           width: double.infinity,
           height: ScreenUtil().setWidth(88),
-          child: ButtonStyle6(
+          child: buttonStyle6(
             context,
             _showEncryptResult ? _copyEncryptedData : _onConfirm,
             _showEncryptResult ? S.of(context).g_mining_key_101 : S.of(context).g_key_78,

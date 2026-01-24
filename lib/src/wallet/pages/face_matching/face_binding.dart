@@ -237,7 +237,7 @@ class _FaceBindingState extends State<FaceBinding> with WidgetsBindingObserver{
                   ),
                   height: ScreenUtil().setWidth(88),
                   width: double.infinity,
-                  child: ButtonStyle2(context, (){
+                  child: buttonStyle2(context, (){
                     useCamera();
                   }, S.of(context).g_face_match_key12),
                 ),

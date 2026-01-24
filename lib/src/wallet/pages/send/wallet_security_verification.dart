@@ -348,7 +348,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
                             child: SizedBox(
                               width: double.infinity,
                               height: ScreenUtil().setWidth(88.0),
-                              child: ButtonStyle5(context, (){
+                              child: buttonStyle5(context, (){
                                 closeKeyboard();
                                 if(load==Load.loading)return;
                                 Navigator.pop(context,false);
@@ -365,7 +365,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
                             child: SizedBox(
                               width: double.infinity,
                               height: ScreenUtil().setWidth(88.0),
-                              child: ButtonStyle6(context, ()async{
+                              child: buttonStyle6(context, ()async{
                                 closeKeyboard();
                                 if(load==Load.loading) {
                                   return;
@@ -937,7 +937,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
   }
   //登录提醒
   showLoginDialog()async{
-    final flag = await TipsDialog6(context, title:S.of(context).login_need_login,);
+    final flag = await tipsDialog6(context, title:S.of(context).login_need_login,);
     if (!mounted) return;
     if (flag != null && flag) {
       await Navigator.pushNamed(context, "/LoginPage",);

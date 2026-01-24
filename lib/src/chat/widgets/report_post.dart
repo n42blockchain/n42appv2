@@ -120,7 +120,7 @@ class _ReportPostState extends State<ReportPost> {
           SizedBox(
             width: double.infinity,
             height: ScreenUtil().setWidth(88),
-            child: ButtonStyle2(context, canClick ? widget.onPressed : null, S.of(context).g_key_48),
+            child: buttonStyle2(context, canClick ? widget.onPressed : null, S.of(context).g_key_48),
           ),
         ],
       ),

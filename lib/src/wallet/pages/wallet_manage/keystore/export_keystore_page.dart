@@ -81,7 +81,7 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
                         ScreenUtil().setWidth(30),
                       ),
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                      child: ButtonStyle2(context, () {
+                      child: buttonStyle2(context, () {
                         if (flag) {
                           Clipboard.setData(ClipboardData(text: widget.keystoreJson));
                           ToastUtils.show(S.of(context).g_key_ex_keystore_11);

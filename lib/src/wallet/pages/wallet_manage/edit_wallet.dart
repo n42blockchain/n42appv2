@@ -83,7 +83,7 @@ class _EditWalletState extends State<EditWallet> {
                 height: ScreenUtil().setWidth(148),
                 width: double.infinity,
                 padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                child: ButtonStyle2(context, ()async{
+                child: buttonStyle2(context, ()async{
                   widget.walletInfo.walletName = _controller.text.trim();
                   //保存钱包
                   // Map<String,dynamic>? walletAll=await SPUtils.getWallsetInfo();

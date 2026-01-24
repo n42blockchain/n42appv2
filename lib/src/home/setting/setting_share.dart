@@ -126,7 +126,7 @@ class _SettingShareState extends State<SettingShare> {
   }
 
   void share() {
-    SheetBottom(
+    sheetBottom(
       context,
       "",
       ShareList(callBack: (int shareType) {
@@ -194,7 +194,7 @@ class _SettingShareState extends State<SettingShare> {
                   Container(
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
                     height: ScreenUtil().setWidth(148.0),
-                    child: ButtonStyle2(
+                    child: buttonStyle2(
                       context,
                           () => share(),
                       S.of(context).g_share_v2_key_5,
@@ -290,7 +290,7 @@ class _SettingShareState extends State<SettingShare> {
                       ToastUtils.init(context);
                       Clipboard.setData(ClipboardData(text: linkStr));
                       ToastUtils.showFtToast(
-                        child: SuccessViewV1(S.of(context).copy),
+                        child: successViewV1(S.of(context).copy),
                         duration: 3,
                       );
                     },
@@ -343,7 +343,7 @@ class _SettingShareState extends State<SettingShare> {
                       Clipboard.setData(
                           ClipboardData(text: AppGlobals.userInfo?.inviteCode ?? ""));
                       ToastUtils.showFtToast(
-                        child: SuccessViewV1(S.of(context).copy),
+                        child: successViewV1(S.of(context).copy),
                         duration: 3,
                       );
                     },

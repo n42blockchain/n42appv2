@@ -875,7 +875,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                             builder: (context) => WalletCoinAddAll(youPay?.payChain ?? "",)));
                     if (!mounted) return;
                     if (r) {
-                      await Provider.of<WalletActionProvider>(context,listen: false).initWallet(initCoinInfo: true);
+                      await Provider.of<WalletActionProvider>(context,listen: false).initWallet(shouldInitCoinInfo: true);
                       init();
                     }
                   },
@@ -941,7 +941,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                             )));
                     if (!mounted) return;
                     if (r) {
-                      await Provider.of<WalletActionProvider>(context,listen: false).initWallet(initCoinInfo: true);
+                      await Provider.of<WalletActionProvider>(context,listen: false).initWallet(shouldInitCoinInfo: true);
                       init();
                     }
                   },
@@ -1251,7 +1251,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
         height: ScreenUtil().setWidth(88.0),
         child: load == Load.error
             ? tryAgainButton()
-            : ButtonStyle6(context, () async {
+            : buttonStyle6(context, () async {
           closeKeyboard();
           if (load == Load.finish) {
             if (readStatement == false) return;
@@ -1506,14 +1506,14 @@ class _SwapAstHomeState extends State<SwapAstHome> {
   }
 
   tryAgainButton() {
-    return ButtonStyle2(context, () {
+    return buttonStyle2(context, () {
       init();
     }, S.of(context).g_swap_key_6,);
 
   }
 
   queryWidget() {
-    SheetBottom(
+    sheetBottom(
         context,
         "",
         Container(

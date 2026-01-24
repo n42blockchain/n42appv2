@@ -151,7 +151,7 @@ class _GroupEditPageState extends State<GroupEditPage> {
                 width: double.infinity,
                 height: ScreenUtil().setWidth(88),
                 margin: EdgeInsets.all( ScreenUtil().setWidth(30)),
-                child: ButtonStyle2(context, () async {
+                child: buttonStyle2(context, () async {
                   try{
                     if(load==Load.loading)return;
                     final nameText = _nameTextEditController.text.trim();

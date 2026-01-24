@@ -245,7 +245,7 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver{
                 width: ScreenUtil().setWidth(300.0),
                 height: ScreenUtil().setWidth(88.0),
                 margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(40.0)),
-                child: ButtonStyle2(context, (){
+                child: buttonStyle2(context, (){
                   if(load==Load.loading)return;
                   init();
                 }, S.of(context).g_face_match_key8),
@@ -253,7 +253,7 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver{
               SizedBox(
                 width: ScreenUtil().setWidth(300.0),
                 height: ScreenUtil().setWidth(88.0),
-                child: ButtonStyle2(context, (){
+                child: buttonStyle2(context, (){
                   binding();
                 }, S.of(context).g_face_match_key9),
               ),

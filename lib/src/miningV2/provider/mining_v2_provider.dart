@@ -25,15 +25,15 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
 class MiningV2Provider extends ChangeNotifier {
-  MiningApi? mining;
-  MiningApi get Mining{
-    mining ??= MiningApi.init();
-    return mining!;
+  MiningApi? _mining;
+  MiningApi get mining{
+    _mining ??= MiningApi.init();
+    return _mining!;
   }
-  MiningWeb3? web3;
-  MiningWeb3 get Web3{
-    web3 ??= MiningWeb3.init(privateKey??"");
-    return web3!;
+  MiningWeb3? _web3;
+  MiningWeb3 get web3{
+    _web3 ??= MiningWeb3.init(privateKey??"");
+    return _web3!;
   }
   //是否已经质押
   bool? depositsEnable;
@@ -53,8 +53,8 @@ class MiningV2Provider extends ChangeNotifier {
   String? address;
 
   resetData() {
-    mining=null;
-    web3=null;
+    _mining=null;
+    _web3=null;
     depositsEnable = false;
     miningStatus = false;
     walletName="";
@@ -357,13 +357,13 @@ class MiningV2Provider extends ChangeNotifier {
       depositLoad=Load.loading;
       notifyListeners();
       miningKeypart=encrypteData['validator'];
-      String? rData=await Mining.createDepositUnsignedTx(
+      String? rData=await mining.createDepositUnsignedTx(
         miningKeypart?['privateKey']??"",
         address??"",
         DataUtils().bigIntToHex(ethToWeiString('$amount', 18)),
       );
       if(rData !=null){
-        MessageModel sendMM=await Web3.sendDepositTransaction(jsonDecode(rData));
+        MessageModel sendMM=await web3.sendDepositTransaction(jsonDecode(rData));
         if(sendMM.error==false){
           setDepositTxHash(sendMM.data);
           errorMessage="";
@@ -407,7 +407,7 @@ class MiningV2Provider extends ChangeNotifier {
       notifyListeners();
       return;
     }
-    MessageModel feeMM=await Web3.exitDepositRowCall(feeWeiInHexTx);
+    MessageModel feeMM=await web3.exitDepositRowCall(feeWeiInHexTx);
     if(feeMM.error) {
       errorMessage=feeMM.data;
       exitDepositLoad=Load.finish;
@@ -415,7 +415,7 @@ class MiningV2Provider extends ChangeNotifier {
       return;
     }
     final exitSignDataStr=await miningCreateExitUnsignedTx(feeMM.data);
-    MessageModel sendMM=await Web3.sendExitDepositTransaction(jsonDecode(exitSignDataStr??'{}'));
+    MessageModel sendMM=await web3.sendExitDepositTransaction(jsonDecode(exitSignDataStr??'{}'));
     if(sendMM.error==false){
       setExitDepositTxHash(sendMM.data);
       errorMessage="";
@@ -444,11 +444,11 @@ class MiningV2Provider extends ChangeNotifier {
     }
   }
   Future<bool> checkTxHash(String txHash) async {
-    MessageModel rmm = await Web3.getTransactionReceipt(txHash);
+    MessageModel rmm = await web3.getTransactionReceipt(txHash);
     return rmm.error;
   }
   Future<void> runMining() async {
-    String? rData=await Mining.runClent(
+    String? rData=await mining.runClent(
       miningKeypart?['privateKey']??"",
     );
     if(rData !=null){
@@ -480,11 +480,11 @@ class MiningV2Provider extends ChangeNotifier {
     });
   }
   Future<String?> miningCreateGetExitFeeUnsignedTx() async {
-    String? rData = await Mining.miningCreateGetExitFeeUnsignedTx();
+    String? rData = await mining.miningCreateGetExitFeeUnsignedTx();
     return rData;
   }
   Future<String?> miningCreateExitUnsignedTx(String feeWeiInHex) async {
-    String? rData = await Mining.miningCreateExitUnsignedTx(feeWeiInHex,miningKeypart?['publicKey']??"");
+    String? rData = await mining.miningCreateExitUnsignedTx(feeWeiInHex,miningKeypart?['publicKey']??"");
     return rData;
   }
 
@@ -576,7 +576,7 @@ class MiningV2Provider extends ChangeNotifier {
     final List<String> tomorrowStr = getTimeFormat(tomorrow);
     isLoading7DayData=true;
     notifyListeners();
-    MessageModel rmm= await Mining.getMiningWithdrawalsDaily(tomorrowStr[0], address??"");
+    MessageModel rmm= await mining.getMiningWithdrawalsDaily(tomorrowStr[0], address??"");
     if(rmm.error==false){
         //有效挖矿1次时间是128秒
         taskList=rmm.data;
@@ -597,7 +597,7 @@ class MiningV2Provider extends ChangeNotifier {
         get7DaysValue(today);
         startWithdrawalTimer();
     }
-    MessageModel rmms=await Mining.getMiningWithdrawalsDailySummary(address??"");
+    MessageModel rmms=await mining.getMiningWithdrawalsDailySummary(address??"");
     if(rmms.error==false){
       miningTotalRevenue=toEther(rmms.data, 18).toDouble();
     }
@@ -709,7 +709,7 @@ class MiningV2Provider extends ChangeNotifier {
     }
   }
   Future<void> getBeaconValidator() async {
-    MessageModel rmm=await Mining.getBeaconValidator(miningKeypart?['publicKey']??"");
+    MessageModel rmm=await mining.getBeaconValidator(miningKeypart?['publicKey']??"");
     if(rmm.error ==false){
       inactivityScore=[0,0,0];
       balanceInBeacon=toEther((rmm.data?['balance_in_beacon']??0).toString(), 9).toDouble();

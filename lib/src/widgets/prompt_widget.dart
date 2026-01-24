@@ -3,7 +3,7 @@ import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-Widget SuccessViewV1(String title) {
+Widget successViewV1(String title) {
   return Container(
     padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24.0), vertical: ScreenUtil().setWidth(48.0)),
     decoration: BoxDecoration(

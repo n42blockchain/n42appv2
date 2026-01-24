@@ -195,7 +195,7 @@ class _ImportPrivatekeyState extends State<ImportPrivatekey> {
                         ),
                       ],
                     ),
-                    ContainerStyle1(
+                    containerStyle1(
                       context,
                       height: ScreenUtil().setWidth(440),
                       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
@@ -221,7 +221,7 @@ class _ImportPrivatekeyState extends State<ImportPrivatekey> {
                           fontWeight: FontWeight.bold,
                           fontSize: ScreenUtil().setSp(32)),
                     ),
-                    ContainerStyle1(
+                    containerStyle1(
                       context,
                       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
                         margin: EdgeInsets.symmetric( vertical: ScreenUtil().setWidth(20)),
@@ -315,7 +315,7 @@ class _ImportPrivatekeyState extends State<ImportPrivatekey> {
                     height: ScreenUtil().setWidth(148),
                     width: double.infinity,
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                    child: ButtonStyle6(
+                    child: buttonStyle6(
                         context,
                             () async {
                           if(load==Load.loading)return;

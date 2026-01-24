@@ -443,7 +443,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
     );
   }
   showNFTSheet(ScreenLockState screenLockState){
-    SheetBottom(
+    sheetBottom(
       context,
       S.of(context).g_lock_key4,
       Container(

@@ -208,7 +208,7 @@ class _FriendDetailState extends State<FriendDetail> {
                 color: AppThemeUtils.getColorByKey(
                     context, AppThemeKeys.itemBgColor.name),
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24))),
-            child: TextFieldStyle3(
+            child: textFieldStyle3(
               context,
               controller: _reasonTextController,
               focusNode: _reasonFocusNode,
@@ -242,7 +242,7 @@ class _FriendDetailState extends State<FriendDetail> {
                 color: AppThemeUtils.getColorByKey(
                     context, AppThemeKeys.itemBgColor.name),
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24))),
-            child: TextFieldStyle3(
+            child: textFieldStyle3(
               context,
               controller: _remarksTextController,
               focusNode: _remarksFocusNode,
@@ -267,7 +267,7 @@ class _FriendDetailState extends State<FriendDetail> {
     if(isFriend){
       title=S.of(context).g_key_squad;
     }
-    return ButtonStyle2(context, () async {
+    return buttonStyle2(context, () async {
       if(isFriend){
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ChatDetailPage(targetUuid: widget.info.uuid??"", conversationType: 0)));
       }

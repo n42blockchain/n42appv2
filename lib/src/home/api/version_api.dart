@@ -8,7 +8,7 @@ import 'package:n42appv2/src/https/base_api.dart';
 class VersionApi{
   late String url;
   late Map<String,String> header;
-  CheckVersionApi(){
+  VersionApi(){
     url=AppConfig.getApiUrlOnline('userInfoHost');
     header={'content-type': 'application/x-www-form-urlencoded'};
   }

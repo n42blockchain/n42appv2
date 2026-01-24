@@ -277,7 +277,7 @@ class SecurityGoogleVedificationState extends State<SecurityGoogleVedification>{
               width: double.infinity,
               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
               padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(36.0),top: ScreenUtil().setWidth(26.0),left: ScreenUtil().setWidth(30.0),right: ScreenUtil().setWidth(30.0),),
-              child: ButtonStyle2(context, ()async{
+              child: buttonStyle2(context, ()async{
                 //跳转
                 if(load==Load.loading)return;
                 setState(() {

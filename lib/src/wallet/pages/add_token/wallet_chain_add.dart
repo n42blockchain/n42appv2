@@ -218,7 +218,7 @@ class _WalletChainAddState extends State<WalletChainAdd> {
     if (!mounted) return;
     if(exist){
       errorMessage=S.of(context).g_token_m_key_22(name);
-      bool? r=await TipsDialog2(context, S.of(context).g_token_m_key_23(name),);
+      bool? r=await tipsDialog2(context, S.of(context).g_token_m_key_23(name),);
       if (!mounted) return;
       if(r==true){
         await addDefaultChain(mKey);
@@ -293,7 +293,7 @@ class _WalletChainAddState extends State<WalletChainAdd> {
                   children: [
                     LoginTitle(title: S.of(context).g_token_m_key_13,must: true,),
                     SizedBox(height: ScreenUtil().setWidth(10),),
-                    TextFieldStyle3(
+                    textFieldStyle3(
                       context,
                       controller: nameController,
                       focusNode: nameNode,
@@ -312,7 +312,7 @@ class _WalletChainAddState extends State<WalletChainAdd> {
                     SizedBox(height: ScreenUtil().setWidth(20),),
                     LoginTitle(title: S.of(context).g_token_m_key_14,must: true,),
                     SizedBox(height: ScreenUtil().setWidth(10),),
-                    TextFieldStyle3(
+                    textFieldStyle3(
                         context,
                         controller: symbolController,
                         focusNode: symbolNode,
@@ -331,7 +331,7 @@ class _WalletChainAddState extends State<WalletChainAdd> {
                     SizedBox(height: ScreenUtil().setWidth(20),),
                     LoginTitle(title: S.of(context).g_token_m_key_15,must: true,),
                     SizedBox(height: ScreenUtil().setWidth(10),),
-                    TextFieldStyle3(
+                    textFieldStyle3(
                         context,
                         controller: chainIdController,
                         focusNode: chainIdNode,
@@ -350,7 +350,7 @@ class _WalletChainAddState extends State<WalletChainAdd> {
                     SizedBox(height: ScreenUtil().setWidth(20),),
                     LoginTitle(title: S.of(context).g_token_m_key_16,must: true,),
                     SizedBox(height: ScreenUtil().setWidth(10),),
-                    TextFieldStyle2(
+                    textFieldStyle2(
                         context,
                         controller: decimalController,
                         focusNode: decimalNode,
@@ -368,7 +368,7 @@ class _WalletChainAddState extends State<WalletChainAdd> {
                     SizedBox(height: ScreenUtil().setWidth(20),),
                     LoginTitle(title: S.of(context).g_token_m_key_17,must: true,),
                     SizedBox(height: ScreenUtil().setWidth(10),),
-                    TextFieldStyle2(
+                    textFieldStyle2(
                         context,
                         controller: rpcController,
                         focusNode: rpcNode,
@@ -387,7 +387,7 @@ class _WalletChainAddState extends State<WalletChainAdd> {
                     SizedBox(height: ScreenUtil().setWidth(20),),
                     LoginTitle(title: S.of(context).g_token_m_key_18),
                     SizedBox(height: ScreenUtil().setWidth(10),),
-                    TextFieldStyle2(
+                    textFieldStyle2(
                         context,
                         controller: apiController,
                         focusNode: apiNode,
@@ -438,7 +438,7 @@ class _WalletChainAddState extends State<WalletChainAdd> {
                     Container(
                       margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
                       height: ScreenUtil().setWidth(88),
-                      child: ButtonStyle6(
+                      child: buttonStyle6(
                         context,
                         (){
                           addChain();

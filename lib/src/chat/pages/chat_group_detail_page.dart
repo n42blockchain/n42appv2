@@ -1472,7 +1472,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
         ],
       ),
     );
-    SheetBottom(
+    sheetBottom(
       context,
       "Action",
       swapWidget,

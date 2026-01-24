@@ -99,7 +99,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                             );
                           } else {
                             final loginNeededTitle = S.of(context).login_need_login;
-                            final flag = await TipsDialog6(context, title: loginNeededTitle);
+                            final flag = await tipsDialog6(context, title: loginNeededTitle);
                             if (!context.mounted) return;
                             if (flag != null && flag) {
                               await Navigator.pushNamed(context, "/LoginPage");
@@ -133,7 +133,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                         onTap: () async {
                           if (AppGlobals.userInfo == null) {
                             final loginNeededTitle = S.of(context).login_need_login;
-                            final flag = await TipsDialog6(context, title: loginNeededTitle);
+                            final flag = await tipsDialog6(context, title: loginNeededTitle);
                             if (!context.mounted) return;
                             if (flag != null && flag) {
                               await Navigator.pushNamed(context, "/LoginPage");
@@ -282,7 +282,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
             onTap: () async {
               if (AppGlobals.userInfo == null) {
                 final loginNeededTitle = S.of(context).login_need_login;
-                final flag = await TipsDialog6(context, title: loginNeededTitle);
+                final flag = await tipsDialog6(context, title: loginNeededTitle);
                 if (!mounted) return;
                 if (flag != null && flag) {
                   await Navigator.pushNamed(context, "/LoginPage");
@@ -491,7 +491,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
         child: InkWell(
           onTap: () async {
             if (isLoggedIn) {
-              final res = await TipsDialog2(context, S.of(context).g_key_logout_sure);
+              final res = await tipsDialog2(context, S.of(context).g_key_logout_sure);
               if (!mounted) return;
               if (res != null && res) {
                 try {

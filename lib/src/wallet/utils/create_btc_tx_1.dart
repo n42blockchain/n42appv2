@@ -63,7 +63,7 @@ class CreateBTCTXV1 {
     }
 
     int changeAmount = totalInputAmount - sendAmount - fee;
-    Map<String,dynamic> rawTx = createRawTransaction_segwit(selectedUTXOs, recipientAddress, sendAmount, changeAmount, fromAddress, pubKey, pubKeyStr);
+    Map<String,dynamic> rawTx = createRawTransactionSegwit(selectedUTXOs, recipientAddress, sendAmount, changeAmount, fromAddress, pubKey, pubKeyStr);
 
     String txHashStr=hex.encode(rawTx['txRow']);
     //ByteData data1=ByteData(4);
@@ -120,7 +120,7 @@ class CreateBTCTXV1 {
     //print("签名后的交易: ${hex.encode(signedTx)}");
     //return txHashStr+witness;
   }
-  create_v2(
+  createV2(
       String wifPrivateKey,
       String recipientAddress,
       double sendValue,
@@ -168,7 +168,7 @@ class CreateBTCTXV1 {
     }
 
     int changeAmount = totalInputAmount - sendAmount - fee;
-    Map<String,dynamic> rawTx = createRawTransaction_segwit_v2(selectedUTXOs, recipientAddress, sendAmount, changeAmount, fromAddress, pubKey, pubKeyStr);
+    Map<String,dynamic> rawTx = createRawTransactionSegwitV2(selectedUTXOs, recipientAddress, sendAmount, changeAmount, fromAddress, pubKey, pubKeyStr);
 
     String txHashStr=hex.encode(rawTx['txRow']);
     //ByteData data1=ByteData(4);
@@ -348,7 +348,7 @@ class CreateBTCTXV1 {
     offset += 4;
     return data.buffer.asUint8List(0,offset);
   }
-  Uint8List createRawInput_all(Map<String, dynamic> input){
+  Uint8List createRawInputAll(Map<String, dynamic> input){
     ByteData data = ByteData(180);
     int offset = 0;
     Uint8List txidBytes = Uint8List.fromList(hex.decode(input['txid']).reversed.toList());
@@ -375,7 +375,7 @@ class CreateBTCTXV1 {
     offset += 4;
     return data.buffer.asUint8List(0,offset);
   }
-  Map<String,dynamic> createRawTransaction_segwit(
+  Map<String,dynamic> createRawTransactionSegwit(
       List<Map<String, dynamic>> inputs,
       String recipient,
       int sendAmount,
@@ -407,7 +407,7 @@ class CreateBTCTXV1 {
     trxMap['inputs']=inputItems;
     List<Uint8List> inputItemsAll=[];
     for (var input in inputs) {
-      inputItemsAll.add(createRawInput_all(input));
+      inputItemsAll.add(createRawInputAll(input));
     }
     trxMap['inputsAll']=inputItemsAll;
     //输出数量
@@ -484,7 +484,7 @@ HashOutputs	32 字节	所有输出的哈希值（value + scriptPubKey）。
 Annex (可选)	32 字节	交易 Annex 数据的哈希值（如果有）。
 KeyVersion	1 字节	公钥版本（通常为 0x00）。
 SighashType	1 字节	签名哈希类型（例如 SIGHASH_ALL，默认值为 0x00）。*/
-  Map<String,dynamic> createRawTransaction_segwit_v2(
+  Map<String,dynamic> createRawTransactionSegwitV2(
       List<Map<String, dynamic>> inputs,
       String recipient,
       int sendAmount,
@@ -516,7 +516,7 @@ SighashType	1 字节	签名哈希类型（例如 SIGHASH_ALL，默认值为 0x00
     trxMap['inputs']=inputItems;
     List<Uint8List> inputItemsAll=[];
     for (var input in inputs) {
-      inputItemsAll.add(createRawInput_all(input));
+      inputItemsAll.add(createRawInputAll(input));
     }
     trxMap['inputsAll']=inputItemsAll;
     //输出数量

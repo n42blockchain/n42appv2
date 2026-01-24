@@ -171,7 +171,7 @@ class _CreateTwoState extends State<CreateTwo> {
                           SizedBox(
                             width: ScreenUtil().setWidth(164.0),
                             height: ScreenUtil().setWidth(60.0),
-                            child: ButtonStyle5(
+                            child: buttonStyle5(
                               context,
                                   (){
                                 resetMnemonicWordsCount(value: 12);
@@ -186,7 +186,7 @@ class _CreateTwoState extends State<CreateTwo> {
                           SizedBox(
                             width: ScreenUtil().setWidth(164.0),
                             height: ScreenUtil().setWidth(60.0),
-                            child: ButtonStyle5(
+                            child: buttonStyle5(
                               context,
                                   (){
                                 resetMnemonicWordsCount(value: 24);
@@ -280,7 +280,7 @@ class _CreateTwoState extends State<CreateTwo> {
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
                     width: double.infinity,
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                    child: ButtonStyle6(
+                    child: buttonStyle6(
                       context,
                           (){
                             if(showMnemonic){
@@ -499,7 +499,7 @@ class _CreateTwoState extends State<CreateTwo> {
             SizedBox(
               width: double.infinity,
               height: ScreenUtil().setWidth(80.0),
-              child: ButtonStyle2(context, (){
+              child: buttonStyle2(context, (){
                 Navigator.pop(context,true);
               }, S.of(context).g_mining_key62,),
             ),
@@ -507,7 +507,7 @@ class _CreateTwoState extends State<CreateTwo> {
             SizedBox(
               width: double.infinity,
               height: ScreenUtil().setWidth(80.0),
-              child: ButtonStyle5(context, (){
+              child: buttonStyle5(context, (){
                 Navigator.pop(context,false);
               }, S.of(context).g_key_79,
                 AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor3.name),
@@ -518,7 +518,7 @@ class _CreateTwoState extends State<CreateTwo> {
         ),
       ),
     );
-    final flag=await TipsDialog3(context,child);
+    final flag=await tipsDialog3(context,child);
     if (!mounted) return;
     if (flag != null && flag) {
       widget.wInfo.mnemonic=mnemonicWords;

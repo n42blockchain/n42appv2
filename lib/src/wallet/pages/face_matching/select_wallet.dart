@@ -73,7 +73,7 @@ class _SelectWalletState extends State<SelectWallet> {
             if (!context.mounted) return;
             Navigator.pop(context,rdata);
           },
-          child: ContainerStyle1(
+          child: containerStyle1(
             context,
             padding: EdgeInsets.all(ScreenUtil().setWidth(20.0)),
             margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0), vertical: ScreenUtil().setWidth(20.0)),

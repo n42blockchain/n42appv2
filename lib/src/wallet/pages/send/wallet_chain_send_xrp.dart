@@ -489,7 +489,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
               fontSize: ScreenUtil().setSp(28.0),
             ),
           ),
-          TextFieldStyle2(
+          textFieldStyle2(
             context,
             controller: toTextEditingController,
             focusNode: toNode,
@@ -519,7 +519,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
     );
   }
   amountWidget(){
-    return ContainerStyle1(
+    return containerStyle1(
       context,
       margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       child: Column(
@@ -560,7 +560,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextFieldStyle2(
+                textFieldStyle2(
                   context,
                   controller: valueTextEditingController,
                   focusNode: valueNode,
@@ -720,7 +720,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
     totalGasPriceStr='${toEther(totalGasPrice.toString(),decimals)} $title';
     gasPriceStr='${toEther(gasPrice.toString(),decimals) } $title';
 
-    return ContainerStyle1(
+    return containerStyle1(
       context,
       alignment: Alignment.center,
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
@@ -910,7 +910,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
             padding: EdgeInsets.all( ScreenUtil().setWidth(30.0)),
             height: ScreenUtil().setWidth(148.0),
             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-            child: ButtonStyle6(
+            child: buttonStyle6(
               context, ()async{
               sendTransaction();
             },
@@ -1061,7 +1061,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
         endIndent: 0,
       ),
     ];
-    SheetBottom(context, S.of(context).g_face_match_key1, Column(
+    sheetBottom(context, S.of(context).g_face_match_key1, Column(
       children: childs,
     ));
   }

@@ -71,7 +71,7 @@ class WalletConnectProvider with ChangeNotifier{
       //SessionRequestEvent data
       )async{
     //final session = signClient!.session.get(eventData.topic!);
-    await web3client_init_fromChainId(eventData.chainId);
+    await web3clientInitFromChainId(eventData.chainId);
     switch (eventData.method) {
       case "personal_sign":
         final requestParams =
@@ -84,7 +84,7 @@ class WalletConnectProvider with ChangeNotifier{
           "data":dataToSign,
           "signType":"message",
         };
-        viewState_deal(WalletConnectState.messageSignOK);
+        viewStateDeal(WalletConnectState.messageSignOK);
         //return _onSign(eventData.id!, eventData.topic!, session, message);
         break;
       case "eth_sign":
@@ -103,7 +103,7 @@ class WalletConnectProvider with ChangeNotifier{
           "data":dataToSign,
           "signType":"message",
         };
-        viewState_deal(WalletConnectState.messageSignOK);
+        viewStateDeal(WalletConnectState.messageSignOK);
         break;
       case "eth_signTypedData":
       case "eth_signTypedData_v3":
@@ -117,7 +117,7 @@ class WalletConnectProvider with ChangeNotifier{
           "data":dataToSign,
           "signType":"message",
         };
-        viewState_deal(WalletConnectState.messageSignOK);
+        viewStateDeal(WalletConnectState.messageSignOK);
         break;
       case "eth_signTransaction":
         Map<String,dynamic> trMap=eventData.params![0];
@@ -130,7 +130,7 @@ class WalletConnectProvider with ChangeNotifier{
           "data":trMap['data']??"0x",
           "signType":"transaction",
         };
-        viewState_deal(WalletConnectState.transactionOK);
+        viewStateDeal(WalletConnectState.transactionOK);
         break;
       case "tron_signTransaction":
         Map<String,dynamic> trMap=eventData.params!['transaction'];
@@ -159,7 +159,7 @@ class WalletConnectProvider with ChangeNotifier{
           txData['contractAddress'] = trMap['transaction']['raw_data']['contract']['parameter']['value']['owner_address']??"";
           txData['amount'] = "";
         }
-        viewState_deal(WalletConnectState.transactionOK);
+        viewStateDeal(WalletConnectState.transactionOK);
         break;
       case "eth_sendTransaction":
       /*final ethereumTransaction = WCEthSignTransaction.fromJson(
@@ -180,7 +180,7 @@ class WalletConnectProvider with ChangeNotifier{
           "data":trMap['data']??"0x",
           "signType":"transaction",
         };
-        viewState_deal(WalletConnectState.transactionOK);
+        viewStateDeal(WalletConnectState.transactionOK);
         break;
       case "tron_signMessage":
         final requestParams = eventData.params! as Map;
@@ -197,14 +197,14 @@ class WalletConnectProvider with ChangeNotifier{
           "data":dataToSign,
           "signType":"message",
         };
-        viewState_deal(WalletConnectState.messageSignOK);
+        viewStateDeal(WalletConnectState.messageSignOK);
         break;
       default:
         debugPrint('Unsupported request.');
     }
     actionData=eventData;
   }
-  connect_init()async{
+  connectInit()async{
     try{
       signClient=await wallet_connect.ReownWalletKit.createInstance(
         projectId: "18a60a7cb862aad161fecd764ecc736a",
@@ -215,25 +215,25 @@ class WalletConnectProvider with ChangeNotifier{
           icons: ["https://n42.ai/static/n42.png"],
         ),
       );
-      coinModel_init();
+      coinModelInit();
       setChainInfo();
     }catch(e){
-      viewState_deal(WalletConnectState.error,params: e.toString());
+      viewStateDeal(WalletConnectState.error,params: e.toString());
     }
   }
   pair(String relayUrl)async{
     try{
       if(Uri.tryParse(relayUrl) !=null){
-        //viewState_deal(WalletConnectV2State.part);
+        //viewStateDeal(WalletConnectV2State.part);
         await signClient!.pair(uri:Uri.parse(relayUrl));
       }
       notifyListeners();
     }catch(e){
-      viewState_deal(WalletConnectState.error,params: e.toString());
+      viewStateDeal(WalletConnectState.error,params: e.toString());
     }
   }
   // 创建web3实例 - 使用 IWalletService 获取钱包信息
-  web3client_init() async {
+  web3clientInit() async {
     try {
       CoinModel cm = coinModels[coinModelsIndex];
       web3client = web3.Web3Client(cm.isTest ? cm.coin['service_test'] : cm.coin['service'], Client());
@@ -241,7 +241,7 @@ class WalletConnectProvider with ChangeNotifier{
       // 使用 IWalletService 获取当前钱包的私钥和助记词
       final walletService = ServiceLocatorSetup.walletService;
       if (walletService == null) {
-        viewState_deal(WalletConnectState.error, params: "Wallet service not available");
+        viewStateDeal(WalletConnectState.error, params: "Wallet service not available");
         return false;
       }
       
@@ -258,18 +258,18 @@ class WalletConnectProvider with ChangeNotifier{
       }
       
       if (pKey == null) {
-        viewState_deal(WalletConnectState.error, params: "Could not get private key");
+        viewStateDeal(WalletConnectState.error, params: "Could not get private key");
         return false;
       }
       
       privateKey = web3.EthPrivateKey(base64Decode(pKey));
       return true;
     } catch (e) {
-      viewState_deal(WalletConnectState.error, params: e.toString());
+      viewStateDeal(WalletConnectState.error, params: e.toString());
       return false;
     }
   }
-  web3client_init_fromChainId(String eip155)async{
+  web3clientInitFromChainId(String eip155)async{
     String chainId=eip155.split(":")[1];
     int chainIndex=coinModels.indexWhere((element){
       String eChainId=(element.isTest?element.coin['chainId_test']:element.coin['chainId']).toString();
@@ -279,21 +279,21 @@ class WalletConnectProvider with ChangeNotifier{
       return false;
     });
     if(chainIndex==-1){
-      viewState_deal(WalletConnectState.error,params: "Error");
+      viewStateDeal(WalletConnectState.error,params: "Error");
       return false;
     }
     if(coinModelsIndex !=chainIndex){
       setCoinModelsIndex(chainIndex);
-      return await web3client_init();
+      return await web3clientInit();
     }
     if(web3client==null){
-      return await web3client_init();
+      return await web3clientInit();
     }
     return true;
   }
 
   //获取ETH类的主链
-  coinModel_init({int chainId=-1}){
+  coinModelInit({int chainId=-1}){
     try{
       List<CoinModel> cms=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).coinModels;
       coinModels=[];
@@ -320,11 +320,11 @@ class WalletConnectProvider with ChangeNotifier{
         setCoinModelsIndex(0);
       }
     }catch(e){
-      viewState_deal(WalletConnectState.error,params: e.toString());
+      viewStateDeal(WalletConnectState.error,params: e.toString());
     }
   }
   //查找不支持的链
-  coinModel_find(String chainId){
+  coinModelFind(String chainId){
     int rIndex=coinModels.indexWhere((element){
       String cId="";
       if(element.coin['blockchainType']==BlockchainType.Ethereum.name){
@@ -362,15 +362,15 @@ class WalletConnectProvider with ChangeNotifier{
             Map<String,wallet_connect.RequiredNamespace> optional=args.params.optionalNamespaces;
             Map<String,wallet_connect.RequiredNamespace> required=args.params.requiredNamespaces;
             List<String> chainType=optional.keys.toList();
-            List<String> chainType_required=required.keys.toList();
+            List<String> chainTypeRequired=required.keys.toList();
             List<String> accounts=[];
-            List<String> accounts_tron=[];
+            List<String> accountsTron=[];
             List<CoinModel> rCoinModel=[];
             for(String chain in chainType){
               if(chain=="eip155"){
                 if(optional[chain]!.chains==null)continue;
                 for(int i=0;i<optional[chain]!.chains!.length;i++){
-                  CoinModel? cm=coinModel_find(optional[chain]!.chains![i]);
+                  CoinModel? cm=coinModelFind(optional[chain]!.chains![i]);
                   if(cm !=null){
                     rCoinModel.add(cm);
                   }
@@ -378,14 +378,14 @@ class WalletConnectProvider with ChangeNotifier{
               }else if(chain=="tron"){
                 if(optional[chain]!.chains==null)continue;
                 for(String c in (optional[chain]!.chains!)){
-                  CoinModel? cm=coinModel_find(c);
+                  CoinModel? cm=coinModelFind(c);
                   if(cm !=null){
                     rCoinModel.add(cm);
                   }
                 }
               }
             }
-            for(String chain in chainType_required){
+            for(String chain in chainTypeRequired){
               if(chain=="eip155"){
                 if(required[chain]!.chains==null)continue;
                 for(int i=0;i<required[chain]!.chains!.length;i++){
@@ -395,7 +395,7 @@ class WalletConnectProvider with ChangeNotifier{
                       continue;
                     }
                   }
-                  CoinModel? cm=coinModel_find(required[chain]!.chains![i]);
+                  CoinModel? cm=coinModelFind(required[chain]!.chains![i]);
                   if(cm !=null){
                     rCoinModel.insert(0,cm);
                   }
@@ -407,7 +407,7 @@ class WalletConnectProvider with ChangeNotifier{
                   if(fIndex !=-1){
                     continue;
                   }
-                  CoinModel? cm=coinModel_find(required[chain]!.chains![i]);
+                  CoinModel? cm=coinModelFind(required[chain]!.chains![i]);
                   if(cm !=null){
                     rCoinModel.insert(0,cm);
                   }
@@ -429,11 +429,11 @@ class WalletConnectProvider with ChangeNotifier{
                 signClient!.registerRequestHandler(chainId: chainId, method: "eth_signTypedData_v4");
                 signClient!.registerAccount(chainId: chainId, accountAddress: coinModels[i].address.toString());
               }else if(coinModels[i].coin['blockchainType']==BlockchainType.Tron.name){
-                /*accounts_tron.add("tron:0xcd8690dc:${coinModels[i].address.toString()}");//测试
+                /*accountsTron.add("tron:0xcd8690dc:${coinModels[i].address.toString()}");//测试
                 signClient!.registerRequestHandler(chainId: "tron:0xcd8690dc", method: "tron_signTransaction");
                 signClient!.registerRequestHandler(chainId: "tron:0xcd8690dc", method: "tron_signMessage");
                 signClient!.registerAccount(chainId: "tron:0xcd8690dc", accountAddress: coinModels[i].address.toString());*/
-                accounts_tron.add("tron:0x2b6653dc:${coinModels[i].address.toString()}");//主
+                accountsTron.add("tron:0x2b6653dc:${coinModels[i].address.toString()}");//主
                 signClient!.registerRequestHandler(chainId: "tron:0x2b6653dc", method: "tron_signTransaction");
                 signClient!.registerRequestHandler(chainId: "tron:0x2b6653dc", method: "tron_signMessage");
                 signClient!.registerAccount(chainId: "tron:0x2b6653dc", accountAddress: coinModels[i].address.toString());
@@ -457,9 +457,9 @@ class WalletConnectProvider with ChangeNotifier{
                 ],
               ),
             };
-            if(accounts_tron.isNotEmpty){
+            if(accountsTron.isNotEmpty){
               namespace!['tron']=wallet_connect.Namespace(
-                accounts: accounts_tron,
+                accounts: accountsTron,
                 methods: [
                   "tron_signTransaction",
                   "tron_signMessage"
@@ -470,10 +470,10 @@ class WalletConnectProvider with ChangeNotifier{
                 ],
               );
             }
-            viewState_deal(WalletConnectState.selectChain);
+            viewStateDeal(WalletConnectState.selectChain);
           }
           else{
-            viewState_deal(WalletConnectState.error,params: "Error");
+            viewStateDeal(WalletConnectState.error,params: "Error");
           }
         });
         //signClient!.registerRequestHandler(chainId: "tron:0xcd8690dc", method: "tron_signTransaction");
@@ -486,11 +486,11 @@ class WalletConnectProvider with ChangeNotifier{
         signClient!.onSessionDelete.subscribe(( args) async{
           //print(args!.topic);
           if(dAppTopic !=null && dAppTopic==args.topic){
-            viewState_deal(WalletConnectState.disconnect);
+            viewStateDeal(WalletConnectState.disconnect);
           }
         });
         signClient!.onSessionProposalError.subscribe((wallet_connect.SessionProposalErrorEvent? args) async{
-          viewState_deal(WalletConnectState.error,params: args?.error.message??"Error");
+          viewStateDeal(WalletConnectState.error,params: args?.error.message??"Error");
         });
         signClient!.onSessionConnect.subscribe((args) async{
           //print(args!.session.topic);
@@ -508,14 +508,14 @@ class WalletConnectProvider with ChangeNotifier{
         });
       }
     }catch(e){
-      viewState_deal(WalletConnectState.error,params: e.toString());
+      viewStateDeal(WalletConnectState.error,params: e.toString());
     }
   }
 
   Future messageSignTap() async {
     try {
       if(walletConnectState==WalletConnectState.messageSign)return;
-      viewState_deal(WalletConnectState.messageSign);
+      viewStateDeal(WalletConnectState.messageSign);
       final eventData = actionData as wallet_connect.SessionRequestEvent;
       String signedDataHex;
       if(eventData.method == "personal_sign"){
@@ -584,17 +584,17 @@ class WalletConnectProvider with ChangeNotifier{
       }
       signClient!.respondSessionRequest(topic: eventData.topic, response: wallet_connect.JsonRpcResponse(id: eventData.id,
         result: signedDataHex,));
-      viewState_deal(WalletConnectState.connect);
+      viewStateDeal(WalletConnectState.connect);
     } catch (e) {
-      viewState_deal(WalletConnectState.error,params: e.toString());
+      viewStateDeal(WalletConnectState.error,params: e.toString());
     }
   }
   Future transactionSignTap() async {
     try {
       if(walletConnectState==WalletConnectState.transaction)return;
-      viewState_deal(WalletConnectState.transaction);
+      viewStateDeal(WalletConnectState.transaction);
       final eventData = actionData as wallet_connect.SessionRequestEvent;
-      bool initOk=await web3client_init_fromChainId(eventData.chainId);
+      bool initOk=await web3clientInitFromChainId(eventData.chainId);
       if(initOk==false)return;
       if (eventData.method == "tron_signTransaction") {
         final requestParams = eventData.params! as Map;
@@ -615,7 +615,7 @@ class WalletConnectProvider with ChangeNotifier{
             id: eventData.id,
             result: returnStr,
           ),);
-        viewState_deal(WalletConnectState.connect);
+        viewStateDeal(WalletConnectState.connect);
         return ;
       }
       Map<String,dynamic> parameters=eventData.params.first;
@@ -678,9 +678,9 @@ class WalletConnectProvider with ChangeNotifier{
           id: eventData.id,
           result: returnStr,
         ),);
-      viewState_deal(WalletConnectState.connect);
+      viewStateDeal(WalletConnectState.connect);
     } catch (e) {
-      viewState_deal(WalletConnectState.error,params: e.toString());
+      viewStateDeal(WalletConnectState.error,params: e.toString());
     }
   }
   /*
@@ -702,7 +702,7 @@ class WalletConnectProvider with ChangeNotifier{
   }*/
   //取消交易或签名等
   cancelTap(WalletConnectState state)async{
-    viewState_deal(state);
+    viewStateDeal(state);
     final eventData = actionData as wallet_connect.SessionRequestEvent;
     signClient!
         .respondSessionRequest(
@@ -712,16 +712,16 @@ class WalletConnectProvider with ChangeNotifier{
                 code: 4001,
                 message: "User rejected."
             ))).then((value){
-      viewState_deal(WalletConnectState.connect);
+      viewStateDeal(WalletConnectState.connect);
     });
   }
   /*approveTap()async{
-    viewState_deal(WalletConnectV2State.transaction);
+    viewStateDeal(WalletConnectV2State.transaction);
     SessionRequestEvent requestEvent=actionData as SessionRequestEvent;
     String txHash=await ethSignTransaction(requestEvent.topic,requestEvent.params);
     await wcClient!.respondSessionRequest(topic: requestEvent.topic, response: JsonRpcResponse(id: requestEvent.id,result: txHash));
     //await approveSession(requestEvent.id,namespace!);
-    viewState_deal(WalletConnectV2State.connect);
+    viewStateDeal(WalletConnectV2State.connect);
   }*/
   disconnectOnTap()async{
     await signClient!.disconnectSession(
@@ -729,10 +729,10 @@ class WalletConnectProvider with ChangeNotifier{
       reason: wallet_connect.Errors.getSdkError(wallet_connect.Errors.USER_DISCONNECTED).toSignError(),
     );
   }
-  viewState_deal(WalletConnectState state,{dynamic params})async{
+  viewStateDeal(WalletConnectState state,{dynamic params})async{
     switch(state){
       case WalletConnectState.loading:
-        await connect_init();
+        await connectInit();
         await pair(params as String);
         break;
     /*case WalletConnectV2State.part:
@@ -747,14 +747,14 @@ class WalletConnectProvider with ChangeNotifier{
           signClient!.approveSession(id:args.id,namespaces:namespace! ).then((value)
           async{
             dAppTopic=value.topic;
-            viewState_deal(WalletConnectState.connect);
+            viewStateDeal(WalletConnectState.connect);
           }).catchError(( error){
             ToastUtils.show(error.toString());
-            viewState_deal(WalletConnectState.disconnect);
+            viewStateDeal(WalletConnectState.disconnect);
           });
         }catch(e){
           ToastUtils.show("Connection error:${e.toString()}");
-          viewState_deal(WalletConnectState.disconnect);
+          viewStateDeal(WalletConnectState.disconnect);
         }
 
         //wcClient!.approveSession(id: args!.id, namespaces: namespace!);
@@ -790,7 +790,7 @@ class WalletConnectProvider with ChangeNotifier{
     notifyListeners();
   }
   showAlertWidget(){
-    SheetBottom(
+    sheetBottom(
       AppGlobals.navigatorKey.currentContext!,
       "",
       WalletConnectAlertWidget(metadata!, actionDataMap!),
@@ -802,14 +802,14 @@ class WalletConnectProvider with ChangeNotifier{
     errorMessage="";
     walletConnectState=WalletConnectState.loading;
   }
-  cleannData_loginout(){
+  cleanDataLogout(){
     if(dAppTopic !=null){
       disconnectOnTap();
     }else{
       cleanData();
     }
     /*if(walletConnectV2State !=WalletConnectV2State.loading){
-      viewState_deal(WalletConnectV2State.disconnect);
+      viewStateDeal(WalletConnectV2State.disconnect);
     }*/
   }
 }
