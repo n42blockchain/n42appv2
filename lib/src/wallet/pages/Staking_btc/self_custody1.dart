@@ -352,7 +352,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
 
   getUTXO2(String address)async{
     try{
-      MessageModel mm=await TokenViewApi().getUTXO_btc(widget.coinModel.coin['coinType'],address,pageSize: 10,pageNum: 1);
+      MessageModel mm=await TokenViewApi().getUTXOBtc(widget.coinModel.coin['coinType'],address,pageSize: 10,pageNum: 1);
       if(mm.error){
       }else{
         MessageModel mm1=MessageModel();

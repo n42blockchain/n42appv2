@@ -372,8 +372,8 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
             transationRecordModel.inputModels=[];
             for(Input input in cri.inputs!){
               InputModel im=InputModel();
-              im.vout=input.output_value;
-              im.txid=input.prev_hash;
+              im.vout=input.outputValue;
+              im.txid=input.prevHash;
               im.script=input.script??"";
               im.address=input.addresses;
               int aIndex=im.address.indexWhere((e){
@@ -424,13 +424,13 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
         else{
           BtcTransactionRecodeModel transationRecordModel=rtrm[0];
           String cDate=(DateTime.parse(cri.confirmed??"").millisecondsSinceEpoch~/1000).toString();
-          if(transationRecordModel.InputsAddress.isEmpty){
+          if(transationRecordModel.inputsAddressList.isEmpty){
             if(cri.inputs!=null){
               transationRecordModel.inputModels=[];
               for(Input input in cri.inputs!){
                 InputModel im=InputModel();
-                im.vout=input.output_value;
-                im.txid=input.prev_hash;
+                im.vout=input.outputValue;
+                im.txid=input.prevHash;
                 im.script=input.script??"";
                 im.address=input.addresses;
                 transationRecordModel.inputModels!.add(im);
@@ -723,10 +723,10 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
                     WalletChainInfoBoard(
                       address: widget.coinModel.address,
                       balanceStr:
-                      '${widget.coinModel.balance_string_all()}${widget.coinModel.coin['unit'].toString().toUpperCase()}',
-                      balanceDollarStr: '\$${widget.coinModel.value_string()}',
+                      '${widget.coinModel.balanceStringAll()}${widget.coinModel.coin['unit'].toString().toUpperCase()}',
+                      balanceDollarStr: '\$${widget.coinModel.valueString()}',
                       marketValueStr:
-                      '\$${widget.coinModel.coinPrice_string()}',
+                      '\$${widget.coinModel.coinPriceString()}',
                       sendTap: () async {
                         WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
                         if(wap.walletInfo.password==""){
@@ -974,7 +974,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
           ),
           SizedBox(height: ScreenUtil().setWidth(10.0),),
           Text(
-            '${widget.coinModel.balance_double_all()}${widget.coinModel.coin['unit'].toString().toUpperCase()}',
+            '${widget.coinModel.balanceDoubleAll()}${widget.coinModel.coin['unit'].toString().toUpperCase()}',
             style: TextStyle(
               fontSize: ScreenUtil().setSp(40.0),
               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
@@ -984,7 +984,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
           /*Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setWidth(10.0)),
             child: Text(
-              '\$${widget.coinModel.coinPrice_string()}',
+              '\$${widget.coinModel.coinPriceString()}',
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28.0),
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
@@ -995,7 +995,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
           Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setWidth(10.0),bottom: ScreenUtil().setWidth(20.0)),
             child: Text(
-              '≈ \$${widget.coinModel.coinPrice_string()}',
+              '≈ \$${widget.coinModel.coinPriceString()}',
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28.0),
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),

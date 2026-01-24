@@ -149,7 +149,7 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
     if(fullname == "AmazeToken"){
       fullname="Amaze Chain";
     }
-    MessageModel coinsData=await tokenViewApi.getTokenList_fullname(fullname);
+    MessageModel coinsData=await tokenViewApi.getTokenListFullname(fullname);
     if(coinsData.error){
       ToastUtils.show(coinsData.data);
     }else{

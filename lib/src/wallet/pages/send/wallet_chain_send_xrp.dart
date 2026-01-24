@@ -128,7 +128,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
   }
   //获取xrp服务器信息，主要获取 基础说定额度和每个对象的锁定额度
   getServiceState()async{
-    MessageModel mm=await XrpApi().getServerState_xrp(isTest: widget.coinModel.isTest);
+    MessageModel mm=await XrpApi().getServerStateXrp(isTest: widget.coinModel.isTest);
     if(mm.error==false){
       widget.coinModel.other?.setServiceState(mm.data);
     }else{
@@ -237,7 +237,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
     account_xrp['load']=Load.loading;
     setState(() {});
     XrpApi xrpApi=XrpApi();
-    MessageModel mm=await xrpApi.getAccountInfo_xrp(addr, widget.coinModel.isTest);
+    MessageModel mm=await xrpApi.getAccountInfoXrp(addr, widget.coinModel.isTest);
     if(mm.error){
       account_xrp['error']=S.current.g_key_t_45(addr);
       account_xrp['load']=Load.finish;
@@ -336,7 +336,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
     if(signTx_check()==false)return;
     try{
       TransferApi transferApi=TransferApi();
-      MessageModel mm=await transferApi.transfer_wallet(
+      MessageModel mm=await transferApi.transferWallet(
           trModel: trModel,
           privateKey: widget.coinModel.privateKey,
           pathIndex: widget.coinModel.pathIndex);
@@ -628,7 +628,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
   amountBalanceWidget(){
     String unit=widget.coinModel.coin['unit'];
     if(widget.coinModel.coin['blockchainType']==BlockchainType.Ripple.name){
-      double tBalance=widget.coinModel.balance_double_all();
+      double tBalance=widget.coinModel.balanceDoubleAll();
       dec.Decimal uBalance=dec.Decimal.zero;//可用余额
       if(tBalance>lockValue.toDouble()){
         uBalance=dec.Decimal.parse(tBalance.toString())-lockValue;
@@ -668,7 +668,7 @@ class _WalletChainSendXrpState extends State<WalletChainSendXrp> {
     }
     else{
       return Text(
-        '${widget.coinModel.balance_string_all()} $unit',
+        '${widget.coinModel.balanceStringAll()} $unit',
         style: TextStyle(
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
           fontSize: ScreenUtil().setSp(28.0),

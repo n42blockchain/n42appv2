@@ -77,7 +77,7 @@ class _SelfCustodyState extends State<SelfCustody> {
                             margin: EdgeInsets.only(left: ScreenUtil().setWidth(10)),
                             alignment: Alignment.centerRight,
                             child: Text(
-                              '${widget.coinModel.balance_string()}${widget.coinModel.coin['unit']}',
+                              '${widget.coinModel.balanceString()}${widget.coinModel.coin['unit']}',
                               style: TextStyle(
                                 fontSize: ScreenUtil().setSp(28),
                                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),

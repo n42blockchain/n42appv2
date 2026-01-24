@@ -129,7 +129,7 @@ class AppDatabase{
   //查询btc交易记录
   insertBtcTransactionRecord(BtcTransactionRecodeModel btcm) async {
     final db = await database;
-    var raw = await db.insert("BtcTransactionRecord", btcm.toMap_db(),
+    var raw = await db.insert("BtcTransactionRecord", btcm.toMapDb(),
         conflictAlgorithm: ConflictAlgorithm.rollback);
     return raw;
   }
@@ -181,27 +181,27 @@ class AppDatabase{
   //创建一个交易记录
   insertTransationRecord(TransationRecordModel trm) async {
     final db = await database;
-    var raw = await db.insert("TransationRecord", trm.toMap_db(),
+    var raw = await db.insert("TransationRecord", trm.toMapDb(),
         conflictAlgorithm: ConflictAlgorithm.rollback);
     return raw;
   }
   //修改交易记录
   updateTransationRecord(TransationRecordModel trm) async {
     final db = await database;
-    var response = await db.update("TransationRecord", trm.toMap_db(),
+    var response = await db.update("TransationRecord", trm.toMapDb(),
         where: "trId=${trm.trId}");
     return response;
   }
   updateTransationRecord_txhash(TransationRecordModel trm) async {
     final db = await database;
-    var response = await db.update("TransationRecord", trm.toMap_db(),
+    var response = await db.update("TransationRecord", trm.toMapDb(),
         where: 'txHash="${trm.txHash}"');
     return response;
   }
   //修改btc交易记录
   updateBtcTransactionRecord(BtcTransactionRecodeModel btcm) async {
     final db = await database;
-    var response = await db.update("BtcTransactionRecord", btcm.toMap_db(),
+    var response = await db.update("BtcTransactionRecord", btcm.toMapDb(),
         where: "trId=${btcm.trId}");
     return response;
   }

@@ -179,15 +179,15 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     if(widget.btcTransactionRecodeModel!=null){
       from=widget.btcTransactionRecodeModel!.address;
       to=widget.btcTransactionRecodeModel!.to1;
-      price='${widget.btcTransactionRecodeModel!.price_double()} ${coinInfo['unit']}';
+      price='${widget.btcTransactionRecodeModel!.priceDouble()} ${coinInfo['unit']}';
     }
     if(widget.transationRecordModel!=null){
       from=widget.transationRecordModel!.from1;
       to=widget.transationRecordModel!.to1;
       if(widget.isNft){
-        price='${int.parse(widget.transationRecordModel!.price_double().toString())}';
+        price='${int.parse(widget.transationRecordModel!.priceDouble().toString())}';
       }else{
-        price='${widget.transationRecordModel!.price_double()} ${coinInfo['unit']}';
+        price='${widget.transationRecordModel!.priceDouble()} ${coinInfo['unit']}';
       }
     }
     // TODO: implement build

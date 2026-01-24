@@ -133,7 +133,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     cm.pathIndex = astModel['pathIndex'] ?? 0;
     getCoinModel = cm;
     await getCoinModel!.buildWallet();
-    getCoinModel!.getBalance_default();
+    getCoinModel!.getBalanceDefault();
     setState(() {});
     getBalance_get();
   }
@@ -153,7 +153,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
       if (swapAstList.isNotEmpty) {
         if (youPay != null) {
           int ypIndex = swapAstList.indexWhere((element) {
-            if (youPay!.pay_chain == element.pay_chain) {
+            if (youPay!.payChain == element.payChain) {
               return true;
             }
             return false;
@@ -165,10 +165,10 @@ class _SwapAstHomeState extends State<SwapAstHome> {
           youPay = swapAstList[0];
         }
         payCoinModel =
-            getChainCoinModel((youPay?.pay_chain ?? "").toUpperCase());
+            getChainCoinModel((youPay?.payChain ?? "").toUpperCase());
         if (payCoinModel != null) {
           getUsdtMap(
-              payCoinModel!.coin['coinType'], youPay?.pay_coin_contract ?? "");
+              payCoinModel!.coin['coinType'], youPay?.payCoinContract ?? "");
         }
         errorMessage = "";
         setState(() {});
@@ -241,12 +241,12 @@ class _SwapAstHomeState extends State<SwapAstHome> {
           payCoinModel!.coin['blockchainType'],
           (payCoinModel!.coin['coinType'] ?? "").toUpperCase(),
           payCoinModel?.address ?? "",
-          contract: youPay?.pay_coin_contract ?? "");
+          contract: youPay?.payCoinContract ?? "");
       if (rData.error) {
         youPay!.balance = 0;
       } else {
         youPay!.balance =
-            toEther(rData.data.toString(), youPay?.pay_coin_decimal ?? 6).toDouble();
+            toEther(rData.data.toString(), youPay?.payCoinDecimal ?? 6).toDouble();
       }
       setState(() {
         youPay!.load = Load.finish;
@@ -304,7 +304,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
 
   getCoinPrice() async {
     String keys = "n";
-    keys = '$keys,${youPay!.pay_coin ?? "".toLowerCase()}';
+    keys = '$keys,${youPay!.payCoin ?? "".toLowerCase()}';
     //查询coins中的币种信息
     var list = await MarketApi().getWalletCoinsInfo(keys);
     if (!mounted) return false;
@@ -332,7 +332,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     Map<String, dynamic> astCoinInfo = coinMarketInfo[index];
     getCoinModel!.coinPrice = astCoinInfo['price'] * 1.0;
     int index_pay = coinMarketInfo.indexWhere((element) {
-      if (element['coin'] == (youPay?.pay_coin ?? "").toLowerCase()) {
+      if (element['coin'] == (youPay?.payCoin ?? "").toLowerCase()) {
         return true;
       }
       return false;
@@ -493,10 +493,10 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     TransferApi transferApi=TransferApi();
     MessageModel rData = await transferApi.transfer(
       payCoinModel!.coin['coinType'],
-      youPay?.pay_addr ?? "",
+      youPay?.payAddr ?? "",
       double.parse(payTextEditingController.text),
       fromAddress: payCoinModel!.address,
-      contractAddress: youPay?.pay_coin_contract ?? "",
+      contractAddress: youPay?.payCoinContract ?? "",
       isTest: false,
     );
     if (rData.error) {
@@ -528,16 +528,16 @@ class _SwapAstHomeState extends State<SwapAstHome> {
         setState(() {});
         return false;
       }
-      MessageModel ethMessage = await tokenViewApi.getGasEstimate_eth_v2(
+      MessageModel ethMessage = await tokenViewApi.getGasEstimateEthV2(
         //EthAPI.getGasLimit(
         payCoinModel!.address,
-        youPay?.pay_coin_contract ?? "",
+        youPay?.payCoinContract ?? "",
         gasPrice,
         ethToWeiString(
-            payTextEditingController.text, youPay!.pay_coin_decimal!),
+            payTextEditingController.text, youPay!.payCoinDecimal!),
         gas,
         payCoinModel!.coin['coinType'],
-        contract: youPay!.pay_coin_contract!,
+        contract: youPay!.payCoinContract!,
         isTest: false,
       );
       if (!mounted) return false;
@@ -792,10 +792,10 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                     if (rModel != null) {
                       youPay = rModel;
                       payCoinModel = getChainCoinModel(
-                          (youPay?.pay_chain ?? "").toUpperCase());
+                          (youPay?.payChain ?? "").toUpperCase());
                       if (payCoinModel != null) {
                         getUsdtMap(payCoinModel!.coin['coinType'],
-                            youPay?.pay_coin_contract ?? "");
+                            youPay?.payCoinContract ?? "");
                       }
                       setState(() {});
                       getBalance_chain_pay();
@@ -827,7 +827,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                         Expanded(
                           flex: 1,
                           child: Text(
-                            youPay?.pay_coin ?? "",
+                            youPay?.payCoin ?? "",
                             style: TextStyle(
                               color: AppThemeUtils.getColorByKey(
                                   context, AppThemeKeys.itemTextColor.name),
@@ -859,7 +859,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  S.of(context).g_swap_key_14(youPay?.pay_chain ?? ""),
+                  S.of(context).g_swap_key_14(youPay?.payChain ?? ""),
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.errorTextColor.name),
@@ -872,7 +872,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                     bool r = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => WalletCoinAddAll(youPay?.pay_chain ?? "",)));
+                            builder: (context) => WalletCoinAddAll(youPay?.payChain ?? "",)));
                     if (!mounted) return;
                     if (r) {
                       await Provider.of<WalletActionProvider>(context,listen: false).init_wallet(initCoinInfo: true);
@@ -924,7 +924,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  S.of(context).g_swap_key_14(youPay?.pay_coin ?? ""),
+                  S.of(context).g_swap_key_14(youPay?.payCoin ?? ""),
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.errorTextColor.name),
@@ -937,7 +937,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                     bool r = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => WalletCoinAddAll(youPay?.pay_coin ?? "",
+                            builder: (context) => WalletCoinAddAll(youPay?.payCoin ?? "",
                             )));
                     if (!mounted) return;
                     if (r) {
@@ -1081,7 +1081,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                "${S.of(context).g_key_29}:${getCoinModel?.balance_double_all()}",
+                "${S.of(context).g_key_29}:${getCoinModel?.balanceDoubleAll()}",
                 style: TextStyle(
                   color: AppThemeUtils.getColorByKey(
                       context, AppThemeKeys.itemTextColor.name),
@@ -1110,9 +1110,9 @@ class _SwapAstHomeState extends State<SwapAstHome> {
       double pc = 0;
       pc = yPrice / gCoinPrice;
       text =
-      "1${youPay?.pay_coin ?? ""} = ${regular.formartNum_double(dec.Decimal.parse(pc.toString()).toDouble(), 8, isCrop: true, isFill0: false)}${CoinType.N.name}";
+      "1${youPay?.payCoin ?? ""} = ${regular.formartNum_double(dec.Decimal.parse(pc.toString()).toDouble(), 8, isCrop: true, isFill0: false)}${CoinType.N.name}";
     } else {
-      text = "??${youPay?.pay_coin ?? ""} = ??${CoinType.N.name}";
+      text = "??${youPay?.payCoin ?? ""} = ??${CoinType.N.name}";
     }
     return Container(
       height: ScreenUtil().setWidth(100),
@@ -1269,7 +1269,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
               String send = payTextEditingController.text;
               String receive = getTextEditingController.text;
               String balance = dec.Decimal.parse(
-                  (getCoinModel!.balance_double_all() +
+                  (getCoinModel!.balanceDoubleAll() +
                       double.parse(receive))
                       .toString())
                   .toString();
@@ -1368,7 +1368,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
         BlockchainType.Tron.name) {
       decimals = payCoinModel!.coin['decimals'] ?? 0;
       if (toEther(totalGasPrice.toString(), decimals).toDouble() >
-          payCoinModel!.balance_double_all()) {
+          payCoinModel!.balanceDoubleAll()) {
         totalGasPriceColor = AppThemeUtils.getColorByKey(
             context, AppThemeKeys.errorTextColor.name);
       }
@@ -1438,7 +1438,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                 ),
                 Expanded(flex: 1, child: Container()),
                 Text(
-                  '${payCoinModel!.balance_string_all()} ${payCoinModel!.coin['unit'] ?? ""}',
+                  '${payCoinModel!.balanceStringAll()} ${payCoinModel!.coin['unit'] ?? ""}',
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.mainButtonBgColor.name),

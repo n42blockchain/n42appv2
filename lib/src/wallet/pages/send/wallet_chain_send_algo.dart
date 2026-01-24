@@ -372,7 +372,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
   signTx(TransationRecordModel trModel)async{
     try{
       TransferApi transferApi=TransferApi();
-      MessageModel mm=await transferApi.transfer_wallet(
+      MessageModel mm=await transferApi.transferWallet(
           trModel: trModel,
           privateKey: widget.coinModel.privateKey,
           pathIndex: widget.coinModel.pathIndex);
@@ -405,7 +405,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
   maxTag()async{
     if(gasLimitLoad==Load.loading)return;
     if(widget.coinModel.coin['isContract']){
-      valueTextEditingController.text=widget.coinModel.balance_string_all();
+      valueTextEditingController.text=widget.coinModel.balanceStringAll();
       transferValue=widget.coinModel.balance;
     }else{
       transferValue=widget.coinModel.balance-totalGasPrice;
@@ -777,10 +777,10 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
   amountBalanceWidget(){
     String unit=widget.coinModel.coin['unit'];
     double minBalance=toEther(widget.coinModel.other.minBalance.toString(), widget.coinModel.coin['decimals']??0).toDouble();
-    double availableBalance=widget.coinModel.balance_double_all()-minBalance;
+    double availableBalance=widget.coinModel.balanceDoubleAll()-minBalance;
     if(widget.coinModel.coin['isContract']){
       return Text(
-        '${widget.coinModel.balance_string_all()} $unit',
+        '${widget.coinModel.balanceStringAll()} $unit',
         style: TextStyle(
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
           fontSize: ScreenUtil().setSp(28.0),
@@ -794,7 +794,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            'Balance:${widget.coinModel.balance_string_all()} $unit',
+            'Balance:${widget.coinModel.balanceStringAll()} $unit',
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
               fontSize: ScreenUtil().setSp(28.0),
@@ -936,7 +936,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
   minerFeeWidget_chainBalance(){
     String unit=chainModel?.coin['unit']??"";
     double minBalance=toEther((chainModel?.other.minBalance??BigInt.zero).toString(), chainModel?.coin['decimals']??0).toDouble();
-    double availableBalance=(chainModel?.balance_double_all()??0)-minBalance;
+    double availableBalance=(chainModel?.balanceDoubleAll()??0)-minBalance;
     return Container(
       alignment: Alignment.center,
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(32.0)),
@@ -954,7 +954,7 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
               ),
               Expanded(flex: 1,child: Container()),
               Text(
-                '${chainModel?.balance_double_all()??0} $unit',
+                '${chainModel?.balanceDoubleAll()??0} $unit',
                 style: TextStyle(
                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
                   fontSize: ScreenUtil().setSp(28.0),

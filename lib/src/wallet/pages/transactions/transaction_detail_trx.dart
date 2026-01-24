@@ -88,7 +88,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
   String nonce="";
   bool owner=true;//是否时自己的交易信息
   getTransactionByHash()async{
-    MessageModel rData=await transactionApi.trxTransactionInfo_hash(
+    MessageModel rData=await transactionApi.trxTransactionInfoHash(
         _txHash);
     if(rData.error==false){
       if(rData.data==null){

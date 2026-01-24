@@ -128,25 +128,25 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
   }
   initData()async{
     await checkLastTx();
-    await getGasFee_btc();
+    await getGasFeeBtc();
     await getBalance();
   }
 
   //验证上一笔交易是否成功
   checkLastTx()async{
-    MessageModel checkLastModel=await transferApi.checkLastTx_btc(widget.coinModel.coin['coinType'], widget.coinModel.address);
+    MessageModel checkLastModel=await transferApi.checkLastTxBtc(widget.coinModel.coin['coinType'], widget.coinModel.address);
     if(checkLastModel.error){
       errorMessage=checkLastModel.data;
     }
     setState(() {});
   }
   //获取 比特币的gasFee等级
-  getGasFee_btc()async{
+  getGasFeeBtc()async{
     if(widget.coinModel.coin['coinType']==CoinType.BTC.name){
       if(gasFeeLevel['loading'])return;
       gasFeeLevel['loading']=true;
       setState(() {});
-      MessageModel gasFeeMM=await tokenViewApi.getGasFee_btc(isTest: widget.coinModel.isTest);
+      MessageModel gasFeeMM=await tokenViewApi.getGasFeeBtc(isTest: widget.coinModel.isTest);
       if(gasFeeMM.error){
         gasFeeLevel['error']=true;
         errorMessage=S.current.g_key_t_44;
@@ -199,7 +199,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
       if(widget.coinModel.coin['coinType']==CoinType.BCH.name){
         utxoPath=widget.coinModel.addressType['legacy'];
       }
-      MessageModel mm=await tokenViewApi.getUTXO_btc(widget.coinModel.coin['coinType'], utxoPath,pageSize: utxoPageSize,pageNum: utxoPageNum,isTest: widget.coinModel.isTest);
+      MessageModel mm=await tokenViewApi.getUTXOBtc(widget.coinModel.coin['coinType'], utxoPath,pageSize: utxoPageSize,pageNum: utxoPageNum,isTest: widget.coinModel.isTest);
       if(mm.error){
         errorMessage=mm.data;
         ToastUtils.show(errorMessage);
@@ -378,7 +378,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
       amountErrorMessage= S.of(context).g_key_46(0);
       setState(() {});
       return;
-    }else if (transactionTotal.toDouble() > widget.coinModel.balance_double_all()) {
+    }else if (transactionTotal.toDouble() > widget.coinModel.balanceDoubleAll()) {
       amountErrorMessage= S.of(context).g_key_47;
       setState(() {});
       return;
@@ -494,8 +494,8 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
       btcTransactionRecodeModel.addrType=widget.coinModel.addrType;
       btcTransactionRecodeModel.max=gasFeeLevel['maxValue'] !=0;
       btcTransactionRecodeModel.isTest=widget.coinModel.isTest?1:0;
-      MessageModel rmm=await transferApi.transfer_wallet(
-        trModel_btc:btcTransactionRecodeModel,
+      MessageModel rmm=await transferApi.transferWallet(
+        trModelBtc:btcTransactionRecodeModel,
         pathIndex: widget.coinModel.pathIndex,
         privateKey: widget.coinModel.privateKey,
       );
@@ -840,7 +840,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
   amountBalanceWidget(){
     String unit=widget.coinModel.coin['unit'];
     return Text(
-      '${dec.Decimal.parse(widget.coinModel.balance_double_all().toString())} $unit',
+      '${dec.Decimal.parse(widget.coinModel.balanceDoubleAll().toString())} $unit',
       style: TextStyle(
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
         fontSize: ScreenUtil().setSp(28.0),
@@ -922,7 +922,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
     int gasFeesInt=gasFeeLevel['gasFees']+price;
     double gasFees=gasFeesInt/100000000;
     Color textColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name);
-    if(widget.coinModel.balance_double_all()<gasFees){
+    if(widget.coinModel.balanceDoubleAll()<gasFees){
       textColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
     }
     return Container(
@@ -1004,7 +1004,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
                   child: CircularProgressIndicator(),):
                 InkWell(
                   onTap: (){
-                    getGasFee_btc();
+                    getGasFeeBtc();
                   },
                   child: Container(
                     height: ScreenUtil().setWidth(36.0),

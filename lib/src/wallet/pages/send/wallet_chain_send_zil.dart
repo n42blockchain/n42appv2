@@ -297,7 +297,7 @@ class _WalletChainSendZilState extends State<WalletChainSendZil> {
   signTx(TransationRecordModel trModel)async{
     try{
       TransferApi transferApi=TransferApi();
-      MessageModel mm=await transferApi.transfer_wallet(
+      MessageModel mm=await transferApi.transferWallet(
           trModel: trModel,
           privateKey: widget.coinModel.privateKey,
           pathIndex: widget.coinModel.pathIndex);
@@ -332,7 +332,7 @@ class _WalletChainSendZilState extends State<WalletChainSendZil> {
   maxTag()async{
     if(gasLimitLoad==Load.loading)return;
     if(widget.coinModel.coin['isContract']){
-      valueTextEditingController.text=widget.coinModel.balance_string_all();
+      valueTextEditingController.text=widget.coinModel.balanceStringAll();
       transferValue=widget.coinModel.balance;
     }else{
       transferValue=widget.coinModel.balance-totalGasPrice;
@@ -525,7 +525,7 @@ class _WalletChainSendZilState extends State<WalletChainSendZil> {
   amountBalanceWidget(){
     String unit=widget.coinModel.coin['unit'].toString().toUpperCase();
     return Text(
-      '${widget.coinModel.balance_string_all()} $unit',
+      '${widget.coinModel.balanceStringAll()} $unit',
       style: TextStyle(
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
         fontSize: ScreenUtil().setSp(28.0),
@@ -592,7 +592,7 @@ class _WalletChainSendZilState extends State<WalletChainSendZil> {
                   ),
                   SizedBox(width: ScreenUtil().setWidth(10),),
                   Expanded(flex: 1,child: Text(
-                    '${chainModel?.balance_double_all()??0} ${(chainModel?.coin['unit']??"").toString().toUpperCase()}',
+                    '${chainModel?.balanceDoubleAll()??0} ${(chainModel?.coin['unit']??"").toString().toUpperCase()}',
                     style: TextStyle(
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
                       fontSize: ScreenUtil().setSp(28.0),

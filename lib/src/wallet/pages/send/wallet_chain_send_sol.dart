@@ -440,7 +440,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
   signTx(TransationRecordModel trModel)async{
     try{
       TransferApi transferApi=TransferApi();
-      MessageModel mm=await transferApi.transfer_wallet(
+      MessageModel mm=await transferApi.transferWallet(
           trModel: trModel,
           privateKey: widget.coinModel.privateKey,
           pathIndex: widget.coinModel.pathIndex);
@@ -476,7 +476,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
   maxTag()async{
     if(gasLimitLoad==Load.loading)return;
     if(widget.coinModel.coin['isContract']){
-      valueTextEditingController.text=widget.coinModel.balance_string_all();
+      valueTextEditingController.text=widget.coinModel.balanceStringAll();
       transferValue=widget.coinModel.balance;
       simulateTransaction();
     }else{
@@ -745,7 +745,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
   amountBalanceWidget(){
     String unit=widget.coinModel.coin['unit'].toString().toUpperCase();
     return Text(
-      '${widget.coinModel.balance_string_all()} $unit',
+      '${widget.coinModel.balanceStringAll()} $unit',
       style: TextStyle(
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
         fontSize: ScreenUtil().setSp(28.0),
@@ -818,7 +818,7 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
                   ),
                   SizedBox(width: ScreenUtil().setWidth(10),),
                   Expanded(flex: 1,child: Text(
-                    '${chainModel?.balance_double_all()??0} ${(chainModel?.coin['unit']??"").toString().toUpperCase()}',
+                    '${chainModel?.balanceDoubleAll()??0} ${(chainModel?.coin['unit']??"").toString().toUpperCase()}',
                     style: TextStyle(
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
                       fontSize: ScreenUtil().setSp(28.0),

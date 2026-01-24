@@ -54,7 +54,7 @@ class _SwapAstSelectChainState extends State<SwapAstSelectChain> {
                 Expanded(
                   flex: 1,
                   child: Text(
-                    sm.pay_coin??"",
+                    sm.payCoin??"",
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(30),
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name),
@@ -63,7 +63,7 @@ class _SwapAstSelectChainState extends State<SwapAstSelectChain> {
                 ),
                 SizedBox(width: ScreenUtil().setWidth(10),),
                 Text(
-                  "${sm.pay_chain}",
+                  "${sm.payChain}",
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(30),
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),

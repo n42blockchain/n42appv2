@@ -324,7 +324,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
           transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
           transationRecordModel.gas=int.parse(cri.gas??"0");
           transationRecordModel.txTime=cri.timeStamp??"0";
-          transationRecordModel.state=int.parse(cri.txreceipt_status??"0");
+          transationRecordModel.state=int.parse(cri.txreceiptStatus??"0");
           transationRecordModel.coinMiniName=widget.coinModel.coin['coinType'];
           transationRecordModel.isTest=widget.coinModel.isTest?1:0;
           if(transationRecordModel.contract ==""){
@@ -351,7 +351,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
           if(transationRecordModel.txTime != cri.timeStamp){
             transationRecordModel.txTime=cri.timeStamp??"0";
             /*if(transationRecordModel.state!=1){
-            transationRecordModel.state=int.parse(cri.txreceipt_status??"0");
+            transationRecordModel.state=int.parse(cri.txreceiptStatus??"0");
           }*/
             await db.updateTransationRecord(transationRecordModel);
             isEdit=true;
@@ -391,7 +391,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
           transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
           transationRecordModel.gas=int.parse(cri.gas??"0");
           transationRecordModel.txTime=cri.timeStamp??"0";
-          transationRecordModel.state=int.parse(cri.txreceipt_status??"0");
+          transationRecordModel.state=int.parse(cri.txreceiptStatus??"0");
           transationRecordModel.coinMiniName=widget.coinModel.coin['coinType'];
           transationRecordModel.isTest=widget.coinModel.isTest?1:0;
           await db.insertTransationRecord(transationRecordModel);
@@ -403,7 +403,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
           if(transationRecordModel.txTime != cri.timeStamp){
             transationRecordModel.txTime=cri.timeStamp??"0";
             /*if(transationRecordModel.state!=1){
-            transationRecordModel.state=int.parse(cri.txreceipt_status??"0");
+            transationRecordModel.state=int.parse(cri.txreceiptStatus??"0");
           }*/
             await db.updateTransationRecord(transationRecordModel);
             isEdit=true;
@@ -439,7 +439,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
           //transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
           //transationRecordModel.gas=int.parse(cri.gas??"0");
           transationRecordModel.txTime=(DateTime.parse(cri.confirmed??"").millisecondsSinceEpoch~/1000).toString();
-          transationRecordModel.state=cri.confirmations>=6?1:0;//int.parse(cri.txreceipt_status??"0");
+          transationRecordModel.state=cri.confirmations>=6?1:0;//int.parse(cri.txreceiptStatus??"0");
           transationRecordModel.coinMiniName=widget.coinModel.coin['coinType'];
           transationRecordModel.isTest=widget.coinModel.isTest?1:0;
           bool isIn=false;//是否是转入
@@ -447,8 +447,8 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
             transationRecordModel.inputModels=[];
             for(Input input in cri.inputs!){
               InputModel im=InputModel();
-              im.vout=input.output_value;
-              im.txid=input.prev_hash;
+              im.vout=input.outputValue;
+              im.txid=input.prevHash;
               im.script=input.script??"";
               im.address=input.addresses;
               int aIndex=im.address.indexWhere((e){
@@ -499,13 +499,13 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
         else{
           BtcTransactionRecodeModel transationRecordModel=rtrm[0];
           String cDate=(DateTime.parse(cri.confirmed??"").millisecondsSinceEpoch~/1000).toString();
-          if(transationRecordModel.InputsAddress.isEmpty){
+          if(transationRecordModel.inputsAddressList.isEmpty){
             if(cri.inputs!=null){
               transationRecordModel.inputModels=[];
               for(Input input in cri.inputs!){
                 InputModel im=InputModel();
-                im.vout=input.output_value;
-                im.txid=input.prev_hash;
+                im.vout=input.outputValue;
+                im.txid=input.prevHash;
                 im.script=input.script??"";
                 im.address=input.addresses;
                 transationRecordModel.inputModels!.add(im);
@@ -528,7 +528,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
           if(transationRecordModel.txTime != cDate){
             transationRecordModel.txTime=cDate;
             /*if(transationRecordModel.state!=1){
-            transationRecordModel.state=int.parse(cri.txreceipt_status??"0");
+            transationRecordModel.state=int.parse(cri.txreceiptStatus??"0");
           }*/
             await db.updateBtcTransactionRecord(transationRecordModel);
             isEdit=true;
@@ -562,7 +562,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
           transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
           transationRecordModel.gas=int.parse(cri.gas??"0");
           transationRecordModel.txTime=cri.timeStamp??"0";
-          transationRecordModel.state=int.parse(cri.txreceipt_status??"0");
+          transationRecordModel.state=int.parse(cri.txreceiptStatus??"0");
           transationRecordModel.coinMiniName=widget.coinModel.coin['coinType'];
           transationRecordModel.isTest=widget.coinModel.isTest?1:0;
           if(transationRecordModel.contract ==""){
@@ -589,7 +589,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
           if(transationRecordModel.txTime != cri.timeStamp){
             transationRecordModel.txTime=cri.timeStamp??"0";
             /*if(transationRecordModel.state!=1){
-            transationRecordModel.state=int.parse(cri.txreceipt_status??"0");
+            transationRecordModel.state=int.parse(cri.txreceiptStatus??"0");
           }*/
             await db.updateTransationRecord(transationRecordModel);
             isEdit=true;
@@ -793,10 +793,10 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
                     WalletChainInfoBoard(
                       address: widget.coinModel.address,
                       balanceStr:
-                      '${widget.coinModel.balance_string_all()}${widget.coinModel.coin['unit'].toString().toUpperCase()}',
-                      balanceDollarStr: '\$${widget.coinModel.value_string()}',
+                      '${widget.coinModel.balanceStringAll()}${widget.coinModel.coin['unit'].toString().toUpperCase()}',
+                      balanceDollarStr: '\$${widget.coinModel.valueString()}',
                       marketValueStr:
-                      '\$${widget.coinModel.coinPrice_string()}',
+                      '\$${widget.coinModel.coinPriceString()}',
                       lockAmountStr: null,
                       xmlLockInfoTap: null,
                       tokenAddTap: null,

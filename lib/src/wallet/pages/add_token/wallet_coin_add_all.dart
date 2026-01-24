@@ -540,7 +540,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
       load = Load.loading;
     });
     TokenViewApi tokenViewApi=TokenViewApi();
-    MessageModel coinsData = await tokenViewApi.getChainList_all();
+    MessageModel coinsData = await tokenViewApi.getChainListAll();
     if (coinsData.error) {
       ToastUtils.show(coinsData.data);
     } else {

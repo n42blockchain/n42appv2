@@ -418,7 +418,7 @@ class _WalletChainSendSuiState extends State<WalletChainSendSui> {
     if(signTx_check()==false)return;
     try{
       TransferApi transferApi=TransferApi();
-      MessageModel mm=await transferApi.transfer_wallet(
+      MessageModel mm=await transferApi.transferWallet(
         trModel: trModel,
         privateKey: widget.coinModel.privateKey,
         pathIndex: widget.coinModel.pathIndex,
@@ -470,7 +470,7 @@ class _WalletChainSendSuiState extends State<WalletChainSendSui> {
   maxTag()async{
     if(gasLimitLoad==Load.loading)return;
     if(widget.coinModel.coin['isContract']){
-      valueTextEditingController.text=widget.coinModel.balance_string_all();
+      valueTextEditingController.text=widget.coinModel.balanceStringAll();
       transferValue=widget.coinModel.balance;
       estimateGas_eth_local();
     }else{
@@ -801,7 +801,7 @@ class _WalletChainSendSuiState extends State<WalletChainSendSui> {
   amountBalanceWidget(){
     String unit=widget.coinModel.coin['unit'].toString().toUpperCase();
     return Text(
-      '${widget.coinModel.balance_string_all()} $unit',
+      '${widget.coinModel.balanceStringAll()} $unit',
       style: TextStyle(
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
         fontSize: ScreenUtil().setSp(28.0),
@@ -888,7 +888,7 @@ class _WalletChainSendSuiState extends State<WalletChainSendSui> {
     else if(widget.coinModel.coin['blockchainType']==BlockchainType.Tron.name){
       if(widget.coinModel.coin['isContract']){
         decimals=chainModel?.coin['decimals']??0;
-        if(toEther(totalGasPrice.toString(),decimals).toDouble() > (chainModel?.balance_double_all()??0)){
+        if(toEther(totalGasPrice.toString(),decimals).toDouble() > (chainModel?.balanceDoubleAll()??0)){
           totalGasPriceColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
         }
       }
@@ -950,7 +950,7 @@ class _WalletChainSendSuiState extends State<WalletChainSendSui> {
                   ),
                   SizedBox(width: ScreenUtil().setWidth(10),),
                   Expanded(flex: 1,child: Text(
-                    '${chainModel?.balance_double_all()??0} ${(chainModel?.coin['unit']??"").toString().toUpperCase()}',
+                    '${chainModel?.balanceDoubleAll()??0} ${(chainModel?.coin['unit']??"").toString().toUpperCase()}',
                     style: TextStyle(
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
                       fontSize: ScreenUtil().setSp(28.0),

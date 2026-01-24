@@ -178,7 +178,7 @@ class _CreateOneState extends State<CreateOne> {
                                   wInfo=WalletInfo(
                                     walletName: "",
                                     password: "",
-                                    UUID: Provider.of<WalletActionProvider>(context,listen: false).UserUUID,
+                                    walletUuid: Provider.of<WalletActionProvider>(context,listen: false).UserUUID,
                                   );
                                   await Navigator.push(context, MaterialPageRoute(builder: (context)=>CreateTwo(wInfo)));
                                   if (!context.mounted) return;

@@ -112,7 +112,7 @@ class _RedeemState extends State<Redeem> {
   List<Map<String,dynamic>> inputUTXO=[];
   redeem(String address,int lockTime)async{
     //await redeem_eth(address);
-    await getGasFee_btc();
+    await getGasFeeBtc();
     //address="tb1qw39qrupll6xwmazqplpjgaclexjsd48jms2gwzk2xeuhqen9qxusem966j";
     //lockTime=1743160567;
     await getUTXO(address);
@@ -192,8 +192,8 @@ class _RedeemState extends State<Redeem> {
     return p2wshAddress!.toAddress(BitcoinNetwork.testnet);*/
   }
   //获取 比特币的gasFee等级
-  getGasFee_btc()async{
-    MessageModel gasFeeMM=await tokenViewApi.getGasFee_btc(isTest: widget.coinModel.isTest);
+  getGasFeeBtc()async{
+    MessageModel gasFeeMM=await tokenViewApi.getGasFeeBtc(isTest: widget.coinModel.isTest);
     if(gasFeeMM.error){
     }else{
       gasFeeRate=gasFeeMM.data;
@@ -253,8 +253,8 @@ class _RedeemState extends State<Redeem> {
       btcTransactionRecodeModel.addrType=widget.coinModel.addrType;
       btcTransactionRecodeModel.max=true;
       btcTransactionRecodeModel.isTest=widget.coinModel.isTest?1:0;
-      MessageModel rmm=await transferApi.transfer_wallet(
-        trModel_btc:btcTransactionRecodeModel,
+      MessageModel rmm=await transferApi.transferWallet(
+        trModelBtc:btcTransactionRecodeModel,
         pathIndex: widget.coinModel.pathIndex,
         privateKey: widget.coinModel.privateKey,
       );
@@ -300,7 +300,7 @@ class _RedeemState extends State<Redeem> {
 //获取 账簿
   getUTXO(String address)async{
     try{
-      MessageModel mm=await tokenViewApi.getUTXO_btc(widget.coinModel.coin['coinType'], address,pageSize: 1,pageNum: 10,isTest: widget.coinModel.isTest);
+      MessageModel mm=await tokenViewApi.getUTXOBtc(widget.coinModel.coin['coinType'], address,pageSize: 1,pageNum: 10,isTest: widget.coinModel.isTest);
       if(mm.error){
         ToastUtils.show(mm.data);
         setState(() {});

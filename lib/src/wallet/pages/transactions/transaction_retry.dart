@@ -237,7 +237,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
       trm.nonce=transactionInfo!['nonce'];
 
       BigInt gaslimit=BigInt.from(GetCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
-      MessageModel ethMessage=await tokenViewApi.getGasEstimate_eth_v2(//EthAPI.getGasLimit(
+      MessageModel ethMessage=await tokenViewApi.getGasEstimateEthV2(//EthAPI.getGasLimit(
         widget.coinModel.address,
         trm.to1,
         trm.gasPriceValue,
@@ -265,7 +265,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
         return;
       }
       TransferApi transferApi=TransferApi();
-      MessageModel mm=await transferApi.transfer_wallet(
+      MessageModel mm=await transferApi.transferWallet(
           trModel: trm,
           privateKey: widget.coinModel.privateKey,
           pathIndex: widget.coinModel.pathIndex);

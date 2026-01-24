@@ -171,7 +171,7 @@ class AppPushUtils {
             final itemMap = json.decode(jsonData);
             debugPrint("itemMap : $itemMap");
             FileItemInfo item = FileItemInfo.fromJson(itemMap);
-            CacheMessageIsReadUtils().saveUnReadMessageId(item.s_uuid ?? '');
+            CacheMessageIsReadUtils().saveUnReadMessageId(item.sUuid ?? '');
             eventBus
                 .fire(EventPublic(EventPublicType.chatMessage, param: item));
           }
@@ -270,7 +270,7 @@ class AppPushUtils {
           builder: (_) => ChatPageV2(
             email: email,
             nickName: nickName,
-            otherUUID: uuid,
+            otherwalletUuid: uuid,
           ),
         ),
       );*/

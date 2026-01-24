@@ -309,7 +309,7 @@ class WalletActionProvider extends ChangeNotifier{
     for (int i = 0; i < _coinModels.length; i++) {
       CoinModel mm = _coinModels[i];
       await mm.buildWallet();
-      mm.getBalance_default();
+      mm.getBalanceDefault();
       if(mm.showList){
         coinList.add(mm);
       }
@@ -337,7 +337,7 @@ class WalletActionProvider extends ChangeNotifier{
     //ProviderUtil.walletActionProvider().getCoinPrice(cm);
     cm.address=mainChain.address;
     cm.addressType=mainChain.addressType;
-    cm.getBalance_default();
+    cm.getBalanceDefault();
     return cm;
   }
   //加载指定network的币
@@ -348,7 +348,7 @@ class WalletActionProvider extends ChangeNotifier{
         CoinModel mm = _coinModels[i];
         await mm.buildWallet();
         if(mm.showList){
-          mm.getBalance_default();
+          mm.getBalanceDefault();
           coinList.add(mm);
         }
         List<String> tokenKeys=mm.tokens.keys.toList();
@@ -362,7 +362,7 @@ class WalletActionProvider extends ChangeNotifier{
     else{
       CoinModel mm = _coinModels[walletInfo.networkIndex];
       if(mm.showList){
-        mm.getBalance_default();
+        mm.getBalanceDefault();
         coinList.add(mm);
       }
       List<String> tokenKeys=mm.tokens.keys.toList();
@@ -562,7 +562,7 @@ class WalletActionProvider extends ChangeNotifier{
     WalletInfo wInfo=WalletInfo(
       walletName: "",
       password: "",
-      UUID: UserUUID,
+      walletUuid: UserUUID,
     );
     wInfo.mnemonic= await Trustdart().generateMnemonic();
     wInfo.walletName="Account${walletInfoLsit.length+1}";
@@ -769,7 +769,7 @@ class WalletActionProvider extends ChangeNotifier{
         cm.coin['percentage'] = cm.percentage;
         
         // 重新计算价值 (余额 * 币价)
-        cm.value = cm.balance_double_all() * cm.coinPrice;
+        cm.value = cm.balanceDoubleAll() * cm.coinPrice;
         
         debugPrint('WalletActionProvider: ✓ Matched ${cm.coin['miniName']} -> $coinSymbol, price=\$${cm.coinPrice}, change=${cm.percentage}%, value=\$${cm.value}');
         found = true;
@@ -888,7 +888,7 @@ class WalletActionProvider extends ChangeNotifier{
     if(clIndex !=-1){
       coinList[clIndex]=_coinModels[cIndex];
       coinList[clIndex].buildWallet();
-      coinList[clIndex].getBalance_default();
+      coinList[clIndex].getBalanceDefault();
       if(coinList[clIndex].tokens.isNotEmpty){
         List<String> tKeys=coinList[clIndex].tokens.keys.toList();
         for(int i=0;i<coinList[clIndex].tokens.length;i++){}
@@ -924,7 +924,7 @@ class WalletActionProvider extends ChangeNotifier{
       _coinModels[index].showList=true;
       coinList.add(_coinModels[index]);
       getCoinPrice(coinList.last);
-      coinList.last.getBalance_default();
+      coinList.last.getBalanceDefault();
       cMap['showList']=chainMap['showList'];
       walletMap[chainMap['baseInfo']['mKey']]=cMap;
     }
@@ -949,7 +949,7 @@ class WalletActionProvider extends ChangeNotifier{
       _coinModels.add(cm);
       coinList.add(cm);
       getCoinPrice(cm);
-      cm.getBalance_default();
+      cm.getBalanceDefault();
       walletMap[chainMap['baseInfo']['mKey']]=chainMap;
     }
     notifyListeners();
@@ -1162,7 +1162,7 @@ class WalletActionProvider extends ChangeNotifier{
           walletMap[coinModel.coin['coinType']]['mainnets'][coinModel.coin['mKey']]=coinModel.coin;
         }
       }
-      coinModel.getBalance_default();
+      coinModel.getBalanceDefault();
       // 不设置 loadError，因为我们已经使用了缓存数据
       coinModel.loadError = false;
       return true;
@@ -1199,7 +1199,7 @@ class WalletActionProvider extends ChangeNotifier{
           walletMap[coinModel.coin['coinType']]['mainnets'][coinModel.coin['mKey']]=coinModel.coin;
         }
       }
-      coinModel.getBalance_default();
+      coinModel.getBalanceDefault();
       return false;
     }
   }
@@ -1251,7 +1251,7 @@ class WalletActionProvider extends ChangeNotifier{
         walletMap[coinModel.coin['coinType']]['mainnets'][coinModel.coin['mKey']]=coinModel.coin;
       }
     }
-    coinModel.getBalance_default();
+    coinModel.getBalanceDefault();
     return false;
   }
 

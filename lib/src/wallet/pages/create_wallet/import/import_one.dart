@@ -252,7 +252,7 @@ class _ImportOneState extends State<ImportOne> with WidgetsBindingObserver{
                             walletName: "",
                             password: "",
                             //path: WalletPath.init(),
-                            UUID: Provider.of<WalletActionProvider>(this.context,listen: false).UserUUID,
+                            walletUuid: Provider.of<WalletActionProvider>(this.context,listen: false).UserUUID,
                             mnemonic: inputMW
                         );
                         await Navigator.push(this.context,MaterialPageRoute(

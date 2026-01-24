@@ -126,7 +126,7 @@ class _PaymentPageState extends State<PaymentPage> {
     }
     if(coinModels.isNotEmpty){
       coinModelIndex=0;
-      double c1=coinModels[coinModelIndex].balance_double_all();
+      double c1=coinModels[coinModelIndex].balanceDoubleAll();
       double c2=double.parse(usdtAmount);
       if(c1<c2){
         errorMessage="USDT 余额不足！";
@@ -342,13 +342,13 @@ class _PaymentPageState extends State<PaymentPage> {
             balanceStr = oCcy.format(balance);
           }
           String valueBalanceStr="";
-          double valueBalance=coinInfo.balance_double_all();
+          double valueBalance=coinInfo.balanceDoubleAll();
           if(valueBalance>1000000000){
             valueBalanceStr=regular.getMoneyAbbreviation(valueBalance);
           }else if(valueBalance>0 && valueBalance <0.0000000009){
             valueBalanceStr=regular.getMoneyAbbreviation_decimal(valueBalance);
           }else{
-            valueBalanceStr=coinInfo.balance_string();
+            valueBalanceStr=coinInfo.balanceString();
           }
           Widget? mainImage;
           Widget image;
@@ -452,7 +452,7 @@ class _PaymentPageState extends State<PaymentPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "\$${coinInfo.coinPrice_string()}",
+                              "\$${coinInfo.coinPriceString()}",
                               style: TextStyle(
                                 fontSize: ScreenUtil().setSp(30.0),
                                 color: AppThemeUtils.getColorByKey(
@@ -488,7 +488,7 @@ class _PaymentPageState extends State<PaymentPage> {
       alignment: Alignment.centerRight,
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       child: Text(
-        "${coinMain!.balance_string()} ${coinType.toUpperCase()}",
+        "${coinMain!.balanceString()} ${coinType.toUpperCase()}",
         style: TextStyle(
           fontSize: ScreenUtil().setSp(26),
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),

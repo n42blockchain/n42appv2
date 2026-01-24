@@ -778,13 +778,13 @@ class _WalletPageState extends State<WalletPage> {
       balanceStr = oCcy.format(balance);
     }
     String valueBalanceStr="";
-    double valueBalance=coinInfo.balance_double_all();
+    double valueBalance=coinInfo.balanceDoubleAll();
     if(valueBalance>1000000000){
       valueBalanceStr=regular.getMoneyAbbreviation(valueBalance);
     }else if(valueBalance>0 && valueBalance <0.0000000009){
       valueBalanceStr=regular.getMoneyAbbreviation_decimal(valueBalance);
     }else{
-      valueBalanceStr=coinInfo.balance_string();
+      valueBalanceStr=coinInfo.balanceString();
     }
     Widget? mainImage;
     Widget image;
@@ -958,7 +958,7 @@ class _WalletPageState extends State<WalletPage> {
                         Row(
                           children: [
                             Text(
-                              "\$${coinInfo.coinPrice_string()}",
+                              "\$${coinInfo.coinPriceString()}",
                               style: TextStyle(
                                 fontSize: ScreenUtil().setSp(24),
                                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),

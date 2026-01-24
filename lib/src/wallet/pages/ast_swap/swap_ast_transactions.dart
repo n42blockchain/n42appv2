@@ -40,16 +40,16 @@ class _SwapAstTransactionsState extends State<SwapAstTransactions> {
             String stateStr="";
             Color stateColor;
             IconData iconData;
-            if(orderModel.order_state==1){
+            if(orderModel.orderState==1){
               iconData=Icons.error;
               stateStr=S.of(context).g_swap_key_22;
               stateColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
-            }else if(orderModel.order_state==2){
+            }else if(orderModel.orderState==2){
               iconData=Icons.error;
               stateStr=S.of(context).g_key_79;
               stateColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
-            }else if(orderModel.order_state==0){
-              int index=orderModel.pay_tx?.indexOf("0x")??-1;
+            }else if(orderModel.orderState==0){
+              int index=orderModel.payTx?.indexOf("0x")??-1;
               if(index==-1){
                 stateStr=S.of(context).g_swap_key_23;
               }else{
@@ -57,7 +57,7 @@ class _SwapAstTransactionsState extends State<SwapAstTransactions> {
               }
               iconData=Icons.info_rounded;
               stateColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name);
-            }else if(orderModel.order_state==5){
+            }else if(orderModel.orderState==5){
               iconData=Icons.check_circle;
               stateStr=S.of(context).g_swap_key_18;
               stateColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.rightTextColor.name);
@@ -103,7 +103,7 @@ class _SwapAstTransactionsState extends State<SwapAstTransactions> {
                           Expanded(
                             flex: 1,
                             child: Text(
-                              "+${orderModel.order_num}",
+                              "+${orderModel.orderNum}",
                               style: TextStyle(
                                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                                 fontSize: ScreenUtil().setSp(28),
@@ -157,7 +157,7 @@ class _SwapAstTransactionsState extends State<SwapAstTransactions> {
             );
           },
           getData: (int page, int pageSize) async {
-            MessageModel rData=await swapAstApi.getNftOrAstOrderList(2, AppGlobals.userInfo?.uuid??"",page: page,page_size: pageSize);
+            MessageModel rData=await swapAstApi.getNftOrAstOrderList(2, AppGlobals.userInfo?.uuid??"",page: page,pageSize: pageSize);
             if(rData.error==false){
               return (rData.data as List).map((e) => SwapAstOrderModel.fromJson(e)).toList();
             }

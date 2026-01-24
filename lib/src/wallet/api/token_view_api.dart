@@ -1247,7 +1247,7 @@ class TokenViewApi{
         bool isTest=false}
       )async{
     if(gasPrice==null){
-      MessageModel gmm=await getGasPrice_trx(isTest:isTest);
+      MessageModel gmm=await getGasPriceTrx(isTest:isTest);
       if(gmm.error){
         return gmm;
       }else{

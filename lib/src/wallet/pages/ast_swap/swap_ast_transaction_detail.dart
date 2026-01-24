@@ -64,18 +64,18 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
       ':',
       dformat.nn
     ]);
-    if(_orderModel.order_state==1){
+    if(_orderModel.orderState==1){
       iconData=Icons.error;
       stateStr=S.of(context).g_swap_key_22;
       stateColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
       return successWidget();
-    }else if(_orderModel.order_state==2){
+    }else if(_orderModel.orderState==2){
       iconData=Icons.error;
       stateStr=S.of(context).g_key_79;
       stateColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
       return successWidget();
-    }else if(_orderModel.order_state==0){
-      int index=_orderModel.pay_tx?.indexOf("0x")??-1;
+    }else if(_orderModel.orderState==0){
+      int index=_orderModel.payTx?.indexOf("0x")??-1;
       if(index==-1){
         stateStr=S.of(context).g_swap_key_23;
       }else{
@@ -84,7 +84,7 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
       iconData=Icons.info_rounded;
       stateColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name);
       return processingWidget();
-    }else if(_orderModel.order_state==5){
+    }else if(_orderModel.orderState==5){
       iconData=Icons.check_circle;
       stateStr=S.of(context).g_swap_key_18;
       stateColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.rightTextColor.name);
@@ -120,7 +120,7 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
                     Expanded(
                       flex: 1,
                       child: Text(
-                        "+${_orderModel.order_num}",
+                        "+${_orderModel.orderNum}",
                         style: TextStyle(
                           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                           fontSize: ScreenUtil().setSp(28),
@@ -184,8 +184,8 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
                         height: ScreenUtil().setWidth(40),
                         width: ScreenUtil().setWidth(40),
                         child: Icon(
-                          (_orderModel.order_state??0)>=3?Icons.check_circle:Icons.radio_button_unchecked,
-                          color: AppThemeUtils.getColorByKey(context, (_orderModel.order_state??0)>=3?AppThemeKeys.rightTextColor.name:AppThemeKeys.dividerColor.name),
+                          (_orderModel.orderState??0)>=3?Icons.check_circle:Icons.radio_button_unchecked,
+                          color: AppThemeUtils.getColorByKey(context, (_orderModel.orderState??0)>=3?AppThemeKeys.rightTextColor.name:AppThemeKeys.dividerColor.name),
                           size: ScreenUtil().setWidth(40),
                         ),
                       ),
@@ -202,8 +202,8 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
                         height: ScreenUtil().setWidth(40),
                         width: ScreenUtil().setWidth(40),
                         child: Icon(
-                          (_orderModel.order_state==3 || _orderModel.order_state==4)?Icons.check_circle:Icons.radio_button_unchecked,
-                          color: AppThemeUtils.getColorByKey(context, (_orderModel.order_state==3 || _orderModel.order_state==4)?AppThemeKeys.rightTextColor.name:AppThemeKeys.rightTextColor.name),
+                          (_orderModel.orderState==3 || _orderModel.orderState==4)?Icons.check_circle:Icons.radio_button_unchecked,
+                          color: AppThemeUtils.getColorByKey(context, (_orderModel.orderState==3 || _orderModel.orderState==4)?AppThemeKeys.rightTextColor.name:AppThemeKeys.rightTextColor.name),
                           size: ScreenUtil().setWidth(40),
                         ),
                       ),
@@ -221,8 +221,8 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
                         width: ScreenUtil().setWidth(40),
                         margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
                         child: Icon(
-                          _orderModel.order_state==5?Icons.check_circle:Icons.radio_button_unchecked,
-                          color: AppThemeUtils.getColorByKey(context, _orderModel.order_state==5?AppThemeKeys.rightTextColor.name:AppThemeKeys.dividerColor.name),
+                          _orderModel.orderState==5?Icons.check_circle:Icons.radio_button_unchecked,
+                          color: AppThemeUtils.getColorByKey(context, _orderModel.orderState==5?AppThemeKeys.rightTextColor.name:AppThemeKeys.dividerColor.name),
                           size: ScreenUtil().setWidth(40),
                         ),
                       ),
@@ -282,7 +282,7 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
                 padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10),),
                 child: RichText(
                   text: TextSpan(
-                    text: '${_orderModel.order_price}',
+                    text: '${_orderModel.orderPrice}',
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(40),
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
@@ -350,8 +350,8 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
           margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
           child: Column(
             children: [
-              rowWidget(S.of(context).g_key_tran_7,"${_orderModel.pay_num} USDT"),
-              rowWidget(S.of(context).g_key_tran_8,"${_orderModel.order_num} ${CoinType.N.name}"),
+              rowWidget(S.of(context).g_key_tran_7,"${_orderModel.payNum} USDT"),
+              rowWidget(S.of(context).g_key_tran_8,"${_orderModel.orderNum} ${CoinType.N.name}"),
               rowWidget(S.of(context).g_key_wallet_k25,createStr),
             ],
           ),

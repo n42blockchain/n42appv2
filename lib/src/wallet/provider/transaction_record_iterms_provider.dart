@@ -97,7 +97,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
     BlockchainType bt=BlockchainType.values.firstWhere((element) => element.name==trm.coin['blockchainType']?true:false);
     switch(bt){
       case BlockchainType.Ethereum:
-        MessageModel mm= await tokenViewApi.getTransactionReceipt_eth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
+        MessageModel mm= await tokenViewApi.getTransactionReceiptEth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
         if(mm.error==false){
           if(trm.coin['coinType']==CoinType.S.name){
             if(mm.data['status']=="0x1"){
@@ -122,7 +122,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         }
         break;
       case BlockchainType.Solana:
-        MessageModel mm= await tokenViewApi.getTransaction_solana(trm.txHash,trm.isTest==0?"main":"test");
+        MessageModel mm= await tokenViewApi.getTransactionSolana(trm.txHash,trm.isTest==0?"main":"test");
         if(mm.error==false){
           int mapLength=mm.data.length;
           if(mapLength!=0){
@@ -139,7 +139,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         }
         break;
       case BlockchainType.Tron:
-        MessageModel mm= await tokenViewApi.getTransactionReceipt_trx(trm.txHash,isTest:trm.isTest==0?false:true);
+        MessageModel mm= await tokenViewApi.getTransactionReceiptTrx(trm.txHash,isTest:trm.isTest==0?false:true);
         if(mm.error==false){
           if(mm.data['error']['code']!=0){
             return;
@@ -173,7 +173,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         break;
       case BlockchainType.Tezos:
         XtzApi xtzApi=XtzApi();
-        MessageModel mm=await xtzApi.getTxInfo_xtz(trm.txHash,trm.isTest==0?false:true);
+        MessageModel mm=await xtzApi.getTxInfoXtz(trm.txHash,trm.isTest==0?false:true);
         if(mm.error==false){
           List<dynamic> rData=mm.data;
           if(rData.isNotEmpty){
@@ -187,7 +187,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         break;
       case BlockchainType.Ripple:
         XrpApi xrpApi=XrpApi();
-        MessageModel mm=await xrpApi.getTxInfo_xrp(trm.txHash,trm.isTest==0?false:true);
+        MessageModel mm=await xrpApi.getTxInfoXrp(trm.txHash,trm.isTest==0?false:true);
         if(mm.error==false){
           if(mm.data=="tesSUCCESS"){
             trm.state=1;
@@ -229,7 +229,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         break;
       case BlockchainType.Harmony:
         // EVM compatible - uses Ethereum RPC
-        MessageModel mmHarmony = await tokenViewApi.getTransactionReceipt_eth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
+        MessageModel mmHarmony = await tokenViewApi.getTransactionReceiptEth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
         if(mmHarmony.error==false){
           if(mmHarmony.data['error']['code']!=0){
             return;
@@ -243,7 +243,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         break;
       case BlockchainType.IoTeX:
         // EVM compatible - uses Ethereum RPC
-        MessageModel mmIotex = await tokenViewApi.getTransactionReceipt_eth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
+        MessageModel mmIotex = await tokenViewApi.getTransactionReceiptEth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
         if(mmIotex.error==false){
           if(mmIotex.data['error']['code']!=0){
             return;
@@ -274,7 +274,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         break;
       case BlockchainType.Theta:
         // EVM compatible - uses Ethereum RPC
-        MessageModel mmTheta = await tokenViewApi.getTransactionReceipt_eth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
+        MessageModel mmTheta = await tokenViewApi.getTransactionReceiptEth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
         if(mmTheta.error==false){
           if(mmTheta.data['error']['code']!=0){
             return;
@@ -373,7 +373,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
     BlockchainType bt=BlockchainType.values.firstWhere((element) => element.name==trm.coin['blockchainType']?true:false);
     switch(bt){
       case BlockchainType.Ethereum:
-        MessageModel mm= await tokenViewApi.getTransactionReceipt_eth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
+        MessageModel mm= await tokenViewApi.getTransactionReceiptEth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
         if(mm.error==false){
           if(trm.coin['coinType']==CoinType.S.name){
             if(mm.data['status']=="0x1"){
@@ -397,7 +397,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         }
         break;
       case BlockchainType.Solana:
-        MessageModel mm= await tokenViewApi.getTransaction_solana(trm.txHash,trm.isTest==0?"main":"test");
+        MessageModel mm= await tokenViewApi.getTransactionSolana(trm.txHash,trm.isTest==0?"main":"test");
         if(mm.error==false){
           int mapLength=mm.data.length;
           if(mapLength!=0){
@@ -414,7 +414,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         }
         break;
       case BlockchainType.Tron:
-        MessageModel mm= await tokenViewApi.getTransactionReceipt_trx(trm.txHash,isTest:trm.isTest==0?false:true);
+        MessageModel mm= await tokenViewApi.getTransactionReceiptTrx(trm.txHash,isTest:trm.isTest==0?false:true);
         if(mm.error==false){
           if(mm.data['error']['code']!=0){
             return;
@@ -447,7 +447,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         break;
       case BlockchainType.Tezos:
         XtzApi xtzApi=XtzApi();
-        MessageModel mm=await xtzApi.getTxInfo_xtz(trm.txHash,trm.isTest==0?false:true);
+        MessageModel mm=await xtzApi.getTxInfoXtz(trm.txHash,trm.isTest==0?false:true);
         if(mm.error==false){
           List<dynamic> rData=mm.data;
           if(rData.isNotEmpty){
@@ -461,7 +461,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         break;
       case BlockchainType.Ripple:
         XrpApi xrpApi=XrpApi();
-        MessageModel mm=await xrpApi.getTxInfo_xrp(trm.txHash,trm.isTest==0?false:true);
+        MessageModel mm=await xrpApi.getTxInfoXrp(trm.txHash,trm.isTest==0?false:true);
         if(mm.error==false){
           if(mm.data=="tesSUCCESS"){
             trm.state=1;
@@ -503,7 +503,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         break;
       case BlockchainType.Harmony:
         // EVM compatible - uses Ethereum RPC
-        MessageModel mmHarmony = await tokenViewApi.getTransactionReceipt_eth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
+        MessageModel mmHarmony = await tokenViewApi.getTransactionReceiptEth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
         if(mmHarmony.error==false){
           if(mmHarmony.data['error']['code']!=0){
             return;
@@ -517,7 +517,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         break;
       case BlockchainType.IoTeX:
         // EVM compatible - uses Ethereum RPC
-        MessageModel mmIotex = await tokenViewApi.getTransactionReceipt_eth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
+        MessageModel mmIotex = await tokenViewApi.getTransactionReceiptEth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
         if(mmIotex.error==false){
           if(mmIotex.data['error']['code']!=0){
             return;
@@ -548,7 +548,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
         break;
       case BlockchainType.Theta:
         // EVM compatible - uses Ethereum RPC
-        MessageModel mmTheta = await tokenViewApi.getTransactionReceipt_eth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
+        MessageModel mmTheta = await tokenViewApi.getTransactionReceiptEth(trm.coin['coinType'],trm.txHash,isTest:trm.isTest==0?false:true,rpc: trm.coin['custom']==true?trm.isTest==0?trm.coin['service']:trm.coin['service_test']:null);
         if(mmTheta.error==false){
           if(mmTheta.data['error']['code']!=0){
             return;

@@ -286,7 +286,7 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
     if(signTx_check()==false)return;
     try{
       TransferApi transferApi=TransferApi();
-      MessageModel mm=await transferApi.transfer_wallet(
+      MessageModel mm=await transferApi.transferWallet(
           trModel: trModel,
           privateKey: widget.coinModel.privateKey,
           pathIndex: widget.coinModel.pathIndex);
@@ -370,7 +370,7 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
   }
   maxTag()async{
     if(gasLimitLoad==Load.loading)return;
-    valueTextEditingController.text=widget.coinModel.balance_string_all();
+    valueTextEditingController.text=widget.coinModel.balanceStringAll();
     bool? rOK=await estimateGas_eth_local();
     if(rOK != null && rOK){
       transferValue=widget.coinModel.balance-totalGasPrice;
@@ -698,7 +698,7 @@ class _WalletChainSendFilState extends State<WalletChainSendFil> {
   amountBalanceWidget(){
     String unit=widget.coinModel.coin['unit'];
     return Text(
-      '${widget.coinModel.balance_string_all()} $unit',
+      '${widget.coinModel.balanceStringAll()} $unit',
       style: TextStyle(
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
         fontSize: ScreenUtil().setSp(28.0),

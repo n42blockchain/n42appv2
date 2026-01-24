@@ -144,7 +144,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
   }
   //获取xrp服务器信息，主要获取 基础说定额度和每个对象的锁定额度
   getServiceState()async{
-    MessageModel mm=await XrpApi().getServerState_xrp(isTest: widget.coinModel.isTest);
+    MessageModel mm=await XrpApi().getServerStateXrp(isTest: widget.coinModel.isTest);
     if (!mounted) return;
     if(mm.error==false){
       widget.coinModel.other?.setServiceState(mm.data);
@@ -244,7 +244,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
           transationRecordModel.gas=int.parse(cri.gas??"0");
           transationRecordModel.txTime=cri.timeStamp??"0";
-          transationRecordModel.state=int.parse(cri.txreceipt_status??"0");
+          transationRecordModel.state=int.parse(cri.txreceiptStatus??"0");
           transationRecordModel.coinMiniName=widget.coinModel.coin['coinType'];
           transationRecordModel.isTest=widget.coinModel.isTest?1:0;
           if(transationRecordModel.contract ==""){
@@ -271,7 +271,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           if(transationRecordModel.txTime != cri.timeStamp){
             transationRecordModel.txTime=cri.timeStamp??"0";
             /*if(transationRecordModel.state!=1){
-            transationRecordModel.state=int.parse(cri.txreceipt_status??"0");
+            transationRecordModel.state=int.parse(cri.txreceiptStatus??"0");
           }*/
             await db.updateTransationRecord(transationRecordModel);
             isEdit=true;
@@ -311,7 +311,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
           transationRecordModel.gas=int.parse(cri.gas??"0");
           transationRecordModel.txTime=cri.timeStamp??"0";
-          transationRecordModel.state=int.parse(cri.txreceipt_status??"0");
+          transationRecordModel.state=int.parse(cri.txreceiptStatus??"0");
           transationRecordModel.coinMiniName=widget.coinModel.coin['coinType'];
           transationRecordModel.isTest=widget.coinModel.isTest?1:0;
           await db.insertTransationRecord(transationRecordModel);
@@ -323,7 +323,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           if(transationRecordModel.txTime != cri.timeStamp){
             transationRecordModel.txTime=cri.timeStamp??"0";
             /*if(transationRecordModel.state!=1){
-            transationRecordModel.state=int.parse(cri.txreceipt_status??"0");
+            transationRecordModel.state=int.parse(cri.txreceiptStatus??"0");
           }*/
             await db.updateTransationRecord(transationRecordModel);
             isEdit=true;
@@ -359,7 +359,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           //transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
           //transationRecordModel.gas=int.parse(cri.gas??"0");
           transationRecordModel.txTime=(DateTime.parse(cri.confirmed??"").millisecondsSinceEpoch~/1000).toString();
-          transationRecordModel.state=cri.confirmations>=6?1:0;//int.parse(cri.txreceipt_status??"0");
+          transationRecordModel.state=cri.confirmations>=6?1:0;//int.parse(cri.txreceiptStatus??"0");
           transationRecordModel.coinMiniName=widget.coinModel.coin['coinType'];
           transationRecordModel.isTest=widget.coinModel.isTest?1:0;
           bool isIn=false;//是否是转入
@@ -367,8 +367,8 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
             transationRecordModel.inputModels=[];
             for(Input input in cri.inputs!){
               InputModel im=InputModel();
-              im.vout=input.output_value;
-              im.txid=input.prev_hash;
+              im.vout=input.outputValue;
+              im.txid=input.prevHash;
               im.script=input.script??"";
               im.address=input.addresses;
               int aIndex=im.address.indexWhere((e){
@@ -419,13 +419,13 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
         else{
           BtcTransactionRecodeModel transationRecordModel=rtrm[0];
           String cDate=(DateTime.parse(cri.confirmed??"").millisecondsSinceEpoch~/1000).toString();
-          if(transationRecordModel.InputsAddress.isEmpty){
+          if(transationRecordModel.inputsAddressList.isEmpty){
             if(cri.inputs!=null){
               transationRecordModel.inputModels=[];
               for(Input input in cri.inputs!){
                 InputModel im=InputModel();
-                im.vout=input.output_value;
-                im.txid=input.prev_hash;
+                im.vout=input.outputValue;
+                im.txid=input.prevHash;
                 im.script=input.script??"";
                 im.address=input.addresses;
                 transationRecordModel.inputModels!.add(im);
@@ -448,7 +448,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           if(transationRecordModel.txTime != cDate){
             transationRecordModel.txTime=cDate;
             /*if(transationRecordModel.state!=1){
-            transationRecordModel.state=int.parse(cri.txreceipt_status??"0");
+            transationRecordModel.state=int.parse(cri.txreceiptStatus??"0");
           }*/
             await db.updateBtcTransactionRecord(transationRecordModel);
             isEdit=true;
@@ -482,7 +482,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
           transationRecordModel.gas=int.parse(cri.gas??"0");
           transationRecordModel.txTime=cri.timeStamp??"0";
-          transationRecordModel.state=int.parse(cri.txreceipt_status??"0");
+          transationRecordModel.state=int.parse(cri.txreceiptStatus??"0");
           transationRecordModel.coinMiniName=widget.coinModel.coin['coinType'];
           transationRecordModel.isTest=widget.coinModel.isTest?1:0;
           if(transationRecordModel.contract ==""){
@@ -509,7 +509,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           if(transationRecordModel.txTime != cri.timeStamp){
             transationRecordModel.txTime=cri.timeStamp??"0";
             /*if(transationRecordModel.state!=1){
-            transationRecordModel.state=int.parse(cri.txreceipt_status??"0");
+            transationRecordModel.state=int.parse(cri.txreceiptStatus??"0");
           }*/
             await db.updateTransationRecord(transationRecordModel);
             isEdit=true;
@@ -619,10 +619,10 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
                     WalletChainInfoBoard(
                       address: widget.coinModel.address,
                       balanceStr:
-                      '${widget.coinModel.balance_string_all()} ${widget.coinModel.coin['unit'].toString().toUpperCase()}',
-                      balanceDollarStr: '\$${widget.coinModel.value_string()}',
+                      '${widget.coinModel.balanceStringAll()} ${widget.coinModel.coin['unit'].toString().toUpperCase()}',
+                      balanceDollarStr: '\$${widget.coinModel.valueString()}',
                       marketValueStr:
-                      '\$${widget.coinModel.coinPrice_string()}',
+                      '\$${widget.coinModel.coinPriceString()}',
                       lockAmountStr: //widget.coinModel.coin['isContract']==false?
                       '${toEther((widget.coinModel.other?.getLockAmount??0).toString(), widget.coinModel.coin['decimals'])} ${CoinType.XRP.name}',
                       xmlLockInfoTap: (){

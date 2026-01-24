@@ -210,7 +210,7 @@ class MiningV2Provider extends ChangeNotifier {
       // 在 coinList 中查找 N 币
       for (var coin in walletActionProvider.coinList) {
         if (coin.coin['coinType'] == CoinType.N.name && coin.coin['isContract'] == false) {
-          walletNBalance = coin.balance_double_all();
+          walletNBalance = coin.balanceDoubleAll();
           debugPrint('MiningV2Provider: Wallet N balance = $walletNBalance');
           notifyListeners();
           return;
@@ -220,7 +220,7 @@ class MiningV2Provider extends ChangeNotifier {
       // 如果在 coinList 中没找到，尝试从 coinModels 中查找
       for (var coin in walletActionProvider.coinModels) {
         if (coin.coin['coinType'] == CoinType.N.name) {
-          walletNBalance = coin.balance_double_all();
+          walletNBalance = coin.balanceDoubleAll();
           debugPrint('MiningV2Provider: Wallet N balance from coinModels = $walletNBalance');
           notifyListeners();
           return;
@@ -301,7 +301,7 @@ class MiningV2Provider extends ChangeNotifier {
         wInfo.password='';
       }
       wInfo.walletName="Account${wap.walletInfoLsit.length+1}";
-      wInfo.UUID=wap.UserUUID;
+      wInfo.walletUuid=wap.UserUUID;
       wInfo.coinInfo=chainUrlMap;
       wInfo.timestamp = "${DateTime.now().millisecondsSinceEpoch}";
     }else{
