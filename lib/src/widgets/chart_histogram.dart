@@ -115,7 +115,7 @@ class _ChartHistogramState extends State<ChartHistogram> {
       int x,
       double y,
       Color barColor,
-      Color barColor_fg,
+      Color barColorFg,
       double width, {
         bool isTouched = false,
         List<int> showTooltips = const [],
@@ -125,7 +125,7 @@ class _ChartHistogramState extends State<ChartHistogram> {
       barRods: [
         BarChartRodData(
           toY: y,
-          color: isTouched ? widget.barChartModel.touchColor : barColor_fg,
+          color: isTouched ? widget.barChartModel.touchColor : barColorFg,
           width: width,
           borderSide: isTouched
               ? BorderSide(
@@ -147,8 +147,8 @@ class _ChartHistogramState extends State<ChartHistogram> {
         double value = widget.barChartModel.values[i];
         Color fg = widget.barChartModel.fgColor;
         if (value == widget.barChartModel.maxValue) {
-          if (widget.barChartModel.fgColor_max != null) {
-            fg = widget.barChartModel.fgColor_max!;
+          if (widget.barChartModel.fgColorMax != null) {
+            fg = widget.barChartModel.fgColorMax!;
           }
         }
         return makeGroupData(
@@ -274,7 +274,7 @@ class BottomTitle {
 class BarChartModel {
   Color bgColor; //柱状图背景色
   Color fgColor; //柱状图前景色
-  Color? fgColor_max; //柱状图前景色 最大值
+  Color? fgColorMax; //柱状图前景色 最大值
   Color touchColor; //长按前景色
   double width; //宽度
   double maxValue;
@@ -283,7 +283,7 @@ class BarChartModel {
   BarChartModel({
     required this.bgColor,
     required this.fgColor,
-    this.fgColor_max,
+    this.fgColorMax,
     required this.touchColor,
     required this.width,
     this.maxValue = -1,

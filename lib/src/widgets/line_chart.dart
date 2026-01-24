@@ -82,11 +82,11 @@ class DrawLineChart extends CustomPainter{
   double bottomMargin=0;
 
   /// 最大值
-  double MAX_VALUE = 100;
+  double maxValue = 100;
   //最小值
-  double MIN_VALUE=0;
+  double minValue=0;
 
-  DrawLineChart(this.theme,this.values,this.MAX_VALUE,this.isUp,this.difference,this.MIN_VALUE,this.bottomMargin);
+  DrawLineChart(this.theme,this.values,this.maxValue,this.isUp,this.difference,this.minValue,this.bottomMargin);
   ///画笔
   Paint painter=Paint()..strokeWidth=1.5..style=PaintingStyle.stroke;
 
@@ -95,7 +95,7 @@ class DrawLineChart extends CustomPainter{
   //double LINE_SPACE = 20;
 
   /// 线段数量
-  int LINE_NUM = 5;
+  int lineNum = 5;
 
   /// 整体宽度
   late double width;
@@ -131,7 +131,7 @@ class DrawLineChart extends CustomPainter{
     painter.style= PaintingStyle.fill;
     painter.shader=ui.Gradient.linear(Offset(width,height/2),Offset(0,height/2), isUp?[Color.fromRGBO(68, 166, 119, 0.14),Color.fromRGBO(68, 166, 119, 0.0)]:[Color.fromRGBO(217, 68, 90, 0.14),Color.fromRGBO(217, 68, 90, 0.0)]);
     painter.color=Color(0xff000000);
-    drawValueLine_fill(canvas);
+    drawValueLineFill(canvas);
     painter.shader=null;
   }
 
@@ -152,7 +152,7 @@ class DrawLineChart extends CustomPainter{
     path.close();
   }
   /// 画线
-  void drawValueLine_fill(Canvas canvas) {
+  void drawValueLineFill(Canvas canvas) {
     Path path = Path();
     path.moveTo(0, height);
     for (int i = 0; i < values.length - 1; i++) {
@@ -186,7 +186,7 @@ class DrawLineChart extends CustomPainter{
 
   /// 获取Y轴坐标
   double getY(double value) {
-    return height-(((value-MIN_VALUE)*dianValue)+bottomMargin);
+    return height-(((value-minValue)*dianValue)+bottomMargin);
   }
 
   /// 获取X轴坐标
