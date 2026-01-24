@@ -55,7 +55,7 @@ class SecurityGoogleVedificationState extends State<SecurityGoogleVedification>{
     // TODO: implement initState
     super.initState();
     initWalletPassword();
-    init_security();
+    initSecurity();
   }
   // 加载钱包名 - 使用 IWalletService 替代 WalletActionProvider
   initWalletPassword() async {
@@ -72,7 +72,7 @@ class SecurityGoogleVedificationState extends State<SecurityGoogleVedification>{
     setState(() {});
   }
   //加载安全设置爱
-  init_security()async{
+  initSecurity()async{
     Map<String,dynamic>? s=await SPUtil().getSecurity();
     if(s!=null){
       Map<String,dynamic>? userSecurityMap=s[AppGlobals.userInfo?.uuid??""];
@@ -469,7 +469,7 @@ class SecurityGoogleVedificationState extends State<SecurityGoogleVedification>{
                       },
                     ),
                   ),
-                  walletEmail_verification(),
+                  walletEmailVerification(),
                 ],
               ),
             ),
@@ -498,7 +498,7 @@ class SecurityGoogleVedificationState extends State<SecurityGoogleVedification>{
     }
   }
   //发送邮箱验证码按钮
-  Widget walletEmail_verification(){
+  Widget walletEmailVerification(){
     //Color bgColor=AppThemeUtils.getColorByKey(context,AppThemeKeys.mainButtonBgColor);
     Widget leftWidget=SizedBox();
     if(emailLoad==Load.loading){

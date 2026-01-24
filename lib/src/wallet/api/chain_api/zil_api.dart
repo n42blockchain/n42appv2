@@ -21,7 +21,7 @@ class ZilApi {
     'method': 'GetBalance',
     'params': [address]
     };
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _baseUrl,
         params: {},
         data: params,
@@ -62,7 +62,7 @@ class ZilApi {
   /// Get minimum gas price
   Future<MessageModel> getMinimumGasPrice() async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _baseUrl,
         params: {},
         data: {
@@ -92,7 +92,7 @@ class ZilApi {
   /// Get network ID
   Future<MessageModel> getNetworkId() async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _baseUrl,
         params: {},
         data: {
@@ -122,7 +122,7 @@ class ZilApi {
   /// Get latest block number
   Future<MessageModel> getLatestTxBlock() async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _baseUrl,
         params: {},
         data: {
@@ -155,7 +155,7 @@ class ZilApi {
   /// Send signed transaction
   Future<MessageModel> createTransaction(Map<String, dynamic> txParams) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _baseUrl,
         params: {},
         data: {
@@ -188,7 +188,7 @@ class ZilApi {
   /// Get transaction by hash
   Future<MessageModel> getTransaction(String txHash) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _baseUrl,
         params: {},
         data: {
@@ -218,7 +218,7 @@ class ZilApi {
   /// Get transactions for address
   Future<MessageModel> getTransactionsForTxBlock(String blockNum) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _baseUrl,
         params: {},
         data: {

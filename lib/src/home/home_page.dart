@@ -347,7 +347,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     
     switch (state) {
       case AppLifecycleState.resumed:
-        MiningBackground().background_end();
+        MiningBackground().backgroundEnd();
         if (_unlockIsPush == true) return;
         
         if (!lockState.isLocked && !lockState.faceEnabled && !lockState.gestureEnabled) {

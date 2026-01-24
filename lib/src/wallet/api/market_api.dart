@@ -31,7 +31,7 @@ class MarketApi {
       final requestUrl = '$url/r/targetCoinMarketsList?coin=$cleanedCoins';
       debugPrint('MarketApi: Fetching coin info from: $requestUrl');
       
-      var data = await BaseApi.RequestEmpty_h.get(
+      var data = await BaseApi.requestEmptyH.get(
         requestUrl,
         params: {},
         header: header,
@@ -72,7 +72,7 @@ class MarketApi {
   /// 获取币的基本详情信息
   Future<Map<String, dynamic>> getWalletCoinsBaseInfo(String coinName) async {
     try {
-      var data = await BaseApi.RequestEmpty_h.get(
+      var data = await BaseApi.requestEmptyH.get(
         '$url/r/coinDetail/$coinName',
         params: {},
         header: header,

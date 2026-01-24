@@ -264,7 +264,7 @@ class MiningV2Provider extends ChangeNotifier {
   /// TODO: This method still uses WalletActionProvider for wallet creation.
   /// Needs to be refactored to use IWalletService when wallet creation
   /// functionality is added to the service interface.
-  Future<MessageModel> setMiningData_import(Map<String,dynamic> value,String password) async {
+  Future<MessageModel> setMiningDataImport(Map<String,dynamic> value,String password) async {
     // NOTE: Keep using WalletActionProvider for wallet creation operations
     // This will be migrated when IWalletService supports wallet creation
     WalletActionProvider wap=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
@@ -585,12 +585,12 @@ class MiningV2Provider extends ChangeNotifier {
         int tIndex=taskList.indexWhere((e)=>e.day==todayStr[0]);
         int yIndex=taskList.indexWhere((e)=>e.day==yesterdayStr[0]);
         if(tIndex !=-1){
-          todayCycleRewardsValue=toEther(taskList[tIndex].total_amount??'0', 18).toDouble();
+          todayCycleRewardsValue=toEther(taskList[tIndex].totalAmount??'0', 18).toDouble();
         }else{
           todayCycleRewardsValue=0;
         }
         if(yIndex !=-1){
-          yesterdayCycleRewardsValue=toEther(taskList[yIndex].total_amount??'0', 18).toDouble();
+          yesterdayCycleRewardsValue=toEther(taskList[yIndex].totalAmount??'0', 18).toDouble();
         }else{
           yesterdayCycleRewardsValue=0;
         }
@@ -629,7 +629,7 @@ class MiningV2Provider extends ChangeNotifier {
       int tIndex=taskList.indexWhere((e)=>e.day==d1Str[0]);
       if(tIndex !=-1){
         barchartValues[i]=(taskList[tIndex].count??0).toDouble();
-        barchartValues2[i]=taskList[tIndex].total_amount??"0";
+        barchartValues2[i]=taskList[tIndex].totalAmount??"0";
       }else{
         barchartValues[i]=0;
         barchartValues2[i]="0";

@@ -21,9 +21,9 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
   FocusNode oldFocusNode=FocusNode();
   FocusNode newFocusNode=FocusNode();
   FocusNode confirmFocusNode=FocusNode();
-  bool obscure_old=true;
-  bool obscure_new=true;
-  bool obscure_confirm=true;
+  bool obscureOld=true;
+  bool obscureNew=true;
+  bool obscureConfirm=true;
   String oldErrorMessage="";
   String newErrorMessage="";
   String confirmErrorMessage="";
@@ -207,13 +207,13 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
             oldEditingController,
             oldFocusNode,
             "6-digit number",
-            obscure_old,
+            obscureOld,
                 (){
               FocusScope.of(context).requestFocus(newFocusNode);
             },
                 (){
               setState(() {
-                obscure_old=!obscure_old;
+                obscureOld=!obscureOld;
               });
             },
           ),
@@ -239,12 +239,12 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
             newEditingController,
             newFocusNode,
             S.of(context).g_lock_key13,
-            obscure_new,
+            obscureNew,
                 (){
               FocusScope.of(context).requestFocus(confirmFocusNode);
             }, (){
             setState(() {
-              obscure_new=!obscure_new;
+              obscureNew=!obscureNew;
             });
           },
           ),
@@ -270,7 +270,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
               confirmEditingController,
               confirmFocusNode,
               S.of(context).g_lock_key13,
-              obscure_confirm,
+              obscureConfirm,
                   (){
                 if(widget.type==1){
                   FocusScope.of(context).requestFocus(oldFocusNode);
@@ -280,7 +280,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
               },
                   (){
                 setState(() {
-                  obscure_confirm=!obscure_confirm;
+                  obscureConfirm=!obscureConfirm;
                 });
               }
           ),

@@ -20,7 +20,7 @@ class EgldApi {
   /// Get account info (balance, nonce)
   Future<MessageModel> getAccount(String address) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_apiUrl/accounts/$address',
         params: {},
         header: {'Accept': 'application/json'},
@@ -52,7 +52,7 @@ class EgldApi {
   /// Get account balance
   Future<MessageModel> getBalance(String address) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_apiUrl/accounts/$address',
         params: {},
         header: {'Accept': 'application/json'},
@@ -77,7 +77,7 @@ class EgldApi {
   /// Get account nonce
   Future<MessageModel> getNonce(String address) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_apiUrl/accounts/$address',
         params: {},
         header: {'Accept': 'application/json'},
@@ -100,7 +100,7 @@ class EgldApi {
   /// Get network config (gas price, chain ID, etc.)
   Future<MessageModel> getNetworkConfig() async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_gatewayUrl/network/config',
         params: {},
         header: {'Accept': 'application/json'},
@@ -131,7 +131,7 @@ class EgldApi {
   /// Get economics (for estimating gas)
   Future<MessageModel> getEconomics() async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_apiUrl/economics',
         params: {},
         header: {'Accept': 'application/json'},
@@ -163,7 +163,7 @@ class EgldApi {
     try {
       final txData = jsonDecode(signedTxJson);
 
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         '$_gatewayUrl/transaction/send',
         params: {},
         data: txData,
@@ -191,7 +191,7 @@ class EgldApi {
   /// Get transaction by hash
   Future<MessageModel> getTransaction(String txHash) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_apiUrl/transactions/$txHash',
         params: {},
         header: {'Accept': 'application/json'},
@@ -223,7 +223,7 @@ class EgldApi {
   /// Get transaction status
   Future<MessageModel> getTransactionStatus(String txHash) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_gatewayUrl/transaction/$txHash/status',
         params: {},
         header: {'Accept': 'application/json'},
@@ -247,7 +247,7 @@ class EgldApi {
   /// Get address transactions
   Future<MessageModel> getTransactions(String address, {int size = 25}) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_apiUrl/accounts/$address/transactions',
         params: {'size': size.toString()},
         header: {'Accept': 'application/json'},
@@ -270,7 +270,7 @@ class EgldApi {
   /// Get ESDT tokens for address
   Future<MessageModel> getTokens(String address) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_apiUrl/accounts/$address/tokens',
         params: {},
         header: {'Accept': 'application/json'},
@@ -293,7 +293,7 @@ class EgldApi {
   /// Get NFTs for address
   Future<MessageModel> getNfts(String address, {int size = 25}) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_apiUrl/accounts/$address/nfts',
         params: {'size': size.toString()},
         header: {'Accept': 'application/json'},

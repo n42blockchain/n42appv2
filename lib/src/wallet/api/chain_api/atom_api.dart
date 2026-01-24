@@ -8,7 +8,7 @@ class AtomApi{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
       uri+='cosmos/bank/v1beta1/balances/$address';
-      var data=await BaseApi.RequestEmpty_h.get(
+      var data=await BaseApi.requestEmptyH.get(
         uri,
         params: {},
         defaultReturn: false,
@@ -49,7 +49,7 @@ class AtomApi{
   getAccounts(String address)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
-      var data=await await BaseApi.RequestEmpty_h.get(
+      var data=await await BaseApi.requestEmptyH.get(
         '${uri}cosmos/auth/v1beta1/accounts/$address',
         params: {},
         defaultReturn: false,
@@ -72,7 +72,7 @@ class AtomApi{
   getMetadata(String denom)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
-      var data=await await BaseApi.RequestEmpty_h.get(
+      var data=await await BaseApi.requestEmptyH.get(
         '${uri}cosmos/bank/v1beta1/denoms_metadata/$denom',
         params: {},
         defaultReturn: false,
@@ -95,7 +95,7 @@ class AtomApi{
   getTxs(String txHash)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
-      var data=await await BaseApi.RequestEmpty_h.get(
+      var data=await await BaseApi.requestEmptyH.get(
         '${uri}cosmos/tx/v1beta1/txs/$txHash',
         params: {},
         defaultReturn: false,
@@ -118,7 +118,7 @@ class AtomApi{
   sendTxs(var rawTx)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
-      var data=await BaseApi.RequestEmpty_h.post(
+      var data=await BaseApi.requestEmptyH.post(
         '${uri}cosmos/tx/v1beta1/txs',
         params: {},
         data: {
@@ -149,7 +149,7 @@ class AtomApi{
   sendTxsSimulate(var rawTx)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
-      var data=await BaseApi.RequestEmpty_h.post(
+      var data=await BaseApi.requestEmptyH.post(
         '${uri}cosmos/tx/v1beta1/simulate',
         params: {},
         data: {
@@ -204,7 +204,7 @@ version: IBC 协议的版本，通常会标明使用的版本号（如 ics20-1�
   getChannels()async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
-      var data=await await BaseApi.RequestEmpty_h.get(
+      var data=await await BaseApi.requestEmptyH.get(
         '${uri}ibc/core/channel/v1/channels',
         params: {},
         defaultReturn: false,

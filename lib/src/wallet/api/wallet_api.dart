@@ -30,7 +30,7 @@ class WalletApi{
         condition+="coins=$coins";
       }
       String path='${url}v2/chains/coins/v2$condition';
-      final a=await BaseApi.RequestEmpty_h.get(path, params: {},header:header,);
+      final a=await BaseApi.requestEmptyH.get(path, params: {},header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
         mm.error=false;
@@ -48,7 +48,7 @@ class WalletApi{
   //获取某个主链币的所有代币
   getTokenListFullname(String fullname)async{
     try{
-      final a=await BaseApi.RequestEmpty_h.get('${url}v1/chains/coins?chains=$fullname', params: {},header:header,);
+      final a=await BaseApi.requestEmptyH.get('${url}v1/chains/coins?chains=$fullname', params: {},header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
         List<dynamic> rData=a['data'];

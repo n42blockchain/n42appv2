@@ -17,7 +17,7 @@ class OneApi {
   /// Get account balance (native ONE)
   Future<MessageModel> getBalance(String address) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _baseUrl,
         params: {},
         data: {
@@ -54,7 +54,7 @@ class OneApi {
   /// Get transaction count (nonce)
   Future<MessageModel> getTransactionCount(String address) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _baseUrl,
         params: {},
         data: {
@@ -88,7 +88,7 @@ class OneApi {
   /// Get gas price
   Future<MessageModel> getGasPrice() async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _baseUrl,
         params: {},
         data: {
@@ -122,7 +122,7 @@ class OneApi {
   /// Send raw transaction
   Future<MessageModel> sendTransaction(String rawTx) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _baseUrl,
         params: {},
         data: {
@@ -155,7 +155,7 @@ class OneApi {
   /// Get transaction by hash
   Future<MessageModel> getTransactionByHash(String txHash) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _baseUrl,
         params: {},
         data: {
@@ -185,7 +185,7 @@ class OneApi {
   /// Get transaction receipt
   Future<MessageModel> getTransactionReceipt(String txHash) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _baseUrl,
         params: {},
         data: {
@@ -215,7 +215,7 @@ class OneApi {
   /// Get block number
   Future<MessageModel> getBlockNumber() async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _baseUrl,
         params: {},
         data: {

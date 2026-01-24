@@ -20,7 +20,7 @@ class FaceApi{
         f=MultipartFile.fromBytes(file,filename: filename);
       }
       FormData fd=FormData.fromMap({"face":f,"address":address,});
-      var data=await BaseApi.RequestEmpty_h.post(
+      var data=await BaseApi.requestEmptyH.post(
         '$url/address_upload_face',
         params: {},
         data: fd,
@@ -45,7 +45,7 @@ class FaceApi{
         f=MultipartFile.fromBytes(file,filename: filename);
       }
       FormData fd=FormData.fromMap({"face":f});
-      var data=await BaseApi.RequestEmpty_h.post(
+      var data=await BaseApi.requestEmptyH.post(
         '$url/detect_face',
         params: {},
         data: fd,
@@ -63,7 +63,7 @@ class FaceApi{
   deleteBinding(String address)async{
     try{
       MessageModel mm = MessageModel();
-      var data=await BaseApi.RequestEmpty_h.delete(
+      var data=await BaseApi.requestEmptyH.delete(
         '$url/delete_face',
         params: {
           "address":address

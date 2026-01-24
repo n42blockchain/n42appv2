@@ -172,7 +172,7 @@ class TrxApi{
   getBlockNowTrx({bool isTest=false})async{
     try{
       String urlStr=RequestUrl().getUrl2(CoinType.TRX.name, 'rpc',isTest: isTest);
-      var data=await BaseApi.RequestEmpty_h.post('$urlStr/wallet/getnowblock', params: {},header: header);
+      var data=await BaseApi.requestEmptyH.post('$urlStr/wallet/getnowblock', params: {},header: header);
       if(data['block_header']==null){
         MessageModel mm=MessageModel.error();
         mm.data=data['message'];
@@ -198,7 +198,7 @@ class TrxApi{
         "amount": amount,
         "visible": true
       };
-      final rData=await BaseApi.RequestEmpty_h.post('$url/wallet/createtransaction', params: {},data: map);
+      final rData=await BaseApi.requestEmptyH.post('$url/wallet/createtransaction', params: {},data: map);
       MessageModel mm=MessageModel();
       if(rData['result']==false){
         mm.error=true;
@@ -217,7 +217,7 @@ class TrxApi{
   sendTxTrx(String signStr,{bool isTest=false})async{
     try{
       String urlStr=RequestUrl().getUrl2(CoinType.TRX.name, 'api',isTest: isTest);
-      final rData=await BaseApi.RequestEmpty_h.post('$urlStr/wallet/broadcasttransaction', params: {},data: jsonDecode(signStr),header: header);
+      final rData=await BaseApi.requestEmptyH.post('$urlStr/wallet/broadcasttransaction', params: {},data: jsonDecode(signStr),header: header);
       MessageModel mm=MessageModel();
       if(rData['result']==false){
         mm.error=true;
@@ -267,7 +267,7 @@ class TrxApi{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};
       String urlStr=RequestUrl().getUrl2("TRX", "rpc",isTest: isTest)+"/jsonrpc";
-      final data=await BaseApi.RequestEmpty_h.post(urlStr, params: {},data: postData,header: header,);
+      final data=await BaseApi.requestEmptyH.post(urlStr, params: {},data: postData,header: header,);
       if(data.containsKey('error')){
         mm.error=true;
         mm.data=data['error']['message'];

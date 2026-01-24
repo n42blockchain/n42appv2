@@ -96,7 +96,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
                   ),
                 ),
               ),
-              rowItem_new(
+              rowItemNew(
                 S.of(context).email_verification,
                 securityMap['email'],()async{
                 await Navigator.push(context, MaterialPageRoute(builder: (context)=>SecurityEdit('email')));
@@ -189,7 +189,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
       ),
     );
   }
-  rowItem_new(String title,bool open,Function callback){
+  rowItemNew(String title,bool open,Function callback){
     return InkWell(
       onTap: (){
         callback();

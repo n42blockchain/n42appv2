@@ -38,7 +38,7 @@ class TokenViewApi{
   //获取nft主页的banner 列表
   Future getBannerData()async{
     try {
-      final res = await BaseApi.RequestEmpty_h.get(
+      final res = await BaseApi.requestEmptyH.get(
         '${url}v1/image/url',
         params: {},header:header,
       );
@@ -80,7 +80,7 @@ class TokenViewApi{
         condition+="coins=$coins";
       }
       String path='${url}v2/chains/coins/v2$condition';
-      final a=await BaseApi.RequestEmpty_h.get(path, params: {},header:header,);
+      final a=await BaseApi.requestEmptyH.get(path, params: {},header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
         mm.error=false;
@@ -118,7 +118,7 @@ class TokenViewApi{
   //获取某个主链币的所有代币
   getTokenListFullname(String fullname)async{
     try{
-      final a=await BaseApi.RequestEmpty_h.get('${url}v1/chains/coins?chains=$fullname', params: {},header:header,);
+      final a=await BaseApi.requestEmptyH.get('${url}v1/chains/coins?chains=$fullname', params: {},header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
         List<dynamic> rData=a['data'];
@@ -161,7 +161,7 @@ class TokenViewApi{
   //获取某笔交易的确认数
   getTxConfirmation(String coinType,String txHash)async{
     try{
-      final a=await BaseApi.RequestEmpty_h.get('${url}v1/vipapi/tx/confirmation?coin=${coinType.toLowerCase()}&tx_hash=$txHash', params: {},header:header,);
+      final a=await BaseApi.requestEmptyH.get('${url}v1/vipapi/tx/confirmation?coin=${coinType.toLowerCase()}&tx_hash=$txHash', params: {},header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==1){
         mm.error=false;
@@ -322,7 +322,7 @@ class TokenViewApi{
   //获取btc类的余额
   /*static getBalanceBtc(String coinType,String address)async{
     try{
-      final a=await Api.RequestEmpty_h.get('${tokenViewUri}addr/b/${coinType.toLowerCase()}/${address}?apikey=lsqvqucOU0H0J9LfJQBX', params: {});
+      final a=await Api.requestEmptyH.get('${tokenViewUri}addr/b/${coinType.toLowerCase()}/${address}?apikey=lsqvqucOU0H0J9LfJQBX', params: {});
       if(a['code']==1){
         return ethToWeiString(a['data'].toString(), 9);
       }else{
@@ -338,7 +338,7 @@ class TokenViewApi{
       if(isTest){
         return await BtcApi(test: isTest).getGasfee();
       }else{
-        final a=await BaseApi.RequestEmpty_h.get('${url}v1/blockchain/fee/byte', params: {},header:header,);
+        final a=await BaseApi.requestEmptyH.get('${url}v1/blockchain/fee/byte', params: {},header:header,);
         MessageModel mm=MessageModel();
         if(a['code']==200){
           mm.data=a['data'];
@@ -358,7 +358,7 @@ class TokenViewApi{
   //获取btc类的余额
   getBalanceBtc(String coinType,String address,{bool returnDouble=false})async{
     try{
-      final a=await BaseApi.RequestEmpty_h.get('${url}v1/vipapi/account/balance?coin=${coinType.toLowerCase()}&addr=$address', params: {},header:header,);
+      final a=await BaseApi.requestEmptyH.get('${url}v1/vipapi/account/balance?coin=${coinType.toLowerCase()}&addr=$address', params: {},header:header,);
       MessageModel mm=MessageModel();
       if(a['code']==200){
         if(returnDouble){
@@ -383,7 +383,7 @@ class TokenViewApi{
       if(isTest){
         return await BtcApi(test: isTest).getUtxos(address);
       }else{
-        final a=await BaseApi.RequestEmpty_h.get('${url}v1/vipapi/utxo/tx/list?coin=${coinType.toLowerCase()}&addr=$address&page=$pageNum&page_size=$pageSize', params: {},header:header,);
+        final a=await BaseApi.requestEmptyH.get('${url}v1/vipapi/utxo/tx/list?coin=${coinType.toLowerCase()}&addr=$address&page=$pageNum&page_size=$pageSize', params: {},header:header,);
         MessageModel mm=MessageModel.error();
         if(a['code']==200){
           mm.error=false;
@@ -405,7 +405,7 @@ class TokenViewApi{
   //获取btc类的交易记录
   getTxListBtc(String coinType,String address,{int pageSize=20,int pageNum=1})async{
     try{
-      final a=await BaseApi.RequestEmpty_h.get('${url}v1/vipapi/address/tx/list?coin=${coinType.toLowerCase()}&addr=$address&page=$pageNum&page_size=$pageSize', params: {},header:header,);
+      final a=await BaseApi.requestEmptyH.get('${url}v1/vipapi/address/tx/list?coin=${coinType.toLowerCase()}&addr=$address&page=$pageNum&page_size=$pageSize', params: {},header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
         mm.error=false;
@@ -438,7 +438,7 @@ class TokenViewApi{
           "coin":coinType.toLowerCase(),
           "tx_hash":signHash,
         };
-        final a=await BaseApi.RequestEmpty_h.post('${url}v1/vipapi/onchainwallet/rawtransaction', params: params,data: params,header:header,);
+        final a=await BaseApi.requestEmptyH.post('${url}v1/vipapi/onchainwallet/rawtransaction', params: params,data: params,header:header,);
         MessageModel mm=MessageModel.error();
         if(a['code']==200){
           mm.error=false;
@@ -474,7 +474,7 @@ class TokenViewApi{
           }else{
             pUrl='${url}v2/eth/balance';
           }
-          a=await BaseApi.RequestEmpty_h.post(pUrl, params: params,data: params,header:header,);
+          a=await BaseApi.requestEmptyH.post(pUrl, params: params,data: params,header:header,);
         }else{
           Map<String,dynamic> params={
             "from":address,
@@ -489,7 +489,7 @@ class TokenViewApi{
           }else{
             pUrl='${url}v2/eth/call';
           }
-          a=await BaseApi.RequestEmpty_h.post(pUrl, params: params,data: params,header:header,);
+          a=await BaseApi.requestEmptyH.post(pUrl, params: params,data: params,header:header,);
         }
         MessageModel mm=MessageModel.error();
         if(a['code']==200){
@@ -544,7 +544,7 @@ class TokenViewApi{
   //获取eth 类 某个地址的所有代币余额
   getAllTokenBalanceEth(String coinType,String address)async{
     try{
-      final a=await BaseApi.RequestEmpty_h.get('${url}v1/vipapi/eth-class/address/balance?coin=${coinType.toLowerCase()}&address=${address.toLowerCase()}', params: {},header:header,);
+      final a=await BaseApi.requestEmptyH.get('${url}v1/vipapi/eth-class/address/balance?coin=${coinType.toLowerCase()}&address=${address.toLowerCase()}', params: {},header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==1){
         mm.error=false;
@@ -572,7 +572,7 @@ class TokenViewApi{
   //eth、etc 预估gas花费
   getGasEstimateEth(Map<String,dynamic> params)async{
     try{
-      final a=await BaseApi.RequestEmpty_h.post('${url}v2/eth/estimate/gas', params: params,data: params,header:header,);
+      final a=await BaseApi.requestEmptyH.post('${url}v2/eth/estimate/gas', params: params,data: params,header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
         if(a['data']['error']['code']!=0){
@@ -654,7 +654,7 @@ class TokenViewApi{
           "net_mode":netMode,
           "tag":"pending"//"latest"
         };
-        final a=await BaseApi.RequestEmpty_h.post('${url}v2/eth/transaction/count', params: params,data: params,header:header,);
+        final a=await BaseApi.requestEmptyH.post('${url}v2/eth/transaction/count', params: params,data: params,header:header,);
         MessageModel mm=MessageModel.error();
         if(a['code']==200){
           String result=a['data']['result'].toString();
@@ -688,7 +688,7 @@ class TokenViewApi{
           "signed_tx":signHash,
           "net_mode":netMode,
         };
-        final a=await BaseApi.RequestEmpty_h.post('${url}v2/eth/raw/transaction', params: params,data: params,header:header,);
+        final a=await BaseApi.requestEmptyH.post('${url}v2/eth/raw/transaction', params: params,data: params,header:header,);
         MessageModel mm=MessageModel.error();
         if(a['code']==200){
           String result=a['data']['result'].toString();
@@ -720,7 +720,7 @@ class TokenViewApi{
           "coin":coinType,
           "net_mode":isTest?"test":"main",
         };
-        final a=await BaseApi.RequestEmpty_h.post('${url}v2/eth/transaction/receipt', params: params,data: params,header:header,);
+        final a=await BaseApi.requestEmptyH.post('${url}v2/eth/transaction/receipt', params: params,data: params,header:header,);
         MessageModel mm=MessageModel.error();
         if(a['code']==200){
           mm.error=false;
@@ -745,7 +745,7 @@ class TokenViewApi{
           "coin":coinType,
           "net_mode":isTest?"test":"main",
         };
-        final a=await BaseApi.RequestEmpty_h.post('${url}v2/eth/gas/price', params: params,data: params,header:header,);
+        final a=await BaseApi.requestEmptyH.post('${url}v2/eth/gas/price', params: params,data: params,header:header,);
         MessageModel mm=MessageModel.error();
         if(a['code']==200){
           if(a['data']['error']['code']!=0){
@@ -770,7 +770,7 @@ class TokenViewApi{
   }
   getEnsResolve(String domain)async{
     try{
-      final a=await BaseApi.RequestEmpty_h.get('${url}v1/ens/resolve?domain=$domain', params: {},header:header,);
+      final a=await BaseApi.requestEmptyH.get('${url}v1/ens/resolve?domain=$domain', params: {},header:header,);
       MessageModel mm=MessageModel();
       if(a['code']==200){
         mm.data=a['data'];
@@ -799,14 +799,14 @@ class TokenViewApi{
           "pubkey":address,
           "net_mode":isTest?"test":"main",
         };
-        a=await BaseApi.RequestEmpty_h.post('${url}v1/sol/balance', params: params,data: params,header:header,);
+        a=await BaseApi.requestEmptyH.post('${url}v1/sol/balance', params: params,data: params,header:header,);
       }else{
         String pubKey=await Trustdart().getPubKeySOL(address,contract);
         Map<String,dynamic> params={
           "pubkey":pubKey,
           "net_mode":isTest?"test":"main",
         };
-        a=await BaseApi.RequestEmpty_h.post('${url}v1/sol/token/account/balance', params: params,data: params,header:header,);
+        a=await BaseApi.requestEmptyH.post('${url}v1/sol/token/account/balance', params: params,data: params,header:header,);
       }
 
       MessageModel mm=MessageModel.error();
@@ -848,7 +848,7 @@ class TokenViewApi{
         "net_mode":isTest?"test":"main",
         "pubkey":address,
       };
-      final a=await BaseApi.RequestEmpty_h.post('${url}v1/sol/token/accounts/by/owner', params: params,data: params,header:header,);
+      final a=await BaseApi.requestEmptyH.post('${url}v1/sol/token/accounts/by/owner', params: params,data: params,header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
         if(a['data']['error']['code']!=0){
@@ -874,7 +874,7 @@ class TokenViewApi{
         "net_mode":isTest?"test":"main",
         "pubkey":address,
       };
-      final a=await BaseApi.RequestEmpty_h.post('${url}v1/sol/account/info', params: params,data: params,header:header,);
+      final a=await BaseApi.requestEmptyH.post('${url}v1/sol/account/info', params: params,data: params,header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
         mm.error=false;
@@ -895,7 +895,7 @@ class TokenViewApi{
       Map<String,dynamic> params={
         "net_mode":isTest?"test":"main",
       };
-      final a=await BaseApi.RequestEmpty_h.post('${url}v1/sol/recent/block/hash', params: params,data: params,header:header,);
+      final a=await BaseApi.requestEmptyH.post('${url}v1/sol/recent/block/hash', params: params,data: params,header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
         mm.error=false;
@@ -917,7 +917,7 @@ class TokenViewApi{
         "net_mode":netMode,
         "tx_hash":signHash,
       };
-      final a=await BaseApi.RequestEmpty_h.post('${url}v1/sol/tx/send', params: params,data: params,header:header,);
+      final a=await BaseApi.requestEmptyH.post('${url}v1/sol/tx/send', params: params,data: params,header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
         if(a['data']['error']['code']!=0){
@@ -942,7 +942,7 @@ class TokenViewApi{
       Map<String,dynamic> params={
         "net_mode":isTest?"test":"main",
       };
-      final a=await BaseApi.RequestEmpty_h.post('${url}v1/sol/fees', params: params,data: params,header:header,);
+      final a=await BaseApi.requestEmptyH.post('${url}v1/sol/fees', params: params,data: params,header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
         mm.error=false;
@@ -964,7 +964,7 @@ class TokenViewApi{
         "net_mode":netMode,
         "tx_sign":txHash,
       };
-      final a=await BaseApi.RequestEmpty_h.post('${url}v1/sol/transaction', params: params,data: params,header:header,);
+      final a=await BaseApi.requestEmptyH.post('${url}v1/sol/transaction', params: params,data: params,header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==0){
         if(a['data']['error']['code']!=0){
@@ -1055,7 +1055,7 @@ class TokenViewApi{
       Map<String,dynamic> params={
         "net_mode":isTest?"test":"main",
       };
-      final a=await BaseApi.RequestEmpty_h.post('${url}v1/trx/gas/price', params: params,data: params,header:header,);
+      final a=await BaseApi.requestEmptyH.post('${url}v1/trx/gas/price', params: params,data: params,header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
         if(a['data']['error']['code']!=0){
@@ -1082,7 +1082,7 @@ class TokenViewApi{
         "tx_hash":txHash,
         "net_mode":isTest?"test":"main",
       };
-      final a=await BaseApi.RequestEmpty_h.post('${url}v1/trx/transaction/receipt', params: params,data: params,header:header,);
+      final a=await BaseApi.requestEmptyH.post('${url}v1/trx/transaction/receipt', params: params,data: params,header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
         mm.error=false;
@@ -1103,7 +1103,7 @@ class TokenViewApi{
       Map<String,dynamic> params={
         "net_mode":isTest?"test":"main",
       };
-      final a=await BaseApi.RequestEmpty_h.post('${url}v1/trx/latest/block', params: params,data: params,header:header,);
+      final a=await BaseApi.requestEmptyH.post('${url}v1/trx/latest/block', params: params,data: params,header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
         mm.error=false;
@@ -1128,7 +1128,7 @@ class TokenViewApi{
         "visible":false,
         "amount":amount,
       };
-      final a=await BaseApi.RequestEmpty_h.post('${url}v1/vipapi/onchainwallet/transaction', params: params,data: params,header:header,);
+      final a=await BaseApi.requestEmptyH.post('${url}v1/vipapi/onchainwallet/transaction', params: params,data: params,header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
         mm.error=false;
@@ -1219,7 +1219,7 @@ class TokenViewApi{
       sign["visible"]=false;
       sign['net_mode']="main";
       //MessageModel mmmm=await TrxApi.sendTx_trx(sign);
-      final a=await BaseApi.RequestEmpty_h.post('${url}v1/trx/broadcast/transaction', params: sign,data: sign,header:header,);
+      final a=await BaseApi.requestEmptyH.post('${url}v1/trx/broadcast/transaction', params: sign,data: sign,header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
         mm.error=false;
@@ -1284,7 +1284,7 @@ class TokenViewApi{
 */
   getBrowserPreviewUrl()async{
     try{
-      final rData=await BaseApi.RequestEmpty_h.get('${url}v1/preview/url', params: {},header: header);
+      final rData=await BaseApi.requestEmptyH.get('${url}v1/preview/url', params: {},header: header);
       MessageModel mm=MessageModel.error();
       if(rData['code']==200){
         mm.error=false;

@@ -3,13 +3,13 @@ class RequestUrl{
     coinKey=coinKey.toUpperCase();
     isTest ??= false;
     if(isTest){
-      return RequestUrl_test1[coinKey]?[uriKey]??"";
+      return requestUrlTest1[coinKey]?[uriKey]??"";
     }else{
-      return RequestUrl_main1[coinKey]?[uriKey]??"";
+      return requestUrlMain1[coinKey]?[uriKey]??"";
     }
 
   }
-  Map<String,dynamic> RequestUrl_test1={
+  Map<String,dynamic> requestUrlTest1={
     'BNB':{
       'api':'https://api-testnet.bscscan.com/api?',
       'browser':'https://testnet.bscscan.com/',
@@ -369,7 +369,7 @@ class RequestUrl{
       'rpc':'https://devnet-gateway.multiversx.com'
     }
   };
-  Map<String,dynamic> RequestUrl_main1={
+  Map<String,dynamic> requestUrlMain1={
     'BNB':{
       'api':'https://api.bscscan.com/api?apikey=YZIAIW52DPWKRBVETBHW2Z6YX893HAXCUG&',
       'browser':'https://bscscan.com/',

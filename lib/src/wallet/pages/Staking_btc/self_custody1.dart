@@ -368,7 +368,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
   getUTXOTxid(String txid)async{
     try{
       String uri="https://mempool.space/testnet4/api/tx/$txid";
-      var data= await BaseApi.RequestEmpty_h.get(uri,
+      var data= await BaseApi.requestEmptyH.get(uri,
         params: {},
         defaultReturn: false,
         header: {
@@ -389,7 +389,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
   getUTXO(String address)async{
     try{
       String uri="https://mempool.space/testnet4/api/address/$address/utxo";
-      var data= await BaseApi.RequestEmpty_h.get(uri,
+      var data= await BaseApi.requestEmptyH.get(uri,
         params: {},
         defaultReturn: false,
         header: {
@@ -410,7 +410,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
   sendTx(String hex)async{
     try{
       String uri="https://mempool.space/testnet4/api/tx";
-      var data= await BaseApi.RequestEmpty_h.post(uri,
+      var data= await BaseApi.requestEmptyH.post(uri,
         params: {},
         defaultReturn: false,
         header: {

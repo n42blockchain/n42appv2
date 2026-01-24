@@ -19,7 +19,7 @@ class ExchangeApi{
     params["token"] = AppGlobals.userInfo?.token??"";
     params["uuid"] = AppGlobals.userInfo?.uuid??"";
     final data =
-    await BaseApi.RequestEmpty_h.get('$url/v1/user_account/list', params: params,addUserInfo: true,header: header,);
+    await BaseApi.requestEmptyH.get('$url/v1/user_account/list', params: params,addUserInfo: true,header: header,);
     return data;
   }
 }

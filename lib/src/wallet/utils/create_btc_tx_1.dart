@@ -829,7 +829,7 @@ SighashType	1 字节	签名哈希类型（例如 SIGHASH_ALL，默认值为 0x00
   getUTXOTxid(String txid)async{
     try{
       String uri="https://mempool.space/testnet4/api/tx/$txid";
-      var data= await BaseApi.RequestEmpty_h.get(uri,
+      var data= await BaseApi.requestEmptyH.get(uri,
         params: {},
         defaultReturn: false,
         header: {

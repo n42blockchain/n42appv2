@@ -335,7 +335,7 @@ class CreateBTCTX {
   getUTXOTxid(String txid)async{
     try{
       String uri="https://mempool.space/testnet4/api/tx/$txid";
-      var data= await BaseApi.RequestEmpty_h.get(uri,
+      var data= await BaseApi.requestEmptyH.get(uri,
         params: {},
         defaultReturn: false,
         header: {

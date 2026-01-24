@@ -16,7 +16,7 @@ class XtzApi{
   getBalanceXtz(String address,String contract,String valueType,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XTZ.name,'api',isTest:isTest);
-      var data=await BaseApi.RequestEmpty_h.get('${uri}explorer/account/$address', params: {},defaultReturn: false);
+      var data=await BaseApi.requestEmptyH.get('${uri}explorer/account/$address', params: {},defaultReturn: false);
       MessageModel mm=MessageModel();
       if(valueType=="balance"){
         mm.data=ethToWeiString(data['spendable_balance'].toString(), 6);
@@ -37,7 +37,7 @@ class XtzApi{
   /*static getOperations_xtz(String address,bool isTest)async{
     try{
       String uri=Api.getUrl2(CoinType.XTZ.name,'api',isTest:isTest);
-      var data=await Api.RequestEmpty_h.get('${uri}explorer/account/$address/operations', params: {});
+      var data=await Api.requestEmptyH.get('${uri}explorer/account/$address/operations', params: {});
       MessageModel mm=MessageModel();
       mm.data=data;
       return mm;
@@ -52,7 +52,7 @@ class XtzApi{
   getCounterXtz(String address,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XTZ.name,'rpc',isTest:isTest);
-      var data=await BaseApi.RequestEmpty_h.get('${uri}chains/main/blocks/head/context/contracts/$address/counter', params: {},defaultReturn: false);
+      var data=await BaseApi.requestEmptyH.get('${uri}chains/main/blocks/head/context/contracts/$address/counter', params: {},defaultReturn: false);
       MessageModel mm=MessageModel();
       mm.data=data;
       return mm;
@@ -65,7 +65,7 @@ class XtzApi{
   getBranchXgz(bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XTZ.name,'rpc',isTest:isTest);
-      var data=await BaseApi.RequestEmpty_h.get('${uri}chains/main/blocks/head/hash', params: {},defaultReturn: false);
+      var data=await BaseApi.requestEmptyH.get('${uri}chains/main/blocks/head/hash', params: {},defaultReturn: false);
       MessageModel mm=MessageModel();
       mm.data=data;
       return mm;
@@ -78,7 +78,7 @@ class XtzApi{
   /*static getConstants_xtz(bool isTest)async{
     try{
       String uri=Api.getUrl2(CoinType.XTZ.name,'rpc',isTest:isTest);
-      var data=await Api.RequestEmpty_h.get('${uri}chains/main/blocks/head/context/constants', params: {});
+      var data=await Api.requestEmptyH.get('${uri}chains/main/blocks/head/context/constants', params: {});
       MessageModel mm=MessageModel();
       mm.data=data;
       return mm;
@@ -92,7 +92,7 @@ class XtzApi{
   getTxInfoXtz(String txHash,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XTZ.name,'api',isTest:isTest);
-      var data=await BaseApi.RequestEmpty_h.get('${uri}explorer/op/$txHash', params: {},defaultReturn: false);
+      var data=await BaseApi.requestEmptyH.get('${uri}explorer/op/$txHash', params: {},defaultReturn: false);
       MessageModel mm=MessageModel();
       mm.data=data;
       return mm;
@@ -106,7 +106,7 @@ class XtzApi{
   sendTxXtz(String signAddress,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XTZ.name, "rpc",isTest:isTest);
-      var data=await BaseApi.RequestEmpty_h.post('${uri}injection/operation?chain=main', params: {},data: json.encode(signAddress),defaultReturn: false);
+      var data=await BaseApi.requestEmptyH.post('${uri}injection/operation?chain=main', params: {},data: json.encode(signAddress),defaultReturn: false);
       MessageModel mm=MessageModel();
       mm.data=data;
       return mm;

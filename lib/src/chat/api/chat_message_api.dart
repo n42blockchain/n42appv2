@@ -21,7 +21,7 @@ class ChatMessageApi {
     params['token'] = token;
     params['source'] = 'app';
     params['email'] = email;
-    return BaseApi.RequestEmpty_h
+    return BaseApi.requestEmptyH
         .get('$url/v1/lr/file/getPubKeyByEmail', params: params, header: header);
   }
 
@@ -35,7 +35,7 @@ class ChatMessageApi {
     params['source'] = 'app';
     params['pub_key'] = pubKey;
     try {
-      final res = await BaseApi.RequestEmpty_h.post(
+      final res = await BaseApi.requestEmptyH.post(
         '$url/v1/l/file/bindPubKey',
         params: {},
         data: params,
@@ -75,7 +75,7 @@ class ChatMessageApi {
     params['file_name'] = fileName;
     params['file_desc'] = fileDesc;
     try {
-      final res = await BaseApi.RequestEmpty_h.post(
+      final res = await BaseApi.requestEmptyH.post(
         '$url/v1/l/file/send',
         params: {},
         data: params,
@@ -104,7 +104,7 @@ class ChatMessageApi {
     params['page'] = pageIndex;
     params['page_size'] = pageSize;
     try {
-      final res = await BaseApi.RequestEmpty_h.get(
+      final res = await BaseApi.requestEmptyH.get(
         '$url/v1/lr/file/get/user/msg/index',
         params: params,
         header: header,
@@ -135,7 +135,7 @@ class ChatMessageApi {
     params['page'] = pageIndex;
     params['page_size'] = pageSize;
     try {
-      final res = await BaseApi.RequestEmpty_h.get(
+      final res = await BaseApi.requestEmptyH.get(
         '$url/v1/lr/file/get/user/msg/detail',
         params: params,
         header: header,

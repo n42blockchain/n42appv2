@@ -23,7 +23,7 @@ class SquadApi {
     params['token'] = token;
     params['source'] = 'app';
     params['email'] = email;
-    final rData = await BaseApi.RequestEmpty_h.get(
+    final rData = await BaseApi.requestEmptyH.get(
       '$url/v1/lr/file/getPubKeyByEmail',
       params: params,
       header: header,
@@ -60,7 +60,7 @@ class SquadApi {
     MessageModel mm = MessageModel();
 
     try {
-      final rData = await BaseApi.RequestEmpty_h.post(
+      final rData = await BaseApi.requestEmptyH.post(
         '$url/v1/l/file/bindPubKey',
         params: {},
         data: formData,
@@ -117,7 +117,7 @@ class SquadApi {
     params['file_name'] = fileName;
     params['file_desc'] = fileDesc;
     try {
-      final res = await BaseApi.RequestEmpty_h.post(
+      final res = await BaseApi.requestEmptyH.post(
         '$url/v1/l/file/send',
         params: {},
         data: params,
@@ -146,7 +146,7 @@ class SquadApi {
     params['page'] = pageIndex;
     params['page_size'] = pageSize;
     try {
-      final res = await BaseApi.RequestEmpty_h.get(
+      final res = await BaseApi.requestEmptyH.get(
         '$url/v1/lr/file/getSendList',
         params: params,
         header: header,
@@ -174,7 +174,7 @@ class SquadApi {
     params['page'] = pageIndex;
     params['page_size'] = pageSize;
     try {
-      final res = await BaseApi.RequestEmpty_h.get(
+      final res = await BaseApi.requestEmptyH.get(
         '$url/v1/lr/file/getRecvList',
         params: params,
         header: header,
@@ -197,7 +197,7 @@ class SquadApi {
     params['token'] = token;
     params['source'] = 'app';
     params['id'] = fileId;
-    return BaseApi.RequestEmpty_h.post(
+    return BaseApi.requestEmptyH.post(
       '$url/v1/l/file/del',
       params: {},
       data: params,

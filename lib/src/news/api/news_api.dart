@@ -20,7 +20,7 @@ class NewsApi {
       "skip": skip * limit,
       "limit": limit
     };
-    final data = await BaseApi.RequestEmpty_h.post(
+    final data = await BaseApi.requestEmptyH.post(
       '${AppConfig.apiUrl['newsHostUrl']}/newsList',
       params: {},
       data: params,header: header,);
@@ -32,7 +32,7 @@ class NewsApi {
     Map params = {
       "newId":id
     };
-    final data = await BaseApi.RequestEmpty_h.post(
+    final data = await BaseApi.requestEmptyH.post(
       '${AppConfig.apiUrl['newsHostUrl']}/newsList?',
       params: {},
       data: params,header: header,);

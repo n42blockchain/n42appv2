@@ -15,7 +15,7 @@ class VetApi {
   /// Get account balance (VET and VTHO)
   Future<MessageModel> getBalance(String address) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_baseUrl/accounts/$address',
         params: {},
         header: {'Accept': 'application/json'},
@@ -44,7 +44,7 @@ class VetApi {
   /// Get VTHO (energy) balance
   Future<MessageModel> getEnergyBalance(String address) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_baseUrl/accounts/$address',
         params: {},
         header: {'Accept': 'application/json'},
@@ -72,7 +72,7 @@ class VetApi {
   /// Get best block info
   Future<MessageModel> getBestBlock() async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_baseUrl/blocks/best',
         params: {},
         header: {'Accept': 'application/json'},
@@ -96,7 +96,7 @@ class VetApi {
   /// Get chain tag
   Future<MessageModel> getChainTag() async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_baseUrl/blocks/0',
         params: {},
         header: {'Accept': 'application/json'},
@@ -122,7 +122,7 @@ class VetApi {
   /// Submit signed transaction
   Future<MessageModel> sendTransaction(String rawTx) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         '$_baseUrl/transactions',
         params: {},
         data: {'raw': rawTx},
@@ -147,7 +147,7 @@ class VetApi {
   /// Get transaction by id
   Future<MessageModel> getTransaction(String txId) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_baseUrl/transactions/$txId',
         params: {},
         header: {'Accept': 'application/json'},
@@ -171,7 +171,7 @@ class VetApi {
   /// Get transaction receipt
   Future<MessageModel> getTransactionReceipt(String txId) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_baseUrl/transactions/$txId/receipt',
         params: {},
         header: {'Accept': 'application/json'},
@@ -195,7 +195,7 @@ class VetApi {
   /// Get transfer logs for address
   Future<MessageModel> getTransferLogs(String address, {int limit = 20}) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         '$_baseUrl/logs/transfer',
         params: {},
         data: {

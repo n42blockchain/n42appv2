@@ -16,7 +16,7 @@ class BtcApi{
   getGasfee()async{
     //https://mempool.space/testnet4/api/v1/fees/recommended
     try{
-      var data=await BaseApi.RequestEmpty_h.get('${uri}v1/fees/recommended', params: {});
+      var data=await BaseApi.requestEmptyH.get('${uri}v1/fees/recommended', params: {});
       MessageModel mm=MessageModel();
       mm.data=data['economyFee'];
       return mm;
@@ -28,7 +28,7 @@ class BtcApi{
   }
   getUtxos(String address)async{
     try{
-      var data=await BaseApi.RequestEmpty_h.get('${uri}address/$address/utxo', params: {});
+      var data=await BaseApi.requestEmptyH.get('${uri}address/$address/utxo', params: {});
       MessageModel mm=MessageModel();
       mm.data=data;
       return mm;
@@ -40,7 +40,7 @@ class BtcApi{
   }
   getUTXOTxid(String txid)async{
     try{
-      var data= await BaseApi.RequestEmpty_h.get("${uri}tx/$txid",
+      var data= await BaseApi.requestEmptyH.get("${uri}tx/$txid",
         params: {},
         defaultReturn: false,
         header: {
@@ -58,7 +58,7 @@ class BtcApi{
   }
   getBalance(String address)async{
     try{
-      var data= await BaseApi.RequestEmpty_h.get("${uri}address/$address",
+      var data= await BaseApi.requestEmptyH.get("${uri}address/$address",
         params: {},
         defaultReturn: false,
         header: {
@@ -113,7 +113,7 @@ class BtcApi{
   }
   sendTx(String signHase)async{
     try{
-      var data= await BaseApi.RequestEmpty_h.post("${uri}tx",
+      var data= await BaseApi.requestEmptyH.post("${uri}tx",
           params: {},
           defaultReturn: false,
           header: {
@@ -133,7 +133,7 @@ class BtcApi{
   }
   getTxState(String txId)async{
     try{
-      var data= await BaseApi.RequestEmpty_h.get("${uri}tx/$txId/status",
+      var data= await BaseApi.requestEmptyH.get("${uri}tx/$txId/status",
         params: {},
         defaultReturn: false,
         header: {

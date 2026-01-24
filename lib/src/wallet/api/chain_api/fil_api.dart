@@ -104,7 +104,7 @@ class FilApi{
     try{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};
-      final data=await BaseApi.RequestEmpty_h.post(RequestUrl().getUrl2("FIL", "rpc",isTest: isTest), params: {},data: postData);
+      final data=await BaseApi.requestEmptyH.post(RequestUrl().getUrl2("FIL", "rpc",isTest: isTest), params: {},data: postData);
       if(data.containsKey('error')){
         mm.error=true;
         mm.data=data['error']['message'];
@@ -124,7 +124,7 @@ class FilApi{
       MessageModel mm=MessageModel();
       String url=RequestUrl().getUrl2("FIL", "api",isTest: isTest);
       url='${url}message/$mId';
-      final data=await BaseApi.RequestEmpty_h.get(url, params: {});
+      final data=await BaseApi.requestEmptyH.get(url, params: {});
       if(data['receipt']['exitCode']??-1 !=0){
         mm.error=true;
         mm.data="";

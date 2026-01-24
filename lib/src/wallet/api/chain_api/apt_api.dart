@@ -19,7 +19,7 @@ class AptApi{
       }else{
         uri='${uri}0x1::coin::CoinStore<$contract::celer_coin_manager::$tokenName>';
       }
-      final data=await BaseApi.RequestEmpty_h.get(uri, params: {},);
+      final data=await BaseApi.requestEmptyH.get(uri, params: {},);
       mm.data=BigInt.from(data);
       return mm;
     }catch(e){
@@ -32,7 +32,7 @@ class AptApi{
     try{
       MessageModel mm=MessageModel();
       String uri='${url}estimate_gas_price';
-      final data=await BaseApi.RequestEmpty_h.get(uri, params: {},);
+      final data=await BaseApi.requestEmptyH.get(uri, params: {},);
       mm.data=BigInt.from(data['gas_estimate']);
       return mm;
     }catch(e){
@@ -45,7 +45,7 @@ class AptApi{
     try{
       MessageModel mm=MessageModel();
       String uri='${url}accounts/$address';
-      final data=await BaseApi.RequestEmpty_h.get(uri, params: {},);
+      final data=await BaseApi.requestEmptyH.get(uri, params: {},);
       mm.data=int.parse(data['sequence_number']);
       return mm;
     }catch(e){
@@ -58,7 +58,7 @@ class AptApi{
     try{
       MessageModel mm=MessageModel();
       String uri='${url}ledger/info';
-      final data=await BaseApi.RequestEmpty_h.get(uri, params: {},);
+      final data=await BaseApi.requestEmptyH.get(uri, params: {},);
       mm.data=int.parse(data['ledger_timestamp']);
       return mm;
     }catch(e){
@@ -72,7 +72,7 @@ class AptApi{
       MessageModel mm=MessageModel();
       String uri='${url}transactions';
 
-      final data=await BaseApi.RequestEmpty_h.post(uri, params: {},data: txHash,header: {'content-type':'application/x.aptos.signed_transaction+bcs'});
+      final data=await BaseApi.requestEmptyH.post(uri, params: {},data: txHash,header: {'content-type':'application/x.aptos.signed_transaction+bcs'});
       mm.data=data['hash'];
       return mm;
     }catch(e){

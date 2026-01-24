@@ -18,7 +18,7 @@ class ChatApi{
     params["last_msg_id"] = lastMsgId;
     params["uuid"] = AppGlobals.userInfo?.uuid;
     final data =
-    await BaseApi.RequestEmpty_h.post('$url/v1/chat/msg/list', data: params, params: {},header: header,);
+    await BaseApi.requestEmptyH.post('$url/v1/chat/msg/list', data: params, params: {},header: header,);
     return data;
   }
 
@@ -26,7 +26,7 @@ class ChatApi{
   Future offlineMsg() async {
     Map<String, dynamic> params = {};
     params["uuid"] = AppGlobals.userInfo?.uuid;
-    final data = await BaseApi.RequestEmpty_h
+    final data = await BaseApi.requestEmptyH
         .post('$url/v1/chat/msg/offline', params: params, data: params,header: header,);
     return data;
   }
@@ -41,7 +41,7 @@ class ChatApi{
     params["from_uuid"] = fromUUID;
     params["receiver_uuid"] = receiveId;
     final data =
-    await BaseApi.RequestEmpty_h.post('$url/v1/chat/send/one', params: params, data: params,header: header,);
+    await BaseApi.requestEmptyH.post('$url/v1/chat/send/one', params: params, data: params,header: header,);
     return data;
   }
   Future sendMessageRed({
@@ -64,7 +64,7 @@ class ChatApi{
     params["type"] = type;
     params["description"] = description;
     final data =
-    await BaseApi.RequestEmpty_h.post('$url/v1/red/send', params: params, data: params,header: header,);
+    await BaseApi.requestEmptyH.post('$url/v1/red/send', params: params, data: params,header: header,);
     return data;
   }
   //获取红包详情
@@ -78,7 +78,7 @@ class ChatApi{
       "Token":AppGlobals.userInfo!.token,
     };
     final data =
-    await BaseApi.RequestEmpty_h.post('$url/v1/red/details', params: params, data: params,header: header,);
+    await BaseApi.requestEmptyH.post('$url/v1/red/details', params: params, data: params,header: header,);
     if(data['code']==200){
       MessageModel mm =MessageModel();
       mm.data=data['data'];
@@ -100,7 +100,7 @@ class ChatApi{
       "Token":AppGlobals.userInfo!.token,
     };
     final data =
-    await BaseApi.RequestEmpty_h.post('$url/v1/red/receive', params: params, data: params,header: header,);
+    await BaseApi.requestEmptyH.post('$url/v1/red/receive', params: params, data: params,header: header,);
     if(data['code']==200){
       MessageModel rmm=MessageModel();
       rmm.data=data['data'];
@@ -122,7 +122,7 @@ class ChatApi{
     params["target_uuid"] = targetUuid;
     params["remarks"] = remarks;
     final data =
-    await BaseApi.RequestEmpty_h.post('$url/v1/friend/accept', params: params, data: params,header: header,);
+    await BaseApi.requestEmptyH.post('$url/v1/friend/accept', params: params, data: params,header: header,);
     return data;
   }
 
@@ -137,7 +137,7 @@ class ChatApi{
     params["sender_uuid"] = senderUuid;
     params["target_uuid"] = targetUuid;
     final data =
-    await BaseApi.RequestEmpty_h.post('$url/v1/friend/add', params: params, data: params,header: header,);
+    await BaseApi.requestEmptyH.post('$url/v1/friend/add', params: params, data: params,header: header,);
     return data;
   }
 
@@ -145,7 +145,7 @@ class ChatApi{
   Future friendApplyList() async {
     Map<String, dynamic> params = {};
     params["uuid"] = AppGlobals.userInfo?.uuid;
-    final data = await BaseApi.RequestEmpty_h
+    final data = await BaseApi.requestEmptyH
         .post('$url/v1/friend/apply/list', params: params, data: params,header: header,);
     return data;
   }
@@ -155,7 +155,7 @@ class ChatApi{
     Map<String, dynamic> params = {};
     params["uuid"] = AppGlobals.userInfo?.uuid;
     final data =
-    await BaseApi.RequestEmpty_h.post('$url/v1/friend/list', params: params, data: params,header: header,);
+    await BaseApi.requestEmptyH.post('$url/v1/friend/list', params: params, data: params,header: header,);
     return data;
   }
 
@@ -164,7 +164,7 @@ class ChatApi{
     Map<String, dynamic> params = {};
     params["email"] = email;
     final data =
-    await BaseApi.RequestEmpty_h.post('$url/v1/friend/search', params: params, data: params,header: header,);
+    await BaseApi.requestEmptyH.post('$url/v1/friend/search', params: params, data: params,header: header,);
     return data;
   }
 
@@ -173,7 +173,7 @@ class ChatApi{
     Map<String, dynamic> params = {};
     params["uuid"] = userId;
     final data =
-    await BaseApi.RequestEmpty_h.post('$url/v1/user/info/get', params: params, data: params,header: header,);
+    await BaseApi.requestEmptyH.post('$url/v1/user/info/get', params: params, data: params,header: header,);
     return data;
   }
 
@@ -183,7 +183,7 @@ class ChatApi{
     params["friend"] = userId;
     params["uuid"] = AppGlobals.userInfo?.uuid;
     final data =
-    await BaseApi.RequestEmpty_h.post('$url/v1/friend/delete', params: {}, data: params,header: header,);
+    await BaseApi.requestEmptyH.post('$url/v1/friend/delete', params: {}, data: params,header: header,);
     return data;
   }
 
@@ -193,7 +193,7 @@ class ChatApi{
     params["friend"] = friendId;
     params["uuid"] = AppGlobals.userInfo?.uuid;
     final data =
-    await BaseApi.RequestEmpty_h.post('$url/v1/friend/block', params: {}, data: params,header: header,);
+    await BaseApi.requestEmptyH.post('$url/v1/friend/block', params: {}, data: params,header: header,);
     return data;
   }
 
@@ -202,7 +202,7 @@ class ChatApi{
     Map<String, dynamic> params = {};
     params["friend"] = friendId;
     params["uuid"] = AppGlobals.userInfo?.uuid;
-    final data = await BaseApi.RequestEmpty_h
+    final data = await BaseApi.requestEmptyH
         .post('$url/v1/friend/blacklist/remove', params: {}, data: params,header: header,);
     return data;
   }
@@ -212,7 +212,7 @@ class ChatApi{
     Map<String, dynamic> params = {};
     params["uuid"] = AppGlobals.userInfo?.uuid;
     final data =
-    await BaseApi.RequestEmpty_h.post('$url/v1/friend/blacklist', params: {}, data: params,header: header,);
+    await BaseApi.requestEmptyH.post('$url/v1/friend/blacklist', params: {}, data: params,header: header,);
     return data;
   }
 
@@ -238,7 +238,7 @@ class ChatApi{
     params["group_name"] = groupName;
     params["extra"] = extra;
     final data =
-    await BaseApi.RequestEmpty_h.post('$url/v1/group/create', params: params, data: params,header: header,);
+    await BaseApi.requestEmptyH.post('$url/v1/group/create', params: params, data: params,header: header,);
     return data;
   }
 
@@ -247,7 +247,7 @@ class ChatApi{
     Map<String, dynamic> params = {};
     params["g_uuid"] = gid;
     params["m_uuid"] = AppGlobals.userInfo?.uuid;
-    final data = await BaseApi.RequestEmpty_h
+    final data = await BaseApi.requestEmptyH
         .post('$url/v1/group/info/query', params: params, data: params,header: header,);
     return data;
   }
@@ -263,7 +263,7 @@ class ChatApi{
     params["g_uuid"] = gUuid;
     params["g_name"] = groupName;
     params["m_uuid"] = mUuid;
-    final data = await BaseApi.RequestEmpty_h
+    final data = await BaseApi.requestEmptyH
         .post('$url/v1/group/info/update', params: params, data: params,header: header,);
     return data;
   }
@@ -280,7 +280,7 @@ class ChatApi{
     params["g_uuid"] = gUuid;
     params["inviter"] = inviter;
     params["members"] = members;
-    final data = await BaseApi.RequestEmpty_h
+    final data = await BaseApi.requestEmptyH
         .post('$url/v1/group/members/add', params: params, data: params,header: header,);
     return data;
   }
@@ -298,7 +298,7 @@ class ChatApi{
     params["admin"] = AppGlobals.userInfo?.uuid;
     params["g_uuid"] = gUuid;
     params["members"] = members;
-    final data = await BaseApi.RequestEmpty_h
+    final data = await BaseApi.requestEmptyH
         .post('$url/v1/group/members/delete', params: params, data: params,header: header,);
     return data;
   }
@@ -311,7 +311,7 @@ class ChatApi{
     Map<String, dynamic> params = {};
     params["g_uuid"] = gUuid;
     params["m_uuid"] = mUuid;
-    final data = await BaseApi.RequestEmpty_h
+    final data = await BaseApi.requestEmptyH
         .post('$url/v1/group/members/query', params: params, data: params,header: header,);
     return data;
   }
@@ -325,7 +325,7 @@ class ChatApi{
     params["g_uuid"] = gUuid;
     params["o_uuid"] = mUuid;
     final data =
-    await BaseApi.RequestEmpty_h.post('$url/v1/group/disband', params: params, data: params,header: header,);
+    await BaseApi.requestEmptyH.post('$url/v1/group/disband', params: params, data: params,header: header,);
     return data;
   }
 
@@ -337,7 +337,7 @@ class ChatApi{
     Map<String, dynamic> params = {};
     params["g_uuid"] = gUuid;
     params["l_uuid"] = mUuid;
-    final data = await BaseApi.RequestEmpty_h
+    final data = await BaseApi.requestEmptyH
         .post('$url/v1/group/user/leave', params: params, data: params,header: header,);
     return data;
   }
@@ -349,7 +349,7 @@ class ChatApi{
     params["user_id"] = mUuid;
     params["seq"] = seq;
     final data =
-    await BaseApi.RequestEmpty_h.post('$url/v1/group/msg/ack', params: params, data: params,header: header,);
+    await BaseApi.requestEmptyH.post('$url/v1/group/msg/ack', params: params, data: params,header: header,);
     return data;
   }
 
@@ -358,7 +358,7 @@ class ChatApi{
   Future groupOfflineLastMsg() async {
     Map<String, dynamic> params = {};
     params["uuid"] = AppGlobals.userInfo?.uuid;
-    final data = await BaseApi.RequestEmpty_h
+    final data = await BaseApi.requestEmptyH
         .post('$url/v1/group/msg/offline/last', params: params, data: params,header: header,);
     return data;
   }
@@ -369,7 +369,7 @@ class ChatApi{
     params["g_uuid"] = gUuid;
     params["last_seq"] = lastSeq;
     params["m_uuid"] = AppGlobals.userInfo?.uuid;
-    final data = await BaseApi.RequestEmpty_h
+    final data = await BaseApi.requestEmptyH
         .post('$url/v1/group/msg/offline/total', params: params, data: params,header: header,);
     return data;
   }
@@ -381,7 +381,7 @@ class ChatApi{
     params["g_uuid"] = gUuid;
     params["data"] = ssList;
     final data =
-    await BaseApi.RequestEmpty_h.post('$url/v1/group/upload/ss', params: {}, data: params,header: header,);
+    await BaseApi.requestEmptyH.post('$url/v1/group/upload/ss', params: {}, data: params,header: header,);
     return data;
   }
 
@@ -391,7 +391,7 @@ class ChatApi{
     params["g_uuid"] = gUuid;
     params["m_uuid"] = AppGlobals.userInfo?.uuid;
     final data =
-    await BaseApi.RequestEmpty_h.post('$url/v1/group/query/ss', params: params, data: params,header: header,);
+    await BaseApi.requestEmptyH.post('$url/v1/group/query/ss', params: params, data: params,header: header,);
     return data;
   }
 
@@ -403,7 +403,7 @@ class ChatApi{
     params["last_seq"] = lastSeq;
     params["m_uuid"] = AppGlobals.userInfo?.uuid;
     params["msg_num"] = 100;
-    final data = await BaseApi.RequestEmpty_h
+    final data = await BaseApi.requestEmptyH
         .post('$url/v1/group/msg/offline/part', params: params, data: params,header: header,);
     return data;
   }
@@ -418,7 +418,7 @@ class ChatApi{
     params["email"] = AppGlobals.userInfo?.email;
     params["tag"] = tag;
     params["target_uuid"] = targetUuid;
-    final data = await BaseApi.RequestEmpty_h
+    final data = await BaseApi.requestEmptyH
         .post('$url/v1/chat/message/report', params: params, data: params,header: header,);
     return data;
   }

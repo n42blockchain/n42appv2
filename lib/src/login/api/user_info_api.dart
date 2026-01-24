@@ -22,7 +22,7 @@ class UserInfoApi{
     params["pwd"] = password;
     params["source"] = "app";
     final data =
-    await BaseApi.RequestEmpty_h.post('$url/v1/user/loginEmail', params: {}, data: params,header: header);
+    await BaseApi.requestEmptyH.post('$url/v1/user/loginEmail', params: {}, data: params,header: header);
     return data;
   }
   //获取支付验证码
@@ -34,7 +34,7 @@ class UserInfoApi{
         "token":AppGlobals.userInfo?.token??"",
       };
       MessageModel mm=MessageModel();
-      final data=await BaseApi.RequestEmpty_h.post('$url/v1/l/user/send/pay/email/code', params:{},data: postMap,header: header);
+      final data=await BaseApi.requestEmptyH.post('$url/v1/l/user/send/pay/email/code', params:{},data: postMap,header: header);
       if(data['code']==200){
         mm.data=true;
       }else{
@@ -58,7 +58,7 @@ class UserInfoApi{
         "token":AppGlobals.userInfo?.token??"",
       };
       MessageModel mm=MessageModel();
-      final data=await BaseApi.RequestEmpty_h.post('$url/v1/l/user/verify/pay/email/code', params:{},data: postMap,header: header);
+      final data=await BaseApi.requestEmptyH.post('$url/v1/l/user/verify/pay/email/code', params:{},data: postMap,header: header);
       if(data['code']==200){
         mm.data=true;
       }else{
@@ -80,7 +80,7 @@ class UserInfoApi{
     params["mobile_model"] = mobileModel;
     params["mobile_name"] = mobileName;
     params["os"] = os;
-    final data = await BaseApi.RequestEmpty_h.get(
+    final data = await BaseApi.requestEmptyH.get(
         '$url/v1/r/user/inviter/code',
         params: params,header: header
     );
@@ -101,11 +101,11 @@ class UserInfoApi{
       'token': AppGlobals.userInfo?.token??"",
       'source': 'app',
     });
-    Map<String,String> header_v2={'content-type': 'multipart/form-data'};
-    final data = await BaseApi.RequestEmpty_h.post(
+    Map<String,String> headerV2={'content-type': 'multipart/form-data'};
+    final data = await BaseApi.requestEmptyH.post(
         '$url/v1/l/user/send/account/cancel/email/code',
         params: {},
-        data: formData,header: header_v2);
+        data: formData,header: headerV2);
     return data;
   }
   ///发送验证码
@@ -114,7 +114,7 @@ class UserInfoApi{
     Map params = {};
     params["email"] = email;
     params["type"] = type;
-    final data = await BaseApi.RequestEmpty_h
+    final data = await BaseApi.requestEmptyH
         .post('$url/v1/user/sendEmailCode', params: {}, data: params,header: header);
     return data;
   }
@@ -128,7 +128,7 @@ class UserInfoApi{
     params["code"] = code;
     //params["invite"] = inviteCode;
     params["invite_code"] = inviteCode;
-    final data = await BaseApi.RequestEmpty_h
+    final data = await BaseApi.requestEmptyH
         .post('$url/v1/user/registerEmail', params: {}, data: params,header: header);
     return data;
   }
@@ -139,7 +139,7 @@ class UserInfoApi{
     params["email"] = email;
     params["pwd"] = password;
     params["code"] = code;
-    final data = await BaseApi.RequestEmpty_h
+    final data = await BaseApi.requestEmptyH
         .post('$url/v1/user/emailResetPwd', params: {}, data: params,header: header);
     return data;
   }
@@ -149,13 +149,13 @@ class UserInfoApi{
       userInfo['source']="app";
       userInfo['token']=AppGlobals.userInfo?.token??"";
       final formData = FormData.fromMap(userInfo);
-      Map<String,String> header_v2={'content-type': 'multipart/form-data'};
+      Map<String,String> headerV2={'content-type': 'multipart/form-data'};
       MessageModel mm=MessageModel();
-      final data=await BaseApi.RequestEmpty_h.post(
+      final data=await BaseApi.requestEmptyH.post(
         '$url/v1/l/user/info',
         params: {},
         data: formData,
-        header: header_v2,
+        header: headerV2,
         addUserInfo: true
       );
       if(data['code']==200){
@@ -178,7 +178,7 @@ class UserInfoApi{
     params["token"] = AppGlobals.userInfo?.token??"";
     params["uuid"] = AppGlobals.userInfo?.uuid??"";
     params["source"] = "app";
-    final data = await BaseApi.RequestEmpty_h
+    final data = await BaseApi.requestEmptyH
         .post('$url/v1/l/user/account/cancel', params: {}, data: params,header: header);
     return data;
   }
@@ -187,7 +187,7 @@ class UserInfoApi{
     Map<String, dynamic> params = {
       "uuid": uuid,
     };
-    final data = await BaseApi.RequestEmpty_h.get(
+    final data = await BaseApi.requestEmptyH.get(
         '$url/v1/r/user/invitee/mining/fullnode',
         params: params,header: header
     );
@@ -201,7 +201,7 @@ class UserInfoApi{
     Map<String, dynamic> params = {
       "uuid": uuid,
     };
-    final data = await BaseApi.RequestEmpty_h.get(
+    final data = await BaseApi.requestEmptyH.get(
         '$url/v1/r/user/invitee/mining',
         params: params,header: header
     );
@@ -219,7 +219,7 @@ class UserInfoApi{
       "page_size": pagesize,
       "page_num": pagenum,
     };
-    final data = await BaseApi.RequestEmpty_h.get(
+    final data = await BaseApi.requestEmptyH.get(
         '$url/v1/r/user/invitee/list/download',
         params: params,header: header
     );
@@ -233,7 +233,7 @@ class UserInfoApi{
   Future getInviteeList(String uuid) async {
     Map<String, dynamic> params = {};
     params["uuid"] = uuid;
-    final data = await BaseApi.RequestEmpty_h.get(
+    final data = await BaseApi.requestEmptyH.get(
         '$url/v1/r/user/invitee/list',
         params: params,header: header
     );
@@ -258,7 +258,7 @@ class UserInfoApi{
         "extra":extra,
       };
 
-      mm.data=await BaseApi.RequestEmpty_h.post('$url/v1/l/feedback',params: {},data:dt ,header: header,addUserInfo: true);
+      mm.data=await BaseApi.requestEmptyH.post('$url/v1/l/feedback',params: {},data:dt ,header: header,addUserInfo: true);
       return mm;
     }catch(e){
       MessageModel mm=MessageModel.error();
@@ -273,7 +273,7 @@ class UserInfoApi{
     params["uuid"] = uuid;
     params["token"] = token;
     params["source"] = "app";
-    final data = await BaseApi.RequestEmpty_h.get(
+    final data = await BaseApi.requestEmptyH.get(
         '$url/v1/r/user/getUserInfo',
         params: params,header: header
     );
@@ -292,7 +292,7 @@ class UserInfoApi{
         params['chain']=chain;
       }
       MessageModel mm=MessageModel();
-      final data=await BaseApi.RequestEmpty_h.get('$url/v1/r/user/info', params: params,header: header);
+      final data=await BaseApi.requestEmptyH.get('$url/v1/r/user/info', params: params,header: header);
       if(data['code']==200){
         mm.data=data['data'];
       }else{
@@ -311,7 +311,7 @@ class UserInfoApi{
     try {
       MessageModel mm = MessageModel();
       final data =
-      await BaseApi.RequestEmpty_h.get('$url/v1/lr/get/msg/notice/list', params: {
+      await BaseApi.requestEmptyH.get('$url/v1/lr/get/msg/notice/list', params: {
         "uuid":AppGlobals.userInfo?.uuid??"",
         "page":page,
         "page_size":pageSize,
@@ -341,7 +341,7 @@ class UserInfoApi{
         "token":AppGlobals.userInfo?.token??"",
       };
       MessageModel mm=MessageModel();
-      final data=await BaseApi.RequestEmpty_h.post('$url/v1/l/user/bind/google/auth/code', params:{},data: postMap,header: header);
+      final data=await BaseApi.requestEmptyH.post('$url/v1/l/user/bind/google/auth/code', params:{},data: postMap,header: header);
       if(data['code']==200){
         mm.data=data['data'];
       }else{
@@ -365,7 +365,7 @@ class UserInfoApi{
         "source":"app",
       };
       MessageModel mm=MessageModel();
-      final data=await BaseApi.RequestEmpty_h.post('$url/v1/l/user/verify/google/auth/code', params:{},data: postMap,header: header);
+      final data=await BaseApi.requestEmptyH.post('$url/v1/l/user/verify/google/auth/code', params:{},data: postMap,header: header);
       if(data['code']==200){
         mm.data=true;
       }else{
@@ -386,7 +386,7 @@ class UserInfoApi{
     params["uuid"] = AppGlobals.userInfo?.uuid??"";
     params["token"] = AppGlobals.userInfo?.token??"";
     params["source"] = "app";
-    final data = await BaseApi.RequestEmpty_h.post(
+    final data = await BaseApi.requestEmptyH.post(
         '$url/v1/l/file/bind/firebase/token',
         params: {},
         data: params,header: header

@@ -14,7 +14,7 @@ class DotApi{
       Map<String,dynamic> pMap={
         "address":address
       };
-      final data=await BaseApi.RequestEmpty_h.post(url, params: {},data: pMap,header: {"x-api-key":"2b9bd66238b546acafe57b2a05ff97e0"});
+      final data=await BaseApi.requestEmptyH.post(url, params: {},data: pMap,header: {"x-api-key":"2b9bd66238b546acafe57b2a05ff97e0"});
       if(data['code'] !=0){
         mm.error=true;
         mm.data="error";
@@ -82,7 +82,7 @@ class DotApi{
     try{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};
-      final data=await BaseApi.RequestEmpty_h.post(RequestUrl().getUrl2(CoinType.DOT.name, "rpc",isTest: isTest), params: {},data: postData);
+      final data=await BaseApi.requestEmptyH.post(RequestUrl().getUrl2(CoinType.DOT.name, "rpc",isTest: isTest), params: {},data: postData);
       if(data.containsKey('error')){
         mm.error=true;
         mm.data=data['error']['message'];

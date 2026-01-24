@@ -52,7 +52,7 @@ class FileApi {
       );
       //String fileName = f.filename!;
       FormData fd = FormData.fromMap({"path": f});
-      var data = await BaseApi.RequestEmpty_h.post(
+      var data = await BaseApi.requestEmptyH.post(
         "$url/ipfsapi/api/v0/add",
         //"${AppConfig.apiUrl['ipfsHost']}/upload",
         params: {},
@@ -97,7 +97,7 @@ class FileApi {
       MultipartFile f = MultipartFile.fromString(json.encode(map),
           filename: "squad_message.json");
       FormData fd = FormData.fromMap({"file": f});
-      var data = await BaseApi.RequestEmpty_h.post(
+      var data = await BaseApi.requestEmptyH.post(
         "$url/ipfsapi/api/v0/add",
         //"${getUrl('ipfs')}v0/add?stream-channels=false&progress=false",
         params: {}, data: fd,header: header,
@@ -132,7 +132,7 @@ class FileApi {
   //根据 uri 获取上传到ipfs的信息
   getMessageByUriFromIpfs(String uri) async {
     try {
-      var data = await BaseApi.RequestEmpty_h.get(uri, params: {});
+      var data = await BaseApi.requestEmptyH.get(uri, params: {});
       return {"error": false, "data": data};
     } on DioException catch (_) {
       throw "Network exception";

@@ -41,10 +41,10 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
     _eventSubscription=eventBus.on().listen((event) async {
       if (event is! EventPublic) return;
       if (event.type == EventPublicType.selectWallet) {
-        await initData_wallet(EventPublicType.selectWallet);
+        await initDataWallet(EventPublicType.selectWallet);
       }
       if (event.type == EventPublicType.selectMiningWallet) {
-        await initData_wallet(EventPublicType.selectMiningWallet);
+        await initDataWallet(EventPublicType.selectMiningWallet);
       }
     });
   }
@@ -53,7 +53,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
     var mv2=Provider.of<MiningV2Provider>(context,listen: false);
     await mv2.loadMiningData();
   }
-  Future<void> initData_wallet(EventPublicType pt)async{
+  Future<void> initDataWallet(EventPublicType pt)async{
     MiningV2Provider mp=Provider.of<MiningV2Provider>(context,listen: false);
     if(pt==EventPublicType.selectWallet){
       if(mp.depositsEnable !=null)return;
@@ -679,7 +679,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
           Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: isEnabled ? () => MiningBackground().background_start() : null,
+              onTap: isEnabled ? () => MiningBackground().backgroundStart() : null,
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
               child: Container(
                 padding: EdgeInsets.symmetric(

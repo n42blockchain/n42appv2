@@ -15,7 +15,7 @@ class XlmApi {
   /// Get account balance
   Future<MessageModel> getBalance(String address) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_baseUrl/accounts/$address',
         params: {},
         header: {'Accept': 'application/json'},
@@ -47,7 +47,7 @@ class XlmApi {
   /// Get account info including sequence number
   Future<MessageModel> getAccountInfo(String address) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_baseUrl/accounts/$address',
         params: {},
         header: {'Accept': 'application/json'},
@@ -75,7 +75,7 @@ class XlmApi {
   /// Get current base fee
   Future<MessageModel> getBaseFee() async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_baseUrl/fee_stats',
         params: {},
         header: {'Accept': 'application/json'},
@@ -99,7 +99,7 @@ class XlmApi {
   /// Submit signed transaction
   Future<MessageModel> submitTransaction(String signedTxXdr) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         '$_baseUrl/transactions',
         params: {'tx': signedTxXdr},
         data: {'tx': signedTxXdr},
@@ -127,7 +127,7 @@ class XlmApi {
   /// Get transaction history
   Future<MessageModel> getTransactions(String address, {int limit = 20}) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_baseUrl/accounts/$address/transactions',
         params: {'limit': limit.toString(), 'order': 'desc'},
         header: {'Accept': 'application/json'},

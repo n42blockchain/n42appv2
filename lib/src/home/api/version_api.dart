@@ -17,7 +17,7 @@ class VersionApi{
     Map<String, dynamic> params = {};
     params["source"] = "app";
     params["app"] = Platform.isIOS ? "ios" : "android";
-    final data = await BaseApi.RequestEmpty_h.get(
+    final data = await BaseApi.requestEmptyH.get(
         '/v1/r/static/app/version',
         params: params,header: header
     );

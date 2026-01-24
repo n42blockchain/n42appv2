@@ -94,7 +94,7 @@ class _MiningImportState extends State<MiningImport> {
       }
       secretMap['isMining']=isMining;
       if (!mounted) return;
-      MessageModel rmm=await Provider.of<MiningV2Provider>(context,listen: false).setMiningData_import(secretMap,password);
+      MessageModel rmm=await Provider.of<MiningV2Provider>(context,listen: false).setMiningDataImport(secretMap,password);
       if (!mounted) return;
       String messageStr=S.of(context).g_mining_key_104;
       if(rmm.error){

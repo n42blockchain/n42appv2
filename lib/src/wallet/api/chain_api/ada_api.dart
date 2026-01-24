@@ -28,7 +28,7 @@ class AdaApi {
   /// Get account info (stake address)
   Future<MessageModel> getAccountInfo(String stakeAddress) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_baseUrl/accounts/$stakeAddress',
         params: {},
         header: _headers,
@@ -60,7 +60,7 @@ class AdaApi {
   /// Get address UTXOs
   Future<MessageModel> getAddressUtxos(String address) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_baseUrl/addresses/$address/utxos',
         params: {},
         header: _headers,
@@ -105,7 +105,7 @@ class AdaApi {
   /// Get address balance (sum of UTXOs)
   Future<MessageModel> getBalance(String address) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_baseUrl/addresses/$address',
         params: {},
         header: _headers,
@@ -138,7 +138,7 @@ class AdaApi {
   /// Get current protocol parameters (for fee calculation)
   Future<MessageModel> getProtocolParameters() async {
     try {
-      final latestEpoch = await BaseApi.RequestEmpty_h.get(
+      final latestEpoch = await BaseApi.requestEmptyH.get(
         '$_baseUrl/epochs/latest',
         params: {},
         header: _headers,
@@ -150,7 +150,7 @@ class AdaApi {
         return mm;
       }
 
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_baseUrl/epochs/${latestEpoch['epoch']}/parameters',
         params: {},
         header: _headers,
@@ -179,7 +179,7 @@ class AdaApi {
   /// Get latest block info (for TTL calculation)
   Future<MessageModel> getLatestBlock() async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_baseUrl/blocks/latest',
         params: {},
         header: _headers,
@@ -207,7 +207,7 @@ class AdaApi {
   /// Submit signed transaction
   Future<MessageModel> submitTransaction(String signedTxHex) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         '$_baseUrl/tx/submit',
         data: signedTxHex,
         header: {
@@ -237,7 +237,7 @@ class AdaApi {
   /// Get transaction info by hash
   Future<MessageModel> getTransaction(String txHash) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_baseUrl/txs/$txHash',
         params: {},
         header: _headers,
@@ -261,7 +261,7 @@ class AdaApi {
   /// Get transaction UTXOs
   Future<MessageModel> getTransactionUtxos(String txHash) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_baseUrl/txs/$txHash/utxos',
         params: {},
         header: _headers,

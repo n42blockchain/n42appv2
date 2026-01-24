@@ -15,7 +15,7 @@ class NearApi {
   /// Get account balance
   Future<MessageModel> getBalance(String accountId) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _baseUrl,
         params: {},
         data: {
@@ -54,7 +54,7 @@ class NearApi {
   /// Get access key (for nonce)
   Future<MessageModel> getAccessKey(String accountId, String publicKey) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _baseUrl,
         params: {},
         data: {
@@ -96,7 +96,7 @@ class NearApi {
   /// Get latest block hash
   Future<MessageModel> getLatestBlockHash() async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _baseUrl,
         params: {},
         data: {
@@ -129,7 +129,7 @@ class NearApi {
   /// Send signed transaction
   Future<MessageModel> sendTransaction(String signedTxBase64) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _baseUrl,
         params: {},
         data: {
@@ -170,7 +170,7 @@ class NearApi {
   /// Get transaction status
   Future<MessageModel> getTransactionStatus(String txHash, String senderId) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _baseUrl,
         params: {},
         data: {
@@ -200,7 +200,7 @@ class NearApi {
   /// Get gas price
   Future<MessageModel> getGasPrice() async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _baseUrl,
         params: {},
         data: {

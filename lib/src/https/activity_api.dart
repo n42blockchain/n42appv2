@@ -17,7 +17,7 @@ class ActivityApi {
         "event": event,
         "data": nftData,
       };
-      final data = await BaseApi.RequestEmpty_h
+      final data = await BaseApi.requestEmptyH
           .post('$url/w/collect/push', params: {}, data: postData,header: header,);
       if (data['code'] == 200) {
         mm.data = true;
@@ -40,7 +40,7 @@ class ActivityApi {
         "event": event,
         "data": nftData,
       };
-      final data = await BaseApi.RequestEmpty_h
+      final data = await BaseApi.requestEmptyH
           .post('$url/w/collect/delay/push', params: {}, data: postData,header: header,);
       if (data['code'] == 200) {
         mm.data = true;
@@ -56,10 +56,10 @@ class ActivityApi {
     }
   }
   //数据收集接口，修改 用户创建的NFT
-  collectPush_update(Map<String, dynamic> nftData)async{
+  collectPushUpdate(Map<String, dynamic> nftData)async{
     try {
       MessageModel mm = MessageModel();
-      final data = await BaseApi.RequestEmpty_h
+      final data = await BaseApi.requestEmptyH
           .post('$url/w/collect/update', params: {}, data: nftData,header: header,);
       if (data['code'] == 200) {
         mm.data = true;

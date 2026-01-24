@@ -281,7 +281,7 @@ class EthAPI{
       }else{
         url=RequestUrl().getUrl2(coinType, "rpc",isTest: isTest);
       }
-      final data=await BaseApi.RequestEmpty_h.post(url, params: {},data: postData);
+      final data=await BaseApi.requestEmptyH.post(url, params: {},data: postData);
       if(data.containsKey('error')){
         mm.error=true;
         mm.data=data['error'];
@@ -301,7 +301,7 @@ class EthAPI{
     try{
       MessageModel mm=MessageModel();
 
-      final data=await Api.RequestEmpty_h.get(Api.getUrl2(coinType, "api",isTest:isTest ), params: {
+      final data=await Api.requestEmptyH.get(Api.getUrl2(coinType, "api",isTest:isTest ), params: {
         "module":"contract",
         "action":"getabi",
         "address":address,
@@ -324,7 +324,7 @@ class EthAPI{
     try{
       MessageModel mm=MessageModel();
 
-      final data=await Api.RequestEmpty_h.get(Api.getUrl2(coinType, "api",isTest:isTest ), params: {
+      final data=await Api.requestEmptyH.get(Api.getUrl2(coinType, "api",isTest:isTest ), params: {
         "module":"token",
         "action":"tokeninfo",
         "address":address,
@@ -374,7 +374,7 @@ class EthAPI{
       }else{
         url=RequestUrl().getUrl2(coinType, "api",isTest: isTest);
       }
-      var data=await BaseApi.RequestEmpty_h.get(url, params: params,);
+      var data=await BaseApi.requestEmptyH.get(url, params: params,);
       if(data.containsKey('error')){
         mm.error=true;
         mm.data=data['error'];

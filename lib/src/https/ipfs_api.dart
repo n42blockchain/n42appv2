@@ -17,7 +17,7 @@ class IpfsApi{
   //获取ipfs图片信息
   getIPFSImageInfo(String uri)async{
     try{
-      var data=await BaseApi.RequestEmpty_h.get(uri, params: {});
+      var data=await BaseApi.requestEmptyH.get(uri, params: {});
       return {"error":false,"data":data};
     }
     catch(e){
@@ -49,7 +49,7 @@ class IpfsApi{
       String password = 'Z,p7=f#|q5JkmeyL';
       String basicAuth =
           'Basic ${base64Encode(utf8.encode('$username:$password'))}';
-      var data=await BaseApi.RequestEmpty_h.post(
+      var data=await BaseApi.requestEmptyH.post(
         //"${AppConfig.apiUrl['ipfsHost']}/upload",///ipfs/api/v0/add
         "${AppConfig.apiUrl['ipfsHost']}/ipfsapi/api/v0/add",
         params: {},
@@ -87,7 +87,7 @@ class IpfsApi{
     try{
       MultipartFile f=MultipartFile.fromString(json.encode(map),filename: filename);
       FormData fd=FormData.fromMap({"file":f});
-      var data=await BaseApi.RequestEmpty_h.post(
+      var data=await BaseApi.requestEmptyH.post(
         "${AppConfig.apiUrl['ipfsHost']}/upload",
         //"${getUrl('ipfs')}v0/add?stream-channels=false&progress=false",
         params: {},data: fd,

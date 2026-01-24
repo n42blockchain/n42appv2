@@ -161,7 +161,7 @@ class TransactionApi {
         return mm;
       }
       final url = '${hostUrl}addrs/$address';
-      var data = await BaseApi.RequestEmpty_h.get(url, params: {},header: header);
+      var data = await BaseApi.requestEmptyH.get(url, params: {},header: header);
       if (data != null) {
         BtcResponse res = BtcResponse.fromJson(data);
         List<Txref> txrefs = res.txrefs;
@@ -174,7 +174,7 @@ class TransactionApi {
             }
           }
           final innerUrl = '${hostUrl}txs/${element.txHash}';
-          var inData = await BaseApi.RequestEmpty_h.get(innerUrl, params: {});
+          var inData = await BaseApi.requestEmptyH.get(innerUrl, params: {});
           if (inData != null) {
             BtcTranDetail bd = BtcTranDetail.fromJson(inData);
             //CommonResponseItemModel item = CommonResponseItemModel();
@@ -219,7 +219,7 @@ class TransactionApi {
           '${hostUrl}account/solTransfers?account=$address&limit=$offset&offset=$page';
       Map<String,String> h=header;
       h['token']="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE3MjI4NDg0NTUxODAsImVtYWlsIjoiamlhbmd5aXdlaUBzdGFybGluay13b3JsZC5jbiIsImFjdGlvbiI6InRva2VuLWFwaSIsImFwaVZlcnNpb24iOiJ2MSIsImlhdCI6MTcyMjg0ODQ1NX0.nN1kusKNvwXb_SUnpFrhsHoYfUuArbiLqC4HHk5UnNI";
-      var data = await BaseApi.RequestEmpty_h.get(requestUrl, params: {},header: h);
+      var data = await BaseApi.requestEmptyH.get(requestUrl, params: {},header: h);
       if (data != null) {
         final res = data['data'];
         List<SOLTransactionItem> list =
@@ -252,7 +252,7 @@ class TransactionApi {
       String requestUrl ='${hostUrl}transaction?address=$address&limit=$offset&start=$page&sort=-timestamp&count=true';
       Map<String,String> h=header;
       h['TRON-PRO-API-KEY']="1908ecd1-99f1-4480-9353-c5a643b907b4";
-      var data = await BaseApi.RequestEmpty_h.get(requestUrl, params: {},header: h);
+      var data = await BaseApi.requestEmptyH.get(requestUrl, params: {},header: h);
       if (data != null) {
         final res = data['data'];
         List<CommonResponseItemModel> list =
@@ -302,7 +302,7 @@ class TransactionApi {
           //'${hostUrl}token_trc20/transfers?relatedAddress=$address&contract_address=$contractAddress&limit=$offset&start=$page&sort=-timestamp&count=true';
       Map<String,String> h=header;
       h['TRON-PRO-API-KEY']="1908ecd1-99f1-4480-9353-c5a643b907b4";
-      var data = await BaseApi.RequestEmpty_h.get(requestUrl, params: {},header: h);
+      var data = await BaseApi.requestEmptyH.get(requestUrl, params: {},header: h);
       if (data != null) {
         final res = data['data'];
         List<CommonResponseItemModel> list =
@@ -344,7 +344,7 @@ class TransactionApi {
       //'${hostUrl}token_trc20/transfers?relatedAddress=$address&contract_address=$contractAddress&limit=$offset&start=$page&sort=-timestamp&count=true';
       Map<String,String> h=header;
       h['TRON-PRO-API-KEY']="1908ecd1-99f1-4480-9353-c5a643b907b4";
-      var data = await BaseApi.RequestEmpty_h.get(requestUrl, params: {},header: h);
+      var data = await BaseApi.requestEmptyH.get(requestUrl, params: {},header: h);
       if (data != null) {
         mm.data= data;
       } else {
@@ -382,7 +382,7 @@ class TransactionApi {
       }
       String requestUrl =
           '${hostUrl}module=account&action=txlist&address=$address&startblock=$fromBlock&page=$page&offset=$offset&sort=desc$endblockStr';
-      var data = await BaseApi.RequestEmpty_h.get(requestUrl, params: {},header: header);
+      var data = await BaseApi.requestEmptyH.get(requestUrl, params: {},header: header);
 
       if (data != null && data["status"] == '1') {
         final response = data["result"];
@@ -417,7 +417,7 @@ class TransactionApi {
       }
       String requestUrl =
           '${hostUrl}address/normal/tx/list?coin=$miniName&addr=$address&page=$page&page_size=$offset';
-      var data = await BaseApi.RequestEmpty_h.get(requestUrl, params: {},header: header);
+      var data = await BaseApi.requestEmptyH.get(requestUrl, params: {},header: header);
       if (data != null && data["status"] == '1') {
         final response = data["result"];
         List<CommonResponseItemModel> list =
@@ -455,7 +455,7 @@ class TransactionApi {
       }
       String requestUrl =
           '${hostUrl}module=account&action=tokentx&address=$address&contractaddress=$contractAddress&startblock=$fromBlock&endblock=$endBlock&page=$page&offset=$offset&sort=desc';
-      var data = await BaseApi.RequestEmpty_h.get(requestUrl, params: {},header: header);
+      var data = await BaseApi.requestEmptyH.get(requestUrl, params: {},header: header);
       if (data != null && data["status"] == '1') {
         final response = data["result"];
         /*List<BNBItemModel> list = (response as List)
@@ -496,7 +496,7 @@ class TransactionApi {
         String requestUrl =
             '${hostUrl}account/splTransfers?account=${address}&limit=${offset}&offset=${page}';
 
-        var data = await BaseApi.RequestEmpty_h.get(requestUrl, params: {},header: header);
+        var data = await BaseApi.requestEmptyH.get(requestUrl, params: {},header: header);
 
         if (data != null) {
           final res = data['data'];

@@ -63,7 +63,7 @@ class TonApi{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};
 
-      final data=await BaseApi.RequestEmpty_h.post(url+path, params: {},data: postData);
+      final data=await BaseApi.requestEmptyH.post(url+path, params: {},data: postData);
       if(data['ok']==false){
         mm.error=true;
         mm.data=data['error'];
@@ -81,7 +81,7 @@ class TonApi{
     try{
       MessageModel mm=MessageModel();
 
-      final data=await BaseApi.RequestEmpty_h.post(url+path, params: {},data: value,header: {'x-api-key':apiKey,'Content-Type':'application/json'});
+      final data=await BaseApi.requestEmptyH.post(url+path, params: {},data: value,header: {'x-api-key':apiKey,'Content-Type':'application/json'});
       if(data['ok']==false){
         mm.error=true;
         mm.data=data['error'];

@@ -9,7 +9,7 @@ import 'package:n42appv2/core/security/security_config.dart';
 
 class BaseHttp {
   String baseUrl;
-  String baseUrl_test;
+  String baseUrlTest;
 
   // 创建 Dio 实例
   late Dio _dio;
@@ -23,7 +23,7 @@ class BaseHttp {
   Map<String,String> headerMap={};
   //构造方法
   //传入正式地址和测试地址
-  BaseHttp(this.baseUrl, this.baseUrl_test,this.headerMap, {this.headerThype=0,}) {
+  BaseHttp(this.baseUrl, this.baseUrlTest,this.headerMap, {this.headerThype=0,}) {
     _options = setBaseOptions();
     _dio = Dio(_options);
     // 配置 HttpClientAdapter 使用安全配置进行 SSL 证书验证
@@ -65,7 +65,7 @@ class BaseHttp {
   }
 
   //设置dio的baseUrl
-  //isTest：是否使用测试地址，也就是baseUrl_test的地址，默认是false，使用正式地址
+  //isTest：是否使用测试地址，也就是baseUrlTest的地址，默认是false，使用正式地址
   setBaseOptions({bool isTest = false}) {
     Map<String, String> header = {};
     if (headerThype == 0) {
@@ -80,7 +80,7 @@ class BaseHttp {
       header['Authorization']=authorizationKey;
     }*/
     return BaseOptions(
-      baseUrl: AppConfig.isOnline ? baseUrl : baseUrl_test,
+      baseUrl: AppConfig.isOnline ? baseUrl : baseUrlTest,
       connectTimeout: Duration(milliseconds: 60000),
       receiveTimeout: Duration(milliseconds: 60000),
       headers: header,

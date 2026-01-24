@@ -72,7 +72,7 @@ class SolApi{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};
       String url=RequestUrl().getUrl2(CoinType.SOL.name, "rpc",isTest: isTest);
-      final data=await BaseApi.RequestEmpty_h.post(url, params: {},data: postData);
+      final data=await BaseApi.requestEmptyH.post(url, params: {},data: postData);
       if(data.containsKey('error')){
         mm.error=true;
         mm.data=data['message'];

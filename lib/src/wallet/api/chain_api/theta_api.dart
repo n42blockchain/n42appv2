@@ -20,7 +20,7 @@ class ThetaApi {
   /// Get account balance (THETA and TFUEL) via EVM RPC
   Future<MessageModel> getBalance(String address) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _rpcUrl,
         params: {},
         data: {
@@ -57,7 +57,7 @@ class ThetaApi {
   /// Get account info from explorer API (includes THETA and TFUEL balances)
   Future<MessageModel> getAccountInfo(String address) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.get(
+      final response = await BaseApi.requestEmptyH.get(
         '$_explorerUrl/account/$address',
         params: {},
         header: {'Accept': 'application/json'},
@@ -86,7 +86,7 @@ class ThetaApi {
   /// Get transaction count (nonce) via EVM RPC
   Future<MessageModel> getTransactionCount(String address) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _rpcUrl,
         params: {},
         data: {
@@ -120,7 +120,7 @@ class ThetaApi {
   /// Get gas price via EVM RPC
   Future<MessageModel> getGasPrice() async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _rpcUrl,
         params: {},
         data: {
@@ -154,7 +154,7 @@ class ThetaApi {
   /// Send raw transaction via EVM RPC
   Future<MessageModel> sendTransaction(String rawTx) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _rpcUrl,
         params: {},
         data: {
@@ -187,7 +187,7 @@ class ThetaApi {
   /// Get transaction by hash via EVM RPC
   Future<MessageModel> getTransactionByHash(String txHash) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _rpcUrl,
         params: {},
         data: {
@@ -217,7 +217,7 @@ class ThetaApi {
   /// Get transaction receipt via EVM RPC
   Future<MessageModel> getTransactionReceipt(String txHash) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _rpcUrl,
         params: {},
         data: {
@@ -247,7 +247,7 @@ class ThetaApi {
   /// Get block number via EVM RPC
   Future<MessageModel> getBlockNumber() async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _rpcUrl,
         params: {},
         data: {

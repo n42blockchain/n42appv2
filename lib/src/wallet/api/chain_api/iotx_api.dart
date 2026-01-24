@@ -17,7 +17,7 @@ class IotxApi {
   /// Get account balance (native IOTX) via EVM RPC
   Future<MessageModel> getBalance(String address) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _evmUrl,
         params: {},
         data: {
@@ -54,7 +54,7 @@ class IotxApi {
   /// Get transaction count (nonce)
   Future<MessageModel> getTransactionCount(String address) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _evmUrl,
         params: {},
         data: {
@@ -88,7 +88,7 @@ class IotxApi {
   /// Get gas price
   Future<MessageModel> getGasPrice() async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _evmUrl,
         params: {},
         data: {
@@ -122,7 +122,7 @@ class IotxApi {
   /// Send raw transaction
   Future<MessageModel> sendTransaction(String rawTx) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _evmUrl,
         params: {},
         data: {
@@ -155,7 +155,7 @@ class IotxApi {
   /// Get transaction by hash
   Future<MessageModel> getTransactionByHash(String txHash) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _evmUrl,
         params: {},
         data: {
@@ -185,7 +185,7 @@ class IotxApi {
   /// Get transaction receipt
   Future<MessageModel> getTransactionReceipt(String txHash) async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _evmUrl,
         params: {},
         data: {
@@ -215,7 +215,7 @@ class IotxApi {
   /// Get block number
   Future<MessageModel> getBlockNumber() async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _evmUrl,
         params: {},
         data: {
@@ -249,7 +249,7 @@ class IotxApi {
   /// Get chain ID
   Future<MessageModel> getChainId() async {
     try {
-      final response = await BaseApi.RequestEmpty_h.post(
+      final response = await BaseApi.requestEmptyH.post(
         _evmUrl,
         params: {},
         data: {

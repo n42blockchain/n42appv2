@@ -14,7 +14,7 @@ class AlgoApi{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ALGO.name,'api',isTest:isTest);
       if(assetId!=""){
-        MessageModel data=await BaseApi.RequestEmpty_h.get('${uri}v2/accounts/$address/assets/$assetId', params: {});
+        MessageModel data=await BaseApi.requestEmptyH.get('${uri}v2/accounts/$address/assets/$assetId', params: {});
         Response rData=data.data;
         if(rData.statusCode==200 || rData.statusCode==201){
           Map<String,dynamic> rDataMap=jsonDecode(rData.data);
@@ -30,7 +30,7 @@ class AlgoApi{
         }
         return data;
       }else{
-        var data=await BaseApi.RequestEmpty_h.get('${uri}v2/accounts/$address', params: {});
+        var data=await BaseApi.requestEmptyH.get('${uri}v2/accounts/$address', params: {});
         MessageModel mm=MessageModel();
         mm.data={
           "balance":BigInt.from(data['amount']),
@@ -49,7 +49,7 @@ class AlgoApi{
   getTransactionsParams({bool isTest=false})async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ALGO.name,'api',isTest:isTest);
-      var data=await BaseApi.RequestEmpty_h.get('${uri}v2/transactions/params', params: {});
+      var data=await BaseApi.requestEmptyH.get('${uri}v2/transactions/params', params: {});
       MessageModel mm=MessageModel();
       mm.data=data;
       return mm;
@@ -67,7 +67,7 @@ class AlgoApi{
       final txData = Stream.fromIterable(txHash.map((i) => [i]));
       //return await sendTransaction(txHash);
       //return await sendTransaction_74(txHash);
-      var data=await BaseApi.RequestEmpty_h.post('${uri}v2/transactions', params: {},data: txData,
+      var data=await BaseApi.requestEmptyH.post('${uri}v2/transactions', params: {},data: txData,
         //contentType: "application/x-binary"
         header: {"Content-Type":"application/x-binary"},
       );
@@ -131,7 +131,7 @@ class AlgoApi{
   getTransactionsInfo(String txId,{bool isTest=false})async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ALGO.name,'api',isTest:isTest);
-      var data=await BaseApi.RequestEmpty_h.get('${uri}v2/transactions/pending/$txId', params: {});
+      var data=await BaseApi.requestEmptyH.get('${uri}v2/transactions/pending/$txId', params: {});
       MessageModel mm=MessageModel();
       mm.data=data;
       return mm;

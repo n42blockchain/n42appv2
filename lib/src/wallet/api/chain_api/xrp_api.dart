@@ -20,7 +20,7 @@ class XrpApi{
           }
         ],
       };
-      var data=await Api.RequestEmpty_h.post(uri, params: {},data: pData);
+      var data=await Api.requestEmptyH.post(uri, params: {},data: pData);
       MessageModel mm=MessageModel();
       if(data['result']['status']=="success"){
         if(valueType=="balance"){
@@ -69,7 +69,7 @@ class XrpApi{
           }
         ],
       };
-      var data=await BaseApi.RequestEmpty_h.post(uri, params: {},data: pData);
+      var data=await BaseApi.requestEmptyH.post(uri, params: {},data: pData);
       MessageModel mm=MessageModel();
       if(data['result']['status']=="success"){
         Map<String,dynamic> infoMap={
@@ -113,7 +113,7 @@ class XrpApi{
         "method":"fee",
         "params":[{}],
       };
-      var data=await BaseApi.RequestEmpty_h.post(uri, params: {},data: pData);
+      var data=await BaseApi.requestEmptyH.post(uri, params: {},data: pData);
       MessageModel mm=MessageModel();
       if(data['result']['status']=="success"){
         mm.data=BigInt.parse(data['result']['drops']['minimum_level']);//minimum_level\median_fee
@@ -138,7 +138,7 @@ class XrpApi{
           "binary":false,
         }],
       };
-      var data=await BaseApi.RequestEmpty_h.post(uri, params: {},data: pData);
+      var data=await BaseApi.requestEmptyH.post(uri, params: {},data: pData);
       MessageModel mm=MessageModel();
       if(data['result']['status']=="success"){
         mm.data=data['result']['meta']['TransactionResult'];
@@ -161,7 +161,7 @@ class XrpApi{
         "method":"server_state",
         "params":[{"ledger_index": "current"}],
       };
-      var data=await BaseApi.RequestEmpty_h.post(uri, params: {},data: pData);
+      var data=await BaseApi.requestEmptyH.post(uri, params: {},data: pData);
       MessageModel mm=MessageModel();
       if(data['result']['status']=="success"){
         Map<String,dynamic> rData={
@@ -194,7 +194,7 @@ class XrpApi{
         "method":"ledger",
         "params":[{"ledger_index": "current"}],
       };
-      var data=await BaseApi.RequestEmpty_h.post(uri, params: {},data: pData);
+      var data=await BaseApi.requestEmptyH.post(uri, params: {},data: pData);
       MessageModel mm=MessageModel();
       if(data['status']=="success"){
         mm.data=data['result']['ledger_current_index'];
@@ -241,7 +241,7 @@ Fee: 交易费用（10-12 drops）*/
           "limit": limit
         }],
       };
-      var data=await BaseApi.RequestEmpty_h.post(uri, params: {},data: pData);
+      var data=await BaseApi.requestEmptyH.post(uri, params: {},data: pData);
       MessageModel mm=MessageModel();
       if(data['result']['status']=="success"){
         mm.data=data['result']['transactions'];
@@ -266,7 +266,7 @@ Fee: 交易费用（10-12 drops）*/
           "tx_blob":signHash,
         }],
       };
-      var data=await BaseApi.RequestEmpty_h.post(uri, params: {},data: pData);
+      var data=await BaseApi.requestEmptyH.post(uri, params: {},data: pData);
       MessageModel mm=MessageModel();
       if(data['result']['status']=="success"){
         if(data['result']['engine_result'].toString().startsWith('tes')){
@@ -321,7 +321,7 @@ Flags: 合约的状态标志*/
           "type": "hook"
         }],
       };
-      var data=await BaseApi.RequestEmpty_h.post(uri, params: {},data: pData);
+      var data=await BaseApi.requestEmptyH.post(uri, params: {},data: pData);
       MessageModel mm=MessageModel();
       if(data['result']['status']=="success"){
         mm.data=BigInt.parse(data['result']['account_objects']);
@@ -368,7 +368,7 @@ TradingFee: 交易费用（单位 basis points，即 30 = 0.3%）*/
         "method":"amm_info",
         "params":[ammInfo],
       };
-      var data=await BaseApi.RequestEmpty_h.post(uri, params: {},data: pData);
+      var data=await BaseApi.requestEmptyH.post(uri, params: {},data: pData);
       MessageModel mm=MessageModel();
       if(data['result']['status']=="success"){
         mm.data=BigInt.parse(data['result']['amm']);
@@ -412,7 +412,7 @@ limit: 账户信任额度（最多持有 1000 USDT）*/
           {address}
         ],
       };
-      var data=await BaseApi.RequestEmpty_h.post(uri, params: {},data: pData);
+      var data=await BaseApi.requestEmptyH.post(uri, params: {},data: pData);
       MessageModel mm=MessageModel();
       if(data['result']['status']=="success"){
         mm.data=BigInt.parse(data['result']['lines']);
@@ -441,7 +441,7 @@ limit: 账户信任额度（最多持有 1000 USDT）*/
           }
         ],
       };
-      var data=await BaseApi.RequestEmpty_h.post(uri, params: {},data: pData);
+      var data=await BaseApi.requestEmptyH.post(uri, params: {},data: pData);
       MessageModel mm=MessageModel();
       if(data['result']['status']=="success"){
         mm.data=data['result']['transactions'];

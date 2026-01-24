@@ -9,9 +9,9 @@ class ExchangeAccountModel{
   //余额
   String? over;
   String? platform;
-  String? coin_fullname;
+  String? coinFullname;
   ExchangeAccountModel(this.coin, this.created, this.icon, this.id,
-      this.updated, this.lock, this.over, this.platform,this.coin_fullname);
+      this.updated, this.lock, this.over, this.platform,this.coinFullname);
   ExchangeAccountModel.fromJson(Map<String,dynamic> map){
     coin=map['coin'] as String?;
     created=map['created'] as int?;
@@ -21,6 +21,6 @@ class ExchangeAccountModel{
     lock=map['lock'] as String?;
     over=map['over'] as String?;
     platform=map['platform'] as String?;
-    coin_fullname=map['coin_fullname'] as String?;
+    coinFullname=map['coinFullname'] as String?;
   }
 }
