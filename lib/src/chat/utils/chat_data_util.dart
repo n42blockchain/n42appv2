@@ -1,4 +1,4 @@
-﻿import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
 import 'package:n42appv2/src/chat/api/chat_db_api.dart';
 import 'package:n42appv2/src/chat/models/chat_message_model.dart';
@@ -25,9 +25,9 @@ class ChatDataUtil {
     String? receiverAesSecret,
     String? originalFileName,
     //消息回复和@功能
-    int? reply_id,
-    int? is_mentioned = 0,
-    String? mentioned_user_ids
+    int? replyId,
+    int? isMentioned = 0,
+    String? mentionedUserIds
   }) {
     Map<String, dynamic> messageContent = {
       "conversationType": conversationType,
@@ -57,9 +57,9 @@ class ChatDataUtil {
         "originalFileName": originalFileName,
       },
       "decryptionMessageContent": decryptionMessageContent,
-      "reply_id": reply_id,
-      "is_mentioned": is_mentioned,
-      "mentioned_user_ids": mentioned_user_ids
+      "reply_id": replyId,
+      "is_mentioned": isMentioned,
+      "mentioned_user_ids": mentionedUserIds
     };
     return messageContent;
   }

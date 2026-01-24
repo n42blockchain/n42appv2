@@ -43,10 +43,10 @@ class TRXTransactionItem {
 
 class ContractData {
   int? amount;
-  String? owner_address;
-  String? to_address;
+  String? ownerAddress;
+  String? toAddress;
 
-  ContractData(this.amount, this.owner_address, this.to_address);
+  ContractData(this.amount, this.ownerAddress, this.toAddress);
 
   factory ContractData.fromJson(Map<String, dynamic> json) =>ContractData(
     json['amount'] as int?,
@@ -56,18 +56,18 @@ class ContractData {
 
   Map<String, dynamic> toJson() => <String, dynamic>{
     'amount': amount,
-    'owner_address': owner_address,
-    'to_address': to_address,
+    'owner_address': ownerAddress,
+    'to_address': toAddress,
   };
 
 }
 
 class Cost {
-  final int? net_fee;
+  final int? netFee;
   final int? fee;
-  final int? net_usage;
+  final int? netUsage;
 
-  Cost(this.net_fee, this.fee, this.net_usage);
+  Cost(this.netFee, this.fee, this.netUsage);
 
   factory Cost.fromJson(Map<String, dynamic> json) => Cost(
     json['net_fee'] as int?,
@@ -76,8 +76,8 @@ class Cost {
   );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-    'net_fee': net_fee,
+    'net_fee': netFee,
     'fee': fee,
-    'net_usage': net_usage,
+    'net_usage': netUsage,
   };
 }

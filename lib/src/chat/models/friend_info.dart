@@ -6,14 +6,14 @@ class FriendInfo{
   String? portrait;
   int? updateDt;
   String? image;
-  String? public_key;
+  String? publicKey;
 
   //本地选择联系人
   bool isSelected = false;
   //是否可以选择
   bool? isCanSelected;
 
-  FriendInfo(this.uuid, this.email, this.name,this.remarks, this.portrait, this.updateDt,this.image,this.public_key);
+  FriendInfo(this.uuid, this.email, this.name,this.remarks, this.portrait, this.updateDt,this.image,this.publicKey);
   factory FriendInfo.fromJson(Map<String, dynamic> json) =>
       FriendInfo(
         json['uuid'] as String?,
@@ -34,7 +34,7 @@ class FriendInfo{
     'portrait': portrait,
     'updateDt': updateDt,
     'image':image,
-    'public_key': public_key,
+    'public_key': publicKey,
     'isSelected': isSelected,
     'isCanSelected': isCanSelected,
   };

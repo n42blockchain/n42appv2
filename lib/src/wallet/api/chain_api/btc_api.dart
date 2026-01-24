@@ -67,13 +67,13 @@ class BtcApi{
       );
       MessageModel mm=MessageModel();
       if(data['chain_stats'] !=null){
-        int funded_txo_sum=data['chain_stats']['funded_txo_sum'];
-        int spent_txo_sum=data['chain_stats']['spent_txo_sum'];
+        int fundedTxoSum=data['chain_stats']['funded_txo_sum'];
+        int spentTxoSum=data['chain_stats']['spent_txo_sum'];
         /*if(funded_txo_sum==0){
           funded_txo_sum=data['chain_stats']['funded_txo_sum'];
           spent_txo_sum=data['chain_stats']['spent_txo_sum'];
         }*/
-        mm.data=BigInt.from(funded_txo_sum-spent_txo_sum);
+        mm.data=BigInt.from(fundedTxoSum-spentTxoSum);
       }else{
         mm.data=BigInt.zero;
       }
@@ -84,7 +84,7 @@ class BtcApi{
       return mm;
     }
   }
-  sendTx_http(String signHase)async{
+  sendTxHttp(String signHase)async{
     HttpOverrides.global = MyHttpOverrides();
     String url = "${uri}tx"; // 替换为你的 API 地址
     try {

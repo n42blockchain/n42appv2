@@ -12,7 +12,7 @@ class BrowserSearchHistoryModel{
     search=map["search"];
     searchCount=map["searchCount"];
   }
-  getMap_db(){
+  getMapDb(){
     return {
       "search":search,
       "searchCount":searchCount,

@@ -10,7 +10,7 @@ class SquadApi {
   late Map<String, String> header;
 
   SquadApi() {
-    url = AppConfig.getApiUrl_online('userInfoHost');
+    url = AppConfig.getApiUrlOnline('userInfoHost');
     header = {'content-type': 'application/json'};
   }
 
@@ -95,13 +95,13 @@ class SquadApi {
   /// 向其他用户发送文件
   Future sendFile({
     required String pubKey,
-    required String r_email,
-    required String s_aes_secret,
-    required String r_aes_secret,
-    required String file_type,
-    required String file_uri,
-    required String file_name,
-    required String file_desc,
+    required String rEmail,
+    required String sAesSecret,
+    required String rAesSecret,
+    required String fileType,
+    required String fileUri,
+    required String fileName,
+    required String fileDesc,
   }) async {
     final userId = AppGlobals.userInfo?.uuid;
     final token = AppGlobals.userInfo?.token;
@@ -109,13 +109,13 @@ class SquadApi {
     params['uuid'] = userId;
     params['token'] = token;
     params['source'] = 'app';
-    params['r_email'] = r_email; // 接收者邮箱
-    params['s_aes_secret'] = s_aes_secret; // 发送者秘文
-    params['r_aes_secret'] = r_aes_secret; // 接收者秘文
-    params['file_type'] = file_type; // 文件类型
-    params['file_uri'] = file_uri; // 文件地址
-    params['file_name'] = file_name;
-    params['file_desc'] = file_desc;
+    params['r_email'] = rEmail; // 接收者邮箱
+    params['s_aes_secret'] = sAesSecret; // 发送者秘文
+    params['r_aes_secret'] = rAesSecret; // 接收者秘文
+    params['file_type'] = fileType; // 文件类型
+    params['file_uri'] = fileUri; // 文件地址
+    params['file_name'] = fileName;
+    params['file_desc'] = fileDesc;
     try {
       final res = await BaseApi.RequestEmpty_h.post(
         '$url/v1/l/file/send',

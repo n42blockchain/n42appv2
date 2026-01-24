@@ -64,13 +64,13 @@ class AppConfig {
     },
     "face":"https://api.n42.ai/face"
   };
-  static String getApiUrl_online(String key){
+  static String getApiUrlOnline(String key){
     if(isOnline){
       return apiUrl[key]["main"];
     }
     return apiUrl[key]["test"];
   }
-  static String getApiUrl_testHost(String key){
+  static String getApiUrlTestHost(String key){
     if(testHost==0){
       return apiUrl[key]["test"];
     }else{

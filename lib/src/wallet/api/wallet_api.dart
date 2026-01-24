@@ -6,15 +6,15 @@ import 'package:n42appv2/generated/l10n.dart';
 class WalletApi{
   late String url;
   late Map<String,String> header;
-  TokenViewApi(){
-    url=AppConfig.getApiUrl_online('tokenViewUri');
+  tokenViewApi(){
+    url=AppConfig.getApiUrlOnline('tokenViewUri');
     header={'content-type': 'application/json'};
   }
   //public
   ///获取币列表，主链加代币
   ///chains 返回特定的主链 主链币全名 solna,bitcoin,
   ///coins 返回特定的代币 代币的symbol eth,bnb,ast
-  getChainList_all({String chains="",String coins=""})async{
+  getChainListAll({String chains="",String coins=""})async{
     try{
       //chains="Amaze Chain";
       String condition="";
@@ -46,7 +46,7 @@ class WalletApi{
     }
   }
   //获取某个主链币的所有代币
-  getTokenList_fullname(String fullname)async{
+  getTokenListFullname(String fullname)async{
     try{
       final a=await BaseApi.RequestEmpty_h.get('${url}v1/chains/coins?chains=$fullname', params: {},header:header,);
       MessageModel mm=MessageModel.error();

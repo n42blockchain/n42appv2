@@ -7,7 +7,7 @@ import 'package:n42appv2/src/models/message_model.dart';
 class SolApi{
   //获取账号信息
   getAccountInfo(String address,{bool isTest=false,})async{
-    MessageModel mm=await BaseRPC_sol("getAccountInfo",[address,{"encoding": "base64"}],isTest: isTest);
+    MessageModel mm=await baseRPCSol("getAccountInfo",[address,{"encoding": "base64"}],isTest: isTest);
     if(mm.error==false){
       mm.data=mm.data['value']['data'];
     }
@@ -15,7 +15,7 @@ class SolApi{
   }
   //获取最新区块hash
   getLatestBlockhash({bool isTest=false,})async{
-    MessageModel mm=await BaseRPC_sol("getLatestBlockhash",[],isTest: isTest);
+    MessageModel mm=await baseRPCSol("getLatestBlockhash",[],isTest: isTest);
     if(mm.error==false){
       mm.data=mm.data['value']['blockhash'];
     }
@@ -24,13 +24,13 @@ class SolApi{
   //获取余额
   getBalance(String address,String contract,{bool isTest=false,})async{
     if(contract==""){
-      MessageModel mm=await BaseRPC_sol("getBalance",[address],isTest: isTest);
+      MessageModel mm=await baseRPCSol("getBalance",[address],isTest: isTest);
       if(mm.error==false){
         mm.data=mm.data['value'];
       }
       return mm;
     }else{
-      MessageModel mm=await BaseRPC_sol("getTokenAccountsByOwner",[address,{"mint": contract},{"encoding": "jsonParsed"}],isTest: isTest);
+      MessageModel mm=await baseRPCSol("getTokenAccountsByOwner",[address,{"mint": contract},{"encoding": "jsonParsed"}],isTest: isTest);
       if(mm.error==false){
         List<Map<String,dynamic>> valueMap=mm.data['value'];
         if(valueMap.isNotEmpty){
@@ -42,7 +42,7 @@ class SolApi{
   }
   //计算gas费
   getFeeForMessage(String signMessage,{isTest=false})async{
-    MessageModel mm=await BaseRPC_sol("getFeeForMessage",[signMessage,
+    MessageModel mm=await baseRPCSol("getFeeForMessage",[signMessage,
       /*{
       "commitment":"processed"
     }*/
@@ -54,7 +54,7 @@ class SolApi{
   }
   //虚拟交易
   simulateTransaction(String signMessage,{isTest=false})async{
-    MessageModel mm=await BaseRPC_sol("simulateTransaction",[signMessage,{
+    MessageModel mm=await baseRPCSol("simulateTransaction",[signMessage,{
       "sigVerify": true
       //"encoding":"base64"
     }],isTest: isTest);
@@ -65,9 +65,9 @@ class SolApi{
   }
   //发起交易
   sendTransaction(String signMessage,{isTest=false})async{
-    return await BaseRPC_sol("sendTransaction",[signMessage,{"encoding":"base58"}],isTest: isTest);
+    return await baseRPCSol("sendTransaction",[signMessage,{"encoding":"base58"}],isTest: isTest);
   }
-  BaseRPC_sol(String method,var value,{bool? isTest})async{
+  baseRPCSol(String method,var value,{bool? isTest})async{
     try{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};

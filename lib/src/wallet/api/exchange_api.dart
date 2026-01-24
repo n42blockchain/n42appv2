@@ -6,7 +6,7 @@ class ExchangeApi{
   late String url;
   late Map<String,String> header;
   ExchangeApi(){
-    url=AppConfig.getApiUrl_online('exchangeHost');
+    url=AppConfig.getApiUrlOnline('exchangeHost');
     header={'content-type': 'application/x-www-form-urlencoded'};
   }
 

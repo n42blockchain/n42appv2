@@ -55,7 +55,7 @@ class XrpApi{
     }
   }
   */
-  getAccountInfo_xrp(String address,bool isTest)async{
+  getAccountInfoXrp(String address,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XRP.name,'rpc',isTest:isTest);
       Map<String,dynamic> pData={
@@ -106,7 +106,7 @@ class XrpApi{
       return mm;
     }
   }
-  getGasPrice_xrp(bool isTest)async{
+  getGasPriceXrp(bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XRP.name,'rpc',isTest:isTest);
       Map<String,dynamic> pData={
@@ -128,7 +128,7 @@ class XrpApi{
       return mm;
     }
   }
-  getTxInfo_xrp(String txHash,bool isTest)async{
+  getTxInfoXrp(String txHash,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XRP.name,'rpc',isTest:isTest);
       Map<String,dynamic> pData={
@@ -154,7 +154,7 @@ class XrpApi{
     }
   }
   //获取服务器信息
-  getServerState_xrp({bool isTest=false})async{
+  getServerStateXrp({bool isTest=false})async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XRP.name,'rpc',isTest:isTest);
       Map<String,dynamic> pData={
@@ -187,7 +187,7 @@ class XrpApi{
     }
   }
   //获取当前账本信息
-  getLedger_xrp({bool isTest=false})async{
+  getLedgerXrp({bool isTest=false})async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XRP.name,'rpc',isTest:isTest);
       Map<String,dynamic> pData={
@@ -229,7 +229,7 @@ class XrpApi{
   /*TransactionType: 交易类型（Payment = 发送 XRP, TrustSet = 信任设置, AMMDeposit = AMM 交易）
 Amount: 交易金额（单位 drops，1 XRP = 1,000,000 drops）
 Fee: 交易费用（10-12 drops）*/
-  getTxs_xrp(String address,{int ledgerIndexMin=-1,int limit=10,bool isTest=false})async{
+  getTxsXrp(String address,{int ledgerIndexMin=-1,int limit=10,bool isTest=false})async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XRP.name,'rpc',isTest:isTest);
       Map<String,dynamic> pData={
@@ -257,7 +257,7 @@ Fee: 交易费用（10-12 drops）*/
     }
   }
   //广播
-  sendTx_xrp(String signHash,bool isTest)async{
+  sendTxXrp(String signHash,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XRP.name,'rpc',isTest:isTest);
       Map<String,dynamic> pData={

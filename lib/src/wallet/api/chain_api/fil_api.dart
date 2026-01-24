@@ -8,14 +8,14 @@ import 'package:web3dart/crypto.dart';
 
 class FilApi{
   getBalance(String address,{bool isTest=false})async{
-    MessageModel mm=await BaseRPC("Filecoin.WalletBalance",[address],isTest: isTest);
+    MessageModel mm=await baseRPC("Filecoin.WalletBalance",[address],isTest: isTest);
     if(mm.error==false){
       mm.data=BigInt.parse(mm.data.toString());
     }
     return mm;
   }
   getGasPrice({bool isTest=false})async{
-    MessageModel mm=await BaseRPC("Filecoin.EthGasPrice",[],isTest: isTest);
+    MessageModel mm=await baseRPC("Filecoin.EthGasPrice",[],isTest: isTest);
     if(mm.error==false){
       mm.data=hexToInt(mm.data);
     }
@@ -23,7 +23,7 @@ class FilApi{
   }
   /*
   static getVersion({bool isTest=false})async{
-    MessageModel mm=await BaseRPC("Filecoin.Version",[],isTest: isTest);
+    MessageModel mm=await baseRPC("Filecoin.Version",[],isTest: isTest);
     if(mm.error==false){
       mm.data=mm.data['BlockDelay'];
     }
@@ -31,7 +31,7 @@ class FilApi{
   }
   */
   getNonce(String address,{bool isTest=false})async{
-    MessageModel mm=await BaseRPC("Filecoin.MpoolGetNonce",[address],isTest: isTest);
+    MessageModel mm=await baseRPC("Filecoin.MpoolGetNonce",[address],isTest: isTest);
     if(mm.error==false){
       mm.data=mm.data.toString();
     }
@@ -59,7 +59,7 @@ class FilApi{
       {
         "MaxFee": "0"
       }];
-    return await BaseRPC(
+    return await baseRPC(
         "Filecoin.MpoolPushMessage",
         param,
         isTest: isTest);
@@ -87,7 +87,7 @@ class FilApi{
         "MaxFee": "0"
       },
       []];
-    return await BaseRPC(
+    return await baseRPC(
         "Filecoin.GasEstimateMessageGas",
         param,
         isTest: isTest);
@@ -95,12 +95,12 @@ class FilApi{
   sendTx(String txHash,{bool isTest=false})async{
     Map<String,dynamic> pMap=json.decode(txHash);
     pMap['Message']['Nonce']=(pMap['Message']['Nonce'] as int);
-    return await BaseRPC(
+    return await baseRPC(
         "Filecoin.MpoolPush",
         [pMap],
         isTest: isTest);
   }
-  BaseRPC(String method,var value,{bool? isTest=false})async{
+  baseRPC(String method,var value,{bool? isTest=false})async{
     try{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};

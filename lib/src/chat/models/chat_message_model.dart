@@ -1,4 +1,4 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/models/friend_info.dart';
@@ -34,11 +34,11 @@ class ChatMessageModel{
   String? decryptionMessageContent;
 
   //回复消息的id
-  int? reply_id;
+  int? replyId;
   //是否@了别人 0为false，1为true.
-  int? is_mentioned;
+  int? isMentioned;
   //@人员的数据集合【String】json
-  String? mentioned_user_ids;
+  String? mentionedUserIds;
 
   /// 消息所属的 群/个人 信息 本地使用
   GroupInfo? groupInfo;
@@ -75,9 +75,9 @@ class ChatMessageModel{
       "targetId": getTargetId(),
       'content': json.encode(content),
       "decryptionMessageContent": decryptionMessageContent,
-      "reply_id": reply_id,
-      "is_mentioned": is_mentioned,
-      "mentioned_user_ids": mentioned_user_ids
+      "reply_id": replyId,
+      "is_mentioned": isMentioned,
+      "mentioned_user_ids": mentionedUserIds
     };
   }
 
@@ -94,9 +94,9 @@ class ChatMessageModel{
         target = map['target'],
         targetId = map['targetId'] ?? '',
         decryptionMessageContent = map["decryptionMessageContent"],
-        reply_id = map["reply_id"],
-        is_mentioned = map["is_mentioned"],
-        mentioned_user_ids = map["mentioned_user_ids"],
+        replyId = map["reply_id"],
+        isMentioned = map["is_mentioned"],
+        mentionedUserIds = map["mentioned_user_ids"],
         line = map['line'];
 
   //从数据库解析数据时使用
@@ -112,9 +112,9 @@ class ChatMessageModel{
         target = map['target'],
         targetId = map['targetId'],
         decryptionMessageContent = map["decryptionMessageContent"],
-        reply_id = map["reply_id"],
-        is_mentioned = map["is_mentioned"],
-        mentioned_user_ids = map["mentioned_user_ids"],
+        replyId = map["reply_id"],
+        isMentioned = map["is_mentioned"],
+        mentionedUserIds = map["mentioned_user_ids"],
         line = map['line'];
 }
 

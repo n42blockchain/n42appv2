@@ -5,13 +5,13 @@ class SwapAstModel{
   String? name;// 全名
   String? desc;
   String? uri;// 图片
-  int? amt_num;
-  String? pay_chain;// 主链
-  String? pay_coin;// 代币缩写
-  String? pay_coin_contract;
-  int? pay_coin_decimal;
-  String? pay_uuid;
-  String? pay_addr;
+  int? amtNum;
+  String? payChain;// 主链
+  String? payCoin;// 代币缩写
+  String? payCoinContract;
+  int? payCoinDecimal;
+  String? payUuid;
+  String? payAddr;
   int? type;
   int? del;
   int? created;
@@ -26,13 +26,13 @@ class SwapAstModel{
       this.name,
       this.desc,
       this.uri,
-      this.amt_num,
-      this.pay_chain,
-      this.pay_coin,
-      this.pay_coin_contract,
-      this.pay_coin_decimal,
-      this.pay_uuid,
-      this.pay_addr,
+      this.amtNum,
+      this.payChain,
+      this.payCoin,
+      this.payCoinContract,
+      this.payCoinDecimal,
+      this.payUuid,
+      this.payAddr,
       this.type,
       this.del,
       this.created,
@@ -60,13 +60,13 @@ class SwapAstModel{
     'name': name,
     'desc': desc,
     'uri': uri,
-    'amt_num': amt_num,
-    'pay_chain': pay_chain,
-    'pay_coin': pay_coin,
-    'pay_coin_contract': pay_coin_contract,
-    'pay_coin_decimal': pay_coin_decimal,
-    'pay_uuid': pay_uuid,
-    'pay_addr': pay_addr,
+    'amt_num': amtNum,
+    'pay_chain': payChain,
+    'pay_coin': payCoin,
+    'pay_coin_contract': payCoinContract,
+    'pay_coin_decimal': payCoinDecimal,
+    'pay_uuid': payUuid,
+    'pay_addr': payAddr,
     'type': type,
     'del': del,
     'created': created,

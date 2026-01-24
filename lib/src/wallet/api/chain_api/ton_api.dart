@@ -15,8 +15,8 @@ class TonApi{
       apiKey="39b7ef60a7dfdaaefe04484218e249d9b18547dee3a32170a25bd24ad928a732";
     }
   }
-  getBalance_ton(String address)async{
-    MessageModel rmm=await BaseRPC_ton(
+  getBalanceTon(String address)async{
+    MessageModel rmm=await baseRPCTon(
       "getAddressBalance",
       {
         "address": address, // 查询 SUI 代币余额
@@ -28,8 +28,8 @@ class TonApi{
     }
     return rmm;
   }
-  getSeqno_ton(String address)async{
-    MessageModel rmm=await BaseRPC2_ton(
+  getSeqnoTon(String address)async{
+    MessageModel rmm=await baseRPC2Ton(
       {
         "address": address,
         "method": "seqno",
@@ -46,8 +46,8 @@ class TonApi{
     }
     return rmm;
   }
-  submit_ton(String signStr)async{
-    MessageModel rmm= await BaseRPC2_ton(
+  submitTon(String signStr)async{
+    MessageModel rmm= await baseRPC2Ton(
       {
         "boc": signStr,
       },
@@ -58,7 +58,7 @@ class TonApi{
     }
     return rmm;
   }
-  BaseRPC_ton(String method,var value,String path)async{
+  baseRPCTon(String method,var value,String path)async{
     try{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};
@@ -77,7 +77,7 @@ class TonApi{
       return mm;
     }
   }
-  BaseRPC2_ton(var value,String path)async{
+  baseRPC2Ton(var value,String path)async{
     try{
       MessageModel mm=MessageModel();
 

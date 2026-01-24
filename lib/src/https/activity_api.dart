@@ -6,7 +6,7 @@ class ActivityApi {
   late String url;
   late Map<String,String> header;
   ActivityApi(){
-    url=AppConfig.getApiUrl_online('activiteHost');
+    url=AppConfig.getApiUrlOnline('activiteHost');
     header={'content-type': 'application/json'};
   }
   //数据收集接口，收集用户创建的NFT和交易N的记录，event create_nft,wallet_transfer

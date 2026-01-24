@@ -567,9 +567,9 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
       if (gInfo != null) {
         groupInfo = gInfo;
         // member_type 0=退群 1=群主 2=普通成员
-        if (gInfo.member_type == 1) {
+        if (gInfo.memberType == 1) {
           isGroupOwner = true;
-        } else if (gInfo.member_type == 2) {
+        } else if (gInfo.memberType == 2) {
           isGroupMember = true;
         } else {
           isGroupOwner = false;
@@ -585,9 +585,9 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
           GroupInfo gInfo = GroupInfo.fromJson(groupData["data"]);
           groupInfo = gInfo;
           // member_type 0=退群 1=群主 2=普通成员
-          if (gInfo.member_type == 1) {
+          if (gInfo.memberType == 1) {
             isGroupOwner = true;
-          } else if (gInfo.member_type == 2) {
+          } else if (gInfo.memberType == 2) {
             isGroupMember = true;
           } else {
             isGroupOwner = false;
@@ -623,9 +623,9 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
 
       //@功能判断
       List<String> memberIds = handlerTextContent();
-      int is_mentioned = 0;
+      int isMentioned = 0;
       if (memberIds.isNotEmpty) {
-        is_mentioned = 1;
+        isMentioned = 1;
       }
       _textEditingController.clearBlocks();
 
@@ -635,12 +635,12 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
           fromID: AppGlobals.userInfo?.uuid ?? '',
           receiveId: widget.targetUuid,
           conversationType: 1,
-          reply_id: currentReplyModel?.messageId,
+          replyId: currentReplyModel?.messageId,
           direction: 1,
           msg: encryptedContent,
           decryptionMessageContent: message,
-          is_mentioned: is_mentioned,
-          mentioned_user_ids: json.encode(memberIds));
+          isMentioned: isMentioned,
+          mentionedUserIds: json.encode(memberIds));
 
       ChatMessageModel cm = ChatMessageModel.fromMap(content);
       //先更新到ui 上
@@ -944,14 +944,14 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
         ToastUtils.show(S.of(context).g_chat_key_33);
         return;
       }
-      String message=json.encode(redPocketModel.RedPocketModelToJson());
+      String message=json.encode(redPocketModel.toJson());
       String encryptedContent = AesUtils().aesEncode(message, groupPwd!);
 
       //@功能判断
       List<String> memberIds = handlerTextContent();
-      int is_mentioned = 0;
+      int isMentioned = 0;
       if (memberIds.isNotEmpty) {
-        is_mentioned = 1;
+        isMentioned = 1;
       }
       _textEditingController.clearBlocks();
 
@@ -961,12 +961,12 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
           fromID: AppGlobals.userInfo?.uuid ?? '',
           receiveId: widget.targetUuid,
           conversationType: 1,
-          reply_id: currentReplyModel?.messageId,
+          replyId: currentReplyModel?.messageId,
           direction: 1,
           msg: encryptedContent,
           decryptionMessageContent: message,
-          is_mentioned: is_mentioned,
-          mentioned_user_ids: json.encode(memberIds));
+          isMentioned: isMentioned,
+          mentionedUserIds: json.encode(memberIds));
 
       ChatMessageModel cm = ChatMessageModel.fromMap(content);
       //先更新到ui 上
@@ -988,13 +988,13 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
       content["decryptionMessageContent"] = null;
 
       try {
-        final data = await chatApi.sendMessage_red(
+        final data = await chatApi.sendMessageRed(
           fromUUID: AppGlobals.userInfo?.uuid ?? '',
           receiveId: widget.targetUuid,
           content: json.encode(content),
           count: redPocketModel.number??0,
           value: redPocketModel.value??0,//ethToWeiString((redPocketModel.value??0).toString(), 18).toString(),
-          tx_raw: redPocketModel.tx_raw??"",
+          txRaw: redPocketModel.txRaw??"",
           type: redPocketModel.distribution??2,
           description: redPocketModel.note??"",
         );
@@ -1064,7 +1064,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
                       color: AppThemeUtils.getColorByKey(
                           context, AppThemeKeys.itemLineColor.name))),
               child: ImageNetWork(
-                imageUrl: groupInfo?.avatar_url ?? "",
+                imageUrl: groupInfo?.avatarUrl ?? "",
                 width: ScreenUtil().setWidth(68),
                 placeholder: "assets/chat/group_def_icon.png",
                 fit: BoxFit.cover,
@@ -1632,7 +1632,7 @@ class _ShowMessageType10State extends State<ShowMessageType10> {
       //当前用户已经领取了红包
       child= userRedPocetOpened();
     }else{
-      if(widget.chatMessage!.redPocketDetailModel?.remain_count==0){
+      if(widget.chatMessage!.redPocketDetailModel?.remainCount==0){
         child= userRedPocetFinish();
       }else{
         child= userRedPocketOpen();
@@ -1924,7 +1924,7 @@ class _ShowMessageType10State extends State<ShowMessageType10> {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                String openUrl=getBrowser_txHash(CoinType.N.name, rpcm?.tx_hash??"");
+                                String openUrl=getBrowser_txHash(CoinType.N.name, rpcm?.txHash??"");
                                 Navigator.push(context, MaterialPageRoute(builder: (context)=>BrowserPage(openUrl)));
                               },
                           ),
@@ -2141,14 +2141,14 @@ class _ShowMessageType10State extends State<ShowMessageType10> {
     );
   }
   getClaim(String uuid){
-    int? index = widget.chatMessage?.redPocketDetailModel?.red_claim?.indexWhere((element) {
+    int? index = widget.chatMessage?.redPocketDetailModel?.redClaim?.indexWhere((element) {
       if(element.uuid==uuid){
         return true;
       }
       return false;
     });
     if(index !=null && index !=-1){
-      return widget.chatMessage!.redPocketDetailModel!.red_claim![index];
+      return widget.chatMessage!.redPocketDetailModel!.redClaim![index];
     }
     return null;
   }

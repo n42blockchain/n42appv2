@@ -119,7 +119,7 @@ class _GroupEditPageState extends State<GroupEditPage> {
                               color: AppThemeUtils.getColorByKey(
                                   context, AppThemeKeys.itemLineColor.name))),
                       child: ImageNetWork(
-                        imageUrl: widget.info.avatar_url,
+                        imageUrl: widget.info.avatarUrl,
                         width: ScreenUtil().setWidth(40),
                         placeholder: "assets/img/person_def_1.png",
                         fit: BoxFit.cover,
@@ -162,10 +162,10 @@ class _GroupEditPageState extends State<GroupEditPage> {
 
                     //修改群名称
                     final data = await chatApi.updateGroupInfo(
-                        g_introduction: "",
-                        g_uuid: widget.info.g_uuid,
-                        group_name: nameText,
-                        m_uuid: AppGlobals.userInfo?.uuid ?? '');
+                        gIntroduction: "",
+                        gUuid: widget.info.gUuid,
+                        groupName: nameText,
+                        mUuid: AppGlobals.userInfo?.uuid ?? '');
 
                     if (data != null && data["code"] == 200) {
                       //更新缓存

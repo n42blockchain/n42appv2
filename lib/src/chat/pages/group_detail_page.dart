@@ -70,14 +70,14 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
         isLoading = true;
       });
       final data = await chatApi.groupMembers(
-          widget.info.g_uuid, AppGlobals.userInfo?.uuid ?? '');
+          widget.info.gUuid, AppGlobals.userInfo?.uuid ?? '');
       if (data != null && data["code"] == 200) {
         final list = data["data"];
         if (list != null && list is List) {
           groupMemberList =
               list.map((e) => GroupMemberInfo.fromJson(e)).toList();
           // 添加群成员缓存
-          ChatSPUtil().saveGroupMembers(widget.info.g_uuid, groupMemberList);
+          ChatSPUtil().saveGroupMembers(widget.info.gUuid, groupMemberList);
           handleData();
         }
       }
@@ -171,7 +171,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                               final flag = await Navigator.of(context)
                                   .push(MaterialPageRoute(
                                   builder: (_) => AddGroupMemberPage(
-                                    groupId: _info.g_uuid,
+                                    groupId: _info.gUuid,
                                     groupMemberList:
                                     groupMemberList,
                                   )));
@@ -204,7 +204,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                                     .push(MaterialPageRoute(
                                     builder: (_) =>
                                         DeleteGroupMemberPage(
-                                          groupId: _info.g_uuid,
+                                          groupId: _info.gUuid,
                                           groupMemberList:
                                           groupMemberList,
                                         )));
@@ -323,7 +323,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                     if (flag != null && flag) {
                       //更新name
                       GroupInfo? item =
-                      await ChatSPUtil().getGroupInfoById(_info.g_uuid);
+                      await ChatSPUtil().getGroupInfoById(_info.gUuid);
                       if (item != null) {
                         _info = item;
                         setState(() {});
@@ -400,13 +400,13 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                     if (isGroupOwner) {
                       //解散群
                       final data = await chatApi.groupDisband(
-                          widget.info.g_uuid,
+                          widget.info.gUuid,
                           AppGlobals.userInfo?.uuid ?? '');
                       //{code: 200, msg: OK, data: true}
                       if (data != null && data["code"] == 200) {
                         if (data["data"] != null && data["data"]) {
                           bottomButtonCanOnClick = false;
-                          widget.info.member_type = 0;
+                          widget.info.memberType = 0;
                           //更新群缓存
                           await ChatSPUtil().saveOrUpdateGroupInfo(
                               widget.info);
@@ -422,7 +422,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                     else {
                       //退出群
                       final data = await chatApi.leaveGroup(
-                          widget.info.g_uuid,
+                          widget.info.gUuid,
                           AppGlobals.userInfo?.uuid ?? '');
                       //{code: 400, msg: Bad Request, data: {l_uuid: l_uuid is a required field}}
                       //{code: 200, msg: OK, data: true}
@@ -430,7 +430,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                         if (data["data"] != null && data["data"]) {
                           //成功退出
                           bottomButtonCanOnClick = false;
-                          widget.info.member_type = 0;
+                          widget.info.memberType = 0;
                           //更新群缓存
                           await ChatSPUtil().saveOrUpdateGroupInfo(
                               widget.info);

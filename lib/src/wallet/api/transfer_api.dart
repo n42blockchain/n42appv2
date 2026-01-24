@@ -133,7 +133,7 @@ class TransferApi {
     MessageModel txmm=MessageModel();
     switch (blockchain) {
       case "Bitcoin":
-        txmm= await transfer_btc(
+        txmm= await transferBtc(
             txChainMap['baseInfo']['coinType'],
             fromAddress,
             toAddress,
@@ -145,7 +145,7 @@ class TransferApi {
         );
         break;
       case "Ethereum":
-        txmm= await transfer_eth(
+        txmm= await transferEth(
           isTest?txChainMap['baseInfo']['chainId_test']:txChainMap['baseInfo']['chainId'],
           txChainMap['baseInfo']['coinType'],
           fromAddress,
@@ -162,7 +162,7 @@ class TransferApi {
         );
         break;
       case "Solana":
-        txmm= await transfer_sol(
+        txmm= await transferSol(
             txChainMap,
             fromAddress,
             toAddress,
@@ -175,7 +175,7 @@ class TransferApi {
         );
         break;
       case "Tron":
-        txmm= await transfer_trx(
+        txmm= await transferTrx(
             fromAddress,
             toAddress,
             value,
@@ -187,7 +187,7 @@ class TransferApi {
         );
         break;
       case "Algorand":
-        return await transfer_algo(
+        return await transferAlgo(
           fromAddress,
           toAddress,
           value,
@@ -197,7 +197,7 @@ class TransferApi {
           maxValue: maxValue,
         );
       case "Tezos":
-        return await transfer_xtz(
+        return await transferXtz(
             fromAddress,
             toAddress,
             value,
@@ -207,7 +207,7 @@ class TransferApi {
             maxValue: maxValue
         );
       case "Ripple":
-        return await transfer_xrp(
+        return await transferXrp(
             fromAddress,
             toAddress,
             value,
@@ -217,7 +217,7 @@ class TransferApi {
             maxValue: maxValue
         );
       case "Cosmos":
-        return await transfer_atom(
+        return await transferAtom(
           fromAddress,
           toAddress,
           value,
@@ -240,10 +240,10 @@ class TransferApi {
   }
 
   //钱包转账使用，此方法无需检测币是否存在，也无需检测转账是否无误
-  transfer_wallet({TransationRecordModel? trModel,BtcTransactionRecodeModel? trModel_btc,String? privateKey,int pathIndex=0})async{
+  transferWallet({TransationRecordModel? trModel,BtcTransactionRecodeModel? trModelBtc,String? privateKey,int pathIndex=0})async{
     String blockchain = "";
     if(trModel==null){
-      blockchain=trModel_btc!.coin['blockchainType'];
+      blockchain=trModelBtc!.coin['blockchainType'];
     }else{
       blockchain=trModel.coin['blockchainType'];
     }
@@ -253,23 +253,23 @@ class TransferApi {
     switch (blockchain) {
       case "Bitcoin":
         List<Map<String,dynamic>> utxo=[];
-        for(InputModel im in trModel_btc!.InputModels){
+        for(InputModel im in trModelBtc!.inputModelsList){
           utxo.add(im.toMap());
         }
-        coinType=trModel_btc.coin['coinType'];
-        network=trModel_btc.isTest==0?"main":"test";
-        txmm= await transfer_btc_send(
-          trModel_btc.coin['coinType'],
-          trModel_btc.address,
-          trModel_btc.to1,
-          trModel_btc.price,
-          getPathWithIndex(trModel_btc.coin['path'][trModel_btc.addrType], pathIndex),
-          trModel_btc.gas,
-          trModel_btc.gasPrice,
-          trModel_btc.inputModels_map(),
-          max: trModel_btc.max,
+        coinType=trModelBtc.coin['coinType'];
+        network=trModelBtc.isTest==0?"main":"test";
+        txmm= await transferBtcSend(
+          trModelBtc.coin['coinType'],
+          trModelBtc.address,
+          trModelBtc.to1,
+          trModelBtc.price,
+          getPathWithIndex(trModelBtc.coin['path'][trModelBtc.addrType], pathIndex),
+          trModelBtc.gas,
+          trModelBtc.gasPrice,
+          trModelBtc.inputModelsMap(),
+          max: trModelBtc.max,
           privateKey: privateKey,
-          isTest: trModel_btc.isTest==0?"main":"test",
+          isTest: trModelBtc.isTest==0?"main":"test",
         );
         break;
       case "Ethereum":
@@ -285,7 +285,7 @@ class TransferApi {
         }else{
           rpc=trModel.coin['service_test'];
         }
-        txmm= await transfer_eth_send(
+        txmm= await transferEthSend(
           trModel.from1,
           trModel.to1,
           trModel.price,
@@ -308,7 +308,7 @@ class TransferApi {
       case "Solana":
         coinType=CoinType.SOL.name;
         network=trModel!.isTest==0?"main":"test";
-        txmm= await transfer_sol_send(
+        txmm= await transferSolSend(
           trModel.from1,
           trModel.to1,
           trModel.price,
@@ -323,7 +323,7 @@ class TransferApi {
       case "Tron":
         coinType=CoinType.TRX.name;
         network=trModel!.isTest==0?"main":"test";
-        txmm= await transfer_trx_send(
+        txmm= await transferTrxSend(
           trModel.from1,
           trModel.to1,
           trModel.price,
@@ -344,7 +344,7 @@ class TransferApi {
         if(trModel.other !=null){
           type=trModel.other.type;
         }
-        txmm= await transfer_algo_send(trModel.from1,
+        txmm= await transferAlgoSend(trModel.from1,
           trModel.to1,
           trModel.price.toString(),
           getPathWithIndex(trModel.coin['path'][trModel.addrType], pathIndex),
@@ -357,7 +357,7 @@ class TransferApi {
       case "Tezos":
         coinType=CoinType.XTZ.name;
         network=trModel!.isTest==0?"main":"test";
-        txmm= await transfer_xtz_send(
+        txmm= await transferXtzSend(
           trModel.from1,
           trModel.to1,
           trModel.price.toInt(),
@@ -369,7 +369,7 @@ class TransferApi {
       case "Ripple":
         coinType=CoinType.XRP.name;
         network=trModel!.isTest==0?"main":"test";
-        txmm= await transfer_xrp_send(trModel.from1,
+        txmm= await transferXrpSend(trModel.from1,
           trModel.to1,
           trModel.price,
           trModel.gasPrice,
@@ -382,7 +382,7 @@ class TransferApi {
       case "Filecoin":
         coinType=CoinType.FIL.name;
         network=trModel!.isTest==0?"main":"test";
-        txmm=await transfer_fil_send(
+        txmm=await transferFilSend(
             trModel.from1,
             trModel.to1,
             trModel.price,
@@ -396,7 +396,7 @@ class TransferApi {
       case "Cosmos":
         coinType=CoinType.ATOM.name;
         network=trModel!.isTest==0?"main":"test";
-        txmm= await transfer_atom_send(
+        txmm= await transferAtomSend(
           trModel.from1,
           trModel.to1,
           trModel.price,
@@ -410,7 +410,7 @@ class TransferApi {
       case "Polkadot":
         coinType=trModel!.coin['coinType'];
         network=trModel.isTest==0?"main":"test";
-        txmm= await transfer_dot_send(
+        txmm= await transferDotSend(
           trModel.from1,
           trModel.to1,
           trModel.price,
@@ -426,7 +426,7 @@ class TransferApi {
       case "Aptos":
         coinType=trModel!.coin['coinType'];
         network=trModel.isTest==0?"main":"test";
-        txmm=await transfer_apt_send(
+        txmm=await transferAptSend(
             trModel.from1,
             trModel.to1,
             trModel.price,
@@ -438,7 +438,7 @@ class TransferApi {
       case "TheOpenNetwork":
         coinType=trModel!.coin['coinType'];
         network=trModel.isTest==0?"main":"test";
-        txmm=await transfer_ton_send(
+        txmm=await transferTonSend(
             trModel.from1,
             trModel.to1,
             trModel.price,
@@ -452,7 +452,7 @@ class TransferApi {
       case "Zilliqa":
         coinType=trModel!.coin['coinType'];
         network=trModel.isTest==0?"main":"test";
-        txmm=await transfer_zil_send(
+        txmm=await transferZilSend(
             trModel.from1,
             trModel.to1,
             trModel.price,
@@ -499,7 +499,7 @@ class TransferApi {
     return rStr;
   }
   //Aptos
-  transfer_apt(String fromAddress, String toAddress, double value,
+  transferApt(String fromAddress, String toAddress, double value,
       int decimals, String path,String coinType,int chainId,
       {String contractAddress = "",int tokenDecimals=0,bool maxValue=true,String? privateKey})async{
     //获取每个byte 消耗多少gas
@@ -517,7 +517,7 @@ class TransferApi {
     }
     /*BigInt balance = BigInt.zero;
     if (contractAddress != "") {
-      MessageModel mmToken = await getBalanceAll_trx(fromAddress, contractAddress: contractAddress);
+      MessageModel mmToken = await getBalanceAllTrx(fromAddress, contractAddress: contractAddress);
       if (mmToken.error == true) {
         return mmToken;
       } else {
@@ -572,7 +572,7 @@ class TransferApi {
         return mme;
       }
     }*/
-    MessageModel mmtx=await transfer_atom_send(fromAddress, toAddress, valuePrice, path, totalGasPrice,contractAddress: contractAddress);
+    MessageModel mmtx=await transferAtomSend(fromAddress, toAddress, valuePrice, path, totalGasPrice,contractAddress: contractAddress);
     if(mmtx.error==false){
       MessageModel mmr = MessageModel();
       mmr.data = {
@@ -584,7 +584,7 @@ class TransferApi {
       return mmtx;
     }
   }
-  transfer_apt_send(String fromAddress, String toAddress, BigInt valuePrice, String path,int gas,BigInt totalGasPrice,String coinType,int chainId,
+  transferAptSend(String fromAddress, String toAddress, BigInt valuePrice, String path,int gas,BigInt totalGasPrice,String coinType,int chainId,
       {String contractAddress = "",String contractModule="",String contractName="",String isTest="main",String? privateKey})async{
     AptApi aptApi=AptApi(isTest: isTest=="main"?false:true);
     MessageModel sequenceNumber=await aptApi.getAccountInfo(fromAddress);
@@ -632,10 +632,10 @@ class TransferApi {
     return mmtx;
   }
   //TheOpenNetwork
-  transfer_ton_send(String fromAddress, String toAddress, BigInt valuePrice, String path,int gas,BigInt totalGasPrice,String coinType,
+  transferTonSend(String fromAddress, String toAddress, BigInt valuePrice, String path,int gas,BigInt totalGasPrice,String coinType,
       {String contractAddress = "",String isTest="main",String? privateKey})async{
     TonApi tonApi=TonApi(isTest: isTest=="main"?false:true);
-    MessageModel sequenceNumber=await tonApi.getSeqno_ton(fromAddress);
+    MessageModel sequenceNumber=await tonApi.getSeqnoTon(fromAddress);
     if(sequenceNumber.error){
       return sequenceNumber;
     }
@@ -668,12 +668,12 @@ class TransferApi {
       rmm.data=S.current.g_key_wallet_m6;
       return rmm;
     }//发起交易
-    MessageModel mmtx=await tonApi.submit_ton(signStr);
+    MessageModel mmtx=await tonApi.submitTon(signStr);
     return mmtx;
   }
 
   //Polkadot
-  transfer_dot(String fromAddress, String toAddress, double value,
+  transferDot(String fromAddress, String toAddress, double value,
       int decimals, String path,String coinType,
       {String contractAddress = "",int tokenDecimals=0,bool maxValue=true,String? privateKey})async{
     //获取每个byte 消耗多少gas
@@ -691,7 +691,7 @@ class TransferApi {
     }
     /*BigInt balance = BigInt.zero;
     if (contractAddress != "") {
-      MessageModel mmToken = await getBalanceAll_trx(fromAddress, contractAddress: contractAddress);
+      MessageModel mmToken = await getBalanceAllTrx(fromAddress, contractAddress: contractAddress);
       if (mmToken.error == true) {
         return mmToken;
       } else {
@@ -746,7 +746,7 @@ class TransferApi {
         return mme;
       }
     }*/
-    MessageModel mmtx=await transfer_atom_send(fromAddress, toAddress, valuePrice, path, totalGasPrice,contractAddress: contractAddress);
+    MessageModel mmtx=await transferAtomSend(fromAddress, toAddress, valuePrice, path, totalGasPrice,contractAddress: contractAddress);
     if(mmtx.error==false){
       MessageModel mmr = MessageModel();
       mmr.data = {
@@ -758,7 +758,7 @@ class TransferApi {
       return mmtx;
     }
   }
-  transfer_dot_send(String fromAddress, String toAddress, BigInt valuePrice, String path,BigInt totalGasPrice,String coinType,
+  transferDotSend(String fromAddress, String toAddress, BigInt valuePrice, String path,BigInt totalGasPrice,String coinType,
       {String contractAddress = "",String isTest="main",String? privateKey,bool returnSignHash=false})async{
     DotApi dotApi=DotApi();
     bool test=isTest=="main"?false:true;
@@ -818,14 +818,14 @@ class TransferApi {
     return mmtx;
   }
   //Cosmos
-  transfer_atom(String fromAddress, String toAddress, double value,
+  transferAtom(String fromAddress, String toAddress, double value,
       int decimals, String path,
       {String contractAddress = "",int tokenDecimals=0,bool maxValue=true,String? privateKey})async{
     //获取每个byte 消耗多少gas
     int gas = GetCoinGas(CoinType.ATOM.name,
         contract: contractAddress == "" ? false : true);
     MessageModel mm =
-    await getBalanceAll_trx(fromAddress);
+    await getBalanceAllTrx(fromAddress);
 
     //获取余额
     BigInt chainBalance = BigInt.zero;
@@ -837,7 +837,7 @@ class TransferApi {
     BigInt balance = BigInt.zero;
     if (contractAddress != "") {
       MessageModel mmToken =
-      await getBalanceAll_trx(fromAddress, contractAddress: contractAddress);
+      await getBalanceAllTrx(fromAddress, contractAddress: contractAddress);
       if (mmToken.error == true) {
         return mmToken;
       } else {
@@ -892,7 +892,7 @@ class TransferApi {
         return mme;
       }
     }
-    MessageModel mmtx=await transfer_atom_send(fromAddress, toAddress, valuePrice, path, totalGasPrice,contractAddress: contractAddress);
+    MessageModel mmtx=await transferAtomSend(fromAddress, toAddress, valuePrice, path, totalGasPrice,contractAddress: contractAddress);
     if(mmtx.error==false){
       MessageModel mmr = MessageModel();
       mmr.data = {
@@ -904,7 +904,7 @@ class TransferApi {
       return mmtx;
     }
   }
-  transfer_atom_send(String fromAddress, String toAddress, BigInt valuePrice, String path,BigInt totalGasPrice,
+  transferAtomSend(String fromAddress, String toAddress, BigInt valuePrice, String path,BigInt totalGasPrice,
       {String contractAddress = "",String isTest="main",String? privateKey})async{
     AtomApi atomApi=AtomApi();
     MessageModel amm=await atomApi.getAccounts(fromAddress);
@@ -953,14 +953,14 @@ class TransferApi {
     return mmtx;
   }
   //tron 转账
-  transfer_trx(String fromAddress, String toAddress, double value,
+  transferTrx(String fromAddress, String toAddress, double value,
       int decimals, String path,
       {String contractAddress = "",int tokenDecimals=0,bool maxValue=true}) async {
     //获取每个byte 消耗多少gas
     int gas = GetCoinGas(CoinType.TRX.name,
         contract: contractAddress == "" ? false : true);
     MessageModel mm =
-    await getBalanceAll_trx(fromAddress);
+    await getBalanceAllTrx(fromAddress);
 
     //获取余额
     BigInt chainBalance = BigInt.zero;
@@ -972,7 +972,7 @@ class TransferApi {
     BigInt balance = BigInt.zero;
     if (contractAddress != "") {
       MessageModel mmToken =
-      await getBalanceAll_trx(fromAddress, contractAddress: contractAddress);
+      await getBalanceAllTrx(fromAddress, contractAddress: contractAddress);
       if (mmToken.error == true) {
         return mmToken;
       } else {
@@ -1027,7 +1027,7 @@ class TransferApi {
         return mme;
       }
     }
-    MessageModel mmtx=await transfer_trx_send(fromAddress, toAddress, valuePrice, path, totalGasPrice,contractAddress: contractAddress);
+    MessageModel mmtx=await transferTrxSend(fromAddress, toAddress, valuePrice, path, totalGasPrice,contractAddress: contractAddress);
     if(mmtx.error==false){
       MessageModel mmr = MessageModel();
       mmr.data = {
@@ -1040,12 +1040,12 @@ class TransferApi {
     }
   }
   //trx提交
-  transfer_trx_send(String fromAddress, String toAddress, BigInt valuePrice, String path,BigInt totalGasPrice,
+  transferTrxSend(String fromAddress, String toAddress, BigInt valuePrice, String path,BigInt totalGasPrice,
       {String contractAddress = "",String isTest="main",String? privateKey})async{
     //签名
     TrxApi trxApi=TrxApi();
     //获取最新块
-    MessageModel mmlbn =await trxApi.getBlockNow_trx(isTest:isTest=="main"?false:true);
+    MessageModel mmlbn =await trxApi.getBlockNowTrx(isTest:isTest=="main"?false:true);
     if (mmlbn.error) {
       return mmlbn;
     }
@@ -1096,7 +1096,7 @@ class TransferApi {
       rmm.data=S.current.g_key_wallet_m6;
       return rmm;
     }//发起交易
-    MessageModel mmtx=await trxApi.sendTx_trx(signStr,isTest:isTest=="main"?false:true);
+    MessageModel mmtx=await trxApi.sendTxTrx(signStr,isTest:isTest=="main"?false:true);
     return mmtx;
     /*MessageModel mmtx = await tokenViewApi.sendTx(
         BlockchainType.Tron.name, CoinType.TRX.name, signStr,
@@ -1116,7 +1116,7 @@ class TransferApi {
     }*/
   }
 
-  transfer_sol(Map<String,dynamic> chainMap,String fromAddress, String toAddress, double value,
+  transferSol(Map<String,dynamic> chainMap,String fromAddress, String toAddress, double value,
       int decimals, String path,
       {String contractAddress = "",int tokenDecimals=0,bool maxValue=true}) async {
     //获取每个byte 消耗多少gas
@@ -1125,7 +1125,7 @@ class TransferApi {
     BigInt balance = BigInt.zero;
     BigInt chainBalance  = BigInt.zero;
     MessageModel mmb =
-    await getBalance_sol(fromAddress, contractAddress: contractAddress);
+    await getBalanceSol(fromAddress, contractAddress: contractAddress);
     if (mmb.error) {
       return mmb;
     } else {
@@ -1136,7 +1136,7 @@ class TransferApi {
       mme.data = S.current.g_key_wallet_m4;
       return mme;
     }
-    MessageModel mmchain = await getBalance_sol(fromAddress);
+    MessageModel mmchain = await getBalanceSol(fromAddress);
     if (mmchain.error) {
       return mmchain;
     } else {
@@ -1185,7 +1185,7 @@ class TransferApi {
         return mme;
       }
     }
-    MessageModel rmm=await transfer_sol_send(fromAddress, toAddress, valuePrice, path, totalGasPrice,contractAddress:contractAddress ,tokenDecimals: tokenDecimals);
+    MessageModel rmm=await transferSolSend(fromAddress, toAddress, valuePrice, path, totalGasPrice,contractAddress:contractAddress ,tokenDecimals: tokenDecimals);
     if(rmm.error==false){
       rmm.data={
         "txHash":rmm.data,
@@ -1195,7 +1195,7 @@ class TransferApi {
     return rmm;
   }
   //solana 提交
-  transfer_sol_send(String fromAddress, String toAddress, BigInt valuePrice, String path,BigInt totalGasPrice,
+  transferSolSend(String fromAddress, String toAddress, BigInt valuePrice, String path,BigInt totalGasPrice,
       {String contractAddress = "",int tokenDecimals=0,String isTest="main",String? privateKey})async{
     SolApi solApi=SolApi();
     String recipientTokenAddress="";
@@ -1286,7 +1286,7 @@ class TransferApi {
   }
 
   //erc721Or1155 721、1155
-  transfer_eth_721({
+  transferEth721({
     String fromAddress="",
     required String toAddress,
     required String contractAddress,
@@ -1319,7 +1319,7 @@ class TransferApi {
     //获取每个byte 消耗多少gas
     int gas =
     GetCoinGas(coinType, contract: true);
-    /*MessageModel mm = await getBalance_eth(coinType, fromAddress,
+    /*MessageModel mm = await getBalanceEth(coinType, fromAddress,
         contractAddress: "");*/
     //获取余额
     //BigInt balance = BigInt.zero;
@@ -1335,7 +1335,7 @@ class TransferApi {
       return mme;
     }*/
     MessageModel mmchain =
-    await getBalance_eth(coinType, fromAddress, contractAddress: "",isTest: isTest);
+    await getBalanceEth(coinType, fromAddress, contractAddress: "",isTest: isTest);
     if (mmchain.error == true) {
       return mmchain;
     } else {
@@ -1375,7 +1375,7 @@ class TransferApi {
     }
 
     //获取nonce值
-    MessageModel mmn = await tokenViewApi.getTransactionCount_eth(
+    MessageModel mmn = await tokenViewApi.getTransactionCountEth(
         coinType, fromAddress,netMode:isTest?"test":"main");
     String nonceHex = "";
     if (mmn.error) {
@@ -1435,7 +1435,7 @@ class TransferApi {
         BlockchainType.Ethereum.name, coinType, signStr,
         netMode: isTest?"test":"main");
   }
-  transfer_eth(int chainId, String coinType, String fromAddress,
+  transferEth(int chainId, String coinType, String fromAddress,
       String toAddress, double value, int decimals, String path,
       {String contractAddress = "",int tokenDecimals=0,bool isTest=false,bool maxValue=true,String? message,}) async {
     //获取每个byte 消耗多少gas
@@ -1444,7 +1444,7 @@ class TransferApi {
     BigInt balance = BigInt.zero;
     BigInt chainBalance = BigInt.zero;
     if(contractAddress !=""){
-      MessageModel mm = await getBalance_eth(coinType, fromAddress,
+      MessageModel mm = await getBalanceEth(coinType, fromAddress,
           contractAddress: contractAddress,isTest:isTest);
       if (mm.error == true) {
         return mm;
@@ -1458,7 +1458,7 @@ class TransferApi {
       }
     }
     MessageModel mmchain =
-    await getBalance_eth(coinType, fromAddress, contractAddress: "",isTest:isTest);
+    await getBalanceEth(coinType, fromAddress, contractAddress: "",isTest:isTest);
     if (mmchain.error == true) {
       return mmchain;
     } else {
@@ -1487,7 +1487,7 @@ class TransferApi {
     //gas费消耗最大数
     BigInt totalGasPrice = BigInt.zero;
     /*else{
-      MessageModel estimate_mm=await TokenViewApi.getGasEstimate_eth_v2(
+      MessageModel estimateMm=await TokenViewApi.getGasEstimateEthV2(
           fromAddress,
           toAddress,
           gasPrice,
@@ -1497,14 +1497,14 @@ class TransferApi {
           contract: contractAddress,
         isTest:isTest,
       );
-      if(estimate_mm.error){
-        return estimate_mm;
+      if(estimateMm.error){
+        return estimateMm;
       }else{
-        gas=(estimate_mm.data as BigInt).toInt();
+        gas=(estimateMm.data as BigInt).toInt();
         totalGasPrice=gasPrice * BigInt.from(gas);
       }
     }*/
-    MessageModel estimate_mm=await TokenViewApi().getGasEstimate_eth_v2(
+    MessageModel estimateMm=await TokenViewApi().getGasEstimateEthV2(
         fromAddress,
         toAddress,
         gasPrice,
@@ -1513,15 +1513,15 @@ class TransferApi {
         coinType,
         contract: contractAddress,
         isTest: isTest,);
-    if(estimate_mm.error==false){
-      gas=(estimate_mm.data as BigInt).toInt();
+    if(estimateMm.error==false){
+      gas=(estimateMm.data as BigInt).toInt();
       if(coinType==CoinType.OP.name
           || coinType==CoinType.BOBA.name){
         gas=(gas*1.5).toInt();
       }
       totalGasPrice=gasPrice * BigInt.from(gas);
     }else{
-      return estimate_mm;
+      return estimateMm;
     }
 
     BigInt valuePrice = BigInt.zero;
@@ -1555,7 +1555,7 @@ class TransferApi {
         return mme;
       }
     }
-    MessageModel rmm=await transfer_eth_send(
+    MessageModel rmm=await transferEthSend(
       fromAddress, toAddress,
       valuePrice, path, gasPrice, gasPrice2,gas,
       coinType, chainId,
@@ -1572,7 +1572,7 @@ class TransferApi {
     return rmm;
   }
   //以太坊提交
-  transfer_eth_send(
+  transferEthSend(
       String fromAddress,
       String toAddress,
       BigInt valuePrice,
@@ -1594,7 +1594,7 @@ class TransferApi {
     String nonceHex = "";
     //获取nonce值
     if(nonce==null){
-      MessageModel mmn = await tokenViewApi.getTransactionCount_eth(
+      MessageModel mmn = await tokenViewApi.getTransactionCountEth(
           coinType, fromAddress,
           netMode: isTest,rpc: rpc);
       if (mmn.error) {
@@ -1685,9 +1685,9 @@ class TransferApi {
         netMode: isTest,rpc: rpc);
   }
 
-  transfer_btc(String coinType, String fromAddress, String toAddress,
+  transferBtc(String coinType, String fromAddress, String toAddress,
       double value, String path,{bool maxValue=true,String isTest="main"}) async {
-    MessageModel checkLastModel=await checkLastTx_btc(coinType, fromAddress);
+    MessageModel checkLastModel=await checkLastTxBtc(coinType, fromAddress);
     if(checkLastModel.error){
       return checkLastModel;
     }
@@ -1695,7 +1695,7 @@ class TransferApi {
     //获取平均gasfee
     int averageValue = 0;
     if (coinType.toUpperCase() == CoinType.BTC.name) {
-      MessageModel gasFeeMM = await tokenViewApi.getGasFee_btc(isTest: isTest=="main"?false:true);
+      MessageModel gasFeeMM = await tokenViewApi.getGasFeeBtc(isTest: isTest=="main"?false:true);
       if (gasFeeMM.error) {
         return gasFeeMM;
       } else {
@@ -1708,7 +1708,7 @@ class TransferApi {
     //获取余额
     BigInt balance = BigInt.zero;
     MessageModel mmb =
-    await getBalance_btc(coinType.toUpperCase(), fromAddress,isTest: isTest=="main"?false:true);
+    await getBalanceBtc(coinType.toUpperCase(), fromAddress,isTest: isTest=="main"?false:true);
     if (mmb.error) {
       return mmb;
     } else {
@@ -1751,7 +1751,7 @@ class TransferApi {
         return mmr;
       }
     }
-    MessageModel rmm=await transfer_btc_send(coinType, fromAddress, toAddress,  valuePrice.toInt(),path, averageValue, byteSizeFees,utxos,max: allValue,isTest:isTest);
+    MessageModel rmm=await transferBtcSend(coinType, fromAddress, toAddress,  valuePrice.toInt(),path, averageValue, byteSizeFees,utxos,max: allValue,isTest:isTest);
     if(rmm.error==false){
       rmm.data={
         "txHash":rmm.data,
@@ -1761,7 +1761,7 @@ class TransferApi {
     return rmm;
   }
   //btc交易发送,max转账最大值
-  transfer_btc_send(
+  transferBtcSend(
       String coinType,
       String fromAddress,
       String toAddress,
@@ -1818,7 +1818,7 @@ class TransferApi {
     bool isTest=false,
   }
       ) async {
-    MessageModel mm = await tokenViewApi.getUTXO_btc(
+    MessageModel mm = await tokenViewApi.getUTXOBtc(
         coinType.toUpperCase(), address,
         pageSize: pageSize, pageNum: pageNum,isTest:isTest);
     if (mm.error) {
@@ -1942,13 +1942,13 @@ class TransferApi {
   }
 
   //Algorand转账
-  transfer_algo( String fromAddress,
+  transferAlgo( String fromAddress,
       String toAddress, double value, int decimals, String path,{bool maxValue=true}) async {
     //获取每个byte 消耗多少gas
     int gas = GetCoinGas("ALGO", contract: false);
     //获取余额
     BigInt chainBalance = BigInt.zero;
-    MessageModel mmchain = await getBalance_algo(fromAddress);
+    MessageModel mmchain = await getBalanceAlgo(fromAddress);
     if (mmchain.error == true) {
       return mmchain;
     } else {
@@ -1981,7 +1981,7 @@ class TransferApi {
       mme.data = S.current.g_key_wallet_m5("ALGO");
       return mme;
     }
-    MessageModel rmm=await transfer_algo_send(
+    MessageModel rmm=await transferAlgoSend(
       fromAddress, toAddress,
       valuePrice.toString(), path,
     );
@@ -1993,7 +1993,7 @@ class TransferApi {
     }
     return rmm;
   }
-  transfer_algo_send(String fromAddress, String toAddress,
+  transferAlgoSend(String fromAddress, String toAddress,
       String value, String path,{String contractAddress="",String isTest="main",String? privateKey,String type="ALGO"})async{
     Map<String,dynamic> txData={
       "type":type,
@@ -2038,13 +2038,13 @@ class TransferApi {
   }
 
   //Tezos转账
-  transfer_xtz( String fromAddress,
+  transferXtz( String fromAddress,
       String toAddress, double value, int decimals, String path,{bool maxValue=true}) async {
     //获取每个byte 消耗多少gas
     int gas = GetCoinGas("XTZ", contract: false);
     //获取余额
     BigInt chainBalance = BigInt.zero;
-    MessageModel mmchain = await getBalance_xtz(fromAddress);
+    MessageModel mmchain = await getBalanceXtz(fromAddress);
     if (mmchain.error == true) {
       return mmchain;
     } else {
@@ -2077,7 +2077,7 @@ class TransferApi {
       mme.data = S.current.g_key_wallet_m5("XTZ");
       return mme;
     }
-    MessageModel rmm=await transfer_xtz_send(
+    MessageModel rmm=await transferXtzSend(
       fromAddress, toAddress,
       valuePrice.toInt(), path,
     );
@@ -2089,7 +2089,7 @@ class TransferApi {
     }
     return rmm;
   }
-  transfer_xtz_send(String fromAddress, String toAddress,
+  transferXtzSend(String fromAddress, String toAddress,
       int value, String path,{bool isTest=false,String? privateKey})async{
     Map<String,dynamic> signMap={
       "amount":value,
@@ -2101,20 +2101,20 @@ class TransferApi {
       "reveal":true,//是否揭露
     };
     XtzApi xtzApi=XtzApi();
-    MessageModel mmCounter=await xtzApi.getCounter_xtz(fromAddress,isTest);
+    MessageModel mmCounter=await xtzApi.getCounterXtz(fromAddress,isTest);
     if(mmCounter.error){
       return mmCounter;
     }else{
       signMap['counter']=int.parse(mmCounter.data.toString())+1;
     }
-    MessageModel mmBranch=await xtzApi.getBranch_xgz(isTest);
+    MessageModel mmBranch=await xtzApi.getBranchXgz(isTest);
     if(mmBranch.error){
       return mmBranch;
     }else{
       signMap['branch']=mmBranch.data.toString();
     }
 
-    MessageModel mmReveal=await xtzApi.getBalance_xtz(fromAddress,"","revealed",isTest);
+    MessageModel mmReveal=await xtzApi.getBalanceXtz(fromAddress,"","revealed",isTest);
     if(mmReveal.error){
       return mmReveal;
     }else{
@@ -2136,15 +2136,15 @@ class TransferApi {
       rmm.data=S.current.g_key_wallet_m6;
       return;
     }
-    return await xtzApi.sendTx_xtz(signStr,isTest);
+    return await xtzApi.sendTxXtz(signStr,isTest);
   }
   //Ripple转账
-  transfer_xrp( String fromAddress,
+  transferXrp( String fromAddress,
       String toAddress, double value, int decimals, String path,{bool maxValue=true}) async {
     //目标地址 是否创建了账号
     bool isCreate=false;
     XrpApi xrpApi=XrpApi();
-    MessageModel mm=await xrpApi.getAccountInfo_xrp(toAddress, false);
+    MessageModel mm=await xrpApi.getAccountInfoXrp(toAddress, false);
     if(mm.error){
       MessageModel rmm=MessageModel.error();
       rmm.data=S.current.g_key_t_45(toAddress);
@@ -2166,7 +2166,7 @@ class TransferApi {
     int gas = GetCoinGas("XRP", contract: false);
     //获取余额
     BigInt chainBalance = BigInt.zero;
-    MessageModel mmchain = await getBalance_xtz(fromAddress);
+    MessageModel mmchain = await getBalanceXtz(fromAddress);
     if (mmchain.error == true) {
       return mmchain;
     } else {
@@ -2199,7 +2199,7 @@ class TransferApi {
       mme.data = S.current.g_key_wallet_m5("XRP");
       return mme;
     }
-    MessageModel rmm=await transfer_xrp_send(
+    MessageModel rmm=await transferXrpSend(
       fromAddress, toAddress,
       valuePrice,
       totalGasPrice,
@@ -2214,7 +2214,7 @@ class TransferApi {
     }
     return rmm;
   }
-  transfer_xrp_send(String fromAddress, String toAddress,
+  transferXrpSend(String fromAddress, String toAddress,
       BigInt value,BigInt totalGasPrice, String path,int sequence,{bool isTest=false,String? privateKey})async{
     Map<String,dynamic> signMap={
       "amount":value.toString(),
@@ -2228,14 +2228,14 @@ class TransferApi {
     };
     XrpApi xrpApi=XrpApi();
     if(sequence==0){
-      MessageModel mmSequence=await xrpApi.getAccountInfo_xrp(fromAddress,isTest);
+      MessageModel mmSequence=await xrpApi.getAccountInfoXrp(fromAddress,isTest);
       if(mmSequence.error){
         return mmSequence;
       }else{
         signMap['sequence']=mmSequence.data['sequence'];
       }
     }
-    MessageModel mmLedgerIndex=await xrpApi.getLedger_xrp(isTest: isTest);
+    MessageModel mmLedgerIndex=await xrpApi.getLedgerXrp(isTest: isTest);
     if(mmLedgerIndex.error){
       return mmLedgerIndex;
     }else{
@@ -2252,10 +2252,10 @@ class TransferApi {
       rmm.data=S.current.g_key_wallet_m6;
       return;
     }
-    return await xrpApi.sendTx_xrp(signStr,isTest);
+    return await xrpApi.sendTxXrp(signStr,isTest);
   }
 
-  transfer_fil_send(
+  transferFilSend(
       String fromAddress,
       String toAddress,
       BigInt value,
@@ -2349,23 +2349,23 @@ class TransferApi {
     MessageModel rmm = MessageModel();
     switch (blockchain) {
       case "Bitcoin":
-        rmm = await getBalance_btc(chainSymbol, address);
+        rmm = await getBalanceBtc(chainSymbol, address);
         break;
       case "Ethereum":
-        rmm = await getBalance_eth(chainSymbol, address,
+        rmm = await getBalanceEth(chainSymbol, address,
             contractAddress: contractAddress);
         break;
       case "Solana":
-        rmm = await getBalance_sol(address, contractAddress: contractAddress);
+        rmm = await getBalanceSol(address, contractAddress: contractAddress);
         break;
       case "Tron":
         rmm = await getBalance_trx(address, contractAddress: contractAddress);
         break;
       case "Algorand":
-        rmm= await getBalance_algo(address);
+        rmm= await getBalanceAlgo(address);
         break;
       case "Tezos":
-        rmm=await getBalance_xtz(address);
+        rmm=await getBalanceXtz(address);
         break;
       case "Ripple":
         rmm=await getBalance_xrp(address);
@@ -2385,7 +2385,7 @@ class TransferApi {
   }
 */
   //获取余额 tron
-  getBalance_trx(String fromAddress,
+  getBalanceTrx(String fromAddress,
       {String contractAddress = ""}) async {
     MessageModel mm = await tokenViewApi.getBalance(
         BlockchainType.Tron.name, CoinType.TRX.name, fromAddress,
@@ -2420,7 +2420,7 @@ class TransferApi {
     return rmm;
   }
 
-  getBalanceAll_trx(String fromAddress,
+  getBalanceAllTrx(String fromAddress,
       {String contractAddress = ""}) async {
     MessageModel mm = await tokenViewApi.getBalance(
         BlockchainType.Tron.name, CoinType.TRX.name, fromAddress,contract: contractAddress,
@@ -2429,7 +2429,7 @@ class TransferApi {
   }
 
   //获取余额 solana
-  getBalance_sol(String fromAddress,
+  getBalanceSol(String fromAddress,
       {String contractAddress = ""}) async {
     MessageModel rData= await tokenViewApi.getBalance(BlockchainType.Solana.name, "", fromAddress,contract: contractAddress);
     /*if(contractAddress !=""){
@@ -2441,7 +2441,7 @@ class TransferApi {
     }*/
     return rData;
   }
-  /*static getBalance_sol(Map<String, dynamic> chainMap,String fromAddress,
+  /*static getBalanceSol(Map<String, dynamic> chainMap,String fromAddress,
       {String contractAddress = ""}) async {
     BigInt balance=BigInt.zero;
     if(contractAddress==""){
@@ -2456,7 +2456,7 @@ class TransferApi {
   }*/
 
   //获取余额 eth
-  getBalance_eth(String coinType, String fromAddress,
+  getBalanceEth(String coinType, String fromAddress,
       {String contractAddress = "",bool isTest=false}) async {
     MessageModel mm = await tokenViewApi.getBalance(
         BlockchainType.Ethereum.name, coinType, fromAddress,contract:contractAddress,
@@ -2464,7 +2464,7 @@ class TransferApi {
     return mm;
   }
 
-  getBalance_btc(String coinType, String fromAddress,{bool isTest=false}) async {
+  getBalanceBtc(String coinType, String fromAddress,{bool isTest=false}) async {
     if(coinType==CoinType.BCH.name){
       fromAddress=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).getAddress(coinType,addrType: 'legacy');
     }
@@ -2473,19 +2473,19 @@ class TransferApi {
         isTest: isTest);
     return mm;
   }
-  getBalance_algo(String fromAddress) async {
+  getBalanceAlgo(String fromAddress) async {
     MessageModel mm = await tokenViewApi.getBalance(
         BlockchainType.Algorand.name, "ALGO", fromAddress,
         isTest: false);
     return mm;
   }
-  getBalance_xtz(String fromAddress) async {
+  getBalanceXtz(String fromAddress) async {
     MessageModel mm = await tokenViewApi.getBalance(
         BlockchainType.Tezos.name, "XTZ", fromAddress,
         isTest: false);
     return mm;
   }
-  getBalance_xrp(String fromAddress) async {
+  getBalanceXrp(String fromAddress) async {
     MessageModel mm = await tokenViewApi.getBalance(
         BlockchainType.Ripple.name, "XRP", fromAddress,
         isTest: false);
@@ -2493,8 +2493,8 @@ class TransferApi {
   }
 
   //根据最后一笔交易，判断此次交易是否可以进行交易，当确认数小于6时，交易不能进行
-  checkLastTx_btc(String coinType, String fromAddress)async{
-    MessageModel txModel=await getTxList_btc(coinType, fromAddress,pageNum: 1,pageSize: 1);
+  checkLastTxBtc(String coinType, String fromAddress)async{
+    MessageModel txModel=await getTxListBtc(coinType, fromAddress,pageNum: 1,pageSize: 1);
     if(txModel.error){
       return txModel;
     }else{
@@ -2524,11 +2524,11 @@ class TransferApi {
   }
   //获取交易记录列表
   //btc 比特币类
-  getTxList_btc(String coinType, String fromAddress,{int pageNum=1,int pageSize=20})async{
+  getTxListBtc(String coinType, String fromAddress,{int pageNum=1,int pageSize=20})async{
     if(coinType==CoinType.BCH.name){
       fromAddress=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).getAddress(coinType,addrType: 'legacy');
     }
-    return await tokenViewApi.getTxList_btc( coinType, fromAddress,pageNum: 1,pageSize: 1);
+    return await tokenViewApi.getTxListBtc( coinType, fromAddress,pageNum: 1,pageSize: 1);
   }
   //获取地址列表
   getAddressList(List<dynamic> chainMap) async {
@@ -2604,7 +2604,7 @@ class TransferApi {
   }
 
   // Zilliqa 转账
-  transfer_zil_send(String fromAddress, String toAddress, BigInt valuePrice, String path, int gas, BigInt gasPrice, String coinType,
+  transferZilSend(String fromAddress, String toAddress, BigInt valuePrice, String path, int gas, BigInt gasPrice, String coinType,
       {String contractAddress = "", String isTest = "main", String? privateKey}) async {
     ZilApi zilApi = ZilApi(isTest: isTest == "main" ? false : true);
 

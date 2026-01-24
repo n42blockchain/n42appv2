@@ -1,45 +1,45 @@
 class FileItemInfo{
   int? id;
-  String? s_uuid;
-  String? r_uuid;
-  String? r_email;
-  String? s_email;
-  String? s_aes_secret;
-  String? r_aes_secret;
-  String? file_type;
-  String? file_uri;
-  String? file_name;
-  String? file_desc;
-  int? s_del;
-  int? r_del;
+  String? sUuid;
+  String? rUuid;
+  String? rEmail;
+  String? sEmail;
+  String? sAesSecret;
+  String? rAesSecret;
+  String? fileType;
+  String? fileUri;
+  String? fileName;
+  String? fileDesc;
+  int? sDel;
+  int? rDel;
   int? created;
   int? updated;
 
-  String? s_name;
-  String? s_head_url;
-  String? r_name;
-  String? r_head_url;
+  String? sName;
+  String? sHeadUrl;
+  String? rName;
+  String? rHeadUrl;
 
   FileItemInfo(
       this.id,
-      this.s_uuid,
-      this.r_uuid,
-      this.s_aes_secret,
-      this.r_aes_secret,
-      this.file_type,
-      this.file_uri,
-      this.file_name,
-      this.file_desc,
-      this.s_del,
-      this.r_del,
-      this.r_email,
-      this.s_email,
+      this.sUuid,
+      this.rUuid,
+      this.sAesSecret,
+      this.rAesSecret,
+      this.fileType,
+      this.fileUri,
+      this.fileName,
+      this.fileDesc,
+      this.sDel,
+      this.rDel,
+      this.rEmail,
+      this.sEmail,
       this.created,
       this.updated,
-      this.s_head_url,
-      this.s_name,
-      this.r_head_url,
-      this.r_name,
+      this.sHeadUrl,
+      this.sName,
+      this.rHeadUrl,
+      this.rName,
       this.deCodeContent,
       );
 
@@ -71,24 +71,24 @@ class FileItemInfo{
   );
   Map<String, dynamic> toJson() =>{
     "id":id,
-    "s_uuid":s_uuid,
-    "r_uuid":r_uuid,
-    "s_aes_secret":s_aes_secret,
-    "r_aes_secret":r_aes_secret,
-    "file_type":file_type,
-    "file_uri":file_uri,
-    "file_name":file_name,
-    "file_desc":file_desc,
-    "s_del":s_del,
-    "r_del":r_del,
-    "r_email":r_email,
-    "s_email":s_email,
+    "s_uuid":sUuid,
+    "r_uuid":rUuid,
+    "s_aes_secret":sAesSecret,
+    "r_aes_secret":rAesSecret,
+    "file_type":fileType,
+    "file_uri":fileUri,
+    "file_name":fileName,
+    "file_desc":fileDesc,
+    "s_del":sDel,
+    "r_del":rDel,
+    "r_email":rEmail,
+    "s_email":sEmail,
     "created":created,
     "updated":updated,
-    "s_head_url":s_head_url,
-    "s_name":s_name,
-    "r_head_url":r_head_url,
-    "r_name":r_name,
+    "s_head_url":sHeadUrl,
+    "s_name":sName,
+    "r_head_url":rHeadUrl,
+    "r_name":rName,
     "deCodeContent":deCodeContent,
   };
 }

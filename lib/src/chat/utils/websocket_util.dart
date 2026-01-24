@@ -45,7 +45,7 @@ class WebSocketUtil {
     channel = IOWebSocketChannel.connect(
       wsUrl,
       headers: {
-        "origin":AppConfig.getApiUrl_online("imHttpHost"),
+        "origin":AppConfig.getApiUrlOnline("imHttpHost"),
       },
       pingInterval: Duration(seconds: 30),
       customClient:httpClient,
@@ -73,7 +73,7 @@ class WebSocketUtil {
     final uuid = AppGlobals.userInfo?.uuid;
     final token = AppGlobals.userInfo?.token;
     final socUrl =
-        '${AppConfig.getApiUrl_online('imWsHost')}/connect?uuid=$uuid&token=$token&source=app';
+        '${AppConfig.getApiUrlOnline('imWsHost')}/connect?uuid=$uuid&token=$token&source=app';
     return socUrl;
   }
 
@@ -285,8 +285,8 @@ class WebSocketUtil {
           }
 
           //当前群组是否有人@我 如果有存入到集合中
-          if(md.is_mentioned != null && md.is_mentioned == 1){
-            List<dynamic> list = md.mentioned_user_ids != null ? json.decode(md.mentioned_user_ids! ) : [];
+          if(md.isMentioned != null && md.isMentioned == 1){
+            List<dynamic> list = md.mentionedUserIds != null ? json.decode(md.mentionedUserIds! ) : [];
             bool flag = false;
             for (var element in list) {
               if(element == AppGlobals.userInfo?.uuid){
@@ -310,7 +310,7 @@ class WebSocketUtil {
     else if (pushCode == 110) {
       AddFriendPush afp = AddFriendPush.fromBuffer(message.content);
       //ChatSPUtils().setNewFriendStatus(true);
-      Provider.of<ChatMessageProvider>(AppGlobals.appContext,listen: false).setNewFriendStatus_add();
+      Provider.of<ChatMessageProvider>(AppGlobals.appContext,listen: false).setNewFriendStatusAdd();
       //弹出添加好友通知
       final data = json.encode({
         "type": 110,

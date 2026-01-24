@@ -16,7 +16,7 @@ class BrowserCollectionModel{
     name=map["name"];
     desc=map["desc"];
   }
-  getMap_db(){
+  getMapDb(){
     return {
       "url":url,
       "name":name,

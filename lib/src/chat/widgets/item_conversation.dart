@@ -244,7 +244,7 @@ class _ItemConversationState extends State<ItemConversation>
     // 0 单聊 1群组
     if (_item.conversationType == 1) {
       GroupInfo? gi = _item.groupInfo;
-      image = gi?.avatar_url;
+      image = gi?.avatarUrl;
       name = gi?.name;
     } else {
       FriendInfo? fi = _item.friendInfo;

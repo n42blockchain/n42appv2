@@ -15,23 +15,23 @@ class TrxApi{
   late String url;
   late Map<String,String> header;
   TrxApi(){
-    url="";//AppConfig.getApiUrl_online('activiteHost');
+    url="";//AppConfig.getApiUrlOnline('activiteHost');
     header={'content-type': 'application/json','TRON-PRO-API-KEY':'c0093859-4ae0-47b5-8650-6b14fec2d771'};
   }
   //trx,Tron
   //获取余额
-  getBalance_trx(String address,String contract,{bool isTest=false})async{
-    address= getAddress_tron(address);
+  getBalanceTrx(String address,String contract,{bool isTest=false})async{
+    address= getAddressTron(address);
     if(contract==""){
-      MessageModel mm=await BaseRPC_eth("eth_getBalance",["0x$address","latest"]);
+      MessageModel mm=await baseRPCEth("eth_getBalance",["0x$address","latest"]);
       if(mm.error==false){
         mm.data=hexToInt(mm.data);
       }
       return mm;
     }else{
-      contract=getAddress_tron(contract);
+      contract=getAddressTron(contract);
       String addr=strip0x(address);
-      MessageModel mm=await BaseRPC_eth("eth_call",[{"from": "0x$address",
+      MessageModel mm=await baseRPCEth("eth_call",[{"from": "0x$address",
         "to": "0x$contract", "data": "0x70a082310000000000000000000000$addr"
       },"latest"]);
       if(mm.error==false){
@@ -40,8 +40,8 @@ class TrxApi{
       return mm;
     }
   }
-  getGasPrice_trx({bool isTest=false})async{
-    MessageModel mm=await BaseRPC_eth("eth_gasPrice",[],isTest: isTest);
+  getGasPriceTrx({bool isTest=false})async{
+    MessageModel mm=await baseRPCEth("eth_gasPrice",[],isTest: isTest);
     if(mm.error==false){
       mm.data=hexToInt(mm.data);
     }
@@ -131,11 +131,11 @@ class TrxApi{
     }
   }
   */
-  getGasEstimate_trx(String from,String to,BigInt gasPrice,BigInt value,BigInt gas,{String contract="",bool isTest=false})async{
-    from=getAddress_tron(from);
-    to=getAddress_tron(to);
+  getGasEstimateTrx(String from,String to,BigInt gasPrice,BigInt value,BigInt gas,{String contract="",bool isTest=false})async{
+    from=getAddressTron(from);
+    to=getAddressTron(to);
     if(contract==""){
-      MessageModel mm= await BaseRPC_eth("eth_estimateGas",
+      MessageModel mm= await baseRPCEth("eth_estimateGas",
           [{"from": from,
             "to": to,
             "gasPrice":'0x${gasPrice.toRadixString(16)}',
@@ -148,13 +148,13 @@ class TrxApi{
       return mm;
     }
     else{
-      contract=getAddress_tron(contract);
+      contract=getAddressTron(contract);
       //toAddress=DataUtils.strip0x(to);
       String aaa=hex(keccakAscii("transfer(address,uint256)"));
       aaa=aaa.substring(0,8).toLowerCase();
       Uint8List valueList=encodeBigInt(value,length: 32);
       String valueHex=hex(valueList).toLowerCase();
-      MessageModel mm= await BaseRPC_eth(
+      MessageModel mm= await baseRPCEth(
           "eth_estimateGas",
           [{"from": "0x$from",
             "to": "0x$contract",
@@ -169,7 +169,7 @@ class TrxApi{
     }
   }
   //或去最新块信息
-  getBlockNow_trx({bool isTest=false})async{
+  getBlockNowTrx({bool isTest=false})async{
     try{
       String urlStr=RequestUrl().getUrl2(CoinType.TRX.name, 'rpc',isTest: isTest);
       var data=await BaseApi.RequestEmpty_h.post('$urlStr/wallet/getnowblock', params: {},header: header);
@@ -214,7 +214,7 @@ class TrxApi{
     }
   }
   //广播交易
-  sendTx_trx(String signStr,{bool isTest=false})async{
+  sendTxTrx(String signStr,{bool isTest=false})async{
     try{
       String urlStr=RequestUrl().getUrl2(CoinType.TRX.name, 'api',isTest: isTest);
       final rData=await BaseApi.RequestEmpty_h.post('$urlStr/wallet/broadcasttransaction', params: {},data: jsonDecode(signStr),header: header);
@@ -262,7 +262,7 @@ class TrxApi{
     }
   }
   */
-  BaseRPC_eth(String method,var value,{bool? isTest})async{
+  baseRPCEth(String method,var value,{bool? isTest})async{
     try{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};
@@ -281,7 +281,7 @@ class TrxApi{
       return mm;
     }
   }
-  String getAddress_tron(String address){
+  String getAddressTron(String address){
     var decodeStr = Base58Decode(address);
     String hexAddress = bytesToHex(Uint8List.fromList(decodeStr));
     //HexUtils().uint8ToHex(Uint8List.fromList(decodeStr));

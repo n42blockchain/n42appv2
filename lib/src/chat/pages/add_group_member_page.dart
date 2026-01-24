@@ -388,7 +388,7 @@ class _AddGroupMemberPageState extends State<AddGroupMemberPage> {
                         Map<String, dynamic> params = {};
 
                         for (var element in selectedList) {
-                          final pubKey = element.public_key;
+                          final pubKey = element.publicKey;
                           final ssText = await _chatUtils.chatEnCode(
                             pubKey ?? '',
                             bytesToHex(Uint8List.fromList(groupPwd!.codeUnits)),

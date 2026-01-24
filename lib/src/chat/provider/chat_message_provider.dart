@@ -1,4 +1,4 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_api.dart';
@@ -42,7 +42,7 @@ class ChatMessageProvider extends ChangeNotifier {
     _haveNewFriend= flag;
     notifyListeners();
   }
-  setNewFriendStatus_add(){
+  setNewFriendStatusAdd(){
     _haveNewFriend++;
     notifyListeners();
   }
@@ -165,7 +165,7 @@ class ChatMessageProvider extends ChangeNotifier {
             index++;
             //申请添加我为好友并且本人没有同意
             //可以设置一个过期时间
-            //int? time = element.create_time;
+            //int? time = element.createTime;
             //判断是否超过7天 todo
             //index = friendList.indexOf(element);
           }
@@ -280,8 +280,8 @@ class ChatMessageProvider extends ChangeNotifier {
                 CacheMessageIsReadUtils().saveUnReadMessageId(md.getTargetId());
 
                 //当前群组是否有人@我 如果有存入到集合中
-                if(md.is_mentioned != null && md.is_mentioned == 1){
-                  List<dynamic> list = md.mentioned_user_ids != null ? json.decode(md.mentioned_user_ids! ) : [];
+                if(md.isMentioned != null && md.isMentioned == 1){
+                  List<dynamic> list = md.mentionedUserIds != null ? json.decode(md.mentionedUserIds! ) : [];
                   bool flag = false;
                   for (var element in list) {
                     if(element == AppGlobals.userInfo?.uuid){
@@ -329,11 +329,11 @@ class ChatMessageProvider extends ChangeNotifier {
         // 0 单聊 1群组
         if (element.conversationType == 0) {
           FriendInfo? info = await chatSPUtil.getNavUserInfo(targetId);
-          FriendInfo? info_r= await chatSPUtil.getNavUserInfo_remark(targetId);
+          FriendInfo? infoR= await chatSPUtil.getNavUserInfoRemark(targetId);
           if (info != null) {
             // debugPrint("从缓存中拿到了friendInfo数据");
             element.friendInfo = info;
-            element.friendInfo?.remarks=info_r?.remarks;
+            element.friendInfo?.remarks=infoR?.remarks;
           } else {
             final friendData = await chatApi.getUserInfo(targetId);
             if (friendData != null && friendData["code"] == 200) {

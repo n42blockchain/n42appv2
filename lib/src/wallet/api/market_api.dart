@@ -7,7 +7,7 @@ class MarketApi {
   late Map<String, String> header;
   
   MarketApi() {
-    url = AppConfig.getApiUrl_online('marketHost');
+    url = AppConfig.getApiUrlOnline('marketHost');
     header = {'content-type': 'application/json'};
   }
   

@@ -77,7 +77,7 @@ class _NewFriendListPageState extends State<NewFriendListPage> {
           threeDayAgoFriendList = [];
           for (FriendApplyInfo friendInfo in friendList) {
             DateTime friendCreateTime =
-            DateTime.fromMillisecondsSinceEpoch(friendInfo.create_time!);
+            DateTime.fromMillisecondsSinceEpoch(friendInfo.createTime!);
             if (friendCreateTime.isAfter(threeDaysAgo)) {
               threeDayFriendList.add(friendInfo);
             } else {

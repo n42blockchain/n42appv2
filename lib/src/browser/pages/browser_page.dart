@@ -47,7 +47,7 @@ class _BrowserPageState extends State<BrowserPage> {
   void dispose() {
     // 使用缓存引用，避免在已卸载状态下通过 context 查找祖先
     _browserProvider?.connectDAPPCallBack = null;
-    _browserProvider?.browser_dispose();
+    _browserProvider?.browserDispose();
     super.dispose();
   }
   walletConnect(){
@@ -56,10 +56,10 @@ class _BrowserPageState extends State<BrowserPage> {
       if(connect){
         Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletConnectPage(url)));
       }else{
-        showAlertWidget_connectDapp(url);
+        showAlertWidgetConnectDapp(url);
       }
     };
-    bp.browser_init();
+    bp.browserInit();
     bp.addUrl(widget.openUrl);
   }
   @override
@@ -124,7 +124,7 @@ class _BrowserPageState extends State<BrowserPage> {
                 SizedBox(width: ScreenUtil().setWidth(10.0),),
                 InkWell(
                   onTap: (){
-                    bValue.wList_add();
+                    bValue.wListAdd();
                   },
                   child: Container(
                     height: ScreenUtil().setWidth(60.0),
@@ -280,7 +280,7 @@ class _BrowserPageState extends State<BrowserPage> {
                   Expanded(child: InkWell(
                     onTap: ()async{
                       if(bValue.collect){
-                        bValue.deleteBrowserCollection_url();
+                        bValue.deleteBrowserCollectionUrl();
                       }else{
                         bValue.addBrowserCollection(context);
                       }
@@ -395,7 +395,7 @@ class _BrowserPageState extends State<BrowserPage> {
                   Expanded(
                     child: InkWell(
                       onTap: ()async{
-                        bValue.wList_add();
+                        bValue.wListAdd();
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -476,7 +476,7 @@ class _BrowserPageState extends State<BrowserPage> {
                   Positioned.fill(
                     child: InkWell(
                       onTap: (){
-                        bValue.wList_show(index);
+                        bValue.wListShow(index);
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -511,7 +511,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                   ),
                                   InkWell(
                                     onTap: (){
-                                      bValue.wList_delete(index);
+                                      bValue.wListDelete(index);
                                     },
                                     child: Container(
                                       width: ScreenUtil().setWidth(40.0),
@@ -553,7 +553,7 @@ class _BrowserPageState extends State<BrowserPage> {
       return bValue.wList[bValue.wListIndex];
     }
   }
-  showAlertWidget_connectDapp(String uri){
+  showAlertWidgetConnectDapp(String uri){
     SheetBottom(context, S.of(context).g_browser_key14, Column(
       children: [
         Container(

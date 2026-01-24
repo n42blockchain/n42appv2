@@ -9,7 +9,7 @@ class VersionApi{
   late String url;
   late Map<String,String> header;
   CheckVersionApi(){
-    url=AppConfig.getApiUrl_online('userInfoHost');
+    url=AppConfig.getApiUrlOnline('userInfoHost');
     header={'content-type': 'application/x-www-form-urlencoded'};
   }
   // 最新版本信息

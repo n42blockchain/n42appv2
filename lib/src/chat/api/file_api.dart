@@ -10,7 +10,7 @@ class FileApi {
   late String url;
   late Map<String,String> header;
   FileApi(){
-    url=AppConfig.getApiUrl_online('ipfsHost');
+    url=AppConfig.getApiUrlOnline('ipfsHost');
     header={'content-type': 'multipart/form-data',
       //"Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDU2MkVGMjZjNENFZjQ3MWU2NUQ0MDY5QWQxRUYwNkQ1OUQ3MDI4QWUiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY5ODIyMjI2OTUzOCwibmFtZSI6IkFtYXplV2FsbGV0In0.WC8LluNV06Burx-Uscv4ovQYgVOknUetAq718A4Xl1g",
     };

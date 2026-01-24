@@ -31,7 +31,7 @@ class _BrowserSettingState extends State<BrowserSetting> {
       setState(() {});
     }
   }
-  setBrowser_connectDApp(bool value){
+  setBrowserConnectDApp(bool value){
     browser['connectDApp']=value;
     SPUtil().setBrowserSetting(browser);
     setState(() {
@@ -67,7 +67,7 @@ class _BrowserSettingState extends State<BrowserSetting> {
                     value: browser['connectDApp'],
                     activeTrackColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
                     onChanged: (value){
-                      setBrowser_connectDApp(value);
+                      setBrowserConnectDApp(value);
                     },
                   ),
                 ],

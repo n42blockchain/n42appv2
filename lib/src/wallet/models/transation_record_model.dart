@@ -36,14 +36,14 @@ class TransationRecordModel{
   String? txTimeStr;
 
   //获取double 类型的 price 转出金额
-  double price_double(){
+  double priceDouble(){
     if(price==BigInt.zero){
       return 0;
     }else{
       return toEther(price.toString(),coin['decimals']).toDouble();
     }
   }
-  double gasPrice_double(){
+  double gasPriceDouble(){
     if(gasPrice==BigInt.zero){
       return 0;
     }else{
@@ -75,7 +75,7 @@ class TransationRecordModel{
     message=map['message'];
   }
   //转为数据库需要的map
-  Map<String,dynamic>toMap_db(){
+  Map<String,dynamic>toMapDb(){
     return {
       "address":address,
       "coinId":coinId,

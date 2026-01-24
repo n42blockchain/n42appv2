@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 /// 保留此类以兼容旧代码，新代码应使用 AppGlobals 和 Riverpod
 @Deprecated('Use AppGlobals and Riverpod providers instead')
 class Application {
+  // ignore: non_constant_identifier_names
   static late BuildContext AppContext;
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   static RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();

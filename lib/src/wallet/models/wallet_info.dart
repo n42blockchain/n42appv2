@@ -6,7 +6,7 @@ class WalletInfo {
   Map<String,dynamic> coinSort={"assets":0,"name":-1};//币排序缓存 assets:0降序，1升序,-1不排序,name:0降序，1升序，-1不排序
   int networkIndex=-1;
   String? walletName;
-  String? UUID; //此次登录的ID
+  String? walletUuid; //此次登录的ID
   Map<String, dynamic>? coinInfo; //币的基本信息
   String? privateKey;
   //生成钱包的时间戳 唯一标识
@@ -20,7 +20,7 @@ class WalletInfo {
         this.mnemonic,
         this.password,
         this.privateKey,
-        this.UUID,
+        this.walletUuid,
         this.timestamp,
         this.coinInfo,
       });
@@ -29,7 +29,7 @@ class WalletInfo {
     mnemonic=json['mnemonic'] as String?;
     password=json['password'] as String?;
     privateKey=json['privateKey'] as String?;
-    UUID=json['UUID'] as String?;
+    walletUuid=json['UUID'] as String?;
     timestamp=json['timestamp'] as String?;
     coinInfo=json['coinInfo'] as Map<String, dynamic>?;
     coinSort=json['coinSort'] as Map<String, dynamic>;
@@ -43,7 +43,7 @@ class WalletInfo {
       "mnemonic":mnemonic,
       "password":password,
       "privateKey":privateKey,
-      "UUID":UUID,
+      "UUID":walletUuid,
       "timestamp":timestamp,
       "coinInfo":coinInfo,
       "coinSort":coinSort,

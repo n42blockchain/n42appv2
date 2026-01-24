@@ -271,7 +271,7 @@ class AppDatabase{
     await db.delete("browserCollection", where: "id=$id");
   }
 
-  deleteBrowserCollection_url(String url) async {
+  deleteBrowserCollectionUrl(String url) async {
     final db = await database;
     return await db.delete("browserCollection", where: 'url="$url"');
   }
@@ -285,7 +285,7 @@ class AppDatabase{
     return list;
   }
 
-  selectBrowserCollection_url(String url) async {
+  selectBrowserCollectionUrl(String url) async {
     final db = await database;
     var response = await db.query("browserCollection", where: 'url="$url"');
     List<BrowserCollectionModel> list =
@@ -301,7 +301,7 @@ class AppDatabase{
     return raw;
   }
   //查询 浏览器历史
-  selectBrowserHistory_like(String urlStr,
+  selectBrowserHistoryLike(String urlStr,
       {int pageSize = 10, int pageNum = 1}) async {
     final db = await database;
     var response = await db.query("browserHistory",

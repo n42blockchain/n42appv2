@@ -9,8 +9,8 @@ class SuiApi{
   SuiApi({bool isTest=false}){
     url=RequestUrl().getUrl2(CoinType.SUI.name, "rpc",isTest: isTest);
   }
-  getBalance_sui(String address)async{
-    MessageModel rmm=await BaseRPC_sui(
+  getBalanceSui(String address)async{
+    MessageModel rmm=await baseRPCSui(
       "suix_getBalance",
       [
         address,
@@ -22,8 +22,8 @@ class SuiApi{
     }
     return rmm;
   }
-  getGasPrice_sui()async{
-    MessageModel rmm= await BaseRPC_sui(
+  getGasPriceSui()async{
+    MessageModel rmm= await baseRPCSui(
       "suix_getReferenceGasPrice",
       [],
     );
@@ -34,7 +34,7 @@ class SuiApi{
   }
   //用户所有的对象，NFT，合约等
   getOwnedObjects(String address)async{
-    MessageModel rmm= await BaseRPC_sui(
+    MessageModel rmm= await baseRPCSui(
       "suix_getOwnedObjects",
       [address, {
         "filter": {
@@ -61,7 +61,7 @@ class SuiApi{
   }
   //模拟交易
   dryRunTransactionBlock(String signStr)async{
-    MessageModel rmm= await BaseRPC_sui(
+    MessageModel rmm= await baseRPCSui(
       "sui_dryRunTransactionBlock",
       [signStr],
     );
@@ -78,7 +78,7 @@ class SuiApi{
   }
   //交易商链
   submit(String transactionBlock,String signStr)async{
-    return await BaseRPC_sui("sui_executeTransactionBlock", [
+    return await baseRPCSui("sui_executeTransactionBlock", [
       transactionBlock,
       [signStr],
       "WaitForEffectsCert",
@@ -90,7 +90,7 @@ class SuiApi{
   }
   //查询交易信息
   getTransactionBlock(String txHash)async{
-    return await BaseRPC_sui("sui_getTransactionBlock", [
+    return await baseRPCSui("sui_getTransactionBlock", [
       txHash,
       {
         "showInput": false,
@@ -103,7 +103,7 @@ class SuiApi{
       },
     ]);
   }
-  BaseRPC_sui(String method,var value)async{
+  baseRPCSui(String method,var value)async{
     try{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};

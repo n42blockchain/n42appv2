@@ -9,7 +9,7 @@ class UserInfoApi{
   late String url;
   late Map<String,String> header;
   UserInfoApi(){
-    url=AppConfig.getApiUrl_online('userInfoHost');
+    url=AppConfig.getApiUrlOnline('userInfoHost');
     header={'content-type': 'application/json'
     //'application/x-www-form-urlencoded'
     };

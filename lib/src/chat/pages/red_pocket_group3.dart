@@ -41,15 +41,15 @@ class _RedPocketGroup3State extends State<RedPocketGroup3> {
     }
   }
   getClaim(String uuid){
-    widget.chatMessage?.redPocketDetailModel?.red_claim?.sort((RedPocketClaimModel a,RedPocketClaimModel b)=>b.value!.compareTo(a.value!));
-    int? index = widget.chatMessage?.redPocketDetailModel?.red_claim?.indexWhere((element) {
+    widget.chatMessage?.redPocketDetailModel?.redClaim?.sort((RedPocketClaimModel a,RedPocketClaimModel b)=>b.value!.compareTo(a.value!));
+    int? index = widget.chatMessage?.redPocketDetailModel?.redClaim?.indexWhere((element) {
       if(element.uuid==uuid){
         return true;
       }
       return false;
     });
     if(index !=null && index !=-1){
-      return widget.chatMessage!.redPocketDetailModel!.red_claim![index];
+      return widget.chatMessage!.redPocketDetailModel!.redClaim![index];
     }
     return null;
   }
@@ -213,7 +213,7 @@ class _RedPocketGroup3State extends State<RedPocketGroup3> {
                     padding: EdgeInsets.only(top: ScreenUtil().setWidth(10.0)),
                     alignment: Alignment.center,
                     child: Text(
-                      "Opend ${(widget.chatMessage?.redPocketDetailModel?.count??0)-(widget.chatMessage?.redPocketDetailModel?.remain_count??0)}/${widget.chatMessage?.redPocketDetailModel?.count??0}",
+                      "Opend ${(widget.chatMessage?.redPocketDetailModel?.count??0)-(widget.chatMessage?.redPocketDetailModel?.remainCount??0)}/${widget.chatMessage?.redPocketDetailModel?.count??0}",
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(28.0),
                         fontWeight: FontWeight.w400,
@@ -224,9 +224,9 @@ class _RedPocketGroup3State extends State<RedPocketGroup3> {
                   Expanded(
                     flex: 1,
                     child: ListView.builder(
-                      itemCount: widget.chatMessage?.redPocketDetailModel?.red_claim?.length,
+                      itemCount: widget.chatMessage?.redPocketDetailModel?.redClaim?.length,
                       itemBuilder: (context,int index){
-                        RedPocketClaimModel? rpcm=widget.chatMessage?.redPocketDetailModel?.red_claim?[index];
+                        RedPocketClaimModel? rpcm=widget.chatMessage?.redPocketDetailModel?.redClaim?[index];
                         String redUrl="";
                         if(index==0){
                           redUrl="red1";
@@ -248,7 +248,7 @@ class _RedPocketGroup3State extends State<RedPocketGroup3> {
                                   borderRadius: BorderRadius.circular(ScreenUtil().setWidth(80.0)),
                                 ),
                                 child: ImageNetWork(
-                                  imageUrl: rpcm?.avatar_url??"",
+                                  imageUrl: rpcm?.avatarUrl??"",
                                   width: ScreenUtil().setSp(80.0),
                                   height: ScreenUtil().setSp(80.0),
                                   placeholder: "assets/chat/user_def_icon.png",

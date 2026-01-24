@@ -1,29 +1,29 @@
 class GroupInfo{
-  String g_uuid;
+  String gUuid;
   String name;
-  String avatar_url;
+  String avatarUrl;
   String introduction;
-  int user_num;
+  int userNum;
   String extra;
-  int avisible_to_nm;
-  int last_seq_before_visible;
+  int avisibleToNm;
+  int lastSeqBeforeVisible;
   int created;
   int updated;
   // member_type 0=退群 1=群主 2=普通成员
-  int? member_type;
+  int? memberType;
 
   GroupInfo(
-      this.g_uuid,
+      this.gUuid,
       this.name,
-      this.avatar_url,
+      this.avatarUrl,
       this.introduction,
-      this.user_num,
+      this.userNum,
       this.extra,
-      this.avisible_to_nm,
-      this.last_seq_before_visible,
+      this.avisibleToNm,
+      this.lastSeqBeforeVisible,
       this.created,
       this.updated,
-      this.member_type);
+      this.memberType);
   factory GroupInfo.fromJson(Map<String, dynamic> json)=>
       GroupInfo(
         json['g_uuid'] as String,
@@ -39,16 +39,16 @@ class GroupInfo{
         json['member_type'] as int,
       );
   Map<String, dynamic> toJson() =>{
-    "g_uuid":g_uuid,
+    "g_uuid":gUuid,
     "name":name,
-    "avatar_url":avatar_url,
+    "avatar_url":avatarUrl,
     "introduction":introduction,
-    "user_num":user_num,
+    "user_num":userNum,
     "extra":extra,
-    "avisible_to_nm":avisible_to_nm,
-    "last_seq_before_visible":last_seq_before_visible,
+    "avisible_to_nm":avisibleToNm,
+    "last_seq_before_visible":lastSeqBeforeVisible,
     "created":created,
     "updated":updated,
-    "member_type":member_type,
+    "member_type":memberType,
   };
 }

@@ -1,4 +1,4 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/models/friend_info.dart';
@@ -57,7 +57,7 @@ class ChatSPUtil {
     const groupListKey = "groupList";
     final list = await getGroupList();
     //查看缓存中是否已经存在当前群组信息
-    int index = list.indexWhere((element) => element.g_uuid == info.g_uuid);
+    int index = list.indexWhere((element) => element.gUuid == info.gUuid);
     if (index != -1) {
       // 更新数据
       list[index] = info;
@@ -82,7 +82,7 @@ class ChatSPUtil {
   Future<GroupInfo?> getGroupInfoById(String groupId) async {
     final list = await getGroupList();
     for (GroupInfo info in list) {
-      if (info.g_uuid == groupId) {
+      if (info.gUuid == groupId) {
         return info;
       }
     }
@@ -165,7 +165,7 @@ class ChatSPUtil {
     return null;
   }
   //根据user_id 查user_id
-  Future<FriendInfo?> getNavUserInfo_remark(String id) async {
+  Future<FriendInfo?> getNavUserInfoRemark(String id) async {
     final list = await getFriendList();
     for (FriendInfo info in list) {
       if (info.uuid == id) {

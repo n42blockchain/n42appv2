@@ -13,7 +13,7 @@ import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 ///explorer/op/{hash}获取交易信息
 class XtzApi{
   //valueType: "balance"spendable_balance;"revealed"is_revealed
-  getBalance_xtz(String address,String contract,String valueType,bool isTest)async{
+  getBalanceXtz(String address,String contract,String valueType,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XTZ.name,'api',isTest:isTest);
       var data=await BaseApi.RequestEmpty_h.get('${uri}explorer/account/$address', params: {},defaultReturn: false);
@@ -49,7 +49,7 @@ class XtzApi{
   }
   */
   //counter 获取计数
-  getCounter_xtz(String address,bool isTest)async{
+  getCounterXtz(String address,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XTZ.name,'rpc',isTest:isTest);
       var data=await BaseApi.RequestEmpty_h.get('${uri}chains/main/blocks/head/context/contracts/$address/counter', params: {},defaultReturn: false);
@@ -62,7 +62,7 @@ class XtzApi{
       return mm;
     }
   }
-  getBranch_xgz(bool isTest)async{
+  getBranchXgz(bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XTZ.name,'rpc',isTest:isTest);
       var data=await BaseApi.RequestEmpty_h.get('${uri}chains/main/blocks/head/hash', params: {},defaultReturn: false);
@@ -89,7 +89,7 @@ class XtzApi{
     }
   }
   */
-  getTxInfo_xtz(String txHash,bool isTest)async{
+  getTxInfoXtz(String txHash,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XTZ.name,'api',isTest:isTest);
       var data=await BaseApi.RequestEmpty_h.get('${uri}explorer/op/$txHash', params: {},defaultReturn: false);
@@ -103,7 +103,7 @@ class XtzApi{
     }
   }
   //广播
-  sendTx_xtz(String signAddress,bool isTest)async{
+  sendTxXtz(String signAddress,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XTZ.name, "rpc",isTest:isTest);
       var data=await BaseApi.RequestEmpty_h.post('${uri}injection/operation?chain=main', params: {},data: json.encode(signAddress),defaultReturn: false);

@@ -19,12 +19,12 @@ class BtcTransactionRecodeModel{
   String coinMiniName="";
   String contract="";
   List<InputModel>? inputModels;
-  List<InputModel> get InputModels{
+  List<InputModel> get inputModelsList{
     inputModels ??= [];
     return inputModels!;
   }
   List<OutputModel>? outputModels;
-  List<OutputModel> get OutputModels{
+  List<OutputModel> get outputModelsList{
     outputModels ??= [];
     return outputModels!;
   }
@@ -43,28 +43,28 @@ class BtcTransactionRecodeModel{
   String? inputAddressStr;
   String? outputAddressStr;
 
-  List<String> get InputsAddress{
+  List<String> get inputsAddressList{
     if(inputsAddress==null){
       inputsAddress=[];
-      for(InputModel im in InputModels){
+      for(InputModel im in inputModelsList){
         inputsAddress!.addAll(im.address);
       }
     }
     return inputsAddress!;
   }
-  List<String> get OutputsAddress{
+  List<String> get outputsAddressList{
     if(outputsAddress==null){
       outputsAddress=[];
-      for(OutputModel om in OutputModels){
+      for(OutputModel om in outputModelsList){
         outputsAddress!.addAll(om.address);
       }
     }
     return outputsAddress!;
   }
-  String get InputAddressStr{
+  String get inputAddressStrValue{
     if(inputAddressStr==null){
       inputAddressStr="";
-      for(String addr in InputsAddress){
+      for(String addr in inputsAddressList){
         if(address.toUpperCase() != addr.toUpperCase()){
           String addrf=DataUtils().addressFarmat(addr);
           inputAddressStr='$inputAddressStr$addrf ';
@@ -75,10 +75,10 @@ class BtcTransactionRecodeModel{
     }
     return inputAddressStr!;
   }
-  String get OutputAddressStr{
+  String get outputAddressStrValue{
     if(outputAddressStr==null){
       outputAddressStr="";
-      for(String addr in OutputsAddress){
+      for(String addr in outputsAddressList){
         if(address.toUpperCase() != addr.toUpperCase()){
           String addrf=DataUtils().addressFarmat(addr);
           outputAddressStr='$outputAddressStr$addrf ';
@@ -91,39 +91,39 @@ class BtcTransactionRecodeModel{
   }
   String? txTimeStr;
 
-  List<Map<String,dynamic>> inputModels_map(){
+  List<Map<String,dynamic>> inputModelsMap(){
     List<Map<String,dynamic>> utxo=[];
-    for(InputModel im in InputModels){
+    for(InputModel im in inputModelsList){
       utxo.add(im.toMap());
     }
     return utxo;
   }
   //获取 的转出utxo btc总和
   int inputPrice(){
-    if(InputModels.isEmpty){
+    if(inputModelsList.isEmpty){
       return 0;
     }else{
       int inputPrice=0;
-      for(InputModel im in InputModels){
+      for(InputModel im in inputModelsList){
         inputPrice+=im.value;
       }
       return inputPrice;
     }
   }
   //获取double类型的 转出utxo btc总和
-  double inputPrice_double(){
-    if(InputModels.isEmpty){
+  double inputPriceDouble(){
+    if(inputModelsList.isEmpty){
       return 0.0;
     }else{
       double inputPrice=0.0;
-      for(InputModel im in InputModels){
+      for(InputModel im in inputModelsList){
         inputPrice+=im.value/100000000;
       }
       return inputPrice;
     }
   }
   //获取double 类型的 price 转出金额
-  double price_double(){
+  double priceDouble(){
     if(price==0){
       return 0;
     }else{
@@ -131,7 +131,7 @@ class BtcTransactionRecodeModel{
     }
   }
   //获取double类型的gas
-  double gas_double(){
+  double gasDouble(){
     if(gas==0){
       return 0;
     }else{
@@ -139,7 +139,7 @@ class BtcTransactionRecodeModel{
     }
   }
   //赋值gas
-  setGas_double(double g){
+  setGasDouble(double g){
     gas=BigInt.from(g*100000000).toInt();
   }
   getTxTimeStr(){
@@ -174,11 +174,11 @@ class BtcTransactionRecodeModel{
     List<dynamic> outputs=jsonDecode(map["output"]);
     for(dynamic s in inputs){
       Map<String,dynamic> input=jsonDecode(s);
-      InputModels.add(InputModel.fromMap(input));
+      inputModelsList.add(InputModel.fromMap(input));
     }
     for(dynamic s in outputs){
       Map<String,dynamic> output=jsonDecode(s);
-      OutputModels.add(OutputModel.fromMap(output));
+      outputModelsList.add(OutputModel.fromMap(output));
     }
     trId=map['trId'];
     address=map['address'];
@@ -199,13 +199,13 @@ class BtcTransactionRecodeModel{
     walletIndex=map['walletIndex'];
     gasPrice=map['gasPrice'];
   }
-  Map<String,dynamic> toMap_db(){
+  Map<String,dynamic> toMapDb(){
     List<String> inputs=[];
-    for(InputModel im in InputModels){
+    for(InputModel im in inputModelsList){
       inputs.add(jsonEncode(im.toMap()));
     }
     List<String> outputs=[];
-    for(OutputModel om in OutputModels){
+    for(OutputModel om in outputModelsList){
       outputs.add(jsonEncode(om.toMap()));
     }
     return {
@@ -232,11 +232,11 @@ class BtcTransactionRecodeModel{
   }
   Map<String,dynamic> toMap(){
     List<String> inputs=[];
-    for(InputModel im in InputModels){
+    for(InputModel im in inputModelsList){
       inputs.add(jsonEncode(im.toMap()));
     }
     List<String> outputs=[];
-    for(OutputModel om in OutputModels){
+    for(OutputModel om in outputModelsList){
       outputs.add(jsonEncode(om.toMap()));
     }
     return {
@@ -271,7 +271,7 @@ class InputModel{
   String witnessValue="";
   int lockTime=0;
   List<String> address=[];
-  double value_double(){
+  double valueDouble(){
     if(value==0){
       return 0;
     }else{
@@ -308,7 +308,7 @@ class OutputModel{
   List<String> address=[];
   int price=0;
   String script="";
-  double price_double(){
+  double priceDoubleValue(){
     if(price==0){
       return 0;
     }else{

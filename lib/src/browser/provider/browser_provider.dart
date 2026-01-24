@@ -57,22 +57,22 @@ class BrowserProvider extends ChangeNotifier{
   bool canBack=false;
   bool canForward=false;
   bool collect=false;
-  browser_init(){
+  browserInit(){
     titleEditingController=TextEditingController();
     titleFocusNode=FocusNode();
     titleFocusNode?.addListener(() {
       notifyListeners();
     });
   }
-  browser_dispose(){
+  browserDispose(){
     titleEditingController?.dispose();
     titleFocusNode?.dispose();
   }
   addUrl(String url){
     String rUrl=checkHttp(url);
-    wList_add(url:rUrl);
+    wListAdd(url:rUrl);
   }
-  wList_add({String url=""}){
+  wListAdd({String url=""}){
     if(url==""){
       url=AppConfig.apiUrl['walletamazeBrowser']!;
     }
@@ -111,7 +111,7 @@ class BrowserProvider extends ChangeNotifier{
             browserApi.insertBrowserHistory(url);
             getTitle();
             checkCanGo();
-            getCollection_url(url);
+            getCollectionUrl(url);
           },
           onWebResourceError: (WebResourceError error) {
             wInfoList[wListIndex]['load']=false;
@@ -163,15 +163,15 @@ class BrowserProvider extends ChangeNotifier{
     //notifyListeners();
   }
   //显示webView
-  wList_show(int index){
+  wListShow(int index){
     wListIndex=index;
     showWList=false;
     titleEditingController?.text=wInfoList[wListIndex]['openUrl'];
     checkCanGo();
-    getCollection_url(wInfoList[wListIndex]['openUrl']);
+    getCollectionUrl(wInfoList[wListIndex]['openUrl']);
   }
   //删除一个 webView
-  wList_delete(int index){
+  wListDelete(int index){
     if(index==0){
       //第一位
       if(wList.length==1){
@@ -195,8 +195,8 @@ class BrowserProvider extends ChangeNotifier{
     notifyListeners();
   }
   //查询收藏缓存 条件 url
-  getCollection_url(String url)async{
-    List<BrowserCollectionModel> list=await browserApi.selectBrowserCollection_url(url);
+  getCollectionUrl(String url)async{
+    List<BrowserCollectionModel> list=await browserApi.selectBrowserCollectionUrl(url);
     if(list.isEmpty){
       collect=false;
     }else{
@@ -276,9 +276,9 @@ class BrowserProvider extends ChangeNotifier{
     return returnUrl;
   }
   //删除收藏url
-  deleteBrowserCollection_url()async{
-    await browserApi.deleteBrowserCollection_url(wInfoList[wListIndex]['openUrl']);
-    getCollection_url(wInfoList[wListIndex]['openUrl']);
+  deleteBrowserCollectionUrl()async{
+    await browserApi.deleteBrowserCollectionUrl(wInfoList[wListIndex]['openUrl']);
+    getCollectionUrl(wInfoList[wListIndex]['openUrl']);
   }
   //添加收藏
   addBrowserCollection(context)async{
@@ -286,7 +286,7 @@ class BrowserProvider extends ChangeNotifier{
     String? currentUrl=await wv.currentUrl();
     String? title=await wv.getTitle();
     await Navigator.push(context, MaterialPageRoute(builder: (context)=>BrowserCollection(title ?? "",currentUrl ?? "",)));
-    getCollection_url(wInfoList[wListIndex]['openUrl']);
+    getCollectionUrl(wInfoList[wListIndex]['openUrl']);
   }
   cleanWList(){
     showWList=false;

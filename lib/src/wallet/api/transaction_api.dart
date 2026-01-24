@@ -167,13 +167,13 @@ class TransactionApi {
         List<Txref> txrefs = res.txrefs;
         List<BtcTranDetail> list = [];
         for (var element in txrefs) {
-          List<BtcTransactionRecodeModel> rtrm=await db.selectBtcTransationRecord_txHash(element.tx_hash);
+          List<BtcTransactionRecodeModel> rtrm=await db.selectBtcTransationRecord_txHash(element.txHash);
           if(rtrm.isNotEmpty){
             if(rtrm.first.outputModels?.isNotEmpty ?? false){
               continue;
             }
           }
-          final innerUrl = '${hostUrl}txs/${element.tx_hash}';
+          final innerUrl = '${hostUrl}txs/${element.txHash}';
           var inData = await BaseApi.RequestEmpty_h.get(innerUrl, params: {});
           if (inData != null) {
             BtcTranDetail bd = BtcTranDetail.fromJson(inData);
@@ -264,8 +264,8 @@ class TransactionApi {
           item.from = e['ownerAddress'] as String;
           item.to = e['toAddress'] as String;
           item.value=e['amount'] as String;
-          final trigger_info=e['trigger_info'];
-          if(trigger_info !=null){
+          final triggerInfo=e['trigger_info'];
+          if(triggerInfo !=null){
             item.contractAddress=e['trigger_info']['contract_address']??"";
             if(item.contractAddress !="" ){
               item.to=e['trigger_info']['parameter']['_to']??"";
@@ -314,8 +314,8 @@ class TransactionApi {
           item.from = e['ownerAddress'] as String;
           //item.to = e['toAddress'] as String;
           //item.value=e['amount'] as String;
-          final trigger_info=e['trigger_info'];
-          if(trigger_info !=null){
+          final triggerInfo=e['trigger_info'];
+          if(triggerInfo !=null){
             item.contractAddress=e['trigger_info']['contract_address']??"";
             if(item.contractAddress !="" ){
               item.to=e['trigger_info']['parameter']['_to']??"";
@@ -336,7 +336,7 @@ class TransactionApi {
     return mm;
   }
  //TRX 根据 交易hash获取交易信息
-  Future<MessageModel> trxTransactionInfo_hash(String hash)async{
+  Future<MessageModel> trxTransactionInfoHash(String hash)async{
     MessageModel mm=MessageModel();
     try {
       final hostUrl = getHostByCoinMiniName('TRX');

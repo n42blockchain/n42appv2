@@ -89,24 +89,24 @@ class CoinModel {
     double t=toEther(balance.toString(), coin['decimals']??0);
     return _regular.formartNum_double(toEther(balance.toString(), coin['decimals']??0), 14,isCrop: true,isFill0: false);
   }*/
-  double balance_double_all() {
+  double balanceDoubleAll() {
     return toEther(balance.toString(), coin['decimals']??0).toDouble();
   }
 
   //返回余额的 科学计数
-  String balance_string() {
-    return _oCcy.format(balance_double_all());
+  String balanceString() {
+    return _oCcy.format(balanceDoubleAll());
   }
   //返回余额的 全部位数
-  String balance_string_all(){
-    return Decimal.parse(balance_double_all().toString()).toString();
+  String balanceStringAll(){
+    return Decimal.parse(balanceDoubleAll().toString()).toString();
   }
 
   //返回value 的科学计数
-  String value_string() {
+  String valueString() {
     return _oCcy.format(value);
   }
-  String coinPrice_string() {
+  String coinPriceString() {
     return _oCcy.format(coinPrice);
   }
   CoinModel.fromMap(Map<String, dynamic> map, ) {
@@ -167,7 +167,7 @@ class CoinModel {
       }
     }
   }
-  getBalance_default()async{
+  getBalanceDefault()async{
     if(isTest){
       balance=BigInt.parse(coin['balance_test']);
     }else{
@@ -175,7 +175,7 @@ class CoinModel {
     }
     percentage=coin['percentage'];
     coinPrice=coin['coinPrice'];
-    value=balance_double_all()*coinPrice;
+    value=balanceDoubleAll()*coinPrice;
   }
   //是否是刷新，目前只有tron 链 使用
   getBalance({bool getToken=true}) async {

@@ -6,10 +6,10 @@ class FriendApplyInfo {
   String? name;
   String? reason;
   int? status;
-  int? create_time;
+  int? createTime;
 
   FriendApplyInfo(this.direction, this.uuid, this.email, this.image, this.name,
-      this.reason, this.status, this.create_time);
+      this.reason, this.status, this.createTime);
 
   factory FriendApplyInfo.fromJson(Map<String, dynamic> json) =>
       FriendApplyInfo(
@@ -31,7 +31,7 @@ class FriendApplyInfo {
     "name":name,
     "reason":reason,
     "status":status,
-    "create_time":create_time,
+    "create_time":createTime,
   };
 
 

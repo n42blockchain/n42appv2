@@ -146,7 +146,7 @@ class AtomApi{
     }
   }
   //cosmos/tx/v1beta1/simulate
-  sendTxs_simulate(var rawTx)async{
+  sendTxsSimulate(var rawTx)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
       var data=await BaseApi.RequestEmpty_h.post(

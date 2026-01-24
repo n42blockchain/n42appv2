@@ -1,6 +1,6 @@
 class BtcTranDetail{
-  final String? block_hash;
-  final int block_index;
+  final String? blockHash;
+  final int blockIndex;
   final String hash;
   final List<String>? addresses;
   final int total;
@@ -10,7 +10,7 @@ class BtcTranDetail{
   final List<Input>? inputs;
   final List<Output>? outputs;
 
-  BtcTranDetail(this.block_hash, this.block_index, this.hash, this.addresses, this.total, this.fees, this.confirmed, this.confirmations, this.inputs, this.outputs);
+  BtcTranDetail(this.blockHash, this.blockIndex, this.hash, this.addresses, this.total, this.fees, this.confirmed, this.confirmations, this.inputs, this.outputs);
 
 
   factory BtcTranDetail.fromJson(Map<String, dynamic> json) =>BtcTranDetail(
@@ -31,8 +31,8 @@ class BtcTranDetail{
   );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-    'block_hash': block_hash,
-    'block_index': block_index,
+    'block_hash': blockHash,
+    'block_index': blockIndex,
     'hash': hash,
     'addresses': addresses,
     'total': total,
@@ -44,13 +44,13 @@ class BtcTranDetail{
   };
 }
 class Input {
-  final String prev_hash;
-  final int output_index;
+  final String prevHash;
+  final int outputIndex;
   final String? script;
-  final int output_value;
+  final int outputValue;
   final List<String> addresses;
 
-  Input(this.prev_hash, this.output_index, this.script, this.output_value, this.addresses);
+  Input(this.prevHash, this.outputIndex, this.script, this.outputValue, this.addresses);
 
 
   factory Input.fromJson(Map<String, dynamic> json) =>Input(
@@ -62,10 +62,10 @@ class Input {
   );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-    'prev_hash': prev_hash,
-    'output_index': output_index,
+    'prev_hash': prevHash,
+    'output_index': outputIndex,
     'script': script,
-    'output_value': output_value,
+    'output_value': outputValue,
     'addresses': addresses,
   };
 

@@ -31,7 +31,7 @@ class CommonResponseItemModel{
   String? gas;
   String? gasPrice;
   String? isError;
-  String? txreceipt_status;
+  String? txreceiptStatus;
   String? input;
   String? contractAddress;
   String? cumulativeGasUsed;
@@ -52,7 +52,7 @@ class CommonResponseItemModel{
     gas=map['gas'] as String?;
     gasPrice=map['gasPrice'] as String?;
     isError=map['isError'] as String?;
-    txreceipt_status=map['txreceipt_status'] as String?;
+    txreceiptStatus=map['txreceipt_status'] as String?;
     input=map['input'] as String?;
     contractAddress=map['contractAddress'] as String?;
     cumulativeGasUsed=map['cumulativeGasUsed'] as String?;
@@ -73,7 +73,7 @@ class CommonResponseItemModel{
       "gas":gas,
       "gasPrice":gasPrice,
       "isError":isError,
-      "txreceipt_status":txreceipt_status,
+      "txreceipt_status":txreceiptStatus,
       "input":input,
       "contractAddress":contractAddress,
       "cumulativeGasUsed":cumulativeGasUsed,

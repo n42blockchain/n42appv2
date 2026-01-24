@@ -43,17 +43,17 @@ class DotApi{
   }
   //GenesisHash=0和BlockHash=nll
   getGenesisHash({int? index,bool isTest=false})async {
-    return await BaseRPC("chain_getBlockHash",index==null?[]:[index],isTest: isTest);
+    return await baseRPC("chain_getBlockHash",index==null?[]:[index],isTest: isTest);
   }
   getNonce(String address,{bool isTest=false})async{
-    return await BaseRPC("system_accountNextIndex",[address],isTest: isTest);
+    return await baseRPC("system_accountNextIndex",[address],isTest: isTest);
   }
   getChainHeader({bool isTest=false})async{
-    return await BaseRPC("chain_getHeader",[],isTest: isTest);
+    return await baseRPC("chain_getHeader",[],isTest: isTest);
   }
   //获取specVersion、TransactionVersion
   getRuntimeVersion({bool isTest=false})async {
-    return await BaseRPC("state_getRuntimeVersion",[],isTest: isTest);
+    return await baseRPC("state_getRuntimeVersion",[],isTest: isTest);
     /*{
   "jsonrpc": "2.0",
   "result": {
@@ -72,13 +72,13 @@ class DotApi{
   }
   submitTxHash(String hash,{bool isTest=false})async{
     //author_submitExtrinsic
-    return await BaseRPC("author_submitExtrinsic",[hash],isTest: isTest);
+    return await baseRPC("author_submitExtrinsic",[hash],isTest: isTest);
   }
   //估算gas费
   getGasPrice(String txHash,{bool isTest=false})async{
-    return await BaseRPC("payment_queryInfo",[txHash],isTest: isTest);
+    return await baseRPC("payment_queryInfo",[txHash],isTest: isTest);
   }
-  BaseRPC(String method,var value,{bool? isTest=false})async{
+  baseRPC(String method,var value,{bool? isTest=false})async{
     try{
       MessageModel mm=MessageModel();
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};

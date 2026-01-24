@@ -12,7 +12,7 @@ class BrowserHistoryModel{
     url=map["url"];
     time=map["time"];
   }
-  getMap_db(){
+  getMapDb(){
     return {
       "url":url,
       "time":time,

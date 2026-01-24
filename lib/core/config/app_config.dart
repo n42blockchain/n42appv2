@@ -158,12 +158,6 @@ class AppConfig {
     return endpoint?.toString() ?? '';
   }
 
-  // Legacy aliases for backwards compatibility
-  @Deprecated('Use getApiUrlOnline instead')
-  static String getApiUrl_online(String key) => getApiUrlOnline(key);
-  
-  @Deprecated('Use getApiUrlTestHost instead')
-  static String getApiUrl_testHost(String key) => getApiUrlTestHost(key);
 
   // ============ Debug Helpers ============
   

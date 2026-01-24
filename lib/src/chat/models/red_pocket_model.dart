@@ -3,7 +3,7 @@ class RedPocketModel{
   double? value;
   String? note;
   int? distribution;
-  String? tx_raw;
+  String? txRaw;
   String? uuid;
   String? nickname;
   String? avatar;
@@ -15,19 +15,19 @@ class RedPocketModel{
     note=map['note'] as String?;
     distribution=map['distribution'] as int?;
     cover=map['cover'] as int?;
-    tx_raw=map['tx_raw'] as String?;
+    txRaw=map['tx_raw'] as String?;
     uuid=map['uuid'] as String?;
     nickname=map['nickname'] as String?;
     avatar=map['avatar'] as String?;
   }
-  Map<String, dynamic> RedPocketModelToJson(){
+  Map<String, dynamic> toJson(){
     return {
       "number" : number??0,
       "value" : value??0.0,
       "note" : note??"",
       "distribution" : distribution?? 0,
       "cover" : cover?? 0,
-      "tx_raw" : tx_raw??"",
+      "tx_raw" : txRaw??"",
       "uuid" : uuid??"",
       "nickname" : nickname??"",
       "avatar" : avatar??"",

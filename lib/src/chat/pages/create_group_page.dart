@@ -284,7 +284,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                             Base64Utils().encodeBase64(mSecrtData ?? '');
 
                         for (var element in selectedList) {
-                          final pubKey = element.public_key;
+                          final pubKey = element.publicKey;
                           final ssText = await chatUtils.chatEnCode(
                               pubKey ?? '',
                               bytesToHex(Uint8List.fromList(passWord.codeUnits)));

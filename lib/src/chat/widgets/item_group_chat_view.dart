@@ -111,7 +111,7 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
   initData() async {
     _item = widget.item;
     messageType = _item.content.type;
-    isReply = _item.reply_id != null;
+    isReply = _item.replyId != null;
     await getGroupPwd();
     await findReplyMessage();
     handlerMessage();
@@ -122,7 +122,7 @@ class _ItemGroupChatViewState extends State<ItemGroupChatView>
     try {
       if (isReply) {
         replyChatItem =
-        await chatDBApi.getMessageByMessageId(_item.reply_id!);
+        await chatDBApi.getMessageByMessageId(_item.replyId!);
         debugPrint("replyChatItem ${replyChatItem != null}");
       }
     } catch (err) {

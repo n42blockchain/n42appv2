@@ -109,7 +109,7 @@ class _ItemChatViewState extends State<ItemChatView>
   void initState() {
     super.initState();
     _item = widget.item;
-    isReply = _item.reply_id != null;
+    isReply = _item.replyId != null;
     messageType = _item.content.type;
     handlerMessage();
   }
@@ -118,7 +118,7 @@ class _ItemChatViewState extends State<ItemChatView>
     try {
       if (isReply) {
         replyChatItem =
-        await chatDBApi.getMessageByMessageId(_item.reply_id!);
+        await chatDBApi.getMessageByMessageId(_item.replyId!);
       }
     } catch (_) {
       // 查找回复消息失败时安全忽略，显示空占位

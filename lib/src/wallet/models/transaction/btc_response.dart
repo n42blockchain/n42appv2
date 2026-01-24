@@ -1,13 +1,13 @@
 class BtcResponse{
   final String address; //自己的
-  final int total_received;
-  final int total_sent;
+  final int totalReceived;
+  final int totalSent;
   final int balance; //余额
-  final int unconfirmed_balance;
+  final int unconfirmedBalance;
   final List<Txref> txrefs;
 
-  BtcResponse(this.address, this.total_received, this.total_sent, this.balance,
-      this.unconfirmed_balance, this.txrefs);
+  BtcResponse(this.address, this.totalReceived, this.totalSent, this.balance,
+      this.unconfirmedBalance, this.txrefs);
 
   factory BtcResponse.fromJson(Map<String, dynamic> json) =>BtcResponse(
     json['address'] as String,
@@ -22,24 +22,24 @@ class BtcResponse{
 
   Map<String, dynamic> toJson() => <String, dynamic>{
     'address': address,
-    'total_received': total_received,
-    'total_sent': total_sent,
+    'total_received': totalReceived,
+    'total_sent': totalSent,
     'balance': balance,
-    'unconfirmed_balance': unconfirmed_balance,
+    'unconfirmed_balance': unconfirmedBalance,
     'txrefs': txrefs,
   };
 }
 class Txref {
-  final String tx_hash;
-  final int block_height;
+  final String txHash;
+  final int blockHeight;
   final int value;
-  final int ref_balance;
+  final int refBalance;
   final int confirmations;
-  final int tx_input_n;
-  final int tx_output_n;
+  final int txInputN;
+  final int txOutputN;
   final String confirmed;
 
-  Txref(this.tx_hash, this.block_height, this.value, this.ref_balance, this.confirmations,this.tx_input_n,this.tx_output_n,this.confirmed);
+  Txref(this.txHash, this.blockHeight, this.value, this.refBalance, this.confirmations,this.txInputN,this.txOutputN,this.confirmed);
 
   factory Txref.fromJson(Map<String, dynamic> json) => Txref(
     json['tx_hash'] as String,
@@ -53,13 +53,13 @@ class Txref {
   );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-    'tx_hash':tx_hash,
-    'block_height': block_height,
+    'tx_hash':txHash,
+    'block_height': blockHeight,
     'value': value,
-    'ref_balance': ref_balance,
+    'ref_balance': refBalance,
     'confirmations': confirmations,
-    'tx_input_n':tx_input_n,
-    'tx_output_n':tx_output_n,
+    'tx_input_n':txInputN,
+    'tx_output_n':txOutputN,
     'confirmed':confirmed,
   };
 }

@@ -1,4 +1,4 @@
-﻿import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
@@ -7,15 +7,15 @@ class ChatApi{
   late String url;
   late Map<String,String> header;
   ChatApi(){
-    url=AppConfig.getApiUrl_online('imHttpHost');
+    url=AppConfig.getApiUrlOnline('imHttpHost');
     header={'content-type': 'application/json'};
   }
   ///   ---------------   消息    ---------------------
   Future msgList(
-      int last_msg_id,
+      int lastMsgId,
       ) async {
     Map<String, dynamic> params = {};
-    params["last_msg_id"] = last_msg_id;
+    params["last_msg_id"] = lastMsgId;
     params["uuid"] = AppGlobals.userInfo?.uuid;
     final data =
     await BaseApi.RequestEmpty_h.post('$url/v1/chat/msg/list', data: params, params: {},header: header,);
@@ -44,13 +44,13 @@ class ChatApi{
     await BaseApi.RequestEmpty_h.post('$url/v1/chat/send/one', params: params, data: params,header: header,);
     return data;
   }
-  Future sendMessage_red({
+  Future sendMessageRed({
     required String fromUUID,
     required String receiveId,
     required String content,
     required int count,
     required double value,
-    required String tx_raw,
+    required String txRaw,
     required int type,
     required String description,
   })async{
@@ -59,7 +59,7 @@ class ChatApi{
     params["from_uuid"] = fromUUID;
     params["receiver_uuid"] = receiveId;
     params["count"] = count;
-    params["tx_raw"] = tx_raw;
+    params["tx_raw"] = txRaw;
     params["value"] = value;
     params["type"] = type;
     params["description"] = description;
@@ -116,10 +116,10 @@ class ChatApi{
   ///   ---------------   好友    ---------------------
   // 同意
   Future friendAccept(
-      String sender_uuid, String target_uuid, String remarks) async {
+      String senderUuid, String targetUuid, String remarks) async {
     Map<String, dynamic> params = {};
-    params["sender_uuid"] = sender_uuid;
-    params["target_uuid"] = target_uuid;
+    params["sender_uuid"] = senderUuid;
+    params["target_uuid"] = targetUuid;
     params["remarks"] = remarks;
     final data =
     await BaseApi.RequestEmpty_h.post('$url/v1/friend/accept', params: params, data: params,header: header,);
@@ -129,13 +129,13 @@ class ChatApi{
   //reason 申请理由
   // remarks备注昵称
   // target_uuid 好友请求接收者的uuid
-  Future friendAdd(String reason, String remarks, String sender_uuid,
-      String target_uuid) async {
+  Future friendAdd(String reason, String remarks, String senderUuid,
+      String targetUuid) async {
     Map<String, dynamic> params = {};
     params["reason"] = reason;
     params["remarks"] = remarks;
-    params["sender_uuid"] = sender_uuid;
-    params["target_uuid"] = target_uuid;
+    params["sender_uuid"] = senderUuid;
+    params["target_uuid"] = targetUuid;
     final data =
     await BaseApi.RequestEmpty_h.post('$url/v1/friend/add', params: params, data: params,header: header,);
     return data;
@@ -169,18 +169,18 @@ class ChatApi{
   }
 
   //获取用户信息
-  Future getUserInfo(String user_id) async {
+  Future getUserInfo(String userId) async {
     Map<String, dynamic> params = {};
-    params["uuid"] = user_id;
+    params["uuid"] = userId;
     final data =
     await BaseApi.RequestEmpty_h.post('$url/v1/user/info/get', params: params, data: params,header: header,);
     return data;
   }
 
   //删除好友
-  Future deleteFriend(String user_id) async {
+  Future deleteFriend(String userId) async {
     Map<String, dynamic> params = {};
-    params["friend"] = user_id;
+    params["friend"] = userId;
     params["uuid"] = AppGlobals.userInfo?.uuid;
     final data =
     await BaseApi.RequestEmpty_h.post('$url/v1/friend/delete', params: {}, data: params,header: header,);
@@ -229,13 +229,13 @@ class ChatApi{
   // string]
   // o_uuid*	string
   //创建群组
-  Future createGroup(String extra, String group_name,
-      String introduction, String o_uuid, List<String?> uuids) async {
+  Future createGroup(String extra, String groupName,
+      String introduction, String oUuid, List<String?> uuids) async {
     Map<String, dynamic> params = {};
-    params["o_uuid"] = o_uuid;
+    params["o_uuid"] = oUuid;
     params["members"] = uuids;
     params["introduction"] = introduction;
-    params["group_name"] = group_name;
+    params["group_name"] = groupName;
     params["extra"] = extra;
     final data =
     await BaseApi.RequestEmpty_h.post('$url/v1/group/create', params: params, data: params,header: header,);
@@ -254,15 +254,15 @@ class ChatApi{
 
   //修改群组信息
   Future updateGroupInfo(
-      {required String g_introduction,
-        required String g_uuid,
-        required String group_name,
-        required String m_uuid}) async {
+      {required String gIntroduction,
+        required String gUuid,
+        required String groupName,
+        required String mUuid}) async {
     Map<String, dynamic> params = {};
-    params["g_introduction"] = g_introduction;
-    params["g_uuid"] = g_uuid;
-    params["g_name"] = group_name;
-    params["m_uuid"] = m_uuid;
+    params["g_introduction"] = gIntroduction;
+    params["g_uuid"] = gUuid;
+    params["g_name"] = groupName;
+    params["m_uuid"] = mUuid;
     final data = await BaseApi.RequestEmpty_h
         .post('$url/v1/group/info/update', params: params, data: params,header: header,);
     return data;
@@ -275,9 +275,9 @@ class ChatApi{
   // "string"
   // ]
   Future addGroupMembers(
-      String g_uuid, String inviter, List members) async {
+      String gUuid, String inviter, List members) async {
     Map<String, dynamic> params = {};
-    params["g_uuid"] = g_uuid;
+    params["g_uuid"] = gUuid;
     params["inviter"] = inviter;
     params["members"] = members;
     final data = await BaseApi.RequestEmpty_h
@@ -293,10 +293,10 @@ class ChatApi{
   //     "string"
   //   ]
   // }
-  Future deleteGroupMembers(String g_uuid, List members) async {
+  Future deleteGroupMembers(String gUuid, List members) async {
     Map<String, dynamic> params = {};
     params["admin"] = AppGlobals.userInfo?.uuid;
-    params["g_uuid"] = g_uuid;
+    params["g_uuid"] = gUuid;
     params["members"] = members;
     final data = await BaseApi.RequestEmpty_h
         .post('$url/v1/group/members/delete', params: params, data: params,header: header,);
@@ -305,12 +305,12 @@ class ChatApi{
 
   //查询群组成员
   Future groupMembers(
-      String g_uuid,
-      String m_uuid,
+      String gUuid,
+      String mUuid,
       ) async {
     Map<String, dynamic> params = {};
-    params["g_uuid"] = g_uuid;
-    params["m_uuid"] = m_uuid;
+    params["g_uuid"] = gUuid;
+    params["m_uuid"] = mUuid;
     final data = await BaseApi.RequestEmpty_h
         .post('$url/v1/group/members/query', params: params, data: params,header: header,);
     return data;
@@ -318,12 +318,12 @@ class ChatApi{
 
   //解散群
   Future groupDisband(
-      String g_uuid,
-      String m_uuid,
+      String gUuid,
+      String mUuid,
       ) async {
     Map<String, dynamic> params = {};
-    params["g_uuid"] = g_uuid;
-    params["o_uuid"] = m_uuid;
+    params["g_uuid"] = gUuid;
+    params["o_uuid"] = mUuid;
     final data =
     await BaseApi.RequestEmpty_h.post('$url/v1/group/disband', params: params, data: params,header: header,);
     return data;
@@ -331,22 +331,22 @@ class ChatApi{
 
   //退出群聊
   Future leaveGroup(
-      String g_uuid,
-      String m_uuid,
+      String gUuid,
+      String mUuid,
       ) async {
     Map<String, dynamic> params = {};
-    params["g_uuid"] = g_uuid;
-    params["l_uuid"] = m_uuid;
+    params["g_uuid"] = gUuid;
+    params["l_uuid"] = mUuid;
     final data = await BaseApi.RequestEmpty_h
         .post('$url/v1/group/user/leave', params: params, data: params,header: header,);
     return data;
   }
 
 //群消息确认
-  Future groupMsgAck(String g_uuid, String m_uuid, int seq) async {
+  Future groupMsgAck(String gUuid, String mUuid, int seq) async {
     Map<String, dynamic> params = {};
-    params["g_uuid"] = g_uuid;
-    params["user_id"] = m_uuid;
+    params["g_uuid"] = gUuid;
+    params["user_id"] = mUuid;
     params["seq"] = seq;
     final data =
     await BaseApi.RequestEmpty_h.post('$url/v1/group/msg/ack', params: params, data: params,header: header,);
@@ -364,10 +364,10 @@ class ChatApi{
   }
 
   //拉取某个群的所有离线消息
-  Future groupOfflineMsg(String g_uuid, int last_seq) async {
+  Future groupOfflineMsg(String gUuid, int lastSeq) async {
     Map<String, dynamic> params = {};
-    params["g_uuid"] = g_uuid;
-    params["last_seq"] = last_seq;
+    params["g_uuid"] = gUuid;
+    params["last_seq"] = lastSeq;
     params["m_uuid"] = AppGlobals.userInfo?.uuid;
     final data = await BaseApi.RequestEmpty_h
         .post('$url/v1/group/msg/offline/total', params: params, data: params,header: header,);
@@ -376,9 +376,9 @@ class ChatApi{
 
   //创建群之后上传群成员秘文
   Future uploadGroupMemberSS(
-      String g_uuid, Map<String, dynamic> ssList) async {
+      String gUuid, Map<String, dynamic> ssList) async {
     Map<String, dynamic> params = {};
-    params["g_uuid"] = g_uuid;
+    params["g_uuid"] = gUuid;
     params["data"] = ssList;
     final data =
     await BaseApi.RequestEmpty_h.post('$url/v1/group/upload/ss', params: {}, data: params,header: header,);
@@ -386,9 +386,9 @@ class ChatApi{
   }
 
   //查询用户在当前群中的SS
-  Future checkGroupSSById(String g_uuid) async {
+  Future checkGroupSSById(String gUuid) async {
     Map<String, dynamic> params = {};
-    params["g_uuid"] = g_uuid;
+    params["g_uuid"] = gUuid;
     params["m_uuid"] = AppGlobals.userInfo?.uuid;
     final data =
     await BaseApi.RequestEmpty_h.post('$url/v1/group/query/ss', params: params, data: params,header: header,);
@@ -397,10 +397,10 @@ class ChatApi{
 
   //从后往前拉取 这个接口主要是进入群聊时先调取一次最新消息，显示给用户
   //因为上边的群离线消息获取是从起始开始拉取 数据大会太过耗时
-  Future getGroupOfflineLastMessage(String g_uuid, int last_seq) async {
+  Future getGroupOfflineLastMessage(String gUuid, int lastSeq) async {
     Map<String, dynamic> params = {};
-    params["g_uuid"] = g_uuid;
-    params["last_seq"] = last_seq;
+    params["g_uuid"] = gUuid;
+    params["last_seq"] = lastSeq;
     params["m_uuid"] = AppGlobals.userInfo?.uuid;
     params["msg_num"] = 100;
     final data = await BaseApi.RequestEmpty_h
