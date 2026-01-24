@@ -14,18 +14,18 @@ class Bip340{
     var random = FortunaRandom();
     var seed = Uint8List.fromList(List.generate(32, (_) => Random().nextInt(256)));
     random.seed(KeyParameter(seed));
-    return decodeBigInt(random.nextBytes(32)) % n!
+    return decodeBigInt(random.nextBytes(32)) % n!;
   }
 
   /// 计算公钥
   ECPoint getPublicKey(BigInt privateKey) {
-    return (G * privateKey)!;
+    return (G! * privateKey)!;
   }
 
   /// 计算 SHA256 哈希
   BigInt hashMessage(Uint8List message) {
     var sha256 = SHA256Digest();
-    return decodeBigInt(sha256.process(message)) % n!
+    return decodeBigInt(sha256.process(message)) % n!;
   }
 
   /// Schnorr 签名

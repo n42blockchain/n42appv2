@@ -97,6 +97,7 @@ extension SafeStateExtension<T extends StatefulWidget> on State<T> {
   /// 在异步操作后调用，自动检查 mounted 状态
   void setStateSafe(VoidCallback fn) {
     if (!mounted) return;
+    // ignore: invalid_use_of_protected_member
     setState(fn);
   }
 

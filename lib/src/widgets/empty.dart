@@ -53,7 +53,7 @@ class _EmptyViewState extends State<EmptyView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (isCanRefresh) //是否需要刷新
+            if (isCanRefresh == true) //是否需要刷新
               IconButton(
                   onPressed: widget.onPressed,
                   icon:  Icon(Icons.wifi_protected_setup_outlined,

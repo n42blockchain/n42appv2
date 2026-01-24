@@ -106,7 +106,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
 
   @override
   void dispose() {
-    eventBusFn.cancel();
+    eventBusFn?.cancel();
     scrollController.dispose();
     super.dispose();
   }

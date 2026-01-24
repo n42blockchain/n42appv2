@@ -172,9 +172,9 @@ class PublicProviderAdapter extends ChangeNotifier {
   void setMessageNotReadCount({int? value}) {
     final notifier = _container.read(unreadCountProvider.notifier);
     if (value == null) {
-      notifier.state++;
+      notifier.increment();
     } else {
-      notifier.state = value;
+      notifier.setCount(value);
     }
   }
 

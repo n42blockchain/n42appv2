@@ -135,7 +135,7 @@ class CoinModel {
         }
         if ((rm[addrType] as String).isEmpty) {
           loadError = true;
-          wap.notifyListeners();
+          wap.refresh();
           return;
         }
         address = rm[addrType];
@@ -192,7 +192,7 @@ class CoinModel {
         // 获取余额失败，但不设置 loadError，因为已经使用了缓存的余额
         // loadError 只在完全无法获取数据时设置
         loadError = false;
-        Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).notifyListeners();
+        Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).refresh();
         return false;
       }else{
         // 获取余额成功
@@ -204,7 +204,7 @@ class CoinModel {
       debugPrint('CoinModel.getBalance error: $e');
       loadError = true;
       isRefresh = false;
-      Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).notifyListeners();
+      Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).refresh();
       return false;
     }
   }

@@ -22,6 +22,11 @@ import 'package:web3dart/crypto.dart' as crypto;
 import 'package:web3dart/web3dart.dart' as web3;
 
 class WalletConnectProvider with ChangeNotifier{
+  /// 公开的刷新方法，用于通知监听者数据已更新
+  void refresh() {
+    notifyListeners();
+  }
+
   /*DataUtils? dataUtils;
   DataUtils get _dataUtils{
     if(dataUtils==null){

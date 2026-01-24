@@ -58,9 +58,7 @@ class _WalletManageState extends State<WalletManage> {
   @override
   void dispose() {
     super.dispose();
-    if(eventBusFn !=null){
-      eventBusFn.cancel();
-    }
+    eventBusFn?.cancel();
   }
   void initData() async {
     // final list = ProviderUtil.walletActionProvider().walletInfoLsit;

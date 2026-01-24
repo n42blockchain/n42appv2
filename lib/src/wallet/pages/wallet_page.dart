@@ -101,7 +101,7 @@ class _WalletPageState extends State<WalletPage> {
             MaterialPageRoute(
                 builder: (context) => WalletConnectPage(scanStr)));
         if (!mounted) return;
-        walletConnectProvider.notifyListeners();
+        walletConnectProvider.refresh();
       } else {
         if (scanStr != ""){
           int index=scanStr.indexOf(AppConfig.apiUrl['walletamazeBrowser']);
@@ -122,7 +122,7 @@ class _WalletPageState extends State<WalletPage> {
       await Navigator.push(context,
           MaterialPageRoute(builder: (context) => WalletConnectPage("")));
       if (!mounted) return;
-      walletConnectProvider.notifyListeners();
+      walletConnectProvider.refresh();
     }
   }
   //扫码

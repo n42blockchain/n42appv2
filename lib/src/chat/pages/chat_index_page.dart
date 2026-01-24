@@ -243,7 +243,7 @@ class _ChatListState extends State<ChatList> with AutomaticKeepAliveClientMixin{
   void dispose() {
     super.dispose();
     _cancelTimer();
-    eventBusFn.cancel();
+    eventBusFn?.cancel();
   }
 
   @override

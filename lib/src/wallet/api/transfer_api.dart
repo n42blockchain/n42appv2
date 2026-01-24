@@ -408,7 +408,7 @@ class TransferApi {
         );
         break;
       case "Polkadot":
-        coinType=trModel.coin['coinType'];
+        coinType=trModel!.coin['coinType'];
         network=trModel.isTest==0?"main":"test";
         txmm= await transfer_dot_send(
           trModel.from1,
@@ -424,7 +424,7 @@ class TransferApi {
         );
         break;
       case "Aptos":
-        coinType=trModel.coin['coinType'];
+        coinType=trModel!.coin['coinType'];
         network=trModel.isTest==0?"main":"test";
         txmm=await transfer_apt_send(
             trModel.from1,
@@ -436,7 +436,7 @@ class TransferApi {
             coinType, trModel.coinId);
         break;
       case "TheOpenNetwork":
-        coinType=trModel.coin['coinType'];
+        coinType=trModel!.coin['coinType'];
         network=trModel.isTest==0?"main":"test";
         txmm=await transfer_ton_send(
             trModel.from1,
@@ -450,7 +450,7 @@ class TransferApi {
         );
         break;
       case "Zilliqa":
-        coinType=trModel.coin['coinType'];
+        coinType=trModel!.coin['coinType'];
         network=trModel.isTest==0?"main":"test";
         txmm=await transfer_zil_send(
             trModel.from1,

@@ -180,7 +180,7 @@ class _ChatGroupDetailPageState extends State<ChatGroupDetailPage> {
   void dispose() {
     Provider.of<ChatMessageProvider>(context,listen: false).setTargetUuid(null);
     super.dispose();
-    eventBusFn.cancel();
+    eventBusFn?.cancel();
     _scrollController.dispose();
     _textEditingController.dispose();
     _addController.dispose();

@@ -26,6 +26,11 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
 class WalletActionProvider extends ChangeNotifier{
+  /// 公开的刷新方法，用于通知监听者数据已更新
+  void refresh() {
+    notifyListeners();
+  }
+
   //刷新coin 余额
   Map<int,dynamic> coinRefreshMap={};
   String defaultWalletUUID="AstranetWallet";

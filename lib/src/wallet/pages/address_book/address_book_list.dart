@@ -61,7 +61,7 @@ class _AddressBookListState extends State<AddressBookList> {
   @override
   void dispose() {
     super.dispose();
-    eventBusFn.cancel();
+    eventBusFn?.cancel();
   }
   @override
   Widget build(BuildContext context) {
