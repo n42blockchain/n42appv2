@@ -38,18 +38,18 @@ class ChatMessageProvider extends ChangeNotifier {
 
   int get haveNewFriend => _haveNewFriend;
 
-  setNewFriendStatus(int flag) {
+  void setNewFriendStatus(int flag) {
     _haveNewFriend= flag;
     notifyListeners();
   }
-  setNewFriendStatusAdd(){
+  void setNewFriendStatusAdd(){
     _haveNewFriend++;
     notifyListeners();
   }
 
   List<ChatMessageModel> _chatConversationList = [];
 
-  setChatConversationList(List<ChatMessageModel> list) async{
+  Future<void> setChatConversationList(List<ChatMessageModel> list) async{
     _chatConversationList = list;
     updateUnReadMessNum();
     notifyListeners();
@@ -61,7 +61,7 @@ class ChatMessageProvider extends ChangeNotifier {
   //当前打开的聊天对象的uuid
   String? currOpenChatTargetUuid;
 
-  setTargetUuid(String? uuid) {
+  void setTargetUuid(String? uuid) {
     currOpenChatTargetUuid = uuid;
   }
 
@@ -70,12 +70,12 @@ class ChatMessageProvider extends ChangeNotifier {
   int _unReadMessageUUIDs = 0;
   int  get unReadMessageUUIDs => _unReadMessageUUIDs;
 
-  setUnReadMessIdNum(int num) {
+  void setUnReadMessIdNum(int num) {
     _unReadMessageUUIDs = num;
     notifyListeners();
   }
 
-  updateUnReadMessNum() async{
+  Future<void> updateUnReadMessNum() async{
     ///更新table角标未读消息数
     _unReadMessageUUIDs = 0;
     final unReadIds = await CacheMessageIsReadUtils().getUnReadIds();
@@ -95,7 +95,7 @@ class ChatMessageProvider extends ChangeNotifier {
 
   //应用启动时 初始化一些聊天所需要的数据
   //例如：获取好友列表 更新缓存
-  initData() async {
+  Future<void> initData() async {
     try {
       //更新好友信息
       await upDateFriendList();
@@ -107,7 +107,7 @@ class ChatMessageProvider extends ChangeNotifier {
     }
   }
 
-  upDateFriendList() async {
+  Future<void> upDateFriendList() async {
     try {
       final data = await chatApi.friendList();
       if (data != null && data["code"] == 200) {
@@ -128,7 +128,7 @@ class ChatMessageProvider extends ChangeNotifier {
   }
 
   //查询会话列表
-  getChatConversationList() async {
+  Future<void> getChatConversationList() async {
     final list = await chatDBApi.getChatConversations();
     // debugPrint("会话列表查询 list：$list");
     List<ChatMessageModel> msgList =
@@ -144,7 +144,7 @@ class ChatMessageProvider extends ChangeNotifier {
   }
 
   //获取离线消息 保存数据库
-  initOffLineMessage() async {
+  Future<void> initOffLineMessage() async {
     await getSingleChatOfflineData();
     await getGroupOfflineMessage();
 
@@ -152,7 +152,7 @@ class ChatMessageProvider extends ChangeNotifier {
     updateNewFriendStatus();
   }
 
-  updateNewFriendStatus() async {
+  Future<void> updateNewFriendStatus() async {
     try{
       final data = await chatApi.friendApplyList();
       if (data != null && data["code"] == 200) {
@@ -181,7 +181,7 @@ class ChatMessageProvider extends ChangeNotifier {
   }
 
   //获取单聊的离线消息
-  getSingleChatOfflineData() async {
+  Future<void> getSingleChatOfflineData() async {
     try {
       //单聊离线消息
       final offlineData = await chatApi.offlineMsg();
@@ -233,7 +233,7 @@ class ChatMessageProvider extends ChangeNotifier {
   }
 
   //获取群离线消息
-  getGroupOfflineMessage() async {
+  Future<void> getGroupOfflineMessage() async {
     final offlineData = await chatApi.groupOfflineLastMsg();
     if (offlineData != null && offlineData["code"] == 200) {
       final list = offlineData["data"];
@@ -311,7 +311,7 @@ class ChatMessageProvider extends ChangeNotifier {
   }
 
   //群聊的离线消息 如果用户没有执行 ack 操作 每次登录都会获取到 不能重复插入数据库
-  saveGroupOfflineMessage(ChatMessageModel model) async {
+  Future<void> saveGroupOfflineMessage(ChatMessageModel model) async {
     if (await chatDBApi.getMessageByMessageId(model.messageId) == null) {
       final raw = await chatDBApi.saveMessage(model);
       debugPrint("saveGroupOfflineMessage status:$raw ${raw == 0 ? "失败" : "成功"}");
@@ -319,7 +319,7 @@ class ChatMessageProvider extends ChangeNotifier {
   }
 
   //更新会话列表群和好友的个人信息
-  updateChatConversationList() async {
+  Future<void> updateChatConversationList() async {
     var list = _chatConversationList;
     for (var element in list) {
       try{

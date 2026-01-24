@@ -1,5 +1,5 @@
 class RequestUrl{
-  getUrl2(String coinKey,String uriKey,{bool? isTest}){
+  String getUrl2(String coinKey,String uriKey,{bool? isTest}){
     coinKey=coinKey.toUpperCase();
     isTest ??= false;
     if(isTest){

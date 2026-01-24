@@ -50,7 +50,7 @@ class WalletConnectProvider with ChangeNotifier{
   //int pairIndex=-1;
   int coinModelsIndex=-1;
   List<CoinModel> coinModels=[];//eth币模型
-  setCoinModelsIndex(int value){
+  void setCoinModelsIndex(int value){
     coinModelsIndex=value;
     notifyListeners();
   }
@@ -67,7 +67,7 @@ class WalletConnectProvider with ChangeNotifier{
   dynamic actionData;
   Map<String,dynamic>? actionDataMap;
   //dataType: transaction,message
-  setActionDataMap(wallet_connect.SessionRequestEvent eventData
+  Future<void> setActionDataMap(wallet_connect.SessionRequestEvent eventData
       //SessionRequestEvent data
       )async{
     //final session = signClient!.session.get(eventData.topic!);
@@ -204,7 +204,7 @@ class WalletConnectProvider with ChangeNotifier{
     }
     actionData=eventData;
   }
-  connectInit()async{
+  Future<void> connectInit()async{
     try{
       signClient=await wallet_connect.ReownWalletKit.createInstance(
         projectId: "18a60a7cb862aad161fecd764ecc736a",
@@ -221,7 +221,7 @@ class WalletConnectProvider with ChangeNotifier{
       viewStateDeal(WalletConnectState.error,params: e.toString());
     }
   }
-  pair(String relayUrl)async{
+  Future<void> pair(String relayUrl)async{
     try{
       if(Uri.tryParse(relayUrl) !=null){
         //viewStateDeal(WalletConnectV2State.part);
@@ -233,7 +233,7 @@ class WalletConnectProvider with ChangeNotifier{
     }
   }
   // 创建web3实例 - 使用 IWalletService 获取钱包信息
-  web3clientInit() async {
+  Future<bool> web3clientInit() async {
     try {
       CoinModel cm = coinModels[coinModelsIndex];
       web3client = web3.Web3Client(cm.isTest ? cm.coin['service_test'] : cm.coin['service'], Client());
@@ -269,7 +269,7 @@ class WalletConnectProvider with ChangeNotifier{
       return false;
     }
   }
-  web3clientInitFromChainId(String eip155)async{
+  Future<bool> web3clientInitFromChainId(String eip155)async{
     String chainId=eip155.split(":")[1];
     int chainIndex=coinModels.indexWhere((element){
       String eChainId=(element.isTest?element.coin['chainId_test']:element.coin['chainId']).toString();
@@ -293,7 +293,7 @@ class WalletConnectProvider with ChangeNotifier{
   }
 
   //获取ETH类的主链
-  coinModelInit({int chainId=-1}){
+  void coinModelInit({int chainId=-1}){
     try{
       List<CoinModel> cms=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).coinModels;
       coinModels=[];
@@ -324,7 +324,7 @@ class WalletConnectProvider with ChangeNotifier{
     }
   }
   //查找不支持的链
-  coinModelFind(String chainId){
+  CoinModel? coinModelFind(String chainId){
     int rIndex=coinModels.indexWhere((element){
       String cId="";
       if(element.coin['blockchainType']==BlockchainType.Ethereum.name){
@@ -351,7 +351,7 @@ class WalletConnectProvider with ChangeNotifier{
   static const eSignTransaction = 'eth_signTransaction';
   static const eSignTypedData = 'eth_signTypedData';
   static const eSendTransaction = 'eth_sendTransaction';*/
-  setChainInfo(){
+  void setChainInfo(){
     try{
       if(signClient !=null){
         signClient!.onSessionProposal.subscribe((wallet_connect.SessionProposalEvent? args)async{
@@ -701,7 +701,7 @@ class WalletConnectProvider with ChangeNotifier{
     await wcClient!.rejectSession(id: id, reason: reason);
   }*/
   //取消交易或签名等
-  cancelTap(WalletConnectState state)async{
+  Future<void> cancelTap(WalletConnectState state)async{
     viewStateDeal(state);
     final eventData = actionData as wallet_connect.SessionRequestEvent;
     signClient!
@@ -723,13 +723,13 @@ class WalletConnectProvider with ChangeNotifier{
     //await approveSession(requestEvent.id,namespace!);
     viewStateDeal(WalletConnectV2State.connect);
   }*/
-  disconnectOnTap()async{
+  Future<void> disconnectOnTap()async{
     await signClient!.disconnectSession(
         topic: dAppTopic??"",
       reason: wallet_connect.Errors.getSdkError(wallet_connect.Errors.USER_DISCONNECTED).toSignError(),
     );
   }
-  viewStateDeal(WalletConnectState state,{dynamic params})async{
+  Future<void> viewStateDeal(WalletConnectState state,{dynamic params})async{
     switch(state){
       case WalletConnectState.loading:
         await connectInit();
@@ -789,7 +789,7 @@ class WalletConnectProvider with ChangeNotifier{
     walletConnectState=state;
     notifyListeners();
   }
-  showAlertWidget(){
+  void showAlertWidget(){
     sheetBottom(
       AppGlobals.navigatorKey.currentContext!,
       "",
@@ -797,12 +797,12 @@ class WalletConnectProvider with ChangeNotifier{
     );
   }
   //清理数据
-  cleanData(){
+  void cleanData(){
     dAppTopic=null;
     errorMessage="";
     walletConnectState=WalletConnectState.loading;
   }
-  cleanDataLogout(){
+  void cleanDataLogout(){
     if(dAppTopic !=null){
       disconnectOnTap();
     }else{

@@ -10,7 +10,7 @@ class ActivityApi {
     header={'content-type': 'application/json'};
   }
   //数据收集接口，收集用户创建的NFT和交易N的记录，event create_nft,wallet_transfer
-  collectPush(String nftData,{String event="create_nft"}) async {
+  Future<MessageModel> collectPush(String nftData,{String event="create_nft"}) async {
     try {
       MessageModel mm = MessageModel();
       Map<String, dynamic> postData = {
@@ -33,7 +33,7 @@ class ActivityApi {
     }
   }
   //数据收集接口，发送推送
-  collectDelayPush(String nftData,{String event="create_nft"}) async {
+  Future<MessageModel> collectDelayPush(String nftData,{String event="create_nft"}) async {
     try {
       MessageModel mm = MessageModel();
       Map<String, dynamic> postData = {
@@ -56,7 +56,7 @@ class ActivityApi {
     }
   }
   //数据收集接口，修改 用户创建的NFT
-  collectPushUpdate(Map<String, dynamic> nftData)async{
+  Future<MessageModel> collectPushUpdate(Map<String, dynamic> nftData) async{
     try {
       MessageModel mm = MessageModel();
       final data = await BaseApi.requestEmptyH

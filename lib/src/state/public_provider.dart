@@ -17,7 +17,7 @@ import 'package:n42appv2/src/utils/app_push_utils.dart';
 class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
   bool unlockIsPush = false; //是否已经锁屏
   bool checkWalletPassword = false; //是否验证了钱包密码
-  setCheckWalletPassword(bool value) {
+  void setCheckWalletPassword(bool value) {
     checkWalletPassword = value;
     notifyListeners();
   }
@@ -27,14 +27,14 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
     _getThemeModeType();
   }
   //验证数据、初始化数据
-  checkData() async {
+  Future<void> checkData() async {
     await _getUserInfo();
     await getLockScreenData();
     load = Load.finish;
     notifyListeners();
   }
   //获取用户信息
-  _getUserInfo() async {
+  Future<void> _getUserInfo() async {
     try {
       SPUtil sPUtils=SPUtil();
       var userInfo = await sPUtils.getUserInfo();
@@ -62,7 +62,7 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
   ///共享用户信息
   UserInfo? _userInfo;
   UserInfo? get userInfo => _userInfo;
-  setUserInfo(UserInfo? info) {
+  void setUserInfo(UserInfo? info) {
     _userInfo = info;
     notifyListeners();
   }
@@ -70,7 +70,7 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
   //未读消息数量
   int messageNotReadCount = 0;
 
-  setMessageNotReadCount({int? value}) {
+  void setMessageNotReadCount({int? value}) {
     if (value == null) {
       messageNotReadCount++;
     } else {
@@ -134,12 +134,12 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
   //主页面 tabbar 索引
   int homeCurrentIndex=0;
   //设置 homeCurrentIndex
-  setHomeCurrentIndex(int value){
+  void setHomeCurrentIndex(int value){
     homeCurrentIndex=value;
     notifyListeners();
   }
 
-  getUserInfoFromServer(UserInfo uInfo) async {
+  Future<UserInfo?> getUserInfoFromServer(UserInfo uInfo) async {
     UserInfoApi loginApi=UserInfoApi();
     UserInfo? uData = await loginApi.getUserInfo(
         uInfo.uuid??"", uInfo.token!, uInfo.hashCode.toString());
@@ -152,7 +152,7 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
   }
 
   //修改用户信息
-  editUserInfo(UserInfo uInfo, {Uint8List? imageData}) async {
+  Future<MessageModel> editUserInfo(UserInfo uInfo, {Uint8List? imageData}) async {
     MessageModel mm = MessageModel();
     if (imageData != null) {
       //上传图片
@@ -192,7 +192,7 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
   //解决引导页问题， 主页的tabbar 切换时调用此方法展示引导页
   //main tabbar
   int selectIndex = 0;
-  setSelectIndex(int value) {
+  void setSelectIndex(int value) {
     selectIndex = value;
     notifyListeners();
   }
@@ -211,7 +211,7 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
   };
 
   //获取锁屏缓存
-  getLockScreenData() async {
+  Future<void> getLockScreenData() async {
     Map<String, dynamic>? rData = await SPUtil().getLockScreen();
     if (rData != null) {
       lockScreenMap = rData;
@@ -231,7 +231,7 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
     }
   }
 
-  setLockScreenData() async {
+  Future<void> setLockScreenData() async {
     await SPUtil().setLockScreen(lockScreenMap);
   }
 /////////

@@ -2,7 +2,7 @@
 import 'package:n42appv2/core/storage/sp_util.dart';
 
 class CacheMessageIsReadUtils {
-  Future saveUnReadMessageId(String uuid) async {
+  Future<bool> saveUnReadMessageId(String uuid) async {
     SPUtil sPUtils=SPUtil();
     final cacheList = await sPUtils.getListObject(generateSpKey());
     Set messageIds = {};
@@ -13,7 +13,7 @@ class CacheMessageIsReadUtils {
     return await sPUtils.putObject(generateSpKey(), messageIds.toList());
   }
 
-  Future removeUnReadMessageId(String uuid) async {
+  Future<bool> removeUnReadMessageId(String uuid) async {
     SPUtil sPUtils=SPUtil();
     final cacheList = await sPUtils.getListObject(generateSpKey());
     Set messageIds = {};
@@ -34,23 +34,23 @@ class CacheMessageIsReadUtils {
   }
 
 
-  Future getUnReadIds() async {
+  Future<Object?> getUnReadIds() async {
     return await SPUtil().getListObject(generateSpKey());
   }
 
 
-  generateSpKey() {
+  String generateSpKey() {
     return "${AppGlobals.userInfo?.uuid}_message_read_list";
   }
 }
 
 //处理@功能工具
 class CacheGroupMentionUtils {
-  generateSpKey() {
+  String generateSpKey() {
     return "${AppGlobals.userInfo?.uuid}_mention_list";
   }
 
-  Future saveMentionGroupId(String groupId) async {
+  Future<bool> saveMentionGroupId(String groupId) async {
     SPUtil sPUtils=SPUtil();
     final cacheList = await sPUtils.getListObject(generateSpKey());
     Set messageIds = {};
@@ -61,7 +61,7 @@ class CacheGroupMentionUtils {
     return await sPUtils.putObject(generateSpKey(), messageIds.toList());
   }
 
-  Future removeMentionGroupId(String groupId) async {
+  Future<bool> removeMentionGroupId(String groupId) async {
     SPUtil sPUtils=SPUtil();
     final cacheList = await sPUtils.getListObject(generateSpKey());
     Set messageIds = {};

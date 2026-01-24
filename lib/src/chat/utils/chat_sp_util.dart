@@ -10,7 +10,7 @@ import 'package:n42appv2/core/storage/sp_util.dart';
 class ChatSPUtil {
 
   //保存用户好友列表
-  Future saveFriendsList(List<FriendInfo> list) async {
+  Future<bool> saveFriendsList(List<FriendInfo> list) async {
     final chatCacheKey = "${AppGlobals.userInfo?.uuid}_friend_list";
     return await SPUtil().putObject(chatCacheKey, list);
   }
@@ -38,7 +38,7 @@ class ChatSPUtil {
   }
 
   //保存或者更新FriendInfo
-  Future saveOrUpdateFriendInfo(FriendInfo info) async {
+  Future<bool> saveOrUpdateFriendInfo(FriendInfo info) async {
     final chatCacheKey = "${AppGlobals.userInfo?.uuid}_friend_list";
     final list = await getFriendList();
     int index = list.indexWhere((element) => element.uuid == info.uuid);
@@ -53,7 +53,7 @@ class ChatSPUtil {
   }
 
   //保存群组信息 这个不区分用户 主要是为了查询群组信息方便而使用
-  Future saveOrUpdateGroupInfo(GroupInfo info) async {
+  Future<bool> saveOrUpdateGroupInfo(GroupInfo info) async {
     const groupListKey = "groupList";
     final list = await getGroupList();
     //查看缓存中是否已经存在当前群组信息
@@ -90,7 +90,7 @@ class ChatSPUtil {
   }
 
   //保存群成员
-  Future saveGroupMembers(
+  Future<bool> saveGroupMembers(
       String groupId, List<GroupMemberInfo> list) async {
     final chatCacheKey = "${groupId}_group_members";
     return await SPUtil().putObject(chatCacheKey, list);
@@ -176,7 +176,7 @@ class ChatSPUtil {
   }
 
   //保存或者更新userInfo
-  Future saveOrUpdateUserInfo(FriendInfo info) async {
+  Future<bool?> saveOrUpdateUserInfo(FriendInfo info) async {
     try {
       const chatCacheKey = "chat_user_list";
       final list = await getNavUserInfoList();
@@ -191,6 +191,7 @@ class ChatSPUtil {
       return await SPUtil().putObject(chatCacheKey, list);
     } catch (err) {
       //err
+      return null;
     }
   }
 }

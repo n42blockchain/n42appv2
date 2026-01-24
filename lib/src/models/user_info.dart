@@ -17,18 +17,18 @@ class UserInfo{
   String? inviteCode;
 
   bool _follower=false;//是否是追随者
-  setFollower(bool value){
+  void setFollower(bool value){
     _follower=value;
   }
   bool get follower=>_follower;
 
   bool _following=false;//是否是我关注的
-  setFollowing(bool value){
+  void setFollowing(bool value){
     _following=value;
   }
   bool get following=>_following;
   bool _followAction=false;//是否正在操作follow
-  setFollowAction(bool value){
+  void setFollowAction(bool value){
     _followAction=value;
   }
   bool get followAction=>_followAction;

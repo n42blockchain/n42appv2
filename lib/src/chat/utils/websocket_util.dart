@@ -69,7 +69,7 @@ class WebSocketUtil {
     channel?.sink.add(data);
   }
 
-  generateSocketUrl() {
+  String generateSocketUrl() {
     final uuid = AppGlobals.userInfo?.uuid;
     final token = AppGlobals.userInfo?.token;
     final socUrl =
@@ -140,13 +140,13 @@ class WebSocketUtil {
     reconnectCount = 0; // 重置重连计数
   }
 
-  onError(err) {
+  void onError(dynamic err) {
     debugPrint(err.runtimeType.toString());
     WebSocketChannelException ex = err;
     debugPrint(ex.message);
   }
 
-  onData(event) async {
+  Future<void> onData(dynamic event) async {
     debugPrint('---- web socket 收到消息:$event');
     //解析pb格式的消息体
     Output output = Output.fromBuffer(event);

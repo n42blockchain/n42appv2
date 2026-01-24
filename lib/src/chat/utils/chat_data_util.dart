@@ -65,7 +65,7 @@ class ChatDataUtil {
   }
 
   //根据pushCode 处理接收消息
-  handleMessage(int pushCode, ChatMessageModel model) async {
+  Future<void> handleMessage(int pushCode, ChatMessageModel model) async {
     try {
       // 0 接收 1 发出
       int direction = model.from == AppGlobals.userInfo?.uuid ? 1 : 0;

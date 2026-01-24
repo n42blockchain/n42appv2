@@ -61,19 +61,19 @@ class ChatUtil {
   }
 
   /// Cache a chat message locally
-  Future cacheChatMessage(String key, String message) async {
+  Future<bool> cacheChatMessage(String key, String message) async {
     final chatCacheKey = "${AppGlobals.userInfo?.uuid}_chatKey";
     final data = await getChatCacheMessage();
     Map<String, dynamic> map = {};
     map[key] = message;
-    if (data != null) {
+    if (data != null && data is Map<String, dynamic>) {
       map.addAll(data);
     }
     return await SPUtil().putObject(chatCacheKey, map);
   }
 
   /// Get cached chat messages
-  Future getChatCacheMessage() async {
+  Future<Object?> getChatCacheMessage() async {
     final chatCacheKey = "${AppGlobals.userInfo?.uuid}_chatKey";
     return await SPUtil().getObject(chatCacheKey);
   }

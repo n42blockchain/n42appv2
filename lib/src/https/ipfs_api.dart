@@ -15,7 +15,7 @@ class IpfsApi{
     };
   }
   //获取ipfs图片信息
-  getIPFSImageInfo(String uri)async{
+  Future<Map<String, dynamic>> getIPFSImageInfo(String uri) async{
     try{
       var data=await BaseApi.requestEmptyH.get(uri, params: {});
       return {"error":false,"data":data};
@@ -24,7 +24,7 @@ class IpfsApi{
       return {"error":true,"data":e};
     }
   }
-  getIPFSImage(String uri)async{
+  Future<Map<String, dynamic>> getIPFSImage(String uri) async{
     try{
       Dio d=Dio();
       Response r=await d.get(uri);
@@ -40,7 +40,7 @@ class IpfsApi{
 
   }
   //ipfs上传图片type 0文件地址上传，1 List<int>上传
-  uploadIPFSImage(var file,String filename,dynamic sendProgress,{int type=0,var cancelToken})async{
+  Future<Map<String, dynamic>> uploadIPFSImage(var file,String filename,dynamic sendProgress,{int type=0,var cancelToken}) async{
     try{
       FormData fd=FormData.fromMap({"path":type==0?
       MultipartFile.fromFile(file,filename: filename):
@@ -83,7 +83,7 @@ class IpfsApi{
     }
   }
   //上传图片信息
-  uploadIPFSImageInfo(Map<String,dynamic> map,String filename)async{
+  Future<Map<String, dynamic>> uploadIPFSImageInfo(Map<String,dynamic> map,String filename) async{
     try{
       MultipartFile f=MultipartFile.fromString(json.encode(map),filename: filename);
       FormData fd=FormData.fromMap({"file":f});

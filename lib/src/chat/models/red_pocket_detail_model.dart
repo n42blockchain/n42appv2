@@ -28,7 +28,7 @@ class RedPocketDetailModel{
     List<dynamic> rc=map['red_claim']??[];
     redClaim=rc.map((e) => RedPocketClaimModel.fromJson(e)).toList();
   }
-  toJson(){
+  Map<String, dynamic> toJson(){
     return {
       "claimed":claimed,
       "count":count,

@@ -46,7 +46,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
     super.dispose();
   }
   //扫码
-  scan() async {
+  Future<String> scan() async {
     String? scanValue = await Navigator.push(
         context, MaterialPageRoute(builder: (context) => ScanPage()));
     if (scanValue != null) {
@@ -74,7 +74,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       );
     },);
   }
-  dAppConnectWidget(WalletConnectProvider connectV2){
+  Widget dAppConnectWidget(WalletConnectProvider connectV2){
     Widget connectChild=Container();
     String title="";
     switch(connectV2.walletConnectState){
@@ -140,10 +140,10 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       ],
     );
   }
-  loadingWidget(){
+  Widget loadingWidget(){
     return LoadingPage();
   }
-  partWidget(){
+  Widget partWidget(){
     return Column(
       children: [
         Container(
@@ -162,7 +162,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       ],
     );
   }
-  dAppWidget(WalletConnectProvider connectV2){
+  Widget dAppWidget(WalletConnectProvider connectV2){
     String iconUrl="";
     String dAppName="";
     String dAppWebUrl="";
@@ -248,7 +248,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       ),
     );
   }
-  titleWidget(String title,{Widget? rightWidget}){
+  Widget titleWidget(String title,{Widget? rightWidget}){
     return Container(
       height: ScreenUtil().setWidth(100),
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
@@ -273,7 +273,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       ),
     );
   }
-  selectChainWidget(WalletConnectProvider connectV2){
+  Widget selectChainWidget(WalletConnectProvider connectV2){
     return Column(
       children: [
         Expanded(
@@ -336,7 +336,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       ],
     );
   }
-  selectChainButton(WalletConnectProvider connectV2){
+  Widget selectChainButton(WalletConnectProvider connectV2){
     return Container(
       height: ScreenUtil().setWidth(150),
       width: double.infinity,
@@ -371,7 +371,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       ),
     );
   }
-  connectOKWidget(WalletConnectProvider connectV2){
+  Widget connectOKWidget(WalletConnectProvider connectV2){
     return Column(
       children: [
         Expanded(
@@ -382,7 +382,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       ],
     );
   }
-  connectWidget(WalletConnectProvider connectV2){
+  Widget connectWidget(WalletConnectProvider connectV2){
     return Column(
       children: [
         Expanded(
@@ -393,7 +393,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       ],
     );
   }
-  connectButton(WalletConnectProvider connectV2){
+  Widget connectButton(WalletConnectProvider connectV2){
     return Container(
       height: ScreenUtil().setWidth(150),
       width: double.infinity,
@@ -410,7 +410,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       }),
     );
   }
-  disconnectWidget(WalletConnectProvider connectV2){
+  Widget disconnectWidget(WalletConnectProvider connectV2){
     return Column(
       children: [
         Expanded(
@@ -427,7 +427,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       ],
     );
   }
-  disconnectButton(WalletConnectProvider connectV2){
+  Widget disconnectButton(WalletConnectProvider connectV2){
     return Container(
       height: ScreenUtil().setWidth(150),
       width: double.infinity,
@@ -468,7 +468,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       ),
     );
   }
-  transactionOKWidget(WalletConnectProvider connectV2){
+  Widget transactionOKWidget(WalletConnectProvider connectV2){
     return Column(
       children: [
         itemWidget("Network",connectV2.actionDataMap?['network']??""),
@@ -507,7 +507,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       ],
     );
   }
-  transactionOKButton(WalletConnectProvider connectV2){
+  Widget transactionOKButton(WalletConnectProvider connectV2){
     if(connectV2.walletConnectState==WalletConnectState.transactionOK) {
       return Container(
         height: ScreenUtil().setWidth(150),
@@ -541,8 +541,9 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
     if(connectV2.walletConnectState==WalletConnectState.transaction) {
       return buttonLoadingWidget("${S.of(context).g_key_106}...");
     }
+    return const SizedBox();
   }
-  messageSignOKWidget(WalletConnectProvider connectV2){
+  Widget messageSignOKWidget(WalletConnectProvider connectV2){
     return Column(
       children: [
         itemWidget("Network",connectV2.actionDataMap?['network']??""),
@@ -574,7 +575,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       ],
     );
   }
-  messageSignOKButton(WalletConnectProvider connectV2){
+  Widget messageSignOKButton(WalletConnectProvider connectV2){
     if(connectV2.walletConnectState==WalletConnectState.messageSignOK) {
       return Container(
         height: ScreenUtil().setWidth(150),
@@ -608,8 +609,9 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
     if(connectV2.walletConnectState==WalletConnectState.messageSign) {
       return buttonLoadingWidget("${S.of(context).g_key_106}...");
     }
+    return const SizedBox();
   }
-  errorWidget(WalletConnectProvider connectV2){
+  Widget errorWidget(WalletConnectProvider connectV2){
     return Column(
       children: [
         Container(
@@ -650,7 +652,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       ],
     );
   }
-  buttonWidget(String title,dynamic onTap){
+  Widget buttonWidget(String title,dynamic onTap){
     return SizedBox(
       width: double.infinity,
       height: ScreenUtil().setWidth(88.0),
@@ -659,7 +661,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       }, title),
     );
   }
-  buttonLoadingWidget(String title){
+  Widget buttonLoadingWidget(String title){
     return Container(
         height: ScreenUtil().setWidth(150),
         width: double.infinity,
@@ -688,7 +690,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
         )
     );
   }
-  itemWidget(String title,String value){
+  Widget itemWidget(String title,String value){
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(30),),
       child: Row(

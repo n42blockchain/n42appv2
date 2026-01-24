@@ -59,14 +59,14 @@ class BaseHttp {
   }*/
 
   //重设dio连接
-  reSetDio(bool isTest) {
+  void reSetDio(bool isTest) {
     _options = setBaseOptions(isTest: isTest);
     _dio = Dio(_options);
   }
 
   //设置dio的baseUrl
   //isTest：是否使用测试地址，也就是baseUrlTest的地址，默认是false，使用正式地址
-  setBaseOptions({bool isTest = false}) {
+  BaseOptions setBaseOptions({bool isTest = false}) {
     Map<String, String> header = {};
     if (headerThype == 0) {
       header = {'content-type': 'application/json'};
@@ -277,7 +277,7 @@ class BaseHttp {
   }*/
 
   // 处理 Http 错误码
-  _handleHttpError(int? errorCode) {
+  String _handleHttpError(int? errorCode) {
     String message;
     switch (errorCode) {
       case 400:
@@ -406,7 +406,7 @@ class BaseHttp {
     );
   }
   //获取用户信息
-  getUserToken(){
+  Map<String, String>? getUserToken(){
     if(AppGlobals.userInfo !=null){
       Map<String,String> rmm= {
         "Source":"app",

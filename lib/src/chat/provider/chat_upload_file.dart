@@ -10,7 +10,7 @@ import 'package:n42appv2/src/models/message_model.dart';
 import 'package:path/path.dart' as path;
 
 class ChatUploadFile{
-  static Future handlerFile(String targetUuid,dynamic newPath,ChatMessageModel cm,Map<String, dynamic> content) async {
+  static Future<MessageModel?> handlerFile(String targetUuid,dynamic newPath,ChatMessageModel cm,Map<String, dynamic> content) async {
     final data = await upLoadFile(newPath);
     //await compute(upLoadFile, newPath);
     //{Hash: bafybeieufukwa6vqh3je7wkh4kx54mdmyfqjujba3k4xaapso6crz6ujii,
@@ -72,7 +72,7 @@ class ChatUploadFile{
     }
   }
   //File upload is encapsulated as a top-level function
-  static Future<dynamic> upLoadFile(filePath) async {
+  static Future<Map<String, dynamic>> upLoadFile(String filePath) async {
     String fileName=path.basename(filePath);
     //上传图片
     Map<String, dynamic> rData = await IpfsApi().uploadIPFSImage(
