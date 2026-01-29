@@ -1,0 +1,15 @@
+# Android Local Properties Template
+# Copy this content to local.properties and fill in your values
+# DO NOT commit local.properties to version control
+
+# Flutter SDK path (required)
+flutter.sdk=/path/to/flutter
+
+# Android SDK path (usually auto-detected)
+# sdk.dir=/path/to/android/sdk
+
+# TrustWallet Core Maven Repository Credentials (required for building)
+# Get a GitHub Personal Access Token with 'read:packages' scope
+# from https://github.com/settings/tokens
+wallet_core.user=YOUR_GITHUB_USERNAME
+wallet_core.key=YOUR_GITHUB_PERSONAL_ACCESS_TOKEN

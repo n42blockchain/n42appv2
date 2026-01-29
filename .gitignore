@@ -86,3 +86,6 @@ coverage/
 # Temp files
 tmpclaude-*
 nul
+
+# Entitlements backup (created by release scripts)
+*.entitlements.backup

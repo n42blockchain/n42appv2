@@ -48,19 +48,21 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>Your consent is required for the APP to use the microphone</string>
+	<string>N42 Wallet needs access to Apple Music to play audio content in chat messages.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>This APP needs to access the camera, user upload profile picture, file transfer and other functions, allowed?</string>
+	<string>N42 Wallet needs camera access to scan QR codes for wallet addresses and WalletConnect, and to capture photos for your profile picture.</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>Why is my app authenticating using face id?</string>
+	<string>N42 Wallet uses Face ID to securely authenticate and protect your wallet access.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Your consent is required for the APP to use the microphone</string>
+	<string>N42 Wallet needs microphone access to record voice messages in chat and for voice/video calls.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This APP needs to access the photo album, user upload profile picture, file transfer and other functions, allowed?</string>
+	<string>N42 Wallet needs photo library access to select images for your profile picture and to share files in chat.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>N42 Wallet needs permission to save QR codes and images to your photo library.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs access to your location to share your location with contacts.</string>
+	<string>N42 Wallet needs location access to share your location with contacts in chat.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app needs access to your location to share your location with contacts.</string>
+	<string>N42 Wallet needs location access to share your location with contacts in chat.</string>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
@@ -87,10 +89,16 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
-    <key>NSAppTransportSecurity</key>
-    <dict>
-        <key>NSAllowsArbitraryLoads</key>
-        <true/>
-    </dict>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<true/>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>
