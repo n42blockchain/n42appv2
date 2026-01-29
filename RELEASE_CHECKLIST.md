@@ -1,197 +1,109 @@
 # N42 Wallet Release Checklist
 
-This document outlines the requirements and steps for releasing the N42 Wallet app to Android (Google Play) and iOS (App Store).
+## Quick Status
+
+| Item | Status |
+|------|--------|
+| Code Analysis | ✅ 0 errors, 0 warnings |
+| iOS PrivacyInfo.xcprivacy | ✅ Created & added to Xcode |
+| iOS Info.plist | ✅ Privacy descriptions updated |
+| Android Manifest | ✅ All permissions configured |
+| ProGuard Rules | ✅ Configured |
+| Build Scripts | ✅ Created |
 
 ---
 
-## Pre-Release Code Quality
+## Before Release - REQUIRED Actions
 
-- [x] All `dart analyze` warnings resolved (0 errors, 1 info)
-- [x] Code properly type-annotated
-- [x] No security vulnerabilities in code
+### 1. Android Signing (P0)
 
----
-
-## Android Release Requirements
-
-### 1. Signing Configuration
-
-**Status: ACTION REQUIRED**
-
-The `android/key.properties` file is missing. Create it from the template:
-
-```bash
-cp android/key.properties.template android/key.properties
-# Edit key.properties with your actual keystore credentials
+Edit `android/key.properties`:
+```properties
+storeFile=../keystores/release.keystore
+storePassword=YOUR_ACTUAL_PASSWORD
+keyAlias=n42wallet
+keyPassword=YOUR_ACTUAL_PASSWORD
 ```
 
-Required values:
-- `storeFile`: Path to your release keystore file
-- `storePassword`: Keystore password
-- `keyAlias`: Key alias in the keystore
-- `keyPassword`: Key password
+Create keystore if needed:
+```bash
+cd android/keystores
+keytool -genkey -v -keystore release.keystore -alias n42wallet \
+  -keyalg RSA -keysize 2048 -validity 10000
+```
 
-### 2. TrustWallet Core Credentials
+### 2. TrustWallet Credentials (P0)
 
-**Status: ACTION REQUIRED**
-
-Add TrustWallet Maven credentials to `android/local.properties`:
-
+Edit `android/local.properties`:
 ```properties
-flutter.sdk=/path/to/flutter
 wallet_core.user=YOUR_GITHUB_USERNAME
 wallet_core.key=YOUR_GITHUB_PERSONAL_ACCESS_TOKEN
 ```
 
-### 3. Build Configuration
+Get token from: https://github.com/settings/tokens (scope: `read:packages`)
 
-- [x] `minifyEnabled = true` (ProGuard enabled)
-- [x] `shrinkResources = true`
-- [x] ProGuard rules configured
-- [x] NDK debug symbols enabled
+### 3. iOS Signing (P0)
 
-### 4. Google Play Console Requirements
-
-- [ ] App signing by Google Play configured
-- [ ] Privacy policy URL set
-- [ ] Content rating questionnaire completed
-- [ ] Target API level meets current requirements (API 34+)
-
-### Build Command
-
-```bash
-flutter build appbundle --release
-# or for APK
-flutter build apk --release
-```
+In Xcode:
+1. Open `ios/Runner.xcworkspace`
+2. Select Runner target → Signing & Capabilities
+3. Set Team ID
+4. Configure signing certificates
 
 ---
 
-## iOS Release Requirements
+## Build Commands
 
-### 1. Privacy Manifest (PrivacyInfo.xcprivacy)
-
-**Status: CREATED**
-
-The `ios/Runner/PrivacyInfo.xcprivacy` file has been created with:
-- NSPrivacyCollectedDataTypes declared
-- NSPrivacyAccessedAPITypes with required reasons
-- NSPrivacyTracking set to false
-
-**Note:** Add this file to Xcode project:
-1. Open `ios/Runner.xcworkspace` in Xcode
-2. Right-click on "Runner" folder → "Add Files to Runner"
-3. Select `PrivacyInfo.xcprivacy`
-4. Ensure "Copy items if needed" is unchecked
-5. Target membership: Runner
-
-### 2. App Transport Security (ATS)
-
-**Status: REVIEW RECOMMENDED**
-
-Current `Info.plist` has `NSAllowsArbitraryLoads = true`. Consider:
-- Adding specific exception domains instead of allowing all
-- Documenting justification for App Store review
-
-### 3. Push Notification Entitlements
-
-**Status: ACTION REQUIRED FOR PRODUCTION**
-
-The `Runner.entitlements` has:
-```xml
-<key>aps-environment</key>
-<string>development</string>
-```
-
-For App Store release, create a production entitlements file or update to:
-```xml
-<key>aps-environment</key>
-<string>production</string>
-```
-
-### 4. Code Signing
-
-- [ ] Distribution certificate installed
-- [ ] App Store provisioning profile created
-- [ ] Team ID configured in Xcode
-
-### 5. App Store Connect Requirements
-
-- [ ] Privacy policy URL
-- [ ] App category selected (Finance)
-- [ ] Screenshots for all required device sizes
-- [ ] App description and keywords
-- [ ] Support URL
-- [ ] Export compliance (encryption declaration)
-
-### 6. Export Options
-
-**Status: TEMPLATE CREATED**
-
-The `ios/ExportOptions-AppStore.plist` has been created. Update with:
-- Your actual Team ID
-- Correct provisioning profile names
-
-### Build Command
-
+### iOS Release
 ```bash
-flutter build ios --release
-# Then archive and upload via Xcode or xcrun
+./scripts/prepare_ios_release.sh
+# Then: Xcode → Product → Archive → Distribute
+```
+
+### Android Release
+```bash
+./scripts/prepare_android_release.sh
+# Output: build/app/outputs/bundle/release/app-release.aab
 ```
 
 ---
 
 ## Version Management
 
-Current version: `1.0.0+1` (pubspec.yaml)
+Current: `1.0.0+1`
 
-Before each release:
-1. Update `version` in `pubspec.yaml`
-2. Update version in iOS Info.plist (automatic with Flutter)
-3. Update versionCode/versionName in Android (automatic with Flutter)
-
----
-
-## Testing Before Release
-
-### Android
-- [ ] Release APK installs on real device
-- [ ] ProGuard doesn't break functionality
-- [ ] All deep links work
-- [ ] Push notifications work in release mode
-
-### iOS
-- [ ] TestFlight build works
-- [ ] App Review guidelines compliance
-- [ ] All permissions show correct descriptions
-- [ ] Universal links work
+Update in `pubspec.yaml`:
+```yaml
+version: X.Y.Z+BUILD_NUMBER
+```
 
 ---
 
-## Security Reminders
+## Store Submission Notes
 
-1. **Never commit sensitive files:**
-   - `android/key.properties`
-   - `android/keystores/`
-   - `ios/*.p12`
-   - `ios/*.mobileprovision`
-   - API keys in code
+### App Store (iOS)
+- [x] PrivacyInfo.xcprivacy included
+- [x] Privacy descriptions professional
+- [x] ITSAppUsesNonExemptEncryption = false
+- [ ] Screenshots prepared
+- [ ] Privacy policy URL
 
-2. **Review before release:**
-   - Remove debug logging
-   - Disable developer tools
-   - Verify API endpoints (production vs staging)
-
----
-
-## Quick Reference
-
-| Platform | Build Command | Output Location |
-|----------|---------------|-----------------|
-| Android APK | `flutter build apk --release` | `build/app/outputs/flutter-apk/` |
-| Android Bundle | `flutter build appbundle --release` | `build/app/outputs/bundle/release/` |
-| iOS | `flutter build ios --release` | `build/ios/iphoneos/Runner.app` |
+### Play Store (Android)
+- [x] ProGuard enabled
+- [x] Debug symbols included
+- [x] Target SDK compliant
+- [ ] Screenshots prepared
+- [ ] Privacy policy URL
 
 ---
 
-*Last updated: 2026-01-28*
+## File Reference
+
+| File | Purpose |
+|------|---------|
+| `android/key.properties` | Signing config (edit before release) |
+| `android/local.properties` | Build config + TrustWallet creds |
+| `android/keystores/` | Store keystore files here |
+| `ios/Runner/PrivacyInfo.xcprivacy` | Apple privacy manifest |
+| `ios/ExportOptions-AppStore.plist` | Archive export settings |
+| `scripts/prepare_*.sh` | Build automation |
