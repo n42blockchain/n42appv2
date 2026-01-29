@@ -1964,7 +1964,6 @@ import WalletCore
             $0.privateKey=pk.data
             $0.to=toAddress
             $0.version=version
-            $0.
             $0.transaction=ZilliqaTransaction.with{
                 $0.transfer=ZilliqaTransaction.Transfer.with{
                     $0.amount=Data.init(base64Encoded: amount)!

@@ -105,3 +105,4 @@
 # ==================== 防止崩溃 ====================
 # 保持 MethodChannel 相关类
 -keep class io.flutter.plugin.common.** { *; }
+-dontwarn com.google.android.play.core.splitinstall.SplitInstallException
