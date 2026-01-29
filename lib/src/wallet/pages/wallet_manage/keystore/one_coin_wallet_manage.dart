@@ -549,7 +549,7 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
                   if (!mounted) return;
                   if (flag != null && flag) {
                     final password = controller.text.trim();
-                    debugPrint("password $password");
+                    // SECURITY: Never log passwords
 
                     if (password != widget.walletInfo.password) {
                       //密码输入错误

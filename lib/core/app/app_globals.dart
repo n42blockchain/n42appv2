@@ -15,22 +15,45 @@ import 'package:provider/provider.dart';
 /// Application Globals
 ///
 /// Centralized storage for application-wide state.
-/// 
-/// Note: This is a legacy pattern. New code should use dependency injection
-/// and proper state management instead of static globals.
-/// 
-/// TODO: Migrate to proper DI pattern with get_it
-@Deprecated('Use dependency injection instead. This class will be removed.')
+///
+/// For new code, prefer using Riverpod providers from `core_providers.dart`:
+/// - `currentUserProvider` for user info
+/// - `themeModeProvider` for theme
+/// - `localeProvider` for locale
+///
+/// This class provides static access for legacy code compatibility.
+/// The underlying data is synchronized with Riverpod providers.
 class AppGlobals {
-  /// Global BuildContext (use with caution)
-  @Deprecated('Avoid using global context. Pass context through widget tree.')
-  static late BuildContext appContext;
-
   /// Global Navigator Key
+  ///
+  /// This is the preferred way to access navigation from outside the widget tree.
+  /// Use `navigatorKey.currentContext` to get the current context if needed.
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   /// Route Observer for navigation tracking
   static RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+
+  /// Global BuildContext
+  ///
+  /// This is a convenience accessor that returns `navigatorKey.currentContext`.
+  /// For new code, prefer passing context through the widget tree.
+  ///
+  /// Usage:
+  /// - Access: `AppGlobals.appContext` (may be null if navigator not mounted)
+  /// - Set: `AppGlobals.appContext = context;` (sets the backing context)
+  static BuildContext get appContext {
+    // Try to get context from navigatorKey first
+    final navContext = navigatorKey.currentContext;
+    if (navContext != null) return navContext;
+    // Fallback to manually set context
+    return _appContext!;
+  }
+
+  static set appContext(BuildContext context) {
+    _appContext = context;
+  }
+
+  static BuildContext? _appContext;
 
   /// Current logged-in user
   static UserInfo? userInfo;
@@ -76,6 +99,5 @@ class AppGlobals {
 
 // Legacy alias for backwards compatibility
 // ignore: camel_case_types
-@Deprecated('Use AppGlobals instead')
 typedef Application = AppGlobals;
 

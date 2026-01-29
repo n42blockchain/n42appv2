@@ -417,7 +417,7 @@ class _ImportKeystoreState extends State<ImportKeystore> {
         debugPrint("import wallet address $address");
 
         String privateKey = walletInfo['privateKey'];
-        debugPrint("import wallet pk $privateKey");
+        // SECURITY: Never log private keys
         privateKey=privateKey.replaceAll('\n','');
         //导入类型默认是钱包名字
         final name = cInfo['baseInfo']['coinType'];

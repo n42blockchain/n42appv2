@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/security/security_config.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/api/chat_db_api.dart';
 import 'package:n42appv2/src/chat/models/chat_message_model.dart';
@@ -37,11 +38,26 @@ class WebSocketUtil {
 
   Timer? _timer;
 
+  /// Verify SSL certificate using SecurityConfig
+  /// Returns true if certificate is valid, false otherwise
+  bool _verifySslCertificate(X509Certificate cert, String host, int port) {
+    // Use centralized security configuration
+    return SecurityConfig.verifySslCertificate(cert, host, port);
+  }
+
   //登录之后 建立socket链接
   void connect() {
     final wsUrl = Uri.parse(generateSocketUrl());
     //channel = WebSocketChannel.connect(wsUrl);
-    HttpClient httpClient=HttpClient()..badCertificateCallback=(X509Certificate cert, String host, int port) => true;
+    // SECURITY: Use proper SSL certificate validation
+    // Only bypass in debug mode for development
+    HttpClient httpClient = HttpClient()
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) {
+        // Use SecurityConfig for consistent SSL validation across the app
+        // In release mode, this will properly validate certificates
+        // In debug mode, it allows self-signed certs for testing
+        return _verifySslCertificate(cert, host, port);
+      };
     channel = IOWebSocketChannel.connect(
       wsUrl,
       headers: {

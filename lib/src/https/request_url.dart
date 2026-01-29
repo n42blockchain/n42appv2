@@ -1,5 +1,48 @@
+import 'package:n42appv2/core/config/api_keys_config.dart';
+import 'package:n42appv2/core/config/rpc_config.dart';
+
 class RequestUrl{
+  /// 是否已初始化 API keys
+  static bool _initialized = false;
+
+  /// 初始化 API keys 和 RPC URLs
+  /// 在应用启动时调用一次
+  static void initializeApiKeys() {
+    if (_initialized) return;
+    _initialized = true;
+
+    // 更新 testnet URLs with API keys
+    _requestUrlTest1['ETH']!['rpc'] = ApiKeysConfig.getInfuraUrl(network: 'sepolia');
+    _requestUrlTest1['S']!['api'] = ApiKeysConfig.getSonicscanApiUrl(isTestnet: true);
+
+    // 更新 testnet BTC-like coins RPC (从环境变量或配置)
+    final btcTestnetRpc = RpcConfig.btcTestnetRpc;
+    for (final coin in ['BTC', 'LTC', 'DOGE', 'DASH', 'VIA', 'DGB', 'MONA', 'FIRO', 'BCH', 'BTG', 'RVN', 'QTUM', 'XEC']) {
+      if (_requestUrlTest1.containsKey(coin)) {
+        _requestUrlTest1[coin]!['rpc'] = btcTestnetRpc;
+      }
+    }
+
+    // 更新 mainnet URLs with API keys
+    _requestUrlMain1['BNB']!['api'] = ApiKeysConfig.getBscscanApiUrl();
+    _requestUrlMain1['ETH']!['api'] = ApiKeysConfig.getEtherscanApiUrl();
+    _requestUrlMain1['ETH']!['rpc'] = ApiKeysConfig.getInfuraUrl(network: 'mainnet');
+    _requestUrlMain1['BASE']!['api'] = ApiKeysConfig.getBasescanApiUrl();
+    _requestUrlMain1['S']!['api'] = ApiKeysConfig.getSonicscanApiUrl();
+
+    // 更新 mainnet BTC-like coins RPC (从环境变量或配置)
+    final btcMainnetRpc = RpcConfig.btcMainnetRpc;
+    for (final coin in ['BTC', 'LTC', 'DOGE', 'DASH', 'VIA', 'DGB', 'MONA', 'FIRO', 'BCH', 'BTG', 'RVN', 'QTUM', 'XEC']) {
+      if (_requestUrlMain1.containsKey(coin)) {
+        _requestUrlMain1[coin]!['rpc'] = btcMainnetRpc;
+      }
+    }
+  }
+
   String getUrl2(String coinKey,String uriKey,{bool? isTest}){
+    // 确保 API keys 已初始化
+    initializeApiKeys();
+
     coinKey=coinKey.toUpperCase();
     isTest ??= false;
     if(isTest){
@@ -9,16 +52,25 @@ class RequestUrl{
     }
 
   }
-  Map<String,dynamic> requestUrlTest1={
+
+  /// Testnet URLs (使用 getter 以支持动态更新)
+  Map<String,dynamic> get requestUrlTest1 => _requestUrlTest1;
+
+  /// Mainnet URLs (使用 getter 以支持动态更新)
+  Map<String,dynamic> get requestUrlMain1 => _requestUrlMain1;
+}
+
+/// Testnet URL 配置 (私有，通过 RequestUrl.requestUrlTest1 访问)
+final Map<String,Map<String,dynamic>> _requestUrlTest1={
     'BNB':{
       'api':'https://api-testnet.bscscan.com/api?',
       'browser':'https://testnet.bscscan.com/',
       'rpc':'https://data-seed-prebsc-1-s1.binance.org:8545',
     },
     'ETH':{
-      'api':'https://api-sepolia.etherscan.io/api?',//'https://api-ropsten.etherscan.io/api?',
-      'browser':'https://sepolia.etherscan.io/',//'https://ropsten.etherscan.io/',
-      'rpc':'https://sepolia.infura.io/v3/9adcf29470b74cf8b2884eb6ba9fe251'//'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',//'https://ropsten.infura.io/v3/b6bd1324a1b34545b1fdda886dd494f9',//'https://mainnet.infura.io'
+      'api':'https://api-sepolia.etherscan.io/api?',
+      'browser':'https://sepolia.etherscan.io/',
+      'rpc': 'https://sepolia.infura.io/v3/', // 由 initializeApiKeys() 更新
     },
     'MATIC':{
       'api':'https://api-testnet.polygonscan.com/api?',
@@ -38,7 +90,7 @@ class RequestUrl{
     'N':{
       'api':'https://testnet2.n42.world/api?',
       'browser':'https://testnet2.n42.world/',
-      'rpc':'http://5.161.252.59:8545'//"https://testrpc.n42.world",
+      'rpc':'https://testrpc.n42.world', // SECURITY: Use HTTPS
     },
     'ETC':{
       'api':'https://blockscout.com/etc/kotti/api?',
@@ -174,79 +226,79 @@ class RequestUrl{
       'api':'https://mempool.space/testnet4/api/',
       'api1':'https://api.blockcypher.com/v1/btc/test3',
       'browser':'https://live.blockcypher.com/btc-testnet/',
-      'rpc':"http://198.200.30.38:18001",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'LTC':{
       'api':'https://198.200.30.38:18390/v1/',
       'api1':'https://api.blockcypher.com/v1/btc/test3',
       'browser':'https://live.blockcypher.com/btc-testnet/',
-      'rpc':"http://198.200.30.38:18001",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'DOGE':{
       'api':'https://198.200.30.38:18390/v1/',
       'api1':'https://api.blockcypher.com/v1/btc/test3',
       'browser':'https://live.blockcypher.com/btc-testnet/',
-      'rpc':"http://198.200.30.38:18001",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'DASH':{
       'api':'https://198.200.30.38:18390/v1/',
       'api1':'https://api.blockcypher.com/v1/btc/test3',
       'browser':'https://live.blockcypher.com/btc-testnet/',
-      'rpc':"http://198.200.30.38:18001",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'VIA':{
       'api':'https://198.200.30.38:18390/v1/',
       'api1':'https://api.blockcypher.com/v1/btc/test3',
       'browser':'https://live.blockcypher.com/btc-testnet/',
-      'rpc':"http://198.200.30.38:18001",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'DGB':{
       'api':'https://198.200.30.38:18390/v1/',
       'api1':'https://api.blockcypher.com/v1/btc/test3',
       'browser':'https://live.blockcypher.com/btc-testnet/',
-      'rpc':"http://198.200.30.38:18001",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'MONA':{
       'api':'https://198.200.30.38:18390/v1/',
       'api1':'https://api.blockcypher.com/v1/btc/test3',
       'browser':'https://live.blockcypher.com/btc-testnet/',
-      'rpc':"http://198.200.30.38:18001",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'FIRO':{
       'api':'https://198.200.30.38:18390/v1/',
       'api1':'https://api.blockcypher.com/v1/btc/test3',
       'browser':'https://live.blockcypher.com/btc-testnet/',
-      'rpc':"http://198.200.30.38:18001",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'BCH':{
       'api':'https://198.200.30.38:18390/v1/',
       'api1':'https://api.blockcypher.com/v1/btc/test3',
       'browser':'https://live.blockcypher.com/btc-testnet/',
-      'rpc':"http://198.200.30.38:18001",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'BTG':{
       'api':'https://198.200.30.38:18390/v1/',
       'api1':'https://api.blockcypher.com/v1/btc/test3',
       'browser':'https://live.blockcypher.com/btc-testnet/',
-      'rpc':"http://198.200.30.38:18001",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'RVN':{
       'api':'https://198.200.30.38:18390/v1/',
       'api1':'https://api.blockcypher.com/v1/btc/test3',
       'browser':'https://live.blockcypher.com/btc-testnet/',
-      'rpc':"http://198.200.30.38:18001",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'QTUM':{
       'api':'https://198.200.30.38:18390/v1/',
       'api1':'https://api.blockcypher.com/v1/btc/test3',
       'browser':'https://live.blockcypher.com/btc-testnet/',
-      'rpc':"http://198.200.30.38:18001",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'XEC':{
       'api':'https://198.200.30.38:18390/v1/',
       'api1':'https://api.blockcypher.com/v1/btc/test3',
       'browser':'https://live.blockcypher.com/btc-testnet/',
-      'rpc':"http://198.200.30.38:18001",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'ALGO':{
       'api':'https://node.testnet.algoexplorerapi.io/',
@@ -314,7 +366,7 @@ class RequestUrl{
       'rpc':"https://testnet.toncenter.com/api/v2/"
     },
     'S':{
-      'api':"https://api-testnet.sonicscan.org/api?apikey=TAQUSSBP544M6P174DQZS921AG3MC9WQUG&",
+      'api':"https://api-testnet.sonicscan.org/api?", // 由 initializeApiKeys() 更新
       'browser':"https://testnet.sonicscan.org/",
       'rpc':"https://rpc.blaze.soniclabs.com/"
     },
@@ -369,16 +421,18 @@ class RequestUrl{
       'rpc':'https://devnet-gateway.multiversx.com'
     }
   };
-  Map<String,dynamic> requestUrlMain1={
+
+/// Mainnet URL 配置 (私有，通过 RequestUrl.requestUrlMain1 访问)
+final Map<String,Map<String,dynamic>> _requestUrlMain1={
     'BNB':{
-      'api':'https://api.bscscan.com/api?apikey=YZIAIW52DPWKRBVETBHW2Z6YX893HAXCUG&',
+      'api':'https://api.bscscan.com/api?', // 由 initializeApiKeys() 更新
       'browser':'https://bscscan.com/',
       'rpc':'https://bsc-dataseed1.binance.org/',
     },
     'ETH':{
-      'api':'https://api.etherscan.io/api?apikey=ZUBXBXGF3ZEVUSCPKI2A63Z5V4ZBR7ABFW&',
+      'api':'https://api.etherscan.io/api?', // 由 initializeApiKeys() 更新
       'browser':'https://etherscan.io/',
-      'rpc':'https://mainnet.infura.io/v3/b6bd1324a1b34545b1fdda886dd494f9',//'https://mainnet.infura.io',
+      'rpc':'https://mainnet.infura.io/v3/', // 由 initializeApiKeys() 更新
     },
     'MATIC':{
       'api':'https://api.polygonscan.com/api?',
@@ -398,7 +452,7 @@ class RequestUrl{
     'N':{
       'api':'https://mainnet.n42.world/api?',
       'browser':'https://mainnet.n42.world/',
-      'rpc':"http://5.161.252.59:8545",//"https://rpc.n42.world",
+      'rpc':'https://rpc.n42.world', // SECURITY: Use HTTPS
     },
     'ETC':{
       'api':'https://blockscout.com/etc/mainnet/api?',
@@ -446,8 +500,8 @@ class RequestUrl{
       'rpc':'https://rpc.tomochain.com'
     },
     'TT':{
-      'api':'http://explorer-mainnet.thundercore.com/api?',
-      'browser':'https://explorer-mainnet.thundercore.com/',//'https://scan.thundercore.com/',
+      'api':'https://explorer-mainnet.thundercore.com/api?', // SECURITY: Upgraded to HTTPS
+      'browser':'https://explorer-mainnet.thundercore.com/',
       'rpc':''
     },
     'GO':{
@@ -502,7 +556,7 @@ class RequestUrl{
     },
     'MTR':{
       'api':'',
-      'browser':'http://scan.meter.io/',
+      'browser':'https://scan.meter.io/', // SECURITY: Upgraded to HTTPS
       'rpc':'https://rpc.meter.io'
     },
     'OKT':{
@@ -533,67 +587,67 @@ class RequestUrl{
     'BTC':{
       'api':'https://blockstream.info/api/',//'https://api.blockcypher.com/v1/btc/main/',
       'browser':'https://www.blockchain.com/btc/',
-      'rpc':"http://198.200.30.34:18002",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'LTC':{
       'api':'https://api.blockcypher.com/v1/ltc/main',
       'browser':'https://live.blockcypher.com/ltc/',
-      'rpc':"http://198.200.30.34:18002",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'DOGE':{
       'api':'https://api.blockcypher.com/v1/doge/main',
       'browser':'https://dogechain.info/',
-      'rpc':"http://198.200.30.34:18002",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'DASH':{
       'api':'https://api.blockcypher.com/v1/dash/main',
       'browser':'https://chainz.cryptoid.info/dash/',
-      'rpc':"http://198.200.30.34:18002",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'VIA':{
       'api':'',//'https://api.blockcypher.com/v1/btc/main',
       'browser':'https://explorer.viacoin.org/',
-      'rpc':"http://198.200.30.34:18002",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'DGB':{
       'api':'',//'https://api.blockcypher.com/v1/btc/main',
-      'browser':'http://digiexplorer.info/',
-      'rpc':"http://198.200.30.34:18002",
+      'browser':'https://digiexplorer.info/', // SECURITY: Upgraded to HTTPS
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'MONA':{
       'api':'',//'https://api.blockcypher.com/v1/btc/main',
       'browser':'https://blockbook.electrum-mona.org/',
-      'rpc':"http://198.200.30.34:18002",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'FIRO':{
       'api':'',//'https://api.blockcypher.com/v1/btc/main',
       'browser':'https://explorer.firo.org/',
-      'rpc':"http://198.200.30.34:18002",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'BCH':{
       'api':'',//'https://api.blockcypher.com/v1/btc/main',
       'browser':'https://www.blockchain.com/bch/',
-      'rpc':"http://198.200.30.34:18002",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'BTG':{
       'api':'',//'https://api.blockcypher.com/v1/btc/main',
       'browser':'https://explorer.bitcoingold.org/insight/',
-      'rpc':"http://198.200.30.34:18002",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'RVN':{
       'api':'',//'https://api.blockcypher.com/v1/btc/main',
       'browser':'https://ravencoin.network/',
-      'rpc':"http://198.200.30.34:18002",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'QTUM':{
       'api':'',//'https://api.blockcypher.com/v1/btc/main',
       'browser':'https://qtum.info/',
-      'rpc':"http://198.200.30.34:18002",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'XEC':{
       'api':'',//'https://api.blockcypher.com/v1/btc/main',
       'browser':'https://explorer.bitcoinabc.org/',
-      'rpc':"http://198.200.30.34:18002",
+      'rpc':'', // 由 initializeApiKeys() 从 RpcConfig 更新
     },
     'ALGO':{
       'api':'https://node.algoexplorerapi.io/',
@@ -621,7 +675,7 @@ class RequestUrl{
       'rpc':''
     },
     'BASE':{
-      'api':'https://api.basescan.org/api?apikey=7A3X4GWAVJTMXDNJQUPU4XCP95J9I8YCJD&',
+      'api':'https://api.basescan.org/api?', // 由 initializeApiKeys() 更新
       'browser':'https://basescan.org/',
       'rpc':'https://mainnet.base.org'
     },
@@ -661,7 +715,7 @@ class RequestUrl{
       'rpc':"https://toncenter.com/api/v2/"
     },
     'S':{
-      'api':"https://api.sonicscan.org/api?apikey=TAQUSSBP544M6P174DQZS921AG3MC9WQUG&",
+      'api':"https://api.sonicscan.org/api?", // 由 initializeApiKeys() 更新
       'browser':"https://sonicscan.org/",
       'rpc':"https://rpc.soniclabs.com/"
     },
@@ -716,4 +770,3 @@ class RequestUrl{
       'rpc':'https://gateway.multiversx.com'
     }
   };
-}

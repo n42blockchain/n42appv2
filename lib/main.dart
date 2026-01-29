@@ -46,6 +46,12 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42_chat/n42_chat.dart';
 import 'package:n42_chat/l10n/app_localizations.dart' as chat_l10n;
+import 'package:n42appv2/core/config/api_keys_config.dart';
+import 'package:n42appv2/core/config/rpc_config.dart';
+import 'package:n42appv2/core/security/secure_storage.dart';
+import 'package:n42appv2/core/security/wallet_data_migration.dart';
+import 'package:n42appv2/core/storage/sp_util.dart';
+import 'package:n42appv2/src/https/request_url.dart';
 
 /// Global ProviderContainer for Riverpod
 /// This is used during the migration phase to bridge Provider and Riverpod
@@ -67,6 +73,29 @@ void main() async {
     kReleaseMode ? Env.prod : Env.dev,
     container: globalProviderContainer,
   );
+
+  // SECURITY: Initialize API keys from environment variables
+  // This removes hardcoded API keys from source code
+  initApiKeys(); // Validate API keys configuration in debug mode
+  initRpcConfig(); // Validate RPC URLs security in debug mode
+  RequestUrl.initializeApiKeys(); // Update URLs with actual API keys
+
+  // SECURITY: Migrate sensitive wallet data from SharedPreferences to SecureStorage
+  // This is a one-time migration to fix the security issue of storing
+  // mnemonic/privateKey/password in unencrypted SharedPreferences
+  try {
+    final migration = WalletDataMigration(
+      secureStorage: SecureStorage(),
+      spUtil: SPUtil(),
+    );
+    if (await migration.needsMigration()) {
+      final count = await migration.migrate();
+      debugPrint('[Security] Wallet data migration completed: $count wallets migrated');
+    }
+  } catch (e) {
+    debugPrint('[Security] Wallet data migration failed: $e');
+    // Don't block app startup, but log the error
+  }
 
   // Initialize N42 Chat module
   try {

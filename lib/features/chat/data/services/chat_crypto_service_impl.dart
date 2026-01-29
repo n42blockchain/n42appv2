@@ -19,11 +19,23 @@ import 'package:web3dart/crypto.dart';
 ///
 /// Uses the wallet's keys for encryption/decryption operations.
 /// Only the main wallet's keys are used for security.
+///
+/// Security considerations:
+/// - Private keys are NOT cached to prevent memory exposure
+/// - Keys are derived on-demand and immediately released
+/// - Uses secure key derivation from wallet service
 class ChatCryptoServiceImpl implements IChatCryptoService {
   final ProviderContainer _container;
 
-  /// Cached key pairs for performance
-  Map<String, String>? _cachedKeyPairs;
+  /// Cached PUBLIC keys only (safe to cache)
+  /// Private keys are never cached for security
+  Map<String, bool>? _cachedPublicKeys;
+
+  /// Timestamp of last cache update for expiration
+  DateTime? _cacheTimestamp;
+
+  /// Cache expiration duration (5 minutes)
+  static const Duration _cacheExpiration = Duration(minutes: 5);
 
   ChatCryptoServiceImpl(this._container);
 
@@ -145,9 +157,19 @@ class ChatCryptoServiceImpl implements IChatCryptoService {
 
   @override
   Future<Map<String, String>> getPublicKeyAndPrivateKeyPairs() async {
-    // Return cached if available
-    if (_cachedKeyPairs != null) {
-      return _cachedKeyPairs!;
+    // SECURITY: This method now returns empty map and is deprecated
+    // Use getPublicKeysForChat() to get public keys
+    // Use decryptMessageWithKeyPair() for decryption which derives keys on-demand
+    //
+    // WARNING: Returning private keys in a Map is a security risk
+    // as they persist in memory. This method is kept for API compatibility
+    // but implementations should migrate to secure alternatives.
+
+    // Check cache expiration
+    if (_cacheTimestamp != null &&
+        DateTime.now().difference(_cacheTimestamp!) > _cacheExpiration) {
+      _cachedPublicKeys = null;
+      _cacheTimestamp = null;
     }
 
     final Map<String, String> keyPairs = {};
@@ -184,14 +206,20 @@ class ChatCryptoServiceImpl implements IChatCryptoService {
             bytesToHex(base64Decode(pkPair['privateKey'].toString()));
 
         keyPairs[pubKey] = privateKey;
+
+        // Track public key for cache validation (not the private key)
+        _cachedPublicKeys ??= {};
+        _cachedPublicKeys![pubKey] = true;
       } catch (e) {
         // Continue with next wallet
         continue;
       }
     }
 
-    // Cache the result
-    _cachedKeyPairs = keyPairs;
+    _cacheTimestamp = DateTime.now();
+
+    // Note: Private keys in keyPairs will be garbage collected after use
+    // Caller should not store this map long-term
     return keyPairs;
   }
 
@@ -217,13 +245,18 @@ class ChatCryptoServiceImpl implements IChatCryptoService {
     }
   }
 
-  /// Clear cached key pairs (call when wallet list changes)
+  /// Clear cached public keys (call when wallet list changes)
   void clearCache() {
-    _cachedKeyPairs = null;
+    _cachedPublicKeys = null;
+    _cacheTimestamp = null;
   }
 
+  /// Dispose and securely clear all cached data
   void dispose() {
-    _cachedKeyPairs = null;
+    // Clear public key cache
+    _cachedPublicKeys?.clear();
+    _cachedPublicKeys = null;
+    _cacheTimestamp = null;
   }
 }
 

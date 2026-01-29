@@ -1,0 +1,183 @@
+// Copyright 2021-2026 N42 Inc. All rights reserved.
+// Use of this source code is governed by a dual license:
+// Apache License 2.0 and MIT License.
+// See LICENSE file in the project root for full license information.
+
+import 'package:flutter/foundation.dart';
+
+/// API Keys 配置
+///
+/// 安全地管理第三方 API keys
+///
+/// 使用方式:
+/// 1. 开发环境: 使用 --dart-define 传入 keys
+///    flutter run --dart-define=INFURA_API_KEY=xxx --dart-define=ETHERSCAN_API_KEY=xxx
+///
+/// 2. 生产环境: 在 CI/CD 中设置环境变量
+///    INFURA_API_KEY=xxx flutter build apk
+///
+/// 3. 本地开发: 创建 api_keys.local.dart (已在 .gitignore 中)
+///
+/// 注意: 永远不要将真实的 API keys 提交到代码仓库
+class ApiKeysConfig {
+  ApiKeysConfig._();
+
+  // ==================== Infura ====================
+
+  /// Infura API Key (Ethereum Mainnet)
+  static const String infuraMainnet = String.fromEnvironment(
+    'INFURA_API_KEY',
+    defaultValue: _defaultInfuraKey,
+  );
+
+  /// Infura API Key (Sepolia Testnet)
+  static const String infuraSepolia = String.fromEnvironment(
+    'INFURA_SEPOLIA_KEY',
+    defaultValue: _defaultInfuraKey,
+  );
+
+  // ==================== Block Explorers ====================
+
+  /// Etherscan API Key
+  static const String etherscan = String.fromEnvironment(
+    'ETHERSCAN_API_KEY',
+    defaultValue: _defaultEtherscanKey,
+  );
+
+  /// BSCScan API Key
+  static const String bscscan = String.fromEnvironment(
+    'BSCSCAN_API_KEY',
+    defaultValue: _defaultBscscanKey,
+  );
+
+  /// Basescan API Key
+  static const String basescan = String.fromEnvironment(
+    'BASESCAN_API_KEY',
+    defaultValue: _defaultBasescanKey,
+  );
+
+  /// Sonicscan API Key
+  static const String sonicscan = String.fromEnvironment(
+    'SONICSCAN_API_KEY',
+    defaultValue: _defaultSonicscanKey,
+  );
+
+  // ==================== Default Keys (Development Only) ====================
+  // WARNING: These are placeholder keys for development
+  // In production, always use environment variables
+
+  static const String _defaultInfuraKey = 'YOUR_INFURA_API_KEY';
+  static const String _defaultEtherscanKey = 'YOUR_ETHERSCAN_API_KEY';
+  static const String _defaultBscscanKey = 'YOUR_BSCSCAN_API_KEY';
+  static const String _defaultBasescanKey = 'YOUR_BASESCAN_API_KEY';
+  static const String _defaultSonicscanKey = 'YOUR_SONICSCAN_API_KEY';
+
+  // ==================== Validation ====================
+
+  /// 检查 API keys 是否已配置
+  static bool get isConfigured {
+    return infuraMainnet != _defaultInfuraKey &&
+        etherscan != _defaultEtherscanKey;
+  }
+
+  /// 在 Debug 模式下验证 API keys 配置
+  static void validateInDebug() {
+    if (!kDebugMode) return;
+
+    final warnings = <String>[];
+
+    if (infuraMainnet == _defaultInfuraKey) {
+      warnings.add('INFURA_API_KEY not configured');
+    }
+    if (etherscan == _defaultEtherscanKey) {
+      warnings.add('ETHERSCAN_API_KEY not configured');
+    }
+    if (bscscan == _defaultBscscanKey) {
+      warnings.add('BSCSCAN_API_KEY not configured');
+    }
+    if (basescan == _defaultBasescanKey) {
+      warnings.add('BASESCAN_API_KEY not configured');
+    }
+    if (sonicscan == _defaultSonicscanKey) {
+      warnings.add('SONICSCAN_API_KEY not configured');
+    }
+
+    if (warnings.isNotEmpty) {
+      debugPrint('⚠️ [ApiKeysConfig] Missing API keys:');
+      for (final warning in warnings) {
+        debugPrint('   - $warning');
+      }
+      debugPrint('   Use --dart-define to set API keys');
+    }
+  }
+
+  // ==================== URL Builders ====================
+
+  /// 获取 Infura RPC URL
+  static String getInfuraUrl({
+    required String network,
+    String? customKey,
+  }) {
+    final key = customKey ?? infuraMainnet;
+    return 'https://$network.infura.io/v3/$key';
+  }
+
+  /// 获取 Etherscan API URL
+  static String getEtherscanApiUrl({
+    String baseUrl = 'https://api.etherscan.io/api',
+    String? customKey,
+  }) {
+    final key = customKey ?? etherscan;
+    if (key == _defaultEtherscanKey) {
+      return '$baseUrl?';
+    }
+    return '$baseUrl?apikey=$key&';
+  }
+
+  /// 获取 BSCScan API URL
+  static String getBscscanApiUrl({
+    String baseUrl = 'https://api.bscscan.com/api',
+    String? customKey,
+  }) {
+    final key = customKey ?? bscscan;
+    if (key == _defaultBscscanKey) {
+      return '$baseUrl?';
+    }
+    return '$baseUrl?apikey=$key&';
+  }
+
+  /// 获取 Basescan API URL
+  static String getBasescanApiUrl({
+    String baseUrl = 'https://api.basescan.org/api',
+    String? customKey,
+  }) {
+    final key = customKey ?? basescan;
+    if (key == _defaultBasescanKey) {
+      return '$baseUrl?';
+    }
+    return '$baseUrl?apikey=$key&';
+  }
+
+  /// 获取 Sonicscan API URL
+  static String getSonicscanApiUrl({
+    String baseUrl = 'https://api.sonicscan.org/api',
+    bool isTestnet = false,
+    String? customKey,
+  }) {
+    final key = customKey ?? sonicscan;
+    final url = isTestnet
+        ? 'https://api-testnet.sonicscan.org/api'
+        : baseUrl;
+    if (key == _defaultSonicscanKey) {
+      return '$url?';
+    }
+    return '$url?apikey=$key&';
+  }
+}
+
+/// API Keys 初始化
+///
+/// 在应用启动时调用以验证 API keys 配置
+void initApiKeys() {
+  ApiKeysConfig.validateInDebug();
+}
