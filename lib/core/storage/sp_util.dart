@@ -8,6 +8,7 @@
 import 'dart:convert';
 
 import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/storage/secure_preferences.dart';
 import 'package:n42appv2/data/models/user_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,13 +16,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 ///
 /// Provides a centralized interface for local storage operations.
 /// Handles user preferences, settings, and cached data.
+/// Sensitive data (wallet, security, user info, lock screen) uses SecureStorage.
+/// Non-sensitive data uses SharedPreferences.
 class SPUtil {
   SharedPreferences? prefs;
+  final SecurePreferences _securePrefs = SecurePreferences.instance;
 
   Future<SharedPreferences> initPrefs() async {
-    prefs ??= await SharedPreferences.getInstance();
+    if (prefs == null) {
+      prefs = await SharedPreferences.getInstance();
+      await _securePrefs.init();
+    }
     return prefs!;
   }
+
+  // ==================== 非敏感设置 ====================
 
   // 是否阅读了登录、安全条款
   Future<void> setReadLoginClause(bool value) async {
@@ -72,51 +81,69 @@ class SPUtil {
     return json.decode(r);
   }
 
-  // 保存钱包信息
+  // ==================== 敏感数据（使用 SecurePreferences） ====================
+
+  // 保存钱包信息（安全存储）
   Future<void> setWalletInfo(Map<String, dynamic> map) async {
-    await putObject(SPkey.walletInfo.name, map);
+    await _securePrefs.setWalletInfo(map);
   }
 
-  /// 获取钱包列表
+  /// 获取钱包列表（安全存储）
   Future<Map<String, dynamic>?> getWalletInfo() async {
-    await initPrefs();
-    String? data = prefs?.getString(SPkey.walletInfo.name);
-    if (data != null) {
-      return jsonDecode(data);
-    }
-    return null;
+    return await _securePrefs.getWalletInfo();
   }
 
-  // 钱包安全验证配置
+  // 钱包安全验证配置（安全存储）
   Future<void> setSecurity(Map<String, dynamic> value) async {
-    await initPrefs();
-    prefs?.setString(SPkey.security.name, json.encode(value));
+    await _securePrefs.setSecurity(value);
   }
 
   Future<Map<String, dynamic>?> getSecurity() async {
-    await initPrefs();
-    String? r = prefs?.getString(SPkey.security.name);
-    if (r == null) {
-      return null;
-    }
-    return json.decode(r);
+    return await _securePrefs.getSecurity();
   }
 
-  // 保存用户信息
+  // 保存用户信息（安全存储）
   Future<void> saveUserInfo(UserInfo? info) async {
-    await putObject(SPkey.userInfo.name, info);
+    if (info == null) {
+      await _securePrefs.setUserInfo(null);
+    } else {
+      await _securePrefs.setUserInfo(info.toJson());
+    }
   }
 
-  // 保存用户信息 (JSON format for SharedUserInfo)
+  // 保存用户信息 (JSON format for SharedUserInfo)（安全存储）
   Future<void> saveUserInfoJson(Map<String, dynamic> info) async {
-    await initPrefs();
-    prefs?.setString(SPkey.userInfo.name, json.encode(info));
+    await _securePrefs.setUserInfo(info);
   }
 
-  // 获取缓存的用户信息
+  // 获取缓存的用户信息（安全存储）
   Future<Map<String, dynamic>?> getUserInfo() async {
-    return await getObject(SPkey.userInfo.name);
+    return await _securePrefs.getUserInfo();
   }
+
+  // 锁屏设置（安全存储）
+  Future<void> setLockScreen(Map<String, dynamic> value) async {
+    final uuid = AppGlobals.userInfo?.uuid ?? "";
+    await _securePrefs.setLockScreen(uuid, value);
+  }
+
+  Future<Map<String, dynamic>?> getLockScreen() async {
+    final uuid = AppGlobals.userInfo?.uuid ?? "";
+    return await _securePrefs.getLockScreen(uuid);
+  }
+
+  // 挖矿数据（安全存储）
+  Future<void> setMiningData(Map<String, dynamic> value) async {
+    final uuid = AppGlobals.userInfo?.uuid ?? "";
+    await _securePrefs.setMiningData(uuid, value);
+  }
+
+  Future<Map<String, dynamic>?> getMiningData() async {
+    final uuid = AppGlobals.userInfo?.uuid ?? "";
+    return await _securePrefs.getMiningData(uuid);
+  }
+
+  // ==================== 非敏感设置（继续使用 SharedPreferences） ====================
 
   // 设置后台挖矿音乐
   Future<void> setBackgroundMiningMusic(int value) async {
@@ -138,34 +165,6 @@ class SPUtil {
   Future<void> setHasAcceptedTerms(bool value) async {
     await initPrefs();
     prefs?.setBool(SPkey.hasAcceptedChatTerms.name, value);
-  }
-
-  // 锁屏设置
-  Future<void> setLockScreen(Map<String, dynamic> value) async {
-    await initPrefs();
-    String? r = prefs?.getString(SPkey.lockScreen.name);
-    final userUuid = AppGlobals.userInfo?.uuid ?? "";
-    
-    if (r == null) {
-      prefs?.setString(SPkey.lockScreen.name, json.encode({
-        userUuid: value,
-      }));
-    } else {
-      Map<String, dynamic> ls = json.decode(r);
-      ls[userUuid] = value;
-      prefs?.setString(SPkey.lockScreen.name, json.encode(ls));
-    }
-  }
-
-  Future<Map<String, dynamic>?> getLockScreen() async {
-    await initPrefs();
-    String? r = prefs?.getString(SPkey.lockScreen.name);
-    if (r == null) {
-      return null;
-    } else {
-      Map<String, dynamic> ls = json.decode(r);
-      return ls[AppGlobals.userInfo?.uuid ?? ""];
-    }
   }
 
   // 服务条款
@@ -190,33 +189,7 @@ class SPUtil {
     return prefs?.getBool(SPkey.useNewChat.name) ?? true;
   }
 
-  // 临时存储，挖矿信息
-  Future<void> setMiningData(Map<String, dynamic> value) async {
-    await initPrefs();
-    String? r = prefs?.getString(SPkey.miningData.name);
-    final userUuid = AppGlobals.userInfo?.uuid ?? "";
-    
-    if (r == null) {
-      prefs?.setString(SPkey.miningData.name, json.encode({
-        userUuid: value,
-      }));
-    } else {
-      Map<String, dynamic> ls = json.decode(r);
-      ls[userUuid] = value;
-      prefs?.setString(SPkey.miningData.name, json.encode(ls));
-    }
-  }
-
-  Future<Map<String, dynamic>?> getMiningData() async {
-    await initPrefs();
-    String? r = prefs?.getString(SPkey.miningData.name);
-    if (r == null) {
-      return null;
-    } else {
-      Map<String, dynamic> ls = json.decode(r);
-      return ls[AppGlobals.userInfo?.uuid ?? ""];
-    }
-  }
+  // ==================== 通用方法 ====================
 
   /// put object.
   Future<bool> putObject(String key, Object? value) async {
@@ -267,15 +240,15 @@ enum SPkey {
   themeMode, // app主题模式0系统，1亮，2暗
   sysLang, // 系统语言en,zh-CN
   browserSetting, // 浏览器设置
-  walletInfo, // 钱包信息
-  security, // 安全设置
-  userInfo,
+  walletInfo, // 钱包信息（已迁移到 SecureStorage）
+  security, // 安全设置（已迁移到 SecureStorage）
+  userInfo, // 用户信息（已迁移到 SecureStorage）
   backgroundMiningMusic, // 后台挖矿音乐
   hasAcceptedChatTerms, // 是否阅读Chat 用户须知
-  lockScreen, // 锁屏配置
+  lockScreen, // 锁屏配置（已迁移到 SecureStorage）
   showTermsOfService, // 显示服务条款
-  miningData, // 临时存储，挖矿信息
-  readLoginClause,
+  miningData, // 挖矿数据（已迁移到 SecureStorage）
+  readLoginClause, // 是否阅读登录条款
   useNewChat, // 是否使用新聊天模块
 }
 

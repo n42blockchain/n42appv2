@@ -9,10 +9,10 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'dart:io';
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/security/security_config.dart';
 
 /// Base HTTP Client
 ///
@@ -58,19 +58,10 @@ class BaseHttp {
     _dio.httpClientAdapter = IOHttpClientAdapter()
       ..createHttpClient = () {
         final client = HttpClient();
-        // WARNING: Disabling SSL verification is a security risk
-        // This should only be enabled for development/testing
-        if (kReleaseMode) {
-          // In production, use proper certificate validation
-          client.badCertificateCallback = (cert, host, port) {
-            // TODO: Implement proper SSL pinning
-            // return _verifyCertificateFingerprint(cert);
-            return true; // Temporary - replace with proper validation
-          };
-        } else {
-          // Development mode - allow all certificates
-          client.badCertificateCallback = (cert, host, port) => true;
-        }
+        // Use unified security configuration for SSL certificate verification
+        client.badCertificateCallback = (X509Certificate cert, String host, int port) {
+          return SecurityConfig.verifySslCertificate(cert, host, port);
+        };
         return client;
       };
   }

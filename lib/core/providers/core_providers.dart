@@ -5,6 +5,12 @@
 //
 // Author: Jiang Yiwei
 
+// Re-export new state providers for Phase 5 migration
+export 'browser_state_provider.dart';
+export 'chat_state_provider.dart';
+export 'mining_state_provider.dart';
+export 'wallet_state_provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42appv2/core/constants/language_constants.dart';

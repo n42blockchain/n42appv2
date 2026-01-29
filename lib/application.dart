@@ -2,7 +2,7 @@ import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/main.dart' show globalProviderContainer;
 import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
-import 'package:n42appv2/src/utils/sp_util.dart';
+import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:flutter/material.dart';
