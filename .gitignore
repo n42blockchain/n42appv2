@@ -45,6 +45,8 @@ pubspec.lock
 **/android/gradlew
 **/android/gradlew.bat
 **/android/local.properties
+**/android/key.properties
+**/android/keystores/
 **/android/**/GeneratedPluginRegistrant.java
 
 # iOS/Xcode specific
@@ -66,6 +68,13 @@ pubspec.lock
 **/ios/Flutter/flutter_export_environment.sh
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
+
+# iOS Signing and Credentials
+**/ios/fastlane/report.xml
+**/ios/*.mobileprovision
+**/ios/*.p12
+**/ios/AuthKey*.p8
+**/ios/ExportOptions.plist
 
 # Coverage
 coverage/
