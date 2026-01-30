@@ -6,7 +6,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        // ✅ TrustWallet 私有仓库
+        // ✅ TrustWallet 私有仓库 (需要 GitHub 认证)
         maven {
             url = uri("https://maven.pkg.github.com/trustwallet/wallet-core")
             val props = java.util.Properties()
