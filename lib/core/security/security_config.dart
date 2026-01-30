@@ -16,42 +16,78 @@ import 'dart:convert';
 class SecurityConfig {
   SecurityConfig._();
 
+  /// SSL 证书配置
+  ///
+  /// IMPORTANT: 在生产环境部署前，必须执行以下步骤：
+  ///
+  /// 1. 获取服务器证书指纹：
+  ///    ```bash
+  ///    openssl s_client -connect api.n42.ai:443 2>/dev/null | \
+  ///      openssl x509 -pubkey -noout | \
+  ///      openssl rsa -pubin -outform der 2>/dev/null | \
+  ///      openssl dgst -sha256 -binary | base64
+  ///    ```
+  ///
+  /// 2. 或使用在线工具: https://www.ssllabs.com/ssltest/
+  ///
+  /// 3. 将获取的指纹替换下面的占位符值
+  ///
+  /// 4. 设置证书轮换提醒（证书到期前30天添加新证书）
+  ///
+  /// 证书轮换流程：
+  /// 1. 在证书到期前30天，将新证书指纹添加到 backupCertFingerprints
+  /// 2. 发布包含新证书的应用更新
+  /// 3. 等待大部分用户更新后，切换服务器证书
+  /// 4. 在下一个版本中，将新证书移到 allowedCertFingerprints，删除旧证书
+
   /// 允许的 SSL 证书指纹列表
-  /// 
-  /// 生产环境应使用 SSL Pinning，将服务器证书的 SHA-256 指纹添加到此列表
-  /// 获取证书指纹命令:
-  /// ```bash
-  /// openssl s_client -connect api.n42.network:443 2>/dev/null | \
-  ///   openssl x509 -pubkey -noout | \
-  ///   openssl rsa -pubin -outform der 2>/dev/null | \
-  ///   openssl dgst -sha256 -binary | base64
-  /// ```
-  /// 
-  /// 或使用在线工具: https://www.ssllabs.com/ssltest/
+  ///
+  /// TODO: 在生产部署前替换这些占位符指纹
   static const List<String> allowedCertFingerprints = [
     // N42 API 服务器证书指纹 (主证书)
+    // PLACEHOLDER - Replace with actual certificate fingerprint
     'sha256/47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=',
     // N42 API 服务器证书指纹 (备用证书)
+    // PLACEHOLDER - Replace with actual certificate fingerprint
     'sha256/C5+lpZ7tcVwmwQIMcRtPbsQtWLABXhQzejna0wHFr8M=',
-    // Let's Encrypt Root CA (用于验证链)
-    'sha256/jQJTbIh0grw0/1TkHSumWb+Fs0Ggogr621gT3PvPKG0=',
+    // Let's Encrypt Root CA (ISRG Root X1)
+    // This is a real fingerprint for Let's Encrypt
+    'sha256/C5+lpZ7tcVwmwQIMcRtPbsQtWLABXhQzejna0wHFr8M=',
     // DigiCert Global Root CA
     'sha256/r/mIkG3eEpVdm+u/ko/cwxzOMo1bk4TyHIlByibiA5E=',
   ];
 
   /// 允许的主机列表（用于 SSL Pinning）
   static const List<String> pinnedHosts = [
+    'api.n42.ai',
     'api.n42.network',
     'ipfs.n42.network',
     'auth.n42.network',
     'ws.n42.network',
     'cdn.n42.network',
   ];
-  
+
   /// 备用证书指纹（证书即将过期时切换）
+  ///
+  /// 在证书轮换期间，将新证书指纹添加到此列表
+  /// 这允许应用同时接受新旧证书
   static const List<String> backupCertFingerprints = [
-    // 备用证书，在主证书即将过期时添加
+    // Add backup certificate fingerprints here before certificate rotation
   ];
+
+  /// Certificate expiry warning threshold in days
+  static const int certExpiryWarningDays = 30;
+
+  /// Check if certificate pinning is properly configured
+  ///
+  /// Returns false if still using placeholder values
+  static bool get isCertPinningConfigured {
+    // Check if fingerprints have been replaced from placeholders
+    // The placeholder value starts with a known pattern
+    const placeholderPattern = 'sha256/47DEQpj8HBSa';
+    return !allowedCertFingerprints.any((fp) => fp.contains(placeholderPattern)) ||
+           kDebugMode; // Allow in debug mode
+  }
 
   /// 敏感数据关键字（用于日志脱敏）
   static const List<String> sensitiveKeys = [
@@ -100,7 +136,7 @@ class SecurityConfig {
   static bool get shouldEnableSslPinning => kReleaseMode;
 
   /// 验证 SSL 证书
-  /// 
+  ///
   /// 在 Release 模式下进行严格验证
   static bool verifySslCertificate(X509Certificate cert, String host, int port) {
     // Debug 模式下允许自签名证书
@@ -118,22 +154,61 @@ class SecurityConfig {
       return true;
     }
 
+    // Check if certificate pinning is properly configured
+    if (!isCertPinningConfigured) {
+      debugPrint('⚠️ WARNING: SSL Pinning not configured for $host. '
+                 'Update allowedCertFingerprints with real certificate fingerprints.');
+      // In release mode without proper configuration, fail secure
+      return false;
+    }
+
     // 验证证书指纹
-    if (allowedCertFingerprints.isEmpty) {
-      // 如果没有配置指纹，暂时允许（但在控制台警告）
-      if (kDebugMode) {
-        debugPrint('⚠️ WARNING: SSL Pinning not configured for $host');
-      }
-      return true;
+    if (allowedCertFingerprints.isEmpty && backupCertFingerprints.isEmpty) {
+      debugPrint('⚠️ WARNING: No certificate fingerprints configured for $host');
+      return false;
     }
 
     try {
       final fingerprint = _getCertFingerprint(cert);
-      return allowedCertFingerprints.contains(fingerprint);
+
+      // Check against primary fingerprints
+      if (allowedCertFingerprints.contains(fingerprint)) {
+        return true;
+      }
+
+      // Check against backup fingerprints (for certificate rotation)
+      if (backupCertFingerprints.contains(fingerprint)) {
+        debugPrint('ℹ️ INFO: Using backup certificate for $host');
+        return true;
+      }
+
+      debugPrint('❌ Certificate fingerprint mismatch for $host');
+      debugPrint('   Expected one of: ${allowedCertFingerprints.join(", ")}');
+      debugPrint('   Got: $fingerprint');
+      return false;
     } catch (e) {
       debugPrint('SSL certificate verification failed: $e');
       return false;
     }
+  }
+
+  /// Check certificate expiry
+  ///
+  /// Returns the number of days until certificate expires, or -1 if unknown
+  static int getCertificateExpiryDays(X509Certificate cert) {
+    try {
+      final endDate = cert.endValidity;
+      final now = DateTime.now();
+      return endDate.difference(now).inDays;
+    } catch (e) {
+      return -1;
+    }
+  }
+
+  /// Check if certificate is expiring soon
+  static bool isCertificateExpiringSoon(X509Certificate cert) {
+    final daysUntilExpiry = getCertificateExpiryDays(cert);
+    return daysUntilExpiry >= 0 && daysUntilExpiry <= certExpiryWarningDays;
   }
 
   /// 获取证书 SHA-256 指纹

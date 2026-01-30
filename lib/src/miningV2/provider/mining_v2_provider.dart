@@ -24,6 +24,39 @@ import 'package:n42appv2/src/widgets/chart_histogram.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
+// ==================== Mining Constants ====================
+// These constants define the timing and threshold values for mining operations
+
+/// Duration of one valid mining cycle in seconds
+/// This is the block time for the N chain beacon consensus
+const int kMiningCycleSeconds = 128;
+
+/// Maximum inactivity score before penalties apply
+/// When score reaches this value, validator is considered at high risk
+const int kMaxInactivityScore = 2700;
+
+/// Interval for checking transaction confirmation status
+const int kTxConfirmCheckIntervalSeconds = 5;
+
+/// Interval for refreshing mining withdrawal data
+const int kWithdrawalRefreshIntervalSeconds = 128;
+
+/// Default wait time for beacon validator status check
+const int kBeaconValidatorWaitSeconds = 200;
+
+/// Interval for periodic mining status updates
+const int kMiningStatusIntervalSeconds = 30;
+
+/// Risk level thresholds (percentage of max inactivity score)
+const double kLowRiskThreshold = 33.33;
+const double kModerateRiskThreshold = 66.66;
+
+/// Inactivity score segment size (for UI display)
+const int kInactivityScoreSegmentSize = 900;
+
+/// Number of days for mining history chart
+const int kMiningHistoryDays = 7;
+
 class MiningV2Provider extends ChangeNotifier {
   MiningApi? _mining;
   MiningApi get mining{
@@ -177,9 +210,9 @@ class MiningV2Provider extends ChangeNotifier {
       //昨天挖矿时间
       yesterdayCycleRewardsValue=0;
       todayCycleRewardsValue=0;
-      barchartValues = [0, 0, 0, 0, 0, 0, 0];
-      barchartAlertMessageList = [];
-      barchartTitle=[];
+      barChartValues = [0, 0, 0, 0, 0, 0, 0];
+      barChartAlertMessageList = [];
+      barChartTitle=[];
       isLoading7DayData=false;
       isShowDefaultBar=true;
       showRedemption=false;
@@ -542,10 +575,10 @@ class MiningV2Provider extends ChangeNotifier {
   //昨天挖矿时间
   double yesterdayCycleRewardsValue=0;
   double nPrice=0;
-  List<double> barchartValues = [0, 0, 0, 0, 0, 0, 0];
-  List<String> barchartValues2 = ["0", "0", "0", "0", "0", "0", "0"];
-  List<AlertMessageGroup> barchartAlertMessageList = [];
-  List<String> barchartTitle=[];
+  List<double> barChartValues = [0, 0, 0, 0, 0, 0, 0];
+  List<String> barChartValues2 = ["0", "0", "0", "0", "0", "0", "0"];
+  List<AlertMessageGroup> barChartAlertMessageList = [];
+  List<String> barChartTitle=[];
   bool isLoading7DayData=false;
   bool isShowDefaultBar=true;
 
@@ -556,16 +589,14 @@ class MiningV2Provider extends ChangeNotifier {
         return;
       }
     }
-    withdrawalTimer = Timer.periodic(const Duration(seconds: 128), (timer) async {
+    withdrawalTimer = Timer.periodic(const Duration(seconds: kWithdrawalRefreshIntervalSeconds), (timer) async {
       getMiningWithdrawalsDaily();
     });
   }
   void endWithdrawalTimer(){
     if(withdrawalTimer !=null){
-      if(withdrawalTimer!.isActive){
-        withdrawalTimer!.cancel();
-        withdrawalTimer=null;
-      }
+      withdrawalTimer!.cancel();
+      withdrawalTimer=null;
     }
   }
   Future<void> getMiningWithdrawalsDaily() async {
@@ -578,7 +609,8 @@ class MiningV2Provider extends ChangeNotifier {
     notifyListeners();
     MessageModel rmm= await mining.getMiningWithdrawalsDaily(tomorrowStr[0], address??"");
     if(rmm.error==false){
-        //有效挖矿1次时间是128秒
+        // Each valid mining cycle takes kMiningCycleSeconds (128 seconds)
+        // This is the consensus block time for the N chain beacon
         taskList=rmm.data;
         final List<String> todayStr = getTimeFormat(today);
         final List<String> yesterdayStr = getTimeFormat(yesterday);
@@ -625,14 +657,14 @@ class MiningV2Provider extends ChangeNotifier {
     for(int i=0;i<7;i++){
       DateTime d1=date.add(Duration(days: -(6-i)));
       final List<String> d1Str = getTimeFormat(d1);
-      barchartTitle.add(d1Str[1]);
+      barChartTitle.add(d1Str[1]);
       int tIndex=taskList.indexWhere((e)=>e.day==d1Str[0]);
       if(tIndex !=-1){
-        barchartValues[i]=(taskList[tIndex].count??0).toDouble();
-        barchartValues2[i]=taskList[tIndex].totalAmount??"0";
+        barChartValues[i]=(taskList[tIndex].count??0).toDouble();
+        barChartValues2[i]=taskList[tIndex].totalAmount??"0";
       }else{
-        barchartValues[i]=0;
-        barchartValues2[i]="0";
+        barChartValues[i]=0;
+        barChartValues2[i]="0";
       }
     }
     generateBarTipData();
@@ -640,23 +672,23 @@ class MiningV2Provider extends ChangeNotifier {
   }
   //生成图标点击事件展示数据
   void generateBarTipData() {
-    if (barchartValues.isNotEmpty && barchartValues.length == 7) {
-      barchartAlertMessageList = [];
+    if (barChartValues.isNotEmpty && barChartValues.length == 7) {
+      barChartAlertMessageList = [];
       //计算奖励
       //final stackAstNum = Provider.of<MiningProvider>(context,listen: false).depositsNum;
-      for (int i=0;i<barchartValues.length;i++) {
+      for (int i=0;i<barChartValues.length;i++) {
         //计算时间
         //int times = (element * 8).toInt();
         //final timeData = formatElapsedTime(times);
         //final value = computeRewardsValueByTaskNum(element.toInt(), stackAstNum);
         // debugPrint("奖励值：$value");
-        barchartAlertMessageList.add(
+        barChartAlertMessageList.add(
           AlertMessageGroup(
             titles: [
               S.current.g_mining_key_23,
-              "${barchartValues[i].toInt()}",
+              "${barChartValues[i].toInt()}",
               S.current.g_mining_key_13,
-              "${toEther(barchartValues2[i], 16)} ${CoinType.N.name}",
+              "${toEther(barChartValues2[i], 16)} ${CoinType.N.name}",
             ],
             styles: [
               TextStyle(
@@ -695,7 +727,7 @@ class MiningV2Provider extends ChangeNotifier {
   bool showRedemption=false;//质押成功的过度状态
   bool showRedemption2=false;//解除质押成功后的过度状态
   Timer? beaconValidatorTimer;
-  void starBeaconValidatorTimer({int waitSeconds = 200}) {
+  void starBeaconValidatorTimer({int waitSeconds = kBeaconValidatorWaitSeconds}) {
     if(beaconValidatorTimer !=null)return;
     beaconValidatorTimer=Timer(Duration(seconds: waitSeconds),(){
       getBeaconValidator();
@@ -715,12 +747,12 @@ class MiningV2Provider extends ChangeNotifier {
       balanceInBeacon=toEther((rmm.data?['balance_in_beacon']??0).toString(), 9).toDouble();
       int iscore=rmm.data?['inactivity_score']??0;
       debugPrint('iscore:$iscore');
-      iscore=iscore>2700?2700:iscore;
-      double isp=((iscore/2700)*100);
+      iscore=iscore>kMaxInactivityScore?kMaxInactivityScore:iscore;
+      double isp=((iscore/kMaxInactivityScore)*100);
       inactivityScorePercentage=isp.toStringAsFixed(2);
-      if(isp<=33.33){
+      if(isp<=kLowRiskThreshold){
         inactivityTitle=S.current.g_mining_key_84;//"Low Risk";
-      }else if(isp<=66.66){
+      }else if(isp<=kModerateRiskThreshold){
         inactivityTitle=S.current.g_mining_key_85;//"Moderately Risk";
       }
       else{
@@ -728,8 +760,8 @@ class MiningV2Provider extends ChangeNotifier {
       }
       if(iscore!=0){
         for(int i=0;i<3;i++){
-          if(iscore-(i+1)*900<=0){
-            inactivityScore[i]=(iscore-(i)*900)/900;
+          if(iscore-(i+1)*kInactivityScoreSegmentSize<=0){
+            inactivityScore[i]=(iscore-(i)*kInactivityScoreSegmentSize)/kInactivityScoreSegmentSize;
             break;
           }else{
             inactivityScore[i]=1;
@@ -742,7 +774,7 @@ class MiningV2Provider extends ChangeNotifier {
         starBeaconValidatorTimer();
       }else{
         final int currentTimestamp=DateTime.now().millisecondsSinceEpoch ~/ 1000;
-        final int readyTimestamp=timestamp+128;
+        final int readyTimestamp=timestamp+kMiningCycleSeconds;
         if(readyTimestamp>currentTimestamp){
           showRedemption=false;
           final int waitSeconds=readyTimestamp-currentTimestamp;
@@ -776,6 +808,18 @@ class MiningV2Provider extends ChangeNotifier {
   /// WebSocket 连接状态
   bool wsConnected = false;
 
+  /// WebSocket 连接状态枚举
+  WebSocketState _wsState = WebSocketState.disconnected;
+  WebSocketState get wsState => _wsState;
+
+  /// 重连相关
+  int _wsReconnectAttempts = 0;
+  static const int _maxReconnectAttempts = 5;
+  Timer? _wsReconnectTimer;
+  String? _lastWsUrl;
+  String? _lastValidatorPubkey;
+  String? _lastValidatorPrivateKey;
+
   /// 初始化 WebSocket
   void initWebSocket() {
     _wsBridge ??= NativeWebSocketBridge();
@@ -787,45 +831,109 @@ class MiningV2Provider extends ChangeNotifier {
     required String validatorPubkey,
     required String validatorPrivateKey,
   }) async {
+    // Store connection params for reconnection
+    _lastWsUrl = wsUrl;
+    _lastValidatorPubkey = validatorPubkey;
+    _lastValidatorPrivateKey = validatorPrivateKey;
+
+    // Cancel any pending reconnect
+    _wsReconnectTimer?.cancel();
+    _wsReconnectTimer = null;
+
     try {
+      _wsState = WebSocketState.connecting;
+      notifyListeners();
+
       initWebSocket();
 
-      // ⭐ 只初始化一次监听
-      _wsSubscription ??= _wsBridge!.messages.listen(
+      // Cancel existing subscription before creating new one
+      await _wsSubscription?.cancel();
+      _wsSubscription = null;
+
+      // Create new subscription for this connection
+      _wsSubscription = _wsBridge!.messages.listen(
         handleWebSocketMessage,
         onError: (e) {
           debugPrint('WS stream error: $e');
-          wsConnected = false;
-          miningStatus = false;
-          notifyListeners();
+          _handleConnectionLost();
+        },
+        onDone: () {
+          debugPrint('WS stream done');
+          _handleConnectionLost();
         },
       );
 
-      // ⭐ 不要先 disconnect
       await _wsBridge!.connect(
         wsUrl: wsUrl,
         validatorPubkey: validatorPubkey,
         validatorPrivateKey: validatorPrivateKey,
       );
 
-      // 注意：这里只表示“已请求连接”
+      // Connection successful
+      _wsState = WebSocketState.connected;
       wsConnected = true;
       miningStatus = true;
+      _wsReconnectAttempts = 0;
       notifyListeners();
 
     } catch (e) {
-      wsConnected = false;
-      miningStatus = false;
       debugPrint('WebSocket connect error: $e');
-      notifyListeners();
+      _handleConnectionLost();
     }
   }
 
+  /// Handle connection lost - attempt reconnection
+  void _handleConnectionLost() {
+    _wsState = WebSocketState.disconnected;
+    wsConnected = false;
+    miningStatus = false;
+    notifyListeners();
+
+    // Attempt auto-reconnection if we have connection params
+    if (_lastWsUrl != null && _wsReconnectAttempts < _maxReconnectAttempts) {
+      _scheduleReconnect();
+    }
+  }
+
+  /// Schedule reconnection with exponential backoff
+  void _scheduleReconnect() {
+    if (_wsReconnectTimer != null) return;
+
+    _wsReconnectAttempts++;
+    final delay = Duration(seconds: _wsReconnectAttempts * 5);
+    debugPrint('WS: Scheduling reconnect attempt $_wsReconnectAttempts in ${delay.inSeconds}s');
+
+    _wsState = WebSocketState.reconnecting;
+    notifyListeners();
+
+    _wsReconnectTimer = Timer(delay, () async {
+      _wsReconnectTimer = null;
+      if (_lastWsUrl != null &&
+          _lastValidatorPubkey != null &&
+          _lastValidatorPrivateKey != null) {
+        await connectWebSocket(
+          wsUrl: _lastWsUrl!,
+          validatorPubkey: _lastValidatorPubkey!,
+          validatorPrivateKey: _lastValidatorPrivateKey!,
+        );
+      }
+    });
+  }
 
   /// 用户主动断开（退出挖矿 / 登出）
   Future<void> disconnectWebSocket() async {
+    // Cancel any pending reconnect
+    _wsReconnectTimer?.cancel();
+    _wsReconnectTimer = null;
+    _wsReconnectAttempts = 0;
+
+    // Clear stored connection params
+    _lastWsUrl = null;
+    _lastValidatorPubkey = null;
+    _lastValidatorPrivateKey = null;
+
     try {
-      await _wsBridge?.disconnect(); // stopService
+      await _wsBridge?.disconnect();
     } catch (e) {
       debugPrint('WebSocket disconnect error: $e');
     }
@@ -833,6 +941,7 @@ class MiningV2Provider extends ChangeNotifier {
     _wsSubscription?.cancel();
     _wsSubscription = null;
 
+    _wsState = WebSocketState.disconnected;
     wsConnected = false;
     miningStatus = false;
     notifyListeners();
@@ -844,20 +953,20 @@ class MiningV2Provider extends ChangeNotifier {
 
     switch (message) {
       case 'WebSocket connected':
+        _wsState = WebSocketState.connected;
         wsConnected = true;
         miningStatus = true;
+        _wsReconnectAttempts = 0;
         notifyListeners();
         break;
 
       case 'onFailure':
       case 'onClosed':
-        wsConnected = false;
-        miningStatus = false;
-        notifyListeners();
+        _handleConnectionLost();
         break;
 
       default:
-      // TODO: 正常业务消息解析
+        // Normal business message handling
         break;
     }
   }
@@ -865,14 +974,35 @@ class MiningV2Provider extends ChangeNotifier {
 
   @override
   void dispose() {
+    // Clean up all timers to prevent memory leaks
+    endCheckTxHash();
+    endWithdrawalTimer();
+    endBeaconValidatorTimer();
+
+    // Clean up reconnect timer
+    _wsReconnectTimer?.cancel();
+    _wsReconnectTimer = null;
+
+    // Clean up WebSocket resources
     _wsSubscription?.cancel();
+    _wsSubscription = null;
     _wsBridge?.disconnect();
+    _wsBridge = null;
+
     super.dispose();
   }
 }
 
+/// WebSocket connection state
+enum WebSocketState {
+  disconnected,
+  connecting,
+  connected,
+  reconnecting,
+}
+
 /// Mining-specific wallet info
-/// 
+///
 /// Used for displaying wallet list in mining UI
 class MiningWalletInfo {
   final int index;

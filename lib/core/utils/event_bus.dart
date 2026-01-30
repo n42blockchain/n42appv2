@@ -53,6 +53,10 @@ enum EventPublicType {
   /// Refresh page data
   refreshData,
 
+  // === Authentication Events ===
+  /// Token expired, user needs to re-login
+  tokenExpired,
+
   // === Chat Feature Events ===
   /// New chat message received
   chatMessage,

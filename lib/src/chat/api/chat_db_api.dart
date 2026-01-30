@@ -1,16 +1,30 @@
-﻿import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/chat/models/chat_message_model.dart';
 import 'package:n42appv2/core/storage/app_database.dart';
+import 'package:n42appv2/src/chat/utils/message_encryption_service.dart';
 import 'package:sqflite/sqflite.dart';
 
-class ChatDBApi{
+/// Database API for chat messages
+///
+/// SECURITY: Sensitive message fields (senderAesSecret, receiverAesSecret,
+/// decryptionMessageContent) are encrypted before storage and decrypted
+/// after retrieval using MessageEncryptionService.
+class ChatDBApi {
   AppDatabase get appDatabase => AppDatabase.instance;
-  ///保存数据
+
+  /// Message encryption service for protecting sensitive fields
+  final MessageEncryptionService _encryptionService = messageEncryptionService;
+
+  /// Save message with encrypted sensitive fields
   Future<int> saveMessage(ChatMessageModel info) async {
     Database db = await appDatabase.database;
     final userId = AppGlobals.userInfo?.uuid;
     Map<String, dynamic> map = info.toMap();
     map["user_id"] = userId;
+
+    // Encrypt sensitive fields before storage
+    map = _encryptionService.encryptMessageFields(map);
+
     var raw = await db.insert("Messages", map,
         conflictAlgorithm: ConflictAlgorithm.rollback);
     return raw;
@@ -81,19 +95,14 @@ class ChatDBApi{
       orderBy: 'timestamp DESC',
       limit: pageSize,
     );
-    /*var response = await db.query(
-      "Messages",
-      columns: null,
-      where: "user_id = ? and targetId = ? and timestamp < ?",
-      whereArgs: [userId, targetUuid, lastMessageTimestamp],
-      // 仅获取时间戳小于上次加载的消息时间戳的消息
-      orderBy: 'timestamp DESC',
-      limit: pageSize,
-    );*/
     if (response.isNotEmpty) {
       List<ChatMessageModel> list =
       response.map((c) {
-        ChatMessageModel cmm=ChatMessageModel.fromDBMap(c);
+        // Decrypt sensitive fields after retrieval
+        final decryptedMap = _encryptionService.decryptMessageFields(
+          Map<String, dynamic>.from(c),
+        );
+        ChatMessageModel cmm = ChatMessageModel.fromDBMap(decryptedMap);
         return cmm;
       }).toList();
       return list;
@@ -125,7 +134,13 @@ class ChatDBApi{
     );
     if (response.isNotEmpty) {
       List<ChatMessageModel> list =
-      response.map((c) => ChatMessageModel.fromDBMap(c)).toList();
+      response.map((c) {
+        // Decrypt sensitive fields after retrieval
+        final decryptedMap = _encryptionService.decryptMessageFields(
+          Map<String, dynamic>.from(c),
+        );
+        return ChatMessageModel.fromDBMap(decryptedMap);
+      }).toList();
       return list.first;
     }
     return null;
@@ -134,7 +149,12 @@ class ChatDBApi{
   ///更新数据单个消息数据
   Future<int> updateMessage(ChatMessageModel info) async {
     Database db = await appDatabase.database;
-    var raw = await db.update("Messages", info.toMap(),
+    Map<String, dynamic> map = info.toMap();
+
+    // Encrypt sensitive fields before storage
+    map = _encryptionService.encryptMessageFields(map);
+
+    var raw = await db.update("Messages", map,
         where: "messageId = ?",
         whereArgs: [info.messageId],
         conflictAlgorithm: ConflictAlgorithm.rollback);

@@ -2,13 +2,11 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/src/miningV2/pages/keyManagement/mining_import.dart';
 import 'package:n42appv2/src/miningV2/pages/keyManagement/mining_key_list.dart';
-import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/container_widget.dart';
-import 'package:provider/provider.dart';
 
 class MiningSetting extends StatefulWidget {
   const MiningSetting({super.key});
@@ -42,39 +40,35 @@ class _MiningSettingState extends State<MiningSetting> {
           right: ScreenUtil().setWidth(30),
           //bottom: ScreenUtil().setWidth(30),
         ),
-        child: Consumer<MiningV2Provider>(
-          builder: (context, mpValue, child) {
-            return Column(
-              children: [
-                containerStyle1(
-                  context,
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          //"验证者列表",
-                          S.of(context).g_mining_key_81,
-                          style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name),
-                          fontSize: ScreenUtil().setSp(32),
-                        ),),
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                        size: ScreenUtil().setWidth(40),
-                      ),
-                    ],
+        child: Column(
+          children: [
+            containerStyle1(
+              context,
+              padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      //"验证者列表",
+                      S.of(context).g_mining_key_81,
+                      style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name),
+                      fontSize: ScreenUtil().setSp(32),
+                    ),),
                   ),
-                  onTap: (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MiningKeyList()));
-                  }
-                ),
-              ],
-            );
-          },
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                    size: ScreenUtil().setWidth(40),
+                  ),
+                ],
+              ),
+              onTap: (){
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MiningKeyList()));
+              }
+            ),
+          ],
         ),
       ),
     );

@@ -45,42 +45,115 @@ class _ImportPrivatekeyState extends State<ImportPrivatekey> {
     //_keystoreController.text='CVFM5HyKx2b35Z2eLvGQ4QDLA5mB7mCowYmqwPtx12k';
     super.initState();
   }
-  Future<MessageModel> checkPraviteKey(String pk)async{
-    MessageModel mm=MessageModel();
-    if(pk.length == 66){
-      String sStr=pk.substring(0,2);
-      if(sStr.toLowerCase()!="0x"){
-        mm.error=true;
-      }else{
-        if(!Regular().regularHex(pk)){
-          mm.error=true;
-        }
-      }
-    }else if(pk.length == 64){
-      if(!Regular().regularHex(pk)){
-        mm.error=true;
-      }
-    }else if(pk.length == 51 || pk.length == 52){
-      if(!Regular().regularBase58(pk)){
-        mm.error=true;
-      }else{
-        mm=decodeWIF(pk);
+  /// Enhanced private key validation
+  ///
+  /// Security features:
+  /// - Format validation (hex, WIF, base58)
+  /// - Length validation
+  /// - WIF checksum verification
+  /// - Post-import public key generation verification
+  Future<MessageModel> checkPraviteKey(String pk) async {
+    MessageModel mm = MessageModel();
+
+    // Layer 1: Trim whitespace
+    pk = pk.trim();
+
+    // Layer 2: Format and length validation
+    if (pk.length == 66) {
+      // Hex format with 0x prefix
+      String sStr = pk.substring(0, 2);
+      if (sStr.toLowerCase() != "0x") {
+        mm.error = true;
+        mm.data = S.of(context).g_key_210;
         return mm;
       }
-    }else{
-      if(!Regular().regularBase58(pk)){
-        mm.error=true;
-      }else{
-        mm=decodeBase58(pk);
+      if (!Regular().regularHex(pk)) {
+        mm.error = true;
+        mm.data = S.of(context).g_key_210;
         return mm;
       }
+    } else if (pk.length == 64) {
+      // Hex format without prefix
+      if (!Regular().regularHex(pk)) {
+        mm.error = true;
+        mm.data = S.of(context).g_key_210;
+        return mm;
+      }
+    } else if (pk.length == 51 || pk.length == 52) {
+      // WIF format (Bitcoin)
+      if (!Regular().regularBase58(pk)) {
+        mm.error = true;
+        mm.data = S.of(context).g_key_210;
+        return mm;
+      }
+      // Layer 3: WIF checksum verification
+      mm = decodeWIF(pk);
+      if (mm.error) {
+        mm.data = 'Invalid WIF checksum';
+        return mm;
+      }
+      // Verify the decoded key can generate valid address
+      final verifyResult = await _verifyPrivateKeyCanGenerateAddress(mm.data);
+      if (!verifyResult) {
+        mm.error = true;
+        mm.data = 'Private key cannot generate valid address';
+      }
+      return mm;
+    } else {
+      // Base58 format
+      if (!Regular().regularBase58(pk)) {
+        mm.error = true;
+        mm.data = S.of(context).g_key_210;
+        return mm;
+      }
+      mm = decodeBase58(pk);
+      return mm;
     }
-    if(mm.error==true){
-      mm.data=S.of(context).g_key_210;
-    }else{
-      mm.data=pk;
+
+    // Layer 4: Verify the key can generate a valid public key
+    final verifyResult = await _verifyPrivateKeyCanGenerateAddress(pk);
+    if (!verifyResult) {
+      mm.error = true;
+      mm.data = 'Private key cannot generate valid address';
+      return mm;
     }
+
+    mm.data = pk;
     return mm;
+  }
+
+  /// Verify that a private key can generate a valid address
+  ///
+  /// This is a critical security check to ensure the imported key is valid
+  Future<bool> _verifyPrivateKeyCanGenerateAddress(String privateKey) async {
+    try {
+      // Try to generate an address using the private key
+      Map<Object?, Object?> rm = await Trustdart().generateAddress(
+        CoinType.N.name,
+        selectChain['baseInfo']['path'][selectChain['addrType']],
+        selectChain['addrType'],
+        mnemonic: "",
+        pk: privateKey,
+        isImport: true,
+      );
+
+      // Check if valid address was generated
+      final address = rm['legacy'];
+      if (address == null || address.toString().isEmpty) {
+        return false;
+      }
+
+      // Additional validation: verify address format
+      final isValid = await Trustdart().validateAddress(
+        selectChain['baseInfo']['mKey'] ?? CoinType.N.name,
+        address.toString(),
+      );
+
+      return isValid;
+    } catch (e) {
+      debugPrint('Private key verification failed: $e');
+      return false;
+    }
   }
   Uint8List sha256Twice(Uint8List data) {
     final first = sha256.convert(data).bytes;

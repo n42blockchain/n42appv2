@@ -1,3 +1,5 @@
+// Copyright 2021-2026 N42 Inc. All rights reserved.
+
 import 'dart:convert';
 
 import 'package:n42appv2/core/app/app_globals.dart';
@@ -7,6 +9,26 @@ import 'package:n42appv2/src/chat/models/group_info.dart';
 import 'package:n42appv2/src/chat/models/group_member_info.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 
+/// Chat-specific storage utility for managing chat-related cached data.
+///
+/// This class is a domain-specific wrapper around [SPUtil] that provides
+/// specialized methods for chat data operations:
+/// - Friend list management (save, get, update)
+/// - Group info management (save, get by ID)
+/// - Group member caching
+/// - Group password data storage
+/// - User info caching for deleted friends display
+///
+/// Architecture note:
+/// This class intentionally delegates to [SPUtil] for actual storage operations
+/// rather than duplicating SharedPreferences logic. The separation provides:
+/// - Clear domain boundaries (chat vs general storage)
+/// - Type-safe methods for chat-specific models
+/// - User-scoped cache keys for multi-account support
+///
+/// See also:
+/// - [SPUtil] - Core storage utility with secure preferences
+/// - [SecurePreferences] - Encrypted storage for sensitive data
 class ChatSPUtil {
 
   //保存用户好友列表

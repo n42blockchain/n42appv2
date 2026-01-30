@@ -9,12 +9,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/core/storage/app_database.dart';
+import 'package:n42appv2/core/security/secure_storage.dart';
 import 'package:n42appv2/shared/di/service_locator.dart';
 import 'package:n42appv2/shared/domain/services/wallet_service_interface.dart';
 import 'package:n42appv2/shared/domain/services/mining_service_interface.dart';
 import 'package:n42appv2/features/wallet/data/services/wallet_service_impl.dart';
 import 'package:n42appv2/features/mining/data/services/mining_service_impl.dart';
 import 'package:n42appv2/features/chat/data/services/chat_crypto_service_impl.dart';
+import 'package:n42appv2/src/chat/api/chat_api.dart';
+import 'package:n42appv2/src/chat/api/chat_db_api.dart';
+import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 
 /// Dependency Injection Container
 final GetIt getIt = GetIt.instance;
@@ -90,7 +94,32 @@ Future<void> configureDependencies(
   }
 
   // ============ Feature-specific registrations ============
-  // These would be added as features are migrated
+
+  // ============ Chat Services ============
+
+  // Chat API - handles HTTP requests to chat server
+  if (!getIt.isRegistered<ChatApi>()) {
+    getIt.registerLazySingleton<ChatApi>(() => ChatApi());
+  }
+
+  // Chat Database API - handles local message storage
+  if (!getIt.isRegistered<ChatDBApi>()) {
+    getIt.registerLazySingleton<ChatDBApi>(() => ChatDBApi());
+  }
+
+  // ============ Wallet Services ============
+
+  // Token View API - handles token/balance queries
+  if (!getIt.isRegistered<TokenViewApi>()) {
+    getIt.registerLazySingleton<TokenViewApi>(() => TokenViewApi());
+  }
+
+  // ============ Security Services ============
+
+  // Secure Storage - handles encrypted credential storage
+  if (!getIt.isRegistered<SecureStorage>()) {
+    getIt.registerLazySingleton<SecureStorage>(() => SecureStorage());
+  }
 }
 
 /// Reset dependencies (for testing)
@@ -100,11 +129,21 @@ Future<void> resetDependencies() async {
   _providerContainer = null;
 }
 
-/// Convenience accessors
+/// Convenience accessors - Core Services
 SPUtil get spUtil => getIt<SPUtil>();
 AppDatabase get appDatabase => getIt<AppDatabase>();
+SecureStorage get secureStorage => getIt<SecureStorage>();
+
+/// Convenience accessors - Feature Services
 WalletServiceImpl get walletServiceImpl => getIt<WalletServiceImpl>();
 MiningServiceImpl get miningServiceImpl => getIt<MiningServiceImpl>();
+
+/// Convenience accessors - Chat Services
+ChatApi get chatApi => getIt<ChatApi>();
+ChatDBApi get chatDBApi => getIt<ChatDBApi>();
+
+/// Convenience accessors - Wallet APIs
+TokenViewApi get tokenViewApi => getIt<TokenViewApi>();
 
 // Shared service accessors (through interface)
 IWalletService get walletService => serviceLocator<IWalletService>();

@@ -111,6 +111,11 @@ class SecureStorage {
     return _storage.read(key: _keyUuid);
   }
 
+  /// 删除用户 UUID
+  Future<void> deleteUuid() async {
+    await _storage.delete(key: _keyUuid);
+  }
+
   /// 保存用户邮箱
   Future<void> saveEmail(String email) async {
     await _storage.write(key: _keyEmail, value: email);

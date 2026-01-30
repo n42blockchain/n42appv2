@@ -144,6 +144,23 @@ class AesUtils {
 
   // ==================== 遗留兼容性方法 ====================
   // 以下方法用于解密旧格式数据，新数据请使用上述安全方法
+  //
+  // SECURITY WARNING:
+  // 旧加密方法使用固定 IV，这在密码学上是不安全的，因为：
+  // 1. 相同的明文+密码会产生相同的密文，允许模式分析
+  // 2. 容易受到重放攻击
+  // 3. 不符合现代加密标准
+  //
+  // 迁移策略：
+  // 1. 新数据必须使用 aesEncode() 方法
+  // 2. 读取旧数据时使用 aesDecryptedAuto() 自动检测格式
+  // 3. 解密后应立即使用 aesEncode() 重新加密以升级格式
+
+  /// Legacy encryption usage counter for monitoring migration progress
+  static int _legacyDecryptionCount = 0;
+
+  /// Get the count of legacy decryption operations (for monitoring)
+  static int get legacyDecryptionCount => _legacyDecryptionCount;
 
   /// 遗留 IV (仅用于解密旧数据)
   @Deprecated('仅用于解密旧格式数据，新加密请使用 aesEncode')
@@ -151,9 +168,20 @@ class AesUtils {
 
   /// 解密旧格式数据 (使用固定 IV)
   ///
+  /// SECURITY WARNING: This method uses a fixed IV which is cryptographically insecure.
+  /// Only use for decrypting existing legacy data, then immediately re-encrypt with aesEncode().
+  ///
   /// 仅用于向后兼容，解密使用旧版本加密的数据
   @Deprecated('仅用于解密旧格式数据')
   String aesDecryptedLegacy(String data, String password) {
+    _legacyDecryptionCount++;
+    // Log warning in debug mode to track legacy usage
+    assert(() {
+      print('⚠️ WARNING: Using legacy AES decryption (fixed IV). '
+            'Consider migrating data to secure format. Count: $_legacyDecryptionCount');
+      return true;
+    }());
+
     final key = encrypt.Key.fromUtf8(password);
     final iv = encrypt.IV.fromUtf8(_legacyIv);
     final encrypter = encrypt.Encrypter(
@@ -165,6 +193,14 @@ class AesUtils {
   /// 尝试解密 (自动检测格式)
   ///
   /// 首先尝试新格式，失败后尝试旧格式
+  ///
+  /// Usage pattern for migration:
+  /// ```dart
+  /// final decrypted = aesUtils.aesDecryptedAuto(encryptedData, password);
+  /// // Immediately re-encrypt with secure method to upgrade format
+  /// final upgraded = aesUtils.aesEncode(decrypted, password);
+  /// // Save upgraded data
+  /// ```
   String aesDecryptedAuto(String data, String password) {
     try {
       // 尝试新格式 (salt + iv + ciphertext)
@@ -178,5 +214,31 @@ class AesUtils {
 
     // ignore: deprecated_member_use_from_same_package
     return aesDecryptedLegacy(data, password);
+  }
+
+  /// Check if data is in legacy format (without trying to decrypt)
+  ///
+  /// Returns true if the data appears to be in the old format (no salt+iv prefix)
+  bool isLegacyFormat(String data) {
+    try {
+      final decoded = base64Decode(data);
+      // Legacy format doesn't have salt+iv prefix, so it's shorter
+      return decoded.length <= _saltLength + _ivLength;
+    } catch (_) {
+      return true; // If we can't decode, assume legacy
+    }
+  }
+
+  /// Migrate data from legacy format to secure format
+  ///
+  /// Returns the re-encrypted data in secure format, or null if migration fails
+  String? migrateToSecureFormat(String legacyData, String password) {
+    try {
+      // ignore: deprecated_member_use_from_same_package
+      final decrypted = aesDecryptedLegacy(legacyData, password);
+      return aesEncode(decrypted, password);
+    } catch (_) {
+      return null;
+    }
   }
 }

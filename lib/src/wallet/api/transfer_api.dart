@@ -28,6 +28,7 @@ import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/chain_1559.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/wallet/utils/coin_gas.dart';
+import 'package:n42appv2/src/wallet/utils/signature_validator.dart';
 import 'package:decimal/decimal.dart';
 import 'package:eth_sig_util/util/utils.dart';
 import 'package:provider/provider.dart';
@@ -74,6 +75,19 @@ class TransferApi {
       return symbol;
     }
     return symbol;
+  }
+
+  /// Validate signed transaction before broadcasting
+  /// Returns null if valid, or error MessageModel if invalid
+  MessageModel? _validateSignature(String signedTx, String coinType) {
+    final result = SignatureValidator.validateSignedTransaction(
+      signedTx: signedTx,
+      coinType: coinType,
+    );
+    if (!result.isValid) {
+      return MessageModel.error()..data = result.errorMessage ?? 'Signature validation failed';
+    }
+    return null;
   }
 
   ///转账方法
@@ -1095,7 +1109,11 @@ class TransferApi {
       MessageModel rmm=MessageModel.error();
       rmm.data=S.current.g_key_wallet_m6;
       return rmm;
-    }//发起交易
+    }
+    // Validate signature before broadcast
+    final validationError = _validateSignature(signStr, CoinType.TRX.name);
+    if (validationError != null) return validationError;
+    //发起交易
     MessageModel mmtx=await trxApi.sendTxTrx(signStr,isTest:isTest=="main"?false:true);
     return mmtx;
     /*MessageModel mmtx = await tokenViewApi.sendTx(
@@ -1280,6 +1298,9 @@ class TransferApi {
       rmm.data=S.current.g_key_wallet_m6;
       return rmm;
     }
+    // Validate signature before broadcast
+    final validationError = _validateSignature(signStr, CoinType.SOL.name);
+    if (validationError != null) return validationError;
     //发送交易
     return await solApi.sendTransaction(signStr,isTest: isTest=="main"?false:true);
     //return await tokenViewApi.sendTx(BlockchainType.Solana.name, CoinType.SOL.name, signStr, netMode: isTest);
@@ -1431,6 +1452,9 @@ class TransferApi {
       return rmm;
     }
     signStr = "0x$signStr";
+    // Validate signature before broadcast
+    final validationError = _validateSignature(signStr, coinType);
+    if (validationError != null) return validationError;
     return await tokenViewApi.sendTx(
         BlockchainType.Ethereum.name, coinType, signStr,
         netMode: isTest?"test":"main") ?? MessageModel.error();
@@ -1680,6 +1704,9 @@ class TransferApi {
       rmm.data=signStr;
       return rmm;
     }
+    // Validate signature before broadcast
+    final validationError = _validateSignature(signStr, coinType);
+    if (validationError != null) return validationError;
     return await tokenViewApi.sendTx(
         BlockchainType.Ethereum.name, coinType, signStr,
         netMode: isTest,rpc: rpc) ?? MessageModel.error();
@@ -1800,6 +1827,9 @@ class TransferApi {
       rmm.data = S.current.g_key_wallet_m6;
       return rmm;
     }
+    // Validate signature before broadcast
+    final validationError = _validateSignature(signStr, coinType.toUpperCase());
+    if (validationError != null) return validationError;
     //发送交易
     return await tokenViewApi.sendTx(
         BlockchainType.Bitcoin.name, coinType.toUpperCase(), signStr,netMode: isTest) ?? MessageModel.error();

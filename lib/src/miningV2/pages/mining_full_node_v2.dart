@@ -140,8 +140,9 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
         text:
         "${S.current.g_mining_key_37}:${S.of(context).g_mining_key_62}",
       ),
-      body: Consumer<MiningV2Provider>(
-        builder: (context, mpValue, child) {
+      body: Selector<MiningV2Provider, Load>(
+        selector: (_, provider) => provider.depositLoad,
+        builder: (context, depositLoad, child) {
           return SafeArea(
             child: Stack(
               children: [
@@ -350,7 +351,7 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
                         height: ScreenUtil().setWidth(148),
                         padding: EdgeInsets.all( ScreenUtil().setWidth(30)),
                         child: buttonStyle6(context, () async {
-                          if(mpValue.depositLoad==Load.loading)return;
+                          if(depositLoad==Load.loading)return;
                           if (_payType == 0) {
                             if (_payMethod == 0) {
                               if (nBalance == null || nBalance! < widget.nNum) {
@@ -370,9 +371,9 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
                           }
                         },
                           S.of(context).g_key_78,
-                          AppThemeUtils.getColorByKey(context, mpValue.depositLoad==Load.loading?AppThemeKeys.mainButtonBgColor3.name:AppThemeKeys.mainButtonBgColor.name,),
-                          AppThemeUtils.getColorByKey(context, mpValue.depositLoad==Load.loading?AppThemeKeys.mainButtonTextColor3.name:AppThemeKeys.mainButtonTextColor.name),
-                          mpValue.depositLoad==Load.loading,
+                          AppThemeUtils.getColorByKey(context, depositLoad==Load.loading?AppThemeKeys.mainButtonBgColor3.name:AppThemeKeys.mainButtonBgColor.name,),
+                          AppThemeUtils.getColorByKey(context, depositLoad==Load.loading?AppThemeKeys.mainButtonTextColor3.name:AppThemeKeys.mainButtonTextColor.name),
+                          depositLoad==Load.loading,
                         ),
                       ),
                     ],

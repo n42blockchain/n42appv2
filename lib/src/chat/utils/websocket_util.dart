@@ -58,11 +58,10 @@ class WebSocketUtil {
         // In debug mode, it allows self-signed certs for testing
         return _verifySslCertificate(cert, host, port);
       };
+    // SECURITY: Use authentication headers instead of URL parameters
     channel = IOWebSocketChannel.connect(
       wsUrl,
-      headers: {
-        "origin":AppConfig.getApiUrlOnline("imHttpHost"),
-      },
+      headers: _getAuthHeaders(),
       pingInterval: Duration(seconds: 30),
       customClient:httpClient,
     );
@@ -85,12 +84,27 @@ class WebSocketUtil {
     channel?.sink.add(data);
   }
 
+  /// Generate WebSocket URL without sensitive tokens in URL parameters
+  ///
+  /// SECURITY: Token is passed via HTTP headers instead of URL parameters
+  /// to prevent token leakage in logs, browser history, and referrer headers
   String generateSocketUrl() {
     final uuid = AppGlobals.userInfo?.uuid;
-    final token = AppGlobals.userInfo?.token;
     final socUrl =
-        '${AppConfig.getApiUrlOnline('imWsHost')}/connect?uuid=$uuid&token=$token&source=app';
+        '${AppConfig.getApiUrlOnline('imWsHost')}/connect?uuid=$uuid&source=app';
     return socUrl;
+  }
+
+  /// Get authentication headers for WebSocket connection
+  ///
+  /// SECURITY: Token is passed via HTTP headers for secure authentication
+  Map<String, String> _getAuthHeaders() {
+    final token = AppGlobals.userInfo?.token;
+    return {
+      "origin": AppConfig.getApiUrlOnline("imHttpHost"),
+      if (token != null && token.isNotEmpty) "Authorization": "Bearer $token",
+      "X-Auth-Token": token ?? "",
+    };
   }
 
   bool shouldReconnect = true;
