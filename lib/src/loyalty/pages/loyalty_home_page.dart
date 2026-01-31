@@ -6,11 +6,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/loyalty/models/loyalty_model.dart';
 import 'package:n42appv2/src/loyalty/pages/rewards_page.dart';
 import 'package:n42appv2/src/loyalty/pages/tasks_page.dart';
 import 'package:n42appv2/src/loyalty/provider/loyalty_provider.dart';
+import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:provider/provider.dart';
 
 /// 积分系统首页
@@ -29,25 +32,33 @@ class LoyaltyHomePage extends StatefulWidget {
 class _LoyaltyHomePageState extends State<LoyaltyHomePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late LoyaltyProvider _provider;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    _provider = LoyaltyProvider();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<LoyaltyProvider>().initialize(widget.walletAddress);
+      _provider.initialize(widget.walletAddress);
     });
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _provider.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ChangeNotifierProvider.value(
+      value: _provider,
+      child: Scaffold(
+      appBar: AppBarWidget(
+        text: S.of(context).g_key_loyalty_title,
+      ),
       body: Consumer<LoyaltyProvider>(
         builder: (context, provider, child) {
           if (provider.loadState == LoyaltyLoadState.loading &&
@@ -92,9 +103,9 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
                         AppThemeKeys.mainBlueColor.name,
                       ),
                       tabs: [
-                        Tab(text: 'Tasks'),
-                        Tab(text: 'Rewards'),
-                        Tab(text: 'History'),
+                        Tab(text: S.of(context).g_key_loyalty_tasks),
+                        Tab(text: S.of(context).g_key_loyalty_rewards),
+                        Tab(text: S.of(context).g_key_loyalty_history),
                       ],
                     ),
                     AppThemeUtils.getColorByKey(
@@ -115,6 +126,7 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
             ),
           );
         },
+      ),
       ),
     );
   }
@@ -320,7 +332,7 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Daily Check-in',
+                  S.of(context).g_key_loyalty_daily_checkin,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(28),
                     fontWeight: FontWeight.w600,
@@ -331,7 +343,9 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
                   ),
                 ),
                 Text(
-                  hasCheckedIn ? 'Checked in today!' : 'Earn 10 points',
+                  hasCheckedIn
+                      ? S.of(context).g_key_loyalty_checked_today
+                      : S.of(context).g_key_loyalty_earn_points(10),
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
                     color: AppThemeUtils.getColorByKey(
@@ -352,7 +366,9 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
               ),
             ),
-            child: Text(hasCheckedIn ? 'Done' : 'Check In'),
+            child: Text(hasCheckedIn
+                ? S.of(context).g_key_loyalty_checkin_done
+                : S.of(context).g_key_loyalty_checkin_btn),
           ),
         ],
       ),
@@ -367,7 +383,7 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
           Expanded(
             child: _buildQuickAction(
               context,
-              'Tasks',
+              S.of(context).g_key_loyalty_tasks,
               '${provider.availableTasks.length}',
               Icons.assignment,
               Colors.blue,
@@ -378,7 +394,7 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
           Expanded(
             child: _buildQuickAction(
               context,
-              'Rewards',
+              S.of(context).g_key_loyalty_rewards,
               '${provider.rewards.length}',
               Icons.card_giftcard,
               Colors.purple,
@@ -389,7 +405,7 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
           Expanded(
             child: _buildQuickAction(
               context,
-              'Invite',
+              S.of(context).g_key_loyalty_invite,
               '+100',
               Icons.person_add,
               Colors.green,
@@ -592,17 +608,25 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
   }
 
   void _handleCheckIn(LoyaltyProvider provider) async {
-    final result = await provider.checkIn();
-    if (!mounted) return;
+    try {
+      final result = await provider.checkIn();
+      if (!mounted) return;
 
-    if (result != null) {
-      final pointsEarned = result['points_earned'] as int? ?? 0;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Check-in successful! +$pointsEarned points'),
-          backgroundColor: Colors.green,
-        ),
-      );
+      if (result != null) {
+        final pointsEarned = result['points_earned'] as int? ?? 0;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${S.of(context).g_key_loyalty_checkin_success} +$pointsEarned ${S.of(context).g_key_loyalty_points}'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else {
+        ToastUtils.show(S.of(context).g_key_loyalty_checkin_failed);
+      }
+    } catch (e) {
+      if (mounted) {
+        ToastUtils.show(S.of(context).g_key_loyalty_checkin_failed);
+      }
     }
   }
 
@@ -637,7 +661,7 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
             ),
             SizedBox(height: ScreenUtil().setWidth(16)),
             Text(
-              'Invite Friends',
+              S.of(context).g_key_loyalty_invite_friends,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(32),
                 fontWeight: FontWeight.bold,
@@ -649,7 +673,7 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
             ),
             SizedBox(height: ScreenUtil().setWidth(8)),
             Text(
-              'Earn 100 points for each friend who joins!',
+              S.of(context).g_key_loyalty_invite_bonus(100),
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(26),
                 color: AppThemeUtils.getColorByKey(
@@ -672,7 +696,7 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
                 children: [
                   Expanded(
                     child: Text(
-                      provider.referralCode ?? 'Loading...',
+                      provider.referralCode ?? S.of(context).g_key_106,
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(32),
                         fontWeight: FontWeight.bold,
@@ -686,11 +710,12 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
                   ),
                   IconButton(
                     icon: Icon(Icons.copy),
+                    tooltip: S.of(context).g_key_loyalty_copy,
                     onPressed: () {
                       if (provider.referralCode != null) {
                         Clipboard.setData(ClipboardData(text: provider.referralCode!));
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Code copied!')),
+                          SnackBar(content: Text(S.of(context).g_key_119)), // "Copy" or similar
                         );
                       }
                     },
@@ -706,12 +731,12 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
                   if (provider.referralLink != null) {
                     Clipboard.setData(ClipboardData(text: provider.referralLink!));
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Link copied!')),
+                      SnackBar(content: Text(S.of(context).g_key_119)), // Copy
                     );
                   }
                 },
                 icon: Icon(Icons.share),
-                label: Text('Share Invite Link'),
+                label: Text(S.of(context).g_key_loyalty_share),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   foregroundColor: Colors.white,
@@ -721,7 +746,7 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
             ),
             SizedBox(height: ScreenUtil().setWidth(16)),
             Text(
-              '${provider.referrals.length} friends invited',
+              S.of(context).g_key_loyalty_invited_friends,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(24),
                 color: AppThemeUtils.getColorByKey(

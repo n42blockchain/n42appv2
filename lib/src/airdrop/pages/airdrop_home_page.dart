@@ -27,25 +27,30 @@ class AirdropHomePage extends StatefulWidget {
 class _AirdropHomePageState extends State<AirdropHomePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late AirdropProvider _provider;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
+    _provider = AirdropProvider();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AirdropProvider>().initialize(widget.walletAddress);
+      _provider.initialize(widget.walletAddress);
     });
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _provider.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ChangeNotifierProvider.value(
+      value: _provider,
+      child: Scaffold(
       appBar: AppBar(
         title: Text('Airdrop Tracker'),
         actions: [
@@ -100,6 +105,7 @@ class _AirdropHomePageState extends State<AirdropHomePage>
             ],
           );
         },
+      ),
       ),
     );
   }

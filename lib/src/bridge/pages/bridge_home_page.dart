@@ -58,7 +58,12 @@ class _BridgeHomePageState extends State<BridgeHomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => BridgeHistoryPage()),
+                  MaterialPageRoute(
+                    builder: (_) => ChangeNotifierProvider.value(
+                      value: _bridgeProvider,
+                      child: const BridgeHistoryPage(),
+                    ),
+                  ),
                 );
               },
             ),

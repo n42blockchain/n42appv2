@@ -12,6 +12,7 @@ import 'package:n42appv2/src/miningV2/pages/mining_today_v2.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_page.dart';
+import 'package:n42appv2/src/earn/pages/earn_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -44,6 +45,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     return [
       const WalletPage(),
       const MiningTodayV2(),
+      const EarnPage(),
       const ChatIndexPage(),
     ];
   }
@@ -159,26 +161,33 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
                         0,
                         "assets/home/tabbar/wallet.png",
                         _tabTwo,
-                        3), // 总共3个tab
-                    // 挖矿
+                        4), // 总共4个tab
+                    // 验证(挖矿)
                     _buildBottomItem(
                         S.of(context).g_home_key3,
                         1,
-                        "assets/home/tabbar/earn.png",
+                        "assets/home/setting/mining.png",
                         _tabThree,
-                        3),
+                        4),
+                    // Earn
+                    _buildBottomItem(
+                        'Earn',
+                        2,
+                        "assets/home/tabbar/earn.png",
+                        _tabfour,
+                        4),
                     // 聊天 - 点击跳转到独立页面
                     useNewChat?_buildChatBottomItem(
                         S.of(context).g_key_squad,
                         "assets/home/tabbar/chat.png",
-                        _tabfour,
-                        3):
+                        _tabfive,
+                        4):
                     _buildBottomItem(
                         S.of(context).g_key_squad,
-                        2,
+                        3,
                         "assets/home/tabbar/chat.png",
                         _tabfive,
-                        3)
+                        4)
                   ],
                 ),
               ),

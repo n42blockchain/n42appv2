@@ -136,6 +136,9 @@ class AppConfig {
       'main': 'https://staking.n42.ai',
       'test': 'https://staking-test.n42.ai',
     },
+
+    // CoinGecko API (for stablecoin prices)
+    'coinGeckoApi': 'https://api.coingecko.com/api/v3',
   };
 
   // ============ Helper Methods ============

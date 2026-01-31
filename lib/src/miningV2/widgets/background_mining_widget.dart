@@ -7,6 +7,8 @@ import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/miningV2/pages/mining_background.dart';
 import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
 
+/// Background Mining Widget - 后台挖矿组件
+
 /// Background Mining Widget
 ///
 /// Shows background mining status and launch button.
@@ -95,7 +97,9 @@ class BackgroundMiningWidget extends StatelessWidget {
           ),
           SizedBox(height: ScreenUtil().setWidth(6)),
           Text(
-            isEnabled ? 'Available' : 'Requires staking',
+            isEnabled
+                ? S.of(context).g_key_mining_available
+                : S.of(context).g_key_mining_requires_staking,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(22),
               color: isEnabled
@@ -109,6 +113,16 @@ class BackgroundMiningWidget extends StatelessWidget {
   }
 
   Widget _buildLaunchButton(BuildContext context, bool isEnabled) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    // 禁用状态下的颜色 - 根据主题调整
+    final disabledBgColor = isDark
+        ? const Color(0xFF3A4A5C)  // 暗色主题：深蓝灰色
+        : const Color(0xFFE0E0E0); // 亮色主题：浅灰色
+    final disabledTextColor = isDark
+        ? const Color(0xFF8A9AAC)  // 暗色主题：中灰色，清晰可见
+        : const Color(0xFF9E9E9E); // 亮色主题：深灰色
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -130,7 +144,7 @@ class BackgroundMiningWidget extends StatelessWidget {
                     end: Alignment.bottomRight,
                   )
                 : null,
-            color: isEnabled ? null : const Color(0xFFE0E0E0),
+            color: isEnabled ? null : disabledBgColor,
             borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
             boxShadow: isEnabled ? [
               BoxShadow(
@@ -145,7 +159,7 @@ class BackgroundMiningWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(24),
               fontWeight: FontWeight.w600,
-              color: isEnabled ? Colors.white : const Color(0xFFBAC2CC),
+              color: isEnabled ? Colors.white : disabledTextColor,
             ),
           ),
         ),

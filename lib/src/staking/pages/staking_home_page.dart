@@ -5,6 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/staking/models/staking_models.dart';
 import 'package:n42appv2/src/staking/pages/stake_page.dart';
@@ -57,7 +58,7 @@ class _StakingHomePageState extends State<StakingHomePage>
       value: _provider,
       child: Scaffold(
         appBar: AppBarWidget(
-          text: 'Staking',
+          text: S.of(context).g_key_stake_title,
         ),
         body: SafeArea(
           child: Column(
@@ -104,16 +105,33 @@ class _StakingHomePageState extends State<StakingHomePage>
           AppThemeKeys.itemSubtitleTextColor.name,
         ),
         labelStyle: TextStyle(
-          fontSize: ScreenUtil().setSp(28),
+          fontSize: ScreenUtil().setSp(26),
           fontWeight: FontWeight.w600,
         ),
         unselectedLabelStyle: TextStyle(
-          fontSize: ScreenUtil().setSp(28),
+          fontSize: ScreenUtil().setSp(26),
           fontWeight: FontWeight.normal,
         ),
+        labelPadding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(8)),
         tabs: [
-          Tab(text: 'Protocols'),
-          Tab(text: 'My Positions'),
+          Tab(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(12)),
+                child: Text(S.of(context).g_key_stake_protocols),
+              ),
+            ),
+          ),
+          Tab(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(12)),
+                child: Text(S.of(context).g_key_stake_positions),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -214,7 +232,7 @@ class _StakingHomePageState extends State<StakingHomePage>
                             borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
                           ),
                           child: Text(
-                            'Liquid',
+                            S.of(context).g_key_stake_liquid_tag,
                             style: TextStyle(
                               fontSize: ScreenUtil().setSp(22),
                               color: Colors.green,
@@ -256,7 +274,7 @@ class _StakingHomePageState extends State<StakingHomePage>
                   ),
                 ),
                 Text(
-                  'APY',
+                  S.of(context).g_key_stake_apy,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(22),
                     color: AppThemeUtils.getColorByKey(
@@ -268,8 +286,8 @@ class _StakingHomePageState extends State<StakingHomePage>
                 SizedBox(height: ScreenUtil().setWidth(8)),
                 Text(
                   protocol.unbondingPeriodDays > 0
-                      ? '${protocol.unbondingPeriodDays}d unbond'
-                      : 'No lock',
+                      ? S.of(context).g_key_stake_d_unbond(protocol.unbondingPeriodDays.toString())
+                      : S.of(context).g_key_stake_no_lock,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(22),
                     color: AppThemeUtils.getColorByKey(
@@ -345,7 +363,7 @@ class _StakingHomePageState extends State<StakingHomePage>
 
               // 活跃仓位
               if (provider.activePositions.isNotEmpty) ...[
-                _buildSectionHeader(context, 'Active Positions'),
+                _buildSectionHeader(context, S.of(context).g_key_stake_active_positions),
                 ...provider.activePositions.map(
                   (p) => _buildPositionCard(context, p),
                 ),
@@ -354,7 +372,7 @@ class _StakingHomePageState extends State<StakingHomePage>
               // 解绑中仓位
               if (provider.unbondingPositions.isNotEmpty) ...[
                 SizedBox(height: ScreenUtil().setWidth(16)),
-                _buildSectionHeader(context, 'Unbonding'),
+                _buildSectionHeader(context, S.of(context).g_key_stake_unbonding),
                 ...provider.unbondingPositions.map(
                   (p) => _buildPositionCard(context, p),
                 ),
@@ -381,7 +399,7 @@ class _StakingHomePageState extends State<StakingHomePage>
           ),
           SizedBox(height: ScreenUtil().setWidth(20)),
           Text(
-            'No staking positions yet',
+            S.of(context).g_key_stake_no_positions_yet,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(30),
               color: AppThemeUtils.getColorByKey(
@@ -407,7 +425,7 @@ class _StakingHomePageState extends State<StakingHomePage>
               ),
             ),
             child: Text(
-              'Start Staking',
+              S.of(context).g_key_stake_start_staking,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28),
                 color: Colors.white,
@@ -440,7 +458,7 @@ class _StakingHomePageState extends State<StakingHomePage>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Total Staking Overview',
+            S.of(context).g_key_stake_overview,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
               color: Colors.white70,
@@ -451,11 +469,11 @@ class _StakingHomePageState extends State<StakingHomePage>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildStatItem(
-                'Active Positions',
+                S.of(context).g_key_stake_active_positions,
                 stats.activePositions.toString(),
               ),
               _buildStatItem(
-                'Avg APY',
+                S.of(context).g_key_stake_avg_apy,
                 '${stats.averageApy.toStringAsFixed(1)}%',
               ),
             ],
@@ -548,7 +566,7 @@ class _StakingHomePageState extends State<StakingHomePage>
                   borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
                 ),
                 child: Text(
-                  isUnbonding ? 'Unbonding' : 'Active',
+                  isUnbonding ? S.of(context).g_key_stake_unbonding : S.of(context).g_key_stake_active,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(22),
                     color: isUnbonding ? Colors.orange : Colors.green,
@@ -557,7 +575,7 @@ class _StakingHomePageState extends State<StakingHomePage>
               ),
               Spacer(),
               Text(
-                '${position.protocol.apy.toStringAsFixed(1)}% APY',
+                '${position.protocol.apy.toStringAsFixed(1)}% ${S.of(context).g_key_stake_apy}',
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(26),
                   color: Colors.green,
@@ -569,7 +587,7 @@ class _StakingHomePageState extends State<StakingHomePage>
           if (position.validator != null) ...[
             SizedBox(height: ScreenUtil().setWidth(8)),
             Text(
-              'Validator: ${position.validator!.name}',
+              '${S.of(context).g_key_stake_validator}: ${position.validator!.name}',
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(24),
                 color: AppThemeUtils.getColorByKey(
@@ -589,7 +607,7 @@ class _StakingHomePageState extends State<StakingHomePage>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Staked',
+                    S.of(context).g_key_stake_staked,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(22),
                       color: AppThemeUtils.getColorByKey(
@@ -616,7 +634,7 @@ class _StakingHomePageState extends State<StakingHomePage>
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      'Rewards',
+                      S.of(context).g_key_stake_rewards,
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(22),
                         color: AppThemeUtils.getColorByKey(
@@ -660,7 +678,7 @@ class _StakingHomePageState extends State<StakingHomePage>
                   ),
                   SizedBox(width: ScreenUtil().setWidth(8)),
                   Text(
-                    '${position.unbondingDaysLeft} days remaining',
+                    S.of(context).g_key_stake_days_remaining(position.unbondingDaysLeft.toString()),
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(24),
                       color: Colors.orange,
