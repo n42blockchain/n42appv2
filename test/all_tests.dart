@@ -58,6 +58,27 @@ import 'benchmark/core_business_benchmark_test.dart' as core_business_benchmark;
 import 'benchmark/navigation_benchmark_test.dart' as navigation_benchmark;
 import 'benchmark/startup_benchmark_test.dart' as startup_benchmark;
 
+// Feature Tests - Gas
+import 'features/gas/gas_estimate_model_test.dart' as gas_estimate_model_test;
+
+// Feature Tests - Bridge
+import 'features/bridge/bridge_model_test.dart' as bridge_model_test;
+
+// Feature Tests - Staking
+import 'features/staking/staking_model_test.dart' as staking_model_test;
+
+// Feature Tests - Hardware Wallet
+import 'features/hardware_wallet/hardware_wallet_model_test.dart' as hardware_wallet_model_test;
+
+// Feature Tests - Batch Transfer
+import 'features/batch_transfer/batch_transfer_model_test.dart' as batch_transfer_model_test;
+
+// Feature Tests - Airdrop
+import 'features/airdrop/airdrop_model_test.dart' as airdrop_model_test;
+
+// Feature Tests - Loyalty
+import 'features/loyalty/loyalty_model_test.dart' as loyalty_model_test;
+
 void main() {
   // Core Provider Tests
   core_providers_test.main();
@@ -106,5 +127,14 @@ void main() {
   core_business_benchmark.main();
   navigation_benchmark.main();
   startup_benchmark.main();
+
+  // Feature Tests - New Modules
+  gas_estimate_model_test.main();
+  bridge_model_test.main();
+  staking_model_test.main();
+  hardware_wallet_model_test.main();
+  batch_transfer_model_test.main();
+  airdrop_model_test.main();
+  loyalty_model_test.main();
 }
 

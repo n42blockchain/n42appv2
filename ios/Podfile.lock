@@ -369,14 +369,13 @@ PODS:
     - sqlite3/perf-threadsafe
     - sqlite3/rtree
     - sqlite3/session
-  - SwiftProtobuf (1.33.3)
   - SwiftyGif (5.4.5)
-  - TrustWalletCore (4.1.22):
-    - TrustWalletCore/Core (= 4.1.22)
-  - TrustWalletCore/Core (4.1.22):
+  - TrustWalletCore (4.6.0):
+    - TrustWalletCore/Core (= 4.6.0)
+  - TrustWalletCore/Core (4.6.0):
     - TrustWalletCore/Types
-  - TrustWalletCore/Types (4.1.22):
-    - SwiftProtobuf
+  - TrustWalletCore/Types (4.6.0):
+    - WalletCoreSwiftProtobuf
   - url_launcher_ios (0.0.1):
     - Flutter
   - video_compress (0.3.0):
@@ -389,6 +388,7 @@ PODS:
     - libwebp
   - wakelock_plus (0.0.1):
     - Flutter
+  - WalletCoreSwiftProtobuf (1.29.0)
   - WebRTC-SDK (137.7151.04)
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
@@ -434,7 +434,7 @@ DEPENDENCIES:
   - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
   - sqflite_sqlcipher (from `.symlinks/plugins/sqflite_sqlcipher/ios`)
   - sqlite3_flutter_libs (from `.symlinks/plugins/sqlite3_flutter_libs/darwin`)
-  - TrustWalletCore (= 4.1.22)
+  - TrustWalletCore (= 4.6.0)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - video_compress (from `.symlinks/plugins/video_compress/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/darwin`)
@@ -484,9 +484,9 @@ SPEC REPOS:
     - SDWebImage
     - SQLCipher
     - sqlite3
-    - SwiftProtobuf
     - SwiftyGif
     - TrustWalletCore
+    - WalletCoreSwiftProtobuf
     - WebRTC-SDK
     - YttriumWrapper
 
@@ -659,18 +659,18 @@ SPEC CHECKSUMS:
   SQLCipher: eb79c64049cb002b4e9fcb30edb7979bf4706dfc
   sqlite3: 8d708bc63e9f4ce48f0ad9d6269e478c5ced1d9b
   sqlite3_flutter_libs: d13b8b3003f18f596e542bcb9482d105577eff41
-  SwiftProtobuf: e1b437c8e31a4c5577b643249a0bb62ed4f02153
   SwiftyGif: 706c60cf65fa2bc5ee0313beece843c8eb8194d4
-  TrustWalletCore: d81c54e92bee6c91c53570728a4e56d57ad3e619
+  TrustWalletCore: a63eef893eeb285c3f689d2bfc89673419f65474
   url_launcher_ios: 7a95fa5b60cc718a708b8f2966718e93db0cef1b
   video_compress: f2133a07762889d67f0711ac831faa26f956980e
   video_player_avfoundation: dd410b52df6d2466a42d28550e33e4146928280a
   video_thumbnail: b637e0ad5f588ca9945f6e2c927f73a69a661140
   wakelock_plus: e29112ab3ef0b318e58cfa5c32326458be66b556
+  WalletCoreSwiftProtobuf: a4798576a2d309511fc45f81843d348732ec571d
   WebRTC-SDK: 40d4f5ba05cadff14e4db5614aec402a633f007e
   webview_flutter_wkwebview: 8ebf4fded22593026f7dbff1fbff31ea98573c8d
   YttriumWrapper: 31e937fe9fbe0f1314d2ca6be9ce9b379a059966
 
-PODFILE CHECKSUM: 4dc5dd68a394bdb155be53972743d113a0813966
+PODFILE CHECKSUM: a4b7acc886390c144c91dcb9a74967c055e17bc1
 
 COCOAPODS: 1.16.2

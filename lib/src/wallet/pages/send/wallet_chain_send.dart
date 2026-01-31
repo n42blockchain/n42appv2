@@ -36,6 +36,10 @@ import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:n42appv2/src/wallet/utils/address_validator.dart';
+import 'package:n42appv2/src/wallet/api/gas_tracker_api.dart';
+import 'package:n42appv2/src/wallet/models/gas_estimate_model.dart';
+import 'package:n42appv2/src/wallet/pages/gas/gas_settings_page.dart';
+import 'package:n42appv2/src/wallet/widgets/gas_selector_widget.dart';
 
 class WalletChainSend extends StatefulWidget {
   final CoinModel coinModel;
@@ -77,6 +81,9 @@ class _WalletChainSendState extends State<WalletChainSend> {
   BigInt gasEth=BigInt.zero;
   BigInt transferValue=BigInt.zero;//转账金额
 
+  // Gas 优化相关
+  GasEstimateModel? _gasEstimate;
+  bool _useAdvancedGas = false;
 
   Load load=Load.loading;
   Load gasLimitLoad=Load.finish;
@@ -153,6 +160,13 @@ class _WalletChainSendState extends State<WalletChainSend> {
     setState(() {
       load=Load.loading;
     });
+
+    // 尝试获取高级 Gas 估算（仅 EVM 链）
+    if (widget.coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name) {
+      await _fetchAdvancedGasEstimate();
+    }
+
+    // 传统方式获取 gas price（作为后备）
     String? rpc=widget.coinModel.coin['custom']==true?widget.coinModel.isTest?widget.coinModel.coin['service_test']:widget.coinModel.coin['service']:null;
     MessageModel mm=await tokenViewApi.getGasPrice(
         widget.coinModel.coin['blockchainType'],
@@ -169,9 +183,54 @@ class _WalletChainSendState extends State<WalletChainSend> {
       errorMessage=mm.data.toString();
       ToastUtils.show(errorMessage);
     }
-    totalGasPrice=gasPrice*gas;
+
+    // 如果有高级 Gas 估算，使用它的值
+    if (_gasEstimate != null && _useAdvancedGas) {
+      totalGasPrice = _gasEstimate!.currentTotalFee;
+      gasPrice = _gasEstimate!.currentOption.effectiveGasPrice;
+      gas = _gasEstimate!.gasLimit;
+    } else {
+      totalGasPrice=gasPrice*gas;
+    }
+
     load=Load.finish;
     setState(() {});
+  }
+
+  /// 获取高级 Gas 估算数据
+  Future<void> _fetchAdvancedGasEstimate() async {
+    final gasTracker = GasTrackerApi();
+    final result = await gasTracker.getGasEstimate(
+      coinType: widget.coinModel.coin['coinType'],
+      isTest: widget.coinModel.isTest,
+      isContract: widget.coinModel.coin['isContract'] ?? false,
+    );
+
+    if (!result.error && result.data is GasEstimateModel) {
+      _gasEstimate = result.data as GasEstimateModel;
+      _useAdvancedGas = true;
+    }
+  }
+
+  /// 打开 Gas 设置页面
+  Future<void> _openGasSettings() async {
+    if (_gasEstimate == null) return;
+
+    final result = await Navigator.push<GasEstimateModel>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => GasSettingsPage(gasEstimate: _gasEstimate!),
+      ),
+    );
+
+    if (result != null && mounted) {
+      setState(() {
+        _gasEstimate = result;
+        totalGasPrice = _gasEstimate!.currentTotalFee;
+        gasPrice = _gasEstimate!.currentOption.effectiveGasPrice;
+        gas = _gasEstimate!.gasLimit;
+      });
+    }
   }
   //获取旷工费 ETH链，当操作的是ETH Layer2的时候调用
   Future<void> getGasPriceLayer2()async{
@@ -971,6 +1030,13 @@ class _WalletChainSendState extends State<WalletChainSend> {
   }
   //旷工费
   Widget minerFeeWidget(){
+    // 如果有高级 Gas 估算且是 EVM 链，显示 Gas 选择器
+    if (_gasEstimate != null &&
+        _useAdvancedGas &&
+        widget.coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name) {
+      return _advancedMinerFeeWidget();
+    }
+
     /*if(widget.coinModel.coin['blockchainType']==BlockchainType.Tezos.name){
       return minerFeeWidget_TezosXTZ();
     }*/
@@ -1150,6 +1216,94 @@ class _WalletChainSendState extends State<WalletChainSend> {
       ),
     );
   }
+
+  /// 高级矿工费显示组件（带 Gas 选择器）
+  Widget _advancedMinerFeeWidget() {
+    // 检查余额是否足够支付 gas
+    bool gasExceedsBalance = false;
+    if (widget.coinModel.coin['isContract']) {
+      BigInt chainBalance = chainModel?.balance ?? BigInt.zero;
+      gasExceedsBalance = totalGasPrice > chainBalance;
+    }
+
+    return Column(
+      children: [
+        // 主链余额显示（如果是代币转账）
+        if (widget.coinModel.coin['isContract'])
+          containerStyle1(
+            context,
+            alignment: Alignment.center,
+            margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0), vertical: ScreenUtil().setWidth(20.0)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  S.of(context).g_key_29,
+                  style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                    fontSize: ScreenUtil().setSp(28.0),
+                  ),
+                ),
+                Text(
+                  '${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? "").toString().toUpperCase()}',
+                  style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
+                    fontSize: ScreenUtil().setSp(28.0),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+        SizedBox(height: ScreenUtil().setWidth(20.0)),
+
+        // Gas 选择器（紧凑版，可点击打开设置页面）
+        GasSelectorCompact(
+          gasEstimate: _gasEstimate!,
+          onTap: _openGasSettings,
+        ),
+
+        // 如果 gas 费用超过余额，显示警告
+        if (gasExceedsBalance)
+          Container(
+            margin: EdgeInsets.only(
+              top: ScreenUtil().setWidth(10.0),
+              left: ScreenUtil().setWidth(30.0),
+              right: ScreenUtil().setWidth(30.0),
+            ),
+            padding: EdgeInsets.symmetric(
+              horizontal: ScreenUtil().setWidth(20.0),
+              vertical: ScreenUtil().setWidth(10.0),
+            ),
+            decoration: BoxDecoration(
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorBgColor2.name),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.warning_amber,
+                  size: ScreenUtil().setWidth(32.0),
+                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+                ),
+                SizedBox(width: ScreenUtil().setWidth(10.0)),
+                Expanded(
+                  child: Text(
+                    S.of(context).g_key_t_29(chainModel?.coin['coinType'] ?? ""),
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(24.0),
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+
   Widget errorMessageWidget(){
     if(errorMessage==""){
       return SizedBox();

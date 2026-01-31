@@ -1088,8 +1088,8 @@ import WalletCore
         var input = RippleSigningInput.with{
             $0.privateKey=privateKey.data
             $0.fee=fee
-            $0.sequence=sequence
-            $0.lastLedgerSequence = ledgerIndex+20
+            $0.sequence=UInt32(sequence)
+            $0.lastLedgerSequence = UInt32(ledgerIndex+20)
             $0.account=account
         }
         
@@ -1886,14 +1886,19 @@ import WalletCore
         let contractAddress : String = txData["contractAddress"] as! String
         let maxGasAmount : String = txData["maxGasAmount"] as! String
         
+        // Helper function to convert UInt64 to Data (big-endian)
+        func uint64ToData(_ value: UInt64) -> Data {
+            return withUnsafeBytes(of: value.bigEndian) { Data($0) }
+        }
+
         if contractAddress==""{
             let transfer = TheOpenNetworkTransfer.with {
                 $0.dest = toAddress
-                $0.amount = UInt64(amount)!
+                $0.amount = uint64ToData(UInt64(amount)!)
                 $0.mode = UInt32(TheOpenNetworkSendMode.payFeesSeparately.rawValue | TheOpenNetworkSendMode.ignoreActionPhaseErrors.rawValue)
                 $0.bounceable = true
             }
-            
+
             let input = TheOpenNetworkSigningInput.with {
                 $0.messages = [transfer]
                 $0.privateKey = pk.data
@@ -1907,15 +1912,15 @@ import WalletCore
             return output.encoded
         }else{
             let jettonTransfer = TheOpenNetworkJettonTransfer.with {
-                $0.jettonAmount = UInt64(amount)!
+                $0.jettonAmount = uint64ToData(UInt64(amount)!)
                 $0.toOwner = toAddress
                 $0.responseAddress = fromAddress
-                $0.forwardAmount = UInt64(maxGasAmount)!
+                $0.forwardAmount = uint64ToData(UInt64(maxGasAmount)!)
             }
-                    
+
             let transfer = TheOpenNetworkTransfer.with {
                 $0.dest = contractAddress
-                $0.amount = UInt64(amount)!
+                $0.amount = uint64ToData(UInt64(amount)!)
                 $0.mode = UInt32(TheOpenNetworkSendMode.payFeesSeparately.rawValue | TheOpenNetworkSendMode.ignoreActionPhaseErrors.rawValue)
                 $0.comment = "test comment"
                 $0.bounceable = true

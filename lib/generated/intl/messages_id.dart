@@ -43,87 +43,87 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m9(value) => "Masukkan jumlah lebih dari ${value}.";
 
-  static String m10(value) =>
+  static String m17(value) =>
       "Apakah Anda yakin ingin menghapus kontak ${value}?";
 
-  static String m11(value) => "Anda tidak memiliki cukup \"${value}\"";
+  static String m19(value) => "Anda tidak memiliki cukup \"${value}\"";
 
-  static String m12(value) => "Gagal mendapatkan akun \"${value}\"";
+  static String m20(value) => "Gagal mendapatkan akun \"${value}\"";
 
-  static String m13(value) => "Minimum ${value} XRP untuk transfer pertama";
+  static String m21(value) => "Minimum ${value} XRP untuk transfer pertama";
 
-  static String m14(value) => "Jaringan ${value} belum ditambahkan.";
-
-  static String m15(value) =>
-      "${value} memiliki transaksi yang belum selesai, silakan coba lagi nanti.";
-
-  static String m16(value) => "Tidak ditemukan alamat untuk ${value}.";
-
-  static String m17(value) => "Saldo ${value} tidak mencukupi.";
-
-  static String m18(value, value1) =>
-      "Setiap akun XRP harus mencadangkan ${value} XRP (${value1} drops) sebagai dasar, yang tidak dapat dibelanjakan.";
-
-  static String m19(value, value1) =>
-      "Untuk setiap objek yang dimiliki akun, ${value} XRP (${value1} drops) ditambahkan ke cadangan.";
-
-  static String m20(value, value1) =>
-      "Akun ini memiliki ${value} objek, yang berarti tambahan ${value1} XRP dicadangkan.";
-
-  static String m21(value) =>
-      "Kesalahan input kata sandi pola, Anda memiliki ${value} kesempatan";
-
-  static String m22(value) =>
-      "Kesalahan input kata sandi pola, Anda memiliki ${value} kesempatan";
+  static String m22(value) => "Jaringan ${value} belum ditambahkan.";
 
   static String m23(value) =>
-      "Anda telah berhasil menyiapkan ${value} dan akan memulai verifikasi dengan N42Wallet!";
+      "${value} memiliki transaksi yang belum selesai, silakan coba lagi nanti.";
 
-  static String m24(value) =>
-      "Bergabung dengan grup ${value} saya di @N42Wallet untuk menjadi penambang awal dari blockchain Layer 1, dan dapatkan kripto di ponsel Anda!";
+  static String m24(value) => "Tidak ditemukan alamat untuk ${value}.";
 
-  static String m25(value) => "Kunci ${value} N untuk menjalankan validator.";
+  static String m25(value) => "Saldo ${value} tidak mencukupi.";
 
-  static String m26(value) => "Impor gagal:${value}";
+  static String m26(value, value1) =>
+      "Setiap akun XRP harus mencadangkan ${value} XRP (${value1} drops) sebagai dasar, yang tidak dapat dibelanjakan.";
 
-  static String m27(value) =>
-      "Dibutuhkan saldo staking minimal ${value} untuk mendapatkan hadiah.";
+  static String m27(value, value1) =>
+      "Untuk setiap objek yang dimiliki akun, ${value} XRP (${value1} drops) ditambahkan ke cadangan.";
 
   static String m28(value, value1) =>
-      "${value} N setiap ${value1} blok ditambang";
+      "Akun ini memiliki ${value} objek, yang berarti tambahan ${value1} XRP dicadangkan.";
 
-  static String m29(value) => "Harus ${value} karakter";
-
-  static String m30(value) => "Saldo ${value} Tidak Mencukupi.";
-
-  static String m31(value) => "${value} masuk...";
-
-  static String m32(value) =>
-      "${value} yang di-swap dalam aplikasi akan segera didistribusikan ke dompet Anda dan tidak dapat dijual melalui proses ini. Dapat digunakan untuk menjalankan node.";
-
-  static String m33(value) => "Maksimal ${value} karakter";
-
-  static String m34(value) => "Jaringan ${value} sudah didukung APP!";
-
-  static String m35(value) =>
-      "Jaringan ${value} sudah didukung APP, apakah Anda ingin menambahkannya?";
-
-  static String m36(value) => "Uji tautan alamat ${value} gagal!";
-
-  static String m37(value) => "Aplikasi akan terbuka dalam ${value} detik.";
-
-  static String m38(value) =>
+  static String m29(value) =>
       "Kesalahan input kata sandi pola, Anda memiliki ${value} kesempatan";
 
-  static String m39(value) =>
-      "Kesalahan input kata sandi, Anda memiliki ${value} kesempatan";
+  static String m30(value) =>
+      "Kesalahan input kata sandi pola, Anda memiliki ${value} kesempatan";
+
+  static String m31(value) =>
+      "Anda telah berhasil menyiapkan ${value} dan akan memulai verifikasi dengan N42Wallet!";
+
+  static String m32(value) =>
+      "Bergabung dengan grup ${value} saya di @N42Wallet untuk menjadi penambang awal dari blockchain Layer 1, dan dapatkan kripto di ponsel Anda!";
+
+  static String m33(value) => "Kunci ${value} N untuk menjalankan validator.";
+
+  static String m34(value) => "Impor gagal:${value}";
+
+  static String m35(value) =>
+      "Dibutuhkan saldo staking minimal ${value} untuk mendapatkan hadiah.";
+
+  static String m36(value, value1) =>
+      "${value} N setiap ${value1} blok ditambang";
+
+  static String m37(value) => "Harus ${value} karakter";
+
+  static String m38(value) => "Saldo ${value} Tidak Mencukupi.";
+
+  static String m39(value) => "${value} masuk...";
 
   static String m40(value) =>
+      "${value} yang di-swap dalam aplikasi akan segera didistribusikan ke dompet Anda dan tidak dapat dijual melalui proses ini. Dapat digunakan untuk menjalankan node.";
+
+  static String m41(value) => "Maksimal ${value} karakter";
+
+  static String m42(value) => "Jaringan ${value} sudah didukung APP!";
+
+  static String m43(value) =>
+      "Jaringan ${value} sudah didukung APP, apakah Anda ingin menambahkannya?";
+
+  static String m44(value) => "Uji tautan alamat ${value} gagal!";
+
+  static String m45(value) => "Aplikasi akan terbuka dalam ${value} detik.";
+
+  static String m46(value) =>
+      "Kesalahan input kata sandi pola, Anda memiliki ${value} kesempatan";
+
+  static String m47(value) =>
       "Kesalahan input kata sandi, Anda memiliki ${value} kesempatan";
 
-  static String m41(value) => "Masukkan kata sandi ${value}";
+  static String m48(value) =>
+      "Kesalahan input kata sandi, Anda memiliki ${value} kesempatan";
 
-  static String m42(value) => "0~${value} karakter";
+  static String m49(value) => "Masukkan kata sandi ${value}";
+
+  static String m50(value) => "0~${value} karakter";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -745,7 +745,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_squad_k11": MessageLookupByLibrary.simpleMessage(
       "File terlalu besar untuk diunggah",
     ),
-    "g_key_squad_k15": m10,
+    "g_key_squad_k15": m17,
     "g_key_squad_k18": MessageLookupByLibrary.simpleMessage("Tambah Kontak"),
     "g_key_squad_k24": MessageLookupByLibrary.simpleMessage("Kontak"),
     "g_key_squad_k25": MessageLookupByLibrary.simpleMessage(
@@ -758,7 +758,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Biaya maksimal per gas",
     ),
     "g_key_t_2": MessageLookupByLibrary.simpleMessage("Tertunda"),
-    "g_key_t_29": m11,
+    "g_key_t_29": m19,
     "g_key_t_3": MessageLookupByLibrary.simpleMessage("Gagal"),
     "g_key_t_30": MessageLookupByLibrary.simpleMessage("Biaya Penambang"),
     "g_key_t_31": MessageLookupByLibrary.simpleMessage("Lanjutkan"),
@@ -783,7 +783,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_44": MessageLookupByLibrary.simpleMessage(
       "Gagal mendapatkan data",
     ),
-    "g_key_t_45": m12,
+    "g_key_t_45": m20,
     "g_key_t_46": MessageLookupByLibrary.simpleMessage(
       "Periksa akun alamat penerima",
     ),
@@ -794,7 +794,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_51": MessageLookupByLibrary.simpleMessage(
       "Verifikasi akun berhasil",
     ),
-    "g_key_t_52": m13,
+    "g_key_t_52": m21,
     "g_key_t_54": MessageLookupByLibrary.simpleMessage(
       "Alamat penerima tidak memiliki akun, dan transfer pertama minimal 10XRP",
     ),
@@ -966,7 +966,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_k56": MessageLookupByLibrary.simpleMessage("Nonce"),
     "g_key_wallet_k57": MessageLookupByLibrary.simpleMessage("Percepat"),
     "g_key_wallet_k58": MessageLookupByLibrary.simpleMessage("Catatan"),
-    "g_key_wallet_m1": m14,
+    "g_key_wallet_m1": m22,
     "g_key_wallet_m11": MessageLookupByLibrary.simpleMessage(
       "Apakah Anda yakin ingin membatalkan akun Anda?",
     ),
@@ -976,7 +976,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_m17": MessageLookupByLibrary.simpleMessage(
       "Silakan masukkan kode verifikasi Google.",
     ),
-    "g_key_wallet_m19": m15,
+    "g_key_wallet_m19": m23,
     "g_key_wallet_m2": MessageLookupByLibrary.simpleMessage(
       "Token saat ini belum ditambahkan.",
     ),
@@ -984,11 +984,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "Masukkan frasa pemulihan Anda dengan kata-kata dipisahkan spasi",
     ),
     "g_key_wallet_m22": MessageLookupByLibrary.simpleMessage("Impor Dompet"),
-    "g_key_wallet_m3": m16,
+    "g_key_wallet_m3": m24,
     "g_key_wallet_m4": MessageLookupByLibrary.simpleMessage(
       "Saldo token saat ini tidak mencukupi.",
     ),
-    "g_key_wallet_m5": m17,
+    "g_key_wallet_m5": m25,
     "g_key_wallet_m6": MessageLookupByLibrary.simpleMessage(
       "Kesalahan penandatanganan",
     ),
@@ -1001,13 +1001,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_xml_0": MessageLookupByLibrary.simpleMessage("Dicadangkan"),
     "g_key_xml_1": MessageLookupByLibrary.simpleMessage("Cadangan Dasar"),
-    "g_key_xml_11": m18,
+    "g_key_xml_11": m26,
     "g_key_xml_2": MessageLookupByLibrary.simpleMessage("Cadangan Tambahan"),
-    "g_key_xml_22": m19,
+    "g_key_xml_22": m27,
     "g_key_xml_3": MessageLookupByLibrary.simpleMessage(
       "Jumlah Objek yang Dimiliki",
     ),
-    "g_key_xml_33": m20,
+    "g_key_xml_33": m28,
     "g_key_xml_4": MessageLookupByLibrary.simpleMessage(
       "Cara menghitung total jumlah yang dicadangkan",
     ),
@@ -1037,7 +1037,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key20": MessageLookupByLibrary.simpleMessage(
       "Gambar kata sandi pola",
     ),
-    "g_lock_key21": m21,
+    "g_lock_key21": m29,
     "g_lock_key22": MessageLookupByLibrary.simpleMessage(
       "Reset kata sandi pola",
     ),
@@ -1047,7 +1047,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "Tambahkan Kata Sandi Dompet?",
     ),
-    "g_lock_key25": m22,
+    "g_lock_key25": m30,
     "g_lock_key3": MessageLookupByLibrary.simpleMessage("Halaman layar kunci"),
     "g_lock_key4": MessageLookupByLibrary.simpleMessage("Kunci otomatis"),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("Berhasil"),
@@ -1071,12 +1071,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key61": MessageLookupByLibrary.simpleMessage("Bagikan ke teman"),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Lanjutkan"),
-    "g_mining_key63": m23,
-    "g_mining_key73": m24,
+    "g_mining_key63": m31,
+    "g_mining_key73": m32,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "Saya baru saja menyiapkan node di @N42Wallet dan memulai verifikasi di perangkat seluler! Ayo bergabung dengan saya. Masa depan terdesentralisasi ada di seluler!",
     ),
-    "g_mining_key76": m25,
+    "g_mining_key76": m33,
     "g_mining_key86": MessageLookupByLibrary.simpleMessage(
       "Penukaran tersedia setelah 768 detik.",
     ),
@@ -1105,7 +1105,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "Format data terenkripsi tidak didukung!",
     ),
-    "g_mining_key_109": m26,
+    "g_mining_key_109": m34,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage("Hadiah Kemarin"),
     "g_mining_key_110": MessageLookupByLibrary.simpleMessage(
       "Data terenkripsi",
@@ -1119,7 +1119,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "Penukaran membutuhkan waktu, silakan tunggu sebentar!",
     ),
-    "g_mining_key_116": m27,
+    "g_mining_key_116": m35,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "Hadiah terakumulasi setiap hari dan hanya dikirim ke dompet N Anda ketika mencapai ~0,5 N.",
     ),
@@ -1176,7 +1176,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 blok/hari~15 menit",
     ),
-    "g_mining_key_71": m28,
+    "g_mining_key_71": m36,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "128 detik per pemeriksaan",
     ),
@@ -1240,7 +1240,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "Silakan masukkan kata sandi enkripsi",
     ),
-    "g_mining_key_98": m29,
+    "g_mining_key_98": m37,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Silakan masukkan kembali kata sandi Anda untuk memastikan kebenaran",
     ),
@@ -1265,7 +1265,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Ajak melalui"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Tautan"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("kode"),
-    "g_swap_key_14": m30,
+    "g_swap_key_14": m38,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Kesalahan mendapatkan harga koin.",
     ),
@@ -1279,7 +1279,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Swap Anda akan segera didistribusikan. Harap bersabar.",
     ),
-    "g_swap_key_20": m31,
+    "g_swap_key_20": m39,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Biaya untuk menjalankan node: Verifikasi Grup 1-49 N Node Dasar: 50 N Node Premium: 100 N Node Pro: 500 N.",
     ),
@@ -1295,7 +1295,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Saldo Baru"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Anda bayar"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Tanggal"),
-    "g_swap_key_31": m32,
+    "g_swap_key_31": m40,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Swap dapat dilihat di penjelajah blockchain terkait (Etherscan, BscScan, TRONSCAN dan milik kami).",
     ),
@@ -1304,7 +1304,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_4": MessageLookupByLibrary.simpleMessage("Anda dapat"),
     "g_swap_key_5": MessageLookupByLibrary.simpleMessage("Pratinjau Swap"),
     "g_swap_key_6": MessageLookupByLibrary.simpleMessage("Coba lagi"),
-    "g_token_m_key_1": m33,
+    "g_token_m_key_1": m41,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Siapa pun dapat membuat token, termasuk membuat versi palsu dari token yang ada. Selalu teliti token sebelum mengimpornya.",
     ),
@@ -1324,9 +1324,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage(
       "Kesalahan Format!",
     ),
-    "g_token_m_key_22": m34,
-    "g_token_m_key_23": m35,
-    "g_token_m_key_24": m36,
+    "g_token_m_key_22": m42,
+    "g_token_m_key_23": m43,
+    "g_token_m_key_24": m44,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Impor token"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Semua jaringan"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("Token Kustom"),
@@ -1334,20 +1334,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_7": MessageLookupByLibrary.simpleMessage("Simbol token"),
     "g_token_m_key_8": MessageLookupByLibrary.simpleMessage("Desimal token"),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("Impor"),
-    "g_unlock_key10": m37,
+    "g_unlock_key10": m45,
     "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
       "Sidik jari atau pengenalan wajah tidak diaktifkan?",
     ),
     "g_unlock_key3": MessageLookupByLibrary.simpleMessage(
       "Gambar kata sandi pola",
     ),
-    "g_unlock_key4": m38,
+    "g_unlock_key4": m46,
     "g_unlock_key5": MessageLookupByLibrary.simpleMessage(
       "Masukkan kata sandi",
     ),
-    "g_unlock_key6": m39,
+    "g_unlock_key6": m47,
     "g_unlock_key7": MessageLookupByLibrary.simpleMessage("Autentikasi gagal"),
-    "g_unlock_key8": m40,
+    "g_unlock_key8": m48,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("Anda juga dapat "),
     "google_verification": MessageLookupByLibrary.simpleMessage(
       "Autentikasi Google",
@@ -1385,7 +1385,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "google_verification_message20": MessageLookupByLibrary.simpleMessage(
       "Masukkan kode verifikasi E-mail",
     ),
-    "google_verification_message21": m41,
+    "google_verification_message21": m49,
     "google_verification_message3": MessageLookupByLibrary.simpleMessage(
       "Gagal mendapatkan kunci google",
     ),
@@ -1443,7 +1443,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "login_password": MessageLookupByLibrary.simpleMessage("Kata Sandi"),
     "next": MessageLookupByLibrary.simpleMessage("Selanjutnya"),
-    "nicknameMessage": m42,
+    "nicknameMessage": m50,
     "password_diff": MessageLookupByLibrary.simpleMessage(
       "Kata sandi tidak cocok",
     ),

@@ -42,81 +42,81 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m9(value) => "Nhập số lượng lớn hơn ${value}.";
 
-  static String m10(value) =>
+  static String m17(value) =>
       "Bạn có chắc chắn muốn xóa liên hệ ${value} không?";
 
-  static String m11(value) => "Bạn không có đủ \"${value}\"";
+  static String m19(value) => "Bạn không có đủ \"${value}\"";
 
-  static String m12(value) => "Không thể lấy tài khoản \"${value}\"";
+  static String m20(value) => "Không thể lấy tài khoản \"${value}\"";
 
-  static String m13(value) => "Tối thiểu ${value} XRP cho lần chuyển đầu tiên";
+  static String m21(value) => "Tối thiểu ${value} XRP cho lần chuyển đầu tiên";
 
-  static String m14(value) => "Chưa thêm chuỗi ${value}.";
-
-  static String m15(value) =>
-      "${value} có giao dịch chưa hoàn tất, vui lòng thử lại sau.";
-
-  static String m16(value) => "Không tìm thấy địa chỉ cho ${value}.";
-
-  static String m17(value) => "Số dư ${value} không đủ.";
-
-  static String m18(value, value1) =>
-      "Mỗi tài khoản XRP phải dự trữ ${value} XRP (${value1} drops) làm mức cơ bản, không thể chi tiêu.";
-
-  static String m19(value, value1) =>
-      "Với mỗi đối tượng tài khoản sở hữu, ${value} XRP (${value1} drops) được thêm vào dự trữ.";
-
-  static String m20(value, value1) =>
-      "Tài khoản này sở hữu ${value} đối tượng, có nghĩa là thêm ${value1} XRP được dự trữ.";
-
-  static String m21(value) => "Nhập sai mật khẩu hình vẽ, bạn còn ${value} lần";
-
-  static String m22(value) => "Nhập sai mật khẩu hình vẽ, bạn còn ${value} lần";
+  static String m22(value) => "Chưa thêm chuỗi ${value}.";
 
   static String m23(value) =>
+      "${value} có giao dịch chưa hoàn tất, vui lòng thử lại sau.";
+
+  static String m24(value) => "Không tìm thấy địa chỉ cho ${value}.";
+
+  static String m25(value) => "Số dư ${value} không đủ.";
+
+  static String m26(value, value1) =>
+      "Mỗi tài khoản XRP phải dự trữ ${value} XRP (${value1} drops) làm mức cơ bản, không thể chi tiêu.";
+
+  static String m27(value, value1) =>
+      "Với mỗi đối tượng tài khoản sở hữu, ${value} XRP (${value1} drops) được thêm vào dự trữ.";
+
+  static String m28(value, value1) =>
+      "Tài khoản này sở hữu ${value} đối tượng, có nghĩa là thêm ${value1} XRP được dự trữ.";
+
+  static String m29(value) => "Nhập sai mật khẩu hình vẽ, bạn còn ${value} lần";
+
+  static String m30(value) => "Nhập sai mật khẩu hình vẽ, bạn còn ${value} lần";
+
+  static String m31(value) =>
       "Bạn đã thiết lập thành công ${value} và sẽ bắt đầu xác minh với N42Wallet!";
 
-  static String m24(value) =>
+  static String m32(value) =>
       "Tham gia nhóm ${value} của tôi trên @N42Wallet để trở thành thợ đào sớm của chuỗi Layer 1 và nhận tiền mã hóa trên điện thoại!";
 
-  static String m25(value) => "Khóa ${value} N để vận hành người xác thực.";
+  static String m33(value) => "Khóa ${value} N để vận hành người xác thực.";
 
-  static String m26(value) => "Nhập thất bại:${value}";
-
-  static String m27(value) =>
-      "Cần có số dư staking tối thiểu ${value} để nhận phần thưởng.";
-
-  static String m28(value, value1) => "${value} N mỗi ${value1} khối đã đào";
-
-  static String m29(value) => "Phải có ${value} ký tự";
-
-  static String m30(value) => "${value} Số dư không đủ.";
-
-  static String m31(value) => "${value} đang đến...";
-
-  static String m32(value) =>
-      "${value} hoán đổi trong ứng dụng sẽ được phân phối đến ví của bạn trong thời gian ngắn và không thể bán qua quy trình này. Có thể sử dụng để vận hành node.";
-
-  static String m33(value) => "Tối đa ${value} ký tự";
-
-  static String m34(value) => "Ứng dụng đã hỗ trợ chuỗi ${value}!";
+  static String m34(value) => "Nhập thất bại:${value}";
 
   static String m35(value) =>
+      "Cần có số dư staking tối thiểu ${value} để nhận phần thưởng.";
+
+  static String m36(value, value1) => "${value} N mỗi ${value1} khối đã đào";
+
+  static String m37(value) => "Phải có ${value} ký tự";
+
+  static String m38(value) => "${value} Số dư không đủ.";
+
+  static String m39(value) => "${value} đang đến...";
+
+  static String m40(value) =>
+      "${value} hoán đổi trong ứng dụng sẽ được phân phối đến ví của bạn trong thời gian ngắn và không thể bán qua quy trình này. Có thể sử dụng để vận hành node.";
+
+  static String m41(value) => "Tối đa ${value} ký tự";
+
+  static String m42(value) => "Ứng dụng đã hỗ trợ chuỗi ${value}!";
+
+  static String m43(value) =>
       "Ứng dụng đã hỗ trợ chuỗi ${value}, bạn có muốn thêm không?";
 
-  static String m36(value) => "Kết nối thử nghiệm địa chỉ ${value} thất bại!";
+  static String m44(value) => "Kết nối thử nghiệm địa chỉ ${value} thất bại!";
 
-  static String m37(value) => "Ứng dụng sẽ mở khóa sau ${value} giây.";
+  static String m45(value) => "Ứng dụng sẽ mở khóa sau ${value} giây.";
 
-  static String m38(value) => "Nhập sai mật khẩu hình vẽ, bạn còn ${value} lần";
+  static String m46(value) => "Nhập sai mật khẩu hình vẽ, bạn còn ${value} lần";
 
-  static String m39(value) => "Nhập sai mật khẩu, bạn còn ${value} lần";
+  static String m47(value) => "Nhập sai mật khẩu, bạn còn ${value} lần";
 
-  static String m40(value) => "Nhập sai mật khẩu, bạn còn ${value} lần";
+  static String m48(value) => "Nhập sai mật khẩu, bạn còn ${value} lần";
 
-  static String m41(value) => "Nhập mật khẩu ${value}";
+  static String m49(value) => "Nhập mật khẩu ${value}";
 
-  static String m42(value) => "0~${value} ký tự";
+  static String m50(value) => "0~${value} ký tự";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -702,7 +702,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_squad_k11": MessageLookupByLibrary.simpleMessage(
       "Tệp quá lớn để tải lên",
     ),
-    "g_key_squad_k15": m10,
+    "g_key_squad_k15": m17,
     "g_key_squad_k18": MessageLookupByLibrary.simpleMessage("Thêm liên hệ"),
     "g_key_squad_k24": MessageLookupByLibrary.simpleMessage("Liên hệ"),
     "g_key_squad_k25": MessageLookupByLibrary.simpleMessage(
@@ -713,7 +713,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_16": MessageLookupByLibrary.simpleMessage("Phí Gas tối đa"),
     "g_key_t_17": MessageLookupByLibrary.simpleMessage("Phí tối đa mỗi Gas"),
     "g_key_t_2": MessageLookupByLibrary.simpleMessage("Đang chờ"),
-    "g_key_t_29": m11,
+    "g_key_t_29": m19,
     "g_key_t_3": MessageLookupByLibrary.simpleMessage("Thất bại"),
     "g_key_t_30": MessageLookupByLibrary.simpleMessage("Phí thợ đào"),
     "g_key_t_31": MessageLookupByLibrary.simpleMessage("Tiếp tục"),
@@ -734,7 +734,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Nhập số nguyên lớn hơn 0.",
     ),
     "g_key_t_44": MessageLookupByLibrary.simpleMessage("Không thể lấy dữ liệu"),
-    "g_key_t_45": m12,
+    "g_key_t_45": m20,
     "g_key_t_46": MessageLookupByLibrary.simpleMessage(
       "Kiểm tra tài khoản địa chỉ nhận",
     ),
@@ -745,7 +745,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_51": MessageLookupByLibrary.simpleMessage(
       "Xác minh tài khoản thành công",
     ),
-    "g_key_t_52": m13,
+    "g_key_t_52": m21,
     "g_key_t_54": MessageLookupByLibrary.simpleMessage(
       "Địa chỉ nhận chưa có tài khoản, và lần chuyển đầu tiên tối thiểu 10XRP",
     ),
@@ -911,7 +911,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_k56": MessageLookupByLibrary.simpleMessage("Nonce"),
     "g_key_wallet_k57": MessageLookupByLibrary.simpleMessage("Tăng tốc"),
     "g_key_wallet_k58": MessageLookupByLibrary.simpleMessage("Ghi chú"),
-    "g_key_wallet_m1": m14,
+    "g_key_wallet_m1": m22,
     "g_key_wallet_m11": MessageLookupByLibrary.simpleMessage(
       "Bạn có chắc chắn muốn hủy tài khoản không?",
     ),
@@ -921,7 +921,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_m17": MessageLookupByLibrary.simpleMessage(
       "Vui lòng nhập mã xác minh Google.",
     ),
-    "g_key_wallet_m19": m15,
+    "g_key_wallet_m19": m23,
     "g_key_wallet_m2": MessageLookupByLibrary.simpleMessage(
       "Token hiện tại chưa được thêm.",
     ),
@@ -929,11 +929,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "Nhập cụm từ khôi phục với các từ cách nhau bằng dấu cách",
     ),
     "g_key_wallet_m22": MessageLookupByLibrary.simpleMessage("Nhập ví"),
-    "g_key_wallet_m3": m16,
+    "g_key_wallet_m3": m24,
     "g_key_wallet_m4": MessageLookupByLibrary.simpleMessage(
       "Số dư token hiện tại không đủ.",
     ),
-    "g_key_wallet_m5": m17,
+    "g_key_wallet_m5": m25,
     "g_key_wallet_m6": MessageLookupByLibrary.simpleMessage("Lỗi ký"),
     "g_key_wallet_m8": MessageLookupByLibrary.simpleMessage("Hủy tài khoản"),
     "g_key_wallet_m9": MessageLookupByLibrary.simpleMessage(
@@ -942,13 +942,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_manage": MessageLookupByLibrary.simpleMessage("Quản lý ví"),
     "g_key_xml_0": MessageLookupByLibrary.simpleMessage("Dự trữ"),
     "g_key_xml_1": MessageLookupByLibrary.simpleMessage("Dự trữ cơ bản"),
-    "g_key_xml_11": m18,
+    "g_key_xml_11": m26,
     "g_key_xml_2": MessageLookupByLibrary.simpleMessage("Dự trữ gia tăng"),
-    "g_key_xml_22": m19,
+    "g_key_xml_22": m27,
     "g_key_xml_3": MessageLookupByLibrary.simpleMessage(
       "Số lượng đối tượng sở hữu",
     ),
-    "g_key_xml_33": m20,
+    "g_key_xml_33": m28,
     "g_key_xml_4": MessageLookupByLibrary.simpleMessage(
       "Cách tính tổng số tiền dự trữ",
     ),
@@ -974,7 +974,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Vẽ lại mật khẩu hình vẽ",
     ),
     "g_lock_key20": MessageLookupByLibrary.simpleMessage("Vẽ mật khẩu hình vẽ"),
-    "g_lock_key21": m21,
+    "g_lock_key21": m29,
     "g_lock_key22": MessageLookupByLibrary.simpleMessage(
       "Đặt lại mật khẩu hình vẽ",
     ),
@@ -982,7 +982,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Nhập sai quá nhiều lần, vui lòng đặt lại mật khẩu",
     ),
     "g_lock_key24": MessageLookupByLibrary.simpleMessage("Thêm mật khẩu ví?"),
-    "g_lock_key25": m22,
+    "g_lock_key25": m30,
     "g_lock_key3": MessageLookupByLibrary.simpleMessage("Trang màn hình khóa"),
     "g_lock_key4": MessageLookupByLibrary.simpleMessage("Tự động khóa"),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("Thành công"),
@@ -1008,12 +1008,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Chia sẻ cho bạn bè",
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Tiếp tục"),
-    "g_mining_key63": m23,
-    "g_mining_key73": m24,
+    "g_mining_key63": m31,
+    "g_mining_key73": m32,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "Tôi vừa thiết lập một node trên @N42Wallet và bắt đầu xác minh trên thiết bị di động! Hãy tham gia cùng tôi. Tương lai phi tập trung là di động!",
     ),
-    "g_mining_key76": m25,
+    "g_mining_key76": m33,
     "g_mining_key86": MessageLookupByLibrary.simpleMessage(
       "Có thể đổi thưởng sau 768 giây.",
     ),
@@ -1046,7 +1046,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "Định dạng dữ liệu mã hóa không được hỗ trợ!",
     ),
-    "g_mining_key_109": m26,
+    "g_mining_key_109": m34,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage(
       "Phần thưởng hôm qua",
     ),
@@ -1060,7 +1060,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "Đổi thưởng cần một chút thời gian, vui lòng đợi một lát!",
     ),
-    "g_mining_key_116": m27,
+    "g_mining_key_116": m35,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "Phần thưởng tích lũy hàng ngày và chỉ được gửi đến ví N của bạn khi đạt ~0.5 N.",
     ),
@@ -1117,7 +1117,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 khối/ngày~15 phút",
     ),
-    "g_mining_key_71": m28,
+    "g_mining_key_71": m36,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "128 giây mỗi lần kiểm tra",
     ),
@@ -1183,7 +1183,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "Vui lòng nhập mật khẩu mã hóa",
     ),
-    "g_mining_key_98": m29,
+    "g_mining_key_98": m37,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Vui lòng nhập lại mật khẩu để đảm bảo chính xác",
     ),
@@ -1208,7 +1208,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Giới thiệu qua"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Liên kết"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("mã"),
-    "g_swap_key_14": m30,
+    "g_swap_key_14": m38,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage("Lỗi lấy giá coin."),
     "g_swap_key_16": MessageLookupByLibrary.simpleMessage(
       "Bằng việc tiếp tục, bạn đồng ý với ",
@@ -1220,7 +1220,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Giao dịch hoán đổi của bạn sẽ được phân phối trong thời gian ngắn. Vui lòng kiên nhẫn.",
     ),
-    "g_swap_key_20": m31,
+    "g_swap_key_20": m39,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Chi phí vận hành node: Xác minh nhóm 1-49 N Node cơ bản: 50 N Node cao cấp: 100 N Node Pro: 500 N.",
     ),
@@ -1234,7 +1234,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Số dư mới"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Bạn trả"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Ngày"),
-    "g_swap_key_31": m32,
+    "g_swap_key_31": m40,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Các giao dịch hoán đổi có thể xem trên các trình duyệt chuỗi liên quan (Etherscan, BscScan, TRONSCAN và của chúng tôi).",
     ),
@@ -1243,7 +1243,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_4": MessageLookupByLibrary.simpleMessage("Bạn nhận"),
     "g_swap_key_5": MessageLookupByLibrary.simpleMessage("Xem trước hoán đổi"),
     "g_swap_key_6": MessageLookupByLibrary.simpleMessage("Thử lại"),
-    "g_token_m_key_1": m33,
+    "g_token_m_key_1": m41,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Bất kỳ ai cũng có thể tạo token, bao gồm cả việc tạo phiên bản giả của token hiện có. Luôn nghiên cứu token trước khi nhập.",
     ),
@@ -1261,9 +1261,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 đơn vị"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Thêm token"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Lỗi định dạng!"),
-    "g_token_m_key_22": m34,
-    "g_token_m_key_23": m35,
-    "g_token_m_key_24": m36,
+    "g_token_m_key_22": m42,
+    "g_token_m_key_23": m43,
+    "g_token_m_key_24": m44,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Nhập token"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Tất cả mạng"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("Token tùy chỉnh"),
@@ -1273,18 +1273,18 @@ class MessageLookup extends MessageLookupByLibrary {
       "Số thập phân token",
     ),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("Nhập"),
-    "g_unlock_key10": m37,
+    "g_unlock_key10": m45,
     "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
       "Chưa bật nhận dạng vân tay hoặc khuôn mặt?",
     ),
     "g_unlock_key3": MessageLookupByLibrary.simpleMessage(
       "Vẽ mật khẩu hình vẽ",
     ),
-    "g_unlock_key4": m38,
+    "g_unlock_key4": m46,
     "g_unlock_key5": MessageLookupByLibrary.simpleMessage("Nhập mật khẩu"),
-    "g_unlock_key6": m39,
+    "g_unlock_key6": m47,
     "g_unlock_key7": MessageLookupByLibrary.simpleMessage("Xác thực thất bại"),
-    "g_unlock_key8": m40,
+    "g_unlock_key8": m48,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("Bạn cũng có thể "),
     "google_verification": MessageLookupByLibrary.simpleMessage(
       "Xác thực Google",
@@ -1322,7 +1322,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "google_verification_message20": MessageLookupByLibrary.simpleMessage(
       "Nhập mã xác minh email",
     ),
-    "google_verification_message21": m41,
+    "google_verification_message21": m49,
     "google_verification_message3": MessageLookupByLibrary.simpleMessage(
       "Không thể lấy khóa Google",
     ),
@@ -1376,7 +1376,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "login_password": MessageLookupByLibrary.simpleMessage("Mật khẩu"),
     "next": MessageLookupByLibrary.simpleMessage("Tiếp theo"),
-    "nicknameMessage": m42,
+    "nicknameMessage": m50,
     "password_diff": MessageLookupByLibrary.simpleMessage(
       "Mật khẩu không khớp",
     ),

@@ -30,6 +30,9 @@ import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_ton.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_trx.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_xrp.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_zil.dart';
+import 'package:n42appv2/src/wallet/pages/batch_transfer/batch_transfer_page.dart';
+import 'package:n42appv2/src/wallet/provider/batch_transfer_provider.dart';
+import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/wallet/pages/transactions/transaction_detail_eth.dart';
 import 'package:n42appv2/src/wallet/pages/transactions/transaction_history_list.dart';
 import 'package:n42appv2/src/wallet/pages/transactions/transaction_retry.dart';
@@ -132,6 +135,66 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
     );
     if (!mounted) return;
     if (closeSheet) Navigator.pop(context);
+  }
+
+  Future<void> _handleBatchTransfer() async {
+    if (!await _ensureWalletBackedUp()) {
+      return;
+    }
+
+    // 获取 RPC URL 和 chain ID
+    final coinType = widget.coinModel.coin['coinType'];
+    final isTest = widget.coinModel.isTest;
+    final chainConfig = chainUrlMap[coinType];
+
+    String rpcUrl = '';
+    int chainId = 1;
+
+    if (chainConfig != null) {
+      rpcUrl = isTest
+          ? (chainConfig['baseInfo']?['service_test'] ?? '')
+          : (chainConfig['baseInfo']?['service'] ?? '');
+      chainId = isTest
+          ? (chainConfig['testnetChainID'] ?? chainConfig['baseInfo']?['chainId_test'] ?? 1)
+          : (chainConfig['mainnetChainID'] ?? chainConfig['baseInfo']?['chainId'] ?? 1);
+    }
+
+    // 如果是自定义链
+    if (widget.coinModel.coin['custom'] == true) {
+      rpcUrl = isTest
+          ? (widget.coinModel.coin['service_test'] ?? '')
+          : (widget.coinModel.coin['service'] ?? '');
+      chainId = isTest
+          ? (widget.coinModel.coin['chainId_test'] ?? 1)
+          : (widget.coinModel.coin['chainId'] ?? 1);
+    }
+
+    if (rpcUrl.isEmpty) {
+      ToastUtils.showWarning('RPC URL not configured');
+      return;
+    }
+
+    if (!mounted) return;
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChangeNotifierProvider(
+          create: (_) => BatchTransferProvider(),
+          child: BatchTransferPage(
+            chainSymbol: widget.coinModel.coin['miniName'] ?? coinType,
+            rpcUrl: rpcUrl,
+            chainId: chainId,
+            fromAddress: widget.coinModel.address ?? '',
+            tokenAddress: widget.coinModel.coin['isContract'] == true
+                ? widget.coinModel.coin['contract']
+                : null,
+            tokenSymbol: widget.coinModel.coin['miniName'] ?? '',
+            decimals: widget.coinModel.coin['decimals'] ?? 18,
+            balance: widget.coinModel.balance,
+          ),
+        ),
+      ),
+    );
   }
 
   Future<void> _openSendPage() async {
@@ -1240,6 +1303,66 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
             ],
           )),
     ));
+    //batch transfer - only for EVM chains
+    if(widget.coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name) {
+      childs.add(Divider(
+        height: ScreenUtil().setWidth(1),
+        indent: 0,
+        endIndent: 0,
+      ));
+      childs.add(InkWell(
+        onTap: () async {
+          await _handleBatchTransfer();
+          if (!mounted) return;
+          Navigator.pop(context);
+        },
+        child: Container(
+            padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                SizedBox(
+                  width: ScreenUtil().setWidth(40.0),
+                  height: ScreenUtil().setWidth(40.0),
+                  child: Icon(
+                    Icons.groups,
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                    size: ScreenUtil().setWidth(40.0),
+                  ),
+                ),
+                SizedBox(
+                  width: ScreenUtil().setWidth(20.0),
+                ),
+                Text(
+                  'Batch Transfer',
+                  style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                    fontSize: ScreenUtil().setSp(30.0),
+                  ),
+                ),
+                SizedBox(width: ScreenUtil().setWidth(10.0)),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: ScreenUtil().setWidth(8),
+                    vertical: ScreenUtil().setWidth(2),
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+                  ),
+                  child: Text(
+                    'NEW',
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(18),
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            )),
+      ));
+    }
     //tokens
     if(widget.coinModel.privateKey == null ||
         widget.coinModel.coin['blockchainType'] == BlockchainType.Bitcoin.name ||
