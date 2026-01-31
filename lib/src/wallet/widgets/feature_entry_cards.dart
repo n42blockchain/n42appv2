@@ -61,7 +61,7 @@ class EnsEntryCard extends StatelessWidget {
                       child: Image.network(
                         avatarUrl!,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => _buildEnsIcon(),
+                        errorBuilder: (context, error, stackTrace) => _buildEnsIcon(),
                       ),
                     )
                   : _buildEnsIcon(),
@@ -219,21 +219,25 @@ class SmartAccountEntryCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        hasSmartAccount
-                            ? S.of(context).g_key_aa_smart_account
-                            : S.of(context).g_key_aa_create_smart_account,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(32),
-                          fontWeight: FontWeight.w600,
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                      Flexible(
+                        child: Text(
+                          hasSmartAccount
+                              ? S.of(context).g_key_aa_smart_account
+                              : S.of(context).g_key_aa_create_smart_account,
+                          style: TextStyle(
+                            fontSize: ScreenUtil().setSp(30),
+                            fontWeight: FontWeight.w600,
+                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       if (hasSmartAccount) ...[
-                        SizedBox(width: ScreenUtil().setWidth(12)),
+                        SizedBox(width: ScreenUtil().setWidth(10)),
                         Container(
                           padding: EdgeInsets.symmetric(
-                            horizontal: ScreenUtil().setWidth(12),
+                            horizontal: ScreenUtil().setWidth(10),
                             vertical: ScreenUtil().setWidth(4),
                           ),
                           decoration: BoxDecoration(
@@ -247,7 +251,7 @@ class SmartAccountEntryCard extends StatelessWidget {
                                 ? S.of(context).g_key_aa_deployed
                                 : S.of(context).g_key_aa_not_deployed,
                             style: TextStyle(
-                              fontSize: ScreenUtil().setSp(20),
+                              fontSize: ScreenUtil().setSp(18),
                               color: isDeployed ? const Color(0xFF4CAF50) : const Color(0xFFFF9800),
                               fontWeight: FontWeight.w500,
                             ),
@@ -262,9 +266,11 @@ class SmartAccountEntryCard extends StatelessWidget {
                         ? _formatAddress(accountAddress ?? '')
                         : S.of(context).g_key_aa_gasless_transactions,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
+                      fontSize: ScreenUtil().setSp(22),
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
@@ -456,7 +462,7 @@ class FeatureEntryHorizontal extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: ScreenUtil().setWidth(280),
+        width: ScreenUtil().setWidth(320),
         padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -513,25 +519,29 @@ class FeatureEntryHorizontal extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
-                      fontWeight: FontWeight.w600,
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(26),
+                        fontWeight: FontWeight.w600,
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                      ),
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
                   SizedBox(height: ScreenUtil().setWidth(4)),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      subtitle,
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(20),
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                      ),
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),

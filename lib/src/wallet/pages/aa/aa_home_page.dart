@@ -12,6 +12,8 @@ import 'package:n42appv2/src/wallet/pages/aa/aa_account_create_page.dart';
 import 'package:n42appv2/src/wallet/pages/aa/aa_account_detail_page.dart';
 import 'package:n42appv2/src/wallet/pages/aa/aa_account_list_page.dart';
 import 'package:n42appv2/src/wallet/pages/aa/aa_send_page.dart';
+import 'package:n42appv2/src/wallet/pages/aa/aa_batch_transaction_page.dart';
+import 'package:n42appv2/src/wallet/pages/aa/session_key_manage_page.dart';
 import 'package:n42appv2/src/wallet/widgets/aa/smart_account_card.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 
@@ -122,6 +124,10 @@ class _AAHomePageState extends State<AAHomePage> {
 
             // 功能入口
             _buildFeatureCards(),
+            SizedBox(height: ScreenUtil().setWidth(24)),
+
+            // 高级功能
+            _buildAdvancedFeatures(),
             SizedBox(height: ScreenUtil().setWidth(24)),
 
             // 智能账户列表
@@ -279,11 +285,61 @@ class _AAHomePageState extends State<AAHomePage> {
             subtitle: S.of(context).g_key_aa_batch_desc,
             color: const Color(0xFFFF9800),
             onTap: _accounts.isNotEmpty
-                ? () {
-                    // 导航到批量交易页面
-                  }
+                ? () => _navigateToBatchTransaction(_accounts.first)
                 : null,
           ),
+        ),
+      ],
+    );
+  }
+
+  void _navigateToBatchTransaction(SmartAccount account) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AABatchTransactionPage(
+          account: account,
+          walletAddress: widget.walletAddress,
+        ),
+      ),
+    );
+  }
+
+  void _navigateToSessionKeys(SmartAccount account) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SessionKeyManagePage(
+          account: account,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAdvancedFeatures() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          S.of(context).g_key_advanced_features,
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(26),
+            fontWeight: FontWeight.w600,
+            color: AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.mainTextColor.name,
+            ),
+          ),
+        ),
+        SizedBox(height: ScreenUtil().setWidth(12)),
+        _buildFeatureCard(
+          icon: Icons.key,
+          title: S.of(context).g_key_aa_session_keys,
+          subtitle: S.of(context).g_key_aa_session_keys_desc,
+          color: const Color(0xFF8B5CF6),
+          onTap: _accounts.isNotEmpty
+              ? () => _navigateToSessionKeys(_accounts.first)
+              : null,
         ),
       ],
     );

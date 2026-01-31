@@ -454,6 +454,47 @@ The following chains support testnet for development and testing:
 - **Multi-Chain**: Works across all EVM-compatible chains
 - **Avatar Support**: Display ENS profile avatars
 - **Text Records**: Access social links (Twitter, GitHub, etc.)
+- **Name Registration**: Register new ENS names with multi-year options
+- **Name Management**: Update records, set primary name, transfer ownership
+- **Renewal**: Extend registration period for owned names
+- **Address Input**: Smart address field with ENS auto-resolution
+
+### Account Abstraction (ERC-4337)
+
+Smart Account features powered by ERC-4337:
+
+#### Smart Accounts
+| Account Type | Description |
+|--------------|-------------|
+| **Simple Account** | Basic smart account with single owner - recommended for most users |
+| **EIP-7702 Account** | Hybrid EOA/Smart Account - No deployment needed |
+| **Safe Account** | Multi-signature account with advanced security features |
+| **Kernel Account** | Modular account with plugin support from ZeroDev |
+
+#### Core Features
+- **Gasless Transactions**: Pay gas fees in any ERC-20 token or get sponsored
+- **Batch Operations**: Execute multiple transactions in a single call
+- **Session Keys**: Delegate limited permissions to DApps with time constraints
+- **Counterfactual Deployment**: Use your smart account before deployment
+
+#### Session Key Management
+- **Permission Control**: Grant transfer, approve, contract call, or full access
+- **Spending Limits**: Set maximum spending amount per session
+- **Time Constraints**: Configure expiration dates for sessions
+- **DApp Authorization**: Track and revoke DApp permissions
+- **Usage Monitoring**: View transaction count and spending progress
+
+#### Paymaster Integration
+| Type | Description |
+|------|-------------|
+| **Sponsored** | Gas fees paid by DApp or protocol |
+| **ERC-20 Gas** | Pay gas in USDC, USDT, or other tokens |
+| **Self-Pay** | Standard ETH gas payment |
+
+#### Supported Networks
+- Ethereum Mainnet & Sepolia
+- Polygon, Arbitrum, Optimism, Base
+- All EVM-compatible L2s with Bundler support
 
 ### NFT Management
 - **Multi-Standard**: ERC-721, ERC-1155, SPL NFTs
@@ -667,9 +708,16 @@ flutter build ios --release
 lib/
 ├── src/
 │   ├── wallet/           # Wallet management, transfers, tokens
+│   │   ├── aa/           # Account Abstraction (ERC-4337)
+│   │   │   ├── models/   # SmartAccount, UserOperation
+│   │   │   ├── bundler/  # Bundler client
+│   │   │   ├── paymaster/# Paymaster integration
+│   │   │   └── utils/    # AA utilities
 │   │   ├── api/          # Blockchain APIs
 │   │   ├── models/       # Data models
 │   │   ├── pages/        # Wallet UI pages
+│   │   │   ├── aa/       # Smart Account pages
+│   │   │   └── ens/      # ENS management pages
 │   │   ├── provider/     # State management
 │   │   ├── services/     # ENS, validation services
 │   │   ├── utils/        # Utilities
@@ -733,6 +781,7 @@ The app connects to the following backend services:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 2.1.0 | 2026-01 | Account Abstraction (ERC-4337), Session Keys, ENS Registration |
 | 2.0.0 | 2026-01 | ENS support, Gas tracker, Batch transfer, Bridge, 200+ chains |
 | 1.5.0 | 2025-12 | Multi-chain staking, Hardware wallet |
 | 1.0.0 | 2025-06 | Initial release |

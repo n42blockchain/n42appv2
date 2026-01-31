@@ -53,104 +53,120 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m14(value) => "Максимум ${value} получателей";
 
-  static String m15(value) => "Congratulations! You now own ${value}";
+  static String m15(value) => "+${value} pts/day";
 
-  static String m16(value) => "Please wait ${value} seconds";
+  static String m16(value) => "Earn up to ${value}% APY";
 
-  static String m17(value) =>
+  static String m17(value) => "Congratulations! You now own ${value}";
+
+  static String m18(value) => "Please wait ${value} seconds";
+
+  static String m19(value) => "Auto-refresh every ${value} seconds";
+
+  static String m20(value) =>
       "Пожалуйста, откройте приложение ${value} на устройстве";
 
-  static String m18(value) => "${value} баллов до след. уровня";
+  static String m21(value) => "Earn ${value} points";
 
-  static String m19(value) =>
+  static String m22(value) => "Earn ${value} points for each friend who joins!";
+
+  static String m23(value) => "${value} баллов до след. уровня";
+
+  static String m24(value) =>
       "Вы уверены, что хотите удалить контакт ${value}?";
 
-  static String m20(value) => "${value}d unbond";
+  static String m25(value) => "${value}d unbond";
 
-  static String m21(value) => "Осталось ${value} дней";
+  static String m26(value) => "Осталось ${value} дней";
 
-  static String m22(value) => "${value} days remaining";
+  static String m27(value) => "${value} days remaining";
 
-  static String m23(value) => "У вас недостаточно \"${value}\"";
+  static String m28(value) => "У вас недостаточно \"${value}\"";
 
-  static String m24(value) => "Не удалось получить аккаунт \"${value}\"";
+  static String m29(value) => "Не удалось получить аккаунт \"${value}\"";
 
-  static String m25(value) => "Минимум ${value} XRP для первого перевода";
+  static String m30(value) => "Минимум ${value} XRP для первого перевода";
 
-  static String m26(value) => "Verification code sent to ${value}";
+  static String m31(value) => "${value}d ago";
 
-  static String m27(value) => "Сеть ${value} не добавлена.";
+  static String m32(value) => "${value}h ago";
 
-  static String m28(value) =>
-      "У ${value} есть незавершённые транзакции, попробуйте позже.";
+  static String m33(value) => "${value}m ago";
 
-  static String m29(value) => "Адрес для ${value} не найден.";
+  static String m34(value) => "Verification code sent to ${value}";
 
-  static String m30(value) => "Недостаточный баланс ${value}.";
-
-  static String m31(value, value1) =>
-      "Каждый аккаунт XRP должен резервировать ${value} XRP (${value1} drops) в качестве базового минимума, который нельзя потратить.";
-
-  static String m32(value, value1) =>
-      "За каждый объект, принадлежащий аккаунту, к резерву добавляется ${value} XRP (${value1} drops).";
-
-  static String m33(value, value1) =>
-      "Этот аккаунт владеет ${value} объектами, что означает дополнительный резерв в ${value1} XRP.";
-
-  static String m34(value) =>
-      "Ошибка ввода графического пароля, осталось ${value} попыток";
-
-  static String m35(value) =>
-      "Ошибка ввода графического пароля, осталась ${value} попытка";
+  static String m35(value) => "Сеть ${value} не добавлена.";
 
   static String m36(value) =>
-      "Вы успешно настроили ${value} и начнёте верификацию с N42Wallet!";
+      "У ${value} есть незавершённые транзакции, попробуйте позже.";
 
-  static String m37(value) =>
-      "Присоединяйтесь к моей группе ${value} в @N42Wallet, чтобы стать ранним майнером Layer 1 сети и получать крипто на свой телефон!";
+  static String m37(value) => "Адрес для ${value} не найден.";
 
-  static String m38(value) => "Заблокируйте ${value} N для запуска валидатора.";
+  static String m38(value) => "Недостаточный баланс ${value}.";
 
-  static String m39(value) => "Импорт не удался:${value}";
+  static String m39(value, value1) =>
+      "Каждый аккаунт XRP должен резервировать ${value} XRP (${value1} drops) в качестве базового минимума, который нельзя потратить.";
 
-  static String m40(value) =>
-      "Для получения вознаграждений требуется баланс стейкинга не менее ${value}.";
+  static String m40(value, value1) =>
+      "За каждый объект, принадлежащий аккаунту, к резерву добавляется ${value} XRP (${value1} drops).";
 
   static String m41(value, value1) =>
-      "${value} N каждые ${value1} добытых блоков";
+      "Этот аккаунт владеет ${value} объектами, что означает дополнительный резерв в ${value1} XRP.";
 
-  static String m42(value) => "Должно быть ${value} символов";
-
-  static String m43(value) => "Недостаточный баланс ${value}.";
-
-  static String m44(value) => "${value} поступает...";
-
-  static String m45(value) =>
-      "${value} обменянные в приложении будут в ближайшее время распределены на ваш кошелёк и не могут быть проданы через этот процесс. Их можно использовать для запуска ноды.";
-
-  static String m46(value) => "Максимум ${value} символов";
-
-  static String m47(value) => "Сеть ${value} уже поддерживается приложением!";
-
-  static String m48(value) =>
-      "Сеть ${value} уже поддерживается приложением, хотите её добавить?";
-
-  static String m49(value) =>
-      "Тестовое подключение к адресу ${value} не удалось!";
-
-  static String m50(value) =>
-      "Приложение разблокируется через ${value} секунд.";
-
-  static String m51(value) =>
+  static String m42(value) =>
       "Ошибка ввода графического пароля, осталось ${value} попыток";
 
-  static String m52(value) => "Ошибка ввода пароля, осталось ${value} попыток";
+  static String m43(value) =>
+      "Ошибка ввода графического пароля, осталась ${value} попытка";
 
-  static String m53(value) => "Ошибка ввода пароля, осталась ${value} попытка";
+  static String m44(value) =>
+      "Вы успешно настроили ${value} и начнёте верификацию с N42Wallet!";
 
-  static String m54(value) => "Введите пароль ${value}";
+  static String m45(value) =>
+      "Присоединяйтесь к моей группе ${value} в @N42Wallet, чтобы стать ранним майнером Layer 1 сети и получать крипто на свой телефон!";
 
-  static String m55(value) => "0~${value} символов";
+  static String m46(value) => "Заблокируйте ${value} N для запуска валидатора.";
+
+  static String m47(value) => "Импорт не удался:${value}";
+
+  static String m48(value) =>
+      "Для получения вознаграждений требуется баланс стейкинга не менее ${value}.";
+
+  static String m49(value, value1) =>
+      "${value} N каждые ${value1} добытых блоков";
+
+  static String m50(value) => "Должно быть ${value} символов";
+
+  static String m51(value) => "Недостаточный баланс ${value}.";
+
+  static String m52(value) => "${value} поступает...";
+
+  static String m53(value) =>
+      "${value} обменянные в приложении будут в ближайшее время распределены на ваш кошелёк и не могут быть проданы через этот процесс. Их можно использовать для запуска ноды.";
+
+  static String m54(value) => "Максимум ${value} символов";
+
+  static String m55(value) => "Сеть ${value} уже поддерживается приложением!";
+
+  static String m56(value) =>
+      "Сеть ${value} уже поддерживается приложением, хотите её добавить?";
+
+  static String m57(value) =>
+      "Тестовое подключение к адресу ${value} не удалось!";
+
+  static String m58(value) =>
+      "Приложение разблокируется через ${value} секунд.";
+
+  static String m59(value) =>
+      "Ошибка ввода графического пароля, осталось ${value} попыток";
+
+  static String m60(value) => "Ошибка ввода пароля, осталось ${value} попыток";
+
+  static String m61(value) => "Ошибка ввода пароля, осталась ${value} попытка";
+
+  static String m62(value) => "Введите пароль ${value}";
+
+  static String m63(value) => "0~${value} символов";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -571,6 +587,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_account_type": MessageLookupByLibrary.simpleMessage(
       "Account Type",
     ),
+    "g_key_aa_active": MessageLookupByLibrary.simpleMessage("Active"),
     "g_key_aa_add_first_operation": MessageLookupByLibrary.simpleMessage(
       "Add your first operation",
     ),
@@ -602,10 +619,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "Batch Transaction",
     ),
     "g_key_aa_by": MessageLookupByLibrary.simpleMessage("by"),
+    "g_key_aa_chain": MessageLookupByLibrary.simpleMessage("Chain"),
     "g_key_aa_chain_id": MessageLookupByLibrary.simpleMessage("Chain ID"),
     "g_key_aa_change": MessageLookupByLibrary.simpleMessage("Change"),
     "g_key_aa_clear_all": MessageLookupByLibrary.simpleMessage("Clear All"),
     "g_key_aa_coming_soon": MessageLookupByLibrary.simpleMessage("Coming Soon"),
+    "g_key_aa_continue": MessageLookupByLibrary.simpleMessage("Continue"),
+    "g_key_aa_contract": MessageLookupByLibrary.simpleMessage("Contract"),
     "g_key_aa_counterfactual_address": MessageLookupByLibrary.simpleMessage(
       "Counterfactual Address",
     ),
@@ -621,20 +641,42 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_create_first_account": MessageLookupByLibrary.simpleMessage(
       "Create a smart account to get started",
     ),
+    "g_key_aa_create_session": MessageLookupByLibrary.simpleMessage(
+      "Create Session Key",
+    ),
+    "g_key_aa_create_session_desc": MessageLookupByLibrary.simpleMessage(
+      "Session keys allow DApps to execute transactions on your behalf with limited permissions and time constraints.",
+    ),
+    "g_key_aa_create_smart_account": MessageLookupByLibrary.simpleMessage(
+      "Create Smart Account",
+    ),
     "g_key_aa_created": MessageLookupByLibrary.simpleMessage("Created"),
     "g_key_aa_custom": MessageLookupByLibrary.simpleMessage("Custom"),
     "g_key_aa_deploy": MessageLookupByLibrary.simpleMessage("Deploy"),
+    "g_key_aa_deploy_failed": MessageLookupByLibrary.simpleMessage(
+      "Deploy Failed",
+    ),
+    "g_key_aa_deploy_failed_desc": MessageLookupByLibrary.simpleMessage(
+      "Deployment failed. Please try again.",
+    ),
     "g_key_aa_deploy_started": MessageLookupByLibrary.simpleMessage(
       "Deployment started",
     ),
     "g_key_aa_deployed": MessageLookupByLibrary.simpleMessage("Deployed"),
+    "g_key_aa_deployed_desc": MessageLookupByLibrary.simpleMessage(
+      "Account is ready to use",
+    ),
     "g_key_aa_deploying": MessageLookupByLibrary.simpleMessage("Deploying..."),
+    "g_key_aa_deploying_desc": MessageLookupByLibrary.simpleMessage(
+      "Deployment transaction is being processed",
+    ),
     "g_key_aa_deployment_note": MessageLookupByLibrary.simpleMessage(
       "Deployment will occur automatically with your first transaction.",
     ),
     "g_key_aa_description": MessageLookupByLibrary.simpleMessage(
       "Experience the next generation of Ethereum accounts with enhanced features",
     ),
+    "g_key_aa_details": MessageLookupByLibrary.simpleMessage("Details"),
     "g_key_aa_eip7702_account": MessageLookupByLibrary.simpleMessage(
       "EIP-7702 Account",
     ),
@@ -652,6 +694,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_execute_batch": MessageLookupByLibrary.simpleMessage(
       "Execute Batch",
     ),
+    "g_key_aa_expired": MessageLookupByLibrary.simpleMessage("Expired"),
+    "g_key_aa_expires": MessageLookupByLibrary.simpleMessage("Expires"),
     "g_key_aa_factory": MessageLookupByLibrary.simpleMessage("Factory"),
     "g_key_aa_feature_batch": MessageLookupByLibrary.simpleMessage(
       "Batch multiple transactions",
@@ -663,6 +707,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Enhanced security",
     ),
     "g_key_aa_free": MessageLookupByLibrary.simpleMessage("FREE"),
+    "g_key_aa_full_access": MessageLookupByLibrary.simpleMessage("Full Access"),
     "g_key_aa_gas_estimate": MessageLookupByLibrary.simpleMessage(
       "Gas Estimate",
     ),
@@ -674,21 +719,28 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_gas_sponsored": MessageLookupByLibrary.simpleMessage(
       "Gas Sponsored",
     ),
+    "g_key_aa_gasless": MessageLookupByLibrary.simpleMessage("Gasless"),
+    "g_key_aa_gasless_transactions": MessageLookupByLibrary.simpleMessage(
+      "Gasless transactions & batch operations",
+    ),
     "g_key_aa_home_title": MessageLookupByLibrary.simpleMessage(
       "Account Abstraction",
     ),
+    "g_key_aa_just_now": MessageLookupByLibrary.simpleMessage("Just now"),
     "g_key_aa_kernel_account": MessageLookupByLibrary.simpleMessage(
       "Kernel Account",
     ),
     "g_key_aa_kernel_desc": MessageLookupByLibrary.simpleMessage(
       "Modular account with plugin support from ZeroDev",
     ),
+    "g_key_aa_label": MessageLookupByLibrary.simpleMessage("Label"),
     "g_key_aa_last_activity": MessageLookupByLibrary.simpleMessage(
       "Last Activity",
     ),
     "g_key_aa_my_accounts": MessageLookupByLibrary.simpleMessage(
       "My Smart Accounts",
     ),
+    "g_key_aa_never": MessageLookupByLibrary.simpleMessage("Never"),
     "g_key_aa_no_accounts": MessageLookupByLibrary.simpleMessage(
       "No smart accounts yet",
     ),
@@ -698,8 +750,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_no_operations": MessageLookupByLibrary.simpleMessage(
       "No operations added",
     ),
+    "g_key_aa_no_session_keys": MessageLookupByLibrary.simpleMessage(
+      "No session keys",
+    ),
     "g_key_aa_not_deployed": MessageLookupByLibrary.simpleMessage(
       "Not Deployed",
+    ),
+    "g_key_aa_not_deployed_desc": MessageLookupByLibrary.simpleMessage(
+      "Account will be deployed on first transaction",
     ),
     "g_key_aa_operations": MessageLookupByLibrary.simpleMessage("Operations"),
     "g_key_aa_owner": MessageLookupByLibrary.simpleMessage("Owner"),
@@ -716,10 +774,28 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_paymaster_description": MessageLookupByLibrary.simpleMessage(
       "Choose how you want to pay for transaction gas fees",
     ),
+    "g_key_aa_pending": MessageLookupByLibrary.simpleMessage("Pending"),
+    "g_key_aa_permission": MessageLookupByLibrary.simpleMessage("Permission"),
     "g_key_aa_preview_address": MessageLookupByLibrary.simpleMessage(
       "Preview Address",
     ),
+    "g_key_aa_ready": MessageLookupByLibrary.simpleMessage("Ready"),
     "g_key_aa_recommended": MessageLookupByLibrary.simpleMessage("Recommended"),
+    "g_key_aa_retry": MessageLookupByLibrary.simpleMessage("Retry"),
+    "g_key_aa_revoke": MessageLookupByLibrary.simpleMessage("Revoke"),
+    "g_key_aa_revoke_confirm": MessageLookupByLibrary.simpleMessage(
+      "Are you sure you want to revoke this session key? The authorized DApp will no longer be able to execute transactions.",
+    ),
+    "g_key_aa_revoke_session": MessageLookupByLibrary.simpleMessage(
+      "Revoke Session Key",
+    ),
+    "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
+      "Session key revoked",
+    ),
+    "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage("Revoked"),
+    "g_key_aa_revoking": MessageLookupByLibrary.simpleMessage(
+      "Revoking session key...",
+    ),
     "g_key_aa_safe_account": MessageLookupByLibrary.simpleMessage(
       "Safe Account",
     ),
@@ -741,14 +817,32 @@ class MessageLookup extends MessageLookupByLibrary {
       "Send tokens using your smart account",
     ),
     "g_key_aa_send_title": MessageLookupByLibrary.simpleMessage("AA Transfer"),
+    "g_key_aa_session_details": MessageLookupByLibrary.simpleMessage(
+      "Session Key Details",
+    ),
+    "g_key_aa_session_keys": MessageLookupByLibrary.simpleMessage(
+      "Session Keys",
+    ),
+    "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
+      "Authorize DApps with temporary access to your smart account",
+    ),
     "g_key_aa_simple_account": MessageLookupByLibrary.simpleMessage(
       "Simple Account",
     ),
     "g_key_aa_simple_desc": MessageLookupByLibrary.simpleMessage(
       "Basic smart account with single owner - recommended for most users",
     ),
+    "g_key_aa_smart_account": MessageLookupByLibrary.simpleMessage(
+      "Smart Account",
+    ),
     "g_key_aa_smart_accounts": MessageLookupByLibrary.simpleMessage(
       "Smart Accounts",
+    ),
+    "g_key_aa_smart_wallet": MessageLookupByLibrary.simpleMessage(
+      "Smart Wallet",
+    ),
+    "g_key_aa_spending_limit": MessageLookupByLibrary.simpleMessage(
+      "Spending Limit",
     ),
     "g_key_aa_sponsored": MessageLookupByLibrary.simpleMessage(
       "Sponsored (Free)",
@@ -756,6 +850,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_title": MessageLookupByLibrary.simpleMessage("Smart Account"),
     "g_key_aa_total_gas": MessageLookupByLibrary.simpleMessage("Total Gas"),
     "g_key_aa_total_value": MessageLookupByLibrary.simpleMessage("Total Value"),
+    "g_key_aa_transactions": MessageLookupByLibrary.simpleMessage(
+      "Transactions",
+    ),
     "g_key_aa_unavailable": MessageLookupByLibrary.simpleMessage("Unavailable"),
     "g_key_aa_version_v07": MessageLookupByLibrary.simpleMessage("v0.7"),
     "g_key_aa_version_v08": MessageLookupByLibrary.simpleMessage("v0.8"),
@@ -778,6 +875,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_address_5": MessageLookupByLibrary.simpleMessage("Успешно удалено"),
     "g_key_address_6": MessageLookupByLibrary.simpleMessage("Выбрать монеты"),
     "g_key_address_7": MessageLookupByLibrary.simpleMessage("Поиск монет"),
+    "g_key_advanced_features": MessageLookupByLibrary.simpleMessage(
+      "Advanced Features",
+    ),
     "g_key_airdrop_active": MessageLookupByLibrary.simpleMessage("Активный"),
     "g_key_airdrop_check_eligibility": MessageLookupByLibrary.simpleMessage(
       "Проверить соответствие",
@@ -831,13 +931,27 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_batch_add_recipient": MessageLookupByLibrary.simpleMessage(
       "Добавить получателя",
     ),
+    "g_key_batch_broadcasting": MessageLookupByLibrary.simpleMessage(
+      "Broadcasting...",
+    ),
     "g_key_batch_clear_all": MessageLookupByLibrary.simpleMessage(
       "Очистить всё",
     ),
+    "g_key_batch_confirm_title": MessageLookupByLibrary.simpleMessage(
+      "Confirm Batch Transfer",
+    ),
+    "g_key_batch_continue": MessageLookupByLibrary.simpleMessage("Continue"),
     "g_key_batch_csv_format": MessageLookupByLibrary.simpleMessage(
       "Формат CSV: адрес,сумма,метка",
     ),
+    "g_key_batch_done": MessageLookupByLibrary.simpleMessage("Done"),
     "g_key_batch_duplicate_address": m11,
+    "g_key_batch_estimating_gas": MessageLookupByLibrary.simpleMessage(
+      "Estimating Gas...",
+    ),
+    "g_key_batch_evm_only": MessageLookupByLibrary.simpleMessage(
+      "Batch transfer supports EVM chains only",
+    ),
     "g_key_batch_execute": MessageLookupByLibrary.simpleMessage(
       "Выполнить пакет",
     ),
@@ -847,15 +961,37 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_batch_gas_savings": MessageLookupByLibrary.simpleMessage(
       "Экономия Gas",
     ),
+    "g_key_batch_help_title": MessageLookupByLibrary.simpleMessage(
+      "Batch Transfer Help",
+    ),
     "g_key_batch_import_csv": MessageLookupByLibrary.simpleMessage(
       "Импорт CSV",
     ),
     "g_key_batch_invalid_address": m12,
     "g_key_batch_invalid_amount": m13,
     "g_key_batch_max_recipients": m14,
+    "g_key_batch_memo_optional": MessageLookupByLibrary.simpleMessage(
+      "Memo is optional",
+    ),
+    "g_key_batch_multicall_tip": MessageLookupByLibrary.simpleMessage(
+      "Use Multicall3 for lower gas fees",
+    ),
+    "g_key_batch_no_supported": MessageLookupByLibrary.simpleMessage(
+      "No supported tokens",
+    ),
     "g_key_batch_preview": MessageLookupByLibrary.simpleMessage("Предпросмотр"),
     "g_key_batch_recipients": MessageLookupByLibrary.simpleMessage(
       "Получатели",
+    ),
+    "g_key_batch_select_token": MessageLookupByLibrary.simpleMessage(
+      "Select Token",
+    ),
+    "g_key_batch_send_multiple": MessageLookupByLibrary.simpleMessage(
+      "Send tokens to multiple addresses in one transaction",
+    ),
+    "g_key_batch_signing": MessageLookupByLibrary.simpleMessage("Signing..."),
+    "g_key_batch_swipe_remove": MessageLookupByLibrary.simpleMessage(
+      "Swipe left to remove a recipient",
     ),
     "g_key_batch_title": MessageLookupByLibrary.simpleMessage(
       "Пакетный перевод",
@@ -913,6 +1049,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_bridge_tx_success": MessageLookupByLibrary.simpleMessage(
       "Мост выполнен",
     ),
+    "g_key_burn_got_it": MessageLookupByLibrary.simpleMessage("Got it"),
+    "g_key_burn_nft_step1": MessageLookupByLibrary.simpleMessage(
+      "1. Select a token with NFT support",
+    ),
+    "g_key_burn_nft_step2": MessageLookupByLibrary.simpleMessage(
+      "2. Go to NFT tab",
+    ),
+    "g_key_burn_nft_step3": MessageLookupByLibrary.simpleMessage(
+      "3. Select the NFT you want to burn",
+    ),
+    "g_key_burn_nft_step4": MessageLookupByLibrary.simpleMessage(
+      "4. Tap \"Burn\" button",
+    ),
+    "g_key_burn_nft_steps": MessageLookupByLibrary.simpleMessage("Steps:"),
+    "g_key_burn_nft_tip": MessageLookupByLibrary.simpleMessage(
+      "To burn an NFT, please go to the NFT details page and tap the \"Burn\" button.",
+    ),
+    "g_key_burn_nft_title": MessageLookupByLibrary.simpleMessage("Burn NFT"),
     "g_key_change_email": MessageLookupByLibrary.simpleMessage("Change Email"),
     "g_key_change_password": MessageLookupByLibrary.simpleMessage(
       "Change Password",
@@ -938,6 +1092,41 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_continue_with_google": MessageLookupByLibrary.simpleMessage(
       "Continue with Google",
     ),
+    "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
+      "Active Products",
+    ),
+    "g_key_earn_claim_free": MessageLookupByLibrary.simpleMessage(
+      "Claim free tokens",
+    ),
+    "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
+      "Cross-chain transfer",
+    ),
+    "g_key_earn_daily_bonus": MessageLookupByLibrary.simpleMessage(
+      "Daily check-in bonus",
+    ),
+    "g_key_earn_more": MessageLookupByLibrary.simpleMessage("Earn More"),
+    "g_key_earn_native_sol": MessageLookupByLibrary.simpleMessage(
+      "Native Solana staking",
+    ),
+    "g_key_earn_points_daily": MessageLookupByLibrary.simpleMessage(
+      "Earn points daily",
+    ),
+    "g_key_earn_pts_day": m15,
+    "g_key_earn_quick_tools": MessageLookupByLibrary.simpleMessage(
+      "Quick Tools",
+    ),
+    "g_key_earn_recommended": MessageLookupByLibrary.simpleMessage(
+      "Recommended",
+    ),
+    "g_key_earn_stake_eth_lido": MessageLookupByLibrary.simpleMessage(
+      "Stake ETH with Lido",
+    ),
+    "g_key_earn_title": MessageLookupByLibrary.simpleMessage("Earn"),
+    "g_key_earn_total_earnings": MessageLookupByLibrary.simpleMessage(
+      "Total Earnings",
+    ),
+    "g_key_earn_up_to_apy": m16,
+    "g_key_earn_view_all": MessageLookupByLibrary.simpleMessage("View All"),
     "g_key_email": MessageLookupByLibrary.simpleMessage("Email"),
     "g_key_email_invalid": MessageLookupByLibrary.simpleMessage(
       "Please enter a valid email address",
@@ -1002,6 +1191,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_get_started": MessageLookupByLibrary.simpleMessage(
       "Get started with ENS",
     ),
+    "g_key_ens_get_your_name": MessageLookupByLibrary.simpleMessage(
+      "Get your .eth name",
+    ),
     "g_key_ens_home_title": MessageLookupByLibrary.simpleMessage("ENS Manager"),
     "g_key_ens_invalid_name": MessageLookupByLibrary.simpleMessage(
       "Invalid ENS name",
@@ -1009,6 +1201,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_is_yours": MessageLookupByLibrary.simpleMessage("is now yours!"),
     "g_key_ens_keep_app_open": MessageLookupByLibrary.simpleMessage(
       "Please keep the app open during registration",
+    ),
+    "g_key_ens_manage_your_identity": MessageLookupByLibrary.simpleMessage(
+      "Manage your Web3 identity",
     ),
     "g_key_ens_management_title": MessageLookupByLibrary.simpleMessage(
       "Manage ENS",
@@ -1056,6 +1251,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_ens_records": MessageLookupByLibrary.simpleMessage("Records"),
     "g_key_ens_register": MessageLookupByLibrary.simpleMessage("Register"),
+    "g_key_ens_register_description": MessageLookupByLibrary.simpleMessage(
+      "Your decentralized identity on Ethereum",
+    ),
     "g_key_ens_register_failed": MessageLookupByLibrary.simpleMessage(
       "Registration failed",
     ),
@@ -1130,7 +1328,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_step_success": MessageLookupByLibrary.simpleMessage("Success"),
     "g_key_ens_step_wait": MessageLookupByLibrary.simpleMessage("Wait"),
     "g_key_ens_success": MessageLookupByLibrary.simpleMessage("Success!"),
-    "g_key_ens_success_message": m15,
+    "g_key_ens_success_message": m17,
     "g_key_ens_suggestions": MessageLookupByLibrary.simpleMessage(
       "Suggestions",
     ),
@@ -1166,13 +1364,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_wait_time_info": MessageLookupByLibrary.simpleMessage(
       "A waiting period prevents front-running",
     ),
-    "g_key_ens_wait_timer": m16,
+    "g_key_ens_wait_timer": m18,
     "g_key_ens_waiting": MessageLookupByLibrary.simpleMessage("Waiting..."),
     "g_key_ens_warning": MessageLookupByLibrary.simpleMessage(
       "Please verify the resolved address before proceeding. ENS names can be transferred or changed by their owner.",
     ),
     "g_key_ens_year": MessageLookupByLibrary.simpleMessage("year"),
     "g_key_ens_years": MessageLookupByLibrary.simpleMessage("years"),
+    "g_key_ens_your_identity": MessageLookupByLibrary.simpleMessage(
+      "Your Identity",
+    ),
     "g_key_enter_confirm_password": MessageLookupByLibrary.simpleMessage(
       "Re-enter new password",
     ),
@@ -1333,6 +1534,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_forgot_password": MessageLookupByLibrary.simpleMessage(
       "Forgot Password?",
     ),
+    "g_key_gas_auto_refresh": m19,
     "g_key_gas_base_fee": MessageLookupByLibrary.simpleMessage(
       "Базовая комиссия",
     ),
@@ -1343,6 +1545,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Ожид. время",
     ),
     "g_key_gas_fast": MessageLookupByLibrary.simpleMessage("Быстро"),
+    "g_key_gas_footer": MessageLookupByLibrary.simpleMessage(
+      "Gas prices fluctuate based on network demand. Lower gas = slower confirmation, higher gas = faster confirmation.",
+    ),
     "g_key_gas_max_fee": MessageLookupByLibrary.simpleMessage("Макс. комиссия"),
     "g_key_gas_network_busy": MessageLookupByLibrary.simpleMessage(
       "Сеть перегружена",
@@ -1355,6 +1560,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_gas_priority_fee": MessageLookupByLibrary.simpleMessage(
       "Приоритетная комиссия",
+    ),
+    "g_key_gas_realtime_prices": MessageLookupByLibrary.simpleMessage(
+      "Real-time Gas Prices",
     ),
     "g_key_gas_settings": MessageLookupByLibrary.simpleMessage("Настройки Gas"),
     "g_key_gas_slow": MessageLookupByLibrary.simpleMessage("Медленно"),
@@ -1391,7 +1599,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_no_devices": MessageLookupByLibrary.simpleMessage(
       "Устройства не найдены",
     ),
-    "g_key_hw_open_app": m17,
+    "g_key_hw_open_app": m20,
     "g_key_hw_rejected": MessageLookupByLibrary.simpleMessage(
       "Отклонено на устройстве",
     ),
@@ -1439,19 +1647,49 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_loyalty_available_points": MessageLookupByLibrary.simpleMessage(
       "Доступно баллов",
     ),
+    "g_key_loyalty_checked_today": MessageLookupByLibrary.simpleMessage(
+      "Checked in today!",
+    ),
+    "g_key_loyalty_checkin_btn": MessageLookupByLibrary.simpleMessage(
+      "Check In",
+    ),
+    "g_key_loyalty_checkin_done": MessageLookupByLibrary.simpleMessage("Done"),
+    "g_key_loyalty_checkin_failed": MessageLookupByLibrary.simpleMessage(
+      "Check-in failed, please try again",
+    ),
+    "g_key_loyalty_checkin_success": MessageLookupByLibrary.simpleMessage(
+      "Check-in successful!",
+    ),
     "g_key_loyalty_claim_points": MessageLookupByLibrary.simpleMessage(
       "Получить баллы",
     ),
+    "g_key_loyalty_complete_failed": MessageLookupByLibrary.simpleMessage(
+      "Task failed, please try again",
+    ),
+    "g_key_loyalty_complete_success": MessageLookupByLibrary.simpleMessage(
+      "Task completed!",
+    ),
+    "g_key_loyalty_copy": MessageLookupByLibrary.simpleMessage("Copy"),
     "g_key_loyalty_daily_checkin": MessageLookupByLibrary.simpleMessage(
       "Ежедневная отметка",
     ),
+    "g_key_loyalty_earn_points": m21,
     "g_key_loyalty_earned": MessageLookupByLibrary.simpleMessage("Заработано"),
     "g_key_loyalty_history": MessageLookupByLibrary.simpleMessage(
       "История баллов",
     ),
+    "g_key_loyalty_invite": MessageLookupByLibrary.simpleMessage("Invite"),
+    "g_key_loyalty_invite_bonus": m22,
+    "g_key_loyalty_invite_friends": MessageLookupByLibrary.simpleMessage(
+      "Invite Friends",
+    ),
     "g_key_loyalty_invited_friends": MessageLookupByLibrary.simpleMessage(
       "Приглашённые друзья",
     ),
+    "g_key_loyalty_max_level": MessageLookupByLibrary.simpleMessage(
+      "Max Level",
+    ),
+    "g_key_loyalty_next_prefix": MessageLookupByLibrary.simpleMessage("Next"),
     "g_key_loyalty_next_tier": MessageLookupByLibrary.simpleMessage(
       "След. уровень",
     ),
@@ -1462,7 +1700,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Нет доступных заданий",
     ),
     "g_key_loyalty_points": MessageLookupByLibrary.simpleMessage("Баллы"),
-    "g_key_loyalty_points_to_next": m18,
+    "g_key_loyalty_points_to_next": m23,
     "g_key_loyalty_redeem": MessageLookupByLibrary.simpleMessage("Обменять"),
     "g_key_loyalty_referral": MessageLookupByLibrary.simpleMessage("Реферал"),
     "g_key_loyalty_referral_bonus": MessageLookupByLibrary.simpleMessage(
@@ -1475,6 +1713,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Реферальная ссылка",
     ),
     "g_key_loyalty_rewards": MessageLookupByLibrary.simpleMessage("Награды"),
+    "g_key_loyalty_share": MessageLookupByLibrary.simpleMessage("Share"),
     "g_key_loyalty_spent": MessageLookupByLibrary.simpleMessage("Потрачено"),
     "g_key_loyalty_task_complete": MessageLookupByLibrary.simpleMessage(
       "Задание выполнено",
@@ -1493,9 +1732,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "Серебро",
     ),
     "g_key_loyalty_title": MessageLookupByLibrary.simpleMessage("Баллы"),
+    "g_key_loyalty_total_earned": MessageLookupByLibrary.simpleMessage(
+      "Total Earned",
+    ),
     "g_key_loyalty_total_points": MessageLookupByLibrary.simpleMessage(
       "Всего баллов",
     ),
+    "g_key_loyalty_used": MessageLookupByLibrary.simpleMessage("Used"),
     "g_key_m_10": MessageLookupByLibrary.simpleMessage("Facebook"),
     "g_key_m_11": MessageLookupByLibrary.simpleMessage("Twitter"),
     "g_key_m_14": MessageLookupByLibrary.simpleMessage("Reddit"),
@@ -1512,6 +1755,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_m_7": MessageLookupByLibrary.simpleMessage("Ещё"),
     "g_key_m_8": MessageLookupByLibrary.simpleMessage("Ссылки"),
     "g_key_m_9": MessageLookupByLibrary.simpleMessage("Веб-сайт"),
+    "g_key_mining_available": MessageLookupByLibrary.simpleMessage("Available"),
+    "g_key_mining_requires_staking": MessageLookupByLibrary.simpleMessage(
+      "Requires staking",
+    ),
     "g_key_mnemonic": MessageLookupByLibrary.simpleMessage("Введите сид-фразу"),
     "g_key_new_password": MessageLookupByLibrary.simpleMessage("New Password"),
     "g_key_new_password_same_as_old": MessageLookupByLibrary.simpleMessage(
@@ -1602,7 +1849,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_squad_k11": MessageLookupByLibrary.simpleMessage(
       "Файл слишком большой для загрузки",
     ),
-    "g_key_squad_k15": m19,
+    "g_key_squad_k15": m24,
     "g_key_squad_k18": MessageLookupByLibrary.simpleMessage("Добавить контакт"),
     "g_key_squad_k24": MessageLookupByLibrary.simpleMessage("Контакт"),
     "g_key_squad_k25": MessageLookupByLibrary.simpleMessage("Поиск по email"),
@@ -1616,9 +1863,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Получить награды",
     ),
     "g_key_stake_commission": MessageLookupByLibrary.simpleMessage("Комиссия"),
-    "g_key_stake_d_unbond": m20,
-    "g_key_stake_days_left": m21,
-    "g_key_stake_days_remaining": m22,
+    "g_key_stake_d_unbond": m25,
+    "g_key_stake_days_left": m26,
+    "g_key_stake_days_remaining": m27,
     "g_key_stake_delegators": MessageLookupByLibrary.simpleMessage(
       "Делегаторы",
     ),
@@ -1681,7 +1928,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Макс. плата за единицу газа",
     ),
     "g_key_t_2": MessageLookupByLibrary.simpleMessage("В ожидании"),
-    "g_key_t_29": m23,
+    "g_key_t_29": m28,
     "g_key_t_3": MessageLookupByLibrary.simpleMessage("Неудача"),
     "g_key_t_30": MessageLookupByLibrary.simpleMessage("Комиссия майнера"),
     "g_key_t_31": MessageLookupByLibrary.simpleMessage("Продолжить"),
@@ -1708,7 +1955,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_44": MessageLookupByLibrary.simpleMessage(
       "Не удалось получить данные",
     ),
-    "g_key_t_45": m24,
+    "g_key_t_45": m29,
     "g_key_t_46": MessageLookupByLibrary.simpleMessage(
       "Проверка адреса получателя",
     ),
@@ -1721,12 +1968,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_51": MessageLookupByLibrary.simpleMessage(
       "Верификация аккаунта успешна",
     ),
-    "g_key_t_52": m25,
+    "g_key_t_52": m30,
     "g_key_t_54": MessageLookupByLibrary.simpleMessage(
       "У адреса получателя нет аккаунта, и первый перевод должен быть минимум 10XRP",
     ),
     "g_key_t_6": MessageLookupByLibrary.simpleMessage("Использовано газа"),
     "g_key_t_7": MessageLookupByLibrary.simpleMessage("Газ"),
+    "g_key_time_days_ago": m31,
+    "g_key_time_hours_ago": m32,
+    "g_key_time_just_now": MessageLookupByLibrary.simpleMessage("Just now"),
+    "g_key_time_minutes_ago": m33,
     "g_key_tran_1": MessageLookupByLibrary.simpleMessage("История транзакций"),
     "g_key_tran_4": MessageLookupByLibrary.simpleMessage("Детали транзакции"),
     "g_key_tran_6": MessageLookupByLibrary.simpleMessage(
@@ -1778,7 +2029,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_verification_code": MessageLookupByLibrary.simpleMessage(
       "Verification Code",
     ),
-    "g_key_verification_code_sent": m26,
+    "g_key_verification_code_sent": m34,
     "g_key_wallet_c10": MessageLookupByLibrary.simpleMessage(
       "Просмотр сид-фразы",
     ),
@@ -1906,7 +2157,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_k56": MessageLookupByLibrary.simpleMessage("Nonce"),
     "g_key_wallet_k57": MessageLookupByLibrary.simpleMessage("Ускорить"),
     "g_key_wallet_k58": MessageLookupByLibrary.simpleMessage("Заметка"),
-    "g_key_wallet_m1": m27,
+    "g_key_wallet_m1": m35,
     "g_key_wallet_m11": MessageLookupByLibrary.simpleMessage(
       "Вы уверены, что хотите удалить аккаунт?",
     ),
@@ -1916,7 +2167,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_m17": MessageLookupByLibrary.simpleMessage(
       "Введите код Google Authenticator.",
     ),
-    "g_key_wallet_m19": m28,
+    "g_key_wallet_m19": m36,
     "g_key_wallet_m2": MessageLookupByLibrary.simpleMessage(
       "Текущий токен не был добавлен.",
     ),
@@ -1924,11 +2175,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "Введите сид-фразу, разделяя слова пробелами",
     ),
     "g_key_wallet_m22": MessageLookupByLibrary.simpleMessage("Импорт кошелька"),
-    "g_key_wallet_m3": m29,
+    "g_key_wallet_m3": m37,
     "g_key_wallet_m4": MessageLookupByLibrary.simpleMessage(
       "Недостаточный баланс текущего токена.",
     ),
-    "g_key_wallet_m5": m30,
+    "g_key_wallet_m5": m38,
     "g_key_wallet_m6": MessageLookupByLibrary.simpleMessage("Ошибка подписи"),
     "g_key_wallet_m8": MessageLookupByLibrary.simpleMessage(
       "Удаление аккаунта",
@@ -1941,13 +2192,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_xml_0": MessageLookupByLibrary.simpleMessage("Зарезервировано"),
     "g_key_xml_1": MessageLookupByLibrary.simpleMessage("Базовый резерв"),
-    "g_key_xml_11": m31,
+    "g_key_xml_11": m39,
     "g_key_xml_2": MessageLookupByLibrary.simpleMessage("Инкрементный резерв"),
-    "g_key_xml_22": m32,
+    "g_key_xml_22": m40,
     "g_key_xml_3": MessageLookupByLibrary.simpleMessage(
       "Количество принадлежащих объектов",
     ),
-    "g_key_xml_33": m33,
+    "g_key_xml_33": m41,
     "g_key_xml_4": MessageLookupByLibrary.simpleMessage(
       "Как рассчитать общую сумму резерва",
     ),
@@ -1975,7 +2226,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key20": MessageLookupByLibrary.simpleMessage(
       "Нарисуйте графический пароль",
     ),
-    "g_lock_key21": m34,
+    "g_lock_key21": m42,
     "g_lock_key22": MessageLookupByLibrary.simpleMessage(
       "Сбросить графический пароль",
     ),
@@ -1985,7 +2236,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "Добавить пароль кошелька?",
     ),
-    "g_lock_key25": m35,
+    "g_lock_key25": m43,
     "g_lock_key3": MessageLookupByLibrary.simpleMessage("Экран блокировки"),
     "g_lock_key4": MessageLookupByLibrary.simpleMessage("Автоблокировка"),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("Успешно"),
@@ -2011,12 +2262,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Поделиться с друзьями",
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Продолжить"),
-    "g_mining_key63": m36,
-    "g_mining_key73": m37,
+    "g_mining_key63": m44,
+    "g_mining_key73": m45,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "Я только что настроил ноду в @N42Wallet и начал верификацию на мобильных устройствах! Присоединяйтесь. Децентрализованное будущее — это мобильность!",
     ),
-    "g_mining_key76": m38,
+    "g_mining_key76": m46,
     "g_mining_key86": MessageLookupByLibrary.simpleMessage(
       "Выкуп доступен после 768 сек.",
     ),
@@ -2049,7 +2300,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "Неподдерживаемый формат зашифрованных данных!",
     ),
-    "g_mining_key_109": m39,
+    "g_mining_key_109": m47,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage(
       "Вчерашние вознаграждения",
     ),
@@ -2065,7 +2316,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "Выкуп занимает некоторое время, пожалуйста, подождите!",
     ),
-    "g_mining_key_116": m40,
+    "g_mining_key_116": m48,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "Вознаграждение накапливается ежедневно и отправляется на ваш N кошелёк только при достижении ~0.5 N.",
     ),
@@ -2124,7 +2375,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 блоков/день~15 мин",
     ),
-    "g_mining_key_71": m41,
+    "g_mining_key_71": m49,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "128 секунд на проверку",
     ),
@@ -2194,7 +2445,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "Введите пароль шифрования",
     ),
-    "g_mining_key_98": m42,
+    "g_mining_key_98": m50,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Повторите пароль для подтверждения",
     ),
@@ -2219,7 +2470,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Ссылка"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("код"),
-    "g_swap_key_14": m43,
+    "g_swap_key_14": m51,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Ошибка получения цены монеты.",
     ),
@@ -2233,7 +2484,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Ваш обмен будет распределён в ближайшее время. Пожалуйста, подождите.",
     ),
-    "g_swap_key_20": m44,
+    "g_swap_key_20": m52,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Стоимость запуска ноды: Групповая верификация 1-49 N Базовая нода: 50 N Премиум нода: 100 N Про нода: 500 N.",
     ),
@@ -2247,7 +2498,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Новый баланс"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Вы платите"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Дата"),
-    "g_swap_key_31": m45,
+    "g_swap_key_31": m53,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Обмены можно просмотреть в соответствующих обозревателях блокчейна (Etherscan, BscScan, TRONSCAN и наш собственный).",
     ),
@@ -2256,7 +2507,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_4": MessageLookupByLibrary.simpleMessage("Вы получаете"),
     "g_swap_key_5": MessageLookupByLibrary.simpleMessage("Предпросмотр обмена"),
     "g_swap_key_6": MessageLookupByLibrary.simpleMessage("Повторить"),
-    "g_token_m_key_1": m46,
+    "g_token_m_key_1": m54,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Любой может создать токен, включая поддельные версии существующих токенов. Всегда изучайте токен перед импортом.",
     ),
@@ -2276,9 +2527,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 ед."),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Добавить токены"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Ошибка формата!"),
-    "g_token_m_key_22": m47,
-    "g_token_m_key_23": m48,
-    "g_token_m_key_24": m49,
+    "g_token_m_key_22": m55,
+    "g_token_m_key_23": m56,
+    "g_token_m_key_24": m57,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Импорт токенов"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Все сети"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage(
@@ -2290,20 +2541,20 @@ class MessageLookup extends MessageLookupByLibrary {
       "Десятичные знаки токена",
     ),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("Импортировать"),
-    "g_unlock_key10": m50,
+    "g_unlock_key10": m58,
     "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
       "Отпечаток пальца или распознавание лица не включено?",
     ),
     "g_unlock_key3": MessageLookupByLibrary.simpleMessage(
       "Нарисуйте графический пароль",
     ),
-    "g_unlock_key4": m51,
+    "g_unlock_key4": m59,
     "g_unlock_key5": MessageLookupByLibrary.simpleMessage("Введите пароль"),
-    "g_unlock_key6": m52,
+    "g_unlock_key6": m60,
     "g_unlock_key7": MessageLookupByLibrary.simpleMessage(
       "Аутентификация не удалась",
     ),
-    "g_unlock_key8": m53,
+    "g_unlock_key8": m61,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("Вы также можете "),
     "google_verification": MessageLookupByLibrary.simpleMessage(
       "Google Аутентификация",
@@ -2341,7 +2592,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "google_verification_message20": MessageLookupByLibrary.simpleMessage(
       "Введите код подтверждения из E-mail",
     ),
-    "google_verification_message21": m54,
+    "google_verification_message21": m62,
     "google_verification_message3": MessageLookupByLibrary.simpleMessage(
       "Не удалось получить ключ Google",
     ),
@@ -2399,7 +2650,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "login_password": MessageLookupByLibrary.simpleMessage("Пароль"),
     "next": MessageLookupByLibrary.simpleMessage("Далее"),
-    "nicknameMessage": m55,
+    "nicknameMessage": m63,
     "password_diff": MessageLookupByLibrary.simpleMessage(
       "Пароли не совпадают",
     ),

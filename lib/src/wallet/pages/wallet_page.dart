@@ -26,6 +26,7 @@ import 'package:n42appv2/src/wallet/widgets/wallet_board.dart';
 import 'package:n42appv2/src/wallet/widgets/wallet_search_coin.dart';
 import 'package:n42appv2/src/wallet/pages/ens/ens_home_page.dart';
 import 'package:n42appv2/src/wallet/pages/aa/aa_home_page.dart';
+import 'package:n42appv2/src/wallet/services/ens_service.dart';
 import 'package:n42appv2/src/wallet_connect/pages/wallet_connect_page.dart';
 import 'package:n42appv2/src/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:n42appv2/src/widgets/app_home_top_bar.dart';
@@ -58,15 +59,38 @@ class _WalletPageState extends State<WalletPage> {
   final oCcy = NumberFormat("#,##0.0#", "en_US");
   late ScrollController _scrollController;
   bool showAddTokenButton = false; //显示底部添加代币按钮
+
+  // ENS 状态
+  String? _ensName;
+  String? _lastCheckedAddress;
+
   void setShowAddTokenButton(bool value) {
     if (showAddTokenButton == value) return;
     setState(() {
       showAddTokenButton = value;
     });
   }
+
+  /// 加载 ENS 反向解析信息
+  Future<void> _loadEnsInfo(String ethAddress) async {
+    if (ethAddress.isEmpty || ethAddress == _lastCheckedAddress) return;
+    _lastCheckedAddress = ethAddress;
+
+    try {
+      final ensService = EnsService();
+      final ensName = await ensService.resolveAddress(ethAddress);
+      if (mounted && ensName != null && ensName.isNotEmpty) {
+        setState(() {
+          _ensName = ensName;
+        });
+      }
+    } catch (e) {
+      debugPrint('ENS reverse resolve error: $e');
+    }
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
     Provider.of<WalletActionProvider>(context,listen: false).initWallet(shouldInitCoinInfo:true);
     /*if(AppGlobals.userInfo==null){
       Provider.of<WalletActionProvider>(context,listen: false).initWallet(shouldInitCoinInfo:true);
@@ -415,21 +439,37 @@ class _WalletPageState extends State<WalletPage> {
                                 ),
                                 // Feature Entry Section (ENS & AA)
                                 SliverToBoxAdapter(
-                                  child: FeatureEntryHorizontal(
-                                    ensName: null, // TODO: Get from ENS service
-                                    hasSmartAccount: false, // TODO: Get from AA provider
-                                    isSmartAccountDeployed: false,
-                                    onEnsTap: () {
+                                  child: Builder(
+                                    builder: (context) {
+                                      // 获取 ETH 地址并加载 ENS 信息
                                       final ethAddress = waValue.getAddress(CoinType.ETH.name) ?? '';
-                                      Navigator.push(context, MaterialPageRoute(
-                                        builder: (context) => EnsHomePage(walletAddress: ethAddress),
-                                      ));
-                                    },
-                                    onSmartAccountTap: () {
-                                      final ethAddress = waValue.getAddress(CoinType.ETH.name) ?? '';
-                                      Navigator.push(context, MaterialPageRoute(
-                                        builder: (context) => AAHomePage(walletAddress: ethAddress),
-                                      ));
+                                      if (ethAddress.isNotEmpty) {
+                                        _loadEnsInfo(ethAddress);
+                                      }
+
+                                      // 获取 AA 账户状态
+                                      final hasAA = waValue.walletInfo.hasAAAccounts;
+                                      final primaryAccount = waValue.walletInfo.getPrimarySmartAccount(1); // Ethereum mainnet
+                                      final isDeployed = primaryAccount?.isDeployed ?? false;
+
+                                      return FeatureEntryHorizontal(
+                                        ensName: _ensName,
+                                        hasSmartAccount: hasAA,
+                                        isSmartAccountDeployed: isDeployed,
+                                        onEnsTap: () {
+                                          Navigator.push(context, MaterialPageRoute(
+                                            builder: (context) => EnsHomePage(walletAddress: ethAddress),
+                                          ));
+                                        },
+                                        onSmartAccountTap: () {
+                                          Navigator.push(context, MaterialPageRoute(
+                                            builder: (context) => AAHomePage(
+                                              walletAddress: ethAddress,
+                                              accountInfo: waValue.walletInfo.aaAccountInfo,
+                                            ),
+                                          ));
+                                        },
+                                      );
                                     },
                                   ),
                                 ),

@@ -10838,6 +10838,411 @@ class S {
       args: [],
     );
   }
+
+  /// `Advanced Features`
+  String get g_key_advanced_features {
+    return Intl.message(
+      'Advanced Features',
+      name: 'g_key_advanced_features',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Get your .eth name`
+  String get g_key_ens_get_your_name {
+    return Intl.message(
+      'Get your .eth name',
+      name: 'g_key_ens_get_your_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your decentralized identity on Ethereum`
+  String get g_key_ens_register_description {
+    return Intl.message(
+      'Your decentralized identity on Ethereum',
+      name: 'g_key_ens_register_description',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Manage your Web3 identity`
+  String get g_key_ens_manage_your_identity {
+    return Intl.message(
+      'Manage your Web3 identity',
+      name: 'g_key_ens_manage_your_identity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your Identity`
+  String get g_key_ens_your_identity {
+    return Intl.message(
+      'Your Identity',
+      name: 'g_key_ens_your_identity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Smart Account`
+  String get g_key_aa_smart_account {
+    return Intl.message(
+      'Smart Account',
+      name: 'g_key_aa_smart_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create Smart Account`
+  String get g_key_aa_create_smart_account {
+    return Intl.message(
+      'Create Smart Account',
+      name: 'g_key_aa_create_smart_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gasless transactions & batch operations`
+  String get g_key_aa_gasless_transactions {
+    return Intl.message(
+      'Gasless transactions & batch operations',
+      name: 'g_key_aa_gasless_transactions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Smart Wallet`
+  String get g_key_aa_smart_wallet {
+    return Intl.message(
+      'Smart Wallet',
+      name: 'g_key_aa_smart_wallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gasless`
+  String get g_key_aa_gasless {
+    return Intl.message(
+      'Gasless',
+      name: 'g_key_aa_gasless',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ready`
+  String get g_key_aa_ready {
+    return Intl.message('Ready', name: 'g_key_aa_ready', desc: '', args: []);
+  }
+
+  /// `Pending`
+  String get g_key_aa_pending {
+    return Intl.message(
+      'Pending',
+      name: 'g_key_aa_pending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Session Keys`
+  String get g_key_aa_session_keys {
+    return Intl.message(
+      'Session Keys',
+      name: 'g_key_aa_session_keys',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Authorize DApps with temporary access to your smart account`
+  String get g_key_aa_session_keys_desc {
+    return Intl.message(
+      'Authorize DApps with temporary access to your smart account',
+      name: 'g_key_aa_session_keys_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Active`
+  String get g_key_aa_active {
+    return Intl.message('Active', name: 'g_key_aa_active', desc: '', args: []);
+  }
+
+  /// `Expired`
+  String get g_key_aa_expired {
+    return Intl.message(
+      'Expired',
+      name: 'g_key_aa_expired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Revoked`
+  String get g_key_aa_revoked_status {
+    return Intl.message(
+      'Revoked',
+      name: 'g_key_aa_revoked_status',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No session keys`
+  String get g_key_aa_no_session_keys {
+    return Intl.message(
+      'No session keys',
+      name: 'g_key_aa_no_session_keys',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Revoke Session Key`
+  String get g_key_aa_revoke_session {
+    return Intl.message(
+      'Revoke Session Key',
+      name: 'g_key_aa_revoke_session',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to revoke this session key? The authorized DApp will no longer be able to execute transactions.`
+  String get g_key_aa_revoke_confirm {
+    return Intl.message(
+      'Are you sure you want to revoke this session key? The authorized DApp will no longer be able to execute transactions.',
+      name: 'g_key_aa_revoke_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Revoke`
+  String get g_key_aa_revoke {
+    return Intl.message('Revoke', name: 'g_key_aa_revoke', desc: '', args: []);
+  }
+
+  /// `Revoking session key...`
+  String get g_key_aa_revoking {
+    return Intl.message(
+      'Revoking session key...',
+      name: 'g_key_aa_revoking',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Session key revoked`
+  String get g_key_aa_revoked {
+    return Intl.message(
+      'Session key revoked',
+      name: 'g_key_aa_revoked',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create Session Key`
+  String get g_key_aa_create_session {
+    return Intl.message(
+      'Create Session Key',
+      name: 'g_key_aa_create_session',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Session keys allow DApps to execute transactions on your behalf with limited permissions and time constraints.`
+  String get g_key_aa_create_session_desc {
+    return Intl.message(
+      'Session keys allow DApps to execute transactions on your behalf with limited permissions and time constraints.',
+      name: 'g_key_aa_create_session_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Details`
+  String get g_key_aa_details {
+    return Intl.message(
+      'Details',
+      name: 'g_key_aa_details',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Spending Limit`
+  String get g_key_aa_spending_limit {
+    return Intl.message(
+      'Spending Limit',
+      name: 'g_key_aa_spending_limit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Session Key Details`
+  String get g_key_aa_session_details {
+    return Intl.message(
+      'Session Key Details',
+      name: 'g_key_aa_session_details',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Label`
+  String get g_key_aa_label {
+    return Intl.message('Label', name: 'g_key_aa_label', desc: '', args: []);
+  }
+
+  /// `Permission`
+  String get g_key_aa_permission {
+    return Intl.message(
+      'Permission',
+      name: 'g_key_aa_permission',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expires`
+  String get g_key_aa_expires {
+    return Intl.message(
+      'Expires',
+      name: 'g_key_aa_expires',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transactions`
+  String get g_key_aa_transactions {
+    return Intl.message(
+      'Transactions',
+      name: 'g_key_aa_transactions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contract`
+  String get g_key_aa_contract {
+    return Intl.message(
+      'Contract',
+      name: 'g_key_aa_contract',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Full Access`
+  String get g_key_aa_full_access {
+    return Intl.message(
+      'Full Access',
+      name: 'g_key_aa_full_access',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue`
+  String get g_key_aa_continue {
+    return Intl.message(
+      'Continue',
+      name: 'g_key_aa_continue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Never`
+  String get g_key_aa_never {
+    return Intl.message('Never', name: 'g_key_aa_never', desc: '', args: []);
+  }
+
+  /// `Just now`
+  String get g_key_aa_just_now {
+    return Intl.message(
+      'Just now',
+      name: 'g_key_aa_just_now',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chain`
+  String get g_key_aa_chain {
+    return Intl.message('Chain', name: 'g_key_aa_chain', desc: '', args: []);
+  }
+
+  /// `Retry`
+  String get g_key_aa_retry {
+    return Intl.message('Retry', name: 'g_key_aa_retry', desc: '', args: []);
+  }
+
+  /// `Deploy Failed`
+  String get g_key_aa_deploy_failed {
+    return Intl.message(
+      'Deploy Failed',
+      name: 'g_key_aa_deploy_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account will be deployed on first transaction`
+  String get g_key_aa_not_deployed_desc {
+    return Intl.message(
+      'Account will be deployed on first transaction',
+      name: 'g_key_aa_not_deployed_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Deployment transaction is being processed`
+  String get g_key_aa_deploying_desc {
+    return Intl.message(
+      'Deployment transaction is being processed',
+      name: 'g_key_aa_deploying_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account is ready to use`
+  String get g_key_aa_deployed_desc {
+    return Intl.message(
+      'Account is ready to use',
+      name: 'g_key_aa_deployed_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Deployment failed. Please try again.`
+  String get g_key_aa_deploy_failed_desc {
+    return Intl.message(
+      'Deployment failed. Please try again.',
+      name: 'g_key_aa_deploy_failed_desc',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

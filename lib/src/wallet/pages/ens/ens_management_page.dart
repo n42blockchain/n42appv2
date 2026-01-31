@@ -12,6 +12,72 @@ import 'package:n42appv2/src/wallet/pages/ens/ens_renew_page.dart';
 import 'package:n42appv2/src/wallet/services/ens_registration_service.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 
+/// 支持 ENS 的链配置
+class EnsChainConfig {
+  final String id;
+  final String name;
+  final String symbol;
+  final int chainId;
+  final String? iconPath;
+  final Color color;
+  final String suffix; // ENS 域名后缀
+
+  const EnsChainConfig({
+    required this.id,
+    required this.name,
+    required this.symbol,
+    required this.chainId,
+    this.iconPath,
+    required this.color,
+    required this.suffix,
+  });
+
+  static const List<EnsChainConfig> supportedChains = [
+    EnsChainConfig(
+      id: 'n42',
+      name: 'N42',
+      symbol: 'N',
+      chainId: 42,
+      color: Color(0xFF6366F1),
+      suffix: '.n42',
+    ),
+    EnsChainConfig(
+      id: 'ethereum',
+      name: 'Ethereum',
+      symbol: 'ETH',
+      chainId: 1,
+      color: Color(0xFF627EEA),
+      suffix: '.eth',
+    ),
+    EnsChainConfig(
+      id: 'sepolia',
+      name: 'Sepolia',
+      symbol: 'ETH',
+      chainId: 11155111,
+      color: Color(0xFF9B8AFF),
+      suffix: '.eth',
+    ),
+    EnsChainConfig(
+      id: 'base',
+      name: 'Base',
+      symbol: 'ETH',
+      chainId: 8453,
+      color: Color(0xFF0052FF),
+      suffix: '.base.eth',
+    ),
+    EnsChainConfig(
+      id: 'arbitrum',
+      name: 'Arbitrum',
+      symbol: 'ETH',
+      chainId: 42161,
+      color: Color(0xFF28A0F0),
+      suffix: '.arb',
+    ),
+  ];
+
+  static EnsChainConfig get defaultChain => supportedChains.first; // N42
+}
+
 /// ENS 管理页面
 ///
 /// 管理已拥有的 ENS 域名:
@@ -40,6 +106,9 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
   final EnsRegistrationService _ensService = EnsRegistrationServiceProvider.instance;
 
   bool _isLoading = false;
+
+  // 当前选择的链
+  EnsChainConfig _selectedChain = EnsChainConfig.defaultChain;
 
   // 文本记录编辑
   final Map<String, TextEditingController> _recordControllers = {};
@@ -250,6 +319,10 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                // 链选择器
+                _buildChainSelector(),
+                SizedBox(height: ScreenUtil().setWidth(20)),
+
                 // 域名信息卡片
                 _buildDomainCard(),
                 SizedBox(height: ScreenUtil().setWidth(24)),
@@ -275,6 +348,147 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
                 child: CircularProgressIndicator(),
               ),
             ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChainSelector() {
+    return Container(
+      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      decoration: BoxDecoration(
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        border: Border.all(
+          color: _selectedChain.color.withAlpha(40),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.link,
+                size: ScreenUtil().setWidth(20),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.itemSubtitleTextColor.name,
+                ),
+              ),
+              SizedBox(width: ScreenUtil().setWidth(8)),
+              Text(
+                S.of(context).g_key_aa_chain,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(24),
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.itemSubtitleTextColor.name,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: ScreenUtil().setWidth(12)),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: EnsChainConfig.supportedChains.map((chain) {
+                final isSelected = _selectedChain.id == chain.id;
+                return Padding(
+                  padding: EdgeInsets.only(right: ScreenUtil().setWidth(12)),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedChain = chain;
+                      });
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: ScreenUtil().setWidth(16),
+                        vertical: ScreenUtil().setWidth(10),
+                      ),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? chain.color.withAlpha(30)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                        border: Border.all(
+                          color: isSelected
+                              ? chain.color
+                              : AppThemeUtils.getColorByKey(
+                                  context,
+                                  AppThemeKeys.itemSubtitleTextColor.name,
+                                ).withAlpha(50),
+                          width: isSelected ? 2 : 1,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: ScreenUtil().setWidth(28),
+                            height: ScreenUtil().setWidth(28),
+                            decoration: BoxDecoration(
+                              color: chain.color.withAlpha(30),
+                              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+                            ),
+                            child: Center(
+                              child: Text(
+                                chain.symbol.substring(0, 1),
+                                style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(18),
+                                  fontWeight: FontWeight.bold,
+                                  color: chain.color,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: ScreenUtil().setWidth(8)),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                chain.name,
+                                style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(24),
+                                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                                  color: isSelected
+                                      ? chain.color
+                                      : AppThemeUtils.getColorByKey(
+                                          context,
+                                          AppThemeKeys.mainTextColor.name,
+                                        ),
+                                ),
+                              ),
+                              Text(
+                                chain.suffix,
+                                style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(18),
+                                  color: AppThemeUtils.getColorByKey(
+                                    context,
+                                    AppThemeKeys.itemSubtitleTextColor.name,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          if (isSelected) ...[
+                            SizedBox(width: ScreenUtil().setWidth(8)),
+                            Icon(
+                              Icons.check_circle,
+                              size: ScreenUtil().setWidth(20),
+                              color: chain.color,
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
         ],
       ),
     );
