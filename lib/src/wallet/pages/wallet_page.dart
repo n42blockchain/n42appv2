@@ -36,6 +36,8 @@ import 'package:n42appv2/src/staking/pages/staking_home_page.dart';
 import 'package:n42appv2/src/airdrop/pages/airdrop_home_page.dart';
 import 'package:n42appv2/src/loyalty/pages/loyalty_home_page.dart';
 import 'package:n42appv2/src/hardware_wallet/pages/hardware_wallet_page.dart';
+import 'package:n42appv2/src/wallet/pages/gas/gas_tracker_page.dart';
+import 'package:n42appv2/src/wallet/pages/batch_transfer/batch_transfer_select_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -597,21 +599,21 @@ class _WalletPageState extends State<WalletPage> {
                 icon: Icons.local_gas_station_rounded,
                 label: 'Gas',
                 color: const Color(0xFFE91E63),
-                onTap: () {},
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const GasTrackerPage())),
               ),
               _buildMiniFeature(
                 context,
                 icon: Icons.local_fire_department_rounded,
                 label: 'Burn',
                 color: const Color(0xFFFF5722),
-                onTap: () {},
+                onTap: () => _showBurnNftTip(context),
               ),
               _buildMiniFeature(
                 context,
                 icon: Icons.grid_view_rounded,
                 label: 'More',
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                onTap: () {},
+                onTap: () => _showMoreFeatures(context),
               ),
             ],
           ),
@@ -742,6 +744,206 @@ class _WalletPageState extends State<WalletPage> {
             label,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(20),
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 显示 NFT 销毁提示
+  void _showBurnNftTip(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.local_fire_department_rounded, color: Colors.orange, size: 28),
+            const SizedBox(width: 8),
+            const Text('Burn NFT'),
+          ],
+        ),
+        content: const Text(
+          'To burn an NFT, please go to the NFT details page and tap the "Burn" button.\n\n'
+          'Steps:\n'
+          '1. Select a token with NFT support\n'
+          '2. Go to NFT tab\n'
+          '3. Select the NFT you want to burn\n'
+          '4. Tap "Burn" button',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Got it'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 显示更多功能菜单
+  void _showMoreFeatures(BuildContext context) {
+    final waProvider = Provider.of<WalletActionProvider>(context, listen: false);
+    final address = waProvider.coinList.isNotEmpty ? waProvider.coinList.first.address?.toString() ?? '' : '';
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(ScreenUtil().setWidth(24))),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // 标题栏
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'More Features',
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(32),
+                      fontWeight: FontWeight.bold,
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => Navigator.pop(ctx),
+                    icon: Icon(
+                      Icons.close,
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: ScreenUtil().setWidth(16)),
+              // 功能网格
+              GridView.count(
+                crossAxisCount: 4,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                childAspectRatio: 0.9,
+                children: [
+                  _buildMoreFeatureItem(
+                    context,
+                    icon: Icons.swap_horiz_rounded,
+                    label: 'Bridge',
+                    color: const Color(0xFF9C27B0),
+                    onTap: () {
+                      Navigator.pop(ctx);
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const BridgeHomePage()));
+                    },
+                  ),
+                  _buildMoreFeatureItem(
+                    context,
+                    icon: Icons.account_balance_rounded,
+                    label: 'Stake',
+                    color: const Color(0xFF4CAF50),
+                    onTap: () {
+                      Navigator.pop(ctx);
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const StakingHomePage()));
+                    },
+                  ),
+                  _buildMoreFeatureItem(
+                    context,
+                    icon: Icons.card_giftcard_rounded,
+                    label: 'Airdrop',
+                    color: const Color(0xFF2196F3),
+                    onTap: () {
+                      Navigator.pop(ctx);
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => AirdropHomePage(walletAddress: address)));
+                    },
+                  ),
+                  _buildMoreFeatureItem(
+                    context,
+                    icon: Icons.stars_rounded,
+                    label: 'Rewards',
+                    color: const Color(0xFFFFC107),
+                    onTap: () {
+                      Navigator.pop(ctx);
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => LoyaltyHomePage(walletAddress: address)));
+                    },
+                  ),
+                  _buildMoreFeatureItem(
+                    context,
+                    icon: Icons.security_rounded,
+                    label: 'Ledger',
+                    color: const Color(0xFF607D8B),
+                    onTap: () {
+                      Navigator.pop(ctx);
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const HardwareWalletPage()));
+                    },
+                  ),
+                  _buildMoreFeatureItem(
+                    context,
+                    icon: Icons.local_gas_station_rounded,
+                    label: 'Gas',
+                    color: const Color(0xFFE91E63),
+                    onTap: () {
+                      Navigator.pop(ctx);
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const GasTrackerPage()));
+                    },
+                  ),
+                  _buildMoreFeatureItem(
+                    context,
+                    icon: Icons.send_rounded,
+                    label: 'Batch',
+                    color: const Color(0xFF00BCD4),
+                    onTap: () {
+                      Navigator.pop(ctx);
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const BatchTransferSelectPage()));
+                    },
+                  ),
+                  _buildMoreFeatureItem(
+                    context,
+                    icon: Icons.local_fire_department_rounded,
+                    label: 'Burn',
+                    color: const Color(0xFFFF5722),
+                    onTap: () {
+                      Navigator.pop(ctx);
+                      _showBurnNftTip(context);
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// 构建更多功能项
+  Widget _buildMoreFeatureItem(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required Color color,
+    VoidCallback? onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: ScreenUtil().setWidth(56),
+            height: ScreenUtil().setWidth(56),
+            decoration: BoxDecoration(
+              color: color.withAlpha(25),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+            ),
+            child: Icon(icon, color: color, size: ScreenUtil().setWidth(28)),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(8)),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(22),
               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
             ),
           ),
