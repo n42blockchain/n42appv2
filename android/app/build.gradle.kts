@@ -18,7 +18,8 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "ai.n42.www"
-    compileSdk = flutter.compileSdkVersion
+    // Google Play 2026 要求: compileSdk 36, targetSdk 35 (Android 15)
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -37,14 +38,14 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "ai.n42.www"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        // Google Play 要求: minSdk 24 (Android 7.0), targetSdk 35 (Android 15)
+        minSdk = 24
+        targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        // 多 DEX 支持
+        multiDexEnabled = true
         externalNativeBuild {
             cmake {
                 // 允许 flexible page sizes

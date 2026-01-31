@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  数据提取规则 - Android 12+ (API 31+) 必需
+  控制应用数据的云备份和设备间传输
+
+  对于加密钱包应用，应禁用自动备份以保护用户私钥安全
+-->
+<data-extraction-rules>
+    <!-- 云备份规则 -->
+    <cloud-backup>
+        <!-- 禁止备份敏感数据 -->
+        <exclude domain="sharedpref" path="." />
+        <exclude domain="database" path="." />
+        <exclude domain="file" path="." />
+    </cloud-backup>
+
+    <!-- 设备间传输规则 -->
+    <device-transfer>
+        <!-- 禁止传输敏感数据 -->
+        <exclude domain="sharedpref" path="." />
+        <exclude domain="database" path="." />
+        <exclude domain="file" path="." />
+    </device-transfer>
+</data-extraction-rules>

@@ -31,6 +31,11 @@ import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:n42appv2/src/widgets/loading.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
+import 'package:n42appv2/src/bridge/pages/bridge_home_page.dart';
+import 'package:n42appv2/src/staking/pages/staking_home_page.dart';
+import 'package:n42appv2/src/airdrop/pages/airdrop_home_page.dart';
+import 'package:n42appv2/src/loyalty/pages/loyalty_home_page.dart';
+import 'package:n42appv2/src/hardware_wallet/pages/hardware_wallet_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -408,6 +413,10 @@ class _WalletPageState extends State<WalletPage> {
                                       },
                                     ),
                                 ),
+                                // 新功能入口
+                                SliverToBoxAdapter(
+                                  child: _buildFeatureEntries(context),
+                                ),
                                 coinListHeaderWidget(waValue),
                                 coinListWidget(waValue),
                                 SliverToBoxAdapter(
@@ -503,6 +512,240 @@ class _WalletPageState extends State<WalletPage> {
             );
           },
         ),
+      ),
+    );
+  }
+
+  /// 构建新功能入口区域 - 参考 Trust Wallet / Rainbow 风格
+  Widget _buildFeatureEntries(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // 横向滚动的功能卡片
+        SizedBox(
+          height: ScreenUtil().setWidth(180),
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
+            children: [
+              // Bridge 大卡片
+              _buildFeatureCard(
+                context,
+                title: 'Bridge',
+                subtitle: 'Cross-chain transfer',
+                icon: Icons.swap_horiz_rounded,
+                gradientColors: const [Color(0xFF667EEA), Color(0xFF764BA2)],
+                isNew: true,
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const BridgeHomePage())),
+              ),
+              SizedBox(width: ScreenUtil().setWidth(12)),
+              // Staking 大卡片
+              _buildFeatureCard(
+                context,
+                title: 'Stake',
+                subtitle: 'Earn rewards',
+                icon: Icons.trending_up_rounded,
+                gradientColors: const [Color(0xFF11998E), Color(0xFF38EF7D)],
+                isNew: true,
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const StakingHomePage())),
+              ),
+              SizedBox(width: ScreenUtil().setWidth(12)),
+              // Airdrop 大卡片
+              _buildFeatureCard(
+                context,
+                title: 'Airdrop',
+                subtitle: 'Track & claim',
+                icon: Icons.card_giftcard_rounded,
+                gradientColors: const [Color(0xFFFF6B6B), Color(0xFFFFE66D)],
+                isNew: true,
+                onTap: () {
+                  final waProvider = Provider.of<WalletActionProvider>(context, listen: false);
+                  final address = waProvider.coinList.isNotEmpty ? waProvider.coinList.first.address?.toString() ?? '' : '';
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => AirdropHomePage(walletAddress: address)));
+                },
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: ScreenUtil().setWidth(16)),
+        // 小图标功能入口
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildMiniFeature(
+                context,
+                icon: Icons.stars_rounded,
+                label: 'Rewards',
+                color: const Color(0xFFFFC107),
+                onTap: () {
+                  final waProvider = Provider.of<WalletActionProvider>(context, listen: false);
+                  final address = waProvider.coinList.isNotEmpty ? waProvider.coinList.first.address?.toString() ?? '' : '';
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => LoyaltyHomePage(walletAddress: address)));
+                },
+              ),
+              _buildMiniFeature(
+                context,
+                icon: Icons.security_rounded,
+                label: 'Ledger',
+                color: const Color(0xFF2196F3),
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const HardwareWalletPage())),
+              ),
+              _buildMiniFeature(
+                context,
+                icon: Icons.local_gas_station_rounded,
+                label: 'Gas',
+                color: const Color(0xFFE91E63),
+                onTap: () {},
+              ),
+              _buildMiniFeature(
+                context,
+                icon: Icons.local_fire_department_rounded,
+                label: 'Burn',
+                color: const Color(0xFFFF5722),
+                onTap: () {},
+              ),
+              _buildMiniFeature(
+                context,
+                icon: Icons.grid_view_rounded,
+                label: 'More',
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                onTap: () {},
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: ScreenUtil().setWidth(8)),
+      ],
+    );
+  }
+
+  /// 构建功能大卡片 - Rainbow / Trust Wallet 风格
+  Widget _buildFeatureCard(
+    BuildContext context, {
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required List<Color> gradientColors,
+    bool isNew = false,
+    VoidCallback? onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: ScreenUtil().setWidth(220),
+        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: gradientColors,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+          boxShadow: [
+            BoxShadow(
+              color: gradientColors[0].withAlpha(80),
+              blurRadius: 12,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: ScreenUtil().setWidth(48),
+                  height: ScreenUtil().setWidth(48),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withAlpha(50),
+                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                  ),
+                  child: Icon(icon, color: Colors.white, size: ScreenUtil().setWidth(28)),
+                ),
+                if (isNew)
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: ScreenUtil().setWidth(10),
+                      vertical: ScreenUtil().setWidth(4),
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withAlpha(50),
+                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+                    ),
+                    child: Text(
+                      'NEW',
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(18),
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(32),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: ScreenUtil().setWidth(4)),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(22),
+                    color: Colors.white.withAlpha(200),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 构建小功能入口 - 简洁图标样式
+  Widget _buildMiniFeature(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required Color color,
+    VoidCallback? onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: ScreenUtil().setWidth(52),
+            height: ScreenUtil().setWidth(52),
+            decoration: BoxDecoration(
+              color: color.withAlpha(25),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+            ),
+            child: Icon(icon, color: color, size: ScreenUtil().setWidth(26)),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(6)),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(20),
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+            ),
+          ),
+        ],
       ),
     );
   }
