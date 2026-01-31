@@ -1206,5 +1206,18 @@
   "g_key_oidc_login": "Enterprise Login (SSO)",
   "g_key_oidc_not_configured": "Enterprise SSO not configured",
   "g_key_saml_login": "SAML Login",
-  "g_key_saml_not_configured": "SAML not configured"
+  "g_key_saml_not_configured": "SAML not configured",
+
+  "g_key_advanced_features": "Advanced Features",
+  "g_key_ens_get_your_name": "Get your .eth name",
+  "g_key_ens_register_description": "Your decentralized identity on Ethereum",
+  "g_key_ens_manage_your_identity": "Manage your Web3 identity",
+  "g_key_ens_your_identity": "Your Identity",
+  "g_key_aa_smart_account": "Smart Account",
+  "g_key_aa_create_smart_account": "Create Smart Account",
+  "g_key_aa_gasless_transactions": "Gasless transactions & batch operations",
+  "g_key_aa_smart_wallet": "Smart Wallet",
+  "g_key_aa_gasless": "Gasless",
+  "g_key_aa_ready": "Ready",
+  "g_key_aa_pending": "Pending"
 }

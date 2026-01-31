@@ -21,8 +21,11 @@ import 'package:n42appv2/src/wallet/pages/wallet_chain_info_xrp.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/wallet_list.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/widgets/create_wallet_button.dart';
+import 'package:n42appv2/src/wallet/widgets/feature_entry_cards.dart';
 import 'package:n42appv2/src/wallet/widgets/wallet_board.dart';
 import 'package:n42appv2/src/wallet/widgets/wallet_search_coin.dart';
+import 'package:n42appv2/src/wallet/pages/ens/ens_home_page.dart';
+import 'package:n42appv2/src/wallet/pages/aa/aa_home_page.dart';
 import 'package:n42appv2/src/wallet_connect/pages/wallet_connect_page.dart';
 import 'package:n42appv2/src/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:n42appv2/src/widgets/app_home_top_bar.dart';
@@ -409,6 +412,26 @@ class _WalletPageState extends State<WalletPage> {
                                         Navigator.push(context, MaterialPageRoute(builder: (content)=>Moonpay(type:1)));
                                       },
                                     ),
+                                ),
+                                // Feature Entry Section (ENS & AA)
+                                SliverToBoxAdapter(
+                                  child: FeatureEntryHorizontal(
+                                    ensName: null, // TODO: Get from ENS service
+                                    hasSmartAccount: false, // TODO: Get from AA provider
+                                    isSmartAccountDeployed: false,
+                                    onEnsTap: () {
+                                      final ethAddress = waValue.getAddress(CoinType.ETH.name) ?? '';
+                                      Navigator.push(context, MaterialPageRoute(
+                                        builder: (context) => EnsHomePage(walletAddress: ethAddress),
+                                      ));
+                                    },
+                                    onSmartAccountTap: () {
+                                      final ethAddress = waValue.getAddress(CoinType.ETH.name) ?? '';
+                                      Navigator.push(context, MaterialPageRoute(
+                                        builder: (context) => AAHomePage(walletAddress: ethAddress),
+                                      ));
+                                    },
+                                  ),
                                 ),
                                 coinListHeaderWidget(waValue),
                                 coinListWidget(waValue),
