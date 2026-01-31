@@ -379,6 +379,39 @@ class UserInfoApi{
       return mm;
     }
   }
+  /// 修改密码（已登录用户，需要原密码）
+  /// oldPassword: 原密码（MD5 哈希后）
+  /// newPassword: 新密码（MD5 哈希后）
+  Future<MessageModel> changePassword(String oldPassword, String newPassword) async {
+    try {
+      Map<String, dynamic> params = {
+        "uuid": AppGlobals.userInfo?.uuid ?? "",
+        "token": AppGlobals.userInfo?.token ?? "",
+        "source": "app",
+        "old_pwd": oldPassword,
+        "new_pwd": newPassword,
+      };
+      MessageModel mm = MessageModel();
+      final data = await BaseApi.requestEmptyH.post(
+        '$url/v1/l/user/change/password',
+        params: {},
+        data: params,
+        header: header,
+      );
+      if (data['code'] == 200) {
+        mm.data = true;
+      } else {
+        mm.error = true;
+        mm.data = data['err'] ?? 'Change password failed';
+      }
+      return mm;
+    } catch (e) {
+      MessageModel mm = MessageModel.error();
+      mm.data = e.toString();
+      return mm;
+    }
+  }
+
   ///FCM推送绑定设备 token
   Future bindPushUserToken(String pushToken) async {
     Map params = {};
@@ -392,5 +425,137 @@ class UserInfoApi{
         data: params,header: header
     );
     return data;
+  }
+
+  /// 第三方登录 - Google
+  /// idToken: Google ID Token
+  /// accessToken: Google Access Token (optional)
+  Future<dynamic> loginWithGoogle(String idToken, {String? accessToken}) async {
+    Map<String, dynamic> params = {
+      "provider": "google",
+      "id_token": idToken,
+      "source": "app",
+    };
+    if (accessToken != null) {
+      params["access_token"] = accessToken;
+    }
+    final data = await BaseApi.requestEmptyH.post(
+      '$url/v1/user/loginSocial',
+      params: {},
+      data: params,
+      header: header,
+    );
+    return data;
+  }
+
+  /// 第三方登录 - Apple
+  /// idToken: Apple Identity Token
+  /// authorizationCode: Apple Authorization Code
+  Future<dynamic> loginWithApple(String idToken, String authorizationCode) async {
+    Map<String, dynamic> params = {
+      "provider": "apple",
+      "id_token": idToken,
+      "authorization_code": authorizationCode,
+      "source": "app",
+    };
+    final data = await BaseApi.requestEmptyH.post(
+      '$url/v1/user/loginSocial',
+      params: {},
+      data: params,
+      header: header,
+    );
+    return data;
+  }
+
+  /// 绑定第三方账号到已有账户
+  /// provider: google, apple, etc.
+  /// idToken: Provider's ID token
+  Future<MessageModel> bindSocialAccount(String provider, String idToken) async {
+    try {
+      Map<String, dynamic> params = {
+        "uuid": AppGlobals.userInfo?.uuid ?? "",
+        "token": AppGlobals.userInfo?.token ?? "",
+        "source": "app",
+        "provider": provider,
+        "id_token": idToken,
+      };
+      MessageModel mm = MessageModel();
+      final data = await BaseApi.requestEmptyH.post(
+        '$url/v1/l/user/bind/social',
+        params: {},
+        data: params,
+        header: header,
+      );
+      if (data['code'] == 200) {
+        mm.data = data['data'];
+      } else {
+        mm.error = true;
+        mm.data = data['err'] ?? 'Bind social account failed';
+      }
+      return mm;
+    } catch (e) {
+      MessageModel mm = MessageModel.error();
+      mm.data = e.toString();
+      return mm;
+    }
+  }
+
+  /// 解绑第三方账号
+  /// provider: google, apple, etc.
+  Future<MessageModel> unbindSocialAccount(String provider) async {
+    try {
+      Map<String, dynamic> params = {
+        "uuid": AppGlobals.userInfo?.uuid ?? "",
+        "token": AppGlobals.userInfo?.token ?? "",
+        "source": "app",
+        "provider": provider,
+      };
+      MessageModel mm = MessageModel();
+      final data = await BaseApi.requestEmptyH.post(
+        '$url/v1/l/user/unbind/social',
+        params: {},
+        data: params,
+        header: header,
+      );
+      if (data['code'] == 200) {
+        mm.data = true;
+      } else {
+        mm.error = true;
+        mm.data = data['err'] ?? 'Unbind social account failed';
+      }
+      return mm;
+    } catch (e) {
+      MessageModel mm = MessageModel.error();
+      mm.data = e.toString();
+      return mm;
+    }
+  }
+
+  /// 获取用户绑定的第三方账号列表
+  Future<MessageModel> getSocialAccounts() async {
+    try {
+      Map<String, dynamic> params = {
+        "uuid": AppGlobals.userInfo?.uuid ?? "",
+        "token": AppGlobals.userInfo?.token ?? "",
+        "source": "app",
+      };
+      MessageModel mm = MessageModel();
+      final data = await BaseApi.requestEmptyH.get(
+        '$url/v1/lr/user/social/accounts',
+        params: params,
+        header: header,
+      );
+      if (data['code'] == 200) {
+        mm.data = data['data'];
+      } else {
+        mm.error = true;
+        mm.data = data['err'] ?? 'Get social accounts failed';
+      }
+      return mm;
+    } catch (e) {
+      MessageModel mm = MessageModel.error();
+      mm.data = e.toString();
+      return mm;
+    }
   }
 }
