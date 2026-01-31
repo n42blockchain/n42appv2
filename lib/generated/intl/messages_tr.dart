@@ -42,88 +42,114 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m9(value) => "${value} değerinden fazla bir miktar girin.";
 
-  static String m17(value) =>
+  static String m10(value) => "${value} gün kaldı";
+
+  static String m11(value) => "${value}. satırda yinelenen adres";
+
+  static String m12(value) => "${value}. satırda geçersiz adres";
+
+  static String m13(value) => "${value}. satırda geçersiz miktar";
+
+  static String m14(value) => "Maksimum ${value} alıcı";
+
+  static String m15(value) => "Congratulations! You now own ${value}";
+
+  static String m16(value) => "Please wait ${value} seconds";
+
+  static String m17(value) => "Lütfen cihazınızda ${value} uygulamasını açın";
+
+  static String m18(value) => "Sonraki seviye için ${value} puan";
+
+  static String m19(value) =>
       "${value} kişisini silmek istediğinizden emin misiniz?";
 
-  static String m19(value) => "Yeterli \"${value}\" bakiyeniz yok";
+  static String m20(value) => "${value}d unbond";
 
-  static String m20(value) => "\"${value}\" hesabı alınamadı";
+  static String m21(value) => "${value} gün kaldı";
 
-  static String m21(value) => "İlk transfer için minimum ${value} XRP";
+  static String m22(value) => "${value} days remaining";
 
-  static String m22(value) => "${value} zinciri eklenmedi.";
+  static String m23(value) => "Yeterli \"${value}\" bakiyeniz yok";
 
-  static String m23(value) =>
+  static String m24(value) => "\"${value}\" hesabı alınamadı";
+
+  static String m25(value) => "İlk transfer için minimum ${value} XRP";
+
+  static String m26(value) => "Verification code sent to ${value}";
+
+  static String m27(value) => "${value} zinciri eklenmedi.";
+
+  static String m28(value) =>
       "${value} için tamamlanmamış işlemler var, lütfen daha sonra tekrar deneyin.";
 
-  static String m24(value) => "${value} için adres bulunamadı.";
+  static String m29(value) => "${value} için adres bulunamadı.";
 
-  static String m25(value) => "${value} bakiyesi yetersiz.";
+  static String m30(value) => "${value} bakiyesi yetersiz.";
 
-  static String m26(value, value1) =>
+  static String m31(value, value1) =>
       "Her XRP hesabı, harcanamayan temel olarak ${value} XRP (${value1} damla) ayırmalıdır.";
 
-  static String m27(value, value1) =>
+  static String m32(value, value1) =>
       "Hesabın sahip olduğu her nesne için ${value} XRP (${value1} damla) rezerve eklenir.";
 
-  static String m28(value, value1) =>
+  static String m33(value, value1) =>
       "Bu hesap ${value} nesneye sahip, yani ek ${value1} XRP ayrılmış.";
 
-  static String m29(value) =>
+  static String m34(value) =>
       "Desen şifresi giriş hatası, ${value} hakkınız kaldı";
-
-  static String m30(value) =>
-      "Desen şifresi giriş hatası, ${value} hakkınız kaldı";
-
-  static String m31(value) =>
-      "Başarıyla bir ${value} kurdunuz ve N42Wallet ile doğrulamaya başlayacaksınız!";
-
-  static String m32(value) =>
-      "@N42Wallet\'ta ${value} grubuma katılarak bir Layer 1 zincirinin erken madencisi olun ve telefonunuzda kripto kazanın!";
-
-  static String m33(value) =>
-      "Doğrulayıcı çalıştırmak için ${value} N kilitleyin.";
-
-  static String m34(value) => "İçe aktarma başarısız:${value}";
 
   static String m35(value) =>
-      "Ödül kazanmak için en az ${value} staking bakiyesi gereklidir.";
-
-  static String m36(value, value1) =>
-      "Her ${value1} blok kazıldığında ${value} N";
-
-  static String m37(value) => "${value} karakter olmalı";
-
-  static String m38(value) => "${value} Yetersiz Bakiye.";
-
-  static String m39(value) => "${value} geliyor...";
-
-  static String m40(value) =>
-      "Uygulama içinde takas edilen ${value}, kısa süre içinde cüzdanınıza dağıtılacak ve bu işlemle satılamaz. Düğüm çalıştırmak için kullanılabilir.";
-
-  static String m41(value) => "Maksimum ${value} karakter";
-
-  static String m42(value) =>
-      "${value} zinciri uygulama tarafından zaten destekleniyor!";
-
-  static String m43(value) =>
-      "${value} zinciri uygulama tarafından zaten destekleniyor, eklemek istiyor musunuz?";
-
-  static String m44(value) => "${value} adres test bağlantısı başarısız!";
-
-  static String m45(value) =>
-      "Uygulama ${value} saniye içinde kilidini açacak.";
-
-  static String m46(value) =>
       "Desen şifresi giriş hatası, ${value} hakkınız kaldı";
 
-  static String m47(value) => "Şifre giriş hatası, ${value} hakkınız kaldı";
+  static String m36(value) =>
+      "Başarıyla bir ${value} kurdunuz ve N42Wallet ile doğrulamaya başlayacaksınız!";
 
-  static String m48(value) => "Şifre giriş hatası, ${value} hakkınız kaldı";
+  static String m37(value) =>
+      "@N42Wallet\'ta ${value} grubuma katılarak bir Layer 1 zincirinin erken madencisi olun ve telefonunuzda kripto kazanın!";
 
-  static String m49(value) => "${value} şifresini girin";
+  static String m38(value) =>
+      "Doğrulayıcı çalıştırmak için ${value} N kilitleyin.";
 
-  static String m50(value) => "0~${value} karakter";
+  static String m39(value) => "İçe aktarma başarısız:${value}";
+
+  static String m40(value) =>
+      "Ödül kazanmak için en az ${value} staking bakiyesi gereklidir.";
+
+  static String m41(value, value1) =>
+      "Her ${value1} blok kazıldığında ${value} N";
+
+  static String m42(value) => "${value} karakter olmalı";
+
+  static String m43(value) => "${value} Yetersiz Bakiye.";
+
+  static String m44(value) => "${value} geliyor...";
+
+  static String m45(value) =>
+      "Uygulama içinde takas edilen ${value}, kısa süre içinde cüzdanınıza dağıtılacak ve bu işlemle satılamaz. Düğüm çalıştırmak için kullanılabilir.";
+
+  static String m46(value) => "Maksimum ${value} karakter";
+
+  static String m47(value) =>
+      "${value} zinciri uygulama tarafından zaten destekleniyor!";
+
+  static String m48(value) =>
+      "${value} zinciri uygulama tarafından zaten destekleniyor, eklemek istiyor musunuz?";
+
+  static String m49(value) => "${value} adres test bağlantısı başarısız!";
+
+  static String m50(value) =>
+      "Uygulama ${value} saniye içinde kilidini açacak.";
+
+  static String m51(value) =>
+      "Desen şifresi giriş hatası, ${value} hakkınız kaldı";
+
+  static String m52(value) => "Şifre giriş hatası, ${value} hakkınız kaldı";
+
+  static String m53(value) => "Şifre giriş hatası, ${value} hakkınız kaldı";
+
+  static String m54(value) => "${value} şifresini girin";
+
+  static String m55(value) => "0~${value} karakter";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -519,6 +545,216 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_85": MessageLookupByLibrary.simpleMessage("Kurtarma ifadesi"),
     "g_key_9": MessageLookupByLibrary.simpleMessage("Tüm tokenlar"),
     "g_key_94": MessageLookupByLibrary.simpleMessage("Ayarlar"),
+    "g_key_aa_account_created": MessageLookupByLibrary.simpleMessage(
+      "Account Created Successfully",
+    ),
+    "g_key_aa_account_details": MessageLookupByLibrary.simpleMessage(
+      "Account Details",
+    ),
+    "g_key_aa_account_name": MessageLookupByLibrary.simpleMessage(
+      "Account Name",
+    ),
+    "g_key_aa_account_name_hint": MessageLookupByLibrary.simpleMessage(
+      "Enter account name",
+    ),
+    "g_key_aa_account_type": MessageLookupByLibrary.simpleMessage(
+      "Account Type",
+    ),
+    "g_key_aa_add_first_operation": MessageLookupByLibrary.simpleMessage(
+      "Add your first operation",
+    ),
+    "g_key_aa_add_operation": MessageLookupByLibrary.simpleMessage(
+      "Add Operation",
+    ),
+    "g_key_aa_address_preview": MessageLookupByLibrary.simpleMessage(
+      "This address is pre-computed and will be deployed when you make your first transaction.",
+    ),
+    "g_key_aa_approve": MessageLookupByLibrary.simpleMessage("Approve"),
+    "g_key_aa_batch": MessageLookupByLibrary.simpleMessage("Batch"),
+    "g_key_aa_batch_atomic": MessageLookupByLibrary.simpleMessage(
+      "Atomic Execution",
+    ),
+    "g_key_aa_batch_desc": MessageLookupByLibrary.simpleMessage(
+      "Execute multiple operations at once",
+    ),
+    "g_key_aa_batch_description": MessageLookupByLibrary.simpleMessage(
+      "Send multiple transactions in a single operation",
+    ),
+    "g_key_aa_batch_operations": MessageLookupByLibrary.simpleMessage(
+      "Batch Operations",
+    ),
+    "g_key_aa_batch_save_gas": MessageLookupByLibrary.simpleMessage("Save Gas"),
+    "g_key_aa_batch_title": MessageLookupByLibrary.simpleMessage(
+      "Batch Transfer",
+    ),
+    "g_key_aa_batch_transaction": MessageLookupByLibrary.simpleMessage(
+      "Batch Transaction",
+    ),
+    "g_key_aa_by": MessageLookupByLibrary.simpleMessage("by"),
+    "g_key_aa_chain_id": MessageLookupByLibrary.simpleMessage("Chain ID"),
+    "g_key_aa_change": MessageLookupByLibrary.simpleMessage("Change"),
+    "g_key_aa_clear_all": MessageLookupByLibrary.simpleMessage("Clear All"),
+    "g_key_aa_coming_soon": MessageLookupByLibrary.simpleMessage("Coming Soon"),
+    "g_key_aa_counterfactual_address": MessageLookupByLibrary.simpleMessage(
+      "Counterfactual Address",
+    ),
+    "g_key_aa_counterfactual_note": MessageLookupByLibrary.simpleMessage(
+      "This is a counterfactual address. It will be deployed on your first transaction.",
+    ),
+    "g_key_aa_create_account": MessageLookupByLibrary.simpleMessage(
+      "Create Smart Account",
+    ),
+    "g_key_aa_create_first": MessageLookupByLibrary.simpleMessage(
+      "Create your first smart account",
+    ),
+    "g_key_aa_create_first_account": MessageLookupByLibrary.simpleMessage(
+      "Create a smart account to get started",
+    ),
+    "g_key_aa_created": MessageLookupByLibrary.simpleMessage("Created"),
+    "g_key_aa_custom": MessageLookupByLibrary.simpleMessage("Custom"),
+    "g_key_aa_deploy": MessageLookupByLibrary.simpleMessage("Deploy"),
+    "g_key_aa_deploy_started": MessageLookupByLibrary.simpleMessage(
+      "Deployment started",
+    ),
+    "g_key_aa_deployed": MessageLookupByLibrary.simpleMessage("Deployed"),
+    "g_key_aa_deploying": MessageLookupByLibrary.simpleMessage("Deploying..."),
+    "g_key_aa_deployment_note": MessageLookupByLibrary.simpleMessage(
+      "Deployment will occur automatically with your first transaction.",
+    ),
+    "g_key_aa_description": MessageLookupByLibrary.simpleMessage(
+      "Experience the next generation of Ethereum accounts with enhanced features",
+    ),
+    "g_key_aa_eip7702_account": MessageLookupByLibrary.simpleMessage(
+      "EIP-7702 Account",
+    ),
+    "g_key_aa_eip7702_badge": MessageLookupByLibrary.simpleMessage("EIP-7702"),
+    "g_key_aa_eip7702_desc": MessageLookupByLibrary.simpleMessage(
+      "Hybrid EOA/Smart Account - No deployment needed",
+    ),
+    "g_key_aa_error": MessageLookupByLibrary.simpleMessage("Error"),
+    "g_key_aa_estimated_gas": MessageLookupByLibrary.simpleMessage(
+      "Estimated Gas",
+    ),
+    "g_key_aa_estimating": MessageLookupByLibrary.simpleMessage(
+      "Estimating...",
+    ),
+    "g_key_aa_execute_batch": MessageLookupByLibrary.simpleMessage(
+      "Execute Batch",
+    ),
+    "g_key_aa_factory": MessageLookupByLibrary.simpleMessage("Factory"),
+    "g_key_aa_feature_batch": MessageLookupByLibrary.simpleMessage(
+      "Batch multiple transactions",
+    ),
+    "g_key_aa_feature_gas": MessageLookupByLibrary.simpleMessage(
+      "Pay gas in any token",
+    ),
+    "g_key_aa_feature_security": MessageLookupByLibrary.simpleMessage(
+      "Enhanced security",
+    ),
+    "g_key_aa_free": MessageLookupByLibrary.simpleMessage("FREE"),
+    "g_key_aa_gas_estimate": MessageLookupByLibrary.simpleMessage(
+      "Gas Estimate",
+    ),
+    "g_key_aa_gas_payment": MessageLookupByLibrary.simpleMessage("Gas Payment"),
+    "g_key_aa_gas_payment_options": MessageLookupByLibrary.simpleMessage(
+      "Gas Payment Options",
+    ),
+    "g_key_aa_gas_savings": MessageLookupByLibrary.simpleMessage("Gas Savings"),
+    "g_key_aa_gas_sponsored": MessageLookupByLibrary.simpleMessage(
+      "Gas Sponsored",
+    ),
+    "g_key_aa_home_title": MessageLookupByLibrary.simpleMessage(
+      "Account Abstraction",
+    ),
+    "g_key_aa_kernel_account": MessageLookupByLibrary.simpleMessage(
+      "Kernel Account",
+    ),
+    "g_key_aa_kernel_desc": MessageLookupByLibrary.simpleMessage(
+      "Modular account with plugin support from ZeroDev",
+    ),
+    "g_key_aa_last_activity": MessageLookupByLibrary.simpleMessage(
+      "Last Activity",
+    ),
+    "g_key_aa_my_accounts": MessageLookupByLibrary.simpleMessage(
+      "My Smart Accounts",
+    ),
+    "g_key_aa_no_accounts": MessageLookupByLibrary.simpleMessage(
+      "No smart accounts yet",
+    ),
+    "g_key_aa_no_accounts_filter": MessageLookupByLibrary.simpleMessage(
+      "No accounts match your filter",
+    ),
+    "g_key_aa_no_operations": MessageLookupByLibrary.simpleMessage(
+      "No operations added",
+    ),
+    "g_key_aa_not_deployed": MessageLookupByLibrary.simpleMessage(
+      "Not Deployed",
+    ),
+    "g_key_aa_operations": MessageLookupByLibrary.simpleMessage("Operations"),
+    "g_key_aa_owner": MessageLookupByLibrary.simpleMessage("Owner"),
+    "g_key_aa_pay_gas_with_token": MessageLookupByLibrary.simpleMessage(
+      "Pay gas with token",
+    ),
+    "g_key_aa_pay_gas_yourself": MessageLookupByLibrary.simpleMessage(
+      "Pay gas with your ETH",
+    ),
+    "g_key_aa_pay_with": MessageLookupByLibrary.simpleMessage("Pay with"),
+    "g_key_aa_pay_with_eth": MessageLookupByLibrary.simpleMessage(
+      "Pay with ETH",
+    ),
+    "g_key_aa_paymaster_description": MessageLookupByLibrary.simpleMessage(
+      "Choose how you want to pay for transaction gas fees",
+    ),
+    "g_key_aa_preview_address": MessageLookupByLibrary.simpleMessage(
+      "Preview Address",
+    ),
+    "g_key_aa_recommended": MessageLookupByLibrary.simpleMessage("Recommended"),
+    "g_key_aa_safe_account": MessageLookupByLibrary.simpleMessage(
+      "Safe Account",
+    ),
+    "g_key_aa_safe_desc": MessageLookupByLibrary.simpleMessage(
+      "Multi-signature account with advanced security features",
+    ),
+    "g_key_aa_saved": MessageLookupByLibrary.simpleMessage("saved"),
+    "g_key_aa_select_chain": MessageLookupByLibrary.simpleMessage(
+      "Select Chain",
+    ),
+    "g_key_aa_select_paymaster": MessageLookupByLibrary.simpleMessage(
+      "Select Paymaster",
+    ),
+    "g_key_aa_select_type": MessageLookupByLibrary.simpleMessage(
+      "Select Account Type",
+    ),
+    "g_key_aa_selected": MessageLookupByLibrary.simpleMessage("Selected"),
+    "g_key_aa_send_desc": MessageLookupByLibrary.simpleMessage(
+      "Send tokens using your smart account",
+    ),
+    "g_key_aa_send_title": MessageLookupByLibrary.simpleMessage("AA Transfer"),
+    "g_key_aa_simple_account": MessageLookupByLibrary.simpleMessage(
+      "Simple Account",
+    ),
+    "g_key_aa_simple_desc": MessageLookupByLibrary.simpleMessage(
+      "Basic smart account with single owner - recommended for most users",
+    ),
+    "g_key_aa_smart_accounts": MessageLookupByLibrary.simpleMessage(
+      "Smart Accounts",
+    ),
+    "g_key_aa_sponsored": MessageLookupByLibrary.simpleMessage(
+      "Sponsored (Free)",
+    ),
+    "g_key_aa_title": MessageLookupByLibrary.simpleMessage("Smart Account"),
+    "g_key_aa_total_gas": MessageLookupByLibrary.simpleMessage("Total Gas"),
+    "g_key_aa_total_value": MessageLookupByLibrary.simpleMessage("Total Value"),
+    "g_key_aa_unavailable": MessageLookupByLibrary.simpleMessage("Unavailable"),
+    "g_key_aa_version_v07": MessageLookupByLibrary.simpleMessage("v0.7"),
+    "g_key_aa_version_v08": MessageLookupByLibrary.simpleMessage("v0.8"),
+    "g_key_aa_view_all": MessageLookupByLibrary.simpleMessage("View All"),
+    "g_key_account_linked": MessageLookupByLibrary.simpleMessage(
+      "Account linked successfully",
+    ),
+    "g_key_account_unlinked": MessageLookupByLibrary.simpleMessage(
+      "Account unlinked successfully",
+    ),
     "g_key_address": MessageLookupByLibrary.simpleMessage("Adres"),
     "g_key_address_1": MessageLookupByLibrary.simpleMessage(
       "Lütfen bir ad girin",
@@ -535,6 +771,403 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_address_6": MessageLookupByLibrary.simpleMessage("Coin Seç"),
     "g_key_address_7": MessageLookupByLibrary.simpleMessage("Coin ara"),
+    "g_key_airdrop_active": MessageLookupByLibrary.simpleMessage("Aktif"),
+    "g_key_airdrop_check_eligibility": MessageLookupByLibrary.simpleMessage(
+      "Uygunluğu Kontrol Et",
+    ),
+    "g_key_airdrop_claim": MessageLookupByLibrary.simpleMessage("Al"),
+    "g_key_airdrop_claimed": MessageLookupByLibrary.simpleMessage("Alındı"),
+    "g_key_airdrop_days_left": m10,
+    "g_key_airdrop_deadline": MessageLookupByLibrary.simpleMessage("Son Tarih"),
+    "g_key_airdrop_eligible": MessageLookupByLibrary.simpleMessage("Uygun"),
+    "g_key_airdrop_estimated_value": MessageLookupByLibrary.simpleMessage(
+      "Tahmini Değer",
+    ),
+    "g_key_airdrop_expired": MessageLookupByLibrary.simpleMessage(
+      "Süresi Doldu",
+    ),
+    "g_key_airdrop_filter": MessageLookupByLibrary.simpleMessage("Filtrele"),
+    "g_key_airdrop_no_airdrops": MessageLookupByLibrary.simpleMessage(
+      "Airdrop bulunamadı",
+    ),
+    "g_key_airdrop_not_eligible": MessageLookupByLibrary.simpleMessage(
+      "Uygun Değil",
+    ),
+    "g_key_airdrop_pending": MessageLookupByLibrary.simpleMessage("Beklemede"),
+    "g_key_airdrop_priority_high": MessageLookupByLibrary.simpleMessage(
+      "Yüksek Öncelik",
+    ),
+    "g_key_airdrop_priority_low": MessageLookupByLibrary.simpleMessage(
+      "Düşük Öncelik",
+    ),
+    "g_key_airdrop_priority_medium": MessageLookupByLibrary.simpleMessage(
+      "Orta Öncelik",
+    ),
+    "g_key_airdrop_requirement_met": MessageLookupByLibrary.simpleMessage(
+      "Gereksinim karşılandı",
+    ),
+    "g_key_airdrop_requirement_not_met": MessageLookupByLibrary.simpleMessage(
+      "Karşılanmadı",
+    ),
+    "g_key_airdrop_requirements": MessageLookupByLibrary.simpleMessage(
+      "Gereksinimler",
+    ),
+    "g_key_airdrop_sort_by": MessageLookupByLibrary.simpleMessage("Sırala"),
+    "g_key_airdrop_title": MessageLookupByLibrary.simpleMessage(
+      "Airdrop Takibi",
+    ),
+    "g_key_airdrop_total_claimed": MessageLookupByLibrary.simpleMessage(
+      "Toplam Alınan",
+    ),
+    "g_key_airdrop_upcoming": MessageLookupByLibrary.simpleMessage("Yakında"),
+    "g_key_apple_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
+      "Apple sign-in cancelled",
+    ),
+    "g_key_batch_add_recipient": MessageLookupByLibrary.simpleMessage(
+      "Alıcı Ekle",
+    ),
+    "g_key_batch_clear_all": MessageLookupByLibrary.simpleMessage(
+      "Tümünü Temizle",
+    ),
+    "g_key_batch_csv_format": MessageLookupByLibrary.simpleMessage(
+      "CSV Formatı: adres,miktar,etiket",
+    ),
+    "g_key_batch_duplicate_address": m11,
+    "g_key_batch_execute": MessageLookupByLibrary.simpleMessage("Çalıştır"),
+    "g_key_batch_export_csv": MessageLookupByLibrary.simpleMessage(
+      "CSV Dışa Aktar",
+    ),
+    "g_key_batch_gas_savings": MessageLookupByLibrary.simpleMessage(
+      "Gas Tasarrufu",
+    ),
+    "g_key_batch_import_csv": MessageLookupByLibrary.simpleMessage(
+      "CSV İçe Aktar",
+    ),
+    "g_key_batch_invalid_address": m12,
+    "g_key_batch_invalid_amount": m13,
+    "g_key_batch_max_recipients": m14,
+    "g_key_batch_preview": MessageLookupByLibrary.simpleMessage("Önizle"),
+    "g_key_batch_recipients": MessageLookupByLibrary.simpleMessage("Alıcılar"),
+    "g_key_batch_title": MessageLookupByLibrary.simpleMessage("Toplu Transfer"),
+    "g_key_batch_total_amount": MessageLookupByLibrary.simpleMessage(
+      "Toplam Miktar",
+    ),
+    "g_key_bridge_amount": MessageLookupByLibrary.simpleMessage("Miktar"),
+    "g_key_bridge_cheapest": MessageLookupByLibrary.simpleMessage("En Ucuz"),
+    "g_key_bridge_estimated_receive": MessageLookupByLibrary.simpleMessage(
+      "Alacağınız (tahmini)",
+    ),
+    "g_key_bridge_fastest": MessageLookupByLibrary.simpleMessage("En Hızlı"),
+    "g_key_bridge_fee": MessageLookupByLibrary.simpleMessage("Köprü Ücreti"),
+    "g_key_bridge_from_chain": MessageLookupByLibrary.simpleMessage(
+      "Kaynak Zincir",
+    ),
+    "g_key_bridge_get_quote": MessageLookupByLibrary.simpleMessage("Fiyat Al"),
+    "g_key_bridge_history": MessageLookupByLibrary.simpleMessage(
+      "Köprü Geçmişi",
+    ),
+    "g_key_bridge_no_routes": MessageLookupByLibrary.simpleMessage(
+      "Rota bulunamadı",
+    ),
+    "g_key_bridge_recommended": MessageLookupByLibrary.simpleMessage(
+      "Önerilen",
+    ),
+    "g_key_bridge_refresh": MessageLookupByLibrary.simpleMessage("Yenile"),
+    "g_key_bridge_route": MessageLookupByLibrary.simpleMessage("Rota"),
+    "g_key_bridge_search_chain": MessageLookupByLibrary.simpleMessage(
+      "Zincir ara...",
+    ),
+    "g_key_bridge_select_token": MessageLookupByLibrary.simpleMessage(
+      "Token Seç",
+    ),
+    "g_key_bridge_slippage": MessageLookupByLibrary.simpleMessage("Kayma"),
+    "g_key_bridge_swap": MessageLookupByLibrary.simpleMessage("Köprü"),
+    "g_key_bridge_time": MessageLookupByLibrary.simpleMessage("Tahmini Süre"),
+    "g_key_bridge_title": MessageLookupByLibrary.simpleMessage("Köprü"),
+    "g_key_bridge_to_chain": MessageLookupByLibrary.simpleMessage(
+      "Hedef Zincir",
+    ),
+    "g_key_bridge_tx_failed": MessageLookupByLibrary.simpleMessage(
+      "Köprü Başarısız",
+    ),
+    "g_key_bridge_tx_pending": MessageLookupByLibrary.simpleMessage(
+      "İşlem Beklemede",
+    ),
+    "g_key_bridge_tx_success": MessageLookupByLibrary.simpleMessage(
+      "Köprü Başarılı",
+    ),
+    "g_key_change_email": MessageLookupByLibrary.simpleMessage("Change Email"),
+    "g_key_change_password": MessageLookupByLibrary.simpleMessage(
+      "Change Password",
+    ),
+    "g_key_change_password_desc": MessageLookupByLibrary.simpleMessage(
+      "Enter your current password and set a new password",
+    ),
+    "g_key_code_length": MessageLookupByLibrary.simpleMessage(
+      "Please enter 6-digit code",
+    ),
+    "g_key_code_required": MessageLookupByLibrary.simpleMessage(
+      "Verification code is required",
+    ),
+    "g_key_code_sent": MessageLookupByLibrary.simpleMessage(
+      "Verification code sent",
+    ),
+    "g_key_confirm_new_password": MessageLookupByLibrary.simpleMessage(
+      "Confirm New Password",
+    ),
+    "g_key_continue_with_apple": MessageLookupByLibrary.simpleMessage(
+      "Continue with Apple",
+    ),
+    "g_key_continue_with_google": MessageLookupByLibrary.simpleMessage(
+      "Continue with Google",
+    ),
+    "g_key_email": MessageLookupByLibrary.simpleMessage("Email"),
+    "g_key_email_invalid": MessageLookupByLibrary.simpleMessage(
+      "Please enter a valid email address",
+    ),
+    "g_key_email_required": MessageLookupByLibrary.simpleMessage(
+      "Email is required",
+    ),
+    "g_key_ens_advanced": MessageLookupByLibrary.simpleMessage("Advanced"),
+    "g_key_ens_annual_fee": MessageLookupByLibrary.simpleMessage("Annual Fee"),
+    "g_key_ens_available": MessageLookupByLibrary.simpleMessage("Available"),
+    "g_key_ens_base_price": MessageLookupByLibrary.simpleMessage("Base Price"),
+    "g_key_ens_checking": MessageLookupByLibrary.simpleMessage(
+      "Checking availability...",
+    ),
+    "g_key_ens_commit": MessageLookupByLibrary.simpleMessage("Commit"),
+    "g_key_ens_commit_failed": MessageLookupByLibrary.simpleMessage(
+      "Commit failed",
+    ),
+    "g_key_ens_commit_tx": MessageLookupByLibrary.simpleMessage(
+      "Committing transaction...",
+    ),
+    "g_key_ens_committing": MessageLookupByLibrary.simpleMessage(
+      "Committing...",
+    ),
+    "g_key_ens_confirm_renew": MessageLookupByLibrary.simpleMessage(
+      "Confirm Renewal",
+    ),
+    "g_key_ens_confirm_send": MessageLookupByLibrary.simpleMessage(
+      "Confirm & Send",
+    ),
+    "g_key_ens_confirm_title": MessageLookupByLibrary.simpleMessage(
+      "Confirm ENS Resolution",
+    ),
+    "g_key_ens_current_expiry": MessageLookupByLibrary.simpleMessage(
+      "Current Expiry",
+    ),
+    "g_key_ens_days_left": MessageLookupByLibrary.simpleMessage("days left"),
+    "g_key_ens_description": MessageLookupByLibrary.simpleMessage(
+      "Register and manage your .eth domain names",
+    ),
+    "g_key_ens_detected": MessageLookupByLibrary.simpleMessage(
+      "ENS Name Detected",
+    ),
+    "g_key_ens_duration": MessageLookupByLibrary.simpleMessage(
+      "Registration Period",
+    ),
+    "g_key_ens_edit_records": MessageLookupByLibrary.simpleMessage(
+      "Edit Records",
+    ),
+    "g_key_ens_expired": MessageLookupByLibrary.simpleMessage("Expired"),
+    "g_key_ens_expires": MessageLookupByLibrary.simpleMessage("Expires"),
+    "g_key_ens_expiring_soon": MessageLookupByLibrary.simpleMessage(
+      "Expiring Soon",
+    ),
+    "g_key_ens_extend_period": MessageLookupByLibrary.simpleMessage(
+      "Extend Registration Period",
+    ),
+    "g_key_ens_failed": MessageLookupByLibrary.simpleMessage("Failed"),
+    "g_key_ens_finalizing": MessageLookupByLibrary.simpleMessage(
+      "Finalizing registration",
+    ),
+    "g_key_ens_get_started": MessageLookupByLibrary.simpleMessage(
+      "Get started with ENS",
+    ),
+    "g_key_ens_home_title": MessageLookupByLibrary.simpleMessage("ENS Manager"),
+    "g_key_ens_invalid_name": MessageLookupByLibrary.simpleMessage(
+      "Invalid ENS name",
+    ),
+    "g_key_ens_is_yours": MessageLookupByLibrary.simpleMessage("is now yours!"),
+    "g_key_ens_keep_app_open": MessageLookupByLibrary.simpleMessage(
+      "Please keep the app open during registration",
+    ),
+    "g_key_ens_management_title": MessageLookupByLibrary.simpleMessage(
+      "Manage ENS",
+    ),
+    "g_key_ens_min_length": MessageLookupByLibrary.simpleMessage(
+      "Minimum 3 characters",
+    ),
+    "g_key_ens_my_domains": MessageLookupByLibrary.simpleMessage("My Domains"),
+    "g_key_ens_name": MessageLookupByLibrary.simpleMessage("ENS Name"),
+    "g_key_ens_new_expiry": MessageLookupByLibrary.simpleMessage("New Expiry"),
+    "g_key_ens_new_owner": MessageLookupByLibrary.simpleMessage(
+      "New Owner Address",
+    ),
+    "g_key_ens_no_domains": MessageLookupByLibrary.simpleMessage(
+      "No domains yet",
+    ),
+    "g_key_ens_no_names": MessageLookupByLibrary.simpleMessage(
+      "You don\'t own any ENS names yet",
+    ),
+    "g_key_ens_owned_names": MessageLookupByLibrary.simpleMessage(
+      "My ENS Names",
+    ),
+    "g_key_ens_owner": MessageLookupByLibrary.simpleMessage("Owner"),
+    "g_key_ens_please_wait": MessageLookupByLibrary.simpleMessage(
+      "Please wait",
+    ),
+    "g_key_ens_premium_name": MessageLookupByLibrary.simpleMessage(
+      "Premium Name",
+    ),
+    "g_key_ens_price_breakdown": MessageLookupByLibrary.simpleMessage(
+      "Price Breakdown",
+    ),
+    "g_key_ens_price_per_year": MessageLookupByLibrary.simpleMessage(
+      "per year",
+    ),
+    "g_key_ens_primary": MessageLookupByLibrary.simpleMessage("Primary"),
+    "g_key_ens_primary_set": MessageLookupByLibrary.simpleMessage(
+      "Primary name set successfully",
+    ),
+    "g_key_ens_processing": MessageLookupByLibrary.simpleMessage(
+      "Processing...",
+    ),
+    "g_key_ens_purchase_title": MessageLookupByLibrary.simpleMessage(
+      "Register ENS",
+    ),
+    "g_key_ens_records": MessageLookupByLibrary.simpleMessage("Records"),
+    "g_key_ens_register": MessageLookupByLibrary.simpleMessage("Register"),
+    "g_key_ens_register_failed": MessageLookupByLibrary.simpleMessage(
+      "Registration failed",
+    ),
+    "g_key_ens_register_now": MessageLookupByLibrary.simpleMessage(
+      "Register Now",
+    ),
+    "g_key_ens_register_tx": MessageLookupByLibrary.simpleMessage(
+      "Registering name...",
+    ),
+    "g_key_ens_registering": MessageLookupByLibrary.simpleMessage(
+      "Registering...",
+    ),
+    "g_key_ens_registration_info": MessageLookupByLibrary.simpleMessage(
+      "Registration Info",
+    ),
+    "g_key_ens_registration_period": MessageLookupByLibrary.simpleMessage(
+      "Registration Period",
+    ),
+    "g_key_ens_renew": MessageLookupByLibrary.simpleMessage("Renew"),
+    "g_key_ens_renew_cost": MessageLookupByLibrary.simpleMessage(
+      "Renewal Cost",
+    ),
+    "g_key_ens_renew_desc": MessageLookupByLibrary.simpleMessage(
+      "Extend your domain registration",
+    ),
+    "g_key_ens_renew_success": MessageLookupByLibrary.simpleMessage(
+      "Renewal successful",
+    ),
+    "g_key_ens_renew_title": MessageLookupByLibrary.simpleMessage("Renew ENS"),
+    "g_key_ens_resolution_failed": MessageLookupByLibrary.simpleMessage(
+      "ENS resolution failed",
+    ),
+    "g_key_ens_resolved_address": MessageLookupByLibrary.simpleMessage(
+      "Resolved Address",
+    ),
+    "g_key_ens_resolving": MessageLookupByLibrary.simpleMessage(
+      "Resolving ENS...",
+    ),
+    "g_key_ens_search": MessageLookupByLibrary.simpleMessage("Search"),
+    "g_key_ens_search_desc": MessageLookupByLibrary.simpleMessage(
+      "Find available .eth names",
+    ),
+    "g_key_ens_search_hint": MessageLookupByLibrary.simpleMessage(
+      "Search for a .eth name",
+    ),
+    "g_key_ens_search_prompt": MessageLookupByLibrary.simpleMessage(
+      "Enter an ENS name to search",
+    ),
+    "g_key_ens_search_register": MessageLookupByLibrary.simpleMessage(
+      "Search & Register",
+    ),
+    "g_key_ens_search_title": MessageLookupByLibrary.simpleMessage(
+      "Search ENS",
+    ),
+    "g_key_ens_service": MessageLookupByLibrary.simpleMessage(
+      "Ethereum Name Service",
+    ),
+    "g_key_ens_set_primary": MessageLookupByLibrary.simpleMessage(
+      "Set as Primary",
+    ),
+    "g_key_ens_standard_name": MessageLookupByLibrary.simpleMessage(
+      "Standard Name",
+    ),
+    "g_key_ens_start_registration": MessageLookupByLibrary.simpleMessage(
+      "Start Registration",
+    ),
+    "g_key_ens_step_1": MessageLookupByLibrary.simpleMessage("Step 1"),
+    "g_key_ens_step_2": MessageLookupByLibrary.simpleMessage("Step 2"),
+    "g_key_ens_step_3": MessageLookupByLibrary.simpleMessage("Step 3"),
+    "g_key_ens_step_commit": MessageLookupByLibrary.simpleMessage("Commit"),
+    "g_key_ens_step_register": MessageLookupByLibrary.simpleMessage("Register"),
+    "g_key_ens_step_success": MessageLookupByLibrary.simpleMessage("Success"),
+    "g_key_ens_step_wait": MessageLookupByLibrary.simpleMessage("Wait"),
+    "g_key_ens_success": MessageLookupByLibrary.simpleMessage("Success!"),
+    "g_key_ens_success_message": m15,
+    "g_key_ens_suggestions": MessageLookupByLibrary.simpleMessage(
+      "Suggestions",
+    ),
+    "g_key_ens_text_records": MessageLookupByLibrary.simpleMessage(
+      "Text Records",
+    ),
+    "g_key_ens_title": MessageLookupByLibrary.simpleMessage("ENS Manager"),
+    "g_key_ens_total": MessageLookupByLibrary.simpleMessage("Total"),
+    "g_key_ens_total_cost": MessageLookupByLibrary.simpleMessage("Total Cost"),
+    "g_key_ens_transfer": MessageLookupByLibrary.simpleMessage("Transfer"),
+    "g_key_ens_transfer_desc": MessageLookupByLibrary.simpleMessage(
+      "Transfer ownership to another address",
+    ),
+    "g_key_ens_transfer_success": MessageLookupByLibrary.simpleMessage(
+      "Transfer successful",
+    ),
+    "g_key_ens_transfer_warning": MessageLookupByLibrary.simpleMessage(
+      "Transfer is irreversible. Make sure the new owner address is correct.",
+    ),
+    "g_key_ens_try_another": MessageLookupByLibrary.simpleMessage(
+      "Try another name",
+    ),
+    "g_key_ens_two_step_process": MessageLookupByLibrary.simpleMessage(
+      "ENS registration is a two-step process",
+    ),
+    "g_key_ens_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Unavailable",
+    ),
+    "g_key_ens_wait": MessageLookupByLibrary.simpleMessage("Wait"),
+    "g_key_ens_wait_explanation": MessageLookupByLibrary.simpleMessage(
+      "Waiting period prevents front-running attacks",
+    ),
+    "g_key_ens_wait_time_info": MessageLookupByLibrary.simpleMessage(
+      "A waiting period prevents front-running",
+    ),
+    "g_key_ens_wait_timer": m16,
+    "g_key_ens_waiting": MessageLookupByLibrary.simpleMessage("Waiting..."),
+    "g_key_ens_warning": MessageLookupByLibrary.simpleMessage(
+      "Please verify the resolved address before proceeding. ENS names can be transferred or changed by their owner.",
+    ),
+    "g_key_ens_year": MessageLookupByLibrary.simpleMessage("year"),
+    "g_key_ens_years": MessageLookupByLibrary.simpleMessage("years"),
+    "g_key_enter_confirm_password": MessageLookupByLibrary.simpleMessage(
+      "Re-enter new password",
+    ),
+    "g_key_enter_email": MessageLookupByLibrary.simpleMessage(
+      "Enter your email address",
+    ),
+    "g_key_enter_new_password": MessageLookupByLibrary.simpleMessage(
+      "Enter new password",
+    ),
+    "g_key_enter_old_password": MessageLookupByLibrary.simpleMessage(
+      "Enter current password",
+    ),
     "g_key_error_1": MessageLookupByLibrary.simpleMessage(
       "Yanıt verisi ayrıştırma hatası!",
     ),
@@ -676,6 +1309,81 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_feedback_9": MessageLookupByLibrary.simpleMessage(
       "Lütfen giriş yapın",
     ),
+    "g_key_forgot_password": MessageLookupByLibrary.simpleMessage(
+      "Forgot Password?",
+    ),
+    "g_key_gas_base_fee": MessageLookupByLibrary.simpleMessage("Temel Ücret"),
+    "g_key_gas_custom": MessageLookupByLibrary.simpleMessage("Özel"),
+    "g_key_gas_estimated_time": MessageLookupByLibrary.simpleMessage(
+      "Tahmini Süre",
+    ),
+    "g_key_gas_fast": MessageLookupByLibrary.simpleMessage("Hızlı"),
+    "g_key_gas_max_fee": MessageLookupByLibrary.simpleMessage("Maksimum Ücret"),
+    "g_key_gas_network_busy": MessageLookupByLibrary.simpleMessage("Ağ yoğun"),
+    "g_key_gas_network_idle": MessageLookupByLibrary.simpleMessage("Ağ boş"),
+    "g_key_gas_network_normal": MessageLookupByLibrary.simpleMessage(
+      "Ağ normal",
+    ),
+    "g_key_gas_priority_fee": MessageLookupByLibrary.simpleMessage(
+      "Öncelik Ücreti",
+    ),
+    "g_key_gas_settings": MessageLookupByLibrary.simpleMessage("Gas Ayarları"),
+    "g_key_gas_slow": MessageLookupByLibrary.simpleMessage("Yavaş"),
+    "g_key_gas_standard": MessageLookupByLibrary.simpleMessage("Standart"),
+    "g_key_google_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
+      "Google sign-in cancelled",
+    ),
+    "g_key_hw_accounts": MessageLookupByLibrary.simpleMessage("Hesaplar"),
+    "g_key_hw_add_account": MessageLookupByLibrary.simpleMessage("Hesap Ekle"),
+    "g_key_hw_confirm_on_device": MessageLookupByLibrary.simpleMessage(
+      "Cihazınızda onaylayın",
+    ),
+    "g_key_hw_connect": MessageLookupByLibrary.simpleMessage(
+      "Donanım Cüzdanı Bağla",
+    ),
+    "g_key_hw_connected": MessageLookupByLibrary.simpleMessage("Bağlandı"),
+    "g_key_hw_connecting": MessageLookupByLibrary.simpleMessage(
+      "Bağlanıyor...",
+    ),
+    "g_key_hw_derivation_path": MessageLookupByLibrary.simpleMessage(
+      "Türetme Yolu",
+    ),
+    "g_key_hw_disconnect": MessageLookupByLibrary.simpleMessage(
+      "Bağlantıyı Kes",
+    ),
+    "g_key_hw_disconnected": MessageLookupByLibrary.simpleMessage(
+      "Bağlantı Kesildi",
+    ),
+    "g_key_hw_enable_bluetooth": MessageLookupByLibrary.simpleMessage(
+      "Lütfen Bluetooth\'u açın",
+    ),
+    "g_key_hw_firmware": MessageLookupByLibrary.simpleMessage(
+      "Firmware Sürümü",
+    ),
+    "g_key_hw_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
+    "g_key_hw_no_devices": MessageLookupByLibrary.simpleMessage(
+      "Cihaz bulunamadı",
+    ),
+    "g_key_hw_open_app": m17,
+    "g_key_hw_rejected": MessageLookupByLibrary.simpleMessage(
+      "Cihazda reddedildi",
+    ),
+    "g_key_hw_scanning": MessageLookupByLibrary.simpleMessage(
+      "Cihazlar aranıyor...",
+    ),
+    "g_key_hw_select_device": MessageLookupByLibrary.simpleMessage("Cihaz Seç"),
+    "g_key_hw_sign_message": MessageLookupByLibrary.simpleMessage(
+      "Mesajı İmzala",
+    ),
+    "g_key_hw_sign_tx": MessageLookupByLibrary.simpleMessage("İşlemi İmzala"),
+    "g_key_hw_signal_strength": MessageLookupByLibrary.simpleMessage(
+      "Sinyal Gücü",
+    ),
+    "g_key_hw_timeout": MessageLookupByLibrary.simpleMessage(
+      "Bağlantı zaman aşımı",
+    ),
+    "g_key_hw_title": MessageLookupByLibrary.simpleMessage("Donanım Cüzdanı"),
+    "g_key_hw_trezor": MessageLookupByLibrary.simpleMessage("Trezor"),
     "g_key_keystore_19": MessageLookupByLibrary.simpleMessage(
       "Mevcut para birimi cüzdanı zaten var.",
     ),
@@ -683,10 +1391,73 @@ class MessageLookup extends MessageLookupByLibrary {
       "Keystore okunamadı",
     ),
     "g_key_keystore_22": MessageLookupByLibrary.simpleMessage("Keystore"),
+    "g_key_link_account": MessageLookupByLibrary.simpleMessage("Link Account"),
+    "g_key_linked_accounts": MessageLookupByLibrary.simpleMessage(
+      "Linked Accounts",
+    ),
     "g_key_login": MessageLookupByLibrary.simpleMessage("Giriş Yap"),
+    "g_key_login_success": MessageLookupByLibrary.simpleMessage(
+      "Login successful",
+    ),
     "g_key_logout": MessageLookupByLibrary.simpleMessage("Çıkış Yap"),
     "g_key_logout_sure": MessageLookupByLibrary.simpleMessage(
       "Uygulamadan çıkmak istediğinizden emin misiniz?",
+    ),
+    "g_key_loyalty_available_points": MessageLookupByLibrary.simpleMessage(
+      "Kullanılabilir Puan",
+    ),
+    "g_key_loyalty_claim_points": MessageLookupByLibrary.simpleMessage(
+      "Puan Al",
+    ),
+    "g_key_loyalty_daily_checkin": MessageLookupByLibrary.simpleMessage(
+      "Günlük Giriş",
+    ),
+    "g_key_loyalty_earned": MessageLookupByLibrary.simpleMessage("Kazanılan"),
+    "g_key_loyalty_history": MessageLookupByLibrary.simpleMessage(
+      "Puan Geçmişi",
+    ),
+    "g_key_loyalty_invited_friends": MessageLookupByLibrary.simpleMessage(
+      "Davet Edilen Arkadaşlar",
+    ),
+    "g_key_loyalty_next_tier": MessageLookupByLibrary.simpleMessage(
+      "Sonraki Seviye",
+    ),
+    "g_key_loyalty_no_rewards": MessageLookupByLibrary.simpleMessage(
+      "Ödül bulunamadı",
+    ),
+    "g_key_loyalty_no_tasks": MessageLookupByLibrary.simpleMessage(
+      "Görev bulunamadı",
+    ),
+    "g_key_loyalty_points": MessageLookupByLibrary.simpleMessage("Puanlar"),
+    "g_key_loyalty_points_to_next": m18,
+    "g_key_loyalty_redeem": MessageLookupByLibrary.simpleMessage("Kullan"),
+    "g_key_loyalty_referral": MessageLookupByLibrary.simpleMessage("Referans"),
+    "g_key_loyalty_referral_bonus": MessageLookupByLibrary.simpleMessage(
+      "Referans Bonusu",
+    ),
+    "g_key_loyalty_referral_code": MessageLookupByLibrary.simpleMessage(
+      "Referans Kodunuz",
+    ),
+    "g_key_loyalty_referral_link": MessageLookupByLibrary.simpleMessage(
+      "Referans Linki",
+    ),
+    "g_key_loyalty_rewards": MessageLookupByLibrary.simpleMessage("Ödüller"),
+    "g_key_loyalty_spent": MessageLookupByLibrary.simpleMessage("Harcanan"),
+    "g_key_loyalty_task_complete": MessageLookupByLibrary.simpleMessage(
+      "Görev Tamamlandı",
+    ),
+    "g_key_loyalty_tasks": MessageLookupByLibrary.simpleMessage("Görevler"),
+    "g_key_loyalty_tier": MessageLookupByLibrary.simpleMessage("Seviye"),
+    "g_key_loyalty_tier_bronze": MessageLookupByLibrary.simpleMessage("Bronz"),
+    "g_key_loyalty_tier_diamond": MessageLookupByLibrary.simpleMessage("Elmas"),
+    "g_key_loyalty_tier_gold": MessageLookupByLibrary.simpleMessage("Altın"),
+    "g_key_loyalty_tier_platinum": MessageLookupByLibrary.simpleMessage(
+      "Platin",
+    ),
+    "g_key_loyalty_tier_silver": MessageLookupByLibrary.simpleMessage("Gümüş"),
+    "g_key_loyalty_title": MessageLookupByLibrary.simpleMessage("Puanlar"),
+    "g_key_loyalty_total_points": MessageLookupByLibrary.simpleMessage(
+      "Toplam Puan",
     ),
     "g_key_m_10": MessageLookupByLibrary.simpleMessage("Facebook"),
     "g_key_m_11": MessageLookupByLibrary.simpleMessage("Twitter"),
@@ -707,6 +1478,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_mnemonic": MessageLookupByLibrary.simpleMessage(
       "Lütfen kurtarma ifadesini girin",
     ),
+    "g_key_new_password": MessageLookupByLibrary.simpleMessage("New Password"),
+    "g_key_new_password_same_as_old": MessageLookupByLibrary.simpleMessage(
+      "New password must be different from current password",
+    ),
+    "g_key_next": MessageLookupByLibrary.simpleMessage("Next"),
     "g_key_nft_141": MessageLookupByLibrary.simpleMessage("Toplam"),
     "g_key_nft_16": MessageLookupByLibrary.simpleMessage("Kamera"),
     "g_key_nft_17": MessageLookupByLibrary.simpleMessage("Fotoğraf seç"),
@@ -715,8 +1491,62 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_nft_220": MessageLookupByLibrary.simpleMessage("Geri"),
     "g_key_nft_41": MessageLookupByLibrary.simpleMessage("İşlem gönderildi"),
     "g_key_nft_47": MessageLookupByLibrary.simpleMessage("Video seç"),
+    "g_key_no_linked_accounts": MessageLookupByLibrary.simpleMessage(
+      "No linked accounts",
+    ),
+    "g_key_oidc_login": MessageLookupByLibrary.simpleMessage(
+      "Enterprise Login (SSO)",
+    ),
+    "g_key_oidc_not_configured": MessageLookupByLibrary.simpleMessage(
+      "Enterprise SSO not configured",
+    ),
+    "g_key_old_password": MessageLookupByLibrary.simpleMessage(
+      "Current Password",
+    ),
+    "g_key_or": MessageLookupByLibrary.simpleMessage("or"),
+    "g_key_password_changed_success": MessageLookupByLibrary.simpleMessage(
+      "Password changed successfully",
+    ),
+    "g_key_password_min_length": MessageLookupByLibrary.simpleMessage(
+      "Password must be at least 6 characters",
+    ),
+    "g_key_password_req_different": MessageLookupByLibrary.simpleMessage(
+      "Different from current password",
+    ),
+    "g_key_password_req_length": MessageLookupByLibrary.simpleMessage(
+      "At least 6 characters",
+    ),
+    "g_key_password_required": MessageLookupByLibrary.simpleMessage(
+      "Password is required",
+    ),
+    "g_key_password_requirements": MessageLookupByLibrary.simpleMessage(
+      "Password Requirements",
+    ),
+    "g_key_password_reset_success": MessageLookupByLibrary.simpleMessage(
+      "Password reset successfully",
+    ),
+    "g_key_passwords_not_match": MessageLookupByLibrary.simpleMessage(
+      "Passwords do not match",
+    ),
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage(
       "Telefon galerisinden seç",
+    ),
+    "g_key_resend_code": MessageLookupByLibrary.simpleMessage("Resend Code"),
+    "g_key_reset_password": MessageLookupByLibrary.simpleMessage(
+      "Reset Password",
+    ),
+    "g_key_reset_password_email_desc": MessageLookupByLibrary.simpleMessage(
+      "Enter your email address to receive a verification code",
+    ),
+    "g_key_saml_login": MessageLookupByLibrary.simpleMessage("SAML Login"),
+    "g_key_saml_not_configured": MessageLookupByLibrary.simpleMessage(
+      "SAML not configured",
+    ),
+    "g_key_send_code": MessageLookupByLibrary.simpleMessage(
+      "Send Verification Code",
+    ),
+    "g_key_set_new_password_desc": MessageLookupByLibrary.simpleMessage(
+      "Set your new password",
     ),
     "g_key_share_code": MessageLookupByLibrary.simpleMessage(
       "QR kodunu paylaş",
@@ -725,14 +1555,90 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_share_method": MessageLookupByLibrary.simpleMessage(
       "Paylaşım yöntemi",
     ),
+    "g_key_sign_in_failed": MessageLookupByLibrary.simpleMessage(
+      "Sign in failed",
+    ),
+    "g_key_social_login": MessageLookupByLibrary.simpleMessage("Social Login"),
     "g_key_squad": MessageLookupByLibrary.simpleMessage("Sohbet"),
     "g_key_squad_k11": MessageLookupByLibrary.simpleMessage(
       "Dosya yüklemek için çok büyük",
     ),
-    "g_key_squad_k15": m17,
+    "g_key_squad_k15": m19,
     "g_key_squad_k18": MessageLookupByLibrary.simpleMessage("Kişi Ekle"),
     "g_key_squad_k24": MessageLookupByLibrary.simpleMessage("Kişi"),
     "g_key_squad_k25": MessageLookupByLibrary.simpleMessage("E-posta ile ara"),
+    "g_key_stake_active": MessageLookupByLibrary.simpleMessage("Aktif"),
+    "g_key_stake_active_positions": MessageLookupByLibrary.simpleMessage(
+      "Active Positions",
+    ),
+    "g_key_stake_apy": MessageLookupByLibrary.simpleMessage("APY"),
+    "g_key_stake_avg_apy": MessageLookupByLibrary.simpleMessage("Avg APY"),
+    "g_key_stake_claim": MessageLookupByLibrary.simpleMessage("Ödül Al"),
+    "g_key_stake_commission": MessageLookupByLibrary.simpleMessage("Komisyon"),
+    "g_key_stake_d_unbond": m20,
+    "g_key_stake_days_left": m21,
+    "g_key_stake_days_remaining": m22,
+    "g_key_stake_delegators": MessageLookupByLibrary.simpleMessage(
+      "Delegatörler",
+    ),
+    "g_key_stake_liquid": MessageLookupByLibrary.simpleMessage("Likit Staking"),
+    "g_key_stake_liquid_tag": MessageLookupByLibrary.simpleMessage("Liquid"),
+    "g_key_stake_min_stake": MessageLookupByLibrary.simpleMessage(
+      "Minimum Stake",
+    ),
+    "g_key_stake_no_lock": MessageLookupByLibrary.simpleMessage("No lock"),
+    "g_key_stake_no_positions": MessageLookupByLibrary.simpleMessage(
+      "Staking pozisyonu yok",
+    ),
+    "g_key_stake_no_positions_yet": MessageLookupByLibrary.simpleMessage(
+      "No staking positions yet",
+    ),
+    "g_key_stake_overview": MessageLookupByLibrary.simpleMessage(
+      "Total Staking Overview",
+    ),
+    "g_key_stake_pending_rewards": MessageLookupByLibrary.simpleMessage(
+      "Bekleyen Ödüller",
+    ),
+    "g_key_stake_positions": MessageLookupByLibrary.simpleMessage(
+      "Pozisyonlarım",
+    ),
+    "g_key_stake_protocol": MessageLookupByLibrary.simpleMessage("Protokol"),
+    "g_key_stake_protocols": MessageLookupByLibrary.simpleMessage("Protocols"),
+    "g_key_stake_restake": MessageLookupByLibrary.simpleMessage(
+      "Yeniden Stake",
+    ),
+    "g_key_stake_rewards": MessageLookupByLibrary.simpleMessage("Ödüller"),
+    "g_key_stake_select_validator": MessageLookupByLibrary.simpleMessage(
+      "Doğrulayıcı Seç",
+    ),
+    "g_key_stake_stake": MessageLookupByLibrary.simpleMessage("Stake Et"),
+    "g_key_stake_staked": MessageLookupByLibrary.simpleMessage("Staked"),
+    "g_key_stake_start_staking": MessageLookupByLibrary.simpleMessage(
+      "Start Staking",
+    ),
+    "g_key_stake_title": MessageLookupByLibrary.simpleMessage("Staking"),
+    "g_key_stake_total_staked": MessageLookupByLibrary.simpleMessage(
+      "Toplam Stake",
+    ),
+    "g_key_stake_unbonding": MessageLookupByLibrary.simpleMessage(
+      "Kilidi Açılıyor",
+    ),
+    "g_key_stake_unbonding_period": MessageLookupByLibrary.simpleMessage(
+      "Kilit Açma Süresi",
+    ),
+    "g_key_stake_unstake": MessageLookupByLibrary.simpleMessage("Stake Çıkar"),
+    "g_key_stake_uptime": MessageLookupByLibrary.simpleMessage(
+      "Çalışma Süresi",
+    ),
+    "g_key_stake_validator": MessageLookupByLibrary.simpleMessage(
+      "Doğrulayıcı",
+    ),
+    "g_key_stake_validators": MessageLookupByLibrary.simpleMessage(
+      "Doğrulayıcılar",
+    ),
+    "g_key_step_email": MessageLookupByLibrary.simpleMessage("Email"),
+    "g_key_step_password": MessageLookupByLibrary.simpleMessage("Password"),
+    "g_key_step_verify": MessageLookupByLibrary.simpleMessage("Verify"),
     "g_key_t_1": MessageLookupByLibrary.simpleMessage("Tamamlandı"),
     "g_key_t_15": MessageLookupByLibrary.simpleMessage("Gas fiyatı"),
     "g_key_t_16": MessageLookupByLibrary.simpleMessage("Maksimum gas ücreti"),
@@ -740,7 +1646,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Gas başına maksimum ücret",
     ),
     "g_key_t_2": MessageLookupByLibrary.simpleMessage("Beklemede"),
-    "g_key_t_29": m19,
+    "g_key_t_29": m23,
     "g_key_t_3": MessageLookupByLibrary.simpleMessage("Başarısız"),
     "g_key_t_30": MessageLookupByLibrary.simpleMessage("Madenci Ücreti"),
     "g_key_t_31": MessageLookupByLibrary.simpleMessage("Devam"),
@@ -761,7 +1667,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "0\'dan büyük tam sayı girin.",
     ),
     "g_key_t_44": MessageLookupByLibrary.simpleMessage("Veri alınamadı"),
-    "g_key_t_45": m20,
+    "g_key_t_45": m24,
     "g_key_t_46": MessageLookupByLibrary.simpleMessage(
       "Alıcı adres hesabını kontrol et",
     ),
@@ -772,7 +1678,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_51": MessageLookupByLibrary.simpleMessage(
       "Hesap doğrulaması başarılı",
     ),
-    "g_key_t_52": m21,
+    "g_key_t_52": m25,
     "g_key_t_54": MessageLookupByLibrary.simpleMessage(
       "Alıcı adresin hesabı yok ve ilk transfer en az 10XRP olmalıdır",
     ),
@@ -804,6 +1710,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_u_8": MessageLookupByLibrary.simpleMessage("Ad"),
     "g_key_u_9": MessageLookupByLibrary.simpleMessage("Gelir"),
+    "g_key_unlink_account": MessageLookupByLibrary.simpleMessage(
+      "Unlink Account",
+    ),
     "g_key_user_p1": MessageLookupByLibrary.simpleMessage(
       "Okudum ve kabul ediyorum ",
     ),
@@ -819,6 +1728,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_v_k4": MessageLookupByLibrary.simpleMessage(
       "Zaten en son sürümdasınız",
     ),
+    "g_key_verification_code": MessageLookupByLibrary.simpleMessage(
+      "Verification Code",
+    ),
+    "g_key_verification_code_sent": m26,
     "g_key_wallet_c10": MessageLookupByLibrary.simpleMessage(
       "Kurtarma İfadesini Görüntüle",
     ),
@@ -934,7 +1847,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_k56": MessageLookupByLibrary.simpleMessage("Nonce"),
     "g_key_wallet_k57": MessageLookupByLibrary.simpleMessage("Hızlandır"),
     "g_key_wallet_k58": MessageLookupByLibrary.simpleMessage("Not"),
-    "g_key_wallet_m1": m22,
+    "g_key_wallet_m1": m27,
     "g_key_wallet_m11": MessageLookupByLibrary.simpleMessage(
       "Hesabınızı iptal etmek istediğinizden emin misiniz?",
     ),
@@ -942,7 +1855,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_m17": MessageLookupByLibrary.simpleMessage(
       "Lütfen Google doğrulama kodunu girin.",
     ),
-    "g_key_wallet_m19": m23,
+    "g_key_wallet_m19": m28,
     "g_key_wallet_m2": MessageLookupByLibrary.simpleMessage(
       "Mevcut token eklenmedi.",
     ),
@@ -952,11 +1865,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_m22": MessageLookupByLibrary.simpleMessage(
       "Cüzdan İçe Aktar",
     ),
-    "g_key_wallet_m3": m24,
+    "g_key_wallet_m3": m29,
     "g_key_wallet_m4": MessageLookupByLibrary.simpleMessage(
       "Mevcut token bakiyesi yetersiz.",
     ),
-    "g_key_wallet_m5": m25,
+    "g_key_wallet_m5": m30,
     "g_key_wallet_m6": MessageLookupByLibrary.simpleMessage("İmzalama hatası"),
     "g_key_wallet_m8": MessageLookupByLibrary.simpleMessage("Hesap iptali"),
     "g_key_wallet_m9": MessageLookupByLibrary.simpleMessage(
@@ -967,13 +1880,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_xml_0": MessageLookupByLibrary.simpleMessage("Ayrılmış"),
     "g_key_xml_1": MessageLookupByLibrary.simpleMessage("Temel Rezerv"),
-    "g_key_xml_11": m26,
+    "g_key_xml_11": m31,
     "g_key_xml_2": MessageLookupByLibrary.simpleMessage("Artımlı Rezerv"),
-    "g_key_xml_22": m27,
+    "g_key_xml_22": m32,
     "g_key_xml_3": MessageLookupByLibrary.simpleMessage(
       "Sahip Olunan Nesne Sayısı",
     ),
-    "g_key_xml_33": m28,
+    "g_key_xml_33": m33,
     "g_key_xml_4": MessageLookupByLibrary.simpleMessage(
       "Toplam ayrılmış miktar nasıl hesaplanır",
     ),
@@ -999,7 +1912,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "İkinci desen şifresi çizimi",
     ),
     "g_lock_key20": MessageLookupByLibrary.simpleMessage("Desen şifresi çiz"),
-    "g_lock_key21": m29,
+    "g_lock_key21": m34,
     "g_lock_key22": MessageLookupByLibrary.simpleMessage(
       "Desen şifresini sıfırla",
     ),
@@ -1009,7 +1922,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "Cüzdan Şifresi Eklensin mi?",
     ),
-    "g_lock_key25": m30,
+    "g_lock_key25": m35,
     "g_lock_key3": MessageLookupByLibrary.simpleMessage("Kilit ekranı sayfası"),
     "g_lock_key4": MessageLookupByLibrary.simpleMessage("Otomatik kilitleme"),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("Başarılı"),
@@ -1035,12 +1948,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Arkadaşlarla paylaş",
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Devam"),
-    "g_mining_key63": m31,
-    "g_mining_key73": m32,
+    "g_mining_key63": m36,
+    "g_mining_key73": m37,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "@N42Wallet\'ta bir düğüm kurdum ve mobil cihazlarda doğrulamaya başladım! Gel bana katıl. Merkeziyetsiz gelecek mobilde!",
     ),
-    "g_mining_key76": m33,
+    "g_mining_key76": m38,
     "g_mining_key86": MessageLookupByLibrary.simpleMessage(
       "768 saniye sonra kullanım mümkün.",
     ),
@@ -1071,7 +1984,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "Desteklenmeyen şifreli veri biçimi!",
     ),
-    "g_mining_key_109": m34,
+    "g_mining_key_109": m39,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage("Dünkü Ödüller"),
     "g_mining_key_110": MessageLookupByLibrary.simpleMessage("Şifreli veri"),
     "g_mining_key_111": MessageLookupByLibrary.simpleMessage(
@@ -1087,7 +2000,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "Kullanım biraz zaman alır, lütfen bekleyin!",
     ),
-    "g_mining_key_116": m35,
+    "g_mining_key_116": m40,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "Ödül her gün birikir ve yalnızca ~0.5 N\'ye ulaştığında N cüzdanınıza gönderilir.",
     ),
@@ -1136,7 +2049,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 blok/gün~15 dakika",
     ),
-    "g_mining_key_71": m36,
+    "g_mining_key_71": m41,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "Kontrol başına 128 saniye",
     ),
@@ -1204,7 +2117,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "Lütfen şifreleme şifresini girin",
     ),
-    "g_mining_key_98": m37,
+    "g_mining_key_98": m42,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Doğruluğundan emin olmak için lütfen şifrenizi tekrar girin",
     ),
@@ -1231,7 +2144,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Bağlantı"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("kod"),
-    "g_swap_key_14": m38,
+    "g_swap_key_14": m43,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Coin fiyatı alınamadı.",
     ),
@@ -1245,7 +2158,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Takasınız kısa süre içinde dağıtılacaktır. Lütfen sabırlı olun.",
     ),
-    "g_swap_key_20": m39,
+    "g_swap_key_20": m44,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Düğüm çalıştırma maliyetleri: Grup Doğrulaması 1-49 N Temel Düğüm: 50 N Premium Düğüm: 100 N Pro Düğüm: 500 N.",
     ),
@@ -1257,7 +2170,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Yeni Bakiye"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Ödediğiniz"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Tarih"),
-    "g_swap_key_31": m40,
+    "g_swap_key_31": m45,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Takaslar ilgili zincir gezginlerinde (Etherscan, BscScan, TRONSCAN ve kendi gezginimiz) görüntülenebilir.",
     ),
@@ -1266,7 +2179,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_4": MessageLookupByLibrary.simpleMessage("Aldığınız"),
     "g_swap_key_5": MessageLookupByLibrary.simpleMessage("Takas Önizlemesi"),
     "g_swap_key_6": MessageLookupByLibrary.simpleMessage("Tekrar dene"),
-    "g_token_m_key_1": m41,
+    "g_token_m_key_1": m46,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Herkes mevcut tokenlerin sahte sürümleri dahil token oluşturabilir. İçe aktarmadan önce her zaman bir tokeni araştırın.",
     ),
@@ -1284,9 +2197,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 birim"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Token Ekle"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Biçim Hatası!"),
-    "g_token_m_key_22": m42,
-    "g_token_m_key_23": m43,
-    "g_token_m_key_24": m44,
+    "g_token_m_key_22": m47,
+    "g_token_m_key_23": m48,
+    "g_token_m_key_24": m49,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Token içe aktar"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Tüm ağlar"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("Özel Token"),
@@ -1294,18 +2207,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_7": MessageLookupByLibrary.simpleMessage("Token sembolü"),
     "g_token_m_key_8": MessageLookupByLibrary.simpleMessage("Token ondalık"),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("İçe Aktar"),
-    "g_unlock_key10": m45,
+    "g_unlock_key10": m50,
     "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
       "Parmak izi veya yüz tanıma etkin değil mi?",
     ),
     "g_unlock_key3": MessageLookupByLibrary.simpleMessage("Desen şifresi çiz"),
-    "g_unlock_key4": m46,
+    "g_unlock_key4": m51,
     "g_unlock_key5": MessageLookupByLibrary.simpleMessage("Şifre girin"),
-    "g_unlock_key6": m47,
+    "g_unlock_key6": m52,
     "g_unlock_key7": MessageLookupByLibrary.simpleMessage(
       "Kimlik doğrulama başarısız",
     ),
-    "g_unlock_key8": m48,
+    "g_unlock_key8": m53,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("Ayrıca "),
     "google_verification": MessageLookupByLibrary.simpleMessage(
       "Google Doğrulama",
@@ -1343,7 +2256,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "google_verification_message20": MessageLookupByLibrary.simpleMessage(
       "E-posta doğrulama kodunu girin",
     ),
-    "google_verification_message21": m49,
+    "google_verification_message21": m54,
     "google_verification_message3": MessageLookupByLibrary.simpleMessage(
       "Google anahtarı alınamadı",
     ),
@@ -1401,7 +2314,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "login_password": MessageLookupByLibrary.simpleMessage("Şifre"),
     "next": MessageLookupByLibrary.simpleMessage("Sonraki"),
-    "nicknameMessage": m50,
+    "nicknameMessage": m55,
     "password_diff": MessageLookupByLibrary.simpleMessage(
       "Şifreler eşleşmiyor",
     ),

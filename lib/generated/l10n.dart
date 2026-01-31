@@ -6904,6 +6904,471 @@ class S {
     );
   }
 
+  /// `Protocols`
+  String get g_key_stake_protocols {
+    return Intl.message(
+      'Protocols',
+      name: 'g_key_stake_protocols',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Liquid`
+  String get g_key_stake_liquid_tag {
+    return Intl.message(
+      'Liquid',
+      name: 'g_key_stake_liquid_tag',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No lock`
+  String get g_key_stake_no_lock {
+    return Intl.message(
+      'No lock',
+      name: 'g_key_stake_no_lock',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{value}d unbond`
+  String g_key_stake_d_unbond(Object value) {
+    return Intl.message(
+      '${value}d unbond',
+      name: 'g_key_stake_d_unbond',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `No staking positions yet`
+  String get g_key_stake_no_positions_yet {
+    return Intl.message(
+      'No staking positions yet',
+      name: 'g_key_stake_no_positions_yet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start Staking`
+  String get g_key_stake_start_staking {
+    return Intl.message(
+      'Start Staking',
+      name: 'g_key_stake_start_staking',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total Staking Overview`
+  String get g_key_stake_overview {
+    return Intl.message(
+      'Total Staking Overview',
+      name: 'g_key_stake_overview',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Active Positions`
+  String get g_key_stake_active_positions {
+    return Intl.message(
+      'Active Positions',
+      name: 'g_key_stake_active_positions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Avg APY`
+  String get g_key_stake_avg_apy {
+    return Intl.message(
+      'Avg APY',
+      name: 'g_key_stake_avg_apy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Staked`
+  String get g_key_stake_staked {
+    return Intl.message(
+      'Staked',
+      name: 'g_key_stake_staked',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{value} days remaining`
+  String g_key_stake_days_remaining(Object value) {
+    return Intl.message(
+      '$value days remaining',
+      name: 'g_key_stake_days_remaining',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Change Password`
+  String get g_key_change_password {
+    return Intl.message(
+      'Change Password',
+      name: 'g_key_change_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your current password and set a new password`
+  String get g_key_change_password_desc {
+    return Intl.message(
+      'Enter your current password and set a new password',
+      name: 'g_key_change_password_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current Password`
+  String get g_key_old_password {
+    return Intl.message(
+      'Current Password',
+      name: 'g_key_old_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter current password`
+  String get g_key_enter_old_password {
+    return Intl.message(
+      'Enter current password',
+      name: 'g_key_enter_old_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Password`
+  String get g_key_new_password {
+    return Intl.message(
+      'New Password',
+      name: 'g_key_new_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter new password`
+  String get g_key_enter_new_password {
+    return Intl.message(
+      'Enter new password',
+      name: 'g_key_enter_new_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm New Password`
+  String get g_key_confirm_new_password {
+    return Intl.message(
+      'Confirm New Password',
+      name: 'g_key_confirm_new_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Re-enter new password`
+  String get g_key_enter_confirm_password {
+    return Intl.message(
+      'Re-enter new password',
+      name: 'g_key_enter_confirm_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password is required`
+  String get g_key_password_required {
+    return Intl.message(
+      'Password is required',
+      name: 'g_key_password_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password must be at least 6 characters`
+  String get g_key_password_min_length {
+    return Intl.message(
+      'Password must be at least 6 characters',
+      name: 'g_key_password_min_length',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New password must be different from current password`
+  String get g_key_new_password_same_as_old {
+    return Intl.message(
+      'New password must be different from current password',
+      name: 'g_key_new_password_same_as_old',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Passwords do not match`
+  String get g_key_passwords_not_match {
+    return Intl.message(
+      'Passwords do not match',
+      name: 'g_key_passwords_not_match',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password Requirements`
+  String get g_key_password_requirements {
+    return Intl.message(
+      'Password Requirements',
+      name: 'g_key_password_requirements',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `At least 6 characters`
+  String get g_key_password_req_length {
+    return Intl.message(
+      'At least 6 characters',
+      name: 'g_key_password_req_length',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Different from current password`
+  String get g_key_password_req_different {
+    return Intl.message(
+      'Different from current password',
+      name: 'g_key_password_req_different',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password changed successfully`
+  String get g_key_password_changed_success {
+    return Intl.message(
+      'Password changed successfully',
+      name: 'g_key_password_changed_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset Password`
+  String get g_key_reset_password {
+    return Intl.message(
+      'Reset Password',
+      name: 'g_key_reset_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your email address to receive a verification code`
+  String get g_key_reset_password_email_desc {
+    return Intl.message(
+      'Enter your email address to receive a verification code',
+      name: 'g_key_reset_password_email_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email`
+  String get g_key_email {
+    return Intl.message('Email', name: 'g_key_email', desc: '', args: []);
+  }
+
+  /// `Enter your email address`
+  String get g_key_enter_email {
+    return Intl.message(
+      'Enter your email address',
+      name: 'g_key_enter_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email is required`
+  String get g_key_email_required {
+    return Intl.message(
+      'Email is required',
+      name: 'g_key_email_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter a valid email address`
+  String get g_key_email_invalid {
+    return Intl.message(
+      'Please enter a valid email address',
+      name: 'g_key_email_invalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send Verification Code`
+  String get g_key_send_code {
+    return Intl.message(
+      'Send Verification Code',
+      name: 'g_key_send_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email`
+  String get g_key_step_email {
+    return Intl.message('Email', name: 'g_key_step_email', desc: '', args: []);
+  }
+
+  /// `Verify`
+  String get g_key_step_verify {
+    return Intl.message(
+      'Verify',
+      name: 'g_key_step_verify',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password`
+  String get g_key_step_password {
+    return Intl.message(
+      'Password',
+      name: 'g_key_step_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verification code sent to {value}`
+  String g_key_verification_code_sent(Object value) {
+    return Intl.message(
+      'Verification code sent to $value',
+      name: 'g_key_verification_code_sent',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Verification Code`
+  String get g_key_verification_code {
+    return Intl.message(
+      'Verification Code',
+      name: 'g_key_verification_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verification code is required`
+  String get g_key_code_required {
+    return Intl.message(
+      'Verification code is required',
+      name: 'g_key_code_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter 6-digit code`
+  String get g_key_code_length {
+    return Intl.message(
+      'Please enter 6-digit code',
+      name: 'g_key_code_length',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change Email`
+  String get g_key_change_email {
+    return Intl.message(
+      'Change Email',
+      name: 'g_key_change_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Resend Code`
+  String get g_key_resend_code {
+    return Intl.message(
+      'Resend Code',
+      name: 'g_key_resend_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verification code sent`
+  String get g_key_code_sent {
+    return Intl.message(
+      'Verification code sent',
+      name: 'g_key_code_sent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Next`
+  String get g_key_next {
+    return Intl.message('Next', name: 'g_key_next', desc: '', args: []);
+  }
+
+  /// `Set your new password`
+  String get g_key_set_new_password_desc {
+    return Intl.message(
+      'Set your new password',
+      name: 'g_key_set_new_password_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password reset successfully`
+  String get g_key_password_reset_success {
+    return Intl.message(
+      'Password reset successfully',
+      name: 'g_key_password_reset_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Forgot Password?`
+  String get g_key_forgot_password {
+    return Intl.message(
+      'Forgot Password?',
+      name: 'g_key_forgot_password',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Hardware Wallet`
   String get g_key_hw_title {
     return Intl.message(
@@ -7774,6 +8239,2601 @@ class S {
     return Intl.message(
       'No rewards available',
       name: 'g_key_loyalty_no_rewards',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check-in successful!`
+  String get g_key_loyalty_checkin_success {
+    return Intl.message(
+      'Check-in successful!',
+      name: 'g_key_loyalty_checkin_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check-in failed, please try again`
+  String get g_key_loyalty_checkin_failed {
+    return Intl.message(
+      'Check-in failed, please try again',
+      name: 'g_key_loyalty_checkin_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Task completed!`
+  String get g_key_loyalty_complete_success {
+    return Intl.message(
+      'Task completed!',
+      name: 'g_key_loyalty_complete_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Task failed, please try again`
+  String get g_key_loyalty_complete_failed {
+    return Intl.message(
+      'Task failed, please try again',
+      name: 'g_key_loyalty_complete_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Done`
+  String get g_key_loyalty_checkin_done {
+    return Intl.message(
+      'Done',
+      name: 'g_key_loyalty_checkin_done',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check In`
+  String get g_key_loyalty_checkin_btn {
+    return Intl.message(
+      'Check In',
+      name: 'g_key_loyalty_checkin_btn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Checked in today!`
+  String get g_key_loyalty_checked_today {
+    return Intl.message(
+      'Checked in today!',
+      name: 'g_key_loyalty_checked_today',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Earn {value} points`
+  String g_key_loyalty_earn_points(Object value) {
+    return Intl.message(
+      'Earn $value points',
+      name: 'g_key_loyalty_earn_points',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Invite`
+  String get g_key_loyalty_invite {
+    return Intl.message(
+      'Invite',
+      name: 'g_key_loyalty_invite',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invite Friends`
+  String get g_key_loyalty_invite_friends {
+    return Intl.message(
+      'Invite Friends',
+      name: 'g_key_loyalty_invite_friends',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Earn {value} points for each friend who joins!`
+  String g_key_loyalty_invite_bonus(Object value) {
+    return Intl.message(
+      'Earn $value points for each friend who joins!',
+      name: 'g_key_loyalty_invite_bonus',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Total Earned`
+  String get g_key_loyalty_total_earned {
+    return Intl.message(
+      'Total Earned',
+      name: 'g_key_loyalty_total_earned',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Used`
+  String get g_key_loyalty_used {
+    return Intl.message('Used', name: 'g_key_loyalty_used', desc: '', args: []);
+  }
+
+  /// `Copy`
+  String get g_key_loyalty_copy {
+    return Intl.message('Copy', name: 'g_key_loyalty_copy', desc: '', args: []);
+  }
+
+  /// `Share`
+  String get g_key_loyalty_share {
+    return Intl.message(
+      'Share',
+      name: 'g_key_loyalty_share',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Max Level`
+  String get g_key_loyalty_max_level {
+    return Intl.message(
+      'Max Level',
+      name: 'g_key_loyalty_max_level',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Next`
+  String get g_key_loyalty_next_prefix {
+    return Intl.message(
+      'Next',
+      name: 'g_key_loyalty_next_prefix',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{value}m ago`
+  String g_key_time_minutes_ago(Object value) {
+    return Intl.message(
+      '${value}m ago',
+      name: 'g_key_time_minutes_ago',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `{value}h ago`
+  String g_key_time_hours_ago(Object value) {
+    return Intl.message(
+      '${value}h ago',
+      name: 'g_key_time_hours_ago',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `{value}d ago`
+  String g_key_time_days_ago(Object value) {
+    return Intl.message(
+      '${value}d ago',
+      name: 'g_key_time_days_ago',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Just now`
+  String get g_key_time_just_now {
+    return Intl.message(
+      'Just now',
+      name: 'g_key_time_just_now',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Available`
+  String get g_key_mining_available {
+    return Intl.message(
+      'Available',
+      name: 'g_key_mining_available',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Requires staking`
+  String get g_key_mining_requires_staking {
+    return Intl.message(
+      'Requires staking',
+      name: 'g_key_mining_requires_staking',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Earn`
+  String get g_key_earn_title {
+    return Intl.message('Earn', name: 'g_key_earn_title', desc: '', args: []);
+  }
+
+  /// `Total Earnings`
+  String get g_key_earn_total_earnings {
+    return Intl.message(
+      'Total Earnings',
+      name: 'g_key_earn_total_earnings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Earn More`
+  String get g_key_earn_more {
+    return Intl.message(
+      'Earn More',
+      name: 'g_key_earn_more',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quick Tools`
+  String get g_key_earn_quick_tools {
+    return Intl.message(
+      'Quick Tools',
+      name: 'g_key_earn_quick_tools',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Active Products`
+  String get g_key_earn_active_products {
+    return Intl.message(
+      'Active Products',
+      name: 'g_key_earn_active_products',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recommended`
+  String get g_key_earn_recommended {
+    return Intl.message(
+      'Recommended',
+      name: 'g_key_earn_recommended',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View All`
+  String get g_key_earn_view_all {
+    return Intl.message(
+      'View All',
+      name: 'g_key_earn_view_all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Earn up to {value}% APY`
+  String g_key_earn_up_to_apy(Object value) {
+    return Intl.message(
+      'Earn up to $value% APY',
+      name: 'g_key_earn_up_to_apy',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Cross-chain transfer`
+  String get g_key_earn_cross_chain {
+    return Intl.message(
+      'Cross-chain transfer',
+      name: 'g_key_earn_cross_chain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Claim free tokens`
+  String get g_key_earn_claim_free {
+    return Intl.message(
+      'Claim free tokens',
+      name: 'g_key_earn_claim_free',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Daily check-in bonus`
+  String get g_key_earn_daily_bonus {
+    return Intl.message(
+      'Daily check-in bonus',
+      name: 'g_key_earn_daily_bonus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Stake ETH with Lido`
+  String get g_key_earn_stake_eth_lido {
+    return Intl.message(
+      'Stake ETH with Lido',
+      name: 'g_key_earn_stake_eth_lido',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Native Solana staking`
+  String get g_key_earn_native_sol {
+    return Intl.message(
+      'Native Solana staking',
+      name: 'g_key_earn_native_sol',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Earn points daily`
+  String get g_key_earn_points_daily {
+    return Intl.message(
+      'Earn points daily',
+      name: 'g_key_earn_points_daily',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `+{value} pts/day`
+  String g_key_earn_pts_day(Object value) {
+    return Intl.message(
+      '+$value pts/day',
+      name: 'g_key_earn_pts_day',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Burn NFT`
+  String get g_key_burn_nft_title {
+    return Intl.message(
+      'Burn NFT',
+      name: 'g_key_burn_nft_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To burn an NFT, please go to the NFT details page and tap the "Burn" button.`
+  String get g_key_burn_nft_tip {
+    return Intl.message(
+      'To burn an NFT, please go to the NFT details page and tap the "Burn" button.',
+      name: 'g_key_burn_nft_tip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Steps:`
+  String get g_key_burn_nft_steps {
+    return Intl.message(
+      'Steps:',
+      name: 'g_key_burn_nft_steps',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `1. Select a token with NFT support`
+  String get g_key_burn_nft_step1 {
+    return Intl.message(
+      '1. Select a token with NFT support',
+      name: 'g_key_burn_nft_step1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `2. Go to NFT tab`
+  String get g_key_burn_nft_step2 {
+    return Intl.message(
+      '2. Go to NFT tab',
+      name: 'g_key_burn_nft_step2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `3. Select the NFT you want to burn`
+  String get g_key_burn_nft_step3 {
+    return Intl.message(
+      '3. Select the NFT you want to burn',
+      name: 'g_key_burn_nft_step3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `4. Tap "Burn" button`
+  String get g_key_burn_nft_step4 {
+    return Intl.message(
+      '4. Tap "Burn" button',
+      name: 'g_key_burn_nft_step4',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Got it`
+  String get g_key_burn_got_it {
+    return Intl.message(
+      'Got it',
+      name: 'g_key_burn_got_it',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Real-time Gas Prices`
+  String get g_key_gas_realtime_prices {
+    return Intl.message(
+      'Real-time Gas Prices',
+      name: 'g_key_gas_realtime_prices',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Auto-refresh every {value} seconds`
+  String g_key_gas_auto_refresh(Object value) {
+    return Intl.message(
+      'Auto-refresh every $value seconds',
+      name: 'g_key_gas_auto_refresh',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Gas prices fluctuate based on network demand. Lower gas = slower confirmation, higher gas = faster confirmation.`
+  String get g_key_gas_footer {
+    return Intl.message(
+      'Gas prices fluctuate based on network demand. Lower gas = slower confirmation, higher gas = faster confirmation.',
+      name: 'g_key_gas_footer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Token`
+  String get g_key_batch_select_token {
+    return Intl.message(
+      'Select Token',
+      name: 'g_key_batch_select_token',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No supported tokens`
+  String get g_key_batch_no_supported {
+    return Intl.message(
+      'No supported tokens',
+      name: 'g_key_batch_no_supported',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Batch transfer supports EVM chains only`
+  String get g_key_batch_evm_only {
+    return Intl.message(
+      'Batch transfer supports EVM chains only',
+      name: 'g_key_batch_evm_only',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send tokens to multiple addresses in one transaction`
+  String get g_key_batch_send_multiple {
+    return Intl.message(
+      'Send tokens to multiple addresses in one transaction',
+      name: 'g_key_batch_send_multiple',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Estimating Gas...`
+  String get g_key_batch_estimating_gas {
+    return Intl.message(
+      'Estimating Gas...',
+      name: 'g_key_batch_estimating_gas',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Signing...`
+  String get g_key_batch_signing {
+    return Intl.message(
+      'Signing...',
+      name: 'g_key_batch_signing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Broadcasting...`
+  String get g_key_batch_broadcasting {
+    return Intl.message(
+      'Broadcasting...',
+      name: 'g_key_batch_broadcasting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Done`
+  String get g_key_batch_done {
+    return Intl.message('Done', name: 'g_key_batch_done', desc: '', args: []);
+  }
+
+  /// `Continue`
+  String get g_key_batch_continue {
+    return Intl.message(
+      'Continue',
+      name: 'g_key_batch_continue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Batch Transfer`
+  String get g_key_batch_confirm_title {
+    return Intl.message(
+      'Confirm Batch Transfer',
+      name: 'g_key_batch_confirm_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Batch Transfer Help`
+  String get g_key_batch_help_title {
+    return Intl.message(
+      'Batch Transfer Help',
+      name: 'g_key_batch_help_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Swipe left to remove a recipient`
+  String get g_key_batch_swipe_remove {
+    return Intl.message(
+      'Swipe left to remove a recipient',
+      name: 'g_key_batch_swipe_remove',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Memo is optional`
+  String get g_key_batch_memo_optional {
+    return Intl.message(
+      'Memo is optional',
+      name: 'g_key_batch_memo_optional',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use Multicall3 for lower gas fees`
+  String get g_key_batch_multicall_tip {
+    return Intl.message(
+      'Use Multicall3 for lower gas fees',
+      name: 'g_key_batch_multicall_tip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm ENS Resolution`
+  String get g_key_ens_confirm_title {
+    return Intl.message(
+      'Confirm ENS Resolution',
+      name: 'g_key_ens_confirm_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ENS Name Detected`
+  String get g_key_ens_detected {
+    return Intl.message(
+      'ENS Name Detected',
+      name: 'g_key_ens_detected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ENS Name`
+  String get g_key_ens_name {
+    return Intl.message('ENS Name', name: 'g_key_ens_name', desc: '', args: []);
+  }
+
+  /// `Resolved Address`
+  String get g_key_ens_resolved_address {
+    return Intl.message(
+      'Resolved Address',
+      name: 'g_key_ens_resolved_address',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please verify the resolved address before proceeding. ENS names can be transferred or changed by their owner.`
+  String get g_key_ens_warning {
+    return Intl.message(
+      'Please verify the resolved address before proceeding. ENS names can be transferred or changed by their owner.',
+      name: 'g_key_ens_warning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm & Send`
+  String get g_key_ens_confirm_send {
+    return Intl.message(
+      'Confirm & Send',
+      name: 'g_key_ens_confirm_send',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Resolving ENS...`
+  String get g_key_ens_resolving {
+    return Intl.message(
+      'Resolving ENS...',
+      name: 'g_key_ens_resolving',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ENS resolution failed`
+  String get g_key_ens_resolution_failed {
+    return Intl.message(
+      'ENS resolution failed',
+      name: 'g_key_ens_resolution_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid ENS name`
+  String get g_key_ens_invalid_name {
+    return Intl.message(
+      'Invalid ENS name',
+      name: 'g_key_ens_invalid_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ENS Manager`
+  String get g_key_ens_title {
+    return Intl.message(
+      'ENS Manager',
+      name: 'g_key_ens_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ENS Manager`
+  String get g_key_ens_home_title {
+    return Intl.message(
+      'ENS Manager',
+      name: 'g_key_ens_home_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ethereum Name Service`
+  String get g_key_ens_service {
+    return Intl.message(
+      'Ethereum Name Service',
+      name: 'g_key_ens_service',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Register and manage your .eth domain names`
+  String get g_key_ens_description {
+    return Intl.message(
+      'Register and manage your .eth domain names',
+      name: 'g_key_ens_description',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search`
+  String get g_key_ens_search {
+    return Intl.message('Search', name: 'g_key_ens_search', desc: '', args: []);
+  }
+
+  /// `Search ENS`
+  String get g_key_ens_search_title {
+    return Intl.message(
+      'Search ENS',
+      name: 'g_key_ens_search_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search for a .eth name`
+  String get g_key_ens_search_hint {
+    return Intl.message(
+      'Search for a .eth name',
+      name: 'g_key_ens_search_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Find available .eth names`
+  String get g_key_ens_search_desc {
+    return Intl.message(
+      'Find available .eth names',
+      name: 'g_key_ens_search_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search & Register`
+  String get g_key_ens_search_register {
+    return Intl.message(
+      'Search & Register',
+      name: 'g_key_ens_search_register',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Extend your domain registration`
+  String get g_key_ens_renew_desc {
+    return Intl.message(
+      'Extend your domain registration',
+      name: 'g_key_ens_renew_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No domains yet`
+  String get g_key_ens_no_domains {
+    return Intl.message(
+      'No domains yet',
+      name: 'g_key_ens_no_domains',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My Domains`
+  String get g_key_ens_my_domains {
+    return Intl.message(
+      'My Domains',
+      name: 'g_key_ens_my_domains',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Get started with ENS`
+  String get g_key_ens_get_started {
+    return Intl.message(
+      'Get started with ENS',
+      name: 'g_key_ens_get_started',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Primary`
+  String get g_key_ens_primary {
+    return Intl.message(
+      'Primary',
+      name: 'g_key_ens_primary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Primary name set successfully`
+  String get g_key_ens_primary_set {
+    return Intl.message(
+      'Primary name set successfully',
+      name: 'g_key_ens_primary_set',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transfer is irreversible. Make sure the new owner address is correct.`
+  String get g_key_ens_transfer_warning {
+    return Intl.message(
+      'Transfer is irreversible. Make sure the new owner address is correct.',
+      name: 'g_key_ens_transfer_warning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Owner Address`
+  String get g_key_ens_new_owner {
+    return Intl.message(
+      'New Owner Address',
+      name: 'g_key_ens_new_owner',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transfer successful`
+  String get g_key_ens_transfer_success {
+    return Intl.message(
+      'Transfer successful',
+      name: 'g_key_ens_transfer_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Available`
+  String get g_key_ens_available {
+    return Intl.message(
+      'Available',
+      name: 'g_key_ens_available',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unavailable`
+  String get g_key_ens_unavailable {
+    return Intl.message(
+      'Unavailable',
+      name: 'g_key_ens_unavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Checking availability...`
+  String get g_key_ens_checking {
+    return Intl.message(
+      'Checking availability...',
+      name: 'g_key_ens_checking',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `per year`
+  String get g_key_ens_price_per_year {
+    return Intl.message(
+      'per year',
+      name: 'g_key_ens_price_per_year',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Register Now`
+  String get g_key_ens_register_now {
+    return Intl.message(
+      'Register Now',
+      name: 'g_key_ens_register_now',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My ENS Names`
+  String get g_key_ens_owned_names {
+    return Intl.message(
+      'My ENS Names',
+      name: 'g_key_ens_owned_names',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You don't own any ENS names yet`
+  String get g_key_ens_no_names {
+    return Intl.message(
+      'You don\'t own any ENS names yet',
+      name: 'g_key_ens_no_names',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expires`
+  String get g_key_ens_expires {
+    return Intl.message(
+      'Expires',
+      name: 'g_key_ens_expires',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expired`
+  String get g_key_ens_expired {
+    return Intl.message(
+      'Expired',
+      name: 'g_key_ens_expired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expiring Soon`
+  String get g_key_ens_expiring_soon {
+    return Intl.message(
+      'Expiring Soon',
+      name: 'g_key_ens_expiring_soon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Register ENS`
+  String get g_key_ens_purchase_title {
+    return Intl.message(
+      'Register ENS',
+      name: 'g_key_ens_purchase_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Commit`
+  String get g_key_ens_step_commit {
+    return Intl.message(
+      'Commit',
+      name: 'g_key_ens_step_commit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wait`
+  String get g_key_ens_step_wait {
+    return Intl.message(
+      'Wait',
+      name: 'g_key_ens_step_wait',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Register`
+  String get g_key_ens_step_register {
+    return Intl.message(
+      'Register',
+      name: 'g_key_ens_step_register',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Success`
+  String get g_key_ens_step_success {
+    return Intl.message(
+      'Success',
+      name: 'g_key_ens_step_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Committing transaction...`
+  String get g_key_ens_commit_tx {
+    return Intl.message(
+      'Committing transaction...',
+      name: 'g_key_ens_commit_tx',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please wait {value} seconds`
+  String g_key_ens_wait_timer(Object value) {
+    return Intl.message(
+      'Please wait $value seconds',
+      name: 'g_key_ens_wait_timer',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Registering name...`
+  String get g_key_ens_register_tx {
+    return Intl.message(
+      'Registering name...',
+      name: 'g_key_ens_register_tx',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Congratulations! You now own {value}`
+  String g_key_ens_success_message(Object value) {
+    return Intl.message(
+      'Congratulations! You now own $value',
+      name: 'g_key_ens_success_message',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Registration Period`
+  String get g_key_ens_duration {
+    return Intl.message(
+      'Registration Period',
+      name: 'g_key_ens_duration',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `year`
+  String get g_key_ens_year {
+    return Intl.message('year', name: 'g_key_ens_year', desc: '', args: []);
+  }
+
+  /// `years`
+  String get g_key_ens_years {
+    return Intl.message('years', name: 'g_key_ens_years', desc: '', args: []);
+  }
+
+  /// `Total Cost`
+  String get g_key_ens_total_cost {
+    return Intl.message(
+      'Total Cost',
+      name: 'g_key_ens_total_cost',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Manage ENS`
+  String get g_key_ens_management_title {
+    return Intl.message(
+      'Manage ENS',
+      name: 'g_key_ens_management_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Records`
+  String get g_key_ens_records {
+    return Intl.message(
+      'Records',
+      name: 'g_key_ens_records',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Records`
+  String get g_key_ens_edit_records {
+    return Intl.message(
+      'Edit Records',
+      name: 'g_key_ens_edit_records',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Set as Primary`
+  String get g_key_ens_set_primary {
+    return Intl.message(
+      'Set as Primary',
+      name: 'g_key_ens_set_primary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transfer`
+  String get g_key_ens_transfer {
+    return Intl.message(
+      'Transfer',
+      name: 'g_key_ens_transfer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Renew`
+  String get g_key_ens_renew {
+    return Intl.message('Renew', name: 'g_key_ens_renew', desc: '', args: []);
+  }
+
+  /// `Renew ENS`
+  String get g_key_ens_renew_title {
+    return Intl.message(
+      'Renew ENS',
+      name: 'g_key_ens_renew_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current Expiry`
+  String get g_key_ens_current_expiry {
+    return Intl.message(
+      'Current Expiry',
+      name: 'g_key_ens_current_expiry',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Expiry`
+  String get g_key_ens_new_expiry {
+    return Intl.message(
+      'New Expiry',
+      name: 'g_key_ens_new_expiry',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Renewal Cost`
+  String get g_key_ens_renew_cost {
+    return Intl.message(
+      'Renewal Cost',
+      name: 'g_key_ens_renew_cost',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `days left`
+  String get g_key_ens_days_left {
+    return Intl.message(
+      'days left',
+      name: 'g_key_ens_days_left',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Text Records`
+  String get g_key_ens_text_records {
+    return Intl.message(
+      'Text Records',
+      name: 'g_key_ens_text_records',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Advanced`
+  String get g_key_ens_advanced {
+    return Intl.message(
+      'Advanced',
+      name: 'g_key_ens_advanced',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transfer ownership to another address`
+  String get g_key_ens_transfer_desc {
+    return Intl.message(
+      'Transfer ownership to another address',
+      name: 'g_key_ens_transfer_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Commit failed`
+  String get g_key_ens_commit_failed {
+    return Intl.message(
+      'Commit failed',
+      name: 'g_key_ens_commit_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Registration failed`
+  String get g_key_ens_register_failed {
+    return Intl.message(
+      'Registration failed',
+      name: 'g_key_ens_register_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Registration Info`
+  String get g_key_ens_registration_info {
+    return Intl.message(
+      'Registration Info',
+      name: 'g_key_ens_registration_info',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ENS registration is a two-step process`
+  String get g_key_ens_two_step_process {
+    return Intl.message(
+      'ENS registration is a two-step process',
+      name: 'g_key_ens_two_step_process',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A waiting period prevents front-running`
+  String get g_key_ens_wait_time_info {
+    return Intl.message(
+      'A waiting period prevents front-running',
+      name: 'g_key_ens_wait_time_info',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please keep the app open during registration`
+  String get g_key_ens_keep_app_open {
+    return Intl.message(
+      'Please keep the app open during registration',
+      name: 'g_key_ens_keep_app_open',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Committing...`
+  String get g_key_ens_committing {
+    return Intl.message(
+      'Committing...',
+      name: 'g_key_ens_committing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please wait`
+  String get g_key_ens_please_wait {
+    return Intl.message(
+      'Please wait',
+      name: 'g_key_ens_please_wait',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Waiting...`
+  String get g_key_ens_waiting {
+    return Intl.message(
+      'Waiting...',
+      name: 'g_key_ens_waiting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Waiting period prevents front-running attacks`
+  String get g_key_ens_wait_explanation {
+    return Intl.message(
+      'Waiting period prevents front-running attacks',
+      name: 'g_key_ens_wait_explanation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Registering...`
+  String get g_key_ens_registering {
+    return Intl.message(
+      'Registering...',
+      name: 'g_key_ens_registering',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Finalizing registration`
+  String get g_key_ens_finalizing {
+    return Intl.message(
+      'Finalizing registration',
+      name: 'g_key_ens_finalizing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Success!`
+  String get g_key_ens_success {
+    return Intl.message(
+      'Success!',
+      name: 'g_key_ens_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `is now yours!`
+  String get g_key_ens_is_yours {
+    return Intl.message(
+      'is now yours!',
+      name: 'g_key_ens_is_yours',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed`
+  String get g_key_ens_failed {
+    return Intl.message('Failed', name: 'g_key_ens_failed', desc: '', args: []);
+  }
+
+  /// `Start Registration`
+  String get g_key_ens_start_registration {
+    return Intl.message(
+      'Start Registration',
+      name: 'g_key_ens_start_registration',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Processing...`
+  String get g_key_ens_processing {
+    return Intl.message(
+      'Processing...',
+      name: 'g_key_ens_processing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Extend Registration Period`
+  String get g_key_ens_extend_period {
+    return Intl.message(
+      'Extend Registration Period',
+      name: 'g_key_ens_extend_period',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Renewal successful`
+  String get g_key_ens_renew_success {
+    return Intl.message(
+      'Renewal successful',
+      name: 'g_key_ens_renew_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Renewal`
+  String get g_key_ens_confirm_renew {
+    return Intl.message(
+      'Confirm Renewal',
+      name: 'g_key_ens_confirm_renew',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter an ENS name to search`
+  String get g_key_ens_search_prompt {
+    return Intl.message(
+      'Enter an ENS name to search',
+      name: 'g_key_ens_search_prompt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Minimum 3 characters`
+  String get g_key_ens_min_length {
+    return Intl.message(
+      'Minimum 3 characters',
+      name: 'g_key_ens_min_length',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Suggestions`
+  String get g_key_ens_suggestions {
+    return Intl.message(
+      'Suggestions',
+      name: 'g_key_ens_suggestions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Try another name`
+  String get g_key_ens_try_another {
+    return Intl.message(
+      'Try another name',
+      name: 'g_key_ens_try_another',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Owner`
+  String get g_key_ens_owner {
+    return Intl.message('Owner', name: 'g_key_ens_owner', desc: '', args: []);
+  }
+
+  /// `Registration Period`
+  String get g_key_ens_registration_period {
+    return Intl.message(
+      'Registration Period',
+      name: 'g_key_ens_registration_period',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price Breakdown`
+  String get g_key_ens_price_breakdown {
+    return Intl.message(
+      'Price Breakdown',
+      name: 'g_key_ens_price_breakdown',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Base Price`
+  String get g_key_ens_base_price {
+    return Intl.message(
+      'Base Price',
+      name: 'g_key_ens_base_price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Annual Fee`
+  String get g_key_ens_annual_fee {
+    return Intl.message(
+      'Annual Fee',
+      name: 'g_key_ens_annual_fee',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total`
+  String get g_key_ens_total {
+    return Intl.message('Total', name: 'g_key_ens_total', desc: '', args: []);
+  }
+
+  /// `Premium Name`
+  String get g_key_ens_premium_name {
+    return Intl.message(
+      'Premium Name',
+      name: 'g_key_ens_premium_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Standard Name`
+  String get g_key_ens_standard_name {
+    return Intl.message(
+      'Standard Name',
+      name: 'g_key_ens_standard_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Step 1`
+  String get g_key_ens_step_1 {
+    return Intl.message('Step 1', name: 'g_key_ens_step_1', desc: '', args: []);
+  }
+
+  /// `Step 2`
+  String get g_key_ens_step_2 {
+    return Intl.message('Step 2', name: 'g_key_ens_step_2', desc: '', args: []);
+  }
+
+  /// `Step 3`
+  String get g_key_ens_step_3 {
+    return Intl.message('Step 3', name: 'g_key_ens_step_3', desc: '', args: []);
+  }
+
+  /// `Commit`
+  String get g_key_ens_commit {
+    return Intl.message('Commit', name: 'g_key_ens_commit', desc: '', args: []);
+  }
+
+  /// `Wait`
+  String get g_key_ens_wait {
+    return Intl.message('Wait', name: 'g_key_ens_wait', desc: '', args: []);
+  }
+
+  /// `Register`
+  String get g_key_ens_register {
+    return Intl.message(
+      'Register',
+      name: 'g_key_ens_register',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Smart Account`
+  String get g_key_aa_title {
+    return Intl.message(
+      'Smart Account',
+      name: 'g_key_aa_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account Abstraction`
+  String get g_key_aa_home_title {
+    return Intl.message(
+      'Account Abstraction',
+      name: 'g_key_aa_home_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My Smart Accounts`
+  String get g_key_aa_my_accounts {
+    return Intl.message(
+      'My Smart Accounts',
+      name: 'g_key_aa_my_accounts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create Smart Account`
+  String get g_key_aa_create_account {
+    return Intl.message(
+      'Create Smart Account',
+      name: 'g_key_aa_create_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account Created Successfully`
+  String get g_key_aa_account_created {
+    return Intl.message(
+      'Account Created Successfully',
+      name: 'g_key_aa_account_created',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account Name`
+  String get g_key_aa_account_name {
+    return Intl.message(
+      'Account Name',
+      name: 'g_key_aa_account_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter account name`
+  String get g_key_aa_account_name_hint {
+    return Intl.message(
+      'Enter account name',
+      name: 'g_key_aa_account_name_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account Type`
+  String get g_key_aa_account_type {
+    return Intl.message(
+      'Account Type',
+      name: 'g_key_aa_account_type',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Coming Soon`
+  String get g_key_aa_coming_soon {
+    return Intl.message(
+      'Coming Soon',
+      name: 'g_key_aa_coming_soon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Preview Address`
+  String get g_key_aa_preview_address {
+    return Intl.message(
+      'Preview Address',
+      name: 'g_key_aa_preview_address',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This is a counterfactual address. It will be deployed on your first transaction.`
+  String get g_key_aa_counterfactual_note {
+    return Intl.message(
+      'This is a counterfactual address. It will be deployed on your first transaction.',
+      name: 'g_key_aa_counterfactual_note',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Deployment will occur automatically with your first transaction.`
+  String get g_key_aa_deployment_note {
+    return Intl.message(
+      'Deployment will occur automatically with your first transaction.',
+      name: 'g_key_aa_deployment_note',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Simple Account`
+  String get g_key_aa_simple_account {
+    return Intl.message(
+      'Simple Account',
+      name: 'g_key_aa_simple_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Basic smart account with single owner - recommended for most users`
+  String get g_key_aa_simple_desc {
+    return Intl.message(
+      'Basic smart account with single owner - recommended for most users',
+      name: 'g_key_aa_simple_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `EIP-7702 Account`
+  String get g_key_aa_eip7702_account {
+    return Intl.message(
+      'EIP-7702 Account',
+      name: 'g_key_aa_eip7702_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hybrid EOA/Smart Account - No deployment needed`
+  String get g_key_aa_eip7702_desc {
+    return Intl.message(
+      'Hybrid EOA/Smart Account - No deployment needed',
+      name: 'g_key_aa_eip7702_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Safe Account`
+  String get g_key_aa_safe_account {
+    return Intl.message(
+      'Safe Account',
+      name: 'g_key_aa_safe_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Multi-signature account with advanced security features`
+  String get g_key_aa_safe_desc {
+    return Intl.message(
+      'Multi-signature account with advanced security features',
+      name: 'g_key_aa_safe_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Kernel Account`
+  String get g_key_aa_kernel_account {
+    return Intl.message(
+      'Kernel Account',
+      name: 'g_key_aa_kernel_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Modular account with plugin support from ZeroDev`
+  String get g_key_aa_kernel_desc {
+    return Intl.message(
+      'Modular account with plugin support from ZeroDev',
+      name: 'g_key_aa_kernel_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Chain`
+  String get g_key_aa_select_chain {
+    return Intl.message(
+      'Select Chain',
+      name: 'g_key_aa_select_chain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Account Type`
+  String get g_key_aa_select_type {
+    return Intl.message(
+      'Select Account Type',
+      name: 'g_key_aa_select_type',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Counterfactual Address`
+  String get g_key_aa_counterfactual_address {
+    return Intl.message(
+      'Counterfactual Address',
+      name: 'g_key_aa_counterfactual_address',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This address is pre-computed and will be deployed when you make your first transaction.`
+  String get g_key_aa_address_preview {
+    return Intl.message(
+      'This address is pre-computed and will be deployed when you make your first transaction.',
+      name: 'g_key_aa_address_preview',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Deployed`
+  String get g_key_aa_deployed {
+    return Intl.message(
+      'Deployed',
+      name: 'g_key_aa_deployed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not Deployed`
+  String get g_key_aa_not_deployed {
+    return Intl.message(
+      'Not Deployed',
+      name: 'g_key_aa_not_deployed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Deploying...`
+  String get g_key_aa_deploying {
+    return Intl.message(
+      'Deploying...',
+      name: 'g_key_aa_deploying',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Deploy`
+  String get g_key_aa_deploy {
+    return Intl.message('Deploy', name: 'g_key_aa_deploy', desc: '', args: []);
+  }
+
+  /// `Deployment started`
+  String get g_key_aa_deploy_started {
+    return Intl.message(
+      'Deployment started',
+      name: 'g_key_aa_deploy_started',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account Details`
+  String get g_key_aa_account_details {
+    return Intl.message(
+      'Account Details',
+      name: 'g_key_aa_account_details',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chain ID`
+  String get g_key_aa_chain_id {
+    return Intl.message(
+      'Chain ID',
+      name: 'g_key_aa_chain_id',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Factory`
+  String get g_key_aa_factory {
+    return Intl.message(
+      'Factory',
+      name: 'g_key_aa_factory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Owner`
+  String get g_key_aa_owner {
+    return Intl.message('Owner', name: 'g_key_aa_owner', desc: '', args: []);
+  }
+
+  /// `Created`
+  String get g_key_aa_created {
+    return Intl.message(
+      'Created',
+      name: 'g_key_aa_created',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Last Activity`
+  String get g_key_aa_last_activity {
+    return Intl.message(
+      'Last Activity',
+      name: 'g_key_aa_last_activity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View All`
+  String get g_key_aa_view_all {
+    return Intl.message(
+      'View All',
+      name: 'g_key_aa_view_all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No smart accounts yet`
+  String get g_key_aa_no_accounts {
+    return Intl.message(
+      'No smart accounts yet',
+      name: 'g_key_aa_no_accounts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No accounts match your filter`
+  String get g_key_aa_no_accounts_filter {
+    return Intl.message(
+      'No accounts match your filter',
+      name: 'g_key_aa_no_accounts_filter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Smart Accounts`
+  String get g_key_aa_smart_accounts {
+    return Intl.message(
+      'Smart Accounts',
+      name: 'g_key_aa_smart_accounts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Experience the next generation of Ethereum accounts with enhanced features`
+  String get g_key_aa_description {
+    return Intl.message(
+      'Experience the next generation of Ethereum accounts with enhanced features',
+      name: 'g_key_aa_description',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pay gas in any token`
+  String get g_key_aa_feature_gas {
+    return Intl.message(
+      'Pay gas in any token',
+      name: 'g_key_aa_feature_gas',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Batch multiple transactions`
+  String get g_key_aa_feature_batch {
+    return Intl.message(
+      'Batch multiple transactions',
+      name: 'g_key_aa_feature_batch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enhanced security`
+  String get g_key_aa_feature_security {
+    return Intl.message(
+      'Enhanced security',
+      name: 'g_key_aa_feature_security',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send tokens using your smart account`
+  String get g_key_aa_send_desc {
+    return Intl.message(
+      'Send tokens using your smart account',
+      name: 'g_key_aa_send_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Batch`
+  String get g_key_aa_batch {
+    return Intl.message('Batch', name: 'g_key_aa_batch', desc: '', args: []);
+  }
+
+  /// `Execute multiple operations at once`
+  String get g_key_aa_batch_desc {
+    return Intl.message(
+      'Execute multiple operations at once',
+      name: 'g_key_aa_batch_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create your first smart account`
+  String get g_key_aa_create_first {
+    return Intl.message(
+      'Create your first smart account',
+      name: 'g_key_aa_create_first',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create a smart account to get started`
+  String get g_key_aa_create_first_account {
+    return Intl.message(
+      'Create a smart account to get started',
+      name: 'g_key_aa_create_first_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change`
+  String get g_key_aa_change {
+    return Intl.message('Change', name: 'g_key_aa_change', desc: '', args: []);
+  }
+
+  /// `Estimated Gas`
+  String get g_key_aa_estimated_gas {
+    return Intl.message(
+      'Estimated Gas',
+      name: 'g_key_aa_estimated_gas',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `AA Transfer`
+  String get g_key_aa_send_title {
+    return Intl.message(
+      'AA Transfer',
+      name: 'g_key_aa_send_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gas Payment`
+  String get g_key_aa_gas_payment {
+    return Intl.message(
+      'Gas Payment',
+      name: 'g_key_aa_gas_payment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Paymaster`
+  String get g_key_aa_select_paymaster {
+    return Intl.message(
+      'Select Paymaster',
+      name: 'g_key_aa_select_paymaster',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gas Payment Options`
+  String get g_key_aa_gas_payment_options {
+    return Intl.message(
+      'Gas Payment Options',
+      name: 'g_key_aa_gas_payment_options',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose how you want to pay for transaction gas fees`
+  String get g_key_aa_paymaster_description {
+    return Intl.message(
+      'Choose how you want to pay for transaction gas fees',
+      name: 'g_key_aa_paymaster_description',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pay with ETH`
+  String get g_key_aa_pay_with_eth {
+    return Intl.message(
+      'Pay with ETH',
+      name: 'g_key_aa_pay_with_eth',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sponsored (Free)`
+  String get g_key_aa_sponsored {
+    return Intl.message(
+      'Sponsored (Free)',
+      name: 'g_key_aa_sponsored',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pay with`
+  String get g_key_aa_pay_with {
+    return Intl.message(
+      'Pay with',
+      name: 'g_key_aa_pay_with',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `FREE`
+  String get g_key_aa_free {
+    return Intl.message('FREE', name: 'g_key_aa_free', desc: '', args: []);
+  }
+
+  /// `Selected`
+  String get g_key_aa_selected {
+    return Intl.message(
+      'Selected',
+      name: 'g_key_aa_selected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unavailable`
+  String get g_key_aa_unavailable {
+    return Intl.message(
+      'Unavailable',
+      name: 'g_key_aa_unavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Estimating...`
+  String get g_key_aa_estimating {
+    return Intl.message(
+      'Estimating...',
+      name: 'g_key_aa_estimating',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gas Estimate`
+  String get g_key_aa_gas_estimate {
+    return Intl.message(
+      'Gas Estimate',
+      name: 'g_key_aa_gas_estimate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gas Sponsored`
+  String get g_key_aa_gas_sponsored {
+    return Intl.message(
+      'Gas Sponsored',
+      name: 'g_key_aa_gas_sponsored',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Batch Transfer`
+  String get g_key_aa_batch_title {
+    return Intl.message(
+      'Batch Transfer',
+      name: 'g_key_aa_batch_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Batch Transaction`
+  String get g_key_aa_batch_transaction {
+    return Intl.message(
+      'Batch Transaction',
+      name: 'g_key_aa_batch_transaction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send multiple transactions in a single operation`
+  String get g_key_aa_batch_description {
+    return Intl.message(
+      'Send multiple transactions in a single operation',
+      name: 'g_key_aa_batch_description',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save Gas`
+  String get g_key_aa_batch_save_gas {
+    return Intl.message(
+      'Save Gas',
+      name: 'g_key_aa_batch_save_gas',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Atomic Execution`
+  String get g_key_aa_batch_atomic {
+    return Intl.message(
+      'Atomic Execution',
+      name: 'g_key_aa_batch_atomic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Operation`
+  String get g_key_aa_add_operation {
+    return Intl.message(
+      'Add Operation',
+      name: 'g_key_aa_add_operation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total Value`
+  String get g_key_aa_total_value {
+    return Intl.message(
+      'Total Value',
+      name: 'g_key_aa_total_value',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total Gas`
+  String get g_key_aa_total_gas {
+    return Intl.message(
+      'Total Gas',
+      name: 'g_key_aa_total_gas',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Operations`
+  String get g_key_aa_operations {
+    return Intl.message(
+      'Operations',
+      name: 'g_key_aa_operations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No operations added`
+  String get g_key_aa_no_operations {
+    return Intl.message(
+      'No operations added',
+      name: 'g_key_aa_no_operations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add your first operation`
+  String get g_key_aa_add_first_operation {
+    return Intl.message(
+      'Add your first operation',
+      name: 'g_key_aa_add_first_operation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clear All`
+  String get g_key_aa_clear_all {
+    return Intl.message(
+      'Clear All',
+      name: 'g_key_aa_clear_all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Execute Batch`
+  String get g_key_aa_execute_batch {
+    return Intl.message(
+      'Execute Batch',
+      name: 'g_key_aa_execute_batch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `EIP-7702`
+  String get g_key_aa_eip7702_badge {
+    return Intl.message(
+      'EIP-7702',
+      name: 'g_key_aa_eip7702_badge',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `v0.7`
+  String get g_key_aa_version_v07 {
+    return Intl.message(
+      'v0.7',
+      name: 'g_key_aa_version_v07',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `v0.8`
+  String get g_key_aa_version_v08 {
+    return Intl.message(
+      'v0.8',
+      name: 'g_key_aa_version_v08',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recommended`
+  String get g_key_aa_recommended {
+    return Intl.message(
+      'Recommended',
+      name: 'g_key_aa_recommended',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gas Savings`
+  String get g_key_aa_gas_savings {
+    return Intl.message(
+      'Gas Savings',
+      name: 'g_key_aa_gas_savings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Batch Operations`
+  String get g_key_aa_batch_operations {
+    return Intl.message(
+      'Batch Operations',
+      name: 'g_key_aa_batch_operations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Approve`
+  String get g_key_aa_approve {
+    return Intl.message(
+      'Approve',
+      name: 'g_key_aa_approve',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Custom`
+  String get g_key_aa_custom {
+    return Intl.message('Custom', name: 'g_key_aa_custom', desc: '', args: []);
+  }
+
+  /// `Error`
+  String get g_key_aa_error {
+    return Intl.message('Error', name: 'g_key_aa_error', desc: '', args: []);
+  }
+
+  /// `by`
+  String get g_key_aa_by {
+    return Intl.message('by', name: 'g_key_aa_by', desc: '', args: []);
+  }
+
+  /// `saved`
+  String get g_key_aa_saved {
+    return Intl.message('saved', name: 'g_key_aa_saved', desc: '', args: []);
+  }
+
+  /// `Pay gas with your ETH`
+  String get g_key_aa_pay_gas_yourself {
+    return Intl.message(
+      'Pay gas with your ETH',
+      name: 'g_key_aa_pay_gas_yourself',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pay gas with token`
+  String get g_key_aa_pay_gas_with_token {
+    return Intl.message(
+      'Pay gas with token',
+      name: 'g_key_aa_pay_gas_with_token',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `or`
+  String get g_key_or {
+    return Intl.message('or', name: 'g_key_or', desc: '', args: []);
+  }
+
+  /// `Login successful`
+  String get g_key_login_success {
+    return Intl.message(
+      'Login successful',
+      name: 'g_key_login_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Social Login`
+  String get g_key_social_login {
+    return Intl.message(
+      'Social Login',
+      name: 'g_key_social_login',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue with Google`
+  String get g_key_continue_with_google {
+    return Intl.message(
+      'Continue with Google',
+      name: 'g_key_continue_with_google',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue with Apple`
+  String get g_key_continue_with_apple {
+    return Intl.message(
+      'Continue with Apple',
+      name: 'g_key_continue_with_apple',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Google sign-in cancelled`
+  String get g_key_google_sign_in_cancelled {
+    return Intl.message(
+      'Google sign-in cancelled',
+      name: 'g_key_google_sign_in_cancelled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Apple sign-in cancelled`
+  String get g_key_apple_sign_in_cancelled {
+    return Intl.message(
+      'Apple sign-in cancelled',
+      name: 'g_key_apple_sign_in_cancelled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign in failed`
+  String get g_key_sign_in_failed {
+    return Intl.message(
+      'Sign in failed',
+      name: 'g_key_sign_in_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Linked Accounts`
+  String get g_key_linked_accounts {
+    return Intl.message(
+      'Linked Accounts',
+      name: 'g_key_linked_accounts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Link Account`
+  String get g_key_link_account {
+    return Intl.message(
+      'Link Account',
+      name: 'g_key_link_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unlink Account`
+  String get g_key_unlink_account {
+    return Intl.message(
+      'Unlink Account',
+      name: 'g_key_unlink_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account linked successfully`
+  String get g_key_account_linked {
+    return Intl.message(
+      'Account linked successfully',
+      name: 'g_key_account_linked',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account unlinked successfully`
+  String get g_key_account_unlinked {
+    return Intl.message(
+      'Account unlinked successfully',
+      name: 'g_key_account_unlinked',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No linked accounts`
+  String get g_key_no_linked_accounts {
+    return Intl.message(
+      'No linked accounts',
+      name: 'g_key_no_linked_accounts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enterprise Login (SSO)`
+  String get g_key_oidc_login {
+    return Intl.message(
+      'Enterprise Login (SSO)',
+      name: 'g_key_oidc_login',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enterprise SSO not configured`
+  String get g_key_oidc_not_configured {
+    return Intl.message(
+      'Enterprise SSO not configured',
+      name: 'g_key_oidc_not_configured',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `SAML Login`
+  String get g_key_saml_login {
+    return Intl.message(
+      'SAML Login',
+      name: 'g_key_saml_login',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `SAML not configured`
+  String get g_key_saml_not_configured {
+    return Intl.message(
+      'SAML not configured',
+      name: 'g_key_saml_not_configured',
       desc: '',
       args: [],
     );
