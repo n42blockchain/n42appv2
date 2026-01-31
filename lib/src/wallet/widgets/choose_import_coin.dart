@@ -77,7 +77,7 @@ class _ChooseImportCoinState extends State<ChooseImportCoin> {
             selectIndex = index;
           });
           Navigator.pop(context,cInfo);
-        },coinPath: cInfo['baseInfo']['path']![cInfo['addrType']]);
+        },coinPath: cInfo['baseInfo']?['path']?[cInfo['addrType']]);
   }
 
   Widget item(BuildContext context, String path, String g, String l, bool isSelected,

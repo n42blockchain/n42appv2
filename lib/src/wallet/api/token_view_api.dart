@@ -13,6 +13,7 @@ import 'package:n42appv2/src/wallet/api/chain_api/btc_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/dot_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/eth_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/fil_api.dart';
+import 'package:n42appv2/src/wallet/api/chain_api/near_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/sol_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/sui_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/ton_api.dart';
@@ -251,6 +252,9 @@ class TokenViewApi{
       case "Zilliqa":
         ZilApi zilApi=ZilApi(isTest: isTest);
         return await zilApi.getBalance(address);
+      case "Near":
+        NearApi nearApi=NearApi(isTest: isTest);
+        return await nearApi.getBalance(address);
     }
     return null;
   }
@@ -786,7 +790,102 @@ class TokenViewApi{
     }
   }
 
+  /// N42 链专用的 ENS 解析
+  /// N42 Name Service - 支持 .n42 后缀的域名
+  Future<MessageModel> getN42EnsResolve(String domain)async{
+    try{
+      // N42 链使用专门的解析端点
+      final a=await BaseApi.requestEmptyH.get('${url}v1/n42/ens/resolve?domain=$domain', params: {},header:header,);
+      MessageModel mm=MessageModel();
+      if(a['code']==200){
+        mm.data=a['data'];
+      }else{
+        mm.error=true;
+        mm.data=errorMessage(a['msg']);
+      }
+      return mm;
+    }catch(e){
+      MessageModel mm=MessageModel.error();
+      mm.data= e.toString();
+      return mm;
+    }
+  }
 
+  /// ENS 反向解析 - 将地址解析为 ENS 名称
+  Future<MessageModel> getEnsReverseResolve(String address)async{
+    try{
+      final a=await BaseApi.requestEmptyH.get('${url}v1/ens/reverse?address=$address', params: {},header:header,);
+      MessageModel mm=MessageModel();
+      if(a['code']==200){
+        mm.data=a['data'];
+      }else{
+        mm.error=true;
+        mm.data=errorMessage(a['msg']);
+      }
+      return mm;
+    }catch(e){
+      MessageModel mm=MessageModel.error();
+      mm.data= e.toString();
+      return mm;
+    }
+  }
+
+  /// N42 ENS 反向解析
+  Future<MessageModel> getN42ReverseResolve(String address)async{
+    try{
+      final a=await BaseApi.requestEmptyH.get('${url}v1/n42/ens/reverse?address=$address', params: {},header:header,);
+      MessageModel mm=MessageModel();
+      if(a['code']==200){
+        mm.data=a['data'];
+      }else{
+        mm.error=true;
+        mm.data=errorMessage(a['msg']);
+      }
+      return mm;
+    }catch(e){
+      MessageModel mm=MessageModel.error();
+      mm.data= e.toString();
+      return mm;
+    }
+  }
+
+  /// 获取 ENS 头像
+  Future<MessageModel> getEnsAvatar(String domain)async{
+    try{
+      final a=await BaseApi.requestEmptyH.get('${url}v1/ens/avatar?domain=$domain', params: {},header:header,);
+      MessageModel mm=MessageModel();
+      if(a['code']==200){
+        mm.data=a['data'];
+      }else{
+        mm.error=true;
+        mm.data=errorMessage(a['msg']);
+      }
+      return mm;
+    }catch(e){
+      MessageModel mm=MessageModel.error();
+      mm.data= e.toString();
+      return mm;
+    }
+  }
+
+  /// 获取 ENS 文本记录 (email, twitter, github 等)
+  Future<MessageModel> getEnsTextRecords(String domain)async{
+    try{
+      final a=await BaseApi.requestEmptyH.get('${url}v1/ens/text-records?domain=$domain', params: {},header:header,);
+      MessageModel mm=MessageModel();
+      if(a['code']==200){
+        mm.data=a['data'];
+      }else{
+        mm.error=true;
+        mm.data=errorMessage(a['msg']);
+      }
+      return mm;
+    }catch(e){
+      MessageModel mm=MessageModel.error();
+      mm.data= e.toString();
+      return mm;
+    }
+  }
 
   ////////////////////////////
   //solana

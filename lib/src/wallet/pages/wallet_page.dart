@@ -31,19 +31,13 @@ import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:n42appv2/src/widgets/loading.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
-import 'package:n42appv2/src/bridge/pages/bridge_home_page.dart';
-import 'package:n42appv2/src/staking/pages/staking_home_page.dart';
-import 'package:n42appv2/src/airdrop/pages/airdrop_home_page.dart';
-import 'package:n42appv2/src/loyalty/pages/loyalty_home_page.dart';
-import 'package:n42appv2/src/hardware_wallet/pages/hardware_wallet_page.dart';
-import 'package:n42appv2/src/wallet/pages/gas/gas_tracker_page.dart';
-import 'package:n42appv2/src/wallet/pages/batch_transfer/batch_transfer_select_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
 
 class WalletPage extends StatefulWidget {
   const WalletPage({super.key});
@@ -291,9 +285,10 @@ class _WalletPageState extends State<WalletPage> {
                                   height: ScreenUtil().setWidth(60.0),
                                   child: (wc.walletConnectState !=
                                       WalletConnectState.disconnect &&
-                                      wc.dAppTopic != null)
+                                      wc.dAppTopic != null &&
+                                      wc.metadata != null)
                                       ? ImageNetWork(
-                                    imageUrl:wc.metadata!.icons.isEmpty
+                                    imageUrl: (wc.metadata?.icons.isEmpty ?? true)
                                         ? ""
                                         : wc.metadata!.icons[0],
                                     placeholder: "assets/img/list_default.png",
@@ -415,10 +410,6 @@ class _WalletPageState extends State<WalletPage> {
                                       },
                                     ),
                                 ),
-                                // 新功能入口
-                                SliverToBoxAdapter(
-                                  child: _buildFeatureEntries(context),
-                                ),
                                 coinListHeaderWidget(waValue),
                                 coinListWidget(waValue),
                                 SliverToBoxAdapter(
@@ -514,440 +505,6 @@ class _WalletPageState extends State<WalletPage> {
             );
           },
         ),
-      ),
-    );
-  }
-
-  /// 构建新功能入口区域 - 参考 Trust Wallet / Rainbow 风格
-  Widget _buildFeatureEntries(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // 横向滚动的功能卡片
-        SizedBox(
-          height: ScreenUtil().setWidth(180),
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
-            children: [
-              // Bridge 大卡片
-              _buildFeatureCard(
-                context,
-                title: 'Bridge',
-                subtitle: 'Cross-chain transfer',
-                icon: Icons.swap_horiz_rounded,
-                gradientColors: const [Color(0xFF667EEA), Color(0xFF764BA2)],
-                isNew: true,
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const BridgeHomePage())),
-              ),
-              SizedBox(width: ScreenUtil().setWidth(12)),
-              // Staking 大卡片
-              _buildFeatureCard(
-                context,
-                title: 'Stake',
-                subtitle: 'Earn rewards',
-                icon: Icons.trending_up_rounded,
-                gradientColors: const [Color(0xFF11998E), Color(0xFF38EF7D)],
-                isNew: true,
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const StakingHomePage())),
-              ),
-              SizedBox(width: ScreenUtil().setWidth(12)),
-              // Airdrop 大卡片
-              _buildFeatureCard(
-                context,
-                title: 'Airdrop',
-                subtitle: 'Track & claim',
-                icon: Icons.card_giftcard_rounded,
-                gradientColors: const [Color(0xFFFF6B6B), Color(0xFFFFE66D)],
-                isNew: true,
-                onTap: () {
-                  final waProvider = Provider.of<WalletActionProvider>(context, listen: false);
-                  final address = waProvider.coinList.isNotEmpty ? waProvider.coinList.first.address?.toString() ?? '' : '';
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => AirdropHomePage(walletAddress: address)));
-                },
-              ),
-            ],
-          ),
-        ),
-        SizedBox(height: ScreenUtil().setWidth(16)),
-        // 小图标功能入口
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildMiniFeature(
-                context,
-                icon: Icons.stars_rounded,
-                label: 'Rewards',
-                color: const Color(0xFFFFC107),
-                onTap: () {
-                  final waProvider = Provider.of<WalletActionProvider>(context, listen: false);
-                  final address = waProvider.coinList.isNotEmpty ? waProvider.coinList.first.address?.toString() ?? '' : '';
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => LoyaltyHomePage(walletAddress: address)));
-                },
-              ),
-              _buildMiniFeature(
-                context,
-                icon: Icons.security_rounded,
-                label: 'Ledger',
-                color: const Color(0xFF2196F3),
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const HardwareWalletPage())),
-              ),
-              _buildMiniFeature(
-                context,
-                icon: Icons.local_gas_station_rounded,
-                label: 'Gas',
-                color: const Color(0xFFE91E63),
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const GasTrackerPage())),
-              ),
-              _buildMiniFeature(
-                context,
-                icon: Icons.local_fire_department_rounded,
-                label: 'Burn',
-                color: const Color(0xFFFF5722),
-                onTap: () => _showBurnNftTip(context),
-              ),
-              _buildMiniFeature(
-                context,
-                icon: Icons.grid_view_rounded,
-                label: 'More',
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                onTap: () => _showMoreFeatures(context),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(height: ScreenUtil().setWidth(8)),
-      ],
-    );
-  }
-
-  /// 构建功能大卡片 - Rainbow / Trust Wallet 风格
-  Widget _buildFeatureCard(
-    BuildContext context, {
-    required String title,
-    required String subtitle,
-    required IconData icon,
-    required List<Color> gradientColors,
-    bool isNew = false,
-    VoidCallback? onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: ScreenUtil().setWidth(220),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: gradientColors,
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-          boxShadow: [
-            BoxShadow(
-              color: gradientColors[0].withAlpha(80),
-              blurRadius: 12,
-              offset: const Offset(0, 6),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: ScreenUtil().setWidth(48),
-                  height: ScreenUtil().setWidth(48),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withAlpha(50),
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-                  ),
-                  child: Icon(icon, color: Colors.white, size: ScreenUtil().setWidth(28)),
-                ),
-                if (isNew)
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(10),
-                      vertical: ScreenUtil().setWidth(4),
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withAlpha(50),
-                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
-                    ),
-                    child: Text(
-                      'NEW',
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(18),
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(32),
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(height: ScreenUtil().setWidth(4)),
-                Text(
-                  subtitle,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
-                    color: Colors.white.withAlpha(200),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// 构建小功能入口 - 简洁图标样式
-  Widget _buildMiniFeature(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-    required Color color,
-    VoidCallback? onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: ScreenUtil().setWidth(52),
-            height: ScreenUtil().setWidth(52),
-            decoration: BoxDecoration(
-              color: color.withAlpha(25),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
-            ),
-            child: Icon(icon, color: color, size: ScreenUtil().setWidth(26)),
-          ),
-          SizedBox(height: ScreenUtil().setWidth(6)),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(20),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// 显示 NFT 销毁提示
-  void _showBurnNftTip(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Row(
-          children: [
-            Icon(Icons.local_fire_department_rounded, color: Colors.orange, size: 28),
-            const SizedBox(width: 8),
-            const Text('Burn NFT'),
-          ],
-        ),
-        content: const Text(
-          'To burn an NFT, please go to the NFT details page and tap the "Burn" button.\n\n'
-          'Steps:\n'
-          '1. Select a token with NFT support\n'
-          '2. Go to NFT tab\n'
-          '3. Select the NFT you want to burn\n'
-          '4. Tap "Burn" button',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Got it'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// 显示更多功能菜单
-  void _showMoreFeatures(BuildContext context) {
-    final waProvider = Provider.of<WalletActionProvider>(context, listen: false);
-    final address = waProvider.coinList.isNotEmpty ? waProvider.coinList.first.address?.toString() ?? '' : '';
-
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(ScreenUtil().setWidth(24))),
-      ),
-      builder: (ctx) => SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // 标题栏
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'More Features',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(32),
-                      fontWeight: FontWeight.bold,
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.pop(ctx),
-                    icon: Icon(
-                      Icons.close,
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: ScreenUtil().setWidth(16)),
-              // 功能网格
-              GridView.count(
-                crossAxisCount: 4,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                childAspectRatio: 0.9,
-                children: [
-                  _buildMoreFeatureItem(
-                    context,
-                    icon: Icons.swap_horiz_rounded,
-                    label: 'Bridge',
-                    color: const Color(0xFF9C27B0),
-                    onTap: () {
-                      Navigator.pop(ctx);
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => const BridgeHomePage()));
-                    },
-                  ),
-                  _buildMoreFeatureItem(
-                    context,
-                    icon: Icons.account_balance_rounded,
-                    label: 'Stake',
-                    color: const Color(0xFF4CAF50),
-                    onTap: () {
-                      Navigator.pop(ctx);
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => const StakingHomePage()));
-                    },
-                  ),
-                  _buildMoreFeatureItem(
-                    context,
-                    icon: Icons.card_giftcard_rounded,
-                    label: 'Airdrop',
-                    color: const Color(0xFF2196F3),
-                    onTap: () {
-                      Navigator.pop(ctx);
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => AirdropHomePage(walletAddress: address)));
-                    },
-                  ),
-                  _buildMoreFeatureItem(
-                    context,
-                    icon: Icons.stars_rounded,
-                    label: 'Rewards',
-                    color: const Color(0xFFFFC107),
-                    onTap: () {
-                      Navigator.pop(ctx);
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => LoyaltyHomePage(walletAddress: address)));
-                    },
-                  ),
-                  _buildMoreFeatureItem(
-                    context,
-                    icon: Icons.security_rounded,
-                    label: 'Ledger',
-                    color: const Color(0xFF607D8B),
-                    onTap: () {
-                      Navigator.pop(ctx);
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => const HardwareWalletPage()));
-                    },
-                  ),
-                  _buildMoreFeatureItem(
-                    context,
-                    icon: Icons.local_gas_station_rounded,
-                    label: 'Gas',
-                    color: const Color(0xFFE91E63),
-                    onTap: () {
-                      Navigator.pop(ctx);
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => const GasTrackerPage()));
-                    },
-                  ),
-                  _buildMoreFeatureItem(
-                    context,
-                    icon: Icons.send_rounded,
-                    label: 'Batch',
-                    color: const Color(0xFF00BCD4),
-                    onTap: () {
-                      Navigator.pop(ctx);
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => const BatchTransferSelectPage()));
-                    },
-                  ),
-                  _buildMoreFeatureItem(
-                    context,
-                    icon: Icons.local_fire_department_rounded,
-                    label: 'Burn',
-                    color: const Color(0xFFFF5722),
-                    onTap: () {
-                      Navigator.pop(ctx);
-                      _showBurnNftTip(context);
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  /// 构建更多功能项
-  Widget _buildMoreFeatureItem(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-    required Color color,
-    VoidCallback? onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: ScreenUtil().setWidth(56),
-            height: ScreenUtil().setWidth(56),
-            decoration: BoxDecoration(
-              color: color.withAlpha(25),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-            ),
-            child: Icon(icon, color: color, size: ScreenUtil().setWidth(28)),
-          ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(22),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -1233,15 +790,15 @@ class _WalletPageState extends State<WalletPage> {
     }
     Widget? mainImage;
     Widget image;
-    if (coinInfo.coin['icon'] == "") {
+    final coinIcon = coinInfo.coin['icon'] ?? '';
+    if (coinIcon == "") {
       image = Image.asset("assets/img/list_default.png");
     } else {
-      image = ImageNetWork(imageUrl:
-      coinInfo.coin['icon'] ?? "",
+      image = ImageNetWork(imageUrl: coinIcon,
         placeholder: "assets/img/list_default.png",
       );
     }
-    if (coinInfo.coin['isContract']) {
+    if (coinInfo.coin['isContract'] == true) {
       mainImage = ImageNetWork(imageUrl:
         coinInfo.mainCoinIcon ?? "",
         placeholder: "assets/img/list_default.png",
@@ -1249,7 +806,8 @@ class _WalletPageState extends State<WalletPage> {
     }
     Color deleteColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
     if(coinInfo.coin['canEdit']==false){
-      deleteColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorGrey.name);
+      // 使用更暗的灰色，在暗色主题下也能看清
+      deleteColor = const Color(0xFF6B6B6B);
     }
     Widget refreshWidget = const SizedBox();
     /*if (coinInfo.isRefresh) {
@@ -1275,6 +833,11 @@ class _WalletPageState extends State<WalletPage> {
     }
     return InkWell(
       onTap: () {
+        // 聚合代币暂不支持详情页面
+        if(coinInfo.coin['isAggregated'] == true) {
+          ToastUtils.show(S.of(context).g_key_aa_coming_soon);
+          return;
+        }
         if(coinInfo.coin['coinType']==CoinType.BTC.name){
           //Navigator.push(context, MaterialPageRoute(builder: (context) => WalletChainInfoBtc(coinInfo)));
           Navigator.push(context, MaterialPageRoute(builder: (context) => WalletChainInfo(coinInfo)));
@@ -1375,7 +938,7 @@ class _WalletPageState extends State<WalletPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          coinInfo.coin['miniName'],
+                          coinInfo.coin['miniName'] ?? '',
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(30),
                             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
