@@ -14,6 +14,8 @@ import 'package:n42appv2/src/wallet/api/market_api.dart';
 import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
+import 'package:n42appv2/src/wallet/models/aggregated_token.dart';
+import 'package:n42appv2/src/wallet/models/aggregated_coin_model.dart';
 import 'package:n42appv2/src/wallet/provider/transaction_record_iterms_provider.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
@@ -304,14 +306,27 @@ class WalletActionProvider extends ChangeNotifier{
     if (!AppGlobals.appContext.mounted) return;
     Provider.of<TransactionRecordItemProvider>(AppGlobals.appContext,listen: false).selectUndoneTr();
   }
+  /// 聚合代币列表 (USDT, USDC)
+  List<AggregatedCoinModel> _aggregatedCoins = [];
+  List<AggregatedCoinModel> get aggregatedCoins => _aggregatedCoins;
+
   Future<void> buildCoinModelInfo() async {
     coinList=[];
+    _aggregatedCoins = [];
+    bool ethAdded = false;
+
     for (int i = 0; i < _coinModels.length; i++) {
       CoinModel mm = _coinModels[i];
       await mm.buildWallet();
       mm.getBalanceDefault();
       if(mm.showList){
         coinList.add(mm);
+
+        // 在 ETH 之后插入 USDT 和 USDC 聚合代币
+        if (mm.coin['coinType'] == 'ETH' && !ethAdded) {
+          ethAdded = true;
+          await _insertAggregatedTokens();
+        }
       }
       List<String> tokenKeys=mm.tokens.keys.toList();
       for(String key in tokenKeys){
@@ -325,6 +340,30 @@ class WalletActionProvider extends ChangeNotifier{
     //coinSortAssets();
     calculateBalanceWidthCoinModel();
     saveCoinSort();
+  }
+
+  /// 插入聚合代币 (USDT, USDC)
+  Future<void> _insertAggregatedTokens() async {
+    // 获取各链地址
+    final addressByChain = <String, String>{};
+    for (final cm in _coinModels) {
+      final coinType = cm.coin['coinType'] as String?;
+      if (coinType != null && cm.address != null) {
+        addressByChain[coinType] = cm.address.toString();
+      }
+    }
+
+    // 创建聚合代币
+    for (final tokenConfig in AggregatedTokens.all) {
+      final aggregatedCoin = AggregatedCoinModel(tokenConfig: tokenConfig);
+      _aggregatedCoins.add(aggregatedCoin);
+      coinList.add(aggregatedCoin);
+
+      // 异步获取余额（不阻塞 UI）
+      aggregatedCoin.fetchAllBalances(addressByChain).then((_) {
+        notifyListeners();
+      });
+    }
   }
   CoinModel buildTokenCoinModel(CoinModel mainChain,Map<String,dynamic> token){
     CoinModel cm=CoinModel.fromMap(token);
@@ -343,6 +382,9 @@ class WalletActionProvider extends ChangeNotifier{
   //加载指定network的币
   Future<void> buildCoinModelInfoWithCoin() async {
     coinList=[];
+    _aggregatedCoins = [];
+    bool ethAdded = false;
+
     if(walletInfo.networkIndex==-1){
       for (int i = 0; i < _coinModels.length; i++) {
         CoinModel mm = _coinModels[i];
@@ -350,6 +392,12 @@ class WalletActionProvider extends ChangeNotifier{
         if(mm.showList){
           mm.getBalanceDefault();
           coinList.add(mm);
+
+          // 在 ETH 之后插入聚合代币
+          if (mm.coin['coinType'] == 'ETH' && !ethAdded) {
+            ethAdded = true;
+            await _insertAggregatedTokens();
+          }
         }
         List<String> tokenKeys=mm.tokens.keys.toList();
         for(String key in tokenKeys){
