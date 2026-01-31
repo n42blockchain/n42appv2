@@ -111,9 +111,10 @@ class AddressValidator {
       );
     }
 
-    // Layer 5: ENS resolution (only for ETH and if allowed)
-    if (allowEns && coinType == CoinType.ETH.name) {
-      final ensResult = await _resolveEns(address);
+    // Layer 5: ENS resolution (for EVM compatible chains if allowed)
+    // N42 链优先，然后是 ETH 和其他 EVM 兼容链
+    if (allowEns && _supportsEns(coinType) && _looksLikeEnsName(address)) {
+      final ensResult = await _resolveEns(address, coinType);
       if (ensResult != null) {
         // Validate resolved address
         if (_isSelfTransfer(ensResult, senderAddress)) {
@@ -130,6 +131,40 @@ class AddressValidator {
     }
 
     return AddressValidationResult.invalid('Invalid address format');
+  }
+
+  /// 检查链是否支持 ENS 解析
+  /// N42 链和所有 EVM 兼容链都支持
+  bool _supportsEns(String coinType) {
+    // N42 链优先支持
+    if (coinType == CoinType.N.name) return true;
+    // ETH 主网
+    if (coinType == CoinType.ETH.name) return true;
+    // 其他 EVM 兼容链
+    return _isEthereumCompatible(coinType);
+  }
+
+  /// 检查字符串是否看起来像 ENS 名称
+  /// 支持 .eth, .n42 等后缀
+  bool _looksLikeEnsName(String name) {
+    final lowercaseName = name.toLowerCase().trim();
+    // 支持的 ENS 后缀
+    const ensSuffixes = [
+      '.eth',    // Ethereum Name Service
+      '.n42',    // N42 Name Service
+      '.xyz',    // ENS 支持的通用域名
+      '.app',    // ENS 支持的应用域名
+      '.luxe',   // ENS 支持的奢侈品域名
+      '.kred',   // ENS 支持的信用域名
+      '.art',    // ENS 支持的艺术域名
+    ];
+
+    for (final suffix in ensSuffixes) {
+      if (lowercaseName.endsWith(suffix)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /// Clean address from URI format
@@ -170,14 +205,39 @@ class AddressValidator {
   }
 
   /// Resolve ENS name to address
-  Future<String?> _resolveEns(String ensName) async {
+  ///
+  /// [ensName] - ENS 名称 (如 vitalik.eth 或 user.n42)
+  /// [coinType] - 目标链类型，N42 优先级最高
+  Future<String?> _resolveEns(String ensName, String coinType) async {
     try {
+      // N42 链的 ENS 名称使用专门的解析
+      if (coinType == CoinType.N.name || ensName.toLowerCase().endsWith('.n42')) {
+        final result = await _resolveN42Ens(ensName);
+        if (result != null) return result;
+      }
+
+      // 回退到标准 ENS 解析（ETH 主网）
       MessageModel result = await _tokenViewApi.getEnsResolve(ensName);
       if (!result.error && result.data != null) {
         return result.data as String;
       }
     } catch (e) {
       // ENS resolution failed
+    }
+    return null;
+  }
+
+  /// 解析 N42 链的 ENS 名称
+  /// N42 有自己的名称服务，优先级高于 ETH ENS
+  Future<String?> _resolveN42Ens(String ensName) async {
+    try {
+      // 尝试使用 N42 专用的 ENS 解析 API
+      MessageModel result = await _tokenViewApi.getN42EnsResolve(ensName);
+      if (!result.error && result.data != null) {
+        return result.data as String;
+      }
+    } catch (e) {
+      // N42 ENS resolution failed, will fallback to standard ENS
     }
     return null;
   }

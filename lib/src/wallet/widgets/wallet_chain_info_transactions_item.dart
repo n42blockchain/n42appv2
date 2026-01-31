@@ -5,6 +5,7 @@ import 'package:n42appv2/src/wallet/pages/transactions/transaction_detail_eth.da
 import 'package:n42appv2/src/wallet/pages/transactions/transaction_detail_page.dart';
 import 'package:n42appv2/src/wallet/pages/transactions/transaction_detail_trx.dart';
 import 'package:n42appv2/src/wallet/pages/transactions/transaction_retry.dart';
+import 'package:n42appv2/src/wallet/widgets/ens_address_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
@@ -147,10 +148,11 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text(
-                            isOut?transactionModel.OutputAddressStr:transactionModel.InputAddressStr,
+                          EnsAddressText(
+                            address: isOut ? transactionModel.OutputAddressStr : transactionModel.InputAddressStr,
+                            coinType: coinModel?.coin['coinType'] ?? 'ETH',
                             style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name,),
+                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name),
                               fontSize: ScreenUtil().setSp(26.0),
                             ),
                           ),

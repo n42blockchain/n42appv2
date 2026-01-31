@@ -618,6 +618,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
                   children: [
                     WalletChainInfoBoard(
                       address: widget.coinModel.address,
+                      coinType: widget.coinModel.coin['coinType'],
                       balanceStr:
                       '${widget.coinModel.balanceStringAll()} ${widget.coinModel.coin['unit'].toString().toUpperCase()}',
                       balanceDollarStr: '\$${widget.coinModel.valueString()}',

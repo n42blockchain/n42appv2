@@ -272,7 +272,7 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Real-time Gas Prices',
+                  S.of(context).g_key_gas_realtime_prices,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(30),
                     fontWeight: FontWeight.bold,
@@ -282,7 +282,7 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
                 ),
                 SizedBox(height: ScreenUtil().setWidth(4)),
                 Text(
-                  'Auto-refresh every 15 seconds',
+                  S.of(context).g_key_gas_auto_refresh('15'),
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
                     color: AppThemeUtils.getColorByKey(
@@ -375,7 +375,7 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
             if (data.baseFee != null)
               _buildGasRow(
                 context,
-                'Base Fee',
+                S.of(context).g_key_gas_base_fee,
                 '${data.baseFee!.toStringAsFixed(2)} Gwei',
                 network.color.withAlpha(180),
               ),
@@ -391,7 +391,7 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8)),
                 child: Text(
-                  'Loading...',
+                  S.of(context).g_key_106, // Loading
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
                     color: AppThemeUtils.getColorByKey(
@@ -462,6 +462,7 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
     }
 
     return Container(
+      constraints: BoxConstraints(maxWidth: ScreenUtil().setWidth(140)),
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(12),
         vertical: ScreenUtil().setWidth(6),
@@ -477,6 +478,9 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
           fontWeight: FontWeight.w600,
           color: statusColor,
         ),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        textAlign: TextAlign.center,
       ),
     );
   }
@@ -485,7 +489,7 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(8)),
       child: Text(
-        'Gas prices fluctuate based on network demand. Lower gas = slower confirmation, higher gas = faster confirmation.',
+        S.of(context).g_key_gas_footer,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(22),
           color: AppThemeUtils.getColorByKey(

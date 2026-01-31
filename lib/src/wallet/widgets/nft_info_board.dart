@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/src/wallet/widgets/ens_address_display.dart';
 import 'package:n42appv2/src/widgets/prompt_widget.dart';
 
 /// NFT 信息展示板
@@ -16,6 +17,7 @@ import 'package:n42appv2/src/widgets/prompt_widget.dart';
 /// 在 NFT 详情页显示 NFT 信息和操作按钮（包括销毁）
 class NftInfoBoard extends StatelessWidget {
   final String? address;
+  final String? coinType; // 链类型（用于 ENS 解析）
   final String? tokenName;
   final String? tokenId;
   final String? contractAddress;
@@ -30,6 +32,7 @@ class NftInfoBoard extends StatelessWidget {
   const NftInfoBoard({
     super.key,
     required this.address,
+    this.coinType,
     this.tokenName,
     this.tokenId,
     this.contractAddress,
@@ -176,32 +179,13 @@ class NftInfoBoard extends StatelessWidget {
   }
 
   Widget _buildAddressRow(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Text(
-            address ?? '',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-            ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        InkWell(
-          onTap: () => _copyToClipboard(context, address ?? ''),
-          child: Container(
-            margin: EdgeInsets.only(left: ScreenUtil().setWidth(10)),
-            padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
-            child: Icon(
-              Icons.copy,
-              size: ScreenUtil().setWidth(36),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-            ),
-          ),
-        ),
-      ],
+    return EnsAddressDisplay(
+      address: address ?? '',
+      coinType: coinType ?? 'ETH',
+      style: EnsDisplayStyle.compact,
+      showAvatar: true,
+      showCopy: true,
+      fontSize: ScreenUtil().setSp(26),
     );
   }
 

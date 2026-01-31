@@ -7,6 +7,7 @@ import 'package:n42appv2/src/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42appv2/src/wallet/models/transation_record_model.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_security_verification.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
+import 'package:n42appv2/src/wallet/widgets/ens_address_display.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/prompt_widget.dart';
@@ -236,8 +237,8 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              tapLabelWidget(S.of(context).g_key_75,from,copy: true,),
-                              tapLabelWidget(S.of(context).g_key_38,to,copy: true,),
+                              _buildAddressLabel(S.of(context).g_key_75, from),
+                              _buildAddressLabel(S.of(context).g_key_38, to),
                               tapLabelWidget(S.of(context).g_key_44,price,),
                               tapLabelWidget(S.of(context).g_key_t_16,gasPrice,),
                             ],
@@ -303,6 +304,37 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
   }
 
   //带标签的label 控件
+  /// 构建地址标签（支持 ENS 显示）
+  Widget _buildAddressLabel(String title, String address) {
+    return Container(
+      margin: EdgeInsets.only(
+        bottom: ScreenUtil().setWidth(16.0),
+        top: ScreenUtil().setWidth(16.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+              fontSize: ScreenUtil().setSp(28.0),
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(10.0)),
+          EnsAddressDisplay(
+            address: address,
+            coinType: coinInfo['coinType'] ?? 'ETH',
+            style: EnsDisplayStyle.full,
+            showAvatar: true,
+            showCopy: true,
+            fontSize: ScreenUtil().setSp(28.0),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget tapLabelWidget(String title,String value,{bool copy=false}){
     return Container(
       margin: EdgeInsets.only(

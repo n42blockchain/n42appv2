@@ -167,7 +167,8 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
           },
         ),
       )
-      ..loadRequest(Uri.parse('http://192.168.31.26:5174/redeem?walletAddress=${widget.coinModel.address}'))
+      // BTC Staking Redeem URL - requires HTTPS in production
+      ..loadRequest(Uri.parse('https://api.n42.ai/btc-staking/redeem?walletAddress=${widget.coinModel.address}'))
       ..addJavaScriptChannel("N42APP", onMessageReceived: (JavaScriptMessage message) async{
         Map<String,dynamic>?rdata=jsonDecode(message.message);
         if(rdata !=null){

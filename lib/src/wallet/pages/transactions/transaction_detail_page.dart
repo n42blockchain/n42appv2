@@ -1,6 +1,7 @@
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
+import 'package:n42appv2/src/wallet/widgets/ens_address_display.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter/services.dart';
@@ -49,15 +50,13 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
           children: [
             _buildItem(S.of(context).g_key_wallet_k25, widget.time),
             _buildItem(S.of(context).g_key_wallet_k54, widget.blockNumber),
-            _buildItem(
+            _buildAddressItem(
               S.of(context).g_key_75,
               widget.from,
-              copy: true,
             ),
-            _buildItem(
+            _buildAddressItem(
               S.of(context).g_key_38,
               widget.to,
-              copy: true,
             ),
             _buildItem(S.of(context).g_key_wallet_k55, widget.value),
             _buildItem(S.of(context).g_key_t_7, widget.gas),
@@ -79,6 +78,47 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
       ),
     );
   }
+  /// 构建地址显示项（支持 ENS）
+  Widget _buildAddressItem(String? title, String? address) {
+    if (address == null || address.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: ScreenUtil().setWidth(16),
+        horizontal: ScreenUtil().setWidth(24),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title ?? "",
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              fontSize: ScreenUtil().setSp(30),
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(12)),
+          EnsAddressDisplay(
+            address: address,
+            coinType: widget.coinType ?? 'ETH',
+            style: EnsDisplayStyle.full,
+            showAvatar: true,
+            showCopy: true,
+            fontSize: ScreenUtil().setSp(28),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(24)),
+          Divider(
+            height: ScreenUtil().setWidth(1),
+            endIndent: 0,
+            indent: 0,
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildItem(String? title, String? content, {bool copy = false}) {
     if (content == null || content.isEmpty) {
       return const SizedBox(

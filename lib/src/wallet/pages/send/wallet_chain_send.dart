@@ -40,6 +40,7 @@ import 'package:n42appv2/src/wallet/api/gas_tracker_api.dart';
 import 'package:n42appv2/src/wallet/models/gas_estimate_model.dart';
 import 'package:n42appv2/src/wallet/pages/gas/gas_settings_page.dart';
 import 'package:n42appv2/src/wallet/widgets/gas_selector_widget.dart';
+import 'package:n42appv2/src/wallet/widgets/ens_confirm_dialog.dart';
 
 class WalletChainSend extends StatefulWidget {
   final CoinModel coinModel;
@@ -452,12 +453,25 @@ class _WalletChainSendState extends State<WalletChainSend> {
     return _addressValidator!;
   }
 
-  /// ENS resolution state for user confirmation
-  /// TODO: Use these fields to show ENS confirmation dialog before transfer
-  // ignore: unused_field
-  String? _resolvedEnsAddress;
-  // ignore: unused_field
-  String? _originalEnsName;
+  /// 用户是否已确认 ENS 解析结果
+  bool _ensConfirmed = false;
+
+  /// 检查链是否支持 ENS 解析
+  /// N42 链优先，然后是所有 EVM 兼容链
+  bool _isEnsSupported(String coinType) {
+    // N42 链优先支持 ENS
+    if (coinType == CoinType.N.name) return true;
+
+    // ETH 主网支持
+    if (coinType == CoinType.ETH.name) return true;
+
+    // 其他 EVM 兼容链
+    const evmChains = [
+      'BNB', 'MATIC', 'AVAX', 'FTM', 'OP', 'ARB',
+      'CELO', 'ONE', 'CRO', 'MOVR', 'GLMR',
+    ];
+    return evmChains.contains(coinType);
+  }
 
   /// Enhanced address validation with multiple security layers
   ///
@@ -473,11 +487,17 @@ class _WalletChainSendState extends State<WalletChainSend> {
       return null;
     }
 
+    // 获取当前链类型
+    final coinType = widget.coinModel.coin['coinType'] as String;
+
+    // 判断是否支持 ENS (N42 优先，然后是所有 EVM 兼容链)
+    final supportsEns = _isEnsSupported(coinType);
+
     final result = await addressValidator.validateAddress(
-      coinType: widget.coinModel.coin['coinType'],
+      coinType: coinType,
       address: addr,
       senderAddress: widget.coinModel.address.toString(),
-      allowEns: widget.coinModel.coin['coinType'] == CoinType.ETH.name,
+      allowEns: supportsEns,
     );
 
     if (!result.isValid) {
@@ -488,10 +508,25 @@ class _WalletChainSendState extends State<WalletChainSend> {
 
     // Handle ENS resolution - show confirmation to user
     if (result.isEnsResolved && result.ensName != null) {
-      _resolvedEnsAddress = result.resolvedAddress;
-      _originalEnsName = result.ensName;
-      // Note: In production, you should show a confirmation dialog here
-      // For now, we log and proceed
+      // 如果用户尚未确认，显示确认对话框
+      if (!_ensConfirmed && mounted) {
+        final confirmed = await EnsConfirmDialog.show(
+          context: context,
+          ensName: result.ensName!,
+          resolvedAddress: result.resolvedAddress ?? '',
+          tokenSymbol: widget.coinModel.coin['symbol'],
+        );
+
+        if (!confirmed) {
+          // 用户取消
+          _ensConfirmed = false;
+          return null;
+        }
+
+        // 用户确认
+        _ensConfirmed = true;
+      }
+
       debugPrint('ENS resolved: ${result.ensName} -> ${AddressValidator.getAddressPreview(result.resolvedAddress ?? "")}');
     }
 

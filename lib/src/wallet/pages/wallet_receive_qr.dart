@@ -6,11 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
+import 'package:n42appv2/src/wallet/widgets/ens_address_display.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
-import 'package:n42appv2/src/widgets/prompt_widget.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
@@ -183,41 +182,19 @@ class _WalletReceiveQrState extends State<WalletReceiveQr> {
                     version: QrVersions.min + 7,
                   ),
                 ),
+                // ENS 名称和地址显示
                 Container(
                   margin: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(100.0),
+                    horizontal: ScreenUtil().setWidth(60.0),
                     vertical: ScreenUtil().setWidth(30.0),
                   ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    address,
-                    style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainBlueColor.name),
-                        fontSize: ScreenUtil().setSp(26.0),
-                        fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    ToastUtils.init(context);
-                    Clipboard.setData(ClipboardData(text: address));
-                    ToastUtils.showFtToast(
-                        child: successViewV1(S.of(context).g_key_119),
-                        duration: 3);
-                  },
-                  child: Container(
-                    margin:
-                    EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
-                    width: ScreenUtil().setWidth(60.0),
-                    height: ScreenUtil().setWidth(60.0),
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(10.0)),
-                    child: Icon(
-                      Icons.copy,
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
-                    ),
+                  child: EnsAddressDisplay(
+                    address: address,
+                    coinType: widget.chainCoinModel.coin['coinType'] ?? 'ETH',
+                    style: EnsDisplayStyle.detailed,
+                    showAvatar: true,
+                    showCopy: true,
+                    fontSize: ScreenUtil().setSp(26.0),
                   ),
                 ),
               ],

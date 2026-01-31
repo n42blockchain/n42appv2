@@ -76,12 +76,12 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Batch Transfer'),
+        title: Text(S.of(context).g_key_batch_title),
         actions: [
           IconButton(
             icon: Icon(Icons.upload_file),
             onPressed: _importCsv,
-            tooltip: 'Import CSV',
+            tooltip: S.of(context).g_key_batch_import_csv,
           ),
           IconButton(
             icon: Icon(Icons.help_outline),
@@ -247,7 +247,7 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
             child: OutlinedButton.icon(
               onPressed: _addItem,
               icon: Icon(Icons.add),
-              label: Text('Add'),
+              label: Text(S.of(context).g_key_159), // Add
             ),
           ),
         ],
@@ -268,7 +268,7 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
             ),
             SizedBox(height: ScreenUtil().setWidth(16)),
             Text(
-              'No recipients added',
+              S.of(context).g_key_batch_recipients,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28),
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
@@ -278,7 +278,7 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
             TextButton.icon(
               onPressed: _importCsv,
               icon: Icon(Icons.upload_file),
-              label: Text('Import CSV'),
+              label: Text(S.of(context).g_key_batch_import_csv),
             ),
           ],
         ),
@@ -551,7 +551,7 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
                   Expanded(
                     child: OutlinedButton(
                       onPressed: provider.clearItems,
-                      child: Text('Clear All'),
+                      child: Text(S.of(context).g_key_batch_clear_all),
                     ),
                   ),
                 if (provider.items.isNotEmpty)
@@ -591,7 +591,7 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
               ),
             ),
             SizedBox(width: ScreenUtil().setWidth(8)),
-            Text('Estimating Gas...'),
+            Text(S.of(context).g_key_batch_estimating_gas),
           ],
         );
       case BatchTransferState.signing:
@@ -607,7 +607,7 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
               ),
             ),
             SizedBox(width: ScreenUtil().setWidth(8)),
-            Text('Signing...'),
+            Text(S.of(context).g_key_batch_signing),
           ],
         );
       case BatchTransferState.broadcasting:
@@ -623,7 +623,7 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
               ),
             ),
             SizedBox(width: ScreenUtil().setWidth(8)),
-            Text('Broadcasting...'),
+            Text(S.of(context).g_key_batch_broadcasting),
           ],
         );
       case BatchTransferState.success:
@@ -632,11 +632,11 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
           children: [
             Icon(Icons.check_circle, size: ScreenUtil().setWidth(24)),
             SizedBox(width: ScreenUtil().setWidth(8)),
-            Text('Done'),
+            Text(S.of(context).g_key_batch_done),
           ],
         );
       default:
-        return Text('Continue');
+        return Text(S.of(context).g_key_batch_continue);
     }
   }
 
@@ -752,17 +752,32 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
   }
 
   Widget _buildConfirmDialog(BatchTransferProvider provider) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return AlertDialog(
-      title: Text('Confirm Batch Transfer'),
+      backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+      title: Text(
+        S.of(context).g_key_batch_confirm_title,
+        style: TextStyle(color: isDark ? Colors.white : Colors.black87),
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Recipients: ${provider.recipientCount}'),
+          Text(
+            '${S.of(context).g_key_batch_recipients}: ${provider.recipientCount}',
+            style: TextStyle(color: isDark ? Colors.white70 : Colors.black87),
+          ),
           SizedBox(height: 8),
-          Text('Total Amount: ${provider.formatAmount(provider.totalAmount)} ${widget.tokenSymbol}'),
+          Text(
+            '${S.of(context).g_key_batch_total_amount}: ${provider.formatAmount(provider.totalAmount)} ${widget.tokenSymbol}',
+            style: TextStyle(color: isDark ? Colors.white70 : Colors.black87),
+          ),
           SizedBox(height: 8),
-          Text('Estimated Gas: ${_formatGasFee(provider.gasEstimate!.totalFee)}'),
+          Text(
+            'Gas: ${_formatGasFee(provider.gasEstimate!.totalFee)}',
+            style: TextStyle(color: isDark ? Colors.white70 : Colors.black87),
+          ),
           SizedBox(height: 16),
           Container(
             padding: EdgeInsets.all(12),
@@ -776,8 +791,11 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
                 SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'This action cannot be undone. Please verify all recipients and amounts.',
-                    style: TextStyle(fontSize: 12),
+                    S.of(context).importantNotice,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: isDark ? Colors.white70 : Colors.black87,
+                    ),
                   ),
                 ),
               ],
@@ -788,11 +806,22 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context, false),
-          child: Text('Cancel'),
+          child: Text(
+            S.of(context).g_key_79, // Cancel
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+            ),
+          ),
         ),
         ElevatedButton(
           onPressed: () => Navigator.pop(context, true),
-          child: Text('Confirm'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+          ),
+          child: Text(
+            S.of(context).g_key_78, // Confirm
+            style: const TextStyle(color: Colors.white),
+          ),
         ),
       ],
     );
@@ -802,14 +831,18 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
     final provider = context.read<BatchTransferProvider>();
     final walletProvider = context.read<WalletActionProvider>();
 
+    // 在 async 操作之前捕获本地化字符串
+    final l10n = S.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+
     // 获取钱包信息
     final walletInfo = walletProvider.walletInfo;
     final mnemonic = walletInfo.mnemonic ?? '';
     final privateKey = walletInfo.privateKey ?? '';
 
     if (mnemonic.isEmpty && privateKey.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).g_key_210)), // 钱包信息错误
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.g_key_210)), // 钱包信息错误
       );
       return;
     }
@@ -846,7 +879,7 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
       );
 
       if (signedTx.isEmpty) {
-        provider.setError(S.of(context).g_key_175); // Transaction failed
+        provider.setError(l10n.g_key_175); // Transaction failed
         return;
       }
 
@@ -854,9 +887,9 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
       final success = await provider.broadcastTransaction(signedTx);
 
       if (success && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        messenger.showSnackBar(
           SnackBar(
-            content: Text(S.of(context).g_key_140), // 交易成功
+            content: Text(l10n.g_key_140), // 交易成功
             backgroundColor: Colors.green,
           ),
         );
@@ -871,29 +904,36 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
   }
 
   void _showHelp() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white70 : Colors.black87;
+
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Batch Transfer Help'),
+      builder: (ctx) => AlertDialog(
+        backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+        title: Text(
+          S.of(context).g_key_batch_help_title,
+          style: TextStyle(color: isDark ? Colors.white : Colors.black87),
+        ),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Batch transfer allows you to send tokens to multiple recipients in a single transaction, saving gas fees.',
-                style: TextStyle(fontSize: 14),
+                S.of(context).g_key_batch_send_multiple,
+                style: TextStyle(fontSize: 14, color: textColor),
               ),
               SizedBox(height: 16),
               Text(
-                'CSV Format:',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                S.of(context).g_key_batch_csv_format,
+                style: TextStyle(fontWeight: FontWeight.bold, color: textColor),
               ),
               SizedBox(height: 8),
               Container(
                 padding: EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.grey.withAlpha(30),
+                  color: (isDark ? Colors.white : Colors.grey).withAlpha(30),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -901,25 +941,31 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
                   style: TextStyle(
                     fontFamily: 'monospace',
                     fontSize: 12,
+                    color: textColor,
                   ),
                 ),
               ),
               SizedBox(height: 16),
               Text(
                 'Tips:',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(fontWeight: FontWeight.bold, color: textColor),
               ),
               SizedBox(height: 8),
-              Text('• Swipe left to remove a recipient'),
-              Text('• Memo is optional'),
-              Text('• Use Multicall3 for lower gas fees'),
+              Text('• ${S.of(context).g_key_batch_swipe_remove}', style: TextStyle(color: textColor)),
+              Text('• ${S.of(context).g_key_batch_memo_optional}', style: TextStyle(color: textColor)),
+              Text('• ${S.of(context).g_key_batch_multicall_tip}', style: TextStyle(color: textColor)),
             ],
           ),
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Got it'),
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(
+              S.of(context).g_key_burn_got_it,
+              style: TextStyle(
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+              ),
+            ),
           ),
         ],
       ),

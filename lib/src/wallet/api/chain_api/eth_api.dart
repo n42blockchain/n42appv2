@@ -271,6 +271,28 @@ class EthAPI{
     return await baseRPCEth("eth_sendRawTransaction",[value],coinType: coinType??cType,isTest: isTest);
   }
 
+  /// Raw eth_call with pre-built data
+  /// Used for AA operations like getNonce from EntryPoint
+  Future<MessageModel> ethCallRaw(String to, String data, {String? coinType, bool isTest = false}) async {
+    return await baseRPCEth(
+      "eth_call",
+      [{"to": to, "data": data}, "latest"],
+      coinType: coinType ?? cType,
+      isTest: isTest,
+    );
+  }
+
+  /// Get contract code at address
+  /// Used to check if a smart account is deployed
+  Future<MessageModel> getCode(String address, {String? coinType, bool isTest = false}) async {
+    return await baseRPCEth(
+      "eth_getCode",
+      [address, "latest"],
+      coinType: coinType ?? cType,
+      isTest: isTest,
+    );
+  }
+
   Future<MessageModel> baseRPCEth(String method,var value,{String? coinType,bool? isTest})async{
     try{
       MessageModel mm=MessageModel();

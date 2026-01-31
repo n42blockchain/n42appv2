@@ -22,6 +22,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42appv2/src/wallet/widgets/ens_address_display.dart';
 import 'package:web3dart/crypto.dart';
 
 class OneCoinWalletManage extends StatefulWidget {
@@ -91,7 +92,7 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
     });
     await Future.delayed(const Duration(milliseconds: 300));
     if (!mounted) return;
-    password ??= widget.walletInfo.password!;
+    password ??= widget.walletInfo.password ?? "";
     final keystoreJson= await Trustdart().getKeyStore(
       widget.model.coin['coinType']!,
       getPathWithIndex(coinPath!, widget.walletInfo.coinInfo![widget.model.coin['coinType']]['pathIndex']??0),
@@ -240,11 +241,13 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
           SizedBox(
             height: ScreenUtil().setWidth(20.0),
           ),
-          Text(
-            widget.model.address??"",
-            style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                fontSize: ScreenUtil().setSp(28.0)),
+          EnsAddressDisplay(
+            address: widget.model.address ?? "",
+            coinType: widget.model.coin['coinType'] ?? 'ETH',
+            style: EnsDisplayStyle.compact,
+            showAvatar: true,
+            showCopy: true,
+            fontSize: ScreenUtil().setSp(28.0),
           ),
           if(widget.walletInfo.privateKey ==null)
           Divider(

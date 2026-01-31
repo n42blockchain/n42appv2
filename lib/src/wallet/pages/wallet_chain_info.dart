@@ -88,7 +88,8 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
 
   Future<bool> _ensureWalletBackedUp() async {
     final walletInfo = _walletProvider.walletInfo;
-    if (walletInfo.password!.isNotEmpty) {
+    // 安全检查 password，如果为 null 或空则需要备份
+    if (walletInfo.password != null && walletInfo.password!.isNotEmpty) {
       return true;
     }
     final flag = await tipsDialog7(context);
@@ -855,6 +856,7 @@ class _WalletChainInfoState extends State<WalletChainInfo> {
                   children: [
                     WalletChainInfoBoard(
                       address: widget.coinModel.address,
+                      coinType: widget.coinModel.coin['coinType'],
                       balanceStr:
                       '${widget.coinModel.balanceStringAll()}${widget.coinModel.coin['unit'].toString().toUpperCase()}',
                       balanceDollarStr: '\$${widget.coinModel.valueString()}',

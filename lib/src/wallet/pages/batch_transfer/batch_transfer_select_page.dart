@@ -5,6 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/pages/batch_transfer/batch_transfer_page.dart';
@@ -21,7 +22,7 @@ class BatchTransferSelectPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text: 'Batch Transfer',
+        text: S.of(context).g_key_batch_title,
       ),
       body: Consumer<WalletActionProvider>(
         builder: (context, waProvider, _) {
@@ -44,7 +45,7 @@ class BatchTransferSelectPage extends StatelessWidget {
               SizedBox(height: ScreenUtil().setWidth(24)),
               // 代币列表
               Text(
-                'Select Token',
+                S.of(context).g_key_batch_select_token,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(28),
                   fontWeight: FontWeight.bold,
@@ -70,34 +71,39 @@ class BatchTransferSelectPage extends StatelessWidget {
 
   Widget _buildEmptyState(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.send_rounded,
-            size: ScreenUtil().setWidth(80),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name),
-          ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
-          Text(
-            'No supported tokens',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(32)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.send_rounded,
+              size: ScreenUtil().setWidth(80),
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.itemSubtitleTextColor.name),
             ),
-          ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
-          Text(
-            'Batch transfer supports EVM chains only',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+            SizedBox(height: ScreenUtil().setWidth(16)),
+            Text(
+              S.of(context).g_key_batch_no_supported,
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(28),
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.itemSubtitleTextColor.name),
+              ),
+              textAlign: TextAlign.center,
             ),
-          ),
-        ],
+            SizedBox(height: ScreenUtil().setWidth(8)),
+            Text(
+              S.of(context).g_key_batch_evm_only,
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(24),
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.itemSubtitleTextColor.name),
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -129,7 +135,7 @@ class BatchTransferSelectPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Batch Transfer',
+                  S.of(context).g_key_batch_title,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(28),
                     fontWeight: FontWeight.bold,
@@ -139,7 +145,7 @@ class BatchTransferSelectPage extends StatelessWidget {
                 ),
                 SizedBox(height: ScreenUtil().setWidth(4)),
                 Text(
-                  'Send tokens to multiple addresses in one transaction',
+                  S.of(context).g_key_batch_send_multiple,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
                     color: AppThemeUtils.getColorByKey(
@@ -205,6 +211,8 @@ class BatchTransferSelectPage extends StatelessWidget {
                       color: AppThemeUtils.getColorByKey(
                           context, AppThemeKeys.mainTextColor.name),
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     chainSymbol,
@@ -213,6 +221,8 @@ class BatchTransferSelectPage extends StatelessWidget {
                       color: AppThemeUtils.getColorByKey(
                           context, AppThemeKeys.itemSubtitleTextColor.name),
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),

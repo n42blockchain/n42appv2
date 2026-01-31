@@ -240,9 +240,9 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: statusColor.withOpacity(0.1),
+        color: statusColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        border: Border.all(color: statusColor.withOpacity(0.3)),
+        border: Border.all(color: statusColor.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
@@ -297,7 +297,8 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
                 _isCustomMode = value;
               });
             },
-            activeColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+            activeTrackColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha: 0.5),
+            activeThumbColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
           ),
         ],
       ),

@@ -11,6 +11,7 @@ import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:n42appv2/src/widgets/prompt_widget.dart';
+import 'package:n42appv2/src/wallet/widgets/ens_address_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -215,13 +216,13 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
             indent: 0,
             endIndent: 0,
           ),
-          itemWidget(S.of(context).g_key_75,transactionInfo?['ownerAddress']??"",copy: true),
+          addressItemWidget(S.of(context).g_key_75,transactionInfo?['ownerAddress']??""),
           Divider(
             height: ScreenUtil().setWidth(1),
             indent: 0,
             endIndent: 0,
           ),
-          itemWidget(S.of(context).g_key_38,trm.to1,copy: true),
+          addressItemWidget(S.of(context).g_key_38,trm.to1),
           Divider(
             height: ScreenUtil().setWidth(1),
             indent: 0,
@@ -391,6 +392,37 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
                   ),
                 ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 地址显示组件（支持 ENS）
+  Widget addressItemWidget(String title, String address) {
+    if (address.isEmpty) return const SizedBox.shrink();
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
+      alignment: Alignment.centerLeft,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              fontSize: ScreenUtil().setSp(28),
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(20)),
+          EnsAddressDisplay(
+            address: address,
+            coinType: widget.coinModel.coin['coinType'] ?? 'TRX',
+            style: EnsDisplayStyle.full,
+            showAvatar: true,
+            showCopy: true,
+            fontSize: ScreenUtil().setSp(28),
           ),
         ],
       ),

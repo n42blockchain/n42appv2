@@ -7,6 +7,7 @@ import 'package:n42appv2/src/wallet/api/address_book_api.dart';
 import 'package:n42appv2/src/wallet/models/address_book_model.dart';
 import 'package:n42appv2/src/wallet/pages/address_book/add_address_page.dart';
 import 'package:n42appv2/src/wallet/widgets/address_edit.dart';
+import 'package:n42appv2/src/wallet/widgets/ens_address_display.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
@@ -155,10 +156,9 @@ class _AddressBookListState extends State<AddressBookList> {
                   SizedBox(
                     height: ScreenUtil().setWidth(8),
                   ),
-                  Text(
-                    info.address ?? "",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  EnsAddressText(
+                    address: info.address ?? "",
+                    coinType: info.coinName ?? 'ETH',
                     style: TextStyle(
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
                       fontSize: ScreenUtil().setSp(24.0),

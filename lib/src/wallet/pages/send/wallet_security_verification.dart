@@ -98,7 +98,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
       });
       return false;
     }*/
-    String oldPwdStr=Provider.of<WalletActionProvider>(context,listen: false).walletInfo.password!;
+    String oldPwdStr=Provider.of<WalletActionProvider>(context,listen: false).walletInfo.password ?? "";
     if(oldPwdStr!=pwdStr){
       setState(() {
         pwdErrorMessage=S.of(context).g_key_t_34;

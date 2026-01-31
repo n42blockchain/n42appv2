@@ -1,13 +1,12 @@
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/src/widgets/prompt_widget.dart';
+import 'package:n42appv2/src/wallet/widgets/ens_address_display.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class WalletChainInfoBoard extends StatelessWidget {
   final String? address;//地址
+  final String? coinType; // 链类型（用于 ENS 解析）
   final String? balanceStr;//token 余额
   final String? balanceDollarStr;//美元余额
   final String? marketValueStr;//市值
@@ -20,6 +19,7 @@ class WalletChainInfoBoard extends StatelessWidget {
   final GestureTapCallback? swapAddTap;//添加兑换按钮
   final GestureTapCallback? sellAddTap;//卖按钮
   const WalletChainInfoBoard({required this.address,
+    this.coinType,
     required this.balanceStr,
     required this.balanceDollarStr,
     required this.marketValueStr,
@@ -42,37 +42,13 @@ class WalletChainInfoBoard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(child: Text(
-                address??"",
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26.0),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),),
-              InkWell(
-                onTap: (){
-                  ToastUtils.init(context);
-                  Clipboard.setData(ClipboardData(text: address ?? ""));
-                  ToastUtils.showFtToast(child:successViewV1(S.of(context).copy),duration: 3);
-                },
-                child: Container(
-                  margin: EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
-                  width: ScreenUtil().setWidth(60.0),
-                  height: ScreenUtil().setWidth(60.0),
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(10.0)),
-                  child: Icon(
-                    Icons.copy,
-                    size: ScreenUtil().setWidth(36.0),
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                  ),
-                ),
-              ),
-            ],
+          EnsAddressDisplay(
+            address: address ?? "",
+            coinType: coinType ?? 'ETH',
+            style: EnsDisplayStyle.compact,
+            showAvatar: true,
+            showCopy: true,
+            fontSize: ScreenUtil().setSp(26.0),
           ),
           SizedBox(height: ScreenUtil().setWidth(10.0),),
           Text(
