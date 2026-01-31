@@ -86,6 +86,7 @@ class AggregatedCoinModel extends CoinModel {
 
   AggregatedCoinModel({required this.tokenConfig}) {
     // 初始化 coin 基本信息
+    // 注意：coinPrice 初始化为 0.0，会从 API 获取真实价格
     coin = {
       'mKey': tokenConfig.symbol,
       'blockchainType': 'Aggregated',
@@ -97,7 +98,7 @@ class AggregatedCoinModel extends CoinModel {
       'decimals': 6, // 统一使用 6 位精度显示
       'balance': '0',
       'balance_test': '0',
-      'coinPrice': tokenConfig.symbol == 'USDT' || tokenConfig.symbol == 'USDC' ? 1.0 : 0.0,
+      'coinPrice': 0.0, // 从 API 获取真实价格
       'percentage': 0.0,
       'isContract': true,
       'isAggregated': true, // 标记为聚合代币
@@ -113,7 +114,7 @@ class AggregatedCoinModel extends CoinModel {
     };
     showList = true;
     isTest = false;
-    coinPrice = tokenConfig.symbol == 'USDT' || tokenConfig.symbol == 'USDC' ? 1.0 : 0.0;
+    coinPrice = 0.0; // 从 API 获取真实价格
   }
 
   /// 根据链符号获取该链的余额

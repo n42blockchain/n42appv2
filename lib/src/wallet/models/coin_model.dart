@@ -119,7 +119,12 @@ class CoinModel {
       if(walletIndex==null){
         WalletActionProvider wap = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
         WalletInfo info = wap.walletInfo;
-        Map<String, dynamic> pathMap = coin['path'];
+        Map<String, dynamic>? pathMap = coin['path'];
+        if (pathMap == null) {
+          debugPrint('CoinModel.buildWallet: path is null for $coinType');
+          loadError = true;
+          return;
+        }
         Map<Object?, Object?> rm= await Trustdart().generateAddress(
           coinType,
           getPathWithIndex(pathMap[addrType], pathIndex),
@@ -133,19 +138,27 @@ class CoinModel {
           String key=keyList[i] as String;
           addressType[key]=rm[keyList[i]];
         }
-        if ((rm[addrType] as String).isEmpty) {
+        // 安全检查：确保 rm[addrType] 不为 null 且不为空
+        final generatedAddress = rm[addrType];
+        if (generatedAddress == null || (generatedAddress as String).isEmpty) {
+          debugPrint('CoinModel.buildWallet: Failed to generate address for $coinType (addrType: $addrType)');
           loadError = true;
           wap.refresh();
           return;
         }
-        address = rm[addrType];
+        address = generatedAddress;
         if(setAddress){
           wap.setAddress(coinType, addressType);
         }
       }else{
         WalletActionProvider wap = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
         WalletInfo info = wap.walletInfoLsit[walletIndex];
-        Map<String, dynamic> pathMap = coin['path'];
+        Map<String, dynamic>? pathMap = coin['path'];
+        if (pathMap == null) {
+          debugPrint('CoinModel.buildWallet: path is null for $coinType');
+          loadError = true;
+          return;
+        }
         Map<Object?, Object?> rm = await Trustdart().generateAddress(
           coinType,
           getPathWithIndex(pathMap[addrType], pathIndex),
@@ -159,23 +172,34 @@ class CoinModel {
           String key=keyList[i] as String;
           addressType[key]=rm[keyList[i]];
         }
-        if ((rm[addrType] as String).isEmpty) {
+        // 安全检查：确保 rm[addrType] 不为 null 且不为空
+        final generatedAddress = rm[addrType];
+        if (generatedAddress == null || (generatedAddress as String).isEmpty) {
+          debugPrint('CoinModel.buildWallet: Failed to generate address for $coinType (addrType: $addrType)');
           loadError = true;
           return;
         }
-        address = rm[addrType];
+        address = generatedAddress;
       }
     }
   }
   Future<void> getBalanceDefault()async{
-    if(isTest){
-      balance=BigInt.parse(coin['balance_test']);
-    }else{
-      balance=BigInt.parse(coin['balance']);
+    try {
+      if(isTest){
+        balance=BigInt.parse(coin['balance_test']?.toString() ?? '0');
+      }else{
+        balance=BigInt.parse(coin['balance']?.toString() ?? '0');
+      }
+      percentage = (coin['percentage'] as num?)?.toDouble() ?? 0.0;
+      coinPrice = (coin['coinPrice'] as num?)?.toDouble() ?? 0.0;
+      value=balanceDoubleAll()*coinPrice;
+    } catch (e) {
+      debugPrint('CoinModel.getBalanceDefault error: $e');
+      balance = BigInt.zero;
+      percentage = 0.0;
+      coinPrice = 0.0;
+      value = 0.0;
     }
-    percentage=coin['percentage'];
-    coinPrice=coin['coinPrice'];
-    value=balanceDoubleAll()*coinPrice;
   }
   //是否是刷新，目前只有tron 链 使用
   Future<bool> getBalance({bool getToken=true}) async {

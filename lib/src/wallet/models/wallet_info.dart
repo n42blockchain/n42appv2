@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:n42appv2/core/security/secure_memory.dart';
+import 'package:n42appv2/src/wallet/aa/models/smart_account.dart';
 
 /// Wallet information model
 ///
@@ -44,6 +45,9 @@ class WalletInfo {
   bool? faceBinding;
   bool mainWallet = false;
 
+  /// Account Abstraction (ERC-4337) account information
+  AAAccountInfo? aaAccountInfo;
+
   WalletInfo({
     this.walletName,
     this.mnemonic,
@@ -66,6 +70,12 @@ class WalletInfo {
     networkIndex = json['networkIndex'] as int;
     faceBinding = json['faceBinding'] as bool?;
     mainWallet = json['mainWallet'] as bool;
+    // Parse AA account info if present
+    if (json['aaAccountInfo'] != null) {
+      aaAccountInfo = AAAccountInfo.fromJson(
+        json['aaAccountInfo'] as Map<String, dynamic>,
+      );
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -81,6 +91,7 @@ class WalletInfo {
       "networkIndex": networkIndex,
       "faceBinding": faceBinding,
       "mainWallet": mainWallet,
+      "aaAccountInfo": aaAccountInfo?.toJson(),
     };
   }
 
@@ -160,5 +171,67 @@ class WalletInfo {
   String toString() {
     // SECURITY: Prevent accidental logging of sensitive data
     return 'WalletInfo(name: $walletName, uuid: $walletUuid, hasMnemonic: $hasMnemonic, hasPrivateKey: $hasPrivateKey)';
+  }
+
+  // ==================== Account Abstraction Methods ====================
+
+  /// Check if AA is enabled for this wallet
+  bool get hasAAAccounts =>
+      aaAccountInfo != null && aaAccountInfo!.totalAccounts > 0;
+
+  /// Check if AA is preferred for transfers
+  bool get prefersAA => aaAccountInfo?.preferAA ?? false;
+
+  /// Set AA preference
+  set prefersAA(bool value) {
+    aaAccountInfo ??= AAAccountInfo(smartAccounts: {});
+    aaAccountInfo!.preferAA = value;
+  }
+
+  /// Get smart accounts for a specific chain
+  List<SmartAccount> getSmartAccountsForChain(int chainId) {
+    return aaAccountInfo?.getAccountsForChain(chainId) ?? [];
+  }
+
+  /// Get the primary smart account for a chain
+  SmartAccount? getPrimarySmartAccount(int chainId) {
+    return aaAccountInfo?.getPrimaryAccount(chainId);
+  }
+
+  /// Add a smart account
+  void addSmartAccount(SmartAccount account) {
+    aaAccountInfo ??= AAAccountInfo(smartAccounts: {});
+    aaAccountInfo!.addAccount(account);
+  }
+
+  /// Remove a smart account
+  bool removeSmartAccount(String address, int chainId) {
+    return aaAccountInfo?.removeAccount(address, chainId) ?? false;
+  }
+
+  /// Find a smart account by address across all chains
+  SmartAccount? findSmartAccount(String address) {
+    return aaAccountInfo?.findAccount(address);
+  }
+
+  /// Update a smart account's state
+  void updateSmartAccountState(String address, int chainId, SmartAccountState newState) {
+    final accounts = aaAccountInfo?.smartAccounts[chainId];
+    if (accounts == null) return;
+
+    final index = accounts.indexWhere(
+      (a) => a.address.toLowerCase() == address.toLowerCase(),
+    );
+    if (index >= 0) {
+      accounts[index] = accounts[index].copyWith(
+        state: newState,
+        lastActivityAt: DateTime.now(),
+      );
+    }
+  }
+
+  /// Initialize AA account info if not present
+  void initAAAccountInfo() {
+    aaAccountInfo ??= AAAccountInfo(smartAccounts: {});
   }
 }
