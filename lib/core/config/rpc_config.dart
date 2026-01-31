@@ -33,6 +33,46 @@ class RpcConfig {
     defaultValue: 'http://198.200.30.34:18002',
   );
 
+  // ==================== EVM 链 RPC ====================
+
+  /// Infura API Key (从环境变量读取)
+  static const String infuraApiKey = String.fromEnvironment(
+    'INFURA_API_KEY',
+    defaultValue: 'b6bd1324a1b34545b1fdda886dd494f9',
+  );
+
+  /// Ethereum Mainnet RPC
+  static String get ethMainnetRpc => 'https://mainnet.infura.io/v3/$infuraApiKey';
+
+  /// Ethereum Sepolia Testnet RPC
+  static const String ethSepoliaRpc = 'https://eth-sepolia.public.blastapi.io';
+
+  /// BSC Mainnet RPC
+  static const String bscMainnetRpc = 'https://bsc-dataseed1.binance.org/';
+
+  /// Polygon Mainnet RPC
+  static const String polygonMainnetRpc = 'https://polygon-rpc.com';
+
+  /// Arbitrum Mainnet RPC
+  static const String arbitrumMainnetRpc = 'https://arb1.arbitrum.io/rpc';
+
+  /// Optimism Mainnet RPC
+  static const String optimismMainnetRpc = 'https://mainnet.optimism.io';
+
+  /// Avalanche C-Chain RPC
+  static const String avalancheMainnetRpc = 'https://api.avax.network/ext/bc/C/rpc';
+
+  /// Base Mainnet RPC
+  static const String baseMainnetRpc = 'https://mainnet.base.org';
+
+  // ==================== 非 EVM 链 RPC ====================
+
+  /// Solana Mainnet RPC
+  static const String solanaMainnetRpc = 'https://api.mainnet-beta.solana.com';
+
+  /// Tron Mainnet RPC
+  static const String tronMainnetRpc = 'https://api.trongrid.io';
+
   // ==================== 安全检查 ====================
 
   /// 检查是否使用了不安全的 HTTP 连接
