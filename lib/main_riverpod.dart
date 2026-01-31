@@ -28,7 +28,6 @@ import 'package:n42appv2/src/browser/provider/browser_provider.dart';
 import 'package:n42appv2/src/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:n42appv2/src/wallet/provider/transaction_record_iterms_provider.dart';
 import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
-import 'package:n42appv2/src/chat/provider/chat_message_provider.dart';
 
 // Themes
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
@@ -88,9 +87,6 @@ void main() async {
           ),
           legacy_provider.ChangeNotifierProvider<MiningV2Provider>(
             create: (_) => MiningV2Provider(),
-          ),
-          legacy_provider.ChangeNotifierProvider<ChatMessageProvider>(
-            create: (_) => ChatMessageProvider(),
           ),
         ],
         child: const N42App(),

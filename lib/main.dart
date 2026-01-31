@@ -14,8 +14,6 @@ import 'package:n42appv2/core/di/injection.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/browser/provider/browser_provider.dart';
-import 'package:n42appv2/src/chat/pages/add_friend.dart';
-import 'package:n42appv2/src/chat/provider/chat_message_provider.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/home/home_page.dart';
 import 'package:n42appv2/src/home/setting/security/security_setting.dart';
@@ -103,8 +101,22 @@ void main() async {
       defaultHomeserver: 'https://matrix.n42.network',
       enableEncryption: true,
       enablePushNotifications: true,
+      // Matrix Sygnal push gateway for FCM/APNs
+      pushGatewayUrl: 'https://push.n42.network/_matrix/push/v1/notify',
+      pushAppId: 'ai.n42.www',
     ));
-    
+
+    // 设置通知点击处理
+    N42Chat.setNotificationTapHandler((roomId, eventId) {
+      debugPrint('N42Chat notification tapped: roomId=$roomId');
+      if (roomId != null && AppGlobals.navigatorKey.currentContext != null) {
+        // 导航到聊天页面
+        Navigator.of(AppGlobals.navigatorKey.currentContext!).push(
+          MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),
+        );
+      }
+    });
+
     // 同步当前主题到 n42_chat
     final currentTheme = globalProviderContainer.read(themeModeProvider);
     N42Chat.setThemeMode(currentTheme);
@@ -112,13 +124,13 @@ void main() async {
     // 同步当前语言到 n42_chat
     final currentLocale = globalProviderContainer.read(localeProvider);
     N42Chat.setLocale(currentLocale);
-    
+
     // 监听 N42Chat 未读消息数，更新主应用的未读计数
     N42Chat.unreadCountStream.listen((count) {
       globalProviderContainer.read(unreadCountProvider.notifier).setCount(count);
       debugPrint('N42Chat unread count updated: $count');
     });
-    
+
     debugPrint('N42Chat initialized successfully with theme: $currentTheme');
   } catch (e) {
     debugPrint('N42Chat initialization failed: $e');
@@ -159,9 +171,6 @@ void main() async {
           ),
           provider_pkg.ChangeNotifierProvider<MiningV2Provider>(
             create: (_) => MiningV2Provider(),
-          ),
-          provider_pkg.ChangeNotifierProvider<ChatMessageProvider>(
-            create: (_) => ChatMessageProvider(),
           ),
         ],
         child: const N42AppV2(),
@@ -247,12 +256,11 @@ class _N42AppV2State extends State<N42AppV2> {
       } else if (params["type"] == "full_node") {
 
       }else if(params["type"] == "friendCard"){
-        // https://astrawallet.com?type=friendCard&userid=20&email=zhc@163.com
-        final _ = params["userid"];
-        final userEmail = params["email"];
+        // Chat friend card handling moved to n42_chat plugin
+        // Navigate to chat interface
         if (AppGlobals.userInfo != null) {
           Navigator.of(AppGlobals.navigatorKey.currentContext!).push(
-              MaterialPageRoute(builder: (_) => AddFriend(email: userEmail)));
+              MaterialPageRoute(builder: (_) => N42Chat.chatWidget()));
         }
       }
     }

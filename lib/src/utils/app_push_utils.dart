@@ -6,11 +6,6 @@ import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/main.dart' show globalProviderContainer;
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
-import 'package:n42appv2/src/chat/models/file_item_info.dart';
-import 'package:n42appv2/src/chat/pages/chat_detail_page.dart';
-import 'package:n42appv2/src/chat/pages/chat_group_detail_page.dart';
-import 'package:n42appv2/src/chat/pages/new_friend_list_page.dart';
-import 'package:n42appv2/src/chat/utils/cache_read_message_utils.dart';
 import 'package:n42appv2/src/home/setting/about_app.dart';
 import 'package:n42appv2/src/home/setting/personal_setting.dart';
 import 'package:n42appv2/src/home/setting/setting_share.dart';
@@ -163,17 +158,8 @@ class AppPushUtils {
           }
 
           if (nType == "chat") {
-            String? jsonData = message.data['data'];
-            debugPrint("jsonData: $jsonData");
-            if (jsonData == null) {
-              return;
-            }
-            final itemMap = json.decode(jsonData);
-            debugPrint("itemMap : $itemMap");
-            FileItemInfo item = FileItemInfo.fromJson(itemMap);
-            CacheMessageIsReadUtils().saveUnReadMessageId(item.sUuid ?? '');
-            eventBus
-                .fire(EventPublic(EventPublicType.chatMessage, param: item));
+            // Chat notifications are handled by n42_chat plugin
+            debugPrint("Chat notification received - handled by n42_chat plugin");
           }
         }
       } catch (err) {
@@ -254,26 +240,8 @@ class AppPushUtils {
       return;
     }
     if (data['type'] == 'chat') {
-      // 文件传输模块通知
-      String? jsonData = data['data'];
-      debugPrint("jsonData: $jsonData");
-      if (jsonData == null) {
-        return;
-      }
-      final itemMap = json.decode(jsonData);
-      debugPrint("itemMap : $itemMap");
-      FileItemInfo.fromJson(itemMap);
-
-      /*Navigator.push(
-        AppGlobals.navigatorKey.currentContext!,
-        MaterialPageRoute(
-          builder: (_) => ChatPageV2(
-            email: email,
-            nickName: nickName,
-            otherwalletUuid: uuid,
-          ),
-        ),
-      );*/
+      // Chat notifications are handled by n42_chat plugin
+      debugPrint("Chat notification tapped - handled by n42_chat plugin");
     }
     else if (data['type'] == 'transfer') {
       Map<String, dynamic> txContent = {};
@@ -435,44 +403,11 @@ class AppPushUtils {
           .popUntil((route) => route.isFirst);
       globalProviderContainer.read(mainTabSelectIndexProvider.notifier).state = 0;
     }
-    else if (data['type'] == 110) {
-      flutterLocalNotificationsPlugin.cancel(110);
-      //好友申请
-      Navigator.of(AppGlobals.navigatorKey.currentContext!).push(
-        MaterialPageRoute(
-          builder: (_) => const NewFriendListPage(),
-        ),
-      );
-    }
-    else if (data['type'] == 100) {
-      Map<String, dynamic>? jsonData = data['data'];
-      if (jsonData == null) {
-        return;
-      }
-      flutterLocalNotificationsPlugin.cancel(100);
-      Navigator.of(AppGlobals.navigatorKey.currentContext!).push(
-        MaterialPageRoute(
-          builder: (_) => ChatDetailPage(
-            targetUuid: jsonData["targetUuid"],
-            conversationType: 0,
-          ),
-        ),
-      );
-    }
-    else if (data['type'] == 101) {
-      Map<String, dynamic>? jsonData = data['data'];
-      if (jsonData == null) {
-        return;
-      }
-      flutterLocalNotificationsPlugin.cancel(101);
-      Navigator.of(AppGlobals.navigatorKey.currentContext!).push(
-        MaterialPageRoute(
-          builder: (_) => ChatGroupDetailPage(
-            targetUuid: jsonData["targetUuid"],
-            conversationType: 1,
-          ),
-        ),
-      );
+    else if (data['type'] == 110 || data['type'] == 100 || data['type'] == 101) {
+      // Chat notifications are handled by n42_chat plugin
+      // Navigate to chat interface
+      flutterLocalNotificationsPlugin.cancel(data['type']);
+      debugPrint("Chat notification tapped - handled by n42_chat plugin");
     }
     else {
       debugPrint("未知消息类型，无法处理");

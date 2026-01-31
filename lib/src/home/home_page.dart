@@ -3,8 +3,6 @@
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/core/providers/core_providers.dart';
-import 'package:n42appv2/src/chat/pages/chat_index_page.dart';
-import 'package:n42appv2/src/chat/widgets/chat_services.dart';
 import 'package:n42appv2/src/home/home_draw_page.dart';
 import 'package:n42appv2/src/home/unlock.dart';
 import 'package:n42appv2/src/miningV2/pages/mining_background.dart';
@@ -18,6 +16,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42_chat/n42_chat.dart';
+import 'package:n42appv2/src/widgets/terms_of_service_widget.dart';
 
 /// Home Page - Migrated to Riverpod
 /// 
@@ -46,28 +45,16 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
       const WalletPage(),
       const MiningTodayV2(),
       const EarnPage(),
-      const ChatIndexPage(),
     ];
   }
-  
-  /// 跳转到聊天页面
+
+  /// 跳转到聊天页面（使用 N42Chat 插件）
   void _navigateToChat() {
-    final useNewChat = ref.read(useNewChatProvider);
-    if (useNewChat) {
-      // 跳转到新的 N42Chat 模块（全屏，有自己的底部 Tab）
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => N42Chat.chatWidget(),
-        ),
-      );
-    } else {
-      // 跳转到旧的聊天页面
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => const ChatIndexPage(),
-        ),
-      );
-    }
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => N42Chat.chatWidget(),
+      ),
+    );
   }
   @override
   void initState() {
@@ -109,9 +96,8 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     final homeCurrentIndex = ref.watch(homeTabIndexProvider);
     final pages = _buildPages();
     
-    // 限制 index 在有效范围内（只有钱包和挖矿两个页面）
+    // 限制 index 在有效范围内
     final safeIndex = homeCurrentIndex.clamp(0, pages.length - 1);
-    final useNewChat = ref.read(useNewChatProvider);
     
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -176,15 +162,9 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
                         "assets/home/tabbar/earn.png",
                         _tabfour,
                         4),
-                    // 聊天 - 点击跳转到独立页面
-                    useNewChat?_buildChatBottomItem(
+                    // 聊天 - 点击跳转到 N42Chat 独立页面
+                    _buildChatBottomItem(
                         S.of(context).g_key_squad,
-                        "assets/home/tabbar/chat.png",
-                        _tabfive,
-                        4):
-                    _buildBottomItem(
-                        S.of(context).g_key_squad,
-                        3,
                         "assets/home/tabbar/chat.png",
                         _tabfive,
                         4)
@@ -194,7 +174,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
             ),
             if(showTermsOfService==false)
               Positioned.fill(
-                child: ChatServices(
+                child: TermsOfServiceWidget(
                   '${AppConfig.apiUrl['walletamazeBrowser']}/static/terms_of_use.html',
                   agreeCallBack: () {
                     SPUtil().setShowTermsOfService(true);

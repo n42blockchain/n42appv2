@@ -16,8 +16,6 @@ import 'package:n42appv2/shared/domain/services/mining_service_interface.dart';
 import 'package:n42appv2/features/wallet/data/services/wallet_service_impl.dart';
 import 'package:n42appv2/features/mining/data/services/mining_service_impl.dart';
 import 'package:n42appv2/features/chat/data/services/chat_crypto_service_impl.dart';
-import 'package:n42appv2/src/chat/api/chat_api.dart';
-import 'package:n42appv2/src/chat/api/chat_db_api.dart';
 import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 
 /// Dependency Injection Container
@@ -95,18 +93,6 @@ Future<void> configureDependencies(
 
   // ============ Feature-specific registrations ============
 
-  // ============ Chat Services ============
-
-  // Chat API - handles HTTP requests to chat server
-  if (!getIt.isRegistered<ChatApi>()) {
-    getIt.registerLazySingleton<ChatApi>(() => ChatApi());
-  }
-
-  // Chat Database API - handles local message storage
-  if (!getIt.isRegistered<ChatDBApi>()) {
-    getIt.registerLazySingleton<ChatDBApi>(() => ChatDBApi());
-  }
-
   // ============ Wallet Services ============
 
   // Token View API - handles token/balance queries
@@ -137,10 +123,6 @@ SecureStorage get secureStorage => getIt<SecureStorage>();
 /// Convenience accessors - Feature Services
 WalletServiceImpl get walletServiceImpl => getIt<WalletServiceImpl>();
 MiningServiceImpl get miningServiceImpl => getIt<MiningServiceImpl>();
-
-/// Convenience accessors - Chat Services
-ChatApi get chatApi => getIt<ChatApi>();
-ChatDBApi get chatDBApi => getIt<ChatDBApi>();
 
 /// Convenience accessors - Wallet APIs
 TokenViewApi get tokenViewApi => getIt<TokenViewApi>();

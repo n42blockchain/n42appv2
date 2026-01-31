@@ -7,19 +7,19 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ChatServices extends StatefulWidget {
+class TermsOfServiceWidget extends StatefulWidget {
   final GestureTapCallback? agreeCallBack;
   final String url;
-  const ChatServices(this.url,{
+  const TermsOfServiceWidget(this.url,{
     super.key,
     this.agreeCallBack,
   });
 
   @override
-  State<ChatServices> createState() => _ChatServicesState();
+  State<TermsOfServiceWidget> createState() => _TermsOfServiceWidgetState();
 }
 
-class _ChatServicesState extends State<ChatServices> {
+class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
   bool _isBottom = true;
   late WebViewController _webViewController;
   double sizedBoxHeight = 1000;
