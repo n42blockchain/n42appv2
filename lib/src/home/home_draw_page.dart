@@ -2,9 +2,7 @@
 import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/home/setting/about_app.dart';
-import 'package:n42appv2/src/home/setting/personal_setting.dart';
 import 'package:n42appv2/src/home/setting/setting_home_page.dart';
-import 'package:n42appv2/src/home/setting/setting_share.dart';
 import 'package:n42appv2/src/notification/pages/message_list.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/pages/address_book/address_book_list.dart';
@@ -17,6 +15,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42_chat/n42_chat.dart';
 
 /// Home Drawer Page - Migrated to Riverpod
 /// 
@@ -29,6 +28,23 @@ class HomeDrawPage extends ConsumerStatefulWidget {
 }
 
 class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepAliveClientMixin {
+  /// Chat 用户信息（从流中更新）
+  dynamic _chatUser;
+
+  @override
+  void initState() {
+    super.initState();
+    // 监听 Chat 用户变化
+    N42Chat.userStream.listen((user) {
+      if (mounted) {
+        setState(() {
+          _chatUser = user;
+        });
+      }
+    });
+    // 初始化时获取当前用户
+    _chatUser = N42Chat.currentUser;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,20 +109,11 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                         "assets/home/profile.png",
                         S.of(context).g_home_key1,
                         onTap: () async {
-                          if (AppGlobals.userInfo != null) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(builder: (_) => const PersonalSetting()),
-                            );
-                          } else {
-                            final loginNeededTitle = S.of(context).login_need_login;
-                            final flag = await tipsDialog6(context, title: loginNeededTitle);
-                            if (!context.mounted) return;
-                            if (flag != null && flag) {
-                              await Navigator.pushNamed(context, "/LoginPage");
-                              if (!context.mounted) return;
-                              Navigator.popUntil(context, ModalRoute.withName("/"));
-                            }
-                          }
+                          // 统一使用 Chat 的个人资料页面
+                          // 如果未登录会自动显示登录页面
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => N42Chat.profileWidget()),
+                          );
                         },
                       ),
                       _menuItem(
@@ -131,15 +138,12 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                         "assets/home/security.png",
                         S.of(context).s_key_11,
                         onTap: () async {
-                          if (AppGlobals.userInfo == null) {
-                            final loginNeededTitle = S.of(context).login_need_login;
-                            final flag = await tipsDialog6(context, title: loginNeededTitle);
-                            if (!context.mounted) return;
-                            if (flag != null && flag) {
-                              await Navigator.pushNamed(context, "/LoginPage");
-                              if (!context.mounted) return;
-                              Navigator.popUntil(context, ModalRoute.withName("/"));
-                            }
+                          if (AppGlobals.userInfo == null && !N42Chat.isLoggedIn) {
+                            // 跳转到 Chat 登录
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),
+                            );
                           } else {
                             Navigator.pushNamed(context, '/securitySetting');
                           }
@@ -191,10 +195,18 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
   }
 
   Widget _userAccount(dynamic currentUser) {
-    // 使用 Riverpod currentUser 响应登录状态变化
+    // 优先使用 Chat 插件的用户信息（从流中更新）
+    final chatUser = _chatUser ?? N42Chat.currentUser;
     final userInfo = AppGlobals.userInfo;
-    final isLoggedIn = currentUser != null || userInfo != null;
-    
+    final isChatLoggedIn = N42Chat.isLoggedIn;
+    final isWalletLoggedIn = currentUser != null || userInfo != null;
+
+    // 显示名称和头像优先使用 chat 用户
+    final displayName = chatUser?.displayName ?? currentUser?.name ?? userInfo?.name;
+    final displayAvatar = chatUser?.avatarUrl ?? currentUser?.image ?? userInfo?.image ?? '';
+    final displayEmail = chatUser?.userId ?? currentUser?.email ?? userInfo?.email ?? '';
+    final isLoggedIn = isChatLoggedIn || isWalletLoggedIn;
+
     return Container(
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
@@ -218,82 +230,85 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
         children: [
           Row(
             children: [
-              // 头像
-              Container(
-                width: ScreenUtil().setWidth(72),
-                height: ScreenUtil().setWidth(72),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(36)),
-                  /*border: Border.all(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                    width: 2,
-                  ),*/
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.2),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                clipBehavior: Clip.hardEdge,
-                child: ImageNetWork(
-                  imageUrl: currentUser?.image ?? userInfo?.image ?? '',
-                  placeholder: "assets/img/person_def_1.png",
+              // 头像 - 点击进入 chat
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),
+                  );
+                },
+                child: Container(
+                  width: ScreenUtil().setWidth(72),
+                  height: ScreenUtil().setWidth(72),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(36)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  clipBehavior: Clip.hardEdge,
+                  child: ImageNetWork(
+                    imageUrl: displayAvatar,
+                    placeholder: "assets/img/person_def_1.png",
+                  ),
                 ),
               ),
               SizedBox(width: ScreenUtil().setWidth(16)),
               // 用户信息
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      isLoggedIn ? (currentUser?.name ?? userInfo?.name ?? '-') : S.of(context).g_key_login,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                        fontWeight: FontWeight.w600,
-                        fontSize: ScreenUtil().setSp(32),
-                        letterSpacing: 0.3,
-                      ),
-                    ),
-                    if (isLoggedIn) ...[
-                      SizedBox(height: ScreenUtil().setWidth(6)),
+                child: GestureDetector(
+                  onTap: () {
+                    // 点击进入 chat 界面
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),
+                    );
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Text(
-                        currentUser?.email ?? userInfo?.email ?? '-',
+                        isLoggedIn ? (displayName ?? '-') : S.of(context).g_key_login,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                          fontSize: ScreenUtil().setSp(24),
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                          fontWeight: FontWeight.w600,
+                          fontSize: ScreenUtil().setSp(32),
+                          letterSpacing: 0.3,
                         ),
                       ),
+                      if (isLoggedIn) ...[
+                        SizedBox(height: ScreenUtil().setWidth(6)),
+                        Text(
+                          displayEmail,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                            fontSize: ScreenUtil().setSp(24),
+                          ),
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
             ],
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
-          // 分享按钮
+          // 邀请朋友按钮 - 跳转到 chat
           GestureDetector(
-            onTap: () async {
-              if (AppGlobals.userInfo == null) {
-                final loginNeededTitle = S.of(context).login_need_login;
-                final flag = await tipsDialog6(context, title: loginNeededTitle);
-                if (!mounted) return;
-                if (flag != null && flag) {
-                  await Navigator.pushNamed(context, "/LoginPage");
-                  if (!mounted) return;
-                  Navigator.popUntil(context, ModalRoute.withName("/"));
-                }
-                return;
-              }
+            onTap: () {
+              // 跳转到 chat 界面（可以在 chat 中分享/邀请朋友）
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SettingShare()),
+                MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),
               );
             },
             child: Container(
@@ -309,7 +324,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
-                    Icons.share_rounded,
+                    Icons.person_add_rounded,
                     size: ScreenUtil().setWidth(20),
                     color: Colors.white,
                   ),
@@ -481,9 +496,13 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
     );
   }
 
-  /// 登录/退出按钮
+  /// 登录/退出按钮 - 使用 Chat 插件登录状态
   Widget _buildLoginLogoutButton(dynamic currentUser) {
-    final isLoggedIn = currentUser != null;
+    // 优先检查 Chat 登录状态
+    final isChatLoggedIn = N42Chat.isLoggedIn;
+    final isWalletLoggedIn = currentUser != null;
+    final isLoggedIn = isChatLoggedIn || isWalletLoggedIn;
+
     return Container(
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
       child: Material(
@@ -495,7 +514,9 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
               if (!mounted) return;
               if (res != null && res) {
                 try {
+                  // 同时登出 wallet 和 chat
                   await AppGlobals.logout();
+                  await N42Chat.logout();
                   if (!mounted) return;
                   Scaffold.of(context).closeDrawer();
                 } catch (err) {
@@ -503,7 +524,11 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
                 }
               }
             } else {
-              Navigator.pushNamed(context, "/LoginPage");
+              // 跳转到 Chat 登录界面
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),
+              );
               Scaffold.of(context).closeDrawer();
             }
           },
@@ -514,7 +539,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
               horizontal: ScreenUtil().setWidth(20),
             ),
             decoration: BoxDecoration(
-              color: isLoggedIn 
+              color: isLoggedIn
                   ? AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name).withValues(alpha:0.1)
                   : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.1),
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
@@ -529,7 +554,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  isLoggedIn ? Icons.logout_rounded : Icons.login_rounded,
+                  isLoggedIn ? Icons.logout_rounded : Icons.chat_rounded,
                   size: ScreenUtil().setWidth(24),
                   color: isLoggedIn
                       ? AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name)

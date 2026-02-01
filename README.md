@@ -2,11 +2,15 @@
 
 A comprehensive cross-platform cryptocurrency wallet built with Flutter, featuring multi-chain support, DeFi integration, secure messaging, and advanced Web3 capabilities.
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.9.2-blue.svg)](https://flutter.dev)
+[![Chains](https://img.shields.io/badge/Chains-238%2B-green.svg)](#multi-chain-wallet)
+
 ## Features Overview
 
 ### Multi-Chain Wallet
 
-Support for **200+ blockchain networks**:
+Support for **238+ blockchain networks** including mainnet and testnet:
 
 #### Layer 1 Blockchains
 
@@ -161,10 +165,8 @@ Support for **200+ blockchain networks**:
 | BNC | BNC | 6002 |
 | S | S | 6003 |
 
-#### Complete Chain List (200 Networks)
-
 <details>
-<summary>Click to expand full list</summary>
+<summary>📋 Complete Chain List (238 Networks)</summary>
 
 | # | Symbol | Network Name |
 |---|--------|--------------|
@@ -373,8 +375,6 @@ Support for **200+ blockchain networks**:
 
 #### Test Networks (46 Chains)
 
-The following chains support testnet for development and testing:
-
 | Category | Testnets |
 |----------|----------|
 | **EVM L1** | ETH (Sepolia/Goerli), BNB (Testnet), AVAX (Fuji), FTM (Testnet), MATIC (Mumbai) |
@@ -384,242 +384,341 @@ The following chains support testnet for development and testing:
 | **Cosmos** | ATOM (Testnet), STRK (Sepolia) |
 | **Other** | ADA (Preview), XLM (Testnet), XRP (Testnet), DOT (Westend), ZIL (Testnet) |
 
-<details>
-<summary>Full Testnet Support List (46 Networks)</summary>
+---
 
-| # | Symbol | Mainnet | Testnet |
-|---|--------|---------|---------|
-| 1 | N | N42 Mainnet | N42 Testnet |
-| 2 | ETH | Ethereum | Sepolia/Goerli |
-| 3 | BNB | BNB Smart Chain | BSC Testnet |
-| 4 | MATIC | Polygon | Mumbai |
-| 5 | AVAX | Avalanche | Fuji |
-| 6 | FTM | Fantom | Fantom Testnet |
-| 7 | OP | Optimism | OP Sepolia |
-| 8 | SOL | Solana | Devnet |
-| 9 | TRX | TRON | Shasta/Nile |
-| 10 | NEAR | NEAR | Testnet |
-| 11 | STRK | Starknet | Sepolia |
-| 12 | CELO | Celo | Alfajores |
-| 13 | ONE | Harmony | Testnet |
-| 14 | GLMR | Moonbeam | Moonbase Alpha |
-| 15 | KLAY | Klaytn | Baobab |
-| 16 | OKT | OKX Chain | Testnet |
-| 17 | HT | Huobi ECO | Testnet |
-| 18 | KCS | KuCoin | Testnet |
-| 19 | METIS | Metis | Sepolia |
-| 20 | BOBA | Boba | Testnet |
-| 21 | ETC | Ethereum Classic | Mordor |
-| 22 | THETA | Theta | Testnet |
-| 23 | MTR | Meter | Testnet |
-| 24 | IOTX | IoTeX | Testnet |
-| 25 | WAN | Wanchain | Testnet |
-| 26 | GO | GoChain | Testnet |
-| 27 | TT | ThunderCore | Testnet |
-| 28 | ADA | Cardano | Preview |
-| 29 | XLM | Stellar | Testnet |
-| 30 | XEM | NEM | Testnet |
-| 31 | XYM | Symbol | Testnet |
-| 32 | NEO | Neo | Testnet |
-| 33 | EOS | EOS | Jungle |
-| 34 | VET | VeChain | Testnet |
-| 35 | ZIL | Zilliqa | Testnet |
-| 36 | WAVES | Waves | Testnet |
-| 37 | ICX | ICON | Testnet |
-| 38 | IOST | IOST | Testnet |
-| 39 | ONT | Ontology | Testnet |
-| 40 | LSK | Lisk | Testnet |
-| 41 | ARK | Ark | Devnet |
-| 42 | DCR | Decred | Testnet |
-| 43 | EGLD | MultiversX | Devnet |
-| 44 | QTUM2 | Qtum | Testnet |
-| 45 | ONG | Onus | Testnet |
-| 46 | GAS | Gas | Testnet |
+## 📋 功能明细
 
-</details>
+### 💰 钱包管理
 
-### Wallet Management
-- **Create Wallet**: Generate new HD wallet with BIP-39 mnemonic
-- **Import Wallet**: Mnemonic phrase, private key, or keystore file
-- **Multi-Account**: Manage multiple accounts per wallet
-- **Address Book**: Save and manage recipient addresses
-- **Transaction History**: Full history with status tracking
-- **QR Code**: Generate and scan payment QR codes
-- **Token Management**: Add custom ERC-20/BEP-20/SPL tokens
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| 创建钱包 | BIP-39 助记词生成 HD 钱包 | ✅ |
+| 导入钱包 | 支持助记词、私钥、Keystore 文件 | ✅ |
+| 多账户管理 | 每个钱包支持多个账户 | ✅ |
+| 地址簿 | 保存和管理常用收款地址 | ✅ |
+| 交易历史 | 完整交易记录和状态追踪 | ✅ |
+| 二维码 | 生成和扫描支付二维码 | ✅ |
+| 代币管理 | 添加自定义 ERC-20/BEP-20/SPL 代币 | ✅ |
+| 余额查询 | 实时查询所有链上余额 | ✅ |
+| 资产统计 | 总资产估值和分布图表 | ✅ |
+| 价格追踪 | 实时价格和涨跌幅显示 | ✅ |
 
-### ENS Support (Ethereum Name Service)
-- **Forward Resolution**: Resolve .eth, .n42, .xyz names to addresses
-- **Reverse Resolution**: Display ENS name for addresses
-- **N42 Priority**: N42 Name Service (.n42) takes precedence
-- **Multi-Chain**: Works across all EVM-compatible chains
-- **Avatar Support**: Display ENS profile avatars
-- **Text Records**: Access social links (Twitter, GitHub, etc.)
-- **Name Registration**: Register new ENS names with multi-year options
-- **Name Management**: Update records, set primary name, transfer ownership
-- **Renewal**: Extend registration period for owned names
-- **Address Input**: Smart address field with ENS auto-resolution
+### 🔄 转账功能
 
-### Account Abstraction (ERC-4337)
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| 单笔转账 | 发送代币到指定地址 | ✅ |
+| 批量转账 | Multicall3 一次发送到多个地址 | ✅ |
+| CSV 导入 | 从 CSV 文件导入收款人列表 | ✅ |
+| Gas 预估 | 准确的 Gas 费用估算 | ✅ |
+| Gas 设置 | 自定义 Gas Price 和 Gas Limit | ✅ |
+| 加速交易 | 提高 Gas 加速待处理交易 | ✅ |
+| 取消交易 | 取消待处理的交易 | ✅ |
+| 自转检测 | 防止误转到自己地址 | ✅ |
+| 地址校验 | EIP-55 校验和验证 | ✅ |
+| 交易预览 | 发送前详细预览交易内容 | ✅ |
 
-Smart Account features powered by ERC-4337:
+### 🏷️ ENS 域名服务
 
-#### Smart Accounts
-| Account Type | Description |
-|--------------|-------------|
-| **Simple Account** | Basic smart account with single owner - recommended for most users |
-| **EIP-7702 Account** | Hybrid EOA/Smart Account - No deployment needed |
-| **Safe Account** | Multi-signature account with advanced security features |
-| **Kernel Account** | Modular account with plugin support from ZeroDev |
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| 正向解析 | 解析 .eth, .n42, .xyz 域名到地址 | ✅ |
+| 反向解析 | 显示地址对应的 ENS 名称 | ✅ |
+| N42 优先 | .n42 域名优先于 .eth 解析 | ✅ |
+| 多链支持 | 所有 EVM 兼容链通用 | ✅ |
+| 头像显示 | 显示 ENS 配置的头像 | ✅ |
+| 文本记录 | 访问社交链接 (Twitter, GitHub 等) | ✅ |
+| 域名注册 | 注册新 ENS 域名，支持多年期 | ✅ |
+| 域名管理 | 更新记录、设置主名称、转让所有权 | ✅ |
+| 域名续费 | 延长已拥有域名的注册期 | ✅ |
+| 智能输入 | 地址输入框自动解析 ENS | ✅ |
+| 域名搜索 | 搜索可用域名 | ✅ |
+| 价格预估 | 显示注册/续费费用 | ✅ |
+| 批量操作 | 批量续费多个域名 | ✅ |
 
-#### Core Features
-- **Gasless Transactions**: Pay gas fees in any ERC-20 token or get sponsored
-- **Batch Operations**: Execute multiple transactions in a single call
-- **Session Keys**: Delegate limited permissions to DApps with time constraints
-- **Counterfactual Deployment**: Use your smart account before deployment
+### 🤖 账户抽象 (AA/ERC-4337)
 
-#### Session Key Management
-- **Permission Control**: Grant transfer, approve, contract call, or full access
-- **Spending Limits**: Set maximum spending amount per session
-- **Time Constraints**: Configure expiration dates for sessions
-- **DApp Authorization**: Track and revoke DApp permissions
-- **Usage Monitoring**: View transaction count and spending progress
+#### 智能账户类型
 
-#### Paymaster Integration
-| Type | Description |
-|------|-------------|
-| **Sponsored** | Gas fees paid by DApp or protocol |
-| **ERC-20 Gas** | Pay gas in USDC, USDT, or other tokens |
-| **Self-Pay** | Standard ETH gas payment |
+| 账户类型 | 说明 | 推荐场景 |
+|----------|------|---------|
+| Simple Account | 单一所有者基础智能账户 | 大多数用户推荐 |
+| EIP-7702 Account | 混合 EOA/智能账户，无需部署 | 低成本用户 |
+| Safe Account | 多签账户，高级安全功能 | 团队/企业 |
+| Kernel Account | 模块化账户，支持插件 | 高级用户 |
 
-#### Supported Networks
+#### AA 核心功能
+
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| 无 Gas 交易 | 使用任意 ERC-20 代币支付 Gas 或由他人赞助 | ✅ |
+| 批量操作 | 一次调用执行多个交易 | ✅ |
+| 会话密钥 | 向 DApp 授予有限权限 | ✅ |
+| 反事实部署 | 部署前即可使用智能账户地址 | ✅ |
+| 社交恢复 | 通过守护者恢复账户 | ✅ |
+| 多签验证 | 多人签名确认交易 | ✅ |
+| 自动执行 | 定时/条件触发交易 | ✅ |
+| 权限控制 | 细粒度的操作权限设置 | ✅ |
+
+#### 会话密钥管理
+
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| 权限类型 | 转账、授权、合约调用、完全访问 | ✅ |
+| 消费限额 | 设置每个会话的最大支出额度 | ✅ |
+| 时间约束 | 配置会话过期时间 | ✅ |
+| DApp 授权 | 追踪和撤销 DApp 权限 | ✅ |
+| 使用监控 | 查看交易计数和消费进度 | ✅ |
+| 一键撤销 | 立即撤销会话权限 | ✅ |
+
+#### Paymaster 集成
+
+| 类型 | 说明 | 状态 |
+|------|------|------|
+| 赞助交易 | Gas 费由 DApp 或协议支付 | ✅ |
+| ERC-20 Gas | 使用 USDC, USDT 等代币支付 Gas | ✅ |
+| 自付 Gas | 标准 ETH Gas 支付 | ✅ |
+| 混合支付 | 部分赞助 + 部分自付 | ✅ |
+
+#### AA 支持网络
+
 - Ethereum Mainnet & Sepolia
 - Polygon, Arbitrum, Optimism, Base
-- All EVM-compatible L2s with Bundler support
+- 所有支持 Bundler 的 EVM L2
 
-### NFT Management
-- **Multi-Standard**: ERC-721, ERC-1155, SPL NFTs
-- **Gallery View**: Visual display of NFT collections
-- **Transfer**: Send NFTs to other addresses
-- **Burn**: Permanently destroy unwanted NFTs
-- **Metadata**: View NFT attributes and properties
+### 🖼️ NFT 管理
 
-### DeFi Features
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| 多标准支持 | ERC-721, ERC-1155, SPL NFT | ✅ |
+| 画廊视图 | NFT 收藏可视化展示 | ✅ |
+| NFT 转账 | 发送 NFT 到其他地址 | ✅ |
+| NFT 销毁 | 永久销毁不需要的 NFT | ✅ |
+| 元数据查看 | 查看 NFT 属性和特性 | ✅ |
+| 收藏分组 | 按收藏集分组显示 | ✅ |
+| 稀有度显示 | 显示 NFT 稀有度信息 | ✅ |
+| 隐藏 NFT | 隐藏不想显示的 NFT | ✅ |
 
-#### Swap
-- **DEX Aggregation**: Best rates across multiple DEXs
-- **Cross-Chain Swaps**: Swap tokens across different networks
-- **Slippage Control**: Configurable slippage tolerance
-- **Price Impact**: Real-time price impact warnings
+### 💱 DeFi 功能
 
-#### Cross-Chain Bridge
-- **LI.FI Integration**: Access 15+ bridge protocols
-- **Supported Routes**: ETH, BSC, Polygon, Arbitrum, Optimism, Avalanche
-- **Bridge History**: Track all bridge transactions
-- **Gas Estimation**: Accurate cross-chain gas fees
+#### 兑换 (Swap)
 
-#### Multi-Chain Staking
-| Protocol | Chain | Est. APY |
-|----------|-------|----------|
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| DEX 聚合 | 跨多个 DEX 获取最佳价格 | ✅ |
+| 跨链兑换 | 不同网络间代币兑换 | ✅ |
+| 滑点控制 | 可配置滑点容忍度 | ✅ |
+| 价格影响 | 实时价格影响警告 | ✅ |
+| 路由显示 | 显示最佳兑换路径 | ✅ |
+| 限价订单 | 设置目标价格自动兑换 | ✅ |
+
+#### 跨链桥
+
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| LI.FI 集成 | 访问 15+ 跨链桥协议 | ✅ |
+| 路由支持 | ETH, BSC, Polygon, Arbitrum, Optimism, Avalanche 等 | ✅ |
+| 桥接历史 | 追踪所有跨链交易 | ✅ |
+| Gas 预估 | 准确的跨链 Gas 费用 | ✅ |
+| 状态追踪 | 实时跨链状态更新 | ✅ |
+| 最佳路由 | 自动选择最优桥接方案 | ✅ |
+
+#### Gas 追踪器
+
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| 实时价格 | 主要网络实时 Gas 价格 | ✅ |
+| 网络状态 | 空闲/正常/繁忙指示 | ✅ |
+| 自动刷新 | 每 15 秒更新一次 | ✅ |
+| EIP-1559 | Base Fee 和 Priority Fee 分解 | ✅ |
+| Gas 预设 | 慢速/标准/快速选项 | ✅ |
+| 历史趋势 | Gas 价格历史图表 | ✅ |
+
+### 📈 Earn 收益
+
+#### 质押 (Staking)
+
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| 多链质押 | 支持 ETH, SOL, ATOM, DOT 等多链原生质押 | ✅ |
+| Lido 质押 | 流动性质押获取 stETH | ✅ |
+| 质押仪表盘 | 查看所有质押仓位 | ✅ |
+| 收益追踪 | 实时收益和 APY 显示 | ✅ |
+| 一键领取 | 一键领取质押奖励 | ✅ |
+| 解质押 | 灵活解除质押 | ✅ |
+| 复投 | 自动复利选项 | ✅ |
+| 历史记录 | 质押/解质押历史 | ✅ |
+
+| 协议 | 链 | 预估 APY |
+|------|-----|---------|
 | Lido | ETH | ~4% |
 | Native | SOL | ~7% |
 | Native | ATOM | ~15% |
 | Native | DOT | ~12% |
-| BTC Staking | BTC | Variable |
+| BTC Staking | BTC | 可变 |
 
-#### Gas Tracker
-- **Real-Time Prices**: Live gas prices for major networks
-- **Network Status**: Idle/Normal/Busy indicators
-- **Auto-Refresh**: Updates every 15 seconds
-- **EIP-1559**: Base fee and priority fee breakdown
-- **Gas Presets**: Slow/Standard/Fast options
+#### 收益聚合
 
-#### Batch Transfer
-- **Multicall3**: Send to multiple addresses in one transaction
-- **CSV Import**: Import recipient lists from CSV files
-- **Gas Savings**: Up to 40% gas savings vs individual transfers
-- **EVM Chains**: Supported on all EVM-compatible networks
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| 收益对比 | 跨协议收益率对比 | ✅ |
+| 风险评级 | 显示协议风险等级 | ✅ |
+| TVL 显示 | 显示协议锁仓量 | ✅ |
+| 一键存入 | 简化存款流程 | ✅ |
+| 组合追踪 | 总质押价值和收益 | ✅ |
 
-### Earn Features
-- **Staking Dashboard**: View all staking positions
-- **Yield Aggregation**: Compare yields across protocols
-- **Claim Rewards**: One-click reward claiming
-- **Portfolio Tracking**: Total staked value and earnings
+### 🎁 空投追踪
 
-### Airdrop Tracker
-- **Eligibility Check**: Check wallet eligibility for airdrops
-- **Claim Alerts**: Notifications for claimable airdrops
-- **History**: Track all claimed airdrops
-- **Multi-Wallet**: Check eligibility across wallets
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| 资格检查 | 检查钱包空投资格 | ✅ |
+| 领取提醒 | 可领取空投通知 | ✅ |
+| 历史记录 | 追踪所有已领取空投 | ✅ |
+| 多钱包检查 | 跨钱包检查资格 | ✅ |
+| 快照时间 | 显示空投快照时间 | ✅ |
+| 任务追踪 | 追踪空投任务完成进度 | ✅ |
 
-### Loyalty & Rewards
-- **Points System**: Earn points for wallet activities
-- **Daily Login**: +10 points per day
-- **Transactions**: +50 points per transaction
-- **Referrals**: +100 points per friend invited
-- **Rewards Store**: Redeem points for rewards
+### 🏆 忠诚度奖励
 
-### Hardware Wallet Support
-- **Ledger**: Bluetooth connection via `ledger_flutter_plus`
-- **Account Import**: Import hardware wallet accounts
-- **Secure Signing**: Sign transactions on device
-- **Multi-Account**: Manage multiple hardware accounts
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| 积分系统 | 钱包活动赚取积分 | ✅ |
+| 每日签到 | 每天 +10 积分 | ✅ |
+| 交易奖励 | 每笔交易 +50 积分 | ✅ |
+| 邀请奖励 | 每邀请一位好友 +100 积分 | ✅ |
+| 奖励商店 | 积分兑换奖励 | ✅ |
+| 等级系统 | 会员等级和专属权益 | ✅ |
+| 排行榜 | 积分排行榜 | ✅ |
 
-### Mining (N42)
-- **Mining Dashboard**: Real-time mining statistics
-- **Pool Configuration**: Connect to mining pools
-- **Key Management**: BLS12-381 keypair generation
-- **Encrypted Storage**: Secure key encryption
+### 🔐 硬件钱包
 
-### Secure Messaging (Chat)
-- **End-to-End Encryption**: Matrix protocol integration
-- **Direct Messages**: 1-on-1 encrypted conversations
-- **Group Chats**: Create and manage group conversations
-- **File Sharing**: Send images, documents, audio
-- **Friend Requests**: Social contact management
-- **Polls**: Create polls and voting
-- **Music Sharing**: Share audio content
-- **Read Receipts**: Message delivery status
-- **Notifications**: Push notifications for messages
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| Ledger 支持 | 蓝牙连接 Ledger 设备 | ✅ |
+| 账户导入 | 导入硬件钱包账户 | ✅ |
+| 安全签名 | 在设备上签名交易 | ✅ |
+| 多账户 | 管理多个硬件账户 | ✅ |
+| 固件检查 | 检查固件版本 | ✅ |
+| 地址验证 | 在设备上验证地址 | ✅ |
 
-### DApp Browser
-- **Web3 Injection**: Full Web3 provider support
-- **WalletConnect v2**: Connect to any WalletConnect dApp
-- **Bookmarks**: Save favorite dApps
-- **History**: Browse history management
-- **Search**: Built-in search functionality
-- **Multi-Chain**: Switch networks within browser
+### ⛏️ 挖矿 (N42)
 
-### WalletConnect
-- **Protocol v2**: Latest WalletConnect specification
-- **Session Management**: Manage connected dApps
-- **Transaction Signing**: Approve/reject transactions
-- **Message Signing**: Personal sign, typed data (EIP-712)
-- **Chain Switching**: Handle network switch requests
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| 挖矿仪表盘 | 实时挖矿统计 | ✅ |
+| 矿池配置 | 连接挖矿矿池 | ✅ |
+| 密钥管理 | BLS12-381 密钥对生成 | ✅ |
+| 加密存储 | 安全密钥加密 | ✅ |
+| 收益追踪 | 挖矿收益统计 | ✅ |
+| 状态监控 | 矿工在线状态 | ✅ |
 
-### Security
+### 💬 安全聊天 (N42 Chat)
 
-#### Authentication
-- **Biometric**: Fingerprint and Face ID/Face Recognition
-- **Gesture Password**: Pattern-based authentication
-- **PIN Code**: Numeric PIN protection
-- **2FA**: Google Authenticator integration
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| 端对端加密 | Matrix 协议 E2EE 加密 | ✅ |
+| 私聊 | 一对一加密对话 | ✅ |
+| 群聊 | 创建和管理群组 | ✅ |
+| 文件分享 | 发送图片、文档、音频 | ✅ |
+| 好友请求 | 社交联系人管理 | ✅ |
+| 语音消息 | 录制和播放语音 | ✅ |
+| 消息撤回 | 2 分钟内撤回消息 | ✅ |
+| 已读回执 | 消息送达状态 | ✅ |
+| 推送通知 | 消息推送提醒 | ✅ |
+| 生物识别登录 | 指纹/面部识别快速登录 | ✅ |
+| 聊天转账 | 在聊天中发送加密货币 | ✅ |
+| 红包功能 | 发送/接收加密货币红包 | ✅ |
 
-#### Data Protection
-- **Encryption**: AES-256-GCM for all sensitive data
-- **Secure Storage**: Platform keychain/keystore
-- **Memory Protection**: Secure memory handling
-- **Key Derivation**: BIP-32/44 HD key derivation
+### 🌐 DApp 浏览器
 
-#### Additional Security
-- **Self-Transfer Prevention**: Block transfers to same address
-- **Address Validation**: EIP-55 checksum verification
-- **Phishing Protection**: Domain verification warnings
-- **Transaction Preview**: Detailed transaction breakdown
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| Web3 注入 | 完整 Web3 Provider 支持 | ✅ |
+| WalletConnect v2 | 连接任意 WalletConnect DApp | ✅ |
+| 书签 | 保存常用 DApp | ✅ |
+| 历史记录 | 浏览历史管理 | ✅ |
+| 搜索 | 内置搜索功能 | ✅ |
+| 多链切换 | 浏览器内切换网络 | ✅ |
+| 安全检测 | 钓鱼网站警告 | ✅ |
+| 权限管理 | DApp 权限控制 | ✅ |
 
-### Payment Integration
-- **MoonPay**: Buy crypto with credit/debit cards
-- **Fiat On-Ramp**: Support for 100+ fiat currencies
-- **Fiat Off-Ramp**: Sell crypto to bank account
+### 🔗 WalletConnect
+
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| 协议 v2 | 最新 WalletConnect 规范 | ✅ |
+| 会话管理 | 管理已连接 DApp | ✅ |
+| 交易签名 | 批准/拒绝交易 | ✅ |
+| 消息签名 | Personal Sign, EIP-712 | ✅ |
+| 链切换 | 处理网络切换请求 | ✅ |
+| 批量请求 | 处理批量签名请求 | ✅ |
+
+### 🔒 安全功能
+
+#### 认证方式
+
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| 生物识别 | 指纹和 Face ID/面部识别 | ✅ |
+| 手势密码 | 图案密码认证 | ✅ |
+| PIN 码 | 数字 PIN 保护 | ✅ |
+| 2FA | Google Authenticator 集成 | ✅ |
+| 社交登录 | Google、Apple 登录 | ✅ |
+| 密码重置 | 邮箱验证码重置密码 | ✅ |
+| 密码修改 | 登录后修改密码 | ✅ |
+
+#### 数据保护
+
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| 加密存储 | AES-256-GCM 加密所有敏感数据 | ✅ |
+| 安全存储 | 平台 Keychain/Keystore | ✅ |
+| 内存保护 | 安全内存处理 | ✅ |
+| 密钥派生 | BIP-32/44 HD 密钥派生 | ✅ |
+| 助记词加密 | 助记词加密存储 | ✅ |
+| 自动锁定 | 超时自动锁定应用 | ✅ |
+
+#### 交易安全
+
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| 自转防护 | 阻止转账到相同地址 | ✅ |
+| 地址验证 | EIP-55 校验和验证 | ✅ |
+| 钓鱼防护 | 域名验证警告 | ✅ |
+| 交易预览 | 详细交易分解 | ✅ |
+| 风险提示 | 高风险交易警告 | ✅ |
+| 白名单 | 信任地址白名单 | ✅ |
+
+### 💳 支付集成
+
+| 功能 | 说明 | 状态 |
+|------|------|------|
+| MoonPay | 信用卡/借记卡购买加密货币 | ✅ |
+| 法币入金 | 支持 100+ 法币 | ✅ |
+| 法币出金 | 卖出加密货币到银行账户 | ✅ |
+| KYC 验证 | 身份验证流程 | ✅ |
+| 支付历史 | 法币交易历史 | ✅ |
+
+### 🌍 国际化
+
+| 语言 | 代码 | 状态 |
+|------|------|------|
+| English | en | ✅ |
+| 中文 | zh | ✅ |
+| 日本語 | ja | ✅ |
+| 한국어 | ko | ✅ |
+| Español | es | ✅ |
+| Português | pt | ✅ |
+| Français | fr | ✅ |
+| Deutsch | de | ✅ |
+| Italiano | it | ✅ |
+| Türkçe | tr | ✅ |
+| Русский | ru | ✅ |
+| Tiếng Việt | vi | ✅ |
+| Bahasa Indonesia | id | ✅ |
+| Polski | pl | ✅ |
+
+---
 
 ## Tech Stack
 
@@ -635,24 +734,9 @@ Smart Account features powered by ERC-4337:
 | Push Notifications | Firebase Cloud Messaging |
 | Encryption | PointyCastle, cryptography |
 | WalletConnect | walletconnect_flutter_v2 |
+| Chat | Matrix SDK (n42_chat) |
 
-## Supported Languages
-
-| Language | Code |
-|----------|------|
-| English | en |
-| Spanish | es_ES |
-| Korean | ko |
-| Japanese | ja |
-| Vietnamese | vi |
-| Portuguese | pt |
-| Turkish | tr |
-| Russian | ru |
-| Indonesian | id |
-| German | de |
-| French | fr |
-| Italian | it |
-| Polish | pl |
+---
 
 ## Getting Started
 
@@ -701,6 +785,8 @@ iOS build:
 ```bash
 flutter build ios --release
 ```
+
+---
 
 ## Project Structure
 
@@ -752,9 +838,9 @@ lib/
 └── generated/            # Generated code (l10n, protobuf)
 ```
 
-## API Endpoints
+---
 
-The app connects to the following backend services:
+## API Endpoints
 
 | Service | Purpose |
 |---------|---------|
@@ -762,29 +848,21 @@ The app connects to the following backend services:
 | LI.FI API | Cross-chain bridge quotes and routes |
 | CoinGecko | Token prices and market data |
 | MoonPay | Fiat on/off ramp |
+| Bundler API | ERC-4337 UserOperation submission |
+| Paymaster API | Gas sponsorship and ERC-20 gas payment |
 
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Code Style
-- Follow Dart style guide
-- Use meaningful variable and function names
-- Add comments for complex logic
-- Write unit tests for new features
+---
 
 ## Version History
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 2.1.0 | 2026-01 | Account Abstraction (ERC-4337), Session Keys, ENS Registration |
-| 2.0.0 | 2026-01 | ENS support, Gas tracker, Batch transfer, Bridge, 200+ chains |
+| 2.1.0 | 2026-01 | Account Abstraction (ERC-4337), Session Keys, ENS Registration, Biometric Login |
+| 2.0.0 | 2026-01 | ENS support, Gas tracker, Batch transfer, Bridge, 238+ chains |
 | 1.5.0 | 2025-12 | Multi-chain staking, Hardware wallet |
 | 1.0.0 | 2025-06 | Initial release |
+
+---
 
 ## License
 
@@ -795,6 +873,8 @@ This software is licensed under a dual license:
 - MIT License
 
 See LICENSE file for full license information.
+
+---
 
 ## Support
 

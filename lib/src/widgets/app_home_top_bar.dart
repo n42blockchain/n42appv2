@@ -113,25 +113,26 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
         ),
       );
     } else {
+      // 扩大点击区域，让用户更容易点击
       child = GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: widget.onLeftImageClick,
         child: Container(
-          margin: EdgeInsets.all(ScreenUtil().setWidth(12)),
-          width: ScreenUtil().setWidth(40.0),
-          height: ScreenUtil().setWidth(40.0),
+          width: ScreenUtil().setWidth(80.0),
+          height: ScreenUtil().setWidth(80.0),
           alignment: Alignment.center,
           child: Image.asset(
             widget.onLeftImageUri ?? "",
-            width: ScreenUtil().setWidth(40),
+            width: ScreenUtil().setWidth(44),
             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
           ),
         ),
       );
     }
-    
+
     return SizedBox(
-      width: ScreenUtil().setWidth(64.0),
-      height: ScreenUtil().setWidth(64.0),
+      width: ScreenUtil().setWidth(80.0),
+      height: ScreenUtil().setWidth(80.0),
       child: Stack(
         children: [
           Positioned.fill(

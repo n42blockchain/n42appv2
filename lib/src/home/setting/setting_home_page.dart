@@ -132,78 +132,7 @@ class SettingHomePage extends ConsumerWidget {
             ],
           ),
         ),
-        // New Chat 设置
-        _buildNewChatSwitch(context, ref),
       ],
-    );
-  }
-
-  /// Build New Chat toggle switch
-  Widget _buildNewChatSwitch(BuildContext context, WidgetRef ref) {
-    final useNewChat = ref.watch(useNewChatProvider);
-    
-    return Container(
-      alignment: Alignment.centerLeft,
-      margin: EdgeInsets.symmetric(
-          vertical: ScreenUtil().setWidth(10.0)),
-      padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30.0),
-          vertical: ScreenUtil().setWidth(20.0)),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
-            Radius.circular(ScreenUtil().setWidth(16.0))),
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-      ),
-      child: Row(
-        children: [
-          Image.asset(
-            "assets/chat/chat_icon.png",
-            width: ScreenUtil().setWidth(48.0),
-            height: ScreenUtil().setWidth(48.0),
-            fit: BoxFit.cover,
-            color: Colors.blueAccent,
-            errorBuilder: (context, error, stackTrace) {
-              return Icon(
-                Icons.chat_bubble_outline,
-                size: ScreenUtil().setWidth(48.0),
-                color: Colors.blueAccent,
-              );
-            },
-          ),
-          SizedBox(width: ScreenUtil().setWidth(30.0)),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  S.of(context).s_key_12,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(30.0),
-                  ),
-                ),
-                SizedBox(height: ScreenUtil().setWidth(6.0)),
-                Text(
-                  S.of(context).s_key_13,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.ff888888.name),
-                    fontSize: ScreenUtil().setSp(24.0),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Switch(
-            value: useNewChat,
-            onChanged: (value) {
-              ref.read(useNewChatProvider.notifier).setUseNewChat(value);
-            },
-            activeTrackColor: Colors.blueAccent,
-          ),
-        ],
-      ),
     );
   }
 }
