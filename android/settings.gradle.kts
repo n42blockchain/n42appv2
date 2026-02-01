@@ -25,4 +25,26 @@ plugins {
 }
 
 include(":app")
+
+// 为缺少 namespace 的第三方插件自动设置 namespace
+gradle.beforeProject {
+    if (project.name != "app" && project.name != rootProject.name) {
+        project.afterEvaluate {
+            val android = project.extensions.findByName("android")
+            if (android is com.android.build.gradle.LibraryExtension) {
+                if (android.namespace.isNullOrEmpty()) {
+                    val manifestFile = project.file("src/main/AndroidManifest.xml")
+                    if (manifestFile.exists()) {
+                        val content = manifestFile.readText()
+                        val regex = """package\s*=\s*["']([^"']+)["']""".toRegex()
+                        val match = regex.find(content)
+                        if (match != null) {
+                            android.namespace = match.groupValues[1]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
  

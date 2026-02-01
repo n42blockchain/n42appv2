@@ -48,6 +48,7 @@ import 'package:n42appv2/core/config/api_keys_config.dart';
 import 'package:n42appv2/core/config/rpc_config.dart';
 import 'package:n42appv2/core/security/secure_storage.dart';
 import 'package:n42appv2/core/security/wallet_data_migration.dart';
+import 'package:n42appv2/src/wallet/n42_wallet_bridge.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/src/https/request_url.dart';
 
@@ -97,13 +98,15 @@ void main() async {
 
   // Initialize N42 Chat module
   try {
-    await N42Chat.initialize(const N42ChatConfig(
+    await N42Chat.initialize(N42ChatConfig(
       defaultHomeserver: 'https://matrix.n42.network',
       enableEncryption: true,
       enablePushNotifications: true,
       // Matrix Sygnal push gateway for FCM/APNs
       pushGatewayUrl: 'https://push.n42.network/_matrix/push/v1/notify',
       pushAppId: 'ai.n42.www',
+      // 钱包桥接，用于获取真实的钱包地址
+      walletBridge: N42WalletBridge(),
     ));
 
     // 设置通知点击处理

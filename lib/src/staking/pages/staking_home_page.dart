@@ -118,7 +118,7 @@ class _StakingHomePageState extends State<StakingHomePage>
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(12)),
+                padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
                 child: Text(S.of(context).g_key_stake_protocols),
               ),
             ),
@@ -127,7 +127,7 @@ class _StakingHomePageState extends State<StakingHomePage>
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(12)),
+                padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
                 child: Text(S.of(context).g_key_stake_positions),
               ),
             ),
@@ -183,7 +183,10 @@ class _StakingHomePageState extends State<StakingHomePage>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
+                  Wrap(
+                    spacing: ScreenUtil().setWidth(8),
+                    runSpacing: ScreenUtil().setWidth(4),
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Text(
                         protocol.name,
@@ -196,7 +199,6 @@ class _StakingHomePageState extends State<StakingHomePage>
                           ),
                         ),
                       ),
-                      SizedBox(width: ScreenUtil().setWidth(8)),
                       Container(
                         padding: EdgeInsets.symmetric(
                           horizontal: ScreenUtil().setWidth(8),
@@ -220,8 +222,7 @@ class _StakingHomePageState extends State<StakingHomePage>
                           ),
                         ),
                       ),
-                      if (protocol.isLiquid) ...[
-                        SizedBox(width: ScreenUtil().setWidth(8)),
+                      if (protocol.isLiquid)
                         Container(
                           padding: EdgeInsets.symmetric(
                             horizontal: ScreenUtil().setWidth(8),
@@ -239,7 +240,6 @@ class _StakingHomePageState extends State<StakingHomePage>
                             ),
                           ),
                         ),
-                      ],
                     ],
                   ),
                   SizedBox(height: ScreenUtil().setWidth(8)),
