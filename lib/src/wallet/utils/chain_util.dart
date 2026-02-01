@@ -1,6 +1,7 @@
 //walletList中使用
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:decimal/decimal.dart';
+import 'package:wallet/wallet.dart';
 import 'package:web3dart/web3dart.dart';
 
 /// 默认钱包链配置

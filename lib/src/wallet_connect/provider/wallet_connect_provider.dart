@@ -8,8 +8,8 @@ import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/wallet_connect/widgets/wallet_connect_alert_widget.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
-import 'package:eth_sig_util/eth_sig_util.dart';
-import 'package:eth_sig_util/util/utils.dart';
+import 'package:eip712/eip712.dart';
+import 'package:web3dart/web3dart.dart' show bytesToHex;
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
@@ -18,7 +18,8 @@ import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:provider/provider.dart';
 import 'package:reown_walletkit/reown_walletkit.dart' as wallet_connect;
-import 'package:web3dart/crypto.dart' as crypto;
+import 'package:wallet/wallet.dart' as wallet_types;
+import 'package:web3dart/web3dart.dart' as crypto;
 import 'package:web3dart/web3dart.dart' as web3;
 
 class WalletConnectProvider with ChangeNotifier{
@@ -532,26 +533,26 @@ class WalletConnectProvider with ChangeNotifier{
       else if (eventData.method == "eth_signTypedData") {
         final requestParams =
         (eventData.params! as List).cast<String>();
-        signedDataHex = EthSigUtil.signTypedData(
-          privateKeyInBytes: privateKey.privateKey,
+        signedDataHex = _signTypedData(
+          privateKey: privateKey,
           jsonData: requestParams[1],
-          version: TypedDataVersion.V4,
+          version: TypedDataVersion.v4,
         );
       } else if (eventData.method == "eth_signTypedData_v3") {
         final requestParams =
         (eventData.params! as List).cast<String>();
-        signedDataHex = EthSigUtil.signTypedData(
-          privateKeyInBytes: privateKey.privateKey,
+        signedDataHex = _signTypedData(
+          privateKey: privateKey,
           jsonData: requestParams[1],
-          version: TypedDataVersion.V3,
+          version: TypedDataVersion.v3,
         );
       } else if (eventData.method == "eth_signTypedData_v4") {
         final requestParams =
         (eventData.params! as List).cast<String>();
-        signedDataHex = EthSigUtil.signTypedData(
-          privateKeyInBytes: privateKey.privateKey,
+        signedDataHex = _signTypedData(
+          privateKey: privateKey,
           jsonData: requestParams[1],
-          version: TypedDataVersion.V4,
+          version: TypedDataVersion.v4,
         );
       } else if (eventData.method == "tron_signMessage") {
         final requestParams = eventData.params! as Map;
@@ -630,24 +631,24 @@ class WalletConnectProvider with ChangeNotifier{
       String? gasLimit=parameters['gasLimit'];
       String? data=parameters['data'];
       final transaction = web3.Transaction(
-        from: web3.EthereumAddress.fromHex(from),
-        to: web3.EthereumAddress.fromHex(to??"0x"),
-        value: web3.EtherAmount.fromBigInt(web3.EtherUnit.wei, BigInt.tryParse(value??"0x") ?? BigInt.zero,),
+        from: wallet_types.EthereumAddress.fromHex(from),
+        to: wallet_types.EthereumAddress.fromHex(to??"0x"),
+        value: wallet_types.EtherAmount.fromBigInt(wallet_types.EtherUnit.wei, BigInt.tryParse(value??"0x") ?? BigInt.zero,),
         gasPrice: gasPrice != null
-            ? web3.EtherAmount.fromBigInt(
-          web3.EtherUnit.gwei,
+            ? wallet_types.EtherAmount.fromBigInt(
+          wallet_types.EtherUnit.gwei,
           BigInt.tryParse(gasPrice) ?? BigInt.zero,
         )
             : null,
         maxFeePerGas: maxFeePerGas != null
-            ? web3.EtherAmount.fromBigInt(
-          web3.EtherUnit.gwei,
+            ? wallet_types.EtherAmount.fromBigInt(
+          wallet_types.EtherUnit.gwei,
           BigInt.tryParse(maxFeePerGas) ?? BigInt.zero,
         )
             : null,
         maxPriorityFeePerGas: maxPriorityFeePerGas != null
-            ? web3.EtherAmount.fromBigInt(
-          web3.EtherUnit.gwei,
+            ? wallet_types.EtherAmount.fromBigInt(
+          wallet_types.EtherUnit.gwei,
           BigInt.tryParse(maxPriorityFeePerGas) ??
               BigInt.zero,
         )
@@ -811,6 +812,38 @@ class WalletConnectProvider with ChangeNotifier{
     /*if(walletConnectV2State !=WalletConnectV2State.loading){
       viewStateDeal(WalletConnectV2State.disconnect);
     }*/
+  }
+
+  /// Sign typed data using EIP-712 standard
+  String _signTypedData({
+    required web3.EthPrivateKey privateKey,
+    required String jsonData,
+    required TypedDataVersion version,
+  }) {
+    try {
+      // Parse JSON data to TypedMessage
+      final Map<String, dynamic> typedData = json.decode(jsonData);
+      final typedMessage = TypedMessage.fromJson(typedData);
+
+      // Hash the typed data using EIP-712
+      final hash = hashTypedData(
+        typedData: typedMessage,
+        version: version,
+      );
+
+      // Sign the hash with private key
+      final signature = privateKey.signToEcSignature(hash);
+
+      // Encode signature to hex (r + s + v format)
+      final r = signature.r.toRadixString(16).padLeft(64, '0');
+      final s = signature.s.toRadixString(16).padLeft(64, '0');
+      final v = (signature.v).toRadixString(16).padLeft(2, '0');
+
+      return '0x$r$s$v';
+    } catch (e) {
+      debugPrint('Error signing typed data: $e');
+      rethrow;
+    }
   }
 }
 //页面状态

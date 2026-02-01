@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
-import 'package:eth_sig_util/util/utils.dart';
+import 'package:web3dart/web3dart.dart';
 import 'package:flustars_flutter3/flustars_flutter3.dart';
 
 class DataUtils{

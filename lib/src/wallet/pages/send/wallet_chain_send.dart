@@ -34,7 +34,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
-import 'package:web3dart/crypto.dart';
+import 'package:web3dart/web3dart.dart';
 import 'package:n42appv2/src/wallet/utils/address_validator.dart';
 import 'package:n42appv2/src/wallet/api/gas_tracker_api.dart';
 import 'package:n42appv2/src/wallet/models/gas_estimate_model.dart';

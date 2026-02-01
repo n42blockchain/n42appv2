@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:eth_sig_util/util/bigint.dart';
+import 'package:web3dart/web3dart.dart';
 import 'dart:math';
 import 'package:pointycastle/export.dart';
 import 'package:convert/convert.dart';

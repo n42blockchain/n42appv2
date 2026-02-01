@@ -1,6 +1,6 @@
 import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
-import 'package:web3dart/crypto.dart';
+import 'package:web3dart/web3dart.dart';
 
 class CreateP2WSH{
   String? p2wsh(int lockTime,{String? uPubKey,String? cPubKey}) {

@@ -83,7 +83,10 @@ class BrowserProvider extends ChangeNotifier{
       params = WebKitWebViewControllerCreationParams(
         allowsInlineMediaPlayback: true,
         mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
+        limitsNavigationsToAppBoundDomains: false,
       );
+    } else if (WebViewPlatform.instance is AndroidWebViewPlatform) {
+      params = AndroidWebViewControllerCreationParams();
     } else {
       params = const PlatformWebViewControllerCreationParams();
     }
@@ -131,15 +134,22 @@ class BrowserProvider extends ChangeNotifier{
             titleEditingController?.text=wInfoList[wListIndex]['openUrl'];
             notifyListeners();
           },
+          onHttpError: (HttpResponseError error) {
+            debugPrint('HTTP error: ${error.response?.statusCode}');
+          },
         ),
       )
       ..loadRequest(Uri.parse(url));
 
     // #docregion platform_features
     if (webViewController.platform is AndroidWebViewController) {
+      final androidController = webViewController.platform as AndroidWebViewController;
       AndroidWebViewController.enableDebugging(true);
-      (webViewController.platform as AndroidWebViewController)
-          .setMediaPlaybackRequiresUserGesture(false);
+      androidController.setMediaPlaybackRequiresUserGesture(false);
+      // Enable mixed content mode for DApp compatibility
+      androidController.setMixedContentMode(MixedContentMode.alwaysAllow);
+      // Enable wide viewport for better page rendering
+      androidController.setUseWideViewPort(true);
     }
     Widget wv=WebViewWidget(controller: webViewController);
     wList.add(wv);

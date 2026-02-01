@@ -34,7 +34,7 @@ import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:n42appv2/src/widgets/prompt_widget.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:crypto/crypto.dart';
-import 'package:eth_sig_util/util/utils.dart';
+import 'package:web3dart/web3dart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

@@ -16,7 +16,7 @@ import 'package:n42appv2/src/wallet/utils/create_btc_tx_2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:web3dart/crypto.dart';
+import 'package:web3dart/web3dart.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';

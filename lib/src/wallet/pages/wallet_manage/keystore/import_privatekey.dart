@@ -24,7 +24,7 @@ import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:fast_base58/fast_base58.dart' as fast;
 import 'package:crypto/crypto.dart';
-import 'package:web3dart/crypto.dart';
+import 'package:web3dart/web3dart.dart';
 
 class ImportPrivatekey extends StatefulWidget {
   const ImportPrivatekey({super.key});

@@ -11,9 +11,7 @@ import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/eth_api.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/trx_api.dart';
 import 'package:n42appv2/src/wallet/utils/chain_1559.dart';
-import 'package:web3dart/crypto.dart';
-import 'package:eth_sig_util/util/bigint.dart';
-import 'package:sqflite/utils/utils.dart';
+import 'package:web3dart/web3dart.dart';
 
 import 'token_api_base.dart';
 
@@ -191,10 +189,10 @@ mixin EthTokenApiMixin on TokenApiBase {
       }
     } else {
       final toAddress = strip0x(to);
-      var methodSig = hex(keccakAscii('transfer(address,uint256)'));
+      var methodSig = bytesToHex(keccakAscii('transfer(address,uint256)'));
       methodSig = methodSig.substring(0, 8).toLowerCase();
-      final Uint8List valueList = encodeBigInt(value, length: 32);
-      final valueHex = hex(valueList).toLowerCase();
+      final Uint8List valueList = padUint8ListTo32(unsignedIntToBytes(value));
+      final valueHex = bytesToHex(valueList);
 
       params = {
         'from': from,

@@ -23,7 +23,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/src/wallet/widgets/ens_address_display.dart';
-import 'package:web3dart/crypto.dart';
+import 'package:web3dart/web3dart.dart';
 
 class OneCoinWalletManage extends StatefulWidget {
   final WalletInfo walletInfo;

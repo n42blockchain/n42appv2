@@ -24,9 +24,7 @@ import 'package:n42appv2/src/wallet/api/chain_api/zil_api.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/utils/chain_1559.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
-import 'package:eth_sig_util/util/bigint.dart';
-import 'package:sqflite/utils/utils.dart';
-import 'package:web3dart/crypto.dart';
+import 'package:web3dart/web3dart.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 class TokenViewApi{
@@ -625,10 +623,10 @@ class TokenViewApi{
     }
     else{
       String toAddress=strip0x(to);
-      String aaa=hex(keccakAscii("transfer(address,uint256)"));
+      String aaa=bytesToHex(keccakAscii("transfer(address,uint256)"));
       aaa=aaa.substring(0,8).toLowerCase();
-      Uint8List valueList=encodeBigInt(value,length: 32);
-      String valueHex=hex(valueList).toLowerCase();
+      Uint8List valueList=padUint8ListTo32(unsignedIntToBytes(value));
+      String valueHex=bytesToHex(valueList);
       Map<String,dynamic> params = {"from": from,
         "to": contract,
         //"gas_price":'0x${gasPrice.toRadixString(16)}',
@@ -1356,7 +1354,7 @@ class TokenViewApi{
     if(gas==null){
       gas=BigInt.from(getCoinGas("TRX",contract:true));
     }
-    String aaa=hex(keccakAscii(method));
+    String aaa=bytesToHex(keccakAscii(method));
     aaa=aaa.substring(0,8).toLowerCase();
     String dataStr="0x${aaa}";
     for(Map<String,dynamic> attribute in attributes){
@@ -1364,8 +1362,8 @@ class TokenViewApi{
         String addr=DataUtils.strip0x(attribute['value']);
         dataStr="${dataStr}00000000000000000000000041${addr}";
       }else if(attribute['type']=="uint256"){
-        Uint8List valueList=encodeBigInt(attribute['value'],length: 32);
-        String valueHex=hex(valueList).toLowerCase();
+        Uint8List valueList=padUint8ListTo32(unsignedIntToBytes(attribute['value']));
+        String valueHex=bytesToHex(valueList);
         dataStr="${dataStr}${valueHex}";
       }
     }

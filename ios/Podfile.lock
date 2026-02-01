@@ -156,6 +156,8 @@ PODS:
     - Flutter
   - flutter_new_badger (0.0.1):
     - Flutter
+  - flutter_olm (3.2.15):
+    - Flutter
   - flutter_secure_storage (6.0.0):
     - Flutter
   - flutter_webrtc (1.2.0):
@@ -317,9 +319,6 @@ PODS:
   - record_ios (1.1.0):
     - Flutter
   - RegulaCommon (9.1.1844)
-  - reown_yttrium (0.0.1):
-    - Flutter
-    - YttriumWrapper (= 0.8.35)
   - saver_gallery (0.0.1):
     - Flutter
   - SDWebImage (5.21.5):
@@ -388,12 +387,15 @@ PODS:
     - libwebp
   - wakelock_plus (0.0.1):
     - Flutter
+  - walletconnect_pay (0.0.1):
+    - Flutter
+    - YttriumWrapper (= 0.10.15)
   - WalletCoreSwiftProtobuf (1.29.0)
   - WebRTC-SDK (137.7151.04)
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
     - FlutterMacOS
-  - YttriumWrapper (0.8.35)
+  - YttriumWrapper (0.10.15)
 
 DEPENDENCIES:
   - app_links (from `.symlinks/plugins/app_links/ios`)
@@ -411,6 +413,7 @@ DEPENDENCIES:
   - flutter_face_core_basic (from `.symlinks/plugins/flutter_face_core_basic/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_new_badger (from `.symlinks/plugins/flutter_new_badger/ios`)
+  - flutter_olm (from `.symlinks/plugins/flutter_olm/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - flutter_webrtc (from `.symlinks/plugins/flutter_webrtc/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
@@ -426,7 +429,6 @@ DEPENDENCIES:
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - qr_code_scanner_plus (from `.symlinks/plugins/qr_code_scanner_plus/ios`)
   - record_ios (from `.symlinks/plugins/record_ios/ios`)
-  - reown_yttrium (from `.symlinks/plugins/reown_yttrium/ios`)
   - saver_gallery (from `.symlinks/plugins/saver_gallery/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -440,6 +442,7 @@ DEPENDENCIES:
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/darwin`)
   - video_thumbnail (from `.symlinks/plugins/video_thumbnail/ios`)
   - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
+  - walletconnect_pay (from `.symlinks/plugins/walletconnect_pay/ios`)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/darwin`)
 
 SPEC REPOS:
@@ -521,6 +524,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_new_badger:
     :path: ".symlinks/plugins/flutter_new_badger/ios"
+  flutter_olm:
+    :path: ".symlinks/plugins/flutter_olm/ios"
   flutter_secure_storage:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
   flutter_webrtc:
@@ -551,8 +556,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/qr_code_scanner_plus/ios"
   record_ios:
     :path: ".symlinks/plugins/record_ios/ios"
-  reown_yttrium:
-    :path: ".symlinks/plugins/reown_yttrium/ios"
   saver_gallery:
     :path: ".symlinks/plugins/saver_gallery/ios"
   share_plus:
@@ -577,6 +580,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/video_thumbnail/ios"
   wakelock_plus:
     :path: ".symlinks/plugins/wakelock_plus/ios"
+  walletconnect_pay:
+    :path: ".symlinks/plugins/walletconnect_pay/ios"
   webview_flutter_wkwebview:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
 
@@ -613,6 +618,7 @@ SPEC CHECKSUMS:
   flutter_face_core_basic: e86f4c426917ac6c7b8dd8f114d366495cd315d1
   flutter_local_notifications: a5a732f069baa862e728d839dd2ebb904737effb
   flutter_new_badger: 133aaf93e9a5542bf905c8483d8b83c5ef4946ea
+  flutter_olm: 733ae24ea4c29e97aaff152ee5bbe913df1c40d7
   flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
   flutter_webrtc: c3e21fc0dcd9d8eb246ae4d5256fcbeb2f5ecd22
   fluttertoast: 2c67e14dce98bbdb200df9e1acf610d7a6264ea1
@@ -648,7 +654,6 @@ SPEC CHECKSUMS:
   qr_code_scanner_plus: 7e087021bc69873140e0754750eb87d867bed755
   record_ios: f75fa1d57f840012775c0e93a38a7f3ceea1a374
   RegulaCommon: 714094c23bdade6ac5ed81b16cb6e299f5aafb2d
-  reown_yttrium: cee334ade64725b1d83f7b34c706a6aae2696d58
   saver_gallery: af2d0c762dafda254e0ad025ef0dabd6506cd490
   SDWebImage: e9c98383c7572d713c1a0d7dd2783b10599b9838
   share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a
@@ -666,10 +671,11 @@ SPEC CHECKSUMS:
   video_player_avfoundation: dd410b52df6d2466a42d28550e33e4146928280a
   video_thumbnail: b637e0ad5f588ca9945f6e2c927f73a69a661140
   wakelock_plus: e29112ab3ef0b318e58cfa5c32326458be66b556
+  walletconnect_pay: 95df6f3533532d72e2ce2a64354f4326177c6fc1
   WalletCoreSwiftProtobuf: a4798576a2d309511fc45f81843d348732ec571d
   WebRTC-SDK: 40d4f5ba05cadff14e4db5614aec402a633f007e
   webview_flutter_wkwebview: 8ebf4fded22593026f7dbff1fbff31ea98573c8d
-  YttriumWrapper: 31e937fe9fbe0f1314d2ca6be9ce9b379a059966
+  YttriumWrapper: cbddb60c835ebc4232d9f57064084ab30686a18e
 
 PODFILE CHECKSUM: a4b7acc886390c144c91dcb9a74967c055e17bc1
 

@@ -5,7 +5,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
-import 'package:encrypt/encrypt.dart' as aes_encrypt;
+import 'package:pointycastle/export.dart';
 import 'package:n42appv2/core/crypto/encryption_service.dart';
 
 /// AES Encryption Service Implementation
@@ -88,6 +88,26 @@ class AesEncryptionService implements IEncryptionService, IKeyDerivationService 
     return result;
   }
 
+  /// Add PKCS7 padding
+  Uint8List _addPKCS7Padding(Uint8List data, int blockSize) {
+    final padLength = blockSize - (data.length % blockSize);
+    final padded = Uint8List(data.length + padLength);
+    padded.setAll(0, data);
+    for (var i = data.length; i < padded.length; i++) {
+      padded[i] = padLength;
+    }
+    return padded;
+  }
+
+  /// Remove PKCS7 padding
+  Uint8List _removePKCS7Padding(Uint8List data) {
+    final padLength = data.last;
+    if (padLength > data.length || padLength > 16) {
+      throw FormatException('Invalid PKCS7 padding');
+    }
+    return Uint8List.fromList(data.sublist(0, data.length - padLength));
+  }
+
   @override
   String encrypt(String plaintext, String password) {
     // Generate random salt and IV
@@ -97,20 +117,24 @@ class AesEncryptionService implements IEncryptionService, IKeyDerivationService 
     // Derive key using PBKDF2
     final derivedKey = deriveKey(password, salt);
 
-    // Create AES encrypter
-    final key = aes_encrypt.Key(derivedKey);
-    final encrypter = aes_encrypt.Encrypter(
-      aes_encrypt.AES(key, mode: aes_encrypt.AESMode.cbc, padding: 'PKCS7'),
-    );
+    // Create AES-CBC cipher
+    final cipher = CBCBlockCipher(AESEngine())
+      ..init(true, ParametersWithIV(KeyParameter(derivedKey), iv));
 
-    // Encrypt
-    final encrypted = encrypter.encrypt(plaintext, iv: aes_encrypt.IV(iv));
+    // Add PKCS7 padding and encrypt
+    final plaintextBytes = utf8.encode(plaintext);
+    final paddedPlaintext = _addPKCS7Padding(Uint8List.fromList(plaintextBytes), 16);
+    final encrypted = Uint8List(paddedPlaintext.length);
+
+    for (var offset = 0; offset < paddedPlaintext.length; offset += 16) {
+      cipher.processBlock(paddedPlaintext, offset, encrypted, offset);
+    }
 
     // Combine: salt + iv + ciphertext
     final combined = Uint8List.fromList([
       ...salt,
       ...iv,
-      ...encrypted.bytes,
+      ...encrypted,
     ]);
 
     return base64Encode(combined);
@@ -133,14 +157,19 @@ class AesEncryptionService implements IEncryptionService, IKeyDerivationService 
     // Derive key using PBKDF2
     final derivedKey = deriveKey(password, salt);
 
-    // Create AES decrypter
-    final key = aes_encrypt.Key(derivedKey);
-    final encrypter = aes_encrypt.Encrypter(
-      aes_encrypt.AES(key, mode: aes_encrypt.AESMode.cbc, padding: 'PKCS7'),
-    );
+    // Create AES-CBC cipher for decryption
+    final cipher = CBCBlockCipher(AESEngine())
+      ..init(false, ParametersWithIV(KeyParameter(derivedKey), iv));
 
     // Decrypt
-    return encrypter.decrypt(aes_encrypt.Encrypted(encryptedBytes), iv: aes_encrypt.IV(iv));
+    final decrypted = Uint8List(encryptedBytes.length);
+    for (var offset = 0; offset < encryptedBytes.length; offset += 16) {
+      cipher.processBlock(encryptedBytes, offset, decrypted, offset);
+    }
+
+    // Remove PKCS7 padding
+    final unpadded = _removePKCS7Padding(decrypted);
+    return utf8.decode(unpadded);
   }
 
   @override
@@ -176,12 +205,32 @@ class AesEncryptionService implements IEncryptionService, IKeyDerivationService 
 
   /// Decrypt legacy format with fixed IV
   String _decryptLegacy(String ciphertext, String password, String legacyIv) {
-    final key = aes_encrypt.Key.fromUtf8(password);
-    final iv = aes_encrypt.IV.fromUtf8(legacyIv);
-    final encrypter = aes_encrypt.Encrypter(
-      aes_encrypt.AES(key, mode: aes_encrypt.AESMode.cbc, padding: 'PKCS7'),
-    );
-    return encrypter.decrypt(aes_encrypt.Encrypted.fromBase64(ciphertext), iv: iv);
+    final keyBytes = Uint8List.fromList(utf8.encode(password));
+    final ivBytes = Uint8List.fromList(utf8.encode(legacyIv));
+
+    // Pad key to 32 bytes if needed
+    final paddedKey = Uint8List(32);
+    paddedKey.setAll(0, keyBytes.length > 32 ? keyBytes.sublist(0, 32) : keyBytes);
+
+    // Pad IV to 16 bytes if needed
+    final paddedIv = Uint8List(16);
+    paddedIv.setAll(0, ivBytes.length > 16 ? ivBytes.sublist(0, 16) : ivBytes);
+
+    final encryptedBytes = base64Decode(ciphertext);
+
+    // Create AES-CBC cipher for decryption
+    final cipher = CBCBlockCipher(AESEngine())
+      ..init(false, ParametersWithIV(KeyParameter(paddedKey), paddedIv));
+
+    // Decrypt
+    final decrypted = Uint8List(encryptedBytes.length);
+    for (var offset = 0; offset < encryptedBytes.length; offset += 16) {
+      cipher.processBlock(encryptedBytes, offset, decrypted, offset);
+    }
+
+    // Remove PKCS7 padding
+    final unpadded = _removePKCS7Padding(decrypted);
+    return utf8.decode(unpadded);
   }
 
   /// Migrate data from legacy format to new format

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:n42appv2/src/models/message_model.dart';
-import 'package:web3dart/crypto.dart';
+import 'package:wallet/wallet.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:http/http.dart';
 

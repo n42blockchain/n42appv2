@@ -21,7 +21,7 @@ import 'package:n42appv2/src/wallet/aa/bundler/bundler_client.dart';
 import 'package:n42appv2/src/wallet/aa/utils/user_op_hash.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/eth_api.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
-import 'package:web3dart/crypto.dart';
+import 'package:web3dart/web3dart.dart';
 
 import '../transfer_handler.dart';
 import 'base_transfer_handler.dart';

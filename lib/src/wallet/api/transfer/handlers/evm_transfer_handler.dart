@@ -5,7 +5,7 @@
 
 import 'dart:io';
 
-import 'package:eth_sig_util/util/utils.dart';
+import 'package:web3dart/web3dart.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';

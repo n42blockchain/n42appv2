@@ -22,7 +22,7 @@ import 'package:n42appv2/src/wallet/provider/transaction_record_iterms_provider.
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:decimal/decimal.dart';
-import 'package:eth_sig_util/util/utils.dart';
+import 'package:web3dart/web3dart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

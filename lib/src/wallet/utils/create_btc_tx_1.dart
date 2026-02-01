@@ -12,7 +12,7 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pointycastle/export.dart';
 import 'package:convert/convert.dart';
-import 'package:web3dart/crypto.dart';
+import 'package:web3dart/web3dart.dart';
 
 class CreateBTCTXV1 {
   Future<String> create(

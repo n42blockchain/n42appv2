@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'dart:typed_data';
-import 'package:eth_sig_util/util/utils.dart';
+import 'package:web3dart/web3dart.dart';
 
 import '../core/aa_constants.dart';
 import '../core/aa_errors.dart';

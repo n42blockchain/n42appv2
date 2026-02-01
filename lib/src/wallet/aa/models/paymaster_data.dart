@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'dart:typed_data';
-import 'package:web3dart/crypto.dart';
+import 'package:web3dart/web3dart.dart';
 
 /// Paymaster types supported
 enum PaymasterType {

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';
-import 'package:web3dart/crypto.dart';
+import 'package:web3dart/web3dart.dart';
 class CreateBtcTX2{
   String createTapRoot(ECPrivate fromPriv2,List<TxInput>txInputs,List<BigInt>txInputAmount,List<Script>txInputScript,List<TxOutput> txOutputs,){
     //ECPrivate privkeyTrScript1 = ECPrivate.fromWif('cSW2kQbqC9zkqagw8oTYKFTozKuZ214zd6CMTDs4V32cMfH3dgKa', netVersion: BitcoinNetwork.testnet.wifNetVer);

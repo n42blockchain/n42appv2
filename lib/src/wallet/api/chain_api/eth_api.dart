@@ -5,9 +5,7 @@ import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/https/request_url.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/wallet/utils/chain_1559.dart';
-import 'package:eth_sig_util/util/bigint.dart';
-import 'package:sqflite/utils/utils.dart';
-import 'package:web3dart/crypto.dart';
+import 'package:web3dart/web3dart.dart';
 
 class EthAPI{
   String? cType;
@@ -192,10 +190,10 @@ class EthAPI{
     }
     else{
       String toAddress=strip0x(to);
-      String aaa=hex(keccakAscii("transfer(address,uint256)"));
+      String aaa=bytesToHex(keccakAscii("transfer(address,uint256)"));
       aaa=aaa.substring(0,8).toLowerCase();
-      Uint8List valueList=encodeBigInt(value,length: 32);
-      String valueHex=hex(valueList).toLowerCase();
+      Uint8List valueList=padUint8ListTo32(unsignedIntToBytes(value));
+      String valueHex=bytesToHex(valueList);
       /*List param=[];
       param.add({"from": from,
         "to": contract,

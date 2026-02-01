@@ -30,7 +30,7 @@ import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/wallet/utils/coin_gas.dart';
 import 'package:n42appv2/src/wallet/utils/signature_validator.dart';
 import 'package:decimal/decimal.dart';
-import 'package:eth_sig_util/util/utils.dart';
+import 'package:web3dart/web3dart.dart';
 import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
