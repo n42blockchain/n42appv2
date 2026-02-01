@@ -12,7 +12,6 @@ import 'package:n42appv2/src/home/setting/setting_share.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/login/pages/login_page.dart';
 import 'package:n42appv2/src/notification/pages/message_info.dart';
-import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/src/wallet/utils/browser_txhash.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';

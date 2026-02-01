@@ -8,7 +8,6 @@ import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/wallet_list.dart';
 import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_2.dart';
-import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_6.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

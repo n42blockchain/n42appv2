@@ -2,7 +2,6 @@
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:decimal/decimal.dart';
 import 'package:wallet/wallet.dart';
-import 'package:web3dart/web3dart.dart';
 
 /// 默认钱包链配置
 /// 排序原则：N42主链放首位，其余按知名度和常用程度排列

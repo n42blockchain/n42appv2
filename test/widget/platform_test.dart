@@ -43,7 +43,7 @@ void main() {
         final widget = Builder(
           builder: (context) {
             final platform = Theme.of(context).platform;
-            return Text('Platform detected: ${platform != null}');
+            return Text('Platform: $platform');
           },
         );
 
@@ -51,8 +51,8 @@ void main() {
         await tester.pumpWidget(wrapWithMaterial(widget));
         await tester.pumpAndSettle();
 
-        // Assert - Platform should be detected
-        expect(find.text('Platform detected: true'), findsOneWidget);
+        // Assert - Platform should be detected (TargetPlatform enum)
+        expect(find.textContaining('Platform: TargetPlatform'), findsOneWidget);
       });
     });
 
@@ -119,8 +119,8 @@ void main() {
       testWidgets('should validate form fields', (tester) async {
         // Arrange
         final formKey = GlobalKey<FormState>();
-        String? email;
-        
+        String? savedEmail;
+
         final widget = Form(
           key: formKey,
           child: Column(
@@ -133,7 +133,7 @@ void main() {
                   }
                   return null;
                 },
-                onSaved: (value) => email = value,
+                onSaved: (value) => savedEmail = value,
               ),
               ElevatedButton(
                 onPressed: () {
@@ -160,8 +160,9 @@ void main() {
         await tester.tap(find.text('Submit'));
         await tester.pumpAndSettle();
 
-        // Assert - No validation error
+        // Assert - No validation error and email should be saved
         expect(find.text('Email is required'), findsNothing);
+        expect(savedEmail, 'test@example.com');
       });
     });
 

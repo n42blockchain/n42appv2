@@ -19,7 +19,6 @@ import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reown_walletkit/reown_walletkit.dart';
-import 'package:web3dart/web3dart.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import 'package:http/http.dart';
@@ -145,7 +144,7 @@ class _RedeemState extends State<Redeem> {
       privateKey=bytesToHex(base64Decode(widget.coinModel.privateKey??""));
     }
     EthPrivateKey credentials = EthPrivateKey.fromHex(privateKey);
-    if (kDebugMode) debugPrint(credentials.address.hex);
+    if (kDebugMode) debugPrint(credentials.address.eip55With0x);
     RedeemToken rt=RedeemToken.init(address: EthereumAddress.fromHex("0x6c30A50430cC615C4659DF2dBe3E42036583bE7E"), client: Web3Client(serviceUrl, Client()),chainId: 11155111);
     final rData=await rt.reedem(p2wshAddress,credentials: credentials);
     if (kDebugMode) debugPrint(rData);

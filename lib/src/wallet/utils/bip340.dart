@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-import 'package:web3dart/web3dart.dart';
 import 'dart:math';
 import 'package:pointycastle/export.dart';
 import 'package:convert/convert.dart';
@@ -9,12 +8,21 @@ class Bip340{
   ECPoint? G ;
   BigInt? n ;
 
+  /// 将字节数组解码为 BigInt
+  BigInt _decodeBigInt(List<int> bytes) {
+    BigInt result = BigInt.zero;
+    for (int i = 0; i < bytes.length; i++) {
+      result = (result << 8) | BigInt.from(bytes[i]);
+    }
+    return result;
+  }
+
   /// 生成随机私钥
   BigInt generatePrivateKey() {
     var random = FortunaRandom();
     var seed = Uint8List.fromList(List.generate(32, (_) => Random().nextInt(256)));
     random.seed(KeyParameter(seed));
-    return decodeBigInt(random.nextBytes(32)) % n!;
+    return _decodeBigInt(random.nextBytes(32)) % n!;
   }
 
   /// 计算公钥
@@ -25,7 +33,7 @@ class Bip340{
   /// 计算 SHA256 哈希
   BigInt hashMessage(Uint8List message) {
     var sha256 = SHA256Digest();
-    return decodeBigInt(sha256.process(message)) % n!;
+    return _decodeBigInt(sha256.process(message)) % n!;
   }
 
   /// Schnorr 签名

@@ -11,6 +11,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// Import material.dart for ThemeMode, ThemeData, etc.
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 

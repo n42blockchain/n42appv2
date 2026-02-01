@@ -9,8 +9,6 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42appv2/core/error/failures.dart';
 import 'package:n42appv2/domain/entities/wallet.dart' as domain;
-import 'package:n42appv2/features/wallet/domain/entities/wallet_entity.dart'
-    hide ChainType;
 
 /// Simple Mock Wallet Repository for UseCase Testing
 ///

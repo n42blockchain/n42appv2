@@ -289,11 +289,12 @@ void main() {
     });
 
     test('should handle small amounts correctly', () {
-      // 0.001 USDC
+      // 0.001 USDC (6 decimals)
       final amountRaw = BigInt.parse('1000');
       const decimals = 6;
 
-      final valueInSmallestUnit = amountRaw.toDouble() / (10.0 * 10.0 * 10.0 * 10.0 * 10.0 * 10.0);
+      final divisor = BigInt.from(10).pow(decimals).toDouble();
+      final valueInSmallestUnit = amountRaw.toDouble() / divisor;
       expect(valueInSmallestUnit, closeTo(0.001, 0.0001));
     });
   });

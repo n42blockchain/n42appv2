@@ -137,25 +137,22 @@ void main() {
   group('Null Address Handling Tests', () {
     test('should handle null address gracefully', () {
       // 模拟 address 为 null 的情况
-      dynamic address;
+      String? address;
 
-      final isNull = address == null;
-      expect(isNull, true);
+      // 验证 null 地址应该被正确识别
+      expect(address, isNull);
 
-      // 检查 null 检查逻辑
-      if (address == null) {
-        // 应该跳过余额获取
-        expect(true, true);
-      }
+      // 使用 null-aware 操作符处理 null 地址
+      final safeAddress = address ?? 'default';
+      expect(safeAddress, 'default');
     });
 
     test('should convert non-null address to string', () {
-      dynamic address = '0x1234567890abcdef';
+      const address = '0x1234567890abcdef';
 
-      if (address != null) {
-        final addressStr = address.toString();
-        expect(addressStr, '0x1234567890abcdef');
-      }
+      expect(address, isNotEmpty);
+      expect(address, '0x1234567890abcdef');
+      expect(address.startsWith('0x'), true);
     });
   });
 

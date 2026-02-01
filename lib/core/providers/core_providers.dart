@@ -34,13 +34,14 @@ final themeModeProvider = StateNotifierProvider<ThemeModeNotifier, ThemeMode>((r
 
 class ThemeModeNotifier extends StateNotifier<ThemeMode> {
   final SPUtil _spUtil;
-  
+
   ThemeModeNotifier(this._spUtil) : super(ThemeMode.system) {
     _loadFromStorage();
   }
-  
+
   Future<void> _loadFromStorage() async {
     final mode = await _spUtil.getThemeMode();
+    if (!mounted) return;
     state = ThemeModeUtils.fromInt(mode ?? 0);
     _syncToN42Chat(state);
   }
@@ -74,6 +75,7 @@ class LocaleNotifier extends StateNotifier<Locale> {
 
   Future<void> _loadFromStorage() async {
     final code = await _spUtil.getSysLang();
+    if (!mounted) return;
     if (code != null) {
       state = _codeToLocale(code);
       _syncToN42Chat(state);
@@ -125,14 +127,15 @@ final currentUserProvider = StateNotifierProvider<CurrentUserNotifier, SharedUse
 
 class CurrentUserNotifier extends StateNotifier<SharedUserInfo?> {
   final SPUtil _spUtil;
-  
+
   CurrentUserNotifier(this._spUtil) : super(null) {
     _loadFromStorage();
   }
-  
+
   Future<void> _loadFromStorage() async {
     try {
       final userJson = await _spUtil.getUserInfo();
+      if (!mounted) return;
       if (userJson != null) {
         state = SharedUserInfo.fromJson(userJson);
       }
@@ -140,8 +143,9 @@ class CurrentUserNotifier extends StateNotifier<SharedUserInfo?> {
       // Ignore loading errors
     }
   }
-  
+
   void setUser(SharedUserInfo user) {
+    if (!mounted) return;
     state = user;
     _spUtil.saveUserInfoJson(user.toJson());
   }
@@ -202,22 +206,25 @@ final useNewChatProvider = StateNotifierProvider<UseNewChatNotifier, bool>((ref)
 
 class UseNewChatNotifier extends StateNotifier<bool> {
   final SPUtil _spUtil;
-  
+
   UseNewChatNotifier(this._spUtil) : super(true) {
     _loadFromStorage();
   }
-  
+
   Future<void> _loadFromStorage() async {
     final useNewChat = await _spUtil.getUseNewChat();
+    if (!mounted) return;
     state = useNewChat;
   }
-  
+
   Future<void> setUseNewChat(bool value) async {
+    if (!mounted) return;
     state = value;
     await _spUtil.setUseNewChat(value);
   }
-  
+
   void toggle() {
+    if (!mounted) return;
     setUseNewChat(!state);
   }
 }
@@ -319,50 +326,60 @@ class ScreenLockNotifier extends StateNotifier<ScreenLockState> {
 
   Future<void> _loadFromStorage() async {
     final data = await _spUtil.getLockScreen();
+    if (!mounted) return;
     state = ScreenLockState.fromMap(data);
   }
 
   Future<void> setLockEnabled(bool enabled) async {
+    if (!mounted) return;
     state = state.copyWith(isLocked: enabled);
     await _saveToStorage();
   }
 
   Future<void> setLockPassword(String password) async {
+    if (!mounted) return;
     state = state.copyWith(lockPassword: password, isLocked: password.isNotEmpty);
     await _saveToStorage();
   }
 
   Future<void> setFaceEnabled(bool enabled) async {
+    if (!mounted) return;
     state = state.copyWith(faceEnabled: enabled);
     await _saveToStorage();
   }
 
   Future<void> setFingerprintEnabled(bool enabled) async {
+    if (!mounted) return;
     state = state.copyWith(fingerprintEnabled: enabled);
     await _saveToStorage();
   }
 
   Future<void> setLockTime(int seconds) async {
+    if (!mounted) return;
     state = state.copyWith(lockTimeSeconds: seconds);
     await _saveToStorage();
   }
 
   Future<void> setGestureEnabled(bool enabled) async {
+    if (!mounted) return;
     state = state.copyWith(gestureEnabled: enabled);
     await _saveToStorage();
   }
 
   Future<void> setGesturePassword(List<int> password) async {
+    if (!mounted) return;
     state = state.copyWith(gesturePassword: password, gestureEnabled: password.isNotEmpty);
     await _saveToStorage();
   }
 
   Future<void> setPasswordLockTimestamp(int timestamp) async {
+    if (!mounted) return;
     state = state.copyWith(passwordLockTimestamp: timestamp);
     await _saveToStorage();
   }
 
   Future<void> _saveToStorage() async {
+    if (!mounted) return;
     await _spUtil.setLockScreen(state.toMap());
   }
 

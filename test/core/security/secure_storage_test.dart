@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42appv2/core/security/secure_storage.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 // 注意：由于 flutter_secure_storage 依赖平台插件，
 // 这个测试需要在集成测试中运行，或者使用 mock
