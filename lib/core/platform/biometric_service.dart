@@ -100,10 +100,10 @@ class BiometricService {
   }
 
   /// 执行生物识别认证
-  /// 
+  ///
   /// [reason] 显示给用户的认证原因
-  /// [useErrorDialogs] 是否使用系统错误对话框
-  /// [stickyAuth] 是否保持认证状态
+  /// [useErrorDialogs] 已废弃，local_auth 3.0 移除此选项
+  /// [stickyAuth] 是否保持认证状态（对应 local_auth 3.0 的 persistAcrossBackgrounding）
   Future<BiometricResult> authenticate({
     required String reason,
     bool useErrorDialogs = true,
@@ -111,13 +111,13 @@ class BiometricService {
     bool biometricOnly = true,
   }) async {
     try {
+      // local_auth 3.0.0 API 变更：
+      // - 移除 options 参数
+      // - stickyAuth 改名为 persistAcrossBackgrounding
       final authenticated = await _localAuth.authenticate(
         localizedReason: reason,
-        options: local_auth.AuthenticationOptions(
-          useErrorDialogs: useErrorDialogs,
-          stickyAuth: stickyAuth,
-          biometricOnly: biometricOnly,
-        ),
+        biometricOnly: biometricOnly,
+        persistAcrossBackgrounding: stickyAuth,
       );
 
       if (authenticated) {

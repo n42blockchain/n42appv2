@@ -78,12 +78,11 @@ class AuthServiceImpl implements IAuthService {
       final isAvailable = await _localAuth.canCheckBiometrics;
       if (!isAvailable) return false;
 
+      // local_auth 3.0.0 API 变更
       return await _localAuth.authenticate(
         localizedReason: 'Please authenticate to continue',
-        options: const AuthenticationOptions(
-          stickyAuth: true,
-          biometricOnly: true,
-        ),
+        biometricOnly: true,
+        persistAcrossBackgrounding: true,
       );
     } catch (e) {
       return false;

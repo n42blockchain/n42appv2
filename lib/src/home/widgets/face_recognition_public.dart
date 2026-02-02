@@ -5,6 +5,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:local_auth_android/local_auth_android.dart' as auth_android;
 import 'package:local_auth_darwin/local_auth_darwin.dart' as auth_ios;
+
 class FaceRecognitionPublic{
   final LocalAuthentication auth = LocalAuthentication();
   //_SupportState _supportState = _SupportState.unknown;
@@ -49,32 +50,25 @@ class FaceRecognitionPublic{
     try {
       dynamic authMessage;
       if(Platform.isIOS){
+        // local_auth 3.0.0: IOSAuthMessages 仅支持 cancelButton 和 localizedFallbackTitle
         authMessage=auth_ios.IOSAuthMessages(
-          lockOut: S.current.g_face_9,
-          goToSettingsButton: S.current.g_face_5,
-          goToSettingsDescription: S.current.g_face_6,
           cancelButton: S.current.g_key_79,
           localizedFallbackTitle: S.current.g_face_8,
         );
       }else{
+        // local_auth 3.0.0: AndroidAuthMessages 仅支持 signInHint, cancelButton, signInTitle
         authMessage=auth_android.AndroidAuthMessages(
-          biometricHint: S.current.g_face_1,
-          biometricNotRecognized: S.current.g_face_2,
-          biometricRequiredTitle: S.current.g_face_3,
-          biometricSuccess: S.current.g_face_4,
+          signInHint: S.current.g_face_1,
           cancelButton: S.current.g_key_79,
-          goToSettingsButton: S.current.g_face_5,
-          goToSettingsDescription: S.current.g_face_6,
           signInTitle: S.current.g_face_7,
         );
       }
+      // local_auth 3.0.0 API 变更
       authenticated = await auth.authenticate(
           localizedReason:
           S.current.g_face_10,
-          options: const AuthenticationOptions(
-            stickyAuth: true,
-            biometricOnly: true,
-          ),
+          biometricOnly: true,
+          persistAcrossBackgrounding: true,
           authMessages: [
             authMessage
           ]

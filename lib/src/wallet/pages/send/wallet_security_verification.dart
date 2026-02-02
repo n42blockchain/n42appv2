@@ -223,32 +223,25 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
     try {
       dynamic authMessage;
       if(Platform.isIOS){
+        // local_auth 3.0.0: IOSAuthMessages 仅支持 cancelButton 和 localizedFallbackTitle
         authMessage=auth_ios.IOSAuthMessages(
-          lockOut: S.of(context).g_face_9,
-          goToSettingsButton: S.of(context).g_face_5,
-          goToSettingsDescription: S.of(context).g_face_6,
           cancelButton: S.of(context).g_key_79,
           localizedFallbackTitle: S.of(context).g_face_8,
         );
       }else{
+        // local_auth 3.0.0: AndroidAuthMessages 仅支持 signInHint, cancelButton, signInTitle
         authMessage=auth_android.AndroidAuthMessages(
-          biometricHint: S.of(context).g_face_1,
-          biometricNotRecognized: S.of(context).g_face_2,
-          biometricRequiredTitle: S.of(context).g_face_3,
-          biometricSuccess: S.of(context).g_face_4,
+          signInHint: S.of(context).g_face_1,
           cancelButton: S.of(context).g_key_79,
-          goToSettingsButton: S.of(context).g_face_5,
-          goToSettingsDescription: S.of(context).g_face_6,
           signInTitle: S.of(context).g_face_7,
         );
       }
+      // local_auth 3.0.0 API 变更
       authenticated = await auth.authenticate(
           localizedReason:
           S.of(context).g_face_10,
-          options: const AuthenticationOptions(
-            stickyAuth: true,
-            biometricOnly: true,
-          ),
+          biometricOnly: true,
+          persistAcrossBackgrounding: true,
           authMessages: [
             authMessage
           ]

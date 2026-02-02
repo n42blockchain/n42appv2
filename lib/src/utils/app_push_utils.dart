@@ -80,12 +80,9 @@ class AppPushUtils {
       requestAlertPermission: true,
     );
 
-    // FlutterLocalNotificationsPlugin().initialize(
-    //     InitializationSettings(android: android, iOS: ios),
-    //     onSelectNotification: _onSelectNotification);
-
+    // flutter_local_notifications 20.0.0 使用命名参数
     FlutterLocalNotificationsPlugin().initialize(
-        InitializationSettings(android: android, iOS: ios),
+        settings: InitializationSettings(android: android, iOS: ios),
         onDidReceiveNotificationResponse: (NotificationResponse details) {
           String? payload = details.payload;
           _onSelectNotification(payload);
@@ -142,11 +139,12 @@ class AppPushUtils {
 
             ///显示通知
             if (notification != null && notification.android != null) {
+              // flutter_local_notifications 20.0.0 使用命名参数
               FlutterLocalNotificationsPlugin().show(
-                  notification.hashCode,
-                  notification.title,
-                  notification.body,
-                  NotificationDetails(
+                  id: notification.hashCode,
+                  title: notification.title,
+                  body: notification.body,
+                  notificationDetails: NotificationDetails(
                     android: AndroidNotificationDetails(
                         channel.id, channel.name,
                         channelDescription: channel.description,
@@ -405,7 +403,8 @@ class AppPushUtils {
     else if (data['type'] == 110 || data['type'] == 100 || data['type'] == 101) {
       // Chat notifications are handled by n42_chat plugin
       // Navigate to chat interface
-      flutterLocalNotificationsPlugin.cancel(data['type']);
+      // flutter_local_notifications 20.0.0 使用命名参数
+      flutterLocalNotificationsPlugin.cancel(id: data['type']);
       debugPrint("Chat notification tapped - handled by n42_chat plugin");
     }
     else {
@@ -473,7 +472,13 @@ class AppPushUtils {
         presentBadge: true
     );
     var notificationDetails = NotificationDetails(android: androidDetails,iOS: iosNotificationDetails);
-    flutterLocalNotificationsPlugin.show(100, "测试推送", "你收到了一条消息", notificationDetails);
+    // flutter_local_notifications 20.0.0 使用命名参数
+    flutterLocalNotificationsPlugin.show(
+      id: 100,
+      title: "测试推送",
+      body: "你收到了一条消息",
+      notificationDetails: notificationDetails,
+    );
   }
 
 }
