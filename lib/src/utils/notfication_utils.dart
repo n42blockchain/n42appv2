@@ -18,7 +18,9 @@ class Notification {
     InitializationSettings(
         android: android,
         iOS: ios);
-    await np.initialize(initializationSettings,
+    // flutter_local_notifications 20.0.0 使用命名参数
+    await np.initialize(
+        settings: initializationSettings,
         onDidReceiveNotificationResponse:(NotificationResponse details) {
           switch (details.notificationResponseType) {
             case NotificationResponseType.selectedNotification:
@@ -86,8 +88,12 @@ class Notification {
 
       // 显示通知, 第一个参数是id,id如果一致则会覆盖之前的通知
       // String? payload, 点击时可以拿到的参数
-      await np.show(notificationId ?? DateTime.now().millisecondsSinceEpoch >> 10,
-          title, body, details,
+      // flutter_local_notifications 20.0.0 使用命名参数
+      await np.show(
+          id: notificationId ?? DateTime.now().millisecondsSinceEpoch >> 10,
+          title: title,
+          body: body,
+          notificationDetails: details,
           payload: params);
     } catch (_) {
       // 错误安全忽略
@@ -120,8 +126,12 @@ class Notification {
 
     // 显示通知, 第一个参数是id,id如果一致则会覆盖之前的通知
     // String? payload, 点击时可以拿到的参数
-    np.show(notificationId ?? DateTime.now().millisecondsSinceEpoch >> 10,
-        title, body, details,
+    // flutter_local_notifications 20.0.0 使用命名参数
+    np.show(
+        id: notificationId ?? DateTime.now().millisecondsSinceEpoch >> 10,
+        title: title,
+        body: body,
+        notificationDetails: details,
         payload: params);
   }
   ///清除所有通知
@@ -134,7 +144,8 @@ class Notification {
   /// 那么同时匹配 id 和 tag 的通知将会
   /// 被取消。 `tag` 对其他平台没有影响。
   void cancelNotification(int id, {String? tag}) {
-    np.cancel(id, tag: tag);
+    // flutter_local_notifications 20.0.0 使用命名参数
+    np.cancel(id: id, tag: tag);
   }
 }
 

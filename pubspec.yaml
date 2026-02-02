@@ -95,27 +95,27 @@ dependencies:
   share_plus: ^12.0.1
 
   # === Security & Auth ===
-  local_auth: ^2.3.0
-  local_auth_android: ^1.0.48
-  local_auth_darwin: ^1.4.2
-  permission_handler: ^11.2.0
+  local_auth: ^3.0.0
+  local_auth_android: ^2.0.4
+  local_auth_darwin: ^2.0.1
+  permission_handler: ^12.0.1
   # encrypt 包已被 pointycastle 直接实现替代
   aes_crypt_null_safe: ^3.0.0
   flutter_face_api: ^7.2.626
   flutter_face_core_basic: ^7.2.235
-  google_sign_in: ^6.3.0
-  sign_in_with_apple: ^6.1.4
+  google_sign_in: ^7.2.0
+  sign_in_with_apple: ^7.0.1
   pinput: ^5.0.2
 
   # === QR Code ===
   qr_code_scanner_plus: ^2.0.14
 
   # === Device Info ===
-  device_info_plus: ^11.5.0
+  device_info_plus: ^12.3.0
   package_info_plus: ^9.0.0
 
   # === Notifications ===
-  flutter_local_notifications: ^19.5.0
+  flutter_local_notifications: ^20.0.0
   flutter_new_badger: ^1.1.0
 
   # === Deep Links ===
@@ -125,10 +125,10 @@ dependencies:
   rate_us_on_store: ^0.0.4
 
   # === Firebase ===
-  firebase_core: ^3.15.2
-  firebase_messaging: ^15.2.10
-  firebase_crashlytics: ^4.3.10
-  firebase_analytics: ^11.6.0
+  firebase_core: ^4.4.0
+  firebase_messaging: ^16.1.1
+  firebase_crashlytics: ^5.0.7
+  firebase_analytics: ^12.1.1
 
   # === Enterprise Architecture ===
   get_it: ^9.2.0

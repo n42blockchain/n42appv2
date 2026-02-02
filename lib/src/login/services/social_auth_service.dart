@@ -63,19 +63,11 @@ class SocialAuthService {
   factory SocialAuthService() => _instance;
   SocialAuthService._internal();
 
-  // Google Sign-In instance
-  GoogleSignIn? _googleSignIn;
+  // Google Sign-In instance (google_sign_in 7.x uses singleton pattern)
+  GoogleSignIn get _googleSignIn => GoogleSignIn.instance;
 
-  /// Initialize Google Sign-In
-  GoogleSignIn get googleSignIn {
-    _googleSignIn ??= GoogleSignIn(
-      scopes: [
-        'email',
-        'profile',
-      ],
-    );
-    return _googleSignIn!;
-  }
+  // Cache current signed-in account
+  GoogleSignInAccount? _currentGoogleAccount;
 
   /// Check if Apple Sign-In is available (iOS 13+ or macOS 10.15+)
   Future<bool> isAppleSignInAvailable() async {
@@ -86,29 +78,53 @@ class SocialAuthService {
   }
 
   /// Sign in with Google
+  /// google_sign_in 7.x API changes:
+  /// - Uses GoogleSignIn.instance singleton
+  /// - authenticate() replaces signIn()
+  /// - accessToken requires separate authorization request
   Future<SocialAuthResult> signInWithGoogle() async {
     try {
       // Sign out first to ensure fresh login
-      await googleSignIn.signOut();
+      await _googleSignIn.signOut();
 
-      final GoogleSignInAccount? account = await googleSignIn.signIn();
+      // Authenticate with Google (google_sign_in 7.x)
+      final GoogleSignInAccount account = await _googleSignIn.authenticate(
+        scopeHint: ['email', 'profile'],
+      );
 
-      if (account == null) {
-        return SocialAuthResult.failure('Google sign-in cancelled');
+      _currentGoogleAccount = account;
+
+      // Get id token from authentication
+      final GoogleSignInAuthentication auth = account.authentication;
+
+      // For access token, need to request authorization separately
+      String? accessToken;
+      try {
+        final authorization = await account.authorizationClient.authorizationForScopes(
+          ['email', 'profile'],
+        );
+        accessToken = authorization?.accessToken;
+      } catch (e) {
+        debugPrint('Failed to get access token: $e');
+        // Continue without access token - idToken is usually sufficient
       }
-
-      final GoogleSignInAuthentication auth = await account.authentication;
 
       return SocialAuthResult(
         success: true,
         provider: 'google',
         idToken: auth.idToken,
-        accessToken: auth.accessToken,
+        accessToken: accessToken,
         email: account.email,
         displayName: account.displayName,
         photoUrl: account.photoUrl,
         userId: account.id,
       );
+    } on GoogleSignInException catch (e) {
+      if (e.code == GoogleSignInExceptionCode.canceled) {
+        return SocialAuthResult.failure('Google sign-in cancelled');
+      }
+      debugPrint('Google Sign-In error: $e');
+      return SocialAuthResult.failure(e.toString());
     } catch (e) {
       debugPrint('Google Sign-In error: $e');
       return SocialAuthResult.failure(e.toString());
@@ -156,7 +172,8 @@ class SocialAuthService {
   /// Sign out from Google
   Future<void> signOutGoogle() async {
     try {
-      await googleSignIn.signOut();
+      await _googleSignIn.signOut();
+      _currentGoogleAccount = null;
     } catch (e) {
       debugPrint('Google Sign-Out error: $e');
     }
@@ -169,11 +186,24 @@ class SocialAuthService {
   }
 
   /// Get current Google user (if signed in)
-  GoogleSignInAccount? get currentGoogleUser => googleSignIn.currentUser;
+  /// Note: google_sign_in 7.x no longer has currentUser getter,
+  /// we cache the account from the last successful sign-in
+  GoogleSignInAccount? get currentGoogleUser => _currentGoogleAccount;
 
   /// Check if user is signed in with Google
+  /// Note: In google_sign_in 7.x, use attemptLightweightAuthentication
+  /// to check for existing session
   Future<bool> isSignedInWithGoogle() async {
-    return await googleSignIn.isSignedIn();
+    try {
+      final account = await _googleSignIn.attemptLightweightAuthentication();
+      if (account != null) {
+        _currentGoogleAccount = account;
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
   }
 }
 
