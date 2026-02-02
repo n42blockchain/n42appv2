@@ -47,8 +47,45 @@ post_install do |installer|
       config.build_settings['SWIFT_VERSION'] = '5.0'
       # 修复 Swift 编译问题
       config.build_settings['SWIFT_SUPPRESS_WARNINGS'] = 'YES'
-      # 确保使用正确的架构
-      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64' if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 11.0
+      # 只排除 i386 架构，保留 arm64 用于 Apple Silicon 模拟器
+      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'i386'
+
+      # Fix fluwx WXApi.h not found issue for simulator builds
+      if target.name == 'fluwx'
+        config.build_settings['HEADER_SEARCH_PATHS'] ||= ['$(inherited)']
+        config.build_settings['HEADER_SEARCH_PATHS'] << '"${PODS_XCFRAMEWORKS_BUILD_DIR}/WechatOpenSDK-XCFramework/WechatOpenSDK.framework/Headers"'
+        config.build_settings['FRAMEWORK_SEARCH_PATHS'] ||= ['$(inherited)']
+        config.build_settings['FRAMEWORK_SEARCH_PATHS'] << '"${PODS_XCFRAMEWORKS_BUILD_DIR}/WechatOpenSDK-XCFramework"'
+      end
+    end
+  end
+
+  # Configure main project for simulator support
+  installer.aggregate_targets.each do |target|
+    target.xcconfigs.each do |variant, xcconfig|
+      xcconfig.save_as(Pathname.new("#{installer.sandbox.root}/Target Support Files/#{target.name}/#{variant}.xcconfig"))
+    end
+  end
+
+  # Modify Runner target to exclude MobileSdk on simulator
+  runner_project = installer.aggregate_targets.first.user_project
+  runner_project.targets.each do |target|
+    if target.name == 'Runner'
+      target.build_configurations.each do |config|
+        # Exclude MobileSdk.xcframework linking on simulator
+        # The Swift code uses #if targetEnvironment(simulator) to provide mock implementations
+        xcconfig_path = config.base_configuration_reference&.real_path
+        if xcconfig_path && File.exist?(xcconfig_path)
+          xcconfig = File.read(xcconfig_path)
+          # Add preprocessor macro to indicate simulator build
+          unless xcconfig.include?('SWIFT_ACTIVE_COMPILATION_CONDITIONS')
+            File.open(xcconfig_path, 'a') do |file|
+              file.puts "\n// Simulator detection for MobileSdk"
+              file.puts "SWIFT_ACTIVE_COMPILATION_CONDITIONS[sdk=iphonesimulator*] = $(inherited) SIMULATOR_BUILD"
+            end
+          end
+        end
+      end
     end
   end
 end

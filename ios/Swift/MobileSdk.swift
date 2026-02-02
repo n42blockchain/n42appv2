@@ -2,9 +2,78 @@ import Foundation
 
 public enum MobileSdkError: Error {
     case rustError(String)
+    case simulatorNotSupported(String)
 }
 
 public class MobileSdk {
+
+#if targetEnvironment(simulator)
+    // MARK: - Simulator Mock Implementations
+    // These mock implementations allow the app to build and run on simulator
+    // Mining features will show appropriate error messages
+
+    private static let simulatorErrorMessage = "Mining features are not available on iOS Simulator. Please use a physical device for mining operations."
+
+    public static func runClient(wsUrl: String, validatorPrivateKey: String,
+                                 completion: @escaping (Result<Void, MobileSdkError>) -> Void) {
+        DispatchQueue.main.async {
+            completion(.failure(.simulatorNotSupported(simulatorErrorMessage)))
+        }
+    }
+
+    public static func generateBlockVerifyResult(
+        block: String,
+        validatorPrivateKey: String,
+        completion: @escaping (Result<String, MobileSdkError>) -> Void
+    ) {
+        DispatchQueue.main.async {
+            completion(.failure(.simulatorNotSupported(simulatorErrorMessage)))
+        }
+    }
+
+    public static func generateBls12381Keypair() -> Result<String, MobileSdkError> {
+        // Return a mock keypair for UI testing (not for actual use)
+        let mockKeypair = """
+        {
+            "publicKey": "0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "privateKey": "0x0000000000000000000000000000000000000000000000000000000000000000",
+            "isMock": true,
+            "warning": "This is a mock keypair for simulator testing only"
+        }
+        """
+        return .success(mockKeypair)
+    }
+
+    public static func createDepositUnsignedTx(
+        depositContractAddress: String,
+        validatorPrivateKey: String,
+        withdrawalAddress: String,
+        depositValueInWei: String
+    ) -> Result<String, MobileSdkError> {
+        return .failure(.simulatorNotSupported(simulatorErrorMessage))
+    }
+
+    public static func createGetExitFeeUnsignedTx() -> Result<String, MobileSdkError> {
+        // Return a mock response for UI testing
+        let mockResponse = """
+        {
+            "fee": "0",
+            "isMock": true,
+            "warning": "This is a mock response for simulator testing only"
+        }
+        """
+        return .success(mockResponse)
+    }
+
+    public static func createExitUnsignedTx(
+        validatorPublicKey: String,
+        feeInWeiOrEmpty: String?
+    ) -> Result<String, MobileSdkError> {
+        return .failure(.simulatorNotSupported(simulatorErrorMessage))
+    }
+
+#else
+    // MARK: - Real Device Implementations
 
     public static func runClient(wsUrl: String, validatorPrivateKey: String,
 completion: @escaping (Result<Void, MobileSdkError>) -> Void) {
@@ -130,4 +199,5 @@ completion(.failure(.rustError(msg))) }
         defer { rust_free_string(jsonPtr) }
         return .success(String(cString: jsonPtr))
     }
+#endif
 }
