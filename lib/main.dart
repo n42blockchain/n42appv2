@@ -128,6 +128,15 @@ void main() async {
     final currentLocale = globalProviderContainer.read(localeProvider);
     N42Chat.setLocale(currentLocale);
 
+    // 监听 n42_chat 语言变化，同步更新主应用的语言设置
+    N42Chat.addLocaleListener((locale) {
+      final currentAppLocale = globalProviderContainer.read(localeProvider);
+      if (currentAppLocale.languageCode != locale.languageCode) {
+        globalProviderContainer.read(localeProvider.notifier).setLocale(locale.languageCode);
+        debugPrint('Main app locale synced from N42Chat: $locale');
+      }
+    });
+
     // 监听 N42Chat 未读消息数，更新主应用的未读计数
     N42Chat.unreadCountStream.listen((count) {
       globalProviderContainer.read(unreadCountProvider.notifier).setCount(count);
