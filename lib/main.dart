@@ -6,6 +6,7 @@
 // Author: Jiang Yiwei
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:app_links/app_links.dart';
 import 'package:n42appv2/core/config/app_config.dart';
@@ -98,13 +99,24 @@ void main() async {
 
   // Initialize N42 Chat module
   try {
+    // Sygnal 要求每个平台使用不同的 app_id
+    // iOS: ai.n42.www.ios, Android: ai.n42.www.android, Web: ai.n42.www.web
+    final String pushAppId;
+    if (Platform.isAndroid) {
+      pushAppId = 'ai.n42.www.android';
+    } else if (Platform.isIOS) {
+      pushAppId = 'ai.n42.www.ios';
+    } else {
+      pushAppId = 'ai.n42.www.web';
+    }
+
     await N42Chat.initialize(N42ChatConfig(
       defaultHomeserver: 'https://matrix.n42.network',
       enableEncryption: true,
       enablePushNotifications: true,
       // Matrix Sygnal push gateway for FCM/APNs
-      pushGatewayUrl: 'https://push.n42.network/_matrix/push/v1/notify',
-      pushAppId: 'ai.n42.www',
+      pushGatewayUrl: 'https://m.si46.world/_matrix/push/v1/notify',
+      pushAppId: pushAppId,
       // 钱包桥接，用于获取真实的钱包地址
       walletBridge: N42WalletBridge(),
     ));
