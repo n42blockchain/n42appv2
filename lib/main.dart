@@ -121,6 +121,9 @@ void main() async {
       walletBridge: N42WalletBridge(),
     ));
 
+    // 设置导航键，用于通话页面导航
+    N42Chat.setNavigatorKey(AppGlobals.navigatorKey);
+
     // 设置通知点击处理
     N42Chat.setNotificationTapHandler((roomId, eventId) {
       debugPrint('N42Chat notification tapped: roomId=$roomId');
