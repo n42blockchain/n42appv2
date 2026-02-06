@@ -65,7 +65,7 @@ class _AccountCreateAndResetState extends ConsumerState<AccountCreateAndReset> {
   @override
   void initState() {
     super.initState();
-    _currentType = _currentType;
+    _currentType = widget.type;
     init();
     getInviterEmail();
     /*eventBusFn=eventBus.on().listen((event) {
