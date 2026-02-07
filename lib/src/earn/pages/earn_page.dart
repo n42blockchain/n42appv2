@@ -240,7 +240,7 @@ class _EarnPageState extends State<EarnPage> {
           SizedBox(height: ScreenUtil().setWidth(16)),
           // 大功能卡片 - 横向滚动
           SizedBox(
-            height: ScreenUtil().setWidth(210),
+            height: ScreenUtil().setWidth(230),
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [

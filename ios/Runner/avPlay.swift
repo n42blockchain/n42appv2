@@ -33,4 +33,14 @@ public func av_stop(){
         return
     }
     audioPlayer.stop()
+    // 恢复 AVAudioSession 为 playAndRecord，避免 .playback 与 WebRTC voice processing 冲突
+    do {
+        try AVAudioSession.sharedInstance().setCategory(
+            .playAndRecord,
+            mode: .voiceChat,
+            options: [.defaultToSpeaker, .allowBluetooth]
+        )
+    } catch {
+        // 恢复失败不影响主流程
+    }
 }

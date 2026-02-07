@@ -2,7 +2,7 @@ name: n42appv2
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.1.314+314
+version: 2.1.314+315
 
 environment:
   sdk: ^3.9.2
@@ -17,7 +17,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_screenutil: ^5.9.3
   easy_refresh: ^3.4.0
-  flutter_slidable: ^3.0.1
+  flutter_slidable: ^4.0.3
   qr_flutter: ^4.1.0
   fl_chart: ^1.1.1
   extended_image: ^10.0.1
@@ -86,7 +86,7 @@ dependencies:
 
   # === Media & Files ===
   image_picker: ^1.2.1
-  file_picker: ^8.1.2
+  file_picker: ^10.0.0
   video_compress: ^3.1.4
   video_player: ^2.10.1
   pro_image_editor: ^11.18.4
@@ -104,7 +104,7 @@ dependencies:
   flutter_face_core_basic: ^7.2.235
   google_sign_in: ^7.2.0
   sign_in_with_apple: ^7.0.1
-  pinput: ^5.0.2
+  pinput: ^6.0.2
 
   # === QR Code ===
   qr_code_scanner_plus: ^2.0.14
@@ -132,7 +132,7 @@ dependencies:
   # === Enterprise Architecture ===
   get_it: ^9.2.0
   injectable: ^2.7.1+4
-  go_router: ^14.8.1
+  go_router: ^17.0.0
   dartz: ^0.10.1
   equatable: ^2.0.7
   freezed_annotation: ^3.1.0
@@ -155,9 +155,9 @@ dev_dependencies:
 
   # === Code Generation ===
   build_runner: ^2.10.5
-  json_serializable: ^6.12.0
-  injectable_generator: ^2.12.0
-  freezed: ^3.2.4
+  json_serializable: ^6.9.5  # blocked by vodozemac→analyzer chain
+  injectable_generator: ^2.9.1  # blocked by vodozemac→analyzer chain
+  freezed: ">=3.2.0 <3.2.4"  # 3.2.4+ blocked by vodozemac→analyzer chain
   intl_utils: ^2.8.13
 
   # === Testing ===

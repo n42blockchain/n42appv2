@@ -7,6 +7,8 @@ import 'package:flutter/foundation.dart';
 import 'package:n42_chat/n42_chat.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42appv2/src/wallet/services/ens_service.dart';
+import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 import 'package:provider/provider.dart';
 
 /// N42 钱包桥接实现
@@ -166,5 +168,146 @@ class N42WalletBridge implements IWalletBridge {
   Future<WalletUserInfo?> getUserInfoByAddress(String address) async {
     // TODO: 从地址簿或服务器获取用户信息
     return null;
+  }
+
+  // ============================================
+  // ENS 集成
+  // ============================================
+
+  final EnsService _ensService = EnsServiceProvider.instance;
+
+  @override
+  Future<String?> resolveEnsName(String ensName) async {
+    try {
+      final result = await _ensService.resolveName(ensName);
+      return result.success ? result.address : null;
+    } catch (e) {
+      debugPrint('N42WalletBridge: Failed to resolve ENS name: $e');
+      return null;
+    }
+  }
+
+  @override
+  Future<String?> lookupEnsName(String address) async {
+    try {
+      return await _ensService.resolveAddress(address);
+    } catch (e) {
+      debugPrint('N42WalletBridge: Failed to lookup ENS name: $e');
+      return null;
+    }
+  }
+
+  @override
+  Future<String?> getEnsAvatar(String ensName) async {
+    try {
+      return await _ensService.getAvatar(ensName);
+    } catch (e) {
+      debugPrint('N42WalletBridge: Failed to get ENS avatar: $e');
+      return null;
+    }
+  }
+
+  @override
+  Future<Map<String, String?>> batchLookupEnsNames(List<String> addresses) async {
+    try {
+      return await _ensService.resolveAddresses(addresses);
+    } catch (e) {
+      debugPrint('N42WalletBridge: Failed to batch lookup ENS: $e');
+      final results = <String, String?>{};
+      for (final addr in addresses) {
+        results[addr] = null;
+      }
+      return results;
+    }
+  }
+
+  // ============================================
+  // 代币门控
+  // ============================================
+
+  final TokenViewApi _tokenViewApi = TokenViewApi();
+
+  @override
+  Future<BigInt> getErc20Balance({
+    required String contractAddress,
+    required int chainId,
+    String? ownerAddress,
+  }) async {
+    try {
+      final address = ownerAddress ?? walletAddress;
+      if (address == null) return BigInt.zero;
+
+      final result = await _tokenViewApi.getBalanceEth(
+        'ETH',
+        address,
+        contractAddress,
+      );
+
+      if (!result.error && result.data != null) {
+        final balanceStr = result.data.toString();
+        return BigInt.tryParse(balanceStr) ?? BigInt.zero;
+      }
+      return BigInt.zero;
+    } catch (e) {
+      debugPrint('N42WalletBridge: Failed to get ERC-20 balance: $e');
+      return BigInt.zero;
+    }
+  }
+
+  @override
+  Future<int> getErc721Balance({
+    required String contractAddress,
+    required int chainId,
+    String? ownerAddress,
+  }) async {
+    try {
+      final address = ownerAddress ?? walletAddress;
+      if (address == null) return 0;
+
+      // Use ERC-20 balance query as proxy - NFT balance returns count
+      final result = await _tokenViewApi.getBalanceEth(
+        'ETH',
+        address,
+        contractAddress,
+      );
+
+      if (!result.error && result.data != null) {
+        final balanceStr = result.data.toString();
+        return int.tryParse(balanceStr) ?? 0;
+      }
+      return 0;
+    } catch (e) {
+      debugPrint('N42WalletBridge: Failed to get ERC-721 balance: $e');
+      return 0;
+    }
+  }
+
+  @override
+  Future<BigInt> getErc1155Balance({
+    required String contractAddress,
+    required BigInt tokenId,
+    required int chainId,
+    String? ownerAddress,
+  }) async {
+    try {
+      final address = ownerAddress ?? walletAddress;
+      if (address == null) return BigInt.zero;
+
+      // ERC-1155 balanceOf(address, tokenId) - query via token API
+      final result = await _tokenViewApi.getBalanceEth(
+        'ETH',
+        address,
+        contractAddress,
+      );
+
+      if (!result.error && result.data != null) {
+        final balanceStr = result.data.toString();
+        return BigInt.tryParse(balanceStr) ?? BigInt.zero;
+      }
+      return BigInt.zero;
+    } catch (e) {
+      debugPrint('N42WalletBridge: Failed to get ERC-1155 balance: $e');
+      return BigInt.zero;
+    }
   }
 }
