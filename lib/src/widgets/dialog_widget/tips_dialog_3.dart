@@ -8,7 +8,10 @@ Future<dynamic> tipsDialog3(BuildContext context, Widget child) async {
       return AlertDialog(
         contentPadding: const EdgeInsets.all(0),
         backgroundColor: Colors.transparent,
-        content: child,
+        content: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 400),
+          child: child,
+        ),
       );
     },
   );

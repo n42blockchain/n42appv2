@@ -1,4 +1,5 @@
 ﻿import 'package:n42appv2/core/providers/core_providers.dart';
+import 'package:n42appv2/core/utils/responsive_utils.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:flutter/material.dart';
@@ -36,11 +37,12 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
     // Watch user info and unread count from Riverpod
     final userInfo = ref.watch(currentUserProvider);
     final messageNotReadCount = ref.watch(unreadCountProvider);
-    
+    final isWide = ResponsiveUtils.isTablet(context);
+
     return Container(
       color: Colors.transparent,
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
-      height: ScreenUtil().setWidth(110.0),
+      padding: EdgeInsets.symmetric(horizontal: isWide ? 16.0 : ScreenUtil().setWidth(30.0)),
+      height: isWide ? 56.0 : ScreenUtil().setWidth(110.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

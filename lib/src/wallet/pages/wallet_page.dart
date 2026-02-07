@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:n42appv2/core/utils/responsive_utils.dart';
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
@@ -167,15 +168,16 @@ class _WalletPageState extends State<WalletPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Consumer<WalletActionProvider>(
-          builder: (context, waValue, child){
-            if(waValue.walletIndex==-1) {
-              return Loading();
-            }
-            if(waValue.buildwallet) {
-              return Loading();
-            }
-            return Stack(
+        child: ResponsiveContainer(
+          child: Consumer<WalletActionProvider>(
+            builder: (context, waValue, child){
+              if(waValue.walletIndex==-1) {
+                return Loading();
+              }
+              if(waValue.buildwallet) {
+                return Loading();
+              }
+              return Stack(
               children: [
                 /*Positioned(
                   top: 0,
@@ -566,7 +568,8 @@ class _WalletPageState extends State<WalletPage> {
                 //walletConnectWidget(wc),
               ],
             );
-          },
+            },
+          ),
         ),
       ),
     );

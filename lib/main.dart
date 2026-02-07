@@ -61,6 +61,27 @@ void main() async {
   // Initialize Flutter bindings
   WidgetsFlutterBinding.ensureInitialized();
 
+  // 设备方向控制：iPad 允许所有方向，iPhone 仅竖屏
+  if (Platform.isIOS) {
+    // 通过 shortestSide 判断是否为 iPad
+    final firstView = WidgetsBinding.instance.platformDispatcher.views.first;
+    final shortestSide = firstView.physicalSize.shortestSide / firstView.devicePixelRatio;
+    if (shortestSide < 600) {
+      // iPhone：锁定竖屏
+      await SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
+    }
+    // iPad：不设置限制，允许所有方向（由 Info.plist 控制）
+  } else {
+    // Android：默认竖屏
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
+
   // Initialize Firebase
   await Firebase.initializeApp();
   await notification.init();
@@ -323,10 +344,26 @@ class _N42AppV2State extends State<N42AppV2> {
     
     return HomePage();
   }
+  /// 根据屏幕宽度计算 ScreenUtil 的 designSize。
+  /// 手机（< 600pt）使用标准 750x1334。
+  /// iPad/平板（>= 600pt）使用更大的 designSize，
+  /// 使得 .setWidth() 生成的尺寸不会过大。
+  Size _getDesignSize(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    if (screenWidth >= 600) {
+      // iPad：将 designSize 放大，抑制元素过度缩放
+      // 比例因子 = 屏幕宽度 / 375（iPhone 逻辑宽度）
+      // designSize 等比放大，使 setWidth 输出值保持接近手机水平
+      final scale = screenWidth / 375;
+      return Size(750 * scale, 1334 * scale);
+    }
+    return const Size(750, 1334);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(750, 1334),
+      designSize: _getDesignSize(context),
       minTextAdapt: true,
       splitScreenMode: true,
       // Use builder only if you need to use library outside ScreenUtilInit context
