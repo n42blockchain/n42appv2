@@ -22,6 +22,12 @@ import 'core/security/device_security_test.dart' as device_security_test;
 import 'core/security/secure_storage_test.dart' as secure_storage_test;
 import 'core/security/security_config_test.dart' as security_config_test;
 
+// Core Platform Tests
+import 'core/platform/deep_link_service_test.dart' as deep_link_service_test;
+
+// Core Routing Tests
+import 'core/routing/deep_link_handler_test.dart' as deep_link_handler_test;
+
 // Core Error Tests
 import 'core/error/failures_test.dart' as failures_test;
 
@@ -91,6 +97,12 @@ void main() {
   device_security_test.main();
   secure_storage_test.main();
   security_config_test.main();
+
+  // Core Platform Tests
+  deep_link_service_test.main();
+
+  // Core Routing Tests
+  deep_link_handler_test.main();
 
   // Core Error Tests
   failures_test.main();

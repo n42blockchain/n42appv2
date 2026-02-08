@@ -7,6 +7,7 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:n42appv2/core/platform/deep_link_service.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/core/storage/app_database.dart';
 import 'package:n42appv2/core/security/secure_storage.dart';
@@ -100,6 +101,13 @@ Future<void> configureDependencies(
     getIt.registerLazySingleton<TokenViewApi>(() => TokenViewApi());
   }
 
+  // ============ Platform Services ============
+
+  // Deep Link Service - handles deep link URI parsing
+  if (!getIt.isRegistered<DeepLinkService>()) {
+    getIt.registerLazySingleton<DeepLinkService>(() => DeepLinkService());
+  }
+
   // ============ Security Services ============
 
   // Secure Storage - handles encrypted credential storage
@@ -119,6 +127,7 @@ Future<void> resetDependencies() async {
 SPUtil get spUtil => getIt<SPUtil>();
 AppDatabase get appDatabase => getIt<AppDatabase>();
 SecureStorage get secureStorage => getIt<SecureStorage>();
+DeepLinkService get deepLinkService => getIt<DeepLinkService>();
 
 /// Convenience accessors - Feature Services
 WalletServiceImpl get walletServiceImpl => getIt<WalletServiceImpl>();

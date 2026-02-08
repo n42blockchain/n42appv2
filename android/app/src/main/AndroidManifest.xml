@@ -90,6 +90,15 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+                <!-- n42://, n42app://, astraapp:// deep links -->
+                <data android:scheme="n42"/>
+                <data android:scheme="n42app"/>
+                <data android:scheme="astraapp"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with YOUR_SCHEME://YOUR_HOST -->
                 <data android:scheme="wc"/>
             </intent-filter>

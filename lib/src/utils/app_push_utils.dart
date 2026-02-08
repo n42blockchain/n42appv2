@@ -13,7 +13,9 @@ import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/login/pages/login_page.dart';
 import 'package:n42appv2/src/notification/pages/message_info.dart';
 import 'package:n42appv2/src/wallet/utils/browser_txhash.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:n42_chat/n42_chat.dart' show FirebasePushService;
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_new_badger/flutter_new_badger.dart';
@@ -121,12 +123,19 @@ class AppPushUtils {
       debugPrint('在前台收到消息！');
 
       try {
+        // Matrix chat 推送（含 room_id 或 type 为 m.call.*）由 n42_chat 插件处理
+        final dataType = message.data['type'] as String?;
+        final roomId = message.data['room_id'] as String?;
+        if (roomId != null || (dataType != null && dataType.startsWith('m.call.'))) {
+          debugPrint('Chat/Matrix notification - handled by n42_chat plugin');
+          return;
+        }
+
         final jsonStr = json.encode(message.data);
-        // debugPrint("jsonStr: $jsonStr");
         if (message.notification != null) {
           _updateBadgeCount();
           //消息类型
-          String nType = message.data['type'];
+          String nType = message.data['type'] ?? '';
           //不弹窗 normal_followed关注,normal_transaction_failed交易失败
           if (nType == "normal_followed" ||
               nType == "normal_transaction_failed" ||
@@ -152,11 +161,6 @@ class AppPushUtils {
                   ),
                   payload: jsonStr);
             }
-          }
-
-          if (nType == "chat") {
-            // Chat notifications are handled by n42_chat plugin
-            debugPrint("Chat notification received - handled by n42_chat plugin");
           }
         }
       } catch (err) {
@@ -417,12 +421,24 @@ class AppPushUtils {
     flutterLocalNotificationsPlugin.cancelAll();
   }
 
+  @pragma('vm:entry-point')
   static Future<void> _firebaseMessagingBackgroundHandler(
       RemoteMessage message) async {
+    // 后台 isolate 需要确保 Firebase 已初始化
+    await Firebase.initializeApp();
+
+    // Matrix/Chat 消息（含 room_id 或 type 为 m.call.*）委托给 n42_chat 插件处理
+    // 包括后台来电 CallKit 触发、消息本地通知等
+    final dataType = message.data['type'] as String?;
+    final roomId = message.data['room_id'] as String?;
+    if (roomId != null || (dataType != null && dataType.startsWith('m.call.'))) {
+      debugPrint('Background: Matrix/Chat message - delegating to FirebasePushService');
+      await FirebasePushService.handleBackgroundMessage(message);
+      return;
+    }
+
     _updateBadgeCount();
-    debugPrint('收到后台消息： ${message.messageId}');
-    // 这里可以处理一些业务逻辑 用户无感知
-    // 不和用户交互
+    debugPrint('Background: app message ${message.messageId}');
   }
 
   //更新未读消息数

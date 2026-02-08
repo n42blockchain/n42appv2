@@ -8,8 +8,9 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:app_links/app_links.dart';
 import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/platform/deep_link_service.dart';
+import 'package:n42appv2/core/routing/deep_link_handler.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/core/di/injection.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
@@ -239,19 +240,19 @@ class N42AppV2 extends StatefulWidget {
 }
 
 class _N42AppV2State extends State<N42AppV2> {
-  late AppLinks _appLinks;
-  StreamSubscription<Uri>? _linkSubscription;
+  DeepLinkService? _deepLinkService;
+  DeepLinkHandler? _deepLinkHandler;
   @override
   void initState() {
+    super.initState();
     // Initialize global context (deprecated - use DI instead)
     // ignore: deprecated_member_use_from_same_package
     AppGlobals.appContext = context;
-    initDeepLinks();
+    _initDeepLinks();
     ///是否打开FirebaseCrashlytics日志收集
     ///release + online 开启
     FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(AppConfig.isOnline);
     initData();
-    super.initState();
   }
   Future<void> initData() async {
     try {
@@ -264,58 +265,79 @@ class _N42AppV2State extends State<N42AppV2> {
       debugPrint("FCM推送初始化失败");
     }
   }
-  Future<void> initDeepLinks() async {
-    _appLinks = AppLinks();
-    _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
-      jumpPage(uri);
-    });
+  Future<void> _initDeepLinks() async {
+    try {
+      final service = getIt<DeepLinkService>();
+      await service.init();
+      final handler = DeepLinkHandler(deepLinkService: service);
+      handler.onNavigate = _handleDeepLinkNavigation;
+      handler.startListening();
+      _deepLinkService = service;
+      _deepLinkHandler = handler;
+    } catch (e) {
+      debugPrint('Deep link initialization failed: $e');
+    }
   }
-  void jumpPage(Uri? uri) {
-    if (uri == null) return;
-    if (uri.path == "/wc") {
-      String param = uri.queryParameters['uri'] ?? "";
-      if (param.contains('relay-protocol') && param.contains('symKey')) {
+
+  void _handleDeepLinkNavigation(DeepLinkData data) {
+    if (!mounted) return;
+    final navContext = AppGlobals.navigatorKey.currentContext;
+    if (navContext == null) return;
+
+    switch (data.type) {
+      case DeepLinkType.walletConnect:
+        final wcUri = data.params['wcUri'] ?? data.uri.toString();
         eventBus.fire(EventPublic(EventPublicType.walletConnect,
-            stringValue: uri.toString()));
-        return;
-      }
-    }
-    String wc = uri.toString();
-    if (wc.contains('relay-protocol') && wc.contains('symKey')) {
-      eventBus
-          .fire(EventPublic(EventPublicType.walletConnect, stringValue: wc));
-      return;
-    }
+            stringValue: wcUri));
+        break;
 
-    //astraapp://astrawallet.com
-    //终端调试命令：adb shell am start -W -a android.intent.action.VIEW -d "astraapp://astrawallet.com?type=group_mining\&id=20"
-    if (uri.scheme == 'astraapp') {
-      final Map<String, dynamic> params = uri.queryParameters;
-      // debugPrint("links params:$params");
-      if (params["type"] == "group_mining") {
-        /*final groupId = params["id"];
-        debugPrint("groupId:$groupId");
-        if (Application.userInfo !=null) {
-          Navigator.push(
-              Application.navigatorKey.currentContext!,
-              MaterialPageRoute(
-                  builder: (_) => GroupInf(groupId: int.parse(groupId))));
-        }*/
-      } else if (params["type"] == "full_node") {
+      case DeepLinkType.chat:
+        final roomId = data.params['roomId'] ?? '';
+        if (roomId.isNotEmpty && AppGlobals.userInfo != null) {
+          N42Chat.openConversation(roomId, context: navContext);
+        }
+        break;
 
-      }else if(params["type"] == "friendCard"){
-        // Chat friend card handling moved to n42_chat plugin
-        // Navigate to chat interface
+      case DeepLinkType.user:
+        final userId = data.params['userId'] ?? '';
+        if (userId.isNotEmpty && AppGlobals.userInfo != null) {
+          debugPrint('Deep link: Navigate to user $userId');
+          // User profile navigation via N42Chat
+          N42Chat.openConversation(userId, context: navContext);
+        }
+        break;
+
+      case DeepLinkType.group:
+        final groupId = data.params['groupId'] ?? '';
+        if (groupId.isNotEmpty && AppGlobals.userInfo != null) {
+          N42Chat.openConversation(groupId, context: navContext);
+        }
+        break;
+
+      case DeepLinkType.friendCard:
         if (AppGlobals.userInfo != null) {
-          Navigator.of(AppGlobals.navigatorKey.currentContext!).push(
+          Navigator.of(navContext).push(
               MaterialPageRoute(builder: (_) => N42Chat.chatWidget()));
         }
-      }
+        break;
+
+      case DeepLinkType.groupMining:
+        debugPrint('Deep link: Group mining - ${data.params}');
+        break;
+
+      case DeepLinkType.fullNode:
+        debugPrint('Deep link: Full node - ${data.params}');
+        break;
+
+      default:
+        debugPrint('Deep link: Unhandled type ${data.type}');
     }
   }
   @override
   void dispose() {
-    _linkSubscription?.cancel();
+    _deepLinkHandler?.dispose();
+    // ignore: discarded_futures
+    _deepLinkService?.dispose();
     super.dispose();
   }
   bool _splashComplete = false;
