@@ -54,7 +54,11 @@ class DeepLinkHandler {
       debugPrint('DeepLinkHandler: Navigating to ${data.type.name} $value');
     }
 
-    onNavigate?.call(data);
+    try {
+      onNavigate?.call(data);
+    } catch (e) {
+      debugPrint('DeepLinkHandler: Navigation callback error: $e');
+    }
   }
 
   /// 生成分享链接

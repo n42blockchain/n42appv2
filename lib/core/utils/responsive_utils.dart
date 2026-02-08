@@ -73,10 +73,10 @@ class ResponsiveUtils {
   /// 在 Android 平板上也可以用 [isTablet] 做宽度判断。
   static bool get isIPad {
     if (!Platform.isIOS) return false;
-    // shortestSide >= 600 是 Apple 对 iPad 的典型判断
-    return WidgetsBinding.instance.platformDispatcher.views.first.physicalSize.shortestSide /
-            WidgetsBinding.instance.platformDispatcher.views.first.devicePixelRatio >=
-        600;
+    final views = WidgetsBinding.instance.platformDispatcher.views;
+    if (views.isEmpty) return false;
+    final view = views.first;
+    return view.physicalSize.shortestSide / view.devicePixelRatio >= 600;
   }
 }
 

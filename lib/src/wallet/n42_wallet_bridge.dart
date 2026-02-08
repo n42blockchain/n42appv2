@@ -133,13 +133,24 @@ class N42WalletBridge implements IWalletBridge {
     final address = walletAddress ?? '';
     final requestId = DateTime.now().millisecondsSinceEpoch.toString();
 
+    final qrUri = Uri(
+      scheme: 'n42',
+      host: 'pay',
+      queryParameters: {
+        'address': address,
+        'amount': amount,
+        'token': token,
+        if (memo != null) 'memo': memo,
+      },
+    );
+
     return PaymentRequest(
       requestId: requestId,
       amount: amount,
       token: token,
       receiverAddress: address,
       memo: memo,
-      qrCodeData: 'n42://pay?address=$address&amount=$amount&token=$token${memo != null ? '&memo=$memo' : ''}',
+      qrCodeData: qrUri.toString(),
       createdAt: DateTime.now(),
       expiresAt: DateTime.now().add(const Duration(minutes: 30)),
     );
@@ -151,14 +162,16 @@ class N42WalletBridge implements IWalletBridge {
     debugPrint('N42WalletBridge: Show receive QR code requested');
   }
 
+  static final _ethAddressRegExp = RegExp(r'^0x[0-9a-fA-F]{40}$');
+
   @override
   bool isValidAddress(String address) {
-    // 支持 ETH 地址格式 (0x...)
-    if (address.startsWith('0x') && address.length == 42) {
+    // ETH address: 0x + 40 hex chars
+    if (_ethAddressRegExp.hasMatch(address)) {
       return true;
     }
-    // 支持 N 链地址格式
-    if (address.startsWith('N') && address.length >= 30) {
+    // N chain address
+    if (address.startsWith('N') && address.length >= 30 && address.length <= 50) {
       return true;
     }
     return false;
