@@ -146,7 +146,7 @@ if [ ! -f "$EXPORT_OPTIONS" ]; then
   <key>signingStyle</key>
   <string>automatic</string>
   <key>teamID</key>
-  <string>2P2W332P22</string>
+  <string>CFRXH38L48</string>
   <key>uploadSymbols</key>
   <true/>
   <key>stripSwiftSymbols</key>
