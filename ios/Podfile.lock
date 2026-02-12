@@ -72,7 +72,7 @@ PODS:
   - Firebase/Messaging (12.8.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 12.8.0)
-  - firebase_analytics (12.1.1):
+  - firebase_analytics (12.1.2):
     - firebase_core
     - FirebaseAnalytics (= 12.8.0)
     - Flutter
@@ -346,7 +346,7 @@ PODS:
   - qr_code_scanner_plus (0.2.6):
     - Flutter
     - MTBBarcodeScanner
-  - record_ios (1.1.0):
+  - record_ios (1.2.0):
     - Flutter
   - RegulaCommon (9.1.1844)
   - saver_gallery (0.0.1):
@@ -668,7 +668,7 @@ SPEC CHECKSUMS:
   FBSDKLoginKit: 6a70798793e499335a98fab1a758d7da34af196e
   file_picker: a0560bc09d61de87f12d246fc47d2119e6ef37be
   Firebase: 9a58fdbc9d8655ed7b79a19cf9690bb007d3d46d
-  firebase_analytics: b5a19eaf3e4bf4187b0815ef4850b8916e2bc549
+  firebase_analytics: a3285a9ab410456957496cdb659f00c1cf19a95f
   firebase_core: ee30637e6744af8e0c12a6a1e8a9718506ec2398
   firebase_crashlytics: 28b8f39df8104131376393e6af658b8b77dd120f
   firebase_messaging: 343de01a8d3e18b60df0c6d37f7174c44ae38e02
@@ -729,7 +729,7 @@ SPEC CHECKSUMS:
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
   qr_code_scanner_plus: 7e087021bc69873140e0754750eb87d867bed755
-  record_ios: f75fa1d57f840012775c0e93a38a7f3ceea1a374
+  record_ios: 412daca2350b228e698fffcd08f1f94ceb1e3844
   RegulaCommon: 714094c23bdade6ac5ed81b16cb6e299f5aafb2d
   saver_gallery: af2d0c762dafda254e0ad025ef0dabd6506cd490
   SDWebImage: e9c98383c7572d713c1a0d7dd2783b10599b9838
