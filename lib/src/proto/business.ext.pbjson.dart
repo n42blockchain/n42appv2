@@ -1,19 +1,22 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: business.ext.proto
-//
-// @dart = 2.12
+// Generated from business.ext.proto.
 
-// ignore_for_file: annotate_overrides, camel_case_types
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// @dart = 3.3
+
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_relative_imports
+// ignore_for_file: unused_import
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-import 'google/protobuf/empty.pbjson.dart' as $0;
+import 'package:protobuf/well_known_types/google/protobuf/empty.pbjson.dart'
+    as $0;
 
 @$core.Deprecated('Use signInReqDescriptor instead')
 const SignInReq$json = {
@@ -75,8 +78,8 @@ const GetUserReq$json = {
 };
 
 /// Descriptor for `GetUserReq`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getUserReqDescriptor = $convert.base64Decode(
-    'CgpHZXRVc2VyUmVxEhcKB3VzZXJfaWQYASABKANSBnVzZXJJZA==');
+final $typed_data.Uint8List getUserReqDescriptor = $convert
+    .base64Decode('CgpHZXRVc2VyUmVxEhcKB3VzZXJfaWQYASABKANSBnVzZXJJZA==');
 
 @$core.Deprecated('Use getUserRespDescriptor instead')
 const GetUserResp$json = {
@@ -116,8 +119,8 @@ const SearchUserReq$json = {
 };
 
 /// Descriptor for `SearchUserReq`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List searchUserReqDescriptor = $convert.base64Decode(
-    'Cg1TZWFyY2hVc2VyUmVxEhAKA2tleRgBIAEoCVIDa2V5');
+final $typed_data.Uint8List searchUserReqDescriptor =
+    $convert.base64Decode('Cg1TZWFyY2hVc2VyUmVxEhAKA2tleRgBIAEoCVIDa2V5');
 
 @$core.Deprecated('Use searchUserRespDescriptor instead')
 const SearchUserResp$json = {
@@ -136,13 +139,18 @@ const $core.Map<$core.String, $core.dynamic> BusinessExtServiceBase$json = {
   '2': [
     {'1': 'SignIn', '2': '.pb.SignInReq', '3': '.pb.SignInResp'},
     {'1': 'GetUser', '2': '.pb.GetUserReq', '3': '.pb.GetUserResp'},
-    {'1': 'UpdateUser', '2': '.pb.UpdateUserReq', '3': '.google.protobuf.Empty'},
+    {
+      '1': 'UpdateUser',
+      '2': '.pb.UpdateUserReq',
+      '3': '.google.protobuf.Empty'
+    },
     {'1': 'SearchUser', '2': '.pb.SearchUserReq', '3': '.pb.SearchUserResp'},
   ],
 };
 
 @$core.Deprecated('Use businessExtServiceDescriptor instead')
-const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> BusinessExtServiceBase$messageJson = {
+const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
+    BusinessExtServiceBase$messageJson = {
   '.pb.SignInReq': SignInReq$json,
   '.pb.SignInResp': SignInResp$json,
   '.pb.GetUserReq': GetUserReq$json,
@@ -160,4 +168,3 @@ final $typed_data.Uint8List businessExtServiceDescriptor = $convert.base64Decode
     'oKB0dldFVzZXISDi5wYi5HZXRVc2VyUmVxGg8ucGIuR2V0VXNlclJlc3ASNwoKVXBkYXRlVXNl'
     'chIRLnBiLlVwZGF0ZVVzZXJSZXEaFi5nb29nbGUucHJvdG9idWYuRW1wdHkSMwoKU2VhcmNoVX'
     'NlchIRLnBiLlNlYXJjaFVzZXJSZXEaEi5wYi5TZWFyY2hVc2VyUmVzcA==');
-

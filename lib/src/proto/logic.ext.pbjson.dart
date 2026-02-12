@@ -1,19 +1,22 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: logic.ext.proto
-//
-// @dart = 2.12
+// Generated from logic.ext.proto.
 
-// ignore_for_file: annotate_overrides, camel_case_types
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// @dart = 3.3
+
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_relative_imports
+// ignore_for_file: unused_import
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-import 'google/protobuf/empty.pbjson.dart' as $0;
+import 'package:protobuf/well_known_types/google/protobuf/empty.pbjson.dart'
+    as $0;
 
 @$core.Deprecated('Use memberTypeDescriptor instead')
 const MemberType$json = {
@@ -57,8 +60,9 @@ const RegisterDeviceResp$json = {
 };
 
 /// Descriptor for `RegisterDeviceResp`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List registerDeviceRespDescriptor = $convert.base64Decode(
-    'ChJSZWdpc3RlckRldmljZVJlc3ASGwoJZGV2aWNlX2lkGAEgASgDUghkZXZpY2VJZA==');
+final $typed_data.Uint8List registerDeviceRespDescriptor =
+    $convert.base64Decode(
+        'ChJSZWdpc3RlckRldmljZVJlc3ASGwoJZGV2aWNlX2lkGAEgASgDUghkZXZpY2VJZA==');
 
 @$core.Deprecated('Use sendMessageReqDescriptor instead')
 const SendMessageReq$json = {
@@ -84,8 +88,8 @@ const SendMessageResp$json = {
 };
 
 /// Descriptor for `SendMessageResp`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List sendMessageRespDescriptor = $convert.base64Decode(
-    'Cg9TZW5kTWVzc2FnZVJlc3ASEAoDc2VxGAEgASgDUgNzZXE=');
+final $typed_data.Uint8List sendMessageRespDescriptor =
+    $convert.base64Decode('Cg9TZW5kTWVzc2FnZVJlc3ASEAoDc2VxGAEgASgDUgNzZXE=');
 
 @$core.Deprecated('Use pushRoomReqDescriptor instead')
 const PushRoomReq$json = {
@@ -193,7 +197,14 @@ final $typed_data.Uint8List friendDescriptor = $convert.base64Decode(
 const GetFriendsResp$json = {
   '1': 'GetFriendsResp',
   '2': [
-    {'1': 'friends', '3': 1, '4': 3, '5': 11, '6': '.pb.Friend', '10': 'friends'},
+    {
+      '1': 'friends',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.pb.Friend',
+      '10': 'friends'
+    },
   ],
 };
 
@@ -258,8 +269,8 @@ const GetGroupReq$json = {
 };
 
 /// Descriptor for `GetGroupReq`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getGroupReqDescriptor = $convert.base64Decode(
-    'CgtHZXRHcm91cFJlcRIZCghncm91cF9pZBgBIAEoA1IHZ3JvdXBJZA==');
+final $typed_data.Uint8List getGroupReqDescriptor = $convert
+    .base64Decode('CgtHZXRHcm91cFJlcRIZCghncm91cF9pZBgBIAEoA1IHZ3JvdXBJZA==');
 
 @$core.Deprecated('Use getGroupRespDescriptor instead')
 const GetGroupResp$json = {
@@ -331,8 +342,9 @@ const AddGroupMembersResp$json = {
 };
 
 /// Descriptor for `AddGroupMembersResp`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List addGroupMembersRespDescriptor = $convert.base64Decode(
-    'ChNBZGRHcm91cE1lbWJlcnNSZXNwEhkKCHVzZXJfaWRzGAEgAygDUgd1c2VySWRz');
+final $typed_data.Uint8List addGroupMembersRespDescriptor =
+    $convert.base64Decode(
+        'ChNBZGRHcm91cE1lbWJlcnNSZXNwEhkKCHVzZXJfaWRzGAEgAygDUgd1c2VySWRz');
 
 @$core.Deprecated('Use updateGroupMemberReqDescriptor instead')
 const UpdateGroupMemberReq$json = {
@@ -340,7 +352,14 @@ const UpdateGroupMemberReq$json = {
   '2': [
     {'1': 'group_id', '3': 1, '4': 1, '5': 3, '10': 'groupId'},
     {'1': 'user_id', '3': 2, '4': 1, '5': 3, '10': 'userId'},
-    {'1': 'member_type', '3': 3, '4': 1, '5': 14, '6': '.pb.MemberType', '10': 'memberType'},
+    {
+      '1': 'member_type',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.pb.MemberType',
+      '10': 'memberType'
+    },
     {'1': 'remarks', '3': 4, '4': 1, '5': 9, '10': 'remarks'},
     {'1': 'extra', '3': 5, '4': 1, '5': 9, '10': 'extra'},
   ],
@@ -376,14 +395,22 @@ const GetGroupMembersReq$json = {
 };
 
 /// Descriptor for `GetGroupMembersReq`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getGroupMembersReqDescriptor = $convert.base64Decode(
-    'ChJHZXRHcm91cE1lbWJlcnNSZXESGQoIZ3JvdXBfaWQYASABKANSB2dyb3VwSWQ=');
+final $typed_data.Uint8List getGroupMembersReqDescriptor =
+    $convert.base64Decode(
+        'ChJHZXRHcm91cE1lbWJlcnNSZXESGQoIZ3JvdXBfaWQYASABKANSB2dyb3VwSWQ=');
 
 @$core.Deprecated('Use getGroupMembersRespDescriptor instead')
 const GetGroupMembersResp$json = {
   '1': 'GetGroupMembersResp',
   '2': [
-    {'1': 'members', '3': 1, '4': 3, '5': 11, '6': '.pb.GroupMember', '10': 'members'},
+    {
+      '1': 'members',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.pb.GroupMember',
+      '10': 'members'
+    },
   ],
 };
 
@@ -401,7 +428,14 @@ const GroupMember$json = {
     {'1': 'sex', '3': 3, '4': 1, '5': 5, '10': 'sex'},
     {'1': 'avatar_url', '3': 4, '4': 1, '5': 9, '10': 'avatarUrl'},
     {'1': 'user_extra', '3': 5, '4': 1, '5': 9, '10': 'userExtra'},
-    {'1': 'member_type', '3': 6, '4': 1, '5': 14, '6': '.pb.MemberType', '10': 'memberType'},
+    {
+      '1': 'member_type',
+      '3': 6,
+      '4': 1,
+      '5': 14,
+      '6': '.pb.MemberType',
+      '10': 'memberType'
+    },
     {'1': 'remarks', '3': 7, '4': 1, '5': 9, '10': 'remarks'},
     {'1': 'extra', '3': 8, '4': 1, '5': 9, '10': 'extra'},
   ],
@@ -418,27 +452,68 @@ final $typed_data.Uint8List groupMemberDescriptor = $convert.base64Decode(
 const $core.Map<$core.String, $core.dynamic> LogicExtServiceBase$json = {
   '1': 'LogicExt',
   '2': [
-    {'1': 'RegisterDevice', '2': '.pb.RegisterDeviceReq', '3': '.pb.RegisterDeviceResp'},
+    {
+      '1': 'RegisterDevice',
+      '2': '.pb.RegisterDeviceReq',
+      '3': '.pb.RegisterDeviceResp'
+    },
     {'1': 'PushRoom', '2': '.pb.PushRoomReq', '3': '.google.protobuf.Empty'},
-    {'1': 'SendMessageToFriend', '2': '.pb.SendMessageReq', '3': '.pb.SendMessageResp'},
+    {
+      '1': 'SendMessageToFriend',
+      '2': '.pb.SendMessageReq',
+      '3': '.pb.SendMessageResp'
+    },
     {'1': 'AddFriend', '2': '.pb.AddFriendReq', '3': '.google.protobuf.Empty'},
-    {'1': 'AgreeAddFriend', '2': '.pb.AgreeAddFriendReq', '3': '.google.protobuf.Empty'},
+    {
+      '1': 'AgreeAddFriend',
+      '2': '.pb.AgreeAddFriendReq',
+      '3': '.google.protobuf.Empty'
+    },
     {'1': 'SetFriend', '2': '.pb.SetFriendReq', '3': '.pb.SetFriendResp'},
-    {'1': 'GetFriends', '2': '.google.protobuf.Empty', '3': '.pb.GetFriendsResp'},
-    {'1': 'SendMessageToGroup', '2': '.pb.SendMessageReq', '3': '.pb.SendMessageResp'},
+    {
+      '1': 'GetFriends',
+      '2': '.google.protobuf.Empty',
+      '3': '.pb.GetFriendsResp'
+    },
+    {
+      '1': 'SendMessageToGroup',
+      '2': '.pb.SendMessageReq',
+      '3': '.pb.SendMessageResp'
+    },
     {'1': 'CreateGroup', '2': '.pb.CreateGroupReq', '3': '.pb.CreateGroupResp'},
-    {'1': 'UpdateGroup', '2': '.pb.UpdateGroupReq', '3': '.google.protobuf.Empty'},
+    {
+      '1': 'UpdateGroup',
+      '2': '.pb.UpdateGroupReq',
+      '3': '.google.protobuf.Empty'
+    },
     {'1': 'GetGroup', '2': '.pb.GetGroupReq', '3': '.pb.GetGroupResp'},
     {'1': 'GetGroups', '2': '.google.protobuf.Empty', '3': '.pb.GetGroupsResp'},
-    {'1': 'AddGroupMembers', '2': '.pb.AddGroupMembersReq', '3': '.pb.AddGroupMembersResp'},
-    {'1': 'UpdateGroupMember', '2': '.pb.UpdateGroupMemberReq', '3': '.google.protobuf.Empty'},
-    {'1': 'DeleteGroupMember', '2': '.pb.DeleteGroupMemberReq', '3': '.google.protobuf.Empty'},
-    {'1': 'GetGroupMembers', '2': '.pb.GetGroupMembersReq', '3': '.pb.GetGroupMembersResp'},
+    {
+      '1': 'AddGroupMembers',
+      '2': '.pb.AddGroupMembersReq',
+      '3': '.pb.AddGroupMembersResp'
+    },
+    {
+      '1': 'UpdateGroupMember',
+      '2': '.pb.UpdateGroupMemberReq',
+      '3': '.google.protobuf.Empty'
+    },
+    {
+      '1': 'DeleteGroupMember',
+      '2': '.pb.DeleteGroupMemberReq',
+      '3': '.google.protobuf.Empty'
+    },
+    {
+      '1': 'GetGroupMembers',
+      '2': '.pb.GetGroupMembersReq',
+      '3': '.pb.GetGroupMembersResp'
+    },
   ],
 };
 
 @$core.Deprecated('Use logicExtServiceDescriptor instead')
-const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> LogicExtServiceBase$messageJson = {
+const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
+    LogicExtServiceBase$messageJson = {
   '.pb.RegisterDeviceReq': RegisterDeviceReq$json,
   '.pb.RegisterDeviceResp': RegisterDeviceResp$json,
   '.pb.PushRoomReq': PushRoomReq$json,
@@ -487,4 +562,3 @@ final $typed_data.Uint8List logicExtServiceDescriptor = $convert.base64Decode(
     'VmLkVtcHR5EkUKEURlbGV0ZUdyb3VwTWVtYmVyEhgucGIuRGVsZXRlR3JvdXBNZW1iZXJSZXEa'
     'Fi5nb29nbGUucHJvdG9idWYuRW1wdHkSQgoPR2V0R3JvdXBNZW1iZXJzEhYucGIuR2V0R3JvdX'
     'BNZW1iZXJzUmVxGhcucGIuR2V0R3JvdXBNZW1iZXJzUmVzcA==');
-

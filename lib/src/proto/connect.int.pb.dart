@@ -1,184 +1,235 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: connect.int.proto
-//
-// @dart = 2.12
+// Generated from connect.int.proto.
 
-// ignore_for_file: annotate_overrides, camel_case_types
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// @dart = 3.3
+
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_relative_imports
 
 import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
+import 'package:protobuf/well_known_types/google/protobuf/empty.pb.dart' as $1;
 
-import 'google/protobuf/empty.pb.dart' as $1;
 import 'message.ext.pb.dart' as $0;
 
+export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
+
 class DeliverMessageReq extends $pb.GeneratedMessage {
-  factory DeliverMessageReq() => create();
-  DeliverMessageReq._() : super();
-  factory DeliverMessageReq.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory DeliverMessageReq.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory DeliverMessageReq({
+    $fixnum.Int64? deviceId,
+    $0.Message? message,
+  }) {
+    final result = create();
+    if (deviceId != null) result.deviceId = deviceId;
+    if (message != null) result.message = message;
+    return result;
+  }
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeliverMessageReq', package: const $pb.PackageName(_omitMessageNames ? '' : 'pb'), createEmptyInstance: create)
+  DeliverMessageReq._();
+
+  factory DeliverMessageReq.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory DeliverMessageReq.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'DeliverMessageReq',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pb'),
+      createEmptyInstance: create)
     ..aInt64(1, _omitFieldNames ? '' : 'deviceId')
-    ..aOM<$0.Message>(2, _omitFieldNames ? '' : 'message', subBuilder: $0.Message.create)
-    ..hasRequiredFields = false
-  ;
+    ..aOM<$0.Message>(2, _omitFieldNames ? '' : 'message',
+        subBuilder: $0.Message.create)
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  DeliverMessageReq clone() => DeliverMessageReq()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  DeliverMessageReq copyWith(void Function(DeliverMessageReq) updates) => super.copyWith((message) => updates(message as DeliverMessageReq)) as DeliverMessageReq;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  DeliverMessageReq clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  DeliverMessageReq copyWith(void Function(DeliverMessageReq) updates) =>
+      super.copyWith((message) => updates(message as DeliverMessageReq))
+          as DeliverMessageReq;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static DeliverMessageReq create() => DeliverMessageReq._();
+  @$core.override
   DeliverMessageReq createEmptyInstance() => create();
-  static $pb.PbList<DeliverMessageReq> createRepeated() => $pb.PbList<DeliverMessageReq>();
   @$core.pragma('dart2js:noInline')
-  static DeliverMessageReq getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeliverMessageReq>(create);
+  static DeliverMessageReq getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<DeliverMessageReq>(create);
   static DeliverMessageReq? _defaultInstance;
 
   @$pb.TagNumber(1)
   $fixnum.Int64 get deviceId => $_getI64(0);
   @$pb.TagNumber(1)
-  set deviceId($fixnum.Int64 v) { $_setInt64(0, v); }
+  set deviceId($fixnum.Int64 value) => $_setInt64(0, value);
   @$pb.TagNumber(1)
   $core.bool hasDeviceId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearDeviceId() => clearField(1);
+  void clearDeviceId() => $_clearField(1);
 
   @$pb.TagNumber(2)
   $0.Message get message => $_getN(1);
   @$pb.TagNumber(2)
-  set message($0.Message v) { setField(2, v); }
+  set message($0.Message value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasMessage() => $_has(1);
   @$pb.TagNumber(2)
-  void clearMessage() => clearField(2);
+  void clearMessage() => $_clearField(2);
   @$pb.TagNumber(2)
   $0.Message ensureMessage() => $_ensure(1);
 }
 
+/// 房间推送
 class PushRoomMsg extends $pb.GeneratedMessage {
-  factory PushRoomMsg() => create();
-  PushRoomMsg._() : super();
-  factory PushRoomMsg.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory PushRoomMsg.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory PushRoomMsg({
+    $fixnum.Int64? roomId,
+    $0.Message? message,
+  }) {
+    final result = create();
+    if (roomId != null) result.roomId = roomId;
+    if (message != null) result.message = message;
+    return result;
+  }
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PushRoomMsg', package: const $pb.PackageName(_omitMessageNames ? '' : 'pb'), createEmptyInstance: create)
+  PushRoomMsg._();
+
+  factory PushRoomMsg.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory PushRoomMsg.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'PushRoomMsg',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pb'),
+      createEmptyInstance: create)
     ..aInt64(1, _omitFieldNames ? '' : 'roomId')
-    ..aOM<$0.Message>(2, _omitFieldNames ? '' : 'message', subBuilder: $0.Message.create)
-    ..hasRequiredFields = false
-  ;
+    ..aOM<$0.Message>(2, _omitFieldNames ? '' : 'message',
+        subBuilder: $0.Message.create)
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  PushRoomMsg clone() => PushRoomMsg()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  PushRoomMsg copyWith(void Function(PushRoomMsg) updates) => super.copyWith((message) => updates(message as PushRoomMsg)) as PushRoomMsg;
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PushRoomMsg clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PushRoomMsg copyWith(void Function(PushRoomMsg) updates) =>
+      super.copyWith((message) => updates(message as PushRoomMsg))
+          as PushRoomMsg;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static PushRoomMsg create() => PushRoomMsg._();
+  @$core.override
   PushRoomMsg createEmptyInstance() => create();
-  static $pb.PbList<PushRoomMsg> createRepeated() => $pb.PbList<PushRoomMsg>();
   @$core.pragma('dart2js:noInline')
-  static PushRoomMsg getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PushRoomMsg>(create);
+  static PushRoomMsg getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<PushRoomMsg>(create);
   static PushRoomMsg? _defaultInstance;
 
   @$pb.TagNumber(1)
   $fixnum.Int64 get roomId => $_getI64(0);
   @$pb.TagNumber(1)
-  set roomId($fixnum.Int64 v) { $_setInt64(0, v); }
+  set roomId($fixnum.Int64 value) => $_setInt64(0, value);
   @$pb.TagNumber(1)
   $core.bool hasRoomId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearRoomId() => clearField(1);
+  void clearRoomId() => $_clearField(1);
 
   @$pb.TagNumber(2)
   $0.Message get message => $_getN(1);
   @$pb.TagNumber(2)
-  set message($0.Message v) { setField(2, v); }
+  set message($0.Message value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasMessage() => $_has(1);
   @$pb.TagNumber(2)
-  void clearMessage() => clearField(2);
+  void clearMessage() => $_clearField(2);
   @$pb.TagNumber(2)
   $0.Message ensureMessage() => $_ensure(1);
 }
 
+/// 房间推送
 class PushAllMsg extends $pb.GeneratedMessage {
-  factory PushAllMsg() => create();
-  PushAllMsg._() : super();
-  factory PushAllMsg.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory PushAllMsg.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory PushAllMsg({
+    $0.Message? message,
+  }) {
+    final result = create();
+    if (message != null) result.message = message;
+    return result;
+  }
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PushAllMsg', package: const $pb.PackageName(_omitMessageNames ? '' : 'pb'), createEmptyInstance: create)
-    ..aOM<$0.Message>(2, _omitFieldNames ? '' : 'message', subBuilder: $0.Message.create)
-    ..hasRequiredFields = false
-  ;
+  PushAllMsg._();
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  PushAllMsg clone() => PushAllMsg()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  PushAllMsg copyWith(void Function(PushAllMsg) updates) => super.copyWith((message) => updates(message as PushAllMsg)) as PushAllMsg;
+  factory PushAllMsg.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory PushAllMsg.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'PushAllMsg',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pb'),
+      createEmptyInstance: create)
+    ..aOM<$0.Message>(2, _omitFieldNames ? '' : 'message',
+        subBuilder: $0.Message.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PushAllMsg clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PushAllMsg copyWith(void Function(PushAllMsg) updates) =>
+      super.copyWith((message) => updates(message as PushAllMsg)) as PushAllMsg;
+
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static PushAllMsg create() => PushAllMsg._();
+  @$core.override
   PushAllMsg createEmptyInstance() => create();
-  static $pb.PbList<PushAllMsg> createRepeated() => $pb.PbList<PushAllMsg>();
   @$core.pragma('dart2js:noInline')
-  static PushAllMsg getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PushAllMsg>(create);
+  static PushAllMsg getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<PushAllMsg>(create);
   static PushAllMsg? _defaultInstance;
 
   @$pb.TagNumber(2)
   $0.Message get message => $_getN(0);
   @$pb.TagNumber(2)
-  set message($0.Message v) { setField(2, v); }
+  set message($0.Message value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasMessage() => $_has(0);
   @$pb.TagNumber(2)
-  void clearMessage() => clearField(2);
+  void clearMessage() => $_clearField(2);
   @$pb.TagNumber(2)
   $0.Message ensureMessage() => $_ensure(0);
 }
 
 class ConnectIntApi {
-  $pb.RpcClient _client;
+  final $pb.RpcClient _client;
+
   ConnectIntApi(this._client);
 
-  $async.Future<$1.Empty> deliverMessage($pb.ClientContext? ctx, DeliverMessageReq request) =>
-    _client.invoke<$1.Empty>(ctx, 'ConnectInt', 'DeliverMessage', request, $1.Empty())
-  ;
+  /// 消息投递
+  $async.Future<$1.Empty> deliverMessage(
+          $pb.ClientContext? ctx, DeliverMessageReq request) =>
+      _client.invoke<$1.Empty>(
+          ctx, 'ConnectInt', 'DeliverMessage', request, $1.Empty());
 }
 
-
-const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
-const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');
+const $core.bool _omitFieldNames =
+    $core.bool.fromEnvironment('protobuf.omit_field_names');
+const $core.bool _omitMessageNames =
+    $core.bool.fromEnvironment('protobuf.omit_message_names');

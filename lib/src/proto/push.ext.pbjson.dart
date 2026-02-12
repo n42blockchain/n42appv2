@@ -1,13 +1,15 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: push.ext.proto
-//
-// @dart = 2.12
+// Generated from push.ext.proto.
 
-// ignore_for_file: annotate_overrides, camel_case_types
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// @dart = 3.3
+
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_relative_imports
+// ignore_for_file: unused_import
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
@@ -127,7 +129,14 @@ const AddGroupMembersPush$json = {
   '2': [
     {'1': 'opt_id', '3': 1, '4': 1, '5': 3, '10': 'optId'},
     {'1': 'opt_name', '3': 2, '4': 1, '5': 9, '10': 'optName'},
-    {'1': 'members', '3': 3, '4': 3, '5': 11, '6': '.pb.GroupMember', '10': 'members'},
+    {
+      '1': 'members',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.pb.GroupMember',
+      '10': 'members'
+    },
   ],
 };
 
@@ -152,4 +161,3 @@ final $typed_data.Uint8List removeGroupMemberPushDescriptor = $convert.base64Dec
     'ChVSZW1vdmVHcm91cE1lbWJlclB1c2gSFQoGb3B0X2lkGAEgASgDUgVvcHRJZBIZCghvcHRfbm'
     'FtZRgCIAEoCVIHb3B0TmFtZRImCg9kZWxldGVkX3VzZXJfaWQYAyABKANSDWRlbGV0ZWRVc2Vy'
     'SWQ=');
-

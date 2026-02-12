@@ -1,19 +1,23 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: connect.int.proto
-//
-// @dart = 2.12
+// Generated from connect.int.proto.
 
-// ignore_for_file: annotate_overrides, camel_case_types
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// @dart = 3.3
+
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_relative_imports
+// ignore_for_file: unused_import
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-import 'google/protobuf/empty.pbjson.dart' as $1;
+import 'package:protobuf/well_known_types/google/protobuf/empty.pbjson.dart'
+    as $1;
+
 import 'message.ext.pbjson.dart' as $0;
 
 @$core.Deprecated('Use deliverMessageReqDescriptor instead')
@@ -21,7 +25,14 @@ const DeliverMessageReq$json = {
   '1': 'DeliverMessageReq',
   '2': [
     {'1': 'device_id', '3': 1, '4': 1, '5': 3, '10': 'deviceId'},
-    {'1': 'message', '3': 2, '4': 1, '5': 11, '6': '.pb.Message', '10': 'message'},
+    {
+      '1': 'message',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.pb.Message',
+      '10': 'message'
+    },
   ],
 };
 
@@ -35,7 +46,14 @@ const PushRoomMsg$json = {
   '1': 'PushRoomMsg',
   '2': [
     {'1': 'room_id', '3': 1, '4': 1, '5': 3, '10': 'roomId'},
-    {'1': 'message', '3': 2, '4': 1, '5': 11, '6': '.pb.Message', '10': 'message'},
+    {
+      '1': 'message',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.pb.Message',
+      '10': 'message'
+    },
   ],
 };
 
@@ -48,7 +66,14 @@ final $typed_data.Uint8List pushRoomMsgDescriptor = $convert.base64Decode(
 const PushAllMsg$json = {
   '1': 'PushAllMsg',
   '2': [
-    {'1': 'message', '3': 2, '4': 1, '5': 11, '6': '.pb.Message', '10': 'message'},
+    {
+      '1': 'message',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.pb.Message',
+      '10': 'message'
+    },
   ],
 };
 
@@ -59,12 +84,17 @@ final $typed_data.Uint8List pushAllMsgDescriptor = $convert.base64Decode(
 const $core.Map<$core.String, $core.dynamic> ConnectIntServiceBase$json = {
   '1': 'ConnectInt',
   '2': [
-    {'1': 'DeliverMessage', '2': '.pb.DeliverMessageReq', '3': '.google.protobuf.Empty'},
+    {
+      '1': 'DeliverMessage',
+      '2': '.pb.DeliverMessageReq',
+      '3': '.google.protobuf.Empty'
+    },
   ],
 };
 
 @$core.Deprecated('Use connectIntServiceDescriptor instead')
-const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> ConnectIntServiceBase$messageJson = {
+const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
+    ConnectIntServiceBase$messageJson = {
   '.pb.DeliverMessageReq': DeliverMessageReq$json,
   '.pb.Message': $0.Message$json,
   '.google.protobuf.Empty': $1.Empty$json,
@@ -74,4 +104,3 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> ConnectInt
 final $typed_data.Uint8List connectIntServiceDescriptor = $convert.base64Decode(
     'CgpDb25uZWN0SW50Ej8KDkRlbGl2ZXJNZXNzYWdlEhUucGIuRGVsaXZlck1lc3NhZ2VSZXEaFi'
     '5nb29nbGUucHJvdG9idWYuRW1wdHk=');
-

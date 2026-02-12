@@ -1,20 +1,24 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: business.int.proto
-//
-// @dart = 2.12
+// Generated from business.int.proto.
 
-// ignore_for_file: annotate_overrides, camel_case_types
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// @dart = 3.3
+
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_relative_imports
+// ignore_for_file: unused_import
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+import 'package:protobuf/well_known_types/google/protobuf/empty.pbjson.dart'
+    as $1;
+
 import 'business.ext.pbjson.dart' as $0;
-import 'google/protobuf/empty.pbjson.dart' as $1;
 
 @$core.Deprecated('Use authReqDescriptor instead')
 const AuthReq$json = {
@@ -35,7 +39,14 @@ final $typed_data.Uint8List authReqDescriptor = $convert.base64Decode(
 const GetUsersReq$json = {
   '1': 'GetUsersReq',
   '2': [
-    {'1': 'user_ids', '3': 1, '4': 3, '5': 11, '6': '.pb.GetUsersReq.UserIdsEntry', '10': 'userIds'},
+    {
+      '1': 'user_ids',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.pb.GetUsersReq.UserIdsEntry',
+      '10': 'userIds'
+    },
   ],
   '3': [GetUsersReq_UserIdsEntry$json],
 };
@@ -60,7 +71,14 @@ final $typed_data.Uint8List getUsersReqDescriptor = $convert.base64Decode(
 const GetUsersResp$json = {
   '1': 'GetUsersResp',
   '2': [
-    {'1': 'users', '3': 1, '4': 3, '5': 11, '6': '.pb.GetUsersResp.UsersEntry', '10': 'users'},
+    {
+      '1': 'users',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.pb.GetUsersResp.UsersEntry',
+      '10': 'users'
+    },
   ],
   '3': [GetUsersResp_UsersEntry$json],
 };
@@ -91,7 +109,8 @@ const $core.Map<$core.String, $core.dynamic> BusinessIntServiceBase$json = {
 };
 
 @$core.Deprecated('Use businessIntServiceDescriptor instead')
-const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> BusinessIntServiceBase$messageJson = {
+const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
+    BusinessIntServiceBase$messageJson = {
   '.pb.AuthReq': AuthReq$json,
   '.google.protobuf.Empty': $1.Empty$json,
   '.pb.GetUserReq': $0.GetUserReq$json,
@@ -108,4 +127,3 @@ final $typed_data.Uint8List businessIntServiceDescriptor = $convert.base64Decode
     'CgtCdXNpbmVzc0ludBIrCgRBdXRoEgsucGIuQXV0aFJlcRoWLmdvb2dsZS5wcm90b2J1Zi5FbX'
     'B0eRIqCgdHZXRVc2VyEg4ucGIuR2V0VXNlclJlcRoPLnBiLkdldFVzZXJSZXNwEi0KCEdldFVz'
     'ZXJzEg8ucGIuR2V0VXNlcnNSZXEaEC5wYi5HZXRVc2Vyc1Jlc3A=');
-

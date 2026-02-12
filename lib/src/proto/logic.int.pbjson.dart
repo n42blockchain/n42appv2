@@ -1,19 +1,23 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: logic.int.proto
-//
-// @dart = 2.12
+// Generated from logic.int.proto.
 
-// ignore_for_file: annotate_overrides, camel_case_types
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// @dart = 3.3
+
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_relative_imports
+// ignore_for_file: unused_import
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-import 'google/protobuf/empty.pbjson.dart' as $1;
+import 'package:protobuf/well_known_types/google/protobuf/empty.pbjson.dart'
+    as $1;
+
 import 'logic.ext.pbjson.dart' as $2;
 import 'message.ext.pbjson.dart' as $0;
 
@@ -54,7 +58,14 @@ final $typed_data.Uint8List syncReqDescriptor = $convert.base64Decode(
 const SyncResp$json = {
   '1': 'SyncResp',
   '2': [
-    {'1': 'messages', '3': 1, '4': 3, '5': 11, '6': '.pb.Message', '10': 'messages'},
+    {
+      '1': 'messages',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.pb.Message',
+      '10': 'messages'
+    },
     {'1': 'has_more', '3': 2, '4': 1, '5': 8, '10': 'hasMore'},
   ],
 };
@@ -139,8 +150,8 @@ const PushResp$json = {
 };
 
 /// Descriptor for `PushResp`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List pushRespDescriptor = $convert.base64Decode(
-    'CghQdXNoUmVzcBIQCgNzZXEYASABKANSA3NlcQ==');
+final $typed_data.Uint8List pushRespDescriptor =
+    $convert.base64Decode('CghQdXNoUmVzcBIQCgNzZXEYASABKANSA3NlcQ==');
 
 @$core.Deprecated('Use pushAllReqDescriptor instead')
 const PushAllReq$json = {
@@ -224,21 +235,38 @@ final $typed_data.Uint8List serverStopReqDescriptor = $convert.base64Decode(
 const $core.Map<$core.String, $core.dynamic> LogicIntServiceBase$json = {
   '1': 'LogicInt',
   '2': [
-    {'1': 'ConnSignIn', '2': '.pb.ConnSignInReq', '3': '.google.protobuf.Empty'},
+    {
+      '1': 'ConnSignIn',
+      '2': '.pb.ConnSignInReq',
+      '3': '.google.protobuf.Empty'
+    },
     {'1': 'Sync', '2': '.pb.SyncReq', '3': '.pb.SyncResp'},
-    {'1': 'MessageACK', '2': '.pb.MessageACKReq', '3': '.google.protobuf.Empty'},
+    {
+      '1': 'MessageACK',
+      '2': '.pb.MessageACKReq',
+      '3': '.google.protobuf.Empty'
+    },
     {'1': 'Offline', '2': '.pb.OfflineReq', '3': '.google.protobuf.Empty'},
-    {'1': 'SubscribeRoom', '2': '.pb.SubscribeRoomReq', '3': '.google.protobuf.Empty'},
+    {
+      '1': 'SubscribeRoom',
+      '2': '.pb.SubscribeRoomReq',
+      '3': '.google.protobuf.Empty'
+    },
     {'1': 'Push', '2': '.pb.PushReq', '3': '.pb.PushResp'},
     {'1': 'PushRoom', '2': '.pb.PushRoomReq', '3': '.google.protobuf.Empty'},
     {'1': 'PushAll', '2': '.pb.PushAllReq', '3': '.google.protobuf.Empty'},
     {'1': 'GetDevice', '2': '.pb.GetDeviceReq', '3': '.pb.GetDeviceResp'},
-    {'1': 'ServerStop', '2': '.pb.ServerStopReq', '3': '.google.protobuf.Empty'},
+    {
+      '1': 'ServerStop',
+      '2': '.pb.ServerStopReq',
+      '3': '.google.protobuf.Empty'
+    },
   ],
 };
 
 @$core.Deprecated('Use logicIntServiceDescriptor instead')
-const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> LogicIntServiceBase$messageJson = {
+const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
+    LogicIntServiceBase$messageJson = {
   '.pb.ConnSignInReq': ConnSignInReq$json,
   '.google.protobuf.Empty': $1.Empty$json,
   '.pb.SyncReq': SyncReq$json,
@@ -269,4 +297,3 @@ final $typed_data.Uint8List logicIntServiceDescriptor = $convert.base64Decode(
     'oWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRIwCglHZXREZXZpY2USEC5wYi5HZXREZXZpY2VSZXEa'
     'ES5wYi5HZXREZXZpY2VSZXNwEjcKClNlcnZlclN0b3ASES5wYi5TZXJ2ZXJTdG9wUmVxGhYuZ2'
     '9vZ2xlLnByb3RvYnVmLkVtcHR5');
-

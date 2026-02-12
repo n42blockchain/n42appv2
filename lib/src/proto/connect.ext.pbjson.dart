@@ -1,13 +1,15 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: connect.ext.proto
-//
-// @dart = 2.12
+// Generated from connect.ext.proto.
 
-// ignore_for_file: annotate_overrides, camel_case_types
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// @dart = 3.3
+
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_relative_imports
+// ignore_for_file: unused_import
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
@@ -36,7 +38,14 @@ final $typed_data.Uint8List packageTypeDescriptor = $convert.base64Decode(
 const Input$json = {
   '1': 'Input',
   '2': [
-    {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.pb.PackageType', '10': 'type'},
+    {
+      '1': 'type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.pb.PackageType',
+      '10': 'type'
+    },
     {'1': 'request_id', '3': 2, '4': 1, '5': 3, '10': 'requestId'},
     {'1': 'data', '3': 3, '4': 1, '5': 12, '10': 'data'},
   ],
@@ -51,7 +60,14 @@ final $typed_data.Uint8List inputDescriptor = $convert.base64Decode(
 const Output$json = {
   '1': 'Output',
   '2': [
-    {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.pb.PackageType', '10': 'type'},
+    {
+      '1': 'type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.pb.PackageType',
+      '10': 'type'
+    },
     {'1': 'request_id', '3': 2, '4': 1, '5': 3, '10': 'requestId'},
     {'1': 'code', '3': 3, '4': 1, '5': 5, '10': 'code'},
     {'1': 'message', '3': 4, '4': 1, '5': 9, '10': 'message'},
@@ -89,14 +105,21 @@ const SyncInput$json = {
 };
 
 /// Descriptor for `SyncInput`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List syncInputDescriptor = $convert.base64Decode(
-    'CglTeW5jSW5wdXQSEAoDc2VxGAEgASgDUgNzZXE=');
+final $typed_data.Uint8List syncInputDescriptor =
+    $convert.base64Decode('CglTeW5jSW5wdXQSEAoDc2VxGAEgASgDUgNzZXE=');
 
 @$core.Deprecated('Use syncOutputDescriptor instead')
 const SyncOutput$json = {
   '1': 'SyncOutput',
   '2': [
-    {'1': 'messages', '3': 1, '4': 3, '5': 11, '6': '.pb.Message', '10': 'messages'},
+    {
+      '1': 'messages',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.pb.Message',
+      '10': 'messages'
+    },
     {'1': 'has_more', '3': 2, '4': 1, '5': 8, '10': 'hasMore'},
   ],
 };
@@ -134,4 +157,3 @@ const MessageACK$json = {
 final $typed_data.Uint8List messageACKDescriptor = $convert.base64Decode(
     'CgpNZXNzYWdlQUNLEh0KCmRldmljZV9hY2sYAiABKANSCWRldmljZUFjaxIWCgZ0YXJnZXQYAy'
     'ABKAlSBnRhcmdldBIhCgxyZWNlaXZlX3RpbWUYBCABKANSC3JlY2VpdmVUaW1l');
-

@@ -23,9 +23,9 @@ class CreateBtcTX2{
     //P2trAddress fromAddress2 = fromPub2.toTaprootAddress(scripts: [[trScriptP2pk1]]);
     //Script scriptPubKey2=fromAddress2.toScriptPubKey();
     var tx =
-    BtcTransaction(inputs: txInputs, outputs: txOutputs, hasSegwit: true);
+    BtcTransaction(inputs: txInputs, outputs: txOutputs);
 
-    const signHash = BitcoinOpCodeConst.TAPROOT_SIGHASH_ALL;
+    const signHash = BitcoinOpCodeConst.sighashAll;
     List<TxWitnessInput>signaturs=[];
     for(int i=0;i<txInputs.length;i++){
       final txDigit = tx.getTransactionTaprootDigset(
@@ -33,10 +33,7 @@ class CreateBtcTX2{
           scriptPubKeys:txInputScript,
           amounts: txInputAmount,
           sighash: signHash);
-      final signatur = fromPriv2.signTapRoot(txDigit,
-          tapScripts: [
-            //[trScriptP2pk1]
-          ],
+      final signatur = fromPriv2.signBip340(txDigit,
           sighash: signHash,
           tweak:false
       );
@@ -55,11 +52,11 @@ class CreateBtcTX2{
   String createSegwit(ECPrivate fromPriv2,List<TxInput>txInputs,List<BigInt>txInputAmount,List<Script>txInputScript,List<TxOutput> txOutputs,){
     //BitcoinOutput bitcoinOutput=BitcoinOutput(address: P2wshAddress.fromScript(script: txOutputs[0].scriptPubKey), value: txOutputs[0].amount);
     var tx =
-    BtcTransaction(inputs: txInputs, outputs: txOutputs, hasSegwit: true);
+    BtcTransaction(inputs: txInputs, outputs: txOutputs);
     List<TxWitnessInput>signaturs=[];
     for(int i=0;i<txInputs.length;i++){
       final txDigit =tx.getTransactionSegwitDigit(txInIndex: i, script: txInputScript[i], amount: txInputAmount[i]);
-      final signatur = fromPriv2.signInput(txDigit);
+      final signatur = fromPriv2.signECDSA(txDigit);
       signaturs.add(TxWitnessInput(stack: [signatur,fromPriv2.getPublic().toHex()]));
     }
     tx = tx.copyWith(witnesses: signaturs);
@@ -73,7 +70,7 @@ class CreateBtcTX2{
   void createMessage(ECPrivate fromPriv2,String message,ECPublic pub){
     String sign=fromPriv2.signMessage(message.codeUnits);
     if (kDebugMode) debugPrint(sign);
-    bool v=pub.verify(message.codeUnits, hexToBytes(sign));
+    bool v=pub.verify(message: message.codeUnits, signature: hexToBytes(sign));
     if (kDebugMode) debugPrint(v.toString());
   }
   String createSegwitV2(ECPrivate fromPriv2,P2wshAddress out1){
@@ -121,7 +118,7 @@ class CreateBtcTX2{
       /// For each input in the transaction, locate the corresponding private key
       /// and sign the transaction digest to construct the unlocking script.
       if (publicKey == examplePublicKey.toHex()) {
-        return fromPriv2.signInput(trDigest, sigHash: sighash);
+        return fromPriv2.signECDSA(trDigest, sighash: sighash);
       }
 
       throw UnimplementedError();

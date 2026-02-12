@@ -1,13 +1,15 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: message.ext.proto
-//
-// @dart = 2.12
+// Generated from message.ext.proto.
 
-// ignore_for_file: annotate_overrides, camel_case_types
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// @dart = 3.3
+
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_relative_imports
+// ignore_for_file: unused_import
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
@@ -35,7 +37,14 @@ const Message$json = {
     {'1': 'content', '3': 3, '4': 1, '5': 12, '10': 'content'},
     {'1': 'seq', '3': 4, '4': 1, '5': 3, '10': 'seq'},
     {'1': 'send_time', '3': 5, '4': 1, '5': 3, '10': 'sendTime'},
-    {'1': 'status', '3': 6, '4': 1, '5': 14, '6': '.pb.MessageStatus', '10': 'status'},
+    {
+      '1': 'status',
+      '3': 6,
+      '4': 1,
+      '5': 14,
+      '6': '.pb.MessageStatus',
+      '10': 'status'
+    },
   ],
 };
 
@@ -45,4 +54,3 @@ final $typed_data.Uint8List messageDescriptor = $convert.base64Decode(
     'Rjb2RlEhgKB2NvbnRlbnQYAyABKAxSB2NvbnRlbnQSEAoDc2VxGAQgASgDUgNzZXESGwoJc2Vu'
     'ZF90aW1lGAUgASgDUghzZW5kVGltZRIpCgZzdGF0dXMYBiABKA4yES5wYi5NZXNzYWdlU3RhdH'
     'VzUgZzdGF0dXM=');
-
