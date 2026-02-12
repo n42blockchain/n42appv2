@@ -14,8 +14,6 @@ class ResponsiveUtils {
 
   static const double mobileBreakpoint = 600;
   static const double tabletBreakpoint = 900;
-  static const double desktopBreakpoint = 1200;
-
   /// 内容区域推荐最大宽度（iPad 竖屏约 810pt，限制内容区让布局更紧凑）
   static const double contentMaxWidth = 600;
 
@@ -87,33 +85,6 @@ enum ScreenType {
   desktop,
 }
 
-/// 响应式构建器 — 根据屏幕宽度选择不同布局
-class ResponsiveBuilder extends StatelessWidget {
-  final Widget mobile;
-  final Widget? tablet;
-  final Widget? desktop;
-
-  const ResponsiveBuilder({
-    super.key,
-    required this.mobile,
-    this.tablet,
-    this.desktop,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final type = ResponsiveUtils.getScreenType(context);
-    switch (type) {
-      case ScreenType.mobile:
-        return mobile;
-      case ScreenType.tablet:
-        return tablet ?? mobile;
-      case ScreenType.desktop:
-        return desktop ?? tablet ?? mobile;
-    }
-  }
-}
-
 /// 内容约束容器 — 限制最大宽度并居中
 class ResponsiveContainer extends StatelessWidget {
   final Widget child;
@@ -143,46 +114,3 @@ class ResponsiveContainer extends StatelessWidget {
   }
 }
 
-/// iPad 上以弹窗样式展示 BottomSheet，限制最大宽度
-void showAdaptiveBottomSheet(
-  BuildContext context, {
-  required WidgetBuilder builder,
-  bool enableDrag = true,
-  bool isDismissible = true,
-}) {
-  final isWide = ResponsiveUtils.isTablet(context);
-
-  if (isWide) {
-    // iPad / 宽屏 — 使用 Dialog 替代全宽 BottomSheet
-    showDialog(
-      context: context,
-      barrierDismissible: isDismissible,
-      builder: (ctx) {
-        return Dialog(
-          insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
-          clipBehavior: Clip.antiAlias,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 500,
-              maxHeight: 600,
-            ),
-            child: builder(ctx),
-          ),
-        );
-      },
-    );
-  } else {
-    // 手机 — 保持原有 BottomSheet 行为
-    showModalBottomSheet(
-      context: context,
-      isDismissible: isDismissible,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      enableDrag: enableDrag,
-      builder: builder,
-    );
-  }
-}
