@@ -11243,6 +11243,46 @@ class S {
       args: [],
     );
   }
+
+  /// `New Device Login`
+  String get device_login_title {
+    return Intl.message(
+      'New Device Login',
+      name: 'device_login_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your account was just logged in on {deviceName} ({os}). If this wasn't you, we recommend changing your password.`
+  String device_login_message(Object deviceName, Object os) {
+    return Intl.message(
+      'Your account was just logged in on $deviceName ($os). If this wasn\'t you, we recommend changing your password.',
+      name: 'device_login_message',
+      desc: '',
+      args: [deviceName, os],
+    );
+  }
+
+  /// `Got it`
+  String get device_login_dismiss {
+    return Intl.message(
+      'Got it',
+      name: 'device_login_dismiss',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change Password`
+  String get device_login_change_password {
+    return Intl.message(
+      'Change Password',
+      name: 'device_login_change_password',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

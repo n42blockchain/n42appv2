@@ -16,6 +16,7 @@ import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/login/services/social_auth_service.dart';
+import 'package:n42appv2/src/utils/device_info_util.dart';
 import 'package:n42appv2/src/utils/toast_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -279,12 +280,13 @@ class _SocialLoginButtonsState extends ConsumerState<SocialLoginButtons> {
   }) async {
     try {
       final api = UserInfoApi();
+      final deviceInfo = await DeviceInfoUtil().getFullDeviceInfo();
       dynamic data;
 
       if (provider == 'google') {
-        data = await api.loginWithGoogle(idToken, accessToken: accessToken);
+        data = await api.loginWithGoogle(idToken, accessToken: accessToken, deviceInfo: deviceInfo);
       } else if (provider == 'apple') {
-        data = await api.loginWithApple(idToken, accessToken ?? '');
+        data = await api.loginWithApple(idToken, accessToken ?? '', deviceInfo: deviceInfo);
       } else {
         throw Exception('Unsupported provider: $provider');
       }

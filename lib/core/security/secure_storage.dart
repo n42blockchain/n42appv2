@@ -67,11 +67,11 @@ class SecureStorage {
   static const String _keyPrivateKeyPrefix = 'pk_';
   static const String _keyBiometricEnabled = 'biometric_enabled';
   static const String _keyGesturePassword = 'gesture_password';
+  static const String _keyDeviceId = 'n42_device_id';
 
   SecureStorage() {
     _storage = const FlutterSecureStorage(
       aOptions: AndroidOptions(
-        encryptedSharedPreferences: true,
         sharedPreferencesName: 'n42_secure_prefs',
         preferencesKeyPrefix: 'n42_',
       ),
@@ -263,6 +263,18 @@ class SecureStorage {
   /// 删除手势密码
   Future<void> deleteGesturePassword() async {
     await _storage.delete(key: _keyGesturePassword);
+  }
+
+  // ==================== 设备标识 ====================
+
+  /// 保存设备唯一标识
+  Future<void> saveDeviceId(String deviceId) async {
+    await _storage.write(key: _keyDeviceId, value: deviceId);
+  }
+
+  /// 获取设备唯一标识
+  Future<String?> getDeviceId() async {
+    return _storage.read(key: _keyDeviceId);
   }
 
   // ==================== 通用方法 ====================

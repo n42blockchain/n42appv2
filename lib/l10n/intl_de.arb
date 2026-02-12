@@ -1235,5 +1235,9 @@
   "g_key_oidc_not_configured": "Enterprise SSO not configured",
   "g_key_saml_login": "SAML Login",
   "g_key_saml_not_configured": "SAML not configured",
-  "g_key_advanced_features": "Advanced Features"
+  "g_key_advanced_features": "Advanced Features",
+  "device_login_title": "Neue Geräteanmeldung",
+  "device_login_message": "Ihr Konto wurde gerade auf {deviceName} ({os}) angemeldet. Wenn Sie das nicht waren, empfehlen wir Ihnen, Ihr Passwort zu ändern.",
+  "device_login_dismiss": "Verstanden",
+  "device_login_change_password": "Passwort ändern"
 }

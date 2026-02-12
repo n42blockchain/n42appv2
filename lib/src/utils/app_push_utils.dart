@@ -10,6 +10,9 @@ import 'package:n42appv2/src/home/setting/about_app.dart';
 import 'package:n42appv2/src/home/setting/personal_setting.dart';
 import 'package:n42appv2/src/home/setting/setting_share.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
+import 'package:n42appv2/data/models/device_login_info.dart';
+import 'package:n42appv2/src/utils/device_info_util.dart';
 import 'package:n42appv2/src/login/pages/login_page.dart';
 import 'package:n42appv2/src/notification/pages/message_info.dart';
 import 'package:n42appv2/src/wallet/utils/browser_txhash.dart';
@@ -131,6 +134,12 @@ class AppPushUtils {
           return;
         }
 
+        // 新设备登录通知 — 前台直接通过 EventBus 弹窗，不走通知栏
+        if (dataType == 'device_login') {
+          await _handleDeviceLoginNotification(message.data);
+          return;
+        }
+
         final jsonStr = json.encode(message.data);
         if (message.notification != null) {
           _updateBadgeCount();
@@ -201,7 +210,8 @@ class AppPushUtils {
       debugPrint('new token : $newToken');
       if (newToken != null && AppGlobals.userInfo != null) {
         UserInfoApi loginApi=UserInfoApi();
-        final data = await loginApi.bindPushUserToken(newToken);
+        final deviceId = await DeviceInfoUtil().getOrCreateDeviceId();
+        final data = await loginApi.bindPushUserToken(newToken, deviceId: deviceId);
         if (data != null && data["code"] == 200) {
           //success
           debugPrint("更新推送用户Token成功");
@@ -240,7 +250,12 @@ class AppPushUtils {
           MaterialPageRoute(builder: (_) => LoginPage()));
       return;
     }
-    if (data['type'] == 'chat') {
+    if (data['type'] == 'device_login') {
+      // 点击设备登录通知打开 App 时，通过 EventBus 触发弹窗
+      _handleDeviceLoginNotification(data);
+      return;
+    }
+    else if (data['type'] == 'chat') {
       // Chat notifications are handled by n42_chat plugin
       debugPrint("Chat notification tapped - handled by n42_chat plugin");
     }
@@ -416,6 +431,27 @@ class AppPushUtils {
     }
   }
 
+  /// 处理新设备登录推送通知
+  /// 校验非自身设备后触发 EventBus 弹窗
+  static Future<void> _handleDeviceLoginNotification(Map<String, dynamic> data) async {
+    try {
+      final currentDeviceId = await DeviceInfoUtil().getOrCreateDeviceId();
+      final notifyDeviceId = data['device_id'] as String? ?? '';
+      // 如果是自己设备的通知，静默忽略
+      if (notifyDeviceId.isNotEmpty && notifyDeviceId == currentDeviceId) {
+        debugPrint('Device login notification from self, ignoring');
+        return;
+      }
+      final info = DeviceLoginInfo.fromJson(data);
+      eventBus.fire(EventPublic(
+        EventPublicType.deviceLoginDetected,
+        param: info,
+      ));
+    } catch (e) {
+      debugPrint('Handle device login notification error: $e');
+    }
+  }
+
   ///清除所有通知
   static void cleanNotification() {
     flutterLocalNotificationsPlugin.cancelAll();
@@ -434,6 +470,28 @@ class AppPushUtils {
     if (roomId != null || (dataType != null && dataType.startsWith('m.call.'))) {
       debugPrint('Background: Matrix/Chat message - delegating to FirebasePushService');
       await FirebasePushService.handleBackgroundMessage(message);
+      return;
+    }
+
+    // 新设备登录通知 — 后台显示系统本地通知
+    if (dataType == 'device_login') {
+      final brand = message.data['device_brand'] ?? '';
+      final os = message.data['device_os'] ?? '';
+      final deviceName = os.isNotEmpty ? '$brand $os' : brand;
+      // flutter_local_notifications 20.0.0 使用命名参数
+      FlutterLocalNotificationsPlugin().show(
+        id: 'device_login'.hashCode,
+        title: 'New Device Login',
+        body: 'Your account was logged in on $deviceName',
+        notificationDetails: NotificationDetails(
+          android: AndroidNotificationDetails(
+            channel.id, channel.name,
+            channelDescription: channel.description,
+            color: Colors.black,
+          ),
+        ),
+        payload: json.encode(message.data),
+      );
       return;
     }
 

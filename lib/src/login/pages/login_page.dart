@@ -8,6 +8,7 @@ import 'package:n42appv2/src/login/pages/account_create_and_reset.dart';
 import 'package:n42appv2/src/login/widgets/login_title.dart';
 import 'package:n42appv2/src/login/widgets/user_protocol.dart';
 import 'package:n42appv2/data/models/user_info.dart';
+import 'package:n42appv2/src/utils/device_info_util.dart';
 import 'package:n42appv2/src/utils/md5_util.dart';
 import 'package:n42appv2/src/utils/regular.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
@@ -268,8 +269,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               load=Load.loading;
                             });
                             UserInfoApi loginApi=UserInfoApi();
+                            final deviceInfo = await DeviceInfoUtil().getFullDeviceInfo();
                             final data = await loginApi.login(
-                                email, Md5Util().generateMd5(password));
+                                email, Md5Util().generateMd5(password),
+                                deviceInfo: deviceInfo);
                             if (!mounted) return;
                             if (data != null) {
                               if (data["code"] == 200) {

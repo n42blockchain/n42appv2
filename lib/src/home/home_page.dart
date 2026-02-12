@@ -3,7 +3,11 @@
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/core/providers/core_providers.dart';
+import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/core/utils/responsive_utils.dart';
+import 'package:n42appv2/data/models/device_login_info.dart';
+import 'package:n42appv2/src/login/pages/change_password_page.dart';
+import 'package:n42appv2/src/widgets/dialog_widget/device_login_dialog.dart';
 import 'package:n42appv2/src/home/home_draw_page.dart';
 import 'package:n42appv2/src/home/unlock.dart';
 import 'package:n42appv2/src/miningV2/pages/mining_background.dart';
@@ -40,6 +44,8 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
   final GlobalKey _tabfive = GlobalKey();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool? showTermsOfService;
+  StreamSubscription? _deviceLoginSubscription;
+  bool _isDeviceLoginDialogShowing = false;
   
   /// Build pages list (不包含 Chat，Chat 作为独立页面跳转)
   List<Widget> _buildPages() {
@@ -63,7 +69,34 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _listenDeviceLogin();
     initData();
+  }
+
+  void _listenDeviceLogin() {
+    _deviceLoginSubscription = eventBus.on<EventPublic>().listen((event) {
+      if (event.type == EventPublicType.deviceLoginDetected &&
+          event.param is DeviceLoginInfo &&
+          !_isDeviceLoginDialogShowing &&
+          mounted) {
+        _showDeviceLoginDialog(event.param as DeviceLoginInfo);
+      }
+    });
+  }
+
+  Future<void> _showDeviceLoginDialog(DeviceLoginInfo info) async {
+    _isDeviceLoginDialogShowing = true;
+    try {
+      final result = await deviceLoginDialog(context, info);
+      if (result == true && mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const ChangePasswordPage()),
+        );
+      }
+    } finally {
+      _isDeviceLoginDialogShowing = false;
+    }
   }
   Future<void> initData() async {
     showTermsOfService = await SPUtil().getShowTermsOfService();
@@ -88,8 +121,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    //关闭监听流
-    //subscription.cancel();
+    _deviceLoginSubscription?.cancel();
     super.dispose();
   }
   @override

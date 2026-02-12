@@ -1235,5 +1235,9 @@
   "g_key_batch_swipe_remove": "Swipe left to remove a recipient",
   "g_key_batch_memo_optional": "Memo is optional",
   "g_key_batch_multicall_tip": "Use Multicall3 for lower gas fees",
-  "g_key_advanced_features": "Advanced Features"
+  "g_key_advanced_features": "Advanced Features",
+  "device_login_title": "Logowanie z nowego urządzenia",
+  "device_login_message": "Twoje konto zostało właśnie zalogowane na {deviceName} ({os}). Jeśli to nie Ty, zalecamy zmianę hasła.",
+  "device_login_dismiss": "Rozumiem",
+  "device_login_change_password": "Zmień hasło"
 }

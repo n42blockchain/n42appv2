@@ -1235,5 +1235,9 @@
   "g_key_batch_swipe_remove": "Swipe left to remove a recipient",
   "g_key_batch_memo_optional": "Memo is optional",
   "g_key_batch_multicall_tip": "Use Multicall3 for lower gas fees",
-  "g_key_advanced_features": "Advanced Features"
+  "g_key_advanced_features": "Advanced Features",
+  "device_login_title": "新しいデバイスでログイン",
+  "device_login_message": "あなたのアカウントが{deviceName}（{os}）でログインされました。心当たりがない場合は、パスワードの変更をお勧めします。",
+  "device_login_dismiss": "了解",
+  "device_login_change_password": "パスワードを変更"
 }

@@ -16,11 +16,14 @@ class UserInfoApi{
   }
 
   /// 邮箱登陆
-  Future login(String email, String password) async {
-    Map params = {};
+  Future login(String email, String password, {Map<String, dynamic>? deviceInfo}) async {
+    Map<String, dynamic> params = {};
     params["email"] = email;
     params["pwd"] = password;
     params["source"] = "app";
+    if (deviceInfo != null) {
+      params.addAll(deviceInfo);
+    }
     final data =
     await BaseApi.requestEmptyH.post('$url/v1/user/loginEmail', params: {}, data: params,header: header);
     return data;
@@ -413,12 +416,15 @@ class UserInfoApi{
   }
 
   ///FCM推送绑定设备 token
-  Future bindPushUserToken(String pushToken) async {
-    Map params = {};
+  Future bindPushUserToken(String pushToken, {String? deviceId}) async {
+    Map<String, dynamic> params = {};
     params["firebase_token"] = pushToken;
     params["uuid"] = AppGlobals.userInfo?.uuid??"";
     params["token"] = AppGlobals.userInfo?.token??"";
     params["source"] = "app";
+    if (deviceId != null) {
+      params["device_id"] = deviceId;
+    }
     final data = await BaseApi.requestEmptyH.post(
         '$url/v1/l/file/bind/firebase/token',
         params: {},
@@ -430,7 +436,7 @@ class UserInfoApi{
   /// 第三方登录 - Google
   /// idToken: Google ID Token
   /// accessToken: Google Access Token (optional)
-  Future<dynamic> loginWithGoogle(String idToken, {String? accessToken}) async {
+  Future<dynamic> loginWithGoogle(String idToken, {String? accessToken, Map<String, dynamic>? deviceInfo}) async {
     Map<String, dynamic> params = {
       "provider": "google",
       "id_token": idToken,
@@ -438,6 +444,9 @@ class UserInfoApi{
     };
     if (accessToken != null) {
       params["access_token"] = accessToken;
+    }
+    if (deviceInfo != null) {
+      params.addAll(deviceInfo);
     }
     final data = await BaseApi.requestEmptyH.post(
       '$url/v1/user/loginSocial',
@@ -451,13 +460,16 @@ class UserInfoApi{
   /// 第三方登录 - Apple
   /// idToken: Apple Identity Token
   /// authorizationCode: Apple Authorization Code
-  Future<dynamic> loginWithApple(String idToken, String authorizationCode) async {
+  Future<dynamic> loginWithApple(String idToken, String authorizationCode, {Map<String, dynamic>? deviceInfo}) async {
     Map<String, dynamic> params = {
       "provider": "apple",
       "id_token": idToken,
       "authorization_code": authorizationCode,
       "source": "app",
     };
+    if (deviceInfo != null) {
+      params.addAll(deviceInfo);
+    }
     final data = await BaseApi.requestEmptyH.post(
       '$url/v1/user/loginSocial',
       params: {},

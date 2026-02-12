@@ -56,6 +56,8 @@ enum EventPublicType {
   // === Authentication Events ===
   /// Token expired, user needs to re-login
   tokenExpired,
+  /// Another device logged in with the same account
+  deviceLoginDetected,
 
   // === Chat Feature Events ===
   /// New chat message received

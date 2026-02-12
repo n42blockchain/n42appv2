@@ -1235,5 +1235,9 @@
   "g_key_aa_not_deployed_desc": "Account will be deployed on first transaction",
   "g_key_aa_deploying_desc": "Deployment transaction is being processed",
   "g_key_aa_deployed_desc": "Account is ready to use",
-  "g_key_aa_deploy_failed_desc": "Deployment failed. Please try again."
+  "g_key_aa_deploy_failed_desc": "Deployment failed. Please try again.",
+  "device_login_title": "New Device Login",
+  "device_login_message": "Your account was just logged in on {deviceName} ({os}). If this wasn't you, we recommend changing your password.",
+  "device_login_dismiss": "Got it",
+  "device_login_change_password": "Change Password"
 }
