@@ -52,8 +52,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
   late String _txHash;
   @override
   void initState() {
-    // TODO: implement initState
-    _txHash = _txHash;
+    _txHash = widget.txHash;
     searchEditingController.text=_txHash;
     init();
     super.initState();
@@ -67,7 +66,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
       owner=false;
       return;
     }
-    setState(() {
+    if (mounted) setState(() {
       load=Load.loading;
     });
     List<TransationRecordModel> trModelList=await db.selectTransationRecordTxHash(_txHash,widget.coinModel.address);
@@ -75,8 +74,10 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
       trm=trModelList[0];
     }
     bool r=await getTransactionByHash();
+    if (!mounted) return;
     if(r){
       await getTransactionReceipt();
+      if (!mounted) return;
       setState(() {
         load=Load.finish;
       });

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42appv2/core/utils/js_escape_utils.dart';
 
 class Moonpay extends StatefulWidget {
   final CoinModel? coinModel;
@@ -52,19 +53,19 @@ class _MoonpayState extends State<Moonpay> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageStarted: (url) {
-            setState(() {
+            if (mounted) setState(() {
               pageLoad = Load.loading;
               pageLoadValue = 0;
             });
           },
           onPageFinished: (url) async {
-            setState(() {
+            if (mounted) setState(() {
               pageLoad = Load.finish;
             });
             await _updateNavButtons();
           },
           onProgress: (progress) {
-            setState(() {
+            if (mounted) setState(() {
               pageLoadValue = progress / 100;
             });
           },
@@ -79,6 +80,7 @@ class _MoonpayState extends State<Moonpay> {
   Future<void> _updateNavButtons() async {
     bool canBack = await webViewController.canGoBack();
     bool canForward = await webViewController.canGoForward();
+    if (!mounted) return;
     setState(() {
       goBack = canBack;
       goForward = canForward;
@@ -95,7 +97,7 @@ class _MoonpayState extends State<Moonpay> {
               widget.coinModel!.address,
               rdatas[0]['url'],
               rdatas[0]['mode']);
-          webViewController.runJavaScript('receiveSignature("$url");');
+          webViewController.runJavaScript('receiveSignature("${JsEscapeUtils.escapeJs(url)}");');
         }
       }
     }

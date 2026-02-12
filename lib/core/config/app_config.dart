@@ -26,6 +26,15 @@ class AppConfig {
   /// Minimum wallet password length
   static const int walletPasswordLength = 8;
 
+  // ============ IPFS Credentials ============
+  // Loaded from environment variables at build time:
+  //   --dart-define=IPFS_USERNAME=xxx --dart-define=IPFS_PASSWORD=xxx
+  static const String _ipfsUsername = String.fromEnvironment('IPFS_USERNAME');
+  static const String _ipfsPassword = String.fromEnvironment('IPFS_PASSWORD');
+
+  static String get ipfsUsername => _ipfsUsername;
+  static String get ipfsPassword => _ipfsPassword;
+
   // ============ Environment Flags ============
   
   /// Whether to enable app update checking

@@ -20,6 +20,7 @@ import 'package:web3dart/web3dart.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';
+import 'package:n42appv2/core/utils/js_escape_utils.dart';
 class SelfCustody1 extends StatefulWidget {
   final CoinModel coinModel;
   const SelfCustody1(this.coinModel,{super.key});
@@ -106,7 +107,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
             String? p2wshAddress=await createP2WSH(nowTime,cPubKey: pKey);
             //CreateP2WSH().p2wsh(rdata['lockupTime']);
             lockAmount=rdata['amount'];
-            _controller.runJavaScript('is_p2wsh_address_valid("$p2wshAddress");');
+            _controller.runJavaScript('is_p2wsh_address_valid("${JsEscapeUtils.escapeJs(p2wshAddress ?? "")}");');
           }else if(rdata['type']=="is_p2wsh_address_valid"){
             if(rdata["result"]==true){
               String p2wshAddr=p2wshAddress!.toAddress(BitcoinNetwork.testnet);
@@ -117,13 +118,13 @@ class _SelfCustody1State extends State<SelfCustody1> {
                 String ethAddress=Provider.of<WalletActionProvider>(context,listen: false).getAddress(CoinType.N.name);
                 BigInt lockAmountInt=ethToWeiString(lockAmount!, 8);
                 //String alertStr='requestMintVbtc("${p2wshAddr}","${ethAddress}",${lockAmountInt},"${value}","${widget.coinModel.address}",${lockTimeInt},"${publicKey}");';
-                String alertStr='requestMintVbtc("$p2wshAddr","$ethAddress",$lockAmountInt,"${widget.coinModel.address}",$lockTimeInt,"$publicKey");';
+                String alertStr='requestMintVbtc("${JsEscapeUtils.escapeJs(p2wshAddr)}","${JsEscapeUtils.escapeJs(ethAddress)}",$lockAmountInt,"${JsEscapeUtils.escapeJs(widget.coinModel.address)}",$lockTimeInt,"${JsEscapeUtils.escapeJs(publicKey ?? "")}");';
                 if (kDebugMode) debugPrint(alertStr);
                 _controller.runJavaScript(alertStr);
               }
             }
           }else if(rdata['type']=="request_mint_vbtc"){
-            _controller.runJavaScript('alert("来自Flutter的消息，我收到了:${rdata['result']}");');
+            _controller.runJavaScript('alert("来自Flutter的消息，我收到了:${JsEscapeUtils.escapeJs(rdata['result']?.toString() ?? "")}");');
           }
         }
 

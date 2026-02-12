@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui' as ui show instantiateImageCodec, Codec;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:n42appv2/core/security/security_config.dart';
 
 class ImageNetWorkSSL extends StatelessWidget {
   final String imageUrl;
@@ -78,8 +79,7 @@ class NetworkImageSSL extends ImageProvider<NetworkImageSSL> {
   }
 
   static final HttpClient _httpClient = HttpClient()
-    ..badCertificateCallback =
-    ((X509Certificate cert, String host, int port) => true);
+    ..badCertificateCallback = SecurityConfig.verifySslCertificate;
 
   Future<ui.Codec> _loadAsync(NetworkImageSSL key) async {
     assert(key == this);

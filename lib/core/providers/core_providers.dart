@@ -13,6 +13,7 @@ export 'wallet_state_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:n42appv2/core/constants/language_constants.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/core/utils/theme_mode_utils.dart';

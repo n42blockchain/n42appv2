@@ -49,8 +49,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
   late String _txHash;
   @override
   void initState() {
-    // TODO: implement initState
-    _txHash = _txHash;
+    _txHash = widget.txHash;
     searchEditingController.text=_txHash;
     init();
     super.initState();
@@ -63,7 +62,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       owner=false;
       return;
     }
-    setState(() {
+    if (mounted) setState(() {
       load=Load.loading;
     });
     List<TransationRecordModel> trModelList=await db.selectTransationRecordTxHash(_txHash,widget.coinModel.address);
@@ -71,6 +70,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       trm=trModelList[0];
     }
     bool r=await getTransactionByHash();
+    if (!mounted) return;
     if(r){
       setState(() {
         load=Load.finish;
@@ -100,7 +100,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       transactionInfo=rData.data;
       trm.gas=transactionInfo?['cost']?['net_fee_cost']??0;
       trm.gasPriceValue=BigInt.from(transactionInfo?['cost']?['fee']??0);
-      if(transactionInfo!['confirmed']==true){
+      if(transactionInfo?['confirmed']==true){
         resultStr="Success";
       }
       value='${toEther(trm.price.toString(), widget.coinModel.coin['decimals'])} ${widget.coinModel.coin['unit']}';

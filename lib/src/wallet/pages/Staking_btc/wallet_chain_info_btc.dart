@@ -44,6 +44,7 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
+import 'package:n42appv2/core/utils/js_escape_utils.dart';
 
 class WalletChainInfoBtc extends StatefulWidget {
   final CoinModel coinModel;
@@ -178,7 +179,7 @@ class _WalletChainInfoBtcState extends State<WalletChainInfoBtc> {
           }else if(rdata['type']=="is_p2wsh_address_valid"){
 
           }else if(rdata['type']=="request_mint_vbtc"){
-            _controller.runJavaScript('alert("来自Flutter的消息，我收到了:${rdata['result']}");');
+            _controller.runJavaScript('alert("来自Flutter的消息，我收到了:${JsEscapeUtils.escapeJs(rdata['result']?.toString() ?? "")}");');
           }
         }
 

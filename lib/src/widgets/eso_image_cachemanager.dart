@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
+import 'package:n42appv2/core/security/security_config.dart';
 
 ///
 class EsoImageCacheManager extends CacheManager {
@@ -10,9 +11,6 @@ class EsoImageCacheManager extends CacheManager {
   static  EsoImageCacheManager? _instance;
   factory EsoImageCacheManager() {
     _instance ??= EsoImageCacheManager._();
-    _httpClient.badCertificateCallback = ((cert, host, port){
-      return true;
-    });
     return _instance!;
   }
   static final HttpClient _httpClient = HttpClient();
@@ -25,7 +23,7 @@ class EsoHttpFileService extends FileService {
   late HttpClient _httpClient;
   EsoHttpFileService({HttpClient? httpClient}) {
     _httpClient = httpClient ?? HttpClient();
-    _httpClient.badCertificateCallback = (cert, host, port) => true;
+    _httpClient.badCertificateCallback = SecurityConfig.verifySslCertificate;
   }
 
   @override

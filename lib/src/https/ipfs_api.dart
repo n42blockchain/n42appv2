@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/security/security_config.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
@@ -45,8 +46,11 @@ class IpfsApi{
       FormData fd=FormData.fromMap({"path":type==0?
       MultipartFile.fromFile(file,filename: filename):
       MultipartFile.fromBytes(file,filename: filename)});
-      String username = 'n42';
-      String password = 'Z,p7=f#|q5JkmeyL';
+      String username = AppConfig.ipfsUsername;
+      String password = AppConfig.ipfsPassword;
+      if (username.isEmpty || password.isEmpty) {
+        return {"error": true, "data": "IPFS credentials not configured"};
+      }
       String basicAuth =
           'Basic ${base64Encode(utf8.encode('$username:$password'))}';
       var data=await BaseApi.requestEmptyH.post(
@@ -112,11 +116,13 @@ class IpfsApi{
         connectTimeout: Duration(milliseconds: 10000),
         receiveTimeout: Duration(milliseconds: 5000),
       ));
-      // 配置 HttpClientAdapter 来忽略 SSL 证书验证
-      dio.httpClientAdapter = IOHttpClientAdapter()..createHttpClient=(){
-        HttpClient client=HttpClient()..badCertificateCallback = (X509Certificate cert, String host, int port) => true; // // 总是返回 true，表示信任所有证书
-        return client;
-      };
+      dio.httpClientAdapter = IOHttpClientAdapter(
+        createHttpClient: () {
+          final client = HttpClient();
+          client.badCertificateCallback = SecurityConfig.verifySslCertificate;
+          return client;
+        },
+      );
       var response = await dio.download(urlPath, savePath,
           onReceiveProgress: receiveProgress);
       var data = response.data;

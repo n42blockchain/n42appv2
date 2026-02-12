@@ -23,6 +23,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import 'package:http/http.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';
+import 'package:n42appv2/core/utils/js_escape_utils.dart';
 
 class Redeem extends StatefulWidget {
   final CoinModel coinModel;
@@ -92,9 +93,9 @@ class _RedeemState extends State<Redeem> {
         if(rdata !=null){
           if(rdata['type']=="redeem"){
             String signStr=await redeem(rdata['p2wsh_address'],rdata['lock_time']);
-            _controller.runJavaScript('request_withdraw_vbtc("${rdata['p2wsh_address']}","$signStr");');
+            _controller.runJavaScript('request_withdraw_vbtc("${JsEscapeUtils.escapeJs(rdata['p2wsh_address']?.toString() ?? "")}","${JsEscapeUtils.escapeJs(signStr)}");');
           }else if(rdata['type']=="request_withdraw_vbtc"){
-            _controller.runJavaScript('alert("来自Flutter的消息，我收到了:${rdata['result']}");');
+            _controller.runJavaScript('alert("来自Flutter的消息，我收到了:${JsEscapeUtils.escapeJs(rdata['result']?.toString() ?? "")}");');
           }
         }
       });
@@ -194,10 +195,11 @@ class _RedeemState extends State<Redeem> {
   Future<void> getGasFeeBtc()async{
     MessageModel gasFeeMM=await tokenViewApi.getGasFeeBtc(isTest: widget.coinModel.isTest);
     if(gasFeeMM.error){
+      debugPrint('getGasFeeBtc error: ${gasFeeMM.data}');
     }else{
       gasFeeRate=gasFeeMM.data;
     }
-    setState(() {});
+    if (mounted) setState(() {});
   }
   Future<String> signP2WSH()async{
     Map<String,dynamic> btcTxMap={
@@ -302,13 +304,13 @@ class _RedeemState extends State<Redeem> {
       MessageModel mm=await tokenViewApi.getUTXOBtc(widget.coinModel.coin['coinType'], address,pageSize: 1,pageNum: 10,isTest: widget.coinModel.isTest);
       if(mm.error){
         ToastUtils.show(mm.data);
-        setState(() {});
+        if (mounted) setState(() {});
       }else{
         await calculateGasFee(mm.data);
       }
     }catch(e){
       ToastUtils.show(e.toString());
-      setState(() {});
+      if (mounted) setState(() {});
     }
   }
   Future<void> calculateGasFee(List<dynamic> unspents)async{
@@ -348,7 +350,7 @@ class _RedeemState extends State<Redeem> {
       }
     }
     inputUTXO=utxos;
-    setState(() {});
+    if (mounted) setState(() {});
   }
   Future<void> initEthToken(String p2wshAddr)async{
     Web3Client client = Web3Client("https://eth-sepolia.public.blastapi.io", Client());

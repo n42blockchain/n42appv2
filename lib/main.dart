@@ -102,89 +102,6 @@ void main() async {
   initRpcConfig(); // Validate RPC URLs security in debug mode
   RequestUrl.initializeApiKeys(); // Update URLs with actual API keys
 
-  // SECURITY: Migrate sensitive wallet data from SharedPreferences to SecureStorage
-  // This is a one-time migration to fix the security issue of storing
-  // mnemonic/privateKey/password in unencrypted SharedPreferences
-  try {
-    final migration = WalletDataMigration(
-      secureStorage: SecureStorage(),
-      spUtil: SPUtil(),
-    );
-    if (await migration.needsMigration()) {
-      final count = await migration.migrate();
-      debugPrint('[Security] Wallet data migration completed: $count wallets migrated');
-    }
-  } catch (e) {
-    debugPrint('[Security] Wallet data migration failed: $e');
-    // Don't block app startup, but log the error
-  }
-
-  // Initialize N42 Chat module
-  try {
-    // Sygnal 要求每个平台使用不同的 app_id
-    // iOS: ai.n42.www.ios, Android: ai.n42.www.android, Web: ai.n42.www.web
-    final String pushAppId;
-    if (Platform.isAndroid) {
-      pushAppId = 'ai.n42.www.android';
-    } else if (Platform.isIOS) {
-      pushAppId = 'ai.n42.www.ios';
-    } else {
-      pushAppId = 'ai.n42.www.web';
-    }
-
-    await N42Chat.initialize(N42ChatConfig(
-      defaultHomeserver: 'https://matrix.n42.network',
-      enableEncryption: true,
-      enablePushNotifications: true,
-      // Matrix Sygnal push gateway for FCM/APNs
-      pushGatewayUrl: 'https://m.si46.world/_matrix/push/v1/notify',
-      pushAppId: pushAppId,
-      // 钱包桥接，用于获取真实的钱包地址
-      walletBridge: N42WalletBridge(),
-    ));
-
-    // 设置导航键，用于通话页面导航
-    N42Chat.setNavigatorKey(AppGlobals.navigatorKey);
-
-    // 设置通知点击处理
-    N42Chat.setNotificationTapHandler((roomId, eventId) {
-      debugPrint('N42Chat notification tapped: roomId=$roomId');
-      if (roomId != null && AppGlobals.navigatorKey.currentContext != null) {
-        // 导航到聊天页面
-        Navigator.of(AppGlobals.navigatorKey.currentContext!).push(
-          MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),
-        );
-      }
-    });
-
-    // 同步当前主题到 n42_chat
-    final currentTheme = globalProviderContainer.read(themeModeProvider);
-    N42Chat.setThemeMode(currentTheme);
-
-    // 同步当前语言到 n42_chat
-    final currentLocale = globalProviderContainer.read(localeProvider);
-    N42Chat.setLocale(currentLocale);
-
-    // 监听 n42_chat 语言变化，同步更新主应用的语言设置
-    N42Chat.addLocaleListener((locale) {
-      final currentAppLocale = globalProviderContainer.read(localeProvider);
-      if (currentAppLocale.languageCode != locale.languageCode) {
-        globalProviderContainer.read(localeProvider.notifier).setLocale(locale.languageCode);
-        debugPrint('Main app locale synced from N42Chat: $locale');
-      }
-    });
-
-    // 监听 N42Chat 未读消息数，更新主应用的未读计数
-    N42Chat.unreadCountStream.listen((count) {
-      globalProviderContainer.read(unreadCountProvider.notifier).setCount(count);
-      debugPrint('N42Chat unread count updated: $count');
-    });
-
-    debugPrint('N42Chat initialized successfully with theme: $currentTheme');
-  } catch (e) {
-    debugPrint('N42Chat initialization failed: $e');
-  }
-
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   };
@@ -253,6 +170,95 @@ class _N42AppV2State extends State<N42AppV2> {
     ///release + online 开启
     FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(AppConfig.isOnline);
     initData();
+    // 延迟初始化：钱包数据迁移 + N42Chat，不阻塞首帧渲染
+    _initDeferredServices();
+  }
+
+  /// 延迟初始化重量级服务，在首帧渲染后执行
+  void _initDeferredServices() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // 钱包数据迁移（后台执行，不阻塞 UI）
+      _migrateWalletData();
+      // N42Chat 初始化（后台执行，不阻塞 UI）
+      _initN42Chat();
+    });
+  }
+
+  /// 安全地将钱包数据从 SharedPreferences 迁移到 SecureStorage
+  Future<void> _migrateWalletData() async {
+    try {
+      final migration = WalletDataMigration(
+        secureStorage: SecureStorage(),
+        spUtil: SPUtil(),
+      );
+      if (await migration.needsMigration()) {
+        final count = await migration.migrate();
+        debugPrint('[Security] Wallet data migration completed: $count wallets migrated');
+      }
+    } catch (e) {
+      debugPrint('[Security] Wallet data migration failed: $e');
+    }
+  }
+
+  /// 后台初始化 N42Chat 模块
+  Future<void> _initN42Chat() async {
+    try {
+      final String pushAppId;
+      if (Platform.isAndroid) {
+        pushAppId = 'ai.n42.www.android';
+      } else if (Platform.isIOS) {
+        pushAppId = 'ai.n42.www.ios';
+      } else {
+        pushAppId = 'ai.n42.www.web';
+      }
+
+      await N42Chat.initialize(N42ChatConfig(
+        defaultHomeserver: 'https://matrix.n42.network',
+        enableEncryption: true,
+        enablePushNotifications: true,
+        pushGatewayUrl: 'https://m.si46.world/_matrix/push/v1/notify',
+        pushAppId: pushAppId,
+        walletBridge: N42WalletBridge(),
+      ));
+
+      N42Chat.setNavigatorKey(AppGlobals.navigatorKey);
+
+      N42Chat.setNotificationTapHandler((roomId, eventId) {
+        debugPrint('N42Chat notification tapped: roomId=$roomId');
+        if (roomId != null && AppGlobals.navigatorKey.currentContext != null) {
+          Navigator.of(AppGlobals.navigatorKey.currentContext!).push(
+            MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),
+          );
+        }
+      });
+
+      // 同步当前主题到 n42_chat
+      final currentTheme = globalProviderContainer.read(themeModeProvider);
+      N42Chat.setThemeMode(currentTheme);
+
+      // 同步当前语言到 n42_chat
+      final currentLocale = globalProviderContainer.read(localeProvider);
+      N42Chat.setLocale(currentLocale);
+
+      // 监听 n42_chat 语言变化，同步更新主应用
+      N42Chat.addLocaleListener((locale) {
+        final currentAppLocale = globalProviderContainer.read(localeProvider);
+        if (currentAppLocale.languageCode != locale.languageCode) {
+          globalProviderContainer.read(localeProvider.notifier).setLocale(locale.languageCode);
+          debugPrint('Main app locale synced from N42Chat: $locale');
+        }
+      });
+
+      // 监听未读消息数
+      N42Chat.unreadCountStream.listen((count) {
+        globalProviderContainer.read(unreadCountProvider.notifier).setCount(count);
+        debugPrint('N42Chat unread count updated: $count');
+      });
+
+      debugPrint('N42Chat initialized successfully with theme: $currentTheme');
+    } catch (e) {
+      debugPrint('N42Chat initialization failed: $e');
+    }
   }
   Future<void> initData() async {
     try {

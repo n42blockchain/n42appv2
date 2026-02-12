@@ -16,7 +16,7 @@ extension AsyncStateX<T> on AsyncValue<T> {
   bool get isRefreshing => isLoading && hasValue;
   
   /// Get data or return default value
-  T dataOr(T defaultValue) => valueOrNull ?? defaultValue;
+  T dataOr(T defaultValue) => value ?? defaultValue;
   
   /// Map data while preserving loading/error states
   AsyncValue<R> mapData<R>(R Function(T data) mapper) {
@@ -29,8 +29,8 @@ extension AsyncStateX<T> on AsyncValue<T> {
   
   /// Execute action when has data
   void whenHasData(void Function(T data) action) {
-    if (hasValue && valueOrNull != null) {
-      action(valueOrNull as T);
+    if (hasValue && value != null) {
+      action(value as T);
     }
   }
 }

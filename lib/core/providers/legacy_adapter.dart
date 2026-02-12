@@ -44,7 +44,7 @@ class WalletProviderAdapter extends ChangeNotifier {
 
   /// Get wallet list
   List<WalletInfoData> get walletInfoList {
-    return _container.read(walletListProvider).valueOrNull ?? [];
+    return _container.read(walletListProvider).value ?? [];
   }
 
   /// Get current wallet index
@@ -60,12 +60,12 @@ class WalletProviderAdapter extends ChangeNotifier {
 
   /// Get coin list
   List<CoinBalanceData> get coinList {
-    return _container.read(coinListProvider).valueOrNull ?? [];
+    return _container.read(coinListProvider).value ?? [];
   }
 
   /// Get total balance
   double get balanceTotal {
-    return _container.read(walletBalanceProvider).valueOrNull ?? 0.0;
+    return _container.read(walletBalanceProvider).value ?? 0.0;
   }
 
   /// Set wallet index

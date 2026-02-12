@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/https/request_url.dart';
@@ -85,8 +83,7 @@ class BtcApi{
     }
   }
   Future<MessageModel> sendTxHttp(String signHase)async{
-    HttpOverrides.global = MyHttpOverrides();
-    String url = "${uri}tx"; // 替换为你的 API 地址
+    String url = "${uri}tx";
     try {
       var response = await http.post(
         Uri.parse(url),
@@ -148,12 +145,5 @@ class BtcApi{
       mm.data=e;
       return mm;
     }
-  }
-}
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }

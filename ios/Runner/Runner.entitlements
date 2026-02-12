@@ -8,5 +8,9 @@
 	<array>
 		<string>group.ai.n42.wallet</string>
 	</array>
+	<key>keychain-access-groups</key>
+	<array>
+		<string>$(AppIdentifierPrefix)ai.n42.www</string>
+	</array>
 </dict>
 </plist>

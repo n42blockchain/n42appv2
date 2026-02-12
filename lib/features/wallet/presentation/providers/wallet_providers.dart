@@ -6,6 +6,7 @@
 // Author: Jiang Yiwei
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
 
@@ -220,7 +221,7 @@ class WalletListNotifier extends AsyncNotifier<List<WalletInfoData>> {
 
   /// Add a new wallet
   Future<void> addWallet(WalletInfoData wallet) async {
-    final current = state.valueOrNull ?? [];
+    final current = state.value ?? [];
     final updated = [...current, wallet];
     state = AsyncValue.data(updated);
     await _saveWallets(updated);
@@ -228,7 +229,7 @@ class WalletListNotifier extends AsyncNotifier<List<WalletInfoData>> {
 
   /// Remove a wallet by address
   Future<void> removeWallet(String address) async {
-    final current = state.valueOrNull ?? [];
+    final current = state.value ?? [];
     final updated = current.where((w) => w.address != address).toList();
     state = AsyncValue.data(updated);
     await _saveWallets(updated);
@@ -236,7 +237,7 @@ class WalletListNotifier extends AsyncNotifier<List<WalletInfoData>> {
 
   /// Update a wallet
   Future<void> updateWallet(WalletInfoData wallet) async {
-    final current = state.valueOrNull ?? [];
+    final current = state.value ?? [];
     final index = current.indexWhere((w) => w.timestamp == wallet.timestamp);
     if (index != -1) {
       final updated = [...current];
@@ -343,7 +344,7 @@ final coinListProvider =
   return CoinListNotifier();
 });
 
-class CoinListNotifier extends AutoDisposeAsyncNotifier<List<CoinBalanceData>> {
+class CoinListNotifier extends AsyncNotifier<List<CoinBalanceData>> {
   @override
   Future<List<CoinBalanceData>> build() async {
     final wallet = ref.watch(currentWalletProvider);
@@ -449,7 +450,7 @@ final miningWalletProvider = Provider<WalletInfoData?>((ref) {
 /// Wallet Count Provider
 final walletCountProvider = Provider<int>((ref) {
   final wallets = ref.watch(walletListProvider);
-  return wallets.valueOrNull?.length ?? 0;
+  return wallets.value?.length ?? 0;
 });
 
 /// Has Wallet Provider
