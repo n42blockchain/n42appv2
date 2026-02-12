@@ -22,7 +22,6 @@ class SecurePreferences {
   /// 安全存储实例
   static const FlutterSecureStorage _secureStorage = FlutterSecureStorage(
     aOptions: AndroidOptions(
-      encryptedSharedPreferences: true,
       sharedPreferencesName: 'n42_secure_prefs',
       preferencesKeyPrefix: 'sp_',
     ),

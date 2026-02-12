@@ -24,7 +24,6 @@ class AppDatabase {
   /// 安全存储实例
   static const FlutterSecureStorage _secureStorage = FlutterSecureStorage(
     aOptions: AndroidOptions(
-      encryptedSharedPreferences: true,
       sharedPreferencesName: 'n42_db_secure',
       preferencesKeyPrefix: 'db_',
     ),
