@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:math';
-import 'dart:typed_data';
-import 'package:web3dart/web3dart.dart';
 import 'package:flustars_flutter3/flustars_flutter3.dart';
 
 class DataUtils{
@@ -24,12 +22,6 @@ class DataUtils{
     return BigInt.parse(strip, radix: 16);
   }
 
-  //int 转 十六进制
-  String intToHex(int value, {bool need0x = true}) {
-    String str = value.toRadixString(16);
-    return add0x(str);
-  }
-
   //bigInt 转 十六进制
   //need0x是否需要加上0x前缀
   String bigIntToHex(BigInt value, {bool need0x = true,bool padToEvenLength = false,}) {
@@ -42,17 +34,6 @@ class DataUtils{
     } else {
       return str;
     }
-  }
-  ///hex 转 String
-  String toStringFromHex(String hex) {
-    Uint8List bArr = hexToBytes(hex);
-    return String.fromCharCodes(bArr);
-  }
-  //保留小数位 不四舍五入
-  double doubleFixed(double num, int position) {
-    var newNum = num.toStringAsFixed(position + 1);
-    return double.parse(
-        newNum.substring(0, newNum.lastIndexOf(".") + position + 1));
   }
   /// 打乱数组
   List shuffle(List arr) {

@@ -18,10 +18,8 @@ class ScanPage extends StatefulWidget {
 
 class _ScanPageState extends State<ScanPage> {
   bool cameraOK=false;
-  Barcode? result;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  String qrcode = 'Unknown';
   bool flash=false;
 
   @override
@@ -38,9 +36,9 @@ class _ScanPageState extends State<ScanPage> {
   void reassemble() {
     super.reassemble();
     if (Platform.isAndroid) {
-      controller!.pauseCamera();
+      controller?.pauseCamera();
     }
-    controller!.resumeCamera();
+    controller?.resumeCamera();
   }
   Future<void> initPlatformState() async {
     if(Platform.isIOS){
@@ -136,7 +134,6 @@ class _ScanPageState extends State<ScanPage> {
       this.controller = controller;
     });
     controller.scannedDataStream.listen((scanData) {
-        result = scanData;
         if(back==false){
           pop(scanData.code??"");
         }

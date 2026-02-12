@@ -4,6 +4,5 @@ enum Load{
   finish,//加载完成
   error,//加载失败
   refresh,//刷新，下拉刷新
-  refresh1,//刷新状态1，刷新按钮刷新
   nextPage,//加载更多
 }

@@ -687,17 +687,17 @@ final Map<String,Map<String,dynamic>> _requestUrlMain1={
     'DOT':{
       'api':'https://polkadot.api.subscan.io/',
       'browser':'https://polkadot.subscan.io/',
-      'rpc':'	https://rpc.polkadot.io'
+      'rpc':'https://rpc.polkadot.io'
     },
     'ACA':{
       'api':'https://acala.api.subscan.io/',
       'browser':'https://acala.subscan.io/',
-      'rpc':'	https://acala-rpc.dwellir.com'
+      'rpc':'https://acala-rpc.dwellir.com'
     },
     'KSM':{
       'api':'https://kusama.api.subscan.io/',
       'browser':'https://kusama.subscan.io/',
-      'rpc':'	https://kusama-rpc.polkadot.io/'
+      'rpc':'https://kusama-rpc.polkadot.io/'
     },
     'APT':{
       'api':"",

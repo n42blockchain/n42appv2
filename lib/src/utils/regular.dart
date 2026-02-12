@@ -115,17 +115,6 @@ class Regular{
     return val;
   }
 
-  //禁止科学计数法
-  String getDoubleWithString(String d) {
-    Decimal? deciaml = Decimal.parse(d);
-    return deciaml.toString();
-  }
-  String getDoubleWithDouble(double d) {
-    Decimal? deciaml = Decimal.parse(d.toString());
-    return deciaml.toString();
-  }
-
-
   ///是否是一个密码
   bool isPassword(String pwd) {
     RegExp rule = RegExp(r'^[A-Za-z\d$@$!%*#?&]{8,18}$');//RegExp(r'^[0-9A-Za-z]{6,18}$');
@@ -147,21 +136,6 @@ class Regular{
   bool isEmail(String email) {
     RegExp  rule = RegExp(r"^\w+([-+.]\w+)*@\w+([-.]\w+)*.\w+([-.]\w+)*$");
     return rule.hasMatch(email);
-  }
-
-  ///验证小数位数
-  bool checkDoubleLength(double value,int length){
-    String valueStr=value.toString();
-    List<String> valueStrs=valueStr.split('.');
-    if(valueStrs.length==2){
-      int l=valueStrs[1].length;
-      if(length>l){
-        return true;
-      }else{
-        return false;
-      }
-    }
-    return true;
   }
 
 }
