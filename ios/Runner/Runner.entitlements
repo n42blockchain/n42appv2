@@ -11,6 +11,7 @@
 	<key>keychain-access-groups</key>
 	<array>
 		<string>$(AppIdentifierPrefix)ai.n42.www</string>
+		<string>$(AppIdentifierPrefix)ai.n42.www.ios</string>
 	</array>
 </dict>
 </plist>

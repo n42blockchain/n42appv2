@@ -8,7 +8,7 @@
 
 	<!-- Team ID (replace with your actual Team ID) -->
 	<key>teamID</key>
-	<string>YOUR_TEAM_ID</string>
+	<string>CFRXH38L48</string>
 
 	<!-- Upload to App Store Connect -->
 	<key>destination</key>
