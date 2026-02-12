@@ -541,7 +541,7 @@ class _HardwareWalletPageState extends State<HardwareWalletPage> {
 
   Future<void> _checkCurrentApp(BuildContext context, HardwareWalletProvider provider) async {
     final app = await provider.getCurrentApp();
-    if (!mounted) return;
+    if (!context.mounted) return;
 
     if (app != null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -582,7 +582,7 @@ class _HardwareWalletPageState extends State<HardwareWalletPage> {
 
     final success = await provider.reconnectDevice(device);
 
-    if (!mounted) return;
+    if (!context.mounted) return;
 
     Navigator.pop(context); // 关闭对话框
 

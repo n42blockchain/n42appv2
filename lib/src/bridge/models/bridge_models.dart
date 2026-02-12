@@ -203,22 +203,16 @@ class BridgeRoute {
             .toList() ??
         [];
 
-    // 展开嵌套的 includedSteps
-    final allSteps = <BridgeRouteStep>[];
-    for (final step in steps) {
-      allSteps.add(step);
-    }
-
     return BridgeRoute(
       id: json['id'] ?? '',
-      steps: allSteps,
+      steps: steps,
       fromToken: BridgeToken.fromJson(json['fromToken'] ?? {}),
       toToken: BridgeToken.fromJson(json['toToken'] ?? {}),
       fromAmount: json['fromAmount'] ?? '0',
       toAmount: json['toAmount'] ?? '0',
       toAmountMin: json['toAmountMin'] ?? '0',
       gasCostUSD: BigInt.tryParse(json['gasCostUSD']?.toString() ?? '0') ?? BigInt.zero,
-      estimatedSeconds: _calculateTotalDuration(allSteps),
+      estimatedSeconds: _calculateTotalDuration(steps),
       tags: List<String>.from(json['tags'] ?? []),
     );
   }
@@ -267,11 +261,10 @@ class BridgeQuoteResponse {
   /// 获取推荐路由
   BridgeRoute? get recommendedRoute {
     if (routes.isEmpty) return null;
-    try {
-      return routes.firstWhere((r) => r.isRecommended);
-    } catch (e) {
-      return routes.first;
-    }
+    return routes.cast<BridgeRoute?>().firstWhere(
+          (r) => r!.isRecommended,
+          orElse: () => routes.first,
+        );
   }
 }
 
@@ -439,5 +432,87 @@ class BridgeStatusResponse {
       destinationTxHash: json['receiving']?['txHash'],
       error: json['error'],
     );
+  }
+}
+
+/// 常用链 ID 常量
+class BridgeChainIds {
+  static const int ethereum = 1;
+  static const int optimism = 10;
+  static const int bsc = 56;
+  static const int polygon = 137;
+  static const int fantom = 250;
+  static const int arbitrum = 42161;
+  static const int avalanche = 43114;
+  static const int base = 8453;
+  static const int linea = 59144;
+  static const int scroll = 534352;
+  static const int zksync = 324;
+
+  /// 根据链名称获取链 ID
+  static int? getChainId(String chainName) {
+    switch (chainName.toLowerCase()) {
+      case 'eth':
+      case 'ethereum':
+        return ethereum;
+      case 'op':
+      case 'optimism':
+        return optimism;
+      case 'bnb':
+      case 'bsc':
+        return bsc;
+      case 'matic':
+      case 'polygon':
+        return polygon;
+      case 'ftm':
+      case 'fantom':
+        return fantom;
+      case 'arb':
+      case 'arbitrum':
+        return arbitrum;
+      case 'avax':
+      case 'avalanche':
+        return avalanche;
+      case 'base':
+        return base;
+      case 'linea':
+        return linea;
+      case 'scroll':
+        return scroll;
+      case 'zksync':
+        return zksync;
+      default:
+        return null;
+    }
+  }
+
+  /// 获取链名称
+  static String getChainName(int chainId) {
+    switch (chainId) {
+      case ethereum:
+        return 'Ethereum';
+      case optimism:
+        return 'Optimism';
+      case bsc:
+        return 'BNB Chain';
+      case polygon:
+        return 'Polygon';
+      case fantom:
+        return 'Fantom';
+      case arbitrum:
+        return 'Arbitrum';
+      case avalanche:
+        return 'Avalanche';
+      case base:
+        return 'Base';
+      case linea:
+        return 'Linea';
+      case scroll:
+        return 'Scroll';
+      case zksync:
+        return 'zkSync Era';
+      default:
+        return 'Unknown';
+    }
   }
 }

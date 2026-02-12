@@ -36,24 +36,6 @@ class SocialAuthResult {
     return SocialAuthResult(success: false, error: error);
   }
 
-  Map<String, dynamic> toJson() => {
-    'success': success,
-    'provider': provider,
-    'idToken': idToken,
-    'accessToken': accessToken,
-    'email': email,
-    'displayName': displayName,
-    'photoUrl': photoUrl,
-    'userId': userId,
-    'error': error,
-  };
-}
-
-/// Supported social auth providers
-enum SocialAuthProvider {
-  google,
-  apple,
-  // Future: facebook, twitter, etc.
 }
 
 /// Social authentication service
@@ -65,9 +47,6 @@ class SocialAuthService {
 
   // Google Sign-In instance (google_sign_in 7.x uses singleton pattern)
   GoogleSignIn get _googleSignIn => GoogleSignIn.instance;
-
-  // Cache current signed-in account
-  GoogleSignInAccount? _currentGoogleAccount;
 
   /// Check if Apple Sign-In is available (iOS 13+ or macOS 10.15+)
   Future<bool> isAppleSignInAvailable() async {
@@ -91,8 +70,6 @@ class SocialAuthService {
       final GoogleSignInAccount account = await _googleSignIn.authenticate(
         scopeHint: ['email', 'profile'],
       );
-
-      _currentGoogleAccount = account;
 
       // Get id token from authentication
       final GoogleSignInAuthentication auth = account.authentication;
@@ -173,84 +150,9 @@ class SocialAuthService {
   Future<void> signOutGoogle() async {
     try {
       await _googleSignIn.signOut();
-      _currentGoogleAccount = null;
     } catch (e) {
       debugPrint('Google Sign-Out error: $e');
     }
   }
 
-  /// Sign out from all providers
-  Future<void> signOutAll() async {
-    await signOutGoogle();
-    // Apple doesn't have a sign-out method
-  }
-
-  /// Get current Google user (if signed in)
-  /// Note: google_sign_in 7.x no longer has currentUser getter,
-  /// we cache the account from the last successful sign-in
-  GoogleSignInAccount? get currentGoogleUser => _currentGoogleAccount;
-
-  /// Check if user is signed in with Google
-  /// Note: In google_sign_in 7.x, use attemptLightweightAuthentication
-  /// to check for existing session
-  Future<bool> isSignedInWithGoogle() async {
-    try {
-      final account = await _googleSignIn.attemptLightweightAuthentication();
-      if (account != null) {
-        _currentGoogleAccount = account;
-        return true;
-      }
-      return false;
-    } catch (e) {
-      return false;
-    }
-  }
-}
-
-/// OIDC Configuration for future implementation
-class OIDCConfig {
-  final String issuer;
-  final String clientId;
-  final String redirectUri;
-  final List<String> scopes;
-
-  OIDCConfig({
-    required this.issuer,
-    required this.clientId,
-    required this.redirectUri,
-    this.scopes = const ['openid', 'profile', 'email'],
-  });
-
-  /// Validate OIDC configuration
-  bool validate() {
-    return issuer.isNotEmpty &&
-           clientId.isNotEmpty &&
-           redirectUri.isNotEmpty;
-  }
-}
-
-/// SAML Configuration for future implementation
-class SAMLConfig {
-  final String idpEntityId;
-  final String idpSsoUrl;
-  final String idpCertificate;
-  final String spEntityId;
-  final String acsUrl;
-
-  SAMLConfig({
-    required this.idpEntityId,
-    required this.idpSsoUrl,
-    required this.idpCertificate,
-    required this.spEntityId,
-    required this.acsUrl,
-  });
-
-  /// Validate SAML configuration
-  bool validate() {
-    return idpEntityId.isNotEmpty &&
-           idpSsoUrl.isNotEmpty &&
-           idpCertificate.isNotEmpty &&
-           spEntityId.isNotEmpty &&
-           acsUrl.isNotEmpty;
-  }
 }

@@ -275,28 +275,6 @@ class LoyaltyProvider extends ChangeNotifier {
     return _tasks.where((t) => t.canComplete).toList();
   }
 
-  /// 已完成的任务
-  List<LoyaltyTask> get completedTasks {
-    return _tasks.where((t) => t.status == TaskStatus.completed).toList();
-  }
-
-  /// 每日任务
-  List<LoyaltyTask> get dailyTasks {
-    return _tasks.where((t) => t.type == TaskType.dailyCheckIn).toList();
-  }
-
-  /// 特殊任务
-  List<LoyaltyTask> get specialTasks {
-    return _tasks.where((t) => t.type == TaskType.special).toList();
-  }
-
-  /// 可负担的奖励
-  List<Reward> get affordableRewards {
-    return _rewards
-        .where((r) => r.canRedeem && r.pointsCost <= _account.availablePoints)
-        .toList();
-  }
-
   /// 获取任务类型的图标
   String getTaskTypeIcon(TaskType type) {
     switch (type) {
@@ -314,26 +292,6 @@ class LoyaltyProvider extends ChangeNotifier {
         return '🐦';
       case TaskType.special:
         return '⭐';
-    }
-  }
-
-  /// 获取奖励类型的图标
-  String getRewardTypeIcon(RewardType type) {
-    switch (type) {
-      case RewardType.gasDiscount:
-        return '⛽';
-      case RewardType.feeDiscount:
-        return '💰';
-      case RewardType.nft:
-        return '🖼️';
-      case RewardType.token:
-        return '🪙';
-      case RewardType.membership:
-        return '👑';
-      case RewardType.raffle:
-        return '🎟️';
-      case RewardType.other:
-        return '🎁';
     }
   }
 

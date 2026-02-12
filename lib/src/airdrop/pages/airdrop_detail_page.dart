@@ -768,9 +768,11 @@ class AirdropDetailPage extends StatelessWidget {
   }
 
   Future<void> _launchUrl(String url) async {
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
+    try {
+      final uri = Uri.parse(url);
       await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      debugPrint('Failed to launch URL: $url, error: $e');
     }
   }
 }

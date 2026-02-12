@@ -20,7 +20,7 @@ class MessageInfo extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              infoMap["title"],
+              infoMap["title"] ?? "",
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                 fontSize: ScreenUtil().setSp(30),
@@ -30,7 +30,7 @@ class MessageInfo extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(40)),
               child: Text(
-                infoMap["content"],
+                infoMap["content"] ?? "",
                 style: TextStyle(
                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                   fontSize: ScreenUtil().setSp(30),
@@ -38,7 +38,7 @@ class MessageInfo extends StatelessWidget {
               ),
             ),
             Text(
-              infoMap["created"],
+              infoMap["created"] ?? "",
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                 fontSize: ScreenUtil().setSp(22),

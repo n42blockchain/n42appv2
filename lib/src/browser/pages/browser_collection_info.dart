@@ -35,9 +35,9 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
 
   @override
   void initState() {
-    titleEditingController.text=widget.collectionModel.name!;
-    urlEditingController.text=widget.collectionModel.url!;
-    descEditingController.text=widget.collectionModel.desc!;
+    titleEditingController.text=widget.collectionModel.name ?? "";
+    urlEditingController.text=widget.collectionModel.url ?? "";
+    descEditingController.text=widget.collectionModel.desc ?? "";
     super.initState();
   }
   @override

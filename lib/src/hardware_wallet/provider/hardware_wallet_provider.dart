@@ -454,11 +454,9 @@ class HardwareWalletProvider extends ChangeNotifier {
       final bytes = _intToBytes(value);
       return [0x80 + bytes.length, ...bytes];
     } else if (value is String) {
-      if (value.startsWith('0x')) {
-        value = value.substring(2);
-      }
-      if (value.isEmpty) return [0x80];
-      final bytes = _hexToBytes(value);
+      final hexStr = value.startsWith('0x') ? value.substring(2) : value;
+      if (hexStr.isEmpty) return [0x80];
+      final bytes = _hexToBytes(hexStr);
       if (bytes.length == 1 && bytes[0] < 128) return bytes;
       if (bytes.length < 56) return [0x80 + bytes.length, ...bytes];
       final lenBytes = _intToBytes(bytes.length);
@@ -486,10 +484,10 @@ class HardwareWalletProvider extends ChangeNotifier {
   }
 
   List<int> _hexToBytes(String hex) {
-    if (hex.length % 2 != 0) hex = '0$hex';
+    final normalizedHex = hex.length % 2 != 0 ? '0$hex' : hex;
     final bytes = <int>[];
-    for (var i = 0; i < hex.length; i += 2) {
-      bytes.add(int.parse(hex.substring(i, i + 2), radix: 16));
+    for (var i = 0; i < normalizedHex.length; i += 2) {
+      bytes.add(int.parse(normalizedHex.substring(i, i + 2), radix: 16));
     }
     return bytes;
   }

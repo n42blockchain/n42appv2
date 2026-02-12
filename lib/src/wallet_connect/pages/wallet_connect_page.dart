@@ -5,7 +5,6 @@ import 'package:n42appv2/src/component/pages/scan_page.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
-import 'package:n42appv2/src/wallet/pages/add_token/wallet_coin_add_all.dart';
 import 'package:n42appv2/src/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
@@ -13,7 +12,6 @@ import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:n42appv2/src/widgets/loading_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:provider/provider.dart' as legacy_provider;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
@@ -32,7 +30,6 @@ class WalletConnectPage extends ConsumerStatefulWidget {
 class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
   @override
   void initState() {
-    // TODO: implement initState
     if(widget.uri !=""){
       legacy_provider.Provider.of<WalletConnectProvider>(context,listen: false).pageOpen=true;
       legacy_provider.Provider.of<WalletConnectProvider>(context,listen: false).viewStateDeal(WalletConnectState.loading,params: widget.uri);
@@ -41,7 +38,6 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     legacy_provider.Provider.of<WalletConnectProvider>(context,listen: false).pageOpen=false;
     super.dispose();
   }
@@ -84,27 +80,6 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       case WalletConnectState.selectChain:
         connectChild=selectChainWidget(connectV2);
         title=S.of(context).g_connect_key11;
-        InkWell(
-          onTap: () async {
-            bool r = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => WalletCoinAddAll("")));
-            if (r) {
-              // 刷新钱包列表 - 使用 Riverpod
-              ref.invalidate(walletListProvider);
-            }
-          },
-          child: Container(
-            height: ScreenUtil().setWidth(80),
-            width: ScreenUtil().setWidth(80),
-            padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
-            child: Icon(
-              Icons.add_circle_outline_outlined,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-            ),
-          ),
-        );
         break;
       case WalletConnectState.connectOK:
         connectChild=connectOKWidget(connectV2);
@@ -139,9 +114,6 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
         Expanded(child: connectChild),
       ],
     );
-  }
-  Widget loadingWidget(){
-    return LoadingPage();
   }
   Widget partWidget(){
     return Column(

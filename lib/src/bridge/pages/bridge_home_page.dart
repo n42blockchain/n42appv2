@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/bridge/api/lifi_api.dart';
 import 'package:n42appv2/src/bridge/models/bridge_models.dart';
 import 'package:n42appv2/src/bridge/pages/bridge_select_chain_page.dart';
 import 'package:n42appv2/src/bridge/pages/bridge_history_page.dart';
@@ -588,8 +587,7 @@ class _BridgeHomePageState extends State<BridgeHomePage> {
         },
       );
 
-      if (!result.error && mounted) {
-        if (!context.mounted) return;
+      if (!result.error && context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(S.of(context).g_key_140),
@@ -723,9 +721,11 @@ class _BridgeHomePageState extends State<BridgeHomePage> {
       );
 
       if (signedTx.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(S.of(context).g_key_175)), // Transaction failed
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(S.of(context).g_key_175)), // Transaction failed
+          );
+        }
         return null;
       }
 
@@ -738,9 +738,11 @@ class _BridgeHomePageState extends State<BridgeHomePage> {
       final broadcastResult = await _broadcastRawTx(rpc, signedTx);
       return broadcastResult;
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString())),
+        );
+      }
       return null;
     }
   }

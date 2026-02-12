@@ -205,10 +205,7 @@ class AirdropApi {
     try {
       final response = await BaseApi.requestEmptyH.post(
         '$_n42AirdropApi/airdrops/$airdropId/claim',
-        params: {
-          'wallet': walletAddress,
-          'tx_hash': txHash,
-        },
+        params: {},
         data: {
           'wallet': walletAddress,
           'tx_hash': txHash,

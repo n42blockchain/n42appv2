@@ -28,13 +28,6 @@ class WalletConnectProvider with ChangeNotifier{
     notifyListeners();
   }
 
-  /*DataUtils? dataUtils;
-  DataUtils get _dataUtils{
-    if(dataUtils==null){
-      dataUtils=DataUtils();
-    }
-    return dataUtils!;
-  }*/
   Trustdart? _trustdart;
   Trustdart get trustdart{
     _trustdart ??= Trustdart();
@@ -55,11 +48,6 @@ class WalletConnectProvider with ChangeNotifier{
     coinModelsIndex=value;
     notifyListeners();
   }
-  List<String> chainEvent=[
-    'chainChanged',
-    'accountsChanged'
-  ];
-  //wallet_connect.ProposalRequiredNamespaces? namespace_optional;
   Map<String, wallet_connect.Namespace>? namespace;
   WalletConnectState walletConnectState=WalletConnectState.loading;
   String errorMessage="";
@@ -67,11 +55,7 @@ class WalletConnectProvider with ChangeNotifier{
   Load load=Load.finish;
   dynamic actionData;
   Map<String,dynamic>? actionDataMap;
-  //dataType: transaction,message
-  Future<void> setActionDataMap(wallet_connect.SessionRequestEvent eventData
-      //SessionRequestEvent data
-      )async{
-    //final session = signClient!.session.get(eventData.topic!);
+  Future<void> setActionDataMap(wallet_connect.SessionRequestEvent eventData)async{
     await web3clientInitFromChainId(eventData.chainId);
     switch (eventData.method) {
       case "personal_sign":
@@ -86,18 +70,12 @@ class WalletConnectProvider with ChangeNotifier{
           "signType":"message",
         };
         viewStateDeal(WalletConnectState.messageSignOK);
-        //return _onSign(eventData.id!, eventData.topic!, session, message);
         break;
       case "eth_sign":
         final requestParams =
         (eventData.params! as List).cast<String>();
         final dataToSign = requestParams[1];
         final address = requestParams[0];
-        /*final message = WCEthSignMessage(
-          data: dataToSign,
-          address: address,
-          type: WCSignType.MESSAGE,
-        );*/
         actionDataMap={
           "network":coinModels[coinModelsIndex].coin['name'],
           "from":address,
@@ -125,7 +103,6 @@ class WalletConnectProvider with ChangeNotifier{
         actionDataMap={
           "network":coinModels[coinModelsIndex].coin['name'],
           "gas":crypto.hexToInt(trMap['gas']??"0x0").toInt().toString(),
-          //_dataUtils.hexToInt(trMap['gas']??"0x0").toInt().toString(),
           "from":trMap['from']??"0x",
           "to":trMap['to']??"0x",
           "data":trMap['data']??"0x",
@@ -163,16 +140,7 @@ class WalletConnectProvider with ChangeNotifier{
         viewStateDeal(WalletConnectState.transactionOK);
         break;
       case "eth_sendTransaction":
-      /*final ethereumTransaction = WCEthSignTransaction.fromJson(
-            eventData.params!.request.params.first);
-        return _onSendTransaction(
-          eventData.id!,
-          int.parse(eventData.params!.chainId.split(':').last),
-          session,
-          ethereumTransaction,
-        );*/
         Map<String,dynamic> trMap=eventData.params![0];
-        //eventData.params!.request.params.first;
         actionDataMap={
           "network":coinModels[coinModelsIndex].coin['name'],
           "gas":crypto.hexToInt(trMap['gas']??"0x0").toInt().toString(),
@@ -187,11 +155,6 @@ class WalletConnectProvider with ChangeNotifier{
         final requestParams = eventData.params! as Map;
         final dataToSign = requestParams["message"];
         final address = requestParams["address"];
-        /*final message = WCEthSignMessage(
-          data: dataToSign,
-          address: address,
-          type: WCSignType.TYPED_MESSAGE_V4,
-        );*/
         actionDataMap={
           "network":coinModels[coinModelsIndex].coin['name'],
           "from":address,
@@ -346,17 +309,10 @@ class WalletConnectProvider with ChangeNotifier{
     return coinModels[rIndex];
   }
 
-  /*static const namespace = 'eip155';
-  static const pSign = 'personal_sign';
-  static const eSign = 'eth_sign';
-  static const eSignTransaction = 'eth_signTransaction';
-  static const eSignTypedData = 'eth_signTypedData';
-  static const eSendTransaction = 'eth_sendTransaction';*/
   void setChainInfo(){
     try{
       if(signClient !=null){
         signClient!.onSessionProposal.subscribe((wallet_connect.SessionProposalEvent? args)async{
-          //final eventData= args as wallet_connect.SessionProposalEvent<wallet_connect.RequestSessionPropose>;
           if(args !=null){
             actionData=args;
             metadata=args.params.proposer.metadata;
@@ -430,11 +386,7 @@ class WalletConnectProvider with ChangeNotifier{
                 signClient!.registerRequestHandler(chainId: chainId, method: "eth_signTypedData_v4");
                 signClient!.registerAccount(chainId: chainId, accountAddress: coinModels[i].address.toString());
               }else if(coinModels[i].coin['blockchainType']==BlockchainType.Tron.name){
-                /*accountsTron.add("tron:0xcd8690dc:${coinModels[i].address.toString()}");//测试
-                signClient!.registerRequestHandler(chainId: "tron:0xcd8690dc", method: "tron_signTransaction");
-                signClient!.registerRequestHandler(chainId: "tron:0xcd8690dc", method: "tron_signMessage");
-                signClient!.registerAccount(chainId: "tron:0xcd8690dc", accountAddress: coinModels[i].address.toString());*/
-                accountsTron.add("tron:0x2b6653dc:${coinModels[i].address.toString()}");//主
+                accountsTron.add("tron:0x2b6653dc:${coinModels[i].address.toString()}");
                 signClient!.registerRequestHandler(chainId: "tron:0x2b6653dc", method: "tron_signTransaction");
                 signClient!.registerRequestHandler(chainId: "tron:0x2b6653dc", method: "tron_signMessage");
                 signClient!.registerAccount(chainId: "tron:0x2b6653dc", accountAddress: coinModels[i].address.toString());
@@ -477,15 +429,12 @@ class WalletConnectProvider with ChangeNotifier{
             viewStateDeal(WalletConnectState.error,params: "Error");
           }
         });
-        //signClient!.registerRequestHandler(chainId: "tron:0xcd8690dc", method: "tron_signTransaction");
-        //signClient!.registerAccount(chainId: "tron:0xcd8690dc", accountAddress: accountAddress);
         signClient!.onSessionRequest.subscribe((wallet_connect.SessionRequestEvent? args) async{
           if (args != null) {
             setActionDataMap(args);
           }
         });
         signClient!.onSessionDelete.subscribe(( args) async{
-          //print(args!.topic);
           if(dAppTopic !=null && dAppTopic==args.topic){
             viewStateDeal(WalletConnectState.disconnect);
           }
@@ -494,18 +443,12 @@ class WalletConnectProvider with ChangeNotifier{
           viewStateDeal(WalletConnectState.error,params: args?.error.message??"Error");
         });
         signClient!.onSessionConnect.subscribe((args) async{
-          //print(args!.session.topic);
-          //dAppTopic=args!.session.pairingTopic;
-          //print("");
         });
         signClient!.onSessionPing.subscribe((args) async{
-          //print('');
         });
         signClient!.onSessionExpire.subscribe((args) async{
-          //print('');
         });
         signClient!.onProposalExpire.subscribe((wallet_connect.SessionProposalEvent? args) async{
-          //print('');
         });
       }
     }catch(e){
@@ -684,23 +627,6 @@ class WalletConnectProvider with ChangeNotifier{
       viewStateDeal(WalletConnectState.error,params: e.toString());
     }
   }
-  /*
-  Future ethSignTypedData(String topic, dynamic parameters) async {
-    final String data = parameters[1];
-    return EthSigUtil.signTypedData(
-      privateKeyInBytes: privateKey.privateKey,
-      jsonData: data,
-      version: TypedDataVersion.V4,
-    );
-  }
-   */
-  /*
-  approveSession(int id,Map<String,Namespace> namespace)async{
-    await wcClient!.approveSession(id: id, namespaces: namespace);
-  }
-  rejectSession(int id,WalletConnectError reason)async{
-    await wcClient!.rejectSession(id: id, reason: reason);
-  }*/
   //取消交易或签名等
   Future<void> cancelTap(WalletConnectState state)async{
     viewStateDeal(state);
@@ -716,14 +642,6 @@ class WalletConnectProvider with ChangeNotifier{
       viewStateDeal(WalletConnectState.connect);
     });
   }
-  /*approveTap()async{
-    viewStateDeal(WalletConnectV2State.transaction);
-    SessionRequestEvent requestEvent=actionData as SessionRequestEvent;
-    String txHash=await ethSignTransaction(requestEvent.topic,requestEvent.params);
-    await wcClient!.respondSessionRequest(topic: requestEvent.topic, response: JsonRpcResponse(id: requestEvent.id,result: txHash));
-    //await approveSession(requestEvent.id,namespace!);
-    viewStateDeal(WalletConnectV2State.connect);
-  }*/
   Future<void> disconnectOnTap()async{
     await signClient!.disconnectSession(
         topic: dAppTopic??"",
@@ -736,13 +654,9 @@ class WalletConnectProvider with ChangeNotifier{
         await connectInit();
         await pair(params as String);
         break;
-    /*case WalletConnectV2State.part:
-        break;*/
       case WalletConnectState.selectChain:
         break;
       case WalletConnectState.connectOK:
-      //chainRegister();
-      //SessionProposalEvent args=actionData as SessionProposalEvent;
         wallet_connect.SessionProposalEvent args=actionData as wallet_connect.SessionProposalEvent;
         try{
           signClient!.approveSession(id:args.id,namespaces:namespace! ).then((value)
@@ -763,7 +677,6 @@ class WalletConnectProvider with ChangeNotifier{
       case WalletConnectState.connect:
         break;
       case WalletConnectState.disconnect:
-      //await signClient!.disconnectSession(topic: dAppTopic??"", reason: wallet_connect.Errors.getSdkError(wallet_connect.Errors.USER_DISCONNECTED));
         cleanData();
         break;
       case WalletConnectState.reconnect:
@@ -809,9 +722,6 @@ class WalletConnectProvider with ChangeNotifier{
     }else{
       cleanData();
     }
-    /*if(walletConnectV2State !=WalletConnectV2State.loading){
-      viewStateDeal(WalletConnectV2State.disconnect);
-    }*/
   }
 
   /// Sign typed data using EIP-712 standard

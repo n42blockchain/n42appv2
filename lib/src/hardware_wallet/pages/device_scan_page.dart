@@ -394,7 +394,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
 
     final success = await provider.connectDevice(device);
 
-    if (!mounted) return;
+    if (!context.mounted) return;
 
     if (success) {
       Navigator.pop(context);

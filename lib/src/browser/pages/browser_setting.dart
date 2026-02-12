@@ -33,7 +33,6 @@ class _BrowserSettingState extends State<BrowserSetting> {
   }
   @override
   void initState() {
-    // TODO: implement initState
     getBrowserSetting();
     super.initState();
   }

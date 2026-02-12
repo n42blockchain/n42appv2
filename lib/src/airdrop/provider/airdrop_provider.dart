@@ -85,23 +85,27 @@ class AirdropProvider extends ChangeNotifier {
 
   /// 加载空投列表
   Future<void> _loadAirdrops({bool refresh = false}) async {
-    final result = await _api.getAirdrops(
-      walletAddress: _walletAddress,
-      filter: _filter,
-      page: refresh ? 1 : _currentPage,
-    );
+    try {
+      final result = await _api.getAirdrops(
+        walletAddress: _walletAddress,
+        filter: _filter,
+        page: refresh ? 1 : _currentPage,
+      );
 
-    if (!result.error && result.data != null) {
-      final newAirdrops = result.data as List<AirdropModel>;
+      if (!result.error && result.data != null) {
+        final newAirdrops = result.data as List<AirdropModel>;
 
-      if (refresh) {
-        _airdrops = newAirdrops;
-      } else {
-        _airdrops.addAll(newAirdrops);
+        if (refresh) {
+          _airdrops = newAirdrops;
+        } else {
+          _airdrops.addAll(newAirdrops);
+        }
+
+        _hasMore = newAirdrops.length >= 20;
+        _currentPage++;
       }
-
-      _hasMore = newAirdrops.length >= 20;
-      _currentPage++;
+    } catch (e) {
+      debugPrint('Failed to load airdrops: $e');
     }
   }
 

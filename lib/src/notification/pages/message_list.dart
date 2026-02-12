@@ -3,7 +3,6 @@
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
-import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/home/setting/about_app.dart';
 import 'package:n42appv2/src/home/setting/personal_setting.dart';
 import 'package:n42appv2/src/home/setting/setting_share.dart';
@@ -84,306 +83,38 @@ class _MessageListState extends ConsumerState<MessageList> {
             debugPrint("json err:${e.toString()}");
           }
           String coin = txContent['coin'] ?? "";
-          if (coin == CoinType.N.name) {
-            coin = CoinType.N.name;
-          }
           String msgType = map['msg_type'] ?? "";
           switch (msgType) {
             case "tokens_received":
               String content =
                   "Transaction hash ${txContent['hash']}, ${txContent['from']} to you ${txContent['num']}$coin";
               return transferItemWidget(title, content, createTime, "transfer",
-                    () {
-                  String? isTestStr=txContent['network'];
-                  bool? isTest;
-                  if(isTestStr !=null){
-                    isTest=isTestStr=="test"?true:false;
-                  }
-                  String bUri = getBrowserTxHash(
-                      txContent['coin'], txContent['hash'] ?? "",isTest: isTest);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => BrowserPage(bUri,
-                            //"Transaction"
-                          )));
-                },map["showDate"],showData2,);
+                    () => _navigateToTxBrowser(txContent),
+                map["showDate"],showData2,);
             case "tokens_sent":
               String content =
                   "Transaction hash ${txContent['hash']}, you sent ${txContent['num']}$coin to ${txContent['to']} ";
               return transferItemWidget(title, content, createTime, "transfer",
-                    () {
-                  String? isTestStr=txContent['network'];
-                  bool? isTest;
-                  if(isTestStr !=null){
-                    isTest=isTestStr=="test"?true:false;
-                  }
-                  String bUri = getBrowserTxHash(
-                      txContent['coin'], txContent['hash'] ?? "",isTest: isTest);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => BrowserPage(bUri,
-                            //"Transaction"
-                          )));
-                },map["showDate"],showData2,);
+                    () => _navigateToTxBrowser(txContent),
+                map["showDate"],showData2,);
             case "normal_transaction_failed":
               String content =
                   "Your pending transaction ${txContent['hash']} failed.";
               return transferItemWidget(title, content, createTime, "transfer",
-                    () {
-                  String? isTestStr=txContent['network'];
-                  bool? isTest;
-                  if(isTestStr !=null){
-                    isTest=isTestStr=="test"?true:false;
-                  }
-                  String bUri = getBrowserTxHash(
-                      txContent['coin'], txContent['hash'] ?? "",isTest: isTest);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => BrowserPage(bUri,
-                            //"Transaction"
-                          )));
-                },map["showDate"],showData2,);
+                    () => _navigateToTxBrowser(txContent),
+                map["showDate"],showData2,);
+            // NFT 相关消息类型（功能已下线，保留 case 返回空组件）
             case "market_nft_sell_to_consumer":
-              return SizedBox();
-              /*Map<String, dynamic>? nftInfo = txContent['nft_info'];
-              String nftName = "";
-              String? imgUrl;
-              NftModel? nftModel;
-              if (nftInfo != null) {
-                nftModel = NftModel.fromJson(nftInfo);
-                nftModel.price =
-                    (txContent['nft_market_info']['price'] ?? 0).toDouble();
-                nftName = nftModel.uriData.name ?? "";
-                imgUrl = nftModel.uriData.imageMini;
-              }
-              String content = "Received; ${nftName} has been received. ";
-              return transferItemWidget(
-                title,
-                content,
-                createTime,
-                "nft",
-                    () {
-                  if (nftModel == null) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => NftBuyHistoryPage()
-                          //MyApp(bUri, "Transaction")
-                        ));
-                  } else {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => MyNftInfo(
-                              nftModel!,
-                              4,
-                              false,
-                              showRemaining: true,
-                              loadNftDetail: true,
-                            )
-                          //MyApp(bUri, "Transaction")
-                        ));
-                  }
-                },map["showDate"],showData2,
-                imgUrl: imgUrl,
-              );*/
             case "market_nft_sell_to_owner":
-              return SizedBox();
-              /*Map<String, dynamic>? nftInfo = txContent['nft_info'];
-              String nftName = "";
-              String? imgUrl;
-              NftModel? nftModel;
-              if (nftInfo != null) {
-                nftModel = NftModel.fromJson(nftInfo);
-                nftModel.price =
-                    (txContent['nft_market_info']['price'] ?? 0).toDouble();
-                nftName = nftModel.uriData.name ?? "";
-                imgUrl = nftModel.uriData.imageMini;
-              }
-              String content =
-                  "Nice! You sold ${nftName} for ${txContent['num']}${coin}.";
-              return transferItemWidget(title, content, createTime, "nft", () {
-                if (nftModel == null) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => NftOnSalePage(1)
-                        //MyApp(bUri, "Transaction")
-                      ));
-                } else {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MyNftInfo(
-                            nftModel!,
-                            0,
-                            false,
-                            showRemaining: true,
-                            loadNftDetail: true,
-                          )));
-                }
-              },map["showDate"],showData2, imgUrl: imgUrl);
-              */
             case "auction_nft_sell_to_consumer":
-              return SizedBox();
-              /*Map<String, dynamic>? nftInfo = txContent['nft_info'];
-              String nftName = "";
-              String? imgUrl;
-              NftModel? nftModel;
-              if (nftInfo != null) {
-                nftModel = NftModel.fromJson(nftInfo);
-                nftModel.price =
-                    (txContent['nft_auction_info']['price'] ?? 0).toDouble();
-                nftName = nftModel.uriData.name ?? "";
-                imgUrl = nftModel.uriData.imageMini;
-              }
-              //
-              String content = "Received; ${nftName} has been received. ";
-              return transferItemWidget(title, content, createTime, "nft", () {
-                if (nftModel == null) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => NftBuyHistoryPage()
-                        //MyApp(bUri, "Transaction")
-                      ));
-                } else {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => MyNftInfo(
-                            nftModel!,
-                            0,
-                            false,
-                            showRemaining: true,
-                            loadNftDetail: true,
-                          )));
-                }
-              },map["showDate"],showData2, imgUrl: imgUrl);
-              */
             case "auction_nft_sell_to_owner":
-              return SizedBox();
-              /*Map<String, dynamic>? nftInfo = txContent['nft_info'];
-              String nftName = "";
-              String? imgUrl;
-              NftModel? nftModel;
-              if (nftInfo != null) {
-                nftModel = NftModel.fromJson(nftInfo);
-                nftModel.price =
-                    (txContent['nft_auction_info']['price'] ?? 0).toDouble();
-                nftName = nftModel.uriData.name ?? "";
-                imgUrl = nftModel.uriData.imageMini;
-              }
-              String content =
-                  "Nice! You sold ${nftName} for ${txContent['num']}${coin}.";
-              return transferItemWidget(title, content, createTime, "nft", () {
-                if (nftModel == null) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => NftOnSalePage(1)
-                        //MyApp(bUri, "Transaction")
-                      ));
-                } else {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MyNftInfo(
-                            nftModel!,
-                            0,
-                            false,
-                            showRemaining: true,
-                            loadNftDetail: true,
-                          )));
-                }
-              },map["showDate"],showData2, imgUrl: imgUrl);
-              */
             case "auction_nft_bid_to_owner":
-              return SizedBox();
-              /*Map<String, dynamic>? nftInfo = txContent['nft_info'];
-              String nftName = "";
-              String? imgUrl;
-              NftModel? nftModel;
-              if (nftInfo != null) {
-                nftModel = NftModel.fromJson(nftInfo);
-                nftModel.price =
-                    (txContent['nft_auction_info']['price'] ?? 0).toDouble();
-                nftName = nftModel.uriData.name ?? "";
-                imgUrl = nftModel.uriData.imageMini;
-              }
-              String content =
-                  "You received a new bid of ${txContent['num']}${coin} on ${nftName}.";
-              return transferItemWidget(title, content, createTime, "nft", () {
-                if (nftModel == null) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => NftOnSalePage(1)
-                        //MyApp(bUri, "Transaction")
-                      ));
-                } else {
-                  AuctionModel auctionModel =
-                  AuctionModel.fromJson(txContent['nft_auction_info']);
-                  auctionModel.nft = nftModel;
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => NFTAuctionInfo(auctionModel:auctionModel)
-                        //MyNftInfo(nftModel!,0,showRemaining: true,loadNftDetail: true,)
-                        //MyApp(bUri, "Transaction")
-                      ));
-                }
-              },map["showDate"],showData2, imgUrl: imgUrl);
-              */
             case "auction_nft_bid_to_consumer":
-              return SizedBox();
-              /*Map<String, dynamic>? nftInfo = txContent['nft_info'];
-              String nftName = "";
-              String? imgUrl;
-              NftModel? nftModel;
-              if (nftInfo != null) {
-                nftModel = NftModel.fromJson(nftInfo);
-                nftModel.price =
-                    (txContent['nft_auction_info']['price'] ?? 0).toDouble();
-                nftName = nftModel.uriData.name ?? "";
-                imgUrl = nftModel.uriData.imageMini;
-              }
-              String content =
-                  "Your ${txContent['num']}${coin} bid on ${nftName} was accepted.";
-              return transferItemWidget(title, content, createTime, "nft", () {
-                if (nftModel == null) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => NftBuyHistoryPage()
-                        //MyApp(bUri, "Transaction")
-                      ));
-                } else {
-                  AuctionModel auctionModel =
-                  AuctionModel.fromJson(txContent['nft_auction_info']);
-                  auctionModel.nft = nftModel;
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => NFTAuctionInfo(auctionModel:auctionModel)
-                        //MyNftInfo(nftModel!,0,showRemaining: true,loadNftDetail: true,)
-                        //MyApp(bUri, "Transaction")
-                      ));
-                }
-              },map["showDate"],showData2, imgUrl: imgUrl);
-              */
             case "trade_limit":
+            case "normal_followed":
+            case "normal_trending":
               return SizedBox();
-              /*String content =
-                  "Your ${txContent['num']} limit order on [Asset Name] has been filled. ";
-              return transferItemWidget(title, content, createTime, "nft", () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => NftBuyHistoryPage()
-                      //MyApp(bUri, "Transaction")
-                    ));
-              },map["showDate"],showData2,);
-              */
             case "normal_price_changed":
-            //percentage,chain
-            // over 10% change in the price of BTC, ETH or AsT within 24 hours.
               double percentage = double.parse((txContent['percentage'] ?? 0).toString());
               String chain = txContent['chain'] ?? "";
               String content =
@@ -401,52 +132,9 @@ class _MessageListState extends ConsumerState<MessageList> {
                   };
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => MessageInfo(infoMap)
-                        //MyApp(bUri, "Transaction")
-                      ));
+                      MaterialPageRoute(builder: (_) => MessageInfo(infoMap)));
                 },map["showDate"],showData2,
               );
-            case "normal_followed":
-              return SizedBox();
-              /*String username = txContent['follow_name'] ?? "";
-              String content = "${username} has followed you!";
-              return transferItemWidget(
-                title,
-                content,
-                createTime,
-                "info",
-                    () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => NftUserHome(
-                            user_uuid: txContent['follow_uuid'] ?? "",
-                            getUserInfo: true,
-                          )
-                        //MyApp(bUri, "Transaction")
-                      ));
-                },map["showDate"],showData2,
-              );*/
-            case "normal_trending":
-              return SizedBox();
-              /*String content =
-                  "Check out these NFTs trending on our marketplace.";
-              return transferItemWidget(
-                title,
-                content,
-                createTime,
-                "info",
-                    () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) =>
-                              NftSearch(searchMap: {'specify_24h_like': true})
-                        //MyApp(bUri, "Transaction")
-                      ));
-                },map["showDate"],showData2,
-              );
-              */
             case "tell_friends":
               return transferItemWidget(title, "", createTime, "transfer",
                     () {
@@ -466,12 +154,6 @@ class _MessageListState extends ConsumerState<MessageList> {
             case "NFTHome #1_normal":
             case "NFTHome #2_normal":
               return SizedBox();
-              /*return transferItemWidget(title, "", createTime, "info",
-                    () {
-                  ProviderUtil.publicProvider().setSelectIndex(2);
-                  Navigator.pop(context);
-                },map["showDate"],showData2,);
-              break;*/
             case "ChatHome #1_normal":
             case "ChatHome #2_normal":
               return transferItemWidget(title, "", createTime, "info",
@@ -550,6 +232,19 @@ class _MessageListState extends ConsumerState<MessageList> {
         pageSize: 100,
       ),
     );
+  }
+
+  /// 导航到交易浏览器页面（提取自重复的 tokens_received/tokens_sent/normal_transaction_failed 逻辑）
+  void _navigateToTxBrowser(Map<String, dynamic> txContent) {
+    final String? isTestStr = txContent['network'];
+    bool? isTest;
+    if (isTestStr != null) {
+      isTest = isTestStr == "test";
+    }
+    final String bUri = getBrowserTxHash(
+        txContent['coin'], txContent['hash'] ?? "", isTest: isTest);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (_) => BrowserPage(bUri)));
   }
 
   Widget transferItemWidget(String title, String content, String createTime,

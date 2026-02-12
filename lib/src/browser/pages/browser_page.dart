@@ -4,8 +4,6 @@ import 'package:n42appv2/src/browser/provider/browser_provider.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet_connect/pages/wallet_connect_page.dart';
-//import 'package:n42appv2/src/wallet_connect/pages/wallet_connect_page.dart';
-//import 'package:n42appv2/src/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:n42appv2/src/widgets/prompt_widget.dart';
@@ -68,7 +66,7 @@ class _BrowserPageState extends State<BrowserPage> {
       body: SafeArea(
         child: GestureDetector(
           onTap: (){
-            FocusScope.of(context).requestFocus(FocusNode());
+            FocusScope.of(context).unfocus();
           },
           child: listWebViewWidget(),
         ),
@@ -111,13 +109,13 @@ class _BrowserPageState extends State<BrowserPage> {
                     ),
                     maxLines: 1,
                     boxShadow:BoxShadow(
-                      color: Color(0xff101828).withAlpha((0 * 255).round()),  //底色,阴影颜色
-                      offset: Offset(0, 0), //阴影位置,从什么位置开始
-                      blurRadius: ScreenUtil().setWidth(0),  // 阴影模糊层度
+                      color: Color(0x00101828),  //底色,阴影颜色(透明)
+                      offset: Offset.zero,
+                      blurRadius: 0,
                       spreadRadius: 0, ),
                     onEditingComplete: (){
                       bValue.loadRequest();
-                      FocusScope.of(context).requestFocus(FocusNode());
+                      FocusScope.of(context).unfocus();
                     },
                   ),
                 ),
@@ -160,20 +158,6 @@ class _BrowserPageState extends State<BrowserPage> {
                     ),
                   ),
                 ),
-                /*if(bValue.wListIndex !=-1)
-                  Visibility(
-                    visible: bValue.wInfoList[bValue.wListIndex]['load']??false,
-                    child: SizedBox(
-                      width: ScreenUtil().setWidth(40.0),
-                      height: ScreenUtil().setWidth(40.0),
-                      child: CircularProgressIndicator(
-                        value: (bValue.wInfoList[bValue.wListIndex]['progress']??0).toDouble(),
-                        backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBorderColor.name),
-                        valueColor: AlwaysStoppedAnimation<Color>(AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)),
-                      ),
-                    ),
-                  ),
-                */
               ],
             ),
           ),
@@ -335,35 +319,6 @@ class _BrowserPageState extends State<BrowserPage> {
                       ),
                     ),
                   ),),
-                  /*
-                  Consumer<WalletConnectProvider>(builder: (context,wc,child){
-                    if(wc.walletConnectState!=WalletConnectState.disconnect && wc.dAppTopic !=null){
-                      return Expanded(child: InkWell(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletConnectPage("")));
-                        },
-                        child: Container(
-                          height: ScreenUtil().setWidth(80.0),
-                          alignment: Alignment.center,
-                          child: Container(
-                            width: ScreenUtil().setWidth(60.0),
-                            height: ScreenUtil().setWidth(60.0),
-                            padding: EdgeInsets.all(ScreenUtil().setWidth(4)),
-                            clipBehavior: Clip.hardEdge,
-                            decoration: BoxDecoration(
-                                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withOpacity(0.3),
-                                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(60))
-                            ),
-                            child: ImageNetWork(imageUrl: wc.metadata!.icons.length==0?"":wc.metadata!.icons[0]??"",),
-                          ),
-
-                        ),
-                      ),);
-                    }else{
-                      return SizedBox();
-                    }
-                  }),
-                  */
                 ],
               ),
             ),
@@ -543,13 +498,8 @@ class _BrowserPageState extends State<BrowserPage> {
     }
     else{
       if(bValue.wListIndex==-1){
-        //return Loading();
         return EmptyView();
       }
-      /*if(bValue.wInfoList[bValue.wListIndex]['load']==null){
-        return Loading();
-        //return EmptyView();
-      }*/
       return bValue.wList[bValue.wListIndex];
     }
   }
@@ -602,7 +552,6 @@ class _BrowserPageState extends State<BrowserPage> {
               }, S.of(context).g_key_79),),
               SizedBox(width: ScreenUtil().setWidth(30),),
               Expanded(child: buttonStyle2(context, ()async{
-                //await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletConnectPage(uri)));
                 Navigator.pop(context);
               }, S.of(context).g_key_78),),
             ],

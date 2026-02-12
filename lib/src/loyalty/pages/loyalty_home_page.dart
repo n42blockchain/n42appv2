@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/loyalty/models/loyalty_model.dart';
+import 'package:n42appv2/src/loyalty/pages/history_page.dart';
 import 'package:n42appv2/src/loyalty/pages/rewards_page.dart';
 import 'package:n42appv2/src/loyalty/pages/tasks_page.dart';
 import 'package:n42appv2/src/loyalty/provider/loyalty_provider.dart';
@@ -500,111 +501,7 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
   }
 
   Widget _buildHistoryTab(LoyaltyProvider provider) {
-    if (provider.history.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.history,
-              size: ScreenUtil().setWidth(80),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
-            ),
-            SizedBox(height: ScreenUtil().setWidth(16)),
-            Text(
-              'No history yet',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    return ListView.builder(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
-      itemCount: provider.history.length,
-      itemBuilder: (context, index) {
-        final item = provider.history[index];
-        return _buildHistoryItem(item);
-      },
-    );
-  }
-
-  Widget _buildHistoryItem(PointsHistory item) {
-    final isEarn = item.action == PointsAction.earn;
-    final color = isEarn ? Colors.green : Colors.red;
-
-    return Container(
-      margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
-      decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: ScreenUtil().setWidth(44),
-            height: ScreenUtil().setWidth(44),
-            decoration: BoxDecoration(
-              color: color.withAlpha(30),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              isEarn ? Icons.add : Icons.remove,
-              color: color,
-              size: ScreenUtil().setWidth(24),
-            ),
-          ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.description,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
-                    fontWeight: FontWeight.w500,
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
-                  ),
-                ),
-                Text(
-                  _formatDate(item.createdAt),
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Text(
-            '${isEarn ? '+' : ''}${item.points}',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
-          ),
-        ],
-      ),
-    );
+    return HistoryPage(history: provider.history);
   }
 
   void _handleCheckIn(LoyaltyProvider provider) async {
@@ -842,20 +739,6 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
     }
   }
 
-  String _formatDate(DateTime date) {
-    final now = DateTime.now();
-    final diff = now.difference(date);
-
-    if (diff.inMinutes < 60) {
-      return '${diff.inMinutes}m ago';
-    } else if (diff.inHours < 24) {
-      return '${diff.inHours}h ago';
-    } else if (diff.inDays < 7) {
-      return '${diff.inDays}d ago';
-    } else {
-      return '${date.month}/${date.day}/${date.year}';
-    }
-  }
 }
 
 /// Tab Bar 代理

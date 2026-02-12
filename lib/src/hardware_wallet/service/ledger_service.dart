@@ -37,6 +37,9 @@ class LedgerService {
   // 扫描到的设备
   final List<BluetoothDeviceInfo> _discoveredDevices = [];
 
+  // 扫描流订阅（防止泄漏）
+  StreamSubscription? _scanStreamSubscription;
+
   // Getters
   HardwareWalletDevice? get connectedDevice => _connectedDevice;
   HardwareWalletConnectionState get connectionState => _connectionState;
@@ -77,8 +80,11 @@ class LedgerService {
         'timeout': timeout.inMilliseconds,
       });
 
+      // 取消之前的订阅，防止泄漏
+      await _scanStreamSubscription?.cancel();
+
       // 监听扫描结果
-      _scanChannel.receiveBroadcastStream().listen(
+      _scanStreamSubscription = _scanChannel.receiveBroadcastStream().listen(
         (event) {
           if (event is Map) {
             final device = BluetoothDeviceInfo.fromJson(Map<String, dynamic>.from(event));
@@ -118,6 +124,8 @@ class LedgerService {
   /// 停止扫描
   Future<void> stopScan() async {
     try {
+      await _scanStreamSubscription?.cancel();
+      _scanStreamSubscription = null;
       await _channel.invokeMethod('stopScan');
       if (_connectionState == HardwareWalletConnectionState.scanning) {
         _updateConnectionState(HardwareWalletConnectionState.disconnected);
@@ -466,10 +474,9 @@ class LedgerService {
     final result = <int>[components.length];
 
     for (final component in components) {
-      var value = 0;
-      var hardened = component.endsWith("'");
-      var numStr = hardened ? component.substring(0, component.length - 1) : component;
-      value = int.parse(numStr);
+      final hardened = component.endsWith("'");
+      final numStr = hardened ? component.substring(0, component.length - 1) : component;
+      var value = int.parse(numStr);
       if (hardened) {
         value += 0x80000000;
       }
@@ -502,7 +509,9 @@ class LedgerService {
 
   /// 释放资源
   Future<void> dispose() async {
-    // 先断开连接，再关闭流
+    // 先取消订阅和断开连接，再关闭流
+    await _scanStreamSubscription?.cancel();
+    _scanStreamSubscription = null;
     await disconnect();
     await _scanResultsController.close();
     await _connectionStateController.close();

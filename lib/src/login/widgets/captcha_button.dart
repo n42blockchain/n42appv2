@@ -86,48 +86,24 @@ class _CaptchaButtonState extends State<CaptchaButton> with WidgetsBindingObserv
 
 
   void _unRegisterAccount() async{
-    try {
-      setState(() {
-        load=Load.loading;
-      });
-      //发送 获取验证码接口
-      final data = await loginApi.sendUnRegisterEmailCode();
-
-      if (data["code"] == 200) {
-        //success
-        setState(() => _countdown -= 1);
-        _startTimer();
-        ToastUtils.show("send code success");
-      } else if (data["code"] == -1402) {
-        // 失败
-        ToastUtils.show("email unregistered");
-      } else {
-        ToastUtils.show("send code error");
-      }
-    } finally {
-      canClick = true;
-      setState(() {
-        load=Load.finish;
-      });
-    }
+    await _doSendCode(() => loginApi.sendUnRegisterEmailCode());
   }
 
-
-
   void _sendEmailCode(String email, String type) async {
+    await _doSendCode(() => loginApi.sendEmailCode(email, type));
+  }
+
+  Future<void> _doSendCode(Future Function() apiCall) async {
     try {
       setState(() {
         load=Load.loading;
       });
-      //发送 获取验证码接口
-      final data = await loginApi.sendEmailCode(email, type);
+      final data = await apiCall();
       if (data["code"] == 200) {
-        //success
         setState(() => _countdown -= 1);
         _startTimer();
         ToastUtils.show("send code success");
       } else if (data["code"] == -1402) {
-        // 失败
         ToastUtils.show("email unregistered");
       } else {
         ToastUtils.show("send code error");

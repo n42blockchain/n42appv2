@@ -609,45 +609,36 @@ class _EarnHomePageState extends State<EarnHomePage> {
     // TODO: 导航到 Swap 页面
   }
 
-  void _navigateToAirdrop(BuildContext context) {
-    // 获取当前钱包地址（使用第一个 EVM 链的地址）
+  /// 获取第一个 EVM 钱包地址
+  String _getEvmWalletAddress(BuildContext context) {
     final coinModels = context.read<WalletActionProvider>().coinModels;
-    String walletAddress = '';
     for (final cm in coinModels) {
       if (cm.address != null && cm.address!.startsWith('0x')) {
-        walletAddress = cm.address!;
-        break;
+        return cm.address!;
       }
     }
+    return '';
+  }
 
+  void _navigateToAirdrop(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (ctx) => ChangeNotifierProvider(
           create: (_) => AirdropProvider(),
-          child: AirdropHomePage(walletAddress: walletAddress),
+          child: AirdropHomePage(walletAddress: _getEvmWalletAddress(context)),
         ),
       ),
     );
   }
 
   void _navigateToLoyalty(BuildContext context) {
-    // 获取当前钱包地址（使用第一个 EVM 链的地址）
-    final coinModels = context.read<WalletActionProvider>().coinModels;
-    String walletAddress = '';
-    for (final cm in coinModels) {
-      if (cm.address != null && cm.address!.startsWith('0x')) {
-        walletAddress = cm.address!;
-        break;
-      }
-    }
-
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (ctx) => ChangeNotifierProvider(
           create: (_) => LoyaltyProvider(),
-          child: LoyaltyHomePage(walletAddress: walletAddress),
+          child: LoyaltyHomePage(walletAddress: _getEvmWalletAddress(context)),
         ),
       ),
     );

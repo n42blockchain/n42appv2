@@ -46,7 +46,7 @@ class BrowserCollectionState extends State<BrowserCollection> {
       return;
     }
     String url = urlEditingController.text;
-    if (title == "") {
+    if (url == "") {
       setState(() {
         urlErrorMessage = S.of(context).g_browser_key4;
       });

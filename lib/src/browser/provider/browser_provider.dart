@@ -43,17 +43,12 @@ class BrowserProvider extends ChangeNotifier{
     showWList=value;
     notifyListeners();
   }
-  String _blockUri="";//需要拦截的地址
-  void setBlockUri(String value){
-    _blockUri=value;
-  }
+  final String _blockUri="";//需要拦截的地址
 
   TextEditingController? titleEditingController;
   FocusNode? titleFocusNode;
   ConnectDAPP? connectDAPPCallBack;
 
-  String openUrl="";
-  String nowUrl="";
   bool canBack=false;
   bool canForward=false;
   bool collect=false;
@@ -182,25 +177,19 @@ class BrowserProvider extends ChangeNotifier{
   }
   //删除一个 webView
   void wListDelete(int index) {
-    if(index==0){
-      //第一位
-      if(wList.length==1){
-        //只有一个页面
-        wListIndex=-1;
-      }
-      wList.removeAt(index);
-    }else if(index==wListIndex-1){
-      //最后一位
-      if(wListIndex==index){
-        wListIndex--;
-      }
-      wList.removeAt(index);
-    }else{
-      wListIndex--;
-      wList.removeAt(index);
-    }
-    if(wListIndex==-1){
+    wList.removeAt(index);
+    wvcList.removeAt(index);
+    wInfoList.removeAt(index);
+    if(wList.isEmpty){
+      wListIndex=-1;
       showWList=false;
+    }else if(index < wListIndex){
+      wListIndex--;
+    }else if(index == wListIndex){
+      // 当前页被删除，显示前一个或第一个
+      if(wListIndex >= wList.length){
+        wListIndex=wList.length-1;
+      }
     }
     notifyListeners();
   }
@@ -222,22 +211,12 @@ class BrowserProvider extends ChangeNotifier{
       notifyListeners();
     }
   }
-  void gotoGoogle() {
-    WebViewController wv=wvcList[wListIndex];
-    String url=wInfoList[wListIndex]['openUrl'];
-    wInfoList[wListIndex]['openUrl']="https://www.google.com/search?q=$url";
-    wv.loadRequest(Uri.parse(openUrl));
-  }
   //检查是否可以 上一页，或者下一页
   Future<void> checkCanGo()async{
     WebViewController wv=wvcList[wListIndex];
     canBack=await wv.canGoBack();
     canForward=await wv.canGoForward();
     notifyListeners();
-  }
-  void clearCache() {
-    WebViewController wv=wvcList[wListIndex];
-    wv.clearCache();
   }
   bool checkUrl(String url) {
     if(_blockUri !=""){

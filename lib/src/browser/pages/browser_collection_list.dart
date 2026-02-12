@@ -42,6 +42,8 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
     }
     loading=Load.loading;
     pageNum=1;
+    lastPage=false;
+    collectionList.clear();
     await getCollectionList();
     loading=Load.finish;
     setState(() {});
@@ -162,7 +164,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
                       Container(
                         padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(6.0)),
                         child: Text(
-                          bcm.name!,
+                          bcm.name ?? "",
                           style: TextStyle(
                             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                             fontSize: ScreenUtil().setSp(28.0),
@@ -174,7 +176,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
                       Container(
                         padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(6.0)),
                         child: Text(
-                          bcm.url!,
+                          bcm.url ?? "",
                           style: TextStyle(
                             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
                             fontSize: ScreenUtil().setSp(26.0),
@@ -184,11 +186,11 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
                         ),
                       ),
                       Visibility(
-                        visible: bcm.desc != "",
+                        visible: (bcm.desc ?? "") != "",
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(6.0)),
                           child: Text(
-                            bcm.desc!,
+                            bcm.desc ?? "",
                             style: TextStyle(
                               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
                               fontSize: ScreenUtil().setSp(26.0),

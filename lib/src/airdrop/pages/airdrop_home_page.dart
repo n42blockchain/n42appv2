@@ -250,8 +250,10 @@ class _AirdropHomePageState extends State<AirdropHomePage>
         itemCount: airdrops.length + (provider.hasMore ? 1 : 0),
         itemBuilder: (context, index) {
           if (index == airdrops.length) {
-            // 加载更多
-            provider.loadMore();
+            // 加载更多 - 在帧回调中触发以避免在 build 过程中修改状态
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              provider.loadMore();
+            });
             return Center(
               child: Padding(
                 padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
