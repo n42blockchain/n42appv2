@@ -42,7 +42,7 @@ class MiningApi{
       return null;
     }
   }
-  Future<String?> runClent(String validatorPrivateKey)async{
+  Future<String?> runClient(String validatorPrivateKey)async{
     try{
       String? res=await mining.miningRunClient({
         "wsUrl": wsUrl, "validatorPrivateKey": validatorPrivateKey

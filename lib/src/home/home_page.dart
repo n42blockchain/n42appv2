@@ -37,11 +37,10 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver {
-  //final GlobalKey _tabOne = GlobalKey();
   final GlobalKey _tabTwo = GlobalKey();
   final GlobalKey _tabThree = GlobalKey();
-  final GlobalKey _tabfour = GlobalKey();
-  final GlobalKey _tabfive = GlobalKey();
+  final GlobalKey _tabFour = GlobalKey();
+  final GlobalKey _tabFive = GlobalKey();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool? showTermsOfService;
   StreamSubscription? _deviceLoginSubscription;
@@ -66,7 +65,6 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
   }
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _listenDeviceLogin();
@@ -284,12 +282,12 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
               fixedFontSize: isWide ? fontSize : null),
           _buildBottomItem(
               'Earn', 2, "assets/home/tabbar/earn.png",
-              _tabfour, 4,
+              _tabFour, 4,
               fixedIconSize: isWide ? iconSize : null,
               fixedFontSize: isWide ? fontSize : null),
           _buildChatBottomItem(
               S.of(context).g_key_squad, "assets/home/tabbar/chat.png",
-              _tabfive, 4,
+              _tabFive, 4,
               fixedIconSize: isWide ? iconSize : null,
               fixedFontSize: isWide ? fontSize : null),
         ],
@@ -346,8 +344,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     final iSize = fixedIconSize ?? ScreenUtil().setWidth(36.0);
     final fSize = fixedFontSize ?? ScreenUtil().setSp(20.0);
 
-    Widget child;
-    child = Image.asset(
+    Widget child = Image.asset(
       imagePath,
       width: iSize,
       height: iSize,
@@ -356,47 +353,6 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
           ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
           : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
     );
-    /*if(index==4){
-      child=Consumer(builder: (context,ChatMessageProvider chatModel,child) {
-        int unRead=0;
-        if(index == 4){
-          unRead=chatModel.unReadMessageUUIDs;
-          unRead+=chatModel.haveNewFriend;
-        }
-        return  badges.Badge(
-          showBadge: index == 4 && unRead != 0,
-          badgeContent: Text('${unRead}',style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor),
-              fontSize: ScreenUtil.getInstance().setSp(20)
-          ),),
-          child: Image.asset(
-            imagePath,
-            width: ScreenUtil.getInstance().setWidth(36.0),
-            height: ScreenUtil.getInstance().setWidth(36.0),
-            fit: BoxFit.cover,
-            color: curIndex == index
-                ? AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor)
-                : (Theme.of(context).brightness == Brightness.light
-                ? Colors.black
-                : Colors.white),
-          ),
-        );
-      });
-    }else{
-      child= Image.asset(
-        imagePath,
-        width: ScreenUtil.getInstance().setWidth(36.0),
-        height: ScreenUtil.getInstance().setWidth(36.0),
-        fit: BoxFit.cover,
-        color: curIndex == index
-            ? AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainBlueColor)
-            : (Theme.of(context).brightness == Brightness.light
-            ? Colors.black
-            : Colors.white),
-      );
-    }*/
     return InkWell(
       onTap: () {
         // Use Riverpod homeTabIndexProvider
@@ -429,7 +385,6 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
   }
 
   int pausedTime = 0; // 记录切到后台的时间戳
-  final bool _unlockIsPush = false;
   
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
@@ -441,8 +396,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     switch (state) {
       case AppLifecycleState.resumed:
         MiningBackground().backgroundEnd();
-        if (_unlockIsPush == true) return;
-        
+
         if (!lockState.isLocked && !lockState.faceEnabled && !lockState.gestureEnabled) {
           return;
         }
@@ -470,8 +424,6 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
         break;
       case AppLifecycleState.paused:
         // 应用处于不可见状态，后台
-        if (_unlockIsPush == true) return;
-        
         if (!lockState.isLocked && !lockState.faceEnabled && !lockState.gestureEnabled) {
           return;
         }

@@ -360,7 +360,7 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
                               }
                               if (!mounted) return;
 
-                              if (nBalance! < widget.nNum) {
+                              if (nBalance == null || nBalance! < widget.nNum) {
                                 return;
                               }
                                 showGroupConfirmDialog(

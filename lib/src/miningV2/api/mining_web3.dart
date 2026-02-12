@@ -32,10 +32,6 @@ class MiningWeb3{
     return mm;
   }
 
-  Future<int?> getBlockNumber() async {
-    return await wClient?.getBlockNumber();
-  }
-
   Future<MessageModel> sendDepositTransaction(Map<String,dynamic> signData)async{
     final tx = await _buildTransaction(signData);
     return await sendTransaction(tx);

@@ -1,5 +1,4 @@
-﻿import 'dart:convert';
-import 'dart:typed_data';
+﻿import 'dart:typed_data';
 
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
@@ -32,8 +31,6 @@ class _PersonalSettingState extends State<PersonalSetting> {
   bool isEdit = false;
   UserInfo? userInfo;
   Load load = Load.finish;
-  bool isArtist = true; //是否是艺术家
-  Map<String, dynamic>? artJson;
 
   TextEditingController nicknameEditingController = TextEditingController();
   TextEditingController descriptionEditingController = TextEditingController();
@@ -48,12 +45,6 @@ class _PersonalSettingState extends State<PersonalSetting> {
     userInfo = AppGlobals.userInfo;
     nicknameEditingController.text = userInfo?.name??"";
     descriptionEditingController.text = userInfo?.desc??"";
-    artJson = json.decode(AppGlobals.userInfo?.artJson??"{}");
-    if(artJson==null){
-      isArtist=false;
-    }else{
-      isArtist=artJson!['_id']==null?false:true;
-    }
   }
 
   Future<void> saveUserInfo() async {
@@ -378,10 +369,6 @@ class _PersonalSettingState extends State<PersonalSetting> {
                       ),
                     ),
                   ),
-                  /*SizedBox(
-                    height: ScreenUtil().setWidth(60.0),
-                  ),*/
-                  //artistWidget(),
                   SizedBox(
                     height: ScreenUtil().setWidth(240.0),
                   ),
@@ -453,133 +440,4 @@ class _PersonalSettingState extends State<PersonalSetting> {
       ),
     );
   }
-/*
-  artistWidget() {
-    return containerStyle1(
-      context,
-      margin: EdgeInsets.symmetric( vertical: ScreenUtil().setWidth(24.0)),
-      /*decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color:
-              AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBoxColor)),*/
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0), vertical: ScreenUtil().setWidth(40.0)),
-            child: Text(
-              S.of(context).g_key_u_5,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(32.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-              ),
-            ),
-          ),
-          //isArtist ? artistWidget_yes() : artistWidget_no(),
-        ],
-      ),
-    );
-  }
-
-  //不是艺术家
-  artistWidget_no() {
-    return Container(
-      width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            S.of(context).g_key_u_6,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(32.0),
-            ),
-          ),
-          InkWell(
-            onTap: (){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => BrowserPage(
-                        //arts_share/index.html?username=1035748138@qq.com
-                        "${AppConfig.apiUrl['walletamazeBrowser']!}/arts_share/index.html?username=${AppGlobals.userInfo?.email??""}",
-                      )));
-            },
-            child: Container(
-              alignment: Alignment.center,
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(30)),
-              child: Text(
-                S.of(context).g_key_u_7,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainButtonBgColor.name),
-                  fontSize: ScreenUtil().setSp(32.0),
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  //是艺术家
-  artistWidget_yes() {
-    return Container(
-      width: double.infinity,
-      child: Column(
-        children: [
-          rowWidget(S.of(context).g_key_u_8, artJson!['name'] ?? "", 2),
-          rowWidget(S.of(context).g_key_u_9, artJson!['revenue'] ?? "", 2),
-          rowWidget(S.of(context).g_key_u_10, artJson!['nftTypes'] ?? "", 2),
-          rowWidget(S.of(context).g_key_u_11, artJson!['followers'] ?? "", 2),
-          rowWidget(S.of(context).g_key_u_12, artJson!['userTypes'] ?? "", 2),
-          rowWidget(S.of(context).g_key_u_13, artJson!['websiteLink'] ?? "", 2),
-          rowWidget(S.of(context).g_key_u_14, artJson!['productsLink'] ?? "", 2),
-          rowWidget(S.of(context).g_key_u_15, artJson!['mediaPlatforms'] ?? "", 2),
-          rowWidget(S.of(context).g_key_u_16, artJson!['walletAddress'] ?? "", 2),
-        ],
-      ),
-    );
-  }
-
-  rowWidget(String title, String value, int maxLines) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0), vertical: ScreenUtil().setWidth(40.0)),
-      child: Row(
-        children: [
-          Container(
-            child: Text(
-              title,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.ff888888.name),
-                fontSize: ScreenUtil().setSp(32.0),),
-            ),
-          ),
-          SizedBox(
-            width: ScreenUtil().setWidth(32.0),
-          ),
-          Expanded(
-            child: Text(
-              value,
-              style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.ff888888.name),
-                  fontSize: ScreenUtil().setSp(26.0)),
-              maxLines: maxLines,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.right,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
- */
 }

@@ -85,10 +85,6 @@ class CheckVersionAlert extends StatelessWidget {
                     RateUsOnStore(
                         androidPackageName: "com.walletamaze.nftwallet",
                         appstoreAppId: "1622941204").launch();
-                    /*await OpenStore.instance.open(
-                      appStoreId: '1622941204',
-                      androidAppBundleId: 'com.walletamaze.nftwallet',
-                    );*/
                     if(isForce != 1){
                       Navigator.of(context).pop();
                     }

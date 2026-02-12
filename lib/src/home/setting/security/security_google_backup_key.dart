@@ -24,7 +24,6 @@ class SecurityGoogleBackupKeyState extends State<SecurityGoogleBackupKey>{
   Load load=Load.finish;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     bindGoogleVerification();
   }
@@ -46,7 +45,6 @@ class SecurityGoogleBackupKeyState extends State<SecurityGoogleBackupKey>{
   }
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBarWidget(
         text: S.of(context).google_verification_message17,

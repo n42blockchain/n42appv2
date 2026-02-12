@@ -37,12 +37,10 @@ class _FeedbackState extends State<Feedback> {
   List<AppendixModel> appendixs=[];
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     inputEditingController.dispose();
     super.dispose();
   }
@@ -181,7 +179,6 @@ class _FeedbackState extends State<Feedback> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return SafeArea(child: Scaffold(
       appBar: AppBarWidget(
         text: S.of(context).g_key_feedback,

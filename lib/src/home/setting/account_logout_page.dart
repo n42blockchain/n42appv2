@@ -32,16 +32,8 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
   }
   Load load=Load.finish;
   final TextEditingController _uCodeController = TextEditingController();
-  //final TextEditingController _uPasswordController = TextEditingController();
-  //final TextEditingController _uGoogleCodeController = TextEditingController();
   bool canClick = false;
-  //String password = '';
   String emailCode = '';
-  //String googleCode = '';
-
-  //bool googleCodeSure = false;
-
-  //bool openGoogleAuth = false;
 
   double totalBalance = 0.0;
 
@@ -56,34 +48,7 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
       emailCode = _uCodeController.text.trim();
       checkStatus();
     });
-
-    /*_uPasswordController.addListener(() {
-      password = _uPasswordController.text.trim();
-      checkStatus();
-    });
-
-    _uGoogleCodeController.addListener(() {
-      googleCode = _uPasswordController.text.trim();
-      checkStatus();
-    });*/
-    // checkExchangeBalance();
-    //initData();
   }
-
-  /*initData() async {
-    Map<String, dynamic>? s = await SPUtil().getSecurity();
-    if (s != null) {
-      Map<String, dynamic>? userSecurityMap = s[AppGlobals.userInfo?.uuid??""];
-      if (userSecurityMap != null) {
-        if (userSecurityMap['google']) {
-          openGoogleAuth = true;
-          if (mounted) {
-            setState(() {});
-          }
-        }
-      }
-    }
-  }*/
 
   //检查交易所是否还有余额
   Future<void> checkExchangeBalance() async {
@@ -207,7 +172,6 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
                   ),
                 ),
 
-                //if (openGoogleAuth) _googleAuthWidget()
               ],
             ),
           ),
@@ -228,21 +192,6 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
               return;
             }
 
-            /*if (openGoogleAuth) {
-              final googleCode = _uGoogleCodeController.text.trim();
-              if (googleCode.isEmpty) {
-                ToastUtils.show(S.of(context).g_key_wallet_m17);
-              }
-              UserInfoApi userInfoAPI=UserInfoApi();
-              //直接对code进行验证
-              MessageModel mm = await userInfoAPI.checkGoogle(googleCode);
-              if (mm.error) {
-                // error message
-                ToastUtils.show(mm.data);
-                return;
-              }
-            }*/
-
             final res = await tipsDialog2(
                 this.context, S.of(this.context).g_key_wallet_m11,
                 cancelText: S.of(this.context).g_key_79,
@@ -256,16 +205,7 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
               if (data != null && data["code"] == 200) {
                 try {
                   ToastUtils.show("Account has been cancelled");
-                  //退出登陆
                   await AppGlobals.logout();
-                  //退出第3方登录
-                  //await FireBaseUtils.signOut();
-                  /*Navigator.pushAndRemoveUntil(
-                    this.context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => const GuidePage()),
-                        (route) => false,
-                  );*/
                 } catch (err) {
                   debugPrint("err: ${err.toString()}");
                 } finally {
@@ -286,56 +226,4 @@ class _AccountLogoutPageState extends State<AccountLogoutPage> {
       ],
     );
   }
-/*
-  _googleAuthWidget() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          child: Text(
-            S.of(context).g_key_wallet_m10,
-            style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor)),
-          ),
-        ),
-        Container(
-            decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBoxColor),
-                borderRadius: BorderRadius.circular(25),
-                border: Border.all(color: const Color(0xffefefef))),
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Row(
-              children: [
-                Expanded(
-                  child: InputField(
-                    type: InputFieldType.email,
-                    controller: _uGoogleCodeController,
-                    hintText: S.of(context).g_key_wallet_m10,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () async {
-                    ClipboardData? clipboardData =
-                    await Clipboard.getData(Clipboard.kTextPlain);
-                    if (clipboardData != null) {
-                      final text = clipboardData.text;
-                      if (text != null && text != "null") {
-                        _uGoogleCodeController.text = text;
-                      }
-                    }
-                  },
-                  child: Text(
-                    S.of(context).g_key_166,
-                    style:
-                    const TextStyle(color: Colors.blueAccent, fontSize: 15),
-                  ),
-                )
-              ],
-            )),
-      ],
-    );
-  }*/
 }

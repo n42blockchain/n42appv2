@@ -31,5 +31,3 @@ class NativeWebSocketBridge {
     return _methodChannel.invokeMethod('disconnectWebSocket');
   }
 }
-
-

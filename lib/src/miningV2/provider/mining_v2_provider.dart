@@ -144,9 +144,6 @@ class MiningV2Provider extends ChangeNotifier {
   }
 
 
-
-
-
   /// 抱团挖矿/质押NFT/质押N
   /// 新增：FUJI NFT 质押
   Future<void> checkAddressMiningStatus() async {
@@ -203,7 +200,7 @@ class MiningV2Provider extends ChangeNotifier {
     }else{
       taskList=[];
       balanceInBeacon=0;
-      inactivityScore=[0,0,0,0];
+      inactivityScore=[0,0,0];
       miningTotalRevenue=0;
       inactivityScorePercentage="0";
       inactivityTitle="";
@@ -238,28 +235,6 @@ class MiningV2Provider extends ChangeNotifier {
       if(rmm.error==false){
         walletNBalance=toEther(rmm.data.toString(), coinInfo['baseInfo']['decimals']).toDouble();
       }
-      /*final walletActionProvider = Provider.of<WalletActionProvider>(AppGlobals.appContext, listen: false);
-      
-      // 在 coinList 中查找 N 币
-      for (var coin in walletActionProvider.coinList) {
-        if (coin.coin['coinType'] == CoinType.N.name && coin.coin['isContract'] == false) {
-          walletNBalance = coin.balanceDoubleAll();
-          debugPrint('MiningV2Provider: Wallet N balance = $walletNBalance');
-          notifyListeners();
-          return;
-        }
-      }
-      
-      // 如果在 coinList 中没找到，尝试从 coinModels 中查找
-      for (var coin in walletActionProvider.coinModels) {
-        if (coin.coin['coinType'] == CoinType.N.name) {
-          walletNBalance = coin.balanceDoubleAll();
-          debugPrint('MiningV2Provider: Wallet N balance from coinModels = $walletNBalance');
-          notifyListeners();
-          return;
-        }
-      }*/
-      
       debugPrint('MiningV2Provider: N coin not found in wallet');
     } catch (e) {
       debugPrint('MiningV2Provider: Error getting wallet N balance: $e');
@@ -481,14 +456,11 @@ class MiningV2Provider extends ChangeNotifier {
     return rmm.error;
   }
   Future<void> runMining() async {
-    String? rData=await mining.runClent(
+    String? rData=await mining.runClient(
       miningKeypart?['privateKey']??"",
     );
     if(rData !=null){
       if(rData == "Client started"){
-        //setMiningData();
-        //start();
-        //isRun=true;
         miningStatus=true;
         errorMessage="";
       }else{
@@ -496,22 +468,11 @@ class MiningV2Provider extends ChangeNotifier {
         errorMessage=rData;
       }
     }else{
-      errorMessage='Running the "runClent" method failed!';//"运行“runClent”方法失败！";
+      errorMessage='Running the "runClient" method failed!';//"运行“runClient”方法失败！";
     }
     notifyListeners();
   }
   Timer? _timer;
-  void start() {
-    // 每隔30秒执行一次
-    if(_timer !=null){
-      if(_timer!.isActive){
-        return;
-      }
-    }
-    _timer = Timer.periodic(const Duration(seconds: 30), (timer) async {
-      //await getBalance(addList: true);
-    });
-  }
   Future<String?> miningCreateGetExitFeeUnsignedTx() async {
     String? rData = await mining.miningCreateGetExitFeeUnsignedTx();
     return rData;
@@ -601,9 +562,9 @@ class MiningV2Provider extends ChangeNotifier {
   }
   Future<void> getMiningWithdrawalsDaily() async {
     if(isLoading7DayData)return;
-    final DateTime today = DateTime.now();//今天
-    final DateTime tomorrow =today.add(const Duration(days: 1));//后天
-    final DateTime yesterday=today.add(const Duration(days: -1));//昨天
+    final DateTime today = DateTime.now();
+    final DateTime tomorrow =today.add(const Duration(days: 1));
+    final DateTime yesterday=today.add(const Duration(days: -1));
     final List<String> tomorrowStr = getTimeFormat(tomorrow);
     isLoading7DayData=true;
     notifyListeners();
@@ -642,17 +603,6 @@ class MiningV2Provider extends ChangeNotifier {
     final String day = date.day.toString().padLeft(2, '0');
     return ["$year-$month-$day","$day/$month"];
   }
-  /// 将秒数转换为时分秒格式的字符串，并补齐两位
-  List<String> formatElapsedTime(int seconds) {
-    int hours = seconds ~/ 3600;
-    int minutes = (seconds % 3600) ~/ 60;
-    int remainingSeconds = seconds % 60;
-    // 使用padLeft方法补齐两位
-    String hoursStr = hours.toString().padLeft(2, '0');
-    String minutesStr = minutes.toString().padLeft(2, '0');
-    String secondsStr = remainingSeconds.toString().padLeft(2, '0');
-    return [hoursStr, minutesStr, secondsStr];
-  }
   void get7DaysValue(DateTime date) {
     for(int i=0;i<7;i++){
       DateTime d1=date.add(Duration(days: -(6-i)));
@@ -670,18 +620,10 @@ class MiningV2Provider extends ChangeNotifier {
     generateBarTipData();
     isShowDefaultBar=false;
   }
-  //生成图标点击事件展示数据
   void generateBarTipData() {
     if (barChartValues.isNotEmpty && barChartValues.length == 7) {
       barChartAlertMessageList = [];
-      //计算奖励
-      //final stackAstNum = Provider.of<MiningProvider>(context,listen: false).depositsNum;
       for (int i=0;i<barChartValues.length;i++) {
-        //计算时间
-        //int times = (element * 8).toInt();
-        //final timeData = formatElapsedTime(times);
-        //final value = computeRewardsValueByTaskNum(element.toInt(), stackAstNum);
-        // debugPrint("奖励值：$value");
         barChartAlertMessageList.add(
           AlertMessageGroup(
             titles: [
@@ -798,8 +740,6 @@ class MiningV2Provider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-
 
   // ================= WebSocket 相关 =================
   NativeWebSocketBridge? _wsBridge;

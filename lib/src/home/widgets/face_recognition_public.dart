@@ -10,7 +10,7 @@ class FaceRecognitionPublic{
   final LocalAuthentication auth = LocalAuthentication();
   //_SupportState _supportState = _SupportState.unknown;
 
-  //检查生物特征是否可用
+  /// 检查生物特征是否可用
   Future<bool> checkBiometrics() async {
     late bool canCheckBiometrics;
     try {
@@ -18,9 +18,6 @@ class FaceRecognitionPublic{
     } on PlatformException catch (_) {
       canCheckBiometrics = false;
     }
-    /*if (!mounted) {
-      return;
-    }*/
     if(canCheckBiometrics){
       final List<BiometricType> availableBiometrics =
       await auth.getAvailableBiometrics();
@@ -37,14 +34,10 @@ class FaceRecognitionPublic{
         canCheckBiometrics=false;
       }
     }
-    if(canCheckBiometrics){
-      return true;
-    }else{
-      return false;
-    }
+    return canCheckBiometrics;
   }
 
-  //人体特征验证
+  /// 人体特征验证
   Future<bool> authenticateWithBiometrics() async {
     bool authenticated = false;
     try {
@@ -76,18 +69,6 @@ class FaceRecognitionPublic{
     } on PlatformException catch (_) {
       return false;
     }
-    /*if (!mounted) {
-      return;
-    }*/
-    if(authenticated){
-      return true;
-    }else{
-      return false;
-    }
+    return authenticated;
   }
 }
-/*enum _SupportState {
-  unknown,
-  supported,
-  unsupported,
-}*/

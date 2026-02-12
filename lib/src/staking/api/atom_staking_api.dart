@@ -107,7 +107,7 @@ class AtomStakingApi {
             protocol: StakingProtocols.atomNative,
             validator: Validator(
               address: validatorAddress,
-              name: _shortenAddress(validatorAddress),
+              name: shortenStakingAddress(validatorAddress),
               description: '',
               logoUri: '',
               commission: 0,
@@ -168,7 +168,7 @@ class AtomStakingApi {
               protocol: StakingProtocols.atomNative,
               validator: Validator(
                 address: validatorAddress,
-                name: _shortenAddress(validatorAddress),
+                name: shortenStakingAddress(validatorAddress),
                 description: '',
                 logoUri: '',
                 commission: 0,
@@ -460,8 +460,4 @@ class AtomStakingApi {
     }
   }
 
-  String _shortenAddress(String address) {
-    if (address.length <= 16) return address;
-    return '${address.substring(0, 10)}...${address.substring(address.length - 6)}';
-  }
 }

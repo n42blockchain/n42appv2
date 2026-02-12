@@ -11,7 +11,6 @@ class SecurityGoogleInstructions extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBarWidget(
         text: S.of(context).google_verification_message12,

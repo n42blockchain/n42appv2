@@ -361,7 +361,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
                   ),
                   SizedBox(height: ScreenUtil().setWidth(4)),
                   Text(
-                    _shortenAddress(validator.address),
+                    shortenStakingAddress(validator.address),
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(22),
                       color: AppThemeUtils.getColorByKey(
@@ -476,8 +476,4 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
     }
   }
 
-  String _shortenAddress(String address) {
-    if (address.length <= 16) return address;
-    return '${address.substring(0, 8)}...${address.substring(address.length - 6)}';
-  }
 }

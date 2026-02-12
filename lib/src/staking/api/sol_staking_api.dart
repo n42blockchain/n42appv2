@@ -53,7 +53,7 @@ class SolStakingApi {
 
           return Validator(
             address: v['votePubkey'] ?? '',
-            name: _shortenAddress(v['votePubkey'] ?? ''),
+            name: shortenStakingAddress(v['votePubkey'] ?? '', prefixLen: 6, suffixLen: 4),
             description: 'Solana Validator',
             logoUri: '',
             commission: commission.toDouble(),
@@ -151,7 +151,7 @@ class SolStakingApi {
             protocol: StakingProtocols.solNative,
             validator: Validator(
               address: validatorAddress,
-              name: _shortenAddress(validatorAddress),
+              name: shortenStakingAddress(validatorAddress, prefixLen: 6, suffixLen: 4),
               description: '',
               logoUri: '',
               commission: 0,
@@ -380,8 +380,4 @@ class SolStakingApi {
     }
   }
 
-  String _shortenAddress(String address) {
-    if (address.length <= 12) return address;
-    return '${address.substring(0, 6)}...${address.substring(address.length - 4)}';
-  }
 }

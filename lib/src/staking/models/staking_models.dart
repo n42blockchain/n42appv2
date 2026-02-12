@@ -168,8 +168,8 @@ class StakingPosition {
       stakedAmount: BigInt.tryParse(json['stakedAmount']?.toString() ?? '0') ?? BigInt.zero,
       rewardsEarned: BigInt.tryParse(json['rewardsEarned']?.toString() ?? '0') ?? BigInt.zero,
       pendingRewards: BigInt.tryParse(json['pendingRewards']?.toString() ?? '0') ?? BigInt.zero,
-      stakedAt: DateTime.parse(json['stakedAt'] ?? DateTime.now().toIso8601String()),
-      unbondingAt: json['unbondingAt'] != null ? DateTime.parse(json['unbondingAt']) : null,
+      stakedAt: DateTime.tryParse(json['stakedAt']?.toString() ?? '') ?? DateTime.now(),
+      unbondingAt: json['unbondingAt'] != null ? DateTime.tryParse(json['unbondingAt'].toString()) : null,
       status: StakingPositionStatus.values.firstWhere(
         (e) => e.name == json['status'],
         orElse: () => StakingPositionStatus.active,
@@ -211,34 +211,6 @@ enum StakingPositionStatus {
   unbonding,  // 解绑中
   completed,  // 解绑完成
   withdrawn,  // 已提取
-}
-
-/// Staking 操作类型
-enum StakingActionType {
-  stake,      // 质押
-  unstake,    // 解除质押
-  claim,      // 领取奖励
-  restake,    // 复投奖励
-  redelegate, // 重新委托（更换验证者）
-}
-
-/// Staking 交易请求
-class StakingTransactionRequest {
-  final StakingActionType action;
-  final StakingProtocol protocol;
-  final Validator? validator;
-  final BigInt amount;
-  final String fromAddress;
-  final Validator? toValidator;  // 用于重新委托
-
-  StakingTransactionRequest({
-    required this.action,
-    required this.protocol,
-    this.validator,
-    required this.amount,
-    required this.fromAddress,
-    this.toValidator,
-  });
 }
 
 /// Staking 交易响应
@@ -296,6 +268,15 @@ class StakingStats {
       activePositions: 0,
     );
   }
+}
+
+/// 缩短地址显示的工具方法
+///
+/// [prefixLen] 前缀长度，[suffixLen] 后缀长度
+String shortenStakingAddress(String address, {int prefixLen = 8, int suffixLen = 6}) {
+  final minLen = prefixLen + suffixLen + 3; // 3 for '...'
+  if (address.length <= minLen) return address;
+  return '${address.substring(0, prefixLen)}...${address.substring(address.length - suffixLen)}';
 }
 
 /// 预定义的 Staking 协议
@@ -361,15 +342,4 @@ class StakingProtocols {
     dotNative,
   ];
 
-  static StakingProtocol? getById(String id) {
-    try {
-      return all.firstWhere((p) => p.id == id);
-    } catch (e) {
-      return null;
-    }
-  }
-
-  static List<StakingProtocol> getByChainType(StakingChainType type) {
-    return all.where((p) => p.chainType == type).toList();
-  }
 }

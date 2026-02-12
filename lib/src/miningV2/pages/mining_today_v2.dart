@@ -156,7 +156,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                               ),
                               if(AppConfig.isMainChainMining==false)
                                 Text(
-                                  "AppConfig.isMainChainMining==true?S.of(context).g_key_148:S.of(context).g_key_147",
+                                  AppConfig.isMainChainMining==true?S.of(context).g_key_148:S.of(context).g_key_147,
                                   style: TextStyle(
                                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
                                     fontSize: ScreenUtil().setSp(20),

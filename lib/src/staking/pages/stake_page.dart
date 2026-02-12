@@ -667,8 +667,16 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          final amount = _balance.toDouble() * percentage / BigInt.from(10).pow(_getDecimals()).toDouble();
-          _amountController.text = amount.toStringAsFixed(6);
+          // 使用整数运算避免浮点精度丢失
+          final decimals = _getDecimals();
+          final scaledAmount = _balance * BigInt.from((percentage * 1000).round()) ~/ BigInt.from(1000);
+          final divisor = BigInt.from(10).pow(decimals);
+          final intPart = scaledAmount ~/ divisor;
+          final fracPart = scaledAmount.remainder(divisor).abs();
+          final fracStr = fracPart.toString().padLeft(decimals, '0');
+          // 显示最多 6 位小数
+          final displayFrac = fracStr.length > 6 ? fracStr.substring(0, 6) : fracStr;
+          _amountController.text = '$intPart.$displayFrac';
         },
         child: Container(
           padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(12)),
@@ -866,8 +874,7 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
     }
 
     final amountText = _amountController.text;
-    final amountDouble = double.tryParse(amountText) ?? 0;
-    final amountBigInt = BigInt.from(amountDouble * BigInt.from(10).pow(_getDecimals()).toDouble());
+    final amountBigInt = _parseAmountToBigInt(amountText, _getDecimals());
 
     setState(() {
       _isLoading = true;
@@ -905,6 +912,29 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
         });
       }
     }
+  }
+
+  /// 将用户输入的金额字符串精确转换为 BigInt（最小单位）
+  ///
+  /// 避免使用 double 中间转换导致的精度丢失。
+  /// 例如：输入 "1.5"，decimals=18 -> 1500000000000000000
+  BigInt _parseAmountToBigInt(String amountText, int decimals) {
+    if (amountText.isEmpty) return BigInt.zero;
+
+    final parts = amountText.split('.');
+    final integerPart = parts[0].isEmpty ? '0' : parts[0];
+    String fractionalPart = parts.length > 1 ? parts[1] : '';
+
+    // 截断超出精度的小数位
+    if (fractionalPart.length > decimals) {
+      fractionalPart = fractionalPart.substring(0, decimals);
+    }
+
+    // 右侧补零到 decimals 位
+    fractionalPart = fractionalPart.padRight(decimals, '0');
+
+    final combined = '$integerPart$fractionalPart';
+    return BigInt.tryParse(combined) ?? BigInt.zero;
   }
 
   Future<void> _performUnstake(BuildContext context, StakingProvider provider) async {

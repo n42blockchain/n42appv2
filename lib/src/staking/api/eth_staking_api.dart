@@ -13,8 +13,8 @@ import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 /// Lido 是以太坊上最大的流动性质押协议
 /// 用户质押 ETH 后获得 stETH，可以随时在 DEX 交易
 class EthStakingApi {
+  /// Lido stETH 合约地址（同时用于质押和余额查询）
   static const String _lidoContractAddress = '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84';
-  static const String _stEthContractAddress = '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84';
 
   // Lido API 端点
   static const String _lidoStatsApi = 'https://eth-api.lido.fi';
@@ -74,7 +74,7 @@ class EthStakingApi {
         'method': 'eth_call',
         'params': [
           {
-            'to': _stEthContractAddress,
+            'to': _lidoContractAddress,
             'data': data,
           },
           'latest'
@@ -288,11 +288,12 @@ class EthStakingApi {
     }
   }
 
-  BigInt _hexToBigInt(String hex) {
-    if (hex.startsWith('0x') || hex.startsWith('0X')) {
-      hex = hex.substring(2);
+  BigInt _hexToBigInt(String hexStr) {
+    String cleaned = hexStr;
+    if (cleaned.startsWith('0x') || cleaned.startsWith('0X')) {
+      cleaned = cleaned.substring(2);
     }
-    if (hex.isEmpty) return BigInt.zero;
-    return BigInt.parse(hex, radix: 16);
+    if (cleaned.isEmpty) return BigInt.zero;
+    return BigInt.parse(cleaned, radix: 16);
   }
 }

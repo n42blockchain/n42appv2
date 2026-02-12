@@ -76,10 +76,6 @@ class _AboutAppState extends State<AboutApp> {
               height: ScreenUtil().setWidth(30.0),
             ),
             _buildNavEnter2(),
-            /*SizedBox(
-              height: ScreenUtil().setWidth(30.0),
-            ),
-            _buildNavEnter3(),*/
             SizedBox(
               height: ScreenUtil().setWidth(30.0),
             ),
@@ -108,7 +104,6 @@ class _AboutAppState extends State<AboutApp> {
             callback: () {
               Navigator.push(context,MaterialPageRoute(builder: (context) {
                 return BrowserPage(AppConfig.apiUrl['walletamazeBrowser']!,);
-                //return Browser(AppConfig.walletamazeBrowser, "Amaze Wallet");
               }));
             },
           ),

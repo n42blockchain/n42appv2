@@ -6,10 +6,6 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
 
-/// Risk threshold constants
-const double kLowRiskThreshold = 33.33;
-const double kModerateRiskThreshold = 66.66;
-
 /// Mining Risk Card Widget
 ///
 /// Displays the inactivity risk score with visual progress bars

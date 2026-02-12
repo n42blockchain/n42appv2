@@ -25,7 +25,6 @@ class _MiningKeyListState extends State<MiningKeyList> {
   List<String> miningKeyList=[];
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getMiningData();
   }

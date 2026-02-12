@@ -11,7 +11,6 @@ class GesturePassword extends StatelessWidget{
   Widget build(BuildContext context) {
     double bigWidth=identifySize/2;
     double miniWidth=identifySize/4;
-    // TODO: implement build
     return GesturePasswordWidget(
       size: identifySize*3,
       lineColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
@@ -70,22 +69,6 @@ class GesturePassword extends StatelessWidget{
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withAlpha((0.5 * 255).round()),
         ),
       ),
-      /*arrowItem:Container(
-        width: 20,
-        height: 20,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor),
-        ),
-      ),
-      errorArrowItem: Container(
-        width: 20,
-        height: 20,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorMessageTextColor),
-        ),
-      ),*/
       answer: answer,
       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
       onComplete: (data) {

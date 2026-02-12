@@ -40,7 +40,6 @@ class GesturePasswordSettingState extends State<GesturePasswordSetting>{
   };
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if(widget.type==1){
       cachedData["1"]["1"]["old"]=widget.oldPassword;
@@ -48,7 +47,6 @@ class GesturePasswordSettingState extends State<GesturePasswordSetting>{
   }
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBarWidget(
         text: widget.type==0?S.of(context).g_lock_key16:S.of(context).g_lock_key22,

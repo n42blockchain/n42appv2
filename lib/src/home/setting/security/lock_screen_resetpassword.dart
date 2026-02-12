@@ -29,13 +29,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
   String confirmErrorMessage="";
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-  @override
   void dispose() {
-    // TODO: implement dispose
     oldEditingController.dispose();
     newEditingController.dispose();
     confirmEditingController.dispose();
@@ -132,7 +126,6 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
   }
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
         appBar: AppBarWidget(
           text: S.of(context).g_lock_key9,

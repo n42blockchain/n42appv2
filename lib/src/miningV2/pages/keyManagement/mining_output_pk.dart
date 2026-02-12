@@ -62,14 +62,14 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
 
     if (pwd.length != 8) {
       setState(() {
-        pwdErrorMessage="密码必须是 8 位";
+        pwdErrorMessage=S.of(context).g_mining_key_98(8);
       });
       return;
     }
 
     if (pwd != confirm) {
       setState(() {
-        confirmErrorMessage="两次输入的密码不一致";
+        confirmErrorMessage=S.of(context).g_key_passwords_not_match;
       });
       return;
     }

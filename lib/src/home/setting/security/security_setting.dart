@@ -31,7 +31,6 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
   bool checkBiometrics=true;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     init();
   }

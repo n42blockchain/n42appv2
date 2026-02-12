@@ -52,7 +52,6 @@ class SecurityGoogleVedificationState extends State<SecurityGoogleVedification>{
   }
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initWalletPassword();
     initSecurity();
@@ -246,7 +245,6 @@ class SecurityGoogleVedificationState extends State<SecurityGoogleVedification>{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBarWidget(
         text: S.of(context).Verification,

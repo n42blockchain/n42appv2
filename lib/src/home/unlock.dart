@@ -26,8 +26,6 @@ class Unlock extends ConsumerStatefulWidget {
 }
 
 class _UnlockState extends ConsumerState<Unlock> {
-  //TextEditingController inputEditingController=TextEditingController();
-  //String pwdErrorMessage="";
   String inputPassword="";
   bool check=false;//是否通过验证
   bool obscure=true;//是否显示密码
@@ -38,11 +36,10 @@ class _UnlockState extends ConsumerState<Unlock> {
   int gestureErrorCount=0;//手势输入错误次数
   int passwordErrorCount=0;//密码输入错误次数
   int passwordUnlock=60;//密码解锁倒计时
-  Timer? passworldTimer;
+  Timer? passwordTimer;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initData();
   }
@@ -112,10 +109,9 @@ class _UnlockState extends ConsumerState<Unlock> {
   }
   @override
   void dispose() {
-    // TODO: implement dispose
-    if(passworldTimer !=null){
-      passworldTimer!.cancel();
-      passworldTimer=null;
+    if(passwordTimer !=null){
+      passwordTimer!.cancel();
+      passwordTimer=null;
     }
     super.dispose();
   }
@@ -156,13 +152,13 @@ class _UnlockState extends ConsumerState<Unlock> {
       await ref.read(screenLockProvider.notifier).setPasswordLockTimestamp(timestamp);
     }
     
-    passworldTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    passwordTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (passwordUnlock > 1) {
         setState(() {
           passwordUnlock--;
         });
       } else {
-        passworldTimer!.cancel();
+        passwordTimer!.cancel();
         initData();
         setState(() {});
       }
@@ -383,9 +379,6 @@ class _UnlockState extends ConsumerState<Unlock> {
         }
         else{
           textspanStr="";
-          /*columns.add(
-            Expanded(flex: 1,child: EmptyView(type: EmptyType.noData,canRefresh: false,),),
-          );*/
           columns.add(
             Expanded(flex: 1,child: Center(
               child: Container(
@@ -436,16 +429,12 @@ class _UnlockState extends ConsumerState<Unlock> {
                   ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () async {
-                      //退出登陆
                       String tokenId=AppGlobals.userInfo?.token??"";
                       await Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
                       if(AppGlobals.userInfo !=null){
                         if((AppGlobals.userInfo?.token??"") !=tokenId){
                           check=true;
                           back();
-                          /*if(widget.type =="resumed"){
-                          Navigator.pop(context);
-                        }*/
                         }
                       }
                     }),

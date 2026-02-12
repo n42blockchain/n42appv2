@@ -20,9 +20,8 @@ class _BrowserSettingState extends State<BrowserSetting> {
   };
   @override
   void initState() {
-    // TODO: implement initState
-    getBrowserSetting();
     super.initState();
+    getBrowserSetting();
   }
   Future<void> getBrowserSetting()async{
     Map<String,dynamic>? b=await SPUtil().getBrowserSetting();
