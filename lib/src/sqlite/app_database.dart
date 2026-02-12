@@ -7,10 +7,10 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class AppDatabase{
-  late Database _database;
+  Database? _database;
   Future<Database> get database async {
-    _database = await getDatabaseInstance();
-    return _database;
+    _database ??= await getDatabaseInstance();
+    return _database!;
   }
   Future<Database> getDatabaseInstance() async {
     var directory = await getDatabasesPath();
@@ -36,7 +36,7 @@ class AppDatabase{
             "coin text,"
             "isTest int," //是否是测试网
             "testnetUri text," //测试网地址
-            "userUuid test," //用户uuid
+            "userUuid text," //用户uuid
             "walletIndex int," //钱包id
             "message TEXT"//消息
             ")");
@@ -59,7 +59,7 @@ class AppDatabase{
             "coin text,"
             "isTest int," //是否是测试网
             "testnetUri text," //测试网地址
-            "userUuid test," //用户uuid
+            "userUuid text," //用户uuid
             "walletIndex int," //钱包id
             "gasPrice int"//交易费
             ")");
@@ -126,27 +126,29 @@ class AppDatabase{
     );
   }
 
-  //查询btc交易记录
+  //插入btc交易记录
   Future<int> insertBtcTransactionRecord(BtcTransactionRecodeModel btcm) async {
     final db = await database;
     var raw = await db.insert("BtcTransactionRecord", btcm.toMapDb(),
         conflictAlgorithm: ConflictAlgorithm.rollback);
     return raw;
   }
-  //查询交易记录，全部未完成的
+  //查询btc交易记录
   //type，查询类型，0：查询全部，1查询完成的，2查询未完成的
   Future<List<BtcTransactionRecodeModel>> selectBtcTransationRecord(
       String userUuid, String address, String coinKey, int selectType,
       {int pageSize = 10, int pageNum = 1}) async {
     final db = await database;
-    String whereStr = "";
+    String whereClause = 'coinMiniName=? and address=?';
+    List<dynamic> whereArgs = [coinKey, address];
     if (selectType == 1) {
-      whereStr = " and state=1";
+      whereClause += ' and state=1';
     } else if (selectType == 2) {
-      whereStr = " and state=0";
+      whereClause += ' and state=0';
     }
     var response = await db.query("BtcTransactionRecord",
-        where: 'coinMiniName="$coinKey" and address="$address" $whereStr',
+        where: whereClause,
+        whereArgs: whereArgs,
         orderBy: "txTime desc",
         limit: pageSize,
         offset: (pageNum - 1) * pageSize);
@@ -162,15 +164,16 @@ class AppDatabase{
         int pageNum = 1,
         int isTest = 0}) async {
     final db = await database;
-    String whereStr = "";
+    String whereClause = 'address=? and contract=? and isTest=? and coinMiniName=?';
+    List<dynamic> whereArgs = [address, contract.toLowerCase(), isTest, miniName];
     if (selectType == 1) {
-      whereStr = " and state=1";
+      whereClause += ' and state=1';
     } else if (selectType == 2) {
-      whereStr = " and state=0";
+      whereClause += ' and state=0';
     }
-    var where = 'address="$address" and contract="${contract.toLowerCase()}" and isTest=$isTest and coinMiniName="$miniName"$whereStr';
     var response = await db.query("TransationRecord",
-        where: where,
+        where: whereClause,
+        whereArgs: whereArgs,
         orderBy: "txTime desc",
         limit: pageSize,
         offset: (pageNum - 1) * pageSize);
@@ -189,20 +192,20 @@ class AppDatabase{
   Future<int> updateTransationRecord(TransationRecordModel trm) async {
     final db = await database;
     var response = await db.update("TransationRecord", trm.toMapDb(),
-        where: "trId=${trm.trId}");
+        where: "trId=?", whereArgs: [trm.trId]);
     return response;
   }
   Future<int> updateTransationRecordTxhash(TransationRecordModel trm) async {
     final db = await database;
     var response = await db.update("TransationRecord", trm.toMapDb(),
-        where: 'txHash="${trm.txHash}"');
+        where: 'txHash=?', whereArgs: [trm.txHash]);
     return response;
   }
   //修改btc交易记录
   Future<int> updateBtcTransactionRecord(BtcTransactionRecodeModel btcm) async {
     final db = await database;
     var response = await db.update("BtcTransactionRecord", btcm.toMapDb(),
-        where: "trId=${btcm.trId}");
+        where: "trId=?", whereArgs: [btcm.trId]);
     return response;
   }
   //查询交易记录，txhash交易hash
@@ -210,7 +213,7 @@ class AppDatabase{
       String txHash,String address) async {
     final db = await database;
     var response =
-    await db.query("TransationRecord", where: 'txHash="$txHash" and address="$address"');
+    await db.query("TransationRecord", where: 'txHash=? and address=?', whereArgs: [txHash, address]);
     List<TransationRecordModel> list =
     response.map((c) => TransationRecordModel.fromMap(c)).toList();
     return list;
@@ -220,7 +223,7 @@ class AppDatabase{
       String userUuid) async {
     final db = await database;
     var response = await db.query("TransationRecord",
-        where: 'state=0 and userUuid="$userUuid"',);
+        where: 'state=0 and userUuid=?', whereArgs: [userUuid]);
     List<TransationRecordModel> list =
     response.map((c) => TransationRecordModel.fromMap(c)).toList();
     return list;
@@ -228,14 +231,15 @@ class AppDatabase{
   Future<List<BtcTransactionRecodeModel>> selectBtcTransationRecordByUUID(
       String userUuid, int selectType) async {
     final db = await database;
-    String whereStr = "";
+    String whereClause = 'userUuid=?';
+    List<dynamic> whereArgs = [userUuid];
     if (selectType == 1) {
-      whereStr = " and state=1";
+      whereClause += ' and state=1';
     } else if (selectType == 2) {
-      whereStr = " and state=0";
+      whereClause += ' and state=0';
     }
     var response = await db.query("BtcTransactionRecord",
-        where: 'userUuid="$userUuid" $whereStr', orderBy: "trId desc");
+        where: whereClause, whereArgs: whereArgs, orderBy: "trId desc");
     List<BtcTransactionRecodeModel> list =
     response.map((c) => BtcTransactionRecodeModel.fromMap(c)).toList();
     return list;
@@ -244,7 +248,7 @@ class AppDatabase{
       String txHash) async {
     final db = await database;
     var response = await db.query("BtcTransactionRecord",
-        where: 'txHash="$txHash"',);
+        where: 'txHash=?', whereArgs: [txHash]);
     List<BtcTransactionRecodeModel> list =
     response.map((c) => BtcTransactionRecodeModel.fromMap(c)).toList();
     return list;
@@ -261,19 +265,20 @@ class AppDatabase{
   //修改浏览器收藏表
   Future<int> updateBrowserCollection(Map<String, dynamic> map, int id) async {
     final db = await database;
-    var response = await db.update("browserCollection", map, where: "id=$id");
+    var response = await db.update("browserCollection", map,
+        where: "id=?", whereArgs: [id]);
     return response;
   }
 
   //删除浏览器收藏表
   Future<void> deleteBrowserCollection(int id) async {
     final db = await database;
-    await db.delete("browserCollection", where: "id=$id");
+    await db.delete("browserCollection", where: "id=?", whereArgs: [id]);
   }
 
   Future<int> deleteBrowserCollectionUrl(String url) async {
     final db = await database;
-    return await db.delete("browserCollection", where: 'url="$url"');
+    return await db.delete("browserCollection", where: 'url=?', whereArgs: [url]);
   }
 
   Future<List<BrowserCollectionModel>> selectBrowserCollection({int pageSize = 10, int pageNum = 1}) async {
@@ -287,7 +292,7 @@ class AppDatabase{
 
   Future<List<BrowserCollectionModel>> selectBrowserCollectionUrl(String url) async {
     final db = await database;
-    var response = await db.query("browserCollection", where: 'url="$url"');
+    var response = await db.query("browserCollection", where: 'url=?', whereArgs: [url]);
     List<BrowserCollectionModel> list =
     response.map((c) => BrowserCollectionModel.fromJson(c)).toList();
     return list;
@@ -307,7 +312,8 @@ class AppDatabase{
     var response = await db.query("browserHistory",
         columns: ["url"],
         distinct: true,
-        where: 'url like "%$urlStr%"',
+        where: 'url like ?',
+        whereArgs: ['%$urlStr%'],
         orderBy: "id desc",
         limit: pageSize,
         offset: (pageNum - 1) * pageSize);
@@ -320,8 +326,6 @@ class AppDatabase{
   Future<List<BrowserSearchHistoryModel>> selectBrowserSearchHistory({int pageSize = 10, int pageNum = 1}) async {
     final db = await database;
     var response = await db.query("browserSearchHistory",
-        columns: ["search"],
-        distinct: true,
         orderBy: "searchCount desc",
         limit: pageSize,
         offset: (pageNum - 1) * pageSize);
@@ -334,9 +338,8 @@ class AppDatabase{
     final db = await database;
     var response = await db.query(
       "browserSearchHistory",
-      columns: ["search"],
-      distinct: true,
-      where: 'search="${map['search']}"',
+      where: 'search=?',
+      whereArgs: [map['search']],
       orderBy: "searchCount desc",
     );
     List<BrowserSearchHistoryModel> list =
@@ -347,9 +350,9 @@ class AppDatabase{
       return raw;
     } else {
       BrowserSearchHistoryModel bshm = list[0];
-      bshm.searchCount = bshm.searchCount! + 1;
+      bshm.searchCount = (bshm.searchCount ?? 0) + 1;
       await db.update('browserSearchHistory', bshm.getMap(),
-          where: 'id=${bshm.id}');
+          where: 'id=?', whereArgs: [bshm.id]);
     }
     return null;
   }

@@ -18,7 +18,9 @@ class AddressBookApi{
   ///列表查询
   Future<List<AddressBookModel>> getAddressBookList(String coinName) async {
     final db = await appDatabase.database;
-    var response = await db.query("AddressBook",where: coinName==""?"1=1":"coinName = '$coinName'");
+    var response = await db.query("AddressBook",
+        where: coinName == "" ? null : "coinName = ?",
+        whereArgs: coinName == "" ? null : [coinName]);
     List<AddressBookModel> list = response.map((c) => AddressBookModel.fromJson(c)).toList();
     return list;
   }

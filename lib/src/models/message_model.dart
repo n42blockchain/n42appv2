@@ -1,14 +1,11 @@
-//调用rpc，当throw抛出错误时使用此模型
-class MessageModel{
-  bool error=false;
-  MessageErrorType type=MessageErrorType.Default;
+/// RPC 调用错误模型，当 throw 抛出错误时使用此模型
+class MessageModel {
+  bool error = false;
   dynamic data;
+
   MessageModel();
-  MessageModel.error(){
-    error=true;
+
+  MessageModel.error() {
+    error = true;
   }
-}
-enum MessageErrorType{
-  Default,
-  E1403,//登出状态
 }

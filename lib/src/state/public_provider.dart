@@ -13,8 +13,7 @@ import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/utils/app_push_utils.dart';
 
-
-class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
+class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin {
   bool unlockIsPush = false; //是否已经锁屏
   bool checkWalletPassword = false; //是否验证了钱包密码
   void setCheckWalletPassword(bool value) {
@@ -36,24 +35,20 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
   //获取用户信息
   Future<void> _getUserInfo() async {
     try {
-      SPUtil sPUtils=SPUtil();
-      var userInfo = await sPUtils.getUserInfo();
+      final spUtil = SPUtil();
+      var userInfo = await spUtil.getUserInfo();
       if (userInfo != null) {
         UserInfo info = UserInfo.fromJson(userInfo);
-        //AppGlobals.login(info);
         setUserInfo(info);
-        //AppGlobals.userInfo!.createWallet = await checkWallet();
-        UserInfo? ruInfo = await getUserInfoFromServer(info);
+        UserInfo? ruInfo = await _getUserInfoFromServer(info);
         if (ruInfo != null) {
-          //ruInfo.createWallet = info.createWallet;
           AppGlobals.userInfo = ruInfo;
-          setUserInfo(info);
-          await sPUtils.saveUserInfo(ruInfo);
-          //ProviderUtil.walletActionProvider().init();
+          setUserInfo(ruInfo);
+          await spUtil.saveUserInfo(ruInfo);
         }
       }
-    } catch (_) {
-      // 错误安全忽略
+    } catch (e) {
+      debugPrint('PublicProvider._getUserInfo error: $e');
     }
   }
 
@@ -132,23 +127,19 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
   }
 
   //主页面 tabbar 索引
-  int homeCurrentIndex=0;
+  int homeCurrentIndex = 0;
+
   //设置 homeCurrentIndex
-  void setHomeCurrentIndex(int value){
-    homeCurrentIndex=value;
+  void setHomeCurrentIndex(int value) {
+    homeCurrentIndex = value;
     notifyListeners();
   }
 
-  Future<UserInfo?> getUserInfoFromServer(UserInfo uInfo) async {
-    UserInfoApi loginApi=UserInfoApi();
-    UserInfo? uData = await loginApi.getUserInfo(
-        uInfo.uuid??"", uInfo.token!, uInfo.hashCode.toString());
-    if (uData != null) {
-      //uInfo=uData;
-      return uData;
-    } else {
-      return null;
-    }
+  Future<UserInfo?> _getUserInfoFromServer(UserInfo uInfo) async {
+    final loginApi = UserInfoApi();
+    final uData = await loginApi.getUserInfo(
+        uInfo.uuid ?? "", uInfo.token ?? "", uInfo.hashCode.toString());
+    return uData;
   }
 
   //修改用户信息
@@ -159,7 +150,7 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
       Map<String, dynamic> rData = await IpfsApi().uploadIPFSImage(
         imageData,
         "aImage.png",
-            (int count, int total) {},
+        (int count, int total) {},
         type: 1,
       );
       if (rData["error"]) {
@@ -167,29 +158,24 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
         mm.data = S.current.g_key_u_23;
         return mm;
       } else {
-        uInfo.image ="${AppConfig.apiUrl['ipfsAddress']}${rData['data']['Hash']}";
-        //"https://${rData['data']}${AppConfig.apiUrl['ipfsAddress']}aImage.png"; //ipfsAddress+rData['data']['Hash'];
+        uInfo.image = "${AppConfig.apiUrl['ipfsAddress']}${rData['data']['Hash']}";
       }
     }
     Map<String, dynamic> uMap = {
-      //"art_json":artStr,
       "desc": uInfo.desc ?? "",
-      //"idx_email_hash":uInfo.idxEmailHash==null?"":uInfo.idxEmailHash,
       "image": uInfo.image ?? "",
       "name": uInfo.name ?? "",
     };
-    UserInfoApi userInfoAPI=UserInfoApi();
+    final userInfoAPI = UserInfoApi();
     mm = await userInfoAPI.updateUserInfo(uMap);
     if (mm.error == false) {
       await SPUtil().saveUserInfo(uInfo);
       AppGlobals.userInfo = uInfo;
       setUserInfo(uInfo);
-      notifyListeners();
     }
     return mm;
   }
-  ///////////////////////////////////
-  //解决引导页问题， 主页的tabbar 切换时调用此方法展示引导页
+  //解决引导页问题，主页的 tabbar 切换时调用此方法展示引导页
   //main tabbar
   int selectIndex = 0;
   void setSelectIndex(int value) {
@@ -197,7 +183,7 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
     notifyListeners();
   }
 
-  ///////后台切到前台 弹出锁屏属性
+  //后台切到前台 弹出锁屏属性
   Map<String, dynamic> lockScreenMap = {
     "lock": false, //是否锁屏
     "lockPW": "", //锁屏密码
@@ -207,7 +193,7 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
     "lockTime": 30,
     "gesture": false, //是否开启手势密码
     "gesturePW": "", //手势密码
-    "PWLock":0,//密码输入错误时间
+    "PWLock": 0, //密码输入错误时间
   };
 
   //获取锁屏缓存
@@ -225,8 +211,8 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
         lockScreenMap['gesturePW'] = [];
         setLockScreenData();
       }
-      if(lockScreenMap['PWLock']==null){
-        lockScreenMap['PWLock']=0;
+      if (lockScreenMap['PWLock'] == null) {
+        lockScreenMap['PWLock'] = 0;
       }
     }
   }
@@ -234,7 +220,6 @@ class PublicProvider extends ChangeNotifier with DiagnosticableTreeMixin{
   Future<void> setLockScreenData() async {
     await SPUtil().setLockScreen(lockScreenMap);
   }
-/////////
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {

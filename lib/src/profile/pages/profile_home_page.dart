@@ -125,13 +125,14 @@ class ProfileHomePage extends StatelessWidget {
                   size: ScreenUtil().setWidth(36),
                 ),
               ),
+              // TODO: 通知红点应根据实际未读消息状态条件显示
               Positioned(
-                top: 8,
-                right: 8,
+                top: ScreenUtil().setWidth(8),
+                right: ScreenUtil().setWidth(8),
                 child: Container(
                   width: ScreenUtil().setWidth(16),
                   height: ScreenUtil().setWidth(16),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.red,
                     shape: BoxShape.circle,
                   ),
@@ -227,7 +228,7 @@ class ProfileHomePage extends StatelessWidget {
         _buildMenuItem(
           context,
           'Language',
-          'English',
+          'Display language',
           Icons.language,
           Colors.indigo,
           () => _navigateToLanguageSettings(context),
@@ -438,15 +439,18 @@ class ProfileHomePage extends StatelessWidget {
             ),
 
             // 尾部
-            trailing ??
-                Icon(
-                  Icons.chevron_right,
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
-                  size: ScreenUtil().setWidth(28),
-                ),
+            if (trailing != null) ...[
+              trailing,
+              SizedBox(width: ScreenUtil().setWidth(4)),
+            ],
+            Icon(
+              Icons.chevron_right,
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
+              size: ScreenUtil().setWidth(28),
+            ),
           ],
         ),
       ),
@@ -461,7 +465,7 @@ class ProfileHomePage extends StatelessWidget {
   void _navigateToHardwareWallet(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => HardwareWalletPage()),
+      MaterialPageRoute(builder: (context) => const HardwareWalletPage()),
     );
   }
 

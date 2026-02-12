@@ -68,13 +68,12 @@ class MoonpayService {
   }
 }
 
-/// 创建签名 URL
+/// 创建 Moonpay URL 签名
 ///
-/// [coinType] 币种类型
-/// [address] 钱包地址
 /// [url] 原始 URL
 /// [mode] 环境模式 ('prod' 或 'test')
-String createUrl(String coinType, String address, String url, String mode) {
+/// 返回 HMAC-SHA256 签名的 Base64 编码字符串
+String createUrl(String url, String mode) {
   final secretKey = MoonpayService._getSecretKey(mode);
 
   Uri uri = Uri.parse(url);

@@ -1,4 +1,4 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/pay/moonpay/create_url.dart';
@@ -6,7 +6,6 @@ import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/core/utils/js_escape_utils.dart';
 
@@ -22,7 +21,6 @@ class Moonpay extends StatefulWidget {
 class _MoonpayState extends State<Moonpay> {
   late final WebViewController webViewController;
   late String url;
-  late String title;
   bool goBack = false;
   bool goForward = false;
   Load pageLoad = Load.finish;
@@ -32,14 +30,12 @@ class _MoonpayState extends State<Moonpay> {
   void initState() {
     super.initState();
 
-    // 初始化 URL 和标题
+    // 初始化 URL
     if (widget.type == 0) {
-      title = S.current.g_key_211;
       url = widget.coinModel == null
           ? "https://n42.world/pay"
           : "https://n42.world/pay?defaultCurrencyCode=${widget.coinModel!.coin['miniName']}&walletAddress=${widget.coinModel!.address}";
     } else {
-      title = S.current.g_key_212;
       url = widget.coinModel == null
           ? "https://n42.world/sell"
           : "https://n42.world/sell?defaultCurrencyCode=${widget.coinModel!.coin['miniName']}";
@@ -88,18 +84,23 @@ class _MoonpayState extends State<Moonpay> {
   }
 
   void _handleJSMessage(JavaScriptMessage message) {
-    List<dynamic> rdatas = jsonDecode(message.message);
-    if (rdatas.isNotEmpty && rdatas[0] != null) {
-      if (rdatas[0]['type'] == "get_moonpay_signature") {
-        if (widget.coinModel != null) {
-          String url = createUrl(
-              widget.coinModel!.coin['miniName'],
-              widget.coinModel!.address,
-              rdatas[0]['url'],
-              rdatas[0]['mode']);
-          webViewController.runJavaScript('receiveSignature("${JsEscapeUtils.escapeJs(url)}");');
+    try {
+      List<dynamic> rdatas = jsonDecode(message.message);
+      if (rdatas.isNotEmpty && rdatas[0] != null) {
+        if (rdatas[0]['type'] == "get_moonpay_signature") {
+          if (widget.coinModel != null) {
+            final signUrl = rdatas[0]['url'];
+            final signMode = rdatas[0]['mode'];
+            if (signUrl is String && signMode is String) {
+              String signature = createUrl(signUrl, signMode);
+              webViewController.runJavaScript(
+                  'receiveSignature("${JsEscapeUtils.escapeJs(signature)}");');
+            }
+          }
         }
       }
+    } catch (e) {
+      debugPrint('Moonpay JS message handling error: $e');
     }
   }
 

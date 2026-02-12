@@ -60,31 +60,37 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
     try {
       // 确保动画至少播放 800ms（快速启动）
       final minDuration = Future.delayed(const Duration(milliseconds: 800));
-      
+
       // 执行初始化
       if (widget.onInit != null) {
-        setState(() {
-          _loadingText = 'Loading...';
-        });
+        if (mounted) {
+          setState(() {
+            _loadingText = 'Loading...';
+          });
+        }
         await widget.onInit!();
       }
-      
+
       // 等待最小时间
       await minDuration;
-      
+
+      if (!mounted) return;
+
       setState(() {
         _loadingText = 'Ready';
         _isLoading = false;
       });
-      
+
       // 短暂延迟后完成
       await Future.delayed(const Duration(milliseconds: 200));
-      
+
+      if (!mounted) return;
       widget.onComplete();
     } catch (e) {
       debugPrint('SplashPage: Initialize error: $e');
       // 即使出错也要完成启动
       await Future.delayed(const Duration(milliseconds: 300));
+      if (!mounted) return;
       widget.onComplete();
     }
   }
@@ -239,4 +245,3 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
     );
   }
 }
-

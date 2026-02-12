@@ -1,44 +1,33 @@
 ﻿import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/https/base_api.dart';
-import 'package:flutter/material.dart';
-
+import 'package:flutter/foundation.dart';
 
 ///@author zhc 2023/2/13 11:21
 ///@description: 新闻api
 
 class NewsApi {
-  late Map<String,String> header;
-  NewsApi(){
-    header={'content-type': 'application/json'};
-  }
-  //获取新闻列表
-  Future newsList({
+  static const Map<String, String> _header = {'content-type': 'application/json'};
+
+  /// 获取新闻列表
+  Future<dynamic> newsList({
     required int skip,
-    required int limit
+    required int limit,
   }) async {
-    Map params = {
+    final Map<String, dynamic> params = {
       "skip": skip * limit,
-      "limit": limit
+      "limit": limit,
     };
-    final data = await BaseApi.requestEmptyH.post(
-      '${AppConfig.apiUrl['newsHostUrl']}/newsList',
-      params: {},
-      data: params,header: header,);
-    debugPrint("news data: $data");
-    return data;
+    try {
+      final data = await BaseApi.requestEmptyH.post(
+        '${AppConfig.apiUrl['newsHostUrl']}/newsList',
+        params: {},
+        data: params,
+        header: _header,
+      );
+      return data;
+    } catch (e) {
+      debugPrint("NewsApi.newsList error: $e");
+      return null;
+    }
   }
-
-  Future newsDetail(String id) async {
-    Map params = {
-      "newId":id
-    };
-    final data = await BaseApi.requestEmptyH.post(
-      '${AppConfig.apiUrl['newsHostUrl']}/newsList?',
-      params: {},
-      data: params,header: header,);
-    return data;
-  }
-
-
-
 }

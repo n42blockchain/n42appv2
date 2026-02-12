@@ -1,4 +1,4 @@
-﻿
+
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/news/api/news_api.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
@@ -17,10 +17,11 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
+  final NewsApi _newsApi = NewsApi();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
       body: Column(
         children: [
           AppHomeTopBar(
@@ -31,54 +32,65 @@ class _NewsPageState extends State<NewsPage> {
             onLeftImageUri: "assets/img/menu.png",
           ),
           Expanded(
-            flex: 1,
             child: BaseList(
               buildItem: (BuildContext context, List<dynamic> results, int index) {
                 final Map<String, dynamic> item = results[index];
-                final dateStrList = (item["pubDate"] as String).split(" ");
-                String dateTimeSte = '';
-                if (dateStrList.length >= 5) {
-                  for (int i = 1; i < 5; i++) {
-                    dateTimeSte += "${dateStrList[i]} ";
-                  }
-                }
-                return buildItem(
-                  item["title"] ?? '',
-                  item["description"] ?? '',
-                  item["image"] ?? '',
+                final dateTimeSte = _parsePubDate(item["pubDate"]);
+                final link = item["link"] as String? ?? '';
+                return _buildItem(
+                  item["title"] as String? ?? '',
+                  item["image"] as String? ?? '',
                   dateTimeSte,
-                  onTap: () async {
-                    Navigator.push(context,MaterialPageRoute(
-                        builder: (_) => BrowserPage( item["link"],)));
-                  },
+                  onTap: link.isNotEmpty
+                      ? () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => BrowserPage(link),
+                            ),
+                          );
+                        }
+                      : null,
                 );
               },
               getData: (int page, int pageSize) async {
-                final data = await NewsApi().newsList(skip: page, limit: pageSize);
-                //debugPrint("data:$data");
+                final data = await _newsApi.newsList(skip: page, limit: pageSize);
                 if (data != null && data["code"] == 200) {
                   return data["data"];
                 }
-                return await Future(() => []);
+                return [];
               },
               firstRefresh: true,
               pageIndex: 0,
               pageSize: 20,
               mainAxisSpacing: ScreenUtil().setWidth(30.0),
             ),
-          )
+          ),
         ],
       ),
     );
   }
-  Widget buildItem(String title, String desc, String imageUrl, String time,
-      {GestureTapCallback? onTap}) {
+
+  /// 解析 pubDate 字符串，提取日期时间部分
+  String _parsePubDate(dynamic pubDate) {
+    if (pubDate == null || pubDate is! String) return '';
+    final dateStrList = pubDate.split(" ");
+    if (dateStrList.length < 5) return pubDate;
+    return dateStrList.sublist(1, 5).join(" ");
+  }
+
+  Widget _buildItem(
+    String title,
+    String imageUrl,
+    String time, {
+    GestureTapCallback? onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-            vertical: ScreenUtil().setWidth(30.0),
-            horizontal: ScreenUtil().setWidth(30.0)
+          vertical: ScreenUtil().setWidth(30.0),
+          horizontal: ScreenUtil().setWidth(30.0),
         ),
         margin: EdgeInsets.only(
           bottom: ScreenUtil().setWidth(30.0),
@@ -87,7 +99,7 @@ class _NewsPageState extends State<NewsPage> {
         ),
         decoration: BoxDecoration(
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0))
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,24 +111,12 @@ class _NewsPageState extends State<NewsPage> {
                   Text(
                     title,
                     style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.itemTextColor.name),
-                        fontSize: ScreenUtil().setSp(30.0),
-                        fontWeight: FontWeight.bold),
-                  ),
-                  /*SizedBox(
-                    height: ScreenUtil().setWidth(19),
-                  ),
-                  Text(
-                    desc ?? '',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
                       color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemSubtitleTextColor.name),
-                      fontSize: ScreenUtil().setSp(25.0),
+                          context, AppThemeKeys.itemTextColor.name),
+                      fontSize: ScreenUtil().setSp(30.0),
+                      fontWeight: FontWeight.bold,
                     ),
-                  ),*/
+                  ),
                   SizedBox(
                     height: ScreenUtil().setWidth(12.0),
                   ),
@@ -139,7 +139,6 @@ class _NewsPageState extends State<NewsPage> {
               Container(
                 height: ScreenUtil().setWidth(108.0),
                 width: ScreenUtil().setWidth(160.0),
-                //超出部分，可裁剪
                 clipBehavior: Clip.hardEdge,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
