@@ -9,13 +9,10 @@ import 'package:decimal/decimal.dart';
 import 'package:provider/provider.dart';
 class CoinModel {
   //数字格式化实例
-  final NumberFormat _oCcy = NumberFormat("#,##0.####", "en_US");
+  static final NumberFormat _oCcy = NumberFormat("#,##0.####", "en_US");
   Map<String, dynamic> coin = {};//主链基本信息
   Map<String,dynamic> tokens={};//代币列表
   ///提供计算属性 代替coin
-  /*CoinInfo get coinInfo {
-    return CoinInfo.fromJson(coin);
-  }*/
   bool showList=true;//是否显示在主页列表上
   String? privateKey;//是否时导入钱包
   bool isTest=false;//是否是测试网，默认主网
@@ -77,18 +74,6 @@ class CoinModel {
       'mainCoinIcon': mainCoinIcon
     };
   }
-  /*Regular? regular;
-  Regular get _regular{
-    if(regular==null){
-      regular=Regular();
-    }
-    return regular!;
-  }*/
-  //获取balance的 浮点类型
-  /*double balance_double() {
-    double t=toEther(balance.toString(), coin['decimals']??0);
-    return _regular.formartNumDouble(toEther(balance.toString(), coin['decimals']??0), 14,isCrop: true,isFill0: false);
-  }*/
   double balanceDoubleAll() {
     return toEther(balance.toString(), coin['decimals']??0).toDouble();
   }

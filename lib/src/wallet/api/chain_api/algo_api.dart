@@ -80,53 +80,6 @@ class AlgoApi{
       return mm;
     }
   }
-  /*
-  static sendTransaction_74(Uint8List data) async {
-    try{
-      MultipartFile f=await MultipartFile.fromBytes(data,filename: 'rawtxn');
-      FormData fd=FormData.fromMap({"file":f});
-      final a=await Api.tokenViewHelp.post('v1/algo/tx/send', params: {},data: fd);
-      MessageModel mm=MessageModel.error();
-      if(a['code']==200){
-        mm.error=false;
-        mm.data=a['data'];
-      }else{
-        mm.data=a['message'];
-      }
-      return mm;
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e.toString();
-      return mm;
-    }
-
-  }
-  static sendTransaction(Uint8List data) async {
-    try{
-      String uri=Api.getUrl2(CoinType.ALGO.name,'api',isTest:true);
-      final Dio _dio=Dio();
-      const _extra = <String, dynamic>{};
-      final queryParameters = <String, dynamic>{};
-      final _data = Stream.fromIterable(data.map((i) => [i]));
-      final _result = await _dio.request<Map<String, dynamic>>('${uri}v2/transactions',
-          queryParameters: queryParameters,
-          options: Options(
-            method: 'POST',
-            headers: <String, dynamic>{r'Content-Type': 'application/x-binary'},
-            extra: _extra,
-            contentType: 'application/x-binary',
-          ),
-          data: _data);
-      MessageModel mm =MessageModel();
-      mm.data=_result.data!['txId'];
-      return mm;
-    }catch(e){
-      MessageModel mm =MessageModel.error();
-      mm.data=e.toString();
-      return mm;
-    }
-  }
-  */
   //根据txid获取交易信息
   Future<MessageModel> getTransactionsInfo(String txId,{bool isTest=false})async{
     try{

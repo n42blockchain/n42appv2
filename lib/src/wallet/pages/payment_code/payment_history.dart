@@ -79,7 +79,6 @@ class _PaymentHistoryState extends State<PaymentHistory> {
   String uuid="";
   @override
   void initState() {
-    // TODO: implement initState
     uuid=AppGlobals.userInfo?.uuid??"";
     super.initState();
   }

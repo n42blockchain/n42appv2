@@ -196,7 +196,6 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver{
   }
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     initPermissions();

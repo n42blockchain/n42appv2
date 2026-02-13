@@ -63,6 +63,7 @@ export 'builder/signature_builder.dart';
 export 'account/smart_account_factory.dart';
 export 'account/account_deployer.dart';
 export 'account/account_types/simple_account.dart';
+export 'account/account_types/simple7702_account.dart';
 
 // Bundler
 export 'bundler/bundler_client.dart';
@@ -71,6 +72,7 @@ export 'bundler/bundler_config.dart';
 // Utilities
 export 'utils/gas_estimator.dart';
 export 'utils/user_op_hash.dart';
+export 'utils/eip7702_handler.dart';
 
 // Provider
 export 'provider/aa_provider.dart';

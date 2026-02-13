@@ -81,14 +81,12 @@ class _WalletChainSendTrxState extends State<WalletChainSendTrx> {
   }
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     valueTextEditingController.text="0";
     initData();
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     toTextEditingController.dispose();
     valueTextEditingController.dispose();
     noteTextEditingController.dispose();

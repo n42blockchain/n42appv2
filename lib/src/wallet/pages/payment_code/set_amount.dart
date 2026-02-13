@@ -35,13 +35,11 @@ class _SetAmountState extends State<SetAmount> {
   String amountErrorMessage="";
   @override
   void initState() {
-    // TODO: implement initState
     initCoin();
     super.initState();
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     amountController.dispose();
     super.dispose();
   }
@@ -329,7 +327,6 @@ class _SetAmountState extends State<SetAmount> {
                       const SizedBox(
                         width: 6,
                       ),
-                      //percentageWidget(context, coinInfo.percentage),
                       const Expanded(flex: 1, child: SizedBox()),
                       Text("\$$balanceStr",
                           style: TextStyle(

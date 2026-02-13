@@ -38,12 +38,10 @@ class _EditWalletPasswordState extends State<EditWalletPassword> {
   Load load=Load.finish;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     _uPasswordController.dispose();
     _uPasswordConfirmController.dispose();
     _lPasswordController.dispose();

@@ -33,14 +33,12 @@ class _ImportKeystoreState extends State<ImportKeystore> {
   Map<String,dynamic> selectChain=allChainUrlMap[CoinType.N.name];
   @override
   void initState() {
-    // TODO: implement initState
     //_keystoreController.text='{"address":"05f1f4958fa2f6756a2bafa6b9b13410dfa2af64","crypto":{"cipher":"aes-128-ctr","ciphertext":"e833d020795104945eb3f863b59f99817c51b6eeb5ac000dc94be5d460966ded","cipherparams":{"iv":"850425007de4c071e3c429849a4cc425"},"kdf":"scrypt","kdfparams":{"dklen":32,"n":262144,"p":1,"r":8,"salt":"96c24775c553d01e814487b1f64625ad82dcb85e14943bdcc51c44e12bd78136"},"mac":"4c97c8d827de2fd3e8d1c773755a13658160d82ec37dfa584b7acadec6a39403"},"id":"4a8b82c3-f0b0-41e9-9d65-3bc5632d8132","version":3}';
     //_passwordController.text='Devkinglory1';
     super.initState();
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     _keystoreController.dispose();
     _passwordController.dispose();
     super.dispose();

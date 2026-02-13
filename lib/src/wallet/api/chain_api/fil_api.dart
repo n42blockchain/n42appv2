@@ -21,15 +21,6 @@ class FilApi{
     }
     return mm;
   }
-  /*
-  static getVersion({bool isTest=false})async{
-    MessageModel mm=await baseRPC("Filecoin.Version",[],isTest: isTest);
-    if(mm.error==false){
-      mm.data=mm.data['BlockDelay'];
-    }
-    return mm;
-  }
-  */
   Future<MessageModel> getNonce(String address,{bool isTest=false})async{
     MessageModel mm=await baseRPC("Filecoin.MpoolGetNonce",[address],isTest: isTest);
     if(mm.error==false){
@@ -37,34 +28,6 @@ class FilApi{
     }
     return mm;
   }
-  /*
-  static getPushMessage(String from,
-      String to,
-      BigInt gas,
-      String gasFeeCap,
-      String gasPremium,
-      {int version=30,
-        String value="0",bool isTest=false})async{
-    List param=[{
-      "Version":version,
-      "From": from,
-      "To": to,
-      "Value":value,
-      "GasLimit": gas.toInt(),
-      "GasFeeCap": gasFeeCap,
-      "GasPremium": gasPremium,
-      "Method": 0,
-      "Params":"",
-    },
-      {
-        "MaxFee": "0"
-      }];
-    return await baseRPC(
-        "Filecoin.MpoolPushMessage",
-        param,
-        isTest: isTest);
-  }
-  */
   Future<MessageModel> getGasLimit(
       String from,
       String to,

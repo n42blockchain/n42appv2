@@ -20,7 +20,6 @@ class _PaymentCodeState extends State<PaymentCode> {
   Map<String,String>? amount;
   @override
   void initState() {
-    // TODO: implement initState
     amount=widget.amount;
     super.initState();
   }

@@ -102,7 +102,6 @@ class _FaceBindingState extends State<FaceBinding> with WidgetsBindingObserver{
         CoinModel? cm=Provider.of<WalletActionProvider>(context,listen: false).getCoinModelWithCoinType(CoinType.N.name);
         if(cm !=null){
           addr=cm.address;
-          //Navigator.pop(context,base64Decode(result.bitmap!.replaceAll("\n", "")));
         }else{
           ToastUtils.show(S.of(context).g_face_match_key5);
           Navigator.pop(context);

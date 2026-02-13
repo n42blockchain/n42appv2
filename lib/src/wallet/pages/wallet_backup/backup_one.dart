@@ -21,7 +21,6 @@ class _BackupOneState extends State<BackupOne> {
   List<String> mnemonicWordsList = [];
   @override
   void initState() {
-    // TODO: implement initState
     mnemonicWordsList=(widget.walletInfo.mnemonic??"").split(" ");
     super.initState();
   }

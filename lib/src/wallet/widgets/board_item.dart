@@ -41,45 +41,4 @@ class BoardItem extends StatelessWidget {
       ),
     );
   }
-  Widget oldWidget(BuildContext context){
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        children: [
-          Container(
-            width: ScreenUtil().setWidth(70),
-            height: ScreenUtil().setWidth(70),
-            padding: EdgeInsets.all(ScreenUtil().setWidth(14),),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(20),)),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-            ),
-            child: Image.asset(
-              imagePath,
-              width: ScreenUtil().setWidth(40),
-              height: ScreenUtil().setWidth(40),
-              fit: BoxFit.cover,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name),
-            ),
-          ),
-          SizedBox(
-            height: ScreenUtil().setWidth(12),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(12),),
-            //height: ScreenUtil().setWidth(80),
-            child: Text(
-              action,
-              style: TextStyle(
-                color: color ??
-                    AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(26),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }

@@ -97,7 +97,6 @@ class _WalletChainAddState extends State<WalletChainAdd> {
   };
   @override
   void initState() {
-    // TODO: implement initState
     nameController=TextEditingController();
     symbolController=TextEditingController();
     decimalController=TextEditingController();
@@ -120,7 +119,6 @@ class _WalletChainAddState extends State<WalletChainAdd> {
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     nameController.dispose();
     symbolController.dispose();
     decimalController.dispose();

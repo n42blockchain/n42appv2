@@ -25,12 +25,10 @@ class _SelfCustodyState extends State<SelfCustody> {
   FocusNode lockupNode=FocusNode();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     valueEditingController.dispose();
     lockupEditingController.dispose();
     valueNode.dispose();

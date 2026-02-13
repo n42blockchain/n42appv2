@@ -61,7 +61,6 @@ class _CreateThreeState extends State<CreateThree> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     //创建钱包流程埋点
     //AmplitudeUtils.screenViewedSeedphraseTest();
@@ -224,7 +223,6 @@ class _CreateThreeState extends State<CreateThree> {
                                   AmplitudeUtils.walletActive(WalletStatus.created);
 
                                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CreateFinish(widget.wInfo)));
-                                  //Navigator.of(this.context).pop();
 
                                 } else {
                                   debugPrint("create wallet err: ");

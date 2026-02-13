@@ -1286,7 +1286,6 @@ class WalletActionProvider extends ChangeNotifier{
       coinList[clIndex].getBalanceDefault();
       if(coinList[clIndex].tokens.isNotEmpty){
         List<String> tKeys=coinList[clIndex].tokens.keys.toList();
-        for(int i=0;i<coinList[clIndex].tokens.length;i++){}
         for(String tkey in tKeys){
           Map<String,dynamic> token=coinList[clIndex].tokens[tkey];
           int tIndex=coinList.indexWhere((element){

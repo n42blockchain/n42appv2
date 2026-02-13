@@ -7,8 +7,6 @@ import 'package:n42appv2/src/wallet/models/transaction/btc_response.dart';
 import 'package:n42appv2/src/wallet/models/transaction/btc_tran_detail.dart';
 import 'package:n42appv2/src/wallet/models/transaction/common_response_item_model.dart';
 import 'package:n42appv2/src/wallet/models/transaction/sol_transaction_item.dart';
-//import 'package:n42appv2/src/wallet/models/transaction/trx_transaction_item.dart';
-//import 'package:n42appv2/src/wallet/utils/chain_browser_url.dart';
 
 class TransactionApi {
   /// ------- 对各种区块链进行查询 ----
@@ -34,12 +32,7 @@ class TransactionApi {
         case "LTC":
         case "DASH":
         case "DOGE":
-          //final data =
           return btcTransactionList(coinMiniName,address, page: page, offset: pageSize,isTest:isTest);
-          /*final list = (data as List)
-              .map((e) => CommonResponseItemModel.fromJson(e.toJson()))
-              .toList();
-          return list;*/
         case "ETH":
         case "ETC":
         case "HT":
@@ -138,9 +131,6 @@ class TransactionApi {
   /// 根据 miniName 获取对应区块链浏览器的host
   String? getHostByCoinMiniName(String key,{bool isTest=false}) {
     return RequestUrl().getUrl2(key, "api",isTest: isTest);
-    /*return isTest
-        ? urlMap[key]?.testApi
-        : urlMap[key]?.api;*/
   }
 
   /// BTC 交易列表
@@ -177,16 +167,6 @@ class TransactionApi {
           var inData = await BaseApi.requestEmptyH.get(innerUrl, params: {});
           if (inData != null) {
             BtcTranDetail bd = BtcTranDetail.fromJson(inData);
-            //CommonResponseItemModel item = CommonResponseItemModel();
-            /*List<Output>? outs = bd.outputs;
-            //设置 发送 和 接收地址
-            if (outs != null) {
-              item.from = outs[1].addresses?[0];
-              item.to = outs[0].addresses?[0];
-            }
-            item.hash = bd.hash;
-            item.value = "${bd.total}";
-            item.gasPrice = "${bd.fees}";*/
             list.add(bd);
           }
         }
@@ -299,7 +279,6 @@ class TransactionApi {
       //https://apilist.tronscan.org/api/transaction?sort=-timestamp&count=true&limit=20&start=0&address=TMuA6YqfCeX8EhbfYEg5y7S4DqzSJireY9
       //https://nileapi.tronscan.org/api/transaction?address=TU7QQsDsJUNmsaduLVNSTrqzk2e72n5VdA
       String requestUrl ='${hostUrl}transaction?address=$address&limit=$offset&start=$page&sort=-timestamp&count=true';
-          //'${hostUrl}token_trc20/transfers?relatedAddress=$address&contract_address=$contractAddress&limit=$offset&start=$page&sort=-timestamp&count=true';
       Map<String,String> h=header;
       h['TRON-PRO-API-KEY']="1908ecd1-99f1-4480-9353-c5a643b907b4";
       var data = await BaseApi.requestEmptyH.get(requestUrl, params: {},header: h);
@@ -341,7 +320,6 @@ class TransactionApi {
     try {
       final hostUrl = getHostByCoinMiniName('TRX');
       String requestUrl ='${hostUrl}transaction-info?hash=$hash';
-      //'${hostUrl}token_trc20/transfers?relatedAddress=$address&contract_address=$contractAddress&limit=$offset&start=$page&sort=-timestamp&count=true';
       Map<String,String> h=header;
       h['TRON-PRO-API-KEY']="1908ecd1-99f1-4480-9353-c5a643b907b4";
       var data = await BaseApi.requestEmptyH.get(requestUrl, params: {},header: h);
@@ -389,11 +367,9 @@ class TransactionApi {
         List<CommonResponseItemModel> list =
         (response as List).map((e) => CommonResponseItemModel.fromJson(e)).toList();
         mm.data=list;
-        //return list;
       } else {
         mm.error=true;
         mm.data=data["message"];
-        //final err = data["message"];
       }
     } catch (e) {
       mm.error=true;
@@ -401,41 +377,6 @@ class TransactionApi {
     }
     return mm;
   }
-  Future<MessageModel> commonEthTransactionList2(
-      String miniName,
-      String address,
-      {
-        int? page = 1,
-        int? offset = 10}) async {
-    MessageModel mm=MessageModel();
-    try {
-      final hostUrl = getHostByCoinMiniName(miniName);
-      if(hostUrl==""){
-        mm.error=true;
-        mm.data=[];
-        return mm;
-      }
-      String requestUrl =
-          '${hostUrl}address/normal/tx/list?coin=$miniName&addr=$address&page=$page&page_size=$offset';
-      var data = await BaseApi.requestEmptyH.get(requestUrl, params: {},header: header);
-      if (data != null && data["status"] == '1') {
-        final response = data["result"];
-        List<CommonResponseItemModel> list =
-        (response as List).map((e) => CommonResponseItemModel.fromJson(e)).toList();
-        mm.data=list;
-        //return list;
-      } else {
-        mm.error=true;
-        mm.data=data["message"];
-        //final err = data["message"];
-      }
-    } catch (e) {
-      mm.error=true;
-      mm.data=e.toString();
-    }
-    return mm;
-  }
-
   /// ------- 合约 代币 交易列表 -------
   ///目前支持的有 ast bnb  ETH avax ftm CELO ht
   Future<MessageModel> commContractTransactionList(
@@ -462,7 +403,6 @@ class TransactionApi {
             .map((e) => BNBItemModel.fromJson(e))
             .toList();*/
         mm.data= (response as List).map((e) => CommonResponseItemModel.fromJson(e)).toList();
-        //return list;
       } else {
         mm.error=true;
         mm.data=data["message"];
@@ -474,47 +414,4 @@ class TransactionApi {
     }
     return mm;
   }
-/*
-  ///sol 获取合约交易列表
-  Future<List<SOLTransactionItem>?> solContractTransactionList(
-      String name, String address, String contractAddress,
-      {int? fromBlock = 0,
-        int? endBlock = 99999999999,
-        int? page = 1,
-        int? offset = 10}) async {
-    try {
-      final hostUrl = getHostByCoinMiniName('SOL');
-      final isTestApi = false;//ProviderUtil.publicProvider().isTestApi;
-      if (isTestApi) {
-        //测试地址和返回数据差别较大 单独处理
-        //https://api-testnet.solscan.io/account/transaction?address=DYNLXDDjF3j6VYscFJY3FNyyNpxohfWgrSmPhgT8mbwK
-        //https://api-testnet.solscan.io/account/transaction?address=7ViD4q77VfADUiE2euhBVmrvYrrMJW3bFbjcgvujmAyZ
-
-      } else {
-        //正式环境
-        //https://public-api.solscan.io/account/splTransfers?account=1212121&offset=0&limit=10
-        String requestUrl =
-            '${hostUrl}account/splTransfers?account=${address}&limit=${offset}&offset=${page}';
-
-        var data = await BaseApi.requestEmptyH.get(requestUrl, params: {},header: header);
-
-        if (data != null) {
-          final res = data['data'];
-          // todo model 需重新定义
-          List<SOLTransactionItem> list =
-          (res as List).map((e) => SOLTransactionItem.fromJson(e)).toList();
-          return list;
-        } else {
-          final err = data["message"];
-
-        }
-      }
-    } catch (e) {
-
-    }
-    return null;
-  }
-*/
-////-----------------------end----------------------------------
-
 }

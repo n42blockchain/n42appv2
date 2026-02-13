@@ -40,7 +40,6 @@ class _ImportPrivatekeyState extends State<ImportPrivatekey> {
   Map<String,dynamic> selectChain=allChainUrlMap[CoinType.N.name];
   @override
   void initState() {
-    // TODO: implement initState
     //_keystoreController.text=bytesToHex(base64Decode("pa0i0UL4y7cgG6j5WDf3GPRATxZ/c37tzcn1GdGsfYk="));
     //_keystoreController.text='CVFM5HyKx2b35Z2eLvGQ4QDLA5mB7mCowYmqwPtx12k';
     super.initState();
@@ -203,7 +202,6 @@ class _ImportPrivatekeyState extends State<ImportPrivatekey> {
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     _keystoreController.dispose();
     super.dispose();
   }

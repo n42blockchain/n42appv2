@@ -45,90 +45,6 @@ class TrxApi{
     }
     return mm;
   }
-  /*static getBalance2_trx(String address,String contract,bool isTest)async{
-    try{
-      String uri=Api.getUrl2(CoinType.TRX.name,'rpc',isTest:isTest);
-      var data=await Api.tronHelp.get('${uri}/v1/accounts/$address', params: {});
-      if(data['success']){
-        MessageModel mm=MessageModel();
-        mm.data=null;
-        List addrs=data['data'];
-        for(Map addr in addrs){
-          bool isFind=false;
-          List owner_ps=addr['owner_permission']['keys'];
-          for(Map owner in owner_ps){
-            if(owner['address']==address){
-              isFind=true;
-              break;
-            }
-          }
-          if(isFind){
-            mm.data=addr;
-            break;
-          }
-        }
-        return mm;
-      }else{
-        MessageModel mm=MessageModel.error();
-        mm.data=data['message'];
-        return mm;
-      }
-
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e;
-      return mm;
-    }
-  }
-  static getBalance1_trx(String address,String contract)async{
-    try{
-      String uri=Api.getUrl2(CoinType.TRX.name,'rpc');
-      var data=await Api.tronHelp.get('${uri}/v1/accounts/$address', params: {});
-      if(data['success']){
-        MessageModel mm=MessageModel();
-        mm.data=BigInt.from(0);
-        List addrs=data['data'];
-        for(Map addr in addrs){
-          bool isFind=false;
-          if(contract==""){
-            List owner_ps=addr['owner_permission']['keys'];
-            for(Map owner in owner_ps){
-              if(owner['address']==address){
-                isFind=true;
-                break;
-              }
-            }
-            if(isFind){
-              mm.data=BigInt.from(addr['balance']);
-              break;
-            }
-          }else{
-            BigInt balance=BigInt.from(0);
-            List owner_ps=addr['trc20'];
-            for(Map owner in owner_ps){
-              String? cBalance=owner[contract];
-              if(cBalance!=null){
-                balance=BigInt.parse(cBalance);
-                break;
-              }
-            }
-            mm.data=balance;
-          }
-        }
-        return mm;
-      }else{
-        MessageModel mm=MessageModel.error();
-        mm.data=data['message'];
-        return mm;
-      }
-
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e;
-      return mm;
-    }
-  }
-  */
   Future<MessageModel> getGasEstimateTrx(String from,String to,BigInt gasPrice,BigInt value,BigInt gas,{String contract="",bool isTest=false})async{
     from=getAddressTron(from);
     to=getAddressTron(to);
@@ -231,35 +147,6 @@ class TrxApi{
     }
   }
 
-  /*
-  sendCall(Map<String,dynamic> params,{bool isTest=false,int id=1})async{
-    Map<String,dynamic> postMap={
-      "jsonrpc": "2.0",
-      "method": "eth_call",
-      "params": [params, "latest"],
-      "id": id
-    };
-    try{
-      var a=await Api.tronHelp.post('${Api.getUrl2(CoinType.TRX.name,'api',isTest:isTest)}', params: {},data: postMap);
-      MessageModel mm=MessageModel.error();
-      if(a['code']==200){
-        if(a['data']['error']['code']!=0){
-          mm.data=a['data']['error']['message'];
-        }else{
-          mm.error=false;
-          mm.data=a['data']['result'];
-        }
-
-      }else{
-        mm.data=a['data'];
-      }
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e;
-      return mm;
-    }
-  }
-  */
   Future<MessageModel> baseRPCEth(String method,var value,{bool? isTest})async{
     try{
       MessageModel mm=MessageModel();

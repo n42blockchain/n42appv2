@@ -30,7 +30,7 @@ class AABatchTransactionPage extends StatefulWidget {
 
 class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
   final List<BatchOperation> _operations = [];
-  PaymasterOption _selectedPaymaster = PaymasterOption.none;
+  final PaymasterOption _selectedPaymaster = PaymasterOption.none;
   bool _isEstimating = false;
   bool _isSending = false;
 
@@ -486,8 +486,8 @@ class _AddOperationSheet extends StatefulWidget {
 class _AddOperationSheetState extends State<_AddOperationSheet> {
   final _toController = TextEditingController();
   final _amountController = TextEditingController();
-  BatchOperationType _selectedType = BatchOperationType.transfer;
-  String _selectedToken = 'ETH';
+  final BatchOperationType _selectedType = BatchOperationType.transfer;
+  final String _selectedToken = 'ETH';
 
   @override
   void dispose() {

@@ -62,14 +62,12 @@ class _ImportOneState extends State<ImportOne> with WidgetsBindingObserver{
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     handlerCopyText();
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }

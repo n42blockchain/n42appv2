@@ -54,7 +54,6 @@ class _PaymentPageState extends State<PaymentPage> {
   final oCcy = NumberFormat("#,##0.0#", "en_US");
   @override
   void initState() {
-    // TODO: implement initState
     if(widget.amount!=null){
       amount=widget.amount!;
       address=widget.address!;
@@ -462,7 +461,6 @@ class _PaymentPageState extends State<PaymentPage> {
                             const SizedBox(
                               width: 6,
                             ),
-                            //percentageWidget(context, coinInfo.percentage),
                             const Expanded(flex: 1, child: SizedBox()),
                             Text("\$$balanceStr",
                                 style: TextStyle(

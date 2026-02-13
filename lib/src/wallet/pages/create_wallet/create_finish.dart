@@ -109,7 +109,6 @@ class _CreateFinishState extends State<CreateFinish> {
   }
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _wInfo = _wInfo;
     if(widget.createMetod=="Import"){

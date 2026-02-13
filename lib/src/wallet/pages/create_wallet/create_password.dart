@@ -36,7 +36,6 @@ class _CreatePasswordState extends State<CreatePassword> {
   bool showPwd2=true;
   @override
   void dispose() {
-    // TODO: implement dispose
     _titleController.dispose();
     _uPasswordController.dispose();
     _uPasswordConfirmController.dispose();
@@ -47,7 +46,6 @@ class _CreatePasswordState extends State<CreatePassword> {
   }
   @override
   void initState() {
-    // TODO: implement initState
     widget.wInfo.walletName="Account${Provider.of<WalletActionProvider>(context,listen: false).walletInfoLsit.length+1}";
     _titleController.text=widget.wInfo.walletName??"";
     super.initState();

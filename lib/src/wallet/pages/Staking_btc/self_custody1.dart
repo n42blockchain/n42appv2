@@ -53,7 +53,6 @@ class _SelfCustody1State extends State<SelfCustody1> {
 
   @override
   void initState() {
-    // TODO: implement initState
     //createWallet();
     //testdata();
     late final PlatformWebViewControllerCreationParams params;
@@ -200,7 +199,6 @@ class _SelfCustody1State extends State<SelfCustody1> {
     }
     cPubKey ??= '03ed20061b9a0417a06ab80d063962c12ed80c9924b1d4da3628705b5b9ac9cecb';
     //cPubKey='03ed20061b9a0417a06ab80d063962c12ed80c9924b1d4da3628705b5b9ac9cecb';
-    //print(lockTime);
     // 2️⃣ 质押时间（秒级时间戳）
     //requestMintVbtc("tb1qw39qrupll6xwmazqplpjgaclexjsd48jms2gwzk2xeuhqen9qxusem966j","0xC2090f16f165e7fc813DdaD0e29D73EB07F0E0A5",130000,"tb1qflj70wxx0s2kpxzpmr9wy9e7860eryag5v246j",1743160567,"03a7460e0d1a959592022042d57e165ead714a788415a898a59a541079a81da2a1");
     //int stakeTime = 1743160567; // 例如: 2023-11-14 12:00:00 UTC
@@ -243,15 +241,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
       if (utxoTx.error == false) {
         String scriptpk = utxoTx.data['vout']?[utxo['vout']]?['scriptpubkey'] ?? "";
         if (scriptpk != "") {
-          //final p2wpkh=P2wpkhAddress.fromAddress(address: utxoTx.data['vout']?[utxo['vout']]?['scriptpubkey_address'] ?? "", network: BitcoinNetwork.testnet);
           txInputScript.add(P2wpkhAddress.fromAddress(address: utxoTx.data['vout']?[utxo['vout']]?['scriptpubkey_address'] ?? "", network: BitcoinNetwork.testnet).toScriptPubKey());
-          /*Script p2wpkhScript=Script(script: [
-            'OP_0',
-            'OP_PUSHBYTES_20',
-            p2wpkh.addressProgram
-          ]);
-          txInputScript.add(p2wpkhScript);*/
-          //txInputScript.add(Script(script: [scriptpk]));
           totalInputAmount += utxo['value'] as int;
           selectedUTXOs.add(TxInput(txId: utxo['txid'], txIndex: utxo['vout']));
           txAmount.add(BigInt.from(utxo['value']));
@@ -265,14 +255,10 @@ class _SelfCustody1State extends State<SelfCustody1> {
     int changeAmount = totalInputAmount - sendAmount - fee;
     List<TxOutput> txOutputs=[];
     
-    //print(privateKey!.getPublic().toSegwitAddress().toAddress(BitcoinNetwork.testnet));
     Script scriptPubKey=P2wpkhAddress.fromAddress(address: 'tb1queqpeqalteucdndy4llnmz8l39ugtklypvw6v8', network: BitcoinNetwork.testnet).toScriptPubKey();
-    //print(scriptPubKey.toHex());
     Script scriptPubkey1=p2wshAddress!.toScriptPubKey();
     String p=p2wshAddress!.toAddress(BitcoinNetwork.mainnet);
     if (kDebugMode) debugPrint(p);
-    //print(scriptPubkey1.toHex());
-    //print(txInputScript[0].toHex());
     //P2wshAddress.fromAddress(address: p2wshAddress!.toAddress(BitcoinNetwork.testnet), network: BitcoinNetwork.testnet).toScriptPubKey();
     //Script scriptPubkey2=Script(script: []);
     txOutputs.add(TxOutput(amount: BigInt.from(sendAmount), scriptPubKey: scriptPubkey1));
@@ -314,12 +300,8 @@ class _SelfCustody1State extends State<SelfCustody1> {
     int changeAmount = totalInputAmount - sendAmount - fee;
     List<TxOutput> txOutputs=[];
 
-    //print(privateKey!.getPublic().toSegwitAddress().toAddress(BitcoinNetwork.testnet));
     Script scriptPubKey=P2wpkhAddress.fromAddress(address: address??"", network: BitcoinNetwork.testnet).toScriptPubKey();
-    //print(scriptPubKey.toHex());
     Script scriptPubkey1=p2wshAddress!.toScriptPubKey();
-    //print(scriptPubkey1.toHex());
-    //print(txInputScript[0].toHex());
     //P2wshAddress.fromAddress(address: p2wshAddress!.toAddress(BitcoinNetwork.testnet), network: BitcoinNetwork.testnet).toScriptPubKey();
     //Script scriptPubkey2=Script(script: []);
     txOutputs.add(TxOutput(amount: BigInt.from(sendAmount), scriptPubKey: scriptPubkey1));

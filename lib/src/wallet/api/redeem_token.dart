@@ -41,21 +41,6 @@ class RedeemToken extends GeneratedContract {
       null,
     );
   }
-/*
-  ///获取可以质押的金额数组
-  ///50 剩余  100 剩余  500 剩余
-  Future getDepositRemain(
-      {required Credentials credentials,
-        Transaction? transaction}) async {
-    final function = self.function('getDepositRemain');
-    final params = [];
-    return await read(
-      function,
-      params,
-      null,
-    );
-  }*/
-
   ///depositsOf
   ///获取当前地址质押数量
   Future depositsOf(String address,
@@ -65,20 +50,6 @@ class RedeemToken extends GeneratedContract {
     final params = [EthereumAddress.fromHex(address)];
     return await read(function, params, null);
   }
-/*
-  ///获取全网总计的质押的N数量
-  Future depositCount(
-      {required Credentials credentials,
-        Transaction? transaction}) async {
-    final function = self.function('getDepositCount');
-    final params = [];
-    return await read(
-      function,
-      params,
-      null,
-    );
-  }*/
-
   ///获取质押之后锁仓时间
   Future lockTime(String address,
       {required Credentials credentials,

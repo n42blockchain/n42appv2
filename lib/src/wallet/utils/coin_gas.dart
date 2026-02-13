@@ -47,25 +47,6 @@ int getCoinGas(String coinType,{bool contract=false}){
         gas=500000;
       }
       break;
-
-
-      /*
-      case CoinType.ARB:
-      case CoinType.OP:
-      if(contract==false){
-        _gas=500000;
-      }else{
-        _gas=500000;
-      }
-      break;
-    case CoinType.BOBA:
-    case CoinType.BASE:
-      if(contract==false){
-        _gas=100000;
-      }else{
-        _gas=1000000;
-      }
-      break;*/
     case CoinType.SOL:
       gas=1;
       break;

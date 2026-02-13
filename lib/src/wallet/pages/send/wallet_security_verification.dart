@@ -55,14 +55,12 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
   late UserInfoApi userInfoApi;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     userInfoApi=UserInfoApi();
     initSecurity();
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     pwdTextEditingController.dispose();
     emailTextEditingController.dispose();
     //googleTextEditingController.dispose();
@@ -70,14 +68,12 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
     super.dispose();
   }
   Future<void> initSecurity() async {
-    //isGoogleAuth=AppGlobals.userInfo!.bindGoogleAuthState ?? false;
     Map<String,dynamic>? s=await SPUtil().getSecurity();
     if(s!=null){
       Map<String,dynamic>? userSecurityMap=s[AppGlobals.userInfo?.uuid??""];
       if(userSecurityMap!=null){
         setState(() {
           securityMap['email']=userSecurityMap['email'];
-          //securityMap['google']=userSecurityMap['google'];
           securityMap['face']=userSecurityMap['face']??false;
         });
       }
@@ -140,7 +136,6 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
       setState(() {
         emailSendWaitNum--;
       });
-      //print(emailSendWaitNum);
       if(emailSendWaitNum<=0){
         emailSendWaitNum=60;
         emailSendWait=false;
@@ -282,7 +277,6 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
   }
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {

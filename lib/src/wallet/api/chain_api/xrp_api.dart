@@ -4,57 +4,6 @@ import 'package:n42appv2/src/https/request_url.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 
 class XrpApi{
-  //valueType: "balance"Balance;"sequence"Sequence;"checkAccount"验证是否创建了账号
-  /*
-  static getBalance_xrp(String address,String contract,String valueType,bool isTest)async{
-    try{
-      String uri=Api.getUrl2(CoinType.XRP.name,'rpc',isTest:isTest);
-      Map<String,dynamic> pData={
-        "method":"account_info",
-        "params":[
-          {
-            "account":address,
-            "strict":true,
-            "ledger_index":"current",
-            "queue":true,
-          }
-        ],
-      };
-      var data=await Api.requestEmptyH.post(uri, params: {},data: pData);
-      MessageModel mm=MessageModel();
-      if(data['result']['status']=="success"){
-        if(valueType=="balance"){
-          mm.data=BigInt.parse(data['result']['account_data']['Balance']);
-        }else if(valueType=="sequence"){
-          mm.data=data['result']['account_data']['Sequence'];
-        }else{
-          mm.data=data['result']['validated'];
-        }
-      }else{
-
-        if(data['result']['validated']==false){
-          //没有账号
-          if(valueType=="balance"){
-            mm.data=BigInt.zero;
-          }else if(valueType=="sequence"){
-            mm.data=0;
-          } else{
-            mm.data=false;
-          }
-
-        }else{
-          mm.error=true;
-          mm.data=data['result']['error'];
-        }
-      }
-      return mm;
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e;
-      return mm;
-    }
-  }
-  */
   Future<MessageModel> getAccountInfoXrp(String address,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XRP.name,'rpc',isTest:isTest);

@@ -80,7 +80,6 @@ class _SwapAstHomeState extends State<SwapAstHome> {
   }
   @override
   void initState() {
-    // TODO: implement initState
     payTextEditingController.text = "0";
     getTextEditingController.text = "${widget.getAstNum??0}";
     init();
@@ -93,7 +92,6 @@ class _SwapAstHomeState extends State<SwapAstHome> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     payTextEditingController.dispose();
     getTextEditingController.dispose();
     payNode.dispose();

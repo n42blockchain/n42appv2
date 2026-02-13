@@ -43,7 +43,6 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
   };
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if(widget.btcTransactionRecodeModel!=null){
       coinInfo=widget.btcTransactionRecodeModel!.coin;
@@ -86,16 +85,12 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
         gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 18)} ${widget.mainCoinUnit}';
         break;
       case BlockchainType.Polkadot:
-        // TODO: Handle this case.
         gasPrice="0";
       case BlockchainType.Aptos:
-        // TODO: Handle this case.
         gasPrice="0";
       case BlockchainType.Sui:
-        // TODO: Handle this case.
         gasPrice="0";
       case BlockchainType.TheOpenNetwork:
-        // TODO: Handle this case.
         gasPrice="0";
       case BlockchainType.Stellar:
         gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 7)} ${widget.mainCoinUnit}';
@@ -157,7 +152,6 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
   //关闭键盘
@@ -191,7 +185,6 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
         price='${widget.transationRecordModel!.priceDouble()} ${coinInfo['unit']}';
       }
     }
-    // TODO: implement build
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {

@@ -14,7 +14,7 @@ class AtomApi{
         defaultReturn: false,
         header: {
           "Content-Type":"application/json",
-          //"x-api-key":'200968d8-1f1a-4d25-a7b6-e5768e723a10',//"bc0a6024-148a-4c6e-8188-0a0523f3f713",
+
         },
       );
       MessageModel mm=MessageModel();
@@ -55,7 +55,7 @@ class AtomApi{
         defaultReturn: false,
         header: {
           "Content-Type":"application/json",
-          //"x-api-key":"bc0a6024-148a-4c6e-8188-0a0523f3f713",
+
         },
       );
       MessageModel mm=MessageModel();
@@ -78,7 +78,7 @@ class AtomApi{
         defaultReturn: false,
         header: {
           "Content-Type":"application/json",
-          //"x-api-key":"bc0a6024-148a-4c6e-8188-0a0523f3f713",
+
         },
       );
       MessageModel mm=MessageModel();
@@ -101,7 +101,7 @@ class AtomApi{
         defaultReturn: false,
         header: {
           "Content-Type":"application/json",
-          //"x-api-key":"bc0a6024-148a-4c6e-8188-0a0523f3f713",
+
         },
       );
       MessageModel mm=MessageModel();
@@ -128,7 +128,7 @@ class AtomApi{
         defaultReturn: false,
         header: {
           "Content-Type":"application/json",
-          //"x-api-key":"bc0a6024-148a-4c6e-8188-0a0523f3f713",
+
         },
       );
       MessageModel mm=MessageModel();
@@ -159,7 +159,7 @@ class AtomApi{
         defaultReturn: false,
         header: {
           "Content-Type":"application/json",
-          //"x-api-key":"bc0a6024-148a-4c6e-8188-0a0523f3f713",
+
         },
       );
       MessageModel mm=MessageModel();
@@ -210,7 +210,7 @@ version: IBC 协议的版本，通常会标明使用的版本号（如 ics20-1�
         defaultReturn: false,
         header: {
           "Content-Type":"application/json",
-          //"x-api-key":"bc0a6024-148a-4c6e-8188-0a0523f3f713",
+
         },
       );
       MessageModel mm=MessageModel();

@@ -84,14 +84,12 @@ class _WalletChainSendSuiState extends State<WalletChainSendSui> {
   }
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     valueTextEditingController.text="0";
     initData();
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     toTextEditingController.dispose();
     valueTextEditingController.dispose();
     noteTextEditingController.dispose();
@@ -168,22 +166,7 @@ class _WalletChainSendSuiState extends State<WalletChainSendSui> {
     load=Load.finish;
     setState(() {});
   }
-  //获取持有的所有可用资产
-  /*"data": {
-          "objectId": "0xabc...",
-          "version": "1",
-          "digest": "xxx",
-          "type": "0x2::coin::Coin<0x2::sui::SUI>",
-          "content": {
-            "fields": {
-              "balance": "100000000"
-            },
-            "type": "0x2::coin::Coin<0x2::sui::SUI>"
-          },
-          "owner": {
-            "AddressOwner": "0x1f4..."
-          }
-        }*/
+  /// 获取持有的所有可用 SUI 资产 (Coin objects)
   Future<void> getOwnerObjects()async{
     List<dynamic> v= await SuiApi(isTest: widget.coinModel.isTest).getOwnedObjects(widget.coinModel.address);
     if (!mounted) return;

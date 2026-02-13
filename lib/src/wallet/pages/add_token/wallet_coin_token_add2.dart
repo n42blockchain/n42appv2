@@ -35,14 +35,12 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
   bool removeSymbol=false;//是否移除了代币
   @override
   void initState() {
-    // TODO: implement initState
     getTokenList();
     init();
     super.initState();
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     inputEditingController.dispose();
     super.dispose();
   }
@@ -192,7 +190,6 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
   }
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
@@ -361,7 +358,6 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
     }
   }
   Widget coinItem(Map<String,dynamic> rowValue){
-    //Widget imgWidget=ImageWidget(rowValue['icon']);
     String icon='https://api-wallet.walletamaze.com/market/v1/r/coinImage/${rowValue['coin_name']}.png';
     String fullname = rowValue['fullname'];
     if(fullname=="LoveCoin"){

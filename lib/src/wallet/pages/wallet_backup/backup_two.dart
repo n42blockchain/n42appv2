@@ -36,7 +36,6 @@ class _BackupTwoState extends State<BackupTwo> {
   bool isCanClick = false;
   @override
   void initState() {
-    // TODO: implement initState
     mnemonicWordsList = widget.walletInfo.mnemonic!.split(" ");
     //克隆一个数组，然后打乱
     var list = dataUtils.shuffle(mnemonicWordsList);

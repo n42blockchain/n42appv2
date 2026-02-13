@@ -28,7 +28,8 @@ class SwapAstOrderModel{
     bAddr=js['b_addr'] as String?;
     orderNum=(js['order_num'] as num?)?.toDouble();
     orderPrice=(js['order_price'] as num?)?.toDouble();//ast兑换价格
-    payNum=(js['pay_num'] as num?)?.toDouble();//支付金额? payTx=js[''];//交易哈希
+    payNum=(js['pay_num'] as num?)?.toDouble();//支付金额
+    payTx=js['pay_tx'] as String?;//交易哈希
     payState=js['pay_state'] as int?;//支付日期
     orderState=js['order_state'] as int?;//订单状态
     orderTx=js['order_tx'] as String?;//订单支付哈希

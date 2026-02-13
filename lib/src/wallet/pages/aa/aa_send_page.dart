@@ -35,7 +35,7 @@ class _AASendPageState extends State<AASendPage> {
   final FocusNode _toFocusNode = FocusNode();
   final FocusNode _amountFocusNode = FocusNode();
 
-  String _selectedToken = 'ETH';
+  final String _selectedToken = 'ETH';
   PaymasterOption _selectedPaymaster = PaymasterOption.none;
   bool _isEstimating = false;
   bool _isSending = false;

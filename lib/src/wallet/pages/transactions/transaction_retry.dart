@@ -56,7 +56,6 @@ class _TransactionRetryState extends State<TransactionRetry> {
   late String _txHash;
   @override
   void initState() {
-    // TODO: implement initState
     _txHash = _txHash;
     searchEditingController.text=_txHash;
     init();
@@ -64,7 +63,6 @@ class _TransactionRetryState extends State<TransactionRetry> {
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     if(timer !=null){
       timer!.cancel();
       timer=null;

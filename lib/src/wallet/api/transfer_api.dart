@@ -155,7 +155,7 @@ class TransferApi {
             path,
             maxValue: maxValue,
             isTest:isTest?"test":"main",
-          //txChainMap['baseInfo']['path'][txChainMap['addrType']]
+
         );
         break;
       case "Ethereum":
@@ -167,7 +167,7 @@ class TransferApi {
           value,
           txChainMap['baseInfo']['decimals'],
           path,
-          //txChainMap['baseInfo']['path'][pathType],
+
           contractAddress: contractAddress,
           tokenDecimals: token==null?0:token['decimals'],
           isTest:isTest,
@@ -183,7 +183,7 @@ class TransferApi {
             value,
             txChainMap['baseInfo']['decimals'],
             path,
-            //txChainMap['baseInfo']['path'][pathType],
+
             contractAddress: contractAddress,tokenDecimals: token==null?0:token['decimals'],
             maxValue: maxValue
         );
@@ -195,7 +195,7 @@ class TransferApi {
             value,
             txChainMap['baseInfo']['decimals'],
             path,
-            //txChainMap['baseInfo']['path'][pathType],
+
             contractAddress: contractAddress,tokenDecimals: token==null?0:token['decimals'],
             maxValue: maxValue
         );
@@ -207,7 +207,7 @@ class TransferApi {
           value,
           txChainMap['baseInfo']['decimals'],
           path,
-          //txChainMap['baseInfo']['path'][pathType],
+
           maxValue: maxValue,
         );
       case "Tezos":
@@ -217,7 +217,7 @@ class TransferApi {
             value,
             txChainMap['baseInfo']['decimals'],
             path,
-            //txChainMap['baseInfo']['path'][pathType],
+
             maxValue: maxValue
         );
       case "Ripple":
@@ -227,7 +227,7 @@ class TransferApi {
             value,
             txChainMap['baseInfo']['decimals'],
             path,
-            //txChainMap['baseInfo']['path'][pathType],
+
             maxValue: maxValue
         );
       case "Cosmos":
@@ -703,27 +703,13 @@ class TransferApi {
     } else {
       chainBalance = mm.data;
     }
-    /*BigInt balance = BigInt.zero;
-    if (contractAddress != "") {
-      MessageModel mmToken = await getBalanceAllTrx(fromAddress, contractAddress: contractAddress);
-      if (mmToken.error == true) {
-        return mmToken;
-      } else {
-        balance = mmToken.data;
-      }
-      if (balance == BigInt.zero) {
-        MessageModel mme = MessageModel.error();
-        mme.data = S.current.g_key_wallet_m4;//"TRC20 余额不足";
-        return mme;
-      }
-    }*/
     if (chainBalance == BigInt.zero) {
       MessageModel mme = MessageModel.error();
-      mme.data = S.current.g_key_wallet_m5(coinType);//"TRX 余额不足";
+      mme.data = S.current.g_key_wallet_m5(coinType);
       return mme;
     }
     //获取gas 费
-    BigInt gasPrice = BigInt.zero; //当前旷工费
+    BigInt gasPrice = BigInt.zero;
     MessageModel mmg = await tokenViewApi.getGasPrice(
         BlockchainType.Cosmos.name, CoinType.ATOM.name,
         isTest: false) ?? MessageModel.error();
@@ -732,12 +718,10 @@ class TransferApi {
     } else {
       gasPrice = mmg.data;
     }
-    //gas费消耗最大数
     BigInt totalGasPrice = gasPrice * BigInt.from(gas);
     BigInt valuePrice = BigInt.zero;
     if (contractAddress == "") {
       valuePrice=ethToWeiString(value.toString(), decimals);
-      //如果是全部转账
       if(valuePrice==chainBalance && maxValue){
         valuePrice=valuePrice-totalGasPrice;
         value=toEther(valuePrice.toString(),decimals).toDouble();
@@ -747,19 +731,7 @@ class TransferApi {
         mme.data = S.current.g_key_wallet_m5(CoinType.ATOM.name);
         return mme;
       }
-    } /*else {
-      valuePrice=ethToWeiString(value.toString(), tokenDecimals);
-      if (valuePrice > balance) {
-        MessageModel mme = MessageModel.error();
-        mme.data = S.current.g_key_wallet_m4;
-        return mme;
-      }
-      if (totalGasPrice > chainBalance) {
-        MessageModel mme = MessageModel.error();
-        mme.data = S.current.g_key_wallet_m5(CoinType.ATOM.name);
-        return mme;
-      }
-    }*/
+    }
     MessageModel mmtx=await transferAtomSend(fromAddress, toAddress, valuePrice, path, totalGasPrice,contractAddress: contractAddress);
     if(mmtx.error==false){
       MessageModel mmr = MessageModel();
@@ -1064,12 +1036,6 @@ class TransferApi {
       return mmlbn;
     }
     Map<String, dynamic> blockInfo = mmlbn.data['raw_data'];
-    /*await tokenViewApi.getLatestBlockNumber_trx(isTest: isTest=="main"?false:true);
-    if (mmlbn.error) {
-      return mmlbn;
-    }
-    Map<String, dynamic> blockInfo = mmlbn.data['block_header']['raw_data'];
-    */
     Map<String, dynamic> txData = {
       "ownerAddress": fromAddress,
       "toAddress": toAddress,
@@ -1116,22 +1082,6 @@ class TransferApi {
     //发起交易
     MessageModel mmtx=await trxApi.sendTxTrx(signStr,isTest:isTest=="main"?false:true);
     return mmtx;
-    /*MessageModel mmtx = await tokenViewApi.sendTx(
-        BlockchainType.Tron.name, CoinType.TRX.name, signStr,
-        netMode: isTest);
-    if (mmtx.error == false) {
-      MessageModel mmr = MessageModel();
-      if (mmtx.data['result']) {
-        mmr.data = mmtx.data['txid'];
-        return mmr;
-      } else {
-        mmr.data = mmtx.data['message'];
-        mmr.error = true;
-        return mmr;
-      }
-    } else {
-      return mmtx;
-    }*/
   }
 
   Future<MessageModel> transferSol(Map<String,dynamic> chainMap,String fromAddress, String toAddress, double value,
@@ -1224,16 +1174,7 @@ class TransferApi {
         rmm.data="Error";
         return rmm;
       }
-      /*MessageModel rBalance= await TokenViewApi.getBalance(BlockchainType.Solana.name, "", toAddress,contract: contractAddress,isTest: isTest=="main"?false:true);
-      if(rBalance.error){
-        return rBalance;
-      }else{
-        if(rBalance.data !=null){
-          recipientTokenAddress=rBalance.data['account'];
-        }
-      }*/
       MessageModel rdataAccount=await solApi.getAccountInfo(recipientTokenAddress,isTest: isTest=="main"?false:true);
-      //MessageModel rdataAccount=await tokenViewApi.getAccountInfo_solana(recipientTokenAddress,isTest: isTest=="main"?false:true);
       if(rdataAccount.error==true){
         return rdataAccount;
       }else{
@@ -1303,7 +1244,6 @@ class TransferApi {
     if (validationError != null) return validationError;
     //发送交易
     return await solApi.sendTransaction(signStr,isTest: isTest=="main"?false:true);
-    //return await tokenViewApi.sendTx(BlockchainType.Solana.name, CoinType.SOL.name, signStr, netMode: isTest);
   }
 
   //erc721Or1155 721、1155
@@ -1340,21 +1280,7 @@ class TransferApi {
     //获取每个byte 消耗多少gas
     int gas =
     getCoinGas(coinType, contract: true);
-    /*MessageModel mm = await getBalanceEth(coinType, fromAddress,
-        contractAddress: "");*/
-    //获取余额
-    //BigInt balance = BigInt.zero;
     BigInt chainBalance = BigInt.zero;
-    /*if (mm.error == true) {
-      return mm;
-    } else {
-      balance = mm.data;
-    }
-    if (balance == BigInt.zero) {
-      MessageModel mme = MessageModel.error();
-      mme.data = S.current.g_key_wallet_m4;
-      return mme;
-    }*/
     MessageModel mmchain =
     await getBalanceEth(coinType, fromAddress, contractAddress: "",isTest: isTest);
     if (mmchain.error == true) {
@@ -1510,24 +1436,6 @@ class TransferApi {
     }
     //gas费消耗最大数
     BigInt totalGasPrice = BigInt.zero;
-    /*else{
-      MessageModel estimateMm=await TokenViewApi.getGasEstimateEthV2(
-          fromAddress,
-          toAddress,
-          gasPrice,
-        ethToWeiString(value.toString(), contractAddress==""?decimals:tokenDecimals),
-          BigInt.from(gas),
-          coinType,
-          contract: contractAddress,
-        isTest:isTest,
-      );
-      if(estimateMm.error){
-        return estimateMm;
-      }else{
-        gas=(estimateMm.data as BigInt).toInt();
-        totalGasPrice=gasPrice * BigInt.from(gas);
-      }
-    }*/
     MessageModel estimateMm=await TokenViewApi().getGasEstimateEthV2(
         fromAddress,
         toAddress,
@@ -1645,12 +1553,6 @@ class TransferApi {
     String gasLimitHex = dataUtils.bigIntToHex(BigInt.from(gas*4), need0x: false);
     String messageHex="";
     if(message !=null){
-      /*var encodedString = utf8.encode(message);
-      var encodedLength = encodedString.length;
-      var data = ByteData(encodedLength+4);
-      data.setUint32(0, encodedLength,Endian.big);
-      var bytes = data.buffer.asUint8List();
-      message.codeUnits;*/
       if(Platform.isAndroid){
         messageHex=message;
       }else{
@@ -1860,19 +1762,6 @@ class TransferApi {
         //是最后一页
         lastPage = true;
       }
-      /*if (unspents.length >= 2) {
-        unspents.sort((a, b) {
-          Map<String, dynamic> am = a;
-          Map<String, dynamic> bm = b;
-          double aValue = double.parse(am['value']);
-          double bValue = double.parse(bm['value']);
-          if (aValue < bValue) {
-            return 1;
-          } else {
-            return -1;
-          }
-        });
-      }*/
       MessageModel mmutxoC =
       await calculateGasFee(value, unspents, utxos, input2Price, gasFee,isTest: isTest);
       if (mmutxoC.error) {
@@ -2328,92 +2217,6 @@ class TransferApi {
     FilApi filApi=FilApi();
     return await filApi.sendTx(signStr,isTest:isTest);
   }
-/*
-  ///获取币的余额
-  ///returnDoubleValue 返回double类型，默认false 返回BigInt
-  getBalance(String chainSymbol,
-      {String contractAddress = "",
-        String address = "",
-        bool returnDoubleValue = false}) async {
-    WalletActionProvider wap = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
-    if(chainSymbol == "BSC"){
-      chainSymbol = "BNB";
-    }
-    if(chainSymbol == "AVAXC"){
-      chainSymbol = "AVAX";
-    }
-    if(chainSymbol == "OPTIMISM"){
-      chainSymbol = "OP";
-    }
-    Map<String, dynamic>? txChainMap =
-    wap.walletMap[chainSymbol.toString().toUpperCase()];
-    if (txChainMap == null) {
-      MessageModel mm = MessageModel.error();
-      mm.data = S.current.g_key_wallet_m1(chainSymbol);
-      return mm;
-    }
-    Map<String, dynamic>? token;
-    if (contractAddress != "") {
-      if (txChainMap['mainnets'].length != 0) {
-        token = txChainMap['mainnets'][contractAddress.toUpperCase()];
-      }
-      if (token == null) {
-        MessageModel mm = MessageModel.error();
-        mm.data = S.current.g_key_wallet_m2;
-        return mm;
-      }
-    }
-
-    if (address == "") {
-      String? addr = wap.getAddress(txChainMap['baseInfo']['coinType'],
-          addrType: txChainMap['addrType']);
-      if (addr == null) {
-        MessageModel mm = MessageModel.error();
-        mm.data = S.current.g_key_wallet_m3(txChainMap['baseInfo']['coinType']);
-        return mm;
-      } else {
-        address = addr;
-      }
-    }
-    String blockchain = txChainMap['baseInfo']['blockchainType'];
-    MessageModel rmm = MessageModel();
-    switch (blockchain) {
-      case "Bitcoin":
-        rmm = await getBalanceBtc(chainSymbol, address);
-        break;
-      case "Ethereum":
-        rmm = await getBalanceEth(chainSymbol, address,
-            contractAddress: contractAddress);
-        break;
-      case "Solana":
-        rmm = await getBalanceSol(address, contractAddress: contractAddress);
-        break;
-      case "Tron":
-        rmm = await getBalance_trx(address, contractAddress: contractAddress);
-        break;
-      case "Algorand":
-        rmm= await getBalanceAlgo(address);
-        break;
-      case "Tezos":
-        rmm=await getBalanceXtz(address);
-        break;
-      case "Ripple":
-        rmm=await getBalance_xrp(address);
-        break;
-    }
-    if (returnDoubleValue) {
-      if (rmm.error == false) {
-        if (contractAddress == "") {
-          rmm.data =
-              toEther(rmm.data.toString(), txChainMap['baseInfo']['decimals']);
-        } else {
-          rmm.data = toEther(rmm.data.toString(), token!['decimals']);
-        }
-      }
-    }
-    return rmm;
-  }
-*/
   //获取余额 tron
   Future<MessageModel> getBalanceTrx(String fromAddress,
       {String contractAddress = ""}) async {
@@ -2462,28 +2265,8 @@ class TransferApi {
   Future<MessageModel> getBalanceSol(String fromAddress,
       {String contractAddress = ""}) async {
     MessageModel rData= await tokenViewApi.getBalance(BlockchainType.Solana.name, "", fromAddress,contract: contractAddress) ?? MessageModel.error();
-    /*if(contractAddress !=""){
-      BigInt balance=BigInt.zero;
-      if(rData.data.length !=0){
-        balance=BigInt.from(rData.data[0]['account']['data']['parsed']['info']['tokenAmount']['uiAmount']);
-      }
-      rData.data=balance;
-    }*/
     return rData;
   }
-  /*static getBalanceSol(Map<String, dynamic> chainMap,String fromAddress,
-      {String contractAddress = ""}) async {
-    BigInt balance=BigInt.zero;
-    if(contractAddress==""){
-      balance= BigInt.parse(chainMap['baseInfo']['balance']);
-    }else{
-      Map<String,dynamic> token=chainMap['mainnets'][contractAddress.toUpperCase()];
-      balance= BigInt.parse(token['balance']);
-    }
-    MessageModel rmm = MessageModel();
-    rmm.data = balance;
-    return rmm;
-  }*/
 
   //获取余额 eth
   Future<MessageModel> getBalanceEth(String coinType, String fromAddress,
@@ -2587,10 +2370,6 @@ class TransferApi {
           Map<String, dynamic> paths = {};
           for (Map<dynamic, dynamic> p in derivation) {
             String pPath = p['path'];
-            /*if (chain['coin_name'].toString().toUpperCase() == "BCH") {
-              //paths["segwit"] = pPath;
-              paths["legacy"] = pPath;
-            } else {*/
             int pIndex = pPath.indexOf("44");
             if (pIndex >= 0) {
               paths['legacy'] = pPath;
@@ -2600,7 +2379,6 @@ class TransferApi {
                 paths['segwit'] = pPath;
               }
             }
-            //}
           }
           String? pathLegacy = paths['segwit'];
           if (pathLegacy == null) {

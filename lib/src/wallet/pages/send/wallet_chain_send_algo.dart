@@ -71,14 +71,12 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     valueTextEditingController.text="0";
     initData();
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     toTextEditingController.dispose();
     valueTextEditingController.dispose();
     toNode.dispose();
@@ -163,7 +161,6 @@ class _WalletChainSendAlgoState extends State<WalletChainSendAlgo> {
     }
     bool checkValue=regular.regularDouble(value.toString());
     bool checkValue1=regular.regularNums(value.toString());
-    //print(toEther(totalGasPrice.toString()));
     if(checkValue==false && checkValue1==false){
       amountErrorMessage= S.of(context).g_key_134;
       setState(() {});

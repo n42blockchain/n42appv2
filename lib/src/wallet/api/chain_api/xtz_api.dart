@@ -34,20 +34,6 @@ class XtzApi{
       return mm;
     }
   }
-  /*static getOperations_xtz(String address,bool isTest)async{
-    try{
-      String uri=Api.getUrl2(CoinType.XTZ.name,'api',isTest:isTest);
-      var data=await Api.requestEmptyH.get('${uri}explorer/account/$address/operations', params: {});
-      MessageModel mm=MessageModel();
-      mm.data=data;
-      return mm;
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e;
-      return mm;
-    }
-  }
-  */
   //counter 获取计数
   Future<MessageModel> getCounterXtz(String address,bool isTest)async{
     try{
@@ -75,20 +61,6 @@ class XtzApi{
       return mm;
     }
   }
-  /*static getConstants_xtz(bool isTest)async{
-    try{
-      String uri=Api.getUrl2(CoinType.XTZ.name,'rpc',isTest:isTest);
-      var data=await Api.requestEmptyH.get('${uri}chains/main/blocks/head/context/constants', params: {});
-      MessageModel mm=MessageModel();
-      mm.data=data;
-      return mm;
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e;
-      return mm;
-    }
-  }
-  */
   Future<MessageModel> getTxInfoXtz(String txHash,bool isTest)async{
     try{
       String uri=RequestUrl().getUrl2(CoinType.XTZ.name,'api',isTest:isTest);

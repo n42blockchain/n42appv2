@@ -47,7 +47,6 @@ class _RedeemState extends State<Redeem> {
   }
   @override
   void initState() {
-    // TODO: implement initState
     //testData();
     late final PlatformWebViewControllerCreationParams params;
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
@@ -183,13 +182,7 @@ class _RedeemState extends State<Redeem> {
       cPubKey,
       2,
       'OP_CHECKMULTISIG']);
-    //print(P2wshAddress.fromScript(script: newScript).toAddress(BitcoinNetwork.testnet));
     return newScript.toHex();
-    /*print(newScript.toHex());
-    // 5️⃣ 生成 P2WSH 地址（主网示例）
-    p2wshAddress =P2wshAddress.fromScript(script: newScript);
-    if (kDebugMode) debugPrint(p2wshAddress!.toAddress(BitcoinNetwork.testnet));
-    return p2wshAddress!.toAddress(BitcoinNetwork.testnet);*/
   }
   //获取 比特币的gasFee等级
   Future<void> getGasFeeBtc()async{

@@ -26,7 +26,6 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
   late SwapAstOrderModel _orderModel;
   @override
   void initState() {
-    // TODO: implement initState
     _orderModel = _orderModel;
     getOrderDetail();
     super.initState();

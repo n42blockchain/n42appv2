@@ -47,7 +47,6 @@ class _AddressBookListState extends State<AddressBookList> {
   }
   @override
   void initState() {
-    // TODO: implement initState
     eventBusFn=eventBus.on().listen((event) {
       if (event is EventPublic && event.type == EventPublicType.refreshData) {
         if (mounted) {

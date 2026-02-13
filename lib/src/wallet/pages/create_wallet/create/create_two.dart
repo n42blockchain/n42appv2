@@ -41,7 +41,6 @@ class _CreateTwoState extends State<CreateTwo> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     //创建钱包流程埋点
     //AmplitudeUtils.screenViewedSeedPhraseBackup();

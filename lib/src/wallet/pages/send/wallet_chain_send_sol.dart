@@ -80,14 +80,12 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
   }
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     valueTextEditingController.text="0";
     initData();
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     toTextEditingController.dispose();
     valueTextEditingController.dispose();
     noteTextEditingController.dispose();
@@ -788,7 +786,6 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
     String title=widget.coinModel.coin['coinType'];
     String totalGasPriceStr="";
     Color totalGasPriceColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    //Widget gasLimitWidget=Container();
     int decimals=widget.coinModel.coin['decimals'];
     if(widget.coinModel.coin['isContract']){
       decimals=chainModel?.coin['decimals']??0;
@@ -855,7 +852,6 @@ class _WalletChainSendSolState extends State<WalletChainSendSol> {
               ],
             ),
           ),*/
-          //gasLimitWidget,
           Container(
             margin: EdgeInsets.only(top: ScreenUtil().setWidth(30.0)),
             alignment: Alignment.center,

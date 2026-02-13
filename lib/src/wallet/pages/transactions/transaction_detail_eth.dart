@@ -66,9 +66,11 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
       owner=false;
       return;
     }
-    if (mounted) setState(() {
-      load=Load.loading;
-    });
+    if (mounted) {
+      setState(() {
+        load=Load.loading;
+      });
+    }
     List<TransationRecordModel> trModelList=await db.selectTransationRecordTxHash(_txHash,widget.coinModel.address);
     if(trModelList.isNotEmpty){
       trm=trModelList[0];

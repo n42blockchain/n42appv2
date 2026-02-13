@@ -565,7 +565,8 @@ class _WalletPageState extends State<WalletPage> {
                     ),
                   ),
                 ),
-                //walletConnectWidget(wc),
+
+
               ],
             );
             },
@@ -905,7 +906,6 @@ class _WalletPageState extends State<WalletPage> {
           return;
         }
         if(coinInfo.coin['coinType']==CoinType.BTC.name){
-          //Navigator.push(context, MaterialPageRoute(builder: (context) => WalletChainInfoBtc(coinInfo)));
           Navigator.push(context, MaterialPageRoute(builder: (context) => WalletChainInfo(coinInfo)));
         }else if(coinInfo.coin['coinType']==CoinType.XRP.name){
           Navigator.push(context, MaterialPageRoute(builder: (context) => WalletChainInfoXRP(coinInfo)));

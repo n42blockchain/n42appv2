@@ -34,31 +34,6 @@ class TokenViewApi{
     url=AppConfig.getApiUrlOnline('tokenViewUri');
     header={'content-type': 'application/json'};
   }
-  //获取nft主页的banner 列表
-  Future getBannerData()async{
-    try {
-      final res = await BaseApi.requestEmptyH.get(
-        '${url}v1/image/url',
-        params: {},header:header,
-      );
-      MessageModel mm=MessageModel.error();
-      if (res['code'] == 200) {
-        mm.error=false;
-        mm.data= res["data"]['image_link'];
-      }else{
-        mm.data="error";
-      }
-      return mm;
-    } catch (err) {
-      MessageModel mm=MessageModel.error();
-      mm.data=err.toString();
-      return mm;
-    }
-  }
-  //static String tokenViewUri="https://192.168.0.196:18214/v1/";//"https://198.200.30.38:18214/v1/";//
-  // "https://services.tokenview.com/vipapi/";//
-  //static String tokenViewUri_net="https://services.tokenview.com/vipapi";
-  //static String apikey="rjWMOBGRJbbGvhCcKzQu";
   //public
   ///获取币列表，主链加代币
   ///chains 返回特定的主链 主链币全名 solna,bitcoin,
@@ -94,26 +69,6 @@ class TokenViewApi{
       return mm;
     }
   }
-  /*
-  //获取主链币的列表
-  static getChainList()async{
-    try{
-      final a=await Api.tokenViewHelp.get('chain/list', params: {});
-      MessageModel mm=MessageModel.error();
-      if(a['code']==200){
-        mm.error=false;
-        mm.data=a['data'];
-      }else{
-        mm.data=errorMessage(a['code']);
-      }
-      return mm;
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e.toString();
-      return mm;
-    }
-  }
-  */
   //获取某个主链币的所有代币
   Future<MessageModel> getTokenListFullname(String fullname)async{
     try{
@@ -137,26 +92,6 @@ class TokenViewApi{
       return mm;
     }
   }
-  /*
-  //某笔交易详情
-  static getTxInfo(String coinType,String txHash)async{
-    try{
-      final a=await Api.tokenViewHelp.get('vipapi/tx?coin=${coinType.toLowerCase()}&tx_hash=${txHash}', params: {});
-      MessageModel mm=MessageModel.error();
-      if(a['code']==200){
-        mm.error=false;
-        mm.data=a['data'];
-      } else{
-        mm.data=errorMessage(a['code']);
-      }
-      return mm;
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e.toString();
-      return mm;
-    }
-  }
-   */
   //获取某笔交易的确认数
   Future<MessageModel> getTxConfirmation(String coinType,String txHash)async{
     try{
@@ -175,26 +110,6 @@ class TokenViewApi{
       return mm;
     }
   }
-  /*
-  //判断交易是否确认
-  static getTx_pending(String coinType,String txHash)async{
-    try{
-      final a=await Api.tokenViewHelp.get('vipapi/pending/tx?coin=${coinType.toLowerCase()}&tx_hash=${txHash}', params: {});
-      MessageModel mm=MessageModel.error();
-      if(a['code']==200){
-        mm.error=false;
-        mm.data=a['data'];
-      } else{
-        mm.data=errorMessage(a['code']);
-      }
-      return mm;
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e.toString();
-      return mm;
-    }
-  }
-  */
   //获取币的 余额
   Future<MessageModel?> getBalance(String blockchain,String coinType,String address,{String contract="",bool returnDouble=false,bool isTest=false,String? rpc})async{
     switch(blockchain){
@@ -320,20 +235,6 @@ class TokenViewApi{
     }
     return null;
   }
-  //
-  //获取btc类的余额
-  /*static getBalanceBtc(String coinType,String address)async{
-    try{
-      final a=await Api.requestEmptyH.get('${tokenViewUri}addr/b/${coinType.toLowerCase()}/${address}?apikey=lsqvqucOU0H0J9LfJQBX', params: {});
-      if(a['code']==1){
-        return ethToWeiString(a['data'].toString(), 9);
-      }else{
-        return Future.error("Error");
-      }
-    }catch(e){
-      return Future.error(e);
-    }
-  }*/
   //获取比特币的gasfee 等级数据，只是比特币的
   Future<MessageModel> getGasFeeBtc({bool isTest=false})async{
     try{
@@ -502,11 +403,6 @@ class TokenViewApi{
           }
           BigInt value=hexToInt(result);
           mm.data=value;
-          /*if(returnDouble){
-          mm.data= double.parse(a['data']['result'].toString());
-        }else{
-          mm.data= ethToWeiString(a['data']['result'].toString(), 18);
-        }*/
         }else{
           mm.data=errorMessage(a['code']);
         }
@@ -520,29 +416,6 @@ class TokenViewApi{
       return mm;
     }
   }
-  /*
-  //获取eth类的交易记录
-  static getTxList_eth(String coinType,String address,{int pageSize=20,int pageNum=1})async{
-    try{
-      final a=await Api.tokenViewHelp.get('vipapi/address/normal/tx/list?coin=${coinType.toLowerCase()}&addr=${address}&page=${pageNum}&page_size=${pageSize}', params: {});
-      MessageModel mm=MessageModel.error();
-      if(a['code']==0){
-        mm.error=false;
-        mm.data=a['data'];
-      }else if(a['code']==404){
-        mm.error=false;
-        mm.data=[];
-      }else{
-        mm.data=errorMessage(a['code']);
-      }
-      return mm;
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e.toString();
-      return mm;
-    }
-  }
-*/
   //获取eth 类 某个地址的所有代币余额
   Future<MessageModel> getAllTokenBalanceEth(String coinType,String address)async{
     try{
@@ -602,11 +475,7 @@ class TokenViewApi{
     if(contract==""){
       Map<String,dynamic> params = {"from": from,
         "to": to,
-        //"gas_price":'0x${gasPrice.toRadixString(16)}',
-        //"gasPrice":'0x${gasPrice.toRadixString(16)}',
         "gas":"0x${gas.toRadixString(16)}",
-        //"price":"0x${value.toRadixString(16)}",
-        //"value":"0x${value.toRadixString(16)}",
         "coin":coinType,
         "net_mode":isTest?"test":"main",
         "id":AppGlobals.currentId++,
@@ -629,8 +498,6 @@ class TokenViewApi{
       String valueHex=bytesToHex(valueList);
       Map<String,dynamic> params = {"from": from,
         "to": contract,
-        //"gas_price":'0x${gasPrice.toRadixString(16)}',
-        //"gasPrice":'0x${gasPrice.toRadixString(16)}',
         "gas":"0x${gas.toRadixString(16)}",
         "data": "0x${aaa}000000000000000000000000$toAddress$valueHex",
         "coin":coinType,
@@ -1083,69 +950,6 @@ class TokenViewApi{
 
 
   ////////////////////////////trx tron
-  /*
-  static getBalance_trx(String coinType,String address,{bool returnDouble=false})async{
-    try{
-      final a=await Api.tokenViewHelp.get('v1/vipapi/account/balance?coin=${coinType.toLowerCase()}&addr=${address}', params: {});
-      MessageModel mm=MessageModel();
-      if(a['code']==200){
-        if(returnDouble){
-          mm.data= double.parse(a['data'].toString());
-        }else{
-          mm.data= ethToWeiString(a['data'].toString(), 6);
-        }
-      }else{
-        mm.error=true;
-        mm.data=errorMessage(a['code']);
-      }
-      return mm;
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data= e.toString();
-      return mm;
-    }
-  }
-  static getBalance1_trx(String address,String contract,{bool returnDouble=false,bool isTest=false})async{
-    try{
-      var a;
-      if(contract==""){
-        Map<String,dynamic> params={
-          "address":address,
-          "net_mode":isTest?"test":"main",
-          "tag":"latest",
-        };
-        a=await Api.tokenViewHelp.post('v1/trx/balance', params: params,data: params);
-      }else{
-        Map<String,dynamic> params={
-          "from":address,
-          "to":contract,
-          "net_mode":isTest?"test":"main",
-          "tag":"latest",
-        };
-        a=await Api.tokenViewHelp.post('v1/trx/call', params: params,data: params);
-      }
-
-      MessageModel mm=MessageModel.error();
-      if(a['code']==200){
-        mm.error=false;
-        BigInt value=DataUtils.hexToInt(a['data']['result'].toString());
-        mm.data=value;
-        /*if(returnDouble){
-          mm.data= double.parse(a['data']['result'].toString());
-        }else{
-          mm.data= ethToWeiString(a['data']['result'].toString(), 18);
-        }*/
-      }else{
-        mm.data=errorMessage(a['code']);
-      }
-      return mm;
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data= e.toString();
-      return mm;
-    }
-  }
-  */
   //获取gas费
   Future<MessageModel> getGasPriceTrx({bool isTest=false})async{
     try{
@@ -1240,82 +1044,11 @@ class TokenViewApi{
       return mm;
     }
   }
-  /*
-  //发送交易
-  static sendTx1_trx(String signHash,String netMode)async{
-    try{
-      Map<String,dynamic> sign=json.decode(signHash);
-      MessageModel cmm=await createTxTrx(
-          sign['raw_data']['contract'][0]['parameter']['value']["owner_address"],
-          sign['raw_data']['contract'][0]['parameter']['value']["to_address"],
-          sign['raw_data']['contract'][0]['parameter']['value']["amount"],
-          'main');
-      String rawDataHex="";
-      if(cmm.error==true){
-        return cmm;
-      }else{
-        rawDataHex=cmm.data;
-      }
-      Map<String,dynamic> params={
-        "net_mode":"main",
-        "transaction":rawDataHex,
-      };
-      params['net_mode']="main";
-      final a=await Api.tokenViewHelp.post('v1/trx/broadcast/hex', params: params,data: params);
-      MessageModel mm=MessageModel.error();
-      if(a['code']==200){
-        mm.error=false;
-        mm.data=a['data'];
-      }else{
-        mm.data=errorMessage(a['code']);
-      }
-      return mm;
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data= e.toString();
-      return mm;
-    }
-  }
-  static sendTx2_trx(String signHash,String netMode)async{
-    try{
-      Map<String,dynamic> params=json.decode(signHash);
-      params['net_mode']="main";
-      final a=await Api.tokenViewHelp.post('v1/trx/broadcast/transaction', params: params,data: params);
-      MessageModel mm=MessageModel.error();
-      if(a['code']==200){
-        mm.error=false;
-        mm.data=a['data'];
-      }else{
-        mm.data=errorMessage(a['code']);
-      }
-      return mm;
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data= e.toString();
-      return mm;
-    }
-  }
-  */
   Future<MessageModel> sendTxTrx(String signHash,String netMode)async{
     try{
       Map<String,dynamic> sign=json.decode(signHash);
-      /*MessageModel cmm=await createTx_trx(
-          sign['raw_data']['contract'][0]['parameter']['value']["owner_address"],
-          sign['raw_data']['contract'][0]['parameter']['value']["to_address"],
-          sign['raw_data']['contract'][0]['parameter']['value']["amount"],
-          'main');
-      String rawDataHex="";
-      if(cmm.error==true){
-        return cmm;
-      }else{
-        rawDataHex=cmm.data;
-      }
-      sign['raw_data_hex']=rawDataHex;
-      sign['coin']='trx';
-      sign["method"]= "broadcasttransaction";*/
       sign["visible"]=false;
       sign['net_mode']="main";
-      //MessageModel mmmm=await TrxApi.sendTx_trx(sign);
       final a=await BaseApi.requestEmptyH.post('${url}v1/trx/broadcast/transaction', params: sign,data: sign,header:header,);
       MessageModel mm=MessageModel.error();
       if(a['code']==200){
@@ -1328,71 +1061,6 @@ class TokenViewApi{
     }catch(e){
       MessageModel mm=MessageModel.error();
       mm.data= e.toString();
-      return mm;
-    }
-  }
-  /*
-  getGasEstimate_trx(
-      String from,
-      String to,
-      String contract,
-      String method,
-      List<Map<String,dynamic>> attributes,
-      {
-        BigInt? gasPrice,
-        BigInt? gas,
-        bool isTest=false}
-      )async{
-    if(gasPrice==null){
-      MessageModel gmm=await getGasPriceTrx(isTest:isTest);
-      if(gmm.error){
-        return gmm;
-      }else{
-        gasPrice=gmm.data;
-      }
-    }
-    if(gas==null){
-      gas=BigInt.from(getCoinGas("TRX",contract:true));
-    }
-    String aaa=bytesToHex(keccakAscii(method));
-    aaa=aaa.substring(0,8).toLowerCase();
-    String dataStr="0x${aaa}";
-    for(Map<String,dynamic> attribute in attributes){
-      if(attribute['type']=="address"){
-        String addr=DataUtils.strip0x(attribute['value']);
-        dataStr="${dataStr}00000000000000000000000041${addr}";
-      }else if(attribute['type']=="uint256"){
-        Uint8List valueList=padUint8ListTo32(unsignedIntToBytes(attribute['value']));
-        String valueHex=bytesToHex(valueList);
-        dataStr="${dataStr}${valueHex}";
-      }
-    }
-    TrxApi trxApi=TrxApi();
-    return await trxApi.sendCall(
-        {"from": from,
-          "to": contract,
-          "gas_price":'0x${gasPrice!.toRadixString(16)}',
-          "gas":"0x${gas.toRadixString(16)}",
-          "data": dataStr,
-        },
-      isTest:isTest,
-      id:AppGlobals.currentId++,);
-  }
-*/
-  Future<MessageModel> getBrowserPreviewUrl()async{
-    try{
-      final rData=await BaseApi.requestEmptyH.get('${url}v1/preview/url', params: {},header: header);
-      MessageModel mm=MessageModel.error();
-      if(rData['code']==200){
-        mm.error=false;
-        mm.data=rData['data']['preview_url'];
-      }else{
-        mm.data=rData['err'];
-      }
-      return mm;
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e.toString();
       return mm;
     }
   }
