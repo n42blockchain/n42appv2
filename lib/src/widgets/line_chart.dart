@@ -47,7 +47,6 @@ class LineChartState extends State<LineChart> with TickerProviderStateMixin{
   late DrawLineChart drawLineChart;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
   @override
@@ -61,7 +60,6 @@ class LineChartState extends State<LineChart> with TickerProviderStateMixin{
       widget.minValue,
       widget.bottomMargin,
     );
-    // TODO: implement build
     return Container(
       color: Color(0xff999999),
       key: anchorKey,

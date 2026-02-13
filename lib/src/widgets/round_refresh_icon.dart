@@ -52,9 +52,11 @@ class _RoundRefreshIconState extends State<RoundRefreshIcon> {
             await widget.refreshData!();
           }
         } finally {
-          setState(() {
-            isLoading = false;
-          });
+          if (mounted) {
+            setState(() {
+              isLoading = false;
+            });
+          }
         }
       },
       child: Padding(

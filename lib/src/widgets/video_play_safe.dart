@@ -24,7 +24,6 @@ class _VideoPlaySafeState extends State<VideoPlaySafe> {
   Load load = Load.loading;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if(widget.dataType=="net"){
       videoPlayerController=VideoPlayerController.networkUrl(Uri.parse(widget.url));

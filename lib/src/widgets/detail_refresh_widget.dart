@@ -28,10 +28,10 @@ class _DetailRefreshWidgetState extends State<DetailRefreshWidget> {
 
   @override
   void dispose() {
-    super.dispose();
     if (_refreshController != null) {
       _refreshController!.dispose();
     }
+    super.dispose();
   }
 
   @override

@@ -46,13 +46,10 @@ class ImageNetWork extends StatelessWidget {
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
       );
     }
-    /// 如果是一个网络url
-    String resultUrl = imageUrl;
-
     if (builder != null) {
       return builder!(
         context,
-        resultUrl,
+        imageUrl,
         placeholderImage,
       );
     } else {
@@ -67,8 +64,7 @@ class ImageNetWork extends StatelessWidget {
         errorWidget: (context,String url,dynamic error){
           return placeholderImage;
         },
-        // cacheManager:
-        //     resultUrl.contains("https") ? EsoImageCacheManager() : null,
+        //
         cacheManager: EsoImageCacheManager(),
       );
     }

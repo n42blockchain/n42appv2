@@ -98,10 +98,10 @@ class BaseListState extends State<BaseList> {
 
   @override
   void dispose() {
-    super.dispose();
     if (_refreshController != null) {
       _refreshController!.dispose();
     }
+    super.dispose();
   }
 
   @override
@@ -131,22 +131,6 @@ class BaseListState extends State<BaseList> {
           : null,
       child: _buildListOrGridView(),
     );
-    /*return EasyRefresh(
-        firstRefresh: widget.firstRefresh ?? false,
-        controller: _refreshController,
-        enableControlFinishLoad: true,
-        enableControlFinishRefresh: true,
-        emptyWidget: showEmpty ? (widget.emptyView ?? const EmptyView()) : null,
-        header: header,
-        footer: footer,
-        onRefresh: () async {
-          handlerRefresh();
-        },
-        onLoad: widget.canLoadMore && pageIndex != widget.pageIndex
-            ? () async => loadMore()
-            : null,
-        child: _buildListOrGridView());
-    */
   }
 
   Widget _buildListOrGridView() {
