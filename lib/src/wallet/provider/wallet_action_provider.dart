@@ -697,21 +697,6 @@ class WalletActionProvider extends ChangeNotifier{
         return sortString(bName,aName);
       });
     }
-    /*if(walletInfo.coinSort['assets']==-1 && walletInfo.coinSort['name']==-1){
-      int index=coinList.indexWhere((e){
-        if(e.coin['coinType']==CoinType.N.name){
-          if(e.coin['mKey']=="0XE062FD6F7B483A648AB9F84AD2BA76F9DEB0A550"){
-            return true;
-          }
-        }
-        return false;
-      });
-      if(index !=-1){
-        CoinModel cm=coinList[index];
-        coinList.removeAt(index);
-        coinList.insert(coinList.length,cm);
-      }
-    }*/
   }
   int sortString(String aName,String bName){
     int minCount=min(aName.length, bName.length);

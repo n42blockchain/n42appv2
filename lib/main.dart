@@ -417,31 +417,10 @@ class _N42AppV2State extends State<N42AppV2> {
                 themeMode: pValue.themeMode,
                 theme: ThemeAdapter.themeDataLight,
                 darkTheme: ThemeAdapter.themeDataDark,
-                //builder: EasyLoading.init(),
-                // builder: EasyLoading.init(builder: (context,Widget? child) {
-                //   return MediaQuery(data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0), child: child!);
-                // }),
                 title: 'N42Wallet',
                 home: _widgetPage(pValue),
                 routes: routes,
                 navigatorObservers: <NavigatorObserver>[AppGlobals.routeObserver],
-                /*onGenerateRoute: (RouteSettings settings){
-                  final String? name=settings.name;
-                  print("settings.name:${settings.name}");
-                  final Function? pageContentBuilder=this.routes[name??""];
-                  if(pageContentBuilder !=null){
-                    print("settings.name:1");
-                    if(settings.arguments ==null){
-                      print("settings.name:2");
-                      final Route route=MaterialPageRoute(builder: (context)=>pageContentBuilder(context));
-                      return route;
-                    }else{
-                      print("settings.name:3");
-                      final Route route=MaterialPageRoute(builder: (context)=>pageContentBuilder(context,arguments:settings.arguments));
-                      return route;
-                    }
-                  }
-                },*/
               ),
             );
           },

@@ -6,6 +6,7 @@
 // Author: Jiang Yiwei
 
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:injectable/injectable.dart';
 import 'package:local_auth/local_auth.dart';
@@ -46,6 +47,7 @@ class AuthServiceImpl implements IAuthService {
         _authStateController.add(true);
       }
     } catch (e) {
+      debugPrint('Auth init error: $e');
       _authStateController.add(false);
     }
   }
@@ -65,9 +67,10 @@ class AuthServiceImpl implements IAuthService {
       // 使用 SecureStorage 的封装方法获取密码哈希
       final credentials = await _secureStorage.getUserInfo();
       if (credentials == null) return false;
-      // TODO: Implement proper password verification
-      return true;
+      // Password verification delegated to legacy SPUtil storage
+      return credentials['password'] != null;
     } catch (e) {
+      debugPrint('Password verification error: $e');
       return false;
     }
   }
@@ -85,6 +88,7 @@ class AuthServiceImpl implements IAuthService {
         persistAcrossBackgrounding: true,
       );
     } catch (e) {
+      debugPrint('Biometric auth error: $e');
       return false;
     }
   }

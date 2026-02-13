@@ -9,6 +9,7 @@ import 'package:n42appv2/src/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/wallet_list.dart';
 import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_2.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,12 +30,13 @@ class HomeDrawPage extends ConsumerStatefulWidget {
 class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepAliveClientMixin {
   /// Chat 用户信息（从流中更新）
   dynamic _chatUser;
+  StreamSubscription? _chatUserSubscription;
 
   @override
   void initState() {
     super.initState();
     // 监听 Chat 用户变化
-    N42Chat.userStream.listen((user) {
+    _chatUserSubscription = N42Chat.userStream.listen((user) {
       if (mounted) {
         setState(() {
           _chatUser = user;
@@ -43,6 +45,12 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage> with AutomaticKeepA
     });
     // 初始化时获取当前用户
     _chatUser = N42Chat.currentUser;
+  }
+
+  @override
+  void dispose() {
+    _chatUserSubscription?.cancel();
+    super.dispose();
   }
 
   @override

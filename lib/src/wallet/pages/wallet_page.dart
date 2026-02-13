@@ -93,14 +93,6 @@ class _WalletPageState extends State<WalletPage> {
   @override
   void initState() {
     Provider.of<WalletActionProvider>(context,listen: false).initWallet(shouldInitCoinInfo:true);
-    /*if(AppGlobals.userInfo==null){
-      Provider.of<WalletActionProvider>(context,listen: false).initWallet(shouldInitCoinInfo:true);
-    }else{
-      Timer(Duration(seconds: 1),(){
-        eventBus.fire(EventPublic(EventPublicType.selectWallet,
-            intValue: 1));
-      });
-    }*/
     _scrollController = ScrollController()
       ..addListener(() {
         var maxScroll = _scrollController.position.maxScrollExtent;

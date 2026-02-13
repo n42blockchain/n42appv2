@@ -8,7 +8,10 @@ class MiningWeb3{
   MiningWeb3.init(String pk){
     credentials=EthPrivateKey.fromHex(bytesToHex(base64Decode(pk)));
   }
-  static const String _rpcUrl='http://5.161.252.59:8545';
+  static const String _rpcUrl = String.fromEnvironment(
+    'MINING_RPC_URL',
+    defaultValue: 'http://5.161.252.59:8545',
+  );
   static const int _chainId=1142;
   static const int _defaultMaxGas=6000000;
   EthPrivateKey? credentials;

@@ -33,7 +33,7 @@ Map<String,dynamic> chainUrlMap={
         "legacy":"m/44'/60'/0'/0/0",
       },
       "service": "https://rpc.n42.world",
-      "service_test": "http://5.161.252.59:8545",
+      "service_test": const String.fromEnvironment('N42_TESTNET_RPC', defaultValue: 'http://5.161.252.59:8545'),
       "chainId": 94,
       "chainId_test": 1142,
       "contract": "",
@@ -187,7 +187,7 @@ Map<String,dynamic> chainUrlMap={
             "path": {
               "legacy":"m/44'/60'/0'/0/0",
             },
-            "service": "http://18.170.108.78:20012",
+            "service": const String.fromEnvironment('ETH_RPC_URL', defaultValue: 'http://18.170.108.78:20012'),
             "service_test": "https://eth-sepolia.public.blastapi.io",
             "chainId": 1,
             "chainId_test": 11155111,

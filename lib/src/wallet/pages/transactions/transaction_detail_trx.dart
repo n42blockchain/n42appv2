@@ -107,23 +107,6 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       }
       value='${toEther(trm.price.toString(), widget.coinModel.coin['decimals'])} ${widget.coinModel.coin['unit']}';
       gasPrice='${toEther(trm.gasPrice.toString(), widget.coinModel.coin['decimals'])} ${widget.coinModel.coin['unit']}';
-      /*if(trm.contract ==""){
-        trm.to1=transactionInfo!['toAddress'];
-        trm.price=BigInt.from(transactionInfo?['contractData']?['amount']??0);
-        value='${toEther(trm.price.toString(), widget.coinModel.coin['decimals'])} ${widget.coinModel.coin['unit']}';
-      }else{
-        try{
-          trm.message="";
-          String input=transactionInfo!['input'];
-          String to=input.substring(10,74).substring(24);
-          trm.to1="0x${to}";
-          //String match=input.substring(0,10);
-          String valueStr=input.substring(74,138);
-          trm.price=hexToInt(valueStr);
-          value='${toEther(trm.price.toString(), widget.coinModel.coin['decimals'])} ${widget.coinModel.coin['unit']}';
-        }catch(e){}
-      }
-      */
       if(trm.from1.toLowerCase() != (transactionInfo?['from']??"").toString().toLowerCase()){
         owner=false;
       }else{

@@ -11,8 +11,15 @@ class MiningApi{
     mining=Trustdart();
   }
   late Trustdart mining;
-  final String wsUrl='ws://5.161.252.59:8546/';
-  static const String _rpcUrl='http://5.161.252.59:8545';
+  static const String _wsUrl = String.fromEnvironment(
+    'MINING_WS_URL',
+    defaultValue: 'ws://5.161.252.59:8546/',
+  );
+  final String wsUrl = _wsUrl;
+  static const String _rpcUrl = String.fromEnvironment(
+    'MINING_RPC_URL',
+    defaultValue: 'http://5.161.252.59:8545',
+  );
   static const String _depositContractAddress='0x0dcAE65dDB5df8f1817D35286beAC32b8994962B';
   Future<Map<String,String>?> generateBls12381Keypair()async{
     try{

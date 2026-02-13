@@ -240,13 +240,6 @@ Widget textFieldStyle3(
         decoration: BoxDecoration(
           borderRadius:borderRadius?? BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
           color: bgColor??AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor2.name),
-          /*boxShadow: [
-            boxShadow??BoxShadow(
-              color: Color(0xff101828).withOpacity(0.05),  //底色,阴影颜色
-              offset: Offset(0, 1), //阴影位置,从什么位置开始
-              blurRadius: scr.setWidth(4.0),  // 阴影模糊层度
-              spreadRadius: 0, )
-          ],*/
           border: borderWidth==0?null:Border.all(
             width: borderWidth,
             color: bdColor,
