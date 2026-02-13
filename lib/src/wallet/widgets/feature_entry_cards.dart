@@ -31,13 +31,13 @@ class EnsEntryCard extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              const Color(0xFF5B8DEF).withOpacity(0.15),
-              const Color(0xFF8B5CF6).withOpacity(0.15),
+              const Color(0xFF5B8DEF).withValues(alpha:0.15),
+              const Color(0xFF8B5CF6).withValues(alpha:0.15),
             ],
           ),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
           border: Border.all(
-            color: const Color(0xFF5B8DEF).withOpacity(0.3),
+            color: const Color(0xFF5B8DEF).withValues(alpha:0.3),
             width: 1,
           ),
         ),
@@ -100,7 +100,7 @@ class EnsEntryCard extends StatelessWidget {
               width: ScreenUtil().setWidth(56),
               height: ScreenUtil().setWidth(56),
               decoration: BoxDecoration(
-                color: const Color(0xFF5B8DEF).withOpacity(0.2),
+                color: const Color(0xFF5B8DEF).withValues(alpha:0.2),
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(28)),
               ),
               child: Icon(
@@ -157,13 +157,13 @@ class SmartAccountEntryCard extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              const Color(0xFFFF6B6B).withOpacity(0.15),
-              const Color(0xFFFFE66D).withOpacity(0.15),
+              const Color(0xFFFF6B6B).withValues(alpha:0.15),
+              const Color(0xFFFFE66D).withValues(alpha:0.15),
             ],
           ),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
           border: Border.all(
-            color: const Color(0xFFFF6B6B).withOpacity(0.3),
+            color: const Color(0xFFFF6B6B).withValues(alpha:0.3),
             width: 1,
           ),
         ),
@@ -242,8 +242,8 @@ class SmartAccountEntryCard extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color: isDeployed
-                                ? const Color(0xFF4CAF50).withOpacity(0.2)
-                                : const Color(0xFFFF9800).withOpacity(0.2),
+                                ? const Color(0xFF4CAF50).withValues(alpha:0.2)
+                                : const Color(0xFFFF9800).withValues(alpha:0.2),
                             borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
                           ),
                           child: Text(
@@ -280,7 +280,7 @@ class SmartAccountEntryCard extends StatelessWidget {
               width: ScreenUtil().setWidth(56),
               height: ScreenUtil().setWidth(56),
               decoration: BoxDecoration(
-                color: const Color(0xFFFF6B6B).withOpacity(0.2),
+                color: const Color(0xFFFF6B6B).withValues(alpha:0.2),
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(28)),
               ),
               child: Icon(
@@ -468,11 +468,11 @@ class FeatureEntryHorizontal extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: gradientColors.map((c) => c.withOpacity(0.15)).toList(),
+            colors: gradientColors.map((c) => c.withValues(alpha:0.15)).toList(),
           ),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
           border: Border.all(
-            color: gradientColors[0].withOpacity(0.3),
+            color: gradientColors[0].withValues(alpha:0.3),
             width: 1,
           ),
         ),

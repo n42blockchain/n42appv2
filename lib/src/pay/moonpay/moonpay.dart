@@ -49,21 +49,27 @@ class _MoonpayState extends State<Moonpay> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageStarted: (url) {
-            if (mounted) setState(() {
-              pageLoad = Load.loading;
-              pageLoadValue = 0;
-            });
+            if (mounted) {
+              setState(() {
+                pageLoad = Load.loading;
+                pageLoadValue = 0;
+              });
+            }
           },
           onPageFinished: (url) async {
-            if (mounted) setState(() {
-              pageLoad = Load.finish;
-            });
+            if (mounted) {
+              setState(() {
+                pageLoad = Load.finish;
+              });
+            }
             await _updateNavButtons();
           },
           onProgress: (progress) {
-            if (mounted) setState(() {
-              pageLoadValue = progress / 100;
-            });
+            if (mounted) {
+              setState(() {
+                pageLoadValue = progress / 100;
+              });
+            }
           },
           onNavigationRequest: (request) {
             return NavigationDecision.navigate;

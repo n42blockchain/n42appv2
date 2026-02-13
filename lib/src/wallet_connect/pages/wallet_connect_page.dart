@@ -239,8 +239,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
               ),
             ),
           ),
-          if(rightWidget !=null)
-            rightWidget,
+          ?rightWidget,
         ],
       ),
     );

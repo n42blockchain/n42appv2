@@ -46,8 +46,8 @@ class WalletChainInfoTitle extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if (title != null) title!,
-                if (subtitle != null) subtitle!,
+                ?title,
+                ?subtitle,
               ],
             ),
           ),

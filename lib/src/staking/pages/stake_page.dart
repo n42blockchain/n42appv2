@@ -888,8 +888,8 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
       );
 
       if (result != null && result.success) {
-        // TODO: 发送交易到钱包签名
         if (!mounted) return;
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Transaction prepared successfully'),

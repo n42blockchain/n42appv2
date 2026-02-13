@@ -466,7 +466,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
           width: size,
           height: size,
           fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => _buildDefaultAvatar(size),
+          errorBuilder: (_, _, _) => _buildDefaultAvatar(size),
         ),
       );
     }

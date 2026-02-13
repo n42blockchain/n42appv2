@@ -1807,10 +1807,8 @@ Decimal toEther(String wei,int decimal) {
   }else{
     // Safe access to decimalMap, dynamically calculate if not found
     String? divisor = decimalMap[decimal.toString()];
-    if (divisor == null) {
-      // Dynamically calculate the divisor for unsupported decimals
-      divisor = BigInt.from(10).pow(decimal).toString() + ".0";
-    }
+    // Dynamically calculate the divisor for unsupported decimals
+    divisor ??= '${BigInt.from(10).pow(decimal)}.0';
     Decimal dd=(Decimal.parse(wei) / Decimal.parse(divisor)).toDecimal();
     return dd;
   }
@@ -1855,9 +1853,7 @@ BigInt ethToWeiString(String eth,int decimals) {
   }else{
     // Safe access to decimalMap, dynamically calculate if not found
     String? decStr = decimalMap[decimals.toString()];
-    if (decStr == null) {
-      decStr = BigInt.from(10).pow(decimals).toString() + ".0";
-    }
+    decStr ??= '${BigInt.from(10).pow(decimals)}.0';
     double dec= double.parse(decStr);
     Decimal rValue=Decimal.parse(eth)*Decimal.parse(dec.toString());
     return rValue.toBigInt();

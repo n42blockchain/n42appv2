@@ -250,7 +250,7 @@ class _MiningImportState extends State<MiningImport> {
               ),
             ),
           ),
-          if (rightWidget != null) rightWidget,
+          ?rightWidget,
         ],
       ),
     );
