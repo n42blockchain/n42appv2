@@ -18,7 +18,7 @@ import 'package:n42appv2/src/notification/pages/message_info.dart';
 import 'package:n42appv2/src/wallet/utils/browser_txhash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:n42_chat/n42_chat.dart' show FirebasePushService;
+import 'package:n42_chat/n42_chat.dart' show FirebasePushService, N42Chat;
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_new_badger/flutter_new_badger.dart';
@@ -200,6 +200,10 @@ class AppPushUtils {
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
       debugPrint("firebase messaging token updated: $newToken");
       bindUserPushToken(newToken);
+      // 同步新 Token 到 Matrix Pusher（确保 FCM token 刷新后 Matrix 推送仍然工作）
+      N42Chat.registerPushNotifications().catchError((Object e) {
+        debugPrint('[PUSH_TOKEN_SYNC] Failed to re-register Matrix pusher on token refresh: $e');
+      });
     });
   }
 
