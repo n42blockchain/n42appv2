@@ -14,6 +14,7 @@ class ResponsiveUtils {
 
   static const double mobileBreakpoint = 600;
   static const double tabletBreakpoint = 900;
+  static const double desktopBreakpoint = 1200;
   /// 内容区域推荐最大宽度（iPad 竖屏约 810pt，限制内容区让布局更紧凑）
   static const double contentMaxWidth = 600;
 
@@ -83,6 +84,37 @@ enum ScreenType {
   mobile,
   tablet,
   desktop,
+}
+
+/// 响应式布局构建器
+///
+/// 根据屏幕类型自动选择渲染不同的子组件。
+/// - [mobile] 是必填的回退组件。
+/// - [tablet] 为 null 时平板使用 [mobile]。
+/// - [desktop] 为 null 时桌面使用 [tablet]（若也为 null 则用 [mobile]）。
+class ResponsiveBuilder extends StatelessWidget {
+  final Widget mobile;
+  final Widget? tablet;
+  final Widget? desktop;
+
+  const ResponsiveBuilder({
+    super.key,
+    required this.mobile,
+    this.tablet,
+    this.desktop,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    switch (ResponsiveUtils.getScreenType(context)) {
+      case ScreenType.desktop:
+        return desktop ?? tablet ?? mobile;
+      case ScreenType.tablet:
+        return tablet ?? mobile;
+      case ScreenType.mobile:
+        return mobile;
+    }
+  }
 }
 
 /// 内容约束容器 — 限制最大宽度并居中

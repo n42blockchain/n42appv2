@@ -689,7 +689,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
     if (widget.batchTransferProvider.totalAmount + amount > widget.balance) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Insufficient balance: total amount would exceed available ${widget.tokenSymbol}'),
+          content: Text(S.of(context).g_key_batch_insufficient_balance(widget.tokenSymbol)),
           backgroundColor: Colors.orange,
         ),
       );

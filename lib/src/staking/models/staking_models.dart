@@ -213,6 +213,15 @@ enum StakingPositionStatus {
   withdrawn,  // 已提取
 }
 
+/// 质押操作类型
+enum StakingActionType {
+  stake,       // 质押
+  unstake,     // 解质押
+  claim,       // 领取奖励
+  restake,     // 复投（领取并再质押）
+  redelegate,  // 重新委托（换验证者）
+}
+
 /// Staking 交易响应
 class StakingTransactionResponse {
   final bool success;
@@ -342,4 +351,17 @@ class StakingProtocols {
     dotNative,
   ];
 
+  /// 按 ID 查找协议，未找到时返回 null
+  static StakingProtocol? getById(String id) {
+    try {
+      return all.firstWhere((p) => p.id == id);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// 按链类型过滤协议列表
+  static List<StakingProtocol> getByChainType(StakingChainType type) {
+    return all.where((p) => p.chainType == type).toList();
+  }
 }

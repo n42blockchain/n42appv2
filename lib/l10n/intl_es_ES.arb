@@ -1249,5 +1249,12 @@
   "g_key_notification_settings": "Notification Settings",
   "g_key_new_airdrops": "New airdrops",
   "g_key_eligibility_alerts": "Eligibility alerts",
-  "g_key_deadline_reminders": "Deadline reminders"
+  "g_key_deadline_reminders": "Deadline reminders",
+  "g_key_batch_insufficient_balance": "Insufficient balance: total amount would exceed available {value}",
+  "g_key_hw_account_already_imported": "Account already imported",
+  "g_key_hw_import_failed": "Failed to import account: {value}",
+  "g_key_bridge_status_pending": "Pending",
+  "g_key_bridge_status_in_progress": "In Progress",
+  "g_key_bridge_status_completed": "Completed",
+  "g_key_bridge_status_failed": "Failed"
 }

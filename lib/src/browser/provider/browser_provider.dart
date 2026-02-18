@@ -144,8 +144,9 @@ class BrowserProvider extends ChangeNotifier{
         AndroidWebViewController.enableDebugging(true);
       }
       androidController.setMediaPlaybackRequiresUserGesture(false);
-      // Enable mixed content mode for DApp compatibility
-      androidController.setMixedContentMode(MixedContentMode.alwaysAllow);
+      // Use compatibility mode instead of alwaysAllow to prevent MITM injection
+      // of malicious HTTP resources into HTTPS DApp pages
+      androidController.setMixedContentMode(MixedContentMode.compatibilityMode);
       // Enable wide viewport for better page rendering
       androidController.setUseWideViewPort(true);
     }

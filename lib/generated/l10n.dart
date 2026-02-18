@@ -11363,6 +11363,76 @@ class S {
       args: [],
     );
   }
+
+  /// `Insufficient balance: total amount would exceed available {value}`
+  String g_key_batch_insufficient_balance(Object value) {
+    return Intl.message(
+      'Insufficient balance: total amount would exceed available $value',
+      name: 'g_key_batch_insufficient_balance',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Account already imported`
+  String get g_key_hw_account_already_imported {
+    return Intl.message(
+      'Account already imported',
+      name: 'g_key_hw_account_already_imported',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to import account: {value}`
+  String g_key_hw_import_failed(Object value) {
+    return Intl.message(
+      'Failed to import account: $value',
+      name: 'g_key_hw_import_failed',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Pending`
+  String get g_key_bridge_status_pending {
+    return Intl.message(
+      'Pending',
+      name: 'g_key_bridge_status_pending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `In Progress`
+  String get g_key_bridge_status_in_progress {
+    return Intl.message(
+      'In Progress',
+      name: 'g_key_bridge_status_in_progress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Completed`
+  String get g_key_bridge_status_completed {
+    return Intl.message(
+      'Completed',
+      name: 'g_key_bridge_status_completed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed`
+  String get g_key_bridge_status_failed {
+    return Intl.message(
+      'Failed',
+      name: 'g_key_bridge_status_failed',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

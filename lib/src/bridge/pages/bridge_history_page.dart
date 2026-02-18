@@ -21,7 +21,7 @@ class BridgeHistoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text: 'Bridge History', // S.of(context).g_key_bridge_history
+        text: S.of(context).g_key_bridge_history,
       ),
       body: ListenableBuilder(
         listenable: provider,
@@ -191,7 +191,7 @@ class BridgeHistoryPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
                     ),
                     child: Text(
-                      'Refresh', // S.of(context).g_key_bridge_refresh
+                      S.of(context).g_key_bridge_refresh,
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(22),
                         color: Colors.white,
@@ -226,22 +226,22 @@ class BridgeHistoryPage extends StatelessWidget {
     switch (status) {
       case BridgeTransactionStatus.pending:
         color = Colors.orange;
-        text = 'Pending';
+        text = S.of(context).g_key_bridge_status_pending;
         icon = Icons.hourglass_empty;
         break;
       case BridgeTransactionStatus.inProgress:
         color = Colors.blue;
-        text = 'In Progress';
+        text = S.of(context).g_key_bridge_status_in_progress;
         icon = Icons.sync;
         break;
       case BridgeTransactionStatus.completed:
         color = Colors.green;
-        text = 'Completed';
+        text = S.of(context).g_key_bridge_status_completed;
         icon = Icons.check_circle;
         break;
       case BridgeTransactionStatus.failed:
         color = Colors.red;
-        text = 'Failed';
+        text = S.of(context).g_key_bridge_status_failed;
         icon = Icons.error;
         break;
     }

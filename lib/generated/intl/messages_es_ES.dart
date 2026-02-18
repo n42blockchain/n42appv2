@@ -50,6 +50,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m12(value) => "Dirección duplicada en fila ${value}";
 
+  static String m65(value) =>
+      "Insufficient balance: total amount would exceed available ${value}";
+
   static String m13(value) => "Dirección inválida en fila ${value}";
 
   static String m14(value) => "Monto inválido en fila ${value}";
@@ -65,6 +68,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m19(value) => "Please wait ${value} seconds";
 
   static String m20(value) => "Actualización automática cada ${value} segundos";
+
+  static String m66(value) => "Failed to import account: ${value}";
 
   static String m21(value) =>
       "Por favor abre la app ${value} en tu dispositivo";
@@ -1018,6 +1023,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_batch_import_csv": MessageLookupByLibrary.simpleMessage(
       "Importar CSV",
     ),
+    "g_key_batch_insufficient_balance": m65,
     "g_key_batch_invalid_address": m13,
     "g_key_batch_invalid_amount": m14,
     "g_key_batch_max_recipients": m15,
@@ -1084,6 +1090,18 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_bridge_slippage": MessageLookupByLibrary.simpleMessage(
       "Deslizamiento",
+    ),
+    "g_key_bridge_status_completed": MessageLookupByLibrary.simpleMessage(
+      "Completed",
+    ),
+    "g_key_bridge_status_failed": MessageLookupByLibrary.simpleMessage(
+      "Failed",
+    ),
+    "g_key_bridge_status_in_progress": MessageLookupByLibrary.simpleMessage(
+      "In Progress",
+    ),
+    "g_key_bridge_status_pending": MessageLookupByLibrary.simpleMessage(
+      "Pending",
     ),
     "g_key_bridge_swap": MessageLookupByLibrary.simpleMessage("Puente"),
     "g_key_bridge_time": MessageLookupByLibrary.simpleMessage(
@@ -1635,6 +1653,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_high_value_only": MessageLookupByLibrary.simpleMessage(
       "High value only",
     ),
+    "g_key_hw_account_already_imported": MessageLookupByLibrary.simpleMessage(
+      "Account already imported",
+    ),
     "g_key_hw_accounts": MessageLookupByLibrary.simpleMessage("Cuentas"),
     "g_key_hw_add_account": MessageLookupByLibrary.simpleMessage(
       "Agregar Cuenta",
@@ -1662,6 +1683,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_firmware": MessageLookupByLibrary.simpleMessage(
       "Versión de Firmware",
     ),
+    "g_key_hw_import_failed": m66,
     "g_key_hw_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
     "g_key_hw_no_devices": MessageLookupByLibrary.simpleMessage(
       "No se encontraron dispositivos",
