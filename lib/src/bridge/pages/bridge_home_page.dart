@@ -590,16 +590,16 @@ class _BridgeHomePageState extends ConsumerState<BridgeHomePage> {
             backgroundColor: Colors.green,
           ),
         );
-        provider.reset();
-        _amountController.clear();
-
-        // 跳转到历史页，让用户追踪交易状态（后台已启动自动轮询）
+        // 先导航到历史页（历史页只读取 transactions，不依赖 fromAmount/selectedRoute）
+        // reset() 在导航后执行，确保历史页第一帧能立即渲染
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (_) => BridgeHistoryPage(provider: _bridgeProvider),
           ),
         );
+        provider.reset();
+        _amountController.clear();
       }
     } else {
       // 获取报价

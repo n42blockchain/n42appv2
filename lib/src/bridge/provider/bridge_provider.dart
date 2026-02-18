@@ -72,6 +72,9 @@ class BridgeProvider extends ChangeNotifier {
   final List<BridgeTransaction> _transactions = [];
   List<BridgeTransaction> get transactions => _transactions;
 
+  // 待处理交易哈希集合，用于 O(1) 轮询过滤，替代每次 O(n) 全量扫描
+  final Set<String> _pendingTxHashes = {};
+
   // 滑点设置
   double _slippage = 0.5;
   double get slippage => _slippage;
@@ -378,6 +381,7 @@ class BridgeProvider extends ChangeNotifier {
       );
 
       _transactions.insert(0, transaction);
+      _pendingTxHashes.add(transaction.txHash);
       _setState(BridgeState.completed);
 
       // 启动后台轮询，每 10s 检查一次交易状态，超时 10 分钟后停止
@@ -421,6 +425,11 @@ class BridgeProvider extends ChangeNotifier {
           bridgeTool: transaction.bridgeTool,
           destinationTxHash: status.destinationTxHash,
         );
+        // 状态达到终态时从待处理集合移除，避免继续轮询
+        if (status.status == BridgeTransactionStatus.completed ||
+            status.status == BridgeTransactionStatus.failed) {
+          _pendingTxHashes.remove(transaction.txHash);
+        }
         notifyListeners();
       }
     }
@@ -443,18 +452,17 @@ class BridgeProvider extends ChangeNotifier {
         return;
       }
 
-      final pending = _transactions
-          .where((t) =>
-              t.status == BridgeTransactionStatus.pending ||
-              t.status == BridgeTransactionStatus.inProgress)
-          .toList();
-
-      // 无待处理交易时停止
-      if (pending.isEmpty) {
+      // 用 Set 做 O(1) 快速判断是否还有待处理交易，避免 O(n) 全量扫描
+      if (_pendingTxHashes.isEmpty) {
         timer.cancel();
         _pollTimer = null;
         return;
       }
+
+      // 只检查 Set 中标记为待处理的交易，而非遍历整个历史列表
+      final pending = _transactions
+          .where((t) => _pendingTxHashes.contains(t.txHash))
+          .toList();
 
       for (final tx in pending) {
         await checkTransactionStatus(tx);

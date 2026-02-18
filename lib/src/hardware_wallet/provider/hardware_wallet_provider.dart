@@ -366,13 +366,23 @@ class HardwareWalletProvider extends ChangeNotifier {
   ///
   /// 将账户地址保存到独立的 SharedPreferences key，
   /// 与主钱包助记词存储隔离，避免破坏主钱包数据。
+  ///
+  /// 使用独立的地址 Set（_hw_addr_set）做 O(1) 去重检查，
+  /// 避免对每条 JSON 条目进行完整解析（原先为 O(n) 解析）。
   Future<bool> importAccount(HardwareWalletAccount account) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final key = 'hardware_wallet_imported_accounts';
-      final existing = prefs.getStringList(key) ?? [];
+      const key = 'hardware_wallet_imported_accounts';
+      const addrSetKey = '_hw_addr_set';
 
-      // 地址去重
+      // O(1) 快速去重：从独立地址集合检查，避免 O(n) JSON 解析
+      final addrSet = Set<String>.from(prefs.getStringList(addrSetKey) ?? []);
+      final addrKey = '${account.address}:${account.coinType}';
+      if (addrSet.contains(addrKey)) {
+        return false; // 已导入，返回 false 让调用方提示用户
+      }
+
+      // 序列化完整条目
       final entry = json.encode({
         'address': account.address,
         'coinType': account.coinType,
@@ -383,22 +393,14 @@ class HardwareWalletProvider extends ChangeNotifier {
         'importedAt': DateTime.now().toIso8601String(),
       });
 
-      final isDuplicate = existing.any((e) {
-        try {
-          final m = json.decode(e) as Map<String, dynamic>;
-          return m['address'] == account.address &&
-              m['coinType'] == account.coinType;
-        } catch (_) {
-          return false;
-        }
-      });
-
-      if (isDuplicate) {
-        return false; // 已导入，返回 false 让调用方提示用户
-      }
-
+      // 同步写入地址集合与完整数据列表
+      addrSet.add(addrKey);
+      final existing = prefs.getStringList(key) ?? [];
       existing.add(entry);
-      await prefs.setStringList(key, existing);
+      await Future.wait([
+        prefs.setStringList(key, existing),
+        prefs.setStringList(addrSetKey, addrSet.toList()),
+      ]);
       return true;
     } catch (e) {
       debugPrint('Failed to import hardware wallet account: $e');

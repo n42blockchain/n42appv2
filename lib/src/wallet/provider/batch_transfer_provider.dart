@@ -66,8 +66,9 @@ class BatchTransferProvider extends ChangeNotifier {
   String? _txHash;
   String? get txHash => _txHash;
 
-  // 计算属性
-  BigInt get totalAmount => _items.fold(BigInt.zero, (sum, item) => sum + item.amount);
+  // 计算属性：缓存总额，避免 addItem 时 O(n²) 重复求和
+  BigInt _cachedTotalAmount = BigInt.zero;
+  BigInt get totalAmount => _cachedTotalAmount;
   int get recipientCount => _items.length;
   bool get isNativeToken => _tokenAddress == null || _tokenAddress!.isEmpty;
   bool get supportsMulticall => _api.supportsMulticall(_chainSymbol);
@@ -108,6 +109,7 @@ class BatchTransferProvider extends ChangeNotifier {
       final result = _api.parseCsv(csvContent, _decimals);
 
       _items = result.items;
+      _cachedTotalAmount = result.items.fold(BigInt.zero, (s, i) => s + i.amount);
       _parseErrors = result.errors;
 
       if (result.success) {
@@ -133,6 +135,7 @@ class BatchTransferProvider extends ChangeNotifier {
       memo: memo,
     );
     _items.add(item);
+    _cachedTotalAmount += amount; // 增量更新，O(1)
 
     if (_state == BatchTransferState.initial) {
       _state = BatchTransferState.ready;
@@ -147,6 +150,7 @@ class BatchTransferProvider extends ChangeNotifier {
   /// 移除转账项
   void removeItem(int index) {
     if (index >= 0 && index < _items.length) {
+      _cachedTotalAmount -= _items[index].amount; // 先减再移除
       _items.removeAt(index);
 
       if (_items.isEmpty) {
@@ -163,6 +167,7 @@ class BatchTransferProvider extends ChangeNotifier {
   /// 清除所有项目
   void clearItems() {
     _items = [];
+    _cachedTotalAmount = BigInt.zero;
     _parseErrors = [];
     _state = BatchTransferState.initial;
     _gasEstimate = null;
@@ -173,6 +178,7 @@ class BatchTransferProvider extends ChangeNotifier {
   /// 更新转账项金额
   void updateItemAmount(int index, BigInt newAmount) {
     if (index >= 0 && index < _items.length) {
+      _cachedTotalAmount = _cachedTotalAmount - _items[index].amount + newAmount; // 增量调整
       _items[index] = BatchTransferItem(
         id: _items[index].id,
         toAddress: _items[index].toAddress,
@@ -310,6 +316,7 @@ class BatchTransferProvider extends ChangeNotifier {
   void reset() {
     _state = BatchTransferState.initial;
     _items = [];
+    _cachedTotalAmount = BigInt.zero;
     _parseErrors = [];
     _gasEstimate = null;
     _errorMessage = null;
