@@ -115,6 +115,7 @@ class BaseHttp {
     Map<String, dynamic>? header,
     bool defaultReturn = true,
     Map<String, String>? userInfo,
+    bool enableRetry = false,
   }) async {
     // RESTful path parameter substitution
     if (params.isNotEmpty) {
@@ -128,6 +129,12 @@ class BaseHttp {
     try {
       Options options = Options(method: method);
       options.contentType = _getContentTypeString();
+      if (enableRetry) {
+        options.extra = {
+          ...?options.extra,
+          RetryOptions.kRetryEnabled: true,
+        };
+      }
 
       if (header != null) {
         options.headers = {...?options.headers, ...header};
@@ -287,6 +294,7 @@ class BaseHttp {
     Map<String, dynamic>? header,
     bool defaultReturn = true,
     bool addUserInfo = false,
+    bool enableRetry = false,
   }) {
     return _request(
       path,
@@ -299,6 +307,7 @@ class BaseHttp {
       defaultReturn: defaultReturn,
       userInfo: addUserInfo ? getUserToken() : null,
       header: header,
+      enableRetry: enableRetry,
     );
   }
 
