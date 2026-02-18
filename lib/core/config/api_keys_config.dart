@@ -116,7 +116,8 @@ class ApiKeysConfig {
   static const String _defaultTonApiKeyMainnet = '';
   static const String _defaultTonApiKeyTestnet = '';
   static const String _defaultDotApiKey = '';
-  static const String _defaultAiApiKey = 'YOUR_AI_API_KEY';
+  // TODO(prod): remove before production build, override with --dart-define=AI_API_KEY=
+  static const String _defaultAiApiKey = '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';
 
   // ==================== Validation ====================
 
