@@ -45,7 +45,7 @@ class AppDatabase {
   }
 
   /// Database version for migrations
-  static const int _dbVersion = 3; // 升级版本以触发迁移
+  static const int _dbVersion = 4; // v4: 添加高频查询字段索引
 
   /// Database file name
   static const String _dbName = 'astranet.db';
@@ -198,6 +198,7 @@ class AppDatabase {
     await _createGroupInfoTable(db);
     await _createAccountTable(db);
     await _createBlocklistTable(db);
+    await _createIndexes(db);
   }
 
   /// Handle database upgrades
@@ -207,6 +208,10 @@ class AppDatabase {
       await db.execute('ALTER TABLE TransationRecord ADD COLUMN message TEXT');
     }
     // Version 3: 加密数据库，结构无变化
+    if (oldVersion < 4) {
+      // Version 4: 为高频查询字段添加索引，提升检索性能
+      await _createIndexes(db);
+    }
   }
 
   // ============ Table Creation Methods ============
@@ -377,6 +382,37 @@ class AppDatabase {
         extra TEXT
       )
     ''');
+  }
+
+  /// 为高频查询字段创建索引
+  Future<void> _createIndexes(Database db) async {
+    // TransactionRecord: 按地址查询（钱包历史）、按哈希查询（状态追踪）、按时间排序（列表展示）
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_tx_address ON TransationRecord(address)',
+    );
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_tx_txhash ON TransationRecord(txHash)',
+    );
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_tx_time ON TransationRecord(txTime)',
+    );
+    // BtcTransactionRecord: 同上
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_btc_address ON BtcTransactionRecord(address)',
+    );
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_btc_txhash ON BtcTransactionRecord(txHash)',
+    );
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_btc_time ON BtcTransactionRecord(txTime)',
+    );
+    // Messages: 按会话 ID 查询（聊天记录加载）、按时间排序
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_msg_conversation ON Messages(conversationId)',
+    );
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_msg_sendtime ON Messages(sendTime)',
+    );
   }
 
   // ============ Close Database ============

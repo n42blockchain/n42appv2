@@ -685,6 +685,17 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
       return;
     }
 
+    // 检查累计转账总额是否超过余额
+    if (widget.batchTransferProvider.totalAmount + amount > widget.balance) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Insufficient balance: total amount would exceed available ${widget.tokenSymbol}'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
     widget.batchTransferProvider.addItem(
       address,
       amount,

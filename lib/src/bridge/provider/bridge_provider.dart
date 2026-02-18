@@ -3,6 +3,8 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:n42appv2/src/bridge/api/lifi_api.dart';
 import 'package:n42appv2/src/bridge/models/bridge_models.dart';
@@ -73,6 +75,11 @@ class BridgeProvider extends ChangeNotifier {
   // 滑点设置
   double _slippage = 0.5;
   double get slippage => _slippage;
+
+  // 状态轮询定时器（用于跟踪 pending/inProgress 交易）
+  Timer? _pollTimer;
+  static const Duration _pollInterval = Duration(seconds: 10);
+  static const Duration _pollTimeout = Duration(minutes: 10);
 
   /// 初始化，加载链列表
   Future<void> initialize() async {
@@ -373,6 +380,9 @@ class BridgeProvider extends ChangeNotifier {
       _transactions.insert(0, transaction);
       _setState(BridgeState.completed);
 
+      // 启动后台轮询，每 10s 检查一次交易状态，超时 10 分钟后停止
+      _startStatusPolling();
+
       return MessageModel()
         ..error = false
         ..data = txHash;
@@ -414,6 +424,55 @@ class BridgeProvider extends ChangeNotifier {
         notifyListeners();
       }
     }
+  }
+
+  /// 启动交易状态轮询
+  ///
+  /// 每隔 [_pollInterval] 检查所有 pending/inProgress 交易。
+  /// 超过 [_pollTimeout] 或所有交易达到终态后自动停止。
+  void _startStatusPolling() {
+    _pollTimer?.cancel();
+
+    final startTime = DateTime.now();
+
+    _pollTimer = Timer.periodic(_pollInterval, (timer) async {
+      // 超时停止
+      if (DateTime.now().difference(startTime) >= _pollTimeout) {
+        timer.cancel();
+        _pollTimer = null;
+        return;
+      }
+
+      final pending = _transactions
+          .where((t) =>
+              t.status == BridgeTransactionStatus.pending ||
+              t.status == BridgeTransactionStatus.inProgress)
+          .toList();
+
+      // 无待处理交易时停止
+      if (pending.isEmpty) {
+        timer.cancel();
+        _pollTimer = null;
+        return;
+      }
+
+      for (final tx in pending) {
+        await checkTransactionStatus(tx);
+      }
+    });
+  }
+
+  /// 停止交易状态轮询
+  void stopPolling() {
+    _pollTimer?.cancel();
+    _pollTimer = null;
+  }
+
+  @override
+  void dispose() {
+    _pollTimer?.cancel();
+    _pollTimer = null;
+    super.dispose();
   }
 
   /// 清除状态，准备新的转账

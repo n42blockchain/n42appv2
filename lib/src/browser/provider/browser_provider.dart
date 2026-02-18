@@ -231,6 +231,8 @@ class BrowserProvider extends ChangeNotifier{
       }
     }
     Uri uri=Uri.parse(url);
+    // 拦截 javascript: 伪协议，防止 XSS/钓鱼攻击
+    if (uri.scheme == 'javascript') return false;
     if(uri.scheme=="wc"){
       if(url.contains('relay-protocol') && url.contains('symKey')){
         if(connectDAPPCallBack !=null){

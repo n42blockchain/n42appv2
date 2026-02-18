@@ -120,17 +120,8 @@ class AirdropApi {
           ..data = response['data'];
       }
 
-      // 返回模拟的资格检查结果
-      return MessageModel()
-        ..error = false
-        ..data = {
-          'is_eligible': true,
-          'claimable_amount': '100',
-          'requirements': [
-            {'id': '1', 'description': 'Hold 0.1 ETH', 'is_met': true},
-            {'id': '2', 'description': 'Complete 5 transactions', 'is_met': true},
-          ],
-        };
+      // 无法确认资格，返回错误而非假设符合
+      return MessageModel.error()..data = 'Eligibility data unavailable';
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }

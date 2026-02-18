@@ -592,6 +592,14 @@ class _BridgeHomePageState extends ConsumerState<BridgeHomePage> {
         );
         provider.reset();
         _amountController.clear();
+
+        // 跳转到历史页，让用户追踪交易状态（后台已启动自动轮询）
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => BridgeHistoryPage(provider: _bridgeProvider),
+          ),
+        );
       }
     } else {
       // 获取报价
