@@ -27,6 +27,19 @@ class WalletConnectProvider with ChangeNotifier{
     notifyListeners();
   }
 
+  @override
+  void dispose() {
+    web3client?.dispose();
+    web3client = null;
+    if (signClient != null) {
+      try {
+        signClient!.core.relayClient.disconnect();
+      } catch (_) {}
+      signClient = null;
+    }
+    super.dispose();
+  }
+
   Trustdart? _trustdart;
   Trustdart get trustdart{
     _trustdart ??= Trustdart();

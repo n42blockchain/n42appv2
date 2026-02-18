@@ -17,23 +17,24 @@ import 'package:n42appv2/src/miningV2/widgets/background_mining_widget.dart';
 import 'package:n42appv2/src/utils/data_utils.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42appv2/features/mining/presentation/providers/mining_providers.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/src/widgets/app_home_top_bar.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/chart_histogram.dart';
 import 'package:n42appv2/src/widgets/detail_refresh_widget.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
-import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-class MiningTodayV2 extends StatefulWidget {
+class MiningTodayV2 extends ConsumerStatefulWidget {
   const MiningTodayV2({super.key});
 
   @override
-  State<MiningTodayV2> createState() => _MiningTodayV2State();
+  ConsumerState<MiningTodayV2> createState() => _MiningTodayV2State();
 }
 
-class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveClientMixin{
+class _MiningTodayV2State extends ConsumerState<MiningTodayV2> with AutomaticKeepAliveClientMixin{
   final DataUtils dataUtils = DataUtils();
   StreamSubscription? _eventSubscription;
 
@@ -52,11 +53,11 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
   }
 
   Future<void> initData() async {
-    var mv2=Provider.of<MiningV2Provider>(context,listen: false);
+    var mv2=ref.read(miningBridgeProvider);
     await mv2.loadMiningData();
   }
   Future<void> initDataWallet(EventPublicType pt)async{
-    MiningV2Provider mp=Provider.of<MiningV2Provider>(context,listen: false);
+    MiningV2Provider mp=ref.read(miningBridgeProvider);
     if(pt==EventPublicType.selectWallet){
       // BUGFIX: Skip initialization only if depositsEnable has already been set
       // Previously was `!= null` which incorrectly skipped when already initialized
@@ -96,9 +97,9 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
               child: Text(S.current.g_key_78),
               onPressed: () async {
                 try {
-                  MiningV2Provider mp=Provider.of<MiningV2Provider>(context,listen: false);
+                  MiningV2Provider mp=ref.read(miningBridgeProvider);
                   if(mp.exitDepositLoad==Load.loading)return;
-                  mp.createExitDepositUnsignedTx();
+                  await mp.createExitDepositUnsignedTx();
 
                 } catch (err) {
                   debugPrint("err:${err.toString()}");
@@ -127,9 +128,9 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
           children: [
             AppHomeTopBar(
               title: S.current.g_home_key3,
-              titleChild: Selector<MiningV2Provider, String>(
-                  selector: (_, provider) => provider.walletName,
-                  builder: (context, walletName, child) {
+              titleChild: Builder(
+                  builder: (context) {
+                    final walletName = ref.watch(miningBridgeProvider.select((p) => p.walletName));
                     return InkWell(
                     onTap: (){
                       showChangeAddress();
@@ -231,8 +232,9 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                     right: ScreenUtil().setWidth(30),
                     //bottom: ScreenUtil().setWidth(30),
                   ),
-                  child: Consumer<MiningV2Provider>(
-                    builder: (context, mpValue, child) {
+                  child: Builder(
+                    builder: (context) {
+                      final mpValue = ref.watch(miningBridgeProvider);
                       return Column(
                         children: [
                           //没有质押展示 选择plans
@@ -406,7 +408,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
   //显示钱包列表
   void showChangeAddress() {
     // Use MiningV2Provider instead of WalletActionProvider
-    MiningV2Provider miningProvider = Provider.of<MiningV2Provider>(context, listen: false);
+    MiningV2Provider miningProvider = ref.read(miningBridgeProvider);
     final walletList = miningProvider.miningWalletList;
     final currentIndex = miningProvider.currentMiningWalletIndex;
     
@@ -457,7 +459,7 @@ class _MiningTodayV2State extends State<MiningTodayV2> with AutomaticKeepAliveCl
                 onTap: () {
                   Navigator.pop(context);
                   if (wInfo.index != currentIndex) {
-                    Provider.of<WalletActionProvider>(context,listen: false).setWalletMiningIndex(wInfo.index);
+                    ref.read(wapBridgeProvider).setWalletMiningIndex(wInfo.index);
                     //miningProvider.setMiningWalletByIndex(wInfo.index);
                   }
                 },

@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/miningV2/api/mining_api.dart';
@@ -19,10 +20,10 @@ import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
+import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/src/widgets/chart_histogram.dart';
 import 'package:n42appv2/generated/l10n.dart';
-import 'package:provider/provider.dart';
 
 // ==================== Mining Constants ====================
 // These constants define the timing and threshold values for mining operations
@@ -102,7 +103,7 @@ class MiningV2Provider extends ChangeNotifier {
   /// Get all wallets that support N chain (for mining)
   List<MiningWalletInfo> get miningWalletList {
     try {
-      WalletActionProvider wap = Provider.of<WalletActionProvider>(AppGlobals.appContext, listen: false);
+      WalletActionProvider wap = globalWapAdapter;
       List<MiningWalletInfo> result = [];
       
       for (int i = 0; i < wap.walletInfoLsit.length; i++) {
@@ -128,7 +129,7 @@ class MiningV2Provider extends ChangeNotifier {
   /// Current selected mining wallet index
   int get currentMiningWalletIndex {
     try {
-      WalletActionProvider wap = Provider.of<WalletActionProvider>(AppGlobals.appContext, listen: false);
+      WalletActionProvider wap = globalWapAdapter;
       return wap.walletMiningIndex;
     } catch (e) {
       return -1;
@@ -148,9 +149,9 @@ class MiningV2Provider extends ChangeNotifier {
   /// 新增：FUJI NFT 质押
   Future<void> checkAddressMiningStatus() async {
     try {
-      WalletActionProvider wap = Provider.of<WalletActionProvider>(AppGlobals.appContext, listen: false);
+      WalletActionProvider wap = globalWapAdapter;
       if (wap.walletInfoLsit.isEmpty) return;
-      
+
       final miningIndex = wap.walletMiningIndex;
       if (miningIndex < 0 || miningIndex >= wap.walletInfoLsit.length) return;
       
@@ -176,7 +177,7 @@ class MiningV2Provider extends ChangeNotifier {
 
       await getMiningData();
       if (depositsEnable == true) {
-        connectWebSocket(wsUrl: 'ws://5.161.252.59:8546/',validatorPrivateKey:miningKeypart?['privateKey']??"",validatorPubkey:miningKeypart?['publicKey']??"",);
+        connectWebSocket(wsUrl: AppConfig.miningWebSocketUrl,validatorPrivateKey:miningKeypart?['privateKey']??"",validatorPubkey:miningKeypart?['publicKey']??"",);
         //runMining();
       }
       // Note: getNprice requires price service, skipping for now
@@ -275,7 +276,7 @@ class MiningV2Provider extends ChangeNotifier {
   Future<MessageModel> setMiningDataImport(Map<String,dynamic> value,String password) async {
     // NOTE: Keep using WalletActionProvider for wallet creation operations
     // This will be migrated when IWalletService supports wallet creation
-    WalletActionProvider wap=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
+    WalletActionProvider wap=globalWapAdapter;
     int index=wap.walletInfoLsit.indexWhere((test){
       if(test.privateKey==value['privateKey']){
         return true;
@@ -485,7 +486,7 @@ class MiningV2Provider extends ChangeNotifier {
   String? privateKey;
   Future<void> getWalletPrivateKey() async {
     try {
-      WalletActionProvider wap = Provider.of<WalletActionProvider>(AppGlobals.appContext, listen: false);
+      WalletActionProvider wap = globalWapAdapter;
       if (wap.walletInfoLsit.isEmpty) {
         errorMessage = "Wallet not available!";
         notifyListeners();
@@ -545,11 +546,7 @@ class MiningV2Provider extends ChangeNotifier {
 
   Timer? withdrawalTimer;
   void startWithdrawalTimer(){
-    if(withdrawalTimer !=null){
-      if(withdrawalTimer!.isActive){
-        return;
-      }
-    }
+    withdrawalTimer?.cancel();
     withdrawalTimer = Timer.periodic(const Duration(seconds: kWithdrawalRefreshIntervalSeconds), (timer) async {
       getMiningWithdrawalsDaily();
     });
@@ -568,34 +565,37 @@ class MiningV2Provider extends ChangeNotifier {
     final List<String> tomorrowStr = getTimeFormat(tomorrow);
     isLoading7DayData=true;
     notifyListeners();
-    MessageModel rmm= await mining.getMiningWithdrawalsDaily(tomorrowStr[0], address??"");
-    if(rmm.error==false){
-        // Each valid mining cycle takes kMiningCycleSeconds (128 seconds)
-        // This is the consensus block time for the N chain beacon
-        taskList=rmm.data;
-        final List<String> todayStr = getTimeFormat(today);
-        final List<String> yesterdayStr = getTimeFormat(yesterday);
-        int tIndex=taskList.indexWhere((e)=>e.day==todayStr[0]);
-        int yIndex=taskList.indexWhere((e)=>e.day==yesterdayStr[0]);
-        if(tIndex !=-1){
-          todayCycleRewardsValue=toEther(taskList[tIndex].totalAmount??'0', 18).toDouble();
-        }else{
-          todayCycleRewardsValue=0;
-        }
-        if(yIndex !=-1){
-          yesterdayCycleRewardsValue=toEther(taskList[yIndex].totalAmount??'0', 18).toDouble();
-        }else{
-          yesterdayCycleRewardsValue=0;
-        }
-        get7DaysValue(today);
-        startWithdrawalTimer();
+    try {
+      MessageModel rmm= await mining.getMiningWithdrawalsDaily(tomorrowStr[0], address??"");
+      if(rmm.error==false){
+          // Each valid mining cycle takes kMiningCycleSeconds (128 seconds)
+          // This is the consensus block time for the N chain beacon
+          taskList=rmm.data;
+          final List<String> todayStr = getTimeFormat(today);
+          final List<String> yesterdayStr = getTimeFormat(yesterday);
+          int tIndex=taskList.indexWhere((e)=>e.day==todayStr[0]);
+          int yIndex=taskList.indexWhere((e)=>e.day==yesterdayStr[0]);
+          if(tIndex !=-1){
+            todayCycleRewardsValue=toEther(taskList[tIndex].totalAmount??'0', 18).toDouble();
+          }else{
+            todayCycleRewardsValue=0;
+          }
+          if(yIndex !=-1){
+            yesterdayCycleRewardsValue=toEther(taskList[yIndex].totalAmount??'0', 18).toDouble();
+          }else{
+            yesterdayCycleRewardsValue=0;
+          }
+          get7DaysValue(today);
+          startWithdrawalTimer();
+      }
+      MessageModel rmms=await mining.getMiningWithdrawalsDailySummary(address??"");
+      if(rmms.error==false){
+        miningTotalRevenue=toEther(rmms.data, 18).toDouble();
+      }
+    } finally {
+      isLoading7DayData=false;
+      notifyListeners();
     }
-    MessageModel rmms=await mining.getMiningWithdrawalsDailySummary(address??"");
-    if(rmms.error==false){
-      miningTotalRevenue=toEther(rmms.data, 18).toDouble();
-    }
-    isLoading7DayData=false;
-    notifyListeners();
   }
   List<String> getTimeFormat(DateTime date){
     final String year = date.year.toString();

@@ -151,8 +151,17 @@ class AppConfig {
     'coinGeckoApi': 'https://api.coingecko.com/api/v3',
   };
 
+  // ============ Mining WebSocket ============
+
+  /// Mining node WebSocket URL
+  /// Override via --dart-define=MINING_WS_URL=wss://yournode:port/
+  static const String miningWebSocketUrl = String.fromEnvironment(
+    'MINING_WS_URL',
+    defaultValue: 'ws://5.161.252.59:8546/',
+  );
+
   // ============ Helper Methods ============
-  
+
   /// Get API URL based on online/offline environment
   static String getApiUrlOnline(String key) {
     final endpoint = apiUrl[key];

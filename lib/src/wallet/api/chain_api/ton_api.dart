@@ -1,4 +1,5 @@
 import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/config/api_keys_config.dart';
 import 'package:n42appv2/core/utils/message_model_bridge.dart';
 import 'package:n42appv2/core/utils/result.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
@@ -12,9 +13,9 @@ class TonApi{
   TonApi({bool isTest=false}){
     url=RequestUrl().getUrl2(CoinType.TON.name, "rpc",isTest: isTest);
     if(isTest){
-      apiKey="871d3fcd705d694b83aab1edc44e7395c7698f4b57f54f722795b2d32e0604aa";
+      apiKey=ApiKeysConfig.tonApiKeyTestnet;
     }else{
-      apiKey="39b7ef60a7dfdaaefe04484218e249d9b18547dee3a32170a25bd24ad928a732";
+      apiKey=ApiKeysConfig.tonApiKeyMainnet;
     }
   }
   Future<MessageModel> getBalanceTon(String address)async{

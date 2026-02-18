@@ -15,10 +15,9 @@ import 'package:n42appv2/src/wallet/api/chain_api/zil_api.dart';
 import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 import 'package:n42appv2/src/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42appv2/src/wallet/models/transation_record_model.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/generated/l10n.dart';
-import 'package:provider/provider.dart';
 
 class TransactionRecordItemProvider with ChangeNotifier{
   AppDatabase? _db;
@@ -42,6 +41,15 @@ class TransactionRecordItemProvider with ChangeNotifier{
     _tokenViewApi ??= TokenViewApi();
     return _tokenViewApi!;
   }
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _timer = null;
+    _timerBtc?.cancel();
+    _timerBtc = null;
+    super.dispose();
+  }
+
   //查询未完成的交易
   Future<void> selectUndoneTr()async{
     _unDoneTrModelList=await db.selectTransationRecordUnDone(AppGlobals.userInfo?.uuid??"");
@@ -337,7 +345,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
       ToastUtils.show(S.current.g_key_140);
       //发出交易成功通知
       if (!AppGlobals.appContext.mounted) return;
-      Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).refreshCoinBalance(trm.coin['coinType'],contract:trm.contract);
+      globalWapAdapter.refreshCoinBalance(trm.coin['coinType'],contract:trm.contract);
       eventBus.fire(EventPublic(EventPublicType.transferOk));
       /**if(trm.contract!=""){
           ProviderUtil.coinInfoProvider().getBalance_main();
@@ -638,7 +646,7 @@ class TransactionRecordItemProvider with ChangeNotifier{
           //ProviderUtil.btcCoinInfoProvider().getBalance();
           //发出交易成功通知
           if (!AppGlobals.appContext.mounted) return;
-          await Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).refreshCoinBalance(trm.coin['coinType'],contract:"");
+          await globalWapAdapter.refreshCoinBalance(trm.coin['coinType'],contract:"");
           eventBus.fire(EventPublic(EventPublicType.transferOk));
           _trUndoneList.remove(trm);
           checkUndoneList();

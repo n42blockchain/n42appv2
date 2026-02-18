@@ -1,4 +1,5 @@
 import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/config/api_keys_config.dart';
 import 'package:n42appv2/core/utils/message_model_bridge.dart';
 import 'package:n42appv2/core/utils/result.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
@@ -16,7 +17,7 @@ class DotApi{
       Map<String,dynamic> pMap={
         "address":address
       };
-      final data=await BaseApi.requestEmptyH.post(url, params: {},data: pMap,header: {"x-api-key":"2b9bd66238b546acafe57b2a05ff97e0"});
+      final data=await BaseApi.requestEmptyH.post(url, params: {},data: pMap,header: {"x-api-key":ApiKeysConfig.dotApiKey});
       if(data['code'] !=0){
         mm.error=true;
         mm.data="error";

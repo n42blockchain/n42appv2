@@ -62,6 +62,28 @@ class ApiKeysConfig {
     defaultValue: _defaultSonicscanKey,
   );
 
+  // ==================== TON (The Open Network) ====================
+
+  /// TON API Key - Mainnet
+  static const String tonApiKeyMainnet = String.fromEnvironment(
+    'TON_API_KEY_MAINNET',
+    defaultValue: _defaultTonApiKeyMainnet,
+  );
+
+  /// TON API Key - Testnet
+  static const String tonApiKeyTestnet = String.fromEnvironment(
+    'TON_API_KEY_TESTNET',
+    defaultValue: _defaultTonApiKeyTestnet,
+  );
+
+  // ==================== Polkadot / Substrate ====================
+
+  /// DOT (Polkadot) Subscan x-api-key
+  static const String dotApiKey = String.fromEnvironment(
+    'DOT_API_KEY',
+    defaultValue: _defaultDotApiKey,
+  );
+
   // ==================== AI Service ====================
 
   /// AI API Key (Groq / OpenAI / DeepSeek compatible)
@@ -91,6 +113,9 @@ class ApiKeysConfig {
   static const String _defaultBscscanKey = 'YOUR_BSCSCAN_API_KEY';
   static const String _defaultBasescanKey = 'YOUR_BASESCAN_API_KEY';
   static const String _defaultSonicscanKey = 'YOUR_SONICSCAN_API_KEY';
+  static const String _defaultTonApiKeyMainnet = '';
+  static const String _defaultTonApiKeyTestnet = '';
+  static const String _defaultDotApiKey = '';
   static const String _defaultAiApiKey = 'YOUR_AI_API_KEY';
 
   // ==================== Validation ====================

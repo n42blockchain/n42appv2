@@ -9,7 +9,6 @@ import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/edit_wallet_password.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_6.dart';
@@ -18,18 +17,19 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:local_auth_android/local_auth_android.dart' as auth_android;
 import 'package:local_auth_darwin/local_auth_darwin.dart' as auth_ios;
 
-class WalletSecurityVerification extends StatefulWidget {
+class WalletSecurityVerification extends ConsumerStatefulWidget {
   const WalletSecurityVerification({super.key});
 
   @override
-  State<WalletSecurityVerification> createState() => _WalletSecurityVerificationState();
+  ConsumerState<WalletSecurityVerification> createState() => _WalletSecurityVerificationState();
 }
 
-class _WalletSecurityVerificationState extends State<WalletSecurityVerification> {
+class _WalletSecurityVerificationState extends ConsumerState<WalletSecurityVerification> {
   TextEditingController pwdTextEditingController=TextEditingController();
   TextEditingController emailTextEditingController=TextEditingController();
   bool obscure=true;//是否显示密码
@@ -45,6 +45,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
   Load emailLoad=Load.finish;
   //Load googleLoad=Load.finish;
   bool showWalletPassword=false;
+  Timer? _emailTimer;
 
   //账号安全
   Map<String,dynamic> securityMap={
@@ -61,6 +62,8 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
   }
   @override
   void dispose() {
+    _emailTimer?.cancel();
+    _emailTimer = null;
     pwdTextEditingController.dispose();
     emailTextEditingController.dispose();
     //googleTextEditingController.dispose();
@@ -79,7 +82,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
       }
     }
     if (!mounted) return;
-    if(Provider.of<WalletActionProvider>(context,listen: false).walletInfo.password!=""){
+    if(ref.read(wapBridgeProvider).walletInfo.password!=""){
       showWalletPassword=true;
     }
     setState(() {});
@@ -94,7 +97,7 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
       });
       return false;
     }*/
-    String oldPwdStr=Provider.of<WalletActionProvider>(context,listen: false).walletInfo.password ?? "";
+    String oldPwdStr=ref.read(wapBridgeProvider).walletInfo.password ?? "";
     if(oldPwdStr!=pwdStr){
       setState(() {
         pwdErrorMessage=S.of(context).g_key_t_34;
@@ -132,7 +135,8 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
   }
   //开启emailsendwait倒计时
   void starEmailSendWait() {
-    Timer(Duration(seconds: 1),(){
+    _emailTimer = Timer(Duration(seconds: 1),(){
+      if (!mounted) return;
       setState(() {
         emailSendWaitNum--;
       });
@@ -263,8 +267,8 @@ class _WalletSecurityVerificationState extends State<WalletSecurityVerification>
     initSecurity();
   }
   Future<void> pushEditWallet() async {
-    int wIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
-    await Navigator.push(context, MaterialPageRoute(builder: (context)=>EditWalletPassword(Provider.of<WalletActionProvider>(context,listen: false).walletInfo, wIndex)));
+    int wIndex=ref.read(wapBridgeProvider).walletIndex;
+    await Navigator.push(context, MaterialPageRoute(builder: (context)=>EditWalletPassword(ref.read(wapBridgeProvider).walletInfo, wIndex)));
     initSecurity();
   }
   Future<bool> _pageBack(){
