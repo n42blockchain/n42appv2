@@ -5,14 +5,21 @@
 //
 // Author: Jiang Yiwei
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/core/constants/language_constants.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/core/utils/theme_mode_utils.dart';
+import 'package:n42appv2/data/models/user_info.dart';
 import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
+import 'package:n42appv2/src/https/ipfs_api.dart';
+import 'package:n42appv2/src/login/api/user_info_api.dart';
+import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42_chat/n42_chat.dart';
 
 /// SPUtil Provider
@@ -383,8 +390,123 @@ class ScreenLockNotifier extends StateNotifier<ScreenLockState> {
 
   bool verifyPassword(String password) => state.lockPassword == password;
   
-  bool verifyGesture(List<int> gesture) => 
+  bool verifyGesture(List<int> gesture) =>
       state.gesturePassword.length == gesture.length &&
       List.generate(gesture.length, (i) => state.gesturePassword[i] == gesture[i]).every((e) => e);
+}
+
+// ============================================
+// App Initialization Provider
+// ============================================
+
+/// Performs app startup initialization: loads user info, lock screen data,
+/// and sets app load state to finished.
+final appInitProvider = FutureProvider.autoDispose<void>((ref) async {
+  final spUtil = ref.read(spUtilProvider);
+  try {
+    final userInfoJson = await spUtil.getUserInfo();
+    if (userInfoJson != null) {
+      final userInfo = UserInfo.fromJson(userInfoJson);
+      AppGlobals.userInfo = userInfo;
+      final sharedInfo = SharedUserInfo(
+        uuid: userInfo.uuid ?? '',
+        email: userInfo.email ?? '',
+        name: userInfo.name,
+        avatarUrl: userInfo.image,
+        token: userInfo.token,
+        image: userInfo.image,
+        desc: userInfo.desc,
+      );
+      ref.read(currentUserProvider.notifier).setUser(sharedInfo);
+
+      // Fetch fresh user info from server (with timeout to prevent startup hang)
+      final loginApi = UserInfoApi();
+      final freshUser = await loginApi.getUserInfo(
+        userInfo.uuid ?? '',
+        userInfo.token ?? '',
+        userInfo.hashCode.toString(),
+      ).timeout(const Duration(seconds: 8), onTimeout: () => null);
+      if (freshUser != null) {
+        AppGlobals.userInfo = freshUser;
+        final freshShared = SharedUserInfo(
+          uuid: freshUser.uuid ?? '',
+          email: freshUser.email ?? '',
+          name: freshUser.name,
+          avatarUrl: freshUser.image,
+          token: freshUser.token,
+          image: freshUser.image,
+          desc: freshUser.desc,
+        );
+        ref.read(currentUserProvider.notifier).setUser(freshShared);
+        await spUtil.saveUserInfo(freshUser);
+      }
+    }
+  } catch (e) {
+    debugPrint('appInitProvider._getUserInfo error: $e');
+  }
+
+  // Load lock screen data
+  // (ScreenLockNotifier loads from storage in its constructor)
+  // Just ensure the provider is read so it initializes
+  ref.read(screenLockProvider);
+
+  ref.read(appLoadStateProvider.notifier).state = Load.finish;
+});
+
+// ============================================
+// User Profile Provider
+// ============================================
+
+/// Handles user profile editing (avatar upload + info update)
+final userProfileProvider = Provider<UserProfileService>((ref) {
+  return UserProfileService(ref);
+});
+
+class UserProfileService {
+  final Ref _ref;
+
+  UserProfileService(this._ref);
+
+  /// Edit user info, optionally uploading a new avatar image
+  Future<MessageModel> editUserInfo(UserInfo uInfo, {Uint8List? imageData}) async {
+    MessageModel mm = MessageModel();
+    if (imageData != null) {
+      Map<String, dynamic> rData = await IpfsApi().uploadIPFSImage(
+        imageData,
+        "aImage.png",
+        (int count, int total) {},
+        type: 1,
+      );
+      if (rData["error"]) {
+        mm.error = true;
+        mm.data = "Upload failed";
+        return mm;
+      } else {
+        uInfo.image = "${AppConfig.apiUrl['ipfsAddress']}${rData['data']['Hash']}";
+      }
+    }
+    Map<String, dynamic> uMap = {
+      "desc": uInfo.desc ?? "",
+      "image": uInfo.image ?? "",
+      "name": uInfo.name ?? "",
+    };
+    final userInfoAPI = UserInfoApi();
+    mm = await userInfoAPI.updateUserInfo(uMap);
+    if (mm.error == false) {
+      await _ref.read(spUtilProvider).saveUserInfo(uInfo);
+      AppGlobals.userInfo = uInfo;
+      final sharedInfo = SharedUserInfo(
+        uuid: uInfo.uuid ?? '',
+        email: uInfo.email ?? '',
+        name: uInfo.name,
+        avatarUrl: uInfo.image,
+        token: uInfo.token,
+        image: uInfo.image,
+        desc: uInfo.desc,
+      );
+      _ref.read(currentUserProvider.notifier).setUser(sharedInfo);
+    }
+    return mm;
+  }
 }
 

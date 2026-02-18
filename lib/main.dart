@@ -15,30 +15,28 @@ import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/core/di/injection.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/browser/provider/browser_provider.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/home/home_page.dart';
 import 'package:n42appv2/src/home/setting/security/security_setting.dart';
 import 'package:n42appv2/src/splash/splash_page.dart';
 import 'package:n42appv2/src/login/pages/login_page.dart';
-import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
-import 'package:n42appv2/src/state/public_provider.dart';
-import 'package:n42appv2/core/providers/legacy_public_adapter.dart';
 import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/transaction_providers.dart';
+import 'package:n42appv2/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
+import 'package:n42appv2/features/mining/presentation/providers/mining_providers.dart';
+import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
 import 'package:n42appv2/src/utils/app_push_utils.dart';
 import 'package:n42appv2/src/utils/notfication_utils.dart';
 import 'package:n42appv2/src/wallet/pages/create_wallet/create/create_one.dart';
 import 'package:n42appv2/src/wallet/pages/create_wallet/import/import_one.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/keystore/import_privatekey.dart';
 import 'package:n42appv2/src/wallet/provider/transaction_record_iterms_provider.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart' as provider_pkg;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -96,6 +94,14 @@ void main() async {
     container: globalProviderContainer,
   );
 
+  // Create the shared WAP adapter instance (used by Riverpod wapBridgeProvider)
+  globalWapAdapter = LegacyWalletActionProviderAdapter(globalProviderContainer);
+
+  // Create shared instances for other providers (Riverpod bridge)
+  globalTripInstance = TransactionRecordItemProvider();
+  globalWcpInstance = WalletConnectProvider();
+  globalMiningInstance = MiningV2Provider();
+
   // SECURITY: Initialize API keys from environment variables
   // This removes hardcoded API keys from source code
   initApiKeys(); // Validate API keys configuration in debug mode
@@ -115,48 +121,21 @@ void main() async {
     // Wrap with ProviderScope for Riverpod
     UncontrolledProviderScope(
       container: globalProviderContainer,
-      child: provider_pkg.MultiProvider(
-        providers: [
-          // Use Legacy Adapter to bridge PublicProvider with Riverpod
-          // This allows gradual migration while maintaining backward compatibility
-          provider_pkg.ChangeNotifierProvider<PublicProvider>(
-            create: (_) => LegacyPublicProviderAdapter(globalProviderContainer),
-          ),
-          provider_pkg.ChangeNotifierProvider<BrowserProvider>(
-            create: (_) => BrowserProvider(),
-          ),
-          provider_pkg.ChangeNotifierProvider<WalletConnectProvider>(
-            create: (_) => WalletConnectProvider(),
-          ),
-          // Use Legacy Adapter to bridge WalletActionProvider with Riverpod
-          provider_pkg.ChangeNotifierProvider<WalletActionProvider>(
-            create: (_) => LegacyWalletActionProviderAdapter(globalProviderContainer),
-          ),
-          provider_pkg.ChangeNotifierProvider<TransactionRecordItemProvider>(
-            create: (_) => TransactionRecordItemProvider(),
-          ),
-          provider_pkg.ChangeNotifierProvider<MiningV2Provider>(
-            create: (_) => MiningV2Provider(),
-          ),
-        ],
-        child: const N42AppV2(),
-      ),
+      child: const N42AppV2(),
     ),
   );
 }
 /// Main Application Widget
 ///
-/// Uses a hybrid Provider + Riverpod architecture during migration phase.
-/// Provider: Legacy state management (to be gradually removed)
-/// Riverpod: New state management (being migrated to)
-class N42AppV2 extends StatefulWidget {
+/// Uses Riverpod for state management.
+class N42AppV2 extends ConsumerStatefulWidget {
   const N42AppV2({super.key});
 
   @override
-  State<N42AppV2> createState() => _N42AppV2State();
+  ConsumerState<N42AppV2> createState() => _N42AppV2State();
 }
 
-class _N42AppV2State extends State<N42AppV2> {
+class _N42AppV2State extends ConsumerState<N42AppV2> {
   DeepLinkService? _deepLinkService;
   DeepLinkHandler? _deepLinkHandler;
   StreamSubscription<int>? _unreadCountSubscription;
@@ -270,7 +249,7 @@ class _N42AppV2State extends State<N42AppV2> {
       /// ios 通过fcm集成的apns推送 同样需要开启vpn
       await AppPushUtils.init();
       if (!mounted) return;
-      await provider_pkg.Provider.of<PublicProvider>(context, listen: false).checkData();
+      await ref.read(appInitProvider.future);
     } catch (err) {
       debugPrint("FCM推送初始化失败");
     }
@@ -352,30 +331,31 @@ class _N42AppV2State extends State<N42AppV2> {
     super.dispose();
   }
   bool _splashComplete = false;
-  
-  Widget _widgetPage(PublicProvider pValue) {
-    // 显示启动页，直到加载完成
-    if (pValue.load == Load.loading || !_splashComplete) {
-      return SplashPage(
-        onInit: () async {
-          // 等待 PublicProvider 加载完成
-          int waitCount = 0;
-          while (pValue.load == Load.loading && waitCount < 100) {
-            await Future.delayed(const Duration(milliseconds: 100));
-            waitCount++;
-          }
-        },
-        onComplete: () {
-          if (mounted) {
-            setState(() {
-              _splashComplete = true;
-            });
-          }
-        },
-      );
+
+  Widget _widgetPage(Load loadState) {
+    // Splash 完成后直接进入首页，不再依赖 loadState
+    // （getUserInfo 刷新是后台操作，不应阻塞首页渲染）
+    if (_splashComplete) {
+      return HomePage();
     }
-    
-    return HomePage();
+
+    return SplashPage(
+      onInit: () async {
+        // 等待加载完成，最多 10 秒
+        int waitCount = 0;
+        while (ref.read(appLoadStateProvider) == Load.loading && waitCount < 100) {
+          await Future.delayed(const Duration(milliseconds: 100));
+          waitCount++;
+        }
+      },
+      onComplete: () {
+        if (mounted) {
+          setState(() {
+            _splashComplete = true;
+          });
+        }
+      },
+    );
   }
   /// 根据屏幕宽度计算 ScreenUtil 的 designSize。
   /// 手机（< 600pt）使用标准 750x1334。
@@ -401,34 +381,33 @@ class _N42AppV2State extends State<N42AppV2> {
       splitScreenMode: true,
       // Use builder only if you need to use library outside ScreenUtilInit context
       builder: (_ , child) {
-        return provider_pkg.Consumer<PublicProvider>(
-          builder: (context, pValue, child) {
-            return GestureDetector(
-              onTap: () {
-                //全局
-                SystemChannels.textInput.invokeMethod('TextInput.hide');
-              },
-              child: MaterialApp(
-                locale: pValue.locale,
-                localizationsDelegates: [
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                  S.delegate,
-                  chat_l10n.S.delegate,
-                ],
-                navigatorKey: AppGlobals.navigatorKey,
-                supportedLocales: S.delegate.supportedLocales,
-                themeMode: pValue.themeMode,
-                theme: ThemeAdapter.themeDataLight,
-                darkTheme: ThemeAdapter.themeDataDark,
-                title: 'N42Wallet',
-                home: _widgetPage(pValue),
-                routes: routes,
-                navigatorObservers: <NavigatorObserver>[AppGlobals.routeObserver],
-              ),
-            );
+        final locale = ref.watch(localeProvider);
+        final themeMode = ref.watch(themeModeProvider);
+        final loadState = ref.watch(appLoadStateProvider);
+        return GestureDetector(
+          onTap: () {
+            //全局
+            SystemChannels.textInput.invokeMethod('TextInput.hide');
           },
+          child: MaterialApp(
+            locale: locale,
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              S.delegate,
+              chat_l10n.S.delegate,
+            ],
+            navigatorKey: AppGlobals.navigatorKey,
+            supportedLocales: S.delegate.supportedLocales,
+            themeMode: themeMode,
+            theme: ThemeAdapter.themeDataLight,
+            darkTheme: ThemeAdapter.themeDataDark,
+            title: 'N42Wallet',
+            home: _widgetPage(loadState),
+            routes: routes,
+            navigatorObservers: <NavigatorObserver>[AppGlobals.routeObserver],
+          ),
         );
       },
       //child: const HomePage(title: 'First Method'),
