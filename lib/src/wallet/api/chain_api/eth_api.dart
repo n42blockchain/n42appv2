@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:dio/dio.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/core/utils/message_model_bridge.dart';
 import 'package:n42appv2/core/utils/result.dart';
@@ -224,13 +223,20 @@ class EthAPI{
     bool enableRetry = true,
   }) async {
     try {
-      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.nextId};
-      String url;
+      final String url;
       if(coinType==null){
-        url=rpc??"";
+        final rpcUrl = rpc;
+        if (rpcUrl == null || rpcUrl.isEmpty) {
+          return Result.failure(AppError.blockchain(
+            'ETH RPC URL is not configured',
+            code: 'ETH_NO_RPC_URL',
+          ));
+        }
+        url = rpcUrl;
       }else{
         url=RequestUrl().getUrl2(coinType, "rpc",isTest: isTest);
       }
+      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.nextId};
       final data=await BaseApi.requestEmptyH.post(url, params: {},data: postData,enableRetry: enableRetry);
       if(data.containsKey('error')){
         final errorObj = data['error'];
@@ -244,14 +250,10 @@ class EthAPI{
         ));
       }
       return Result.success(data['result']);
-    } on DioException catch (e) {
-      return Result.failure(AppError.network(
-        e.message ?? 'Network error',
-        code: 'NET_${e.type.name.toUpperCase()}',
-        originalError: e,
-      ));
     } catch (e, st) {
-      return Result.failure(AppError.unknown(e.toString(), originalError: e, stackTrace: st));
+      // BaseHttp converts DioException to a localized String upstream;
+      // any error reaching here is already user-readable or a logic fault.
+      return Result.failure(AppError.network(e.toString(), originalError: e, stackTrace: st));
     }
   }
 /*

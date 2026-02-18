@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/core/utils/message_model_bridge.dart';
 import 'package:n42appv2/core/utils/result.dart';
@@ -93,14 +92,9 @@ class FilApi{
         ));
       }
       return Result.success(data['result']);
-    } on DioException catch (e) {
-      return Result.failure(AppError.network(
-        e.message ?? 'Network error',
-        code: 'NET_${e.type.name.toUpperCase()}',
-        originalError: e,
-      ));
     } catch (e, st) {
-      return Result.failure(AppError.unknown(e.toString(), originalError: e, stackTrace: st));
+      // BaseHttp converts DioException to a localized String upstream.
+      return Result.failure(AppError.network(e.toString(), originalError: e, stackTrace: st));
     }
   }
 
