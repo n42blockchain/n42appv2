@@ -5,6 +5,7 @@
 
 import 'dart:math';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 
 /// Keys for per-request retry control via [Options.extra].
@@ -73,11 +74,15 @@ class RetryInterceptor extends Interceptor {
   /// Visible for testing — allows injecting a deterministic RNG.
   final Random random;
 
+  final Connectivity _connectivity;
+
   RetryInterceptor({
     required this.dio,
     this.policy = const RetryPolicy(),
     Random? random,
-  }) : random = random ?? Random();
+    Connectivity? connectivity,
+  })  : random = random ?? Random(),
+        _connectivity = connectivity ?? Connectivity();
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
@@ -105,6 +110,13 @@ class RetryInterceptor extends Interceptor {
     if (options.cancelToken?.isCancelled == true) {
       return handler.next(err);
     }
+
+    // Skip retry when device has no network connection.
+    final connectivityResults = await _connectivity.checkConnectivity();
+    final hasNetwork = connectivityResults.any(
+      (r) => r != ConnectivityResult.none,
+    );
+    if (!hasNetwork) return handler.next(err);
 
     await Future<void>.delayed(delay);
 
