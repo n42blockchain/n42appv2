@@ -232,8 +232,9 @@ class BrowserProvider extends ChangeNotifier{
       }
     }
     Uri uri=Uri.parse(url);
-    // 拦截 javascript: 伪协议，防止 XSS/钓鱼攻击
-    if (uri.scheme == 'javascript') return false;
+    // 拦截危险 URL 协议：javascript: 可用于 XSS；data: / blob: 可绕过 CSP；file: 可读本地文件
+    const blockedSchemes = {'javascript', 'data', 'blob', 'file'};
+    if (blockedSchemes.contains(uri.scheme)) return false;
     if(uri.scheme=="wc"){
       if(url.contains('relay-protocol') && url.contains('symKey')){
         if(connectDAPPCallBack !=null){

@@ -135,7 +135,12 @@ class WalletConnectProvider with ChangeNotifier{
         viewStateDeal(WalletConnectState.transactionOK);
         break;
       case "tron_signTransaction":
-        Map<String,dynamic> trMap=eventData.params!['transaction'];
+        final rawTronParams = eventData.params;
+        if (rawTronParams == null || rawTronParams is! Map || !rawTronParams.containsKey('transaction')) {
+          viewStateDeal(WalletConnectState.error, params: 'Invalid TRON transaction: missing params');
+          break;
+        }
+        final Map<String,dynamic> trMap = Map<String,dynamic>.from(rawTronParams['transaction'] as Map);
         final tronInnerTx = trMap['transaction'] as Map<String, dynamic>? ?? {};
         final tronRawData = tronInnerTx['raw_data'] as Map<String, dynamic>? ?? {};
         // contract 字段在标准 TRON 格式中为 List，但部分实现为 Map
@@ -253,7 +258,19 @@ class WalletConnectProvider with ChangeNotifier{
         return false;
       }
       
-      privateKey = web3.EthPrivateKey(base64Decode(pKey));
+      // 验证 base64 格式并确认解码后为 32 字节私钥
+      final Uint8List decodedKey;
+      try {
+        decodedKey = base64Decode(pKey);
+      } on FormatException catch (e) {
+        viewStateDeal(WalletConnectState.error, params: 'Invalid private key encoding: ${e.message}');
+        return false;
+      }
+      if (decodedKey.length != 32) {
+        viewStateDeal(WalletConnectState.error, params: 'Invalid private key length: expected 32 bytes');
+        return false;
+      }
+      privateKey = web3.EthPrivateKey(decodedKey);
       return true;
     } catch (e) {
       viewStateDeal(WalletConnectState.error, params: e.toString());
@@ -527,7 +544,11 @@ class WalletConnectProvider with ChangeNotifier{
       } else if (eventData.method == "tron_signMessage") {
         final requestParams = eventData.params! as Map;
         final dataToSign = requestParams["message"];
-        CoinModel cm = coinModels[2];
+        final CoinModel? cm = coinModels.where((c) => c.coin['coinType'] == CoinType.TRX.name).firstOrNull;
+        if (cm == null) {
+          viewStateDeal(WalletConnectState.error, params: 'TRON chain not supported');
+          return;
+        }
         
         // 使用 IWalletService 获取私钥和助记词
         final walletService = ServiceLocatorSetup.walletService;
@@ -570,7 +591,11 @@ class WalletConnectProvider with ChangeNotifier{
       if (eventData.method == "tron_signTransaction") {
         final requestParams = eventData.params! as Map;
         final dataToSign = requestParams["message"];
-        CoinModel cm = coinModels[2];
+        final CoinModel? cm = coinModels.where((c) => c.coin['coinType'] == CoinType.TRX.name).firstOrNull;
+        if (cm == null) {
+          viewStateDeal(WalletConnectState.error, params: 'TRON chain not supported');
+          return;
+        }
         
         // 使用 IWalletService 获取私钥和助记词
         final walletService = ServiceLocatorSetup.walletService;

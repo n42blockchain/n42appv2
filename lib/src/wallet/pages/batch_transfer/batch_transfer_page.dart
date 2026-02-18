@@ -663,7 +663,8 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
       return;
     }
 
-    if (!address.startsWith('0x') || address.length != 42) {
+    if (!address.startsWith('0x') || address.length != 42 ||
+        !RegExp(r'^0x[0-9a-fA-F]{40}$').hasMatch(address)) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Invalid address format')),
       );
