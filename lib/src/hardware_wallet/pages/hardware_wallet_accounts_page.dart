@@ -460,13 +460,12 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
   }
 
   void _useAccount(BuildContext context, HardwareWalletAccount account) {
-    // TODO: 将账户添加到钱包
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text('Add Account'),
         content: Text(
-          'Do you want to add this account to your wallet?\n\n'
+          'Do you want to track this hardware wallet account?\n\n'
           'Address: ${account.shortAddress}\n'
           'Network: ${account.coinType}',
         ),
@@ -476,20 +475,46 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
             child: Text('Cancel'),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(context);
-              // TODO: 实际添加账户到钱包
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Account added successfully'),
-                  backgroundColor: Colors.green,
-                ),
-              );
+              await _importAccount(context, account);
             },
             child: Text('Add'),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _importAccount(
+      BuildContext context, HardwareWalletAccount account) async {
+    try {
+      final success = await widget.provider.importAccount(account);
+      if (!context.mounted) return;
+      if (success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                'Account ${account.shortAddress} added to tracking list'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Account already imported'),
+            backgroundColor: Colors.orange,
+          ),
+        );
+      }
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to import account: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 }

@@ -149,9 +149,7 @@ class StakingProvider extends ChangeNotifier {
           break;
 
         case StakingChainType.polkadot:
-          // TODO: 实现 DOT 质押
-          _validators = [];
-          break;
+          throw UnsupportedError('DOT staking is not yet supported');
       }
 
       _state = StakingState.loaded;
@@ -233,9 +231,7 @@ class StakingProvider extends ChangeNotifier {
           break;
 
         case StakingChainType.polkadot:
-          // TODO: 实现 DOT 质押
-          _positions = [];
-          break;
+          throw UnsupportedError('DOT staking is not yet supported');
       }
 
       _state = StakingState.loaded;
@@ -289,7 +285,7 @@ class StakingProvider extends ChangeNotifier {
             break;
 
           case StakingChainType.polkadot:
-            // TODO: 实现 DOT 质押
+            // DOT staking not yet supported; skip silently in multi-chain load
             break;
         }
       }

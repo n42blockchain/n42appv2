@@ -362,6 +362,63 @@ class HardwareWalletProvider extends ChangeNotifier {
     }
   }
 
+  /// 导入硬件钱包账户到本地追踪列表
+  ///
+  /// 将账户地址保存到独立的 SharedPreferences key，
+  /// 与主钱包助记词存储隔离，避免破坏主钱包数据。
+  Future<bool> importAccount(HardwareWalletAccount account) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final key = 'hardware_wallet_imported_accounts';
+      final existing = prefs.getStringList(key) ?? [];
+
+      // 地址去重
+      final entry = json.encode({
+        'address': account.address,
+        'coinType': account.coinType,
+        'derivationPath': account.derivationPath,
+        'index': account.index,
+        'deviceId': _currentDevice?.id ?? '',
+        'deviceName': _currentDevice?.name ?? '',
+        'importedAt': DateTime.now().toIso8601String(),
+      });
+
+      final isDuplicate = existing.any((e) {
+        try {
+          final m = json.decode(e) as Map<String, dynamic>;
+          return m['address'] == account.address &&
+              m['coinType'] == account.coinType;
+        } catch (_) {
+          return false;
+        }
+      });
+
+      if (isDuplicate) {
+        return false; // 已导入，返回 false 让调用方提示用户
+      }
+
+      existing.add(entry);
+      await prefs.setStringList(key, existing);
+      return true;
+    } catch (e) {
+      debugPrint('Failed to import hardware wallet account: $e');
+      rethrow;
+    }
+  }
+
+  /// 获取所有已导入的硬件钱包账户
+  Future<List<Map<String, dynamic>>> getImportedAccounts() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final raw = prefs.getStringList('hardware_wallet_imported_accounts') ?? [];
+      return raw
+          .map((e) => json.decode(e) as Map<String, dynamic>)
+          .toList();
+    } catch (e) {
+      return [];
+    }
+  }
+
   /// 删除已保存的设备
   Future<void> removeDevice(String deviceId) async {
     _savedDevices.removeWhere((d) => d.id == deviceId);

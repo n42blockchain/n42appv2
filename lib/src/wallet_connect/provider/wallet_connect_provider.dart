@@ -136,31 +136,34 @@ class WalletConnectProvider with ChangeNotifier{
         break;
       case "tron_signTransaction":
         Map<String,dynamic> trMap=eventData.params!['transaction'];
+        final tronInnerTx = trMap['transaction'] as Map<String, dynamic>? ?? {};
+        final tronRawData = tronInnerTx['raw_data'] as Map<String, dynamic>? ?? {};
+        // contract 字段在标准 TRON 格式中为 List，但部分实现为 Map
+        final tronContractRaw = tronRawData['contract'];
+        String tronContractType = '';
+        Map<String, dynamic> tronContractValue = {};
+        if (tronContractRaw is List && tronContractRaw.isNotEmpty) {
+          final item = tronContractRaw[0] as Map<String, dynamic>;
+          tronContractType = item['type'] as String? ?? '';
+          tronContractValue = (item['parameter']?['value'] as Map<String, dynamic>?) ?? {};
+        } else if (tronContractRaw is Map<String, dynamic>) {
+          tronContractType = tronContractRaw['type'] as String? ?? '';
+          tronContractValue = (tronContractRaw['parameter']?['value'] as Map<String, dynamic>?) ?? {};
+        }
+        final tronOwnerAddr = tronContractValue['owner_address'] as String? ?? '';
+        final tronToAddr = tronContractValue['to_address'] as String? ?? '';
+        final tronContractAddr = tronContractValue['contract_address'] as String? ?? '';
+        final tronFeeLimit = tronRawData['fee_limit'] as int? ?? 0;
+        // TriggerSmartContract = TRC20；TransferContract = TRX 原生转账
+        final isTrc20 = tronContractType == 'TriggerSmartContract';
         actionDataMap={
           "network":coinModels[coinModelsIndex].coin['name'],
-          "gas":trMap['transaction']['fee_limit'].toString(),
-          "from":trMap['transaction']['raw_data']['fee_limit']??"0",
-          "to":trMap['transaction']['raw_data']['to']??"",
-          "data":trMap['transaction']['raw_data_hex']??"",
+          "gas":tronFeeLimit.toString(),
+          "from":tronOwnerAddr,
+          "to":isTrc20 ? tronContractAddr : tronToAddr,
+          "data":tronInnerTx['raw_data_hex'] as String? ?? "",
           "signType":"transaction",
         };
-        Map<String, dynamic> txData = {
-          "ownerAddress": trMap['transaction']['raw_data']['contract']['parameter']['value']['owner_address']??"",
-          "toAddress": trMap['transaction']['raw_data']['to']??"",
-          "timestamp": trMap['transaction']['raw_data']['timestamp'] as int,
-          "blockTime": trMap['transaction']['raw_data']['to']??"",
-          "txTrieRoot": trMap['transaction']['raw_data']['to']??"",
-          "witnessAddress": trMap['transaction']['raw_data']['to']??"",
-          "parentHash": trMap['transaction']['raw_data']['to']??"",
-          "version": trMap['transaction']['raw_data']['to']??"",
-          "number": trMap['transaction']['raw_data']['to']??"",
-          "feeLimit": trMap['transaction']['raw_data']['fee_limit'] as int,
-        };
-        if (trMap['transaction']['raw_data']['contract']['parameter']['value']['owner_address']??"" != "") {
-          txData['cmd'] = "TRC20";
-          txData['contractAddress'] = trMap['transaction']['raw_data']['contract']['parameter']['value']['owner_address']??"";
-          txData['amount'] = "";
-        }
         viewStateDeal(WalletConnectState.transactionOK);
         break;
       case "eth_sendTransaction":

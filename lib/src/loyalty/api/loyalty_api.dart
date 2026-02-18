@@ -85,15 +85,11 @@ class LoyaltyApi {
           ..data = response['data'];
       }
 
-      // API 未部署时返回模拟成功数据
-      return MessageModel()
-        ..error = false
-        ..data = {'points_earned': 10, 'task_id': taskId};
+      return MessageModel.error()
+        ..data = 'Task completion failed: server error (code ${response['code']})';
     } catch (e) {
-      // API 不可用时也返回模拟成功，便于测试
-      return MessageModel()
-        ..error = false
-        ..data = {'points_earned': 10, 'task_id': taskId, 'mock': true};
+      return MessageModel.error()
+        ..data = e.toString();
     }
   }
 
@@ -112,24 +108,11 @@ class LoyaltyApi {
           ..data = response['data'];
       }
 
-      // API 未部署时返回模拟签到成功
-      return MessageModel()
-        ..error = false
-        ..data = {
-          'points_earned': 10,
-          'streak': 5,
-          'bonus': 0,
-        };
+      return MessageModel.error()
+        ..data = 'Check-in failed: server error (code ${response['code']})';
     } catch (e) {
-      // API 不可用时也返回模拟成功，便于测试
-      return MessageModel()
-        ..error = false
-        ..data = {
-          'points_earned': 10,
-          'streak': 5,
-          'bonus': 0,
-          'mock': true,
-        };
+      return MessageModel.error()
+        ..data = e.toString();
     }
   }
 
