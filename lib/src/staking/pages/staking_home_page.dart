@@ -11,7 +11,6 @@ import 'package:n42appv2/src/staking/models/staking_models.dart';
 import 'package:n42appv2/src/staking/pages/stake_page.dart';
 import 'package:n42appv2/src/staking/provider/staking_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:provider/provider.dart';
 
 /// Staking 首页
 ///
@@ -54,30 +53,27 @@ class _StakingHomePageState extends State<StakingHomePage>
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: _provider,
-      child: Scaffold(
-        appBar: AppBarWidget(
-          text: S.of(context).g_key_stake_title,
-        ),
-        body: SafeArea(
-          child: Column(
-            children: [
-              // Tab 栏
-              _buildTabBar(context),
+    return Scaffold(
+      appBar: AppBarWidget(
+        text: S.of(context).g_key_stake_title,
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Tab 栏
+            _buildTabBar(context),
 
-              // Tab 内容
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    _buildProtocolsTab(context),
-                    _buildPositionsTab(context),
-                  ],
-                ),
+            // Tab 内容
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildProtocolsTab(context),
+                  _buildPositionsTab(context),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -139,7 +135,13 @@ class _StakingHomePageState extends State<StakingHomePage>
 
   /// 协议列表 Tab
   Widget _buildProtocolsTab(BuildContext context) {
-    final protocols = StakingProtocols.all;
+    // DOT staking is not yet implemented; hide until backend support is ready
+    const bool dotStakingEnabled = bool.fromEnvironment('FEATURE_DOT_STAKING', defaultValue: false);
+    final protocols = dotStakingEnabled
+        ? StakingProtocols.all
+        : StakingProtocols.all
+            .where((p) => p.chainType != StakingChainType.polkadot)
+            .toList();
 
     return ListView.builder(
       padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
@@ -337,8 +339,10 @@ class _StakingHomePageState extends State<StakingHomePage>
 
   /// 用户仓位 Tab
   Widget _buildPositionsTab(BuildContext context) {
-    return Consumer<StakingProvider>(
-      builder: (context, provider, _) {
+    return ListenableBuilder(
+      listenable: _provider,
+      builder: (context, _) {
+        final provider = _provider;
         if (provider.state == StakingState.loading) {
           return Center(child: CircularProgressIndicator());
         }

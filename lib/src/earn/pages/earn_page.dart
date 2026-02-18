@@ -14,21 +14,21 @@ import 'package:n42appv2/src/loyalty/pages/loyalty_home_page.dart';
 import 'package:n42appv2/src/hardware_wallet/pages/hardware_wallet_page.dart';
 import 'package:n42appv2/src/wallet/pages/gas/gas_tracker_page.dart';
 import 'package:n42appv2/src/wallet/pages/batch_transfer/batch_transfer_select_page.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/app_home_top_bar.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 
 /// Earn 页面
 ///
 /// 展示所有收益相关功能：Stake, Bridge, Airdrop, Rewards 等
-class EarnPage extends StatefulWidget {
+class EarnPage extends ConsumerStatefulWidget {
   const EarnPage({super.key});
 
   @override
-  State<EarnPage> createState() => _EarnPageState();
+  ConsumerState<EarnPage> createState() => _EarnPageState();
 }
 
-class _EarnPageState extends State<EarnPage> {
+class _EarnPageState extends ConsumerState<EarnPage> {
   // 模拟已质押数据
   final List<StakedItem> _stakedItems = [];
 
@@ -219,7 +219,7 @@ class _EarnPageState extends State<EarnPage> {
 
   /// 主要功能区
   Widget _buildMainFeatures(BuildContext context) {
-    final waProvider = Provider.of<WalletActionProvider>(context, listen: false);
+    final waProvider = ref.read(wapBridgeProvider);
     final address = waProvider.coinList.isNotEmpty
         ? waProvider.coinList.first.address?.toString() ?? ''
         : '';
@@ -669,7 +669,7 @@ class _EarnPageState extends State<EarnPage> {
             icon: Icons.stars,
             color: const Color(0xFFFFC107),
             onTap: () {
-              final waProvider = Provider.of<WalletActionProvider>(context, listen: false);
+              final waProvider = ref.read(wapBridgeProvider);
               final address = waProvider.coinList.isNotEmpty
                   ? waProvider.coinList.first.address?.toString() ?? ''
                   : '';

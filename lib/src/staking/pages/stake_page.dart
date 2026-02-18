@@ -6,12 +6,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/staking/models/staking_models.dart';
 import 'package:n42appv2/src/staking/pages/validator_list_page.dart';
 import 'package:n42appv2/src/staking/provider/staking_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:provider/provider.dart';
 
 /// Stake 页面
 ///
@@ -68,10 +68,23 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
   }
 
   Future<void> _loadBalance() async {
-    // TODO: 实际获取用户余额
-    // 这里需要集成钱包模块获取对应链的余额
+    final symbol = widget.protocol.chainSymbol;
+    try {
+      final coinModels = globalWapAdapter.coinModels;
+      final cm = coinModels.where((c) => c.coin['coinType'] == symbol).firstOrNull;
+      if (cm != null) {
+        final rawBalance = cm.isTest
+            ? (cm.coin['balance_test'] ?? '0')
+            : (cm.coin['balance'] ?? '0');
+        setState(() {
+          _balance = BigInt.tryParse(rawBalance) ?? BigInt.zero;
+        });
+        return;
+      }
+    } catch (_) {}
+    // Fallback: zero balance if wallet data unavailable
     setState(() {
-      _balance = BigInt.from(10).pow(_getDecimals()) * BigInt.from(10); // 模拟 10 个代币
+      _balance = BigInt.zero;
     });
   }
 
@@ -90,41 +103,40 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: _provider,
-      child: Scaffold(
-        appBar: AppBarWidget(
-          text: widget.protocol.name,
-        ),
-        body: SafeArea(
-          child: Column(
-            children: [
-              // 协议信息卡片
-              _buildProtocolInfoCard(context),
+    return Scaffold(
+      appBar: AppBarWidget(
+        text: widget.protocol.name,
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            // 协议信息卡片
+            _buildProtocolInfoCard(context),
 
-              // Tab 栏
-              _buildTabBar(context),
+            // Tab 栏
+            _buildTabBar(context),
 
-              // Tab 内容
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    _buildStakeTab(context),
-                    _buildUnstakeTab(context),
-                  ],
-                ),
+            // Tab 内容
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildStakeTab(context),
+                  _buildUnstakeTab(context),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
   Widget _buildProtocolInfoCard(BuildContext context) {
-    return Consumer<StakingProvider>(
-      builder: (context, provider, _) {
+    return ListenableBuilder(
+      listenable: _provider,
+      builder: (context, _) {
+        final provider = _provider;
         return Container(
           margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
           padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
@@ -287,8 +299,10 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
   }
 
   Widget _buildStakeTab(BuildContext context) {
-    return Consumer<StakingProvider>(
-      builder: (context, provider, _) {
+    return ListenableBuilder(
+      listenable: _provider,
+      builder: (context, _) {
+        final provider = _provider;
         return SingleChildScrollView(
           padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
           child: Column(
@@ -348,8 +362,10 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
   }
 
   Widget _buildUnstakeTab(BuildContext context) {
-    return Consumer<StakingProvider>(
-      builder: (context, provider, _) {
+    return ListenableBuilder(
+      listenable: _provider,
+      builder: (context, _) {
+        final provider = _provider;
         // 如果是流动性质押，显示不同的提示
         if (widget.protocol.isLiquid) {
           return Center(

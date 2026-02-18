@@ -9,7 +9,6 @@ import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/airdrop/models/airdrop_model.dart';
 import 'package:n42appv2/src/airdrop/pages/airdrop_detail_page.dart';
 import 'package:n42appv2/src/airdrop/provider/airdrop_provider.dart';
-import 'package:provider/provider.dart';
 
 /// 空投追踪首页
 class AirdropHomePage extends StatefulWidget {
@@ -48,9 +47,7 @@ class _AirdropHomePageState extends State<AirdropHomePage>
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: _provider,
-      child: Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Text('Airdrop Tracker'),
         actions: [
@@ -74,8 +71,10 @@ class _AirdropHomePageState extends State<AirdropHomePage>
           ],
         ),
       ),
-      body: Consumer<AirdropProvider>(
-        builder: (context, provider, child) {
+      body: ListenableBuilder(
+        listenable: _provider,
+        builder: (context, _) {
+          final provider = _provider;
           if (provider.loadState == AirdropLoadState.loading &&
               provider.airdrops.isEmpty) {
             return Center(child: CircularProgressIndicator());
@@ -105,7 +104,6 @@ class _AirdropHomePageState extends State<AirdropHomePage>
             ],
           );
         },
-      ),
       ),
     );
   }
@@ -639,10 +637,132 @@ class _AirdropHomePageState extends State<AirdropHomePage>
   }
 
   void _showFilterSheet() {
-    // TODO: 显示筛选底部表单
+    final currentFilter = _provider.filter;
+    AirdropType? selectedType = currentFilter.types?.isNotEmpty == true ? currentFilter.types!.first : null;
+    bool onlyEligible = currentFilter.onlyEligible ?? false;
+    bool onlyHighValue = currentFilter.onlyHighValue ?? false;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (ctx, setSheetState) {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Filter', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(ctx);
+                          _provider.clearFilter();
+                        },
+                        child: const Text('Reset'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  const Text('Type', style: TextStyle(fontWeight: FontWeight.w600)),
+                  Wrap(
+                    spacing: 8,
+                    children: AirdropType.values.map((type) {
+                      final label = type.name[0].toUpperCase() + type.name.substring(1);
+                      return ChoiceChip(
+                        label: Text(label),
+                        selected: selectedType == type,
+                        onSelected: (v) => setSheetState(() => selectedType = v ? type : null),
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 12),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Eligible only'),
+                    value: onlyEligible,
+                    onChanged: (v) => setSheetState(() => onlyEligible = v),
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('High value only'),
+                    value: onlyHighValue,
+                    onChanged: (v) => setSheetState(() => onlyHighValue = v),
+                  ),
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(ctx);
+                        _provider.applyFilter(AirdropFilter(
+                          types: selectedType != null ? [selectedType!] : null,
+                          onlyEligible: onlyEligible ? true : null,
+                          onlyHighValue: onlyHighValue ? true : null,
+                        ));
+                      },
+                      child: const Text('Apply'),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   void _showNotificationSettings() {
-    // TODO: 显示通知设置
+    bool newAirdrops = true;
+    bool eligibilityAlerts = true;
+    bool deadlineReminders = true;
+
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (ctx, setDialogState) {
+            return AlertDialog(
+              title: const Text('Notification Settings'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('New airdrops'),
+                    value: newAirdrops,
+                    onChanged: (v) => setDialogState(() => newAirdrops = v),
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Eligibility alerts'),
+                    value: eligibilityAlerts,
+                    onChanged: (v) => setDialogState(() => eligibilityAlerts = v),
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Deadline reminders'),
+                    value: deadlineReminders,
+                    onChanged: (v) => setDialogState(() => deadlineReminders = v),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+                ElevatedButton(onPressed: () => Navigator.pop(ctx), child: const Text('Save')),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 }

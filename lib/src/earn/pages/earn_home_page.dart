@@ -7,14 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/airdrop/pages/airdrop_home_page.dart';
-import 'package:n42appv2/src/airdrop/provider/airdrop_provider.dart';
 import 'package:n42appv2/src/bridge/pages/bridge_home_page.dart';
 import 'package:n42appv2/src/home/widgets/feature_entry_card.dart';
 import 'package:n42appv2/src/loyalty/pages/loyalty_home_page.dart';
-import 'package:n42appv2/src/loyalty/provider/loyalty_provider.dart';
+import 'package:n42appv2/src/miningV2/pages/mining_full_node_v2.dart';
 import 'package:n42appv2/src/staking/pages/staking_home_page.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:n42appv2/src/wallet/pages/ast_swap/swap_ast_home.dart';
+import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
 
 /// 赚取首页
 ///
@@ -98,17 +97,8 @@ class _EarnHomePageState extends State<EarnHomePage> {
               ),
             ],
           ),
-          // 历史记录按钮
-          IconButton(
-            onPressed: () {
-              // TODO: 导航到收益历史
-            },
-            icon: Icon(
-              Icons.history,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-              size: ScreenUtil().setWidth(40),
-            ),
-          ),
+          // 历史记录按钮（暂未开放）
+          const SizedBox.shrink(),
         ],
       ),
     );
@@ -594,8 +584,10 @@ class _EarnHomePageState extends State<EarnHomePage> {
   }
 
   void _navigateToMining(BuildContext context) {
-    // 切换到挖矿标签页
-    // TODO: 实现导航到挖矿页面
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const MiningFullNodeV2(nNum: 32)),
+    );
   }
 
   void _navigateToBridge(BuildContext context) {
@@ -606,12 +598,15 @@ class _EarnHomePageState extends State<EarnHomePage> {
   }
 
   void _navigateToSwap(BuildContext context) {
-    // TODO: 导航到 Swap 页面
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SwapAstHome()),
+    );
   }
 
   /// 获取第一个 EVM 钱包地址
   String _getEvmWalletAddress(BuildContext context) {
-    final coinModels = context.read<WalletActionProvider>().coinModels;
+    final coinModels = globalWapAdapter.coinModels;
     for (final cm in coinModels) {
       if (cm.address != null && cm.address!.startsWith('0x')) {
         return cm.address!;
@@ -624,10 +619,7 @@ class _EarnHomePageState extends State<EarnHomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (ctx) => ChangeNotifierProvider(
-          create: (_) => AirdropProvider(),
-          child: AirdropHomePage(walletAddress: _getEvmWalletAddress(context)),
-        ),
+        builder: (ctx) => AirdropHomePage(walletAddress: _getEvmWalletAddress(context)),
       ),
     );
   }
@@ -636,10 +628,7 @@ class _EarnHomePageState extends State<EarnHomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (ctx) => ChangeNotifierProvider(
-          create: (_) => LoyaltyProvider(),
-          child: LoyaltyHomePage(walletAddress: _getEvmWalletAddress(context)),
-        ),
+        builder: (ctx) => LoyaltyHomePage(walletAddress: _getEvmWalletAddress(context)),
       ),
     );
   }

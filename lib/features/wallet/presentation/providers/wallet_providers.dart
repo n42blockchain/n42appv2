@@ -9,6 +9,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
 
 /// Wallet Info Data for Provider
 /// Lightweight representation for state management
@@ -330,15 +332,15 @@ final currentWalletProvider = Provider<WalletInfoData?>((ref) {
 
 /// Wallet Balance Provider (Async)
 ///
-/// Migration placeholder: actual balance is managed via the legacy Provider path
-/// (WalletActionProvider). This Riverpod provider will be implemented when the
-/// full Provider→Riverpod migration is completed.
+/// Bridges the legacy WalletActionProvider balance total into Riverpod.
+/// The actual per-coin balance fetching is still managed by the legacy provider;
+/// this provider exposes the aggregated USD total for Riverpod consumers.
 final walletBalanceProvider = FutureProvider.autoDispose<double>((ref) async {
   final wallet = ref.watch(currentWalletProvider);
   if (wallet == null) return 0.0;
 
-  // Actual balance is fetched via legacy WalletActionProvider
-  return 0.0;
+  // Read aggregated balance from the legacy WalletActionProvider
+  return globalWapAdapter.balanceTotal;
 });
 
 /// Coin List Provider (Async)
@@ -364,14 +366,30 @@ class CoinListNotifier extends AsyncNotifier<List<CoinBalanceData>> {
         
         if (coinData != null && coinData['baseInfo'] != null) {
           final baseInfo = coinData['baseInfo'] as Map<String, dynamic>;
+          // Read balance from the legacy WalletActionProvider coin list
+          double balance = 0.0;
+          double balanceUsd = 0.0;
+          double price = 0.0;
+          double priceChange = 0.0;
+          try {
+            final legacyCoin = globalWapAdapter.coinModels
+                .where((c) => c.coin['coinType'] == coinKey)
+                .firstOrNull;
+            if (legacyCoin != null) {
+              balance = legacyCoin.balanceDoubleAll();
+              price = legacyCoin.coinPrice;
+              priceChange = legacyCoin.percentage;
+              balanceUsd = legacyCoin.value;
+            }
+          } catch (_) {}
           coins.add(CoinBalanceData(
             symbol: coinKey,
             name: baseInfo['name']?.toString() ?? coinKey,
             iconUrl: baseInfo['icon']?.toString() ?? '',
-            balance: 0.0, // TODO: Fetch actual balance
-            balanceUsd: 0.0,
-            price: 0.0,
-            priceChange24h: 0.0,
+            balance: balance,
+            balanceUsd: balanceUsd,
+            price: price,
+            priceChange24h: priceChange,
             chainType: coinKey,
           ));
         }
@@ -460,4 +478,22 @@ final walletCountProvider = Provider<int>((ref) {
 final hasWalletProvider = Provider<bool>((ref) {
   final count = ref.watch(walletCountProvider);
   return count > 0;
+});
+
+// ============================================
+// WAP Bridge Provider (Provider → Riverpod bridge)
+// ============================================
+
+/// Bridge provider that wraps the legacy WalletActionProvider as a Riverpod
+/// ChangeNotifierProvider. This allows gradual migration of consumers from
+/// `Provider.of<WalletActionProvider>(context)` to `ref.read(wapBridgeProvider)`.
+///
+/// The WAP instance is created in main() and stored in `globalWapAdapter`.
+/// Both MultiProvider and this Riverpod provider reference the same instance.
+///
+/// Usage in widgets:
+/// - `ref.read(wapBridgeProvider)` replaces `Provider.of<WAP>(context, listen: false)`
+/// - `ref.watch(wapBridgeProvider)` replaces `Consumer<WAP>`
+final wapBridgeProvider = ChangeNotifierProvider<WalletActionProvider>((ref) {
+  return globalWapAdapter;
 });
