@@ -50,13 +50,27 @@ class ApiClient {
       ),
     );
 
-    // 2. Logging 拦截器
+    // 2. Logging 拦截器：过滤敏感 header（Authorization / Cookie）
     _dio.interceptors.add(
-      LogInterceptor(
-        requestBody: kDebugMode,
-        responseBody: kDebugMode,
-        logPrint: (object) {
-          if (kDebugMode) debugPrint(object.toString());
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          if (kDebugMode) {
+            final safeHeaders = Map<String, dynamic>.from(options.headers)
+              ..remove('Authorization')
+              ..remove('authorization')
+              ..remove('Cookie')
+              ..remove('cookie');
+            debugPrint('[ApiClient] → ${options.method} ${options.path} '
+                'headers: $safeHeaders');
+          }
+          handler.next(options);
+        },
+        onResponse: (response, handler) {
+          if (kDebugMode) {
+            debugPrint('[ApiClient] ← ${response.statusCode} '
+                '${response.requestOptions.path}');
+          }
+          handler.next(response);
         },
       ),
     );

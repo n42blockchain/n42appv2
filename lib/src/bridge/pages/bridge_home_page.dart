@@ -30,6 +30,9 @@ class _BridgeHomePageState extends ConsumerState<BridgeHomePage> {
   late BridgeProvider _bridgeProvider;
   final TextEditingController _amountController = TextEditingController();
 
+  // 缓存 RegExp 对象，避免每次 _formatAmount 调用时重新编译
+  static final _trailingZeroRegex = RegExp(r'0+$');
+
   @override
   void initState() {
     super.initState();
@@ -269,7 +272,7 @@ class _BridgeHomePageState extends ConsumerState<BridgeHomePage> {
                         ),
                       SizedBox(width: ScreenUtil().setWidth(10)),
                       Text(
-                        token?.symbol ?? 'Select',
+                        token?.symbol ?? S.of(context).g_key_bridge_select,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(30),
                           fontWeight: FontWeight.bold,
@@ -705,7 +708,7 @@ class _BridgeHomePageState extends ConsumerState<BridgeHomePage> {
       final coinInfo = walletProvider.walletMap[chainSymbol];
       if (coinInfo == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Chain not supported')),
+          SnackBar(content: Text(S.of(context).g_key_bridge_chain_not_supported)),
         );
         return null;
       }
@@ -802,8 +805,8 @@ class _BridgeHomePageState extends ConsumerState<BridgeHomePage> {
         return whole.toString();
       }
 
-      // 移除尾部的零
-      String trimmedFraction = fraction.replaceAll(RegExp(r'0+$'), '');
+      // 移除尾部的零（复用缓存的 RegExp，避免每次重新编译）
+      String trimmedFraction = fraction.replaceAll(_trailingZeroRegex, '');
       if (trimmedFraction.isEmpty) {
         return whole.toString();
       }

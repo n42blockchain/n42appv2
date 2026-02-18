@@ -11433,6 +11433,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Chain not supported`
+  String get g_key_bridge_chain_not_supported {
+    return Intl.message(
+      'Chain not supported',
+      name: 'g_key_bridge_chain_not_supported',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select`
+  String get g_key_bridge_select {
+    return Intl.message(
+      'Select',
+      name: 'g_key_bridge_select',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

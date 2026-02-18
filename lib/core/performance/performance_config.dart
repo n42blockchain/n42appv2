@@ -104,15 +104,27 @@ class PerformanceConfig {
     return jankCount / _frameRecords.length;
   }
 
-  /// 生成性能报告
+  /// 生成性能报告（一次遍历完成所有计算，避免重复过滤）
   static Map<String, dynamic> getPerformanceReport() {
-    final jankCount = _frameRecords
-        .where((r) => r.totalDuration > _jankThresholdUs)
-        .length;
+    if (_frameRecords.isEmpty) {
+      return {
+        'averageFrameTime': 0.0,
+        'jankRate': 0.0,
+        'totalFrames': 0,
+        'jankFrames': 0,
+      };
+    }
+    int totalDuration = 0;
+    int jankCount = 0;
+    for (final r in _frameRecords) {
+      totalDuration += r.totalDuration;
+      if (r.totalDuration > _jankThresholdUs) jankCount++;
+    }
+    final count = _frameRecords.length;
     return {
-      'averageFrameTime': averageFrameTime,
-      'jankRate': jankRate,
-      'totalFrames': _frameRecords.length,
+      'averageFrameTime': totalDuration / count / 1000, // 微秒 → 毫秒
+      'jankRate': jankCount / count,
+      'totalFrames': count,
       'jankFrames': jankCount,
     };
   }

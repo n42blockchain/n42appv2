@@ -115,13 +115,15 @@ class BridgeProvider extends ChangeNotifier {
 
     _setState(BridgeState.idle);
 
-    // 加载两个链的代币
+    // 并行加载两个链的代币，减少初始化延迟
+    final futures = <Future>[];
     if (_fromChain != null) {
-      await loadTokensForChain(_fromChain!.chainId);
+      futures.add(loadTokensForChain(_fromChain!.chainId));
     }
     if (_toChain != null && _toChain!.chainId != _fromChain?.chainId) {
-      await loadTokensForChain(_toChain!.chainId);
+      futures.add(loadTokensForChain(_toChain!.chainId));
     }
+    if (futures.isNotEmpty) await Future.wait(futures);
   }
 
   /// 加载指定链的代币列表

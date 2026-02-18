@@ -1256,5 +1256,7 @@
   "g_key_bridge_status_pending": "Pending",
   "g_key_bridge_status_in_progress": "In Progress",
   "g_key_bridge_status_completed": "Completed",
-  "g_key_bridge_status_failed": "Failed"
+  "g_key_bridge_status_failed": "Failed",
+  "g_key_bridge_chain_not_supported": "Chain not supported",
+  "g_key_bridge_select": "Select"
 }

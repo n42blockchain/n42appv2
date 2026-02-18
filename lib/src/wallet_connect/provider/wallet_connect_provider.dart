@@ -34,9 +34,15 @@ class WalletConnectProvider with ChangeNotifier{
     if (signClient != null) {
       try {
         signClient!.core.relayClient.disconnect();
-      } catch (_) {}
+      } catch (e) {
+        if (kDebugMode) debugPrint('[WalletConnect] disconnect error: $e');
+      }
       signClient = null;
     }
+    // 清除敏感数据，避免内存泄漏
+    actionData = null;
+    actionDataMap = {};
+    errorMessage = '';
     super.dispose();
   }
 
@@ -386,29 +392,32 @@ class WalletConnectProvider with ChangeNotifier{
                 }
               }
             }
+            // 用 Set 预处理 optional 链 ID，将嵌套 O(n²) 查找降为 O(1)
+            final optionalEip155Set = Set<String>.from(
+              optional['eip155']?.chains ?? [],
+            );
+            final optionalTronSet = Set<String>.from(
+              optional['tron']?.chains ?? [],
+            );
             for(String chain in chainTypeRequired){
               if(chain=="eip155"){
                 if(required[chain]!.chains==null)continue;
-                for(int i=0;i<required[chain]!.chains!.length;i++){
-                  if(optional.isNotEmpty){
-                    int fIndex=optional[chain]!.chains!.indexWhere((element) => required[chain]!.chains![i]==element);
-                    if(fIndex !=-1){
-                      continue;
-                    }
+                for(final chainId in required[chain]!.chains!){
+                  if(optional.isNotEmpty && optionalEip155Set.contains(chainId)){
+                    continue;
                   }
-                  CoinModel? cm=coinModelFind(required[chain]!.chains![i]);
+                  CoinModel? cm=coinModelFind(chainId);
                   if(cm !=null){
                     rCoinModel.insert(0,cm);
                   }
                 }
               }else if(chain=="tron"){
                 if(required[chain]!.chains==null)continue;
-                for(int i=0;i<required[chain]!.chains!.length;i++){
-                  int fIndex=optional[chain]!.chains!.indexWhere((element) => required[chain]!.chains![i]==element);
-                  if(fIndex !=-1){
+                for(final chainId in required[chain]!.chains!){
+                  if(optionalTronSet.contains(chainId)){
                     continue;
                   }
-                  CoinModel? cm=coinModelFind(required[chain]!.chains![i]);
+                  CoinModel? cm=coinModelFind(chainId);
                   if(cm !=null){
                     rCoinModel.insert(0,cm);
                   }
@@ -752,6 +761,8 @@ class WalletConnectProvider with ChangeNotifier{
         errorMessage=params as String;
         break;
     }
+    // 状态未变且非 error 时跳过通知，避免不必要的 UI 重建
+    if (walletConnectState == state && state != WalletConnectState.error) return;
     walletConnectState=state;
     notifyListeners();
   }

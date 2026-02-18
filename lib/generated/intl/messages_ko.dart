@@ -865,6 +865,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_batch_title": MessageLookupByLibrary.simpleMessage("일괄 전송"),
     "g_key_batch_total_amount": MessageLookupByLibrary.simpleMessage("총 금액"),
     "g_key_bridge_amount": MessageLookupByLibrary.simpleMessage("금액"),
+    "g_key_bridge_chain_not_supported": MessageLookupByLibrary.simpleMessage(
+      "Chain not supported",
+    ),
     "g_key_bridge_cheapest": MessageLookupByLibrary.simpleMessage("가장 저렴"),
     "g_key_bridge_estimated_receive": MessageLookupByLibrary.simpleMessage(
       "예상 수령액",
@@ -883,6 +886,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_bridge_search_chain": MessageLookupByLibrary.simpleMessage(
       "체인 검색...",
     ),
+    "g_key_bridge_select": MessageLookupByLibrary.simpleMessage("Select"),
     "g_key_bridge_select_token": MessageLookupByLibrary.simpleMessage("토큰 선택"),
     "g_key_bridge_slippage": MessageLookupByLibrary.simpleMessage("슬리피지"),
     "g_key_bridge_status_completed": MessageLookupByLibrary.simpleMessage(

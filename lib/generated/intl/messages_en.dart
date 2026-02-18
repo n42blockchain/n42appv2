@@ -995,6 +995,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Total Amount",
     ),
     "g_key_bridge_amount": MessageLookupByLibrary.simpleMessage("Amount"),
+    "g_key_bridge_chain_not_supported": MessageLookupByLibrary.simpleMessage(
+      "Chain not supported",
+    ),
     "g_key_bridge_cheapest": MessageLookupByLibrary.simpleMessage("Cheapest"),
     "g_key_bridge_estimated_receive": MessageLookupByLibrary.simpleMessage(
       "You will receive (estimated)",
@@ -1019,6 +1022,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_bridge_search_chain": MessageLookupByLibrary.simpleMessage(
       "Search chain...",
     ),
+    "g_key_bridge_select": MessageLookupByLibrary.simpleMessage("Select"),
     "g_key_bridge_select_token": MessageLookupByLibrary.simpleMessage(
       "Select Token",
     ),

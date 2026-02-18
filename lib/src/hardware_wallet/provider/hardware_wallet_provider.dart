@@ -536,10 +536,10 @@ class HardwareWalletProvider extends ChangeNotifier {
     if (value == 0) return [];
     final bytes = <int>[];
     while (value > 0) {
-      bytes.insert(0, value & 0xff);
+      bytes.add(value & 0xff); // O(1) add，最后统一 reverse，替代 O(n) insert(0,...)
       value >>= 8;
     }
-    return bytes;
+    return bytes.reversed.toList();
   }
 
   List<int> _hexToBytes(String hex) {
