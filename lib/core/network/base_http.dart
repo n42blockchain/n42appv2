@@ -13,6 +13,8 @@ import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/core/security/security_config.dart';
+import 'package:n42appv2/core/network/circuit_breaker_interceptor.dart';
+import 'package:n42appv2/core/network/retry_interceptor.dart';
 
 /// Base HTTP Client
 ///
@@ -50,6 +52,8 @@ class BaseHttp {
   }) {
     _options = _createBaseOptions();
     _dio = Dio(_options);
+    _dio.interceptors.add(CircuitBreakerInterceptor());
+    _dio.interceptors.add(RetryInterceptor(dio: _dio));
     _configureHttpAdapter();
   }
 
@@ -70,6 +74,8 @@ class BaseHttp {
   void reSetDio(bool isTest) {
     _options = _createBaseOptions(isTest: isTest);
     _dio = Dio(_options);
+    _dio.interceptors.add(CircuitBreakerInterceptor());
+    _dio.interceptors.add(RetryInterceptor(dio: _dio));
     _configureHttpAdapter();
   }
 
