@@ -1239,5 +1239,15 @@
   "device_login_title": "Yeni Cihaz Girişi",
   "device_login_message": "Hesabınıza {deviceName} ({os}) üzerinden giriş yapıldı. Bu siz değilseniz, şifrenizi değiştirmenizi öneririz.",
   "device_login_dismiss": "Anladım",
-  "device_login_change_password": "Şifre Değiştir"
+  "device_login_change_password": "Şifre Değiştir",
+  "g_key_filter": "Filter",
+  "g_key_reset": "Reset",
+  "g_key_filter_type": "Type",
+  "g_key_eligible_only": "Eligible only",
+  "g_key_high_value_only": "High value only",
+  "g_key_apply": "Apply",
+  "g_key_notification_settings": "Notification Settings",
+  "g_key_new_airdrops": "New airdrops",
+  "g_key_eligibility_alerts": "Eligibility alerts",
+  "g_key_deadline_reminders": "Deadline reminders"
 }

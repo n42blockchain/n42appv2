@@ -5,6 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/airdrop/models/airdrop_model.dart';
 import 'package:n42appv2/src/airdrop/pages/airdrop_detail_page.dart';
@@ -660,18 +661,18 @@ class _AirdropHomePageState extends State<AirdropHomePage>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Filter', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      Text(S.of(ctx).g_key_filter, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                       TextButton(
                         onPressed: () {
                           Navigator.pop(ctx);
                           _provider.clearFilter();
                         },
-                        child: const Text('Reset'),
+                        child: Text(S.of(ctx).g_key_reset),
                       ),
                     ],
                   ),
                   const SizedBox(height: 12),
-                  const Text('Type', style: TextStyle(fontWeight: FontWeight.w600)),
+                  Text(S.of(ctx).g_key_filter_type, style: const TextStyle(fontWeight: FontWeight.w600)),
                   Wrap(
                     spacing: 8,
                     children: AirdropType.values.map((type) {
@@ -686,13 +687,13 @@ class _AirdropHomePageState extends State<AirdropHomePage>
                   const SizedBox(height: 12),
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: const Text('Eligible only'),
+                    title: Text(S.of(ctx).g_key_eligible_only),
                     value: onlyEligible,
                     onChanged: (v) => setSheetState(() => onlyEligible = v),
                   ),
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: const Text('High value only'),
+                    title: Text(S.of(ctx).g_key_high_value_only),
                     value: onlyHighValue,
                     onChanged: (v) => setSheetState(() => onlyHighValue = v),
                   ),
@@ -708,7 +709,7 @@ class _AirdropHomePageState extends State<AirdropHomePage>
                           onlyHighValue: onlyHighValue ? true : null,
                         ));
                       },
-                      child: const Text('Apply'),
+                      child: Text(S.of(ctx).g_key_apply),
                     ),
                   ),
                 ],
@@ -731,33 +732,33 @@ class _AirdropHomePageState extends State<AirdropHomePage>
         return StatefulBuilder(
           builder: (ctx, setDialogState) {
             return AlertDialog(
-              title: const Text('Notification Settings'),
+              title: Text(S.of(ctx).g_key_notification_settings),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: const Text('New airdrops'),
+                    title: Text(S.of(ctx).g_key_new_airdrops),
                     value: newAirdrops,
                     onChanged: (v) => setDialogState(() => newAirdrops = v),
                   ),
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: const Text('Eligibility alerts'),
+                    title: Text(S.of(ctx).g_key_eligibility_alerts),
                     value: eligibilityAlerts,
                     onChanged: (v) => setDialogState(() => eligibilityAlerts = v),
                   ),
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: const Text('Deadline reminders'),
+                    title: Text(S.of(ctx).g_key_deadline_reminders),
                     value: deadlineReminders,
                     onChanged: (v) => setDialogState(() => deadlineReminders = v),
                   ),
                 ],
               ),
               actions: [
-                TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
-                ElevatedButton(onPressed: () => Navigator.pop(ctx), child: const Text('Save')),
+                TextButton(onPressed: () => Navigator.pop(ctx), child: Text(S.of(ctx).g_key_79)),
+                ElevatedButton(onPressed: () => Navigator.pop(ctx), child: Text(S.of(ctx).g_key_115)),
               ],
             );
           },

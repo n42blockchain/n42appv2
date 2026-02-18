@@ -939,6 +939,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_apple_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
       "Apple sign-in cancelled",
     ),
+    "g_key_apply": MessageLookupByLibrary.simpleMessage("Apply"),
     "g_key_batch_add_recipient": MessageLookupByLibrary.simpleMessage(
       "Добавить получателя",
     ),
@@ -1103,6 +1104,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_continue_with_google": MessageLookupByLibrary.simpleMessage(
       "Continue with Google",
     ),
+    "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
+      "Deadline reminders",
+    ),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
       "Active Products",
     ),
@@ -1138,6 +1142,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_earn_up_to_apy": m17,
     "g_key_earn_view_all": MessageLookupByLibrary.simpleMessage("View All"),
+    "g_key_eligibility_alerts": MessageLookupByLibrary.simpleMessage(
+      "Eligibility alerts",
+    ),
+    "g_key_eligible_only": MessageLookupByLibrary.simpleMessage(
+      "Eligible only",
+    ),
     "g_key_email": MessageLookupByLibrary.simpleMessage("Email"),
     "g_key_email_invalid": MessageLookupByLibrary.simpleMessage(
       "Please enter a valid email address",
@@ -1542,6 +1552,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_feedback_9": MessageLookupByLibrary.simpleMessage(
       "Войдите в систему",
     ),
+    "g_key_filter": MessageLookupByLibrary.simpleMessage("Filter"),
+    "g_key_filter_type": MessageLookupByLibrary.simpleMessage("Type"),
     "g_key_forgot_password": MessageLookupByLibrary.simpleMessage(
       "Forgot Password?",
     ),
@@ -1580,6 +1592,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_gas_standard": MessageLookupByLibrary.simpleMessage("Стандарт"),
     "g_key_google_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
       "Google sign-in cancelled",
+    ),
+    "g_key_high_value_only": MessageLookupByLibrary.simpleMessage(
+      "High value only",
     ),
     "g_key_hw_accounts": MessageLookupByLibrary.simpleMessage("Аккаунты"),
     "g_key_hw_add_account": MessageLookupByLibrary.simpleMessage(
@@ -1771,6 +1786,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Requires staking",
     ),
     "g_key_mnemonic": MessageLookupByLibrary.simpleMessage("Введите сид-фразу"),
+    "g_key_new_airdrops": MessageLookupByLibrary.simpleMessage("New airdrops"),
     "g_key_new_password": MessageLookupByLibrary.simpleMessage("New Password"),
     "g_key_new_password_same_as_old": MessageLookupByLibrary.simpleMessage(
       "New password must be different from current password",
@@ -1788,6 +1804,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_nft_47": MessageLookupByLibrary.simpleMessage("Выбрать видео"),
     "g_key_no_linked_accounts": MessageLookupByLibrary.simpleMessage(
       "No linked accounts",
+    ),
+    "g_key_notification_settings": MessageLookupByLibrary.simpleMessage(
+      "Notification Settings",
     ),
     "g_key_oidc_login": MessageLookupByLibrary.simpleMessage(
       "Enterprise Login (SSO)",
@@ -1827,6 +1846,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Выбрать из галереи телефона",
     ),
     "g_key_resend_code": MessageLookupByLibrary.simpleMessage("Resend Code"),
+    "g_key_reset": MessageLookupByLibrary.simpleMessage("Reset"),
     "g_key_reset_password": MessageLookupByLibrary.simpleMessage(
       "Reset Password",
     ),

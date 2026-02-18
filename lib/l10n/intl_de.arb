@@ -1239,5 +1239,15 @@
   "device_login_title": "Neue Geräteanmeldung",
   "device_login_message": "Ihr Konto wurde gerade auf {deviceName} ({os}) angemeldet. Wenn Sie das nicht waren, empfehlen wir Ihnen, Ihr Passwort zu ändern.",
   "device_login_dismiss": "Verstanden",
-  "device_login_change_password": "Passwort ändern"
+  "device_login_change_password": "Passwort ändern",
+  "g_key_filter": "Filter",
+  "g_key_reset": "Reset",
+  "g_key_filter_type": "Type",
+  "g_key_eligible_only": "Eligible only",
+  "g_key_high_value_only": "High value only",
+  "g_key_apply": "Apply",
+  "g_key_notification_settings": "Notification Settings",
+  "g_key_new_airdrops": "New airdrops",
+  "g_key_eligibility_alerts": "Eligibility alerts",
+  "g_key_deadline_reminders": "Deadline reminders"
 }

@@ -1239,5 +1239,15 @@
   "device_login_title": "새 기기 로그인",
   "device_login_message": "회원님의 계정이 {deviceName} ({os})에서 로그인되었습니다. 본인이 아닌 경우 비밀번호를 변경하는 것을 권장합니다.",
   "device_login_dismiss": "확인",
-  "device_login_change_password": "비밀번호 변경"
+  "device_login_change_password": "비밀번호 변경",
+  "g_key_filter": "Filter",
+  "g_key_reset": "Reset",
+  "g_key_filter_type": "Type",
+  "g_key_eligible_only": "Eligible only",
+  "g_key_high_value_only": "High value only",
+  "g_key_apply": "Apply",
+  "g_key_notification_settings": "Notification Settings",
+  "g_key_new_airdrops": "New airdrops",
+  "g_key_eligibility_alerts": "Eligibility alerts",
+  "g_key_deadline_reminders": "Deadline reminders"
 }

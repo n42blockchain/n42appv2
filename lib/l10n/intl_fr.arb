@@ -1239,5 +1239,15 @@
   "device_login_title": "Nouvelle connexion",
   "device_login_message": "Votre compte vient d'être connecté sur {deviceName} ({os}). Si ce n'était pas vous, nous vous recommandons de changer votre mot de passe.",
   "device_login_dismiss": "Compris",
-  "device_login_change_password": "Changer le mot de passe"
+  "device_login_change_password": "Changer le mot de passe",
+  "g_key_filter": "Filter",
+  "g_key_reset": "Reset",
+  "g_key_filter_type": "Type",
+  "g_key_eligible_only": "Eligible only",
+  "g_key_high_value_only": "High value only",
+  "g_key_apply": "Apply",
+  "g_key_notification_settings": "Notification Settings",
+  "g_key_new_airdrops": "New airdrops",
+  "g_key_eligibility_alerts": "Eligibility alerts",
+  "g_key_deadline_reminders": "Deadline reminders"
 }

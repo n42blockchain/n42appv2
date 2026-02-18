@@ -806,6 +806,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_apple_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
       "Apple sign-in cancelled",
     ),
+    "g_key_apply": MessageLookupByLibrary.simpleMessage("Apply"),
     "g_key_batch_add_recipient": MessageLookupByLibrary.simpleMessage("수신자 추가"),
     "g_key_batch_broadcasting": MessageLookupByLibrary.simpleMessage(
       "Broadcasting...",
@@ -928,6 +929,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_continue_with_google": MessageLookupByLibrary.simpleMessage(
       "Continue with Google",
     ),
+    "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
+      "Deadline reminders",
+    ),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage("활성 상품"),
     "g_key_earn_claim_free": MessageLookupByLibrary.simpleMessage("무료 토큰 받기"),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage("크로스체인 전송"),
@@ -951,6 +955,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_total_earnings": MessageLookupByLibrary.simpleMessage("총 수익"),
     "g_key_earn_up_to_apy": m17,
     "g_key_earn_view_all": MessageLookupByLibrary.simpleMessage("전체 보기"),
+    "g_key_eligibility_alerts": MessageLookupByLibrary.simpleMessage(
+      "Eligibility alerts",
+    ),
+    "g_key_eligible_only": MessageLookupByLibrary.simpleMessage(
+      "Eligible only",
+    ),
     "g_key_email": MessageLookupByLibrary.simpleMessage("Email"),
     "g_key_email_invalid": MessageLookupByLibrary.simpleMessage(
       "Please enter a valid email address",
@@ -1291,6 +1301,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_feedback_7": MessageLookupByLibrary.simpleMessage("실패"),
     "g_key_feedback_8": MessageLookupByLibrary.simpleMessage("클릭하여 재시도"),
     "g_key_feedback_9": MessageLookupByLibrary.simpleMessage("로그인하세요"),
+    "g_key_filter": MessageLookupByLibrary.simpleMessage("Filter"),
+    "g_key_filter_type": MessageLookupByLibrary.simpleMessage("Type"),
     "g_key_forgot_password": MessageLookupByLibrary.simpleMessage(
       "Forgot Password?",
     ),
@@ -1315,6 +1327,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_gas_standard": MessageLookupByLibrary.simpleMessage("표준"),
     "g_key_google_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
       "Google sign-in cancelled",
+    ),
+    "g_key_high_value_only": MessageLookupByLibrary.simpleMessage(
+      "High value only",
     ),
     "g_key_hw_accounts": MessageLookupByLibrary.simpleMessage("계정"),
     "g_key_hw_add_account": MessageLookupByLibrary.simpleMessage("계정 추가"),
@@ -1464,6 +1479,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Requires staking",
     ),
     "g_key_mnemonic": MessageLookupByLibrary.simpleMessage("시드 문구를 입력하세요"),
+    "g_key_new_airdrops": MessageLookupByLibrary.simpleMessage("New airdrops"),
     "g_key_new_password": MessageLookupByLibrary.simpleMessage("New Password"),
     "g_key_new_password_same_as_old": MessageLookupByLibrary.simpleMessage(
       "New password must be different from current password",
@@ -1479,6 +1495,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_nft_47": MessageLookupByLibrary.simpleMessage("영상 선택"),
     "g_key_no_linked_accounts": MessageLookupByLibrary.simpleMessage(
       "No linked accounts",
+    ),
+    "g_key_notification_settings": MessageLookupByLibrary.simpleMessage(
+      "Notification Settings",
     ),
     "g_key_oidc_login": MessageLookupByLibrary.simpleMessage(
       "Enterprise Login (SSO)",
@@ -1516,6 +1535,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage("휴대폰 갤러리에서 선택"),
     "g_key_resend_code": MessageLookupByLibrary.simpleMessage("Resend Code"),
+    "g_key_reset": MessageLookupByLibrary.simpleMessage("Reset"),
     "g_key_reset_password": MessageLookupByLibrary.simpleMessage(
       "Reset Password",
     ),

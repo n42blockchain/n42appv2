@@ -11283,6 +11283,86 @@ class S {
       args: [],
     );
   }
+
+  /// `Filter`
+  String get g_key_filter {
+    return Intl.message('Filter', name: 'g_key_filter', desc: '', args: []);
+  }
+
+  /// `Reset`
+  String get g_key_reset {
+    return Intl.message('Reset', name: 'g_key_reset', desc: '', args: []);
+  }
+
+  /// `Type`
+  String get g_key_filter_type {
+    return Intl.message('Type', name: 'g_key_filter_type', desc: '', args: []);
+  }
+
+  /// `Eligible only`
+  String get g_key_eligible_only {
+    return Intl.message(
+      'Eligible only',
+      name: 'g_key_eligible_only',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `High value only`
+  String get g_key_high_value_only {
+    return Intl.message(
+      'High value only',
+      name: 'g_key_high_value_only',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Apply`
+  String get g_key_apply {
+    return Intl.message('Apply', name: 'g_key_apply', desc: '', args: []);
+  }
+
+  /// `Notification Settings`
+  String get g_key_notification_settings {
+    return Intl.message(
+      'Notification Settings',
+      name: 'g_key_notification_settings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New airdrops`
+  String get g_key_new_airdrops {
+    return Intl.message(
+      'New airdrops',
+      name: 'g_key_new_airdrops',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Eligibility alerts`
+  String get g_key_eligibility_alerts {
+    return Intl.message(
+      'Eligibility alerts',
+      name: 'g_key_eligibility_alerts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Deadline reminders`
+  String get g_key_deadline_reminders {
+    return Intl.message(
+      'Deadline reminders',
+      name: 'g_key_deadline_reminders',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

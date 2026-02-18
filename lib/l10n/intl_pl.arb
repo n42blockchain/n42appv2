@@ -1239,5 +1239,15 @@
   "device_login_title": "Logowanie z nowego urządzenia",
   "device_login_message": "Twoje konto zostało właśnie zalogowane na {deviceName} ({os}). Jeśli to nie Ty, zalecamy zmianę hasła.",
   "device_login_dismiss": "Rozumiem",
-  "device_login_change_password": "Zmień hasło"
+  "device_login_change_password": "Zmień hasło",
+  "g_key_filter": "Filter",
+  "g_key_reset": "Reset",
+  "g_key_filter_type": "Type",
+  "g_key_eligible_only": "Eligible only",
+  "g_key_high_value_only": "High value only",
+  "g_key_apply": "Apply",
+  "g_key_notification_settings": "Notification Settings",
+  "g_key_new_airdrops": "New airdrops",
+  "g_key_eligibility_alerts": "Eligibility alerts",
+  "g_key_deadline_reminders": "Deadline reminders"
 }
