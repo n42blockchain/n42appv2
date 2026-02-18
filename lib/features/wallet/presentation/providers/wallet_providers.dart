@@ -340,7 +340,11 @@ final walletBalanceProvider = FutureProvider.autoDispose<double>((ref) async {
   if (wallet == null) return 0.0;
 
   // Read aggregated balance from the legacy WalletActionProvider
-  return globalWapAdapter.balanceTotal;
+  try {
+    return globalWapAdapter.balanceTotal;
+  } catch (_) {
+    return 0.0;
+  }
 });
 
 /// Coin List Provider (Async)
@@ -358,30 +362,34 @@ class CoinListNotifier extends AsyncNotifier<List<CoinBalanceData>> {
     // Build coin list from wallet's coinInfo
     final List<CoinBalanceData> coins = [];
     final coinInfo = wallet.coinInfo;
-    
+
     if (coinInfo != null) {
+      // Build O(1) lookup map from legacy coin models (O-1 optimisation + A-4 guard)
+      Map<String, dynamic> modelMap = {};
+      try {
+        modelMap = {
+          for (final c in globalWapAdapter.coinModels)
+            (c.coin['coinType'] as String? ?? ''): c,
+        };
+      } catch (_) {}
+
       for (final entry in coinInfo.entries) {
         final coinKey = entry.key;
         final coinData = entry.value as Map<String, dynamic>?;
-        
+
         if (coinData != null && coinData['baseInfo'] != null) {
           final baseInfo = coinData['baseInfo'] as Map<String, dynamic>;
-          // Read balance from the legacy WalletActionProvider coin list
           double balance = 0.0;
           double balanceUsd = 0.0;
           double price = 0.0;
           double priceChange = 0.0;
-          try {
-            final legacyCoin = globalWapAdapter.coinModels
-                .where((c) => c.coin['coinType'] == coinKey)
-                .firstOrNull;
-            if (legacyCoin != null) {
-              balance = legacyCoin.balanceDoubleAll();
-              price = legacyCoin.coinPrice;
-              priceChange = legacyCoin.percentage;
-              balanceUsd = legacyCoin.value;
-            }
-          } catch (_) {}
+          final legacyCoin = modelMap[coinKey];
+          if (legacyCoin != null) {
+            balance = legacyCoin.balanceDoubleAll();
+            price = legacyCoin.coinPrice;
+            priceChange = legacyCoin.percentage;
+            balanceUsd = legacyCoin.value;
+          }
           coins.add(CoinBalanceData(
             symbol: coinKey,
             name: baseInfo['name']?.toString() ?? coinKey,

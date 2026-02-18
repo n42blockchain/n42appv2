@@ -393,6 +393,7 @@ class MiningV2Provider extends ChangeNotifier {
 
   }
   void startCheckDepositTxHash(String txHash){
+    _timer?.cancel();
     _timer=Timer.periodic(const Duration(seconds: 5), (timer) async {
       if(await checkTxHash(txHash)==false){
         endCheckTxHash();
@@ -435,6 +436,7 @@ class MiningV2Provider extends ChangeNotifier {
     notifyListeners();
   }
   void startCheckExitDepositTxHash(String txHash){
+    _timer?.cancel();
     _timer=Timer.periodic(const Duration(seconds: 5), (timer) async {
       if(await checkTxHash(txHash)==false){
         exitDepositLoad=Load.finish;
@@ -592,6 +594,8 @@ class MiningV2Provider extends ChangeNotifier {
       if(rmms.error==false){
         miningTotalRevenue=toEther(rmms.data, 18).toDouble();
       }
+    } catch (e, st) {
+      debugPrint('[Mining] getMiningWithdrawalsDaily: $e\n$st');
     } finally {
       isLoading7DayData=false;
       notifyListeners();

@@ -29,6 +29,10 @@ class StakingHomePage extends StatefulWidget {
 
 class _StakingHomePageState extends State<StakingHomePage>
     with SingleTickerProviderStateMixin {
+  // Evaluated once at compile time; avoids repeated bool.fromEnvironment calls on every build.
+  static const bool _dotStakingEnabled =
+      bool.fromEnvironment('FEATURE_DOT_STAKING', defaultValue: false);
+
   late TabController _tabController;
   late StakingProvider _provider;
 
@@ -136,8 +140,7 @@ class _StakingHomePageState extends State<StakingHomePage>
   /// 协议列表 Tab
   Widget _buildProtocolsTab(BuildContext context) {
     // DOT staking is not yet implemented; hide until backend support is ready
-    const bool dotStakingEnabled = bool.fromEnvironment('FEATURE_DOT_STAKING', defaultValue: false);
-    final protocols = dotStakingEnabled
+    final protocols = _dotStakingEnabled
         ? StakingProtocols.all
         : StakingProtocols.all
             .where((p) => p.chainType != StakingChainType.polkadot)

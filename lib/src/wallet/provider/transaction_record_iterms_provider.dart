@@ -73,16 +73,17 @@ class TransactionRecordItemProvider with ChangeNotifier{
     }
   }
   void timerStart(){
-    if(_timer!=null)return;
-    _timer=Timer.periodic(Duration(seconds: 10), (timer) {
-      if(_unDoneTrModelList.isNotEmpty){
-        for(int i=0;i<_unDoneTrModelList.length;i++){
-          checkUndoneTr(_unDoneTrModelList[i]);
-        }
-      }
-      if(_unDoneTrModelList.isEmpty && _timer !=null ){
-        _timer!.cancel();
+    if(_timer != null && _timer!.isActive)return;
+    _timer=Timer.periodic(const Duration(seconds: 10), (timer) async {
+      if(_unDoneTrModelList.isEmpty){
+        timer.cancel();
         _timer=null;
+        return;
+      }
+      // Snapshot list to avoid concurrent modification during async iteration
+      final pending=List<TransationRecordModel>.from(_unDoneTrModelList);
+      for(final trm in pending){
+        await checkUndoneTr(trm);
       }
     });
   }

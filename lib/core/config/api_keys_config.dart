@@ -123,7 +123,9 @@ class ApiKeysConfig {
   /// 检查 API keys 是否已配置
   static bool get isConfigured {
     return infuraMainnet != _defaultInfuraKey &&
-        etherscan != _defaultEtherscanKey;
+        etherscan != _defaultEtherscanKey &&
+        tonApiKeyMainnet.isNotEmpty &&
+        dotApiKey.isNotEmpty;
   }
 
   /// 在 Debug 模式下验证 API keys 配置
@@ -146,6 +148,12 @@ class ApiKeysConfig {
     }
     if (sonicscan == _defaultSonicscanKey) {
       warnings.add('SONICSCAN_API_KEY not configured');
+    }
+    if (tonApiKeyMainnet.isEmpty) {
+      warnings.add('TON_API_KEY_MAINNET not configured');
+    }
+    if (dotApiKey.isEmpty) {
+      warnings.add('DOT_API_KEY not configured');
     }
     if (aiApiKey == _defaultAiApiKey) {
       warnings.add('AI_API_KEY not configured');
