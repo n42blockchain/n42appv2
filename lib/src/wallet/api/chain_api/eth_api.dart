@@ -100,10 +100,8 @@ class EthAPI{
       final mm=resultToMessageModel(result);
       if(mm.error==false){
         mm.data=hexToInt(mm.data);
-      }else{
-        mm.error=true;
-        mm.data=mm.data['message']??"Error";
       }
+      // On error, mm.data is already the message string from AppError.message
       return mm;
     }
     else{
@@ -146,12 +144,8 @@ class EthAPI{
       final mm=resultToMessageModel(result);
       if(mm.error==false){
         mm.data=hexToInt(mm.data);
-      }else{
-        mm.error=true;
-        if(mm.data.runtimeType != String){
-          mm.data=mm.data['message'];
-        }
       }
+      // On error, mm.data is already the message string from AppError.message
       return mm;
     }
   }
@@ -239,8 +233,12 @@ class EthAPI{
       }
       final data=await BaseApi.requestEmptyH.post(url, params: {},data: postData,enableRetry: enableRetry);
       if(data.containsKey('error')){
+        final errorObj = data['error'];
+        final errorMsg = errorObj is Map
+            ? (errorObj['message']?.toString() ?? errorObj.toString())
+            : errorObj?.toString() ?? 'RPC error';
         return Result.failure(AppError.blockchain(
-          data['error']?.toString() ?? 'RPC error',
+          errorMsg,
           code: 'ETH_RPC_ERROR',
           originalError: data['error'],
         ));

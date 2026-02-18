@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42appv2/core/network/retry_interceptor.dart';
@@ -57,6 +58,7 @@ class _MockResponse {
 ({Dio dio, _MockHttpAdapter adapter}) _createTestDio({
   RetryPolicy? policy,
   Random? random,
+  Connectivity? connectivity,
 }) {
   final adapter = _MockHttpAdapter();
   final dio = Dio(BaseOptions(baseUrl: 'https://test.example.com'));
@@ -70,6 +72,7 @@ class _MockResponse {
       maxJitter: Duration.zero,
     ),
     random: random ?? _ZeroRandom(),
+    connectivity: connectivity ?? _MockConnectivity([ConnectivityResult.wifi]),
   ));
   return (dio: dio, adapter: adapter);
 }
@@ -491,6 +494,89 @@ void main() {
   });
 
   // ---------------------------------------------------------------------------
+  // Connectivity check tests (new behaviour added in connectivity_plus PR)
+  // ---------------------------------------------------------------------------
+
+  group('connectivity check', () {
+    test('skips retry when device reports ConnectivityResult.none', () async {
+      final (:dio, :adapter) = _createTestDio(
+        connectivity: _MockConnectivity([ConnectivityResult.none]),
+      );
+      adapter.enqueue(502);
+      adapter.enqueue(200); // must NOT be consumed
+
+      await expectLater(
+        () => dio.get('/test'),
+        throwsA(isA<DioException>().having(
+          (e) => e.response?.statusCode,
+          'statusCode',
+          502,
+        )),
+      );
+      // Second response was never consumed — retry was skipped.
+      expect(adapter.responses.length, 1);
+    });
+
+    test('retries normally when device reports ConnectivityResult.wifi', () async {
+      final (:dio, :adapter) = _createTestDio(
+        connectivity: _MockConnectivity([ConnectivityResult.wifi]),
+      );
+      adapter.enqueue(502);
+      adapter.enqueue(200);
+
+      final response = await dio.get('/test');
+      expect(response.statusCode, 200);
+      expect(adapter.responses, isEmpty);
+    });
+
+    test('retries normally when device reports ConnectivityResult.mobile', () async {
+      final (:dio, :adapter) = _createTestDio(
+        connectivity: _MockConnectivity([ConnectivityResult.mobile]),
+      );
+      adapter.enqueue(502);
+      adapter.enqueue(200);
+
+      final response = await dio.get('/test');
+      expect(response.statusCode, 200);
+      expect(adapter.responses, isEmpty);
+    });
+
+    test('retries when list has none AND wifi (any() check)', () async {
+      final (:dio, :adapter) = _createTestDio(
+        connectivity: _MockConnectivity([
+          ConnectivityResult.none,
+          ConnectivityResult.wifi,
+        ]),
+      );
+      adapter.enqueue(502);
+      adapter.enqueue(200);
+
+      final response = await dio.get('/test');
+      expect(response.statusCode, 200);
+      expect(adapter.responses, isEmpty);
+    });
+
+    test('skips ALL retries when offline — exhausts no extra requests', () async {
+      final (:dio, :adapter) = _createTestDio(
+        policy: const RetryPolicy(
+          maxRetries: 3,
+          baseDelay: Duration(milliseconds: 1),
+          maxDelay: Duration(milliseconds: 10),
+          maxJitter: Duration.zero,
+        ),
+        connectivity: _MockConnectivity([ConnectivityResult.none]),
+      );
+      adapter.enqueue(502); // only initial attempt
+      // No more queued — proves retries were skipped
+      await expectLater(
+        () => dio.get('/test'),
+        throwsA(isA<DioException>()),
+      );
+      expect(adapter.responses, isEmpty);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
   // RetryOptions constants
   // ---------------------------------------------------------------------------
 
@@ -513,4 +599,18 @@ class _ZeroRandom implements Random {
 
   @override
   bool nextBool() => false;
+}
+
+/// A controllable [Connectivity] mock for testing.
+class _MockConnectivity implements Connectivity {
+  final List<ConnectivityResult> results;
+
+  _MockConnectivity(this.results);
+
+  @override
+  Future<List<ConnectivityResult>> checkConnectivity() async => results;
+
+  @override
+  Stream<List<ConnectivityResult>> get onConnectivityChanged =>
+      const Stream.empty();
 }
