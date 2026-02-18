@@ -13,8 +13,6 @@ import 'package:n42appv2/src/wallet/api/transfer_api.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/models/transation_record_model.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_base_send.dart';
-import 'package:n42appv2/src/wallet/provider/transaction_record_iterms_provider.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/wallet/utils/coin_gas.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
@@ -22,22 +20,24 @@ import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:n42appv2/src/widgets/prompt_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/transaction_providers.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 import 'package:web3dart/web3dart.dart';
 
-class TransactionRetry extends StatefulWidget {
+class TransactionRetry extends ConsumerStatefulWidget {
   final String txHash;
   final CoinModel coinModel;
   const TransactionRetry(this.coinModel,this.txHash,{super.key});
 
   @override
-  State<TransactionRetry> createState() => _TransactionRetryState();
+  ConsumerState<TransactionRetry> createState() => _TransactionRetryState();
 }
 
-class _TransactionRetryState extends State<TransactionRetry> {
+class _TransactionRetryState extends ConsumerState<TransactionRetry> {
   EthAPI? _ethAPI;
   EthAPI get ethAPI{
     _ethAPI ??= EthAPI();
@@ -56,7 +56,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
   late String _txHash;
   @override
   void initState() {
-    _txHash = _txHash;
+    _txHash = widget.txHash;
     searchEditingController.text=_txHash;
     init();
     super.initState();
@@ -93,7 +93,7 @@ class _TransactionRetryState extends State<TransactionRetry> {
       trModel.addrType=widget.coinModel.addrType;
       trModel.coin=widget.coinModel.coin;
       trModel.coinMiniName=widget.coinModel.coin['coinType'];
-      trModel.walletIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
+      trModel.walletIndex=ref.read(wapBridgeProvider).walletIndex;
       trModel.contract=widget.coinModel.isTest?widget.coinModel.coin['contract_test']:widget.coinModel.coin['contract'];
       trModel.isTest=widget.coinModel.isTest?1:0;
       trModel.gasPrice=BigInt.zero;//totalGasPrice;
@@ -269,17 +269,17 @@ class _TransactionRetryState extends State<TransactionRetry> {
           pathIndex: widget.coinModel.pathIndex);
       if (!mounted) return;
       if(mm.error){
-        ToastUtils.show(ethMessage.data);
+        ToastUtils.show(mm.data);
       }else{
         trm.txHash=mm.data;
         if(trm.trId==0){
           trm.trId=await db.insertTransationRecord(trm);
           if (!mounted) return;
-          Provider.of<TransactionRecordItemProvider>(context,listen: false).addUndoneTr(trm,1);
+          ref.read(tripBridgeProvider).addUndoneTr(trm,1);
         }else{
           await db.updateTransationRecord(trm);
           if (!mounted) return;
-          Provider.of<TransactionRecordItemProvider>(context,listen: false).selectUndoneTr();
+          ref.read(tripBridgeProvider).selectUndoneTr();
         }
         ToastUtils.show(S.current.g_key_nft_41);
         setState(() {

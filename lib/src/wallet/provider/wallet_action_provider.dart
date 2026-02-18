@@ -5,7 +5,8 @@ import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
+import 'package:n42appv2/features/mining/presentation/providers/mining_providers.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/transaction_providers.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
@@ -15,10 +16,10 @@ import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/wallet/api/market_api.dart';
 import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
+import 'package:n42appv2/src/wallet/models/coin_model_wallet_access.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/models/aggregated_token.dart';
 import 'package:n42appv2/src/wallet/models/aggregated_coin_model.dart';
-import 'package:n42appv2/src/wallet/provider/transaction_record_iterms_provider.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:decimal/decimal.dart';
@@ -27,10 +28,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:n42appv2/generated/l10n.dart';
-import 'package:provider/provider.dart';
 
-class WalletActionProvider extends ChangeNotifier{
+class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAccess{
   /// 公开的刷新方法，用于通知监听者数据已更新
+  @override
   void refresh() {
     notifyListeners();
   }
@@ -61,6 +62,9 @@ class WalletActionProvider extends ChangeNotifier{
   //钱包列表
   List<WalletInfo> _walletInfoLsit = [];
   List<WalletInfo> get walletInfoLsit => _walletInfoLsit;
+  @override
+  List<WalletInfo> get walletInfoList => _walletInfoLsit;
+  @override
   WalletInfo get walletInfo{
     return _walletInfoLsit[walletIndex];
   }
@@ -209,6 +213,7 @@ class WalletActionProvider extends ChangeNotifier{
     return returnCM;
   }
   //添加币到 集合中
+  @override
   void setAddress(String key, Map<String, dynamic> value) {
     _addrsss[key] = value;
   }
@@ -247,14 +252,17 @@ class WalletActionProvider extends ChangeNotifier{
   Future<void> initWallet({bool shouldInitCoinInfo=false})async{
     if(buildwallet==true)return;
     buildwallet=true;
-    await getWalletInfo();
-    // 同步新链到现有钱包
-    await _syncNewChains();
-    //导入的钱包
-    //await initImportWallet();
-    await buildCoinModel();
-    buildwallet=false;
-    notifyListeners();
+    try {
+      await getWalletInfo();
+      // 同步新链到现有钱包
+      await _syncNewChains();
+      //导入的钱包
+      //await initImportWallet();
+      await buildCoinModel();
+    } finally {
+      buildwallet=false;
+      notifyListeners();
+    }
     if(shouldInitCoinInfo){
       ///发送一个event事件 对挖矿进行初始化
       eventBus.fire(EventPublic(EventPublicType.selectWallet,
@@ -430,12 +438,12 @@ class WalletActionProvider extends ChangeNotifier{
         }
       }
       cm.privateKey=walletInfo.privateKey;
+      cm.walletAccess=this;
       _coinModels.add(cm);
     }
     notifyListeners();
     await buildCoinModelInfo();
-    if (!AppGlobals.appContext.mounted) return;
-    Provider.of<TransactionRecordItemProvider>(AppGlobals.appContext,listen: false).selectUndoneTr();
+    globalTripInstance.selectUndoneTr();
   }
   /// 聚合代币列表 (USDT, USDC)
   List<AggregatedCoinModel> _aggregatedCoins = [];
@@ -448,7 +456,7 @@ class WalletActionProvider extends ChangeNotifier{
 
     for (int i = 0; i < _coinModels.length; i++) {
       CoinModel mm = _coinModels[i];
-      await mm.buildWallet();
+      await mm.buildWallet(walletAccess: this);
       mm.getBalanceDefault();
       if(mm.showList){
         coinList.add(mm);
@@ -593,6 +601,7 @@ class WalletActionProvider extends ChangeNotifier{
     //ProviderUtil.walletActionProvider().getCoinPrice(cm);
     cm.address=mainChain.address;
     cm.addressType=mainChain.addressType;
+    cm.walletAccess=this;
     cm.getBalanceDefault();
     return cm;
   }
@@ -605,7 +614,7 @@ class WalletActionProvider extends ChangeNotifier{
     if(walletInfo.networkIndex==-1){
       for (int i = 0; i < _coinModels.length; i++) {
         CoinModel mm = _coinModels[i];
-        await mm.buildWallet();
+        await mm.buildWallet(walletAccess: this);
         if(mm.showList){
           mm.getBalanceDefault();
           coinList.add(mm);
@@ -877,9 +886,8 @@ class WalletActionProvider extends ChangeNotifier{
           mnemonic: _walletInfoLsit[rIndex].mnemonic??"",
           pk: _walletInfoLsit[rIndex].privateKey??""
       );
-      if (!AppGlobals.appContext.mounted) return MessageModel.error();
       String miningAddress=rmAddress[cInfo['addrType']];
-      var miningData=Provider.of<MiningV2Provider>(AppGlobals.appContext,listen: false).miningData?[miningAddress];
+      var miningData=globalMiningInstance.miningData?[miningAddress];
       if(miningData !=null){
         if(miningData['isMining']==true){
           MessageModel rmm=MessageModel.error();
@@ -1267,7 +1275,7 @@ class WalletActionProvider extends ChangeNotifier{
     });
     if(clIndex !=-1){
       coinList[clIndex]=_coinModels[cIndex];
-      coinList[clIndex].buildWallet();
+      coinList[clIndex].buildWallet(walletAccess: this);
       coinList[clIndex].getBalanceDefault();
       if(coinList[clIndex].tokens.isNotEmpty){
         List<String> tKeys=coinList[clIndex].tokens.keys.toList();
@@ -1483,6 +1491,7 @@ class WalletActionProvider extends ChangeNotifier{
   }
 
   //计算余额
+  @override
   void calculateBalanceWidthCoinModel(){
     double tBalance=0.0;
     for(int i=0;i<coinList.length;i++){
@@ -1491,6 +1500,7 @@ class WalletActionProvider extends ChangeNotifier{
     setBalanceTotal(tBalance);
     //getTokens_top();
   }
+  @override
   Future<bool> getBalanceWithCoinModel(CoinModel coinModel)async{
     //获取coin 的地址
     // 如果地址为 null，说明该链的地址生成失败，跳过余额获取
@@ -1674,7 +1684,7 @@ class WalletActionProvider extends ChangeNotifier{
       return false;
     });
     if(cmIndex != -1){
-      await coinList[cmIndex].getBalance();
+      await coinList[cmIndex].getBalance(walletAccess: this);
       notifyListeners();
     }
   }

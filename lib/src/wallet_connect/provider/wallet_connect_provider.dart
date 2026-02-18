@@ -4,8 +4,8 @@ import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/core/di/service_locator_setup.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
+import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42appv2/src/wallet_connect/widgets/wallet_connect_alert_widget.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:eip712/eip712.dart';
@@ -16,7 +16,6 @@ import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:provider/provider.dart';
 import 'package:reown_walletkit/reown_walletkit.dart' as wallet_connect;
 import 'package:wallet/wallet.dart' as wallet_types;
 import 'package:web3dart/web3dart.dart' as crypto;
@@ -69,6 +68,10 @@ class WalletConnectProvider with ChangeNotifier{
       case "personal_sign":
         final requestParams =
         (eventData.params! as List).cast<String>();
+        if (requestParams.length < 2) {
+          viewStateDeal(WalletConnectState.error, params: 'Invalid personal_sign params: expected 2, got ${requestParams.length}');
+          return;
+        }
         final dataToSign = requestParams[0];
         final address = requestParams[1];
         actionDataMap={
@@ -267,7 +270,7 @@ class WalletConnectProvider with ChangeNotifier{
   //获取ETH类的主链
   void coinModelInit({int chainId=-1}){
     try{
-      List<CoinModel> cms=Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).coinModels;
+      List<CoinModel> cms=globalWapAdapter.coinModels;
       coinModels=[];
       for(CoinModel cm in cms){
         if(cm.coin['blockchainType']==BlockchainType.Ethereum.name){
