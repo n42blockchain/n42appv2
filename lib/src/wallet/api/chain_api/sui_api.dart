@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/utils/message_model_bridge.dart';
+import 'package:n42appv2/core/utils/result.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/https/request_url.dart';
@@ -10,23 +13,25 @@ class SuiApi{
     url=RequestUrl().getUrl2(CoinType.SUI.name, "rpc",isTest: isTest);
   }
   Future<MessageModel> getBalanceSui(String address)async{
-    MessageModel rmm=await baseRPCSui(
+    final result=await baseRPCSui(
       "suix_getBalance",
       [
         address,
-        "0x2::sui::SUI"  // 查询 SUI 代币余额
+        "0x2::sui::SUI"
       ],
     );
+    final rmm=resultToMessageModel(result);
     if(rmm.error==false){
       rmm.data=BigInt.parse(rmm.data['totalBalance']);
     }
     return rmm;
   }
   Future<MessageModel> getGasPriceSui()async{
-    MessageModel rmm= await baseRPCSui(
+    final result=await baseRPCSui(
       "suix_getReferenceGasPrice",
       [],
     );
+    final rmm=resultToMessageModel(result);
     if(rmm.error==false){
       rmm.data=BigInt.parse(rmm.data);
     }
@@ -34,7 +39,7 @@ class SuiApi{
   }
   //用户所有的对象，NFT，合约等
   Future<List<dynamic>> getOwnedObjects(String address)async{
-    MessageModel rmm= await baseRPCSui(
+    final result=await baseRPCSui(
       "suix_getOwnedObjects",
       [address, {
         "filter": {
@@ -55,6 +60,7 @@ class SuiApi{
         }
       }],
     );
+    final rmm=resultToMessageModel(result);
     if(rmm.error==false){
       return rmm.data['data'] ?? [];
     }
@@ -62,10 +68,11 @@ class SuiApi{
   }
   //模拟交易
   Future<MessageModel> dryRunTransactionBlock(String signStr)async{
-    MessageModel rmm= await baseRPCSui(
+    final result=await baseRPCSui(
       "sui_dryRunTransactionBlock",
       [signStr],
     );
+    final rmm=resultToMessageModel(result);
     if(rmm.error==false){
       if(rmm.data['effects']['status']=='success'){
         //computationCost + storageCost - storageRebate
@@ -77,50 +84,62 @@ class SuiApi{
     }
     return rmm;
   }
-  //交易商链
+  //交易上链（明确禁用重试，防止双发）
   Future<MessageModel> submit(String transactionBlock,String signStr)async{
-    return await baseRPCSui("sui_executeTransactionBlock", [
-      transactionBlock,
-      [signStr],
-      "WaitForEffectsCert",
-      {
-        "showEffects": true,
-        "showEvents": true
-      }
-    ]);
+    return resultToMessageModel(
+      await baseRPCSui(
+        "sui_executeTransactionBlock",
+        [
+          transactionBlock,
+          [signStr],
+          "WaitForEffectsCert",
+          {"showEffects": true, "showEvents": true}
+        ],
+        enableRetry: false,
+      ),
+    );
   }
   //查询交易信息
   Future<MessageModel> getTransactionBlock(String txHash)async{
-    return await baseRPCSui("sui_getTransactionBlock", [
-      txHash,
-      {
-        "showInput": false,
-        "showRawInput": false,
-        "showEffects": true,
-        "showEvents": false,
-        "showObjectChanges": false,
-        "showBalanceChanges": false,
-        "showRawEffects": false
-      },
-    ]);
+    return resultToMessageModel(
+      await baseRPCSui("sui_getTransactionBlock", [
+        txHash,
+        {
+          "showInput": false,
+          "showRawInput": false,
+          "showEffects": true,
+          "showEvents": false,
+          "showObjectChanges": false,
+          "showBalanceChanges": false,
+          "showRawEffects": false
+        },
+      ]),
+    );
   }
-  Future<MessageModel> baseRPCSui(String method,var value)async{
-    try{
-      MessageModel mm=MessageModel();
+  Future<Result<dynamic, AppError>> baseRPCSui(
+    String method,
+    var value, {
+    bool enableRetry = true,
+  }) async {
+    try {
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.nextId};
-
-      final data=await BaseApi.requestEmptyH.post(url, params: {},data: postData);
+      final data=await BaseApi.requestEmptyH.post(url, params: {},data: postData,enableRetry: enableRetry);
       if(data.containsKey('error')){
-        mm.error=true;
-        mm.data=data['error'];
-      }else{
-        mm.data=data['result'];
+        return Result.failure(AppError.blockchain(
+          data['error']?.toString() ?? 'RPC error',
+          code: 'SUI_RPC_ERROR',
+          originalError: data['error'],
+        ));
       }
-      return mm;
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e.toString();
-      return mm;
+      return Result.success(data['result']);
+    } on DioException catch (e) {
+      return Result.failure(AppError.network(
+        e.message ?? 'Network error',
+        code: 'NET_${e.type.name.toUpperCase()}',
+        originalError: e,
+      ));
+    } catch (e, st) {
+      return Result.failure(AppError.unknown(e.toString(), originalError: e, stackTrace: st));
     }
   }
 }

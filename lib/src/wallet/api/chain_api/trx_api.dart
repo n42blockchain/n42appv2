@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:dio/dio.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/utils/message_model_bridge.dart';
+import 'package:n42appv2/core/utils/result.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/https/request_url.dart';
@@ -21,7 +24,8 @@ class TrxApi{
   Future<MessageModel> getBalanceTrx(String address,String contract,{bool isTest=false})async{
     address= getAddressTron(address);
     if(contract==""){
-      MessageModel mm=await baseRPCEth("eth_getBalance",["0x$address","latest"]);
+      final result=await baseRPCEth("eth_getBalance",["0x$address","latest"]);
+      final mm=resultToMessageModel(result);
       if(mm.error==false){
         mm.data=hexToInt(mm.data);
       }
@@ -29,9 +33,10 @@ class TrxApi{
     }else{
       contract=getAddressTron(contract);
       String addr=strip0x(address);
-      MessageModel mm=await baseRPCEth("eth_call",[{"from": "0x$address",
+      final result=await baseRPCEth("eth_call",[{"from": "0x$address",
         "to": "0x$contract", "data": "0x70a082310000000000000000000000$addr"
       },"latest"]);
+      final mm=resultToMessageModel(result);
       if(mm.error==false){
         mm.data=hexToInt(mm.data);
       }
@@ -39,7 +44,8 @@ class TrxApi{
     }
   }
   Future<MessageModel> getGasPriceTrx({bool isTest=false})async{
-    MessageModel mm=await baseRPCEth("eth_gasPrice",[],isTest: isTest);
+    final result=await baseRPCEth("eth_gasPrice",[],isTest: isTest);
+    final mm=resultToMessageModel(result);
     if(mm.error==false){
       mm.data=hexToInt(mm.data);
     }
@@ -49,13 +55,14 @@ class TrxApi{
     from=getAddressTron(from);
     to=getAddressTron(to);
     if(contract==""){
-      MessageModel mm= await baseRPCEth("eth_estimateGas",
+      final result=await baseRPCEth("eth_estimateGas",
           [{"from": from,
             "to": to,
             "gasPrice":'0x${gasPrice.toRadixString(16)}',
             "gas":"0x${gas.toRadixString(16)}",
             "value":"0x${value.toRadixString(16)}",
           }],isTest:isTest);
+      final mm=resultToMessageModel(result);
       if(mm.error==false){
         mm.data=hexToInt(mm.data);
       }
@@ -63,12 +70,11 @@ class TrxApi{
     }
     else{
       contract=getAddressTron(contract);
-      //toAddress=DataUtils.strip0x(to);
       String aaa=bytesToHex(keccakAscii("transfer(address,uint256)"));
       aaa=aaa.substring(0,8).toLowerCase();
       Uint8List valueList=padUint8ListTo32(unsignedIntToBytes(value));
       String valueHex=bytesToHex(valueList);
-      MessageModel mm= await baseRPCEth(
+      final result=await baseRPCEth(
           "eth_estimateGas",
           [{"from": "0x$from",
             "to": "0x$contract",
@@ -76,6 +82,7 @@ class TrxApi{
             "gas":"0x${gas.toRadixString(16)}",
             "data": "0x${aaa}0000000000000000000000$to$valueHex",
           }],isTest:isTest);
+      final mm=resultToMessageModel(result);
       if(mm.error==false){
         mm.data=hexToInt(mm.data);
       }
@@ -147,23 +154,41 @@ class TrxApi{
     }
   }
 
-  Future<MessageModel> baseRPCEth(String method,var value,{bool? isTest})async{
-    try{
-      MessageModel mm=MessageModel();
+  Future<Result<dynamic, AppError>> baseRPCEth(
+    String method,
+    var value, {
+    bool? isTest,
+    bool enableRetry = true,
+  }) async {
+    try {
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.nextId};
       String urlStr="${RequestUrl().getUrl2("TRX", "rpc",isTest: isTest)}/jsonrpc";
-      final data=await BaseApi.requestEmptyH.post(urlStr, params: {},data: postData,header: header,);
+      final data=await BaseApi.requestEmptyH.post(
+        urlStr,
+        params: {},
+        data: postData,
+        header: header,
+        enableRetry: enableRetry,
+      );
       if(data.containsKey('error')){
-        mm.error=true;
-        mm.data=data['error']['message'];
-      }else{
-        mm.data=data['result'];
+        final errorMsg = data['error'] is Map
+            ? (data['error']['message']?.toString() ?? 'RPC error')
+            : data['error']?.toString() ?? 'RPC error';
+        return Result.failure(AppError.blockchain(
+          errorMsg,
+          code: 'TRX_RPC_ERROR',
+          originalError: data['error'],
+        ));
       }
-      return mm;
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e.toString();
-      return mm;
+      return Result.success(data['result']);
+    } on DioException catch (e) {
+      return Result.failure(AppError.network(
+        e.message ?? 'Network error',
+        code: 'NET_${e.type.name.toUpperCase()}',
+        originalError: e,
+      ));
+    } catch (e, st) {
+      return Result.failure(AppError.unknown(e.toString(), originalError: e, stackTrace: st));
     }
   }
   String getAddressTron(String address){

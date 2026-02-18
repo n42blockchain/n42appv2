@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/utils/message_model_bridge.dart';
+import 'package:n42appv2/core/utils/result.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/https/request_url.dart';
 import 'package:n42appv2/src/models/message_model.dart';
@@ -8,21 +11,24 @@ import 'package:web3dart/web3dart.dart';
 
 class FilApi{
   Future<MessageModel> getBalance(String address,{bool isTest=false})async{
-    MessageModel mm=await baseRPC("Filecoin.WalletBalance",[address],isTest: isTest);
+    final result=await baseRPC("Filecoin.WalletBalance",[address],isTest: isTest);
+    final mm=resultToMessageModel(result);
     if(mm.error==false){
       mm.data=BigInt.parse(mm.data.toString());
     }
     return mm;
   }
   Future<MessageModel> getGasPrice({bool isTest=false})async{
-    MessageModel mm=await baseRPC("Filecoin.EthGasPrice",[],isTest: isTest);
+    final result=await baseRPC("Filecoin.EthGasPrice",[],isTest: isTest);
+    final mm=resultToMessageModel(result);
     if(mm.error==false){
       mm.data=hexToInt(mm.data);
     }
     return mm;
   }
   Future<MessageModel> getNonce(String address,{bool isTest=false})async{
-    MessageModel mm=await baseRPC("Filecoin.MpoolGetNonce",[address],isTest: isTest);
+    final result=await baseRPC("Filecoin.MpoolGetNonce",[address],isTest: isTest);
+    final mm=resultToMessageModel(result);
     if(mm.error==false){
       mm.data=mm.data.toString();
     }
@@ -50,35 +56,51 @@ class FilApi{
         "MaxFee": "0"
       },
       []];
-    return await baseRPC(
-        "Filecoin.GasEstimateMessageGas",
-        param,
-        isTest: isTest);
+    return resultToMessageModel(
+      await baseRPC("Filecoin.GasEstimateMessageGas", param, isTest: isTest),
+    );
   }
+  //发送交易（明确禁用重试，防止双发）
   Future<MessageModel> sendTx(String txHash,{bool isTest=false})async{
     Map<String,dynamic> pMap=json.decode(txHash);
     pMap['Message']['Nonce']=(pMap['Message']['Nonce'] as int);
-    return await baseRPC(
-        "Filecoin.MpoolPush",
-        [pMap],
-        isTest: isTest);
+    return resultToMessageModel(
+      await baseRPC("Filecoin.MpoolPush", [pMap], isTest: isTest, enableRetry: false),
+    );
   }
-  Future<MessageModel> baseRPC(String method,var value,{bool? isTest=false})async{
-    try{
-      MessageModel mm=MessageModel();
+  Future<Result<dynamic, AppError>> baseRPC(
+    String method,
+    var value, {
+    bool? isTest = false,
+    bool enableRetry = true,
+  }) async {
+    try {
       Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.nextId};
-      final data=await BaseApi.requestEmptyH.post(RequestUrl().getUrl2("FIL", "rpc",isTest: isTest), params: {},data: postData);
+      final data=await BaseApi.requestEmptyH.post(
+        RequestUrl().getUrl2("FIL", "rpc",isTest: isTest),
+        params: {},
+        data: postData,
+        enableRetry: enableRetry,
+      );
       if(data.containsKey('error')){
-        mm.error=true;
-        mm.data=data['error']['message'];
-      }else{
-        mm.data=data['result'];
+        final errorMsg = data['error'] is Map
+            ? (data['error']['message']?.toString() ?? 'RPC error')
+            : data['error']?.toString() ?? 'RPC error';
+        return Result.failure(AppError.blockchain(
+          errorMsg,
+          code: 'FIL_RPC_ERROR',
+          originalError: data['error'],
+        ));
       }
-      return mm;
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e.toString();
-      return mm;
+      return Result.success(data['result']);
+    } on DioException catch (e) {
+      return Result.failure(AppError.network(
+        e.message ?? 'Network error',
+        code: 'NET_${e.type.name.toUpperCase()}',
+        originalError: e,
+      ));
+    } catch (e, st) {
+      return Result.failure(AppError.unknown(e.toString(), originalError: e, stackTrace: st));
     }
   }
 
