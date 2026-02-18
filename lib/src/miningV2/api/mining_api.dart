@@ -130,7 +130,7 @@ class MiningApi{
   Future<MessageModel> _postBeacon(String method,List<dynamic> params)async{
     try{
       MessageModel mm=MessageModel();
-      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":params,"id":AppGlobals.currentId++};
+      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":params,"id":AppGlobals.nextId};
 
       final data=await BaseApi.requestEmptyH.post(_rpcUrl, params: {},data: postData);
       if(data.containsKey('error')){

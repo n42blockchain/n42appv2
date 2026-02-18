@@ -175,7 +175,7 @@ mixin EthTokenApiMixin on TokenApiBase {
         'gas': '0x${gas.toRadixString(16)}',
         'coin': coinType,
         'net_mode': isTest ? 'test' : 'main',
-        'id': AppGlobals.currentId++,
+        'id': AppGlobals.nextId,
       };
 
       if (get1559WithChainSymbol(coinType)) {
@@ -201,7 +201,7 @@ mixin EthTokenApiMixin on TokenApiBase {
         'data': '0x${methodSig}000000000000000000000000$toAddress$valueHex',
         'coin': coinType,
         'net_mode': isTest ? 'test' : 'main',
-        'id': AppGlobals.currentId++,
+        'id': AppGlobals.nextId,
       };
 
       if (get1559WithChainSymbol(coinType)) {

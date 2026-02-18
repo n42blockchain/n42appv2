@@ -11,6 +11,8 @@ import 'base_transfer_handler.dart';
 ///
 /// Supports: BTC, LTC, DOGE, BCH, DASH, ZEC, DGB, RVN
 class BtcTransferHandler extends BaseTransferHandler {
+  // Active implementation: see transfer_api.dart for the working transfer methods
+
   final String _chainSymbol;
 
   BtcTransferHandler([this._chainSymbol = 'BTC']);

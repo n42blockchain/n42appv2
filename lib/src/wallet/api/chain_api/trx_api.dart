@@ -150,7 +150,7 @@ class TrxApi{
   Future<MessageModel> baseRPCEth(String method,var value,{bool? isTest})async{
     try{
       MessageModel mm=MessageModel();
-      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};
+      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.nextId};
       String urlStr="${RequestUrl().getUrl2("TRX", "rpc",isTest: isTest)}/jsonrpc";
       final data=await BaseApi.requestEmptyH.post(urlStr, params: {},data: postData,header: header,);
       if(data.containsKey('error')){

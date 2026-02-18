@@ -641,7 +641,11 @@ class TransferApi {
       MessageModel rmm=MessageModel.error();
       rmm.data=S.current.g_key_wallet_m6;
       return rmm;
-    }//发起交易
+    }
+    // Validate signature before broadcast
+    final validationError = _validateSignature(signStr, coinType);
+    if (validationError != null) return validationError;
+    //发起交易
     MessageModel mmtx=await aptApi.sendTxHash(signStr);
     return mmtx;
   }
@@ -934,7 +938,11 @@ class TransferApi {
       MessageModel rmm=MessageModel.error();
       rmm.data=S.current.g_key_wallet_m6;
       return rmm;
-    }//发起交易
+    }
+    // Validate signature before broadcast
+    final validationError = _validateSignature(signStr, CoinType.ATOM.name);
+    if (validationError != null) return validationError;
+    //发起交易
     MessageModel mmtx=await atomApi.sendTxs(signStr);
     return mmtx;
   }
@@ -2055,6 +2063,9 @@ class TransferApi {
       rmm.data=S.current.g_key_wallet_m6;
       return rmm;
     }
+    // Validate signature before broadcast
+    final xtzValidationError = _validateSignature(signStr, CoinType.XTZ.name);
+    if (xtzValidationError != null) return xtzValidationError;
     return await xtzApi.sendTxXtz(signStr,isTest);
   }
   //Ripple转账
@@ -2171,6 +2182,9 @@ class TransferApi {
       rmm.data=S.current.g_key_wallet_m6;
       return rmm;
     }
+    // Validate signature before broadcast
+    final xrpValidationError = _validateSignature(signStr, CoinType.XRP.name);
+    if (xrpValidationError != null) return xrpValidationError;
     return await xrpApi.sendTxXrp(signStr,isTest);
   }
 
@@ -2213,6 +2227,9 @@ class TransferApi {
       rmm.data=S.current.g_key_wallet_m6;
       return rmm;
     }
+    // Validate signature before broadcast
+    final filValidationError = _validateSignature(signStr, CoinType.FIL.name);
+    if (filValidationError != null) return filValidationError;
     //signStr = "0x$signStr";
     FilApi filApi=FilApi();
     return await filApi.sendTx(signStr,isTest:isTest);

@@ -329,12 +329,15 @@ final currentWalletProvider = Provider<WalletInfoData?>((ref) {
 });
 
 /// Wallet Balance Provider (Async)
+///
+/// Migration placeholder: actual balance is managed via the legacy Provider path
+/// (WalletActionProvider). This Riverpod provider will be implemented when the
+/// full Provider→Riverpod migration is completed.
 final walletBalanceProvider = FutureProvider.autoDispose<double>((ref) async {
   final wallet = ref.watch(currentWalletProvider);
   if (wallet == null) return 0.0;
 
-  // TODO: Implement actual balance fetching from API
-  // For now, return 0
+  // Actual balance is fetched via legacy WalletActionProvider
   return 0.0;
 });
 

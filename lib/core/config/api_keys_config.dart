@@ -62,6 +62,26 @@ class ApiKeysConfig {
     defaultValue: _defaultSonicscanKey,
   );
 
+  // ==================== AI Service ====================
+
+  /// AI API Key (Groq / OpenAI / DeepSeek compatible)
+  static const String aiApiKey = String.fromEnvironment(
+    'AI_API_KEY',
+    defaultValue: _defaultAiApiKey,
+  );
+
+  /// AI API Base URL
+  static const String aiBaseUrl = String.fromEnvironment(
+    'AI_BASE_URL',
+    defaultValue: 'https://api.groq.com/openai',
+  );
+
+  /// AI Model
+  static const String aiModel = String.fromEnvironment(
+    'AI_MODEL',
+    defaultValue: 'llama-3.3-70b-versatile',
+  );
+
   // ==================== Default Keys (Development Only) ====================
   // WARNING: These are placeholder keys for development
   // In production, always use environment variables
@@ -71,6 +91,7 @@ class ApiKeysConfig {
   static const String _defaultBscscanKey = 'YOUR_BSCSCAN_API_KEY';
   static const String _defaultBasescanKey = 'YOUR_BASESCAN_API_KEY';
   static const String _defaultSonicscanKey = 'YOUR_SONICSCAN_API_KEY';
+  static const String _defaultAiApiKey = 'YOUR_AI_API_KEY';
 
   // ==================== Validation ====================
 
@@ -100,6 +121,9 @@ class ApiKeysConfig {
     }
     if (sonicscan == _defaultSonicscanKey) {
       warnings.add('SONICSCAN_API_KEY not configured');
+    }
+    if (aiApiKey == _defaultAiApiKey) {
+      warnings.add('AI_API_KEY not configured');
     }
 
     if (warnings.isNotEmpty) {

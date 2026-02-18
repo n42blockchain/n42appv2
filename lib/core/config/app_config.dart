@@ -66,31 +66,31 @@ class AppConfig {
     // Market API
     'marketHost': {
       'main': 'https://api.n42.ai/market/v1',
-      'test': 'http://5.78.28.90:9398/v1',
+      'test': 'http://5.78.28.90:9398/v1', // TODO(production): Replace with domain name
     },
-    
+
     // NFT API
     'nftHost': {
       'main': 'https://api.n42.ai/nft-market',
-      'test': 'https://5.78.28.90:9397',
+      'test': 'https://5.78.28.90:9397', // TODO(production): Replace with domain name
     },
-    
+
     // Activity API
     'activiteHost': {
       'main': 'https://api.n42.ai/activity/v1',
-      'test': 'https://5.78.28.90:9390/v1',
+      'test': 'https://5.78.28.90:9390/v1', // TODO(production): Replace with domain name
     },
-    
+
     // Mining API
     'groupMiningHost': {
       'main': 'https://api.n42.ai/activity',
-      'test': 'https://5.78.28.90:9390',
+      'test': 'https://5.78.28.90:9390', // TODO(production): Replace with domain name
     },
-    
+
     // User Center API
     'userInfoHost': {
       'main': 'https://api.n42.ai/user',
-      'test': 'https://5.78.28.90:9393',
+      'test': 'https://5.78.28.90:9393', // TODO(production): Replace with domain name
     },
     
     // IPFS
@@ -100,13 +100,13 @@ class AppConfig {
     // Wallet/Token API
     'tokenViewUri': {
       'main': 'https://api.n42.ai/wallet/',
-      'test': 'https://5.78.28.90:9492/',
+      'test': 'https://5.78.28.90:9492/', // TODO(production): Replace with domain name
     },
-    
+
     // Exchange/Swap API
     'exchangeHost': {
       'main': 'https://api.n42.ai/swap',
-      'test': 'https://5.78.28.90:9391',
+      'test': 'https://5.78.28.90:9391', // TODO(production): Replace with domain name
     },
     
     // News API
@@ -120,14 +120,15 @@ class AppConfig {
     
     // IM (Instant Messaging) API
     'imHttpHost': {
-      'main': 'https://5.161.249.184:10001',
-      'test': 'https://5.78.28.90:9394',
+      'main': 'https://5.161.249.184:10001', // TODO(production): Replace with domain name
+      'test': 'https://5.78.28.90:9394', // TODO(production): Replace with domain name
     },
-    
+
     // IM WebSocket
+    // TODO(production): Upgrade ws:// to wss:// and replace IPs with domain names
     'imWsHost': {
-      'main': 'ws://5.161.249.184:10002',
-      'test': 'ws://5.78.28.90:9395',
+      'main': 'ws://5.161.249.184:10002', // TODO(production): Upgrade to wss:// with domain name
+      'test': 'ws://5.78.28.90:9395', // TODO(production): Upgrade to wss:// with domain name
     },
     
     // Block Explorer API

@@ -24,18 +24,20 @@ class WalletServiceImpl implements IWalletService {
   final ProviderContainer _container;
   final StreamController<SharedWalletInfo?> _walletStreamController =
       StreamController<SharedWalletInfo?>.broadcast();
+  ProviderSubscription? _walletListSubscription;
+  ProviderSubscription? _walletIndexSubscription;
 
   WalletServiceImpl(this._container) {
     // Listen to wallet changes and broadcast
-    _container.listen<AsyncValue<List<WalletInfoData>>>(
+    _walletListSubscription = _container.listen<AsyncValue<List<WalletInfoData>>>(
       walletListProvider,
       (_, next) {
         final wallet = getCurrentWallet();
         _walletStreamController.add(wallet);
       },
     );
-    
-    _container.listen<int>(
+
+    _walletIndexSubscription = _container.listen<int>(
       selectedWalletIndexProvider,
       (_, _) {
         final wallet = getCurrentWallet();
@@ -216,6 +218,8 @@ class WalletServiceImpl implements IWalletService {
   }
 
   void dispose() {
+    _walletListSubscription?.close();
+    _walletIndexSubscription?.close();
     _walletStreamController.close();
   }
 }

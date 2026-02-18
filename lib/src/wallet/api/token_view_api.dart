@@ -478,7 +478,7 @@ class TokenViewApi{
         "gas":"0x${gas.toRadixString(16)}",
         "coin":coinType,
         "net_mode":isTest?"test":"main",
-        "id":AppGlobals.currentId++,
+        "id":AppGlobals.nextId,
       };
       if(get1559WithChainSymbol(coinType)){
         params["maxFeePerGas"]='0x${gasPrice.toRadixString(16)}';
@@ -502,7 +502,7 @@ class TokenViewApi{
         "data": "0x${aaa}000000000000000000000000$toAddress$valueHex",
         "coin":coinType,
         "net_mode":isTest?"test":"main",
-        "id":AppGlobals.currentId++,
+        "id":AppGlobals.nextId,
       };
       if(get1559WithChainSymbol(coinType)){
         params["maxFeePerGas"]='0x${gasPrice.toRadixString(16)}';

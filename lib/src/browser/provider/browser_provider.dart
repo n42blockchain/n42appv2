@@ -1,4 +1,5 @@
-﻿import 'package:n42appv2/core/config/app_config.dart';
+﻿import 'package:flutter/foundation.dart';
+import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/browser/api/browser_api.dart';
 import 'package:n42appv2/src/browser/models/browser_collection_model.dart';
 import 'package:n42appv2/src/browser/pages/browser_collection.dart';
@@ -139,7 +140,9 @@ class BrowserProvider extends ChangeNotifier{
     // #docregion platform_features
     if (webViewController.platform is AndroidWebViewController) {
       final androidController = webViewController.platform as AndroidWebViewController;
-      AndroidWebViewController.enableDebugging(true);
+      if (kDebugMode) {
+        AndroidWebViewController.enableDebugging(true);
+      }
       androidController.setMediaPlaybackRequiresUserGesture(false);
       // Enable mixed content mode for DApp compatibility
       androidController.setMixedContentMode(MixedContentMode.alwaysAllow);
@@ -177,6 +180,8 @@ class BrowserProvider extends ChangeNotifier{
   }
   //删除一个 webView
   void wListDelete(int index) {
+    // Clear WebViewController navigation delegate before removal
+    wvcList[index].setNavigationDelegate(NavigationDelegate());
     wList.removeAt(index);
     wvcList.removeAt(index);
     wInfoList.removeAt(index);

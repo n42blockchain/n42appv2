@@ -61,7 +61,7 @@ class TonApi{
   Future<MessageModel> baseRPCTon(String method,var value,String path)async{
     try{
       MessageModel mm=MessageModel();
-      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};
+      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.nextId};
 
       final data=await BaseApi.requestEmptyH.post(url+path, params: {},data: postData);
       if(data['ok']==false){

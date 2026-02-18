@@ -58,8 +58,9 @@ class AppGlobals {
   /// Current logged-in user
   static UserInfo? userInfo;
 
-  /// Current active ID
-  static int currentId = 0;
+  /// Current active ID (use nextId for thread-safe auto-increment)
+  static int _currentId = 0;
+  static int get nextId => ++_currentId;
 
   /// Handle user login
   /// 

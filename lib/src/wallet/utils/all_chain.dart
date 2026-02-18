@@ -455,8 +455,8 @@ Map<String,dynamic> allChainUrlMap=<String,dynamic>{
       "path": {
         "legacy": "m/44'/60'/0'/0/0"
       },
-      "service": "https://mainnet.infura.io/v3/b6bd1324a1b34545b1fdda886dd494f9",
-      "service_test": "https://ropsten.infura.io/v3/b6bd1324a1b34545b1fdda886dd494f9",
+      "service": "https://mainnet.infura.io/v3/",
+      "service_test": "https://ropsten.infura.io/v3/",
       "chainId": 1,
       "chainId_test": 3,
       "contract": "",
@@ -469,7 +469,7 @@ Map<String,dynamic> allChainUrlMap=<String,dynamic>{
     "testnetIndex": 0,
     "testnets": [{
       "testnetWS": "",
-      "testnetRPC": "https://ropsten.infura.io/v3/b6bd1324a1b34545b1fdda886dd494f9",
+      "testnetRPC": "https://ropsten.infura.io/v3/",
       "testnetChainID": 3,
       "testnetContract": <String,dynamic>{}
     }],

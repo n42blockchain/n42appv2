@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +17,7 @@ class Trustdart {
       });
       return mnemonic;
     } catch (e) {
+      debugPrint('Trustdart.generateMnemonic: $e');
       return "";
     }
   }
@@ -36,6 +38,7 @@ class Trustdart {
       }
       //return importStatus;
     } catch (e) {
+      debugPrint('Trustdart.checkMnemonic: $e');
       return false;
     }
   }
@@ -59,6 +62,7 @@ class Trustdart {
       });
       return address;
     } catch (e) {
+      debugPrint('Trustdart.generateAddress: $e');
       return {'legacy': ''};
     }
   }
@@ -73,6 +77,7 @@ class Trustdart {
       });
       return isAddressValid;
     } catch (e) {
+      debugPrint('Trustdart.validateAddress: $e');
       return false;
     }
   }
@@ -93,6 +98,7 @@ class Trustdart {
       });
       return publicKey;
     } catch (e) {
+      debugPrint('Trustdart.getPublicKey: $e');
       return '';
     }
   }
@@ -113,6 +119,7 @@ class Trustdart {
       });
       return privateKey;
     } catch (e) {
+      debugPrint('Trustdart.getPrivateKey: $e');
       return '';
     }
   }
@@ -131,6 +138,7 @@ class Trustdart {
       });
       return keyPair;
     } catch (e) {
+      debugPrint('Trustdart.getPrivateKeyAndPublicKeyPair: $e');
       return '';
     }
   }
@@ -152,6 +160,7 @@ class Trustdart {
       });
       return txHash;
     } catch (e) {
+      debugPrint('Trustdart.signTransactionMaxValue: $e');
       return '';
     }
   }
@@ -174,6 +183,7 @@ class Trustdart {
       });
       return txHash;
     } catch (e) {
+      debugPrint('Trustdart.signTransaction: $e');
       return '';
     }
   }
@@ -194,6 +204,7 @@ class Trustdart {
       });
       return txHash;
     } catch (e) {
+      debugPrint('Trustdart.signTransactionG: $e');
       return '';
     }
   }
@@ -214,6 +225,7 @@ class Trustdart {
       });
       return txHash;
     } catch (e) {
+      debugPrint('Trustdart.signTransactionBtcP2wsh: $e');
       return '';
     }
   }
@@ -234,6 +246,7 @@ class Trustdart {
       });
       return json.decode(txHash);
     } catch (e) {
+      debugPrint('Trustdart.signTransactionByteArray: $e');
       return {"result":false,"signHash":""};
     }
   }
@@ -254,6 +267,7 @@ class Trustdart {
       });
       return txHash;
     } catch (e) {
+      debugPrint('Trustdart.signMessage: $e');
       return '';
     }
   }
@@ -276,6 +290,7 @@ class Trustdart {
       });
       return keyStoreJson;
     } catch (e) {
+      debugPrint('Trustdart.getKeyStore: $e');
       return "";
     }
   }
@@ -293,6 +308,7 @@ class Trustdart {
       });
       return keyStoreJson;
     } catch (e) {
+      debugPrint('Trustdart.getWalletInfoWithKeyStore: $e');
       return {"address":"","privateKey":""};
     }
   }
@@ -306,6 +322,7 @@ class Trustdart {
       });
       return pubKey;
     } catch (e) {
+      debugPrint('Trustdart.getPubKeySOL: $e');
       return "";
     }
   }
@@ -367,6 +384,7 @@ class Trustdart {
       });
       return rData;
     } catch (e) {
+      debugPrint('Trustdart.getPermissions: $e');
       return "";
     }
   }
@@ -378,6 +396,7 @@ class Trustdart {
       await _channel.invokeMethod('EvmEmit',params);
       return jsonDecode(rData);
     } catch (e) {
+      debugPrint('Trustdart.evmEmit: $e');
       return null;
     }
   }
@@ -388,6 +407,7 @@ class Trustdart {
       await _channel.invokeMethod('MiningGenerateBls12381Keypair',);
       return rData;
     } catch (e) {
+      debugPrint('Trustdart.miningGenerateBls12381Keypair: $e');
       return null;
     }
   }
@@ -397,6 +417,7 @@ class Trustdart {
       await _channel.invokeMethod('MiningCreateDepositUnsignedTx',params);
       return rData;
     } catch (e) {
+      debugPrint('Trustdart.miningCreateDepositUnsignedTx: $e');
       return null;
     }
   }
@@ -406,6 +427,7 @@ class Trustdart {
       await _channel.invokeMethod('MiningRunClient',params);
       return rData;
     } catch (e) {
+      debugPrint('Trustdart.miningRunClient: $e');
       return null;
     }
   }
@@ -415,6 +437,7 @@ class Trustdart {
       await _channel.invokeMethod('MiningCreateGetExitFeeUnsignedTx',);
       return rData;
     } catch (e) {
+      debugPrint('Trustdart.miningCreateGetExitFeeUnsignedTx: $e');
       return null;
     }
   }
@@ -424,6 +447,7 @@ class Trustdart {
       await _channel.invokeMethod('MiningCreateExitUnsignedTx',params);
       return rData;
     } catch (e) {
+      debugPrint('Trustdart.miningCreateExitUnsignedTx: $e');
       return null;
     }
   }

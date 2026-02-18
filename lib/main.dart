@@ -159,6 +159,7 @@ class N42AppV2 extends StatefulWidget {
 class _N42AppV2State extends State<N42AppV2> {
   DeepLinkService? _deepLinkService;
   DeepLinkHandler? _deepLinkHandler;
+  StreamSubscription<int>? _unreadCountSubscription;
   @override
   void initState() {
     super.initState();
@@ -219,6 +220,9 @@ class _N42AppV2State extends State<N42AppV2> {
         pushGatewayUrl: 'https://m.si46.world/_matrix/push/v1/notify',
         pushAppId: pushAppId,
         walletBridge: N42WalletBridge(),
+        aiApiKey: ApiKeysConfig.aiApiKey,
+        aiBaseUrl: ApiKeysConfig.aiBaseUrl,
+        aiModel: ApiKeysConfig.aiModel,
       ));
 
       N42Chat.setNavigatorKey(AppGlobals.navigatorKey);
@@ -250,7 +254,7 @@ class _N42AppV2State extends State<N42AppV2> {
       });
 
       // 监听未读消息数
-      N42Chat.unreadCountStream.listen((count) {
+      _unreadCountSubscription = N42Chat.unreadCountStream.listen((count) {
         globalProviderContainer.read(unreadCountProvider.notifier).setCount(count);
         debugPrint('N42Chat unread count updated: $count');
       });
@@ -341,6 +345,7 @@ class _N42AppV2State extends State<N42AppV2> {
   }
   @override
   void dispose() {
+    _unreadCountSubscription?.cancel();
     _deepLinkHandler?.dispose();
     // ignore: discarded_futures
     _deepLinkService?.dispose();

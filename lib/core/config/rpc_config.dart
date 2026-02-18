@@ -18,19 +18,19 @@ class RpcConfig {
   // ==================== 测试网 RPC ====================
 
   /// BTC Testnet RPC
-  /// WARNING: HTTP 连接，仅用于测试
+  /// TODO(production): Verify HTTPS support on BTC RPC server; revert to HTTP if not available
   static const String btcTestnetRpc = String.fromEnvironment(
     'BTC_TESTNET_RPC',
-    defaultValue: 'http://198.200.30.38:18001',
+    defaultValue: 'https://198.200.30.38:18001',
   );
 
   // ==================== 主网 RPC ====================
 
   /// BTC Mainnet RPC
-  /// WARNING: HTTP 连接，需要升级到 HTTPS
+  /// TODO(production): Verify HTTPS support on BTC RPC server; revert to HTTP if not available
   static const String btcMainnetRpc = String.fromEnvironment(
     'BTC_MAINNET_RPC',
-    defaultValue: 'http://198.200.30.34:18002',
+    defaultValue: 'https://198.200.30.34:18002',
   );
 
   // ==================== EVM 链 RPC ====================
@@ -38,7 +38,7 @@ class RpcConfig {
   /// Infura API Key (从环境变量读取)
   static const String infuraApiKey = String.fromEnvironment(
     'INFURA_API_KEY',
-    defaultValue: 'b6bd1324a1b34545b1fdda886dd494f9',
+    defaultValue: 'YOUR_INFURA_API_KEY',
   );
 
   /// Ethereum Mainnet RPC

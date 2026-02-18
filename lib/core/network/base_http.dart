@@ -167,6 +167,9 @@ class BaseHttp {
     if (response.statusCode == 200 ||
         response.statusCode == 201 ||
         response.statusCode == 202) {
+      if (response.data == null) {
+        throw S.current.g_key_error_1;
+      }
       try {
         if (defaultReturn) {
           if (response.data is Map || response.data is List) {
@@ -230,6 +233,8 @@ class BaseHttp {
         return S.current.g_key_error_14;
       case 408:
         return S.current.g_key_error_15;
+      case 429:
+        return S.current.g_key_error_23;
       case 500:
         return S.current.g_key_error_16;
       case 501:

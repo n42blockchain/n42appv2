@@ -73,7 +73,7 @@ class EthAPI{
         "value":"0x${value.toRadixString(16)}",
         //"coin":coinType??cType??"",
         //"net_mode":isTest?"test":"main",
-        //"id":AppGlobals.currentId++,
+        //"id":AppGlobals.nextId,
       };
       //params["gasPrice"]='0x${gasPrice.toRadixString(16)}';
       if(get1559WithChainSymbol(coinType??cType??"")){
@@ -126,7 +126,7 @@ class EthAPI{
         "data": "0x${aaa}000000000000000000000000$toAddress$valueHex",
         //"coin":coinType??cType??"",
         //"net_mode":isTest?"test":"main",
-        "id":AppGlobals.currentId++,
+        "id":AppGlobals.nextId,
       };
       if(get1559WithChainSymbol(coinType??cType??"")){
         params["maxFeePerGas"]='0x${gasPrice.toRadixString(16)}';
@@ -205,7 +205,7 @@ class EthAPI{
   Future<MessageModel> baseRPCEth(String method,var value,{String? coinType,bool? isTest})async{
     try{
       MessageModel mm=MessageModel();
-      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};
+      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.nextId};
       String url;
       if(coinType==null){
         url=rpc??"";

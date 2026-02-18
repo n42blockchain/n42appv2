@@ -9,6 +9,8 @@ import 'base_transfer_handler.dart';
 
 /// Transfer handler for Algorand chain
 class AlgoTransferHandler extends BaseTransferHandler {
+  // Active implementation: see transfer_api.dart for the working transfer methods
+
   @override
   String get chainSymbol => 'ALGO';
 

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/https/request_url.dart';
 import 'package:n42appv2/src/models/message_model.dart';
@@ -67,8 +68,8 @@ class TransactionApi {
         case "TRX":
           return await trxTransactionList(address, page: page, offset: pageSize);
       }
-    } catch (_) {
-      // 错误安全忽略
+    } catch (e) {
+      debugPrint('TransactionApi.getTransactionList: $e');
     } finally {}
     return MessageModel();
   }
@@ -122,8 +123,8 @@ class TransactionApi {
         default:
           break;
       }
-    } catch (_) {
-      // 错误安全忽略
+    } catch (e) {
+      debugPrint('TransactionApi.getContractTransactionList: $e');
     } finally {}
     return MessageModel();
   }

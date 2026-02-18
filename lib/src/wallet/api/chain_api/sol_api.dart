@@ -70,7 +70,7 @@ class SolApi{
   Future<MessageModel> baseRPCSol(String method,var value,{bool? isTest})async{
     try{
       MessageModel mm=MessageModel();
-      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};
+      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.nextId};
       String url=RequestUrl().getUrl2(CoinType.SOL.name, "rpc",isTest: isTest);
       final data=await BaseApi.requestEmptyH.post(url, params: {},data: postData);
       if(data.containsKey('error')){

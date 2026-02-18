@@ -152,7 +152,7 @@ Map<String,dynamic> chainUrlMap={
       "path": {
         "legacy":"m/44'/60'/0'/0/0",
       },
-      "service": "https://mainnet.infura.io/v3/b6bd1324a1b34545b1fdda886dd494f9",
+      "service": "https://mainnet.infura.io/v3/", // Updated at runtime by RpcConfig.infuraApiKey
       "service_test": "https://eth-sepolia.public.blastapi.io",
       "chainId": 1,
       "chainId_test": 11155111,

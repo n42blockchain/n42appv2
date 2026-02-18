@@ -56,6 +56,14 @@ class WalletConnectProvider with ChangeNotifier{
   dynamic actionData;
   Map<String,dynamic>? actionDataMap;
   Future<void> setActionDataMap(wallet_connect.SessionRequestEvent eventData)async{
+    if (eventData.params == null) {
+      viewStateDeal(WalletConnectState.error, params: 'Invalid request: params is null');
+      return;
+    }
+    if (coinModelsIndex < 0 || coinModelsIndex >= coinModels.length) {
+      viewStateDeal(WalletConnectState.error, params: 'No valid chain selected');
+      return;
+    }
     await web3clientInitFromChainId(eventData.chainId);
     switch (eventData.method) {
       case "personal_sign":

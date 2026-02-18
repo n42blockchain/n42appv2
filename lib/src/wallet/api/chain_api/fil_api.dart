@@ -66,7 +66,7 @@ class FilApi{
   Future<MessageModel> baseRPC(String method,var value,{bool? isTest=false})async{
     try{
       MessageModel mm=MessageModel();
-      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.currentId++};
+      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.nextId};
       final data=await BaseApi.requestEmptyH.post(RequestUrl().getUrl2("FIL", "rpc",isTest: isTest), params: {},data: postData);
       if(data.containsKey('error')){
         mm.error=true;

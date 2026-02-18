@@ -9,6 +9,8 @@ import 'base_transfer_handler.dart';
 
 /// Transfer handler for Aptos chain
 class AptTransferHandler extends BaseTransferHandler {
+  // Active implementation: see transfer_api.dart for the working transfer methods
+
   @override
   String get chainSymbol => 'APT';
 

@@ -42,16 +42,14 @@ class SecurityConfig {
 
   /// 允许的 SSL 证书指纹列表
   ///
-  /// TODO: 在生产部署前替换这些占位符指纹
+  /// IMPORTANT: 必须在生产部署前替换为真实的服务器证书指纹
+  /// 当前值为占位符，release 模式下 SSL pinning 会拒绝所有连接
   static const List<String> allowedCertFingerprints = [
     // N42 API 服务器证书指纹 (主证书)
-    // PLACEHOLDER - Replace with actual certificate fingerprint
+    // PLACEHOLDER - Replace with actual certificate fingerprint before production
     'sha256/47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=',
     // N42 API 服务器证书指纹 (备用证书)
-    // PLACEHOLDER - Replace with actual certificate fingerprint
-    'sha256/C5+lpZ7tcVwmwQIMcRtPbsQtWLABXhQzejna0wHFr8M=',
-    // Let's Encrypt Root CA (ISRG Root X1)
-    // This is a real fingerprint for Let's Encrypt
+    // PLACEHOLDER - Replace with actual certificate fingerprint before production
     'sha256/C5+lpZ7tcVwmwQIMcRtPbsQtWLABXhQzejna0wHFr8M=',
     // DigiCert Global Root CA
     'sha256/r/mIkG3eEpVdm+u/ko/cwxzOMo1bk4TyHIlByibiA5E=',
@@ -85,8 +83,12 @@ class SecurityConfig {
     // Check if fingerprints have been replaced from placeholders
     // The placeholder value starts with a known pattern
     const placeholderPattern = 'sha256/47DEQpj8HBSa';
-    return !allowedCertFingerprints.any((fp) => fp.contains(placeholderPattern)) ||
-           kDebugMode; // Allow in debug mode
+    final hasPlaceholder = allowedCertFingerprints.any((fp) => fp.contains(placeholderPattern));
+    if (hasPlaceholder) {
+      debugPrint('WARNING: SSL certificate pinning uses placeholder fingerprints. '
+          'Replace with real server certificate fingerprints before production deployment.');
+    }
+    return !hasPlaceholder || kDebugMode; // Allow in debug mode
   }
 
   /// 敏感数据关键字（用于日志脱敏）
