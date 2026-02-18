@@ -1,24 +1,24 @@
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 
-class ChooseCoinsPage extends StatefulWidget {
+class ChooseCoinsPage extends ConsumerStatefulWidget {
   const ChooseCoinsPage({super.key});
 
   @override
-  State<ChooseCoinsPage> createState() => _ChooseCoinsPageState();
+  ConsumerState<ChooseCoinsPage> createState() => _ChooseCoinsPageState();
 }
 
-class _ChooseCoinsPageState extends State<ChooseCoinsPage> {
+class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
   var selectIndex = -1;
   var isSearch = false;
   var cleanable = true;
@@ -42,7 +42,7 @@ class _ChooseCoinsPageState extends State<ChooseCoinsPage> {
 
   Future<void> initData() async {
     List<CoinModel> list =
-        Provider.of<WalletActionProvider>(context, listen: false)
+        ref.read(wapBridgeProvider)
             .coinModels;
     allList = list;
     mList = list;

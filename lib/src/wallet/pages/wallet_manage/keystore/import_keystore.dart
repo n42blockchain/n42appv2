@@ -4,7 +4,6 @@ import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/all_chain.dart';
 import 'package:n42appv2/src/wallet/widgets/choose_import_coin.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
@@ -14,19 +13,20 @@ import 'package:n42appv2/src/widgets/container_widget.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 
-class ImportKeystore extends StatefulWidget {
+class ImportKeystore extends ConsumerStatefulWidget {
   const ImportKeystore({super.key});
 
   @override
-  State<ImportKeystore> createState() => _ImportKeystoreState();
+  ConsumerState<ImportKeystore> createState() => _ImportKeystoreState();
 }
 
-class _ImportKeystoreState extends State<ImportKeystore> {
+class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
   final _keystoreController = TextEditingController();
   final _passwordController = TextEditingController();
   Load load=Load.finish;
@@ -422,12 +422,12 @@ class _ImportKeystoreState extends State<ImportKeystore> {
         WalletInfo info = WalletInfo(
           walletName: name,
           password: password,
-          walletUuid: Provider.of<WalletActionProvider>(context,listen: false).userUUID,
+          walletUuid: ref.read(wapBridgeProvider).userUUID,
           privateKey: privateKey,
           coinInfo: {selectChain['baseInfo']['mKey']:selectChain},
         );
         // 添加到集合中
-        final res = await Provider.of<WalletActionProvider>(context,listen: false)
+        final res = await ref.read(wapBridgeProvider)
             .addImportWalletInfo(info);
         if (!mounted) return;
         if (res) {

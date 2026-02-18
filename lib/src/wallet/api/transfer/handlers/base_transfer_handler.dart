@@ -3,7 +3,7 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/utils/data_utils.dart';
 import 'package:n42appv2/src/wallet/api/token_view_api.dart';
@@ -11,7 +11,6 @@ import 'package:n42appv2/src/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42appv2/src/wallet/models/transation_record_model.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
-import 'package:provider/provider.dart';
 
 import '../transfer_handler.dart';
 
@@ -44,7 +43,7 @@ abstract class BaseTransferHandler implements TransferHandler {
 
   /// Get wallet action provider
   WalletActionProvider get walletProvider {
-    return Provider.of<WalletActionProvider>(AppGlobals.appContext, listen: false);
+    return globalWapAdapter;
   }
 
   /// Get chain map for the specified chain symbol

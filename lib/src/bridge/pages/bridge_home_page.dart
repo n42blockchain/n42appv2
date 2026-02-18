@@ -12,21 +12,21 @@ import 'package:n42appv2/src/bridge/pages/bridge_select_chain_page.dart';
 import 'package:n42appv2/src/bridge/pages/bridge_history_page.dart';
 import 'package:n42appv2/src/bridge/provider/bridge_provider.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 
 /// 跨链桥主页面
-class BridgeHomePage extends StatefulWidget {
+class BridgeHomePage extends ConsumerStatefulWidget {
   const BridgeHomePage({super.key});
 
   @override
-  State<BridgeHomePage> createState() => _BridgeHomePageState();
+  ConsumerState<BridgeHomePage> createState() => _BridgeHomePageState();
 }
 
-class _BridgeHomePageState extends State<BridgeHomePage> {
+class _BridgeHomePageState extends ConsumerState<BridgeHomePage> {
   late BridgeProvider _bridgeProvider;
   final TextEditingController _amountController = TextEditingController();
 
@@ -46,96 +46,92 @@ class _BridgeHomePageState extends State<BridgeHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: _bridgeProvider,
-      child: Scaffold(
-        appBar: AppBarWidget(
-          text: S.of(context).g_key_bridge_title,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.history),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ChangeNotifierProvider.value(
-                      value: _bridgeProvider,
-                      child: const BridgeHistoryPage(),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-        body: Consumer<BridgeProvider>(
-          builder: (context, provider, _) {
-            return SafeArea(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // 源链选择
-                          _buildChainCard(
-                            context,
-                            provider,
-                            isFrom: true,
-                          ),
+    return Scaffold(
+      appBar: AppBarWidget(
+        text: S.of(context).g_key_bridge_title,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.history),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => BridgeHistoryPage(provider: _bridgeProvider),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      body: ListenableBuilder(
+        listenable: _bridgeProvider,
+        builder: (context, _) {
+          final provider = _bridgeProvider;
+          return SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // 源链选择
+                        _buildChainCard(
+                          context,
+                          provider,
+                          isFrom: true,
+                        ),
 
-                          // 交换按钮
-                          Center(
-                            child: Container(
-                              margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
-                              child: IconButton(
-                                onPressed: provider.state == BridgeState.idle
-                                    ? () => provider.swapChains()
-                                    : null,
-                                icon: Container(
-                                  padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
-                                  decoration: BoxDecoration(
-                                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Icon(
-                                    Icons.swap_vert,
-                                    color: Colors.white,
-                                    size: ScreenUtil().setWidth(40),
-                                  ),
+                        // 交换按钮
+                        Center(
+                          child: Container(
+                            margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+                            child: IconButton(
+                              onPressed: provider.state == BridgeState.idle
+                                  ? () => provider.swapChains()
+                                  : null,
+                              icon: Container(
+                                padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+                                decoration: BoxDecoration(
+                                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.swap_vert,
+                                  color: Colors.white,
+                                  size: ScreenUtil().setWidth(40),
                                 ),
                               ),
                             ),
                           ),
+                        ),
 
-                          // 目标链选择
-                          _buildChainCard(
-                            context,
-                            provider,
-                            isFrom: false,
-                          ),
+                        // 目标链选择
+                        _buildChainCard(
+                          context,
+                          provider,
+                          isFrom: false,
+                        ),
 
-                          SizedBox(height: ScreenUtil().setWidth(30)),
+                        SizedBox(height: ScreenUtil().setWidth(30)),
 
-                          // 路由信息
-                          if (provider.selectedRoute != null) _buildRouteInfo(context, provider),
+                        // 路由信息
+                        if (provider.selectedRoute != null) _buildRouteInfo(context, provider),
 
-                          // 错误信息
-                          if (provider.errorMessage != null) _buildErrorMessage(context, provider),
-                        ],
-                      ),
+                        // 错误信息
+                        if (provider.errorMessage != null) _buildErrorMessage(context, provider),
+                      ],
                     ),
                   ),
+                ),
 
-                  // 底部按钮
-                  _buildBottomButton(context, provider),
-                ],
-              ),
-            );
-          },
-        ),
+                // 底部按钮
+                _buildBottomButton(context, provider),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -574,7 +570,7 @@ class _BridgeHomePageState extends State<BridgeHomePage> {
   ) async {
     if (!canGetQuote) return;
 
-    final walletProvider = Provider.of<WalletActionProvider>(context, listen: false);
+    final walletProvider = ref.read(wapBridgeProvider);
     final address = walletProvider.getAddress('ETH') ?? '';
 
     if (canExecute) {
@@ -681,7 +677,7 @@ class _BridgeHomePageState extends State<BridgeHomePage> {
     BridgeProvider provider,
   ) async {
     try {
-      final walletProvider = Provider.of<WalletActionProvider>(context, listen: false);
+      final walletProvider = ref.read(wapBridgeProvider);
       final walletInfo = walletProvider.walletInfo;
       final mnemonic = walletInfo.mnemonic ?? '';
       final privateKey = walletInfo.privateKey ?? '';

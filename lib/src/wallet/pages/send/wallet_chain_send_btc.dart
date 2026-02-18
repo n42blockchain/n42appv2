@@ -14,9 +14,7 @@ import 'package:n42appv2/src/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_base_send.dart';
-import 'package:n42appv2/src/wallet/provider/transaction_record_iterms_provider.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/wallet/utils/coin_gas.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
@@ -31,20 +29,22 @@ import 'package:intl/intl.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:decimal/decimal.dart' as dec;
 import 'package:flustars_flutter3/flustars_flutter3.dart' as flustars;
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/transaction_providers.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:validators/validators.dart';
 
-class WalletChainSendBtc extends StatefulWidget {
+class WalletChainSendBtc extends ConsumerStatefulWidget {
   final CoinModel coinModel;
   final String? toAmount;
   final String? toAddress;
   const WalletChainSendBtc(this.coinModel,{this.toAddress,this.toAmount,super.key});
 
   @override
-  State<WalletChainSendBtc> createState() => _WalletChainSendBtcState();
+  ConsumerState<WalletChainSendBtc> createState() => _WalletChainSendBtcState();
 }
 
-class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
+class _WalletChainSendBtcState extends ConsumerState<WalletChainSendBtc> {
   TransferApi? _transferApi;
   TransferApi get transferApi{
     _transferApi ??= TransferApi();
@@ -438,7 +438,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
     if(trModel.txHash != ""){
       await AppDatabase().insertBtcTransactionRecord(trModel);
       if (!mounted) return;
-      Provider.of<TransactionRecordItemProvider>(context,listen: false).addUndoneTr(trModel,0);
+      ref.read(tripBridgeProvider).addUndoneTr(trModel,0);
       ToastUtils.show(S.current.g_key_nft_41);
       if(toTextFieldEnabel==false){
         Navigator.pop(context,trModel.txHash);
@@ -1153,7 +1153,7 @@ class _WalletChainSendBtcState extends State<WalletChainSendBtc> {
               trModel.to1=toTextEditingController.text.trim();
               trModel.coin=widget.coinModel.coin;
               trModel.coinMiniName=widget.coinModel.coin['coinType'];
-              trModel.walletIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
+              trModel.walletIndex=ref.read(wapBridgeProvider).walletIndex;
               trModel.price=price;
               trModel.gasPrice=gasFeeLevel['gasFees'];
               bool check=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletBaseSend(null,trModel,widget.coinModel.coin['unit'])));

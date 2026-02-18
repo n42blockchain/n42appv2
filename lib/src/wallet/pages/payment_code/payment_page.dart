@@ -17,12 +17,13 @@ import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-class PaymentPage extends StatefulWidget {
+class PaymentPage extends ConsumerStatefulWidget {
   final String? amount;
   final String? address;
   final String? coinType;
@@ -30,10 +31,10 @@ class PaymentPage extends StatefulWidget {
   const PaymentPage(this.amount,this.uuid,this.coinType,this.address,{super.key});
 
   @override
-  State<PaymentPage> createState() => _PaymentPageState();
+  ConsumerState<PaymentPage> createState() => _PaymentPageState();
 }
 
-class _PaymentPageState extends State<PaymentPage> {
+class _PaymentPageState extends ConsumerState<PaymentPage> {
   String amount="";
   String address="";
   String coinType="";
@@ -76,7 +77,7 @@ class _PaymentPageState extends State<PaymentPage> {
     setState(() {});
   }
   Future<void> initCoinInfo()async{
-    usdtInfo=Provider.of<WalletActionProvider>(context,listen: false).getCoinPriceWithUnit("usdt");
+    usdtInfo=ref.read(wapBridgeProvider).getCoinPriceWithUnit("usdt");
     //查询coins中的币种信息
     var list = await MarketApi().getWalletCoinsInfo("usdt");
     //判断查询是否成功
@@ -115,7 +116,7 @@ class _PaymentPageState extends State<PaymentPage> {
     setState(() {});
   }
   void initCoinModel(){
-    WalletActionProvider wap =Provider.of<WalletActionProvider>(context,listen: false);
+    WalletActionProvider wap =ref.read(wapBridgeProvider);
     for(CoinModel cm in wap.coinList){
       if(cm.coin['coinType'].toString().toLowerCase()==coinType.toLowerCase()){
         if(cm.coin['miniName'].toString().toLowerCase()=="usdt"){
@@ -139,7 +140,7 @@ class _PaymentPageState extends State<PaymentPage> {
     });
   }
   Future<void> initCoinMainModel()async{
-    WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
+    WalletActionProvider wap=ref.read(wapBridgeProvider);
     int cIndex=wap.coinModels.indexWhere((element){
       if(element.coin['coinType']==coinModels[coinModelIndex].coin['coinType']){
         if(coinModels[coinModelIndex].privateKey !=null){
@@ -517,7 +518,7 @@ class _PaymentPageState extends State<PaymentPage> {
           Expanded(
             flex: 1,
             child: Text(
-              Provider.of<WalletActionProvider>(context,listen: false).walletInfo.walletName??"",
+              ref.read(wapBridgeProvider).walletInfo.walletName??"",
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name),
                 fontSize: ScreenUtil().setSp(30),

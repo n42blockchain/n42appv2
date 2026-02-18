@@ -7,7 +7,6 @@ import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/api/face_api.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/loading_page.dart';
@@ -15,23 +14,24 @@ import 'package:flutter/material.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_face_api/flutter_face_api.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:provider/provider.dart';
 
 
-class FaceBinding extends StatefulWidget {
+class FaceBinding extends ConsumerStatefulWidget {
   final int type;//1绑定，2验证
   final String? address;
   final int? walletIndex;
   const FaceBinding(this.type,{this.address,this.walletIndex,super.key});
 
   @override
-  State<FaceBinding> createState() => _FaceBindingState();
+  ConsumerState<FaceBinding> createState() => _FaceBindingState();
 }
 
 
-class _FaceBindingState extends State<FaceBinding> with WidgetsBindingObserver{
+class _FaceBindingState extends ConsumerState<FaceBinding> with WidgetsBindingObserver{
   var faceSdk = FaceSDK.instance;
   Load load=Load.finish;
   bool cameraOK=false;
@@ -99,7 +99,7 @@ class _FaceBindingState extends State<FaceBinding> with WidgetsBindingObserver{
       if(widget.address !=null){
         addr=widget.address!;
       }else{
-        CoinModel? cm=Provider.of<WalletActionProvider>(context,listen: false).getCoinModelWithCoinType(CoinType.N.name);
+        CoinModel? cm=ref.read(wapBridgeProvider).getCoinModelWithCoinType(CoinType.N.name);
         if(cm !=null){
           addr=cm.address;
         }else{
@@ -125,7 +125,7 @@ class _FaceBindingState extends State<FaceBinding> with WidgetsBindingObserver{
           Navigator.pop(context,mm);
         }else{
           //ToastUtils.show(S.of(context).g_face_match_key11(cm.address));
-          Provider.of<WalletActionProvider>(context,listen: false).setWalletFaceBinding(widget.walletIndex);
+          ref.read(wapBridgeProvider).setWalletFaceBinding(widget.walletIndex);
           if (!mounted) return;
           MessageModel mm=MessageModel();
           mm.data=S.of(context).g_face_match_key11(addr);

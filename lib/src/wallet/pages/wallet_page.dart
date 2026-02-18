@@ -37,21 +37,23 @@ import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:n42appv2/src/widgets/loading.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42appv2/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 
-class WalletPage extends StatefulWidget {
+class WalletPage extends ConsumerStatefulWidget {
   const WalletPage({super.key});
 
   @override
-  State<WalletPage> createState() => _WalletPageState();
+  ConsumerState<WalletPage> createState() => _WalletPageState();
 }
 
-class _WalletPageState extends State<WalletPage> {
+class _WalletPageState extends ConsumerState<WalletPage> {
   Regular? _regular;
   Regular get regular{
     _regular ??= Regular();
@@ -92,7 +94,7 @@ class _WalletPageState extends State<WalletPage> {
 
   @override
   void initState() {
-    Provider.of<WalletActionProvider>(context,listen: false).initWallet(shouldInitCoinInfo:true);
+    ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo:true);
     _scrollController = ScrollController()
       ..addListener(() {
         var maxScroll = _scrollController.position.maxScrollExtent;
@@ -107,7 +109,7 @@ class _WalletPageState extends State<WalletPage> {
   }
 
   Future<void> walletConnect() async {
-    WalletConnectProvider walletConnectProvider=Provider.of<WalletConnectProvider>(context,listen: false);
+    WalletConnectProvider walletConnectProvider=ref.read(wcpBridgeProvider);
     if (walletConnectProvider.walletConnectState ==
         WalletConnectState.disconnect ||
         walletConnectProvider.walletConnectState ==
@@ -161,8 +163,8 @@ class _WalletPageState extends State<WalletPage> {
     return Scaffold(
       body: SafeArea(
         child: ResponsiveContainer(
-          child: Consumer<WalletActionProvider>(
-            builder: (context, waValue, child){
+          child: Builder(builder: (context) {
+            final waValue = ref.watch(wapBridgeProvider);
               if(waValue.walletIndex==-1) {
                 return Loading();
               }
@@ -296,7 +298,8 @@ class _WalletPageState extends State<WalletPage> {
                                 ),
                               ],
                             ),
-                            Consumer<WalletConnectProvider>(builder: (context,wc,child){
+                            Builder(builder: (context) {
+                              final wc = ref.watch(wcpBridgeProvider);
                               return InkWell(
                                 onTap: () {
                                   walletConnect();
@@ -561,8 +564,7 @@ class _WalletPageState extends State<WalletPage> {
 
               ],
             );
-            },
-          ),
+            }),
         ),
       ),
     );
@@ -919,9 +921,9 @@ class _WalletPageState extends State<WalletPage> {
               onPressed: (context) async {
                 if(coinInfo.coin['canEdit']==true){
                   if(coinInfo.coin['isContract']){
-                    Provider.of<WalletActionProvider>(context,listen: false).removeWalletChainToken(coinInfo.coin,symbol:coinInfo.coin["coinType"],miniName:coinInfo.coin['miniName']);
+                    ref.read(wapBridgeProvider).removeWalletChainToken(coinInfo.coin,symbol:coinInfo.coin["coinType"],miniName:coinInfo.coin['miniName']);
                   }else{
-                    Provider.of<WalletActionProvider>(context,listen: false).removeWalletChain(coinInfo.coin['mKey'],coinInfo.coin['unit']);
+                    ref.read(wapBridgeProvider).removeWalletChain(coinInfo.coin['mKey'],coinInfo.coin['unit']);
                   }
                 }
               },
@@ -1248,7 +1250,7 @@ class _WalletPageState extends State<WalletPage> {
   //显示钱包列表
   void showChangeAddress() {
     //WalletInfo nowWalletInfo=walletValue.walletInfoLsit[walletValue.walletIndex];
-    WalletActionProvider walletValue = Provider.of<WalletActionProvider>(context,listen: false);
+    WalletActionProvider walletValue = ref.read(wapBridgeProvider);
     List<Widget> childs = [];
     childs.add(
       Container(
@@ -1339,7 +1341,7 @@ class _WalletPageState extends State<WalletPage> {
                     maxLines: 1,
                   ),
                   Spacer(),
-                  if(wInfo.mainWallet==true || Provider.of<WalletActionProvider>(context,listen: false).walletIndex == index)
+                  if(wInfo.mainWallet==true || ref.read(wapBridgeProvider).walletIndex == index)
                     Icon(Icons.lock,
                       color: AppThemeUtils.getColorByKey(
                           context, AppThemeKeys.mainGreyColor.name),
@@ -1391,7 +1393,7 @@ class _WalletPageState extends State<WalletPage> {
   }
   //显示添加代币和链
   Future<void> showAddToken()async{
-    WalletInfo wi=Provider.of<WalletActionProvider>(context,listen: false).walletInfo;
+    WalletInfo wi=ref.read(wapBridgeProvider).walletInfo;
     if(wi.privateKey !=null){
       String? cType=wi.coinInfo?.keys.toList()[0];
       bool? r = await Navigator.push(
@@ -1401,7 +1403,7 @@ class _WalletPageState extends State<WalletPage> {
           ));
       if (!mounted) return;
       if (r==true) {
-        Provider.of<WalletActionProvider>(context,listen: false).initWallet(shouldInitCoinInfo: true);
+        ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
       }
       return;
     }
@@ -1414,7 +1416,7 @@ class _WalletPageState extends State<WalletPage> {
           InkWell(
             onTap: ()async{
               String? cType;
-              WalletInfo wi=Provider.of<WalletActionProvider>(context,listen: false).walletInfo;
+              WalletInfo wi=ref.read(wapBridgeProvider).walletInfo;
               if(wi.privateKey !=null){
                 cType=wi.coinInfo?.keys.toList()[0];
               }
@@ -1425,7 +1427,7 @@ class _WalletPageState extends State<WalletPage> {
                   ));
               if (!mounted) return;
               if (r==true) {
-                Provider.of<WalletActionProvider>(context,listen: false).initWallet(shouldInitCoinInfo: true);
+                ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
               }
               Navigator.pop(context);
             },
@@ -1456,7 +1458,7 @@ class _WalletPageState extends State<WalletPage> {
                   ));
               if (!mounted) return;
               if (r==true) {
-                Provider.of<WalletActionProvider>(context,listen: false).initWallet(shouldInitCoinInfo: true);
+                ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
               }
               Navigator.pop(context);
             },

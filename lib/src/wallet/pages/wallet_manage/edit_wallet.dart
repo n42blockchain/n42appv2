@@ -1,25 +1,25 @@
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/comm_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 
-class EditWallet extends StatefulWidget {
+class EditWallet extends ConsumerStatefulWidget {
   final WalletInfo walletInfo;
   final int walletIndex;
   const EditWallet({required this.walletInfo,required this.walletIndex,super.key});
 
   @override
-  State<EditWallet> createState() => _EditWalletState();
+  ConsumerState<EditWallet> createState() => _EditWalletState();
 }
 
-class _EditWalletState extends State<EditWallet> {
+class _EditWalletState extends ConsumerState<EditWallet> {
   final _controller = TextEditingController();
 
   @override
@@ -92,7 +92,7 @@ class _EditWalletState extends State<EditWallet> {
                   // }else{
                   //   walletAll[AppGlobals.userInfo!.uuid]=[widget.walletInfo.toJson()];
                   // }
-                  await Provider.of<WalletActionProvider>(context,listen: false).saveWalletInfo(widget.walletInfo,widget.walletIndex);
+                  await ref.read(wapBridgeProvider).saveWalletInfo(widget.walletInfo,widget.walletIndex);
                   //await SPUtils.setWalletInfo({AppGlobals.userInfo!.uuid:[widget.walletInfo.toJson()]});
 
                   ///更新一下provider中的数据

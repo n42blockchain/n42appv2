@@ -9,28 +9,28 @@ import 'package:n42appv2/src/wallet/api/transfer_api.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_btc.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/wallet/utils/create_btc_tx_1.dart';
 import 'package:n42appv2/src/wallet/utils/create_btc_tx_2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';
 import 'package:n42appv2/core/utils/js_escape_utils.dart';
-class SelfCustody1 extends StatefulWidget {
+class SelfCustody1 extends ConsumerStatefulWidget {
   final CoinModel coinModel;
   const SelfCustody1(this.coinModel,{super.key});
 
   @override
-  State<SelfCustody1> createState() => _SelfCustody1State();
+  ConsumerState<SelfCustody1> createState() => _SelfCustody1State();
 }
 //01000000000103b4e1d30cf774b846bc6147f99f8ef11a6c300c61387a040dc68356e04c127bfb0000000000ffffffff607b3facebc1aedfb6c0a1448a37a1f727851e49c3135adaf8f81edc0e3feaa30000000000ffffffffc28c3d24f622f79dce51518a5a09cc7748e4baef93778e2327f5bd73b751a9d20500000000ffffffff02a086010000000000160014e6401c83bf5e7986cda4afff3d88ff897885dbe49e6a373000000000160014e6401c83bf5e7986cda4afff3d88ff897885dbe40140e69d8fec799297dd42ad45491d36e05e64c9dfaa6c8544b666b81b100aaf44242be38b37c6bfd096dc7dd2490bdac08a76db5e313f4619f460db8a5db764f9ea00000000
 //02000000000103b4e1d30cf774b846bc6147f99f8ef11a6c300c61387a040dc68356e04c127bfb0000000000ffffffff607b3facebc1aedfb6c0a1448a37a1f727851e49c3135adaf8f81edc0e3feaa30000000000ffffffffc28c3d24f622f79dce51518a5a09cc7748e4baef93778e2327f5bd73b751a9d20500000000ffffffff02a086010000000000160014e6401c83bf5e7986cda4afff3d88ff897885dbe49e6a373000000000160014e6401c83bf5e7986cda4afff3d88ff897885dbe4034064a9ed7a202a05831461b0ffe898e0b500e6b8472d083ba0a819eef044200ab95c3a9ee4518785c7104c5a17d7be51adc99724dba24e270d18cae623589ba20f40f724540c07ead1c412f6fb5a7ef204e36ed3e47bdd036d83754e2e6f2bdeff9a9a4fd72fbe794d75de673473f909dc01b0dddc0625b93f0846d944ffd01e7dc4406f4b37f0fcbdca1aaeda926af92e70b52327425a5f118d5b7c03e62c171a9174d3b296382aac93440a4fec103c2567c538101b690e5e236eb8a1af4ee2f3b79200000000
-class _SelfCustody1State extends State<SelfCustody1> {
+class _SelfCustody1State extends ConsumerState<SelfCustody1> {
   late WebViewController _controller;
   TransferApi? _transferApi;
   TransferApi get transferApi{
@@ -114,7 +114,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
               if (!mounted) return;
               if(value !=null){
 
-                String ethAddress=Provider.of<WalletActionProvider>(context,listen: false).getAddress(CoinType.N.name);
+                String ethAddress=ref.read(wapBridgeProvider).getAddress(CoinType.N.name);
                 BigInt lockAmountInt=ethToWeiString(lockAmount!, 8);
                 //String alertStr='requestMintVbtc("${p2wshAddr}","${ethAddress}",${lockAmountInt},"${value}","${widget.coinModel.address}",${lockTimeInt},"${publicKey}");';
                 String alertStr='requestMintVbtc("${JsEscapeUtils.escapeJs(p2wshAddr)}","${JsEscapeUtils.escapeJs(ethAddress)}",$lockAmountInt,"${JsEscapeUtils.escapeJs(widget.coinModel.address)}",$lockTimeInt,"${JsEscapeUtils.escapeJs(publicKey ?? "")}");';
@@ -144,7 +144,7 @@ class _SelfCustody1State extends State<SelfCustody1> {
   Future<void> createWallet()async{
     //9804a241a85bba9480c7e99b23a201f30b48c0d5e990f42e1ed32b19117d99b1
     privateKey = ECPrivate.fromWif("cVbQm3SVhN3sHD2mhbucpyz99mH6WNRcAKhzur3SP5hX4Ca53m15", netVersion: BitcoinNetwork.mainnet.wifNetVer);
-    //String mm=Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic??"";
+    //String mm=ref.read(wapBridgeProvider).walletInfo.mnemonic??"";
     //String walletPK=await Trustdart().getPrivateKey(mm, CoinType.BTC.name, "m/84'/0'/0'/0/0");
     //privateKey=ECPrivate.fromBytes(base64Decode(walletPK));
 
@@ -162,11 +162,11 @@ class _SelfCustody1State extends State<SelfCustody1> {
 
   }
   Future<void> createWallet2()async{
-    Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic;
-    String pk=await Trustdart().getPrivateKey(Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic??"", CoinType.BTC.name, "m/84'/4'/0'/0/0");
+    ref.read(wapBridgeProvider).walletInfo.mnemonic;
+    String pk=await Trustdart().getPrivateKey(ref.read(wapBridgeProvider).walletInfo.mnemonic??"", CoinType.BTC.name, "m/84'/4'/0'/0/0");
     bytesToHex(base64.decode(pk));
     privateKey=ECPrivate.fromHex(bytesToHex(base64.decode(pk)));
-    //String mm=Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic??"";
+    //String mm=ref.read(wapBridgeProvider).walletInfo.mnemonic??"";
     //String walletPK=await Trustdart().getPrivateKey(mm, CoinType.BTC.name, "m/84'/0'/0'/0/0");
     //privateKey=ECPrivate.fromBytes(base64Decode(walletPK));
     final publicKey = privateKey!.getPublic();
@@ -183,10 +183,10 @@ class _SelfCustody1State extends State<SelfCustody1> {
   Future<String?> createP2WSH(int lockTime,{String? uPubKey,String? cPubKey})async{
     // 1️⃣ 用户 & Canister 公钥 (HEX 格式)
     if(uPubKey==null){
-      //Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic;
-      //String pk=await Trustdart().getPrivateKey(Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic??"", CoinType.BTC.name, "m/84'/4'/0'/0/0");
+      //ref.read(wapBridgeProvider).walletInfo.mnemonic;
+      //String pk=await Trustdart().getPrivateKey(ref.read(wapBridgeProvider).walletInfo.mnemonic??"", CoinType.BTC.name, "m/84'/4'/0'/0/0");
       if (!mounted) return null;
-      final wap = Provider.of<WalletActionProvider>(context,listen: false);
+      final wap = ref.read(wapBridgeProvider);
       String pubKey=await Trustdart().getPublicKey(CoinType.BTC.name, "m/84'/4'/0'/0/0",mnemonic: wap.walletInfo.mnemonic??"",pk: wap.walletInfo.privateKey??"");
       publicKey=bytesToHex(base64Decode(pubKey));
       await Trustdart().getPrivateKey(wap.walletInfo.mnemonic??"",CoinType.BTC.name, "m/84'/4'/0'/0/0",);
@@ -220,8 +220,8 @@ class _SelfCustody1State extends State<SelfCustody1> {
     p2wshAddress =P2wshAddress.fromScript(script: newScript);
     if (kDebugMode) debugPrint(p2wshAddress!.toAddress(BitcoinNetwork.testnet));
     return p2wshAddress!.toAddress(BitcoinNetwork.testnet);
-    //Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic;
-    //String pk=await Trustdart().getPrivateKey(Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic??"", CoinType.BTC.name, "m/84'/4'/0'/0/0");
+    //ref.read(wapBridgeProvider).walletInfo.mnemonic;
+    //String pk=await Trustdart().getPrivateKey(ref.read(wapBridgeProvider).walletInfo.mnemonic??"", CoinType.BTC.name, "m/84'/4'/0'/0/0");
     //Trustdart().testSign_btc('cVbQm3SVhN3sHD2mhbucpyz99mH6WNRcAKhzur3SP5hX4Ca53m15');
     //Trustdart().testSign_btc(pk);
     //CreateBtcTX2().createMessage(privateKey!, "Hello", privateKey!.getPublic());

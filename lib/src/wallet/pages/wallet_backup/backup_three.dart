@@ -9,20 +9,21 @@ import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
-import 'package:provider/provider.dart';
 
-class BackupThree extends StatefulWidget {
+class BackupThree extends ConsumerStatefulWidget {
   final WalletInfo walletInfo;
   final int walletIndex;
   const BackupThree(this.walletInfo,this.walletIndex,{super.key});
 
   @override
-  State<BackupThree> createState() => _BackupThreeState();
+  ConsumerState<BackupThree> createState() => _BackupThreeState();
 }
 
-class _BackupThreeState extends State<BackupThree> {
+class _BackupThreeState extends ConsumerState<BackupThree> {
   final TextEditingController _uPasswordController = TextEditingController();
   final TextEditingController _uPasswordConfirmController = TextEditingController();
   final FocusNode _uPasswordFocusNode = FocusNode();
@@ -202,11 +203,11 @@ class _BackupThreeState extends State<BackupThree> {
                           uPasswordConfirmErrorMessage="";
                         });
                         widget.walletInfo.password=password;
-                        WalletActionProvider wap=Provider.of<WalletActionProvider>(this.context,listen: false);
+                        WalletActionProvider wap=ref.read(wapBridgeProvider);
                         await wap.saveWalletInfo(widget.walletInfo,widget.walletIndex);
                         if (!mounted) return;
                         if(widget.walletIndex==wap.walletIndex){
-                          Provider.of<WalletActionProvider>(this.context,listen: false).initWallet();
+                          ref.read(wapBridgeProvider).initWallet();
                         }
                         ToastUtils.show(S.of(this.context).g_key_185);
                         eventBus.fire(EventPublic(EventPublicType.backup,param: widget.walletInfo));

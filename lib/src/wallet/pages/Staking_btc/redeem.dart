@@ -14,10 +14,10 @@ import 'package:n42appv2/src/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:reown_walletkit/reown_walletkit.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
@@ -25,15 +25,15 @@ import 'package:http/http.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';
 import 'package:n42appv2/core/utils/js_escape_utils.dart';
 
-class Redeem extends StatefulWidget {
+class Redeem extends ConsumerStatefulWidget {
   final CoinModel coinModel;
   const Redeem(this.coinModel,{super.key});
 
   @override
-  State<Redeem> createState() => _RedeemState();
+  ConsumerState<Redeem> createState() => _RedeemState();
 }
 
-class _RedeemState extends State<Redeem> {
+class _RedeemState extends ConsumerState<Redeem> {
   late WebViewController _controller;
   TransferApi? _transferApi;
   TransferApi get transferApi{
@@ -130,7 +130,7 @@ class _RedeemState extends State<Redeem> {
     trModel.to1=widget.coinModel.address;
     trModel.coin=widget.coinModel.coin;
     trModel.coinMiniName=widget.coinModel.coin['coinType'];
-    trModel.walletIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
+    trModel.walletIndex=ref.read(wapBridgeProvider).walletIndex;
     trModel.price=100000;
     transatroinBuilder1To1(trModel,);*/
   }
@@ -138,7 +138,7 @@ class _RedeemState extends State<Redeem> {
     String serviceUrl=RequestUrl().getUrl2(CoinType.ETH.name, 'rpc',isTest: widget.coinModel.isTest);
     String privateKey;
     if(widget.coinModel.privateKey==null || widget.coinModel.privateKey==""){
-      String pk=await Trustdart().getPrivateKey(Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic??"", CoinType.ETH.name, "m/44'/60'/0'/0/0");
+      String pk=await Trustdart().getPrivateKey(ref.read(wapBridgeProvider).walletInfo.mnemonic??"", CoinType.ETH.name, "m/44'/60'/0'/0/0");
       privateKey=bytesToHex(base64Decode(pk));
     }else{
       privateKey=bytesToHex(base64Decode(widget.coinModel.privateKey??""));
@@ -152,11 +152,11 @@ class _RedeemState extends State<Redeem> {
   Future<String> createP2WSH(int lockTime,{String? uPubKey,String? cPubKey})async{
     // 1️⃣ 用户 & Canister 公钥 (HEX 格式)
     if(uPubKey==null){
-      //Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic;
-      //String pk=await Trustdart().getPrivateKey(Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic??"", CoinType.BTC.name, "m/84'/4'/0'/0/0");
-      String pubKey=await Trustdart().getPublicKey(CoinType.BTC.name, "m/84'/4'/0'/0/0",mnemonic: Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic??"",pk: Provider.of<WalletActionProvider>(context,listen: false).walletInfo.privateKey??"");
+      //ref.read(wapBridgeProvider).walletInfo.mnemonic;
+      //String pk=await Trustdart().getPrivateKey(ref.read(wapBridgeProvider).walletInfo.mnemonic??"", CoinType.BTC.name, "m/84'/4'/0'/0/0");
+      String pubKey=await Trustdart().getPublicKey(CoinType.BTC.name, "m/84'/4'/0'/0/0",mnemonic: ref.read(wapBridgeProvider).walletInfo.mnemonic??"",pk: ref.read(wapBridgeProvider).walletInfo.privateKey??"");
       uPubKey=bytesToHex(base64Decode(pubKey));
-      //String privatKey1=await Trustdart().getPrivateKey(Provider.of<WalletActionProvider>(context,listen: false).walletInfo.mnemonic??"",CoinType.BTC.name, "m/84'/4'/0'/0/0",);
+      //String privatKey1=await Trustdart().getPrivateKey(ref.read(wapBridgeProvider).walletInfo.mnemonic??"",CoinType.BTC.name, "m/84'/4'/0'/0/0",);
       //String privatKeyStr=bytesToHex(base64Decode(privatKey1));
       
       //privateKey!.getPublic().toHex();
@@ -205,7 +205,7 @@ class _RedeemState extends State<Redeem> {
       "max":true
     };
     if (kDebugMode) debugPrint(json.encode(btcTxMap));
-    return await Trustdart().signTransactionBtcP2wsh(CoinType.BTC.name, "m/84'/4'/0'/0/0", btcTxMap,pk: Provider.of<WalletActionProvider>(context,listen: false).walletInfo.privateKey??"");
+    return await Trustdart().signTransactionBtcP2wsh(CoinType.BTC.name, "m/84'/4'/0'/0/0", btcTxMap,pk: ref.read(wapBridgeProvider).walletInfo.privateKey??"");
   }
   //交易打包
   //unspents 未消费列表
@@ -349,7 +349,7 @@ class _RedeemState extends State<Redeem> {
     Web3Client client = Web3Client("https://eth-sepolia.public.blastapi.io", Client());
     RedeemToken token = RedeemToken.init(
         address: EthereumAddress.fromHex("0x6c30A50430cC615C4659DF2dBe3E42036583bE7E"), client: client);
-    WalletInfo walletInfo=Provider.of<WalletActionProvider>(context,listen: false).walletInfo;
+    WalletInfo walletInfo=ref.read(wapBridgeProvider).walletInfo;
     String privateKey=walletInfo.privateKey??"";
     if(privateKey==""){
       privateKey=await Trustdart().getPrivateKey(walletInfo.mnemonic??"", CoinType.ETH.name, "m/44'/60'/0'/0/0",);

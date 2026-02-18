@@ -9,7 +9,6 @@ import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/pages/create_wallet/create_password.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/all_chain.dart';
 import 'package:n42appv2/src/wallet/widgets/choose_import_coin.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
@@ -19,21 +18,22 @@ import 'package:n42appv2/src/widgets/container_widget.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:fast_base58/fast_base58.dart' as fast;
 import 'package:crypto/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
-class ImportPrivatekey extends StatefulWidget {
+class ImportPrivatekey extends ConsumerStatefulWidget {
   const ImportPrivatekey({super.key});
 
   @override
-  State<ImportPrivatekey> createState() => _ImportPrivatekeyState();
+  ConsumerState<ImportPrivatekey> createState() => _ImportPrivatekeyState();
 }
 
-class _ImportPrivatekeyState extends State<ImportPrivatekey> {
+class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
   final _keystoreController = TextEditingController();
   Load load=Load.finish;
   String errorMessage="";
@@ -424,7 +424,7 @@ class _ImportPrivatekeyState extends State<ImportPrivatekey> {
                           if(rm['legacy']!=""){
                             Uint8List ksjByte=hexToBytes(keystoreJson);
                             String base64Str=base64Encode(ksjByte);
-                            WalletInfo? findWalletInfo=Provider.of<WalletActionProvider>(this.context,listen: false).findWallet(pk: base64Str);
+                            WalletInfo? findWalletInfo=ref.read(wapBridgeProvider).findWallet(pk: base64Str);
                             if(findWalletInfo != null){
                               errorMessage=S.of(this.context).g_key_214(findWalletInfo.walletName??"");
                               setState(() {});
@@ -436,7 +436,7 @@ class _ImportPrivatekeyState extends State<ImportPrivatekey> {
                                 walletName: "",
                                 password: "",
                                 //path: WalletPath.init(),
-                                walletUuid: Provider.of<WalletActionProvider>(this.context,listen: false).userUUID,
+                                walletUuid: ref.read(wapBridgeProvider).userUUID,
                                 mnemonic: "",
                               privateKey: base64Str,
                               coinInfo: {selectChain['baseInfo']['mKey']:selectChain},

@@ -10,11 +10,11 @@ import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/hardware_wallet/models/hardware_wallet_models.dart';
 import 'package:n42appv2/src/hardware_wallet/provider/hardware_wallet_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:provider/provider.dart';
 
 /// 硬件钱包账户页面
 class HardwareWalletAccountsPage extends StatefulWidget {
-  const HardwareWalletAccountsPage({super.key});
+  final HardwareWalletProvider provider;
+  const HardwareWalletAccountsPage({super.key, required this.provider});
 
   @override
   State<HardwareWalletAccountsPage> createState() => _HardwareWalletAccountsPageState();
@@ -44,7 +44,7 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
   Future<void> _loadAccounts() async {
     setState(() => _isLoading = true);
 
-    final provider = context.read<HardwareWalletProvider>();
+    final provider = widget.provider;
     await provider.loadAccounts(_selectedCoinType);
 
     if (mounted) {
@@ -59,8 +59,10 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
         text: 'Wallet Accounts',
       ),
       body: SafeArea(
-        child: Consumer<HardwareWalletProvider>(
-          builder: (context, provider, _) {
+        child: ListenableBuilder(
+          listenable: widget.provider,
+          builder: (context, _) {
+            final provider = widget.provider;
             if (!provider.isConnected) {
               return _buildNotConnectedState(context);
             }

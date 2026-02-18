@@ -2,23 +2,23 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/src/miningV2/pages/keyManagement/mining_output_tip.dart';
-import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/container_widget.dart';
 import 'package:n42appv2/generated/l10n.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42appv2/features/mining/presentation/providers/mining_providers.dart';
 
-class MiningKeyList extends StatefulWidget {
+class MiningKeyList extends ConsumerStatefulWidget {
   const MiningKeyList({super.key});
 
   @override
-  State<MiningKeyList> createState() => _MiningKeyListState();
+  ConsumerState<MiningKeyList> createState() => _MiningKeyListState();
 }
 
-class _MiningKeyListState extends State<MiningKeyList> {
+class _MiningKeyListState extends ConsumerState<MiningKeyList> {
 
   Map<String,dynamic>? miningData;
   List<dynamic> miningList=[];
@@ -42,7 +42,7 @@ class _MiningKeyListState extends State<MiningKeyList> {
     await SPUtil().setMiningData(miningData!);
     getMiningData();
     if (!mounted) return;
-    Provider.of<MiningV2Provider>(context,listen: false).getMiningData();
+    ref.read(miningBridgeProvider).getMiningData();
   }
   @override
   Widget build(BuildContext context) {

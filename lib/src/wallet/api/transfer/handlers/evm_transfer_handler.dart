@@ -11,11 +11,10 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/wallet/api/token_view_api.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42appv2/src/wallet/utils/chain_1559.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/wallet/utils/coin_gas.dart';
-import 'package:provider/provider.dart';
 
 import '../transfer_handler.dart';
 import 'base_transfer_handler.dart';
@@ -306,7 +305,7 @@ class EvmTransferHandler extends BaseTransferHandler {
         coinType,
         path,
         signMap,
-        mnemonic: Provider.of<WalletActionProvider>(AppGlobals.appContext, listen: false)
+        mnemonic: globalWapAdapter
             .walletInfo
             .mnemonic ?? '',
       );

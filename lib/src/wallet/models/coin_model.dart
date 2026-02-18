@@ -1,12 +1,10 @@
 import 'package:flutter/foundation.dart';
-import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/src/wallet/models/coin_model_wallet_access.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:intl/intl.dart';
 import 'package:decimal/decimal.dart';
-import 'package:provider/provider.dart';
 class CoinModel {
   //数字格式化实例
   static final NumberFormat _oCcy = NumberFormat("#,##0.####", "en_US");
@@ -32,6 +30,10 @@ class CoinModel {
   bool custom=false;
 
   dynamic other;
+
+  /// Reference to wallet access layer, set by WalletActionProvider during construction.
+  /// This breaks the circular dependency: CoinModel no longer imports WAP directly.
+  ICoinModelWalletAccess? walletAccess;
 
   CoinModel();
   CoinModel.fromJson(Map<String,dynamic> json){
@@ -98,12 +100,17 @@ class CoinModel {
     coin = map;
   }
   //setAddress,是否设置钱包的地址Map
-  Future<void> buildWallet({String pk="",bool setAddress=true,int? walletIndex}) async {
+  Future<void> buildWallet({String pk="",bool setAddress=true,int? walletIndex, ICoinModelWalletAccess? walletAccess}) async {
+    walletAccess ??= this.walletAccess;
     String coinType = coin['coinType'];
     if (address == null) {
       if(walletIndex==null){
-        WalletActionProvider wap = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
-        WalletInfo info = wap.walletInfo;
+        if (walletAccess == null) {
+          debugPrint('CoinModel.buildWallet: walletAccess is required');
+          loadError = true;
+          return;
+        }
+        WalletInfo info = walletAccess.walletInfo;
         Map<String, dynamic>? pathMap = coin['path'];
         if (pathMap == null) {
           debugPrint('CoinModel.buildWallet: path is null for $coinType');
@@ -128,16 +135,20 @@ class CoinModel {
         if (generatedAddress == null || (generatedAddress as String).isEmpty) {
           debugPrint('CoinModel.buildWallet: Failed to generate address for $coinType (addrType: $addrType)');
           loadError = true;
-          wap.refresh();
+          walletAccess.refresh();
           return;
         }
         address = generatedAddress;
         if(setAddress){
-          wap.setAddress(coinType, addressType);
+          walletAccess.setAddress(coinType, addressType);
         }
       }else{
-        WalletActionProvider wap = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
-        WalletInfo info = wap.walletInfoLsit[walletIndex];
+        if (walletAccess == null) {
+          debugPrint('CoinModel.buildWallet: walletAccess is required');
+          loadError = true;
+          return;
+        }
+        WalletInfo info = walletAccess.walletInfoList[walletIndex];
         Map<String, dynamic>? pathMap = coin['path'];
         if (pathMap == null) {
           debugPrint('CoinModel.buildWallet: path is null for $coinType');
@@ -187,33 +198,35 @@ class CoinModel {
     }
   }
   //是否是刷新，目前只有tron 链 使用
-  Future<bool> getBalance({bool getToken=true}) async {
+  Future<bool> getBalance({bool getToken=true, ICoinModelWalletAccess? walletAccess}) async {
+    walletAccess ??= this.walletAccess;
+    if (walletAccess == null) {
+      debugPrint('CoinModel.getBalance: walletAccess is required');
+      return false;
+    }
     try {
       //如果币的地址为空，创建地址
-      WalletActionProvider wap = Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false);
       if (address == null) {
-        await buildWallet();
+        await buildWallet(walletAccess: walletAccess);
       }
       // getBalanceWithCoinModel 返回 true 表示有错误，false 表示成功
-      bool hasError = await wap.getBalanceWithCoinModel(this);
-      if (!AppGlobals.appContext.mounted) return false;
+      bool hasError = await walletAccess.getBalanceWithCoinModel(this);
       if(hasError){
         // 获取余额失败，但不设置 loadError，因为已经使用了缓存的余额
-        // loadError 只在完全无法获取数据时设置
         loadError = false;
-        Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).refresh();
+        walletAccess.refresh();
         return false;
       }else{
         // 获取余额成功
         loadError = false;
-        wap.calculateBalanceWidthCoinModel();
+        walletAccess.calculateBalanceWidthCoinModel();
         return true;
       }
     } catch (e) {
       debugPrint('CoinModel.getBalance error: $e');
       loadError = true;
       isRefresh = false;
-      Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).refresh();
+      walletAccess.refresh();
       return false;
     }
   }

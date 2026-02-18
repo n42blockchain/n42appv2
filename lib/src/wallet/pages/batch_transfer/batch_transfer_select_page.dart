@@ -4,28 +4,29 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/pages/batch_transfer/batch_transfer_page.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42appv2/src/wallet/provider/batch_transfer_provider.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:provider/provider.dart';
 
 /// 批量转账代币选择页面
-class BatchTransferSelectPage extends StatelessWidget {
+class BatchTransferSelectPage extends ConsumerWidget {
   const BatchTransferSelectPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final waProvider = ref.watch(wapBridgeProvider);
     return Scaffold(
       appBar: AppBarWidget(
         text: S.of(context).g_key_batch_title,
       ),
-      body: Consumer<WalletActionProvider>(
-        builder: (context, waProvider, _) {
+      body: Builder(builder: (context) {
           // 过滤出支持批量转账的代币（EVM 链）
           final supportedCoins = waProvider.coinList.where((coin) {
             final chainSymbol = coin.coin['symbol'] ?? '';
@@ -57,8 +58,7 @@ class BatchTransferSelectPage extends StatelessWidget {
               ...supportedCoins.map((coin) => _buildCoinItem(context, coin)),
             ],
           );
-        },
-      ),
+        }),
     );
   }
 
@@ -294,6 +294,7 @@ class BatchTransferSelectPage extends StatelessWidget {
           tokenSymbol: chainSymbol,
           decimals: decimals,
           balance: balance,
+          batchTransferProvider: BatchTransferProvider(),
         ),
       ),
     );

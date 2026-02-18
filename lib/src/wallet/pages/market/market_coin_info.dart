@@ -4,25 +4,25 @@ import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/utils/regular.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/api/market_api.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/widgets/about_show_dialog.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:n42appv2/src/widgets/line_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-class MarketCoinInfo extends StatefulWidget {
+class MarketCoinInfo extends ConsumerStatefulWidget {
   final Map<String, dynamic> coin;
   const MarketCoinInfo(this.coin,{super.key});
 
   @override
-  State<MarketCoinInfo> createState() => _MarketCoinInfoState();
+  ConsumerState<MarketCoinInfo> createState() => _MarketCoinInfoState();
 }
 
-class _MarketCoinInfoState extends State<MarketCoinInfo> {
+class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
   final oCcy = NumberFormat("#,##0.00########", "en_US");
   double priceChangePercentage24h=0.0;
   Map<String,dynamic>? coinInfo;
@@ -62,7 +62,7 @@ class _MarketCoinInfoState extends State<MarketCoinInfo> {
       }
     }
     if (!mounted) return;
-    coinInfo=await Provider.of<WalletActionProvider>(context,listen: false).getCoinsBaseInfo(coin['coin_gecko_id']);
+    coinInfo=await ref.read(wapBridgeProvider).getCoinsBaseInfo(coin['coin_gecko_id']);
     if(coinInfo==null){
       load=Load.error;
     }else{

@@ -9,7 +9,6 @@ import 'package:n42appv2/src/wallet/pages/face_matching/face_match.dart';
 import 'package:n42appv2/src/wallet/pages/face_matching/face_user_notice.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/wallet_manage.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/wallet/widgets/create_wallet_button.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
@@ -20,18 +19,19 @@ import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:n42appv2/src/widgets/loading_page.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-class WalletList extends StatefulWidget {
+class WalletList extends ConsumerStatefulWidget {
   const WalletList({super.key});
 
   @override
-  State<WalletList> createState() => _WalletListState();
+  ConsumerState<WalletList> createState() => _WalletListState();
 }
 
-class _WalletListState extends State<WalletList> {
+class _WalletListState extends ConsumerState<WalletList> {
   List<WalletInfo> walletList = [];
   int fbwIndex=-1;
   bool fbwCheck=true;//验证钱包地址是否成功，默认成功
@@ -44,7 +44,7 @@ class _WalletListState extends State<WalletList> {
   }
 
   Future<void> initData() async {
-    walletList = Provider.of<WalletActionProvider>(context,listen: false).walletInfoLsit;
+    walletList = ref.read(wapBridgeProvider).walletInfoLsit;
     checkFaceBindingWallet();
     setState(() {});
   }
@@ -88,7 +88,7 @@ class _WalletListState extends State<WalletList> {
       if(addr.toUpperCase()==addressMap['legacy'].toString().toUpperCase()){
         fbwCheck=true;
         fbwIndex=i;
-        Provider.of<WalletActionProvider>(context,listen: false).setWalletFaceBinding(fbwIndex);
+        ref.read(wapBridgeProvider).setWalletFaceBinding(fbwIndex);
         break;
       }
     }
@@ -134,7 +134,7 @@ class _WalletListState extends State<WalletList> {
     if(rmm.error){
       ToastUtils.show(S.of(context).g_face_match_key35);
     }else{
-      Provider.of<WalletActionProvider>(context,listen: false).setWalletFaceBinding(fbwIndex,faceBinding: false);
+      ref.read(wapBridgeProvider).setWalletFaceBinding(fbwIndex,faceBinding: false);
       fbwIndex=-1;
     }
     setState(() {
@@ -472,7 +472,7 @@ class _WalletListState extends State<WalletList> {
                       fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),
-                if(info.mainWallet==true || Provider.of<WalletActionProvider>(context,listen: false).walletIndex == index)
+                if(info.mainWallet==true || ref.read(wapBridgeProvider).walletIndex == index)
                 Icon(Icons.lock,
                   color: AppThemeUtils.getColorByKey(
                       context, AppThemeKeys.mainGreyColor.name),

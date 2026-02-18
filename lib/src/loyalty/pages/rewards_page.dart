@@ -8,17 +8,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/loyalty/models/loyalty_model.dart';
 import 'package:n42appv2/src/loyalty/provider/loyalty_provider.dart';
-import 'package:provider/provider.dart';
 
 /// 奖励兑换页面
 class RewardsPage extends StatelessWidget {
   final List<Reward> rewards;
   final int availablePoints;
+  final LoyaltyProvider provider;
 
   const RewardsPage({
     super.key,
     required this.rewards,
     required this.availablePoints,
+    required this.provider,
   });
 
   @override
@@ -466,7 +467,7 @@ class RewardsPage extends StatelessWidget {
     if (!context.mounted) return;
 
     // 执行兑换
-    final provider = context.read<LoyaltyProvider>();
+    final provider = this.provider;
     final success = await provider.redeemReward(reward.id);
 
     if (!context.mounted) return;

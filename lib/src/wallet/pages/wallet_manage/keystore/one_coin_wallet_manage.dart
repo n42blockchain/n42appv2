@@ -9,7 +9,6 @@ import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/keystore/export_keystore_desc.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
@@ -19,23 +18,24 @@ import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_4.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/src/wallet/widgets/ens_address_display.dart';
 import 'package:web3dart/web3dart.dart';
 
-class OneCoinWalletManage extends StatefulWidget {
+class OneCoinWalletManage extends ConsumerStatefulWidget {
   final WalletInfo walletInfo;
   final CoinModel model;
   final int walletIndex;
   const OneCoinWalletManage({required this.walletInfo, required this.model,required this.walletIndex,super.key});
 
   @override
-  State<OneCoinWalletManage> createState() => _OneCoinWalletManageState();
+  ConsumerState<OneCoinWalletManage> createState() => _OneCoinWalletManageState();
 }
 
-class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
+class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage> {
   String? mnemonic;
   String? coinPath;
   String? addrType;
@@ -79,10 +79,10 @@ class _OneCoinWalletManageState extends State<OneCoinWalletManage> {
     widget.walletInfo.coinInfo![widget.model.coin['coinType']]['pathList']=pathList;
     widget.walletInfo.coinInfo![widget.model.coin['coinType']]['pathIndex']=pathIndex;
     widget.walletInfo.coinInfo![widget.model.coin['coinType']]['addrType']=addrType;
-    await Provider.of<WalletActionProvider>(context,listen: false).saveWalletInfo(widget.walletInfo,widget.walletIndex);
+    await ref.read(wapBridgeProvider).saveWalletInfo(widget.walletInfo,widget.walletIndex);
     if (!mounted) return;
-    if(Provider.of<WalletActionProvider>(context,listen: false).walletIndex == widget.walletIndex){
-      Provider.of<WalletActionProvider>(context,listen: false).reBuildCoin(widget.walletInfo,widget.model.coin['coinType']);
+    if(ref.read(wapBridgeProvider).walletIndex == widget.walletIndex){
+      ref.read(wapBridgeProvider).reBuildCoin(widget.walletInfo,widget.model.coin['coinType']);
     }
     Navigator.pop(context,true);
   }

@@ -1,12 +1,10 @@
 ﻿import 'package:n42appv2/src/home/widgets/gesture_password/gesture_password.dart';
-import 'package:n42appv2/src/state/public_provider.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_1.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 
 class GesturePasswordSetting extends StatefulWidget{
   final int type;//0新密码，1重设密码
@@ -51,10 +49,7 @@ class GesturePasswordSettingState extends State<GesturePasswordSetting>{
       appBar: AppBarWidget(
         text: widget.type==0?S.of(context).g_lock_key16:S.of(context).g_lock_key22,
       ),
-      body: Consumer<PublicProvider>(
-          builder: (context,pValue,child){
-            return gesturePasswordWidget();
-          }),
+      body: gesturePasswordWidget(),
     );
   }
   Widget gesturePasswordWidget(){

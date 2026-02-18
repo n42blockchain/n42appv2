@@ -1,7 +1,6 @@
 ﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/miningV2/pages/keyManagement/mining_output_tip.dart';
@@ -20,18 +19,19 @@ import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42appv2/features/mining/presentation/providers/mining_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-class MiningFullNodeV2 extends StatefulWidget {
+class MiningFullNodeV2 extends ConsumerStatefulWidget {
   final int nNum;
   const MiningFullNodeV2({required this.nNum,super.key});
 
   @override
-  State<MiningFullNodeV2> createState() => _MiningFullNodeV2State();
+  ConsumerState<MiningFullNodeV2> createState() => _MiningFullNodeV2State();
 }
 
-class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
+class _MiningFullNodeV2State extends ConsumerState<MiningFullNodeV2> {
   final TokenViewApi _tokenViewApi = TokenViewApi();
   StreamSubscription? _eventSubscription;
   int _payType = 0;
@@ -140,9 +140,9 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
         text:
         "${S.current.g_mining_key_37}:${S.of(context).g_mining_key_62}",
       ),
-      body: Selector<MiningV2Provider, Load>(
-        selector: (_, provider) => provider.depositLoad,
-        builder: (context, depositLoad, child) {
+      body: Builder(
+        builder: (context) {
+          final depositLoad = ref.watch(miningBridgeProvider.select((p) => p.depositLoad));
           return SafeArea(
             child: Stack(
               children: [
@@ -627,7 +627,7 @@ class _MiningFullNodeV2State extends State<MiningFullNodeV2> {
       return;
     }
     try {
-      MiningV2Provider mp=Provider.of<MiningV2Provider>(AppGlobals.appContext,listen: false);
+      MiningV2Provider mp=ref.read(miningBridgeProvider);
       mp.createDepositUnsignedTx(widget.nNum, encrypteData!);
     } catch (err) {
       //RPCError: got code 3 with msg "execution reverted: 10 N Deposit Limit has been reached".

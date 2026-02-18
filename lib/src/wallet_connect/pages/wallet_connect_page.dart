@@ -12,8 +12,8 @@ import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:n42appv2/src/widgets/loading_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart' as legacy_provider;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42appv2/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
 /// WalletConnect Page - Migrated to Riverpod
@@ -31,14 +31,14 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
   @override
   void initState() {
     if(widget.uri !=""){
-      legacy_provider.Provider.of<WalletConnectProvider>(context,listen: false).pageOpen=true;
-      legacy_provider.Provider.of<WalletConnectProvider>(context,listen: false).viewStateDeal(WalletConnectState.loading,params: widget.uri);
+      ref.read(wcpBridgeProvider).pageOpen=true;
+      ref.read(wcpBridgeProvider).viewStateDeal(WalletConnectState.loading,params: widget.uri);
     }
     super.initState();
   }
   @override
   void dispose() {
-    legacy_provider.Provider.of<WalletConnectProvider>(context,listen: false).pageOpen=false;
+    ref.read(wcpBridgeProvider).pageOpen=false;
     super.dispose();
   }
   //扫码
@@ -53,22 +53,21 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return legacy_provider.Consumer<WalletConnectProvider>(builder: (context,connectV2,child){
-      return Scaffold(
-        appBar: AppBarWidget(
-          text: connectV2.metadata==null?"Wallet Connect":connectV2.metadata!.name,
+    final connectV2 = ref.watch(wcpBridgeProvider);
+    return Scaffold(
+      appBar: AppBarWidget(
+        text: connectV2.metadata==null?"Wallet Connect":connectV2.metadata!.name,
+      ),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Positioned.fill(child: dAppConnectWidget(connectV2)),
+            if(connectV2.load==Load.loading)
+              Positioned.fill(child: LoadingPage()),
+          ],
         ),
-        body: SafeArea(
-          child: Stack(
-            children: [
-              Positioned.fill(child: dAppConnectWidget(connectV2)),
-              if(connectV2.load==Load.loading)
-                Positioned.fill(child: LoadingPage()),
-            ],
-          ),
-        ),
-      );
-    },);
+      ),
+    );
   }
   Widget dAppConnectWidget(WalletConnectProvider connectV2){
     Widget connectChild=Container();

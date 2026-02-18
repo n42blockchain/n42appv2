@@ -4,24 +4,24 @@ import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/pages/face_matching/face_binding.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/container_widget.dart';
 import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-class SelectWallet extends StatefulWidget {
+class SelectWallet extends ConsumerStatefulWidget {
   const SelectWallet({super.key});
 
   @override
-  State<SelectWallet> createState() => _SelectWalletState();
+  ConsumerState<SelectWallet> createState() => _SelectWalletState();
 }
 
-class _SelectWalletState extends State<SelectWallet> {
+class _SelectWalletState extends ConsumerState<SelectWallet> {
   List<WalletInfo> walletList = [];
   @override
   void initState() {
@@ -29,7 +29,7 @@ class _SelectWalletState extends State<SelectWallet> {
     initData();
   }
   Future<void> initData() async {
-    walletList = Provider.of<WalletActionProvider>(context,listen: false).walletInfoLsit;
+    walletList = ref.read(wapBridgeProvider).walletInfoLsit;
     setState(() {});
   }
   @override

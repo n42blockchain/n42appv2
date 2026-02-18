@@ -3,17 +3,18 @@ import 'package:n42appv2/src/wallet_connect/provider/wallet_connect_provider.dar
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
+import 'package:n42appv2/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
 import 'package:reown_walletkit/reown_walletkit.dart' as wallet_connect;
 import 'package:n42appv2/generated/l10n.dart';
-class WalletConnectAlertWidget extends StatelessWidget {
+class WalletConnectAlertWidget extends ConsumerWidget {
   final wallet_connect.PairingMetadata metadata;
   final Map<String,dynamic> actionDataMap;
   const WalletConnectAlertWidget(this.metadata,this.actionDataMap,{super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SingleChildScrollView(
       child: SizedBox(
         height: ScreenUtil().setWidth(1000),
@@ -47,7 +48,7 @@ class WalletConnectAlertWidget extends StatelessWidget {
             ),
             //title
             titleWidget(context),
-            dAppConnectWidget(context),
+            dAppConnectWidget(context, ref),
           ],
         ),
       ),
@@ -73,16 +74,16 @@ class WalletConnectAlertWidget extends StatelessWidget {
       ),
     );
   }
-  Widget dAppConnectWidget(BuildContext context){
+  Widget dAppConnectWidget(BuildContext context, WidgetRef ref){
     Widget connectChild;
     if(actionDataMap['signType']=="message"){
-      connectChild=messageSignOKWidget(context);
+      connectChild=messageSignOKWidget(context, ref);
     }else{
-      connectChild=transactionOKWidget(context);
+      connectChild=transactionOKWidget(context, ref);
     }
     return Expanded(child: connectChild);
   }
-  Widget transactionOKWidget(BuildContext context){
+  Widget transactionOKWidget(BuildContext context, WidgetRef ref){
     return Column(
       children: [
         itemWidget(context,"Network",actionDataMap['network']??""),
@@ -114,11 +115,11 @@ class WalletConnectAlertWidget extends StatelessWidget {
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
         ),
         Spacer(),
-        transactionOKButton(context),
+        transactionOKButton(context, ref),
       ],
     );
   }
-  Widget transactionOKButton(BuildContext context){
+  Widget transactionOKButton(BuildContext context, WidgetRef ref){
     return Container(
       height: ScreenUtil().setWidth(150.0),
       width: double.infinity,
@@ -134,7 +135,7 @@ class WalletConnectAlertWidget extends StatelessWidget {
           Expanded(
             flex: 1,
             child: buttonWidget(context,S.of(context).g_connect_key3,(){
-              Provider.of<WalletConnectProvider>(context,listen: false).cancelTap(WalletConnectState.transaction);
+              ref.read(wcpBridgeProvider).cancelTap(WalletConnectState.transaction);
               Navigator.pop(context);
             }),
           ),
@@ -142,7 +143,7 @@ class WalletConnectAlertWidget extends StatelessWidget {
           Expanded(
             flex: 1,
             child: buttonWidget(context,S.of(context).g_key_78,(){
-              Provider.of<WalletConnectProvider>(context,listen: false).transactionSignTap();
+              ref.read(wcpBridgeProvider).transactionSignTap();
               Navigator.pop(context);
             }),
           ),
@@ -150,7 +151,7 @@ class WalletConnectAlertWidget extends StatelessWidget {
       ),
     );
   }
-  Widget messageSignOKWidget(BuildContext context){
+  Widget messageSignOKWidget(BuildContext context, WidgetRef ref){
     return Column(
       children: [
         itemWidget(context,"Network",actionDataMap['network']??""),
@@ -178,11 +179,11 @@ class WalletConnectAlertWidget extends StatelessWidget {
           flex: 1,
           child: SizedBox(),
         ),
-        messageSignOKButton(context),
+        messageSignOKButton(context, ref),
       ],
     );
   }
-  Widget messageSignOKButton(BuildContext context){
+  Widget messageSignOKButton(BuildContext context, WidgetRef ref){
     return Container(
       height: ScreenUtil().setWidth(150.0),
       width: double.infinity,
@@ -198,7 +199,7 @@ class WalletConnectAlertWidget extends StatelessWidget {
           Expanded(
             flex: 1,
             child: buttonWidget(context,S.of(context).g_connect_key3,(){
-              Provider.of<WalletConnectProvider>(context,listen: false).cancelTap(WalletConnectState.messageSign);
+              ref.read(wcpBridgeProvider).cancelTap(WalletConnectState.messageSign);
               Navigator.pop(context);
             }),
           ),
@@ -206,7 +207,7 @@ class WalletConnectAlertWidget extends StatelessWidget {
           Expanded(
             flex: 1,
             child: buttonWidget(context,S.of(context).g_key_78,(){
-              Provider.of<WalletConnectProvider>(context,listen: false).messageSignTap();
+              ref.read(wcpBridgeProvider).messageSignTap();
               Navigator.pop(context);
             }),
           ),

@@ -10,6 +10,10 @@ import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 
+/// Global WAP adapter instance shared between Provider (MultiProvider) and
+/// Riverpod (wapBridgeProvider). Set in main() before runApp().
+late final LegacyWalletActionProviderAdapter globalWapAdapter;
+
 /// Legacy Wallet Action Provider Adapter
 ///
 /// This adapter bridges the old WalletActionProvider (ChangeNotifier) with
@@ -20,7 +24,7 @@ import 'package:n42appv2/core/utils/event_bus.dart';
 /// 1. New Riverpod providers are the source of truth for wallet data
 /// 2. The adapter syncs state between old and new systems
 /// 3. Operations go through Riverpod, then notify legacy listeners
-/// 
+///
 /// Usage:
 /// - In the app's MultiProvider, replace WalletActionProvider with this adapter
 /// - Pass a ProviderContainer to the adapter

@@ -7,7 +7,7 @@ import 'package:n42appv2/src/home/widgets/nav_select_image.dart';
 import 'package:n42appv2/src/home/widgets/nav_setting_item.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/data/models/user_info.dart';
-import 'package:n42appv2/src/state/public_provider.dart';
+import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
@@ -17,16 +17,16 @@ import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PersonalSetting extends StatefulWidget {
+class PersonalSetting extends ConsumerStatefulWidget {
   const PersonalSetting({super.key});
 
   @override
-  State<PersonalSetting> createState() => _PersonalSettingState();
+  ConsumerState<PersonalSetting> createState() => _PersonalSettingState();
 }
 
-class _PersonalSettingState extends State<PersonalSetting> {
+class _PersonalSettingState extends ConsumerState<PersonalSetting> {
   Uint8List? imageEdit;
   bool isEdit = false;
   UserInfo? userInfo;
@@ -74,7 +74,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
 
         }
       }
-      MessageModel r = await Provider.of<PublicProvider>(context,listen: false).editUserInfo(userInfo!, imageData: imageEdit);
+      MessageModel r = await ref.read(userProfileProvider).editUserInfo(userInfo!, imageData: imageEdit);
       if (!mounted) return;
       if (r.error == false) {
         ToastUtils.showSuccess(S.of(context).g_key_185);

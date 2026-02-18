@@ -7,10 +7,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:n42appv2/data/models/user_info.dart';
+import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
-import 'package:n42appv2/src/wallet_connect/provider/wallet_connect_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:n42appv2/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
 
 /// Application Globals
 ///
@@ -67,8 +66,8 @@ class AppGlobals {
   /// Sets up user state and initializes related services.
   static Future<void> login(UserInfo info) async {
     userInfo = info;
-    Provider.of<WalletActionProvider>(appContext,listen: false).initWallet(shouldInitCoinInfo: true);
-    Provider.of<WalletConnectProvider>(appContext,listen: false).cleanDataLogout();
+    globalWapAdapter.initWallet(shouldInitCoinInfo: true);
+    globalWcpInstance.cleanDataLogout();
     // Note: Provider access should be done through proper DI
     // The following calls should be refactored to use events or DI
   }

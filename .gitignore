@@ -7,6 +7,9 @@ bin-release/
 # Other files and folders
 .settings/
 
+# Environment secrets
+.env
+
 # Executables
 *.swf
 *.air

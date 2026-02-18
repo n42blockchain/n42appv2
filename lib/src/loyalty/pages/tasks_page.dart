@@ -8,15 +8,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/loyalty/models/loyalty_model.dart';
 import 'package:n42appv2/src/loyalty/provider/loyalty_provider.dart';
-import 'package:provider/provider.dart';
 
 /// 任务列表页面
 class TasksPage extends StatelessWidget {
   final List<LoyaltyTask> tasks;
+  final LoyaltyProvider provider;
 
   const TasksPage({
     super.key,
     required this.tasks,
+    required this.provider,
   });
 
   @override
@@ -346,7 +347,7 @@ class TasksPage extends StatelessWidget {
       );
     } else {
       // 直接完成任务
-      final provider = context.read<LoyaltyProvider>();
+      final provider = this.provider;
       final success = await provider.completeTask(task.id);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

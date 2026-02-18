@@ -10,26 +10,26 @@ import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/pages/address_book/choose_coins_page.dart';
 import 'package:n42appv2/src/wallet/pages/face_matching/face_match.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/container_widget.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 
-class AddAddressPage extends StatefulWidget {
+class AddAddressPage extends ConsumerStatefulWidget {
   const AddAddressPage({super.key});
 
   @override
-  State<AddAddressPage> createState() => _AddAddressPageState();
+  ConsumerState<AddAddressPage> createState() => _AddAddressPageState();
 }
 
-class _AddAddressPageState extends State<AddAddressPage> {
+class _AddAddressPageState extends ConsumerState<AddAddressPage> {
   final addressController = TextEditingController();
   final nameController = TextEditingController();
   final descController = TextEditingController();
@@ -53,7 +53,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     Future.microtask(() async {
       if (!mounted) return;
       List<CoinModel> list =
-          Provider.of<WalletActionProvider>(context, listen: false)
+          ref.read(wapBridgeProvider)
               .coinModels;
       debugPrint("list ===${list.length}");
       if (list.isNotEmpty) {

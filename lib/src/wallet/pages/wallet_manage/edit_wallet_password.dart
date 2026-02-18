@@ -4,25 +4,25 @@ import 'package:n42appv2/src/utils/regular.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 
-class EditWalletPassword extends StatefulWidget {
+class EditWalletPassword extends ConsumerStatefulWidget {
   final WalletInfo walletInfo;
   final int walletIndex;
   const EditWalletPassword(this.walletInfo,this.walletIndex,{super.key});
 
   @override
-  State<EditWalletPassword> createState() => _EditWalletPasswordState();
+  ConsumerState<EditWalletPassword> createState() => _EditWalletPasswordState();
 }
 
-class _EditWalletPasswordState extends State<EditWalletPassword> {
+class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
   final TextEditingController _uPasswordController = TextEditingController();
   final TextEditingController _uPasswordConfirmController = TextEditingController();
   final TextEditingController _lPasswordController = TextEditingController();
@@ -278,7 +278,7 @@ class _EditWalletPasswordState extends State<EditWalletPassword> {
                             load=Load.loading;
                           });
                           widget.walletInfo.password=password;
-                          final wap = Provider.of<WalletActionProvider>(context,listen: false);
+                          final wap = ref.read(wapBridgeProvider);
                           final successMessage = S.of(context).g_key_185;
                           await wap.saveWalletInfo(widget.walletInfo,widget.walletIndex);
                           if (!context.mounted) return;

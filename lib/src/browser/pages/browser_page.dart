@@ -1,6 +1,7 @@
 ﻿import 'package:n42appv2/src/browser/pages/browser_collection_list.dart';
 import 'package:n42appv2/src/browser/pages/browser_setting.dart';
 import 'package:n42appv2/src/browser/provider/browser_provider.dart';
+import 'package:n42appv2/features/browser/presentation/providers/browser_providers.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet_connect/pages/wallet_connect_page.dart';
@@ -11,20 +12,20 @@ import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class BrowserPage extends StatefulWidget {
+class BrowserPage extends ConsumerStatefulWidget {
   final String openUrl;
   const BrowserPage(this.openUrl,{super.key});
 
   @override
-  State<BrowserPage> createState() => _BrowserPageState();
+  ConsumerState<BrowserPage> createState() => _BrowserPageState();
 }
 
-class _BrowserPageState extends State<BrowserPage> {
+class _BrowserPageState extends ConsumerState<BrowserPage> {
   BrowserProvider? _browserProvider;
   bool _inited = false;
 
@@ -33,7 +34,7 @@ class _BrowserPageState extends State<BrowserPage> {
     super.initState();
     // 延迟到首帧后再初始化，避免在构建阶段触发通知
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _browserProvider = Provider.of<BrowserProvider>(context, listen: false);
+      _browserProvider = ref.read(browserNotifierProvider);
       if (!_inited) {
         _inited = true;
         walletConnect();
@@ -49,7 +50,8 @@ class _BrowserPageState extends State<BrowserPage> {
     super.dispose();
   }
   void walletConnect(){
-    final bp = _browserProvider ?? Provider.of<BrowserProvider>(context, listen: false);
+    _browserProvider ??= ref.read(browserNotifierProvider);
+    final bp = _browserProvider!;
     bp.connectDAPPCallBack=(String url,bool connect){
       if(connect){
         Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletConnectPage(url)));
@@ -74,7 +76,8 @@ class _BrowserPageState extends State<BrowserPage> {
     );
   }
   Widget listWebViewWidget(){
-    return Consumer<BrowserProvider>(builder: (context,bValue,child){
+    final bValue = ref.watch(browserNotifierProvider);
+    return Builder(builder: (context){
       return Column(
         children: [
           Container(

@@ -1,13 +1,11 @@
 //获取浏览器地址，根据币类型、地址和合约
-import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42appv2/src/https/request_url.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
-import 'package:provider/provider.dart';
 
 String getBrowserTokenAddress(String coinType,String address,String token,{bool? isTest}){
   coinType=coinType.toUpperCase();
   if(isTest==null){
-    Map<String,dynamic> coinMap= Provider.of<WalletActionProvider>(AppGlobals.appContext,listen: false).walletMap[coinType];
+    Map<String,dynamic> coinMap= globalWapAdapter.walletMap[coinType];
     isTest=coinMap['isTest'];
   }
   String path=RequestUrl().getUrl2(coinType, "browser",isTest: isTest);

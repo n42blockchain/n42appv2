@@ -12,26 +12,26 @@ import 'package:n42appv2/src/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/edit_wallet.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/edit_wallet_password.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/keystore/one_coin_wallet_manage.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/widgets/item_wallet.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-class WalletManage extends StatefulWidget {
+class WalletManage extends ConsumerStatefulWidget {
   final WalletInfo walletInfo;
   final int walletIndex;
   const WalletManage({required this.walletInfo,required this.walletIndex,super.key});
 
   @override
-  State<WalletManage> createState() => _WalletManageState();
+  ConsumerState<WalletManage> createState() => _WalletManageState();
 }
 
-class _WalletManageState extends State<WalletManage> {
+class _WalletManageState extends ConsumerState<WalletManage> {
   WalletInfo? walletInfo;
   List<CoinModel>? coinList;
   //String? mnemonic;
@@ -71,7 +71,7 @@ class _WalletManageState extends State<WalletManage> {
         return false;
       }
     });*/
-    if(Provider.of<WalletActionProvider>(context,listen: false).walletIndex != widget.walletIndex){
+    if(ref.read(wapBridgeProvider).walletIndex != widget.walletIndex){
       showDelete=true;
     }
     //mnemonic = walletInfo?.mnemonic;
@@ -159,7 +159,7 @@ class _WalletManageState extends State<WalletManage> {
     );
   }
   Future<void> deleteWallet()async{
-    MessageModel? rmm=await Provider.of<WalletActionProvider>(context,listen: false).deleteWalletInfo(info:walletInfo);
+    MessageModel? rmm=await ref.read(wapBridgeProvider).deleteWalletInfo(info:walletInfo);
     if (!mounted) return;
     if(rmm==null){
       Navigator.pop(context);
@@ -243,7 +243,7 @@ class _WalletManageState extends State<WalletManage> {
               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
               child: buttonStyle2(
                 context, ()async{
-                  MessageModel mm=Provider.of<WalletActionProvider>(context,listen: false).setMainWallet(widget.walletIndex);
+                  MessageModel mm=ref.read(wapBridgeProvider).setMainWallet(widget.walletIndex);
                   if (!context.mounted) return;
                   if(mm.error){
                     ToastUtils.show(mm.data);

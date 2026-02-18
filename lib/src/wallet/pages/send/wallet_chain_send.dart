@@ -16,7 +16,6 @@ import 'package:n42appv2/src/wallet/models/transation_record_model.dart';
 import 'package:n42appv2/src/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42appv2/src/wallet/pages/face_matching/face_match.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_base_send.dart';
-import 'package:n42appv2/src/wallet/provider/transaction_record_iterms_provider.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/chain_1559.dart';
 import 'package:n42appv2/src/wallet/utils/chain_eth_layer2.dart';
@@ -32,7 +31,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/transaction_providers.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:n42appv2/src/wallet/utils/address_validator.dart';
@@ -42,15 +43,15 @@ import 'package:n42appv2/src/wallet/pages/gas/gas_settings_page.dart';
 import 'package:n42appv2/src/wallet/widgets/gas_selector_widget.dart';
 import 'package:n42appv2/src/wallet/widgets/ens_confirm_dialog.dart';
 
-class WalletChainSend extends StatefulWidget {
+class WalletChainSend extends ConsumerStatefulWidget {
   final CoinModel coinModel;
   const WalletChainSend(this.coinModel,{super.key});
 
   @override
-  State<WalletChainSend> createState() => _WalletChainSendState();
+  ConsumerState<WalletChainSend> createState() => _WalletChainSendState();
 }
 
-class _WalletChainSendState extends State<WalletChainSend> {
+class _WalletChainSendState extends ConsumerState<WalletChainSend> {
   CoinModel? chainModel;
   Regular? regular;
   Regular get _regular{
@@ -113,7 +114,7 @@ class _WalletChainSendState extends State<WalletChainSend> {
   Future<void> initData()async{
     //判断是否是代币
     if(widget.coinModel.coin['isContract']){
-      WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
+      WalletActionProvider wap=ref.read(wapBridgeProvider);
       int cIndex=wap.coinModels.indexWhere((element){
         if(element.coin['coinType']==widget.coinModel.coin['coinType']){
           if(widget.coinModel.privateKey !=null){
@@ -584,7 +585,7 @@ class _WalletChainSendState extends State<WalletChainSend> {
     trModel.addrType=widget.coinModel.addrType;
     trModel.coin=widget.coinModel.coin;
     trModel.coinMiniName=widget.coinModel.coin['coinType'];
-    trModel.walletIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
+    trModel.walletIndex=ref.read(wapBridgeProvider).walletIndex;
     trModel.contract=widget.coinModel.isTest?widget.coinModel.coin['contract_test']:widget.coinModel.coin['contract'];
     trModel.isTest=widget.coinModel.isTest?1:0;
     trModel.gasPrice=totalGasPrice;
@@ -621,7 +622,7 @@ class _WalletChainSendState extends State<WalletChainSend> {
         AppDatabase appDatabase =AppDatabase();
         trModel.trId=await appDatabase.insertTransationRecord(trModel);
         if (!mounted) return;
-        Provider.of<TransactionRecordItemProvider>(context,listen: false).addUndoneTr(trModel,1);
+        ref.read(tripBridgeProvider).addUndoneTr(trModel,1);
         ToastUtils.show(S.current.g_key_nft_41);
         Navigator.pop(context);
       }

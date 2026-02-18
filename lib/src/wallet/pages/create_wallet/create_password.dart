@@ -1,3 +1,5 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/login/widgets/login_title.dart';
 import 'package:n42appv2/src/utils/regular.dart';
@@ -5,24 +7,22 @@ import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/pages/create_wallet/create_finish.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
-import 'package:provider/provider.dart';
 
-class CreatePassword extends StatefulWidget {
+class CreatePassword extends ConsumerStatefulWidget {
   final WalletInfo wInfo;
   final String createMetod;//Create,Import,PrivateKey
   const CreatePassword(this.wInfo,{this.createMetod="Create",super.key});
 
   @override
-  State<CreatePassword> createState() => _CreatePasswordState();
+  ConsumerState<CreatePassword> createState() => _CreatePasswordState();
 }
 
-class _CreatePasswordState extends State<CreatePassword> {
+class _CreatePasswordState extends ConsumerState<CreatePassword> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _uPasswordController = TextEditingController();
   final TextEditingController _uPasswordConfirmController = TextEditingController();
@@ -46,7 +46,7 @@ class _CreatePasswordState extends State<CreatePassword> {
   }
   @override
   void initState() {
-    widget.wInfo.walletName="Account${Provider.of<WalletActionProvider>(context,listen: false).walletInfoLsit.length+1}";
+    widget.wInfo.walletName="Account${ref.read(wapBridgeProvider).walletInfoLsit.length+1}";
     _titleController.text=widget.wInfo.walletName??"";
     super.initState();
   }

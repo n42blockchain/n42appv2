@@ -27,21 +27,22 @@ import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:decimal/decimal.dart' as dec;
 import 'package:date_format/date_format.dart' as dformat;
 
-class SwapAstHome extends StatefulWidget {
+class SwapAstHome extends ConsumerStatefulWidget {
   final double? getAstNum;
   const SwapAstHome({this.getAstNum,super.key});
 
   @override
-  State<SwapAstHome> createState() => _SwapAstHomeState();
+  ConsumerState<SwapAstHome> createState() => _SwapAstHomeState();
 }
 
-class _SwapAstHomeState extends State<SwapAstHome> {
+class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
   Regular? _regular;
   Regular get regular{
     _regular ??= Regular();
@@ -122,7 +123,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
   }
 
   Future<void> getAstChainModel() async {
-    WalletActionProvider wa = Provider.of<WalletActionProvider>(context,listen: false);
+    WalletActionProvider wa = ref.read(wapBridgeProvider);
     Map<String, dynamic> astModel = wa.walletMap[CoinType.N.name];
     CoinModel cm = CoinModel.fromMap(astModel['baseInfo']);
     cm.showList = astModel['showList'];
@@ -185,7 +186,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
     if (symbol == "BSC") {
       symbol = CoinType.BNB.name;
     }
-    List<CoinModel> rList = Provider.of<WalletActionProvider>(context,listen: false)
+    List<CoinModel> rList = ref.read(wapBridgeProvider)
         .getCoinModelWithSymbols(symbols: symbol);
     if (rList.isNotEmpty) {
       return rList[0];
@@ -196,7 +197,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
   void getUsdtMap(String chainSymbol, String contractAddress) {
     token = null;
     if (contractAddress != "") {
-      Map<String, dynamic>? txChainMap = Provider.of<WalletActionProvider>(context,listen: false)
+      Map<String, dynamic>? txChainMap = ref.read(wapBridgeProvider)
           .walletMap[chainSymbol.toString().toUpperCase()];
       if (txChainMap != null) {
         if (txChainMap['mainnets'].length != 0) {
@@ -874,7 +875,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                             builder: (context) => WalletCoinAddAll(youPay?.payChain ?? "",)));
                     if (!mounted) return;
                     if (r) {
-                      await Provider.of<WalletActionProvider>(context,listen: false).initWallet(shouldInitCoinInfo: true);
+                      await ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
                       init();
                     }
                   },
@@ -940,7 +941,7 @@ class _SwapAstHomeState extends State<SwapAstHome> {
                             )));
                     if (!mounted) return;
                     if (r) {
-                      await Provider.of<WalletActionProvider>(context,listen: false).initWallet(shouldInitCoinInfo: true);
+                      await ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
                       init();
                     }
                   },

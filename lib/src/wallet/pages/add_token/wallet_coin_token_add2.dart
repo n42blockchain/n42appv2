@@ -11,21 +11,22 @@ import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-class WalletCoinTokenAdd2 extends StatefulWidget {
+class WalletCoinTokenAdd2 extends ConsumerStatefulWidget {
   //Map<String,dynamic> coinMap;
   final CoinModel coinModel;
   //int isImport;
   const WalletCoinTokenAdd2(this.coinModel,{super.key});
 
   @override
-  State<WalletCoinTokenAdd2> createState() => _WalletCoinTokenAdd2State();
+  ConsumerState<WalletCoinTokenAdd2> createState() => _WalletCoinTokenAdd2State();
 }
 
-class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
+class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
   TextEditingController inputEditingController=TextEditingController();
   List<dynamic> coinlist=[];
   List<dynamic> coinlistSeach=[];
@@ -66,7 +67,7 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
       setState(() {
         coinMap['edit']=true;
       });
-      WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
+      WalletActionProvider wap=ref.read(wapBridgeProvider);
       String baseTokenStr=json.encode(widget.coinModel.coin);
       Map<String,dynamic>baseToken=json.decode(baseTokenStr);
       baseToken['isContract']=true;
@@ -102,7 +103,7 @@ class _WalletCoinTokenAdd2State extends State<WalletCoinTokenAdd2> {
       setState(() {
         coinMap['edit']=true;
       });
-      WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
+      WalletActionProvider wap=ref.read(wapBridgeProvider);
       wap.removeWalletChainToken(coinMap);
       coinMap['isAdd']=false;
       removeSymbol=true;

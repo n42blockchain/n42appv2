@@ -5,19 +5,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/models/batch_transfer_model.dart';
 import 'package:n42appv2/src/wallet/provider/batch_transfer_provider.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/pages/batch_transfer/csv_import_page.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
-import 'package:provider/provider.dart';
 
 /// 批量转账页面
-class BatchTransferPage extends StatefulWidget {
+class BatchTransferPage extends ConsumerStatefulWidget {
   final String chainSymbol;
   final String rpcUrl;
   final int chainId;
@@ -26,6 +26,7 @@ class BatchTransferPage extends StatefulWidget {
   final String tokenSymbol;
   final int decimals;
   final BigInt balance;
+  final BatchTransferProvider batchTransferProvider;
 
   const BatchTransferPage({
     super.key,
@@ -37,13 +38,14 @@ class BatchTransferPage extends StatefulWidget {
     required this.tokenSymbol,
     required this.decimals,
     required this.balance,
+    required this.batchTransferProvider,
   });
 
   @override
-  State<BatchTransferPage> createState() => _BatchTransferPageState();
+  ConsumerState<BatchTransferPage> createState() => _BatchTransferPageState();
 }
 
-class _BatchTransferPageState extends State<BatchTransferPage> {
+class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
   final _addressController = TextEditingController();
   final _amountController = TextEditingController();
   final _memoController = TextEditingController();
@@ -52,7 +54,7 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<BatchTransferProvider>().initialize(
+      widget.batchTransferProvider.initialize(
         chainSymbol: widget.chainSymbol,
         rpcUrl: widget.rpcUrl,
         chainId: widget.chainId,
@@ -89,8 +91,10 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
           ),
         ],
       ),
-      body: Consumer<BatchTransferProvider>(
-        builder: (context, provider, child) {
+      body: ListenableBuilder(
+        listenable: widget.batchTransferProvider,
+        builder: (context, _) {
+          final provider = widget.batchTransferProvider;
           return Column(
             children: [
               // 顶部信息栏
@@ -681,7 +685,7 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
       return;
     }
 
-    context.read<BatchTransferProvider>().addItem(
+    widget.batchTransferProvider.addItem(
       address,
       amount,
       memo: memo.isEmpty ? null : memo,
@@ -727,12 +731,12 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
 
     if (!mounted) return;
     if (result != null && result.isNotEmpty) {
-      context.read<BatchTransferProvider>().parseCsv(result);
+      widget.batchTransferProvider.parseCsv(result);
     }
   }
 
   void _proceedToConfirm() async {
-    final provider = context.read<BatchTransferProvider>();
+    final provider = widget.batchTransferProvider;
 
     // 先估算 Gas
     await provider.estimateGas();
@@ -828,8 +832,8 @@ class _BatchTransferPageState extends State<BatchTransferPage> {
   }
 
   void _executeTransfer() async {
-    final provider = context.read<BatchTransferProvider>();
-    final walletProvider = context.read<WalletActionProvider>();
+    final provider = widget.batchTransferProvider;
+    final walletProvider = ref.read(wapBridgeProvider);
 
     // 在 async 操作之前捕获本地化字符串
     final l10n = S.of(context);

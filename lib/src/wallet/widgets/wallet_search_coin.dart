@@ -17,20 +17,21 @@ import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-class WalletSearchCoin extends StatefulWidget {
+class WalletSearchCoin extends ConsumerStatefulWidget {
   final int type;//0转账，1收币
   const WalletSearchCoin(this.type,{super.key});
 
   @override
-  State<WalletSearchCoin> createState() => _WalletSearchCoinState();
+  ConsumerState<WalletSearchCoin> createState() => _WalletSearchCoinState();
 }
 
-class _WalletSearchCoinState extends State<WalletSearchCoin> {
+class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
   Regular? _regular;
   Regular get regular{
     _regular ??= Regular();
@@ -79,8 +80,8 @@ class _WalletSearchCoinState extends State<WalletSearchCoin> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Consumer<WalletActionProvider>(
-        builder: (context, waValue, child) {
+    return Builder(builder: (context) {
+          final waValue = ref.watch(wapBridgeProvider);
           return SizedBox(
             height: ScreenUtil().setWidth(800.0),
             width: double.infinity,
@@ -168,8 +169,7 @@ class _WalletSearchCoinState extends State<WalletSearchCoin> {
 
             ),
           );
-        }
-    );
+        });
   }
   Widget coinListWidget(WalletActionProvider waValue){
     if(inputEditingController.text==""){
@@ -266,13 +266,13 @@ class _WalletSearchCoinState extends State<WalletSearchCoin> {
         }else{
           if (!mounted) return;
           if(coinInfo.coin['isContract']){
-            int cIndex=Provider.of<WalletActionProvider>(context,listen: false).coinModels.indexWhere((element){
+            int cIndex=ref.read(wapBridgeProvider).coinModels.indexWhere((element){
               if(element.coin['coinType']==coinInfo.coin['coinType']){
                 return true;
               }
               return false;
             });
-            CoinModel chainCoinModel=Provider.of<WalletActionProvider>(context,listen: false).coinModels[cIndex];
+            CoinModel chainCoinModel=ref.read(wapBridgeProvider).coinModels[cIndex];
             await Navigator.push(
               context,
               MaterialPageRoute(

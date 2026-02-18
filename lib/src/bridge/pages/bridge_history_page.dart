@@ -10,12 +10,12 @@ import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/bridge/models/bridge_models.dart';
 import 'package:n42appv2/src/bridge/provider/bridge_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 /// 跨链桥历史记录页面
 class BridgeHistoryPage extends StatelessWidget {
-  const BridgeHistoryPage({super.key});
+  final BridgeProvider provider;
+  const BridgeHistoryPage({super.key, required this.provider});
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +23,9 @@ class BridgeHistoryPage extends StatelessWidget {
       appBar: AppBarWidget(
         text: 'Bridge History', // S.of(context).g_key_bridge_history
       ),
-      body: Consumer<BridgeProvider>(
-        builder: (context, provider, _) {
+      body: ListenableBuilder(
+        listenable: provider,
+        builder: (context, _) {
           final transactions = provider.transactions;
 
           if (transactions.isEmpty) {

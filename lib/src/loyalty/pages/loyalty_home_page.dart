@@ -15,7 +15,6 @@ import 'package:n42appv2/src/loyalty/pages/tasks_page.dart';
 import 'package:n42appv2/src/loyalty/provider/loyalty_provider.dart';
 import 'package:n42appv2/src/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:provider/provider.dart';
 
 /// 积分系统首页
 class LoyaltyHomePage extends StatefulWidget {
@@ -54,14 +53,14 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: _provider,
-      child: Scaffold(
+    return Scaffold(
       appBar: AppBarWidget(
         text: S.of(context).g_key_loyalty_title,
       ),
-      body: Consumer<LoyaltyProvider>(
-        builder: (context, provider, child) {
+      body: ListenableBuilder(
+        listenable: _provider,
+        builder: (context, _) {
+          final provider = _provider;
           if (provider.loadState == LoyaltyLoadState.loading &&
               provider.account.totalPoints == 0) {
             return Center(child: CircularProgressIndicator());
@@ -127,7 +126,6 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
             ),
           );
         },
-      ),
       ),
     );
   }
@@ -490,13 +488,14 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
   }
 
   Widget _buildTasksTab(LoyaltyProvider provider) {
-    return TasksPage(tasks: provider.tasks);
+    return TasksPage(tasks: provider.tasks, provider: _provider);
   }
 
   Widget _buildRewardsTab(LoyaltyProvider provider) {
     return RewardsPage(
       rewards: provider.rewards,
       availablePoints: provider.account.availablePoints,
+      provider: _provider,
     );
   }
 
@@ -660,7 +659,7 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage>
   }
 
   void _showRulesDialog() async {
-    final provider = context.read<LoyaltyProvider>();
+    final provider = _provider;
     await provider.loadRules();
 
     if (!mounted) return;

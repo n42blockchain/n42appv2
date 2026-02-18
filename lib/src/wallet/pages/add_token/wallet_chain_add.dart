@@ -6,26 +6,26 @@ import 'package:n42appv2/src/utils/regular.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/api/chain_api/eth_api.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/all_chain.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_2.dart';
 import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:validators/validators.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-class WalletChainAdd extends StatefulWidget {
+class WalletChainAdd extends ConsumerStatefulWidget {
   const WalletChainAdd({super.key});
 
   @override
-  State<WalletChainAdd> createState() => _WalletChainAddState();
+  ConsumerState<WalletChainAdd> createState() => _WalletChainAddState();
 }
 
-class _WalletChainAddState extends State<WalletChainAdd> {
+class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
   late TextEditingController nameController;
   late TextEditingController symbolController;
   late TextEditingController decimalController;
@@ -252,7 +252,7 @@ class _WalletChainAddState extends State<WalletChainAdd> {
     ethMap['baseInfo']['chainId']=chainId;
     ethMap['baseInfo']['service']=rpcStr;
     //ethMap['baseInfo']['api']=apiStr;
-    await Provider.of<WalletActionProvider>(context,listen: false).addWalletChain(ethMap);
+    await ref.read(wapBridgeProvider).addWalletChain(ethMap);
     if (!mounted) return;
     setState(() {
       load=Load.finish;
@@ -268,7 +268,7 @@ class _WalletChainAddState extends State<WalletChainAdd> {
     }
   }
   Future<void> addDefaultChain(String symbol)async{
-    await Provider.of<WalletActionProvider>(context,listen: false).addWalletChain(allChainUrlMap[symbol]);
+    await ref.read(wapBridgeProvider).addWalletChain(allChainUrlMap[symbol]);
     if (!mounted) return;
     Navigator.pop(context,true);
   }

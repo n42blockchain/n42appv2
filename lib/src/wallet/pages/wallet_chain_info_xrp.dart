@@ -30,7 +30,6 @@ import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_xrp.dart';
 import 'package:n42appv2/src/wallet/pages/transactions/transaction_history_list.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_receive_qr.dart';
-import 'package:n42appv2/src/wallet/provider/transaction_record_iterms_provider.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/utils/browser_address.dart';
 import 'package:n42appv2/src/wallet/utils/browser_token_address.dart';
@@ -42,21 +41,23 @@ import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_7.dart';
 import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/transaction_providers.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:intl/intl.dart';
 
-class WalletChainInfoXRP extends StatefulWidget {
+class WalletChainInfoXRP extends ConsumerStatefulWidget {
   final CoinModel coinModel;
   const WalletChainInfoXRP(this.coinModel,{super.key});
 
   @override
-  State<WalletChainInfoXRP> createState() => _WalletChainInfoXRPState();
+  ConsumerState<WalletChainInfoXRP> createState() => _WalletChainInfoXRPState();
 }
 
-class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
+class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP> {
   final NumberFormat _oCcy = NumberFormat("#,##0.####", "en_US");
   AppDatabase? _db;
   AppDatabase get db{
@@ -109,7 +110,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
 
   void initData() {
     if (widget.coinModel.coin['isContract']) {
-      int cIndex = Provider.of<WalletActionProvider>(context,listen: false)
+      int cIndex = ref.read(wapBridgeProvider)
           .coinModels
           .indexWhere((element) {
         if (element.coin['coinType'] == widget.coinModel.coin['coinType']) {
@@ -118,7 +119,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
         return false;
       });
       chainCoinModel =
-      Provider.of<WalletActionProvider>(context,listen: false).coinModels[cIndex];
+      ref.read(wapBridgeProvider).coinModels[cIndex];
       chainName = chainCoinModel?.coin['name'];
       chainSymbol = chainCoinModel?.coin['miniName'];
       tokenName = widget.coinModel.coin['name'];
@@ -137,7 +138,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           isTest: widget.coinModel.isTest);
       getServiceState();
     }
-    marketInfo = Provider.of<WalletActionProvider>(context,listen: false)
+    marketInfo = ref.read(wapBridgeProvider)
         .getCoinPriceWithUnitAll(widget.coinModel.coin['unit']);
     getTransactionData(Load.refresh);
     getTransactionDataNetwork(Load.refresh);
@@ -238,7 +239,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           transationRecordModel.to1=(cri.to??"").toLowerCase();
           transationRecordModel.price=BigInt.parse(cri.value??"0");
           transationRecordModel.contract=(widget.coinModel.coin['contract']??"").toLowerCase();
-          transationRecordModel.walletIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
+          transationRecordModel.walletIndex=ref.read(wapBridgeProvider).walletIndex;
           transationRecordModel.nonce=cri.nonce;
           transationRecordModel.txHash=cri.hash??"";
           transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
@@ -305,7 +306,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           transationRecordModel.to1=(cri.to??"").toLowerCase();
           transationRecordModel.price=BigInt.parse(cri.value??"0");
           transationRecordModel.contract=(widget.coinModel.coin['contract']??"").toLowerCase();
-          transationRecordModel.walletIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
+          transationRecordModel.walletIndex=ref.read(wapBridgeProvider).walletIndex;
           transationRecordModel.nonce=cri.nonce;
           transationRecordModel.txHash=cri.hash??"";
           transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
@@ -353,7 +354,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           transationRecordModel.price=cri.total;
           transationRecordModel.gasPrice=cri.fees;
           transationRecordModel.to1="";
-          transationRecordModel.walletIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
+          transationRecordModel.walletIndex=ref.read(wapBridgeProvider).walletIndex;
           //transationRecordModel.nonce="0";
           transationRecordModel.txHash=cri.hash;
           //transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
@@ -476,7 +477,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
           transationRecordModel.to1=(cri.to??"").toLowerCase();
           transationRecordModel.price=BigInt.parse(cri.value??"0");
           transationRecordModel.contract=(widget.coinModel.coin['contract']??"").toLowerCase();
-          transationRecordModel.walletIndex=Provider.of<WalletActionProvider>(context,listen: false).walletIndex;
+          transationRecordModel.walletIndex=ref.read(wapBridgeProvider).walletIndex;
           transationRecordModel.nonce=cri.nonce;
           transationRecordModel.txHash=cri.hash;
           transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
@@ -526,7 +527,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
   }
   */
   Future<void> getTxInfoNetwork(TransationRecordModel transationRecordModel)async{
-    TransationRecordModel rtrm=await Provider.of<TransactionRecordItemProvider>(context,listen: false).checkUndoneTrReturn(transationRecordModel) ?? transationRecordModel;
+    TransationRecordModel rtrm=await ref.read(tripBridgeProvider).checkUndoneTrReturn(transationRecordModel) ?? transationRecordModel;
     transactionList.firstWhere((element){
       TransationRecordModel trm=element as TransationRecordModel;
       if(trm.txHash==rtrm.txHash){
@@ -538,7 +539,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
     setState(() {});
   }
   Future<void> getTxInfoNetworkBtc(BtcTransactionRecodeModel transationRecordModel)async{
-    BtcTransactionRecodeModel rtrm=await Provider.of<TransactionRecordItemProvider>(context,listen: false).checkUndoneTrBtcReturn(transationRecordModel) ?? transationRecordModel;
+    BtcTransactionRecodeModel rtrm=await ref.read(tripBridgeProvider).checkUndoneTrBtcReturn(transationRecordModel) ?? transationRecordModel;
     transactionList.firstWhere((element){
       TransationRecordModel trm=element as TransationRecordModel;
       if(trm.txHash==rtrm.txHash){
@@ -630,7 +631,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
                         showXMLLockAmountWidget();
                       },
                       sendTap: () async {
-                        WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
+                        WalletActionProvider wap=ref.read(wapBridgeProvider);
                         if(wap.walletInfo.password==""){
                           final flag= await tipsDialog7(context);
                           if (!context.mounted) return;
@@ -652,7 +653,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
                         getTransactionData(Load.refresh);
                       },
                       receiveTap: () async{
-                        WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
+                        WalletActionProvider wap=ref.read(wapBridgeProvider);
                         if(wap.walletInfo.password==""){
                           final flag= await tipsDialog7(context);
                           if (!context.mounted) return;
@@ -794,7 +795,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
   //切换网络，测试网络还是主网
   Future<void> changeNet(bool isTest, Load loadType) async {
     try {
-      WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
+      WalletActionProvider wap=ref.read(wapBridgeProvider);
       wap.walletMap[widget.coinModel.coin['coinType']]['isTest'] = isTest;
       widget.coinModel.isTest = isTest;
       await wap.saveWalletInfo(wap.walletInfo, wap.walletIndex);
@@ -815,7 +816,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
     //send
     childs.add(InkWell(
       onTap: () async {
-        WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
+        WalletActionProvider wap=ref.read(wapBridgeProvider);
         if(wap.walletInfo.password==""){
           final flag= await tipsDialog7(context);
           if (!mounted) return;
@@ -918,7 +919,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
     //Receive
     childs.add(InkWell(
       onTap: () async{
-        WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
+        WalletActionProvider wap=ref.read(wapBridgeProvider);
         if(wap.walletInfo.password==""){
           final flag= await tipsDialog7(context);
           if (!mounted) return;
@@ -1113,7 +1114,7 @@ class _WalletChainInfoXRPState extends State<WalletChainInfoXRP> {
                     widget.coinModel,)));
           if (!mounted) return;
           if (r) {
-            Provider.of<WalletActionProvider>(context).initWallet(shouldInitCoinInfo: true);
+            ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
           }
           Navigator.pop(context);
         },

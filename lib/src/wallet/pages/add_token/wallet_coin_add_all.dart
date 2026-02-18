@@ -18,19 +18,20 @@ import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 
-class WalletCoinAddAll extends StatefulWidget {
+class WalletCoinAddAll extends ConsumerStatefulWidget {
   final String? coinType;
   final String seachStr;
   const WalletCoinAddAll(this.seachStr,{this.coinType,super.key});
 
   @override
-  State<WalletCoinAddAll> createState() => _WalletCoinAddAllState();
+  ConsumerState<WalletCoinAddAll> createState() => _WalletCoinAddAllState();
 }
 
-class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
+class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
   Regular? _regular;
   Regular get regular{
     _regular ??= Regular();
@@ -105,7 +106,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
   }
 
   void init() {
-    chains = Provider.of<WalletActionProvider>(context,listen: false).walletMap;
+    chains = ref.read(wapBridgeProvider).walletMap;
     setChainsToken();
   }
 
@@ -196,7 +197,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
           chainMap['edit'] = false;
         });
       } else {
-        WalletActionProvider wap = Provider.of<WalletActionProvider>(context,listen: false);
+        WalletActionProvider wap = ref.read(wapBridgeProvider);
         chainInfoMap['showList'] = showList;
         /*if(showList){
           wap.coinSortAdd1();
@@ -246,7 +247,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
       }
       if (!mounted) return;
       chain = chains![symbolStr];
-      WalletActionProvider wap = Provider.of<WalletActionProvider>(context,listen: false);
+      WalletActionProvider wap = ref.read(wapBridgeProvider);
       String baseTokenStr = json.encode(chain!['baseInfo']);
       Map<String, dynamic> baseToken = json.decode(baseTokenStr);
       baseToken['isContract'] = true;
@@ -416,7 +417,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
       setState(() {
         chainMap['edit'] = true;
       });
-      WalletActionProvider wap = Provider.of<WalletActionProvider>(context,listen: false);
+      WalletActionProvider wap = ref.read(wapBridgeProvider);
       Map<String, dynamic> walletMap = wap.walletMap;
       List<String> walletMapKeys = walletMap.keys.toList();
       int keyIndex = -1;
@@ -461,7 +462,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
         coinMap['edit'] = true;
       });
       String symbolStr = coinMap['symbol'].toString();
-      WalletActionProvider wap = Provider.of<WalletActionProvider>(context,listen: false);
+      WalletActionProvider wap = ref.read(wapBridgeProvider);
       if (wap.walletMap[symbolStr.toUpperCase()]['mainnets'].length == 0) {
         setState(() {
           coinMap['isAdd'] = false;
@@ -548,7 +549,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
       coinlist = [];
       List<dynamic> returnData = coinsData.data;
       Map<String, dynamic> chains =
-          Provider.of<WalletActionProvider>(context,listen: false).walletMap;
+          ref.read(wapBridgeProvider).walletMap;
       coinDeal(returnData, chains);
     }
     setState(() {
@@ -681,7 +682,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
       return;
     }
     if (!mounted) return;
-    WalletActionProvider wap = Provider.of<WalletActionProvider>(context,listen: false);
+    WalletActionProvider wap = ref.read(wapBridgeProvider);
     String baseTokenStr = json.encode(chain['baseInfo']);
     Map<String, dynamic> baseToken = json.decode(baseTokenStr);
     baseToken['isContract'] = true;
@@ -715,7 +716,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
         coinMap['edit'] = true;
       });
       String symbolStr = coinMap['coinType'].toString();
-      WalletActionProvider wap = Provider.of<WalletActionProvider>(context,listen: false);
+      WalletActionProvider wap = ref.read(wapBridgeProvider);
       if (wap.walletMap[symbolStr.toUpperCase()]['isTest']) {
         if (wap
             .walletMap[symbolStr.toUpperCase()]['testnets'][0]
@@ -737,7 +738,7 @@ class _WalletCoinAddAllState extends State<WalletCoinAddAll> {
       }
 
       addSymbol = addSymbol.replaceFirst(',${coinMap['miniName']}', '');
-      Provider.of<WalletActionProvider>(context,listen: false).removeWalletChainToken(coinMap,
+      ref.read(wapBridgeProvider).removeWalletChainToken(coinMap,
           symbol: coinMap['coinType'], miniName: coinMap['miniName']);
       setState(() {
         coinMap['edit'] = false;

@@ -11,7 +11,6 @@ import 'package:n42appv2/src/hardware_wallet/pages/device_scan_page.dart';
 import 'package:n42appv2/src/hardware_wallet/pages/hardware_wallet_accounts_page.dart';
 import 'package:n42appv2/src/hardware_wallet/provider/hardware_wallet_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:provider/provider.dart';
 
 /// 硬件钱包管理页面
 class HardwareWalletPage extends StatefulWidget {
@@ -38,47 +37,46 @@ class _HardwareWalletPageState extends State<HardwareWalletPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: _provider,
-      child: Scaffold(
-        appBar: AppBarWidget(
-          text: 'Hardware Wallet',
-        ),
-        body: SafeArea(
-          child: Consumer<HardwareWalletProvider>(
-            builder: (context, provider, _) {
-              return SingleChildScrollView(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // 连接状态卡片
-                    _buildConnectionStatusCard(context, provider),
+    return Scaffold(
+      appBar: AppBarWidget(
+        text: 'Hardware Wallet',
+      ),
+      body: SafeArea(
+        child: ListenableBuilder(
+          listenable: _provider,
+          builder: (context, _) {
+            final provider = _provider;
+            return SingleChildScrollView(
+              padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 连接状态卡片
+                  _buildConnectionStatusCard(context, provider),
 
+                  SizedBox(height: ScreenUtil().setWidth(24)),
+
+                  // 已保存的设备
+                  if (provider.savedDevices.isNotEmpty) ...[
+                    _buildSectionTitle(context, 'Saved Devices'),
+                    SizedBox(height: ScreenUtil().setWidth(12)),
+                    ...provider.savedDevices.map(
+                      (device) => _buildSavedDeviceCard(context, provider, device),
+                    ),
                     SizedBox(height: ScreenUtil().setWidth(24)),
-
-                    // 已保存的设备
-                    if (provider.savedDevices.isNotEmpty) ...[
-                      _buildSectionTitle(context, 'Saved Devices'),
-                      SizedBox(height: ScreenUtil().setWidth(12)),
-                      ...provider.savedDevices.map(
-                        (device) => _buildSavedDeviceCard(context, provider, device),
-                      ),
-                      SizedBox(height: ScreenUtil().setWidth(24)),
-                    ],
-
-                    // 添加新设备按钮
-                    _buildAddDeviceButton(context),
-
-                    SizedBox(height: ScreenUtil().setWidth(24)),
-
-                    // 支持的设备说明
-                    _buildSupportedDevicesInfo(context),
                   ],
-                ),
-              );
-            },
-          ),
+
+                  // 添加新设备按钮
+                  _buildAddDeviceButton(context),
+
+                  SizedBox(height: ScreenUtil().setWidth(24)),
+
+                  // 支持的设备说明
+                  _buildSupportedDevicesInfo(context),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );
@@ -519,10 +517,7 @@ class _HardwareWalletPageState extends State<HardwareWalletPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ChangeNotifierProvider.value(
-          value: _provider,
-          child: const DeviceScanPage(),
-        ),
+        builder: (context) => DeviceScanPage(provider: _provider),
       ),
     );
   }
@@ -531,10 +526,7 @@ class _HardwareWalletPageState extends State<HardwareWalletPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ChangeNotifierProvider.value(
-          value: _provider,
-          child: const HardwareWalletAccountsPage(),
-        ),
+        builder: (context) => HardwareWalletAccountsPage(provider: _provider),
       ),
     );
   }

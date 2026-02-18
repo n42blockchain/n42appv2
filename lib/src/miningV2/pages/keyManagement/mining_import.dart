@@ -7,24 +7,24 @@ import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/miningV2/api/mining_api.dart';
 import 'package:n42appv2/src/miningV2/pages/keyManagement/data_encryption.dart';
 import 'package:n42appv2/src/miningV2/pages/keyManagement/file_import.dart';
-import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/text_field_widget.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42appv2/features/mining/presentation/providers/mining_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-class MiningImport extends StatefulWidget {
+class MiningImport extends ConsumerStatefulWidget {
   const MiningImport({super.key});
 
   @override
-  State<MiningImport> createState() => _MiningImportState();
+  ConsumerState<MiningImport> createState() => _MiningImportState();
 }
 
-class _MiningImportState extends State<MiningImport> {
+class _MiningImportState extends ConsumerState<MiningImport> {
   // 控制器和焦点节点
   final TextEditingController _encryptedDataController = TextEditingController();
   final FocusNode _encryptedDataFocusNode = FocusNode();
@@ -91,7 +91,7 @@ class _MiningImportState extends State<MiningImport> {
       }
       secretMap['isMining']=isMining;
       if (!mounted) return;
-      MessageModel rmm=await Provider.of<MiningV2Provider>(context,listen: false).setMiningDataImport(secretMap,password);
+      MessageModel rmm=await ref.read(miningBridgeProvider).setMiningDataImport(secretMap,password);
       if (!mounted) return;
       String messageStr=S.of(context).g_mining_key_104;
       if(rmm.error){

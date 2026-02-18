@@ -1,24 +1,24 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/pages/create_wallet/create_password.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
-import 'package:provider/provider.dart';
 
-class ImportOne extends StatefulWidget {
+class ImportOne extends ConsumerStatefulWidget {
   const ImportOne({super.key});
 
   @override
-  State<ImportOne> createState() => _ImportOneState();
+  ConsumerState<ImportOne> createState() => _ImportOneState();
 }
 
-class _ImportOneState extends State<ImportOne> with WidgetsBindingObserver{
+class _ImportOneState extends ConsumerState<ImportOne> with WidgetsBindingObserver{
   TextEditingController inputEditingController=TextEditingController();
   String inputMW="";
   String errorMessage="";
@@ -233,7 +233,7 @@ class _ImportOneState extends State<ImportOne> with WidgetsBindingObserver{
                           ToastUtils.show(errorMessage);
                           return;
                         }else{
-                          WalletInfo? fWalletInfo= Provider.of<WalletActionProvider>(this.context,listen: false).findWallet(mnemonic: inputMW);
+                          WalletInfo? fWalletInfo= ref.read(wapBridgeProvider).findWallet(mnemonic: inputMW);
                           if(fWalletInfo ==null){
                             errorMessage="";
                           }else{
@@ -250,7 +250,7 @@ class _ImportOneState extends State<ImportOne> with WidgetsBindingObserver{
                             walletName: "",
                             password: "",
                             //path: WalletPath.init(),
-                            walletUuid: Provider.of<WalletActionProvider>(this.context,listen: false).userUUID,
+                            walletUuid: ref.read(wapBridgeProvider).userUUID,
                             mnemonic: inputMW
                         );
                         await Navigator.push(this.context,MaterialPageRoute(

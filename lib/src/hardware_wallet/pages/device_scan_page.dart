@@ -9,11 +9,11 @@ import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/hardware_wallet/models/hardware_wallet_models.dart';
 import 'package:n42appv2/src/hardware_wallet/provider/hardware_wallet_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:provider/provider.dart';
 
 /// 设备扫描页面
 class DeviceScanPage extends StatefulWidget {
-  const DeviceScanPage({super.key});
+  final HardwareWalletProvider provider;
+  const DeviceScanPage({super.key, required this.provider});
 
   @override
   State<DeviceScanPage> createState() => _DeviceScanPageState();
@@ -48,7 +48,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
   }
 
   Future<void> _startScan() async {
-    final provider = context.read<HardwareWalletProvider>();
+    final provider = widget.provider;
 
     // 检查蓝牙权限
     final hasPermission = await provider.requestPermissions();
@@ -74,7 +74,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
 
   void _stopScan() {
     _animationController.stop();
-    context.read<HardwareWalletProvider>().stopScan();
+    widget.provider.stopScan();
   }
 
   @override
@@ -84,8 +84,10 @@ class _DeviceScanPageState extends State<DeviceScanPage>
         text: 'Find Device',
       ),
       body: SafeArea(
-        child: Consumer<HardwareWalletProvider>(
-          builder: (context, provider, _) {
+        child: ListenableBuilder(
+          listenable: widget.provider,
+          builder: (context, _) {
+            final provider = widget.provider;
             return Column(
               children: [
                 // 扫描动画区域

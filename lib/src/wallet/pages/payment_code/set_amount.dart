@@ -9,20 +9,21 @@ import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
 import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 
-class SetAmount extends StatefulWidget {
+class SetAmount extends ConsumerStatefulWidget {
   final int type;//0默认 跳转并替换PaymentCode页面，1返回上一个页面
   final Map<String,String>? amount;
   const SetAmount({this.type=0,this.amount,super.key});
 
   @override
-  State<SetAmount> createState() => _SetAmountState();
+  ConsumerState<SetAmount> createState() => _SetAmountState();
 }
 
-class _SetAmountState extends State<SetAmount> {
+class _SetAmountState extends ConsumerState<SetAmount> {
   Regular? _regular;
   Regular get regular{
     _regular ??= Regular();
@@ -44,7 +45,7 @@ class _SetAmountState extends State<SetAmount> {
     super.dispose();
   }
   void initCoin(){
-    WalletActionProvider wap=Provider.of<WalletActionProvider>(context,listen: false);
+    WalletActionProvider wap=ref.read(wapBridgeProvider);
     for(CoinModel cm in wap.coinList){
       if(cm.coin['miniName'].toString().toLowerCase()=="usdt"){
         coinList.add(cm);

@@ -3,11 +3,10 @@ import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers
 import 'package:n42appv2/main.dart' show globalProviderContainer;
 import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
-import 'package:n42appv2/src/wallet_connect/provider/wallet_connect_provider.dart';
+import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42appv2/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:n42appv2/data/models/user_info.dart';
-import 'package:provider/provider.dart';
 
 /// Legacy Application class - 已部分迁移到 Riverpod
 /// 
@@ -31,8 +30,8 @@ class Application {
     // 刷新钱包列表
     globalProviderContainer.invalidate(walletListProvider);
     // 通过 Legacy Provider 初始化钱包
-    Provider.of<WalletActionProvider>(AppContext, listen: false).initWallet(shouldInitCoinInfo: true);
-    Provider.of<WalletConnectProvider>(AppContext, listen: false).cleanDataLogout();
+    globalWapAdapter.initWallet(shouldInitCoinInfo: true);
+    globalWcpInstance.cleanDataLogout();
   }
   
   /// 用户退出
@@ -45,8 +44,8 @@ class Application {
       globalProviderContainer.invalidate(walletListProvider);
       // 通过 Legacy Provider 清理
       if (!AppContext.mounted) return;
-      Provider.of<WalletActionProvider>(AppContext, listen: false).initWallet();
-      Provider.of<WalletConnectProvider>(AppContext, listen: false).cleanDataLogout();
+      globalWapAdapter.initWallet();
+      globalWcpInstance.cleanDataLogout();
     } catch (err) {
       debugPrint('Logout error: $err');
     }
