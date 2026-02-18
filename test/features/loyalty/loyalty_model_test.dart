@@ -206,4 +206,245 @@ void main() {
       expect(pointsNeeded, 1000);
     });
   });
+
+  // ---------------------------------------------------------------------------
+  // Additional coverage: fromJson, edge cases, expiry
+  // ---------------------------------------------------------------------------
+
+  group('LoyaltyTask.fromJson — extended', () {
+    test('all fields are parsed from complete JSON', () {
+      final task = LoyaltyTask.fromJson({
+        'id': 'task-ext-001',
+        'title': 'Daily Check-In',
+        'description': 'Check in every day',
+        'type': 'dailyCheckIn',
+        'status': 'available',
+        'points': 100,
+        'max_completions': 7,
+        'completed_count': 2,
+        'expires_at': '2099-12-31T23:59:59.000Z',
+        'action_url': 'https://n42.ai/task/checkin',
+      });
+
+      expect(task.id, 'task-ext-001');
+      expect(task.points, 100);
+      expect(task.maxCompletions, 7);
+      expect(task.completedCount, 2);
+      expect(task.expiresAt, isNotNull);
+      expect(task.actionUrl, 'https://n42.ai/task/checkin');
+    });
+
+    test('unknown type defaults to TaskType.special', () {
+      final task = LoyaltyTask.fromJson({
+        'id': 't',
+        'title': 't',
+        'description': 'd',
+        'type': 'unknownXXX',
+        'status': 'available',
+        'points': 0,
+      });
+      expect(task.type, TaskType.special);
+    });
+
+    test('unknown status defaults to TaskStatus.available', () {
+      final task = LoyaltyTask.fromJson({
+        'id': 't',
+        'title': 't',
+        'description': 'd',
+        'type': 'special',
+        'status': 'badStatus',
+        'points': 0,
+      });
+      expect(task.status, TaskStatus.available);
+    });
+
+    test('all TaskType enum values parse from JSON', () {
+      final types = {
+        'dailyCheckIn': TaskType.dailyCheckIn,
+        'transaction': TaskType.transaction,
+        'referral': TaskType.referral,
+        'staking': TaskType.staking,
+        'dappUsage': TaskType.dappUsage,
+        'social': TaskType.social,
+        'special': TaskType.special,
+      };
+
+      for (final entry in types.entries) {
+        final task = LoyaltyTask.fromJson({
+          'id': 't',
+          'title': 't',
+          'description': 'd',
+          'type': entry.key,
+          'status': 'available',
+          'points': 10,
+        });
+        expect(task.type, entry.value,
+            reason: 'type "${entry.key}" should map to ${entry.value}');
+      }
+    });
+  });
+
+  group('LoyaltyTask.canComplete — edge cases', () {
+    test('false when expired (past expiresAt)', () {
+      final task = LoyaltyTask.fromJson({
+        'id': 't',
+        'title': 't',
+        'description': 'd',
+        'type': 'dailyCheckIn',
+        'status': 'available',
+        'points': 10,
+        'expires_at': '2000-01-01T00:00:00.000Z',
+      });
+      expect(task.canComplete, isFalse);
+    });
+
+    test('false when maxCompletions reached', () {
+      final task = LoyaltyTask.fromJson({
+        'id': 't',
+        'title': 't',
+        'description': 'd',
+        'type': 'dailyCheckIn',
+        'status': 'available',
+        'points': 10,
+        'max_completions': 3,
+        'completed_count': 3,
+      });
+      expect(task.canComplete, isFalse);
+    });
+
+    test('true when unlimited (null maxCompletions)', () {
+      final task = LoyaltyTask.fromJson({
+        'id': 't',
+        'title': 't',
+        'description': 'd',
+        'type': 'transaction',
+        'status': 'available',
+        'points': 10,
+      });
+      expect(task.canComplete, isTrue);
+    });
+  });
+
+  group('LoyaltyAccount.fromJson — extended', () {
+    test('all tier values parse correctly from JSON', () {
+      final tierMap = {
+        'bronze': LoyaltyTier.bronze,
+        'silver': LoyaltyTier.silver,
+        'gold': LoyaltyTier.gold,
+        'platinum': LoyaltyTier.platinum,
+        'diamond': LoyaltyTier.diamond,
+      };
+
+      for (final entry in tierMap.entries) {
+        final account = LoyaltyAccount.fromJson({
+          'wallet_address': '0xAddr',
+          'total_points': 0,
+          'available_points': 0,
+          'used_points': 0,
+          'tier': entry.key,
+          'tier_progress': 0,
+          'next_tier_points': 1000,
+          'created_at': '2024-01-01T00:00:00.000Z',
+          'updated_at': '2024-01-01T00:00:00.000Z',
+        });
+        expect(account.tier, entry.value);
+      }
+    });
+
+    test('missing tier defaults to bronze', () {
+      final account = LoyaltyAccount.fromJson({
+        'wallet_address': '',
+        'total_points': 0,
+        'available_points': 0,
+        'used_points': 0,
+        'tier': 'legendary',
+        'tier_progress': 0,
+        'next_tier_points': 1000,
+        'created_at': '2024-01-01T00:00:00.000Z',
+        'updated_at': '2024-01-01T00:00:00.000Z',
+      });
+      expect(account.tier, LoyaltyTier.bronze);
+    });
+  });
+
+  group('Reward.fromJson — extended', () {
+    test('all RewardType variants parse correctly', () {
+      final types = {
+        'gasDiscount': RewardType.gasDiscount,
+        'feeDiscount': RewardType.feeDiscount,
+        'nft': RewardType.nft,
+        'token': RewardType.token,
+        'membership': RewardType.membership,
+        'raffle': RewardType.raffle,
+        'other': RewardType.other,
+      };
+
+      for (final entry in types.entries) {
+        final reward = Reward.fromJson({
+          'id': 'r',
+          'name': 'n',
+          'description': 'd',
+          'type': entry.key,
+          'points_cost': 100,
+          'is_available': true,
+        });
+        expect(reward.type, entry.value);
+      }
+    });
+  });
+
+  group('Reward.canRedeem — edge cases', () {
+    test('false when stock is 0', () {
+      final reward = Reward.fromJson({
+        'id': 'r',
+        'name': 'n',
+        'description': 'd',
+        'type': 'nft',
+        'points_cost': 100,
+        'is_available': true,
+        'stock': 0,
+      });
+      expect(reward.canRedeem, isFalse);
+    });
+
+    test('false when userRedeemed >= userLimit', () {
+      final reward = Reward.fromJson({
+        'id': 'r',
+        'name': 'n',
+        'description': 'd',
+        'type': 'raffle',
+        'points_cost': 50,
+        'is_available': true,
+        'user_limit': 2,
+        'user_redeemed': 2,
+      });
+      expect(reward.canRedeem, isFalse);
+    });
+
+    test('false when expired', () {
+      final reward = Reward.fromJson({
+        'id': 'r',
+        'name': 'n',
+        'description': 'd',
+        'type': 'membership',
+        'points_cost': 1000,
+        'is_available': true,
+        'expires_at': '2000-01-01T00:00:00.000Z',
+      });
+      expect(reward.canRedeem, isFalse);
+    });
+
+    test('true when unlimited stock and not expired', () {
+      final reward = Reward.fromJson({
+        'id': 'r',
+        'name': 'n',
+        'description': 'd',
+        'type': 'gasDiscount',
+        'points_cost': 200,
+        'is_available': true,
+        'expires_at': '2099-12-31T00:00:00.000Z',
+      });
+      expect(reward.canRedeem, isTrue);
+    });
+  });
 }
