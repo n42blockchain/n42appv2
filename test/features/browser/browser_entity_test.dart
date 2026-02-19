@@ -49,10 +49,11 @@ void main() {
     });
 
     test('different url → not equal', () {
+      // Only url differs — title and id are identical to isolate the url field.
       final a = BrowserHistoryEntity(
-          id: 'h', url: 'https://a.com', title: 'A', visitedAt: ts);
+          id: 'h', url: 'https://a.com', title: 'X', visitedAt: ts);
       final b = BrowserHistoryEntity(
-          id: 'h', url: 'https://b.com', title: 'B', visitedAt: ts);
+          id: 'h', url: 'https://b.com', title: 'X', visitedAt: ts);
       expect(a, isNot(equals(b)));
     });
 

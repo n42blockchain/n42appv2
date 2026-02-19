@@ -111,6 +111,14 @@ void main() {
       base.copyWith(name: 'Changed');
       expect(base.name, 'Alice');
     });
+
+    test('limitation: name cannot be cleared to null via copyWith', () {
+      // copyWith uses `??` — passing null silently preserves the existing value.
+      // To clear a nullable field, reconstruct the entity directly.
+      const withName = UserEntity(uuid: 'u', email: 'a@b.com', name: 'Alice');
+      final attempt = withName.copyWith(name: null);
+      expect(attempt.name, 'Alice'); // null was silently ignored
+    });
   });
 
   group('UserEntity equality', () {
@@ -239,6 +247,13 @@ void main() {
     test('different secret → not equal', () {
       const a = GoogleAuthEntity(secret: 'A', qrCodeUrl: 'url', backupCodes: []);
       const b = GoogleAuthEntity(secret: 'B', qrCodeUrl: 'url', backupCodes: []);
+      expect(a, isNot(equals(b)));
+    });
+
+    test('backupCodes order matters for equality', () {
+      // List equality is order-sensitive — ['c1','c2'] ≠ ['c2','c1'].
+      const a = GoogleAuthEntity(secret: 'S', qrCodeUrl: 'url', backupCodes: ['c1', 'c2']);
+      const b = GoogleAuthEntity(secret: 'S', qrCodeUrl: 'url', backupCodes: ['c2', 'c1']);
       expect(a, isNot(equals(b)));
     });
   });

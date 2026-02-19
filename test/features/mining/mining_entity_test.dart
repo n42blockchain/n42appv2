@@ -134,6 +134,15 @@ void main() {
       );
       expect(e.isActive, isFalse);
     });
+
+    test('false when status is error', () {
+      final e = MiningSessionEntity(
+        id: 's', walletAddress: '0x', planId: 'p',
+        startTime: start, status: MiningStatus.error,
+        earnedRewards: 0, rewardTokenSymbol: 'T', miningPower: 1.0,
+      );
+      expect(e.isActive, isFalse);
+    });
   });
 
   group('MiningSessionEntity.duration and formattedDuration', () {

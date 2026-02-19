@@ -30,29 +30,25 @@ void main() {
   // ─────────────────────────────────────────────────
 
   group('ChainType enum', () {
-    test('has ethereum and bitcoin', () {
+    test('contains all 13 expected values', () {
       expect(ChainType.values, containsAll([
         ChainType.ethereum,
         ChainType.bitcoin,
-      ]));
-    });
-
-    test('has solana and tron', () {
-      expect(ChainType.values, containsAll([
         ChainType.solana,
         ChainType.tron,
-      ]));
-    });
-
-    test('has cosmos, ripple, ton', () {
-      expect(ChainType.values, containsAll([
+        ChainType.filecoin,
+        ChainType.polkadot,
+        ChainType.algorand,
+        ChainType.aptos,
+        ChainType.sui,
         ChainType.cosmos,
         ChainType.ripple,
+        ChainType.tezos,
         ChainType.ton,
       ]));
     });
 
-    test('has 13 values total', () {
+    test('13 values total', () {
       expect(ChainType.values.length, 13);
     });
   });
@@ -155,6 +151,14 @@ void main() {
         id: 'w', name: 'N', address: '0123456789', chainType: 'eth', createdAt: created,
       );
       expect(e.shortAddress, '0123456789');
+    });
+
+    test('11 chars (one over threshold) uses truncated form', () {
+      // Boundary: 10 → full, 11 → first 6 + '...' + last 4.
+      final e = WalletEntity(
+        id: 'w', name: 'N', address: '01234567890', chainType: 'eth', createdAt: created,
+      );
+      expect(e.shortAddress, contains('...'));
     });
   });
 
