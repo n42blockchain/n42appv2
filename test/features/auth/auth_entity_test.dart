@@ -175,7 +175,9 @@ void main() {
     });
 
     test('true when expiresAt is in the past', () {
-      final past = DateTime.now().subtract(const Duration(seconds: 1));
+      // Use Duration(days: 1) instead of seconds to avoid any clock-skew
+      // race between test setup and the DateTime.now() call in isExpired.
+      final past = DateTime.now().subtract(const Duration(days: 1));
       final e = AuthTokenEntity(accessToken: 'tok', expiresAt: past);
       expect(e.isExpired, isTrue);
     });

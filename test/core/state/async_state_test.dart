@@ -13,29 +13,17 @@ void main() {
   // ─────────────────────────────────────────────────
 
   group('LoadState enum', () {
-    test('has initial value', () {
-      expect(LoadState.initial, isA<LoadState>());
-    });
-
-    test('has loading value', () {
-      expect(LoadState.loading, isA<LoadState>());
-    });
-
-    test('has success value', () {
-      expect(LoadState.success, isA<LoadState>());
-    });
-
-    test('has error value', () {
-      expect(LoadState.error, isA<LoadState>());
+    test('contains all four expected values', () {
+      expect(LoadState.values, containsAll([
+        LoadState.initial,
+        LoadState.loading,
+        LoadState.success,
+        LoadState.error,
+      ]));
     });
 
     test('four values total', () {
       expect(LoadState.values.length, 4);
-    });
-
-    test('values are distinct', () {
-      final values = LoadState.values.toSet();
-      expect(values.length, 4);
     });
   });
 
@@ -127,12 +115,13 @@ void main() {
       expect(mapped.hasValue, isFalse);
     });
 
-    test('preserves error state', () {
+    test('preserves error state with same error object', () {
       final err = Exception('fail');
       final state = AsyncValue<int>.error(err, StackTrace.empty);
       final mapped = state.mapData((v) => v * 2);
       expect(mapped.hasError, isTrue);
-      expect(mapped.error, isA<Exception>());
+      // Verify the exact same error instance is preserved, not a wrapper.
+      expect(mapped.error, same(err));
     });
   });
 

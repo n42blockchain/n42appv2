@@ -13,20 +13,13 @@ void main() {
   // ─────────────────────────────────────────────────
 
   group('MiningStatus enum', () {
-    test('has active value', () {
-      expect(MiningStatus.active, isA<MiningStatus>());
-    });
-
-    test('has paused value', () {
-      expect(MiningStatus.paused, isA<MiningStatus>());
-    });
-
-    test('has completed value', () {
-      expect(MiningStatus.completed, isA<MiningStatus>());
-    });
-
-    test('has error value', () {
-      expect(MiningStatus.error, isA<MiningStatus>());
+    test('contains all four expected values', () {
+      expect(MiningStatus.values, containsAll([
+        MiningStatus.active,
+        MiningStatus.paused,
+        MiningStatus.completed,
+        MiningStatus.error,
+      ]));
     });
 
     test('four values total', () {
@@ -410,6 +403,30 @@ void main() {
         uptimePercentage: 100, totalRewards: 0, activatedAt: activated,
       );
       expect(e.daysUntilExpiration, isNull);
+    });
+
+    test('daysUntilExpiration returns positive days for future expiresAt', () {
+      // Use a fixed far-future date so the test is deterministic regardless
+      // of when it runs. 10000 days from epoch is well past any reasonable
+      // test execution time.
+      final farFuture = DateTime.utc(2100, 1, 1);
+      final e = FullNodeEntity(
+        id: 'n', name: 'N', status: NodeStatus.online,
+        uptimePercentage: 100, totalRewards: 0, activatedAt: activated,
+        expiresAt: farFuture,
+      );
+      expect(e.daysUntilExpiration, isNotNull);
+      expect(e.daysUntilExpiration!, greaterThan(0));
+    });
+
+    test('daysUntilExpiration returns 0 or negative for past expiresAt', () {
+      final yesterday = DateTime.utc(2000, 1, 1); // far in the past
+      final e = FullNodeEntity(
+        id: 'n', name: 'N', status: NodeStatus.online,
+        uptimePercentage: 100, totalRewards: 0, activatedAt: activated,
+        expiresAt: yesterday,
+      );
+      expect(e.daysUntilExpiration!, lessThanOrEqualTo(0));
     });
 
     test('same fields → equal', () {
