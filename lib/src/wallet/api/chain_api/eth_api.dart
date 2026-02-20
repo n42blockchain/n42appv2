@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:n42appv2/core/app/app_globals.dart';
@@ -256,6 +257,89 @@ class EthAPI{
       return Result.failure(AppError.network(e.toString(), originalError: e, stackTrace: st));
     }
   }
+  // ──────────────────────────────────────────────────────────────
+  // ERC-20 合约元数据读取（name / symbol / decimals）
+  // 仅支持 EVM 兼容链，通过原始 eth_call 实现，无需完整 ABI 文件。
+  // ──────────────────────────────────────────────────────────────
+
+  /// 从 EVM 合约地址读取 ERC-20 Token 元信息。
+  ///
+  /// 成功时返回 `{name, symbol, decimals}`，失败（非合约地址/RPC 超时）返回 null。
+  static Future<({String name, String symbol, int decimals})?> getErc20TokenInfo(
+    String contractAddress,
+    String rpcUrl,
+  ) async {
+    try {
+      final ethAPI = EthAPI.init(null, rpcUrl, null);
+      final addr = contractAddress.toLowerCase();
+
+      // 并行调用 name() / symbol() / decimals() 三个 view 函数
+      // 函数选择器：keccak256 前 4 字节
+      //   name()     → 0x06fdde03
+      //   symbol()   → 0x95d89b41
+      //   decimals() → 0x313ce567
+      final results = await Future.wait([
+        ethAPI.baseRPCEth('eth_call', [{'to': addr, 'data': '0x06fdde03'}, 'latest']),
+        ethAPI.baseRPCEth('eth_call', [{'to': addr, 'data': '0x95d89b41'}, 'latest']),
+        ethAPI.baseRPCEth('eth_call', [{'to': addr, 'data': '0x313ce567'}, 'latest']),
+      ]);
+
+      if (results.any((r) => r.isFailure)) return null;
+
+      final nameHex     = results[0].valueOrNull?.toString() ?? '';
+      final symbolHex   = results[1].valueOrNull?.toString() ?? '';
+      final decimalsHex = results[2].valueOrNull?.toString() ?? '';
+
+      final name    = _abiDecodeString(nameHex);
+      final symbol  = _abiDecodeString(symbolHex);
+      final decimals = _abiDecodeUint8(decimalsHex);
+
+      // 至少 symbol 非空才认为是合法的 ERC-20 合约
+      if (symbol.isEmpty && name.isEmpty) return null;
+
+      return (name: name, symbol: symbol, decimals: decimals);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// ABI 解码 `string` 返回值（动态类型）。
+  ///
+  /// 格式：[32B offset][32B length][data bytes]（均为 hex，去掉 0x 前缀后操作）
+  static String _abiDecodeString(String hex) {
+    try {
+      final clean = hex.startsWith('0x') ? hex.substring(2) : hex;
+      // 至少需要 offset(64) + length(64) + 至少1字节数据
+      if (clean.length < 128) return '';
+      final lengthHex = clean.substring(64, 128);
+      final length = int.parse(lengthHex, radix: 16);
+      if (length == 0) return '';
+      if (clean.length < 128 + length * 2) return '';
+      final dataHex = clean.substring(128, 128 + length * 2);
+      final bytes = Uint8List.fromList(
+        List.generate(
+          dataHex.length ~/ 2,
+          (i) => int.parse(dataHex.substring(i * 2, i * 2 + 2), radix: 16),
+        ),
+      );
+      return utf8.decode(bytes, allowMalformed: true);
+    } catch (_) {
+      return '';
+    }
+  }
+
+  /// ABI 解码 `uint8` 返回值（定长 32 字节，取低 1 字节）。
+  static int _abiDecodeUint8(String hex) {
+    try {
+      final clean = hex.startsWith('0x') ? hex.substring(2) : hex;
+      if (clean.isEmpty) return 18;
+      // 取最后 2 个十六进制字符（即最低字节）
+      return int.parse(clean.substring(clean.length > 2 ? clean.length - 2 : 0), radix: 16);
+    } catch (_) {
+      return 18; // ERC-20 默认 18 位小数
+    }
+  }
+
 /*
   //获取abi文件
   static getABI(String coinType,String address,{bool isTest=false})async{

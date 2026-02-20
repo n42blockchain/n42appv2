@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:n42appv2/core/config/app_config.dart';
@@ -8,6 +9,7 @@ import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/utils/regular.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
+import 'package:n42appv2/src/wallet/api/chain_api/eth_api.dart';
 import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
@@ -63,6 +65,21 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
   int networkIndexToken = 0;
   String networkNameToken = "";
 
+  // ── 热门代币推荐 ─────────────────────────────────────────────
+  /// 热门代币 symbol 白名单（纯前端过滤，来源于 coinlist API 数据）
+  static const _popularSymbolSet = {
+    'USDT', 'USDC', 'DAI', 'WBTC', 'WETH',
+    'UNI', 'LINK', 'AAVE', 'SHIB', 'PEPE',
+    'ARB', 'OP', 'MATIC',
+  };
+  List<dynamic> _popularTokens = []; // 从 coinlist 中提取的热门代币条目
+
+  // ── 合约自动校验 ─────────────────────────────────────────────
+  /// 合约验证状态：'' | 'loading' | 'found' | 'notFound' | 'error'
+  String _contractState = '';
+  String _contractHint = ''; // 成功时显示 "USDT · 6 decimals"
+  Timer? _contractDebounce;
+
   void setNetworkIndex(int value, String name) {
     if (importType == 0) {
       if (value == networkIndex) return;
@@ -95,6 +112,7 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
 
   @override
   void dispose() {
+    _contractDebounce?.cancel();
     inputEditingController.dispose();
     tokenEditingController.dispose();
     symbolEditingController.dispose();
@@ -551,6 +569,8 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
       Map<String, dynamic> chains =
           ref.read(wapBridgeProvider).walletMap;
       coinDeal(returnData, chains);
+      // 从全量列表中提取热门代币（仅带合约地址的代币条目）
+      _extractPopularTokens();
     }
     setState(() {
       load = Load.finish;
@@ -558,6 +578,19 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
     if (inputEditingController.text != "") {
       seachCoin();
     }
+  }
+
+  /// 从 [coinlist] 中提取热门代币，去重（同一 symbol 只保留各链一条）。
+  void _extractPopularTokens() {
+    final seen = <String>{};
+    _popularTokens = coinlist.where((item) {
+      final sym = (item['coin_name'] ?? '').toString().toUpperCase();
+      final contract = (item['contract'] ?? '').toString();
+      if (!_popularSymbolSet.contains(sym)) return false;
+      if (contract.isEmpty) return false; // 排除主链币（只保留代币条目）
+      final key = '$sym:${(item["chain_name"] ?? "").toString()}';
+      return seen.add(key); // 去重
+    }).toList();
   }
 
   //链 币 数据处理
@@ -631,6 +664,93 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
       tokenEditingController.text = scanValue;
       addressCheck(scanValue);
       setState(() {});
+    }
+  }
+
+  // ── 合约地址自动校验 ──────────────────────────────────────────
+
+  /// 用户输入合约地址时触发（带 800ms 防抖）。
+  void _onContractAddressChanged(String value) {
+    _contractDebounce?.cancel();
+    if (value.trim().isEmpty) {
+      setState(() { _contractState = ''; _contractHint = ''; });
+      return;
+    }
+    _contractDebounce = Timer(const Duration(milliseconds: 800), () {
+      _lookupContractInfo(value.trim());
+    });
+  }
+
+  /// 查询合约信息：先从本地 coinlist 匹配，再尝试链上 eth_call。
+  Future<void> _lookupContractInfo(String address) async {
+    if (!mounted) return;
+
+    // 1. 地址格式校验
+    final List<String> cKeys = chainsToken.keys.toList();
+    if (cKeys.isEmpty) return;
+    final coinType = chainsToken[cKeys[networkIndexToken]]['baseInfo']['coinType'] as String;
+    final validAddr = await Trustdart().validateAddress(coinType, address);
+    if (!validAddr) {
+      setState(() { _contractState = 'error'; _contractHint = ''; });
+      return;
+    }
+
+    setState(() { _contractState = 'loading'; _contractHint = ''; });
+
+    // 2. 从 coinlist 匹配（已知代币，无需链上查询）
+    final chainMiniName = chainsToken[cKeys[networkIndexToken]]['baseInfo']['miniName']
+        .toString().toUpperCase();
+    final knownIdx = coinlist.indexWhere((e) {
+      if ((e['contract'] ?? '').toString().isEmpty) return false;
+      if (e['coin_name'].toString().toUpperCase() != chainMiniName &&
+          (e['symbol'] ?? '').toString().toUpperCase() != chainMiniName) {
+        // 允许按合约地址匹配，不限链
+      }
+      return e['contract'].toString().toLowerCase() == address.toLowerCase();
+    });
+
+    if (knownIdx != -1) {
+      final found = coinlist[knownIdx];
+      final sym = found['coin_name']?.toString() ?? '';
+      final dec = found['decimals']?.toString() ?? '18';
+      final name = found['fullname']?.toString() ?? sym;
+      if (mounted) {
+        symbolEditingController.text = sym;
+        decimalEditingController.text = dec;
+        setState(() {
+          _contractState = 'found';
+          _contractHint = '$name · $dec decimals';
+          symbolErrorMessage = '';
+          decimalErrorMessage = '';
+        });
+      }
+      return;
+    }
+
+    // 3. 链上查询（仅支持 EVM 链）
+    final blockchainType = chainsToken[cKeys[networkIndexToken]]['baseInfo']['blockchainType'];
+    if (blockchainType == 'Ethereum') {
+      final rpcUrl = chainsToken[cKeys[networkIndexToken]]['baseInfo']['service']?.toString() ?? '';
+      if (rpcUrl.isNotEmpty) {
+        final info = await EthAPI.getErc20TokenInfo(address, rpcUrl);
+        if (!mounted) return;
+        if (info != null) {
+          symbolEditingController.text = info.symbol;
+          decimalEditingController.text = info.decimals.toString();
+          setState(() {
+            _contractState = 'found';
+            _contractHint = '${info.name.isNotEmpty ? info.name : info.symbol} · ${info.decimals} decimals';
+            symbolErrorMessage = '';
+            decimalErrorMessage = '';
+          });
+          return;
+        }
+      }
+    }
+
+    // 4. 未找到 → 提示用户手动填写
+    if (mounted) {
+      setState(() { _contractState = 'notFound'; _contractHint = ''; });
     }
   }
 
@@ -1159,6 +1279,7 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
                       EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
                     ),
                     maxLines: 1,
+                    onChanged: _onContractAddressChanged,
                     onEditingComplete: () {
                       FocusScope.of(context).requestFocus(symbolFocusNode);
                       addressCheck(tokenEditingController.text);
@@ -1229,8 +1350,88 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
                 ),
               ),
             ),
+          // 合约校验状态提示
+          _buildContractStateWidget(),
         ],
       ),
+    );
+  }
+
+  Widget _buildContractStateWidget() {
+    if (_contractState.isEmpty) return const SizedBox.shrink();
+
+    Widget content;
+    switch (_contractState) {
+      case 'loading':
+        content = Row(
+          children: [
+            SizedBox(
+              width: ScreenUtil().setWidth(24),
+              height: ScreenUtil().setWidth(24),
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainBlueColor.name),
+              ),
+            ),
+            SizedBox(width: ScreenUtil().setWidth(12)),
+            Text(
+              'Looking up token info…',
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(24),
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.itemSubtitleTextColor.name),
+              ),
+            ),
+          ],
+        );
+        break;
+      case 'found':
+        content = Row(
+          children: [
+            Icon(Icons.check_circle_outline,
+                color: Colors.green, size: ScreenUtil().setWidth(28)),
+            SizedBox(width: ScreenUtil().setWidth(10)),
+            Expanded(
+              child: Text(
+                'Token found: $_contractHint',
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(24),
+                  color: Colors.green,
+                ),
+              ),
+            ),
+          ],
+        );
+        break;
+      case 'notFound':
+        content = Row(
+          children: [
+            Icon(Icons.info_outline,
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.textColorOrange.name),
+                size: ScreenUtil().setWidth(28)),
+            SizedBox(width: ScreenUtil().setWidth(10)),
+            Expanded(
+              child: Text(
+                'Token not found in list — fill symbol & decimals manually',
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(24),
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.textColorOrange.name),
+                ),
+              ),
+            ),
+          ],
+        );
+        break;
+      default: // 'error'
+        content = const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: EdgeInsets.only(top: ScreenUtil().setWidth(12)),
+      child: content,
     );
   }
 
@@ -1461,7 +1662,9 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
   }
 
   Widget coinListWidget() {
-    if (inputEditingController.text == "" && networkIndex == -1) {
+    final bool isDefaultView = inputEditingController.text == "" && networkIndex == -1;
+
+    if (isDefaultView) {
       return RefreshIndicator(
         onRefresh: () async {
           if (load == Load.finish) await getChainList();
@@ -1471,29 +1674,27 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
         color: AppThemeUtils.getColorByKey(
             context, AppThemeKeys.mainButtonTextColor.name),
         displacement: ScreenUtil().setWidth(72.0),
-        child: ListView.builder(
-          itemCount: coinlist.length,
-          itemBuilder: (context, int index) {
-            Map<String, dynamic> rowValue = coinlist[index];
-            if(rowValue['unit'] ==null || rowValue['unit'] ==""){
-              return coinItem(rowValue);
-            }else{
-              if(rowValue['unit'].toString().toUpperCase() == rowValue['coin_name'].toString().toUpperCase()){
-                return coinItem(rowValue);
-              }else{
-                return SizedBox();
-              }
-            }
-
-          },
-          /*separatorBuilder: (context, int index) {
-            return Divider(
-              height: ScreenUtil().setWidth(1.0),
-              indent: 0,
-              endIndent: 0,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name),
-            );
-          },*/
+        child: CustomScrollView(
+          slivers: [
+            // ── 热门代币推荐区 ──────────────────────────────────
+            if (_popularTokens.isNotEmpty)
+              SliverToBoxAdapter(child: _buildPopularSection()),
+            // ── 全量代币列表 ────────────────────────────────────
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final rowValue = coinlist[index] as Map<String, dynamic>;
+                  final unit = rowValue['unit']?.toString() ?? '';
+                  final coinName = rowValue['coin_name']?.toString() ?? '';
+                  if (unit.isNotEmpty && unit.toUpperCase() != coinName.toUpperCase()) {
+                    return const SizedBox.shrink();
+                  }
+                  return coinItem(rowValue);
+                },
+                childCount: coinlist.length,
+              ),
+            ),
+          ],
         ),
       );
     } else {
@@ -1508,20 +1709,169 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
             if(rowValue['unit'].toString().toUpperCase() == rowValue['coin_name'].toString().toUpperCase()){
               return coinItem(rowValue);
             }else{
-              return SizedBox();
+              return const SizedBox.shrink();
             }
           }
         },
-        /*separatorBuilder: (context, int index) {
-          return Divider(
-            height: ScreenUtil().setWidth(1.0),
-            indent: 0,
-            endIndent: 0,
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name),
-          );
-        },*/
       );
     }
+  }
+
+  // ── 热门代币推荐区 ────────────────────────────────────────────
+
+  Widget _buildPopularSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.fromLTRB(
+            ScreenUtil().setWidth(4),
+            ScreenUtil().setWidth(16),
+            0,
+            ScreenUtil().setWidth(8),
+          ),
+          child: Text(
+            'Popular Tokens',
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(26),
+              fontWeight: FontWeight.w600,
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.itemSubtitleTextColor.name),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: ScreenUtil().setWidth(100),
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: _popularTokens.length,
+            itemBuilder: (context, index) {
+              return _popularChip(_popularTokens[index]);
+            },
+          ),
+        ),
+        Divider(
+          height: ScreenUtil().setWidth(32),
+          color: AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.itemLineColor.name),
+        ),
+        Padding(
+          padding: EdgeInsets.only(
+            left: ScreenUtil().setWidth(4),
+            bottom: ScreenUtil().setWidth(8),
+          ),
+          child: Text(
+            'All Tokens',
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(26),
+              fontWeight: FontWeight.w600,
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.itemSubtitleTextColor.name),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _popularChip(Map<String, dynamic> item) {
+    final bool isAdded = item['isAdd'] == true;
+    final String sym = item['coin_name']?.toString() ?? '';
+    final String chainName = item['chain_name']?.toString() ?? '';
+    final String fullname = item['fullname']?.toString() ?? sym;
+    final String iconUrl =
+        'https://api-wallet.walletamaze.com/market/v1/r/coinImage/$fullname.png';
+
+    return GestureDetector(
+      onTap: isAdded
+          ? null
+          : () {
+              if (item['edit'] == true) return;
+              addCoinToken(item);
+            },
+      child: Container(
+        margin: EdgeInsets.only(right: ScreenUtil().setWidth(16)),
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(20),
+          vertical: ScreenUtil().setWidth(10),
+        ),
+        decoration: BoxDecoration(
+          color: isAdded
+              ? AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainBlueColor.name)
+                  .withValues(alpha: 0.08)
+              : AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.itemBgColor.name),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(40)),
+          border: Border.all(
+            color: isAdded
+                ? AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.mainBlueColor.name)
+                    .withValues(alpha: 0.3)
+                : AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.itemBorderColor.name),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: ScreenUtil().setWidth(40),
+              height: ScreenUtil().setWidth(40),
+              child: ImageNetWork(
+                imageUrl: iconUrl,
+                placeholder: 'assets/img/list_default.png',
+              ),
+            ),
+            SizedBox(width: ScreenUtil().setWidth(10)),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  sym,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(26),
+                    fontWeight: FontWeight.w600,
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.mainTextColor.name),
+                  ),
+                ),
+                Text(
+                  chainName,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(20),
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(width: ScreenUtil().setWidth(8)),
+            if (item['edit'] == true)
+              SizedBox(
+                width: ScreenUtil().setWidth(20),
+                height: ScreenUtil().setWidth(20),
+                child: const CircularProgressIndicator(strokeWidth: 2),
+              )
+            else if (isAdded)
+              Icon(
+                Icons.check,
+                size: ScreenUtil().setWidth(28),
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainBlueColor.name),
+              )
+            else
+              Icon(
+                Icons.add,
+                size: ScreenUtil().setWidth(28),
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainButtonBgColor.name),
+              ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget coinItem(Map<String, dynamic> rowValue) {
