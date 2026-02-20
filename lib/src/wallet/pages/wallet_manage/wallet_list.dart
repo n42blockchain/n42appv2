@@ -21,6 +21,7 @@ import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
@@ -421,70 +422,299 @@ class _WalletListState extends ConsumerState<WalletList> {
     );
   }
 
+  // ── 钱包列表（含分组 + 侧滑操作） ──────────────────────────────
+
   Widget _buildList() {
     if (walletList.isEmpty) return const EmptyView();
-    return ListView.builder(
-      itemCount: walletList.length,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (BuildContext context, int index) {
-        WalletInfo info = walletList[index];
-        return GestureDetector(
-          onTap: () async {
-            if(info.password==""){
-              jumpWalletInfoPage(info,index);
-              return;
-            }
-            //密码验证
-            final controller = TextEditingController();
-            final flag = await tipsDialog4(context, null,
-                controller: controller);
-            if (!context.mounted) return;
-            if (flag != null && flag) {
-              final password = controller.text.trim();
-              if (password != info.password) {
-                //密码输入错误
-                ToastUtils.show(S.of(context).g_key_146);
-                return;
-              }
-              jumpWalletInfoPage(info,index);
-            }
-          },
-          child: containerStyle1(
-            context,
-            padding: EdgeInsets.all(ScreenUtil().setWidth(20.0)),
-            margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0), vertical: ScreenUtil().setWidth(20.0)),
-            child: Row(
-              children: [
-                Image.asset(
-                  "assets/img/${info.mainWallet==false?'ast_h':"ast"}.png",
-                  width: ScreenUtil().setWidth(70.0),
-                ),
-                SizedBox(
-                  width: ScreenUtil().setWidth(20.0),
-                ),
-                Text(
-                  info.walletName ?? "-",
-                  style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(40.0),
-                      fontWeight: FontWeight.bold),
-                ),
-                const Spacer(),
-                if(info.mainWallet==true || ref.read(wapBridgeProvider).walletIndex == index)
-                Icon(Icons.lock,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainGreyColor.name),
-                ),
-                Icon(Icons.chevron_right,
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name)),
-              ],
-            ),
-          ),
-        );
-      },
+
+    // 分组：助记词 HD 钱包 vs 单链导入钱包
+    final hdWallets = <_IndexedWallet>[];
+    final singleWallets = <_IndexedWallet>[];
+    for (var i = 0; i < walletList.length; i++) {
+      final w = _IndexedWallet(walletList[i], i);
+      if (walletList[i].hasMnemonic) {
+        hdWallets.add(w);
+      } else {
+        singleWallets.add(w);
+      }
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (hdWallets.isNotEmpty) ...[
+          _groupHeader('HD Wallet  ·  助记词钱包'),
+          ...hdWallets.map((w) => _walletTile(w.info, w.index)),
+          SizedBox(height: ScreenUtil().setWidth(10)),
+        ],
+        if (singleWallets.isNotEmpty) ...[
+          _groupHeader('Single-Chain  ·  单链导入'),
+          ...singleWallets.map((w) => _walletTile(w.info, w.index)),
+        ],
+      ],
     );
   }
+
+  Widget _groupHeader(String label) => Padding(
+        padding: EdgeInsets.only(
+          left: ScreenUtil().setWidth(30),
+          top: ScreenUtil().setWidth(10),
+          bottom: ScreenUtil().setWidth(8),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.itemSubtitleTextColor.name),
+            fontSize: ScreenUtil().setSp(24),
+            letterSpacing: 0.4,
+          ),
+        ),
+      );
+
+  /// 单个钱包磁贴，带侧滑操作。
+  ///
+  /// UX：
+  ///   - Tap 非当前钱包 → 直接切换（无需密码，切换不暴露私钥）
+  ///   - Tap 当前钱包   → 进管理页（可能需要密码）
+  ///   - 左滑           → 显示「编辑」+「删除」
+  Widget _walletTile(WalletInfo info, int index) {
+    final activeIndex = ref.read(wapBridgeProvider).walletIndex;
+    final isActive = (activeIndex == index);
+
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(30),
+        vertical: ScreenUtil().setWidth(8),
+      ),
+      child: Slidable(
+        key: ValueKey('wallet_$index'),
+        // 左滑 → 右侧操作区（编辑 + 删除）
+        endActionPane: ActionPane(
+          motion: const DrawerMotion(),
+          extentRatio: 0.45,
+          children: [
+            SlidableAction(
+              onPressed: (_) => _onManage(info, index),
+              backgroundColor: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.mainBlueColor.name),
+              foregroundColor: Colors.white,
+              icon: Icons.edit_outlined,
+              label: S.of(context).g_key_wallet_manage,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(ScreenUtil().setWidth(12)),
+                bottomLeft: Radius.circular(ScreenUtil().setWidth(12)),
+              ),
+            ),
+            // 只有非当前、非主钱包可以删除
+            if (!isActive && info.mainWallet != true)
+              SlidableAction(
+                onPressed: (_) => _onDelete(info),
+                backgroundColor: Colors.redAccent,
+                foregroundColor: Colors.white,
+                icon: Icons.delete_outline,
+                label: S.of(context).g_key_113,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(ScreenUtil().setWidth(12)),
+                  bottomRight: Radius.circular(ScreenUtil().setWidth(12)),
+                ),
+              ),
+          ],
+        ),
+        child: _walletCard(info, index, isActive),
+      ),
+    );
+  }
+
+  Widget _walletCard(WalletInfo info, int index, bool isActive) {
+    final coinKeys = info.coinInfo?.keys.toList() ?? [];
+
+    return GestureDetector(
+      onTap: () {
+        if (isActive) {
+          // 已是当前钱包 → 管理
+          _onManage(info, index);
+        } else {
+          // 非当前钱包 → 直接切换
+          _switchWallet(index);
+        }
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(20),
+          vertical: ScreenUtil().setWidth(18),
+        ),
+        decoration: BoxDecoration(
+          color: isActive
+              ? AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainBlueColor.name)
+                  .withValues(alpha: 0.08)
+              : AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.itemBgColor.name),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+          border: isActive
+              ? Border.all(
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainBlueColor.name),
+                  width: 1.5,
+                )
+              : Border.all(color: Colors.transparent),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            // 头像 / 图标
+            Image.asset(
+              'assets/img/${isActive ? "ast" : "ast_h"}.png',
+              width: ScreenUtil().setWidth(56),
+            ),
+            SizedBox(width: ScreenUtil().setWidth(16)),
+
+            // 名称 + 链信息
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    info.walletName ?? '-',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.mainTextColor.name),
+                      fontSize: ScreenUtil().setSp(32),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(height: ScreenUtil().setWidth(4)),
+                  Text(
+                    // 显示持有的链列表，最多 3 个
+                    coinKeys.take(3).join(' · ') +
+                        (coinKeys.length > 3
+                            ? ' +${coinKeys.length - 3}'
+                            : ''),
+                    style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.itemSubtitleTextColor.name),
+                      fontSize: ScreenUtil().setSp(24),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // 激活标志 或 右箭头
+            if (isActive)
+              Icon(
+                Icons.check_circle,
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainBlueColor.name),
+                size: ScreenUtil().setWidth(40),
+              )
+            else
+              Icon(
+                Icons.radio_button_unchecked,
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                size: ScreenUtil().setWidth(36),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ── 操作方法 ────────────────────────────────────────────────
+
+  /// 直接切换（Tap 非当前钱包 / 右滑）
+  void _switchWallet(int index) {
+    final mm = ref.read(wapBridgeProvider).setMainWallet(index);
+    if (mm.error) {
+      ToastUtils.show(mm.data);
+    } else {
+      setState(() {});
+      ToastUtils.show(S.of(context).g_key_15);
+    }
+  }
+
+  /// 打开管理页（需密码验证）
+  Future<void> _onManage(WalletInfo info, int index) async {
+    if (info.password == '') {
+      await jumpWalletInfoPage(info, index);
+      return;
+    }
+    final controller = TextEditingController();
+    final flag = await tipsDialog4(context, null, controller: controller);
+    if (!mounted) return;
+    if (flag == true) {
+      if (controller.text.trim() != info.password) {
+        final msg = S.of(context).g_key_146;
+        ToastUtils.show(msg);
+        return;
+      }
+      await jumpWalletInfoPage(info, index);
+    }
+  }
+
+  /// 删除钱包（与原 deleteWalletAlert 逻辑一致）
+  Future<void> _onDelete(WalletInfo info) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          S.of(ctx).g_face_3,
+          style: TextStyle(
+            color: AppThemeUtils.getColorByKey(
+                ctx, AppThemeKeys.mainTextColor.name),
+            fontSize: ScreenUtil().setSp(32),
+          ),
+        ),
+        content: Text(
+          S.of(ctx).g_key_192,
+          style: TextStyle(
+            color: AppThemeUtils.getColorByKey(
+                ctx, AppThemeKeys.mainTextColor.name),
+            fontSize: ScreenUtil().setSp(28),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(S.of(ctx).g_key_79,
+                style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(
+                        ctx, AppThemeKeys.mainBlueColor.name))),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(S.of(ctx).g_key_78,
+                style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(
+                        ctx, AppThemeKeys.mainBlueColor.name))),
+          ),
+        ],
+      ),
+    );
+    if (!mounted || confirmed != true) return;
+    final rmm = await ref.read(wapBridgeProvider).deleteWalletInfo(info: info);
+    if (!mounted) return;
+    if (rmm != null) {
+      ToastUtils.show(rmm.data);
+    }
+    initData();
+  }
+}
+
+/// 内部辅助：带原始索引的钱包信息（用于分组后保持索引正确）
+class _IndexedWallet {
+  final WalletInfo info;
+  final int index;
+  const _IndexedWallet(this.info, this.index);
 }
