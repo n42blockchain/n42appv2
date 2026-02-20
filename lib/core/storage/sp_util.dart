@@ -280,5 +280,6 @@ enum SPkey {
   useNewChat, // 是否使用新聊天模块
   hideSmallAssets, // 小额资产隐藏（< $1 USD）
   coinSearchHistory, // 资产搜索历史记录（最近 10 条关键词）
+  recentSendAddresses, // 最近转账地址 JSON：Map<coinType, List<{address,name?,time}>>
 }
 
