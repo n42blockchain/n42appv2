@@ -157,5 +157,6 @@ class FilTrModel{
 class RippleTrModel{
   String txType;
   int sequence;
-  RippleTrModel(this.txType,this.sequence);
+  int? destinationTag; // 转账到交易所时通常必填，防止资产丢失
+  RippleTrModel(this.txType, this.sequence, {this.destinationTag});
 }

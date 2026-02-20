@@ -20,7 +20,6 @@ import 'package:n42appv2/src/wallet/utils/coin_gas.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/container_widget.dart';
-import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,6 +30,8 @@ import 'package:n42appv2/features/wallet/presentation/providers/transaction_prov
 import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:decimal/decimal.dart' as dec;
+import 'package:n42appv2/src/wallet/pages/send/send_utils.dart';
+import 'package:n42appv2/src/wallet/services/recent_address_service.dart';
 
 class WalletChainSendXrp extends ConsumerStatefulWidget {
   final CoinModel coinModel;
@@ -50,8 +51,10 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp> {
   final oCcy =  NumberFormat("#,##0.00########", "en_US");
   late TextEditingController toTextEditingController=TextEditingController();
   late TextEditingController valueTextEditingController=TextEditingController();
+  final TextEditingController destTagCtrl = TextEditingController();
   late FocusNode toNode=FocusNode();
   late FocusNode valueNode=FocusNode();
+  final FocusNode destTagNode = FocusNode();
 
   String toErrorMessage="";
   String amountErrorMessage="";
@@ -77,8 +80,10 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp> {
   void dispose() {
     toTextEditingController.dispose();
     valueTextEditingController.dispose();
+    destTagCtrl.dispose();
     toNode.dispose();
     valueNode.dispose();
+    destTagNode.dispose();
     super.dispose();
   }
 
@@ -317,7 +322,13 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp> {
     trModel.gas=gas.toInt();
     trModel.gasPriceValue=gasPrice;
     trModel.price=transferValue;
-    trModel.other=RippleTrModel("XRP",widget.coinModel.other.sequence);
+    trModel.other=RippleTrModel(
+      "XRP",
+      widget.coinModel.other.sequence,
+      destinationTag: destTagCtrl.text.trim().isEmpty
+          ? null
+          : int.tryParse(destTagCtrl.text.trim()),
+    );
     //trModel.coinId=widget.coinModel.isTest?widget.coinModel.coin['chainId_test']:widget.coinModel.coin['chainId'];
 
     bool check=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletBaseSend(trModel,null,widget.coinModel.coin['unit'])));
@@ -345,6 +356,10 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp> {
         trModel.trId=await AppDatabase().insertTransationRecord(trModel);
         if (!mounted) return;
         ref.read(tripBridgeProvider).addUndoneTr(trModel,1);
+        await RecentAddressService.save(
+          widget.coinModel.coin['coinType'] ?? '',
+          toTextEditingController.text.trim(),
+        );
         ToastUtils.show(S.current.g_key_nft_41);
         Navigator.pop(context);
       }
@@ -463,7 +478,15 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp> {
           },);
         },
       ),*/
+      RecentAddressBar(
+        coinType: widget.coinModel.coin['coinType'] ?? '',
+        onSelected: (addr) {
+          toTextEditingController.text = addr;
+          toAddressCheck(addr);
+        },
+      ),
       toWidget(),
+      destinationTagWidget(),
       amountWidget(),
       minerFeeWidgetRippleXRP(),
       toAddressAccount(),
@@ -474,6 +497,73 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp> {
       children: cChildren,
     );
   }
+  Widget destinationTagWidget() {
+    return Container(
+      margin: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(30.0),
+        vertical: ScreenUtil().setWidth(8.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                'Destination Tag',
+                style: TextStyle(
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainTextColor.name),
+                  fontSize: ScreenUtil().setSp(28.0),
+                ),
+              ),
+              SizedBox(width: ScreenUtil().setWidth(8)),
+              Text(
+                '（可选）',
+                style: TextStyle(
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                  fontSize: ScreenUtil().setSp(24.0),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: ScreenUtil().setWidth(12.0)),
+          TextField(
+            controller: destTagCtrl,
+            focusNode: destTagNode,
+            keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.mainTextColor.name),
+              fontSize: ScreenUtil().setSp(28.0),
+            ),
+            decoration: InputDecoration(
+              hintText: '转账到交易所时通常必填',
+              hintStyle: TextStyle(
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                fontSize: ScreenUtil().setSp(24.0),
+              ),
+              filled: true,
+              fillColor: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.itemBgColor.name),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(20.0),
+                vertical: ScreenUtil().setWidth(16.0),
+              ),
+              border: OutlineInputBorder(
+                borderRadius:
+                    BorderRadius.circular(ScreenUtil().setWidth(10.0)),
+                borderSide: BorderSide.none,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget toWidget(){
     return Container(
       margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
@@ -926,141 +1016,14 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp> {
       ),
     );
   }
-  void searchToAddressWidget(){
-    List<Widget> childs=[
-      InkWell(
-        onTap: ()async{
-          final value =await Navigator.push(context, MaterialPageRoute(
-              builder: (context)=> AddressBookList(coinName: widget.coinModel.coin['coinType'],)));
-          if (!mounted) return;
-          if(value !=null){
-            toTextEditingController.text=value;
-          }
-          Navigator.pop(context);
-        },
-        child: SizedBox(
-          height: ScreenUtil().setWidth(88),
-          width: double.infinity,
-          child: Row(
-            children: [
-              Container(
-                height: ScreenUtil().setWidth(48),
-                width: ScreenUtil().setWidth(48),
-                margin: EdgeInsets.only(right: ScreenUtil().setWidth(20),),
-                child: Image.asset(
-                  "assets/wallet/addressBook.png",
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                  height: ScreenUtil().setWidth(48),
-                  width: ScreenUtil().setWidth(48),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Text(
-                  S.of(context).g_key_108,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                    fontSize: ScreenUtil().setSp(30),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      Divider(
-        height: ScreenUtil().setWidth(1),
-        indent: 0,
-        endIndent: 0,
-      ),
-      InkWell(
-        onTap: scanQR,
-        child: SizedBox(
-          height: ScreenUtil().setWidth(88),
-          width: double.infinity,
-          child: Row(
-            children: [
-              Container(
-                height: ScreenUtil().setWidth(48),
-                width: ScreenUtil().setWidth(48),
-                margin: EdgeInsets.only(right: ScreenUtil().setWidth(20),),
-                child: Image.asset(
-                  "assets/wallet/scan.png",
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                  height: ScreenUtil().setWidth(48),
-                  width: ScreenUtil().setWidth(48),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Text(
-                  S.of(context).g_key_4,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                    fontSize: ScreenUtil().setSp(30),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      Divider(
-        height: ScreenUtil().setWidth(1),
-        indent: 0,
-        endIndent: 0,
-      ),
-      InkWell(
-        onTap: ()async{
-          ClipboardData? cd = await Clipboard.getData(Clipboard.kTextPlain);
-          if (!mounted) return;
-          if(cd !=null){
-            if(cd.text !=null && cd.text != "null"){
-              toTextEditingController.text=cd.text??"";
-              setState(() {
-              });
-              toAddressCheck(cd.text??"");
-            }
-          }
-          Navigator.pop(context);
-        },
-        child: SizedBox(
-          height: ScreenUtil().setWidth(88),
-          width: double.infinity,
-          child: Row(
-            children: [
-              Container(
-                height: ScreenUtil().setWidth(48),
-                width: ScreenUtil().setWidth(48),
-                margin: EdgeInsets.only(right: ScreenUtil().setWidth(20),),
-                child: Icon(
-                  Icons.paste_outlined,
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                  size: ScreenUtil().setWidth(48),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Text(
-                  S.of(context).g_key_166,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                    fontSize: ScreenUtil().setSp(30),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      Divider(
-        height: ScreenUtil().setWidth(1),
-        indent: 0,
-        endIndent: 0,
-      ),
-    ];
-    sheetBottom(context, S.of(context).g_face_match_key1, Column(
-      children: childs,
-    ));
+  void searchToAddressWidget() {
+    showAddressPickerSheet(
+      context,
+      coinModel: widget.coinModel,
+      onAddressSelected: (addr) {
+        toTextEditingController.text = addr;
+        toAddressCheck(addr);
+      },
+    );
   }
 }

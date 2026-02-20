@@ -391,6 +391,7 @@ class TransferApi {
           trModel.other.sequence,
           isTest: trModel.isTest==0?false:true,
           privateKey: privateKey,
+          destinationTag: trModel.other.destinationTag,
         );
         break;
       case "Filecoin":
@@ -2145,7 +2146,7 @@ class TransferApi {
     return rmm;
   }
   Future<MessageModel> transferXrpSend(String fromAddress, String toAddress,
-      BigInt value,BigInt totalGasPrice, String path,int sequence,{bool isTest=false,String? privateKey})async{
+      BigInt value,BigInt totalGasPrice, String path,int sequence,{bool isTest=false,String? privateKey,int? destinationTag})async{
     Map<String,dynamic> signMap={
       "amount":value.toString(),
       "toAddress":toAddress,
@@ -2156,6 +2157,9 @@ class TransferApi {
       "issuer":"",
       "currency":""
     };
+    if (destinationTag != null) {
+      signMap['destinationTag'] = destinationTag;
+    }
     XrpApi xrpApi=XrpApi();
     if(sequence==0){
       MessageModel mmSequence=await xrpApi.getAccountInfoXrp(fromAddress,isTest);
