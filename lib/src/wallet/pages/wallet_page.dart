@@ -946,7 +946,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                   padding: EdgeInsets.symmetric(
                       horizontal: ScreenUtil().setWidth(12)),
                   child: Text(
-                    'Other assets',
+                    S.of(context).g_key_coin_list_separator,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(20),
                       color: AppThemeUtils.getColorByKey(
@@ -988,7 +988,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
           Text(
-            'All assets are below \$1',
+            S.of(context).g_key_coin_list_all_hidden,
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.itemSubtitleTextColor.name),
@@ -1002,7 +1002,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
               SPUtil().setHideSmallAssets(false);
             },
             child: Text(
-              'Tap to show all',
+              S.of(context).g_key_coin_list_show_all,
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(
                     context, AppThemeKeys.mainBlueColor.name),

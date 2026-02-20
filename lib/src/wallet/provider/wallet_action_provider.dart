@@ -722,6 +722,7 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
   String _coinPinKey(CoinModel cm) {
     final coinType = cm.coin['coinType'] as String? ?? '';
     final miniName = cm.coin['miniName'] as String? ?? '';
+    if (coinType.isEmpty) return '__invalid__';
     if (cm.coin['isContract'] == true) return '${coinType}_$miniName';
     return coinType;
   }
@@ -745,7 +746,7 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
 
   /// 将已置顶的代币提升到 coinList 前端，各组内部顺序不变（稳定）。
   void _elevatePinnedToTop() {
-    if (walletInfo.pinnedCoins.isEmpty) return;
+    if (walletInfo.pinnedCoins.isEmpty || coinList.isEmpty) return;
     final pinned = <dynamic>[];
     final others = <dynamic>[];
     for (final c in coinList) {
@@ -756,29 +757,37 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
       }
     }
     if (pinned.isEmpty) return;
-    coinList = [...pinned, ...others];
+    coinList
+      ..clear()
+      ..addAll(pinned)
+      ..addAll(others);
   }
+
+  /// 当前已置顶代币数量（O(1)，可安全在 build 中访问）。
+  int get pinnedCoinCount => walletInfo.pinnedCoins.length;
 
   /// 切换代币置顶状态；持久化并触发重排 + 通知。
   /// 聚合代币（isAggregated）不允许置顶，调用时会被忽略。
   void togglePinCoin(CoinModel cm) {
     if (cm.coin['isAggregated'] == true) return;
     final key = _coinPinKey(cm);
+    if (key == '__invalid__') return; // 无效代币 key，拒绝操作
+
     if (cm.isPinned) {
       walletInfo.pinnedCoins.remove(key);
       cm.isPinned = false;
     } else {
+      if (walletInfo.pinnedCoins.length >= 200) return; // 防止无限增长
       walletInfo.pinnedCoins.add(key);
       cm.isPinned = true;
     }
-    // 重新排序（保持当前排序策略），再提升置顶
-    if (walletInfo.coinSort['assets'] == -1 && walletInfo.coinSort['name'] == -1) {
+    // 重新排序（保持当前排序策略），coinSortAssets 内部已调用 _elevatePinnedToTop
+    final isDefaultSort = walletInfo.coinSort['assets'] == -1 && walletInfo.coinSort['name'] == -1;
+    if (isDefaultSort) {
       _applyPriorityOrder();
+      _elevatePinnedToTop();
     } else {
-      coinSortAssets(); // coinSortAssets 内部已调用 _elevatePinnedToTop
-    }
-    if (walletInfo.coinSort['assets'] == -1 && walletInfo.coinSort['name'] == -1) {
-      _elevatePinnedToTop(); // 优先级模式下的提升
+      coinSortAssets();
     }
     saveCoinSort(); // 持久化（内部调用 saveWalletInfo）
     notifyListeners();

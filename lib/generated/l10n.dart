@@ -11453,6 +11453,46 @@ class S {
       args: [],
     );
   }
+
+  /// `Other assets`
+  String get g_key_coin_list_separator {
+    return Intl.message(
+      'Other assets',
+      name: 'g_key_coin_list_separator',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All assets are below $1`
+  String get g_key_coin_list_all_hidden {
+    return Intl.message(
+      'All assets are below \$1',
+      name: 'g_key_coin_list_all_hidden',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tap to show all`
+  String get g_key_coin_list_show_all {
+    return Intl.message(
+      'Tap to show all',
+      name: 'g_key_coin_list_show_all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recent`
+  String get g_key_coin_search_recent {
+    return Intl.message(
+      'Recent',
+      name: 'g_key_coin_search_recent',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

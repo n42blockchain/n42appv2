@@ -73,7 +73,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
   /// 将关键词插到历史头部，去重后截断为 _maxHistory 条，持久化。
   Future<void> _saveToHistory(String keyword) async {
     final kw = keyword.trim();
-    if (kw.isEmpty) return;
+    if (kw.isEmpty || kw.length > 50) return; // 拒绝空或超长关键词
     final updated = [kw, ..._history.where((e) => e != kw)].take(_maxHistory).toList();
     setState(() => _history = updated);
     await SPUtil().saveCoinSearchHistory(updated);
@@ -109,32 +109,32 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
     }
     final input = raw.toLowerCase();
     try {
-      final matched = <CoinModel>[];
+      // 单次遍历同时完成过滤 + 缓存 toLowerCase 结果，避免 sort 阶段重复转换
+      final matched = <({CoinModel coin, String sym, String name})>[];
       for (final cm in waValue.coinList) {
         final sym = cm.coin['miniName'].toString().toLowerCase();
         final name = cm.coin['name'].toString().toLowerCase();
         if (sym.contains(input) || name.contains(input)) {
-          matched.add(cm);
+          matched.add((coin: cm, sym: sym, name: name));
         }
       }
       // 相关性排序：精确 symbol=5 > symbol前缀=4 > name前缀=3 >
       //             symbol包含=2 > name包含=1；同权时持仓价值降序
       matched.sort((a, b) {
-        final ra = _rankScore(a, input);
-        final rb = _rankScore(b, input);
+        final ra = _rankScoreCached(a.sym, a.name, input);
+        final rb = _rankScoreCached(b.sym, b.name, input);
         if (ra != rb) return rb.compareTo(ra);
-        return b.value.compareTo(a.value);
+        return b.coin.value.compareTo(a.coin.value);
       });
-      setState(() => _searchResults = matched);
+      setState(() => _searchResults = matched.map((e) => e.coin).toList());
     } catch (e) {
       ToastUtils.show(e.toString());
     }
   }
 
   /// 返回搜索相关性权重 1–5（值越高越优先）。
-  int _rankScore(CoinModel cm, String input) {
-    final sym = cm.coin['miniName'].toString().toLowerCase();
-    final name = cm.coin['name'].toString().toLowerCase();
+  /// sym 与 name 已预处理为小写，避免在 sort 内部重复转换。
+  int _rankScoreCached(String sym, String name, String input) {
     if (sym == input) return 5;
     if (sym.startsWith(input)) return 4;
     if (name.startsWith(input)) return 3;
@@ -357,7 +357,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Recent', // i18n-TODO: add g_key_coin_search_recent
+                S.of(context).g_key_coin_search_recent,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(24.0),
                   color: AppThemeUtils.getColorByKey(

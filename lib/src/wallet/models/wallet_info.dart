@@ -72,7 +72,7 @@ class WalletInfo {
     coinInfo = json['coinInfo'] as Map<String, dynamic>?;
     coinSort = json['coinSort'] as Map<String, dynamic>;
     networkIndex = json['networkIndex'] as int;
-    pinnedCoins = (json['pinnedCoins'] as List<dynamic>?)?.cast<String>() ?? [];
+    pinnedCoins = ((json['pinnedCoins'] as List<dynamic>?)?.cast<String>() ?? []).take(200).toList();
     faceBinding = json['faceBinding'] as bool?;
     mainWallet = json['mainWallet'] as bool;
     // Parse AA account info if present
