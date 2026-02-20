@@ -8,6 +8,7 @@ import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_algo.dart';
+import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_apt.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_btc.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_dot.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_fil.dart';
@@ -182,6 +183,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
         if (bt == BlockchainType.Polkadot.name) return WalletChainSendDot(coinInfo);
         if (bt == BlockchainType.Sui.name) return WalletChainSendSui(coinInfo);
         if (bt == BlockchainType.TheOpenNetwork.name) return WalletChainSendTon(coinInfo);
+        if (bt == BlockchainType.Aptos.name) return WalletChainSendApt(coinInfo);
         return WalletChainSend(coinInfo);
       }));
     } else {
