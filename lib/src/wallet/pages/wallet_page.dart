@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:n42appv2/core/utils/responsive_utils.dart';
@@ -44,6 +45,7 @@ import 'package:intl/intl.dart';
 import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 
 class WalletPage extends ConsumerStatefulWidget {
@@ -62,6 +64,10 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   final oCcy = NumberFormat("#,##0.0#", "en_US");
   late ScrollController _scrollController;
   bool showAddTokenButton = false; //显示底部添加代币按钮
+  bool _hideSmallAssets = false; // 小额资产隐藏开关（< $1 USD）
+
+  /// 价格自动刷新定时器（每 60 秒）
+  Timer? _priceRefreshTimer;
 
   // ENS 状态
   String? _ensName;
@@ -94,7 +100,8 @@ class _WalletPageState extends ConsumerState<WalletPage> {
 
   @override
   void initState() {
-    ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo:true);
+    super.initState();
+    ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
     _scrollController = ScrollController()
       ..addListener(() {
         var maxScroll = _scrollController.position.maxScrollExtent;
@@ -105,7 +112,28 @@ class _WalletPageState extends ConsumerState<WalletPage> {
           setShowAddTokenButton(false);
         }
       });
-    super.initState();
+    // 恢复小额资产隐藏偏好
+    SPUtil().getHideSmallAssets().then((v) {
+      if (mounted) setState(() => _hideSmallAssets = v);
+    });
+    // 首次 build 完成后启动价格自动刷新 Timer（60s 间隔）
+    WidgetsBinding.instance.addPostFrameCallback((_) => _startPriceTimer());
+  }
+
+  void _startPriceTimer() {
+    _priceRefreshTimer?.cancel();
+    _priceRefreshTimer = Timer.periodic(const Duration(seconds: 60), (_) {
+      if (!mounted) return;
+      // refresh: false → 保留 loading 状态，静默后台更新
+      ref.read(wapBridgeProvider).refreshWalletCoinInfo(refresh: false);
+    });
+  }
+
+  @override
+  void dispose() {
+    _priceRefreshTimer?.cancel();
+    _scrollController.dispose();
+    super.dispose();
   }
 
   Future<void> walletConnect() async {
@@ -374,6 +402,8 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                   // ),
                                   child: WalletBoard(
                                       accountPrice: waValue.balanceTotal,
+                                      usdToCnyRate: waValue.usdToCnyRate,
+                                      priceLastUpdated: waValue.priceLastUpdated,
                                       walletName: waValue.walletName,
                                       sendTap: () async{
                                         if(waValue.walletInfo.password==""){
@@ -697,7 +727,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                   ),
                 ],
               ),
-              // 底部行：排序选项
+              // 底部行：排序选项 + 小额隐藏开关
               Row(
                 children: [
                   // 按名称排序
@@ -716,6 +746,53 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                     () => waValue.setCoinSortAssets("assets"),
                   ),
                   const Spacer(),
+                  // 小额资产隐藏开关
+                  Tooltip(
+                    message: _hideSmallAssets ? 'Show all assets' : 'Hide assets < \$1',
+                    child: GestureDetector(
+                      onTap: () {
+                        final next = !_hideSmallAssets;
+                        setState(() => _hideSmallAssets = next);
+                        SPUtil().setHideSmallAssets(next);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil().setWidth(14),
+                          vertical: ScreenUtil().setWidth(6),
+                        ),
+                        decoration: BoxDecoration(
+                          color: _hideSmallAssets
+                              ? AppThemeUtils.getColorByKey(
+                                      context, AppThemeKeys.mainBlueColor.name)
+                                  .withValues(alpha: 0.15)
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              _hideSmallAssets
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility_outlined,
+                              size: ScreenUtil().setWidth(26),
+                              color: AppThemeUtils.getColorByKey(
+                                  context, AppThemeKeys.itemSubtitleTextColor.name),
+                            ),
+                            SizedBox(width: ScreenUtil().setWidth(6)),
+                            Text(
+                              '< \$1',
+                              style: TextStyle(
+                                color: AppThemeUtils.getColorByKey(
+                                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                                fontSize: ScreenUtil().setSp(22),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -775,6 +852,11 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   }
 
   Widget coinListWidget1(WalletActionProvider waValue) {
+    // 小额资产过滤：仅在开关开启时，过滤掉 value < $1 的代币
+    final displayList = _hideSmallAssets
+        ? waValue.coinList.where((c) => (c.value as double) >= 1.0).toList()
+        : waValue.coinList;
+
     // 使用 shrinkWrap 和自适应高度，避免固定高度导致溢出
     return Container(
       width: double.infinity,
@@ -808,23 +890,66 @@ class _WalletPageState extends ConsumerState<WalletPage> {
               ),
             ),
           ),
-          if (waValue.coinList.isEmpty)
+          if (displayList.isEmpty)
             Container(
               height: ScreenUtil().setWidth(300.0),
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.backGroundColor.name),
-              child: const EmptyView(),
+              child: _hideSmallAssets && waValue.coinList.isNotEmpty
+                  ? _buildAllHiddenHint()
+                  : const EmptyView(),
             ),
-          if (waValue.coinList.isNotEmpty)
+          if (displayList.isNotEmpty)
             ListView.builder(
               padding: EdgeInsets.zero,
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: waValue.coinList.length,
+              itemCount: displayList.length,
               itemBuilder: (context, int index) {
-                return _mainCoin(waValue.coinList[index],"c$index","coin_list");
+                return _mainCoin(displayList[index],"c$index","coin_list");
               },
             ),
+        ],
+      ),
+    );
+  }
+
+  /// 所有资产因小额过滤全部隐藏时的提示
+  Widget _buildAllHiddenHint() {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.visibility_off_outlined,
+            size: ScreenUtil().setWidth(60),
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.itemSubtitleTextColor.name),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(16)),
+          Text(
+            'All assets are below \$1',
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              fontSize: ScreenUtil().setSp(28),
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(8)),
+          GestureDetector(
+            onTap: () {
+              setState(() => _hideSmallAssets = false);
+              SPUtil().setHideSmallAssets(false);
+            },
+            child: Text(
+              'Tap to show all',
+              style: TextStyle(
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainBlueColor.name),
+                fontSize: ScreenUtil().setSp(26),
+              ),
+            ),
+          ),
         ],
       ),
     );

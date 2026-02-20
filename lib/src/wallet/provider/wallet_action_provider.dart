@@ -981,6 +981,28 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
   /// 稳定币价格缓存有效期（5分钟）
   static const Duration _stablecoinCacheDuration = Duration(minutes: 5);
 
+  // ---------------------------------------------------------------------------
+  // USD → CNY 汇率（动态，从 CoinGecko 稳定币 CNY 报价推导）
+  // ---------------------------------------------------------------------------
+
+  /// 当前 USD→CNY 参考汇率，备用值 7.3
+  double _usdToCnyRate = 7.3;
+  double get usdToCnyRate => _usdToCnyRate;
+
+  // ---------------------------------------------------------------------------
+  // 市场价格最后成功更新时间（用于 UI "更新于 X 分钟前" 展示）
+  // ---------------------------------------------------------------------------
+
+  DateTime? _priceLastUpdated;
+  DateTime? get priceLastUpdated => _priceLastUpdated;
+
+  // ---------------------------------------------------------------------------
+  // 市场数据防重复请求：两次 getCoinInfo() 间隔 < 30s 时跳过网络请求
+  // ---------------------------------------------------------------------------
+
+  DateTime? _coinMarketInfoFetchTime;
+  static const Duration _marketInfoMinInterval = Duration(seconds: 30);
+
   /// 稳定币价格有效范围（防止异常数据）
   static const double _stablecoinMinPrice = 0.9;
   static const double _stablecoinMaxPrice = 1.1;
@@ -1010,7 +1032,8 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
     try {
       final geckoIds = _stablecoinGeckoIds.values.join(',');
       final baseUrl = AppConfig.apiUrl['coinGeckoApi'] ?? 'https://api.coingecko.com/api/v3';
-      final url = '$baseUrl/simple/price?ids=$geckoIds&vs_currencies=usd&include_24hr_change=true';
+      // 同时请求 cny 报价，用于推导 USD→CNY 汇率
+      final url = '$baseUrl/simple/price?ids=$geckoIds&vs_currencies=usd,cny&include_24hr_change=true';
 
       final response = await BaseApi.requestEmptyH.get(url, params: {}, header: {'content-type': 'application/json'});
 
@@ -1022,7 +1045,6 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
           final geckoId = entry.value;
           final coinData = response[geckoId];
           if (coinData != null && coinData is Map) {
-            // 安全的类型转换
             final rawPrice = coinData['usd'];
             final rawChange = coinData['usd_24h_change'];
 
@@ -1032,11 +1054,19 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
             // 验证价格在合理范围内
             if (price >= _stablecoinMinPrice && price <= _stablecoinMaxPrice) {
               newPrices[symbol] = {'price': price, 'change': change};
-              debugPrint('WalletActionProvider: Stablecoin $symbol price: \$$price, change: $change%');
             } else {
-              // 价格异常，使用默认值
               newPrices[symbol] = {'price': 1.0, 'change': 0.0};
               debugPrint('WalletActionProvider: Stablecoin $symbol price out of range ($price), using default 1.0');
+            }
+
+            // 利用 USDT 的 CNY 报价推导 USD→CNY 汇率
+            // USDT_cny / USDT_usd ≈ 汇率（USDT 近似锚定 $1）
+            if (symbol == 'usdt') {
+              final cnyPrice = _parseDouble(coinData['cny'], 0.0);
+              if (cnyPrice > 5.0 && cnyPrice < 12.0 && price > 0) {
+                _usdToCnyRate = cnyPrice / price;
+                debugPrint('WalletActionProvider: USD→CNY rate updated: $_usdToCnyRate');
+              }
             }
           }
         }
@@ -1049,7 +1079,7 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
     } catch (e, stackTrace) {
       debugPrint('WalletActionProvider: Failed to fetch stablecoin prices: $e');
       debugPrint('WalletActionProvider: Stack trace: $stackTrace');
-      // 失败时保留之前的缓存，如果没有缓存则使用默认值
+      // 失败时保留之前的缓存和汇率，不重置
     }
   }
 
@@ -1071,37 +1101,46 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
     for(CoinModel cm in coinList){
       coinSelectPriceKeys+="${cm.coin['miniName'].toString().toLowerCase()},";
     }
-    debugPrint('WalletActionProvider: Getting coin info for: $coinSelectPriceKeys');
 
-    // 先获取稳定币价格（从 CoinGecko）
+    // 先获取稳定币价格（从 CoinGecko，含 CNY 汇率推导，有 5 分钟缓存）
     await _fetchStablecoinPrices();
 
-    //查询coins中的币种信息
-    var list = await MarketApi().getWalletCoinsInfo(coinSelectPriceKeys);
-    //判断查询是否成功
-    if (list['error'] == true) {
-      //查询失败，设置当前操作状态为error，并设置错误信息
-      debugPrint('WalletActionProvider: getCoinInfo failed: ${list['data']}');
-      ToastUtils.show(S.current.g_key_5);
-      notifyListeners();
-    } else {
-      //查询成功，将币的信息赋值到_coinslist
-      final data = list['data'];
-      if (data != null && data['data'] != null) {
-        _coinMarketInfo = data['data'];
-        debugPrint('WalletActionProvider: Loaded ${_coinMarketInfo.length} coins market info');
-        // 遍历并设置每个币的价格
-        for(CoinModel cm in coinList){
-          getCoinPrice(cm);
+    // 市场数据防重复请求：30s 内已有新鲜数据则跳过网络请求，直接用缓存重算总余额
+    final now = DateTime.now();
+    final marketDataFresh = _coinMarketInfoFetchTime != null &&
+        now.difference(_coinMarketInfoFetchTime!) < _marketInfoMinInterval &&
+        _coinMarketInfo.isNotEmpty;
+
+    if (!marketDataFresh) {
+      //查询coins中的币种信息
+      var list = await MarketApi().getWalletCoinsInfo(coinSelectPriceKeys);
+      if (list['error'] == true) {
+        debugPrint('WalletActionProvider: getCoinInfo failed: ${list['data']}');
+        // 静默失败：保留旧缓存价格，不打扰用户（仅首次无数据时才 Toast）
+        if (_coinMarketInfo.isEmpty) {
+          ToastUtils.show(S.current.g_key_5);
         }
-        // 价格更新后重新计算总余额并通知UI刷新
-        calculateBalanceWidthCoinModel();
-        notifyListeners();
       } else {
-        debugPrint('WalletActionProvider: No market data in response');
+        final data = list['data'];
+        if (data != null && data['data'] != null) {
+          _coinMarketInfo = data['data'];
+          _coinMarketInfoFetchTime = now;
+          debugPrint('WalletActionProvider: Loaded ${_coinMarketInfo.length} coins market info');
+        }
       }
+    } else {
+      debugPrint('WalletActionProvider: Market data fresh (${now.difference(_coinMarketInfoFetchTime!).inSeconds}s old), skip fetch');
     }
-    //getBalance_main();
+
+    // 无论是否重新拉取，都用最新缓存重算价格和总余额
+    for(CoinModel cm in coinList){
+      getCoinPrice(cm);
+    }
+    calculateBalanceWidthCoinModel();
+    // 记录本次成功更新时间（用于 UI 展示"更新于 X 分钟前"）
+    _priceLastUpdated = now;
+    notifyListeners();
+
     addCoinRefreshMap();
   }
 
