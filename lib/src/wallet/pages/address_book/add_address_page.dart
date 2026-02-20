@@ -23,7 +23,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddAddressPage extends ConsumerStatefulWidget {
-  const AddAddressPage({super.key});
+  /// 从列表页「扫码添加」流程传入，预填地址输入框
+  final String? initialAddress;
+  const AddAddressPage({this.initialAddress, super.key});
 
   @override
   ConsumerState<AddAddressPage> createState() => _AddAddressPageState();
@@ -49,6 +51,10 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
   @override
   void initState() {
     super.initState();
+    // 预填地址（来自扫码添加流程）
+    if (widget.initialAddress != null && widget.initialAddress!.isNotEmpty) {
+      addressController.text = widget.initialAddress!;
+    }
     /// 取出第一个币 作为本页默认的币种
     Future.microtask(() async {
       if (!mounted) return;

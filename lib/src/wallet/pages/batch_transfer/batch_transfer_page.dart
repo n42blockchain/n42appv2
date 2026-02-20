@@ -3,6 +3,7 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,6 +16,8 @@ import 'package:n42appv2/src/wallet/provider/batch_transfer_provider.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/pages/batch_transfer/csv_import_page.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 /// 批量转账页面
 class BatchTransferPage extends ConsumerStatefulWidget {
@@ -141,7 +144,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
                 ),
                 SizedBox(height: ScreenUtil().setWidth(4)),
                 Text(
-                  'Chain: ${widget.chainSymbol}',
+                  '${S.of(context).g_key_batch_evm_only.split(' ').take(3).join(' ')} · ${widget.chainSymbol}',
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
@@ -193,7 +196,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Add Recipient',
+            S.of(context).g_key_batch_add_recipient,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
               fontWeight: FontWeight.w600,
@@ -434,11 +437,11 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
       case BatchTransferStatus.pending:
         return 'Pending';
       case BatchTransferStatus.processing:
-        return 'Processing';
+        return S.of(context).g_key_batch_broadcasting; // "Broadcasting..."
       case BatchTransferStatus.success:
-        return 'Success';
+        return S.of(context).g_key_batch_done; // "Done"
       case BatchTransferStatus.failed:
-        return 'Failed';
+        return S.of(context).g_key_175; // "Transaction failed"
     }
   }
 
@@ -465,7 +468,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Recipients:',
+                    '${S.of(context).g_key_batch_recipients}:',
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(24),
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
@@ -486,7 +489,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Total Amount:',
+                    '${S.of(context).g_key_batch_total_amount}:',
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(24),
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
@@ -508,7 +511,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Estimated Gas:',
+                      'Estimated Gas:',  // 无专用 l10n key，保持英文
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(24),
                         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
@@ -905,17 +908,239 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
       if (success && mounted) {
         messenger.showSnackBar(
           SnackBar(
-            content: Text(l10n.g_key_140), // 交易成功
+            content: Text(l10n.g_key_140), // "Transaction successful"
             backgroundColor: Colors.green,
+            behavior: SnackBarBehavior.floating,
           ),
         );
-        // 返回上一页
-        Future.delayed(Duration(seconds: 2), () {
-          if (mounted) Navigator.pop(context, true);
-        });
+        // 显示结果底部弹窗（用户关闭后才返回上一页）
+        await _showTransferResult(provider);
+        if (mounted) Navigator.pop(context, true);
       }
     } catch (e) {
       provider.setError(e.toString());
+    }
+  }
+
+  // ─── 转账结果底部弹窗 ─────────────────────────────────────────────────────────
+
+  Future<void> _showTransferResult(BatchTransferProvider provider) async {
+    if (!mounted) return;
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppThemeUtils.getColorByKey(
+          context, AppThemeKeys.itemBgColor.name),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(ScreenUtil().setWidth(24)),
+        ),
+      ),
+      builder: (sheetCtx) => _buildResultSheet(sheetCtx, provider),
+    );
+  }
+
+  Widget _buildResultSheet(
+      BuildContext sheetCtx, BatchTransferProvider provider) {
+    final mainText = AppThemeUtils.getColorByKey(
+        sheetCtx, AppThemeKeys.mainTextColor.name);
+    final subText = AppThemeUtils.getColorByKey(
+        sheetCtx, AppThemeKeys.itemSubtitleTextColor.name);
+    final blue = AppThemeUtils.getColorByKey(
+        sheetCtx, AppThemeKeys.mainBlueColor.name);
+    final txHash = provider.txHash ?? '';
+
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // 把手
+            Container(
+              width: ScreenUtil().setWidth(60),
+              height: ScreenUtil().setWidth(5),
+              margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
+              decoration: BoxDecoration(
+                color: subText.withValues(alpha: 0.3),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(3)),
+              ),
+            ),
+
+            // ✅ 成功图标
+            Icon(Icons.check_circle_rounded,
+                color: Colors.green, size: ScreenUtil().setWidth(72)),
+            SizedBox(height: ScreenUtil().setWidth(12)),
+
+            Text(
+              S.of(sheetCtx).g_key_140, // "Transaction successful"
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(36),
+                fontWeight: FontWeight.w700,
+                color: Colors.green,
+              ),
+            ),
+            SizedBox(height: ScreenUtil().setWidth(24)),
+
+            // 汇总信息
+            Container(
+              padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+              decoration: BoxDecoration(
+                color: AppThemeUtils.getColorByKey(
+                    sheetCtx, AppThemeKeys.backGroundColor.name),
+                borderRadius:
+                    BorderRadius.circular(ScreenUtil().setWidth(12)),
+              ),
+              child: Column(
+                children: [
+                  _resultRow(
+                    S.of(sheetCtx).g_key_batch_recipients,
+                    '${provider.recipientCount}',
+                    subText, mainText,
+                  ),
+                  SizedBox(height: ScreenUtil().setWidth(8)),
+                  _resultRow(
+                    S.of(sheetCtx).g_key_batch_total_amount,
+                    '${provider.formatAmount(provider.totalAmount)} ${widget.tokenSymbol}',
+                    subText, mainText,
+                  ),
+                  if (txHash.isNotEmpty) ...[
+                    SizedBox(height: ScreenUtil().setWidth(8)),
+                    _resultRow('TxHash',
+                        _shortenAddress(txHash), subText, mainText,
+                        trailing: IconButton(
+                          icon: Icon(Icons.copy_outlined,
+                              size: ScreenUtil().setWidth(32),
+                              color: blue),
+                          onPressed: () {
+                            Clipboard.setData(
+                                ClipboardData(text: txHash));
+                            HapticFeedback.lightImpact();
+                            ScaffoldMessenger.of(sheetCtx).showSnackBar(
+                              SnackBar(
+                                content: Text(S.of(sheetCtx).g_key_119),
+                                duration: const Duration(seconds: 1),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          },
+                        )),
+                  ],
+                ],
+              ),
+            ),
+            SizedBox(height: ScreenUtil().setWidth(24)),
+
+            // 导出报告按钮
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () => _exportReport(provider, sheetCtx),
+                icon: Icon(Icons.file_download_outlined,
+                    size: ScreenUtil().setWidth(36)),
+                label: Text(S.of(sheetCtx).g_key_batch_export_csv),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: blue,
+                  foregroundColor: Colors.white,
+                  padding: EdgeInsets.symmetric(
+                      vertical: ScreenUtil().setWidth(20)),
+                  textStyle: TextStyle(
+                    fontSize: ScreenUtil().setSp(30),
+                    fontWeight: FontWeight.w600,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(ScreenUtil().setWidth(14)),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: ScreenUtil().setWidth(12)),
+
+            // 关闭按钮
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () => Navigator.pop(sheetCtx),
+                style: OutlinedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(
+                      vertical: ScreenUtil().setWidth(16)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(ScreenUtil().setWidth(14)),
+                  ),
+                ),
+                child: Text(S.of(sheetCtx).g_key_batch_done), // "Done"
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _resultRow(String label, String value, Color labelColor,
+      Color valueColor, {Widget? trailing}) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          '$label:',
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(24),
+            color: labelColor,
+          ),
+        ),
+        const Spacer(),
+        Flexible(
+          child: Text(
+            value,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(24),
+              fontWeight: FontWeight.w600,
+              color: valueColor,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        trailing ?? const SizedBox.shrink(),
+      ],
+    );
+  }
+
+  // ─── 导出 CSV 报告 ────────────────────────────────────────────────────────────
+
+  Future<void> _exportReport(
+      BatchTransferProvider provider, BuildContext sheetCtx) async {
+    // 在 async 操作前捕获 l10n 字符串，避免跨异步 gap 使用 BuildContext
+    final subject = S.of(sheetCtx).g_key_batch_export_csv;
+    try {
+      final csvContent = provider.generateReportCsv();
+      final tempDir = await getTemporaryDirectory();
+      final timestamp = DateTime.now()
+          .toIso8601String()
+          .replaceAll(':', '-')
+          .substring(0, 19);
+      final fileName = 'batch_report_$timestamp.csv';
+      final file = File('${tempDir.path}/$fileName');
+      await file.writeAsString(csvContent);
+
+      if (!mounted) return;
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(file.path, mimeType: 'text/csv', name: fileName)],
+          subject: subject,
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Export failed: $e'),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     }
   }
 
@@ -963,7 +1188,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
               ),
               SizedBox(height: 16),
               Text(
-                'Tips:',
+                'Tips',
                 style: TextStyle(fontWeight: FontWeight.bold, color: textColor),
               ),
               SizedBox(height: 8),

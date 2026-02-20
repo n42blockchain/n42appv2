@@ -39,4 +39,16 @@ class AddressBookApi{
       where: "id = ?", whereArgs: [info.id],);
     return raw;
   }
+
+  /// 全文搜索（名称、备注、地址模糊匹配）
+  Future<List<AddressBookModel>> searchAddressBook(String query) async {
+    final db = await appDatabase.database;
+    final q = '%$query%';
+    final response = await db.query(
+      'AddressBook',
+      where: 'name LIKE ? OR desc LIKE ? OR address LIKE ?',
+      whereArgs: [q, q, q],
+    );
+    return response.map((c) => AddressBookModel.fromJson(c)).toList();
+  }
 }

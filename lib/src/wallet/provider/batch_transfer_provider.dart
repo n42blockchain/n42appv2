@@ -342,9 +342,47 @@ class BatchTransferProvider extends ChangeNotifier {
 
   /// 获取 CSV 模板
   String getCsvTemplate() {
-    return '''address,amount,memo(optional)
-0x1234567890123456789012345678901234567890,1.5,Payment 1
-0xabcdefabcdefabcdefabcdefabcdefabcdefabcd,2.0,Payment 2
-0x9876543210987654321098765432109876543210,0.5,''';
+    return '# Batch transfer template\n'
+        '# Columns: address, amount, memo(optional)\n'
+        'address,amount,memo\n'
+        '0x1234567890123456789012345678901234567890,1.5,Payment 1\n'
+        '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd,2.0,Payment 2\n'
+        '0x9876543210987654321098765432109876543210,0.5,';
+  }
+
+  /// 生成转账结果报告 CSV（UTF-8 with BOM，Excel 直接打开兼容）
+  ///
+  /// 列：No, Address, Amount (symbol), Memo, Status, TxHash, Error, Time
+  String generateReportCsv() {
+    final buf = StringBuffer();
+    // UTF-8 BOM — Excel 识别中文不乱码
+    buf.write('\uFEFF');
+    buf.writeln(
+        'No,Address,Amount ($_tokenSymbol),Memo,Status,TxHash,Error,Time');
+    final time = DateTime.now()
+        .toIso8601String()
+        .replaceFirst('T', ' ')
+        .substring(0, 19);
+    for (var i = 0; i < _items.length; i++) {
+      final item = _items[i];
+      final amount = formatAmount(item.amount);
+      final memo = _escapeCsvField(item.memo ?? '');
+      final txHash = item.txHash ?? '';
+      final error = _escapeCsvField(item.error ?? '');
+      buf.writeln(
+          '${i + 1},${item.toAddress},$amount,$memo,${item.status.name},$txHash,$error,$time');
+    }
+    return buf.toString();
+  }
+
+  /// RFC-4180 CSV 字段转义：含逗号、双引号、换行时加引号包裹
+  static String _escapeCsvField(String field) {
+    if (field.contains(',') ||
+        field.contains('"') ||
+        field.contains('\n') ||
+        field.contains('\r')) {
+      return '"${field.replaceAll('"', '""')}"';
+    }
+    return field;
   }
 }
