@@ -25,6 +25,10 @@ class WalletInfo {
   /// name: 0=descending, 1=ascending, -1=no sort
   Map<String, dynamic> coinSort = {"assets": 0, "name": -1};
 
+  /// 用户手动置顶的代币标识集合
+  /// 主链币：coinType（如 "ETH"），合约代币：coinType_miniName（如 "ETH_USDT"）
+  List<String> pinnedCoins = [];
+
   int networkIndex = -1;
   String? walletName;
 
@@ -68,6 +72,7 @@ class WalletInfo {
     coinInfo = json['coinInfo'] as Map<String, dynamic>?;
     coinSort = json['coinSort'] as Map<String, dynamic>;
     networkIndex = json['networkIndex'] as int;
+    pinnedCoins = (json['pinnedCoins'] as List<dynamic>?)?.cast<String>() ?? [];
     faceBinding = json['faceBinding'] as bool?;
     mainWallet = json['mainWallet'] as bool;
     // Parse AA account info if present
@@ -89,6 +94,7 @@ class WalletInfo {
       "coinInfo": coinInfo,
       "coinSort": coinSort,
       "networkIndex": networkIndex,
+      "pinnedCoins": pinnedCoins,
       "faceBinding": faceBinding,
       "mainWallet": mainWallet,
       "aaAccountInfo": aaAccountInfo?.toJson(),

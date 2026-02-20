@@ -4,6 +4,77 @@
 
 ---
 
+## [2026-02-20] 代币置顶：用户常用代币钉在列表顶部
+
+### 背景
+
+主页代币列表仅有资产价值/名称两种排序，缺乏「用户偏好」维度：
+用户常用的小市值代币（如某 DeFi 代币）总被价值排序压到列表底部，每次都需要滚动查找。
+
+### 改动文件
+
+| 文件 | 类型 | 说明 |
+|------|------|------|
+| `lib/src/wallet/models/wallet_info.dart` | 修改 | 添加 `pinnedCoins: List<String>` 字段 + fromJson/toJson |
+| `lib/src/wallet/models/coin_model.dart` | 修改 | 添加 `bool isPinned = false` 运行时标记 |
+| `lib/src/wallet/provider/wallet_action_provider.dart` | 修改 | 添加置顶核心逻辑 |
+| `lib/src/wallet/pages/wallet_page.dart` | 修改 | 图钉 UI + 分隔行 |
+
+### 功能详情
+
+#### 1. 数据模型
+
+**标识键规则**（`_coinPinKey()`）：
+- 主链币：`coinType`（如 `"ETH"`）
+- 合约代币：`coinType_miniName`（如 `"ETH_USDT"`），避免主链与代币碰撞
+
+**存储**：`WalletInfo.pinnedCoins: List<String>`，随钱包数据序列化到 SecurePreferences，**按钱包独立管理**。
+
+**运行时标记**：`CoinModel.isPinned: bool`（不序列化），在 coinList 构建完成后由 `_syncPinnedState()` 从 `walletInfo.pinnedCoins` 同步。
+
+#### 2. 排序优先级
+
+```
+置顶代币（用户手动）
+  > 优先级链（N / BTC / ETH / USDT / USDC，仅无自定义排序时）
+  > 用户排序（资产价值 / 名称 A-Z）
+```
+
+核心方法：
+- `_syncPinnedState()` — coinList 构建后调用，同步 `isPinned` 字段
+- `_elevatePinnedToTop()` — 稳定地将置顶代币移到列表前端（保持组内顺序）
+- `coinSortAssets()` 末尾自动调用 `_elevatePinnedToTop()`，无需每个排序路径单独处理
+
+#### 3. 切换置顶
+
+```dart
+void togglePinCoin(CoinModel cm) {
+  // 聚合代币（isAggregated）不允许置顶
+  // 更新 walletInfo.pinnedCoins + cm.isPinned
+  // 重新排序 → _elevatePinnedToTop → saveCoinSort → notifyListeners
+}
+```
+
+#### 4. UI
+
+**图钉按钮**（每个代币行右侧）：
+- 未置顶：`push_pin_outlined`，35% 透明灰色
+- 已置顶：`push_pin`，蓝色（`mainBlueColor`）
+- 聚合代币（USDT/USDC 聚合）不显示图钉按钮
+- 触控区独立于代币行 onTap（`HitTestBehavior.opaque`），不会触发跳转
+
+**名称行角标**（已置顶时）：蓝色小图钉显示在 symbol 左侧，`22sp`
+
+**分隔行**（置顶与普通代币之间）：两侧分隔线 + 中间 "Other assets" 灰色标签，仅在混合列表时显示。
+
+### 技术备注
+
+- `isPinned` 不写入 `CoinModel.toJson()`，避免污染链配置数据
+- `_syncPinnedState()` 在两处 coinList 初始化路径（initWallet / refreshWallet）均有调用，确保重启后状态正确还原
+- `_elevatePinnedToTop()` 使用稳定分区（preserve relative order within pinned group）
+
+---
+
 ## [2026-02-20] 资产搜索优化：相关性排序 + 搜索历史记录
 
 ### 背景

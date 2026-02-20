@@ -28,6 +28,8 @@ class CoinModel {
   bool loadError = false; //加载是否失败，如果失败钱包item会提示叹号
   String? mainCoinIcon;//主链币图标地址
   bool custom=false;
+  /// 用户手动置顶标记（运行时状态，不序列化）
+  bool isPinned = false;
 
   dynamic other;
 

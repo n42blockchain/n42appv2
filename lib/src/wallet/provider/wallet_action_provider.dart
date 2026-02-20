@@ -479,10 +479,11 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
     // 在所有代币添加完成后，插入聚合代币
     await _insertAggregatedTokensAt(0); // 先插入，后面会排序
 
-    // 应用优先级排序：N, BTC, ETH, USDT, USDC 在最前面
+    // 同步置顶状态并应用优先级排序
+    _syncPinnedState();
     _applyPriorityOrder();
+    _elevatePinnedToTop(); // 置顶优先于优先级链
 
-    //coinSortAssets();
     calculateBalanceWidthCoinModel();
     saveCoinSort();
   }
@@ -635,8 +636,10 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
       // 在所有代币添加完成后，插入聚合代币
       await _insertAggregatedTokensAt(0);
 
-      // 应用优先级排序：N, BTC, ETH, USDT, USDC 在最前面
+      // 同步置顶状态并应用优先级排序
+      _syncPinnedState();
       _applyPriorityOrder();
+      _elevatePinnedToTop();
     }
     else{
       CoinModel mm = _coinModels[walletInfo.networkIndex];
@@ -649,12 +652,14 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
         CoinModel cm=buildTokenCoinModel(mm,mm.tokens[key]);
         coinList.add(cm);
       }
+      _syncPinnedState();
     }
     // 排序时保持优先级（如果有自定义排序，之后会覆盖）
     if (walletInfo.coinSort['assets'] == -1 && walletInfo.coinSort['name'] == -1) {
       _applyPriorityOrder();
+      _elevatePinnedToTop();
     } else {
-      coinSortAssets();
+      coinSortAssets(); // coinSortAssets 内部已调用 _elevatePinnedToTop
     }
     notifyListeners();
     calculateBalanceWidthCoinModel();
@@ -706,6 +711,77 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
         return sortString(bName,aName);
       });
     }
+    // 任何排序后，置顶代币始终在最前面
+    _elevatePinnedToTop();
+  }
+
+  // ── 代币置顶 ─────────────────────────────────────────────────────────────
+
+  /// 生成代币置顶的唯一标识 key。
+  /// 主链币：coinType；合约代币：coinType_miniName（避免碰撞）。
+  String _coinPinKey(CoinModel cm) {
+    final coinType = cm.coin['coinType'] as String? ?? '';
+    final miniName = cm.coin['miniName'] as String? ?? '';
+    if (cm.coin['isContract'] == true) return '${coinType}_$miniName';
+    return coinType;
+  }
+
+  /// 同步 coinList 中所有 CoinModel 的 isPinned 状态。
+  /// 在 coinList 重建完成后、排序前调用。
+  void _syncPinnedState() {
+    if (walletInfo.pinnedCoins.isEmpty) {
+      for (final c in coinList) {
+        if (c is CoinModel) c.isPinned = false;
+      }
+      return;
+    }
+    final pinnedSet = Set<String>.from(walletInfo.pinnedCoins);
+    for (final c in coinList) {
+      if (c is CoinModel) {
+        c.isPinned = pinnedSet.contains(_coinPinKey(c));
+      }
+    }
+  }
+
+  /// 将已置顶的代币提升到 coinList 前端，各组内部顺序不变（稳定）。
+  void _elevatePinnedToTop() {
+    if (walletInfo.pinnedCoins.isEmpty) return;
+    final pinned = <dynamic>[];
+    final others = <dynamic>[];
+    for (final c in coinList) {
+      if (c is CoinModel && c.isPinned) {
+        pinned.add(c);
+      } else {
+        others.add(c);
+      }
+    }
+    if (pinned.isEmpty) return;
+    coinList = [...pinned, ...others];
+  }
+
+  /// 切换代币置顶状态；持久化并触发重排 + 通知。
+  /// 聚合代币（isAggregated）不允许置顶，调用时会被忽略。
+  void togglePinCoin(CoinModel cm) {
+    if (cm.coin['isAggregated'] == true) return;
+    final key = _coinPinKey(cm);
+    if (cm.isPinned) {
+      walletInfo.pinnedCoins.remove(key);
+      cm.isPinned = false;
+    } else {
+      walletInfo.pinnedCoins.add(key);
+      cm.isPinned = true;
+    }
+    // 重新排序（保持当前排序策略），再提升置顶
+    if (walletInfo.coinSort['assets'] == -1 && walletInfo.coinSort['name'] == -1) {
+      _applyPriorityOrder();
+    } else {
+      coinSortAssets(); // coinSortAssets 内部已调用 _elevatePinnedToTop
+    }
+    if (walletInfo.coinSort['assets'] == -1 && walletInfo.coinSort['name'] == -1) {
+      _elevatePinnedToTop(); // 优先级模式下的提升
+    }
+    saveCoinSort(); // 持久化（内部调用 saveWalletInfo）
+    notifyListeners();
   }
   int sortString(String aName,String bName){
     int minCount=min(aName.length, bName.length);

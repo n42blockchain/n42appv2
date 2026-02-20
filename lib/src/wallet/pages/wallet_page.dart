@@ -900,17 +900,77 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                   : const EmptyView(),
             ),
           if (displayList.isNotEmpty)
-            ListView.builder(
-              padding: EdgeInsets.zero,
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: displayList.length,
-              itemBuilder: (context, int index) {
-                return _mainCoin(displayList[index],"c$index","coin_list");
-              },
-            ),
+            _buildCoinListView(displayList),
         ],
       ),
+    );
+  }
+
+  /// 代币列表 ListView，有置顶时在置顶与普通代币之间插入分隔行。
+  Widget _buildCoinListView(List<dynamic> list) {
+    // 统计从头部连续的置顶代币数量（coinList 已排序，置顶必在前）
+    int pinnedCount = 0;
+    for (final c in list) {
+      if (c is CoinModel && c.isPinned) {
+        pinnedCount++;
+      } else {
+        break;
+      }
+    }
+
+    // 是否需要插入分隔行（有置顶且列表中还有非置顶代币）
+    final needsDivider = pinnedCount > 0 && pinnedCount < list.length;
+    // 分隔行占一个 index slot
+    final itemCount = list.length + (needsDivider ? 1 : 0);
+
+    return ListView.builder(
+      padding: EdgeInsets.zero,
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: itemCount,
+      itemBuilder: (context, index) {
+        if (needsDivider && index == pinnedCount) {
+          // 置顶区与普通区之间的分隔行
+          return Padding(
+            padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(4)),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Divider(
+                    height: 1,
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.dividerColor.name),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: ScreenUtil().setWidth(12)),
+                  child: Text(
+                    'Other assets',
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(20),
+                      color: AppThemeUtils.getColorByKey(
+                              context,
+                              AppThemeKeys.itemSubtitleTextColor.name)
+                          .withValues(alpha: 0.6),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Divider(
+                    height: 1,
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.dividerColor.name),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+        // 真实代币 index（分隔行之后需要偏移 -1）
+        final coinIndex = (needsDivider && index > pinnedCount) ? index - 1 : index;
+        return _mainCoin(list[coinIndex], "c$coinIndex", "coin_list");
+      },
     );
   }
 
@@ -1122,13 +1182,26 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          coinInfo.coin['miniName'] ?? '',
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(30),
-                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.3,
+                        // 置顶时在名称左侧显示蓝色图钉角标
+                        if (coinInfo.isPinned)
+                          Padding(
+                            padding: EdgeInsets.only(right: ScreenUtil().setWidth(6)),
+                            child: Icon(
+                              Icons.push_pin,
+                              size: ScreenUtil().setWidth(22),
+                              color: AppThemeUtils.getColorByKey(
+                                  context, AppThemeKeys.mainBlueColor.name),
+                            ),
+                          ),
+                        Expanded(
+                          child: Text(
+                            coinInfo.coin['miniName'] ?? '',
+                            style: TextStyle(
+                              fontSize: ScreenUtil().setSp(30),
+                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.3,
+                            ),
                           ),
                         ),
                         Text(
@@ -1173,6 +1246,35 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                   ],
                 ),
               ),
+              // ── 图钉按钮（独立触控区，不触发 onTap 跳转）
+              if (coinInfo.coin['isAggregated'] != true)
+                GestureDetector(
+                  onTap: () {
+                    ref.read(wapBridgeProvider).togglePinCoin(coinInfo);
+                  },
+                  behavior: HitTestBehavior.opaque,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      ScreenUtil().setWidth(12),
+                      ScreenUtil().setWidth(16),
+                      0,
+                      ScreenUtil().setWidth(16),
+                    ),
+                    child: Icon(
+                      coinInfo.isPinned
+                          ? Icons.push_pin
+                          : Icons.push_pin_outlined,
+                      size: ScreenUtil().setWidth(30),
+                      color: coinInfo.isPinned
+                          ? AppThemeUtils.getColorByKey(
+                              context, AppThemeKeys.mainBlueColor.name)
+                          : AppThemeUtils.getColorByKey(
+                                  context,
+                                  AppThemeKeys.itemSubtitleTextColor.name)
+                              .withValues(alpha: 0.35),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
