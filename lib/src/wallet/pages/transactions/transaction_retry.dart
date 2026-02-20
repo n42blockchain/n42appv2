@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:n42appv2/src/browser/pages/browser_page.dart';
+import 'package:n42appv2/src/wallet/utils/browser_txhash.dart';
+
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/models/message_model.dart';
@@ -52,12 +55,22 @@ class _TransactionRetryState extends ConsumerState<TransactionRetry> {
   Load load=Load.finish;
   String errorMessage="";
   TransationRecordModel trm=TransationRecordModel();
-  late TokenViewApi tokenViewApi;
+  TokenViewApi? _tokenViewApiInstance;
+  TokenViewApi get tokenViewApi {
+    _tokenViewApiInstance ??= TokenViewApi();
+    return _tokenViewApiInstance!;
+  }
   late String _txHash;
+  late String _explorerUrl;
   @override
   void initState() {
     _txHash = widget.txHash;
     searchEditingController.text=_txHash;
+    _explorerUrl = getBrowserTxHash(
+      widget.coinModel.coin['coinType'],
+      _txHash,
+      isTest: widget.coinModel.isTest,
+    );
     init();
     super.initState();
   }
@@ -123,6 +136,7 @@ class _TransactionRetryState extends ConsumerState<TransactionRetry> {
   String gasLimit='';
   String nonce="";
   bool owner=true;//是否时自己的交易信息
+  BigInt _originalGasPriceValue = BigInt.zero;
   Timer? timer;
   Future<bool> getTransactionByHash()async{
     MessageModel rData=await ethAPI.getTransactionByHash(
@@ -137,6 +151,7 @@ class _TransactionRetryState extends ConsumerState<TransactionRetry> {
       transactionInfo=rData.data;
       trm.gas=hexToInt(transactionInfo!['gas']??"0x0").toInt();
       trm.gasPriceValue=hexToInt(transactionInfo!['gasPrice']??"0x0");
+      _originalGasPriceValue = trm.gasPriceValue; // 缓存原始值，防止重复乘法
       //trm.price=hexToInt(transactionInfo!['value']??"0x0");
       resultStr="Pending";
       gasPrice='${toGWei(trm.gasPriceValue.toString())} GWei';
@@ -186,16 +201,16 @@ class _TransactionRetryState extends ConsumerState<TransactionRetry> {
     if(rData.error==false){
       transactionInfoReceipt=rData.data;
       if(transactionInfoReceipt !=null){
-        if(transactionInfoReceipt!['status']=="0x0"){
-          resultStr="Error";
-        }
-        else if(transactionInfoReceipt!['status']=="0x1"){
+        // receipt 非 null 表示交易已上链确认，停止轮询
+        if(transactionInfoReceipt!['status']=="0x1"){
           resultStr="Success";
-          return;
         }else{
-          resultStr="Error";
+          // 0x0 = 链上 revert，或其他异常状态
+          resultStr="Failed";
         }
+        return;
       }
+      // receipt 为 null 表示仍在 mempool，继续轮询
       errorMessage="";
     }else{
       errorMessage=rData.data.toString();
@@ -207,90 +222,145 @@ class _TransactionRetryState extends ConsumerState<TransactionRetry> {
       getTransactionReceipt();
     });
   }
-  Future<void> send(String toAddress,BigInt value,double gasPricePercent)async{
-    try{
-      if(load==Load.loading)return;
-      if(errorMessage !="")return;
-      setState(() {
-        load=Load.loading;
-      });
-      if(transactionInfo!['gasPrice']=="0x0"){
-        MessageModel rGasPrice=await tokenViewApi.getGasPrice(
-            BlockchainType.Ethereum.name,
-            trm.coinMiniName,
-          rpc: widget.coinModel.coin['custom']==true?widget.coinModel.coin['service']:null,
+  Future<void> send(String toAddress, BigInt transferValue, {bool isCancel = false}) async {
+    if (load == Load.loading) return;
+    if (errorMessage != "") return;
+    if (!mounted) return;
+    setState(() { load = Load.loading; });
+    try {
+      // Step 1: 计算替换 gasPrice（修复 Bug 2 双重乘法 / Bug 7 testnet RPC）
+      final bool isEip1559 = transactionInfo!['gasPrice'] == "0x0"
+          || _originalGasPriceValue == BigInt.zero;
+      final String? customRpc = widget.coinModel.coin['custom'] == true
+          ? (widget.coinModel.isTest
+              ? widget.coinModel.coin['service_test']
+              : widget.coinModel.coin['service'])
+          : null;
+
+      BigInt newGasPriceValue;
+      if (isEip1559) {
+        // EIP-1559：从 API 获取当前市场价格 ×1.5（修复 Bug 2 错误乘法）
+        final mm = await tokenViewApi.getGasPrice(
+          BlockchainType.Ethereum.name,
+          trm.coinMiniName,
+          rpc: customRpc,
         ) ?? MessageModel.error();
-        if(rGasPrice.error==false){
-          trm.gasPriceValue=rGasPrice.data*BigInt.from(gasPricePercent);
-        }else{
-          ToastUtils.show(rGasPrice.data);
+        if (!mounted) return;
+        if (mm.error) {
+          setState(() { load = Load.finish; }); // 修复 Bug 3 loading 卡死
+          ToastUtils.show(mm.data);
           return;
         }
-      }
-      trm.price=value;
-      trm.gas=hexToInt(transactionInfo!['gas']).toInt();
-      trm.gasPriceValue=trm.gasPriceValue*BigInt.from(gasPricePercent);
-      trm.gasPrice=trm.gasPriceValue*BigInt.from(trm.gas);
-      trm.to1=toAddress;
-      trm.nonce=transactionInfo!['nonce'];
-
-      BigInt gaslimit=BigInt.from(getCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
-      MessageModel ethMessage=await tokenViewApi.getGasEstimateEthV2(//EthAPI.getGasLimit(
-        widget.coinModel.address,
-        trm.to1,
-        trm.gasPriceValue,
-        trm.price,
-        gaslimit,
-        widget.coinModel.coin['coinType'],
-        contract: widget.coinModel.isTest?widget.coinModel.coin['contract_test']:widget.coinModel.coin['contract'],
-        isTest: widget.coinModel.isTest,
-      );
-      if (!mounted) return;
-      if(ethMessage.error==false){
-        trm.gas=(ethMessage.data as BigInt).toInt();
-        trm.gasPrice=trm.gasPriceValue*BigInt.from(trm.gas);
-      }else{
-        ToastUtils.show(ethMessage.data);
-        return;
+        newGasPriceValue = (mm.data as BigInt) * BigInt.from(3) ~/ BigInt.from(2);
+      } else {
+        // Legacy：从原始缓存值 ×1.5（修复 Bug 5 就地翻倍 / Bug 2 错误系数）
+        newGasPriceValue = _originalGasPriceValue * BigInt.from(3) ~/ BigInt.from(2);
       }
 
-      bool check=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletBaseSend(trm,null,trm.coin['unit'])));
-      if (!mounted) return;
-      if(check==false){
-        setState(() {
-          load=Load.finish;
-        });
-        return;
-      }
-      TransferApi transferApi=TransferApi();
-      MessageModel mm=await transferApi.transferWallet(
+      if (isCancel) {
+        // Step 2a: 取消路径 —— 构造最小 cancel tx（修复 Bug 4 gas 浪费 / Bug 6 合约污染）
+        final cancelTrm = _buildCancelTrm(newGasPriceValue);
+        final bool check = await Navigator.push(context,
+          MaterialPageRoute(builder: (_) => WalletBaseSend(cancelTrm, null, cancelTrm.coin['unit'])));
+        if (!mounted) return;
+        if (!check) { setState(() { load = Load.finish; }); return; }
+        final mm = await TransferApi().transferWallet(
+          trModel: cancelTrm,
+          privateKey: widget.coinModel.privateKey,
+          pathIndex: widget.coinModel.pathIndex,
+        );
+        if (!mounted) return;
+        await _handleTransferResult(mm, cancelTrm);
+      } else {
+        // Step 2b: 加速路径 —— 相同 nonce/目标/金额，更高 gasPrice
+        trm.gasPriceValue = newGasPriceValue;
+        trm.price = transferValue;
+        trm.to1 = toAddress;
+        trm.nonce = transactionInfo!['nonce'];
+        trm.gas = hexToInt(transactionInfo!['gas']).toInt();
+
+        final BigInt gaslimit = BigInt.from(getCoinGas(
+          widget.coinModel.coin['coinType'],
+          contract: widget.coinModel.coin['isContract'],
+        ));
+        final MessageModel gasEst = await tokenViewApi.getGasEstimateEthV2(
+          widget.coinModel.address,
+          trm.to1,
+          trm.gasPriceValue,
+          trm.price,
+          gaslimit,
+          widget.coinModel.coin['coinType'],
+          contract: widget.coinModel.isTest
+              ? widget.coinModel.coin['contract_test']
+              : widget.coinModel.coin['contract'],
+          isTest: widget.coinModel.isTest,
+        );
+        if (!mounted) return;
+        if (gasEst.error == false) {
+          trm.gas = (gasEst.data as BigInt).toInt();
+        } else {
+          setState(() { load = Load.finish; }); // 修复 Bug 3 loading 卡死
+          ToastUtils.show(gasEst.data);
+          return;
+        }
+        trm.gasPrice = trm.gasPriceValue * BigInt.from(trm.gas);
+
+        final bool check = await Navigator.push(context,
+          MaterialPageRoute(builder: (_) => WalletBaseSend(trm, null, trm.coin['unit'])));
+        if (!mounted) return;
+        if (!check) { setState(() { load = Load.finish; }); return; }
+        final mm = await TransferApi().transferWallet(
           trModel: trm,
           privateKey: widget.coinModel.privateKey,
-          pathIndex: widget.coinModel.pathIndex);
-      if (!mounted) return;
-      if(mm.error){
-        ToastUtils.show(mm.data);
-      }else{
-        trm.txHash=mm.data;
-        if(trm.trId==0){
-          trm.trId=await db.insertTransationRecord(trm);
-          if (!mounted) return;
-          ref.read(tripBridgeProvider).addUndoneTr(trm,1);
-        }else{
-          await db.updateTransationRecord(trm);
-          if (!mounted) return;
-          ref.read(tripBridgeProvider).selectUndoneTr();
-        }
-        ToastUtils.show(S.current.g_key_nft_41);
-        setState(() {
-          load=Load.finish;
-        });
-        Navigator.pop(context,true);
+          pathIndex: widget.coinModel.pathIndex,
+        );
+        if (!mounted) return;
+        await _handleTransferResult(mm, trm);
       }
-    }catch(e){
-      ToastUtils.show(e.toString());
-      load=Load.finish;
-      setState(() {});
+    } catch (e) {
+      if (mounted) { setState(() { load = Load.finish; }); ToastUtils.show(e.toString()); }
+    }
+  }
+
+  /// 构造取消交易的独立 model（不污染 trm，修复 Bug 6 合约污染 / Bug 4 gas 浪费）
+  TransationRecordModel _buildCancelTrm(BigInt gasPriceValue) {
+    return TransationRecordModel()
+      ..address       = trm.address
+      ..from1         = trm.from1
+      ..to1           = widget.coinModel.address  // 发给自己
+      ..price         = BigInt.zero               // 0 ETH
+      ..gas           = 21000                     // 普通转账最小 gas，不需要估算
+      ..gasPriceValue = gasPriceValue
+      ..gasPrice      = gasPriceValue * BigInt.from(21000)
+      ..nonce         = transactionInfo!['nonce'] // 必须与原交易相同，RBF 核心
+      ..contract      = ""                        // 无合约，修复 Bug 6
+      ..coin          = trm.coin
+      ..coinMiniName  = trm.coinMiniName
+      ..coinId        = trm.coinId
+      ..isTest        = trm.isTest
+      ..addrType      = trm.addrType
+      ..walletIndex   = trm.walletIndex;
+  }
+
+  /// 统一广播后处理（消除重复代码，修复 Bug 3 error 路径 loading 卡死）
+  Future<void> _handleTransferResult(MessageModel mm, TransationRecordModel model) async {
+    if (mm.error) {
+      setState(() { load = Load.finish; });
+      ToastUtils.show(mm.data);
+    } else {
+      model.txHash = mm.data;
+      if (model.trId == 0) {
+        model.trId = await db.insertTransationRecord(model);
+        if (!mounted) return;
+        ref.read(tripBridgeProvider).addUndoneTr(model, 1);
+      } else {
+        await db.updateTransationRecord(model);
+        if (!mounted) return;
+        ref.read(tripBridgeProvider).selectUndoneTr();
+      }
+      ToastUtils.show(S.current.g_key_nft_41);
+      setState(() { load = Load.finish; });
+      Navigator.pop(context, true);
     }
   }
   //关闭键盘
@@ -302,6 +372,14 @@ class _TransactionRetryState extends ConsumerState<TransactionRetry> {
     return Scaffold(
       appBar: AppBarWidget(
         text: S.of(context).s_key_3,
+        actions: _explorerUrl.isNotEmpty ? [
+          IconButton(
+            icon: const Icon(Icons.open_in_browser_outlined),
+            tooltip: S.of(context).g_key_196,
+            onPressed: () => Navigator.push(context,
+              MaterialPageRoute(builder: (_) => BrowserPage(_explorerUrl))),
+          ),
+        ] : null,
       ),
       body: bodyWidget(),
     );
@@ -574,14 +652,14 @@ class _TransactionRetryState extends ConsumerState<TransactionRetry> {
             Expanded(
               flex: 1,
               child: buttonWidget(S.of(context).g_key_79,(){
-                send(trm.from1,BigInt.zero,2);
+                send(widget.coinModel.address, BigInt.zero, isCancel: true);
               }),
             ),
             SizedBox(width: ScreenUtil().setWidth(30.0),),
             Expanded(
               flex: 1,
               child: buttonWidget(S.of(context).g_key_wallet_k57,(){
-                send(trm.to1,trm.price,2);
+                send(trm.to1, trm.price);
               }),
             ),
           ],
