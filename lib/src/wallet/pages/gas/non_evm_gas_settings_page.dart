@@ -88,10 +88,8 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
   void _validateCustomRate(String value) {
     final rate = int.tryParse(value);
     setState(() {
-      if (value.isEmpty) {
-        _customRateError = S.current.g_key_41; // "Please enter"
-      } else if (rate == null || rate <= 0) {
-        _customRateError = S.current.g_key_42; // "Invalid input"
+      if (value.isEmpty || rate == null || rate <= 0) {
+        _customRateError = S.current.g_key_t_43; // "Enter a whole number greater than 0."
       } else {
         _customRateError = '';
       }
@@ -121,8 +119,7 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
 
     return Scaffold(
       appBar: AppBarWidget(
-        context: context,
-        title: S.of(context).g_key_gas_settings,
+        text: S.of(context).g_key_gas_settings,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

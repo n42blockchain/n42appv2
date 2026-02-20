@@ -8719,6 +8719,41 @@ class S {
     );
   }
 
+  /// `Gas Tracker`
+  String get g_key_gas_tracker {
+    return Intl.message('Gas Tracker', name: 'g_key_gas_tracker', desc: '', args: []);
+  }
+
+  /// `Price Trend`
+  String get g_key_gas_price_trend {
+    return Intl.message('Price Trend', name: 'g_key_gas_price_trend', desc: '', args: []);
+  }
+
+  /// `Gas Alert`
+  String get g_key_gas_alert {
+    return Intl.message('Gas Alert', name: 'g_key_gas_alert', desc: '', args: []);
+  }
+
+  /// `Threshold (Gwei)`
+  String get g_key_gas_alert_threshold {
+    return Intl.message('Threshold (Gwei)', name: 'g_key_gas_alert_threshold', desc: '', args: []);
+  }
+
+  /// `Alert when below`
+  String get g_key_gas_alert_below {
+    return Intl.message('Alert when below', name: 'g_key_gas_alert_below', desc: '', args: []);
+  }
+
+  /// `Alert when above`
+  String get g_key_gas_alert_above {
+    return Intl.message('Alert when above', name: 'g_key_gas_alert_above', desc: '', args: []);
+  }
+
+  /// `Save`
+  String get g_key_gas_alert_save {
+    return Intl.message('Save', name: 'g_key_gas_alert_save', desc: '', args: []);
+  }
+
   /// `Select Token`
   String get g_key_batch_select_token {
     return Intl.message(
