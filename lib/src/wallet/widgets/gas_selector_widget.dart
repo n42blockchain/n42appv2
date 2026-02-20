@@ -238,19 +238,19 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
           if (widget.gasEstimate.supportsEIP1559 && currentOption.eip1559 != null) ...[
             _buildDetailRow(
               context,
-              'Base Fee',
+              S.of(context).g_key_gas_base_fee,
               '${_formatGwei(widget.gasEstimate.baseFee ?? BigInt.zero)} Gwei',
             ),
             SizedBox(height: ScreenUtil().setWidth(16)),
             _buildDetailRow(
               context,
-              'Max Priority Fee',
+              S.of(context).g_key_gas_priority_fee,
               '${_formatGwei(currentOption.maxPriorityFeePerGas)} Gwei',
             ),
             SizedBox(height: ScreenUtil().setWidth(16)),
             _buildDetailRow(
               context,
-              'Max Fee',
+              S.of(context).g_key_gas_max_fee,
               '${_formatGwei(currentOption.effectiveGasPrice)} Gwei',
             ),
           ] else ...[

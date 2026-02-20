@@ -393,16 +393,16 @@ class GasTrackerApi {
     return BigInt.parse(hex, radix: 16);
   }
 
-  /// 格式化确认时间
+  /// 格式化确认时间（通用缩写，便于 i18n）
   static String formatEstimatedTime(int seconds) {
     if (seconds < 60) {
-      return '~$seconds 秒';
+      return '~${seconds}s';
     } else if (seconds < 3600) {
       final minutes = seconds ~/ 60;
-      return '~$minutes 分钟';
+      return '~${minutes}min';
     } else {
       final hours = seconds ~/ 3600;
-      return '~$hours 小时';
+      return '~${hours}hr';
     }
   }
 }
