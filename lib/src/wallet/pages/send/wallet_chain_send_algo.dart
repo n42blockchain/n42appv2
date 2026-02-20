@@ -28,6 +28,7 @@ import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/src/wallet/pages/send/send_utils.dart';
 import 'package:n42appv2/src/wallet/services/recent_address_service.dart';
+import 'package:n42appv2/src/wallet/widgets/non_evm_fee_selector.dart';
 
 class WalletChainSendAlgo extends ConsumerStatefulWidget {
   final CoinModel coinModel;
@@ -864,82 +865,23 @@ class _WalletChainSendAlgoState extends ConsumerState<WalletChainSendAlgo> {
     );
   }
   //旷工费
-  Widget minerFeeWidget(){
-    String title=widget.coinModel.coin['coinType'];
-    String totalGasPriceStr="";
-    String gasPriceStr="";
-    Color totalGasPriceColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    Widget gasLimitWidget=Container();
-    int decimals=widget.coinModel.coin['decimals'];
-    if(widget.coinModel.coin['isContract']){
-      decimals=chainModel?.coin['decimals']??0;
-    }
-    totalGasPriceStr='${toEther(totalGasPrice.toString(),decimals)} $title';
-    gasPriceStr='${toEther(gasPrice.toString(),decimals) } $title';
+  Widget minerFeeWidget() {
+    final isContract = widget.coinModel.coin['isContract'] == true;
+    final int decimals = isContract
+        ? (chainModel?.coin['decimals'] ?? 0)
+        : widget.coinModel.coin['decimals'] as int;
+    final title = widget.coinModel.coin['coinType']?.toString() ?? '';
+    final feeText = '${toEther(totalGasPrice.toString(), decimals)} $title';
 
-    return Container(
-      alignment: Alignment.center,
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0),vertical: ScreenUtil().setWidth(30.0)),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(8.0))),
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-      ),
-      child: Column(
-        children: [
-          if(widget.coinModel.coin['isContract'])
-            minerFeeWidgetChainBalance(),
-          Container(
-            alignment: Alignment.center,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  S.of(context).g_key_t_15,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                    fontSize: ScreenUtil().setSp(28.0),
-                  ),
-                ),
-                Expanded(flex: 1,child: Container()),
-                Text(
-                  gasPriceStr,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(28.0),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          gasLimitWidget,
-          Container(
-            margin: EdgeInsets.only(top: ScreenUtil().setWidth(32.0)),
-            alignment: Alignment.center,
-            //padding: EdgeInsets.symmetric(horizontal: scr.setWidth(32.0),),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  S.of(context).g_key_t_16,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                    fontSize: ScreenUtil().setSp(28.0),
-                  ),
-                ),
-                Expanded(flex: 1,child: Container()),
-                Text(
-                  totalGasPriceStr,
-                  style: TextStyle(
-                    color: totalGasPriceColor,
-                    fontSize: ScreenUtil().setSp(28.0),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (isContract) minerFeeWidgetChainBalance(),
+        NonEvmFeeCompact(
+          feeText: feeText,
+          onTap: null,
+        ),
+      ],
     );
   }
   Widget minerFeeWidgetChainBalance(){

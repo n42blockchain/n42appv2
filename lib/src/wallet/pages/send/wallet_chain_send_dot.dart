@@ -21,7 +21,6 @@ import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/container_widget.dart';
 import 'package:n42appv2/src/widgets/text_field_widget.dart';
-import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,6 +33,7 @@ import 'package:n42appv2/src/wallet/pages/face_matching/face_match.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:n42appv2/src/wallet/pages/send/send_utils.dart';
 import 'package:n42appv2/src/wallet/services/recent_address_service.dart';
+import 'package:n42appv2/src/wallet/widgets/non_evm_fee_selector.dart';
 
 class WalletChainSendDot extends ConsumerStatefulWidget {
   final CoinModel coinModel;
@@ -780,184 +780,48 @@ class _WalletChainSendDotState extends ConsumerState<WalletChainSendDot> {
     );
   }
   //旷工费
-  Widget minerFeeWidget(){
-    /*if(widget.coinModel.coin['blockchainType']==BlockchainType.Tezos.name){
-      return minerFeeWidget_TezosXTZ();
-    }*/
-    String title=widget.coinModel.coin['coinType'];
-    String totalGasPriceStr="";
-    String gasPriceStr="";
-    Color totalGasPriceColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    Widget gasLimitWidget=Container();
-    int decimals=widget.coinModel.coin['decimals'];
-    if(widget.coinModel.coin['blockchainType']==BlockchainType.Ethereum.name){
-      String unit=widget.coinModel.coin['unit'].toString().toUpperCase();
-      if(widget.coinModel.coin['isContract']){
-        decimals=chainModel?.coin['decimals']??0;
-        unit=(chainModel?.coin['unit']??"").toString().toUpperCase();
-        BigInt chainBalance=chainModel?.balance?? BigInt.zero;
-        if(totalGasPrice > chainBalance){
-          totalGasPriceColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
-        }
-      }
-      totalGasPriceStr='${Decimal.parse(toEther(totalGasPrice.toString(),decimals).toString())}$unit';
-      gasPriceStr='${Decimal.parse(toGWei(gasPrice.toString()).toString()) }Gwei';
-      gasLimitWidget=Container(
-        margin: EdgeInsets.only(top: ScreenUtil().setWidth(30.0)),
-        alignment: Alignment.center,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              S.of(context).g_key_101,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                fontSize: ScreenUtil().setSp(28.0),
-              ),
-            ),
-            SizedBox(width: ScreenUtil().setWidth(10),),
-            Expanded(flex: 1,child: Text(
-              "$gas",
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(28.0),
-              ),
-              textAlign: TextAlign.right,
-            ),),
-          ],
-        ),
-      );
-    }
-    else if(widget.coinModel.coin['blockchainType']==BlockchainType.Tron.name){
-      if(widget.coinModel.coin['isContract']){
-        decimals=chainModel?.coin['decimals']??0;
-        if(toEther(totalGasPrice.toString(),decimals).toDouble() > (chainModel?.balanceDoubleAll()??0)){
-          totalGasPriceColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
-        }
-      }
-      totalGasPriceStr='${toEther(totalGasPrice.toString(),decimals)} $title';
-      gasPriceStr='${toEther(gasPrice.toString(),decimals) } $title';
-      gasLimitWidget=Container(
-        margin: EdgeInsets.only(top: ScreenUtil().setWidth(30.0)),
-        alignment: Alignment.center,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              S.of(context).g_key_101,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                fontSize: ScreenUtil().setSp(28.0),
-              ),
-            ),
-            Expanded(flex: 1,child: Container()),
-            Text(
-              "$gas",
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(28.0),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-    else{
-      if(widget.coinModel.coin['isContract']){
-        decimals=chainModel?.coin['decimals']??0;
-      }
-      totalGasPriceStr='${toEther(totalGasPrice.toString(),decimals)} $title';
-      gasPriceStr='${toEther(gasPrice.toString(),decimals) } $title';
-    }
+  Widget minerFeeWidget() {
+    final isContract = widget.coinModel.coin['isContract'] == true;
+    final int decimals = isContract
+        ? (chainModel?.coin['decimals'] ?? 0)
+        : widget.coinModel.coin['decimals'] as int;
+    final title = widget.coinModel.coin['coinType']?.toString() ?? '';
+    final feeText = '${toEther(totalGasPrice.toString(), decimals)} $title';
 
-    return containerStyle1(
-      context,
-      alignment: Alignment.center,
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0),vertical: ScreenUtil().setWidth(30.0)),
-      child: Column(
-        children: [
-          if(widget.coinModel.coin['isContract'])
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(30.0)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    S.of(context).g_key_29,
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                      fontSize: ScreenUtil().setSp(28.0),
-                    ),
-                  ),
-                  SizedBox(width: ScreenUtil().setWidth(10),),
-                  Expanded(flex: 1,child: Text(
-                    '${chainModel?.balanceDoubleAll()??0} ${(chainModel?.coin['unit']??"").toString().toUpperCase()}',
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
-                      fontSize: ScreenUtil().setSp(28.0),
-                    ),
-                    textAlign: TextAlign.right,
-                  ),),
-
-                ],
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (isContract)
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: ScreenUtil().setWidth(30.0),
+              vertical: ScreenUtil().setWidth(8.0),
             ),
-          Container(
-            alignment: Alignment.center,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  S.of(context).g_key_t_17,
+                  S.of(context).g_key_29,
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
                     fontSize: ScreenUtil().setSp(28.0),
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(10),),
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    gasPriceStr,
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(28.0),
-                    ),
-                    textAlign: TextAlign.right,
-                  ),),
-              ],
-            ),
-          ),
-          gasLimitWidget,
-          Container(
-            margin: EdgeInsets.only(top: ScreenUtil().setWidth(30.0)),
-            alignment: Alignment.center,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
                 Text(
-                  S.of(context).g_key_t_16,
+                  '${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}',
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
                     fontSize: ScreenUtil().setSp(28.0),
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(10),),
-                Expanded(flex: 1,child: Text(
-                  totalGasPriceStr,
-                  style: TextStyle(
-                    color: totalGasPriceColor,
-                    fontSize: ScreenUtil().setSp(28.0),
-                  ),
-                  textAlign: TextAlign.right,
-                ),),
               ],
             ),
           ),
-        ],
-      ),
+        NonEvmFeeCompact(
+          feeText: feeText,
+          onTap: null,
+        ),
+      ],
     );
   }
   Widget errorMessageWidget(){

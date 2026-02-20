@@ -31,8 +31,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42appv2/features/wallet/presentation/providers/transaction_providers.dart';
 import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:validators/validators.dart';
+import 'package:n42appv2/src/wallet/api/gas_tracker_api.dart';
+import 'package:n42appv2/src/wallet/models/non_evm_fee_model.dart';
+import 'package:n42appv2/src/wallet/pages/gas/non_evm_gas_settings_page.dart';
 import 'package:n42appv2/src/wallet/pages/send/send_utils.dart';
 import 'package:n42appv2/src/wallet/services/recent_address_service.dart';
+import 'package:n42appv2/src/wallet/widgets/non_evm_fee_selector.dart';
 
 class WalletChainSendBtc extends ConsumerStatefulWidget {
   final CoinModel coinModel;
@@ -92,6 +96,8 @@ class _WalletChainSendBtcState extends ConsumerState<WalletChainSendBtc> {
 
   //当地址被固定时，地址和转账金额输入框不能修改
   bool toTextFieldEnabel=true;
+
+  NonEvmFeeModel? _btcFeeModel;
 
   Map<String,dynamic> gasFeeLevel={
     "error":false,
@@ -162,8 +168,55 @@ class _WalletChainSendBtcState extends ConsumerState<WalletChainSendBtc> {
       gasFeeLevel['gasFeeRate']=averageValue;
     }
     byteFeeTextEditingController.text=gasFeeLevel['averageValue'].toString();
+    _buildBtcFeeModel();
     setState(() {});
   }
+
+  /// 根据服务器费率构建 Slow/Standard/Fast 三档模型（用 250 bytes 估算总费）
+  void _buildBtcFeeModel() {
+    final avgRate = gasFeeLevel['averageValue'] as int;
+    final coinType = widget.coinModel.coin['coinType']?.toString() ?? 'BTC';
+    final unit = (widget.coinModel.coin['unit'] ?? coinType).toString().toUpperCase();
+    // 典型单输入/双输出 BTC 交易约 250 bytes
+    const estBytes = 250;
+    _btcFeeModel = NonEvmFeeModel.forBtcLike(
+      averageRateSatPerByte: avgRate,
+      calcFeeByRate: (rate) => rate * estBytes,
+      chainSymbol: coinType,
+      unit: unit,
+    );
+  }
+
+  /// 打开非 EVM Gas 设置页，回来后应用选择结果
+  Future<void> _openBtcGasSettings() async {
+    if (_btcFeeModel == null) return;
+    final result = await Navigator.push<NonEvmGasResult>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => NonEvmGasSettingsPage(feeModel: _btcFeeModel!),
+      ),
+    );
+    if (result != null && mounted) {
+      _btcFeeModel = result.feeModel;
+      final rate = result.effectiveFeeRate ??
+          _btcFeeModel!.currentOption.feeRate ??
+          (gasFeeLevel['averageValue'] as int);
+      gasFeeLevel['gasFeeRate'] = rate;
+      byteFeeTextEditingController.text = rate.toString();
+      setState(() {});
+      calculateGasFee();
+    }
+  }
+
+  /// 速度档位标签
+  String _btcSpeedLabel(NonEvmFeeSpeed speed) {
+    switch (speed) {
+      case NonEvmFeeSpeed.slow:     return S.current.g_key_gas_slow;
+      case NonEvmFeeSpeed.standard: return S.current.g_key_gas_standard;
+      case NonEvmFeeSpeed.fast:     return S.current.g_key_gas_fast;
+    }
+  }
+
   //获取余额
   Future<void> getBalance()async{
     try{
@@ -658,9 +711,8 @@ class _WalletChainSendBtcState extends ConsumerState<WalletChainSendBtc> {
       ),
       toWidget(),
                       amountWidget(),
-                      gasFeeWidgetPrice(),
+                      _buildBtcFeeCompact(),
                       totalPriceWidgegt(),
-                      gasFeeWidgetBtc(),
                       errorMessageWidget(),
                       SizedBox(height: ScreenUtil().setWidth(100.0),),
                     ],
@@ -880,6 +932,40 @@ class _WalletChainSendBtcState extends ConsumerState<WalletChainSendBtc> {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
+    );
+  }
+
+  /// 紧凑型费用展示（替换旧的 gasFeeWidgetPrice + gasFeeWidgetBtc）
+  Widget _buildBtcFeeCompact() {
+    final coinType = widget.coinModel.coin['coinType']?.toString() ?? 'BTC';
+    final fees = gasFeeLevel['gasFees'] as int;
+    final feesBtc = gasFeeLevel['loading'] as bool
+        ? '...'
+        : '${flustars.NumUtil.divide(fees, 100000000)} $coinType';
+
+    if (_btcFeeModel == null) {
+      // 首次加载前降级展示
+      return NonEvmFeeCompact(
+        feeText: feesBtc,
+        hasError: false,
+        onTap: null,
+      );
+    }
+
+    final option = _btcFeeModel!.currentOption;
+    final totalSat = fees + price;
+    final hasError = totalSat > 0 &&
+        widget.coinModel.balanceDoubleAll() < totalSat / 100000000;
+
+    return NonEvmFeeCompact(
+      feeText: feesBtc,
+      speedLabel: _btcSpeedLabel(_btcFeeModel!.selectedSpeed),
+      estimatedTime: GasTrackerApi.formatEstimatedTime(option.estimatedSeconds),
+      rateText: option.feeRate != null
+          ? '${option.feeRate} ${option.feeRateUnit ?? "sat/byte"}'
+          : null,
+      hasError: hasError,
+      onTap: _openBtcGasSettings,
     );
   }
 
