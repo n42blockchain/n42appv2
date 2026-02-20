@@ -1,4 +1,5 @@
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/src/wallet/pages/create_wallet/import/import_cloud_backup.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/keystore/import_keystore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -219,6 +220,73 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
             indent: ScreenUtil().setWidth(30),
             endIndent: ScreenUtil().setWidth(30),
             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
+          ),
+          // ── iCloud / Google Drive 加密备份导入 ──────────────────────────
+          InkWell(
+            onTap: () async {
+              await Navigator.of(this.context).push(MaterialPageRoute(
+                  builder: (_) => const ImportCloudBackup()));
+              if (!mounted) return;
+              Navigator.of(this.context).pop();
+              if (widget.onTapBack != null) {
+                widget.onTapBack();
+              }
+            },
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(30),
+                vertical: ScreenUtil().setWidth(20),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    height: ScreenUtil().setWidth(50),
+                    width: ScreenUtil().setWidth(50),
+                    margin: EdgeInsets.only(right: ScreenUtil().setWidth(20)),
+                    child: Icon(
+                      Icons.cloud_download_outlined,
+                      color: AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.mainBlueColor.name),
+                      size: ScreenUtil().setWidth(50),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Cloud Backup',
+                          style: TextStyle(
+                            color: AppThemeUtils.getColorByKey(
+                                context, AppThemeKeys.mainBlueColor.name),
+                            fontSize: ScreenUtil().setSp(36),
+                          ),
+                        ),
+                        Text(
+                          'Import from iCloud / Google Drive',
+                          style: TextStyle(
+                            color: AppThemeUtils.getColorByKey(
+                                context,
+                                AppThemeKeys.itemSubtitleTextColor.name),
+                            fontSize: ScreenUtil().setSp(26),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Divider(
+            height: ScreenUtil().setWidth(1),
+            indent: ScreenUtil().setWidth(30),
+            endIndent: ScreenUtil().setWidth(30),
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.dividerColor.name),
           ),
           InkWell(
             onTap: ()async{

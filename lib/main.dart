@@ -29,6 +29,7 @@ import 'package:n42appv2/src/utils/app_push_utils.dart';
 import 'package:n42appv2/src/utils/notfication_utils.dart';
 import 'package:n42appv2/src/wallet/pages/create_wallet/create/create_one.dart';
 import 'package:n42appv2/src/wallet/pages/create_wallet/import/import_one.dart';
+import 'package:n42appv2/src/wallet/pages/create_wallet/import/import_cloud_backup.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/keystore/import_privatekey.dart';
 import 'package:n42appv2/src/wallet/provider/transaction_record_iterms_provider.dart';
 import 'package:n42appv2/src/wallet_connect/provider/wallet_connect_provider.dart';
@@ -419,6 +420,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
     "/CreateOne":(context)=>CreateOne(),
     "/ImportOne":(context)=>ImportOne(),
     "/ImportPrivatekey":(context)=>ImportPrivatekey(),
+    "/ImportCloudBackup":(context)=>ImportCloudBackup(),
     "/LoginPage":(context)=>LoginPage(),
     "/securitySetting": (context) => SecuritySetting(),
   //"/BackupOne":(context,)=>BackupOne(),
