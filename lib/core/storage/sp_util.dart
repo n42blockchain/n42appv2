@@ -189,6 +189,34 @@ class SPUtil {
     return prefs?.getBool(SPkey.useNewChat.name) ?? true;
   }
 
+  // 小额资产隐藏开关（< $1 USD 的代币不在资产列表中显示）
+  Future<void> setHideSmallAssets(bool value) async {
+    await initPrefs();
+    await prefs?.setBool(SPkey.hideSmallAssets.name, value);
+  }
+
+  Future<bool> getHideSmallAssets() async {
+    await initPrefs();
+    return prefs?.getBool(SPkey.hideSmallAssets.name) ?? false;
+  }
+
+  // 资产搜索历史（最近 10 条关键词，按时间倒序）
+  Future<List<String>> getCoinSearchHistory() async {
+    await initPrefs();
+    final raw = prefs?.getString(SPkey.coinSearchHistory.name);
+    if (raw == null || raw.isEmpty) return [];
+    try {
+      return (json.decode(raw) as List<dynamic>).cast<String>();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  Future<void> saveCoinSearchHistory(List<String> history) async {
+    await initPrefs();
+    await prefs?.setString(SPkey.coinSearchHistory.name, json.encode(history));
+  }
+
   // ==================== 通用方法 ====================
 
   /// put object.
@@ -250,5 +278,7 @@ enum SPkey {
   miningData, // 挖矿数据（已迁移到 SecureStorage）
   readLoginClause, // 是否阅读登录条款
   useNewChat, // 是否使用新聊天模块
+  hideSmallAssets, // 小额资产隐藏（< $1 USD）
+  coinSearchHistory, // 资产搜索历史记录（最近 10 条关键词）
 }
 
