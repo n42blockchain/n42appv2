@@ -41,11 +41,13 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
   final FocusNode _focusNode = FocusNode();
 
   Timer? _debounce;
+  Timer? _saveHistoryDebounce; // 搜索历史 IO 防抖，避免高频磁盘写入
   List<CoinModel> _searchResults = [];
   List<String> _history = [];
 
   static const int _maxHistory = 10;
   static const Duration _debounceDuration = Duration(milliseconds: 300);
+  static const Duration _historyIoDuration = Duration(milliseconds: 800);
 
   // ── Lifecycle ─────────────────────────────────────────────────────────────
 
@@ -58,6 +60,11 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
   @override
   void dispose() {
     _debounce?.cancel();
+    // 如果有待写入的历史记录，dispose 前立即触发（fire-and-forget）
+    if (_saveHistoryDebounce?.isActive == true) {
+      _saveHistoryDebounce!.cancel();
+      SPUtil().saveCoinSearchHistory(_history);
+    }
     _inputCtrl.dispose();
     _focusNode.dispose();
     super.dispose();
@@ -70,13 +77,19 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
     if (mounted) setState(() => _history = history);
   }
 
-  /// 将关键词插到历史头部，去重后截断为 _maxHistory 条，持久化。
-  Future<void> _saveToHistory(String keyword) async {
+  /// 将关键词插到历史头部，去重后截断为 _maxHistory 条。
+  /// UI 立即更新；IO 写入防抖 800ms 后执行，避免高频磁盘写。
+  void _saveToHistory(String keyword) {
     final kw = keyword.trim();
     if (kw.isEmpty || kw.length > 50) return; // 拒绝空或超长关键词
     final updated = [kw, ..._history.where((e) => e != kw)].take(_maxHistory).toList();
+    if (!mounted) return;
     setState(() => _history = updated);
-    await SPUtil().saveCoinSearchHistory(updated);
+    // 防抖写入：取消前次定时，重新计时
+    _saveHistoryDebounce?.cancel();
+    _saveHistoryDebounce = Timer(_historyIoDuration, () {
+      SPUtil().saveCoinSearchHistory(updated);
+    });
   }
 
   Future<void> _removeFromHistory(String keyword) async {

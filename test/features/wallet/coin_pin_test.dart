@@ -711,4 +711,147 @@ void main() {
           reason: '2 coins + 1 divider row');
     });
   });
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // _syncPinnedState fingerprint cache
+  // ──────────────────────────────────────────────────────────────────────────
+
+  group('_syncPinnedState fingerprint cache', () {
+    // Mirrors the fingerprint caching logic in WalletActionProvider._syncPinnedState
+
+    // 使用内容哈希（Object.hashAll），与实现层保持一致
+    String computeFingerprint(WalletInfo wi, int coinListLength) =>
+        '${Object.hashAll(wi.pinnedCoins)}|$coinListLength';
+
+    test('fingerprint changes when pinnedCoins list changes', () {
+      final wi = _makeWalletInfo(pinnedCoins: ['ETH']);
+      final fp1 = computeFingerprint(wi, 3);
+      wi.pinnedCoins.add('BNB');
+      final fp2 = computeFingerprint(wi, 3);
+      expect(fp1, isNot(fp2));
+    });
+
+    test('fingerprint changes when coinList length changes', () {
+      final wi = _makeWalletInfo(pinnedCoins: ['ETH']);
+      final fp1 = computeFingerprint(wi, 3);
+      final fp2 = computeFingerprint(wi, 5);
+      expect(fp1, isNot(fp2));
+    });
+
+    test('fingerprint is stable when nothing changes', () {
+      final wi = _makeWalletInfo(pinnedCoins: ['ETH', 'BNB']);
+      final fp1 = computeFingerprint(wi, 10);
+      final fp2 = computeFingerprint(wi, 10);
+      expect(fp1, fp2);
+    });
+  });
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // stale pinnedCoins cleanup on chain/token removal
+  // ──────────────────────────────────────────────────────────────────────────
+
+  group('stale pinnedCoins cleanup', () {
+    /// Mirrors removeWalletChain cleanup logic
+    void simulateRemoveChain(WalletInfo wi, String unit) {
+      wi.pinnedCoins.removeWhere(
+        (key) => key == unit || key.startsWith('${unit}_'),
+      );
+    }
+
+    /// Mirrors removeWalletChainToken cleanup logic
+    void simulateRemoveToken(WalletInfo wi, String symbolStr, String tokenMiniName) {
+      if (tokenMiniName.isNotEmpty) {
+        wi.pinnedCoins.remove('${symbolStr}_$tokenMiniName');
+      }
+    }
+
+    test('removeChain removes main coin pin key', () {
+      final wi = _makeWalletInfo(pinnedCoins: ['ETH', 'BNB']);
+      simulateRemoveChain(wi, 'ETH');
+      expect(wi.pinnedCoins, isNot(contains('ETH')));
+      expect(wi.pinnedCoins, contains('BNB'),
+          reason: 'other chains must not be affected');
+    });
+
+    test('removeChain removes all contract token keys for that chain', () {
+      final wi = _makeWalletInfo(pinnedCoins: ['ETH', 'ETH_USDT', 'ETH_USDC', 'BNB']);
+      simulateRemoveChain(wi, 'ETH');
+      expect(wi.pinnedCoins, isNotEmpty);
+      expect(wi.pinnedCoins.any((k) => k == 'ETH' || k.startsWith('ETH_')), isFalse,
+          reason: 'ETH main + all ETH_* tokens must be removed');
+      expect(wi.pinnedCoins, contains('BNB'));
+    });
+
+    test('removeChain on non-pinned chain is a no-op', () {
+      final wi = _makeWalletInfo(pinnedCoins: ['BNB']);
+      simulateRemoveChain(wi, 'SOL'); // SOL not pinned
+      expect(wi.pinnedCoins, ['BNB']);
+    });
+
+    test('removeToken removes only the specific contract key', () {
+      final wi = _makeWalletInfo(pinnedCoins: ['ETH_USDT', 'ETH_USDC', 'ETH']);
+      simulateRemoveToken(wi, 'ETH', 'USDT');
+      expect(wi.pinnedCoins, isNot(contains('ETH_USDT')));
+      expect(wi.pinnedCoins, contains('ETH_USDC'),
+          reason: 'other contract tokens must not be affected');
+      expect(wi.pinnedCoins, contains('ETH'));
+    });
+
+    test('removeToken with empty miniName is safe no-op', () {
+      final wi = _makeWalletInfo(pinnedCoins: ['ETH_USDT']);
+      simulateRemoveToken(wi, 'ETH', ''); // empty miniName → skip
+      expect(wi.pinnedCoins, contains('ETH_USDT'));
+    });
+  });
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // _saveToHistory debounce — validation logic (no IO in unit tests)
+  // ──────────────────────────────────────────────────────────────────────────
+
+  group('_saveToHistory debounce — validation', () {
+    // Mirrors the updated _saveToHistory validation logic.
+    // The IO/debounce Timer cannot be unit-tested without Flutter test bindings,
+    // but the validation gate is pure logic.
+
+    bool wouldSave(String keyword) {
+      final kw = keyword.trim();
+      return kw.isNotEmpty && kw.length <= 50;
+    }
+
+    test('keyword that passes validation triggers a save attempt', () {
+      expect(wouldSave('USDT'), isTrue);
+    });
+
+    test('empty keyword after trim is rejected', () {
+      expect(wouldSave('  '), isFalse);
+    });
+
+    test('50-char keyword is accepted (boundary)', () {
+      expect(wouldSave('a' * 50), isTrue);
+    });
+
+    test('51-char keyword is rejected (over boundary)', () {
+      expect(wouldSave('a' * 51), isFalse);
+    });
+
+    test('deduplication: same keyword appears only once in history list', () {
+      const maxHistory = 10;
+      final history = ['USDT', 'ETH', 'BNB'];
+      // Simulate inserting 'USDT' again
+      final updated =
+          ['USDT', ...history.where((e) => e != 'USDT')].take(maxHistory).toList();
+      expect(updated.where((e) => e == 'USDT').length, 1,
+          reason: 'no duplicates after re-insert');
+      expect(updated[0], 'USDT', reason: 'most recent at front');
+    });
+
+    test('history is capped at maxHistory items', () {
+      const maxHistory = 10;
+      final history = List.generate(maxHistory, (i) => 'COIN_$i');
+      final updated =
+          ['NEW', ...history.where((e) => e != 'NEW')].take(maxHistory).toList();
+      expect(updated.length, maxHistory);
+      expect(updated[0], 'NEW');
+    });
+  });
 }

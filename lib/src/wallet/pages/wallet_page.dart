@@ -1248,32 +1248,9 @@ class _WalletPageState extends ConsumerState<WalletPage> {
               ),
               // ── 图钉按钮（独立触控区，不触发 onTap 跳转）
               if (coinInfo.coin['isAggregated'] != true)
-                GestureDetector(
-                  onTap: () {
-                    ref.read(wapBridgeProvider).togglePinCoin(coinInfo);
-                  },
-                  behavior: HitTestBehavior.opaque,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(
-                      ScreenUtil().setWidth(12),
-                      ScreenUtil().setWidth(16),
-                      0,
-                      ScreenUtil().setWidth(16),
-                    ),
-                    child: Icon(
-                      coinInfo.isPinned
-                          ? Icons.push_pin
-                          : Icons.push_pin_outlined,
-                      size: ScreenUtil().setWidth(30),
-                      color: coinInfo.isPinned
-                          ? AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainBlueColor.name)
-                          : AppThemeUtils.getColorByKey(
-                                  context,
-                                  AppThemeKeys.itemSubtitleTextColor.name)
-                              .withValues(alpha: 0.35),
-                    ),
-                  ),
+                _PinIconButton(
+                  isPinned: coinInfo.isPinned,
+                  onTap: () => ref.read(wapBridgeProvider).togglePinCoin(coinInfo),
                 ),
             ],
           ),
@@ -1742,5 +1719,45 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     return maxHeight != oldDelegate.maxHeight ||
         minHeight != oldDelegate.minHeight ||
         child != oldDelegate.child;
+  }
+}
+
+/// 代币列表项中的图钉按钮。
+///
+/// 独立 [StatelessWidget] 以缩小 rebuild 范围：仅当 [isPinned] 变化时
+/// Flutter diff 算法才会重建此节点，不受父节点其他字段更新的影响。
+class _PinIconButton extends StatelessWidget {
+  const _PinIconButton({
+    required this.isPinned,
+    required this.onTap,
+  });
+
+  final bool isPinned;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          ScreenUtil().setWidth(12),
+          ScreenUtil().setWidth(16),
+          0,
+          ScreenUtil().setWidth(16),
+        ),
+        child: Icon(
+          isPinned ? Icons.push_pin : Icons.push_pin_outlined,
+          size: ScreenUtil().setWidth(30),
+          color: isPinned
+              ? AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.mainBlueColor.name)
+              : AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.itemSubtitleTextColor.name)
+                  .withValues(alpha: 0.35),
+        ),
+      ),
+    );
   }
 }

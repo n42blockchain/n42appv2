@@ -38,6 +38,10 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
 
   //刷新coin 余额
   Map<int,dynamic> coinRefreshMap={};
+
+  // ── 置顶同步缓存（避免无变化时重复遍历）────────────────────────────────────
+  /// 上次 _syncPinnedState 时的 fingerprint；格式：pinnedHash|coinListLength
+  String _lastSyncFingerprint = '';
   String defaultWalletUUID="AstranetWallet";
   String get userUUID{
     if(AppGlobals.userInfo==null){
@@ -729,7 +733,13 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
 
   /// 同步 coinList 中所有 CoinModel 的 isPinned 状态。
   /// 在 coinList 重建完成后、排序前调用。
+  /// 使用 fingerprint 缓存：pinnedCoins 与 coinList 长度均未变化时直接跳过。
   void _syncPinnedState() {
+    // 使用内容哈希（Object.hashAll），而非 List 的 identity hashCode
+    final fp = '${Object.hashAll(walletInfo.pinnedCoins)}|${coinList.length}';
+    if (fp == _lastSyncFingerprint) return; // 无变化，跳过
+    _lastSyncFingerprint = fp;
+
     if (walletInfo.pinnedCoins.isEmpty) {
       for (final c in coinList) {
         if (c is CoinModel) c.isPinned = false;
@@ -1490,6 +1500,12 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
       }
     }
 
+    // 清理该链及其所有合约代币的置顶记录（避免残留 stale key）
+    walletInfo.pinnedCoins.removeWhere(
+      (key) => key == unit || key.startsWith('${unit}_'),
+    );
+    _lastSyncFingerprint = ''; // 使缓存失效，下次强制重同步
+
     saveWalletInfo(walletInfo, walletIndex);
     notifyListeners();
   }
@@ -1563,6 +1579,14 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
       tokens= walletMap[symbolStr]['mainnets'];
     }
     tokens.remove(token['contract'].toString().toUpperCase());
+
+    // 清理该合约代币对应的置顶记录
+    final tokenMiniName = (miniName ?? token['miniName']?.toString() ?? '').toUpperCase();
+    if (tokenMiniName.isNotEmpty) {
+      walletInfo.pinnedCoins.remove('${symbolStr}_$tokenMiniName');
+      _lastSyncFingerprint = ''; // 使缓存失效，下次强制重同步
+    }
+
     saveWalletInfo(walletInfo, walletIndex);
     for(CoinModel cm in coinList){
       if(cm.coin['coinType']==symbolStr){
