@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:n42appv2/core/config/api_keys_config.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/https/request_url.dart';
 import 'package:n42appv2/src/models/message_model.dart';
@@ -67,6 +68,14 @@ class TransactionApi {
           return await solTransactionList(address,page: page, offset: pageSize);
         case "TRX":
           return await trxTransactionList(address, page: page, offset: pageSize);
+        case "DOT":
+        case "KSM":
+        case "ACA":
+          return await dotTransactionList(address, coinMiniName, isTest: isTest);
+        case "APT":
+          return await aptTransactionList(address, isTest: isTest);
+        case "TON":
+          return await tonTransactionList(address, isTest: isTest);
       }
     } catch (e) {
       debugPrint('TransactionApi.getTransactionList: $e');
@@ -378,6 +387,202 @@ class TransactionApi {
     }
     return mm;
   }
+  // ---------------------------------------------------------------------------
+  // DOT / Polkadot — Subscan API v2
+  // ---------------------------------------------------------------------------
+
+  /// DOT、KSM、ACA 交易列表，via Subscan transfers API
+  Future<MessageModel> dotTransactionList(
+    String address,
+    String coinType, {
+    bool isTest = false,
+  }) async {
+    MessageModel mm = MessageModel();
+    try {
+      final hostUrl = getHostByCoinMiniName(coinType, isTest: isTest);
+      if (hostUrl == null || hostUrl.isEmpty) {
+        mm.data = null;
+        return mm;
+      }
+      final url = '${hostUrl}api/v2/scan/transfers';
+      final h = Map<String, String>.from(header)
+        ..['x-api-key'] = ApiKeysConfig.dotApiKey;
+      final data = await BaseApi.requestEmptyH.post(
+        url,
+        params: {},
+        data: {'address': address, 'row': 25, 'page': 0},
+        header: h,
+      );
+      if (data != null && data['code'] == 0) {
+        final transfers = data['data']['transfers'] as List? ?? [];
+        final list = transfers.map<CommonResponseItemModel>((e) {
+          final item = CommonResponseItemModel();
+          item.hash =
+              e['extrinsic_hash'] as String? ?? e['hash'] as String? ?? '';
+          item.from = e['from'] as String? ?? '';
+          item.to = e['to'] as String? ?? '';
+          // Subscan returns human-readable amounts (e.g. "1.5000000000")
+          // DOT decimals = 10; KSM = 12; ACA = 12
+          final decimals = coinType == 'DOT' ? 10 : 12;
+          final amountStr = e['amount'] as String? ?? '0';
+          item.value = _parseToSmallestUnit(amountStr, decimals).toString();
+          item.timeStamp =
+              (e['block_timestamp'] as int?)?.toString() ?? '0';
+          item.txreceiptStatus = (e['success'] == true) ? '1' : '0';
+          item.gas = '0';
+          item.gasPrice = '0';
+          item.contractAddress = '';
+          return item;
+        }).toList();
+        mm.data = list;
+      } else {
+        mm.error = true;
+        mm.data = data?['message'] ?? 'Subscan error';
+      }
+    } catch (e) {
+      mm.error = true;
+      mm.data = e.toString();
+    }
+    return mm;
+  }
+
+  // ---------------------------------------------------------------------------
+  // APT / Aptos — Aptos REST API
+  // ---------------------------------------------------------------------------
+
+  /// APT 交易列表，via Aptos REST `/accounts/{addr}/transactions`
+  Future<MessageModel> aptTransactionList(
+    String address, {
+    bool isTest = false,
+  }) async {
+    MessageModel mm = MessageModel();
+    try {
+      final rpcUrl = RequestUrl().getUrl2('APT', 'rpc', isTest: isTest);
+      if (rpcUrl.isEmpty) {
+        mm.data = null;
+        return mm;
+      }
+      final url = '${rpcUrl}accounts/$address/transactions?limit=25';
+      final data =
+          await BaseApi.requestEmptyH.get(url, params: {}, header: header);
+      if (data is List) {
+        final list = data
+            .map<CommonResponseItemModel?>((e) {
+              if (e['type'] != 'user_transaction') return null;
+              final item = CommonResponseItemModel();
+              item.hash = e['hash'] as String? ?? '';
+              item.from = e['sender'] as String? ?? '';
+              // Extract recipient and amount from payload arguments
+              final payload = e['payload'] as Map<String, dynamic>?;
+              final args = payload?['arguments'] as List?;
+              item.to =
+                  (args != null && args.isNotEmpty) ? args[0].toString() : '';
+              item.value = (args != null && args.length > 1)
+                  ? args[1].toString()
+                  : '0'; // octas (10^8 per APT)
+              // Aptos timestamp is in microseconds
+              final tsMicro =
+                  int.tryParse(e['timestamp']?.toString() ?? '0') ?? 0;
+              item.timeStamp = (tsMicro ~/ 1000000).toString();
+              item.txreceiptStatus = (e['success'] == true) ? '1' : '0';
+              final gasUsed =
+                  int.tryParse(e['gas_used']?.toString() ?? '0') ?? 0;
+              final gasUnitPrice =
+                  int.tryParse(e['gas_unit_price']?.toString() ?? '0') ?? 0;
+              item.gas = gasUsed.toString();
+              item.gasPrice = (gasUsed * gasUnitPrice).toString(); // octas
+              item.contractAddress = '';
+              return item;
+            })
+            .whereType<CommonResponseItemModel>()
+            .toList();
+        mm.data = list;
+      } else {
+        mm.error = true;
+        mm.data = 'Aptos API error';
+      }
+    } catch (e) {
+      mm.error = true;
+      mm.data = e.toString();
+    }
+    return mm;
+  }
+
+  // ---------------------------------------------------------------------------
+  // TON — TON Center v2 API
+  // ---------------------------------------------------------------------------
+
+  /// TON 交易列表，via TON Center v2 `/getTransactions`
+  Future<MessageModel> tonTransactionList(
+    String address, {
+    bool isTest = false,
+  }) async {
+    MessageModel mm = MessageModel();
+    try {
+      final rpcUrl = RequestUrl().getUrl2('TON', 'rpc', isTest: isTest);
+      if (rpcUrl.isEmpty) {
+        mm.data = null;
+        return mm;
+      }
+      final url = '${rpcUrl}getTransactions?address=$address&limit=20';
+      final data =
+          await BaseApi.requestEmptyH.get(url, params: {}, header: header);
+      if (data != null && data['ok'] == true) {
+        final txList = data['result'] as List? ?? [];
+        final list = txList
+            .map<CommonResponseItemModel?>((e) {
+              try {
+                final inMsg = e['in_msg'] as Map<String, dynamic>?;
+                if (inMsg == null) return null;
+                final item = CommonResponseItemModel();
+                final txId = e['transaction_id'] as Map<String, dynamic>?;
+                item.hash = txId?['hash'] as String? ?? '';
+                item.from = inMsg['source'] as String? ?? '';
+                item.to = inMsg['destination'] as String? ?? address;
+                item.value = inMsg['value']?.toString() ?? '0'; // nanoTON
+                item.timeStamp = e['utime']?.toString() ?? '0'; // Unix seconds
+                item.txreceiptStatus = '1'; // listed ⇒ confirmed
+                item.gasPrice = e['fee']?.toString() ?? '0'; // total nanoTON
+                item.gas = '0';
+                item.contractAddress = '';
+                return item;
+              } catch (_) {
+                return null;
+              }
+            })
+            .whereType<CommonResponseItemModel>()
+            .toList();
+        mm.data = list;
+      } else {
+        mm.error = true;
+        mm.data = 'TON API error';
+      }
+    } catch (e) {
+      mm.error = true;
+      mm.data = e.toString();
+    }
+    return mm;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Helper
+  // ---------------------------------------------------------------------------
+
+  /// 将人类可读的小数金额字符串（如 "1.5000000000"）转换为最小单位 BigInt
+  static BigInt _parseToSmallestUnit(String amount, int decimals) {
+    try {
+      final parts = amount.split('.');
+      final intPart = BigInt.parse(parts[0].isEmpty ? '0' : parts[0]);
+      final fracRaw = parts.length > 1 ? parts[1] : '';
+      final fracPadded =
+          fracRaw.padRight(decimals, '0').substring(0, decimals);
+      final fracPart = BigInt.parse(fracPadded);
+      return intPart * BigInt.from(10).pow(decimals) + fracPart;
+    } catch (_) {
+      return BigInt.zero;
+    }
+  }
+
   /// ------- 合约 代币 交易列表 -------
   ///目前支持的有 ast bnb  ETH avax ftm CELO ht
   Future<MessageModel> commContractTransactionList(

@@ -16,6 +16,7 @@ import 'package:n42appv2/src/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/models/transaction/btc_tran_detail.dart';
 import 'package:n42appv2/src/wallet/models/transaction/common_response_item_model.dart';
+import 'package:n42appv2/src/wallet/models/transaction/sol_transaction_item.dart';
 import 'package:n42appv2/src/wallet/models/transation_record_model.dart';
 import 'package:n42appv2/src/wallet/pages/add_token/wallet_coin_token_add2.dart';
 import 'package:n42appv2/src/wallet/pages/market/market_coin_info.dart';
@@ -361,7 +362,11 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo> {
       }else if(widget.coinModel.coin['blockchainType'] ==BlockchainType.Tron.name){
         getTransactionDataNetworkTrx(mm.data);
       }else if(widget.coinModel.coin['blockchainType'] ==BlockchainType.Solana.name){
-        //getTransactionDataNetworkSol(mm.data);
+        getTransactionDataNetworkSol(mm.data);
+      }else if(widget.coinModel.coin['blockchainType'] ==BlockchainType.Polkadot.name||
+               widget.coinModel.coin['blockchainType'] ==BlockchainType.Aptos.name||
+               widget.coinModel.coin['blockchainType'] ==BlockchainType.TheOpenNetwork.name){
+        getTransactionDataNetworkGeneric(mm.data);
       }
     }
   }
@@ -603,71 +608,94 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo> {
       }
     }
   }
-  /*
-  getTransactionDataNetworkSol(List<SOLTransactionItem>? cril)async{
-    if(cril !=null){
-      bool isEdit=false;
-      for(int i=cril.length-1;i>=0;i--){
-        SOLTransactionItem cri=cril[i];
-        List<TransationRecordModel> rtrm=await db.selectTransationRecordTxHash(cri.txHash??"0x");
-        if(rtrm.length==0){
-          TransationRecordModel transationRecordModel=TransationRecordModel();
-          transationRecordModel.coinId=widget.coinModel.isTest?widget.coinModel.coin['chainId_test']:widget.coinModel.coin['chainId'];
-          transationRecordModel.coin=widget.coinModel.coin;
-          transationRecordModel.address=widget.coinModel.address??"";
-          transationRecordModel.from1=(cri.from??"").toLowerCase();
-          transationRecordModel.to1=(cri.to??"").toLowerCase();
-          transationRecordModel.price=BigInt.parse(cri.value??"0");
-          transationRecordModel.contract=(widget.coinModel.coin['contract']??"").toLowerCase();
-          transationRecordModel.walletIndex=ref.read(wapBridgeProvider).walletIndex;
-          transationRecordModel.nonce=cri.nonce;
-          transationRecordModel.txHash=cri.hash;
-          transationRecordModel.gasPrice=BigInt.parse(cri.gasPrice??"0");
-          transationRecordModel.gas=int.parse(cri.gas??"0");
-          transationRecordModel.txTime=cri.timeStamp??"0";
-          transationRecordModel.state=int.parse(cri.txreceiptStatus??"0");
-          transationRecordModel.coinMiniName=widget.coinModel.coin['coinType'];
-          transationRecordModel.isTest=widget.coinModel.isTest?1:0;
-          if(transationRecordModel.contract ==""){
-            String input=cri.input??"0x";
-            if(input=="0x"){
-              input="";
-            }
-            else{
-              try{
-                input=utf8.decode(hexToBytes(input));
-              }catch(e){
-                input="";
-              }
-
-            }
-            transationRecordModel.message=input;
-          }
-          await db.insertTransationRecord(transationRecordModel);
-          isEdit=true;
-          getTxInfoNetwork(transationRecordModel);
+  /// Solana 交易记录同步 — 将 SOLTransactionItem 映射到本地 DB
+  Future<void> getTransactionDataNetworkSol(List<SOLTransactionItem>? cril) async {
+    if (cril == null) return;
+    bool isEdit = false;
+    for (int i = cril.length - 1; i >= 0; i--) {
+      final cri = cril[i];
+      final hash = cri.txHash ?? '';
+      if (hash.isEmpty) continue;
+      final rtrm = await db.selectTransationRecordTxHash(hash, widget.coinModel.address);
+      if (!mounted) return;
+      if (rtrm.isEmpty) {
+        final trm = TransationRecordModel();
+        trm.coinId = (widget.coinModel.isTest
+                ? widget.coinModel.coin['chainId_test']
+                : widget.coinModel.coin['chainId']) ??
+            0;
+        trm.coin = widget.coinModel.coin;
+        trm.address = widget.coinModel.address ?? '';
+        trm.from1 = (cri.src ?? '').toLowerCase();
+        trm.to1 = (cri.dst ?? '').toLowerCase();
+        trm.price = BigInt.from(cri.lamport ?? 0);   // lamport (10^-9 SOL)
+        trm.contract = (widget.coinModel.coin['contract'] ?? '').toLowerCase();
+        trm.walletIndex = ref.read(wapBridgeProvider).walletIndex;
+        trm.txHash = hash;
+        trm.gasPrice = BigInt.from(cri.fee ?? 0);    // fee in lamport
+        trm.gas = 0;
+        trm.txTime = (cri.blockTime ?? 0).toString(); // Unix seconds
+        trm.state = (cri.status == 'Success') ? 1 : 0;
+        trm.coinMiniName = widget.coinModel.coin['coinType'];
+        trm.isTest = widget.coinModel.isTest ? 1 : 0;
+        await db.insertTransationRecord(trm);
+        isEdit = true;
+      } else {
+        final trm = rtrm[0];
+        final newTime = (cri.blockTime ?? 0).toString();
+        if (trm.txTime != newTime) {
+          trm.txTime = newTime;
+          await db.updateTransationRecord(trm);
+          isEdit = true;
         }
-        else{
-          TransationRecordModel transationRecordModel=rtrm[0];
-          if(transationRecordModel.txTime != cri.timeStamp){
-            transationRecordModel.txTime=cri.timeStamp??"0";
-            /*if(transationRecordModel.state!=1){
-            transationRecordModel.state=int.parse(cri.txreceiptStatus??"0");
-          }*/
-            await db.updateTransationRecord(transationRecordModel);
-            isEdit=true;
-          }
-          if(transationRecordModel.contract !=""){
-            transationRecordModel.state=transationRecordModel.state;
-          }
-        }
-      }
-      if(isEdit){
-        getTransactionData(Load.refresh);
       }
     }
+    if (isEdit) getTransactionData(Load.refresh);
   }
-  */
+
+  /// 通用交易记录同步（DOT / APT / TON）— 复用 CommonResponseItemModel 格式
+  Future<void> getTransactionDataNetworkGeneric(List<CommonResponseItemModel>? cril) async {
+    if (cril == null) return;
+    bool isEdit = false;
+    for (int i = cril.length - 1; i >= 0; i--) {
+      final cri = cril[i];
+      final hash = cri.hash ?? '';
+      if (hash.isEmpty) continue;
+      final rtrm = await db.selectTransationRecordTxHash(hash, widget.coinModel.address);
+      if (!mounted) return;
+      if (rtrm.isEmpty) {
+        final trm = TransationRecordModel();
+        trm.coinId = (widget.coinModel.isTest
+                ? widget.coinModel.coin['chainId_test']
+                : widget.coinModel.coin['chainId']) ??
+            0;
+        trm.coin = widget.coinModel.coin;
+        trm.address = widget.coinModel.address ?? '';
+        trm.from1 = (cri.from ?? '').toLowerCase();
+        trm.to1 = (cri.to ?? '').toLowerCase();
+        trm.price = BigInt.tryParse(cri.value ?? '0') ?? BigInt.zero;
+        trm.contract = (widget.coinModel.coin['contract'] ?? '').toLowerCase();
+        trm.walletIndex = ref.read(wapBridgeProvider).walletIndex;
+        trm.txHash = hash;
+        trm.gasPrice = BigInt.tryParse(cri.gasPrice ?? '0') ?? BigInt.zero;
+        trm.gas = int.tryParse(cri.gas ?? '0') ?? 0;
+        trm.txTime = cri.timeStamp ?? '0';
+        trm.state = int.tryParse(cri.txreceiptStatus ?? '0') ?? 0;
+        trm.coinMiniName = widget.coinModel.coin['coinType'];
+        trm.isTest = widget.coinModel.isTest ? 1 : 0;
+        await db.insertTransationRecord(trm);
+        isEdit = true;
+      } else {
+        final trm = rtrm[0];
+        if (trm.txTime != (cri.timeStamp ?? '0')) {
+          trm.txTime = cri.timeStamp ?? '0';
+          await db.updateTransationRecord(trm);
+          isEdit = true;
+        }
+      }
+    }
+    if (isEdit) getTransactionData(Load.refresh);
+  }
   Future<void> getTxInfoNetwork(TransationRecordModel transationRecordModel)async{
     TransationRecordModel rtrm=await ref.read(tripBridgeProvider).checkUndoneTrReturn(transationRecordModel) ?? transationRecordModel;
     transactionList.firstWhere((element){
