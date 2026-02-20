@@ -1549,6 +1549,31 @@ class S {
     return Intl.message('Get amount', name: 'g_key_tran_8', desc: '', args: []);
   }
 
+  /// `Direction`
+  String get g_key_tx_filter_direction {
+    return Intl.message('Direction', name: 'g_key_tx_filter_direction', desc: '', args: []);
+  }
+
+  /// `Date Range`
+  String get g_key_tx_filter_date_range {
+    return Intl.message('Date Range', name: 'g_key_tx_filter_date_range', desc: '', args: []);
+  }
+
+  /// `Start Date`
+  String get g_key_tx_filter_date_from {
+    return Intl.message('Start Date', name: 'g_key_tx_filter_date_from', desc: '', args: []);
+  }
+
+  /// `End Date`
+  String get g_key_tx_filter_date_to {
+    return Intl.message('End Date', name: 'g_key_tx_filter_date_to', desc: '', args: []);
+  }
+
+  /// `No transactions match your filter`
+  String get g_key_tx_no_results {
+    return Intl.message('No transactions match your filter', name: 'g_key_tx_no_results', desc: '', args: []);
+  }
+
   /// `Max {value} characters`
   String g_token_m_key_1(Object value) {
     return Intl.message(

@@ -2007,6 +2007,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_tran_8": MessageLookupByLibrary.simpleMessage(
       "Jumlah yang diterima",
     ),
+    "g_key_tx_filter_direction": MessageLookupByLibrary.simpleMessage("Direction"),
+    "g_key_tx_filter_date_range": MessageLookupByLibrary.simpleMessage("Date Range"),
+    "g_key_tx_filter_date_from": MessageLookupByLibrary.simpleMessage("Start Date"),
+    "g_key_tx_filter_date_to": MessageLookupByLibrary.simpleMessage("End Date"),
+    "g_key_tx_no_results": MessageLookupByLibrary.simpleMessage("No transactions match your filter"),
     "g_key_u_10": MessageLookupByLibrary.simpleMessage("Jenis NFT"),
     "g_key_u_11": MessageLookupByLibrary.simpleMessage("Pengikut"),
     "g_key_u_12": MessageLookupByLibrary.simpleMessage("Jenis Pengguna"),

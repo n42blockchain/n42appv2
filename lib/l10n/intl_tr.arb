@@ -1256,5 +1256,10 @@
   "g_key_notification_settings": "Notification Settings",
   "g_key_new_airdrops": "New airdrops",
   "g_key_eligibility_alerts": "Eligibility alerts",
-  "g_key_deadline_reminders": "Deadline reminders"
+  "g_key_deadline_reminders": "Deadline reminders",
+  "g_key_tx_filter_direction": "Direction",
+  "g_key_tx_filter_date_range": "Date Range",
+  "g_key_tx_filter_date_from": "Start Date",
+  "g_key_tx_filter_date_to": "End Date",
+  "g_key_tx_no_results": "No transactions match your filter"
 }

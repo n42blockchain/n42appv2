@@ -1269,5 +1269,10 @@
   "g_key_coin_list_separator": "Other assets",
   "g_key_coin_list_all_hidden": "All assets are below $1",
   "g_key_coin_list_show_all": "Tap to show all",
-  "g_key_coin_search_recent": "Recent"
+  "g_key_coin_search_recent": "Recent",
+  "g_key_tx_filter_direction": "Direction",
+  "g_key_tx_filter_date_range": "Date Range",
+  "g_key_tx_filter_date_from": "Start Date",
+  "g_key_tx_filter_date_to": "End Date",
+  "g_key_tx_no_results": "No transactions match your filter"
 }

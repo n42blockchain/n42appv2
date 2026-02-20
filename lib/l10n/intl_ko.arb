@@ -1265,5 +1265,10 @@
   "g_key_bridge_status_completed": "Completed",
   "g_key_bridge_status_failed": "Failed",
   "g_key_bridge_chain_not_supported": "Chain not supported",
-  "g_key_bridge_select": "Select"
+  "g_key_bridge_select": "Select",
+  "g_key_tx_filter_direction": "Direction",
+  "g_key_tx_filter_date_range": "Date Range",
+  "g_key_tx_filter_date_from": "Start Date",
+  "g_key_tx_filter_date_to": "End Date",
+  "g_key_tx_no_results": "No transactions match your filter"
 }
