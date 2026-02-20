@@ -12,7 +12,6 @@ import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 import 'package:n42appv2/src/wallet/api/transfer_api.dart';
 import 'package:n42appv2/src/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
-import 'package:n42appv2/src/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
@@ -20,7 +19,6 @@ import 'package:n42appv2/src/wallet/utils/coin_gas.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/container_widget.dart';
-import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,6 +31,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42appv2/features/wallet/presentation/providers/transaction_providers.dart';
 import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:validators/validators.dart';
+import 'package:n42appv2/src/wallet/pages/address_book/address_book_list.dart';
+import 'package:n42appv2/src/wallet/pages/send/send_utils.dart';
+import 'package:n42appv2/src/wallet/services/recent_address_service.dart';
 
 class WalletChainSendBtc extends ConsumerStatefulWidget {
   final CoinModel coinModel;
@@ -439,6 +440,10 @@ class _WalletChainSendBtcState extends ConsumerState<WalletChainSendBtc> {
       await AppDatabase().insertBtcTransactionRecord(trModel);
       if (!mounted) return;
       ref.read(tripBridgeProvider).addUndoneTr(trModel,0);
+      await RecentAddressService.save(
+        widget.coinModel.coin['coinType'] ?? '',
+        toTextEditingController.text.trim(),
+      );
       ToastUtils.show(S.current.g_key_nft_41);
       if(toTextFieldEnabel==false){
         Navigator.pop(context,trModel.txHash);
@@ -645,7 +650,14 @@ class _WalletChainSendBtcState extends ConsumerState<WalletChainSendBtc> {
                         },
                       ),
                       */
-                      toWidget(),
+                      RecentAddressBar(
+        coinType: widget.coinModel.coin['coinType'] ?? '',
+        onSelected: (addr) {
+          toTextEditingController.text = addr;
+          toAddressCheck(addr);
+        },
+      ),
+      toWidget(),
                       amountWidget(),
                       gasFeeWidgetPrice(),
                       totalPriceWidgegt(),
@@ -1176,136 +1188,14 @@ class _WalletChainSendBtcState extends ConsumerState<WalletChainSendBtc> {
       ),
     );
   }
-  void searchToAddressWidget(){
-    List<Widget> childs=[
-      InkWell(
-        onTap: ()async{
-          final value =await Navigator.push(context, MaterialPageRoute(
-              builder: (context)=> AddressBookList(coinName: widget.coinModel.coin['coinType'],)));
-          if (!mounted) return;
-          if(value !=null){
-            toTextEditingController.text=value;
-          }
-          Navigator.pop(context);
-        },
-        child: SizedBox(
-          height: ScreenUtil().setWidth(88),
-          width: double.infinity,
-          child: Row(
-            children: [
-              Container(
-                height: ScreenUtil().setWidth(48),
-                width: ScreenUtil().setWidth(48),
-                margin: EdgeInsets.only(right: ScreenUtil().setWidth(20),),
-                child: Image.asset(
-                  "assets/wallet/addressBook.png",
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                  height: ScreenUtil().setWidth(48),
-                  width: ScreenUtil().setWidth(48),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Text(
-                  S.of(context).g_key_108,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                    fontSize: ScreenUtil().setSp(30),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      Divider(
-        height: ScreenUtil().setWidth(1),
-        indent: 0,
-        endIndent: 0,
-      ),
-      InkWell(
-        onTap: scanQR,
-        child: SizedBox(
-          height: ScreenUtil().setWidth(88),
-          width: double.infinity,
-          child: Row(
-            children: [
-              Container(
-                height: ScreenUtil().setWidth(48),
-                width: ScreenUtil().setWidth(48),
-                margin: EdgeInsets.only(right: ScreenUtil().setWidth(20),),
-                child: Image.asset(
-                  "assets/wallet/scan.png",
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                  height: ScreenUtil().setWidth(48),
-                  width: ScreenUtil().setWidth(48),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Text(
-                  S.of(context).g_key_4,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                    fontSize: ScreenUtil().setSp(30),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      Divider(
-        height: ScreenUtil().setWidth(1),
-        indent: 0,
-        endIndent: 0,
-      ),
-      InkWell(
-        onTap: ()async{
-          ClipboardData? cd = await Clipboard.getData(Clipboard.kTextPlain);
-          if (!mounted) return;
-          if(cd !=null){
-            if(cd.text !=null && cd.text != "null"){
-              toTextEditingController.text=cd.text??"";
-              setState(() {
-              });
-              toAddressCheck(cd.text??"");
-            }
-          }
-          Navigator.pop(context);
-        },
-        child: SizedBox(
-          height: ScreenUtil().setWidth(88),
-          width: double.infinity,
-          child: Row(
-            children: [
-              Container(
-                height: ScreenUtil().setWidth(48),
-                width: ScreenUtil().setWidth(48),
-                margin: EdgeInsets.only(right: ScreenUtil().setWidth(20),),
-                child: Icon(
-                  Icons.paste_outlined,
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                  size: ScreenUtil().setWidth(48),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Text(
-                  S.of(context).g_key_166,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                    fontSize: ScreenUtil().setSp(30),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    ];
-    sheetBottom(context, S.of(context).g_face_match_key1, Column(
-      children: childs,
-    ));
+  void searchToAddressWidget() {
+    showAddressPickerSheet(
+      context,
+      coinModel: widget.coinModel,
+      onAddressSelected: (addr) {
+        toTextEditingController.text = addr;
+        toAddressCheck(addr);
+      },
+    );
   }
 }

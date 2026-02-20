@@ -1,6 +1,8 @@
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/component/pages/scan_page.dart';
+import 'package:n42appv2/src/wallet/pages/send/send_utils.dart';
+import 'package:n42appv2/src/wallet/services/recent_address_service.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/sqlite/app_database.dart';
 import 'package:n42appv2/src/utils/regular.dart';
@@ -296,6 +298,10 @@ class _WalletChainSendFilState extends ConsumerState<WalletChainSendFil> {
         trModel.trId=await AppDatabase().insertTransationRecord(trModel);
         if (!mounted) return;
         ref.read(tripBridgeProvider).addUndoneTr(trModel,1);
+        await RecentAddressService.save(
+          widget.coinModel.coin['coinType'] ?? '',
+          toTextEditingController.text.trim(),
+        );
         ToastUtils.show(S.current.g_key_nft_41);
         Navigator.pop(context);
       }
@@ -453,6 +459,13 @@ class _WalletChainSendFilState extends ConsumerState<WalletChainSendFil> {
         },
       ),
       */
+      RecentAddressBar(
+        coinType: widget.coinModel.coin['coinType'] ?? '',
+        onSelected: (addr) {
+          toTextEditingController.text = addr;
+          toAddressCheck(addr);
+        },
+      ),
       toWidget(),
       amountWidget(),
       minerFeeWidget(),
