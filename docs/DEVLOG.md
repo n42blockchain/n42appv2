@@ -5,6 +5,70 @@
 
 ---
 
+## [2026-02-21] AA Account Abstraction — Safe/Biconomy 支持 + 5 Bug 修复
+
+### Commits
+`b2b26d5` `28e11f2` `5e83ec1`
+
+### Problems Found
+1. **必现崩溃** `_calculatePreviewAddress()` 调用 `_generateMockAddress()` 用 `DateTime.now().microsecond % chars.length` 生成随机地址（非确定性，且与真实工厂地址无关）
+2. **i18n 错误** 链选择标题用 `S.of(context).g_key_17`（通用"SELECT"）而非 `g_key_aa_select_chain`
+3. **类型列表不完整** `_buildTypeSelector` 只列出 `simpleAccount/safe/kernel`，缺 `biconomy`
+4. **类型可用性硬编码** `isAvailable = type == SmartAccountType.simpleAccount`，Safe/Biconomy 无法点击
+5. **描述返回空字符串** `_getTypeDescription()` 对 `biconomy/custom` 返回 `''`
+6. **Mock 创建流程** `_createAccount()` 只是 `Future.delayed(1s)` + pop，无实际逻辑
+7. **缺少 Safe/Biconomy 工厂地址** `aa_config.dart` 的 `AAChainConfig` 无 `safeFactory`/`biconomyFactory` 字段
+8. **缺少 i18n 键** `g_key_aa_biconomy_account/desc`、`g_key_aa_address_calculating/error`、`g_key_aa_safe_threshold/guardians` 共 6 个
+
+### Changes
+
+| Step | Commit | Description |
+|------|--------|-------------|
+| i18n | `b2b26d5` | 6 个新键 × 13 语言：biconomy_account/desc, address_calculating/error, safe_threshold/guardians |
+| Config | `28e11f2` | `aa_config.dart`：添加 Safe v1.4.1 + Biconomy Nexus v1 工厂地址常量及 helpers |
+| Features | `5e83ec1` | 新建 safe_account.dart + biconomy_account.dart + 修复 factory + 修复 create page |
+
+### Architecture: Counterfactual Address Computation
+
+**SimpleAccount** (`computeAddressForType → calculateSimpleAccountAddress`):
+- eth_call → `SimpleAccountFactory.getAddress(owner, salt)` via bundler RPC
+- Fallback: local `_calculateSimpleAddress()` approximation
+
+**Safe v1.4.1** (`SafeAccountHelper.computeAddress`):
+- eth_call → `SafeProxyFactory.proxyCreationCode()` (returns SafeProxy creation bytecode)
+- initCodeHash = keccak256(creationCode ++ uint256(uint160(singletonAddr)))
+- initializer = `setup([owner], threshold=1, 0x0, 0x, fallbackHandler, 0x0, 0, 0x0)`
+- CREATE2 salt = keccak256(keccak256(initializer) ++ bytes32(saltNonce))
+- address = keccak256(0xff ++ factory ++ salt ++ initCodeHash)[12:]
+
+**Biconomy Nexus v1** (`BiconomyAccountHelper.computeAddress`):
+- initData = abi.encode(NexusBootstrap, abi.encodeWithSelector(initNexusWithSingleValidator, BootstrapConfig(K1Validator, abi.encode(owner))))
+- eth_call → `NexusAccountFactory.computeAccountAddress(initData, salt)`
+
+### Known Contract Addresses
+
+| Contract | Address |
+|----------|---------|
+| SafeProxyFactory v1.4.1 | `0x4e1DCf7AD4e460CfD30791CCC4F9c8a4f820ec67` |
+| SafeL2 singleton v1.4.1 | `0x29fcB43b46531BcA003ddC8FCB67FFE91900C762` |
+| SafeFallbackHandler v1.4.1 | `0xfd0732Dc9E303f09fCEf3a7388Ad10A83459Ec99` |
+| Biconomy Nexus Factory v1 | `0x0000000000BBc222D4Ca2ae6c3a42b9B5E1Ca3F0` |
+| Biconomy K1Validator | `0x0000002D6DB27c52E3C11c1Cf24072004AC75cBa` |
+| NexusBootstrap v1 | `0x6D1DaD347A3E0C0A74B73A29Cfa9bE7A1Ac8a39C` |
+
+### Create Page Fixes
+- Address computation: real async eth_call with loading state / retry on error
+- Chain selector label: `g_key_aa_select_chain` ✓
+- Type selector: includes `biconomy` ✓
+- `isAvailable`: SimpleAccount + Safe + Biconomy all enabled; Kernel = Coming Soon
+- Description: proper i18n for all types ✓
+- `_createAccount()`: builds real `SmartAccount` model, pops with it for caller to persist
+- Button disabled while calculating or if address computation failed
+
+**Tests: 2141 passed (0 failures)**
+
+---
+
 ## [2026-02-21] Earn Module — Complete Overhaul
 
 ### Commits
