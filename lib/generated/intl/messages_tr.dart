@@ -817,9 +817,38 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_pay_with_eth": MessageLookupByLibrary.simpleMessage(
       "Pay with ETH",
     ),
+    "g_key_aa_paymaster_balance": MessageLookupByLibrary.simpleMessage(
+      "Bakiye",
+    ),
+    "g_key_aa_paymaster_chains_supported": MessageLookupByLibrary.simpleMessage(
+      "zincir destekleniyor",
+    ),
+    "g_key_aa_paymaster_checking": MessageLookupByLibrary.simpleMessage(
+      "Kullanılabilirlik kontrol ediliyor...",
+    ),
+    "g_key_aa_paymaster_coverage": MessageLookupByLibrary.simpleMessage(
+      "Zincir Kapsamı",
+    ),
     "g_key_aa_paymaster_description": MessageLookupByLibrary.simpleMessage(
       "Choose how you want to pay for transaction gas fees",
     ),
+    "g_key_aa_paymaster_est_cost": MessageLookupByLibrary.simpleMessage(
+      "Tahmini maliyet",
+    ),
+    "g_key_aa_paymaster_load_failed": MessageLookupByLibrary.simpleMessage(
+      "Gaz seçenekleri yüklenemedi",
+    ),
+    "g_key_aa_paymaster_not_supported": MessageLookupByLibrary.simpleMessage(
+      "Bu zincirde mevcut değil",
+    ),
+    "g_key_aa_paymaster_quote_expired": MessageLookupByLibrary.simpleMessage(
+      "Teklif süresi doldu",
+    ),
+    "g_key_aa_paymaster_retry": MessageLookupByLibrary.simpleMessage(
+      "Tekrar dene",
+    ),
+    "g_key_aa_paymaster_sponsored_unavailable":
+        MessageLookupByLibrary.simpleMessage("Sponsorluk mevcut değil"),
     "g_key_aa_pending": MessageLookupByLibrary.simpleMessage("Pending"),
     "g_key_aa_permission": MessageLookupByLibrary.simpleMessage("Permission"),
     "g_key_aa_preview_address": MessageLookupByLibrary.simpleMessage(

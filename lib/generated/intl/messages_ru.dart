@@ -828,9 +828,38 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_pay_with_eth": MessageLookupByLibrary.simpleMessage(
       "Pay with ETH",
     ),
+    "g_key_aa_paymaster_balance": MessageLookupByLibrary.simpleMessage(
+      "Баланс",
+    ),
+    "g_key_aa_paymaster_chains_supported": MessageLookupByLibrary.simpleMessage(
+      "сетей поддерживается",
+    ),
+    "g_key_aa_paymaster_checking": MessageLookupByLibrary.simpleMessage(
+      "Проверка доступности...",
+    ),
+    "g_key_aa_paymaster_coverage": MessageLookupByLibrary.simpleMessage(
+      "Охват сетей",
+    ),
     "g_key_aa_paymaster_description": MessageLookupByLibrary.simpleMessage(
       "Choose how you want to pay for transaction gas fees",
     ),
+    "g_key_aa_paymaster_est_cost": MessageLookupByLibrary.simpleMessage(
+      "Прим. стоимость",
+    ),
+    "g_key_aa_paymaster_load_failed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось загрузить опции газа",
+    ),
+    "g_key_aa_paymaster_not_supported": MessageLookupByLibrary.simpleMessage(
+      "Недоступно в этой сети",
+    ),
+    "g_key_aa_paymaster_quote_expired": MessageLookupByLibrary.simpleMessage(
+      "Котировка устарела",
+    ),
+    "g_key_aa_paymaster_retry": MessageLookupByLibrary.simpleMessage(
+      "Повторить",
+    ),
+    "g_key_aa_paymaster_sponsored_unavailable":
+        MessageLookupByLibrary.simpleMessage("Спонсорство недоступно"),
     "g_key_aa_pending": MessageLookupByLibrary.simpleMessage("Pending"),
     "g_key_aa_permission": MessageLookupByLibrary.simpleMessage("Permission"),
     "g_key_aa_preview_address": MessageLookupByLibrary.simpleMessage(

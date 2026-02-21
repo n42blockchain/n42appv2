@@ -713,9 +713,34 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_pay_with_eth": MessageLookupByLibrary.simpleMessage(
       "Pay with ETH",
     ),
+    "g_key_aa_paymaster_balance": MessageLookupByLibrary.simpleMessage("残高"),
+    "g_key_aa_paymaster_chains_supported": MessageLookupByLibrary.simpleMessage(
+      "チェーン対応",
+    ),
+    "g_key_aa_paymaster_checking": MessageLookupByLibrary.simpleMessage(
+      "利用可能性を確認中...",
+    ),
+    "g_key_aa_paymaster_coverage": MessageLookupByLibrary.simpleMessage(
+      "チェーンカバレッジ",
+    ),
     "g_key_aa_paymaster_description": MessageLookupByLibrary.simpleMessage(
       "Choose how you want to pay for transaction gas fees",
     ),
+    "g_key_aa_paymaster_est_cost": MessageLookupByLibrary.simpleMessage(
+      "推定コスト",
+    ),
+    "g_key_aa_paymaster_load_failed": MessageLookupByLibrary.simpleMessage(
+      "ガスオプションの読み込み失敗",
+    ),
+    "g_key_aa_paymaster_not_supported": MessageLookupByLibrary.simpleMessage(
+      "このチェーンでは利用不可",
+    ),
+    "g_key_aa_paymaster_quote_expired": MessageLookupByLibrary.simpleMessage(
+      "見積もり期限切れ",
+    ),
+    "g_key_aa_paymaster_retry": MessageLookupByLibrary.simpleMessage("再試行"),
+    "g_key_aa_paymaster_sponsored_unavailable":
+        MessageLookupByLibrary.simpleMessage("スポンサーシップ利用不可"),
     "g_key_aa_pending": MessageLookupByLibrary.simpleMessage("Pending"),
     "g_key_aa_permission": MessageLookupByLibrary.simpleMessage("Permission"),
     "g_key_aa_preview_address": MessageLookupByLibrary.simpleMessage(

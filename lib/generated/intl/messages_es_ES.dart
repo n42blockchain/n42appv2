@@ -867,9 +867,36 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_pay_with_eth": MessageLookupByLibrary.simpleMessage(
       "Pay with ETH",
     ),
+    "g_key_aa_paymaster_balance": MessageLookupByLibrary.simpleMessage("Saldo"),
+    "g_key_aa_paymaster_chains_supported": MessageLookupByLibrary.simpleMessage(
+      "cadenas compatibles",
+    ),
+    "g_key_aa_paymaster_checking": MessageLookupByLibrary.simpleMessage(
+      "Verificando disponibilidad...",
+    ),
+    "g_key_aa_paymaster_coverage": MessageLookupByLibrary.simpleMessage(
+      "Cobertura de cadena",
+    ),
     "g_key_aa_paymaster_description": MessageLookupByLibrary.simpleMessage(
       "Choose how you want to pay for transaction gas fees",
     ),
+    "g_key_aa_paymaster_est_cost": MessageLookupByLibrary.simpleMessage(
+      "Costo est.",
+    ),
+    "g_key_aa_paymaster_load_failed": MessageLookupByLibrary.simpleMessage(
+      "Error al cargar opciones de gas",
+    ),
+    "g_key_aa_paymaster_not_supported": MessageLookupByLibrary.simpleMessage(
+      "No disponible en esta cadena",
+    ),
+    "g_key_aa_paymaster_quote_expired": MessageLookupByLibrary.simpleMessage(
+      "Cotización expirada",
+    ),
+    "g_key_aa_paymaster_retry": MessageLookupByLibrary.simpleMessage(
+      "Reintentar",
+    ),
+    "g_key_aa_paymaster_sponsored_unavailable":
+        MessageLookupByLibrary.simpleMessage("Patrocinio no disponible"),
     "g_key_aa_pending": MessageLookupByLibrary.simpleMessage("Pending"),
     "g_key_aa_permission": MessageLookupByLibrary.simpleMessage("Permission"),
     "g_key_aa_preview_address": MessageLookupByLibrary.simpleMessage(

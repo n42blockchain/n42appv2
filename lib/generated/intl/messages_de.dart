@@ -860,9 +860,38 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_pay_with_eth": MessageLookupByLibrary.simpleMessage(
       "Pay with ETH",
     ),
+    "g_key_aa_paymaster_balance": MessageLookupByLibrary.simpleMessage(
+      "Guthaben",
+    ),
+    "g_key_aa_paymaster_chains_supported": MessageLookupByLibrary.simpleMessage(
+      "Chains unterstützt",
+    ),
+    "g_key_aa_paymaster_checking": MessageLookupByLibrary.simpleMessage(
+      "Verfügbarkeit prüfen...",
+    ),
+    "g_key_aa_paymaster_coverage": MessageLookupByLibrary.simpleMessage(
+      "Chain-Abdeckung",
+    ),
     "g_key_aa_paymaster_description": MessageLookupByLibrary.simpleMessage(
       "Choose how you want to pay for transaction gas fees",
     ),
+    "g_key_aa_paymaster_est_cost": MessageLookupByLibrary.simpleMessage(
+      "Gesch. Kosten",
+    ),
+    "g_key_aa_paymaster_load_failed": MessageLookupByLibrary.simpleMessage(
+      "Gas-Optionen nicht geladen",
+    ),
+    "g_key_aa_paymaster_not_supported": MessageLookupByLibrary.simpleMessage(
+      "Nicht auf dieser Chain verfügbar",
+    ),
+    "g_key_aa_paymaster_quote_expired": MessageLookupByLibrary.simpleMessage(
+      "Angebot abgelaufen",
+    ),
+    "g_key_aa_paymaster_retry": MessageLookupByLibrary.simpleMessage(
+      "Wiederholen",
+    ),
+    "g_key_aa_paymaster_sponsored_unavailable":
+        MessageLookupByLibrary.simpleMessage("Sponsoring nicht verfügbar"),
     "g_key_aa_pending": MessageLookupByLibrary.simpleMessage("Pending"),
     "g_key_aa_permission": MessageLookupByLibrary.simpleMessage("Permission"),
     "g_key_aa_preview_address": MessageLookupByLibrary.simpleMessage(

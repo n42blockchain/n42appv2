@@ -11389,6 +11389,106 @@ class S {
     );
   }
 
+  /// `Checking availability...`
+  String get g_key_aa_paymaster_checking {
+    return Intl.message(
+      'Checking availability...',
+      name: 'g_key_aa_paymaster_checking',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to load gas options`
+  String get g_key_aa_paymaster_load_failed {
+    return Intl.message(
+      'Failed to load gas options',
+      name: 'g_key_aa_paymaster_load_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Retry`
+  String get g_key_aa_paymaster_retry {
+    return Intl.message(
+      'Retry',
+      name: 'g_key_aa_paymaster_retry',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not available on this chain`
+  String get g_key_aa_paymaster_not_supported {
+    return Intl.message(
+      'Not available on this chain',
+      name: 'g_key_aa_paymaster_not_supported',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sponsorship not available`
+  String get g_key_aa_paymaster_sponsored_unavailable {
+    return Intl.message(
+      'Sponsorship not available',
+      name: 'g_key_aa_paymaster_sponsored_unavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Est. cost`
+  String get g_key_aa_paymaster_est_cost {
+    return Intl.message(
+      'Est. cost',
+      name: 'g_key_aa_paymaster_est_cost',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Balance`
+  String get g_key_aa_paymaster_balance {
+    return Intl.message(
+      'Balance',
+      name: 'g_key_aa_paymaster_balance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quote expired`
+  String get g_key_aa_paymaster_quote_expired {
+    return Intl.message(
+      'Quote expired',
+      name: 'g_key_aa_paymaster_quote_expired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chain Coverage`
+  String get g_key_aa_paymaster_coverage {
+    return Intl.message(
+      'Chain Coverage',
+      name: 'g_key_aa_paymaster_coverage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `chains supported`
+  String get g_key_aa_paymaster_chains_supported {
+    return Intl.message(
+      'chains supported',
+      name: 'g_key_aa_paymaster_chains_supported',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `or`
   String get g_key_or {
     return Intl.message('or', name: 'g_key_or', desc: '', args: []);
