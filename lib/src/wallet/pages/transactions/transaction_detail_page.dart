@@ -1,5 +1,7 @@
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
+import 'package:n42appv2/src/browser/pages/browser_page.dart';
+import 'package:n42appv2/src/wallet/utils/browser_txhash.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/wallet/widgets/ens_address_display.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,7 @@ class TransactionDetailPage extends StatefulWidget {
 
   //交易的金额
   final String? value;
+  final bool? isTest;
   const TransactionDetailPage({this.time,
     this.from,
     this.to,
@@ -30,6 +33,7 @@ class TransactionDetailPage extends StatefulWidget {
     this.coinType,
     this.gasUsed,
     this.value,
+    this.isTest,
     super.key});
 
   @override
@@ -39,9 +43,20 @@ class TransactionDetailPage extends StatefulWidget {
 class _TransactionDetailPageState extends State<TransactionDetailPage> {
   @override
   Widget build(BuildContext context) {
+    final explorerUrl = (widget.coinType != null && widget.txHash != null)
+        ? getBrowserTxHash(widget.coinType!, widget.txHash!, isTest: widget.isTest)
+        : '';
     return Scaffold(
       appBar: AppBarWidget(
         text: S.of(context).g_key_tran_4,
+        actions: explorerUrl.isNotEmpty ? [
+          IconButton(
+            icon: const Icon(Icons.open_in_browser_outlined),
+            tooltip: S.of(context).g_key_196,
+            onPressed: () => Navigator.push(context,
+              MaterialPageRoute(builder: (_) => BrowserPage(explorerUrl))),
+          ),
+        ] : null,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(ScreenUtil().setWidth(30)),

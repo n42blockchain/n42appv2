@@ -1,5 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:n42appv2/src/browser/pages/browser_page.dart';
+import 'package:n42appv2/src/wallet/utils/browser_txhash.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/sqlite/app_database.dart';
@@ -50,12 +53,24 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     return _tokenViewApi!;
   }
   late String _txHash;
+  Timer? _pollingTimer;
+  late String _explorerUrl;
   @override
   void initState() {
     _txHash = widget.txHash;
     searchEditingController.text=_txHash;
+    _explorerUrl = getBrowserTxHash(
+      widget.coinModel.coin['coinType'],
+      _txHash,
+      isTest: widget.coinModel.isTest,
+    );
     init();
     super.initState();
+  }
+  @override
+  void dispose() {
+    _pollingTimer?.cancel();
+    super.dispose();
   }
   Future<void> init()async{
     errorMessage="";
@@ -159,20 +174,28 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     if(rData.error==false){
       transactionInfoReceipt=rData.data;
       if(transactionInfoReceipt !=null){
-        if(transactionInfoReceipt!['status']=="0x0"){
-          resultStr="Pending";
-        }
-        else if(transactionInfoReceipt!['status']=="0x1"){
+        // receipt 非 null 表示交易已上链确认，停止轮询
+        if(transactionInfoReceipt!['status']=="0x1"){
           resultStr="Success";
-          return;
         }else{
-          resultStr="Error";
+          // 0x0 = 链上 revert（执行失败），非 Pending
+          resultStr="Failed";
         }
+        return;
       }
+      // receipt 为 null 表示交易仍在 mempool，继续轮询
       errorMessage="";
+      _startPolling();
     }else{
       errorMessage=rData.data.toString();
     }
+  }
+  void _startPolling() {
+    _pollingTimer?.cancel();
+    _pollingTimer = Timer(const Duration(seconds: 3), () async {
+      await getTransactionReceipt();
+      if (mounted) setState(() {});
+    });
   }
   //关闭键盘
   void closeKeyboard(){
@@ -183,6 +206,14 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     return Scaffold(
       appBar: AppBarWidget(
         text: S.of(context).s_key_3,
+        actions: _explorerUrl.isNotEmpty ? [
+          IconButton(
+            icon: const Icon(Icons.open_in_browser_outlined),
+            tooltip: S.of(context).g_key_196,
+            onPressed: () => Navigator.push(context,
+              MaterialPageRoute(builder: (_) => BrowserPage(_explorerUrl))),
+          ),
+        ] : null,
       ),
       body: bodyWidget(),
     );

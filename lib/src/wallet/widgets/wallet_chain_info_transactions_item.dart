@@ -48,6 +48,7 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                       coinType: transactionModel.coin['coinType'],
                       //gas: transactionModel.gas_double.toString(),
                       time: transactionModel.getTxTimeStr(),
+                      isTest: coinModel?.isTest,
                     )));
           }
           else{
@@ -296,6 +297,7 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                         //gas: transactionModel.gas.toString(),
                         //gasPrice: transactionModel.gasPrice_double().toString(),
                         time: transactionModel.getTxTimeStr(),
+                        isTest: coinModel?.isTest,
                       )));
             }
           }

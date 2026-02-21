@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:n42appv2/src/browser/pages/browser_page.dart';
+import 'package:n42appv2/src/wallet/utils/browser_txhash.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/sqlite/app_database.dart';
@@ -47,12 +51,24 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
     return _tokenViewApi!;
   }
   late String _txHash;
+  Timer? _pollingTimer;
+  late String _explorerUrl;
   @override
   void initState() {
     _txHash = widget.txHash;
     searchEditingController.text=_txHash;
+    _explorerUrl = getBrowserTxHash(
+      widget.coinModel.coin['coinType'],
+      _txHash,
+      isTest: widget.coinModel.isTest,
+    );
     init();
     super.initState();
+  }
+  @override
+  void dispose() {
+    _pollingTimer?.cancel();
+    super.dispose();
   }
   Future<void> init()async{
     if(_txHash==""){
@@ -104,6 +120,10 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       trm.gasPriceValue=BigInt.from(transactionInfo?['cost']?['fee']??0);
       if(transactionInfo?['confirmed']==true){
         resultStr="Success";
+        _stopPolling();
+      }else{
+        resultStr="Pending";
+        _startPolling();
       }
       value='${toEther(trm.price.toString(), widget.coinModel.coin['decimals'])} ${widget.coinModel.coin['unit']}';
       gasPrice='${toEther(trm.gasPrice.toString(), widget.coinModel.coin['decimals'])} ${widget.coinModel.coin['unit']}';
@@ -119,6 +139,17 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       return false;
     }
   }
+  void _startPolling() {
+    _pollingTimer?.cancel();
+    _pollingTimer = Timer(const Duration(seconds: 3), () async {
+      await getTransactionByHash();
+      if (mounted) setState(() {});
+    });
+  }
+  void _stopPolling() {
+    _pollingTimer?.cancel();
+    _pollingTimer = null;
+  }
   //关闭键盘
   void closeKeyboard(){
     FocusScope.of(context).requestFocus(FocusNode());
@@ -128,6 +159,14 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
     return Scaffold(
       appBar: AppBarWidget(
         text: S.of(context).s_key_3,
+        actions: _explorerUrl.isNotEmpty ? [
+          IconButton(
+            icon: const Icon(Icons.open_in_browser_outlined),
+            tooltip: S.of(context).g_key_196,
+            onPressed: () => Navigator.push(context,
+              MaterialPageRoute(builder: (_) => BrowserPage(_explorerUrl))),
+          ),
+        ] : null,
       ),
       body: bodyWidget(),
     );
