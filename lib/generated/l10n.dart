@@ -11869,6 +11869,66 @@ class S {
     );
   }
 
+  /// `Biconomy Account`
+  String get g_key_aa_biconomy_account {
+    return Intl.message(
+      'Biconomy Account',
+      name: 'g_key_aa_biconomy_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Modular ERC-7579 smart account with gasless transaction support`
+  String get g_key_aa_biconomy_desc {
+    return Intl.message(
+      'Modular ERC-7579 smart account with gasless transaction support',
+      name: 'g_key_aa_biconomy_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Calculating address...`
+  String get g_key_aa_address_calculating {
+    return Intl.message(
+      'Calculating address...',
+      name: 'g_key_aa_address_calculating',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to calculate address. Please try again.`
+  String get g_key_aa_address_error {
+    return Intl.message(
+      'Failed to calculate address. Please try again.',
+      name: 'g_key_aa_address_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Threshold`
+  String get g_key_aa_safe_threshold {
+    return Intl.message(
+      'Threshold',
+      name: 'g_key_aa_safe_threshold',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Guardians`
+  String get g_key_aa_safe_guardians {
+    return Intl.message(
+      'Guardians',
+      name: 'g_key_aa_safe_guardians',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `New Device Login`
   String get device_login_title {
     return Intl.message(
