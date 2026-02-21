@@ -89,6 +89,31 @@ class AAConstants {
   /// Key for storing default paymaster
   static const String defaultPaymasterStorageKey = 'defaultPaymaster';
 
+  // ==================== Gas Deviation Thresholds ====================
+
+  /// Total gas (verificationGasLimit + callGasLimit + preVerificationGas) above
+  /// which a "gas very high" warning is surfaced to the user.
+  static const int gasTotalWarningThreshold = 2000000;
+
+  /// Total gas above which a "gas critically high" warning is surfaced.
+  /// Operations approaching this limit are often mis-configured or re-entrancy
+  /// attacks; the user should be strongly cautioned.
+  static const int gasTotalCriticalThreshold = 5000000;
+
+  /// verificationGasLimit above which an individual verification warning fires.
+  static const int gasVerificationWarningThreshold = 500000;
+
+  /// callGasLimit above which an individual call gas warning fires.
+  static const int gasCallWarningThreshold = 500000;
+
+  /// Percentage deviation (bundler estimate vs client estimate) above which a
+  /// "warning" severity deviation alert is raised.
+  static const double gasDeviationWarningPct = 50.0;
+
+  /// Percentage deviation above which a "critical" severity deviation alert is
+  /// raised (possible under-estimation — transaction likely to fail).
+  static const double gasDeviationCriticalPct = 100.0;
+
   // ==================== Validation ====================
 
   /// Maximum UserOperation calldata size (128KB)

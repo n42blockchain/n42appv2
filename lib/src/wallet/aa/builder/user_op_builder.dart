@@ -249,10 +249,50 @@ class UserOpBuilder {
     );
   }
 
-  /// Build UserOperation for gas estimation (with dummy signature)
+  /// Build UserOperation for gas estimation (with dummy signature).
+  ///
+  /// Unlike [build], this method:
+  /// 1. Does **not** require gas fees to be set — estimation is the step that
+  ///    determines those values, so requiring them would be circular.
+  /// 2. Temporarily injects [AAConstants.dummySignature] without mutating the
+  ///    builder's persistent state.  After this call, [build] will still use
+  ///    the signature that was set before (or null if none was set).
+  ///
+  /// The caller must have set sender, nonce, and callData before calling this.
   UserOperation buildForEstimation() {
-    setDummySignature();
-    return build();
+    // Minimal validation — gas fees are intentionally excluded.
+    if (_sender == null || _sender!.isEmpty) {
+      throw UserOperationBuildError('Sender address is required for estimation');
+    }
+    if (_nonce == null) {
+      throw UserOperationBuildError('Nonce is required for estimation');
+    }
+    if (_callData == null || _callData!.isEmpty) {
+      throw UserOperationBuildError('Call data is required for estimation');
+    }
+
+    // Temporarily replace signature without permanently mutating builder state.
+    final savedSignature = _signature;
+    _signature = AAConstants.dummySignature;
+    try {
+      // Inline UserOperation construction — avoids calling build() which
+      // would enforce the _maxFeePerGas != 0 invariant (not yet known).
+      return UserOperation(
+        sender: _sender!,
+        nonce: _nonce!,
+        initCode: _initCode,
+        callData: _callData!,
+        accountGasLimits: PackedGasLimits.pack(_verificationGasLimit, _callGasLimit),
+        preVerificationGas: _preVerificationGas,
+        gasFees: PackedGasFees.pack(_maxPriorityFeePerGas, _maxFeePerGas),
+        paymasterAndData: _paymasterAndData,
+        signature: _signature,
+        eip7702Auth: _eip7702Auth,
+      );
+    } finally {
+      // Always restore — even if UserOperation constructor throws.
+      _signature = savedSignature;
+    }
   }
 
   /// Get estimated total gas
