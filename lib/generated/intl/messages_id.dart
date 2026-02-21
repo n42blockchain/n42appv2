@@ -258,6 +258,28 @@ class MessageLookup extends MessageLookupByLibrary {
       "Tambahkan verifikasi Email?",
     ),
     "file": MessageLookupByLibrary.simpleMessage("File"),
+    "g_2fa_backup_hint": MessageLookupByLibrary.simpleMessage(
+      "Simpan kunci ini — Anda membutuhkannya jika kehilangan ponsel.",
+    ),
+    "g_2fa_backup_share": MessageLookupByLibrary.simpleMessage("Bagikan"),
+    "g_2fa_backup_share_text": MessageLookupByLibrary.simpleMessage(
+      "Kunci cadangan Google Authenticator N42Wallet",
+    ),
+    "g_2fa_disable_confirm_hint": MessageLookupByLibrary.simpleMessage(
+      "Masukkan kode 6 digit Google Authenticator untuk menonaktifkan 2FA.",
+    ),
+    "g_2fa_disable_confirm_title": MessageLookupByLibrary.simpleMessage(
+      "Nonaktifkan Google 2FA",
+    ),
+    "g_2fa_disable_error": MessageLookupByLibrary.simpleMessage(
+      "Gagal menonaktifkan Google 2FA. Periksa kode dan coba lagi.",
+    ),
+    "g_2fa_disable_success": MessageLookupByLibrary.simpleMessage(
+      "Google 2FA telah dinonaktifkan",
+    ),
+    "g_2fa_invalid_format": MessageLookupByLibrary.simpleMessage(
+      "Masukkan kode 6 digit yang valid",
+    ),
     "g_app_share_key_1": MessageLookupByLibrary.simpleMessage(
       "Token hanya dapat dikirim dalam jaringan yang sama. Pengiriman dari jaringan lain dapat mengakibatkan kehilangan.",
     ),

@@ -228,6 +228,28 @@ class MessageLookup extends MessageLookupByLibrary {
       "メール認証を追加しますか？",
     ),
     "file": MessageLookupByLibrary.simpleMessage("ファイル"),
+    "g_2fa_backup_hint": MessageLookupByLibrary.simpleMessage(
+      "このキーを保存してください — スマートフォンを紛失した場合に必要です。",
+    ),
+    "g_2fa_backup_share": MessageLookupByLibrary.simpleMessage("共有"),
+    "g_2fa_backup_share_text": MessageLookupByLibrary.simpleMessage(
+      "N42ウォレット Google Authenticator バックアップキー",
+    ),
+    "g_2fa_disable_confirm_hint": MessageLookupByLibrary.simpleMessage(
+      "Google Authenticatorの6桁のコードを入力して2FAを無効にしてください。",
+    ),
+    "g_2fa_disable_confirm_title": MessageLookupByLibrary.simpleMessage(
+      "Google 2FAを無効化",
+    ),
+    "g_2fa_disable_error": MessageLookupByLibrary.simpleMessage(
+      "Google 2FAの無効化に失敗しました。コードを確認して再試行してください。",
+    ),
+    "g_2fa_disable_success": MessageLookupByLibrary.simpleMessage(
+      "Google 2FAが無効になりました",
+    ),
+    "g_2fa_invalid_format": MessageLookupByLibrary.simpleMessage(
+      "有効な6桁のコードを入力してください",
+    ),
     "g_app_share_key_1": MessageLookupByLibrary.simpleMessage(
       "トークンは同じネットワーク内でのみ送信できます。他のネットワークから送信すると、損失が発生する可能性があります。",
     ),

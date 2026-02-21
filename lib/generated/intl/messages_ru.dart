@@ -262,6 +262,28 @@ class MessageLookup extends MessageLookupByLibrary {
       "Добавить подтверждение по email?",
     ),
     "file": MessageLookupByLibrary.simpleMessage("Файл"),
+    "g_2fa_backup_hint": MessageLookupByLibrary.simpleMessage(
+      "Сохраните этот ключ — он понадобится, если вы потеряете телефон.",
+    ),
+    "g_2fa_backup_share": MessageLookupByLibrary.simpleMessage("Поделиться"),
+    "g_2fa_backup_share_text": MessageLookupByLibrary.simpleMessage(
+      "Резервный ключ Google Authenticator N42Wallet",
+    ),
+    "g_2fa_disable_confirm_hint": MessageLookupByLibrary.simpleMessage(
+      "Введите 6-значный код Google Authenticator для отключения 2FA.",
+    ),
+    "g_2fa_disable_confirm_title": MessageLookupByLibrary.simpleMessage(
+      "Отключить Google 2FA",
+    ),
+    "g_2fa_disable_error": MessageLookupByLibrary.simpleMessage(
+      "Не удалось отключить Google 2FA. Проверьте код и попробуйте снова.",
+    ),
+    "g_2fa_disable_success": MessageLookupByLibrary.simpleMessage(
+      "Google 2FA отключён",
+    ),
+    "g_2fa_invalid_format": MessageLookupByLibrary.simpleMessage(
+      "Введите корректный 6-значный код",
+    ),
     "g_app_share_key_1": MessageLookupByLibrary.simpleMessage(
       "Токены можно отправлять только в пределах одной сети. Отправка из других сетей может привести к потере средств.",
     ),

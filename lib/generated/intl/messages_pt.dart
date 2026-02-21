@@ -262,6 +262,28 @@ class MessageLookup extends MessageLookupByLibrary {
       "Adicionar verificação de e-mail?",
     ),
     "file": MessageLookupByLibrary.simpleMessage("Arquivo"),
+    "g_2fa_backup_hint": MessageLookupByLibrary.simpleMessage(
+      "Salve esta chave — você precisará dela se perder o telefone.",
+    ),
+    "g_2fa_backup_share": MessageLookupByLibrary.simpleMessage("Compartilhar"),
+    "g_2fa_backup_share_text": MessageLookupByLibrary.simpleMessage(
+      "Chave de backup do Google Authenticator N42Wallet",
+    ),
+    "g_2fa_disable_confirm_hint": MessageLookupByLibrary.simpleMessage(
+      "Insira o código de 6 dígitos do Google Authenticator para desativar o 2FA.",
+    ),
+    "g_2fa_disable_confirm_title": MessageLookupByLibrary.simpleMessage(
+      "Desativar Google 2FA",
+    ),
+    "g_2fa_disable_error": MessageLookupByLibrary.simpleMessage(
+      "Falha ao desativar o Google 2FA. Verifique o código e tente novamente.",
+    ),
+    "g_2fa_disable_success": MessageLookupByLibrary.simpleMessage(
+      "Google 2FA foi desativado",
+    ),
+    "g_2fa_invalid_format": MessageLookupByLibrary.simpleMessage(
+      "Insira um código válido de 6 dígitos",
+    ),
     "g_app_share_key_1": MessageLookupByLibrary.simpleMessage(
       "Tokens só podem ser enviados dentro da mesma rede. Enviar de outras redes pode resultar em perda.",
     ),

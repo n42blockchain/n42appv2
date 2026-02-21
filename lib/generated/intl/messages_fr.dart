@@ -265,6 +265,28 @@ class MessageLookup extends MessageLookupByLibrary {
       "Ajouter la vérification par e-mail ?",
     ),
     "file": MessageLookupByLibrary.simpleMessage("Fichier"),
+    "g_2fa_backup_hint": MessageLookupByLibrary.simpleMessage(
+      "Sauvegardez cette clé — vous en aurez besoin si vous perdez votre téléphone.",
+    ),
+    "g_2fa_backup_share": MessageLookupByLibrary.simpleMessage("Partager"),
+    "g_2fa_backup_share_text": MessageLookupByLibrary.simpleMessage(
+      "Clé de sauvegarde Google Authenticator de N42Wallet",
+    ),
+    "g_2fa_disable_confirm_hint": MessageLookupByLibrary.simpleMessage(
+      "Entrez votre code Google Authenticator à 6 chiffres pour confirmer la désactivation du 2FA.",
+    ),
+    "g_2fa_disable_confirm_title": MessageLookupByLibrary.simpleMessage(
+      "Désactiver Google 2FA",
+    ),
+    "g_2fa_disable_error": MessageLookupByLibrary.simpleMessage(
+      "Échec de la désactivation de Google 2FA. Vérifiez le code et réessayez.",
+    ),
+    "g_2fa_disable_success": MessageLookupByLibrary.simpleMessage(
+      "Google 2FA a été désactivé",
+    ),
+    "g_2fa_invalid_format": MessageLookupByLibrary.simpleMessage(
+      "Veuillez entrer un code valide à 6 chiffres",
+    ),
     "g_app_share_key_1": MessageLookupByLibrary.simpleMessage(
       "Les jetons ne peuvent être envoyés que sur le même réseau. L\'envoi depuis d\'autres réseaux peut entraîner une perte.",
     ),

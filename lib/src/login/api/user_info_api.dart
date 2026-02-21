@@ -382,6 +382,35 @@ class UserInfoApi{
       return mm;
     }
   }
+  //解绑谷歌验证（需要当前 TOTP 码验证身份）
+  Future<MessageModel> unbindGoogle(String code) async {
+    try {
+      Map<String, dynamic> postMap = {
+        "uuid": AppGlobals.userInfo?.uuid ?? "",
+        "code": code,
+        "token": AppGlobals.userInfo?.token ?? "",
+        "source": "app",
+      };
+      MessageModel mm = MessageModel();
+      final data = await BaseApi.requestEmptyH.post(
+        '$url/v1/l/user/unbind/google/auth/code',
+        params: {},
+        data: postMap,
+        header: header,
+      );
+      if (data['code'] == 200) {
+        mm.data = true;
+      } else {
+        mm.error = true;
+        mm.data = data['err'];
+      }
+      return mm;
+    } catch (e) {
+      MessageModel mm = MessageModel.error();
+      mm.data = e.toString();
+      return mm;
+    }
+  }
   /// 修改密码（已登录用户，需要原密码）
   /// oldPassword: 原密码（MD5 哈希后）
   /// newPassword: 新密码（MD5 哈希后）

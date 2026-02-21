@@ -252,6 +252,28 @@ class MessageLookup extends MessageLookupByLibrary {
       "Thêm xác minh email?",
     ),
     "file": MessageLookupByLibrary.simpleMessage("Tệp"),
+    "g_2fa_backup_hint": MessageLookupByLibrary.simpleMessage(
+      "Lưu khóa này — bạn sẽ cần nó nếu mất điện thoại.",
+    ),
+    "g_2fa_backup_share": MessageLookupByLibrary.simpleMessage("Chia sẻ"),
+    "g_2fa_backup_share_text": MessageLookupByLibrary.simpleMessage(
+      "Khóa dự phòng Google Authenticator N42Wallet",
+    ),
+    "g_2fa_disable_confirm_hint": MessageLookupByLibrary.simpleMessage(
+      "Nhập mã 6 chữ số từ Google Authenticator để xác nhận tắt 2FA.",
+    ),
+    "g_2fa_disable_confirm_title": MessageLookupByLibrary.simpleMessage(
+      "Tắt Google 2FA",
+    ),
+    "g_2fa_disable_error": MessageLookupByLibrary.simpleMessage(
+      "Không thể tắt Google 2FA. Vui lòng kiểm tra mã và thử lại.",
+    ),
+    "g_2fa_disable_success": MessageLookupByLibrary.simpleMessage(
+      "Google 2FA đã được tắt",
+    ),
+    "g_2fa_invalid_format": MessageLookupByLibrary.simpleMessage(
+      "Vui lòng nhập mã 6 chữ số hợp lệ",
+    ),
     "g_app_share_key_1": MessageLookupByLibrary.simpleMessage(
       "Token chỉ có thể gửi trong cùng một mạng. Gửi từ mạng khác có thể dẫn đến mất mát.",
     ),

@@ -5094,6 +5094,86 @@ class S {
     );
   }
 
+  /// `Disable Google 2FA`
+  String get g_2fa_disable_confirm_title {
+    return Intl.message(
+      'Disable Google 2FA',
+      name: 'g_2fa_disable_confirm_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your current 6-digit Google Authenticator code to confirm disabling 2FA.`
+  String get g_2fa_disable_confirm_hint {
+    return Intl.message(
+      'Enter your current 6-digit Google Authenticator code to confirm disabling 2FA.',
+      name: 'g_2fa_disable_confirm_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Google 2FA has been disabled`
+  String get g_2fa_disable_success {
+    return Intl.message(
+      'Google 2FA has been disabled',
+      name: 'g_2fa_disable_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to disable Google 2FA. Please verify the code and try again.`
+  String get g_2fa_disable_error {
+    return Intl.message(
+      'Failed to disable Google 2FA. Please verify the code and try again.',
+      name: 'g_2fa_disable_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save this key — you'll need it if you lose your phone`
+  String get g_2fa_backup_hint {
+    return Intl.message(
+      'Save this key — you\'ll need it if you lose your phone',
+      name: 'g_2fa_backup_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Share`
+  String get g_2fa_backup_share {
+    return Intl.message(
+      'Share',
+      name: 'g_2fa_backup_share',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `N42Wallet Google Authenticator backup key`
+  String get g_2fa_backup_share_text {
+    return Intl.message(
+      'N42Wallet Google Authenticator backup key',
+      name: 'g_2fa_backup_share_text',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter a valid 6-digit code`
+  String get g_2fa_invalid_format {
+    return Intl.message(
+      'Please enter a valid 6-digit code',
+      name: 'g_2fa_invalid_format',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Sign up`
   String get Create_account {
     return Intl.message('Sign up', name: 'Create_account', desc: '', args: []);

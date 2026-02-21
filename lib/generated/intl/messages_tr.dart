@@ -259,6 +259,28 @@ class MessageLookup extends MessageLookupByLibrary {
       "E-posta doğrulaması eklensin mi?",
     ),
     "file": MessageLookupByLibrary.simpleMessage("Dosya"),
+    "g_2fa_backup_hint": MessageLookupByLibrary.simpleMessage(
+      "Bu anahtarı kaydedin — telefonunuzu kaybederseniz ihtiyacınız olacak.",
+    ),
+    "g_2fa_backup_share": MessageLookupByLibrary.simpleMessage("Paylaş"),
+    "g_2fa_backup_share_text": MessageLookupByLibrary.simpleMessage(
+      "N42Wallet Google Authenticator yedek anahtarı",
+    ),
+    "g_2fa_disable_confirm_hint": MessageLookupByLibrary.simpleMessage(
+      "2FA\'yı devre dışı bırakmak için Google Authenticator\'dan 6 haneli kodu girin.",
+    ),
+    "g_2fa_disable_confirm_title": MessageLookupByLibrary.simpleMessage(
+      "Google 2FA\'yı devre dışı bırak",
+    ),
+    "g_2fa_disable_error": MessageLookupByLibrary.simpleMessage(
+      "Google 2FA devre dışı bırakılamadı. Kodu kontrol edin ve tekrar deneyin.",
+    ),
+    "g_2fa_disable_success": MessageLookupByLibrary.simpleMessage(
+      "Google 2FA devre dışı bırakıldı",
+    ),
+    "g_2fa_invalid_format": MessageLookupByLibrary.simpleMessage(
+      "Geçerli 6 haneli bir kod girin",
+    ),
     "g_app_share_key_1": MessageLookupByLibrary.simpleMessage(
       "Tokenlar yalnızca aynı ağ içinde gönderilebilir. Diğer ağlardan gönderim kayba neden olabilir.",
     ),

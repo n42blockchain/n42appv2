@@ -233,6 +233,28 @@ class MessageLookup extends MessageLookupByLibrary {
       "이메일 인증을 추가하시겠습니까?",
     ),
     "file": MessageLookupByLibrary.simpleMessage("파일"),
+    "g_2fa_backup_hint": MessageLookupByLibrary.simpleMessage(
+      "이 키를 저장하세요 — 휴대폰을 잃어버렸을 때 필요합니다.",
+    ),
+    "g_2fa_backup_share": MessageLookupByLibrary.simpleMessage("공유"),
+    "g_2fa_backup_share_text": MessageLookupByLibrary.simpleMessage(
+      "N42Wallet Google Authenticator 백업 키",
+    ),
+    "g_2fa_disable_confirm_hint": MessageLookupByLibrary.simpleMessage(
+      "Google Authenticator의 6자리 코드를 입력하여 2FA를 비활성화하세요.",
+    ),
+    "g_2fa_disable_confirm_title": MessageLookupByLibrary.simpleMessage(
+      "Google 2FA 비활성화",
+    ),
+    "g_2fa_disable_error": MessageLookupByLibrary.simpleMessage(
+      "Google 2FA 비활성화에 실패했습니다. 코드를 확인하고 다시 시도하세요.",
+    ),
+    "g_2fa_disable_success": MessageLookupByLibrary.simpleMessage(
+      "Google 2FA가 비활성화되었습니다",
+    ),
+    "g_2fa_invalid_format": MessageLookupByLibrary.simpleMessage(
+      "유효한 6자리 코드를 입력하세요",
+    ),
     "g_app_share_key_1": MessageLookupByLibrary.simpleMessage(
       "토큰은 동일한 네트워크 내에서만 전송할 수 있습니다. 다른 네트워크에서 전송하면 손실이 발생할 수 있습니다.",
     ),

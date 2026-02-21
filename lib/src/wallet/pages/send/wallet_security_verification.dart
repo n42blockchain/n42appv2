@@ -32,9 +32,11 @@ class WalletSecurityVerification extends ConsumerStatefulWidget {
 class _WalletSecurityVerificationState extends ConsumerState<WalletSecurityVerification> {
   TextEditingController pwdTextEditingController=TextEditingController();
   TextEditingController emailTextEditingController=TextEditingController();
+  TextEditingController googleTextEditingController=TextEditingController();
   bool obscure=true;//是否显示密码
   String pwdErrorMessage="";//错误提示
   String emailErrorMessage="";
+  String googleErrorMessage="";
   String faceErrorMessage="";
   Map<String,dynamic> coinInfo={};
   String gasPrice="";
@@ -43,14 +45,13 @@ class _WalletSecurityVerificationState extends ConsumerState<WalletSecurityVerif
   bool emailSendWait=false;//发送邮件是否等待
   Load load=Load.finish;
   Load emailLoad=Load.finish;
-  //Load googleLoad=Load.finish;
   bool showWalletPassword=false;
   Timer? _emailTimer;
 
   //账号安全
   Map<String,dynamic> securityMap={
     "email":false,
-    //"google":false,
+    "google":false,
     "face":false,
   };
   late UserInfoApi userInfoApi;
@@ -66,7 +67,7 @@ class _WalletSecurityVerificationState extends ConsumerState<WalletSecurityVerif
     _emailTimer = null;
     pwdTextEditingController.dispose();
     emailTextEditingController.dispose();
-    //googleTextEditingController.dispose();
+    googleTextEditingController.dispose();
     emailSendWaitNum=0;
     super.dispose();
   }
@@ -77,6 +78,7 @@ class _WalletSecurityVerificationState extends ConsumerState<WalletSecurityVerif
       if(userSecurityMap!=null){
         setState(() {
           securityMap['email']=userSecurityMap['email'];
+          securityMap['google']=userSecurityMap['google']??false;
           securityMap['face']=userSecurityMap['face']??false;
         });
       }
@@ -176,6 +178,35 @@ class _WalletSecurityVerificationState extends ConsumerState<WalletSecurityVerif
       return true;
     }
   }
+  //谷歌验证码验证
+  Future<bool> checkGoogleVerification() async {
+    String codeStr = googleTextEditingController.text.trim();
+    if (codeStr.isEmpty) {
+      setState(() {
+        googleErrorMessage = S.of(context).rest_Please_enter;
+      });
+      return false;
+    }
+    if (codeStr.length != 6 || !RegExp(r'^\d{6}$').hasMatch(codeStr)) {
+      setState(() {
+        googleErrorMessage = S.of(context).g_2fa_invalid_format;
+      });
+      return false;
+    }
+    MessageModel mm = await userInfoApi.checkGoogle(codeStr);
+    if (mm.error) {
+      setState(() {
+        googleErrorMessage = S.of(context).email_code_input_error;
+      });
+      return false;
+    } else {
+      setState(() {
+        googleErrorMessage = "";
+      });
+      return true;
+    }
+  }
+
   //生物识别
   Future<void> faceVerification() async {
     final LocalAuthentication auth = LocalAuthentication();
@@ -361,7 +392,7 @@ class _WalletSecurityVerificationState extends ConsumerState<WalletSecurityVerif
                                 if(load==Load.loading) {
                                   return;
                                 }
-                                if(showWalletPassword==false && securityMap['face']==false && securityMap['email']==false //&& securityMap['google']==false
+                                if(showWalletPassword==false && securityMap['face']==false && securityMap['email']==false && securityMap['google']==false
                                 ) {
                                   return;
                                 }
@@ -399,6 +430,16 @@ class _WalletSecurityVerificationState extends ConsumerState<WalletSecurityVerif
                                     return;
                                   }
                                 }
+                                if(securityMap['google']){
+                                  rValue=await checkGoogleVerification();
+                                  if (!context.mounted) return;
+                                  if(rValue==false){
+                                    setState(() {
+                                      load=Load.finish;
+                                    });
+                                    return;
+                                  }
+                                }
                                 if (!context.mounted) return;
                                 setState(() {
                                   load=Load.finish;
@@ -406,7 +447,7 @@ class _WalletSecurityVerificationState extends ConsumerState<WalletSecurityVerif
                                 Navigator.pop(context,true);
                               },
                                 S.of(context).g_key_78,
-                                AppThemeUtils.getColorByKey(context, (load==Load.finish && (showWalletPassword || securityMap['face'] || securityMap['email'] //|| securityMap['google']
+                                AppThemeUtils.getColorByKey(context, (load==Load.finish && (showWalletPassword || securityMap['face'] || securityMap['email'] || securityMap['google']
                                 ))?AppThemeKeys.mainButtonBgColor.name:AppThemeKeys.mainButtonBgColor3.name),
                                 AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
                                 load==Load.loading,),
@@ -432,6 +473,11 @@ class _WalletSecurityVerificationState extends ConsumerState<WalletSecurityVerif
     }else{
       rw.add(walletEmail());
     }
+    if(securityMap['google']){
+      rw.insert(1, walletGoogle());
+    }else{
+      rw.add(walletGoogle());
+    }
     if(securityMap['face']){
       rw.insert(1, walletFace());
     }else{
@@ -440,6 +486,176 @@ class _WalletSecurityVerificationState extends ConsumerState<WalletSecurityVerif
     rw.add(SizedBox(height: ScreenUtil().setWidth(50.0),));
     return rw;
   }
+  //谷歌验证控件
+  Widget walletGoogle() {
+    if (securityMap['google'] == true) {
+      return Container(
+        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8.0)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              S.of(context).google_verification,
+              style: TextStyle(
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                fontSize: ScreenUtil().setSp(28.0),
+              ),
+            ),
+            SizedBox(height: ScreenUtil().setWidth(10.0)),
+            Container(
+              padding: EdgeInsets.only(
+                left: ScreenUtil().setWidth(32.0),
+                right: ScreenUtil().setWidth(10.0),
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(8.0))),
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: TextField(
+                      style: TextStyle(
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                        fontSize: ScreenUtil().setSp(28.0),
+                      ),
+                      controller: googleTextEditingController,
+                      textInputAction: TextInputAction.done,
+                      keyboardType: TextInputType.number,
+                      maxLength: 6,
+                      decoration: InputDecoration(
+                        hintText: S.of(context).google_verification_message19,
+                        hintStyle: TextStyle(
+                          fontSize: ScreenUtil().setSp(28.0),
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                        ),
+                        border: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        counterText: '',
+                      ),
+                      maxLines: 1,
+                      onEditingComplete: () => closeKeyboard(),
+                    ),
+                  ),
+                  // 粘贴按钮
+                  InkWell(
+                    onTap: () async {
+                      ClipboardData? cd = await Clipboard.getData(Clipboard.kTextPlain);
+                      if (cd?.text != null && cd!.text != "null") {
+                        googleTextEditingController.text = cd.text!.trim();
+                        setState(() {});
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: ScreenUtil().setWidth(10.0),
+                        horizontal: ScreenUtil().setWidth(20.0),
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
+                        borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(30.0))),
+                      ),
+                      child: Text(
+                        S.of(context).g_key_166,
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(24.0),
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Visibility(
+              visible: googleErrorMessage != "",
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    googleErrorMessage,
+                    style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+                      fontSize: ScreenUtil().setSp(26.0),
+                    ),
+                    textAlign: TextAlign.end,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: ScreenUtil().setWidth(40.0)),
+          ],
+        ),
+      );
+    } else {
+      // Google 2FA 未启用：显示引导去设置
+      return Container(
+        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8.0)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              S.of(context).google_verification,
+              style: TextStyle(
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                fontSize: ScreenUtil().setSp(28.0),
+              ),
+            ),
+            SizedBox(height: ScreenUtil().setWidth(10.0)),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      S.of(context).google_verification_message7,
+                      style: TextStyle(
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
+                        fontSize: ScreenUtil().setSp(26.0),
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      if (AppGlobals.userInfo == null) {
+                        showLoginDialog();
+                      } else {
+                        pushSetting();
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: ScreenUtil().setWidth(10.0),
+                        horizontal: ScreenUtil().setWidth(20.0),
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
+                        borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(30.0))),
+                      ),
+                      child: Text(
+                        S.of(context).google_verification_message10,
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(24.0),
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: ScreenUtil().setWidth(40.0)),
+          ],
+        ),
+      );
+    }
+  }
+
   //钱包密码
   Widget walletPassword(){
     if(showWalletPassword){

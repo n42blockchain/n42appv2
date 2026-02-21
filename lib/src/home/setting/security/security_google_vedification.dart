@@ -196,16 +196,16 @@ class SecurityGoogleVedificationState extends State<SecurityGoogleVedification>{
   }
   //谷歌验证
   Future<bool> checkGoogleVerification()async{
-    String codeStr=googleTextEditingController.text;
+    String codeStr=googleTextEditingController.text.trim();
     if(codeStr==""){
       setState(() {
         googleErrorMessage=S.of(context).rest_Please_enter;
       });
       return false;
     }
-    if(codeStr.length!=6){
+    if(codeStr.length!=6 || !RegExp(r'^\d{6}$').hasMatch(codeStr)){
       setState(() {
-        googleErrorMessage=S.of(context).email_code_input_error;
+        googleErrorMessage=S.of(context).g_2fa_invalid_format;
       });
       return false;
     }
@@ -580,9 +580,11 @@ class SecurityGoogleVedificationState extends State<SecurityGoogleVedification>{
                     ),
                     controller: googleTextEditingController,
                     textInputAction: TextInputAction.done,
-                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: TextInputType.number,
+                    maxLength: 6,
                     decoration: InputDecoration(
                       isCollapsed: true,
+                      counterText: '',
                       contentPadding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18.0)),
                       hintText: S.of(context).rest_Please_enter,
                       hintStyle: TextStyle(
