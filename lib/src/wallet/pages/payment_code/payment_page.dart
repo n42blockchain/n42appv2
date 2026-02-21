@@ -10,6 +10,7 @@ import 'package:n42appv2/src/wallet/api/market_api.dart';
 import 'package:n42appv2/src/wallet/api/transfer_api.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_security_verification.dart';
+import 'package:n42appv2/src/wallet/widgets/ens_address_display.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
@@ -285,13 +286,15 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                                 fontSize: ScreenUtil().setSp(30),
                               ),
                             ),
-                          Text(
-                            address,
-                            style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                              fontSize: ScreenUtil().setSp(30),
-                              fontWeight: FontWeight.bold,
-                            ),
+                          EnsAddressDisplay(
+                            address: address,
+                            coinType: coinType.isNotEmpty ? coinType : 'ETH',
+                            style: EnsDisplayStyle.compact,
+                            showAvatar: false,
+                            showCopy: false,
+                            textColor: AppThemeUtils.getColorByKey(
+                                context, AppThemeKeys.mainTextColor.name),
+                            fontSize: ScreenUtil().setSp(30),
                           ),
                           Text(
                             "\$ $amount",

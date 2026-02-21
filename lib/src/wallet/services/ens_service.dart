@@ -224,12 +224,9 @@ class EnsService {
   }) async {
     final normalizedAddress = address.toLowerCase();
 
-    // 检查缓存
-    if (useCache) {
-      final cached = _getFromCache(_reverseCache, normalizedAddress);
-      if (cached != null) {
-        return cached;
-      }
+    // 检查缓存（使用 containsKey 区分"已缓存 null"与"缓存未命中"）
+    if (useCache && _isInReverseCache(normalizedAddress)) {
+      return _reverseCache[normalizedAddress]!.value;
     }
 
     try {
@@ -243,7 +240,7 @@ class EnsService {
       // ETH 回退
       ensName ??= await _reverseResolveEth(normalizedAddress);
 
-      // 更新缓存 (即使为 null 也缓存，避免重复查询)
+      // 更新缓存（即使为 null 也缓存，避免对同一地址重复查询）
       _addToCache(_reverseCache, normalizedAddress, ensName);
 
       return ensName;
@@ -420,7 +417,7 @@ class EnsService {
     return null;
   }
 
-  /// 从缓存获取
+  /// 从缓存获取（仅适用于非空值类型；nullable 类型请用 [_isInReverseCache]）
   T? _getFromCache<T>(Map<String, _CacheEntry<T>> cache, String key) {
     final entry = cache[key];
     if (entry != null && !entry.isExpired) {
@@ -431,6 +428,17 @@ class EnsService {
       cache.remove(key);
     }
     return null;
+  }
+
+  /// 检查反向解析缓存中是否存在有效条目（可区分"已缓存 null"与"缓存未命中"）
+  bool _isInReverseCache(String key) {
+    final entry = _reverseCache[key];
+    if (entry == null) return false;
+    if (entry.isExpired) {
+      _reverseCache.remove(key);
+      return false;
+    }
+    return true;
   }
 
   /// 添加到缓存

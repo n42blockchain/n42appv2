@@ -376,10 +376,14 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text(
-                            isOut?transactionModel.to1:transactionModel.from1,
+                          EnsAddressText(
+                            address: isOut
+                                ? transactionModel.to1
+                                : transactionModel.from1,
+                            coinType: coinModel?.coin['coinType'] ?? 'ETH',
                             style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name,),
+                              color: AppThemeUtils.getColorByKey(
+                                  context, AppThemeKeys.itemTextColor.name),
                               fontSize: ScreenUtil().setSp(26.0),
                             ),
                           ),

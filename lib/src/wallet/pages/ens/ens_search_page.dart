@@ -347,7 +347,8 @@ class _EnsSearchPageState extends State<EnsSearchPage> {
   }
 
   Widget _buildSuggestions() {
-    final suggestions = ['alice', 'bob', 'crypto', 'defi', 'nft'];
+    // Web3 / N42 ecosystem oriented suggestions as search starters
+    final suggestions = ['n42user', 'web3', 'builder', 'trader', 'hodler', 'degen'];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
