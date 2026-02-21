@@ -869,14 +869,79 @@ class MessageLookup extends MessageLookupByLibrary {
       "Send tokens using your smart account",
     ),
     "g_key_aa_send_title": MessageLookupByLibrary.simpleMessage("AA Transfer"),
+    "g_key_aa_session_1d": MessageLookupByLibrary.simpleMessage("1 ngày"),
+    "g_key_aa_session_1h": MessageLookupByLibrary.simpleMessage("1 giờ"),
+    "g_key_aa_session_30d": MessageLookupByLibrary.simpleMessage("30 ngày"),
+    "g_key_aa_session_7d": MessageLookupByLibrary.simpleMessage("7 ngày"),
+    "g_key_aa_session_allowed": MessageLookupByLibrary.simpleMessage(
+      "Được phép",
+    ),
+    "g_key_aa_session_amount_hint": MessageLookupByLibrary.simpleMessage(
+      "ví dụ: 100.00",
+    ),
+    "g_key_aa_session_amount_limit": MessageLookupByLibrary.simpleMessage(
+      "Số tiền tối đa",
+    ),
+    "g_key_aa_session_blocked": MessageLookupByLibrary.simpleMessage("Bị chặn"),
+    "g_key_aa_session_confirm_risk": MessageLookupByLibrary.simpleMessage(
+      "Tôi hiểu quyền của khóa này",
+    ),
+    "g_key_aa_session_contract_can": MessageLookupByLibrary.simpleMessage(
+      "Tương tác với hợp đồng DApp được chấp thuận",
+    ),
+    "g_key_aa_session_create_failed": MessageLookupByLibrary.simpleMessage(
+      "Không thể tạo khóa phiên",
+    ),
+    "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
+      "Khóa phiên đã được tạo",
+    ),
+    "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
+      "ví dụ: Uniswap, Aave...",
+    ),
+    "g_key_aa_session_dapp_label": MessageLookupByLibrary.simpleMessage(
+      "Nhãn / Tên DApp",
+    ),
     "g_key_aa_session_details": MessageLookupByLibrary.simpleMessage(
       "Session Key Details",
+    ),
+    "g_key_aa_session_expiry": MessageLookupByLibrary.simpleMessage(
+      "Có hiệu lực trong",
+    ),
+    "g_key_aa_session_full_warning": MessageLookupByLibrary.simpleMessage(
+      "Rủi ro cao — chỉ dùng DApp đã xác minh",
     ),
     "g_key_aa_session_keys": MessageLookupByLibrary.simpleMessage(
       "Session Keys",
     ),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
       "Authorize DApps with temporary access to your smart account",
+    ),
+    "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
+      "Truy cập DApp",
+    ),
+    "g_key_aa_session_preset_full": MessageLookupByLibrary.simpleMessage(
+      "Kiểm soát đầy đủ",
+    ),
+    "g_key_aa_session_preset_transfer": MessageLookupByLibrary.simpleMessage(
+      "Chỉ gửi",
+    ),
+    "g_key_aa_session_risk_high": MessageLookupByLibrary.simpleMessage(
+      "Rủi ro cao",
+    ),
+    "g_key_aa_session_risk_low": MessageLookupByLibrary.simpleMessage(
+      "Rủi ro thấp",
+    ),
+    "g_key_aa_session_risk_medium": MessageLookupByLibrary.simpleMessage(
+      "Rủi ro trung bình",
+    ),
+    "g_key_aa_session_risk_warning": MessageLookupByLibrary.simpleMessage(
+      "Xem lại quyền trước khi xác nhận",
+    ),
+    "g_key_aa_session_select_preset": MessageLookupByLibrary.simpleMessage(
+      "Chọn cấp độ quyền",
+    ),
+    "g_key_aa_session_transfer_can": MessageLookupByLibrary.simpleMessage(
+      "Chuyển token trong giới hạn đã đặt",
     ),
     "g_key_aa_simple_account": MessageLookupByLibrary.simpleMessage(
       "Simple Account",

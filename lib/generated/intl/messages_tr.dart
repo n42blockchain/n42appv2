@@ -896,14 +896,77 @@ class MessageLookup extends MessageLookupByLibrary {
       "Send tokens using your smart account",
     ),
     "g_key_aa_send_title": MessageLookupByLibrary.simpleMessage("AA Transfer"),
+    "g_key_aa_session_1d": MessageLookupByLibrary.simpleMessage("1 Gün"),
+    "g_key_aa_session_1h": MessageLookupByLibrary.simpleMessage("1 Saat"),
+    "g_key_aa_session_30d": MessageLookupByLibrary.simpleMessage("30 Gün"),
+    "g_key_aa_session_7d": MessageLookupByLibrary.simpleMessage("7 Gün"),
+    "g_key_aa_session_allowed": MessageLookupByLibrary.simpleMessage("İzinli"),
+    "g_key_aa_session_amount_hint": MessageLookupByLibrary.simpleMessage(
+      "örn. 100,00",
+    ),
+    "g_key_aa_session_amount_limit": MessageLookupByLibrary.simpleMessage(
+      "Maks. Tutar",
+    ),
+    "g_key_aa_session_blocked": MessageLookupByLibrary.simpleMessage("Engelli"),
+    "g_key_aa_session_confirm_risk": MessageLookupByLibrary.simpleMessage(
+      "Bu anahtarın yetkilerini anlıyorum",
+    ),
+    "g_key_aa_session_contract_can": MessageLookupByLibrary.simpleMessage(
+      "Onaylanan DApp sözleşmeleriyle etkileşim",
+    ),
+    "g_key_aa_session_create_failed": MessageLookupByLibrary.simpleMessage(
+      "Oturum anahtarı oluşturulamadı",
+    ),
+    "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
+      "Oturum anahtarı oluşturuldu",
+    ),
+    "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
+      "örn. Uniswap, Aave...",
+    ),
+    "g_key_aa_session_dapp_label": MessageLookupByLibrary.simpleMessage(
+      "Etiket / DApp Adı",
+    ),
     "g_key_aa_session_details": MessageLookupByLibrary.simpleMessage(
       "Session Key Details",
+    ),
+    "g_key_aa_session_expiry": MessageLookupByLibrary.simpleMessage(
+      "Geçerlilik Süresi",
+    ),
+    "g_key_aa_session_full_warning": MessageLookupByLibrary.simpleMessage(
+      "Yüksek risk — yalnızca güvenilir DApp\'ler",
     ),
     "g_key_aa_session_keys": MessageLookupByLibrary.simpleMessage(
       "Session Keys",
     ),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
       "Authorize DApps with temporary access to your smart account",
+    ),
+    "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
+      "DApp Erişimi",
+    ),
+    "g_key_aa_session_preset_full": MessageLookupByLibrary.simpleMessage(
+      "Tam Kontrol",
+    ),
+    "g_key_aa_session_preset_transfer": MessageLookupByLibrary.simpleMessage(
+      "Yalnızca Gönder",
+    ),
+    "g_key_aa_session_risk_high": MessageLookupByLibrary.simpleMessage(
+      "Yüksek Risk",
+    ),
+    "g_key_aa_session_risk_low": MessageLookupByLibrary.simpleMessage(
+      "Düşük Risk",
+    ),
+    "g_key_aa_session_risk_medium": MessageLookupByLibrary.simpleMessage(
+      "Orta Risk",
+    ),
+    "g_key_aa_session_risk_warning": MessageLookupByLibrary.simpleMessage(
+      "Onaylamadan önce yetkileri inceleyin",
+    ),
+    "g_key_aa_session_select_preset": MessageLookupByLibrary.simpleMessage(
+      "İzin Seviyesi Seç",
+    ),
+    "g_key_aa_session_transfer_can": MessageLookupByLibrary.simpleMessage(
+      "Belirlenen limit dahilinde token transfer et",
     ),
     "g_key_aa_simple_account": MessageLookupByLibrary.simpleMessage(
       "Simple Account",

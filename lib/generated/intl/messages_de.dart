@@ -939,14 +939,79 @@ class MessageLookup extends MessageLookupByLibrary {
       "Send tokens using your smart account",
     ),
     "g_key_aa_send_title": MessageLookupByLibrary.simpleMessage("AA Transfer"),
+    "g_key_aa_session_1d": MessageLookupByLibrary.simpleMessage("1 Tag"),
+    "g_key_aa_session_1h": MessageLookupByLibrary.simpleMessage("1 Stunde"),
+    "g_key_aa_session_30d": MessageLookupByLibrary.simpleMessage("30 Tage"),
+    "g_key_aa_session_7d": MessageLookupByLibrary.simpleMessage("7 Tage"),
+    "g_key_aa_session_allowed": MessageLookupByLibrary.simpleMessage("Erlaubt"),
+    "g_key_aa_session_amount_hint": MessageLookupByLibrary.simpleMessage(
+      "z.B. 100,00",
+    ),
+    "g_key_aa_session_amount_limit": MessageLookupByLibrary.simpleMessage(
+      "Max. Betrag",
+    ),
+    "g_key_aa_session_blocked": MessageLookupByLibrary.simpleMessage(
+      "Blockiert",
+    ),
+    "g_key_aa_session_confirm_risk": MessageLookupByLibrary.simpleMessage(
+      "Ich verstehe die Berechtigungen dieses Schlüssels",
+    ),
+    "g_key_aa_session_contract_can": MessageLookupByLibrary.simpleMessage(
+      "Mit genehmigten DApp-Verträgen interagieren",
+    ),
+    "g_key_aa_session_create_failed": MessageLookupByLibrary.simpleMessage(
+      "Sitzungsschlüssel konnte nicht erstellt werden",
+    ),
+    "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
+      "Sitzungsschlüssel erstellt",
+    ),
+    "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
+      "z.B. Uniswap, Aave...",
+    ),
+    "g_key_aa_session_dapp_label": MessageLookupByLibrary.simpleMessage(
+      "Label / DApp-Name",
+    ),
     "g_key_aa_session_details": MessageLookupByLibrary.simpleMessage(
       "Session Key Details",
+    ),
+    "g_key_aa_session_expiry": MessageLookupByLibrary.simpleMessage(
+      "Gültig für",
+    ),
+    "g_key_aa_session_full_warning": MessageLookupByLibrary.simpleMessage(
+      "Hohes Risiko — nur vertrauenswürdige DApps",
     ),
     "g_key_aa_session_keys": MessageLookupByLibrary.simpleMessage(
       "Session Keys",
     ),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
       "Authorize DApps with temporary access to your smart account",
+    ),
+    "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
+      "DApp-Zugriff",
+    ),
+    "g_key_aa_session_preset_full": MessageLookupByLibrary.simpleMessage(
+      "Volle Kontrolle",
+    ),
+    "g_key_aa_session_preset_transfer": MessageLookupByLibrary.simpleMessage(
+      "Nur Senden",
+    ),
+    "g_key_aa_session_risk_high": MessageLookupByLibrary.simpleMessage(
+      "Hohes Risiko",
+    ),
+    "g_key_aa_session_risk_low": MessageLookupByLibrary.simpleMessage(
+      "Niedriges Risiko",
+    ),
+    "g_key_aa_session_risk_medium": MessageLookupByLibrary.simpleMessage(
+      "Mittleres Risiko",
+    ),
+    "g_key_aa_session_risk_warning": MessageLookupByLibrary.simpleMessage(
+      "Berechtigungen vor Bestätigung prüfen",
+    ),
+    "g_key_aa_session_select_preset": MessageLookupByLibrary.simpleMessage(
+      "Berechtigungsebene wählen",
+    ),
+    "g_key_aa_session_transfer_can": MessageLookupByLibrary.simpleMessage(
+      "Token im gesetzten Limit übertragen",
     ),
     "g_key_aa_simple_account": MessageLookupByLibrary.simpleMessage(
       "Simple Account",

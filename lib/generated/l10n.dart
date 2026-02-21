@@ -11799,6 +11799,256 @@ class S {
     );
   }
 
+  /// `Choose Permission Level`
+  String get g_key_aa_session_select_preset {
+    return Intl.message(
+      'Choose Permission Level',
+      name: 'g_key_aa_session_select_preset',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send Only`
+  String get g_key_aa_session_preset_transfer {
+    return Intl.message(
+      'Send Only',
+      name: 'g_key_aa_session_preset_transfer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `DApp Access`
+  String get g_key_aa_session_preset_contract {
+    return Intl.message(
+      'DApp Access',
+      name: 'g_key_aa_session_preset_contract',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Full Control`
+  String get g_key_aa_session_preset_full {
+    return Intl.message(
+      'Full Control',
+      name: 'g_key_aa_session_preset_full',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Low Risk`
+  String get g_key_aa_session_risk_low {
+    return Intl.message(
+      'Low Risk',
+      name: 'g_key_aa_session_risk_low',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Medium Risk`
+  String get g_key_aa_session_risk_medium {
+    return Intl.message(
+      'Medium Risk',
+      name: 'g_key_aa_session_risk_medium',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `High Risk`
+  String get g_key_aa_session_risk_high {
+    return Intl.message(
+      'High Risk',
+      name: 'g_key_aa_session_risk_high',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Allowed`
+  String get g_key_aa_session_allowed {
+    return Intl.message(
+      'Allowed',
+      name: 'g_key_aa_session_allowed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Blocked`
+  String get g_key_aa_session_blocked {
+    return Intl.message(
+      'Blocked',
+      name: 'g_key_aa_session_blocked',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Valid For`
+  String get g_key_aa_session_expiry {
+    return Intl.message(
+      'Valid For',
+      name: 'g_key_aa_session_expiry',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `1 Hour`
+  String get g_key_aa_session_1h {
+    return Intl.message(
+      '1 Hour',
+      name: 'g_key_aa_session_1h',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `1 Day`
+  String get g_key_aa_session_1d {
+    return Intl.message(
+      '1 Day',
+      name: 'g_key_aa_session_1d',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `7 Days`
+  String get g_key_aa_session_7d {
+    return Intl.message(
+      '7 Days',
+      name: 'g_key_aa_session_7d',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `30 Days`
+  String get g_key_aa_session_30d {
+    return Intl.message(
+      '30 Days',
+      name: 'g_key_aa_session_30d',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Label / DApp Name`
+  String get g_key_aa_session_dapp_label {
+    return Intl.message(
+      'Label / DApp Name',
+      name: 'g_key_aa_session_dapp_label',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `e.g. Uniswap, Aave...`
+  String get g_key_aa_session_dapp_hint {
+    return Intl.message(
+      'e.g. Uniswap, Aave...',
+      name: 'g_key_aa_session_dapp_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Max Amount`
+  String get g_key_aa_session_amount_limit {
+    return Intl.message(
+      'Max Amount',
+      name: 'g_key_aa_session_amount_limit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `e.g. 100.00`
+  String get g_key_aa_session_amount_hint {
+    return Intl.message(
+      'e.g. 100.00',
+      name: 'g_key_aa_session_amount_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Session key created`
+  String get g_key_aa_session_create_success {
+    return Intl.message(
+      'Session key created',
+      name: 'g_key_aa_session_create_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to create session key`
+  String get g_key_aa_session_create_failed {
+    return Intl.message(
+      'Failed to create session key',
+      name: 'g_key_aa_session_create_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `I understand this key's permissions`
+  String get g_key_aa_session_confirm_risk {
+    return Intl.message(
+      'I understand this key\'s permissions',
+      name: 'g_key_aa_session_confirm_risk',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Review permissions before confirming`
+  String get g_key_aa_session_risk_warning {
+    return Intl.message(
+      'Review permissions before confirming',
+      name: 'g_key_aa_session_risk_warning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transfer tokens within set limit`
+  String get g_key_aa_session_transfer_can {
+    return Intl.message(
+      'Transfer tokens within set limit',
+      name: 'g_key_aa_session_transfer_can',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Interact with approved DApp contracts`
+  String get g_key_aa_session_contract_can {
+    return Intl.message(
+      'Interact with approved DApp contracts',
+      name: 'g_key_aa_session_contract_can',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `High risk — only trust verified DApps`
+  String get g_key_aa_session_full_warning {
+    return Intl.message(
+      'High risk — only trust verified DApps',
+      name: 'g_key_aa_session_full_warning',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Active`
   String get g_key_aa_active {
     return Intl.message('Active', name: 'g_key_aa_active', desc: '', args: []);

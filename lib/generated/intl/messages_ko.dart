@@ -786,14 +786,71 @@ class MessageLookup extends MessageLookupByLibrary {
       "Send tokens using your smart account",
     ),
     "g_key_aa_send_title": MessageLookupByLibrary.simpleMessage("AA Transfer"),
+    "g_key_aa_session_1d": MessageLookupByLibrary.simpleMessage("1일"),
+    "g_key_aa_session_1h": MessageLookupByLibrary.simpleMessage("1시간"),
+    "g_key_aa_session_30d": MessageLookupByLibrary.simpleMessage("30일"),
+    "g_key_aa_session_7d": MessageLookupByLibrary.simpleMessage("7일"),
+    "g_key_aa_session_allowed": MessageLookupByLibrary.simpleMessage("허용됨"),
+    "g_key_aa_session_amount_hint": MessageLookupByLibrary.simpleMessage(
+      "예: 100.00",
+    ),
+    "g_key_aa_session_amount_limit": MessageLookupByLibrary.simpleMessage(
+      "최대 금액",
+    ),
+    "g_key_aa_session_blocked": MessageLookupByLibrary.simpleMessage("차단됨"),
+    "g_key_aa_session_confirm_risk": MessageLookupByLibrary.simpleMessage(
+      "이 키의 권한을 이해합니다",
+    ),
+    "g_key_aa_session_contract_can": MessageLookupByLibrary.simpleMessage(
+      "승인된 DApp 계약과 상호 작용",
+    ),
+    "g_key_aa_session_create_failed": MessageLookupByLibrary.simpleMessage(
+      "세션 키 생성 실패",
+    ),
+    "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
+      "세션 키가 생성되었습니다",
+    ),
+    "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
+      "예: Uniswap, Aave...",
+    ),
+    "g_key_aa_session_dapp_label": MessageLookupByLibrary.simpleMessage(
+      "레이블 / DApp 이름",
+    ),
     "g_key_aa_session_details": MessageLookupByLibrary.simpleMessage(
       "Session Key Details",
+    ),
+    "g_key_aa_session_expiry": MessageLookupByLibrary.simpleMessage("유효 기간"),
+    "g_key_aa_session_full_warning": MessageLookupByLibrary.simpleMessage(
+      "높은 위험 — 검증된 DApp만 사용",
     ),
     "g_key_aa_session_keys": MessageLookupByLibrary.simpleMessage(
       "Session Keys",
     ),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
       "Authorize DApps with temporary access to your smart account",
+    ),
+    "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
+      "DApp 접근",
+    ),
+    "g_key_aa_session_preset_full": MessageLookupByLibrary.simpleMessage(
+      "전체 제어",
+    ),
+    "g_key_aa_session_preset_transfer": MessageLookupByLibrary.simpleMessage(
+      "전송만",
+    ),
+    "g_key_aa_session_risk_high": MessageLookupByLibrary.simpleMessage("높은 위험"),
+    "g_key_aa_session_risk_low": MessageLookupByLibrary.simpleMessage("낮은 위험"),
+    "g_key_aa_session_risk_medium": MessageLookupByLibrary.simpleMessage(
+      "중간 위험",
+    ),
+    "g_key_aa_session_risk_warning": MessageLookupByLibrary.simpleMessage(
+      "확인 전 권한을 검토하세요",
+    ),
+    "g_key_aa_session_select_preset": MessageLookupByLibrary.simpleMessage(
+      "권한 수준 선택",
+    ),
+    "g_key_aa_session_transfer_can": MessageLookupByLibrary.simpleMessage(
+      "설정된 한도 내에서 토큰 전송",
     ),
     "g_key_aa_simple_account": MessageLookupByLibrary.simpleMessage(
       "Simple Account",

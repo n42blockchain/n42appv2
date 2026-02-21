@@ -786,14 +786,71 @@ class MessageLookup extends MessageLookupByLibrary {
       "Send tokens using your smart account",
     ),
     "g_key_aa_send_title": MessageLookupByLibrary.simpleMessage("AA Transfer"),
+    "g_key_aa_session_1d": MessageLookupByLibrary.simpleMessage("1日"),
+    "g_key_aa_session_1h": MessageLookupByLibrary.simpleMessage("1時間"),
+    "g_key_aa_session_30d": MessageLookupByLibrary.simpleMessage("30日間"),
+    "g_key_aa_session_7d": MessageLookupByLibrary.simpleMessage("7日間"),
+    "g_key_aa_session_allowed": MessageLookupByLibrary.simpleMessage("許可"),
+    "g_key_aa_session_amount_hint": MessageLookupByLibrary.simpleMessage(
+      "例：100.00",
+    ),
+    "g_key_aa_session_amount_limit": MessageLookupByLibrary.simpleMessage(
+      "最大金額",
+    ),
+    "g_key_aa_session_blocked": MessageLookupByLibrary.simpleMessage("ブロック"),
+    "g_key_aa_session_confirm_risk": MessageLookupByLibrary.simpleMessage(
+      "このキーの権限を理解しました",
+    ),
+    "g_key_aa_session_contract_can": MessageLookupByLibrary.simpleMessage(
+      "承認済みDAppコントラクトと対話",
+    ),
+    "g_key_aa_session_create_failed": MessageLookupByLibrary.simpleMessage(
+      "セッションキーの作成に失敗しました",
+    ),
+    "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
+      "セッションキーを作成しました",
+    ),
+    "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
+      "例：Uniswap、Aave...",
+    ),
+    "g_key_aa_session_dapp_label": MessageLookupByLibrary.simpleMessage(
+      "ラベル / DApp名",
+    ),
     "g_key_aa_session_details": MessageLookupByLibrary.simpleMessage(
       "Session Key Details",
+    ),
+    "g_key_aa_session_expiry": MessageLookupByLibrary.simpleMessage("有効期間"),
+    "g_key_aa_session_full_warning": MessageLookupByLibrary.simpleMessage(
+      "高リスク — 信頼できるDAppのみ",
     ),
     "g_key_aa_session_keys": MessageLookupByLibrary.simpleMessage(
       "Session Keys",
     ),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
       "Authorize DApps with temporary access to your smart account",
+    ),
+    "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
+      "DAppアクセス",
+    ),
+    "g_key_aa_session_preset_full": MessageLookupByLibrary.simpleMessage(
+      "フル制御",
+    ),
+    "g_key_aa_session_preset_transfer": MessageLookupByLibrary.simpleMessage(
+      "送信のみ",
+    ),
+    "g_key_aa_session_risk_high": MessageLookupByLibrary.simpleMessage("高リスク"),
+    "g_key_aa_session_risk_low": MessageLookupByLibrary.simpleMessage("低リスク"),
+    "g_key_aa_session_risk_medium": MessageLookupByLibrary.simpleMessage(
+      "中リスク",
+    ),
+    "g_key_aa_session_risk_warning": MessageLookupByLibrary.simpleMessage(
+      "確認前に権限を確認してください",
+    ),
+    "g_key_aa_session_select_preset": MessageLookupByLibrary.simpleMessage(
+      "権限レベルを選択",
+    ),
+    "g_key_aa_session_transfer_can": MessageLookupByLibrary.simpleMessage(
+      "設定した上限内でトークンを転送",
     ),
     "g_key_aa_simple_account": MessageLookupByLibrary.simpleMessage(
       "Simple Account",
