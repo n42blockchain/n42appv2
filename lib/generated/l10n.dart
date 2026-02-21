@@ -9029,6 +9029,141 @@ class S {
     );
   }
 
+  /// `Ledger`
+  String get g_key_earn_ledger {
+    return Intl.message(
+      'Ledger',
+      name: 'g_key_earn_ledger',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gas`
+  String get g_key_earn_gas {
+    return Intl.message('Gas', name: 'g_key_earn_gas', desc: '', args: []);
+  }
+
+  /// `Batch`
+  String get g_key_earn_batch {
+    return Intl.message('Batch', name: 'g_key_earn_batch', desc: '', args: []);
+  }
+
+  /// `Burn`
+  String get g_key_earn_burn {
+    return Intl.message('Burn', name: 'g_key_earn_burn', desc: '', args: []);
+  }
+
+  /// `Mining`
+  String get g_key_earn_mining {
+    return Intl.message(
+      'Mining',
+      name: 'g_key_earn_mining',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Swap`
+  String get g_key_earn_swap {
+    return Intl.message('Swap', name: 'g_key_earn_swap', desc: '', args: []);
+  }
+
+  /// `Node Mining`
+  String get g_key_earn_node_mining {
+    return Intl.message(
+      'Node Mining',
+      name: 'g_key_earn_node_mining',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Earn rewards by participating in node mining`
+  String get g_key_earn_node_mining_desc {
+    return Intl.message(
+      'Earn rewards by participating in node mining',
+      name: 'g_key_earn_node_mining_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No active positions`
+  String get g_key_earn_no_positions {
+    return Intl.message(
+      'No active positions',
+      name: 'g_key_earn_no_positions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start Staking`
+  String get g_key_earn_go_staking {
+    return Intl.message(
+      'Start Staking',
+      name: 'g_key_earn_go_staking',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Buy N`
+  String get g_key_earn_buy_n {
+    return Intl.message('Buy N', name: 'g_key_earn_buy_n', desc: '', args: []);
+  }
+
+  /// `Buy N with AST protocol`
+  String get g_key_earn_buy_n_desc {
+    return Intl.message(
+      'Buy N with AST protocol',
+      name: 'g_key_earn_buy_n_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `DEX Swap`
+  String get g_key_earn_dex_swap {
+    return Intl.message(
+      'DEX Swap',
+      name: 'g_key_earn_dex_swap',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Swap any token via Uniswap / 1inch`
+  String get g_key_earn_dex_desc {
+    return Intl.message(
+      'Swap any token via Uniswap / 1inch',
+      name: 'g_key_earn_dex_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Swap Type`
+  String get g_key_earn_select_swap {
+    return Intl.message(
+      'Select Swap Type',
+      name: 'g_key_earn_select_swap',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading APY...`
+  String get g_key_earn_loading_apy {
+    return Intl.message(
+      'Loading APY...',
+      name: 'g_key_earn_loading_apy',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Burn NFT`
   String get g_key_burn_nft_title {
     return Intl.message(
