@@ -103,15 +103,18 @@ class PaymasterService {
     final baseUrl = AAConfig.paymasterUrls[symbol];
     if (baseUrl == null) return false;
 
-    final url = apiKey != null && apiKey.isNotEmpty
-        ? '$baseUrl?apikey=$apiKey'
-        : baseUrl;
+    // API key goes in Authorization header, never in the URL, to avoid
+    // logging in proxies, browser history, and server access logs.
+    final headers = <String, String>{'Content-Type': 'application/json'};
+    if (apiKey != null && apiKey.isNotEmpty) {
+      headers['Authorization'] = 'Bearer $apiKey';
+    }
 
     try {
       final resp = await _client
           .post(
-            Uri.parse(url),
-            headers: const {'Content-Type': 'application/json'},
+            Uri.parse(baseUrl),
+            headers: headers,
             body: jsonEncode({
               'jsonrpc': '2.0',
               'id': 1,
@@ -119,16 +122,18 @@ class PaymasterService {
               'params': [],
             }),
           )
-          .timeout(const Duration(seconds: 5));
+          .timeout(const Duration(seconds: 10));
 
       if (resp.statusCode != 200) return false;
 
-      final body = jsonDecode(resp.body) as Map<String, dynamic>;
-      if (body['result'] == null) return false;
+      final dynamic decoded = jsonDecode(resp.body);
+      if (decoded is! Map<String, dynamic>) return false;
+      final resultRaw = decoded['result'];
+      if (resultRaw is! String) return false;
 
       // Verify the returned chainId matches what we expect
       final returnedChainId =
-          int.tryParse((body['result'] as String).replaceFirst('0x', ''), radix: 16);
+          int.tryParse(resultRaw.replaceFirst('0x', ''), radix: 16);
       return returnedChainId == chainId;
     } catch (e) {
       // Network error → optimistically allow, real error shown at submission

@@ -38,7 +38,6 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
   late PaymasterOption _selectedOption;
   _LoadState _loadState = _LoadState.loading;
   List<PaymasterOption> _availableOptions = [];
-  String? _errorMessage;
 
   @override
   void initState() {
@@ -50,7 +49,6 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
   Future<void> _loadPaymasterOptions() async {
     setState(() {
       _loadState = _LoadState.loading;
-      _errorMessage = null;
     });
 
     try {
@@ -74,11 +72,13 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
         });
       }
     } catch (e) {
+      // Do not expose raw exception messages (may leak API URLs / stack traces)
+      assert(() {
+        debugPrint('[PaymasterSelectPage] loadOptions error: $e');
+        return true;
+      }());
       if (mounted) {
-        setState(() {
-          _loadState = _LoadState.error;
-          _errorMessage = e.toString();
-        });
+        setState(() => _loadState = _LoadState.error);
       }
     }
   }
@@ -305,19 +305,6 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
                     context, AppThemeKeys.mainTextColor.name),
               ),
             ),
-            if (_errorMessage != null) ...[
-              SizedBox(height: ScreenUtil().setWidth(8)),
-              Text(
-                _errorMessage!,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
-                  color: Colors.grey,
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
             SizedBox(height: ScreenUtil().setWidth(24)),
             ElevatedButton.icon(
               onPressed: _loadPaymasterOptions,
