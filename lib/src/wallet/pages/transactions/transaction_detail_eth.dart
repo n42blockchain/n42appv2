@@ -23,6 +23,23 @@ import 'package:web3dart/web3dart.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
+/// EVM eth_getTransactionReceipt 返回的 status 字段格式不统一：
+/// - 标准节点: "0x1" / "0x0"
+/// - 部分节点: "0x01" / "0x00"（带前导零）
+/// - 部分节点: 整数 1 / 0
+/// - 旧格式:   bool true / false
+/// 统一解析，1 == 成功，其他均为失败。
+bool _isReceiptSuccess(dynamic status) {
+  if (status == null) return false;
+  if (status is bool) return status;
+  if (status is int) return status == 1;
+  final s = status.toString().toLowerCase().trim();
+  if (s == '1' || s == 'true') return true;
+  final hex = s.startsWith('0x') ? s.substring(2) : s;
+  final n = int.tryParse(hex, radix: 16);
+  return n != null && n == 1;
+}
+
 class TransactionDetailEth extends StatefulWidget {
   final String txHash;
   final CoinModel coinModel;
@@ -175,7 +192,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
       transactionInfoReceipt=rData.data;
       if(transactionInfoReceipt !=null){
         // receipt 非 null 表示交易已上链确认，停止轮询
-        if(transactionInfoReceipt!['status']=="0x1"){
+        if(_isReceiptSuccess(transactionInfoReceipt!['status'])){
           resultStr="Success";
         }else{
           // 0x0 = 链上 revert（执行失败），非 Pending
