@@ -607,10 +607,7 @@
   "g_key_hw_add_account": "Добавить аккаунт",
   "g_key_hw_confirm_on_device": "Подтвердите на устройстве",
   "g_key_hw_connect": "Подключить аппаратный кошелёк",
-  "g_key_hw_connected": "Подключено",
-  "g_key_hw_connecting": "Подключение...",
   "g_key_hw_derivation_path": "Путь деривации",
-  "g_key_hw_disconnect": "Отключить",
   "g_key_hw_disconnected": "Отключено",
   "g_key_hw_enable_bluetooth": "Пожалуйста, включите Bluetooth",
   "g_key_hw_firmware": "Версия прошивки",
@@ -677,7 +674,9 @@
   "g_key_hw_import_failed": "Не удалось импортировать счёт: {value}",
   "@g_key_hw_import_failed": {
     "placeholders": {
-      "value": {"type": "String"}
+      "value": {
+        "type": "String"
+      }
     }
   },
   "g_key_hw_wallet_accounts": "Счета Кошелька",
@@ -689,26 +688,101 @@
   "g_key_hw_open_ledger_app_hint": "Убедитесь, что приложение {app} открыто на Ledger",
   "@g_key_hw_open_ledger_app_hint": {
     "placeholders": {
-      "app": {"type": "String"}
+      "app": {
+        "type": "String"
+      }
     }
   },
   "g_key_hw_address_copied": "Адрес скопирован",
   "g_key_hw_add_account_content": "Хотите отслеживать этот счёт аппаратного кошелька?\n\nАдрес: {address}\nСеть: {network}",
   "@g_key_hw_add_account_content": {
     "placeholders": {
-      "address": {"type": "String"},
-      "network": {"type": "String"}
+      "address": {
+        "type": "String"
+      },
+      "network": {
+        "type": "String"
+      }
     }
   },
   "g_key_hw_account_added": "Счёт {address} добавлен",
   "@g_key_hw_account_added": {
     "placeholders": {
-      "address": {"type": "String"}
+      "address": {
+        "type": "String"
+      }
     }
   },
   "g_key_hw_cancel": "Отмена",
   "g_key_hw_add": "Добавить",
   "g_key_hw_load_more": "Загрузить ещё",
+  "g_key_hw_connected": "Connected",
+  "g_key_hw_not_connected_label": "Not Connected",
+  "g_key_hw_disconnect": "Disconnect",
+  "g_key_hw_view_accounts": "View Accounts",
+  "g_key_hw_check_app": "Check App",
+  "g_key_hw_saved_devices": "Saved Devices",
+  "g_key_hw_connect_new_device": "Connect New Device",
+  "g_key_hw_connect_new_ledger": "Connect Ledger (Bluetooth)",
+  "g_key_hw_connect_new_trezor": "Connect Trezor (USB)",
+  "g_key_hw_connect_new_keystone": "Air-gap with Keystone (QR)",
+  "g_key_hw_supported_devices": "Supported Devices",
+  "g_key_hw_ble_hint": "Make sure your device is unlocked and Bluetooth is enabled before connecting.",
+  "g_key_hw_remove_device": "Remove Device",
+  "g_key_hw_remove_device_confirm": "Are you sure you want to remove \"{name}\" from saved devices?",
+  "@g_key_hw_remove_device_confirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "g_key_hw_remove": "Remove",
+  "g_key_hw_current_app_label": "Current app: {app}",
+  "@g_key_hw_current_app_label": {
+    "placeholders": {
+      "app": {
+        "type": "String"
+      }
+    }
+  },
+  "g_key_hw_no_app_open": "No app is currently open",
+  "g_key_hw_last_connected": "Last connected: {date}",
+  "@g_key_hw_last_connected": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "g_key_hw_today": "Today",
+  "g_key_hw_yesterday": "Yesterday",
+  "g_key_hw_days_ago": "{days} days ago",
+  "@g_key_hw_days_ago": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "g_key_hw_connecting": "Connecting...",
+  "g_key_hw_trezor_connect_title": "Connect Trezor",
+  "g_key_hw_trezor_usb_hint": "Connect your Trezor device via USB cable and unlock it",
+  "g_key_hw_trezor_connecting": "Connecting to Trezor...",
+  "g_key_hw_trezor_pin_required": "Enter PIN on your Trezor device",
+  "g_key_hw_trezor_passphrase_required": "Enter passphrase on your Trezor device",
+  "g_key_hw_trezor_connected": "Trezor connected successfully",
+  "g_key_hw_trezor_connect_failed": "Failed to connect to Trezor. Make sure USB is connected.",
+  "g_key_hw_keystone_connect_title": "Connect Keystone",
+  "g_key_hw_keystone_scan_xpub_hint": "Scan the QR code from your Keystone device to import accounts",
+  "g_key_hw_keystone_scan_request_hint": "Scan this QR code with your Keystone device to sign the transaction",
+  "g_key_hw_keystone_scan_response_title": "Scan Keystone Signature",
+  "g_key_hw_keystone_scan_response_hint": "Point your camera at the QR code displayed on your Keystone device",
+  "g_key_hw_keystone_signing": "Waiting for Keystone signature...",
+  "g_key_hw_keystone_signature_received": "Signature received successfully",
+  "g_key_hw_keystone_scan_error": "Failed to parse QR code. Please try again.",
+  "g_key_hw_keystone_invalid_response": "Invalid response from Keystone device",
+  "g_key_hw_keystone_tap_to_scan": "Tap to scan Keystone response",
   "g_key_keystore_19": "Кошелёк для данной валюты уже существует.",
   "g_key_keystore_21": "Не удалось прочитать Keystore",
   "g_key_keystore_22": "Keystore",
@@ -1387,35 +1461,45 @@
   "g_key_aa_gas_warn_total_high_desc": "Расчётный общий газ ({gas}) необычно высок. Проверьте транзакцию на наличие ошибок.",
   "@g_key_aa_gas_warn_total_high_desc": {
     "placeholders": {
-      "gas": {"type": "String"}
+      "gas": {
+        "type": "String"
+      }
     }
   },
   "g_key_aa_gas_warn_verify_high": "Газ верификации высокий",
   "g_key_aa_gas_warn_verify_high_desc": "Газ верификации ({gas}) может быть слишком высоким. Это может происходить при сложной логике аккаунта.",
   "@g_key_aa_gas_warn_verify_high_desc": {
     "placeholders": {
-      "gas": {"type": "String"}
+      "gas": {
+        "type": "String"
+      }
     }
   },
   "g_key_aa_gas_warn_call_high": "Газ выполнения высокий",
   "g_key_aa_gas_warn_call_high_desc": "Газ выполнения ({gas}) высокий. Вызванный контракт может потреблять больше газа, чем ожидалось.",
   "@g_key_aa_gas_warn_call_high_desc": {
     "placeholders": {
-      "gas": {"type": "String"}
+      "gas": {
+        "type": "String"
+      }
     }
   },
   "g_key_aa_gas_warn_paymaster": "Высокие накладные расходы Paymaster",
   "g_key_aa_gas_warn_paymaster_desc": "Накладные расходы газа paymaster ({gas}) высоки. Транзакции без газа могут стоить дороже.",
   "@g_key_aa_gas_warn_paymaster_desc": {
     "placeholders": {
-      "gas": {"type": "String"}
+      "gas": {
+        "type": "String"
+      }
     }
   },
   "g_key_aa_gas_warn_deploy": "Накладные расходы газа развёртывания",
   "g_key_aa_gas_warn_deploy_desc": "Первая транзакция включает развёртывание аккаунта (~{gas} газа). Последующие транзакции будут дешевле.",
   "@g_key_aa_gas_warn_deploy_desc": {
     "placeholders": {
-      "gas": {"type": "String"}
+      "gas": {
+        "type": "String"
+      }
     }
   },
   "g_key_aa_gas_warn_under_est": "Возможная недооценка газа",

@@ -607,10 +607,7 @@
   "g_key_hw_add_account": "Tambah Akun",
   "g_key_hw_confirm_on_device": "Konfirmasi di perangkat Anda",
   "g_key_hw_connect": "Hubungkan Dompet Hardware",
-  "g_key_hw_connected": "Terhubung",
-  "g_key_hw_connecting": "Menghubungkan...",
   "g_key_hw_derivation_path": "Jalur Derivasi",
-  "g_key_hw_disconnect": "Putuskan",
   "g_key_hw_disconnected": "Terputus",
   "g_key_hw_enable_bluetooth": "Mohon aktifkan Bluetooth",
   "g_key_hw_firmware": "Versi Firmware",
@@ -677,7 +674,9 @@
   "g_key_hw_import_failed": "Gagal mengimpor akun: {value}",
   "@g_key_hw_import_failed": {
     "placeholders": {
-      "value": {"type": "String"}
+      "value": {
+        "type": "String"
+      }
     }
   },
   "g_key_hw_wallet_accounts": "Akun Dompet",
@@ -689,26 +688,101 @@
   "g_key_hw_open_ledger_app_hint": "Pastikan aplikasi {app} terbuka di Ledger Anda",
   "@g_key_hw_open_ledger_app_hint": {
     "placeholders": {
-      "app": {"type": "String"}
+      "app": {
+        "type": "String"
+      }
     }
   },
   "g_key_hw_address_copied": "Alamat disalin",
   "g_key_hw_add_account_content": "Apakah Anda ingin melacak akun hardware wallet ini?\n\nAlamat: {address}\nJaringan: {network}",
   "@g_key_hw_add_account_content": {
     "placeholders": {
-      "address": {"type": "String"},
-      "network": {"type": "String"}
+      "address": {
+        "type": "String"
+      },
+      "network": {
+        "type": "String"
+      }
     }
   },
   "g_key_hw_account_added": "Akun {address} ditambahkan",
   "@g_key_hw_account_added": {
     "placeholders": {
-      "address": {"type": "String"}
+      "address": {
+        "type": "String"
+      }
     }
   },
   "g_key_hw_cancel": "Batal",
   "g_key_hw_add": "Tambah",
   "g_key_hw_load_more": "Muat lebih banyak",
+  "g_key_hw_connected": "Connected",
+  "g_key_hw_not_connected_label": "Not Connected",
+  "g_key_hw_disconnect": "Disconnect",
+  "g_key_hw_view_accounts": "View Accounts",
+  "g_key_hw_check_app": "Check App",
+  "g_key_hw_saved_devices": "Saved Devices",
+  "g_key_hw_connect_new_device": "Connect New Device",
+  "g_key_hw_connect_new_ledger": "Connect Ledger (Bluetooth)",
+  "g_key_hw_connect_new_trezor": "Connect Trezor (USB)",
+  "g_key_hw_connect_new_keystone": "Air-gap with Keystone (QR)",
+  "g_key_hw_supported_devices": "Supported Devices",
+  "g_key_hw_ble_hint": "Make sure your device is unlocked and Bluetooth is enabled before connecting.",
+  "g_key_hw_remove_device": "Remove Device",
+  "g_key_hw_remove_device_confirm": "Are you sure you want to remove \"{name}\" from saved devices?",
+  "@g_key_hw_remove_device_confirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "g_key_hw_remove": "Remove",
+  "g_key_hw_current_app_label": "Current app: {app}",
+  "@g_key_hw_current_app_label": {
+    "placeholders": {
+      "app": {
+        "type": "String"
+      }
+    }
+  },
+  "g_key_hw_no_app_open": "No app is currently open",
+  "g_key_hw_last_connected": "Last connected: {date}",
+  "@g_key_hw_last_connected": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "g_key_hw_today": "Today",
+  "g_key_hw_yesterday": "Yesterday",
+  "g_key_hw_days_ago": "{days} days ago",
+  "@g_key_hw_days_ago": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "g_key_hw_connecting": "Connecting...",
+  "g_key_hw_trezor_connect_title": "Connect Trezor",
+  "g_key_hw_trezor_usb_hint": "Connect your Trezor device via USB cable and unlock it",
+  "g_key_hw_trezor_connecting": "Connecting to Trezor...",
+  "g_key_hw_trezor_pin_required": "Enter PIN on your Trezor device",
+  "g_key_hw_trezor_passphrase_required": "Enter passphrase on your Trezor device",
+  "g_key_hw_trezor_connected": "Trezor connected successfully",
+  "g_key_hw_trezor_connect_failed": "Failed to connect to Trezor. Make sure USB is connected.",
+  "g_key_hw_keystone_connect_title": "Connect Keystone",
+  "g_key_hw_keystone_scan_xpub_hint": "Scan the QR code from your Keystone device to import accounts",
+  "g_key_hw_keystone_scan_request_hint": "Scan this QR code with your Keystone device to sign the transaction",
+  "g_key_hw_keystone_scan_response_title": "Scan Keystone Signature",
+  "g_key_hw_keystone_scan_response_hint": "Point your camera at the QR code displayed on your Keystone device",
+  "g_key_hw_keystone_signing": "Waiting for Keystone signature...",
+  "g_key_hw_keystone_signature_received": "Signature received successfully",
+  "g_key_hw_keystone_scan_error": "Failed to parse QR code. Please try again.",
+  "g_key_hw_keystone_invalid_response": "Invalid response from Keystone device",
+  "g_key_hw_keystone_tap_to_scan": "Tap to scan Keystone response",
   "g_key_keystore_19": "Dompet mata uang saat ini sudah ada.",
   "g_key_keystore_21": "Tidak dapat membaca Keystore",
   "g_key_keystore_22": "Keystore",
@@ -1387,35 +1461,45 @@
   "g_key_aa_gas_warn_total_high_desc": "Total gas yang diperkirakan ({gas}) sangat tinggi. Periksa transaksi Anda untuk kesalahan.",
   "@g_key_aa_gas_warn_total_high_desc": {
     "placeholders": {
-      "gas": {"type": "String"}
+      "gas": {
+        "type": "String"
+      }
     }
   },
   "g_key_aa_gas_warn_verify_high": "Gas Verifikasi Tinggi",
   "g_key_aa_gas_warn_verify_high_desc": "Gas verifikasi ({gas}) mungkin terlalu tinggi. Ini bisa terjadi dengan logika akun yang kompleks.",
   "@g_key_aa_gas_warn_verify_high_desc": {
     "placeholders": {
-      "gas": {"type": "String"}
+      "gas": {
+        "type": "String"
+      }
     }
   },
   "g_key_aa_gas_warn_call_high": "Gas Eksekusi Tinggi",
   "g_key_aa_gas_warn_call_high_desc": "Gas eksekusi ({gas}) tinggi. Kontrak yang dipanggil mungkin menggunakan lebih banyak gas dari yang diharapkan.",
   "@g_key_aa_gas_warn_call_high_desc": {
     "placeholders": {
-      "gas": {"type": "String"}
+      "gas": {
+        "type": "String"
+      }
     }
   },
   "g_key_aa_gas_warn_paymaster": "Overhead Paymaster Tinggi",
   "g_key_aa_gas_warn_paymaster_desc": "Overhead gas paymaster ({gas}) tinggi. Transaksi tanpa gas mungkin lebih mahal.",
   "@g_key_aa_gas_warn_paymaster_desc": {
     "placeholders": {
-      "gas": {"type": "String"}
+      "gas": {
+        "type": "String"
+      }
     }
   },
   "g_key_aa_gas_warn_deploy": "Overhead Gas Deployment",
   "g_key_aa_gas_warn_deploy_desc": "Transaksi pertama termasuk deployment akun (~{gas} gas). Transaksi berikutnya akan lebih murah.",
   "@g_key_aa_gas_warn_deploy_desc": {
     "placeholders": {
-      "gas": {"type": "String"}
+      "gas": {
+        "type": "String"
+      }
     }
   },
   "g_key_aa_gas_warn_under_est": "Kemungkinan Gas Terlalu Rendah",

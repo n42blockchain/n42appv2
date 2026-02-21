@@ -7809,41 +7809,11 @@ class S {
     );
   }
 
-  /// `Disconnect`
-  String get g_key_hw_disconnect {
-    return Intl.message(
-      'Disconnect',
-      name: 'g_key_hw_disconnect',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Scanning for devices...`
   String get g_key_hw_scanning {
     return Intl.message(
       'Scanning for devices...',
       name: 'g_key_hw_scanning',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Connecting...`
-  String get g_key_hw_connecting {
-    return Intl.message(
-      'Connecting...',
-      name: 'g_key_hw_connecting',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Connected`
-  String get g_key_hw_connected {
-    return Intl.message(
-      'Connected',
-      name: 'g_key_hw_connected',
       desc: '',
       args: [],
     );
@@ -12644,6 +12614,386 @@ class S {
     return Intl.message(
       'Load More',
       name: 'g_key_hw_load_more',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connected`
+  String get g_key_hw_connected {
+    return Intl.message(
+      'Connected',
+      name: 'g_key_hw_connected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not Connected`
+  String get g_key_hw_not_connected_label {
+    return Intl.message(
+      'Not Connected',
+      name: 'g_key_hw_not_connected_label',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Disconnect`
+  String get g_key_hw_disconnect {
+    return Intl.message(
+      'Disconnect',
+      name: 'g_key_hw_disconnect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View Accounts`
+  String get g_key_hw_view_accounts {
+    return Intl.message(
+      'View Accounts',
+      name: 'g_key_hw_view_accounts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check App`
+  String get g_key_hw_check_app {
+    return Intl.message(
+      'Check App',
+      name: 'g_key_hw_check_app',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saved Devices`
+  String get g_key_hw_saved_devices {
+    return Intl.message(
+      'Saved Devices',
+      name: 'g_key_hw_saved_devices',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connect New Device`
+  String get g_key_hw_connect_new_device {
+    return Intl.message(
+      'Connect New Device',
+      name: 'g_key_hw_connect_new_device',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connect Ledger (Bluetooth)`
+  String get g_key_hw_connect_new_ledger {
+    return Intl.message(
+      'Connect Ledger (Bluetooth)',
+      name: 'g_key_hw_connect_new_ledger',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connect Trezor (USB)`
+  String get g_key_hw_connect_new_trezor {
+    return Intl.message(
+      'Connect Trezor (USB)',
+      name: 'g_key_hw_connect_new_trezor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Air-gap with Keystone (QR)`
+  String get g_key_hw_connect_new_keystone {
+    return Intl.message(
+      'Air-gap with Keystone (QR)',
+      name: 'g_key_hw_connect_new_keystone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Supported Devices`
+  String get g_key_hw_supported_devices {
+    return Intl.message(
+      'Supported Devices',
+      name: 'g_key_hw_supported_devices',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Make sure your device is unlocked and Bluetooth is enabled before connecting.`
+  String get g_key_hw_ble_hint {
+    return Intl.message(
+      'Make sure your device is unlocked and Bluetooth is enabled before connecting.',
+      name: 'g_key_hw_ble_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove Device`
+  String get g_key_hw_remove_device {
+    return Intl.message(
+      'Remove Device',
+      name: 'g_key_hw_remove_device',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to remove "{name}" from saved devices?`
+  String g_key_hw_remove_device_confirm(String name) {
+    return Intl.message(
+      'Are you sure you want to remove "$name" from saved devices?',
+      name: 'g_key_hw_remove_device_confirm',
+      desc: '',
+      args: [name],
+    );
+  }
+
+  /// `Remove`
+  String get g_key_hw_remove {
+    return Intl.message('Remove', name: 'g_key_hw_remove', desc: '', args: []);
+  }
+
+  /// `Current app: {app}`
+  String g_key_hw_current_app_label(String app) {
+    return Intl.message(
+      'Current app: $app',
+      name: 'g_key_hw_current_app_label',
+      desc: '',
+      args: [app],
+    );
+  }
+
+  /// `No app is currently open`
+  String get g_key_hw_no_app_open {
+    return Intl.message(
+      'No app is currently open',
+      name: 'g_key_hw_no_app_open',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Last connected: {date}`
+  String g_key_hw_last_connected(String date) {
+    return Intl.message(
+      'Last connected: $date',
+      name: 'g_key_hw_last_connected',
+      desc: '',
+      args: [date],
+    );
+  }
+
+  /// `Today`
+  String get g_key_hw_today {
+    return Intl.message('Today', name: 'g_key_hw_today', desc: '', args: []);
+  }
+
+  /// `Yesterday`
+  String get g_key_hw_yesterday {
+    return Intl.message(
+      'Yesterday',
+      name: 'g_key_hw_yesterday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{days} days ago`
+  String g_key_hw_days_ago(int days) {
+    return Intl.message(
+      '$days days ago',
+      name: 'g_key_hw_days_ago',
+      desc: '',
+      args: [days],
+    );
+  }
+
+  /// `Connecting...`
+  String get g_key_hw_connecting {
+    return Intl.message(
+      'Connecting...',
+      name: 'g_key_hw_connecting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connect Trezor`
+  String get g_key_hw_trezor_connect_title {
+    return Intl.message(
+      'Connect Trezor',
+      name: 'g_key_hw_trezor_connect_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connect your Trezor device via USB cable and unlock it`
+  String get g_key_hw_trezor_usb_hint {
+    return Intl.message(
+      'Connect your Trezor device via USB cable and unlock it',
+      name: 'g_key_hw_trezor_usb_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connecting to Trezor...`
+  String get g_key_hw_trezor_connecting {
+    return Intl.message(
+      'Connecting to Trezor...',
+      name: 'g_key_hw_trezor_connecting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter PIN on your Trezor device`
+  String get g_key_hw_trezor_pin_required {
+    return Intl.message(
+      'Enter PIN on your Trezor device',
+      name: 'g_key_hw_trezor_pin_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter passphrase on your Trezor device`
+  String get g_key_hw_trezor_passphrase_required {
+    return Intl.message(
+      'Enter passphrase on your Trezor device',
+      name: 'g_key_hw_trezor_passphrase_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Trezor connected successfully`
+  String get g_key_hw_trezor_connected {
+    return Intl.message(
+      'Trezor connected successfully',
+      name: 'g_key_hw_trezor_connected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to connect to Trezor. Make sure USB is connected.`
+  String get g_key_hw_trezor_connect_failed {
+    return Intl.message(
+      'Failed to connect to Trezor. Make sure USB is connected.',
+      name: 'g_key_hw_trezor_connect_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connect Keystone`
+  String get g_key_hw_keystone_connect_title {
+    return Intl.message(
+      'Connect Keystone',
+      name: 'g_key_hw_keystone_connect_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scan the QR code from your Keystone device to import accounts`
+  String get g_key_hw_keystone_scan_xpub_hint {
+    return Intl.message(
+      'Scan the QR code from your Keystone device to import accounts',
+      name: 'g_key_hw_keystone_scan_xpub_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scan this QR code with your Keystone device to sign the transaction`
+  String get g_key_hw_keystone_scan_request_hint {
+    return Intl.message(
+      'Scan this QR code with your Keystone device to sign the transaction',
+      name: 'g_key_hw_keystone_scan_request_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scan Keystone Signature`
+  String get g_key_hw_keystone_scan_response_title {
+    return Intl.message(
+      'Scan Keystone Signature',
+      name: 'g_key_hw_keystone_scan_response_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Point your camera at the QR code displayed on your Keystone device`
+  String get g_key_hw_keystone_scan_response_hint {
+    return Intl.message(
+      'Point your camera at the QR code displayed on your Keystone device',
+      name: 'g_key_hw_keystone_scan_response_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Waiting for Keystone signature...`
+  String get g_key_hw_keystone_signing {
+    return Intl.message(
+      'Waiting for Keystone signature...',
+      name: 'g_key_hw_keystone_signing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Signature received successfully`
+  String get g_key_hw_keystone_signature_received {
+    return Intl.message(
+      'Signature received successfully',
+      name: 'g_key_hw_keystone_signature_received',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to parse QR code. Please try again.`
+  String get g_key_hw_keystone_scan_error {
+    return Intl.message(
+      'Failed to parse QR code. Please try again.',
+      name: 'g_key_hw_keystone_scan_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid response from Keystone device`
+  String get g_key_hw_keystone_invalid_response {
+    return Intl.message(
+      'Invalid response from Keystone device',
+      name: 'g_key_hw_keystone_invalid_response',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tap to scan Keystone response`
+  String get g_key_hw_keystone_tap_to_scan {
+    return Intl.message(
+      'Tap to scan Keystone response',
+      name: 'g_key_hw_keystone_tap_to_scan',
       desc: '',
       args: [],
     );

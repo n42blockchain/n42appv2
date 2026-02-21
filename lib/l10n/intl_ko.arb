@@ -660,10 +660,7 @@
   "g_key_hw_add_account": "계정 추가",
   "g_key_hw_confirm_on_device": "기기에서 확인해주세요",
   "g_key_hw_connect": "하드웨어 지갑 연결",
-  "g_key_hw_connected": "연결됨",
-  "g_key_hw_connecting": "연결 중...",
   "g_key_hw_derivation_path": "파생 경로",
-  "g_key_hw_disconnect": "연결 해제",
   "g_key_hw_disconnected": "연결 해제됨",
   "g_key_hw_enable_bluetooth": "블루투스를 켜주세요",
   "g_key_hw_firmware": "펌웨어 버전",
@@ -1378,26 +1375,101 @@
   "g_key_hw_open_ledger_app_hint": "Ledger에서 {app} 앱이 열려 있는지 확인하세요",
   "@g_key_hw_open_ledger_app_hint": {
     "placeholders": {
-      "app": {"type": "String"}
+      "app": {
+        "type": "String"
+      }
     }
   },
   "g_key_hw_address_copied": "주소가 복사되었습니다",
   "g_key_hw_add_account_content": "이 하드웨어 지갑 계정을 추적하시겠습니까?\n\n주소: {address}\n네트워크: {network}",
   "@g_key_hw_add_account_content": {
     "placeholders": {
-      "address": {"type": "String"},
-      "network": {"type": "String"}
+      "address": {
+        "type": "String"
+      },
+      "network": {
+        "type": "String"
+      }
     }
   },
   "g_key_hw_account_added": "계정 {address} 추가됨",
   "@g_key_hw_account_added": {
     "placeholders": {
-      "address": {"type": "String"}
+      "address": {
+        "type": "String"
+      }
     }
   },
   "g_key_hw_cancel": "취소",
   "g_key_hw_add": "추가",
   "g_key_hw_load_more": "더 불러오기",
+  "g_key_hw_connected": "Connected",
+  "g_key_hw_not_connected_label": "Not Connected",
+  "g_key_hw_disconnect": "Disconnect",
+  "g_key_hw_view_accounts": "View Accounts",
+  "g_key_hw_check_app": "Check App",
+  "g_key_hw_saved_devices": "Saved Devices",
+  "g_key_hw_connect_new_device": "Connect New Device",
+  "g_key_hw_connect_new_ledger": "Connect Ledger (Bluetooth)",
+  "g_key_hw_connect_new_trezor": "Connect Trezor (USB)",
+  "g_key_hw_connect_new_keystone": "Air-gap with Keystone (QR)",
+  "g_key_hw_supported_devices": "Supported Devices",
+  "g_key_hw_ble_hint": "Make sure your device is unlocked and Bluetooth is enabled before connecting.",
+  "g_key_hw_remove_device": "Remove Device",
+  "g_key_hw_remove_device_confirm": "Are you sure you want to remove \"{name}\" from saved devices?",
+  "@g_key_hw_remove_device_confirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "g_key_hw_remove": "Remove",
+  "g_key_hw_current_app_label": "Current app: {app}",
+  "@g_key_hw_current_app_label": {
+    "placeholders": {
+      "app": {
+        "type": "String"
+      }
+    }
+  },
+  "g_key_hw_no_app_open": "No app is currently open",
+  "g_key_hw_last_connected": "Last connected: {date}",
+  "@g_key_hw_last_connected": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "g_key_hw_today": "Today",
+  "g_key_hw_yesterday": "Yesterday",
+  "g_key_hw_days_ago": "{days} days ago",
+  "@g_key_hw_days_ago": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "g_key_hw_connecting": "Connecting...",
+  "g_key_hw_trezor_connect_title": "Connect Trezor",
+  "g_key_hw_trezor_usb_hint": "Connect your Trezor device via USB cable and unlock it",
+  "g_key_hw_trezor_connecting": "Connecting to Trezor...",
+  "g_key_hw_trezor_pin_required": "Enter PIN on your Trezor device",
+  "g_key_hw_trezor_passphrase_required": "Enter passphrase on your Trezor device",
+  "g_key_hw_trezor_connected": "Trezor connected successfully",
+  "g_key_hw_trezor_connect_failed": "Failed to connect to Trezor. Make sure USB is connected.",
+  "g_key_hw_keystone_connect_title": "Connect Keystone",
+  "g_key_hw_keystone_scan_xpub_hint": "Scan the QR code from your Keystone device to import accounts",
+  "g_key_hw_keystone_scan_request_hint": "Scan this QR code with your Keystone device to sign the transaction",
+  "g_key_hw_keystone_scan_response_title": "Scan Keystone Signature",
+  "g_key_hw_keystone_scan_response_hint": "Point your camera at the QR code displayed on your Keystone device",
+  "g_key_hw_keystone_signing": "Waiting for Keystone signature...",
+  "g_key_hw_keystone_signature_received": "Signature received successfully",
+  "g_key_hw_keystone_scan_error": "Failed to parse QR code. Please try again.",
+  "g_key_hw_keystone_invalid_response": "Invalid response from Keystone device",
+  "g_key_hw_keystone_tap_to_scan": "Tap to scan Keystone response",
   "g_key_bridge_status_pending": "Pending",
   "g_key_bridge_status_in_progress": "In Progress",
   "g_key_bridge_status_completed": "Completed",
@@ -1432,35 +1504,45 @@
   "g_key_aa_gas_warn_total_high_desc": "추정 총 가스({gas})가 비정상적으로 높습니다. 트랜잭션 오류를 확인하세요.",
   "@g_key_aa_gas_warn_total_high_desc": {
     "placeholders": {
-      "gas": {"type": "String"}
+      "gas": {
+        "type": "String"
+      }
     }
   },
   "g_key_aa_gas_warn_verify_high": "검증 가스 높음",
   "g_key_aa_gas_warn_verify_high_desc": "검증 가스({gas})가 너무 높을 수 있습니다. 복잡한 계정 로직에서 발생할 수 있습니다.",
   "@g_key_aa_gas_warn_verify_high_desc": {
     "placeholders": {
-      "gas": {"type": "String"}
+      "gas": {
+        "type": "String"
+      }
     }
   },
   "g_key_aa_gas_warn_call_high": "실행 가스 높음",
   "g_key_aa_gas_warn_call_high_desc": "실행 가스({gas})가 높습니다. 호출된 컨트랙트가 예상보다 더 많은 가스를 소비할 수 있습니다.",
   "@g_key_aa_gas_warn_call_high_desc": {
     "placeholders": {
-      "gas": {"type": "String"}
+      "gas": {
+        "type": "String"
+      }
     }
   },
   "g_key_aa_gas_warn_paymaster": "Paymaster 오버헤드 높음",
   "g_key_aa_gas_warn_paymaster_desc": "Paymaster 가스 오버헤드({gas})가 높습니다. 가스 없는 트랜잭션 비용이 증가할 수 있습니다.",
   "@g_key_aa_gas_warn_paymaster_desc": {
     "placeholders": {
-      "gas": {"type": "String"}
+      "gas": {
+        "type": "String"
+      }
     }
   },
   "g_key_aa_gas_warn_deploy": "배포 가스 오버헤드",
   "g_key_aa_gas_warn_deploy_desc": "첫 번째 트랜잭션에는 계정 배포가 포함됩니다(~{gas} 가스). 이후 트랜잭션은 더 저렴해집니다.",
   "@g_key_aa_gas_warn_deploy_desc": {
     "placeholders": {
-      "gas": {"type": "String"}
+      "gas": {
+        "type": "String"
+      }
     }
   },
   "g_key_aa_gas_warn_under_est": "가스 과소 추정 가능성",

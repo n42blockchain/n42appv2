@@ -10,6 +10,7 @@ enum HardwareWalletType {
   ledgerStax,
   trezorModelT,
   trezorOne,
+  keystoneModel,
 }
 
 /// 硬件钱包连接状态
@@ -156,6 +157,8 @@ class HardwareWalletDevice {
         return 'Trezor Model T';
       case HardwareWalletType.trezorOne:
         return 'Trezor One';
+      case HardwareWalletType.keystoneModel:
+        return 'Keystone';
     }
   }
 
@@ -171,6 +174,9 @@ class HardwareWalletDevice {
     return type == HardwareWalletType.trezorModelT ||
         type == HardwareWalletType.trezorOne;
   }
+
+  /// 是否为 Keystone 设备（气隙 QR 签名）
+  bool get isKeystone => type == HardwareWalletType.keystoneModel;
 }
 
 /// 硬件钱包账户
@@ -250,11 +256,19 @@ class HardwareWalletSignResponse {
   final String? txHash;
   final String? error;
 
+  /// 当设备为 Keystone 时，此字段为 true，表示需要跳转 QR 签名页面
+  final bool needsKeystoneQr;
+
+  /// 需要 Keystone QR 签名时，此字段包含待签名的原始 RLP 交易字节
+  final List<int>? rawTxForQr;
+
   HardwareWalletSignResponse({
     required this.success,
     this.signature,
     this.txHash,
     this.error,
+    this.needsKeystoneQr = false,
+    this.rawTxForQr,
   });
 
   factory HardwareWalletSignResponse.success({
@@ -360,6 +374,9 @@ class HardwareWalletError {
   static const String invalidTransaction = 'INVALID_TRANSACTION';
   static const String deviceLocked = 'DEVICE_LOCKED';
   static const String unsupportedCoin = 'UNSUPPORTED_COIN';
+  static const String usbPermissionDenied = 'USB_PERMISSION_DENIED';
+  static const String qrParseError = 'QR_PARSE_ERROR';
+  static const String qrCrcMismatch = 'QR_CRC_MISMATCH';
 
   @override
   String toString() => '$code: $message';

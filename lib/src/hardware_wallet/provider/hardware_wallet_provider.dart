@@ -8,7 +8,9 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:n42appv2/src/hardware_wallet/models/hardware_wallet_models.dart';
+import 'package:n42appv2/src/hardware_wallet/service/keystone_service.dart';
 import 'package:n42appv2/src/hardware_wallet/service/ledger_service.dart';
+import 'package:n42appv2/src/hardware_wallet/service/trezor_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// 硬件钱包 Provider
@@ -27,6 +29,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// TRX:    m/44'/195'/0'/0/ (Tron app)
 class HardwareWalletProvider extends ChangeNotifier {
   final LedgerService _ledgerService = LedgerService();
+  final TrezorService _trezorService = TrezorService();
+  final KeystoneService _keystoneService = KeystoneService();
 
   // 状态
   HardwareWalletConnectionState _connectionState = HardwareWalletConnectionState.disconnected;
@@ -141,6 +145,17 @@ class HardwareWalletProvider extends ChangeNotifier {
 
   /// 重新连接已保存的设备
   Future<bool> reconnectDevice(HardwareWalletDevice device) async {
+    if (device.isTrezor) {
+      return await _reconnectTrezor(device);
+    }
+    if (device.isKeystone) {
+      // Keystone 是气隙设备，无需重新连接；直接标记为"已连接"
+      _currentDevice = device.copyWith(isConnected: true);
+      _connectionState = HardwareWalletConnectionState.connected;
+      notifyListeners();
+      return true;
+    }
+    // Ledger BLE 重连
     final deviceInfo = BluetoothDeviceInfo(
       id: device.id,
       name: device.name,
@@ -148,6 +163,71 @@ class HardwareWalletProvider extends ChangeNotifier {
     );
     return await connectDevice(deviceInfo);
   }
+
+  Future<bool> _reconnectTrezor(HardwareWalletDevice device) async {
+    _errorMessage = null;
+    _connectionState = HardwareWalletConnectionState.connecting;
+    notifyListeners();
+
+    try {
+      final connected = await _trezorService.connect();
+      _currentDevice = connected.copyWith(
+        id: device.id,
+        lastConnectedAt: DateTime.now(),
+      );
+      _connectionState = HardwareWalletConnectionState.connected;
+      await _saveDevice(_currentDevice!);
+      notifyListeners();
+      return true;
+    } on HardwareWalletError catch (e) {
+      _errorMessage = e.userFriendlyMessage;
+      _connectionState = HardwareWalletConnectionState.error;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  /// 连接 Trezor 设备（USB）
+  ///
+  /// 返回 [HardwareWalletDevice]（连接成功）或 null（失败）。
+  /// 错误消息通过 [errorMessage] getter 获取。
+  Future<HardwareWalletDevice?> connectTrezor() async {
+    _errorMessage = null;
+    _connectionState = HardwareWalletConnectionState.connecting;
+    notifyListeners();
+
+    try {
+      final device = await _trezorService.connect();
+      _currentDevice = device;
+      _connectionState = HardwareWalletConnectionState.connected;
+      await _saveDevice(device);
+      notifyListeners();
+      return device;
+    } on HardwareWalletError catch (e) {
+      _errorMessage = e.userFriendlyMessage;
+      _connectionState = HardwareWalletConnectionState.error;
+      notifyListeners();
+      return null;
+    }
+  }
+
+  /// 注册 Keystone 气隙设备（从 xpub QR 扫描结果创建）
+  ///
+  /// Keystone 设备不需要主动连接；调用方传入从 [KeystoneService.parseSyncQr]
+  /// 解析得到的 [KeystoneAccountInfo]，此方法将其保存为虚拟设备。
+  Future<HardwareWalletDevice> registerKeystone(
+    KeystoneAccountInfo accountInfo,
+  ) async {
+    final device = accountInfo.toDevice();
+    _currentDevice = device;
+    _connectionState = HardwareWalletConnectionState.connected;
+    await _saveDevice(device);
+    notifyListeners();
+    return device;
+  }
+
+  /// 获取当前设备的 [KeystoneService]（仅 Keystone 设备有效）
+  KeystoneService get keystoneService => _keystoneService;
 
   /// 断开连接
   Future<void> disconnect() async {
@@ -255,6 +335,9 @@ class HardwareWalletProvider extends ChangeNotifier {
   }
 
   /// 内部：从 [startIndex] 开始加载 [count] 个账户
+  ///
+  /// 根据当前连接设备类型自动路由到 Ledger 或 Trezor 服务。
+  /// Keystone 设备通过 xpub 本地派生地址，暂不在此方法处理。
   Future<void> _loadAccountsFrom(
     String coinType, {
     required int startIndex,
@@ -264,13 +347,19 @@ class HardwareWalletProvider extends ChangeNotifier {
     final basePath = _derivationBasePath(coin);
     final isEvm = _isEvmChain(coin);
     final isBtcLike = _isBitcoinLikeChain(coin);
+    final isTrezor = _currentDevice?.isTrezor ?? false;
 
     for (var i = startIndex; i < startIndex + count; i++) {
       try {
         String? address;
         final path = '$basePath$i';
 
-        if (isEvm) {
+        if (isTrezor) {
+          address = await _trezorService.getAddress(
+            coinType: coin,
+            derivationPath: path,
+          );
+        } else if (isEvm) {
           address = await _ledgerService.getEthereumAddress(derivationPath: path);
         } else if (isBtcLike) {
           address = await _ledgerService.getBitcoinAddress(derivationPath: path);
@@ -401,15 +490,47 @@ class HardwareWalletProvider extends ChangeNotifier {
 
   /// 通用签名方法
   ///
-  /// 根据 coinType 路由到对应的签名实现：
+  /// 根据当前设备类型和 coinType 路由到对应的签名实现：
+  ///
+  /// **Trezor 设备**：
+  /// - EVM / BTC / SOL / ATOM / DOT / TRX → Trezor 平台通道
+  ///
+  /// **Ledger 设备**：
   /// - EVM 链 → signEthereumTransaction / signEthereumMessage
   /// - BTC/LTC/DOGE/BCH → signBitcoinTransaction
   /// - SOL/ATOM/DOT/TRX → signChainTransaction（native 实现）
+  ///
+  /// **Keystone 设备**：
+  /// - 返回 [HardwareWalletSignResponse] 标记为需要 QR 签名。
+  ///   调用方需检测 [needsKeystoneQr] == true，然后导航至 KeystoneSignPage。
   Future<HardwareWalletSignResponse> signTransaction(
     HardwareWalletSignRequest request,
   ) async {
+    if (!isConnected) {
+      return HardwareWalletSignResponse.error('No device connected');
+    }
+
     final coinType = request.coinType.toUpperCase();
 
+    // ── Trezor ──────────────────────────────────────────────────
+    if (_currentDevice?.isTrezor ?? false) {
+      return await _signWithTrezor(request, coinType);
+    }
+
+    // ── Keystone ────────────────────────────────────────────────
+    if (_currentDevice?.isKeystone ?? false) {
+      // Keystone 签名需要 QR 交互；返回特殊响应让 UI 层处理
+      return HardwareWalletSignResponse(
+        success: false,
+        error: null,
+        needsKeystoneQr: true,
+        rawTxForQr: _isEvmChain(coinType)
+            ? _serializeEthTransaction(request.transactionData)
+            : null,
+      );
+    }
+
+    // ── Ledger ──────────────────────────────────────────────────
     if (_isEvmChain(coinType)) {
       if (request.signType == HardwareWalletSignType.message) {
         return await signEthereumMessage(
@@ -448,6 +569,47 @@ class HardwareWalletProvider extends ChangeNotifier {
           'Unsupported coin type: $coinType',
         );
     }
+  }
+
+  Future<HardwareWalletSignResponse> _signWithTrezor(
+    HardwareWalletSignRequest request,
+    String coinType,
+  ) async {
+    if (_isEvmChain(coinType)) {
+      if (request.signType == HardwareWalletSignType.message) {
+        return await _trezorService.signMessage(
+          derivationPath: request.derivationPath,
+          messageBytes: Uint8List.fromList(
+            (request.message ?? '').codeUnits,
+          ),
+        );
+      } else if (request.signType == HardwareWalletSignType.typedData) {
+        return await _trezorService.signTypedData(
+          derivationPath: request.derivationPath,
+          typedDataJson: request.message ?? '{}',
+        );
+      } else {
+        return await _trezorService.signEthTransaction(
+          derivationPath: request.derivationPath,
+          txData: request.transactionData,
+        );
+      }
+    }
+
+    if (_isBitcoinLikeChain(coinType)) {
+      final psbtHex = request.transactionData['psbtHex'] as String? ?? '';
+      return await _trezorService.signBtcTransaction(
+        derivationPath: request.derivationPath,
+        psbtHex: psbtHex,
+      );
+    }
+
+    // SOL / other via generic channel
+    return await _trezorService.signChainTransaction(
+      coinType: coinType,
+      derivationPath: request.derivationPath,
+      txData: request.transactionData,
+    );
   }
 
   /// 导入硬件钱包账户到本地追踪列表

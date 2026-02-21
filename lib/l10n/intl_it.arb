@@ -607,10 +607,7 @@
   "g_key_hw_add_account": "Aggiungi Account",
   "g_key_hw_confirm_on_device": "Conferma sul tuo dispositivo",
   "g_key_hw_connect": "Connetti Portafoglio Hardware",
-  "g_key_hw_connected": "Connesso",
-  "g_key_hw_connecting": "Connessione...",
   "g_key_hw_derivation_path": "Percorso di Derivazione",
-  "g_key_hw_disconnect": "Disconnetti",
   "g_key_hw_disconnected": "Disconnesso",
   "g_key_hw_enable_bluetooth": "Per favore attiva il Bluetooth",
   "g_key_hw_firmware": "Versione Firmware",
@@ -677,7 +674,9 @@
   "g_key_hw_import_failed": "Importazione account fallita: {value}",
   "@g_key_hw_import_failed": {
     "placeholders": {
-      "value": {"type": "String"}
+      "value": {
+        "type": "String"
+      }
     }
   },
   "g_key_hw_wallet_accounts": "Conti del Portafoglio",
@@ -689,26 +688,101 @@
   "g_key_hw_open_ledger_app_hint": "Assicurarsi che l'app {app} sia aperta sul Ledger",
   "@g_key_hw_open_ledger_app_hint": {
     "placeholders": {
-      "app": {"type": "String"}
+      "app": {
+        "type": "String"
+      }
     }
   },
   "g_key_hw_address_copied": "Indirizzo copiato",
   "g_key_hw_add_account_content": "Si vuole tracciare questo conto hardware wallet?\n\nIndirizzo: {address}\nRete: {network}",
   "@g_key_hw_add_account_content": {
     "placeholders": {
-      "address": {"type": "String"},
-      "network": {"type": "String"}
+      "address": {
+        "type": "String"
+      },
+      "network": {
+        "type": "String"
+      }
     }
   },
   "g_key_hw_account_added": "Conto {address} aggiunto",
   "@g_key_hw_account_added": {
     "placeholders": {
-      "address": {"type": "String"}
+      "address": {
+        "type": "String"
+      }
     }
   },
   "g_key_hw_cancel": "Annulla",
   "g_key_hw_add": "Aggiungi",
   "g_key_hw_load_more": "Carica altro",
+  "g_key_hw_connected": "Connected",
+  "g_key_hw_not_connected_label": "Not Connected",
+  "g_key_hw_disconnect": "Disconnect",
+  "g_key_hw_view_accounts": "View Accounts",
+  "g_key_hw_check_app": "Check App",
+  "g_key_hw_saved_devices": "Saved Devices",
+  "g_key_hw_connect_new_device": "Connect New Device",
+  "g_key_hw_connect_new_ledger": "Connect Ledger (Bluetooth)",
+  "g_key_hw_connect_new_trezor": "Connect Trezor (USB)",
+  "g_key_hw_connect_new_keystone": "Air-gap with Keystone (QR)",
+  "g_key_hw_supported_devices": "Supported Devices",
+  "g_key_hw_ble_hint": "Make sure your device is unlocked and Bluetooth is enabled before connecting.",
+  "g_key_hw_remove_device": "Remove Device",
+  "g_key_hw_remove_device_confirm": "Are you sure you want to remove \"{name}\" from saved devices?",
+  "@g_key_hw_remove_device_confirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "g_key_hw_remove": "Remove",
+  "g_key_hw_current_app_label": "Current app: {app}",
+  "@g_key_hw_current_app_label": {
+    "placeholders": {
+      "app": {
+        "type": "String"
+      }
+    }
+  },
+  "g_key_hw_no_app_open": "No app is currently open",
+  "g_key_hw_last_connected": "Last connected: {date}",
+  "@g_key_hw_last_connected": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "g_key_hw_today": "Today",
+  "g_key_hw_yesterday": "Yesterday",
+  "g_key_hw_days_ago": "{days} days ago",
+  "@g_key_hw_days_ago": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "g_key_hw_connecting": "Connecting...",
+  "g_key_hw_trezor_connect_title": "Connect Trezor",
+  "g_key_hw_trezor_usb_hint": "Connect your Trezor device via USB cable and unlock it",
+  "g_key_hw_trezor_connecting": "Connecting to Trezor...",
+  "g_key_hw_trezor_pin_required": "Enter PIN on your Trezor device",
+  "g_key_hw_trezor_passphrase_required": "Enter passphrase on your Trezor device",
+  "g_key_hw_trezor_connected": "Trezor connected successfully",
+  "g_key_hw_trezor_connect_failed": "Failed to connect to Trezor. Make sure USB is connected.",
+  "g_key_hw_keystone_connect_title": "Connect Keystone",
+  "g_key_hw_keystone_scan_xpub_hint": "Scan the QR code from your Keystone device to import accounts",
+  "g_key_hw_keystone_scan_request_hint": "Scan this QR code with your Keystone device to sign the transaction",
+  "g_key_hw_keystone_scan_response_title": "Scan Keystone Signature",
+  "g_key_hw_keystone_scan_response_hint": "Point your camera at the QR code displayed on your Keystone device",
+  "g_key_hw_keystone_signing": "Waiting for Keystone signature...",
+  "g_key_hw_keystone_signature_received": "Signature received successfully",
+  "g_key_hw_keystone_scan_error": "Failed to parse QR code. Please try again.",
+  "g_key_hw_keystone_invalid_response": "Invalid response from Keystone device",
+  "g_key_hw_keystone_tap_to_scan": "Tap to scan Keystone response",
   "g_key_keystore_19": "Esiste già un portafoglio per questa valuta.",
   "g_key_keystore_21": "Impossibile leggere il keystore",
   "g_key_keystore_22": "Keystore",
@@ -1387,35 +1461,45 @@
   "g_key_aa_gas_warn_total_high_desc": "Il gas totale stimato ({gas}) è insolitamente alto. Controlla la tua transazione per errori.",
   "@g_key_aa_gas_warn_total_high_desc": {
     "placeholders": {
-      "gas": {"type": "String"}
+      "gas": {
+        "type": "String"
+      }
     }
   },
   "g_key_aa_gas_warn_verify_high": "Gas di Verifica Alto",
   "g_key_aa_gas_warn_verify_high_desc": "Il gas di verifica ({gas}) potrebbe essere troppo alto. Ciò può accadere con logica account complessa.",
   "@g_key_aa_gas_warn_verify_high_desc": {
     "placeholders": {
-      "gas": {"type": "String"}
+      "gas": {
+        "type": "String"
+      }
     }
   },
   "g_key_aa_gas_warn_call_high": "Gas di Esecuzione Alto",
   "g_key_aa_gas_warn_call_high_desc": "Il gas di esecuzione ({gas}) è alto. Il contratto chiamato potrebbe consumare più gas del previsto.",
   "@g_key_aa_gas_warn_call_high_desc": {
     "placeholders": {
-      "gas": {"type": "String"}
+      "gas": {
+        "type": "String"
+      }
     }
   },
   "g_key_aa_gas_warn_paymaster": "Overhead Paymaster Alto",
   "g_key_aa_gas_warn_paymaster_desc": "L'overhead gas del paymaster ({gas}) è alto. Le transazioni senza gas potrebbero costare di più.",
   "@g_key_aa_gas_warn_paymaster_desc": {
     "placeholders": {
-      "gas": {"type": "String"}
+      "gas": {
+        "type": "String"
+      }
     }
   },
   "g_key_aa_gas_warn_deploy": "Overhead Gas di Deployment",
   "g_key_aa_gas_warn_deploy_desc": "La prima transazione include il deployment dell'account (~{gas} gas). Le transazioni successive saranno più economiche.",
   "@g_key_aa_gas_warn_deploy_desc": {
     "placeholders": {
-      "gas": {"type": "String"}
+      "gas": {
+        "type": "String"
+      }
     }
   },
   "g_key_aa_gas_warn_under_est": "Possibile Sottostima del Gas",
