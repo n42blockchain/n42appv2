@@ -21,6 +21,8 @@ class BatchOperation {
   final BatchOperationType type;
   final String targetAddress;
   final String? tokenSymbol;
+  /// ERC-20 合约地址；ETH 转账时为 null
+  final String? tokenAddress;
   final BigInt? amount;
   final int? decimals;
   final String? customData;
@@ -30,11 +32,59 @@ class BatchOperation {
     required this.type,
     required this.targetAddress,
     this.tokenSymbol,
+    this.tokenAddress,
     this.amount,
     this.decimals,
     this.customData,
     this.description,
   });
+
+  /// 序列化为 JSON（用于模板持久化）
+  Map<String, dynamic> toJson() => {
+        'type': type.name,
+        'targetAddress': targetAddress,
+        if (tokenSymbol != null) 'tokenSymbol': tokenSymbol,
+        if (tokenAddress != null) 'tokenAddress': tokenAddress,
+        if (amount != null) 'amount': amount!.toString(),
+        if (decimals != null) 'decimals': decimals,
+        if (customData != null) 'customData': customData,
+        if (description != null) 'description': description,
+      };
+
+  /// 从 JSON 反序列化（用于模板加载）
+  factory BatchOperation.fromJson(Map<String, dynamic> json) {
+    return BatchOperation(
+      type: BatchOperationType.values.firstWhere(
+        (e) => e.name == json['type'],
+        orElse: () => BatchOperationType.transfer,
+      ),
+      targetAddress: json['targetAddress'] as String,
+      tokenSymbol: json['tokenSymbol'] as String?,
+      tokenAddress: json['tokenAddress'] as String?,
+      amount: json['amount'] != null ? BigInt.tryParse(json['amount'] as String) : null,
+      decimals: json['decimals'] as int?,
+      customData: json['customData'] as String?,
+      description: json['description'] as String?,
+    );
+  }
+
+  /// 验证操作是否可以提交
+  bool isValid() {
+    // 目标地址必须是合法的 EVM 地址（0x 前缀 + 40 hex chars）
+    final addrRegex = RegExp(r'^0x[0-9a-fA-F]{40}$');
+    if (!addrRegex.hasMatch(targetAddress)) return false;
+    // transfer/approve 需要金额 > 0
+    if (type == BatchOperationType.transfer || type == BatchOperationType.approve) {
+      if (amount == null || amount! <= BigInt.zero) return false;
+    }
+    // ERC-20 操作需要合约地址
+    if (type == BatchOperationType.approve && tokenAddress == null) return false;
+    // custom 操作需要 calldata
+    if (type == BatchOperationType.custom && (customData == null || customData!.isEmpty)) {
+      return false;
+    }
+    return true;
+  }
 
   String get formattedAmount {
     if (amount == null || decimals == null) return '0';

@@ -17,7 +17,7 @@ class AppDatabase{
     String path = join(directory, "astranet.db");
     return await openDatabase(
       path,
-      version: 2, //Message 新增字段
+      version: 3, //v3: aa_batch_templates
       onCreate: (Database db, int version) async {
         //交易记录
         await db.execute("create table TransationRecord("
@@ -114,12 +114,35 @@ class AppDatabase{
             mentioned_user_ids TEXT
           )
     ''');
+        // AA 批量交易模板表
+        await db.execute('''
+          CREATE TABLE aa_batch_templates (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            chain_symbol TEXT NOT NULL,
+            operations TEXT NOT NULL,
+            created_at INTEGER NOT NULL,
+            updated_at INTEGER NOT NULL
+          )
+        ''');
       },
       onUpgrade: (Database db, int oldVersion, int newVersion) async {
-        if(oldVersion==1){
+        if (oldVersion < 2) {
           await db.execute('''
               ALTER TABLE BtcTransactionRecord
               ADD COLUMN gasPrice INTEGER
+          ''');
+        }
+        if (oldVersion < 3) {
+          await db.execute('''
+            CREATE TABLE aa_batch_templates (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              name TEXT NOT NULL,
+              chain_symbol TEXT NOT NULL,
+              operations TEXT NOT NULL,
+              created_at INTEGER NOT NULL,
+              updated_at INTEGER NOT NULL
+            )
           ''');
         }
       },
