@@ -5,6 +5,56 @@
 
 ---
 
+## [2026-02-21] Earn Module — Complete Overhaul
+
+### Commits
+`2ce86cd` `10d2dc6` `25f5369` `d556fb1` `f807f90`
+
+### Problems Found
+- `earn_page.dart` (active, ConsumerStatefulWidget): `_loadStakedData()` was empty TODO; `_stakedItems` always `[]` → Active Products never shown
+- 4 Quick Tools labels (`Ledger`, `Gas`, `Batch`, `Burn`) hardcoded English, no i18n
+- Missing **Mining** and **Swap** feature cards (existed in dead `earn_home_page.dart`)
+- Recommended products APY hardcoded (`~4%`, `~7%`), disconnected from live staking APIs
+- "View All" `onPressed: () {}` — no-op
+- `earn_home_page.dart` (685 lines): dead code, imported nowhere, now deleted
+
+### Changes
+
+| Step | Commit | Description |
+|------|--------|-------------|
+| i18n | `2ce86cd` | 16 new keys × 13 languages: `g_key_earn_ledger/gas/batch/burn/mining/swap/no_positions/go_staking/buy_n/buy_n_desc/dex_swap/dex_desc/select_swap/loading_apy` etc. |
+| Provider | `10d2dc6` | New `lib/src/earn/provider/earn_provider.dart`: `EarnNotifier extends StateNotifier<EarnState>`, concurrent APY fetch from ETH/SOL/ATOM, multi-chain position loading |
+| Page | `25f5369` | Overhauled `earn_page.dart`: live APY badges, real position loading, 6 feature cards (Stake/Mining/Swap/Bridge/Airdrop/Loyalty), all i18n, Active Products always visible |
+| Cleanup | `d556fb1` | Deleted `earn_home_page.dart` (dead code) |
+| Tests | `f807f90` | 11 `EarnState` unit tests |
+
+### EarnProvider Architecture
+```dart
+EarnNotifier extends StateNotifier<EarnState>
+  _loadApys()        // Future.wait([ETH, SOL, ATOM]), fallback to static on error
+  loadPositions()    // ETH→SOL→ATOM sequential accumulation into activePositions
+  refreshApys()      // manual refresh
+
+EarnState {
+  ethApy, solApy, atomApy   // live from APIs, default 4/7/15
+  apyLoading, positionsLoading
+  activePositions: List<StakingPosition>
+  maxApy, totalStakedRaw, totalRewardsRaw
+}
+```
+
+### earn_page.dart Key Improvements
+- Feature cards: Stake → Mining → Swap → Bridge → Airdrop → Loyalty (horizontal scroll)
+- Swap card → `sheetBottom` → "Buy N" (`SwapAstHome`)
+- Active Products: loading spinner → empty-state CTA → real position list
+- Recommended APY: live from `earnProvider`, shows `...` while loading
+- "View All" → `StakingHomePage`
+- `flutter analyze lib/src/earn/` → No issues found!
+
+**Tests: +2141: All tests passed!**
+
+---
+
 ## [2026-02-21] DeFi 模块三连：跨链桥 + 多链质押 + BTC 自托管质押
 
 ### 背景
