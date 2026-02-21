@@ -11179,6 +11179,106 @@ class S {
     );
   }
 
+  /// `Batch submitted successfully`
+  String get g_key_aa_batch_success {
+    return Intl.message(
+      'Batch submitted successfully',
+      name: 'g_key_aa_batch_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Batch execution failed`
+  String get g_key_aa_batch_failed {
+    return Intl.message(
+      'Batch execution failed',
+      name: 'g_key_aa_batch_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Template saved`
+  String get g_key_aa_batch_template_saved {
+    return Intl.message(
+      'Template saved',
+      name: 'g_key_aa_batch_template_saved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Load Template`
+  String get g_key_aa_batch_template_load {
+    return Intl.message(
+      'Load Template',
+      name: 'g_key_aa_batch_template_load',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Template Name`
+  String get g_key_aa_batch_template_name {
+    return Intl.message(
+      'Template Name',
+      name: 'g_key_aa_batch_template_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter template name`
+  String get g_key_aa_batch_template_name_hint {
+    return Intl.message(
+      'Enter template name',
+      name: 'g_key_aa_batch_template_name_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save as Template`
+  String get g_key_aa_batch_save_template {
+    return Intl.message(
+      'Save as Template',
+      name: 'g_key_aa_batch_save_template',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Templates`
+  String get g_key_aa_batch_templates {
+    return Intl.message(
+      'Templates',
+      name: 'g_key_aa_batch_templates',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No saved templates`
+  String get g_key_aa_batch_no_templates {
+    return Intl.message(
+      'No saved templates',
+      name: 'g_key_aa_batch_no_templates',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Submitting...`
+  String get g_key_aa_batch_submitting {
+    return Intl.message(
+      'Submitting...',
+      name: 'g_key_aa_batch_submitting',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `EIP-7702`
   String get g_key_aa_eip7702_badge {
     return Intl.message(

@@ -88,6 +88,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m30(value) => "${value} days remaining";
 
+  static String m69(value) =>
+      "Unstaking takes ${value} days. Your tokens will be locked during this period.";
+
   static String m31(value) => "\"${value}\"이(가) 부족합니다";
 
   static String m32(value) => "\"${value}\" 계정 가져오기 실패";
@@ -491,6 +494,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_add_operation": MessageLookupByLibrary.simpleMessage(
       "Add Operation",
     ),
+    "g_key_aa_address_calculating": MessageLookupByLibrary.simpleMessage(
+      "주소 계산 중...",
+    ),
+    "g_key_aa_address_error": MessageLookupByLibrary.simpleMessage(
+      "주소 계산에 실패했습니다. 다시 시도해주세요.",
+    ),
     "g_key_aa_address_preview": MessageLookupByLibrary.simpleMessage(
       "This address is pre-computed and will be deployed when you make your first transaction.",
     ),
@@ -505,15 +514,51 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_batch_description": MessageLookupByLibrary.simpleMessage(
       "Send multiple transactions in a single operation",
     ),
+    "g_key_aa_batch_failed": MessageLookupByLibrary.simpleMessage(
+      "Batch execution failed",
+    ),
+    "g_key_aa_batch_no_templates": MessageLookupByLibrary.simpleMessage(
+      "No saved templates",
+    ),
     "g_key_aa_batch_operations": MessageLookupByLibrary.simpleMessage(
       "Batch Operations",
     ),
     "g_key_aa_batch_save_gas": MessageLookupByLibrary.simpleMessage("Save Gas"),
+    "g_key_aa_batch_save_template": MessageLookupByLibrary.simpleMessage(
+      "Save as Template",
+    ),
+    "g_key_aa_batch_submitting": MessageLookupByLibrary.simpleMessage(
+      "Submitting...",
+    ),
+    "g_key_aa_batch_success": MessageLookupByLibrary.simpleMessage(
+      "Batch submitted successfully",
+    ),
+    "g_key_aa_batch_template_load": MessageLookupByLibrary.simpleMessage(
+      "Load Template",
+    ),
+    "g_key_aa_batch_template_name": MessageLookupByLibrary.simpleMessage(
+      "Template Name",
+    ),
+    "g_key_aa_batch_template_name_hint": MessageLookupByLibrary.simpleMessage(
+      "Enter template name",
+    ),
+    "g_key_aa_batch_template_saved": MessageLookupByLibrary.simpleMessage(
+      "Template saved",
+    ),
+    "g_key_aa_batch_templates": MessageLookupByLibrary.simpleMessage(
+      "Templates",
+    ),
     "g_key_aa_batch_title": MessageLookupByLibrary.simpleMessage(
       "Batch Transfer",
     ),
     "g_key_aa_batch_transaction": MessageLookupByLibrary.simpleMessage(
       "Batch Transaction",
+    ),
+    "g_key_aa_biconomy_account": MessageLookupByLibrary.simpleMessage(
+      "Biconomy 계정",
+    ),
+    "g_key_aa_biconomy_desc": MessageLookupByLibrary.simpleMessage(
+      "가스리스 트랜잭션을 지원하는 모듈식 ERC-7579 스마트 계정",
     ),
     "g_key_aa_by": MessageLookupByLibrary.simpleMessage("by"),
     "g_key_aa_chain": MessageLookupByLibrary.simpleMessage("Chain"),
@@ -699,6 +744,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_safe_desc": MessageLookupByLibrary.simpleMessage(
       "Multi-signature account with advanced security features",
     ),
+    "g_key_aa_safe_guardians": MessageLookupByLibrary.simpleMessage("보호자"),
+    "g_key_aa_safe_threshold": MessageLookupByLibrary.simpleMessage("임계값"),
     "g_key_aa_saved": MessageLookupByLibrary.simpleMessage("saved"),
     "g_key_aa_select_chain": MessageLookupByLibrary.simpleMessage(
       "Select Chain",
@@ -912,6 +959,76 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_bridge_tx_failed": MessageLookupByLibrary.simpleMessage("브릿지 실패"),
     "g_key_bridge_tx_pending": MessageLookupByLibrary.simpleMessage("거래 처리 중"),
     "g_key_bridge_tx_success": MessageLookupByLibrary.simpleMessage("브릿지 성공"),
+    "g_key_btc_redeem_locked_until": MessageLookupByLibrary.simpleMessage(
+      "잠금 기간",
+    ),
+    "g_key_btc_redeem_reminder": MessageLookupByLibrary.simpleMessage(
+      "환매를 제출하기 전에 잠금 기간이 만료되었는지 확인하세요.",
+    ),
+    "g_key_btc_redeem_still_locked": MessageLookupByLibrary.simpleMessage(
+      "BTC 아직 잠금 중",
+    ),
+    "g_key_btc_redeem_title": MessageLookupByLibrary.simpleMessage("vBTC 환매"),
+    "g_key_btc_redeem_unlocked": MessageLookupByLibrary.simpleMessage(
+      "잠금 해제됨 — 환매 준비 완료",
+    ),
+    "g_key_btc_stake_acknowledge": MessageLookupByLibrary.simpleMessage(
+      "위험을 이해하고 진행하겠습니다",
+    ),
+    "g_key_btc_stake_continue": MessageLookupByLibrary.simpleMessage(
+      "스테이킹 계속하기",
+    ),
+    "g_key_btc_stake_how_it_works": MessageLookupByLibrary.simpleMessage(
+      "작동 방식",
+    ),
+    "g_key_btc_stake_reminder": MessageLookupByLibrary.simpleMessage(
+      "BTC는 타임락이 만료될 때까지 잠금됩니다. 아래 인터페이스에서 프로세스를 완료하세요.",
+    ),
+    "g_key_btc_stake_risk1": MessageLookupByLibrary.simpleMessage(
+      "BTC는 스테이킹 기간 동안 잠금됩니다. 조기 출금은 불가능합니다.",
+    ),
+    "g_key_btc_stake_risk2": MessageLookupByLibrary.simpleMessage(
+      "잠금은 비트코인 OP_CHECKLOCKTIMEVERIFY(CLTV)로 강제되며 우회할 수 없습니다.",
+    ),
+    "g_key_btc_stake_risk3": MessageLookupByLibrary.simpleMessage(
+      "스마트 컨트랙트 위험: 감사를 받았지만, 어떤 프로토콜도 완전히 위험이 없지 않습니다.",
+    ),
+    "g_key_btc_stake_risk4": MessageLookupByLibrary.simpleMessage(
+      "최소 스테이킹: 0.001 BTC. 최소 잠금 기간: 0.125일 (약 3시간).",
+    ),
+    "g_key_btc_stake_risk_warning": MessageLookupByLibrary.simpleMessage(
+      "위험 경고",
+    ),
+    "g_key_btc_stake_step1_desc": MessageLookupByLibrary.simpleMessage(
+      "BTC는 타임락(CLTV)이 포함된 2-of-2 멀티시그 주소에 잠금되며, 귀하의 키와 N42 캐니스터 키로 보호됩니다.",
+    ),
+    "g_key_btc_stake_step1_title": MessageLookupByLibrary.simpleMessage(
+      "BTC 잠금",
+    ),
+    "g_key_btc_stake_step2_desc": MessageLookupByLibrary.simpleMessage(
+      "온체인 확인 후 지갑에 1:1 비율로 vBTC가 발행됩니다.",
+    ),
+    "g_key_btc_stake_step2_title": MessageLookupByLibrary.simpleMessage(
+      "vBTC 발행",
+    ),
+    "g_key_btc_stake_step3_desc": MessageLookupByLibrary.simpleMessage(
+      "vBTC를 보유하여 스테이킹 보상을 받으세요. vBTC는 DeFi 프로토콜에서도 사용 가능합니다.",
+    ),
+    "g_key_btc_stake_step3_title": MessageLookupByLibrary.simpleMessage(
+      "보상 획득",
+    ),
+    "g_key_btc_stake_step4_desc": MessageLookupByLibrary.simpleMessage(
+      "잠금 기간이 만료되면 vBTC를 소각하여 원래 BTC를 돌려받으세요.",
+    ),
+    "g_key_btc_stake_step4_title": MessageLookupByLibrary.simpleMessage(
+      "잠금 해제 후 환매",
+    ),
+    "g_key_btc_stake_subtitle": MessageLookupByLibrary.simpleMessage(
+      "BTC를 잠금하여 vBTC를 발행하고 보상을 받으세요",
+    ),
+    "g_key_btc_stake_title": MessageLookupByLibrary.simpleMessage(
+      "BTC 자기수탁 스테이킹",
+    ),
     "g_key_burn_got_it": MessageLookupByLibrary.simpleMessage("확인"),
     "g_key_burn_nft_step1": MessageLookupByLibrary.simpleMessage(
       "1. NFT 지원 토큰 선택",
@@ -959,14 +1076,38 @@ class MessageLookup extends MessageLookupByLibrary {
       "Deadline reminders",
     ),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage("활성 상품"),
+    "g_key_earn_batch": MessageLookupByLibrary.simpleMessage("일괄"),
+    "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("소각"),
+    "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("N 구매"),
+    "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
+      "AST 프로토콜로 N 구매",
+    ),
     "g_key_earn_claim_free": MessageLookupByLibrary.simpleMessage("무료 토큰 받기"),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage("크로스체인 전송"),
     "g_key_earn_daily_bonus": MessageLookupByLibrary.simpleMessage(
       "매일 체크인 보너스",
     ),
+    "g_key_earn_dex_desc": MessageLookupByLibrary.simpleMessage(
+      "Uniswap / 1inch를 통해 모든 토큰 스왑",
+    ),
+    "g_key_earn_dex_swap": MessageLookupByLibrary.simpleMessage("DEX 스왑"),
+    "g_key_earn_gas": MessageLookupByLibrary.simpleMessage("가스"),
+    "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage("스테이킹 시작"),
+    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("레저"),
+    "g_key_earn_loading_apy": MessageLookupByLibrary.simpleMessage(
+      "APY 로딩 중...",
+    ),
+    "g_key_earn_mining": MessageLookupByLibrary.simpleMessage("채굴"),
     "g_key_earn_more": MessageLookupByLibrary.simpleMessage("더 많이 벌기"),
     "g_key_earn_native_sol": MessageLookupByLibrary.simpleMessage(
       "네이티브 솔라나 스테이킹",
+    ),
+    "g_key_earn_no_positions": MessageLookupByLibrary.simpleMessage(
+      "활성 포지션 없음",
+    ),
+    "g_key_earn_node_mining": MessageLookupByLibrary.simpleMessage("노드 채굴"),
+    "g_key_earn_node_mining_desc": MessageLookupByLibrary.simpleMessage(
+      "노드 채굴에 참여하여 보상을 받으세요",
     ),
     "g_key_earn_points_daily": MessageLookupByLibrary.simpleMessage(
       "매일 포인트 획득",
@@ -974,9 +1115,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_pts_day": m16,
     "g_key_earn_quick_tools": MessageLookupByLibrary.simpleMessage("빠른 도구"),
     "g_key_earn_recommended": MessageLookupByLibrary.simpleMessage("추천"),
+    "g_key_earn_select_swap": MessageLookupByLibrary.simpleMessage("스왑 유형 선택"),
     "g_key_earn_stake_eth_lido": MessageLookupByLibrary.simpleMessage(
       "Lido로 ETH 스테이킹",
     ),
+    "g_key_earn_swap": MessageLookupByLibrary.simpleMessage("스왑"),
     "g_key_earn_title": MessageLookupByLibrary.simpleMessage("수익"),
     "g_key_earn_total_earnings": MessageLookupByLibrary.simpleMessage("총 수익"),
     "g_key_earn_up_to_apy": m17,
@@ -1641,6 +1784,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_active_positions": MessageLookupByLibrary.simpleMessage(
       "Active Positions",
     ),
+    "g_key_stake_amount": MessageLookupByLibrary.simpleMessage("Amount"),
+    "g_key_stake_amount_unstake": MessageLookupByLibrary.simpleMessage(
+      "Amount to Unstake",
+    ),
     "g_key_stake_apy": MessageLookupByLibrary.simpleMessage("연이율"),
     "g_key_stake_avg_apy": MessageLookupByLibrary.simpleMessage("Avg APY"),
     "g_key_stake_claim": MessageLookupByLibrary.simpleMessage("보상 받기"),
@@ -1649,15 +1796,39 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_days_left": m29,
     "g_key_stake_days_remaining": m30,
     "g_key_stake_delegators": MessageLookupByLibrary.simpleMessage("위임자 수"),
+    "g_key_stake_estimated_daily": MessageLookupByLibrary.simpleMessage(
+      "Est. Daily Reward",
+    ),
+    "g_key_stake_estimated_yearly": MessageLookupByLibrary.simpleMessage(
+      "Est. Yearly Reward",
+    ),
+    "g_key_stake_go_to_swap": MessageLookupByLibrary.simpleMessage(
+      "Go to Swap",
+    ),
     "g_key_stake_liquid": MessageLookupByLibrary.simpleMessage("리퀴드 스테이킹"),
+    "g_key_stake_liquid_staking_label": MessageLookupByLibrary.simpleMessage(
+      "Liquid Staking",
+    ),
     "g_key_stake_liquid_tag": MessageLookupByLibrary.simpleMessage("Liquid"),
+    "g_key_stake_liquid_unstake_desc": MessageLookupByLibrary.simpleMessage(
+      "Your liquid token can be traded on DEX directly. Use Swap to exchange it back to the native asset.",
+    ),
     "g_key_stake_min_stake": MessageLookupByLibrary.simpleMessage("최소 스테이킹"),
+    "g_key_stake_no_active_positions": MessageLookupByLibrary.simpleMessage(
+      "No active positions to unstake",
+    ),
     "g_key_stake_no_lock": MessageLookupByLibrary.simpleMessage("No lock"),
     "g_key_stake_no_positions": MessageLookupByLibrary.simpleMessage(
       "스테이킹 포지션 없음",
     ),
     "g_key_stake_no_positions_yet": MessageLookupByLibrary.simpleMessage(
       "No staking positions yet",
+    ),
+    "g_key_stake_no_validators": MessageLookupByLibrary.simpleMessage(
+      "No validators found",
+    ),
+    "g_key_stake_no_wallet": MessageLookupByLibrary.simpleMessage(
+      "Wallet address not available",
     ),
     "g_key_stake_overview": MessageLookupByLibrary.simpleMessage(
       "Total Staking Overview",
@@ -1670,9 +1841,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_protocols": MessageLookupByLibrary.simpleMessage("Protocols"),
     "g_key_stake_restake": MessageLookupByLibrary.simpleMessage("재스테이크"),
     "g_key_stake_rewards": MessageLookupByLibrary.simpleMessage("보상"),
+    "g_key_stake_search_validator": MessageLookupByLibrary.simpleMessage(
+      "Search validators...",
+    ),
+    "g_key_stake_select_a_validator": MessageLookupByLibrary.simpleMessage(
+      "Select a validator",
+    ),
+    "g_key_stake_select_position": MessageLookupByLibrary.simpleMessage(
+      "Select a position to unstake",
+    ),
     "g_key_stake_select_validator": MessageLookupByLibrary.simpleMessage(
       "검증인 선택",
     ),
+    "g_key_stake_sort_by": MessageLookupByLibrary.simpleMessage("Sort by"),
     "g_key_stake_stake": MessageLookupByLibrary.simpleMessage("스테이크"),
     "g_key_stake_staked": MessageLookupByLibrary.simpleMessage("Staked"),
     "g_key_stake_start_staking": MessageLookupByLibrary.simpleMessage(
@@ -1680,14 +1861,22 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_stake_title": MessageLookupByLibrary.simpleMessage("스테이킹"),
     "g_key_stake_total_staked": MessageLookupByLibrary.simpleMessage("총 스테이킹"),
+    "g_key_stake_tx_prepared": MessageLookupByLibrary.simpleMessage(
+      "Transaction prepared successfully",
+    ),
     "g_key_stake_unbonding": MessageLookupByLibrary.simpleMessage("언본딩 중"),
     "g_key_stake_unbonding_period": MessageLookupByLibrary.simpleMessage(
       "언본딩 기간",
     ),
+    "g_key_stake_unbonding_warning": m69,
     "g_key_stake_unstake": MessageLookupByLibrary.simpleMessage("언스테이크"),
+    "g_key_stake_updating": MessageLookupByLibrary.simpleMessage("Updating..."),
     "g_key_stake_uptime": MessageLookupByLibrary.simpleMessage("가동 시간"),
     "g_key_stake_validator": MessageLookupByLibrary.simpleMessage("검증인"),
     "g_key_stake_validators": MessageLookupByLibrary.simpleMessage("검증인 목록"),
+    "g_key_stake_you_receive": MessageLookupByLibrary.simpleMessage(
+      "You will receive",
+    ),
     "g_key_step_email": MessageLookupByLibrary.simpleMessage("Email"),
     "g_key_step_password": MessageLookupByLibrary.simpleMessage("Password"),
     "g_key_step_verify": MessageLookupByLibrary.simpleMessage("Verify"),

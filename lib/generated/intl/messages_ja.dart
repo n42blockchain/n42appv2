@@ -494,6 +494,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_add_operation": MessageLookupByLibrary.simpleMessage(
       "Add Operation",
     ),
+    "g_key_aa_address_calculating": MessageLookupByLibrary.simpleMessage(
+      "アドレスを計算中...",
+    ),
+    "g_key_aa_address_error": MessageLookupByLibrary.simpleMessage(
+      "アドレスの計算に失敗しました。もう一度お試しください。",
+    ),
     "g_key_aa_address_preview": MessageLookupByLibrary.simpleMessage(
       "This address is pre-computed and will be deployed when you make your first transaction.",
     ),
@@ -508,15 +514,51 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_batch_description": MessageLookupByLibrary.simpleMessage(
       "Send multiple transactions in a single operation",
     ),
+    "g_key_aa_batch_failed": MessageLookupByLibrary.simpleMessage(
+      "Batch execution failed",
+    ),
+    "g_key_aa_batch_no_templates": MessageLookupByLibrary.simpleMessage(
+      "No saved templates",
+    ),
     "g_key_aa_batch_operations": MessageLookupByLibrary.simpleMessage(
       "Batch Operations",
     ),
     "g_key_aa_batch_save_gas": MessageLookupByLibrary.simpleMessage("Save Gas"),
+    "g_key_aa_batch_save_template": MessageLookupByLibrary.simpleMessage(
+      "Save as Template",
+    ),
+    "g_key_aa_batch_submitting": MessageLookupByLibrary.simpleMessage(
+      "Submitting...",
+    ),
+    "g_key_aa_batch_success": MessageLookupByLibrary.simpleMessage(
+      "Batch submitted successfully",
+    ),
+    "g_key_aa_batch_template_load": MessageLookupByLibrary.simpleMessage(
+      "Load Template",
+    ),
+    "g_key_aa_batch_template_name": MessageLookupByLibrary.simpleMessage(
+      "Template Name",
+    ),
+    "g_key_aa_batch_template_name_hint": MessageLookupByLibrary.simpleMessage(
+      "Enter template name",
+    ),
+    "g_key_aa_batch_template_saved": MessageLookupByLibrary.simpleMessage(
+      "Template saved",
+    ),
+    "g_key_aa_batch_templates": MessageLookupByLibrary.simpleMessage(
+      "Templates",
+    ),
     "g_key_aa_batch_title": MessageLookupByLibrary.simpleMessage(
       "Batch Transfer",
     ),
     "g_key_aa_batch_transaction": MessageLookupByLibrary.simpleMessage(
       "Batch Transaction",
+    ),
+    "g_key_aa_biconomy_account": MessageLookupByLibrary.simpleMessage(
+      "Biconomyアカウント",
+    ),
+    "g_key_aa_biconomy_desc": MessageLookupByLibrary.simpleMessage(
+      "ガスレストランザクションをサポートするモジュラーERC-7579スマートアカウント",
     ),
     "g_key_aa_by": MessageLookupByLibrary.simpleMessage("by"),
     "g_key_aa_chain": MessageLookupByLibrary.simpleMessage("Chain"),
@@ -702,6 +744,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_safe_desc": MessageLookupByLibrary.simpleMessage(
       "Multi-signature account with advanced security features",
     ),
+    "g_key_aa_safe_guardians": MessageLookupByLibrary.simpleMessage("ガーディアン"),
+    "g_key_aa_safe_threshold": MessageLookupByLibrary.simpleMessage("しきい値"),
     "g_key_aa_saved": MessageLookupByLibrary.simpleMessage("saved"),
     "g_key_aa_select_chain": MessageLookupByLibrary.simpleMessage(
       "Select Chain",
@@ -941,14 +985,38 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
       "アクティブな製品",
     ),
+    "g_key_earn_batch": MessageLookupByLibrary.simpleMessage("バッチ転送"),
+    "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("バーン"),
+    "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("Nを購入"),
+    "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
+      "ASTプロトコルでNを購入",
+    ),
     "g_key_earn_claim_free": MessageLookupByLibrary.simpleMessage("無料トークンを獲得"),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage("クロスチェーン転送"),
     "g_key_earn_daily_bonus": MessageLookupByLibrary.simpleMessage(
       "毎日のチェックインボーナス",
     ),
+    "g_key_earn_dex_desc": MessageLookupByLibrary.simpleMessage(
+      "Uniswap / 1inchを通じて任意のトークンをスワップ",
+    ),
+    "g_key_earn_dex_swap": MessageLookupByLibrary.simpleMessage("DEXスワップ"),
+    "g_key_earn_gas": MessageLookupByLibrary.simpleMessage("ガス"),
+    "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage("ステーキング開始"),
+    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("レジャー"),
+    "g_key_earn_loading_apy": MessageLookupByLibrary.simpleMessage(
+      "APY読み込み中...",
+    ),
+    "g_key_earn_mining": MessageLookupByLibrary.simpleMessage("マイニング"),
     "g_key_earn_more": MessageLookupByLibrary.simpleMessage("もっと稼ぐ"),
     "g_key_earn_native_sol": MessageLookupByLibrary.simpleMessage(
       "ネイティブSolanaステーキング",
+    ),
+    "g_key_earn_no_positions": MessageLookupByLibrary.simpleMessage(
+      "アクティブなポジションなし",
+    ),
+    "g_key_earn_node_mining": MessageLookupByLibrary.simpleMessage("ノードマイニング"),
+    "g_key_earn_node_mining_desc": MessageLookupByLibrary.simpleMessage(
+      "ノードマイニングに参加して報酬を獲得",
     ),
     "g_key_earn_points_daily": MessageLookupByLibrary.simpleMessage(
       "毎日ポイントを獲得",
@@ -956,9 +1024,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_pts_day": m16,
     "g_key_earn_quick_tools": MessageLookupByLibrary.simpleMessage("クイックツール"),
     "g_key_earn_recommended": MessageLookupByLibrary.simpleMessage("おすすめ"),
+    "g_key_earn_select_swap": MessageLookupByLibrary.simpleMessage(
+      "スワップタイプを選択",
+    ),
     "g_key_earn_stake_eth_lido": MessageLookupByLibrary.simpleMessage(
       "LidoでETHをステーク",
     ),
+    "g_key_earn_swap": MessageLookupByLibrary.simpleMessage("スワップ"),
     "g_key_earn_title": MessageLookupByLibrary.simpleMessage("稼ぐ"),
     "g_key_earn_total_earnings": MessageLookupByLibrary.simpleMessage("総収益"),
     "g_key_earn_up_to_apy": m17,

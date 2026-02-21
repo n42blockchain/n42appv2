@@ -93,6 +93,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m30(value) => "${value} days remaining";
 
+  static String m69(value) =>
+      "Unstaking takes ${value} days. Your tokens will be locked during this period.";
+
   static String m31(value) => "No tienes suficiente \"${value}\"";
 
   static String m32(value) => "Error al obtener la cuenta\"${value}\" account";
@@ -645,6 +648,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_add_operation": MessageLookupByLibrary.simpleMessage(
       "Add Operation",
     ),
+    "g_key_aa_address_calculating": MessageLookupByLibrary.simpleMessage(
+      "Calculando dirección...",
+    ),
+    "g_key_aa_address_error": MessageLookupByLibrary.simpleMessage(
+      "Error al calcular la dirección. Por favor, inténtelo de nuevo.",
+    ),
     "g_key_aa_address_preview": MessageLookupByLibrary.simpleMessage(
       "This address is pre-computed and will be deployed when you make your first transaction.",
     ),
@@ -659,15 +668,51 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_batch_description": MessageLookupByLibrary.simpleMessage(
       "Send multiple transactions in a single operation",
     ),
+    "g_key_aa_batch_failed": MessageLookupByLibrary.simpleMessage(
+      "Batch execution failed",
+    ),
+    "g_key_aa_batch_no_templates": MessageLookupByLibrary.simpleMessage(
+      "No saved templates",
+    ),
     "g_key_aa_batch_operations": MessageLookupByLibrary.simpleMessage(
       "Batch Operations",
     ),
     "g_key_aa_batch_save_gas": MessageLookupByLibrary.simpleMessage("Save Gas"),
+    "g_key_aa_batch_save_template": MessageLookupByLibrary.simpleMessage(
+      "Save as Template",
+    ),
+    "g_key_aa_batch_submitting": MessageLookupByLibrary.simpleMessage(
+      "Submitting...",
+    ),
+    "g_key_aa_batch_success": MessageLookupByLibrary.simpleMessage(
+      "Batch submitted successfully",
+    ),
+    "g_key_aa_batch_template_load": MessageLookupByLibrary.simpleMessage(
+      "Load Template",
+    ),
+    "g_key_aa_batch_template_name": MessageLookupByLibrary.simpleMessage(
+      "Template Name",
+    ),
+    "g_key_aa_batch_template_name_hint": MessageLookupByLibrary.simpleMessage(
+      "Enter template name",
+    ),
+    "g_key_aa_batch_template_saved": MessageLookupByLibrary.simpleMessage(
+      "Template saved",
+    ),
+    "g_key_aa_batch_templates": MessageLookupByLibrary.simpleMessage(
+      "Templates",
+    ),
     "g_key_aa_batch_title": MessageLookupByLibrary.simpleMessage(
       "Batch Transfer",
     ),
     "g_key_aa_batch_transaction": MessageLookupByLibrary.simpleMessage(
       "Batch Transaction",
+    ),
+    "g_key_aa_biconomy_account": MessageLookupByLibrary.simpleMessage(
+      "Cuenta Biconomy",
+    ),
+    "g_key_aa_biconomy_desc": MessageLookupByLibrary.simpleMessage(
+      "Cuenta inteligente ERC-7579 modular con soporte para transacciones sin gas",
     ),
     "g_key_aa_by": MessageLookupByLibrary.simpleMessage("by"),
     "g_key_aa_chain": MessageLookupByLibrary.simpleMessage("Chain"),
@@ -853,6 +898,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_safe_desc": MessageLookupByLibrary.simpleMessage(
       "Multi-signature account with advanced security features",
     ),
+    "g_key_aa_safe_guardians": MessageLookupByLibrary.simpleMessage(
+      "Guardianes",
+    ),
+    "g_key_aa_safe_threshold": MessageLookupByLibrary.simpleMessage("Umbral"),
     "g_key_aa_saved": MessageLookupByLibrary.simpleMessage("saved"),
     "g_key_aa_select_chain": MessageLookupByLibrary.simpleMessage(
       "Select Chain",
@@ -1128,6 +1177,78 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_bridge_tx_success": MessageLookupByLibrary.simpleMessage(
       "Puente Exitoso",
     ),
+    "g_key_btc_redeem_locked_until": MessageLookupByLibrary.simpleMessage(
+      "Bloqueado hasta",
+    ),
+    "g_key_btc_redeem_reminder": MessageLookupByLibrary.simpleMessage(
+      "Verifica que el período de bloqueo haya expirado antes de enviar el canje.",
+    ),
+    "g_key_btc_redeem_still_locked": MessageLookupByLibrary.simpleMessage(
+      "BTC aún bloqueado",
+    ),
+    "g_key_btc_redeem_title": MessageLookupByLibrary.simpleMessage(
+      "Canjear vBTC",
+    ),
+    "g_key_btc_redeem_unlocked": MessageLookupByLibrary.simpleMessage(
+      "Desbloqueado — listo para canjear",
+    ),
+    "g_key_btc_stake_acknowledge": MessageLookupByLibrary.simpleMessage(
+      "Entiendo los riesgos y deseo continuar",
+    ),
+    "g_key_btc_stake_continue": MessageLookupByLibrary.simpleMessage(
+      "Continuar al Staking",
+    ),
+    "g_key_btc_stake_how_it_works": MessageLookupByLibrary.simpleMessage(
+      "Cómo Funciona",
+    ),
+    "g_key_btc_stake_reminder": MessageLookupByLibrary.simpleMessage(
+      "El BTC quedará bloqueado hasta que expire el bloqueo temporal. Completa el proceso en la interfaz.",
+    ),
+    "g_key_btc_stake_risk1": MessageLookupByLibrary.simpleMessage(
+      "El BTC queda bloqueado durante todo el período de staking. No es posible retirar antes.",
+    ),
+    "g_key_btc_stake_risk2": MessageLookupByLibrary.simpleMessage(
+      "El bloqueo es aplicado por Bitcoin OP_CHECKLOCKTIMEVERIFY (CLTV) y no puede evitarse.",
+    ),
+    "g_key_btc_stake_risk3": MessageLookupByLibrary.simpleMessage(
+      "Riesgo de contrato inteligente: aunque auditado, ningún protocolo es completamente seguro.",
+    ),
+    "g_key_btc_stake_risk4": MessageLookupByLibrary.simpleMessage(
+      "Mínimo staking: 0.001 BTC. Período mínimo de bloqueo: 0.125 días (~3 horas).",
+    ),
+    "g_key_btc_stake_risk_warning": MessageLookupByLibrary.simpleMessage(
+      "Advertencia de Riesgo",
+    ),
+    "g_key_btc_stake_step1_desc": MessageLookupByLibrary.simpleMessage(
+      "Tu BTC queda bloqueado en un multifirma 2-de-2 con bloqueo temporal (CLTV), asegurado por tu clave y la clave del canister N42.",
+    ),
+    "g_key_btc_stake_step1_title": MessageLookupByLibrary.simpleMessage(
+      "Bloquea tu BTC",
+    ),
+    "g_key_btc_stake_step2_desc": MessageLookupByLibrary.simpleMessage(
+      "Tras la confirmación en cadena, se acuña vBTC en tu cartera en proporción 1:1.",
+    ),
+    "g_key_btc_stake_step2_title": MessageLookupByLibrary.simpleMessage(
+      "Acuña vBTC",
+    ),
+    "g_key_btc_stake_step3_desc": MessageLookupByLibrary.simpleMessage(
+      "Mantén vBTC para ganar recompensas. vBTC también es usable en protocolos DeFi.",
+    ),
+    "g_key_btc_stake_step3_title": MessageLookupByLibrary.simpleMessage(
+      "Gana Recompensas",
+    ),
+    "g_key_btc_stake_step4_desc": MessageLookupByLibrary.simpleMessage(
+      "Cuando expire el período de bloqueo, quema tu vBTC para recibir el BTC original.",
+    ),
+    "g_key_btc_stake_step4_title": MessageLookupByLibrary.simpleMessage(
+      "Canjea al Desbloquear",
+    ),
+    "g_key_btc_stake_subtitle": MessageLookupByLibrary.simpleMessage(
+      "Bloquea BTC para acuñar vBTC y ganar recompensas",
+    ),
+    "g_key_btc_stake_title": MessageLookupByLibrary.simpleMessage(
+      "Staking BTC Autocustodio",
+    ),
     "g_key_burn_got_it": MessageLookupByLibrary.simpleMessage("Entendido"),
     "g_key_burn_nft_step1": MessageLookupByLibrary.simpleMessage(
       "1. Selecciona un token con soporte NFT",
@@ -1177,6 +1298,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
       "Productos Activos",
     ),
+    "g_key_earn_batch": MessageLookupByLibrary.simpleMessage("Transferencia"),
+    "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("Quemar"),
+    "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("Comprar N"),
+    "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
+      "Compra N con el protocolo AST",
+    ),
     "g_key_earn_claim_free": MessageLookupByLibrary.simpleMessage(
       "Reclama tokens gratis",
     ),
@@ -1186,9 +1313,33 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_daily_bonus": MessageLookupByLibrary.simpleMessage(
       "Bono de check-in diario",
     ),
+    "g_key_earn_dex_desc": MessageLookupByLibrary.simpleMessage(
+      "Intercambia cualquier token vía Uniswap / 1inch",
+    ),
+    "g_key_earn_dex_swap": MessageLookupByLibrary.simpleMessage(
+      "Intercambio DEX",
+    ),
+    "g_key_earn_gas": MessageLookupByLibrary.simpleMessage("Gas"),
+    "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage(
+      "Comenzar Staking",
+    ),
+    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
+    "g_key_earn_loading_apy": MessageLookupByLibrary.simpleMessage(
+      "Cargando APY...",
+    ),
+    "g_key_earn_mining": MessageLookupByLibrary.simpleMessage("Minería"),
     "g_key_earn_more": MessageLookupByLibrary.simpleMessage("Ganar Más"),
     "g_key_earn_native_sol": MessageLookupByLibrary.simpleMessage(
       "Staking nativo de Solana",
+    ),
+    "g_key_earn_no_positions": MessageLookupByLibrary.simpleMessage(
+      "Sin posiciones activas",
+    ),
+    "g_key_earn_node_mining": MessageLookupByLibrary.simpleMessage(
+      "Minería de Nodos",
+    ),
+    "g_key_earn_node_mining_desc": MessageLookupByLibrary.simpleMessage(
+      "Gana recompensas participando en la minería de nodos",
     ),
     "g_key_earn_points_daily": MessageLookupByLibrary.simpleMessage(
       "Gana puntos diariamente",
@@ -1200,9 +1351,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_recommended": MessageLookupByLibrary.simpleMessage(
       "Recomendado",
     ),
+    "g_key_earn_select_swap": MessageLookupByLibrary.simpleMessage(
+      "Seleccionar Tipo de Intercambio",
+    ),
     "g_key_earn_stake_eth_lido": MessageLookupByLibrary.simpleMessage(
       "Stake ETH con Lido",
     ),
+    "g_key_earn_swap": MessageLookupByLibrary.simpleMessage("Intercambiar"),
     "g_key_earn_title": MessageLookupByLibrary.simpleMessage("Ganar"),
     "g_key_earn_total_earnings": MessageLookupByLibrary.simpleMessage(
       "Ganancias Totales",
@@ -2023,6 +2178,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_active_positions": MessageLookupByLibrary.simpleMessage(
       "Active Positions",
     ),
+    "g_key_stake_amount": MessageLookupByLibrary.simpleMessage("Amount"),
+    "g_key_stake_amount_unstake": MessageLookupByLibrary.simpleMessage(
+      "Amount to Unstake",
+    ),
     "g_key_stake_apy": MessageLookupByLibrary.simpleMessage("APY"),
     "g_key_stake_avg_apy": MessageLookupByLibrary.simpleMessage("Avg APY"),
     "g_key_stake_claim": MessageLookupByLibrary.simpleMessage(
@@ -2035,12 +2194,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_delegators": MessageLookupByLibrary.simpleMessage(
       "Delegadores",
     ),
+    "g_key_stake_estimated_daily": MessageLookupByLibrary.simpleMessage(
+      "Est. Daily Reward",
+    ),
+    "g_key_stake_estimated_yearly": MessageLookupByLibrary.simpleMessage(
+      "Est. Yearly Reward",
+    ),
+    "g_key_stake_go_to_swap": MessageLookupByLibrary.simpleMessage(
+      "Go to Swap",
+    ),
     "g_key_stake_liquid": MessageLookupByLibrary.simpleMessage(
       "Staking Líquido",
     ),
+    "g_key_stake_liquid_staking_label": MessageLookupByLibrary.simpleMessage(
+      "Liquid Staking",
+    ),
     "g_key_stake_liquid_tag": MessageLookupByLibrary.simpleMessage("Liquid"),
+    "g_key_stake_liquid_unstake_desc": MessageLookupByLibrary.simpleMessage(
+      "Your liquid token can be traded on DEX directly. Use Swap to exchange it back to the native asset.",
+    ),
     "g_key_stake_min_stake": MessageLookupByLibrary.simpleMessage(
       "Apuesta Mínima",
+    ),
+    "g_key_stake_no_active_positions": MessageLookupByLibrary.simpleMessage(
+      "No active positions to unstake",
     ),
     "g_key_stake_no_lock": MessageLookupByLibrary.simpleMessage("No lock"),
     "g_key_stake_no_positions": MessageLookupByLibrary.simpleMessage(
@@ -2048,6 +2225,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_stake_no_positions_yet": MessageLookupByLibrary.simpleMessage(
       "No staking positions yet",
+    ),
+    "g_key_stake_no_validators": MessageLookupByLibrary.simpleMessage(
+      "No validators found",
+    ),
+    "g_key_stake_no_wallet": MessageLookupByLibrary.simpleMessage(
+      "Wallet address not available",
     ),
     "g_key_stake_overview": MessageLookupByLibrary.simpleMessage(
       "Total Staking Overview",
@@ -2062,9 +2245,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_protocols": MessageLookupByLibrary.simpleMessage("Protocols"),
     "g_key_stake_restake": MessageLookupByLibrary.simpleMessage("Reapostar"),
     "g_key_stake_rewards": MessageLookupByLibrary.simpleMessage("Recompensas"),
+    "g_key_stake_search_validator": MessageLookupByLibrary.simpleMessage(
+      "Search validators...",
+    ),
+    "g_key_stake_select_a_validator": MessageLookupByLibrary.simpleMessage(
+      "Select a validator",
+    ),
+    "g_key_stake_select_position": MessageLookupByLibrary.simpleMessage(
+      "Select a position to unstake",
+    ),
     "g_key_stake_select_validator": MessageLookupByLibrary.simpleMessage(
       "Seleccionar Validador",
     ),
+    "g_key_stake_sort_by": MessageLookupByLibrary.simpleMessage("Sort by"),
     "g_key_stake_stake": MessageLookupByLibrary.simpleMessage("Apostar"),
     "g_key_stake_staked": MessageLookupByLibrary.simpleMessage("Staked"),
     "g_key_stake_start_staking": MessageLookupByLibrary.simpleMessage(
@@ -2074,19 +2267,27 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_total_staked": MessageLookupByLibrary.simpleMessage(
       "Total Apostado",
     ),
+    "g_key_stake_tx_prepared": MessageLookupByLibrary.simpleMessage(
+      "Transaction prepared successfully",
+    ),
     "g_key_stake_unbonding": MessageLookupByLibrary.simpleMessage(
       "Desvinculando",
     ),
     "g_key_stake_unbonding_period": MessageLookupByLibrary.simpleMessage(
       "Período de Desvinculación",
     ),
+    "g_key_stake_unbonding_warning": m69,
     "g_key_stake_unstake": MessageLookupByLibrary.simpleMessage(
       "Retirar Apuesta",
     ),
+    "g_key_stake_updating": MessageLookupByLibrary.simpleMessage("Updating..."),
     "g_key_stake_uptime": MessageLookupByLibrary.simpleMessage("Tiempo Activo"),
     "g_key_stake_validator": MessageLookupByLibrary.simpleMessage("Validador"),
     "g_key_stake_validators": MessageLookupByLibrary.simpleMessage(
       "Validadores",
+    ),
+    "g_key_stake_you_receive": MessageLookupByLibrary.simpleMessage(
+      "You will receive",
     ),
     "g_key_step_email": MessageLookupByLibrary.simpleMessage("Email"),
     "g_key_step_password": MessageLookupByLibrary.simpleMessage("Password"),

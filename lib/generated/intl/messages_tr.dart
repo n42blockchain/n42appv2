@@ -598,6 +598,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_add_operation": MessageLookupByLibrary.simpleMessage(
       "Add Operation",
     ),
+    "g_key_aa_address_calculating": MessageLookupByLibrary.simpleMessage(
+      "Adres hesaplanıyor...",
+    ),
+    "g_key_aa_address_error": MessageLookupByLibrary.simpleMessage(
+      "Adres hesaplanamadı. Lütfen tekrar deneyin.",
+    ),
     "g_key_aa_address_preview": MessageLookupByLibrary.simpleMessage(
       "This address is pre-computed and will be deployed when you make your first transaction.",
     ),
@@ -612,15 +618,51 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_batch_description": MessageLookupByLibrary.simpleMessage(
       "Send multiple transactions in a single operation",
     ),
+    "g_key_aa_batch_failed": MessageLookupByLibrary.simpleMessage(
+      "Batch execution failed",
+    ),
+    "g_key_aa_batch_no_templates": MessageLookupByLibrary.simpleMessage(
+      "No saved templates",
+    ),
     "g_key_aa_batch_operations": MessageLookupByLibrary.simpleMessage(
       "Batch Operations",
     ),
     "g_key_aa_batch_save_gas": MessageLookupByLibrary.simpleMessage("Save Gas"),
+    "g_key_aa_batch_save_template": MessageLookupByLibrary.simpleMessage(
+      "Save as Template",
+    ),
+    "g_key_aa_batch_submitting": MessageLookupByLibrary.simpleMessage(
+      "Submitting...",
+    ),
+    "g_key_aa_batch_success": MessageLookupByLibrary.simpleMessage(
+      "Batch submitted successfully",
+    ),
+    "g_key_aa_batch_template_load": MessageLookupByLibrary.simpleMessage(
+      "Load Template",
+    ),
+    "g_key_aa_batch_template_name": MessageLookupByLibrary.simpleMessage(
+      "Template Name",
+    ),
+    "g_key_aa_batch_template_name_hint": MessageLookupByLibrary.simpleMessage(
+      "Enter template name",
+    ),
+    "g_key_aa_batch_template_saved": MessageLookupByLibrary.simpleMessage(
+      "Template saved",
+    ),
+    "g_key_aa_batch_templates": MessageLookupByLibrary.simpleMessage(
+      "Templates",
+    ),
     "g_key_aa_batch_title": MessageLookupByLibrary.simpleMessage(
       "Batch Transfer",
     ),
     "g_key_aa_batch_transaction": MessageLookupByLibrary.simpleMessage(
       "Batch Transaction",
+    ),
+    "g_key_aa_biconomy_account": MessageLookupByLibrary.simpleMessage(
+      "Biconomy Hesabı",
+    ),
+    "g_key_aa_biconomy_desc": MessageLookupByLibrary.simpleMessage(
+      "Gassız işlem desteğiyle modüler ERC-7579 akıllı hesabı",
     ),
     "g_key_aa_by": MessageLookupByLibrary.simpleMessage("by"),
     "g_key_aa_chain": MessageLookupByLibrary.simpleMessage("Chain"),
@@ -806,6 +848,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_safe_desc": MessageLookupByLibrary.simpleMessage(
       "Multi-signature account with advanced security features",
     ),
+    "g_key_aa_safe_guardians": MessageLookupByLibrary.simpleMessage(
+      "Koruyucular",
+    ),
+    "g_key_aa_safe_threshold": MessageLookupByLibrary.simpleMessage("Eşik"),
     "g_key_aa_saved": MessageLookupByLibrary.simpleMessage("saved"),
     "g_key_aa_select_chain": MessageLookupByLibrary.simpleMessage(
       "Select Chain",
@@ -1097,6 +1143,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
       "Active Products",
     ),
+    "g_key_earn_batch": MessageLookupByLibrary.simpleMessage("Toplu Transfer"),
+    "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("Yak"),
+    "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("N Satın Al"),
+    "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
+      "AST protokolü ile N satın al",
+    ),
     "g_key_earn_claim_free": MessageLookupByLibrary.simpleMessage(
       "Claim free tokens",
     ),
@@ -1106,9 +1158,31 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_daily_bonus": MessageLookupByLibrary.simpleMessage(
       "Daily check-in bonus",
     ),
+    "g_key_earn_dex_desc": MessageLookupByLibrary.simpleMessage(
+      "Uniswap / 1inch üzerinden herhangi bir token takas edin",
+    ),
+    "g_key_earn_dex_swap": MessageLookupByLibrary.simpleMessage("DEX Takas"),
+    "g_key_earn_gas": MessageLookupByLibrary.simpleMessage("Gaz"),
+    "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage(
+      "Staking\'e Başla",
+    ),
+    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
+    "g_key_earn_loading_apy": MessageLookupByLibrary.simpleMessage(
+      "APY yükleniyor...",
+    ),
+    "g_key_earn_mining": MessageLookupByLibrary.simpleMessage("Madencilik"),
     "g_key_earn_more": MessageLookupByLibrary.simpleMessage("Earn More"),
     "g_key_earn_native_sol": MessageLookupByLibrary.simpleMessage(
       "Native Solana staking",
+    ),
+    "g_key_earn_no_positions": MessageLookupByLibrary.simpleMessage(
+      "Aktif pozisyon yok",
+    ),
+    "g_key_earn_node_mining": MessageLookupByLibrary.simpleMessage(
+      "Düğüm Madenciliği",
+    ),
+    "g_key_earn_node_mining_desc": MessageLookupByLibrary.simpleMessage(
+      "Düğüm madenciliğine katılarak ödül kazanın",
     ),
     "g_key_earn_points_daily": MessageLookupByLibrary.simpleMessage(
       "Earn points daily",
@@ -1120,9 +1194,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_recommended": MessageLookupByLibrary.simpleMessage(
       "Recommended",
     ),
+    "g_key_earn_select_swap": MessageLookupByLibrary.simpleMessage(
+      "Takas Türü Seçin",
+    ),
     "g_key_earn_stake_eth_lido": MessageLookupByLibrary.simpleMessage(
       "Stake ETH with Lido",
     ),
+    "g_key_earn_swap": MessageLookupByLibrary.simpleMessage("Takas"),
     "g_key_earn_title": MessageLookupByLibrary.simpleMessage("Earn"),
     "g_key_earn_total_earnings": MessageLookupByLibrary.simpleMessage(
       "Total Earnings",
