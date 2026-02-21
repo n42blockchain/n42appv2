@@ -14,6 +14,7 @@ import 'package:n42appv2/src/wallet/models/wallet_info.dart';
 import 'package:n42appv2/src/wallet/pages/add_token/wallet_chain_add.dart';
 import 'package:n42appv2/src/wallet/pages/add_token/wallet_coin_add_all.dart';
 import 'package:n42appv2/src/wallet/pages/ast_swap/swap_ast_home.dart';
+import 'package:n42appv2/src/wallet/pages/dex_swap/dex_swap_home.dart';
 import 'package:n42appv2/src/wallet/pages/face_matching/face_user_notice.dart';
 import 'package:n42appv2/src/wallet/pages/payment_code/payment_page.dart';
 import 'package:n42appv2/src/wallet/pages/payment_code/set_amount.dart';
@@ -450,7 +451,36 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                           }
                                         }
                                         else{
-                                          Navigator.push(context, MaterialPageRoute(builder: (context)=>SwapAstHome()));
+                                          sheetBottom(
+                                            context,
+                                            'Select Swap Mode',
+                                            Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                ListTile(
+                                                  leading: const Icon(Icons.currency_exchange),
+                                                  title: const Text('Buy N'),
+                                                  subtitle: const Text('Purchase N via AST protocol'),
+                                                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                                                  onTap: () {
+                                                    Navigator.pop(context);
+                                                    Navigator.push(context, MaterialPageRoute(builder: (_) => SwapAstHome()));
+                                                  },
+                                                ),
+                                                const Divider(height: 1),
+                                                ListTile(
+                                                  leading: const Icon(Icons.swap_horiz),
+                                                  title: const Text('DEX Swap'),
+                                                  subtitle: const Text('Swap any token via Uniswap / 1inch / Jupiter'),
+                                                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                                                  onTap: () {
+                                                    Navigator.pop(context);
+                                                    Navigator.push(context, MaterialPageRoute(builder: (_) => const DexSwapHome()));
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          );
                                         }
                                       },
                                       paymentCodeTap: () async{

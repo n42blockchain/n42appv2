@@ -13,6 +13,8 @@ import 'package:n42appv2/src/loyalty/pages/loyalty_home_page.dart';
 import 'package:n42appv2/src/miningV2/pages/mining_full_node_v2.dart';
 import 'package:n42appv2/src/staking/pages/staking_home_page.dart';
 import 'package:n42appv2/src/wallet/pages/ast_swap/swap_ast_home.dart';
+import 'package:n42appv2/src/wallet/pages/dex_swap/dex_swap_home.dart';
+import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
 
 /// 赚取首页
@@ -598,9 +600,57 @@ class _EarnHomePageState extends State<EarnHomePage> {
   }
 
   void _navigateToSwap(BuildContext context) {
-    Navigator.push(
+    sheetBottom(
       context,
-      MaterialPageRoute(builder: (context) => SwapAstHome()),
+      'Select Swap Mode',
+      Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _swapOptionTile(
+            context,
+            icon: Icons.currency_exchange,
+            title: 'Buy N',
+            subtitle: 'Purchase N via AST protocol',
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => SwapAstHome()),
+              );
+            },
+          ),
+          const Divider(height: 1),
+          _swapOptionTile(
+            context,
+            icon: Icons.swap_horiz,
+            title: 'DEX Swap',
+            subtitle: 'Swap any token via Uniswap / 1inch / Jupiter',
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const DexSwapHome()),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _swapOptionTile(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(title),
+      subtitle: Text(subtitle),
+      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+      onTap: onTap,
     );
   }
 

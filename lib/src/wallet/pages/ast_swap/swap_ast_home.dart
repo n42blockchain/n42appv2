@@ -510,6 +510,7 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
 
   //eth 模拟交易
   Future<bool> estimateGasEth() async {
+    if (payCoinModel == null) return true;  // Bug 5: payCoinModel 为 null 时跳过估算
     if (payCoinModel!.balance == BigInt.zero) {
       errorMessage = S.of(context).g_key_t_29(payCoinModel!.coin['coinType']);
       setState(() {});
@@ -1294,7 +1295,8 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => SwapAstSummary(
-                          send, receive, balance, date)));
+                          send, receive, balance, date,
+                          payCoin: youPay?.payCoin ?? 'USDT')));
               if (!mounted) return;
               if (rData == true) {
                 //埋点：用户点击确认交换按钮

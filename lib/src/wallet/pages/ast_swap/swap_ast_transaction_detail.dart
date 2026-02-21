@@ -26,7 +26,13 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
   late SwapAstOrderModel _orderModel;
   @override
   void initState() {
-    _orderModel = _orderModel;
+    _orderModel = widget.orderModel;  // Bug 1: 修复自赋值，改为从 widget 初始化
+    // Bug 2: 在 initState 中固定时间，避免每次 rebuild 取 DateTime.now()
+    final int tsMs = (_orderModel.created ?? 0) * 1000;
+    createStr = dformat.formatDate(
+      DateTime.fromMillisecondsSinceEpoch(tsMs),
+      [dformat.yyyy, '/', dformat.mm, '/', dformat.dd, ' ', dformat.am, ' ', dformat.hh, ':', dformat.nn],
+    );
     getOrderDetail();
     super.initState();
   }
@@ -49,20 +55,6 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
     );
   }
   Widget bodyWidget() {
-    createStr=dformat.formatDate(
-        DateTime.now(), [
-      dformat.yyyy,
-      '/',
-      dformat.mm,
-      '/',
-      dformat.dd,
-      ' ',
-      dformat.am,
-      ' ',
-      dformat.hh,
-      ':',
-      dformat.nn
-    ]);
     if(_orderModel.orderState==1){
       iconData=Icons.error;
       stateStr=S.of(context).g_swap_key_22;
@@ -110,7 +102,7 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
                 Row(
                   children: [
                     Text(
-                      "USDT/${_orderModel.type==1?"NFT":CoinType.N.name}",
+                      "${_orderModel.payCoin ?? 'USDT'}/${_orderModel.type==1?"NFT":CoinType.N.name}",
                       style: TextStyle(
                         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                         fontSize: ScreenUtil().setSp(28),
@@ -234,7 +226,7 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      pRowWidget("USDT",),
+                      pRowWidget(_orderModel.payCoin ?? 'USDT',),
                       SizedBox(height: ScreenUtil().setWidth(60),),
                       pRowWidget("Swap"),
                       SizedBox(height: ScreenUtil().setWidth(60),),
@@ -349,7 +341,7 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
           margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
           child: Column(
             children: [
-              rowWidget(S.of(context).g_key_tran_7,"${_orderModel.payNum} USDT"),
+              rowWidget(S.of(context).g_key_tran_7,"${_orderModel.payNum} ${_orderModel.payCoin ?? 'USDT'}"),
               rowWidget(S.of(context).g_key_tran_8,"${_orderModel.orderNum} ${CoinType.N.name}"),
               rowWidget(S.of(context).g_key_wallet_k25,createStr),
             ],

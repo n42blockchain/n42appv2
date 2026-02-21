@@ -12,7 +12,9 @@ class SwapAstSummary extends StatefulWidget {
   final String receive;
   final String balance;
   final String date;
-  const SwapAstSummary(this.send,this.receive,this.balance,this.date ,{super.key});
+  final String payCoin;  // Bug 3: 新增动态 payCoin 参数，替代硬编码 USDT
+  const SwapAstSummary(this.send, this.receive, this.balance, this.date,
+      {required this.payCoin, super.key});
 
   @override
   State<SwapAstSummary> createState() => _SwapAstSummaryState();
@@ -51,7 +53,7 @@ class _SwapAstSummaryState extends State<SwapAstSummary> {
                         ),
                         Expanded(
                           child: Text(
-                            "${widget.send} USDT",
+                            "${widget.send} ${widget.payCoin}",
                             style: TextStyle(
                               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name),
                               fontSize: ScreenUtil().setSp(30),

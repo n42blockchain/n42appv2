@@ -94,7 +94,7 @@ class _SwapAstTransactionsState extends State<SwapAstTransactions> {
                       Row(
                         children: [
                           Text(
-                            "USDT/${CoinType.N.name}",
+                            "${orderModel.payCoin ?? 'USDT'}/${CoinType.N.name}",
                             style: TextStyle(
                               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                               fontSize: ScreenUtil().setSp(28),
