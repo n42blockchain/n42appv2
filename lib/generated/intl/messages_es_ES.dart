@@ -2109,6 +2109,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_gas_tracker": MessageLookupByLibrary.simpleMessage(
       "Rastreador de Gas",
     ),
+    "g_key_gesture_medium": MessageLookupByLibrary.simpleMessage("Medio"),
+    "g_key_gesture_strong": MessageLookupByLibrary.simpleMessage("Fuerte"),
+    "g_key_gesture_too_simple": MessageLookupByLibrary.simpleMessage(
+      "Patrón demasiado simple, use más nodos",
+    ),
+    "g_key_gesture_weak": MessageLookupByLibrary.simpleMessage("Débil"),
     "g_key_google_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
       "Google sign-in cancelled",
     ),

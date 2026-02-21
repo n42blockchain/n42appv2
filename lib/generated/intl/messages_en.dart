@@ -2022,6 +2022,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_gas_slow": MessageLookupByLibrary.simpleMessage("Slow"),
     "g_key_gas_standard": MessageLookupByLibrary.simpleMessage("Standard"),
     "g_key_gas_tracker": MessageLookupByLibrary.simpleMessage("Gas Tracker"),
+    "g_key_gesture_medium": MessageLookupByLibrary.simpleMessage("Medium"),
+    "g_key_gesture_strong": MessageLookupByLibrary.simpleMessage("Strong"),
+    "g_key_gesture_too_simple": MessageLookupByLibrary.simpleMessage(
+      "Pattern too simple, please use more nodes",
+    ),
+    "g_key_gesture_weak": MessageLookupByLibrary.simpleMessage("Weak"),
     "g_key_google_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
       "Google sign-in cancelled",
     ),

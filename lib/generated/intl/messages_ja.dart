@@ -1673,6 +1673,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_gas_slow": MessageLookupByLibrary.simpleMessage("低速"),
     "g_key_gas_standard": MessageLookupByLibrary.simpleMessage("標準"),
     "g_key_gas_tracker": MessageLookupByLibrary.simpleMessage("Gasトラッカー"),
+    "g_key_gesture_medium": MessageLookupByLibrary.simpleMessage("中程度"),
+    "g_key_gesture_strong": MessageLookupByLibrary.simpleMessage("強い"),
+    "g_key_gesture_too_simple": MessageLookupByLibrary.simpleMessage(
+      "パターンが簡単すぎます。ノードをもっと追加してください",
+    ),
+    "g_key_gesture_weak": MessageLookupByLibrary.simpleMessage("弱い"),
     "g_key_google_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
       "Google sign-in cancelled",
     ),

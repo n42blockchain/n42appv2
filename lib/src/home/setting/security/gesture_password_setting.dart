@@ -1,4 +1,7 @@
-﻿import 'package:n42appv2/src/home/widgets/gesture_password/gesture_password.dart';
+// Copyright 2021-2026 N42 Inc. All rights reserved.
+
+import 'package:n42appv2/src/home/widgets/gesture_password/gesture_password.dart';
+import 'package:n42appv2/src/home/widgets/gesture_password/gesture_pattern_strength.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_1.dart';
@@ -6,62 +9,202 @@ import 'package:flutter/material.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class GesturePasswordSetting extends StatefulWidget{
-  final int type;//0新密码，1重设密码
+class GesturePasswordSetting extends StatefulWidget {
+  final int type; // 0: new password, 1: reset password
   final String? oldPassword;
-  const GesturePasswordSetting(this.type,{this.oldPassword,super.key});
+  const GesturePasswordSetting(this.type, {this.oldPassword, super.key});
   @override
-  GesturePasswordSettingState createState()=>GesturePasswordSettingState();
+  GesturePasswordSettingState createState() => GesturePasswordSettingState();
 }
 
-class GesturePasswordSettingState extends State<GesturePasswordSetting>{
-  Map<String,dynamic> cachedData={
-    //0：新密码操作步骤
-    "0":{
-      "1":"",//第一次输入
-      "2":"",//第二次输入
-      "errorCount":0,//第二次输入错误次数
-      "index":"1",//当前进行到第几步了，默认第一步
+class GesturePasswordSettingState extends State<GesturePasswordSetting> {
+  /// Strength from the most recent first-draw completion.
+  /// Cleared when advancing past the first-draw step.
+  PatternStrength? _currentStrength;
+
+  Map<String, dynamic> cachedData = {
+    // type=0: new password
+    "0": {
+      "1": "", // first draw
+      "2": "", // confirmation draw
+      "errorCount": 0,
+      "index": "1",
     },
-    //重设密码步骤
-    "1":{
-      //旧密码输入
-      "1":{
-        "old":"",//旧密码 数组
-        "errorCount":0,//输入错误次数
+    // type=1: reset password
+    "1": {
+      "1": {
+        "old": "", // old password (populated from widget.oldPassword)
+        "errorCount": 0,
       },
-      "2":"",//新密码首次输入
-      "3":"",//新密码二次输入
-      "errorCount":0,//第二次输入错误次数
-      "index":"1",//当前进行到第几步了，默认第一步
+      "2": "", // new password first draw
+      "3": "", // new password confirmation
+      "errorCount": 0,
+      "index": "1",
     }
   };
+
   @override
   void initState() {
     super.initState();
-    if(widget.type==1){
-      cachedData["1"]["1"]["old"]=widget.oldPassword;
+    if (widget.type == 1) {
+      cachedData["1"]["1"]["old"] = widget.oldPassword;
     }
   }
+
+  // ────────────────────────────────────────────────────────────────────────
+  // Helpers
+  // ────────────────────────────────────────────────────────────────────────
+
+  /// Returns true when the user is on the first-draw step of a new password.
+  bool get _isFirstDrawStep {
+    if (widget.type == 0) return cachedData['0']['index'] == "1";
+    if (widget.type == 1) return cachedData['1']['index'] == "2";
+    return false;
+  }
+
+  List<int> _parsePoints(String value) =>
+      value.split(',').map(int.parse).toList();
+
+  // ────────────────────────────────────────────────────────────────────────
+  // Gesture callback
+  // ────────────────────────────────────────────────────────────────────────
+
+  Future<void> _onGestureComplete(String value) async {
+    if (widget.type == 0) {
+      await _handleType0(value);
+    } else {
+      await _handleType1(value);
+    }
+  }
+
+  Future<void> _handleType0(String value) async {
+    if (cachedData['0']['index'] == "1") {
+      // ── First draw: check strength ──────────────────────────────────────
+      final strength = GesturePatternStrength.evaluate(_parsePoints(value));
+      if (strength == PatternStrength.weak) {
+        setState(() => _currentStrength = strength);
+        return; // block advancing — user must redraw
+      }
+      setState(() {
+        _currentStrength = null; // clear on advance
+        cachedData['0']["1"] = value;
+        cachedData['0']["index"] = "2";
+      });
+    } else {
+      // ── Confirmation draw ───────────────────────────────────────────────
+      if (value == cachedData['0']["1"]) {
+        setState(() => cachedData['0']["2"] = value);
+        Navigator.pop(context, value);
+      } else {
+        cachedData['0']["errorCount"] = cachedData['0']["errorCount"] + 1;
+        if (cachedData['0']["errorCount"] == 3) {
+          final flag =
+              await tipsDialog1(context, S.of(context).g_lock_key23);
+          if (!mounted) return;
+          if (flag != null && flag) {
+            setState(() {
+              cachedData['0']["index"] = "1";
+              cachedData['0']["errorCount"] = 0;
+              cachedData['0']["1"] = "";
+              _currentStrength = null;
+            });
+            return;
+          }
+        }
+        setState(() {});
+      }
+    }
+  }
+
+  Future<void> _handleType1(String value) async {
+    final String index = cachedData['1']['index'];
+
+    if (index == "1") {
+      // ── Verify old password ─────────────────────────────────────────────
+      if (cachedData['1']["1"]["old"] == value) {
+        setState(() => cachedData['1']["index"] = "2");
+      } else {
+        cachedData['1']["1"]["errorCount"] =
+            cachedData['1']["1"]["errorCount"] + 1;
+        if (cachedData['1']["1"]["errorCount"] == 3) {
+          final flag =
+              await tipsDialog1(context, S.of(context).g_lock_key23);
+          if (!mounted) return;
+          if (flag != null && flag) {
+            setState(() => cachedData['1']["1"]["errorCount"] = 0);
+            Navigator.pop(context);
+            return;
+          }
+        }
+        setState(() {});
+      }
+    } else if (index == "2") {
+      // ── New password first draw: check strength ─────────────────────────
+      final strength = GesturePatternStrength.evaluate(_parsePoints(value));
+      if (strength == PatternStrength.weak) {
+        setState(() => _currentStrength = strength);
+        return; // block advancing — user must redraw
+      }
+      setState(() {
+        _currentStrength = null; // clear on advance
+        cachedData['1']["2"] = value;
+        cachedData['1']["index"] = "3";
+      });
+    } else {
+      // ── New password confirmation draw ──────────────────────────────────
+      if (value == cachedData['1']["2"]) {
+        setState(() => cachedData['1']["3"] = value);
+        Navigator.pop(context, value);
+      } else {
+        cachedData['1']["errorCount"] = cachedData['1']["errorCount"] + 1;
+        if (cachedData['1']["errorCount"] == 3) {
+          final flag =
+              await tipsDialog1(context, S.of(context).g_lock_key23);
+          if (!mounted) return;
+          if (flag != null && flag) {
+            setState(() {
+              cachedData['1']["index"] = "2"; // back to new-password draw
+              cachedData['1']["errorCount"] = 0;
+              cachedData['1']["2"] = "";
+              _currentStrength = null;
+            });
+            return;
+          }
+        }
+        setState(() {});
+      }
+    }
+  }
+
+  // ────────────────────────────────────────────────────────────────────────
+  // Build
+  // ────────────────────────────────────────────────────────────────────────
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text: widget.type==0?S.of(context).g_lock_key16:S.of(context).g_lock_key22,
+        text: widget.type == 0
+            ? S.of(context).g_lock_key16
+            : S.of(context).g_lock_key22,
       ),
       body: gesturePasswordWidget(),
     );
   }
-  Widget gesturePasswordWidget(){
+
+  Widget gesturePasswordWidget() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          height: ScreenUtil().setWidth(350.0),
+          height: ScreenUtil().setWidth(300.0),
           width: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(60.0)),
+          padding: EdgeInsets.symmetric(
+              horizontal: ScreenUtil().setWidth(60.0)),
           child: tipTextWidget(),
         ),
+        if (_isFirstDrawStep && _currentStrength != null)
+          _buildStrengthIndicator(),
         Container(
           alignment: Alignment.center,
           height: ScreenUtil().setWidth(540.0),
@@ -70,89 +213,7 @@ class GesturePasswordSettingState extends State<GesturePasswordSetting>{
             height: ScreenUtil().setWidth(540.0),
             width: ScreenUtil().setWidth(540.0),
             child: GesturePassword(
-                  (String value)async{
-                if(widget.type==0){
-                  if(cachedData['0']['index']=="1"){
-                    setState(() {
-                      cachedData['0']["1"]=value;
-                      cachedData['0']["index"]="2";
-                    });
-                  }else{
-                    if(value==cachedData['0']["1"]){
-                      //设置密码完成
-                      //调用保存设置
-                      //退出当前页
-                      setState(() {
-                        cachedData['0']["2"]=value;
-                      });
-                      Navigator.pop(context,value);
-                    }else{
-                      cachedData['0']["errorCount"]=cachedData['0']["errorCount"]+1;
-                      if(cachedData['0']["errorCount"]==3){
-                        //三次输入错误，重置内容
-                        final flag=await tipsDialog1(context, S.of(context).g_lock_key23);
-                        if (!mounted) return;
-                        if (flag != null && flag) {
-                          cachedData['0']["index"]="1";
-                          cachedData['0']["errorCount"]=0;
-                          cachedData['0']["1"]="";
-                        }
-                      }
-                      setState(() {});
-                    }
-                  }
-                }
-                else{
-                  if(cachedData['1']['index']=="1"){
-                    if(cachedData['1']["1"]["old"]==value){
-                      setState(() {
-                        cachedData['1']["index"]="2";
-                      });
-                    }else{
-                      cachedData['1']["1"]["errorCount"]=cachedData['1']["1"]["errorCount"]+1;
-                      if(cachedData['1']["1"]["errorCount"]==3){
-                        //输入三次错误，提示输入错误次数过多返回上一页
-                        final flag=await tipsDialog1(context, S.of(context).g_lock_key23);
-                        if (!mounted) return;
-                        if (flag != null && flag) {
-                          cachedData['1']["1"]["errorCount"]=0;
-                          Navigator.pop(context);
-                        }
-                      }
-                      setState(() {});
-                    }
-                  }
-                  else if(cachedData['1']['index']=="2"){
-                    setState(() {
-                      cachedData['1']["2"]=value;
-                      cachedData['1']["index"]="3";
-                    });
-                  }else{
-                    if(value==cachedData['1']["2"]){
-                      //设置密码完成
-                      //调用保存设置
-                      //退出当前页
-                      setState(() {
-                        cachedData['1']["3"]=value;
-                      });
-                      Navigator.pop(context,value);
-                    }else{
-                      cachedData['1']["errorCount"]=cachedData['1']["errorCount"]+1;
-                      if(cachedData['1']["errorCount"]==3){
-                        //三次输入错误，重置内容
-                        final flag=await tipsDialog1(context, S.of(context).g_lock_key23);
-                        if (!mounted) return;
-                        if (flag != null && flag) {
-                          cachedData['1']["index"]="1";
-                          cachedData['1']["errorCount"]=0;
-                          cachedData['1']["2"]="";
-                        }
-                        setState(() {});
-                      }
-                    }
-                  }
-                }
-              },
+              _onGestureComplete,
               ScreenUtil().setWidth(180.0),
               answer: getAnswer(),
             ),
@@ -161,58 +222,84 @@ class GesturePasswordSettingState extends State<GesturePasswordSetting>{
       ],
     );
   }
-  Widget tipTextWidget(){
-    String titleStr="";
-    String subtitleStr="";
-    if(widget.type==0){
-      titleStr=S.of(context).g_lock_key17;
-      if(cachedData["0"]["index"]=="1"){
-        subtitleStr=S.of(context).g_lock_key18;
-      }else{
-        if(cachedData["0"]["errorCount"] ==0){
-          subtitleStr=S.of(context).g_lock_key19;
-        }else if(cachedData["0"]["errorCount"] ==2){
-          subtitleStr=S.of(context).g_lock_key25("${3-cachedData["0"]["errorCount"]}");
-        }else{
-          subtitleStr=S.of(context).g_lock_key21("${3-cachedData["0"]["errorCount"]}");
+
+  // ────────────────────────────────────────────────────────────────────────
+  // Tip text
+  // ────────────────────────────────────────────────────────────────────────
+
+  Widget tipTextWidget() {
+    String titleStr = "";
+    String subtitleStr = "";
+
+    if (widget.type == 0) {
+      titleStr = S.of(context).g_lock_key17;
+      if (cachedData["0"]["index"] == "1") {
+        // First draw step
+        if (_currentStrength == PatternStrength.weak) {
+          subtitleStr = S.of(context).g_key_gesture_too_simple;
+        } else {
+          subtitleStr = S.of(context).g_lock_key18;
+        }
+      } else {
+        // Confirmation step
+        final int errCount = cachedData["0"]["errorCount"];
+        if (errCount == 0) {
+          subtitleStr = S.of(context).g_lock_key19;
+        } else if (errCount == 2) {
+          subtitleStr = S.of(context)
+              .g_lock_key25("${3 - errCount}");
+        } else {
+          subtitleStr = S.of(context)
+              .g_lock_key21("${3 - errCount}");
         }
       }
-    }else{
-      if(cachedData["1"]["index"] =="1"){
-        titleStr=S.of(context).g_lock_key20;
-        if(cachedData["1"]["1"]["errorCount"] !=0){
-          if(cachedData["1"]["1"]["errorCount"] ==2){
-            subtitleStr=S.of(context).g_lock_key25("${3-cachedData["1"]["1"]["errorCount"]}");
-          }else{
-            subtitleStr=S.of(context).g_lock_key21("${3-cachedData["1"]["1"]["errorCount"]}");
-          }
+    } else {
+      if (cachedData["1"]["index"] == "1") {
+        // Verify old password step
+        titleStr = S.of(context).g_lock_key20;
+        final int errCount = cachedData["1"]["1"]["errorCount"];
+        if (errCount != 0) {
+          subtitleStr = errCount == 2
+              ? S.of(context).g_lock_key25("${3 - errCount}")
+              : S.of(context).g_lock_key21("${3 - errCount}");
         }
-      }else{
-        titleStr=S.of(context).g_lock_key17;
-        if(cachedData["1"]["index"]=="2"){
-          subtitleStr=S.of(context).g_lock_key18;
-        }else{
-          if(cachedData["1"]["errorCount"] ==0){
-            subtitleStr=S.of(context).g_lock_key19;
-          }else if(cachedData["1"]["errorCount"] ==2){
-            subtitleStr=S.of(context).g_lock_key25("${3-cachedData["1"]["errorCount"]}");
-          }else{
-            subtitleStr=S.of(context).g_lock_key21("${3-cachedData["1"]["errorCount"]}");
+      } else {
+        titleStr = S.of(context).g_lock_key17;
+        if (cachedData["1"]["index"] == "2") {
+          // New password first draw step
+          if (_currentStrength == PatternStrength.weak) {
+            subtitleStr = S.of(context).g_key_gesture_too_simple;
+          } else {
+            subtitleStr = S.of(context).g_lock_key18;
+          }
+        } else {
+          // Confirmation step
+          final int errCount = cachedData["1"]["errorCount"];
+          if (errCount == 0) {
+            subtitleStr = S.of(context).g_lock_key19;
+          } else if (errCount == 2) {
+            subtitleStr = S.of(context)
+                .g_lock_key25("${3 - errCount}");
+          } else {
+            subtitleStr = S.of(context)
+                .g_lock_key21("${3 - errCount}");
           }
         }
       }
     }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          height: ScreenUtil().setWidth(140.0),
+          height: ScreenUtil().setWidth(120.0),
           alignment: Alignment.center,
           child: Text(
             titleStr,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.mainTextColor.name),
               fontSize: ScreenUtil().setSp(32.0),
             ),
           ),
@@ -220,37 +307,97 @@ class GesturePasswordSettingState extends State<GesturePasswordSetting>{
         Text(
           subtitleStr,
           style: TextStyle(
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-            fontSize: ScreenUtil().setSp(32.0),
+            color: _currentStrength == PatternStrength.weak && _isFirstDrawStep
+                ? AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.errorTextColor.name)
+                : AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainTextColor.name),
+            fontSize: ScreenUtil().setSp(28.0),
           ),
           textAlign: TextAlign.center,
         ),
       ],
     );
   }
-  List<int>? getAnswer(){
-    if(widget.type==0){
-      if(cachedData['0']['index']=="1"){
+
+  // ────────────────────────────────────────────────────────────────────────
+  // Strength indicator
+  // ────────────────────────────────────────────────────────────────────────
+
+  Widget _buildStrengthIndicator() {
+    final PatternStrength strength = _currentStrength!;
+    final int litBars = strength == PatternStrength.weak
+        ? 1
+        : strength == PatternStrength.medium
+            ? 2
+            : 3;
+    final Color barColor = strength == PatternStrength.weak
+        ? const Color(0xFFE53935) // red
+        : strength == PatternStrength.medium
+            ? const Color(0xFFFFA726) // orange
+            : const Color(0xFF43A047); // green
+    final String label = strength == PatternStrength.weak
+        ? S.of(context).g_key_gesture_weak
+        : strength == PatternStrength.medium
+            ? S.of(context).g_key_gesture_medium
+            : S.of(context).g_key_gesture_strong;
+
+    final double barW = ScreenUtil().setWidth(60.0);
+    final double barH = ScreenUtil().setWidth(8.0);
+    final double gap = ScreenUtil().setWidth(4.0);
+
+    return Padding(
+      padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          for (int i = 0; i < 3; i++)
+            Container(
+              width: barW,
+              height: barH,
+              margin: EdgeInsets.symmetric(horizontal: gap),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(barH / 2),
+                color: i < litBars
+                    ? barColor
+                    : AppThemeUtils.getColorByKey(
+                            context, AppThemeKeys.itemSubtitleTextColor.name)
+                        .withAlpha((0.3 * 255).round()),
+              ),
+            ),
+          SizedBox(width: ScreenUtil().setWidth(12.0)),
+          Text(
+            label,
+            style: TextStyle(
+              color: barColor,
+              fontSize: ScreenUtil().setSp(24.0),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ────────────────────────────────────────────────────────────────────────
+  // Answer helper
+  // ────────────────────────────────────────────────────────────────────────
+
+  List<int>? getAnswer() {
+    if (widget.type == 0) {
+      if (cachedData['0']['index'] == "1") return null;
+      return _stringToIntArray(cachedData['0']["1"]);
+    } else {
+      if (cachedData['1']['index'] == "1") {
+        return _stringToIntArray(cachedData['1']["1"]['old']);
+      } else if (cachedData['1']['index'] == "2") {
         return null;
-      }else{
-        return stringToIntArray(cachedData['0']["1"]);
-      }
-    }else{
-      if(cachedData['1']['index']=="1"){
-        return stringToIntArray(cachedData['1']["1"]['old']);
-      }else if(cachedData['1']['index']=="2"){
-        return null;
-      }else{
-        return stringToIntArray(cachedData['1']["2"]);
+      } else {
+        return _stringToIntArray(cachedData['1']["2"]);
       }
     }
   }
-  List<int> stringToIntArray(String answer){
-    List<String> answerStrList=answer.split(',');
-    List<int> answerIntList=[];
-    for(String value in answerStrList){
-      answerIntList.add(int.parse(value));
-    }
-    return answerIntList;
-  }
+
+  List<int> _stringToIntArray(String answer) =>
+      answer.split(',').map(int.parse).toList();
 }

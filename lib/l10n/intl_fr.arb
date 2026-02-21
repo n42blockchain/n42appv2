@@ -1556,5 +1556,9 @@
   "g_key_domain_sns_name": "Solana Name Service",
   "g_key_domain_ud_not_found": "Domaine Unstoppable introuvable ou sans adresse pour cette chaîne",
   "g_key_domain_sns_not_found": "Domaine Solana introuvable",
-  "g_key_domain_resolve_hint": "Prend en charge ENS (.eth), Unstoppable Domains (.crypto/.wallet/…) et Solana SNS (.sol)"
+  "g_key_domain_resolve_hint": "Prend en charge ENS (.eth), Unstoppable Domains (.crypto/.wallet/…) et Solana SNS (.sol)",
+  "g_key_gesture_weak": "Faible",
+  "g_key_gesture_medium": "Moyen",
+  "g_key_gesture_strong": "Fort",
+  "g_key_gesture_too_simple": "Modèle trop simple, utilisez plus de nœuds"
 }

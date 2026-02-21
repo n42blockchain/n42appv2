@@ -1999,6 +1999,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_gas_slow": MessageLookupByLibrary.simpleMessage("Lento"),
     "g_key_gas_standard": MessageLookupByLibrary.simpleMessage("Padrão"),
     "g_key_gas_tracker": MessageLookupByLibrary.simpleMessage("Gas Tracker"),
+    "g_key_gesture_medium": MessageLookupByLibrary.simpleMessage("Médio"),
+    "g_key_gesture_strong": MessageLookupByLibrary.simpleMessage("Forte"),
+    "g_key_gesture_too_simple": MessageLookupByLibrary.simpleMessage(
+      "Padrão muito simples, adicione mais nós",
+    ),
+    "g_key_gesture_weak": MessageLookupByLibrary.simpleMessage("Fraco"),
     "g_key_google_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
       "Google sign-in cancelled",
     ),

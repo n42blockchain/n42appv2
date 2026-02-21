@@ -48,7 +48,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
       if(oldOk){
         oldErrorMessage="";
       }else{
-        oldErrorMessage="6-digit number";
+        oldErrorMessage=S.of(context).g_lock_key13;
         setState(() {
         });
         return;
@@ -69,7 +69,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
     if(newOk){
       newErrorMessage="";
     }else{
-      newErrorMessage="6-digit number";
+      newErrorMessage=S.of(context).g_lock_key13;
       setState(() {
       });
       return;
@@ -79,7 +79,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
     if(newOk){
       newErrorMessage="";
     }else{
-      newErrorMessage="6-digit number";
+      newErrorMessage=S.of(context).g_lock_key13;
       setState(() {
       });
       return;
@@ -90,7 +90,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
     if(confirmOk){
       confirmErrorMessage="";
     }else{
-      confirmErrorMessage="6-digit number";
+      confirmErrorMessage=S.of(context).g_lock_key13;
       setState(() {
       });
       return;
@@ -99,7 +99,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
     if(confirmOk){
       confirmErrorMessage="";
     }else{
-      confirmErrorMessage="6-digit number";
+      confirmErrorMessage=S.of(context).g_lock_key13;
       setState(() {
       });
       return;

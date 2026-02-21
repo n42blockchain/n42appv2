@@ -1917,6 +1917,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_gas_slow": MessageLookupByLibrary.simpleMessage("Chậm"),
     "g_key_gas_standard": MessageLookupByLibrary.simpleMessage("Tiêu chuẩn"),
     "g_key_gas_tracker": MessageLookupByLibrary.simpleMessage("Gas Tracker"),
+    "g_key_gesture_medium": MessageLookupByLibrary.simpleMessage("Trung bình"),
+    "g_key_gesture_strong": MessageLookupByLibrary.simpleMessage("Mạnh"),
+    "g_key_gesture_too_simple": MessageLookupByLibrary.simpleMessage(
+      "Mẫu quá đơn giản, vui lòng thêm nhiều nút hơn",
+    ),
+    "g_key_gesture_weak": MessageLookupByLibrary.simpleMessage("Yếu"),
     "g_key_google_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
       "Google sign-in cancelled",
     ),

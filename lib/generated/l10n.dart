@@ -13943,6 +13943,41 @@ class S {
       args: [],
     );
   }
+
+  /// `Weak`
+  String get g_key_gesture_weak {
+    return Intl.message('Weak', name: 'g_key_gesture_weak', desc: '', args: []);
+  }
+
+  /// `Medium`
+  String get g_key_gesture_medium {
+    return Intl.message(
+      'Medium',
+      name: 'g_key_gesture_medium',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Strong`
+  String get g_key_gesture_strong {
+    return Intl.message(
+      'Strong',
+      name: 'g_key_gesture_strong',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pattern too simple, please use more nodes`
+  String get g_key_gesture_too_simple {
+    return Intl.message(
+      'Pattern too simple, please use more nodes',
+      name: 'g_key_gesture_too_simple',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

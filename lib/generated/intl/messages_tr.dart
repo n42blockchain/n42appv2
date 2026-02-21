@@ -1942,6 +1942,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_gas_slow": MessageLookupByLibrary.simpleMessage("Yavaş"),
     "g_key_gas_standard": MessageLookupByLibrary.simpleMessage("Standart"),
     "g_key_gas_tracker": MessageLookupByLibrary.simpleMessage("Gas Tracker"),
+    "g_key_gesture_medium": MessageLookupByLibrary.simpleMessage("Orta"),
+    "g_key_gesture_strong": MessageLookupByLibrary.simpleMessage("Güçlü"),
+    "g_key_gesture_too_simple": MessageLookupByLibrary.simpleMessage(
+      "Desen çok basit, daha fazla nokta ekleyin",
+    ),
+    "g_key_gesture_weak": MessageLookupByLibrary.simpleMessage("Zayıf"),
     "g_key_google_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
       "Google sign-in cancelled",
     ),

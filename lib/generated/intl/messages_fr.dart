@@ -2028,6 +2028,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_gas_slow": MessageLookupByLibrary.simpleMessage("Lent"),
     "g_key_gas_standard": MessageLookupByLibrary.simpleMessage("Standard"),
     "g_key_gas_tracker": MessageLookupByLibrary.simpleMessage("Gas Tracker"),
+    "g_key_gesture_medium": MessageLookupByLibrary.simpleMessage("Moyen"),
+    "g_key_gesture_strong": MessageLookupByLibrary.simpleMessage("Fort"),
+    "g_key_gesture_too_simple": MessageLookupByLibrary.simpleMessage(
+      "Modèle trop simple, utilisez plus de nœuds",
+    ),
+    "g_key_gesture_weak": MessageLookupByLibrary.simpleMessage("Faible"),
     "g_key_google_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
       "Google sign-in cancelled",
     ),

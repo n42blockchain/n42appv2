@@ -1556,5 +1556,9 @@
   "g_key_domain_sns_name": "Solana Name Service",
   "g_key_domain_ud_not_found": "Домен Unstoppable не найден или нет адреса для этой сети",
   "g_key_domain_sns_not_found": "Домен Solana не найден",
-  "g_key_domain_resolve_hint": "Поддерживает ENS (.eth), Unstoppable Domains (.crypto/.wallet/…) и Solana SNS (.sol)"
+  "g_key_domain_resolve_hint": "Поддерживает ENS (.eth), Unstoppable Domains (.crypto/.wallet/…) и Solana SNS (.sol)",
+  "g_key_gesture_weak": "Слабый",
+  "g_key_gesture_medium": "Средний",
+  "g_key_gesture_strong": "Сильный",
+  "g_key_gesture_too_simple": "Шаблон слишком простой, добавьте больше узлов"
 }

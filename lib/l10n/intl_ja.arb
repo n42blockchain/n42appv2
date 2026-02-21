@@ -1556,5 +1556,9 @@
   "g_key_domain_sns_name": "Solana ネームサービス",
   "g_key_domain_ud_not_found": "Unstoppableドメインが見つからないか、このチェーンのアドレスがありません",
   "g_key_domain_sns_not_found": "Solanaドメインが見つかりません",
-  "g_key_domain_resolve_hint": "ENS (.eth)・Unstoppable Domains (.crypto/.wallet/…)・Solana SNS (.sol) に対応"
+  "g_key_domain_resolve_hint": "ENS (.eth)・Unstoppable Domains (.crypto/.wallet/…)・Solana SNS (.sol) に対応",
+  "g_key_gesture_weak": "弱い",
+  "g_key_gesture_medium": "中程度",
+  "g_key_gesture_strong": "強い",
+  "g_key_gesture_too_simple": "パターンが簡単すぎます。ノードをもっと追加してください"
 }

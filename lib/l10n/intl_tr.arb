@@ -1556,5 +1556,9 @@
   "g_key_domain_sns_name": "Solana İsim Servisi",
   "g_key_domain_ud_not_found": "Unstoppable alan adı bulunamadı veya bu zincir için adres yok",
   "g_key_domain_sns_not_found": "Solana alan adı bulunamadı",
-  "g_key_domain_resolve_hint": "ENS (.eth), Unstoppable Domains (.crypto/.wallet/…) ve Solana SNS (.sol) desteklenir"
+  "g_key_domain_resolve_hint": "ENS (.eth), Unstoppable Domains (.crypto/.wallet/…) ve Solana SNS (.sol) desteklenir",
+  "g_key_gesture_weak": "Zayıf",
+  "g_key_gesture_medium": "Orta",
+  "g_key_gesture_strong": "Güçlü",
+  "g_key_gesture_too_simple": "Desen çok basit, daha fazla nokta ekleyin"
 }

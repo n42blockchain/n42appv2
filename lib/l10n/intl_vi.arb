@@ -1556,5 +1556,9 @@
   "g_key_domain_sns_name": "Dịch vụ tên Solana",
   "g_key_domain_ud_not_found": "Không tìm thấy tên miền Unstoppable hoặc không có địa chỉ cho chuỗi này",
   "g_key_domain_sns_not_found": "Không tìm thấy tên miền Solana",
-  "g_key_domain_resolve_hint": "Hỗ trợ ENS (.eth), Unstoppable Domains (.crypto/.wallet/…) và Solana SNS (.sol)"
+  "g_key_domain_resolve_hint": "Hỗ trợ ENS (.eth), Unstoppable Domains (.crypto/.wallet/…) và Solana SNS (.sol)",
+  "g_key_gesture_weak": "Yếu",
+  "g_key_gesture_medium": "Trung bình",
+  "g_key_gesture_strong": "Mạnh",
+  "g_key_gesture_too_simple": "Mẫu quá đơn giản, vui lòng thêm nhiều nút hơn"
 }
