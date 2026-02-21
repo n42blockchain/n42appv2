@@ -38,6 +38,11 @@ class _UnlockState extends ConsumerState<Unlock> {
   int passwordUnlock=60;//密码解锁倒计时
   Timer? passwordTimer;
 
+  /// True when device passed [checkBiometrics] — we can offer a retry.
+  bool _biometricAvailable=false;
+  /// True when the last biometric attempt failed or was cancelled by user.
+  bool _biometricFailed=false;
+
   @override
   void initState() {
     super.initState();
@@ -82,30 +87,123 @@ class _UnlockState extends ConsumerState<Unlock> {
   }
   Future<void> initFace() async {
     final lockState = ref.read(screenLockProvider);
-    if (lockState.faceEnabled) {
-      FaceRecognitionPublic frp = FaceRecognitionPublic();
-      bool checkBiometrics = await frp.checkBiometrics();
-      if (!mounted) return;
-      if (checkBiometrics) {
-        bool authenticate = await frp.authenticateWithBiometrics();
-        if (!mounted) return;
-        if (authenticate) {
-          check = true;
-          back();
-        } else {
-          // 验证失败
-          check = false;
-          ToastUtils.show(S.of(context).g_unlock_key7);
-        }
-      } else {
-        // 无法使用生物识别
-        check = false;
-        ToastUtils.show(S.of(context).g_lock_key7);
-      }
+    if (!lockState.faceEnabled) {
+      setState(() => faceShow = true);
+      return;
     }
-    setState(() {
-      faceShow = true;
-    });
+
+    final FaceRecognitionPublic frp = FaceRecognitionPublic();
+    final bool canAuth = await frp.checkBiometrics();
+    if (!mounted) return;
+
+    if (!canAuth) {
+      // Device does not have usable biometrics (not enrolled or unavailable)
+      ToastUtils.show(S.of(context).g_lock_key7);
+      setState(() {
+        _biometricAvailable = false;
+        faceShow = true;
+      });
+      return;
+    }
+
+    setState(() => _biometricAvailable = true);
+
+    final BiometricAuthResult result = await frp.authenticateWithBiometrics();
+    if (!mounted) return;
+
+    if (result == BiometricAuthResult.success) {
+      check = true;
+      back();
+      return; // already popped — do NOT set faceShow = true
+    }
+
+    // For all non-success results, advance to next auth layer (gesture/PIN)
+    // and show contextual feedback.
+    if (result == BiometricAuthResult.userCancelled) {
+      // Silent: user deliberately dismissed — show retry button, no toast
+      setState(() {
+        _biometricFailed = true;
+        faceShow = true;
+      });
+    } else if (result == BiometricAuthResult.notEnrolled) {
+      ToastUtils.show(S.of(context).g_biometric_not_enrolled);
+      setState(() {
+        _biometricAvailable = false;
+        faceShow = true;
+      });
+    } else if (result == BiometricAuthResult.lockedOut) {
+      ToastUtils.show(S.of(context).g_biometric_locked_out);
+      setState(() {
+        _biometricFailed = true;
+        faceShow = true;
+      });
+    } else if (result == BiometricAuthResult.notAvailable) {
+      ToastUtils.show(S.of(context).g_lock_key7);
+      setState(() {
+        _biometricAvailable = false;
+        faceShow = true;
+      });
+    } else {
+      // BiometricAuthResult.failed — biometric mismatch / hardware error
+      ToastUtils.show(S.of(context).g_unlock_key7);
+      setState(() {
+        _biometricFailed = true;
+        faceShow = true;
+      });
+    }
+  }
+
+  /// Retry biometric auth without resetting to the loading state.
+  /// Called from the fingerprint icon button shown on gesture/PIN steps.
+  Future<void> _retryBiometric() async {
+    setState(() => _biometricFailed = false);
+
+    final FaceRecognitionPublic frp = FaceRecognitionPublic();
+    final BiometricAuthResult result = await frp.authenticateWithBiometrics();
+    if (!mounted) return;
+
+    if (result == BiometricAuthResult.success) {
+      check = true;
+      back();
+      return;
+    }
+
+    if (result == BiometricAuthResult.userCancelled) {
+      setState(() => _biometricFailed = true);
+    } else if (result == BiometricAuthResult.notEnrolled) {
+      ToastUtils.show(S.of(context).g_biometric_not_enrolled);
+      setState(() => _biometricAvailable = false);
+    } else if (result == BiometricAuthResult.lockedOut) {
+      ToastUtils.show(S.of(context).g_biometric_locked_out);
+      setState(() => _biometricFailed = true);
+    } else if (result == BiometricAuthResult.notAvailable) {
+      ToastUtils.show(S.of(context).g_lock_key7);
+      setState(() => _biometricAvailable = false);
+    } else {
+      ToastUtils.show(S.of(context).g_unlock_key7);
+      setState(() => _biometricFailed = true);
+    }
+  }
+
+  Widget _buildBiometricRetryButton() {
+    return Container(
+      alignment: Alignment.center,
+      child: TextButton.icon(
+        onPressed: _retryBiometric,
+        icon: Icon(
+          Icons.fingerprint,
+          size: ScreenUtil().setWidth(40.0),
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+        ),
+        label: Text(
+          S.of(context).g_biometric_retry,
+          style: TextStyle(
+            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+            fontSize: ScreenUtil().setSp(26.0),
+          ),
+        ),
+      ),
+    );
   }
   @override
   void dispose() {
@@ -396,6 +494,10 @@ class _UnlockState extends ConsumerState<Unlock> {
               ),
             ),),
           );
+        }
+        // Show biometric retry button on gesture/PIN steps when auth failed
+        if (_biometricFailed && _biometricAvailable && lockState.faceEnabled) {
+          columns.add(_buildBiometricRetryButton());
         }
         columns.add(Container(
           margin: EdgeInsets.only(top: ScreenUtil().setWidth(60.0),),

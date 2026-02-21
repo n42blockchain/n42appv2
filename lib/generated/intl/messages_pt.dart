@@ -268,6 +268,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_app_share_key_2": MessageLookupByLibrary.simpleMessage(
       "Escaneie para receber",
     ),
+    "g_biometric_locked_out": MessageLookupByLibrary.simpleMessage(
+      "Muitas tentativas. Biometria bloqueada — use a senha.",
+    ),
+    "g_biometric_not_enrolled": MessageLookupByLibrary.simpleMessage(
+      "Biometria não configurada. Ative nas Configurações.",
+    ),
+    "g_biometric_retry": MessageLookupByLibrary.simpleMessage(
+      "Usar Face ID / Touch ID",
+    ),
     "g_browser_key1": MessageLookupByLibrary.simpleMessage(
       "Por favor, digite a URL",
     ),

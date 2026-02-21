@@ -13978,6 +13978,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Use Face ID / Touch ID`
+  String get g_biometric_retry {
+    return Intl.message(
+      'Use Face ID / Touch ID',
+      name: 'g_biometric_retry',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Biometric not set up. Please enable in device Settings.`
+  String get g_biometric_not_enrolled {
+    return Intl.message(
+      'Biometric not set up. Please enable in device Settings.',
+      name: 'g_biometric_not_enrolled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Too many failures. Biometric locked — please use passcode.`
+  String get g_biometric_locked_out {
+    return Intl.message(
+      'Too many failures. Biometric locked — please use passcode.',
+      name: 'g_biometric_locked_out',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

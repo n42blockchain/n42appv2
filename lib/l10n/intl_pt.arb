@@ -1560,5 +1560,8 @@
   "g_key_gesture_weak": "Fraco",
   "g_key_gesture_medium": "Médio",
   "g_key_gesture_strong": "Forte",
-  "g_key_gesture_too_simple": "Padrão muito simples, adicione mais nós"
+  "g_key_gesture_too_simple": "Padrão muito simples, adicione mais nós",
+  "g_biometric_retry": "Usar Face ID / Touch ID",
+  "g_biometric_not_enrolled": "Biometria não configurada. Ative nas Configurações.",
+  "g_biometric_locked_out": "Muitas tentativas. Biometria bloqueada — use a senha."
 }

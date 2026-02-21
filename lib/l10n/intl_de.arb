@@ -1560,5 +1560,8 @@
   "g_key_gesture_weak": "Schwach",
   "g_key_gesture_medium": "Mittel",
   "g_key_gesture_strong": "Stark",
-  "g_key_gesture_too_simple": "Muster zu einfach, bitte mehr Punkte verwenden"
+  "g_key_gesture_too_simple": "Muster zu einfach, bitte mehr Punkte verwenden",
+  "g_biometric_retry": "Face ID / Touch ID verwenden",
+  "g_biometric_not_enrolled": "Biometrie nicht eingerichtet. Bitte in den Einstellungen aktivieren.",
+  "g_biometric_locked_out": "Zu viele Versuche. Biometrie gesperrt – bitte PIN verwenden."
 }

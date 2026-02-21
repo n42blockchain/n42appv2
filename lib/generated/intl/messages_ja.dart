@@ -232,6 +232,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "トークンは同じネットワーク内でのみ送信できます。他のネットワークから送信すると、損失が発生する可能性があります。",
     ),
     "g_app_share_key_2": MessageLookupByLibrary.simpleMessage("スキャンして受取"),
+    "g_biometric_locked_out": MessageLookupByLibrary.simpleMessage(
+      "試行回数超過。生体認証がロックされました。パスコードをお使いください。",
+    ),
+    "g_biometric_not_enrolled": MessageLookupByLibrary.simpleMessage(
+      "生体認証が設定されていません。設定から有効にしてください。",
+    ),
+    "g_biometric_retry": MessageLookupByLibrary.simpleMessage(
+      "Face ID / Touch IDを使う",
+    ),
     "g_browser_key1": MessageLookupByLibrary.simpleMessage("URLを入力してください"),
     "g_browser_key10": MessageLookupByLibrary.simpleMessage("説明を入力"),
     "g_browser_key11": MessageLookupByLibrary.simpleMessage("ブラウザ"),

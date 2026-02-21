@@ -5,6 +5,8 @@
 //
 // Author: Jiang Yiwei
 
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 
 /// 安全违规响应动作
@@ -68,7 +70,7 @@ class SecurityPolicyConfig {
 /// 设备安全检测服务
 ///
 /// 在调试/测试模式下所有检测均返回安全值，避免影响开发效率。
-/// 在 release 模式下实施真实的设备完整性检查。
+/// 在 release 模式下实施基于文件系统的真实完整性检查（无需额外依赖）。
 class DeviceSecurityService {
   static DeviceSecurityService? _instance;
 
@@ -79,27 +81,133 @@ class DeviceSecurityService {
     return _instance!;
   }
 
-  /// 检测设备是否已 Root（Android）或越狱（iOS）
+  // ────────────────────────────────────────────────────────────────────────
+  // Root / Jailbreak detection
+  // ────────────────────────────────────────────────────────────────────────
+
+  /// 检测设备是否已 Root（Android）或越狱（iOS）。
   ///
-  /// 调试模式始终返回 false，避免在开发设备上被误拦截。
+  /// 实现策略：
+  /// - 调试模式始终返回 `false`（避免在开发设备上被误拦截）
+  /// - Release 模式通过文件系统特征判断（无需额外 pub 依赖）
+  ///
+  /// 注意：文件检测是必要条件判断，可能出现漏报（false negative），
+  /// 但不会出现误报（false positive），适合生产安全策略。
   Future<bool> isDeviceCompromised() async {
     if (kDebugMode) return false;
-    // Release 模式：检查常见 root/越狱指示文件
-    // 实际需要引入 flutter_jailbreak_detection 等库实现
+    try {
+      if (Platform.isAndroid) return _isAndroidRooted();
+      if (Platform.isIOS) return _isIosJailbroken();
+    } catch (_) {
+      // 文件系统访问异常：保守返回 false，避免误拦截
+    }
     return false;
   }
 
-  /// 检测是否运行在模拟器上
+  /// Android Root 检测 — 检查常见 su 二进制和 root 管理器 APK 路径。
+  bool _isAndroidRooted() {
+    const List<String> rootPaths = [
+      // su binary locations
+      '/system/xbin/su',
+      '/system/bin/su',
+      '/data/local/xbin/su',
+      '/data/local/bin/su',
+      '/sbin/su',
+      '/su/bin/su',
+      '/system/sd/xbin/su',
+      '/system/bin/failsafe/su',
+      '/data/local/su',
+      // Root management apps
+      '/system/app/Superuser.apk',
+      '/system/app/SuperSU.apk',
+      '/data/app/eu.chainfire.supersu-1.apk',
+      '/data/app/eu.chainfire.supersu-2.apk',
+      // Magisk (systemless root)
+      '/sbin/.magisk',
+      '/sbin/.core/mirror',
+      '/sbin/.core/img',
+    ];
+    return rootPaths.any((path) {
+      try {
+        return File(path).existsSync();
+      } catch (_) {
+        return false;
+      }
+    });
+  }
+
+  /// iOS 越狱检测 — 检查常见越狱工具和 Cydia 安装路径。
+  bool _isIosJailbroken() {
+    const List<String> jailbreakPaths = [
+      // Package managers
+      '/Applications/Cydia.app',
+      '/Applications/Sileo.app',
+      '/Applications/Zebra.app',
+      '/Applications/Installer.app',
+      // APT / dpkg infrastructure
+      '/private/var/lib/apt',
+      '/private/var/lib/cydia',
+      '/etc/apt',
+      '/usr/libexec/cydia',
+      // SSH server (not present on stock iOS)
+      '/usr/sbin/sshd',
+      '/usr/bin/sshd',
+      '/usr/libexec/ssh-keysign',
+      // Mobile substrate / Tweak loader
+      '/Library/MobileSubstrate/MobileSubstrate.dylib',
+      '/Library/MobileSubstrate/DynamicLibraries/LiveClock.plist',
+      '/Library/MobileSubstrate/DynamicLibraries/Veency.plist',
+      // LaunchDaemons added by jailbreaks
+      '/System/Library/LaunchDaemons/com.ikey.brickhouse.plist',
+      '/System/Library/LaunchDaemons/com.saurik.Cydia.Startup.plist',
+      // Bash shell (not present on stock iOS; installed by many jailbreaks)
+      '/bin/bash',
+      // Stash directories (jailbreak-specific)
+      '/private/var/stash',
+      '/private/var/tmp/cydia.log',
+      '/private/var/mobile/Library/SBSettings/Themes',
+    ];
+    return jailbreakPaths.any((path) {
+      try {
+        return File(path).existsSync();
+      } catch (_) {
+        return false;
+      }
+    });
+  }
+
+  // ────────────────────────────────────────────────────────────────────────
+  // Emulator detection
+  // ────────────────────────────────────────────────────────────────────────
+
+  /// 检测是否运行在模拟器上。
   ///
-  /// 调试模式始终返回 false，便于在模拟器中开发。
+  /// 调试模式始终返回 `false`（便于在模拟器中开发）。
+  /// Release 模式：iOS 模拟器可通过 Platform.environment 区分；
+  /// Android 模拟器检测需要 MethodChannel，此处保守返回 false。
   Future<bool> isRunningOnEmulator() async {
     if (kDebugMode) return false;
+    try {
+      // iOS Simulator sets SIMULATOR_DEVICE_NAME in its environment.
+      // This env var is absent on physical devices.
+      if (Platform.isIOS) {
+        return Platform.environment.containsKey('SIMULATOR_DEVICE_NAME');
+      }
+      // Android: reliable detection requires reading Build.FINGERPRINT or
+      // ro.build.characteristics via a MethodChannel.  Without adding a
+      // platform channel here, we conservatively return false and rely on
+      // root detection to catch most emulator-based attacks.
+    } catch (_) {}
     return false;
   }
 
-  /// 检测是否有调试器附加
+  // ────────────────────────────────────────────────────────────────────────
+  // Debugger detection
+  // ────────────────────────────────────────────────────────────────────────
+
+  /// 检测是否有调试器附加。
   ///
-  /// 通过 assert 语句检测——assert 仅在 debug/test 模式下执行。
+  /// 通过 `assert` 语句检测——assert 仅在 debug/test 模式下执行。
   Future<bool> isDebuggerAttached() async {
     bool isDebug = false;
     assert(() {
@@ -109,19 +217,21 @@ class DeviceSecurityService {
     return isDebug;
   }
 
-  /// 获取完整的设备安全状态
+  // ────────────────────────────────────────────────────────────────────────
+  // Aggregate
+  // ────────────────────────────────────────────────────────────────────────
+
+  /// 获取完整的设备安全状态快照。
   Future<DeviceSecurityStatus> getSecurityStatus() async {
     final isRooted = await isDeviceCompromised();
     final isEmulator = await isRunningOnEmulator();
     final isDebugger = await isDebuggerAttached();
 
-    final isSecure = !isRooted && !isEmulator;
-
     return DeviceSecurityStatus(
       isRootedOrJailbroken: isRooted,
       isEmulator: isEmulator,
       isDebuggerAttached: isDebugger,
-      isSecure: isSecure,
+      isSecure: !isRooted && !isEmulator,
     );
   }
 }

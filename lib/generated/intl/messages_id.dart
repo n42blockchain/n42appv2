@@ -264,6 +264,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_app_share_key_2": MessageLookupByLibrary.simpleMessage(
       "Pindai untuk menerima",
     ),
+    "g_biometric_locked_out": MessageLookupByLibrary.simpleMessage(
+      "Terlalu banyak percobaan. Biometrik terkunci — gunakan kata sandi.",
+    ),
+    "g_biometric_not_enrolled": MessageLookupByLibrary.simpleMessage(
+      "Biometrik belum diatur. Aktifkan di Pengaturan.",
+    ),
+    "g_biometric_retry": MessageLookupByLibrary.simpleMessage(
+      "Gunakan Face ID / Touch ID",
+    ),
     "g_browser_key1": MessageLookupByLibrary.simpleMessage(
       "Silakan masukkan URL",
     ),

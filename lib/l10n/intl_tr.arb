@@ -1560,5 +1560,8 @@
   "g_key_gesture_weak": "Zayıf",
   "g_key_gesture_medium": "Orta",
   "g_key_gesture_strong": "Güçlü",
-  "g_key_gesture_too_simple": "Desen çok basit, daha fazla nokta ekleyin"
+  "g_key_gesture_too_simple": "Desen çok basit, daha fazla nokta ekleyin",
+  "g_biometric_retry": "Face ID / Touch ID kullan",
+  "g_biometric_not_enrolled": "Biyometri ayarlı değil. Ayarlar'dan etkinleştirin.",
+  "g_biometric_locked_out": "Çok fazla deneme. Biyometri kilitlendi — şifreyi kullanın."
 }

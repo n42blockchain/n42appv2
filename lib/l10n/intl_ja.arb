@@ -1560,5 +1560,8 @@
   "g_key_gesture_weak": "弱い",
   "g_key_gesture_medium": "中程度",
   "g_key_gesture_strong": "強い",
-  "g_key_gesture_too_simple": "パターンが簡単すぎます。ノードをもっと追加してください"
+  "g_key_gesture_too_simple": "パターンが簡単すぎます。ノードをもっと追加してください",
+  "g_biometric_retry": "Face ID / Touch IDを使う",
+  "g_biometric_not_enrolled": "生体認証が設定されていません。設定から有効にしてください。",
+  "g_biometric_locked_out": "試行回数超過。生体認証がロックされました。パスコードをお使いください。"
 }

@@ -265,6 +265,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_app_share_key_2": MessageLookupByLibrary.simpleMessage(
       "Almak için tarayın",
     ),
+    "g_biometric_locked_out": MessageLookupByLibrary.simpleMessage(
+      "Çok fazla deneme. Biyometri kilitlendi — şifreyi kullanın.",
+    ),
+    "g_biometric_not_enrolled": MessageLookupByLibrary.simpleMessage(
+      "Biyometri ayarlı değil. Ayarlar\'dan etkinleştirin.",
+    ),
+    "g_biometric_retry": MessageLookupByLibrary.simpleMessage(
+      "Face ID / Touch ID kullan",
+    ),
     "g_browser_key1": MessageLookupByLibrary.simpleMessage("Lütfen URL girin"),
     "g_browser_key10": MessageLookupByLibrary.simpleMessage("Açıklama girin"),
     "g_browser_key11": MessageLookupByLibrary.simpleMessage("Tarayıcı"),

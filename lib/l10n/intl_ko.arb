@@ -1603,5 +1603,8 @@
   "g_key_gesture_weak": "약함",
   "g_key_gesture_medium": "보통",
   "g_key_gesture_strong": "강함",
-  "g_key_gesture_too_simple": "패턴이 너무 단순합니다. 노드를 더 추가하세요"
+  "g_key_gesture_too_simple": "패턴이 너무 단순합니다. 노드를 더 추가하세요",
+  "g_biometric_retry": "Face ID / Touch ID 사용",
+  "g_biometric_not_enrolled": "생체인증이 설정되지 않았습니다. 설정에서 활성화하세요.",
+  "g_biometric_locked_out": "시도 횟수 초과. 생체인증이 잠겼습니다 — 암호를 사용하세요."
 }

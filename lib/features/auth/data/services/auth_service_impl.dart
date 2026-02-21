@@ -9,26 +9,24 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:injectable/injectable.dart';
-import 'package:local_auth/local_auth.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/core/security/secure_storage.dart';
 import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
 import 'package:n42appv2/shared/domain/services/auth_service_interface.dart';
+import 'package:n42appv2/src/home/widgets/face_recognition_public.dart';
 
 /// Implementation of IAuthService
 @LazySingleton(as: IAuthService)
 class AuthServiceImpl implements IAuthService {
   final SPUtil _spUtil;
   final SecureStorage _secureStorage;
-  final LocalAuthentication _localAuth;
   final StreamController<bool> _authStateController =
       StreamController<bool>.broadcast();
 
   SharedUserInfo? _currentUser;
   String? _authToken;
 
-  AuthServiceImpl(this._spUtil, this._secureStorage)
-      : _localAuth = LocalAuthentication() {
+  AuthServiceImpl(this._spUtil, this._secureStorage) {
     _initializeFromStorage();
   }
 
@@ -78,15 +76,15 @@ class AuthServiceImpl implements IAuthService {
   @override
   Future<bool> verifyBiometric() async {
     try {
-      final isAvailable = await _localAuth.canCheckBiometrics;
-      if (!isAvailable) return false;
-
-      // local_auth 3.0.0 API 变更
-      return await _localAuth.authenticate(
-        localizedReason: 'Please authenticate to continue',
-        biometricOnly: true,
-        persistAcrossBackgrounding: true,
-      );
+      // Delegate to the shared FaceRecognitionPublic helper which handles:
+      // - device support + enrollment checks
+      // - platform-specific dialog messages (iOS / Android)
+      // - per-error-code PlatformException mapping
+      final frp = FaceRecognitionPublic();
+      final available = await frp.checkBiometrics();
+      if (!available) return false;
+      final result = await frp.authenticateWithBiometrics();
+      return result == BiometricAuthResult.success;
     } catch (e) {
       debugPrint('Biometric auth error: $e');
       return false;

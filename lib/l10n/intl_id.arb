@@ -1560,5 +1560,8 @@
   "g_key_gesture_weak": "Lemah",
   "g_key_gesture_medium": "Sedang",
   "g_key_gesture_strong": "Kuat",
-  "g_key_gesture_too_simple": "Pola terlalu sederhana, gunakan lebih banyak titik"
+  "g_key_gesture_too_simple": "Pola terlalu sederhana, gunakan lebih banyak titik",
+  "g_biometric_retry": "Gunakan Face ID / Touch ID",
+  "g_biometric_not_enrolled": "Biometrik belum diatur. Aktifkan di Pengaturan.",
+  "g_biometric_locked_out": "Terlalu banyak percobaan. Biometrik terkunci — gunakan kata sandi."
 }

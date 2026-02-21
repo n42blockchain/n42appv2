@@ -1622,5 +1622,8 @@
   "g_key_gesture_weak": "Weak",
   "g_key_gesture_medium": "Medium",
   "g_key_gesture_strong": "Strong",
-  "g_key_gesture_too_simple": "Pattern too simple, please use more nodes"
+  "g_key_gesture_too_simple": "Pattern too simple, please use more nodes",
+  "g_biometric_retry": "Use Face ID / Touch ID",
+  "g_biometric_not_enrolled": "Biometric not set up. Please enable in device Settings.",
+  "g_biometric_locked_out": "Too many failures. Biometric locked — please use passcode."
 }

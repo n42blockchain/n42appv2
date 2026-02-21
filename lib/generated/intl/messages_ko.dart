@@ -237,6 +237,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "토큰은 동일한 네트워크 내에서만 전송할 수 있습니다. 다른 네트워크에서 전송하면 손실이 발생할 수 있습니다.",
     ),
     "g_app_share_key_2": MessageLookupByLibrary.simpleMessage("스캔하여 받기"),
+    "g_biometric_locked_out": MessageLookupByLibrary.simpleMessage(
+      "시도 횟수 초과. 생체인증이 잠겼습니다 — 암호를 사용하세요.",
+    ),
+    "g_biometric_not_enrolled": MessageLookupByLibrary.simpleMessage(
+      "생체인증이 설정되지 않았습니다. 설정에서 활성화하세요.",
+    ),
+    "g_biometric_retry": MessageLookupByLibrary.simpleMessage(
+      "Face ID / Touch ID 사용",
+    ),
     "g_browser_key1": MessageLookupByLibrary.simpleMessage("URL을 입력하세요"),
     "g_browser_key10": MessageLookupByLibrary.simpleMessage("설명 입력"),
     "g_browser_key11": MessageLookupByLibrary.simpleMessage("브라우저"),

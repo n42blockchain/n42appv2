@@ -256,6 +256,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Token chỉ có thể gửi trong cùng một mạng. Gửi từ mạng khác có thể dẫn đến mất mát.",
     ),
     "g_app_share_key_2": MessageLookupByLibrary.simpleMessage("Quét để nhận"),
+    "g_biometric_locked_out": MessageLookupByLibrary.simpleMessage(
+      "Quá nhiều lần thử. Sinh trắc học bị khóa — dùng mật khẩu.",
+    ),
+    "g_biometric_not_enrolled": MessageLookupByLibrary.simpleMessage(
+      "Chưa cài đặt sinh trắc học. Hãy bật trong Cài đặt.",
+    ),
+    "g_biometric_retry": MessageLookupByLibrary.simpleMessage(
+      "Dùng Face ID / Touch ID",
+    ),
     "g_browser_key1": MessageLookupByLibrary.simpleMessage("Vui lòng nhập URL"),
     "g_browser_key10": MessageLookupByLibrary.simpleMessage("Nhập mô tả"),
     "g_browser_key11": MessageLookupByLibrary.simpleMessage("Trình duyệt"),

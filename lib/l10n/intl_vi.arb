@@ -1560,5 +1560,8 @@
   "g_key_gesture_weak": "Yếu",
   "g_key_gesture_medium": "Trung bình",
   "g_key_gesture_strong": "Mạnh",
-  "g_key_gesture_too_simple": "Mẫu quá đơn giản, vui lòng thêm nhiều nút hơn"
+  "g_key_gesture_too_simple": "Mẫu quá đơn giản, vui lòng thêm nhiều nút hơn",
+  "g_biometric_retry": "Dùng Face ID / Touch ID",
+  "g_biometric_not_enrolled": "Chưa cài đặt sinh trắc học. Hãy bật trong Cài đặt.",
+  "g_biometric_locked_out": "Quá nhiều lần thử. Sinh trắc học bị khóa — dùng mật khẩu."
 }
