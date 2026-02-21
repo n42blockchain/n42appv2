@@ -4,11 +4,19 @@
 // See LICENSE file in the project root for full license information.
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:n42appv2/src/bridge/api/lifi_api.dart';
 import 'package:n42appv2/src/bridge/models/bridge_models.dart';
 import 'package:n42appv2/src/models/message_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+/// 状态变化回调：tx 已更新到终态 (completed / failed)
+typedef BridgeStatusChangeCallback = void Function(
+  BridgeTransaction tx,
+  BridgeTransactionStatus newStatus,
+);
 
 /// 跨链桥状态
 enum BridgeState {
@@ -26,7 +34,13 @@ enum BridgeState {
 ///
 /// 管理跨链桥的状态和业务逻辑
 class BridgeProvider extends ChangeNotifier {
+  static const String _kPersistKey = 'bridge_transactions_v1';
+
   final LiFiApi _lifiApi = LiFiApi();
+
+  /// 状态变化通知回调：仅在 completed / failed 时触发。
+  /// 由 UI 层设置，dispose 时应置 null 防止野回调。
+  BridgeStatusChangeCallback? onStatusChanged;
 
   BridgeState _state = BridgeState.idle;
   BridgeState get state => _state;
@@ -84,8 +98,9 @@ class BridgeProvider extends ChangeNotifier {
   static const Duration _pollInterval = Duration(seconds: 10);
   static const Duration _pollTimeout = Duration(minutes: 10);
 
-  /// 初始化，加载链列表
+  /// 初始化：先恢复持久化历史，再加载链列表
   Future<void> initialize() async {
+    await _loadPersisted();
     await loadChains();
   }
 
@@ -386,6 +401,9 @@ class BridgeProvider extends ChangeNotifier {
       _pendingTxHashes.add(transaction.txHash);
       _setState(BridgeState.completed);
 
+      // 持久化新交易记录
+      unawaited(_savePersisted());
+
       // 启动后台轮询，每 10s 检查一次交易状态，超时 10 分钟后停止
       _startStatusPolling();
 
@@ -398,7 +416,7 @@ class BridgeProvider extends ChangeNotifier {
     }
   }
 
-  /// 检查交易状态
+  /// 检查单笔交易状态，更新记录并在终态时触发回调+持久化
   Future<void> checkTransactionStatus(BridgeTransaction transaction) async {
     final result = await _lifiApi.getStatus(
       txHash: transaction.txHash,
@@ -408,11 +426,14 @@ class BridgeProvider extends ChangeNotifier {
     );
 
     if (!result.error) {
-      final status = result.data as BridgeStatusResponse;
+      final statusResp = result.data as BridgeStatusResponse;
       final index = _transactions.indexWhere((t) => t.txHash == transaction.txHash);
 
       if (index >= 0) {
-        _transactions[index] = BridgeTransaction(
+        final oldStatus = _transactions[index].status;
+        final newStatus = statusResp.status;
+
+        final updated = BridgeTransaction(
           txHash: transaction.txHash,
           fromChainId: transaction.fromChainId,
           toChainId: transaction.toChainId,
@@ -422,18 +443,39 @@ class BridgeProvider extends ChangeNotifier {
           toAmount: transaction.toAmount,
           fromAddress: transaction.fromAddress,
           toAddress: transaction.toAddress,
-          status: status.status,
+          status: newStatus,
           createdAt: transaction.createdAt,
           bridgeTool: transaction.bridgeTool,
-          destinationTxHash: status.destinationTxHash,
+          destinationTxHash: statusResp.destinationTxHash,
         );
-        // 状态达到终态时从待处理集合移除，避免继续轮询
-        if (status.status == BridgeTransactionStatus.completed ||
-            status.status == BridgeTransactionStatus.failed) {
+        _transactions[index] = updated;
+
+        final isTerminal = newStatus == BridgeTransactionStatus.completed ||
+            newStatus == BridgeTransactionStatus.failed;
+
+        if (isTerminal) {
           _pendingTxHashes.remove(transaction.txHash);
+          // 终态才持久化（避免频繁写盘）
+          unawaited(_savePersisted());
         }
+
+        // 状态真正发生变化且到达终态时通知 UI（如发送通知）
+        if (newStatus != oldStatus && isTerminal) {
+          onStatusChanged?.call(updated, newStatus);
+        }
+
         notifyListeners();
       }
+    }
+  }
+
+  /// 主动刷新所有 pending/inProgress 交易状态（供下拉刷新使用）
+  Future<void> refreshPendingTransactions() async {
+    final pending = _transactions
+        .where((t) => _pendingTxHashes.contains(t.txHash))
+        .toList();
+    for (final tx in pending) {
+      await checkTransactionStatus(tx);
     }
   }
 
@@ -476,6 +518,48 @@ class BridgeProvider extends ChangeNotifier {
   void stopPolling() {
     _pollTimer?.cancel();
     _pollTimer = null;
+  }
+
+  // ─── 持久化 ────────────────────────────────────────────────────────────────
+
+  /// 将交易历史序列化写入 SharedPreferences
+  Future<void> _savePersisted() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final json = jsonEncode(
+        _transactions.map((t) => t.toJson()).toList(),
+      );
+      await prefs.setString(_kPersistKey, json);
+    } catch (_) {
+      // 持久化失败不影响主流程
+    }
+  }
+
+  /// 从 SharedPreferences 恢复交易历史，并恢复 pending 轮询
+  Future<void> _loadPersisted() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final raw = prefs.getString(_kPersistKey);
+      if (raw == null) return;
+
+      final list = jsonDecode(raw) as List<dynamic>;
+      _transactions.addAll(
+        list.map((e) => BridgeTransaction.fromJson(e as Map<String, dynamic>)),
+      );
+
+      // 恢复 pending/inProgress 到轮询集合
+      for (final tx in _transactions) {
+        if (tx.status == BridgeTransactionStatus.pending ||
+            tx.status == BridgeTransactionStatus.inProgress) {
+          _pendingTxHashes.add(tx.txHash);
+        }
+      }
+      if (_pendingTxHashes.isNotEmpty) {
+        _startStatusPolling();
+      }
+    } catch (_) {
+      // 反序列化失败时忽略，保持空历史
+    }
   }
 
   @override

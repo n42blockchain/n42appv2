@@ -85,7 +85,7 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
               child: TextField(
                 controller: _searchController,
                 decoration: InputDecoration(
-                  hintText: 'Search chain...', // S.of(context).g_key_bridge_search_chain
+                  hintText: S.of(context).g_key_bridge_search_chain,
                   hintStyle: TextStyle(
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textFieldHintColor.name),
                   ),

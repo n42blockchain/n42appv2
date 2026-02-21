@@ -180,7 +180,7 @@ class BridgeRoute {
   final String fromAmount;
   final String toAmount;
   final String toAmountMin;
-  final BigInt gasCostUSD;
+  final double gasCostUSD;
   final int estimatedSeconds;
   final List<String> tags;
 
@@ -211,7 +211,7 @@ class BridgeRoute {
       fromAmount: json['fromAmount'] ?? '0',
       toAmount: json['toAmount'] ?? '0',
       toAmountMin: json['toAmountMin'] ?? '0',
-      gasCostUSD: BigInt.tryParse(json['gasCostUSD']?.toString() ?? '0') ?? BigInt.zero,
+      gasCostUSD: double.tryParse(json['gasCostUSD']?.toString() ?? '0') ?? 0.0,
       estimatedSeconds: _calculateTotalDuration(steps),
       tags: List<String>.from(json['tags'] ?? []),
     );
