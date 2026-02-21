@@ -1347,5 +1347,42 @@
   "g_key_payment_usdt_insufficient": "USDTの残高が不足しています！",
   "g_key_payment_usdt_not_found": "USDTトークンを追加してください！",
   "g_key_payment_native_insufficient": "ネイティブ残高が不足しています！",
-  "g_key_payment_native_not_found": "メインチェーンが見つかりません！"
+  "g_key_payment_native_not_found": "メインチェーンが見つかりません！",
+  "g_key_aa_gas_warn_total_high": "ガスリミットが非常に高い",
+  "g_key_aa_gas_warn_total_high_desc": "推定総ガス({gas})が異常に高くなっています。トランザクションにエラーがないか確認してください。",
+  "@g_key_aa_gas_warn_total_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_verify_high": "検証ガスが高い",
+  "g_key_aa_gas_warn_verify_high_desc": "検証ガス({gas})が高すぎる可能性があります。複雑なアカウントロジックで発生することがあります。",
+  "@g_key_aa_gas_warn_verify_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_call_high": "実行ガスが高い",
+  "g_key_aa_gas_warn_call_high_desc": "実行ガス({gas})が高くなっています。呼び出したコントラクトが予想以上のガスを消費する可能性があります。",
+  "@g_key_aa_gas_warn_call_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_paymaster": "Paymasterオーバーヘッドが高い",
+  "g_key_aa_gas_warn_paymaster_desc": "Paymasterガスオーバーヘッド({gas})が高くなっています。ガスフリートランザクションのコストが増加する可能性があります。",
+  "@g_key_aa_gas_warn_paymaster_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_deploy": "デプロイメントガスオーバーヘッド",
+  "g_key_aa_gas_warn_deploy_desc": "最初のトランザクションにはアカウントのデプロイが含まれます（~{gas}ガス）。以降のトランザクションは安くなります。",
+  "@g_key_aa_gas_warn_deploy_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_under_est": "ガスの過小評価の可能性",
+  "g_key_aa_gas_warn_under_est_desc": "実際に使用されるガスが推定値を超える可能性があります。より大きなバッファを追加することをご検討ください。"
 }

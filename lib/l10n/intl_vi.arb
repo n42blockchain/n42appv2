@@ -1347,5 +1347,42 @@
   "g_key_payment_usdt_insufficient": "Số dư USDT không đủ!",
   "g_key_payment_usdt_not_found": "Vui lòng thêm token USDT!",
   "g_key_payment_native_insufficient": "Số dư gốc không đủ!",
-  "g_key_payment_native_not_found": "Không tìm thấy chuỗi chính!"
+  "g_key_payment_native_not_found": "Không tìm thấy chuỗi chính!",
+  "g_key_aa_gas_warn_total_high": "Giới Hạn Gas Rất Cao",
+  "g_key_aa_gas_warn_total_high_desc": "Tổng gas ước tính ({gas}) cao bất thường. Kiểm tra giao dịch của bạn để tìm lỗi.",
+  "@g_key_aa_gas_warn_total_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_verify_high": "Gas Xác Minh Cao",
+  "g_key_aa_gas_warn_verify_high_desc": "Gas xác minh ({gas}) có thể quá cao. Điều này có thể xảy ra với logic tài khoản phức tạp.",
+  "@g_key_aa_gas_warn_verify_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_call_high": "Gas Thực Thi Cao",
+  "g_key_aa_gas_warn_call_high_desc": "Gas thực thi ({gas}) cao. Hợp đồng được gọi có thể tiêu thụ nhiều gas hơn dự kiến.",
+  "@g_key_aa_gas_warn_call_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_paymaster": "Chi Phí Paymaster Cao",
+  "g_key_aa_gas_warn_paymaster_desc": "Chi phí gas paymaster ({gas}) cao. Các giao dịch không tốn gas có thể tốn kém hơn.",
+  "@g_key_aa_gas_warn_paymaster_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_deploy": "Chi Phí Gas Triển Khai",
+  "g_key_aa_gas_warn_deploy_desc": "Giao dịch đầu tiên bao gồm triển khai tài khoản (~{gas} gas). Các giao dịch tiếp theo sẽ rẻ hơn.",
+  "@g_key_aa_gas_warn_deploy_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_under_est": "Có Thể Ước Tính Gas Thấp",
+  "g_key_aa_gas_warn_under_est_desc": "Gas thực tế sử dụng có thể vượt quá ước tính. Hãy xem xét thêm bộ đệm lớn hơn."
 }

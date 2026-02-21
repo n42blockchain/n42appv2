@@ -1347,5 +1347,42 @@
   "g_key_payment_usdt_insufficient": "Solde USDT insuffisant !",
   "g_key_payment_usdt_not_found": "Veuillez ajouter le token USDT !",
   "g_key_payment_native_insufficient": "Solde natif insuffisant !",
-  "g_key_payment_native_not_found": "Chaîne native introuvable !"
+  "g_key_payment_native_not_found": "Chaîne native introuvable !",
+  "g_key_aa_gas_warn_total_high": "Limite de Gas Très Élevée",
+  "g_key_aa_gas_warn_total_high_desc": "Le gas total estimé ({gas}) est inhabituellement élevé. Vérifiez votre transaction pour les erreurs.",
+  "@g_key_aa_gas_warn_total_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_verify_high": "Gas de Vérification Élevé",
+  "g_key_aa_gas_warn_verify_high_desc": "Le gas de vérification ({gas}) peut être trop élevé. Cela peut arriver avec une logique de compte complexe.",
+  "@g_key_aa_gas_warn_verify_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_call_high": "Gas d'Exécution Élevé",
+  "g_key_aa_gas_warn_call_high_desc": "Le gas d'exécution ({gas}) est élevé. Le contrat appelé peut consommer plus de gas que prévu.",
+  "@g_key_aa_gas_warn_call_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_paymaster": "Surcharge Paymaster Élevée",
+  "g_key_aa_gas_warn_paymaster_desc": "La surcharge de gas du paymaster ({gas}) est élevée. Les transactions sans gas peuvent coûter plus cher.",
+  "@g_key_aa_gas_warn_paymaster_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_deploy": "Surcharge de Déploiement",
+  "g_key_aa_gas_warn_deploy_desc": "La première transaction inclut le déploiement du compte (~{gas} gas). Les transactions suivantes seront moins chères.",
+  "@g_key_aa_gas_warn_deploy_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_under_est": "Possible Sous-Estimation du Gas",
+  "g_key_aa_gas_warn_under_est_desc": "Le gas réellement utilisé peut dépasser l'estimation. Envisagez d'ajouter une plus grande marge."
 }

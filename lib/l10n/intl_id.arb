@@ -1347,5 +1347,42 @@
   "g_key_payment_usdt_insufficient": "Saldo USDT tidak mencukupi!",
   "g_key_payment_usdt_not_found": "Tambahkan token USDT!",
   "g_key_payment_native_insufficient": "Saldo asli tidak mencukupi!",
-  "g_key_payment_native_not_found": "Rantai asli tidak ditemukan!"
+  "g_key_payment_native_not_found": "Rantai asli tidak ditemukan!",
+  "g_key_aa_gas_warn_total_high": "Batas Gas Sangat Tinggi",
+  "g_key_aa_gas_warn_total_high_desc": "Total gas yang diperkirakan ({gas}) sangat tinggi. Periksa transaksi Anda untuk kesalahan.",
+  "@g_key_aa_gas_warn_total_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_verify_high": "Gas Verifikasi Tinggi",
+  "g_key_aa_gas_warn_verify_high_desc": "Gas verifikasi ({gas}) mungkin terlalu tinggi. Ini bisa terjadi dengan logika akun yang kompleks.",
+  "@g_key_aa_gas_warn_verify_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_call_high": "Gas Eksekusi Tinggi",
+  "g_key_aa_gas_warn_call_high_desc": "Gas eksekusi ({gas}) tinggi. Kontrak yang dipanggil mungkin menggunakan lebih banyak gas dari yang diharapkan.",
+  "@g_key_aa_gas_warn_call_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_paymaster": "Overhead Paymaster Tinggi",
+  "g_key_aa_gas_warn_paymaster_desc": "Overhead gas paymaster ({gas}) tinggi. Transaksi tanpa gas mungkin lebih mahal.",
+  "@g_key_aa_gas_warn_paymaster_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_deploy": "Overhead Gas Deployment",
+  "g_key_aa_gas_warn_deploy_desc": "Transaksi pertama termasuk deployment akun (~{gas} gas). Transaksi berikutnya akan lebih murah.",
+  "@g_key_aa_gas_warn_deploy_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_under_est": "Kemungkinan Gas Terlalu Rendah",
+  "g_key_aa_gas_warn_under_est_desc": "Gas aktual yang digunakan mungkin melebihi estimasi. Pertimbangkan untuk menambahkan buffer yang lebih besar."
 }

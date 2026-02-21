@@ -12868,6 +12868,126 @@ class S {
       args: [],
     );
   }
+
+  /// `Gas Limit Very High`
+  String get g_key_aa_gas_warn_total_high {
+    return Intl.message(
+      'Gas Limit Very High',
+      name: 'g_key_aa_gas_warn_total_high',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Estimated total gas ({gas}) is unusually high. Check your transaction for errors.`
+  String g_key_aa_gas_warn_total_high_desc(String gas) {
+    return Intl.message(
+      'Estimated total gas ($gas) is unusually high. Check your transaction for errors.',
+      name: 'g_key_aa_gas_warn_total_high_desc',
+      desc: '',
+      args: [gas],
+    );
+  }
+
+  /// `Verification Gas High`
+  String get g_key_aa_gas_warn_verify_high {
+    return Intl.message(
+      'Verification Gas High',
+      name: 'g_key_aa_gas_warn_verify_high',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verification gas ({gas}) may be too high. This can happen with complex account logic.`
+  String g_key_aa_gas_warn_verify_high_desc(String gas) {
+    return Intl.message(
+      'Verification gas ($gas) may be too high. This can happen with complex account logic.',
+      name: 'g_key_aa_gas_warn_verify_high_desc',
+      desc: '',
+      args: [gas],
+    );
+  }
+
+  /// `Execution Gas High`
+  String get g_key_aa_gas_warn_call_high {
+    return Intl.message(
+      'Execution Gas High',
+      name: 'g_key_aa_gas_warn_call_high',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Execution gas ({gas}) is high. The called contract may consume more gas than expected.`
+  String g_key_aa_gas_warn_call_high_desc(String gas) {
+    return Intl.message(
+      'Execution gas ($gas) is high. The called contract may consume more gas than expected.',
+      name: 'g_key_aa_gas_warn_call_high_desc',
+      desc: '',
+      args: [gas],
+    );
+  }
+
+  /// `Paymaster Overhead High`
+  String get g_key_aa_gas_warn_paymaster {
+    return Intl.message(
+      'Paymaster Overhead High',
+      name: 'g_key_aa_gas_warn_paymaster',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Paymaster gas overhead ({gas}) is high. Gas-free transactions may cost more.`
+  String g_key_aa_gas_warn_paymaster_desc(String gas) {
+    return Intl.message(
+      'Paymaster gas overhead ($gas) is high. Gas-free transactions may cost more.',
+      name: 'g_key_aa_gas_warn_paymaster_desc',
+      desc: '',
+      args: [gas],
+    );
+  }
+
+  /// `Deployment Gas Overhead`
+  String get g_key_aa_gas_warn_deploy {
+    return Intl.message(
+      'Deployment Gas Overhead',
+      name: 'g_key_aa_gas_warn_deploy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `First transaction includes account deployment (~{gas} gas). Subsequent transactions will be cheaper.`
+  String g_key_aa_gas_warn_deploy_desc(String gas) {
+    return Intl.message(
+      'First transaction includes account deployment (~$gas gas). Subsequent transactions will be cheaper.',
+      name: 'g_key_aa_gas_warn_deploy_desc',
+      desc: '',
+      args: [gas],
+    );
+  }
+
+  /// `Possible Gas Under-Estimate`
+  String get g_key_aa_gas_warn_under_est {
+    return Intl.message(
+      'Possible Gas Under-Estimate',
+      name: 'g_key_aa_gas_warn_under_est',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The actual gas used may exceed the estimate. Consider adding a larger buffer.`
+  String get g_key_aa_gas_warn_under_est_desc {
+    return Intl.message(
+      'The actual gas used may exceed the estimate. Consider adding a larger buffer.',
+      name: 'g_key_aa_gas_warn_under_est_desc',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

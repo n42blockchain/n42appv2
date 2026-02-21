@@ -1347,5 +1347,42 @@
   "g_key_payment_usdt_insufficient": "Unzureichendes USDT-Guthaben!",
   "g_key_payment_usdt_not_found": "Bitte USDT-Token hinzufügen!",
   "g_key_payment_native_insufficient": "Unzureichendes Guthaben!",
-  "g_key_payment_native_not_found": "Hauptkette nicht gefunden!"
+  "g_key_payment_native_not_found": "Hauptkette nicht gefunden!",
+  "g_key_aa_gas_warn_total_high": "Gas-Limit sehr hoch",
+  "g_key_aa_gas_warn_total_high_desc": "Geschätztes Gesamt-Gas ({gas}) ist ungewöhnlich hoch. Überprüfen Sie Ihre Transaktion auf Fehler.",
+  "@g_key_aa_gas_warn_total_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_verify_high": "Verifikations-Gas hoch",
+  "g_key_aa_gas_warn_verify_high_desc": "Verifikations-Gas ({gas}) könnte zu hoch sein. Dies kann bei komplexer Kontologik auftreten.",
+  "@g_key_aa_gas_warn_verify_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_call_high": "Ausführungs-Gas hoch",
+  "g_key_aa_gas_warn_call_high_desc": "Ausführungs-Gas ({gas}) ist hoch. Der aufgerufene Vertrag könnte mehr Gas verbrauchen als erwartet.",
+  "@g_key_aa_gas_warn_call_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_paymaster": "Paymaster-Overhead hoch",
+  "g_key_aa_gas_warn_paymaster_desc": "Paymaster-Gas-Overhead ({gas}) ist hoch. Gasfreie Transaktionen können teurer sein.",
+  "@g_key_aa_gas_warn_paymaster_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_deploy": "Bereitstellungs-Gas-Overhead",
+  "g_key_aa_gas_warn_deploy_desc": "Erste Transaktion beinhaltet Konto-Bereitstellung (~{gas} Gas). Nachfolgende Transaktionen werden günstiger sein.",
+  "@g_key_aa_gas_warn_deploy_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_under_est": "Mögliche Gas-Unterschätzung",
+  "g_key_aa_gas_warn_under_est_desc": "Das tatsächlich verwendete Gas könnte die Schätzung überschreiten. Erwägen Sie einen größeren Puffer."
 }

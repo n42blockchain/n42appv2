@@ -1347,5 +1347,42 @@
   "g_key_payment_usdt_insufficient": "Saldo USDT insuficiente!",
   "g_key_payment_usdt_not_found": "Adicione o token USDT!",
   "g_key_payment_native_insufficient": "Saldo nativo insuficiente!",
-  "g_key_payment_native_not_found": "Cadeia nativa não encontrada!"
+  "g_key_payment_native_not_found": "Cadeia nativa não encontrada!",
+  "g_key_aa_gas_warn_total_high": "Limite de Gas Muito Alto",
+  "g_key_aa_gas_warn_total_high_desc": "O gas total estimado ({gas}) está incomumente alto. Verifique sua transação por erros.",
+  "@g_key_aa_gas_warn_total_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_verify_high": "Gas de Verificação Alto",
+  "g_key_aa_gas_warn_verify_high_desc": "O gas de verificação ({gas}) pode estar muito alto. Isso pode ocorrer com lógica de conta complexa.",
+  "@g_key_aa_gas_warn_verify_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_call_high": "Gas de Execução Alto",
+  "g_key_aa_gas_warn_call_high_desc": "O gas de execução ({gas}) está alto. O contrato chamado pode consumir mais gas do que o esperado.",
+  "@g_key_aa_gas_warn_call_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_paymaster": "Overhead do Paymaster Alto",
+  "g_key_aa_gas_warn_paymaster_desc": "O overhead de gas do paymaster ({gas}) está alto. Transações sem gas podem custar mais.",
+  "@g_key_aa_gas_warn_paymaster_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_deploy": "Overhead de Gas de Implantação",
+  "g_key_aa_gas_warn_deploy_desc": "A primeira transação inclui a implantação da conta (~{gas} gas). As transações subsequentes serão mais baratas.",
+  "@g_key_aa_gas_warn_deploy_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_under_est": "Possível Sub-Estimativa de Gas",
+  "g_key_aa_gas_warn_under_est_desc": "O gas real utilizado pode exceder a estimativa. Considere adicionar um buffer maior."
 }

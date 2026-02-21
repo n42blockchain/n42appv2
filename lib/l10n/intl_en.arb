@@ -1413,5 +1413,42 @@
   "g_key_payment_usdt_insufficient": "Insufficient USDT balance!",
   "g_key_payment_usdt_not_found": "Please add USDT token!",
   "g_key_payment_native_insufficient": "Insufficient native balance!",
-  "g_key_payment_native_not_found": "Native chain not found!"
+  "g_key_payment_native_not_found": "Native chain not found!",
+  "g_key_aa_gas_warn_total_high": "Gas Limit Very High",
+  "g_key_aa_gas_warn_total_high_desc": "Estimated total gas ({gas}) is unusually high. Check your transaction for errors.",
+  "@g_key_aa_gas_warn_total_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_verify_high": "Verification Gas High",
+  "g_key_aa_gas_warn_verify_high_desc": "Verification gas ({gas}) may be too high. This can happen with complex account logic.",
+  "@g_key_aa_gas_warn_verify_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_call_high": "Execution Gas High",
+  "g_key_aa_gas_warn_call_high_desc": "Execution gas ({gas}) is high. The called contract may consume more gas than expected.",
+  "@g_key_aa_gas_warn_call_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_paymaster": "Paymaster Overhead High",
+  "g_key_aa_gas_warn_paymaster_desc": "Paymaster gas overhead ({gas}) is high. Gas-free transactions may cost more.",
+  "@g_key_aa_gas_warn_paymaster_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_deploy": "Deployment Gas Overhead",
+  "g_key_aa_gas_warn_deploy_desc": "First transaction includes account deployment (~{gas} gas). Subsequent transactions will be cheaper.",
+  "@g_key_aa_gas_warn_deploy_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_under_est": "Possible Gas Under-Estimate",
+  "g_key_aa_gas_warn_under_est_desc": "The actual gas used may exceed the estimate. Consider adding a larger buffer."
 }

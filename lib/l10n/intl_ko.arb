@@ -1398,5 +1398,42 @@
   "g_key_payment_usdt_insufficient": "USDT 잔액 부족!",
   "g_key_payment_usdt_not_found": "USDT 토큰을 추가하세요!",
   "g_key_payment_native_insufficient": "기본 잔액 부족!",
-  "g_key_payment_native_not_found": "메인체인을 찾을 수 없습니다!"
+  "g_key_payment_native_not_found": "메인체인을 찾을 수 없습니다!",
+  "g_key_aa_gas_warn_total_high": "가스 한도 매우 높음",
+  "g_key_aa_gas_warn_total_high_desc": "추정 총 가스({gas})가 비정상적으로 높습니다. 트랜잭션 오류를 확인하세요.",
+  "@g_key_aa_gas_warn_total_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_verify_high": "검증 가스 높음",
+  "g_key_aa_gas_warn_verify_high_desc": "검증 가스({gas})가 너무 높을 수 있습니다. 복잡한 계정 로직에서 발생할 수 있습니다.",
+  "@g_key_aa_gas_warn_verify_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_call_high": "실행 가스 높음",
+  "g_key_aa_gas_warn_call_high_desc": "실행 가스({gas})가 높습니다. 호출된 컨트랙트가 예상보다 더 많은 가스를 소비할 수 있습니다.",
+  "@g_key_aa_gas_warn_call_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_paymaster": "Paymaster 오버헤드 높음",
+  "g_key_aa_gas_warn_paymaster_desc": "Paymaster 가스 오버헤드({gas})가 높습니다. 가스 없는 트랜잭션 비용이 증가할 수 있습니다.",
+  "@g_key_aa_gas_warn_paymaster_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_deploy": "배포 가스 오버헤드",
+  "g_key_aa_gas_warn_deploy_desc": "첫 번째 트랜잭션에는 계정 배포가 포함됩니다(~{gas} 가스). 이후 트랜잭션은 더 저렴해집니다.",
+  "@g_key_aa_gas_warn_deploy_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_under_est": "가스 과소 추정 가능성",
+  "g_key_aa_gas_warn_under_est_desc": "실제 사용된 가스가 추정치를 초과할 수 있습니다. 더 큰 버퍼를 추가하는 것을 고려하세요."
 }

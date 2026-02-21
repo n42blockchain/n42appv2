@@ -1347,5 +1347,42 @@
   "g_key_payment_usdt_insufficient": "Saldo USDT insufficiente!",
   "g_key_payment_usdt_not_found": "Aggiungere il token USDT!",
   "g_key_payment_native_insufficient": "Saldo nativo insufficiente!",
-  "g_key_payment_native_not_found": "Catena nativa non trovata!"
+  "g_key_payment_native_not_found": "Catena nativa non trovata!",
+  "g_key_aa_gas_warn_total_high": "Limite Gas Molto Alto",
+  "g_key_aa_gas_warn_total_high_desc": "Il gas totale stimato ({gas}) è insolitamente alto. Controlla la tua transazione per errori.",
+  "@g_key_aa_gas_warn_total_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_verify_high": "Gas di Verifica Alto",
+  "g_key_aa_gas_warn_verify_high_desc": "Il gas di verifica ({gas}) potrebbe essere troppo alto. Ciò può accadere con logica account complessa.",
+  "@g_key_aa_gas_warn_verify_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_call_high": "Gas di Esecuzione Alto",
+  "g_key_aa_gas_warn_call_high_desc": "Il gas di esecuzione ({gas}) è alto. Il contratto chiamato potrebbe consumare più gas del previsto.",
+  "@g_key_aa_gas_warn_call_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_paymaster": "Overhead Paymaster Alto",
+  "g_key_aa_gas_warn_paymaster_desc": "L'overhead gas del paymaster ({gas}) è alto. Le transazioni senza gas potrebbero costare di più.",
+  "@g_key_aa_gas_warn_paymaster_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_deploy": "Overhead Gas di Deployment",
+  "g_key_aa_gas_warn_deploy_desc": "La prima transazione include il deployment dell'account (~{gas} gas). Le transazioni successive saranno più economiche.",
+  "@g_key_aa_gas_warn_deploy_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_under_est": "Possibile Sottostima del Gas",
+  "g_key_aa_gas_warn_under_est_desc": "Il gas effettivamente utilizzato potrebbe superare la stima. Considera di aggiungere un buffer maggiore."
 }

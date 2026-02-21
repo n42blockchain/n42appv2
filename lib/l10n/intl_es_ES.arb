@@ -1399,5 +1399,42 @@
   "g_key_payment_usdt_insufficient": "¡Saldo USDT insuficiente!",
   "g_key_payment_usdt_not_found": "¡Añade el token USDT!",
   "g_key_payment_native_insufficient": "¡Saldo nativo insuficiente!",
-  "g_key_payment_native_not_found": "¡Cadena nativa no encontrada!"
+  "g_key_payment_native_not_found": "¡Cadena nativa no encontrada!",
+  "g_key_aa_gas_warn_total_high": "Límite de Gas Muy Alto",
+  "g_key_aa_gas_warn_total_high_desc": "El gas total estimado ({gas}) es inusualmente alto. Verifique su transacción por errores.",
+  "@g_key_aa_gas_warn_total_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_verify_high": "Gas de Verificación Alto",
+  "g_key_aa_gas_warn_verify_high_desc": "El gas de verificación ({gas}) puede ser demasiado alto. Esto puede ocurrir con lógica de cuenta compleja.",
+  "@g_key_aa_gas_warn_verify_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_call_high": "Gas de Ejecución Alto",
+  "g_key_aa_gas_warn_call_high_desc": "El gas de ejecución ({gas}) es alto. El contrato llamado puede consumir más gas del esperado.",
+  "@g_key_aa_gas_warn_call_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_paymaster": "Sobrecarga de Paymaster Alta",
+  "g_key_aa_gas_warn_paymaster_desc": "La sobrecarga de gas del paymaster ({gas}) es alta. Las transacciones sin gas pueden costar más.",
+  "@g_key_aa_gas_warn_paymaster_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_deploy": "Sobrecarga de Gas de Despliegue",
+  "g_key_aa_gas_warn_deploy_desc": "La primera transacción incluye el despliegue de cuenta (~{gas} gas). Las transacciones posteriores serán más baratas.",
+  "@g_key_aa_gas_warn_deploy_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_under_est": "Posible Subestimación de Gas",
+  "g_key_aa_gas_warn_under_est_desc": "El gas real utilizado puede superar la estimación. Considere agregar un margen mayor."
 }

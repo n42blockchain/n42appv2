@@ -1347,5 +1347,42 @@
   "g_key_payment_usdt_insufficient": "Niewystarczające saldo USDT!",
   "g_key_payment_usdt_not_found": "Dodaj token USDT!",
   "g_key_payment_native_insufficient": "Niewystarczające saldo natywne!",
-  "g_key_payment_native_not_found": "Nie znaleziono łańcucha głównego!"
+  "g_key_payment_native_not_found": "Nie znaleziono łańcucha głównego!",
+  "g_key_aa_gas_warn_total_high": "Limit Gazu Bardzo Wysoki",
+  "g_key_aa_gas_warn_total_high_desc": "Szacowany całkowity gaz ({gas}) jest wyjątkowo wysoki. Sprawdź transakcję pod kątem błędów.",
+  "@g_key_aa_gas_warn_total_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_verify_high": "Gaz Weryfikacji Wysoki",
+  "g_key_aa_gas_warn_verify_high_desc": "Gaz weryfikacji ({gas}) może być za wysoki. Może to wystąpić przy złożonej logice konta.",
+  "@g_key_aa_gas_warn_verify_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_call_high": "Gaz Wykonania Wysoki",
+  "g_key_aa_gas_warn_call_high_desc": "Gaz wykonania ({gas}) jest wysoki. Wywołany kontrakt może zużywać więcej gazu niż oczekiwano.",
+  "@g_key_aa_gas_warn_call_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_paymaster": "Wysoki Narzut Paymaster",
+  "g_key_aa_gas_warn_paymaster_desc": "Narzut gazu paymaster ({gas}) jest wysoki. Transakcje bez gazu mogą kosztować więcej.",
+  "@g_key_aa_gas_warn_paymaster_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_deploy": "Narzut Gazu Wdrożenia",
+  "g_key_aa_gas_warn_deploy_desc": "Pierwsza transakcja obejmuje wdrożenie konta (~{gas} gazu). Kolejne transakcje będą tańsze.",
+  "@g_key_aa_gas_warn_deploy_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_under_est": "Możliwe Niedoszacowanie Gazu",
+  "g_key_aa_gas_warn_under_est_desc": "Rzeczywiście zużyty gaz może przekroczyć szacunek. Rozważ dodanie większego buforu."
 }

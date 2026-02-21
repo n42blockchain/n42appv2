@@ -1347,5 +1347,42 @@
   "g_key_payment_usdt_insufficient": "Недостаточно USDT!",
   "g_key_payment_usdt_not_found": "Пожалуйста, добавьте токен USDT!",
   "g_key_payment_native_insufficient": "Недостаточно нативного баланса!",
-  "g_key_payment_native_not_found": "Основная цепочка не найдена!"
+  "g_key_payment_native_not_found": "Основная цепочка не найдена!",
+  "g_key_aa_gas_warn_total_high": "Лимит газа очень высокий",
+  "g_key_aa_gas_warn_total_high_desc": "Расчётный общий газ ({gas}) необычно высок. Проверьте транзакцию на наличие ошибок.",
+  "@g_key_aa_gas_warn_total_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_verify_high": "Газ верификации высокий",
+  "g_key_aa_gas_warn_verify_high_desc": "Газ верификации ({gas}) может быть слишком высоким. Это может происходить при сложной логике аккаунта.",
+  "@g_key_aa_gas_warn_verify_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_call_high": "Газ выполнения высокий",
+  "g_key_aa_gas_warn_call_high_desc": "Газ выполнения ({gas}) высокий. Вызванный контракт может потреблять больше газа, чем ожидалось.",
+  "@g_key_aa_gas_warn_call_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_paymaster": "Высокие накладные расходы Paymaster",
+  "g_key_aa_gas_warn_paymaster_desc": "Накладные расходы газа paymaster ({gas}) высоки. Транзакции без газа могут стоить дороже.",
+  "@g_key_aa_gas_warn_paymaster_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_deploy": "Накладные расходы газа развёртывания",
+  "g_key_aa_gas_warn_deploy_desc": "Первая транзакция включает развёртывание аккаунта (~{gas} газа). Последующие транзакции будут дешевле.",
+  "@g_key_aa_gas_warn_deploy_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_under_est": "Возможная недооценка газа",
+  "g_key_aa_gas_warn_under_est_desc": "Фактически использованный газ может превысить оценку. Рассмотрите добавление большего буфера."
 }

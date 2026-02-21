@@ -1347,5 +1347,42 @@
   "g_key_payment_usdt_insufficient": "Yetersiz USDT bakiyesi!",
   "g_key_payment_usdt_not_found": "Lütfen USDT token ekleyin!",
   "g_key_payment_native_insufficient": "Yetersiz yerel bakiye!",
-  "g_key_payment_native_not_found": "Ana zincir bulunamadı!"
+  "g_key_payment_native_not_found": "Ana zincir bulunamadı!",
+  "g_key_aa_gas_warn_total_high": "Gaz Limiti Çok Yüksek",
+  "g_key_aa_gas_warn_total_high_desc": "Tahmini toplam gaz ({gas}) alışılmadık derecede yüksek. İşleminizi hatalar için kontrol edin.",
+  "@g_key_aa_gas_warn_total_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_verify_high": "Doğrulama Gazı Yüksek",
+  "g_key_aa_gas_warn_verify_high_desc": "Doğrulama gazı ({gas}) çok yüksek olabilir. Bu, karmaşık hesap mantığıyla oluşabilir.",
+  "@g_key_aa_gas_warn_verify_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_call_high": "Yürütme Gazı Yüksek",
+  "g_key_aa_gas_warn_call_high_desc": "Yürütme gazı ({gas}) yüksek. Çağrılan sözleşme beklenenden daha fazla gaz tüketebilir.",
+  "@g_key_aa_gas_warn_call_high_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_paymaster": "Paymaster Yükü Yüksek",
+  "g_key_aa_gas_warn_paymaster_desc": "Paymaster gaz yükü ({gas}) yüksek. Gaz ücretsiz işlemler daha pahalıya gelebilir.",
+  "@g_key_aa_gas_warn_paymaster_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_deploy": "Dağıtım Gaz Yükü",
+  "g_key_aa_gas_warn_deploy_desc": "İlk işlem hesap dağıtımını içerir (~{gas} gaz). Sonraki işlemler daha ucuz olacaktır.",
+  "@g_key_aa_gas_warn_deploy_desc": {
+    "placeholders": {
+      "gas": {"type": "String"}
+    }
+  },
+  "g_key_aa_gas_warn_under_est": "Olası Gaz Düşük Tahmini",
+  "g_key_aa_gas_warn_under_est_desc": "Gerçekte kullanılan gaz tahmini aşabilir. Daha büyük bir tampon eklemeyi düşünün."
 }
