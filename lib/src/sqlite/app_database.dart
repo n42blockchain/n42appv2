@@ -17,7 +17,7 @@ class AppDatabase{
     String path = join(directory, "astranet.db");
     return await openDatabase(
       path,
-      version: 3, //v3: aa_batch_templates
+      version: 4, //v4: aa_session_keys
       onCreate: (Database db, int version) async {
         //交易记录
         await db.execute("create table TransationRecord("
@@ -125,6 +125,25 @@ class AppDatabase{
             updated_at INTEGER NOT NULL
           )
         ''');
+        // AA Session Key 表
+        await db.execute('''
+          CREATE TABLE aa_session_keys (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            key_address TEXT NOT NULL,
+            label TEXT NOT NULL,
+            permission TEXT NOT NULL,
+            status TEXT NOT NULL,
+            created_at INTEGER NOT NULL,
+            expires_at INTEGER NOT NULL,
+            dapp_name TEXT,
+            allowed_contracts TEXT,
+            spending_limit TEXT,
+            spending_token TEXT,
+            used_amount TEXT,
+            transaction_count INTEGER,
+            chain_id INTEGER NOT NULL
+          )
+        ''');
       },
       onUpgrade: (Database db, int oldVersion, int newVersion) async {
         if (oldVersion < 2) {
@@ -142,6 +161,26 @@ class AppDatabase{
               operations TEXT NOT NULL,
               created_at INTEGER NOT NULL,
               updated_at INTEGER NOT NULL
+            )
+          ''');
+        }
+        if (oldVersion < 4) {
+          await db.execute('''
+            CREATE TABLE aa_session_keys (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              key_address TEXT NOT NULL,
+              label TEXT NOT NULL,
+              permission TEXT NOT NULL,
+              status TEXT NOT NULL,
+              created_at INTEGER NOT NULL,
+              expires_at INTEGER NOT NULL,
+              dapp_name TEXT,
+              allowed_contracts TEXT,
+              spending_limit TEXT,
+              spending_token TEXT,
+              used_amount TEXT,
+              transaction_count INTEGER,
+              chain_id INTEGER NOT NULL
             )
           ''');
         }
