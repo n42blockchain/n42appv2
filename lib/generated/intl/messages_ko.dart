@@ -1245,6 +1245,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_tx_failed": MessageLookupByLibrary.simpleMessage("트랜잭션 실패"),
     "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage("지불 금액"),
     "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage("받는 금액"),
+    "g_key_domain_resolve_hint": MessageLookupByLibrary.simpleMessage(
+      "ENS (.eth), Unstoppable Domains (.crypto/.wallet/…) 및 Solana SNS (.sol) 지원",
+    ),
+    "g_key_domain_sns_name": MessageLookupByLibrary.simpleMessage("솔라나 네임 서비스"),
+    "g_key_domain_sns_not_found": MessageLookupByLibrary.simpleMessage(
+      "솔라나 도메인을 찾을 수 없습니다",
+    ),
+    "g_key_domain_ud_name": MessageLookupByLibrary.simpleMessage(
+      "Unstoppable Domains",
+    ),
+    "g_key_domain_ud_not_found": MessageLookupByLibrary.simpleMessage(
+      "Unstoppable 도메인을 찾을 수 없거나 이 체인의 주소가 없습니다",
+    ),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage("활성 상품"),
     "g_key_earn_batch": MessageLookupByLibrary.simpleMessage("일괄"),
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("소각"),

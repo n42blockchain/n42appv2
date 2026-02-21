@@ -752,6 +752,126 @@ class TokenViewApi{
     }
   }
 
+  // ── Unstoppable Domains ────────────────────────────────────────────────────
+
+  /// Unstoppable Domains 正向解析
+  ///
+  /// [domain] — 域名（如 alice.crypto）
+  /// [ticker] — 目标链代币符号（ETH / BNB / MATIC / BTC / SOL 等）
+  ///            不传则由后端返回默认 EVM 地址
+  ///
+  /// 后端代理调用 UD Resolve API：
+  ///   GET /domains/{domain}
+  ///   取 records['crypto.{TICKER}.address']
+  Future<MessageModel> getUdResolve(String domain, {String? ticker}) async {
+    try {
+      final tickerParam = ticker != null ? '&ticker=$ticker' : '';
+      final a = await BaseApi.requestEmptyH.get(
+        '${url}v1/ud/resolve?domain=$domain$tickerParam',
+        params: {},
+        header: header,
+      );
+      MessageModel mm = MessageModel();
+      if (a['code'] == 200) {
+        mm.data = a['data'];
+      } else {
+        mm.error = true;
+        mm.data = errorMessage(a['msg']);
+      }
+      return mm;
+    } catch (e) {
+      MessageModel mm = MessageModel.error();
+      mm.data = e.toString();
+      return mm;
+    }
+  }
+
+  /// Unstoppable Domains 反向解析
+  ///
+  /// [address] — 链地址
+  /// [ticker]  — 地址所属链的代币符号
+  ///
+  /// 后端调用 UD Reverse API：
+  ///   GET /reverse/{address}
+  Future<MessageModel> getUdReverseResolve(String address,
+      {String? ticker}) async {
+    try {
+      final tickerParam = ticker != null ? '&ticker=$ticker' : '';
+      final a = await BaseApi.requestEmptyH.get(
+        '${url}v1/ud/reverse?address=$address$tickerParam',
+        params: {},
+        header: header,
+      );
+      MessageModel mm = MessageModel();
+      if (a['code'] == 200) {
+        mm.data = a['data'];
+      } else {
+        mm.error = true;
+        mm.data = errorMessage(a['msg']);
+      }
+      return mm;
+    } catch (e) {
+      MessageModel mm = MessageModel.error();
+      mm.data = e.toString();
+      return mm;
+    }
+  }
+
+  // ── Solana Name Service (SNS / Bonfida) ────────────────────────────────────
+
+  /// SNS 正向解析：.sol 域名 → Solana 地址
+  ///
+  /// [domain] — 域名（如 alice.sol）
+  ///
+  /// 后端代理调用：
+  ///   GET https://sns-sdk-proxy.bonfida.workers.dev/resolve/{domain}
+  Future<MessageModel> getSnsResolve(String domain) async {
+    try {
+      final a = await BaseApi.requestEmptyH.get(
+        '${url}v1/sns/resolve?domain=$domain',
+        params: {},
+        header: header,
+      );
+      MessageModel mm = MessageModel();
+      if (a['code'] == 200) {
+        mm.data = a['data'];
+      } else {
+        mm.error = true;
+        mm.data = errorMessage(a['msg']);
+      }
+      return mm;
+    } catch (e) {
+      MessageModel mm = MessageModel.error();
+      mm.data = e.toString();
+      return mm;
+    }
+  }
+
+  /// SNS 反向解析：Solana 地址 → .sol 域名
+  ///
+  /// [address] — Solana base58 地址
+  Future<MessageModel> getSnsReverseResolve(String address) async {
+    try {
+      final a = await BaseApi.requestEmptyH.get(
+        '${url}v1/sns/reverse?address=$address',
+        params: {},
+        header: header,
+      );
+      MessageModel mm = MessageModel();
+      if (a['code'] == 200) {
+        mm.data = a['data'];
+      } else {
+        mm.error = true;
+        mm.data = errorMessage(a['msg']);
+      }
+      return mm;
+    } catch (e) {
+      MessageModel mm = MessageModel.error();
+      mm.data = e.toString();
+      return mm;
+    }
+  }
+
   ////////////////////////////
   //solana
   //获取余额

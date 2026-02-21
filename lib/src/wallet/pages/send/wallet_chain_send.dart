@@ -469,21 +469,10 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend> {
   EnsResolutionResult? _ensResult;
   Timer? _ensDebounceTimer;
 
-  /// 检查链是否支持 ENS 解析
-  /// N42 链优先，然后是所有 EVM 兼容链
+  /// 检查链是否支持域名解析（ENS / UD / SNS）
+  /// 委托给 EnsService.chainSupportsEns()，与 EnsService 保持单一来源
   bool _isEnsSupported(String coinType) {
-    // N42 链优先支持 ENS
-    if (coinType == CoinType.N.name) return true;
-
-    // ETH 主网支持
-    if (coinType == CoinType.ETH.name) return true;
-
-    // 其他 EVM 兼容链
-    const evmChains = [
-      'BNB', 'MATIC', 'AVAX', 'FTM', 'OP', 'ARB',
-      'CELO', 'ONE', 'CRO', 'MOVR', 'GLMR',
-    ];
-    return evmChains.contains(coinType);
+    return EnsService.chainSupportsEns(coinType);
   }
 
   // ── ENS 实时解析（防抖 500ms，仅在 ENS 支持链上触发） ──────────────────────

@@ -1551,4 +1551,10 @@
 ,
   "g_key_ens_self_transfer": "Нельзя отправить на собственный адрес",
   "g_key_ens_copy_address": "Адрес скопирован"
+,
+  "g_key_domain_ud_name": "Unstoppable Domains",
+  "g_key_domain_sns_name": "Solana Name Service",
+  "g_key_domain_ud_not_found": "Домен Unstoppable не найден или нет адреса для этой сети",
+  "g_key_domain_sns_not_found": "Домен Solana не найден",
+  "g_key_domain_resolve_hint": "Поддерживает ENS (.eth), Unstoppable Domains (.crypto/.wallet/…) и Solana SNS (.sol)"
 }

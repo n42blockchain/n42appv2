@@ -7,7 +7,23 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/wallet/api/token_view_api.dart';
-import 'package:n42appv2/src/models/message_model.dart';
+
+/// 域名解析协议
+enum DomainProtocol {
+  /// N42 Name Service (.n42)
+  n42,
+
+  /// Ethereum Name Service (.eth / .xyz / .app / .luxe / .kred / .art)
+  ens,
+
+  /// Unstoppable Domains (.crypto / .wallet / .nft / .blockchain / .dao / …)
+  unstoppableDomains,
+
+  /// Solana Name Service (.sol)
+  sns,
+
+  unknown,
+}
 
 /// ENS 解析结果
 class EnsResolutionResult {
@@ -26,8 +42,11 @@ class EnsResolutionResult {
   /// 错误信息
   final String? error;
 
-  /// 来源链 (N42, ETH, etc.)
+  /// 来源链标签（'N42' / 'ETH' / 'UD' / 'SNS'）
   final String? sourceChain;
+
+  /// 解析使用的协议
+  final DomainProtocol protocol;
 
   const EnsResolutionResult({
     required this.success,
@@ -36,6 +55,7 @@ class EnsResolutionResult {
     this.avatar,
     this.error,
     this.sourceChain,
+    this.protocol = DomainProtocol.unknown,
   });
 
   factory EnsResolutionResult.success({
@@ -43,6 +63,7 @@ class EnsResolutionResult {
     String? ensName,
     String? avatar,
     String? sourceChain,
+    DomainProtocol protocol = DomainProtocol.unknown,
   }) {
     return EnsResolutionResult(
       success: true,
@@ -50,6 +71,7 @@ class EnsResolutionResult {
       ensName: ensName,
       avatar: avatar,
       sourceChain: sourceChain,
+      protocol: protocol,
     );
   }
 
@@ -86,62 +108,108 @@ class EnsTextRecords {
   });
 }
 
-/// ENS 服务 - 提供完整的 ENS 功能
+/// 统一域名解析服务
 ///
-/// 功能特性（对标 MetaMask、Rainbow 等主流钱包）:
-/// - 正向解析 (ENS name -> address)
-/// - 反向解析 (address -> ENS name)
-/// - 头像解析
-/// - 文本记录解析
-/// - 多链支持 (N42 优先，ETH 主网回退)
-/// - 缓存机制
+/// 支持 4 种协议（解析优先级从高到低）：
+///
+/// 1. **N42 Name Service** — `.n42` 后缀
+/// 2. **Solana Name Service (SNS)** — `.sol` 后缀，Bonfida 协议
+/// 3. **Unstoppable Domains (UD)** — `.crypto` / `.wallet` / `.nft` / …
+/// 4. **Ethereum Name Service (ENS)** — `.eth` / `.xyz` / `.app` / …
+///
+/// **多链解析**：对于 UD 域名，通过 `preferredChain` 参数获取对应链的地址；
+///              对于 SNS 域名，始终返回 Solana 地址。
+///
+/// **缓存策略**：所有协议共享同一套 5 分钟内存缓存。
 class EnsService {
   final TokenViewApi _tokenViewApi;
 
-  /// 正向解析缓存 (name -> address)
+  /// 正向解析缓存 (name → EnsResolutionResult)
   final Map<String, _CacheEntry<EnsResolutionResult>> _forwardCache = {};
 
-  /// 反向解析缓存 (address -> name)
+  /// 反向解析缓存 (address → domain name)
   final Map<String, _CacheEntry<String?>> _reverseCache = {};
 
   /// 头像缓存
   final Map<String, _CacheEntry<String?>> _avatarCache = {};
 
-  /// 缓存有效期 (5 分钟)
+  /// 缓存有效期（5 分钟）
   static const _cacheDuration = Duration(minutes: 5);
 
-  /// 支持的 ENS 后缀
+  // ── 各协议的域名后缀 ──────────────────────────────────────────────────────
+
+  /// N42 Name Service 后缀
+  static const _n42Suffixes = ['.n42'];
+
+  /// Solana Name Service 后缀
+  static const _snsSuffixes = ['.sol'];
+
+  /// Unstoppable Domains 后缀（截止 2025 年已发布的 TLD）
+  ///
+  /// 参考：https://docs.unstoppabledomains.com/getting-started/supported-domains/
+  static const _udSuffixes = [
+    '.crypto',     // UD 首批 TLD（2019）
+    '.wallet',     // 多链钱包域名（2021）
+    '.bitcoin',    // Bitcoin 生态（2021）
+    '.nft',        // NFT 身份（2022）
+    '.blockchain', // 通用区块链（2021）
+    '.dao',        // DAO 组织（2022）
+    '.888',        // 吉祥数字（2022）
+    '.zil',        // Zilliqa 生态（迁移到 Polygon L2）
+    '.x',          // 简短域名（2023）
+    '.klever',     // Klever 生态（2022）
+    '.hi',         // HI 金融（2022）
+    '.kresus',     // Kresus 生态（2022）
+    '.manga',      // 动漫文化（2023）
+    '.binanceus',  // Binance US 生态（2022）
+    '.coin',       // 通用代币（2023）
+    '.polygon',    // Polygon 生态（2023）
+  ];
+
+  /// 以太坊 ENS 后缀
+  static const _ensSuffixes = [
+    '.eth',
+    '.xyz',
+    '.app',
+    '.luxe',
+    '.kred',
+    '.art',
+  ];
+
+  /// 全部支持的域名后缀（用于 isEnsName 快速判断）
   static const ensSuffixes = [
-    '.n42', // N42 Name Service (优先)
-    '.eth', // Ethereum Name Service
-    '.xyz', // ENS 支持的通用域名
-    '.app', // ENS 支持的应用域名
-    '.luxe', // ENS 支持的奢侈品域名
-    '.kred', // ENS 支持的信用域名
-    '.art', // ENS 支持的艺术域名
+    ..._n42Suffixes,
+    ..._snsSuffixes,
+    ..._udSuffixes,
+    ..._ensSuffixes,
   ];
 
   EnsService({TokenViewApi? tokenViewApi})
       : _tokenViewApi = tokenViewApi ?? TokenViewApi();
 
-  /// 检查字符串是否是 ENS 名称
+  // ── 公开静态工具方法 ──────────────────────────────────────────────────────
+
+  /// 检查字符串是否是受支持的域名（任意协议）
   static bool isEnsName(String input) {
-    final lowercaseInput = input.toLowerCase().trim();
+    final lower = input.toLowerCase().trim();
     for (final suffix in ensSuffixes) {
-      if (lowercaseInput.endsWith(suffix)) {
-        return true;
-      }
+      if (lower.endsWith(suffix)) return true;
     }
     return false;
   }
 
-  /// 检查链是否支持 ENS
+  /// 检查链是否支持域名解析
+  ///
+  /// - N42、EVM 兼容链：支持 N42 NS + ENS + UD
+  /// - Solana：支持 SNS + UD
   static bool chainSupportsEns(String coinType) {
-    // N42 链优先支持
+    // Solana：支持 SNS + UD
+    if (coinType == CoinType.SOL.name) return true;
+    // N42 链
     if (coinType == CoinType.N.name) return true;
     // ETH 主网
     if (coinType == CoinType.ETH.name) return true;
-    // 其他 EVM 兼容链
+    // 其他 EVM 兼容链（也支持 UD 多链解析）
     const evmChains = [
       'BNB', 'MATIC', 'AVAX', 'FTM', 'OP', 'ARB',
       'CELO', 'ONE', 'CRO', 'MOVR', 'GLMR',
@@ -149,139 +217,163 @@ class EnsService {
     return evmChains.contains(coinType);
   }
 
-  /// 正向解析 - 将 ENS 名称解析为地址
+  /// 识别域名所属协议
+  static DomainProtocol detectProtocol(String domainName) {
+    final lower = domainName.toLowerCase().trim();
+    if (_n42Suffixes.any((s) => lower.endsWith(s))) {
+      return DomainProtocol.n42;
+    }
+    if (_snsSuffixes.any((s) => lower.endsWith(s))) {
+      return DomainProtocol.sns;
+    }
+    if (_udSuffixes.any((s) => lower.endsWith(s))) {
+      return DomainProtocol.unstoppableDomains;
+    }
+    if (_ensSuffixes.any((s) => lower.endsWith(s))) {
+      return DomainProtocol.ens;
+    }
+    return DomainProtocol.unknown;
+  }
+
+  // ── 正向解析 ─────────────────────────────────────────────────────────────
+
+  /// 将域名解析为地址（统一入口）
   ///
-  /// [ensName] - ENS 名称 (如 vitalik.eth 或 user.n42)
-  /// [preferredChain] - 优先使用的链 (默认 N42 优先)
-  /// [useCache] - 是否使用缓存
+  /// [domainName]     — 域名（如 `alice.eth` / `alice.sol` / `alice.crypto`）
+  /// [preferredChain] — 期望返回的链地址（对 UD 多链域名有效）
+  /// [useCache]       — 是否使用缓存
   Future<EnsResolutionResult> resolveName(
-    String ensName, {
+    String domainName, {
     String? preferredChain,
     bool useCache = true,
   }) async {
-    final normalizedName = ensName.toLowerCase().trim();
+    final normalized = domainName.toLowerCase().trim();
 
-    // 检查缓存
+    // 缓存键：域名 + 目标链（UD 多链域名的缓存需要区分链）
+    final cacheKey = preferredChain != null
+        ? '$normalized@$preferredChain'
+        : normalized;
+
     if (useCache) {
-      final cached = _getFromCache(_forwardCache, normalizedName);
-      if (cached != null) {
-        return cached;
-      }
+      final cached = _getFromCache(_forwardCache, cacheKey);
+      if (cached != null) return cached;
     }
 
     try {
-      String? resolvedAddress;
-      String? sourceChain;
+      final protocol = detectProtocol(normalized);
+      EnsResolutionResult? result;
 
-      // N42 名称 (.n42) 或在 N42 链上请求时，优先使用 N42 解析
-      if (normalizedName.endsWith('.n42') ||
-          preferredChain == CoinType.N.name) {
-        final n42Result = await _resolveN42(normalizedName);
-        if (n42Result != null) {
-          resolvedAddress = n42Result;
-          sourceChain = 'N42';
-        }
+      switch (protocol) {
+        case DomainProtocol.n42:
+          result = await _resolveWithN42(normalized);
+
+        case DomainProtocol.sns:
+          result = await _resolveWithSns(normalized);
+
+        case DomainProtocol.unstoppableDomains:
+          result = await _resolveWithUd(normalized, preferredChain);
+          // UD 解析失败时不再 fallback（防止用户误解）
+
+        case DomainProtocol.ens:
+        case DomainProtocol.unknown:
+          // N42 链优先尝试 N42 解析（支持跨协议）
+          if (preferredChain == CoinType.N.name) {
+            result = await _resolveWithN42(normalized);
+          }
+          // 再尝试 ETH ENS
+          result ??= await _resolveWithEns(normalized);
       }
 
-      // 如果 N42 解析失败，回退到 ETH ENS
-      if (resolvedAddress == null) {
-        final ethResult = await _resolveEth(normalizedName);
-        if (ethResult != null) {
-          resolvedAddress = ethResult;
-          sourceChain = 'ETH';
-        }
-      }
+      result ??= EnsResolutionResult.failure('Domain name not found');
 
-      if (resolvedAddress != null) {
-        final result = EnsResolutionResult.success(
-          address: resolvedAddress,
-          ensName: normalizedName,
-          sourceChain: sourceChain,
-        );
-
-        // 更新缓存
-        _addToCache(_forwardCache, normalizedName, result);
-
-        return result;
-      }
-
-      return EnsResolutionResult.failure('ENS name not found');
+      // 写入缓存
+      _addToCache(_forwardCache, cacheKey, result);
+      return result;
     } catch (e) {
-      debugPrint('ENS resolution error: $e');
+      debugPrint('[DomainService] resolveName error: $e');
       return EnsResolutionResult.failure('Resolution failed: $e');
     }
   }
 
-  /// 反向解析 - 将地址解析为 ENS 名称
+  // ── 反向解析 ─────────────────────────────────────────────────────────────
+
+  /// 将地址反向解析为域名
   ///
-  /// [address] - 以太坊地址
-  /// [coinType] - 链类型
-  /// [useCache] - 是否使用缓存
+  /// [address]  — 链地址
+  /// [coinType] — 地址所属链（影响使用哪个协议）
+  /// [useCache] — 是否使用缓存
   Future<String?> resolveAddress(
     String address, {
     String coinType = 'ETH',
     bool useCache = true,
   }) async {
-    final normalizedAddress = address.toLowerCase();
+    final normalizedAddr = address.toLowerCase();
 
-    // 检查缓存（使用 containsKey 区分"已缓存 null"与"缓存未命中"）
-    if (useCache && _isInReverseCache(normalizedAddress)) {
-      return _reverseCache[normalizedAddress]!.value;
+    if (useCache && _isInReverseCache(normalizedAddr)) {
+      return _reverseCache[normalizedAddr]!.value;
     }
 
     try {
-      String? ensName;
+      String? domainName;
 
-      // N42 链优先
-      if (coinType == CoinType.N.name) {
-        ensName = await _reverseResolveN42(normalizedAddress);
+      if (coinType == CoinType.SOL.name) {
+        // Solana 链：优先 SNS 反向解析
+        domainName = await _reverseResolveSns(address);
+      } else if (coinType == CoinType.N.name) {
+        // N42 链：优先 N42 反向解析
+        domainName = await _reverseResolveN42(normalizedAddr);
+        // fallback 到 ENS
+        domainName ??= await _reverseResolveEns(normalizedAddr);
+      } else {
+        // EVM 链：先 ENS，再 UD
+        domainName = await _reverseResolveEns(normalizedAddr);
+        domainName ??= await _reverseResolveUd(normalizedAddr, coinType);
       }
 
-      // ETH 回退
-      ensName ??= await _reverseResolveEth(normalizedAddress);
-
-      // 更新缓存（即使为 null 也缓存，避免对同一地址重复查询）
-      _addToCache(_reverseCache, normalizedAddress, ensName);
-
-      return ensName;
+      _addToCache(_reverseCache, normalizedAddr, domainName);
+      return domainName;
     } catch (e) {
-      debugPrint('Reverse ENS resolution error: $e');
+      debugPrint('[DomainService] resolveAddress error: $e');
       return null;
     }
   }
 
-  /// 获取 ENS 头像
-  ///
-  /// [ensName] - ENS 名称
-  /// [useCache] - 是否使用缓存
-  Future<String?> getAvatar(String ensName, {bool useCache = true}) async {
-    final normalizedName = ensName.toLowerCase().trim();
+  // ── 头像 ──────────────────────────────────────────────────────────────────
 
-    // 检查缓存
+  /// 获取域名头像 URL
+  ///
+  /// 仅 ENS 和 N42 NS 支持头像，UD / SNS 暂不支持（直接返回 null）。
+  Future<String?> getAvatar(String domainName, {bool useCache = true}) async {
+    final normalized = domainName.toLowerCase().trim();
+
     if (useCache) {
-      final cached = _getFromCache(_avatarCache, normalizedName);
-      if (cached != null) {
-        return cached;
-      }
+      final cached = _getFromCache(_avatarCache, normalized);
+      if (cached != null) return cached;
+    }
+
+    final protocol = detectProtocol(normalized);
+    // UD / SNS 目前无头像服务
+    if (protocol == DomainProtocol.unstoppableDomains ||
+        protocol == DomainProtocol.sns) {
+      return null;
     }
 
     try {
-      final avatar = await _fetchAvatar(normalizedName);
-
-      // 更新缓存
-      _addToCache(_avatarCache, normalizedName, avatar);
-
+      final avatar = await _fetchEnsAvatar(normalized);
+      _addToCache(_avatarCache, normalized, avatar);
       return avatar;
     } catch (e) {
-      debugPrint('ENS avatar fetch error: $e');
+      debugPrint('[DomainService] getAvatar error: $e');
       return null;
     }
   }
 
-  /// 获取 ENS 文本记录
-  Future<EnsTextRecords?> getTextRecords(String ensName) async {
+  // ── 文本记录 ─────────────────────────────────────────────────────────────
+
+  /// 获取 ENS 文本记录（仅 ENS / N42 NS 协议支持）
+  Future<EnsTextRecords?> getTextRecords(String domainName) async {
     try {
-      final result = await _tokenViewApi.getEnsTextRecords(ensName);
+      final result = await _tokenViewApi.getEnsTextRecords(domainName);
       if (!result.error && result.data != null) {
         final data = result.data as Map<String, dynamic>;
         return EnsTextRecords(
@@ -296,141 +388,231 @@ class EnsService {
         );
       }
     } catch (e) {
-      debugPrint('ENS text records fetch error: $e');
+      debugPrint('[DomainService] getTextRecords error: $e');
     }
     return null;
   }
 
-  /// 批量解析多个 ENS 名称
+  // ── 批量解析 ─────────────────────────────────────────────────────────────
+
+  /// 并行解析多个域名
   Future<Map<String, EnsResolutionResult>> resolveNames(
-    List<String> ensNames, {
+    List<String> domainNames, {
     String? preferredChain,
   }) async {
-    final results = <String, EnsResolutionResult>{};
-
-    // 并行解析
-    final futures = ensNames.map((name) async {
-      final result = await resolveName(name, preferredChain: preferredChain);
+    final futures = domainNames.map((name) async {
+      final result =
+          await resolveName(name, preferredChain: preferredChain);
       return MapEntry(name, result);
     });
-
     final entries = await Future.wait(futures);
-    for (final entry in entries) {
-      results[entry.key] = entry.value;
-    }
-
-    return results;
+    return Map.fromEntries(entries);
   }
 
-  /// 批量反向解析多个地址
+  /// 并行反向解析多个地址
   Future<Map<String, String?>> resolveAddresses(
     List<String> addresses, {
     String coinType = 'ETH',
   }) async {
-    final results = <String, String?>{};
-
-    // 并行解析
     final futures = addresses.map((addr) async {
       final result = await resolveAddress(addr, coinType: coinType);
       return MapEntry(addr, result);
     });
-
     final entries = await Future.wait(futures);
-    for (final entry in entries) {
-      results[entry.key] = entry.value;
-    }
-
-    return results;
+    return Map.fromEntries(entries);
   }
 
-  /// 清除缓存
+  /// 清除全部缓存
   void clearCache() {
     _forwardCache.clear();
     _reverseCache.clear();
     _avatarCache.clear();
   }
 
-  // ============ Private Methods ============
+  // ── 私有：各协议解析实现 ─────────────────────────────────────────────────
 
-  /// N42 ENS 解析
-  Future<String?> _resolveN42(String ensName) async {
+  /// N42 Name Service 正向解析
+  Future<EnsResolutionResult?> _resolveWithN42(String domain) async {
     try {
-      MessageModel result = await _tokenViewApi.getN42EnsResolve(ensName);
+      final result = await _tokenViewApi.getN42EnsResolve(domain);
       if (!result.error && result.data != null) {
-        return result.data as String;
+        return EnsResolutionResult.success(
+          address: result.data as String,
+          ensName: domain,
+          sourceChain: 'N42',
+          protocol: DomainProtocol.n42,
+        );
       }
     } catch (e) {
-      debugPrint('N42 ENS resolution failed: $e');
+      debugPrint('[DomainService] N42 NS failed: $e');
     }
     return null;
   }
 
-  /// ETH ENS 解析
-  Future<String?> _resolveEth(String ensName) async {
+  /// Ethereum Name Service 正向解析
+  Future<EnsResolutionResult?> _resolveWithEns(String domain) async {
     try {
-      MessageModel result = await _tokenViewApi.getEnsResolve(ensName);
+      final result = await _tokenViewApi.getEnsResolve(domain);
       if (!result.error && result.data != null) {
-        return result.data as String;
+        return EnsResolutionResult.success(
+          address: result.data as String,
+          ensName: domain,
+          sourceChain: 'ETH',
+          protocol: DomainProtocol.ens,
+        );
       }
     } catch (e) {
-      debugPrint('ETH ENS resolution failed: $e');
+      debugPrint('[DomainService] ETH ENS failed: $e');
     }
     return null;
   }
 
-  /// N42 反向解析
+  /// Unstoppable Domains 正向解析
+  ///
+  /// [domain]         — UD 域名（如 alice.crypto）
+  /// [preferredChain] — 期望的链地址（ETH / BNB / MATIC / BTC / SOL 等）
+  ///                    为 null 时后端返回默认 EVM 地址
+  Future<EnsResolutionResult?> _resolveWithUd(
+    String domain,
+    String? preferredChain,
+  ) async {
+    try {
+      final ticker = _coinTypeToUdTicker(preferredChain);
+      final result =
+          await _tokenViewApi.getUdResolve(domain, ticker: ticker);
+      if (!result.error && result.data != null) {
+        return EnsResolutionResult.success(
+          address: result.data as String,
+          ensName: domain,
+          sourceChain: 'UD',
+          protocol: DomainProtocol.unstoppableDomains,
+        );
+      }
+    } catch (e) {
+      debugPrint('[DomainService] Unstoppable Domains failed: $e');
+    }
+    return null;
+  }
+
+  /// Solana Name Service 正向解析
+  ///
+  /// [domain] — .sol 域名（如 alice.sol）
+  Future<EnsResolutionResult?> _resolveWithSns(String domain) async {
+    try {
+      final result = await _tokenViewApi.getSnsResolve(domain);
+      if (!result.error && result.data != null) {
+        return EnsResolutionResult.success(
+          address: result.data as String,
+          ensName: domain,
+          sourceChain: 'SNS',
+          protocol: DomainProtocol.sns,
+        );
+      }
+    } catch (e) {
+      debugPrint('[DomainService] SNS failed: $e');
+    }
+    return null;
+  }
+
+  // ── 私有：各协议反向解析 ────────────────────────────────────────────────
+
   Future<String?> _reverseResolveN42(String address) async {
     try {
-      MessageModel result = await _tokenViewApi.getN42ReverseResolve(address);
-      if (!result.error && result.data != null) {
-        return result.data as String;
-      }
+      final result = await _tokenViewApi.getN42ReverseResolve(address);
+      if (!result.error && result.data != null) return result.data as String;
     } catch (e) {
-      debugPrint('N42 reverse resolution failed: $e');
+      debugPrint('[DomainService] N42 reverse failed: $e');
     }
     return null;
   }
 
-  /// ETH 反向解析
-  Future<String?> _reverseResolveEth(String address) async {
+  Future<String?> _reverseResolveEns(String address) async {
     try {
-      MessageModel result = await _tokenViewApi.getEnsReverseResolve(address);
-      if (!result.error && result.data != null) {
-        return result.data as String;
-      }
+      final result = await _tokenViewApi.getEnsReverseResolve(address);
+      if (!result.error && result.data != null) return result.data as String;
     } catch (e) {
-      debugPrint('ETH reverse resolution failed: $e');
+      debugPrint('[DomainService] ENS reverse failed: $e');
     }
     return null;
   }
 
-  /// 获取头像
-  Future<String?> _fetchAvatar(String ensName) async {
+  Future<String?> _reverseResolveUd(
+      String address, String coinType) async {
     try {
-      MessageModel result = await _tokenViewApi.getEnsAvatar(ensName);
-      if (!result.error && result.data != null) {
-        return result.data as String;
-      }
+      final ticker = _coinTypeToUdTicker(coinType);
+      final result =
+          await _tokenViewApi.getUdReverseResolve(address, ticker: ticker);
+      if (!result.error && result.data != null) return result.data as String;
     } catch (e) {
-      debugPrint('ENS avatar fetch failed: $e');
+      debugPrint('[DomainService] UD reverse failed: $e');
     }
     return null;
   }
 
-  /// 从缓存获取（仅适用于非空值类型；nullable 类型请用 [_isInReverseCache]）
+  Future<String?> _reverseResolveSns(String address) async {
+    try {
+      final result = await _tokenViewApi.getSnsReverseResolve(address);
+      if (!result.error && result.data != null) return result.data as String;
+    } catch (e) {
+      debugPrint('[DomainService] SNS reverse failed: $e');
+    }
+    return null;
+  }
+
+  // ── 私有：头像 ────────────────────────────────────────────────────────────
+
+  Future<String?> _fetchEnsAvatar(String domainName) async {
+    try {
+      final result = await _tokenViewApi.getEnsAvatar(domainName);
+      if (!result.error && result.data != null) return result.data as String;
+    } catch (e) {
+      debugPrint('[DomainService] avatar fetch failed: $e');
+    }
+    return null;
+  }
+
+  // ── 私有：工具 ────────────────────────────────────────────────────────────
+
+  /// 将 N42 coinType 映射到 UD ticker 符号
+  ///
+  /// UD 使用标准代币 ticker 来区分多链地址记录，例如：
+  ///   crypto.ETH.address / crypto.BTC.address / crypto.SOL.address
+  static String? _coinTypeToUdTicker(String? coinType) {
+    if (coinType == null) return null;
+    const tickerMap = {
+      'ETH': 'ETH',
+      'N': 'ETH',    // N42 使用 EVM 地址格式
+      'BNB': 'BNB',
+      'MATIC': 'MATIC',
+      'AVAX': 'AVAX',
+      'FTM': 'FTM',
+      'OP': 'ETH',   // Optimism 使用 ETH 地址
+      'ARB': 'ETH',  // Arbitrum 使用 ETH 地址
+      'SOL': 'SOL',
+      'BTC': 'BTC',
+      'TRX': 'TRX',
+      'XRP': 'XRP',
+      'CELO': 'CELO',
+      'ONE': 'ONE',
+      'CRO': 'CRO',
+      'MOVR': 'MOVR',
+      'GLMR': 'GLMR',
+    };
+    return tickerMap[coinType.toUpperCase()];
+  }
+
+  // ── 私有：缓存操作 ────────────────────────────────────────────────────────
+
   T? _getFromCache<T>(Map<String, _CacheEntry<T>> cache, String key) {
     final entry = cache[key];
-    if (entry != null && !entry.isExpired) {
-      return entry.value;
-    }
-    // 清除过期条目
-    if (entry != null) {
+    if (entry == null) return null;
+    if (entry.isExpired) {
       cache.remove(key);
+      return null;
     }
-    return null;
+    return entry.value;
   }
 
-  /// 检查反向解析缓存中是否存在有效条目（可区分"已缓存 null"与"缓存未命中"）
   bool _isInReverseCache(String key) {
     final entry = _reverseCache[key];
     if (entry == null) return false;
@@ -441,8 +623,8 @@ class EnsService {
     return true;
   }
 
-  /// 添加到缓存
-  void _addToCache<T>(Map<String, _CacheEntry<T>> cache, String key, T value) {
+  void _addToCache<T>(
+      Map<String, _CacheEntry<T>> cache, String key, T value) {
     cache[key] = _CacheEntry(value, DateTime.now().add(_cacheDuration));
   }
 }
@@ -457,7 +639,7 @@ class _CacheEntry<T> {
   bool get isExpired => DateTime.now().isAfter(expiry);
 }
 
-/// ENS 服务单例
+/// ENS/Domain 服务单例
 class EnsServiceProvider {
   static EnsService? _instance;
 

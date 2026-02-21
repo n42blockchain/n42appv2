@@ -13893,6 +13893,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Unstoppable Domains`
+  String get g_key_domain_ud_name {
+    return Intl.message(
+      'Unstoppable Domains',
+      name: 'g_key_domain_ud_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Solana Name Service`
+  String get g_key_domain_sns_name {
+    return Intl.message(
+      'Solana Name Service',
+      name: 'g_key_domain_sns_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unstoppable domain not found or no address for this chain`
+  String get g_key_domain_ud_not_found {
+    return Intl.message(
+      'Unstoppable domain not found or no address for this chain',
+      name: 'g_key_domain_ud_not_found',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Solana domain not found`
+  String get g_key_domain_sns_not_found {
+    return Intl.message(
+      'Solana domain not found',
+      name: 'g_key_domain_sns_not_found',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Supports ENS (.eth), Unstoppable Domains (.crypto/.wallet/…) and Solana SNS (.sol)`
+  String get g_key_domain_resolve_hint {
+    return Intl.message(
+      'Supports ENS (.eth), Unstoppable Domains (.crypto/.wallet/…) and Solana SNS (.sol)',
+      name: 'g_key_domain_resolve_hint',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -1551,4 +1551,10 @@
 ,
   "g_key_ens_self_transfer": "Tidak dapat mengirim ke alamat sendiri",
   "g_key_ens_copy_address": "Alamat disalin"
+,
+  "g_key_domain_ud_name": "Unstoppable Domains",
+  "g_key_domain_sns_name": "Solana Name Service",
+  "g_key_domain_ud_not_found": "Domain Unstoppable tidak ditemukan atau tidak ada alamat untuk rantai ini",
+  "g_key_domain_sns_not_found": "Domain Solana tidak ditemukan",
+  "g_key_domain_resolve_hint": "Mendukung ENS (.eth), Unstoppable Domains (.crypto/.wallet/…) dan Solana SNS (.sol)"
 }

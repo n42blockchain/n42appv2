@@ -1323,6 +1323,21 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage("Bạn Trả"),
     "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage("Bạn Nhận"),
+    "g_key_domain_resolve_hint": MessageLookupByLibrary.simpleMessage(
+      "Hỗ trợ ENS (.eth), Unstoppable Domains (.crypto/.wallet/…) và Solana SNS (.sol)",
+    ),
+    "g_key_domain_sns_name": MessageLookupByLibrary.simpleMessage(
+      "Dịch vụ tên Solana",
+    ),
+    "g_key_domain_sns_not_found": MessageLookupByLibrary.simpleMessage(
+      "Không tìm thấy tên miền Solana",
+    ),
+    "g_key_domain_ud_name": MessageLookupByLibrary.simpleMessage(
+      "Unstoppable Domains",
+    ),
+    "g_key_domain_ud_not_found": MessageLookupByLibrary.simpleMessage(
+      "Không tìm thấy tên miền Unstoppable hoặc không có địa chỉ cho chuỗi này",
+    ),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
       "Active Products",
     ),

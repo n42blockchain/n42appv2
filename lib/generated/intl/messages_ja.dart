@@ -1155,6 +1155,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_tx_failed": MessageLookupByLibrary.simpleMessage("トランザクション失敗"),
     "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage("支払い"),
     "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage("受取り"),
+    "g_key_domain_resolve_hint": MessageLookupByLibrary.simpleMessage(
+      "ENS (.eth)・Unstoppable Domains (.crypto/.wallet/…)・Solana SNS (.sol) に対応",
+    ),
+    "g_key_domain_sns_name": MessageLookupByLibrary.simpleMessage(
+      "Solana ネームサービス",
+    ),
+    "g_key_domain_sns_not_found": MessageLookupByLibrary.simpleMessage(
+      "Solanaドメインが見つかりません",
+    ),
+    "g_key_domain_ud_name": MessageLookupByLibrary.simpleMessage(
+      "Unstoppable Domains",
+    ),
+    "g_key_domain_ud_not_found": MessageLookupByLibrary.simpleMessage(
+      "Unstoppableドメインが見つからないか、このチェーンのアドレスがありません",
+    ),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
       "アクティブな製品",
     ),

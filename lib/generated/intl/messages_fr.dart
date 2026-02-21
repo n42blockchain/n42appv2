@@ -1422,6 +1422,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage(
       "Vous Recevez",
     ),
+    "g_key_domain_resolve_hint": MessageLookupByLibrary.simpleMessage(
+      "Prend en charge ENS (.eth), Unstoppable Domains (.crypto/.wallet/…) et Solana SNS (.sol)",
+    ),
+    "g_key_domain_sns_name": MessageLookupByLibrary.simpleMessage(
+      "Solana Name Service",
+    ),
+    "g_key_domain_sns_not_found": MessageLookupByLibrary.simpleMessage(
+      "Domaine Solana introuvable",
+    ),
+    "g_key_domain_ud_name": MessageLookupByLibrary.simpleMessage(
+      "Unstoppable Domains",
+    ),
+    "g_key_domain_ud_not_found": MessageLookupByLibrary.simpleMessage(
+      "Domaine Unstoppable introuvable ou sans adresse pour cette chaîne",
+    ),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
       "Active Products",
     ),

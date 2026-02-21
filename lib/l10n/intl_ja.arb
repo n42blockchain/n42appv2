@@ -1551,4 +1551,10 @@
 ,
   "g_key_ens_self_transfer": "自分のアドレスには送信できません",
   "g_key_ens_copy_address": "アドレスをコピーしました"
+,
+  "g_key_domain_ud_name": "Unstoppable Domains",
+  "g_key_domain_sns_name": "Solana ネームサービス",
+  "g_key_domain_ud_not_found": "Unstoppableドメインが見つからないか、このチェーンのアドレスがありません",
+  "g_key_domain_sns_not_found": "Solanaドメインが見つかりません",
+  "g_key_domain_resolve_hint": "ENS (.eth)・Unstoppable Domains (.crypto/.wallet/…)・Solana SNS (.sol) に対応"
 }

@@ -1348,6 +1348,21 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage("Ödediğiniz"),
     "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage("Aldığınız"),
+    "g_key_domain_resolve_hint": MessageLookupByLibrary.simpleMessage(
+      "ENS (.eth), Unstoppable Domains (.crypto/.wallet/…) ve Solana SNS (.sol) desteklenir",
+    ),
+    "g_key_domain_sns_name": MessageLookupByLibrary.simpleMessage(
+      "Solana İsim Servisi",
+    ),
+    "g_key_domain_sns_not_found": MessageLookupByLibrary.simpleMessage(
+      "Solana alan adı bulunamadı",
+    ),
+    "g_key_domain_ud_name": MessageLookupByLibrary.simpleMessage(
+      "Unstoppable Domains",
+    ),
+    "g_key_domain_ud_not_found": MessageLookupByLibrary.simpleMessage(
+      "Unstoppable alan adı bulunamadı veya bu zincir için adres yok",
+    ),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
       "Active Products",
     ),

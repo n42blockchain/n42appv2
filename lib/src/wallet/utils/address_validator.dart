@@ -3,7 +3,7 @@
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/api/token_view_api.dart';
-import 'package:n42appv2/src/models/message_model.dart';
+import 'package:n42appv2/src/wallet/services/ens_service.dart';
 
 /// Address validation result
 class AddressValidationResult {
@@ -133,38 +133,14 @@ class AddressValidator {
     return AddressValidationResult.invalid('Invalid address format');
   }
 
-  /// 检查链是否支持 ENS 解析
-  /// N42 链和所有 EVM 兼容链都支持
+  /// 检查链是否支持域名解析（ENS / UD / SNS）
   bool _supportsEns(String coinType) {
-    // N42 链优先支持
-    if (coinType == CoinType.N.name) return true;
-    // ETH 主网
-    if (coinType == CoinType.ETH.name) return true;
-    // 其他 EVM 兼容链
-    return _isEthereumCompatible(coinType);
+    return EnsService.chainSupportsEns(coinType);
   }
 
-  /// 检查字符串是否看起来像 ENS 名称
-  /// 支持 .eth, .n42 等后缀
+  /// 检查字符串是否看起来像受支持的域名（任意协议）
   bool _looksLikeEnsName(String name) {
-    final lowercaseName = name.toLowerCase().trim();
-    // 支持的 ENS 后缀
-    const ensSuffixes = [
-      '.eth',    // Ethereum Name Service
-      '.n42',    // N42 Name Service
-      '.xyz',    // ENS 支持的通用域名
-      '.app',    // ENS 支持的应用域名
-      '.luxe',   // ENS 支持的奢侈品域名
-      '.kred',   // ENS 支持的信用域名
-      '.art',    // ENS 支持的艺术域名
-    ];
-
-    for (final suffix in ensSuffixes) {
-      if (lowercaseName.endsWith(suffix)) {
-        return true;
-      }
-    }
-    return false;
+    return EnsService.isEnsName(name);
   }
 
   /// Clean address from URI format
@@ -204,42 +180,61 @@ class AddressValidator {
     return true;
   }
 
-  /// Resolve ENS name to address
+  /// 将域名解析为地址，按协议自动分发：
+  ///   .n42  → N42 Name Service
+  ///   .sol  → Solana Name Service (SNS)
+  ///   UD 后缀 → Unstoppable Domains
+  ///   其他  → ETH ENS
   ///
-  /// [ensName] - ENS 名称 (如 vitalik.eth 或 user.n42)
-  /// [coinType] - 目标链类型，N42 优先级最高
-  Future<String?> _resolveEns(String ensName, String coinType) async {
+  /// [domainName] - 域名（如 alice.eth / alice.sol / alice.crypto）
+  /// [coinType]   - 目标链（影响 UD 多链解析的 ticker 选择）
+  Future<String?> _resolveEns(String domainName, String coinType) async {
     try {
-      // N42 链的 ENS 名称使用专门的解析
-      if (coinType == CoinType.N.name || ensName.toLowerCase().endsWith('.n42')) {
-        final result = await _resolveN42Ens(ensName);
-        if (result != null) return result;
-      }
+      final protocol = EnsService.detectProtocol(domainName);
 
-      // 回退到标准 ENS 解析（ETH 主网）
-      MessageModel result = await _tokenViewApi.getEnsResolve(ensName);
-      if (!result.error && result.data != null) {
-        return result.data as String;
+      switch (protocol) {
+        case DomainProtocol.n42:
+          final r = await _tokenViewApi.getN42EnsResolve(domainName);
+          if (!r.error && r.data != null) return r.data as String;
+          break;
+
+        case DomainProtocol.sns:
+          final r = await _tokenViewApi.getSnsResolve(domainName);
+          if (!r.error && r.data != null) return r.data as String;
+          break;
+
+        case DomainProtocol.unstoppableDomains:
+          final ticker = _coinTypeToUdTicker(coinType);
+          final r =
+              await _tokenViewApi.getUdResolve(domainName, ticker: ticker);
+          if (!r.error && r.data != null) return r.data as String;
+          break;
+
+        case DomainProtocol.ens:
+        case DomainProtocol.unknown:
+          // N42 链时先尝试 N42 NS
+          if (coinType == CoinType.N.name) {
+            final r = await _tokenViewApi.getN42EnsResolve(domainName);
+            if (!r.error && r.data != null) return r.data as String;
+          }
+          final r = await _tokenViewApi.getEnsResolve(domainName);
+          if (!r.error && r.data != null) return r.data as String;
+          break;
       }
     } catch (e) {
-      // ENS resolution failed
+      // 解析失败，返回 null
     }
     return null;
   }
 
-  /// 解析 N42 链的 ENS 名称
-  /// N42 有自己的名称服务，优先级高于 ETH ENS
-  Future<String?> _resolveN42Ens(String ensName) async {
-    try {
-      // 尝试使用 N42 专用的 ENS 解析 API
-      MessageModel result = await _tokenViewApi.getN42EnsResolve(ensName);
-      if (!result.error && result.data != null) {
-        return result.data as String;
-      }
-    } catch (e) {
-      // N42 ENS resolution failed, will fallback to standard ENS
-    }
-    return null;
+  /// 将 coinType 映射到 UD ticker（UD 多链记录中使用）
+  static String? _coinTypeToUdTicker(String coinType) {
+    const map = {
+      'ETH': 'ETH', 'N': 'ETH', 'BNB': 'BNB', 'MATIC': 'MATIC',
+      'AVAX': 'AVAX', 'FTM': 'FTM', 'OP': 'ETH', 'ARB': 'ETH',
+      'SOL': 'SOL', 'BTC': 'BTC', 'TRX': 'TRX', 'XRP': 'XRP',
+    };
+    return map[coinType.toUpperCase()];
   }
 
   /// Generate address preview for UI display
