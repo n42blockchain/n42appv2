@@ -5,6 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/staking/models/staking_models.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
@@ -106,7 +107,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text: 'Select Validator',
+        text: S.of(context).g_key_stake_select_validator,
       ),
       body: SafeArea(
         child: Column(
@@ -148,7 +149,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
       child: TextField(
         controller: _searchController,
         decoration: InputDecoration(
-          hintText: 'Search validators...',
+          hintText: S.of(context).g_key_stake_search_validator,
           hintStyle: TextStyle(
             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textFieldHintColor.name),
           ),
@@ -178,18 +179,18 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
       child: Row(
         children: [
           Text(
-            'Sort by:',
+            S.of(context).g_key_stake_sort_by,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(24),
               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
             ),
           ),
           SizedBox(width: ScreenUtil().setWidth(12)),
-          _buildSortChip(context, 'APY', ValidatorSortBy.apy),
+          _buildSortChip(context, S.of(context).g_key_stake_apy, ValidatorSortBy.apy),
           SizedBox(width: ScreenUtil().setWidth(8)),
-          _buildSortChip(context, 'Commission', ValidatorSortBy.commission),
+          _buildSortChip(context, S.of(context).g_key_stake_commission, ValidatorSortBy.commission),
           SizedBox(width: ScreenUtil().setWidth(8)),
-          _buildSortChip(context, 'Staked', ValidatorSortBy.totalStaked),
+          _buildSortChip(context, S.of(context).g_key_stake_staked, ValidatorSortBy.totalStaked),
         ],
       ),
     );
@@ -249,7 +250,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
           ),
           SizedBox(height: ScreenUtil().setWidth(20)),
           Text(
-            'No validators found',
+            S.of(context).g_key_stake_no_validators,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(30),
               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),

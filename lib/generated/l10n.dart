@@ -7014,6 +7014,186 @@ class S {
     );
   }
 
+  /// `Amount`
+  String get g_key_stake_amount {
+    return Intl.message(
+      'Amount',
+      name: 'g_key_stake_amount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Amount to Unstake`
+  String get g_key_stake_amount_unstake {
+    return Intl.message(
+      'Amount to Unstake',
+      name: 'g_key_stake_amount_unstake',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Est. Daily Reward`
+  String get g_key_stake_estimated_daily {
+    return Intl.message(
+      'Est. Daily Reward',
+      name: 'g_key_stake_estimated_daily',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Est. Yearly Reward`
+  String get g_key_stake_estimated_yearly {
+    return Intl.message(
+      'Est. Yearly Reward',
+      name: 'g_key_stake_estimated_yearly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You will receive`
+  String get g_key_stake_you_receive {
+    return Intl.message(
+      'You will receive',
+      name: 'g_key_stake_you_receive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go to Swap`
+  String get g_key_stake_go_to_swap {
+    return Intl.message(
+      'Go to Swap',
+      name: 'g_key_stake_go_to_swap',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Liquid Staking`
+  String get g_key_stake_liquid_staking_label {
+    return Intl.message(
+      'Liquid Staking',
+      name: 'g_key_stake_liquid_staking_label',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your liquid token can be traded on DEX directly. Use Swap to exchange it back to the native asset.`
+  String get g_key_stake_liquid_unstake_desc {
+    return Intl.message(
+      'Your liquid token can be traded on DEX directly. Use Swap to exchange it back to the native asset.',
+      name: 'g_key_stake_liquid_unstake_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unstaking takes {value} days. Your tokens will be locked during this period.`
+  String g_key_stake_unbonding_warning(Object value) {
+    return Intl.message(
+      'Unstaking takes $value days. Your tokens will be locked during this period.',
+      name: 'g_key_stake_unbonding_warning',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `No active positions to unstake`
+  String get g_key_stake_no_active_positions {
+    return Intl.message(
+      'No active positions to unstake',
+      name: 'g_key_stake_no_active_positions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select a position to unstake`
+  String get g_key_stake_select_position {
+    return Intl.message(
+      'Select a position to unstake',
+      name: 'g_key_stake_select_position',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transaction prepared successfully`
+  String get g_key_stake_tx_prepared {
+    return Intl.message(
+      'Transaction prepared successfully',
+      name: 'g_key_stake_tx_prepared',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wallet address not available`
+  String get g_key_stake_no_wallet {
+    return Intl.message(
+      'Wallet address not available',
+      name: 'g_key_stake_no_wallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search validators...`
+  String get g_key_stake_search_validator {
+    return Intl.message(
+      'Search validators...',
+      name: 'g_key_stake_search_validator',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sort by`
+  String get g_key_stake_sort_by {
+    return Intl.message(
+      'Sort by',
+      name: 'g_key_stake_sort_by',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No validators found`
+  String get g_key_stake_no_validators {
+    return Intl.message(
+      'No validators found',
+      name: 'g_key_stake_no_validators',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select a validator`
+  String get g_key_stake_select_a_validator {
+    return Intl.message(
+      'Select a validator',
+      name: 'g_key_stake_select_a_validator',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Updating...`
+  String get g_key_stake_updating {
+    return Intl.message(
+      'Updating...',
+      name: 'g_key_stake_updating',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Change Password`
   String get g_key_change_password {
     return Intl.message(

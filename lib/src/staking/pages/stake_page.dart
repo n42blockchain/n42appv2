@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/staking/models/staking_models.dart';
 import 'package:n42appv2/src/staking/pages/validator_list_page.dart';
 import 'package:n42appv2/src/staking/provider/staking_provider.dart';
+import 'package:n42appv2/src/wallet/pages/dex_swap/dex_swap_home.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 
 /// Stake 页面
@@ -35,9 +37,17 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
   late StakingProvider _provider;
   final TextEditingController _amountController = TextEditingController();
 
+  // 解质押专用控制器（与 stake 用的 _amountController 分开）
+  final TextEditingController _unstakeAmountController = TextEditingController();
+
   bool _isLoading = false;
   BigInt _balance = BigInt.zero;
   String _errorMessage = '';
+
+  // 解质押相关状态
+  List<StakingPosition> _activePositions = [];
+  StakingPosition? _selectedPosition;
+  bool _loadingPositions = false;
 
   @override
   void initState() {
@@ -46,25 +56,45 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
     _provider = StakingProvider();
     _provider.selectProtocol(widget.protocol);
 
-    // 加载验证者列表（如果需要）
-    if (_needsValidator()) {
-      _provider.loadValidators();
-    }
+    // 加载验证者列表并同步更新实时 APY（所有链都执行）
+    _provider.loadValidators();
 
-    // TODO: 加载用户余额
     _loadBalance();
+
+    // 非流动性质押：加载用户仓位，以便解质押选择
+    if (!widget.protocol.isLiquid && widget.userAddress != null) {
+      _loadActivePositions();
+    }
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     _amountController.dispose();
+    _unstakeAmountController.dispose();
     _provider.dispose();
     super.dispose();
   }
 
   bool _needsValidator() {
     return widget.protocol.chainType != StakingChainType.ethereum;
+  }
+
+  /// 加载用户当前活跃质押仓位（用于解质押页面显示）
+  Future<void> _loadActivePositions() async {
+    if (widget.userAddress == null || widget.userAddress!.isEmpty) return;
+    if (!mounted) return;
+    setState(() => _loadingPositions = true);
+
+    await _provider.loadUserPositions(widget.userAddress!, widget.protocol.chainType);
+
+    if (!mounted) return;
+    setState(() {
+      _activePositions = _provider.positions
+          .where((p) => p.status == StakingPositionStatus.active)
+          .toList();
+      _loadingPositions = false;
+    });
   }
 
   Future<void> _loadBalance() async {
@@ -195,7 +225,7 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
                               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
                             ),
                             child: Text(
-                              'Liquid',
+                              S.of(context).g_key_stake_liquid_tag,
                               style: TextStyle(
                                 fontSize: ScreenUtil().setSp(20),
                                 color: Colors.white,
@@ -208,8 +238,8 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
                     SizedBox(height: ScreenUtil().setWidth(8)),
                     Text(
                       widget.protocol.isLiquid
-                          ? 'Receive ${widget.protocol.liquidTokenSymbol} after staking'
-                          : 'Unbonding period: ${widget.protocol.unbondingPeriodDays} days',
+                          ? S.of(context).g_key_stake_liquid_staking_label
+                          : S.of(context).g_key_stake_d_unbond(widget.protocol.unbondingPeriodDays.toString()),
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(24),
                         color: Colors.white70,
@@ -291,8 +321,8 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
           fontWeight: FontWeight.w600,
         ),
         tabs: [
-          Tab(text: 'Stake'),
-          Tab(text: 'Unstake'),
+          Tab(text: S.of(context).g_key_stake_stake),
+          Tab(text: S.of(context).g_key_stake_unstake),
         ],
       ),
     );
@@ -310,14 +340,14 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
             children: [
               // 验证者选择（如果需要）
               if (_needsValidator()) ...[
-                _buildSectionTitle(context, 'Select Validator'),
+                _buildSectionTitle(context, S.of(context).g_key_stake_select_validator),
                 SizedBox(height: ScreenUtil().setWidth(12)),
                 _buildValidatorSelector(context, provider),
                 SizedBox(height: ScreenUtil().setWidth(24)),
               ],
 
               // 金额输入
-              _buildSectionTitle(context, 'Amount'),
+              _buildSectionTitle(context, S.of(context).g_key_stake_amount),
               SizedBox(height: ScreenUtil().setWidth(12)),
               _buildAmountInput(context),
               SizedBox(height: ScreenUtil().setWidth(12)),
@@ -366,7 +396,8 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
       listenable: _provider,
       builder: (context, _) {
         final provider = _provider;
-        // 如果是流动性质押，显示不同的提示
+
+        // 流动性质押（ETH Lido）：引导用户去 DEX Swap
         if (widget.protocol.isLiquid) {
           return Center(
             child: Padding(
@@ -384,7 +415,7 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
                   ),
                   SizedBox(height: ScreenUtil().setWidth(20)),
                   Text(
-                    'Liquid Staking',
+                    S.of(context).g_key_stake_liquid_staking_label,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(32),
                       fontWeight: FontWeight.bold,
@@ -395,23 +426,49 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
                     ),
                   ),
                   SizedBox(height: ScreenUtil().setWidth(12)),
-                  Text(
-                    'Your ${widget.protocol.liquidTokenSymbol} can be traded directly on DEX without unstaking. Go to Swap to exchange it back to ${widget.protocol.chainSymbol}.',
+                  // 液态代币符号 + 说明
+                  RichText(
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(26),
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
+                    text: TextSpan(
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(26),
+                        color: AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.itemSubtitleTextColor.name,
+                        ),
                       ),
+                      children: [
+                        TextSpan(
+                          text: widget.protocol.liquidTokenSymbol,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppThemeUtils.getColorByKey(
+                              context,
+                              AppThemeKeys.mainBlueColor.name,
+                            ),
+                          ),
+                        ),
+                        TextSpan(text: ' — '),
+                        TextSpan(text: S.of(context).g_key_stake_liquid_unstake_desc),
+                      ],
                     ),
                   ),
                   SizedBox(height: ScreenUtil().setWidth(30)),
-                  ElevatedButton(
+                  ElevatedButton.icon(
                     onPressed: () {
-                      // TODO: 导航到 Swap 页面
-                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const DexSwapHome()),
+                      );
                     },
+                    icon: Icon(Icons.swap_horizontal_circle_outlined, color: Colors.white),
+                    label: Text(
+                      S.of(context).g_key_stake_go_to_swap,
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(28),
+                        color: Colors.white,
+                      ),
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppThemeUtils.getColorByKey(
                         context,
@@ -425,13 +482,6 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
                         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
                       ),
                     ),
-                    child: Text(
-                      'Go to Swap',
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(28),
-                        color: Colors.white,
-                      ),
-                    ),
                   ),
                 ],
               ),
@@ -439,13 +489,13 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
           );
         }
 
-        // 非流动性质押的解除质押页面
+        // 非流动性质押（SOL / ATOM）：显示用户仓位列表 + 解质押操作
         return SingleChildScrollView(
           padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 解绑说明
+              // 解绑警告
               Container(
                 padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
                 decoration: BoxDecoration(
@@ -462,7 +512,9 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
                     SizedBox(width: ScreenUtil().setWidth(12)),
                     Expanded(
                       child: Text(
-                        'Unstaking takes ${widget.protocol.unbondingPeriodDays} days. Your tokens will be locked during this period.',
+                        S.of(context).g_key_stake_unbonding_warning(
+                          widget.protocol.unbondingPeriodDays.toString(),
+                        ),
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(24),
                           color: Colors.orange[800],
@@ -475,21 +527,56 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
 
               SizedBox(height: ScreenUtil().setWidth(24)),
 
-              // 金额输入
-              _buildSectionTitle(context, 'Amount to Unstake'),
+              // 用户活跃质押仓位列表
+              _buildSectionTitle(context, S.of(context).g_key_stake_select_position),
               SizedBox(height: ScreenUtil().setWidth(12)),
-              _buildAmountInput(context),
-              SizedBox(height: ScreenUtil().setWidth(12)),
-              _buildQuickAmountButtons(context),
+              _buildPositionSelector(context),
+
+              // 只有选中仓位后才显示金额输入（对于支持部分解绑的协议）
+              if (_selectedPosition != null && widget.protocol.chainType == StakingChainType.cosmos) ...[
+                SizedBox(height: ScreenUtil().setWidth(24)),
+                _buildSectionTitle(context, S.of(context).g_key_stake_amount_unstake),
+                SizedBox(height: ScreenUtil().setWidth(12)),
+                _buildUnstakeAmountInput(context),
+                SizedBox(height: ScreenUtil().setWidth(12)),
+                _buildQuickUnstakeButtons(context),
+              ],
+
               SizedBox(height: ScreenUtil().setWidth(24)),
+
+              // 错误提示
+              if (_errorMessage.isNotEmpty) ...[
+                Container(
+                  padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
+                  decoration: BoxDecoration(
+                    color: Colors.red.withAlpha(20),
+                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.error_outline, color: Colors.red, size: ScreenUtil().setWidth(32)),
+                      SizedBox(width: ScreenUtil().setWidth(8)),
+                      Expanded(
+                        child: Text(
+                          _errorMessage,
+                          style: TextStyle(color: Colors.red, fontSize: ScreenUtil().setSp(24)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: ScreenUtil().setWidth(24)),
+              ],
 
               // Unstake 按钮
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _isLoading ? null : () => _performUnstake(context, provider),
+                  onPressed: (_isLoading || _selectedPosition == null)
+                      ? null
+                      : () => _performUnstake(context, provider),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
+                    backgroundColor: _selectedPosition != null ? Colors.orange : null,
                     padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
@@ -505,11 +592,18 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
                           ),
                         )
                       : Text(
-                          'Unstake',
+                          _selectedPosition == null
+                              ? S.of(context).g_key_stake_select_position
+                              : S.of(context).g_key_stake_unstake,
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(32),
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: _selectedPosition != null
+                                ? Colors.white
+                                : AppThemeUtils.getColorByKey(
+                                    context,
+                                    AppThemeKeys.itemSubtitleTextColor.name,
+                                  ),
                           ),
                         ),
                 ),
@@ -519,6 +613,243 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
         );
       },
     );
+  }
+
+  /// 用户活跃仓位选择器（解质押用）
+  Widget _buildPositionSelector(BuildContext context) {
+    if (_loadingPositions) {
+      return Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+          child: CircularProgressIndicator(strokeWidth: 2),
+        ),
+      );
+    }
+
+    if (widget.userAddress == null || widget.userAddress!.isEmpty) {
+      return _buildNoWalletHint(context);
+    }
+
+    if (_activePositions.isEmpty) {
+      return Container(
+        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+        decoration: BoxDecoration(
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        ),
+        child: Center(
+          child: Text(
+            S.of(context).g_key_stake_no_active_positions,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(26),
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.itemSubtitleTextColor.name),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Column(
+      children: _activePositions.map((pos) {
+        final isSelected = _selectedPosition?.id == pos.id;
+        return GestureDetector(
+          onTap: () {
+            setState(() {
+              _selectedPosition = isSelected ? null : pos;
+              // SOL 解质押是全额解绑；ATOM 可部分解绑，预填最大值
+              if (!isSelected) {
+                if (widget.protocol.chainType == StakingChainType.cosmos) {
+                  _unstakeAmountController.text = _formatBigInt(pos.stakedAmount);
+                }
+                // 更新 provider 中的 selectedValidator（ATOM 需要）
+                if (pos.validator != null) {
+                  _provider.selectValidator(pos.validator!);
+                }
+              }
+            });
+          },
+          child: Container(
+            margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
+            padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+            decoration: BoxDecoration(
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+              border: isSelected
+                  ? Border.all(
+                      color: Colors.orange,
+                      width: 2,
+                    )
+                  : null,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        pos.validator != null
+                            ? pos.validator!.name
+                            : widget.protocol.name,
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(28),
+                          fontWeight: FontWeight.w600,
+                          color: AppThemeUtils.getColorByKey(
+                              context, AppThemeKeys.mainTextColor.name),
+                        ),
+                      ),
+                      SizedBox(height: ScreenUtil().setWidth(4)),
+                      Text(
+                        '${S.of(context).g_key_stake_staked}: ${_formatBigInt(pos.stakedAmount)} ${widget.protocol.chainSymbol}',
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(24),
+                          color: AppThemeUtils.getColorByKey(
+                              context, AppThemeKeys.itemSubtitleTextColor.name),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (isSelected)
+                  Icon(Icons.check_circle, color: Colors.orange, size: ScreenUtil().setWidth(36)),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  /// 解质押金额输入框（ATOM 专用，支持部分解绑）
+  Widget _buildUnstakeAmountInput(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
+      decoration: BoxDecoration(
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _unstakeAmountController,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+              ],
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(32),
+                fontWeight: FontWeight.w600,
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              ),
+              decoration: InputDecoration(
+                hintText: '0.0',
+                hintStyle: TextStyle(
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                ),
+                border: InputBorder.none,
+              ),
+              onChanged: (_) => setState(() => _errorMessage = ''),
+            ),
+          ),
+          Text(
+            widget.protocol.chainSymbol,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(28),
+              fontWeight: FontWeight.w600,
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 解质押快捷百分比按钮（ATOM 专用）
+  Widget _buildQuickUnstakeButtons(BuildContext context) {
+    if (_selectedPosition == null) return const SizedBox.shrink();
+    final stakedAmount = _selectedPosition!.stakedAmount;
+
+    return Row(
+      children: [
+        for (final pct in [
+          ('25%', 0.25),
+          ('50%', 0.5),
+          ('75%', 0.75),
+          ('MAX', 1.0),
+        ]) ...[
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                final decimals = _getDecimals();
+                final scaled = stakedAmount *
+                    BigInt.from((pct.$2 * 1000).round()) ~/
+                    BigInt.from(1000);
+                final divisor = BigInt.from(10).pow(decimals);
+                final intPart = scaled ~/ divisor;
+                final fracStr =
+                    scaled.remainder(divisor).abs().toString().padLeft(decimals, '0');
+                final dispFrac =
+                    fracStr.length > 6 ? fracStr.substring(0, 6) : fracStr;
+                _unstakeAmountController.text = '$intPart.$dispFrac';
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(12)),
+                margin: EdgeInsets.only(right: ScreenUtil().setWidth(8)),
+                decoration: BoxDecoration(
+                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                ),
+                child: Center(
+                  child: Text(
+                    pct.$1,
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(24),
+                      fontWeight: FontWeight.w600,
+                      color: Colors.orange,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildNoWalletHint(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      decoration: BoxDecoration(
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+      ),
+      child: Center(
+        child: Text(
+          S.of(context).g_key_stake_no_wallet,
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(26),
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.itemSubtitleTextColor.name),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// BigInt 转人类可读字符串（最多 6 位小数）
+  String _formatBigInt(BigInt amount) {
+    final decimals = _getDecimals();
+    final divisor = BigInt.from(10).pow(decimals);
+    final intPart = amount ~/ divisor;
+    final fracStr = amount.remainder(divisor).abs().toString().padLeft(decimals, '0');
+    final dispFrac = fracStr.length > 6 ? fracStr.substring(0, 6) : fracStr;
+    // 去掉尾部多余 0
+    final trimmed = dispFrac.replaceAll(RegExp(r'0+$'), '');
+    return trimmed.isEmpty ? '$intPart' : '$intPart.$trimmed';
   }
 
   Widget _buildSectionTitle(BuildContext context, String title) {
@@ -565,7 +896,7 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
                     ),
                     SizedBox(height: ScreenUtil().setWidth(4)),
                     Text(
-                      'Commission: ${provider.selectedValidator!.commission.toStringAsFixed(1)}% | APY: ${provider.selectedValidator!.apy.toStringAsFixed(1)}%',
+                      '${S.of(context).g_key_stake_commission}: ${provider.selectedValidator!.commission.toStringAsFixed(1)}% | ${S.of(context).g_key_stake_apy}: ${provider.selectedValidator!.apy.toStringAsFixed(1)}%',
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(24),
                         color: AppThemeUtils.getColorByKey(
@@ -590,7 +921,7 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
               SizedBox(width: ScreenUtil().setWidth(12)),
               Expanded(
                 child: Text(
-                  'Select a validator',
+                  S.of(context).g_key_stake_select_a_validator,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(28),
                     color: AppThemeUtils.getColorByKey(
@@ -735,7 +1066,7 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Estimated Daily Reward',
+                S.of(context).g_key_stake_estimated_daily,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(26),
                   color: AppThemeUtils.getColorByKey(
@@ -759,7 +1090,7 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Estimated Yearly Reward',
+                S.of(context).g_key_stake_estimated_yearly,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(26),
                   color: AppThemeUtils.getColorByKey(
@@ -786,7 +1117,7 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'You will receive',
+                  S.of(context).g_key_stake_you_receive,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(26),
                     color: AppThemeUtils.getColorByKey(
@@ -845,10 +1176,10 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
               )
             : Text(
                 isValidatorRequired
-                    ? 'Select a Validator'
+                    ? S.of(context).g_key_stake_select_a_validator
                     : !isAmountValid
-                        ? 'Min: ${widget.protocol.minStakeAmount} ${widget.protocol.chainSymbol}'
-                        : 'Stake',
+                        ? '${S.of(context).g_key_stake_min_stake}: ${widget.protocol.minStakeAmount} ${widget.protocol.chainSymbol}'
+                        : S.of(context).g_key_stake_stake,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(32),
                   fontWeight: FontWeight.bold,
@@ -884,13 +1215,16 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
   Future<void> _performStake(BuildContext context, StakingProvider provider) async {
     if (widget.userAddress == null || widget.userAddress!.isEmpty) {
       setState(() {
-        _errorMessage = 'No wallet address available';
+        _errorMessage = S.of(context).g_key_stake_no_wallet;
       });
       return;
     }
 
     final amountText = _amountController.text;
     final amountBigInt = _parseAmountToBigInt(amountText, _getDecimals());
+    // 提前捕获跨异步使用的对象
+    final messenger = ScaffoldMessenger.of(context);
+    final txPreparedMsg = S.of(context).g_key_stake_tx_prepared;
 
     setState(() {
       _isLoading = true;
@@ -905,16 +1239,12 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
 
       if (result != null && result.success) {
         if (!mounted) return;
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Transaction prepared successfully'),
-            backgroundColor: Colors.green,
-          ),
+        messenger.showSnackBar(
+          SnackBar(content: Text(txPreparedMsg), backgroundColor: Colors.green),
         );
       } else {
         setState(() {
-          _errorMessage = result?.error ?? 'Failed to build transaction';
+          _errorMessage = result?.error ?? '';
         });
       }
     } catch (e) {
@@ -954,12 +1284,65 @@ class _StakePageState extends State<StakePage> with SingleTickerProviderStateMix
   }
 
   Future<void> _performUnstake(BuildContext context, StakingProvider provider) async {
-    // TODO: 实现解除质押
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Unstake functionality coming soon'),
-        backgroundColor: Colors.orange,
-      ),
-    );
+    if (widget.userAddress == null || widget.userAddress!.isEmpty) {
+      setState(() => _errorMessage = S.of(context).g_key_stake_no_wallet);
+      return;
+    }
+
+    if (_selectedPosition == null) {
+      setState(() => _errorMessage = S.of(context).g_key_stake_select_position);
+      return;
+    }
+
+    // 解质押金额：SOL 全量，ATOM 可自定义
+    BigInt unstakeAmount;
+    if (widget.protocol.chainType == StakingChainType.cosmos) {
+      final amtText = _unstakeAmountController.text;
+      unstakeAmount = _parseAmountToBigInt(amtText, _getDecimals());
+      if (unstakeAmount == BigInt.zero) {
+        setState(() => _errorMessage = S.of(context).g_key_stake_amount_unstake);
+        return;
+      }
+    } else {
+      // SOL：全量解绑整个 stake account
+      unstakeAmount = _selectedPosition!.stakedAmount;
+    }
+
+    // 提前捕获跨异步使用的对象
+    final messenger = ScaffoldMessenger.of(context);
+    final txPreparedMsg = S.of(context).g_key_stake_tx_prepared;
+
+    setState(() {
+      _isLoading = true;
+      _errorMessage = '';
+    });
+
+    final positionToUnstake = _selectedPosition!;
+    try {
+      final result = await provider.buildUnstakeTransaction(
+        position: positionToUnstake,
+        fromAddress: widget.userAddress!,
+        amount: unstakeAmount,
+      );
+
+      if (!mounted) return;
+
+      if (result != null && result.success) {
+        messenger.showSnackBar(
+          SnackBar(content: Text(txPreparedMsg), backgroundColor: Colors.green),
+        );
+        // 解质押成功后刷新仓位列表
+        setState(() => _selectedPosition = null);
+        await _loadActivePositions();
+      } else {
+        setState(() {
+          _errorMessage = result?.error ?? '';
+        });
+      }
+    } catch (e) {
+      if (mounted) setState(() => _errorMessage = e.toString());
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
   }
 }

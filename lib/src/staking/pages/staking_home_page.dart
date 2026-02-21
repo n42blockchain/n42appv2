@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/src/staking/api/atom_staking_api.dart';
+import 'package:n42appv2/src/staking/api/eth_staking_api.dart';
+import 'package:n42appv2/src/staking/api/sol_staking_api.dart';
 import 'package:n42appv2/src/staking/models/staking_models.dart';
 import 'package:n42appv2/src/staking/pages/stake_page.dart';
 import 'package:n42appv2/src/staking/provider/staking_provider.dart';
@@ -35,6 +38,9 @@ class _StakingHomePageState extends State<StakingHomePage>
 
   late TabController _tabController;
   late StakingProvider _provider;
+  // 实时 APY 缓存：key = protocol.id
+  final Map<String, double> _liveApys = {};
+  bool _loadingApys = false;
 
   @override
   void initState() {
@@ -45,6 +51,54 @@ class _StakingHomePageState extends State<StakingHomePage>
     // 加载用户仓位
     if (widget.userAddresses != null && widget.userAddresses!.isNotEmpty) {
       _provider.loadAllUserPositions(widget.userAddresses!);
+    }
+
+    // 并行拉取各协议实时 APY
+    _loadLiveApys();
+  }
+
+  /// 并行拉取三条链的实时 APY，全部完成后刷新 UI
+  Future<void> _loadLiveApys() async {
+    if (_loadingApys) return;
+    if (!mounted) return;
+    setState(() => _loadingApys = true);
+
+    try {
+      final results = await Future.wait([
+        EthStakingApi().getLidoApy(),
+        SolStakingApi().getEstimatedApy(),
+        AtomStakingApi().getInflationAndApy(),
+      ]);
+
+      if (!mounted) return;
+
+      final newApys = <String, double>{};
+
+      final ethResult = results[0];
+      if (!ethResult.error && ethResult.data is double) {
+        newApys[StakingProtocols.ethLido.id] = ethResult.data as double;
+      }
+
+      final solResult = results[1];
+      if (!solResult.error && solResult.data is double) {
+        newApys[StakingProtocols.solNative.id] = solResult.data as double;
+      }
+
+      final atomResult = results[2];
+      if (!atomResult.error && atomResult.data is Map) {
+        final atomData = atomResult.data as Map;
+        final apy = (atomData['apy'] as num?)?.toDouble();
+        if (apy != null && apy > 0) {
+          newApys[StakingProtocols.atomNative.id] = apy;
+        }
+      }
+
+      setState(() {
+        _liveApys.addAll(newApys);
+        _loadingApys = false;
+      });
+    } catch (_) {
+      if (mounted) setState(() => _loadingApys = false);
     }
   }
 
@@ -270,16 +324,27 @@ class _StakingHomePageState extends State<StakingHomePage>
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
+                _loadingApys && !_liveApys.containsKey(protocol.id)
+                    ? SizedBox(
+                        width: ScreenUtil().setWidth(20),
+                        height: ScreenUtil().setWidth(20),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                        ),
+                      )
+                    : Text(
+                        '${(_liveApys[protocol.id] ?? protocol.apy).toStringAsFixed(1)}%',
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(32),
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green,
+                        ),
+                      ),
                 Text(
-                  '${protocol.apy.toStringAsFixed(1)}%',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(32),
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green,
-                  ),
-                ),
-                Text(
-                  S.of(context).g_key_stake_apy,
+                  _liveApys.containsKey(protocol.id)
+                      ? S.of(context).g_key_stake_apy
+                      : (_loadingApys ? S.of(context).g_key_stake_updating : S.of(context).g_key_stake_apy),
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(22),
                     color: AppThemeUtils.getColorByKey(
@@ -582,7 +647,7 @@ class _StakingHomePageState extends State<StakingHomePage>
               ),
               Spacer(),
               Text(
-                '${position.protocol.apy.toStringAsFixed(1)}% ${S.of(context).g_key_stake_apy}',
+                '${(_liveApys[position.protocol.id] ?? position.protocol.apy).toStringAsFixed(1)}% ${S.of(context).g_key_stake_apy}',
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(26),
                   color: Colors.green,
