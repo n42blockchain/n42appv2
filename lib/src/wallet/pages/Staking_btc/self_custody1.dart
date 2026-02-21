@@ -1,3 +1,8 @@
+// Copyright 2021-2026 N42 Inc. All rights reserved.
+// Use of this source code is governed by a dual license:
+// Apache License 2.0 and MIT License.
+// See LICENSE file in the project root for full license information.
+
 import 'dart:convert';
 
 import 'package:n42appv2/core/config/app_config.dart';
@@ -21,6 +26,11 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';
 import 'package:n42appv2/core/utils/js_escape_utils.dart';
+import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/src/widgets/app_bar_widget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class SelfCustody1 extends ConsumerStatefulWidget {
   final CoinModel coinModel;
   const SelfCustody1(this.coinModel,{super.key});
@@ -32,6 +42,10 @@ class SelfCustody1 extends ConsumerStatefulWidget {
 //02000000000103b4e1d30cf774b846bc6147f99f8ef11a6c300c61387a040dc68356e04c127bfb0000000000ffffffff607b3facebc1aedfb6c0a1448a37a1f727851e49c3135adaf8f81edc0e3feaa30000000000ffffffffc28c3d24f622f79dce51518a5a09cc7748e4baef93778e2327f5bd73b751a9d20500000000ffffffff02a086010000000000160014e6401c83bf5e7986cda4afff3d88ff897885dbe49e6a373000000000160014e6401c83bf5e7986cda4afff3d88ff897885dbe4034064a9ed7a202a05831461b0ffe898e0b500e6b8472d083ba0a819eef044200ab95c3a9ee4518785c7104c5a17d7be51adc99724dba24e270d18cae623589ba20f40f724540c07ead1c412f6fb5a7ef204e36ed3e47bdd036d83754e2e6f2bdeff9a9a4fd72fbe794d75de673473f909dc01b0dddc0625b93f0846d944ffd01e7dc4406f4b37f0fcbdca1aaeda926af92e70b52327425a5f118d5b7c03e62c171a9174d3b296382aac93440a4fec103c2567c538101b690e5e236eb8a1af4ee2f3b79200000000
 class _SelfCustody1State extends ConsumerState<SelfCustody1> {
   late WebViewController _controller;
+
+  /// 是否显示顶部风险提醒横幅（用户可手动关闭）
+  bool _showBanner = true;
+
   TransferApi? _transferApi;
   TransferApi get transferApi{
     _transferApi ??= TransferApi();
@@ -499,12 +513,61 @@ class _SelfCustody1State extends ConsumerState<SelfCustody1> {
   }
   @override
   Widget build(BuildContext context) {
+    final s = S.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Self-Custody'),
+      appBar: AppBarWidget(text: s.g_key_btc_stake_title),
+      body: Column(
+        children: [
+          // ── 可关闭的风险提醒横幅 ──────────────────────────────
+          if (_showBanner) _buildReminderBanner(context, s),
+
+          // ── WebView 填充剩余空间 ──────────────────────────────
+          Expanded(
+            child: WebViewWidget(controller: _controller),
+          ),
+        ],
       ),
-      body: WebViewWidget(
-        controller: _controller,
+    );
+  }
+
+  Widget _buildReminderBanner(BuildContext context, S s) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(20),
+        vertical: ScreenUtil().setWidth(12),
+      ),
+      color: Colors.orange.withAlpha(30),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.info_outline_rounded,
+            color: Colors.orange,
+            size: ScreenUtil().setWidth(28),
+          ),
+          SizedBox(width: ScreenUtil().setWidth(10)),
+          Expanded(
+            child: Text(
+              s.g_key_btc_stake_reminder,
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(22),
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainTextColor.name),
+                height: 1.4,
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () => setState(() => _showBanner = false),
+            child: Icon(
+              Icons.close,
+              size: ScreenUtil().setWidth(28),
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.itemSubtitleTextColor.name),
+            ),
+          ),
+        ],
       ),
     );
   }

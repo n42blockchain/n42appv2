@@ -1,3 +1,8 @@
+// Copyright 2021-2026 N42 Inc. All rights reserved.
+// Use of this source code is governed by a dual license:
+// Apache License 2.0 and MIT License.
+// See LICENSE file in the project root for full license information.
+
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -24,6 +29,10 @@ import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import 'package:http/http.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';
 import 'package:n42appv2/core/utils/js_escape_utils.dart';
+import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/src/widgets/app_bar_widget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Redeem extends ConsumerStatefulWidget {
   final CoinModel coinModel;
@@ -35,6 +44,14 @@ class Redeem extends ConsumerStatefulWidget {
 
 class _RedeemState extends ConsumerState<Redeem> {
   late WebViewController _controller;
+
+  /// WebView 触发赎回时记录的锁定到期时间戳（Unix 秒）
+  /// null 表示尚未收到赎回请求
+  int? _lockTimeUnix;
+
+  /// 是否显示顶部状态横幅（用户可关闭）
+  bool _showBanner = true;
+
   TransferApi? _transferApi;
   TransferApi get transferApi{
     _transferApi ??= TransferApi();
@@ -91,7 +108,10 @@ class _RedeemState extends ConsumerState<Redeem> {
         Map<String,dynamic>?rdata=jsonDecode(message.message);
         if(rdata !=null){
           if(rdata['type']=="redeem"){
-            String signStr=await redeem(rdata['p2wsh_address'],rdata['lock_time']);
+            final int lockTime = (rdata['lock_time'] as num).toInt();
+            // 记录锁定时间以便 UI 展示状态
+            if (mounted) setState(() => _lockTimeUnix = lockTime);
+            String signStr=await redeem(rdata['p2wsh_address'], lockTime);
             _controller.runJavaScript('request_withdraw_vbtc("${JsEscapeUtils.escapeJs(rdata['p2wsh_address']?.toString() ?? "")}","${JsEscapeUtils.escapeJs(signStr)}");');
           }else if(rdata['type']=="request_withdraw_vbtc"){
             _controller.runJavaScript('alert("来自Flutter的消息，我收到了:${JsEscapeUtils.escapeJs(rdata['result']?.toString() ?? "")}");');
@@ -199,7 +219,7 @@ class _RedeemState extends ConsumerState<Redeem> {
       "utxo":inputUTXO,
       "toAddress":widget.coinModel.address,
       "amount":99500,
-      "byteFee":1,
+      "byteFee":gasFeeRate, // 使用动态 gas 费率，不再硬编码为 1
       "changeAddress":widget.coinModel.address,
       "change":0,
       "max":true
@@ -360,12 +380,89 @@ class _RedeemState extends ConsumerState<Redeem> {
   }
   @override
   Widget build(BuildContext context) {
+    final s = S.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Redeem'),
+      appBar: AppBarWidget(text: s.g_key_btc_redeem_title),
+      body: Column(
+        children: [
+          // ── 顶部锁定状态 / 提醒横幅 ──────────────────────────
+          if (_showBanner) _buildStatusBanner(context, s),
+
+          // ── WebView 填充剩余空间 ──────────────────────────────
+          Expanded(
+            child: WebViewWidget(controller: _controller),
+          ),
+        ],
       ),
-      body: WebViewWidget(
-        controller: _controller,
+    );
+  }
+
+  Widget _buildStatusBanner(BuildContext context, S s) {
+    final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    final bool isUnlocked = _lockTimeUnix != null && _lockTimeUnix! <= now;
+    final bool isStillLocked = _lockTimeUnix != null && _lockTimeUnix! > now;
+
+    // 决定横幅颜色与内容
+    final Color bgColor;
+    final Color iconColor;
+    final IconData bannerIcon;
+    final String bannerText;
+
+    if (isUnlocked) {
+      bgColor = Colors.green.withAlpha(30);
+      iconColor = Colors.green;
+      bannerIcon = Icons.lock_open_outlined;
+      bannerText = s.g_key_btc_redeem_unlocked;
+    } else if (isStillLocked) {
+      final dt = DateTime.fromMillisecondsSinceEpoch(_lockTimeUnix! * 1000);
+      final dateStr =
+          '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')} '
+          '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+      bgColor = Colors.red.withAlpha(25);
+      iconColor = Colors.red;
+      bannerIcon = Icons.lock_outline;
+      bannerText = '${s.g_key_btc_redeem_still_locked}  ·  ${s.g_key_btc_redeem_locked_until} $dateStr';
+    } else {
+      // 尚未收到赎回消息，显示通用提醒
+      bgColor = Colors.orange.withAlpha(25);
+      iconColor = Colors.orange;
+      bannerIcon = Icons.info_outline_rounded;
+      bannerText = s.g_key_btc_redeem_reminder;
+    }
+
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(20),
+        vertical: ScreenUtil().setWidth(12),
+      ),
+      color: bgColor,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(bannerIcon, color: iconColor, size: ScreenUtil().setWidth(28)),
+          SizedBox(width: ScreenUtil().setWidth(10)),
+          Expanded(
+            child: Text(
+              bannerText,
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(22),
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainTextColor.name),
+                height: 1.4,
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () => setState(() => _showBanner = false),
+            child: Icon(
+              Icons.close,
+              size: ScreenUtil().setWidth(28),
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.itemSubtitleTextColor.name),
+            ),
+          ),
+        ],
       ),
     );
   }

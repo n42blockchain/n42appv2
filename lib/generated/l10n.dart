@@ -7194,6 +7194,246 @@ class S {
     );
   }
 
+  /// `BTC Self-Custody Staking`
+  String get g_key_btc_stake_title {
+    return Intl.message(
+      'BTC Self-Custody Staking',
+      name: 'g_key_btc_stake_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lock BTC to mint vBTC and earn rewards`
+  String get g_key_btc_stake_subtitle {
+    return Intl.message(
+      'Lock BTC to mint vBTC and earn rewards',
+      name: 'g_key_btc_stake_subtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `How It Works`
+  String get g_key_btc_stake_how_it_works {
+    return Intl.message(
+      'How It Works',
+      name: 'g_key_btc_stake_how_it_works',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lock Your BTC`
+  String get g_key_btc_stake_step1_title {
+    return Intl.message(
+      'Lock Your BTC',
+      name: 'g_key_btc_stake_step1_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your BTC is locked in a 2-of-2 multisig address with a time-lock (CLTV), secured by your key and the N42 canister key.`
+  String get g_key_btc_stake_step1_desc {
+    return Intl.message(
+      'Your BTC is locked in a 2-of-2 multisig address with a time-lock (CLTV), secured by your key and the N42 canister key.',
+      name: 'g_key_btc_stake_step1_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mint vBTC`
+  String get g_key_btc_stake_step2_title {
+    return Intl.message(
+      'Mint vBTC',
+      name: 'g_key_btc_stake_step2_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `After on-chain confirmation, vBTC is minted to your wallet at a 1:1 ratio.`
+  String get g_key_btc_stake_step2_desc {
+    return Intl.message(
+      'After on-chain confirmation, vBTC is minted to your wallet at a 1:1 ratio.',
+      name: 'g_key_btc_stake_step2_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Earn Rewards`
+  String get g_key_btc_stake_step3_title {
+    return Intl.message(
+      'Earn Rewards',
+      name: 'g_key_btc_stake_step3_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hold vBTC to earn staking rewards. vBTC is also usable in DeFi protocols.`
+  String get g_key_btc_stake_step3_desc {
+    return Intl.message(
+      'Hold vBTC to earn staking rewards. vBTC is also usable in DeFi protocols.',
+      name: 'g_key_btc_stake_step3_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Redeem After Unlock`
+  String get g_key_btc_stake_step4_title {
+    return Intl.message(
+      'Redeem After Unlock',
+      name: 'g_key_btc_stake_step4_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `When the lock period expires, burn your vBTC to receive your original BTC back.`
+  String get g_key_btc_stake_step4_desc {
+    return Intl.message(
+      'When the lock period expires, burn your vBTC to receive your original BTC back.',
+      name: 'g_key_btc_stake_step4_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Risk Warning`
+  String get g_key_btc_stake_risk_warning {
+    return Intl.message(
+      'Risk Warning',
+      name: 'g_key_btc_stake_risk_warning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your BTC will be locked for the full staking period. Early withdrawal is not possible.`
+  String get g_key_btc_stake_risk1 {
+    return Intl.message(
+      'Your BTC will be locked for the full staking period. Early withdrawal is not possible.',
+      name: 'g_key_btc_stake_risk1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The lock is enforced by Bitcoin OP_CHECKLOCKTIMEVERIFY (CLTV) and cannot be bypassed.`
+  String get g_key_btc_stake_risk2 {
+    return Intl.message(
+      'The lock is enforced by Bitcoin OP_CHECKLOCKTIMEVERIFY (CLTV) and cannot be bypassed.',
+      name: 'g_key_btc_stake_risk2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Smart contract risk: although audited, no protocol is entirely risk-free.`
+  String get g_key_btc_stake_risk3 {
+    return Intl.message(
+      'Smart contract risk: although audited, no protocol is entirely risk-free.',
+      name: 'g_key_btc_stake_risk3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Minimum staking: 0.001 BTC. Minimum lock period: 0.125 days (~3 hours).`
+  String get g_key_btc_stake_risk4 {
+    return Intl.message(
+      'Minimum staking: 0.001 BTC. Minimum lock period: 0.125 days (~3 hours).',
+      name: 'g_key_btc_stake_risk4',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `I understand the risks and wish to proceed`
+  String get g_key_btc_stake_acknowledge {
+    return Intl.message(
+      'I understand the risks and wish to proceed',
+      name: 'g_key_btc_stake_acknowledge',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue to Stake`
+  String get g_key_btc_stake_continue {
+    return Intl.message(
+      'Continue to Stake',
+      name: 'g_key_btc_stake_continue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `BTC will be locked until the timelock expires. Complete the staking process in the interface below.`
+  String get g_key_btc_stake_reminder {
+    return Intl.message(
+      'BTC will be locked until the timelock expires. Complete the staking process in the interface below.',
+      name: 'g_key_btc_stake_reminder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Redeem vBTC`
+  String get g_key_btc_redeem_title {
+    return Intl.message(
+      'Redeem vBTC',
+      name: 'g_key_btc_redeem_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Locked until`
+  String get g_key_btc_redeem_locked_until {
+    return Intl.message(
+      'Locked until',
+      name: 'g_key_btc_redeem_locked_until',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unlocked — ready to redeem`
+  String get g_key_btc_redeem_unlocked {
+    return Intl.message(
+      'Unlocked — ready to redeem',
+      name: 'g_key_btc_redeem_unlocked',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `BTC still locked`
+  String get g_key_btc_redeem_still_locked {
+    return Intl.message(
+      'BTC still locked',
+      name: 'g_key_btc_redeem_still_locked',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verify the lock period has expired before submitting your redemption.`
+  String get g_key_btc_redeem_reminder {
+    return Intl.message(
+      'Verify the lock period has expired before submitting your redemption.',
+      name: 'g_key_btc_redeem_reminder',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Change Password`
   String get g_key_change_password {
     return Intl.message(
