@@ -59,6 +59,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
       amount=widget.amount!;
       address=widget.address!;
       coinType=widget.coinType!;
+      uuid=widget.uuid??""; // 修复：uuid 从未从 widget 读取
     }
     initData();
     super.initState();
@@ -68,13 +69,21 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
     await initCoinInfo();
     initCoinModel();
   }
-  Future<void> initUserInfo()async{
-    UserInfoApi uApi=UserInfoApi();
-    MessageModel mm = await uApi.getUserInfoWithUUID(uuid);
-    if(mm.error==false){
-      userInfo=mm.data;
+  Future<void> initUserInfo() async {
+    if (uuid.isEmpty) {
+      setState(() {});
+      return;
     }
-    setState(() {});
+    UserInfoApi uApi = UserInfoApi();
+    MessageModel mm = await uApi.getUserInfoWithUUID(uuid);
+    if (mm.error == false && mm.data != null) {
+      try {
+        userInfo = UserInfo.fromJson(Map<String, dynamic>.from(mm.data as Map));
+      } catch (e) {
+        debugPrint('initUserInfo parse error: $e');
+      }
+    }
+    if (mounted) setState(() {});
   }
   Future<void> initCoinInfo()async{
     usdtInfo=ref.read(wapBridgeProvider).getCoinPriceWithUnit("usdt");
@@ -168,31 +177,56 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
   }
 
   Future<void> web3Transaction() async {
-    setState(() {
-      load=Load.loading;
-    });
-    TransferApi transferApi=TransferApi();
-    MessageModel rData = await transferApi.transfer(
-      coinModels[coinModelIndex].coin['coinType'],
-      address,
-      double.parse(amount),
-      fromAddress: coinModels[coinModelIndex].address,
-      contractAddress: coinModels[coinModelIndex].coin['contract'],
-      isTest: false,
-    );
-    if (rData.error) {
-      errorMessage = rData.data;
-      setState(() {
-        load=Load.finish;
-      });
-    } else {
-      errorMessage = "";
-      setState(() {
-        load=Load.finish;
-      });
-      ToastUtils.show("支付成功！");
-      if (!mounted) return;
-      Navigator.pop(context);
+    setState(() { load = Load.loading; });
+    try {
+      final CoinModel payToken = coinModels[coinModelIndex];
+      // 修复：转账金额应使用 USDT 等值（而非 USD 金额）
+      final double transferAmount = usdtAmount.isNotEmpty
+          ? double.parse(usdtAmount)
+          : (amount.isNotEmpty ? double.parse(amount) : 0.0);
+      TransferApi transferApi = TransferApi();
+      MessageModel rData = await transferApi.transfer(
+        payToken.coin['coinType'],
+        address,
+        transferAmount,
+        fromAddress: payToken.address,
+        // 修复：根据 isTest 选择正确的合约地址
+        contractAddress: payToken.isTest
+            ? (payToken.coin['contract_test'] ?? payToken.coin['contract'])
+            : payToken.coin['contract'],
+        // 修复：isTest 不再硬编码 false
+        isTest: payToken.isTest,
+      );
+      if (rData.error) {
+        errorMessage = rData.data;
+        setState(() { load = Load.finish; });
+      } else {
+        errorMessage = "";
+        setState(() { load = Load.finish; });
+        // 通知收款方（fire-and-forget，不阻塞支付成功 UX）
+        if (uuid.isNotEmpty) {
+          (() async {
+            try {
+              await UserInfoApi().sendPaymentReceipt(
+                toUuid: uuid,
+                txHash: rData.data?.toString() ?? "",
+                amount: amount,
+                tokenAmount: usdtAmount,
+                coinType: payToken.coin['coinType'],
+                tokenName: "USDT",
+              );
+            } catch (e) {
+              debugPrint('sendPaymentReceipt error: $e');
+            }
+          })();
+        }
+        ToastUtils.show("支付成功！");
+        if (!mounted) return;
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      errorMessage = e.toString();
+      setState(() { load = Load.finish; });
     }
   }
   @override

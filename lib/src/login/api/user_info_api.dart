@@ -479,4 +479,82 @@ class UserInfoApi{
     return data;
   }
 
+  /// 发送收款通知（支付方调用，通知收款方「确认收款」推送）
+  /// [toUuid]       收款方用户 UUID
+  /// [txHash]       链上交易哈希
+  /// [amount]       法币金额（如 "9.9"）
+  /// [tokenAmount]  代币金额（如 "10.1 USDT"）
+  /// [coinType]     链类型（如 "ETH"、"BSC"）
+  /// [tokenName]    代币名称（如 "USDT"）
+  Future<MessageModel> sendPaymentReceipt({
+    required String toUuid,
+    required String txHash,
+    required String amount,
+    required String tokenAmount,
+    required String coinType,
+    required String tokenName,
+  }) async {
+    try {
+      Map<String, dynamic> params = {
+        "uuid": AppGlobals.userInfo?.uuid ?? "",
+        "token": AppGlobals.userInfo?.token ?? "",
+        "source": "app",
+        "to_uuid": toUuid,
+        "tx_hash": txHash,
+        "amount": amount,
+        "token_amount": tokenAmount,
+        "coin_type": coinType,
+        "token_name": tokenName,
+        "from_name": AppGlobals.userInfo?.name ?? "",
+      };
+      MessageModel mm = MessageModel();
+      final data = await BaseApi.requestEmptyH.post(
+        '$url/v1/l/payment/receipt',
+        params: {},
+        data: params,
+        header: header,
+      );
+      if (data['code'] == 200) {
+        mm.data = true;
+      } else {
+        mm.error = true;
+        mm.data = data['err'] ?? 'Failed to send payment receipt';
+      }
+      return mm;
+    } catch (e) {
+      MessageModel mm = MessageModel.error();
+      mm.data = e.toString();
+      return mm;
+    }
+  }
+
+  /// 获取当前用户的支付历史记录（收款 + 付款）
+  Future<MessageModel> getPaymentHistory({int page = 1, int pageSize = 20}) async {
+    try {
+      MessageModel mm = MessageModel();
+      final data = await BaseApi.requestEmptyH.get(
+        '$url/v1/lr/payment/history',
+        params: {
+          "uuid": AppGlobals.userInfo?.uuid ?? "",
+          "token": AppGlobals.userInfo?.token ?? "",
+          "source": "app",
+          "page": page,
+          "page_size": pageSize,
+        },
+        header: header,
+      );
+      if (data['code'] == 200) {
+        mm.data = (data['data'] as List?) ?? [];
+      } else {
+        mm.error = true;
+        mm.data = data['err'] ?? 'Failed';
+      }
+      return mm;
+    } catch (e) {
+      MessageModel mm = MessageModel.error();
+      mm.data = e.toString();
+      return mm;
+    }
+  }
+
 }

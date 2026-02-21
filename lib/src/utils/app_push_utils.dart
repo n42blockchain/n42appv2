@@ -7,6 +7,7 @@ import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/main.dart' show globalProviderContainer;
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/home/setting/about_app.dart';
+import 'package:n42appv2/src/wallet/pages/payment_code/payment_history.dart';
 import 'package:n42appv2/src/home/setting/personal_setting.dart';
 import 'package:n42appv2/src/home/setting/setting_share.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
@@ -262,6 +263,13 @@ class AppPushUtils {
     else if (data['type'] == 'chat') {
       // Chat notifications are handled by n42_chat plugin
       debugPrint("Chat notification tapped - handled by n42_chat plugin");
+    }
+    else if (data['type'] == 'payment_received') {
+      // 「确认收款」通知 — 跳转到支付历史页
+      Navigator.push(
+        AppGlobals.navigatorKey.currentContext!,
+        MaterialPageRoute(builder: (_) => const PaymentHistory()),
+      );
     }
     else if (data['type'] == 'transfer') {
       Map<String, dynamic> txContent = {};
