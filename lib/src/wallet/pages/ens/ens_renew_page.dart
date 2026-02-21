@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/src/wallet/services/ens_expiry_reminder_service.dart';
 import 'package:n42appv2/src/wallet/services/ens_registration_service.dart';
 import 'package:n42appv2/src/wallet/widgets/ens/ens_price_card.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
@@ -37,6 +38,9 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
   bool _isLoadingPrice = false;
   bool _isRenewing = false;
   RenewResult? _renewResult;
+  // 到期提醒状态
+  bool _reminderEnabled = true;
+  bool _reminderSaving = false;
 
   @override
   void initState() {
@@ -85,6 +89,13 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
             backgroundColor: Colors.red,
           ),
         );
+      } else if (result.data!.newExpiresAt != null) {
+        // 续费成功：自动注册到期提醒
+        await EnsExpiryReminderService.setReminder(
+          widget.ownedEns.name,
+          result.data!.newExpiresAt!,
+        );
+        if (mounted) setState(() => _reminderEnabled = true);
       }
     }
   }
@@ -430,6 +441,73 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                   ),
                 ),
               ),
+            ),
+          ],
+          // 到期提醒开关
+          if (_renewResult?.newExpiresAt != null) ...[
+            SizedBox(height: ScreenUtil().setWidth(20)),
+            Divider(color: Colors.green.withAlpha(50)),
+            SizedBox(height: ScreenUtil().setWidth(8)),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        S.of(context).g_key_ens_reminder_enable,
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(26),
+                          fontWeight: FontWeight.w600,
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.mainTextColor.name,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: ScreenUtil().setWidth(4)),
+                      Text(
+                        S.of(context).g_key_ens_reminder_hint,
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(22),
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.itemSubtitleTextColor.name,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Switch(
+                  value: _reminderEnabled,
+                  activeThumbColor: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ),
+                  onChanged: _reminderSaving
+                      ? null
+                      : (value) async {
+                          setState(() => _reminderSaving = true);
+                          if (value) {
+                            await EnsExpiryReminderService.setReminder(
+                              widget.ownedEns.name,
+                              _renewResult!.newExpiresAt!,
+                            );
+                          } else {
+                            await EnsExpiryReminderService.disableReminder(
+                              widget.ownedEns.name,
+                            );
+                          }
+                          if (mounted) {
+                            setState(() {
+                              _reminderEnabled = value;
+                              _reminderSaving = false;
+                            });
+                          }
+                        },
+                ),
+              ],
             ),
           ],
         ],

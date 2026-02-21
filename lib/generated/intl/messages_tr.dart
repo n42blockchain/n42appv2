@@ -1569,6 +1569,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_registration_period": MessageLookupByLibrary.simpleMessage(
       "Registration Period",
     ),
+    "g_key_ens_reminder_disabled": MessageLookupByLibrary.simpleMessage(
+      "Hatırlatıcı kapalı",
+    ),
+    "g_key_ens_reminder_enable": MessageLookupByLibrary.simpleMessage(
+      "Süre sonu hatırlatıcısını etkinleştir",
+    ),
+    "g_key_ens_reminder_enabled": MessageLookupByLibrary.simpleMessage(
+      "Hatırlatıcı açık",
+    ),
+    "g_key_ens_reminder_hint": MessageLookupByLibrary.simpleMessage(
+      "Süresi dolmadan 30, 7 ve 1 gün önce bildir",
+    ),
     "g_key_ens_renew": MessageLookupByLibrary.simpleMessage("Renew"),
     "g_key_ens_renew_cost": MessageLookupByLibrary.simpleMessage(
       "Renewal Cost",

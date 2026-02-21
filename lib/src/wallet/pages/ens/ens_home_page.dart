@@ -9,6 +9,7 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/pages/ens/ens_search_page.dart';
 import 'package:n42appv2/src/wallet/pages/ens/ens_management_page.dart';
+import 'package:n42appv2/src/wallet/services/ens_expiry_reminder_service.dart';
 import 'package:n42appv2/src/wallet/services/ens_registration_service.dart';
 import 'package:n42appv2/src/wallet/widgets/ens/ens_owned_list_item.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
@@ -49,6 +50,8 @@ class _EnsHomePageState extends State<EnsHomePage> {
   void initState() {
     super.initState();
     _loadOwnedNames();
+    // 进入 ENS 首页时检查所有域名的到期提醒
+    EnsExpiryReminderService.checkAndNotify();
   }
 
   Future<void> _loadOwnedNames() async {

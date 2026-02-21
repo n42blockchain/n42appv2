@@ -1638,6 +1638,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_registration_period": MessageLookupByLibrary.simpleMessage(
       "Registration Period",
     ),
+    "g_key_ens_reminder_disabled": MessageLookupByLibrary.simpleMessage(
+      "Erinnerung ist deaktiviert",
+    ),
+    "g_key_ens_reminder_enable": MessageLookupByLibrary.simpleMessage(
+      "Ablauferinnerung aktivieren",
+    ),
+    "g_key_ens_reminder_enabled": MessageLookupByLibrary.simpleMessage(
+      "Erinnerung ist aktiviert",
+    ),
+    "g_key_ens_reminder_hint": MessageLookupByLibrary.simpleMessage(
+      "30, 7 und 1 Tag vor Ablauf benachrichtigen",
+    ),
     "g_key_ens_renew": MessageLookupByLibrary.simpleMessage("Renew"),
     "g_key_ens_renew_cost": MessageLookupByLibrary.simpleMessage(
       "Renewal Cost",

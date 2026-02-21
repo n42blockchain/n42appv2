@@ -10084,6 +10084,46 @@ class S {
     );
   }
 
+  /// `Expiry reminder is off`
+  String get g_key_ens_reminder_disabled {
+    return Intl.message(
+      'Expiry reminder is off',
+      name: 'g_key_ens_reminder_disabled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expiry reminder is on`
+  String get g_key_ens_reminder_enabled {
+    return Intl.message(
+      'Expiry reminder is on',
+      name: 'g_key_ens_reminder_enabled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notify 30, 7 and 1 day before expiry`
+  String get g_key_ens_reminder_hint {
+    return Intl.message(
+      'Notify 30, 7 and 1 day before expiry',
+      name: 'g_key_ens_reminder_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enable expiry reminder`
+  String get g_key_ens_reminder_enable {
+    return Intl.message(
+      'Enable expiry reminder',
+      name: 'g_key_ens_reminder_enable',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Registration failed`
   String get g_key_ens_register_failed {
     return Intl.message(
