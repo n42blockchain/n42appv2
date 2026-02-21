@@ -25,7 +25,11 @@ class PaymasterOption {
   final PaymasterType type;
   final String? tokenSymbol;
   final String? tokenAddress;
+  /// Token decimals for ERC-20 paymaster (e.g. 6 for USDC/USDT, 18 for DAI)
+  final int? decimals;
   final double? exchangeRate; // 1 ETH = X token
+  /// Human-readable estimated gas cost in the token, e.g. "1.23 USDC"
+  final String? estimatedCost;
   final bool isAvailable;
   final String? unavailableReason;
 
@@ -33,7 +37,9 @@ class PaymasterOption {
     required this.type,
     this.tokenSymbol,
     this.tokenAddress,
+    this.decimals,
     this.exchangeRate,
+    this.estimatedCost,
     this.isAvailable = true,
     this.unavailableReason,
   });
@@ -222,6 +228,9 @@ class PaymasterOptionCard extends StatelessWidget {
       case PaymasterType.sponsored:
         return S.of(context).g_key_aa_gas_sponsored;
       case PaymasterType.erc20:
+        if (option.estimatedCost != null) {
+          return '${S.of(context).g_key_aa_paymaster_est_cost}: ${option.estimatedCost}';
+        }
         if (option.exchangeRate != null) {
           return '1 ETH ≈ ${option.exchangeRate!.toStringAsFixed(2)} ${option.tokenSymbol}';
         }
