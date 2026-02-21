@@ -38,6 +38,25 @@ class AAConfig {
   /// Simple7702Account Factory address for EIP-7702 hybrid accounts
   static const String simple7702AccountFactory = '0x7702000000000000000000000000000000000001';
 
+  // ── Safe (Gnosis Safe v1.4.1) ─────────────────────────────────────────────
+
+  /// SafeProxyFactory v1.4.1 — deployed at same address on all EVM chains
+  static const String safeProxyFactory = '0x4e1DCf7AD4e460CfD30791CCC4F9c8a4f820ec67';
+
+  /// SafeL2 singleton v1.4.1 — used as mastercopy for proxy deployment
+  static const String safeL2Singleton = '0x29fcB43b46531BcA003ddC8FCB67FFE91900C762';
+
+  /// Safe CompatibilityFallbackHandler v1.4.1
+  static const String safeFallbackHandler = '0xfd0732Dc9E303f09fCEf3a7388Ad10A83459Ec99';
+
+  // ── Biconomy Nexus v1 (ERC-7579 modular) ─────────────────────────────────
+
+  /// Biconomy Nexus v1 Factory — deployed at same address on all EVM chains
+  static const String biconomyNexusFactory = '0x0000000000BBc222D4Ca2ae6c3a42b9B5E1Ca3F0';
+
+  /// Biconomy K1 Validator (ECDSA single-owner module for Nexus)
+  static const String biconomyK1Validator = '0x0000002D6DB27c52E3C11c1Cf24072004AC75cBa';
+
   /// Get EntryPoint address for specified version
   static String getEntryPoint({EntryPointVersion? version}) {
     final v = version ?? defaultVersion;
@@ -49,6 +68,12 @@ class AAConfig {
     final v = version ?? defaultVersion;
     return v == EntryPointVersion.v08 ? simpleAccountFactoryV08 : simpleAccountFactoryV07;
   }
+
+  /// Get Safe ProxyFactory address (same for all versions/chains)
+  static String getSafeFactory() => safeProxyFactory;
+
+  /// Get Biconomy Nexus Factory address (same for all versions/chains)
+  static String getBiconomyFactory() => biconomyNexusFactory;
 
   /// Supported chain symbols for AA
   static const Set<String> supportedChains = {
@@ -149,6 +174,8 @@ class AAConfig {
       backupBundlerUrl: backupBundlerUrls[symbol],
       entryPoint: getEntryPoint(version: v),
       simpleAccountFactory: getSimpleAccountFactory(version: v),
+      safeFactory: getSafeFactory(),
+      biconomyFactory: getBiconomyFactory(),
       version: v,
     );
   }
@@ -186,6 +213,13 @@ class AAChainConfig {
   final String? backupBundlerUrl;
   final String entryPoint;
   final String simpleAccountFactory;
+
+  /// Safe ProxyFactory v1.4.1 address (null if not set)
+  final String? safeFactory;
+
+  /// Biconomy Nexus v1 Factory address (null if not set)
+  final String? biconomyFactory;
+
   final String? paymasterUrl;
   final EntryPointVersion version;
 
@@ -195,6 +229,8 @@ class AAChainConfig {
     this.backupBundlerUrl,
     required this.entryPoint,
     required this.simpleAccountFactory,
+    this.safeFactory,
+    this.biconomyFactory,
     this.paymasterUrl,
     this.version = EntryPointVersion.v08,
   });
