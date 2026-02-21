@@ -55,10 +55,14 @@ class EIP7702Handler {
   }
 
   /// Parse EIP-7702 authorization from UserOperation
+  ///
+  /// Returns null if the UserOperation has no auth, decoding fails, or the
+  /// decoded authorization fails [EIP7702Authorization.isValid] check.
   static EIP7702Authorization? parseAuthorization(UserOperation userOp) {
     if (!userOp.hasEIP7702Auth) return null;
     try {
-      return EIP7702Authorization.decode(userOp.eip7702Auth!);
+      final auth = EIP7702Authorization.decode(userOp.eip7702Auth!);
+      return auth.isValid ? auth : null;
     } catch (e) {
       return null;
     }
@@ -109,6 +113,36 @@ class EIP7702Handler {
   /// Estimate gas overhead for EIP-7702 authorization
   static BigInt estimateAuthorizationGas() {
     return BigInt.from(Simple7702GasConstants.authorizationGas);
+  }
+
+  /// Build an unsigned revocation authorization.
+  ///
+  /// Per EIP-7702, setting [address] to the zero address cancels any active
+  /// delegation. The caller must sign the resulting hash before submitting.
+  ///
+  /// The returned authorization has zeroed r/s/v — sign it before use:
+  /// ```dart
+  /// final revokeAuth = EIP7702Handler.buildRevocationAuthorization(
+  ///   chainId: chainId, nonce: currentNonce);
+  /// final hash = EIP7702Handler.createAuthorizationHash(
+  ///   chainId: chainId,
+  ///   implementationAddress: revokeAuth.address,
+  ///   nonce: revokeAuth.nonce,
+  /// );
+  /// // sign hash, then replace v/r/s
+  /// ```
+  static EIP7702Authorization buildRevocationAuthorization({
+    required int chainId,
+    required BigInt nonce,
+  }) {
+    return EIP7702Authorization(
+      chainId: chainId,
+      address: '0x0000000000000000000000000000000000000000',
+      nonce: nonce,
+      v: 0,
+      r: Uint8List(32),
+      s: Uint8List(32),
+    );
   }
 
   /// Check if chain supports EIP-7702
@@ -305,32 +339,36 @@ class EntryPointVersionAdapter {
         : BigInt.zero; // No threshold in v0.7
   }
 
-  /// Estimate gas savings when using v0.8 vs v0.7
+  /// Estimate gas savings when using v0.8 + EIP-7702 vs v0.7 + traditional deploy
   ///
   /// v0.8 is generally more gas efficient due to:
-  /// 1. Reduced unused gas penalty
-  /// 2. Optimized validation flow
-  /// 3. EIP-7702 eliminates deployment costs
+  /// 1. EIP-7702 eliminates the one-time deployment cost (~200 000 gas)
+  /// 2. Reduced unused-gas penalty threshold (40 000 vs 0 in v0.7)
+  /// 3. Optimized validation flow
+  ///
+  /// Returns non-negative BigInt (clamped to zero when savings are negligible).
   static BigInt estimateGasSavings({
     required UserOperation userOp,
     required bool isFirstTransaction,
   }) {
     var savings = BigInt.zero;
 
-    // EIP-7702 saves deployment gas
+    // EIP-7702 avoids the typical ~200 000 gas smart-account deployment on first tx.
+    // The authorization itself adds ~25 000 gas overhead.
+    // Net = 200 000 − 25 000 = +175 000 gas saved (positive savings).
     if (userOp.hasEIP7702Auth && isFirstTransaction) {
-      savings += BigInt.from(Simple7702GasConstants.authorizationGas);
-      // Minus the deployment gas that would have been needed
-      savings -= BigInt.from(200000); // Typical deployment cost
+      savings += BigInt.from(200000); // Deployment gas avoided
+      savings -= BigInt.from(Simple7702GasConstants.authorizationGas); // Auth overhead
     }
 
-    // v0.8 penalty reduction
+    // v0.8 penalty reduction: unused gas under 40k is not penalised (v0.7 penalises all)
     final unusedGas = userOp.verificationGasLimit - BigInt.from(20000); // Estimate
     if (unusedGas > BigInt.zero && unusedGas < BigInt.from(40000)) {
       savings += unusedGas * BigInt.from(10) ~/ BigInt.from(100); // 10% saved
     }
 
-    return savings;
+    // Clamp to zero — negative savings would be misleading to callers
+    return savings < BigInt.zero ? BigInt.zero : savings;
   }
 }
 

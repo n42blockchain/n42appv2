@@ -317,11 +317,15 @@ class AAChainConfig {
   String? get simple7702AccountFactory =>
       version == EntryPointVersion.v08 ? AAConfig.simple7702AccountFactory : null;
 
-  /// Get bundler URL with API key appended if available
+  /// Get bundler URL (without API key in URL — supply key via Authorization header).
+  ///
+  /// The API key must be sent as `Authorization: Bearer <key>` header to avoid
+  /// leaking it in proxy logs, browser history, and server access logs.
+  ///
+  /// Deprecated: use [bundlerUrl] directly and set the header on your HTTP client.
+  @Deprecated('Pass apiKey via Authorization header, not URL query param')
   String getBundlerUrlWithKey(String? apiKey) {
-    if (apiKey == null || apiKey.isEmpty) {
-      return bundlerUrl;
-    }
-    return '$bundlerUrl?apikey=$apiKey';
+    // API key is intentionally not appended to the URL to prevent log leakage.
+    return bundlerUrl;
   }
 }

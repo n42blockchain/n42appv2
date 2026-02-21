@@ -281,9 +281,26 @@ class EIP7702Authorization {
   });
 
   /// Check if authorization is valid
+  ///
+  /// A valid authorization has:
+  /// - 32-byte r and s components
+  /// - v in {0, 1} (y-parity per EIP-7702) or {27, 28} (Ethereum legacy style)
   bool get isValid {
     return r.length == 32 && s.length == 32 && (v == 27 || v == 28 || v == 0 || v == 1);
   }
+
+  /// Whether this authorization is a revocation.
+  ///
+  /// Per EIP-7702, setting [address] to the zero address cancels any active
+  /// delegation for the authorizing EOA.
+  bool get isRevocation =>
+      address == '0x0000000000000000000000000000000000000000';
+
+  /// Whether this authorization is chain-agnostic (chainId == 0).
+  ///
+  /// ⚠️ Security warning: chain-agnostic authorizations can be replayed on
+  /// *any* EVM chain. Prefer a specific chainId for production use.
+  bool get isAnyChain => chainId == 0;
 
   /// Encode to bytes for UserOperation
   Uint8List encode() {
