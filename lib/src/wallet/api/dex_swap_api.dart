@@ -11,12 +11,17 @@ class DexSwapApi {
     _header = {'content-type': 'application/json'};
   }
 
-  /// GET /v1/dex/tokens?chain=ETH
-  Future<MessageModel> getTokens(String chain) async {
+  /// GET /v1/dex/tokens?chain=ETH[&q=usdc]
+  ///
+  /// [q] 可选搜索词，后端按 symbol/name/address 模糊过滤。
+  /// 传入完整合约地址时可精确查找未预加载的代币。
+  Future<MessageModel> getTokens(String chain, {String? q}) async {
+    final params = <String, dynamic>{'chain': chain};
+    if (q != null && q.isNotEmpty) params['q'] = q;
     try {
       final data = await BaseApi.requestEmptyH.get(
         '$_base/v1/dex/tokens',
-        params: {'chain': chain},
+        params: params,
         header: _header,
       );
       final mm = MessageModel();

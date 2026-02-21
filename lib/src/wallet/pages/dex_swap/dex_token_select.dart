@@ -25,6 +25,11 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
   bool _loading = true;
   String _error = '';
 
+  // 地址搜索状态（当本地无结果且输入像合约地址时触发）
+  bool _remoteSearching = false;
+  List<DexTokenModel> _remoteResults = [];
+  String _remoteError = '';
+
   @override
   void initState() {
     super.initState();
@@ -62,17 +67,81 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
     }
   }
 
+  /// 判断输入字符串是否像一个合约地址
+  /// - EVM：0x 开头 + 40 个 hex 字符（共 42 字符）
+  /// - Solana：base58，通常 32-50 字符，不含 0x 前缀
+  bool _isAddressLike(String q) {
+    if (q.startsWith('0x') && q.length == 42) {
+      // 简单 hex 校验
+      final hex = q.substring(2);
+      return RegExp(r'^[0-9a-fA-F]+$').hasMatch(hex);
+    }
+    // Solana base58 地址（含字母和数字，不含 0/O/I/l 等歧义字符）
+    if (!q.startsWith('0x') && q.length >= 32 && q.length <= 50) {
+      return RegExp(r'^[1-9A-HJ-NP-Za-km-z]+$').hasMatch(q);
+    }
+    return false;
+  }
+
   void _onSearch() {
     final q = _searchCtrl.text.trim().toLowerCase();
+
+    // 重置地址搜索状态
     setState(() {
-      _filtered = q.isEmpty
-          ? _all
-          : _all
-              .where((t) =>
-                  t.symbol.toLowerCase().contains(q) ||
-                  t.name.toLowerCase().contains(q) ||
-                  t.address.toLowerCase().contains(q))
-              .toList();
+      _remoteResults = [];
+      _remoteError = '';
+      _remoteSearching = false;
+    });
+
+    if (q.isEmpty) {
+      setState(() => _filtered = _all);
+      return;
+    }
+
+    // 本地过滤
+    final local = _all
+        .where((t) =>
+            t.symbol.toLowerCase().contains(q) ||
+            t.name.toLowerCase().contains(q) ||
+            t.address.toLowerCase().contains(q))
+        .toList();
+
+    setState(() => _filtered = local);
+
+    // 当本地无结果且输入看起来是合约地址时，向后端查询
+    if (local.isEmpty && _isAddressLike(_searchCtrl.text.trim())) {
+      _searchByAddress(_searchCtrl.text.trim());
+    }
+  }
+
+  /// 用完整地址向后端搜索（后端精确匹配 address 字段）
+  Future<void> _searchByAddress(String address) async {
+    if (!mounted) return;
+    setState(() => _remoteSearching = true);
+
+    final MessageModel res =
+        await _api.getTokens(widget.chain, q: address);
+
+    if (!mounted) return;
+    if (res.error) {
+      setState(() {
+        _remoteSearching = false;
+        _remoteError = 'Search failed';
+      });
+      return;
+    }
+
+    final rawList = res.data as List? ?? [];
+    final results = rawList
+        .map((e) => DexTokenModel.fromJson(e as Map<String, dynamic>))
+        .toList();
+
+    setState(() {
+      _remoteSearching = false;
+      _remoteResults = results;
+      if (results.isEmpty) {
+        _remoteError = 'Token not found';
+      }
     });
   }
 
@@ -105,6 +174,19 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
                   color: AppThemeUtils.getColorByKey(
                       context, AppThemeKeys.itemSubtitleTextColor.name),
                 ),
+                suffixIcon: _searchCtrl.text.isNotEmpty
+                    ? IconButton(
+                        icon: Icon(
+                          Icons.clear,
+                          color: AppThemeUtils.getColorByKey(
+                              context, AppThemeKeys.itemSubtitleTextColor.name),
+                        ),
+                        onPressed: () {
+                          _searchCtrl.clear();
+                          _onSearch();
+                        },
+                      )
+                    : null,
                 filled: true,
                 fillColor: AppThemeUtils.getColorByKey(
                     context, AppThemeKeys.itemBgColor.name),
@@ -143,24 +225,56 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
         ),
       );
     }
-    if (_filtered.isEmpty) {
+
+    // 有本地结果 → 直接展示
+    if (_filtered.isNotEmpty) {
+      return _buildList(_filtered);
+    }
+
+    // 正在做地址远程搜索
+    if (_remoteSearching) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    // 远程搜索有结果
+    if (_remoteResults.isNotEmpty) {
+      return _buildList(_remoteResults);
+    }
+
+    // 远程搜索无结果
+    if (_remoteError.isNotEmpty) {
       return Center(
-        child: Text('No tokens found',
-            style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name))),
+        child: Text(
+          _remoteError,
+          style: TextStyle(
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.itemSubtitleTextColor.name)),
+        ),
       );
     }
+
+    // 本地无结果且输入不像地址
+    return Center(
+      child: Text(
+        _searchCtrl.text.isEmpty ? 'No tokens found' : 'No tokens found',
+        style: TextStyle(
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.itemSubtitleTextColor.name)),
+      ),
+    );
+  }
+
+  Widget _buildList(List<DexTokenModel> tokens) {
     return ListView.separated(
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-      itemCount: _filtered.length,
+      itemCount: tokens.length,
       separatorBuilder: (context, i) => Divider(
         height: ScreenUtil().setWidth(1),
         color: AppThemeUtils.getColorByKey(
             context, AppThemeKeys.dividerColor.name),
       ),
       itemBuilder: (context, index) {
-        final token = _filtered[index];
+        final token = tokens[index];
         return InkWell(
           onTap: () => Navigator.pop(context, token),
           child: SizedBox(
@@ -194,7 +308,8 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
                         token.name,
                         style: TextStyle(
                           color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.itemSubtitleTextColor.name),
+                              context,
+                              AppThemeKeys.itemSubtitleTextColor.name),
                           fontSize: ScreenUtil().setSp(22),
                         ),
                         maxLines: 1,
@@ -203,11 +318,25 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
                     ],
                   ),
                 ),
+                // 地址缩略展示
+                Text(
+                  _shortenAddress(token.address),
+                  style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                    fontSize: ScreenUtil().setSp(20),
+                  ),
+                ),
               ],
             ),
           ),
         );
       },
     );
+  }
+
+  String _shortenAddress(String address) {
+    if (address.length <= 10) return address;
+    return '${address.substring(0, 6)}…${address.substring(address.length - 4)}';
   }
 }
