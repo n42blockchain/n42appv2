@@ -6,17 +6,16 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/n42/n42appv2/backend/swap/db"
 	"github.com/n42/n42appv2/backend/swap/models"
 )
 
 // HistoryHandler 处理历史记录查询
 type HistoryHandler struct {
-	db *db.DB
+	db DEXStore
 }
 
 // NewHistoryHandler 创建 HistoryHandler
-func NewHistoryHandler(database *db.DB) *HistoryHandler {
+func NewHistoryHandler(database DEXStore) *HistoryHandler {
 	return &HistoryHandler{db: database}
 }
 

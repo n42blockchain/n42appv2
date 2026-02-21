@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 
-	"github.com/n42/n42appv2/backend/swap/db"
 	"github.com/n42/n42appv2/backend/swap/models"
 	"github.com/n42/n42appv2/backend/swap/services"
 )
@@ -16,11 +15,11 @@ import (
 // QuoteHandler 持有依赖
 type QuoteHandler struct {
 	agg *services.Aggregator
-	db  *db.DB
+	db  DEXStore
 }
 
 // NewQuoteHandler 创建 QuoteHandler
-func NewQuoteHandler(agg *services.Aggregator, database *db.DB) *QuoteHandler {
+func NewQuoteHandler(agg *services.Aggregator, database DEXStore) *QuoteHandler {
 	return &QuoteHandler{agg: agg, db: database}
 }
 

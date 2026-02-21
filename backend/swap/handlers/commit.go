@@ -5,19 +5,18 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/n42/n42appv2/backend/swap/db"
 	"github.com/n42/n42appv2/backend/swap/models"
 	"github.com/n42/n42appv2/backend/swap/monitor"
 )
 
 // CommitHandler 处理提交 txHash
 type CommitHandler struct {
-	db      *db.DB
+	db      DEXStore
 	monitor *monitor.Monitor
 }
 
 // NewCommitHandler 创建 CommitHandler
-func NewCommitHandler(database *db.DB, mon *monitor.Monitor) *CommitHandler {
+func NewCommitHandler(database DEXStore, mon *monitor.Monitor) *CommitHandler {
 	return &CommitHandler{db: database, monitor: mon}
 }
 

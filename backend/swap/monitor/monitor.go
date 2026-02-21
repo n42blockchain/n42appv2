@@ -8,18 +8,23 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 
-	"github.com/n42/n42appv2/backend/swap/db"
 	"github.com/n42/n42appv2/backend/swap/models"
 )
 
+// StatusUpdater 是 Monitor 对数据库层的最小依赖接口。
+// db.DB 隐式满足此接口。
+type StatusUpdater interface {
+	UpdateStatus(orderID string, status int) error
+}
+
 // Monitor 异步轮询 txHash 确认状态
 type Monitor struct {
-	db      *db.DB
+	db      StatusUpdater
 	rpcURLs map[string]string // chain → RPC URL
 }
 
 // New 创建 Monitor
-func New(database *db.DB, rpcURLs map[string]string) *Monitor {
+func New(database StatusUpdater, rpcURLs map[string]string) *Monitor {
 	return &Monitor{db: database, rpcURLs: rpcURLs}
 }
 
@@ -28,6 +33,9 @@ func New(database *db.DB, rpcURLs map[string]string) *Monitor {
 // 检查间隔：5 秒
 // 最大等待：30 分钟，超时后将订单标记为 failed
 func (m *Monitor) Watch(orderID, chain, txHash string) {
+	if m.db == nil {
+		return // 无 DB 时（测试场景）静默跳过
+	}
 	go func() {
 		rpcURL, ok := m.rpcURLs[chain]
 		if !ok {
