@@ -233,6 +233,48 @@ class OwnedEns {
   }
 }
 
+/// ENS 子域名信息
+class SubdomainInfo {
+  /// 子域名标签（不含父域名，如 "blog"）
+  final String label;
+
+  /// 完整名称（如 "blog.alice.eth"）
+  final String fullName;
+
+  /// 所有者地址
+  final String owner;
+
+  /// 解析器合约地址（可选）
+  final String? resolver;
+
+  const SubdomainInfo({
+    required this.label,
+    required this.fullName,
+    required this.owner,
+    this.resolver,
+  });
+
+  factory SubdomainInfo.fromJson(Map<String, dynamic> json) {
+    return SubdomainInfo(
+      label: json['label'] as String,
+      fullName: json['fullName'] as String,
+      owner: json['owner'] as String,
+      resolver: json['resolver'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'label': label,
+        'fullName': fullName,
+        'owner': owner,
+        'resolver': resolver,
+      };
+
+  /// 地址是否为零地址（即子域名已被删除）
+  bool get isDeleted =>
+      owner == '0x0000000000000000000000000000000000000000';
+}
+
 /// 注册承诺结果
 class CommitResult {
   /// 承诺哈希
@@ -1026,12 +1068,148 @@ class EnsRegistrationService {
     return mm;
   }
 
+  // ============ 子域名管理 ============
+
+  /// 获取域名下所有子域名列表
+  ///
+  /// [name] — 父域名（如 alice.eth）
+  Future<MessageModel> getSubdomains(String name) async {
+    final mm = MessageModel();
+    final normalizedName = _normalizeName(name);
+
+    try {
+      final response = await BaseApi.requestEmptyH.get(
+        '${_baseUrl}v1/ens/subdomains',
+        params: {'name': normalizedName},
+        header: _headers,
+      );
+
+      if (response['code'] == 200) {
+        final dataList = response['data'] as List<dynamic>?;
+        mm.error = false;
+        mm.data = (dataList ?? [])
+            .map((e) => SubdomainInfo.fromJson(e as Map<String, dynamic>))
+            .toList();
+      } else {
+        mm.error = true;
+        mm.data = <SubdomainInfo>[];
+      }
+    } catch (e) {
+      debugPrint('ENS get subdomains error: $e');
+      mm.error = true;
+      mm.data = <SubdomainInfo>[];
+    }
+
+    return mm;
+  }
+
+  /// 创建子域名
+  ///
+  /// [parent]   — 父域名（如 alice.eth）
+  /// [label]    — 子域名标签（如 blog → blog.alice.eth）
+  /// [owner]    — 子域名所有者地址
+  /// [resolver] — 解析器合约地址（可选，留空使用父域名解析器）
+  Future<MessageModel> createSubdomain(
+    String parent,
+    String label,
+    String owner, {
+    String? resolver,
+  }) async {
+    final mm = MessageModel();
+    final normalizedParent = _normalizeName(parent);
+    final normalizedLabel = label.toLowerCase().trim();
+
+    try {
+      final body = <String, dynamic>{
+        'parent': normalizedParent,
+        'label': normalizedLabel,
+        'owner': owner,
+      };
+      if (resolver != null && resolver.isNotEmpty) {
+        body['resolver'] = resolver;
+      }
+
+      final response = await BaseApi.requestEmptyH.post(
+        '${_baseUrl}v1/ens/create-subdomain',
+        params: <String, dynamic>{},
+        data: body,
+        header: _headers,
+      );
+
+      if (response['code'] == 200) {
+        mm.error = false;
+        mm.data = response['data']?['txHash'];
+      } else {
+        mm.error = true;
+        mm.data = response['msg']?.toString() ?? 'Create subdomain failed';
+      }
+    } catch (e) {
+      debugPrint('ENS create subdomain error: $e');
+      mm.error = true;
+      mm.data = e.toString();
+    }
+
+    return mm;
+  }
+
+  /// 删除子域名（将所有者设为零地址，释放子域名控制权）
+  ///
+  /// [parent] — 父域名（如 alice.eth）
+  /// [label]  — 子域名标签（如 blog）
+  Future<MessageModel> deleteSubdomain(String parent, String label) async {
+    final mm = MessageModel();
+    final normalizedParent = _normalizeName(parent);
+    final normalizedLabel = label.toLowerCase().trim();
+
+    try {
+      final response = await BaseApi.requestEmptyH.post(
+        '${_baseUrl}v1/ens/delete-subdomain',
+        params: <String, dynamic>{},
+        data: {
+          'parent': normalizedParent,
+          'label': normalizedLabel,
+        },
+        header: _headers,
+      );
+
+      if (response['code'] == 200) {
+        mm.error = false;
+        mm.data = response['data']?['txHash'];
+      } else {
+        mm.error = true;
+        mm.data = response['msg']?.toString() ?? 'Delete subdomain failed';
+      }
+    } catch (e) {
+      debugPrint('ENS delete subdomain error: $e');
+      mm.error = true;
+      mm.data = e.toString();
+    }
+
+    return mm;
+  }
+
+  /// 验证子域名标签格式（字母 / 数字 / 连字符，不可首尾为连字符）
+  bool isValidSubdomainLabel(String label) {
+    final normalized = label.toLowerCase().trim();
+    if (normalized.isEmpty) return false;
+    final validChars = RegExp(r'^[a-z0-9-]+$');
+    if (!validChars.hasMatch(normalized)) return false;
+    if (normalized.startsWith('-') || normalized.endsWith('-')) return false;
+    return true;
+  }
+
   // ============ 辅助方法 ============
 
+  /// 已知 ENS 域名后缀（顺序无关，仅用于 endsWith 检查）
+  static const _knownSuffixes = ['.eth', '.n42', '.arb'];
+
   /// 标准化 ENS 名称
+  ///
+  /// 若名称已有已知后缀（.eth / .n42 / .arb / .base.eth 等）则不修改；
+  /// 否则追加 .eth（向后兼容）。
   String _normalizeName(String name) {
     var normalized = name.toLowerCase().trim();
-    if (!normalized.endsWith('.eth')) {
+    if (!_knownSuffixes.any((s) => normalized.endsWith(s))) {
       normalized = '$normalized.eth';
     }
     return normalized;

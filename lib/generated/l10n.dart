@@ -10124,6 +10124,146 @@ class S {
     );
   }
 
+  /// `Subdomains`
+  String get g_key_ens_subdomains {
+    return Intl.message(
+      'Subdomains',
+      name: 'g_key_ens_subdomains',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create Subdomain`
+  String get g_key_ens_subdomain_create {
+    return Intl.message(
+      'Create Subdomain',
+      name: 'g_key_ens_subdomain_create',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subdomain label`
+  String get g_key_ens_subdomain_label {
+    return Intl.message(
+      'Subdomain label',
+      name: 'g_key_ens_subdomain_label',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `e.g. blog, mail, app`
+  String get g_key_ens_subdomain_label_hint {
+    return Intl.message(
+      'e.g. blog, mail, app',
+      name: 'g_key_ens_subdomain_label_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Owner address`
+  String get g_key_ens_subdomain_owner {
+    return Intl.message(
+      'Owner address',
+      name: 'g_key_ens_subdomain_owner',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Leave empty to use current wallet`
+  String get g_key_ens_subdomain_owner_hint {
+    return Intl.message(
+      'Leave empty to use current wallet',
+      name: 'g_key_ens_subdomain_owner_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subdomain created`
+  String get g_key_ens_subdomain_created {
+    return Intl.message(
+      'Subdomain created',
+      name: 'g_key_ens_subdomain_created',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subdomain deleted`
+  String get g_key_ens_subdomain_deleted {
+    return Intl.message(
+      'Subdomain deleted',
+      name: 'g_key_ens_subdomain_deleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No subdomains yet`
+  String get g_key_ens_subdomain_empty {
+    return Intl.message(
+      'No subdomains yet',
+      name: 'g_key_ens_subdomain_empty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete Subdomain`
+  String get g_key_ens_subdomain_delete {
+    return Intl.message(
+      'Delete Subdomain',
+      name: 'g_key_ens_subdomain_delete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This subdomain will be permanently deleted.`
+  String get g_key_ens_subdomain_delete_confirm {
+    return Intl.message(
+      'This subdomain will be permanently deleted.',
+      name: 'g_key_ens_subdomain_delete_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use letters, numbers and hyphens only`
+  String get g_key_ens_subdomain_invalid_label {
+    return Intl.message(
+      'Use letters, numbers and hyphens only',
+      name: 'g_key_ens_subdomain_invalid_label',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Resolved address updated`
+  String get g_key_ens_address_updated {
+    return Intl.message(
+      'Resolved address updated',
+      name: 'g_key_ens_address_updated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid address (must be 0x + 40 hex chars)`
+  String get g_key_ens_invalid_address {
+    return Intl.message(
+      'Invalid address (must be 0x + 40 hex chars)',
+      name: 'g_key_ens_invalid_address',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Registration failed`
   String get g_key_ens_register_failed {
     return Intl.message(

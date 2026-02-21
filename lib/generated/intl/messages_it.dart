@@ -1470,6 +1470,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_email_required": MessageLookupByLibrary.simpleMessage(
       "Email is required",
     ),
+    "g_key_ens_address_updated": MessageLookupByLibrary.simpleMessage(
+      "Resolved address updated",
+    ),
     "g_key_ens_advanced": MessageLookupByLibrary.simpleMessage("Advanced"),
     "g_key_ens_annual_fee": MessageLookupByLibrary.simpleMessage("Annual Fee"),
     "g_key_ens_available": MessageLookupByLibrary.simpleMessage("Available"),
@@ -1534,6 +1537,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Get your .eth name",
     ),
     "g_key_ens_home_title": MessageLookupByLibrary.simpleMessage("ENS Manager"),
+    "g_key_ens_invalid_address": MessageLookupByLibrary.simpleMessage(
+      "Invalid address (must be 0x + 40 hex chars)",
+    ),
     "g_key_ens_invalid_name": MessageLookupByLibrary.simpleMessage(
       "Invalid ENS name",
     ),
@@ -1678,6 +1684,40 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_step_register": MessageLookupByLibrary.simpleMessage("Register"),
     "g_key_ens_step_success": MessageLookupByLibrary.simpleMessage("Success"),
     "g_key_ens_step_wait": MessageLookupByLibrary.simpleMessage("Wait"),
+    "g_key_ens_subdomain_create": MessageLookupByLibrary.simpleMessage(
+      "Create Subdomain",
+    ),
+    "g_key_ens_subdomain_created": MessageLookupByLibrary.simpleMessage(
+      "Subdomain created",
+    ),
+    "g_key_ens_subdomain_delete": MessageLookupByLibrary.simpleMessage(
+      "Delete Subdomain",
+    ),
+    "g_key_ens_subdomain_delete_confirm": MessageLookupByLibrary.simpleMessage(
+      "This subdomain will be permanently deleted.",
+    ),
+    "g_key_ens_subdomain_deleted": MessageLookupByLibrary.simpleMessage(
+      "Subdomain deleted",
+    ),
+    "g_key_ens_subdomain_empty": MessageLookupByLibrary.simpleMessage(
+      "No subdomains yet",
+    ),
+    "g_key_ens_subdomain_invalid_label": MessageLookupByLibrary.simpleMessage(
+      "Use letters, numbers and hyphens only",
+    ),
+    "g_key_ens_subdomain_label": MessageLookupByLibrary.simpleMessage(
+      "Subdomain label",
+    ),
+    "g_key_ens_subdomain_label_hint": MessageLookupByLibrary.simpleMessage(
+      "e.g. blog, mail, app",
+    ),
+    "g_key_ens_subdomain_owner": MessageLookupByLibrary.simpleMessage(
+      "Owner address",
+    ),
+    "g_key_ens_subdomain_owner_hint": MessageLookupByLibrary.simpleMessage(
+      "Leave empty to use current wallet",
+    ),
+    "g_key_ens_subdomains": MessageLookupByLibrary.simpleMessage("Subdomains"),
     "g_key_ens_success": MessageLookupByLibrary.simpleMessage("Success!"),
     "g_key_ens_success_message": m23,
     "g_key_ens_suggestions": MessageLookupByLibrary.simpleMessage(
