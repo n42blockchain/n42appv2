@@ -1,6 +1,148 @@
 # N42 Wallet — 开发日志
 
 > 格式：`## [日期] 标题`，新记录置顶。
+> **提交规范**：每个独立步骤（i18n / 逻辑修复 / UI / 测试）单独提交，便于 bisect 与 review。
+
+---
+
+## [2026-02-21] DeFi 模块三连：跨链桥 + 多链质押 + BTC 自托管质押
+
+### 背景
+
+三个 DeFi 模块功能不完整或存在关键缺陷：
+- **跨链桥（Li.Fi）**：缺少状态追踪、成功/失败通知，路由对比无展示
+- **质押（ETH/SOL/ATOM）**：APY 全部静态硬编码，解质押流程仅弹 "coming soon"
+- **BTC 自托管质押**：`self_custody.dart` 是空壳，无流程说明，无风险提示
+
+---
+
+### 模块一：跨链桥修复 `e433e05`
+
+#### 改动文件
+
+| 文件 | 说明 |
+|------|------|
+| `lib/src/bridge/pages/bridge_home_page.dart` | 路由对比卡（多 provider 价格/时间并排），轮询状态追踪 |
+| `lib/src/bridge/pages/bridge_history_page.dart` | 状态变化本地通知，持久化历史（SharedPreferences） |
+| `lib/src/bridge/pages/bridge_select_chain_page.dart` | 搜索、选中态、i18n |
+| `lib/l10n/intl_*.arb` + `lib/generated/l10n.dart` | 新增 bridge 相关 i18n key |
+
+#### 核心改动
+
+- **路由对比**：`_routeCards()` 横向 PageView，展示 Uniswap / Li.Fi / 1inch 三路由的 amountOut / gas / 预估时间，高亮最优选项
+- **状态轮询**：`Timer.periodic(10s)` 对 `pending` 状态桥接历史轮询 `LifiApi().getStatus(txHash)`；`_completedTxHashes Set<String>` 防重入
+- **本地通知**：`FlutterLocalNotificationsPlugin` 在状态变为 `DONE`/`FAILED` 时弹出通知
+- **历史持久化**：`SharedPreferences` key `bridge_history`，JSON 数组存储，页面销毁前写盘
+- **路由优化展示**：每条路由卡显示 Provider Logo / 金额差额 / gas 费 / 时间，`_bestRouteIndex` 自动定位最优
+
+---
+
+### 模块二：ETH/SOL/ATOM 多链质押 `0a44206`
+
+#### 改动文件
+
+| 文件 | 说明 |
+|------|------|
+| `lib/src/staking/pages/staking_home_page.dart` | 实时 APY 并行加载，协议卡/持仓卡动态显示 |
+| `lib/src/staking/pages/stake_page.dart` | ETH 解质押 → DEX，SOL/ATOM 真实解质押流程 |
+| `lib/src/staking/pages/validator_list_page.dart` | AppBar / 搜索 / 排序 / 空状态全量 i18n |
+| `lib/l10n/intl_*.arb` + `lib/generated/l10n.dart` | 新增 19 个 staking i18n key |
+
+#### 核心改动
+
+**实时 APY 加载**（`staking_home_page.dart`）：
+
+```dart
+// Future.wait 并发三链 API，setState 后协议卡 / 持仓卡均使用 live 数据
+await Future.wait([
+  EthStakingApi().getLidoApy(),      // https://eth-api.lido.fi/v1/protocol/steth/apr/sma
+  SolStakingApi().getEstimatedApy(), // getInflationRate JSON-RPC
+  AtomStakingApi().getInflationAndApy(), // Cosmos REST API
+]);
+```
+
+加载期间显示 `CircularProgressIndicator`，失败后静默降级至静态值。
+
+**解质押流程**（`stake_page.dart`）：
+
+| 链 | 流程 |
+|----|------|
+| ETH Lido | 液态代币 stETH → 跳转 `DexSwapHome` 直接 swap，无锁定期 |
+| SOL | 选择持仓 → 全额注销 stake account（`buildUnstakeTransaction(position:)`） |
+| ATOM | 选择持仓 → 输入金额（支持 25/50/75/MAX 快捷按钮）→ 部分解委托 |
+
+**异步安全**：`ScaffoldMessenger.of(context)` 在 `await` 前捕获到局部变量，消除 `use_build_context_synchronously` 警告。
+
+**测试**：`flutter test test/features/staking/` → `+22: All tests passed!`
+
+---
+
+### 模块三：BTC 自托管质押 `c7f1d61`
+
+#### 背景
+
+- `self_custody.dart`：原本是有 TextField 但按钮无回调的空壳
+- `self_custody1.dart` / `redeem.dart`：直接返回裸 `WebViewWidget`，无 AppBar / 无提示
+- `redeem.dart`：`byteFee: 1` 硬编码，锁定期到期无任何检查或提示
+
+#### 改动文件
+
+| 文件 | 说明 |
+|------|------|
+| `lib/src/wallet/pages/Staking_btc/self_custody.dart` | 全面改写为流程介绍 + 风险提示入口页 |
+| `lib/src/wallet/pages/Staking_btc/self_custody1.dart` | 换用 `AppBarWidget`，加可关闭风险横幅 |
+| `lib/src/wallet/pages/Staking_btc/redeem.dart` | 换用 `AppBarWidget`，加锁定状态横幅，`byteFee` 动态化 |
+| `lib/l10n/intl_*.arb` + `lib/generated/l10n.dart` | 新增 26 个 btc_stake / btc_redeem i18n key |
+
+#### `self_custody.dart` 改写详情
+
+页面结构：
+```
+AppBarWidget("BTC Self-Custody Staking")
+├── CoinHeader：图标 + 名称 + 余额
+├── HowItWorks：4 步流程（带图标、连接线）
+│   ① 锁定 BTC（橙色，lock icon）
+│   ② 铸造 vBTC（紫色，token icon）
+│   ③ 获取奖励（绿色，star icon）
+│   ④ 到期赎回（蓝色，lock_open icon）
+├── RiskWarning：橙色边框卡，4 条风险说明
+│   • CLTV 锁定不可撤销
+│   • OP_CHECKLOCKTIMEVERIFY 无法绕过
+│   • 智能合约风险
+│   • 最低 0.001 BTC / 0.125 天
+└── Acknowledgment：勾选框（AnimatedContainer 过渡）
+    └── "Continue to Stake" 按钮（未勾选时视觉置灰 + 点击无效）
+```
+
+#### 赎回状态横幅（`redeem.dart`）
+
+WebView 发送 `redeem` 消息时捕获 `lock_time`（Unix 秒），横幅三态：
+
+| 状态 | 颜色 | 内容 |
+|------|------|------|
+| 尚未触发赎回 | 橙色 | 通用提醒 |
+| `lock_time > now` | 红色 | "BTC still locked · Locked until YYYY-MM-DD HH:mm" |
+| `lock_time ≤ now` | 绿色 | "Unlocked — ready to redeem" |
+
+#### byteFee 修复
+
+```dart
+// 修改前
+"byteFee": 1,
+
+// 修改后
+"byteFee": gasFeeRate, // 动态 gas 费率（已从 API getGasFeeBtc() 获取）
+```
+
+#### 分析结果
+
+```
+flutter analyze lib/src/wallet/pages/Staking_btc/
+→ No issues found!
+
+flutter test test/features/staking/
+→ +22: All tests passed!
+```
 
 ---
 
