@@ -441,6 +441,7 @@
   "g_key_ens_checking": "Checking availability...",
   "g_key_ens_commit": "Commit",
   "g_key_ens_commit_failed": "Commit failed",
+  "g_key_ens_commitment_expired_msg": "Kayıt taahhüdünün süresi doldu. Lütfen kayıt işlemini yeniden başlatın.",
   "g_key_ens_commit_tx": "Committing transaction...",
   "g_key_ens_committing": "Committing...",
   "g_key_ens_confirm_renew": "Confirm Renewal",

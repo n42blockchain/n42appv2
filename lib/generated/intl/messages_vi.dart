@@ -1417,6 +1417,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_commit_tx": MessageLookupByLibrary.simpleMessage(
       "Committing transaction...",
     ),
+    "g_key_ens_commitment_expired_msg": MessageLookupByLibrary.simpleMessage(
+      "Cam kết đăng ký đã hết hạn. Vui lòng bắt đầu lại quy trình đăng ký.",
+    ),
     "g_key_ens_committing": MessageLookupByLibrary.simpleMessage(
       "Committing...",
     ),

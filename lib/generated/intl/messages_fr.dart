@@ -1518,6 +1518,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_commit_tx": MessageLookupByLibrary.simpleMessage(
       "Committing transaction...",
     ),
+    "g_key_ens_commitment_expired_msg": MessageLookupByLibrary.simpleMessage(
+      "L\'engagement d\'enregistrement a expiré. Veuillez recommencer le processus d\'enregistrement.",
+    ),
     "g_key_ens_committing": MessageLookupByLibrary.simpleMessage(
       "Committing...",
     ),

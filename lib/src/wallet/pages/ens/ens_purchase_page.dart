@@ -53,6 +53,8 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
 
   CommitResult? _commitResult;
   RegisterResult? _registerResult;
+  // 标记 register 步骤因承诺过期而失败，用于智能重试决策
+  bool _commitmentExpiredOnRegister = false;
 
   Timer? _waitTimer;
   int _remainingSeconds = 0;
@@ -135,9 +137,14 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
     if (!mounted) return;
 
     if (registerResult.error || registerResult.data == null || !registerResult.data!.success) {
+      final isExpired = registerResult.data?.error ==
+          EnsRegisterErrorType.commitmentExpired.name;
       setState(() {
         _currentStep = -1;
-        _errorMessage = registerResult.data?.error ?? S.of(context).g_key_ens_register_failed;
+        _commitmentExpiredOnRegister = isExpired;
+        _errorMessage = isExpired
+            ? S.of(context).g_key_ens_commitment_expired_msg
+            : (registerResult.data?.error ?? S.of(context).g_key_ens_register_failed);
       });
       return;
     }
@@ -151,12 +158,36 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
 
   void _retryRegistration() {
     _waitTimer?.cancel();
-    setState(() {
-      _currentStep = 0;
-      _errorMessage = null;
-      _commitResult = null;
-      _registerResult = null;
-    });
+
+    if (_commitResult == null || _commitResult!.isExpired || _commitmentExpiredOnRegister) {
+      // 承诺不存在或已过期 → 通知服务端回滚（best-effort），然后从步骤 0 重新开始
+      if (_commitmentExpiredOnRegister || _commitResult?.isExpired == true) {
+        _ensService.rollbackCommit(widget.name); // intentionally not awaited (best-effort)
+      }
+      setState(() {
+        _currentStep = 0;
+        _errorMessage = null;
+        _commitResult = null;
+        _registerResult = null;
+        _commitmentExpiredOnRegister = false;
+      });
+    } else if (_commitResult!.canRegister) {
+      // 承诺仍在有效窗口内 → 跳过 commit 步骤，直接重试 register
+      setState(() {
+        _errorMessage = null;
+        _commitmentExpiredOnRegister = false;
+      });
+      _executeRegister();
+    } else {
+      // 承诺已提交但仍在等待期 → 恢复倒计时
+      setState(() {
+        _currentStep = 2;
+        _errorMessage = null;
+        _remainingSeconds = _commitResult!.remainingWaitTime;
+        _commitmentExpiredOnRegister = false;
+      });
+      _startWaitTimer();
+    }
   }
 
   @override
@@ -402,7 +433,9 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
               fit: StackFit.expand,
               children: [
                 CircularProgressIndicator(
-                  value: 1 - (_remainingSeconds / (_commitResult?.minWaitTime ?? 60)),
+                  value: (_commitResult?.minWaitTime ?? 0) > 0
+                      ? (1 - (_remainingSeconds / _commitResult!.minWaitTime)).clamp(0.0, 1.0)
+                      : 1.0,
                   strokeWidth: 8,
                   backgroundColor: AppThemeUtils.getColorByKey(
                     context,

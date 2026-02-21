@@ -1321,6 +1321,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_commit_tx": MessageLookupByLibrary.simpleMessage(
       "Committing transaction...",
     ),
+    "g_key_ens_commitment_expired_msg": MessageLookupByLibrary.simpleMessage(
+      "등록 커밋이 만료되었습니다. 등록 프로세스를 다시 시작하세요.",
+    ),
     "g_key_ens_committing": MessageLookupByLibrary.simpleMessage(
       "Committing...",
     ),

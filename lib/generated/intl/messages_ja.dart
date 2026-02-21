@@ -1235,6 +1235,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_commit_tx": MessageLookupByLibrary.simpleMessage(
       "Committing transaction...",
     ),
+    "g_key_ens_commitment_expired_msg": MessageLookupByLibrary.simpleMessage(
+      "登録コミットメントの有効期限が切れました。登録プロセスをやり直してください。",
+    ),
     "g_key_ens_committing": MessageLookupByLibrary.simpleMessage(
       "Committing...",
     ),

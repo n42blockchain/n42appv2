@@ -456,6 +456,24 @@ class RenewResult {
   }
 }
 
+
+/// ENS 注册错误类型
+///
+/// 用于区分可重试的瞬时错误与需要完整重启的过期错误。
+enum EnsRegisterErrorType {
+  /// 承诺哈希已过期，需要重新 commit（maxWaitTime 已超出）
+  commitmentExpired,
+
+  /// 承诺尚未到达最小等待时间（过早调用 register）
+  tooEarly,
+
+  /// 可重试的瞬时错误（网络抖动、gas 不足等）
+  transient,
+
+  /// 未知错误
+  unknown,
+}
+
 /// ENS 注册服务
 ///
 /// 提供 ENS 域名的完整生命周期管理：
@@ -681,6 +699,31 @@ class EnsRegistrationService {
     return _pendingCommitments[normalizedName];
   }
 
+
+  /// 回滚注册承诺（best-effort）
+  ///
+  /// 当注册失败且承诺已过期时调用。
+  /// 清除本地缓存并通知服务端回滚，服务端可将未完成的 order 标记为废弃。
+  /// 此操作是 best-effort：服务端通知失败不会影响本地状态清理。
+  ///
+  /// [name] - ENS 名称（含或不含 .eth 后缀均可）
+  Future<void> rollbackCommit(String name) async {
+    final normalizedName = _normalizeName(name).replaceAll('.eth', '');
+    // 立即清除本地缓存
+    _pendingCommitments.remove(normalizedName);
+    try {
+      await BaseApi.requestEmptyH.post(
+        '${_baseUrl}v1/ens/rollback',
+        params: <String, dynamic>{},
+        data: {'name': normalizedName},
+        header: _headers,
+      );
+    } catch (e) {
+      // best-effort：服务端通知失败不影响本地状态
+      debugPrint('ENS rollback notify error: $e');
+    }
+  }
+
   /// 第二步：执行注册
   ///
   /// [params] - 注册参数
@@ -709,10 +752,21 @@ class EnsRegistrationService {
         mm.error = false;
         mm.data = result;
       } else {
+        final errCode = response['code'] as int? ?? 0;
+        final errMsg = response['msg']?.toString() ?? 'Registration failed';
+        // 判断是否是承诺过期错误（服务端约定：4001 或消息含 expired/commitment not valid）
+        final isExpired = errCode == 4001 ||
+            errMsg.toLowerCase().contains('expired') ||
+            errMsg.toLowerCase().contains('commitment not valid');
+        if (isExpired) {
+          // 承诺过期：清除本地缓存并通知服务端回滚
+          await rollbackCommit(params.name);
+        }
+        // 非过期错误（网络抖动、gas 不足等）保留缓存，允许 UI 层重试
         mm.error = true;
         mm.data = RegisterResult.failure(
           params.name,
-          response['msg']?.toString() ?? 'Registration failed',
+          isExpired ? EnsRegisterErrorType.commitmentExpired.name : errMsg,
         );
       }
     } catch (e) {

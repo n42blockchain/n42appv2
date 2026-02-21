@@ -10074,6 +10074,16 @@ class S {
     );
   }
 
+  /// `Registration commitment expired. Please start the registration process again.`
+  String get g_key_ens_commitment_expired_msg {
+    return Intl.message(
+      'Registration commitment expired. Please start the registration process again.',
+      name: 'g_key_ens_commitment_expired_msg',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Registration failed`
   String get g_key_ens_register_failed {
     return Intl.message(
