@@ -50,7 +50,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m12(value) => "Dirección duplicada en fila ${value}";
 
-  static String m65(value) =>
+  static String m67(value) =>
       "Insufficient balance: total amount would exceed available ${value}";
 
   static String m13(value) => "Dirección inválida en fila ${value}";
@@ -69,7 +69,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m20(value) => "Actualización automática cada ${value} segundos";
 
-  static String m66(value) => "Failed to import account: ${value}";
+  static String m68(value) => "Failed to import account: ${value}";
 
   static String m21(value) =>
       "Por favor abre la app ${value} en tu dispositivo";
@@ -80,104 +80,108 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m24(value) => "${value} puntos para el siguiente nivel";
 
-  static String m25(value) =>
+  static String m25(amount, token) => "≈ ${amount}${token}";
+
+  static String m26(amount) => "≈ ${amount} USDT";
+
+  static String m27(value) =>
       "¿Estás seguro de que deseas eliminar el contacto?";
 
-  static String m26(value) => "${value}d unbond";
+  static String m28(value) => "${value}d unbond";
 
-  static String m27(value) => "${value} días restantes";
+  static String m29(value) => "${value} días restantes";
 
-  static String m28(value) => "${value} days remaining";
+  static String m30(value) => "${value} days remaining";
 
-  static String m29(value) => "No tienes suficiente \"${value}\"";
+  static String m31(value) => "No tienes suficiente \"${value}\"";
 
-  static String m30(value) => "Error al obtener la cuenta\"${value}\" account";
+  static String m32(value) => "Error al obtener la cuenta\"${value}\" account";
 
-  static String m31(value) =>
+  static String m33(value) =>
       "Mínimo ${value} XRP para la primera transferencia";
 
-  static String m32(value) => "${value}d ago";
+  static String m34(value) => "${value}d ago";
 
-  static String m33(value) => "${value}h ago";
+  static String m35(value) => "${value}h ago";
 
-  static String m34(value) => "${value}m ago";
+  static String m36(value) => "${value}m ago";
 
-  static String m35(value) => "Verification code sent to ${value}";
+  static String m37(value) => "Verification code sent to ${value}";
 
-  static String m36(value) => "No se agregó ninguna cadena de ${value}";
+  static String m38(value) => "No se agregó ninguna cadena de ${value}";
 
-  static String m37(value) =>
+  static String m39(value) =>
       "${value} tiene transacciones sin finalizar, inténtelo nuevamente más tarde.";
 
-  static String m38(value) => "No se encontró ninguna dirección para ${value}.";
+  static String m40(value) => "No se encontró ninguna dirección para ${value}.";
 
-  static String m39(value) => "Saldo insuficiente de ${value}.";
-
-  static String m40(value, value1) =>
-      "Cada cuenta XRP debe reservar ${value} XRP (${value1} drops) como mínimo base, el cual no se puede gastar.";
-
-  static String m41(value, value1) =>
-      "Por cada objeto que posee la cuenta, se agregan ${value} XRP (${value1} drops) a la reserva.";
+  static String m41(value) => "Saldo insuficiente de ${value}.";
 
   static String m42(value, value1) =>
+      "Cada cuenta XRP debe reservar ${value} XRP (${value1} drops) como mínimo base, el cual no se puede gastar.";
+
+  static String m43(value, value1) =>
+      "Por cada objeto que posee la cuenta, se agregan ${value} XRP (${value1} drops) a la reserva.";
+
+  static String m44(value, value1) =>
       "Esta cuenta posee ${value} objetos, lo que significa que se reservan ${value1} XRP adicionales.";
 
-  static String m43(value) =>
+  static String m45(value) =>
       "Error al ingresar el patrón de contraseña, tienes ${value} posibilidades";
 
-  static String m44(value) =>
+  static String m46(value) =>
       "Error al ingresar la contraseña del patrón, tiene ${value} posibilidades";
 
-  static String m45(value) =>
+  static String m47(value) =>
       "Has configurado correctamente un ${value} y comenzarás a verificar con N42Wallet.";
 
-  static String m46(value) =>
+  static String m48(value) =>
       "¡Únase a mi grupo ${value} en @N42Wallet para ser uno de los primeros mineros de una cadena de Capa 1 y obtenga criptomonedas en su teléfono!";
 
-  static String m47(value) => "Bloquee ${value} N para ejecutar un validador.";
+  static String m49(value) => "Bloquee ${value} N para ejecutar un validador.";
 
-  static String m48(value) => "Error en la importación::${value}";
+  static String m50(value) => "Error en la importación::${value}";
 
-  static String m49(value) =>
+  static String m51(value) =>
       "Se requiere un saldo de staking de al menos ${value} para obtener recompensas.";
 
-  static String m50(value, value1) =>
+  static String m52(value, value1) =>
       "${value} N por cada ${value1} bloques minados";
 
-  static String m51(value) => "Debe tener ${value} caracteres";
+  static String m53(value) => "Debe tener ${value} caracteres";
 
-  static String m52(value) => "${value} Saldo insuficiente.";
+  static String m54(value) => "${value} Saldo insuficiente.";
 
-  static String m53(value) => "${value} entrante...";
+  static String m55(value) => "${value} entrante...";
 
-  static String m54(value) =>
+  static String m56(value) =>
       "El ${value} intercambiado en la aplicación se distribuirá en breve a tu Wallet y no se puede vender a través de este proceso. Se puede usar para ejecutar un nodo.";
 
-  static String m55(value) => "Máximo ${value} caracteres";
+  static String m57(value) => "Máximo ${value} caracteres";
 
-  static String m56(value) => "¡La aplicación ${value} chain ya es compatible!";
-
-  static String m57(value) =>
-      "La aplicación ${value} chain ya es compatible, ¿quieres agregarla?";
-
-  static String m58(value) =>
-      "¡El enlace de prueba de dirección ${value} falló!";
+  static String m58(value) => "¡La aplicación ${value} chain ya es compatible!";
 
   static String m59(value) =>
-      "La aplicación se desbloqueará en ${value} segundos.";
+      "La aplicación ${value} chain ya es compatible, ¿quieres agregarla?";
 
   static String m60(value) =>
-      "Error al ingresar la contraseña del patrón, tienes ${value} posibilidades";
+      "¡El enlace de prueba de dirección ${value} falló!";
 
   static String m61(value) =>
-      "Error al ingresar la contraseña, tienes ${value} posibilidades";
+      "La aplicación se desbloqueará en ${value} segundos.";
 
   static String m62(value) =>
+      "Error al ingresar la contraseña del patrón, tienes ${value} posibilidades";
+
+  static String m63(value) =>
       "Error al ingresar la contraseña, tienes ${value} posibilidades";
 
-  static String m63(value) => "Ingrese ${value} contraseña";
+  static String m64(value) =>
+      "Error al ingresar la contraseña, tienes ${value} posibilidades";
 
-  static String m64(value) => "0~${value} caracteres";
+  static String m65(value) => "Ingrese ${value} contraseña";
+
+  static String m66(value) => "0~${value} caracteres";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -1023,7 +1027,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_batch_import_csv": MessageLookupByLibrary.simpleMessage(
       "Importar CSV",
     ),
-    "g_key_batch_insufficient_balance": m65,
+    "g_key_batch_insufficient_balance": m67,
     "g_key_batch_invalid_address": m13,
     "g_key_batch_invalid_amount": m14,
     "g_key_batch_max_recipients": m15,
@@ -1622,6 +1626,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_forgot_password": MessageLookupByLibrary.simpleMessage(
       "Forgot Password?",
     ),
+    "g_key_gas_alert": MessageLookupByLibrary.simpleMessage("Alerta de Gas"),
+    "g_key_gas_alert_above": MessageLookupByLibrary.simpleMessage(
+      "Alertar si sube de",
+    ),
+    "g_key_gas_alert_below": MessageLookupByLibrary.simpleMessage(
+      "Alertar si baja de",
+    ),
+    "g_key_gas_alert_save": MessageLookupByLibrary.simpleMessage("Guardar"),
+    "g_key_gas_alert_threshold": MessageLookupByLibrary.simpleMessage(
+      "Umbral (Gwei)",
+    ),
     "g_key_gas_auto_refresh": m20,
     "g_key_gas_base_fee": MessageLookupByLibrary.simpleMessage("Tarifa Base"),
     "g_key_gas_custom": MessageLookupByLibrary.simpleMessage("Personalizado"),
@@ -1640,6 +1655,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_gas_network_normal": MessageLookupByLibrary.simpleMessage(
       "Red normal",
     ),
+    "g_key_gas_price_trend": MessageLookupByLibrary.simpleMessage(
+      "Tendencia de Precio",
+    ),
     "g_key_gas_priority_fee": MessageLookupByLibrary.simpleMessage(
       "Tarifa Prioritaria",
     ),
@@ -1651,6 +1669,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_gas_slow": MessageLookupByLibrary.simpleMessage("Lento"),
     "g_key_gas_standard": MessageLookupByLibrary.simpleMessage("Estándar"),
+    "g_key_gas_tracker": MessageLookupByLibrary.simpleMessage(
+      "Rastreador de Gas",
+    ),
     "g_key_google_sign_in_cancelled": MessageLookupByLibrary.simpleMessage(
       "Google sign-in cancelled",
     ),
@@ -1687,7 +1708,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_firmware": MessageLookupByLibrary.simpleMessage(
       "Versión de Firmware",
     ),
-    "g_key_hw_import_failed": m66,
+    "g_key_hw_import_failed": m68,
     "g_key_hw_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
     "g_key_hw_no_devices": MessageLookupByLibrary.simpleMessage(
       "No se encontraron dispositivos",
@@ -1911,6 +1932,49 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_passwords_not_match": MessageLookupByLibrary.simpleMessage(
       "Passwords do not match",
     ),
+    "g_key_payment_amount_invalid": MessageLookupByLibrary.simpleMessage(
+      "Importe no válido",
+    ),
+    "g_key_payment_approx_token": m25,
+    "g_key_payment_approx_usdt": m26,
+    "g_key_payment_code_title": MessageLookupByLibrary.simpleMessage(
+      "QR de pago",
+    ),
+    "g_key_payment_confirm": MessageLookupByLibrary.simpleMessage("Confirmar"),
+    "g_key_payment_history": MessageLookupByLibrary.simpleMessage(
+      "Historial de pagos",
+    ),
+    "g_key_payment_history_btn": MessageLookupByLibrary.simpleMessage(
+      "Historial",
+    ),
+    "g_key_payment_incoming": MessageLookupByLibrary.simpleMessage("Entrada"),
+    "g_key_payment_load_failed": MessageLookupByLibrary.simpleMessage(
+      "Error de carga",
+    ),
+    "g_key_payment_name_not_set": MessageLookupByLibrary.simpleMessage(
+      "No establecido",
+    ),
+    "g_key_payment_native_insufficient": MessageLookupByLibrary.simpleMessage(
+      "¡Saldo nativo insuficiente!",
+    ),
+    "g_key_payment_native_not_found": MessageLookupByLibrary.simpleMessage(
+      "¡Cadena nativa no encontrada!",
+    ),
+    "g_key_payment_outgoing": MessageLookupByLibrary.simpleMessage("Salida"),
+    "g_key_payment_set_amount_title": MessageLookupByLibrary.simpleMessage(
+      "Establecer importe",
+    ),
+    "g_key_payment_success": MessageLookupByLibrary.simpleMessage(
+      "¡Pago exitoso!",
+    ),
+    "g_key_payment_title": MessageLookupByLibrary.simpleMessage("Pago"),
+    "g_key_payment_usdt_insufficient": MessageLookupByLibrary.simpleMessage(
+      "¡Saldo USDT insuficiente!",
+    ),
+    "g_key_payment_usdt_not_found": MessageLookupByLibrary.simpleMessage(
+      "¡Añade el token USDT!",
+    ),
+    "g_key_payment_wallet": MessageLookupByLibrary.simpleMessage("Cartera"),
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage(
       "Seleccionar de la galería del teléfono",
     ),
@@ -1949,7 +2013,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_squad_k11": MessageLookupByLibrary.simpleMessage(
       "El archivo es demasiado grande para cargarlo",
     ),
-    "g_key_squad_k15": m25,
+    "g_key_squad_k15": m27,
     "g_key_squad_k18": MessageLookupByLibrary.simpleMessage("Agregar contacto"),
     "g_key_squad_k24": MessageLookupByLibrary.simpleMessage("Contacto"),
     "g_key_squad_k25": MessageLookupByLibrary.simpleMessage(
@@ -1965,9 +2029,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Reclamar Recompensas",
     ),
     "g_key_stake_commission": MessageLookupByLibrary.simpleMessage("Comisión"),
-    "g_key_stake_d_unbond": m26,
-    "g_key_stake_days_left": m27,
-    "g_key_stake_days_remaining": m28,
+    "g_key_stake_d_unbond": m28,
+    "g_key_stake_days_left": m29,
+    "g_key_stake_days_remaining": m30,
     "g_key_stake_delegators": MessageLookupByLibrary.simpleMessage(
       "Delegadores",
     ),
@@ -2032,7 +2096,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_16": MessageLookupByLibrary.simpleMessage("Tarifa máxima de gas"),
     "g_key_t_17": MessageLookupByLibrary.simpleMessage("Tarifa máxima por gas"),
     "g_key_t_2": MessageLookupByLibrary.simpleMessage("Pendiente"),
-    "g_key_t_29": m29,
+    "g_key_t_29": m31,
     "g_key_t_3": MessageLookupByLibrary.simpleMessage("Error"),
     "g_key_t_30": MessageLookupByLibrary.simpleMessage("arifa de minero"),
     "g_key_t_31": MessageLookupByLibrary.simpleMessage("Continuar"),
@@ -2061,7 +2125,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_44": MessageLookupByLibrary.simpleMessage(
       "Error al obtener datos",
     ),
-    "g_key_t_45": m30,
+    "g_key_t_45": m32,
     "g_key_t_46": MessageLookupByLibrary.simpleMessage(
       "Verificar la dirección de recepción de la cuenta",
     ),
@@ -2072,16 +2136,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_51": MessageLookupByLibrary.simpleMessage(
       "Verificación de cuenta exitosa",
     ),
-    "g_key_t_52": m31,
+    "g_key_t_52": m33,
     "g_key_t_54": MessageLookupByLibrary.simpleMessage(
       "La dirección de recepción no tiene una cuenta y la primera transferencia es de al menos 10XRP",
     ),
     "g_key_t_6": MessageLookupByLibrary.simpleMessage("Gas usado"),
     "g_key_t_7": MessageLookupByLibrary.simpleMessage("Gas"),
-    "g_key_time_days_ago": m32,
-    "g_key_time_hours_ago": m33,
+    "g_key_time_days_ago": m34,
+    "g_key_time_hours_ago": m35,
     "g_key_time_just_now": MessageLookupByLibrary.simpleMessage("Just now"),
-    "g_key_time_minutes_ago": m34,
+    "g_key_time_minutes_ago": m36,
     "g_key_tran_1": MessageLookupByLibrary.simpleMessage(
       "Historial de transacciones",
     ),
@@ -2093,11 +2157,19 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_tran_7": MessageLookupByLibrary.simpleMessage("Monto gastado"),
     "g_key_tran_8": MessageLookupByLibrary.simpleMessage("Obtener monto"),
-    "g_key_tx_filter_direction": MessageLookupByLibrary.simpleMessage("Direction"),
-    "g_key_tx_filter_date_range": MessageLookupByLibrary.simpleMessage("Date Range"),
-    "g_key_tx_filter_date_from": MessageLookupByLibrary.simpleMessage("Start Date"),
+    "g_key_tx_filter_date_from": MessageLookupByLibrary.simpleMessage(
+      "Start Date",
+    ),
+    "g_key_tx_filter_date_range": MessageLookupByLibrary.simpleMessage(
+      "Date Range",
+    ),
     "g_key_tx_filter_date_to": MessageLookupByLibrary.simpleMessage("End Date"),
-    "g_key_tx_no_results": MessageLookupByLibrary.simpleMessage("No transactions match your filter"),
+    "g_key_tx_filter_direction": MessageLookupByLibrary.simpleMessage(
+      "Direction",
+    ),
+    "g_key_tx_no_results": MessageLookupByLibrary.simpleMessage(
+      "No transactions match your filter",
+    ),
     "g_key_u_10": MessageLookupByLibrary.simpleMessage("Tipos de NFT"),
     "g_key_u_11": MessageLookupByLibrary.simpleMessage("Seguidores"),
     "g_key_u_12": MessageLookupByLibrary.simpleMessage("Tipos de usuario"),
@@ -2142,7 +2214,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_verification_code": MessageLookupByLibrary.simpleMessage(
       "Verification Code",
     ),
-    "g_key_verification_code_sent": m35,
+    "g_key_verification_code_sent": m37,
     "g_key_wallet_c10": MessageLookupByLibrary.simpleMessage(
       "Ver frase inicial",
     ),
@@ -2274,7 +2346,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_k56": MessageLookupByLibrary.simpleMessage("Nonce"),
     "g_key_wallet_k57": MessageLookupByLibrary.simpleMessage("Acelerar"),
     "g_key_wallet_k58": MessageLookupByLibrary.simpleMessage("Nota"),
-    "g_key_wallet_m1": m36,
+    "g_key_wallet_m1": m38,
     "g_key_wallet_m11": MessageLookupByLibrary.simpleMessage(
       "¿Estás seguro de que deseas cancelar tu cuenta?",
     ),
@@ -2284,7 +2356,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_m17": MessageLookupByLibrary.simpleMessage(
       "Ingrese el código de verificación de Google.",
     ),
-    "g_key_wallet_m19": m37,
+    "g_key_wallet_m19": m39,
     "g_key_wallet_m2": MessageLookupByLibrary.simpleMessage(
       "El token actual no ha sido agregado.",
     ),
@@ -2292,11 +2364,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "Ingresa tu frase semilla con palabras separadas por espacios",
     ),
     "g_key_wallet_m22": MessageLookupByLibrary.simpleMessage("Importar Wallet"),
-    "g_key_wallet_m3": m38,
+    "g_key_wallet_m3": m40,
     "g_key_wallet_m4": MessageLookupByLibrary.simpleMessage(
       "El saldo actual de tokens es insuficiente.",
     ),
-    "g_key_wallet_m5": m39,
+    "g_key_wallet_m5": m41,
     "g_key_wallet_m6": MessageLookupByLibrary.simpleMessage("Error de firma"),
     "g_key_wallet_m8": MessageLookupByLibrary.simpleMessage(
       "Cancelación de cuenta",
@@ -2309,13 +2381,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_xml_0": MessageLookupByLibrary.simpleMessage("Reservado"),
     "g_key_xml_1": MessageLookupByLibrary.simpleMessage("Reserva base"),
-    "g_key_xml_11": m40,
+    "g_key_xml_11": m42,
     "g_key_xml_2": MessageLookupByLibrary.simpleMessage("Reserva incremental"),
-    "g_key_xml_22": m41,
+    "g_key_xml_22": m43,
     "g_key_xml_3": MessageLookupByLibrary.simpleMessage(
       "Cantidad de objetos poseídos",
     ),
-    "g_key_xml_33": m42,
+    "g_key_xml_33": m44,
     "g_key_xml_4": MessageLookupByLibrary.simpleMessage(
       "Cómo calcular el monto total reservado",
     ),
@@ -2347,7 +2419,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key20": MessageLookupByLibrary.simpleMessage(
       "Contraseña del patrón de dibujo",
     ),
-    "g_lock_key21": m43,
+    "g_lock_key21": m45,
     "g_lock_key22": MessageLookupByLibrary.simpleMessage(
       "Restablecer la contraseña del patrón",
     ),
@@ -2357,7 +2429,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "¿Agregar contraseña de billetera?",
     ),
-    "g_lock_key25": m44,
+    "g_lock_key25": m46,
     "g_lock_key3": MessageLookupByLibrary.simpleMessage(
       "Página de pantalla de bloqueo",
     ),
@@ -2387,12 +2459,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Compartir con amigos",
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Continuar"),
-    "g_mining_key63": m45,
-    "g_mining_key73": m46,
+    "g_mining_key63": m47,
+    "g_mining_key73": m48,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "Acabo de configurar un nodo en @N42aWallet y comencé a verificar en dispositivos móviles. ¡Únete a mí! ¡El futuro descentralizado es móvil!",
     ),
-    "g_mining_key76": m47,
+    "g_mining_key76": m49,
     "g_mining_key86": MessageLookupByLibrary.simpleMessage(
       "Canje disponible después de los 768.",
     ),
@@ -2425,7 +2497,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "¡Formato de datos cifrados no compatible!",
     ),
-    "g_mining_key_109": m48,
+    "g_mining_key_109": m50,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage(
       "Recompensas de ayer",
     ),
@@ -2441,7 +2513,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "El canje tarda un poco, ¡por favor espera un momento!",
     ),
-    "g_mining_key_116": m49,
+    "g_mining_key_116": m51,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "La recompensa se acumula diariamente y solo se envía a tu Wallet N cuando alcanza ~0.5 N.",
     ),
@@ -2504,7 +2576,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 bloques/día ~ 15 minutos",
     ),
-    "g_mining_key_71": m50,
+    "g_mining_key_71": m52,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "128 segundos por verificación",
     ),
@@ -2578,7 +2650,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "Por favor, introduzca la contraseña de cifrado",
     ),
-    "g_mining_key_98": m51,
+    "g_mining_key_98": m53,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Vuelve a introducir tu contraseña para asegurarte de que es correcta",
     ),
@@ -2605,7 +2677,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Referir vía"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Enlace"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("código"),
-    "g_swap_key_14": m52,
+    "g_swap_key_14": m54,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Obtener error en el precio de la moneda.",
     ),
@@ -2619,7 +2691,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Su intercambio se distribuirá en breve. Tenga paciencia.",
     ),
-    "g_swap_key_20": m53,
+    "g_swap_key_20": m55,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Costos para ejecutar un nodo: Verificación en grupo 1-49 N Nodo Básico: 50 N Nodo Premium: 100 N Nodo Pro: 500 N.",
     ),
@@ -2635,7 +2707,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Saldo Nuevo"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Tú pagas"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Fecha"),
-    "g_swap_key_31": m54,
+    "g_swap_key_31": m56,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Los swaps se pueden ver en los exploradores de cadena relevantes (Etherscan, BscScan, TRONSCAN y el nuestro).",
     ),
@@ -2646,7 +2718,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Intercambio de vista previa",
     ),
     "g_swap_key_6": MessageLookupByLibrary.simpleMessage("Inténtalo de nuevo"),
-    "g_token_m_key_1": m55,
+    "g_token_m_key_1": m57,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Cualquiera puede crear un token, incluso crear versiones falsas de tokens existentes. Siempre investigue un token antes de importarlo.",
     ),
@@ -2672,9 +2744,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage(
       "¡Error de formato!",
     ),
-    "g_token_m_key_22": m56,
-    "g_token_m_key_23": m57,
-    "g_token_m_key_24": m58,
+    "g_token_m_key_22": m58,
+    "g_token_m_key_23": m59,
+    "g_token_m_key_24": m60,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Importar tokens"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Todas las redes"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage(
@@ -2686,22 +2758,22 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_7": MessageLookupByLibrary.simpleMessage("Símbolo de ficha"),
     "g_token_m_key_8": MessageLookupByLibrary.simpleMessage("Token decimal"),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("Importar"),
-    "g_unlock_key10": m59,
+    "g_unlock_key10": m61,
     "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
       "El reconocimiento de huellas dactilares o facial no está habilitado. Inicie sesión.",
     ),
     "g_unlock_key3": MessageLookupByLibrary.simpleMessage(
       "Contraseña del patrón de dibujo",
     ),
-    "g_unlock_key4": m60,
+    "g_unlock_key4": m62,
     "g_unlock_key5": MessageLookupByLibrary.simpleMessage(
       "Ingrese la contraseña",
     ),
-    "g_unlock_key6": m61,
+    "g_unlock_key6": m63,
     "g_unlock_key7": MessageLookupByLibrary.simpleMessage(
       "Error de autenticación",
     ),
-    "g_unlock_key8": m62,
+    "g_unlock_key8": m64,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("También puedes "),
     "google_verification": MessageLookupByLibrary.simpleMessage(
       "Autenticación de Google",
@@ -2739,7 +2811,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "google_verification_message20": MessageLookupByLibrary.simpleMessage(
       "Ingrese el código de verificación de correo electrónico",
     ),
-    "google_verification_message21": m63,
+    "google_verification_message21": m65,
     "google_verification_message3": MessageLookupByLibrary.simpleMessage(
       "Error al obtener la clave de Google",
     ),
@@ -2799,7 +2871,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "login_password": MessageLookupByLibrary.simpleMessage("Contraseña"),
     "next": MessageLookupByLibrary.simpleMessage("Siguiente"),
-    "nicknameMessage": m64,
+    "nicknameMessage": m66,
     "password_diff": MessageLookupByLibrary.simpleMessage(
       "Las contraseñas no coinciden",
     ),

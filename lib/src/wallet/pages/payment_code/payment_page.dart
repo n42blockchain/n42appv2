@@ -52,14 +52,28 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
     _regular ??= Regular();
     return _regular!;
   }
+  // 复用同一实例，避免每次方法调用创建新对象
+  final UserInfoApi _userInfoApi = UserInfoApi();
   final oCcy = NumberFormat("#,##0.0#", "en_US");
+  /// UUID v4 格式正则（仅接受标准格式，防止注入任意字符串）
+  static final _uuidRe = RegExp(
+    r'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+    caseSensitive: false,
+  );
+
   @override
   void initState() {
     if(widget.amount!=null){
-      amount=widget.amount!;
-      address=widget.address!;
-      coinType=widget.coinType!;
-      uuid=widget.uuid??""; // 修复：uuid 从未从 widget 读取
+      // 校验 amount：必须为正有限数，防止注入 NaN/Infinity/负数
+      final double? parsedAmount = double.tryParse(widget.amount!);
+      if (parsedAmount != null && parsedAmount.isFinite && parsedAmount > 0) {
+        amount = widget.amount!;
+      }
+      address  = widget.address  ?? "";
+      coinType = widget.coinType ?? "";
+      // 校验 UUID 格式，非标准格式则不使用（不发 push，不发 API）
+      final String rawUuid = widget.uuid ?? "";
+      uuid = _uuidRe.hasMatch(rawUuid) ? rawUuid : "";
     }
     initData();
     super.initState();
@@ -74,8 +88,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
       setState(() {});
       return;
     }
-    UserInfoApi uApi = UserInfoApi();
-    MessageModel mm = await uApi.getUserInfoWithUUID(uuid);
+    MessageModel mm = await _userInfoApi.getUserInfoWithUUID(uuid);
     if (mm.error == false && mm.data != null) {
       try {
         userInfo = UserInfo.fromJson(Map<String, dynamic>.from(mm.data as Map));
@@ -115,11 +128,11 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
     }
     double uAmount=0;
     double coinPrice=usdtInfo?['coinPrice']??0.0;
+    final double amountVal = double.tryParse(amount) ?? 0.0;
     if(coinPrice>1){
-      uAmount=(amount==""?0.0:double.parse(amount))*coinPrice;
+      uAmount=amountVal*coinPrice;
     }else{
-      double am=amount==""?0.0:double.parse(amount);
-      uAmount=am+am*(1-coinPrice);
+      uAmount=amountVal+amountVal*(1-coinPrice);
     }
     usdtAmount=DataUtils().formatNum(uAmount,2);
     setState(() {});
@@ -138,11 +151,11 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
       double c1=coinModels[coinModelIndex].balanceDoubleAll();
       double c2=double.parse(usdtAmount);
       if(c1<c2){
-        errorMessage="USDT 余额不足！";
+        errorMessage=S.current.g_key_payment_usdt_insufficient;
       }
       initCoinMainModel();
     }else{
-      errorMessage="请添加USDT代币！";
+      errorMessage=S.current.g_key_payment_usdt_not_found;
     }
     setState(() {
       load=Load.finish;
@@ -168,10 +181,10 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
       coinMain=wap.coinModels[cIndex];
       await coinMain?.getBalance();
       if(coinMain!.balance==BigInt.zero){
-        errorMessage="主链币余额不足！";
+        errorMessage=S.current.g_key_payment_native_insufficient;
       }
     }else{
-      errorMessage="未找到主链！";
+      errorMessage=S.current.g_key_payment_native_not_found;
     }
     setState(() {});
   }
@@ -180,10 +193,16 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
     setState(() { load = Load.loading; });
     try {
       final CoinModel payToken = coinModels[coinModelIndex];
-      // 修复：转账金额应使用 USDT 等值（而非 USD 金额）
+      // 优先使用 USDT 等值金额；tryParse 防止 NaN/Infinity 崩溃
       final double transferAmount = usdtAmount.isNotEmpty
-          ? double.parse(usdtAmount)
-          : (amount.isNotEmpty ? double.parse(amount) : 0.0);
+          ? (double.tryParse(usdtAmount) ?? 0.0)
+          : (double.tryParse(amount) ?? 0.0);
+      // 二次守卫：金额必须为正有限数
+      if (!transferAmount.isFinite || transferAmount <= 0) {
+        errorMessage = S.current.g_key_payment_amount_invalid;
+        setState(() { load = Load.finish; });
+        return;
+      }
       TransferApi transferApi = TransferApi();
       MessageModel rData = await transferApi.transfer(
         payToken.coin['coinType'],
@@ -205,22 +224,12 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
         setState(() { load = Load.finish; });
         // 通知收款方（fire-and-forget，不阻塞支付成功 UX）
         if (uuid.isNotEmpty) {
-          (() async {
-            try {
-              await UserInfoApi().sendPaymentReceipt(
-                toUuid: uuid,
-                txHash: rData.data?.toString() ?? "",
-                amount: amount,
-                tokenAmount: usdtAmount,
-                coinType: payToken.coin['coinType'],
-                tokenName: "USDT",
-              );
-            } catch (e) {
-              debugPrint('sendPaymentReceipt error: $e');
-            }
-          })();
+          _notifyPayee(
+            txHash: rData.data?.toString() ?? "",
+            coinType: payToken.coin['coinType'],
+          );
         }
-        ToastUtils.show("支付成功！");
+        ToastUtils.show(S.current.g_key_payment_success);
         if (!mounted) return;
         Navigator.pop(context);
       }
@@ -229,12 +238,28 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
       setState(() { load = Load.finish; });
     }
   }
+
+  /// 向收款方发送"已收款"通知（fire-and-forget，不阻塞 UI）
+  void _notifyPayee({required String txHash, required String coinType}) {
+    _userInfoApi.sendPaymentReceipt(
+      toUuid: uuid,
+      txHash: txHash,
+      amount: amount,
+      tokenAmount: usdtAmount,
+      coinType: coinType,
+      tokenName: "USDT",
+    ).catchError((Object e) {
+      debugPrint('sendPaymentReceipt error: $e');
+      return MessageModel.error();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
       appBar: AppBarWidget(
-        text:"支付",
+        text: S.of(context).g_key_payment_title,
       ),
       body: SafeArea(
         child: Stack(
@@ -277,7 +302,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                             ),
                           ),
                           Text(
-                            "约 $usdtAmount USDT",
+                            S.of(context).g_key_payment_approx_usdt(usdtAmount),
                             style: TextStyle(
                               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                               fontSize: ScreenUtil().setSp(60),
@@ -542,7 +567,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
       child: Row(
         children: [
           Text(
-            "钱包",
+            S.of(context).g_key_payment_wallet,
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
               fontSize: ScreenUtil().setSp(30),

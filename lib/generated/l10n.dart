@@ -1549,31 +1549,6 @@ class S {
     return Intl.message('Get amount', name: 'g_key_tran_8', desc: '', args: []);
   }
 
-  /// `Direction`
-  String get g_key_tx_filter_direction {
-    return Intl.message('Direction', name: 'g_key_tx_filter_direction', desc: '', args: []);
-  }
-
-  /// `Date Range`
-  String get g_key_tx_filter_date_range {
-    return Intl.message('Date Range', name: 'g_key_tx_filter_date_range', desc: '', args: []);
-  }
-
-  /// `Start Date`
-  String get g_key_tx_filter_date_from {
-    return Intl.message('Start Date', name: 'g_key_tx_filter_date_from', desc: '', args: []);
-  }
-
-  /// `End Date`
-  String get g_key_tx_filter_date_to {
-    return Intl.message('End Date', name: 'g_key_tx_filter_date_to', desc: '', args: []);
-  }
-
-  /// `No transactions match your filter`
-  String get g_key_tx_no_results {
-    return Intl.message('No transactions match your filter', name: 'g_key_tx_no_results', desc: '', args: []);
-  }
-
   /// `Max {value} characters`
   String g_token_m_key_1(Object value) {
     return Intl.message(
@@ -8746,37 +8721,72 @@ class S {
 
   /// `Gas Tracker`
   String get g_key_gas_tracker {
-    return Intl.message('Gas Tracker', name: 'g_key_gas_tracker', desc: '', args: []);
+    return Intl.message(
+      'Gas Tracker',
+      name: 'g_key_gas_tracker',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Price Trend`
   String get g_key_gas_price_trend {
-    return Intl.message('Price Trend', name: 'g_key_gas_price_trend', desc: '', args: []);
+    return Intl.message(
+      'Price Trend',
+      name: 'g_key_gas_price_trend',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Gas Alert`
   String get g_key_gas_alert {
-    return Intl.message('Gas Alert', name: 'g_key_gas_alert', desc: '', args: []);
+    return Intl.message(
+      'Gas Alert',
+      name: 'g_key_gas_alert',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Threshold (Gwei)`
   String get g_key_gas_alert_threshold {
-    return Intl.message('Threshold (Gwei)', name: 'g_key_gas_alert_threshold', desc: '', args: []);
+    return Intl.message(
+      'Threshold (Gwei)',
+      name: 'g_key_gas_alert_threshold',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Alert when below`
   String get g_key_gas_alert_below {
-    return Intl.message('Alert when below', name: 'g_key_gas_alert_below', desc: '', args: []);
+    return Intl.message(
+      'Alert when below',
+      name: 'g_key_gas_alert_below',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Alert when above`
   String get g_key_gas_alert_above {
-    return Intl.message('Alert when above', name: 'g_key_gas_alert_above', desc: '', args: []);
+    return Intl.message(
+      'Alert when above',
+      name: 'g_key_gas_alert_above',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Save`
   String get g_key_gas_alert_save {
-    return Intl.message('Save', name: 'g_key_gas_alert_save', desc: '', args: []);
+    return Intl.message(
+      'Save',
+      name: 'g_key_gas_alert_save',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Select Token`
@@ -11549,6 +11559,246 @@ class S {
     return Intl.message(
       'Recent',
       name: 'g_key_coin_search_recent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Direction`
+  String get g_key_tx_filter_direction {
+    return Intl.message(
+      'Direction',
+      name: 'g_key_tx_filter_direction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date Range`
+  String get g_key_tx_filter_date_range {
+    return Intl.message(
+      'Date Range',
+      name: 'g_key_tx_filter_date_range',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start Date`
+  String get g_key_tx_filter_date_from {
+    return Intl.message(
+      'Start Date',
+      name: 'g_key_tx_filter_date_from',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `End Date`
+  String get g_key_tx_filter_date_to {
+    return Intl.message(
+      'End Date',
+      name: 'g_key_tx_filter_date_to',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No transactions match your filter`
+  String get g_key_tx_no_results {
+    return Intl.message(
+      'No transactions match your filter',
+      name: 'g_key_tx_no_results',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment History`
+  String get g_key_payment_history {
+    return Intl.message(
+      'Payment History',
+      name: 'g_key_payment_history',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Load failed`
+  String get g_key_payment_load_failed {
+    return Intl.message(
+      'Load failed',
+      name: 'g_key_payment_load_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Incoming`
+  String get g_key_payment_incoming {
+    return Intl.message(
+      'Incoming',
+      name: 'g_key_payment_incoming',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Outgoing`
+  String get g_key_payment_outgoing {
+    return Intl.message(
+      'Outgoing',
+      name: 'g_key_payment_outgoing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `≈ {amount}{token}`
+  String g_key_payment_approx_token(String amount, String token) {
+    return Intl.message(
+      '≈ $amount$token',
+      name: 'g_key_payment_approx_token',
+      desc: '',
+      args: [amount, token],
+    );
+  }
+
+  /// `Payment QR`
+  String get g_key_payment_code_title {
+    return Intl.message(
+      'Payment QR',
+      name: 'g_key_payment_code_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `History`
+  String get g_key_payment_history_btn {
+    return Intl.message(
+      'History',
+      name: 'g_key_payment_history_btn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not Set`
+  String get g_key_payment_name_not_set {
+    return Intl.message(
+      'Not Set',
+      name: 'g_key_payment_name_not_set',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Set Payment Amount`
+  String get g_key_payment_set_amount_title {
+    return Intl.message(
+      'Set Payment Amount',
+      name: 'g_key_payment_set_amount_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm`
+  String get g_key_payment_confirm {
+    return Intl.message(
+      'Confirm',
+      name: 'g_key_payment_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid payment amount`
+  String get g_key_payment_amount_invalid {
+    return Intl.message(
+      'Invalid payment amount',
+      name: 'g_key_payment_amount_invalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment`
+  String get g_key_payment_title {
+    return Intl.message(
+      'Payment',
+      name: 'g_key_payment_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment successful!`
+  String get g_key_payment_success {
+    return Intl.message(
+      'Payment successful!',
+      name: 'g_key_payment_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wallet`
+  String get g_key_payment_wallet {
+    return Intl.message(
+      'Wallet',
+      name: 'g_key_payment_wallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `≈ {amount} USDT`
+  String g_key_payment_approx_usdt(String amount) {
+    return Intl.message(
+      '≈ $amount USDT',
+      name: 'g_key_payment_approx_usdt',
+      desc: '',
+      args: [amount],
+    );
+  }
+
+  /// `Insufficient USDT balance!`
+  String get g_key_payment_usdt_insufficient {
+    return Intl.message(
+      'Insufficient USDT balance!',
+      name: 'g_key_payment_usdt_insufficient',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please add USDT token!`
+  String get g_key_payment_usdt_not_found {
+    return Intl.message(
+      'Please add USDT token!',
+      name: 'g_key_payment_usdt_not_found',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Insufficient native balance!`
+  String get g_key_payment_native_insufficient {
+    return Intl.message(
+      'Insufficient native balance!',
+      name: 'g_key_payment_native_insufficient',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Native chain not found!`
+  String get g_key_payment_native_not_found {
+    return Intl.message(
+      'Native chain not found!',
+      name: 'g_key_payment_native_not_found',
       desc: '',
       args: [],
     );

@@ -1,6 +1,7 @@
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
+import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
@@ -23,6 +24,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
   String uuid = "";
   Load load = Load.finish;
   String errorMessage = "";
+  bool _isLoading = false; // 并发加载守卫
   final DateFormat _dateFmt = DateFormat("MM-dd HH:mm");
 
   @override
@@ -33,7 +35,8 @@ class _PaymentHistoryState extends State<PaymentHistory> {
   }
 
   Future<void> loadHistory() async {
-    if (!mounted) return;
+    if (!mounted || _isLoading) return; // 防止并发重复请求
+    _isLoading = true;
     setState(() {
       load = Load.loading;
       errorMessage = "";
@@ -44,7 +47,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
       if (mm.error) {
         setState(() {
           load = Load.error;
-          errorMessage = mm.data?.toString() ?? "加载失败";
+          errorMessage = mm.data?.toString() ?? S.current.g_key_payment_load_failed;
         });
       } else {
         final raw = mm.data;
@@ -67,6 +70,8 @@ class _PaymentHistoryState extends State<PaymentHistory> {
         load = Load.error;
         errorMessage = e.toString();
       });
+    } finally {
+      _isLoading = false;
     }
   }
 
@@ -89,11 +94,11 @@ class _PaymentHistoryState extends State<PaymentHistory> {
       backgroundColor:
           AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
       appBar: AppBarWidget(
-        text: "支付历史",
+        text: S.of(context).g_key_payment_history,
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh_outlined),
-            tooltip: "刷新",
+            tooltip: S.of(context).g_key_bridge_refresh,
             onPressed: loadHistory,
           ),
         ],
@@ -176,7 +181,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
       margin:
           EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       child: Text(
-        isIncoming ? "收入" : "支出",
+        isIncoming ? S.of(context).g_key_payment_incoming : S.of(context).g_key_payment_outgoing,
         style: TextStyle(
           color: AppThemeUtils.getColorByKey(
             context,
@@ -267,7 +272,10 @@ class _PaymentHistoryState extends State<PaymentHistory> {
                       ),
                       if ((data['tokenAmount'] ?? "").toString().isNotEmpty)
                         Text(
-                          "约 ${data['tokenAmount']}${data['token'] ?? ""}",
+                          S.of(context).g_key_payment_approx_token(
+                            data['tokenAmount'].toString(),
+                            data['token']?.toString() ?? "",
+                          ),
                           style: TextStyle(
                             color: AppThemeUtils.getColorByKey(
                                 context, AppThemeKeys.itemSubtitleTextColor.name),

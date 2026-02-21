@@ -1,5 +1,6 @@
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/pages/payment_code/payment_history.dart';
 import 'package:n42appv2/src/wallet/pages/payment_code/set_amount.dart';
@@ -29,7 +30,7 @@ class _PaymentCodeState extends State<PaymentCode> {
       backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.rightTextColor.name),
       appBar: AppBarWidget(
         backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.rightTextColor.name),
-        text: "收款码",
+        text: S.of(context).g_key_payment_code_title,
         style: TextStyle(
           fontWeight: FontWeight.normal,
           fontSize: ScreenUtil().setSp(32.0),
@@ -41,7 +42,7 @@ class _PaymentCodeState extends State<PaymentCode> {
               Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentHistory()));
             },
             child: Text(
-              "历史",
+              S.of(context).g_key_payment_history_btn,
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
                 fontSize: ScreenUtil().setSp(30.0),
@@ -73,7 +74,7 @@ class _PaymentCodeState extends State<PaymentCode> {
                       padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(30)),
                       alignment: Alignment.center,
                       child: Text(
-                        AppGlobals.userInfo?.name??"未设置",
+                        AppGlobals.userInfo?.name ?? S.of(context).g_key_payment_name_not_set,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(30),
                           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlockColor.name),
@@ -129,7 +130,7 @@ class _PaymentCodeState extends State<PaymentCode> {
                         }
                       },
                       child: Text(
-                        "设置收款金额",
+                        S.of(context).g_key_payment_set_amount_title,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(32),
                           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),

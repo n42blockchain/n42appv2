@@ -1,4 +1,5 @@
 import 'package:n42appv2/src/utils/regular.dart';
+import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/pages/payment_code/payment_code.dart';
@@ -76,7 +77,7 @@ class _SetAmountState extends ConsumerState<SetAmount> {
     return Scaffold(
       backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
       appBar: AppBarWidget(
-        text: "设置收款金额",
+        text: S.of(context).g_key_payment_set_amount_title,
       ),
       body: SafeArea(
         child: Column(
@@ -101,7 +102,7 @@ class _SetAmountState extends ConsumerState<SetAmount> {
                   String amountStr=amountController.text;
                   if(regular.regularDouble(amountStr)==false){
                     if(regular.regularNums(amountStr)==false){
-                      amountErrorMessage="收款金额格式错误";
+                      amountErrorMessage=S.of(context).g_key_payment_amount_invalid;
                     }else{
                       amountErrorMessage="";
                     }
@@ -113,7 +114,7 @@ class _SetAmountState extends ConsumerState<SetAmount> {
                 onChanged: (String value){
                   if(regular.regularDouble(value)==false){
                     if(regular.regularNums(value)==false){
-                      amountErrorMessage="收款金额格式错误";
+                      amountErrorMessage=S.of(context).g_key_payment_amount_invalid;
                     }else{
                       amountErrorMessage="";
                     }
@@ -170,7 +171,7 @@ class _SetAmountState extends ConsumerState<SetAmount> {
                   if(regular.regularDouble(amountStr)==false){
                     if(regular.regularNums(amountStr)==false){
                       setState(() {
-                        amountErrorMessage="收款金额格式错误";
+                        amountErrorMessage=S.of(context).g_key_payment_amount_invalid;
                       });
                       return;
                     }else{
@@ -191,7 +192,7 @@ class _SetAmountState extends ConsumerState<SetAmount> {
                     Navigator.pop(context,rmap);
                   }
               },
-                "确定",
+                S.of(context).g_key_payment_confirm,
                 AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
                 AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
                 false,

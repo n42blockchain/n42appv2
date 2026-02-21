@@ -495,18 +495,21 @@ class UserInfoApi{
     required String tokenName,
   }) async {
     try {
-      Map<String, dynamic> params = {
-        "uuid": AppGlobals.userInfo?.uuid ?? "",
-        "token": AppGlobals.userInfo?.token ?? "",
-        "source": "app",
-        "to_uuid": toUuid,
-        "tx_hash": txHash,
-        "amount": amount,
-        "token_amount": tokenAmount,
-        "coin_type": coinType,
+      // 构建请求体，跳过空字符串字段以减小 payload 体积
+      final Map<String, dynamic> params = {
+        "uuid"      : AppGlobals.userInfo?.uuid ?? "",
+        "token"     : AppGlobals.userInfo?.token ?? "",
+        "source"    : "app",
+        "to_uuid"   : toUuid,
+        "tx_hash"   : txHash,
+        "coin_type" : coinType,
         "token_name": tokenName,
-        "from_name": AppGlobals.userInfo?.name ?? "",
       };
+      if (amount.isNotEmpty)      params["amount"]       = amount;
+      if (tokenAmount.isNotEmpty) params["token_amount"] = tokenAmount;
+      final String fromName = AppGlobals.userInfo?.name ?? "";
+      if (fromName.isNotEmpty)    params["from_name"]    = fromName;
+
       MessageModel mm = MessageModel();
       final data = await BaseApi.requestEmptyH.post(
         '$url/v1/l/payment/receipt',

@@ -1274,5 +1274,35 @@
   "g_key_tx_filter_date_range": "Date Range",
   "g_key_tx_filter_date_from": "Start Date",
   "g_key_tx_filter_date_to": "End Date",
-  "g_key_tx_no_results": "No transactions match your filter"
+  "g_key_tx_no_results": "No transactions match your filter",
+  "g_key_payment_history": "Payment History",
+  "g_key_payment_load_failed": "Load failed",
+  "g_key_payment_incoming": "Incoming",
+  "g_key_payment_outgoing": "Outgoing",
+  "g_key_payment_approx_token": "≈ {amount}{token}",
+  "@g_key_payment_approx_token": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "token":  {"type": "String"}
+    }
+  },
+  "g_key_payment_code_title": "Payment QR",
+  "g_key_payment_history_btn": "History",
+  "g_key_payment_name_not_set": "Not Set",
+  "g_key_payment_set_amount_title": "Set Payment Amount",
+  "g_key_payment_confirm": "Confirm",
+  "g_key_payment_amount_invalid": "Invalid payment amount",
+  "g_key_payment_title": "Payment",
+  "g_key_payment_success": "Payment successful!",
+  "g_key_payment_wallet": "Wallet",
+  "g_key_payment_approx_usdt": "≈ {amount} USDT",
+  "@g_key_payment_approx_usdt": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "g_key_payment_usdt_insufficient": "Insufficient USDT balance!",
+  "g_key_payment_usdt_not_found": "Please add USDT token!",
+  "g_key_payment_native_insufficient": "Insufficient native balance!",
+  "g_key_payment_native_not_found": "Native chain not found!"
 }
