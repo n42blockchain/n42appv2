@@ -7,11 +7,12 @@
 
 ## 项目结构
 
-- 主项目: C:\N42\n42appv2 (Flutter 应用)
-- Chat 插件: D:\n42\n42_chat (聊天功能模块)
-- 区块链节点: /Users/jieliu/Documents/n42/minto/ (Rust 主节点 + Go Erigon fork)
-- 技术栈: Rust（主链节点）、Go（Erigon fork）、TypeScript/Flutter/Dart（前端/移动端）
-- **开始工作前确认当前目录属于哪个子项目**
+- 主项目: /Users/jieliu/Documents/n42/n42appv2 (Flutter 钱包 App，当前 repo)
+- Chat 插件: /Users/jieliu/Documents/n42/n42_chat (聊天功能模块，独立 Flutter package)
+- Rust 主链节点: /Users/jieliu/Documents/n42/n42-26/ (N42 区块链 Rust 全节点，含 crates/)
+- 储值卡应用: /Users/jieliu/Documents/n42/minto/ (链上储值卡，TypeScript 全栈：contracts + backend + mobile + web-admin)
+- 技术栈: Rust（主链节点）、TypeScript/Node.js（minto 后端/合约）、Flutter/Dart（钱包 + 聊天）
+- **开始工作前确认当前目录属于哪个子项目，git remote 确认是对的 repo**
 
 ## Session Continuation
 
