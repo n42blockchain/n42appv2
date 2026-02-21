@@ -755,9 +755,9 @@ class EnsRegistrationService {
         final errCode = response['code'] as int? ?? 0;
         final errMsg = response['msg']?.toString() ?? 'Registration failed';
         // 判断是否是承诺过期错误（服务端约定：4001 或消息含 expired/commitment not valid）
-        final isExpired = errCode == 4001 ||
-            errMsg.toLowerCase().contains('expired') ||
-            errMsg.toLowerCase().contains('commitment not valid');
+        // 仅信任服务端明确的错误码 4001 判断承诺过期
+        // 避免依赖 errMsg 字符串匹配——服务端可在任何消息中注入 "expired" 关键词
+        final isExpired = errCode == 4001;
         if (isExpired) {
           // 承诺过期：清除本地缓存并通知服务端回滚
           await rollbackCommit(params.name);
