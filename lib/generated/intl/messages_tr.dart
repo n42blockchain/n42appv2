@@ -1460,6 +1460,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_confirm_title": MessageLookupByLibrary.simpleMessage(
       "Confirm ENS Resolution",
     ),
+    "g_key_ens_copy_address": MessageLookupByLibrary.simpleMessage(
+      "Adres kopyalandı",
+    ),
     "g_key_ens_current_expiry": MessageLookupByLibrary.simpleMessage(
       "Current Expiry",
     ),
@@ -1622,6 +1625,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_ens_search_title": MessageLookupByLibrary.simpleMessage(
       "Search ENS",
+    ),
+    "g_key_ens_self_transfer": MessageLookupByLibrary.simpleMessage(
+      "Kendi adresinize gönderemezsiniz",
     ),
     "g_key_ens_service": MessageLookupByLibrary.simpleMessage(
       "Ethereum Name Service",

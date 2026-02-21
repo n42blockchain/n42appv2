@@ -5,6 +5,7 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
@@ -28,7 +29,9 @@ enum EnsResolveStatus {
 
 /// ENS 地址输入框
 ///
-/// 提供实时 ENS 解析反馈，对标 MetaMask、Rainbow 等主流钱包
+/// 提供实时 ENS 解析反馈，对标 MetaMask、Rainbow 等主流钱包。
+/// 解析成功后显示缩短地址（6+4 格式）、来源链徽章、头像，
+/// 并支持点击复制已解析地址。
 class EnsAddressField extends StatefulWidget {
   /// 文本控制器
   final TextEditingController controller;
@@ -84,6 +87,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
 
   EnsResolveStatus _status = EnsResolveStatus.idle;
   EnsResolutionResult? _resolveResult;
+  String? _avatarUrl;
   Timer? _debounceTimer;
 
   /// 防抖延迟时间
@@ -142,33 +146,53 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
           widget.senderAddress.toLowerCase()) {
         _updateStatus(
           EnsResolveStatus.failed,
-          EnsResolutionResult.failure('Cannot transfer to yourself'),
+          EnsResolutionResult.failure(S.current.g_key_ens_self_transfer),
         );
         widget.onAddressValidated?.call(null, true);
-      } else {
-        _updateStatus(EnsResolveStatus.resolved, result);
-        widget.onAddressValidated?.call(result.address, true);
+        return;
       }
+
+      _updateStatus(EnsResolveStatus.resolved, result);
+      widget.onAddressValidated?.call(result.address, true);
+
+      // 异步加载头像（不阻塞主流程）
+      _loadAvatar(result, ensName);
     } else {
       _updateStatus(EnsResolveStatus.failed, result);
       widget.onAddressValidated?.call(null, true);
     }
   }
 
-  Future<void> _validateAddress(String address) async {
-    // 简单的地址格式检查
-    final isValidFormat = address.startsWith('0x') && address.length == 42;
-    if (isValidFormat) {
-      widget.onAddressValidated?.call(address, false);
-    } else {
-      widget.onAddressValidated?.call(null, false);
+  /// 异步加载 ENS 头像：优先使用已内联在解析结果中的 avatar URL，
+  /// 否则单独请求 getAvatar。
+  Future<void> _loadAvatar(EnsResolutionResult result, String ensName) async {
+    String? url = result.avatar;
+    if (url == null || url.isEmpty) {
+      try {
+        url = await _ensService.getAvatar(ensName);
+      } catch (_) {
+        url = null;
+      }
     }
+    if (!mounted) return;
+    if (url != null && url.isNotEmpty) {
+      setState(() => _avatarUrl = url);
+    }
+  }
+
+  Future<void> _validateAddress(String address) async {
+    // 简单的地址格式检查（0x + 40 hex）
+    final isValidFormat =
+        address.startsWith('0x') && address.length == 42 &&
+        RegExp(r'^0x[0-9a-fA-F]{40}$').hasMatch(address);
+    widget.onAddressValidated?.call(isValidFormat ? address : null, false);
   }
 
   void _updateStatus(EnsResolveStatus status, EnsResolutionResult? result) {
     setState(() {
       _status = status;
       _resolveResult = result;
+      if (status != EnsResolveStatus.resolved) _avatarUrl = null;
     });
     widget.onEnsStatusChanged?.call(status, result);
   }
@@ -229,11 +253,11 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
           ),
         ),
 
-        // ENS 解析结果显示
+        // ENS 解析结果显示（解析成功时展示）
         if (_status == EnsResolveStatus.resolved && _resolveResult != null)
-          _buildResolvedInfo(blueColor, subtitleColor, mainTextColor),
+          _buildResolvedCard(blueColor, subtitleColor, mainTextColor),
 
-        // 错误信息
+        // 外部错误信息（父组件传入）
         if (widget.errorText != null && widget.errorText!.isNotEmpty)
           Padding(
             padding: EdgeInsets.only(
@@ -321,77 +345,136 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
     }
   }
 
-  Widget _buildResolvedInfo(
+  /// 解析成功卡片：显示头像（若有）、ENS名称→缩短地址、来源链徽章。
+  /// 点击整个卡片可复制完整地址。
+  Widget _buildResolvedCard(
     Color blueColor,
     Color subtitleColor,
     Color mainTextColor,
   ) {
-    return Container(
-      margin: EdgeInsets.only(top: ScreenUtil().setWidth(8)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
-      decoration: BoxDecoration(
-        color: const Color(0xFF4CAF50).withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
-        border: Border.all(
-          color: const Color(0xFF4CAF50).withValues(alpha: 0.3),
+    final resolvedAddr = _resolveResult!.address!;
+    final shortAddr = AddressValidator.getAddressPreview(
+      resolvedAddr,
+      prefixLength: 6,
+      suffixLength: 4,
+    );
+
+    return GestureDetector(
+      onTap: () => _copyAddress(resolvedAddr),
+      child: Container(
+        margin: EdgeInsets.only(top: ScreenUtil().setWidth(8)),
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(12),
+          vertical: ScreenUtil().setWidth(10),
+        ),
+        decoration: BoxDecoration(
+          color: const Color(0xFF4CAF50).withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+          border: Border.all(
+            color: const Color(0xFF4CAF50).withValues(alpha: 0.3),
+          ),
+        ),
+        child: Row(
+          children: [
+            // 头像（有时才显示）或默认的 verified 图标
+            _buildAvatarWidget(),
+            SizedBox(width: ScreenUtil().setWidth(8)),
+
+            // 地址信息列
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // 副标题：Resolved Address
+                  Text(
+                    S.of(context).g_key_ens_resolved_address,
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(20),
+                      color: subtitleColor,
+                    ),
+                  ),
+                  SizedBox(height: ScreenUtil().setWidth(2)),
+                  // 主体：缩短地址（6+4）
+                  Text(
+                    shortAddr,
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(26),
+                      fontWeight: FontWeight.w600,
+                      color: mainTextColor,
+                      fontFamily: 'monospace',
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // 来源链徽章（若有）
+            if (_resolveResult?.sourceChain != null)
+              Container(
+                margin: EdgeInsets.only(left: ScreenUtil().setWidth(4)),
+                padding: EdgeInsets.symmetric(
+                  horizontal: ScreenUtil().setWidth(8),
+                  vertical: ScreenUtil().setWidth(4),
+                ),
+                decoration: BoxDecoration(
+                  color: blueColor.withValues(alpha: 0.1),
+                  borderRadius:
+                      BorderRadius.circular(ScreenUtil().setWidth(6)),
+                ),
+                child: Text(
+                  _resolveResult!.sourceChain!,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(18),
+                    fontWeight: FontWeight.w600,
+                    color: blueColor,
+                  ),
+                ),
+              ),
+
+            // 复制图标提示
+            SizedBox(width: ScreenUtil().setWidth(6)),
+            Icon(
+              Icons.copy_rounded,
+              color: subtitleColor,
+              size: ScreenUtil().setWidth(20),
+            ),
+          ],
         ),
       ),
-      child: Row(
-        children: [
-          Icon(
-            Icons.verified,
-            color: const Color(0xFF4CAF50),
-            size: ScreenUtil().setWidth(24),
-          ),
-          SizedBox(width: ScreenUtil().setWidth(8)),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  S.of(context).g_key_ens_resolved_address,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(20),
-                    color: subtitleColor,
-                  ),
-                ),
-                SizedBox(height: ScreenUtil().setWidth(2)),
-                Text(
-                  AddressValidator.getAddressPreview(
-                    _resolveResult!.address!,
-                    prefixLength: 10,
-                    suffixLength: 8,
-                  ),
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    fontWeight: FontWeight.w600,
-                    color: mainTextColor,
-                    fontFamily: 'monospace',
-                  ),
-                ),
-              ],
-            ),
-          ),
-          if (_resolveResult?.sourceChain != null)
-            Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(8),
-                vertical: ScreenUtil().setWidth(4),
-              ),
-              decoration: BoxDecoration(
-                color: blueColor.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
-              ),
-              child: Text(
-                _resolveResult!.sourceChain!,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(18),
-                  fontWeight: FontWeight.w600,
-                  color: blueColor,
-                ),
-              ),
-            ),
-        ],
+    );
+  }
+
+  /// 头像组件：如有 URL 则显示网络图片，否则显示 verified 图标
+  Widget _buildAvatarWidget() {
+    if (_avatarUrl != null) {
+      return ClipOval(
+        child: Image.network(
+          _avatarUrl!,
+          width: ScreenUtil().setWidth(32),
+          height: ScreenUtil().setWidth(32),
+          fit: BoxFit.cover,
+          errorBuilder: (ctx, err, st) => _verifiedIcon(),
+        ),
+      );
+    }
+    return _verifiedIcon();
+  }
+
+  Widget _verifiedIcon() => Icon(
+        Icons.verified,
+        color: const Color(0xFF4CAF50),
+        size: ScreenUtil().setWidth(24),
+      );
+
+  void _copyAddress(String address) {
+    Clipboard.setData(ClipboardData(text: address));
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(S.of(context).g_key_ens_copy_address),
+        duration: const Duration(seconds: 1),
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }

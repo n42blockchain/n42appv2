@@ -1335,6 +1335,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_ens_confirm_send": MessageLookupByLibrary.simpleMessage("확인 및 전송"),
     "g_key_ens_confirm_title": MessageLookupByLibrary.simpleMessage("ENS 확인"),
+    "g_key_ens_copy_address": MessageLookupByLibrary.simpleMessage("주소 복사됨"),
     "g_key_ens_current_expiry": MessageLookupByLibrary.simpleMessage(
       "Current Expiry",
     ),
@@ -1493,6 +1494,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_ens_search_title": MessageLookupByLibrary.simpleMessage(
       "Search ENS",
+    ),
+    "g_key_ens_self_transfer": MessageLookupByLibrary.simpleMessage(
+      "자신의 주소로는 전송할 수 없습니다",
     ),
     "g_key_ens_service": MessageLookupByLibrary.simpleMessage(
       "Ethereum Name Service",

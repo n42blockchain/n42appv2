@@ -1548,4 +1548,7 @@
   "g_key_dex_status_confirmed": "Confirmé",
   "g_key_dex_status_failed": "Échoué",
   "g_key_dex_status_quoted": "Devisé"
+,
+  "g_key_ens_self_transfer": "Impossible d'envoyer à votre propre adresse",
+  "g_key_ens_copy_address": "Adresse copiée"
 }

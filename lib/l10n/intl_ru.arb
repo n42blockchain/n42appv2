@@ -1548,4 +1548,7 @@
   "g_key_dex_status_confirmed": "Подтверждено",
   "g_key_dex_status_failed": "Не удалось",
   "g_key_dex_status_quoted": "Котировка"
+,
+  "g_key_ens_self_transfer": "Нельзя отправить на собственный адрес",
+  "g_key_ens_copy_address": "Адрес скопирован"
 }

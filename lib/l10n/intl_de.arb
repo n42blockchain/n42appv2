@@ -1548,4 +1548,7 @@
   "g_key_dex_status_confirmed": "Bestätigt",
   "g_key_dex_status_failed": "Fehlgeschlagen",
   "g_key_dex_status_quoted": "Angeboten"
+,
+  "g_key_ens_self_transfer": "Senden an eigene Adresse nicht möglich",
+  "g_key_ens_copy_address": "Adresse kopiert"
 }

@@ -1591,4 +1591,7 @@
   "g_key_dex_status_confirmed": "확인됨",
   "g_key_dex_status_failed": "실패",
   "g_key_dex_status_quoted": "견적됨"
+,
+  "g_key_ens_self_transfer": "자신의 주소로는 전송할 수 없습니다",
+  "g_key_ens_copy_address": "주소 복사됨"
 }

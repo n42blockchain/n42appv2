@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/component/pages/scan_page.dart';
@@ -41,6 +42,8 @@ import 'package:n42appv2/src/wallet/models/gas_estimate_model.dart';
 import 'package:n42appv2/src/wallet/pages/gas/gas_settings_page.dart';
 import 'package:n42appv2/src/wallet/widgets/gas_selector_widget.dart';
 import 'package:n42appv2/src/wallet/widgets/ens_confirm_dialog.dart';
+import 'package:n42appv2/src/wallet/widgets/ens_address_field.dart';
+import 'package:n42appv2/src/wallet/services/ens_service.dart';
 import 'package:n42appv2/src/wallet/pages/send/send_utils.dart';
 import 'package:n42appv2/src/wallet/services/recent_address_service.dart';
 
@@ -99,10 +102,14 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend> {
   void initState() {
     super.initState();
     valueTextEditingController.text="0";
+    // 监听地址输入，对 ENS 名称做实时解析
+    toTextEditingController.addListener(_onToAddressInputChanged);
     initData();
   }
   @override
   void dispose() {
+    toTextEditingController.removeListener(_onToAddressInputChanged);
+    _ensDebounceTimer?.cancel();
     toTextEditingController.dispose();
     valueTextEditingController.dispose();
     noteTextEditingController.dispose();
@@ -456,6 +463,12 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend> {
   /// 用户是否已确认 ENS 解析结果
   bool _ensConfirmed = false;
 
+  // ── ENS 实时解析状态（地址输入框下方的内联状态横幅） ──
+  final EnsService _ensService = EnsServiceProvider.instance;
+  EnsResolveStatus _ensStatus = EnsResolveStatus.idle;
+  EnsResolutionResult? _ensResult;
+  Timer? _ensDebounceTimer;
+
   /// 检查链是否支持 ENS 解析
   /// N42 链优先，然后是所有 EVM 兼容链
   bool _isEnsSupported(String coinType) {
@@ -471,6 +484,211 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend> {
       'CELO', 'ONE', 'CRO', 'MOVR', 'GLMR',
     ];
     return evmChains.contains(coinType);
+  }
+
+  // ── ENS 实时解析（防抖 500ms，仅在 ENS 支持链上触发） ──────────────────────
+
+  void _onToAddressInputChanged() {
+    final coinType = widget.coinModel.coin['coinType'] as String;
+    if (!_isEnsSupported(coinType)) return;
+
+    _ensDebounceTimer?.cancel();
+    final text = toTextEditingController.text.trim();
+
+    if (text.isEmpty || !EnsService.isEnsName(text)) {
+      if (_ensStatus != EnsResolveStatus.idle) {
+        setState(() {
+          _ensStatus = EnsResolveStatus.idle;
+          _ensResult = null;
+        });
+      }
+      return;
+    }
+
+    setState(() {
+      _ensStatus = EnsResolveStatus.resolving;
+      _ensResult = null;
+    });
+
+    _ensDebounceTimer = Timer(const Duration(milliseconds: 500), () {
+      _resolveEnsRealtime(text, coinType);
+    });
+  }
+
+  Future<void> _resolveEnsRealtime(String ensName, String coinType) async {
+    final result = await _ensService.resolveName(ensName, preferredChain: coinType);
+    if (!mounted) return;
+    setState(() {
+      _ensStatus = result.success && result.address != null
+          ? EnsResolveStatus.resolved
+          : EnsResolveStatus.failed;
+      _ensResult = result;
+    });
+  }
+
+  /// 地址输入框下方的 ENS 实时状态横幅
+  Widget _buildEnsStatusBanner() {
+    if (_ensStatus == EnsResolveStatus.idle) return const SizedBox.shrink();
+
+    final subtitleColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final mainTextColor =
+        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final blueColor =
+        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+
+    // 解析中：旋转指示器 + 文本
+    if (_ensStatus == EnsResolveStatus.resolving) {
+      return Padding(
+        padding: EdgeInsets.only(top: ScreenUtil().setWidth(8)),
+        child: Row(
+          children: [
+            SizedBox(
+              width: ScreenUtil().setWidth(20),
+              height: ScreenUtil().setWidth(20),
+              child: CircularProgressIndicator(
+                strokeWidth: 1.5,
+                valueColor: AlwaysStoppedAnimation<Color>(blueColor),
+              ),
+            ),
+            SizedBox(width: ScreenUtil().setWidth(8)),
+            Text(
+              S.of(context).g_key_ens_resolving,
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(22),
+                color: subtitleColor,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // 解析失败：橙色警告
+    if (_ensStatus == EnsResolveStatus.failed) {
+      final errMsg = _ensResult?.error ?? S.of(context).g_key_t_50;
+      return Padding(
+        padding: EdgeInsets.only(
+          top: ScreenUtil().setWidth(6),
+          left: ScreenUtil().setWidth(4),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.warning_amber_rounded,
+                color: Colors.orange, size: ScreenUtil().setWidth(20)),
+            SizedBox(width: ScreenUtil().setWidth(6)),
+            Expanded(
+              child: Text(
+                errMsg,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(22),
+                  color: Colors.orange,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // 解析成功：绿色卡片，显示缩短地址 + 来源链徽章，点击复制
+    if (_ensStatus == EnsResolveStatus.resolved && _ensResult?.address != null) {
+      final resolvedAddr = _ensResult!.address!;
+      final shortAddr = AddressValidator.getAddressPreview(
+        resolvedAddr,
+        prefixLength: 6,
+        suffixLength: 4,
+      );
+
+      return GestureDetector(
+        onTap: () {
+          Clipboard.setData(ClipboardData(text: resolvedAddr));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(S.of(context).g_key_ens_copy_address),
+              duration: const Duration(seconds: 1),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        },
+        child: Container(
+          margin: EdgeInsets.only(top: ScreenUtil().setWidth(8)),
+          padding: EdgeInsets.symmetric(
+            horizontal: ScreenUtil().setWidth(12),
+            vertical: ScreenUtil().setWidth(8),
+          ),
+          decoration: BoxDecoration(
+            color: const Color(0xFF4CAF50).withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+            border: Border.all(
+              color: const Color(0xFF4CAF50).withValues(alpha: 0.3),
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.check_circle_outline,
+                color: const Color(0xFF4CAF50),
+                size: ScreenUtil().setWidth(20),
+              ),
+              SizedBox(width: ScreenUtil().setWidth(8)),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      S.of(context).g_key_ens_resolved_address,
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(20),
+                        color: subtitleColor,
+                      ),
+                    ),
+                    Text(
+                      shortAddr,
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(24),
+                        fontWeight: FontWeight.w600,
+                        color: mainTextColor,
+                        fontFamily: 'monospace',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (_ensResult?.sourceChain != null)
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: ScreenUtil().setWidth(6),
+                    vertical: ScreenUtil().setWidth(3),
+                  ),
+                  decoration: BoxDecoration(
+                    color: blueColor.withValues(alpha: 0.1),
+                    borderRadius:
+                        BorderRadius.circular(ScreenUtil().setWidth(5)),
+                  ),
+                  child: Text(
+                    _ensResult!.sourceChain!,
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(18),
+                      fontWeight: FontWeight.w600,
+                      color: blueColor,
+                    ),
+                  ),
+                ),
+              SizedBox(width: ScreenUtil().setWidth(4)),
+              Icon(
+                Icons.copy_rounded,
+                color: subtitleColor,
+                size: ScreenUtil().setWidth(18),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return const SizedBox.shrink();
   }
 
   /// Enhanced address validation with multiple security layers
@@ -628,6 +846,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend> {
           widget.coinModel.coin['coinType'] ?? '',
           toTextEditingController.text.trim(),
         );
+        if (!mounted) return;
         ToastUtils.show(S.current.g_key_nft_41);
         Navigator.pop(context);
       }
@@ -659,6 +878,13 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend> {
     if (!mounted) return;
     if(scanValue !=null){
       toTextEditingController.text=scanValue;
+      // 扫码填入普通地址时重置 ENS 状态（监听器会处理 ENS 名称）
+      if (!EnsService.isEnsName(scanValue)) {
+        setState(() {
+          _ensStatus = EnsResolveStatus.idle;
+          _ensResult = null;
+        });
+      }
       toAddressCheck(scanValue);
     }
     Navigator.pop(context);
@@ -872,6 +1098,8 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend> {
             },
             */
           ),
+          // ENS 实时解析状态横幅（ENS 支持链上输入 ENS 名称时自动展示）
+          _buildEnsStatusBanner(),
         ],
       ),
     );

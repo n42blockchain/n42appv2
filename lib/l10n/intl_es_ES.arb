@@ -1591,4 +1591,7 @@
   "g_key_dex_status_confirmed": "Confirmado",
   "g_key_dex_status_failed": "Fallido",
   "g_key_dex_status_quoted": "Cotizado"
+,
+  "g_key_ens_self_transfer": "No puedes enviarte a ti mismo",
+  "g_key_ens_copy_address": "Dirección copiada"
 }

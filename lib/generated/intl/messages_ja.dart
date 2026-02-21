@@ -1249,6 +1249,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_ens_confirm_send": MessageLookupByLibrary.simpleMessage("確認して送信"),
     "g_key_ens_confirm_title": MessageLookupByLibrary.simpleMessage("ENS解決の確認"),
+    "g_key_ens_copy_address": MessageLookupByLibrary.simpleMessage(
+      "アドレスをコピーしました",
+    ),
     "g_key_ens_current_expiry": MessageLookupByLibrary.simpleMessage(
       "Current Expiry",
     ),
@@ -1405,6 +1408,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_ens_search_title": MessageLookupByLibrary.simpleMessage(
       "Search ENS",
+    ),
+    "g_key_ens_self_transfer": MessageLookupByLibrary.simpleMessage(
+      "自分のアドレスには送信できません",
     ),
     "g_key_ens_service": MessageLookupByLibrary.simpleMessage(
       "Ethereum Name Service",

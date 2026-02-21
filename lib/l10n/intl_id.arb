@@ -1548,4 +1548,7 @@
   "g_key_dex_status_confirmed": "Dikonfirmasi",
   "g_key_dex_status_failed": "Gagal",
   "g_key_dex_status_quoted": "Dikutip"
+,
+  "g_key_ens_self_transfer": "Tidak dapat mengirim ke alamat sendiri",
+  "g_key_ens_copy_address": "Alamat disalin"
 }

@@ -1611,5 +1611,7 @@
   "g_key_dex_status_pending": "Pending",
   "g_key_dex_status_confirmed": "Confirmed",
   "g_key_dex_status_failed": "Failed",
-  "g_key_dex_status_quoted": "Quoted"
+  "g_key_dex_status_quoted": "Quoted",
+  "g_key_ens_self_transfer": "Cannot send to your own address",
+  "g_key_ens_copy_address": "Address copied"
 }

@@ -1548,4 +1548,7 @@
   "g_key_dex_status_confirmed": "Confermato",
   "g_key_dex_status_failed": "Fallito",
   "g_key_dex_status_quoted": "Quotato"
+,
+  "g_key_ens_self_transfer": "Impossibile inviare al proprio indirizzo",
+  "g_key_ens_copy_address": "Indirizzo copiato"
 }

@@ -1548,4 +1548,7 @@
   "g_key_dex_status_confirmed": "Onaylandı",
   "g_key_dex_status_failed": "Başarısız",
   "g_key_dex_status_quoted": "Teklif Verildi"
+,
+  "g_key_ens_self_transfer": "Kendi adresinize gönderemezsiniz",
+  "g_key_ens_copy_address": "Adres kopyalandı"
 }

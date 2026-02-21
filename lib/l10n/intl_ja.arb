@@ -1548,4 +1548,7 @@
   "g_key_dex_status_confirmed": "確認済み",
   "g_key_dex_status_failed": "失敗",
   "g_key_dex_status_quoted": "見積もり済み"
+,
+  "g_key_ens_self_transfer": "自分のアドレスには送信できません",
+  "g_key_ens_copy_address": "アドレスをコピーしました"
 }

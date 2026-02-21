@@ -13873,6 +13873,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Cannot send to your own address`
+  String get g_key_ens_self_transfer {
+    return Intl.message(
+      'Cannot send to your own address',
+      name: 'g_key_ens_self_transfer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Address copied`
+  String get g_key_ens_copy_address {
+    return Intl.message(
+      'Address copied',
+      name: 'g_key_ens_copy_address',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
