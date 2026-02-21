@@ -1369,6 +1369,35 @@
   "g_key_batch_insufficient_balance": "Insufficient balance: total amount would exceed available {value}",
   "g_key_hw_account_already_imported": "Account already imported",
   "g_key_hw_import_failed": "Failed to import account: {value}",
+  "g_key_hw_wallet_accounts": "지갑 계정",
+  "g_key_hw_not_connected": "기기가 연결되지 않음",
+  "g_key_hw_go_back": "뒤로",
+  "g_key_hw_loading_accounts": "계정 불러오는 중...",
+  "g_key_hw_loading_hint": "요청 시 기기에서 확인해주세요",
+  "g_key_hw_no_accounts_found": "계정을 찾을 수 없음",
+  "g_key_hw_open_ledger_app_hint": "Ledger에서 {app} 앱이 열려 있는지 확인하세요",
+  "@g_key_hw_open_ledger_app_hint": {
+    "placeholders": {
+      "app": {"type": "String"}
+    }
+  },
+  "g_key_hw_address_copied": "주소가 복사되었습니다",
+  "g_key_hw_add_account_content": "이 하드웨어 지갑 계정을 추적하시겠습니까?\n\n주소: {address}\n네트워크: {network}",
+  "@g_key_hw_add_account_content": {
+    "placeholders": {
+      "address": {"type": "String"},
+      "network": {"type": "String"}
+    }
+  },
+  "g_key_hw_account_added": "계정 {address} 추가됨",
+  "@g_key_hw_account_added": {
+    "placeholders": {
+      "address": {"type": "String"}
+    }
+  },
+  "g_key_hw_cancel": "취소",
+  "g_key_hw_add": "추가",
+  "g_key_hw_load_more": "더 불러오기",
   "g_key_bridge_status_pending": "Pending",
   "g_key_bridge_status_in_progress": "In Progress",
   "g_key_bridge_status_completed": "Completed",

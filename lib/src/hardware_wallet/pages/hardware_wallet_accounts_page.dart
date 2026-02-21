@@ -13,6 +13,8 @@ import 'package:n42appv2/src/hardware_wallet/provider/hardware_wallet_provider.d
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 
 /// 硬件钱包账户页面
+///
+/// 支持的链：ETH / BTC / BNB / MATIC / ARB / OP / BASE / AVAX / SOL / LTC / DOGE / BCH / ATOM / DOT / TRX
 class HardwareWalletAccountsPage extends StatefulWidget {
   final HardwareWalletProvider provider;
   const HardwareWalletAccountsPage({super.key, required this.provider});
@@ -24,14 +26,28 @@ class HardwareWalletAccountsPage extends StatefulWidget {
 class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage> {
   String _selectedCoinType = 'ETH';
   bool _isLoading = false;
+  bool _isLoadingMore = false;
 
-  final List<Map<String, String>> _supportedCoins = [
-    {'symbol': 'ETH', 'name': 'Ethereum'},
-    {'symbol': 'BTC', 'name': 'Bitcoin'},
-    {'symbol': 'BNB', 'name': 'BNB Smart Chain'},
-    {'symbol': 'MATIC', 'name': 'Polygon'},
-    {'symbol': 'ARB', 'name': 'Arbitrum'},
-    {'symbol': 'OP', 'name': 'Optimism'},
+  /// 支持的链列表（symbol, name）
+  static const List<Map<String, String>> _supportedCoins = [
+    // EVM 链 — 共用 Ledger Ethereum app
+    {'symbol': 'ETH',  'name': 'Ethereum'},
+    {'symbol': 'BNB',  'name': 'BNB Chain'},
+    {'symbol': 'MATIC','name': 'Polygon'},
+    {'symbol': 'ARB',  'name': 'Arbitrum'},
+    {'symbol': 'OP',   'name': 'Optimism'},
+    {'symbol': 'BASE', 'name': 'Base'},
+    {'symbol': 'AVAX', 'name': 'Avalanche'},
+    // UTXO 链
+    {'symbol': 'BTC',  'name': 'Bitcoin'},
+    {'symbol': 'LTC',  'name': 'Litecoin'},
+    {'symbol': 'DOGE', 'name': 'Dogecoin'},
+    {'symbol': 'BCH',  'name': 'Bitcoin Cash'},
+    // 其他链
+    {'symbol': 'SOL',  'name': 'Solana'},
+    {'symbol': 'ATOM', 'name': 'Cosmos'},
+    {'symbol': 'DOT',  'name': 'Polkadot'},
+    {'symbol': 'TRX',  'name': 'Tron'},
   ];
 
   @override
@@ -45,19 +61,29 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
   Future<void> _loadAccounts() async {
     setState(() => _isLoading = true);
 
-    final provider = widget.provider;
-    await provider.loadAccounts(_selectedCoinType);
+    await widget.provider.loadAccounts(_selectedCoinType);
 
     if (mounted) {
       setState(() => _isLoading = false);
     }
   }
 
+  Future<void> _loadMoreAccounts() async {
+    setState(() => _isLoadingMore = true);
+
+    await widget.provider.loadMoreAccounts();
+
+    if (mounted) {
+      setState(() => _isLoadingMore = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final s = S.of(context);
     return Scaffold(
       appBar: AppBarWidget(
-        text: 'Wallet Accounts',
+        text: s.g_key_hw_wallet_accounts,
       ),
       body: SafeArea(
         child: ListenableBuilder(
@@ -79,7 +105,7 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
                 // 账户列表
                 Expanded(
                   child: _isLoading
-                      ? _buildLoadingState()
+                      ? _buildLoadingState(context)
                       : _buildAccountsList(context, provider),
                 ),
               ],
@@ -91,6 +117,7 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
   }
 
   Widget _buildNotConnectedState(BuildContext context) {
+    final s = S.of(context);
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -105,7 +132,7 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
           ),
           SizedBox(height: ScreenUtil().setWidth(20)),
           Text(
-            'Device not connected',
+            s.g_key_hw_not_connected,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(30),
               color: AppThemeUtils.getColorByKey(
@@ -117,7 +144,7 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
           SizedBox(height: ScreenUtil().setWidth(20)),
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Go Back'),
+            child: Text(s.g_key_hw_go_back),
           ),
         ],
       ),
@@ -126,7 +153,7 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
 
   Widget _buildDeviceInfoCard(BuildContext context, HardwareWalletProvider provider) {
     final device = provider.currentDevice;
-    if (device == null) return SizedBox.shrink();
+    if (device == null) return const SizedBox.shrink();
 
     return Container(
       margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
@@ -167,7 +194,7 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
                   ),
                 ),
                 Text(
-                  'Connected',
+                  S.of(context).g_key_hw_connected,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
                     color: Colors.green,
@@ -216,6 +243,7 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
               ),
               child: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     coin['symbol']!,
@@ -252,19 +280,35 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
     );
   }
 
-  Widget _buildLoadingState() {
+  Widget _buildLoadingState(BuildContext context) {
+    final s = S.of(context);
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircularProgressIndicator(),
+          const CircularProgressIndicator(),
           SizedBox(height: ScreenUtil().setWidth(20)),
           Text(
-            'Loading accounts...\nPlease confirm on your device if prompted',
+            s.g_key_hw_loading_accounts,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
-              color: Colors.grey,
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(8)),
+          Text(
+            s.g_key_hw_loading_hint,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(22),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
             ),
           ),
         ],
@@ -276,6 +320,7 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
     final accounts = provider.accounts;
 
     if (accounts.isEmpty) {
+      final appName = LedgerApps.getAppName(_selectedCoinType) ?? _selectedCoinType;
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -290,7 +335,7 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
             ),
             SizedBox(height: ScreenUtil().setWidth(16)),
             Text(
-              'No accounts found',
+              S.of(context).g_key_hw_no_accounts_found,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28),
                 color: AppThemeUtils.getColorByKey(
@@ -301,7 +346,7 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
             ),
             SizedBox(height: ScreenUtil().setWidth(8)),
             Text(
-              'Make sure the ${LedgerApps.getAppName(_selectedCoinType) ?? _selectedCoinType} app is open on your Ledger',
+              S.of(context).g_key_hw_open_ledger_app_hint(appName),
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(24),
@@ -314,7 +359,7 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
             SizedBox(height: ScreenUtil().setWidth(20)),
             ElevatedButton(
               onPressed: _loadAccounts,
-              child: Text('Retry'),
+              child: Text(S.of(context).g_key_aa_retry),
             ),
           ],
         ),
@@ -323,11 +368,36 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
 
     return ListView.builder(
       padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-      itemCount: accounts.length,
+      // +1 for the "Load More" button at the end
+      itemCount: accounts.length + 1,
       itemBuilder: (context, index) {
-        final account = accounts[index];
-        return _buildAccountItem(context, account);
+        if (index == accounts.length) {
+          // "Load More" 按钮
+          return _buildLoadMoreButton(context);
+        }
+        return _buildAccountItem(context, accounts[index]);
       },
+    );
+  }
+
+  Widget _buildLoadMoreButton(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+      child: _isLoadingMore
+          ? Center(child: CircularProgressIndicator(strokeWidth: 2))
+          : TextButton(
+              onPressed: _loadMoreAccounts,
+              child: Text(
+                S.of(context).g_key_hw_load_more,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(26),
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ),
+                ),
+              ),
+            ),
     );
   }
 
@@ -454,8 +524,8 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
     Clipboard.setData(ClipboardData(text: address));
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Address copied to clipboard'),
-        duration: Duration(seconds: 2),
+        content: Text(S.of(context).g_key_hw_address_copied),
+        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -463,24 +533,25 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
   void _useAccount(BuildContext context, HardwareWalletAccount account) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Add Account'),
+      builder: (dialogContext) => AlertDialog(
+        title: Text(S.of(context).g_key_hw_add_account),
         content: Text(
-          'Do you want to track this hardware wallet account?\n\n'
-          'Address: ${account.shortAddress}\n'
-          'Network: ${account.coinType}',
+          S.of(context).g_key_hw_add_account_content(
+            account.shortAddress,
+            account.coinType,
+          ),
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'),
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(S.of(context).g_key_hw_cancel),
           ),
           TextButton(
             onPressed: () async {
-              Navigator.pop(context);
+              Navigator.pop(dialogContext);
               await _importAccount(context, account);
             },
-            child: Text('Add'),
+            child: Text(S.of(context).g_key_hw_add),
           ),
         ],
       ),
@@ -496,7 +567,8 @@ class _HardwareWalletAccountsPageState extends State<HardwareWalletAccountsPage>
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-                'Account ${account.shortAddress} added to tracking list'),
+              S.of(context).g_key_hw_account_added(account.shortAddress),
+            ),
             backgroundColor: Colors.green,
           ),
         );

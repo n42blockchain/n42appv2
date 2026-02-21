@@ -674,6 +674,41 @@
   "g_key_forgot_password": "Forgot Password?",
   "g_key_hw_title": "Portfel sprzętowy",
   "g_key_hw_trezor": "Trezor",
+  "g_key_hw_import_failed": "Nie udało się zaimportować konta: {value}",
+  "@g_key_hw_import_failed": {
+    "placeholders": {
+      "value": {"type": "String"}
+    }
+  },
+  "g_key_hw_wallet_accounts": "Konta Portfela",
+  "g_key_hw_not_connected": "Urządzenie niepodłączone",
+  "g_key_hw_go_back": "Powrót",
+  "g_key_hw_loading_accounts": "Ładowanie kont...",
+  "g_key_hw_loading_hint": "Potwierdź na urządzeniu jeśli wymagane",
+  "g_key_hw_no_accounts_found": "Nie znaleziono kont",
+  "g_key_hw_open_ledger_app_hint": "Upewnij się, że aplikacja {app} jest otwarta na Ledgerze",
+  "@g_key_hw_open_ledger_app_hint": {
+    "placeholders": {
+      "app": {"type": "String"}
+    }
+  },
+  "g_key_hw_address_copied": "Adres skopiowany",
+  "g_key_hw_add_account_content": "Czy chcesz śledzić to konto portfela sprzętowego?\n\nAdres: {address}\nSieć: {network}",
+  "@g_key_hw_add_account_content": {
+    "placeholders": {
+      "address": {"type": "String"},
+      "network": {"type": "String"}
+    }
+  },
+  "g_key_hw_account_added": "Konto {address} dodane",
+  "@g_key_hw_account_added": {
+    "placeholders": {
+      "address": {"type": "String"}
+    }
+  },
+  "g_key_hw_cancel": "Anuluj",
+  "g_key_hw_add": "Dodaj",
+  "g_key_hw_load_more": "Załaduj więcej",
   "g_key_keystore_19": "Portfel bieżącej waluty już istnieje.",
   "g_key_keystore_21": "Nie można odczytać keystore",
   "g_key_keystore_22": "Keystore",

@@ -656,6 +656,41 @@
   "g_key_forgot_password": "Forgot Password?",
   "g_key_hw_title": "Hardware-Wallet",
   "g_key_hw_trezor": "Trezor",
+  "g_key_hw_import_failed": "Konto konnte nicht importiert werden: {value}",
+  "@g_key_hw_import_failed": {
+    "placeholders": {
+      "value": {"type": "String"}
+    }
+  },
+  "g_key_hw_wallet_accounts": "Wallet-Konten",
+  "g_key_hw_not_connected": "Gerät nicht verbunden",
+  "g_key_hw_go_back": "Zurück",
+  "g_key_hw_loading_accounts": "Konten werden geladen...",
+  "g_key_hw_loading_hint": "Bitte auf Ihrem Gerät bestätigen, falls aufgefordert",
+  "g_key_hw_no_accounts_found": "Keine Konten gefunden",
+  "g_key_hw_open_ledger_app_hint": "Stellen Sie sicher, dass die {app}-App auf Ihrem Ledger geöffnet ist",
+  "@g_key_hw_open_ledger_app_hint": {
+    "placeholders": {
+      "app": {"type": "String"}
+    }
+  },
+  "g_key_hw_address_copied": "Adresse kopiert",
+  "g_key_hw_add_account_content": "Möchten Sie dieses Hardware-Wallet-Konto verfolgen?\n\nAdresse: {address}\nNetzwerk: {network}",
+  "@g_key_hw_add_account_content": {
+    "placeholders": {
+      "address": {"type": "String"},
+      "network": {"type": "String"}
+    }
+  },
+  "g_key_hw_account_added": "Konto {address} hinzugefügt",
+  "@g_key_hw_account_added": {
+    "placeholders": {
+      "address": {"type": "String"}
+    }
+  },
+  "g_key_hw_cancel": "Abbrechen",
+  "g_key_hw_add": "Hinzufügen",
+  "g_key_hw_load_more": "Mehr laden",
   "g_key_keystore_19": "Ein Waehrungs-Wallet fuer diesen Typ existiert bereits.",
   "g_key_keystore_21": "Keystore konnte nicht gelesen werden",
   "g_key_keystore_22": "Keystore",

@@ -1369,6 +1369,35 @@
   "g_key_batch_insufficient_balance": "Insufficient balance: total amount would exceed available {value}",
   "g_key_hw_account_already_imported": "Account already imported",
   "g_key_hw_import_failed": "Failed to import account: {value}",
+  "g_key_hw_wallet_accounts": "Wallet Accounts",
+  "g_key_hw_not_connected": "Device not connected",
+  "g_key_hw_go_back": "Go Back",
+  "g_key_hw_loading_accounts": "Loading accounts...",
+  "g_key_hw_loading_hint": "Please confirm on your device if prompted",
+  "g_key_hw_no_accounts_found": "No accounts found",
+  "g_key_hw_open_ledger_app_hint": "Make sure the {app} app is open on your Ledger",
+  "@g_key_hw_open_ledger_app_hint": {
+    "placeholders": {
+      "app": {"type": "String"}
+    }
+  },
+  "g_key_hw_address_copied": "Address copied",
+  "g_key_hw_add_account_content": "Do you want to track this hardware wallet account?\n\nAddress: {address}\nNetwork: {network}",
+  "@g_key_hw_add_account_content": {
+    "placeholders": {
+      "address": {"type": "String"},
+      "network": {"type": "String"}
+    }
+  },
+  "g_key_hw_account_added": "Account {address} added",
+  "@g_key_hw_account_added": {
+    "placeholders": {
+      "address": {"type": "String"}
+    }
+  },
+  "g_key_hw_cancel": "Cancel",
+  "g_key_hw_add": "Add",
+  "g_key_hw_load_more": "Load More",
   "g_key_bridge_status_pending": "Pending",
   "g_key_bridge_status_in_progress": "In Progress",
   "g_key_bridge_status_completed": "Completed",

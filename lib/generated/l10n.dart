@@ -12529,6 +12529,126 @@ class S {
     );
   }
 
+  /// `Wallet Accounts`
+  String get g_key_hw_wallet_accounts {
+    return Intl.message(
+      'Wallet Accounts',
+      name: 'g_key_hw_wallet_accounts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Device not connected`
+  String get g_key_hw_not_connected {
+    return Intl.message(
+      'Device not connected',
+      name: 'g_key_hw_not_connected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go Back`
+  String get g_key_hw_go_back {
+    return Intl.message(
+      'Go Back',
+      name: 'g_key_hw_go_back',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading accounts...`
+  String get g_key_hw_loading_accounts {
+    return Intl.message(
+      'Loading accounts...',
+      name: 'g_key_hw_loading_accounts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please confirm on your device if prompted`
+  String get g_key_hw_loading_hint {
+    return Intl.message(
+      'Please confirm on your device if prompted',
+      name: 'g_key_hw_loading_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No accounts found`
+  String get g_key_hw_no_accounts_found {
+    return Intl.message(
+      'No accounts found',
+      name: 'g_key_hw_no_accounts_found',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Make sure the {app} app is open on your Ledger`
+  String g_key_hw_open_ledger_app_hint(String app) {
+    return Intl.message(
+      'Make sure the $app app is open on your Ledger',
+      name: 'g_key_hw_open_ledger_app_hint',
+      desc: '',
+      args: [app],
+    );
+  }
+
+  /// `Address copied`
+  String get g_key_hw_address_copied {
+    return Intl.message(
+      'Address copied',
+      name: 'g_key_hw_address_copied',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you want to track this hardware wallet account?\n\nAddress: {address}\nNetwork: {network}`
+  String g_key_hw_add_account_content(String address, String network) {
+    return Intl.message(
+      'Do you want to track this hardware wallet account?\n\nAddress: $address\nNetwork: $network',
+      name: 'g_key_hw_add_account_content',
+      desc: '',
+      args: [address, network],
+    );
+  }
+
+  /// `Account {address} added`
+  String g_key_hw_account_added(String address) {
+    return Intl.message(
+      'Account $address added',
+      name: 'g_key_hw_account_added',
+      desc: '',
+      args: [address],
+    );
+  }
+
+  /// `Cancel`
+  String get g_key_hw_cancel {
+    return Intl.message('Cancel', name: 'g_key_hw_cancel', desc: '', args: []);
+  }
+
+  /// `Add`
+  String get g_key_hw_add {
+    return Intl.message('Add', name: 'g_key_hw_add', desc: '', args: []);
+  }
+
+  /// `Load More`
+  String get g_key_hw_load_more {
+    return Intl.message(
+      'Load More',
+      name: 'g_key_hw_load_more',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Pending`
   String get g_key_bridge_status_pending {
     return Intl.message(

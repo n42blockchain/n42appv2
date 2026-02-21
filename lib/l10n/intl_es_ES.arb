@@ -1370,6 +1370,35 @@
   "g_key_batch_insufficient_balance": "Insufficient balance: total amount would exceed available {value}",
   "g_key_hw_account_already_imported": "Account already imported",
   "g_key_hw_import_failed": "Failed to import account: {value}",
+  "g_key_hw_wallet_accounts": "Cuentas de Cartera",
+  "g_key_hw_not_connected": "Dispositivo no conectado",
+  "g_key_hw_go_back": "Volver",
+  "g_key_hw_loading_accounts": "Cargando cuentas...",
+  "g_key_hw_loading_hint": "Por favor, confirme en su dispositivo si se le solicita",
+  "g_key_hw_no_accounts_found": "No se encontraron cuentas",
+  "g_key_hw_open_ledger_app_hint": "Asegúrese de que la aplicación {app} esté abierta en su Ledger",
+  "@g_key_hw_open_ledger_app_hint": {
+    "placeholders": {
+      "app": {"type": "String"}
+    }
+  },
+  "g_key_hw_address_copied": "Dirección copiada",
+  "g_key_hw_add_account_content": "¿Desea rastrear esta cuenta de hardware wallet?\n\nDirección: {address}\nRed: {network}",
+  "@g_key_hw_add_account_content": {
+    "placeholders": {
+      "address": {"type": "String"},
+      "network": {"type": "String"}
+    }
+  },
+  "g_key_hw_account_added": "Cuenta {address} añadida",
+  "@g_key_hw_account_added": {
+    "placeholders": {
+      "address": {"type": "String"}
+    }
+  },
+  "g_key_hw_cancel": "Cancelar",
+  "g_key_hw_add": "Añadir",
+  "g_key_hw_load_more": "Cargar más",
   "g_key_bridge_status_pending": "Pending",
   "g_key_bridge_status_in_progress": "In Progress",
   "g_key_bridge_status_completed": "Completed",

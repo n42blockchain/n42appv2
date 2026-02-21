@@ -11,7 +11,17 @@ import 'package:n42appv2/src/hardware_wallet/models/hardware_wallet_models.dart'
 
 /// Ledger 设备服务
 ///
-/// 通过蓝牙 BLE 与 Ledger 硬件钱包通信
+/// 通过蓝牙 BLE 与 Ledger 硬件钱包通信。
+///
+/// 连接稳定性：
+/// - connect() 内部实现最多 3 次重试（线性退避）
+/// - 连接成功后启动 keepalive 心跳（每 30s 调 getCurrentApp()）
+/// - keepalive 失败自动触发 _onConnectionLost()
+///
+/// 支持链：
+/// - EVM 链（ETH/BNB/MATIC/AVAX/FTM/OP/ARB/BASE）通过 APDU 直接获取地址
+/// - BTC 通过 native 平台通道
+/// - SOL/ATOM/DOT/TRX 通过 native 平台通道（各链专属 Ledger app）
 class LedgerService {
   static final LedgerService _instance = LedgerService._internal();
   factory LedgerService() => _instance;
@@ -23,6 +33,12 @@ class LedgerService {
 
   // Ledger BLE 服务 UUID
   static const String _ledgerServiceUUID = '13d63400-2c97-0004-0000-4c6564676572';
+
+  // 连接重试次数上限
+  static const int _maxConnectRetries = 3;
+
+  // Keepalive 间隔
+  static const Duration _keepaliveInterval = Duration(seconds: 30);
 
   // 当前连接的设备
   HardwareWalletDevice? _connectedDevice;
@@ -39,6 +55,9 @@ class LedgerService {
 
   // 扫描流订阅（防止泄漏）
   StreamSubscription? _scanStreamSubscription;
+
+  // Keepalive 定时器
+  Timer? _keepaliveTimer;
 
   // Getters
   HardwareWalletDevice? get connectedDevice => _connectedDevice;
@@ -135,50 +154,72 @@ class LedgerService {
     }
   }
 
-  /// 连接到 Ledger 设备
+  /// 连接到 Ledger 设备（最多 3 次重试，线性退避）
+  ///
+  /// 每次失败后等待 [attempt]s（1s、2s），第三次失败时抛出错误。
+  /// 连接成功后自动启动 keepalive 心跳。
   Future<HardwareWalletDevice> connect(BluetoothDeviceInfo deviceInfo) async {
     _updateConnectionState(HardwareWalletConnectionState.connecting);
 
-    try {
-      final result = await _channel.invokeMethod<Map>('connect', {
-        'deviceId': deviceInfo.id,
-        'serviceUUID': _ledgerServiceUUID,
-      });
+    HardwareWalletError? lastError;
 
-      if (result == null) {
-        throw HardwareWalletError(
-          code: HardwareWalletError.connectionFailed,
-          message: 'Failed to connect to device',
+    for (var attempt = 1; attempt <= _maxConnectRetries; attempt++) {
+      try {
+        final result = await _channel.invokeMethod<Map>('connect', {
+          'deviceId': deviceInfo.id,
+          'serviceUUID': _ledgerServiceUUID,
+        });
+
+        if (result == null) {
+          throw HardwareWalletError(
+            code: HardwareWalletError.connectionFailed,
+            message: 'Failed to connect to device',
+          );
+        }
+
+        // 获取设备信息
+        final firmwareVersion = await _getFirmwareVersion();
+        final deviceType = _determineDeviceType(deviceInfo.name);
+
+        _connectedDevice = HardwareWalletDevice(
+          id: deviceInfo.id,
+          name: deviceInfo.name,
+          type: deviceType,
+          firmwareVersion: firmwareVersion,
+          isConnected: true,
+          lastConnectedAt: DateTime.now(),
         );
+
+        _updateConnectionState(HardwareWalletConnectionState.connected);
+        _startKeepalive();
+        return _connectedDevice!;
+      } on PlatformException catch (e) {
+        lastError = HardwareWalletError(
+          code: HardwareWalletError.connectionFailed,
+          message: e.message ?? 'Connection failed',
+          details: e.details?.toString(),
+        );
+        debugPrint('Connect attempt $attempt/$_maxConnectRetries failed: ${e.message}');
+
+        if (attempt < _maxConnectRetries) {
+          // 线性退避：等待 attempt 秒后重试
+          await Future.delayed(Duration(seconds: attempt));
+        }
+      } on HardwareWalletError catch (e) {
+        lastError = e;
+        if (attempt < _maxConnectRetries) {
+          await Future.delayed(Duration(seconds: attempt));
+        }
       }
-
-      // 获取设备信息
-      final firmwareVersion = await _getFirmwareVersion();
-      final deviceType = _determineDeviceType(deviceInfo.name);
-
-      _connectedDevice = HardwareWalletDevice(
-        id: deviceInfo.id,
-        name: deviceInfo.name,
-        type: deviceType,
-        firmwareVersion: firmwareVersion,
-        isConnected: true,
-        lastConnectedAt: DateTime.now(),
-      );
-
-      _updateConnectionState(HardwareWalletConnectionState.connected);
-      return _connectedDevice!;
-    } on PlatformException catch (e) {
-      _updateConnectionState(HardwareWalletConnectionState.error);
-      throw HardwareWalletError(
-        code: HardwareWalletError.connectionFailed,
-        message: e.message ?? 'Connection failed',
-        details: e.details?.toString(),
-      );
     }
+
+    _updateConnectionState(HardwareWalletConnectionState.error);
+    throw lastError!;
   }
 
   /// 断开连接
   Future<void> disconnect() async {
+    _stopKeepalive();
     try {
       await _channel.invokeMethod('disconnect');
       _connectedDevice = null;
@@ -209,7 +250,9 @@ class LedgerService {
     }
   }
 
-  /// 获取以太坊地址
+  /// 获取 EVM 链地址（ETH / BNB / MATIC / AVAX / FTM / OP / ARB / BASE）
+  ///
+  /// 所有 EVM 兼容链共用 Ledger Ethereum app 及 m/44'/60'/0'/0/ 路径族。
   Future<String?> getEthereumAddress({
     String derivationPath = "m/44'/60'/0'/0/0",
     bool display = false,
@@ -249,7 +292,7 @@ class LedgerService {
     }
   }
 
-  /// 获取比特币地址
+  /// 获取比特币地址（通过 native 平台通道）
   Future<String?> getBitcoinAddress({
     String derivationPath = "m/84'/0'/0'/0/0",
     bool display = false,
@@ -275,6 +318,49 @@ class LedgerService {
     }
   }
 
+  /// 获取非 EVM/BTC 链地址（SOL / ATOM / DOT / TRX 等）
+  ///
+  /// 通过 native 平台通道路由到各链专属的 Ledger app APDU 实现。
+  /// Native 侧根据 [coinType] 选择对应应用协议。
+  Future<String?> getChainAddress({
+    required String coinType,
+    required String derivationPath,
+    bool display = false,
+  }) async {
+    if (_connectedDevice == null) {
+      throw HardwareWalletError(
+        code: HardwareWalletError.deviceNotFound,
+        message: 'No device connected',
+      );
+    }
+
+    try {
+      final result = await _channel.invokeMethod<String>('getChainAddress', {
+        'coinType': coinType.toUpperCase(),
+        'path': derivationPath,
+        'display': display,
+      });
+      return result;
+    } on PlatformException catch (e) {
+      if (e.code == 'USER_REJECTED') {
+        throw HardwareWalletError(
+          code: HardwareWalletError.userRejected,
+          message: 'User rejected on device',
+        );
+      }
+      if (e.code == 'APP_NOT_OPEN') {
+        throw HardwareWalletError(
+          code: HardwareWalletError.appNotOpen,
+          message: 'Please open the ${coinType.toUpperCase()} app on your Ledger',
+        );
+      }
+      throw HardwareWalletError(
+        code: HardwareWalletError.signingFailed,
+        message: e.message ?? 'Failed to get $coinType address',
+      );
+    }
+  }
+
   /// 签名以太坊交易
   Future<HardwareWalletSignResponse> signEthereumTransaction({
     required String derivationPath,
@@ -285,7 +371,7 @@ class LedgerService {
     }
 
     try {
-      // 分块发送交易数据
+      // 分块发送交易数据（Ledger BLE MTU ~150 字节）
       final chunks = _splitIntoChunks(rawTx, 150);
       Uint8List? response;
 
@@ -317,7 +403,10 @@ class LedgerService {
     }
   }
 
-  /// 签名以太坊消息
+  /// 签名以太坊消息（EIP-191 personal_sign）
+  ///
+  /// 通过 native 平台通道实现，native 侧负责组装 personal_sign APDU
+  /// 并处理设备确认交互。
   Future<HardwareWalletSignResponse> signEthereumMessage({
     required String derivationPath,
     required String message,
@@ -375,11 +464,82 @@ class LedgerService {
     }
   }
 
+  /// 签名非 EVM/BTC 链交易（SOL / ATOM / DOT / TRX）
+  ///
+  /// 通过 native 平台通道，native 侧根据 coinType 选择对应 Ledger app 协议。
+  Future<HardwareWalletSignResponse> signChainTransaction({
+    required String coinType,
+    required String derivationPath,
+    required Map<String, dynamic> txData,
+  }) async {
+    if (_connectedDevice == null) {
+      return HardwareWalletSignResponse.error('No device connected');
+    }
+
+    try {
+      final result = await _channel.invokeMethod<Map>('signChainTx', {
+        'coinType': coinType.toUpperCase(),
+        'path': derivationPath,
+        'txData': txData,
+      });
+
+      if (result != null && result['signature'] != null) {
+        return HardwareWalletSignResponse.success(
+          signature: result['signature'] as String,
+          txHash: result['txHash'] as String?,
+        );
+      }
+
+      return HardwareWalletSignResponse.error('Signing failed');
+    } on PlatformException catch (e) {
+      if (e.code == 'USER_REJECTED') {
+        return HardwareWalletSignResponse.error('Transaction rejected on device');
+      }
+      return HardwareWalletSignResponse.error(e.message ?? 'Signing failed');
+    }
+  }
+
   // ============ Private Methods ============
 
   void _updateConnectionState(HardwareWalletConnectionState state) {
     _connectionState = state;
     _connectionStateController.add(state);
+  }
+
+  /// 启动 keepalive 心跳
+  ///
+  /// 每 [_keepaliveInterval] 调用一次 getCurrentApp()；
+  /// 若连续失败则触发 [_onConnectionLost]。
+  void _startKeepalive() {
+    _stopKeepalive();
+    _keepaliveTimer = Timer.periodic(_keepaliveInterval, (_) async {
+      if (_connectionState != HardwareWalletConnectionState.connected) {
+        _stopKeepalive();
+        return;
+      }
+      try {
+        await getCurrentApp();
+      } catch (e) {
+        debugPrint('Keepalive failed: $e');
+        _onConnectionLost();
+      }
+    });
+  }
+
+  /// 停止 keepalive 心跳
+  void _stopKeepalive() {
+    _keepaliveTimer?.cancel();
+    _keepaliveTimer = null;
+  }
+
+  /// 连接意外断开的处理
+  void _onConnectionLost() {
+    _stopKeepalive();
+    if (_connectedDevice != null) {
+      _connectedDevice = _connectedDevice!.copyWith(isConnected: false);
+    }
+    _updateConnectionState(HardwareWalletConnectionState.error);
+    debugPrint('LedgerService: connection lost');
   }
 
   HardwareWalletType _determineDeviceType(String name) {
@@ -404,22 +564,106 @@ class LedgerService {
     }
   }
 
+  /// 发送 APDU 并处理标准 Ledger 状态码
+  ///
+  /// 标准状态码（最后 2 字节）：
+  ///   0x9000 = 成功
+  ///   0x6985 = 用户拒绝
+  ///   0x6A82 = 文件/应用未找到（应用未打开）
+  ///   0x6700 = 错误长度
+  ///   0x6982 = 安全状态不满足（设备已锁定）
+  ///   0x5515 = 设备已锁定（部分固件）
+  ///   0x5501 = 用户拒绝（部分固件）
+  ///   0x6D00 = INS 不支持（应用版本不兼容）
+  ///   0x6E00 = CLA 不支持（错误的应用）
   Future<Uint8List?> _sendApdu(Uint8List apdu) async {
     try {
       final result = await _channel.invokeMethod<Uint8List>('sendApdu', {
         'apdu': apdu,
       });
+
+      // 检查响应状态码（最后 2 字节）
+      if (result != null && result.length >= 2) {
+        final sw1 = result[result.length - 2];
+        final sw2 = result[result.length - 1];
+        final sw = (sw1 << 8) | sw2;
+
+        switch (sw) {
+          case 0x9000:
+            // 成功：返回不含状态码的有效载荷
+            return result.length > 2 ? result.sublist(0, result.length - 2) : Uint8List(0);
+          case 0x6985:
+          case 0x5501:
+            throw HardwareWalletError(
+              code: HardwareWalletError.userRejected,
+              message: 'User rejected on device',
+            );
+          case 0x6A82:
+            throw HardwareWalletError(
+              code: HardwareWalletError.appNotOpen,
+              message: 'App not open on device',
+            );
+          case 0x6982:
+          case 0x5515:
+            throw HardwareWalletError(
+              code: HardwareWalletError.deviceLocked,
+              message: 'Device is locked. Please unlock it first',
+            );
+          case 0x6700:
+            throw HardwareWalletError(
+              code: HardwareWalletError.invalidTransaction,
+              message: 'Invalid APDU length',
+            );
+          case 0x6D00:
+            throw HardwareWalletError(
+              code: HardwareWalletError.appNotOpen,
+              message: 'Instruction not supported. Check that the correct app is open',
+            );
+          case 0x6E00:
+            throw HardwareWalletError(
+              code: HardwareWalletError.appNotOpen,
+              message: 'Class not supported. Wrong app may be open',
+            );
+          default:
+            // 未识别的状态码：返回完整响应让调用方处理
+            debugPrint('LedgerService: unrecognized SW 0x${sw.toRadixString(16).padLeft(4, '0')}');
+            return result;
+        }
+      }
+
       return result;
     } on PlatformException catch (e) {
-      if (e.code == '6985') {
+      // 兼容旧版 native 实现：错误码通过 PlatformException.code 传递
+      final code = e.code.toLowerCase();
+      if (code == '6985' || code == '5501') {
         throw HardwareWalletError(
           code: HardwareWalletError.userRejected,
           message: 'User rejected on device',
         );
-      } else if (e.code == '6a82') {
+      } else if (code == '6a82') {
         throw HardwareWalletError(
           code: HardwareWalletError.appNotOpen,
           message: 'App not open on device',
+        );
+      } else if (code == '6982' || code == '5515') {
+        throw HardwareWalletError(
+          code: HardwareWalletError.deviceLocked,
+          message: 'Device is locked',
+        );
+      } else if (code == '6700') {
+        throw HardwareWalletError(
+          code: HardwareWalletError.invalidTransaction,
+          message: 'Invalid APDU length',
+        );
+      } else if (code == '6d00') {
+        throw HardwareWalletError(
+          code: HardwareWalletError.appNotOpen,
+          message: 'Instruction not supported',
+        );
+      } else if (code == '6e00') {
+        throw HardwareWalletError(
+          code: HardwareWalletError.appNotOpen,
+          message: 'Class not supported',
         );
       }
       rethrow;
@@ -509,6 +753,7 @@ class LedgerService {
 
   /// 释放资源
   Future<void> dispose() async {
+    _stopKeepalive();
     // 先取消订阅和断开连接，再关闭流
     await _scanStreamSubscription?.cancel();
     _scanStreamSubscription = null;

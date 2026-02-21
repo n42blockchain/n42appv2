@@ -674,6 +674,41 @@
   "g_key_forgot_password": "Forgot Password?",
   "g_key_hw_title": "Dompet Hardware",
   "g_key_hw_trezor": "Trezor",
+  "g_key_hw_import_failed": "Gagal mengimpor akun: {value}",
+  "@g_key_hw_import_failed": {
+    "placeholders": {
+      "value": {"type": "String"}
+    }
+  },
+  "g_key_hw_wallet_accounts": "Akun Dompet",
+  "g_key_hw_not_connected": "Perangkat tidak terhubung",
+  "g_key_hw_go_back": "Kembali",
+  "g_key_hw_loading_accounts": "Memuat akun...",
+  "g_key_hw_loading_hint": "Harap konfirmasi di perangkat Anda jika diminta",
+  "g_key_hw_no_accounts_found": "Tidak ada akun yang ditemukan",
+  "g_key_hw_open_ledger_app_hint": "Pastikan aplikasi {app} terbuka di Ledger Anda",
+  "@g_key_hw_open_ledger_app_hint": {
+    "placeholders": {
+      "app": {"type": "String"}
+    }
+  },
+  "g_key_hw_address_copied": "Alamat disalin",
+  "g_key_hw_add_account_content": "Apakah Anda ingin melacak akun hardware wallet ini?\n\nAlamat: {address}\nJaringan: {network}",
+  "@g_key_hw_add_account_content": {
+    "placeholders": {
+      "address": {"type": "String"},
+      "network": {"type": "String"}
+    }
+  },
+  "g_key_hw_account_added": "Akun {address} ditambahkan",
+  "@g_key_hw_account_added": {
+    "placeholders": {
+      "address": {"type": "String"}
+    }
+  },
+  "g_key_hw_cancel": "Batal",
+  "g_key_hw_add": "Tambah",
+  "g_key_hw_load_more": "Muat lebih banyak",
   "g_key_keystore_19": "Dompet mata uang saat ini sudah ada.",
   "g_key_keystore_21": "Tidak dapat membaca Keystore",
   "g_key_keystore_22": "Keystore",

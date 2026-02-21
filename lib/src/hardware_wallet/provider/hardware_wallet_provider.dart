@@ -13,7 +13,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// 硬件钱包 Provider
 ///
-/// 管理硬件钱包连接、账户和签名操作
+/// 管理硬件钱包连接、账户和签名操作。
+///
+/// 支持的链（BIP-44 派生路径）：
+/// EVM 链：ETH/BNB/MATIC/AVAX/FTM/OP/ARB/BASE → m/44'/60'/0'/0/
+/// BTC:    m/84'/0'/0'/0/   (Native SegWit P2WPKH)
+/// LTC:    m/84'/2'/0'/0/   (Native SegWit)
+/// DOGE:   m/44'/3'/0'/0/
+/// BCH:    m/44'/145'/0'/0/
+/// SOL:    m/44'/501'/0'/0' (Solana app)
+/// ATOM:   m/44'/118'/0'/0/ (Cosmos app)
+/// DOT:    m/44'/354'/0'/0/ (Polkadot app)
+/// TRX:    m/44'/195'/0'/0/ (Tron app)
 class HardwareWalletProvider extends ChangeNotifier {
   final LedgerService _ledgerService = LedgerService();
 
@@ -29,6 +40,9 @@ class HardwareWalletProvider extends ChangeNotifier {
 
   // 账户列表
   List<HardwareWalletAccount> _accounts = [];
+
+  // 当前选中的 coinType（用于 loadMoreAccounts）
+  String _currentCoinType = 'ETH';
 
   // 订阅
   StreamSubscription? _scanSubscription;
@@ -196,59 +210,25 @@ class HardwareWalletProvider extends ChangeNotifier {
     }
   }
 
-  /// 加载账户列表
+  /// 加载账户列表（前 5 个）
+  ///
+  /// 支持的 coinType 及其 BIP-44 路径：
+  /// - EVM 链：m/44'/60'/0'/0/   (ETH/BNB/MATIC/AVAX/FTM/OP/ARB/BASE)
+  /// - BTC:   m/84'/0'/0'/0/    (Native SegWit)
+  /// - LTC:   m/84'/2'/0'/0/    (Native SegWit)
+  /// - DOGE:  m/44'/3'/0'/0/
+  /// - BCH:   m/44'/145'/0'/0/
+  /// - SOL:   m/44'/501'/0'/0'
+  /// - ATOM:  m/44'/118'/0'/0/
+  /// - DOT:   m/44'/354'/0'/0/
+  /// - TRX:   m/44'/195'/0'/0/
   Future<void> loadAccounts(String coinType) async {
     if (!isConnected || _currentDevice == null) return;
 
     _accounts = [];
+    _currentCoinType = coinType.toUpperCase();
 
-    // 根据币种确定派生路径
-    String basePath;
-    switch (coinType.toUpperCase()) {
-      case 'ETH':
-      case 'BNB':
-      case 'MATIC':
-      case 'AVAX':
-      case 'FTM':
-      case 'OP':
-      case 'ARB':
-        basePath = "m/44'/60'/0'/0/";
-        break;
-      case 'BTC':
-        basePath = "m/84'/0'/0'/0/";
-        break;
-      case 'SOL':
-        basePath = "m/44'/501'/0'/0'/";
-        break;
-      default:
-        basePath = "m/44'/60'/0'/0/";
-    }
-
-    // 加载前 5 个账户
-    for (var i = 0; i < 5; i++) {
-      try {
-        String? address;
-        final path = '$basePath$i';
-
-        if (coinType.toUpperCase() == 'BTC') {
-          address = await _ledgerService.getBitcoinAddress(derivationPath: path);
-        } else {
-          address = await _ledgerService.getEthereumAddress(derivationPath: path);
-        }
-
-        if (address != null) {
-          _accounts.add(HardwareWalletAccount(
-            address: address,
-            coinType: coinType,
-            derivationPath: path,
-            index: i,
-          ));
-        }
-      } catch (e) {
-        debugPrint('Failed to load account $i: $e');
-        break;
-      }
-    }
+    await _loadAccountsFrom(coinType, startIndex: 0, count: 5);
 
     // 更新设备的账户列表
     if (_currentDevice != null) {
@@ -257,6 +237,109 @@ class HardwareWalletProvider extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  /// 加载更多账户（从当前最大 index 继续）
+  Future<void> loadMoreAccounts() async {
+    if (!isConnected || _currentDevice == null) return;
+
+    final startIndex = _accounts.isEmpty ? 0 : _accounts.last.index + 1;
+    await _loadAccountsFrom(_currentCoinType, startIndex: startIndex, count: 5);
+
+    if (_currentDevice != null) {
+      _currentDevice = _currentDevice!.copyWith(accounts: List.from(_accounts));
+      await _saveDevice(_currentDevice!);
+    }
+
+    notifyListeners();
+  }
+
+  /// 内部：从 [startIndex] 开始加载 [count] 个账户
+  Future<void> _loadAccountsFrom(
+    String coinType, {
+    required int startIndex,
+    required int count,
+  }) async {
+    final coin = coinType.toUpperCase();
+    final basePath = _derivationBasePath(coin);
+    final isEvm = _isEvmChain(coin);
+    final isBtcLike = _isBitcoinLikeChain(coin);
+
+    for (var i = startIndex; i < startIndex + count; i++) {
+      try {
+        String? address;
+        final path = '$basePath$i';
+
+        if (isEvm) {
+          address = await _ledgerService.getEthereumAddress(derivationPath: path);
+        } else if (isBtcLike) {
+          address = await _ledgerService.getBitcoinAddress(derivationPath: path);
+        } else {
+          // SOL / ATOM / DOT / TRX — 通过 native 平台通道
+          address = await _ledgerService.getChainAddress(
+            coinType: coin,
+            derivationPath: path,
+          );
+        }
+
+        if (address != null) {
+          _accounts.add(HardwareWalletAccount(
+            address: address,
+            coinType: coin,
+            derivationPath: path,
+            index: i,
+          ));
+        }
+      } catch (e) {
+        debugPrint('Failed to load account $i for $coin: $e');
+        break;
+      }
+    }
+  }
+
+  /// 返回 coinType 对应的 BIP-44 基础路径（不含最后的 index）
+  String _derivationBasePath(String coin) {
+    switch (coin) {
+      case 'ETH':
+      case 'BNB':
+      case 'MATIC':
+      case 'AVAX':
+      case 'FTM':
+      case 'OP':
+      case 'ARB':
+      case 'BASE':
+        return "m/44'/60'/0'/0/";
+      case 'BTC':
+        return "m/84'/0'/0'/0/";
+      case 'LTC':
+        return "m/84'/2'/0'/0/";
+      case 'DOGE':
+        return "m/44'/3'/0'/0/";
+      case 'BCH':
+        return "m/44'/145'/0'/0/";
+      case 'SOL':
+        return "m/44'/501'/0'/0'/";
+      case 'ATOM':
+        return "m/44'/118'/0'/0/";
+      case 'DOT':
+        return "m/44'/354'/0'/0/";
+      case 'TRX':
+        return "m/44'/195'/0'/0/";
+      default:
+        return "m/44'/60'/0'/0/";
+    }
+  }
+
+  /// EVM 兼容链（使用 Ledger Ethereum app）
+  bool _isEvmChain(String coin) {
+    const evmCoins = {'ETH', 'BNB', 'MATIC', 'AVAX', 'FTM', 'OP', 'ARB', 'BASE'};
+    return evmCoins.contains(coin);
+  }
+
+  /// 类比特币链（使用 Ledger Bitcoin/Litecoin/Dogecoin app）
+  bool _isBitcoinLikeChain(String coin) {
+    const btcCoins = {'BTC', 'LTC', 'DOGE', 'BCH'};
+    return btcCoins.contains(coin);
   }
 
   /// 签名以太坊交易
@@ -317,44 +400,49 @@ class HardwareWalletProvider extends ChangeNotifier {
   }
 
   /// 通用签名方法
+  ///
+  /// 根据 coinType 路由到对应的签名实现：
+  /// - EVM 链 → signEthereumTransaction / signEthereumMessage
+  /// - BTC/LTC/DOGE/BCH → signBitcoinTransaction
+  /// - SOL/ATOM/DOT/TRX → signChainTransaction（native 实现）
   Future<HardwareWalletSignResponse> signTransaction(
     HardwareWalletSignRequest request,
   ) async {
     final coinType = request.coinType.toUpperCase();
 
-    // 根据币种选择签名方法
-    switch (coinType) {
-      case 'ETH':
-      case 'BNB':
-      case 'MATIC':
-      case 'AVAX':
-      case 'FTM':
-      case 'OP':
-      case 'ARB':
-      case 'BASE':
-        if (request.signType == HardwareWalletSignType.message) {
-          return await signEthereumMessage(
-            derivationPath: request.derivationPath,
-            message: request.message ?? '',
-          );
-        } else {
-          // 将交易数据序列化为 RLP
-          final rawTx = _serializeEthTransaction(request.transactionData);
-          return await signEthereumTransaction(
-            derivationPath: request.derivationPath,
-            rawTx: rawTx,
-          );
-        }
+    if (_isEvmChain(coinType)) {
+      if (request.signType == HardwareWalletSignType.message) {
+        return await signEthereumMessage(
+          derivationPath: request.derivationPath,
+          message: request.message ?? '',
+        );
+      } else {
+        final rawTx = _serializeEthTransaction(request.transactionData);
+        return await signEthereumTransaction(
+          derivationPath: request.derivationPath,
+          rawTx: rawTx,
+        );
+      }
+    }
 
-      case 'BTC':
-      case 'LTC':
-      case 'DOGE':
-      case 'BCH':
-        return await signBitcoinTransaction(
+    if (_isBitcoinLikeChain(coinType)) {
+      return await signBitcoinTransaction(
+        derivationPath: request.derivationPath,
+        txData: request.transactionData,
+      );
+    }
+
+    // SOL / ATOM / DOT / TRX — 通过 native 实现
+    switch (coinType) {
+      case 'SOL':
+      case 'ATOM':
+      case 'DOT':
+      case 'TRX':
+        return await _ledgerService.signChainTransaction(
+          coinType: coinType,
           derivationPath: request.derivationPath,
           txData: request.transactionData,
         );
-
       default:
         return HardwareWalletSignResponse.error(
           'Unsupported coin type: $coinType',
@@ -479,76 +567,151 @@ class HardwareWalletProvider extends ChangeNotifier {
     }
   }
 
+  /// 序列化以太坊交易为 RLP 编码字节
+  ///
+  /// 支持两种格式：
+  /// - EIP-1559 (type 2)：当 txData 包含 maxFeePerGas 或 maxPriorityFeePerGas 时使用
+  ///   格式: 0x02 || RLP([chainId, nonce, maxPriorityFeePerGas, maxFeePerGas, gasLimit, to, value, data, accessList])
+  /// - Legacy (type 0)：其余情况，含 EIP-155 重放保护
+  ///   格式: RLP([nonce, gasPrice, gasLimit, to, value, data, chainId, 0, 0])
   Uint8List _serializeEthTransaction(Map<String, dynamic> txData) {
-    // 简化的 RLP 编码
-    // 实际实现需要完整的 RLP 编码库
-    final List<int> encoded = [];
+    final bool isEip1559 =
+        txData.containsKey('maxFeePerGas') || txData.containsKey('maxPriorityFeePerGas');
 
-    // 交易字段: nonce, gasPrice, gasLimit, to, value, data, chainId
-    final fields = ['nonce', 'gasPrice', 'gasLimit', 'to', 'value', 'data'];
-    for (final field in fields) {
-      final value = txData[field];
-      if (value != null) {
-        encoded.addAll(_rlpEncode(value));
-      } else {
-        encoded.add(0x80); // 空字符串
-      }
+    if (isEip1559) {
+      return _serializeEip1559Transaction(txData);
+    } else {
+      return _serializeLegacyTransaction(txData);
     }
-
-    // 添加 chainId 用于 EIP-155
-    if (txData['chainId'] != null) {
-      encoded.addAll(_rlpEncode(txData['chainId']));
-      encoded.add(0x80); // r
-      encoded.add(0x80); // s
-    }
-
-    // 包装成列表
-    return Uint8List.fromList(_rlpEncodeList(encoded));
   }
 
+  /// 序列化 EIP-1559 (type 2) 交易
+  Uint8List _serializeEip1559Transaction(Map<String, dynamic> txData) {
+    // 字段顺序: chainId, nonce, maxPriorityFeePerGas, maxFeePerGas, gasLimit, to, value, data, accessList
+    final items = <List<int>>[
+      _rlpEncode(txData['chainId'] ?? 1),
+      _rlpEncode(txData['nonce'] ?? 0),
+      _rlpEncode(txData['maxPriorityFeePerGas'] ?? '0x0'),
+      _rlpEncode(txData['maxFeePerGas'] ?? '0x0'),
+      _rlpEncode(txData['gasLimit'] ?? txData['gas'] ?? '0x0'),
+      _rlpEncode(txData['to'] ?? ''),
+      _rlpEncode(txData['value'] ?? '0x0'),
+      _rlpEncode(txData['data'] ?? '0x'),
+      // accessList: 空列表 RLP
+      ...[_rlpEncodeList([])],
+    ];
+
+    final payload = items.expand((e) => e).toList();
+    final rlpList = _rlpEncodeList(payload);
+
+    // type 2 前缀 0x02
+    return Uint8List.fromList([0x02, ...rlpList]);
+  }
+
+  /// 序列化 Legacy (type 0) 交易，含 EIP-155 重放保护
+  Uint8List _serializeLegacyTransaction(Map<String, dynamic> txData) {
+    final chainId = txData['chainId'] ?? 1;
+
+    // 字段顺序: nonce, gasPrice, gasLimit, to, value, data, chainId (EIP-155), 0, 0
+    final items = <List<int>>[
+      _rlpEncode(txData['nonce'] ?? 0),
+      _rlpEncode(txData['gasPrice'] ?? '0x0'),
+      _rlpEncode(txData['gasLimit'] ?? txData['gas'] ?? '0x0'),
+      _rlpEncode(txData['to'] ?? ''),
+      _rlpEncode(txData['value'] ?? '0x0'),
+      _rlpEncode(txData['data'] ?? '0x'),
+      // EIP-155: v=chainId, r=0, s=0
+      _rlpEncode(chainId),
+      [0x80], // r = empty
+      [0x80], // s = empty
+    ];
+
+    final payload = items.expand((e) => e).toList();
+    return Uint8List.fromList(_rlpEncodeList(payload));
+  }
+
+  /// RLP 编码单个值
+  ///
+  /// 支持：
+  /// - int → 直接编码
+  /// - String（十六进制带 0x）→ 转为字节编码
+  /// - String（十六进制不带 0x 的地址）→ 转为字节编码
   List<int> _rlpEncode(dynamic value) {
     if (value is int) {
       if (value == 0) return [0x80];
-      if (value < 128) return [value];
-      final bytes = _intToBytes(value);
+      if (value < 0x80) return [value];
+      final bytes = _intToMinBytes(value);
       return [0x80 + bytes.length, ...bytes];
-    } else if (value is String) {
-      final hexStr = value.startsWith('0x') ? value.substring(2) : value;
-      if (hexStr.isEmpty) return [0x80];
-      final bytes = _hexToBytes(hexStr);
-      if (bytes.length == 1 && bytes[0] < 128) return bytes;
-      if (bytes.length < 56) return [0x80 + bytes.length, ...bytes];
-      final lenBytes = _intToBytes(bytes.length);
-      return [0xb7 + lenBytes.length, ...lenBytes, ...bytes];
     }
+
+    if (value is String) {
+      // 十六进制字符串
+      final hexStr = value.startsWith('0x') ? value.substring(2) : value;
+
+      // 地址（40 字符十六进制）或空
+      if (hexStr.isEmpty) return [0x80];
+
+      final bytes = _hexToBytes(hexStr);
+
+      // 整数编码（去除前导零）
+      // 判断是否应作为整数编码：不是固定长度地址且无前导零意义
+      if (bytes.length == 20) {
+        // 以太坊地址：直接编码为字节串
+        return bytes.length < 56
+            ? [0x80 + bytes.length, ...bytes]
+            : [0xb7 + _intToMinBytes(bytes.length).length, ..._intToMinBytes(bytes.length), ...bytes];
+      }
+
+      // 数值型十六进制：去除前导零
+      final stripped = _stripLeadingZeroBytes(bytes);
+      if (stripped.isEmpty) return [0x80];
+      if (stripped.length == 1 && stripped[0] < 0x80) return stripped;
+      if (stripped.length < 56) return [0x80 + stripped.length, ...stripped];
+      final lenBytes = _intToMinBytes(stripped.length);
+      return [0xb7 + lenBytes.length, ...lenBytes, ...stripped];
+    }
+
     return [0x80];
   }
 
-  List<int> _rlpEncodeList(List<int> items) {
-    if (items.length < 56) {
-      return [0xc0 + items.length, ...items];
+  /// RLP 编码列表（已编码的各字段拼接在一起）
+  List<int> _rlpEncodeList(List<int> encodedItems) {
+    if (encodedItems.isEmpty) return [0xc0];
+    if (encodedItems.length < 56) {
+      return [0xc0 + encodedItems.length, ...encodedItems];
     }
-    final lenBytes = _intToBytes(items.length);
-    return [0xf7 + lenBytes.length, ...lenBytes, ...items];
+    final lenBytes = _intToMinBytes(encodedItems.length);
+    return [0xf7 + lenBytes.length, ...lenBytes, ...encodedItems];
   }
 
-  List<int> _intToBytes(int value) {
+  /// 将整数转换为最小表示的字节列表（大端序，无前导零）
+  List<int> _intToMinBytes(int value) {
     if (value == 0) return [];
     final bytes = <int>[];
     while (value > 0) {
-      bytes.add(value & 0xff); // O(1) add，最后统一 reverse，替代 O(n) insert(0,...)
+      bytes.add(value & 0xff);
       value >>= 8;
     }
     return bytes.reversed.toList();
   }
 
+  /// 十六进制字符串转字节列表
   List<int> _hexToBytes(String hex) {
-    final normalizedHex = hex.length % 2 != 0 ? '0$hex' : hex;
+    final normalized = hex.length % 2 != 0 ? '0$hex' : hex;
     final bytes = <int>[];
-    for (var i = 0; i < normalizedHex.length; i += 2) {
-      bytes.add(int.parse(normalizedHex.substring(i, i + 2), radix: 16));
+    for (var i = 0; i < normalized.length; i += 2) {
+      bytes.add(int.parse(normalized.substring(i, i + 2), radix: 16));
     }
     return bytes;
+  }
+
+  /// 去除字节列表前导零
+  List<int> _stripLeadingZeroBytes(List<int> bytes) {
+    var start = 0;
+    while (start < bytes.length && bytes[start] == 0) {
+      start++;
+    }
+    return bytes.sublist(start);
   }
 
   @override
