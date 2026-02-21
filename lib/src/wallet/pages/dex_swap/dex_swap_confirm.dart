@@ -23,7 +23,7 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(text: 'Confirm Swap'),
+      appBar: AppBarWidget(text: S.of(context).g_key_dex_confirm_title),
       body: Padding(
         padding: EdgeInsets.fromLTRB(
           ScreenUtil().setWidth(30),
@@ -56,12 +56,12 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
       ),
       child: Column(
         children: [
-          _row('You Pay', '${q.amountIn} ${q.tokenInSymbol}'),
-          _row('You Receive', '${q.amountOut} ${q.tokenOutSymbol}'),
-          _row('Price Impact', q.priceImpact),
-          _row('Gas Estimate', q.gasEstimate),
-          _row('Best Source', q.source),
-          _row('Chain', q.chain),
+          _row(S.of(context).g_key_dex_you_pay, '${q.amountIn} ${q.tokenInSymbol}'),
+          _row(S.of(context).g_key_dex_you_receive, '${q.amountOut} ${q.tokenOutSymbol}'),
+          _row(S.of(context).g_key_dex_price_impact, q.priceImpact),
+          _row(S.of(context).g_key_dex_gas_estimate, q.gasEstimate),
+          _row(S.of(context).g_key_dex_best_source, q.source),
+          _row(S.of(context).g_key_dex_chain, q.chain),
         ],
       ),
     );
@@ -99,7 +99,7 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Slippage Tolerance',
+          S.of(context).g_key_dex_slippage,
           style: TextStyle(
             color: AppThemeUtils.getColorByKey(
                 context, AppThemeKeys.itemSubtitleTextColor.name),
@@ -179,11 +179,11 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
               context,
               () async {
                 final nav = Navigator.of(context);
-                final bool verified = await nav.push(
+                final bool? verified = await nav.push(
                   MaterialPageRoute(
                       builder: (_) => WalletSecurityVerification()),
                 );
-                if (verified) {
+                if (verified == true) {
                   nav.pop(_slippageBps);
                 }
               },

@@ -1123,6 +1123,38 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
       "Deadline reminders",
     ),
+    "g_key_dex_best_route": MessageLookupByLibrary.simpleMessage("最適ルート"),
+    "g_key_dex_best_source": MessageLookupByLibrary.simpleMessage("最適ソース"),
+    "g_key_dex_chain": MessageLookupByLibrary.simpleMessage("チェーン"),
+    "g_key_dex_confirm_title": MessageLookupByLibrary.simpleMessage("スワップを確認"),
+    "g_key_dex_gas_estimate": MessageLookupByLibrary.simpleMessage("ガス見積もり"),
+    "g_key_dex_history_title": MessageLookupByLibrary.simpleMessage("DEX 履歴"),
+    "g_key_dex_no_tokens": MessageLookupByLibrary.simpleMessage("トークンなし"),
+    "g_key_dex_no_tokens_found": MessageLookupByLibrary.simpleMessage(
+      "トークンが見つかりません",
+    ),
+    "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage("価格インパクト"),
+    "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage("見積もり失敗"),
+    "g_key_dex_retry": MessageLookupByLibrary.simpleMessage("再試行"),
+    "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(
+      "シンボル / 名前 / アドレスで検索",
+    ),
+    "g_key_dex_select_token": MessageLookupByLibrary.simpleMessage("選択"),
+    "g_key_dex_slippage": MessageLookupByLibrary.simpleMessage("スリッページ許容値"),
+    "g_key_dex_sol_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Solana DEX スワップはアプリ内でまだサポートされていません",
+    ),
+    "g_key_dex_status_confirmed": MessageLookupByLibrary.simpleMessage("確認済み"),
+    "g_key_dex_status_failed": MessageLookupByLibrary.simpleMessage("失敗"),
+    "g_key_dex_status_pending": MessageLookupByLibrary.simpleMessage("保留中"),
+    "g_key_dex_status_quoted": MessageLookupByLibrary.simpleMessage("見積もり済み"),
+    "g_key_dex_swap_btn": MessageLookupByLibrary.simpleMessage("スワップ"),
+    "g_key_dex_swap_success": MessageLookupByLibrary.simpleMessage(
+      "スワップを送信しました",
+    ),
+    "g_key_dex_tx_failed": MessageLookupByLibrary.simpleMessage("トランザクション失敗"),
+    "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage("支払い"),
+    "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage("受取り"),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
       "アクティブな製品",
     ),

@@ -1292,6 +1292,62 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
       "Deadline reminders",
     ),
+    "g_key_dex_best_route": MessageLookupByLibrary.simpleMessage("En İyi Rota"),
+    "g_key_dex_best_source": MessageLookupByLibrary.simpleMessage(
+      "En İyi Kaynak",
+    ),
+    "g_key_dex_chain": MessageLookupByLibrary.simpleMessage("Zincir"),
+    "g_key_dex_confirm_title": MessageLookupByLibrary.simpleMessage(
+      "Swap\'ı Onayla",
+    ),
+    "g_key_dex_gas_estimate": MessageLookupByLibrary.simpleMessage(
+      "Gas Tahmini",
+    ),
+    "g_key_dex_history_title": MessageLookupByLibrary.simpleMessage(
+      "DEX Geçmişi",
+    ),
+    "g_key_dex_no_tokens": MessageLookupByLibrary.simpleMessage("Token yok"),
+    "g_key_dex_no_tokens_found": MessageLookupByLibrary.simpleMessage(
+      "Token bulunamadı",
+    ),
+    "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage(
+      "Fiyat Etkisi",
+    ),
+    "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
+      "Fiyat teklifi başarısız",
+    ),
+    "g_key_dex_retry": MessageLookupByLibrary.simpleMessage("Tekrar Dene"),
+    "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(
+      "Sembol / isim / adres ara",
+    ),
+    "g_key_dex_select_token": MessageLookupByLibrary.simpleMessage("Seç"),
+    "g_key_dex_slippage": MessageLookupByLibrary.simpleMessage(
+      "Kayma Toleransı",
+    ),
+    "g_key_dex_sol_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Solana DEX swap uygulamada henüz desteklenmiyor",
+    ),
+    "g_key_dex_status_confirmed": MessageLookupByLibrary.simpleMessage(
+      "Onaylandı",
+    ),
+    "g_key_dex_status_failed": MessageLookupByLibrary.simpleMessage(
+      "Başarısız",
+    ),
+    "g_key_dex_status_pending": MessageLookupByLibrary.simpleMessage(
+      "Beklemede",
+    ),
+    "g_key_dex_status_quoted": MessageLookupByLibrary.simpleMessage(
+      "Teklif Verildi",
+    ),
+    "g_key_dex_swap_btn": MessageLookupByLibrary.simpleMessage("Takas Et"),
+    "g_key_dex_swap_success": MessageLookupByLibrary.simpleMessage(
+      "Swap başarıyla gönderildi",
+    ),
+    "g_key_dex_tx_failed": MessageLookupByLibrary.simpleMessage(
+      "İşlem başarısız",
+    ),
+    "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage("Ödediğiniz"),
+    "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage("Aldığınız"),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
       "Active Products",
     ),

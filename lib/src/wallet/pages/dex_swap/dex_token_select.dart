@@ -56,7 +56,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
         _error = res.data?.toString() ?? 'Load failed';
       });
     } else {
-      final list = (res.data as List)
+      final list = ((res.data as List?) ?? [])
           .map((e) => DexTokenModel.fromJson(e as Map<String, dynamic>))
           .toList();
       setState(() {
@@ -163,7 +163,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
                 fontSize: ScreenUtil().setSp(28),
               ),
               decoration: InputDecoration(
-                hintText: 'Search symbol / name / address',
+                hintText: S.of(context).g_key_dex_search_hint,
                 hintStyle: TextStyle(
                   color: AppThemeUtils.getColorByKey(
                       context, AppThemeKeys.textFieldHintColor.name),
@@ -220,7 +220,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.errorTextColor.name))),
             SizedBox(height: ScreenUtil().setWidth(20)),
-            TextButton(onPressed: _loadTokens, child: const Text('Retry')),
+            TextButton(onPressed: _loadTokens, child: Text(S.of(context).g_key_dex_retry)),
           ],
         ),
       );
@@ -256,7 +256,9 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
     // 本地无结果且输入不像地址
     return Center(
       child: Text(
-        _searchCtrl.text.isEmpty ? 'No tokens found' : 'No tokens found',
+        _searchCtrl.text.isEmpty
+            ? S.of(context).g_key_dex_no_tokens
+            : S.of(context).g_key_dex_no_tokens_found,
         style: TextStyle(
             color: AppThemeUtils.getColorByKey(
                 context, AppThemeKeys.itemSubtitleTextColor.name)),

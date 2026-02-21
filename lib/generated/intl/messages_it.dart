@@ -1336,6 +1336,58 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
       "Deadline reminders",
     ),
+    "g_key_dex_best_route": MessageLookupByLibrary.simpleMessage(
+      "Percorso Migliore",
+    ),
+    "g_key_dex_best_source": MessageLookupByLibrary.simpleMessage(
+      "Fonte Migliore",
+    ),
+    "g_key_dex_chain": MessageLookupByLibrary.simpleMessage("Rete"),
+    "g_key_dex_confirm_title": MessageLookupByLibrary.simpleMessage(
+      "Conferma Swap",
+    ),
+    "g_key_dex_gas_estimate": MessageLookupByLibrary.simpleMessage("Stima Gas"),
+    "g_key_dex_history_title": MessageLookupByLibrary.simpleMessage(
+      "Cronologia DEX",
+    ),
+    "g_key_dex_no_tokens": MessageLookupByLibrary.simpleMessage("Nessun token"),
+    "g_key_dex_no_tokens_found": MessageLookupByLibrary.simpleMessage(
+      "Nessun token trovato",
+    ),
+    "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage(
+      "Impatto Prezzo",
+    ),
+    "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
+      "Preventivo fallito",
+    ),
+    "g_key_dex_retry": MessageLookupByLibrary.simpleMessage("Riprova"),
+    "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(
+      "Cerca simbolo / nome / indirizzo",
+    ),
+    "g_key_dex_select_token": MessageLookupByLibrary.simpleMessage("Seleziona"),
+    "g_key_dex_slippage": MessageLookupByLibrary.simpleMessage(
+      "Tolleranza Slippage",
+    ),
+    "g_key_dex_sol_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Solana DEX swap non ancora supportato nell\'app",
+    ),
+    "g_key_dex_status_confirmed": MessageLookupByLibrary.simpleMessage(
+      "Confermato",
+    ),
+    "g_key_dex_status_failed": MessageLookupByLibrary.simpleMessage("Fallito"),
+    "g_key_dex_status_pending": MessageLookupByLibrary.simpleMessage(
+      "In Attesa",
+    ),
+    "g_key_dex_status_quoted": MessageLookupByLibrary.simpleMessage("Quotato"),
+    "g_key_dex_swap_btn": MessageLookupByLibrary.simpleMessage("Scambia"),
+    "g_key_dex_swap_success": MessageLookupByLibrary.simpleMessage(
+      "Swap inviato con successo",
+    ),
+    "g_key_dex_tx_failed": MessageLookupByLibrary.simpleMessage(
+      "Transazione fallita",
+    ),
+    "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage("Paghi"),
+    "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage("Ricevi"),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
       "Active Products",
     ),

@@ -9,3 +9,7 @@
 
 - 主项目: C:\N42\n42appv2 (Flutter 应用)
 - Chat 插件: D:\n42\n42_chat (聊天功能模块)
+
+## Session Continuation
+
+When continuing from a previous session, immediately summarize the prior state in 2-3 sentences and begin executing — do NOT re-explore the entire codebase. Ask the user to confirm the plan only if something is ambiguous.

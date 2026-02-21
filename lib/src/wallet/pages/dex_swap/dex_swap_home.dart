@@ -142,7 +142,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     if (res.error) {
       setState(() {
         _quoteLoad = Load.finish;
-        _errorMsg = res.data?.toString() ?? 'Quote failed';
+        _errorMsg = res.data?.toString() ?? S.of(context).g_key_dex_quote_failed;
       });
     } else {
       final quote = DexQuoteModel.fromJson(res.data as Map<String, dynamic>);
@@ -181,7 +181,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     if (_chain == 'SOL') {
       setState(() {
         _swapLoad = Load.finish;
-        _errorMsg = 'Solana DEX swap not yet supported in-app.';
+        _errorMsg = S.of(context).g_key_dex_sol_unsupported;
       });
       return;
     }
@@ -202,7 +202,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     if (txRes.error) {
       setState(() {
         _swapLoad = Load.finish;
-        _errorMsg = txRes.data?.toString() ?? 'Transaction failed';
+        _errorMsg = txRes.data?.toString() ?? S.of(context).g_key_dex_tx_failed;
       });
       return;
     }
@@ -224,7 +224,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     _amountCtrl.clear();
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Swap submitted successfully!')),
+      SnackBar(content: Text(S.of(context).g_key_dex_swap_success)),
     );
   }
 
@@ -232,7 +232,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text: 'DEX Swap',
+        text: S.of(context).g_key_earn_dex_swap,
         actions: [
           InkWell(
             onTap: () => Navigator.push(
@@ -444,7 +444,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
                       if (token != null)
                         SizedBox(width: ScreenUtil().setWidth(8)),
                       Text(
-                        token?.symbol ?? 'Select',
+                        token?.symbol ?? S.of(context).g_key_dex_select_token,
                         style: TextStyle(
                           color: AppThemeUtils.getColorByKey(
                               context, AppThemeKeys.mainBlueColor.name),
@@ -512,9 +512,9 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       ),
       child: Column(
         children: [
-          _quoteRow('Best Route', q.source),
-          _quoteRow('Price Impact', q.priceImpact),
-          _quoteRow('Gas Estimate', q.gasEstimate),
+          _quoteRow(S.of(context).g_key_dex_best_route, q.source),
+          _quoteRow(S.of(context).g_key_dex_price_impact, q.priceImpact),
+          _quoteRow(S.of(context).g_key_dex_gas_estimate, q.gasEstimate),
         ],
       ),
     );
@@ -592,7 +592,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
                 }
               }
             : () {},
-        'Swap',
+        S.of(context).g_key_dex_swap_btn,
         canSwap
             ? AppThemeUtils.getColorByKey(
                 context, AppThemeKeys.mainButtonBgColor.name)

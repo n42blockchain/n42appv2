@@ -8,6 +8,7 @@ import 'package:n42appv2/src/widgets/base_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:date_format/date_format.dart' as dformat;
+import 'package:n42appv2/generated/l10n.dart';
 
 class DexSwapHistory extends StatefulWidget {
   const DexSwapHistory({super.key});
@@ -19,10 +20,20 @@ class DexSwapHistory extends StatefulWidget {
 class _DexSwapHistoryState extends State<DexSwapHistory> {
   final DexSwapApi _api = DexSwapApi();
 
+  String _statusText(BuildContext context, int status) {
+    final s = S.of(context);
+    switch (status) {
+      case 1: return s.g_key_dex_status_pending;
+      case 2: return s.g_key_dex_status_confirmed;
+      case 3: return s.g_key_dex_status_failed;
+      default: return s.g_key_dex_status_quoted;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(text: 'DEX History'),
+      appBar: AppBarWidget(text: S.of(context).g_key_dex_history_title),
       body: Padding(
         padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
         child: BaseList(
@@ -34,7 +45,7 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
             final MessageModel res =
                 await _api.getHistory(uuid, page: page, size: pageSize);
             if (res.error) return [];
-            return (res.data as List)
+            return ((res.data as List?) ?? [])
                 .map((e) =>
                     DexHistoryModel.fromJson(e as Map<String, dynamic>))
                 .toList();
@@ -131,7 +142,7 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
                       ),
                       const Expanded(child: SizedBox()),
                       Text(
-                        item.statusText,
+                        _statusText(context, item.status),
                         style: TextStyle(
                           color: statusColor,
                           fontSize: ScreenUtil().setSp(24),

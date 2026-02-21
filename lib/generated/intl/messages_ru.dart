@@ -1313,6 +1313,68 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
       "Deadline reminders",
     ),
+    "g_key_dex_best_route": MessageLookupByLibrary.simpleMessage(
+      "Лучший Маршрут",
+    ),
+    "g_key_dex_best_source": MessageLookupByLibrary.simpleMessage(
+      "Лучший Источник",
+    ),
+    "g_key_dex_chain": MessageLookupByLibrary.simpleMessage("Сеть"),
+    "g_key_dex_confirm_title": MessageLookupByLibrary.simpleMessage(
+      "Подтвердить Своп",
+    ),
+    "g_key_dex_gas_estimate": MessageLookupByLibrary.simpleMessage(
+      "Оценка Газа",
+    ),
+    "g_key_dex_history_title": MessageLookupByLibrary.simpleMessage(
+      "История DEX",
+    ),
+    "g_key_dex_no_tokens": MessageLookupByLibrary.simpleMessage(
+      "Токены отсутствуют",
+    ),
+    "g_key_dex_no_tokens_found": MessageLookupByLibrary.simpleMessage(
+      "Токены не найдены",
+    ),
+    "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage(
+      "Влияние на Цену",
+    ),
+    "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
+      "Ошибка котировки",
+    ),
+    "g_key_dex_retry": MessageLookupByLibrary.simpleMessage("Повторить"),
+    "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(
+      "Поиск по символу / имени / адресу",
+    ),
+    "g_key_dex_select_token": MessageLookupByLibrary.simpleMessage("Выбрать"),
+    "g_key_dex_slippage": MessageLookupByLibrary.simpleMessage(
+      "Допуск Проскальзывания",
+    ),
+    "g_key_dex_sol_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Solana DEX своп пока не поддерживается в приложении",
+    ),
+    "g_key_dex_status_confirmed": MessageLookupByLibrary.simpleMessage(
+      "Подтверждено",
+    ),
+    "g_key_dex_status_failed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось",
+    ),
+    "g_key_dex_status_pending": MessageLookupByLibrary.simpleMessage(
+      "В ожидании",
+    ),
+    "g_key_dex_status_quoted": MessageLookupByLibrary.simpleMessage(
+      "Котировка",
+    ),
+    "g_key_dex_swap_btn": MessageLookupByLibrary.simpleMessage("Обменять"),
+    "g_key_dex_swap_success": MessageLookupByLibrary.simpleMessage(
+      "Своп успешно отправлен",
+    ),
+    "g_key_dex_tx_failed": MessageLookupByLibrary.simpleMessage(
+      "Транзакция не удалась",
+    ),
+    "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage("Вы Платите"),
+    "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage(
+      "Вы Получаете",
+    ),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
       "Active Products",
     ),

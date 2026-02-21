@@ -63,7 +63,7 @@ class DexSwapApi {
         mm.data = data['data'];
       } else {
         mm.error = true;
-        mm.data = data['err'] ?? 'Quote failed';
+        mm.data = data['msg'] ?? data['err'] ?? 'Quote failed';
       }
       return mm;
     } catch (e) {

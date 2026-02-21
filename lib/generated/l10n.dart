@@ -13458,6 +13458,231 @@ class S {
       args: [],
     );
   }
+
+  /// `Confirm Swap`
+  String get g_key_dex_confirm_title {
+    return Intl.message(
+      'Confirm Swap',
+      name: 'g_key_dex_confirm_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `DEX History`
+  String get g_key_dex_history_title {
+    return Intl.message(
+      'DEX History',
+      name: 'g_key_dex_history_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Best Route`
+  String get g_key_dex_best_route {
+    return Intl.message(
+      'Best Route',
+      name: 'g_key_dex_best_route',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price Impact`
+  String get g_key_dex_price_impact {
+    return Intl.message(
+      'Price Impact',
+      name: 'g_key_dex_price_impact',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gas Estimate`
+  String get g_key_dex_gas_estimate {
+    return Intl.message(
+      'Gas Estimate',
+      name: 'g_key_dex_gas_estimate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You Pay`
+  String get g_key_dex_you_pay {
+    return Intl.message(
+      'You Pay',
+      name: 'g_key_dex_you_pay',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You Receive`
+  String get g_key_dex_you_receive {
+    return Intl.message(
+      'You Receive',
+      name: 'g_key_dex_you_receive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Best Source`
+  String get g_key_dex_best_source {
+    return Intl.message(
+      'Best Source',
+      name: 'g_key_dex_best_source',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chain`
+  String get g_key_dex_chain {
+    return Intl.message('Chain', name: 'g_key_dex_chain', desc: '', args: []);
+  }
+
+  /// `Slippage Tolerance`
+  String get g_key_dex_slippage {
+    return Intl.message(
+      'Slippage Tolerance',
+      name: 'g_key_dex_slippage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select`
+  String get g_key_dex_select_token {
+    return Intl.message(
+      'Select',
+      name: 'g_key_dex_select_token',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search symbol / name / address`
+  String get g_key_dex_search_hint {
+    return Intl.message(
+      'Search symbol / name / address',
+      name: 'g_key_dex_search_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No tokens`
+  String get g_key_dex_no_tokens {
+    return Intl.message(
+      'No tokens',
+      name: 'g_key_dex_no_tokens',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No tokens found`
+  String get g_key_dex_no_tokens_found {
+    return Intl.message(
+      'No tokens found',
+      name: 'g_key_dex_no_tokens_found',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Swap submitted successfully`
+  String get g_key_dex_swap_success {
+    return Intl.message(
+      'Swap submitted successfully',
+      name: 'g_key_dex_swap_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Solana DEX swap not yet supported in-app`
+  String get g_key_dex_sol_unsupported {
+    return Intl.message(
+      'Solana DEX swap not yet supported in-app',
+      name: 'g_key_dex_sol_unsupported',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quote failed`
+  String get g_key_dex_quote_failed {
+    return Intl.message(
+      'Quote failed',
+      name: 'g_key_dex_quote_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transaction failed`
+  String get g_key_dex_tx_failed {
+    return Intl.message(
+      'Transaction failed',
+      name: 'g_key_dex_tx_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Retry`
+  String get g_key_dex_retry {
+    return Intl.message('Retry', name: 'g_key_dex_retry', desc: '', args: []);
+  }
+
+  /// `Swap`
+  String get g_key_dex_swap_btn {
+    return Intl.message('Swap', name: 'g_key_dex_swap_btn', desc: '', args: []);
+  }
+
+  /// `Pending`
+  String get g_key_dex_status_pending {
+    return Intl.message(
+      'Pending',
+      name: 'g_key_dex_status_pending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirmed`
+  String get g_key_dex_status_confirmed {
+    return Intl.message(
+      'Confirmed',
+      name: 'g_key_dex_status_confirmed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed`
+  String get g_key_dex_status_failed {
+    return Intl.message(
+      'Failed',
+      name: 'g_key_dex_status_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quoted`
+  String get g_key_dex_status_quoted {
+    return Intl.message(
+      'Quoted',
+      name: 'g_key_dex_status_quoted',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

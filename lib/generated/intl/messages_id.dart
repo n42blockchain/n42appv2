@@ -1315,6 +1315,64 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
       "Deadline reminders",
     ),
+    "g_key_dex_best_route": MessageLookupByLibrary.simpleMessage(
+      "Rute Terbaik",
+    ),
+    "g_key_dex_best_source": MessageLookupByLibrary.simpleMessage(
+      "Sumber Terbaik",
+    ),
+    "g_key_dex_chain": MessageLookupByLibrary.simpleMessage("Jaringan"),
+    "g_key_dex_confirm_title": MessageLookupByLibrary.simpleMessage(
+      "Konfirmasi Swap",
+    ),
+    "g_key_dex_gas_estimate": MessageLookupByLibrary.simpleMessage(
+      "Estimasi Gas",
+    ),
+    "g_key_dex_history_title": MessageLookupByLibrary.simpleMessage(
+      "Riwayat DEX",
+    ),
+    "g_key_dex_no_tokens": MessageLookupByLibrary.simpleMessage(
+      "Tidak ada token",
+    ),
+    "g_key_dex_no_tokens_found": MessageLookupByLibrary.simpleMessage(
+      "Tidak ada token ditemukan",
+    ),
+    "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage(
+      "Dampak Harga",
+    ),
+    "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
+      "Kutipan gagal",
+    ),
+    "g_key_dex_retry": MessageLookupByLibrary.simpleMessage("Coba Lagi"),
+    "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(
+      "Cari simbol / nama / alamat",
+    ),
+    "g_key_dex_select_token": MessageLookupByLibrary.simpleMessage("Pilih"),
+    "g_key_dex_slippage": MessageLookupByLibrary.simpleMessage(
+      "Toleransi Slippage",
+    ),
+    "g_key_dex_sol_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Solana DEX swap belum didukung di aplikasi",
+    ),
+    "g_key_dex_status_confirmed": MessageLookupByLibrary.simpleMessage(
+      "Dikonfirmasi",
+    ),
+    "g_key_dex_status_failed": MessageLookupByLibrary.simpleMessage("Gagal"),
+    "g_key_dex_status_pending": MessageLookupByLibrary.simpleMessage(
+      "Tertunda",
+    ),
+    "g_key_dex_status_quoted": MessageLookupByLibrary.simpleMessage("Dikutip"),
+    "g_key_dex_swap_btn": MessageLookupByLibrary.simpleMessage("Tukar"),
+    "g_key_dex_swap_success": MessageLookupByLibrary.simpleMessage(
+      "Swap berhasil dikirim",
+    ),
+    "g_key_dex_tx_failed": MessageLookupByLibrary.simpleMessage(
+      "Transaksi gagal",
+    ),
+    "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage("Anda Membayar"),
+    "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage(
+      "Anda Terima",
+    ),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
       "Active Products",
     ),
