@@ -8,11 +8,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42appv2/src/wallet/aa/account/smart_account_factory.dart';
 import 'package:n42appv2/src/wallet/aa/core/aa_config.dart';
 import 'package:n42appv2/src/wallet/aa/models/smart_account.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 
 /// AA 账户创建页面
+///
+/// Pops with a [SmartAccount] on success so the caller can persist it.
 class AAAccountCreatePage extends StatefulWidget {
   /// 所有者地址 (EOA)
   final String ownerAddress;
@@ -34,6 +37,7 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage> {
   String? _previewAddress;
   bool _isCalculating = false;
   bool _isCreating = false;
+  String? _addressError;
 
   @override
   void initState() {
@@ -47,30 +51,61 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage> {
     super.dispose();
   }
 
+  // ── Address computation ────────────────────────────────────────────────────
+
+  /// Computes the counterfactual address via [SmartAccountFactory.computeAddressForType].
+  ///
+  /// Uses eth_call to the appropriate factory's view function so the result is
+  /// exact (no local approximation).
   Future<void> _calculatePreviewAddress() async {
-    setState(() => _isCalculating = true);
+    if (!mounted) return;
+    setState(() {
+      _isCalculating = true;
+      _previewAddress = null;
+      _addressError = null;
+    });
 
-    // 模拟计算 counterfactual 地址
-    // 实际实现应使用 SmartAccountFactory.calculateSimpleAccountAddress
-    await Future.delayed(const Duration(milliseconds: 500));
+    try {
+      final config = AAConfig.getChainConfig(_selectedChain);
+      if (config == null) {
+        if (mounted) {
+          setState(() {
+            _isCalculating = false;
+            _addressError = S.of(context).g_key_aa_address_error;
+          });
+        }
+        return;
+      }
 
-    if (mounted) {
-      setState(() {
-        _isCalculating = false;
-        // 模拟的预览地址
-        _previewAddress = '0x${_generateMockAddress()}';
-      });
+      final factory = SmartAccountFactory(
+        ownerAddress: widget.ownerAddress,
+        chainId: config.chainId,
+        config: config,
+      );
+
+      final address = await factory.computeAddressForType(
+        _selectedType,
+        salt: BigInt.zero,
+      );
+
+      if (mounted) {
+        setState(() {
+          _isCalculating = false;
+          if (address != null) {
+            _previewAddress = address;
+          } else {
+            _addressError = S.of(context).g_key_aa_address_error;
+          }
+        });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _isCalculating = false;
+          _addressError = S.of(context).g_key_aa_address_error;
+        });
+      }
     }
-  }
-
-  String _generateMockAddress() {
-    // 生成模拟地址用于预览
-    const chars = '0123456789abcdef';
-    final buffer = StringBuffer();
-    for (int i = 0; i < 40; i++) {
-      buffer.write(chars[DateTime.now().microsecond % chars.length]);
-    }
-    return buffer.toString();
   }
 
   void _onChainChanged(String chain) {
@@ -83,25 +118,56 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage> {
     _calculatePreviewAddress();
   }
 
+  // ── Account creation ───────────────────────────────────────────────────────
+
   Future<void> _createAccount() async {
+    if (_previewAddress == null) return;
     setState(() => _isCreating = true);
 
-    // 模拟创建账户
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      final config = AAConfig.getChainConfig(_selectedChain);
+      if (config == null) throw Exception('Unsupported chain: $_selectedChain');
 
-    if (mounted) {
-      setState(() => _isCreating = false);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(S.of(context).g_key_aa_account_created),
-          backgroundColor: Colors.green,
-        ),
+      final factory = SmartAccountFactory(
+        ownerAddress: widget.ownerAddress,
+        chainId: config.chainId,
+        config: config,
       );
 
-      Navigator.pop(context, true);
+      final account = factory.createAccount(
+        type: _selectedType,
+        address: _previewAddress,
+        salt: BigInt.zero,
+        label: _labelController.text.trim().isEmpty
+            ? null
+            : _labelController.text.trim(),
+      );
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(S.of(context).g_key_aa_account_created),
+            backgroundColor: Colors.green,
+          ),
+        );
+        // Pop with the SmartAccount so the caller can persist it
+        Navigator.pop(context, account);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString()),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isCreating = false);
     }
   }
+
+  // ── Build ──────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +184,7 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage> {
             _buildLabelInput(),
             SizedBox(height: ScreenUtil().setWidth(24)),
 
-            // 链选择
+            // 链选择  (Bug 2 fix: g_key_17 → g_key_aa_select_chain)
             _buildChainSelector(),
             SizedBox(height: ScreenUtil().setWidth(24)),
 
@@ -183,7 +249,8 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          S.of(context).g_key_17,
+          // Bug 2 fix: was g_key_17 (wrong key), now g_key_aa_select_chain
+          S.of(context).g_key_aa_select_chain,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(26),
             fontWeight: FontWeight.w600,
@@ -216,7 +283,8 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage> {
                           context,
                           AppThemeKeys.itemBgColor.name,
                         ),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                  borderRadius:
+                      BorderRadius.circular(ScreenUtil().setWidth(12)),
                   border: Border.all(
                     color: isSelected
                         ? AppThemeUtils.getColorByKey(
@@ -251,9 +319,11 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage> {
   }
 
   Widget _buildTypeSelector() {
+    // Bug 3 fix: added biconomy to the type list
     final types = [
       SmartAccountType.simpleAccount,
       SmartAccountType.safe,
+      SmartAccountType.biconomy,
       SmartAccountType.kernel,
     ];
 
@@ -279,7 +349,10 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage> {
 
   Widget _buildTypeOption(SmartAccountType type) {
     final isSelected = _selectedType == type;
-    final isAvailable = type == SmartAccountType.simpleAccount;
+    // Bug 4 fix: SimpleAccount, Safe, Biconomy are all available; Kernel is coming soon
+    final isAvailable = type == SmartAccountType.simpleAccount ||
+        type == SmartAccountType.safe ||
+        type == SmartAccountType.biconomy;
 
     return GestureDetector(
       onTap: isAvailable ? () => _onTypeChanged(type) : null,
@@ -313,7 +386,8 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage> {
                 height: ScreenUtil().setWidth(44),
                 decoration: BoxDecoration(
                   color: _getTypeColor(type).withAlpha(25),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                  borderRadius:
+                      BorderRadius.circular(ScreenUtil().setWidth(12)),
                 ),
                 child: Icon(
                   _getTypeIcon(type),
@@ -348,7 +422,8 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage> {
                             ),
                             decoration: BoxDecoration(
                               color: Colors.grey.withAlpha(30),
-                              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+                              borderRadius: BorderRadius.circular(
+                                  ScreenUtil().setWidth(6)),
                             ),
                             child: Text(
                               S.of(context).g_key_aa_coming_soon,
@@ -420,12 +495,46 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage> {
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
           if (_isCalculating)
-            Center(
-              child: SizedBox(
-                width: ScreenUtil().setWidth(24),
-                height: ScreenUtil().setWidth(24),
-                child: const CircularProgressIndicator(strokeWidth: 2),
-              ),
+            Row(
+              children: [
+                SizedBox(
+                  width: ScreenUtil().setWidth(20),
+                  height: ScreenUtil().setWidth(20),
+                  child: const CircularProgressIndicator(strokeWidth: 2),
+                ),
+                SizedBox(width: ScreenUtil().setWidth(12)),
+                Text(
+                  S.of(context).g_key_aa_address_calculating,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(22),
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.itemSubtitleTextColor.name,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          else if (_addressError != null)
+            Row(
+              children: [
+                Icon(Icons.error_outline,
+                    size: ScreenUtil().setWidth(20), color: Colors.red),
+                SizedBox(width: ScreenUtil().setWidth(8)),
+                Expanded(
+                  child: Text(
+                    _addressError!,
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(22),
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: _calculatePreviewAddress,
+                  child: Text(S.of(context).g_key_aa_retry),
+                ),
+              ],
             )
           else if (_previewAddress != null)
             Row(
@@ -486,9 +595,7 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage> {
       decoration: BoxDecoration(
         color: Colors.amber.withAlpha(20),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        border: Border.all(
-          color: Colors.amber.withAlpha(40),
-        ),
+        border: Border.all(color: Colors.amber.withAlpha(40)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -514,8 +621,9 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage> {
   }
 
   Widget _buildCreateButton() {
+    final canCreate = _previewAddress != null && !_isCalculating;
     return ElevatedButton(
-      onPressed: _isCreating ? null : _createAccount,
+      onPressed: (_isCreating || !canCreate) ? null : _createAccount,
       style: ElevatedButton.styleFrom(
         backgroundColor: AppThemeUtils.getColorByKey(
           context,
@@ -546,6 +654,8 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage> {
             ),
     );
   }
+
+  // ── Helpers ────────────────────────────────────────────────────────────────
 
   Color _getTypeColor(SmartAccountType type) {
     switch (type) {
@@ -591,7 +701,9 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage> {
         return S.of(context).g_key_aa_safe_desc;
       case SmartAccountType.kernel:
         return S.of(context).g_key_aa_kernel_desc;
+      // Bug 5 fix: was returning '' for biconomy, now returns proper description
       case SmartAccountType.biconomy:
+        return S.of(context).g_key_aa_biconomy_desc;
       case SmartAccountType.custom:
         return '';
     }

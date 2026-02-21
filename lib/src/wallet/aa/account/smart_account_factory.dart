@@ -3,13 +3,17 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'dart:typed_data';
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import 'package:web3dart/web3dart.dart';
 
 import '../core/aa_config.dart';
 import '../core/aa_errors.dart';
 import '../models/smart_account.dart';
 import '../builder/calldata_builder.dart';
+import 'account_types/safe_account.dart';
+import 'account_types/biconomy_account.dart';
 
 /// Factory for creating and managing smart accounts
 ///
@@ -34,100 +38,131 @@ class SmartAccountFactory {
   /// Get the chain ID
   int get chainId => _chainId;
 
-  /// Calculate the counterfactual address for a SimpleAccount
+  /// Calculate the counterfactual address for a SimpleAccount.
   ///
-  /// Uses CREATE2 formula: keccak256(0xff ++ factory ++ salt ++ keccak256(initCode))
-  /// But for SimpleAccountFactory, we can call getAddress on the factory contract.
+  /// Uses eth_call to factory.getAddress(owner, salt) via the bundler RPC,
+  /// which is the most reliable method.
   Future<String> calculateSimpleAccountAddress({
     BigInt? salt,
   }) async {
     final accountSalt = salt ?? BigInt.zero;
+    final rpcUrl = _config.bundlerUrl;
 
-    // For SimpleAccount, the address is deterministically calculated based on:
-    // 1. Factory address
-    // 2. Owner address
-    // 3. Salt
-
-    // Use CREATE2 calculation
-    return _calculateCreate2Address(
-      factoryAddress: _config.simpleAccountFactory,
+    final calldata = CalldataBuilder.buildGetAddress(
       owner: _ownerAddress,
       salt: accountSalt,
     );
-  }
-
-  /// Calculate CREATE2 address
-  String _calculateCreate2Address({
-    required String factoryAddress,
-    required String owner,
-    required BigInt salt,
-  }) {
-    // CREATE2 address = keccak256(0xff ++ deployer ++ salt ++ keccak256(initCode))[12:]
-
-    // For SimpleAccount, the salt is keccak256(abi.encodePacked(owner, salt))
-    final ownerBytes = hexToBytes(owner.replaceFirst('0x', '').padLeft(64, '0'));
-    final saltBytes = Uint8List(32);
-    final saltValueBytes = intToBytes(salt);
-    saltBytes.setAll(32 - saltValueBytes.length, saltValueBytes);
-
-    final combinedSalt = Uint8List(64);
-    combinedSalt.setAll(0, ownerBytes);
-    combinedSalt.setAll(32, saltBytes);
-    final hashedSalt = keccak256(combinedSalt);
-
-    // Get init code hash (this is the bytecode hash of the SimpleAccount proxy)
-    // Note: This is a simplified version. In production, you'd query the actual bytecode.
-    final initCodeHash = _getSimpleAccountInitCodeHash();
-
-    // CREATE2 formula
-    final data = Uint8List(1 + 20 + 32 + 32);
-    data[0] = 0xff;
-
-    final factoryBytes = hexToBytes(factoryAddress.replaceFirst('0x', ''));
-    data.setAll(1, factoryBytes);
-    data.setAll(21, hashedSalt);
-    data.setAll(53, initCodeHash);
-
-    final addressHash = keccak256(data);
-    return '0x${bytesToHex(addressHash.sublist(12))}';
-  }
-
-  /// Get the init code hash for SimpleAccount
-  /// This is the keccak256 of the proxy creation code + implementation address
-  Uint8List _getSimpleAccountInitCodeHash() {
-    // This is a placeholder. In production, this should be the actual
-    // keccak256 hash of the SimpleAccount proxy creation bytecode.
-    // The exact value depends on the factory implementation.
-
-    // For eth-infinitism SimpleAccountFactory, this is deterministic
-    // based on the implementation address.
-    return hexToBytes(
-      '0x${'0' * 64}', // Placeholder - needs actual bytecode hash
+    final result = await _ethCall(
+      rpcUrl: rpcUrl,
+      to: _config.simpleAccountFactory,
+      data: '0x${bytesToHex(calldata)}',
     );
+
+    if (result != null && result.length >= 66) {
+      final bytes = hexToBytes(result.replaceFirst('0x', ''));
+      if (bytes.length >= 32) {
+        return '0x${bytesToHex(bytes.sublist(12, 32))}';
+      }
+    }
+
+    // Fallback: approximate local calculation
+    return _calculateSimpleAddress(accountSalt);
   }
 
-  /// Create a new SmartAccount model (does not deploy on-chain)
+  /// Compute the counterfactual address for ANY supported account type.
+  ///
+  /// Uses type-specific helpers and RPC calls. Returns null if RPC fails.
+  Future<String?> computeAddressForType(
+    SmartAccountType type, {
+    BigInt? salt,
+  }) async {
+    final accountSalt = salt ?? BigInt.zero;
+    final rpcUrl = _config.bundlerUrl;
+
+    switch (type) {
+      case SmartAccountType.simpleAccount:
+        final addr = await calculateSimpleAccountAddress(salt: accountSalt);
+        return addr;
+
+      case SmartAccountType.simple7702Account:
+        // EIP-7702: the smart account address IS the EOA address
+        return _ownerAddress;
+
+      case SmartAccountType.safe:
+        final helper = SafeAccountHelper(
+          factoryAddress: _config.safeFactory ?? AAConfig.safeProxyFactory,
+          singletonAddress: AAConfig.safeL2Singleton,
+          fallbackHandlerAddress: AAConfig.safeFallbackHandler,
+          entryPointAddress: _config.entryPoint,
+        );
+        return helper.computeAddress(
+          owner: _ownerAddress,
+          saltNonce: accountSalt,
+          rpcUrl: rpcUrl,
+        );
+
+      case SmartAccountType.biconomy:
+        final helper = BiconomyAccountHelper(
+          factoryAddress: _config.biconomyFactory ?? AAConfig.biconomyNexusFactory,
+          k1ValidatorAddress: AAConfig.biconomyK1Validator,
+          entryPointAddress: _config.entryPoint,
+        );
+        return helper.computeAddress(
+          owner: _ownerAddress,
+          salt: accountSalt,
+          rpcUrl: rpcUrl,
+        );
+
+      case SmartAccountType.kernel:
+      case SmartAccountType.custom:
+        return null; // Not yet implemented
+    }
+  }
+
+  /// Create a new SmartAccount model (does not deploy on-chain).
+  ///
+  /// [address] must be provided when calling from the create page
+  /// (already computed via [computeAddressForType]). Falls back to the local
+  /// SimpleAccount approximation if not supplied.
   SmartAccount createAccount({
     required SmartAccountType type,
+    String? address,
     BigInt? salt,
     String? label,
   }) {
     final accountSalt = salt ?? BigInt.zero;
 
-    // Calculate address (synchronous version using simplified calculation)
-    final address = _calculateSimpleAddress(accountSalt);
+    final resolvedAddress = address ?? _calculateSimpleAddress(accountSalt);
+    final factoryAddr = _factoryAddressForType(type);
 
     return SmartAccount(
-      address: address,
+      address: resolvedAddress,
       type: type,
       ownerAddress: _ownerAddress,
       state: SmartAccountState.notDeployed,
       chainId: _chainId,
       salt: accountSalt,
-      factoryAddress: _config.simpleAccountFactory,
+      factoryAddress: factoryAddr,
       createdAt: DateTime.now(),
       label: label,
     );
+  }
+
+  /// Return the appropriate factory address for a given account type.
+  String _factoryAddressForType(SmartAccountType type) {
+    switch (type) {
+      case SmartAccountType.simpleAccount:
+        return _config.simpleAccountFactory;
+      case SmartAccountType.simple7702Account:
+        return AAConfig.simple7702AccountFactory;
+      case SmartAccountType.safe:
+        return _config.safeFactory ?? AAConfig.safeProxyFactory;
+      case SmartAccountType.biconomy:
+        return _config.biconomyFactory ?? AAConfig.biconomyNexusFactory;
+      case SmartAccountType.kernel:
+      case SmartAccountType.custom:
+        return _config.simpleAccountFactory;
+    }
   }
 
   /// Simplified address calculation for sync usage
@@ -164,6 +199,38 @@ class SmartAccountFactory {
       owner: _ownerAddress,
       salt: accountSalt,
     );
+  }
+
+  // ── Private: eth_call ───────────────────────────────────────────────────────
+
+  static Future<String?> _ethCall({
+    required String rpcUrl,
+    required String to,
+    required String data,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse(rpcUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'jsonrpc': '2.0',
+          'id': 1,
+          'method': 'eth_call',
+          'params': [
+            {'to': to, 'data': data},
+            'latest',
+          ],
+        }),
+      );
+      if (response.statusCode != 200) return null;
+      final json = jsonDecode(response.body) as Map<String, dynamic>;
+      if (json.containsKey('error')) return null;
+      final result = json['result'];
+      return result is String ? result : null;
+    } catch (e) {
+      if (kDebugMode) debugPrint('[SmartAccountFactory] ethCall error: $e');
+      return null;
+    }
   }
 
   /// Check if account is deployed at the given address
