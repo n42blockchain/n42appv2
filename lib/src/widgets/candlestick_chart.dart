@@ -1,27 +1,16 @@
 import 'dart:math';
+import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
+import 'package:n42appv2/src/wallet/models/ohlc_point.dart';
 
-/// Single OHLC data point for a candlestick candle.
-class OhlcPoint {
-  final double open;
-  final double high;
-  final double low;
-  final double close;
-
-  const OhlcPoint({
-    required this.open,
-    required this.high,
-    required this.low,
-    required this.close,
-  });
-
-  bool get isBullish => close >= open;
-}
+// Re-export so callers only need to import this file.
+export 'package:n42appv2/src/wallet/models/ohlc_point.dart';
 
 /// Candlestick (K-line) chart widget with optional volume bars below.
 ///
 /// Accepts OHLC price data and an optional list of volume values.
 /// Volume bars occupy [volumeHeightRatio] fraction of the total height.
+/// When [volumeData] is empty the volume section is hidden automatically.
 class CandlestickChart extends StatelessWidget {
   final List<OhlcPoint> ohlcData;
   final List<double> volumeData;
@@ -51,9 +40,11 @@ class CandlestickChart extends StatelessWidget {
       width: double.infinity,
       child: CustomPaint(
         painter: _CandlestickPainter(
-          ohlcData: ohlcData,
+          // [FIX M3] Filter out invalid candles before they reach the painter.
+          ohlcData: ohlcData.where((p) => p.isValid).toList(),
           volumeData: volumeData,
           isDark: isDark,
+          // [FIX] Honour caller's ratio only when volume data is present.
           volumeHeightRatio: volumeData.isEmpty ? 0.0 : volumeHeightRatio,
         ),
       ),
@@ -93,44 +84,46 @@ class _CandlestickPainter extends CustomPainter {
     final chartH = size.height * (1 - volumeHeightRatio);
     final volH = size.height * volumeHeightRatio;
 
-    // --- Price range ---
-    double maxPrice = ohlcData.map((d) => d.high).reduce(max);
-    double minPrice = ohlcData.map((d) => d.low).reduce(min);
-    final priceRange = maxPrice - minPrice;
-    if (priceRange == 0) return;
+    // [FIX P3] Compute price range in a single pass.
+    double maxPrice = ohlcData[0].high;
+    double minPrice = ohlcData[0].low;
+    for (final d in ohlcData) {
+      if (d.high > maxPrice) maxPrice = d.high;
+      if (d.low < minPrice) minPrice = d.low;
+    }
 
-    // 5% padding top and bottom
+    final priceRange = maxPrice - minPrice;
+    if (priceRange == 0) return; // Flat chart – avoid division by zero.
+
+    // 5% visual padding top and bottom so candles don't touch the edges.
     final pad = priceRange * 0.05;
     final priceCeil = maxPrice + pad;
     final priceFloor = minPrice - pad;
     final priceSpan = priceCeil - priceFloor;
 
-    double toY(double price) {
-      return chartH - ((price - priceFloor) / priceSpan) * chartH;
-    }
+    double toY(double price) =>
+        chartH - ((price - priceFloor) / priceSpan) * chartH;
 
-    // --- Grid lines ---
     _drawGrid(canvas, size, chartH);
 
-    // --- Volume max ---
-    double maxVol = 1;
+    // --- Volume ---
+    double maxVol = 1.0;
     if (volumeData.isNotEmpty) {
       maxVol = volumeData.reduce(max);
       if (maxVol == 0) maxVol = 1;
     }
 
-    // --- Align volume data ---
-    // Volume may have more/fewer points; we display proportionally.
-    List<double> alignedVolumes = [];
+    // Align volume data length to candle count via proportional index mapping.
+    List<double> alignedVolumes = const [];
     if (volumeData.isNotEmpty && volH > 0) {
       if (volumeData.length == n) {
         alignedVolumes = volumeData;
       } else {
-        // Down-sample or up-sample by index mapping
+        final srcLen = volumeData.length;
+        final denominator = n > 1 ? n - 1 : 1;
         alignedVolumes = List.generate(n, (i) {
-          final ratio = i / (n - 1 == 0 ? 1 : n - 1);
           final srcIdx =
-              (ratio * (volumeData.length - 1)).round().clamp(0, volumeData.length - 1);
+              ((i / denominator) * (srcLen - 1)).round().clamp(0, srcLen - 1);
           return volumeData[srcIdx];
         });
       }
@@ -141,6 +134,7 @@ class _CandlestickPainter extends CustomPainter {
     final bodyW = (candleSlotW * 0.55).clamp(1.5, 12.0);
     final halfBody = bodyW / 2;
 
+    // [FIX P1] Allocate Paint objects once outside the drawing loop.
     final wickPaint = Paint()
       ..strokeWidth = 1.0
       ..style = PaintingStyle.stroke;
@@ -148,6 +142,7 @@ class _CandlestickPainter extends CustomPainter {
     final dojiPaint = Paint()
       ..strokeWidth = 1.5
       ..style = PaintingStyle.stroke;
+    final volPaint = Paint()..style = PaintingStyle.fill;
 
     for (int i = 0; i < n; i++) {
       final d = ohlcData[i];
@@ -163,16 +158,19 @@ class _CandlestickPainter extends CustomPainter {
       final openY = toY(d.open);
       final closeY = toY(d.close);
 
-      // Wick (high-low line)
+      // Wick
       canvas.drawLine(Offset(cx, highY), Offset(cx, lowY), wickPaint);
 
-      // Body (open-close rectangle)
+      // Body
       final bodyTop = min(openY, closeY);
       final bodyBottom = max(openY, closeY);
       if ((bodyBottom - bodyTop) < 1.0) {
-        // Doji candle – draw horizontal line
+        // Doji – draw a horizontal line instead of a zero-height rect.
         canvas.drawLine(
-            Offset(cx - halfBody, bodyTop), Offset(cx + halfBody, bodyTop), dojiPaint);
+          Offset(cx - halfBody, bodyTop),
+          Offset(cx + halfBody, bodyTop),
+          dojiPaint,
+        );
       } else {
         canvas.drawRect(
           Rect.fromLTRB(cx - halfBody, bodyTop, cx + halfBody, bodyBottom),
@@ -184,29 +182,25 @@ class _CandlestickPainter extends CustomPainter {
       if (alignedVolumes.isNotEmpty && volH > 0) {
         final vol = alignedVolumes[i];
         final barH = (vol / maxVol) * volH * 0.88;
-        final barTop = size.height - barH;
-        final volPaint = Paint()
-          ..style = PaintingStyle.fill
-          ..color = color.withValues(alpha: 0.45);
+        volPaint.color = color.withValues(alpha: 0.45);
         canvas.drawRect(
-          Rect.fromLTRB(cx - halfBody, barTop, cx + halfBody, size.height),
+          Rect.fromLTRB(
+              cx - halfBody, size.height - barH, cx + halfBody, size.height),
           volPaint,
         );
       }
     }
 
-    // --- Price labels (right side) ---
     _drawPriceLabels(canvas, size, chartH, priceFloor, priceCeil);
 
-    // --- Volume separator line ---
+    // Separator between price chart and volume area.
     if (volH > 0) {
-      final sepPaint = Paint()
-        ..color = _gridColor
-        ..strokeWidth = 0.5;
       canvas.drawLine(
         Offset(0, chartH),
         Offset(size.width, chartH),
-        sepPaint,
+        Paint()
+          ..color = _gridColor
+          ..strokeWidth = 0.5,
       );
     }
   }
@@ -242,6 +236,7 @@ class _CandlestickPainter extends CustomPainter {
         ),
         textDirection: TextDirection.ltr,
       )..layout();
+      // Only draw if the label fits within the chart area.
       if (y - tp.height / 2 >= 0 && y + tp.height / 2 <= chartH) {
         tp.paint(canvas, Offset(size.width - tp.width - 2, y - tp.height / 2));
       }
@@ -256,10 +251,14 @@ class _CandlestickPainter extends CustomPainter {
     return '\$${price.toStringAsFixed(6)}';
   }
 
+  // [FIX M1] Use value equality (OhlcPoint.== + listEquals) so repaint is
+  // triggered correctly even when the list *object* reference is unchanged but
+  // content differs (defensive), and skipped when reference changes but
+  // content is identical.
   @override
   bool shouldRepaint(covariant _CandlestickPainter old) {
-    return old.ohlcData != ohlcData ||
-        old.volumeData != volumeData ||
-        old.isDark != isDark;
+    return old.isDark != isDark ||
+        !listEquals(old.ohlcData, ohlcData) ||
+        !listEquals(old.volumeData, volumeData);
   }
 }
