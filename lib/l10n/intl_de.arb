@@ -1760,4 +1760,6 @@
   "g_portfolio_pie_total": "Gesamt",
   "g_portfolio_losers": "Top Verlierer",
   "g_portfolio_all_holdings": "Alle Bestände"
+,
+  "g_version_later": "Später"
 }

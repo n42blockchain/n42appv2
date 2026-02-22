@@ -1803,4 +1803,6 @@
   "g_portfolio_pie_total": "합계",
   "g_portfolio_losers": "하락 순위",
   "g_portfolio_all_holdings": "전체 보유 자산"
+,
+  "g_version_later": "나중에"
 }

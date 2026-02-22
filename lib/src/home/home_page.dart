@@ -24,6 +24,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42_chat/n42_chat.dart';
 import 'package:n42appv2/src/widgets/terms_of_service_widget.dart';
+import 'package:n42appv2/src/home/api/version_api.dart';
+import 'package:n42appv2/src/home/widgets/check_version_alert.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 /// Home Page - Migrated to Riverpod
 /// 
@@ -144,7 +147,45 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     } else {
       AppGlobals.login(AppGlobals.userInfo!);
     }
+
+    // 启动后延迟 2 秒检查版本更新，避免阻塞主界面渲染
+    Future.delayed(const Duration(seconds: 2), _checkVersionOnStartup);
   }
+
+  /// 冷启动版本检查。
+  /// - 强制更新（isForce=true）：弹出不可关闭的对话框，用户必须更新才能继续使用。
+  /// - 可选更新：静默（不弹窗），让用户在 About 页面主动查看。
+  Future<void> _checkVersionOnStartup() async {
+    if (!AppConfig.isOpenAppUpdate || !mounted) return;
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      final versionInfo = await VersionApi().getVersionInfo();
+      if (versionInfo == null || !mounted) return;
+
+      final serverCode = versionInfo.versionCode;
+      final localCode = int.tryParse(packageInfo.buildNumber) ?? 0;
+      if (serverCode == null || serverCode <= localCode) return;
+
+      // 仅在强制更新时主动弹窗；可选更新让用户自行去 About 页查看
+      if (versionInfo.isForce != true) return;
+
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        barrierDismissible: false, // 强制更新不允许点外部关闭
+        builder: (_) => CheckVersionAlert(
+          newVersion: versionInfo.versionName ?? '',
+          updateTitle: versionInfo.updateTitle ?? '',
+          introduction: versionInfo.updateContent ?? '',
+          isForce: 1,
+          downloadUrl: versionInfo.downloadUrl,
+        ),
+      );
+    } catch (_) {
+      // 版本检查失败绝不 crash App
+    }
+  }
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);

@@ -3006,6 +3006,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_unlock_key7": MessageLookupByLibrary.simpleMessage("인증 실패"),
     "g_unlock_key8": m81,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("또한 "),
+    "g_version_later": MessageLookupByLibrary.simpleMessage("나중에"),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
       "연결이 끊어졌습니다. 다시 연결해 주세요.",
     ),

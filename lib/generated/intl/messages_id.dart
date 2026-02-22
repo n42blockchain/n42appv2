@@ -3439,6 +3439,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_unlock_key7": MessageLookupByLibrary.simpleMessage("Autentikasi gagal"),
     "g_unlock_key8": m81,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("Anda juga dapat "),
+    "g_version_later": MessageLookupByLibrary.simpleMessage("Nanti"),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
       "Koneksi terputus. Silakan hubungkan kembali.",
     ),

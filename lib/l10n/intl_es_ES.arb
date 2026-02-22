@@ -1803,4 +1803,6 @@
   "g_portfolio_pie_total": "Total",
   "g_portfolio_losers": "Mayores pérdidas",
   "g_portfolio_all_holdings": "Todos los activos"
+,
+  "g_version_later": "Más tarde"
 }

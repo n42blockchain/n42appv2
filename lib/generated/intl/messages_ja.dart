@@ -2907,6 +2907,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_unlock_key7": MessageLookupByLibrary.simpleMessage("認証に失敗しました"),
     "g_unlock_key8": m81,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("または"),
+    "g_version_later": MessageLookupByLibrary.simpleMessage("後で"),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
       "接続が切れました。再接続してください。",
     ),

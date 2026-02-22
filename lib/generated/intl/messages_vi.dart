@@ -3373,6 +3373,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_unlock_key7": MessageLookupByLibrary.simpleMessage("Xác thực thất bại"),
     "g_unlock_key8": m81,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("Bạn cũng có thể "),
+    "g_version_later": MessageLookupByLibrary.simpleMessage("Để sau"),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
       "Mất kết nối. Vui lòng kết nối lại.",
     ),

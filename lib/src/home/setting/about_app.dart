@@ -47,11 +47,11 @@ class _AboutAppState extends State<AboutApp> {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     versionInfo = await VersionApi().getVersionInfo();
     if (versionInfo != null) {
-      if (versionInfo!.versionCode! > int.parse(packageInfo.buildNumber)) {
+      final serverCode = versionInfo!.versionCode;
+      final localCode = int.tryParse(packageInfo.buildNumber) ?? 0;
+      if (serverCode != null && serverCode > localCode) {
         findNewVersion = true;
-        if (mounted) {
-          setState(() {});
-        }
+        if (mounted) setState(() {});
       }
     }
   }
@@ -341,8 +341,10 @@ class _AboutAppState extends State<AboutApp> {
             builder: (context) {
               return CheckVersionAlert(
                 newVersion: versionInfo!.versionName ?? "",
+                updateTitle: versionInfo!.updateTitle ?? '',
                 introduction: versionInfo!.updateContent ?? '',
-                isForce: 0,
+                isForce: versionInfo!.isForce == true ? 1 : 0,
+                downloadUrl: versionInfo!.downloadUrl,
               );
             },
           );

@@ -1760,4 +1760,6 @@
   "g_portfolio_pie_total": "Итого",
   "g_portfolio_losers": "Наибольшие потери",
   "g_portfolio_all_holdings": "Все активы"
+,
+  "g_version_later": "Позже"
 }

@@ -1760,4 +1760,6 @@
   "g_portfolio_pie_total": "Toplam",
   "g_portfolio_losers": "En Büyük Kayıplar",
   "g_portfolio_all_holdings": "Tüm Varlıklar"
+,
+  "g_version_later": "Sonra"
 }

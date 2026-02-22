@@ -3528,6 +3528,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_unlock_key8": m81,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("Você também pode "),
+    "g_version_later": MessageLookupByLibrary.simpleMessage("Mais tarde"),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
       "Conexão perdida. Por favor, reconecte.",
     ),

@@ -1760,4 +1760,6 @@
   "g_portfolio_pie_total": "Total",
   "g_portfolio_losers": "Plus grandes pertes",
   "g_portfolio_all_holdings": "Tous les actifs"
+,
+  "g_version_later": "Plus tard"
 }

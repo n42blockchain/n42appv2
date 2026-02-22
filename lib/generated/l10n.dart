@@ -15478,6 +15478,11 @@ class S {
       args: [],
     );
   }
+
+  /// `Later`
+  String get g_version_later {
+    return Intl.message('Later', name: 'g_version_later', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

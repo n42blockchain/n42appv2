@@ -3387,6 +3387,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_unlock_key8": m81,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("Ayrıca "),
+    "g_version_later": MessageLookupByLibrary.simpleMessage("Sonra"),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
       "Bağlantı kesildi. Lütfen yeniden bağlanın.",
     ),

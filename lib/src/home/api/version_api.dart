@@ -10,19 +10,30 @@ class VersionApi{
   late Map<String,String> header;
   VersionApi(){
     url=AppConfig.getApiUrlOnline('userInfoHost');
-    header={'content-type': 'application/x-www-form-urlencoded'};
+    header={'content-type': 'application/json'};
   }
   // 最新版本信息
   Future<VersionInfoModel?> getVersionInfo() async {
     Map<String, dynamic> params = {};
     params["source"] = "app";
     params["app"] = Platform.isIOS ? "ios" : "android";
-    final data = await BaseApi.requestEmptyH.get(
-        '/v1/r/static/app/version',
-        params: params,header: header
-    );
-    if(data["code"] == 200){
-      return VersionInfoModel.fromJson(json.decode(data['data']));
+    try {
+      final data = await BaseApi.requestEmptyH.get(
+          '$url/v1/r/static/app/version',
+          params: params, header: header
+      );
+      if (data["code"] == 200 && data['data'] != null) {
+        final raw = data['data'];
+        // 兼容两种后端返回格式：
+        //   1) data['data'] 已是 Map（Dio 自动反序列化）
+        //   2) data['data'] 是 JSON 字符串（后端将 JSON 包在字符串里）
+        final Map<String, dynamic> map =
+            raw is String ? json.decode(raw) as Map<String, dynamic>
+                         : raw as Map<String, dynamic>;
+        return VersionInfoModel.fromJson(map);
+      }
+    } catch (_) {
+      // 版本检查失败不应影响 App 正常使用
     }
     return null;
   }
