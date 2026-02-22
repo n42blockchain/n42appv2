@@ -1582,6 +1582,10 @@
   "g_phishing_warning_body": "Questo sito web è stato identificato come potenzialmente dannoso. Potrebbe tentare di rubare i tuoi asset crypto o le chiavi private.",
   "g_phishing_warning_url_label": "URL Sospetto:",
   "g_phishing_go_back": "Torna Indietro (Sicuro)",
-  "g_phishing_proceed_anyway": "Procedi Comunque"
+  "g_phishing_proceed_anyway": "Procedi Comunque",
+
+  "g_tx_risk_safe": "Sicuro",
+  "g_tx_risk_caution": "Attenzione",
+  "g_tx_risk_danger": "Alto Rischio"
 
 }

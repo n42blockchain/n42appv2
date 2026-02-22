@@ -3266,6 +3266,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Token-Dezimalstellen",
     ),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("Importieren"),
+    "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Achtung"),
+    "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Hohes Risiko"),
+    "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Sicher"),
     "g_unlock_key10": m74,
     "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
       "Fingerabdruck- oder Gesichtserkennung nicht aktiviert?",

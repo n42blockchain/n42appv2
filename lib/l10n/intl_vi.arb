@@ -1582,6 +1582,10 @@
   "g_phishing_warning_body": "Trang web này đã được xác định là có khả năng độc hại. Nó có thể đang cố gắng đánh cắp tài sản tiền điện tử hoặc khóa riêng tư của bạn.",
   "g_phishing_warning_url_label": "URL đáng ngờ:",
   "g_phishing_go_back": "Quay lại (An toàn)",
-  "g_phishing_proceed_anyway": "Tiếp tục dù sao"
+  "g_phishing_proceed_anyway": "Tiếp tục dù sao",
+
+  "g_tx_risk_safe": "An toàn",
+  "g_tx_risk_caution": "Thận trọng",
+  "g_tx_risk_danger": "Rủi ro cao"
 
 }

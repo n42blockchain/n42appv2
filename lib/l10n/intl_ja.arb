@@ -1582,6 +1582,10 @@
   "g_phishing_warning_body": "このウェブサイトは潜在的に悪意があると識別されました。あなたの暗号資産や秘密鍵を盗もうとしている可能性があります。",
   "g_phishing_warning_url_label": "不審なURL：",
   "g_phishing_go_back": "戻る（安全）",
-  "g_phishing_proceed_anyway": "それでも続ける"
+  "g_phishing_proceed_anyway": "それでも続ける",
+
+  "g_tx_risk_safe": "安全",
+  "g_tx_risk_caution": "注意",
+  "g_tx_risk_danger": "高リスク"
 
 }

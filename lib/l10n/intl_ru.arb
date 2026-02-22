@@ -1582,6 +1582,10 @@
   "g_phishing_warning_body": "Этот сайт был идентифицирован как потенциально вредоносный. Он может пытаться похитить ваши криптоактивы или закрытые ключи.",
   "g_phishing_warning_url_label": "Подозрительный URL:",
   "g_phishing_go_back": "Назад (Безопасно)",
-  "g_phishing_proceed_anyway": "Продолжить всё равно"
+  "g_phishing_proceed_anyway": "Продолжить всё равно",
+
+  "g_tx_risk_safe": "Безопасно",
+  "g_tx_risk_caution": "Осторожно",
+  "g_tx_risk_danger": "Высокий риск"
 
 }

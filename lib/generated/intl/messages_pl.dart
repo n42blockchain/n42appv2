@@ -3207,6 +3207,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Miejsca dziesiętne tokena",
     ),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("Importuj"),
+    "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Uwaga"),
+    "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Wysokie Ryzyko"),
+    "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Bezpieczne"),
     "g_unlock_key10": m74,
     "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
       "Rozpoznawanie odcisku palca lub twarzy nie jest włączone?",

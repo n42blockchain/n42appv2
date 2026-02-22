@@ -1582,6 +1582,10 @@
   "g_phishing_warning_body": "Ta strona internetowa została zidentyfikowana jako potencjalnie szkodliwa. Może próbować ukraść Twoje krypto aktywa lub klucze prywatne.",
   "g_phishing_warning_url_label": "Podejrzany URL:",
   "g_phishing_go_back": "Wróć (Bezpieczne)",
-  "g_phishing_proceed_anyway": "Kontynuuj mimo to"
+  "g_phishing_proceed_anyway": "Kontynuuj mimo to",
+
+  "g_tx_risk_safe": "Bezpieczne",
+  "g_tx_risk_caution": "Uwaga",
+  "g_tx_risk_danger": "Wysokie Ryzyko"
 
 }

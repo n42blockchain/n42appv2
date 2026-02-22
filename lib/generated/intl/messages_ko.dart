@@ -2751,6 +2751,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_7": MessageLookupByLibrary.simpleMessage("토큰 심볼"),
     "g_token_m_key_8": MessageLookupByLibrary.simpleMessage("토큰 소수점"),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("가져오기"),
+    "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("주의"),
+    "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("고위험"),
+    "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("안전"),
     "g_unlock_key10": m74,
     "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
       "지문 또는 얼굴 인식이 활성화되지 않았습니까?",

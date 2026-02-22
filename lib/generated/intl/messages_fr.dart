@@ -3337,6 +3337,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Décimales du jeton",
     ),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("Importer"),
+    "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Attention"),
+    "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Risque Élevé"),
+    "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Sûr"),
     "g_unlock_key10": m74,
     "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
       "La reconnaissance d\'empreinte ou faciale n\'est pas activée ?",

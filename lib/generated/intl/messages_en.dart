@@ -3232,6 +3232,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_7": MessageLookupByLibrary.simpleMessage("Token symbol"),
     "g_token_m_key_8": MessageLookupByLibrary.simpleMessage("Token decimal"),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("Import"),
+    "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Caution"),
+    "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("High Risk"),
+    "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Safe"),
     "g_unlock_key10": m74,
     "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
       "Fingerprint or face recognition is not enabled?",

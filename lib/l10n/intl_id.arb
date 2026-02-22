@@ -1582,6 +1582,10 @@
   "g_phishing_warning_body": "Situs web ini telah diidentifikasi sebagai berpotensi berbahaya. Mungkin mencoba mencuri aset kripto atau kunci pribadi Anda.",
   "g_phishing_warning_url_label": "URL Mencurigakan:",
   "g_phishing_go_back": "Kembali (Aman)",
-  "g_phishing_proceed_anyway": "Lanjutkan Saja"
+  "g_phishing_proceed_anyway": "Lanjutkan Saja",
+
+  "g_tx_risk_safe": "Aman",
+  "g_tx_risk_caution": "Perhatian",
+  "g_tx_risk_danger": "Risiko Tinggi"
 
 }

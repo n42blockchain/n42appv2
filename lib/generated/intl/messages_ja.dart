@@ -2658,6 +2658,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_7": MessageLookupByLibrary.simpleMessage("トークンシンボル"),
     "g_token_m_key_8": MessageLookupByLibrary.simpleMessage("トークン桁数"),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("インポート"),
+    "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("注意"),
+    "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("高リスク"),
+    "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("安全"),
     "g_unlock_key10": m74,
     "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
       "指紋または顔認証が有効になっていませんか？",

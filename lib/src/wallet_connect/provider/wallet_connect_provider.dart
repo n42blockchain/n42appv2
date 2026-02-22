@@ -136,6 +136,7 @@ class WalletConnectProvider with ChangeNotifier{
           "from":trMap['from']??"0x",
           "to":trMap['to']??"0x",
           "data":trMap['data']??"0x",
+          "value":trMap['value']??"0x0",
           "signType":"transaction",
         };
         viewStateDeal(WalletConnectState.transactionOK);
@@ -185,6 +186,7 @@ class WalletConnectProvider with ChangeNotifier{
           "from":trMap['from']??"0x",
           "to":trMap['to']??"0x",
           "data":trMap['data']??"0x",
+          "value":trMap['value']??"0x0",
           "signType":"transaction",
         };
         viewStateDeal(WalletConnectState.transactionOK);

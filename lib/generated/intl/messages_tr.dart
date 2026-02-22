@@ -3111,6 +3111,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_7": MessageLookupByLibrary.simpleMessage("Token sembolü"),
     "g_token_m_key_8": MessageLookupByLibrary.simpleMessage("Token ondalık"),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("İçe Aktar"),
+    "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Dikkat"),
+    "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Yüksek Risk"),
+    "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Güvenli"),
     "g_unlock_key10": m74,
     "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
       "Parmak izi veya yüz tanıma etkin değil mi?",

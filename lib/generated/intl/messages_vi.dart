@@ -3102,6 +3102,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Số thập phân token",
     ),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("Nhập"),
+    "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Thận trọng"),
+    "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Rủi ro cao"),
+    "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("An toàn"),
     "g_unlock_key10": m74,
     "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
       "Chưa bật nhận dạng vân tay hoặc khuôn mặt?",

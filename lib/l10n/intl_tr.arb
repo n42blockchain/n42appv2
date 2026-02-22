@@ -1582,6 +1582,10 @@
   "g_phishing_warning_body": "Bu web sitesi potansiyel olarak kötü niyetli olarak tanımlanmıştır. Kripto varlıklarınızı veya özel anahtarlarınızı çalmaya çalışıyor olabilir.",
   "g_phishing_warning_url_label": "Şüpheli URL:",
   "g_phishing_go_back": "Geri Dön (Güvenli)",
-  "g_phishing_proceed_anyway": "Yine de Devam Et"
+  "g_phishing_proceed_anyway": "Yine de Devam Et",
+
+  "g_tx_risk_safe": "Güvenli",
+  "g_tx_risk_caution": "Dikkat",
+  "g_tx_risk_danger": "Yüksek Risk"
 
 }

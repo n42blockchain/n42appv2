@@ -3275,6 +3275,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Decimali del token",
     ),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("Importa"),
+    "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Attenzione"),
+    "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Alto Rischio"),
+    "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Sicuro"),
     "g_unlock_key10": m74,
     "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
       "Impronta digitale o riconoscimento facciale non abilitato?",

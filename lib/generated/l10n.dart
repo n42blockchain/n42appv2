@@ -14198,6 +14198,31 @@ class S {
       args: [],
     );
   }
+
+  /// `Safe`
+  String get g_tx_risk_safe {
+    return Intl.message('Safe', name: 'g_tx_risk_safe', desc: '', args: []);
+  }
+
+  /// `Caution`
+  String get g_tx_risk_caution {
+    return Intl.message(
+      'Caution',
+      name: 'g_tx_risk_caution',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `High Risk`
+  String get g_tx_risk_danger {
+    return Intl.message(
+      'High Risk',
+      name: 'g_tx_risk_danger',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -1582,6 +1582,10 @@
   "g_phishing_warning_body": "Diese Website wurde als potenziell schädlich eingestuft. Sie könnte versuchen, Ihre Krypto-Assets oder privaten Schlüssel zu stehlen.",
   "g_phishing_warning_url_label": "Verdächtige URL:",
   "g_phishing_go_back": "Zurück (Sicher)",
-  "g_phishing_proceed_anyway": "Trotzdem fortfahren"
+  "g_phishing_proceed_anyway": "Trotzdem fortfahren",
+
+  "g_tx_risk_safe": "Sicher",
+  "g_tx_risk_caution": "Achtung",
+  "g_tx_risk_danger": "Hohes Risiko"
 
 }

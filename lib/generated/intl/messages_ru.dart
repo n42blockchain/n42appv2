@@ -3210,6 +3210,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Десятичные знаки токена",
     ),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("Импортировать"),
+    "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Осторожно"),
+    "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Высокий риск"),
+    "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Безопасно"),
     "g_unlock_key10": m74,
     "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
       "Отпечаток пальца или распознавание лица не включено?",

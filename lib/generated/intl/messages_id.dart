@@ -3166,6 +3166,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_7": MessageLookupByLibrary.simpleMessage("Simbol token"),
     "g_token_m_key_8": MessageLookupByLibrary.simpleMessage("Desimal token"),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("Impor"),
+    "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Perhatian"),
+    "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Risiko Tinggi"),
+    "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Aman"),
     "g_unlock_key10": m74,
     "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
       "Sidik jari atau pengenalan wajah tidak diaktifkan?",

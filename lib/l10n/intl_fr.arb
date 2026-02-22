@@ -1582,6 +1582,10 @@
   "g_phishing_warning_body": "Ce site web a été identifié comme potentiellement malveillant. Il peut tenter de voler vos actifs crypto ou vos clés privées.",
   "g_phishing_warning_url_label": "URL suspecte :",
   "g_phishing_go_back": "Retour (Sûr)",
-  "g_phishing_proceed_anyway": "Continuer quand même"
+  "g_phishing_proceed_anyway": "Continuer quand même",
+
+  "g_tx_risk_safe": "Sûr",
+  "g_tx_risk_caution": "Attention",
+  "g_tx_risk_danger": "Risque Élevé"
 
 }

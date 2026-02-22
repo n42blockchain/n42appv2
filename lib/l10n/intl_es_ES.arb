@@ -1625,6 +1625,10 @@
   "g_phishing_warning_body": "Este sitio web ha sido identificado como potencialmente malicioso. Podría intentar robar sus activos cripto o claves privadas.",
   "g_phishing_warning_url_label": "URL sospechosa:",
   "g_phishing_go_back": "Volver (Seguro)",
-  "g_phishing_proceed_anyway": "Continuar de todos modos"
+  "g_phishing_proceed_anyway": "Continuar de todos modos",
+
+  "g_tx_risk_safe": "Seguro",
+  "g_tx_risk_caution": "Precaución",
+  "g_tx_risk_danger": "Alto Riesgo"
 
 }
