@@ -104,7 +104,7 @@ class _MiningTodayV2State extends ConsumerState<MiningTodayV2> with AutomaticKee
                 } catch (err) {
                   debugPrint("err:${err.toString()}");
                 } finally {
-                  if (mounted) {
+                  if (dialogContext.mounted) {
                     Navigator.of(dialogContext).pop(); // Dismiss alert dialog
                   }
                   //更新ui

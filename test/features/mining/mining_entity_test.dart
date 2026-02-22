@@ -1,5 +1,5 @@
 // Tests for mining_entity.dart — pure Equatable entity classes and enums.
-// Covers: MiningStatus, NodeStatus enums; MiningSessionEntity (duration,
+// Covers: MiningSessionStatus, NodeStatus enums; MiningSessionEntity (duration,
 // formattedDuration, isActive); MiningPlanEntity (monthly/yearly return);
 // MiningRewardEntity; FullNodeEntity (isOnline, daysUntilExpiration);
 // MiningStatusEntity; MiningRewardsEntity; MiningStatisticsEntity.
@@ -12,18 +12,18 @@ void main() {
   // MiningStatus enum
   // ─────────────────────────────────────────────────
 
-  group('MiningStatus enum', () {
+  group('MiningSessionStatus enum', () {
     test('contains all four expected values', () {
-      expect(MiningStatus.values, containsAll([
-        MiningStatus.active,
-        MiningStatus.paused,
-        MiningStatus.completed,
-        MiningStatus.error,
+      expect(MiningSessionStatus.values, containsAll([
+        MiningSessionStatus.active,
+        MiningSessionStatus.paused,
+        MiningSessionStatus.completed,
+        MiningSessionStatus.error,
       ]));
     });
 
     test('four values total', () {
-      expect(MiningStatus.values.length, 4);
+      expect(MiningSessionStatus.values.length, 4);
     });
   });
 
@@ -59,7 +59,7 @@ void main() {
         walletAddress: '0xABC',
         planId: 'plan1',
         startTime: start,
-        status: MiningStatus.active,
+        status: MiningSessionStatus.active,
         earnedRewards: 5.0,
         rewardTokenSymbol: 'N42',
         miningPower: 100.0,
@@ -68,7 +68,7 @@ void main() {
       expect(e.walletAddress, '0xABC');
       expect(e.planId, 'plan1');
       expect(e.startTime, start);
-      expect(e.status, MiningStatus.active);
+      expect(e.status, MiningSessionStatus.active);
       expect(e.earnedRewards, 5.0);
       expect(e.rewardTokenSymbol, 'N42');
       expect(e.miningPower, 100.0);
@@ -80,7 +80,7 @@ void main() {
         walletAddress: '0x',
         planId: 'p',
         startTime: start,
-        status: MiningStatus.active,
+        status: MiningSessionStatus.active,
         earnedRewards: 0,
         rewardTokenSymbol: 'TK',
         miningPower: 1.0,
@@ -96,7 +96,7 @@ void main() {
         planId: 'p',
         startTime: start,
         endTime: end,
-        status: MiningStatus.completed,
+        status: MiningSessionStatus.completed,
         earnedRewards: 10.0,
         rewardTokenSymbol: 'N42',
         miningPower: 100.0,
@@ -111,7 +111,7 @@ void main() {
     test('true when status is active', () {
       final e = MiningSessionEntity(
         id: 's', walletAddress: '0x', planId: 'p',
-        startTime: start, status: MiningStatus.active,
+        startTime: start, status: MiningSessionStatus.active,
         earnedRewards: 0, rewardTokenSymbol: 'T', miningPower: 1.0,
       );
       expect(e.isActive, isTrue);
@@ -120,7 +120,7 @@ void main() {
     test('false when status is completed', () {
       final e = MiningSessionEntity(
         id: 's', walletAddress: '0x', planId: 'p',
-        startTime: start, status: MiningStatus.completed,
+        startTime: start, status: MiningSessionStatus.completed,
         earnedRewards: 0, rewardTokenSymbol: 'T', miningPower: 1.0,
       );
       expect(e.isActive, isFalse);
@@ -129,7 +129,7 @@ void main() {
     test('false when status is paused', () {
       final e = MiningSessionEntity(
         id: 's', walletAddress: '0x', planId: 'p',
-        startTime: start, status: MiningStatus.paused,
+        startTime: start, status: MiningSessionStatus.paused,
         earnedRewards: 0, rewardTokenSymbol: 'T', miningPower: 1.0,
       );
       expect(e.isActive, isFalse);
@@ -138,7 +138,7 @@ void main() {
     test('false when status is error', () {
       final e = MiningSessionEntity(
         id: 's', walletAddress: '0x', planId: 'p',
-        startTime: start, status: MiningStatus.error,
+        startTime: start, status: MiningSessionStatus.error,
         earnedRewards: 0, rewardTokenSymbol: 'T', miningPower: 1.0,
       );
       expect(e.isActive, isFalse);
@@ -152,7 +152,7 @@ void main() {
       final e = MiningSessionEntity(
         id: 's', walletAddress: '0x', planId: 'p',
         startTime: start, endTime: end,
-        status: MiningStatus.completed,
+        status: MiningSessionStatus.completed,
         earnedRewards: 0, rewardTokenSymbol: 'T', miningPower: 1.0,
       );
       expect(e.duration, equals(const Duration(hours: 2, minutes: 30)));
@@ -164,7 +164,7 @@ void main() {
       final e = MiningSessionEntity(
         id: 's', walletAddress: '0x', planId: 'p',
         startTime: start, endTime: end,
-        status: MiningStatus.completed,
+        status: MiningSessionStatus.completed,
         earnedRewards: 0, rewardTokenSymbol: 'T', miningPower: 1.0,
       );
       expect(e.formattedDuration, '3h 45m');
@@ -176,7 +176,7 @@ void main() {
       final e = MiningSessionEntity(
         id: 's', walletAddress: '0x', planId: 'p',
         startTime: start, endTime: end,
-        status: MiningStatus.completed,
+        status: MiningSessionStatus.completed,
         earnedRewards: 0, rewardTokenSymbol: 'T', miningPower: 1.0,
       );
       expect(e.formattedDuration, '2d 5h');
@@ -188,7 +188,7 @@ void main() {
       final e = MiningSessionEntity(
         id: 's', walletAddress: '0x', planId: 'p',
         startTime: start, endTime: end,
-        status: MiningStatus.completed,
+        status: MiningSessionStatus.completed,
         earnedRewards: 0, rewardTokenSymbol: 'T', miningPower: 1.0,
       );
       expect(e.formattedDuration, '45m');
@@ -203,7 +203,7 @@ void main() {
           walletAddress: '0x',
           planId: 'p',
           startTime: start,
-          status: MiningStatus.active,
+          status: MiningSessionStatus.active,
           earnedRewards: 1.0,
           rewardTokenSymbol: 'T',
           miningPower: 50.0,

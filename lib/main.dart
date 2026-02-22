@@ -23,6 +23,8 @@ import 'package:n42appv2/src/login/pages/login_page.dart';
 import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42appv2/features/wallet/presentation/providers/transaction_providers.dart';
 import 'package:n42appv2/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
+import 'package:n42appv2/features/mining/data/repositories/mining_repository_impl.dart';
+import 'package:n42appv2/features/mining/domain/repositories/mining_repository.dart';
 import 'package:n42appv2/features/mining/presentation/providers/mining_providers.dart';
 import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
 import 'package:n42appv2/src/utils/app_push_utils.dart';
@@ -104,6 +106,18 @@ void main() async {
   globalTripInstance = TransactionRecordItemProvider();
   globalWcpInstance = WalletConnectProvider();
   globalMiningInstance = MiningV2Provider();
+
+  // Wire V2 → V1 bridge: sync real mining state to the shared IMiningService
+  // so that other features (wallet, earn, etc.) can query mining status correctly.
+  miningServiceImpl.attachToV2Provider(globalMiningInstance);
+
+  // Register V1 MiningRepository backed by V2 provider (lazy access is safe
+  // because globalMiningInstance is already initialised above).
+  if (!getIt.isRegistered<MiningRepository>()) {
+    getIt.registerSingleton<MiningRepository>(
+      MiningRepositoryImpl(globalMiningInstance),
+    );
+  }
 
   // SECURITY: Initialize API keys from environment variables
   // This removes hardcoded API keys from source code

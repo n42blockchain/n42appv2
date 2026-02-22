@@ -27,7 +27,7 @@ class MiningSessionEntity extends Equatable {
   final DateTime? endTime;
 
   /// Current session status
-  final MiningStatus status;
+  final MiningSessionStatus status;
 
   /// Total rewards earned in this session
   final double earnedRewards;
@@ -51,7 +51,7 @@ class MiningSessionEntity extends Equatable {
   });
 
   /// Check if session is currently active
-  bool get isActive => status == MiningStatus.active;
+  bool get isActive => status == MiningSessionStatus.active;
 
   /// Get session duration
   Duration get duration {
@@ -85,18 +85,22 @@ class MiningSessionEntity extends Equatable {
       ];
 }
 
-/// Mining Status
-enum MiningStatus {
-  /// Mining is active
+/// Mining Session Status
+///
+/// Describes the lifecycle state of a single [MiningSessionEntity].
+/// Do NOT confuse with [MiningStatus] from the shared service interface,
+/// which describes the overall mining service state.
+enum MiningSessionStatus {
+  /// Mining session is active
   active,
 
-  /// Mining is paused
+  /// Mining session is paused
   paused,
 
   /// Mining session completed
   completed,
 
-  /// Mining stopped due to error
+  /// Mining session stopped due to error
   error,
 }
 

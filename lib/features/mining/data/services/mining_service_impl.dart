@@ -6,11 +6,13 @@
 // Author: Jiang Yiwei
 
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:n42appv2/shared/domain/services/mining_service_interface.dart';
 import 'package:n42appv2/shared/domain/services/wallet_service_interface.dart';
 import 'package:n42appv2/shared/di/service_locator.dart';
 import 'package:n42appv2/shared/events/event_manager.dart';
 import 'package:n42appv2/shared/events/cross_feature_events.dart';
+import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
 
 /// Mining Service Implementation
 ///
@@ -26,8 +28,35 @@ class MiningServiceImpl implements IMiningService {
 
   StreamSubscription? _walletEventSubscription;
 
+  VoidCallback? _v2Listener;
+
   MiningServiceImpl() {
     _subscribeToEvents();
+  }
+
+  /// Attach to [MiningV2Provider] so that real mining-state changes
+  /// are reflected through the [IMiningService] interface.
+  ///
+  /// Call this in `main()` immediately after [MiningV2Provider] is created
+  /// and before any feature queries this service.
+  void attachToV2Provider(MiningV2Provider v2) {
+    // Remove any previous listener (safe to call if first attach)
+    if (_v2Listener != null) {
+      v2.removeListener(_v2Listener!);
+    }
+
+    _v2Listener = () {
+      final newStatus = v2.miningStatus ? MiningStatus.mining : MiningStatus.idle;
+      updateStatus(newStatus);
+      updateMiningInfo(
+        status: newStatus,
+        walletAddress: v2.address,
+        totalReward: v2.miningTotalRevenue.toStringAsFixed(6),
+      );
+      _miningWalletAddress = v2.address;
+    };
+
+    v2.addListener(_v2Listener!);
   }
 
   void _subscribeToEvents() {
@@ -123,6 +152,7 @@ class MiningServiceImpl implements IMiningService {
   void dispose() {
     _walletEventSubscription?.cancel();
     _statusStreamController.close();
+    _v2Listener = null;
   }
 }
 

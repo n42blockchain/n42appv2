@@ -18,6 +18,11 @@ export 'domain/entities/mining_entity.dart';
 export 'domain/repositories/mining_repository.dart';
 export 'domain/usecases/start_mining.dart';
 
-// Presentation Layer - To be migrated from lib/src/miningV2/
-// export 'presentation/providers/mining_v2_provider.dart';
+// Data Layer
+export 'data/services/mining_service_impl.dart';
+export 'data/repositories/mining_repository_impl.dart';
+
+// Presentation Layer
+export 'presentation/providers/mining_providers.dart';
+// Pages still live in lib/src/miningV2/ (V2 implementation, migration pending):
 // export 'presentation/pages/mining_today_v2.dart';
