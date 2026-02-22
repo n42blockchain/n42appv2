@@ -236,6 +236,48 @@ class AirdropModel {
       'updated_at': updatedAt.toIso8601String(),
     };
   }
+
+  // sentinel 用于区分"明确传 null"与"不传（保留原值）"
+  static const Object _sentinel = Object();
+
+  AirdropModel copyWith({
+    Object? isEligible = _sentinel,
+    Object? userClaimableAmount = _sentinel,
+    List<AirdropRequirement>? requirements,
+    AirdropStatus? status,
+  }) {
+    return AirdropModel(
+      id: id,
+      name: name,
+      description: description,
+      projectName: projectName,
+      projectLogo: projectLogo,
+      projectUrl: projectUrl,
+      chainSymbol: chainSymbol,
+      chainId: chainId,
+      type: type,
+      status: status ?? this.status,
+      priority: priority,
+      tokenSymbol: tokenSymbol,
+      tokenAddress: tokenAddress,
+      estimatedValueUsd: estimatedValueUsd,
+      amount: amount,
+      startDate: startDate,
+      endDate: endDate,
+      claimDeadline: claimDeadline,
+      requirements: requirements ?? this.requirements,
+      isEligible: isEligible == _sentinel ? this.isEligible : isEligible as bool?,
+      userClaimableAmount: userClaimableAmount == _sentinel
+          ? this.userClaimableAmount
+          : userClaimableAmount as String?,
+      claimUrl: claimUrl,
+      claimTxHash: claimTxHash,
+      socialLinks: socialLinks,
+      tags: tags,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+    );
+  }
 }
 
 /// 空投领取条件

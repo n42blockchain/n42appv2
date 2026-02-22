@@ -9,126 +9,162 @@ import 'package:n42appv2/core/security/phishing_detector.dart';
 import 'package:n42appv2/core/security/phishing_warning_dialog.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/airdrop/models/airdrop_model.dart';
+import 'package:n42appv2/src/airdrop/provider/airdrop_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// 空投详情页面
-class AirdropDetailPage extends StatelessWidget {
+class AirdropDetailPage extends StatefulWidget {
   final AirdropModel airdrop;
+  final AirdropProvider provider;
 
   const AirdropDetailPage({
     super.key,
     required this.airdrop,
+    required this.provider,
   });
 
   @override
+  State<AirdropDetailPage> createState() => _AirdropDetailPageState();
+}
+
+class _AirdropDetailPageState extends State<AirdropDetailPage> {
+  @override
+  void initState() {
+    super.initState();
+    // 自动触发资格检测：active/upcoming 且 isEligible 未知时
+    final airdrop = widget.airdrop;
+    if (airdrop.isEligible == null &&
+        (airdrop.status == AirdropStatus.active ||
+            airdrop.status == AirdropStatus.upcoming)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.provider.checkEligibility(airdrop.id);
+      });
+    }
+  }
+
+  /// 从 provider 获取最新模型（回退到构造函数传入的快照）
+  AirdropModel get _airdrop {
+    final found = widget.provider.airdrops
+        .where((a) => a.id == widget.airdrop.id)
+        .firstOrNull;
+    return found ?? widget.airdrop;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          // 顶部 App Bar
-          SliverAppBar(
-            expandedHeight: ScreenUtil().setWidth(200),
-            pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text(
-                airdrop.projectName,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              background: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainBlueColor.name,
-                      ),
-                      AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainBlueColor.name,
-                      ).withAlpha(180),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+    return ListenableBuilder(
+      listenable: widget.provider,
+      builder: (context, _) {
+        final airdrop = _airdrop;
+        return Scaffold(
+          body: CustomScrollView(
+            slivers: [
+              // 顶部 App Bar
+              SliverAppBar(
+                expandedHeight: ScreenUtil().setWidth(200),
+                pinned: true,
+                flexibleSpace: FlexibleSpaceBar(
+                  title: Text(
+                    airdrop.projectName,
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(32),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                child: Center(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-                    child: Image.network(
-                      airdrop.projectLogo,
-                      width: ScreenUtil().setWidth(80),
-                      height: ScreenUtil().setWidth(80),
-                      errorBuilder: (ctx, error, stack) => Container(
-                        width: ScreenUtil().setWidth(80),
-                        height: ScreenUtil().setWidth(80),
-                        decoration: BoxDecoration(
-                          color: Colors.white24,
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                  background: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.mainBlueColor.name,
+                          ),
+                          AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.mainBlueColor.name,
+                          ).withValues(alpha: 180 / 255),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                    ),
+                    child: Center(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                        child: Image.network(
+                          airdrop.projectLogo,
+                          width: ScreenUtil().setWidth(80),
+                          height: ScreenUtil().setWidth(80),
+                          errorBuilder: (ctx, error, stack) => Container(
+                            width: ScreenUtil().setWidth(80),
+                            height: ScreenUtil().setWidth(80),
+                            decoration: BoxDecoration(
+                              color: Colors.white24,
+                              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                            ),
+                            child: const Icon(Icons.token, color: Colors.white, size: 40),
+                          ),
                         ),
-                        child: Icon(Icons.token, color: Colors.white, size: 40),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ),
 
-          // 内容
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // 空投名称和状态
-                  _buildHeader(context),
+              // 内容
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // 空投名称和状态
+                      _buildHeader(context, airdrop),
 
-                  SizedBox(height: ScreenUtil().setWidth(20)),
+                      SizedBox(height: ScreenUtil().setWidth(20)),
 
-                  // 价值信息卡片
-                  _buildValueCard(context),
+                      // 价值信息卡片
+                      _buildValueCard(context, airdrop),
 
-                  SizedBox(height: ScreenUtil().setWidth(20)),
+                      SizedBox(height: ScreenUtil().setWidth(20)),
 
-                  // 时间信息
-                  _buildTimeInfo(context),
+                      // 时间信息
+                      _buildTimeInfo(context, airdrop),
 
-                  SizedBox(height: ScreenUtil().setWidth(20)),
+                      SizedBox(height: ScreenUtil().setWidth(20)),
 
-                  // 描述
-                  _buildDescription(context),
+                      // 描述
+                      _buildDescription(context, airdrop),
 
-                  SizedBox(height: ScreenUtil().setWidth(20)),
+                      SizedBox(height: ScreenUtil().setWidth(20)),
 
-                  // 领取条件
-                  _buildRequirements(context),
+                      // 领取条件
+                      _buildRequirements(context, airdrop),
 
-                  SizedBox(height: ScreenUtil().setWidth(20)),
+                      SizedBox(height: ScreenUtil().setWidth(20)),
 
-                  // 社交链接
-                  if (airdrop.socialLinks != null && airdrop.socialLinks!.isNotEmpty)
-                    _buildSocialLinks(context),
+                      // 社交链接
+                      if (airdrop.socialLinks != null && airdrop.socialLinks!.isNotEmpty)
+                        _buildSocialLinks(context, airdrop),
 
-                  SizedBox(height: ScreenUtil().setWidth(30)),
+                      SizedBox(height: ScreenUtil().setWidth(30)),
 
-                  // 操作按钮
-                  _buildActionButtons(context),
+                      // 操作按钮
+                      _buildActionButtons(context, airdrop),
 
-                  SizedBox(height: ScreenUtil().setWidth(40)),
-                ],
+                      SizedBox(height: ScreenUtil().setWidth(40)),
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, AirdropModel airdrop) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -161,7 +197,7 @@ class AirdropDetailPage extends StatelessWidget {
                   vertical: ScreenUtil().setWidth(4),
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.grey.withAlpha(20),
+                  color: Colors.grey.withValues(alpha: 20 / 255),
                   borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
                 ),
                 child: Text(
@@ -182,7 +218,7 @@ class AirdropDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildValueCard(BuildContext context) {
+  Widget _buildValueCard(BuildContext context, AirdropModel airdrop) {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
@@ -254,7 +290,7 @@ class AirdropDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTimeInfo(BuildContext context) {
+  Widget _buildTimeInfo(BuildContext context, AirdropModel airdrop) {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
@@ -284,8 +320,8 @@ class AirdropDetailPage extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: airdrop.isExpiringSoon
-                        ? Colors.orange.withAlpha(20)
-                        : Colors.green.withAlpha(20),
+                        ? Colors.orange.withValues(alpha: 20 / 255)
+                        : Colors.green.withValues(alpha: 20 / 255),
                     borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
                   ),
                   child: Row(
@@ -347,7 +383,7 @@ class AirdropDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDescription(BuildContext context) {
+  Widget _buildDescription(BuildContext context, AirdropModel airdrop) {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
@@ -382,8 +418,8 @@ class AirdropDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildRequirements(BuildContext context) {
-    if (airdrop.requirements.isEmpty) return SizedBox.shrink();
+  Widget _buildRequirements(BuildContext context, AirdropModel airdrop) {
+    if (airdrop.requirements.isEmpty) return const SizedBox.shrink();
 
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
@@ -447,7 +483,7 @@ class AirdropDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSocialLinks(BuildContext context) {
+  Widget _buildSocialLinks(BuildContext context, AirdropModel airdrop) {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
@@ -497,7 +533,7 @@ class AirdropDetailPage extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-              .withAlpha(20),
+              .withValues(alpha: 20 / 255),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
         ),
         child: Row(
@@ -523,18 +559,18 @@ class AirdropDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButtons(BuildContext context) {
+  Widget _buildActionButtons(BuildContext context, AirdropModel airdrop) {
     if (airdrop.status == AirdropStatus.claimed) {
       return Container(
         padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
-          color: Colors.green.withAlpha(20),
+          color: Colors.green.withValues(alpha: 20 / 255),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.check_circle, color: Colors.green),
+            const Icon(Icons.check_circle, color: Colors.green),
             SizedBox(width: ScreenUtil().setWidth(8)),
             Text(
               'Already Claimed',
@@ -553,13 +589,13 @@ class AirdropDetailPage extends StatelessWidget {
       return Container(
         padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
-          color: Colors.red.withAlpha(20),
+          color: Colors.red.withValues(alpha: 20 / 255),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.cancel, color: Colors.red),
+            const Icon(Icons.cancel, color: Colors.red),
             SizedBox(width: ScreenUtil().setWidth(8)),
             Text(
               'Claim Period Ended',
@@ -574,8 +610,87 @@ class AirdropDetailPage extends StatelessWidget {
       );
     }
 
+    final isChecking =
+        widget.provider.eligibilityChecking[airdrop.id] == true;
+
     return Column(
       children: [
+        // 资格未知时显示检测按钮/进度
+        if (airdrop.isEligible == null &&
+            (airdrop.status == AirdropStatus.active ||
+                airdrop.status == AirdropStatus.upcoming))
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: isChecking
+                  ? null
+                  : () => widget.provider.checkEligibility(airdrop.id),
+              style: OutlinedButton.styleFrom(
+                padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                ),
+              ),
+              child: isChecking
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: ScreenUtil().setWidth(28),
+                          height: ScreenUtil().setWidth(28),
+                          child: const CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                        SizedBox(width: ScreenUtil().setWidth(8)),
+                        Text(
+                          'Checking Eligibility...',
+                          style: TextStyle(fontSize: ScreenUtil().setSp(28)),
+                        ),
+                      ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.search),
+                        SizedBox(width: ScreenUtil().setWidth(8)),
+                        Text(
+                          'Check Eligibility',
+                          style: TextStyle(
+                            fontSize: ScreenUtil().setSp(28),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
+          ),
+
+        // 不符合条件时显示提示
+        if (airdrop.isEligible == false)
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+            decoration: BoxDecoration(
+              color: Colors.orange.withValues(alpha: 20 / 255),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.info_outline, color: Colors.orange),
+                SizedBox(width: ScreenUtil().setWidth(8)),
+                Text(
+                  'Not Eligible',
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(28),
+                    color: Colors.orange,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+        // 符合条件且有领取链接时显示 Claim 按钮
         if (airdrop.isClaimable && airdrop.claimUrl != null)
           SizedBox(
             width: double.infinity,
@@ -592,7 +707,7 @@ class AirdropDetailPage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.redeem),
+                  const Icon(Icons.redeem),
                   SizedBox(width: ScreenUtil().setWidth(8)),
                   Text(
                     'Claim Now',
@@ -605,36 +720,54 @@ class AirdropDetailPage extends StatelessWidget {
               ),
             ),
           ),
+
+        // upcoming 空投显示提醒按钮
         if (airdrop.status == AirdropStatus.upcoming)
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton(
-              onPressed: () {
-                // TODO: 设置提醒
-              },
-              style: OutlinedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.notifications_active),
-                  SizedBox(width: ScreenUtil().setWidth(8)),
-                  Text(
-                    'Remind Me',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
-                      fontWeight: FontWeight.w600,
-                    ),
+          Padding(
+            padding: EdgeInsets.only(top: ScreenUtil().setWidth(12)),
+            child: SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () => _subscribeAlert(context, airdrop),
+                style: OutlinedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
                   ),
-                ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.notifications_active),
+                    SizedBox(width: ScreenUtil().setWidth(8)),
+                    Text(
+                      'Remind Me',
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(28),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
       ],
+    );
+  }
+
+  Future<void> _subscribeAlert(BuildContext context, AirdropModel airdrop) async {
+    final success = await widget.provider.subscribeAlert(airdrop.id);
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          success
+              ? 'Reminder set! We\'ll notify you when ${airdrop.name} is live.'
+              : 'Failed to set reminder. Please try again.',
+        ),
+        duration: const Duration(seconds: 3),
+      ),
     );
   }
 
@@ -671,7 +804,7 @@ class AirdropDetailPage extends StatelessWidget {
         vertical: ScreenUtil().setWidth(6),
       ),
       decoration: BoxDecoration(
-        color: color.withAlpha(30),
+        color: color.withValues(alpha: 30 / 255),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
       ),
       child: Text(
@@ -693,7 +826,7 @@ class AirdropDetailPage extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-            .withAlpha(20),
+            .withValues(alpha: 20 / 255),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
       ),
       child: Text(
@@ -736,7 +869,7 @@ class AirdropDetailPage extends StatelessWidget {
         vertical: ScreenUtil().setWidth(4),
       ),
       decoration: BoxDecoration(
-        color: color.withAlpha(20),
+        color: color.withValues(alpha: 20 / 255),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
       ),
       child: Text(

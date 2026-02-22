@@ -52,6 +52,10 @@ class AirdropProvider extends ChangeNotifier {
   bool _hasMore = true;
   bool get hasMore => _hasMore;
 
+  // 资格检测进行中标记（key = airdropId）
+  final Map<String, bool> _eligibilityChecking = {};
+  Map<String, bool> get eligibilityChecking => Map.unmodifiable(_eligibilityChecking);
+
   /// 初始化
   Future<void> initialize(String walletAddress) async {
     _walletAddress = walletAddress;
@@ -81,6 +85,9 @@ class AirdropProvider extends ChangeNotifier {
     }
 
     notifyListeners();
+
+    // 加载完成后自动触发资格检测
+    _autoCheckEligibility();
   }
 
   /// 加载空投列表
@@ -147,26 +154,95 @@ class AirdropProvider extends ChangeNotifier {
     await refresh();
   }
 
-  /// 检查资格
-  Future<Map<String, dynamic>?> checkEligibility(String airdropId) async {
-    if (_walletAddress == null) return null;
+  /// 检查资格（直接更新本地模型）
+  Future<void> checkEligibility(String airdropId) async {
+    if (_walletAddress == null) return;
+    if (_eligibilityChecking[airdropId] == true) return;
 
-    final result = await _api.checkEligibility(
-      airdropId: airdropId,
-      walletAddress: _walletAddress!,
-    );
+    _eligibilityChecking[airdropId] = true;
+    notifyListeners();
 
-    if (!result.error && result.data != null) {
-      // 更新本地空投数据
-      final index = _airdrops.indexWhere((a) => a.id == airdropId);
-      if (index != -1) {
-        // 这里需要更新空投的资格状态
-        notifyListeners();
+    try {
+      final result = await _api.checkEligibility(
+        airdropId: airdropId,
+        walletAddress: _walletAddress!,
+      );
+
+      if (!result.error && result.data != null) {
+        final data = result.data as Map<String, dynamic>;
+        final index = _airdrops.indexWhere((a) => a.id == airdropId);
+        if (index != -1) {
+          final rawReqs = data['requirements'];
+          final updatedRequirements = (rawReqs is List && rawReqs.isNotEmpty)
+              ? rawReqs
+                  .map((r) => AirdropRequirement.fromJson(r as Map<String, dynamic>))
+                  .toList()
+              : null;
+
+          _airdrops[index] = _airdrops[index].copyWith(
+            isEligible: data['is_eligible'] as bool?,
+            userClaimableAmount: data['claimable_amount'] as String?,
+            requirements: updatedRequirements,
+          );
+          _recalcStats();
+        }
       }
-      return result.data as Map<String, dynamic>;
+    } finally {
+      _eligibilityChecking[airdropId] = false;
+      notifyListeners();
+    }
+  }
+
+  /// 对 isEligible == null 的 active/upcoming 空投自动批量触发资格检测
+  void _autoCheckEligibility() {
+    if (_walletAddress == null) return;
+    for (final airdrop in _airdrops) {
+      if ((airdrop.status == AirdropStatus.active ||
+              airdrop.status == AirdropStatus.upcoming) &&
+          airdrop.isEligible == null) {
+        checkEligibility(airdrop.id);
+      }
+    }
+  }
+
+  /// 从本地 _airdrops 重新计算统计数据
+  void _recalcStats() {
+    int eligible = 0;
+    int claimed = 0;
+    double claimedValue = 0.0;
+    double pendingValue = 0.0;
+
+    for (final a in _airdrops) {
+      if (a.isEligible == true &&
+          (a.status == AirdropStatus.active ||
+              a.status == AirdropStatus.upcoming)) {
+        eligible++;
+        pendingValue += a.estimatedValueUsd ?? 0;
+      }
+      if (a.status == AirdropStatus.claimed) {
+        claimed++;
+        claimedValue += a.estimatedValueUsd ?? 0;
+      }
     }
 
-    return null;
+    _stats = AirdropStats(
+      totalAirdrops: _airdrops.length,
+      eligibleAirdrops: eligible,
+      claimedAirdrops: claimed,
+      totalValueUsd: _airdrops.fold(0.0, (s, a) => s + (a.estimatedValueUsd ?? 0)),
+      claimedValueUsd: claimedValue,
+      pendingValueUsd: pendingValue,
+    );
+  }
+
+  /// 订阅空投提醒
+  Future<bool> subscribeAlert(String airdropId) async {
+    if (_walletAddress == null) return false;
+    final result = await _api.subscribeAirdropAlert(
+      walletAddress: _walletAddress!,
+      pushEnabled: true,
+    );
+    return !result.error;
   }
 
   /// 标记为已领取

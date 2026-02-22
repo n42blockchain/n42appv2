@@ -5,11 +5,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42appv2/core/security/phishing_detector.dart';
+import 'package:n42appv2/core/security/phishing_warning_dialog.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/airdrop/models/airdrop_model.dart';
 import 'package:n42appv2/src/airdrop/pages/airdrop_detail_page.dart';
 import 'package:n42appv2/src/airdrop/provider/airdrop_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// 空投追踪首页
 class AirdropHomePage extends StatefulWidget {
@@ -118,7 +121,7 @@ class _AirdropHomePageState extends State<AirdropHomePage>
           colors: [
             AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
             AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-                .withAlpha(180),
+                .withValues(alpha: 180 / 255),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -295,7 +298,7 @@ class _AirdropHomePageState extends State<AirdropHomePage>
                       width: ScreenUtil().setWidth(48),
                       height: ScreenUtil().setWidth(48),
                       decoration: BoxDecoration(
-                        color: Colors.grey.withAlpha(30),
+                        color: Colors.grey.withValues(alpha: 30 / 255),
                         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
                       ),
                       child: Icon(Icons.token, color: Colors.grey),
@@ -382,7 +385,7 @@ class _AirdropHomePageState extends State<AirdropHomePage>
                   vertical: ScreenUtil().setWidth(6),
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.orange.withAlpha(20),
+                  color: Colors.orange.withValues(alpha: 20 / 255),
                   borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
                 ),
                 child: Row(
@@ -471,7 +474,7 @@ class _AirdropHomePageState extends State<AirdropHomePage>
         vertical: ScreenUtil().setWidth(3),
       ),
       decoration: BoxDecoration(
-        color: color.withAlpha(30),
+        color: color.withValues(alpha: 30 / 255),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
       ),
       child: Text(
@@ -493,7 +496,7 @@ class _AirdropHomePageState extends State<AirdropHomePage>
       ),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-            .withAlpha(20),
+            .withValues(alpha: 20 / 255),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
       ),
       child: Text(
@@ -536,7 +539,7 @@ class _AirdropHomePageState extends State<AirdropHomePage>
         vertical: ScreenUtil().setWidth(3),
       ),
       decoration: BoxDecoration(
-        color: color.withAlpha(20),
+        color: color.withValues(alpha: 20 / 255),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
       ),
       child: Text(
@@ -625,15 +628,31 @@ class _AirdropHomePageState extends State<AirdropHomePage>
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AirdropDetailPage(airdrop: airdrop),
+        builder: (context) => AirdropDetailPage(airdrop: airdrop, provider: _provider),
       ),
     );
   }
 
   void _claimAirdrop(AirdropModel airdrop) {
     if (airdrop.claimUrl != null) {
-      // 打开领取链接
-      _navigateToDetail(airdrop);
+      _launchUrl(context, airdrop.claimUrl!);
+    }
+  }
+
+  Future<void> _launchUrl(BuildContext context, String url) async {
+    final result = PhishingDetector.instance.checkUrl(url);
+    if (result == PhishingCheckResult.phishing) {
+      if (!context.mounted) return;
+      final proceed = await showPhishingWarningDialog(context, url);
+      if (proceed != true) return;
+      PhishingDetector.instance.allowForSession(url);
+    }
+
+    try {
+      final uri = Uri.parse(url);
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      debugPrint('Failed to launch URL: $url, error: $e');
     }
   }
 
