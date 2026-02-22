@@ -3109,6 +3109,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_notification_key_1": MessageLookupByLibrary.simpleMessage(
       "Powiadomienia",
     ),
+    "g_phishing_go_back": MessageLookupByLibrary.simpleMessage(
+      "Wróć (Bezpieczne)",
+    ),
+    "g_phishing_proceed_anyway": MessageLookupByLibrary.simpleMessage(
+      "Kontynuuj mimo to",
+    ),
+    "g_phishing_warning_body": MessageLookupByLibrary.simpleMessage(
+      "Ta strona internetowa została zidentyfikowana jako potencjalnie szkodliwa. Może próbować ukraść Twoje krypto aktywa lub klucze prywatne.",
+    ),
+    "g_phishing_warning_title": MessageLookupByLibrary.simpleMessage(
+      "Ostrzeżenie Bezpieczeństwa",
+    ),
+    "g_phishing_warning_url_label": MessageLookupByLibrary.simpleMessage(
+      "Podejrzany URL:",
+    ),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("Udostępnij"),
     "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("Polecenie"),
     "g_share_v3_key_3": MessageLookupByLibrary.simpleMessage(

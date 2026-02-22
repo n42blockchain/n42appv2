@@ -3068,6 +3068,21 @@ class MessageLookup extends MessageLookupByLibrary {
       "Dapat dibuka kapan saja",
     ),
     "g_notification_key_1": MessageLookupByLibrary.simpleMessage("Notifikasi"),
+    "g_phishing_go_back": MessageLookupByLibrary.simpleMessage(
+      "Kembali (Aman)",
+    ),
+    "g_phishing_proceed_anyway": MessageLookupByLibrary.simpleMessage(
+      "Lanjutkan Saja",
+    ),
+    "g_phishing_warning_body": MessageLookupByLibrary.simpleMessage(
+      "Situs web ini telah diidentifikasi sebagai berpotensi berbahaya. Mungkin mencoba mencuri aset kripto atau kunci pribadi Anda.",
+    ),
+    "g_phishing_warning_title": MessageLookupByLibrary.simpleMessage(
+      "Peringatan Keamanan",
+    ),
+    "g_phishing_warning_url_label": MessageLookupByLibrary.simpleMessage(
+      "URL Mencurigakan:",
+    ),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("Bagikan"),
     "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("Referral"),
     "g_share_v3_key_3": MessageLookupByLibrary.simpleMessage(

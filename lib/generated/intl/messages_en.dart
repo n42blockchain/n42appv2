@@ -3142,6 +3142,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_notification_key_1": MessageLookupByLibrary.simpleMessage(
       "Notifications",
     ),
+    "g_phishing_go_back": MessageLookupByLibrary.simpleMessage(
+      "Go Back (Safe)",
+    ),
+    "g_phishing_proceed_anyway": MessageLookupByLibrary.simpleMessage(
+      "Proceed Anyway",
+    ),
+    "g_phishing_warning_body": MessageLookupByLibrary.simpleMessage(
+      "This website has been identified as potentially malicious. It may be attempting to steal your crypto assets or private keys.",
+    ),
+    "g_phishing_warning_title": MessageLookupByLibrary.simpleMessage(
+      "Security Warning",
+    ),
+    "g_phishing_warning_url_label": MessageLookupByLibrary.simpleMessage(
+      "Suspicious URL:",
+    ),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("Share"),
     "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("Referral"),
     "g_share_v3_key_3": MessageLookupByLibrary.simpleMessage(

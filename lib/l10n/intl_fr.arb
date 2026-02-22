@@ -1577,5 +1577,11 @@
   "g_key_gesture_too_simple": "Modèle trop simple, utilisez plus de nœuds",
   "g_biometric_retry": "Utiliser Face ID / Touch ID",
   "g_biometric_not_enrolled": "Biométrie non configurée. Activez-la dans Réglages.",
-  "g_biometric_locked_out": "Trop de tentatives. Biométrie verrouillée — utilisez votre code."
+  "g_biometric_locked_out": "Trop de tentatives. Biométrie verrouillée — utilisez votre code.",
+  "g_phishing_warning_title": "Avertissement de Sécurité",
+  "g_phishing_warning_body": "Ce site web a été identifié comme potentiellement malveillant. Il peut tenter de voler vos actifs crypto ou vos clés privées.",
+  "g_phishing_warning_url_label": "URL suspecte :",
+  "g_phishing_go_back": "Retour (Sûr)",
+  "g_phishing_proceed_anyway": "Continuer quand même"
+
 }

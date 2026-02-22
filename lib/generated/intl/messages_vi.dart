@@ -3008,6 +3008,21 @@ class MessageLookup extends MessageLookupByLibrary {
       "Có thể mở khóa bất kỳ lúc nào",
     ),
     "g_notification_key_1": MessageLookupByLibrary.simpleMessage("Thông báo"),
+    "g_phishing_go_back": MessageLookupByLibrary.simpleMessage(
+      "Quay lại (An toàn)",
+    ),
+    "g_phishing_proceed_anyway": MessageLookupByLibrary.simpleMessage(
+      "Tiếp tục dù sao",
+    ),
+    "g_phishing_warning_body": MessageLookupByLibrary.simpleMessage(
+      "Trang web này đã được xác định là có khả năng độc hại. Nó có thể đang cố gắng đánh cắp tài sản tiền điện tử hoặc khóa riêng tư của bạn.",
+    ),
+    "g_phishing_warning_title": MessageLookupByLibrary.simpleMessage(
+      "Cảnh báo Bảo mật",
+    ),
+    "g_phishing_warning_url_label": MessageLookupByLibrary.simpleMessage(
+      "URL đáng ngờ:",
+    ),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("Chia sẻ"),
     "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("Giới thiệu"),
     "g_share_v3_key_3": MessageLookupByLibrary.simpleMessage(

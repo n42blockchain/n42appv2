@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/foundation.dart';
 import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/security/phishing_detector.dart';
 import 'package:n42appv2/src/browser/api/browser_api.dart';
 import 'package:n42appv2/src/browser/models/browser_collection_model.dart';
 import 'package:n42appv2/src/browser/pages/browser_collection.dart';
@@ -15,8 +16,16 @@ import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 // #enddocregion platform_imports
 
-typedef ConnectDAPP = void Function(String url,bool connect);
-class BrowserProvider extends ChangeNotifier{
+typedef ConnectDAPP = void Function(String url, bool connect);
+
+/// Callback invoked when a navigation is blocked as phishing.
+///
+/// [url] is the blocked URL.
+/// [proceed] is a callback that the UI may invoke if the user chooses
+/// "Proceed Anyway"; it whitelists the URL for this session and retries.
+typedef PhishingWarning = void Function(String url, VoidCallback proceed);
+
+class BrowserProvider extends ChangeNotifier {
   BrowserProvider(){
     getBrowserSetting();
   }
@@ -49,6 +58,10 @@ class BrowserProvider extends ChangeNotifier{
   TextEditingController? titleEditingController;
   FocusNode? titleFocusNode;
   ConnectDAPP? connectDAPPCallBack;
+
+  /// Set by [BrowserPage] to display a phishing warning dialog.
+  /// Cleared in [BrowserPage.dispose] to prevent stale context usage.
+  PhishingWarning? phishingCallBack;
 
   bool canBack=false;
   bool canForward=false;
@@ -225,34 +238,53 @@ class BrowserProvider extends ChangeNotifier{
     notifyListeners();
   }
   bool checkUrl(String url) {
-    if(_blockUri !=""){
-      if(_blockUri == url){
+    if (_blockUri != "") {
+      if (_blockUri == url) {
         eventBus.fire(EventPublic(EventPublicType.blockUri));
         return false;
       }
     }
-    Uri uri=Uri.parse(url);
+    final uri = Uri.parse(url);
     // 拦截危险 URL 协议：javascript: 可用于 XSS；data: / blob: 可绕过 CSP；file: 可读本地文件
     const blockedSchemes = {'javascript', 'data', 'blob', 'file'};
     if (blockedSchemes.contains(uri.scheme)) return false;
-    if(uri.scheme=="wc"){
-      if(url.contains('relay-protocol') && url.contains('symKey')){
-        if(connectDAPPCallBack !=null){
-          connectDAPPCallBack!(url,browser['connectDApp']);
+
+    if (uri.scheme == "wc") {
+      if (url.contains('relay-protocol') && url.contains('symKey')) {
+        if (connectDAPPCallBack != null) {
+          connectDAPPCallBack!(url, browser['connectDApp']);
           return false;
         }
       }
-    }else if(uri.scheme=="amazeapp"){
+    } else if (uri.scheme == "amazeapp") {
       if (uri.path == "/wc") {
-        String param = uri.queryParameters['uri'] ?? "";
+        final param = uri.queryParameters['uri'] ?? "";
         if (param.contains('relay-protocol') && param.contains('symKey')) {
-          if(connectDAPPCallBack !=null){
-            connectDAPPCallBack!(param,browser['connectDApp']);
+          if (connectDAPPCallBack != null) {
+            connectDAPPCallBack!(param, browser['connectDApp']);
             return false;
           }
         }
       }
     }
+
+    // ── Phishing detection (http / https only) ────────────────────────────
+    if (uri.scheme == 'http' || uri.scheme == 'https') {
+      final result = PhishingDetector.instance.checkUrl(url);
+      if (result == PhishingCheckResult.phishing) {
+        final blockedUrl = url;
+        phishingCallBack?.call(blockedUrl, () {
+          // User chose "Proceed Anyway": whitelist for this session and retry
+          PhishingDetector.instance.allowForSession(blockedUrl);
+          final idx = wListIndex;
+          if (idx >= 0 && idx < wvcList.length) {
+            wvcList[idx].loadRequest(Uri.parse(blockedUrl));
+          }
+        });
+        return false;
+      }
+    }
+
     return true;
   }
   String checkHttp(String url) {

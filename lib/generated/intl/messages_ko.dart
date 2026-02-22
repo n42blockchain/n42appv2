@@ -2675,6 +2675,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "언제든지 잠금 해제 가능",
     ),
     "g_notification_key_1": MessageLookupByLibrary.simpleMessage("알림"),
+    "g_phishing_go_back": MessageLookupByLibrary.simpleMessage("뒤로 가기 (안전)"),
+    "g_phishing_proceed_anyway": MessageLookupByLibrary.simpleMessage("어쨌든 계속"),
+    "g_phishing_warning_body": MessageLookupByLibrary.simpleMessage(
+      "이 웹사이트는 잠재적으로 악의적인 사이트로 식별되었습니다. 암호화폐 자산이나 개인 키를 훔치려 할 수 있습니다.",
+    ),
+    "g_phishing_warning_title": MessageLookupByLibrary.simpleMessage("보안 경고"),
+    "g_phishing_warning_url_label": MessageLookupByLibrary.simpleMessage(
+      "의심스러운 URL:",
+    ),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("공유"),
     "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("추천"),
     "g_share_v3_key_3": MessageLookupByLibrary.simpleMessage(

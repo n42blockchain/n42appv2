@@ -1577,5 +1577,11 @@
   "g_key_gesture_too_simple": "Schema troppo semplice, aggiungere più nodi",
   "g_biometric_retry": "Usa Face ID / Touch ID",
   "g_biometric_not_enrolled": "Biometria non configurata. Abilitala nelle Impostazioni.",
-  "g_biometric_locked_out": "Troppi tentativi. Biometria bloccata — usa il codice."
+  "g_biometric_locked_out": "Troppi tentativi. Biometria bloccata — usa il codice.",
+  "g_phishing_warning_title": "Avviso di Sicurezza",
+  "g_phishing_warning_body": "Questo sito web è stato identificato come potenzialmente dannoso. Potrebbe tentare di rubare i tuoi asset crypto o le chiavi private.",
+  "g_phishing_warning_url_label": "URL Sospetto:",
+  "g_phishing_go_back": "Torna Indietro (Sicuro)",
+  "g_phishing_proceed_anyway": "Procedi Comunque"
+
 }

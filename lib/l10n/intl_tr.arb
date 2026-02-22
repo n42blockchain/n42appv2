@@ -1577,5 +1577,11 @@
   "g_key_gesture_too_simple": "Desen çok basit, daha fazla nokta ekleyin",
   "g_biometric_retry": "Face ID / Touch ID kullan",
   "g_biometric_not_enrolled": "Biyometri ayarlı değil. Ayarlar'dan etkinleştirin.",
-  "g_biometric_locked_out": "Çok fazla deneme. Biyometri kilitlendi — şifreyi kullanın."
+  "g_biometric_locked_out": "Çok fazla deneme. Biyometri kilitlendi — şifreyi kullanın.",
+  "g_phishing_warning_title": "Güvenlik Uyarısı",
+  "g_phishing_warning_body": "Bu web sitesi potansiyel olarak kötü niyetli olarak tanımlanmıştır. Kripto varlıklarınızı veya özel anahtarlarınızı çalmaya çalışıyor olabilir.",
+  "g_phishing_warning_url_label": "Şüpheli URL:",
+  "g_phishing_go_back": "Geri Dön (Güvenli)",
+  "g_phishing_proceed_anyway": "Yine de Devam Et"
+
 }

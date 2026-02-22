@@ -3110,6 +3110,21 @@ class MessageLookup extends MessageLookupByLibrary {
       "Разблокировка в любое время",
     ),
     "g_notification_key_1": MessageLookupByLibrary.simpleMessage("Уведомления"),
+    "g_phishing_go_back": MessageLookupByLibrary.simpleMessage(
+      "Назад (Безопасно)",
+    ),
+    "g_phishing_proceed_anyway": MessageLookupByLibrary.simpleMessage(
+      "Продолжить всё равно",
+    ),
+    "g_phishing_warning_body": MessageLookupByLibrary.simpleMessage(
+      "Этот сайт был идентифицирован как потенциально вредоносный. Он может пытаться похитить ваши криптоактивы или закрытые ключи.",
+    ),
+    "g_phishing_warning_title": MessageLookupByLibrary.simpleMessage(
+      "Предупреждение безопасности",
+    ),
+    "g_phishing_warning_url_label": MessageLookupByLibrary.simpleMessage(
+      "Подозрительный URL:",
+    ),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("Поделиться"),
     "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("Реферал"),
     "g_share_v3_key_3": MessageLookupByLibrary.simpleMessage(

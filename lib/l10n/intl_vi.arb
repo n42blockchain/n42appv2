@@ -1577,5 +1577,11 @@
   "g_key_gesture_too_simple": "Mẫu quá đơn giản, vui lòng thêm nhiều nút hơn",
   "g_biometric_retry": "Dùng Face ID / Touch ID",
   "g_biometric_not_enrolled": "Chưa cài đặt sinh trắc học. Hãy bật trong Cài đặt.",
-  "g_biometric_locked_out": "Quá nhiều lần thử. Sinh trắc học bị khóa — dùng mật khẩu."
+  "g_biometric_locked_out": "Quá nhiều lần thử. Sinh trắc học bị khóa — dùng mật khẩu.",
+  "g_phishing_warning_title": "Cảnh báo Bảo mật",
+  "g_phishing_warning_body": "Trang web này đã được xác định là có khả năng độc hại. Nó có thể đang cố gắng đánh cắp tài sản tiền điện tử hoặc khóa riêng tư của bạn.",
+  "g_phishing_warning_url_label": "URL đáng ngờ:",
+  "g_phishing_go_back": "Quay lại (An toàn)",
+  "g_phishing_proceed_anyway": "Tiếp tục dù sao"
+
 }

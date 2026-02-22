@@ -1577,5 +1577,11 @@
   "g_key_gesture_too_simple": "Padrão muito simples, adicione mais nós",
   "g_biometric_retry": "Usar Face ID / Touch ID",
   "g_biometric_not_enrolled": "Biometria não configurada. Ative nas Configurações.",
-  "g_biometric_locked_out": "Muitas tentativas. Biometria bloqueada — use a senha."
+  "g_biometric_locked_out": "Muitas tentativas. Biometria bloqueada — use a senha.",
+  "g_phishing_warning_title": "Aviso de Segurança",
+  "g_phishing_warning_body": "Este site foi identificado como potencialmente malicioso. Pode estar tentando roubar seus ativos de criptomoeda ou chaves privadas.",
+  "g_phishing_warning_url_label": "URL Suspeita:",
+  "g_phishing_go_back": "Voltar (Seguro)",
+  "g_phishing_proceed_anyway": "Continuar mesmo assim"
+
 }

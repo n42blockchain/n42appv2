@@ -3017,6 +3017,21 @@ class MessageLookup extends MessageLookupByLibrary {
       "Her zaman kilidi açılabilir",
     ),
     "g_notification_key_1": MessageLookupByLibrary.simpleMessage("Bildirimler"),
+    "g_phishing_go_back": MessageLookupByLibrary.simpleMessage(
+      "Geri Dön (Güvenli)",
+    ),
+    "g_phishing_proceed_anyway": MessageLookupByLibrary.simpleMessage(
+      "Yine de Devam Et",
+    ),
+    "g_phishing_warning_body": MessageLookupByLibrary.simpleMessage(
+      "Bu web sitesi potansiyel olarak kötü niyetli olarak tanımlanmıştır. Kripto varlıklarınızı veya özel anahtarlarınızı çalmaya çalışıyor olabilir.",
+    ),
+    "g_phishing_warning_title": MessageLookupByLibrary.simpleMessage(
+      "Güvenlik Uyarısı",
+    ),
+    "g_phishing_warning_url_label": MessageLookupByLibrary.simpleMessage(
+      "Şüpheli URL:",
+    ),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("Paylaş"),
     "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("Davet"),
     "g_share_v3_key_3": MessageLookupByLibrary.simpleMessage(

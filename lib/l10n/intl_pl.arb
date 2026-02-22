@@ -1577,5 +1577,11 @@
   "g_key_gesture_too_simple": "Wzorzec zbyt prosty, dodaj więcej punktów",
   "g_biometric_retry": "Użyj Face ID / Touch ID",
   "g_biometric_not_enrolled": "Biometria nie skonfigurowana. Włącz w Ustawieniach.",
-  "g_biometric_locked_out": "Zbyt wiele prób. Biometria zablokowana — użyj hasła."
+  "g_biometric_locked_out": "Zbyt wiele prób. Biometria zablokowana — użyj hasła.",
+  "g_phishing_warning_title": "Ostrzeżenie Bezpieczeństwa",
+  "g_phishing_warning_body": "Ta strona internetowa została zidentyfikowana jako potencjalnie szkodliwa. Może próbować ukraść Twoje krypto aktywa lub klucze prywatne.",
+  "g_phishing_warning_url_label": "Podejrzany URL:",
+  "g_phishing_go_back": "Wróć (Bezpieczne)",
+  "g_phishing_proceed_anyway": "Kontynuuj mimo to"
+
 }

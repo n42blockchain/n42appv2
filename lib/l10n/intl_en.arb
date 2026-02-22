@@ -1639,5 +1639,11 @@
   "g_key_gesture_too_simple": "Pattern too simple, please use more nodes",
   "g_biometric_retry": "Use Face ID / Touch ID",
   "g_biometric_not_enrolled": "Biometric not set up. Please enable in device Settings.",
-  "g_biometric_locked_out": "Too many failures. Biometric locked — please use passcode."
+  "g_biometric_locked_out": "Too many failures. Biometric locked — please use passcode.",
+  "g_phishing_warning_title": "Security Warning",
+  "g_phishing_warning_body": "This website has been identified as potentially malicious. It may be attempting to steal your crypto assets or private keys.",
+  "g_phishing_warning_url_label": "Suspicious URL:",
+  "g_phishing_go_back": "Go Back (Safe)",
+  "g_phishing_proceed_anyway": "Proceed Anyway"
+
 }

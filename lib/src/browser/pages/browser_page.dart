@@ -1,4 +1,5 @@
-﻿import 'package:n42appv2/src/browser/pages/browser_collection_list.dart';
+﻿import 'package:n42appv2/core/security/phishing_warning_dialog.dart';
+import 'package:n42appv2/src/browser/pages/browser_collection_list.dart';
 import 'package:n42appv2/src/browser/pages/browser_setting.dart';
 import 'package:n42appv2/src/browser/provider/browser_provider.dart';
 import 'package:n42appv2/features/browser/presentation/providers/browser_providers.dart';
@@ -46,18 +47,23 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
   void dispose() {
     // 使用缓存引用，避免在已卸载状态下通过 context 查找祖先
     _browserProvider?.connectDAPPCallBack = null;
+    _browserProvider?.phishingCallBack = null;
     _browserProvider?.browserDispose();
     super.dispose();
   }
   void walletConnect(){
     _browserProvider ??= ref.read(browserNotifierProvider);
     final bp = _browserProvider!;
-    bp.connectDAPPCallBack=(String url,bool connect){
-      if(connect){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletConnectPage(url)));
-      }else{
+    bp.connectDAPPCallBack = (String url, bool connect) {
+      if (connect) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => WalletConnectPage(url)));
+      } else {
         showAlertWidgetConnectDapp(url);
       }
+    };
+    bp.phishingCallBack = (String url, VoidCallback proceed) {
+      _showPhishingWarning(url, proceed);
     };
     bp.browserInit();
     bp.addUrl(widget.openUrl);
@@ -506,7 +512,17 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
       return bValue.wList[bValue.wListIndex];
     }
   }
-  void showAlertWidgetConnectDapp(String uri){
+  /// Show a phishing warning dialog and, if the user accepts the risk,
+  /// invoke [proceed] to whitelist the URL and retry navigation.
+  void _showPhishingWarning(String url, VoidCallback proceed) {
+    showPhishingWarningDialog(context, url).then((approved) {
+      if (approved == true) {
+        proceed();
+      }
+    });
+  }
+
+  void showAlertWidgetConnectDapp(String uri) {
     sheetBottom(context, S.of(context).g_browser_key14, Column(
       children: [
         Container(

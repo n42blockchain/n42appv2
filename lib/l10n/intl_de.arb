@@ -1577,5 +1577,11 @@
   "g_key_gesture_too_simple": "Muster zu einfach, bitte mehr Punkte verwenden",
   "g_biometric_retry": "Face ID / Touch ID verwenden",
   "g_biometric_not_enrolled": "Biometrie nicht eingerichtet. Bitte in den Einstellungen aktivieren.",
-  "g_biometric_locked_out": "Zu viele Versuche. Biometrie gesperrt – bitte PIN verwenden."
+  "g_biometric_locked_out": "Zu viele Versuche. Biometrie gesperrt – bitte PIN verwenden.",
+  "g_phishing_warning_title": "Sicherheitswarnung",
+  "g_phishing_warning_body": "Diese Website wurde als potenziell schädlich eingestuft. Sie könnte versuchen, Ihre Krypto-Assets oder privaten Schlüssel zu stehlen.",
+  "g_phishing_warning_url_label": "Verdächtige URL:",
+  "g_phishing_go_back": "Zurück (Sicher)",
+  "g_phishing_proceed_anyway": "Trotzdem fortfahren"
+
 }

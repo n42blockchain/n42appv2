@@ -2576,6 +2576,19 @@ class MessageLookup extends MessageLookupByLibrary {
       "いつでもアンロック可能",
     ),
     "g_notification_key_1": MessageLookupByLibrary.simpleMessage("通知"),
+    "g_phishing_go_back": MessageLookupByLibrary.simpleMessage("戻る（安全）"),
+    "g_phishing_proceed_anyway": MessageLookupByLibrary.simpleMessage(
+      "それでも続ける",
+    ),
+    "g_phishing_warning_body": MessageLookupByLibrary.simpleMessage(
+      "このウェブサイトは潜在的に悪意があると識別されました。あなたの暗号資産や秘密鍵を盗もうとしている可能性があります。",
+    ),
+    "g_phishing_warning_title": MessageLookupByLibrary.simpleMessage(
+      "セキュリティ警告",
+    ),
+    "g_phishing_warning_url_label": MessageLookupByLibrary.simpleMessage(
+      "不審なURL：",
+    ),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("共有"),
     "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("紹介"),
     "g_share_v3_key_3": MessageLookupByLibrary.simpleMessage(

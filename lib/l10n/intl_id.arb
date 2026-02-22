@@ -1577,5 +1577,11 @@
   "g_key_gesture_too_simple": "Pola terlalu sederhana, gunakan lebih banyak titik",
   "g_biometric_retry": "Gunakan Face ID / Touch ID",
   "g_biometric_not_enrolled": "Biometrik belum diatur. Aktifkan di Pengaturan.",
-  "g_biometric_locked_out": "Terlalu banyak percobaan. Biometrik terkunci — gunakan kata sandi."
+  "g_biometric_locked_out": "Terlalu banyak percobaan. Biometrik terkunci — gunakan kata sandi.",
+  "g_phishing_warning_title": "Peringatan Keamanan",
+  "g_phishing_warning_body": "Situs web ini telah diidentifikasi sebagai berpotensi berbahaya. Mungkin mencoba mencuri aset kripto atau kunci pribadi Anda.",
+  "g_phishing_warning_url_label": "URL Mencurigakan:",
+  "g_phishing_go_back": "Kembali (Aman)",
+  "g_phishing_proceed_anyway": "Lanjutkan Saja"
+
 }

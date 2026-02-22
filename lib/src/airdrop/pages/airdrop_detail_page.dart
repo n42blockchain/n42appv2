@@ -5,6 +5,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42appv2/core/security/phishing_detector.dart';
+import 'package:n42appv2/core/security/phishing_warning_dialog.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/airdrop/models/airdrop_model.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -487,7 +489,7 @@ class AirdropDetailPage extends StatelessWidget {
 
   Widget _buildLinkButton(BuildContext context, String label, IconData icon, String url) {
     return InkWell(
-      onTap: () => _launchUrl(url),
+      onTap: () => _launchUrl(context, url),
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: ScreenUtil().setWidth(16),
@@ -578,7 +580,7 @@ class AirdropDetailPage extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () => _launchUrl(airdrop.claimUrl!),
+              onPressed: () => _launchUrl(context, airdrop.claimUrl!),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,
@@ -767,7 +769,17 @@ class AirdropDetailPage extends StatelessWidget {
     return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
   }
 
-  Future<void> _launchUrl(String url) async {
+  Future<void> _launchUrl(BuildContext context, String url) async {
+    // Phishing check before opening in the external browser
+    final result = PhishingDetector.instance.checkUrl(url);
+    if (result == PhishingCheckResult.phishing) {
+      if (!context.mounted) return;
+      final proceed = await showPhishingWarningDialog(context, url);
+      if (proceed != true) return;
+      // User accepted the risk — whitelist for this session
+      PhishingDetector.instance.allowForSession(url);
+    }
+
     try {
       final uri = Uri.parse(url);
       await launchUrl(uri, mode: LaunchMode.externalApplication);

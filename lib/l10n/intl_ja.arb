@@ -1577,5 +1577,11 @@
   "g_key_gesture_too_simple": "パターンが簡単すぎます。ノードをもっと追加してください",
   "g_biometric_retry": "Face ID / Touch IDを使う",
   "g_biometric_not_enrolled": "生体認証が設定されていません。設定から有効にしてください。",
-  "g_biometric_locked_out": "試行回数超過。生体認証がロックされました。パスコードをお使いください。"
+  "g_biometric_locked_out": "試行回数超過。生体認証がロックされました。パスコードをお使いください。",
+  "g_phishing_warning_title": "セキュリティ警告",
+  "g_phishing_warning_body": "このウェブサイトは潜在的に悪意があると識別されました。あなたの暗号資産や秘密鍵を盗もうとしている可能性があります。",
+  "g_phishing_warning_url_label": "不審なURL：",
+  "g_phishing_go_back": "戻る（安全）",
+  "g_phishing_proceed_anyway": "それでも続ける"
+
 }

@@ -3169,6 +3169,21 @@ class MessageLookup extends MessageLookupByLibrary {
       "Sbloccabile in qualsiasi momento",
     ),
     "g_notification_key_1": MessageLookupByLibrary.simpleMessage("Notifiche"),
+    "g_phishing_go_back": MessageLookupByLibrary.simpleMessage(
+      "Torna Indietro (Sicuro)",
+    ),
+    "g_phishing_proceed_anyway": MessageLookupByLibrary.simpleMessage(
+      "Procedi Comunque",
+    ),
+    "g_phishing_warning_body": MessageLookupByLibrary.simpleMessage(
+      "Questo sito web è stato identificato come potenzialmente dannoso. Potrebbe tentare di rubare i tuoi asset crypto o le chiavi private.",
+    ),
+    "g_phishing_warning_title": MessageLookupByLibrary.simpleMessage(
+      "Avviso di Sicurezza",
+    ),
+    "g_phishing_warning_url_label": MessageLookupByLibrary.simpleMessage(
+      "URL Sospetto:",
+    ),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("Condividi"),
     "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("Referral"),
     "g_share_v3_key_3": MessageLookupByLibrary.simpleMessage(

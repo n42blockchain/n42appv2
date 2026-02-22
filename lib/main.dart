@@ -47,8 +47,10 @@ import 'package:n42_chat/n42_chat.dart';
 import 'package:n42_chat/l10n/app_localizations.dart' as chat_l10n;
 import 'package:n42appv2/core/config/api_keys_config.dart';
 import 'package:n42appv2/core/config/rpc_config.dart';
+import 'package:n42appv2/core/security/phishing_detector.dart';
 import 'package:n42appv2/core/security/secure_storage.dart';
 import 'package:n42appv2/core/security/wallet_data_migration.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:n42appv2/src/wallet/n42_wallet_bridge.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/src/https/request_url.dart';
@@ -162,7 +164,19 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
       _migrateWalletData();
       // N42Chat 初始化（后台执行，不阻塞 UI）
       _initN42Chat();
+      // 钓鱼检测初始化（后台执行，不阻塞 UI）
+      _initPhishingDetector();
     });
+  }
+
+  /// 初始化钓鱼网址检测服务（后台执行，不阻塞 UI）
+  Future<void> _initPhishingDetector() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await PhishingDetector.instance.initialize(prefs);
+    } catch (e) {
+      debugPrint('[Security] PhishingDetector init failed: $e');
+    }
   }
 
   /// 安全地将钱包数据从 SharedPreferences 迁移到 SecureStorage

@@ -3317,6 +3317,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_notification_key_1": MessageLookupByLibrary.simpleMessage(
       "Notificaciones",
     ),
+    "g_phishing_go_back": MessageLookupByLibrary.simpleMessage(
+      "Volver (Seguro)",
+    ),
+    "g_phishing_proceed_anyway": MessageLookupByLibrary.simpleMessage(
+      "Continuar de todos modos",
+    ),
+    "g_phishing_warning_body": MessageLookupByLibrary.simpleMessage(
+      "Este sitio web ha sido identificado como potencialmente malicioso. Podría intentar robar sus activos cripto o claves privadas.",
+    ),
+    "g_phishing_warning_title": MessageLookupByLibrary.simpleMessage(
+      "Advertencia de Seguridad",
+    ),
+    "g_phishing_warning_url_label": MessageLookupByLibrary.simpleMessage(
+      "URL sospechosa:",
+    ),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("Compartir"),
     "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("Recomendación"),
     "g_share_v3_key_3": MessageLookupByLibrary.simpleMessage(

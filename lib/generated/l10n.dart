@@ -14148,6 +14148,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Security Warning`
+  String get g_phishing_warning_title {
+    return Intl.message(
+      'Security Warning',
+      name: 'g_phishing_warning_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This website has been identified as potentially malicious. It may be attempting to steal your crypto assets or private keys.`
+  String get g_phishing_warning_body {
+    return Intl.message(
+      'This website has been identified as potentially malicious. It may be attempting to steal your crypto assets or private keys.',
+      name: 'g_phishing_warning_body',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Suspicious URL:`
+  String get g_phishing_warning_url_label {
+    return Intl.message(
+      'Suspicious URL:',
+      name: 'g_phishing_warning_url_label',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go Back (Safe)`
+  String get g_phishing_go_back {
+    return Intl.message(
+      'Go Back (Safe)',
+      name: 'g_phishing_go_back',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Proceed Anyway`
+  String get g_phishing_proceed_anyway {
+    return Intl.message(
+      'Proceed Anyway',
+      name: 'g_phishing_proceed_anyway',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
