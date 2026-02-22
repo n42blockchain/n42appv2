@@ -7,7 +7,6 @@ import 'package:n42appv2/core/utils/js_escape_utils.dart';
 import 'package:n42appv2/src/browser/api/browser_api.dart';
 import 'package:n42appv2/src/browser/handler/dapp_request_handler.dart';
 import 'package:n42appv2/src/browser/js/ethereum_provider.dart';
-import 'package:n42appv2/src/browser/models/browser_collection_model.dart';
 import 'package:n42appv2/src/browser/pages/browser_collection.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
@@ -60,7 +59,8 @@ class BrowserProvider extends ChangeNotifier {
     showWList=value;
     notifyListeners();
   }
-  final String _blockUri="";//需要拦截的地址
+  /// URL to block from navigation. Empty string means no blocking.
+  final String _blockUri = "";
 
   TextEditingController? titleEditingController;
   FocusNode? titleFocusNode;
@@ -190,12 +190,9 @@ class BrowserProvider extends ChangeNotifier {
             notifyListeners();
           },
           onNavigationRequest: (NavigationRequest request) {
-            bool r=checkUrl(request.url);
-            if(r==true){
-              return NavigationDecision.navigate;
-            }else{
-              return NavigationDecision.prevent;
-            }
+            return checkUrl(request.url)
+                ? NavigationDecision.navigate
+                : NavigationDecision.prevent;
           },
           onUrlChange: (UrlChange change) {
             final idx = _indexOfController(wvc);
@@ -295,14 +292,10 @@ class BrowserProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
-  //查询收藏缓存 条件 url
-  Future<void> getCollectionUrl(String url)async{
-    List<BrowserCollectionModel> list=await browserApi.selectBrowserCollectionUrl(url);
-    if(list.isEmpty){
-      collect=false;
-    }else{
-      collect=true;
-    }
+  /// Check whether the given URL is in the bookmarks collection.
+  Future<void> getCollectionUrl(String url) async {
+    final list = await browserApi.selectBrowserCollectionUrl(url);
+    collect = list.isNotEmpty;
     notifyListeners();
   }
   Future<void> getTitle()async{
@@ -355,13 +348,11 @@ class BrowserProvider extends ChangeNotifier {
     if (uri.scheme == 'http' || uri.scheme == 'https') {
       final result = PhishingDetector.instance.checkUrl(url);
       if (result == PhishingCheckResult.phishing) {
-        final blockedUrl = url;
-        phishingCallBack?.call(blockedUrl, () {
-          // User chose "Proceed Anyway": whitelist for this session and retry
-          PhishingDetector.instance.allowForSession(blockedUrl);
+        phishingCallBack?.call(url, () {
+          PhishingDetector.instance.allowForSession(url);
           final idx = wListIndex;
           if (idx >= 0 && idx < wvcList.length) {
-            wvcList[idx].loadRequest(Uri.parse(blockedUrl));
+            wvcList[idx].loadRequest(Uri.parse(url));
           }
         });
         return false;

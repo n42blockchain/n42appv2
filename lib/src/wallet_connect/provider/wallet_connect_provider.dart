@@ -21,7 +21,6 @@ import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:reown_walletkit/reown_walletkit.dart' as wallet_connect;
 import 'package:wallet/wallet.dart' as wallet_types;
-import 'package:web3dart/web3dart.dart' as crypto;
 import 'package:web3dart/web3dart.dart' as web3;
 
 /// Localized WC toast helper.
@@ -313,7 +312,7 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
         final trMap = eventData.params![0] as Map<String, dynamic>;
         actionDataMap = {
           "network": networkName,
-          "gas": crypto.hexToInt(trMap['gas'] ?? "0x0").toInt().toString(),
+          "gas": web3.hexToInt(trMap['gas'] ?? "0x0").toInt().toString(),
           "from": trMap['from'] ?? "0x",
           "to": trMap['to'] ?? "0x",
           "data": trMap['data'] ?? "0x",
@@ -530,190 +529,194 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
     return index == -1 ? null : coinModels[index];
   }
 
-  void setChainInfo(){
-    // Guard: subscribe only once per client instance.
+  /// EIP-155 methods registered per chain for WalletConnect session handling.
+  static const _ethMethods = [
+    "eth_sendTransaction",
+    "eth_signTransaction",
+    "eth_sign",
+    "personal_sign",
+    "eth_signTypedData",
+    "eth_signTypedData_v3",
+    "eth_signTypedData_v4",
+  ];
+
+  /// TRON methods registered for WalletConnect session handling.
+  static const _tronMethods = [
+    "tron_signTransaction",
+    "tron_signMessage",
+  ];
+
+  /// Standard events exposed to DApps via WalletConnect namespaces.
+  static const _namespaceEvents = ['chainChanged', 'accountsChanged'];
+
+  void setChainInfo() {
     if (_eventsRegistered) return;
     _eventsRegistered = true;
-    try{
-      if(signClient !=null){
-        // ── Relay client monitoring ──────────────────────────────────────────
-        // Re-establish the WebSocket when the OS closed it while in background.
-        try {
-          signClient!.core.relayClient.onRelayClientDisconnect.subscribe((_) {
-            debugPrint('[WalletConnect] Relay disconnected');
-            if (dAppTopic != null) _scheduleReconnect();
-          });
-          signClient!.core.relayClient.onRelayClientConnect.subscribe((_) {
-            debugPrint('[WalletConnect] Relay connected');
-            _reconnectAttempts = 0;
-            _cancelReconnectTimer();
-          });
-          signClient!.core.relayClient.onRelayClientError.subscribe((_) {
-            debugPrint('[WalletConnect] Relay error');
-            if (dAppTopic != null) _scheduleReconnect();
-          });
-        } catch (e) {
-          debugPrint('[WalletConnect] Relay event subscription unavailable: $e');
-        }
+    try {
+      if (signClient == null) return;
 
-        signClient!.onSessionProposal.subscribe((wallet_connect.SessionProposalEvent? args)async{
-          if(args !=null){
-            actionData=args;
-            metadata=args.params.proposer.metadata;
-            Map<String,wallet_connect.RequiredNamespace> optional=args.params.optionalNamespaces;
-            Map<String,wallet_connect.RequiredNamespace> required=args.params.requiredNamespaces;
-            List<String> chainType=optional.keys.toList();
-            List<String> chainTypeRequired=required.keys.toList();
-            List<String> accounts=[];
-            List<String> accountsTron=[];
-            List<CoinModel> rCoinModel=[];
-            for(String chain in chainType){
-              if(chain=="eip155"){
-                if(optional[chain]!.chains==null)continue;
-                for(int i=0;i<optional[chain]!.chains!.length;i++){
-                  CoinModel? cm=coinModelFind(optional[chain]!.chains![i]);
-                  if(cm !=null){
-                    rCoinModel.add(cm);
-                  }
-                }
-              }else if(chain=="tron"){
-                if(optional[chain]!.chains==null)continue;
-                for(String c in (optional[chain]!.chains!)){
-                  CoinModel? cm=coinModelFind(c);
-                  if(cm !=null){
-                    rCoinModel.add(cm);
-                  }
-                }
-              }
-            }
-            // 用 Set 预处理 optional 链 ID，将嵌套 O(n²) 查找降为 O(1)
-            final optionalEip155Set = Set<String>.from(
-              optional['eip155']?.chains ?? [],
-            );
-            final optionalTronSet = Set<String>.from(
-              optional['tron']?.chains ?? [],
-            );
-            for(String chain in chainTypeRequired){
-              if(chain=="eip155"){
-                if(required[chain]!.chains==null)continue;
-                for(final chainId in required[chain]!.chains!){
-                  if(optional.isNotEmpty && optionalEip155Set.contains(chainId)){
-                    continue;
-                  }
-                  CoinModel? cm=coinModelFind(chainId);
-                  if(cm !=null){
-                    rCoinModel.insert(0,cm);
-                  }
-                }
-              }else if(chain=="tron"){
-                if(required[chain]!.chains==null)continue;
-                for(final chainId in required[chain]!.chains!){
-                  if(optionalTronSet.contains(chainId)){
-                    continue;
-                  }
-                  CoinModel? cm=coinModelFind(chainId);
-                  if(cm !=null){
-                    rCoinModel.insert(0,cm);
-                  }
-                }
-              }
-            }
-            coinModels=rCoinModel;
-            coinModelsIndex=coinModels.length-1;
+      _subscribeRelayEvents();
+      _subscribeSessionEvents();
+    } catch (e) {
+      viewStateDeal(WalletConnectState.error, params: e.toString());
+    }
+  }
 
-            for(int i=coinModels.length-1;i>=0;i--){
-              if(coinModels[i].coin['blockchainType']==BlockchainType.Ethereum.name){
-                String chainId="eip155:${coinModels[i].isTest?coinModels[i].coin['chainId_test']:coinModels[i].coin['chainId']}";
-                accounts.add("$chainId:${coinModels[i].address.toString()}");
-                signClient!.registerRequestHandler(chainId: chainId, method: "eth_sendTransaction");
-                signClient!.registerRequestHandler(chainId: chainId, method: "eth_signTransaction");
-                signClient!.registerRequestHandler(chainId: chainId, method: "eth_sign");
-                signClient!.registerRequestHandler(chainId: chainId, method: "personal_sign");
-                signClient!.registerRequestHandler(chainId: chainId, method: "eth_signTypedData");
-                signClient!.registerRequestHandler(chainId: chainId, method: "eth_signTypedData_v3");
-                signClient!.registerRequestHandler(chainId: chainId, method: "eth_signTypedData_v4");
-                signClient!.registerAccount(chainId: chainId, accountAddress: coinModels[i].address.toString());
-              }else if(coinModels[i].coin['blockchainType']==BlockchainType.Tron.name){
-                accountsTron.add("tron:0x2b6653dc:${coinModels[i].address.toString()}");
-                signClient!.registerRequestHandler(chainId: "tron:0x2b6653dc", method: "tron_signTransaction");
-                signClient!.registerRequestHandler(chainId: "tron:0x2b6653dc", method: "tron_signMessage");
-                signClient!.registerAccount(chainId: "tron:0x2b6653dc", accountAddress: coinModels[i].address.toString());
-              }
+  /// Subscribe to relay-level connect/disconnect/error events.
+  void _subscribeRelayEvents() {
+    try {
+      signClient!.core.relayClient.onRelayClientDisconnect.subscribe((_) {
+        debugPrint('[WalletConnect] Relay disconnected');
+        if (dAppTopic != null) _scheduleReconnect();
+      });
+      signClient!.core.relayClient.onRelayClientConnect.subscribe((_) {
+        debugPrint('[WalletConnect] Relay connected');
+        _reconnectAttempts = 0;
+        _cancelReconnectTimer();
+      });
+      signClient!.core.relayClient.onRelayClientError.subscribe((_) {
+        debugPrint('[WalletConnect] Relay error');
+        if (dAppTopic != null) _scheduleReconnect();
+      });
+    } catch (e) {
+      debugPrint('[WalletConnect] Relay event subscription unavailable: $e');
+    }
+  }
 
-            }
-            namespace={
-              "eip155":wallet_connect.Namespace(
-                accounts: accounts,
-                methods: [
-                  "eth_sendTransaction",
-                  "eth_signTransaction",
-                  "eth_sign",
-                  "personal_sign",
-                  "eth_signTypedData",
-                  "eth_signTypedData_v3",
-                  "eth_signTypedData_v4"
-                ],
-                events: [
-                  'chainChanged',
-                  'accountsChanged'
-                ],
-              ),
-            };
-            if(accountsTron.isNotEmpty){
-              namespace!['tron']=wallet_connect.Namespace(
-                accounts: accountsTron,
-                methods: [
-                  "tron_signTransaction",
-                  "tron_signMessage"
-                ],
-                events: [
-                  'chainChanged',
-                  'accountsChanged'
-                ],
-              );
-            }
-            viewStateDeal(WalletConnectState.selectChain);
-          }
-          else{
-            viewStateDeal(WalletConnectState.error,params: "Error");
-          }
-        });
-        signClient!.onSessionRequest.subscribe((wallet_connect.SessionRequestEvent? args) async{
-          if (args != null) {
-            setActionDataMap(args);
-          }
-        });
-        signClient!.onSessionDelete.subscribe((args) async{
-          if (_disconnectingByUser) return;
-          if (dAppTopic != null && dAppTopic == args.topic) {
-            // Current session was deleted by the DApp
-            final s = _wcL10n();
-            ToastUtils.show(s?.g_wc_dapp_disconnected ?? 'DApp has disconnected');
-            viewStateDeal(WalletConnectState.disconnect);
-          } else {
-            // A different session was deleted — refresh list UI
-            notifyListeners();
-          }
-        });
-        signClient!.onSessionProposalError.subscribe((wallet_connect.SessionProposalErrorEvent? args) async {
-          viewStateDeal(WalletConnectState.error, params: args?.error.message ?? "Error");
-        });
-        signClient!.onSessionExpire.subscribe((args) async {
-          // Session TTL (default 7 days) has passed; must reconnect from scratch.
-          if (dAppTopic != null) {
-            final s = _wcL10n();
-            ToastUtils.show(s?.g_wc_session_expired ?? 'Session has expired');
-            viewStateDeal(WalletConnectState.disconnect);
-          }
-        });
-        signClient!.onProposalExpire.subscribe((wallet_connect.SessionProposalEvent? args) async{
-          // QR-code scan window timed out (typically 5 minutes).
-          final s = _wcL10n();
-          viewStateDeal(WalletConnectState.error, params: s?.g_wc_proposal_timeout ?? 'Connection request timed out');
-        });
+  /// Subscribe to session-level WalletKit events (proposal, request, delete, etc.).
+  void _subscribeSessionEvents() {
+    signClient!.onSessionProposal.subscribe((wallet_connect.SessionProposalEvent? args) async {
+      if (args == null) {
+        viewStateDeal(WalletConnectState.error, params: "Error");
+        return;
       }
-    }catch(e){
-      viewStateDeal(WalletConnectState.error,params: e.toString());
+      actionData = args;
+      metadata = args.params.proposer.metadata;
+
+      final resolvedModels = _resolveChains(
+        args.params.optionalNamespaces,
+        args.params.requiredNamespaces,
+      );
+      coinModels = resolvedModels;
+      coinModelsIndex = coinModels.length - 1;
+
+      final accounts = <String>[];
+      final accountsTron = <String>[];
+      _registerChainHandlers(accounts, accountsTron);
+
+      namespace = {
+        "eip155": wallet_connect.Namespace(
+          accounts: accounts,
+          methods: _ethMethods,
+          events: _namespaceEvents,
+        ),
+      };
+      if (accountsTron.isNotEmpty) {
+        namespace!['tron'] = wallet_connect.Namespace(
+          accounts: accountsTron,
+          methods: _tronMethods,
+          events: _namespaceEvents,
+        );
+      }
+      viewStateDeal(WalletConnectState.selectChain);
+    });
+
+    signClient!.onSessionRequest.subscribe((wallet_connect.SessionRequestEvent? args) async {
+      if (args != null) setActionDataMap(args);
+    });
+
+    signClient!.onSessionDelete.subscribe((args) async {
+      if (_disconnectingByUser) return;
+      if (dAppTopic != null && dAppTopic == args.topic) {
+        final s = _wcL10n();
+        ToastUtils.show(s?.g_wc_dapp_disconnected ?? 'DApp has disconnected');
+        viewStateDeal(WalletConnectState.disconnect);
+      } else {
+        notifyListeners();
+      }
+    });
+
+    signClient!.onSessionProposalError.subscribe((wallet_connect.SessionProposalErrorEvent? args) async {
+      viewStateDeal(WalletConnectState.error, params: args?.error.message ?? "Error");
+    });
+
+    signClient!.onSessionExpire.subscribe((args) async {
+      if (dAppTopic != null) {
+        final s = _wcL10n();
+        ToastUtils.show(s?.g_wc_session_expired ?? 'Session has expired');
+        viewStateDeal(WalletConnectState.disconnect);
+      }
+    });
+
+    signClient!.onProposalExpire.subscribe((wallet_connect.SessionProposalEvent? args) async {
+      final s = _wcL10n();
+      viewStateDeal(WalletConnectState.error, params: s?.g_wc_proposal_timeout ?? 'Connection request timed out');
+    });
+  }
+
+  /// Resolve coin models from optional + required WalletConnect namespaces.
+  ///
+  /// Optional chains are added first; required chains not already in optional
+  /// are inserted at the front of the list (higher priority).
+  List<CoinModel> _resolveChains(
+    Map<String, wallet_connect.RequiredNamespace> optional,
+    Map<String, wallet_connect.RequiredNamespace> required,
+  ) {
+    final result = <CoinModel>[];
+
+    // Collect optional chains
+    for (final chain in optional.keys) {
+      final chains = optional[chain]?.chains;
+      if (chains == null) continue;
+      for (final chainId in chains) {
+        final cm = coinModelFind(chainId);
+        if (cm != null) result.add(cm);
+      }
+    }
+
+    // Collect required chains not already covered by optional
+    final optionalSets = <String, Set<String>>{};
+    for (final key in optional.keys) {
+      optionalSets[key] = Set<String>.from(optional[key]?.chains ?? []);
+    }
+
+    for (final chain in required.keys) {
+      final chains = required[chain]?.chains;
+      if (chains == null) continue;
+      final alreadyCovered = optionalSets[chain] ?? <String>{};
+      for (final chainId in chains) {
+        if (alreadyCovered.contains(chainId)) continue;
+        final cm = coinModelFind(chainId);
+        if (cm != null) result.insert(0, cm);
+      }
+    }
+
+    return result;
+  }
+
+  /// Register request handlers and build account lists for all resolved chains.
+  void _registerChainHandlers(List<String> accounts, List<String> accountsTron) {
+    for (int i = coinModels.length - 1; i >= 0; i--) {
+      final cm = coinModels[i];
+      final blockchainType = cm.coin['blockchainType'];
+
+      if (blockchainType == BlockchainType.Ethereum.name) {
+        final chainId = "eip155:${cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId']}";
+        final addr = cm.address.toString();
+        accounts.add("$chainId:$addr");
+        for (final method in _ethMethods) {
+          signClient!.registerRequestHandler(chainId: chainId, method: method);
+        }
+        signClient!.registerAccount(chainId: chainId, accountAddress: addr);
+      } else if (blockchainType == BlockchainType.Tron.name) {
+        const tronChainId = "tron:0x2b6653dc";
+        final addr = cm.address.toString();
+        accountsTron.add("$tronChainId:$addr");
+        for (final method in _tronMethods) {
+          signClient!.registerRequestHandler(chainId: tronChainId, method: method);
+        }
+        signClient!.registerAccount(chainId: tronChainId, accountAddress: addr);
+      }
     }
   }
 
@@ -736,9 +739,9 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
         final rawData = requestParams[0];
         // DApps may send either hex-encoded bytes (0xdeadbeef) or plain
         // UTF-8 text (e.g. SIWE messages). Detect and decode accordingly.
-        final stripped = crypto.strip0x(rawData);
+        final stripped = web3.strip0x(rawData);
         final encodedMessage = _isValidHex(stripped)
-            ? crypto.hexToBytes(stripped)
+            ? web3.hexToBytes(stripped)
             : Uint8List.fromList(utf8.encode(rawData));
         final signedData = privateKey.signPersonalMessageToUint8List(encodedMessage);
         signedDataHex = bytesToHex(signedData, include0x: true);
@@ -768,7 +771,7 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
 
       } else {
         final requestParams = (eventData.params! as List).cast<String>();
-        final dataToSign = crypto.strip0x(requestParams[1]);
+        final dataToSign = web3.strip0x(requestParams[1]);
         if (coinModels[coinModelsIndex].coin['coinType'] == CoinType.N.name) {
           signedDataHex = await trustdart.signMessage(
             CoinType.N.name, "", dataToSign,
@@ -776,7 +779,7 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
           );
           signedDataHex = "0x$signedDataHex";
         } else {
-          final encodedMessage = crypto.hexToBytes(dataToSign);
+          final encodedMessage = web3.hexToBytes(dataToSign);
           final signedData = privateKey.signPersonalMessageToUint8List(encodedMessage);
           signedDataHex = bytesToHex(signedData, include0x: true);
         }
@@ -850,7 +853,7 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
             : null,
         maxGas: int.tryParse(gasLimit ?? ''),
         nonce: int.tryParse(nonce ?? ''),
-        data: (data != null && data != '0x') ? crypto.hexToBytes(data) : null,
+        data: (data != null && data != '0x') ? web3.hexToBytes(data) : null,
       );
 
       String returnStr;
@@ -1031,7 +1034,7 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
     // Sign the pre-hashed data directly via secp256k1.
     // ecSign does NOT hash again; it signs the raw 32-byte digest.
     // The returned v is already recovery + 27 (i.e. 27 or 28).
-    final signature = crypto.sign(hash, privateKey.privateKey);
+    final signature = web3.sign(hash, privateKey.privateKey);
 
     // Encode to 65-byte hex: r (32 bytes) + s (32 bytes) + v (1 byte)
     final r = signature.r.toRadixString(16).padLeft(64, '0');

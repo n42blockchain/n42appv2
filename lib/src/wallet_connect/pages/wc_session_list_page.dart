@@ -53,21 +53,23 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
     }
   }
 
-  Future<void> _confirmDisconnect(String topic, String dAppName) async {
+  /// Show a confirm/cancel dialog. Returns true if the user confirmed.
+  Future<bool> _showConfirmDialog({String? title, required String content}) async {
+    final s = S.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(dAppName),
-        content: Text(S.of(context).g_wc_disconnect_confirm),
+        title: title != null ? Text(title) : null,
+        content: Text(content),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text(S.of(context).g_key_79),
+            child: Text(s.g_key_79),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
             child: Text(
-              S.of(context).g_key_78,
+              s.g_key_78,
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
               ),
@@ -76,34 +78,24 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
         ],
       ),
     );
-    if (confirmed == true && mounted) {
+    return confirmed == true;
+  }
+
+  Future<void> _confirmDisconnect(String topic, String dAppName) async {
+    final confirmed = await _showConfirmDialog(
+      title: dAppName,
+      content: S.of(context).g_wc_disconnect_confirm,
+    );
+    if (confirmed && mounted) {
       await ref.read(wcpBridgeProvider).disconnectSessionByTopic(topic);
     }
   }
 
   Future<void> _confirmDisconnectAll() async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        content: Text(S.of(context).g_wc_disconnect_all_confirm),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: Text(S.of(context).g_key_79),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: Text(
-              S.of(context).g_key_78,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
-              ),
-            ),
-          ),
-        ],
-      ),
+    final confirmed = await _showConfirmDialog(
+      content: S.of(context).g_wc_disconnect_all_confirm,
     );
-    if (confirmed == true && mounted) {
+    if (confirmed && mounted) {
       await ref.read(wcpBridgeProvider).disconnectAllSessions();
     }
   }
@@ -187,7 +179,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
         vertical: ScreenUtil().setWidth(16),
       ),
       itemCount: entries.length,
-      separatorBuilder: (_, __) => SizedBox(height: ScreenUtil().setWidth(16)),
+      separatorBuilder: (_, _) => SizedBox(height: ScreenUtil().setWidth(16)),
       itemBuilder: (context, index) {
         final session = entries[index].value;
         return _buildSessionCard(session);

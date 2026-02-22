@@ -19,7 +19,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+
 
 class BrowserPage extends ConsumerStatefulWidget {
   final String openUrl;
@@ -229,190 +229,57 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
               value: bValue.wInfoList[bValue.wListIndex]['progress']??0,
               backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor3.name),
               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),),
-          if(bValue.showWList==false)
+          if (!bValue.showWList)
             Container(
               alignment: Alignment.center,
               height: ScreenUtil().setWidth(100.0),
               child: Row(
                 children: [
-                  Expanded(child: InkWell(
-                    onTap: ()async{
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: ScreenUtil().setWidth(80.0),
-                      width: ScreenUtil().setWidth(60.0),
-                      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10.0),vertical: ScreenUtil().setWidth(20.0)),
-                      child: Image.asset(
-                        "assets/browser/close.png",
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                        width: ScreenUtil().setWidth(40.0),
-                        height: ScreenUtil().setWidth(40.0),
-                      ),
-                    ),
-                  ),),
-                  Expanded(
-                    flex: 1,
-                    child: InkWell(
-                      onTap: ()async{
-                        WebViewController wv=bValue.wvcList[bValue.wListIndex];
-                        await wv.reload();
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: ScreenUtil().setWidth(80.0),
-                        width: ScreenUtil().setWidth(60.0),
-                        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10.0),vertical: ScreenUtil().setWidth(20.0)),
-                        child: Image.asset(
-                          "assets/browser/refresh.png",
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                          width: ScreenUtil().setWidth(40.0),
-                          height: ScreenUtil().setWidth(40.0),
-                        ),
-                      ),
-                    ),),
-                  Expanded(child: InkWell(
-                    onTap: bValue.canBack ? ()async{
-                      WebViewController wv=bValue.wvcList[bValue.wListIndex];
-                      bool back=await wv.canGoBack();
-                      if (back){
+                  _toolbarAssetButton("close", onTap: () => Navigator.pop(context)),
+                  _toolbarAssetButton("refresh", onTap: () async {
+                    await bValue.wvcList[bValue.wListIndex].reload();
+                  }),
+                  _toolbarAssetButton(
+                    "arrow-left",
+                    colorKey: bValue.canBack ? AppThemeKeys.mainTextColor.name : AppThemeKeys.itemBorderColor.name,
+                    onTap: bValue.canBack ? () async {
+                      final wv = bValue.wvcList[bValue.wListIndex];
+                      if (await wv.canGoBack()) {
                         await wv.goBack();
-                      }else{
+                      } else {
                         if (!mounted) return;
                         Navigator.pop(this.context);
                       }
                     } : null,
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: ScreenUtil().setWidth(80.0),
-                      width: ScreenUtil().setWidth(60.0),
-                      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10.0),vertical: ScreenUtil().setWidth(20.0)),
-                      child: Image.asset(
-                        "assets/browser/arrow-left.png",
-                        color: AppThemeUtils.getColorByKey(context, bValue.canBack?AppThemeKeys.mainTextColor.name:AppThemeKeys.itemBorderColor.name),
-                        width: ScreenUtil().setWidth(40.0),
-                        height: ScreenUtil().setWidth(40.0),
-                      ),
-                    ),
-                  ),),
-                  Expanded(child: InkWell(
-                    onTap: bValue.canForward ? ()async{
-                      WebViewController wv=bValue.wvcList[bValue.wListIndex];
-                      bool forward=await wv.canGoForward();
-                      if (forward){
+                  ),
+                  _toolbarAssetButton(
+                    "arrow-right",
+                    colorKey: bValue.canForward ? AppThemeKeys.mainTextColor.name : AppThemeKeys.itemBorderColor.name,
+                    onTap: bValue.canForward ? () async {
+                      final wv = bValue.wvcList[bValue.wListIndex];
+                      if (await wv.canGoForward()) {
                         await wv.goForward();
                       }
                     } : null,
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: ScreenUtil().setWidth(80.0),
-                      width: ScreenUtil().setWidth(60.0),
-                      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10.0),vertical: ScreenUtil().setWidth(20.0)),
-                      child: Image.asset(
-                        "assets/browser/arrow-right.png",
-                        color: AppThemeUtils.getColorByKey(context, bValue.canForward?AppThemeKeys.mainTextColor.name:AppThemeKeys.itemBorderColor.name),
-                        width: ScreenUtil().setWidth(40.0),
-                        height: ScreenUtil().setWidth(40.0),
-                      ),
-                    ),
-                  ),),
-                  Expanded(child: InkWell(
-                    onTap: ()async{
-                      if(bValue.collect){
+                  ),
+                  _toolbarAssetButton(
+                    bValue.collect ? "star" : "star_border",
+                    onTap: () {
+                      if (bValue.collect) {
                         bValue.deleteBrowserCollectionUrl();
-                      }else{
+                      } else {
                         bValue.addBrowserCollection(context);
                       }
                     },
-                    child: Container(
-                      height: ScreenUtil().setWidth(80.0),
-                      width: ScreenUtil().setWidth(60.0),
-                      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10.0),vertical: ScreenUtil().setWidth(20.0)),
-                      child: Image.asset(
-                        "assets/browser/${bValue.collect?"star":"star_border"}.png",
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                        width: ScreenUtil().setWidth(40.0),
-                        height: ScreenUtil().setWidth(40.0),
-                      ),
-                    ),
-                  ),),
-                  Expanded(child: InkWell(
-                    onTap: ()async{
-                      String? url=await Navigator.push(context, MaterialPageRoute(builder: (context)=>const BrowserHistoryPage()));
-                      if(url !=null){
-                        WebViewController wv=bValue.wvcList[bValue.wListIndex];
-                        wv.loadRequest(Uri.parse(url));
-                      }
-                    },
-                    child: Container(
-                      height: ScreenUtil().setWidth(80.0),
-                      width: ScreenUtil().setWidth(60.0),
-                      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10.0),vertical: ScreenUtil().setWidth(20.0)),
-                      child: Icon(
-                        Icons.history,
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                        size: ScreenUtil().setWidth(40.0),
-                      ),
-                    ),
-                  ),),
-                  Expanded(child: InkWell(
-                    onTap: ()async{
-                      String? url=await Navigator.push(context, MaterialPageRoute(builder: (context)=>BrowserCollectionList()));
-                      if(url !=null){
-                        WebViewController wv=bValue.wvcList[bValue.wListIndex];
-                        wv.loadRequest(Uri.parse(url));
-                      }
-                    },
-                    child: Container(
-                      height: ScreenUtil().setWidth(80.0),
-                      width: ScreenUtil().setWidth(60.0),
-                      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10.0),vertical: ScreenUtil().setWidth(20.0)),
-                      child: Image.asset(
-                        "assets/browser/note.png",
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                        width: ScreenUtil().setWidth(40.0),
-                        height: ScreenUtil().setWidth(40.0),
-                      ),
-                    ),
-                  ),),
-                  Expanded(child: InkWell(
-                    onTap: ()async{
-                      String? url=await Navigator.push(context, MaterialPageRoute(builder: (context)=>const DAppDirectoryPage()));
-                      if(url !=null){
-                        WebViewController wv=bValue.wvcList[bValue.wListIndex];
-                        wv.loadRequest(Uri.parse(url));
-                      }
-                    },
-                    child: Container(
-                      height: ScreenUtil().setWidth(80.0),
-                      width: ScreenUtil().setWidth(60.0),
-                      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10.0),vertical: ScreenUtil().setWidth(20.0)),
-                      child: Icon(
-                        Icons.explore,
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                        size: ScreenUtil().setWidth(40.0),
-                      ),
-                    ),
-                  ),),
-                  Expanded(child: InkWell(
-                    onTap: ()async{
-                      WebViewController wv=bValue.wvcList[bValue.wListIndex];
-                      await Navigator.push(context, MaterialPageRoute(builder: (context)=>BrowserSetting(webViewController: wv,)));
-                      bValue.getBrowserSetting();
-                    },
-                    child: Container(
-                      height: ScreenUtil().setWidth(80.0),
-                      width: ScreenUtil().setWidth(60.0),
-                      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10.0),vertical: ScreenUtil().setWidth(20.0)),
-                      child: Image.asset(
-                        "assets/browser/setting.png",
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                        width: ScreenUtil().setWidth(40.0),
-                        height: ScreenUtil().setWidth(40.0),
-                      ),
-                    ),
-                  ),),
+                  ),
+                  _toolbarIconButton(Icons.history, onTap: () => _navigateAndLoad(bValue, const BrowserHistoryPage())),
+                  _toolbarAssetButton("note", onTap: () => _navigateAndLoad(bValue, BrowserCollectionList())),
+                  _toolbarIconButton(Icons.explore, onTap: () => _navigateAndLoad(bValue, const DAppDirectoryPage())),
+                  _toolbarAssetButton("setting", onTap: () async {
+                    final wv = bValue.wvcList[bValue.wListIndex];
+                    await Navigator.push(context, MaterialPageRoute(builder: (_) => BrowserSetting(webViewController: wv)));
+                    bValue.getBrowserSetting();
+                  }),
                 ],
               ),
             ),
@@ -659,6 +526,56 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
         proceed();
       }
     });
+  }
+
+  /// Push a page and load the returned URL into the current WebView tab.
+  Future<void> _navigateAndLoad(BrowserProvider bValue, Widget page) async {
+    final url = await Navigator.push<String>(context, MaterialPageRoute(builder: (_) => page));
+    if (url != null) {
+      bValue.wvcList[bValue.wListIndex].loadRequest(Uri.parse(url));
+    }
+  }
+
+  /// Toolbar button with an asset image from `assets/browser/`.
+  Widget _toolbarAssetButton(String assetName, {VoidCallback? onTap, String? colorKey}) {
+    final color = AppThemeUtils.getColorByKey(context, colorKey ?? AppThemeKeys.mainTextColor.name);
+    return Expanded(
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          alignment: Alignment.center,
+          height: ScreenUtil().setWidth(80.0),
+          width: ScreenUtil().setWidth(60.0),
+          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10.0), vertical: ScreenUtil().setWidth(20.0)),
+          child: Image.asset(
+            "assets/browser/$assetName.png",
+            color: color,
+            width: ScreenUtil().setWidth(40.0),
+            height: ScreenUtil().setWidth(40.0),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Toolbar button with a Material icon.
+  Widget _toolbarIconButton(IconData icon, {VoidCallback? onTap}) {
+    return Expanded(
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          alignment: Alignment.center,
+          height: ScreenUtil().setWidth(80.0),
+          width: ScreenUtil().setWidth(60.0),
+          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10.0), vertical: ScreenUtil().setWidth(20.0)),
+          child: Icon(
+            icon,
+            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+            size: ScreenUtil().setWidth(40.0),
+          ),
+        ),
+      ),
+    );
   }
 
   void showAlertWidgetConnectDapp(String uri) {
