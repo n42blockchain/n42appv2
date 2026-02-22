@@ -8,19 +8,27 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_chat/n42_chat.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42_chat/n42_chat.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 
-/// 修改邮箱页面（两步流程）
+/// 修改邮箱页面
 ///
-/// Step 0 – 输入新邮箱地址并发送验证码
-/// Step 1 – 输入 6 位验证码并提交修改
+/// 流程：
+/// - 未登录 Chat（或 Chat 未初始化）：2 步
+///     Step 0 – 输入新邮箱
+///     Step 1 – 输入 N42 验证码 → 确认修改
 ///
-/// 返回值 `true` 表示修改成功，调用方可刷新本地用户信息。
+/// - 已登录 Chat（可选同步）：3 步
+///     Step 0 – 输入新邮箱 + 密码（开启同步时）
+///     Step 1 – 输入 N42 验证码 → 确认 N42 修改
+///     Step 2 – 自动请求 Chat 验证码 → 输入 Chat 验证码 → 确认
+///              失败时：显示错误 + [重试] / [跳过]
+///
+/// 返回 `true` 表示 N42 邮箱已成功修改（无论 Chat 同步状态）。
 class ChangeEmailPage extends StatefulWidget {
   const ChangeEmailPage({super.key});
 
@@ -29,40 +37,71 @@ class ChangeEmailPage extends StatefulWidget {
 }
 
 class _ChangeEmailPageState extends State<ChangeEmailPage> {
+  // ── Step ────────────────────────────────────────────────────────────────────
   int _step = 0;
+  bool _chatAvailable = false; // Chat 已初始化且已登录
+  bool _chatSyncEnabled = true; // 用户是否开启 Chat 同步
 
+  // ── Controllers ─────────────────────────────────────────────────────────────
   final _emailCtrl = TextEditingController();
-  final _codeCtrl = TextEditingController();
+  final _passwordCtrl = TextEditingController();
+  final _n42CodeCtrl = TextEditingController();
+  final _chatCodeCtrl = TextEditingController();
   final _emailFocus = FocusNode();
-  final _codeFocus = FocusNode();
+  final _passwordFocus = FocusNode();
+  final _n42CodeFocus = FocusNode();
+  final _chatCodeFocus = FocusNode();
+  bool _obscurePassword = true;
 
-  bool _sendingCode = false;
-  bool _submitting = false;
-  int _countdown = 0;
-  Timer? _timer;
+  // ── Loading ──────────────────────────────────────────────────────────────────
+  bool _sendingN42Code = false;
+  bool _confirmingN42 = false;
+  bool _requestingChatCode = false;
+  bool _confirmingChat = false;
 
+  // ── State flags ──────────────────────────────────────────────────────────────
+  bool _chatCodeSent = false;
+
+  // ── Errors ───────────────────────────────────────────────────────────────────
   String? _emailError;
-  String? _codeError;
+  String? _passwordError;
+  String? _n42CodeError;
+  String? _chatSyncError; // Chat 同步过程中的错误（请求码 / 确认均用此字段）
+
+  // ── Countdown ────────────────────────────────────────────────────────────────
+  int _countdown = 0;
+  Timer? _countdownTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _chatAvailable = N42Chat.isInitialized && N42Chat.isLoggedIn;
+    _chatSyncEnabled = _chatAvailable;
+  }
 
   @override
   void dispose() {
-    _timer?.cancel();
+    _countdownTimer?.cancel();
     _emailCtrl.dispose();
-    _codeCtrl.dispose();
+    _passwordCtrl.dispose();
+    _n42CodeCtrl.dispose();
+    _chatCodeCtrl.dispose();
     _emailFocus.dispose();
-    _codeFocus.dispose();
+    _passwordFocus.dispose();
+    _n42CodeFocus.dispose();
+    _chatCodeFocus.dispose();
     super.dispose();
   }
 
-  // ─── Helpers ───────────────────────────────────────────────────────────────
+  // ─── Helpers ──────────────────────────────────────────────────────────────────
 
   bool _isValidEmail(String v) =>
       RegExp(r'^[\w.+-]+@[\w-]+\.[\w.]+$').hasMatch(v.trim());
 
   void _startCountdown() {
     _countdown = 60;
-    _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 1), (t) {
+    _countdownTimer?.cancel();
+    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (t) {
       if (!mounted) {
         t.cancel();
         return;
@@ -75,9 +114,9 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
     });
   }
 
-  // ─── Actions ───────────────────────────────────────────────────────────────
+  // ─── Step 0 → 1: 发送 N42 验证码 ────────────────────────────────────────────
 
-  Future<void> _sendCode() async {
+  Future<void> _sendN42Code() async {
     final email = _emailCtrl.text.trim();
     if (email.isEmpty) {
       setState(() => _emailError = 'Please enter a new email address');
@@ -88,23 +127,28 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
       return;
     }
     if (email == (AppGlobals.userInfo?.email ?? '')) {
-      setState(
-          () => _emailError = 'New email must differ from your current email');
+      setState(() => _emailError = 'New email must differ from current email');
+      return;
+    }
+    if (_chatSyncEnabled && _chatAvailable && _passwordCtrl.text.isEmpty) {
+      setState(() => _passwordError = 'Password required for Chat sync');
       return;
     }
 
     setState(() {
       _emailError = null;
-      _sendingCode = true;
+      _passwordError = null;
+      _sendingN42Code = true;
     });
 
     try {
-      final data = await UserInfoApi().sendEmailCode(email, 'changeEmail');
+      final data =
+          await UserInfoApi().sendEmailCode(email, 'changeEmail');
       if (!mounted) return;
       if (data['code'] == 200) {
         _startCountdown();
         setState(() => _step = 1);
-        ToastUtils.show('Verification code sent');
+        ToastUtils.show('Verification code sent to $email');
       } else {
         ToastUtils.show(
             (data['err'] ?? data['msg'] ?? 'Failed to send code').toString());
@@ -112,44 +156,42 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
     } catch (e) {
       if (mounted) ToastUtils.show(e.toString());
     } finally {
-      if (mounted) setState(() => _sendingCode = false);
+      if (mounted) setState(() => _sendingN42Code = false);
     }
   }
 
-  Future<void> _resendCode() async {
-    if (_countdown > 0) return;
-    // Re-validate and send
-    final email = _emailCtrl.text.trim();
-    if (email.isEmpty || !_isValidEmail(email)) return;
-
-    setState(() => _sendingCode = true);
+  Future<void> _resendN42Code() async {
+    if (_countdown > 0 || _sendingN42Code) return;
+    setState(() => _sendingN42Code = true);
     try {
-      final data = await UserInfoApi().sendEmailCode(email, 'changeEmail');
+      final data = await UserInfoApi()
+          .sendEmailCode(_emailCtrl.text.trim(), 'changeEmail');
       if (!mounted) return;
       if (data['code'] == 200) {
         _startCountdown();
-        ToastUtils.show('Verification code resent');
+        ToastUtils.show('Code resent');
       } else {
-        ToastUtils.show(
-            (data['err'] ?? data['msg'] ?? 'Failed to resend').toString());
+        ToastUtils.show((data['err'] ?? 'Failed to resend').toString());
       }
     } catch (e) {
       if (mounted) ToastUtils.show(e.toString());
     } finally {
-      if (mounted) setState(() => _sendingCode = false);
+      if (mounted) setState(() => _sendingN42Code = false);
     }
   }
 
-  Future<void> _confirmChange() async {
-    final code = _codeCtrl.text.trim();
+  // ─── Step 1: 确认 N42 邮箱修改 ──────────────────────────────────────────────
+
+  Future<void> _confirmN42() async {
+    final code = _n42CodeCtrl.text.trim();
     if (code.length != 6) {
-      setState(() => _codeError = 'Please enter the 6-digit code');
+      setState(() => _n42CodeError = 'Please enter the 6-digit code');
       return;
     }
 
     setState(() {
-      _codeError = null;
-      _submitting = true;
+      _n42CodeError = null;
+      _confirmingN42 = true;
     });
 
     try {
@@ -158,74 +200,100 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
       if (!mounted) return;
       if (result.error == false) {
         AppGlobals.userInfo?.email = _emailCtrl.text.trim();
-        ToastUtils.showSuccess('Email updated successfully');
-        // 尝试引导用户同步 Chat 账户邮箱
-        await _offerChatEmailSync();
-        if (mounted) Navigator.pop(context, true);
+        _countdownTimer?.cancel();
+
+        if (_chatSyncEnabled && _chatAvailable) {
+          // 进入 Step 2：自动请求 Chat 验证码
+          setState(() => _step = 2);
+          await _requestChatCode();
+        } else {
+          ToastUtils.showSuccess('Email updated successfully');
+          Navigator.pop(context, true);
+        }
       } else {
-        ToastUtils.show(result.data?.toString() ?? 'Failed to change email');
+        setState(() => _n42CodeError =
+            result.data?.toString() ?? 'Incorrect code, please try again');
       }
     } catch (e) {
-      if (mounted) ToastUtils.show(e.toString());
+      if (mounted) setState(() => _n42CodeError = e.toString());
     } finally {
-      if (mounted) setState(() => _submitting = false);
+      if (mounted) setState(() => _confirmingN42 = false);
     }
   }
 
-  /// N42 邮箱改完后，若 Chat 已初始化且已登录，提示用户可选同步 Chat 邮箱
-  Future<void> _offerChatEmailSync() async {
-    if (!mounted) return;
-    if (!N42Chat.isInitialized || !N42Chat.isLoggedIn) return;
+  // ─── Step 2: Chat 同步 ───────────────────────────────────────────────────────
 
-    final newEmail = _emailCtrl.text.trim();
-    final shouldSync = await showDialog<bool>(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) {
-        final accentColor = AppThemeUtils.getColorByKey(
-            ctx, AppThemeKeys.mainBlueColor.name);
-        final textColor =
-            AppThemeUtils.getColorByKey(ctx, AppThemeKeys.mainTextColor.name);
-        final bgColor = AppThemeUtils.getColorByKey(
-            ctx, AppThemeKeys.itemBgColor.name);
-        return AlertDialog(
-          backgroundColor: bgColor,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-          title: Text(
-            'Sync Chat Account',
-            style: TextStyle(
-                fontSize: 17.sp,
-                fontWeight: FontWeight.bold,
-                color: textColor),
-          ),
-          content: Text(
-            'Your N42 profile email has been updated to:\n$newEmail\n\nWould you also like to update your Chat account email?',
-            style: TextStyle(fontSize: 14.sp, color: textColor.withAlpha(200)),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: Text('Not Now',
-                  style: TextStyle(color: textColor.withAlpha(150))),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, true),
-              child: Text('Sync Chat',
-                  style: TextStyle(
-                      color: accentColor, fontWeight: FontWeight.w600)),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (shouldSync == true && mounted) {
-      await N42Chat.openChangeEmailPage(context);
+  Future<void> _requestChatCode() async {
+    setState(() {
+      _requestingChatCode = true;
+      _chatSyncError = null;
+      _chatCodeSent = false;
+      _chatCodeCtrl.clear();
+    });
+    try {
+      await N42Chat.requestChatEmailChange(
+        _passwordCtrl.text,
+        _emailCtrl.text.trim(),
+      );
+      if (!mounted) return;
+      setState(() {
+        _chatCodeSent = true;
+        _requestingChatCode = false;
+      });
+      _startCountdown();
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _chatSyncError = e.toString();
+          _requestingChatCode = false;
+        });
+      }
     }
   }
 
-  // ─── Build ─────────────────────────────────────────────────────────────────
+  Future<void> _resendChatCode() async {
+    if (_countdown > 0 || _requestingChatCode) return;
+    await _requestChatCode();
+  }
+
+  Future<void> _confirmChat() async {
+    final code = _chatCodeCtrl.text.trim();
+    if (code.length != 6) {
+      setState(() => _chatSyncError = 'Please enter the 6-digit code');
+      return;
+    }
+
+    setState(() {
+      _chatSyncError = null;
+      _confirmingChat = true;
+    });
+
+    try {
+      await N42Chat.confirmChatEmailChange(
+        _emailCtrl.text.trim(),
+        code,
+      );
+      if (!mounted) return;
+      ToastUtils.showSuccess('Both accounts updated successfully!');
+      Navigator.pop(context, true);
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _chatSyncError = e.toString();
+          _confirmingChat = false;
+        });
+      }
+    }
+  }
+
+  /// 跳过 Chat 同步：N42 邮箱已更新，Chat 留给用户稍后手动处理
+  void _skipChatSync() {
+    ToastUtils.show(
+        'N42 email updated. Chat email can be updated in Chat > Settings.');
+    Navigator.pop(context, true);
+  }
+
+  // ─── Build ────────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
@@ -240,6 +308,8 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
     final lineColor =
         AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name);
 
+    final totalSteps = (_chatSyncEnabled && _chatAvailable) ? 3 : 2;
+
     return Scaffold(
       appBar: AppBarWidget(text: 'Change Email'),
       body: SingleChildScrollView(
@@ -247,227 +317,630 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ── Step indicator ──────────────────────────────────────────────
             _StepIndicator(
               currentStep: _step,
+              totalSteps: totalSteps,
               accentColor: accentColor,
               lineColor: lineColor,
               textColor: textColor,
             ),
             SizedBox(height: 36.h),
-
-            // ── Step 0: Enter new email ─────────────────────────────────────
-            if (_step == 0) ...[
-              Text('Current email',
-                  style: TextStyle(fontSize: 13.sp, color: subColor)),
-              SizedBox(height: 4.h),
-              Text(
-                AppGlobals.userInfo?.email ?? '',
-                style: TextStyle(
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w500,
-                    color: textColor),
-              ),
-              SizedBox(height: 28.h),
-              Text('New email address',
-                  style: TextStyle(fontSize: 13.sp, color: subColor)),
-              SizedBox(height: 8.h),
-              TextField(
-                controller: _emailCtrl,
-                focusNode: _emailFocus,
-                keyboardType: TextInputType.emailAddress,
-                autocorrect: false,
-                style: TextStyle(fontSize: 15.sp, color: textColor),
-                decoration: _buildInputDecoration(
-                  hint: 'Enter new email address',
-                  fillColor: fillColor,
-                  accentColor: accentColor,
-                  subColor: subColor,
-                  errorText: _emailError,
-                ),
-                onChanged: (_) {
-                  if (_emailError != null) setState(() => _emailError = null);
-                },
-                onSubmitted: (_) => _sendCode(),
-              ),
-              SizedBox(height: 36.h),
-              SizedBox(
-                width: double.infinity,
-                height: 50.h,
-                child: ElevatedButton(
-                  onPressed: _sendingCode ? null : _sendCode,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: accentColor,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r)),
-                  ),
-                  child: _sendingCode
-                      ? SizedBox(
-                          width: 20.w,
-                          height: 20.h,
-                          child: const CircularProgressIndicator(
-                              color: Colors.white, strokeWidth: 2),
-                        )
-                      : Text('Send Verification Code',
-                          style: TextStyle(
-                              fontSize: 16.sp, fontWeight: FontWeight.w600)),
-                ),
-              ),
-            ],
-
-            // ── Step 1: Enter verification code ────────────────────────────
-            if (_step == 1) ...[
-              Text('Code sent to',
-                  style: TextStyle(fontSize: 13.sp, color: subColor)),
-              SizedBox(height: 4.h),
-              Text(
-                _emailCtrl.text.trim(),
-                style: TextStyle(
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w500,
-                    color: accentColor),
-              ),
-              SizedBox(height: 28.h),
-              Text('Enter 6-digit code',
-                  style: TextStyle(fontSize: 13.sp, color: subColor)),
-              SizedBox(height: 8.h),
-              TextField(
-                controller: _codeCtrl,
-                focusNode: _codeFocus,
-                keyboardType: TextInputType.number,
-                textAlign: TextAlign.center,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(6),
-                ],
-                style: TextStyle(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.w700,
-                    color: textColor,
-                    letterSpacing: 8),
-                decoration: _buildInputDecoration(
-                  hint: '------',
-                  fillColor: fillColor,
-                  accentColor: accentColor,
-                  subColor: subColor,
-                  errorText: _codeError,
-                  counterText: '',
-                ),
-                onChanged: (_) {
-                  if (_codeError != null) setState(() => _codeError = null);
-                },
-                onSubmitted: (_) => _confirmChange(),
-              ),
-              SizedBox(height: 12.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  GestureDetector(
-                    onTap: (_countdown > 0 || _sendingCode) ? null : _resendCode,
-                    child: Text(
-                      _countdown > 0
-                          ? 'Resend in ${_countdown}s'
-                          : 'Resend code',
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        color: _countdown > 0 ? subColor : accentColor,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 32.h),
-              SizedBox(
-                width: double.infinity,
-                height: 50.h,
-                child: ElevatedButton(
-                  onPressed: _submitting ? null : _confirmChange,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: accentColor,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r)),
-                  ),
-                  child: _submitting
-                      ? SizedBox(
-                          width: 20.w,
-                          height: 20.h,
-                          child: const CircularProgressIndicator(
-                              color: Colors.white, strokeWidth: 2),
-                        )
-                      : Text('Confirm Change',
-                          style: TextStyle(
-                              fontSize: 16.sp, fontWeight: FontWeight.w600)),
-                ),
-              ),
-              SizedBox(height: 16.h),
-              Center(
-                child: TextButton(
-                  onPressed: () => setState(() {
-                    _step = 0;
-                    _codeCtrl.clear();
-                    _codeError = null;
-                  }),
-                  child: Text('← Change email address',
-                      style: TextStyle(color: subColor, fontSize: 13.sp)),
-                ),
-              ),
-            ],
+            if (_step == 0)
+              _buildStep0(
+                  textColor, subColor, accentColor, fillColor, lineColor),
+            if (_step == 1)
+              _buildStep1(textColor, subColor, accentColor, fillColor),
+            if (_step == 2)
+              _buildStep2(
+                  textColor, subColor, accentColor, fillColor, lineColor),
           ],
         ),
       ),
     );
   }
 
-  InputDecoration _buildInputDecoration({
+  // ── Step 0 ──────────────────────────────────────────────────────────────────
+
+  Widget _buildStep0(Color textColor, Color subColor, Color accentColor,
+      Color fillColor, Color lineColor) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Current email',
+            style: TextStyle(fontSize: 13.sp, color: subColor)),
+        SizedBox(height: 4.h),
+        Text(
+          AppGlobals.userInfo?.email ?? '',
+          style: TextStyle(
+              fontSize: 15.sp,
+              fontWeight: FontWeight.w500,
+              color: textColor),
+        ),
+        SizedBox(height: 28.h),
+
+        Text('New email address',
+            style: TextStyle(fontSize: 13.sp, color: subColor)),
+        SizedBox(height: 8.h),
+        TextField(
+          controller: _emailCtrl,
+          focusNode: _emailFocus,
+          keyboardType: TextInputType.emailAddress,
+          autocorrect: false,
+          style: TextStyle(fontSize: 15.sp, color: textColor),
+          decoration: _inputDeco(
+            hint: 'Enter new email address',
+            fillColor: fillColor,
+            accentColor: accentColor,
+            subColor: subColor,
+            errorText: _emailError,
+          ),
+          onChanged: (_) {
+            if (_emailError != null) setState(() => _emailError = null);
+          },
+          onSubmitted: (_) {
+            if (_chatSyncEnabled && _chatAvailable) {
+              _passwordFocus.requestFocus();
+            } else {
+              _sendN42Code();
+            }
+          },
+        ),
+
+        // ── Chat sync section ──────────────────────────────────────────────
+        if (_chatAvailable) ...[
+          SizedBox(height: 24.h),
+          Container(
+            padding: EdgeInsets.all(14.w),
+            decoration: BoxDecoration(
+              color:
+                  AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor2.name),
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Also sync Chat account email',
+                              style: TextStyle(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: textColor)),
+                          SizedBox(height: 3.h),
+                          Text('Both accounts will be updated in one flow',
+                              style: TextStyle(
+                                  fontSize: 12.sp, color: subColor)),
+                        ],
+                      ),
+                    ),
+                    Switch(
+                      value: _chatSyncEnabled,
+                      onChanged: (v) => setState(() {
+                        _chatSyncEnabled = v;
+                        _passwordError = null;
+                      }),
+                      activeTrackColor: accentColor,
+                      activeThumbColor: Colors.white,
+                    ),
+                  ],
+                ),
+                if (_chatSyncEnabled) ...[
+                  SizedBox(height: 12.h),
+                  Divider(
+                      color: AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.dividerColor.name),
+                      height: 1),
+                  SizedBox(height: 12.h),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('Current password (for Chat)',
+                        style: TextStyle(fontSize: 13.sp, color: subColor)),
+                  ),
+                  SizedBox(height: 8.h),
+                  TextField(
+                    controller: _passwordCtrl,
+                    focusNode: _passwordFocus,
+                    obscureText: _obscurePassword,
+                    style: TextStyle(fontSize: 15.sp, color: textColor),
+                    decoration: _inputDeco(
+                      hint: 'Enter current password',
+                      fillColor: AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.itemBgColor.name),
+                      accentColor: accentColor,
+                      subColor: subColor,
+                      errorText: _passwordError,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: subColor,
+                          size: 20.sp,
+                        ),
+                        onPressed: () =>
+                            setState(() => _obscurePassword = !_obscurePassword),
+                      ),
+                    ),
+                    onChanged: (_) {
+                      if (_passwordError != null) {
+                        setState(() => _passwordError = null);
+                      }
+                    },
+                    onSubmitted: (_) => _sendN42Code(),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+
+        SizedBox(height: 36.h),
+        _primaryButton(
+          label: 'Send Verification Code',
+          onPressed: _sendN42Code,
+          loading: _sendingN42Code,
+          accentColor: accentColor,
+        ),
+      ],
+    );
+  }
+
+  // ── Step 1: N42 验证码 ──────────────────────────────────────────────────────
+
+  Widget _buildStep1(Color textColor, Color subColor, Color accentColor,
+      Color fillColor) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Verification code sent to',
+            style: TextStyle(fontSize: 13.sp, color: subColor)),
+        SizedBox(height: 4.h),
+        Text(
+          _emailCtrl.text.trim(),
+          style: TextStyle(
+              fontSize: 15.sp,
+              fontWeight: FontWeight.w500,
+              color: accentColor),
+        ),
+        SizedBox(height: 28.h),
+
+        Text('Enter 6-digit code',
+            style: TextStyle(fontSize: 13.sp, color: subColor)),
+        SizedBox(height: 8.h),
+        _codeField(
+          ctrl: _n42CodeCtrl,
+          focus: _n42CodeFocus,
+          textColor: textColor,
+          fillColor: fillColor,
+          accentColor: accentColor,
+          subColor: subColor,
+          errorText: _n42CodeError,
+          onChanged: (_) {
+            if (_n42CodeError != null) setState(() => _n42CodeError = null);
+          },
+          onSubmitted: (_) => _confirmN42(),
+        ),
+        SizedBox(height: 12.h),
+        _resendRow(
+          countdown: _countdown,
+          loading: _sendingN42Code,
+          onTap: _resendN42Code,
+          accentColor: accentColor,
+          subColor: subColor,
+        ),
+        SizedBox(height: 32.h),
+        _primaryButton(
+          label: _chatSyncEnabled && _chatAvailable
+              ? 'Confirm & Continue to Chat Sync'
+              : 'Confirm Change',
+          onPressed: _confirmN42,
+          loading: _confirmingN42,
+          accentColor: accentColor,
+        ),
+        SizedBox(height: 12.h),
+        _backButton(
+          label: '← Change email address',
+          onPressed: () => setState(() {
+            _step = 0;
+            _n42CodeCtrl.clear();
+            _n42CodeError = null;
+          }),
+          subColor: subColor,
+        ),
+      ],
+    );
+  }
+
+  // ── Step 2: Chat 同步 ───────────────────────────────────────────────────────
+
+  Widget _buildStep2(Color textColor, Color subColor, Color accentColor,
+      Color fillColor, Color lineColor) {
+    const successColor = Color(0xFF22C55E);
+    const errorColor = Color(0xFFEF4444);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // N42 成功状态行
+        Row(
+          children: [
+            Icon(Icons.check_circle, color: successColor, size: 20.sp),
+            SizedBox(width: 10.w),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('N42 account email updated',
+                    style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        color: textColor)),
+                Text(_emailCtrl.text.trim(),
+                    style: TextStyle(fontSize: 12.sp, color: subColor)),
+              ],
+            ),
+          ],
+        ),
+        SizedBox(height: 20.h),
+        Divider(color: lineColor, height: 1),
+        SizedBox(height: 20.h),
+
+        // Chat 同步标题
+        Row(
+          children: [
+            Icon(Icons.chat_bubble_outline, color: accentColor, size: 18.sp),
+            SizedBox(width: 8.w),
+            Text('Sync Chat Account Email',
+                style: TextStyle(
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.bold,
+                    color: textColor)),
+          ],
+        ),
+        SizedBox(height: 20.h),
+
+        // ── 状态：正在请求 Chat 验证码 ─────────────────────────────────────
+        if (_requestingChatCode)
+          Center(
+            child: Column(
+              children: [
+                SizedBox(height: 16.h),
+                CircularProgressIndicator(color: accentColor, strokeWidth: 2),
+                SizedBox(height: 12.h),
+                Text('Sending Chat verification code...',
+                    style: TextStyle(fontSize: 13.sp, color: subColor)),
+                SizedBox(height: 8.h),
+                Text('Code will be sent to ${_emailCtrl.text.trim()}',
+                    style: TextStyle(fontSize: 12.sp, color: subColor)),
+              ],
+            ),
+          ),
+
+        // ── 状态：请求 Chat 验证码失败（连密码都没过） ─────────────────────
+        if (!_requestingChatCode && _chatSyncError != null && !_chatCodeSent)
+          ..._buildChatRequestError(
+              errorColor, subColor, accentColor, textColor, lineColor),
+
+        // ── 状态：Chat 验证码已发送，等待用户输入 ──────────────────────────
+        if (_chatCodeSent && !_requestingChatCode)
+          ..._buildChatCodeInput(
+              textColor, subColor, accentColor, fillColor, errorColor),
+      ],
+    );
+  }
+
+  List<Widget> _buildChatRequestError(Color errorColor, Color subColor,
+      Color accentColor, Color textColor, Color lineColor) {
+    return [
+      Container(
+        padding: EdgeInsets.all(12.w),
+        decoration: BoxDecoration(
+          color: errorColor.withAlpha(20),
+          borderRadius: BorderRadius.circular(8.r),
+          border: Border.all(color: errorColor.withAlpha(80)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.error_outline, color: errorColor, size: 16.sp),
+                SizedBox(width: 6.w),
+                Text('Failed to send Chat code',
+                    style: TextStyle(
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w600,
+                        color: errorColor)),
+              ],
+            ),
+            SizedBox(height: 4.h),
+            Text(_chatSyncError!,
+                style: TextStyle(fontSize: 12.sp, color: subColor)),
+          ],
+        ),
+      ),
+      SizedBox(height: 16.h),
+      Row(
+        children: [
+          Expanded(
+            child: OutlinedButton(
+              onPressed: _skipChatSync,
+              style: OutlinedButton.styleFrom(
+                foregroundColor: subColor,
+                side: BorderSide(color: lineColor),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r)),
+                padding: EdgeInsets.symmetric(vertical: 14.h),
+              ),
+              child: Text('Skip',
+                  style: TextStyle(fontSize: 15.sp)),
+            ),
+          ),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: ElevatedButton(
+              onPressed: _requestChatCode,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: accentColor,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r)),
+                padding: EdgeInsets.symmetric(vertical: 14.h),
+              ),
+              child: Text('Retry',
+                  style: TextStyle(
+                      fontSize: 15.sp, fontWeight: FontWeight.w600)),
+            ),
+          ),
+        ],
+      ),
+    ];
+  }
+
+  List<Widget> _buildChatCodeInput(Color textColor, Color subColor,
+      Color accentColor, Color fillColor, Color errorColor) {
+    return [
+      Text('Chat code sent to',
+          style: TextStyle(fontSize: 13.sp, color: subColor)),
+      SizedBox(height: 4.h),
+      Text(
+        _emailCtrl.text.trim(),
+        style: TextStyle(
+            fontSize: 15.sp,
+            fontWeight: FontWeight.w500,
+            color: accentColor),
+      ),
+      SizedBox(height: 20.h),
+
+      Text('Enter 6-digit Chat code',
+          style: TextStyle(fontSize: 13.sp, color: subColor)),
+      SizedBox(height: 8.h),
+      _codeField(
+        ctrl: _chatCodeCtrl,
+        focus: _chatCodeFocus,
+        textColor: textColor,
+        fillColor: fillColor,
+        accentColor: accentColor,
+        subColor: subColor,
+        errorText: null,
+        onChanged: (_) {
+          if (_chatSyncError != null) setState(() => _chatSyncError = null);
+        },
+        onSubmitted: (_) => _confirmChat(),
+      ),
+
+      // Chat 错误（验证码错误等）
+      if (_chatSyncError != null) ...[
+        SizedBox(height: 8.h),
+        Container(
+          padding: EdgeInsets.all(10.w),
+          decoration: BoxDecoration(
+            color: errorColor.withAlpha(20),
+            borderRadius: BorderRadius.circular(8.r),
+            border: Border.all(color: errorColor.withAlpha(80)),
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.error_outline, color: errorColor, size: 14.sp),
+              SizedBox(width: 6.w),
+              Expanded(
+                  child: Text(_chatSyncError!,
+                      style:
+                          TextStyle(fontSize: 12.sp, color: errorColor))),
+            ],
+          ),
+        ),
+      ],
+
+      SizedBox(height: 12.h),
+      _resendRow(
+        countdown: _countdown,
+        loading: _requestingChatCode,
+        onTap: _resendChatCode,
+        accentColor: accentColor,
+        subColor: subColor,
+      ),
+      SizedBox(height: 28.h),
+      _primaryButton(
+        label: 'Confirm Chat Sync',
+        onPressed: _confirmChat,
+        loading: _confirmingChat,
+        accentColor: accentColor,
+      ),
+      SizedBox(height: 12.h),
+      Center(
+        child: TextButton(
+          onPressed: _skipChatSync,
+          child: Text(
+            'Skip – N42 email is already updated',
+            style: TextStyle(color: subColor, fontSize: 13.sp),
+          ),
+        ),
+      ),
+    ];
+  }
+
+  // ─── Shared UI helpers ────────────────────────────────────────────────────────
+
+  Widget _codeField({
+    required TextEditingController ctrl,
+    required FocusNode focus,
+    required Color textColor,
+    required Color fillColor,
+    required Color accentColor,
+    required Color subColor,
+    String? errorText,
+    required ValueChanged<String> onChanged,
+    required ValueChanged<String> onSubmitted,
+  }) {
+    return TextField(
+      controller: ctrl,
+      focusNode: focus,
+      keyboardType: TextInputType.number,
+      textAlign: TextAlign.center,
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(6),
+      ],
+      style: TextStyle(
+          fontSize: 24.sp,
+          fontWeight: FontWeight.w700,
+          color: textColor,
+          letterSpacing: 8),
+      decoration: _inputDeco(
+        hint: '------',
+        fillColor: fillColor,
+        accentColor: accentColor,
+        subColor: subColor,
+        errorText: errorText,
+        counterText: '',
+      ),
+      onChanged: onChanged,
+      onSubmitted: onSubmitted,
+    );
+  }
+
+  Widget _resendRow({
+    required int countdown,
+    required bool loading,
+    required VoidCallback onTap,
+    required Color accentColor,
+    required Color subColor,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        GestureDetector(
+          onTap: (countdown > 0 || loading) ? null : onTap,
+          child: Text(
+            countdown > 0 ? 'Resend in ${countdown}s' : 'Resend code',
+            style: TextStyle(
+              fontSize: 13.sp,
+              color: countdown > 0 ? subColor : accentColor,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _primaryButton({
+    required String label,
+    required Future<void> Function() onPressed,
+    required bool loading,
+    required Color accentColor,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      height: 50.h,
+      child: ElevatedButton(
+        onPressed: loading ? null : onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: accentColor,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r)),
+        ),
+        child: loading
+            ? SizedBox(
+                width: 20.w,
+                height: 20.h,
+                child: const CircularProgressIndicator(
+                    color: Colors.white, strokeWidth: 2),
+              )
+            : Text(label,
+                style: TextStyle(
+                    fontSize: 16.sp, fontWeight: FontWeight.w600)),
+      ),
+    );
+  }
+
+  Widget _backButton({
+    required String label,
+    required VoidCallback onPressed,
+    required Color subColor,
+  }) {
+    return Center(
+      child: TextButton(
+        onPressed: onPressed,
+        child: Text(label,
+            style: TextStyle(color: subColor, fontSize: 13.sp)),
+      ),
+    );
+  }
+
+  InputDecoration _inputDeco({
     required String hint,
     required Color fillColor,
     required Color accentColor,
     required Color subColor,
     String? errorText,
     String? counterText,
+    Widget? suffixIcon,
   }) {
     return InputDecoration(
       hintText: hint,
       hintStyle: TextStyle(color: subColor),
       errorText: errorText,
       counterText: counterText,
+      suffixIcon: suffixIcon,
       filled: true,
       fillColor: fillColor,
       contentPadding:
           EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10.r),
-        borderSide: BorderSide.none,
-      ),
+          borderRadius: BorderRadius.circular(10.r),
+          borderSide: BorderSide.none),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10.r),
-        borderSide: BorderSide(color: accentColor, width: 1.5),
-      ),
+          borderRadius: BorderRadius.circular(10.r),
+          borderSide: BorderSide(color: accentColor, width: 1.5)),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10.r),
-        borderSide: const BorderSide(color: Color(0xFFEF4444), width: 1.5),
-      ),
+          borderRadius: BorderRadius.circular(10.r),
+          borderSide:
+              const BorderSide(color: Color(0xFFEF4444), width: 1.5)),
       focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10.r),
-        borderSide: const BorderSide(color: Color(0xFFEF4444), width: 1.5),
-      ),
+          borderRadius: BorderRadius.circular(10.r),
+          borderSide:
+              const BorderSide(color: Color(0xFFEF4444), width: 1.5)),
     );
   }
 }
 
-// ─── Step Indicator ───────────────────────────────────────────────────────────
+// ─── Step Indicator (supports 2 or 3 steps) ──────────────────────────────────
 
 class _StepIndicator extends StatelessWidget {
   final int currentStep;
+  final int totalSteps;
   final Color accentColor;
   final Color lineColor;
   final Color textColor;
 
   const _StepIndicator({
     required this.currentStep,
+    required this.totalSteps,
     required this.accentColor,
     required this.lineColor,
     required this.textColor,
@@ -477,26 +950,21 @@ class _StepIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        _StepDot(
-          label: '1',
-          done: currentStep > 0,
-          active: currentStep == 0,
-          accentColor: accentColor,
-          textColor: textColor,
-        ),
-        Expanded(
-          child: Container(
-            height: 1.5,
-            color: currentStep > 0 ? accentColor : lineColor,
+        for (int i = 0; i < totalSteps; i++) ...[
+          _StepDot(
+            label: '${i + 1}',
+            done: currentStep > i,
+            active: currentStep == i,
+            accentColor: accentColor,
+            textColor: textColor,
           ),
-        ),
-        _StepDot(
-          label: '2',
-          done: false,
-          active: currentStep == 1,
-          accentColor: accentColor,
-          textColor: textColor,
-        ),
+          if (i < totalSteps - 1)
+            Expanded(
+              child: Container(
+                  height: 1.5,
+                  color: currentStep > i ? accentColor : lineColor),
+            ),
+        ],
       ],
     );
   }
@@ -532,13 +1000,11 @@ class _StepDot extends StatelessWidget {
       child: Center(
         child: done
             ? Icon(Icons.check, size: 14.sp, color: accentColor)
-            : Text(
-                label,
+            : Text(label,
                 style: TextStyle(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w600,
-                    color: color),
-              ),
+                    color: color)),
       ),
     );
   }

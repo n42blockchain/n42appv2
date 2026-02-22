@@ -4,6 +4,7 @@ import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/home/setting/account_logout_page.dart';
 import 'package:n42appv2/src/home/setting/change_email_page.dart';
+import 'package:n42appv2/src/wallet/services/ens_service.dart';
 import 'package:n42appv2/src/home/widgets/nav_select_image.dart';
 import 'package:n42appv2/src/home/widgets/nav_setting_item.dart';
 import 'package:n42appv2/src/models/message_model.dart';
@@ -32,6 +33,8 @@ class _PersonalSettingState extends ConsumerState<PersonalSetting> {
   bool isEdit = false;
   UserInfo? userInfo;
   Load load = Load.finish;
+  String? _ensName;
+  bool _ensLoading = false;
 
   TextEditingController nicknameEditingController = TextEditingController();
   TextEditingController descriptionEditingController = TextEditingController();
@@ -46,6 +49,23 @@ class _PersonalSettingState extends ConsumerState<PersonalSetting> {
     userInfo = AppGlobals.userInfo;
     nicknameEditingController.text = userInfo?.name??"";
     descriptionEditingController.text = userInfo?.desc??"";
+    _resolveEnsName();
+  }
+
+  Future<void> _resolveEnsName() async {
+    final addr = userInfo?.walletAddr ?? '';
+    if (addr.isEmpty) return;
+    setState(() => _ensLoading = true);
+    try {
+      final name = await EnsServiceProvider.instance.resolveAddress(addr);
+      if (mounted && name != null && name.isNotEmpty) {
+        setState(() => _ensName = name);
+      }
+    } catch (_) {
+      // ENS 解析失败不影响页面正常使用
+    } finally {
+      if (mounted) setState(() => _ensLoading = false);
+    }
   }
 
   Future<void> saveUserInfo() async {
@@ -397,6 +417,57 @@ class _PersonalSettingState extends ConsumerState<PersonalSetting> {
                       ),
                     ),
                   ),
+                  // ── ENS Name ────────────────────────────────────────────
+                  if ((userInfo?.walletAddr ?? '').isNotEmpty) ...[
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: ScreenUtil().setWidth(40.0),
+                      ),
+                      child: Text(
+                        "ENS Name",
+                        style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(
+                              context, AppThemeKeys.mainBlueColor.name),
+                          fontSize: ScreenUtil().setSp(30.0),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.symmetric(
+                          vertical: ScreenUtil().setWidth(20.0)),
+                      decoration: BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(
+                                width: ScreenUtil().setWidth(1.0),
+                                color: AppThemeUtils.getColorByKey(
+                                    context, AppThemeKeys.itemLineColor.name),
+                              ))),
+                      child: _ensLoading
+                          ? SizedBox(
+                              width: ScreenUtil().setSp(32.0),
+                              height: ScreenUtil().setSp(32.0),
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppThemeUtils.getColorByKey(context,
+                                    AppThemeKeys.mainBlueColor.name),
+                              ),
+                            )
+                          : Text(
+                              _ensName ?? '—',
+                              style: TextStyle(
+                                color: AppThemeUtils.getColorByKey(
+                                    context,
+                                    _ensName != null
+                                        ? AppThemeKeys.mainBlueColor.name
+                                        : AppThemeKeys
+                                            .itemSubtitleTextColor.name),
+                                fontSize: ScreenUtil().setSp(30.0),
+                              ),
+                            ),
+                    ),
+                  ],
                   SizedBox(
                     height: ScreenUtil().setWidth(240.0),
                   ),
