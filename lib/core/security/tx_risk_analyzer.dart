@@ -487,10 +487,14 @@ class TxRiskAnalyzer {
   }
 
   static bool _isMaxUint256(String hex64) {
-    // Allow with or without leading zeros
-    final clean = hex64.replaceAll('0', '').replaceAll('f', '').toLowerCase();
-    return clean.isEmpty && hex64.toLowerCase().contains('f');
-    // More precise:
+    try {
+      final clean = hex64.replaceAll(RegExp(r'^0+'), '').toLowerCase();
+      if (clean.isEmpty) return false;
+      final bi = BigInt.parse(clean, radix: 16);
+      return bi == _maxUint256;
+    } catch (_) {
+      return false;
+    }
   }
 
   static bool _isUnlimitedPermitValue(dynamic value) {
@@ -529,9 +533,17 @@ class TxRiskAnalyzer {
       final clean = hexValue.startsWith('0x') ? hexValue.substring(2) : hexValue;
       if (clean.isEmpty || clean == '0') return '0 ETH';
       final wei = BigInt.parse(clean, radix: 16);
-      // 1 ETH = 10^18 wei
-      final eth = wei / BigInt.from(10).pow(18);
-      return '${eth.toStringAsFixed(6)} ETH';
+      if (wei == BigInt.zero) return '0 ETH';
+      // 1 ETH = 10^18 wei — show up to 6 decimal places
+      final divisor = BigInt.from(10).pow(18);
+      final whole = wei ~/ divisor;
+      final remainder = wei.remainder(divisor);
+      if (remainder == BigInt.zero) return '$whole ETH';
+      // Pad remainder to 18 digits, then take first 6 for display
+      final fracStr = remainder.toString().padLeft(18, '0').substring(0, 6);
+      // Remove trailing zeros
+      final trimmed = fracStr.replaceAll(RegExp(r'0+$'), '');
+      return '$whole.${trimmed.isEmpty ? '0' : trimmed} ETH';
     } catch (_) {
       return hexValue;
     }

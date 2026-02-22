@@ -301,7 +301,7 @@ class BrowserProvider extends ChangeNotifier {
         returnUrl=url;
       }
     }else{
-      returnUrl="https://www.google.com/search?q=$url";
+      returnUrl="https://www.google.com/search?q=${Uri.encodeQueryComponent(url)}";
     }
     return returnUrl;
   }

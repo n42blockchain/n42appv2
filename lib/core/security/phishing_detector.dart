@@ -151,17 +151,23 @@ class PhishingDetector {
   }
 
   bool _isBlocked(String host) {
-    if (_blocklist.contains(host)) return true;
-    for (final b in _blocklist) {
-      if (host.endsWith('.$b')) return true;
-    }
-    return false;
+    return _matchesDomainSet(host, _blocklist);
   }
 
   bool _isWhitelisted(String host) {
-    if (_whitelist.contains(host)) return true;
-    for (final w in _whitelist) {
-      if (host == w || host.endsWith('.$w')) return true;
+    return _matchesDomainSet(host, _whitelist);
+  }
+
+  /// O(k) domain match (k = number of dots in host, typically 2-4).
+  /// Checks exact match first, then walks parent domains.
+  /// e.g. "a.b.evil.com" checks: a.b.evil.com → b.evil.com → evil.com → com
+  static bool _matchesDomainSet(String host, Set<String> domainSet) {
+    if (domainSet.contains(host)) return true;
+    var idx = host.indexOf('.');
+    while (idx != -1 && idx < host.length - 1) {
+      final parent = host.substring(idx + 1);
+      if (domainSet.contains(parent)) return true;
+      idx = host.indexOf('.', idx + 1);
     }
     return false;
   }
@@ -208,6 +214,7 @@ class PhishingDetector {
       final response = await request.close();
 
       if (response.statusCode != 200) {
+        await response.drain<void>(); // consume body to free socket
         client.close();
         debugPrint('[PhishingDetector] Remote returned ${response.statusCode}');
         return;
