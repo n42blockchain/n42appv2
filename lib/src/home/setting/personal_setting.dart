@@ -3,6 +3,7 @@
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/home/setting/account_logout_page.dart';
+import 'package:n42appv2/src/home/setting/change_email_page.dart';
 import 'package:n42appv2/src/home/widgets/nav_select_image.dart';
 import 'package:n42appv2/src/home/widgets/nav_setting_item.dart';
 import 'package:n42appv2/src/models/message_model.dart';
@@ -316,23 +317,50 @@ class _PersonalSettingState extends ConsumerState<PersonalSetting> {
                       ),
                     ),
                   ),
-                  Container(
-                    width: double.infinity,
-                    alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
-                    decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                              width: ScreenUtil().setWidth(1.0),
-                              color: AppThemeUtils.getColorByKey(
-                                  context, AppThemeKeys.itemLineColor.name),
-                            ))),
-                    child: Text(
-                      userInfo?.email??"",
-                      style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.itemSubtitleTextColor.name),
-                        fontSize: ScreenUtil().setSp(30.0),
+                  InkWell(
+                    onTap: () async {
+                      final changed = await Navigator.push<bool>(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const ChangeEmailPage()),
+                      );
+                      if (changed == true && mounted) {
+                        setState(() {
+                          userInfo = AppGlobals.userInfo;
+                        });
+                      }
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.symmetric(
+                          vertical: ScreenUtil().setWidth(20.0)),
+                      decoration: BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(
+                                width: ScreenUtil().setWidth(1.0),
+                                color: AppThemeUtils.getColorByKey(
+                                    context, AppThemeKeys.itemLineColor.name),
+                              ))),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              userInfo?.email ?? '',
+                              style: TextStyle(
+                                color: AppThemeUtils.getColorByKey(context,
+                                    AppThemeKeys.itemSubtitleTextColor.name),
+                                fontSize: ScreenUtil().setSp(30.0),
+                              ),
+                            ),
+                          ),
+                          Icon(
+                            Icons.chevron_right,
+                            color: AppThemeUtils.getColorByKey(context,
+                                AppThemeKeys.itemSubtitleTextColor.name),
+                            size: ScreenUtil().setSp(36.0),
+                          ),
+                        ],
                       ),
                     ),
                   ),

@@ -411,6 +411,39 @@ class UserInfoApi{
       return mm;
     }
   }
+  /// 修改邮箱（已登录用户）
+  /// [newEmail] 新邮箱地址
+  /// [code]     发送到新邮箱的 6 位验证码
+  Future<MessageModel> changeEmail(String newEmail, String code) async {
+    try {
+      final Map<String, dynamic> params = {
+        "uuid": AppGlobals.userInfo?.uuid ?? "",
+        "token": AppGlobals.userInfo?.token ?? "",
+        "source": "app",
+        "new_email": newEmail,
+        "code": code,
+      };
+      MessageModel mm = MessageModel();
+      final data = await BaseApi.requestEmptyH.post(
+        '$url/v1/l/user/change/email',
+        params: {},
+        data: params,
+        header: header,
+      );
+      if (data['code'] == 200) {
+        mm.data = true;
+      } else {
+        mm.error = true;
+        mm.data = data['err'] ?? 'Change email failed';
+      }
+      return mm;
+    } catch (e) {
+      MessageModel mm = MessageModel.error();
+      mm.data = e.toString();
+      return mm;
+    }
+  }
+
   /// 修改密码（已登录用户，需要原密码）
   /// oldPassword: 原密码（MD5 哈希后）
   /// newPassword: 新密码（MD5 哈希后）
