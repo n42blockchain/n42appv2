@@ -3,7 +3,10 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -20,6 +23,14 @@ class SocialAuthResult {
   final String? userId;
   final String? error;
 
+  /// Apple Sign-In only: the raw (unhashed) nonce used to generate the SHA256
+  /// nonce embedded in [idToken]. Pass to your backend so it can verify the
+  /// JWT's `nonce` claim via SHA256(rawNonce).
+  final String? rawNonce;
+
+  /// True when the user explicitly cancelled the sign-in flow.
+  final bool cancelled;
+
   SocialAuthResult({
     required this.success,
     this.provider,
@@ -30,12 +41,17 @@ class SocialAuthResult {
     this.photoUrl,
     this.userId,
     this.error,
+    this.rawNonce,
+    this.cancelled = false,
   });
 
   factory SocialAuthResult.failure(String error) {
     return SocialAuthResult(success: false, error: error);
   }
 
+  factory SocialAuthResult.cancelled() {
+    return SocialAuthResult(success: false, cancelled: true);
+  }
 }
 
 /// Social authentication service
@@ -98,7 +114,7 @@ class SocialAuthService {
       );
     } on GoogleSignInException catch (e) {
       if (e.code == GoogleSignInExceptionCode.canceled) {
-        return SocialAuthResult.failure('Google sign-in cancelled');
+        return SocialAuthResult.cancelled();
       }
       debugPrint('Google Sign-In error: $e');
       return SocialAuthResult.failure(e.toString());
@@ -109,20 +125,34 @@ class SocialAuthService {
   }
 
   /// Sign in with Apple
+  ///
+  /// Generates a cryptographic nonce for each request.  Apple embeds
+  /// SHA256(rawNonce) in the returned identity token; the backend must verify
+  /// SHA256([SocialAuthResult.rawNonce]) == token's `nonce` claim.
+  ///
+  /// Apple only returns [email] and the user's full name on the **first**
+  /// authorization.  Subsequent logins have `null` for both — use
+  /// [SocialAuthResult.userId] (stable sub) to identify the account.
   Future<SocialAuthResult> signInWithApple() async {
     try {
       if (!await isAppleSignInAvailable()) {
         return SocialAuthResult.failure('Apple Sign-In not available');
       }
 
+      // Generate a secure random nonce for this sign-in attempt.
+      final rawNonce = _generateNonce();
+      final hashedNonce = _sha256ofString(rawNonce);
+
       final credential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
           AppleIDAuthorizationScopes.fullName,
         ],
+        nonce: hashedNonce,
       );
 
-      // Build display name from given name and family name
+      // Build display name from given name and family name.
+      // NOTE: Apple only provides these on first login; subsequent logins → null.
       String? displayName;
       if (credential.givenName != null || credential.familyName != null) {
         displayName = [
@@ -136,14 +166,41 @@ class SocialAuthService {
         provider: 'apple',
         idToken: credential.identityToken,
         accessToken: credential.authorizationCode,
-        email: credential.email,
+        email: credential.email,        // null on re-login — handled by backend
         displayName: displayName,
         userId: credential.userIdentifier,
+        rawNonce: rawNonce,
       );
+    } on SignInWithAppleAuthorizationException catch (e) {
+      if (e.code == AuthorizationErrorCode.canceled) {
+        return SocialAuthResult.cancelled();
+      }
+      debugPrint('Apple Sign-In authorization error: $e');
+      return SocialAuthResult.failure(e.message);
     } catch (e) {
       debugPrint('Apple Sign-In error: $e');
       return SocialAuthResult.failure(e.toString());
     }
+  }
+
+  // ─── Nonce helpers ────────────────────────────────────────────────────────
+
+  /// Generates a cryptographically-secure random 32-character nonce string.
+  String _generateNonce() {
+    const charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    final random = Random.secure();
+    return List.generate(
+      32,
+      (_) => charset[random.nextInt(charset.length)],
+    ).join();
+  }
+
+  /// Returns the SHA256 hex digest of [input].
+  String _sha256ofString(String input) {
+    final bytes = utf8.encode(input);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
   }
 
   /// Sign out from Google

@@ -212,13 +212,13 @@ class _SocialLoginButtonsState extends ConsumerState<SocialLoginButtons> {
 
       if (!mounted) return;
 
+      if (result.cancelled) return; // user dismissed — no toast
       if (!result.success) {
         widget.onError?.call(result.error ?? 'Google sign-in failed');
         ToastUtils.show(result.error ?? 'Google sign-in failed');
         return;
       }
 
-      // Send to backend
       await _loginWithSocialToken(
         provider: 'google',
         idToken: result.idToken!,
@@ -249,17 +249,18 @@ class _SocialLoginButtonsState extends ConsumerState<SocialLoginButtons> {
 
       if (!mounted) return;
 
+      if (result.cancelled) return; // user dismissed — no toast
       if (!result.success) {
         widget.onError?.call(result.error ?? 'Apple sign-in failed');
         ToastUtils.show(result.error ?? 'Apple sign-in failed');
         return;
       }
 
-      // Send to backend
       await _loginWithSocialToken(
         provider: 'apple',
         idToken: result.idToken!,
         accessToken: result.accessToken,
+        rawNonce: result.rawNonce,
       );
     } catch (e) {
       if (mounted) {
@@ -277,6 +278,7 @@ class _SocialLoginButtonsState extends ConsumerState<SocialLoginButtons> {
     required String provider,
     required String idToken,
     String? accessToken,
+    String? rawNonce,
   }) async {
     try {
       final api = UserInfoApi();
@@ -286,7 +288,12 @@ class _SocialLoginButtonsState extends ConsumerState<SocialLoginButtons> {
       if (provider == 'google') {
         data = await api.loginWithGoogle(idToken, accessToken: accessToken, deviceInfo: deviceInfo);
       } else if (provider == 'apple') {
-        data = await api.loginWithApple(idToken, accessToken ?? '', deviceInfo: deviceInfo);
+        data = await api.loginWithApple(
+          idToken,
+          accessToken ?? '',
+          rawNonce: rawNonce,
+          deviceInfo: deviceInfo,
+        );
       } else {
         throw Exception('Unsupported provider: $provider');
       }

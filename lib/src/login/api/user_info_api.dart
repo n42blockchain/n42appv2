@@ -522,12 +522,18 @@ class UserInfoApi{
   /// 第三方登录 - Apple
   /// idToken: Apple Identity Token
   /// authorizationCode: Apple Authorization Code
-  Future<dynamic> loginWithApple(String idToken, String authorizationCode, {Map<String, dynamic>? deviceInfo}) async {
+  Future<dynamic> loginWithApple(
+    String idToken,
+    String authorizationCode, {
+    String? rawNonce,
+    Map<String, dynamic>? deviceInfo,
+  }) async {
     Map<String, dynamic> params = {
       "provider": "apple",
       "id_token": idToken,
       "authorization_code": authorizationCode,
       "source": "app",
+      "nonce": ?rawNonce,
     };
     if (deviceInfo != null) {
       params.addAll(deviceInfo);

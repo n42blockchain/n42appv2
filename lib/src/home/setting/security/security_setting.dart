@@ -3,6 +3,7 @@ import 'package:n42appv2/src/home/setting/security/gesture_password_setting.dart
 import 'package:n42appv2/src/home/setting/security/lock_screen_resetpassword.dart';
 import 'package:n42appv2/src/home/setting/security/security_edit.dart';
 import 'package:n42appv2/src/home/widgets/face_recognition_public.dart';
+import 'package:n42appv2/src/login/pages/change_password_page.dart';
 import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
@@ -102,6 +103,19 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
                   ),
                 ),
               ),
+              // ── 修改登录密码 ─────────────────────────────────────────
+              if (AppGlobals.userInfo != null)
+                rowItemNew(
+                  S.of(context).g_key_change_password,
+                  false, // not a toggle — just a navigation arrow
+                  () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const ChangePasswordPage()),
+                    );
+                  },
+                ),
               rowItemNew(
                 S.of(context).email_verification,
                 securityMap['email'],()async{
