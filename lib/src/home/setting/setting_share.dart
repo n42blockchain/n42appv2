@@ -1,4 +1,4 @@
-﻿import 'dart:ui' as ui;
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -38,59 +38,55 @@ class _SettingShareState extends State<SettingShare> {
     return _loginApi!;
   }
 
+  String? get _uuid => AppGlobals.userInfo?.uuid;
+
   @override
   void initState() {
     super.initState();
     linkStr =
-    '${AppConfig.apiUrl['walletamazeBrowser']!}/download?uuid=${AppGlobals.userInfo?.uuid ?? ""}&code=${AppGlobals.userInfo?.inviteCode ?? ""}';
-    getInviteeListDownload();
-    getInviteeList();
-    getInviteeMiningCount();
-    getInviteeMiningInfo();
+        '${AppConfig.apiUrl['walletamazeBrowser']!}/download?uuid=${_uuid ?? ""}&code=${AppGlobals.userInfo?.inviteCode ?? ""}';
+    _loadAllStats();
   }
 
-  Future<void> getInviteeMiningInfo() async {
-    if (AppGlobals.userInfo != null) {
-      var dataList =
-      await loginApi.getInviteeMiningInfo(AppGlobals.userInfo?.uuid ?? '');
-      if (dataList != null) {
-        rewardTotal =
-            double.parse((dataList['total_reward'] ?? "0.0").toString());
-        setState(() {});
-      }
+  Future<void> _loadAllStats() async {
+    if (_uuid == null) return;
+    await Future.wait([
+      _loadInviteeDownloadCount(),
+      _loadInviteeCount(),
+      _loadMiningCount(),
+      _loadMiningReward(),
+    ]);
+  }
+
+  Future<void> _loadMiningReward() async {
+    final data = await loginApi.getInviteeMiningInfo(_uuid ?? '');
+    if (data != null) {
+      rewardTotal = double.parse((data['total_reward'] ?? "0.0").toString());
+      setState(() {});
     }
   }
 
-  Future<void> getInviteeMiningCount() async {
-    if (AppGlobals.userInfo != null) {
-      var dataList =
-      await loginApi.getInviteeMiningCount(AppGlobals.userInfo?.uuid ?? '');
-      if (dataList != null) {
-        miningTotal = int.parse((dataList['total'] ?? 0).toString());
-        setState(() {});
-      }
+  Future<void> _loadMiningCount() async {
+    final data = await loginApi.getInviteeMiningCount(_uuid ?? '');
+    if (data != null) {
+      miningTotal = int.parse((data['total'] ?? 0).toString());
+      setState(() {});
     }
   }
 
-  Future<void> getInviteeListDownload() async {
-    if (AppGlobals.userInfo != null) {
-      var dataList =
-      await loginApi.getInviteeDownloadList(AppGlobals.userInfo?.uuid ?? '');
-      if (dataList != null) {
-        inviteeTotalDown = int.parse(dataList['total'].toString());
-        setState(() {});
-      }
+  Future<void> _loadInviteeDownloadCount() async {
+    final data = await loginApi.getInviteeDownloadList(_uuid ?? '');
+    if (data != null) {
+      inviteeTotalDown = int.parse(data['total'].toString());
+      setState(() {});
     }
   }
 
-  Future<void> getInviteeList() async {
-    if (AppGlobals.userInfo != null) {
-      var dataList =
-      await loginApi.getInviteeList(AppGlobals.userInfo?.uuid ?? '');
-      if (dataList != null) {
-        inviteeTotal = int.parse(dataList['total'].toString());
-        setState(() {});
-      }
+  Future<void> _loadInviteeCount() async {
+    final data = await loginApi.getInviteeList(_uuid ?? '');
+    if (data != null) {
+      inviteeTotal = int.parse(data['total'].toString());
+      setState(() {});
     }
   }
 
@@ -101,7 +97,7 @@ class _SettingShareState extends State<SettingShare> {
           .findRenderObject() as RenderRepaintBoundary;
       ui.Image image = await boundary.toImage(pixelRatio: 3.0);
       ByteData? byteData =
-      await image.toByteData(format: ui.ImageByteFormat.png);
+          await image.toByteData(format: ui.ImageByteFormat.png);
       Uint8List pngBytes = byteData!.buffer.asUint8List();
 
       if (!mounted) return;
@@ -116,7 +112,7 @@ class _SettingShareState extends State<SettingShare> {
             ),
           ],
           text:
-          "${S.of(context).g_share_v3_key_3} ${S.of(context).g_share_v3_key_4} 25 ${S.of(context).g_share_v3_key_5}",
+              "${S.of(context).g_share_v3_key_3} ${S.of(context).g_share_v3_key_4} 25 ${S.of(context).g_share_v3_key_5}",
           sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
         ),
       );
@@ -125,7 +121,7 @@ class _SettingShareState extends State<SettingShare> {
     }
   }
 
-  void share() {
+  void _share() {
     sheetBottom(
       context,
       "",
@@ -135,12 +131,22 @@ class _SettingShareState extends State<SettingShare> {
         } else {
           SharePlus.instance.share(
             ShareParams(
-              text: "${S.of(context).g_share_v3_key_3} ${S.of(context).g_share_v3_key_4} 25 ${S.of(context).g_share_v3_key_5} ${S.of(context).g_share_v3_key_7}: $linkStr",
+              text:
+                  "${S.of(context).g_share_v3_key_3} ${S.of(context).g_share_v3_key_4} 25 ${S.of(context).g_share_v3_key_5} ${S.of(context).g_share_v3_key_7}: $linkStr",
               subject: AppConfig.apiUrl['walletamazeBrowser'],
             ),
           );
         }
       }),
+    );
+  }
+
+  void _copyToClipboard(String text) {
+    ToastUtils.init(context);
+    Clipboard.setData(ClipboardData(text: text));
+    ToastUtils.showFtToast(
+      child: successViewV1(S.of(context).copy),
+      duration: 3,
     );
   }
 
@@ -167,7 +173,7 @@ class _SettingShareState extends State<SettingShare> {
                       ),
                     ),
                     _buildStatsRow(context),
-                    shareWidget(),
+                    _buildShareContent(),
                     SizedBox(height: ScreenUtil().setWidth(148.0)),
                   ],
                 ),
@@ -181,9 +187,7 @@ class _SettingShareState extends State<SettingShare> {
                 icon: const Icon(Icons.arrow_back_ios),
                 color: AppThemeUtils.getColorByKey(
                     context, AppThemeKeys.mainTextColor.name),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+                onPressed: () => Navigator.pop(context),
               ),
             ),
             Positioned(
@@ -198,10 +202,10 @@ class _SettingShareState extends State<SettingShare> {
                     height: ScreenUtil().setWidth(148.0),
                     child: buttonStyle2(
                       context,
-                          () => share(),
+                      _share,
                       S.of(context).g_share_v2_key_5,
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -223,14 +227,19 @@ class _SettingShareState extends State<SettingShare> {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.itemBgColor.name),
       ),
       child: Row(
         children: [
-          _buildStatsCell(context, S.of(context).g_referral_invited, inviteeTotal.toString()),
-          _buildStatsCell(context, S.of(context).g_referral_downloaded, inviteeTotalDown.toString()),
-          _buildStatsCell(context, S.of(context).g_referral_mining, miningTotal.toString()),
-          _buildStatsCell(context, S.of(context).g_referral_reward, rewardTotal.toStringAsFixed(2)),
+          _buildStatsCell(context, S.of(context).g_referral_invited,
+              inviteeTotal.toString()),
+          _buildStatsCell(context, S.of(context).g_referral_downloaded,
+              inviteeTotalDown.toString()),
+          _buildStatsCell(context, S.of(context).g_referral_mining,
+              miningTotal.toString()),
+          _buildStatsCell(context, S.of(context).g_referral_reward,
+              rewardTotal.toStringAsFixed(2)),
         ],
       ),
     );
@@ -245,7 +254,8 @@ class _SettingShareState extends State<SettingShare> {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(36.0),
               fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.mainTextColor.name),
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(4.0)),
@@ -263,12 +273,58 @@ class _SettingShareState extends State<SettingShare> {
     );
   }
 
-  Widget shareWidget() {
+  Widget _buildCopyableRow(String label, String value) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
+        color: AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.itemBgColor.name),
+      ),
+      child: Row(
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(26.0),
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.itemTextColor.name),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(26.0),
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.itemTextColor.name),
+              ),
+            ),
+          ),
+          SizedBox(width: ScreenUtil().setWidth(16.0)),
+          InkWell(
+            onTap: () => _copyToClipboard(value),
+            child: Icon(
+              Icons.copy,
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.mainBlueColor.name),
+              size: ScreenUtil().setWidth(32.0),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildShareContent() {
     return RepaintBoundary(
       key: previewContainer,
       child: Container(
-        color:
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+        color: AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.backGroundColor.name),
         child: Column(
           children: [
             SizedBox(height: ScreenUtil().setWidth(30)),
@@ -307,121 +363,26 @@ class _SettingShareState extends State<SettingShare> {
                 ),
               ),
             ),
-            Container(
-              alignment: Alignment.centerLeft,
-              margin:
-              EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
-              padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemBgColor.name),
-              ),
-              child: Row(
-                children: [
-                  Text(
-                    S.of(context).g_share_v3_key_7,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(26.0),
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemTextColor.name),
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      linkStr,
-                      textAlign: TextAlign.end,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(26.0),
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.itemTextColor.name),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: ScreenUtil().setWidth(16.0)),
-                  InkWell(
-                    onTap: () {
-                      ToastUtils.init(context);
-                      Clipboard.setData(ClipboardData(text: linkStr));
-                      ToastUtils.showFtToast(
-                        child: successViewV1(S.of(context).copy),
-                        duration: 3,
-                      );
-                    },
-                    child: Icon(
-                      Icons.copy,
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
-                      size: ScreenUtil().setWidth(32.0),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            _buildCopyableRow(S.of(context).g_share_v3_key_7, linkStr),
             SizedBox(height: ScreenUtil().setWidth(30.0)),
-            Container(
-              alignment: Alignment.centerLeft,
-              margin:
-              EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
-              padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemBgColor.name),
-              ),
-              child: Row(
-                children: [
-                  Text(
-                    S.of(context).g_share_v3_key_8,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(26.0),
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemTextColor.name),
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      AppGlobals.userInfo?.inviteCode ?? "",
-                      textAlign: TextAlign.end,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(26.0),
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.itemTextColor.name),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: ScreenUtil().setWidth(16.0)),
-                  InkWell(
-                    onTap: () {
-                      ToastUtils.init(context);
-                      Clipboard.setData(
-                          ClipboardData(text: AppGlobals.userInfo?.inviteCode ?? ""));
-                      ToastUtils.showFtToast(
-                        child: successViewV1(S.of(context).copy),
-                        duration: 3,
-                      );
-                    },
-                    child: Icon(
-                      Icons.copy,
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
-                      size: ScreenUtil().setWidth(32.0),
-                    ),
-                  ),
-                ],
-              ),
+            _buildCopyableRow(
+              S.of(context).g_share_v3_key_8,
+              AppGlobals.userInfo?.inviteCode ?? "",
             ),
             Container(
-              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(70)),
+              padding:
+                  EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(70)),
               alignment: Alignment.center,
               child: Container(
                 width: 240,
                 height: 240,
                 decoration: BoxDecoration(
                   border: Border.all(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemLineColor.name)),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(40.0)),
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.itemLineColor.name),
+                  ),
+                  borderRadius:
+                      BorderRadius.circular(ScreenUtil().setWidth(40.0)),
                   color: AppThemeUtils.getColorByKey(
                       context, AppThemeKeys.mainWhiteColor.name),
                 ),

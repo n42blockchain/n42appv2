@@ -221,12 +221,9 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
   ) {
     const maxSlices = 8;
     final sliceRecords = records.take(maxSlices).toList();
-    double othersValue = 0;
-    if (records.length > maxSlices) {
-      for (var i = maxSlices; i < records.length; i++) {
-        othersValue += records[i].value;
-      }
-    }
+    final othersValue = records.length > maxSlices
+        ? records.skip(maxSlices).fold(0.0, (sum, r) => sum + r.value)
+        : 0.0;
 
     final sections = <PieChartSectionData>[];
     for (var i = 0; i < sliceRecords.length; i++) {
@@ -418,6 +415,8 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
       });
 
     final gainers = sorted.where((r) => r.percentage >= 0).take(3).toList();
+    // 从 sorted（gain 降序）中取亏损项，reversed 使亏损最大的在前，
+    // take(3) 取前三，再 reversed 恢复为亏损从小到大。
     final losers = sorted.reversed
         .where((r) => r.percentage < 0)
         .take(3)
