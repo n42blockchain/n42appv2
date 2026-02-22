@@ -28,6 +28,7 @@ import 'package:n42appv2/src/wallet/widgets/feature_entry_cards.dart';
 import 'package:n42appv2/src/wallet/widgets/wallet_board.dart';
 import 'package:n42appv2/src/wallet/widgets/wallet_search_coin.dart';
 import 'package:n42appv2/src/wallet/pages/ens/ens_home_page.dart';
+import 'package:n42appv2/src/wallet/pages/portfolio/portfolio_page.dart';
 import 'package:n42appv2/src/wallet/pages/aa/aa_home_page.dart';
 import 'package:n42appv2/src/wallet/services/ens_service.dart';
 import 'package:n42appv2/src/wallet_connect/pages/wallet_connect_page.dart';
@@ -768,6 +769,28 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                     ),
                   ),
                   const Spacer(),
+                  // 投资组合分析入口
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => const PortfolioPage())),
+                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil().setWidth(10),
+                          vertical: ScreenUtil().setWidth(6),
+                        ),
+                        child: Icon(
+                          Icons.donut_large_rounded,
+                          size: ScreenUtil().setWidth(36),
+                          color: AppThemeUtils.getColorByKey(
+                              context, AppThemeKeys.itemSubtitleTextColor.name),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: ScreenUtil().setWidth(4)),
                   // 网络选择器
                   Material(
                     color: Colors.transparent,
