@@ -62,13 +62,17 @@ class _UnlockState extends ConsumerState<Unlock> {
     
     if (dOld != 0) {
       int dNow = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-      if (dNow - dOld < 55) {
+      final elapsed = dNow - dOld;
+      if (elapsed < 60) {
+        // 倒计时仍在进行：还剩 (60 - elapsed) 秒
         setState(() {
-          passwordUnlock = 60 - (dNow - dOld);
+          passwordUnlock = 60 - elapsed;
         });
         passwordLock(setData: false);
         return;
       }
+      // elapsed >= 60：锁定已到期，清除时间戳，正常进入解锁流程
+      ref.read(screenLockProvider.notifier).setPasswordLockTimestamp(0);
     }
     
     if (lockState.faceEnabled) {

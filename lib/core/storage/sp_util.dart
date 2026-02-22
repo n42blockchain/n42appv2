@@ -178,6 +178,27 @@ class SPUtil {
     return prefs?.getBool(SPkey.showTermsOfService.name) ?? false;
   }
 
+  // ── 锁屏后台计时（跨进程持久化） ──────────────────────────────────────────
+  //
+  // 在 AppLifecycleState.hidden / paused 时写入时间戳，应用恢复后读取并清除。
+  // 目的：即使 OS 在后台杀死进程，重启后仍可判断后台时长是否超过锁屏超时。
+
+  Future<void> setPausedAt(int timestampSeconds) async {
+    await initPrefs();
+    await prefs!.setInt(SPkey.lockPausedAt.name, timestampSeconds);
+  }
+
+  Future<int?> getPausedAt() async {
+    await initPrefs();
+    final v = prefs?.getInt(SPkey.lockPausedAt.name);
+    return (v != null && v > 0) ? v : null;
+  }
+
+  Future<void> clearPausedAt() async {
+    await initPrefs();
+    await prefs?.remove(SPkey.lockPausedAt.name);
+  }
+
   // 是否使用新聊天模块 (N42 Chat)
   Future<void> setUseNewChat(bool value) async {
     await initPrefs();
@@ -283,5 +304,6 @@ enum SPkey {
   recentSendAddresses, // 最近转账地址 JSON：Map<coinType, List<{address,name?,time}>>
   gasAlertSettings, // Gas 价格提醒配置 JSON：Map<symbol, GasAlertConfig>
   ensExpiryReminders, // ENS 域名到期提醒配置 JSON：Map<domainName, EnsExpiryReminderConfig>
+  lockPausedAt, // 应用进入后台时的 Unix 时间戳（秒），用于跨进程重启的锁屏计时
 }
 

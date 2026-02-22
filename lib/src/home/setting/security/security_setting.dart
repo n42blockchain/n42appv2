@@ -23,6 +23,13 @@ class SecuritySetting extends ConsumerStatefulWidget{
 
 class _SecuritySettingState extends ConsumerState<SecuritySetting>{
   List<String> lockTimeList=["10","30","60","120","180","240","300","600"];
+
+  /// 将秒数格式化为人类可读形式：< 60 显示秒，≥ 60 显示分钟
+  String _formatLockTime(int seconds) {
+    if (seconds < 60) return '${seconds}s';
+    final minutes = seconds ~/ 60;
+    return '${minutes}min';
+  }
   Map<String,dynamic> securityMap={
     "email":false,
     "google":false,
@@ -425,7 +432,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
                 ),
               ),),
             Text(
-              "${screenLockState.lockTimeSeconds} s",
+              _formatLockTime(screenLockState.lockTimeSeconds),
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                 fontSize: ScreenUtil().setSp(30.0),
@@ -471,7 +478,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting>{
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "$title s",
+                      _formatLockTime(int.parse(title)),
                       style: TextStyle(
                         color: titleColor,
                         fontSize: ScreenUtil().setSp(28.0),
