@@ -424,5 +424,6 @@ enum SPkey {
   mainChainMining, // 是否使用主链挖矿
   miningUiVersion, // 挖矿 UI 版本：true = V2（默认），false = V1
   marketWatchlist, // 行情自选列表，JSON List<String> 存 coin symbol（lowercase）
+  coinPriceAlerts, // 币价到价提醒配置，JSON Map<coinId, CoinPriceAlertConfig>
 }
 

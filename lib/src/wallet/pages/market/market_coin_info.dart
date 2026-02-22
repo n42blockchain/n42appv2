@@ -11,6 +11,8 @@ import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/utils/regular.dart';
 import 'package:n42appv2/src/wallet/api/market_api.dart';
+import 'package:n42appv2/src/wallet/pages/market/price_alert_sheet.dart';
+import 'package:n42appv2/src/wallet/services/coin_price_alert_service.dart';
 import 'package:n42appv2/src/wallet/widgets/about_show_dialog.dart';
 import 'package:n42appv2/src/widgets/candlestick_chart.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
@@ -61,6 +63,9 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
   bool _chartLoading = false;
   int  _chartGeneration = 0; // stale-response cancellation counter
 
+  // ─── price alert state ────────────────────────────────────────────────────
+  CoinPriceAlertConfig? _alertConfig;
+
   // ─── lifecycle ─────────────────────────────────────────────────────────────
 
   @override
@@ -74,6 +79,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
     _priceChange24h = _toDouble(_coin['price_change_per_24h']);
     _fetchCoinPrice();
     _fetchCoinInfo();
+    _loadAlertConfig();
   }
 
   @override
@@ -83,6 +89,30 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
   }
 
   // ─── data fetching ─────────────────────────────────────────────────────────
+
+  Future<void> _loadAlertConfig() async {
+    final coinId = (_coin['coin_gecko_id'] ?? '').toString().trim();
+    if (coinId.isEmpty) return;
+    final all = await CoinPriceAlertService.loadAll();
+    if (!mounted) return;
+    setState(() => _alertConfig = all[coinId]);
+  }
+
+  Future<void> _openAlertSheet() async {
+    final coinId = (_coin['coin_gecko_id'] ?? '').toString().trim();
+    final symbol = (_coin['coin'] ?? '').toString().trim();
+    final name = (_coin['name'] ?? '').toString().trim();
+    final price = _toDouble(_coin['price']);
+
+    final changed = await showPriceAlertSheet(
+      context: context,
+      coinId: coinId,
+      symbol: symbol,
+      name: name,
+      currentPrice: price,
+    );
+    if (changed == true) await _loadAlertConfig();
+  }
 
   Future<void> _fetchCoinPrice() async {
     final coinSymbol = (_coin['coin'] ?? '').toString().trim();
@@ -339,6 +369,25 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            // Price alert bell
+            InkWell(
+              onTap: _openAlertSheet,
+              borderRadius: BorderRadius.circular(20),
+              child: Padding(
+                padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
+                child: Icon(
+                  (_alertConfig != null && _alertConfig!.enabled)
+                      ? Icons.notifications_active_rounded
+                      : Icons.notifications_none_rounded,
+                  color: (_alertConfig != null && _alertConfig!.enabled)
+                      ? AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.mainBlueColor.name)
+                      : AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.mainTextColor.name),
+                  size: ScreenUtil().setWidth(44),
+                ),
               ),
             ),
           ],
