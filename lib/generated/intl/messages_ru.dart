@@ -464,6 +464,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_face_9": MessageLookupByLibrary.simpleMessage(
       "Рекомендуется повторно включить биометрию.",
     ),
+    "g_face_liveness_failed": MessageLookupByLibrary.simpleMessage(
+      "Лицо не обнаружено. Посмотрите прямо в камеру и повторите попытку.",
+    ),
     "g_face_match_key1": MessageLookupByLibrary.simpleMessage(
       "Метод сопоставления лица",
     ),
@@ -542,6 +545,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_face_match_key8": MessageLookupByLibrary.simpleMessage("Выбрать заново"),
     "g_face_match_key9": MessageLookupByLibrary.simpleMessage("Сопоставить"),
+    "g_face_network_error": MessageLookupByLibrary.simpleMessage(
+      "Ошибка сети. Проверьте подключение и повторите попытку.",
+    ),
+    "g_face_sdk_init_failed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось запустить распознавание лиц. Повторите попытку.",
+    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("Профиль"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("Новости"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("Верификация"),

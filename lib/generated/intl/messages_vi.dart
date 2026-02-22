@@ -440,6 +440,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_face_9": MessageLookupByLibrary.simpleMessage(
       "Khuyến nghị bạn kích hoạt lại sinh trắc học.",
     ),
+    "g_face_liveness_failed": MessageLookupByLibrary.simpleMessage(
+      "Không phát hiện được khuôn mặt. Vui lòng nhìn thẳng vào camera và thử lại.",
+    ),
     "g_face_match_key1": MessageLookupByLibrary.simpleMessage(
       "Phương thức khớp khuôn mặt",
     ),
@@ -514,6 +517,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_face_match_key7": MessageLookupByLibrary.simpleMessage("Khớp khuôn mặt"),
     "g_face_match_key8": MessageLookupByLibrary.simpleMessage("Chọn lại"),
     "g_face_match_key9": MessageLookupByLibrary.simpleMessage("Khớp"),
+    "g_face_network_error": MessageLookupByLibrary.simpleMessage(
+      "Lỗi mạng. Vui lòng kiểm tra kết nối và thử lại.",
+    ),
+    "g_face_sdk_init_failed": MessageLookupByLibrary.simpleMessage(
+      "Không thể khởi động nhận diện khuôn mặt. Vui lòng thử lại.",
+    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("Hồ sơ"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("Tin tức"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("Xác minh"),

@@ -491,6 +491,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_face_9": MessageLookupByLibrary.simpleMessage(
       "Il est recommandé de réactiver la biométrie.",
     ),
+    "g_face_liveness_failed": MessageLookupByLibrary.simpleMessage(
+      "Visage non détecté. Veuillez regarder directement la caméra et réessayer.",
+    ),
     "g_face_match_key1": MessageLookupByLibrary.simpleMessage(
       "Méthode de correspondance faciale",
     ),
@@ -571,6 +574,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_face_match_key8": MessageLookupByLibrary.simpleMessage("Resélectionner"),
     "g_face_match_key9": MessageLookupByLibrary.simpleMessage("Correspondre"),
+    "g_face_network_error": MessageLookupByLibrary.simpleMessage(
+      "Erreur réseau. Veuillez vérifier votre connexion et réessayer.",
+    ),
+    "g_face_sdk_init_failed": MessageLookupByLibrary.simpleMessage(
+      "Impossible de démarrer la reconnaissance faciale. Veuillez réessayer.",
+    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("Profil"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("Actualités"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("Vérification"),

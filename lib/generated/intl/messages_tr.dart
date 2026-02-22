@@ -453,6 +453,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_face_9": MessageLookupByLibrary.simpleMessage(
       "Biyometriği yeniden etkinleştirmeniz önerilir.",
     ),
+    "g_face_liveness_failed": MessageLookupByLibrary.simpleMessage(
+      "Yüz algılanamadı. Lütfen kameraya doğrudan bakın ve tekrar deneyin.",
+    ),
     "g_face_match_key1": MessageLookupByLibrary.simpleMessage(
       "Yüz eşleştirme yöntemi",
     ),
@@ -531,6 +534,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_face_match_key7": MessageLookupByLibrary.simpleMessage("Yüz eşleştirme"),
     "g_face_match_key8": MessageLookupByLibrary.simpleMessage("Yeniden seç"),
     "g_face_match_key9": MessageLookupByLibrary.simpleMessage("Eşleştir"),
+    "g_face_network_error": MessageLookupByLibrary.simpleMessage(
+      "Ağ hatası. Lütfen bağlantınızı kontrol edin ve tekrar deneyin.",
+    ),
+    "g_face_sdk_init_failed": MessageLookupByLibrary.simpleMessage(
+      "Yüz tanıma başlatılamadı. Lütfen tekrar deneyin.",
+    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("Profil"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("Haberler"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("Doğrulama"),

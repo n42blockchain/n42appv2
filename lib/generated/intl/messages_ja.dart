@@ -380,6 +380,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_face_8": MessageLookupByLibrary.simpleMessage("戻る"),
     "g_face_9": MessageLookupByLibrary.simpleMessage("生体認証を再度有効にすることをお勧めします。"),
+    "g_face_liveness_failed": MessageLookupByLibrary.simpleMessage(
+      "顔が検出されませんでした。カメラを正面から見て、もう一度お試しください。",
+    ),
     "g_face_match_key1": MessageLookupByLibrary.simpleMessage("顔認証方法"),
     "g_face_match_key10": m4,
     "g_face_match_key11": m5,
@@ -442,6 +445,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_face_match_key7": MessageLookupByLibrary.simpleMessage("顔認証マッチング"),
     "g_face_match_key8": MessageLookupByLibrary.simpleMessage("再選択"),
     "g_face_match_key9": MessageLookupByLibrary.simpleMessage("マッチング"),
+    "g_face_network_error": MessageLookupByLibrary.simpleMessage(
+      "ネットワークエラーです。接続を確認してもう一度お試しください。",
+    ),
+    "g_face_sdk_init_failed": MessageLookupByLibrary.simpleMessage(
+      "顔認証を開始できませんでした。もう一度お試しください。",
+    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("プロフィール"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("ニュース"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("認証"),

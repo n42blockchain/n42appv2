@@ -472,6 +472,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_face_9": MessageLookupByLibrary.simpleMessage(
       "Es wird empfohlen, die Biometrie erneut zu aktivieren.",
     ),
+    "g_face_liveness_failed": MessageLookupByLibrary.simpleMessage(
+      "Gesicht nicht erkannt. Bitte schauen Sie direkt in die Kamera und versuchen Sie es erneut.",
+    ),
     "g_face_match_key1": MessageLookupByLibrary.simpleMessage(
       "Gesichtsabgleich-Methode",
     ),
@@ -556,6 +559,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Erneut auswaehlen",
     ),
     "g_face_match_key9": MessageLookupByLibrary.simpleMessage("Abgleichen"),
+    "g_face_network_error": MessageLookupByLibrary.simpleMessage(
+      "Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+    ),
+    "g_face_sdk_init_failed": MessageLookupByLibrary.simpleMessage(
+      "Gesichtserkennung konnte nicht gestartet werden. Bitte versuchen Sie es erneut.",
+    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("Profil"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("Nachrichten"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("Verifizierung"),

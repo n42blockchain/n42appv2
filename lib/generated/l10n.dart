@@ -4199,6 +4199,36 @@ class S {
     );
   }
 
+  /// `Face not detected. Please look directly at the camera and try again.`
+  String get g_face_liveness_failed {
+    return Intl.message(
+      'Face not detected. Please look directly at the camera and try again.',
+      name: 'g_face_liveness_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to start face recognition. Please try again.`
+  String get g_face_sdk_init_failed {
+    return Intl.message(
+      'Failed to start face recognition. Please try again.',
+      name: 'g_face_sdk_init_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Network error. Please check your connection and try again.`
+  String get g_face_network_error {
+    return Intl.message(
+      'Network error. Please check your connection and try again.',
+      name: 'g_face_network_error',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Match successful.Address:{value}.`
   String g_face_match_key4(Object value) {
     return Intl.message(

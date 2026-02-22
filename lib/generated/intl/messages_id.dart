@@ -464,6 +464,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_face_9": MessageLookupByLibrary.simpleMessage(
       "Disarankan untuk mengaktifkan kembali biometrik.",
     ),
+    "g_face_liveness_failed": MessageLookupByLibrary.simpleMessage(
+      "Wajah tidak terdeteksi. Silakan lihat langsung ke kamera dan coba lagi.",
+    ),
     "g_face_match_key1": MessageLookupByLibrary.simpleMessage(
       "Metode pencocokan wajah",
     ),
@@ -546,6 +549,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_face_match_key8": MessageLookupByLibrary.simpleMessage("Pilih ulang"),
     "g_face_match_key9": MessageLookupByLibrary.simpleMessage("Cocokkan"),
+    "g_face_network_error": MessageLookupByLibrary.simpleMessage(
+      "Kesalahan jaringan. Silakan periksa koneksi Anda dan coba lagi.",
+    ),
+    "g_face_sdk_init_failed": MessageLookupByLibrary.simpleMessage(
+      "Gagal memulai pengenalan wajah. Silakan coba lagi.",
+    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("Profil"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("Berita"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("Verifikasi"),

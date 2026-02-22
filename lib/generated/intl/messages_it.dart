@@ -469,6 +469,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_face_9": MessageLookupByLibrary.simpleMessage(
       "Si consiglia di riattivare la biometria.",
     ),
+    "g_face_liveness_failed": MessageLookupByLibrary.simpleMessage(
+      "Volto non rilevato. Guarda direttamente la telecamera e riprova.",
+    ),
     "g_face_match_key1": MessageLookupByLibrary.simpleMessage(
       "Metodo di riconoscimento facciale",
     ),
@@ -549,6 +552,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_face_match_key8": MessageLookupByLibrary.simpleMessage("Riseleziona"),
     "g_face_match_key9": MessageLookupByLibrary.simpleMessage("Abbina"),
+    "g_face_network_error": MessageLookupByLibrary.simpleMessage(
+      "Errore di rete. Controlla la connessione e riprova.",
+    ),
+    "g_face_sdk_init_failed": MessageLookupByLibrary.simpleMessage(
+      "Impossibile avviare il riconoscimento facciale. Riprova.",
+    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("Profilo"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("Notizie"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("Verifica"),

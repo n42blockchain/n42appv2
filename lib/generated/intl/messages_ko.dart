@@ -379,6 +379,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_face_9": MessageLookupByLibrary.simpleMessage(
       "생체 인식을 다시 활성화하는 것이 좋습니다.",
     ),
+    "g_face_liveness_failed": MessageLookupByLibrary.simpleMessage(
+      "얼굴이 감지되지 않았습니다. 카메라를 정면으로 바라보고 다시 시도해 주세요.",
+    ),
     "g_face_match_key1": MessageLookupByLibrary.simpleMessage("얼굴 매칭 방법"),
     "g_face_match_key10": m4,
     "g_face_match_key11": m5,
@@ -441,6 +444,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_face_match_key7": MessageLookupByLibrary.simpleMessage("얼굴 매칭"),
     "g_face_match_key8": MessageLookupByLibrary.simpleMessage("다시 선택"),
     "g_face_match_key9": MessageLookupByLibrary.simpleMessage("매칭"),
+    "g_face_network_error": MessageLookupByLibrary.simpleMessage(
+      "네트워크 오류입니다. 연결을 확인하고 다시 시도해 주세요.",
+    ),
+    "g_face_sdk_init_failed": MessageLookupByLibrary.simpleMessage(
+      "얼굴 인식을 시작할 수 없습니다. 다시 시도해 주세요.",
+    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("프로필"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("뉴스"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("검증"),
