@@ -19,7 +19,6 @@ import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/api/market_api.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
@@ -27,7 +26,6 @@ import 'package:n42appv2/src/widgets/custom_popup_menu_wrap.dart';
 import 'package:n42appv2/src/widgets/detail_refresh_widget.dart';
 import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:n42appv2/src/widgets/loading.dart';
-import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -90,9 +88,6 @@ class _TodayMiningPageState extends State<TodayMiningPage> {
 
   ///定时器 间隔15s监测挖矿状态
   Timer? _timer;
-
-  final CustomPopupMenuController _tipsWindowController =
-  CustomPopupMenuController();
 
   double astPrice = 0;
 
@@ -161,8 +156,8 @@ class _TodayMiningPageState extends State<TodayMiningPage> {
 
 
   totalValueData() async {
-    Decimal value1 = await getTotalValue(astAddress ?? '');
-    Decimal value2= await getAccountRewardUnpaid(astAddress ?? '');
+    Decimal value1 = await getTotalValue(astAddress);
+    Decimal value2= await getAccountRewardUnpaid(astAddress);
     totalValue = 0;
     totalValue = value1.toDouble() + value2.toDouble();
     globalMiningV1.setMiningIncome(totalValue);
@@ -202,7 +197,6 @@ class _TodayMiningPageState extends State<TodayMiningPage> {
       //{jsonrpc: 2.0, id: 1, result: {address: 0x588639773bc6f163aa262245cda746c120676431, data: [{value: 0, timestamp: 1670467644, blockNumber: 0x1}, {value: 0, timestamp: 1670467684, blockNumber: 0x6}]}}
       debugPrint("24H挖矿收益:$revenue24Data");
       if (revenue24Data != null) {
-        final data = revenue24Data["result"]['data'];
         String total = revenue24Data["result"]['total'];
         if (total.isNotEmpty) {
           BigInt? value = hexToInt(total);
@@ -227,7 +221,7 @@ class _TodayMiningPageState extends State<TodayMiningPage> {
       if (data24 != null) {
         String? total = data24["result"]['totalBlocks'];
         if (total !=null && total.isNotEmpty) {
-          BigInt value = hexToInt(total)??BigInt.zero;
+          BigInt value = hexToInt(total);
               //_hexUtils.hexToBigInt(total) ?? BigInt.zero;
           // debugPrint("getCurrentMining value :${value.toString()}");
           BigInt result = value * BigInt.from(8);
@@ -271,7 +265,7 @@ class _TodayMiningPageState extends State<TodayMiningPage> {
       if (data != null) {
         String? total = data["result"]?['totalBlocks'];
         if (total!=null && total.isNotEmpty) {
-          BigInt value = hexToInt(total)??BigInt.zero;
+          BigInt value = hexToInt(total);
               //_hexUtils.hexToBigInt(total) ?? BigInt.zero;
           if (value != BigInt.zero) {
             //根据做任务的个数计算奖励值
@@ -364,8 +358,6 @@ class _TodayMiningPageState extends State<TodayMiningPage> {
     try {
       final lockTime = await MiningApi.lockTime(address);
       debugPrint("lockTime data：$lockTime");
-      final lockDataTime =
-      DateTime.fromMillisecondsSinceEpoch(int.parse("${lockTime[0]}"));
       // isCanUnlock
       isCanUnlock = DateTime.now().millisecondsSinceEpoch ~/ 1000 >
           int.parse("${lockTime[0]}");
@@ -458,7 +450,7 @@ class _TodayMiningPageState extends State<TodayMiningPage> {
   //使用区块链浏览器提供的接口查询当天挖矿情况
   void getCurrentMiningTimeByBlockApi() async {
     try {
-      final list = await MiningApi.getMiningBarChartData(astAddress ?? '');
+      final list = await MiningApi.getMiningBarChartData(astAddress);
       final lastEpochNum = await MiningApi.getLastEpochNum();
       final currentEpochNum = lastEpochNum + 1;
       if (list != null) {
@@ -980,7 +972,7 @@ class _TodayMiningPageState extends State<TodayMiningPage> {
             ),
           ),
           Text(
-            "${dataUtils.doubleFixed(last24HValue, 3) ?? ''}${CoinType.N.name}",
+            "${dataUtils.doubleFixed(last24HValue, 3)}${CoinType.N.name}",
             style: TextStyle(
                 color: AppThemeUtils.getColorByKey(
                     context, AppThemeKeys.mainTextColor.name),

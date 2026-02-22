@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:n42appv2/core/config/app_config.dart';
-import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/miningV1/api/mining_config.dart';
@@ -56,7 +55,7 @@ class MiningApi {
     MiningProvider mp=globalMiningV1;
     //获取ast的 private key
     WalletInfo walletInfo=wap.walletInfoLsit[mp.walletIndex];
-    final Map<String, dynamic>? map = walletInfo?.coinInfo;
+    final Map<String, dynamic>? map = walletInfo.coinInfo;
     final astMap = map?[CoinType.N.name];
     if (astMap != null) {
       int pathIndex = astMap['pathIndex'] ?? 0;

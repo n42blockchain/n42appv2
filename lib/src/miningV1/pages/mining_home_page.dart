@@ -1,13 +1,11 @@
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/miningV1/api/mining_api.dart';
 import 'package:n42appv2/src/miningV1/pages/mining_index.dart';
-import 'package:n42appv2/src/miningV1/pages/mining_plans.dart';
 import 'package:n42appv2/src/miningV1/provider/mining_provider.dart';
 import 'package:n42appv2/src/miningV1/provider/mining_v1_providers.dart';
 import 'package:n42appv2/src/miningV1/utils/mining_utils.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:n42appv2/src/widgets/loading.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +66,7 @@ class _MiningHomePageState extends State<MiningHomePage> with AutomaticKeepAlive
   }
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
       child: buildContentView(context),
     );

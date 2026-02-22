@@ -13,7 +13,6 @@ import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/utils/toast_utils.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/widgets/chart_histogram.dart';
@@ -305,16 +304,12 @@ class _SummaryPageState extends State<SummaryPage> {
   List<String> getPast7DaysDate() {
     final now = DateTime.now();
     const oneDay = Duration(days: 1);
-    final currentYear = now.year;
     final dates = <String>[];
 
     for (int i = 7; i >= 1; i--) {
       final date = now.subtract(oneDay * i);
       final day = date.day.toString().padLeft(2, '0');
       final month = date.month.toString().padLeft(2, '0');
-      final year = date.year;
-      // final formattedDate =
-      //     year == currentYear ? '$day/$month' : '$day/$month/$year';
       final formattedDate = '$day/$month';
       dates.add(formattedDate);
     }

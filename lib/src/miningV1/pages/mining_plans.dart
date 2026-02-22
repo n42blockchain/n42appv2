@@ -1,6 +1,4 @@
 import 'package:n42appv2/src/miningV1/pages/full_node_page.dart';
-import 'package:n42appv2/src/miningV1/provider/mining_provider.dart';
-import 'package:n42appv2/src/miningV1/utils/mining_utils.dart';
 import 'package:n42appv2/src/miningV1/widgets/ast_mining_board.dart';
 import 'package:n42appv2/src/miningV1/widgets/show_SKip_Confirm_Dialog.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';

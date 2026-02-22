@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/miningV1/api/mining_api.dart';
 import 'package:n42appv2/src/miningV1/api/mining_config.dart';
-import 'package:n42appv2/src/miningV1/provider/mining_provider.dart';
 import 'package:n42appv2/src/miningV1/provider/mining_v1_providers.dart';
 import 'package:n42appv2/src/miningV1/utils/mining_plugin_utils.dart';
 import 'package:n42appv2/src/miningV1/utils/mining_utils.dart';

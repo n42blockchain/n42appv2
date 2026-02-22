@@ -1,6 +1,5 @@
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/miningV1/models/mining_type.dart';
-import 'package:n42appv2/src/miningV1/provider/mining_provider.dart';
 import 'package:n42appv2/src/miningV1/provider/mining_v1_providers.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';

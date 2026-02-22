@@ -6,9 +6,9 @@ import 'package:n42appv2/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SelectPlan extends StatelessWidget {
-  dynamic onTap;
+  final dynamic onTap;
 
-  SelectPlan({required this.onTap, Key? key}) : super(key: key);
+  const SelectPlan({required this.onTap, super.key});
 
   @override
   Widget build(BuildContext context) {
