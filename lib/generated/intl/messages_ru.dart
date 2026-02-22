@@ -166,7 +166,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m61(value) =>
       "Присоединяйтесь к моей группе ${value} в @N42Wallet, чтобы стать ранним майнером Layer 1 сети и получать крипто на свой телефон!";
 
-  static String m62(value) => "Заблокируйте ${value} N для запуска валидатора.";
+  static String m62(value, value1) =>
+      "Вы уверены, что хотите заблокировать ${value} N до ${value1} для запуска узла?";
 
   static String m63(value) => "Импорт не удался:${value}";
 
@@ -315,7 +316,24 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_browser_key16": MessageLookupByLibrary.simpleMessage("Закрыть все"),
     "g_browser_key17": MessageLookupByLibrary.simpleMessage("Готово"),
+    "g_browser_key18": MessageLookupByLibrary.simpleMessage("История"),
+    "g_browser_key19": MessageLookupByLibrary.simpleMessage(
+      "Очистить всю историю",
+    ),
+    "g_browser_key20": MessageLookupByLibrary.simpleMessage(
+      "Очистить всю историю просмотра?",
+    ),
+    "g_browser_key21": MessageLookupByLibrary.simpleMessage("История очищена"),
+    "g_browser_key22": MessageLookupByLibrary.simpleMessage("Сегодня"),
+    "g_browser_key23": MessageLookupByLibrary.simpleMessage("Вчера"),
+    "g_browser_key24": MessageLookupByLibrary.simpleMessage("Каталог DApps"),
+    "g_browser_key25": MessageLookupByLibrary.simpleMessage("Популярные"),
+    "g_browser_key26": MessageLookupByLibrary.simpleMessage("DEX"),
+    "g_browser_key27": MessageLookupByLibrary.simpleMessage("DeFi"),
+    "g_browser_key28": MessageLookupByLibrary.simpleMessage("NFT"),
+    "g_browser_key29": MessageLookupByLibrary.simpleMessage("Мост"),
     "g_browser_key3": MessageLookupByLibrary.simpleMessage("Закладки"),
+    "g_browser_key30": MessageLookupByLibrary.simpleMessage("Инструменты"),
     "g_browser_key4": MessageLookupByLibrary.simpleMessage(
       "Закладки ещё не добавлены",
     ),
@@ -2902,10 +2920,23 @@ class MessageLookup extends MessageLookupByLibrary {
       "Добавить биометрическую верификацию?",
     ),
     "g_lock_key9": MessageLookupByLibrary.simpleMessage("Сбросить пароль"),
+    "g_mining_key15": MessageLookupByLibrary.simpleMessage("Task detail"),
     "g_mining_key20": MessageLookupByLibrary.simpleMessage("Разблокировать N?"),
     "g_mining_key31": MessageLookupByLibrary.simpleMessage(
       "Активность облачной верификации",
     ),
+    "g_mining_key33": MessageLookupByLibrary.simpleMessage(
+      "Verification Settings",
+    ),
+    "g_mining_key34": MessageLookupByLibrary.simpleMessage(
+      "Background Verification Music",
+    ),
+    "g_mining_key35": MessageLookupByLibrary.simpleMessage("Default"),
+    "g_mining_key36": MessageLookupByLibrary.simpleMessage("Mute"),
+    "g_mining_key37": MessageLookupByLibrary.simpleMessage(
+      "When background verification is enabled, the music will play in the background. If the music stops, verification will also stop.",
+    ),
+    "g_mining_key38": MessageLookupByLibrary.simpleMessage("Your Tier"),
     "g_mining_key46": MessageLookupByLibrary.simpleMessage(
       "Для настройки требуется небольшая сумма на газ.",
     ),
@@ -2917,17 +2948,25 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Продолжить"),
     "g_mining_key63": m60,
+    "g_mining_key7": MessageLookupByLibrary.simpleMessage("Unlock Date"),
     "g_mining_key73": m61,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "Я только что настроил ноду в @N42Wallet и начал верификацию на мобильных устройствах! Присоединяйтесь. Децентрализованное будущее — это мобильность!",
     ),
     "g_mining_key76": m62,
+    "g_mining_key82": MessageLookupByLibrary.simpleMessage("Mineral"),
+    "g_mining_key83": MessageLookupByLibrary.simpleMessage("Node"),
+    "g_mining_key84": MessageLookupByLibrary.simpleMessage("Network"),
+    "g_mining_key85": MessageLookupByLibrary.simpleMessage(
+      "Switch between testnet and mainnet for cloud mining.",
+    ),
     "g_mining_key86": MessageLookupByLibrary.simpleMessage(
       "Выкуп доступен после 768 сек.",
     ),
     "g_mining_key87": MessageLookupByLibrary.simpleMessage(
       "Запросы до этого момента не будут обработаны.",
     ),
+    "g_mining_key_1": MessageLookupByLibrary.simpleMessage("Home"),
     "g_mining_key_10": MessageLookupByLibrary.simpleMessage(
       "Сегодняшнее вознаграждение",
     ),
@@ -2980,12 +3019,22 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_14": MessageLookupByLibrary.simpleMessage(
       "Добытая стоимость",
     ),
-    "g_mining_key_15": MessageLookupByLibrary.simpleMessage(
-      "Рассчитывается на основе рыночной цены N * общее количество вознаграждений N.",
+    "g_mining_key_15": MessageLookupByLibrary.simpleMessage("Task detail"),
+    "g_mining_key_19": MessageLookupByLibrary.simpleMessage("Summary"),
+    "g_mining_key_2": MessageLookupByLibrary.simpleMessage("Activities"),
+    "g_mining_key_20": MessageLookupByLibrary.simpleMessage(
+      "Total Value Mined",
+    ),
+    "g_mining_key_21": MessageLookupByLibrary.simpleMessage(
+      "Verification Since",
+    ),
+    "g_mining_key_22": MessageLookupByLibrary.simpleMessage(
+      "Reward Distribution",
     ),
     "g_mining_key_23": MessageLookupByLibrary.simpleMessage(
       "Количество прибылей",
     ),
+    "g_mining_key_24": MessageLookupByLibrary.simpleMessage("Verified Value"),
     "g_mining_key_31": MessageLookupByLibrary.simpleMessage("Выбор планов"),
     "g_mining_key_32": MessageLookupByLibrary.simpleMessage(
       "Период разблокировки: Разблокировка в любое время",
@@ -3010,22 +3059,40 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_43": MessageLookupByLibrary.simpleMessage(
       "У вас недостаточно N для этой транзакции",
     ),
+    "g_mining_key_45": MessageLookupByLibrary.simpleMessage(
+      "Are you sure you want to skip?",
+    ),
+    "g_mining_key_46": MessageLookupByLibrary.simpleMessage(
+      "You will not receive any verification rewards until you choose 1 of the plans.",
+    ),
     "g_mining_key_47": MessageLookupByLibrary.simpleMessage("Отключено"),
+    "g_mining_key_48": MessageLookupByLibrary.simpleMessage("Reward"),
     "g_mining_key_49": MessageLookupByLibrary.simpleMessage("Показать ещё"),
     "g_mining_key_5": MessageLookupByLibrary.simpleMessage(
       "Статус верификации",
     ),
+    "g_mining_key_50": MessageLookupByLibrary.simpleMessage("To unlock"),
+    "g_mining_key_52": MessageLookupByLibrary.simpleMessage("Skip"),
+    "g_mining_key_58": MessageLookupByLibrary.simpleMessage("Past 7 Days"),
+    "g_mining_key_59": MessageLookupByLibrary.simpleMessage(
+      "Accumulated Rewards",
+    ),
     "g_mining_key_6": MessageLookupByLibrary.simpleMessage(
       "Заблокируйте N для начала получения вознаграждений за верификацию.",
     ),
+    "g_mining_key_60": MessageLookupByLibrary.simpleMessage("Rewards Received"),
+    "g_mining_key_61": MessageLookupByLibrary.simpleMessage("Advanced"),
     "g_mining_key_62": MessageLookupByLibrary.simpleMessage("Начальный"),
+    "g_mining_key_63": MessageLookupByLibrary.simpleMessage("Pro"),
+    "g_mining_key_64": MessageLookupByLibrary.simpleMessage("FULL NODE"),
+    "g_mining_key_65": MessageLookupByLibrary.simpleMessage("MINS/DAY"),
     "g_mining_key_66": MessageLookupByLibrary.simpleMessage("Продвинутая нода"),
     "g_mining_key_67": MessageLookupByLibrary.simpleMessage("Начальная нода"),
     "g_mining_key_68": MessageLookupByLibrary.simpleMessage("Про нода"),
     "g_mining_key_69": MessageLookupByLibrary.simpleMessage(
       "500 блоков/день~70 мин",
     ),
-    "g_mining_key_7": MessageLookupByLibrary.simpleMessage("Выберите план"),
+    "g_mining_key_7": MessageLookupByLibrary.simpleMessage("Unlock Date"),
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 блоков/день~15 мин",
     ),
@@ -3048,6 +3115,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Сначала сохраните пару публичного и приватного ключей валидатора.",
     ),
     "g_mining_key_79": MessageLookupByLibrary.simpleMessage("Экспорт"),
+    "g_mining_key_8": MessageLookupByLibrary.simpleMessage(
+      "Today\'s Verification Time",
+    ),
     "g_mining_key_80": MessageLookupByLibrary.simpleMessage(
       "Недостаточно средств для перевода.",
     ),
@@ -3124,6 +3194,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_phishing_warning_url_label": MessageLookupByLibrary.simpleMessage(
       "Подозрительный URL:",
+    ),
+    "g_setting_mining_v1_label": MessageLookupByLibrary.simpleMessage(
+      "Классический майнинг (V1)",
+    ),
+    "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
+      "Облачный майнинг (V2)",
+    ),
+    "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
+      "Интерфейс майнинга",
     ),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("Поделиться"),
     "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("Реферал"),
@@ -3228,6 +3307,37 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_unlock_key8": m77,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("Вы также можете "),
+    "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
+      "Соединение потеряно. Пожалуйста, подключитесь снова.",
+    ),
+    "g_wc_dapp_disconnected": MessageLookupByLibrary.simpleMessage(
+      "DApp отключился",
+    ),
+    "g_wc_disconnect_all": MessageLookupByLibrary.simpleMessage(
+      "Отключить все",
+    ),
+    "g_wc_disconnect_all_confirm": MessageLookupByLibrary.simpleMessage(
+      "Отключиться от всех DApp?",
+    ),
+    "g_wc_disconnect_confirm": MessageLookupByLibrary.simpleMessage(
+      "Отключиться от этого DApp?",
+    ),
+    "g_wc_new_connection": MessageLookupByLibrary.simpleMessage(
+      "Новое подключение",
+    ),
+    "g_wc_no_sessions": MessageLookupByLibrary.simpleMessage(
+      "Нет активных подключений",
+    ),
+    "g_wc_no_sessions_desc": MessageLookupByLibrary.simpleMessage(
+      "Отсканируйте QR-код для подключения к DApp",
+    ),
+    "g_wc_proposal_timeout": MessageLookupByLibrary.simpleMessage(
+      "Запрос на подключение истёк",
+    ),
+    "g_wc_session_expired": MessageLookupByLibrary.simpleMessage(
+      "Сессия истекла",
+    ),
+    "g_wc_sessions": MessageLookupByLibrary.simpleMessage("Подключённые DApp"),
     "google_verification": MessageLookupByLibrary.simpleMessage(
       "Google Аутентификация",
     ),

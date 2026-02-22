@@ -71,7 +71,7 @@ class GroupConfirm extends StatelessWidget {
           ),
           Text(
             // "Are you sure you want to lock $num AsT until $lockDate to run a node?",
-            S.of(context).g_mining_key76(num),
+            S.of(context).g_mining_key76(num.toString(), lockDate),
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: AppThemeUtils.getColorByKey(

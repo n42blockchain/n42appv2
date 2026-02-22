@@ -132,7 +132,67 @@ class SettingHomePage extends ConsumerWidget {
             ],
           ),
         ),
+        Container(
+          alignment: Alignment.centerLeft,
+          margin: EdgeInsets.symmetric(
+              vertical: ScreenUtil().setWidth(10.0)),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(
+                Radius.circular(ScreenUtil().setWidth(16.0))),
+            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          ),
+          child: _buildMiningVersionToggle(context, ref),
+        ),
       ],
+    );
+  }
+
+  Widget _buildMiningVersionToggle(BuildContext context, WidgetRef ref) {
+    final useV2 = ref.watch(miningUseV2Provider);
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(30.0),
+        vertical: ScreenUtil().setWidth(20.0),
+      ),
+      child: Row(
+        children: [
+          Image.asset(
+            'assets/home/setting/mining.png',
+            width: ScreenUtil().setWidth(40),
+            color: Colors.blueAccent,
+          ),
+          SizedBox(width: ScreenUtil().setWidth(20.0)),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  S.of(context).g_setting_mining_version,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(30.0),
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                  ),
+                ),
+                Text(
+                  useV2
+                      ? S.of(context).g_setting_mining_v2_label
+                      : S.of(context).g_setting_mining_v1_label,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24.0),
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Switch(
+            value: useV2,
+            onChanged: (v) => ref.read(miningUseV2Provider.notifier).setUseV2(v),
+            activeColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+          ),
+        ],
+      ),
     );
   }
 }

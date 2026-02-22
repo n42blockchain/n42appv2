@@ -170,7 +170,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m61(value) =>
       "Join my ${value} group on @N42Wallet to be an early miner of a Layer 1 chain, and get crypto on your phone!";
 
-  static String m62(value) => "Lock ${value} N to run a validator.";
+  static String m62(value, value1) =>
+      "Are you sure you want to lock ${value} N until ${value1} to run a node?";
 
   static String m63(value) => "Import failed:${value}";
 
@@ -317,7 +318,24 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_browser_key16": MessageLookupByLibrary.simpleMessage("Close all"),
     "g_browser_key17": MessageLookupByLibrary.simpleMessage("Done"),
+    "g_browser_key18": MessageLookupByLibrary.simpleMessage("History"),
+    "g_browser_key19": MessageLookupByLibrary.simpleMessage(
+      "Clear All History",
+    ),
+    "g_browser_key20": MessageLookupByLibrary.simpleMessage(
+      "Clear all browsing history?",
+    ),
+    "g_browser_key21": MessageLookupByLibrary.simpleMessage("History cleared"),
+    "g_browser_key22": MessageLookupByLibrary.simpleMessage("Today"),
+    "g_browser_key23": MessageLookupByLibrary.simpleMessage("Yesterday"),
+    "g_browser_key24": MessageLookupByLibrary.simpleMessage("Discover DApps"),
+    "g_browser_key25": MessageLookupByLibrary.simpleMessage("Popular"),
+    "g_browser_key26": MessageLookupByLibrary.simpleMessage("DEX"),
+    "g_browser_key27": MessageLookupByLibrary.simpleMessage("DeFi"),
+    "g_browser_key28": MessageLookupByLibrary.simpleMessage("NFT"),
+    "g_browser_key29": MessageLookupByLibrary.simpleMessage("Bridge"),
     "g_browser_key3": MessageLookupByLibrary.simpleMessage("Bookmarks"),
+    "g_browser_key30": MessageLookupByLibrary.simpleMessage("Tools"),
     "g_browser_key4": MessageLookupByLibrary.simpleMessage(
       "No bookmarks added yet",
     ),
@@ -2956,10 +2974,23 @@ class MessageLookup extends MessageLookupByLibrary {
       "Add biometric verification?",
     ),
     "g_lock_key9": MessageLookupByLibrary.simpleMessage("Reset password"),
+    "g_mining_key15": MessageLookupByLibrary.simpleMessage("Task detail"),
     "g_mining_key20": MessageLookupByLibrary.simpleMessage("Unlock N?"),
     "g_mining_key31": MessageLookupByLibrary.simpleMessage(
       "Cloud Verification Activity",
     ),
+    "g_mining_key33": MessageLookupByLibrary.simpleMessage(
+      "Verification Settings",
+    ),
+    "g_mining_key34": MessageLookupByLibrary.simpleMessage(
+      "Background Verification Music",
+    ),
+    "g_mining_key35": MessageLookupByLibrary.simpleMessage("Default"),
+    "g_mining_key36": MessageLookupByLibrary.simpleMessage("Mute"),
+    "g_mining_key37": MessageLookupByLibrary.simpleMessage(
+      "When background verification is enabled, the music will play in the background. If the music stops, verification will also stop.",
+    ),
+    "g_mining_key38": MessageLookupByLibrary.simpleMessage("Your Tier"),
     "g_mining_key46": MessageLookupByLibrary.simpleMessage(
       "Setup requires a small amount for gas.",
     ),
@@ -2969,17 +3000,25 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key61": MessageLookupByLibrary.simpleMessage("Share to friends"),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Continue"),
     "g_mining_key63": m60,
+    "g_mining_key7": MessageLookupByLibrary.simpleMessage("Unlock Date"),
     "g_mining_key73": m61,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "I just set up a node on @N42Wallet and started verification on mobile devices! Come and join me. The decentralized future is mobile!",
     ),
     "g_mining_key76": m62,
+    "g_mining_key82": MessageLookupByLibrary.simpleMessage("Mineral"),
+    "g_mining_key83": MessageLookupByLibrary.simpleMessage("Node"),
+    "g_mining_key84": MessageLookupByLibrary.simpleMessage("Network"),
+    "g_mining_key85": MessageLookupByLibrary.simpleMessage(
+      "Switch between testnet and mainnet for cloud mining.",
+    ),
     "g_mining_key86": MessageLookupByLibrary.simpleMessage(
       "Redemption available after 768s.",
     ),
     "g_mining_key87": MessageLookupByLibrary.simpleMessage(
       "Requests before that will not be processed.",
     ),
+    "g_mining_key_1": MessageLookupByLibrary.simpleMessage("Home"),
     "g_mining_key_10": MessageLookupByLibrary.simpleMessage("Today\'s reward"),
     "g_mining_key_100": MessageLookupByLibrary.simpleMessage(
       "Please treat the data below as an important key. We recommend copying and backing it up to a trusted location immediately.",
@@ -3022,10 +3061,20 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key_13": MessageLookupByLibrary.simpleMessage("Total Rewards"),
     "g_mining_key_14": MessageLookupByLibrary.simpleMessage("Mined Value"),
-    "g_mining_key_15": MessageLookupByLibrary.simpleMessage(
-      "Calculated based on market price of N * the total N rewards.",
+    "g_mining_key_15": MessageLookupByLibrary.simpleMessage("Task detail"),
+    "g_mining_key_19": MessageLookupByLibrary.simpleMessage("Summary"),
+    "g_mining_key_2": MessageLookupByLibrary.simpleMessage("Activities"),
+    "g_mining_key_20": MessageLookupByLibrary.simpleMessage(
+      "Total Value Mined",
+    ),
+    "g_mining_key_21": MessageLookupByLibrary.simpleMessage(
+      "Verification Since",
+    ),
+    "g_mining_key_22": MessageLookupByLibrary.simpleMessage(
+      "Reward Distribution",
     ),
     "g_mining_key_23": MessageLookupByLibrary.simpleMessage("Profit count"),
+    "g_mining_key_24": MessageLookupByLibrary.simpleMessage("Verified Value"),
     "g_mining_key_31": MessageLookupByLibrary.simpleMessage("Select Plans"),
     "g_mining_key_32": MessageLookupByLibrary.simpleMessage(
       "Unlock Period: Unlockable at any time",
@@ -3050,22 +3099,40 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_43": MessageLookupByLibrary.simpleMessage(
       "You do not have enough N for this transaction",
     ),
+    "g_mining_key_45": MessageLookupByLibrary.simpleMessage(
+      "Are you sure you want to skip?",
+    ),
+    "g_mining_key_46": MessageLookupByLibrary.simpleMessage(
+      "You will not receive any verification rewards until you choose 1 of the plans.",
+    ),
     "g_mining_key_47": MessageLookupByLibrary.simpleMessage("Disabled"),
+    "g_mining_key_48": MessageLookupByLibrary.simpleMessage("Reward"),
     "g_mining_key_49": MessageLookupByLibrary.simpleMessage("View more"),
     "g_mining_key_5": MessageLookupByLibrary.simpleMessage(
       "Verification Status",
     ),
+    "g_mining_key_50": MessageLookupByLibrary.simpleMessage("To unlock"),
+    "g_mining_key_52": MessageLookupByLibrary.simpleMessage("Skip"),
+    "g_mining_key_58": MessageLookupByLibrary.simpleMessage("Past 7 Days"),
+    "g_mining_key_59": MessageLookupByLibrary.simpleMessage(
+      "Accumulated Rewards",
+    ),
     "g_mining_key_6": MessageLookupByLibrary.simpleMessage(
       "Lock N to start verifying rewards.",
     ),
+    "g_mining_key_60": MessageLookupByLibrary.simpleMessage("Rewards Received"),
+    "g_mining_key_61": MessageLookupByLibrary.simpleMessage("Advanced"),
     "g_mining_key_62": MessageLookupByLibrary.simpleMessage("Entry"),
+    "g_mining_key_63": MessageLookupByLibrary.simpleMessage("Pro"),
+    "g_mining_key_64": MessageLookupByLibrary.simpleMessage("FULL NODE"),
+    "g_mining_key_65": MessageLookupByLibrary.simpleMessage("MINS/DAY"),
     "g_mining_key_66": MessageLookupByLibrary.simpleMessage("Advanced Node"),
     "g_mining_key_67": MessageLookupByLibrary.simpleMessage("Entry Node"),
     "g_mining_key_68": MessageLookupByLibrary.simpleMessage("Pro Node"),
     "g_mining_key_69": MessageLookupByLibrary.simpleMessage(
       "500 blocks/day~70 mins",
     ),
-    "g_mining_key_7": MessageLookupByLibrary.simpleMessage("Select a Plan"),
+    "g_mining_key_7": MessageLookupByLibrary.simpleMessage("Unlock Date"),
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 blocks/day~15 mins",
     ),
@@ -3088,6 +3155,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Please save the verifier\'s public and private key pair first.",
     ),
     "g_mining_key_79": MessageLookupByLibrary.simpleMessage("Export"),
+    "g_mining_key_8": MessageLookupByLibrary.simpleMessage(
+      "Today\'s Verification Time",
+    ),
     "g_mining_key_80": MessageLookupByLibrary.simpleMessage(
       "Insufficient funds for transfer.",
     ),
@@ -3156,6 +3226,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_phishing_warning_url_label": MessageLookupByLibrary.simpleMessage(
       "Suspicious URL:",
+    ),
+    "g_setting_mining_v1_label": MessageLookupByLibrary.simpleMessage(
+      "Classic Mining (V1)",
+    ),
+    "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
+      "Cloud Mining (V2)",
+    ),
+    "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
+      "Mining Interface",
     ),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("Share"),
     "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("Referral"),
@@ -3250,6 +3329,37 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_unlock_key8": m77,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("You can also "),
+    "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
+      "Connection lost. Please reconnect.",
+    ),
+    "g_wc_dapp_disconnected": MessageLookupByLibrary.simpleMessage(
+      "DApp has disconnected",
+    ),
+    "g_wc_disconnect_all": MessageLookupByLibrary.simpleMessage(
+      "Disconnect All",
+    ),
+    "g_wc_disconnect_all_confirm": MessageLookupByLibrary.simpleMessage(
+      "Disconnect from all DApps?",
+    ),
+    "g_wc_disconnect_confirm": MessageLookupByLibrary.simpleMessage(
+      "Disconnect from this DApp?",
+    ),
+    "g_wc_new_connection": MessageLookupByLibrary.simpleMessage(
+      "New Connection",
+    ),
+    "g_wc_no_sessions": MessageLookupByLibrary.simpleMessage(
+      "No active connections",
+    ),
+    "g_wc_no_sessions_desc": MessageLookupByLibrary.simpleMessage(
+      "Scan a QR code to connect to a DApp",
+    ),
+    "g_wc_proposal_timeout": MessageLookupByLibrary.simpleMessage(
+      "Connection request timed out",
+    ),
+    "g_wc_session_expired": MessageLookupByLibrary.simpleMessage(
+      "Session has expired",
+    ),
+    "g_wc_sessions": MessageLookupByLibrary.simpleMessage("Connected DApps"),
     "google_verification": MessageLookupByLibrary.simpleMessage(
       "Google Authentication",
     ),

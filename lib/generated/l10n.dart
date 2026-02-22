@@ -1174,6 +1174,96 @@ class S {
     return Intl.message('Done', name: 'g_browser_key17', desc: '', args: []);
   }
 
+  /// `History`
+  String get g_browser_key18 {
+    return Intl.message('History', name: 'g_browser_key18', desc: '', args: []);
+  }
+
+  /// `Clear All History`
+  String get g_browser_key19 {
+    return Intl.message(
+      'Clear All History',
+      name: 'g_browser_key19',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clear all browsing history?`
+  String get g_browser_key20 {
+    return Intl.message(
+      'Clear all browsing history?',
+      name: 'g_browser_key20',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `History cleared`
+  String get g_browser_key21 {
+    return Intl.message(
+      'History cleared',
+      name: 'g_browser_key21',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Today`
+  String get g_browser_key22 {
+    return Intl.message('Today', name: 'g_browser_key22', desc: '', args: []);
+  }
+
+  /// `Yesterday`
+  String get g_browser_key23 {
+    return Intl.message(
+      'Yesterday',
+      name: 'g_browser_key23',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Discover DApps`
+  String get g_browser_key24 {
+    return Intl.message(
+      'Discover DApps',
+      name: 'g_browser_key24',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Popular`
+  String get g_browser_key25 {
+    return Intl.message('Popular', name: 'g_browser_key25', desc: '', args: []);
+  }
+
+  /// `DEX`
+  String get g_browser_key26 {
+    return Intl.message('DEX', name: 'g_browser_key26', desc: '', args: []);
+  }
+
+  /// `DeFi`
+  String get g_browser_key27 {
+    return Intl.message('DeFi', name: 'g_browser_key27', desc: '', args: []);
+  }
+
+  /// `NFT`
+  String get g_browser_key28 {
+    return Intl.message('NFT', name: 'g_browser_key28', desc: '', args: []);
+  }
+
+  /// `Bridge`
+  String get g_browser_key29 {
+    return Intl.message('Bridge', name: 'g_browser_key29', desc: '', args: []);
+  }
+
+  /// `Tools`
+  String get g_browser_key30 {
+    return Intl.message('Tools', name: 'g_browser_key30', desc: '', args: []);
+  }
+
   /// `Connect`
   String get g_connect_key1 {
     return Intl.message('Connect', name: 'g_connect_key1', desc: '', args: []);
@@ -2344,10 +2434,10 @@ class S {
     );
   }
 
-  /// `Select a Plan`
+  /// `Unlock Date`
   String get g_mining_key_7 {
     return Intl.message(
-      'Select a Plan',
+      'Unlock Date',
       name: 'g_mining_key_7',
       desc: '',
       args: [],
@@ -2414,10 +2504,10 @@ class S {
     );
   }
 
-  /// `Calculated based on market price of N * the total N rewards.`
+  /// `Task detail`
   String get g_mining_key_15 {
     return Intl.message(
-      'Calculated based on market price of N * the total N rewards.',
+      'Task detail',
       name: 'g_mining_key_15',
       desc: '',
       args: [],
@@ -3179,13 +3269,13 @@ class S {
     );
   }
 
-  /// `Lock {value} N to run a validator.`
-  String g_mining_key76(Object value) {
+  /// `Are you sure you want to lock {value} N until {value1} to run a node?`
+  String g_mining_key76(String value, String value1) {
     return Intl.message(
-      'Lock $value N to run a validator.',
+      'Are you sure you want to lock $value N until $value1 to run a node?',
       name: 'g_mining_key76',
       desc: '',
-      args: [value],
+      args: [value, value1],
     );
   }
 
@@ -14219,6 +14309,416 @@ class S {
     return Intl.message(
       'High Risk',
       name: 'g_tx_risk_danger',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connection lost. Please reconnect.`
+  String get g_wc_connection_lost {
+    return Intl.message(
+      'Connection lost. Please reconnect.',
+      name: 'g_wc_connection_lost',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `DApp has disconnected`
+  String get g_wc_dapp_disconnected {
+    return Intl.message(
+      'DApp has disconnected',
+      name: 'g_wc_dapp_disconnected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Session has expired`
+  String get g_wc_session_expired {
+    return Intl.message(
+      'Session has expired',
+      name: 'g_wc_session_expired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connection request timed out`
+  String get g_wc_proposal_timeout {
+    return Intl.message(
+      'Connection request timed out',
+      name: 'g_wc_proposal_timeout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connected DApps`
+  String get g_wc_sessions {
+    return Intl.message(
+      'Connected DApps',
+      name: 'g_wc_sessions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No active connections`
+  String get g_wc_no_sessions {
+    return Intl.message(
+      'No active connections',
+      name: 'g_wc_no_sessions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scan a QR code to connect to a DApp`
+  String get g_wc_no_sessions_desc {
+    return Intl.message(
+      'Scan a QR code to connect to a DApp',
+      name: 'g_wc_no_sessions_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Disconnect from this DApp?`
+  String get g_wc_disconnect_confirm {
+    return Intl.message(
+      'Disconnect from this DApp?',
+      name: 'g_wc_disconnect_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Disconnect All`
+  String get g_wc_disconnect_all {
+    return Intl.message(
+      'Disconnect All',
+      name: 'g_wc_disconnect_all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Disconnect from all DApps?`
+  String get g_wc_disconnect_all_confirm {
+    return Intl.message(
+      'Disconnect from all DApps?',
+      name: 'g_wc_disconnect_all_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Connection`
+  String get g_wc_new_connection {
+    return Intl.message(
+      'New Connection',
+      name: 'g_wc_new_connection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Home`
+  String get g_mining_key_1 {
+    return Intl.message('Home', name: 'g_mining_key_1', desc: '', args: []);
+  }
+
+  /// `Activities`
+  String get g_mining_key_2 {
+    return Intl.message(
+      'Activities',
+      name: 'g_mining_key_2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Today's Verification Time`
+  String get g_mining_key_8 {
+    return Intl.message(
+      'Today\'s Verification Time',
+      name: 'g_mining_key_8',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Summary`
+  String get g_mining_key_19 {
+    return Intl.message('Summary', name: 'g_mining_key_19', desc: '', args: []);
+  }
+
+  /// `Total Value Mined`
+  String get g_mining_key_20 {
+    return Intl.message(
+      'Total Value Mined',
+      name: 'g_mining_key_20',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verification Since`
+  String get g_mining_key_21 {
+    return Intl.message(
+      'Verification Since',
+      name: 'g_mining_key_21',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reward Distribution`
+  String get g_mining_key_22 {
+    return Intl.message(
+      'Reward Distribution',
+      name: 'g_mining_key_22',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verified Value`
+  String get g_mining_key_24 {
+    return Intl.message(
+      'Verified Value',
+      name: 'g_mining_key_24',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to skip?`
+  String get g_mining_key_45 {
+    return Intl.message(
+      'Are you sure you want to skip?',
+      name: 'g_mining_key_45',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You will not receive any verification rewards until you choose 1 of the plans.`
+  String get g_mining_key_46 {
+    return Intl.message(
+      'You will not receive any verification rewards until you choose 1 of the plans.',
+      name: 'g_mining_key_46',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reward`
+  String get g_mining_key_48 {
+    return Intl.message('Reward', name: 'g_mining_key_48', desc: '', args: []);
+  }
+
+  /// `To unlock`
+  String get g_mining_key_50 {
+    return Intl.message(
+      'To unlock',
+      name: 'g_mining_key_50',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Skip`
+  String get g_mining_key_52 {
+    return Intl.message('Skip', name: 'g_mining_key_52', desc: '', args: []);
+  }
+
+  /// `Past 7 Days`
+  String get g_mining_key_58 {
+    return Intl.message(
+      'Past 7 Days',
+      name: 'g_mining_key_58',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Accumulated Rewards`
+  String get g_mining_key_59 {
+    return Intl.message(
+      'Accumulated Rewards',
+      name: 'g_mining_key_59',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rewards Received`
+  String get g_mining_key_60 {
+    return Intl.message(
+      'Rewards Received',
+      name: 'g_mining_key_60',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Advanced`
+  String get g_mining_key_61 {
+    return Intl.message(
+      'Advanced',
+      name: 'g_mining_key_61',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pro`
+  String get g_mining_key_63 {
+    return Intl.message('Pro', name: 'g_mining_key_63', desc: '', args: []);
+  }
+
+  /// `FULL NODE`
+  String get g_mining_key_64 {
+    return Intl.message(
+      'FULL NODE',
+      name: 'g_mining_key_64',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `MINS/DAY`
+  String get g_mining_key_65 {
+    return Intl.message(
+      'MINS/DAY',
+      name: 'g_mining_key_65',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unlock Date`
+  String get g_mining_key7 {
+    return Intl.message(
+      'Unlock Date',
+      name: 'g_mining_key7',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Task detail`
+  String get g_mining_key15 {
+    return Intl.message(
+      'Task detail',
+      name: 'g_mining_key15',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verification Settings`
+  String get g_mining_key33 {
+    return Intl.message(
+      'Verification Settings',
+      name: 'g_mining_key33',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Background Verification Music`
+  String get g_mining_key34 {
+    return Intl.message(
+      'Background Verification Music',
+      name: 'g_mining_key34',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Default`
+  String get g_mining_key35 {
+    return Intl.message('Default', name: 'g_mining_key35', desc: '', args: []);
+  }
+
+  /// `Mute`
+  String get g_mining_key36 {
+    return Intl.message('Mute', name: 'g_mining_key36', desc: '', args: []);
+  }
+
+  /// `When background verification is enabled, the music will play in the background. If the music stops, verification will also stop.`
+  String get g_mining_key37 {
+    return Intl.message(
+      'When background verification is enabled, the music will play in the background. If the music stops, verification will also stop.',
+      name: 'g_mining_key37',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your Tier`
+  String get g_mining_key38 {
+    return Intl.message(
+      'Your Tier',
+      name: 'g_mining_key38',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mineral`
+  String get g_mining_key82 {
+    return Intl.message('Mineral', name: 'g_mining_key82', desc: '', args: []);
+  }
+
+  /// `Node`
+  String get g_mining_key83 {
+    return Intl.message('Node', name: 'g_mining_key83', desc: '', args: []);
+  }
+
+  /// `Network`
+  String get g_mining_key84 {
+    return Intl.message('Network', name: 'g_mining_key84', desc: '', args: []);
+  }
+
+  /// `Switch between testnet and mainnet for cloud mining.`
+  String get g_mining_key85 {
+    return Intl.message(
+      'Switch between testnet and mainnet for cloud mining.',
+      name: 'g_mining_key85',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mining Interface`
+  String get g_setting_mining_version {
+    return Intl.message(
+      'Mining Interface',
+      name: 'g_setting_mining_version',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cloud Mining (V2)`
+  String get g_setting_mining_v2_label {
+    return Intl.message(
+      'Cloud Mining (V2)',
+      name: 'g_setting_mining_v2_label',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Classic Mining (V1)`
+  String get g_setting_mining_v1_label {
+    return Intl.message(
+      'Classic Mining (V1)',
+      name: 'g_setting_mining_v1_label',
       desc: '',
       args: [],
     );

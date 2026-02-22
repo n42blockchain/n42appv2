@@ -164,7 +164,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m61(value) =>
       "Bergabung dengan grup ${value} saya di @N42Wallet untuk menjadi penambang awal dari blockchain Layer 1, dan dapatkan kripto di ponsel Anda!";
 
-  static String m62(value) => "Kunci ${value} N untuk menjalankan validator.";
+  static String m62(value, value1) =>
+      "Apakah Anda yakin ingin mengunci ${value} N hingga ${value1} untuk menjalankan node?";
 
   static String m63(value) => "Impor gagal:${value}";
 
@@ -313,7 +314,24 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_browser_key16": MessageLookupByLibrary.simpleMessage("Tutup semua"),
     "g_browser_key17": MessageLookupByLibrary.simpleMessage("Selesai"),
+    "g_browser_key18": MessageLookupByLibrary.simpleMessage("Riwayat"),
+    "g_browser_key19": MessageLookupByLibrary.simpleMessage(
+      "Hapus Semua Riwayat",
+    ),
+    "g_browser_key20": MessageLookupByLibrary.simpleMessage(
+      "Hapus semua riwayat penjelajahan?",
+    ),
+    "g_browser_key21": MessageLookupByLibrary.simpleMessage("Riwayat dihapus"),
+    "g_browser_key22": MessageLookupByLibrary.simpleMessage("Hari ini"),
+    "g_browser_key23": MessageLookupByLibrary.simpleMessage("Kemarin"),
+    "g_browser_key24": MessageLookupByLibrary.simpleMessage("Jelajahi DApps"),
+    "g_browser_key25": MessageLookupByLibrary.simpleMessage("Populer"),
+    "g_browser_key26": MessageLookupByLibrary.simpleMessage("DEX"),
+    "g_browser_key27": MessageLookupByLibrary.simpleMessage("DeFi"),
+    "g_browser_key28": MessageLookupByLibrary.simpleMessage("NFT"),
+    "g_browser_key29": MessageLookupByLibrary.simpleMessage("Bridge"),
     "g_browser_key3": MessageLookupByLibrary.simpleMessage("Bookmark"),
+    "g_browser_key30": MessageLookupByLibrary.simpleMessage("Alat"),
     "g_browser_key4": MessageLookupByLibrary.simpleMessage(
       "Belum ada bookmark yang ditambahkan",
     ),
@@ -2876,10 +2894,23 @@ class MessageLookup extends MessageLookupByLibrary {
       "Tambahkan verifikasi biometrik?",
     ),
     "g_lock_key9": MessageLookupByLibrary.simpleMessage("Reset kata sandi"),
+    "g_mining_key15": MessageLookupByLibrary.simpleMessage("Task detail"),
     "g_mining_key20": MessageLookupByLibrary.simpleMessage("Buka kunci N?"),
     "g_mining_key31": MessageLookupByLibrary.simpleMessage(
       "Aktivitas Verifikasi Cloud",
     ),
+    "g_mining_key33": MessageLookupByLibrary.simpleMessage(
+      "Verification Settings",
+    ),
+    "g_mining_key34": MessageLookupByLibrary.simpleMessage(
+      "Background Verification Music",
+    ),
+    "g_mining_key35": MessageLookupByLibrary.simpleMessage("Default"),
+    "g_mining_key36": MessageLookupByLibrary.simpleMessage("Mute"),
+    "g_mining_key37": MessageLookupByLibrary.simpleMessage(
+      "When background verification is enabled, the music will play in the background. If the music stops, verification will also stop.",
+    ),
+    "g_mining_key38": MessageLookupByLibrary.simpleMessage("Your Tier"),
     "g_mining_key46": MessageLookupByLibrary.simpleMessage(
       "Pengaturan memerlukan sedikit biaya gas.",
     ),
@@ -2889,17 +2920,25 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key61": MessageLookupByLibrary.simpleMessage("Bagikan ke teman"),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Lanjutkan"),
     "g_mining_key63": m60,
+    "g_mining_key7": MessageLookupByLibrary.simpleMessage("Unlock Date"),
     "g_mining_key73": m61,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "Saya baru saja menyiapkan node di @N42Wallet dan memulai verifikasi di perangkat seluler! Ayo bergabung dengan saya. Masa depan terdesentralisasi ada di seluler!",
     ),
     "g_mining_key76": m62,
+    "g_mining_key82": MessageLookupByLibrary.simpleMessage("Mineral"),
+    "g_mining_key83": MessageLookupByLibrary.simpleMessage("Node"),
+    "g_mining_key84": MessageLookupByLibrary.simpleMessage("Network"),
+    "g_mining_key85": MessageLookupByLibrary.simpleMessage(
+      "Switch between testnet and mainnet for cloud mining.",
+    ),
     "g_mining_key86": MessageLookupByLibrary.simpleMessage(
       "Penukaran tersedia setelah 768 detik.",
     ),
     "g_mining_key87": MessageLookupByLibrary.simpleMessage(
       "Permintaan sebelum itu tidak akan diproses.",
     ),
+    "g_mining_key_1": MessageLookupByLibrary.simpleMessage("Home"),
     "g_mining_key_10": MessageLookupByLibrary.simpleMessage("Hadiah hari ini"),
     "g_mining_key_100": MessageLookupByLibrary.simpleMessage(
       "Silakan perlakukan data di bawah ini sebagai kunci penting. Kami sarankan untuk menyalin dan mencadangkannya ke lokasi tepercaya segera.",
@@ -2942,12 +2981,22 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key_13": MessageLookupByLibrary.simpleMessage("Total Hadiah"),
     "g_mining_key_14": MessageLookupByLibrary.simpleMessage("Nilai Ditambang"),
-    "g_mining_key_15": MessageLookupByLibrary.simpleMessage(
-      "Dihitung berdasarkan harga pasar N * total hadiah N.",
+    "g_mining_key_15": MessageLookupByLibrary.simpleMessage("Task detail"),
+    "g_mining_key_19": MessageLookupByLibrary.simpleMessage("Summary"),
+    "g_mining_key_2": MessageLookupByLibrary.simpleMessage("Activities"),
+    "g_mining_key_20": MessageLookupByLibrary.simpleMessage(
+      "Total Value Mined",
+    ),
+    "g_mining_key_21": MessageLookupByLibrary.simpleMessage(
+      "Verification Since",
+    ),
+    "g_mining_key_22": MessageLookupByLibrary.simpleMessage(
+      "Reward Distribution",
     ),
     "g_mining_key_23": MessageLookupByLibrary.simpleMessage(
       "Jumlah keuntungan",
     ),
+    "g_mining_key_24": MessageLookupByLibrary.simpleMessage("Verified Value"),
     "g_mining_key_31": MessageLookupByLibrary.simpleMessage("Pilih Paket"),
     "g_mining_key_32": MessageLookupByLibrary.simpleMessage(
       "Periode Buka Kunci: Dapat dibuka kapan saja",
@@ -2974,22 +3023,40 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_43": MessageLookupByLibrary.simpleMessage(
       "Anda tidak memiliki cukup N untuk transaksi ini",
     ),
+    "g_mining_key_45": MessageLookupByLibrary.simpleMessage(
+      "Are you sure you want to skip?",
+    ),
+    "g_mining_key_46": MessageLookupByLibrary.simpleMessage(
+      "You will not receive any verification rewards until you choose 1 of the plans.",
+    ),
     "g_mining_key_47": MessageLookupByLibrary.simpleMessage("Dinonaktifkan"),
+    "g_mining_key_48": MessageLookupByLibrary.simpleMessage("Reward"),
     "g_mining_key_49": MessageLookupByLibrary.simpleMessage(
       "Lihat selengkapnya",
     ),
     "g_mining_key_5": MessageLookupByLibrary.simpleMessage("Status Verifikasi"),
+    "g_mining_key_50": MessageLookupByLibrary.simpleMessage("To unlock"),
+    "g_mining_key_52": MessageLookupByLibrary.simpleMessage("Skip"),
+    "g_mining_key_58": MessageLookupByLibrary.simpleMessage("Past 7 Days"),
+    "g_mining_key_59": MessageLookupByLibrary.simpleMessage(
+      "Accumulated Rewards",
+    ),
     "g_mining_key_6": MessageLookupByLibrary.simpleMessage(
       "Kunci N untuk mulai mendapatkan hadiah verifikasi.",
     ),
+    "g_mining_key_60": MessageLookupByLibrary.simpleMessage("Rewards Received"),
+    "g_mining_key_61": MessageLookupByLibrary.simpleMessage("Advanced"),
     "g_mining_key_62": MessageLookupByLibrary.simpleMessage("Pemula"),
+    "g_mining_key_63": MessageLookupByLibrary.simpleMessage("Pro"),
+    "g_mining_key_64": MessageLookupByLibrary.simpleMessage("FULL NODE"),
+    "g_mining_key_65": MessageLookupByLibrary.simpleMessage("MINS/DAY"),
     "g_mining_key_66": MessageLookupByLibrary.simpleMessage("Node Lanjutan"),
     "g_mining_key_67": MessageLookupByLibrary.simpleMessage("Node Pemula"),
     "g_mining_key_68": MessageLookupByLibrary.simpleMessage("Node Pro"),
     "g_mining_key_69": MessageLookupByLibrary.simpleMessage(
       "500 blok/hari~70 menit",
     ),
-    "g_mining_key_7": MessageLookupByLibrary.simpleMessage("Pilih Paket"),
+    "g_mining_key_7": MessageLookupByLibrary.simpleMessage("Unlock Date"),
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 blok/hari~15 menit",
     ),
@@ -3012,6 +3079,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Silakan simpan pasangan kunci publik dan pribadi validator terlebih dahulu.",
     ),
     "g_mining_key_79": MessageLookupByLibrary.simpleMessage("Ekspor"),
+    "g_mining_key_8": MessageLookupByLibrary.simpleMessage(
+      "Today\'s Verification Time",
+    ),
     "g_mining_key_80": MessageLookupByLibrary.simpleMessage(
       "Saldo tidak mencukupi untuk transfer.",
     ),
@@ -3082,6 +3152,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_phishing_warning_url_label": MessageLookupByLibrary.simpleMessage(
       "URL Mencurigakan:",
+    ),
+    "g_setting_mining_v1_label": MessageLookupByLibrary.simpleMessage(
+      "Penambangan Klasik (V1)",
+    ),
+    "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
+      "Penambangan Cloud (V2)",
+    ),
+    "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
+      "Antarmuka Pertambangan",
     ),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("Bagikan"),
     "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("Referral"),
@@ -3184,6 +3263,35 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_unlock_key7": MessageLookupByLibrary.simpleMessage("Autentikasi gagal"),
     "g_unlock_key8": m77,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("Anda juga dapat "),
+    "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
+      "Koneksi terputus. Silakan hubungkan kembali.",
+    ),
+    "g_wc_dapp_disconnected": MessageLookupByLibrary.simpleMessage(
+      "DApp telah terputus",
+    ),
+    "g_wc_disconnect_all": MessageLookupByLibrary.simpleMessage(
+      "Putuskan Semua",
+    ),
+    "g_wc_disconnect_all_confirm": MessageLookupByLibrary.simpleMessage(
+      "Putuskan koneksi dari semua DApp?",
+    ),
+    "g_wc_disconnect_confirm": MessageLookupByLibrary.simpleMessage(
+      "Putuskan koneksi dari DApp ini?",
+    ),
+    "g_wc_new_connection": MessageLookupByLibrary.simpleMessage("Koneksi Baru"),
+    "g_wc_no_sessions": MessageLookupByLibrary.simpleMessage(
+      "Tidak ada koneksi aktif",
+    ),
+    "g_wc_no_sessions_desc": MessageLookupByLibrary.simpleMessage(
+      "Pindai kode QR untuk terhubung ke DApp",
+    ),
+    "g_wc_proposal_timeout": MessageLookupByLibrary.simpleMessage(
+      "Permintaan koneksi telah habis waktu",
+    ),
+    "g_wc_session_expired": MessageLookupByLibrary.simpleMessage(
+      "Sesi telah berakhir",
+    ),
+    "g_wc_sessions": MessageLookupByLibrary.simpleMessage("DApp Terhubung"),
     "google_verification": MessageLookupByLibrary.simpleMessage(
       "Autentikasi Google",
     ),

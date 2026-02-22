@@ -162,7 +162,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m61(value) =>
       "Tham gia nhóm ${value} của tôi trên @N42Wallet để trở thành thợ đào sớm của chuỗi Layer 1 và nhận tiền mã hóa trên điện thoại!";
 
-  static String m62(value) => "Khóa ${value} N để vận hành người xác thực.";
+  static String m62(value, value1) =>
+      "Bạn có chắc muốn khóa ${value} N cho đến ${value1} để chạy node không?";
 
   static String m63(value) => "Nhập thất bại:${value}";
 
@@ -301,7 +302,24 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_browser_key16": MessageLookupByLibrary.simpleMessage("Đóng tất cả"),
     "g_browser_key17": MessageLookupByLibrary.simpleMessage("Xong"),
+    "g_browser_key18": MessageLookupByLibrary.simpleMessage("Lịch sử"),
+    "g_browser_key19": MessageLookupByLibrary.simpleMessage(
+      "Xóa tất cả lịch sử",
+    ),
+    "g_browser_key20": MessageLookupByLibrary.simpleMessage(
+      "Xóa tất cả lịch sử duyệt web?",
+    ),
+    "g_browser_key21": MessageLookupByLibrary.simpleMessage("Đã xóa lịch sử"),
+    "g_browser_key22": MessageLookupByLibrary.simpleMessage("Hôm nay"),
+    "g_browser_key23": MessageLookupByLibrary.simpleMessage("Hôm qua"),
+    "g_browser_key24": MessageLookupByLibrary.simpleMessage("Khám phá DApps"),
+    "g_browser_key25": MessageLookupByLibrary.simpleMessage("Phổ biến"),
+    "g_browser_key26": MessageLookupByLibrary.simpleMessage("DEX"),
+    "g_browser_key27": MessageLookupByLibrary.simpleMessage("DeFi"),
+    "g_browser_key28": MessageLookupByLibrary.simpleMessage("NFT"),
+    "g_browser_key29": MessageLookupByLibrary.simpleMessage("Cầu nối"),
     "g_browser_key3": MessageLookupByLibrary.simpleMessage("Dấu trang"),
+    "g_browser_key30": MessageLookupByLibrary.simpleMessage("Công cụ"),
     "g_browser_key4": MessageLookupByLibrary.simpleMessage(
       "Chưa có dấu trang nào",
     ),
@@ -2808,10 +2826,23 @@ class MessageLookup extends MessageLookupByLibrary {
       "Thêm xác minh sinh trắc học?",
     ),
     "g_lock_key9": MessageLookupByLibrary.simpleMessage("Đặt lại mật khẩu"),
+    "g_mining_key15": MessageLookupByLibrary.simpleMessage("Task detail"),
     "g_mining_key20": MessageLookupByLibrary.simpleMessage("Mở khóa N?"),
     "g_mining_key31": MessageLookupByLibrary.simpleMessage(
       "Hoạt động xác minh đám mây",
     ),
+    "g_mining_key33": MessageLookupByLibrary.simpleMessage(
+      "Verification Settings",
+    ),
+    "g_mining_key34": MessageLookupByLibrary.simpleMessage(
+      "Background Verification Music",
+    ),
+    "g_mining_key35": MessageLookupByLibrary.simpleMessage("Default"),
+    "g_mining_key36": MessageLookupByLibrary.simpleMessage("Mute"),
+    "g_mining_key37": MessageLookupByLibrary.simpleMessage(
+      "When background verification is enabled, the music will play in the background. If the music stops, verification will also stop.",
+    ),
+    "g_mining_key38": MessageLookupByLibrary.simpleMessage("Your Tier"),
     "g_mining_key46": MessageLookupByLibrary.simpleMessage(
       "Thiết lập cần một lượng nhỏ để trả phí gas.",
     ),
@@ -2823,17 +2854,25 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Tiếp tục"),
     "g_mining_key63": m60,
+    "g_mining_key7": MessageLookupByLibrary.simpleMessage("Unlock Date"),
     "g_mining_key73": m61,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "Tôi vừa thiết lập một node trên @N42Wallet và bắt đầu xác minh trên thiết bị di động! Hãy tham gia cùng tôi. Tương lai phi tập trung là di động!",
     ),
     "g_mining_key76": m62,
+    "g_mining_key82": MessageLookupByLibrary.simpleMessage("Mineral"),
+    "g_mining_key83": MessageLookupByLibrary.simpleMessage("Node"),
+    "g_mining_key84": MessageLookupByLibrary.simpleMessage("Network"),
+    "g_mining_key85": MessageLookupByLibrary.simpleMessage(
+      "Switch between testnet and mainnet for cloud mining.",
+    ),
     "g_mining_key86": MessageLookupByLibrary.simpleMessage(
       "Có thể đổi thưởng sau 768 giây.",
     ),
     "g_mining_key87": MessageLookupByLibrary.simpleMessage(
       "Các yêu cầu trước đó sẽ không được xử lý.",
     ),
+    "g_mining_key_1": MessageLookupByLibrary.simpleMessage("Home"),
     "g_mining_key_10": MessageLookupByLibrary.simpleMessage(
       "Phần thưởng hôm nay",
     ),
@@ -2880,10 +2919,20 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key_13": MessageLookupByLibrary.simpleMessage("Tổng phần thưởng"),
     "g_mining_key_14": MessageLookupByLibrary.simpleMessage("Giá trị đã đào"),
-    "g_mining_key_15": MessageLookupByLibrary.simpleMessage(
-      "Tính toán dựa trên giá thị trường của N nhân tổng phần thưởng N.",
+    "g_mining_key_15": MessageLookupByLibrary.simpleMessage("Task detail"),
+    "g_mining_key_19": MessageLookupByLibrary.simpleMessage("Summary"),
+    "g_mining_key_2": MessageLookupByLibrary.simpleMessage("Activities"),
+    "g_mining_key_20": MessageLookupByLibrary.simpleMessage(
+      "Total Value Mined",
+    ),
+    "g_mining_key_21": MessageLookupByLibrary.simpleMessage(
+      "Verification Since",
+    ),
+    "g_mining_key_22": MessageLookupByLibrary.simpleMessage(
+      "Reward Distribution",
     ),
     "g_mining_key_23": MessageLookupByLibrary.simpleMessage("Số lần lợi nhuận"),
+    "g_mining_key_24": MessageLookupByLibrary.simpleMessage("Verified Value"),
     "g_mining_key_31": MessageLookupByLibrary.simpleMessage("Chọn gói"),
     "g_mining_key_32": MessageLookupByLibrary.simpleMessage(
       "Thời gian mở khóa: Có thể mở khóa bất kỳ lúc nào",
@@ -2912,22 +2961,40 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_43": MessageLookupByLibrary.simpleMessage(
       "Bạn không có đủ N cho giao dịch này",
     ),
+    "g_mining_key_45": MessageLookupByLibrary.simpleMessage(
+      "Are you sure you want to skip?",
+    ),
+    "g_mining_key_46": MessageLookupByLibrary.simpleMessage(
+      "You will not receive any verification rewards until you choose 1 of the plans.",
+    ),
     "g_mining_key_47": MessageLookupByLibrary.simpleMessage("Đã tắt"),
+    "g_mining_key_48": MessageLookupByLibrary.simpleMessage("Reward"),
     "g_mining_key_49": MessageLookupByLibrary.simpleMessage("Xem thêm"),
     "g_mining_key_5": MessageLookupByLibrary.simpleMessage(
       "Trạng thái xác minh",
     ),
+    "g_mining_key_50": MessageLookupByLibrary.simpleMessage("To unlock"),
+    "g_mining_key_52": MessageLookupByLibrary.simpleMessage("Skip"),
+    "g_mining_key_58": MessageLookupByLibrary.simpleMessage("Past 7 Days"),
+    "g_mining_key_59": MessageLookupByLibrary.simpleMessage(
+      "Accumulated Rewards",
+    ),
     "g_mining_key_6": MessageLookupByLibrary.simpleMessage(
       "Khóa N để bắt đầu nhận phần thưởng xác minh.",
     ),
+    "g_mining_key_60": MessageLookupByLibrary.simpleMessage("Rewards Received"),
+    "g_mining_key_61": MessageLookupByLibrary.simpleMessage("Advanced"),
     "g_mining_key_62": MessageLookupByLibrary.simpleMessage("Nhập cuộc"),
+    "g_mining_key_63": MessageLookupByLibrary.simpleMessage("Pro"),
+    "g_mining_key_64": MessageLookupByLibrary.simpleMessage("FULL NODE"),
+    "g_mining_key_65": MessageLookupByLibrary.simpleMessage("MINS/DAY"),
     "g_mining_key_66": MessageLookupByLibrary.simpleMessage("Node nâng cao"),
     "g_mining_key_67": MessageLookupByLibrary.simpleMessage("Node nhập cuộc"),
     "g_mining_key_68": MessageLookupByLibrary.simpleMessage("Node Pro"),
     "g_mining_key_69": MessageLookupByLibrary.simpleMessage(
       "500 khối/ngày~70 phút",
     ),
-    "g_mining_key_7": MessageLookupByLibrary.simpleMessage("Chọn gói"),
+    "g_mining_key_7": MessageLookupByLibrary.simpleMessage("Unlock Date"),
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 khối/ngày~15 phút",
     ),
@@ -2950,6 +3017,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Vui lòng lưu cặp khóa công khai và khóa riêng tư của người xác minh trước.",
     ),
     "g_mining_key_79": MessageLookupByLibrary.simpleMessage("Xuất"),
+    "g_mining_key_8": MessageLookupByLibrary.simpleMessage(
+      "Today\'s Verification Time",
+    ),
     "g_mining_key_80": MessageLookupByLibrary.simpleMessage(
       "Số dư không đủ để chuyển.",
     ),
@@ -3022,6 +3092,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_phishing_warning_url_label": MessageLookupByLibrary.simpleMessage(
       "URL đáng ngờ:",
+    ),
+    "g_setting_mining_v1_label": MessageLookupByLibrary.simpleMessage(
+      "Khai thác cổ điển (V1)",
+    ),
+    "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
+      "Khai thác đám mây (V2)",
+    ),
+    "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
+      "Giao diện khai thác",
     ),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("Chia sẻ"),
     "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("Giới thiệu"),
@@ -3118,6 +3197,33 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_unlock_key7": MessageLookupByLibrary.simpleMessage("Xác thực thất bại"),
     "g_unlock_key8": m77,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("Bạn cũng có thể "),
+    "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
+      "Mất kết nối. Vui lòng kết nối lại.",
+    ),
+    "g_wc_dapp_disconnected": MessageLookupByLibrary.simpleMessage(
+      "DApp đã ngắt kết nối",
+    ),
+    "g_wc_disconnect_all": MessageLookupByLibrary.simpleMessage("Ngắt tất cả"),
+    "g_wc_disconnect_all_confirm": MessageLookupByLibrary.simpleMessage(
+      "Ngắt kết nối khỏi tất cả DApp?",
+    ),
+    "g_wc_disconnect_confirm": MessageLookupByLibrary.simpleMessage(
+      "Ngắt kết nối khỏi DApp này?",
+    ),
+    "g_wc_new_connection": MessageLookupByLibrary.simpleMessage("Kết nối mới"),
+    "g_wc_no_sessions": MessageLookupByLibrary.simpleMessage(
+      "Không có kết nối hoạt động",
+    ),
+    "g_wc_no_sessions_desc": MessageLookupByLibrary.simpleMessage(
+      "Quét mã QR để kết nối với DApp",
+    ),
+    "g_wc_proposal_timeout": MessageLookupByLibrary.simpleMessage(
+      "Yêu cầu kết nối đã hết thời gian",
+    ),
+    "g_wc_session_expired": MessageLookupByLibrary.simpleMessage(
+      "Phiên đã hết hạn",
+    ),
+    "g_wc_sessions": MessageLookupByLibrary.simpleMessage("DApp đã kết nối"),
     "google_verification": MessageLookupByLibrary.simpleMessage(
       "Xác thực Google",
     ),

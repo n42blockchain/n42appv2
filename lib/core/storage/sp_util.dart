@@ -238,6 +238,102 @@ class SPUtil {
     await prefs?.setString(SPkey.coinSearchHistory.name, json.encode(history));
   }
 
+  // ==================== V1 挖矿专用方法 ====================
+
+  /// 获取 V1 挖矿状态（按地址存储）
+  /// 格式：{ address: { miningType: String, miningValue: {...} } }
+  Future<Map<String, dynamic>?> getMiningStautus() async {
+    await initPrefs();
+    final raw = prefs?.getString(SPkey.miningV1Status.name);
+    if (raw == null || raw.isEmpty) return null;
+    try {
+      return json.decode(raw) as Map<String, dynamic>;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// 设置某地址的 V1 挖矿状态
+  Future<void> setMiningStatus(String address, Map<String, dynamic> map) async {
+    await initPrefs();
+    final existing = await getMiningStautus() ?? {};
+    existing[address] = {...(existing[address] as Map? ?? {}), ...map};
+    await prefs?.setString(SPkey.miningV1Status.name, json.encode(existing));
+  }
+
+  /// 更新某地址挖矿状态中的某个子字段
+  Future<void> setMiningStatus_child(
+      String address, String key, dynamic value) async {
+    await initPrefs();
+    final existing = await getMiningStautus() ?? {};
+    final addrData =
+        Map<String, dynamic>.from(existing[address] as Map? ?? {});
+    final miningValue =
+        Map<String, dynamic>.from(addrData['miningValue'] as Map? ?? {});
+    miningValue[key] = value;
+    addrData['miningValue'] = miningValue;
+    existing[address] = addrData;
+    await prefs?.setString(SPkey.miningV1Status.name, json.encode(existing));
+  }
+
+  /// 获取当前选中的 V1 挖矿节点
+  Future<Map<String, dynamic>?> getCurrNodeAddress() async {
+    await initPrefs();
+    final raw = prefs?.getString(SPkey.miningV1NodeAddress.name);
+    if (raw == null || raw.isEmpty) return null;
+    try {
+      return json.decode(raw) as Map<String, dynamic>;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// 设置当前选中的 V1 挖矿节点
+  Future<void> setCurrNodeAddress(Map<dynamic, dynamic> node) async {
+    await initPrefs();
+    await prefs?.setString(
+        SPkey.miningV1NodeAddress.name, json.encode(node));
+  }
+
+  /// 获取 V1 挖矿是否开启
+  Future<bool> getOpenMining() async {
+    await initPrefs();
+    return prefs?.getBool(SPkey.miningV1OpenMining.name) ?? false;
+  }
+
+  /// 设置 V1 挖矿开关（与 setMiningOpen 等价）
+  Future<void> setOpenMining(bool value) async {
+    await initPrefs();
+    await prefs?.setBool(SPkey.miningV1OpenMining.name, value);
+  }
+
+  /// 设置 V1 挖矿开关（别名）
+  Future<void> setMiningOpen(bool value) async => setOpenMining(value);
+
+  /// 获取是否使用主链挖矿
+  Future<bool?> getIsMainChainMining() async {
+    await initPrefs();
+    return prefs?.getBool(SPkey.mainChainMining.name);
+  }
+
+  /// 设置是否使用主链挖矿
+  Future<void> setIsMainChainMining(bool value) async {
+    await initPrefs();
+    await prefs?.setBool(SPkey.mainChainMining.name, value);
+  }
+
+  /// 读取挖矿 UI 版本选择：true = V2（默认），false = V1
+  Future<bool> getMiningUseV2() async {
+    await initPrefs();
+    return prefs?.getBool(SPkey.miningUiVersion.name) ?? true;
+  }
+
+  /// 保存挖矿 UI 版本选择
+  Future<void> setMiningUseV2(bool useV2) async {
+    await initPrefs();
+    await prefs?.setBool(SPkey.miningUiVersion.name, useV2);
+  }
+
   // ==================== 通用方法 ====================
 
   /// put object.
@@ -305,5 +401,10 @@ enum SPkey {
   gasAlertSettings, // Gas 价格提醒配置 JSON：Map<symbol, GasAlertConfig>
   ensExpiryReminders, // ENS 域名到期提醒配置 JSON：Map<domainName, EnsExpiryReminderConfig>
   lockPausedAt, // 应用进入后台时的 Unix 时间戳（秒），用于跨进程重启的锁屏计时
+  miningV1Status, // V1 挖矿状态（按地址）
+  miningV1NodeAddress, // V1 当前选中节点
+  miningV1OpenMining, // V1 挖矿开关
+  mainChainMining, // 是否使用主链挖矿
+  miningUiVersion, // 挖矿 UI 版本：true = V2（默认），false = V1
 }
 

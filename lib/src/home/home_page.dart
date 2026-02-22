@@ -12,6 +12,7 @@ import 'package:n42appv2/src/home/home_draw_page.dart';
 import 'package:n42appv2/src/home/unlock.dart';
 import 'package:n42appv2/src/miningV2/pages/mining_background.dart';
 import 'package:n42appv2/src/miningV2/pages/mining_today_v2.dart';
+import 'package:n42appv2/src/miningV1/pages/mining_index.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_page.dart';
@@ -48,9 +49,10 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
   
   /// Build pages list (不包含 Chat，Chat 作为独立页面跳转)
   List<Widget> _buildPages() {
+    final useV2 = ref.watch(miningUseV2Provider);
     return [
       const WalletPage(),
-      const MiningTodayV2(),
+      useV2 ? const MiningTodayV2() : const MiningIndex(),
       const EarnPage(),
     ];
   }

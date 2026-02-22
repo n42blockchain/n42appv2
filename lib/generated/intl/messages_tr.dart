@@ -164,8 +164,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m61(value) =>
       "@N42Wallet\'ta ${value} grubuma katılarak bir Layer 1 zincirinin erken madencisi olun ve telefonunuzda kripto kazanın!";
 
-  static String m62(value) =>
-      "Doğrulayıcı çalıştırmak için ${value} N kilitleyin.";
+  static String m62(value, value1) =>
+      "${value1} tarihine kadar bir düğüm çalıştırmak için ${value} N\'yi kilitlemek istediğinizden emin misiniz?";
 
   static String m63(value) => "İçe aktarma başarısız:${value}";
 
@@ -310,7 +310,28 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_browser_key16": MessageLookupByLibrary.simpleMessage("Tümünü kapat"),
     "g_browser_key17": MessageLookupByLibrary.simpleMessage("Tamam"),
+    "g_browser_key18": MessageLookupByLibrary.simpleMessage("Geçmiş"),
+    "g_browser_key19": MessageLookupByLibrary.simpleMessage(
+      "Tüm Geçmişi Temizle",
+    ),
+    "g_browser_key20": MessageLookupByLibrary.simpleMessage(
+      "Tüm tarama geçmişi silinsin mi?",
+    ),
+    "g_browser_key21": MessageLookupByLibrary.simpleMessage(
+      "Geçmiş temizlendi",
+    ),
+    "g_browser_key22": MessageLookupByLibrary.simpleMessage("Bugün"),
+    "g_browser_key23": MessageLookupByLibrary.simpleMessage("Dün"),
+    "g_browser_key24": MessageLookupByLibrary.simpleMessage(
+      "DApp\'ları Keşfet",
+    ),
+    "g_browser_key25": MessageLookupByLibrary.simpleMessage("Popüler"),
+    "g_browser_key26": MessageLookupByLibrary.simpleMessage("DEX"),
+    "g_browser_key27": MessageLookupByLibrary.simpleMessage("DeFi"),
+    "g_browser_key28": MessageLookupByLibrary.simpleMessage("NFT"),
+    "g_browser_key29": MessageLookupByLibrary.simpleMessage("Köprü"),
     "g_browser_key3": MessageLookupByLibrary.simpleMessage("Yer İmleri"),
+    "g_browser_key30": MessageLookupByLibrary.simpleMessage("Araçlar"),
     "g_browser_key4": MessageLookupByLibrary.simpleMessage(
       "Henüz yer imi eklenmedi",
     ),
@@ -2823,10 +2844,23 @@ class MessageLookup extends MessageLookupByLibrary {
       "Biyometrik doğrulama eklensin mi?",
     ),
     "g_lock_key9": MessageLookupByLibrary.simpleMessage("Şifreyi sıfırla"),
+    "g_mining_key15": MessageLookupByLibrary.simpleMessage("Task detail"),
     "g_mining_key20": MessageLookupByLibrary.simpleMessage("N kilidini aç?"),
     "g_mining_key31": MessageLookupByLibrary.simpleMessage(
       "Bulut Doğrulama Etkinliği",
     ),
+    "g_mining_key33": MessageLookupByLibrary.simpleMessage(
+      "Verification Settings",
+    ),
+    "g_mining_key34": MessageLookupByLibrary.simpleMessage(
+      "Background Verification Music",
+    ),
+    "g_mining_key35": MessageLookupByLibrary.simpleMessage("Default"),
+    "g_mining_key36": MessageLookupByLibrary.simpleMessage("Mute"),
+    "g_mining_key37": MessageLookupByLibrary.simpleMessage(
+      "When background verification is enabled, the music will play in the background. If the music stops, verification will also stop.",
+    ),
+    "g_mining_key38": MessageLookupByLibrary.simpleMessage("Your Tier"),
     "g_mining_key46": MessageLookupByLibrary.simpleMessage(
       "Kurulum gas için küçük bir miktar gerektirir.",
     ),
@@ -2838,17 +2872,25 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Devam"),
     "g_mining_key63": m60,
+    "g_mining_key7": MessageLookupByLibrary.simpleMessage("Unlock Date"),
     "g_mining_key73": m61,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "@N42Wallet\'ta bir düğüm kurdum ve mobil cihazlarda doğrulamaya başladım! Gel bana katıl. Merkeziyetsiz gelecek mobilde!",
     ),
     "g_mining_key76": m62,
+    "g_mining_key82": MessageLookupByLibrary.simpleMessage("Mineral"),
+    "g_mining_key83": MessageLookupByLibrary.simpleMessage("Node"),
+    "g_mining_key84": MessageLookupByLibrary.simpleMessage("Network"),
+    "g_mining_key85": MessageLookupByLibrary.simpleMessage(
+      "Switch between testnet and mainnet for cloud mining.",
+    ),
     "g_mining_key86": MessageLookupByLibrary.simpleMessage(
       "768 saniye sonra kullanım mümkün.",
     ),
     "g_mining_key87": MessageLookupByLibrary.simpleMessage(
       "Bundan önce yapılan istekler işlenmeyecektir.",
     ),
+    "g_mining_key_1": MessageLookupByLibrary.simpleMessage("Home"),
     "g_mining_key_10": MessageLookupByLibrary.simpleMessage("Bugünün ödülü"),
     "g_mining_key_100": MessageLookupByLibrary.simpleMessage(
       "Lütfen aşağıdaki verileri önemli bir anahtar olarak değerlendirin. Hemen güvenilir bir konuma kopyalayıp yedeklemenizi öneririz.",
@@ -2895,10 +2937,20 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key_13": MessageLookupByLibrary.simpleMessage("Toplam Ödüller"),
     "g_mining_key_14": MessageLookupByLibrary.simpleMessage("Kazılan Değer"),
-    "g_mining_key_15": MessageLookupByLibrary.simpleMessage(
-      "N\'nin piyasa fiyatı * toplam N ödüllerine göre hesaplanır.",
+    "g_mining_key_15": MessageLookupByLibrary.simpleMessage("Task detail"),
+    "g_mining_key_19": MessageLookupByLibrary.simpleMessage("Summary"),
+    "g_mining_key_2": MessageLookupByLibrary.simpleMessage("Activities"),
+    "g_mining_key_20": MessageLookupByLibrary.simpleMessage(
+      "Total Value Mined",
+    ),
+    "g_mining_key_21": MessageLookupByLibrary.simpleMessage(
+      "Verification Since",
+    ),
+    "g_mining_key_22": MessageLookupByLibrary.simpleMessage(
+      "Reward Distribution",
     ),
     "g_mining_key_23": MessageLookupByLibrary.simpleMessage("Kâr sayısı"),
+    "g_mining_key_24": MessageLookupByLibrary.simpleMessage("Verified Value"),
     "g_mining_key_31": MessageLookupByLibrary.simpleMessage("Plan Seç"),
     "g_mining_key_32": MessageLookupByLibrary.simpleMessage(
       "Kilit Açma Süresi: Her zaman kilidi açılabilir",
@@ -2921,20 +2973,38 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_43": MessageLookupByLibrary.simpleMessage(
       "Bu işlem için yeterli N bakiyeniz yok",
     ),
+    "g_mining_key_45": MessageLookupByLibrary.simpleMessage(
+      "Are you sure you want to skip?",
+    ),
+    "g_mining_key_46": MessageLookupByLibrary.simpleMessage(
+      "You will not receive any verification rewards until you choose 1 of the plans.",
+    ),
     "g_mining_key_47": MessageLookupByLibrary.simpleMessage("Devre Dışı"),
+    "g_mining_key_48": MessageLookupByLibrary.simpleMessage("Reward"),
     "g_mining_key_49": MessageLookupByLibrary.simpleMessage("Daha fazla gör"),
     "g_mining_key_5": MessageLookupByLibrary.simpleMessage("Doğrulama Durumu"),
+    "g_mining_key_50": MessageLookupByLibrary.simpleMessage("To unlock"),
+    "g_mining_key_52": MessageLookupByLibrary.simpleMessage("Skip"),
+    "g_mining_key_58": MessageLookupByLibrary.simpleMessage("Past 7 Days"),
+    "g_mining_key_59": MessageLookupByLibrary.simpleMessage(
+      "Accumulated Rewards",
+    ),
     "g_mining_key_6": MessageLookupByLibrary.simpleMessage(
       "Doğrulama ödüllerini başlatmak için N kilitleyin.",
     ),
+    "g_mining_key_60": MessageLookupByLibrary.simpleMessage("Rewards Received"),
+    "g_mining_key_61": MessageLookupByLibrary.simpleMessage("Advanced"),
     "g_mining_key_62": MessageLookupByLibrary.simpleMessage("Giriş"),
+    "g_mining_key_63": MessageLookupByLibrary.simpleMessage("Pro"),
+    "g_mining_key_64": MessageLookupByLibrary.simpleMessage("FULL NODE"),
+    "g_mining_key_65": MessageLookupByLibrary.simpleMessage("MINS/DAY"),
     "g_mining_key_66": MessageLookupByLibrary.simpleMessage("Gelişmiş Düğüm"),
     "g_mining_key_67": MessageLookupByLibrary.simpleMessage("Giriş Düğümü"),
     "g_mining_key_68": MessageLookupByLibrary.simpleMessage("Pro Düğüm"),
     "g_mining_key_69": MessageLookupByLibrary.simpleMessage(
       "500 blok/gün~70 dakika",
     ),
-    "g_mining_key_7": MessageLookupByLibrary.simpleMessage("Plan Seç"),
+    "g_mining_key_7": MessageLookupByLibrary.simpleMessage("Unlock Date"),
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 blok/gün~15 dakika",
     ),
@@ -2957,6 +3027,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Lütfen önce doğrulayıcının açık ve özel anahtar çiftini kaydedin.",
     ),
     "g_mining_key_79": MessageLookupByLibrary.simpleMessage("Dışa Aktar"),
+    "g_mining_key_8": MessageLookupByLibrary.simpleMessage(
+      "Today\'s Verification Time",
+    ),
     "g_mining_key_80": MessageLookupByLibrary.simpleMessage(
       "Transfer için yetersiz bakiye.",
     ),
@@ -3031,6 +3104,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_phishing_warning_url_label": MessageLookupByLibrary.simpleMessage(
       "Şüpheli URL:",
+    ),
+    "g_setting_mining_v1_label": MessageLookupByLibrary.simpleMessage(
+      "Klasik Madencilik (V1)",
+    ),
+    "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
+      "Bulut Madenciliği (V2)",
+    ),
+    "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
+      "Madencilik Arayüzü",
     ),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("Paylaş"),
     "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("Davet"),
@@ -3127,6 +3209,35 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_unlock_key8": m77,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("Ayrıca "),
+    "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
+      "Bağlantı kesildi. Lütfen yeniden bağlanın.",
+    ),
+    "g_wc_dapp_disconnected": MessageLookupByLibrary.simpleMessage(
+      "DApp bağlantıyı kesti",
+    ),
+    "g_wc_disconnect_all": MessageLookupByLibrary.simpleMessage("Tümünü kes"),
+    "g_wc_disconnect_all_confirm": MessageLookupByLibrary.simpleMessage(
+      "Tüm DApp bağlantılarını kes?",
+    ),
+    "g_wc_disconnect_confirm": MessageLookupByLibrary.simpleMessage(
+      "Bu DApp bağlantısını kes?",
+    ),
+    "g_wc_new_connection": MessageLookupByLibrary.simpleMessage(
+      "Yeni bağlantı",
+    ),
+    "g_wc_no_sessions": MessageLookupByLibrary.simpleMessage(
+      "Aktif bağlantı yok",
+    ),
+    "g_wc_no_sessions_desc": MessageLookupByLibrary.simpleMessage(
+      "Bir DApp\'e bağlanmak için QR kodu tarayın",
+    ),
+    "g_wc_proposal_timeout": MessageLookupByLibrary.simpleMessage(
+      "Bağlantı isteği zaman aşımına uğradı",
+    ),
+    "g_wc_session_expired": MessageLookupByLibrary.simpleMessage(
+      "Oturum süresi doldu",
+    ),
+    "g_wc_sessions": MessageLookupByLibrary.simpleMessage("Bağlı DApp\'ler"),
     "google_verification": MessageLookupByLibrary.simpleMessage(
       "Google Doğrulama",
     ),

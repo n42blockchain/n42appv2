@@ -156,7 +156,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m61(value) =>
       "@N42Walletで私の${value}グループに参加して、Layer 1チェーンの初期マイナーになり、スマホで暗号資産を獲得しよう！";
 
-  static String m62(value) => "バリデーターを実行するには${value} Nをロックしてください。";
+  static String m62(value, value1) =>
+      "ノードを実行するために${value1}まで${value} Nをロックしてもよろしいですか？";
 
   static String m63(value) => "インポートに失敗しました：${value}";
 
@@ -273,7 +274,20 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_browser_key16": MessageLookupByLibrary.simpleMessage("すべて閉じる"),
     "g_browser_key17": MessageLookupByLibrary.simpleMessage("完了"),
+    "g_browser_key18": MessageLookupByLibrary.simpleMessage("履歴"),
+    "g_browser_key19": MessageLookupByLibrary.simpleMessage("すべての履歴を消去"),
+    "g_browser_key20": MessageLookupByLibrary.simpleMessage("すべての閲覧履歴を消去しますか？"),
+    "g_browser_key21": MessageLookupByLibrary.simpleMessage("履歴を消去しました"),
+    "g_browser_key22": MessageLookupByLibrary.simpleMessage("今日"),
+    "g_browser_key23": MessageLookupByLibrary.simpleMessage("昨日"),
+    "g_browser_key24": MessageLookupByLibrary.simpleMessage("DAppsを探す"),
+    "g_browser_key25": MessageLookupByLibrary.simpleMessage("人気"),
+    "g_browser_key26": MessageLookupByLibrary.simpleMessage("DEX"),
+    "g_browser_key27": MessageLookupByLibrary.simpleMessage("DeFi"),
+    "g_browser_key28": MessageLookupByLibrary.simpleMessage("NFT"),
+    "g_browser_key29": MessageLookupByLibrary.simpleMessage("ブリッジ"),
     "g_browser_key3": MessageLookupByLibrary.simpleMessage("ブックマーク"),
+    "g_browser_key30": MessageLookupByLibrary.simpleMessage("ツール"),
     "g_browser_key4": MessageLookupByLibrary.simpleMessage(
       "ブックマークがまだ追加されていません",
     ),
@@ -2426,8 +2440,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key7": MessageLookupByLibrary.simpleMessage("生体認証が有効になっていません"),
     "g_lock_key8": MessageLookupByLibrary.simpleMessage("生体認証を追加しますか？"),
     "g_lock_key9": MessageLookupByLibrary.simpleMessage("パスワードをリセット"),
+    "g_mining_key15": MessageLookupByLibrary.simpleMessage("Task detail"),
     "g_mining_key20": MessageLookupByLibrary.simpleMessage("Nをアンロックしますか？"),
     "g_mining_key31": MessageLookupByLibrary.simpleMessage("クラウド認証アクティビティ"),
+    "g_mining_key33": MessageLookupByLibrary.simpleMessage(
+      "Verification Settings",
+    ),
+    "g_mining_key34": MessageLookupByLibrary.simpleMessage(
+      "Background Verification Music",
+    ),
+    "g_mining_key35": MessageLookupByLibrary.simpleMessage("Default"),
+    "g_mining_key36": MessageLookupByLibrary.simpleMessage("Mute"),
+    "g_mining_key37": MessageLookupByLibrary.simpleMessage(
+      "When background verification is enabled, the music will play in the background. If the music stops, verification will also stop.",
+    ),
+    "g_mining_key38": MessageLookupByLibrary.simpleMessage("Your Tier"),
     "g_mining_key46": MessageLookupByLibrary.simpleMessage(
       "セットアップには少量のガスが必要です。",
     ),
@@ -2437,15 +2464,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key61": MessageLookupByLibrary.simpleMessage("友達に共有"),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("続行"),
     "g_mining_key63": m60,
+    "g_mining_key7": MessageLookupByLibrary.simpleMessage("Unlock Date"),
     "g_mining_key73": m61,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "@N42Walletでノードをセットアップし、モバイルデバイスで認証を開始しました！ぜひ参加してください。分散化された未来はモバイルです！",
     ),
     "g_mining_key76": m62,
+    "g_mining_key82": MessageLookupByLibrary.simpleMessage("Mineral"),
+    "g_mining_key83": MessageLookupByLibrary.simpleMessage("Node"),
+    "g_mining_key84": MessageLookupByLibrary.simpleMessage("Network"),
+    "g_mining_key85": MessageLookupByLibrary.simpleMessage(
+      "Switch between testnet and mainnet for cloud mining.",
+    ),
     "g_mining_key86": MessageLookupByLibrary.simpleMessage("768秒後に引き換え可能です。"),
     "g_mining_key87": MessageLookupByLibrary.simpleMessage(
       "それ以前のリクエストは処理されません。",
     ),
+    "g_mining_key_1": MessageLookupByLibrary.simpleMessage("Home"),
     "g_mining_key_10": MessageLookupByLibrary.simpleMessage("本日の報酬"),
     "g_mining_key_100": MessageLookupByLibrary.simpleMessage(
       "以下のデータを重要な鍵として扱ってください。すぐにコピーして信頼できる場所にバックアップすることをお勧めします。",
@@ -2484,10 +2519,20 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key_13": MessageLookupByLibrary.simpleMessage("累計報酬"),
     "g_mining_key_14": MessageLookupByLibrary.simpleMessage("マイニング価値"),
-    "g_mining_key_15": MessageLookupByLibrary.simpleMessage(
-      "Nの市場価格 × 累計N報酬に基づいて計算されます。",
+    "g_mining_key_15": MessageLookupByLibrary.simpleMessage("Task detail"),
+    "g_mining_key_19": MessageLookupByLibrary.simpleMessage("Summary"),
+    "g_mining_key_2": MessageLookupByLibrary.simpleMessage("Activities"),
+    "g_mining_key_20": MessageLookupByLibrary.simpleMessage(
+      "Total Value Mined",
+    ),
+    "g_mining_key_21": MessageLookupByLibrary.simpleMessage(
+      "Verification Since",
+    ),
+    "g_mining_key_22": MessageLookupByLibrary.simpleMessage(
+      "Reward Distribution",
     ),
     "g_mining_key_23": MessageLookupByLibrary.simpleMessage("利益回数"),
+    "g_mining_key_24": MessageLookupByLibrary.simpleMessage("Verified Value"),
     "g_mining_key_31": MessageLookupByLibrary.simpleMessage("プランを選択"),
     "g_mining_key_32": MessageLookupByLibrary.simpleMessage(
       "アンロック期間：いつでもアンロック可能",
@@ -2504,18 +2549,36 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_43": MessageLookupByLibrary.simpleMessage(
       "この取引に必要なNが不足しています",
     ),
+    "g_mining_key_45": MessageLookupByLibrary.simpleMessage(
+      "Are you sure you want to skip?",
+    ),
+    "g_mining_key_46": MessageLookupByLibrary.simpleMessage(
+      "You will not receive any verification rewards until you choose 1 of the plans.",
+    ),
     "g_mining_key_47": MessageLookupByLibrary.simpleMessage("無効"),
+    "g_mining_key_48": MessageLookupByLibrary.simpleMessage("Reward"),
     "g_mining_key_49": MessageLookupByLibrary.simpleMessage("詳細を見る"),
     "g_mining_key_5": MessageLookupByLibrary.simpleMessage("認証ステータス"),
+    "g_mining_key_50": MessageLookupByLibrary.simpleMessage("To unlock"),
+    "g_mining_key_52": MessageLookupByLibrary.simpleMessage("Skip"),
+    "g_mining_key_58": MessageLookupByLibrary.simpleMessage("Past 7 Days"),
+    "g_mining_key_59": MessageLookupByLibrary.simpleMessage(
+      "Accumulated Rewards",
+    ),
     "g_mining_key_6": MessageLookupByLibrary.simpleMessage(
       "Nをロックして報酬認証を開始します。",
     ),
+    "g_mining_key_60": MessageLookupByLibrary.simpleMessage("Rewards Received"),
+    "g_mining_key_61": MessageLookupByLibrary.simpleMessage("Advanced"),
     "g_mining_key_62": MessageLookupByLibrary.simpleMessage("エントリー"),
+    "g_mining_key_63": MessageLookupByLibrary.simpleMessage("Pro"),
+    "g_mining_key_64": MessageLookupByLibrary.simpleMessage("FULL NODE"),
+    "g_mining_key_65": MessageLookupByLibrary.simpleMessage("MINS/DAY"),
     "g_mining_key_66": MessageLookupByLibrary.simpleMessage("アドバンスドノード"),
     "g_mining_key_67": MessageLookupByLibrary.simpleMessage("エントリーノード"),
     "g_mining_key_68": MessageLookupByLibrary.simpleMessage("プロノード"),
     "g_mining_key_69": MessageLookupByLibrary.simpleMessage("1日500ブロック〜約70分"),
-    "g_mining_key_7": MessageLookupByLibrary.simpleMessage("プランを選択"),
+    "g_mining_key_7": MessageLookupByLibrary.simpleMessage("Unlock Date"),
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage("1日100ブロック〜約15分"),
     "g_mining_key_71": m65,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage("128秒ごとにチェック"),
@@ -2532,6 +2595,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "まずバリデーターの公開鍵と秘密鍵のペアを保存してください。",
     ),
     "g_mining_key_79": MessageLookupByLibrary.simpleMessage("エクスポート"),
+    "g_mining_key_8": MessageLookupByLibrary.simpleMessage(
+      "Today\'s Verification Time",
+    ),
     "g_mining_key_80": MessageLookupByLibrary.simpleMessage(
       "送金するための資金が不足しています。",
     ),
@@ -2589,6 +2655,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_phishing_warning_url_label": MessageLookupByLibrary.simpleMessage(
       "不審なURL：",
     ),
+    "g_setting_mining_v1_label": MessageLookupByLibrary.simpleMessage(
+      "クラシックマイニング (V1)",
+    ),
+    "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
+      "クラウドマイニング (V2)",
+    ),
+    "g_setting_mining_version": MessageLookupByLibrary.simpleMessage("マイニング画面"),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("共有"),
     "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("紹介"),
     "g_share_v3_key_3": MessageLookupByLibrary.simpleMessage(
@@ -2672,6 +2745,31 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_unlock_key7": MessageLookupByLibrary.simpleMessage("認証に失敗しました"),
     "g_unlock_key8": m77,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("または"),
+    "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
+      "接続が切れました。再接続してください。",
+    ),
+    "g_wc_dapp_disconnected": MessageLookupByLibrary.simpleMessage(
+      "DAppが切断されました",
+    ),
+    "g_wc_disconnect_all": MessageLookupByLibrary.simpleMessage("すべて切断"),
+    "g_wc_disconnect_all_confirm": MessageLookupByLibrary.simpleMessage(
+      "すべてのDAppから切断しますか？",
+    ),
+    "g_wc_disconnect_confirm": MessageLookupByLibrary.simpleMessage(
+      "このDAppから切断しますか？",
+    ),
+    "g_wc_new_connection": MessageLookupByLibrary.simpleMessage("新しい接続"),
+    "g_wc_no_sessions": MessageLookupByLibrary.simpleMessage("アクティブな接続はありません"),
+    "g_wc_no_sessions_desc": MessageLookupByLibrary.simpleMessage(
+      "QRコードをスキャンしてDAppに接続",
+    ),
+    "g_wc_proposal_timeout": MessageLookupByLibrary.simpleMessage(
+      "接続リクエストがタイムアウトしました",
+    ),
+    "g_wc_session_expired": MessageLookupByLibrary.simpleMessage(
+      "セッションの有効期限が切れました",
+    ),
+    "g_wc_sessions": MessageLookupByLibrary.simpleMessage("接続中のDApp"),
     "google_verification": MessageLookupByLibrary.simpleMessage("Google認証"),
     "google_verification_message10": MessageLookupByLibrary.simpleMessage(
       "リンク",

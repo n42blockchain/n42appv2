@@ -161,7 +161,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m61(value) =>
       "@N42Wallet에서 내 ${value} 그룹에 참여하여 레이어 1 체인의 초기 채굴자가 되고, 폰으로 암호화폐를 받으세요!";
 
-  static String m62(value) => "검증자를 실행하려면 ${value} N을 잠그세요.";
+  static String m62(value, value1) =>
+      "${value1}까지 노드를 실행하기 위해 ${value} N을 잠그시겠습니까?";
 
   static String m63(value) => "가져오기 실패:${value}";
 
@@ -276,7 +277,22 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_browser_key14": MessageLookupByLibrary.simpleMessage("DApp 연결을 확인하세요"),
     "g_browser_key16": MessageLookupByLibrary.simpleMessage("모두 닫기"),
     "g_browser_key17": MessageLookupByLibrary.simpleMessage("완료"),
+    "g_browser_key18": MessageLookupByLibrary.simpleMessage("기록"),
+    "g_browser_key19": MessageLookupByLibrary.simpleMessage("모든 기록 삭제"),
+    "g_browser_key20": MessageLookupByLibrary.simpleMessage(
+      "모든 탐색 기록을 삭제하시겠습니까?",
+    ),
+    "g_browser_key21": MessageLookupByLibrary.simpleMessage("기록이 삭제되었습니다"),
+    "g_browser_key22": MessageLookupByLibrary.simpleMessage("오늘"),
+    "g_browser_key23": MessageLookupByLibrary.simpleMessage("어제"),
+    "g_browser_key24": MessageLookupByLibrary.simpleMessage("DApp 탐색"),
+    "g_browser_key25": MessageLookupByLibrary.simpleMessage("인기"),
+    "g_browser_key26": MessageLookupByLibrary.simpleMessage("DEX"),
+    "g_browser_key27": MessageLookupByLibrary.simpleMessage("DeFi"),
+    "g_browser_key28": MessageLookupByLibrary.simpleMessage("NFT"),
+    "g_browser_key29": MessageLookupByLibrary.simpleMessage("브릿지"),
     "g_browser_key3": MessageLookupByLibrary.simpleMessage("북마크"),
+    "g_browser_key30": MessageLookupByLibrary.simpleMessage("도구"),
     "g_browser_key4": MessageLookupByLibrary.simpleMessage("아직 북마크가 없습니다"),
     "g_browser_key5": MessageLookupByLibrary.simpleMessage("북마크"),
     "g_browser_key6": MessageLookupByLibrary.simpleMessage("이름"),
@@ -2527,8 +2543,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key7": MessageLookupByLibrary.simpleMessage("생체 인식이 활성화되지 않았습니다"),
     "g_lock_key8": MessageLookupByLibrary.simpleMessage("생체 인증을 추가하시겠습니까?"),
     "g_lock_key9": MessageLookupByLibrary.simpleMessage("비밀번호 재설정"),
+    "g_mining_key15": MessageLookupByLibrary.simpleMessage("Task detail"),
     "g_mining_key20": MessageLookupByLibrary.simpleMessage("N 잠금 해제?"),
     "g_mining_key31": MessageLookupByLibrary.simpleMessage("클라우드 검증 활동"),
+    "g_mining_key33": MessageLookupByLibrary.simpleMessage(
+      "Verification Settings",
+    ),
+    "g_mining_key34": MessageLookupByLibrary.simpleMessage(
+      "Background Verification Music",
+    ),
+    "g_mining_key35": MessageLookupByLibrary.simpleMessage("Default"),
+    "g_mining_key36": MessageLookupByLibrary.simpleMessage("Mute"),
+    "g_mining_key37": MessageLookupByLibrary.simpleMessage(
+      "When background verification is enabled, the music will play in the background. If the music stops, verification will also stop.",
+    ),
+    "g_mining_key38": MessageLookupByLibrary.simpleMessage("Your Tier"),
     "g_mining_key46": MessageLookupByLibrary.simpleMessage(
       "설정에는 소량의 가스가 필요합니다.",
     ),
@@ -2538,15 +2567,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key61": MessageLookupByLibrary.simpleMessage("친구에게 공유"),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("계속"),
     "g_mining_key63": m60,
+    "g_mining_key7": MessageLookupByLibrary.simpleMessage("Unlock Date"),
     "g_mining_key73": m61,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "@N42Wallet에서 노드를 설정하고 모바일 기기에서 검증을 시작했습니다! 함께하세요. 탈중앙화 미래는 모바일입니다!",
     ),
     "g_mining_key76": m62,
+    "g_mining_key82": MessageLookupByLibrary.simpleMessage("Mineral"),
+    "g_mining_key83": MessageLookupByLibrary.simpleMessage("Node"),
+    "g_mining_key84": MessageLookupByLibrary.simpleMessage("Network"),
+    "g_mining_key85": MessageLookupByLibrary.simpleMessage(
+      "Switch between testnet and mainnet for cloud mining.",
+    ),
     "g_mining_key86": MessageLookupByLibrary.simpleMessage("768초 후 상환 가능."),
     "g_mining_key87": MessageLookupByLibrary.simpleMessage(
       "그 전의 요청은 처리되지 않습니다.",
     ),
+    "g_mining_key_1": MessageLookupByLibrary.simpleMessage("Home"),
     "g_mining_key_10": MessageLookupByLibrary.simpleMessage("오늘의 보상"),
     "g_mining_key_100": MessageLookupByLibrary.simpleMessage(
       "아래 데이터를 중요한 키로 취급하세요. 즉시 복사하여 신뢰할 수 있는 위치에 백업하는 것을 권장합니다.",
@@ -2585,10 +2622,20 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key_13": MessageLookupByLibrary.simpleMessage("총 보상"),
     "g_mining_key_14": MessageLookupByLibrary.simpleMessage("채굴 가치"),
-    "g_mining_key_15": MessageLookupByLibrary.simpleMessage(
-      "N 시장 가격 * 총 N 보상을 기준으로 계산됩니다.",
+    "g_mining_key_15": MessageLookupByLibrary.simpleMessage("Task detail"),
+    "g_mining_key_19": MessageLookupByLibrary.simpleMessage("Summary"),
+    "g_mining_key_2": MessageLookupByLibrary.simpleMessage("Activities"),
+    "g_mining_key_20": MessageLookupByLibrary.simpleMessage(
+      "Total Value Mined",
+    ),
+    "g_mining_key_21": MessageLookupByLibrary.simpleMessage(
+      "Verification Since",
+    ),
+    "g_mining_key_22": MessageLookupByLibrary.simpleMessage(
+      "Reward Distribution",
     ),
     "g_mining_key_23": MessageLookupByLibrary.simpleMessage("수익 횟수"),
+    "g_mining_key_24": MessageLookupByLibrary.simpleMessage("Verified Value"),
     "g_mining_key_31": MessageLookupByLibrary.simpleMessage("플랜 선택"),
     "g_mining_key_32": MessageLookupByLibrary.simpleMessage(
       "잠금 해제 기간: 언제든지 잠금 해제 가능",
@@ -2605,18 +2652,36 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_43": MessageLookupByLibrary.simpleMessage(
       "이 거래에 필요한 N이 부족합니다",
     ),
+    "g_mining_key_45": MessageLookupByLibrary.simpleMessage(
+      "Are you sure you want to skip?",
+    ),
+    "g_mining_key_46": MessageLookupByLibrary.simpleMessage(
+      "You will not receive any verification rewards until you choose 1 of the plans.",
+    ),
     "g_mining_key_47": MessageLookupByLibrary.simpleMessage("비활성화됨"),
+    "g_mining_key_48": MessageLookupByLibrary.simpleMessage("Reward"),
     "g_mining_key_49": MessageLookupByLibrary.simpleMessage("더 보기"),
     "g_mining_key_5": MessageLookupByLibrary.simpleMessage("검증 상태"),
+    "g_mining_key_50": MessageLookupByLibrary.simpleMessage("To unlock"),
+    "g_mining_key_52": MessageLookupByLibrary.simpleMessage("Skip"),
+    "g_mining_key_58": MessageLookupByLibrary.simpleMessage("Past 7 Days"),
+    "g_mining_key_59": MessageLookupByLibrary.simpleMessage(
+      "Accumulated Rewards",
+    ),
     "g_mining_key_6": MessageLookupByLibrary.simpleMessage(
       "N을 잠그고 검증 보상을 시작하세요.",
     ),
+    "g_mining_key_60": MessageLookupByLibrary.simpleMessage("Rewards Received"),
+    "g_mining_key_61": MessageLookupByLibrary.simpleMessage("Advanced"),
     "g_mining_key_62": MessageLookupByLibrary.simpleMessage("엔트리"),
+    "g_mining_key_63": MessageLookupByLibrary.simpleMessage("Pro"),
+    "g_mining_key_64": MessageLookupByLibrary.simpleMessage("FULL NODE"),
+    "g_mining_key_65": MessageLookupByLibrary.simpleMessage("MINS/DAY"),
     "g_mining_key_66": MessageLookupByLibrary.simpleMessage("어드밴스드 노드"),
     "g_mining_key_67": MessageLookupByLibrary.simpleMessage("엔트리 노드"),
     "g_mining_key_68": MessageLookupByLibrary.simpleMessage("프로 노드"),
     "g_mining_key_69": MessageLookupByLibrary.simpleMessage("하루 500블록~70분"),
-    "g_mining_key_7": MessageLookupByLibrary.simpleMessage("플랜 선택"),
+    "g_mining_key_7": MessageLookupByLibrary.simpleMessage("Unlock Date"),
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage("하루 100블록~15분"),
     "g_mining_key_71": m65,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage("검증당 128초"),
@@ -2633,6 +2698,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "먼저 검증자의 공개키와 개인키 쌍을 저장하세요.",
     ),
     "g_mining_key_79": MessageLookupByLibrary.simpleMessage("내보내기"),
+    "g_mining_key_8": MessageLookupByLibrary.simpleMessage(
+      "Today\'s Verification Time",
+    ),
     "g_mining_key_80": MessageLookupByLibrary.simpleMessage(
       "송금에 필요한 자금이 부족합니다.",
     ),
@@ -2683,6 +2751,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_phishing_warning_title": MessageLookupByLibrary.simpleMessage("보안 경고"),
     "g_phishing_warning_url_label": MessageLookupByLibrary.simpleMessage(
       "의심스러운 URL:",
+    ),
+    "g_setting_mining_v1_label": MessageLookupByLibrary.simpleMessage(
+      "클래식 채굴 (V1)",
+    ),
+    "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
+      "클라우드 채굴 (V2)",
+    ),
+    "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
+      "채굴 인터페이스",
     ),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("공유"),
     "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("추천"),
@@ -2765,6 +2842,29 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_unlock_key7": MessageLookupByLibrary.simpleMessage("인증 실패"),
     "g_unlock_key8": m77,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("또한 "),
+    "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
+      "연결이 끊어졌습니다. 다시 연결해 주세요.",
+    ),
+    "g_wc_dapp_disconnected": MessageLookupByLibrary.simpleMessage(
+      "DApp이 연결을 해제했습니다",
+    ),
+    "g_wc_disconnect_all": MessageLookupByLibrary.simpleMessage("모두 연결 해제"),
+    "g_wc_disconnect_all_confirm": MessageLookupByLibrary.simpleMessage(
+      "모든 DApp에서 연결을 해제하시겠습니까?",
+    ),
+    "g_wc_disconnect_confirm": MessageLookupByLibrary.simpleMessage(
+      "이 DApp에서 연결을 해제하시겠습니까?",
+    ),
+    "g_wc_new_connection": MessageLookupByLibrary.simpleMessage("새 연결"),
+    "g_wc_no_sessions": MessageLookupByLibrary.simpleMessage("활성 연결 없음"),
+    "g_wc_no_sessions_desc": MessageLookupByLibrary.simpleMessage(
+      "QR 코드를 스캔하여 DApp에 연결하세요",
+    ),
+    "g_wc_proposal_timeout": MessageLookupByLibrary.simpleMessage(
+      "연결 요청 시간이 초과되었습니다",
+    ),
+    "g_wc_session_expired": MessageLookupByLibrary.simpleMessage("세션이 만료되었습니다"),
+    "g_wc_sessions": MessageLookupByLibrary.simpleMessage("연결된 DApp"),
     "google_verification": MessageLookupByLibrary.simpleMessage("Google 인증"),
     "google_verification_message10": MessageLookupByLibrary.simpleMessage("연결"),
     "google_verification_message11": MessageLookupByLibrary.simpleMessage(
