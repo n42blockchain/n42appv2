@@ -20,6 +20,10 @@ class MiningApi{
     'MINING_RPC_URL',
     defaultValue: 'http://5.161.252.59:8545',
   );
+  static const String _explorerApiBase = String.fromEnvironment(
+    'MINING_EXPLORER_URL',
+    defaultValue: 'https://testnet2.n42.world',
+  );
   static const String _depositContractAddress='0x0dcAE65dDB5df8f1817D35286beAC32b8994962B';
   Future<Map<String,String>?> generateBls12381Keypair()async{
     try{
@@ -83,7 +87,7 @@ class MiningApi{
   Future<MessageModel> getMiningWithdrawalsDaily(String dayStr,String address)async{
     try {
       //https://testnet2.n42.world/api/v2/addresses/0x8157AC6F0C0eb1F465D14f62917e151637Ee47cC/withdrawals-daily?day=2025-11-12
-      var data = await BaseApi.requestEmptyH.get("https://testnet2.n42.world/api/v2/addresses/$address/withdrawals-daily?day=$dayStr", params: {});
+      var data = await BaseApi.requestEmptyH.get("$_explorerApiBase/api/v2/addresses/$address/withdrawals-daily?day=$dayStr", params: {});
       MessageModel mm=MessageModel();
       List<dynamic>? items=data['items'];
       if(items != null){
@@ -105,7 +109,7 @@ class MiningApi{
   Future<MessageModel> getMiningWithdrawalsDailySummary(String address)async{
     try {
       //https://testnet2.n42.world/api/v2/addresses/0xCC5BC02C7cD8E7bda6D17128f3B20949040c5131/withdrawals-daily/summary
-      var data = await BaseApi.requestEmptyH.get("https://testnet2.n42.world/api/v2/addresses/$address/withdrawals-daily/summary", params: {});
+      var data = await BaseApi.requestEmptyH.get("$_explorerApiBase/api/v2/addresses/$address/withdrawals-daily/summary", params: {});
       MessageModel mm=MessageModel();
       if(data != null){
         mm.data = data['total_amount'];
