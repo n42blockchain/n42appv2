@@ -81,18 +81,17 @@ class MarketApi {
       if (raw == null || raw is! List) return [];
 
       // [FIX M3] Validate OHLC constraints via OhlcPoint.isValid.
-      final result = <OhlcPoint>[];
-      for (final item in raw) {
-        if (item is! List || item.length < 5) continue;
-        final point = OhlcPoint(
-          open: _toDouble(item[1]),
-          high: _toDouble(item[2]),
-          low: _toDouble(item[3]),
-          close: _toDouble(item[4]),
-        );
-        if (point.isValid) result.add(point);
-      }
-      return result;
+      return raw
+          .whereType<List>()
+          .where((item) => item.length >= 5)
+          .map((item) => OhlcPoint(
+                open: _toDouble(item[1]),
+                high: _toDouble(item[2]),
+                low: _toDouble(item[3]),
+                close: _toDouble(item[4]),
+              ))
+          .where((p) => p.isValid)
+          .toList();
     } catch (e, st) {
       debugPrint('MarketApi.getOhlcvData error: $e\n$st');
       return [];
@@ -143,10 +142,9 @@ class MarketApi {
         header: _header,
       );
 
-      if (data == null || (data is Map && data['data'] == null)) {
-        return {'error': true, 'data': '未找到该币'};
-      }
-      return {'error': false, 'data': data['data']};
+      final d = (data is Map) ? data['data'] : null;
+      if (d == null) return {'error': true, 'data': '未找到该币'};
+      return {'error': false, 'data': d};
     } catch (e, st) {
       debugPrint('MarketApi.getWalletCoinsBaseInfo error: $e\n$st');
       return {'error': true, 'data': e.toString()};
