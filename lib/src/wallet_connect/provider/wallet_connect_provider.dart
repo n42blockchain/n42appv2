@@ -1,5 +1,7 @@
 ﻿import 'dart:convert';
+import 'dart:async';
 
+import 'package:flutter/widgets.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/core/di/service_locator_setup.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
@@ -21,7 +23,11 @@ import 'package:wallet/wallet.dart' as wallet_types;
 import 'package:web3dart/web3dart.dart' as crypto;
 import 'package:web3dart/web3dart.dart' as web3;
 
-class WalletConnectProvider with ChangeNotifier{
+class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
+  WalletConnectProvider() {
+    WidgetsBinding.instance.addObserver(this);
+  }
+
   /// 公开的刷新方法，用于通知监听者数据已更新
   void refresh() {
     notifyListeners();
@@ -29,6 +35,8 @@ class WalletConnectProvider with ChangeNotifier{
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _cancelReconnectTimer();
     web3client?.dispose();
     web3client = null;
     if (signClient != null) {
@@ -46,6 +54,67 @@ class WalletConnectProvider with ChangeNotifier{
     super.dispose();
   }
 
+  // ── App lifecycle ──────────────────────────────────────────────────────────
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _onAppResumed();
+    }
+  }
+
+  /// Called when app returns to foreground.
+  /// Re-establishes the relay WebSocket that may have been closed by the OS.
+  void _onAppResumed() {
+    if (signClient == null || dAppTopic == null) return;
+    try {
+      // The SDK call is a no-op when already connected, safe to always call.
+      signClient!.core.relayClient.connect().catchError((e) {
+        debugPrint('[WalletConnect] Resume relay reconnect error: $e');
+      });
+    } catch (e) {
+      debugPrint('[WalletConnect] Resume relay reconnect: $e');
+    }
+  }
+
+  // ── Reconnect timer ───────────────────────────────────────────────────────
+
+  Timer? _reconnectTimer;
+  static const _maxReconnectAttempts = 5;
+  int _reconnectAttempts = 0;
+
+  void _scheduleReconnect() {
+    _cancelReconnectTimer();
+    if (signClient == null || _reconnectAttempts >= _maxReconnectAttempts) {
+      if (_reconnectAttempts >= _maxReconnectAttempts && dAppTopic != null) {
+        ToastUtils.show('Connection lost. Please reconnect.');
+        viewStateDeal(WalletConnectState.disconnect);
+      }
+      return;
+    }
+    // Exponential back-off: 2s, 4s, 8s, 16s, 30s
+    final seconds = (_reconnectAttempts < 4) ? (2 << _reconnectAttempts) : 30;
+    _reconnectTimer = Timer(Duration(seconds: seconds), _tryReconnect);
+    debugPrint('[WalletConnect] Reconnect attempt ${_reconnectAttempts + 1} in ${seconds}s');
+  }
+
+  Future<void> _tryReconnect() async {
+    _reconnectAttempts++;
+    try {
+      await signClient!.core.relayClient.connect();
+      _reconnectAttempts = 0;
+      debugPrint('[WalletConnect] Relay reconnected');
+    } catch (e) {
+      debugPrint('[WalletConnect] Reconnect #$_reconnectAttempts failed: $e');
+      _scheduleReconnect();
+    }
+  }
+
+  void _cancelReconnectTimer() {
+    _reconnectTimer?.cancel();
+    _reconnectTimer = null;
+  }
+
   Trustdart? _trustdart;
   Trustdart get trustdart{
     _trustdart ??= Trustdart();
@@ -56,6 +125,14 @@ class WalletConnectProvider with ChangeNotifier{
   //Web3Wallet? wcClient;
   web3.Web3Client? web3client;
   String? dAppTopic;
+
+  /// Guard: prevent duplicate WalletKit event subscriptions when connectInit
+  /// is called again (e.g. user scans a new QR after disconnect).
+  bool _eventsRegistered = false;
+
+  /// True while the user-initiated disconnect is in progress.
+  /// Suppresses the DApp-disconnect Toast from [onSessionDelete] in that window.
+  bool _disconnectingByUser = false;
 
   late web3.EthPrivateKey privateKey;
   //List<PairingInfo> pairings = [];
@@ -210,6 +287,12 @@ class WalletConnectProvider with ChangeNotifier{
   }
   Future<void> connectInit()async{
     try{
+      if (signClient != null) {
+        // Already initialised — re-use the existing client and just
+        // refresh the coin model for the new pairing attempt.
+        coinModelInit();
+        return;
+      }
       signClient=await wallet_connect.ReownWalletKit.createInstance(
         projectId: "18a60a7cb862aad161fecd764ecc736a",
         metadata: wallet_connect.PairingMetadata(
@@ -362,8 +445,30 @@ class WalletConnectProvider with ChangeNotifier{
   }
 
   void setChainInfo(){
+    // Guard: subscribe only once per client instance.
+    if (_eventsRegistered) return;
+    _eventsRegistered = true;
     try{
       if(signClient !=null){
+        // ── Relay client monitoring ──────────────────────────────────────────
+        // Re-establish the WebSocket when the OS closed it while in background.
+        try {
+          signClient!.core.relayClient.onRelayClientDisconnect.subscribe((_) {
+            debugPrint('[WalletConnect] Relay disconnected');
+            if (dAppTopic != null) _scheduleReconnect();
+          });
+          signClient!.core.relayClient.onRelayClientConnect.subscribe((_) {
+            debugPrint('[WalletConnect] Relay connected');
+            _reconnectAttempts = 0;
+            _cancelReconnectTimer();
+          });
+          signClient!.core.relayClient.onRelayClientError.subscribe((_) {
+            debugPrint('[WalletConnect] Relay error');
+          });
+        } catch (e) {
+          debugPrint('[WalletConnect] Relay event subscription unavailable: $e');
+        }
+
         signClient!.onSessionProposal.subscribe((wallet_connect.SessionProposalEvent? args)async{
           if(args !=null){
             actionData=args;
@@ -489,8 +594,11 @@ class WalletConnectProvider with ChangeNotifier{
             setActionDataMap(args);
           }
         });
-        signClient!.onSessionDelete.subscribe(( args) async{
-          if(dAppTopic !=null && dAppTopic==args.topic){
+        signClient!.onSessionDelete.subscribe((args) async{
+          // Only notify when the DApp (remote peer) initiated the disconnect.
+          // User-initiated disconnects are handled in [disconnectOnTap].
+          if (dAppTopic != null && dAppTopic == args.topic && !_disconnectingByUser) {
+            ToastUtils.show('DApp has disconnected');
             viewStateDeal(WalletConnectState.disconnect);
           }
         });
@@ -502,8 +610,15 @@ class WalletConnectProvider with ChangeNotifier{
         signClient!.onSessionPing.subscribe((args) async{
         });
         signClient!.onSessionExpire.subscribe((args) async{
+          // Session TTL (default 7 days) has passed; must reconnect from scratch.
+          if (dAppTopic != null) {
+            ToastUtils.show('Session has expired');
+            viewStateDeal(WalletConnectState.disconnect);
+          }
         });
         signClient!.onProposalExpire.subscribe((wallet_connect.SessionProposalEvent? args) async{
+          // QR-code scan window timed out (typically 5 minutes).
+          viewStateDeal(WalletConnectState.error, params: 'Connection request timed out');
         });
       }
     }catch(e){
@@ -705,11 +820,29 @@ class WalletConnectProvider with ChangeNotifier{
       viewStateDeal(WalletConnectState.connect);
     });
   }
-  Future<void> disconnectOnTap()async{
-    await signClient!.disconnectSession(
-        topic: dAppTopic??"",
-      reason: wallet_connect.Errors.getSdkError(wallet_connect.Errors.USER_DISCONNECTED).toSignError(),
-    );
+  Future<void> disconnectOnTap() async {
+    final topic = dAppTopic;
+    if (topic == null) {
+      // Nothing to disconnect; just reset state.
+      viewStateDeal(WalletConnectState.disconnect);
+      return;
+    }
+    _disconnectingByUser = true;
+    try {
+      await signClient!.disconnectSession(
+        topic: topic,
+        reason: wallet_connect.Errors.getSdkError(
+          wallet_connect.Errors.USER_DISCONNECTED,
+        ).toSignError(),
+      );
+    } catch (e) {
+      // Session may already be gone (e.g. network drop, DApp crashed).
+      // We still want to clean up local state.
+      if (kDebugMode) debugPrint('[WalletConnect] Disconnect error: $e');
+    } finally {
+      _disconnectingByUser = false;
+      viewStateDeal(WalletConnectState.disconnect);
+    }
   }
   Future<void> viewStateDeal(WalletConnectState state,{dynamic params})async{
     switch(state){

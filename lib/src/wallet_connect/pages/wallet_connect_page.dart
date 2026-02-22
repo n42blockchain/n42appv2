@@ -448,7 +448,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
           endIndent: ScreenUtil().setWidth(30),
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
         ),
-        itemWidget("Form",connectV2.actionDataMap?['from']??""),
+        itemWidget("From",connectV2.actionDataMap?['from']??""),
         Divider(
           height: ScreenUtil().setWidth(1),
           indent: ScreenUtil().setWidth(30),
