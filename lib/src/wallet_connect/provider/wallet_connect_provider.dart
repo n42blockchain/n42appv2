@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/core/di/service_locator_setup.dart';
+import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
@@ -22,6 +23,18 @@ import 'package:reown_walletkit/reown_walletkit.dart' as wallet_connect;
 import 'package:wallet/wallet.dart' as wallet_types;
 import 'package:web3dart/web3dart.dart' as crypto;
 import 'package:web3dart/web3dart.dart' as web3;
+
+/// Localized WC toast helper.
+/// Uses the navigator context if available; falls back to English.
+S? _wcL10n() {
+  final ctx = AppGlobals.navigatorKey.currentContext;
+  if (ctx == null) return null;
+  try {
+    return S.of(ctx);
+  } catch (_) {
+    return null;
+  }
+}
 
 class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
   WalletConnectProvider() {
@@ -64,16 +77,38 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
   }
 
   /// Called when app returns to foreground.
-  /// Re-establishes the relay WebSocket that may have been closed by the OS.
+  /// Re-establishes the relay WebSocket that may have been closed by the OS,
+  /// then pings the DApp to verify the session is still alive.
   void _onAppResumed() {
     if (signClient == null || dAppTopic == null) return;
     try {
-      // The SDK call is a no-op when already connected, safe to always call.
-      signClient!.core.relayClient.connect().catchError((e) {
+      signClient!.core.relayClient.connect().then((_) {
+        // After relay is up, ping the DApp to verify session health.
+        _pingSession();
+      }).catchError((e) {
         debugPrint('[WalletConnect] Resume relay reconnect error: $e');
+        _scheduleReconnect();
       });
     } catch (e) {
       debugPrint('[WalletConnect] Resume relay reconnect: $e');
+    }
+  }
+
+  /// Ping the active DApp session to verify it's still alive.
+  /// If the ping fails, the session is stale — notify and disconnect.
+  Future<void> _pingSession() async {
+    final topic = dAppTopic;
+    if (topic == null || signClient == null) return;
+    try {
+      await signClient!.reOwnSign.ping(topic: topic).timeout(
+        const Duration(seconds: 10),
+      );
+      debugPrint('[WalletConnect] Session ping OK');
+    } catch (e) {
+      debugPrint('[WalletConnect] Session ping failed: $e');
+      final s = _wcL10n();
+      ToastUtils.show(s?.g_wc_session_expired ?? 'Session has expired');
+      viewStateDeal(WalletConnectState.disconnect);
     }
   }
 
@@ -87,7 +122,8 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
     _cancelReconnectTimer();
     if (signClient == null || _reconnectAttempts >= _maxReconnectAttempts) {
       if (_reconnectAttempts >= _maxReconnectAttempts && dAppTopic != null) {
-        ToastUtils.show('Connection lost. Please reconnect.');
+        final s = _wcL10n();
+        ToastUtils.show(s?.g_wc_connection_lost ?? 'Connection lost. Please reconnect.');
         viewStateDeal(WalletConnectState.disconnect);
       }
       return;
@@ -116,13 +152,13 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
   }
 
   Trustdart? _trustdart;
-  Trustdart get trustdart{
+  Trustdart get trustdart {
     _trustdart ??= Trustdart();
     return _trustdart!;
   }
-  bool pageOpen=false;
+
+  bool pageOpen = false;
   wallet_connect.ReownWalletKit? signClient;
-  //Web3Wallet? wcClient;
   web3.Web3Client? web3client;
   String? dAppTopic;
 
@@ -135,22 +171,82 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
   bool _disconnectingByUser = false;
 
   late web3.EthPrivateKey privateKey;
-  //List<PairingInfo> pairings = [];
-  //int pairIndex=-1;
-  int coinModelsIndex=-1;
-  List<CoinModel> coinModels=[];//eth币模型
-  void setCoinModelsIndex(int value){
-    coinModelsIndex=value;
+  int coinModelsIndex = -1;
+  List<CoinModel> coinModels = [];
+  Map<String, wallet_connect.Namespace>? namespace;
+  WalletConnectState walletConnectState = WalletConnectState.loading;
+  String errorMessage = "";
+  wallet_connect.PairingMetadata? metadata;
+  Load load = Load.finish;
+  dynamic actionData;
+  Map<String, dynamic>? actionDataMap;
+
+  void setCoinModelsIndex(int value) {
+    coinModelsIndex = value;
     notifyListeners();
   }
-  Map<String, wallet_connect.Namespace>? namespace;
-  WalletConnectState walletConnectState=WalletConnectState.loading;
-  String errorMessage="";
-  wallet_connect.PairingMetadata ? metadata;
-  Load load=Load.finish;
-  dynamic actionData;
-  Map<String,dynamic>? actionDataMap;
-  Future<void> setActionDataMap(wallet_connect.SessionRequestEvent eventData)async{
+
+  // ── Multi-session management ─────────────────────────────────────────────
+
+  /// Returns all active WalletConnect sessions from the SDK's persistent store.
+  Map<String, wallet_connect.SessionData> getActiveSessions() {
+    if (signClient == null) return {};
+    try {
+      return signClient!.getActiveSessions();
+    } catch (e) {
+      if (kDebugMode) debugPrint('[WalletConnect] getActiveSessions error: $e');
+      return {};
+    }
+  }
+
+  /// Disconnect a specific session by its topic.
+  Future<void> disconnectSessionByTopic(String topic) async {
+    if (signClient == null) return;
+    try {
+      await signClient!.disconnectSession(
+        topic: topic,
+        reason: wallet_connect.Errors.getSdkError(
+          wallet_connect.Errors.USER_DISCONNECTED,
+        ).toSignError(),
+      );
+    } catch (e) {
+      if (kDebugMode) debugPrint('[WalletConnect] disconnectSession($topic) error: $e');
+    }
+    // If the disconnected session is the current one, clean up local state
+    if (dAppTopic == topic) {
+      cleanData();
+    }
+    notifyListeners();
+  }
+
+  /// Disconnect all active sessions.
+  Future<void> disconnectAllSessions() async {
+    final sessions = getActiveSessions();
+    for (final topic in sessions.keys.toList()) {
+      try {
+        await signClient!.disconnectSession(
+          topic: topic,
+          reason: wallet_connect.Errors.getSdkError(
+            wallet_connect.Errors.USER_DISCONNECTED,
+          ).toSignError(),
+        );
+      } catch (e) {
+        if (kDebugMode) debugPrint('[WalletConnect] disconnectAll($topic) error: $e');
+      }
+    }
+    cleanData();
+    notifyListeners();
+  }
+
+  /// Set the active session context when user taps a session from the list.
+  void setActiveSession(wallet_connect.SessionData session) {
+    dAppTopic = session.topic;
+    metadata = session.peer.metadata;
+    walletConnectState = WalletConnectState.connect;
+    notifyListeners();
+  }
+
+  Future<void> setActionDataMap(wallet_connect.SessionRequestEvent eventData) async {
     if (eventData.params == null) {
       viewStateDeal(WalletConnectState.error, params: 'Invalid request: params is null');
       return;
@@ -159,75 +255,82 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
       viewStateDeal(WalletConnectState.error, params: 'No valid chain selected');
       return;
     }
-    await web3clientInitFromChainId(eventData.chainId);
+
+    // Resolve the correct session metadata for this request's topic
+    // so the signing popup shows the right DApp info.
+    final sessions = getActiveSessions();
+    final session = sessions[eventData.topic];
+    if (session != null) {
+      metadata = session.peer.metadata;
+    }
+
+    // Assign actionData BEFORE dispatching so UI reads the correct event
+    actionData = eventData;
+    final initOk = await web3clientInitFromChainId(eventData.chainId);
+    if (!initOk) return;
+
+    final networkName = coinModels[coinModelsIndex].coin['name'];
+
     switch (eventData.method) {
+      // ── Message signing methods ──────────────────────────────────────────
       case "personal_sign":
-        final requestParams =
-        (eventData.params! as List).cast<String>();
-        if (requestParams.length < 2) {
-          viewStateDeal(WalletConnectState.error, params: 'Invalid personal_sign params: expected 2, got ${requestParams.length}');
+        final params = (eventData.params! as List).cast<String>();
+        if (params.length < 2) {
+          viewStateDeal(WalletConnectState.error,
+              params: 'Invalid personal_sign params: expected 2, got ${params.length}');
           return;
         }
-        final dataToSign = requestParams[0];
-        final address = requestParams[1];
-        actionDataMap={
-          "network":coinModels[coinModelsIndex].coin['name'],
-          "from":address,
-          "data":dataToSign,
-          "signType":"message",
-        };
+        // personal_sign: data at [0], address at [1] (reversed from eth_sign)
+        actionDataMap = _buildMessageData(networkName, params[1], params[0]);
         viewStateDeal(WalletConnectState.messageSignOK);
-        break;
+
       case "eth_sign":
-        final requestParams =
-        (eventData.params! as List).cast<String>();
-        final dataToSign = requestParams[1];
-        final address = requestParams[0];
-        actionDataMap={
-          "network":coinModels[coinModelsIndex].coin['name'],
-          "from":address,
-          "data":dataToSign,
-          "signType":"message",
-        };
-        viewStateDeal(WalletConnectState.messageSignOK);
-        break;
       case "eth_signTypedData":
       case "eth_signTypedData_v3":
       case "eth_signTypedData_v4":
-        final requestParams = (eventData.params! as List).cast<String>();
-        final dataToSign = requestParams[1];
-        final address = requestParams[0];
-        actionDataMap={
-          "network":coinModels[coinModelsIndex].coin['name'],
-          "from":address,
-          "data":dataToSign,
-          "signType":"message",
-        };
+        final params = (eventData.params! as List).cast<String>();
+        if (params.length < 2) {
+          viewStateDeal(WalletConnectState.error,
+              params: 'Invalid ${eventData.method} params: expected 2, got ${params.length}');
+          return;
+        }
+        // eth_sign / signTypedData: address at [0], data at [1]
+        actionDataMap = _buildMessageData(networkName, params[0], params[1]);
         viewStateDeal(WalletConnectState.messageSignOK);
-        break;
+
+      case "tron_signMessage":
+        final params = eventData.params! as Map;
+        actionDataMap = _buildMessageData(
+          networkName,
+          params["address"],
+          params["message"],
+        );
+        viewStateDeal(WalletConnectState.messageSignOK);
+
+      // ── Transaction methods ──────────────────────────────────────────────
       case "eth_signTransaction":
-        Map<String,dynamic> trMap=eventData.params![0];
-        actionDataMap={
-          "network":coinModels[coinModelsIndex].coin['name'],
-          "gas":crypto.hexToInt(trMap['gas']??"0x0").toInt().toString(),
-          "from":trMap['from']??"0x",
-          "to":trMap['to']??"0x",
-          "data":trMap['data']??"0x",
-          "value":trMap['value']??"0x0",
-          "signType":"transaction",
+      case "eth_sendTransaction":
+        final trMap = eventData.params![0] as Map<String, dynamic>;
+        actionDataMap = {
+          "network": networkName,
+          "gas": crypto.hexToInt(trMap['gas'] ?? "0x0").toInt().toString(),
+          "from": trMap['from'] ?? "0x",
+          "to": trMap['to'] ?? "0x",
+          "data": trMap['data'] ?? "0x",
+          "value": trMap['value'] ?? "0x0",
+          "signType": "transaction",
         };
         viewStateDeal(WalletConnectState.transactionOK);
-        break;
+
       case "tron_signTransaction":
         final rawTronParams = eventData.params;
         if (rawTronParams == null || rawTronParams is! Map || !rawTronParams.containsKey('transaction')) {
           viewStateDeal(WalletConnectState.error, params: 'Invalid TRON transaction: missing params');
           break;
         }
-        final Map<String,dynamic> trMap = Map<String,dynamic>.from(rawTronParams['transaction'] as Map);
+        final trMap = Map<String, dynamic>.from(rawTronParams['transaction'] as Map);
         final tronInnerTx = trMap['transaction'] as Map<String, dynamic>? ?? {};
         final tronRawData = tronInnerTx['raw_data'] as Map<String, dynamic>? ?? {};
-        // contract 字段在标准 TRON 格式中为 List，但部分实现为 Map
         final tronContractRaw = tronRawData['contract'];
         String tronContractType = '';
         Map<String, dynamic> tronContractValue = {};
@@ -243,57 +346,58 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
         final tronToAddr = tronContractValue['to_address'] as String? ?? '';
         final tronContractAddr = tronContractValue['contract_address'] as String? ?? '';
         final tronFeeLimit = tronRawData['fee_limit'] as int? ?? 0;
-        // TriggerSmartContract = TRC20；TransferContract = TRX 原生转账
         final isTrc20 = tronContractType == 'TriggerSmartContract';
-        actionDataMap={
-          "network":coinModels[coinModelsIndex].coin['name'],
-          "gas":tronFeeLimit.toString(),
-          "from":tronOwnerAddr,
-          "to":isTrc20 ? tronContractAddr : tronToAddr,
-          "data":tronInnerTx['raw_data_hex'] as String? ?? "",
-          "signType":"transaction",
+        actionDataMap = {
+          "network": networkName,
+          "gas": tronFeeLimit.toString(),
+          "from": tronOwnerAddr,
+          "to": isTrc20 ? tronContractAddr : tronToAddr,
+          "data": tronInnerTx['raw_data_hex'] as String? ?? "",
+          "signType": "transaction",
         };
         viewStateDeal(WalletConnectState.transactionOK);
-        break;
-      case "eth_sendTransaction":
-        Map<String,dynamic> trMap=eventData.params![0];
-        actionDataMap={
-          "network":coinModels[coinModelsIndex].coin['name'],
-          "gas":crypto.hexToInt(trMap['gas']??"0x0").toInt().toString(),
-          "from":trMap['from']??"0x",
-          "to":trMap['to']??"0x",
-          "data":trMap['data']??"0x",
-          "value":trMap['value']??"0x0",
-          "signType":"transaction",
-        };
-        viewStateDeal(WalletConnectState.transactionOK);
-        break;
-      case "tron_signMessage":
-        final requestParams = eventData.params! as Map;
-        final dataToSign = requestParams["message"];
-        final address = requestParams["address"];
-        actionDataMap={
-          "network":coinModels[coinModelsIndex].coin['name'],
-          "from":address,
-          "data":dataToSign,
-          "signType":"message",
-        };
-        viewStateDeal(WalletConnectState.messageSignOK);
-        break;
+
       default:
-        debugPrint('Unsupported request.');
+        debugPrint('[WalletConnect] Unsupported method: ${eventData.method}');
+        _rejectUnsupportedMethod(eventData);
     }
-    actionData=eventData;
   }
-  Future<void> connectInit()async{
-    try{
+
+  /// Build a standard message-sign action data map.
+  Map<String, dynamic> _buildMessageData(String network, String address, String data) {
+    return {
+      "network": network,
+      "from": address,
+      "data": data,
+      "signType": "message",
+    };
+  }
+
+  /// Reject an unsupported method with a JSON-RPC error so the DApp
+  /// doesn't hang indefinitely waiting for a response.
+  void _rejectUnsupportedMethod(wallet_connect.SessionRequestEvent eventData) {
+    try {
+      signClient?.respondSessionRequest(
+        topic: eventData.topic,
+        response: wallet_connect.JsonRpcResponse(
+          id: eventData.id,
+          error: wallet_connect.JsonRpcError(
+            code: 4200,
+            message: 'Unsupported method: ${eventData.method}',
+          ),
+        ),
+      );
+    } catch (e) {
+      debugPrint('[WalletConnect] Error rejecting unsupported method: $e');
+    }
+  }
+  Future<void> connectInit() async {
+    try {
       if (signClient != null) {
-        // Already initialised — re-use the existing client and just
-        // refresh the coin model for the new pairing attempt.
         coinModelInit();
         return;
       }
-      signClient=await wallet_connect.ReownWalletKit.createInstance(
+      signClient = await wallet_connect.ReownWalletKit.createInstance(
         projectId: "18a60a7cb862aad161fecd764ecc736a",
         metadata: wallet_connect.PairingMetadata(
           name: AppConfig.apiUrl['walletName'],
@@ -304,22 +408,23 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
       );
       coinModelInit();
       setChainInfo();
-    }catch(e){
-      viewStateDeal(WalletConnectState.error,params: e.toString());
+    } catch (e) {
+      viewStateDeal(WalletConnectState.error, params: e.toString());
     }
   }
-  Future<void> pair(String relayUrl)async{
-    try{
-      if(Uri.tryParse(relayUrl) !=null){
-        //viewStateDeal(WalletConnectV2State.part);
-        await signClient!.pair(uri:Uri.parse(relayUrl));
+
+  Future<void> pair(String relayUrl) async {
+    try {
+      final uri = Uri.tryParse(relayUrl);
+      if (uri != null) {
+        await signClient!.pair(uri: uri);
       }
       notifyListeners();
-    }catch(e){
-      viewStateDeal(WalletConnectState.error,params: e.toString());
+    } catch (e) {
+      viewStateDeal(WalletConnectState.error, params: e.toString());
     }
   }
-  // 创建web3实例 - 使用 IWalletService 获取钱包信息
+
   Future<bool> web3clientInit() async {
     try {
       CoinModel cm = coinModels[coinModelsIndex];
@@ -368,80 +473,61 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
       return false;
     }
   }
-  Future<bool> web3clientInitFromChainId(String eip155)async{
-    String chainId=eip155.split(":")[1];
-    int chainIndex=coinModels.indexWhere((element){
-      String eChainId=(element.isTest?element.coin['chainId_test']:element.coin['chainId']).toString();
-      if(eChainId==chainId){
-        return true;
-      }
-      return false;
+  Future<bool> web3clientInitFromChainId(String eip155) async {
+    final chainId = eip155.split(":")[1];
+    final chainIndex = coinModels.indexWhere((element) {
+      final eChainId = (element.isTest ? element.coin['chainId_test'] : element.coin['chainId']).toString();
+      return eChainId == chainId;
     });
-    if(chainIndex==-1){
-      viewStateDeal(WalletConnectState.error,params: "Error");
+    if (chainIndex == -1) {
+      viewStateDeal(WalletConnectState.error, params: "Error");
       return false;
     }
-    if(coinModelsIndex !=chainIndex){
+    if (coinModelsIndex != chainIndex) {
       setCoinModelsIndex(chainIndex);
       return await web3clientInit();
     }
-    if(web3client==null){
+    if (web3client == null) {
       return await web3clientInit();
     }
     return true;
   }
 
-  //获取ETH类的主链
-  void coinModelInit({int chainId=-1}){
-    try{
-      List<CoinModel> cms=globalWapAdapter.coinModels;
-      coinModels=[];
-      for(CoinModel cm in cms){
-        if(cm.coin['blockchainType']==BlockchainType.Ethereum.name){
-          coinModels.add(cm);
-          if(chainId==-1){
-            //setCoinModelsIndex(coinModels.length-1);
-          }else{
-            if(cm.isTest){
-              if(cm.coin['chainId_test']==chainId){
-                setCoinModelsIndex(coinModels.length-1);
-              }
-            }else{
-              if(cm.coin['chainId']==chainId){
-                setCoinModelsIndex(coinModels.length-1);
-              }
-            }
-
+  void coinModelInit({int chainId = -1}) {
+    try {
+      final cms = globalWapAdapter.coinModels;
+      coinModels = [];
+      for (final cm in cms) {
+        if (cm.coin['blockchainType'] != BlockchainType.Ethereum.name) continue;
+        coinModels.add(cm);
+        if (chainId != -1) {
+          final cmChainId = cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId'];
+          if (cmChainId == chainId) {
+            setCoinModelsIndex(coinModels.length - 1);
           }
         }
       }
-      if(coinModels.isNotEmpty && chainId ==-1){
+      if (coinModels.isNotEmpty && chainId == -1) {
         setCoinModelsIndex(0);
       }
-    }catch(e){
-      viewStateDeal(WalletConnectState.error,params: e.toString());
+    } catch (e) {
+      viewStateDeal(WalletConnectState.error, params: e.toString());
     }
   }
-  //查找不支持的链
-  CoinModel? coinModelFind(String chainId){
-    int rIndex=coinModels.indexWhere((element){
-      String cId="";
-      if(element.coin['blockchainType']==BlockchainType.Ethereum.name){
-        dynamic id=element.isTest?element.coin['chainId_test']:element.coin['chainId'];
-        cId="eip155:$id";
-      }else if(element.coin['blockchainType']==BlockchainType.Tron.name){
-        cId="tron:0x2b6653dc";
+
+  /// Find a coin model matching the given WalletConnect chain ID string.
+  CoinModel? coinModelFind(String chainId) {
+    final index = coinModels.indexWhere((element) {
+      final blockchainType = element.coin['blockchainType'];
+      if (blockchainType == BlockchainType.Ethereum.name) {
+        final id = element.isTest ? element.coin['chainId_test'] : element.coin['chainId'];
+        return "eip155:$id" == chainId;
+      } else if (blockchainType == BlockchainType.Tron.name) {
+        return "tron:0x2b6653dc" == chainId;
       }
-      if(cId==chainId){
-        return true;
-      }else{
-        return false;
-      }
+      return false;
     });
-    if(rIndex ==-1){
-      return null;
-    }
-    return coinModels[rIndex];
+    return index == -1 ? null : coinModels[index];
   }
 
   void setChainInfo(){
@@ -464,6 +550,7 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
           });
           signClient!.core.relayClient.onRelayClientError.subscribe((_) {
             debugPrint('[WalletConnect] Relay error');
+            if (dAppTopic != null) _scheduleReconnect();
           });
         } catch (e) {
           debugPrint('[WalletConnect] Relay event subscription unavailable: $e');
@@ -543,6 +630,7 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
                 signClient!.registerRequestHandler(chainId: chainId, method: "eth_sign");
                 signClient!.registerRequestHandler(chainId: chainId, method: "personal_sign");
                 signClient!.registerRequestHandler(chainId: chainId, method: "eth_signTypedData");
+                signClient!.registerRequestHandler(chainId: chainId, method: "eth_signTypedData_v3");
                 signClient!.registerRequestHandler(chainId: chainId, method: "eth_signTypedData_v4");
                 signClient!.registerAccount(chainId: chainId, accountAddress: coinModels[i].address.toString());
               }else if(coinModels[i].coin['blockchainType']==BlockchainType.Tron.name){
@@ -562,6 +650,7 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
                   "eth_sign",
                   "personal_sign",
                   "eth_signTypedData",
+                  "eth_signTypedData_v3",
                   "eth_signTypedData_v4"
                 ],
                 events: [
@@ -595,30 +684,32 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
           }
         });
         signClient!.onSessionDelete.subscribe((args) async{
-          // Only notify when the DApp (remote peer) initiated the disconnect.
-          // User-initiated disconnects are handled in [disconnectOnTap].
-          if (dAppTopic != null && dAppTopic == args.topic && !_disconnectingByUser) {
-            ToastUtils.show('DApp has disconnected');
+          if (_disconnectingByUser) return;
+          if (dAppTopic != null && dAppTopic == args.topic) {
+            // Current session was deleted by the DApp
+            final s = _wcL10n();
+            ToastUtils.show(s?.g_wc_dapp_disconnected ?? 'DApp has disconnected');
             viewStateDeal(WalletConnectState.disconnect);
+          } else {
+            // A different session was deleted — refresh list UI
+            notifyListeners();
           }
         });
-        signClient!.onSessionProposalError.subscribe((wallet_connect.SessionProposalErrorEvent? args) async{
-          viewStateDeal(WalletConnectState.error,params: args?.error.message??"Error");
+        signClient!.onSessionProposalError.subscribe((wallet_connect.SessionProposalErrorEvent? args) async {
+          viewStateDeal(WalletConnectState.error, params: args?.error.message ?? "Error");
         });
-        signClient!.onSessionConnect.subscribe((args) async{
-        });
-        signClient!.onSessionPing.subscribe((args) async{
-        });
-        signClient!.onSessionExpire.subscribe((args) async{
+        signClient!.onSessionExpire.subscribe((args) async {
           // Session TTL (default 7 days) has passed; must reconnect from scratch.
           if (dAppTopic != null) {
-            ToastUtils.show('Session has expired');
+            final s = _wcL10n();
+            ToastUtils.show(s?.g_wc_session_expired ?? 'Session has expired');
             viewStateDeal(WalletConnectState.disconnect);
           }
         });
         signClient!.onProposalExpire.subscribe((wallet_connect.SessionProposalEvent? args) async{
           // QR-code scan window timed out (typically 5 minutes).
-          viewStateDeal(WalletConnectState.error, params: 'Connection request timed out');
+          final s = _wcL10n();
+          viewStateDeal(WalletConnectState.error, params: s?.g_wc_proposal_timeout ?? 'Connection request timed out');
         });
       }
     }catch(e){
@@ -626,199 +717,183 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
     }
   }
 
-  Future messageSignTap() async {
+  /// Map method name to EIP-712 typed data version.
+  static const _typedDataVersions = {
+    "eth_signTypedData": TypedDataVersion.v4,
+    "eth_signTypedData_v3": TypedDataVersion.v3,
+    "eth_signTypedData_v4": TypedDataVersion.v4,
+  };
+
+  Future<void> messageSignTap() async {
     try {
-      if(walletConnectState==WalletConnectState.messageSign)return;
+      if (walletConnectState == WalletConnectState.messageSign) return;
       viewStateDeal(WalletConnectState.messageSign);
       final eventData = actionData as wallet_connect.SessionRequestEvent;
       String signedDataHex;
-      if(eventData.method == "personal_sign"){
-        final requestParams =
-        (eventData.params! as List).cast<String>();
-        String dataToSign = requestParams[0];
-        dataToSign=crypto.strip0x(requestParams[0]);
-        //final address = requestParams[1];
-        final encodedMessage = crypto.hexToBytes(dataToSign);
-        final signedData =
-        privateKey.signPersonalMessageToUint8List(encodedMessage);
-        signedDataHex = bytesToHex(signedData,include0x: true);
-      }
-      else if (eventData.method == "eth_signTypedData") {
-        final requestParams =
-        (eventData.params! as List).cast<String>();
+
+      if (eventData.method == "personal_sign") {
+        final requestParams = (eventData.params! as List).cast<String>();
+        final rawData = requestParams[0];
+        // DApps may send either hex-encoded bytes (0xdeadbeef) or plain
+        // UTF-8 text (e.g. SIWE messages). Detect and decode accordingly.
+        final stripped = crypto.strip0x(rawData);
+        final encodedMessage = _isValidHex(stripped)
+            ? crypto.hexToBytes(stripped)
+            : Uint8List.fromList(utf8.encode(rawData));
+        final signedData = privateKey.signPersonalMessageToUint8List(encodedMessage);
+        signedDataHex = bytesToHex(signedData, include0x: true);
+
+      } else if (_typedDataVersions.containsKey(eventData.method)) {
+        final requestParams = (eventData.params! as List).cast<String>();
         signedDataHex = _signTypedData(
           privateKey: privateKey,
           jsonData: requestParams[1],
-          version: TypedDataVersion.v4,
+          version: _typedDataVersions[eventData.method]!,
         );
-      } else if (eventData.method == "eth_signTypedData_v3") {
-        final requestParams =
-        (eventData.params! as List).cast<String>();
-        signedDataHex = _signTypedData(
-          privateKey: privateKey,
-          jsonData: requestParams[1],
-          version: TypedDataVersion.v3,
-        );
-      } else if (eventData.method == "eth_signTypedData_v4") {
-        final requestParams =
-        (eventData.params! as List).cast<String>();
-        signedDataHex = _signTypedData(
-          privateKey: privateKey,
-          jsonData: requestParams[1],
-          version: TypedDataVersion.v4,
-        );
+
       } else if (eventData.method == "tron_signMessage") {
         final requestParams = eventData.params! as Map;
         final dataToSign = requestParams["message"];
-        final CoinModel? cm = coinModels.where((c) => c.coin['coinType'] == CoinType.TRX.name).firstOrNull;
+        final cm = coinModels.where((c) => c.coin['coinType'] == CoinType.TRX.name).firstOrNull;
         if (cm == null) {
           viewStateDeal(WalletConnectState.error, params: 'TRON chain not supported');
           return;
         }
-        
-        // 使用 IWalletService 获取私钥和助记词
-        final walletService = ServiceLocatorSetup.walletService;
-        final currentIndex = walletService?.miningWalletIndex ?? 0;
-        final mnemonic = await walletService?.getMnemonicForWallet(currentIndex) ?? "";
-        final pk = await walletService?.getPrivateKeyForWallet(currentIndex) ?? "";
-        
-        String path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
-        signedDataHex = await trustdart.signMessage(CoinType.TRX.name, path, dataToSign, mnemonic: mnemonic, pk: pk);
-      }
-      else {
-        final requestParams =
-        (eventData.params! as List).cast<String>();
-        String dataToSign = requestParams[1];
-        dataToSign=crypto.strip0x(dataToSign);
-        if(coinModels[coinModelsIndex].coin['coinType']==CoinType.N.name){
-          signedDataHex=await trustdart.signMessage(CoinType.N.name, "", dataToSign, pk: base64Encode(privateKey.privateKey));
-          signedDataHex="0x$signedDataHex";
-        }else{
-          final encodedMessage =  crypto.hexToBytes(dataToSign);
-          final signedData =
-          privateKey.signPersonalMessageToUint8List(encodedMessage);
-          signedDataHex = bytesToHex(signedData,include0x: true);
+        final credentials = await _getTronCredentials();
+        final path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
+        signedDataHex = await trustdart.signMessage(
+          CoinType.TRX.name, path, dataToSign,
+          mnemonic: credentials.mnemonic, pk: credentials.privateKey,
+        );
+
+      } else {
+        final requestParams = (eventData.params! as List).cast<String>();
+        final dataToSign = crypto.strip0x(requestParams[1]);
+        if (coinModels[coinModelsIndex].coin['coinType'] == CoinType.N.name) {
+          signedDataHex = await trustdart.signMessage(
+            CoinType.N.name, "", dataToSign,
+            pk: base64Encode(privateKey.privateKey),
+          );
+          signedDataHex = "0x$signedDataHex";
+        } else {
+          final encodedMessage = crypto.hexToBytes(dataToSign);
+          final signedData = privateKey.signPersonalMessageToUint8List(encodedMessage);
+          signedDataHex = bytesToHex(signedData, include0x: true);
         }
       }
-      signClient!.respondSessionRequest(topic: eventData.topic, response: wallet_connect.JsonRpcResponse(id: eventData.id,
-        result: signedDataHex,));
+
+      signClient!.respondSessionRequest(
+        topic: eventData.topic,
+        response: wallet_connect.JsonRpcResponse(id: eventData.id, result: signedDataHex),
+      );
       viewStateDeal(WalletConnectState.connect);
     } catch (e) {
-      viewStateDeal(WalletConnectState.error,params: e.toString());
+      viewStateDeal(WalletConnectState.error, params: e.toString());
     }
   }
-  Future transactionSignTap() async {
+  Future<void> transactionSignTap() async {
     try {
-      if(walletConnectState==WalletConnectState.transaction)return;
+      if (walletConnectState == WalletConnectState.transaction) return;
       viewStateDeal(WalletConnectState.transaction);
       final eventData = actionData as wallet_connect.SessionRequestEvent;
-      bool initOk=await web3clientInitFromChainId(eventData.chainId);
-      if(initOk==false)return;
+      final initOk = await web3clientInitFromChainId(eventData.chainId);
+      if (!initOk) return;
+
       if (eventData.method == "tron_signTransaction") {
         final requestParams = eventData.params! as Map;
         final dataToSign = requestParams["message"];
-        final CoinModel? cm = coinModels.where((c) => c.coin['coinType'] == CoinType.TRX.name).firstOrNull;
+        final cm = coinModels.where((c) => c.coin['coinType'] == CoinType.TRX.name).firstOrNull;
         if (cm == null) {
           viewStateDeal(WalletConnectState.error, params: 'TRON chain not supported');
           return;
         }
-        
-        // 使用 IWalletService 获取私钥和助记词
-        final walletService = ServiceLocatorSetup.walletService;
-        final currentIndex = walletService?.miningWalletIndex ?? 0;
-        final mnemonic = await walletService?.getMnemonicForWallet(currentIndex) ?? "";
-        final pk = await walletService?.getPrivateKeyForWallet(currentIndex) ?? "";
-        
-        String path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
-        String returnStr = await trustdart.signTransaction(CoinType.TRX.name, path, dataToSign, mnemonic: mnemonic, pk: pk);
+        final credentials = await _getTronCredentials();
+        final path = getPathWithIndex(cm.coin['path'][cm.addrType], cm.pathIndex);
+        final returnStr = await trustdart.signTransaction(
+          CoinType.TRX.name, path, dataToSign,
+          mnemonic: credentials.mnemonic, pk: credentials.privateKey,
+        );
         signClient!.respondSessionRequest(
           topic: eventData.topic,
-          response: wallet_connect.JsonRpcResponse(
-            id: eventData.id,
-            result: returnStr,
-          ),);
+          response: wallet_connect.JsonRpcResponse(id: eventData.id, result: returnStr),
+        );
         viewStateDeal(WalletConnectState.connect);
-        return ;
+        return;
       }
-      Map<String,dynamic> parameters=eventData.params.first;
-      String from=parameters['from'];
-      String? to=parameters['to'];
-      String? value=parameters['value'];
-      String? nonce=parameters['nonce'];
-      String? gasPrice=parameters['gasPrice'];
-      String? maxFeePerGas=parameters['maxFeePerGas'];
-      String? maxPriorityFeePerGas=parameters['maxPriorityFeePerGas'];
-      //String? gas=parameters['gas'];
-      String? gasLimit=parameters['gasLimit'];
-      String? data=parameters['data'];
+
+      final parameters = eventData.params.first as Map<String, dynamic>;
+      final from = parameters['from'] as String;
+      final to = parameters['to'] as String?;
+      final value = parameters['value'] as String?;
+      final nonce = parameters['nonce'] as String?;
+      final gasPrice = parameters['gasPrice'] as String?;
+      final maxFeePerGas = parameters['maxFeePerGas'] as String?;
+      final maxPriorityFeePerGas = parameters['maxPriorityFeePerGas'] as String?;
+      final gasLimit = parameters['gasLimit'] as String?;
+      final data = parameters['data'] as String?;
+
       final transaction = web3.Transaction(
         from: wallet_types.EthereumAddress.fromHex(from),
-        to: wallet_types.EthereumAddress.fromHex(to??"0x"),
-        value: wallet_types.EtherAmount.fromBigInt(wallet_types.EtherUnit.wei, BigInt.tryParse(value??"0x") ?? BigInt.zero,),
+        to: wallet_types.EthereumAddress.fromHex(to ?? "0x"),
+        value: wallet_types.EtherAmount.fromBigInt(
+          wallet_types.EtherUnit.wei,
+          BigInt.tryParse(value ?? "0x") ?? BigInt.zero,
+        ),
         gasPrice: gasPrice != null
-            ? wallet_types.EtherAmount.fromBigInt(
-          wallet_types.EtherUnit.gwei,
-          BigInt.tryParse(gasPrice) ?? BigInt.zero,
-        )
+            ? wallet_types.EtherAmount.fromBigInt(wallet_types.EtherUnit.gwei, BigInt.tryParse(gasPrice) ?? BigInt.zero)
             : null,
         maxFeePerGas: maxFeePerGas != null
-            ? wallet_types.EtherAmount.fromBigInt(
-          wallet_types.EtherUnit.gwei,
-          BigInt.tryParse(maxFeePerGas) ?? BigInt.zero,
-        )
+            ? wallet_types.EtherAmount.fromBigInt(wallet_types.EtherUnit.gwei, BigInt.tryParse(maxFeePerGas) ?? BigInt.zero)
             : null,
         maxPriorityFeePerGas: maxPriorityFeePerGas != null
-            ? wallet_types.EtherAmount.fromBigInt(
-          wallet_types.EtherUnit.gwei,
-          BigInt.tryParse(maxPriorityFeePerGas) ??
-              BigInt.zero,
-        )
+            ? wallet_types.EtherAmount.fromBigInt(wallet_types.EtherUnit.gwei, BigInt.tryParse(maxPriorityFeePerGas) ?? BigInt.zero)
             : null,
         maxGas: int.tryParse(gasLimit ?? ''),
         nonce: int.tryParse(nonce ?? ''),
-        data: (data != null && data != '0x')
-            ?  crypto.hexToBytes(data)
-            : null,
+        data: (data != null && data != '0x') ? crypto.hexToBytes(data) : null,
       );
-      String returnStr="";
-      if(eventData.method == "eth_signTransaction"){
-        Uint8List sig = await web3client!.signTransaction(
-          privateKey,
-          transaction,
-        );
-        returnStr= bytesToHex(sig,include0x: true);
-      }else if(eventData.method == "eth_sendTransaction"){
+
+      String returnStr;
+      if (eventData.method == "eth_signTransaction") {
+        final sig = await web3client!.signTransaction(privateKey, transaction);
+        returnStr = bytesToHex(sig, include0x: true);
+      } else {
+        final cm = coinModels[coinModelsIndex];
         returnStr = await web3client!.sendTransaction(
           privateKey,
           transaction,
-          chainId: coinModels[coinModelsIndex].isTest?coinModels[coinModelsIndex].coin['chainId_test']:coinModels[coinModelsIndex].coin['chainId'],
+          chainId: cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId'],
         );
       }
+
       signClient!.respondSessionRequest(
+        topic: eventData.topic,
+        response: wallet_connect.JsonRpcResponse(id: eventData.id, result: returnStr),
+      );
+      viewStateDeal(WalletConnectState.connect);
+    } catch (e) {
+      viewStateDeal(WalletConnectState.error, params: e.toString());
+    }
+  }
+
+  Future<void> cancelTap(WalletConnectState state) async {
+    viewStateDeal(state);
+    try {
+      final eventData = actionData as wallet_connect.SessionRequestEvent;
+      await signClient!.respondSessionRequest(
         topic: eventData.topic,
         response: wallet_connect.JsonRpcResponse(
           id: eventData.id,
-          result: returnStr,
-        ),);
-      viewStateDeal(WalletConnectState.connect);
+          error: wallet_connect.JsonRpcError(
+            code: 4001,
+            message: "User rejected.",
+          ),
+        ),
+      );
     } catch (e) {
-      viewStateDeal(WalletConnectState.error,params: e.toString());
+      debugPrint('[WalletConnect] Cancel respond error: $e');
     }
-  }
-  //取消交易或签名等
-  Future<void> cancelTap(WalletConnectState state)async{
-    viewStateDeal(state);
-    final eventData = actionData as wallet_connect.SessionRequestEvent;
-    signClient!
-        .respondSessionRequest(
-        topic: eventData.topic,
-        response: wallet_connect.JsonRpcResponse(id: eventData.id,
-            error: wallet_connect.JsonRpcError(
-                code: 4001,
-                message: "User rejected."
-            ))).then((value){
-      viewStateDeal(WalletConnectState.connect);
-    });
+    viewStateDeal(WalletConnectState.connect);
   }
   Future<void> disconnectOnTap() async {
     final topic = dAppTopic;
@@ -844,128 +919,138 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
       viewStateDeal(WalletConnectState.disconnect);
     }
   }
-  Future<void> viewStateDeal(WalletConnectState state,{dynamic params})async{
-    switch(state){
+  Future<void> viewStateDeal(WalletConnectState state, {dynamic params}) async {
+    switch (state) {
       case WalletConnectState.loading:
         await connectInit();
         await pair(params as String);
-        break;
-      case WalletConnectState.selectChain:
-        break;
       case WalletConnectState.connectOK:
-        wallet_connect.SessionProposalEvent args=actionData as wallet_connect.SessionProposalEvent;
-        try{
-          signClient!.approveSession(id:args.id,namespaces:namespace! ).then((value)
-          async{
-            dAppTopic=value.topic;
+        final args = actionData as wallet_connect.SessionProposalEvent;
+        try {
+          signClient!.approveSession(id: args.id, namespaces: namespace!).then((value) async {
+            dAppTopic = value.topic;
             viewStateDeal(WalletConnectState.connect);
-          }).catchError(( error){
+          }).catchError((error) {
             ToastUtils.show(error.toString());
             viewStateDeal(WalletConnectState.disconnect);
           });
-        }catch(e){
-          ToastUtils.show("Connection error:${e.toString()}");
+        } catch (e) {
+          ToastUtils.show("Connection error: ${e.toString()}");
           viewStateDeal(WalletConnectState.disconnect);
         }
-
-        //wcClient!.approveSession(id: args!.id, namespaces: namespace!);
-        break;
-      case WalletConnectState.connect:
-        break;
       case WalletConnectState.disconnect:
         cleanData();
-        break;
-      case WalletConnectState.reconnect:
-
-        break;
       case WalletConnectState.transactionOK:
-        if(pageOpen==false){
-          showAlertWidget();
-        }
-        break;
-      case WalletConnectState.transaction:
-        break;
       case WalletConnectState.messageSignOK:
-        if(pageOpen==false){
-          showAlertWidget();
-        }
-        break;
+        if (!pageOpen) showAlertWidget();
+      case WalletConnectState.error:
+        errorMessage = params as String;
+      case WalletConnectState.selectChain:
+      case WalletConnectState.connect:
+      case WalletConnectState.reconnect:
+      case WalletConnectState.transaction:
       case WalletConnectState.messageSign:
         break;
-      case WalletConnectState.error:
-        errorMessage=params as String;
-        break;
     }
-    // 状态未变且非 error 时跳过通知，避免不必要的 UI 重建
-    if (walletConnectState == state && state != WalletConnectState.error) return;
-    walletConnectState=state;
+    walletConnectState = state;
     notifyListeners();
   }
-  void showAlertWidget(){
-    sheetBottom(
-      AppGlobals.navigatorKey.currentContext!,
-      "",
-      WalletConnectAlertWidget(metadata!, actionDataMap!),
-    );
+
+  void showAlertWidget() {
+    final ctx = AppGlobals.navigatorKey.currentContext;
+    if (ctx == null || metadata == null || actionDataMap == null) {
+      debugPrint('[WalletConnect] Cannot show alert: context or data is null');
+      return;
+    }
+    sheetBottom(ctx, "", WalletConnectAlertWidget(metadata!, actionDataMap!));
   }
-  //清理数据
-  void cleanData(){
-    dAppTopic=null;
-    errorMessage="";
-    walletConnectState=WalletConnectState.loading;
+
+  void cleanData() {
+    _cancelReconnectTimer();
+    _reconnectAttempts = 0;
+    dAppTopic = null;
+    errorMessage = "";
+    walletConnectState = WalletConnectState.loading;
   }
-  void cleanDataLogout(){
-    if(dAppTopic !=null){
+
+  void cleanDataLogout() {
+    if (dAppTopic != null) {
       disconnectOnTap();
-    }else{
+    } else {
       cleanData();
     }
   }
 
-  /// Sign typed data using EIP-712 standard
+  // ── Private helpers ────────────────────────────────────────────────────────
+
+  /// Fetch TRON wallet credentials from IWalletService.
+  Future<({String mnemonic, String privateKey})> _getTronCredentials() async {
+    final walletService = ServiceLocatorSetup.walletService;
+    final currentIndex = walletService?.miningWalletIndex ?? 0;
+    final mnemonic = await walletService?.getMnemonicForWallet(currentIndex) ?? "";
+    final pk = await walletService?.getPrivateKeyForWallet(currentIndex) ?? "";
+    return (mnemonic: mnemonic, privateKey: pk);
+  }
+
+  /// Returns true if [s] contains only hex characters (0-9, a-f, A-F).
+  /// Empty string returns false to avoid creating a zero-length byte array.
+  static bool _isValidHex(String s) {
+    if (s.isEmpty) return false;
+    return RegExp(r'^[0-9a-fA-F]+$').hasMatch(s);
+  }
+
+  /// Sign typed data using EIP-712 standard.
+  ///
+  /// IMPORTANT: [hashTypedData] already returns keccak256(0x1901 ‖ domainHash ‖ messageHash).
+  /// We must sign this hash DIRECTLY with secp256k1 — do NOT use [signToEcSignature]
+  /// which internally calls keccak256 again, producing an invalid double-hashed signature.
   String _signTypedData({
     required web3.EthPrivateKey privateKey,
     required String jsonData,
     required TypedDataVersion version,
   }) {
-    try {
-      // Parse JSON data to TypedMessage
-      final Map<String, dynamic> typedData = json.decode(jsonData);
-      final typedMessage = TypedMessage.fromJson(typedData);
-
-      // Hash the typed data using EIP-712
-      final hash = hashTypedData(
-        typedData: typedMessage,
-        version: version,
-      );
-
-      // Sign the hash with private key
-      final signature = privateKey.signToEcSignature(hash);
-
-      // Encode signature to hex (r + s + v format)
-      final r = signature.r.toRadixString(16).padLeft(64, '0');
-      final s = signature.s.toRadixString(16).padLeft(64, '0');
-      final v = (signature.v).toRadixString(16).padLeft(2, '0');
-
-      return '0x$r$s$v';
-    } catch (e) {
-      debugPrint('Error signing typed data: $e');
-      rethrow;
+    // Parse and validate JSON
+    final Map<String, dynamic> typedData = json.decode(jsonData);
+    const requiredFields = ['types', 'primaryType', 'domain', 'message'];
+    for (final field in requiredFields) {
+      if (!typedData.containsKey(field)) {
+        throw FormatException(
+          'Invalid EIP-712 data: missing required field "$field"',
+        );
+      }
     }
+
+    final typedMessage = TypedMessage.fromJson(typedData);
+
+    // hashTypedData returns the final 32-byte keccak256 hash — ready to sign
+    final hash = hashTypedData(
+      typedData: typedMessage,
+      version: version,
+    );
+
+    // Sign the pre-hashed data directly via secp256k1.
+    // ecSign does NOT hash again; it signs the raw 32-byte digest.
+    // The returned v is already recovery + 27 (i.e. 27 or 28).
+    final signature = crypto.sign(hash, privateKey.privateKey);
+
+    // Encode to 65-byte hex: r (32 bytes) + s (32 bytes) + v (1 byte)
+    final r = signature.r.toRadixString(16).padLeft(64, '0');
+    final s = signature.s.toRadixString(16).padLeft(64, '0');
+    final v = signature.v.toRadixString(16).padLeft(2, '0');
+
+    return '0x$r$s$v';
   }
 }
-//页面状态
-enum WalletConnectState{
-  loading,//加载
-  //part,//配对中
-  selectChain,//选择链
-  connectOK,//确认连接
-  connect,//连接
-  disconnect,//连接断开
-  reconnect,//重连
-  transactionOK,//交易确认
-  transaction,//交易中
-  messageSignOK,//签名消息确认
-  messageSign,//签名消息确认中
+enum WalletConnectState {
+  loading,
+  selectChain,
+  connectOK,
+  connect,
+  disconnect,
+  reconnect,
+  transactionOK,
+  transaction,
+  messageSignOK,
+  messageSign,
   error,
 }

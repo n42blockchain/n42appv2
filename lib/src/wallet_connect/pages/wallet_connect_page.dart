@@ -4,7 +4,6 @@ import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/component/pages/scan_page.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
@@ -30,33 +29,31 @@ class WalletConnectPage extends ConsumerStatefulWidget {
 class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
   @override
   void initState() {
-    if(widget.uri !=""){
-      ref.read(wcpBridgeProvider).pageOpen=true;
-      ref.read(wcpBridgeProvider).viewStateDeal(WalletConnectState.loading,params: widget.uri);
-    }
     super.initState();
+    if (widget.uri != "") {
+      ref.read(wcpBridgeProvider).pageOpen = true;
+      ref.read(wcpBridgeProvider).viewStateDeal(WalletConnectState.loading, params: widget.uri);
+    }
   }
   @override
   void dispose() {
-    ref.read(wcpBridgeProvider).pageOpen=false;
+    ref.read(wcpBridgeProvider).pageOpen = false;
     super.dispose();
   }
-  //扫码
+
   Future<String> scan() async {
-    String? scanValue = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ScanPage()));
-    if (scanValue != null) {
-      return scanValue;
-    } else {
-      return "";
-    }
+    final scanValue = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(builder: (context) => ScanPage()),
+    );
+    return scanValue ?? "";
   }
   @override
   Widget build(BuildContext context) {
     final connectV2 = ref.watch(wcpBridgeProvider);
     return Scaffold(
       appBar: AppBarWidget(
-        text: connectV2.metadata==null?"Wallet Connect":connectV2.metadata!.name,
+        text: connectV2.metadata?.name ?? "Wallet Connect",
       ),
       body: SafeArea(
         child: Stack(
@@ -69,56 +66,49 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       ),
     );
   }
-  Widget dAppConnectWidget(WalletConnectProvider connectV2){
-    Widget connectChild=Container();
-    String title="";
-    switch(connectV2.walletConnectState){
+  Widget dAppConnectWidget(WalletConnectProvider connectV2) {
+    Widget connectChild = Container();
+    String title = "";
+
+    switch (connectV2.walletConnectState) {
       case WalletConnectState.loading:
-        connectChild=partWidget();
-        break;
+        connectChild = partWidget();
       case WalletConnectState.selectChain:
-        connectChild=selectChainWidget(connectV2);
-        title=S.of(context).g_connect_key11;
-        break;
+        connectChild = selectChainWidget(connectV2);
+        title = S.of(context).g_connect_key11;
       case WalletConnectState.connectOK:
-        connectChild=connectOKWidget(connectV2);
-        break;
+        connectChild = connectOKWidget(connectV2);
       case WalletConnectState.connect:
-        connectChild=connectWidget(connectV2);
-        break;
+        connectChild = connectWidget(connectV2);
       case WalletConnectState.disconnect:
-        connectChild=disconnectWidget(connectV2);
-        break;
+        connectChild = disconnectWidget(connectV2);
       case WalletConnectState.reconnect:
         break;
       case WalletConnectState.transactionOK:
       case WalletConnectState.transaction:
-        connectChild=transactionOKWidget(connectV2);
-        title=S.of(context).s_key_3;
-        break;
+        connectChild = transactionOKWidget(connectV2);
+        title = S.of(context).s_key_3;
       case WalletConnectState.messageSignOK:
       case WalletConnectState.messageSign:
-        connectChild=messageSignOKWidget(connectV2);
-        title=S.of(context).g_connect_key12;
-        break;
+        connectChild = messageSignOKWidget(connectV2);
+        title = S.of(context).g_connect_key12;
       case WalletConnectState.error:
-        connectChild=errorWidget(connectV2);
-        break;
+        connectChild = errorWidget(connectV2);
     }
+
     return Column(
       children: [
         dAppWidget(connectV2),
-        if(title !="")
-          titleWidget(title),
+        if (title != "") titleWidget(title),
         Expanded(child: connectChild),
       ],
     );
   }
-  Widget partWidget(){
+  Widget partWidget() {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.all(30.0),
+          padding: const EdgeInsets.all(30.0),
           alignment: Alignment.center,
           child: Text(
             S.of(context).g_connect_key14,
@@ -133,17 +123,15 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       ],
     );
   }
-  Widget dAppWidget(WalletConnectProvider connectV2){
-    String iconUrl="";
-    String dAppName="";
-    String dAppWebUrl="";
-    String dAppDesc="";
-    if(connectV2.metadata !=null){
-      iconUrl=connectV2.metadata!.icons.isNotEmpty?connectV2.metadata!.icons[0]:"";
-      dAppName=connectV2.metadata!.name;
-      dAppWebUrl=connectV2.metadata!.url;
-      dAppDesc=connectV2.metadata!.description;
-    }
+  Widget dAppWidget(WalletConnectProvider connectV2) {
+    final meta = connectV2.metadata;
+    if (meta == null) return const SizedBox.shrink();
+
+    final iconUrl = meta.icons.isNotEmpty ? meta.icons[0] : "";
+    final dAppName = meta.name;
+    final dAppWebUrl = meta.url;
+    final dAppDesc = meta.description;
+
     return Container(
       width: double.infinity,
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
@@ -151,16 +139,16 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if(iconUrl !="")
+          if (iconUrl != "")
             SizedBox(
               height: ScreenUtil().setWidth(90),
               width: ScreenUtil().setWidth(90),
-              child: ImageNetWork(imageUrl:
-                  iconUrl,
+              child: ImageNetWork(
+                imageUrl: iconUrl,
                 placeholder: "assets/wallet/WalletConnect.png",
               ),
             ),
-          if(dAppName !="")
+          if (dAppName != "")
             SizedBox(
               height: ScreenUtil().setWidth(60),
               width: double.infinity,
@@ -176,7 +164,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
                 textAlign: TextAlign.center,
               ),
             ),
-          if(dAppDesc !="")
+          if (dAppDesc != "")
             Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
@@ -192,12 +180,12 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
                 textAlign: TextAlign.center,
               ),
             ),
-          if(dAppWebUrl !="")
+          if (dAppWebUrl != "")
             InkWell(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>BrowserPage(dAppWebUrl,
-                  //dAppName
-                )));
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => BrowserPage(dAppWebUrl),
+                ));
               },
               child: SizedBox(
                 height: ScreenUtil().setWidth(60),
@@ -219,7 +207,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       ),
     );
   }
-  Widget titleWidget(String title,{Widget? rightWidget}){
+  Widget titleWidget(String title, {Widget? rightWidget}) {
     return Container(
       height: ScreenUtil().setWidth(100),
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
@@ -228,7 +216,6 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       child: Row(
         children: [
           Expanded(
-            flex: 1,
             child: Text(
               title,
               style: TextStyle(
@@ -243,24 +230,21 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       ),
     );
   }
-  Widget selectChainWidget(WalletConnectProvider connectV2){
+  Widget selectChainWidget(WalletConnectProvider connectV2) {
     return Column(
       children: [
         Expanded(
-          flex: 1,
           child: ListView.separated(
             padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-            itemBuilder: (context,int index){
-              CoinModel cm=connectV2.coinModels[index];
-              Widget iconWidget;
-              if(cm.coin['coinType']==CoinType.N.name){
-                iconWidget=Image.asset("assets/img/ast.png");
-              }else{
-                iconWidget=ImageNetWork(
-                  imageUrl: cm.coin['icon'],
-                  placeholder: "assets/img/list_default.png",
-                );
-              }
+            itemBuilder: (context, int index) {
+              final cm = connectV2.coinModels[index];
+              final isNativeCoin = cm.coin['coinType'] == CoinType.N.name;
+              final iconWidget = isNativeCoin
+                  ? Image.asset("assets/img/ast.png")
+                  : ImageNetWork(
+                      imageUrl: cm.coin['icon'],
+                      placeholder: "assets/img/list_default.png",
+                    );
               return SizedBox(
                 height: ScreenUtil().setWidth(120),
                 width: double.infinity,
@@ -273,14 +257,11 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
                       child: iconWidget,
                     ),
                     Expanded(
-                      flex: 1,
                       child: Text(
                         cm.coin['name'],
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(30),
-                          color: AppThemeUtils.getColorByKey(
-                            context,AppThemeKeys.mainTextColor.name,
-                          ),
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                         ),
                         textAlign: TextAlign.end,
                         overflow: TextOverflow.ellipsis,
@@ -291,7 +272,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
                 ),
               );
             },
-            separatorBuilder: (context,int index){
+            separatorBuilder: (context, int index) {
               return Divider(
                 height: ScreenUtil().setWidth(1),
                 endIndent: 0,
@@ -306,282 +287,164 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
       ],
     );
   }
-  Widget selectChainButton(WalletConnectProvider connectV2){
-    return Container(
-      height: ScreenUtil().setWidth(150),
-      width: double.infinity,
-      padding: EdgeInsets.only(
-        bottom: ScreenUtil().setWidth(36.0),
-        top: ScreenUtil().setWidth(26.0),
-        left: ScreenUtil().setWidth(30),
-        right: ScreenUtil().setWidth(30),
-      ),
-      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+  Widget selectChainButton(WalletConnectProvider connectV2) {
+    return _bottomBar(
       child: Row(
         children: [
           Expanded(
-            flex: 1,
-            child: buttonWidget(
-              S.of(context).g_key_79, (){
+            child: buttonWidget(S.of(context).g_key_79, () {
               connectV2.cleanData();
-              Navigator.pop(context,false);
-            },
-            ),
+              Navigator.pop(context, false);
+            }),
           ),
-          SizedBox(width: ScreenUtil().setWidth(30),),
+          SizedBox(width: ScreenUtil().setWidth(30)),
           Expanded(
-            flex: 1,
-            child: buttonWidget(
-              S.of(context).g_connect_key1, (){
+            child: buttonWidget(S.of(context).g_connect_key1, () {
               connectV2.viewStateDeal(WalletConnectState.connectOK);
-            },
-            ),
+            }),
           ),
         ],
       ),
     );
   }
-  Widget connectOKWidget(WalletConnectProvider connectV2){
+  Widget connectOKWidget(WalletConnectProvider connectV2) {
     return Column(
       children: [
-        Expanded(
-          flex: 1,
-          child: SizedBox(),
-        ),
+        const Spacer(),
         buttonLoadingWidget("${S.of(context).g_connect_key13}..."),
       ],
     );
   }
-  Widget connectWidget(WalletConnectProvider connectV2){
+
+  Widget connectWidget(WalletConnectProvider connectV2) {
     return Column(
       children: [
-        Expanded(
-          flex: 1,
-          child: SizedBox(),
+        const Spacer(),
+        _bottomBar(
+          child: buttonWidget(S.of(context).g_connect_key2, () {
+            connectV2.disconnectOnTap();
+          }),
         ),
-        connectButton(connectV2),
       ],
     );
   }
-  Widget connectButton(WalletConnectProvider connectV2){
-    return Container(
-      height: ScreenUtil().setWidth(150),
-      width: double.infinity,
-      padding: EdgeInsets.only(
-        bottom: ScreenUtil().setWidth(36.0),
-        top: ScreenUtil().setWidth(26.0),
-        left: ScreenUtil().setWidth(30),
-        right: ScreenUtil().setWidth(30),
-      ),
-      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-      child: buttonWidget(S.of(context).g_connect_key2,(){
-        connectV2.disconnectOnTap();
-        //viewState_deal(WalletConnectV2State.disconnect);
-      }),
-    );
-  }
-  Widget disconnectWidget(WalletConnectProvider connectV2){
+  Widget disconnectWidget(WalletConnectProvider connectV2) {
+    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
     return Column(
       children: [
         Expanded(
-          flex: 1,
           child: Center(
-            child: SizedBox(
-              height: ScreenUtil().setWidth(160),
-              width: ScreenUtil().setWidth(160),
-              child: Image.asset("assets/wallet/icon_net.png",color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: ScreenUtil().setWidth(160),
+                  width: ScreenUtil().setWidth(160),
+                  child: Image.asset("assets/wallet/icon_net.png", color: subtitleColor),
+                ),
+                SizedBox(height: ScreenUtil().setWidth(24)),
+                Text(
+                  S.of(context).g_wc_dapp_disconnected,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(28),
+                    color: subtitleColor,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
           ),
         ),
-        disconnectButton(connectV2),
+        _bottomBar(
+          child: Row(
+            children: [
+              Expanded(
+                child: buttonWidget(S.of(context).g_key_79, () {
+                  connectV2.cleanData();
+                  Navigator.pop(context, false);
+                }),
+              ),
+              SizedBox(width: ScreenUtil().setWidth(30)),
+              Expanded(
+                child: buttonWidget(S.of(context).g_key_4, () async {
+                  final scanStr = await scan();
+                  if (!mounted) return;
+                  if (scanStr.contains('relay-protocol') && scanStr.contains('symKey')) {
+                    connectV2.viewStateDeal(WalletConnectState.loading, params: scanStr);
+                  } else {
+                    ToastUtils.show(S.of(context).g_key_203);
+                  }
+                }),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
-  Widget disconnectButton(WalletConnectProvider connectV2){
-    return Container(
-      height: ScreenUtil().setWidth(150),
-      width: double.infinity,
-      padding: EdgeInsets.only(
-        bottom: ScreenUtil().setWidth(36.0),
-        top: ScreenUtil().setWidth(26.0),
-        left: ScreenUtil().setWidth(30),
-        right: ScreenUtil().setWidth(30),
-      ),
-      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: buttonWidget(
-              S.of(context).g_key_79, (){
-              connectV2.cleanData();
-              Navigator.pop(context,false);
-            },
-            ),
-          ),
-          SizedBox(width: ScreenUtil().setWidth(30),),
-          Expanded(
-            flex: 1,
-            child: buttonWidget(
-              S.of(context).g_key_4, ()async{
-              String scanStr=await scan();
-              if (!mounted) return;
-              if(scanStr.contains('relay-protocol') && scanStr.contains('symKey')){
-                connectV2.viewStateDeal(WalletConnectState.loading,params: scanStr);
-              }else{
-                ToastUtils.show(S.of(context).g_key_203);
-              }
-            },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-  Widget transactionOKWidget(WalletConnectProvider connectV2){
+  Widget transactionOKWidget(WalletConnectProvider connectV2) {
+    final data = connectV2.actionDataMap;
     return Column(
       children: [
-        itemWidget("Network",connectV2.actionDataMap?['network']??""),
-        Divider(
-          height: ScreenUtil().setWidth(1),
-          indent: ScreenUtil().setWidth(30),
-          endIndent: ScreenUtil().setWidth(30),
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
-        ),
-        itemWidget("From",connectV2.actionDataMap?['from']??""),
-        Divider(
-          height: ScreenUtil().setWidth(1),
-          indent: ScreenUtil().setWidth(30),
-          endIndent: ScreenUtil().setWidth(30),
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
-        ),
-        itemWidget("To",connectV2.actionDataMap?['to']??""),
-        Divider(
-          height: ScreenUtil().setWidth(1),
-          indent: ScreenUtil().setWidth(30),
-          endIndent: ScreenUtil().setWidth(30),
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
-        ),
-        itemWidget("Data",connectV2.actionDataMap?['data']??""),
-        Divider(
-          height: ScreenUtil().setWidth(1),
-          indent: ScreenUtil().setWidth(30),
-          endIndent: ScreenUtil().setWidth(30),
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
-        ),
-        Expanded(
-          flex: 1,
-          child: SizedBox(),
-        ),
-        transactionOKButton(connectV2),
+        itemWidget("Network", data?['network'] ?? ""),
+        _sectionDivider(),
+        itemWidget("From", data?['from'] ?? ""),
+        _sectionDivider(),
+        itemWidget("To", data?['to'] ?? ""),
+        _sectionDivider(),
+        itemWidget("Data", data?['data'] ?? ""),
+        _sectionDivider(),
+        const Spacer(),
+        _transactionOKButton(connectV2),
       ],
     );
   }
-  Widget transactionOKButton(WalletConnectProvider connectV2){
-    if(connectV2.walletConnectState==WalletConnectState.transactionOK) {
-      return Container(
-        height: ScreenUtil().setWidth(150),
-        width: double.infinity,
-        padding: EdgeInsets.only(
-          bottom: ScreenUtil().setWidth(36.0),
-          top: ScreenUtil().setWidth(26.0),
-          left: ScreenUtil().setWidth(30),
-          right: ScreenUtil().setWidth(30),
-        ),
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: buttonWidget(S.of(context).g_connect_key3,(){
-                connectV2.cancelTap(WalletConnectState.transaction);
-              }),
-            ),
-            SizedBox(width: ScreenUtil().setWidth(30),),
-            Expanded(
-              flex: 1,
-              child: buttonWidget(S.of(context).g_key_78,(){
-                connectV2.transactionSignTap();
-              }),
-            ),
-          ],
+
+  Widget _transactionOKButton(WalletConnectProvider connectV2) {
+    if (connectV2.walletConnectState == WalletConnectState.transactionOK) {
+      return _bottomBar(
+        child: _cancelConfirmRow(
+          onCancel: () => connectV2.cancelTap(WalletConnectState.transaction),
+          onConfirm: () => connectV2.transactionSignTap(),
         ),
       );
     }
-    if(connectV2.walletConnectState==WalletConnectState.transaction) {
+    if (connectV2.walletConnectState == WalletConnectState.transaction) {
       return buttonLoadingWidget("${S.of(context).g_key_106}...");
     }
     return const SizedBox();
   }
-  Widget messageSignOKWidget(WalletConnectProvider connectV2){
+  Widget messageSignOKWidget(WalletConnectProvider connectV2) {
+    final data = connectV2.actionDataMap;
     return Column(
       children: [
-        itemWidget("Network",connectV2.actionDataMap?['network']??""),
-        Divider(
-          height: ScreenUtil().setWidth(1),
-          indent: ScreenUtil().setWidth(30),
-          endIndent: ScreenUtil().setWidth(30),
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
-        ),
-        itemWidget("Address",connectV2.actionDataMap?['from']??""),
-        Divider(
-          height: ScreenUtil().setWidth(1),
-          indent: ScreenUtil().setWidth(30),
-          endIndent: ScreenUtil().setWidth(30),
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
-        ),
-        itemWidget("Data",connectV2.actionDataMap?['data']??""),
-        Divider(
-          height: ScreenUtil().setWidth(1),
-          indent: ScreenUtil().setWidth(30),
-          endIndent: ScreenUtil().setWidth(30),
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
-        ),
-        Expanded(
-          flex: 1,
-          child: SizedBox(),
-        ),
-        messageSignOKButton(connectV2),
+        itemWidget("Network", data?['network'] ?? ""),
+        _sectionDivider(),
+        itemWidget("Address", data?['from'] ?? ""),
+        _sectionDivider(),
+        itemWidget("Data", data?['data'] ?? ""),
+        _sectionDivider(),
+        const Spacer(),
+        _messageSignOKButton(connectV2),
       ],
     );
   }
-  Widget messageSignOKButton(WalletConnectProvider connectV2){
-    if(connectV2.walletConnectState==WalletConnectState.messageSignOK) {
-      return Container(
-        height: ScreenUtil().setWidth(150),
-        width: double.infinity,
-        padding: EdgeInsets.only(
-          bottom: ScreenUtil().setWidth(36.0),
-          top: ScreenUtil().setWidth(26.0),
-          left: ScreenUtil().setWidth(30),
-          right: ScreenUtil().setWidth(30),
-        ),
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: buttonWidget(S.of(context).g_connect_key3,(){
-                connectV2.cancelTap(WalletConnectState.messageSign);
-              }),
-            ),
-            SizedBox(width: ScreenUtil().setWidth(30),),
-            Expanded(
-              flex: 1,
-              child: buttonWidget(S.of(context).g_key_78,(){
-                connectV2.messageSignTap();
-              }),
-            ),
-          ],
+
+  Widget _messageSignOKButton(WalletConnectProvider connectV2) {
+    if (connectV2.walletConnectState == WalletConnectState.messageSignOK) {
+      return _bottomBar(
+        child: _cancelConfirmRow(
+          onCancel: () => connectV2.cancelTap(WalletConnectState.messageSign),
+          onConfirm: () => connectV2.messageSignTap(),
         ),
       );
     }
-    if(connectV2.walletConnectState==WalletConnectState.messageSign) {
+    if (connectV2.walletConnectState == WalletConnectState.messageSign) {
       return buttonLoadingWidget("${S.of(context).g_key_106}...");
     }
     return const SizedBox();
   }
-  Widget errorWidget(WalletConnectProvider connectV2){
+  Widget errorWidget(WalletConnectProvider connectV2) {
     return Column(
       children: [
         Container(
@@ -601,85 +464,107 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
             textAlign: TextAlign.center,
           ),
         ),
-        Expanded(child: SizedBox()),
-        Container(
-          height: ScreenUtil().setWidth(150),
-          width: double.infinity,
-          padding: EdgeInsets.only(
-            bottom: ScreenUtil().setWidth(36.0),
-            top: ScreenUtil().setWidth(26.0),
-            left: ScreenUtil().setWidth(30),
-            right: ScreenUtil().setWidth(30),
-          ),
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-          child: buttonWidget(
-            S.of(context).g_key_nft_220, (){
+        const Spacer(),
+        _bottomBar(
+          child: buttonWidget(S.of(context).g_key_nft_220, () {
             connectV2.cleanDataLogout();
-            Navigator.pop(context,false);
-          },
-          ),
+            Navigator.pop(context, false);
+          }),
         ),
       ],
     );
   }
-  Widget buttonWidget(String title,dynamic onTap){
+
+  // ── Shared helper widgets ──────────────────────────────────────────────────
+
+  /// Standard bottom action bar container used across all states.
+  Widget _bottomBar({required Widget child}) {
+    return Container(
+      height: ScreenUtil().setWidth(150),
+      width: double.infinity,
+      padding: EdgeInsets.only(
+        bottom: ScreenUtil().setWidth(36.0),
+        top: ScreenUtil().setWidth(26.0),
+        left: ScreenUtil().setWidth(30),
+        right: ScreenUtil().setWidth(30),
+      ),
+      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+      child: child,
+    );
+  }
+
+  /// Cancel + Confirm button row used by transaction and message signing.
+  Widget _cancelConfirmRow({
+    required VoidCallback onCancel,
+    required VoidCallback onConfirm,
+  }) {
+    return Row(
+      children: [
+        Expanded(child: buttonWidget(S.of(context).g_connect_key3, onCancel)),
+        SizedBox(width: ScreenUtil().setWidth(30)),
+        Expanded(child: buttonWidget(S.of(context).g_key_78, onConfirm)),
+      ],
+    );
+  }
+
+  Widget _sectionDivider() {
+    return Divider(
+      height: ScreenUtil().setWidth(1),
+      indent: ScreenUtil().setWidth(30),
+      endIndent: ScreenUtil().setWidth(30),
+      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
+    );
+  }
+
+  Widget buttonWidget(String title, VoidCallback onTap) {
     return SizedBox(
       width: double.infinity,
       height: ScreenUtil().setWidth(88.0),
-      child: buttonStyle2(context, (){
-        onTap();
-      }, title),
+      child: buttonStyle2(context, onTap, title),
     );
   }
-  Widget buttonLoadingWidget(String title){
-    return Container(
-        height: ScreenUtil().setWidth(150),
+
+  Widget buttonLoadingWidget(String title) {
+    return _bottomBar(
+      child: Container(
+        height: ScreenUtil().setWidth(88),
         width: double.infinity,
-        padding: EdgeInsets.only(
-          bottom: ScreenUtil().setWidth(36.0),
-          top: ScreenUtil().setWidth(26.0),
-          left: ScreenUtil().setWidth(30),
-          right: ScreenUtil().setWidth(30),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor3.name),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
         ),
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-        child: Container(
-          height: ScreenUtil().setWidth(88),
-          width: double.infinity,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor3.name),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+        child: Text(
+          title,
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(30.0),
+            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
           ),
-          child: Text(
-            title,
-            style: TextStyle(
-                fontSize: ScreenUtil().setSp(30.0),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name)
-            ),
-          ),
-        )
+        ),
+      ),
     );
   }
-  Widget itemWidget(String title,String value){
+
+  Widget itemWidget(String title, String value) {
+    final textColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30),),
+      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
       child: Row(
         children: [
           Text(
             title,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(28),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              color: textColor,
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(20),),
+          SizedBox(width: ScreenUtil().setWidth(20)),
           Expanded(
-            flex: 1,
             child: Text(
               value,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                color: textColor,
               ),
               maxLines: 5,
               overflow: TextOverflow.ellipsis,

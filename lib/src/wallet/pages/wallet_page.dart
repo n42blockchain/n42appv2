@@ -31,6 +31,7 @@ import 'package:n42appv2/src/wallet/pages/ens/ens_home_page.dart';
 import 'package:n42appv2/src/wallet/pages/aa/aa_home_page.dart';
 import 'package:n42appv2/src/wallet/services/ens_service.dart';
 import 'package:n42appv2/src/wallet_connect/pages/wallet_connect_page.dart';
+import 'package:n42appv2/src/wallet_connect/pages/wc_session_list_page.dart';
 import 'package:n42appv2/src/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:n42appv2/src/widgets/app_home_top_bar.dart';
 import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_7.dart';
@@ -139,6 +140,22 @@ class _WalletPageState extends ConsumerState<WalletPage> {
 
   Future<void> walletConnect() async {
     WalletConnectProvider walletConnectProvider=ref.read(wcpBridgeProvider);
+    // Ensure SDK is initialized before checking sessions
+    await walletConnectProvider.connectInit();
+
+    // If there are active sessions, show the session list page
+    final activeSessions = walletConnectProvider.getActiveSessions();
+    if (activeSessions.isNotEmpty) {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => WcSessionListPage()),
+      );
+      if (!mounted) return;
+      walletConnectProvider.refresh();
+      return;
+    }
+
+    // No active sessions — scan for a new connection
     if (walletConnectProvider.walletConnectState ==
         WalletConnectState.disconnect ||
         walletConnectProvider.walletConnectState ==
@@ -167,7 +184,6 @@ class _WalletPageState extends ConsumerState<WalletPage> {
               return;
             }
           }
-          //ToastUtils.show(S.of(context).g_key_203);
         }
       }
     } else {
@@ -329,6 +345,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                             ),
                             Builder(builder: (context) {
                               final wc = ref.watch(wcpBridgeProvider);
+                              final sessionCount = wc.getActiveSessions().length;
                               return InkWell(
                                 onTap: () {
                                   walletConnect();
@@ -336,21 +353,53 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                 child: SizedBox(
                                   width: ScreenUtil().setWidth(60.0),
                                   height: ScreenUtil().setWidth(60.0),
-                                  child: (wc.walletConnectState !=
-                                      WalletConnectState.disconnect &&
-                                      wc.dAppTopic != null &&
-                                      wc.metadata != null)
-                                      ? ImageNetWork(
-                                    imageUrl: (wc.metadata?.icons.isEmpty ?? true)
-                                        ? ""
-                                        : wc.metadata!.icons[0],
-                                    placeholder: "assets/img/list_default.png",
-                                  )
-                                      : Image.asset(
-                                    "assets/wallet/WalletConnect.png",
-                                    color: AppThemeUtils.getColorByKey(
-                                        context,
-                                        AppThemeKeys.mainBlueColor.name),
+                                  child: Stack(
+                                    clipBehavior: Clip.none,
+                                    children: [
+                                      Positioned.fill(
+                                        child: (wc.walletConnectState !=
+                                                WalletConnectState.disconnect &&
+                                            wc.dAppTopic != null &&
+                                            wc.metadata != null)
+                                            ? ImageNetWork(
+                                                imageUrl: (wc.metadata?.icons.isEmpty ?? true)
+                                                    ? ""
+                                                    : wc.metadata!.icons[0],
+                                                placeholder: "assets/img/list_default.png",
+                                              )
+                                            : Image.asset(
+                                                "assets/wallet/WalletConnect.png",
+                                                color: AppThemeUtils.getColorByKey(
+                                                    context,
+                                                    AppThemeKeys.mainBlueColor.name),
+                                              ),
+                                      ),
+                                      if (sessionCount > 0)
+                                        Positioned(
+                                          right: -ScreenUtil().setWidth(8),
+                                          top: -ScreenUtil().setWidth(8),
+                                          child: Container(
+                                            padding: EdgeInsets.all(ScreenUtil().setWidth(6)),
+                                            decoration: BoxDecoration(
+                                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                                              shape: BoxShape.circle,
+                                            ),
+                                            constraints: BoxConstraints(
+                                              minWidth: ScreenUtil().setWidth(28),
+                                              minHeight: ScreenUtil().setWidth(28),
+                                            ),
+                                            child: Text(
+                                              '$sessionCount',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: ScreenUtil().setSp(18),
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ),
+                                    ],
                                   ),
                                 ),
                               );
