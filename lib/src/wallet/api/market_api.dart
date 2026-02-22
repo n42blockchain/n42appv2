@@ -132,6 +132,72 @@ class MarketApi {
     }
   }
 
+  /// 获取 CoinGecko Trending 币种列表（/search/trending）
+  ///
+  /// 返回 trending coins 的 item 列表，每项包含 id, name, symbol, thumb, large,
+  /// market_cap_rank, data 等字段。网络异常或解析失败返回空列表。
+  Future<List<Map<String, dynamic>>> getTrendingCoins() async {
+    try {
+      final requestUrl = '$_geckoBase/search/trending';
+      debugPrint('MarketApi.getTrendingCoins');
+
+      final raw = await BaseApi.requestEmptyH.get<dynamic>(
+        requestUrl,
+        params: {},
+        header: _header,
+      );
+
+      if (raw == null || raw is! Map) return [];
+      final coins = raw['coins'];
+      if (coins is! List) return [];
+
+      return coins
+          .whereType<Map<dynamic, dynamic>>()
+          .map((c) {
+            final item = c['item'];
+            if (item is! Map) return null;
+            return Map<String, dynamic>.from(item);
+          })
+          .whereType<Map<String, dynamic>>()
+          .toList();
+    } catch (e, st) {
+      debugPrint('MarketApi.getTrendingCoins error: $e\n$st');
+      return [];
+    }
+  }
+
+  /// 搜索币种（CoinGecko /search?q={query}）
+  ///
+  /// [query] 为空时直接返回 `[]`。
+  /// 返回搜索结果 coins 列表，每项包含 id, name, symbol, thumb, large,
+  /// market_cap_rank 等字段。网络异常返回空列表。
+  Future<List<Map<String, dynamic>>> searchCoins(String query) async {
+    if (query.trim().isEmpty) return [];
+    try {
+      final requestUrl =
+          '$_geckoBase/search?q=${Uri.encodeQueryComponent(query.trim())}';
+      debugPrint('MarketApi.searchCoins: $query');
+
+      final raw = await BaseApi.requestEmptyH.get<dynamic>(
+        requestUrl,
+        params: {},
+        header: _header,
+      );
+
+      if (raw == null || raw is! Map) return [];
+      final coins = raw['coins'];
+      if (coins is! List) return [];
+
+      return coins
+          .whereType<Map<dynamic, dynamic>>()
+          .map((c) => Map<String, dynamic>.from(c))
+          .toList();
+    } catch (e, st) {
+      debugPrint('MarketApi.searchCoins error: $e\n$st');
+      return [];
+    }
+  }
+
   /// 获取币的基本详情信息（N42 market API → CoinGecko proxy）
   Future<Map<String, dynamic>> getWalletCoinsBaseInfo(String coinName) async {
     if (coinName.isEmpty) return {'error': true, 'data': '未找到该币'};

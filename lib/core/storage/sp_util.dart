@@ -221,6 +221,23 @@ class SPUtil {
     return prefs?.getBool(SPkey.hideSmallAssets.name) ?? false;
   }
 
+  // 行情自选列表（存储 coin symbol lowercase）
+  Future<List<String>> getMarketWatchlist() async {
+    await initPrefs();
+    final raw = prefs?.getString(SPkey.marketWatchlist.name);
+    if (raw == null || raw.isEmpty) return [];
+    try {
+      return (json.decode(raw) as List<dynamic>).cast<String>();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  Future<void> saveMarketWatchlist(List<String> list) async {
+    await initPrefs();
+    await prefs?.setString(SPkey.marketWatchlist.name, json.encode(list));
+  }
+
   // 资产搜索历史（最近 10 条关键词，按时间倒序）
   Future<List<String>> getCoinSearchHistory() async {
     await initPrefs();
@@ -406,5 +423,6 @@ enum SPkey {
   miningV1OpenMining, // V1 挖矿开关
   mainChainMining, // 是否使用主链挖矿
   miningUiVersion, // 挖矿 UI 版本：true = V2（默认），false = V1
+  marketWatchlist, // 行情自选列表，JSON List<String> 存 coin symbol（lowercase）
 }
 

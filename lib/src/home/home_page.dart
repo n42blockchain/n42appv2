@@ -17,6 +17,7 @@ import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_page.dart';
 import 'package:n42appv2/src/earn/pages/earn_page.dart';
+import 'package:n42appv2/src/wallet/pages/market/market_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,6 +43,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
   final GlobalKey _tabThree = GlobalKey();
   final GlobalKey _tabFour = GlobalKey();
   final GlobalKey _tabFive = GlobalKey();
+  final GlobalKey _tabSix = GlobalKey();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool? showTermsOfService;
   StreamSubscription? _deviceLoginSubscription;
@@ -54,6 +56,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
       const WalletPage(),
       useV2 ? const MiningTodayV2() : const MiningIndex(),
       const EarnPage(),
+      const MarketPage(),
     ];
   }
 
@@ -224,7 +227,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     return NavigationRail(
       selectedIndex: currentIndex,
       onDestinationSelected: (index) {
-        if (index < 3) {
+        if (index < 4) {
           ref.read(homeTabIndexProvider.notifier).state = index;
         } else {
           _navigateToChat();
@@ -260,6 +263,11 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
           icon: Image.asset("assets/home/tabbar/earn.png", width: 22, height: 22, color: unselectedColor),
           selectedIcon: Image.asset("assets/home/tabbar/earn.png", width: 22, height: 22, color: selectedColor),
           label: const Text('Earn'),
+        ),
+        NavigationRailDestination(
+          icon: Image.asset("assets/home/tabbar/news.png", width: 22, height: 22, color: unselectedColor),
+          selectedIcon: Image.asset("assets/home/tabbar/news.png", width: 22, height: 22, color: selectedColor),
+          label: const Text('Market'),
         ),
         NavigationRailDestination(
           icon: Image.asset("assets/home/tabbar/chat.png", width: 22, height: 22, color: unselectedColor),
@@ -298,22 +306,27 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
         children: [
           _buildBottomItem(
               S.of(context).g_key_6, 0, "assets/home/tabbar/wallet.png",
-              _tabTwo, 4,
+              _tabTwo, 5,
               fixedIconSize: isWide ? iconSize : null,
               fixedFontSize: isWide ? fontSize : null),
           _buildBottomItem(
               S.of(context).g_home_key3, 1, "assets/home/setting/mining.png",
-              _tabThree, 4,
+              _tabThree, 5,
               fixedIconSize: isWide ? iconSize : null,
               fixedFontSize: isWide ? fontSize : null),
           _buildBottomItem(
               'Earn', 2, "assets/home/tabbar/earn.png",
-              _tabFour, 4,
+              _tabFour, 5,
+              fixedIconSize: isWide ? iconSize : null,
+              fixedFontSize: isWide ? fontSize : null),
+          _buildBottomItem(
+              'Market', 3, "assets/home/tabbar/news.png",
+              _tabSix, 5,
               fixedIconSize: isWide ? iconSize : null,
               fixedFontSize: isWide ? fontSize : null),
           _buildChatBottomItem(
               S.of(context).g_key_squad, "assets/home/tabbar/chat.png",
-              _tabFive, 4,
+              _tabFive, 5,
               fixedIconSize: isWide ? iconSize : null,
               fixedFontSize: isWide ? fontSize : null),
         ],
