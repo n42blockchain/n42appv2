@@ -2888,15 +2888,20 @@ class MessageLookup extends MessageLookupByLibrary {
       "의심스러운 URL:",
     ),
     "g_portfolio_24h": MessageLookupByLibrary.simpleMessage("24h Change"),
+    "g_portfolio_all_holdings": MessageLookupByLibrary.simpleMessage(
+      "전체 보유 자산",
+    ),
     "g_portfolio_allocation": MessageLookupByLibrary.simpleMessage(
       "Asset Allocation",
     ),
     "g_portfolio_gainers": MessageLookupByLibrary.simpleMessage("Top Gainers"),
+    "g_portfolio_losers": MessageLookupByLibrary.simpleMessage("하락 순위"),
     "g_portfolio_movers": MessageLookupByLibrary.simpleMessage("24h Movers"),
     "g_portfolio_no_assets": MessageLookupByLibrary.simpleMessage(
       "No assets found",
     ),
     "g_portfolio_others": MessageLookupByLibrary.simpleMessage("Others"),
+    "g_portfolio_pie_total": MessageLookupByLibrary.simpleMessage("합계"),
     "g_portfolio_title": MessageLookupByLibrary.simpleMessage("Portfolio"),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("Total Value"),
     "g_referral_downloaded": MessageLookupByLibrary.simpleMessage("다운로드"),

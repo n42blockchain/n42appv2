@@ -1756,4 +1756,8 @@
   "g_referral_downloaded": "Pobrane",
   "g_referral_mining": "Węzły górnicze",
   "g_referral_reward": "Nagroda (N)"
+,
+  "g_portfolio_pie_total": "Łącznie",
+  "g_portfolio_losers": "Największe straty",
+  "g_portfolio_all_holdings": "Wszystkie aktywa"
 }

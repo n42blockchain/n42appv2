@@ -343,7 +343,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              'Total',
+                              S.of(context).g_portfolio_pie_total,
                               style: TextStyle(
                                   fontSize: 12.sp,
                                   color: textColor.withAlpha(153)),
@@ -456,7 +456,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
           if (losers.isNotEmpty) ...[
             SizedBox(height: 10.h),
             _MoverRow(
-              label: 'Top Losers',
+              label: S.of(context).g_portfolio_losers,
               records: losers,
               pnlFn: _pnl,
               fmtUsd: _fmtUsd,
@@ -488,7 +488,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'All Holdings',
+            S.of(context).g_portfolio_all_holdings,
             style: TextStyle(
                 fontSize: 15.sp,
                 fontWeight: FontWeight.bold,

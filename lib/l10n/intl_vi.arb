@@ -1756,4 +1756,8 @@
   "g_referral_downloaded": "Đã tải",
   "g_referral_mining": "Nút khai thác",
   "g_referral_reward": "Phần thưởng (N)"
+,
+  "g_portfolio_pie_total": "Tổng",
+  "g_portfolio_losers": "Giảm nhiều nhất",
+  "g_portfolio_all_holdings": "Tất cả tài sản"
 }

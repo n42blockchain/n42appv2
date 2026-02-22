@@ -1756,4 +1756,8 @@
   "g_referral_downloaded": "İndirildi",
   "g_referral_mining": "Madencilik Düğümleri",
   "g_referral_reward": "Ödül (N)"
+,
+  "g_portfolio_pie_total": "Toplam",
+  "g_portfolio_losers": "En Büyük Kayıplar",
+  "g_portfolio_all_holdings": "Tüm Varlıklar"
 }

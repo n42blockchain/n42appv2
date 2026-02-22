@@ -1756,4 +1756,8 @@
   "g_referral_downloaded": "Diunduh",
   "g_referral_mining": "Node Penambangan",
   "g_referral_reward": "Hadiah (N)"
+,
+  "g_portfolio_pie_total": "Total",
+  "g_portfolio_losers": "Penurunan Teratas",
+  "g_portfolio_all_holdings": "Semua Aset"
 }

@@ -1756,4 +1756,8 @@
   "g_referral_downloaded": "Scaricato",
   "g_referral_mining": "Nodi di mining",
   "g_referral_reward": "Ricompensa (N)"
+,
+  "g_portfolio_pie_total": "Totale",
+  "g_portfolio_losers": "Peggiori",
+  "g_portfolio_all_holdings": "Tutti gli asset"
 }

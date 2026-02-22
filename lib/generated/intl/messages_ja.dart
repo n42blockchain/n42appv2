@@ -2791,15 +2791,18 @@ class MessageLookup extends MessageLookupByLibrary {
       "不審なURL：",
     ),
     "g_portfolio_24h": MessageLookupByLibrary.simpleMessage("24h Change"),
+    "g_portfolio_all_holdings": MessageLookupByLibrary.simpleMessage("全保有資産"),
     "g_portfolio_allocation": MessageLookupByLibrary.simpleMessage(
       "Asset Allocation",
     ),
     "g_portfolio_gainers": MessageLookupByLibrary.simpleMessage("Top Gainers"),
+    "g_portfolio_losers": MessageLookupByLibrary.simpleMessage("トップ下落"),
     "g_portfolio_movers": MessageLookupByLibrary.simpleMessage("24h Movers"),
     "g_portfolio_no_assets": MessageLookupByLibrary.simpleMessage(
       "No assets found",
     ),
     "g_portfolio_others": MessageLookupByLibrary.simpleMessage("Others"),
+    "g_portfolio_pie_total": MessageLookupByLibrary.simpleMessage("合計"),
     "g_portfolio_title": MessageLookupByLibrary.simpleMessage("Portfolio"),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("Total Value"),
     "g_referral_downloaded": MessageLookupByLibrary.simpleMessage("ダウンロード"),

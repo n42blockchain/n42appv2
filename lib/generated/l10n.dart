@@ -15448,6 +15448,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Total`
+  String get g_portfolio_pie_total {
+    return Intl.message(
+      'Total',
+      name: 'g_portfolio_pie_total',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Top Losers`
+  String get g_portfolio_losers {
+    return Intl.message(
+      'Top Losers',
+      name: 'g_portfolio_losers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All Holdings`
+  String get g_portfolio_all_holdings {
+    return Intl.message(
+      'All Holdings',
+      name: 'g_portfolio_all_holdings',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

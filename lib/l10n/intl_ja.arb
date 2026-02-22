@@ -1756,4 +1756,8 @@
   "g_referral_downloaded": "ダウンロード",
   "g_referral_mining": "マイニングノード",
   "g_referral_reward": "報酬 (N)"
+,
+  "g_portfolio_pie_total": "合計",
+  "g_portfolio_losers": "トップ下落",
+  "g_portfolio_all_holdings": "全保有資産"
 }

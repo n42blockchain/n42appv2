@@ -1820,4 +1820,8 @@
   "g_referral_downloaded": "Downloaded",
   "g_referral_mining": "Mining Nodes",
   "g_referral_reward": "Reward (N)"
+,
+  "g_portfolio_pie_total": "Total",
+  "g_portfolio_losers": "Top Losers",
+  "g_portfolio_all_holdings": "All Holdings"
 }
