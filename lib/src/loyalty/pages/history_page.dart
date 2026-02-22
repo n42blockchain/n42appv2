@@ -137,7 +137,7 @@ class HistoryPage extends StatelessWidget {
             width: ScreenUtil().setWidth(48),
             height: ScreenUtil().setWidth(48),
             decoration: BoxDecoration(
-              color: color.withAlpha(30),
+              color: color.withValues(alpha: 30 / 255),
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
             ),
             child: Center(

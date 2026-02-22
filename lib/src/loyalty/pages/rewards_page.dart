@@ -149,7 +149,7 @@ class RewardsPage extends StatelessWidget {
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
         border: canRedeem
-            ? Border.all(color: Colors.green.withAlpha(100), width: 1)
+            ? Border.all(color: Colors.green.withValues(alpha: 100 / 255), width: 1)
             : null,
       ),
       child: Column(
@@ -158,7 +158,7 @@ class RewardsPage extends StatelessWidget {
           Container(
             height: ScreenUtil().setWidth(120),
             decoration: BoxDecoration(
-              color: _getRewardColor(reward.type).withAlpha(30),
+              color: _getRewardColor(reward.type).withValues(alpha: 30 / 255),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(ScreenUtil().setWidth(12)),
                 topRight: Radius.circular(ScreenUtil().setWidth(12)),
@@ -200,8 +200,8 @@ class RewardsPage extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: canAfford
-                            ? Colors.green.withAlpha(30)
-                            : Colors.grey.withAlpha(30),
+                            ? Colors.green.withValues(alpha: 30 / 255)
+                            : Colors.grey.withValues(alpha: 30 / 255),
                         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
                       ),
                       child: Text(
@@ -334,7 +334,7 @@ class RewardsPage extends StatelessWidget {
         vertical: ScreenUtil().setWidth(4),
       ),
       decoration: BoxDecoration(
-        color: color.withAlpha(20),
+        color: color.withValues(alpha: 20 / 255),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
       ),
       child: Row(
