@@ -1715,6 +1715,11 @@
   "g_mining_key85": "Switch between testnet and mainnet for cloud mining.",
   "g_setting_mining_version": "Mining Interface",
   "g_setting_mining_v2_label": "Cloud Mining (V2)",
-  "g_setting_mining_v1_label": "Classic Mining (V1)"
-
+  "g_setting_mining_v1_label": "Classic Mining (V1)",
+  "g_mining_node_key1": "Full Node Detail",
+  "g_mining_node_key2": "Node ID",
+  "g_mining_node_key3": "WS Connected",
+  "g_mining_node_key4": "WS Disconnected",
+  "g_mining_node_key5": "WS Reconnecting",
+  "g_mining_node_key6": "Expiry"
 }

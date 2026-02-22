@@ -2637,6 +2637,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "正確であることを確認するために、パスワードを再入力してください",
     ),
+    "g_mining_node_key1": MessageLookupByLibrary.simpleMessage("フルノード詳細"),
+    "g_mining_node_key2": MessageLookupByLibrary.simpleMessage("ノード ID"),
+    "g_mining_node_key3": MessageLookupByLibrary.simpleMessage("WS 接続中"),
+    "g_mining_node_key4": MessageLookupByLibrary.simpleMessage("WS 切断"),
+    "g_mining_node_key5": MessageLookupByLibrary.simpleMessage("WS 再接続中"),
+    "g_mining_node_key6": MessageLookupByLibrary.simpleMessage("有効期限"),
     "g_mining_unlock_period": MessageLookupByLibrary.simpleMessage("アンロック期間:"),
     "g_mining_unlockable_anytime": MessageLookupByLibrary.simpleMessage(
       "いつでもアンロック可能",

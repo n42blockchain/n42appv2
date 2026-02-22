@@ -3172,6 +3172,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Wprowadź hasło ponownie, aby upewnić się, że jest poprawne",
     ),
+    "g_mining_node_key1": MessageLookupByLibrary.simpleMessage(
+      "Szczegóły Pełnego Węzła",
+    ),
+    "g_mining_node_key2": MessageLookupByLibrary.simpleMessage("ID Węzła"),
+    "g_mining_node_key3": MessageLookupByLibrary.simpleMessage("WS Połączony"),
+    "g_mining_node_key4": MessageLookupByLibrary.simpleMessage("WS Rozłączony"),
+    "g_mining_node_key5": MessageLookupByLibrary.simpleMessage(
+      "WS Ponowne połączenie",
+    ),
+    "g_mining_node_key6": MessageLookupByLibrary.simpleMessage("Wygaśnięcie"),
     "g_mining_unlock_period": MessageLookupByLibrary.simpleMessage(
       "Okres odblokowania:",
     ),

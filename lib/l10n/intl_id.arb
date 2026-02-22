@@ -1651,5 +1651,11 @@
   },
   "g_setting_mining_version": "Antarmuka Pertambangan",
   "g_setting_mining_v2_label": "Penambangan Cloud (V2)",
-  "g_setting_mining_v1_label": "Penambangan Klasik (V1)"
+  "g_setting_mining_v1_label": "Penambangan Klasik (V1)",
+  "g_mining_node_key1": "Detail Node Penuh",
+  "g_mining_node_key2": "ID Node",
+  "g_mining_node_key3": "WS Terhubung",
+  "g_mining_node_key4": "WS Terputus",
+  "g_mining_node_key5": "WS Menghubungkan",
+  "g_mining_node_key6": "Kedaluwarsa"
 }

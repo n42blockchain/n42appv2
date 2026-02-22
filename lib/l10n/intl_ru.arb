@@ -1651,5 +1651,11 @@
   },
   "g_setting_mining_version": "Интерфейс майнинга",
   "g_setting_mining_v2_label": "Облачный майнинг (V2)",
-  "g_setting_mining_v1_label": "Классический майнинг (V1)"
+  "g_setting_mining_v1_label": "Классический майнинг (V1)",
+  "g_mining_node_key1": "Детали Полного Узла",
+  "g_mining_node_key2": "ID узла",
+  "g_mining_node_key3": "WS Подключён",
+  "g_mining_node_key4": "WS Отключён",
+  "g_mining_node_key5": "WS Переподключение",
+  "g_mining_node_key6": "Истечение"
 }

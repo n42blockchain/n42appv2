@@ -14723,6 +14723,66 @@ class S {
       args: [],
     );
   }
+
+  /// `Full Node Detail`
+  String get g_mining_node_key1 {
+    return Intl.message(
+      'Full Node Detail',
+      name: 'g_mining_node_key1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Node ID`
+  String get g_mining_node_key2 {
+    return Intl.message(
+      'Node ID',
+      name: 'g_mining_node_key2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `WS Connected`
+  String get g_mining_node_key3 {
+    return Intl.message(
+      'WS Connected',
+      name: 'g_mining_node_key3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `WS Disconnected`
+  String get g_mining_node_key4 {
+    return Intl.message(
+      'WS Disconnected',
+      name: 'g_mining_node_key4',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `WS Reconnecting`
+  String get g_mining_node_key5 {
+    return Intl.message(
+      'WS Reconnecting',
+      name: 'g_mining_node_key5',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expiry`
+  String get g_mining_node_key6 {
+    return Intl.message(
+      'Expiry',
+      name: 'g_mining_node_key6',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

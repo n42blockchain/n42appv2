@@ -3220,6 +3220,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Bitte geben Sie Ihr Passwort erneut ein, um es zu bestaetigen",
     ),
+    "g_mining_node_key1": MessageLookupByLibrary.simpleMessage(
+      "Full Node Detail",
+    ),
+    "g_mining_node_key2": MessageLookupByLibrary.simpleMessage("Node ID"),
+    "g_mining_node_key3": MessageLookupByLibrary.simpleMessage("WS Verbunden"),
+    "g_mining_node_key4": MessageLookupByLibrary.simpleMessage("WS Getrennt"),
+    "g_mining_node_key5": MessageLookupByLibrary.simpleMessage(
+      "WS Verbindet...",
+    ),
+    "g_mining_node_key6": MessageLookupByLibrary.simpleMessage("Ablaufdatum"),
     "g_mining_unlock_period": MessageLookupByLibrary.simpleMessage(
       "Entsperrungszeitraum:",
     ),

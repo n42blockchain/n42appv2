@@ -2738,6 +2738,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "비밀번호가 올바른지 확인하기 위해 다시 입력하세요",
     ),
+    "g_mining_node_key1": MessageLookupByLibrary.simpleMessage("풀 노드 상세"),
+    "g_mining_node_key2": MessageLookupByLibrary.simpleMessage("노드 ID"),
+    "g_mining_node_key3": MessageLookupByLibrary.simpleMessage("WS 연결됨"),
+    "g_mining_node_key4": MessageLookupByLibrary.simpleMessage("WS 연결 끊김"),
+    "g_mining_node_key5": MessageLookupByLibrary.simpleMessage("WS 재연결 중"),
+    "g_mining_node_key6": MessageLookupByLibrary.simpleMessage("만료"),
     "g_mining_unlock_period": MessageLookupByLibrary.simpleMessage("잠금 해제 기간:"),
     "g_mining_unlockable_anytime": MessageLookupByLibrary.simpleMessage(
       "언제든지 잠금 해제 가능",

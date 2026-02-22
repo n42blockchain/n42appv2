@@ -3173,6 +3173,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Повторите пароль для подтверждения",
     ),
+    "g_mining_node_key1": MessageLookupByLibrary.simpleMessage(
+      "Детали Полного Узла",
+    ),
+    "g_mining_node_key2": MessageLookupByLibrary.simpleMessage("ID узла"),
+    "g_mining_node_key3": MessageLookupByLibrary.simpleMessage("WS Подключён"),
+    "g_mining_node_key4": MessageLookupByLibrary.simpleMessage("WS Отключён"),
+    "g_mining_node_key5": MessageLookupByLibrary.simpleMessage(
+      "WS Переподключение",
+    ),
+    "g_mining_node_key6": MessageLookupByLibrary.simpleMessage("Истечение"),
     "g_mining_unlock_period": MessageLookupByLibrary.simpleMessage(
       "Период разблокировки:",
     ),

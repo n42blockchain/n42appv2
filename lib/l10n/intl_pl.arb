@@ -1651,5 +1651,11 @@
   },
   "g_setting_mining_version": "Interfejs Górniczy",
   "g_setting_mining_v2_label": "Górnictwo w chmurze (V2)",
-  "g_setting_mining_v1_label": "Klasyczne górnictwo (V1)"
+  "g_setting_mining_v1_label": "Klasyczne górnictwo (V1)",
+  "g_mining_node_key1": "Szczegóły Pełnego Węzła",
+  "g_mining_node_key2": "ID Węzła",
+  "g_mining_node_key3": "WS Połączony",
+  "g_mining_node_key4": "WS Rozłączony",
+  "g_mining_node_key5": "WS Ponowne połączenie",
+  "g_mining_node_key6": "Wygaśnięcie"
 }

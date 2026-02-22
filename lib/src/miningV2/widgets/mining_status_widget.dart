@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
+import 'package:n42appv2/src/miningV2/pages/mining_node_detail_page.dart';
 import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
 
 /// Mining Status Widget
@@ -105,10 +106,28 @@ class MiningStatusWidget extends StatelessWidget {
                     ),
                   ),
                 ),
+              if (mpValue.depositsEnable == true)
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (_) => const MiningNodeDetailPage()),
+                    );
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(left: ScreenUtil().setWidth(4)),
+                    child: Icon(
+                      Icons.arrow_forward_ios,
+                      size: ScreenUtil().setWidth(24),
+                      color: AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.itemSubtitleTextColor.name),
+                    ),
+                  ),
+                ),
             ],
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
-          // Status text + indicator
+          // Status text + WS indicator dot
           Row(
             children: [
               Expanded(
@@ -123,6 +142,17 @@ class MiningStatusWidget extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
+              // WS connected green dot (only when connected)
+              if (mpValue.wsConnected)
+                Container(
+                  width: ScreenUtil().setWidth(8),
+                  height: ScreenUtil().setWidth(8),
+                  margin: EdgeInsets.only(right: ScreenUtil().setWidth(6)),
+                  decoration: const BoxDecoration(
+                    color: Color(0xff32D74B),
+                    shape: BoxShape.circle,
+                  ),
+                ),
               // Status indicator dot
               Container(
                 width: ScreenUtil().setWidth(14),

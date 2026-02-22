@@ -1694,5 +1694,11 @@
   },
   "g_setting_mining_version": "채굴 인터페이스",
   "g_setting_mining_v2_label": "클라우드 채굴 (V2)",
-  "g_setting_mining_v1_label": "클래식 채굴 (V1)"
+  "g_setting_mining_v1_label": "클래식 채굴 (V1)",
+  "g_mining_node_key1": "풀 노드 상세",
+  "g_mining_node_key2": "노드 ID",
+  "g_mining_node_key3": "WS 연결됨",
+  "g_mining_node_key4": "WS 연결 끊김",
+  "g_mining_node_key5": "WS 재연결 중",
+  "g_mining_node_key6": "만료"
 }

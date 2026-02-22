@@ -3083,6 +3083,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Doğruluğundan emin olmak için lütfen şifrenizi tekrar girin",
     ),
+    "g_mining_node_key1": MessageLookupByLibrary.simpleMessage(
+      "Tam Düğüm Detayı",
+    ),
+    "g_mining_node_key2": MessageLookupByLibrary.simpleMessage("Düğüm ID"),
+    "g_mining_node_key3": MessageLookupByLibrary.simpleMessage("WS Bağlı"),
+    "g_mining_node_key4": MessageLookupByLibrary.simpleMessage(
+      "WS Bağlantı Kesildi",
+    ),
+    "g_mining_node_key5": MessageLookupByLibrary.simpleMessage(
+      "WS Yeniden Bağlanıyor",
+    ),
+    "g_mining_node_key6": MessageLookupByLibrary.simpleMessage("Bitiş tarihi"),
     "g_mining_unlock_period": MessageLookupByLibrary.simpleMessage(
       "Kilit Açma Süresi:",
     ),

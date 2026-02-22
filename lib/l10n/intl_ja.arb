@@ -1651,5 +1651,11 @@
   },
   "g_setting_mining_version": "マイニング画面",
   "g_setting_mining_v2_label": "クラウドマイニング (V2)",
-  "g_setting_mining_v1_label": "クラシックマイニング (V1)"
+  "g_setting_mining_v1_label": "クラシックマイニング (V1)",
+  "g_mining_node_key1": "フルノード詳細",
+  "g_mining_node_key2": "ノード ID",
+  "g_mining_node_key3": "WS 接続中",
+  "g_mining_node_key4": "WS 切断",
+  "g_mining_node_key5": "WS 再接続中",
+  "g_mining_node_key6": "有効期限"
 }

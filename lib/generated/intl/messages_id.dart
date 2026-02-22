@@ -3131,6 +3131,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Silakan masukkan kembali kata sandi Anda untuk memastikan kebenaran",
     ),
+    "g_mining_node_key1": MessageLookupByLibrary.simpleMessage(
+      "Detail Node Penuh",
+    ),
+    "g_mining_node_key2": MessageLookupByLibrary.simpleMessage("ID Node"),
+    "g_mining_node_key3": MessageLookupByLibrary.simpleMessage("WS Terhubung"),
+    "g_mining_node_key4": MessageLookupByLibrary.simpleMessage("WS Terputus"),
+    "g_mining_node_key5": MessageLookupByLibrary.simpleMessage(
+      "WS Menghubungkan",
+    ),
+    "g_mining_node_key6": MessageLookupByLibrary.simpleMessage("Kedaluwarsa"),
     "g_mining_unlock_period": MessageLookupByLibrary.simpleMessage(
       "Periode Buka Kunci:",
     ),

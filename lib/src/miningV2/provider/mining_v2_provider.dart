@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/features/mining/domain/entities/mining_entity.dart';
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
@@ -680,6 +681,34 @@ class MiningV2Provider extends ChangeNotifier {
   /// Cached exit timestamp from beacon (unix seconds, 0 = not exited)
   int exitTimestamp = 0;
 
+  /// Builds a [FullNodeEntity] from the cached beacon state.
+  /// Returns null if not staked or pubkey is unavailable.
+  FullNodeEntity? get fullNodeEntity {
+    if (depositsEnable != true) return null;
+    final pubKey = miningKeypart?['publicKey'] ?? '';
+    if (pubKey.isEmpty) return null;
+    NodeStatus status;
+    if (!showRedemption2 && exitTimestamp != 0) {
+      status = NodeStatus.offline;
+    } else if (showRedemption) {
+      status = miningStatus ? NodeStatus.online : NodeStatus.offline;
+    } else {
+      status = NodeStatus.syncing;
+    }
+    final inactivityPct = double.tryParse(inactivityScorePercentage) ?? 0.0;
+    return FullNodeEntity(
+      id: pubKey,
+      name: 'Beacon Validator',
+      status: status,
+      uptimePercentage: (100.0 - inactivityPct).clamp(0.0, 100.0),
+      totalRewards: miningTotalRevenue,
+      activatedAt: activationTime ?? DateTime.now(),
+      expiresAt: exitTimestamp > 0
+          ? DateTime.fromMillisecondsSinceEpoch(exitTimestamp * 1000)
+          : null,
+    );
+  }
+
   /// Periodic poll timer for beacon validator status when node is active
   Timer? _statusPollTimer;
 
@@ -938,6 +967,7 @@ class MiningV2Provider extends ChangeNotifier {
         miningStatus = true;
         _wsReconnectAttempts = 0;
         notifyListeners();
+        getBeaconValidator(); // immediately refresh beacon status on connect/reconnect
         break;
 
       case 'onFailure':

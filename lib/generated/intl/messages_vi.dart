@@ -3071,6 +3071,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Vui lòng nhập lại mật khẩu để đảm bảo chính xác",
     ),
+    "g_mining_node_key1": MessageLookupByLibrary.simpleMessage(
+      "Chi tiết Nút đầy đủ",
+    ),
+    "g_mining_node_key2": MessageLookupByLibrary.simpleMessage("ID Nút"),
+    "g_mining_node_key3": MessageLookupByLibrary.simpleMessage("WS Đã kết nối"),
+    "g_mining_node_key4": MessageLookupByLibrary.simpleMessage(
+      "WS Ngắt kết nối",
+    ),
+    "g_mining_node_key5": MessageLookupByLibrary.simpleMessage(
+      "WS Đang kết nối lại",
+    ),
+    "g_mining_node_key6": MessageLookupByLibrary.simpleMessage("Hết hạn"),
     "g_mining_unlock_period": MessageLookupByLibrary.simpleMessage(
       "Thời gian mở khóa:",
     ),

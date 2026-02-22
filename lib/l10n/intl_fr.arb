@@ -1651,5 +1651,11 @@
   },
   "g_setting_mining_version": "Interface de Minage",
   "g_setting_mining_v2_label": "Minage cloud (V2)",
-  "g_setting_mining_v1_label": "Minage classique (V1)"
+  "g_setting_mining_v1_label": "Minage classique (V1)",
+  "g_mining_node_key1": "Détail Nœud Complet",
+  "g_mining_node_key2": "ID du Nœud",
+  "g_mining_node_key3": "WS Connecté",
+  "g_mining_node_key4": "WS Déconnecté",
+  "g_mining_node_key5": "WS Reconnexion",
+  "g_mining_node_key6": "Expiration"
 }

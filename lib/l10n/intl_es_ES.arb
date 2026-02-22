@@ -1694,5 +1694,11 @@
   },
   "g_setting_mining_version": "Interfaz de Minería",
   "g_setting_mining_v2_label": "Minería en la nube (V2)",
-  "g_setting_mining_v1_label": "Minería clásica (V1)"
+  "g_setting_mining_v1_label": "Minería clásica (V1)",
+  "g_mining_node_key1": "Detalle Nodo Completo",
+  "g_mining_node_key2": "ID de Nodo",
+  "g_mining_node_key3": "WS Conectado",
+  "g_mining_node_key4": "WS Desconectado",
+  "g_mining_node_key5": "WS Reconectando",
+  "g_mining_node_key6": "Vencimiento"
 }
