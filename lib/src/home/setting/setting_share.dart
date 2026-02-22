@@ -166,7 +166,9 @@ class _SettingShareState extends State<SettingShare> {
                         ),
                       ),
                     ),
+                    _buildStatsRow(context),
                     shareWidget(),
+                    SizedBox(height: ScreenUtil().setWidth(148.0)),
                   ],
                 ),
               ),
@@ -205,6 +207,58 @@ class _SettingShareState extends State<SettingShare> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildStatsRow(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(30.0),
+        vertical: ScreenUtil().setWidth(12.0),
+      ),
+      padding: EdgeInsets.symmetric(
+        vertical: ScreenUtil().setWidth(24.0),
+        horizontal: ScreenUtil().setWidth(8.0),
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+      ),
+      child: Row(
+        children: [
+          _buildStatsCell(context, S.of(context).g_referral_invited, inviteeTotal.toString()),
+          _buildStatsCell(context, S.of(context).g_referral_downloaded, inviteeTotalDown.toString()),
+          _buildStatsCell(context, S.of(context).g_referral_mining, miningTotal.toString()),
+          _buildStatsCell(context, S.of(context).g_referral_reward, rewardTotal.toStringAsFixed(2)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatsCell(BuildContext context, String label, String value) {
+    return Expanded(
+      child: Column(
+        children: [
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(36.0),
+              fontWeight: FontWeight.bold,
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(4.0)),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(20.0),
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.itemSubtitleTextColor.name),
+            ),
+          ),
+        ],
       ),
     );
   }

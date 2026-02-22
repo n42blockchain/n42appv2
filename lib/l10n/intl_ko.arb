@@ -1792,4 +1792,11 @@
   "g_portfolio_gainers": "Top Gainers",
   "g_theme_accent_color": "Accent Color",
   "g_theme_accent_reset": "Reset to default"
+,
+  "g_referral_invite_code": "초대 코드",
+  "g_referral_stats_title": "추천 통계",
+  "g_referral_invited": "초대됨",
+  "g_referral_downloaded": "다운로드",
+  "g_referral_mining": "채굴 노드",
+  "g_referral_reward": "보상 (N)"
 }

@@ -2802,6 +2802,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_others": MessageLookupByLibrary.simpleMessage("Others"),
     "g_portfolio_title": MessageLookupByLibrary.simpleMessage("Portfolio"),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("Total Value"),
+    "g_referral_downloaded": MessageLookupByLibrary.simpleMessage("ダウンロード"),
+    "g_referral_invite_code": MessageLookupByLibrary.simpleMessage("招待コード"),
+    "g_referral_invited": MessageLookupByLibrary.simpleMessage("招待済み"),
+    "g_referral_mining": MessageLookupByLibrary.simpleMessage("マイニングノード"),
+    "g_referral_reward": MessageLookupByLibrary.simpleMessage("報酬 (N)"),
+    "g_referral_stats_title": MessageLookupByLibrary.simpleMessage("招待統計"),
     "g_setting_mining_v1_label": MessageLookupByLibrary.simpleMessage(
       "クラシックマイニング (V1)",
     ),

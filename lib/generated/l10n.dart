@@ -15388,6 +15388,66 @@ class S {
       args: [],
     );
   }
+
+  /// `Invite Code`
+  String get g_referral_invite_code {
+    return Intl.message(
+      'Invite Code',
+      name: 'g_referral_invite_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Referral Stats`
+  String get g_referral_stats_title {
+    return Intl.message(
+      'Referral Stats',
+      name: 'g_referral_stats_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invited`
+  String get g_referral_invited {
+    return Intl.message(
+      'Invited',
+      name: 'g_referral_invited',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Downloaded`
+  String get g_referral_downloaded {
+    return Intl.message(
+      'Downloaded',
+      name: 'g_referral_downloaded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mining Nodes`
+  String get g_referral_mining {
+    return Intl.message(
+      'Mining Nodes',
+      name: 'g_referral_mining',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reward (N)`
+  String get g_referral_reward {
+    return Intl.message(
+      'Reward (N)',
+      name: 'g_referral_reward',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -1749,4 +1749,11 @@
   "g_portfolio_gainers": "Top Gainers",
   "g_theme_accent_color": "Accent Color",
   "g_theme_accent_reset": "Reset to default"
+,
+  "g_referral_invite_code": "Kod zaproszenia",
+  "g_referral_stats_title": "Statystyki poleceń",
+  "g_referral_invited": "Zaproszeni",
+  "g_referral_downloaded": "Pobrane",
+  "g_referral_mining": "Węzły górnicze",
+  "g_referral_reward": "Nagroda (N)"
 }

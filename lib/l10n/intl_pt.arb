@@ -1749,4 +1749,11 @@
   "g_portfolio_gainers": "Top Gainers",
   "g_theme_accent_color": "Accent Color",
   "g_theme_accent_reset": "Reset to default"
+,
+  "g_referral_invite_code": "Código de convite",
+  "g_referral_stats_title": "Estatísticas de indicação",
+  "g_referral_invited": "Convidados",
+  "g_referral_downloaded": "Baixado",
+  "g_referral_mining": "Nós de mineração",
+  "g_referral_reward": "Recompensa (N)"
 }

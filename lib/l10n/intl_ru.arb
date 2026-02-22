@@ -1749,4 +1749,11 @@
   "g_portfolio_gainers": "Top Gainers",
   "g_theme_accent_color": "Accent Color",
   "g_theme_accent_reset": "Reset to default"
+,
+  "g_referral_invite_code": "Код приглашения",
+  "g_referral_stats_title": "Статистика рефералов",
+  "g_referral_invited": "Приглашено",
+  "g_referral_downloaded": "Загружено",
+  "g_referral_mining": "Майнинговые узлы",
+  "g_referral_reward": "Награда (N)"
 }

@@ -3347,6 +3347,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_others": MessageLookupByLibrary.simpleMessage("Others"),
     "g_portfolio_title": MessageLookupByLibrary.simpleMessage("Portfolio"),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("Total Value"),
+    "g_referral_downloaded": MessageLookupByLibrary.simpleMessage("Pobrane"),
+    "g_referral_invite_code": MessageLookupByLibrary.simpleMessage(
+      "Kod zaproszenia",
+    ),
+    "g_referral_invited": MessageLookupByLibrary.simpleMessage("Zaproszeni"),
+    "g_referral_mining": MessageLookupByLibrary.simpleMessage("Węzły górnicze"),
+    "g_referral_reward": MessageLookupByLibrary.simpleMessage("Nagroda (N)"),
+    "g_referral_stats_title": MessageLookupByLibrary.simpleMessage(
+      "Statystyki poleceń",
+    ),
     "g_setting_mining_v1_label": MessageLookupByLibrary.simpleMessage(
       "Klasyczne górnictwo (V1)",
     ),

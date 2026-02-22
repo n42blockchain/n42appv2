@@ -1749,4 +1749,11 @@
   "g_portfolio_gainers": "Top Gainers",
   "g_theme_accent_color": "Accent Color",
   "g_theme_accent_reset": "Reset to default"
+,
+  "g_referral_invite_code": "Kode undangan",
+  "g_referral_stats_title": "Statistik Referral",
+  "g_referral_invited": "Diundang",
+  "g_referral_downloaded": "Diunduh",
+  "g_referral_mining": "Node Penambangan",
+  "g_referral_reward": "Hadiah (N)"
 }

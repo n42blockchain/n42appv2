@@ -3389,6 +3389,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_others": MessageLookupByLibrary.simpleMessage("Others"),
     "g_portfolio_title": MessageLookupByLibrary.simpleMessage("Portfolio"),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("Total Value"),
+    "g_referral_downloaded": MessageLookupByLibrary.simpleMessage("Baixado"),
+    "g_referral_invite_code": MessageLookupByLibrary.simpleMessage(
+      "Código de convite",
+    ),
+    "g_referral_invited": MessageLookupByLibrary.simpleMessage("Convidados"),
+    "g_referral_mining": MessageLookupByLibrary.simpleMessage(
+      "Nós de mineração",
+    ),
+    "g_referral_reward": MessageLookupByLibrary.simpleMessage("Recompensa (N)"),
+    "g_referral_stats_title": MessageLookupByLibrary.simpleMessage(
+      "Estatísticas de indicação",
+    ),
     "g_setting_mining_v1_label": MessageLookupByLibrary.simpleMessage(
       "Mineração Clássica (V1)",
     ),

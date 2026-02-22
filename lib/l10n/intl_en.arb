@@ -1813,4 +1813,11 @@
   "g_portfolio_gainers": "Top Gainers",
   "g_theme_accent_color": "Accent Color",
   "g_theme_accent_reset": "Reset to default"
+,
+  "g_referral_invite_code": "Invite Code",
+  "g_referral_stats_title": "Referral Stats",
+  "g_referral_invited": "Invited",
+  "g_referral_downloaded": "Downloaded",
+  "g_referral_mining": "Mining Nodes",
+  "g_referral_reward": "Reward (N)"
 }

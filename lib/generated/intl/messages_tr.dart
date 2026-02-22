@@ -3258,6 +3258,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_others": MessageLookupByLibrary.simpleMessage("Others"),
     "g_portfolio_title": MessageLookupByLibrary.simpleMessage("Portfolio"),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("Total Value"),
+    "g_referral_downloaded": MessageLookupByLibrary.simpleMessage("İndirildi"),
+    "g_referral_invite_code": MessageLookupByLibrary.simpleMessage(
+      "Davet kodu",
+    ),
+    "g_referral_invited": MessageLookupByLibrary.simpleMessage("Davet Edildi"),
+    "g_referral_mining": MessageLookupByLibrary.simpleMessage(
+      "Madencilik Düğümleri",
+    ),
+    "g_referral_reward": MessageLookupByLibrary.simpleMessage("Ödül (N)"),
+    "g_referral_stats_title": MessageLookupByLibrary.simpleMessage(
+      "Referans İstatistikleri",
+    ),
     "g_setting_mining_v1_label": MessageLookupByLibrary.simpleMessage(
       "Klasik Madencilik (V1)",
     ),

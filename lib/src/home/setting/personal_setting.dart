@@ -1,9 +1,9 @@
-﻿import 'dart:typed_data';
-
+﻿import 'package:flutter/services.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/home/setting/account_logout_page.dart';
 import 'package:n42appv2/src/home/setting/change_email_page.dart';
+import 'package:n42appv2/src/home/setting/setting_share.dart';
 import 'package:n42appv2/src/wallet/services/ens_service.dart';
 import 'package:n42appv2/src/home/widgets/nav_select_image.dart';
 import 'package:n42appv2/src/home/widgets/nav_setting_item.dart';
@@ -384,6 +384,77 @@ class _PersonalSettingState extends ConsumerState<PersonalSetting> {
                       ),
                     ),
                   ),
+                  // ── Invite Code ─────────────────────────────────────────
+                  if ((userInfo?.inviteCode ?? '').isNotEmpty) ...[
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: ScreenUtil().setWidth(40.0),
+                      ),
+                      child: Text(
+                        S.of(context).g_referral_invite_code,
+                        style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(
+                              context, AppThemeKeys.mainBlueColor.name),
+                          fontSize: ScreenUtil().setSp(30.0),
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const SettingShare()),
+                      ),
+                      child: Container(
+                        width: double.infinity,
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.symmetric(
+                            vertical: ScreenUtil().setWidth(20.0)),
+                        decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(
+                                  width: ScreenUtil().setWidth(1.0),
+                                  color: AppThemeUtils.getColorByKey(
+                                      context, AppThemeKeys.itemLineColor.name),
+                                ))),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                userInfo?.inviteCode ?? '',
+                                style: TextStyle(
+                                  color: AppThemeUtils.getColorByKey(context,
+                                      AppThemeKeys.itemSubtitleTextColor.name),
+                                  fontSize: ScreenUtil().setSp(30.0),
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Clipboard.setData(ClipboardData(
+                                    text: userInfo?.inviteCode ?? ''));
+                                ToastUtils.showSuccess(S.of(context).copy);
+                              },
+                              child: Icon(
+                                Icons.copy,
+                                color: AppThemeUtils.getColorByKey(
+                                    context, AppThemeKeys.mainBlueColor.name),
+                                size: ScreenUtil().setSp(32.0),
+                              ),
+                            ),
+                            SizedBox(width: ScreenUtil().setWidth(8.0)),
+                            Icon(
+                              Icons.chevron_right,
+                              color: AppThemeUtils.getColorByKey(context,
+                                  AppThemeKeys.itemSubtitleTextColor.name),
+                              size: ScreenUtil().setSp(36.0),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                  // ── UUID ────────────────────────────────────────────────
                   Padding(
                     padding: EdgeInsets.only(
                       top: ScreenUtil().setWidth(40.0),
