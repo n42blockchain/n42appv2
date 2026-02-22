@@ -107,12 +107,16 @@ class _MiningFullNodeV2State extends ConsumerState<MiningFullNodeV2> {
           CoinType.N.name, path, 'legacy', mnemonic: mnemonic ?? "", pk: privateKey ?? "");
       final astAddress = addressMap['legacy'];
       
+      final bool isTest = astMap['isTest'] == true;
+      final String rpc = isTest
+          ? (astMap['baseInfo']['service_test'] ?? '')
+          : (astMap['baseInfo']['service'] ?? '');
       MessageModel mm = await _tokenViewApi.getBalance(
           BlockchainType.Ethereum.name,
           CoinType.N.name,
           astAddress ?? '',
-          isTest: true,
-          rpc: 'http://5.161.252.59:8545/'
+          isTest: isTest,
+          rpc: rpc,
       ) ?? MessageModel.error();
       if (mm.error) {
       } else {

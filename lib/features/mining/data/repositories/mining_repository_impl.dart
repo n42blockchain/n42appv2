@@ -203,6 +203,50 @@ class MiningRepositoryImpl implements MiningRepository {
   }
 
   @override
+  Future<Either<Failure, FullNodeEntity?>> getFullNode(String pubKey) async {
+    try {
+      final targetPubKey = pubKey.isNotEmpty
+          ? pubKey
+          : (_v2.miningKeypart?['publicKey'] ?? '');
+      if (targetPubKey.isEmpty) return const Right(null);
+      if (_v2.depositsEnable != true) return const Right(null);
+
+      // Determine node status from V2 provider's cached beacon state.
+      // showRedemption=true  → activation complete and ready
+      // showRedemption2=true → exit_timestamp == 0 (normal/active)
+      // showRedemption2=false → exit_timestamp != 0 (has exited or exiting)
+      NodeStatus status;
+      if (!_v2.showRedemption2 && _v2.exitTimestamp != 0) {
+        // Node has exited the beacon chain
+        status = NodeStatus.offline;
+      } else if (_v2.showRedemption) {
+        // Activation complete; online if WebSocket mining is active
+        status = _v2.miningStatus ? NodeStatus.online : NodeStatus.offline;
+      } else {
+        // Pending activation
+        status = NodeStatus.syncing;
+      }
+
+      final inactivityPct = double.tryParse(_v2.inactivityScorePercentage) ?? 0.0;
+      final uptimePercentage = (100.0 - inactivityPct).clamp(0.0, 100.0);
+
+      return Right(FullNodeEntity(
+        id: targetPubKey,
+        name: 'Beacon Validator',
+        status: status,
+        uptimePercentage: uptimePercentage,
+        totalRewards: _v2.miningTotalRevenue,
+        activatedAt: _v2.activationTime ?? DateTime.now(),
+        expiresAt: _v2.exitTimestamp > 0
+            ? DateTime.fromMillisecondsSinceEpoch(_v2.exitTimestamp * 1000)
+            : null,
+      ));
+    } catch (e) {
+      return Left(ServerFailure(message: 'getFullNode failed: $e'));
+    }
+  }
+
+  @override
   Stream<MiningStatusEntity> get miningStatusStream =>
       _statusStreamController.stream;
 

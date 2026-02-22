@@ -50,6 +50,11 @@ abstract class MiningRepository {
   /// Get mining statistics
   Future<Either<Failure, MiningStatisticsEntity>> getMiningStatistics(String walletAddress);
 
+  /// Get full node (beacon validator) info by validator public key.
+  ///
+  /// Returns [null] if not staked or beacon data not yet loaded.
+  Future<Either<Failure, FullNodeEntity?>> getFullNode(String pubKey);
+
   /// Subscribe to mining status updates
   Stream<MiningStatusEntity> get miningStatusStream;
 }

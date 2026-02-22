@@ -199,6 +199,7 @@ class MiningV2Provider extends ChangeNotifier {
       getMiningWithdrawalsDaily();
       getBeaconValidator();
     }else{
+      _stopStatusPolling();
       taskList=[];
       balanceInBeacon=0;
       inactivityScore=[0,0,0];
@@ -672,6 +673,31 @@ class MiningV2Provider extends ChangeNotifier {
   String inactivityTitle="";
   bool showRedemption=false;//质押成功的过度状态
   bool showRedemption2=false;//解除质押成功后的过度状态
+
+  /// Cached activation timestamp from beacon (unix seconds, 0 = not yet activated)
+  DateTime? activationTime;
+
+  /// Cached exit timestamp from beacon (unix seconds, 0 = not exited)
+  int exitTimestamp = 0;
+
+  /// Periodic poll timer for beacon validator status when node is active
+  Timer? _statusPollTimer;
+
+  /// Start periodic beacon-validator polling every [kMiningStatusIntervalSeconds] seconds.
+  void _startStatusPolling() {
+    _statusPollTimer?.cancel();
+    _statusPollTimer = Timer.periodic(
+      const Duration(seconds: kMiningStatusIntervalSeconds),
+      (_) => getBeaconValidator(),
+    );
+  }
+
+  /// Stop periodic beacon-validator polling.
+  void _stopStatusPolling() {
+    _statusPollTimer?.cancel();
+    _statusPollTimer = null;
+  }
+
   Timer? beaconValidatorTimer;
   void starBeaconValidatorTimer({int waitSeconds = kBeaconValidatorWaitSeconds}) {
     if(beaconValidatorTimer !=null)return;
@@ -716,9 +742,11 @@ class MiningV2Provider extends ChangeNotifier {
       }
       int timestamp=rmm.data['activation_timestamp'];
       if(timestamp==0){
+        activationTime = null;
         showRedemption=false;
         starBeaconValidatorTimer();
       }else{
+        activationTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
         final int currentTimestamp=DateTime.now().millisecondsSinceEpoch ~/ 1000;
         final int readyTimestamp=timestamp+kMiningCycleSeconds;
         if(readyTimestamp>currentTimestamp){
@@ -730,11 +758,19 @@ class MiningV2Provider extends ChangeNotifier {
         }
       }
       int eTimestamp=rmm.data['exit_timestamp'];
+      exitTimestamp = eTimestamp;
       if(eTimestamp==0){
         showRedemption2=true;
-        starBeaconValidatorTimer();
+        if (showRedemption) {
+          // Node is fully active: switch to periodic polling at kMiningStatusIntervalSeconds
+          _startStatusPolling();
+        } else {
+          // Still pending activation: keep one-shot timer approach
+          starBeaconValidatorTimer();
+        }
       }else{
         showRedemption2=false;
+        _stopStatusPolling();
         depositsEnable=false;
         miningStatus=false;
         loadMiningData();
@@ -922,6 +958,7 @@ class MiningV2Provider extends ChangeNotifier {
     endCheckTxHash();
     endWithdrawalTimer();
     endBeaconValidatorTimer();
+    _stopStatusPolling();
 
     // Clean up reconnect timer
     _wsReconnectTimer?.cancel();
