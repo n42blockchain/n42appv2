@@ -136,6 +136,10 @@ dependencies:
   equatable: ^2.0.7
   freezed_annotation: ^3.1.0
 
+  # === V1 Mining Plugin ===
+  flutter_mining:
+    path: plugins/flutter_mining
+
   # === N42 Chat Module ===
   n42_chat:
     #git: https://github.com/n42blockchain/n42_chat

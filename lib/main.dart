@@ -27,6 +27,8 @@ import 'package:n42appv2/features/mining/data/repositories/mining_repository_imp
 import 'package:n42appv2/features/mining/domain/repositories/mining_repository.dart';
 import 'package:n42appv2/features/mining/presentation/providers/mining_providers.dart';
 import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
+import 'package:n42appv2/src/miningV1/provider/mining_v1_providers.dart';
+import 'package:n42appv2/src/miningV1/provider/mining_provider.dart' show MiningProvider;
 import 'package:n42appv2/src/utils/app_push_utils.dart';
 import 'package:n42appv2/src/utils/notfication_utils.dart';
 import 'package:n42appv2/src/wallet/pages/create_wallet/create/create_one.dart';
@@ -106,6 +108,8 @@ void main() async {
   globalTripInstance = TransactionRecordItemProvider();
   globalWcpInstance = WalletConnectProvider();
   globalMiningInstance = MiningV2Provider();
+  // Initialize V1 mining provider global instance
+  globalMiningV1 = MiningProvider();
 
   // Wire V2 → V1 bridge: sync real mining state to the shared IMiningService
   // so that other features (wallet, earn, etc.) can query mining status correctly.
