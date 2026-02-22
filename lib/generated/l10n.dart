@@ -14783,6 +14783,611 @@ class S {
       args: [],
     );
   }
+
+  /// `UUID`
+  String get g_key_uuid {
+    return Intl.message('UUID', name: 'g_key_uuid', desc: '', args: []);
+  }
+
+  /// `Trending`
+  String get g_market_trending {
+    return Intl.message(
+      'Trending',
+      name: 'g_market_trending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search`
+  String get g_market_search {
+    return Intl.message('Search', name: 'g_market_search', desc: '', args: []);
+  }
+
+  /// `Watchlist`
+  String get g_market_watchlist {
+    return Intl.message(
+      'Watchlist',
+      name: 'g_market_watchlist',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search coins...`
+  String get g_market_search_hint {
+    return Intl.message(
+      'Search coins...',
+      name: 'g_market_search_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No results`
+  String get g_market_no_results {
+    return Intl.message(
+      'No results',
+      name: 'g_market_no_results',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No watchlist yet`
+  String get g_market_empty_watchlist {
+    return Intl.message(
+      'No watchlist yet',
+      name: 'g_market_empty_watchlist',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tap ★ on any coin to add`
+  String get g_market_empty_watchlist_hint {
+    return Intl.message(
+      'Tap ★ on any coin to add',
+      name: 'g_market_empty_watchlist_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove`
+  String get g_alert_remove {
+    return Intl.message('Remove', name: 'g_alert_remove', desc: '', args: []);
+  }
+
+  /// `Alert me when price`
+  String get g_alert_direction {
+    return Intl.message(
+      'Alert me when price',
+      name: 'g_alert_direction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Goes Above ↑`
+  String get g_alert_above {
+    return Intl.message(
+      'Goes Above ↑',
+      name: 'g_alert_above',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Drops Below ↓`
+  String get g_alert_below {
+    return Intl.message(
+      'Drops Below ↓',
+      name: 'g_alert_below',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Target price (USD)`
+  String get g_alert_target_price {
+    return Intl.message(
+      'Target price (USD)',
+      name: 'g_alert_target_price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enable this alert`
+  String get g_alert_enable {
+    return Intl.message(
+      'Enable this alert',
+      name: 'g_alert_enable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Set Alert`
+  String get g_alert_set {
+    return Intl.message('Set Alert', name: 'g_alert_set', desc: '', args: []);
+  }
+
+  /// `Update Alert`
+  String get g_alert_update {
+    return Intl.message(
+      'Update Alert',
+      name: 'g_alert_update',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter a valid price greater than 0`
+  String get g_alert_invalid_price {
+    return Intl.message(
+      'Please enter a valid price greater than 0',
+      name: 'g_alert_invalid_price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current price: ${price}`
+  String g_alert_current_price(String price) {
+    return Intl.message(
+      'Current price: \$$price',
+      name: 'g_alert_current_price',
+      desc: '',
+      args: [price],
+    );
+  }
+
+  /// `Price Alert · {symbol}`
+  String g_alert_title(String symbol) {
+    return Intl.message(
+      'Price Alert · $symbol',
+      name: 'g_alert_title',
+      desc: '',
+      args: [symbol],
+    );
+  }
+
+  /// `Change Email`
+  String get g_email_change_title {
+    return Intl.message(
+      'Change Email',
+      name: 'g_email_change_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current email`
+  String get g_email_current_label {
+    return Intl.message(
+      'Current email',
+      name: 'g_email_current_label',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New email address`
+  String get g_email_new_label {
+    return Intl.message(
+      'New email address',
+      name: 'g_email_new_label',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter new email address`
+  String get g_email_new_hint {
+    return Intl.message(
+      'Enter new email address',
+      name: 'g_email_new_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter a new email address`
+  String get g_email_error_empty {
+    return Intl.message(
+      'Please enter a new email address',
+      name: 'g_email_error_empty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid email address`
+  String get g_email_error_invalid {
+    return Intl.message(
+      'Invalid email address',
+      name: 'g_email_error_invalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New email must differ from current email`
+  String get g_email_error_same {
+    return Intl.message(
+      'New email must differ from current email',
+      name: 'g_email_error_same',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password required for Chat sync`
+  String get g_email_pwd_required {
+    return Intl.message(
+      'Password required for Chat sync',
+      name: 'g_email_pwd_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verification code sent to {email}`
+  String g_email_code_sent_to(String email) {
+    return Intl.message(
+      'Verification code sent to $email',
+      name: 'g_email_code_sent_to',
+      desc: '',
+      args: [email],
+    );
+  }
+
+  /// `Code resent`
+  String get g_email_code_resent {
+    return Intl.message(
+      'Code resent',
+      name: 'g_email_code_resent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter the 6-digit code`
+  String get g_email_code_invalid {
+    return Intl.message(
+      'Please enter the 6-digit code',
+      name: 'g_email_code_invalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email updated successfully`
+  String get g_email_success {
+    return Intl.message(
+      'Email updated successfully',
+      name: 'g_email_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Incorrect code, please try again`
+  String get g_email_code_wrong {
+    return Intl.message(
+      'Incorrect code, please try again',
+      name: 'g_email_code_wrong',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Both accounts updated successfully!`
+  String get g_email_both_success {
+    return Intl.message(
+      'Both accounts updated successfully!',
+      name: 'g_email_both_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `N42 email updated. Chat email can be updated in Chat > Settings.`
+  String get g_email_n42_only {
+    return Intl.message(
+      'N42 email updated. Chat email can be updated in Chat > Settings.',
+      name: 'g_email_n42_only',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send Verification Code`
+  String get g_email_send_code {
+    return Intl.message(
+      'Send Verification Code',
+      name: 'g_email_send_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter 6-digit code`
+  String get g_email_enter_code {
+    return Intl.message(
+      'Enter 6-digit code',
+      name: 'g_email_enter_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm & Continue to Chat Sync`
+  String get g_email_confirm_continue {
+    return Intl.message(
+      'Confirm & Continue to Chat Sync',
+      name: 'g_email_confirm_continue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Change`
+  String get g_email_confirm_change {
+    return Intl.message(
+      'Confirm Change',
+      name: 'g_email_confirm_change',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `← Change email address`
+  String get g_email_back_to_email {
+    return Intl.message(
+      '← Change email address',
+      name: 'g_email_back_to_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `N42 account email updated`
+  String get g_email_n42_updated {
+    return Intl.message(
+      'N42 account email updated',
+      name: 'g_email_n42_updated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sync Chat Account Email`
+  String get g_email_chat_sync_title {
+    return Intl.message(
+      'Sync Chat Account Email',
+      name: 'g_email_chat_sync_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sending Chat verification code...`
+  String get g_email_chat_sending {
+    return Intl.message(
+      'Sending Chat verification code...',
+      name: 'g_email_chat_sending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to send Chat code`
+  String get g_email_chat_send_fail {
+    return Intl.message(
+      'Failed to send Chat code',
+      name: 'g_email_chat_send_fail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chat code sent to`
+  String get g_email_chat_code_sent_to {
+    return Intl.message(
+      'Chat code sent to',
+      name: 'g_email_chat_code_sent_to',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter 6-digit Chat code`
+  String get g_email_chat_code_hint {
+    return Intl.message(
+      'Enter 6-digit Chat code',
+      name: 'g_email_chat_code_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Chat Sync`
+  String get g_email_chat_confirm {
+    return Intl.message(
+      'Confirm Chat Sync',
+      name: 'g_email_chat_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Skip – N42 email is already updated`
+  String get g_email_skip_full {
+    return Intl.message(
+      'Skip – N42 email is already updated',
+      name: 'g_email_skip_full',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Resend in {s}s`
+  String g_email_resend_countdown(int s) {
+    return Intl.message(
+      'Resend in ${s}s',
+      name: 'g_email_resend_countdown',
+      desc: '',
+      args: [s],
+    );
+  }
+
+  /// `Resend code`
+  String get g_email_resend {
+    return Intl.message(
+      'Resend code',
+      name: 'g_email_resend',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Also sync Chat account email`
+  String get g_email_also_sync {
+    return Intl.message(
+      'Also sync Chat account email',
+      name: 'g_email_also_sync',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current password (for Chat)`
+  String get g_email_pwd_label {
+    return Intl.message(
+      'Current password (for Chat)',
+      name: 'g_email_pwd_label',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter password`
+  String get g_email_pwd_hint {
+    return Intl.message(
+      'Enter password',
+      name: 'g_email_pwd_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Skip`
+  String get g_email_skip {
+    return Intl.message('Skip', name: 'g_email_skip', desc: '', args: []);
+  }
+
+  /// `Portfolio`
+  String get g_portfolio_title {
+    return Intl.message(
+      'Portfolio',
+      name: 'g_portfolio_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No assets found`
+  String get g_portfolio_no_assets {
+    return Intl.message(
+      'No assets found',
+      name: 'g_portfolio_no_assets',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total Value`
+  String get g_portfolio_total {
+    return Intl.message(
+      'Total Value',
+      name: 'g_portfolio_total',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `24h Change`
+  String get g_portfolio_24h {
+    return Intl.message(
+      '24h Change',
+      name: 'g_portfolio_24h',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Asset Allocation`
+  String get g_portfolio_allocation {
+    return Intl.message(
+      'Asset Allocation',
+      name: 'g_portfolio_allocation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Others`
+  String get g_portfolio_others {
+    return Intl.message(
+      'Others',
+      name: 'g_portfolio_others',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `24h Movers`
+  String get g_portfolio_movers {
+    return Intl.message(
+      '24h Movers',
+      name: 'g_portfolio_movers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Top Gainers`
+  String get g_portfolio_gainers {
+    return Intl.message(
+      'Top Gainers',
+      name: 'g_portfolio_gainers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Accent Color`
+  String get g_theme_accent_color {
+    return Intl.message(
+      'Accent Color',
+      name: 'g_theme_accent_color',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset to default`
+  String get g_theme_accent_reset {
+    return Intl.message(
+      'Reset to default',
+      name: 'g_theme_accent_reset',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -1657,5 +1657,96 @@
   "g_mining_node_key3": "WS Verbunden",
   "g_mining_node_key4": "WS Getrennt",
   "g_mining_node_key5": "WS Verbindet...",
-  "g_mining_node_key6": "Ablaufdatum"
+  "g_mining_node_key6": "Ablaufdatum",
+  "g_key_uuid": "UUID",
+  "g_market_trending": "Trending",
+  "g_market_search": "Search",
+  "g_market_watchlist": "Watchlist",
+  "g_market_search_hint": "Search coins...",
+  "g_market_no_results": "No results",
+  "g_market_empty_watchlist": "No watchlist yet",
+  "g_market_empty_watchlist_hint": "Tap ★ on any coin to add",
+  "g_alert_remove": "Remove",
+  "g_alert_direction": "Alert me when price",
+  "g_alert_above": "Goes Above ↑",
+  "g_alert_below": "Drops Below ↓",
+  "g_alert_target_price": "Target price (USD)",
+  "g_alert_enable": "Enable this alert",
+  "g_alert_set": "Set Alert",
+  "g_alert_update": "Update Alert",
+  "g_alert_invalid_price": "Please enter a valid price greater than 0",
+  "g_alert_current_price": "Current price: ${price}",
+  "@g_alert_current_price": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "g_alert_title": "Price Alert · {symbol}",
+  "@g_alert_title": {
+    "placeholders": {
+      "symbol": {
+        "type": "String"
+      }
+    }
+  },
+  "g_email_change_title": "Change Email",
+  "g_email_current_label": "Current email",
+  "g_email_new_label": "New email address",
+  "g_email_new_hint": "Enter new email address",
+  "g_email_error_empty": "Please enter a new email address",
+  "g_email_error_invalid": "Invalid email address",
+  "g_email_error_same": "New email must differ from current email",
+  "g_email_pwd_required": "Password required for Chat sync",
+  "g_email_code_sent_to": "Verification code sent to {email}",
+  "@g_email_code_sent_to": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "g_email_code_resent": "Code resent",
+  "g_email_code_invalid": "Please enter the 6-digit code",
+  "g_email_success": "Email updated successfully",
+  "g_email_code_wrong": "Incorrect code, please try again",
+  "g_email_both_success": "Both accounts updated successfully!",
+  "g_email_n42_only": "N42 email updated. Chat email can be updated in Chat > Settings.",
+  "g_email_send_code": "Send Verification Code",
+  "g_email_enter_code": "Enter 6-digit code",
+  "g_email_confirm_continue": "Confirm & Continue to Chat Sync",
+  "g_email_confirm_change": "Confirm Change",
+  "g_email_back_to_email": "← Change email address",
+  "g_email_n42_updated": "N42 account email updated",
+  "g_email_chat_sync_title": "Sync Chat Account Email",
+  "g_email_chat_sending": "Sending Chat verification code...",
+  "g_email_chat_send_fail": "Failed to send Chat code",
+  "g_email_chat_code_sent_to": "Chat code sent to",
+  "g_email_chat_code_hint": "Enter 6-digit Chat code",
+  "g_email_chat_confirm": "Confirm Chat Sync",
+  "g_email_skip_full": "Skip – N42 email is already updated",
+  "g_email_resend_countdown": "Resend in {s}s",
+  "@g_email_resend_countdown": {
+    "placeholders": {
+      "s": {
+        "type": "int"
+      }
+    }
+  },
+  "g_email_resend": "Resend code",
+  "g_email_also_sync": "Also sync Chat account email",
+  "g_email_pwd_label": "Current password (for Chat)",
+  "g_email_pwd_hint": "Enter password",
+  "g_email_skip": "Skip",
+  "g_portfolio_title": "Portfolio",
+  "g_portfolio_no_assets": "No assets found",
+  "g_portfolio_total": "Total Value",
+  "g_portfolio_24h": "24h Change",
+  "g_portfolio_allocation": "Asset Allocation",
+  "g_portfolio_others": "Others",
+  "g_portfolio_movers": "24h Movers",
+  "g_portfolio_gainers": "Top Gainers",
+  "g_theme_accent_color": "Accent Color",
+  "g_theme_accent_reset": "Reset to default"
 }

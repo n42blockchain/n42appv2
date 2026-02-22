@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/services/coin_price_alert_service.dart';
 
@@ -105,7 +106,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
     final text = _priceCtrl.text.trim();
     final price = double.tryParse(text);
     if (price == null || price <= 0) {
-      _showError('Please enter a valid price greater than 0');
+      _showError(S.of(context).g_alert_invalid_price);
       return;
     }
 
@@ -189,7 +190,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                         color: accentColor, size: 22.sp),
                     SizedBox(width: 8.w),
                     Text(
-                      'Price Alert · ${widget.symbol.toUpperCase()}',
+                      S.of(context).g_alert_title(widget.symbol.toUpperCase()),
                       style: TextStyle(
                         fontSize: 17.sp,
                         fontWeight: FontWeight.bold,
@@ -201,7 +202,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                       TextButton(
                         onPressed: _saving ? null : _delete,
                         child: Text(
-                          'Remove',
+                          S.of(context).g_alert_remove,
                           style: TextStyle(
                               color: const Color(0xFFEF4444), fontSize: 13.sp),
                         ),
@@ -213,7 +214,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                 if (widget.currentPrice > 0) ...[
                   SizedBox(height: 4.h),
                   Text(
-                    'Current price: \$${_fmtPrice(widget.currentPrice)}',
+                    S.of(context).g_alert_current_price(_fmtPrice(widget.currentPrice)),
                     style: TextStyle(fontSize: 12.sp, color: subColor),
                   ),
                 ],
@@ -221,14 +222,14 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
 
                 // ── Direction toggle ───────────────────────────────────────
                 Text(
-                  'Alert me when price',
+                  S.of(context).g_alert_direction,
                   style: TextStyle(fontSize: 13.sp, color: subColor),
                 ),
                 SizedBox(height: 8.h),
                 Row(
                   children: [
                     _DirectionChip(
-                      label: 'Goes Above ↑',
+                      label: S.of(context).g_alert_above,
                       selected: _alertAbove,
                       onTap: () => setState(() => _alertAbove = true),
                       accentColor: accentColor,
@@ -237,7 +238,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                     ),
                     SizedBox(width: 10.w),
                     _DirectionChip(
-                      label: 'Drops Below ↓',
+                      label: S.of(context).g_alert_below,
                       selected: !_alertAbove,
                       onTap: () => setState(() => _alertAbove = false),
                       accentColor: accentColor,
@@ -250,7 +251,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
 
                 // ── Target price input ─────────────────────────────────────
                 Text(
-                  'Target price (USD)',
+                  S.of(context).g_alert_target_price,
                   style: TextStyle(fontSize: 13.sp, color: subColor),
                 ),
                 SizedBox(height: 8.h),
@@ -295,7 +296,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                 Row(
                   children: [
                     Text(
-                      'Enable this alert',
+                      S.of(context).g_alert_enable,
                       style: TextStyle(fontSize: 14.sp, color: textColor),
                     ),
                     const Spacer(),
@@ -332,7 +333,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                             ),
                           )
                         : Text(
-                            _existing != null ? 'Update Alert' : 'Set Alert',
+                            _existing != null ? S.of(context).g_alert_update : S.of(context).g_alert_set,
                             style: TextStyle(
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.w600),

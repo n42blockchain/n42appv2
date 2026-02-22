@@ -13,6 +13,7 @@ import 'package:n42appv2/core/app/app_globals.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/login/api/user_info_api.dart';
+import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 
 /// 修改邮箱页面
@@ -119,19 +120,19 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
   Future<void> _sendN42Code() async {
     final email = _emailCtrl.text.trim();
     if (email.isEmpty) {
-      setState(() => _emailError = 'Please enter a new email address');
+      setState(() => _emailError = S.of(context).g_email_error_empty);
       return;
     }
     if (!_isValidEmail(email)) {
-      setState(() => _emailError = 'Invalid email address');
+      setState(() => _emailError = S.of(context).g_email_error_invalid);
       return;
     }
     if (email == (AppGlobals.userInfo?.email ?? '')) {
-      setState(() => _emailError = 'New email must differ from current email');
+      setState(() => _emailError = S.of(context).g_email_error_same);
       return;
     }
     if (_chatSyncEnabled && _chatAvailable && _passwordCtrl.text.isEmpty) {
-      setState(() => _passwordError = 'Password required for Chat sync');
+      setState(() => _passwordError = S.of(context).g_email_pwd_required);
       return;
     }
 
@@ -148,7 +149,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
       if (data['code'] == 200) {
         _startCountdown();
         setState(() => _step = 1);
-        ToastUtils.show('Verification code sent to $email');
+        ToastUtils.show(S.of(context).g_email_code_sent_to(email));
       } else {
         ToastUtils.show(
             (data['err'] ?? data['msg'] ?? 'Failed to send code').toString());
@@ -169,7 +170,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
       if (!mounted) return;
       if (data['code'] == 200) {
         _startCountdown();
-        ToastUtils.show('Code resent');
+        ToastUtils.show(S.of(context).g_email_code_resent);
       } else {
         ToastUtils.show((data['err'] ?? 'Failed to resend').toString());
       }
@@ -185,7 +186,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
   Future<void> _confirmN42() async {
     final code = _n42CodeCtrl.text.trim();
     if (code.length != 6) {
-      setState(() => _n42CodeError = 'Please enter the 6-digit code');
+      setState(() => _n42CodeError = S.of(context).g_email_code_invalid);
       return;
     }
 
@@ -207,12 +208,12 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
           setState(() => _step = 2);
           await _requestChatCode();
         } else {
-          ToastUtils.showSuccess('Email updated successfully');
+          ToastUtils.showSuccess(S.of(context).g_email_success);
           Navigator.pop(context, true);
         }
       } else {
         setState(() => _n42CodeError =
-            result.data?.toString() ?? 'Incorrect code, please try again');
+            result.data?.toString() ?? S.of(context).g_email_code_wrong);
       }
     } catch (e) {
       if (mounted) setState(() => _n42CodeError = e.toString());
@@ -259,7 +260,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
   Future<void> _confirmChat() async {
     final code = _chatCodeCtrl.text.trim();
     if (code.length != 6) {
-      setState(() => _chatSyncError = 'Please enter the 6-digit code');
+      setState(() => _chatSyncError = S.of(context).g_email_code_invalid);
       return;
     }
 
@@ -274,7 +275,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
         code,
       );
       if (!mounted) return;
-      ToastUtils.showSuccess('Both accounts updated successfully!');
+      ToastUtils.showSuccess(S.of(context).g_email_both_success);
       Navigator.pop(context, true);
     } catch (e) {
       if (mounted) {
@@ -288,8 +289,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
 
   /// 跳过 Chat 同步：N42 邮箱已更新，Chat 留给用户稍后手动处理
   void _skipChatSync() {
-    ToastUtils.show(
-        'N42 email updated. Chat email can be updated in Chat > Settings.');
+    ToastUtils.show(S.of(context).g_email_n42_only);
     Navigator.pop(context, true);
   }
 
@@ -311,7 +311,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
     final totalSteps = (_chatSyncEnabled && _chatAvailable) ? 3 : 2;
 
     return Scaffold(
-      appBar: AppBarWidget(text: 'Change Email'),
+      appBar: AppBarWidget(text: S.of(context).g_email_change_title),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 28.h),
         child: Column(
@@ -346,7 +346,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Current email',
+        Text(S.of(context).g_email_current_label,
             style: TextStyle(fontSize: 13.sp, color: subColor)),
         SizedBox(height: 4.h),
         Text(
@@ -358,7 +358,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
         ),
         SizedBox(height: 28.h),
 
-        Text('New email address',
+        Text(S.of(context).g_email_new_label,
             style: TextStyle(fontSize: 13.sp, color: subColor)),
         SizedBox(height: 8.h),
         TextField(
@@ -368,7 +368,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
           autocorrect: false,
           style: TextStyle(fontSize: 15.sp, color: textColor),
           decoration: _inputDeco(
-            hint: 'Enter new email address',
+            hint: S.of(context).g_email_new_hint,
             fillColor: fillColor,
             accentColor: accentColor,
             subColor: subColor,
@@ -404,7 +404,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Also sync Chat account email',
+                          Text(S.of(context).g_email_also_sync,
                               style: TextStyle(
                                   fontSize: 14.sp,
                                   fontWeight: FontWeight.w500,
@@ -436,7 +436,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
                   SizedBox(height: 12.h),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Text('Current password (for Chat)',
+                    child: Text(S.of(context).g_email_pwd_label,
                         style: TextStyle(fontSize: 13.sp, color: subColor)),
                   ),
                   SizedBox(height: 8.h),
@@ -446,7 +446,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
                     obscureText: _obscurePassword,
                     style: TextStyle(fontSize: 15.sp, color: textColor),
                     decoration: _inputDeco(
-                      hint: 'Enter current password',
+                      hint: S.of(context).g_email_pwd_hint,
                       fillColor: AppThemeUtils.getColorByKey(
                           context, AppThemeKeys.itemBgColor.name),
                       accentColor: accentColor,
@@ -479,7 +479,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
 
         SizedBox(height: 36.h),
         _primaryButton(
-          label: 'Send Verification Code',
+          label: S.of(context).g_email_send_code,
           onPressed: _sendN42Code,
           loading: _sendingN42Code,
           accentColor: accentColor,
@@ -495,7 +495,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Verification code sent to',
+        Text(S.of(context).g_email_n42_updated + ' →',
             style: TextStyle(fontSize: 13.sp, color: subColor)),
         SizedBox(height: 4.h),
         Text(
@@ -507,7 +507,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
         ),
         SizedBox(height: 28.h),
 
-        Text('Enter 6-digit code',
+        Text(S.of(context).g_email_enter_code,
             style: TextStyle(fontSize: 13.sp, color: subColor)),
         SizedBox(height: 8.h),
         _codeField(
@@ -534,15 +534,15 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
         SizedBox(height: 32.h),
         _primaryButton(
           label: _chatSyncEnabled && _chatAvailable
-              ? 'Confirm & Continue to Chat Sync'
-              : 'Confirm Change',
+              ? S.of(context).g_email_confirm_continue
+              : S.of(context).g_email_confirm_change,
           onPressed: _confirmN42,
           loading: _confirmingN42,
           accentColor: accentColor,
         ),
         SizedBox(height: 12.h),
         _backButton(
-          label: '← Change email address',
+          label: S.of(context).g_email_back_to_email,
           onPressed: () => setState(() {
             _step = 0;
             _n42CodeCtrl.clear();
@@ -572,7 +572,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('N42 account email updated',
+                Text(S.of(context).g_email_n42_updated,
                     style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
@@ -592,7 +592,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
           children: [
             Icon(Icons.chat_bubble_outline, color: accentColor, size: 18.sp),
             SizedBox(width: 8.w),
-            Text('Sync Chat Account Email',
+            Text(S.of(context).g_email_chat_sync_title,
                 style: TextStyle(
                     fontSize: 15.sp,
                     fontWeight: FontWeight.bold,
@@ -609,7 +609,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
                 SizedBox(height: 16.h),
                 CircularProgressIndicator(color: accentColor, strokeWidth: 2),
                 SizedBox(height: 12.h),
-                Text('Sending Chat verification code...',
+                Text(S.of(context).g_email_chat_sending,
                     style: TextStyle(fontSize: 13.sp, color: subColor)),
                 SizedBox(height: 8.h),
                 Text('Code will be sent to ${_emailCtrl.text.trim()}',
@@ -648,7 +648,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
               children: [
                 Icon(Icons.error_outline, color: errorColor, size: 16.sp),
                 SizedBox(width: 6.w),
-                Text('Failed to send Chat code',
+                Text(S.of(context).g_email_chat_send_fail,
                     style: TextStyle(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w600,
@@ -674,7 +674,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
                     borderRadius: BorderRadius.circular(12.r)),
                 padding: EdgeInsets.symmetric(vertical: 14.h),
               ),
-              child: Text('Skip',
+              child: Text(S.of(context).g_email_skip,
                   style: TextStyle(fontSize: 15.sp)),
             ),
           ),
@@ -702,7 +702,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
   List<Widget> _buildChatCodeInput(Color textColor, Color subColor,
       Color accentColor, Color fillColor, Color errorColor) {
     return [
-      Text('Chat code sent to',
+      Text(S.of(context).g_email_chat_code_sent_to,
           style: TextStyle(fontSize: 13.sp, color: subColor)),
       SizedBox(height: 4.h),
       Text(
@@ -714,7 +714,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
       ),
       SizedBox(height: 20.h),
 
-      Text('Enter 6-digit Chat code',
+      Text(S.of(context).g_email_chat_code_hint,
           style: TextStyle(fontSize: 13.sp, color: subColor)),
       SizedBox(height: 8.h),
       _codeField(
@@ -764,7 +764,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
       ),
       SizedBox(height: 28.h),
       _primaryButton(
-        label: 'Confirm Chat Sync',
+        label: S.of(context).g_email_chat_confirm,
         onPressed: _confirmChat,
         loading: _confirmingChat,
         accentColor: accentColor,
@@ -774,7 +774,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
         child: TextButton(
           onPressed: _skipChatSync,
           child: Text(
-            'Skip – N42 email is already updated',
+            S.of(context).g_email_skip_full,
             style: TextStyle(color: subColor, fontSize: 13.sp),
           ),
         ),
@@ -835,7 +835,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
         GestureDetector(
           onTap: (countdown > 0 || loading) ? null : onTap,
           child: Text(
-            countdown > 0 ? 'Resend in ${countdown}s' : 'Resend code',
+            countdown > 0 ? S.of(context).g_email_resend_countdown(countdown) : S.of(context).g_email_resend,
             style: TextStyle(
               fontSize: 13.sp,
               color: countdown > 0 ? subColor : accentColor,

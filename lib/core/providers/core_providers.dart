@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/core/constants/language_constants.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
@@ -56,6 +57,42 @@ class ThemeModeNotifier extends StateNotifier<ThemeMode> {
 
   void _syncToN42Chat(ThemeMode mode) {
     if (N42Chat.isInitialized) N42Chat.setThemeMode(mode);
+  }
+}
+
+// ============================================
+// Accent Color Provider
+// ============================================
+
+/// Accent color provider — persisted via SharedPreferences.
+/// Default is [ThemeAdapter.defaultAccent] (N42 brand blue).
+final accentColorProvider = StateNotifierProvider<AccentColorNotifier, Color>((ref) {
+  return AccentColorNotifier(ref.watch(spUtilProvider));
+});
+
+class AccentColorNotifier extends StateNotifier<Color> {
+  final SPUtil _spUtil;
+
+  AccentColorNotifier(this._spUtil) : super(ThemeAdapter.defaultAccent) {
+    _loadFromStorage();
+  }
+
+  Future<void> _loadFromStorage() async {
+    final value = await _spUtil.getAccentColor();
+    if (!mounted) return;
+    if (value != null && value != 0) {
+      state = Color(value);
+    }
+  }
+
+  void setAccent(Color color) {
+    state = color;
+    _spUtil.setAccentColor(color.toARGB32());
+  }
+
+  void reset() {
+    state = ThemeAdapter.defaultAccent;
+    _spUtil.setAccentColor(0); // 0 = default
   }
 }
 

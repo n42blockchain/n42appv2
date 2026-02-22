@@ -416,6 +416,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
       builder: (_ , child) {
         final locale = ref.watch(localeProvider);
         final themeMode = ref.watch(themeModeProvider);
+        final accentColor = ref.watch(accentColorProvider);
         final loadState = ref.watch(appLoadStateProvider);
         return GestureDetector(
           onTap: () {
@@ -434,8 +435,8 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
             navigatorKey: AppGlobals.navigatorKey,
             supportedLocales: S.delegate.supportedLocales,
             themeMode: themeMode,
-            theme: ThemeAdapter.themeDataLight,
-            darkTheme: ThemeAdapter.themeDataDark,
+            theme: ThemeAdapter.buildLight(accentColor),
+            darkTheme: ThemeAdapter.buildDark(accentColor),
             title: 'N42Wallet',
             home: _widgetPage(loadState),
             routes: routes,

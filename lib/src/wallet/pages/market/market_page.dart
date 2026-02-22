@@ -14,6 +14,7 @@ import 'package:n42appv2/src/wallet/api/market_api.dart';
 import 'package:n42appv2/src/wallet/pages/market/market_coin_info.dart';
 import 'package:n42appv2/src/wallet/pages/market/price_alert_sheet.dart';
 import 'package:n42appv2/src/wallet/services/coin_price_alert_service.dart';
+import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/src/widgets/image_network.dart' show ImageNetWork;
 
 // ─── Entry point ─────────────────────────────────────────────────────────────
@@ -390,10 +391,10 @@ class _MarketPageState extends ConsumerState<MarketPage>
             labelStyle:
                 TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
             unselectedLabelStyle: TextStyle(fontSize: 14.sp),
-            tabs: const [
-              Tab(text: 'Trending'),
-              Tab(text: 'Search'),
-              Tab(text: 'Watchlist'),
+            tabs: [
+              Tab(text: S.of(context).g_market_trending),
+              Tab(text: S.of(context).g_market_search),
+              Tab(text: S.of(context).g_market_watchlist),
             ],
           ),
         ],
@@ -762,7 +763,7 @@ class _SearchTab extends StatelessWidget {
             onChanged: onChanged,
             style: TextStyle(color: textColor, fontSize: 14.sp),
             decoration: InputDecoration(
-              hintText: 'Search coins…',
+              hintText: S.of(context).g_market_search_hint,
               hintStyle: TextStyle(color: subColor, fontSize: 14.sp),
               prefixIcon:
                   Icon(Icons.search, color: subColor, size: 20.sp),
@@ -803,7 +804,7 @@ class _SearchTab extends StatelessWidget {
     if (results.isEmpty) {
       return _EmptyState(
         icon: Icons.search_off_rounded,
-        message: 'No results for "${controller.text}"',
+        message: S.of(context).g_market_no_results,
       );
     }
     return ListView.builder(
@@ -857,7 +858,7 @@ class _WatchlistTab extends StatelessWidget {
     if (symbols.isEmpty) {
       return _EmptyState(
         icon: Icons.star_outline_rounded,
-        message: 'No watchlist coins yet\nTap ★ to add',
+        message: S.of(context).g_market_empty_watchlist,
       );
     }
     return RefreshIndicator(

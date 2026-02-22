@@ -23,181 +23,189 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(deviceName, os) =>
       "회원님의 계정이 ${deviceName} (${os})에서 로그인되었습니다. 본인이 아닌 경우 비밀번호를 변경하는 것을 권장합니다.";
 
-  static String m1(value) => "저는 ${value}입니다";
+  static String m1(price) => "Current price: \$${price}";
 
-  static String m2(value) => "채팅 멤버(${value})";
+  static String m2(symbol) => "Price Alert · ${symbol}";
 
-  static String m3(value) => "${value}을(를) 친구로 추가하시겠습니까";
+  static String m3(value) => "저는 ${value}입니다";
 
-  static String m4(value) => "이미 바인딩되어 있어 현재 다시 바인딩할 수 없습니다. 바인딩 주소: ${value}.";
+  static String m4(value) => "채팅 멤버(${value})";
 
-  static String m5(value) => "바인딩 성공. 바인딩 주소: ${value}";
+  static String m5(value) => "${value}을(를) 친구로 추가하시겠습니까";
 
-  static String m6(value) => "${value} 지갑에 N42체인이 없습니다!";
+  static String m6(email) => "Verification code sent to ${email}";
 
-  static String m7(value) => "매칭 성공. 주소:${value}.";
+  static String m7(s) => "Resend in ${s}s";
 
-  static String m8(value) => "${value}보다 큰 금액입니다.";
+  static String m8(value) => "이미 바인딩되어 있어 현재 다시 바인딩할 수 없습니다. 바인딩 주소: ${value}.";
 
-  static String m9(value) => "지갑이 이미 존재합니다. 지갑 이름: \"${value}\"";
+  static String m9(value) => "바인딩 성공. 바인딩 주소: ${value}";
 
-  static String m10(value) => "${value} 이상의 금액을 입력하세요.";
+  static String m10(value) => "${value} 지갑에 N42체인이 없습니다!";
 
-  static String m11(gas) =>
-      "실행 가스(${gas})가 높습니다. 호출된 컨트랙트가 예상보다 더 많은 가스를 소비할 수 있습니다.";
+  static String m11(value) => "매칭 성공. 주소:${value}.";
 
-  static String m12(gas) =>
-      "첫 번째 트랜잭션에는 계정 배포가 포함됩니다(~${gas} 가스). 이후 트랜잭션은 더 저렴해집니다.";
+  static String m12(value) => "${value}보다 큰 금액입니다.";
 
-  static String m13(gas) =>
-      "Paymaster 가스 오버헤드(${gas})가 높습니다. 가스 없는 트랜잭션 비용이 증가할 수 있습니다.";
+  static String m13(value) => "지갑이 이미 존재합니다. 지갑 이름: \"${value}\"";
 
-  static String m14(gas) => "추정 총 가스(${gas})가 비정상적으로 높습니다. 트랜잭션 오류를 확인하세요.";
+  static String m14(value) => "${value} 이상의 금액을 입력하세요.";
 
   static String m15(gas) =>
+      "실행 가스(${gas})가 높습니다. 호출된 컨트랙트가 예상보다 더 많은 가스를 소비할 수 있습니다.";
+
+  static String m16(gas) =>
+      "첫 번째 트랜잭션에는 계정 배포가 포함됩니다(~${gas} 가스). 이후 트랜잭션은 더 저렴해집니다.";
+
+  static String m17(gas) =>
+      "Paymaster 가스 오버헤드(${gas})가 높습니다. 가스 없는 트랜잭션 비용이 증가할 수 있습니다.";
+
+  static String m18(gas) => "추정 총 가스(${gas})가 비정상적으로 높습니다. 트랜잭션 오류를 확인하세요.";
+
+  static String m19(gas) =>
       "검증 가스(${gas})가 너무 높을 수 있습니다. 복잡한 계정 로직에서 발생할 수 있습니다.";
 
-  static String m16(value) => "${value}일 남음";
+  static String m20(value) => "${value}일 남음";
 
-  static String m17(value) => "${value}행의 주소가 중복됨";
+  static String m21(value) => "${value}행의 주소가 중복됨";
 
-  static String m80(value) =>
+  static String m84(value) =>
       "Insufficient balance: total amount would exceed available ${value}";
 
-  static String m18(value) => "${value}행의 주소가 잘못됨";
+  static String m22(value) => "${value}행의 주소가 잘못됨";
 
-  static String m19(value) => "${value}행의 금액이 잘못됨";
+  static String m23(value) => "${value}행의 금액이 잘못됨";
 
-  static String m20(value) => "최대 ${value}명의 수신자";
+  static String m24(value) => "최대 ${value}명의 수신자";
 
-  static String m21(value) => "+${value}포인트/일";
+  static String m25(value) => "+${value}포인트/일";
 
-  static String m22(value) => "최대 ${value}% APY 획득";
+  static String m26(value) => "최대 ${value}% APY 획득";
 
-  static String m23(value) => "Congratulations! You now own ${value}";
+  static String m27(value) => "Congratulations! You now own ${value}";
 
-  static String m24(value) => "Please wait ${value} seconds";
+  static String m28(value) => "Please wait ${value} seconds";
 
-  static String m25(value) => "${value}초마다 자동 새로고침";
+  static String m29(value) => "${value}초마다 자동 새로고침";
 
-  static String m26(address) => "계정 ${address} 추가됨";
+  static String m30(address) => "계정 ${address} 추가됨";
 
-  static String m27(address, network) =>
+  static String m31(address, network) =>
       "이 하드웨어 지갑 계정을 추적하시겠습니까?\n\n주소: ${address}\n네트워크: ${network}";
 
-  static String m28(app) => "Current app: ${app}";
+  static String m32(app) => "Current app: ${app}";
 
-  static String m29(days) => "${days} days ago";
+  static String m33(days) => "${days} days ago";
 
-  static String m30(value) => "Failed to import account: ${value}";
+  static String m34(value) => "Failed to import account: ${value}";
 
-  static String m31(date) => "Last connected: ${date}";
+  static String m35(date) => "Last connected: ${date}";
 
-  static String m32(value) => "기기에서 ${value} 앱을 열어주세요";
+  static String m36(value) => "기기에서 ${value} 앱을 열어주세요";
 
-  static String m33(app) => "Ledger에서 ${app} 앱이 열려 있는지 확인하세요";
+  static String m37(app) => "Ledger에서 ${app} 앱이 열려 있는지 확인하세요";
 
-  static String m34(name) =>
+  static String m38(name) =>
       "Are you sure you want to remove \"${name}\" from saved devices?";
 
-  static String m35(value) => "Earn ${value} points";
+  static String m39(value) => "Earn ${value} points";
 
-  static String m36(value) => "Earn ${value} points for each friend who joins!";
+  static String m40(value) => "Earn ${value} points for each friend who joins!";
 
-  static String m37(value) => "다음 등급까지 ${value}포인트";
+  static String m41(value) => "다음 등급까지 ${value}포인트";
 
-  static String m38(amount, token) => "≈ ${amount}${token}";
+  static String m42(amount, token) => "≈ ${amount}${token}";
 
-  static String m39(amount) => "≈ ${amount} USDT";
+  static String m43(amount) => "≈ ${amount} USDT";
 
-  static String m40(value) => "연락처 ${value}을(를) 삭제하시겠습니까?";
+  static String m44(value) => "연락처 ${value}을(를) 삭제하시겠습니까?";
 
-  static String m41(value) => "${value}d unbond";
+  static String m45(value) => "${value}d unbond";
 
-  static String m42(value) => "${value}일 남음";
+  static String m46(value) => "${value}일 남음";
 
-  static String m43(value) => "${value} days remaining";
+  static String m47(value) => "${value} days remaining";
 
-  static String m81(value) =>
+  static String m85(value) =>
       "Unstaking takes ${value} days. Your tokens will be locked during this period.";
 
-  static String m44(value) => "\"${value}\"이(가) 부족합니다";
+  static String m48(value) => "\"${value}\"이(가) 부족합니다";
 
-  static String m45(value) => "\"${value}\" 계정 가져오기 실패";
+  static String m49(value) => "\"${value}\" 계정 가져오기 실패";
 
-  static String m46(value) => "첫 송금 시 최소 ${value} XRP 필요";
+  static String m50(value) => "첫 송금 시 최소 ${value} XRP 필요";
 
-  static String m47(value) => "${value}d ago";
+  static String m51(value) => "${value}d ago";
 
-  static String m48(value) => "${value}h ago";
+  static String m52(value) => "${value}h ago";
 
-  static String m49(value) => "${value}m ago";
+  static String m53(value) => "${value}m ago";
 
-  static String m50(value) => "Verification code sent to ${value}";
+  static String m54(value) => "Verification code sent to ${value}";
 
-  static String m51(value) => "${value} 체인이 추가되지 않았습니다.";
+  static String m55(value) => "${value} 체인이 추가되지 않았습니다.";
 
-  static String m52(value) => "${value}에 미완료 거래가 있습니다. 나중에 다시 시도하세요.";
+  static String m56(value) => "${value}에 미완료 거래가 있습니다. 나중에 다시 시도하세요.";
 
-  static String m53(value) => "${value}에 대한 주소를 찾을 수 없습니다.";
+  static String m57(value) => "${value}에 대한 주소를 찾을 수 없습니다.";
 
-  static String m54(value) => "${value} 잔액이 부족합니다.";
+  static String m58(value) => "${value} 잔액이 부족합니다.";
 
-  static String m55(value, value1) =>
+  static String m59(value, value1) =>
       "모든 XRP 계정은 기준선으로 ${value} XRP(${value1} drops)를 예약해야 하며, 이는 사용할 수 없습니다.";
 
-  static String m56(value, value1) =>
+  static String m60(value, value1) =>
       "계정이 소유한 각 객체에 대해 ${value} XRP(${value1} drops)가 준비금에 추가됩니다.";
 
-  static String m57(value, value1) =>
+  static String m61(value, value1) =>
       "이 계정은 ${value}개의 객체를 소유하고 있으며, 이는 추가로 ${value1} XRP가 예약됨을 의미합니다.";
 
-  static String m58(value) => "패턴 비밀번호 입력 오류, ${value}번의 기회가 남았습니다";
+  static String m62(value) => "패턴 비밀번호 입력 오류, ${value}번의 기회가 남았습니다";
 
-  static String m59(value) => "패턴 비밀번호 입력 오류, ${value}번의 기회가 남았습니다";
+  static String m63(value) => "패턴 비밀번호 입력 오류, ${value}번의 기회가 남았습니다";
 
-  static String m60(value) => "${value}을(를) 성공적으로 설정했으며 N42Wallet으로 검증을 시작합니다!";
+  static String m64(value) => "${value}을(를) 성공적으로 설정했으며 N42Wallet으로 검증을 시작합니다!";
 
-  static String m61(value) =>
+  static String m65(value) =>
       "@N42Wallet에서 내 ${value} 그룹에 참여하여 레이어 1 체인의 초기 채굴자가 되고, 폰으로 암호화폐를 받으세요!";
 
-  static String m62(value, value1) =>
+  static String m66(value, value1) =>
       "${value1}까지 노드를 실행하기 위해 ${value} N을 잠그시겠습니까?";
 
-  static String m63(value) => "가져오기 실패:${value}";
+  static String m67(value) => "가져오기 실패:${value}";
 
-  static String m64(value) => "보상을 받으려면 최소 ${value}의 스테이킹 잔액이 필요합니다.";
+  static String m68(value) => "보상을 받으려면 최소 ${value}의 스테이킹 잔액이 필요합니다.";
 
-  static String m65(value, value1) => "${value1}블록 채굴 시 ${value} N";
+  static String m69(value, value1) => "${value1}블록 채굴 시 ${value} N";
 
-  static String m66(value) => "${value}자여야 합니다";
+  static String m70(value) => "${value}자여야 합니다";
 
-  static String m67(value) => "${value} 잔액이 부족합니다.";
+  static String m71(value) => "${value} 잔액이 부족합니다.";
 
-  static String m68(value) => "${value} 입금 중...";
+  static String m72(value) => "${value} 입금 중...";
 
-  static String m69(value) =>
+  static String m73(value) =>
       "앱 내에서 스왑된 ${value}은(는) 곧 지갑으로 분배되며 이 프로세스를 통해 판매할 수 없습니다. 노드 운영에 사용할 수 있습니다.";
 
-  static String m70(value) => "최대 ${value}자";
+  static String m74(value) => "최대 ${value}자";
 
-  static String m71(value) => "${value} 체인은 앱에서 이미 지원됩니다!";
+  static String m75(value) => "${value} 체인은 앱에서 이미 지원됩니다!";
 
-  static String m72(value) => "${value} 체인은 앱에서 이미 지원됩니다. 추가하시겠습니까?";
+  static String m76(value) => "${value} 체인은 앱에서 이미 지원됩니다. 추가하시겠습니까?";
 
-  static String m73(value) => "${value} 주소 테스트 링크 실패!";
+  static String m77(value) => "${value} 주소 테스트 링크 실패!";
 
-  static String m74(value) => "${value}초 후 앱이 잠금 해제됩니다.";
+  static String m78(value) => "${value}초 후 앱이 잠금 해제됩니다.";
 
-  static String m75(value) => "패턴 비밀번호 입력 오류, ${value}번의 기회가 남았습니다";
+  static String m79(value) => "패턴 비밀번호 입력 오류, ${value}번의 기회가 남았습니다";
 
-  static String m76(value) => "비밀번호 입력 오류, ${value}번의 기회가 남았습니다";
+  static String m80(value) => "비밀번호 입력 오류, ${value}번의 기회가 남았습니다";
 
-  static String m77(value) => "비밀번호 입력 오류, ${value}번의 기회가 남았습니다";
+  static String m81(value) => "비밀번호 입력 오류, ${value}번의 기회가 남았습니다";
 
-  static String m78(value) => "${value} 비밀번호 입력";
+  static String m82(value) => "${value} 비밀번호 입력";
 
-  static String m79(value) => "0~${value}자";
+  static String m83(value) => "0~${value}자";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -256,6 +264,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_2fa_invalid_format": MessageLookupByLibrary.simpleMessage(
       "유효한 6자리 코드를 입력하세요",
     ),
+    "g_alert_above": MessageLookupByLibrary.simpleMessage("Goes Above ↑"),
+    "g_alert_below": MessageLookupByLibrary.simpleMessage("Drops Below ↓"),
+    "g_alert_current_price": m1,
+    "g_alert_direction": MessageLookupByLibrary.simpleMessage(
+      "Alert me when price",
+    ),
+    "g_alert_enable": MessageLookupByLibrary.simpleMessage("Enable this alert"),
+    "g_alert_invalid_price": MessageLookupByLibrary.simpleMessage(
+      "Please enter a valid price greater than 0",
+    ),
+    "g_alert_remove": MessageLookupByLibrary.simpleMessage("Remove"),
+    "g_alert_set": MessageLookupByLibrary.simpleMessage("Set Alert"),
+    "g_alert_target_price": MessageLookupByLibrary.simpleMessage(
+      "Target price (USD)",
+    ),
+    "g_alert_title": m2,
+    "g_alert_update": MessageLookupByLibrary.simpleMessage("Update Alert"),
     "g_app_share_key_1": MessageLookupByLibrary.simpleMessage(
       "토큰은 동일한 네트워크 내에서만 전송할 수 있습니다. 다른 네트워크에서 전송하면 손실이 발생할 수 있습니다.",
     ),
@@ -300,7 +325,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_browser_key8": MessageLookupByLibrary.simpleMessage("URL"),
     "g_browser_key9": MessageLookupByLibrary.simpleMessage("설명"),
     "g_chat_key_1": MessageLookupByLibrary.simpleMessage("그룹 채팅 시작"),
-    "g_chat_key_10": m1,
+    "g_chat_key_10": m3,
     "g_chat_key_11": MessageLookupByLibrary.simpleMessage("친구 초대"),
     "g_chat_key_12": MessageLookupByLibrary.simpleMessage("연락처 선택"),
     "g_chat_key_13": MessageLookupByLibrary.simpleMessage("완료"),
@@ -325,7 +350,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_chat_key_3": MessageLookupByLibrary.simpleMessage("추가됨"),
     "g_chat_key_30": MessageLookupByLibrary.simpleMessage("친구로 추가되었습니다"),
     "g_chat_key_31": MessageLookupByLibrary.simpleMessage("수락"),
-    "g_chat_key_32": m2,
+    "g_chat_key_32": m4,
     "g_chat_key_33": MessageLookupByLibrary.simpleMessage(
       "비밀번호를 제대로 파싱할 수 없어 일시적으로 메시지를 보낼 수 없습니다. 그룹에 들어갈 때 지갑을 가져오세요",
     ),
@@ -355,7 +380,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_chat_key_57": MessageLookupByLibrary.simpleMessage("신고했습니다 - 클릭하여 보기"),
     "g_chat_key_58": MessageLookupByLibrary.simpleMessage("차단 목록"),
     "g_chat_key_59": MessageLookupByLibrary.simpleMessage("제거"),
-    "g_chat_key_6": m3,
+    "g_chat_key_6": m5,
     "g_chat_key_60": MessageLookupByLibrary.simpleMessage("아직 연락처가 없습니다"),
     "g_chat_key_61": MessageLookupByLibrary.simpleMessage("오늘"),
     "g_chat_key_62": MessageLookupByLibrary.simpleMessage("3일 이상 전"),
@@ -379,6 +404,96 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_connect_key2": MessageLookupByLibrary.simpleMessage("연결 해제"),
     "g_connect_key3": MessageLookupByLibrary.simpleMessage("거부"),
+    "g_email_also_sync": MessageLookupByLibrary.simpleMessage(
+      "Also sync Chat account email",
+    ),
+    "g_email_back_to_email": MessageLookupByLibrary.simpleMessage(
+      "← Change email address",
+    ),
+    "g_email_both_success": MessageLookupByLibrary.simpleMessage(
+      "Both accounts updated successfully!",
+    ),
+    "g_email_change_title": MessageLookupByLibrary.simpleMessage(
+      "Change Email",
+    ),
+    "g_email_chat_code_hint": MessageLookupByLibrary.simpleMessage(
+      "Enter 6-digit Chat code",
+    ),
+    "g_email_chat_code_sent_to": MessageLookupByLibrary.simpleMessage(
+      "Chat code sent to",
+    ),
+    "g_email_chat_confirm": MessageLookupByLibrary.simpleMessage(
+      "Confirm Chat Sync",
+    ),
+    "g_email_chat_send_fail": MessageLookupByLibrary.simpleMessage(
+      "Failed to send Chat code",
+    ),
+    "g_email_chat_sending": MessageLookupByLibrary.simpleMessage(
+      "Sending Chat verification code...",
+    ),
+    "g_email_chat_sync_title": MessageLookupByLibrary.simpleMessage(
+      "Sync Chat Account Email",
+    ),
+    "g_email_code_invalid": MessageLookupByLibrary.simpleMessage(
+      "Please enter the 6-digit code",
+    ),
+    "g_email_code_resent": MessageLookupByLibrary.simpleMessage("Code resent"),
+    "g_email_code_sent_to": m6,
+    "g_email_code_wrong": MessageLookupByLibrary.simpleMessage(
+      "Incorrect code, please try again",
+    ),
+    "g_email_confirm_change": MessageLookupByLibrary.simpleMessage(
+      "Confirm Change",
+    ),
+    "g_email_confirm_continue": MessageLookupByLibrary.simpleMessage(
+      "Confirm & Continue to Chat Sync",
+    ),
+    "g_email_current_label": MessageLookupByLibrary.simpleMessage(
+      "Current email",
+    ),
+    "g_email_enter_code": MessageLookupByLibrary.simpleMessage(
+      "Enter 6-digit code",
+    ),
+    "g_email_error_empty": MessageLookupByLibrary.simpleMessage(
+      "Please enter a new email address",
+    ),
+    "g_email_error_invalid": MessageLookupByLibrary.simpleMessage(
+      "Invalid email address",
+    ),
+    "g_email_error_same": MessageLookupByLibrary.simpleMessage(
+      "New email must differ from current email",
+    ),
+    "g_email_n42_only": MessageLookupByLibrary.simpleMessage(
+      "N42 email updated. Chat email can be updated in Chat > Settings.",
+    ),
+    "g_email_n42_updated": MessageLookupByLibrary.simpleMessage(
+      "N42 account email updated",
+    ),
+    "g_email_new_hint": MessageLookupByLibrary.simpleMessage(
+      "Enter new email address",
+    ),
+    "g_email_new_label": MessageLookupByLibrary.simpleMessage(
+      "New email address",
+    ),
+    "g_email_pwd_hint": MessageLookupByLibrary.simpleMessage("Enter password"),
+    "g_email_pwd_label": MessageLookupByLibrary.simpleMessage(
+      "Current password (for Chat)",
+    ),
+    "g_email_pwd_required": MessageLookupByLibrary.simpleMessage(
+      "Password required for Chat sync",
+    ),
+    "g_email_resend": MessageLookupByLibrary.simpleMessage("Resend code"),
+    "g_email_resend_countdown": m7,
+    "g_email_send_code": MessageLookupByLibrary.simpleMessage(
+      "Send Verification Code",
+    ),
+    "g_email_skip": MessageLookupByLibrary.simpleMessage("Skip"),
+    "g_email_skip_full": MessageLookupByLibrary.simpleMessage(
+      "Skip – N42 email is already updated",
+    ),
+    "g_email_success": MessageLookupByLibrary.simpleMessage(
+      "Email updated successfully",
+    ),
     "g_face_1": MessageLookupByLibrary.simpleMessage("생체 인식 스캔 안내"),
     "g_face_10": MessageLookupByLibrary.simpleMessage(
       "인증을 위해 지문 또는 얼굴을 스캔하세요.",
@@ -399,8 +514,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "얼굴이 감지되지 않았습니다. 카메라를 정면으로 바라보고 다시 시도해 주세요.",
     ),
     "g_face_match_key1": MessageLookupByLibrary.simpleMessage("얼굴 매칭 방법"),
-    "g_face_match_key10": m4,
-    "g_face_match_key11": m5,
+    "g_face_match_key10": m8,
+    "g_face_match_key11": m9,
     "g_face_match_key12": MessageLookupByLibrary.simpleMessage("다시 바인딩"),
     "g_face_match_key13": MessageLookupByLibrary.simpleMessage("바인딩"),
     "g_face_match_key14": MessageLookupByLibrary.simpleMessage("인증"),
@@ -448,13 +563,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_face_match_key3": MessageLookupByLibrary.simpleMessage("매칭 실패!"),
     "g_face_match_key30": MessageLookupByLibrary.simpleMessage("알겠습니다"),
     "g_face_match_key31": MessageLookupByLibrary.simpleMessage("지갑 주소 선택"),
-    "g_face_match_key32": m6,
+    "g_face_match_key32": m10,
     "g_face_match_key33": MessageLookupByLibrary.simpleMessage("바인딩 해제"),
     "g_face_match_key34": MessageLookupByLibrary.simpleMessage("얼굴 데이터 인증 실패!"),
     "g_face_match_key35": MessageLookupByLibrary.simpleMessage(
       "얼굴 데이터 바인딩 해제 실패!",
     ),
-    "g_face_match_key4": m7,
+    "g_face_match_key4": m11,
     "g_face_match_key5": MessageLookupByLibrary.simpleMessage("주소 오류!"),
     "g_face_match_key6": MessageLookupByLibrary.simpleMessage("얼굴 데이터 바인딩"),
     "g_face_match_key7": MessageLookupByLibrary.simpleMessage("얼굴 매칭"),
@@ -492,7 +607,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_13": MessageLookupByLibrary.simpleMessage("지갑 목록"),
     "g_key_132": MessageLookupByLibrary.simpleMessage("데이터 없음"),
     "g_key_134": MessageLookupByLibrary.simpleMessage("유효하지 않은 금액"),
-    "g_key_135": m8,
+    "g_key_135": m12,
     "g_key_14": MessageLookupByLibrary.simpleMessage("메인 지갑"),
     "g_key_140": MessageLookupByLibrary.simpleMessage("거래 성공"),
     "g_key_146": MessageLookupByLibrary.simpleMessage("비밀번호가 틀렸습니다"),
@@ -534,7 +649,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_211": MessageLookupByLibrary.simpleMessage("구매"),
     "g_key_212": MessageLookupByLibrary.simpleMessage("판매"),
     "g_key_213": MessageLookupByLibrary.simpleMessage("시장 정보"),
-    "g_key_214": m9,
+    "g_key_214": m13,
     "g_key_25": MessageLookupByLibrary.simpleMessage("비밀번호가 일치하지 않습니다."),
     "g_key_29": MessageLookupByLibrary.simpleMessage("잔액"),
     "g_key_3": MessageLookupByLibrary.simpleMessage("추가 실패!"),
@@ -545,7 +660,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_41": MessageLookupByLibrary.simpleMessage("지갑 주소 입력"),
     "g_key_43": MessageLookupByLibrary.simpleMessage("사용 가능한 잔액"),
     "g_key_44": MessageLookupByLibrary.simpleMessage("금액"),
-    "g_key_46": m10,
+    "g_key_46": m14,
     "g_key_47": MessageLookupByLibrary.simpleMessage("이 거래를 처리하기에 잔액이 부족합니다."),
     "g_key_48": MessageLookupByLibrary.simpleMessage("보내기"),
     "g_key_5": MessageLookupByLibrary.simpleMessage("로드 실패!"),
@@ -750,19 +865,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_gas_warn_call_high": MessageLookupByLibrary.simpleMessage(
       "실행 가스 높음",
     ),
-    "g_key_aa_gas_warn_call_high_desc": m11,
+    "g_key_aa_gas_warn_call_high_desc": m15,
     "g_key_aa_gas_warn_deploy": MessageLookupByLibrary.simpleMessage(
       "배포 가스 오버헤드",
     ),
-    "g_key_aa_gas_warn_deploy_desc": m12,
+    "g_key_aa_gas_warn_deploy_desc": m16,
     "g_key_aa_gas_warn_paymaster": MessageLookupByLibrary.simpleMessage(
       "Paymaster 오버헤드 높음",
     ),
-    "g_key_aa_gas_warn_paymaster_desc": m13,
+    "g_key_aa_gas_warn_paymaster_desc": m17,
     "g_key_aa_gas_warn_total_high": MessageLookupByLibrary.simpleMessage(
       "가스 한도 매우 높음",
     ),
-    "g_key_aa_gas_warn_total_high_desc": m14,
+    "g_key_aa_gas_warn_total_high_desc": m18,
     "g_key_aa_gas_warn_under_est": MessageLookupByLibrary.simpleMessage(
       "가스 과소 추정 가능성",
     ),
@@ -772,7 +887,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_gas_warn_verify_high": MessageLookupByLibrary.simpleMessage(
       "검증 가스 높음",
     ),
-    "g_key_aa_gas_warn_verify_high_desc": m15,
+    "g_key_aa_gas_warn_verify_high_desc": m19,
     "g_key_aa_gasless": MessageLookupByLibrary.simpleMessage("Gasless"),
     "g_key_aa_gasless_transactions": MessageLookupByLibrary.simpleMessage(
       "Gasless transactions & batch operations",
@@ -1018,7 +1133,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_airdrop_claim": MessageLookupByLibrary.simpleMessage("수령"),
     "g_key_airdrop_claimed": MessageLookupByLibrary.simpleMessage("수령 완료"),
-    "g_key_airdrop_days_left": m16,
+    "g_key_airdrop_days_left": m20,
     "g_key_airdrop_deadline": MessageLookupByLibrary.simpleMessage("마감"),
     "g_key_airdrop_eligible": MessageLookupByLibrary.simpleMessage("대상"),
     "g_key_airdrop_estimated_value": MessageLookupByLibrary.simpleMessage(
@@ -1070,7 +1185,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "CSV 형식: 주소,금액,라벨",
     ),
     "g_key_batch_done": MessageLookupByLibrary.simpleMessage("Done"),
-    "g_key_batch_duplicate_address": m17,
+    "g_key_batch_duplicate_address": m21,
     "g_key_batch_estimating_gas": MessageLookupByLibrary.simpleMessage(
       "Estimating Gas...",
     ),
@@ -1084,10 +1199,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Batch Transfer Help",
     ),
     "g_key_batch_import_csv": MessageLookupByLibrary.simpleMessage("CSV 가져오기"),
-    "g_key_batch_insufficient_balance": m80,
-    "g_key_batch_invalid_address": m18,
-    "g_key_batch_invalid_amount": m19,
-    "g_key_batch_max_recipients": m20,
+    "g_key_batch_insufficient_balance": m84,
+    "g_key_batch_invalid_address": m22,
+    "g_key_batch_invalid_amount": m23,
+    "g_key_batch_max_recipients": m24,
     "g_key_batch_memo_optional": MessageLookupByLibrary.simpleMessage(
       "Memo is optional",
     ),
@@ -1351,7 +1466,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_points_daily": MessageLookupByLibrary.simpleMessage(
       "매일 포인트 획득",
     ),
-    "g_key_earn_pts_day": m21,
+    "g_key_earn_pts_day": m25,
     "g_key_earn_quick_tools": MessageLookupByLibrary.simpleMessage("빠른 도구"),
     "g_key_earn_recommended": MessageLookupByLibrary.simpleMessage("추천"),
     "g_key_earn_select_swap": MessageLookupByLibrary.simpleMessage("스왑 유형 선택"),
@@ -1361,7 +1476,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_swap": MessageLookupByLibrary.simpleMessage("스왑"),
     "g_key_earn_title": MessageLookupByLibrary.simpleMessage("수익"),
     "g_key_earn_total_earnings": MessageLookupByLibrary.simpleMessage("총 수익"),
-    "g_key_earn_up_to_apy": m22,
+    "g_key_earn_up_to_apy": m26,
     "g_key_earn_view_all": MessageLookupByLibrary.simpleMessage("전체 보기"),
     "g_key_eligibility_alerts": MessageLookupByLibrary.simpleMessage(
       "Eligibility alerts",
@@ -1621,7 +1736,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_ens_subdomains": MessageLookupByLibrary.simpleMessage("Subdomains"),
     "g_key_ens_success": MessageLookupByLibrary.simpleMessage("Success!"),
-    "g_key_ens_success_message": m23,
+    "g_key_ens_success_message": m27,
     "g_key_ens_suggestions": MessageLookupByLibrary.simpleMessage(
       "Suggestions",
     ),
@@ -1657,7 +1772,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_wait_time_info": MessageLookupByLibrary.simpleMessage(
       "A waiting period prevents front-running",
     ),
-    "g_key_ens_wait_timer": m24,
+    "g_key_ens_wait_timer": m28,
     "g_key_ens_waiting": MessageLookupByLibrary.simpleMessage("Waiting..."),
     "g_key_ens_warning": MessageLookupByLibrary.simpleMessage(
       "진행하기 전에 확인된 주소를 검증해 주세요. ENS 이름은 소유자에 의해 이전되거나 변경될 수 있습니다.",
@@ -1789,7 +1904,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_gas_alert_threshold": MessageLookupByLibrary.simpleMessage(
       "임계값 (Gwei)",
     ),
-    "g_key_gas_auto_refresh": m25,
+    "g_key_gas_auto_refresh": m29,
     "g_key_gas_base_fee": MessageLookupByLibrary.simpleMessage("기본 수수료"),
     "g_key_gas_custom": MessageLookupByLibrary.simpleMessage("사용자 지정"),
     "g_key_gas_estimated_time": MessageLookupByLibrary.simpleMessage("예상 시간"),
@@ -1822,14 +1937,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_high_value_only": MessageLookupByLibrary.simpleMessage(
       "High value only",
     ),
-    "g_key_hw_account_added": m26,
+    "g_key_hw_account_added": m30,
     "g_key_hw_account_already_imported": MessageLookupByLibrary.simpleMessage(
       "Account already imported",
     ),
     "g_key_hw_accounts": MessageLookupByLibrary.simpleMessage("계정"),
     "g_key_hw_add": MessageLookupByLibrary.simpleMessage("추가"),
     "g_key_hw_add_account": MessageLookupByLibrary.simpleMessage("계정 추가"),
-    "g_key_hw_add_account_content": m27,
+    "g_key_hw_add_account_content": m31,
     "g_key_hw_address_copied": MessageLookupByLibrary.simpleMessage(
       "주소가 복사되었습니다",
     ),
@@ -1858,8 +1973,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_connecting": MessageLookupByLibrary.simpleMessage(
       "Connecting...",
     ),
-    "g_key_hw_current_app_label": m28,
-    "g_key_hw_days_ago": m29,
+    "g_key_hw_current_app_label": m32,
+    "g_key_hw_days_ago": m33,
     "g_key_hw_derivation_path": MessageLookupByLibrary.simpleMessage("파생 경로"),
     "g_key_hw_disconnect": MessageLookupByLibrary.simpleMessage("Disconnect"),
     "g_key_hw_disconnected": MessageLookupByLibrary.simpleMessage("연결 해제됨"),
@@ -1868,7 +1983,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_hw_firmware": MessageLookupByLibrary.simpleMessage("펌웨어 버전"),
     "g_key_hw_go_back": MessageLookupByLibrary.simpleMessage("뒤로"),
-    "g_key_hw_import_failed": m30,
+    "g_key_hw_import_failed": m34,
     "g_key_hw_keystone_connect_title": MessageLookupByLibrary.simpleMessage(
       "Connect Keystone",
     ),
@@ -1898,7 +2013,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_tap_to_scan": MessageLookupByLibrary.simpleMessage(
       "Tap to scan Keystone response",
     ),
-    "g_key_hw_last_connected": m31,
+    "g_key_hw_last_connected": m35,
     "g_key_hw_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
     "g_key_hw_load_more": MessageLookupByLibrary.simpleMessage("더 불러오기"),
     "g_key_hw_loading_accounts": MessageLookupByLibrary.simpleMessage(
@@ -1920,14 +2035,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_not_connected_label": MessageLookupByLibrary.simpleMessage(
       "Not Connected",
     ),
-    "g_key_hw_open_app": m32,
-    "g_key_hw_open_ledger_app_hint": m33,
+    "g_key_hw_open_app": m36,
+    "g_key_hw_open_ledger_app_hint": m37,
     "g_key_hw_rejected": MessageLookupByLibrary.simpleMessage("기기에서 거부됨"),
     "g_key_hw_remove": MessageLookupByLibrary.simpleMessage("Remove"),
     "g_key_hw_remove_device": MessageLookupByLibrary.simpleMessage(
       "Remove Device",
     ),
-    "g_key_hw_remove_device_confirm": m34,
+    "g_key_hw_remove_device_confirm": m38,
     "g_key_hw_saved_devices": MessageLookupByLibrary.simpleMessage(
       "Saved Devices",
     ),
@@ -2015,11 +2130,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_loyalty_daily_checkin": MessageLookupByLibrary.simpleMessage(
       "출석 체크",
     ),
-    "g_key_loyalty_earn_points": m35,
+    "g_key_loyalty_earn_points": m39,
     "g_key_loyalty_earned": MessageLookupByLibrary.simpleMessage("획득"),
     "g_key_loyalty_history": MessageLookupByLibrary.simpleMessage("포인트 내역"),
     "g_key_loyalty_invite": MessageLookupByLibrary.simpleMessage("Invite"),
-    "g_key_loyalty_invite_bonus": m36,
+    "g_key_loyalty_invite_bonus": m40,
     "g_key_loyalty_invite_friends": MessageLookupByLibrary.simpleMessage(
       "Invite Friends",
     ),
@@ -2038,7 +2153,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "이용 가능한 미션 없음",
     ),
     "g_key_loyalty_points": MessageLookupByLibrary.simpleMessage("포인트"),
-    "g_key_loyalty_points_to_next": m37,
+    "g_key_loyalty_points_to_next": m41,
     "g_key_loyalty_redeem": MessageLookupByLibrary.simpleMessage("교환"),
     "g_key_loyalty_referral": MessageLookupByLibrary.simpleMessage("추천"),
     "g_key_loyalty_referral_bonus": MessageLookupByLibrary.simpleMessage(
@@ -2147,8 +2262,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_payment_amount_invalid": MessageLookupByLibrary.simpleMessage(
       "유효하지 않은 금액",
     ),
-    "g_key_payment_approx_token": m38,
-    "g_key_payment_approx_usdt": m39,
+    "g_key_payment_approx_token": m42,
+    "g_key_payment_approx_usdt": m43,
     "g_key_payment_code_title": MessageLookupByLibrary.simpleMessage("결제 QR"),
     "g_key_payment_confirm": MessageLookupByLibrary.simpleMessage("확인"),
     "g_key_payment_history": MessageLookupByLibrary.simpleMessage("결제 내역"),
@@ -2205,7 +2320,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_squad_k11": MessageLookupByLibrary.simpleMessage(
       "파일이 너무 커서 업로드할 수 없습니다",
     ),
-    "g_key_squad_k15": m40,
+    "g_key_squad_k15": m44,
     "g_key_squad_k18": MessageLookupByLibrary.simpleMessage("연락처 추가"),
     "g_key_squad_k24": MessageLookupByLibrary.simpleMessage("연락처"),
     "g_key_squad_k25": MessageLookupByLibrary.simpleMessage("이메일로 검색"),
@@ -2221,9 +2336,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_avg_apy": MessageLookupByLibrary.simpleMessage("Avg APY"),
     "g_key_stake_claim": MessageLookupByLibrary.simpleMessage("보상 받기"),
     "g_key_stake_commission": MessageLookupByLibrary.simpleMessage("수수료"),
-    "g_key_stake_d_unbond": m41,
-    "g_key_stake_days_left": m42,
-    "g_key_stake_days_remaining": m43,
+    "g_key_stake_d_unbond": m45,
+    "g_key_stake_days_left": m46,
+    "g_key_stake_days_remaining": m47,
     "g_key_stake_delegators": MessageLookupByLibrary.simpleMessage("위임자 수"),
     "g_key_stake_estimated_daily": MessageLookupByLibrary.simpleMessage(
       "Est. Daily Reward",
@@ -2297,7 +2412,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_unbonding_period": MessageLookupByLibrary.simpleMessage(
       "언본딩 기간",
     ),
-    "g_key_stake_unbonding_warning": m81,
+    "g_key_stake_unbonding_warning": m85,
     "g_key_stake_unstake": MessageLookupByLibrary.simpleMessage("언스테이크"),
     "g_key_stake_updating": MessageLookupByLibrary.simpleMessage("Updating..."),
     "g_key_stake_uptime": MessageLookupByLibrary.simpleMessage("가동 시간"),
@@ -2314,7 +2429,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_16": MessageLookupByLibrary.simpleMessage("최대 가스 수수료"),
     "g_key_t_17": MessageLookupByLibrary.simpleMessage("가스당 최대 수수료"),
     "g_key_t_2": MessageLookupByLibrary.simpleMessage("대기 중"),
-    "g_key_t_29": m44,
+    "g_key_t_29": m48,
     "g_key_t_3": MessageLookupByLibrary.simpleMessage("실패"),
     "g_key_t_30": MessageLookupByLibrary.simpleMessage("채굴자 수수료"),
     "g_key_t_31": MessageLookupByLibrary.simpleMessage("진행"),
@@ -2327,23 +2442,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_4": MessageLookupByLibrary.simpleMessage("출금"),
     "g_key_t_43": MessageLookupByLibrary.simpleMessage("0보다 큰 정수를 입력하세요."),
     "g_key_t_44": MessageLookupByLibrary.simpleMessage("데이터 가져오기 실패"),
-    "g_key_t_45": m45,
+    "g_key_t_45": m49,
     "g_key_t_46": MessageLookupByLibrary.simpleMessage("받는 주소 계정 확인"),
     "g_key_t_47": MessageLookupByLibrary.simpleMessage("찾기"),
     "g_key_t_49": MessageLookupByLibrary.simpleMessage("계정 없음"),
     "g_key_t_5": MessageLookupByLibrary.simpleMessage("입금"),
     "g_key_t_50": MessageLookupByLibrary.simpleMessage("유효하지 않은 주소"),
     "g_key_t_51": MessageLookupByLibrary.simpleMessage("계정 인증 성공"),
-    "g_key_t_52": m46,
+    "g_key_t_52": m50,
     "g_key_t_54": MessageLookupByLibrary.simpleMessage(
       "받는 주소에 계정이 없으며, 첫 송금 시 최소 10XRP가 필요합니다",
     ),
     "g_key_t_6": MessageLookupByLibrary.simpleMessage("사용된 가스"),
     "g_key_t_7": MessageLookupByLibrary.simpleMessage("가스"),
-    "g_key_time_days_ago": m47,
-    "g_key_time_hours_ago": m48,
+    "g_key_time_days_ago": m51,
+    "g_key_time_hours_ago": m52,
     "g_key_time_just_now": MessageLookupByLibrary.simpleMessage("Just now"),
-    "g_key_time_minutes_ago": m49,
+    "g_key_time_minutes_ago": m53,
     "g_key_tran_1": MessageLookupByLibrary.simpleMessage("거래 내역"),
     "g_key_tran_4": MessageLookupByLibrary.simpleMessage("거래 상세"),
     "g_key_tran_6": MessageLookupByLibrary.simpleMessage("거래 영수증은 내역에서 확인하세요"),
@@ -2385,6 +2500,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_user_p3": MessageLookupByLibrary.simpleMessage(
       "개인정보 처리방침 및 개인정보 수집 안내",
     ),
+    "g_key_uuid": MessageLookupByLibrary.simpleMessage("UUID"),
     "g_key_v_k1": MessageLookupByLibrary.simpleMessage("최신 버전 발견"),
     "g_key_v_k2": MessageLookupByLibrary.simpleMessage("즉시 업데이트"),
     "g_key_v_k3": MessageLookupByLibrary.simpleMessage("새 버전 발견"),
@@ -2392,7 +2508,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_verification_code": MessageLookupByLibrary.simpleMessage(
       "Verification Code",
     ),
-    "g_key_verification_code_sent": m50,
+    "g_key_verification_code_sent": m54,
     "g_key_wallet_c10": MessageLookupByLibrary.simpleMessage("시드 문구 보기"),
     "g_key_wallet_c11": MessageLookupByLibrary.simpleMessage(
       "시드 문구를 기록하고 안전하게 보관하세요.",
@@ -2482,13 +2598,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_k56": MessageLookupByLibrary.simpleMessage("논스"),
     "g_key_wallet_k57": MessageLookupByLibrary.simpleMessage("가속"),
     "g_key_wallet_k58": MessageLookupByLibrary.simpleMessage("메모"),
-    "g_key_wallet_m1": m51,
+    "g_key_wallet_m1": m55,
     "g_key_wallet_m11": MessageLookupByLibrary.simpleMessage("계정을 탈퇴하시겠습니까?"),
     "g_key_wallet_m13": MessageLookupByLibrary.simpleMessage("로그아웃 확인"),
     "g_key_wallet_m17": MessageLookupByLibrary.simpleMessage(
       "Google 인증 코드를 입력하세요.",
     ),
-    "g_key_wallet_m19": m52,
+    "g_key_wallet_m19": m56,
     "g_key_wallet_m2": MessageLookupByLibrary.simpleMessage(
       "현재 토큰이 추가되지 않았습니다.",
     ),
@@ -2496,9 +2612,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "단어 사이에 공백을 두고 시드 문구를 입력하세요",
     ),
     "g_key_wallet_m22": MessageLookupByLibrary.simpleMessage("지갑 가져오기"),
-    "g_key_wallet_m3": m53,
+    "g_key_wallet_m3": m57,
     "g_key_wallet_m4": MessageLookupByLibrary.simpleMessage("현재 토큰 잔액이 부족합니다."),
-    "g_key_wallet_m5": m54,
+    "g_key_wallet_m5": m58,
     "g_key_wallet_m6": MessageLookupByLibrary.simpleMessage("서명 오류"),
     "g_key_wallet_m8": MessageLookupByLibrary.simpleMessage("계정 탈퇴"),
     "g_key_wallet_m9": MessageLookupByLibrary.simpleMessage(
@@ -2507,11 +2623,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_manage": MessageLookupByLibrary.simpleMessage("지갑 관리"),
     "g_key_xml_0": MessageLookupByLibrary.simpleMessage("예약됨"),
     "g_key_xml_1": MessageLookupByLibrary.simpleMessage("기본 준비금"),
-    "g_key_xml_11": m55,
+    "g_key_xml_11": m59,
     "g_key_xml_2": MessageLookupByLibrary.simpleMessage("증분 준비금"),
-    "g_key_xml_22": m56,
+    "g_key_xml_22": m60,
     "g_key_xml_3": MessageLookupByLibrary.simpleMessage("소유 객체 수"),
-    "g_key_xml_33": m57,
+    "g_key_xml_33": m61,
     "g_key_xml_4": MessageLookupByLibrary.simpleMessage("총 예약 금액 계산 방법"),
     "g_key_xml_44": MessageLookupByLibrary.simpleMessage(
       "총 준비금 = 기본 준비금 + (소유 객체 수 × 증분 준비금)",
@@ -2529,13 +2645,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_lock_key19": MessageLookupByLibrary.simpleMessage("패턴 비밀번호 두 번째 그리기"),
     "g_lock_key20": MessageLookupByLibrary.simpleMessage("패턴 비밀번호 그리기"),
-    "g_lock_key21": m58,
+    "g_lock_key21": m62,
     "g_lock_key22": MessageLookupByLibrary.simpleMessage("패턴 비밀번호 재설정"),
     "g_lock_key23": MessageLookupByLibrary.simpleMessage(
       "입력 오류가 너무 많습니다. 비밀번호를 재설정하세요",
     ),
     "g_lock_key24": MessageLookupByLibrary.simpleMessage("지갑 비밀번호를 추가하시겠습니까?"),
-    "g_lock_key25": m59,
+    "g_lock_key25": m63,
     "g_lock_key3": MessageLookupByLibrary.simpleMessage("잠금 화면 페이지"),
     "g_lock_key4": MessageLookupByLibrary.simpleMessage("자동 잠금"),
     "g_lock_key5": MessageLookupByLibrary.simpleMessage("성공"),
@@ -2543,6 +2659,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key7": MessageLookupByLibrary.simpleMessage("생체 인식이 활성화되지 않았습니다"),
     "g_lock_key8": MessageLookupByLibrary.simpleMessage("생체 인증을 추가하시겠습니까?"),
     "g_lock_key9": MessageLookupByLibrary.simpleMessage("비밀번호 재설정"),
+    "g_market_empty_watchlist": MessageLookupByLibrary.simpleMessage(
+      "No watchlist yet",
+    ),
+    "g_market_empty_watchlist_hint": MessageLookupByLibrary.simpleMessage(
+      "Tap ★ on any coin to add",
+    ),
+    "g_market_no_results": MessageLookupByLibrary.simpleMessage("No results"),
+    "g_market_search": MessageLookupByLibrary.simpleMessage("Search"),
+    "g_market_search_hint": MessageLookupByLibrary.simpleMessage(
+      "Search coins...",
+    ),
+    "g_market_trending": MessageLookupByLibrary.simpleMessage("Trending"),
+    "g_market_watchlist": MessageLookupByLibrary.simpleMessage("Watchlist"),
     "g_mining_key15": MessageLookupByLibrary.simpleMessage("Task detail"),
     "g_mining_key20": MessageLookupByLibrary.simpleMessage("N 잠금 해제?"),
     "g_mining_key31": MessageLookupByLibrary.simpleMessage("클라우드 검증 활동"),
@@ -2566,13 +2695,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key61": MessageLookupByLibrary.simpleMessage("친구에게 공유"),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("계속"),
-    "g_mining_key63": m60,
+    "g_mining_key63": m64,
     "g_mining_key7": MessageLookupByLibrary.simpleMessage("Unlock Date"),
-    "g_mining_key73": m61,
+    "g_mining_key73": m65,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "@N42Wallet에서 노드를 설정하고 모바일 기기에서 검증을 시작했습니다! 함께하세요. 탈중앙화 미래는 모바일입니다!",
     ),
-    "g_mining_key76": m62,
+    "g_mining_key76": m66,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("Mineral"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("Node"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("Network"),
@@ -2604,7 +2733,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "지원되지 않는 암호화 데이터 형식입니다!",
     ),
-    "g_mining_key_109": m63,
+    "g_mining_key_109": m67,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage("어제의 보상"),
     "g_mining_key_110": MessageLookupByLibrary.simpleMessage("암호화된 데이터"),
     "g_mining_key_111": MessageLookupByLibrary.simpleMessage("파일 가져오기"),
@@ -2616,7 +2745,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "상환에는 시간이 걸립니다. 잠시만 기다려 주세요!",
     ),
-    "g_mining_key_116": m64,
+    "g_mining_key_116": m68,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "보상은 매일 누적되며 ~0.5 N에 도달하면 N 지갑으로 전송됩니다.",
     ),
@@ -2683,7 +2812,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_69": MessageLookupByLibrary.simpleMessage("하루 500블록~70분"),
     "g_mining_key_7": MessageLookupByLibrary.simpleMessage("Unlock Date"),
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage("하루 100블록~15분"),
-    "g_mining_key_71": m65,
+    "g_mining_key_71": m69,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage("검증당 128초"),
     "g_mining_key_73": MessageLookupByLibrary.simpleMessage("클라우드 검증 시작됨"),
     "g_mining_key_74": MessageLookupByLibrary.simpleMessage(
@@ -2734,7 +2863,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_95": MessageLookupByLibrary.simpleMessage("확인 및 저장"),
     "g_mining_key_96": MessageLookupByLibrary.simpleMessage("비밀번호 설정 및 암호화"),
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage("암호화 비밀번호를 입력하세요"),
-    "g_mining_key_98": m66,
+    "g_mining_key_98": m70,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "비밀번호가 올바른지 확인하기 위해 다시 입력하세요",
     ),
@@ -2758,6 +2887,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_phishing_warning_url_label": MessageLookupByLibrary.simpleMessage(
       "의심스러운 URL:",
     ),
+    "g_portfolio_24h": MessageLookupByLibrary.simpleMessage("24h Change"),
+    "g_portfolio_allocation": MessageLookupByLibrary.simpleMessage(
+      "Asset Allocation",
+    ),
+    "g_portfolio_gainers": MessageLookupByLibrary.simpleMessage("Top Gainers"),
+    "g_portfolio_movers": MessageLookupByLibrary.simpleMessage("24h Movers"),
+    "g_portfolio_no_assets": MessageLookupByLibrary.simpleMessage(
+      "No assets found",
+    ),
+    "g_portfolio_others": MessageLookupByLibrary.simpleMessage("Others"),
+    "g_portfolio_title": MessageLookupByLibrary.simpleMessage("Portfolio"),
+    "g_portfolio_total": MessageLookupByLibrary.simpleMessage("Total Value"),
     "g_setting_mining_v1_label": MessageLookupByLibrary.simpleMessage(
       "클래식 채굴 (V1)",
     ),
@@ -2779,7 +2920,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("추천 방법"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("링크"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("코드"),
-    "g_swap_key_14": m67,
+    "g_swap_key_14": m71,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage("코인 가격 조회 오류."),
     "g_swap_key_16": MessageLookupByLibrary.simpleMessage("진행 시 다음에 동의하게 됩니다 "),
     "g_swap_key_17": MessageLookupByLibrary.simpleMessage("이용약관."),
@@ -2787,7 +2928,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "스왑이 곧 분배됩니다. 잠시만 기다려 주세요.",
     ),
-    "g_swap_key_20": m68,
+    "g_swap_key_20": m72,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "노드 운영 비용: 그룹 검증 1-49 N 기본 노드: 50 N 프리미엄 노드: 100 N 프로 노드: 500 N.",
     ),
@@ -2799,7 +2940,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("새 잔액"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("지불 금액"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("날짜"),
-    "g_swap_key_31": m69,
+    "g_swap_key_31": m73,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "스왑은 관련 체인 탐색기(Etherscan, BscScan, TRONSCAN 및 자체 탐색기)에서 확인할 수 있습니다.",
     ),
@@ -2808,7 +2949,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_4": MessageLookupByLibrary.simpleMessage("받는 금액"),
     "g_swap_key_5": MessageLookupByLibrary.simpleMessage("스왑 미리보기"),
     "g_swap_key_6": MessageLookupByLibrary.simpleMessage("다시 시도"),
-    "g_token_m_key_1": m70,
+    "g_theme_accent_color": MessageLookupByLibrary.simpleMessage(
+      "Accent Color",
+    ),
+    "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
+      "Reset to default",
+    ),
+    "g_token_m_key_1": m74,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "누구나 기존 토큰의 가짜 버전을 포함하여 토큰을 만들 수 있습니다. 가져오기 전에 항상 토큰을 조사하세요.",
     ),
@@ -2824,9 +2971,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 정수"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("토큰 추가"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("형식 오류!"),
-    "g_token_m_key_22": m71,
-    "g_token_m_key_23": m72,
-    "g_token_m_key_24": m73,
+    "g_token_m_key_22": m75,
+    "g_token_m_key_23": m76,
+    "g_token_m_key_24": m77,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("토큰 가져오기"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("모든 네트워크"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("커스텀 토큰"),
@@ -2837,16 +2984,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("주의"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("고위험"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("안전"),
-    "g_unlock_key10": m74,
+    "g_unlock_key10": m78,
     "g_unlock_key2": MessageLookupByLibrary.simpleMessage(
       "지문 또는 얼굴 인식이 활성화되지 않았습니까?",
     ),
     "g_unlock_key3": MessageLookupByLibrary.simpleMessage("패턴 비밀번호 그리기"),
-    "g_unlock_key4": m75,
+    "g_unlock_key4": m79,
     "g_unlock_key5": MessageLookupByLibrary.simpleMessage("비밀번호 입력"),
-    "g_unlock_key6": m76,
+    "g_unlock_key6": m80,
     "g_unlock_key7": MessageLookupByLibrary.simpleMessage("인증 실패"),
-    "g_unlock_key8": m77,
+    "g_unlock_key8": m81,
     "g_unlock_key9": MessageLookupByLibrary.simpleMessage("또한 "),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
       "연결이 끊어졌습니다. 다시 연결해 주세요.",
@@ -2901,7 +3048,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "google_verification_message20": MessageLookupByLibrary.simpleMessage(
       "이메일 인증 코드 입력",
     ),
-    "google_verification_message21": m78,
+    "google_verification_message21": m82,
     "google_verification_message3": MessageLookupByLibrary.simpleMessage(
       "Google 키 가져오기 실패",
     ),
@@ -2941,7 +3088,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_need_login": MessageLookupByLibrary.simpleMessage("먼저 로그인하세요"),
     "login_password": MessageLookupByLibrary.simpleMessage("비밀번호"),
     "next": MessageLookupByLibrary.simpleMessage("다음"),
-    "nicknameMessage": m79,
+    "nicknameMessage": m83,
     "password_diff": MessageLookupByLibrary.simpleMessage("비밀번호가 일치하지 않습니다"),
     "personalInformation": MessageLookupByLibrary.simpleMessage("프로필 편집"),
     "photograph": MessageLookupByLibrary.simpleMessage("사진 촬영"),

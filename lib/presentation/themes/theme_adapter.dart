@@ -13,11 +13,15 @@ import 'package:flutter/material.dart';
 class ThemeAdapter {
   ThemeAdapter._();
 
-  /// Light Theme
-  static ThemeData themeDataLight = ThemeData.light().copyWith(
+  /// Default accent color (N42 brand blue)
+  static const Color defaultAccent = Color(0xFF1976F9);
+
+  /// Build light ThemeData with the given [accent] color.
+  static ThemeData buildLight(Color accent) => ThemeData.light().copyWith(
     scaffoldBackgroundColor: AppThemeUtils.lightMap[AppThemeKeys.backGroundColor.name],
-    primaryColor: const Color(0xffF9f9f9),
-    
+    primaryColor: accent,
+    colorScheme: ColorScheme.light(primary: accent, secondary: accent),
+
     // AppBar Theme
     appBarTheme: const AppBarTheme(
       centerTitle: true,
@@ -27,44 +31,44 @@ class ThemeAdapter {
       toolbarTextStyle: TextStyle(color: Color(0xff222222)),
       iconTheme: IconThemeData(color: Color(0xff222222)),
     ),
-    
+
     // Bottom Navigation Theme
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      selectedIconTheme: IconThemeData(color: Color(0xFF448BDF)),
-      unselectedIconTheme: IconThemeData(color: Color(0xffffffff)),
-      selectedItemColor: Color(0xFF448BDF),
-      unselectedItemColor: Color(0xff222222),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      selectedIconTheme: IconThemeData(color: accent),
+      unselectedIconTheme: const IconThemeData(color: Color(0xffffffff)),
+      selectedItemColor: accent,
+      unselectedItemColor: const Color(0xff222222),
     ),
-    
+
     iconTheme: const IconThemeData(color: Color(0xff222222)),
-    
+
     // Input Decoration Theme
-    inputDecorationTheme: const InputDecorationTheme(
-      hintStyle: TextStyle(color: Color(0xFFBAC2CC), fontSize: 16),
+    inputDecorationTheme: InputDecorationTheme(
+      hintStyle: const TextStyle(color: Color(0xFFBAC2CC), fontSize: 16),
       focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: Color(0xFF448BDF), style: BorderStyle.solid),
+        borderSide: BorderSide(color: accent, style: BorderStyle.solid),
       ),
-      border: UnderlineInputBorder(
+      border: const UnderlineInputBorder(
         borderSide: BorderSide(color: Color(0xffc6c6c6), style: BorderStyle.solid),
       ),
-      errorBorder: UnderlineInputBorder(
+      errorBorder: const UnderlineInputBorder(
         borderSide: BorderSide(color: Color(0xffd9445a), style: BorderStyle.solid),
       ),
     ),
-    
-    floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: Color.fromRGBO(255, 255, 255, 0.5),
+
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: accent,
     ),
-    
-    buttonTheme: const ButtonThemeData(buttonColor: Color(0xFF448BDF)),
-    
+
+    buttonTheme: ButtonThemeData(buttonColor: accent),
+
     // Progress Indicator Theme
-    progressIndicatorTheme: const ProgressIndicatorThemeData(
-      color: Color(0xFF448BDF),
+    progressIndicatorTheme: ProgressIndicatorThemeData(
+      color: accent,
       linearTrackColor: Colors.white24,
       refreshBackgroundColor: Colors.white24,
     ),
-    
+
     // Divider Theme
     dividerTheme: const DividerThemeData(
       color: Color(0xffD9D9D9),
@@ -73,21 +77,23 @@ class ThemeAdapter {
       indent: 10,
       endIndent: 10,
     ),
-    
-    textSelectionTheme: const TextSelectionThemeData(
-      cursorColor: Color(0xFF448BDF),
+
+    textSelectionTheme: TextSelectionThemeData(
+      cursorColor: accent,
     ),
   );
 
-  /// Dark Theme
-  static ThemeData themeDataDark = ThemeData.dark().copyWith(
+  /// Build dark ThemeData with the given [accent] color.
+  static ThemeData buildDark(Color accent) => ThemeData.dark().copyWith(
     scaffoldBackgroundColor: AppThemeUtils.darkMap[AppThemeKeys.backGroundColor.name],
-    
+    primaryColor: accent,
+    colorScheme: ColorScheme.dark(primary: accent, secondary: accent),
+
     cardTheme: const CardThemeData(
       shadowColor: Color(0xff444444),
       color: Color(0xff2b2b2b),
     ),
-    
+
     // AppBar Theme
     appBarTheme: const AppBarTheme(
       centerTitle: true,
@@ -97,44 +103,44 @@ class ThemeAdapter {
       actionsIconTheme: IconThemeData(color: Color(0xffffffff)),
       iconTheme: IconThemeData(color: Color(0xffffffff)),
     ),
-    
+
     // Bottom Navigation Theme
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      selectedIconTheme: IconThemeData(color: Color(0xFF448BDF)),
-      unselectedIconTheme: IconThemeData(color: Color(0xffffffff)),
-      selectedItemColor: Color(0xFF448BDF),
-      unselectedItemColor: Color(0xff888888),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      selectedIconTheme: IconThemeData(color: accent),
+      unselectedIconTheme: const IconThemeData(color: Color(0xffffffff)),
+      selectedItemColor: accent,
+      unselectedItemColor: const Color(0xff888888),
     ),
-    
+
     iconTheme: const IconThemeData(color: Color(0xffffffff)),
-    
+
     // Input Decoration Theme
-    inputDecorationTheme: const InputDecorationTheme(
-      hintStyle: TextStyle(color: Color(0xFFBEBEBE), fontSize: 16),
+    inputDecorationTheme: InputDecorationTheme(
+      hintStyle: const TextStyle(color: Color(0xFFBEBEBE), fontSize: 16),
       focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: Color(0xFF448BDF), style: BorderStyle.solid),
+        borderSide: BorderSide(color: accent, style: BorderStyle.solid),
       ),
-      border: UnderlineInputBorder(
+      border: const UnderlineInputBorder(
         borderSide: BorderSide(color: Color(0xff545454), style: BorderStyle.solid),
       ),
-      errorBorder: UnderlineInputBorder(
+      errorBorder: const UnderlineInputBorder(
         borderSide: BorderSide(color: Color(0xffd9445a), style: BorderStyle.solid),
       ),
     ),
-    
-    floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: Color.fromRGBO(255, 255, 255, 0.5),
+
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: accent.withValues(alpha: 0.5),
     ),
-    
-    buttonTheme: const ButtonThemeData(buttonColor: Color(0xFF448BDF)),
-    
+
+    buttonTheme: ButtonThemeData(buttonColor: accent),
+
     // Progress Indicator Theme
-    progressIndicatorTheme: const ProgressIndicatorThemeData(
-      color: Color(0xFF448BDF),
+    progressIndicatorTheme: ProgressIndicatorThemeData(
+      color: accent,
       linearTrackColor: Colors.white24,
       refreshBackgroundColor: Colors.white24,
     ),
-    
+
     // Divider Theme
     dividerTheme: const DividerThemeData(
       color: Color(0xff303239),
@@ -143,24 +149,36 @@ class ThemeAdapter {
       indent: 10,
       endIndent: 10,
     ),
-    
-    textSelectionTheme: const TextSelectionThemeData(
-      cursorColor: Color(0xFF448BDF),
+
+    textSelectionTheme: TextSelectionThemeData(
+      cursorColor: accent,
     ),
   );
+
+  // ── Backward-compat statics (used in tests / legacy call sites) ──────────
+  static ThemeData get themeDataLight => buildLight(defaultAccent);
+  static ThemeData get themeDataDark  => buildDark(defaultAccent);
 }
 
 /// Theme Utility Functions
 class AppThemeUtils {
   AppThemeUtils._();
 
-  /// Get color by key based on current theme
+  /// Get color by key based on current theme.
+  ///
+  /// [AppThemeKeys.mainBlueColor] always resolves through
+  /// `Theme.of(context).colorScheme.primary` so it automatically
+  /// reflects any custom accent color set by the user.
   static Color getColorByKey(BuildContext? context, String key) {
     if (context == null) return Colors.red;
-    
+
+    if (key == AppThemeKeys.mainBlueColor.name) {
+      return Theme.of(context).colorScheme.primary;
+    }
+
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final colorMap = isDark ? darkMap : lightMap;
-    
+
     return colorMap[key] ?? const Color(0xff000000);
   }
 

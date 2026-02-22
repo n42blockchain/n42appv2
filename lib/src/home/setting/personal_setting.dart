@@ -389,7 +389,7 @@ class _PersonalSettingState extends ConsumerState<PersonalSetting> {
                       top: ScreenUtil().setWidth(40.0),
                     ),
                     child: Text(
-                      "UUID", //昵称
+                      S.of(context).g_key_uuid, //UUID
                       style: TextStyle(
                         color: AppThemeUtils.getColorByKey(
                             context, AppThemeKeys.mainBlueColor.name),
@@ -424,7 +424,7 @@ class _PersonalSettingState extends ConsumerState<PersonalSetting> {
                         top: ScreenUtil().setWidth(40.0),
                       ),
                       child: Text(
-                        "ENS Name",
+                        S.of(context).g_key_ens_name,
                         style: TextStyle(
                           color: AppThemeUtils.getColorByKey(
                               context, AppThemeKeys.mainBlueColor.name),

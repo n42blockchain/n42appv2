@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
+import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/src/widgets/image_network.dart' show ImageNetWork;
 
 // ─── Color palette for pie slices ────────────────────────────────────────────
@@ -116,7 +117,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'Portfolio',
+          S.of(context).g_portfolio_title,
           style: TextStyle(
               color: textColor, fontSize: 18.sp, fontWeight: FontWeight.bold),
         ),
@@ -156,7 +157,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
               size: 64.sp, color: textColor.withAlpha(80)),
           SizedBox(height: 12.h),
           Text(
-            'No assets found',
+            S.of(context).g_portfolio_no_assets,
             style: TextStyle(fontSize: 15.sp, color: textColor.withAlpha(128)),
           ),
         ],
@@ -179,7 +180,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
       children: [
         Expanded(
           child: _SummaryCard(
-            label: 'Total Value',
+            label: S.of(context).g_portfolio_total,
             value: _fmtUsd(totalValue),
             subValue: null,
             valueColor: accentColor,
@@ -191,7 +192,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
         SizedBox(width: 12.w),
         Expanded(
           child: _SummaryCard(
-            label: '24h Change',
+            label: S.of(context).g_portfolio_24h,
             value: _fmtPnl(pnl24h),
             subValue:
                 '${pnlPct >= 0 ? '+' : ''}${pnlPct.toStringAsFixed(2)}%',
@@ -278,7 +279,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Asset Allocation',
+            S.of(context).g_portfolio_allocation,
             style: TextStyle(
                 fontSize: 15.sp,
                 fontWeight: FontWeight.bold,
@@ -380,7 +381,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
                       if (othersValue > 0)
                         _LegendItem(
                           color: _sliceColors.last,
-                          symbol: 'Others',
+                          symbol: S.of(context).g_portfolio_others,
                           pct: totalValue > 0
                               ? othersValue / totalValue * 100
                               : 0,
@@ -436,7 +437,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '24h Movers',
+            S.of(context).g_portfolio_movers,
             style: TextStyle(
                 fontSize: 15.sp,
                 fontWeight: FontWeight.bold,
@@ -445,7 +446,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
           SizedBox(height: 12.h),
           if (gainers.isNotEmpty) ...[
             _MoverRow(
-              label: 'Top Gainers',
+              label: S.of(context).g_portfolio_gainers,
               records: gainers,
               pnlFn: _pnl,
               fmtUsd: _fmtUsd,

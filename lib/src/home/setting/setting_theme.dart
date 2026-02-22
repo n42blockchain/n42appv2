@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/core/constants/app_colors.dart';
 import 'package:n42appv2/core/providers/core_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 
 /// Theme options configuration
@@ -47,25 +48,127 @@ final _themeOptions = [
   ),
 ];
 
+// ── Preset accent colors ──────────────────────────────────────────────────
+
+const _presetAccents = [
+  Color(0xFF1976F9), // default blue
+  Color(0xFF009688), // teal
+  Color(0xFF7B1FA2), // purple
+  Color(0xFFF57C00), // orange
+  Color(0xFF388E3C), // green
+  Color(0xFFC62828), // red
+  Color(0xFFE91E63), // pink
+  Color(0xFF303F9F), // indigo
+];
+
 class SettingTheme extends ConsumerWidget {
   const SettingTheme({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentMode = ref.watch(themeModeProvider);
+    final currentAccent = ref.watch(accentColorProvider);
+    final isDefault = currentAccent.toARGB32() == ThemeAdapter.defaultAccent.toARGB32();
 
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_key_126),
-      body: ListView.builder(
-        itemCount: _themeOptions.length,
-        itemBuilder: (context, index) {
-          final option = _themeOptions[index];
-          return _ThemeItem(
-            option: option,
-            isSelected: currentMode == option.mode,
-            onTap: () => ref.read(themeModeProvider.notifier).setTheme(option.mode),
-          );
-        },
+      body: ListView(
+        children: [
+          // ── Theme mode section ────────────────────────────────────────
+          ...List.generate(_themeOptions.length, (index) {
+            final option = _themeOptions[index];
+            return _ThemeItem(
+              option: option,
+              isSelected: currentMode == option.mode,
+              onTap: () =>
+                  ref.read(themeModeProvider.notifier).setTheme(option.mode),
+            );
+          }),
+
+          // ── Accent color section ──────────────────────────────────────
+          Padding(
+            padding: EdgeInsets.fromLTRB(
+                ScreenUtil().setWidth(30),
+                ScreenUtil().setWidth(28),
+                ScreenUtil().setWidth(30),
+                ScreenUtil().setWidth(8)),
+            child: Row(
+              children: [
+                Text(
+                  S.of(context).g_theme_accent_color,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(28),
+                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.color
+                        ?.withAlpha(180),
+                  ),
+                ),
+                const Spacer(),
+                if (!isDefault)
+                  GestureDetector(
+                    onTap: () =>
+                        ref.read(accentColorProvider.notifier).reset(),
+                    child: Text(
+                      S.of(context).g_theme_accent_reset,
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(24),
+                        color: currentAccent,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(30),
+                vertical: ScreenUtil().setWidth(8)),
+            child: Wrap(
+              spacing: ScreenUtil().setWidth(18),
+              runSpacing: ScreenUtil().setWidth(18),
+              children: _presetAccents.map((color) {
+                final selected =
+                    color.toARGB32() == currentAccent.toARGB32();
+                return GestureDetector(
+                  onTap: () =>
+                      ref.read(accentColorProvider.notifier).setAccent(color),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 150),
+                    width: ScreenUtil().setWidth(60),
+                    height: ScreenUtil().setWidth(60),
+                    decoration: BoxDecoration(
+                      color: color,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: selected
+                            ? Colors.white
+                            : Colors.transparent,
+                        width: 3,
+                      ),
+                      boxShadow: selected
+                          ? [
+                              BoxShadow(
+                                color: color.withAlpha(120),
+                                blurRadius: 8,
+                                spreadRadius: 2,
+                              )
+                            ]
+                          : null,
+                    ),
+                    child: selected
+                        ? const Icon(Icons.check,
+                            color: Colors.white, size: 22)
+                        : null,
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(24)),
+        ],
       ),
     );
   }
