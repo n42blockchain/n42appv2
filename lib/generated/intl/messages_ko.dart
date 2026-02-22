@@ -1738,6 +1738,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "네트워크 도구를 통해 전송하세요. 해커가 획득하면 복구할 수 없는 경제적 손실이 발생합니다",
     ),
     "g_key_ex_keystore_9": MessageLookupByLibrary.simpleMessage("도구를 사용하여 저장"),
+    "g_key_ex_keystore_confirm_risk": MessageLookupByLibrary.simpleMessage(
+      "이 파일과 비밀번호를 얻는 사람은 누구든 제 자산을 완전히 제어할 수 있습니다 — 손실은 영구적이며 복구할 수 없습니다",
+    ),
+    "g_key_ex_keystore_pwd_title": MessageLookupByLibrary.simpleMessage(
+      "내보내기를 확인하려면 지갑 비밀번호를 입력하세요",
+    ),
+    "g_key_ex_pk_pwd_title": MessageLookupByLibrary.simpleMessage(
+      "개인 키를 보려면 지갑 비밀번호를 입력하세요",
+    ),
     "g_key_feedback": MessageLookupByLibrary.simpleMessage("피드백"),
     "g_key_feedback_1": MessageLookupByLibrary.simpleMessage("피드백 정보를 입력하세요"),
     "g_key_feedback_2": MessageLookupByLibrary.simpleMessage(

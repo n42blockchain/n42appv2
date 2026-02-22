@@ -1944,6 +1944,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ex_keystore_9": MessageLookupByLibrary.simpleMessage(
       "Gunakan alat untuk menyimpan",
     ),
+    "g_key_ex_keystore_confirm_risk": MessageLookupByLibrary.simpleMessage(
+      "Saya memahami bahwa siapa pun yang mendapatkan file ini dan kata sandi memiliki kendali penuh atas dana saya — kehilangan bersifat permanen dan tidak dapat dipulihkan",
+    ),
+    "g_key_ex_keystore_pwd_title": MessageLookupByLibrary.simpleMessage(
+      "Masukkan kata sandi dompet untuk mengonfirmasi ekspor",
+    ),
+    "g_key_ex_pk_pwd_title": MessageLookupByLibrary.simpleMessage(
+      "Masukkan kata sandi dompet untuk melihat kunci privat",
+    ),
     "g_key_feedback": MessageLookupByLibrary.simpleMessage("Umpan Balik"),
     "g_key_feedback_1": MessageLookupByLibrary.simpleMessage(
       "Silakan isi informasi umpan balik",

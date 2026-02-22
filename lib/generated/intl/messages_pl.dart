@@ -1941,6 +1941,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ex_keystore_9": MessageLookupByLibrary.simpleMessage(
       "Użyj narzędzi do zapisania",
     ),
+    "g_key_ex_keystore_confirm_risk": MessageLookupByLibrary.simpleMessage(
+      "Rozumiem, że każdy, kto uzyska ten plik i hasło, ma pełną kontrolę nad moimi środkami — strata jest trwała i nieodwracalna",
+    ),
+    "g_key_ex_keystore_pwd_title": MessageLookupByLibrary.simpleMessage(
+      "Wprowadź hasło portfela, aby potwierdzić eksport",
+    ),
+    "g_key_ex_pk_pwd_title": MessageLookupByLibrary.simpleMessage(
+      "Wprowadź hasło portfela, aby wyświetlić klucz prywatny",
+    ),
     "g_key_feedback": MessageLookupByLibrary.simpleMessage("Opinia"),
     "g_key_feedback_1": MessageLookupByLibrary.simpleMessage(
       "Wypełnij informacje zwrotne",

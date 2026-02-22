@@ -2076,6 +2076,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ex_keystore_9": MessageLookupByLibrary.simpleMessage(
       "Usar herramientas de guardado",
     ),
+    "g_key_ex_keystore_confirm_risk": MessageLookupByLibrary.simpleMessage(
+      "Entiendo que cualquiera que obtenga este archivo y la contraseña tiene control total sobre mis fondos: la pérdida es permanente e irrecuperable",
+    ),
+    "g_key_ex_keystore_pwd_title": MessageLookupByLibrary.simpleMessage(
+      "Ingresa la contraseña de la billetera para confirmar la exportación",
+    ),
+    "g_key_ex_pk_pwd_title": MessageLookupByLibrary.simpleMessage(
+      "Ingresa la contraseña de la billetera para ver la clave privada",
+    ),
     "g_key_feedback": MessageLookupByLibrary.simpleMessage("Comentarios"),
     "g_key_feedback_1": MessageLookupByLibrary.simpleMessage(
       "Por favor complete la información de comentarios",

@@ -1915,6 +1915,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ex_keystore_9": MessageLookupByLibrary.simpleMessage(
       "Kaydetmek için araçlar kullanın",
     ),
+    "g_key_ex_keystore_confirm_risk": MessageLookupByLibrary.simpleMessage(
+      "Bu dosyayı ve şifreyi alan herkesin fonlarım üzerinde tam kontrole sahip olduğunu anlıyorum — kayıp kalıcı ve geri alınamaz",
+    ),
+    "g_key_ex_keystore_pwd_title": MessageLookupByLibrary.simpleMessage(
+      "Dışa aktarmayı onaylamak için cüzdan şifresini girin",
+    ),
+    "g_key_ex_pk_pwd_title": MessageLookupByLibrary.simpleMessage(
+      "Özel anahtarı görüntülemek için cüzdan şifresini girin",
+    ),
     "g_key_feedback": MessageLookupByLibrary.simpleMessage("Geri Bildirim"),
     "g_key_feedback_1": MessageLookupByLibrary.simpleMessage(
       "Lütfen geri bildirim bilgisini doldurun",

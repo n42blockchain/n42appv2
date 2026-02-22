@@ -1986,6 +1986,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ex_keystore_9": MessageLookupByLibrary.simpleMessage(
       "Verwenden Sie Tools zum Speichern",
     ),
+    "g_key_ex_keystore_confirm_risk": MessageLookupByLibrary.simpleMessage(
+      "Ich verstehe, dass jeder, der diese Datei und das Passwort erhält, die vollständige Kontrolle über mein Guthaben hat – ein Verlust ist dauerhaft und nicht wiederherstellbar",
+    ),
+    "g_key_ex_keystore_pwd_title": MessageLookupByLibrary.simpleMessage(
+      "Wallet-Passwort eingeben, um Export zu bestätigen",
+    ),
+    "g_key_ex_pk_pwd_title": MessageLookupByLibrary.simpleMessage(
+      "Wallet-Passwort eingeben, um privaten Schlüssel anzuzeigen",
+    ),
     "g_key_feedback": MessageLookupByLibrary.simpleMessage("Feedback"),
     "g_key_feedback_1": MessageLookupByLibrary.simpleMessage(
       "Bitte Feedback-Informationen ausfuellen",

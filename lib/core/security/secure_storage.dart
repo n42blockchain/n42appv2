@@ -71,10 +71,17 @@ class SecureStorage {
 
   SecureStorage() {
     _storage = const FlutterSecureStorage(
+      // Android：flutter_secure_storage v9+ 默认使用 AES-256-GCM custom cipher，
+      // 同时加密 key 和 value，防止通过文件系统侧信道推断内容。
+      // 注意：encryptedSharedPreferences (Jetpack Security) 在 v11 中已废弃，
+      // 库会在首次访问时自动将旧数据迁移到 custom cipher，无需额外配置。
       aOptions: AndroidOptions(
         sharedPreferencesName: 'n42_secure_prefs',
         preferencesKeyPrefix: 'n42_',
       ),
+      // iOS：first_unlock_this_device
+      // - 设备重启后首次解锁即可访问（适合 App 后台唤醒场景）
+      // - 不同步到 iCloud Keychain / 不迁移到新设备（钱包密钥适合此级别）
       iOptions: IOSOptions(
         accessibility: KeychainAccessibility.first_unlock_this_device,
         accountName: 'n42wallet',

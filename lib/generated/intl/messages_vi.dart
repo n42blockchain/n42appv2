@@ -1892,6 +1892,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ex_keystore_9": MessageLookupByLibrary.simpleMessage(
       "Sử dụng công cụ để lưu",
     ),
+    "g_key_ex_keystore_confirm_risk": MessageLookupByLibrary.simpleMessage(
+      "Tôi hiểu rằng bất kỳ ai có được file này và mật khẩu đều có toàn quyền kiểm soát tài sản của tôi — mất mát là vĩnh viễn và không thể khôi phục",
+    ),
+    "g_key_ex_keystore_pwd_title": MessageLookupByLibrary.simpleMessage(
+      "Nhập mật khẩu ví để xác nhận xuất",
+    ),
+    "g_key_ex_pk_pwd_title": MessageLookupByLibrary.simpleMessage(
+      "Nhập mật khẩu ví để xem khóa riêng tư",
+    ),
     "g_key_feedback": MessageLookupByLibrary.simpleMessage("Phản hồi"),
     "g_key_feedback_1": MessageLookupByLibrary.simpleMessage(
       "Vui lòng điền thông tin phản hồi",

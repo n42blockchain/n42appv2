@@ -1946,6 +1946,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ex_keystore_9": MessageLookupByLibrary.simpleMessage(
       "Используйте инструменты для хранения",
     ),
+    "g_key_ex_keystore_confirm_risk": MessageLookupByLibrary.simpleMessage(
+      "Я понимаю, что любой, кто получит этот файл и пароль, будет иметь полный контроль над моими средствами — потеря необратима",
+    ),
+    "g_key_ex_keystore_pwd_title": MessageLookupByLibrary.simpleMessage(
+      "Введите пароль кошелька для подтверждения экспорта",
+    ),
+    "g_key_ex_pk_pwd_title": MessageLookupByLibrary.simpleMessage(
+      "Введите пароль кошелька для просмотра приватного ключа",
+    ),
     "g_key_feedback": MessageLookupByLibrary.simpleMessage("Обратная связь"),
     "g_key_feedback_1": MessageLookupByLibrary.simpleMessage(
       "Заполните информацию обратной связи",

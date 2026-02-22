@@ -1662,6 +1662,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "ネットワークツールを通じて転送してください。ハッカーに取得されると、取り返しのつかない経済的損失が発生します",
     ),
     "g_key_ex_keystore_9": MessageLookupByLibrary.simpleMessage("ツールを使用して保存"),
+    "g_key_ex_keystore_confirm_risk": MessageLookupByLibrary.simpleMessage(
+      "このファイルとパスワードを入手した人は誰でも私の資金を完全に管理できます。損失は永続的で回復不能です。",
+    ),
+    "g_key_ex_keystore_pwd_title": MessageLookupByLibrary.simpleMessage(
+      "エクスポートを確認するにはウォレットのパスワードを入力してください",
+    ),
+    "g_key_ex_pk_pwd_title": MessageLookupByLibrary.simpleMessage(
+      "秘密鍵を表示するにはウォレットのパスワードを入力してください",
+    ),
     "g_key_feedback": MessageLookupByLibrary.simpleMessage("フィードバック"),
     "g_key_feedback_1": MessageLookupByLibrary.simpleMessage(
       "フィードバック情報を入力してください",

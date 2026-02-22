@@ -1993,6 +1993,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ex_keystore_9": MessageLookupByLibrary.simpleMessage(
       "Utilisez des outils pour sauvegarder",
     ),
+    "g_key_ex_keystore_confirm_risk": MessageLookupByLibrary.simpleMessage(
+      "Je comprends que toute personne obtenant ce fichier et le mot de passe a le contrôle total de mes fonds — la perte est permanente et irrécupérable",
+    ),
+    "g_key_ex_keystore_pwd_title": MessageLookupByLibrary.simpleMessage(
+      "Saisissez le mot de passe du portefeuille pour confirmer l\'exportation",
+    ),
+    "g_key_ex_pk_pwd_title": MessageLookupByLibrary.simpleMessage(
+      "Saisissez le mot de passe du portefeuille pour voir la clé privée",
+    ),
     "g_key_feedback": MessageLookupByLibrary.simpleMessage("Commentaires"),
     "g_key_feedback_1": MessageLookupByLibrary.simpleMessage(
       "Veuillez remplir les informations de commentaires",

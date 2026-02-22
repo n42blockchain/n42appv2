@@ -3984,6 +3984,36 @@ class S {
     );
   }
 
+  /// `I understand that anyone who obtains this file and password has full control over my funds — loss is permanent and unrecoverable`
+  String get g_key_ex_keystore_confirm_risk {
+    return Intl.message(
+      'I understand that anyone who obtains this file and password has full control over my funds — loss is permanent and unrecoverable',
+      name: 'g_key_ex_keystore_confirm_risk',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter wallet password to confirm export`
+  String get g_key_ex_keystore_pwd_title {
+    return Intl.message(
+      'Enter wallet password to confirm export',
+      name: 'g_key_ex_keystore_pwd_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter wallet password to view private key`
+  String get g_key_ex_pk_pwd_title {
+    return Intl.message(
+      'Enter wallet password to view private key',
+      name: 'g_key_ex_pk_pwd_title',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Identity wallet`
   String get g_key_ex_keystore_13 {
     return Intl.message(

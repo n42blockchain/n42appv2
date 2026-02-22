@@ -544,23 +544,23 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage> {
                   }
                 }
                 else{
-                  //密码验证
+                  //密码验证：标题更明确，告知用户这是导出操作
                   final controller = TextEditingController();
                   final flag = await tipsDialog4(
-                      context, null,
+                      context,
+                      S.of(context).g_key_ex_keystore_pwd_title,
                       controller: controller);
                   if (!mounted) return;
                   if (flag != null && flag) {
                     final password = controller.text.trim();
                     // SECURITY: Never log passwords
-
                     if (password != widget.walletInfo.password) {
-                      //密码输入错误
                       ToastUtils.show(S.of(context).g_key_146);
                       return;
                     }
                     jumpExportKeystoreDescPage();
                   }
+                  controller.dispose();
                 }
               } finally {
                 setState(() {
@@ -602,6 +602,24 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage> {
           if(widget.walletInfo.password != "")
             InkWell(
               onTap: ()async{
+                // 私钥导出前必须进行密码二次验证，防止他人借用已解锁设备直接复制
+                final controller = TextEditingController();
+                try {
+                  final flag = await tipsDialog4(
+                    context,
+                    S.of(context).g_key_ex_pk_pwd_title,
+                    controller: controller,
+                  );
+                  if (!mounted) return;
+                  if (flag != true) return;
+                  final entered = controller.text.trim();
+                  if (entered != widget.walletInfo.password) {
+                    ToastUtils.show(S.of(context).g_key_146);
+                    return;
+                  }
+                } finally {
+                  controller.dispose();
+                }
                 String pk=await Trustdart().getPrivateKey(mnemonic??"", widget.model.coin['coinType'], coinPath??"");
                 if (!mounted) return;
                 String pkHex=bytesToHex(base64Decode(pk));
