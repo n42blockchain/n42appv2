@@ -17,6 +17,9 @@
 export 'domain/entities/browser_entity.dart';
 export 'domain/repositories/browser_repository.dart';
 
+// Data Layer
+export 'data/repositories/browser_repository_impl.dart';
+
 // Presentation Layer - To be migrated from lib/src/browser/
 // export 'presentation/providers/browser_provider.dart';
 // export 'presentation/pages/browser_page.dart';

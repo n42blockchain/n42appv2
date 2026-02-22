@@ -96,4 +96,20 @@ class DataUtils{
     String dateTimeStr = DateUtil.formatDate(time, format: format);
     return dateTimeStr;
   }
+
+  /// 将 double 截断到指定小数位（不四舍五入）
+  String doubleFixed(double num, int position) {
+    if (position <= 0) return num.truncate().toString();
+    final str = num.toStringAsFixed(position + 2);
+    final dotIndex = str.lastIndexOf('.');
+    if (dotIndex < 0) return str;
+    final end = dotIndex + position + 1;
+    if (end >= str.length) return str;
+    return str.substring(0, end);
+  }
+
+  /// 将十六进制字符串转为 int（去掉 0x 前缀）
+  int hexToInt(String hex) {
+    return int.parse(strip0x(hex), radix: 16);
+  }
 }

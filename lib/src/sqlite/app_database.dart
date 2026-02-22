@@ -17,7 +17,7 @@ class AppDatabase{
     String path = join(directory, "astranet.db");
     return await openDatabase(
       path,
-      version: 4, //v4: aa_session_keys
+      version: 6, //v6: browserCollection favicon + createdAt
       onCreate: (Database db, int version) async {
         //交易记录
         await db.execute("create table TransationRecord("
@@ -78,13 +78,16 @@ class AppDatabase{
             "id integer primary key autoincrement,"
             "name text,"
             "url text,"
-            "desc text"
+            "desc text,"
+            "favicon text,"
+            "createdAt integer"
             ")");
         //浏览器浏览历史
         await db.execute("create table browserHistory ("
             "id integer primary key autoincrement,"
             "url text,"
-            "time text"
+            "time text,"
+            "title text"
             ")");
         //浏览器搜索历史表
         await db.execute("create table browserSearchHistory ("
@@ -182,6 +185,19 @@ class AppDatabase{
               transaction_count INTEGER,
               chain_id INTEGER NOT NULL
             )
+          ''');
+        }
+        if (oldVersion < 5) {
+          await db.execute('''
+            ALTER TABLE browserHistory ADD COLUMN title TEXT
+          ''');
+        }
+        if (oldVersion < 6) {
+          await db.execute('''
+            ALTER TABLE browserCollection ADD COLUMN favicon TEXT
+          ''');
+          await db.execute('''
+            ALTER TABLE browserCollection ADD COLUMN createdAt INTEGER
           ''');
         }
       },
@@ -424,5 +440,30 @@ class AppDatabase{
     final db = await database;
     var raw = await db.delete('browserSearchHistory');
     return raw;
+  }
+
+  //分页查询浏览历史（按时间降序）
+  Future<List<BrowserHistoryModel>> selectBrowserHistory(
+      {int pageSize = 20, int pageNum = 1}) async {
+    final db = await database;
+    var response = await db.query("browserHistory",
+        orderBy: "time desc",
+        limit: pageSize,
+        offset: (pageNum - 1) * pageSize);
+    List<BrowserHistoryModel> list =
+        response.map((c) => BrowserHistoryModel.fromJson(c)).toList();
+    return list;
+  }
+
+  //删除单条浏览历史
+  Future<void> deleteBrowserHistoryById(int id) async {
+    final db = await database;
+    await db.delete("browserHistory", where: "id=?", whereArgs: [id]);
+  }
+
+  //清空浏览历史
+  Future<int> clearBrowserHistory() async {
+    final db = await database;
+    return await db.delete("browserHistory");
   }
 }

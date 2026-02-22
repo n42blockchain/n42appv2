@@ -1,7 +1,10 @@
 ﻿import 'package:n42appv2/core/security/phishing_warning_dialog.dart';
 import 'package:n42appv2/src/browser/pages/browser_collection_list.dart';
+import 'package:n42appv2/src/browser/pages/browser_history_page.dart';
+import 'package:n42appv2/src/browser/pages/dapp_directory_page.dart';
 import 'package:n42appv2/src/browser/pages/browser_setting.dart';
 import 'package:n42appv2/src/browser/provider/browser_provider.dart';
+import 'package:n42appv2/src/browser/widgets/dapp_signing_sheet.dart';
 import 'package:n42appv2/features/browser/presentation/providers/browser_providers.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
@@ -48,6 +51,9 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
     // 使用缓存引用，避免在已卸载状态下通过 context 查找祖先
     _browserProvider?.connectDAPPCallBack = null;
     _browserProvider?.phishingCallBack = null;
+    if (_browserProvider?.dappHandler != null) {
+      _browserProvider!.dappHandler!.onSigningRequest = null;
+    }
     _browserProvider?.browserDispose();
     super.dispose();
   }
@@ -65,8 +71,51 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
     bp.phishingCallBack = (String url, VoidCallback proceed) {
       _showPhishingWarning(url, proceed);
     };
+
+    // Initialize EIP-1193 DApp handler
+    bp.initDAppHandler();
+    if (bp.dappHandler != null) {
+      bp.dappHandler!.onSigningRequest = _showDAppSigningSheet;
+    }
+
     bp.browserInit();
     bp.addUrl(widget.openUrl);
+  }
+
+  /// Show a signing confirmation bottom sheet for DApp requests.
+  /// Returns true if approved, false if rejected.
+  Future<bool> _showDAppSigningSheet({
+    required String origin,
+    required String method,
+    required Map<String, dynamic> details,
+  }) async {
+    // Resolve origin from current page URL
+    final bp = _browserProvider;
+    String displayOrigin = origin;
+    if (bp != null && bp.wListIndex >= 0 && bp.wListIndex < bp.wInfoList.length) {
+      final url = bp.wInfoList[bp.wListIndex]['openUrl'] as String? ?? '';
+      displayOrigin = Uri.tryParse(url)?.host ?? origin;
+    }
+
+    final result = await showModalBottomSheet<bool>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (ctx) => Container(
+        decoration: BoxDecoration(
+          color: AppThemeUtils.getColorByKey(ctx, AppThemeKeys.backGroundColor.name),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(ScreenUtil().setWidth(16.0))),
+        ),
+        child: SafeArea(
+          child: DAppSigningSheet(
+            origin: displayOrigin,
+            method: method,
+            details: details,
+          ),
+        ),
+      ),
+    );
+    return result ?? false;
   }
   @override
   Widget build(BuildContext context) {
@@ -223,53 +272,51 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
                         ),
                       ),
                     ),),
-                  if(bValue.canBack)
-                    Expanded(child: InkWell(
-                      onTap: ()async{
-                        WebViewController wv=bValue.wvcList[bValue.wListIndex];
-                        bool back=await wv.canGoBack();
-                        if (back){
-                          await wv.goBack();
-                        }else{
-                          if (!mounted) return;
-                          Navigator.pop(this.context);
-                        }
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: ScreenUtil().setWidth(80.0),
-                        width: ScreenUtil().setWidth(60.0),
-                        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10.0),vertical: ScreenUtil().setWidth(20.0)),
-                        child: Image.asset(
-                          "assets/browser/arrow-left.png",
-                          color: AppThemeUtils.getColorByKey(context, bValue.canBack?AppThemeKeys.mainTextColor.name:AppThemeKeys.itemBorderColor.name),
-                          width: ScreenUtil().setWidth(40.0),
-                          height: ScreenUtil().setWidth(40.0),
-                        ),
+                  Expanded(child: InkWell(
+                    onTap: bValue.canBack ? ()async{
+                      WebViewController wv=bValue.wvcList[bValue.wListIndex];
+                      bool back=await wv.canGoBack();
+                      if (back){
+                        await wv.goBack();
+                      }else{
+                        if (!mounted) return;
+                        Navigator.pop(this.context);
+                      }
+                    } : null,
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: ScreenUtil().setWidth(80.0),
+                      width: ScreenUtil().setWidth(60.0),
+                      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10.0),vertical: ScreenUtil().setWidth(20.0)),
+                      child: Image.asset(
+                        "assets/browser/arrow-left.png",
+                        color: AppThemeUtils.getColorByKey(context, bValue.canBack?AppThemeKeys.mainTextColor.name:AppThemeKeys.itemBorderColor.name),
+                        width: ScreenUtil().setWidth(40.0),
+                        height: ScreenUtil().setWidth(40.0),
                       ),
-                    ),),
-                  if(bValue.canForward)
-                    Expanded(child: InkWell(
-                      onTap: ()async{
-                        WebViewController wv=bValue.wvcList[bValue.wListIndex];
-                        bool forward=await wv.canGoForward();
-                        if (forward){
-                          await wv.goForward();
-                        }
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: ScreenUtil().setWidth(80.0),
-                        width: ScreenUtil().setWidth(60.0),
-                        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10.0),vertical: ScreenUtil().setWidth(20.0)),
-                        child: Image.asset(
-                          "assets/browser/arrow-right.png",
-                          color: AppThemeUtils.getColorByKey(context, bValue.canForward?AppThemeKeys.mainTextColor.name:AppThemeKeys.itemBorderColor.name),
-                          width: ScreenUtil().setWidth(40.0),
-                          height: ScreenUtil().setWidth(40.0),
-                        ),
+                    ),
+                  ),),
+                  Expanded(child: InkWell(
+                    onTap: bValue.canForward ? ()async{
+                      WebViewController wv=bValue.wvcList[bValue.wListIndex];
+                      bool forward=await wv.canGoForward();
+                      if (forward){
+                        await wv.goForward();
+                      }
+                    } : null,
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: ScreenUtil().setWidth(80.0),
+                      width: ScreenUtil().setWidth(60.0),
+                      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10.0),vertical: ScreenUtil().setWidth(20.0)),
+                      child: Image.asset(
+                        "assets/browser/arrow-right.png",
+                        color: AppThemeUtils.getColorByKey(context, bValue.canForward?AppThemeKeys.mainTextColor.name:AppThemeKeys.itemBorderColor.name),
+                        width: ScreenUtil().setWidth(40.0),
+                        height: ScreenUtil().setWidth(40.0),
                       ),
-                    ),),
+                    ),
+                  ),),
                   Expanded(child: InkWell(
                     onTap: ()async{
                       if(bValue.collect){
@@ -292,6 +339,25 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
                   ),),
                   Expanded(child: InkWell(
                     onTap: ()async{
+                      String? url=await Navigator.push(context, MaterialPageRoute(builder: (context)=>const BrowserHistoryPage()));
+                      if(url !=null){
+                        WebViewController wv=bValue.wvcList[bValue.wListIndex];
+                        wv.loadRequest(Uri.parse(url));
+                      }
+                    },
+                    child: Container(
+                      height: ScreenUtil().setWidth(80.0),
+                      width: ScreenUtil().setWidth(60.0),
+                      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10.0),vertical: ScreenUtil().setWidth(20.0)),
+                      child: Icon(
+                        Icons.history,
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                        size: ScreenUtil().setWidth(40.0),
+                      ),
+                    ),
+                  ),),
+                  Expanded(child: InkWell(
+                    onTap: ()async{
                       String? url=await Navigator.push(context, MaterialPageRoute(builder: (context)=>BrowserCollectionList()));
                       if(url !=null){
                         WebViewController wv=bValue.wvcList[bValue.wListIndex];
@@ -307,6 +373,25 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
                         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                         width: ScreenUtil().setWidth(40.0),
                         height: ScreenUtil().setWidth(40.0),
+                      ),
+                    ),
+                  ),),
+                  Expanded(child: InkWell(
+                    onTap: ()async{
+                      String? url=await Navigator.push(context, MaterialPageRoute(builder: (context)=>const DAppDirectoryPage()));
+                      if(url !=null){
+                        WebViewController wv=bValue.wvcList[bValue.wListIndex];
+                        wv.loadRequest(Uri.parse(url));
+                      }
+                    },
+                    child: Container(
+                      height: ScreenUtil().setWidth(80.0),
+                      width: ScreenUtil().setWidth(60.0),
+                      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10.0),vertical: ScreenUtil().setWidth(20.0)),
+                      child: Icon(
+                        Icons.explore,
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                        size: ScreenUtil().setWidth(40.0),
                       ),
                     ),
                   ),),
@@ -404,7 +489,10 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
   Widget webViewWidget(BrowserProvider bValue){
     if(bValue.showWList){
       return GridView.builder(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(30.0),
+          vertical: ScreenUtil().setWidth(16.0),
+        ),
         itemCount: bValue.wList.length,
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 200,
@@ -413,92 +501,143 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
           mainAxisSpacing: ScreenUtil().setWidth(30),
         ),
         itemBuilder: (context,int index){
-          return AspectRatio(
-            aspectRatio: 0.8,
-            child: Container(
-              height: double.infinity,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30.0)),
-                border: Border.all(
-                  width: ScreenUtil().setWidth(2.0),
-                  color: AppThemeUtils.getColorByKey(context, index==bValue.wListIndex?AppThemeKeys.mainBlueColor.name:AppThemeKeys.itemLineColor.name),
-                ),
-              ),
-              clipBehavior: Clip.hardEdge,
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30.0)),
-                      ),
-                      clipBehavior: Clip.hardEdge,
-                      child: bValue.wList[index],
-                    ),
-                  ),
-                  Positioned.fill(
-                    child: InkWell(
-                      onTap: (){
-                        bValue.wListShow(index);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30.0)),
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.transparentBgColor.name),
-                        ),
-                        clipBehavior: Clip.hardEdge,
+          final isActive = index == bValue.wListIndex;
+          final title = bValue.wInfoList[index]['title'] as String? ?? '';
+          final openUrl = bValue.wInfoList[index]['openUrl'] as String? ?? '';
+          final host = Uri.tryParse(openUrl)?.host ?? '';
+          // First letter of host as favicon placeholder
+          final letter = host.isNotEmpty
+              ? host.replaceFirst('www.', '')[0].toUpperCase()
+              : '?';
 
-                        child: Column(
+          return Dismissible(
+            key: ValueKey('tab_${bValue.wvcList[index].hashCode}'),
+            direction: DismissDirection.up,
+            onDismissed: (_) {
+              bValue.wListDelete(index);
+            },
+            background: Container(
+              alignment: Alignment.center,
+              child: Icon(
+                Icons.close,
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                size: ScreenUtil().setWidth(50),
+              ),
+            ),
+            child: GestureDetector(
+              onTap: (){
+                bValue.wListShow(index);
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24.0)),
+                  border: Border.all(
+                    width: isActive ? ScreenUtil().setWidth(3.0) : ScreenUtil().setWidth(1.5),
+                    color: AppThemeUtils.getColorByKey(context, isActive?AppThemeKeys.mainBlueColor.name:AppThemeKeys.itemLineColor.name),
+                  ),
+                ),
+                clipBehavior: Clip.hardEdge,
+                child: Stack(
+                  children: [
+                    // WebView preview
+                    Positioned.fill(
+                      child: IgnorePointer(
+                        child: bValue.wList[index],
+                      ),
+                    ),
+                    // Overlay to intercept taps
+                    Positioned.fill(
+                      child: Container(
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.transparentBgColor.name),
+                      ),
+                    ),
+                    // Header bar with title, host, close button
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+                        padding: EdgeInsets.symmetric(
+                          vertical: ScreenUtil().setWidth(8.0),
+                          horizontal: ScreenUtil().setWidth(12.0),
+                        ),
+                        child: Row(
                           children: [
+                            // Favicon placeholder
                             Container(
-                              height: ScreenUtil().setWidth(50.0),
-                              width: double.infinity,
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              width: ScreenUtil().setWidth(32),
+                              height: ScreenUtil().setWidth(32),
+                              decoration: BoxDecoration(
+                                color: isActive
+                                    ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
+                                    : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                letter,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil().setSp(16),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: ScreenUtil().setWidth(8)),
+                            // Title + host
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
-                                      child: Text(
-                                        bValue.wInfoList[index]['title']??"",
-                                        style: TextStyle(
-                                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                                          fontSize: ScreenUtil().setSp(20.0),
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.clip,
-                                      ),
+                                  Text(
+                                    title.isNotEmpty ? title : host,
+                                    style: TextStyle(
+                                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                                      fontSize: ScreenUtil().setSp(20.0),
+                                      fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
                                     ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  InkWell(
-                                    onTap: (){
-                                      bValue.wListDelete(index);
-                                    },
-                                    child: Container(
-                                      width: ScreenUtil().setWidth(40.0),
-                                      height: ScreenUtil().setWidth(40.0),
-                                      margin: EdgeInsets.only(right: ScreenUtil().setWidth(15.0)),
-                                      padding: EdgeInsets.all( ScreenUtil().setWidth(5.0)),
-                                      child: Image.asset(
-                                        "assets/browser/close.png",
-                                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                                        width: ScreenUtil().setWidth(30.0),
-                                        height: ScreenUtil().setWidth(30.0),
+                                  if (title.isNotEmpty && host.isNotEmpty)
+                                    Text(
+                                      host,
+                                      style: TextStyle(
+                                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                                        fontSize: ScreenUtil().setSp(16.0),
                                       ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                  ),
                                 ],
+                              ),
+                            ),
+                            // Close button
+                            GestureDetector(
+                              onTap: (){
+                                bValue.wListDelete(index);
+                              },
+                              child: Container(
+                                width: ScreenUtil().setWidth(36.0),
+                                height: ScreenUtil().setWidth(36.0),
+                                padding: EdgeInsets.all(ScreenUtil().setWidth(4.0)),
+                                child: Image.asset(
+                                  "assets/browser/close.png",
+                                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                                  width: ScreenUtil().setWidth(28.0),
+                                  height: ScreenUtil().setWidth(28.0),
+                                ),
                               ),
                             ),
                           ],
                         ),
                       ),
                     ),
-                  )
-                ],
+                  ],
+                ),
               ),
             ),
           );

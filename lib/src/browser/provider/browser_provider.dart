@@ -1,10 +1,17 @@
-﻿import 'package:flutter/foundation.dart';
+﻿import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/core/security/phishing_detector.dart';
+import 'package:n42appv2/core/utils/js_escape_utils.dart';
 import 'package:n42appv2/src/browser/api/browser_api.dart';
+import 'package:n42appv2/src/browser/handler/dapp_request_handler.dart';
+import 'package:n42appv2/src/browser/js/ethereum_provider.dart';
 import 'package:n42appv2/src/browser/models/browser_collection_model.dart';
 import 'package:n42appv2/src/browser/pages/browser_collection.dart';
+import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/core/utils/event_bus.dart';
+import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
@@ -63,6 +70,24 @@ class BrowserProvider extends ChangeNotifier {
   /// Cleared in [BrowserPage.dispose] to prevent stale context usage.
   PhishingWarning? phishingCallBack;
 
+  /// DApp request handler for EIP-1193 provider
+  DAppRequestHandler? _dappHandler;
+  DAppRequestHandler? get dappHandler => _dappHandler;
+
+  /// Initialize the DApp handler with EVM chains from the wallet
+  void initDAppHandler() {
+    try {
+      final cms = globalWapAdapter.coinModels;
+      final ethCoins = cms.where((cm) =>
+          cm.coin['blockchainType'] == BlockchainType.Ethereum.name).toList();
+      if (ethCoins.isNotEmpty) {
+        _dappHandler = DAppRequestHandler(ethCoinModels: ethCoins);
+      }
+    } catch (e) {
+      debugPrint('[Browser] initDAppHandler error: $e');
+    }
+  }
+
   bool canBack=false;
   bool canForward=false;
   bool collect=false;
@@ -81,6 +106,13 @@ class BrowserProvider extends ChangeNotifier {
     String rUrl=checkHttp(url);
     wListAdd(url:rUrl);
   }
+
+  /// Look up the current index of [controller] in the tab list.
+  /// Returns -1 if the tab has been closed.
+  int _indexOfController(WebViewController controller) {
+    return wvcList.indexOf(controller);
+  }
+
   void wListAdd({String url=""}) {
     if(url==""){
       url=AppConfig.apiUrl['walletamazeBrowser']!;
@@ -102,32 +134,59 @@ class BrowserProvider extends ChangeNotifier {
 
     webViewController =
         WebViewController.fromPlatformCreationParams(params);
+
+    // Capture the controller reference for use in navigation callbacks.
+    // All callbacks look up their tab index dynamically via _indexOfController
+    // to avoid stale closure captures of wListIndex.
+    final wvc = webViewController;
+
     webViewController
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {
-            debugPrint('WebView is loading (progress : $progress%)');
-            wInfoList[wListIndex]['progress']=progress*0.01;
+            final idx = _indexOfController(wvc);
+            if (idx < 0) return;
+            wInfoList[idx]['progress']=progress*0.01;
             notifyListeners();
           },
           onPageStarted: (String url) {
+            final idx = _indexOfController(wvc);
+            if (idx < 0) return;
             debugPrint('Page started loading: $url');
-            wInfoList[wListIndex]['load']=true;
+            wInfoList[idx]['load']=true;
+            _injectProviderScript(wvc);
             notifyListeners();
           },
-          onPageFinished: (String url) {
-            wInfoList[wListIndex]['load']=false;
-            wInfoList[wListIndex]['progress']=0;
-            browserApi.insertBrowserHistory(url);
-            getTitle();
-            checkCanGo();
-            getCollectionUrl(url);
+          onPageFinished: (String url) async {
+            final idx = _indexOfController(wvc);
+            if (idx < 0) return;
+            wInfoList[idx]['load']=false;
+            wInfoList[idx]['progress']=0;
+            _injectProviderScript(wvc);
+            // Fetch title for this tab
+            final t = await wvc.getTitle();
+            if (t != null) {
+              final idx2 = _indexOfController(wvc);
+              if (idx2 >= 0) wInfoList[idx2]['title'] = t;
+            }
+            final idx3 = _indexOfController(wvc);
+            if (idx3 < 0) return;
+            final pageTitle = wInfoList[idx3]['title'] as String?;
+            browserApi.insertBrowserHistory(url, title: pageTitle);
+            // Only update navigation state if this is the active tab
+            if (idx3 == wListIndex) {
+              checkCanGo();
+              getCollectionUrl(url);
+            }
+            notifyListeners();
           },
           onWebResourceError: (WebResourceError error) {
-            wInfoList[wListIndex]['load']=false;
-            wInfoList[wListIndex]['progress']=0;
+            final idx = _indexOfController(wvc);
+            if (idx < 0) return;
+            wInfoList[idx]['load']=false;
+            wInfoList[idx]['progress']=0;
             notifyListeners();
           },
           onNavigationRequest: (NavigationRequest request) {
@@ -139,8 +198,13 @@ class BrowserProvider extends ChangeNotifier {
             }
           },
           onUrlChange: (UrlChange change) {
-            wInfoList[wListIndex]['openUrl']=change.url??"";
-            titleEditingController?.text=wInfoList[wListIndex]['openUrl'];
+            final idx = _indexOfController(wvc);
+            if (idx < 0) return;
+            wInfoList[idx]['openUrl']=change.url??"";
+            // Only update URL bar if this is the active tab
+            if (idx == wListIndex) {
+              titleEditingController?.text=wInfoList[idx]['openUrl'];
+            }
             notifyListeners();
           },
           onHttpError: (HttpResponseError error) {
@@ -149,6 +213,16 @@ class BrowserProvider extends ChangeNotifier {
         ),
       )
       ..loadRequest(Uri.parse(url));
+
+    // Add DApp JavaScript channel for EIP-1193 communication
+    if (_dappHandler != null) {
+      webViewController.addJavaScriptChannel(
+        'N42Wallet',
+        onMessageReceived: (JavaScriptMessage message) {
+          _handleDAppMessage(message, webViewController);
+        },
+      );
+    }
 
     // #docregion platform_features
     if (webViewController.platform is AndroidWebViewController) {
@@ -188,9 +262,12 @@ class BrowserProvider extends ChangeNotifier {
   void wListShow(int index) {
     wListIndex=index;
     showWList=false;
-    titleEditingController?.text=wInfoList[wListIndex]['openUrl'];
+    titleEditingController?.text=wInfoList[wListIndex]['openUrl'] ?? '';
+    // Notify immediately so the UI switches tab right away
+    notifyListeners();
+    // Then async-update navigation and bookmark state
     checkCanGo();
-    getCollectionUrl(wInfoList[wListIndex]['openUrl']);
+    getCollectionUrl(wInfoList[wListIndex]['openUrl'] ?? '');
   }
   //删除一个 webView
   void wListDelete(int index) {
@@ -200,8 +277,8 @@ class BrowserProvider extends ChangeNotifier {
     wvcList.removeAt(index);
     wInfoList.removeAt(index);
     if(wList.isEmpty){
-      wListIndex=-1;
-      showWList=false;
+      wListAdd();
+      return;
     }else if(index < wListIndex){
       wListIndex--;
     }else if(index == wListIndex){
@@ -209,6 +286,12 @@ class BrowserProvider extends ChangeNotifier {
       if(wListIndex >= wList.length){
         wListIndex=wList.length-1;
       }
+    }
+    // Sync URL bar and navigation state with the new current tab
+    if (wListIndex >= 0 && wListIndex < wInfoList.length) {
+      titleEditingController?.text = wInfoList[wListIndex]['openUrl'] ?? '';
+      checkCanGo();
+      getCollectionUrl(wInfoList[wListIndex]['openUrl'] ?? '');
     }
     notifyListeners();
   }
@@ -319,12 +402,82 @@ class BrowserProvider extends ChangeNotifier {
     await Navigator.push(context, MaterialPageRoute(builder: (context)=>BrowserCollection(title ?? "",currentUrl ?? "",)));
     getCollectionUrl(wInfoList[wListIndex]['openUrl']);
   }
+  /// Handle incoming DApp JSON-RPC messages from the JavaScript channel.
+  ///
+  /// The [controller] reference is captured at channel creation time,
+  /// so it always points to the correct WebView regardless of tab switching.
+  Future<void> _handleDAppMessage(
+      JavaScriptMessage message, WebViewController controller) async {
+    if (_dappHandler == null) return;
+    try {
+      final data = json.decode(message.message) as Map<String, dynamic>;
+      final id = data['id'];
+      if (id == null) return;
+      final method = data['method'] as String;
+      final params = (data['params'] as List<dynamic>?) ?? [];
+
+      try {
+        final result = await _dappHandler!.handleRequest(method, params);
+
+        // If chain was switched, notify the JS side
+        if (method == 'wallet_switchEthereumChain' ||
+            method == 'wallet_addEthereumChain') {
+          final newChainHex = JsEscapeUtils.escapeJs(_dappHandler!.chainIdHex);
+          final newAddr = JsEscapeUtils.escapeJs(_dappHandler!.address);
+          controller.runJavaScript(
+              'window.ethereum._n42SetChain("$newChainHex");'
+              'window.ethereum._n42SetAccounts(["$newAddr"]);');
+        }
+
+        // Serialize result safely — handles null, strings, numbers, lists, maps
+        final resultStr = JsEscapeUtils.escapeJs(json.encode(result));
+        controller.runJavaScript(
+            'window.ethereum._n42Cb($id, "$resultStr", null);');
+      } catch (e) {
+        // Build a proper EIP-1193 error object {code, message}
+        final Map<String, dynamic> errObj;
+        if (e is Map) {
+          errObj = {'code': e['code'] ?? -32603, 'message': e['message'] ?? e.toString()};
+        } else {
+          errObj = {'code': -32603, 'message': e.toString()};
+        }
+        final errorStr = JsEscapeUtils.escapeJs(json.encode(errObj));
+        controller.runJavaScript(
+            'window.ethereum._n42Cb($id, null, "$errorStr");');
+      }
+    } catch (e) {
+      debugPrint('[Browser] DApp message parse error: $e');
+    }
+  }
+
+  /// Inject the EIP-1193 provider script into the given WebView controller.
+  /// Idempotent — safe to call multiple times (the JS IIFE guards with `_isN42`).
+  void _injectProviderScript(WebViewController controller) {
+    if (_dappHandler == null) return;
+    try {
+      final script = EthereumProviderJs.buildProviderScript(
+        _dappHandler!.chainIdHex,
+        [_dappHandler!.address],
+      );
+      controller.runJavaScript(script);
+    } catch (e) {
+      debugPrint('[Browser] Provider injection error: $e');
+    }
+  }
+
   void cleanWList() {
+    // Clear all navigation delegates before disposal
+    for (final wvc in wvcList) {
+      wvc.setNavigationDelegate(NavigationDelegate());
+    }
     showWList=false;
-    wListIndex=-1;
     wList=[];
     wvcList=[];
     wInfoList=[];
-    notifyListeners();
+    _dappHandler?.dispose();
+    _dappHandler=null;
+    // Create a fresh default tab instead of leaving empty
+    wListIndex=-1;
+    wListAdd();
   }
 }
