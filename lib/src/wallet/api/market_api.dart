@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/https/base_api.dart';
+import 'package:n42appv2/src/widgets/candlestick_chart.dart';
 
 class MarketApi {
   late String url;
@@ -69,6 +70,73 @@ class MarketApi {
     }
   }
   
+  /// 获取 OHLCV K线数据（CoinGecko /coins/{id}/ohlc）
+  /// [geckoId] - CoinGecko 币种 ID
+  /// [days]    - 时间跨度（1, 7, 14, 30, 90, 180, 365）
+  /// 返回 [open, high, low, close] 列表（CoinGecko 不含 volume）
+  Future<List<OhlcPoint>> getOhlcvData(String geckoId, {int days = 1}) async {
+    try {
+      final base = AppConfig.apiUrl['coinGeckoApi'] as String? ??
+          'https://api.coingecko.com/api/v3';
+      final requestUrl = '$base/coins/$geckoId/ohlc?vs_currency=usd&days=$days';
+      debugPrint('MarketApi: OHLCV → $requestUrl');
+      final raw = await BaseApi.requestEmptyH.get<dynamic>(
+        requestUrl,
+        params: {},
+        header: {'content-type': 'application/json'},
+      );
+      if (raw == null || raw is! List) return [];
+      return raw
+          .where((item) => item is List && item.length >= 5)
+          .map((item) => OhlcPoint(
+                open: (item[1] as num).toDouble(),
+                high: (item[2] as num).toDouble(),
+                low: (item[3] as num).toDouble(),
+                close: (item[4] as num).toDouble(),
+              ))
+          .toList();
+    } catch (e) {
+      debugPrint('MarketApi.getOhlcvData error: $e');
+      return [];
+    }
+  }
+
+  /// 获取市场图表数据（价格 + 交易量时序）
+  /// 返回 {'prices': [[ts,price],...], 'volumes': [[ts,vol],...]}
+  Future<Map<String, List<double>>> getMarketChart(
+      String geckoId, {
+      int days = 1,
+    }) async {
+    try {
+      final base = AppConfig.apiUrl['coinGeckoApi'] as String? ??
+          'https://api.coingecko.com/api/v3';
+      // CoinGecko free tier: interval 自动决定（1d→minutely、>1d→hourly/daily）
+      final requestUrl =
+          '$base/coins/$geckoId/market_chart?vs_currency=usd&days=$days';
+      debugPrint('MarketApi: market_chart → $requestUrl');
+      final raw = await BaseApi.requestEmptyH.get<dynamic>(
+        requestUrl,
+        params: {},
+        header: {'content-type': 'application/json'},
+      );
+      if (raw == null || raw is! Map) return {'prices': [], 'volumes': []};
+      List<double> extractValues(dynamic series) {
+        if (series is! List) return [];
+        return series
+            .where((item) => item is List && item.length >= 2)
+            .map((item) => (item[1] as num).toDouble())
+            .toList();
+      }
+      return {
+        'prices': extractValues(raw['prices']),
+        'volumes': extractValues(raw['total_volumes']),
+      };
+    } catch (e) {
+      debugPrint('MarketApi.getMarketChart error: $e');
+      return {'prices': [], 'volumes': []};
+    }
+  }
+
   /// 获取币的基本详情信息
   Future<Map<String, dynamic>> getWalletCoinsBaseInfo(String coinName) async {
     try {
