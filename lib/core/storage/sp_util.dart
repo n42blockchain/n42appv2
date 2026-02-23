@@ -406,6 +406,36 @@ class SPUtil {
     String? data = prefs?.getString(key);
     return (data == null || data.isEmpty) ? null : json.decode(data);
   }
+
+  // ── Token auto-discovery: ignored contracts ──────────────────────────────
+
+  /// Returns the set of contract addresses the user has dismissed in the
+  /// token discovery flow (stored in lower-case).
+  Future<Set<String>> getIgnoredTokenContracts() async {
+    await initPrefs();
+    final raw = prefs?.getString(SPkey.ignoredTokenContracts.name);
+    if (raw == null || raw.isEmpty) return {};
+    try {
+      return (json.decode(raw) as List<dynamic>).map((e) => e as String).toSet();
+    } catch (_) {
+      return {};
+    }
+  }
+
+  /// Persists [contracts] to the ignored list (merges with existing).
+  Future<void> addIgnoredTokenContracts(Iterable<String> contracts) async {
+    await initPrefs();
+    final existing = await getIgnoredTokenContracts();
+    for (final c in contracts) {
+      existing.add(c.toLowerCase());
+    }
+    await prefs?.setString(
+        SPkey.ignoredTokenContracts.name, json.encode(existing.toList()));
+  }
+
+  /// Convenience method to ignore a single contract address.
+  Future<void> addIgnoredTokenContract(String contract) =>
+      addIgnoredTokenContracts([contract]);
 }
 
 /// Storage Keys
@@ -437,5 +467,6 @@ enum SPkey {
   marketWatchlist, // 行情自选列表，JSON List<String> 存 coin symbol（lowercase）
   coinPriceAlerts, // 币价到价提醒配置，JSON Map<coinId, CoinPriceAlertConfig>
   accentColor,     // 自定义主色调，存 ARGB int（0 表示默认蓝色）
+  ignoredTokenContracts, // 代币自动发现：用户手动忽略的合约地址 JSON List<String>
 }
 

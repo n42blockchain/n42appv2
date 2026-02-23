@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:n42appv2/core/token_discovery/discovered_token.dart';
+import 'package:n42appv2/core/token_discovery/token_discovery_service.dart';
+import 'package:n42appv2/src/wallet/pages/token_discovery/token_discovery_page.dart';
 import 'package:n42appv2/core/utils/responsive_utils.dart';
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
@@ -69,6 +72,12 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   bool showAddTokenButton = false; //显示底部添加代币按钮
   bool _hideSmallAssets = false; // 小额资产隐藏开关（< $1 USD）
 
+  // ── Token auto-discovery ──────────────────────────────────────────────────
+  /// Tokens found on-chain but not yet in the wallet.
+  List<DiscoveredToken> _discoveredTokens = [];
+  /// Prevents re-scanning on every rebuild; reset when wallet changes.
+  bool _discoveryScanned = false;
+
   /// 价格自动刷新定时器（每 60 秒）
   Timer? _priceRefreshTimer;
 
@@ -121,6 +130,59 @@ class _WalletPageState extends ConsumerState<WalletPage> {
     });
     // 首次 build 完成后启动价格自动刷新 Timer（60s 间隔）
     WidgetsBinding.instance.addPostFrameCallback((_) => _startPriceTimer());
+  }
+
+  // ── Token discovery ────────────────────────────────────────────────────────
+
+  /// Called from build() the first time the wallet is fully loaded.
+  /// Runs entirely in the background; never blocks the UI.
+  Future<void> _runTokenDiscovery(WalletActionProvider wap) async {
+    if (_discoveryScanned) return;
+    _discoveryScanned = true;
+
+    try {
+      // 1. Collect already-known contracts (lower-cased).
+      final knownContracts = <String>{};
+      for (final chainType in wap.walletMap.keys) {
+        final chainData = wap.walletMap[chainType];
+        final mainnets = chainData['mainnets'] as Map<dynamic, dynamic>? ?? {};
+        for (final tokenData in mainnets.values) {
+          if (tokenData is Map) {
+            final contract =
+                (tokenData['contract'] as String?)?.toLowerCase() ?? '';
+            if (contract.isNotEmpty) knownContracts.add(contract);
+          }
+        }
+      }
+
+      // 2. Load ignored contracts from persistent storage.
+      final ignoredContracts = await SPUtil().getIgnoredTokenContracts();
+
+      // 3. Build address map: coinType → wallet address (main chains only).
+      final addressByChain = <String, String?>{};
+      for (final cm in wap.coinModels) {
+        final coinType = cm.coin['coinType'] as String? ?? '';
+        final address = cm.address?.toString() ?? '';
+        if (coinType.isNotEmpty && address.isNotEmpty) {
+          addressByChain.putIfAbsent(coinType, () => address);
+        }
+      }
+
+      // 4. Scan.
+      final discovered = await TokenDiscoveryService.scanAll(
+        addressByChain: addressByChain,
+        knownContracts: knownContracts,
+        ignoredContracts: ignoredContracts,
+      );
+
+      if (!mounted) return;
+      if (discovered.isNotEmpty) {
+        setState(() => _discoveredTokens = discovered);
+      }
+    } catch (e) {
+      // Discovery is best-effort; never surface errors to the user.
+      debugPrint('[WalletPage] Token discovery error: $e');
+    }
   }
 
   void _startPriceTimer() {
@@ -216,6 +278,12 @@ class _WalletPageState extends ConsumerState<WalletPage> {
               }
               if(waValue.buildwallet) {
                 return Loading();
+              }
+              // Trigger token discovery once after the wallet is ready.
+              if (!_discoveryScanned) {
+                WidgetsBinding.instance.addPostFrameCallback(
+                  (_) => _runTokenDiscovery(waValue),
+                );
               }
               return Stack(
               children: [
@@ -976,6 +1044,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          if (_discoveredTokens.isNotEmpty) _buildDiscoveryBanner(),
           if(waValue.loadBalance==Load.loading)
           Container(
             width: double.infinity,
@@ -1004,6 +1073,71 @@ class _WalletPageState extends ConsumerState<WalletPage> {
           if (displayList.isNotEmpty)
             _buildCoinListView(displayList),
         ],
+      ),
+    );
+  }
+
+  // ── Token discovery banner ────────────────────────────────────────────────
+
+  Widget _buildDiscoveryBanner() {
+    final count = _discoveredTokens.length;
+    final blueColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name);
+    return GestureDetector(
+      onTap: () async {
+        final added = await Navigator.push<bool>(
+          context,
+          MaterialPageRoute(
+            builder: (_) =>
+                TokenDiscoveryPage(tokens: _discoveredTokens),
+          ),
+        );
+        if (!mounted) return;
+        if (added == true) {
+          setState(() => _discoveredTokens = []);
+        }
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(24),
+          vertical: ScreenUtil().setWidth(14),
+        ),
+        decoration: BoxDecoration(
+          color: blueColor.withValues(alpha: 0.10),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          border: Border.all(
+            color: blueColor.withValues(alpha: 0.30),
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.manage_search_rounded,
+                color: blueColor, size: ScreenUtil().setWidth(36)),
+            SizedBox(width: ScreenUtil().setWidth(12)),
+            Expanded(
+              child: Text(
+                S.of(context).g_key_token_discovery_banner(count),
+                style: TextStyle(
+                  color: blueColor,
+                  fontSize: ScreenUtil().setSp(26),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            // Dismiss — clears banner without adding to ignore list.
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () => setState(() => _discoveredTokens = []),
+              child: Padding(
+                padding: EdgeInsets.all(ScreenUtil().setWidth(8)),
+                child: Icon(Icons.close_rounded,
+                    color: blueColor.withValues(alpha: 0.70),
+                    size: ScreenUtil().setWidth(30)),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

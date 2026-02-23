@@ -157,6 +157,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m53(value) => "${value}m ago";
 
+  static String m91(count) => "Add (${count})";
+
+  static String m92(count) =>
+      "${Intl.plural(count, one: '1 new token detected', other: '${count} new tokens detected')} — tap to review";
+
   static String m54(value) => "Verification code sent to ${value}";
 
   static String m55(value) => "No ${value} chain added.";
@@ -2904,6 +2909,27 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_time_hours_ago": m52,
     "g_key_time_just_now": MessageLookupByLibrary.simpleMessage("Just now"),
     "g_key_time_minutes_ago": m53,
+    "g_key_token_discovery_add": MessageLookupByLibrary.simpleMessage("Add"),
+    "g_key_token_discovery_add_selected": m91,
+    "g_key_token_discovery_added": MessageLookupByLibrary.simpleMessage(
+      "Token added",
+    ),
+    "g_key_token_discovery_banner": m92,
+    "g_key_token_discovery_deselect_all": MessageLookupByLibrary.simpleMessage(
+      "Deselect all",
+    ),
+    "g_key_token_discovery_empty": MessageLookupByLibrary.simpleMessage(
+      "No new tokens found",
+    ),
+    "g_key_token_discovery_ignore": MessageLookupByLibrary.simpleMessage(
+      "Ignore",
+    ),
+    "g_key_token_discovery_select_all": MessageLookupByLibrary.simpleMessage(
+      "Select all",
+    ),
+    "g_key_token_discovery_title": MessageLookupByLibrary.simpleMessage(
+      "Discovered Tokens",
+    ),
     "g_key_tran_1": MessageLookupByLibrary.simpleMessage("Transaction history"),
     "g_key_tran_4": MessageLookupByLibrary.simpleMessage("Transaction Detail"),
     "g_key_tran_6": MessageLookupByLibrary.simpleMessage(

@@ -15823,6 +15823,96 @@ class S {
       args: [],
     );
   }
+
+  /// `{count, plural, =1{1 new token detected} other{{count} new tokens detected}} — tap to review`
+  String g_key_token_discovery_banner(int count) {
+    return Intl.message(
+      '${Intl.plural(count, one: '1 new token detected', other: '$count new tokens detected')} — tap to review',
+      name: 'g_key_token_discovery_banner',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Discovered Tokens`
+  String get g_key_token_discovery_title {
+    return Intl.message(
+      'Discovered Tokens',
+      name: 'g_key_token_discovery_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add`
+  String get g_key_token_discovery_add {
+    return Intl.message(
+      'Add',
+      name: 'g_key_token_discovery_add',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add ({count})`
+  String g_key_token_discovery_add_selected(int count) {
+    return Intl.message(
+      'Add ($count)',
+      name: 'g_key_token_discovery_add_selected',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Select all`
+  String get g_key_token_discovery_select_all {
+    return Intl.message(
+      'Select all',
+      name: 'g_key_token_discovery_select_all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Deselect all`
+  String get g_key_token_discovery_deselect_all {
+    return Intl.message(
+      'Deselect all',
+      name: 'g_key_token_discovery_deselect_all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ignore`
+  String get g_key_token_discovery_ignore {
+    return Intl.message(
+      'Ignore',
+      name: 'g_key_token_discovery_ignore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Token added`
+  String get g_key_token_discovery_added {
+    return Intl.message(
+      'Token added',
+      name: 'g_key_token_discovery_added',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No new tokens found`
+  String get g_key_token_discovery_empty {
+    return Intl.message(
+      'No new tokens found',
+      name: 'g_key_token_discovery_empty',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

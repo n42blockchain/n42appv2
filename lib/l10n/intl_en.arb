@@ -1886,5 +1886,25 @@
   "g_key_dex_approving": "Approving…",
   "g_key_dex_approval_success": "Approved! Tap Swap to continue.",
   "g_key_dex_sol_note": "Solana swap: sign the transaction in your Solana wallet.",
-  "g_key_dex_quote_refreshed": "Quote refreshed"
+  "g_key_dex_quote_refreshed": "Quote refreshed",
+
+  "g_key_token_discovery_banner": "{count, plural, =1{1 new token detected} other{{count} new tokens detected}} — tap to review",
+  "@g_key_token_discovery_banner": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "g_key_token_discovery_title": "Discovered Tokens",
+  "g_key_token_discovery_add": "Add",
+  "g_key_token_discovery_add_selected": "Add ({count})",
+  "@g_key_token_discovery_add_selected": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "g_key_token_discovery_select_all": "Select all",
+  "g_key_token_discovery_deselect_all": "Deselect all",
+  "g_key_token_discovery_ignore": "Ignore",
+  "g_key_token_discovery_added": "Token added",
+  "g_key_token_discovery_empty": "No new tokens found"
 }
