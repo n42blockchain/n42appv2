@@ -1,0 +1,603 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:n42_wallet/features/browser/pages/browser_page.dart';
+import 'package:n42_wallet/features/wallet/utils/browser/browser_txhash.dart';
+import 'package:n42_wallet/features/component/enums/load.dart';
+import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/features/sqlite/app_database.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
+import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
+import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/features/widgets/empty.dart';
+import 'package:n42_wallet/features/widgets/prompt_widget.dart';
+import 'package:n42_wallet/features/wallet/widgets/ens_address_display.dart';
+import 'package:n42_wallet/features/wallet/pages/transactions/transaction_retry.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:web3dart/web3dart.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+
+/// EVM eth_getTransactionReceipt 返回的 status 字段格式不统一：
+/// - 标准节点: "0x1" / "0x0"
+/// - 部分节点: "0x01" / "0x00"（带前导零）
+/// - 部分节点: 整数 1 / 0
+/// - 旧格式:   bool true / false
+/// 统一解析，1 == 成功，其他均为失败。
+bool _isReceiptSuccess(dynamic status) {
+  if (status == null) return false;
+  if (status is bool) return status;
+  if (status is int) return status == 1;
+  final s = status.toString().toLowerCase().trim();
+  if (s == '1' || s == 'true') return true;
+  final hex = s.startsWith('0x') ? s.substring(2) : s;
+  final n = int.tryParse(hex, radix: 16);
+  return n != null && n == 1;
+}
+
+class TransactionDetailEth extends StatefulWidget {
+  final String txHash;
+  final CoinModel coinModel;
+  const TransactionDetailEth(this.coinModel,this.txHash,{super.key});
+
+  @override
+  State<TransactionDetailEth> createState() => _TransactionDetailEthState();
+}
+
+class _TransactionDetailEthState extends State<TransactionDetailEth> {
+  EthAPI? _ethAPI;
+  EthAPI get ethAPI{
+    _ethAPI ??= EthAPI();
+    return _ethAPI!;
+  }
+  AppDatabase? _db;
+  AppDatabase get db{
+    _db ??= AppDatabase();
+    return _db!;
+  }
+  TextEditingController searchEditingController=TextEditingController();
+  Load load=Load.finish;
+  String errorMessage="";
+  TransationRecordModel trm=TransationRecordModel();
+  TokenViewApi? _tokenViewApi;
+  TokenViewApi get tokenViewApi{
+    _tokenViewApi ??= TokenViewApi();
+    return _tokenViewApi!;
+  }
+  late String _txHash;
+  Timer? _pollingTimer;
+  late String _explorerUrl;
+  @override
+  void initState() {
+    _txHash = widget.txHash;
+    searchEditingController.text=_txHash;
+    _explorerUrl = getBrowserTxHash(
+      widget.coinModel.coin['coinType'],
+      _txHash,
+      isTest: widget.coinModel.isTest,
+    );
+    init();
+    super.initState();
+  }
+  @override
+  void dispose() {
+    _pollingTimer?.cancel();
+    super.dispose();
+  }
+  Future<void> init()async{
+    errorMessage="";
+    if(_txHash==""){
+      _txHash=searchEditingController.text;
+    }
+    if(_txHash==""){
+      owner=false;
+      return;
+    }
+    if (mounted) {
+      setState(() {
+        load=Load.loading;
+      });
+    }
+    List<TransationRecordModel> trModelList=await db.selectTransationRecordTxHash(_txHash,widget.coinModel.address);
+    if(trModelList.isNotEmpty){
+      trm=trModelList[0];
+    }
+    bool r=await getTransactionByHash();
+    if (!mounted) return;
+    if(r){
+      await getTransactionReceipt();
+      if (!mounted) return;
+      setState(() {
+        load=Load.finish;
+      });
+    }else{
+      setState(() {
+        load=Load.error;
+      });
+    }
+  }
+  Map<String,dynamic>? transactionInfo;
+  Map<String,dynamic>? transactionInfoReceipt;
+  String resultStr="Pending";
+  String value='';
+  String gasPrice='';
+  String gasLimit='';
+  String nonce="";
+  bool owner=true;//是否时自己的交易信息
+  Future<bool> getTransactionByHash()async{
+    MessageModel rData=await ethAPI.getTransactionByHash(
+        _txHash,
+        coinType: widget.coinModel.coin['coinType'],);
+    if(rData.error==false){
+      if(rData.data==null){
+        errorMessage="Not found";
+        owner=false;
+        return false;
+      }
+      transactionInfo=rData.data;
+      trm.gas=hexToInt(transactionInfo!['gas']??"0x0").toInt();
+      trm.gasPriceValue=hexToInt(transactionInfo!['gasPrice']??"0x0");
+      //trm.price=hexToInt(transactionInfo!['value']??"0x0");
+      resultStr="Pending";
+      gasPrice='${toGWei(trm.gasPriceValue.toString())} GWei';
+      gasLimit='${trm.gas}';
+      nonce='${hexToInt(transactionInfo!['nonce']??"0x0").toInt()}';
+
+      if(trm.contract ==""){
+        try{
+          trm.message=utf8.decode(hexToBytes(transactionInfo!['input']));
+        }
+        catch(e){
+          trm.message="";
+        }
+        trm.to1=transactionInfo!['to'];
+        trm.price=hexToInt(transactionInfo!['value']??"0x0");
+        value='${toEther(trm.price.toString(), widget.coinModel.coin['decimals'])} ${widget.coinModel.coin['unit']}';
+      }else{
+        try{
+          trm.message="";
+          String input=transactionInfo!['input'];
+          String to=input.substring(10,74).substring(24);
+          trm.to1="0x$to";
+          //String match=input.substring(0,10);
+          String valueStr=input.substring(74,138);
+          trm.price=hexToInt(valueStr);
+          value='${toEther(trm.price.toString(), widget.coinModel.coin['decimals'])} ${widget.coinModel.coin['unit']}';
+        } catch (_) {
+          // 错误安全忽略
+        }
+      }
+      if(trm.from1.toLowerCase() != (transactionInfo?['from']??"").toString().toLowerCase()){
+        owner=false;
+      }else{
+        owner=true;
+      }
+      return true;
+    }else{
+      errorMessage=rData.data.toString();
+      owner=false;
+      return false;
+    }
+  }
+  Future<void> getTransactionReceipt()async{
+    MessageModel rData=await ethAPI.getTransactionReceipt(
+        _txHash,
+        coinType: widget.coinModel.coin['coinType'],);
+    if(rData.error==false){
+      transactionInfoReceipt=rData.data;
+      if(transactionInfoReceipt !=null){
+        // receipt 非 null 表示交易已上链确认，停止轮询
+        if(_isReceiptSuccess(transactionInfoReceipt!['status'])){
+          resultStr="Success";
+        }else{
+          // 0x0 = 链上 revert（执行失败），非 Pending
+          resultStr="Failed";
+        }
+        return;
+      }
+      // receipt 为 null 表示交易仍在 mempool，继续轮询
+      errorMessage="";
+      _startPolling();
+    }else{
+      errorMessage=rData.data.toString();
+    }
+  }
+  void _startPolling() {
+    _pollingTimer?.cancel();
+    _pollingTimer = Timer(const Duration(seconds: 3), () async {
+      await getTransactionReceipt();
+      if (mounted) setState(() {});
+    });
+  }
+  //关闭键盘
+  void closeKeyboard(){
+    FocusScope.of(context).requestFocus(FocusNode());
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBarWidget(
+        text: S.of(context).s_key_3,
+        actions: _explorerUrl.isNotEmpty ? [
+          IconButton(
+            icon: const Icon(Icons.open_in_browser_outlined),
+            tooltip: S.of(context).g_key_196,
+            onPressed: () => Navigator.push(context,
+              MaterialPageRoute(builder: (_) => BrowserPage(_explorerUrl))),
+          ),
+        ] : null,
+      ),
+      body: bodyWidget(),
+    );
+  }
+  Widget bodyWidget(){
+    return SafeArea(
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Column(
+              children: [
+                searchWidget(),
+                Expanded(
+                  flex: 1,
+                  child: load==Load.error?errorWidget():
+                  txDataWidget(),
+                ),
+              ],
+            ),
+          ),
+          // 交易 Pending 且是自己发出的交易时，显示加速 / 取消操作栏
+          if (resultStr == "Pending" && owner && load == Load.finish)
+            _buildPendingActionBar(),
+        ],
+      ),
+    );
+  }
+
+  /// Pending 交易操作栏：取消 + 加速，均跳转到 TransactionRetry 处理
+  Widget _buildPendingActionBar() {
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: ScreenUtil().setWidth(36),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+        child: Row(
+          children: [
+            // 取消按钮
+            Expanded(
+              child: OutlinedButton(
+                onPressed: () async {
+                  final result = await Navigator.push<bool>(context,
+                    MaterialPageRoute(
+                        builder: (_) => TransactionRetry(widget.coinModel, _txHash)));
+                  if (result == true && mounted) Navigator.pop(context, true);
+                },
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.mainBlueColor.name),
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  ),
+                  minimumSize: Size(double.infinity, ScreenUtil().setWidth(88)),
+                ),
+                child: Text(
+                  S.of(context).g_key_79,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(28),
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.mainBlueColor.name),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(width: ScreenUtil().setWidth(24)),
+            // 加速按钮
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () async {
+                  final result = await Navigator.push<bool>(context,
+                    MaterialPageRoute(
+                        builder: (_) => TransactionRetry(widget.coinModel, _txHash)));
+                  if (result == true && mounted) Navigator.pop(context, true);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainBlueColor.name),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  ),
+                  minimumSize: Size(double.infinity, ScreenUtil().setWidth(88)),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.bolt_rounded,
+                        color: Colors.white,
+                        size: ScreenUtil().setWidth(28)),
+                    SizedBox(width: ScreenUtil().setWidth(6)),
+                    Text(
+                      S.of(context).g_key_wallet_k57,
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(28),
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  Widget errorWidget(){
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        InkWell(
+          onTap: (){
+            init();
+          },
+          child: Container(
+            height: ScreenUtil().setWidth(80),
+            width: ScreenUtil().setWidth(80),
+            padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
+            child: Icon(Icons.refresh,color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),),
+          ),
+        ),
+        errorMessageWidget(),
+      ],
+    );
+  }
+  Widget txDataWidget(){
+    if(transactionInfo==null){
+      return const IntrinsicHeight(
+        child: Center(
+          child: EmptyView(),
+        ),
+      );
+    }
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          itemWidget(S.of(context).g_key_wallet_k37,transactionInfo?['hash']??"",copy: true),
+          Divider(
+            height: ScreenUtil().setWidth(1),
+            indent: 0,
+            endIndent: 0,
+          ),
+          itemWidget(S.of(context).g_key_wallet_k33,resultStr),
+          Divider(
+            height: ScreenUtil().setWidth(1),
+            indent: 0,
+            endIndent: 0,
+          ),
+          itemWidget(S.of(context).g_key_wallet_k54,transactionInfo?['blockHash']??"",copy: true),
+          Divider(
+            height: ScreenUtil().setWidth(1),
+            indent: 0,
+            endIndent: 0,
+          ),
+          addressItemWidget(S.of(context).g_key_75,transactionInfo?['from']??""),
+          Divider(
+            height: ScreenUtil().setWidth(1),
+            indent: 0,
+            endIndent: 0,
+          ),
+          addressItemWidget(S.of(context).g_key_38,trm.to1),
+          Divider(
+            height: ScreenUtil().setWidth(1),
+            indent: 0,
+            endIndent: 0,
+          ),
+          itemWidget(S.of(context).g_key_wallet_k55,value),
+          Divider(
+            height: ScreenUtil().setWidth(1),
+            indent: 0,
+            endIndent: 0,
+          ),
+          itemWidget(S.of(context).g_key_t_15,gasPrice),
+          Divider(
+            height: ScreenUtil().setWidth(1),
+            indent: 0,
+            endIndent: 0,
+          ),
+          itemWidget(S.of(context).g_key_101,gasLimit),
+          Divider(
+            height: ScreenUtil().setWidth(1),
+            indent: 0,
+            endIndent: 0,
+          ),
+          itemWidget(S.of(context).g_key_wallet_k56,nonce),
+          Divider(
+            height: ScreenUtil().setWidth(1),
+            indent: 0,
+            endIndent: 0,
+          ),
+          itemWidget(S.of(context).g_key_wallet_k58,trm.message??""),
+          Divider(
+            height: ScreenUtil().setWidth(1),
+            indent: 0,
+            endIndent: 0,
+          ),
+          errorMessageWidget(),
+          SizedBox(height: ScreenUtil().setWidth(140),),
+        ],
+      ),
+    );
+  }
+  Widget searchWidget(){
+    return Container(
+      margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.only(left: ScreenUtil().setWidth(20)),
+      decoration: BoxDecoration(
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(8.0))),
+      ),
+      constraints: BoxConstraints(
+        maxHeight: ScreenUtil().setWidth(72.0),
+        minHeight: ScreenUtil().setWidth(72.0),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: TextField(
+              style: TextStyle(
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                fontSize: ScreenUtil().setSp(26.0),
+              ),
+              controller: searchEditingController,
+              textInputAction: TextInputAction.search,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
+                hintText: S.of(context).search,
+                border: InputBorder.none,
+                errorBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                isCollapsed: true,
+              ),
+              maxLines: 1,
+              onEditingComplete: (){
+                closeKeyboard();
+                init();
+              },
+            ),
+          ),
+          InkWell(
+            onTap: (){
+              closeKeyboard();
+              init();
+            },
+            child: Container(
+              width: ScreenUtil().setWidth(60.0),
+              height: ScreenUtil().setWidth(60.0),
+              alignment: Alignment.center,
+              child: Icon(
+                Icons.search,
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                size: ScreenUtil().setWidth(30.0),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget errorMessageWidget(){
+    if(errorMessage==""){
+      return SizedBox();
+    }else{
+      return Container(
+        margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0),left: ScreenUtil().setWidth(30),right: ScreenUtil().setWidth(30)),
+        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0),vertical: ScreenUtil().setWidth(30.0)),
+        width: double.infinity,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(20.0))),
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorBgColor2.name),
+        ),
+        child: Text(
+          errorMessage,
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(28.0),
+            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+          ),
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+
+  }
+  Widget itemWidget(String title,String value,{bool copy=false}){
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
+      alignment: Alignment.centerLeft,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              fontSize: ScreenUtil().setSp(28),
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(20),),
+          Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Text(
+                  value,
+                  style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                    fontSize: ScreenUtil().setSp(28),
+                  ),
+                ),
+              ),
+              if(copy)
+                InkWell(
+                  onTap: (){
+                    ToastUtils.init(context);
+                    Clipboard.setData(ClipboardData(text: value));
+                    ToastUtils.showFtToast(child:successViewV1(S.of(context).copy),duration: 3);
+                  },
+                  child: Container(
+                    height: ScreenUtil().setWidth(50),
+                    width: ScreenUtil().setWidth(50),
+                    padding: EdgeInsets.all(ScreenUtil().setWidth(5)),
+                    child: Icon(Icons.copy,color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),),
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 地址显示组件（支持 ENS）
+  Widget addressItemWidget(String title, String address) {
+    if (address.isEmpty) return const SizedBox.shrink();
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
+      alignment: Alignment.centerLeft,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              fontSize: ScreenUtil().setSp(28),
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(20)),
+          EnsAddressDisplay(
+            address: address,
+            coinType: widget.coinModel.coin['coinType'] ?? 'ETH',
+            style: EnsDisplayStyle.full,
+            showAvatar: true,
+            showCopy: true,
+            fontSize: ScreenUtil().setSp(28),
+          ),
+        ],
+      ),
+    );
+  }
+}

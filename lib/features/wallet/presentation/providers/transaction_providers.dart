@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:n42_wallet/src/wallet/provider/transaction_record_iterms_provider.dart';
+import 'package:n42_wallet/features/wallet/provider/transaction_record_iterms_provider.dart';
 
 /// Global TRIP instance shared between legacy code and Riverpod.
 /// Initialized in main() before runApp().

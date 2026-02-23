@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/api_keys_config.dart';
-import 'package:n42_wallet/src/wallet/api/chain_api/eth_api.dart';
-import 'package:n42_wallet/src/wallet/api/chain_api/sol_api.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/sol_api.dart';
 
 import 'discovered_token.dart';
 

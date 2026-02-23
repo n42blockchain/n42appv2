@@ -6,7 +6,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:n42_wallet/features/mining/domain/entities/mining_entity.dart';
-import 'package:n42_wallet/src/mining_v2/provider/mining_v2_provider.dart';
+import 'package:n42_wallet/features/mining_v2/provider/mining_v2_provider.dart';
 
 /// Global MiningV2Provider instance shared between legacy code and Riverpod.
 /// Initialized in main() before runApp().

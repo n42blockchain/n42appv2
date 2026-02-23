@@ -17,7 +17,7 @@ import 'package:n42_wallet/shared/domain/services/mining_service_interface.dart'
 import 'package:n42_wallet/features/wallet/data/services/wallet_service_impl.dart';
 import 'package:n42_wallet/features/mining/data/services/mining_service_impl.dart';
 import 'package:n42_wallet/features/chat/data/services/chat_crypto_service_impl.dart';
-import 'package:n42_wallet/src/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 
 /// Dependency Injection Container
 final GetIt getIt = GetIt.instance;

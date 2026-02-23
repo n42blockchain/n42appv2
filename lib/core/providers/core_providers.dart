@@ -17,10 +17,10 @@ import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/utils/theme_mode_utils.dart';
 import 'package:n42_wallet/data/models/user_info.dart';
 import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
-import 'package:n42_wallet/src/component/enums/load.dart';
-import 'package:n42_wallet/src/http/ipfs_api.dart';
-import 'package:n42_wallet/src/login/api/user_info_api.dart';
-import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/features/component/enums/load.dart';
+import 'package:n42_wallet/core/network/ipfs_api.dart';
+import 'package:n42_wallet/features/login/api/user_info_api.dart';
+import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_chat/n42_chat.dart';
 
 /// SPUtil Provider

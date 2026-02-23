@@ -13,7 +13,7 @@ import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
 import 'package:n42_wallet/shared/domain/services/auth_service_interface.dart';
-import 'package:n42_wallet/src/home/widgets/face_recognition_public.dart';
+import 'package:n42_wallet/features/home/widgets/face_recognition_public.dart';
 
 /// Implementation of IAuthService
 @LazySingleton(as: IAuthService)

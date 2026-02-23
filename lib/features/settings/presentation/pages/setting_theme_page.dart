@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/constants/app_colors.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 
 /// Theme options configuration
 const _themeConfigs = <(ThemeMode, String, Color, Color)>[

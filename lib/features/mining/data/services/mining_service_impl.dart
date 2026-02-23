@@ -12,7 +12,7 @@ import 'package:n42_wallet/shared/domain/services/wallet_service_interface.dart'
 import 'package:n42_wallet/shared/di/service_locator.dart';
 import 'package:n42_wallet/shared/events/event_manager.dart';
 import 'package:n42_wallet/shared/events/cross_feature_events.dart';
-import 'package:n42_wallet/src/mining_v2/provider/mining_v2_provider.dart';
+import 'package:n42_wallet/features/mining_v2/provider/mining_v2_provider.dart';
 
 /// Mining Service Implementation
 ///
