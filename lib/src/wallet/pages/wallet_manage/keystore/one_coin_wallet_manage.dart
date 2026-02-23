@@ -9,7 +9,7 @@ import 'package:n42_wallet/src/wallet/models/coin_model.dart';
 import 'package:n42_wallet/src/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/src/wallet/pages/wallet_manage/keystore/export_keystore_desc.dart';
 import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/src/widgets/button_widget.dart';
 import 'package:n42_wallet/src/widgets/comm_input.dart';

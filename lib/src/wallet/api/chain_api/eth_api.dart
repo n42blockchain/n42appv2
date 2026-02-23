@@ -7,7 +7,7 @@ import 'package:n42_wallet/core/utils/result.dart';
 import 'package:n42_wallet/src/http/base_api.dart';
 import 'package:n42_wallet/src/http/request_url.dart';
 import 'package:n42_wallet/src/models/message_model.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_1559.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/chain_eip1559.dart';
 import 'package:web3dart/web3dart.dart';
 
 class EthAPI{

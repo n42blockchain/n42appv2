@@ -17,9 +17,9 @@ import 'package:n42_wallet/src/wallet/pages/ast_swap/swap_ast_select_chain.dart'
 import 'package:n42_wallet/src/wallet/pages/ast_swap/swap_ast_summary.dart';
 import 'package:n42_wallet/src/wallet/pages/ast_swap/swap_ast_transactions.dart';
 import 'package:n42_wallet/src/wallet/provider/wallet_action_provider.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_1559.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
-import 'package:n42_wallet/src/wallet/utils/coin_gas.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/chain_eip1559.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
+import 'package:n42_wallet/src/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/src/wallet/widgets/arlert_widget.dart';
 import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/src/widgets/button_widget.dart';

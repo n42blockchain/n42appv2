@@ -22,8 +22,8 @@ import 'package:n42_wallet/src/wallet/api/chain_api/xrp_api.dart';
 import 'package:n42_wallet/src/wallet/api/chain_api/xtz_api.dart';
 import 'package:n42_wallet/src/wallet/api/chain_api/zil_api.dart';
 import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_1559.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/chain_eip1559.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 

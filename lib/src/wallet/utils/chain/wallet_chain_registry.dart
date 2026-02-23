@@ -1,15 +1,15 @@
 //walletList中使用
 import 'package:decimal/decimal.dart';
 import 'package:wallet/wallet.dart';
-import 'chain_util_data_part1.dart';
-import 'chain_util_data_part2.dart';
+import 'configs/wallet_chain_configs_part1.dart';
+import 'configs/wallet_chain_configs_part2.dart';
 
 /// 默认钱包链配置
 /// 排序原则：N42主链放首位，其余按知名度和常用程度排列
 /// 2026年调整：移除OKT、ZIL等低知名度链，添加ARB、OP、AVAX、MATIC、TON等热门链
 Map<String,dynamic> chainUrlMap={
-  ...chainUrlDataPart1,
-  ...chainUrlDataPart2,
+  ...walletChainConfigsPart1,
+  ...walletChainConfigsPart2,
 };
 
 //根据 index和默认path 返回新path

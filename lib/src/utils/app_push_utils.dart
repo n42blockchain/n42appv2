@@ -16,7 +16,7 @@ import 'package:n42_wallet/data/models/device_login_info.dart';
 import 'package:n42_wallet/src/utils/device_info_util.dart';
 import 'package:n42_wallet/src/login/pages/login_page.dart';
 import 'package:n42_wallet/src/notification/pages/message_info.dart';
-import 'package:n42_wallet/src/wallet/utils/browser_txhash.dart';
+import 'package:n42_wallet/src/wallet/utils/browser/browser_txhash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:n42_chat/n42_chat.dart' show FirebasePushService, N42Chat;

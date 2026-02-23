@@ -12,7 +12,7 @@ import 'package:n42_wallet/src/bridge/pages/bridge_select_chain_page.dart';
 import 'package:n42_wallet/src/bridge/pages/bridge_history_page.dart';
 import 'package:n42_wallet/src/bridge/provider/bridge_provider.dart';
 import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/src/widgets/button_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

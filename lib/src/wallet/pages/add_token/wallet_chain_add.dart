@@ -6,7 +6,7 @@ import 'package:n42_wallet/src/utils/regular.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/src/wallet/api/chain_api/eth_api.dart';
-import 'package:n42_wallet/src/wallet/utils/all_chain.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/chain_url_registry.dart';
 import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/src/widgets/button_widget.dart';
 import 'package:n42_wallet/src/widgets/dialog_widget/tips_dialog_2.dart';

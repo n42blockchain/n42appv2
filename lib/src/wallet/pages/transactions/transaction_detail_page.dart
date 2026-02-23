@@ -1,7 +1,7 @@
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/src/browser/pages/browser_page.dart';
-import 'package:n42_wallet/src/wallet/utils/browser_txhash.dart';
+import 'package:n42_wallet/src/wallet/utils/browser/browser_txhash.dart';
 import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/src/wallet/widgets/ens_address_display.dart';
 import 'package:flutter/material.dart';

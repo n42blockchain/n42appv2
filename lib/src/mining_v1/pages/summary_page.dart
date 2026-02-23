@@ -14,7 +14,7 @@ import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/src/utils/toast_utils.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/src/widgets/chart_histogram.dart';
 import 'package:n42_wallet/src/widgets/detail_refresh_widget.dart';
 import 'package:n42_wallet/src/widgets/empty.dart';

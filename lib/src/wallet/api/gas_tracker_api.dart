@@ -6,9 +6,9 @@
 import 'package:n42_wallet/src/http/base_api.dart';
 import 'package:n42_wallet/src/models/message_model.dart';
 import 'package:n42_wallet/src/wallet/models/gas_estimate_model.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_1559.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
-import 'package:n42_wallet/src/wallet/utils/coin_gas.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/chain_eip1559.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
+import 'package:n42_wallet/src/wallet/utils/transaction/coin_gas.dart';
 
 /// Gas 追踪和估算 API
 ///

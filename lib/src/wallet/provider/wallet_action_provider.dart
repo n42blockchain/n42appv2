@@ -21,7 +21,7 @@ import 'package:n42_wallet/src/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/src/wallet/models/aggregated_token.dart';
 import 'package:n42_wallet/src/wallet/models/aggregated_coin_model.dart';
 import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:decimal/decimal.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:flutter/cupertino.dart';

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:n42_wallet/src/browser/pages/browser_page.dart';
-import 'package:n42_wallet/src/wallet/utils/browser_txhash.dart';
+import 'package:n42_wallet/src/wallet/utils/browser/browser_txhash.dart';
 import 'package:n42_wallet/src/component/enums/load.dart';
 import 'package:n42_wallet/src/models/message_model.dart';
 import 'package:n42_wallet/src/sqlite/app_database.dart';
@@ -12,7 +12,7 @@ import 'package:n42_wallet/src/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/src/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/src/wallet/models/coin_model.dart';
 import 'package:n42_wallet/src/wallet/models/transation_record_model.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/src/widgets/empty.dart';
 import 'package:n42_wallet/src/widgets/prompt_widget.dart';

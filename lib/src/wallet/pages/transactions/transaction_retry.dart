@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:n42_wallet/src/browser/pages/browser_page.dart';
-import 'package:n42_wallet/src/wallet/utils/browser_txhash.dart';
+import 'package:n42_wallet/src/wallet/utils/browser/browser_txhash.dart';
 
 import 'package:n42_wallet/src/component/enums/coin_type.dart';
 import 'package:n42_wallet/src/component/enums/load.dart';
@@ -16,8 +16,8 @@ import 'package:n42_wallet/src/wallet/api/transfer_api.dart';
 import 'package:n42_wallet/src/wallet/models/coin_model.dart';
 import 'package:n42_wallet/src/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/src/wallet/pages/send/wallet_base_send.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
-import 'package:n42_wallet/src/wallet/utils/coin_gas.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
+import 'package:n42_wallet/src/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/src/widgets/button_widget.dart';
 import 'package:n42_wallet/src/widgets/empty.dart';

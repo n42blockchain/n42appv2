@@ -10,7 +10,7 @@ import 'package:n42_wallet/src/component/enums/coin_type.dart';
 import 'package:n42_wallet/src/models/message_model.dart';
 import 'package:n42_wallet/src/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/src/wallet/api/chain_api/trx_api.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_1559.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/chain_eip1559.dart';
 import 'package:web3dart/web3dart.dart';
 
 import 'token_api_base.dart';

@@ -11,7 +11,7 @@ import 'package:n42_wallet/src/models/message_model.dart';
 import 'package:n42_wallet/src/news/news_page.dart';
 import 'package:n42_wallet/src/notification/pages/message_info.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-import 'package:n42_wallet/src/wallet/utils/browser_txhash.dart';
+import 'package:n42_wallet/src/wallet/utils/browser/browser_txhash.dart';
 import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/src/widgets/base_list.dart';
 import 'package:cached_network_image/cached_network_image.dart';

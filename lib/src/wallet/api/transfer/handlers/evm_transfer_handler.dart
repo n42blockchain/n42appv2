@@ -12,9 +12,9 @@ import 'package:n42_wallet/src/component/enums/coin_type.dart';
 import 'package:n42_wallet/src/models/message_model.dart';
 import 'package:n42_wallet/src/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_1559.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
-import 'package:n42_wallet/src/wallet/utils/coin_gas.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/chain_eip1559.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
+import 'package:n42_wallet/src/wallet/utils/transaction/coin_gas.dart';
 
 import '../transfer_handler.dart';
 import 'base_transfer_handler.dart';

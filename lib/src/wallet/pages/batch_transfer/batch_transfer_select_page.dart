@@ -12,7 +12,7 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/src/wallet/models/coin_model.dart';
 import 'package:n42_wallet/src/wallet/pages/batch_transfer/batch_transfer_page.dart';
 import 'package:n42_wallet/src/wallet/provider/batch_transfer_provider.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 
 /// 批量转账代币选择页面

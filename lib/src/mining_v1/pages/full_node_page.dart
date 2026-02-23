@@ -22,7 +22,7 @@ import 'package:n42_wallet/src/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
 import 'package:n42_wallet/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/src/widgets/button_widget.dart';
 import 'package:n42_wallet/src/widgets/dialog_widget/tips_dialog_7.dart';

@@ -10,7 +10,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/src/wallet/api/gas_tracker_api.dart';
 import 'package:n42_wallet/src/wallet/models/gas_estimate_model.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
 
 /// Gas 选择器组件
 ///

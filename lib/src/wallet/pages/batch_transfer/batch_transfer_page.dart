@@ -15,7 +15,7 @@ import 'package:n42_wallet/src/wallet/models/batch_transfer_model.dart';
 import 'package:n42_wallet/src/wallet/provider/batch_transfer_provider.dart';
 import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
 import 'package:n42_wallet/src/wallet/pages/batch_transfer/csv_import_page.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 

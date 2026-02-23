@@ -8,7 +8,7 @@ import 'package:n42_wallet/core/di/service_locator_setup.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/src/wallet/models/coin_model.dart';
 import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/src/wallet_connect/widgets/wallet_connect_alert_widget.dart';
 import 'package:n42_wallet/src/widgets/sheet_bottom.dart';

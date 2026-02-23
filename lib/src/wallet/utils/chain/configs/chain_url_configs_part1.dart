@@ -1,6 +1,6 @@
 import 'package:n42_wallet/src/component/enums/coin_type.dart';
 
-final Map<String, dynamic> chainDataPart1 = <String, dynamic>{
+final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
   CoinType.N.name:<String,dynamic>{
     "showList":true,//主链币是否显示在主页列表中
     "isTest":false,//是否时正式链

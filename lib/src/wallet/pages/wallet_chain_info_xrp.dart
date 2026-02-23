@@ -31,9 +31,9 @@ import 'package:n42_wallet/src/wallet/pages/transactions/transaction_history_lis
 import 'package:n42_wallet/src/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42_wallet/src/wallet/pages/wallet_receive_qr.dart';
 import 'package:n42_wallet/src/wallet/provider/wallet_action_provider.dart';
-import 'package:n42_wallet/src/wallet/utils/browser_address.dart';
-import 'package:n42_wallet/src/wallet/utils/browser_token_address.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/wallet/utils/browser/browser_address.dart';
+import 'package:n42_wallet/src/wallet/utils/browser/browser_token_address.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/src/wallet/widgets/wallet_chain_info_board.dart';
 import 'package:n42_wallet/src/wallet/widgets/wallet_chain_info_transactions_item.dart';
 import 'package:n42_wallet/src/widgets/app_bar_widget.dart';

@@ -10,7 +10,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/src/wallet/api/gas_tracker_api.dart';
 import 'package:n42_wallet/src/wallet/models/non_evm_fee_model.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
 
 // ─── 紧凑费用行（用于发送页面，统一非 EVM 链的手续费展示）──────────────────
 

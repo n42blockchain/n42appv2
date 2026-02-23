@@ -15,8 +15,8 @@ import 'package:n42_wallet/src/wallet/pages/address_book/address_book_list.dart'
 import 'package:n42_wallet/src/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
 import 'package:n42_wallet/src/wallet/provider/wallet_action_provider.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
-import 'package:n42_wallet/src/wallet/utils/coin_gas.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
+import 'package:n42_wallet/src/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/src/widgets/button_widget.dart';
 import 'package:n42_wallet/src/widgets/container_widget.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/src/wallet/models/coin_model_wallet_access.dart';
 import 'package:n42_wallet/src/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:intl/intl.dart';
 import 'package:decimal/decimal.dart';
 class CoinModel {

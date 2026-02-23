@@ -13,7 +13,7 @@ import 'package:n42_wallet/shared/domain/services/wallet_service_interface.dart'
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/src/component/enums/coin_type.dart';
 import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
 
 /// Implementation of IWalletService using Riverpod
 ///

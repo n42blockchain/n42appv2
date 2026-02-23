@@ -8,7 +8,7 @@ import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/src/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
 import 'package:n42_wallet/src/wallet/provider/wallet_action_provider.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 

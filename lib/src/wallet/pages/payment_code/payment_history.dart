@@ -5,7 +5,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/src/login/api/user_info_api.dart';
 import 'package:n42_wallet/src/models/message_model.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-import 'package:n42_wallet/src/wallet/utils/browser_txhash.dart';
+import 'package:n42_wallet/src/wallet/utils/browser/browser_txhash.dart';
 import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/src/widgets/empty.dart';
 import 'package:flutter/material.dart';

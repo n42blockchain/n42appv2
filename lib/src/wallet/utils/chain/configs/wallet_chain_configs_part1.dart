@@ -1,7 +1,7 @@
 //walletList中使用 - Part 1: N, BTC, ETH, SOL, BNB, ARB, OP, BASE, AVAX, MATIC, TON, TRX, XRP, ATOM, DOT, FIL, SUI, APT
 import 'package:n42_wallet/src/component/enums/coin_type.dart';
 
-Map<String,dynamic> chainUrlDataPart1={
+Map<String,dynamic> walletChainConfigsPart1={
   CoinType.N.name:<String,dynamic>{
     "showList":true,//主链币是否显示在主页列表中
     "isTest":true,//是否时正式链

@@ -1,7 +1,7 @@
 //walletList中使用 - Part 2: ALGO, XTZ, LTC, DOGE, ETC, FTM, CRO, KLAY, ZKSYNC, LINEA, SCROLL, MNT, BLAST, NEAR, ZIL, GNOSIS, NOVA
 import 'package:n42_wallet/src/component/enums/coin_type.dart';
 
-Map<String,dynamic> chainUrlDataPart2={
+Map<String,dynamic> walletChainConfigsPart2={
   CoinType.ALGO.name:{
     "showList":true,
     "isTest":false,

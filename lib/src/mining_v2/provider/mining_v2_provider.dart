@@ -20,7 +20,7 @@ import 'package:n42_wallet/src/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/src/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
 import 'package:n42_wallet/src/wallet/provider/wallet_action_provider.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/src/widgets/chart_histogram.dart';

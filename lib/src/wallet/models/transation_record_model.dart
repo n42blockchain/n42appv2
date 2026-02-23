@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:n42_wallet/core/app/app_globals.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:date_format/date_format.dart' as dformat;
 
 class TransationRecordModel{

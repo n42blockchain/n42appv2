@@ -20,7 +20,7 @@ import 'package:n42_wallet/src/wallet/aa/account/smart_account_factory.dart';
 import 'package:n42_wallet/src/wallet/aa/bundler/bundler_client.dart';
 import 'package:n42_wallet/src/wallet/aa/utils/user_op_hash.dart';
 import 'package:n42_wallet/src/wallet/api/chain_api/eth_api.dart';
-import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:web3dart/web3dart.dart';
 
 import '../transfer_handler.dart';

@@ -1,6 +1,6 @@
 import 'package:n42_wallet/src/component/enums/coin_type.dart';
 
-final Map<String, dynamic> chainDataPart5 = <String, dynamic>{
+final Map<String, dynamic> chainUrlConfigsPart5 = <String, dynamic>{
   CoinType.WORLD.name: <String,dynamic>{
     "isTest": false,
     "supportTest": false,

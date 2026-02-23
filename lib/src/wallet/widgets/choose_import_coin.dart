@@ -1,6 +1,6 @@
 import 'package:n42_wallet/src/component/enums/coin_type.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-import 'package:n42_wallet/src/wallet/utils/all_chain.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/chain_url_registry.dart';
 import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/src/widgets/empty.dart';
 import 'package:n42_wallet/src/widgets/image_network.dart';

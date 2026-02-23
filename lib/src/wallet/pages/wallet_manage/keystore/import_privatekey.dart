@@ -9,7 +9,7 @@ import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/src/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/src/wallet/pages/create_wallet/create_password.dart';
 import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
-import 'package:n42_wallet/src/wallet/utils/all_chain.dart';
+import 'package:n42_wallet/src/wallet/utils/chain/chain_url_registry.dart';
 import 'package:n42_wallet/src/wallet/widgets/choose_import_coin.dart';
 import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/src/widgets/button_widget.dart';

@@ -10,7 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/src/wallet/services/ens_service.dart';
-import 'package:n42_wallet/src/wallet/utils/address_validator.dart';
+import 'package:n42_wallet/src/wallet/utils/validation/address_validator.dart';
 
 /// ENS 解析状态
 enum EnsResolveStatus {
