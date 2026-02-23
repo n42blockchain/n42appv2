@@ -1862,5 +1862,29 @@
     "placeholders": {
       "value": {"type": "String"}
     }
-  }
+  },
+  "g_key_dex_min_received": "Min. Received",
+  "g_key_dex_slippage_label": "Max Slippage",
+  "g_key_dex_quote_expires": "Quote expires in {secs}s",
+  "@g_key_dex_quote_expires": {
+    "placeholders": {
+      "secs": {"type": "String"}
+    }
+  },
+  "g_key_dex_price_impact_high": "High price impact ({impact})! Proceed with caution.",
+  "@g_key_dex_price_impact_high": {
+    "placeholders": {
+      "impact": {"type": "String"}
+    }
+  },
+  "g_key_dex_approve_required": "Approve {token} to continue",
+  "@g_key_dex_approve_required": {
+    "placeholders": {
+      "token": {"type": "String"}
+    }
+  },
+  "g_key_dex_approving": "Approving…",
+  "g_key_dex_approval_success": "Approved! Tap Swap to continue.",
+  "g_key_dex_sol_note": "Solana swap: sign the transaction in your Solana wallet.",
+  "g_key_dex_quote_refreshed": "Quote refreshed"
 }

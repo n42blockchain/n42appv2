@@ -1,6 +1,7 @@
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
+import 'package:n42appv2/src/wallet/api/chain_api/eth_api.dart';
 
 class DexSwapApi {
   late final String _base;
@@ -35,6 +36,10 @@ class DexSwapApi {
   }
 
   /// POST /v1/dex/quote
+  ///
+  /// [slippageBps] is baked into the returned [calldata] and determines the
+  /// minimum output the router will accept on-chain.  Changing it after the
+  /// fact has no effect, so always pass the user's current setting.
   Future<MessageModel> getQuote({
     required String chain,
     required String tokenIn,
@@ -116,4 +121,76 @@ class DexSwapApi {
       return mm;
     }
   }
+
+  // ── ERC-20 approval helpers ───────────────────────────────────────────────
+
+  /// Check current ERC-20 token allowance via `eth_call`.
+  ///
+  /// Returns the allowance as [BigInt], or [BigInt.zero] on any error.
+  ///
+  /// [coinType]   — app-internal coin type (ETH, BNB, MATIC, ARB, OP, BASE…)
+  /// [tokenAddr]  — ERC-20 contract address
+  /// [owner]      — wallet address
+  /// [spender]    — router / spender address
+  static Future<BigInt> checkAllowance({
+    required String coinType,
+    required String tokenAddr,
+    required String owner,
+    required String spender,
+  }) async {
+    try {
+      // allowance(address owner, address spender) → uint256
+      // selector: 0xdd62ed3e
+      final ownerPadded = _pad32(owner);
+      final spenderPadded = _pad32(spender);
+      final data = '0xdd62ed3e$ownerPadded$spenderPadded';
+
+      final result = await EthAPI()
+          .baseRPCEth(
+            'eth_call',
+            [
+              {'to': tokenAddr, 'data': data},
+              'latest',
+            ],
+            coinType: coinType,
+            enableRetry: false,
+          )
+          .timeout(const Duration(seconds: 6));
+
+      if (result.isSuccess) {
+        final hex = result.valueOrNull?.toString() ?? '';
+        if (hex.startsWith('0x') && hex.length > 2) {
+          return BigInt.parse(hex.substring(2), radix: 16);
+        }
+      }
+      return BigInt.zero;
+    } catch (_) {
+      return BigInt.zero;
+    }
+  }
+
+  /// Build ERC-20 `approve(spender, amount)` calldata.
+  ///
+  /// Passing [amount] = null sets unlimited approval (uint256.max).
+  static String buildApproveCalldata(String spender, {BigInt? amount}) {
+    // approve(address,uint256) selector: 0x095ea7b3
+    final spenderPadded = _pad32(spender);
+    final amountHex = (amount ?? _maxUint256).toRadixString(16).padLeft(64, '0');
+    return '0x095ea7b3$spenderPadded$amountHex';
+  }
+
+  // ── Private helpers ───────────────────────────────────────────────────────
+
+  /// Pad an Ethereum address to a 32-byte (64 hex char) ABI word.
+  static String _pad32(String addr) {
+    final clean = addr.toLowerCase().startsWith('0x')
+        ? addr.substring(2).toLowerCase()
+        : addr.toLowerCase();
+    return clean.padLeft(64, '0');
+  }
+
+  static final BigInt _maxUint256 = BigInt.parse(
+    'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+    radix: 16,
+  );
 }

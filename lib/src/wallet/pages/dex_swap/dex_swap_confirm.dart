@@ -16,10 +16,6 @@ class DexSwapConfirm extends StatefulWidget {
 }
 
 class _DexSwapConfirmState extends State<DexSwapConfirm> {
-  // 可选滑点 (bps: 10=0.1%, 50=0.5%, 100=1%)
-  static const List<int> _slippageOptions = [10, 50, 100];
-  int _slippageBps = 50;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,8 +30,6 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
         child: Column(
           children: [
             _summaryCard(),
-            SizedBox(height: ScreenUtil().setWidth(40)),
-            _slippageSelector(),
             const Expanded(child: SizedBox()),
             _actionRow(),
             SizedBox(height: ScreenUtil().setWidth(36)),
@@ -56,9 +50,13 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
       ),
       child: Column(
         children: [
-          _row(S.of(context).g_key_dex_you_pay, '${q.amountIn} ${q.tokenInSymbol}'),
-          _row(S.of(context).g_key_dex_you_receive, '${q.amountOut} ${q.tokenOutSymbol}'),
-          _row(S.of(context).g_key_dex_price_impact, q.priceImpact),
+          _row(S.of(context).g_key_dex_you_pay,
+              '${q.amountIn} ${q.tokenInSymbol}'),
+          _row(S.of(context).g_key_dex_you_receive,
+              '${q.amountOut} ${q.tokenOutSymbol}'),
+          _row(S.of(context).g_key_dex_min_received,
+              '${q.minAmountOut} ${q.tokenOutSymbol}'),
+          _priceImpactRow(q),
           _row(S.of(context).g_key_dex_gas_estimate, q.gasEstimate),
           _row(S.of(context).g_key_dex_best_source, q.source),
           _row(S.of(context).g_key_dex_chain, q.chain),
@@ -67,6 +65,7 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
     );
   }
 
+  /// Standard label/value row.
   Widget _row(String label, String value) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(14)),
@@ -94,66 +93,43 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
     );
   }
 
-  Widget _slippageSelector() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          S.of(context).g_key_dex_slippage,
-          style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name),
-            fontSize: ScreenUtil().setSp(26),
+  /// Price-impact row with color coding:
+  /// ≥ 3 % → red, ≥ 1 % → orange, otherwise normal text color.
+  Widget _priceImpactRow(DexQuoteModel q) {
+    final impact = q.priceImpactNum;
+    final Color valueColor;
+    if (impact >= 3.0) {
+      valueColor = Colors.red;
+    } else if (impact >= 1.0) {
+      valueColor = Colors.orange;
+    } else {
+      valueColor = AppThemeUtils.getColorByKey(
+          context, AppThemeKeys.mainTextColor.name);
+    }
+
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(14)),
+      child: Row(
+        children: [
+          Text(
+            S.of(context).g_key_dex_price_impact,
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              fontSize: ScreenUtil().setSp(28),
+            ),
           ),
-        ),
-        SizedBox(height: ScreenUtil().setWidth(16)),
-        Row(
-          children: _slippageOptions.map((bps) {
-            final selected = _slippageBps == bps;
-            return Expanded(
-              child: GestureDetector(
-                onTap: () => setState(() => _slippageBps = bps),
-                child: Container(
-                  margin:
-                      EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(8)),
-                  padding:
-                      EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
-                  decoration: BoxDecoration(
-                    color: selected
-                        ? AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainButtonBgColor.name)
-                        : AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.itemBgColor.name),
-                    borderRadius:
-                        BorderRadius.circular(ScreenUtil().setWidth(8)),
-                    border: Border.all(
-                      color: selected
-                          ? AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainButtonBgColor.name)
-                          : AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.dividerColor.name),
-                    ),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    '${bps / 100}%',
-                    style: TextStyle(
-                      color: selected
-                          ? AppThemeUtils.getColorByKey(context,
-                              AppThemeKeys.mainButtonTextColor.name)
-                          : AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(28),
-                      fontWeight:
-                          selected ? FontWeight.bold : FontWeight.normal,
-                    ),
-                  ),
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
+          const Expanded(child: SizedBox()),
+          Text(
+            q.priceImpact,
+            style: TextStyle(
+              color: valueColor,
+              fontSize: ScreenUtil().setSp(28),
+              fontWeight: impact >= 1.0 ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -184,7 +160,7 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
                       builder: (_) => WalletSecurityVerification()),
                 );
                 if (verified == true) {
-                  nav.pop(_slippageBps);
+                  nav.pop(true);
                 }
               },
               S.of(context).g_key_78,

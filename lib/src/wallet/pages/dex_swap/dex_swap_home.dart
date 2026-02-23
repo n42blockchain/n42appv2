@@ -22,15 +22,32 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 
-/// 支持链列表（显示标签 + 后端 chain 参数）
+// ── Supported chains ──────────────────────────────────────────────────────────
+
+/// DEX chain label → backend chain value → app-internal coinType for RPC calls.
 const List<Map<String, String>> _kSupportedChains = [
-  {'label': 'ETH', 'value': 'ETH'},
-  {'label': 'BSC', 'value': 'BSC'},
-  {'label': 'Polygon', 'value': 'POLYGON'},
-  {'label': 'ARB', 'value': 'ARB'},
-  {'label': 'OP', 'value': 'OP'},
-  {'label': 'SOL', 'value': 'SOL'},
+  {'label': 'ETH',     'value': 'ETH',     'coinType': 'ETH'},
+  {'label': 'BSC',     'value': 'BSC',     'coinType': 'BNB'},
+  {'label': 'Polygon', 'value': 'POLYGON', 'coinType': 'MATIC'},
+  {'label': 'ARB',     'value': 'ARB',     'coinType': 'ARB'},
+  {'label': 'OP',      'value': 'OP',      'coinType': 'OP'},
+  {'label': 'BASE',    'value': 'BASE',    'coinType': 'BASE'},
+  {'label': 'SOL',     'value': 'SOL',     'coinType': 'SOL'},
 ];
+
+/// Lookup coinType for a given DEX chain value.
+String _coinTypeForChain(String dexChain) {
+  return _kSupportedChains
+      .firstWhere(
+        (c) => c['value'] == dexChain,
+        orElse: () => {'coinType': dexChain},
+      )['coinType']!;
+}
+
+// ── Constants ─────────────────────────────────────────────────────────────────
+
+/// Seconds before a fetched quote is considered stale and auto-refreshed.
+const int _kQuoteTtlSeconds = 30;
 
 class DexSwapHome extends ConsumerStatefulWidget {
   const DexSwapHome({super.key});
@@ -43,49 +60,83 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   final DexSwapApi _dexApi = DexSwapApi();
   final TransferApi _transferApi = TransferApi();
   final TextEditingController _amountCtrl = TextEditingController();
-  Timer? _debounce;
 
+  Timer? _debounce;
+  Timer? _expiryTicker;
+
+  // ── Chain / token state ───────────────────────────────────────────────────
   String _chain = 'ETH';
   DexTokenModel? _tokenIn;
   DexTokenModel? _tokenOut;
+
+  // ── Quote state ───────────────────────────────────────────────────────────
   DexQuoteModel? _quote;
   Load _quoteLoad = Load.finish;
+  int _quoteSecsLeft = 0; // countdown to expiry
+
+  // ── Slippage (baked into quote calldata — must re-fetch on change) ────────
+  // Options: 10 = 0.1%, 50 = 0.5%, 100 = 1%, 200 = 2%
+  static const List<int> _slippageOptions = [10, 50, 100, 200];
+  int _slippageBps = 50;
+
+  // ── ERC-20 approval state ─────────────────────────────────────────────────
+  bool _needsApproval = false;
+  Load _approveLoad = Load.finish;
+
+  // ── Swap / error state ────────────────────────────────────────────────────
   Load _swapLoad = Load.finish;
   String _errorMsg = '';
 
-  // 用户 EVM 地址（用于获取报价）
-  String _userAddr = '';
+  // ── Wallet addresses by chain ─────────────────────────────────────────────
+  /// EVM 0x address (all EVM chains share the same key)
+  String _evmAddr = '';
+
+  /// Solana base58 address
+  String _solAddr = '';
+
+  String get _userAddr =>
+      _chain == 'SOL' ? _solAddr : _evmAddr;
+
+  // ── Lifecycle ─────────────────────────────────────────────────────────────
 
   @override
   void initState() {
     super.initState();
-    _initUserAddress();
+    _initAddresses();
     _amountCtrl.addListener(_onAmountChanged);
   }
 
   @override
   void dispose() {
-    _amountCtrl.dispose();
     _debounce?.cancel();
+    _expiryTicker?.cancel();
+    _amountCtrl.dispose();
     super.dispose();
   }
 
-  void _initUserAddress() {
-    // 从钱包 provider 中取出第一个 EVM 地址
+  // ── Address resolution ────────────────────────────────────────────────────
+
+  void _initAddresses() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       final WalletActionProvider wa = ref.read(wapBridgeProvider);
       for (final CoinModel cm in wa.coinModels) {
         final addr = cm.address ?? '';
-        if (addr.startsWith('0x')) {
-          setState(() => _userAddr = addr);
-          return;
+        if (addr.startsWith('0x') && _evmAddr.isEmpty) {
+          _evmAddr = addr;
+        } else if (!addr.startsWith('0x') && _solAddr.isEmpty) {
+          // Heuristic: non-0x, 32–44 chars → Solana base58
+          if (addr.length >= 32 && addr.length <= 44) {
+            _solAddr = addr;
+          }
         }
+        if (_evmAddr.isNotEmpty && _solAddr.isNotEmpty) break;
       }
-      // 非 EVM 链（Solana）使用 uuid 作为 fallback
-      setState(() => _userAddr = AppGlobals.userInfo?.uuid ?? '');
+      if (mounted) setState(() {});
     });
   }
+
+  // ── Amount / chain change ────────────────────────────────────────────────
 
   void _onChainChanged(String chain) {
     setState(() {
@@ -93,10 +144,12 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       _tokenIn = null;
       _tokenOut = null;
       _quote = null;
+      _needsApproval = false;
       _errorMsg = '';
+      _quoteSecsLeft = 0;
     });
+    _expiryTicker?.cancel();
     _amountCtrl.clear();
-    _initUserAddress();
   }
 
   void _onAmountChanged() {
@@ -112,22 +165,46 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
         setState(() {
           _quote = null;
           _errorMsg = '';
+          _quoteSecsLeft = 0;
         });
+        _expiryTicker?.cancel();
       }
     });
   }
 
+  // ── Slippage ──────────────────────────────────────────────────────────────
+
+  void _onSlippageChanged(int bps) {
+    if (_slippageBps == bps) return;
+    setState(() {
+      _slippageBps = bps;
+      _quote = null; // invalidate: calldata must be re-fetched with new bps
+      _needsApproval = false;
+      _quoteSecsLeft = 0;
+    });
+    _expiryTicker?.cancel();
+    // Re-fetch if amount + tokens are set
+    final amount = _amountCtrl.text.trim();
+    if (amount.isNotEmpty && amount != '0' && _tokenIn != null && _tokenOut != null) {
+      _fetchQuote(amount);
+    }
+  }
+
+  // ── Quote fetching ────────────────────────────────────────────────────────
+
   Future<void> _fetchQuote(String amountHuman) async {
     if (_tokenIn == null || _tokenOut == null || _userAddr.isEmpty) return;
 
-    // 将人类可读金额转换为最小单位字符串
     final BigInt amountWei = _toWei(amountHuman, _tokenIn!.decimals);
     if (amountWei == BigInt.zero) return;
 
+    _expiryTicker?.cancel();
     setState(() {
       _quoteLoad = Load.loading;
       _errorMsg = '';
       _quote = null;
+      _needsApproval = false;
+      _quoteSecsLeft = 0;
     });
 
     final MessageModel res = await _dexApi.getQuote(
@@ -136,6 +213,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       tokenOut: _tokenOut!.address,
       amountIn: amountWei.toString(),
       userAddr: _userAddr,
+      slippageBps: _slippageBps,
     );
     if (!mounted) return;
 
@@ -144,54 +222,136 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
         _quoteLoad = Load.finish;
         _errorMsg = res.data?.toString() ?? S.of(context).g_key_dex_quote_failed;
       });
-    } else {
-      final quote = DexQuoteModel.fromJson(res.data as Map<String, dynamic>);
-      setState(() {
-        _quoteLoad = Load.finish;
-        _quote = quote;
-      });
+      return;
     }
+
+    final quote = DexQuoteModel.fromJson(
+      res.data as Map<String, dynamic>,
+      slippageBps: _slippageBps,
+    );
+
+    // For EVM non-native tokens, check if approval is needed
+    final bool needsApprove = await _checkApprovalNeeded(amountWei, quote);
+
+    if (!mounted) return;
+    setState(() {
+      _quoteLoad = Load.finish;
+      _quote = quote;
+      _needsApproval = needsApprove;
+      _quoteSecsLeft = _kQuoteTtlSeconds;
+    });
+
+    _startExpiryTimer(amountHuman);
   }
 
-  BigInt _toWei(String amount, int decimals) {
-    try {
-      final double d = double.parse(amount);
-      if (d <= 0) return BigInt.zero;
-      final BigInt multiplier = BigInt.from(10).pow(decimals);
-      // 避免浮点精度问题：使用整数运算
-      final BigInt result =
-          BigInt.from((d * multiplier.toDouble()).round());
-      return result;
-    } catch (_) {
-      return BigInt.zero;
-    }
+  // ── Quote expiry timer ────────────────────────────────────────────────────
+
+  void _startExpiryTimer(String amountHuman) {
+    _expiryTicker = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (!mounted) {
+        _expiryTicker?.cancel();
+        return;
+      }
+      setState(() => _quoteSecsLeft--);
+      if (_quoteSecsLeft <= 0) {
+        _expiryTicker?.cancel();
+        // Auto-refresh
+        _fetchQuote(amountHuman);
+      }
+    });
   }
 
-  Future<void> _executeSwap(int slippageBps) async {
+  // ── ERC-20 approval check ─────────────────────────────────────────────────
+
+  /// Returns true if the token-in is an ERC-20 that needs approval.
+  Future<bool> _checkApprovalNeeded(
+      BigInt amountIn, DexQuoteModel quote) async {
+    // Native token (empty address or chain-native sentinel) → no approval
+    final tokenAddr = _tokenIn?.address ?? '';
+    if (tokenAddr.isEmpty || tokenAddr == '0x0000000000000000000000000000000000000000') {
+      return false;
+    }
+    // Solana: no ERC-20 approval concept
+    if (_chain == 'SOL') return false;
+
+    final coinType = _coinTypeForChain(_chain);
+    if (coinType.isEmpty || _userAddr.isEmpty || quote.routerAddr.isEmpty) {
+      return false;
+    }
+
+    final allowance = await DexSwapApi.checkAllowance(
+      coinType: coinType,
+      tokenAddr: tokenAddr,
+      owner: _userAddr,
+      spender: quote.routerAddr,
+    );
+    return allowance < amountIn;
+  }
+
+  // ── Approve ───────────────────────────────────────────────────────────────
+
+  Future<void> _executeApprove() async {
     final DexQuoteModel? q = _quote;
-    if (q == null) return;
-    if (_swapLoad == Load.loading) return;
+    if (q == null || _approveLoad == Load.loading) return;
+
+    setState(() {
+      _approveLoad = Load.loading;
+      _errorMsg = '';
+    });
+
+    final calldata =
+        DexSwapApi.buildApproveCalldata(q.routerAddr); // unlimited approval
+
+    final MessageModel txRes = await _transferApi.transfer(
+      _chain,
+      _tokenIn!.address, // approve on the token contract
+      0.0,
+      fromAddress: _userAddr,
+      contractAddress: '',
+      isTest: false,
+      message: calldata,
+    );
+    if (!mounted) return;
+
+    if (txRes.error) {
+      setState(() {
+        _approveLoad = Load.finish;
+        _errorMsg = txRes.data?.toString() ?? S.of(context).g_key_dex_tx_failed;
+      });
+      return;
+    }
+
+    setState(() {
+      _approveLoad = Load.finish;
+      _needsApproval = false;
+      _errorMsg = '';
+    });
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(S.of(context).g_key_dex_approval_success),
+          backgroundColor: const Color(0xFF4CAF50),
+        ),
+      );
+    }
+  }
+
+  // ── Swap execution ────────────────────────────────────────────────────────
+
+  Future<void> _executeSwap() async {
+    final DexQuoteModel? q = _quote;
+    if (q == null || _swapLoad == Load.loading) return;
 
     setState(() {
       _swapLoad = Load.loading;
       _errorMsg = '';
     });
 
-    // Solana：calldata 是 base64 序列化 tx，暂不支持 in-app 广播
-    if (_chain == 'SOL') {
-      setState(() {
-        _swapLoad = Load.finish;
-        _errorMsg = S.of(context).g_key_dex_sol_unsupported;
-      });
-      return;
-    }
-
-    // EVM：通过 TransferApi.transfer 广播 calldata
-    // message 参数会设置为 EVM 交易的 data 字段
     final MessageModel txRes = await _transferApi.transfer(
       _tokenIn?.chain ?? _chain,
       q.routerAddr,
-      0.0, // 纯代币兑换时 ETH value = 0
+      0.0, // ERC-20 swap: ETH value = 0
       fromAddress: _userAddr,
       contractAddress: '',
       isTest: false,
@@ -208,18 +368,15 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     }
 
     final String txHash = txRes.data['txHash'] as String? ?? '';
-
-    // 广播成功后通知后端 commit
-    await _dexApi.commit(
-      AppGlobals.userInfo?.uuid ?? '',
-      q.orderId,
-      txHash,
-    );
+    await _dexApi.commit(AppGlobals.userInfo?.uuid ?? '', q.orderId, txHash);
     if (!mounted) return;
 
+    _expiryTicker?.cancel();
     setState(() {
       _swapLoad = Load.finish;
       _quote = null;
+      _needsApproval = false;
+      _quoteSecsLeft = 0;
     });
     _amountCtrl.clear();
 
@@ -228,11 +385,55 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     );
   }
 
+  // ── Amount conversion (pure BigInt — no float precision loss) ────────────
+
+  /// Convert a human-readable decimal amount string to wei (smallest unit).
+  ///
+  /// Uses pure integer arithmetic to avoid double precision issues.
+  /// e.g. "1.23456789012345678" with 18 decimals → correct BigInt
+  static BigInt _toWei(String amount, int decimals) {
+    try {
+      final trimmed = amount.trim();
+      if (trimmed.isEmpty) return BigInt.zero;
+
+      final dotIdx = trimmed.indexOf('.');
+      final String intStr;
+      String fracStr;
+
+      if (dotIdx == -1) {
+        intStr = trimmed;
+        fracStr = '';
+      } else {
+        intStr = trimmed.substring(0, dotIdx);
+        fracStr = trimmed.substring(dotIdx + 1);
+      }
+
+      // Trim or pad fractional part to exactly [decimals] digits
+      if (fracStr.length > decimals) {
+        fracStr = fracStr.substring(0, decimals); // truncate
+      } else {
+        fracStr = fracStr.padRight(decimals, '0'); // pad with zeros
+      }
+
+      final intPart = BigInt.parse(intStr.isEmpty ? '0' : intStr);
+      final fracPart = BigInt.parse(fracStr.isEmpty ? '0' : fracStr);
+      final multiplier = BigInt.from(10).pow(decimals);
+
+      final result = intPart * multiplier + fracPart;
+      return result > BigInt.zero ? result : BigInt.zero;
+    } catch (_) {
+      return BigInt.zero;
+    }
+  }
+
+  // ── Build ─────────────────────────────────────────────────────────────────
+
   @override
   Widget build(BuildContext context) {
+    final s = S.of(context);
     return Scaffold(
       appBar: AppBarWidget(
-        text: S.of(context).g_key_earn_dex_swap,
+        text: s.g_key_earn_dex_swap,
         actions: [
           InkWell(
             onTap: () => Navigator.push(
@@ -258,6 +459,8 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _chainChips(),
+              SizedBox(height: ScreenUtil().setWidth(16)),
+              _slippageRow(),
               SizedBox(height: ScreenUtil().setWidth(24)),
               _tokenInRow(),
               SizedBox(height: ScreenUtil().setWidth(16)),
@@ -277,7 +480,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
                 _quoteCard(_quote!),
               ],
               SizedBox(height: ScreenUtil().setWidth(40)),
-              _swapButton(),
+              _actionButtons(),
             ],
           ),
         ),
@@ -285,9 +488,12 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     );
   }
 
+  // ── Chain chips ───────────────────────────────────────────────────────────
+
   Widget _chainChips() {
     return Wrap(
       spacing: ScreenUtil().setWidth(12),
+      runSpacing: ScreenUtil().setWidth(8),
       children: _kSupportedChains.map((c) {
         final bool selected = c['value'] == _chain;
         return ChoiceChip(
@@ -311,6 +517,69 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     );
   }
 
+  // ── Slippage selector ─────────────────────────────────────────────────────
+
+  Widget _slippageRow() {
+    final s = S.of(context);
+    return Row(
+      children: [
+        Text(
+          s.g_key_dex_slippage_label,
+          style: TextStyle(
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.itemSubtitleTextColor.name),
+            fontSize: ScreenUtil().setSp(24),
+          ),
+        ),
+        SizedBox(width: ScreenUtil().setWidth(16)),
+        ..._slippageOptions.map((bps) {
+          final selected = _slippageBps == bps;
+          return GestureDetector(
+            onTap: () => _onSlippageChanged(bps),
+            child: Container(
+              margin: EdgeInsets.only(right: ScreenUtil().setWidth(8)),
+              padding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(16),
+                vertical: ScreenUtil().setWidth(6),
+              ),
+              decoration: BoxDecoration(
+                color: selected
+                    ? AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.mainButtonBgColor.name)
+                    : AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.itemBgColor.name),
+                borderRadius:
+                    BorderRadius.circular(ScreenUtil().setWidth(6)),
+                border: Border.all(
+                  color: selected
+                      ? AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.mainButtonBgColor.name)
+                      : AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.dividerColor.name),
+                ),
+              ),
+              child: Text(
+                '${(bps / 100).toStringAsFixed(bps % 100 == 0 ? 0 : 1)}%',
+                style: TextStyle(
+                  color: selected
+                      ? AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.mainButtonTextColor.name)
+                      : AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.mainTextColor.name),
+                  fontSize: ScreenUtil().setSp(22),
+                  fontWeight:
+                      selected ? FontWeight.w600 : FontWeight.normal,
+                ),
+              ),
+            ),
+          );
+        }),
+      ],
+    );
+  }
+
+  // ── Token rows ────────────────────────────────────────────────────────────
+
   Widget _tokenInRow() {
     return _tokenRow(
       label: S.of(context).g_swap_key_3,
@@ -319,13 +588,13 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       onTokenTap: () async {
         final DexTokenModel? result = await Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (_) => DexTokenSelect(chain: _chain)),
+          MaterialPageRoute(builder: (_) => DexTokenSelect(chain: _chain)),
         );
         if (result != null) {
           setState(() {
             _tokenIn = result;
             _quote = null;
+            _needsApproval = false;
           });
           _onAmountChanged();
         }
@@ -342,8 +611,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       onTokenTap: () async {
         final DexTokenModel? result = await Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (_) => DexTokenSelect(chain: _chain)),
+          MaterialPageRoute(builder: (_) => DexTokenSelect(chain: _chain)),
         );
         if (result != null) {
           setState(() {
@@ -366,8 +634,8 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
-        color:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor4.name),
+        color: AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.itemBgColor4.name),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: Column(
@@ -393,8 +661,8 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
                               context, AppThemeKeys.itemTextColor.name),
                           fontSize: ScreenUtil().setSp(44),
                         ),
-                        keyboardType:
-                            const TextInputType.numberWithOptions(decimal: true),
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
                         decoration: InputDecoration(
                           hintText: '0.00',
                           hintStyle: TextStyle(
@@ -432,7 +700,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (token != null)
+                      if (token != null) ...[
                         SizedBox(
                           width: ScreenUtil().setWidth(36),
                           height: ScreenUtil().setWidth(36),
@@ -441,10 +709,11 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
                             placeholder: 'assets/img/list_default.png',
                           ),
                         ),
-                      if (token != null)
                         SizedBox(width: ScreenUtil().setWidth(8)),
+                      ],
                       Text(
-                        token?.symbol ?? S.of(context).g_key_dex_select_token,
+                        token?.symbol ??
+                            S.of(context).g_key_dex_select_token,
                         style: TextStyle(
                           color: AppThemeUtils.getColorByKey(
                               context, AppThemeKeys.mainBlueColor.name),
@@ -470,16 +739,19 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     );
   }
 
+  // ── Swap arrow ────────────────────────────────────────────────────────────
+
   Widget _swapArrow() {
     return Center(
       child: GestureDetector(
         onTap: () {
-          if (_tokenIn != null && _tokenOut != null) {
+          if (_tokenIn != null || _tokenOut != null) {
             setState(() {
               final tmp = _tokenIn;
               _tokenIn = _tokenOut;
               _tokenOut = tmp;
               _quote = null;
+              _needsApproval = false;
             });
             _onAmountChanged();
           }
@@ -502,25 +774,126 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     );
   }
 
+  // ── Quote card ────────────────────────────────────────────────────────────
+
   Widget _quoteCard(DexQuoteModel q) {
+    final s = S.of(context);
+    final double impactNum = q.priceImpactNum;
+    final Color impactColor = impactNum >= 3.0
+        ? const Color(0xFFF44336)    // red ≥ 3 %
+        : impactNum >= 1.0
+            ? const Color(0xFFFF9800) // orange 1–3 %
+            : AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.mainTextColor.name);
+
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
-        color:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.itemBgColor.name),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: Column(
         children: [
-          _quoteRow(S.of(context).g_key_dex_best_route, q.source),
-          _quoteRow(S.of(context).g_key_dex_price_impact, q.priceImpact),
-          _quoteRow(S.of(context).g_key_dex_gas_estimate, q.gasEstimate),
+          // Route + countdown in same row
+          _quoteRowWidget(
+            s.g_key_dex_best_route,
+            q.source,
+            trailing: _quoteSecsLeft > 0
+                ? Text(
+                    s.g_key_dex_quote_expires(_quoteSecsLeft.toString()),
+                    style: TextStyle(
+                      color: _quoteSecsLeft <= 10
+                          ? const Color(0xFFF44336)
+                          : AppThemeUtils.getColorByKey(
+                              context, AppThemeKeys.ff888888.name),
+                      fontSize: ScreenUtil().setSp(22),
+                    ),
+                  )
+                : null,
+          ),
+          // Price impact with color coding
+          _quoteRowWidget(
+            s.g_key_dex_price_impact,
+            q.priceImpact,
+            valueColor: impactColor,
+          ),
+          _quoteRow(s.g_key_dex_gas_estimate, q.gasEstimate),
+          // Minimum received
+          _quoteRow(s.g_key_dex_min_received,
+              '${q.minAmountOut} ${q.tokenOutSymbol}'),
+          // High impact warning
+          if (impactNum >= 3.0) ...[
+            SizedBox(height: ScreenUtil().setWidth(8)),
+            Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(12),
+                vertical: ScreenUtil().setWidth(8),
+              ),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF44336).withAlpha(20),
+                borderRadius:
+                    BorderRadius.circular(ScreenUtil().setWidth(8)),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.warning_amber_rounded,
+                      color: const Color(0xFFF44336),
+                      size: ScreenUtil().setWidth(28)),
+                  SizedBox(width: ScreenUtil().setWidth(8)),
+                  Expanded(
+                    child: Text(
+                      s.g_key_dex_price_impact_high(q.priceImpact),
+                      style: TextStyle(
+                        color: const Color(0xFFF44336),
+                        fontSize: ScreenUtil().setSp(22),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+          // Approve notice
+          if (_needsApproval) ...[
+            SizedBox(height: ScreenUtil().setWidth(8)),
+            Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(12),
+                vertical: ScreenUtil().setWidth(8),
+              ),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFF9800).withAlpha(20),
+                borderRadius:
+                    BorderRadius.circular(ScreenUtil().setWidth(8)),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.lock_outline,
+                      color: const Color(0xFFFF9800),
+                      size: ScreenUtil().setWidth(28)),
+                  SizedBox(width: ScreenUtil().setWidth(8)),
+                  Expanded(
+                    child: Text(
+                      s.g_key_dex_approve_required(
+                          _tokenIn?.symbol ?? ''),
+                      style: TextStyle(
+                        color: const Color(0xFFFF9800),
+                        fontSize: ScreenUtil().setSp(22),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );
   }
 
-  Widget _quoteRow(String label, String value) {
+  Widget _quoteRowWidget(String label, String value,
+      {Color? valueColor, Widget? trailing}) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
       child: Row(
@@ -533,19 +906,30 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
               fontSize: ScreenUtil().setSp(26),
             ),
           ),
+          if (trailing != null) ...[
+            SizedBox(width: ScreenUtil().setWidth(8)),
+            trailing,
+          ],
           const Expanded(child: SizedBox()),
           Text(
             value,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: valueColor ??
+                  AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainTextColor.name),
               fontSize: ScreenUtil().setSp(26),
+              fontWeight: valueColor != null ? FontWeight.w600 : FontWeight.normal,
             ),
           ),
         ],
       ),
     );
   }
+
+  Widget _quoteRow(String label, String value, {Color? valueColor}) =>
+      _quoteRowWidget(label, value, valueColor: valueColor);
+
+  // ── Error widget ──────────────────────────────────────────────────────────
 
   Widget _errorWidget() {
     return Container(
@@ -567,33 +951,56 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     );
   }
 
-  Widget _swapButton() {
-    final bool canSwap = _quote != null && _swapLoad == Load.finish;
-    final bool loading = _swapLoad == Load.loading;
+  // ── Action buttons ────────────────────────────────────────────────────────
+
+  Widget _actionButtons() {
+    final s = S.of(context);
+    final bool hasQuote = _quote != null;
+    final bool loading =
+        _swapLoad == Load.loading || _approveLoad == Load.loading;
+
+    // Show Approve button if needed, otherwise Swap button
+    if (_needsApproval && hasQuote) {
+      return SizedBox(
+        height: ScreenUtil().setWidth(88),
+        width: double.infinity,
+        child: buttonStyle6(
+          context,
+          _approveLoad == Load.finish ? _executeApprove : () {},
+          _approveLoad == Load.loading
+              ? s.g_key_dex_approving
+              : s.g_key_dex_approve_required(_tokenIn?.symbol ?? ''),
+          AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.textColorOrange.name),
+          AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.mainButtonTextColor.name),
+          _approveLoad == Load.loading,
+        ),
+      );
+    }
 
     return SizedBox(
       height: ScreenUtil().setWidth(88),
       width: double.infinity,
       child: buttonStyle6(
         context,
-        canSwap
+        hasQuote && !loading
             ? () async {
                 FocusScope.of(context).unfocus();
-                final result = await Navigator.push(
+                final bool? confirmed = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (_) => DexSwapConfirm(quote: _quote!),
                   ),
                 );
                 if (!mounted) return;
-                if (result is int) {
-                  // result 是用户选择的 slippageBps
-                  await _executeSwap(result);
+                if (confirmed == true) {
+                  await _executeSwap();
                 }
               }
             : () {},
-        S.of(context).g_key_dex_swap_btn,
-        canSwap
+        s.g_key_dex_swap_btn,
+        hasQuote && !loading
             ? AppThemeUtils.getColorByKey(
                 context, AppThemeKeys.mainButtonBgColor.name)
             : AppThemeUtils.getColorByKey(

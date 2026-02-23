@@ -82,6 +82,13 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m24(value) => "Maximum ${value} recipients";
 
+  static String m85(token) => "Approve ${token} to continue";
+
+  static String m86(impact) =>
+      "High price impact (${impact})! Proceed with caution.";
+
+  static String m87(secs) => "Quote expires in ${secs}s";
+
   static String m25(value) => "+${value} pts/day";
 
   static String m26(value) => "Earn up to ${value}% APY";
@@ -122,9 +129,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m43(amount) => "≈ ${amount} USDT";
 
-  static String m85(value) => "Est. gas: ~${value} units";
+  static String m88(value) => "Est. gas: ~${value} units";
 
-  static String m86(reason) => "Reason: ${reason}";
+  static String m89(reason) => "Reason: ${reason}";
 
   static String m44(value) =>
       "Are you sure you want to delete the contact ${value}?";
@@ -135,7 +142,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m47(value) => "${value} days remaining";
 
-  static String m87(value) =>
+  static String m90(value) =>
       "Unstaking takes ${value} days. Your tokens will be locked during this period.";
 
   static String m48(value) => "You do not have enough \"${value}\"";
@@ -1562,6 +1569,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
       "Deadline reminders",
     ),
+    "g_key_dex_approval_success": MessageLookupByLibrary.simpleMessage(
+      "Approved! Tap Swap to continue.",
+    ),
+    "g_key_dex_approve_required": m85,
+    "g_key_dex_approving": MessageLookupByLibrary.simpleMessage("Approving…"),
     "g_key_dex_best_route": MessageLookupByLibrary.simpleMessage("Best Route"),
     "g_key_dex_best_source": MessageLookupByLibrary.simpleMessage(
       "Best Source",
@@ -1576,6 +1588,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_history_title": MessageLookupByLibrary.simpleMessage(
       "DEX History",
     ),
+    "g_key_dex_min_received": MessageLookupByLibrary.simpleMessage(
+      "Min. Received",
+    ),
     "g_key_dex_no_tokens": MessageLookupByLibrary.simpleMessage("No tokens"),
     "g_key_dex_no_tokens_found": MessageLookupByLibrary.simpleMessage(
       "No tokens found",
@@ -1583,8 +1598,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage(
       "Price Impact",
     ),
+    "g_key_dex_price_impact_high": m86,
+    "g_key_dex_quote_expires": m87,
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
       "Quote failed",
+    ),
+    "g_key_dex_quote_refreshed": MessageLookupByLibrary.simpleMessage(
+      "Quote refreshed",
     ),
     "g_key_dex_retry": MessageLookupByLibrary.simpleMessage("Retry"),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(
@@ -1593,6 +1613,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_select_token": MessageLookupByLibrary.simpleMessage("Select"),
     "g_key_dex_slippage": MessageLookupByLibrary.simpleMessage(
       "Slippage Tolerance",
+    ),
+    "g_key_dex_slippage_label": MessageLookupByLibrary.simpleMessage(
+      "Max Slippage",
+    ),
+    "g_key_dex_sol_note": MessageLookupByLibrary.simpleMessage(
+      "Solana swap: sign the transaction in your Solana wallet.",
     ),
     "g_key_dex_sol_unsupported": MessageLookupByLibrary.simpleMessage(
       "Solana DEX swap not yet supported in-app",
@@ -2694,11 +2720,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_sign_in_failed": MessageLookupByLibrary.simpleMessage(
       "Sign in failed",
     ),
-    "g_key_sim_gas_estimate": m85,
+    "g_key_sim_gas_estimate": m88,
     "g_key_sim_reverted": MessageLookupByLibrary.simpleMessage(
       "Transaction will likely fail",
     ),
-    "g_key_sim_reverted_reason": m86,
+    "g_key_sim_reverted_reason": m89,
     "g_key_sim_simulating": MessageLookupByLibrary.simpleMessage(
       "Simulating transaction…",
     ),
@@ -2817,7 +2843,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_unbonding_period": MessageLookupByLibrary.simpleMessage(
       "Unbonding Period",
     ),
-    "g_key_stake_unbonding_warning": m87,
+    "g_key_stake_unbonding_warning": m90,
     "g_key_stake_unstake": MessageLookupByLibrary.simpleMessage("Unstake"),
     "g_key_stake_updating": MessageLookupByLibrary.simpleMessage("Updating..."),
     "g_key_stake_uptime": MessageLookupByLibrary.simpleMessage("Uptime"),

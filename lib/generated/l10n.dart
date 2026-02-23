@@ -15733,6 +15733,96 @@ class S {
       args: [value],
     );
   }
+
+  /// `Min. Received`
+  String get g_key_dex_min_received {
+    return Intl.message(
+      'Min. Received',
+      name: 'g_key_dex_min_received',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Max Slippage`
+  String get g_key_dex_slippage_label {
+    return Intl.message(
+      'Max Slippage',
+      name: 'g_key_dex_slippage_label',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quote expires in {secs}s`
+  String g_key_dex_quote_expires(String secs) {
+    return Intl.message(
+      'Quote expires in ${secs}s',
+      name: 'g_key_dex_quote_expires',
+      desc: '',
+      args: [secs],
+    );
+  }
+
+  /// `High price impact ({impact})! Proceed with caution.`
+  String g_key_dex_price_impact_high(String impact) {
+    return Intl.message(
+      'High price impact ($impact)! Proceed with caution.',
+      name: 'g_key_dex_price_impact_high',
+      desc: '',
+      args: [impact],
+    );
+  }
+
+  /// `Approve {token} to continue`
+  String g_key_dex_approve_required(String token) {
+    return Intl.message(
+      'Approve $token to continue',
+      name: 'g_key_dex_approve_required',
+      desc: '',
+      args: [token],
+    );
+  }
+
+  /// `Approving…`
+  String get g_key_dex_approving {
+    return Intl.message(
+      'Approving…',
+      name: 'g_key_dex_approving',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Approved! Tap Swap to continue.`
+  String get g_key_dex_approval_success {
+    return Intl.message(
+      'Approved! Tap Swap to continue.',
+      name: 'g_key_dex_approval_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Solana swap: sign the transaction in your Solana wallet.`
+  String get g_key_dex_sol_note {
+    return Intl.message(
+      'Solana swap: sign the transaction in your Solana wallet.',
+      name: 'g_key_dex_sol_note',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quote refreshed`
+  String get g_key_dex_quote_refreshed {
+    return Intl.message(
+      'Quote refreshed',
+      name: 'g_key_dex_quote_refreshed',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
