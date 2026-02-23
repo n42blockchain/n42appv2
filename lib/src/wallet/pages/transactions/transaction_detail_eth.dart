@@ -17,6 +17,7 @@ import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/empty.dart';
 import 'package:n42appv2/src/widgets/prompt_widget.dart';
 import 'package:n42appv2/src/wallet/widgets/ens_address_display.dart';
+import 'package:n42appv2/src/wallet/pages/transactions/transaction_retry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:web3dart/web3dart.dart';
@@ -251,7 +252,91 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
               ],
             ),
           ),
+          // 交易 Pending 且是自己发出的交易时，显示加速 / 取消操作栏
+          if (resultStr == "Pending" && owner && load == Load.finish)
+            _buildPendingActionBar(),
         ],
+      ),
+    );
+  }
+
+  /// Pending 交易操作栏：取消 + 加速，均跳转到 TransactionRetry 处理
+  Widget _buildPendingActionBar() {
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: ScreenUtil().setWidth(36),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+        child: Row(
+          children: [
+            // 取消按钮
+            Expanded(
+              child: OutlinedButton(
+                onPressed: () async {
+                  final result = await Navigator.push<bool>(context,
+                    MaterialPageRoute(
+                        builder: (_) => TransactionRetry(widget.coinModel, _txHash)));
+                  if (result == true && mounted) Navigator.pop(context, true);
+                },
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.mainBlueColor.name),
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  ),
+                  minimumSize: Size(double.infinity, ScreenUtil().setWidth(88)),
+                ),
+                child: Text(
+                  S.of(context).g_key_79,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(28),
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.mainBlueColor.name),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(width: ScreenUtil().setWidth(24)),
+            // 加速按钮
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () async {
+                  final result = await Navigator.push<bool>(context,
+                    MaterialPageRoute(
+                        builder: (_) => TransactionRetry(widget.coinModel, _txHash)));
+                  if (result == true && mounted) Navigator.pop(context, true);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainBlueColor.name),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  ),
+                  minimumSize: Size(double.infinity, ScreenUtil().setWidth(88)),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.bolt_rounded,
+                        color: Colors.white,
+                        size: ScreenUtil().setWidth(28)),
+                    SizedBox(width: ScreenUtil().setWidth(6)),
+                    Text(
+                      S.of(context).g_key_wallet_k57,
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(28),
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

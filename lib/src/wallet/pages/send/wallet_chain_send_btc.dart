@@ -753,58 +753,17 @@ class _WalletChainSendBtcState extends ConsumerState<WalletChainSendBtc> {
             errorMessage: toErrorMessage,
             maxLines: 3,
             height: ScreenUtil().setWidth(170.0),
-            rightWidget1: toTextFieldEnabel?Container(
-              width: ScreenUtil().setWidth(60.0),
-              height: ScreenUtil().setWidth(60.0),
-              padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
-              child: Icon(
-                Icons.add,
-                size: ScreenUtil().setWidth(50.0),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-              ),
-            ):null,
-            rightOnTap1: toTextFieldEnabel?searchToAddressWidget:null,
+            rightWidget3: buildSendIconBtn(context, Icons.qr_code_scanner),
+            rightOnTap3: scanQR,
+            rightWidget1: buildSendIconBtn(context, Icons.paste_outlined),
+            rightOnTap1: () => performPasteAddress(
+              context,
+              controller: toTextEditingController,
+              onAddress: toAddressCheck,
+            ),
+            rightWidget2: buildSendIconBtn(context, Icons.menu_book_outlined),
+            rightOnTap2: searchToAddressWidget,
             bgColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-            /*
-            rightWidget1: Container(
-              width: ScreenUtil().setWidth(60.0),
-              height: ScreenUtil().setWidth(60.0),
-              padding: EdgeInsets.all(ScreenUtil().setWidth(8.0)),
-              child: Image.asset(
-                "assets/wallet/scan.png",
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-              ),
-            ),
-            rightWidget2: Container(
-              margin: EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
-              height: ScreenUtil().setWidth(60.0),
-              padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
-              decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(60.0),)),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                S.of(context).g_key_166,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26.0),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
-                ),
-              ),
-            ),
-            rightOnTap1: scanQR,
-            rightOnTap2: ()async{
-              ClipboardData? cd = await Clipboard.getData(Clipboard.kTextPlain);
-              if(cd != null){
-                if(cd.text != null && cd.text != "null"){
-                  toTextEditingController.text=cd.text??"";
-                  setState(() {
-                  });
-                  toAddressCheck(cd.text??"");
-                }
-              }
-            },
-            */
           ),
         ],
       ),
@@ -887,6 +846,7 @@ class _WalletChainSendBtcState extends ConsumerState<WalletChainSendBtc> {
                     maxTag();
                   }:null,
                 ),
+                buildUsdEquivalent(context, valueTextEditingController.text, widget.coinModel.coinPrice),
                 Divider(
                   height: ScreenUtil().setWidth(1.0),
                   indent: ScreenUtil().setWidth(20.0),
