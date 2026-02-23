@@ -1,7 +1,9 @@
-﻿import 'dart:convert';
+﻿import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42appv2/core/security/dapp_security_service.dart';
 import 'package:n42appv2/core/security/phishing_detector.dart';
 import 'package:n42appv2/core/utils/js_escape_utils.dart';
 import 'package:n42appv2/src/browser/api/browser_api.dart';
@@ -406,6 +408,13 @@ class BrowserProvider extends ChangeNotifier {
       if (id == null) return;
       final method = data['method'] as String;
       final params = (data['params'] as List<dynamic>?) ?? [];
+
+      // Track permission usage for this DApp origin (fire-and-forget)
+      final currentUrl = wListIndex >= 0 && wListIndex < wInfoList.length
+          ? wInfoList[wListIndex]['openUrl'] as String? ?? ''
+          : '';
+      final origin = Uri.tryParse(currentUrl)?.host ?? '';
+      unawaited(DAppPermissionsTracker.record(origin, method));
 
       try {
         final result = await _dappHandler!.handleRequest(method, params);

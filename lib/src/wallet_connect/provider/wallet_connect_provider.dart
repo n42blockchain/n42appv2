@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
+import 'package:n42appv2/core/security/dapp_security_service.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/core/di/service_locator_setup.dart';
 import 'package:n42appv2/generated/l10n.dart';
@@ -261,6 +262,9 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
     final session = sessions[eventData.topic];
     if (session != null) {
       metadata = session.peer.metadata;
+      // Track permission usage for this DApp origin (fire-and-forget)
+      final origin = Uri.tryParse(session.peer.metadata.url)?.host ?? '';
+      unawaited(DAppPermissionsTracker.record(origin, eventData.method));
     }
 
     // Assign actionData BEFORE dispatching so UI reads the correct event

@@ -504,6 +504,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_connect_key2": MessageLookupByLibrary.simpleMessage("Desconectar"),
     "g_connect_key3": MessageLookupByLibrary.simpleMessage("Rechazar"),
+    "g_dapp_security_blocked": MessageLookupByLibrary.simpleMessage("Blocked"),
+    "g_dapp_security_caution": MessageLookupByLibrary.simpleMessage("Caution"),
+    "g_dapp_security_safe": MessageLookupByLibrary.simpleMessage("Safe"),
+    "g_dapp_security_title": MessageLookupByLibrary.simpleMessage(
+      "DApp Security",
+    ),
+    "g_dapp_security_verified": MessageLookupByLibrary.simpleMessage(
+      "Verified",
+    ),
     "g_email_also_sync": MessageLookupByLibrary.simpleMessage(
       "Also sync Chat account email",
     ),

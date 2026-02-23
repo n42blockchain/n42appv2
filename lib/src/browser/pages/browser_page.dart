@@ -1,4 +1,6 @@
-﻿import 'package:n42appv2/core/security/phishing_warning_dialog.dart';
+﻿import 'package:n42appv2/core/security/dapp_security_service.dart';
+import 'package:n42appv2/core/security/phishing_warning_dialog.dart';
+import 'package:n42appv2/src/widgets/dapp_security_badge.dart';
 import 'package:n42appv2/src/browser/pages/browser_collection_list.dart';
 import 'package:n42appv2/src/browser/pages/browser_history_page.dart';
 import 'package:n42appv2/src/browser/pages/dapp_directory_page.dart';
@@ -158,11 +160,17 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
                       width: ScreenUtil().setWidth(30.0),
                       height: ScreenUtil().setWidth(30.0),
                       margin: EdgeInsets.only(right:ScreenUtil().setWidth(15.0)),
-                      child: Image.asset(
-                        "assets/browser/search.png",
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                        width: ScreenUtil().setWidth(30.0),
-                        height: ScreenUtil().setWidth(30.0),
+                      child: DAppSecurityIcon(
+                        info: (() {
+                          final idx = bValue.wListIndex;
+                          if (idx < 0 || idx >= bValue.wInfoList.length) return null;
+                          final url = bValue.wInfoList[idx]['openUrl'] as String? ?? '';
+                          if (url.startsWith('http://') || url.startsWith('https://')) {
+                            return DAppSecurityService.check(url);
+                          }
+                          return null;
+                        })(),
+                        size: 24,
                       ),
                     ),
                     maxLines: 1,

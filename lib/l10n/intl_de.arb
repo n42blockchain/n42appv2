@@ -1826,5 +1826,11 @@
   "g_pnl_cost_basis": "Cost Basis",
   "g_pnl_avg_cost": "Avg Cost",
   "g_pnl_unrealized": "Unrealized P&L",
-  "g_pnl_no_trades": "No trades recorded"
+  "g_pnl_no_trades": "No trades recorded",
+
+  "g_dapp_security_verified": "Verified",
+  "g_dapp_security_safe": "Safe",
+  "g_dapp_security_caution": "Caution",
+  "g_dapp_security_blocked": "Blocked",
+  "g_dapp_security_title": "DApp Security"
 }

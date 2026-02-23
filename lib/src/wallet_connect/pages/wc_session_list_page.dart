@@ -8,7 +8,9 @@ import 'package:n42appv2/src/component/pages/scan_page.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet_connect/pages/wallet_connect_page.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
+import 'package:n42appv2/src/widgets/dapp_security_badge.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
+import 'package:n42appv2/core/security/dapp_security_service.dart';
 import 'package:reown_walletkit/reown_walletkit.dart' as wallet_connect;
 
 /// Known EIP-155 chain ID → human-readable name mapping.
@@ -280,6 +282,23 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                         );
                       }).toList(),
                     ),
+                  // Method history chips
+                  FutureBuilder<List<String>>(
+                    future: DAppPermissionsTracker.getForOrigin(
+                      Uri.tryParse(meta.url)?.host ?? '',
+                    ),
+                    builder: (ctx, snap) {
+                      final methods = snap.data ?? [];
+                      if (methods.isEmpty) return const SizedBox.shrink();
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          top: ScreenUtil().setWidth(6),
+                          bottom: ScreenUtil().setWidth(2),
+                        ),
+                        child: DAppMethodChips(methods: methods),
+                      );
+                    },
+                  ),
                   SizedBox(height: ScreenUtil().setWidth(8)),
                   // Expiry
                   Text(

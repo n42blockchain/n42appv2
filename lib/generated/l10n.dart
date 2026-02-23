@@ -16383,6 +16383,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Verified`
+  String get g_dapp_security_verified {
+    return Intl.message(
+      'Verified',
+      name: 'g_dapp_security_verified',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Safe`
+  String get g_dapp_security_safe {
+    return Intl.message(
+      'Safe',
+      name: 'g_dapp_security_safe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Caution`
+  String get g_dapp_security_caution {
+    return Intl.message(
+      'Caution',
+      name: 'g_dapp_security_caution',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Blocked`
+  String get g_dapp_security_blocked {
+    return Intl.message(
+      'Blocked',
+      name: 'g_dapp_security_blocked',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `DApp Security`
+  String get g_dapp_security_title {
+    return Intl.message(
+      'DApp Security',
+      name: 'g_dapp_security_title',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -4,7 +4,9 @@ import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/component/pages/scan_page.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
+import 'package:n42appv2/core/security/dapp_security_service.dart';
 import 'package:n42appv2/src/wallet_connect/provider/wallet_connect_provider.dart';
+import 'package:n42appv2/src/widgets/dapp_security_badge.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
@@ -201,6 +203,14 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage> {
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                 ),
+              ),
+            ),
+          if (dAppWebUrl.isNotEmpty)
+            Padding(
+              padding: EdgeInsets.only(top: ScreenUtil().setWidth(12)),
+              child: DAppSecurityBadge(
+                info: DAppSecurityService.check(dAppWebUrl),
+                showReason: false,
               ),
             ),
         ],
