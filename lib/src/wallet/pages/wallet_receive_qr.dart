@@ -3,7 +3,9 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
@@ -55,7 +57,6 @@ String _buildQrData({
   switch (blockchainType) {
     case 'Ethereum':
       // EIP-681: ethereum:<address>?value=<wei_amount>
-      // 使用 value 字段保持标准兼容；钱包端按小数解析即可
       return 'ethereum:$address?value=$trimmed';
     case 'Bitcoin':
       // BIP-21: bitcoin:<address>?amount=<btc>
@@ -80,16 +81,16 @@ String _buildQrData({
 
 // ─── Widget ───────────────────────────────────────────────────────────────────
 
-class WalletReceiveQr extends StatefulWidget {
+class WalletReceiveQr extends ConsumerStatefulWidget {
   final CoinModel chainCoinModel;
   final CoinModel? tokenCoinModel;
   const WalletReceiveQr(this.chainCoinModel, {this.tokenCoinModel, super.key});
 
   @override
-  State<WalletReceiveQr> createState() => _WalletReceiveQrState();
+  ConsumerState<WalletReceiveQr> createState() => _WalletReceiveQrState();
 }
 
-class _WalletReceiveQrState extends State<WalletReceiveQr> {
+class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
   String symbol = '';
   String logoUrl = '';
   String network = '';
@@ -142,6 +143,21 @@ class _WalletReceiveQrState extends State<WalletReceiveQr> {
     setState(() => _qrData = newData);
   }
 
+  /// 切换到另一条链接收
+  void _switchChain(CoinModel cm) {
+    if (cm.address.isEmpty) return;
+    setState(() {
+      network = cm.coin['name'] ?? '';
+      logoUrl = cm.coin['icon'] ?? '';
+      blockchainType = cm.coin['blockchainType'] ?? '';
+      coinType = cm.coin['coinType'] ?? '';
+      symbol = cm.coin['miniName'] ?? '';
+      address = cm.address;
+      _qrData = address;
+      _amountCtrl.clear(); // 不同链单位不同，清空金额
+    });
+  }
+
   // ─── 复制地址 ───────────────────────────────────────────────────────────────
 
   Future<void> _copyAddress() async {
@@ -186,15 +202,102 @@ class _WalletReceiveQrState extends State<WalletReceiveQr> {
     }
   }
 
+  /// 分享收款链接（地址文本 / payment URI）
+  Future<void> _shareLink() async {
+    // 有金额时分享完整 URI（如 ethereum:0x...?value=0.5）；无金额时仅分享地址
+    final shareText = _qrData.isNotEmpty ? _qrData : address;
+    if (!mounted) return;
+    await SharePlus.instance.share(
+      ShareParams(
+        text: shareText,
+        subject: '${S.of(context).g_key_33} $symbol',
+      ),
+    );
+  }
+
   // ─── 链品牌色 ───────────────────────────────────────────────────────────────
 
   Color get _chainColor =>
       _kChainColors[coinType] ?? const Color(0xFF6C7689);
 
+  // ─── 链选择器（横向滚动 chip 列表）─────────────────────────────────────────
+
+  Widget _buildChainSelector(
+      List<CoinModel> chains, Color blueColor, Color mainText) {
+    // 过滤掉地址为空的链（通常代表还未初始化）
+    final available = chains.where((c) => c.address.isNotEmpty).toList();
+    if (available.length <= 1) return const SizedBox.shrink();
+
+    return SizedBox(
+      height: ScreenUtil().setWidth(72),
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: EdgeInsets.symmetric(
+            horizontal: ScreenUtil().setWidth(40)),
+        itemCount: available.length,
+        separatorBuilder: (context, index) =>
+            SizedBox(width: ScreenUtil().setWidth(12)),
+        itemBuilder: (_, i) {
+          final cm = available[i];
+          final ct = cm.coin['coinType'] as String? ?? '';
+          final chipColor = _kChainColors[ct] ?? blueColor;
+          final isSelected = ct == coinType;
+
+          return GestureDetector(
+            onTap: () => _switchChain(cm),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 180),
+              padding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(20),
+              ),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? chipColor.withValues(alpha: 0.12)
+                    : Colors.transparent,
+                border: Border.all(
+                  color: isSelected
+                      ? chipColor
+                      : mainText.withValues(alpha: 0.2),
+                  width: isSelected ? 1.5 : 1.0,
+                ),
+                borderRadius:
+                    BorderRadius.circular(ScreenUtil().setWidth(36)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ImageNetWork(
+                    imageUrl: cm.coin['icon'] ?? '',
+                    width: ScreenUtil().setWidth(32),
+                    height: ScreenUtil().setWidth(32),
+                    placeholder: 'assets/img/list_default.png',
+                  ),
+                  SizedBox(width: ScreenUtil().setWidth(8)),
+                  Text(
+                    ct,
+                    style: TextStyle(
+                      color: isSelected ? chipColor : mainText,
+                      fontSize: ScreenUtil().setSp(24),
+                      fontWeight: isSelected
+                          ? FontWeight.w700
+                          : FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   // ─── Build ──────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
+    final waValue = ref.watch(wapBridgeProvider);
+
     final bgColor = AppThemeUtils.getColorByKey(
         context, AppThemeKeys.backGroundColor.name);
     final mainText = AppThemeUtils.getColorByKey(
@@ -229,6 +332,10 @@ class _WalletReceiveQrState extends State<WalletReceiveQr> {
               EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(24)),
           child: Column(
             children: [
+              // ── 链选择器（不进截图）──────────────────────────────────────────
+              _buildChainSelector(waValue.coinModels, blueColor, mainText),
+              SizedBox(height: ScreenUtil().setWidth(20)),
+
               // ── QR 卡片（RepaintBoundary 仅包裹此区域，用于截图分享）────────
               RepaintBoundary(
                 key: _previewKey,
@@ -272,7 +379,8 @@ class _WalletReceiveQrState extends State<WalletReceiveQr> {
                         ),
                         decoration: BoxDecoration(
                           color: chainColor.withValues(alpha: 0.12),
-                          border: Border.all(color: chainColor, width: 1.2),
+                          border:
+                              Border.all(color: chainColor, width: 1.2),
                           borderRadius: BorderRadius.circular(
                               ScreenUtil().setWidth(40)),
                         ),
@@ -302,8 +410,8 @@ class _WalletReceiveQrState extends State<WalletReceiveQr> {
                               ScreenUtil().setWidth(30.0)),
                         ),
                         child: QrImageView(
-                          padding:
-                              EdgeInsets.all(ScreenUtil().setWidth(20.0)),
+                          padding: EdgeInsets.all(
+                              ScreenUtil().setWidth(20.0)),
                           data: _qrData,
                           version: QrVersions.auto,
                         ),
@@ -379,6 +487,31 @@ class _WalletReceiveQrState extends State<WalletReceiveQr> {
                         ),
                       ),
                     ),
+                    SizedBox(height: ScreenUtil().setWidth(20)),
+
+                    // 分享链接按钮（分享地址文本 / payment URI）
+                    OutlinedButton.icon(
+                      onPressed: _shareLink,
+                      icon: Icon(
+                        Icons.link_rounded,
+                        size: ScreenUtil().setWidth(36),
+                      ),
+                      label: Text(S.of(context).g_key_share_link),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: blueColor,
+                        side: BorderSide(color: blueColor, width: 1.2),
+                        padding: EdgeInsets.symmetric(
+                            vertical: ScreenUtil().setWidth(28)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              ScreenUtil().setWidth(16)),
+                        ),
+                        textStyle: TextStyle(
+                          fontSize: ScreenUtil().setSp(32),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
                     SizedBox(height: ScreenUtil().setWidth(36)),
 
                     // 金额预填标签
@@ -440,7 +573,8 @@ class _WalletReceiveQrState extends State<WalletReceiveQr> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               ScreenUtil().setWidth(16)),
-                          borderSide: BorderSide(color: blueColor, width: 1.5),
+                          borderSide:
+                              BorderSide(color: blueColor, width: 1.5),
                         ),
                       ),
                     ),
