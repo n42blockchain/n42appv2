@@ -1,31 +1,29 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42appv2/core/utils/toast_utils.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/transaction_providers.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:n42appv2/src/component/pages/scan_page.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/sqlite/app_database.dart';
 import 'package:n42appv2/src/utils/data_utils.dart';
 import 'package:n42appv2/src/utils/regular.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/core/utils/toast_utils.dart';
 import 'package:n42appv2/src/wallet/api/transfer_api.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/models/transation_record_model.dart';
+import 'package:n42appv2/src/wallet/pages/send/send_utils.dart';
 import 'package:n42appv2/src/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42appv2/src/wallet/provider/trustdart.dart';
+import 'package:n42appv2/src/wallet/services/recent_address_service.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
 import 'package:n42appv2/src/wallet/utils/coin_gas.dart';
+import 'package:n42appv2/src/wallet/widgets/non_evm_fee_selector.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/text_field_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:n42appv2/features/wallet/presentation/providers/transaction_providers.dart';
-import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/src/wallet/pages/send/send_utils.dart';
-import 'package:n42appv2/src/wallet/services/recent_address_service.dart';
-import 'package:n42appv2/src/wallet/widgets/non_evm_fee_selector.dart';
 
 /// 通用 Memo 发送页，覆盖所有无专属发送页的非 EVM 链。
 ///
@@ -332,58 +330,11 @@ class _WalletChainSendMemoState extends ConsumerState<WalletChainSendMemo> {
     FocusScope.of(context).requestFocus(FocusNode());
   }
 
-  Future<void> _scanQR() async {
-    final String? scanValue = await Navigator.push<String>(
-        context, MaterialPageRoute(builder: (_) => ScanPage()));
-    if (!mounted) return;
-    if (scanValue != null) {
-      _toCtrl.text = scanValue;
-      _toAddressCheck(scanValue);
-    }
-  }
+  void _scanQR() => performScanQR(context,
+      controller: _toCtrl, onAddress: _toAddressCheck);
 
-  Future<void> _pasteAddress() async {
-    final cd = await Clipboard.getData(Clipboard.kTextPlain);
-    if (!mounted) return;
-    if (cd?.text != null && cd!.text != 'null') {
-      _toCtrl.text = cd.text!;
-      _toAddressCheck(cd.text!);
-    }
-  }
-
-  Widget _iconBtn(IconData icon) => Container(
-        width: ScreenUtil().setWidth(50.0),
-        height: ScreenUtil().setWidth(50.0),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(6.0)),
-        child: Icon(
-          icon,
-          size: ScreenUtil().setWidth(38.0),
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainBlueColor.name),
-        ),
-      );
-
-  Widget _buildUsdEquivalent() {
-    final amount = double.tryParse(_valueCtrl.text) ?? 0.0;
-    final price = widget.coinModel.coinPrice;
-    if (price <= 0 || amount <= 0) return const SizedBox.shrink();
-    final usd = amount * price;
-    final usdStr = usd < 0.01 ? '< \$0.01' : '\$${usd.toStringAsFixed(2)}';
-    return Padding(
-      padding: EdgeInsets.only(
-        left: ScreenUtil().setWidth(30),
-        bottom: ScreenUtil().setWidth(12),
-      ),
-      child: Text(
-        '≈ $usdStr',
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(24),
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name),
-        ),
-      ),
-    );
-  }
+  void _pasteAddress() => performPasteAddress(context,
+      controller: _toCtrl, onAddress: _toAddressCheck);
 
   // ────────────────────────────────────────── build ─────────────────────────
 
@@ -462,11 +413,11 @@ class _WalletChainSendMemoState extends ConsumerState<WalletChainSendMemo> {
             errorMessage: _toError,
             bgColor: AppThemeUtils.getColorByKey(
                 context, AppThemeKeys.itemBgColor.name),
-            rightWidget3: _iconBtn(Icons.qr_code_scanner),
+            rightWidget3: buildSendIconBtn(context, Icons.qr_code_scanner),
             rightOnTap3: _scanQR,
-            rightWidget1: _iconBtn(Icons.paste_outlined),
+            rightWidget1: buildSendIconBtn(context, Icons.paste_outlined),
             rightOnTap1: _pasteAddress,
-            rightWidget2: _iconBtn(Icons.menu_book_outlined),
+            rightWidget2: buildSendIconBtn(context, Icons.menu_book_outlined),
             rightOnTap2: _showAddressPicker,
           ),
         ],
@@ -592,7 +543,8 @@ class _WalletChainSendMemoState extends ConsumerState<WalletChainSendMemo> {
                   endIndent: ScreenUtil().setWidth(20.0),
                 ),
                 _buildOwnerAddress(),
-                _buildUsdEquivalent(),
+                buildUsdEquivalent(
+                    context, _valueCtrl.text, widget.coinModel.coinPrice),
               ],
             ),
           ),

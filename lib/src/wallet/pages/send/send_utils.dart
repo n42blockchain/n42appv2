@@ -15,6 +15,86 @@ import 'package:n42appv2/src/wallet/pages/face_matching/face_match.dart';
 import 'package:n42appv2/src/wallet/services/recent_address_service.dart';
 import 'package:n42appv2/src/widgets/sheet_bottom.dart';
 
+// ─── 共享小部件 ─────────────────────────────────────────────────────────────
+
+/// 地址输入框右侧的小图标按钮（扫码 / 粘贴 / 地址簿）。
+Widget buildSendIconBtn(BuildContext context, IconData icon) {
+  return Container(
+    width: ScreenUtil().setWidth(50.0),
+    height: ScreenUtil().setWidth(50.0),
+    padding: EdgeInsets.all(ScreenUtil().setWidth(6.0)),
+    child: Icon(
+      icon,
+      size: ScreenUtil().setWidth(38.0),
+      color: AppThemeUtils.getColorByKey(
+          context, AppThemeKeys.mainBlueColor.name),
+    ),
+  );
+}
+
+/// 金额输入框下方的 USD 等值显示。
+///
+/// [amountText] 为当前输入的金额字符串，[coinPrice] 为币价（USD）。
+/// 当价格或金额无效时返回空占位。
+Widget buildUsdEquivalent(
+    BuildContext context, String amountText, double coinPrice) {
+  final amount = double.tryParse(amountText) ?? 0.0;
+  if (coinPrice <= 0 || amount <= 0) return const SizedBox.shrink();
+  final usd = amount * coinPrice;
+  final usdStr = usd < 0.01 ? '< \$0.01' : '\$${usd.toStringAsFixed(2)}';
+  return Padding(
+    padding: EdgeInsets.only(
+      left: ScreenUtil().setWidth(30),
+      bottom: ScreenUtil().setWidth(12),
+    ),
+    child: Text(
+      '≈ $usdStr',
+      style: TextStyle(
+        fontSize: ScreenUtil().setSp(24),
+        color: AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.itemSubtitleTextColor.name),
+      ),
+    ),
+  );
+}
+
+/// 扫码并填入地址。
+///
+/// [controller] 为目标地址输入框控制器。
+/// [onAddress] 在扫码成功后回调（通常用于触发地址校验）。
+Future<void> performScanQR(
+  BuildContext context, {
+  required TextEditingController controller,
+  required ValueChanged<String> onAddress,
+}) async {
+  final String? scanValue = await Navigator.push<String>(
+      context, MaterialPageRoute(builder: (_) => ScanPage()));
+  if (!context.mounted) return;
+  if (scanValue != null) {
+    controller.text = scanValue;
+    onAddress(scanValue);
+  }
+}
+
+/// 粘贴剪贴板内容并填入地址。
+///
+/// [controller] 为目标地址输入框控制器。
+/// [onAddress] 在粘贴成功后回调（通常用于触发地址校验）。
+Future<void> performPasteAddress(
+  BuildContext context, {
+  required TextEditingController controller,
+  required ValueChanged<String> onAddress,
+}) async {
+  final cd = await Clipboard.getData(Clipboard.kTextPlain);
+  if (!context.mounted) return;
+  if (cd?.text != null && cd!.text != 'null') {
+    controller.text = cd.text!;
+    onAddress(cd.text!);
+  }
+}
+
+// ─── 地址选择弹窗 ──────────────────────────────────────────────────────────
+
 /// 显示地址选择底部弹窗（地址簿 / 扫码 / 粘贴 / EVM 人脸识别）。
 ///
 /// [isEvm] 为 true 时追加人脸识别选项（仅 EVM 链支持）。
