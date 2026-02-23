@@ -16243,6 +16243,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Checking contract security...`
+  String get g_key_security_goplus_checking {
+    return Intl.message(
+      'Checking contract security...',
+      name: 'g_key_security_goplus_checking',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contract Verified Safe`
+  String get g_key_security_goplus_safe {
+    return Intl.message(
+      'Contract Verified Safe',
+      name: 'g_key_security_goplus_safe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use Caution`
+  String get g_key_security_goplus_caution {
+    return Intl.message(
+      'Use Caution',
+      name: 'g_key_security_goplus_caution',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `High Risk Detected`
+  String get g_key_security_goplus_danger {
+    return Intl.message(
+      'High Risk Detected',
+      name: 'g_key_security_goplus_danger',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `GoPlus`
+  String get g_key_security_goplus_powered_by {
+    return Intl.message(
+      'GoPlus',
+      name: 'g_key_security_goplus_powered_by',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

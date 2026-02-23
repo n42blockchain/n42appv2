@@ -1,4 +1,6 @@
 import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/security/goplus_security_result.dart';
+import 'package:n42appv2/core/security/goplus_security_service.dart';
 import 'package:n42appv2/core/security/tx_simulation_result.dart';
 import 'package:n42appv2/core/security/tx_simulation_service.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
@@ -13,6 +15,7 @@ import 'package:n42appv2/src/wallet/widgets/ens_address_display.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/prompt_widget.dart';
+import 'package:n42appv2/src/widgets/contract_security_card.dart';
 import 'package:n42appv2/src/widgets/tx_simulation_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -39,6 +42,10 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
   String gasPrice="";
   TxSimulationResult _simResult = TxSimulationResult.simulating();
 
+  // GoPlus 合约安全检查结果
+  GoplusSecurityResult? _goplResult;
+  bool _goplLoading = false;
+
   //账号安全
   Map<String,dynamic> securityMap={
     "email":false,
@@ -57,6 +64,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     init();
     initSecurity();
     _runSimulation();
+    _runGoplusCheck();
   }
   void init(){
     //计算gasPrice
@@ -189,6 +197,29 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     if (mounted) setState(() => _simResult = result);
   }
 
+  /// GoPlus 合约安全检查（仅 EVM + ERC-20 合约，fail-open 设计）
+  Future<void> _runGoplusCheck() async {
+    final bt = coinInfo['blockchainType'] as String? ?? '';
+    if (bt != 'Ethereum') return;
+
+    final m = widget.transationRecordModel;
+    if (m == null || m.contract.isEmpty) return;
+
+    final coinType = coinInfo['coinType'] as String? ?? '';
+    if (!GoplusSecurityService.supportsChain(coinType)) return;
+
+    if (mounted) setState(() => _goplLoading = true);
+
+    final result =
+        await GoplusSecurityService.checkToken(coinType, m.contract);
+    if (mounted) {
+      setState(() {
+        _goplResult = result;
+        _goplLoading = false;
+      });
+    }
+  }
+
   /// Reconstruct calldata from [TransationRecordModel]:
   /// - Native transfer (contract empty) → "0x"
   /// - ERC-20 transfer(address,uint256) → "0xa9059cbb" + padded address + padded amount
@@ -271,6 +302,13 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TxSimulationCard(result: _simResult),
+                        if (_goplLoading) ...[
+                          SizedBox(height: ScreenUtil().setWidth(8)),
+                          const ContractSecurityCard.loading(),
+                        ] else if (_goplResult != null) ...[
+                          SizedBox(height: ScreenUtil().setWidth(8)),
+                          ContractSecurityCard.result(result: _goplResult!),
+                        ],
                         SizedBox(height: ScreenUtil().setWidth(16)),
                         Padding(
                           padding: EdgeInsets.only(

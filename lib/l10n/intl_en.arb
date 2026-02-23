@@ -1939,5 +1939,11 @@
   "g_key_watch_wallet_desc": "Track any EVM address without private key",
   "g_key_watch_address_hint": "Enter Ethereum address (0x...)",
   "g_key_watch_only_banner": "Watch-only",
-  "g_key_watch_only_cant_send": "Watch-only wallet cannot send or sign transactions"
+  "g_key_watch_only_cant_send": "Watch-only wallet cannot send or sign transactions",
+
+  "g_key_security_goplus_checking": "Checking contract security...",
+  "g_key_security_goplus_safe": "Contract Verified Safe",
+  "g_key_security_goplus_caution": "Use Caution",
+  "g_key_security_goplus_danger": "High Risk Detected",
+  "g_key_security_goplus_powered_by": "GoPlus"
 }

@@ -2783,6 +2783,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_saml_not_configured": MessageLookupByLibrary.simpleMessage(
       "SAML not configured",
     ),
+    "g_key_security_goplus_caution": MessageLookupByLibrary.simpleMessage(
+      "Use Caution",
+    ),
+    "g_key_security_goplus_checking": MessageLookupByLibrary.simpleMessage(
+      "Checking contract security...",
+    ),
+    "g_key_security_goplus_danger": MessageLookupByLibrary.simpleMessage(
+      "High Risk Detected",
+    ),
+    "g_key_security_goplus_powered_by": MessageLookupByLibrary.simpleMessage(
+      "GoPlus",
+    ),
+    "g_key_security_goplus_safe": MessageLookupByLibrary.simpleMessage(
+      "Contract Verified Safe",
+    ),
     "g_key_send_code": MessageLookupByLibrary.simpleMessage(
       "Send Verification Code",
     ),
