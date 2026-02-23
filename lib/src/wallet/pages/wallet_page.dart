@@ -324,6 +324,15 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
+                                  if (waValue.walletInfo.watchOnly)
+                                    Padding(
+                                      padding: EdgeInsets.only(right: ScreenUtil().setWidth(6)),
+                                      child: Icon(
+                                        Icons.visibility_outlined,
+                                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                                        size: ScreenUtil().setWidth(28),
+                                      ),
+                                    ),
                                   Text(
                                     waValue.walletName,
                                     style: TextStyle(
@@ -528,6 +537,10 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                       priceLastUpdated: waValue.priceLastUpdated,
                                       walletName: waValue.walletName,
                                       sendTap: () async{
+                                        if(waValue.walletInfo.watchOnly){
+                                          ToastUtils.show(S.of(this.context).g_key_watch_only_cant_send);
+                                          return;
+                                        }
                                         if(waValue.walletInfo.password==""){
                                           final flag= await tipsDialog7(this.context);
                                           if (!mounted) return;
@@ -544,6 +557,11 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                         }
                                       },
                                       receiveTap: () async{
+                                        if(waValue.walletInfo.watchOnly){
+                                          // 观察钱包允许查看接收地址，直接显示
+                                          showSearchCoin(1);
+                                          return;
+                                        }
                                         if(waValue.walletInfo.password==""){
                                           final flag= await tipsDialog7(this.context);
                                           if (!mounted) return;
@@ -560,6 +578,10 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                         }
                                       },
                                       swapTap: () async{
+                                        if(waValue.walletInfo.watchOnly){
+                                          ToastUtils.show(S.of(this.context).g_key_watch_only_cant_send);
+                                          return;
+                                        }
                                         if(waValue.walletInfo.password==""){
                                           final flag= await tipsDialog7(this.context);
                                           if (!mounted) return;
@@ -1821,15 +1843,25 @@ class _WalletPageState extends ConsumerState<WalletPage> {
               alignment: Alignment.centerLeft,
               child: Row(
                 children: [
-                  Text(
-                    wInfo.mainWallet?S.of(context).g_key_14:S.of(context).g_key_6,
-                    style: TextStyle(
-                      color: walletColor,
-                      fontSize: ScreenUtil().setSp(36.0),
+                  if (wInfo.watchOnly)
+                    Padding(
+                      padding: EdgeInsets.only(right: ScreenUtil().setWidth(8)),
+                      child: Icon(
+                        Icons.visibility_outlined,
+                        color: walletColor,
+                        size: ScreenUtil().setWidth(32),
+                      ),
+                    )
+                  else
+                    Text(
+                      wInfo.mainWallet?S.of(context).g_key_14:S.of(context).g_key_6,
+                      style: TextStyle(
+                        color: walletColor,
+                        fontSize: ScreenUtil().setSp(36.0),
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
                   SizedBox(
                     width: ScreenUtil().setWidth(20.0),
                   ),

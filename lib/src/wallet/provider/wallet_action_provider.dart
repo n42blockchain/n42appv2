@@ -1023,6 +1023,24 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
     }
 
   }
+  /// 添加观察钱包（Watch-only）
+  /// [name] 钱包显示名称；[address] 要追踪的 EVM 地址（0x...）
+  Future<void> addWatchOnlyWallet(String name, String address) async {
+    final wInfo = WalletInfo(
+      walletName: name.trim().isEmpty ? 'Watch ${_walletInfoLsit.length + 1}' : name.trim(),
+      password: '0', // 非空，避免触发备份提示
+      walletUuid: userUUID,
+    );
+    wInfo.watchOnly = true;
+    wInfo.watchAddress = address.trim();
+    wInfo.mnemonic = '';
+    wInfo.privateKey = '';
+    wInfo.coinInfo = chainUrlMap;
+    wInfo.mainWallet = false;
+    wInfo.timestamp = '${DateTime.now().millisecondsSinceEpoch}';
+    await addWalletInfo(wInfo);
+  }
+
   ///删除一个钱包
   Future<MessageModel?> deleteWalletInfo({WalletInfo? info}) async{
     if (_walletInfoLsit.isEmpty) return null;
@@ -1038,22 +1056,25 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
           return false;
         }
       });
-      Map<String,dynamic> cInfo=_walletInfoLsit[rIndex].coinInfo?[CoinType.N.name];
-      Map<String, dynamic> pathMap = cInfo['baseInfo']['path'];
-      var rmAddress=await Trustdart().generateAddress(
-          CoinType.N.name,
-          getPathWithIndex(pathMap[cInfo['addrType']], cInfo['pathIndex']),
-          cInfo['addrType'],
-          mnemonic: _walletInfoLsit[rIndex].mnemonic??"",
-          pk: _walletInfoLsit[rIndex].privateKey??""
-      );
-      String miningAddress=rmAddress[cInfo['addrType']];
-      var miningData=globalMiningInstance.miningData?[miningAddress];
-      if(miningData !=null){
-        if(miningData['isMining']==true){
-          MessageModel rmm=MessageModel.error();
-          rmm.data="The validator's wallet cannot be deleted!";//"验证者钱包，无法删除！";
-          return rmm;
+      // 观察钱包：无私钥/助记词，直接删除，跳过挖矿地址检查
+      if (!_walletInfoLsit[rIndex].watchOnly) {
+        Map<String,dynamic> cInfo=_walletInfoLsit[rIndex].coinInfo?[CoinType.N.name];
+        Map<String, dynamic> pathMap = cInfo['baseInfo']['path'];
+        var rmAddress=await Trustdart().generateAddress(
+            CoinType.N.name,
+            getPathWithIndex(pathMap[cInfo['addrType']], cInfo['pathIndex']),
+            cInfo['addrType'],
+            mnemonic: _walletInfoLsit[rIndex].mnemonic??"",
+            pk: _walletInfoLsit[rIndex].privateKey??""
+        );
+        String miningAddress=rmAddress[cInfo['addrType']];
+        var miningData=globalMiningInstance.miningData?[miningAddress];
+        if(miningData !=null){
+          if(miningData['isMining']==true){
+            MessageModel rmm=MessageModel.error();
+            rmm.data="The validator's wallet cannot be deleted!";//"验证者钱包，无法删除！";
+            return rmm;
+          }
         }
       }
       if(rIndex<walletIndex){

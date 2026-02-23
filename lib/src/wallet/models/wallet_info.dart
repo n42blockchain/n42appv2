@@ -52,6 +52,12 @@ class WalletInfo {
   bool? faceBinding;
   bool mainWallet = false;
 
+  /// 观察钱包标记 — 仅追踪地址余额，无法发起任何签名操作
+  bool watchOnly = false;
+
+  /// 观察地址（EVM 格式，如 0x...），仅在 watchOnly=true 时有意义
+  String watchAddress = '';
+
   /// Account Abstraction (ERC-4337) account information
   AAAccountInfo? aaAccountInfo;
 
@@ -79,6 +85,8 @@ class WalletInfo {
     chainOrder = ((json['chainOrder'] as List<dynamic>?)?.cast<String>() ?? []);
     faceBinding = json['faceBinding'] as bool?;
     mainWallet = json['mainWallet'] as bool;
+    watchOnly = (json['watchOnly'] as bool?) ?? false;
+    watchAddress = (json['watchAddress'] as String?) ?? '';
     // Parse AA account info if present
     if (json['aaAccountInfo'] != null) {
       aaAccountInfo = AAAccountInfo.fromJson(
@@ -102,6 +110,8 @@ class WalletInfo {
       "chainOrder": chainOrder,
       "faceBinding": faceBinding,
       "mainWallet": mainWallet,
+      "watchOnly": watchOnly,
+      "watchAddress": watchAddress,
       "aaAccountInfo": aaAccountInfo?.toJson(),
     };
   }

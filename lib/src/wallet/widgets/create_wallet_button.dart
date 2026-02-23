@@ -1,5 +1,6 @@
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/pages/create_wallet/import/import_cloud_backup.dart';
+import 'package:n42appv2/src/wallet/pages/wallet_manage/add_watch_wallet_page.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/keystore/import_keystore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -272,6 +273,72 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
                                 context,
                                 AppThemeKeys.itemSubtitleTextColor.name),
                             fontSize: ScreenUtil().setSp(26),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Divider(
+            height: ScreenUtil().setWidth(1),
+            indent: ScreenUtil().setWidth(30),
+            endIndent: ScreenUtil().setWidth(30),
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.dividerColor.name),
+          ),
+          // ── 观察钱包 ──────────────────────────────────────────────────────
+          InkWell(
+            onTap: () async {
+              final ok = await Navigator.of(this.context).push<bool>(
+                  MaterialPageRoute(builder: (_) => const AddWatchWalletPage()));
+              if (!mounted) return;
+              Navigator.of(this.context).pop();
+              if (ok == true && widget.onTapBack != null) {
+                widget.onTapBack();
+              }
+            },
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(30),
+                vertical: ScreenUtil().setWidth(20),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    height: ScreenUtil().setWidth(50),
+                    width: ScreenUtil().setWidth(50),
+                    margin: EdgeInsets.only(right: ScreenUtil().setWidth(20)),
+                    child: Icon(
+                      Icons.visibility_outlined,
+                      color: AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.mainBlueColor.name),
+                      size: ScreenUtil().setWidth(50),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          S.of(context).g_key_watch_wallet,
+                          style: TextStyle(
+                            color: AppThemeUtils.getColorByKey(
+                                context, AppThemeKeys.mainBlueColor.name),
+                            fontSize: ScreenUtil().setSp(36),
+                          ),
+                        ),
+                        Text(
+                          S.of(context).g_key_watch_wallet_desc,
+                          style: TextStyle(
+                            color: AppThemeUtils.getColorByKey(context,
+                                AppThemeKeys.itemSubtitleTextColor.name),
+                            fontSize: ScreenUtil().setSp(26.0),
                           ),
                         ),
                       ],

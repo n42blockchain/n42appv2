@@ -113,6 +113,17 @@ class CoinModel {
           return;
         }
         WalletInfo info = walletAccess.walletInfo;
+
+        // 观察钱包：直接使用存储的观察地址，跳过密钥推导
+        if (info.watchOnly && info.watchAddress.isNotEmpty) {
+          address = info.watchAddress;
+          addressType[addrType] = info.watchAddress;
+          if (setAddress) {
+            walletAccess.setAddress(coinType, addressType);
+          }
+          return;
+        }
+
         Map<String, dynamic>? pathMap = coin['path'];
         if (pathMap == null) {
           debugPrint('CoinModel.buildWallet: path is null for $coinType');

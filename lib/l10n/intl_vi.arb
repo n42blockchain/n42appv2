@@ -1759,5 +1759,10 @@
   "g_portfolio_losers": "Giảm nhiều nhất",
   "g_portfolio_all_holdings": "Tất cả tài sản",
   "g_version_later": "Để sau",
-  "g_key_manage_chains": "Manage Chains"
+  "g_key_manage_chains": "Manage Chains",
+  "g_key_watch_wallet": "Watch Wallet",
+  "g_key_watch_wallet_desc": "Track any EVM address without private key",
+  "g_key_watch_address_hint": "Enter Ethereum address (0x...)",
+  "g_key_watch_only_banner": "Watch-only",
+  "g_key_watch_only_cant_send": "Watch-only wallet cannot send or sign transactions"
 }

@@ -1802,5 +1802,10 @@
   "g_portfolio_losers": "하락 순위",
   "g_portfolio_all_holdings": "전체 보유 자산",
   "g_version_later": "나중에",
-  "g_key_manage_chains": "Manage Chains"
+  "g_key_manage_chains": "Manage Chains",
+  "g_key_watch_wallet": "Watch Wallet",
+  "g_key_watch_wallet_desc": "Track any EVM address without private key",
+  "g_key_watch_address_hint": "Enter Ethereum address (0x...)",
+  "g_key_watch_only_banner": "Watch-only",
+  "g_key_watch_only_cant_send": "Watch-only wallet cannot send or sign transactions"
 }

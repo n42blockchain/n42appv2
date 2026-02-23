@@ -15923,6 +15923,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Watch Wallet`
+  String get g_key_watch_wallet {
+    return Intl.message(
+      'Watch Wallet',
+      name: 'g_key_watch_wallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Track any EVM address without private key`
+  String get g_key_watch_wallet_desc {
+    return Intl.message(
+      'Track any EVM address without private key',
+      name: 'g_key_watch_wallet_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter Ethereum address (0x...)`
+  String get g_key_watch_address_hint {
+    return Intl.message(
+      'Enter Ethereum address (0x...)',
+      name: 'g_key_watch_address_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Watch-only`
+  String get g_key_watch_only_banner {
+    return Intl.message(
+      'Watch-only',
+      name: 'g_key_watch_only_banner',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Watch-only wallet cannot send or sign transactions`
+  String get g_key_watch_only_cant_send {
+    return Intl.message(
+      'Watch-only wallet cannot send or sign transactions',
+      name: 'g_key_watch_only_cant_send',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

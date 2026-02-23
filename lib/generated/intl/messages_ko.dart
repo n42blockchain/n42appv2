@@ -2624,6 +2624,19 @@ class MessageLookup extends MessageLookupByLibrary {
       "이메일 인증 코드를 입력하세요.",
     ),
     "g_key_wallet_manage": MessageLookupByLibrary.simpleMessage("지갑 관리"),
+    "g_key_watch_address_hint": MessageLookupByLibrary.simpleMessage(
+      "Enter Ethereum address (0x...)",
+    ),
+    "g_key_watch_only_banner": MessageLookupByLibrary.simpleMessage(
+      "Watch-only",
+    ),
+    "g_key_watch_only_cant_send": MessageLookupByLibrary.simpleMessage(
+      "Watch-only wallet cannot send or sign transactions",
+    ),
+    "g_key_watch_wallet": MessageLookupByLibrary.simpleMessage("Watch Wallet"),
+    "g_key_watch_wallet_desc": MessageLookupByLibrary.simpleMessage(
+      "Track any EVM address without private key",
+    ),
     "g_key_xml_0": MessageLookupByLibrary.simpleMessage("예약됨"),
     "g_key_xml_1": MessageLookupByLibrary.simpleMessage("기본 준비금"),
     "g_key_xml_11": m59,
