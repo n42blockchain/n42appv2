@@ -31,11 +31,16 @@ class EarnState {
   /// APY 是否正在加载
   final bool apyLoading;
 
-  /// 用户活跃质押仓位（多链合并）
+  /// 用户活跃 + 解绑中质押仓位（多链合并）
   final List<StakingPosition> activePositions;
 
   /// 用户仓位是否正在加载
   final bool positionsLoading;
+
+  /// 各链代币 USD 价格，用于计算总 USD 价值
+  final double ethPriceUsd;
+  final double solPriceUsd;
+  final double atomPriceUsd;
 
   const EarnState({
     this.ethApy = _kEthApyDefault,
@@ -44,6 +49,9 @@ class EarnState {
     this.apyLoading = false,
     this.activePositions = const [],
     this.positionsLoading = false,
+    this.ethPriceUsd = 0.0,
+    this.solPriceUsd = 0.0,
+    this.atomPriceUsd = 0.0,
   });
 
   EarnState copyWith({
@@ -53,6 +61,9 @@ class EarnState {
     bool? apyLoading,
     List<StakingPosition>? activePositions,
     bool? positionsLoading,
+    double? ethPriceUsd,
+    double? solPriceUsd,
+    double? atomPriceUsd,
   }) {
     return EarnState(
       ethApy: ethApy ?? this.ethApy,
@@ -61,19 +72,63 @@ class EarnState {
       apyLoading: apyLoading ?? this.apyLoading,
       activePositions: activePositions ?? this.activePositions,
       positionsLoading: positionsLoading ?? this.positionsLoading,
+      ethPriceUsd: ethPriceUsd ?? this.ethPriceUsd,
+      solPriceUsd: solPriceUsd ?? this.solPriceUsd,
+      atomPriceUsd: atomPriceUsd ?? this.atomPriceUsd,
     );
   }
 
-  /// 所有活跃仓位的总质押价值（BigInt，最小单位）
-  BigInt get totalStakedRaw =>
-      activePositions.fold(BigInt.zero, (s, p) => s + p.stakedAmount);
+  // ── 链精度换算 ─────────────────────────────────────────────────────────────
+  // ETH/stETH: 18 decimals (wei)
+  // SOL:        9 decimals (lamport)
+  // ATOM:        6 decimals (uatom)
+  // DOT:        10 decimals (planck) — reserved
 
-  /// 所有活跃仓位的待领取奖励（BigInt，最小单位）
-  BigInt get totalRewardsRaw =>
-      activePositions.fold(BigInt.zero, (s, p) => s + p.pendingRewards);
+  /// 将 BigInt 最小单位金额换算为 double 代币数量
+  static double tokenAmount(BigInt raw, StakingChainType chainType) {
+    if (raw == BigInt.zero) return 0.0;
+    switch (chainType) {
+      case StakingChainType.ethereum: return raw.toDouble() / 1e18;
+      case StakingChainType.solana:   return raw.toDouble() / 1e9;
+      case StakingChainType.cosmos:   return raw.toDouble() / 1e6;
+      case StakingChainType.polkadot: return raw.toDouble() / 1e10;
+    }
+  }
+
+  double _chainPrice(StakingChainType chainType) {
+    switch (chainType) {
+      case StakingChainType.ethereum: return ethPriceUsd;
+      case StakingChainType.solana:   return solPriceUsd;
+      case StakingChainType.cosmos:   return atomPriceUsd;
+      case StakingChainType.polkadot: return 0.0;
+    }
+  }
+
+  // ── 汇总计算 ───────────────────────────────────────────────────────────────
+
+  /// 所有活跃/解绑中仓位的总质押 USD 价值
+  double get totalStakedUsd => activePositions.fold(0.0, (sum, p) {
+    final amount = tokenAmount(p.stakedAmount, p.protocol.chainType);
+    return sum + amount * _chainPrice(p.protocol.chainType);
+  });
+
+  /// 所有活跃仓位的待领取奖励 USD 价值（主要为 ATOM）
+  double get totalPendingRewardsUsd => activePositions.fold(0.0, (sum, p) {
+    if (p.pendingRewards == BigInt.zero) return sum;
+    final amount = tokenAmount(p.pendingRewards, p.protocol.chainType);
+    return sum + amount * _chainPrice(p.protocol.chainType);
+  });
 
   /// 所有推荐中最高 APY
   double get maxApy => [ethApy, solApy, atomApy].reduce((a, b) => a > b ? a : b);
+
+  /// 活跃中仓位（不含解绑）
+  List<StakingPosition> get onlyActive =>
+      activePositions.where((p) => p.status == StakingPositionStatus.active).toList();
+
+  /// 解绑中仓位
+  List<StakingPosition> get unbondingPositions =>
+      activePositions.where((p) => p.status == StakingPositionStatus.unbonding).toList();
 }
 
 // ─── Notifier ────────────────────────────────────────────────────────────────
@@ -149,6 +204,21 @@ class EarnNotifier extends StateNotifier<EarnState> {
   /// 手动刷新 APY（下拉刷新等场景使用）
   Future<void> refreshApys() => _loadApys();
 
+  /// 更新各链代币 USD 价格，供 USD 总量计算使用。
+  ///
+  /// 由 EarnPage 在加载钱包地址时同步调用。
+  void updateCoinPrices({
+    double ethPrice = 0.0,
+    double solPrice = 0.0,
+    double atomPrice = 0.0,
+  }) {
+    state = state.copyWith(
+      ethPriceUsd: ethPrice,
+      solPriceUsd: solPrice,
+      atomPriceUsd: atomPrice,
+    );
+  }
+
   // ── 仓位加载 ──────────────────────────────────────────────────────────────
 
   /// 加载多链活跃质押仓位
@@ -189,9 +259,12 @@ class EarnNotifier extends StateNotifier<EarnState> {
     );
 
     if (!mounted) return;
+    // 保留 active + unbonding 仓位，让用户看到正在解绑的资产
     state = state.copyWith(
       activePositions: allPositions
-          .where((p) => p.status == StakingPositionStatus.active)
+          .where((p) =>
+              p.status == StakingPositionStatus.active ||
+              p.status == StakingPositionStatus.unbonding)
           .toList(),
       positionsLoading: false,
     );

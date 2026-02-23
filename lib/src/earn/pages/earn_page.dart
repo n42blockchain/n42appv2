@@ -44,23 +44,35 @@ class _EarnPageState extends ConsumerState<EarnPage> {
 
   void _loadStakedData() {
     final wap = ref.read(wapBridgeProvider);
-    // 从 coinList 中找各链地址
-    String? ethAddr;
-    String? solAddr;
-    String? atomAddr;
+    String? ethAddr, solAddr, atomAddr;
+    double ethPrice = 0.0, solPrice = 0.0, atomPrice = 0.0;
     for (final cm in wap.coinList) {
       final coinType = cm.coin['coinType'] as String? ?? '';
       final addr = cm.address?.toString() ?? '';
       if (addr.isEmpty) continue;
-      if (coinType == 'ETH' && ethAddr == null) ethAddr = addr;
-      if (coinType == 'SOL' && solAddr == null) solAddr = addr;
-      if (coinType == 'ATOM' && atomAddr == null) atomAddr = addr;
+      if (coinType == 'ETH' && ethAddr == null) {
+        ethAddr = addr;
+        ethPrice = cm.coinPrice ?? 0.0;
+      }
+      if (coinType == 'SOL' && solAddr == null) {
+        solAddr = addr;
+        solPrice = cm.coinPrice ?? 0.0;
+      }
+      if (coinType == 'ATOM' && atomAddr == null) {
+        atomAddr = addr;
+        atomPrice = cm.coinPrice ?? 0.0;
+      }
     }
+    ref.read(earnProvider.notifier).updateCoinPrices(
+      ethPrice: ethPrice,
+      solPrice: solPrice,
+      atomPrice: atomPrice,
+    );
     ref.read(earnProvider.notifier).loadPositions(
-          ethAddress: ethAddr,
-          solAddress: solAddr,
-          atomAddress: atomAddr,
-        );
+      ethAddress: ethAddr,
+      solAddress: solAddr,
+      atomAddress: atomAddr,
+    );
   }
 
   String get _walletAddress {
@@ -75,8 +87,14 @@ class _EarnPageState extends ConsumerState<EarnPage> {
     final earnState = ref.watch(earnProvider);
     return Scaffold(
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
+        child: RefreshIndicator(
+          onRefresh: () async {
+            _loadStakedData();
+            await ref.read(earnProvider.notifier).refreshApys();
+          },
+          child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: [
             // 顶部栏
             SliverToBoxAdapter(
               child: AppHomeTopBar(
@@ -118,6 +136,7 @@ class _EarnPageState extends ConsumerState<EarnPage> {
               child: SizedBox(height: ScreenUtil().setWidth(120)),
             ),
           ],
+        ),
         ),
       ),
     );
@@ -204,7 +223,9 @@ class _EarnPageState extends ConsumerState<EarnPage> {
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
           Text(
-            '\$0.00',
+            earnState.positionsLoading
+                ? '...'
+                : '\$${earnState.totalStakedUsd.toStringAsFixed(2)}',
             style: TextStyle(
               fontSize: ScreenUtil().setSp(56),
               fontWeight: FontWeight.bold,
@@ -215,13 +236,26 @@ class _EarnPageState extends ConsumerState<EarnPage> {
           Row(
             children: [
               _buildEarningsStat(
-                  S.of(context).g_key_stake_title, '\$0.00', Icons.account_balance),
+                S.of(context).g_key_stake_title,
+                earnState.positionsLoading
+                    ? '...'
+                    : '\$${earnState.totalStakedUsd.toStringAsFixed(2)}',
+                Icons.account_balance,
+              ),
               SizedBox(width: ScreenUtil().setWidth(32)),
               _buildEarningsStat(
-                  S.of(context).g_key_stake_rewards, '0 pts', Icons.stars),
+                S.of(context).g_key_stake_rewards,
+                earnState.positionsLoading
+                    ? '...'
+                    : '\$${earnState.totalPendingRewardsUsd.toStringAsFixed(2)}',
+                Icons.stars,
+              ),
               SizedBox(width: ScreenUtil().setWidth(32)),
               _buildEarningsStat(
-                  S.of(context).g_key_airdrop_title, '0', Icons.card_giftcard),
+                S.of(context).g_key_airdrop_title,
+                '0',
+                Icons.card_giftcard,
+              ),
             ],
           ),
         ],
@@ -678,8 +712,9 @@ class _EarnPageState extends ConsumerState<EarnPage> {
   // ──────────────────────────────────────────────────────────────────────────
 
   Widget _buildActiveProducts(BuildContext context, EarnState earnState) {
-    final positions = earnState.activePositions;
     final loading = earnState.positionsLoading;
+    final active = earnState.onlyActive;
+    final unbonding = earnState.unbondingPositions;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
@@ -717,10 +752,25 @@ class _EarnPageState extends ConsumerState<EarnPage> {
           SizedBox(height: ScreenUtil().setWidth(12)),
           if (loading)
             _buildPositionsLoading()
-          else if (positions.isEmpty)
+          else if (active.isEmpty && unbonding.isEmpty)
             _buildNoPositions(context)
-          else
-            ...positions.map((p) => _buildActivePositionItem(context, p)),
+          else ...[
+            ...active.map((p) => _buildActivePositionItem(context, earnState, p)),
+            if (unbonding.isNotEmpty) ...[
+              SizedBox(height: ScreenUtil().setWidth(8)),
+              Text(
+                S.of(context).g_key_stake_unstake,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(26),
+                  fontWeight: FontWeight.w600,
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                ),
+              ),
+              SizedBox(height: ScreenUtil().setWidth(8)),
+              ...unbonding.map((p) => _buildActivePositionItem(context, earnState, p)),
+            ],
+          ],
         ],
       ),
     );
@@ -782,12 +832,13 @@ class _EarnPageState extends ConsumerState<EarnPage> {
   }
 
   Widget _buildActivePositionItem(
-      BuildContext context, StakingPosition position) {
+      BuildContext context, EarnState earnState, StakingPosition position) {
     final protocol = position.protocol;
-    final apyStr = '${protocol.apy.toStringAsFixed(1)}% APY';
-
-    // 链对应颜色
+    final isUnbonding = position.status == StakingPositionStatus.unbonding;
+    final liveApy = _liveApy(earnState, protocol.chainType);
+    final apyStr = '${liveApy.toStringAsFixed(1)}% APY';
     final color = _chainColor(protocol.chainType);
+    final hasPendingRewards = position.pendingRewards > BigInt.zero;
 
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
@@ -796,8 +847,10 @@ class _EarnPageState extends ConsumerState<EarnPage> {
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
         border: Border.all(
-          color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name)
+          color: (isUnbonding
+                  ? Colors.orange
+                  : AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainBlueColor.name))
               .withAlpha(30),
         ),
       ),
@@ -826,16 +879,43 @@ class _EarnPageState extends ConsumerState<EarnPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  protocol.name,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
-                    fontWeight: FontWeight.w600,
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        protocol.name,
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(28),
+                          fontWeight: FontWeight.w600,
+                          color: AppThemeUtils.getColorByKey(
+                              context, AppThemeKeys.mainTextColor.name),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if (isUnbonding) ...[
+                      SizedBox(width: ScreenUtil().setWidth(6)),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil().setWidth(8),
+                          vertical: ScreenUtil().setWidth(2),
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.orange.withAlpha(30),
+                          borderRadius:
+                              BorderRadius.circular(ScreenUtil().setWidth(8)),
+                        ),
+                        child: Text(
+                          'Unbonding',
+                          style: TextStyle(
+                            fontSize: ScreenUtil().setSp(18),
+                            color: Colors.orange,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
                 Text(
                   protocol.chainSymbol,
@@ -845,6 +925,14 @@ class _EarnPageState extends ConsumerState<EarnPage> {
                         context, AppThemeKeys.itemSubtitleTextColor.name),
                   ),
                 ),
+                if (hasPendingRewards)
+                  Text(
+                    '+${_formatBigIntForChain(position.pendingRewards, protocol.chainType, protocol.chainSymbol)}',
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(20),
+                      color: Colors.green,
+                    ),
+                  ),
               ],
             ),
           ),
@@ -852,7 +940,8 @@ class _EarnPageState extends ConsumerState<EarnPage> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                _formatBigInt(position.stakedAmount, protocol.chainSymbol),
+                _formatBigIntForChain(
+                    position.stakedAmount, protocol.chainType, protocol.chainSymbol),
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(28),
                   fontWeight: FontWeight.w600,
@@ -860,13 +949,14 @@ class _EarnPageState extends ConsumerState<EarnPage> {
                       context, AppThemeKeys.mainTextColor.name),
                 ),
               ),
-              Text(
-                apyStr,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
-                  color: Colors.green,
+              if (!isUnbonding)
+                Text(
+                  apyStr,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(22),
+                    color: Colors.green,
+                  ),
                 ),
-              ),
             ],
           ),
         ],
@@ -887,16 +977,30 @@ class _EarnPageState extends ConsumerState<EarnPage> {
     }
   }
 
-  /// 将最小单位 BigInt 格式化为可读字符串（精度 6 位）
-  String _formatBigInt(BigInt raw, String symbol) {
+  /// 将最小单位 BigInt 按链精度换算，格式化为可读字符串（最多 6 位有效小数）
+  String _formatBigIntForChain(
+      BigInt raw, StakingChainType chainType, String symbol) {
     if (raw == BigInt.zero) return '0 $symbol';
-    // 以 1e18 精度（ETH / SOL / ATOM 的标准）
-    final whole = raw ~/ BigInt.from(10).pow(18);
-    final frac = (raw % BigInt.from(10).pow(18)) ~/
-        BigInt.from(10).pow(12); // 6 位小数
-    final fracStr = frac.toString().padLeft(6, '0').replaceAll(RegExp(r'0+$'), '');
-    final display = fracStr.isEmpty ? whole.toString() : '$whole.$fracStr';
-    return '$display $symbol';
+    final amount = EarnState.tokenAmount(raw, chainType);
+    final formatted = amount
+        .toStringAsFixed(6)
+        .replaceAll(RegExp(r'0+$'), '')
+        .replaceAll(RegExp(r'\.$'), '');
+    return '$formatted $symbol';
+  }
+
+  /// 根据链类型返回实时 APY（apyLoading 时降级到默认值）
+  double _liveApy(EarnState earnState, StakingChainType chainType) {
+    switch (chainType) {
+      case StakingChainType.ethereum:
+        return earnState.ethApy;
+      case StakingChainType.solana:
+        return earnState.solApy;
+      case StakingChainType.cosmos:
+        return earnState.atomApy;
+      case StakingChainType.polkadot:
+        return 0.0;
+    }
   }
 
   // ──────────────────────────────────────────────────────────────────────────
