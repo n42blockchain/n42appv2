@@ -27,6 +27,7 @@ class SimpleHashNftApi {
     'OPTIMISM': 'optimism',
     'AVAXC': 'avalanche',
     'SOL': 'solana',
+    'BTC': 'bitcoin', // Bitcoin Ordinals
   };
 
   Map<String, dynamic> get _authHeader {

@@ -15804,6 +15804,106 @@ class S {
     );
   }
 
+  /// `Search by name or collection`
+  String get g_key_nft_search_hint {
+    return Intl.message(
+      'Search by name or collection',
+      name: 'g_key_nft_search_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All`
+  String get g_key_nft_filter_all {
+    return Intl.message(
+      'All',
+      name: 'g_key_nft_filter_all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Video`
+  String get g_key_nft_filter_video {
+    return Intl.message(
+      'Video',
+      name: 'g_key_nft_filter_video',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Floor`
+  String get g_key_nft_floor_price {
+    return Intl.message(
+      'Floor',
+      name: 'g_key_nft_floor_price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Collection`
+  String get g_key_nft_collection {
+    return Intl.message(
+      'Collection',
+      name: 'g_key_nft_collection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Description`
+  String get g_key_nft_description {
+    return Intl.message(
+      'Description',
+      name: 'g_key_nft_description',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ordinals`
+  String get g_key_nft_ordinals {
+    return Intl.message(
+      'Ordinals',
+      name: 'g_key_nft_ordinals',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Inscription #`
+  String get g_key_nft_inscription {
+    return Intl.message(
+      'Inscription #',
+      name: 'g_key_nft_inscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Video playback not supported`
+  String get g_key_nft_no_video_support {
+    return Intl.message(
+      'Video playback not supported',
+      name: 'g_key_nft_no_video_support',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ordinals transfers are not yet supported`
+  String get g_key_nft_ordinals_unsupported {
+    return Intl.message(
+      'Ordinals transfers are not yet supported',
+      name: 'g_key_nft_ordinals_unsupported',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Simulating transaction…`
   String get g_key_sim_simulating {
     return Intl.message(

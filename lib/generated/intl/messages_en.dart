@@ -2646,19 +2646,39 @@ class MessageLookup extends MessageLookupByLibrary {
       "Solana NFT burn is coming soon",
     ),
     "g_key_nft_burn_title": MessageLookupByLibrary.simpleMessage("Burn NFT"),
+    "g_key_nft_collection": MessageLookupByLibrary.simpleMessage("Collection"),
     "g_key_nft_contract": MessageLookupByLibrary.simpleMessage("Contract"),
+    "g_key_nft_description": MessageLookupByLibrary.simpleMessage(
+      "Description",
+    ),
     "g_key_nft_error_retry": MessageLookupByLibrary.simpleMessage(
       "Failed to load NFTs. Tap to retry.",
     ),
+    "g_key_nft_filter_all": MessageLookupByLibrary.simpleMessage("All"),
+    "g_key_nft_filter_video": MessageLookupByLibrary.simpleMessage("Video"),
+    "g_key_nft_floor_price": MessageLookupByLibrary.simpleMessage("Floor"),
     "g_key_nft_gallery": MessageLookupByLibrary.simpleMessage("NFT Gallery"),
+    "g_key_nft_inscription": MessageLookupByLibrary.simpleMessage(
+      "Inscription #",
+    ),
     "g_key_nft_no_items": MessageLookupByLibrary.simpleMessage("No NFTs found"),
     "g_key_nft_no_url": MessageLookupByLibrary.simpleMessage(
       "No explorer link available",
     ),
+    "g_key_nft_no_video_support": MessageLookupByLibrary.simpleMessage(
+      "Video playback not supported",
+    ),
     "g_key_nft_open_browser": MessageLookupByLibrary.simpleMessage(
       "View on Explorer",
     ),
+    "g_key_nft_ordinals": MessageLookupByLibrary.simpleMessage("Ordinals"),
+    "g_key_nft_ordinals_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Ordinals transfers are not yet supported",
+    ),
     "g_key_nft_quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
+    "g_key_nft_search_hint": MessageLookupByLibrary.simpleMessage(
+      "Search by name or collection",
+    ),
     "g_key_nft_send": MessageLookupByLibrary.simpleMessage("Send NFT"),
     "g_key_nft_send_sol_unsupported": MessageLookupByLibrary.simpleMessage(
       "Solana NFT transfers are coming soon",
