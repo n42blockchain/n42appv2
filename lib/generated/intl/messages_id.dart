@@ -1488,6 +1488,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
       "Deadline reminders",
     ),
+    "g_key_dex_approve_exact": MessageLookupByLibrary.simpleMessage(
+      "Jumlah Tepat",
+    ),
+    "g_key_dex_approve_unlimited": MessageLookupByLibrary.simpleMessage(
+      "Tak Terbatas",
+    ),
+    "g_key_dex_approve_unlimited_info": MessageLookupByLibrary.simpleMessage(
+      "Persetujuan tak terbatas: router dapat membelanjakan token ini kapan saja. Praktik standar, namun berisiko jika kontrak disusupi.",
+    ),
     "g_key_dex_best_route": MessageLookupByLibrary.simpleMessage(
       "Rute Terbaik",
     ),
@@ -1510,11 +1519,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_no_tokens_found": MessageLookupByLibrary.simpleMessage(
       "Tidak ada token ditemukan",
     ),
+    "g_key_dex_price_chart": MessageLookupByLibrary.simpleMessage(
+      "Grafik harga",
+    ),
     "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage(
       "Dampak Harga",
     ),
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
       "Kutipan gagal",
+    ),
+    "g_key_dex_quote_refreshed": MessageLookupByLibrary.simpleMessage(
+      "Penawaran diperbarui",
     ),
     "g_key_dex_retry": MessageLookupByLibrary.simpleMessage("Coba Lagi"),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(

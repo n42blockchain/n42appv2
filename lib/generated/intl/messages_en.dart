@@ -874,6 +874,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_batch_transaction": MessageLookupByLibrary.simpleMessage(
       "Batch Transaction",
     ),
+    "g_key_aa_benefit_batch_desc": MessageLookupByLibrary.simpleMessage(
+      "Approve and swap in one transaction — no more two-step confirmations",
+    ),
+    "g_key_aa_benefit_batch_title": MessageLookupByLibrary.simpleMessage(
+      "One-Click Batch Actions",
+    ),
+    "g_key_aa_benefit_gas_desc": MessageLookupByLibrary.simpleMessage(
+      "Sponsor transactions or pay fees with ERC-20 tokens instead of ETH",
+    ),
+    "g_key_aa_benefit_gas_title": MessageLookupByLibrary.simpleMessage(
+      "Pay Gas with Any Token",
+    ),
+    "g_key_aa_benefit_recovery_desc": MessageLookupByLibrary.simpleMessage(
+      "Recover access via trusted contacts if you lose your private key",
+    ),
+    "g_key_aa_benefit_recovery_title": MessageLookupByLibrary.simpleMessage(
+      "Social Recovery",
+    ),
     "g_key_aa_biconomy_account": MessageLookupByLibrary.simpleMessage(
       "Biconomy Account",
     ),
@@ -884,6 +902,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_chain": MessageLookupByLibrary.simpleMessage("Chain"),
     "g_key_aa_chain_id": MessageLookupByLibrary.simpleMessage("Chain ID"),
     "g_key_aa_change": MessageLookupByLibrary.simpleMessage("Change"),
+    "g_key_aa_check_status": MessageLookupByLibrary.simpleMessage(
+      "Check Status",
+    ),
     "g_key_aa_clear_all": MessageLookupByLibrary.simpleMessage("Clear All"),
     "g_key_aa_coming_soon": MessageLookupByLibrary.simpleMessage("Coming Soon"),
     "g_key_aa_continue": MessageLookupByLibrary.simpleMessage("Continue"),
@@ -915,6 +936,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_created": MessageLookupByLibrary.simpleMessage("Created"),
     "g_key_aa_custom": MessageLookupByLibrary.simpleMessage("Custom"),
     "g_key_aa_deploy": MessageLookupByLibrary.simpleMessage("Deploy"),
+    "g_key_aa_deploy_auto_note": MessageLookupByLibrary.simpleMessage(
+      "Account will be deployed automatically on your first transaction",
+    ),
     "g_key_aa_deploy_failed": MessageLookupByLibrary.simpleMessage(
       "Deploy Failed",
     ),
@@ -972,6 +996,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_full_access": MessageLookupByLibrary.simpleMessage("Full Access"),
     "g_key_aa_gas_estimate": MessageLookupByLibrary.simpleMessage(
       "Gas Estimate",
+    ),
+    "g_key_aa_gas_estimate_failed": MessageLookupByLibrary.simpleMessage(
+      "Gas estimate failed, using default",
     ),
     "g_key_aa_gas_payment": MessageLookupByLibrary.simpleMessage("Gas Payment"),
     "g_key_aa_gas_payment_options": MessageLookupByLibrary.simpleMessage(
@@ -1047,6 +1074,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_not_deployed_desc": MessageLookupByLibrary.simpleMessage(
       "Account will be deployed on first transaction",
     ),
+    "g_key_aa_onboard_step1": MessageLookupByLibrary.simpleMessage(
+      "Create smart account (free, no ETH needed)",
+    ),
+    "g_key_aa_onboard_step2": MessageLookupByLibrary.simpleMessage(
+      "Fund it — receive any EVM token",
+    ),
+    "g_key_aa_onboard_step3": MessageLookupByLibrary.simpleMessage(
+      "Transact gaslessly with Paymaster",
+    ),
     "g_key_aa_operations": MessageLookupByLibrary.simpleMessage("Operations"),
     "g_key_aa_owner": MessageLookupByLibrary.simpleMessage("Owner"),
     "g_key_aa_pay_gas_with_token": MessageLookupByLibrary.simpleMessage(
@@ -1095,6 +1131,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Preview Address",
     ),
     "g_key_aa_ready": MessageLookupByLibrary.simpleMessage("Ready"),
+    "g_key_aa_receive_address": MessageLookupByLibrary.simpleMessage(
+      "Receive Address",
+    ),
     "g_key_aa_recommended": MessageLookupByLibrary.simpleMessage("Recommended"),
     "g_key_aa_retry": MessageLookupByLibrary.simpleMessage("Retry"),
     "g_key_aa_revoke": MessageLookupByLibrary.simpleMessage("Revoke"),

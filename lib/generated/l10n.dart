@@ -13879,6 +13879,136 @@ class S {
     );
   }
 
+  /// `Pay Gas with Any Token`
+  String get g_key_aa_benefit_gas_title {
+    return Intl.message(
+      'Pay Gas with Any Token',
+      name: 'g_key_aa_benefit_gas_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sponsor transactions or pay fees with ERC-20 tokens instead of ETH`
+  String get g_key_aa_benefit_gas_desc {
+    return Intl.message(
+      'Sponsor transactions or pay fees with ERC-20 tokens instead of ETH',
+      name: 'g_key_aa_benefit_gas_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `One-Click Batch Actions`
+  String get g_key_aa_benefit_batch_title {
+    return Intl.message(
+      'One-Click Batch Actions',
+      name: 'g_key_aa_benefit_batch_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Approve and swap in one transaction — no more two-step confirmations`
+  String get g_key_aa_benefit_batch_desc {
+    return Intl.message(
+      'Approve and swap in one transaction — no more two-step confirmations',
+      name: 'g_key_aa_benefit_batch_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Social Recovery`
+  String get g_key_aa_benefit_recovery_title {
+    return Intl.message(
+      'Social Recovery',
+      name: 'g_key_aa_benefit_recovery_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recover access via trusted contacts if you lose your private key`
+  String get g_key_aa_benefit_recovery_desc {
+    return Intl.message(
+      'Recover access via trusted contacts if you lose your private key',
+      name: 'g_key_aa_benefit_recovery_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create smart account (free, no ETH needed)`
+  String get g_key_aa_onboard_step1 {
+    return Intl.message(
+      'Create smart account (free, no ETH needed)',
+      name: 'g_key_aa_onboard_step1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fund it — receive any EVM token`
+  String get g_key_aa_onboard_step2 {
+    return Intl.message(
+      'Fund it — receive any EVM token',
+      name: 'g_key_aa_onboard_step2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transact gaslessly with Paymaster`
+  String get g_key_aa_onboard_step3 {
+    return Intl.message(
+      'Transact gaslessly with Paymaster',
+      name: 'g_key_aa_onboard_step3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check Status`
+  String get g_key_aa_check_status {
+    return Intl.message(
+      'Check Status',
+      name: 'g_key_aa_check_status',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account will be deployed automatically on your first transaction`
+  String get g_key_aa_deploy_auto_note {
+    return Intl.message(
+      'Account will be deployed automatically on your first transaction',
+      name: 'g_key_aa_deploy_auto_note',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gas estimate failed, using default`
+  String get g_key_aa_gas_estimate_failed {
+    return Intl.message(
+      'Gas estimate failed, using default',
+      name: 'g_key_aa_gas_estimate_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Receive Address`
+  String get g_key_aa_receive_address {
+    return Intl.message(
+      'Receive Address',
+      name: 'g_key_aa_receive_address',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Confirm Swap`
   String get g_key_dex_confirm_title {
     return Intl.message(

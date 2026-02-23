@@ -1540,6 +1540,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
       "Deadline reminders",
     ),
+    "g_key_dex_approve_exact": MessageLookupByLibrary.simpleMessage(
+      "Montant exact",
+    ),
+    "g_key_dex_approve_unlimited": MessageLookupByLibrary.simpleMessage(
+      "Illimité",
+    ),
+    "g_key_dex_approve_unlimited_info": MessageLookupByLibrary.simpleMessage(
+      "Approbation illimitée : le routeur peut dépenser ce jeton à tout moment. Pratique standard, mais risquée si le contrat est compromis.",
+    ),
     "g_key_dex_best_route": MessageLookupByLibrary.simpleMessage(
       "Meilleure Route",
     ),
@@ -1560,11 +1569,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_no_tokens_found": MessageLookupByLibrary.simpleMessage(
       "Aucun token trouvé",
     ),
+    "g_key_dex_price_chart": MessageLookupByLibrary.simpleMessage(
+      "Graphique de prix",
+    ),
     "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage(
       "Impact du Prix",
     ),
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
       "Devis échoué",
+    ),
+    "g_key_dex_quote_refreshed": MessageLookupByLibrary.simpleMessage(
+      "Devis actualisé",
     ),
     "g_key_dex_retry": MessageLookupByLibrary.simpleMessage("Réessayer"),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(

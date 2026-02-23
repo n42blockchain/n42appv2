@@ -1511,6 +1511,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
       "Deadline reminders",
     ),
+    "g_key_dex_approve_exact": MessageLookupByLibrary.simpleMessage(
+      "Importo esatto",
+    ),
+    "g_key_dex_approve_unlimited": MessageLookupByLibrary.simpleMessage(
+      "Illimitato",
+    ),
+    "g_key_dex_approve_unlimited_info": MessageLookupByLibrary.simpleMessage(
+      "Approvazione illimitata: il router può spendere questo token in qualsiasi momento. Pratica standard, ma rischiosa se il contratto viene compromesso.",
+    ),
     "g_key_dex_best_route": MessageLookupByLibrary.simpleMessage(
       "Percorso Migliore",
     ),
@@ -1529,11 +1538,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_no_tokens_found": MessageLookupByLibrary.simpleMessage(
       "Nessun token trovato",
     ),
+    "g_key_dex_price_chart": MessageLookupByLibrary.simpleMessage(
+      "Grafico del prezzo",
+    ),
     "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage(
       "Impatto Prezzo",
     ),
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
       "Preventivo fallito",
+    ),
+    "g_key_dex_quote_refreshed": MessageLookupByLibrary.simpleMessage(
+      "Preventivo aggiornato",
     ),
     "g_key_dex_retry": MessageLookupByLibrary.simpleMessage("Riprova"),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(

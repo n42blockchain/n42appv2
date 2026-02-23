@@ -1292,6 +1292,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
       "Deadline reminders",
     ),
+    "g_key_dex_approve_exact": MessageLookupByLibrary.simpleMessage("正確な金額"),
+    "g_key_dex_approve_unlimited": MessageLookupByLibrary.simpleMessage("無制限"),
+    "g_key_dex_approve_unlimited_info": MessageLookupByLibrary.simpleMessage(
+      "無制限承認：ルーターはいつでもこのトークンを使用できます。標準的な方法ですが、コントラクトが侵害された場合はリスクがあります。",
+    ),
     "g_key_dex_best_route": MessageLookupByLibrary.simpleMessage("最適ルート"),
     "g_key_dex_best_source": MessageLookupByLibrary.simpleMessage("最適ソース"),
     "g_key_dex_chain": MessageLookupByLibrary.simpleMessage("チェーン"),
@@ -1302,8 +1307,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_no_tokens_found": MessageLookupByLibrary.simpleMessage(
       "トークンが見つかりません",
     ),
+    "g_key_dex_price_chart": MessageLookupByLibrary.simpleMessage("価格チャート"),
     "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage("価格インパクト"),
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage("見積もり失敗"),
+    "g_key_dex_quote_refreshed": MessageLookupByLibrary.simpleMessage(
+      "見積もりが更新されました",
+    ),
     "g_key_dex_retry": MessageLookupByLibrary.simpleMessage("再試行"),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(
       "シンボル / 名前 / アドレスで検索",

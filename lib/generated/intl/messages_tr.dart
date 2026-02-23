@@ -1468,6 +1468,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
       "Deadline reminders",
     ),
+    "g_key_dex_approve_exact": MessageLookupByLibrary.simpleMessage(
+      "Tam Miktar",
+    ),
+    "g_key_dex_approve_unlimited": MessageLookupByLibrary.simpleMessage(
+      "Sınırsız",
+    ),
+    "g_key_dex_approve_unlimited_info": MessageLookupByLibrary.simpleMessage(
+      "Sınırsız onay: yönlendirici bu tokenı istediği zaman harcayabilir. Standart uygulama, ancak kontrat ele geçirilirse risk taşır.",
+    ),
     "g_key_dex_best_route": MessageLookupByLibrary.simpleMessage("En İyi Rota"),
     "g_key_dex_best_source": MessageLookupByLibrary.simpleMessage(
       "En İyi Kaynak",
@@ -1486,11 +1495,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_no_tokens_found": MessageLookupByLibrary.simpleMessage(
       "Token bulunamadı",
     ),
+    "g_key_dex_price_chart": MessageLookupByLibrary.simpleMessage(
+      "Fiyat Grafiği",
+    ),
     "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage(
       "Fiyat Etkisi",
     ),
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
       "Fiyat teklifi başarısız",
+    ),
+    "g_key_dex_quote_refreshed": MessageLookupByLibrary.simpleMessage(
+      "Teklif yenilendi",
     ),
     "g_key_dex_retry": MessageLookupByLibrary.simpleMessage("Tekrar Dene"),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(

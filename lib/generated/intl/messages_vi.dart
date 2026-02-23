@@ -1438,6 +1438,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
       "Deadline reminders",
     ),
+    "g_key_dex_approve_exact": MessageLookupByLibrary.simpleMessage(
+      "Số tiền chính xác",
+    ),
+    "g_key_dex_approve_unlimited": MessageLookupByLibrary.simpleMessage(
+      "Không giới hạn",
+    ),
+    "g_key_dex_approve_unlimited_info": MessageLookupByLibrary.simpleMessage(
+      "Phê duyệt không giới hạn: bộ định tuyến có thể chi tiêu token này bất cứ lúc nào. Thông lệ tiêu chuẩn nhưng có rủi ro nếu hợp đồng bị xâm phạm.",
+    ),
     "g_key_dex_best_route": MessageLookupByLibrary.simpleMessage(
       "Tuyến Tốt Nhất",
     ),
@@ -1460,11 +1469,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_no_tokens_found": MessageLookupByLibrary.simpleMessage(
       "Không tìm thấy token",
     ),
+    "g_key_dex_price_chart": MessageLookupByLibrary.simpleMessage(
+      "Biểu đồ giá",
+    ),
     "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage(
       "Tác Động Giá",
     ),
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
       "Lấy báo giá thất bại",
+    ),
+    "g_key_dex_quote_refreshed": MessageLookupByLibrary.simpleMessage(
+      "Báo giá đã được làm mới",
     ),
     "g_key_dex_retry": MessageLookupByLibrary.simpleMessage("Thử Lại"),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(

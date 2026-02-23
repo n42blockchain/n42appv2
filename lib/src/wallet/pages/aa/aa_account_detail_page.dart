@@ -5,16 +5,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/aa/models/smart_account.dart';
+import 'package:n42appv2/src/wallet/aa/aa.dart';
 import 'package:n42appv2/src/wallet/pages/aa/aa_send_page.dart';
 import 'package:n42appv2/src/wallet/widgets/aa/deployment_status_indicator.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 /// AA 账户详情页面
-class AAAccountDetailPage extends StatefulWidget {
+class AAAccountDetailPage extends ConsumerStatefulWidget {
   final SmartAccount account;
   final String walletAddress;
 
@@ -25,10 +28,10 @@ class AAAccountDetailPage extends StatefulWidget {
   });
 
   @override
-  State<AAAccountDetailPage> createState() => _AAAccountDetailPageState();
+  ConsumerState<AAAccountDetailPage> createState() => _AAAccountDetailPageState();
 }
 
-class _AAAccountDetailPageState extends State<AAAccountDetailPage> {
+class _AAAccountDetailPageState extends ConsumerState<AAAccountDetailPage> {
   bool _isDeploying = false;
 
   void _copyAddress() {
@@ -41,22 +44,62 @@ class _AAAccountDetailPageState extends State<AAAccountDetailPage> {
     );
   }
 
-  Future<void> _deployAccount() async {
+  Future<void> _checkAccountStatus() async {
     setState(() => _isDeploying = true);
-
-    // 模拟部署
-    await Future.delayed(const Duration(seconds: 2));
-
-    if (mounted) {
-      setState(() => _isDeploying = false);
-
+    try {
+      final wap = ref.read(wapBridgeProvider);
+      final aaProvider = AAProvider(wap);
+      final isDeployed = await aaProvider.checkAccountDeployment(widget.account);
+      if (!mounted) return;
+      final msg = isDeployed
+          ? S.of(context).g_key_aa_deployed
+          : S.of(context).g_key_aa_deploy_auto_note;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(S.of(context).g_key_aa_deploy_started),
-          backgroundColor: Colors.green,
+          content: Text(msg),
+          backgroundColor: isDeployed ? Colors.green : null,
         ),
       );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(S.of(context).g_key_aa_retry)),
+      );
+    } finally {
+      if (mounted) setState(() => _isDeploying = false);
     }
+  }
+
+  void _showReceiveDialog() {
+    final address = widget.account.address;
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(S.of(context).g_key_aa_receive_address),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            QrImageView(
+              data: address.isEmpty ? '0x0' : address,
+              version: QrVersions.auto,
+              size: 200.0,
+            ),
+            const SizedBox(height: 12),
+            SelectableText(
+              address,
+              style: const TextStyle(fontSize: 12),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(S.of(context).g_key_79),
+          ),
+        ],
+      ),
+    );
   }
 
   void _navigateToSend() {
@@ -251,20 +294,16 @@ class _AAAccountDetailPageState extends State<AAAccountDetailPage> {
             icon: Icons.qr_code,
             label: S.of(context).g_key_33,
             color: const Color(0xFF66BB6A),
-            onTap: () {
-              // 显示收款二维码
-            },
+            onTap: _showReceiveDialog,
           ),
         ),
         SizedBox(width: ScreenUtil().setWidth(12)),
         Expanded(
           child: _buildActionButton(
-            icon: Icons.rocket_launch,
-            label: S.of(context).g_key_aa_deploy,
+            icon: Icons.radar,
+            label: S.of(context).g_key_aa_check_status,
             color: const Color(0xFFFF9800),
-            onTap: widget.account.needsDeployment && !_isDeploying
-                ? _deployAccount
-                : null,
+            onTap: _isDeploying ? null : _checkAccountStatus,
             isLoading: _isDeploying,
           ),
         ),

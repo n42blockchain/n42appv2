@@ -217,45 +217,75 @@ class _AAHomePageState extends State<AAHomePage> {
             ],
           ),
           SizedBox(height: ScreenUtil().setWidth(20)),
-          // 特性列表
-          _buildFeatureItem(
-            Icons.local_gas_station,
-            S.of(context).g_key_aa_feature_gas,
+          // 利益卡片
+          _buildBenefitCard(
+            Icons.local_gas_station_outlined,
+            S.of(context).g_key_aa_benefit_gas_title,
+            S.of(context).g_key_aa_benefit_gas_desc,
+            const Color(0xFF5E97F6),
           ),
-          _buildFeatureItem(
-            Icons.layers,
-            S.of(context).g_key_aa_feature_batch,
+          _buildBenefitCard(
+            Icons.layers_outlined,
+            S.of(context).g_key_aa_benefit_batch_title,
+            S.of(context).g_key_aa_benefit_batch_desc,
+            const Color(0xFFFF9800),
           ),
-          _buildFeatureItem(
-            Icons.security,
-            S.of(context).g_key_aa_feature_security,
+          _buildBenefitCard(
+            Icons.people_outline,
+            S.of(context).g_key_aa_benefit_recovery_title,
+            S.of(context).g_key_aa_benefit_recovery_desc,
+            const Color(0xFF4CAF50),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildFeatureItem(IconData icon, String text) {
+  Widget _buildBenefitCard(IconData icon, String title, String desc, Color color) {
     return Padding(
-      padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(8)),
+      padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            icon,
-            size: ScreenUtil().setWidth(20),
-            color: const Color(0xFF6366F1),
+          Container(
+            width: ScreenUtil().setWidth(40),
+            height: ScreenUtil().setWidth(40),
+            decoration: BoxDecoration(
+              color: color.withAlpha(25),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+            ),
+            child: Center(
+              child: Icon(icon, size: ScreenUtil().setWidth(22), color: color),
+            ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(10)),
+          SizedBox(width: ScreenUtil().setWidth(12)),
           Expanded(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    fontWeight: FontWeight.w600,
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.mainTextColor.name,
+                    ),
+                  ),
                 ),
-              ),
+                SizedBox(height: ScreenUtil().setWidth(2)),
+                Text(
+                  desc,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(22),
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.itemSubtitleTextColor.name,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -458,67 +488,75 @@ class _AAHomePageState extends State<AAHomePage> {
   }
 
   Widget _buildEmptyState() {
+    final steps = [
+      S.of(context).g_key_aa_onboard_step1,
+      S.of(context).g_key_aa_onboard_step2,
+      S.of(context).g_key_aa_onboard_step3,
+    ];
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
         border: Border.all(
           color: const Color(0xFF6366F1).withAlpha(30),
-          style: BorderStyle.solid,
         ),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Icons.account_balance_wallet_outlined,
-            size: ScreenUtil().setWidth(64),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ).withAlpha(100),
-          ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
           Text(
             S.of(context).g_key_aa_no_accounts,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(28),
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
               color: AppThemeUtils.getColorByKey(
                 context,
                 AppThemeKeys.mainTextColor.name,
               ),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
-          Text(
-            S.of(context).g_key_aa_create_first_account,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
+          SizedBox(height: ScreenUtil().setWidth(16)),
+          ...List.generate(steps.length, (i) {
+            return Padding(
+              padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
+              child: Row(
+                children: [
+                  Container(
+                    width: ScreenUtil().setWidth(28),
+                    height: ScreenUtil().setWidth(28),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF6366F1).withAlpha(30),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Text(
+                        '${i + 1}',
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(20),
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF6366F1),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: ScreenUtil().setWidth(12)),
+                  Expanded(
+                    child: Text(
+                      steps[i],
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(24),
+                        color: AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.itemSubtitleTextColor.name,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
-          ElevatedButton.icon(
-            onPressed: _navigateToCreateAccount,
-            icon: const Icon(Icons.add, size: 20),
-            label: Text(S.of(context).g_key_aa_create_account),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF6366F1),
-              foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(24),
-                vertical: ScreenUtil().setWidth(12),
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-              ),
-            ),
-          ),
+            );
+          }),
         ],
       ),
     );

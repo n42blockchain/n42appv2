@@ -3,11 +3,13 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/aa/models/smart_account.dart';
+import 'package:n42appv2/src/wallet/aa/aa.dart' hide PaymasterType;
 import 'package:n42appv2/src/wallet/pages/aa/paymaster_select_page.dart';
 import 'package:n42appv2/src/wallet/widgets/aa/aa_transaction_preview.dart';
 import 'package:n42appv2/src/wallet/widgets/aa/gas_sponsorship_badge.dart';
@@ -52,20 +54,65 @@ class _AASendPageState extends State<AASendPage> {
     super.dispose();
   }
 
+  /// 将 chainId 转换为链符号
+  String _chainSymbol() {
+    final entry = AAConfig.chainIds.entries.firstWhere(
+      (e) => e.value == widget.account.chainId,
+      orElse: () => const MapEntry('ETH', 1),
+    );
+    return entry.key;
+  }
+
+  /// 构建 ETH 转账的 callData
+  Uint8List _buildCallData() {
+    final toAddress = _toController.text.trim();
+    final amountText = _amountController.text.trim();
+    final amountEth = double.tryParse(amountText) ?? 0.0;
+    final amountWei = BigInt.from((amountEth * 1e18).toInt());
+    return CalldataBuilder.buildExecute(
+      target: toAddress.isEmpty ? '0x0000000000000000000000000000000000000000' : toAddress,
+      value: amountWei,
+      data: Uint8List(0),
+    );
+  }
+
   Future<void> _estimateGas() async {
     if (_toController.text.isEmpty || _amountController.text.isEmpty) return;
 
     setState(() => _isEstimating = true);
 
-    // 模拟 Gas 估算
-    await Future.delayed(const Duration(milliseconds: 500));
+    // 默认 gas 价格（20 Gwei baseFee + 2 Gwei priority）
+    const defaultMaxFeePerGas = 22 * 1000000000; // 22 Gwei
+    try {
+      final chainSymbol = _chainSymbol();
+      final bundler = BundlerClient.forChain(chainSymbol);
 
-    if (mounted) {
+      final estimationOp = UserOpBuilder()
+          .setSender(widget.account.address)
+          .setNonce(BigInt.zero)
+          .setCallData(_buildCallData())
+          .buildForEstimation();
+
+      final estimator = AAGasEstimator(bundler);
+      final result = await estimator.estimate(estimationOp);
+
+      if (!mounted) return;
       setState(() {
-        _isEstimating = false;
-        _estimatedGas = BigInt.from(150000);
-        _maxFeePerGas = BigInt.from(50 * 1e9); // 50 Gwei
+        _estimatedGas = result.totalGas;
+        _maxFeePerGas = BigInt.from(defaultMaxFeePerGas);
       });
+    } catch (e) {
+      if (!mounted) return;
+      // 估算失败时使用保守默认值，发送按钮仍可用
+      setState(() {
+        _estimatedGas = BigInt.from(150000);
+        _maxFeePerGas = BigInt.from(defaultMaxFeePerGas);
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(S.of(context).g_key_aa_gas_estimate_failed)),
+      );
+    } finally {
+      if (mounted) setState(() => _isEstimating = false);
     }
   }
 

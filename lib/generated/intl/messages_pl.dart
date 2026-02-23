@@ -1487,6 +1487,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
       "Deadline reminders",
     ),
+    "g_key_dex_approve_exact": MessageLookupByLibrary.simpleMessage(
+      "Dokładna kwota",
+    ),
+    "g_key_dex_approve_unlimited": MessageLookupByLibrary.simpleMessage(
+      "Nieograniczone",
+    ),
+    "g_key_dex_approve_unlimited_info": MessageLookupByLibrary.simpleMessage(
+      "Nieograniczone zatwierdzenie: router może w dowolnym momencie wydać ten token. Standardowa praktyka, ale ryzykowna w przypadku naruszenia kontraktu.",
+    ),
     "g_key_dex_best_route": MessageLookupByLibrary.simpleMessage(
       "Najlepsza Trasa",
     ),
@@ -1507,11 +1516,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_no_tokens_found": MessageLookupByLibrary.simpleMessage(
       "Nie znaleziono tokenów",
     ),
+    "g_key_dex_price_chart": MessageLookupByLibrary.simpleMessage(
+      "Wykres ceny",
+    ),
     "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage(
       "Wpływ na Cenę",
     ),
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
       "Wycena nieudana",
+    ),
+    "g_key_dex_quote_refreshed": MessageLookupByLibrary.simpleMessage(
+      "Wycena odświeżona",
     ),
     "g_key_dex_retry": MessageLookupByLibrary.simpleMessage("Ponów"),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(

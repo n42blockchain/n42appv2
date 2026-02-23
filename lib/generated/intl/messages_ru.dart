@@ -1486,6 +1486,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
       "Deadline reminders",
     ),
+    "g_key_dex_approve_exact": MessageLookupByLibrary.simpleMessage(
+      "Точная сумма",
+    ),
+    "g_key_dex_approve_unlimited": MessageLookupByLibrary.simpleMessage(
+      "Без ограничений",
+    ),
+    "g_key_dex_approve_unlimited_info": MessageLookupByLibrary.simpleMessage(
+      "Неограниченное одобрение: маршрутизатор может тратить этот токен в любое время. Стандартная практика, но опасна при компрометации контракта.",
+    ),
     "g_key_dex_best_route": MessageLookupByLibrary.simpleMessage(
       "Лучший Маршрут",
     ),
@@ -1508,11 +1517,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_no_tokens_found": MessageLookupByLibrary.simpleMessage(
       "Токены не найдены",
     ),
+    "g_key_dex_price_chart": MessageLookupByLibrary.simpleMessage(
+      "График цены",
+    ),
     "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage(
       "Влияние на Цену",
     ),
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
       "Ошибка котировки",
+    ),
+    "g_key_dex_quote_refreshed": MessageLookupByLibrary.simpleMessage(
+      "Котировка обновлена",
     ),
     "g_key_dex_retry": MessageLookupByLibrary.simpleMessage("Повторить"),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(

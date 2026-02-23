@@ -1529,6 +1529,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
       "Deadline reminders",
     ),
+    "g_key_dex_approve_exact": MessageLookupByLibrary.simpleMessage(
+      "Genaue Menge",
+    ),
+    "g_key_dex_approve_unlimited": MessageLookupByLibrary.simpleMessage(
+      "Unbegrenzt",
+    ),
+    "g_key_dex_approve_unlimited_info": MessageLookupByLibrary.simpleMessage(
+      "Unbegrenzte Genehmigung: Der Router kann dieses Token jederzeit ausgeben. Standard, birgt jedoch Risiken bei Kompromittierung.",
+    ),
     "g_key_dex_best_route": MessageLookupByLibrary.simpleMessage("Beste Route"),
     "g_key_dex_best_source": MessageLookupByLibrary.simpleMessage(
       "Beste Quelle",
@@ -1547,11 +1556,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_no_tokens_found": MessageLookupByLibrary.simpleMessage(
       "Keine Token gefunden",
     ),
+    "g_key_dex_price_chart": MessageLookupByLibrary.simpleMessage(
+      "Preisdiagramm",
+    ),
     "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage(
       "Preiseinfluss",
     ),
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
       "Angebot fehlgeschlagen",
+    ),
+    "g_key_dex_quote_refreshed": MessageLookupByLibrary.simpleMessage(
+      "Angebot aktualisiert",
     ),
     "g_key_dex_retry": MessageLookupByLibrary.simpleMessage("Wiederholen"),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(

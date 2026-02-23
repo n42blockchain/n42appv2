@@ -1384,6 +1384,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_deadline_reminders": MessageLookupByLibrary.simpleMessage(
       "Deadline reminders",
     ),
+    "g_key_dex_approve_exact": MessageLookupByLibrary.simpleMessage("정확한 금액"),
+    "g_key_dex_approve_unlimited": MessageLookupByLibrary.simpleMessage("무제한"),
+    "g_key_dex_approve_unlimited_info": MessageLookupByLibrary.simpleMessage(
+      "무제한 승인: 라우터가 언제든지 이 토큰을 사용할 수 있습니다. 표준적인 방법이지만 계약이 침해될 경우 위험합니다.",
+    ),
     "g_key_dex_best_route": MessageLookupByLibrary.simpleMessage("최적 경로"),
     "g_key_dex_best_source": MessageLookupByLibrary.simpleMessage("최적 소스"),
     "g_key_dex_chain": MessageLookupByLibrary.simpleMessage("체인"),
@@ -1394,8 +1399,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_no_tokens_found": MessageLookupByLibrary.simpleMessage(
       "토큰을 찾을 수 없음",
     ),
+    "g_key_dex_price_chart": MessageLookupByLibrary.simpleMessage("가격 차트"),
     "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage("가격 영향"),
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage("견적 실패"),
+    "g_key_dex_quote_refreshed": MessageLookupByLibrary.simpleMessage(
+      "견적이 갱신되었습니다",
+    ),
     "g_key_dex_retry": MessageLookupByLibrary.simpleMessage("다시 시도"),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(
       "심볼 / 이름 / 주소 검색",
