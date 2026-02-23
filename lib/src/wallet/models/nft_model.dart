@@ -68,9 +68,11 @@ class NftModel {
     final contractType = contract['type'] as String? ?? '';
     final nftType = contractType.isNotEmpty ? contractType : 'ERC721';
 
-    // 余额（owners_v2 中的 quantity_string 或 quantity）
-    final quantityStr = nft['quantity_string'] as String? ?? '1';
-    final balance = int.tryParse(quantityStr) ?? 1;
+    // 余额：quantity_string（字符串）优先，回退到 quantity（整数）字段
+    final rawQ = nft['quantity_string'] ?? nft['quantity'];
+    final balance = rawQ is int
+        ? rawQ
+        : (rawQ is String ? (int.tryParse(rawQ) ?? 1) : 1);
 
     // OpenSea / marketplace URL
     final marketplaces = nft['markets'] as List<dynamic>?;

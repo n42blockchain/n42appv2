@@ -895,6 +895,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_batch_transaction": MessageLookupByLibrary.simpleMessage(
       "Batch Transaction",
     ),
+    "g_key_aa_benefit_batch_desc": MessageLookupByLibrary.simpleMessage(
+      "Approve and swap in one transaction — no more two-step confirmations",
+    ),
+    "g_key_aa_benefit_batch_title": MessageLookupByLibrary.simpleMessage(
+      "One-Click Batch Actions",
+    ),
+    "g_key_aa_benefit_gas_desc": MessageLookupByLibrary.simpleMessage(
+      "Sponsor transactions or pay fees with ERC-20 tokens instead of ETH",
+    ),
+    "g_key_aa_benefit_gas_title": MessageLookupByLibrary.simpleMessage(
+      "Pay Gas with Any Token",
+    ),
+    "g_key_aa_benefit_recovery_desc": MessageLookupByLibrary.simpleMessage(
+      "Recover access via trusted contacts if you lose your private key",
+    ),
+    "g_key_aa_benefit_recovery_title": MessageLookupByLibrary.simpleMessage(
+      "Social Recovery",
+    ),
     "g_key_aa_biconomy_account": MessageLookupByLibrary.simpleMessage(
       "Conta Biconomy",
     ),
@@ -905,6 +923,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_chain": MessageLookupByLibrary.simpleMessage("Chain"),
     "g_key_aa_chain_id": MessageLookupByLibrary.simpleMessage("Chain ID"),
     "g_key_aa_change": MessageLookupByLibrary.simpleMessage("Change"),
+    "g_key_aa_check_status": MessageLookupByLibrary.simpleMessage(
+      "Check Status",
+    ),
     "g_key_aa_clear_all": MessageLookupByLibrary.simpleMessage("Clear All"),
     "g_key_aa_coming_soon": MessageLookupByLibrary.simpleMessage("Coming Soon"),
     "g_key_aa_continue": MessageLookupByLibrary.simpleMessage("Continue"),
@@ -936,6 +957,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_created": MessageLookupByLibrary.simpleMessage("Created"),
     "g_key_aa_custom": MessageLookupByLibrary.simpleMessage("Custom"),
     "g_key_aa_deploy": MessageLookupByLibrary.simpleMessage("Deploy"),
+    "g_key_aa_deploy_auto_note": MessageLookupByLibrary.simpleMessage(
+      "Account will be deployed automatically on your first transaction",
+    ),
     "g_key_aa_deploy_failed": MessageLookupByLibrary.simpleMessage(
       "Deploy Failed",
     ),
@@ -993,6 +1017,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_full_access": MessageLookupByLibrary.simpleMessage("Full Access"),
     "g_key_aa_gas_estimate": MessageLookupByLibrary.simpleMessage(
       "Gas Estimate",
+    ),
+    "g_key_aa_gas_estimate_failed": MessageLookupByLibrary.simpleMessage(
+      "Gas estimate failed, using default",
     ),
     "g_key_aa_gas_payment": MessageLookupByLibrary.simpleMessage("Gas Payment"),
     "g_key_aa_gas_payment_options": MessageLookupByLibrary.simpleMessage(
@@ -1068,6 +1095,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_not_deployed_desc": MessageLookupByLibrary.simpleMessage(
       "Account will be deployed on first transaction",
     ),
+    "g_key_aa_onboard_step1": MessageLookupByLibrary.simpleMessage(
+      "Create smart account (free, no ETH needed)",
+    ),
+    "g_key_aa_onboard_step2": MessageLookupByLibrary.simpleMessage(
+      "Fund it — receive any EVM token",
+    ),
+    "g_key_aa_onboard_step3": MessageLookupByLibrary.simpleMessage(
+      "Transact gaslessly with Paymaster",
+    ),
     "g_key_aa_operations": MessageLookupByLibrary.simpleMessage("Operations"),
     "g_key_aa_owner": MessageLookupByLibrary.simpleMessage("Owner"),
     "g_key_aa_pay_gas_with_token": MessageLookupByLibrary.simpleMessage(
@@ -1116,6 +1152,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Preview Address",
     ),
     "g_key_aa_ready": MessageLookupByLibrary.simpleMessage("Ready"),
+    "g_key_aa_receive_address": MessageLookupByLibrary.simpleMessage(
+      "Receive Address",
+    ),
     "g_key_aa_recommended": MessageLookupByLibrary.simpleMessage("Recommended"),
     "g_key_aa_retry": MessageLookupByLibrary.simpleMessage("Retry"),
     "g_key_aa_revoke": MessageLookupByLibrary.simpleMessage("Revoke"),
@@ -2537,6 +2576,59 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_nft_220": MessageLookupByLibrary.simpleMessage("Voltar"),
     "g_key_nft_41": MessageLookupByLibrary.simpleMessage("Transação enviada"),
     "g_key_nft_47": MessageLookupByLibrary.simpleMessage("Selecionar vídeo"),
+    "g_key_nft_address_invalid": MessageLookupByLibrary.simpleMessage(
+      "Invalid wallet address",
+    ),
+    "g_key_nft_balance": MessageLookupByLibrary.simpleMessage("Balance"),
+    "g_key_nft_burn_confirm": MessageLookupByLibrary.simpleMessage(
+      "This action is irreversible. The NFT will be sent to the burn address.",
+    ),
+    "g_key_nft_burn_evm_only": MessageLookupByLibrary.simpleMessage(
+      "Burn is only supported on EVM chains",
+    ),
+    "g_key_nft_burn_sol_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Solana NFT burn is coming soon",
+    ),
+    "g_key_nft_burn_title": MessageLookupByLibrary.simpleMessage("Burn NFT"),
+    "g_key_nft_collection": MessageLookupByLibrary.simpleMessage("Collection"),
+    "g_key_nft_contract": MessageLookupByLibrary.simpleMessage("Contract"),
+    "g_key_nft_description": MessageLookupByLibrary.simpleMessage(
+      "Description",
+    ),
+    "g_key_nft_error_retry": MessageLookupByLibrary.simpleMessage(
+      "Failed to load NFTs. Tap to retry.",
+    ),
+    "g_key_nft_filter_all": MessageLookupByLibrary.simpleMessage("All"),
+    "g_key_nft_filter_video": MessageLookupByLibrary.simpleMessage("Video"),
+    "g_key_nft_floor_price": MessageLookupByLibrary.simpleMessage("Floor"),
+    "g_key_nft_gallery": MessageLookupByLibrary.simpleMessage("NFT Gallery"),
+    "g_key_nft_inscription": MessageLookupByLibrary.simpleMessage(
+      "Inscription #",
+    ),
+    "g_key_nft_no_items": MessageLookupByLibrary.simpleMessage("No NFTs found"),
+    "g_key_nft_no_url": MessageLookupByLibrary.simpleMessage(
+      "No explorer link available",
+    ),
+    "g_key_nft_no_video_support": MessageLookupByLibrary.simpleMessage(
+      "Video playback not supported",
+    ),
+    "g_key_nft_open_browser": MessageLookupByLibrary.simpleMessage(
+      "View on Explorer",
+    ),
+    "g_key_nft_ordinals": MessageLookupByLibrary.simpleMessage("Ordinals"),
+    "g_key_nft_ordinals_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Ordinals transfers are not yet supported",
+    ),
+    "g_key_nft_quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
+    "g_key_nft_search_hint": MessageLookupByLibrary.simpleMessage(
+      "Search by name or collection",
+    ),
+    "g_key_nft_send": MessageLookupByLibrary.simpleMessage("Send NFT"),
+    "g_key_nft_send_sol_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Solana NFT transfers are coming soon",
+    ),
+    "g_key_nft_token_id": MessageLookupByLibrary.simpleMessage("Token ID"),
+    "g_key_nft_type": MessageLookupByLibrary.simpleMessage("Type"),
     "g_key_no_linked_accounts": MessageLookupByLibrary.simpleMessage(
       "No linked accounts",
     ),
@@ -2634,6 +2726,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_saml_login": MessageLookupByLibrary.simpleMessage("SAML Login"),
     "g_key_saml_not_configured": MessageLookupByLibrary.simpleMessage(
       "SAML not configured",
+    ),
+    "g_key_security_goplus_caution": MessageLookupByLibrary.simpleMessage(
+      "Use Caution",
+    ),
+    "g_key_security_goplus_checking": MessageLookupByLibrary.simpleMessage(
+      "Checking contract security...",
+    ),
+    "g_key_security_goplus_danger": MessageLookupByLibrary.simpleMessage(
+      "High Risk Detected",
+    ),
+    "g_key_security_goplus_powered_by": MessageLookupByLibrary.simpleMessage(
+      "GoPlus",
+    ),
+    "g_key_security_goplus_safe": MessageLookupByLibrary.simpleMessage(
+      "Contract Verified Safe",
     ),
     "g_key_send_code": MessageLookupByLibrary.simpleMessage(
       "Send Verification Code",

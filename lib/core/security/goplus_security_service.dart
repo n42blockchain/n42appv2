@@ -59,7 +59,7 @@ class GoplusSecurityService {
       final raw = await BaseApi.requestEmptyH.get<dynamic>(
         '$_base/token_security/$chainId',
         params: {'contract_addresses': normalizedAddr},
-        header: const {},
+        header: <String, dynamic>{},
       );
 
       if (raw == null || raw is! Map) return null;
@@ -68,8 +68,13 @@ class GoplusSecurityService {
       final resultMap = raw['result'] as Map<String, dynamic>?;
       if (resultMap == null || resultMap.isEmpty) return null;
 
-      final tokenData =
-          resultMap[normalizedAddr] as Map<String, dynamic>?;
+      // GoPlus returns the key as the contract address used in the request.
+      // Add a fallback: try original case, then first entry (single-query responses
+      // always return exactly one entry).
+      final tokenData = (resultMap[normalizedAddr] ??
+              resultMap[contractAddress] ??
+              (resultMap.length == 1 ? resultMap.values.first : null))
+          as Map<String, dynamic>?;
       if (tokenData == null) return null;
 
       final result = GoplusSecurityResult.fromTokenJson(tokenData);

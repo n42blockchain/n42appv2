@@ -72,7 +72,8 @@ class _NftListPageState extends State<NftListPage> {
   }
 
   List<NftModel> get _filtered {
-    var list = _nfts;
+    // 过滤掉 balance <= 0 的 NFT（API 数据异常 or 已全部转出的 ERC-1155）
+    var list = _nfts.where((n) => n.balance > 0).toList();
 
     // 类型过滤
     switch (_filter) {
