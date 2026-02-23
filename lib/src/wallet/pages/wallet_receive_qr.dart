@@ -182,7 +182,8 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
       final image = await boundary.toImage(pixelRatio: 3.0);
       final byteData =
           await image.toByteData(format: ui.ImageByteFormat.png);
-      final bytes = byteData!.buffer.asUint8List();
+      if (byteData == null) return;
+      final bytes = byteData.buffer.asUint8List();
 
       final tempDir = await getTemporaryDirectory();
       final file = await File('${tempDir.path}/receive_qr.png')
