@@ -20,17 +20,7 @@ import 'package:n42appv2/src/wallet/models/transaction/sol_transaction_item.dart
 import 'package:n42appv2/src/wallet/models/transation_record_model.dart';
 import 'package:n42appv2/src/wallet/pages/add_token/wallet_coin_token_add2.dart';
 import 'package:n42appv2/src/wallet/pages/market/market_coin_info.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_algo.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_btc.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_dot.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_fil.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_sol.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_sui.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_ton.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_trx.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_xrp.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_zil.dart';
+import 'package:n42appv2/src/wallet/pages/send/unified_send_page.dart';
 import 'package:n42appv2/src/wallet/pages/batch_transfer/batch_transfer_page.dart';
 import 'package:n42appv2/src/wallet/provider/batch_transfer_provider.dart';
 import 'package:n42appv2/src/wallet/utils/chain_util.dart';
@@ -205,32 +195,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo> {
         context, MaterialPageRoute(builder: (context) => targetPage));
   }
 
-  Widget? _buildSendPage() {
-    switch (widget.coinModel.coin['blockchainType']) {
-      case "Bitcoin":
-        return WalletChainSendBtc(widget.coinModel);
-      case "Solana":
-        return WalletChainSendSol(widget.coinModel);
-      case "Tron":
-        return WalletChainSendTrx(widget.coinModel);
-      case "Algorand":
-        return WalletChainSendAlgo(widget.coinModel);
-      case "Ripple":
-        return WalletChainSendXrp(widget.coinModel);
-      case "Filecoin":
-        return WalletChainSendFil(widget.coinModel);
-      case "Polkadot":
-        return WalletChainSendDot(widget.coinModel);
-      case "Sui":
-        return WalletChainSendSui(widget.coinModel);
-      case "TheOpenNetwork":
-        return WalletChainSendTon(widget.coinModel);
-      case "Zilliqa":
-        return WalletChainSendZil(widget.coinModel);
-      default:
-        return WalletChainSend(widget.coinModel);
-    }
-  }
+  Widget? _buildSendPage() => UnifiedSendPage(widget.coinModel);
 
   @override
   void initState() {
