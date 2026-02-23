@@ -33,7 +33,7 @@ class _AboutAppState extends State<AboutApp> {
   Future<void> _initData() async {
     final packageInfo = await PackageInfo.fromPlatform();
     setState(() {
-      appVersion = packageInfo.version;
+      appVersion = '${packageInfo.version} (${packageInfo.buildNumber})';
     });
 
     if (AppConfig.isOpenAppUpdate) {

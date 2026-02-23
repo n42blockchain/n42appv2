@@ -1,0 +1,8 @@
+#!/bin/bash
+# Auto-increment build number on every commit.
+# Bumps pubspec.yaml build number and stages the change.
+
+ROOT="$(git rev-parse --show-toplevel)"
+
+"$ROOT/scripts/bump_version.sh"
+git add "$ROOT/pubspec.yaml"
