@@ -232,6 +232,22 @@ class SPUtil {
     return prefs?.getBool(SPkey.hideSmallAssets.name) ?? false;
   }
 
+  // 小额资产过滤阈值（0 = 关闭过滤；>0 = 过滤掉 value < threshold 的代币）
+  // 支持的档位：0, 1, 5, 10, 50
+  Future<void> setSmallAssetsThreshold(double threshold) async {
+    await initPrefs();
+    await prefs?.setDouble(SPkey.smallAssetsThreshold.name, threshold);
+  }
+
+  Future<double> getSmallAssetsThreshold() async {
+    await initPrefs();
+    final stored = prefs?.getDouble(SPkey.smallAssetsThreshold.name);
+    if (stored != null) return stored;
+    // 向后兼容：旧版用 bool hideSmallAssets，若为 true 则迁移为 $1 阈值
+    final oldBool = prefs?.getBool(SPkey.hideSmallAssets.name) ?? false;
+    return oldBool ? 1.0 : 0.0;
+  }
+
   // 行情自选列表（存储 coin symbol lowercase）
   Future<List<String>> getMarketWatchlist() async {
     await initPrefs();
@@ -468,5 +484,6 @@ enum SPkey {
   coinPriceAlerts, // 币价到价提醒配置，JSON Map<coinId, CoinPriceAlertConfig>
   accentColor,     // 自定义主色调，存 ARGB int（0 表示默认蓝色）
   ignoredTokenContracts, // 代币自动发现：用户手动忽略的合约地址 JSON List<String>
+  smallAssetsThreshold, // 小额资产过滤阈值（double: 0=关闭, 1/5/10/50 表示过滤低于该 USD 价值的代币）
 }
 

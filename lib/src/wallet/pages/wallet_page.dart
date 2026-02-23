@@ -71,7 +71,9 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   final oCcy = NumberFormat("#,##0.0#", "en_US");
   late ScrollController _scrollController;
   bool showAddTokenButton = false; //显示底部添加代币按钮
-  bool _hideSmallAssets = false; // 小额资产隐藏开关（< $1 USD）
+  /// 小额资产过滤阈值：0=关闭，1/5/10/50 表示过滤低于该 USD 价值的代币
+  double _smallAssetsThreshold = 0.0;
+  static const List<double> _thresholdCycle = [0.0, 1.0, 5.0, 10.0, 50.0];
 
   // ── Token auto-discovery ──────────────────────────────────────────────────
   /// Tokens found on-chain but not yet in the wallet.
@@ -125,9 +127,9 @@ class _WalletPageState extends ConsumerState<WalletPage> {
           setShowAddTokenButton(false);
         }
       });
-    // 恢复小额资产隐藏偏好
-    SPUtil().getHideSmallAssets().then((v) {
-      if (mounted) setState(() => _hideSmallAssets = v);
+    // 恢复小额资产过滤阈值偏好（兼容旧版 bool 格式）
+    SPUtil().getSmallAssetsThreshold().then((v) {
+      if (mounted) setState(() => _smallAssetsThreshold = v);
     });
     // 首次 build 完成后启动价格自动刷新 Timer（60s 间隔）
     WidgetsBinding.instance.addPostFrameCallback((_) => _startPriceTimer());
@@ -925,57 +927,63 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                     () => waValue.setCoinSortAssets("change"),
                   ),
                   const Spacer(),
-                  // 小额资产隐藏开关
-                  Tooltip(
-                    message: _hideSmallAssets ? 'Show all assets' : 'Hide assets < \$1',
-                    child: GestureDetector(
-                      onTap: () {
-                        final next = !_hideSmallAssets;
-                        setState(() => _hideSmallAssets = next);
-                        SPUtil().setHideSmallAssets(next);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(14),
-                          vertical: ScreenUtil().setWidth(6),
-                        ),
-                        decoration: BoxDecoration(
-                          color: _hideSmallAssets
-                              ? AppThemeUtils.getColorByKey(
-                                      context, AppThemeKeys.mainBlueColor.name)
-                                  .withValues(alpha: 0.15)
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              _hideSmallAssets
-                                  ? Icons.visibility_off_outlined
-                                  : Icons.visibility_outlined,
-                              size: ScreenUtil().setWidth(26),
-                              color: AppThemeUtils.getColorByKey(
-                                  context, AppThemeKeys.itemSubtitleTextColor.name),
-                            ),
-                            SizedBox(width: ScreenUtil().setWidth(6)),
-                            Text(
-                              '< \$1',
-                              style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(
-                                    context, AppThemeKeys.itemSubtitleTextColor.name),
-                                fontSize: ScreenUtil().setSp(22),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                  // 小额资产过滤：点击循环切换阈值 off→$1→$5→$10→$50→off
+                  _buildThresholdButton(),
                 ],
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  /// 小额资产阈值切换按钮
+  /// 点击循环：off → $1 → $5 → $10 → $50 → off
+  Widget _buildThresholdButton() {
+    final active = _smallAssetsThreshold > 0;
+    final label = active
+        ? '< \$${_smallAssetsThreshold.toInt()}'
+        : '< \$';
+    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final subColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    return GestureDetector(
+      onTap: () {
+        final idx = _thresholdCycle.indexOf(_smallAssetsThreshold);
+        final next = _thresholdCycle[(idx + 1) % _thresholdCycle.length];
+        setState(() => _smallAssetsThreshold = next);
+        SPUtil().setSmallAssetsThreshold(next);
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(14),
+          vertical: ScreenUtil().setWidth(6),
+        ),
+        decoration: BoxDecoration(
+          color: active ? blueColor.withValues(alpha: 0.12) : Colors.transparent,
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          border: active
+              ? Border.all(color: blueColor.withValues(alpha: 0.25), width: 1)
+              : null,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              active ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+              size: ScreenUtil().setWidth(26),
+              color: active ? blueColor : subColor,
+            ),
+            SizedBox(width: ScreenUtil().setWidth(5)),
+            Text(
+              label,
+              style: TextStyle(
+                color: active ? blueColor : subColor,
+                fontSize: ScreenUtil().setSp(22),
+                fontWeight: active ? FontWeight.w600 : FontWeight.normal,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -1031,10 +1039,13 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   }
 
   Widget coinListWidget1(WalletActionProvider waValue) {
-    // 小额资产过滤：仅在开关开启时，过滤掉 value < $1 的代币
-    final displayList = _hideSmallAssets
-        ? waValue.coinList.where((c) => (c.value as double) >= 1.0).toList()
+    // 小额资产过滤：阈值 > 0 时过滤掉价值低于阈值的代币
+    final displayList = _smallAssetsThreshold > 0
+        ? waValue.coinList.where((c) => c.value >= _smallAssetsThreshold).toList()
         : waValue.coinList;
+
+    // 初始加载（coinList 为空且钱包正在构建）→ 显示 skeleton 占位
+    final showSkeleton = waValue.coinList.isEmpty && waValue.buildwallet;
 
     // 使用 shrinkWrap 和自适应高度，避免固定高度导致溢出
     return Container(
@@ -1054,32 +1065,39 @@ class _WalletPageState extends ConsumerState<WalletPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (_discoveredTokens.isNotEmpty) _buildDiscoveryBanner(),
-          if(waValue.loadBalance==Load.loading)
-          Container(
-            width: double.infinity,
-            height: ScreenUtil().setWidth(60.0),
-            alignment: Alignment.center,
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.textColorOrange.name),
-            child: Text(
-              S.of(context).g_key_208,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
+          // 余额逐条加载中的进度提示条
+          if (waValue.loadBalance == Load.loading)
+            Container(
+              width: double.infinity,
+              height: ScreenUtil().setWidth(60.0),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainWhiteColor.name)
+                    context, AppThemeKeys.textColorOrange.name),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+              ),
+              child: Text(
+                S.of(context).g_key_208,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(24),
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainWhiteColor.name),
+                ),
               ),
             ),
-          ),
-          if (displayList.isEmpty)
+          // Skeleton 占位：初始加载时显示
+          if (showSkeleton) const _CoinListSkeleton(),
+          // 列表为空（非加载中）
+          if (!showSkeleton && displayList.isEmpty)
             Container(
               height: ScreenUtil().setWidth(300.0),
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.backGroundColor.name),
-              child: _hideSmallAssets && waValue.coinList.isNotEmpty
+              child: _smallAssetsThreshold > 0 && waValue.coinList.isNotEmpty
                   ? _buildAllHiddenHint()
                   : const EmptyView(),
             ),
-          if (displayList.isNotEmpty)
+          if (!showSkeleton && displayList.isNotEmpty)
             _buildCoinListView(displayList),
         ],
       ),
@@ -1243,8 +1261,8 @@ class _WalletPageState extends ConsumerState<WalletPage> {
           SizedBox(height: ScreenUtil().setWidth(8)),
           GestureDetector(
             onTap: () {
-              setState(() => _hideSmallAssets = false);
-              SPUtil().setHideSmallAssets(false);
+              setState(() => _smallAssetsThreshold = 0.0);
+              SPUtil().setSmallAssetsThreshold(0.0);
             },
             child: Text(
               S.of(context).g_key_coin_list_show_all,
@@ -2037,6 +2055,145 @@ class _PinIconButton extends StatelessWidget {
                       context, AppThemeKeys.itemSubtitleTextColor.name)
                   .withValues(alpha: 0.35),
         ),
+      ),
+    );
+  }
+}
+
+// ── Skeleton 加载占位组件 ────────────────────────────────────────────────────
+
+/// 资产列表骨架屏：初始加载时显示 5 个脉冲占位行，无需外部依赖。
+class _CoinListSkeleton extends StatefulWidget {
+  const _CoinListSkeleton();
+
+  @override
+  State<_CoinListSkeleton> createState() => _CoinListSkeletonState();
+}
+
+class _CoinListSkeletonState extends State<_CoinListSkeleton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _ctrl;
+  late Animation<double> _anim;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    )..repeat(reverse: true);
+    _anim = CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut);
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _anim,
+      builder: (context, _) {
+        // 在背景色和稍亮色之间脉冲
+        final base = AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.itemBgColor.name);
+        final shimmer = Color.lerp(
+              base,
+              AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.dividerColor.name),
+              _anim.value,
+            ) ??
+            base;
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: List.generate(
+            5,
+            (i) => _SkeletonCoinRow(shimmerColor: shimmer),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _SkeletonCoinRow extends StatelessWidget {
+  const _SkeletonCoinRow({required this.shimmerColor});
+  final Color shimmerColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final radius = ScreenUtil().setWidth(8);
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // 圆形头像占位
+          Container(
+            width: ScreenUtil().setWidth(48),
+            height: ScreenUtil().setWidth(48),
+            margin: EdgeInsets.only(right: ScreenUtil().setWidth(14)),
+            decoration: BoxDecoration(
+              color: shimmerColor,
+              shape: BoxShape.circle,
+            ),
+          ),
+          // 文字占位
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 第一行：符号 + 数量
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: ScreenUtil().setWidth(80),
+                      height: ScreenUtil().setWidth(22),
+                      decoration: BoxDecoration(
+                        color: shimmerColor,
+                        borderRadius: BorderRadius.circular(radius),
+                      ),
+                    ),
+                    Container(
+                      width: ScreenUtil().setWidth(60),
+                      height: ScreenUtil().setWidth(22),
+                      decoration: BoxDecoration(
+                        color: shimmerColor,
+                        borderRadius: BorderRadius.circular(radius),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: ScreenUtil().setWidth(10)),
+                // 第二行：价格 + 总价值
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: ScreenUtil().setWidth(100),
+                      height: ScreenUtil().setWidth(18),
+                      decoration: BoxDecoration(
+                        color: shimmerColor,
+                        borderRadius: BorderRadius.circular(radius),
+                      ),
+                    ),
+                    Container(
+                      width: ScreenUtil().setWidth(50),
+                      height: ScreenUtil().setWidth(18),
+                      decoration: BoxDecoration(
+                        color: shimmerColor,
+                        borderRadius: BorderRadius.circular(radius),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
