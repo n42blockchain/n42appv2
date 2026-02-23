@@ -5,16 +5,16 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:n42appv2/src/wallet/models/wallet_info.dart';
-import 'package:n42appv2/src/wallet/utils/wallet_backup_crypto.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:n42appv2/src/widgets/button_widget.dart';
-import 'package:n42appv2/src/widgets/comm_input.dart';
-import 'package:n42appv2/src/widgets/container_widget.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/component/enums/load.dart';
+import 'package:n42_wallet/src/wallet/models/wallet_info.dart';
+import 'package:n42_wallet/src/wallet/utils/wallet_backup_crypto.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/src/widgets/button_widget.dart';
+import 'package:n42_wallet/src/widgets/comm_input.dart';
+import 'package:n42_wallet/src/widgets/container_widget.dart';
 
 /// 从 iCloud Drive / Google Drive 加密备份文件导入钱包。
 ///

@@ -1,16 +1,16 @@
 ﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:n42appv2/src/miningV2/api/mining_api.dart';
-import 'package:n42appv2/src/miningV2/pages/mining_full_node_v2.dart';
-import 'package:n42appv2/src/miningV2/utils/mining_utils.dart';
-import 'package:n42appv2/src/miningV2/widgets/mining_board_widget.dart';
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/core/utils/event_bus.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/src/miningV2/api/mining_api.dart';
+import 'package:n42_wallet/src/miningV2/pages/mining_full_node_v2.dart';
+import 'package:n42_wallet/src/miningV2/utils/mining_utils.dart';
+import 'package:n42_wallet/src/miningV2/widgets/mining_board_widget.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/core/utils/event_bus.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/src/widgets/button_widget.dart';
+import 'package:n42_wallet/src/widgets/button_widget.dart';
 
 class MiningPlansV2 extends StatefulWidget {
   const MiningPlansV2({super.key});

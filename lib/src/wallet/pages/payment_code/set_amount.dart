@@ -1,19 +1,19 @@
-import 'package:n42appv2/src/utils/regular.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/models/coin_model.dart';
-import 'package:n42appv2/src/wallet/pages/payment_code/payment_code.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:n42appv2/src/widgets/button_widget.dart';
-import 'package:n42appv2/src/widgets/empty.dart';
-import 'package:n42appv2/src/widgets/image_network.dart';
-import 'package:n42appv2/src/widgets/text_field_widget.dart';
+import 'package:n42_wallet/src/utils/regular.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/wallet/models/coin_model.dart';
+import 'package:n42_wallet/src/wallet/pages/payment_code/payment_code.dart';
+import 'package:n42_wallet/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/src/widgets/button_widget.dart';
+import 'package:n42_wallet/src/widgets/empty.dart';
+import 'package:n42_wallet/src/widgets/image_network.dart';
+import 'package:n42_wallet/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 
 class SetAmount extends ConsumerStatefulWidget {
   final int type;//0默认 跳转并替换PaymentCode页面，1返回上一个页面

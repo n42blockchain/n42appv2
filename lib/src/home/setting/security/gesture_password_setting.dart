@@ -1,12 +1,12 @@
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 
-import 'package:n42appv2/src/home/widgets/gesture_password/gesture_password.dart';
-import 'package:n42appv2/src/home/widgets/gesture_password/gesture_pattern_strength.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_1.dart';
+import 'package:n42_wallet/src/home/widgets/gesture_password/gesture_password.dart';
+import 'package:n42_wallet/src/home/widgets/gesture_password/gesture_pattern_strength.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/src/widgets/dialog_widget/tips_dialog_1.dart';
 import 'package:flutter/material.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GesturePasswordSetting extends StatefulWidget {

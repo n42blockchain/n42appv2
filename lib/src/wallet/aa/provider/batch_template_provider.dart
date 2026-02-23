@@ -6,8 +6,8 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:n42appv2/src/sqlite/app_database.dart';
-import 'package:n42appv2/src/wallet/widgets/aa/batch_operation_item.dart';
+import 'package:n42_wallet/src/sqlite/app_database.dart';
+import 'package:n42_wallet/src/wallet/widgets/aa/batch_operation_item.dart';
 
 /// AA 批量交易模板数据模型
 class BatchTemplate {

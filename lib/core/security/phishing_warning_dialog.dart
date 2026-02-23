@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_3.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/widgets/dialog_widget/tips_dialog_3.dart';
 
 /// Display a full-screen-blocking phishing warning dialog.
 ///

@@ -21,7 +21,7 @@ export 'domain/usecases/get_balance.dart' hide ChainType;
 export 'domain/usecases/send_transaction.dart';
 
 // Export ChainType from a single source
-export 'package:n42appv2/domain/entities/wallet.dart' show ChainType;
+export 'package:n42_wallet/domain/entities/wallet.dart' show ChainType;
 
 // Data Layer
 export 'data/repositories/wallet_repository_impl.dart';

@@ -5,11 +5,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/core/security/phishing_detector.dart';
-import 'package:n42appv2/core/security/phishing_warning_dialog.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/loyalty/models/loyalty_model.dart';
-import 'package:n42appv2/src/loyalty/provider/loyalty_provider.dart';
+import 'package:n42_wallet/core/security/phishing_detector.dart';
+import 'package:n42_wallet/core/security/phishing_warning_dialog.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/loyalty/models/loyalty_model.dart';
+import 'package:n42_wallet/src/loyalty/provider/loyalty_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// 任务列表过滤枚举

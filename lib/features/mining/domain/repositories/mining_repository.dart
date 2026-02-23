@@ -6,8 +6,8 @@
 // Author: Jiang Yiwei
 
 import 'package:dartz/dartz.dart';
-import 'package:n42appv2/core/error/failures.dart';
-import 'package:n42appv2/features/mining/domain/entities/mining_entity.dart';
+import 'package:n42_wallet/core/error/failures.dart';
+import 'package:n42_wallet/features/mining/domain/entities/mining_entity.dart';
 
 /// Mining Repository Interface
 ///

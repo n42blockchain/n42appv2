@@ -6,14 +6,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/component/pages/scan_page.dart';
-import 'package:n42appv2/src/wallet/models/coin_model.dart';
-import 'package:n42appv2/src/wallet/pages/address_book/address_book_list.dart';
-import 'package:n42appv2/src/wallet/pages/face_matching/face_match.dart';
-import 'package:n42appv2/src/wallet/services/recent_address_service.dart';
-import 'package:n42appv2/src/widgets/sheet_bottom.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/component/pages/scan_page.dart';
+import 'package:n42_wallet/src/wallet/models/coin_model.dart';
+import 'package:n42_wallet/src/wallet/pages/address_book/address_book_list.dart';
+import 'package:n42_wallet/src/wallet/pages/face_matching/face_match.dart';
+import 'package:n42_wallet/src/wallet/services/recent_address_service.dart';
+import 'package:n42_wallet/src/widgets/sheet_bottom.dart';
 
 // ─── 共享小部件 ─────────────────────────────────────────────────────────────
 

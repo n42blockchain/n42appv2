@@ -5,8 +5,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/hardware_wallet/pages/hardware_wallet_page.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/hardware_wallet/pages/hardware_wallet_page.dart';
 
 /// 我的页面
 ///

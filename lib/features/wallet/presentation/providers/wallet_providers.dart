@@ -7,10 +7,10 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:n42appv2/core/storage/sp_util.dart';
-import 'package:n42appv2/core/app/app_globals.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
-import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 
 /// Wallet Info Data for Provider
 /// Lightweight representation for state management

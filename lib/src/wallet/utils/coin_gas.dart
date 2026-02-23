@@ -1,5 +1,5 @@
 //返回币的基础gas费
-import 'package:n42appv2/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
 
 int getCoinGas(String coinType,{bool contract=false}){
   int index=CoinType.values.indexWhere((element) => element.name==coinType?true:false);

@@ -6,7 +6,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:n42appv2/core/security/phishing_detector.dart';
+import 'package:n42_wallet/core/security/phishing_detector.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ─── Security level enum ──────────────────────────────────────────────────

@@ -1,14 +1,14 @@
-import 'package:n42appv2/core/config/app_config.dart';
-import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
-import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/src/miningV1/api/mining_api.dart';
-import 'package:n42appv2/src/miningV1/models/mining_type.dart';
-import 'package:n42appv2/core/utils/event_bus.dart';
-import 'package:n42appv2/core/storage/sp_util.dart';
-import 'package:n42appv2/src/wallet/models/wallet_info.dart';
-import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
-import 'package:n42appv2/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/src/miningV1/api/mining_api.dart';
+import 'package:n42_wallet/src/miningV1/models/mining_type.dart';
+import 'package:n42_wallet/core/utils/event_bus.dart';
+import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/src/wallet/models/wallet_info.dart';
+import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 

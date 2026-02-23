@@ -1,25 +1,25 @@
 import 'dart:async';
 
-import 'package:n42appv2/src/browser/pages/browser_page.dart';
-import 'package:n42appv2/src/wallet/utils/browser_txhash.dart';
-import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/sqlite/app_database.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/src/wallet/api/token_view_api.dart';
-import 'package:n42appv2/src/wallet/api/transaction_api.dart';
-import 'package:n42appv2/src/wallet/models/coin_model.dart';
-import 'package:n42appv2/src/wallet/models/transation_record_model.dart';
-import 'package:n42appv2/src/wallet/utils/chain_util.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:n42appv2/src/widgets/empty.dart';
-import 'package:n42appv2/src/widgets/prompt_widget.dart';
-import 'package:n42appv2/src/wallet/widgets/ens_address_display.dart';
+import 'package:n42_wallet/src/browser/pages/browser_page.dart';
+import 'package:n42_wallet/src/wallet/utils/browser_txhash.dart';
+import 'package:n42_wallet/src/component/enums/load.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/src/sqlite/app_database.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
+import 'package:n42_wallet/src/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/src/wallet/api/transaction_api.dart';
+import 'package:n42_wallet/src/wallet/models/coin_model.dart';
+import 'package:n42_wallet/src/wallet/models/transation_record_model.dart';
+import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/src/widgets/empty.dart';
+import 'package:n42_wallet/src/widgets/prompt_widget.dart';
+import 'package:n42_wallet/src/wallet/widgets/ens_address_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 class TransactionDetailTrx extends StatefulWidget {
   final String txHash;

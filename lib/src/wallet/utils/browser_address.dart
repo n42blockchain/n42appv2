@@ -1,6 +1,6 @@
 //获取浏览器地址，根据币类型和地址
-import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
-import 'package:n42appv2/src/https/request_url.dart';
+import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/src/https/request_url.dart';
 
 String getBrowserAddress(String coinType,String address,{bool? isTest}){
   coinType=coinType.toUpperCase();

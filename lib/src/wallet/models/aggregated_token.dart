@@ -3,7 +3,7 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'package:n42appv2/core/config/rpc_config.dart';
+import 'package:n42_wallet/core/config/rpc_config.dart';
 
 /// 聚合代币链上配置
 class ChainTokenConfig {

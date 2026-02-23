@@ -8,7 +8,7 @@
 import 'dart:async';
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/foundation.dart';
-import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
+import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
 import 'cross_feature_events.dart';
 
 /// Cross-Feature Event Manager

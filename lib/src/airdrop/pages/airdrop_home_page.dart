@@ -5,13 +5,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/core/security/phishing_detector.dart';
-import 'package:n42appv2/core/security/phishing_warning_dialog.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/airdrop/models/airdrop_model.dart';
-import 'package:n42appv2/src/airdrop/pages/airdrop_detail_page.dart';
-import 'package:n42appv2/src/airdrop/provider/airdrop_provider.dart';
+import 'package:n42_wallet/core/security/phishing_detector.dart';
+import 'package:n42_wallet/core/security/phishing_warning_dialog.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/airdrop/models/airdrop_model.dart';
+import 'package:n42_wallet/src/airdrop/pages/airdrop_detail_page.dart';
+import 'package:n42_wallet/src/airdrop/provider/airdrop_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// 空投追踪首页

@@ -1,5 +1,5 @@
 //判断是否是以太坊二级网络
-import 'package:n42appv2/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
 
 bool getEthLayer2(String symbol){
   if(symbol==CoinType.BOBA.name

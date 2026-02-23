@@ -1,5 +1,5 @@
-import 'package:n42appv2/src/https/base_api.dart';
-import 'package:n42appv2/src/models/message_model.dart';
+import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
 
 /// NEAR Protocol API
 class NearApi {

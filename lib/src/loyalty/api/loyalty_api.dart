@@ -3,9 +3,9 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'package:n42appv2/src/https/base_api.dart';
-import 'package:n42appv2/src/loyalty/models/loyalty_model.dart';
-import 'package:n42appv2/src/models/message_model.dart';
+import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/loyalty/models/loyalty_model.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
 
 /// 积分系统 API
 class LoyaltyApi {

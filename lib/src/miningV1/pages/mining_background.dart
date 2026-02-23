@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/src/utils/notfication_utils.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/src/utils/notfication_utils.dart';
 
 class MiningBackground {
   background_start() {

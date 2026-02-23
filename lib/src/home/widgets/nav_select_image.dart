@@ -1,12 +1,12 @@
 ﻿import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:n42appv2/src/component/pages/image_crop_page.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/component/pages/image_crop_page.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 class NavSelectImage extends StatelessWidget {
   final dynamic returnImage;//选择好图片后，返回，返回类型未uint8List

@@ -1,18 +1,18 @@
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 
 import 'dart:io';
-import 'package:n42appv2/src/component/pages/image_crop_page.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/src/wallet/api/face_api.dart';
-import 'package:n42appv2/src/wallet/models/image_upload_model.dart';
-import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:n42appv2/src/widgets/button_widget.dart';
-import 'package:n42appv2/src/widgets/loading_page.dart';
+import 'package:n42_wallet/src/component/pages/image_crop_page.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/src/component/enums/load.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
+import 'package:n42_wallet/src/wallet/api/face_api.dart';
+import 'package:n42_wallet/src/wallet/models/image_upload_model.dart';
+import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/src/widgets/button_widget.dart';
+import 'package:n42_wallet/src/widgets/loading_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

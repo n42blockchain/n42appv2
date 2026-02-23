@@ -7,9 +7,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:n42appv2/src/bridge/api/lifi_api.dart';
-import 'package:n42appv2/src/bridge/models/bridge_models.dart';
-import 'package:n42appv2/src/models/message_model.dart';
+import 'package:n42_wallet/src/bridge/api/lifi_api.dart';
+import 'package:n42_wallet/src/bridge/models/bridge_models.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// 状态变化回调：tx 已更新到终态 (completed / failed)

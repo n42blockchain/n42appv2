@@ -1,11 +1,11 @@
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/models/wallet_info.dart';
-import 'package:n42appv2/src/wallet/pages/wallet_backup/backup_two.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:n42appv2/src/widgets/button_widget.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/wallet/models/wallet_info.dart';
+import 'package:n42_wallet/src/wallet/pages/wallet_backup/backup_two.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/src/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 class BackupOne extends StatefulWidget {
   final WalletInfo walletInfo;

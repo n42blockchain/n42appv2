@@ -5,15 +5,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/staking/api/atom_staking_api.dart';
-import 'package:n42appv2/src/staking/api/eth_staking_api.dart';
-import 'package:n42appv2/src/staking/api/sol_staking_api.dart';
-import 'package:n42appv2/src/staking/models/staking_models.dart';
-import 'package:n42appv2/src/staking/pages/stake_page.dart';
-import 'package:n42appv2/src/staking/provider/staking_provider.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/staking/api/atom_staking_api.dart';
+import 'package:n42_wallet/src/staking/api/eth_staking_api.dart';
+import 'package:n42_wallet/src/staking/api/sol_staking_api.dart';
+import 'package:n42_wallet/src/staking/models/staking_models.dart';
+import 'package:n42_wallet/src/staking/pages/stake_page.dart';
+import 'package:n42_wallet/src/staking/provider/staking_provider.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 
 /// Staking 首页
 ///

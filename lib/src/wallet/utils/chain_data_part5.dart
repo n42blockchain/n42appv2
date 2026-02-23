@@ -1,4 +1,4 @@
-import 'package:n42appv2/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
 
 final Map<String, dynamic> chainDataPart5 = <String, dynamic>{
   CoinType.WORLD.name: <String,dynamic>{

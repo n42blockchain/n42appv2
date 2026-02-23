@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 class Loading extends StatelessWidget {
   final String? text;

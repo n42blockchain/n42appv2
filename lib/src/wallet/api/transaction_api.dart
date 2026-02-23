@@ -1,14 +1,14 @@
 import 'package:flutter/foundation.dart';
-import 'package:n42appv2/core/config/api_keys_config.dart';
-import 'package:n42appv2/src/https/base_api.dart';
-import 'package:n42appv2/src/https/request_url.dart';
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/sqlite/app_database.dart';
-import 'package:n42appv2/src/wallet/models/btc_transaction_recode_model.dart';
-import 'package:n42appv2/src/wallet/models/transaction/btc_response.dart';
-import 'package:n42appv2/src/wallet/models/transaction/btc_tran_detail.dart';
-import 'package:n42appv2/src/wallet/models/transaction/common_response_item_model.dart';
-import 'package:n42appv2/src/wallet/models/transaction/sol_transaction_item.dart';
+import 'package:n42_wallet/core/config/api_keys_config.dart';
+import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/https/request_url.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/src/sqlite/app_database.dart';
+import 'package:n42_wallet/src/wallet/models/btc_transaction_recode_model.dart';
+import 'package:n42_wallet/src/wallet/models/transaction/btc_response.dart';
+import 'package:n42_wallet/src/wallet/models/transaction/btc_tran_detail.dart';
+import 'package:n42_wallet/src/wallet/models/transaction/common_response_item_model.dart';
+import 'package:n42_wallet/src/wallet/models/transaction/sol_transaction_item.dart';
 
 class TransactionApi {
   /// ------- 对各种区块链进行查询 ----

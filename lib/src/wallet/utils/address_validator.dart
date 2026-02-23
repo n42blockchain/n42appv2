@@ -1,9 +1,9 @@
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 
-import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/api/token_view_api.dart';
-import 'package:n42appv2/src/wallet/services/ens_service.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/src/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/src/wallet/services/ens_service.dart';
 
 /// Address validation result
 class AddressValidationResult {

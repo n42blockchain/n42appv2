@@ -6,15 +6,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/loyalty/models/loyalty_model.dart';
-import 'package:n42appv2/src/loyalty/pages/history_page.dart';
-import 'package:n42appv2/src/loyalty/pages/rewards_page.dart';
-import 'package:n42appv2/src/loyalty/pages/tasks_page.dart';
-import 'package:n42appv2/src/loyalty/provider/loyalty_provider.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/loyalty/models/loyalty_model.dart';
+import 'package:n42_wallet/src/loyalty/pages/history_page.dart';
+import 'package:n42_wallet/src/loyalty/pages/rewards_page.dart';
+import 'package:n42_wallet/src/loyalty/pages/tasks_page.dart';
+import 'package:n42_wallet/src/loyalty/provider/loyalty_provider.dart';
+import 'package:n42_wallet/src/utils/toast_utils.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 
 /// 积分系统首页
 class LoyaltyHomePage extends StatefulWidget {

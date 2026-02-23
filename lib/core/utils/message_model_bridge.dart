@@ -3,8 +3,8 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'package:n42appv2/core/utils/result.dart';
-import 'package:n42appv2/src/models/message_model.dart';
+import 'package:n42_wallet/core/utils/result.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
 
 /// 将 Result 转为 MessageModel，在迁移期保持 UI 层调用方不变。
 ///

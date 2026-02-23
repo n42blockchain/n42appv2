@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/src/https/base_api.dart';
-import 'package:n42appv2/src/https/request_url.dart';
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/https/request_url.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
 
 ///explorer/tip,返回有关最新块、索引器状态、协议部署和供应统计信息的信息。
 ///explorer/account/{hash}，返回账户信息

@@ -1,6 +1,6 @@
-﻿import 'package:n42appv2/core/app/app_globals.dart';
+﻿import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 class Notification {
   final FlutterLocalNotificationsPlugin np = FlutterLocalNotificationsPlugin();

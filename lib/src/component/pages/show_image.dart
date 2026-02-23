@@ -1,5 +1,5 @@
 ﻿//查看图片
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

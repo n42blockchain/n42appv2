@@ -6,11 +6,11 @@
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/api/gas_tracker_api.dart';
-import 'package:n42appv2/src/wallet/models/non_evm_fee_model.dart';
-import 'package:n42appv2/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/wallet/api/gas_tracker_api.dart';
+import 'package:n42_wallet/src/wallet/models/non_evm_fee_model.dart';
+import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
 
 // ─── 紧凑费用行（用于发送页面，统一非 EVM 链的手续费展示）──────────────────
 

@@ -1,15 +1,15 @@
-import 'package:n42appv2/core/config/app_config.dart';
-import 'package:n42appv2/src/browser/pages/browser_page.dart';
-import 'package:n42appv2/src/home/api/version_api.dart';
-import 'package:n42appv2/src/home/models/version_info_model.dart';
-import 'package:n42appv2/src/home/widgets/check_version_alert.dart';
-import 'package:n42appv2/src/home/widgets/nav_setting_item.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/src/browser/pages/browser_page.dart';
+import 'package:n42_wallet/src/home/api/version_api.dart';
+import 'package:n42_wallet/src/home/models/version_info_model.dart';
+import 'package:n42_wallet/src/home/widgets/check_version_alert.dart';
+import 'package:n42_wallet/src/home/widgets/nav_setting_item.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 class AboutApp extends StatefulWidget {
   const AboutApp({super.key});

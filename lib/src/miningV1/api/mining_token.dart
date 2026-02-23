@@ -1,4 +1,4 @@
-import 'package:n42appv2/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
 import 'package:wallet/wallet.dart' show EthereumAddress, EtherAmount;
 import 'package:web3dart/web3dart.dart';
 // ast挖矿质押

@@ -5,8 +5,8 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:n42appv2/src/wallet/models/aggregated_token.dart';
-import 'package:n42appv2/src/wallet/models/coin_model.dart';
+import 'package:n42_wallet/src/wallet/models/aggregated_token.dart';
+import 'package:n42_wallet/src/wallet/models/coin_model.dart';
 import 'package:wallet/wallet.dart';
 import 'package:web3dart/web3dart.dart';
 

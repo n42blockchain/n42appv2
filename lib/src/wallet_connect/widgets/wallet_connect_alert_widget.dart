@@ -1,20 +1,20 @@
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 
-import 'package:n42appv2/core/security/tx_risk_analyzer.dart';
-import 'package:n42appv2/core/security/tx_simulation_result.dart';
-import 'package:n42appv2/core/security/tx_simulation_service.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet_connect/provider/wallet_connect_provider.dart';
-import 'package:n42appv2/src/wallet_connect/widgets/tx_risk_banner_widget.dart';
-import 'package:n42appv2/src/widgets/button_widget.dart';
-import 'package:n42appv2/src/widgets/image_network.dart';
-import 'package:n42appv2/src/widgets/tx_simulation_card.dart';
+import 'package:n42_wallet/core/security/tx_risk_analyzer.dart';
+import 'package:n42_wallet/core/security/tx_simulation_result.dart';
+import 'package:n42_wallet/core/security/tx_simulation_service.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/wallet_connect/provider/wallet_connect_provider.dart';
+import 'package:n42_wallet/src/wallet_connect/widgets/tx_risk_banner_widget.dart';
+import 'package:n42_wallet/src/widgets/button_widget.dart';
+import 'package:n42_wallet/src/widgets/image_network.dart';
+import 'package:n42_wallet/src/widgets/tx_simulation_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
+import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
 import 'package:reown_walletkit/reown_walletkit.dart' as wallet_connect;
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 /// WalletConnect signing confirmation bottom sheet.
 ///

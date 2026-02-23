@@ -1,20 +1,20 @@
-﻿import 'package:n42appv2/core/app/app_globals.dart';
-import 'package:n42appv2/core/providers/core_providers.dart';
-import 'package:n42appv2/src/browser/pages/browser_page.dart';
-import 'package:n42appv2/src/home/setting/about_app.dart';
-import 'package:n42appv2/src/home/setting/setting_home_page.dart';
-import 'package:n42appv2/src/notification/pages/message_list.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/pages/address_book/address_book_list.dart';
-import 'package:n42appv2/src/wallet/pages/wallet_manage/wallet_list.dart';
-import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_2.dart';
-import 'package:n42appv2/src/widgets/image_network.dart';
+﻿import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart';
+import 'package:n42_wallet/src/browser/pages/browser_page.dart';
+import 'package:n42_wallet/src/home/setting/about_app.dart';
+import 'package:n42_wallet/src/home/setting/setting_home_page.dart';
+import 'package:n42_wallet/src/notification/pages/message_list.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/wallet/pages/address_book/address_book_list.dart';
+import 'package:n42_wallet/src/wallet/pages/wallet_manage/wallet_list.dart';
+import 'package:n42_wallet/src/widgets/dialog_widget/tips_dialog_2.dart';
+import 'package:n42_wallet/src/widgets/image_network.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/core/config/app_config.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_chat/n42_chat.dart';
 
 /// Home Drawer Page - Migrated to Riverpod

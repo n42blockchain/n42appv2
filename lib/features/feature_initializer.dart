@@ -6,7 +6,7 @@
 // Author: Jiang Yiwei
 
 import 'package:flutter/foundation.dart';
-import 'package:n42appv2/shared/contracts/feature_contracts.dart';
+import 'package:n42_wallet/shared/contracts/feature_contracts.dart';
 
 /// Feature Initializer
 ///

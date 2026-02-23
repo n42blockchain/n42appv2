@@ -1,17 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
-import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
-import 'package:n42appv2/core/config/app_config.dart';
-import 'package:n42appv2/src/login/widgets/login_title.dart';
-import 'package:n42appv2/src/utils/regular.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/src/wallet/models/wallet_info.dart';
-import 'package:n42appv2/src/wallet/pages/create_wallet/create_finish.dart';
-import 'package:n42appv2/src/widgets/button_widget.dart';
-import 'package:n42appv2/src/widgets/text_field_widget.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/src/login/widgets/login_title.dart';
+import 'package:n42_wallet/src/utils/regular.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
+import 'package:n42_wallet/src/wallet/models/wallet_info.dart';
+import 'package:n42_wallet/src/wallet/pages/create_wallet/create_finish.dart';
+import 'package:n42_wallet/src/widgets/button_widget.dart';
+import 'package:n42_wallet/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 class CreatePassword extends ConsumerStatefulWidget {
   final WalletInfo wInfo;

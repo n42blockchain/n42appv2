@@ -1,5 +1,5 @@
 //walletList中使用 - Part 1: N, BTC, ETH, SOL, BNB, ARB, OP, BASE, AVAX, MATIC, TON, TRX, XRP, ATOM, DOT, FIL, SUI, APT
-import 'package:n42appv2/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
 
 Map<String,dynamic> chainUrlDataPart1={
   CoinType.N.name:<String,dynamic>{

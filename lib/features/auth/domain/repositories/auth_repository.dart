@@ -6,8 +6,8 @@
 // Author: Jiang Yiwei
 
 import 'package:dartz/dartz.dart';
-import 'package:n42appv2/core/error/failures.dart';
-import 'package:n42appv2/features/auth/domain/entities/auth_entity.dart';
+import 'package:n42_wallet/core/error/failures.dart';
+import 'package:n42_wallet/features/auth/domain/entities/auth_entity.dart';
 
 /// Auth Repository Interface
 ///

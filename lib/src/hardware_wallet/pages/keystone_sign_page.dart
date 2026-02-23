@@ -8,10 +8,10 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/hardware_wallet/service/keystone_service.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/hardware_wallet/service/keystone_service.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 /// Keystone 气隙 QR 签名页面

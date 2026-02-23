@@ -1,10 +1,10 @@
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/src/wallet/models/address_book_model.dart';
-import 'package:n42appv2/src/wallet/pages/address_book/edit_address_page.dart';
-import 'package:n42appv2/src/widgets/prompt_widget.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
+import 'package:n42_wallet/src/wallet/models/address_book_model.dart';
+import 'package:n42_wallet/src/wallet/pages/address_book/edit_address_page.dart';
+import 'package:n42_wallet/src/widgets/prompt_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

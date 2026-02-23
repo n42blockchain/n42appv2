@@ -5,7 +5,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:n42appv2/core/security/secure_storage.dart';
+import 'package:n42_wallet/core/security/secure_storage.dart';
 
 /// 应用通用 HTTP 客户端
 ///

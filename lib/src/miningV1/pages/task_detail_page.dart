@@ -1,14 +1,14 @@
-import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/src/miningV1/api/mining_api.dart';
-import 'package:n42appv2/src/miningV1/widgets/nav_show_data_item.dart';
-import 'package:n42appv2/src/utils/data_utils.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:n42appv2/src/widgets/loading.dart';
-import 'package:n42appv2/src/widgets/round_refresh_icon.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/src/miningV1/api/mining_api.dart';
+import 'package:n42_wallet/src/miningV1/widgets/nav_show_data_item.dart';
+import 'package:n42_wallet/src/utils/data_utils.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/utils/toast_utils.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/src/widgets/loading.dart';
+import 'package:n42_wallet/src/widgets/round_refresh_icon.dart';
 import 'package:flutter/material.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

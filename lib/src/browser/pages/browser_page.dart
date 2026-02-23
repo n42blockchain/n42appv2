@@ -1,26 +1,26 @@
-﻿import 'package:n42appv2/core/security/dapp_security_service.dart';
-import 'package:n42appv2/core/security/phishing_warning_dialog.dart';
-import 'package:n42appv2/src/widgets/dapp_security_badge.dart';
-import 'package:n42appv2/src/browser/pages/browser_collection_list.dart';
-import 'package:n42appv2/src/browser/pages/browser_history_page.dart';
-import 'package:n42appv2/src/browser/pages/dapp_directory_page.dart';
-import 'package:n42appv2/src/browser/pages/browser_setting.dart';
-import 'package:n42appv2/src/browser/provider/browser_provider.dart';
-import 'package:n42appv2/src/browser/widgets/dapp_signing_sheet.dart';
-import 'package:n42appv2/features/browser/presentation/providers/browser_providers.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/src/wallet_connect/pages/wallet_connect_page.dart';
-import 'package:n42appv2/src/widgets/button_widget.dart';
-import 'package:n42appv2/src/widgets/empty.dart';
-import 'package:n42appv2/src/widgets/prompt_widget.dart';
-import 'package:n42appv2/src/widgets/sheet_bottom.dart';
-import 'package:n42appv2/src/widgets/text_field_widget.dart';
+﻿import 'package:n42_wallet/core/security/dapp_security_service.dart';
+import 'package:n42_wallet/core/security/phishing_warning_dialog.dart';
+import 'package:n42_wallet/src/widgets/dapp_security_badge.dart';
+import 'package:n42_wallet/src/browser/pages/browser_collection_list.dart';
+import 'package:n42_wallet/src/browser/pages/browser_history_page.dart';
+import 'package:n42_wallet/src/browser/pages/dapp_directory_page.dart';
+import 'package:n42_wallet/src/browser/pages/browser_setting.dart';
+import 'package:n42_wallet/src/browser/provider/browser_provider.dart';
+import 'package:n42_wallet/src/browser/widgets/dapp_signing_sheet.dart';
+import 'package:n42_wallet/features/browser/presentation/providers/browser_providers.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
+import 'package:n42_wallet/src/wallet_connect/pages/wallet_connect_page.dart';
+import 'package:n42_wallet/src/widgets/button_widget.dart';
+import 'package:n42_wallet/src/widgets/empty.dart';
+import 'package:n42_wallet/src/widgets/prompt_widget.dart';
+import 'package:n42_wallet/src/widgets/sheet_bottom.dart';
+import 'package:n42_wallet/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 
 class BrowserPage extends ConsumerStatefulWidget {

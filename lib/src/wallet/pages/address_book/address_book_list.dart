@@ -8,19 +8,19 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/core/utils/event_bus.dart';
-import 'package:n42appv2/src/component/pages/scan_page.dart';
-import 'package:n42appv2/src/wallet/api/address_book_api.dart';
-import 'package:n42appv2/src/wallet/models/address_book_model.dart';
-import 'package:n42appv2/src/wallet/pages/address_book/add_address_page.dart';
-import 'package:n42appv2/src/wallet/pages/address_book/edit_address_page.dart';
-import 'package:n42appv2/src/wallet/widgets/ens_address_display.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:n42appv2/src/widgets/empty.dart';
-import 'package:n42appv2/src/widgets/image_network.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/core/utils/event_bus.dart';
+import 'package:n42_wallet/src/component/pages/scan_page.dart';
+import 'package:n42_wallet/src/wallet/api/address_book_api.dart';
+import 'package:n42_wallet/src/wallet/models/address_book_model.dart';
+import 'package:n42_wallet/src/wallet/pages/address_book/add_address_page.dart';
+import 'package:n42_wallet/src/wallet/pages/address_book/edit_address_page.dart';
+import 'package:n42_wallet/src/wallet/widgets/ens_address_display.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/src/widgets/empty.dart';
+import 'package:n42_wallet/src/widgets/image_network.dart';
 
 // ─── 联系人头像色盘（基于姓名首字符确定性哈希）────────────────────────────
 const List<Color> _kAvatarColors = [

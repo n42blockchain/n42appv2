@@ -8,11 +8,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
-import 'package:n42appv2/core/error/failures.dart';
-import 'package:n42appv2/core/usecase/usecase.dart';
-import 'package:n42appv2/features/mining/domain/entities/mining_entity.dart';
-import 'package:n42appv2/features/mining/domain/repositories/mining_repository.dart';
-import 'package:n42appv2/shared/domain/services/wallet_service_interface.dart';
+import 'package:n42_wallet/core/error/failures.dart';
+import 'package:n42_wallet/core/usecase/usecase.dart';
+import 'package:n42_wallet/features/mining/domain/entities/mining_entity.dart';
+import 'package:n42_wallet/features/mining/domain/repositories/mining_repository.dart';
+import 'package:n42_wallet/shared/domain/services/wallet_service_interface.dart';
 
 /// Start Mining Use Case
 @injectable

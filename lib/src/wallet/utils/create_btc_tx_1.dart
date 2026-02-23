@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:n42appv2/src/https/base_api.dart';
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/wallet/utils/bip340.dart';
-import 'package:n42appv2/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/src/wallet/utils/bip340.dart';
+import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';
 import 'package:crypto/crypto.dart';
 //import 'package:eth_sig_util/util/utils.dart';

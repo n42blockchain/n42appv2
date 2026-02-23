@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/core/storage/sp_util.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:flutter/services.dart';
 
 class Trustdart {

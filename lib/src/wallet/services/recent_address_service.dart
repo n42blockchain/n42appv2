@@ -5,7 +5,7 @@
 
 import 'dart:convert';
 
-import 'package:n42appv2/core/storage/sp_util.dart';
+import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// 最近转账地址条目

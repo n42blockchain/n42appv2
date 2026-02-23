@@ -7,18 +7,18 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/sqlite/app_database.dart';
-import 'package:n42appv2/src/wallet/aa/builder/calldata_builder.dart';
-import 'package:n42appv2/src/wallet/aa/core/aa_config.dart';
-import 'package:n42appv2/src/wallet/aa/models/smart_account.dart';
-import 'package:n42appv2/src/wallet/aa/provider/batch_template_provider.dart';
-import 'package:n42appv2/src/wallet/api/transfer/handlers/aa_transfer_handler.dart';
-import 'package:n42appv2/src/wallet/widgets/aa/batch_operation_item.dart';
-import 'package:n42appv2/src/wallet/widgets/aa/gas_sponsorship_badge.dart';
-import 'package:n42appv2/src/wallet/widgets/aa/paymaster_option_card.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/sqlite/app_database.dart';
+import 'package:n42_wallet/src/wallet/aa/builder/calldata_builder.dart';
+import 'package:n42_wallet/src/wallet/aa/core/aa_config.dart';
+import 'package:n42_wallet/src/wallet/aa/models/smart_account.dart';
+import 'package:n42_wallet/src/wallet/aa/provider/batch_template_provider.dart';
+import 'package:n42_wallet/src/wallet/api/transfer/handlers/aa_transfer_handler.dart';
+import 'package:n42_wallet/src/wallet/widgets/aa/batch_operation_item.dart';
+import 'package:n42_wallet/src/wallet/widgets/aa/gas_sponsorship_badge.dart';
+import 'package:n42_wallet/src/wallet/widgets/aa/paymaster_option_card.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 import 'package:web3dart/web3dart.dart' show hexToBytes;
 
 /// AA 批量交易页面

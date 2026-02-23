@@ -6,8 +6,8 @@
 // Author: Jiang Yiwei
 
 import 'package:get_it/get_it.dart';
-import 'package:n42appv2/shared/domain/services/wallet_service_interface.dart';
-import 'package:n42appv2/shared/domain/services/mining_service_interface.dart';
+import 'package:n42_wallet/shared/domain/services/wallet_service_interface.dart';
+import 'package:n42_wallet/shared/domain/services/mining_service_interface.dart';
 
 /// Global Service Locator
 ///

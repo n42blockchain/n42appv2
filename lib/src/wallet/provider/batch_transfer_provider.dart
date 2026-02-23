@@ -4,8 +4,8 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/foundation.dart';
-import 'package:n42appv2/src/wallet/api/batch_transfer_api.dart';
-import 'package:n42appv2/src/wallet/models/batch_transfer_model.dart';
+import 'package:n42_wallet/src/wallet/api/batch_transfer_api.dart';
+import 'package:n42_wallet/src/wallet/models/batch_transfer_model.dart';
 
 /// 批量转账状态
 enum BatchTransferState {

@@ -1,11 +1,11 @@
-import 'package:n42appv2/core/config/app_config.dart';
-import 'package:n42appv2/src/miningV1/models/mining_type.dart';
-import 'package:n42appv2/src/miningV1/provider/mining_v1_providers.dart';
-import 'package:n42appv2/core/utils/event_bus.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/widgets/button_widget.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/src/miningV1/models/mining_type.dart';
+import 'package:n42_wallet/src/miningV1/provider/mining_v1_providers.dart';
+import 'package:n42_wallet/core/utils/event_bus.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:share_plus/share_plus.dart';
 

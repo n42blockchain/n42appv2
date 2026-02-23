@@ -1,17 +1,17 @@
 import 'dart:convert';
 
-import 'package:n42appv2/core/config/app_config.dart';
-import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/src/miningV1/provider/mining_provider.dart';
-import 'package:n42appv2/src/miningV1/provider/mining_v1_providers.dart';
-import 'package:n42appv2/src/miningV1/utils/mining_cache_utils.dart';
-import 'package:n42appv2/src/miningV1/utils/mining_plugin_utils.dart';
-import 'package:n42appv2/core/storage/sp_util.dart';
-import 'package:n42appv2/src/wallet/models/wallet_info.dart';
-import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
-import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
-import 'package:n42appv2/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/src/miningV1/provider/mining_provider.dart';
+import 'package:n42_wallet/src/miningV1/provider/mining_v1_providers.dart';
+import 'package:n42_wallet/src/miningV1/utils/mining_cache_utils.dart';
+import 'package:n42_wallet/src/miningV1/utils/mining_plugin_utils.dart';
+import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/src/wallet/models/wallet_info.dart';
+import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
 import 'package:web3dart/web3dart.dart';
 
 class MiningUtils{

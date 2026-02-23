@@ -1,25 +1,25 @@
 ﻿import 'dart:convert';
 
-import 'package:n42appv2/core/app/app_globals.dart';
-import 'package:n42appv2/core/providers/core_providers.dart';
-import 'package:n42appv2/src/browser/pages/browser_page.dart';
-import 'package:n42appv2/src/home/setting/about_app.dart';
-import 'package:n42appv2/src/home/setting/personal_setting.dart';
-import 'package:n42appv2/src/home/setting/setting_share.dart';
-import 'package:n42appv2/src/login/api/user_info_api.dart';
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/news/news_page.dart';
-import 'package:n42appv2/src/notification/pages/message_info.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/utils/browser_txhash.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:n42appv2/src/widgets/base_list.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart';
+import 'package:n42_wallet/src/browser/pages/browser_page.dart';
+import 'package:n42_wallet/src/home/setting/about_app.dart';
+import 'package:n42_wallet/src/home/setting/personal_setting.dart';
+import 'package:n42_wallet/src/home/setting/setting_share.dart';
+import 'package:n42_wallet/src/login/api/user_info_api.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/src/news/news_page.dart';
+import 'package:n42_wallet/src/notification/pages/message_info.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/wallet/utils/browser_txhash.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/src/widgets/base_list.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 /// Message List Page - Migrated to Riverpod
 /// 

@@ -1,31 +1,31 @@
 import 'dart:async';
 
-import 'package:n42appv2/core/storage/sp_util.dart';
-import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/src/utils/regular.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/src/wallet/models/coin_model.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_algo.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_apt.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_btc.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_dot.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_fil.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_sol.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_sui.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_ton.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_xrp.dart';
-import 'package:n42appv2/src/wallet/pages/wallet_receive_qr.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
-import 'package:n42appv2/src/widgets/empty.dart';
-import 'package:n42appv2/src/widgets/image_network.dart';
+import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/src/utils/regular.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
+import 'package:n42_wallet/src/wallet/models/coin_model.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send_algo.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send_apt.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send_btc.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send_dot.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send_fil.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send_sol.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send_sui.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send_ton.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send_xrp.dart';
+import 'package:n42_wallet/src/wallet/pages/wallet_receive_qr.dart';
+import 'package:n42_wallet/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42_wallet/src/widgets/empty.dart';
+import 'package:n42_wallet/src/widgets/image_network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 class WalletSearchCoin extends ConsumerStatefulWidget {
   final int type; // 0 转账，1 收币

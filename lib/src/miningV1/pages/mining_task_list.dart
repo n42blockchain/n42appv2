@@ -1,14 +1,14 @@
-import 'package:n42appv2/src/miningV1/api/mining_api.dart';
-import 'package:n42appv2/src/miningV1/pages/task_detail_page.dart';
-import 'package:n42appv2/src/miningV1/widgets/task_item.dart';
-import 'package:n42appv2/src/miningV1/widgets/task_value_bar.dart';
-import 'package:n42appv2/src/utils/data_utils.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/utils/chain_util.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:n42appv2/src/widgets/base_list.dart';
+import 'package:n42_wallet/src/miningV1/api/mining_api.dart';
+import 'package:n42_wallet/src/miningV1/pages/task_detail_page.dart';
+import 'package:n42_wallet/src/miningV1/widgets/task_item.dart';
+import 'package:n42_wallet/src/miningV1/widgets/task_value_bar.dart';
+import 'package:n42_wallet/src/utils/data_utils.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/src/widgets/base_list.dart';
 import 'package:flutter/material.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MiningTaskList extends StatefulWidget {

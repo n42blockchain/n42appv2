@@ -8,9 +8,9 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
-import 'package:n42appv2/core/config/app_config.dart';
-import 'package:n42appv2/src/https/base_api.dart';
-import 'package:n42appv2/src/models/message_model.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
 import 'package:web3dart/web3dart.dart';
 
 /// ENS 价格信息

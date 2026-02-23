@@ -1,14 +1,14 @@
-import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/models/coin_model.dart';
-import 'package:n42appv2/src/wallet/pages/transactions/transaction_detail_eth.dart';
-import 'package:n42appv2/src/wallet/pages/transactions/transaction_detail_page.dart';
-import 'package:n42appv2/src/wallet/pages/transactions/transaction_detail_trx.dart';
-import 'package:n42appv2/src/wallet/pages/transactions/transaction_retry.dart';
-import 'package:n42appv2/src/wallet/widgets/ens_address_display.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/wallet/models/coin_model.dart';
+import 'package:n42_wallet/src/wallet/pages/transactions/transaction_detail_eth.dart';
+import 'package:n42_wallet/src/wallet/pages/transactions/transaction_detail_page.dart';
+import 'package:n42_wallet/src/wallet/pages/transactions/transaction_detail_trx.dart';
+import 'package:n42_wallet/src/wallet/pages/transactions/transaction_retry.dart';
+import 'package:n42_wallet/src/wallet/widgets/ens_address_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 class WalletChainInfoTransactionsItem extends StatelessWidget {
   final int? type;//0 BTC类型的 1 除了btc其它类型的

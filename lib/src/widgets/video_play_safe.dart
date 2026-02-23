@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:n42appv2/src/widgets/loading_page.dart';
+import 'package:n42_wallet/src/component/enums/load.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/src/widgets/loading_page.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';

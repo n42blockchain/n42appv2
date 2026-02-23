@@ -5,18 +5,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/bridge/models/bridge_models.dart';
-import 'package:n42appv2/src/bridge/pages/bridge_select_chain_page.dart';
-import 'package:n42appv2/src/bridge/pages/bridge_history_page.dart';
-import 'package:n42appv2/src/bridge/provider/bridge_provider.dart';
-import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/utils/chain_util.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:n42appv2/src/widgets/button_widget.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/bridge/models/bridge_models.dart';
+import 'package:n42_wallet/src/bridge/pages/bridge_select_chain_page.dart';
+import 'package:n42_wallet/src/bridge/pages/bridge_history_page.dart';
+import 'package:n42_wallet/src/bridge/provider/bridge_provider.dart';
+import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/src/widgets/button_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 
 /// 跨链桥主页面
 class BridgeHomePage extends ConsumerStatefulWidget {

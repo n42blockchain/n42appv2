@@ -8,16 +8,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/core/market/crypto_news_service.dart';
-import 'package:n42appv2/core/market/fear_greed_service.dart';
-import 'package:n42appv2/core/storage/sp_util.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/api/market_api.dart';
-import 'package:n42appv2/src/wallet/pages/market/market_coin_info.dart';
-import 'package:n42appv2/src/wallet/pages/market/price_alert_sheet.dart';
-import 'package:n42appv2/src/wallet/services/coin_price_alert_service.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/src/widgets/image_network.dart' show ImageNetWork;
+import 'package:n42_wallet/core/market/crypto_news_service.dart';
+import 'package:n42_wallet/core/market/fear_greed_service.dart';
+import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/wallet/api/market_api.dart';
+import 'package:n42_wallet/src/wallet/pages/market/market_coin_info.dart';
+import 'package:n42_wallet/src/wallet/pages/market/price_alert_sheet.dart';
+import 'package:n42_wallet/src/wallet/services/coin_price_alert_service.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/src/widgets/image_network.dart' show ImageNetWork;
 import 'package:url_launcher/url_launcher.dart';
 
 // ─── Entry point ─────────────────────────────────────────────────────────────

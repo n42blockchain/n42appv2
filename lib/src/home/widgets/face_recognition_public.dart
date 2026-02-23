@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:local_auth_android/local_auth_android.dart' as auth_android;
 import 'package:local_auth_darwin/local_auth_darwin.dart' as auth_ios;
 

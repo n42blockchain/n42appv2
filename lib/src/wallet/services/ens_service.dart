@@ -5,8 +5,8 @@
 
 import 'dart:async';
 import 'package:flutter/foundation.dart';
-import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/src/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/src/wallet/api/token_view_api.dart';
 
 /// 域名解析协议
 enum DomainProtocol {

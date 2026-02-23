@@ -4,9 +4,9 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/foundation.dart';
-import 'package:n42appv2/core/config/api_keys_config.dart';
-import 'package:n42appv2/src/https/base_api.dart';
-import 'package:n42appv2/src/wallet/models/nft_model.dart';
+import 'package:n42_wallet/core/config/api_keys_config.dart';
+import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/wallet/models/nft_model.dart';
 
 /// SimpleHash NFT API 封装
 ///

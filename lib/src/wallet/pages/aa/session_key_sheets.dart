@@ -3,10 +3,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/aa/models/smart_account.dart';
-import 'package:n42appv2/src/wallet/aa/repository/session_key_repository.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/wallet/aa/models/smart_account.dart';
+import 'package:n42_wallet/src/wallet/aa/repository/session_key_repository.dart';
 
 import 'session_key_models.dart';
 

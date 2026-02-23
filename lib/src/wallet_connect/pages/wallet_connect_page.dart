@@ -1,21 +1,21 @@
-﻿import 'package:n42appv2/src/browser/pages/browser_page.dart';
-import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:n42appv2/src/component/pages/scan_page.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/core/security/dapp_security_service.dart';
-import 'package:n42appv2/src/wallet_connect/provider/wallet_connect_provider.dart';
-import 'package:n42appv2/src/widgets/dapp_security_badge.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:n42appv2/src/widgets/button_widget.dart';
-import 'package:n42appv2/src/widgets/image_network.dart';
-import 'package:n42appv2/src/widgets/loading_page.dart';
+﻿import 'package:n42_wallet/src/browser/pages/browser_page.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/src/component/enums/load.dart';
+import 'package:n42_wallet/src/component/pages/scan_page.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
+import 'package:n42_wallet/core/security/dapp_security_service.dart';
+import 'package:n42_wallet/src/wallet_connect/provider/wallet_connect_provider.dart';
+import 'package:n42_wallet/src/widgets/dapp_security_badge.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/src/widgets/button_widget.dart';
+import 'package:n42_wallet/src/widgets/image_network.dart';
+import 'package:n42_wallet/src/widgets/loading_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 /// WalletConnect Page - Migrated to Riverpod
 /// 

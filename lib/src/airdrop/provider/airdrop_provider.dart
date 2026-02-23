@@ -4,8 +4,8 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/foundation.dart';
-import 'package:n42appv2/src/airdrop/api/airdrop_api.dart';
-import 'package:n42appv2/src/airdrop/models/airdrop_model.dart';
+import 'package:n42_wallet/src/airdrop/api/airdrop_api.dart';
+import 'package:n42_wallet/src/airdrop/models/airdrop_model.dart';
 
 /// 空投加载状态
 enum AirdropLoadState {

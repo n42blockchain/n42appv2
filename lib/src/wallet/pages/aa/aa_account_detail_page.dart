@@ -7,13 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/aa/aa.dart';
-import 'package:n42appv2/src/wallet/pages/aa/aa_send_page.dart';
-import 'package:n42appv2/src/wallet/widgets/aa/deployment_status_indicator.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/wallet/aa/aa.dart';
+import 'package:n42_wallet/src/wallet/pages/aa/aa_send_page.dart';
+import 'package:n42_wallet/src/wallet/widgets/aa/deployment_status_indicator.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 /// AA 账户详情页面

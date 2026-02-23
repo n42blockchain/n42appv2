@@ -1,20 +1,20 @@
 
-import 'package:n42appv2/core/config/app_config.dart';
-import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/src/miningV1/pages/mining_settings.dart';
-import 'package:n42appv2/src/miningV1/pages/summary_page.dart';
-import 'package:n42appv2/src/miningV1/pages/today_mining_page.dart';
-import 'package:n42appv2/src/miningV1/provider/mining_provider.dart';
-import 'package:n42appv2/src/miningV1/provider/mining_v1_providers.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/models/wallet_info.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
-import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
-import 'package:n42appv2/src/widgets/app_home_top_bar.dart';
-import 'package:n42appv2/src/widgets/keep_state_widget.dart';
-import 'package:n42appv2/src/widgets/sheet_bottom.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/src/miningV1/pages/mining_settings.dart';
+import 'package:n42_wallet/src/miningV1/pages/summary_page.dart';
+import 'package:n42_wallet/src/miningV1/pages/today_mining_page.dart';
+import 'package:n42_wallet/src/miningV1/provider/mining_provider.dart';
+import 'package:n42_wallet/src/miningV1/provider/mining_v1_providers.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/wallet/models/wallet_info.dart';
+import 'package:n42_wallet/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/src/widgets/app_home_top_bar.dart';
+import 'package:n42_wallet/src/widgets/keep_state_widget.dart';
+import 'package:n42_wallet/src/widgets/sheet_bottom.dart';
 import 'package:flutter/material.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MiningIndex extends StatefulWidget {

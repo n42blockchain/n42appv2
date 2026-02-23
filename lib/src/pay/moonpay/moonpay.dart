@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:n42appv2/src/pay/moonpay/create_url.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/models/coin_model.dart';
+import 'package:n42_wallet/src/component/enums/load.dart';
+import 'package:n42_wallet/src/pay/moonpay/create_url.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/wallet/models/coin_model.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/core/utils/js_escape_utils.dart';
+import 'package:n42_wallet/core/utils/js_escape_utils.dart';
 
 class Moonpay extends StatefulWidget {
   final CoinModel? coinModel;

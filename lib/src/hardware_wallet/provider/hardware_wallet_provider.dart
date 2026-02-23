@@ -7,10 +7,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:n42appv2/src/hardware_wallet/models/hardware_wallet_models.dart';
-import 'package:n42appv2/src/hardware_wallet/service/keystone_service.dart';
-import 'package:n42appv2/src/hardware_wallet/service/ledger_service.dart';
-import 'package:n42appv2/src/hardware_wallet/service/trezor_service.dart';
+import 'package:n42_wallet/src/hardware_wallet/models/hardware_wallet_models.dart';
+import 'package:n42_wallet/src/hardware_wallet/service/keystone_service.dart';
+import 'package:n42_wallet/src/hardware_wallet/service/ledger_service.dart';
+import 'package:n42_wallet/src/hardware_wallet/service/trezor_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// 硬件钱包 Provider

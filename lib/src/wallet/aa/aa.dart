@@ -21,7 +21,7 @@
 //
 // Usage:
 // ```dart
-// import 'package:n42appv2/src/wallet/aa/aa.dart';
+// import 'package:n42_wallet/src/wallet/aa/aa.dart';
 //
 // // Create a smart account
 // final factory = SmartAccountFactory(

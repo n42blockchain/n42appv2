@@ -7,17 +7,17 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:n42appv2/core/platform/deep_link_service.dart';
-import 'package:n42appv2/core/storage/sp_util.dart';
-import 'package:n42appv2/core/storage/app_database.dart';
-import 'package:n42appv2/core/security/secure_storage.dart';
-import 'package:n42appv2/shared/di/service_locator.dart';
-import 'package:n42appv2/shared/domain/services/wallet_service_interface.dart';
-import 'package:n42appv2/shared/domain/services/mining_service_interface.dart';
-import 'package:n42appv2/features/wallet/data/services/wallet_service_impl.dart';
-import 'package:n42appv2/features/mining/data/services/mining_service_impl.dart';
-import 'package:n42appv2/features/chat/data/services/chat_crypto_service_impl.dart';
-import 'package:n42appv2/src/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/core/platform/deep_link_service.dart';
+import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/core/storage/app_database.dart';
+import 'package:n42_wallet/core/security/secure_storage.dart';
+import 'package:n42_wallet/shared/di/service_locator.dart';
+import 'package:n42_wallet/shared/domain/services/wallet_service_interface.dart';
+import 'package:n42_wallet/shared/domain/services/mining_service_interface.dart';
+import 'package:n42_wallet/features/wallet/data/services/wallet_service_impl.dart';
+import 'package:n42_wallet/features/mining/data/services/mining_service_impl.dart';
+import 'package:n42_wallet/features/chat/data/services/chat_crypto_service_impl.dart';
+import 'package:n42_wallet/src/wallet/api/token_view_api.dart';
 
 /// Dependency Injection Container
 final GetIt getIt = GetIt.instance;

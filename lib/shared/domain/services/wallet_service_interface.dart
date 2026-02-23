@@ -5,7 +5,7 @@
 //
 // Author: Jiang Yiwei
 
-import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
+import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
 
 /// Wallet Service Interface
 ///

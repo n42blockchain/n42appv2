@@ -9,12 +9,12 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'dart:io';
 import 'dart:convert';
-import 'package:n42appv2/core/app/app_globals.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/core/config/app_config.dart';
-import 'package:n42appv2/core/security/security_config.dart';
-import 'package:n42appv2/core/network/circuit_breaker_interceptor.dart';
-import 'package:n42appv2/core/network/retry_interceptor.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/security/security_config.dart';
+import 'package:n42_wallet/core/network/circuit_breaker_interceptor.dart';
+import 'package:n42_wallet/core/network/retry_interceptor.dart';
 
 /// Base HTTP Client
 ///

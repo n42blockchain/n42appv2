@@ -6,8 +6,8 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:n42appv2/src/loyalty/api/loyalty_api.dart';
-import 'package:n42appv2/src/loyalty/models/loyalty_model.dart';
+import 'package:n42_wallet/src/loyalty/api/loyalty_api.dart';
+import 'package:n42_wallet/src/loyalty/models/loyalty_model.dart';
 
 /// 加载状态
 enum LoyaltyLoadState {

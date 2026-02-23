@@ -6,5 +6,5 @@
 // Author: Jiang Yiwei
 
 // Re-export ServiceLocatorSetup for backwards compatibility
-export 'package:n42appv2/shared/di/service_locator.dart';
+export 'package:n42_wallet/shared/di/service_locator.dart';
 

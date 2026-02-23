@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:n42appv2/src/miningV1/api/mining_config.dart';
-import 'package:n42appv2/src/miningV1/utils/mining_utils.dart';
-import 'package:n42appv2/core/storage/sp_util.dart';
+import 'package:n42_wallet/src/miningV1/api/mining_config.dart';
+import 'package:n42_wallet/src/miningV1/utils/mining_utils.dart';
+import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';

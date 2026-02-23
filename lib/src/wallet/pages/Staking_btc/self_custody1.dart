@@ -5,30 +5,30 @@
 
 import 'dart:convert';
 
-import 'package:n42appv2/core/config/app_config.dart';
-import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/src/https/base_api.dart';
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/wallet/api/token_view_api.dart';
-import 'package:n42appv2/src/wallet/api/transfer_api.dart';
-import 'package:n42appv2/src/wallet/models/coin_model.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_btc.dart';
-import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/utils/chain_util.dart';
-import 'package:n42appv2/src/wallet/utils/create_btc_tx_1.dart';
-import 'package:n42appv2/src/wallet/utils/create_btc_tx_2.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/src/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/src/wallet/api/transfer_api.dart';
+import 'package:n42_wallet/src/wallet/models/coin_model.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send_btc.dart';
+import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/wallet/utils/create_btc_tx_1.dart';
+import 'package:n42_wallet/src/wallet/utils/create_btc_tx_2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
-import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';
-import 'package:n42appv2/core/utils/js_escape_utils.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/core/utils/js_escape_utils.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SelfCustody1 extends ConsumerStatefulWidget {

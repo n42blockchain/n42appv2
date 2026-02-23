@@ -5,10 +5,10 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:n42_chat/n42_chat.dart';
-import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
-import 'package:n42appv2/src/wallet/services/ens_service.dart';
-import 'package:n42appv2/src/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42_wallet/src/wallet/services/ens_service.dart';
+import 'package:n42_wallet/src/wallet/api/token_view_api.dart';
 
 /// N42 钱包桥接实现
 ///

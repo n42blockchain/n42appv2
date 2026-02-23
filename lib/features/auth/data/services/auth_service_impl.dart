@@ -9,11 +9,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:injectable/injectable.dart';
-import 'package:n42appv2/core/storage/sp_util.dart';
-import 'package:n42appv2/core/security/secure_storage.dart';
-import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
-import 'package:n42appv2/shared/domain/services/auth_service_interface.dart';
-import 'package:n42appv2/src/home/widgets/face_recognition_public.dart';
+import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/core/security/secure_storage.dart';
+import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
+import 'package:n42_wallet/shared/domain/services/auth_service_interface.dart';
+import 'package:n42_wallet/src/home/widgets/face_recognition_public.dart';
 
 /// Implementation of IAuthService
 @LazySingleton(as: IAuthService)

@@ -3,8 +3,8 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
 
 import 'token_api_base.dart';
 

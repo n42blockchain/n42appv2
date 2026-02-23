@@ -5,23 +5,23 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/bridge/pages/bridge_home_page.dart';
-import 'package:n42appv2/src/earn/provider/earn_provider.dart';
-import 'package:n42appv2/src/staking/models/staking_models.dart';
-import 'package:n42appv2/src/staking/pages/staking_home_page.dart';
-import 'package:n42appv2/src/airdrop/pages/airdrop_home_page.dart';
-import 'package:n42appv2/src/loyalty/pages/loyalty_home_page.dart';
-import 'package:n42appv2/src/hardware_wallet/pages/hardware_wallet_page.dart';
-import 'package:n42appv2/src/miningV2/pages/mining_today_v2.dart';
-import 'package:n42appv2/src/wallet/pages/ast_swap/swap_ast_home.dart';
-import 'package:n42appv2/src/wallet/pages/gas/gas_tracker_page.dart';
-import 'package:n42appv2/src/wallet/pages/batch_transfer/batch_transfer_select_page.dart';
-import 'package:n42appv2/src/widgets/app_home_top_bar.dart';
-import 'package:n42appv2/src/widgets/sheet_bottom.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/bridge/pages/bridge_home_page.dart';
+import 'package:n42_wallet/src/earn/provider/earn_provider.dart';
+import 'package:n42_wallet/src/staking/models/staking_models.dart';
+import 'package:n42_wallet/src/staking/pages/staking_home_page.dart';
+import 'package:n42_wallet/src/airdrop/pages/airdrop_home_page.dart';
+import 'package:n42_wallet/src/loyalty/pages/loyalty_home_page.dart';
+import 'package:n42_wallet/src/hardware_wallet/pages/hardware_wallet_page.dart';
+import 'package:n42_wallet/src/miningV2/pages/mining_today_v2.dart';
+import 'package:n42_wallet/src/wallet/pages/ast_swap/swap_ast_home.dart';
+import 'package:n42_wallet/src/wallet/pages/gas/gas_tracker_page.dart';
+import 'package:n42_wallet/src/wallet/pages/batch_transfer/batch_transfer_select_page.dart';
+import 'package:n42_wallet/src/widgets/app_home_top_bar.dart';
+import 'package:n42_wallet/src/widgets/sheet_bottom.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
-import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 
 /// Earn 页面
 ///

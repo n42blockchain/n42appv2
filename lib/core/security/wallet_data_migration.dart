@@ -4,8 +4,8 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/foundation.dart';
-import 'package:n42appv2/core/security/secure_storage.dart';
-import 'package:n42appv2/core/storage/sp_util.dart';
+import 'package:n42_wallet/core/security/secure_storage.dart';
+import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// 钱包数据迁移服务

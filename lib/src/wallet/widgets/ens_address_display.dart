@@ -6,10 +6,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/services/ens_service.dart';
-import 'package:n42appv2/src/wallet/utils/address_validator.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/wallet/services/ens_service.dart';
+import 'package:n42_wallet/src/wallet/utils/address_validator.dart';
 
 /// ENS 地址显示样式
 enum EnsDisplayStyle {

@@ -3,9 +3,9 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'package:n42appv2/src/https/base_api.dart';
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/bridge/models/bridge_models.dart';
+import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/src/bridge/models/bridge_models.dart';
 
 /// LI.FI 跨链桥 API
 ///

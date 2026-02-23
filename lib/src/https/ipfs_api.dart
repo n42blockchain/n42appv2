@@ -1,7 +1,7 @@
 ﻿import 'dart:convert';
 
-import 'package:n42appv2/core/config/app_config.dart';
-import 'package:n42appv2/src/https/base_api.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/src/https/base_api.dart';
 import 'package:dio/dio.dart';
 
 class IpfsApi{

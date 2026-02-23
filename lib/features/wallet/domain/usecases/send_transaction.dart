@@ -8,9 +8,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
-import 'package:n42appv2/core/error/failures.dart';
-import 'package:n42appv2/core/usecase/usecase.dart';
-import 'package:n42appv2/features/wallet/domain/entities/wallet_entity.dart';
+import 'package:n42_wallet/core/error/failures.dart';
+import 'package:n42_wallet/core/usecase/usecase.dart';
+import 'package:n42_wallet/features/wallet/domain/entities/wallet_entity.dart';
 
 /// Transaction Repository Interface
 abstract class TransactionRepository {

@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/foundation.dart';
-import 'package:n42appv2/src/https/base_api.dart';
+import 'package:n42_wallet/src/https/base_api.dart';
 
 // ─── Model ─────────────────────────────────────────────────────────────────
 

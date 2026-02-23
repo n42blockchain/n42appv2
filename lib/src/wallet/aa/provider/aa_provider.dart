@@ -4,15 +4,15 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/foundation.dart';
-import 'package:n42appv2/src/wallet/aa/core/aa_config.dart';
-import 'package:n42appv2/src/wallet/aa/core/aa_errors.dart';
-import 'package:n42appv2/src/wallet/aa/models/smart_account.dart';
-import 'package:n42appv2/src/wallet/aa/models/user_operation_receipt.dart';
-import 'package:n42appv2/src/wallet/aa/account/smart_account_factory.dart';
-import 'package:n42appv2/src/wallet/aa/bundler/bundler_client.dart';
-import 'package:n42appv2/src/wallet/api/chain_api/eth_api.dart';
-import 'package:n42appv2/src/wallet/models/wallet_info.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42_wallet/src/wallet/aa/core/aa_config.dart';
+import 'package:n42_wallet/src/wallet/aa/core/aa_errors.dart';
+import 'package:n42_wallet/src/wallet/aa/models/smart_account.dart';
+import 'package:n42_wallet/src/wallet/aa/models/user_operation_receipt.dart';
+import 'package:n42_wallet/src/wallet/aa/account/smart_account_factory.dart';
+import 'package:n42_wallet/src/wallet/aa/bundler/bundler_client.dart';
+import 'package:n42_wallet/src/wallet/api/chain_api/eth_api.dart';
+import 'package:n42_wallet/src/wallet/models/wallet_info.dart';
+import 'package:n42_wallet/src/wallet/provider/wallet_action_provider.dart';
 
 /// Provider for Account Abstraction (ERC-4337) state management
 ///

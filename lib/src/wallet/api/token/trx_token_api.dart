@@ -5,7 +5,7 @@
 
 import 'dart:convert';
 
-import 'package:n42appv2/src/models/message_model.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
 import 'package:web3dart/web3dart.dart';
 
 import 'token_api_base.dart';

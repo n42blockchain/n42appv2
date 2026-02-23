@@ -6,11 +6,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/pages/ens/ens_renew_page.dart';
-import 'package:n42appv2/src/wallet/services/ens_registration_service.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/wallet/pages/ens/ens_renew_page.dart';
+import 'package:n42_wallet/src/wallet/services/ens_registration_service.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 
 /// 支持 ENS 的链配置（用于域名后缀匹配与颜色展示）
 class EnsChainConfig {

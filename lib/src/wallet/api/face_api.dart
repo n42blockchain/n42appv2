@@ -1,8 +1,8 @@
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 
-import 'package:n42appv2/core/config/app_config.dart';
-import 'package:n42appv2/src/https/base_api.dart';
-import 'package:n42appv2/src/models/message_model.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
 import 'package:dio/dio.dart';
 
 class FaceApi {

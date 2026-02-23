@@ -1,27 +1,27 @@
 ﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:n42appv2/src/miningV2/pages/keyManagement/mining_output_tip.dart';
-import 'package:n42appv2/src/miningV2/pages/share_mining.dart';
-import 'package:n42appv2/src/miningV2/widgets/group_confrim.dart';
-import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
-import 'package:n42appv2/src/miningV2/widgets/n_level_widget.dart';
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/core/utils/event_bus.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/src/wallet/api/token_view_api.dart';
-import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/shared/di/service_locator.dart';
-import 'package:n42appv2/src/wallet/utils/chain_util.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/src/component/enums/load.dart';
+import 'package:n42_wallet/src/miningV2/pages/keyManagement/mining_output_tip.dart';
+import 'package:n42_wallet/src/miningV2/pages/share_mining.dart';
+import 'package:n42_wallet/src/miningV2/widgets/group_confrim.dart';
+import 'package:n42_wallet/src/miningV2/provider/mining_v2_provider.dart';
+import 'package:n42_wallet/src/miningV2/widgets/n_level_widget.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/core/utils/event_bus.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
+import 'package:n42_wallet/src/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/shared/di/service_locator.dart';
+import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/src/widgets/button_widget.dart';
+import 'package:n42_wallet/src/widgets/button_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:n42appv2/features/mining/presentation/providers/mining_providers.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/features/mining/presentation/providers/mining_providers.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 class MiningFullNodeV2 extends ConsumerStatefulWidget {
   final int nNum;

@@ -6,9 +6,9 @@
 // Author: Jiang Yiwei
 
 import 'package:dartz/dartz.dart';
-import 'package:n42appv2/core/error/failures.dart';
-import 'package:n42appv2/features/chat/domain/entities/message_entity.dart';
-import 'package:n42appv2/features/chat/domain/entities/conversation_entity.dart';
+import 'package:n42_wallet/core/error/failures.dart';
+import 'package:n42_wallet/features/chat/domain/entities/message_entity.dart';
+import 'package:n42_wallet/features/chat/domain/entities/conversation_entity.dart';
 
 /// Chat Repository Interface
 ///

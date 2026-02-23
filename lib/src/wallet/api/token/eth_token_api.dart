@@ -5,12 +5,12 @@
 
 import 'dart:typed_data';
 
-import 'package:n42appv2/core/app/app_globals.dart';
-import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/wallet/api/chain_api/eth_api.dart';
-import 'package:n42appv2/src/wallet/api/chain_api/trx_api.dart';
-import 'package:n42appv2/src/wallet/utils/chain_1559.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/src/wallet/api/chain_api/eth_api.dart';
+import 'package:n42_wallet/src/wallet/api/chain_api/trx_api.dart';
+import 'package:n42_wallet/src/wallet/utils/chain_1559.dart';
 import 'package:web3dart/web3dart.dart';
 
 import 'token_api_base.dart';

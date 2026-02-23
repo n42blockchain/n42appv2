@@ -7,12 +7,12 @@
 
 import 'dart:async';
 import 'package:flutter/foundation.dart';
-import 'package:n42appv2/shared/domain/services/mining_service_interface.dart';
-import 'package:n42appv2/shared/domain/services/wallet_service_interface.dart';
-import 'package:n42appv2/shared/di/service_locator.dart';
-import 'package:n42appv2/shared/events/event_manager.dart';
-import 'package:n42appv2/shared/events/cross_feature_events.dart';
-import 'package:n42appv2/src/miningV2/provider/mining_v2_provider.dart';
+import 'package:n42_wallet/shared/domain/services/mining_service_interface.dart';
+import 'package:n42_wallet/shared/domain/services/wallet_service_interface.dart';
+import 'package:n42_wallet/shared/di/service_locator.dart';
+import 'package:n42_wallet/shared/events/event_manager.dart';
+import 'package:n42_wallet/shared/events/cross_feature_events.dart';
+import 'package:n42_wallet/src/miningV2/provider/mining_v2_provider.dart';
 
 /// Mining Service Implementation
 ///

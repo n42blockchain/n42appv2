@@ -7,9 +7,9 @@
 
 import 'dart:convert';
 
-import 'package:n42appv2/core/app/app_globals.dart';
-import 'package:n42appv2/core/storage/secure_preferences.dart';
-import 'package:n42appv2/data/models/user_info.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/storage/secure_preferences.dart';
+import 'package:n42_wallet/data/models/user_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Shared Preferences Utility

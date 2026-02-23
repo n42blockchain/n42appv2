@@ -1,9 +1,9 @@
 ﻿import 'package:dio/dio.dart';
-import 'package:n42appv2/core/config/app_config.dart';
-import 'package:n42appv2/core/app/app_globals.dart';
-import 'package:n42appv2/src/https/base_api.dart';
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/data/models/user_info.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/data/models/user_info.dart';
 
 class UserInfoApi{
   late String url;

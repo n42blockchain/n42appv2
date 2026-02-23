@@ -1,20 +1,20 @@
-﻿import 'package:n42appv2/core/app/app_globals.dart';
-import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:n42appv2/src/home/models/exchange_account_model.dart';
-import 'package:n42appv2/src/login/api/handtype.dart';
-import 'package:n42appv2/src/login/api/user_info_api.dart';
-import 'package:n42appv2/src/login/widgets/input_field.dart';
-import 'package:n42appv2/src/utils/regular.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/src/wallet/api/exchange_api.dart';
-import 'package:n42appv2/src/wallet/api/market_api.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:n42appv2/src/widgets/button_widget.dart';
-import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_2.dart';
-import 'package:n42appv2/src/widgets/loading_page.dart';
+﻿import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/src/component/enums/load.dart';
+import 'package:n42_wallet/src/home/models/exchange_account_model.dart';
+import 'package:n42_wallet/src/login/api/handtype.dart';
+import 'package:n42_wallet/src/login/api/user_info_api.dart';
+import 'package:n42_wallet/src/login/widgets/input_field.dart';
+import 'package:n42_wallet/src/utils/regular.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
+import 'package:n42_wallet/src/wallet/api/exchange_api.dart';
+import 'package:n42_wallet/src/wallet/api/market_api.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/src/widgets/button_widget.dart';
+import 'package:n42_wallet/src/widgets/dialog_widget/tips_dialog_2.dart';
+import 'package:n42_wallet/src/widgets/loading_page.dart';
 import 'package:flutter/material.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AccountLogoutPage extends StatefulWidget {

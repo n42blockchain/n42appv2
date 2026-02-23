@@ -7,12 +7,12 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:n42appv2/core/error/failures.dart';
-import 'package:n42appv2/core/error/exceptions.dart';
-import 'package:n42appv2/features/wallet/domain/entities/wallet_entity.dart';
-import 'package:n42appv2/features/wallet/domain/repositories/wallet_repository.dart';
-import 'package:n42appv2/features/wallet/data/datasources/wallet_local_datasource.dart';
-import 'package:n42appv2/features/wallet/data/datasources/wallet_remote_datasource.dart';
+import 'package:n42_wallet/core/error/failures.dart';
+import 'package:n42_wallet/core/error/exceptions.dart';
+import 'package:n42_wallet/features/wallet/domain/entities/wallet_entity.dart';
+import 'package:n42_wallet/features/wallet/domain/repositories/wallet_repository.dart';
+import 'package:n42_wallet/features/wallet/data/datasources/wallet_local_datasource.dart';
+import 'package:n42_wallet/features/wallet/data/datasources/wallet_remote_datasource.dart';
 
 /// Wallet Repository Implementation
 ///

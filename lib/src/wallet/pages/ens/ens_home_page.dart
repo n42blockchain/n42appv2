@@ -5,17 +5,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/pages/ens/ens_search_page.dart';
-import 'package:n42appv2/src/wallet/pages/ens/ens_management_page.dart';
-import 'package:n42appv2/src/wallet/services/ens_expiry_reminder_service.dart';
-import 'package:n42appv2/src/wallet/services/ens_registration_service.dart';
-import 'package:n42appv2/src/wallet/widgets/ens/ens_owned_list_item.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/wallet/pages/ens/ens_search_page.dart';
+import 'package:n42_wallet/src/wallet/pages/ens/ens_management_page.dart';
+import 'package:n42_wallet/src/wallet/services/ens_expiry_reminder_service.dart';
+import 'package:n42_wallet/src/wallet/services/ens_registration_service.dart';
+import 'package:n42_wallet/src/wallet/widgets/ens/ens_owned_list_item.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 
 // 引入链配置
-export 'package:n42appv2/src/wallet/pages/ens/ens_management_page.dart' show EnsChainConfig;
+export 'package:n42_wallet/src/wallet/pages/ens/ens_management_page.dart' show EnsChainConfig;
 
 /// ENS 功能主页
 ///

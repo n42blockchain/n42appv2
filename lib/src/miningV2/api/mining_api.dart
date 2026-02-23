@@ -1,10 +1,10 @@
 ﻿import 'dart:convert';
 
-import 'package:n42appv2/core/app/app_globals.dart';
-import 'package:n42appv2/src/https/base_api.dart';
-import 'package:n42appv2/src/miningV2/models/mining_withdrawals_daily.dart';
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/miningV2/models/mining_withdrawals_daily.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
 
 class MiningApi{
   MiningApi.init(){

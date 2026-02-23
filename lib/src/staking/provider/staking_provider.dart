@@ -4,10 +4,10 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/foundation.dart';
-import 'package:n42appv2/src/staking/api/atom_staking_api.dart';
-import 'package:n42appv2/src/staking/api/eth_staking_api.dart';
-import 'package:n42appv2/src/staking/api/sol_staking_api.dart';
-import 'package:n42appv2/src/staking/models/staking_models.dart';
+import 'package:n42_wallet/src/staking/api/atom_staking_api.dart';
+import 'package:n42_wallet/src/staking/api/eth_staking_api.dart';
+import 'package:n42_wallet/src/staking/api/sol_staking_api.dart';
+import 'package:n42_wallet/src/staking/models/staking_models.dart';
 
 /// Staking 状态枚举
 enum StakingState {

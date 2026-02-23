@@ -5,13 +5,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/aa/models/smart_account.dart';
-import 'package:n42appv2/src/wallet/pages/aa/aa_account_create_page.dart';
-import 'package:n42appv2/src/wallet/pages/aa/aa_account_detail_page.dart';
-import 'package:n42appv2/src/wallet/widgets/aa/smart_account_card.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/wallet/aa/models/smart_account.dart';
+import 'package:n42_wallet/src/wallet/pages/aa/aa_account_create_page.dart';
+import 'package:n42_wallet/src/wallet/pages/aa/aa_account_detail_page.dart';
+import 'package:n42_wallet/src/wallet/widgets/aa/smart_account_card.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 
 /// AA 账户列表页面
 class AAAccountListPage extends StatefulWidget {

@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:n42appv2/core/app/app_globals.dart';
-import 'package:n42appv2/core/utils/message_model_bridge.dart';
-import 'package:n42appv2/core/utils/result.dart';
-import 'package:n42appv2/src/https/base_api.dart';
-import 'package:n42appv2/src/https/request_url.dart';
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/wallet/utils/chain_1559.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/utils/message_model_bridge.dart';
+import 'package:n42_wallet/core/utils/result.dart';
+import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/https/request_url.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/src/wallet/utils/chain_1559.dart';
 import 'package:web3dart/web3dart.dart';
 
 class EthAPI{

@@ -1,8 +1,8 @@
-﻿import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+﻿import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 class ChartHistogram extends StatefulWidget {
   final TitleModel titleModel; //标题，主标题、副标题如果没有可以不传，

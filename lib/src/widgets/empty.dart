@@ -1,8 +1,8 @@
 ﻿//@author zhc 2022/3/17 11:29 上午
 //@description:Loading组件
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum EmptyType {

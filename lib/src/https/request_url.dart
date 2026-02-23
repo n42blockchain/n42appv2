@@ -1,5 +1,5 @@
-import 'package:n42appv2/core/config/api_keys_config.dart';
-import 'package:n42appv2/core/config/rpc_config.dart';
+import 'package:n42_wallet/core/config/api_keys_config.dart';
+import 'package:n42_wallet/core/config/rpc_config.dart';
 
 class RequestUrl{
   /// 是否已初始化 API keys

@@ -1,10 +1,10 @@
-import 'package:n42appv2/core/config/app_config.dart';
-import 'package:n42appv2/core/app/app_globals.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/pages/payment_code/payment_history.dart';
-import 'package:n42appv2/src/wallet/pages/payment_code/set_amount.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/wallet/pages/payment_code/payment_history.dart';
+import 'package:n42_wallet/src/wallet/pages/payment_code/set_amount.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qr_flutter/qr_flutter.dart';

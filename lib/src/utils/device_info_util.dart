@@ -2,8 +2,8 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:n42appv2/core/security/secure_storage.dart';
-import 'package:n42appv2/src/utils/data_utils.dart';
+import 'package:n42_wallet/core/security/secure_storage.dart';
+import 'package:n42_wallet/src/utils/data_utils.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
 class DeviceInfoUtil{

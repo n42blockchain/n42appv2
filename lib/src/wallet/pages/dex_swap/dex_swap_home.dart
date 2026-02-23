@@ -1,28 +1,28 @@
 import 'dart:async';
 
-import 'package:n42appv2/core/app/app_globals.dart';
-import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/api/dex_swap_api.dart';
-import 'package:n42appv2/src/wallet/api/market_api.dart';
-import 'package:n42appv2/src/wallet/api/transfer_api.dart';
-import 'package:n42appv2/src/wallet/models/coin_model.dart';
-import 'package:n42appv2/src/wallet/models/dex/dex_quote_model.dart';
-import 'package:n42appv2/src/wallet/models/dex/dex_token_model.dart';
-import 'package:n42appv2/src/wallet/pages/dex_swap/dex_swap_confirm.dart';
-import 'package:n42appv2/src/wallet/pages/dex_swap/dex_swap_history.dart';
-import 'package:n42appv2/src/wallet/pages/dex_swap/dex_token_select.dart';
-import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:n42appv2/src/widgets/button_widget.dart';
-import 'package:n42appv2/src/widgets/image_network.dart';
-import 'package:n42appv2/src/widgets/line_chart.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/src/component/enums/load.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/wallet/api/dex_swap_api.dart';
+import 'package:n42_wallet/src/wallet/api/market_api.dart';
+import 'package:n42_wallet/src/wallet/api/transfer_api.dart';
+import 'package:n42_wallet/src/wallet/models/coin_model.dart';
+import 'package:n42_wallet/src/wallet/models/dex/dex_quote_model.dart';
+import 'package:n42_wallet/src/wallet/models/dex/dex_token_model.dart';
+import 'package:n42_wallet/src/wallet/pages/dex_swap/dex_swap_confirm.dart';
+import 'package:n42_wallet/src/wallet/pages/dex_swap/dex_swap_history.dart';
+import 'package:n42_wallet/src/wallet/pages/dex_swap/dex_token_select.dart';
+import 'package:n42_wallet/src/wallet/provider/wallet_action_provider.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/src/widgets/button_widget.dart';
+import 'package:n42_wallet/src/widgets/image_network.dart';
+import 'package:n42_wallet/src/widgets/line_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 // ── Supported chains ──────────────────────────────────────────────────────────
 

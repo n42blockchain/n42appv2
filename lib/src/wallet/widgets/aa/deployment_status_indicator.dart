@@ -5,8 +5,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/src/wallet/aa/models/smart_account.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/src/wallet/aa/models/smart_account.dart';
 
 /// 智能账户部署状态指示器
 class DeploymentStatusIndicator extends StatelessWidget {

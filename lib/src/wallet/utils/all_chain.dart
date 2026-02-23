@@ -1,4 +1,4 @@
-import 'package:n42appv2/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
 import 'chain_data_part1.dart';
 import 'chain_data_part2.dart';
 import 'chain_data_part3.dart';

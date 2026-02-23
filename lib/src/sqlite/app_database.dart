@@ -1,8 +1,8 @@
-import 'package:n42appv2/src/browser/models/browser_collection_model.dart';
-import 'package:n42appv2/src/browser/models/browser_history_model.dart';
-import 'package:n42appv2/src/browser/models/browser_search_history_model.dart';
-import 'package:n42appv2/src/wallet/models/btc_transaction_recode_model.dart';
-import 'package:n42appv2/src/wallet/models/transation_record_model.dart';
+import 'package:n42_wallet/src/browser/models/browser_collection_model.dart';
+import 'package:n42_wallet/src/browser/models/browser_history_model.dart';
+import 'package:n42_wallet/src/browser/models/browser_search_history_model.dart';
+import 'package:n42_wallet/src/wallet/models/btc_transaction_recode_model.dart';
+import 'package:n42_wallet/src/wallet/models/transation_record_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 

@@ -3,10 +3,10 @@ import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
-import 'package:n42appv2/core/di/service_locator_setup.dart';
-import 'package:n42appv2/src/wallet/models/coin_model.dart';
-import 'package:n42appv2/src/wallet/provider/trustdart.dart';
-import 'package:n42appv2/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/core/di/service_locator_setup.dart';
+import 'package:n42_wallet/src/wallet/models/coin_model.dart';
+import 'package:n42_wallet/src/wallet/provider/trustdart.dart';
+import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
 import 'package:eip712/eip712.dart';
 import 'package:web3dart/web3dart.dart' as web3;
 import 'package:web3dart/web3dart.dart' show bytesToHex;

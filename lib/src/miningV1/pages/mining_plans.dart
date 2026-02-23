@@ -1,12 +1,12 @@
-import 'package:n42appv2/src/miningV1/pages/full_node_page.dart';
-import 'package:n42appv2/src/miningV1/widgets/ast_mining_board.dart';
-import 'package:n42appv2/src/miningV1/widgets/show_SKip_Confirm_Dialog.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/widgets/app_home_top_bar.dart';
-import 'package:n42appv2/src/widgets/button_widget.dart';
+import 'package:n42_wallet/src/miningV1/pages/full_node_page.dart';
+import 'package:n42_wallet/src/miningV1/widgets/ast_mining_board.dart';
+import 'package:n42_wallet/src/miningV1/widgets/show_SKip_Confirm_Dialog.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/widgets/app_home_top_bar.dart';
+import 'package:n42_wallet/src/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 class MiningPlans extends StatefulWidget {
   const MiningPlans({super.key});

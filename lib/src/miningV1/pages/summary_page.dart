@@ -1,27 +1,27 @@
 
-import 'package:n42appv2/core/config/app_config.dart';
-import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:n42appv2/src/miningV1/api/mining_api.dart';
-import 'package:n42appv2/src/miningV1/models/mining_type.dart';
-import 'package:n42appv2/src/miningV1/provider/mining_provider.dart';
-import 'package:n42appv2/src/miningV1/provider/mining_v1_providers.dart';
-import 'package:n42appv2/src/miningV1/utils/mining_utils.dart';
-import 'package:n42appv2/src/miningV1/widgets/task_item.dart';
-import 'package:n42appv2/src/utils/data_utils.dart';
-import 'package:n42appv2/core/utils/event_bus.dart';
-import 'package:n42appv2/core/storage/sp_util.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
-import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
-import 'package:n42appv2/src/wallet/utils/chain_util.dart';
-import 'package:n42appv2/src/widgets/chart_histogram.dart';
-import 'package:n42appv2/src/widgets/detail_refresh_widget.dart';
-import 'package:n42appv2/src/widgets/empty.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/src/component/enums/load.dart';
+import 'package:n42_wallet/src/miningV1/api/mining_api.dart';
+import 'package:n42_wallet/src/miningV1/models/mining_type.dart';
+import 'package:n42_wallet/src/miningV1/provider/mining_provider.dart';
+import 'package:n42_wallet/src/miningV1/provider/mining_v1_providers.dart';
+import 'package:n42_wallet/src/miningV1/utils/mining_utils.dart';
+import 'package:n42_wallet/src/miningV1/widgets/task_item.dart';
+import 'package:n42_wallet/src/utils/data_utils.dart';
+import 'package:n42_wallet/core/utils/event_bus.dart';
+import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/utils/toast_utils.dart';
+import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/src/widgets/chart_histogram.dart';
+import 'package:n42_wallet/src/widgets/detail_refresh_widget.dart';
+import 'package:n42_wallet/src/widgets/empty.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:web3dart/web3dart.dart';
 
 class SummaryPage extends StatefulWidget {

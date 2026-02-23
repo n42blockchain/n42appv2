@@ -5,11 +5,11 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:n42appv2/src/staking/api/atom_staking_api.dart';
-import 'package:n42appv2/src/staking/api/eth_staking_api.dart';
-import 'package:n42appv2/src/staking/api/sol_staking_api.dart';
-import 'package:n42appv2/src/staking/models/staking_models.dart';
-import 'package:n42appv2/src/staking/provider/staking_provider.dart';
+import 'package:n42_wallet/src/staking/api/atom_staking_api.dart';
+import 'package:n42_wallet/src/staking/api/eth_staking_api.dart';
+import 'package:n42_wallet/src/staking/api/sol_staking_api.dart';
+import 'package:n42_wallet/src/staking/models/staking_models.dart';
+import 'package:n42_wallet/src/staking/provider/staking_provider.dart';
 
 // ─── 静态默认 APY（API 失败时的降级值）───────────────────────────────────────
 const double _kEthApyDefault = 4.0;

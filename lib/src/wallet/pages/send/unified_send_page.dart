@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:n42appv2/src/wallet/models/coin_model.dart';
-import 'package:n42appv2/src/wallet/pages/send/send_profile.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_algo.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_btc.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_dot.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_fil.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_memo.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_sol.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_sui.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_ton.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_trx.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_xrp.dart';
-import 'package:n42appv2/src/wallet/pages/send/wallet_chain_send_zil.dart';
+import 'package:n42_wallet/src/wallet/models/coin_model.dart';
+import 'package:n42_wallet/src/wallet/pages/send/send_profile.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send_algo.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send_btc.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send_dot.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send_fil.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send_memo.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send_sol.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send_sui.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send_ton.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send_trx.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send_xrp.dart';
+import 'package:n42_wallet/src/wallet/pages/send/wallet_chain_send_zil.dart';
 
 /// 统一发送入口，根据链类型自动路由到正确的发送页。
 ///

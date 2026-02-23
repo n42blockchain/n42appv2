@@ -7,7 +7,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:n42appv2/src/hardware_wallet/models/hardware_wallet_models.dart';
+import 'package:n42_wallet/src/hardware_wallet/models/hardware_wallet_models.dart';
 
 /// Ledger 设备服务
 ///

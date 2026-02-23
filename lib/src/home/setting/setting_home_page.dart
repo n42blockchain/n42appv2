@@ -1,13 +1,13 @@
-﻿import 'package:n42appv2/src/browser/pages/browser_setting.dart';
-import 'package:n42appv2/src/home/setting/setting_sys_language.dart';
-import 'package:n42appv2/src/home/setting/setting_theme.dart';
-import 'package:n42appv2/src/home/widgets/nav_setting_item.dart';
-import 'package:n42appv2/core/providers/core_providers.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
+﻿import 'package:n42_wallet/src/browser/pages/browser_setting.dart';
+import 'package:n42_wallet/src/home/setting/setting_sys_language.dart';
+import 'package:n42_wallet/src/home/setting/setting_theme.dart';
+import 'package:n42_wallet/src/home/widgets/nav_setting_item.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Setting Home Page - Migrated to Riverpod

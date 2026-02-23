@@ -13,7 +13,7 @@
 ///
 /// For new code, prefer using the modular approach:
 /// ```dart
-/// import 'package:n42appv2/src/wallet/api/token/token_api.dart';
+/// import 'package:n42_wallet/src/wallet/api/token/token_api.dart';
 ///
 /// final api = ModularTokenApi();
 /// final balance = await api.getBalanceEth('ETH', address, '');

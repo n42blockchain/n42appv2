@@ -1,7 +1,7 @@
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:rate_us_on_store/rate_us_on_store.dart';
 import 'package:url_launcher/url_launcher.dart';
 

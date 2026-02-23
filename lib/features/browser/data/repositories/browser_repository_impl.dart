@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:n42appv2/core/error/failures.dart';
-import 'package:n42appv2/features/browser/domain/entities/browser_entity.dart';
-import 'package:n42appv2/features/browser/domain/repositories/browser_repository.dart';
-import 'package:n42appv2/src/browser/api/browser_api.dart';
-import 'package:n42appv2/src/browser/models/browser_collection_model.dart';
-import 'package:n42appv2/src/browser/models/browser_history_model.dart';
+import 'package:n42_wallet/core/error/failures.dart';
+import 'package:n42_wallet/features/browser/domain/entities/browser_entity.dart';
+import 'package:n42_wallet/features/browser/domain/repositories/browser_repository.dart';
+import 'package:n42_wallet/src/browser/api/browser_api.dart';
+import 'package:n42_wallet/src/browser/models/browser_collection_model.dart';
+import 'package:n42_wallet/src/browser/models/browser_history_model.dart';
 
 /// Concrete implementation of [BrowserRepository] backed by SQLite
 /// via [BrowserApi].

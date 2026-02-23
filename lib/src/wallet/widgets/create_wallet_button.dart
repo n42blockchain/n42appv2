@@ -1,10 +1,10 @@
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/pages/create_wallet/import/import_cloud_backup.dart';
-import 'package:n42appv2/src/wallet/pages/wallet_manage/add_watch_wallet_page.dart';
-import 'package:n42appv2/src/wallet/pages/wallet_manage/keystore/import_keystore.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/wallet/pages/create_wallet/import/import_cloud_backup.dart';
+import 'package:n42_wallet/src/wallet/pages/wallet_manage/add_watch_wallet_page.dart';
+import 'package:n42_wallet/src/wallet/pages/wallet_manage/keystore/import_keystore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 class CreateWalletButton extends StatefulWidget {
   final dynamic onTapBack;

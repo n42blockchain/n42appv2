@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
-import 'package:n42appv2/core/security/security_config.dart';
+import 'package:n42_wallet/core/security/security_config.dart';
 
 ///
 class EsoImageCacheManager extends CacheManager {

@@ -3,8 +3,8 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'package:n42appv2/src/wallet/aa/core/aa_config.dart';
-import 'package:n42appv2/src/wallet/aa/models/smart_account.dart';
+import 'package:n42_wallet/src/wallet/aa/core/aa_config.dart';
+import 'package:n42_wallet/src/wallet/aa/models/smart_account.dart';
 
 import 'transfer_handler.dart';
 import 'handlers/evm_transfer_handler.dart';

@@ -7,17 +7,17 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/core/app/app_globals.dart';
-import 'package:n42appv2/core/providers/core_providers.dart';
-import 'package:n42appv2/core/storage/sp_util.dart';
-import 'package:n42appv2/data/models/user_info.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
-import 'package:n42appv2/src/login/api/user_info_api.dart';
-import 'package:n42appv2/src/login/services/social_auth_service.dart';
-import 'package:n42appv2/src/utils/device_info_util.dart';
-import 'package:n42appv2/src/utils/toast_utils.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart';
+import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/data/models/user_info.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
+import 'package:n42_wallet/src/login/api/user_info_api.dart';
+import 'package:n42_wallet/src/login/services/social_auth_service.dart';
+import 'package:n42_wallet/src/utils/device_info_util.dart';
+import 'package:n42_wallet/src/utils/toast_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Social login buttons widget

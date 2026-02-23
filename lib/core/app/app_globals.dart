@@ -6,10 +6,10 @@
 // Author: Jiang Yiwei
 
 import 'package:flutter/material.dart';
-import 'package:n42appv2/data/models/user_info.dart';
-import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
-import 'package:n42appv2/core/storage/sp_util.dart';
-import 'package:n42appv2/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
+import 'package:n42_wallet/data/models/user_info.dart';
+import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
 
 /// Application Globals
 ///

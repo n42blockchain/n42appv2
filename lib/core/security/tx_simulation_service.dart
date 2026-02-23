@@ -3,9 +3,9 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:n42appv2/core/security/tx_simulation_result.dart';
-import 'package:n42appv2/core/utils/result.dart';
-import 'package:n42appv2/src/wallet/api/chain_api/eth_api.dart';
+import 'package:n42_wallet/core/security/tx_simulation_result.dart';
+import 'package:n42_wallet/core/utils/result.dart';
+import 'package:n42_wallet/src/wallet/api/chain_api/eth_api.dart';
 
 /// Simulates an EVM transaction via `eth_call` to detect reverts before signing.
 ///

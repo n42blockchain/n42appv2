@@ -1,5 +1,5 @@
-import 'package:n42appv2/src/wallet/models/coin_model.dart';
-import 'package:n42appv2/src/wallet/models/wallet_info.dart';
+import 'package:n42_wallet/src/wallet/models/coin_model.dart';
+import 'package:n42_wallet/src/wallet/models/wallet_info.dart';
 
 /// Abstraction layer to break the CoinModel → WalletActionProvider circular dependency.
 ///

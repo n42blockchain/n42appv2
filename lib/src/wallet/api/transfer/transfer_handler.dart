@@ -3,9 +3,9 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/wallet/models/transation_record_model.dart';
-import 'package:n42appv2/src/wallet/models/btc_transaction_recode_model.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/src/wallet/models/transation_record_model.dart';
+import 'package:n42_wallet/src/wallet/models/btc_transaction_recode_model.dart';
 
 /// Transfer parameters for all chain types
 class TransferParams {

@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:dio/dio.dart';
-import 'package:n42appv2/core/network/retry_interceptor.dart';
+import 'package:n42_wallet/core/network/retry_interceptor.dart';
 
 /// Pre-configured [RetryPolicy] presets and [Options] extension methods
 /// for per-request retry control.

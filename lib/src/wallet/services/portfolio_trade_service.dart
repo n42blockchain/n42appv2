@@ -3,8 +3,8 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'package:n42appv2/src/sqlite/app_database.dart';
-import 'package:n42appv2/src/wallet/models/portfolio_trade.dart';
+import 'package:n42_wallet/src/sqlite/app_database.dart';
+import 'package:n42_wallet/src/wallet/models/portfolio_trade.dart';
 
 /// CRUD operations for the local `portfolio_trades` table.
 ///

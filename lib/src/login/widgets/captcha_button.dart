@@ -1,12 +1,12 @@
 ﻿import 'dart:async';
 
-import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:n42appv2/src/login/api/handtype.dart';
-import 'package:n42appv2/src/login/api/user_info_api.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/core/utils/toast_utils.dart';
+import 'package:n42_wallet/src/component/enums/load.dart';
+import 'package:n42_wallet/src/login/api/handtype.dart';
+import 'package:n42_wallet/src/login/api/user_info_api.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// 点击事件，返回true继续后续操作，返回false不再倒计时

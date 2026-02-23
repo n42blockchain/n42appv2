@@ -1,7 +1,7 @@
-﻿import 'package:n42appv2/core/providers/core_providers.dart';
-import 'package:n42appv2/core/utils/responsive_utils.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/widgets/image_network.dart';
+﻿import 'package:n42_wallet/core/providers/core_providers.dart';
+import 'package:n42_wallet/core/utils/responsive_utils.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/widgets/image_network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

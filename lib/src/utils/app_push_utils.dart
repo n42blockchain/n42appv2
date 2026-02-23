@@ -2,21 +2,21 @@
 
 import 'dart:convert';
 
-import 'package:n42appv2/core/app/app_globals.dart';
-import 'package:n42appv2/core/providers/core_providers.dart';
-import 'package:n42appv2/main.dart' show globalProviderContainer;
-import 'package:n42appv2/src/browser/pages/browser_page.dart';
-import 'package:n42appv2/src/home/setting/about_app.dart';
-import 'package:n42appv2/src/wallet/pages/payment_code/payment_history.dart';
-import 'package:n42appv2/src/home/setting/personal_setting.dart';
-import 'package:n42appv2/src/home/setting/setting_share.dart';
-import 'package:n42appv2/src/login/api/user_info_api.dart';
-import 'package:n42appv2/core/utils/event_bus.dart';
-import 'package:n42appv2/data/models/device_login_info.dart';
-import 'package:n42appv2/src/utils/device_info_util.dart';
-import 'package:n42appv2/src/login/pages/login_page.dart';
-import 'package:n42appv2/src/notification/pages/message_info.dart';
-import 'package:n42appv2/src/wallet/utils/browser_txhash.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart';
+import 'package:n42_wallet/main.dart' show globalProviderContainer;
+import 'package:n42_wallet/src/browser/pages/browser_page.dart';
+import 'package:n42_wallet/src/home/setting/about_app.dart';
+import 'package:n42_wallet/src/wallet/pages/payment_code/payment_history.dart';
+import 'package:n42_wallet/src/home/setting/personal_setting.dart';
+import 'package:n42_wallet/src/home/setting/setting_share.dart';
+import 'package:n42_wallet/src/login/api/user_info_api.dart';
+import 'package:n42_wallet/core/utils/event_bus.dart';
+import 'package:n42_wallet/data/models/device_login_info.dart';
+import 'package:n42_wallet/src/utils/device_info_util.dart';
+import 'package:n42_wallet/src/login/pages/login_page.dart';
+import 'package:n42_wallet/src/notification/pages/message_info.dart';
+import 'package:n42_wallet/src/wallet/utils/browser_txhash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:n42_chat/n42_chat.dart' show FirebasePushService, N42Chat;

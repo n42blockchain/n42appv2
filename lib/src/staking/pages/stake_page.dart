@@ -6,14 +6,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/staking/models/staking_models.dart';
-import 'package:n42appv2/src/staking/pages/validator_list_page.dart';
-import 'package:n42appv2/src/staking/provider/staking_provider.dart';
-import 'package:n42appv2/src/wallet/pages/dex_swap/dex_swap_home.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/staking/models/staking_models.dart';
+import 'package:n42_wallet/src/staking/pages/validator_list_page.dart';
+import 'package:n42_wallet/src/staking/provider/staking_provider.dart';
+import 'package:n42_wallet/src/wallet/pages/dex_swap/dex_swap_home.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
 
 /// Stake 页面
 ///

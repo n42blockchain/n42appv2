@@ -1,12 +1,12 @@
-import 'package:n42appv2/core/providers/core_providers.dart';
-import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
-import 'package:n42appv2/main.dart' show globalProviderContainer;
-import 'package:n42appv2/shared/domain/entities/wallet_info.dart';
-import 'package:n42appv2/core/storage/sp_util.dart';
-import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
-import 'package:n42appv2/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/main.dart' show globalProviderContainer;
+import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
+import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
 import 'package:flutter/material.dart';
-import 'package:n42appv2/data/models/user_info.dart';
+import 'package:n42_wallet/data/models/user_info.dart';
 
 /// Legacy Application class - 已部分迁移到 Riverpod
 /// 

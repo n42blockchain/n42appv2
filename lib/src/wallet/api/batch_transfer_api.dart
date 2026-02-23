@@ -6,9 +6,9 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:n42appv2/src/https/base_api.dart';
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/wallet/models/batch_transfer_model.dart';
+import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/src/wallet/models/batch_transfer_model.dart';
 
 /// Multicall3 批量转账 API
 ///

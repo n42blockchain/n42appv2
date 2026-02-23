@@ -6,11 +6,11 @@
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/src/wallet/api/gas_tracker_api.dart';
-import 'package:n42appv2/src/wallet/models/gas_estimate_model.dart';
-import 'package:n42appv2/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/src/wallet/api/gas_tracker_api.dart';
+import 'package:n42_wallet/src/wallet/models/gas_estimate_model.dart';
+import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
 
 /// Gas 选择器组件
 ///

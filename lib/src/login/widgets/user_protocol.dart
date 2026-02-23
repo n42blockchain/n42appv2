@@ -1,10 +1,10 @@
-﻿import 'package:n42appv2/core/config/app_config.dart';
-import 'package:n42appv2/core/storage/sp_util.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
+﻿import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:roundcheckbox/roundcheckbox.dart';
 import 'package:url_launcher/url_launcher.dart';
 

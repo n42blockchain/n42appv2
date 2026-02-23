@@ -1,6 +1,6 @@
 import 'dart:typed_data';
-import 'package:n42appv2/core/security/secure_memory.dart';
-import 'package:n42appv2/src/wallet/aa/models/smart_account.dart';
+import 'package:n42_wallet/core/security/secure_memory.dart';
+import 'package:n42_wallet/src/wallet/aa/models/smart_account.dart';
 
 /// Wallet information model
 ///

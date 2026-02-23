@@ -3,11 +3,11 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'package:n42appv2/core/config/app_config.dart';
-import 'package:n42appv2/core/network/base_http.dart';
-import 'package:n42appv2/src/https/base_api.dart';
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/network/base_http.dart';
+import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 /// Base class for Token API functionality
 ///

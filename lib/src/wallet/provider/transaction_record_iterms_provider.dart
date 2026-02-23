@@ -1,23 +1,23 @@
 import 'dart:async';
 
-import 'package:n42appv2/core/app/app_globals.dart';
-import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/sqlite/app_database.dart';
-import 'package:n42appv2/core/utils/event_bus.dart';
-import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/src/wallet/api/chain_api/algo_api.dart';
-import 'package:n42appv2/src/wallet/api/chain_api/btc_api.dart';
-import 'package:n42appv2/src/wallet/api/chain_api/fil_api.dart';
-import 'package:n42appv2/src/wallet/api/chain_api/xrp_api.dart';
-import 'package:n42appv2/src/wallet/api/chain_api/xtz_api.dart';
-import 'package:n42appv2/src/wallet/api/chain_api/zil_api.dart';
-import 'package:n42appv2/src/wallet/api/token_view_api.dart';
-import 'package:n42appv2/src/wallet/models/btc_transaction_recode_model.dart';
-import 'package:n42appv2/src/wallet/models/transation_record_model.dart';
-import 'package:n42appv2/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/src/sqlite/app_database.dart';
+import 'package:n42_wallet/core/utils/event_bus.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
+import 'package:n42_wallet/src/wallet/api/chain_api/algo_api.dart';
+import 'package:n42_wallet/src/wallet/api/chain_api/btc_api.dart';
+import 'package:n42_wallet/src/wallet/api/chain_api/fil_api.dart';
+import 'package:n42_wallet/src/wallet/api/chain_api/xrp_api.dart';
+import 'package:n42_wallet/src/wallet/api/chain_api/xtz_api.dart';
+import 'package:n42_wallet/src/wallet/api/chain_api/zil_api.dart';
+import 'package:n42_wallet/src/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/src/wallet/models/btc_transaction_recode_model.dart';
+import 'package:n42_wallet/src/wallet/models/transation_record_model.dart';
+import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:flutter/material.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 class TransactionRecordItemProvider with ChangeNotifier{
   AppDatabase? _db;

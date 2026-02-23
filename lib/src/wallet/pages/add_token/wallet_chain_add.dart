@@ -1,22 +1,22 @@
-import 'package:n42appv2/src/component/enums/coin_type.dart';
-import 'package:n42appv2/src/component/enums/load.dart';
-import 'package:n42appv2/src/login/widgets/login_title.dart';
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/utils/regular.dart';
-import 'package:n42appv2/presentation/themes/theme_adapter.dart';
-import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/src/wallet/api/chain_api/eth_api.dart';
-import 'package:n42appv2/src/wallet/utils/all_chain.dart';
-import 'package:n42appv2/src/widgets/app_bar_widget.dart';
-import 'package:n42appv2/src/widgets/button_widget.dart';
-import 'package:n42appv2/src/widgets/dialog_widget/tips_dialog_2.dart';
-import 'package:n42appv2/src/widgets/text_field_widget.dart';
+import 'package:n42_wallet/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/src/component/enums/load.dart';
+import 'package:n42_wallet/src/login/widgets/login_title.dart';
+import 'package:n42_wallet/src/models/message_model.dart';
+import 'package:n42_wallet/src/utils/regular.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
+import 'package:n42_wallet/src/wallet/api/chain_api/eth_api.dart';
+import 'package:n42_wallet/src/wallet/utils/all_chain.dart';
+import 'package:n42_wallet/src/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/src/widgets/button_widget.dart';
+import 'package:n42_wallet/src/widgets/dialog_widget/tips_dialog_2.dart';
+import 'package:n42_wallet/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:validators/validators.dart';
-import 'package:n42appv2/generated/l10n.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 class WalletChainAdd extends ConsumerStatefulWidget {
   const WalletChainAdd({super.key});
