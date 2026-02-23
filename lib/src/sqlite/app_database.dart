@@ -17,7 +17,7 @@ class AppDatabase{
     String path = join(directory, "astranet.db");
     return await openDatabase(
       path,
-      version: 6, //v6: browserCollection favicon + createdAt
+      version: 7, //v7: portfolio_trades for cost-basis P&L tracking
       onCreate: (Database db, int version) async {
         //交易记录
         await db.execute("create table TransationRecord("
@@ -128,6 +128,18 @@ class AppDatabase{
             updated_at INTEGER NOT NULL
           )
         ''');
+        // 投资组合盈亏 — 买入成本追踪表
+        await db.execute('''
+          CREATE TABLE portfolio_trades (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            coin_id TEXT NOT NULL,
+            symbol TEXT NOT NULL,
+            name TEXT NOT NULL,
+            quantity REAL NOT NULL,
+            buy_price_usd REAL NOT NULL,
+            buy_time_ms INTEGER NOT NULL
+          )
+        ''');
         // AA Session Key 表
         await db.execute('''
           CREATE TABLE aa_session_keys (
@@ -198,6 +210,19 @@ class AppDatabase{
           ''');
           await db.execute('''
             ALTER TABLE browserCollection ADD COLUMN createdAt INTEGER
+          ''');
+        }
+        if (oldVersion < 7) {
+          await db.execute('''
+            CREATE TABLE portfolio_trades (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              coin_id TEXT NOT NULL,
+              symbol TEXT NOT NULL,
+              name TEXT NOT NULL,
+              quantity REAL NOT NULL,
+              buy_price_usd REAL NOT NULL,
+              buy_time_ms INTEGER NOT NULL
+            )
           ''');
         }
       },

@@ -11,8 +11,11 @@ import 'package:n42appv2/src/browser/pages/browser_page.dart';
 import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/utils/regular.dart';
 import 'package:n42appv2/src/wallet/api/market_api.dart';
+import 'package:n42appv2/src/wallet/models/portfolio_trade.dart';
 import 'package:n42appv2/src/wallet/pages/market/price_alert_sheet.dart';
+import 'package:n42appv2/src/wallet/pages/market/trade_entry_sheet.dart';
 import 'package:n42appv2/src/wallet/services/coin_price_alert_service.dart';
+import 'package:n42appv2/src/wallet/services/portfolio_trade_service.dart';
 import 'package:n42appv2/src/wallet/widgets/about_show_dialog.dart';
 import 'package:n42appv2/src/widgets/candlestick_chart.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
@@ -31,8 +34,17 @@ class MarketCoinInfo extends ConsumerStatefulWidget {
 
 class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
   // ─── formatters ────────────────────────────────────────────────────────────
-  final oCcy     = NumberFormat('#,##0.00########', 'en_US');
   final _regular = Regular();
+
+  /// 根据价格大小自动选择合适的小数位：>=$1000 两位，>=$1 四位，小于 $1 四位有效数字。
+  String _fmtPrice(double price) {
+    if (price <= 0) return '0.00';
+    if (price >= 1000) return NumberFormat('#,##0.00', 'en_US').format(price);
+    if (price >= 1)    return NumberFormat('#,##0.0000', 'en_US').format(price);
+    // 小数：保留 4 位有效数字，去尾零
+    final s = price.toStringAsPrecision(4);
+    return double.tryParse(s)?.toString() ?? s;
+  }
 
   // ─── live coin data ────────────────────────────────────────────────────────
   late Map<String, dynamic> _coin;
@@ -66,6 +78,9 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
   // ─── price alert state ────────────────────────────────────────────────────
   CoinPriceAlertConfig? _alertConfig;
 
+  // ─── portfolio P&L state ──────────────────────────────────────────────────
+  List<PortfolioTrade> _trades = [];
+
   // ─── lifecycle ─────────────────────────────────────────────────────────────
 
   @override
@@ -80,6 +95,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
     _fetchCoinPrice();
     _fetchCoinInfo();
     _loadAlertConfig();
+    _loadTrades();
   }
 
   @override
@@ -96,6 +112,30 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
     final all = await CoinPriceAlertService.loadAll();
     if (!mounted) return;
     setState(() => _alertConfig = all[coinId]);
+  }
+
+  Future<void> _loadTrades() async {
+    final coinId = (_coin['coin_gecko_id'] ?? '').toString().trim();
+    if (coinId.isEmpty) return;
+    final list = await PortfolioTradeService.getTradesForCoin(coinId);
+    if (!mounted) return;
+    setState(() => _trades = list);
+  }
+
+  Future<void> _openTradeSheet() async {
+    final coinId = (_coin['coin_gecko_id'] ?? '').toString().trim();
+    final symbol = (_coin['coin'] ?? '').toString().trim();
+    final name = (_coin['name'] ?? '').toString().trim();
+    final price = _toDouble(_coin['price']);
+
+    final changed = await showTradeEntrySheet(
+      context: context,
+      coinId: coinId,
+      symbol: symbol,
+      name: name,
+      currentPrice: price,
+    );
+    if (changed == true) await _loadTrades();
   }
 
   Future<void> _openAlertSheet() async {
@@ -235,6 +275,24 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
     _pct7d          = _toDouble(_marketData?['price_change_percentage_7d']);
     _pct30d         = _toDouble(_marketData?['price_change_percentage_30d']);
     _liquidityScore = _toDouble(_coinInfo?['liquidity_score']);
+
+    // 将 market_data 里的市值/成交量/供应量回填到 _coin，供 _buildMarketStatsCard 使用
+    final md = _marketData;
+    if (md != null) {
+      _coin['market_cap']          = _marketDouble('market_cap');
+      _coin['volume_24h']          = _marketDouble('total_volume');
+      _coin['total_supply']        = _toDouble(md['total_supply']);
+      _coin['circulating_supply']  = _toDouble(md['circulating_supply']);
+
+      // 提取 7 日 sparkline 作为图表兜底数据
+      final sparkline = md['sparkline_7d'];
+      if (sparkline is Map) {
+        final prices = sparkline['price'];
+        if (prices is List && prices.isNotEmpty) {
+          _coin['kline_default'] = prices;
+        }
+      }
+    }
   }
 
   /// Convenience accessor — avoids repeating the null + type guard everywhere.
@@ -287,6 +345,8 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
 
   @override
   Widget build(BuildContext context) {
+    final coinId = (_coin['coin_gecko_id'] ?? '').toString().trim();
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -297,6 +357,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
                 child: Column(
                   children: [
                     _buildPriceSection(context),
+                    if (_trades.isNotEmpty) _buildPnlCard(context),
                     _buildPeriodSelector(context),
                     _buildChartSection(context),
                     _buildMarketStatsCard(context),
@@ -305,7 +366,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
                       _buildAboutSection(context),
                       _buildLinksSection(context),
                     ],
-                    SizedBox(height: ScreenUtil().setWidth(40)),
+                    SizedBox(height: ScreenUtil().setWidth(80)),
                   ],
                 ),
               ),
@@ -313,6 +374,15 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
           ],
         ),
       ),
+      floatingActionButton: coinId.isNotEmpty
+          ? FloatingActionButton.small(
+              onPressed: _openTradeSheet,
+              tooltip: S.of(context).g_pnl_add_trade,
+              backgroundColor: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.mainBlueColor.name),
+              child: const Icon(Icons.add, color: Colors.white),
+            )
+          : null,
     );
   }
 
@@ -411,7 +481,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
         children: [
           Expanded(
             child: Text(
-              '\$${oCcy.format(price)}',
+              '\$${_fmtPrice(price)}',
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(44),
                 fontWeight: FontWeight.w700,
@@ -444,6 +514,124 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
         ],
       ),
     );
+  }
+
+  // ─── portfolio P&L card ────────────────────────────────────────────────────
+
+  Widget _buildPnlCard(BuildContext context) {
+    final textColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainTextColor.name);
+    final subColor = textColor.withAlpha(153);
+    final cardBg = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemBgColor.name);
+    final accentColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name);
+    final s = S.of(context);
+
+    final summary = CoinPnlSummary(_trades);
+    final currentPrice = _toDouble(_coin['price']);
+    final pnlUsd = summary.pnlUsd(currentPrice);
+    final pnlPct = summary.pnlPct(currentPrice);
+    final isProfit = pnlUsd >= 0;
+    final pnlColor =
+        isProfit ? const Color(0xFF22C55E) : const Color(0xFFEF4444);
+
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(30),
+          vertical: ScreenUtil().setWidth(8)),
+      child: Container(
+        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+        decoration: BoxDecoration(
+          color: cardBg,
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header row
+            Row(
+              children: [
+                Text(
+                  s.g_pnl_cost_basis,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(26),
+                    fontWeight: FontWeight.w600,
+                    color: textColor,
+                  ),
+                ),
+                const Spacer(),
+                GestureDetector(
+                  onTap: _openTradeSheet,
+                  child: Icon(Icons.add_circle_outline,
+                      color: accentColor, size: ScreenUtil().setSp(30)),
+                ),
+              ],
+            ),
+            SizedBox(height: ScreenUtil().setWidth(12)),
+            // Stats row
+            Row(
+              children: [
+                _pnlStat(
+                  s.g_pnl_avg_cost,
+                  '\$${_fmtPrice(summary.avgCost)}',
+                  textColor,
+                  subColor,
+                ),
+                SizedBox(width: ScreenUtil().setWidth(20)),
+                _pnlStat(
+                  s.g_pnl_quantity,
+                  _fmtQty(summary.totalQty),
+                  textColor,
+                  subColor,
+                ),
+                SizedBox(width: ScreenUtil().setWidth(20)),
+                _pnlStat(
+                  s.g_pnl_unrealized,
+                  '${isProfit ? '+' : ''}\$${_fmtPrice(pnlUsd.abs())}  '
+                  '${isProfit ? '+' : ''}${pnlPct.toStringAsFixed(2)}%',
+                  pnlColor,
+                  subColor,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _pnlStat(
+      String label, String value, Color valueColor, Color labelColor) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+                fontSize: ScreenUtil().setSp(20), color: labelColor),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(4)),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(22),
+              fontWeight: FontWeight.w600,
+              color: valueColor,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _fmtQty(double v) {
+    if (v == v.truncateToDouble()) return v.truncate().toString();
+    return v.toStringAsFixed(v < 1 ? 6 : 4)
+        .replaceAll(RegExp(r'0+$'), '')
+        .replaceAll(RegExp(r'\.$'), '');
   }
 
   // ─── period selector ───────────────────────────────────────────────────────

@@ -8,6 +8,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42appv2/core/market/crypto_news_service.dart';
+import 'package:n42appv2/core/market/fear_greed_service.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/api/market_api.dart';
@@ -16,6 +18,7 @@ import 'package:n42appv2/src/wallet/pages/market/price_alert_sheet.dart';
 import 'package:n42appv2/src/wallet/services/coin_price_alert_service.dart';
 import 'package:n42appv2/generated/l10n.dart';
 import 'package:n42appv2/src/widgets/image_network.dart' show ImageNetWork;
+import 'package:url_launcher/url_launcher.dart';
 
 // ─── Entry point ─────────────────────────────────────────────────────────────
 
@@ -51,15 +54,24 @@ class _MarketPageState extends ConsumerState<MarketPage>
   // Price alert polling timer
   Timer? _alertCheckTimer;
 
+  // Fear & Greed
+  FearGreedData? _fearGreed;
+
+  // News
+  List<NewsArticle> _news = [];
+  bool _newsLoading = false;
+
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(_onTabChanged);
     _loadTrending();
     _loadWatchlist();
     _loadAlerts();
     _startAlertPolling();
+    _loadFearGreed();
+    _loadNews();
   }
 
   @override
@@ -74,6 +86,20 @@ class _MarketPageState extends ConsumerState<MarketPage>
 
   void _onTabChanged() {
     setState(() {});
+  }
+
+  // ─── Fear & Greed + News loaders ────────────────────────────────────────
+
+  Future<void> _loadFearGreed() async {
+    final data = await FearGreedService.fetch();
+    if (mounted && data != null) setState(() => _fearGreed = data);
+  }
+
+  Future<void> _loadNews() async {
+    if (_newsLoading) return;
+    if (mounted) setState(() => _newsLoading = true);
+    final list = await CryptoNewsService.fetchLatest();
+    if (mounted) setState(() { _news = list; _newsLoading = false; });
   }
 
   // ─── Price alert helpers ─────────────────────────────────────────────────
@@ -347,6 +373,11 @@ class _MarketPageState extends ConsumerState<MarketPage>
                   },
                   onRefresh: _loadWatchlist,
                 ),
+                _NewsTab(
+                  articles: _news,
+                  loading: _newsLoading,
+                  onRefresh: _loadNews,
+                ),
               ],
             ),
           ),
@@ -373,7 +404,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
                 Text(
                   'Markets',
                   style: TextStyle(
-                    fontSize: 22.sp,
+                    fontSize: 32.sp,
                     fontWeight: FontWeight.bold,
                     color: textColor,
                   ),
@@ -381,6 +412,12 @@ class _MarketPageState extends ConsumerState<MarketPage>
               ],
             ),
           ),
+          // Fear & Greed pill
+          if (_fearGreed != null)
+            Padding(
+              padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 8.h),
+              child: _FearGreedBadge(data: _fearGreed!),
+            ),
           TabBar(
             controller: _tabController,
             labelColor: accentColor,
@@ -388,13 +425,16 @@ class _MarketPageState extends ConsumerState<MarketPage>
             indicatorColor: accentColor,
             indicatorWeight: 2,
             dividerColor: dividerColor,
+            isScrollable: true,
+            tabAlignment: TabAlignment.start,
             labelStyle:
-                TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
-            unselectedLabelStyle: TextStyle(fontSize: 14.sp),
+                TextStyle(fontSize: 26.sp, fontWeight: FontWeight.w600),
+            unselectedLabelStyle: TextStyle(fontSize: 26.sp),
             tabs: [
               Tab(text: S.of(context).g_market_trending),
               Tab(text: S.of(context).g_market_search),
               Tab(text: S.of(context).g_market_watchlist),
+              Tab(text: S.of(context).g_market_news),
             ],
           ),
         ],
@@ -519,18 +559,18 @@ class _CoinTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
-            height: 72.h,
+            height: 88.h,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: Row(
                 children: [
                   // Coin icon
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(20.r),
+                    borderRadius: BorderRadius.circular(24.r),
                     child: ImageNetWork(
                       imageUrl: _imageUrl,
-                      width: 40.w,
-                      height: 40.w,
+                      width: 48.w,
+                      height: 48.w,
                     ),
                   ),
                   SizedBox(width: 12.w),
@@ -554,7 +594,7 @@ class _CoinTile extends StatelessWidget {
                                 child: Text(
                                   '#$_rank',
                                   style: TextStyle(
-                                      fontSize: 10.sp, color: subColor),
+                                      fontSize: 18.sp, color: subColor),
                                 ),
                               ),
                               SizedBox(width: 6.w),
@@ -563,7 +603,7 @@ class _CoinTile extends StatelessWidget {
                               child: Text(
                                 _name,
                                 style: TextStyle(
-                                    fontSize: 15.sp,
+                                    fontSize: 28.sp,
                                     fontWeight: FontWeight.w600,
                                     color: textColor),
                                 overflow: TextOverflow.ellipsis,
@@ -575,7 +615,7 @@ class _CoinTile extends StatelessWidget {
                         Text(
                           _symbol.toUpperCase(),
                           style:
-                              TextStyle(fontSize: 12.sp, color: subColor),
+                              TextStyle(fontSize: 22.sp, color: subColor),
                         ),
                       ],
                     ),
@@ -591,7 +631,7 @@ class _CoinTile extends StatelessWidget {
                               ? '\$${_formatPrice(_price)}'
                               : '--',
                           style: TextStyle(
-                              fontSize: 14.sp,
+                              fontSize: 28.sp,
                               fontWeight: FontWeight.w600,
                               color: textColor),
                         ),
@@ -599,7 +639,7 @@ class _CoinTile extends StatelessWidget {
                         Text(
                           '${isPositive ? '+' : ''}${_pct24h.toStringAsFixed(2)}%',
                           style:
-                              TextStyle(fontSize: 12.sp, color: pctColor),
+                              TextStyle(fontSize: 22.sp, color: pctColor),
                         ),
                       ],
                     ),
@@ -620,7 +660,7 @@ class _CoinTile extends StatelessWidget {
                                   context,
                                   AppThemeKeys.mainBlueColor.name)
                               : subColor,
-                          size: 20.sp,
+                          size: 28.sp,
                         ),
                       ),
                     ),
@@ -635,7 +675,7 @@ class _CoinTile extends StatelessWidget {
                       color: inWatchlist
                           ? const Color(0xFFFACC15)
                           : subColor,
-                      size: 22.sp,
+                      size: 30.sp,
                     ),
                   ),
                 ],
@@ -761,16 +801,16 @@ class _SearchTab extends StatelessWidget {
           child: TextField(
             controller: controller,
             onChanged: onChanged,
-            style: TextStyle(color: textColor, fontSize: 14.sp),
+            style: TextStyle(color: textColor, fontSize: 26.sp),
             decoration: InputDecoration(
               hintText: S.of(context).g_market_search_hint,
-              hintStyle: TextStyle(color: subColor, fontSize: 14.sp),
+              hintStyle: TextStyle(color: subColor, fontSize: 26.sp),
               prefixIcon:
-                  Icon(Icons.search, color: subColor, size: 20.sp),
+                  Icon(Icons.search, color: subColor, size: 28.sp),
               suffixIcon: controller.text.isNotEmpty
                   ? IconButton(
                       icon: Icon(Icons.clear,
-                          color: subColor, size: 18.sp),
+                          color: subColor, size: 26.sp),
                       onPressed: () {
                         controller.clear();
                         onChanged('');
@@ -909,12 +949,12 @@ class _EmptyState extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 48.sp, color: subColor),
+          Icon(icon, size: 64.sp, color: subColor),
           SizedBox(height: 12.h),
           Text(
             message,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 14.sp, color: subColor),
+            style: TextStyle(fontSize: 26.sp, color: subColor),
           ),
         ],
       ),
@@ -934,5 +974,202 @@ class _EmptyState extends StatelessWidget {
     }
 
     return body;
+  }
+}
+
+// ─── Fear & Greed Badge ───────────────────────────────────────────────────────
+
+class _FearGreedBadge extends StatelessWidget {
+  final FearGreedData data;
+  const _FearGreedBadge({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    final level = data.level;
+    final color = Color(level.colorValue);
+    final bgColor = color.withAlpha(26); // 10% opacity background
+
+    return Row(
+      children: [
+        Container(
+          padding:
+              EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(20.r),
+            border: Border.all(color: color.withAlpha(80)),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(level.emoji, style: TextStyle(fontSize: 20.sp)),
+              SizedBox(width: 4.w),
+              Text(
+                '${data.classification}  ${data.value}',
+                style: TextStyle(
+                  fontSize: 20.sp,
+                  color: color,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(width: 6.w),
+        Text(
+          'Fear & Greed',
+          style: TextStyle(
+            fontSize: 18.sp,
+            color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainTextColor.name)
+                .withAlpha(100),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ─── News Tab ─────────────────────────────────────────────────────────────────
+
+class _NewsTab extends StatelessWidget {
+  final List<NewsArticle> articles;
+  final bool loading;
+  final Future<void> Function() onRefresh;
+
+  const _NewsTab({
+    required this.articles,
+    required this.loading,
+    required this.onRefresh,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (loading) return const Center(child: CircularProgressIndicator());
+    if (articles.isEmpty) {
+      return _EmptyState(
+        icon: Icons.newspaper_outlined,
+        message: S.of(context).g_news_empty,
+        onRefresh: onRefresh,
+      );
+    }
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: ListView.builder(
+        itemCount: articles.length,
+        itemBuilder: (_, i) => _NewsCard(article: articles[i]),
+      ),
+    );
+  }
+}
+
+class _NewsCard extends StatelessWidget {
+  final NewsArticle article;
+  const _NewsCard({required this.article});
+
+  @override
+  Widget build(BuildContext context) {
+    final textColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainTextColor.name);
+    final subColor = textColor.withAlpha(153);
+    final dividerColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.dividerColor.name);
+
+    return InkWell(
+      onTap: () async {
+        final uri = Uri.tryParse(article.url);
+        if (uri != null &&
+            (uri.isScheme('https') || uri.isScheme('http'))) {
+          await launchUrl(uri, mode: LaunchMode.externalApplication);
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding:
+                EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Thumbnail
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.r),
+                  child: article.imageUrl != null
+                      ? ImageNetWork(
+                          imageUrl: article.imageUrl!,
+                          width: 72.w,
+                          height: 72.w,
+                          fit: BoxFit.cover,
+                        )
+                      : Container(
+                          width: 72.w,
+                          height: 72.w,
+                          color: dividerColor,
+                          child: Icon(Icons.article_outlined,
+                              color: subColor, size: 32.sp),
+                        ),
+                ),
+                SizedBox(width: 12.w),
+                // Text content
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        article.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 26.sp,
+                          fontWeight: FontWeight.w500,
+                          color: textColor,
+                          height: 1.35,
+                        ),
+                      ),
+                      SizedBox(height: 6.h),
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              article.sourceName,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontSize: 20.sp, color: subColor),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.symmetric(horizontal: 6.w),
+                            child: Text('·',
+                                style: TextStyle(
+                                    fontSize: 20.sp, color: subColor)),
+                          ),
+                          Text(
+                            article.timeAgo(),
+                            style: TextStyle(
+                                fontSize: 20.sp, color: subColor),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(width: 8.w),
+                Icon(Icons.arrow_forward_ios,
+                    size: 16.sp, color: subColor.withAlpha(128)),
+              ],
+            ),
+          ),
+          Divider(
+              height: 1,
+              thickness: 0.5,
+              color: dividerColor,
+              indent: 16.w,
+              endIndent: 0),
+        ],
+      ),
+    );
   }
 }

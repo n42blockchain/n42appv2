@@ -16293,6 +16293,96 @@ class S {
       args: [],
     );
   }
+
+  /// `News`
+  String get g_market_news {
+    return Intl.message('News', name: 'g_market_news', desc: '', args: []);
+  }
+
+  /// `No news available`
+  String get g_news_empty {
+    return Intl.message(
+      'No news available',
+      name: 'g_news_empty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Source`
+  String get g_news_source {
+    return Intl.message('Source', name: 'g_news_source', desc: '', args: []);
+  }
+
+  /// `Add Trade`
+  String get g_pnl_add_trade {
+    return Intl.message(
+      'Add Trade',
+      name: 'g_pnl_add_trade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quantity`
+  String get g_pnl_quantity {
+    return Intl.message('Quantity', name: 'g_pnl_quantity', desc: '', args: []);
+  }
+
+  /// `Buy Price (USD)`
+  String get g_pnl_buy_price_usd {
+    return Intl.message(
+      'Buy Price (USD)',
+      name: 'g_pnl_buy_price_usd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save`
+  String get g_pnl_save {
+    return Intl.message('Save', name: 'g_pnl_save', desc: '', args: []);
+  }
+
+  /// `Cancel`
+  String get g_pnl_cancel {
+    return Intl.message('Cancel', name: 'g_pnl_cancel', desc: '', args: []);
+  }
+
+  /// `Cost Basis`
+  String get g_pnl_cost_basis {
+    return Intl.message(
+      'Cost Basis',
+      name: 'g_pnl_cost_basis',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Avg Cost`
+  String get g_pnl_avg_cost {
+    return Intl.message('Avg Cost', name: 'g_pnl_avg_cost', desc: '', args: []);
+  }
+
+  /// `Unrealized P&L`
+  String get g_pnl_unrealized {
+    return Intl.message(
+      'Unrealized P&L',
+      name: 'g_pnl_unrealized',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No trades recorded`
+  String get g_pnl_no_trades {
+    return Intl.message(
+      'No trades recorded',
+      name: 'g_pnl_no_trades',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -3154,6 +3154,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_empty_watchlist_hint": MessageLookupByLibrary.simpleMessage(
       "Tap ★ on any coin to add",
     ),
+    "g_market_news": MessageLookupByLibrary.simpleMessage("News"),
     "g_market_no_results": MessageLookupByLibrary.simpleMessage("No results"),
     "g_market_search": MessageLookupByLibrary.simpleMessage("Search"),
     "g_market_search_hint": MessageLookupByLibrary.simpleMessage(
@@ -3414,6 +3415,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_unlockable_anytime": MessageLookupByLibrary.simpleMessage(
       "Dapat dibuka kapan saja",
     ),
+    "g_news_empty": MessageLookupByLibrary.simpleMessage("No news available"),
+    "g_news_source": MessageLookupByLibrary.simpleMessage("Source"),
     "g_notification_key_1": MessageLookupByLibrary.simpleMessage("Notifikasi"),
     "g_phishing_go_back": MessageLookupByLibrary.simpleMessage(
       "Kembali (Aman)",
@@ -3430,6 +3433,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_phishing_warning_url_label": MessageLookupByLibrary.simpleMessage(
       "URL Mencurigakan:",
     ),
+    "g_pnl_add_trade": MessageLookupByLibrary.simpleMessage("Add Trade"),
+    "g_pnl_avg_cost": MessageLookupByLibrary.simpleMessage("Avg Cost"),
+    "g_pnl_buy_price_usd": MessageLookupByLibrary.simpleMessage(
+      "Buy Price (USD)",
+    ),
+    "g_pnl_cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+    "g_pnl_cost_basis": MessageLookupByLibrary.simpleMessage("Cost Basis"),
+    "g_pnl_no_trades": MessageLookupByLibrary.simpleMessage(
+      "No trades recorded",
+    ),
+    "g_pnl_quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
+    "g_pnl_save": MessageLookupByLibrary.simpleMessage("Save"),
+    "g_pnl_unrealized": MessageLookupByLibrary.simpleMessage("Unrealized P&L"),
     "g_portfolio_24h": MessageLookupByLibrary.simpleMessage("24h Change"),
     "g_portfolio_all_holdings": MessageLookupByLibrary.simpleMessage(
       "Semua Aset",
