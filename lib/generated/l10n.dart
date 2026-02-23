@@ -15723,6 +15723,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Est. gas: ~{value} units`
+  String g_key_sim_gas_estimate(String value) {
+    return Intl.message(
+      'Est. gas: ~$value units',
+      name: 'g_key_sim_gas_estimate',
+      desc: '',
+      args: [value],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

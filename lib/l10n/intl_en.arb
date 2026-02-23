@@ -1856,5 +1856,11 @@
       "reason": {"type": "String"}
     }
   },
-  "g_key_sim_unavailable": "Simulation unavailable for this network"
+  "g_key_sim_unavailable": "Simulation unavailable for this network",
+  "g_key_sim_gas_estimate": "Est. gas: ~{value} units",
+  "@g_key_sim_gas_estimate": {
+    "placeholders": {
+      "value": {"type": "String"}
+    }
+  }
 }

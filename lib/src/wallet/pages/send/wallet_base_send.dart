@@ -173,17 +173,17 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     final coinType = coinInfo['coinType'] as String? ?? '';
     final isTest = m.isTest == 1;
     final data = _buildCalldata(m);
-    // Native transfer: send value. Token transfer: value = 0 (encoded in calldata)
-    final BigInt? value = m.contract.isEmpty
-        ? BigInt.tryParse(m.price.toString())
-        : BigInt.zero;
+    // Native transfer: forward value (m.price is already BigInt).
+    // Token transfer: value stays null — amount is encoded in calldata.
+    final BigInt? value =
+        (m.contract.isEmpty && m.price > BigInt.zero) ? m.price : null;
 
     final result = await TxSimulationService.simulate(
       coinType: coinType,
       from: m.from1,
       to: m.to1,
       data: data,
-      value: (value != null && value > BigInt.zero) ? value : null,
+      value: value,
       isTest: isTest,
     );
     if (mounted) setState(() => _simResult = result);
@@ -203,10 +203,12 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
       return '0x';
     }
     // Standard ERC-20 transfer(address,uint256)
-    final toAddress = m.to1.toLowerCase().replaceFirst('0x', '');
+    // m.to1 may or may not have a leading "0x" — strip it safely.
+    final raw = m.to1.toLowerCase();
+    final toAddress = raw.startsWith('0x') ? raw.substring(2) : raw;
     final paddedTo = toAddress.padLeft(64, '0');
-    final amount = BigInt.tryParse(m.price.toString()) ?? BigInt.zero;
-    final paddedAmount = amount.toRadixString(16).padLeft(64, '0');
+    // m.price is already BigInt — no toString/parse round-trip needed.
+    final paddedAmount = m.price.toRadixString(16).padLeft(64, '0');
     return '0xa9059cbb$paddedTo$paddedAmount';
   }
 
