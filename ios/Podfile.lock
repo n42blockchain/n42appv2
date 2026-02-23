@@ -163,6 +163,8 @@ PODS:
     - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
+  - flutter_mining (0.0.1):
+    - Flutter
   - flutter_new_badger (0.0.1):
     - Flutter
   - flutter_secure_storage_darwin (10.0.0):
@@ -448,6 +450,7 @@ DEPENDENCIES:
   - flutter_face_core_basic (from `.symlinks/plugins/flutter_face_core_basic/ios`)
   - flutter_facebook_auth (from `.symlinks/plugins/flutter_facebook_auth/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
+  - flutter_mining (from `.symlinks/plugins/flutter_mining/ios`)
   - flutter_new_badger (from `.symlinks/plugins/flutter_new_badger/ios`)
   - flutter_secure_storage_darwin (from `.symlinks/plugins/flutter_secure_storage_darwin/darwin`)
   - flutter_tts (from `.symlinks/plugins/flutter_tts/ios`)
@@ -574,6 +577,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_facebook_auth/ios"
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
+  flutter_mining:
+    :path: ".symlinks/plugins/flutter_mining/ios"
   flutter_new_badger:
     :path: ".symlinks/plugins/flutter_new_badger/ios"
   flutter_secure_storage_darwin:
@@ -689,6 +694,7 @@ SPEC CHECKSUMS:
   flutter_face_core_basic: e86f4c426917ac6c7b8dd8f114d366495cd315d1
   flutter_facebook_auth: fa3b69b1df0831d2178fe87a05ee2d7d0156db70
   flutter_local_notifications: a5a732f069baa862e728d839dd2ebb904737effb
+  flutter_mining: 56b545081a9941d0f9ef59d0d614184f392ea258
   flutter_new_badger: 133aaf93e9a5542bf905c8483d8b83c5ef4946ea
   flutter_secure_storage_darwin: acdb3f316ed05a3e68f856e0353b133eec373a23
   flutter_tts: 35ac3c7d42412733e795ea96ad2d7e05d0a75113

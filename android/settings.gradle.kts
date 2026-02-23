@@ -26,6 +26,14 @@ plugins {
 
 include(":app")
 
+// flutter_mining 插件的本地 AAR 桥接模块（避免 library 项目不能直接依赖 local .aar 的限制）
+include(":mobile-sdk-module")
+project(":mobile-sdk-module").projectDir =
+    file("../plugins/flutter_mining/android/mobile-sdk-module")
+include(":evm-module")
+project(":evm-module").projectDir =
+    file("../plugins/flutter_mining/android/evm-module")
+
 // 为缺少 namespace 的第三方插件自动设置 namespace
 gradle.beforeProject {
     if (project.name != "app" && project.name != rootProject.name) {

@@ -53,9 +53,7 @@ android {
 }
 
 dependencies {
-    //implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation files("libs/mobile-sdk-release.aar")
-    implementation files("libs/evm.aar")
-    //implementation (name:'evm',ext:'aar')
-    //implementation (name:'mobile-sdk-release',ext:'aar')
+    // 通过子项目模块引用 AAR，避免 "Direct local .aar file dependencies are not supported" 构建错误
+    implementation project(':mobile-sdk-module')
+    implementation project(':evm-module')
 }

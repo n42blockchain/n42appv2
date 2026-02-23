@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:n42appv2/core/config/api_keys_config.dart';
 import 'package:n42appv2/core/config/app_config.dart';
 import 'package:n42appv2/src/https/base_api.dart';
 // [FIX A1] Import OhlcPoint from the model layer, NOT from the UI widget layer.
@@ -13,11 +14,24 @@ class MarketApi {
       : _url = AppConfig.getApiUrlOnline('marketHost'),
         _header = const {'content-type': 'application/json'};
 
-  // [FIX] Single location for the CoinGecko base URL so both methods stay in
-  // sync with the config value.
-  static String get _geckoBase =>
-      (AppConfig.apiUrl['coinGeckoApi'] as String?) ??
-      'https://api.coingecko.com/api/v3';
+  // [FIX] Single location for the CoinGecko base URL.
+  // 有 API key 时使用 Pro endpoint（更高限额），否则用免费 endpoint。
+  static String get _geckoBase {
+    final key = ApiKeysConfig.coinGeckoApiKey;
+    if (key.isNotEmpty) return 'https://pro-api.coingecko.com/api/v3';
+    return (AppConfig.apiUrl['coinGeckoApi'] as String?) ??
+        'https://api.coingecko.com/api/v3';
+  }
+
+  /// CoinGecko 请求头：有 key 时加上认证头。
+  Map<String, String> get _geckoHeader {
+    final key = ApiKeysConfig.coinGeckoApiKey;
+    if (key.isEmpty) return {'content-type': 'application/json'};
+    return {
+      'content-type': 'application/json',
+      'x-cg-demo-api-key': key,
+    };
+  }
 
   // ---------------------------------------------------------------------------
   // Public API
@@ -75,7 +89,7 @@ class MarketApi {
       final raw = await BaseApi.requestEmptyH.get<dynamic>(
         requestUrl,
         params: {},
-        header: _header,
+        header: _geckoHeader,
       );
 
       if (raw == null || raw is! List) return [];
@@ -117,7 +131,7 @@ class MarketApi {
       final raw = await BaseApi.requestEmptyH.get<dynamic>(
         requestUrl,
         params: {},
-        header: _header,
+        header: _geckoHeader,
       );
 
       if (raw == null || raw is! Map) return empty;
