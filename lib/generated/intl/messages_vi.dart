@@ -3103,6 +3103,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_market_trending": MessageLookupByLibrary.simpleMessage("Trending"),
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage("Watchlist"),
+    "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
+      "Điểm không hoạt động của trình xác thực cao. Kiểm tra trạng thái nút của bạn để tránh bị phạt.",
+    ),
     "g_mining_key15": MessageLookupByLibrary.simpleMessage("Task detail"),
     "g_mining_key20": MessageLookupByLibrary.simpleMessage("Mở khóa N?"),
     "g_mining_key31": MessageLookupByLibrary.simpleMessage(

@@ -25,6 +25,7 @@ enum BridgeState {
   loadingTokens,
   loadingQuotes,
   loadingTransaction,
+  approving,
   executing,
   completed,
   error,
@@ -371,6 +372,82 @@ class BridgeProvider extends ChangeNotifier {
       if (!txResponse.isSuccess || txResponse.txData == null) {
         _setError(txResponse.error ?? 'Invalid transaction data');
         return MessageModel.error()..data = _errorMessage;
+      }
+
+      // ERC-20 授权检查：原生代币无需授权
+      if (!_fromToken!.isNative) {
+        _setState(BridgeState.approving);
+
+        final fromAmountBig = BigInt.tryParse(
+              _parseAmount(_fromAmount, _fromToken!.decimals),
+            ) ??
+            BigInt.zero;
+        // LiFi 合约地址即为 spender（来自 transactionRequest.to）
+        final spenderAddress =
+            txResponse.txData!['to']?.toString() ?? '';
+
+        if (spenderAddress.isNotEmpty && fromAmountBig > BigInt.zero) {
+          final approvalResult = await _lifiApi.getTokenApproval(
+            chainId: _fromChain!.chainId,
+            tokenAddress: _fromToken!.address,
+            walletAddress: fromAddress,
+            spenderAddress: spenderAddress,
+          );
+
+          if (!approvalResult.error && approvalResult.data != null) {
+            final approvalData = approvalResult.data as Map<String, dynamic>;
+            final rawAllowance =
+                approvalData['allowance']?.toString() ?? '0';
+            final allowance = rawAllowance.startsWith('0x')
+                ? BigInt.tryParse(rawAllowance.substring(2), radix: 16) ??
+                    BigInt.zero
+                : BigInt.tryParse(rawAllowance) ?? BigInt.zero;
+
+            if (allowance < fromAmountBig) {
+              // 授权额度不足，先发送 approve 交易
+              final approveTxResult = await _lifiApi.getApprovalTransaction(
+                chainId: _fromChain!.chainId,
+                tokenAddress: _fromToken!.address,
+                spenderAddress: spenderAddress,
+                amount: fromAmountBig.toString(),
+              );
+
+              if (!approveTxResult.error && approveTxResult.data != null) {
+                final approveTxData =
+                    approveTxResult.data as Map<String, dynamic>;
+                final approveTxHash = await signAndSend(approveTxData);
+
+                if (approveTxHash == null) {
+                  _setError('Approval transaction cancelled');
+                  return MessageModel.error()..data = _errorMessage;
+                }
+
+                // 等待授权到账（轮询 allowance，最多 60s）
+                for (var i = 0; i < 20; i++) {
+                  await Future.delayed(const Duration(seconds: 3));
+                  final updated = await _lifiApi.getTokenApproval(
+                    chainId: _fromChain!.chainId,
+                    tokenAddress: _fromToken!.address,
+                    walletAddress: fromAddress,
+                    spenderAddress: spenderAddress,
+                  );
+                  if (!updated.error && updated.data != null) {
+                    final updatedData = updated.data as Map<String, dynamic>;
+                    final newRaw =
+                        updatedData['allowance']?.toString() ?? '0';
+                    final newAllowance = newRaw.startsWith('0x')
+                        ? BigInt.tryParse(newRaw.substring(2), radix: 16) ??
+                            BigInt.zero
+                        : BigInt.tryParse(newRaw) ?? BigInt.zero;
+                    if (newAllowance >= fromAmountBig) break;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        _setState(BridgeState.executing);
       }
 
       // 签名并发送交易

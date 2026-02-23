@@ -3,6 +3,8 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:n42appv2/src/loyalty/api/loyalty_api.dart';
 import 'package:n42appv2/src/loyalty/models/loyalty_model.dart';
@@ -262,6 +264,7 @@ class LoyaltyProvider extends ChangeNotifier {
       );
 
       notifyListeners();
+      unawaited(refresh()); // 异步同步后端，防止重进页面积分复原
       return true;
     }
 

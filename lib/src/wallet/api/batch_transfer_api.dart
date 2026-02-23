@@ -3,6 +3,9 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 import 'package:n42appv2/src/https/base_api.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/wallet/models/batch_transfer_model.dart';
@@ -370,6 +373,34 @@ class BatchTransferApi {
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
+  }
+
+  /// 轮询 tx receipt，最多 [maxAttempts] 次，每次间隔 [intervalMs] ms。
+  /// 返回 null 表示超时；receipt['status'] == '0x1' 表示成功。
+  static Future<Map<String, dynamic>?> waitForReceipt(
+    String rpcUrl,
+    String txHash, {
+    int maxAttempts = 20,
+    int intervalMs = 3000,
+  }) async {
+    for (var i = 0; i < maxAttempts; i++) {
+      await Future.delayed(Duration(milliseconds: intervalMs));
+      try {
+        final resp = await http.post(
+          Uri.parse(rpcUrl),
+          body: jsonEncode({
+            'jsonrpc': '2.0',
+            'method': 'eth_getTransactionReceipt',
+            'params': [txHash],
+            'id': 1,
+          }),
+          headers: {'Content-Type': 'application/json'},
+        );
+        final result = jsonDecode(resp.body)['result'];
+        if (result != null) return Map<String, dynamic>.from(result);
+      } catch (_) {}
+    }
+    return null;
   }
 
   // ============ Helper Methods ============

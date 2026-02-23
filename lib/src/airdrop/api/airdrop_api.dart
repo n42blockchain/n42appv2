@@ -34,15 +34,14 @@ class AirdropApi {
         return result;
       }
 
-      // 回退到模拟数据
+      // 后端无数据，返回网络错误
       return MessageModel()
-        ..error = false
-        ..data = _getMockAirdrops(walletAddress);
+        ..error = true
+        ..data = 'Network unavailable';
     } catch (e) {
-      // 返回模拟数据
       return MessageModel()
-        ..error = false
-        ..data = _getMockAirdrops(walletAddress);
+        ..error = true
+        ..data = 'Network unavailable';
     }
   }
 
@@ -123,14 +122,9 @@ class AirdropApi {
       // 无法确认资格，返回错误而非假设符合
       return MessageModel.error()..data = 'Eligibility data unavailable';
     } catch (e) {
-      // API 不可达时返回 mock 降级数据，让流程可以继续
       return MessageModel()
-        ..error = false
-        ..data = {
-          'is_eligible': walletAddress.isNotEmpty,
-          'claimable_amount': null,
-          'requirements': <dynamic>[],
-        };
+        ..error = true
+        ..data = 'Eligibility check failed';
     }
   }
 
@@ -148,21 +142,13 @@ class AirdropApi {
           ..data = AirdropStats.fromJson(response['data']);
       }
 
-      // 返回模拟统计
       return MessageModel()
-        ..error = false
-        ..data = AirdropStats(
-          totalAirdrops: 12,
-          eligibleAirdrops: 5,
-          claimedAirdrops: 2,
-          totalValueUsd: 1250.0,
-          claimedValueUsd: 350.0,
-          pendingValueUsd: 900.0,
-        );
+        ..error = true
+        ..data = 'Stats unavailable';
     } catch (e) {
       return MessageModel()
-        ..error = false
-        ..data = AirdropStats.empty();
+        ..error = true
+        ..data = 'Stats unavailable';
     }
   }
 

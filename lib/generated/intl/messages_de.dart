@@ -3246,6 +3246,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_market_trending": MessageLookupByLibrary.simpleMessage("Trending"),
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage("Watchlist"),
+    "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
+      "Inaktivitätswert des Validators ist hoch. Überprüfen Sie Ihren Knotenstatus, um Strafen zu vermeiden.",
+    ),
     "g_mining_key15": MessageLookupByLibrary.simpleMessage("Task detail"),
     "g_mining_key20": MessageLookupByLibrary.simpleMessage("N entsperren?"),
     "g_mining_key31": MessageLookupByLibrary.simpleMessage(

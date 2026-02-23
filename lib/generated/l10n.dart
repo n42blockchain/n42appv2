@@ -16433,6 +16433,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Validator inactivity score is high. Check your node status to avoid penalties.`
+  String get g_mining_inactivity_warning {
+    return Intl.message(
+      'Validator inactivity score is high. Check your node status to avoid penalties.',
+      name: 'g_mining_inactivity_warning',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -149,6 +149,7 @@ class MiningV2Provider extends ChangeNotifier {
   /// 抱团挖矿/质押NFT/质押N
   /// 新增：FUJI NFT 质押
   Future<void> checkAddressMiningStatus() async {
+    _inactivityWarningShown = false; // 每次冷启动重置，允许重新检测
     try {
       WalletActionProvider wap = globalWapAdapter;
       if (wap.walletInfoLsit.isEmpty) return;
@@ -672,6 +673,7 @@ class MiningV2Provider extends ChangeNotifier {
   List<double> inactivityScore=[0,0,0];
   String inactivityScorePercentage="0";
   String inactivityTitle="";
+  bool _inactivityWarningShown=false; // 每次冷启动只弹一次高风险 Toast
   bool showRedemption=false;//质押成功的过度状态
   bool showRedemption2=false;//解除质押成功后的过度状态
 
@@ -758,6 +760,11 @@ class MiningV2Provider extends ChangeNotifier {
       }
       else{
         inactivityTitle=S.current.g_mining_key_87;//"High Risk";
+      }
+      // 高风险预警：inactivity score 超过 66% 时弹 Toast（每次冷启动只弹一次）
+      if (isp > kModerateRiskThreshold && !_inactivityWarningShown) {
+        _inactivityWarningShown = true;
+        ToastUtils.show(S.current.g_mining_inactivity_warning);
       }
       if(iscore!=0){
         for(int i=0;i<3;i++){

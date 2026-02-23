@@ -2814,6 +2814,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_market_trending": MessageLookupByLibrary.simpleMessage("Trending"),
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage("Watchlist"),
+    "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
+      "유효성 검사기 비활동 점수가 높습니다. 페널티를 피하려면 노드 상태를 확인하세요.",
+    ),
     "g_mining_key15": MessageLookupByLibrary.simpleMessage("Task detail"),
     "g_mining_key20": MessageLookupByLibrary.simpleMessage("N 잠금 해제?"),
     "g_mining_key31": MessageLookupByLibrary.simpleMessage("클라우드 검증 활동"),

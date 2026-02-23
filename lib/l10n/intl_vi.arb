@@ -1832,5 +1832,6 @@
   "g_dapp_security_safe": "Safe",
   "g_dapp_security_caution": "Caution",
   "g_dapp_security_blocked": "Blocked",
-  "g_dapp_security_title": "DApp Security"
+  "g_dapp_security_title": "DApp Security",
+  "g_mining_inactivity_warning": "Điểm không hoạt động của trình xác thực cao. Kiểm tra trạng thái nút của bạn để tránh bị phạt."
 }

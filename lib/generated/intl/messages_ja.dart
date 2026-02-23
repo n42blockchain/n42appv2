@@ -2711,6 +2711,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_market_trending": MessageLookupByLibrary.simpleMessage("Trending"),
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage("Watchlist"),
+    "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
+      "バリデーターの非活動スコアが高いです。ペナルティを避けるため、ノードのステータスを確認してください。",
+    ),
     "g_mining_key15": MessageLookupByLibrary.simpleMessage("Task detail"),
     "g_mining_key20": MessageLookupByLibrary.simpleMessage("Nをアンロックしますか？"),
     "g_mining_key31": MessageLookupByLibrary.simpleMessage("クラウド認証アクティビティ"),

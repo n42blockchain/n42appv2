@@ -17,6 +17,7 @@ enum BatchTransferState {
   confirming,
   signing,
   broadcasting,
+  awaitingConfirmation,
   success,
   error,
 }
@@ -281,12 +282,37 @@ class BatchTransferProvider extends ChangeNotifier {
       }
 
       _txHash = result.data.toString();
-      _state = BatchTransferState.success;
 
-      // 更新所有项目状态
-      for (var item in _items) {
-        item.status = BatchTransferStatus.success;
-        item.txHash = _txHash;
+      // 等待链上确认
+      _state = BatchTransferState.awaitingConfirmation;
+      notifyListeners();
+
+      final receipt = await BatchTransferApi.waitForReceipt(_rpcUrl, _txHash!);
+
+      if (receipt != null && receipt['status'] == '0x1') {
+        // 交易成功上链
+        _state = BatchTransferState.success;
+        for (var item in _items) {
+          item.status = BatchTransferStatus.success;
+          item.txHash = _txHash;
+        }
+      } else if (receipt != null) {
+        // 交易已上链但 reverted
+        _errorMessage = 'Transaction reverted on-chain';
+        _state = BatchTransferState.error;
+        for (var item in _items) {
+          item.status = BatchTransferStatus.failed;
+          item.txHash = _txHash;
+        }
+        notifyListeners();
+        return false;
+      } else {
+        // 超时：交易已广播但确认超时，标记为 pending
+        _state = BatchTransferState.success;
+        for (var item in _items) {
+          item.status = BatchTransferStatus.pending;
+          item.txHash = _txHash;
+        }
       }
 
       notifyListeners();

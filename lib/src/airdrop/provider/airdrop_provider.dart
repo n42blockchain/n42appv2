@@ -56,6 +56,10 @@ class AirdropProvider extends ChangeNotifier {
   final Map<String, bool> _eligibilityChecking = {};
   Map<String, bool> get eligibilityChecking => Map.unmodifiable(_eligibilityChecking);
 
+  // 网络错误标记（true 时保留上次成功数据，显示错误横幅）
+  bool _isNetworkError = false;
+  bool get isNetworkError => _isNetworkError;
+
   /// 初始化
   Future<void> initialize(String walletAddress) async {
     _walletAddress = walletAddress;
@@ -66,6 +70,7 @@ class AirdropProvider extends ChangeNotifier {
   Future<void> refresh() async {
     _loadState = AirdropLoadState.loading;
     _errorMessage = null;
+    _isNetworkError = false;
     _currentPage = 1;
     _hasMore = true;
     notifyListeners();
@@ -110,8 +115,12 @@ class AirdropProvider extends ChangeNotifier {
 
         _hasMore = newAirdrops.length >= 20;
         _currentPage++;
+      } else if (result.error) {
+        // 网络失败：保留上次成功数据，标记错误横幅
+        _isNetworkError = true;
       }
     } catch (e) {
+      _isNetworkError = true;
       debugPrint('Failed to load airdrops: $e');
     }
   }
