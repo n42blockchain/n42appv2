@@ -1,11 +1,14 @@
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 
 import 'package:n42appv2/core/security/tx_risk_analyzer.dart';
+import 'package:n42appv2/core/security/tx_simulation_result.dart';
+import 'package:n42appv2/core/security/tx_simulation_service.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:n42appv2/src/wallet_connect/widgets/tx_risk_banner_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
+import 'package:n42appv2/src/widgets/tx_simulation_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,31 +18,84 @@ import 'package:n42appv2/generated/l10n.dart';
 
 /// WalletConnect signing confirmation bottom sheet.
 ///
-/// Shows a risk analysis banner above the approve/reject buttons for all
-/// transaction requests. For typed-data (EIP-712) requests, detects Permit
-/// patterns and surfaces appropriate warnings.
-class WalletConnectAlertWidget extends ConsumerWidget {
+/// Shows a risk analysis banner and an on-chain simulation result above the
+/// approve/reject buttons for all transaction requests. For typed-data
+/// (EIP-712) requests, detects Permit patterns and surfaces appropriate warnings.
+class WalletConnectAlertWidget extends ConsumerStatefulWidget {
   final wallet_connect.PairingMetadata metadata;
   final Map<String, dynamic> actionDataMap;
 
   const WalletConnectAlertWidget(this.metadata, this.actionDataMap, {super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isTransaction = actionDataMap['signType'] == 'transaction';
+  ConsumerState<WalletConnectAlertWidget> createState() =>
+      _WalletConnectAlertWidgetState();
+}
+
+class _WalletConnectAlertWidgetState
+    extends ConsumerState<WalletConnectAlertWidget> {
+  TxSimulationResult _simResult = TxSimulationResult.simulating();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.actionDataMap['signType'] == 'transaction') {
+      _runSimulation();
+    } else {
+      // Message signing — no simulation needed
+      _simResult = TxSimulationResult.unavailable();
+    }
+  }
+
+  Future<void> _runSimulation() async {
+    final coinType = widget.actionDataMap['coinType'] as String? ?? '';
+    if (coinType.isEmpty) {
+      if (mounted) setState(() => _simResult = TxSimulationResult.unavailable());
+      return;
+    }
+
+    final result = await TxSimulationService.simulate(
+      coinType: coinType,
+      from: widget.actionDataMap['from'] as String? ?? '',
+      to: widget.actionDataMap['to'] as String? ?? '',
+      data: widget.actionDataMap['data'] as String? ?? '0x',
+      value: _parseHexValue(widget.actionDataMap['value']),
+    );
+
+    if (mounted) setState(() => _simResult = result);
+  }
+
+  /// Parse a hex-encoded value string (e.g. "0x1a") to BigInt, returning null
+  /// if the string is absent, zero, or unparseable.
+  BigInt? _parseHexValue(dynamic raw) {
+    if (raw == null) return null;
+    final s = raw.toString();
+    if (s.isEmpty || s == '0x' || s == '0x0' || s == '0') return null;
+    try {
+      final clean = s.startsWith('0x') ? s.substring(2) : s;
+      final v = BigInt.parse(clean, radix: 16);
+      return v > BigInt.zero ? v : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isTransaction = widget.actionDataMap['signType'] == 'transaction';
 
     // Compute risk analysis synchronously — pure function, no I/O
     final TxRiskAnalysis riskAnalysis;
     if (isTransaction) {
       riskAnalysis = TxRiskAnalyzer.analyze(
-        calldata: actionDataMap['data'] as String?,
-        ethValue: actionDataMap['value'] as String?,
-        toAddress: actionDataMap['to'] as String?,
+        calldata: widget.actionDataMap['data'] as String?,
+        ethValue: widget.actionDataMap['value'] as String?,
+        toAddress: widget.actionDataMap['to'] as String?,
       );
     } else {
       // Message sign — try EIP-712 typed data analysis
       riskAnalysis = TxRiskAnalyzer.analyzeTypedData(
-            actionDataMap['data'] as String?,
+            widget.actionDataMap['data'] as String?,
           ) ??
           const TxRiskAnalysis(
             level: TxRiskLevel.safe,
@@ -68,6 +124,9 @@ class WalletConnectAlertWidget extends ConsumerWidget {
                 else
                   _buildMessageRows(context),
 
+                // Simulation card — only for transactions
+                if (isTransaction) TxSimulationCard(result: _simResult),
+
                 // Risk banner — always shown for transaction; for message only
                 // when a meaningful analysis is available (e.g. Permit detected)
                 if (isTransaction ||
@@ -81,9 +140,9 @@ class WalletConnectAlertWidget extends ConsumerWidget {
 
         // ── Action buttons — always visible at bottom ─────────────────────────
         if (isTransaction)
-          _buildTransactionButtons(context, ref)
+          _buildTransactionButtons(context)
         else
-          _buildMessageButtons(context, ref),
+          _buildMessageButtons(context),
       ],
     );
   }
@@ -99,14 +158,16 @@ class WalletConnectAlertWidget extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ImageNetWork(
-            imageUrl: metadata.icons.isNotEmpty ? metadata.icons[0] : '',
+            imageUrl: widget.metadata.icons.isNotEmpty
+                ? widget.metadata.icons[0]
+                : '',
             height: ScreenUtil().setWidth(60),
             width: ScreenUtil().setWidth(60),
             placeholder: 'assets/img/list_default.png',
           ),
           SizedBox(width: ScreenUtil().setWidth(10)),
           Text(
-            metadata.name,
+            widget.metadata.name,
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.mainTextColor.name),
@@ -144,15 +205,15 @@ class WalletConnectAlertWidget extends ConsumerWidget {
   Widget _buildTransactionRows(BuildContext context) {
     return Column(
       children: [
-        _itemWidget(context, 'Network', actionDataMap['network'] ?? ''),
+        _itemWidget(context, 'Network', widget.actionDataMap['network'] ?? ''),
         _divider(context),
-        _itemWidget(context, 'From', actionDataMap['from'] ?? ''),
+        _itemWidget(context, 'From', widget.actionDataMap['from'] ?? ''),
         _divider(context),
-        _itemWidget(context, 'To', actionDataMap['to'] ?? ''),
+        _itemWidget(context, 'To', widget.actionDataMap['to'] ?? ''),
         _divider(context),
-        _itemWidget(context, 'Gas', actionDataMap['gas'] ?? ''),
+        _itemWidget(context, 'Gas', widget.actionDataMap['gas'] ?? ''),
         _divider(context),
-        _itemWidget(context, 'Data', actionDataMap['data'] ?? ''),
+        _itemWidget(context, 'Data', widget.actionDataMap['data'] ?? ''),
       ],
     );
   }
@@ -160,18 +221,18 @@ class WalletConnectAlertWidget extends ConsumerWidget {
   Widget _buildMessageRows(BuildContext context) {
     return Column(
       children: [
-        _itemWidget(context, 'Network', actionDataMap['network'] ?? ''),
+        _itemWidget(context, 'Network', widget.actionDataMap['network'] ?? ''),
         _divider(context),
-        _itemWidget(context, 'Address', actionDataMap['from'] ?? ''),
+        _itemWidget(context, 'Address', widget.actionDataMap['from'] ?? ''),
         _divider(context),
-        _itemWidget(context, 'Data', actionDataMap['data'] ?? ''),
+        _itemWidget(context, 'Data', widget.actionDataMap['data'] ?? ''),
       ],
     );
   }
 
   // ── Buttons ───────────────────────────────────────────────────────────────────
 
-  Widget _buildTransactionButtons(BuildContext context, WidgetRef ref) {
+  Widget _buildTransactionButtons(BuildContext context) {
     final s = S.of(context);
     return _buttonRow(
       context,
@@ -190,7 +251,7 @@ class WalletConnectAlertWidget extends ConsumerWidget {
     );
   }
 
-  Widget _buildMessageButtons(BuildContext context, WidgetRef ref) {
+  Widget _buildMessageButtons(BuildContext context) {
     final s = S.of(context);
     return _buttonRow(
       context,

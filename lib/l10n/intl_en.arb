@@ -1846,5 +1846,15 @@
   "g_key_nft_quantity": "Quantity",
   "g_key_nft_address_invalid": "Invalid wallet address",
   "g_key_nft_burn_evm_only": "Burn is only supported on EVM chains",
-  "g_key_nft_error_retry": "Failed to load NFTs. Tap to retry."
+  "g_key_nft_error_retry": "Failed to load NFTs. Tap to retry.",
+  "g_key_sim_simulating": "Simulating transaction…",
+  "g_key_sim_success": "Transaction simulation passed",
+  "g_key_sim_reverted": "Transaction will likely fail",
+  "g_key_sim_reverted_reason": "Reason: {reason}",
+  "@g_key_sim_reverted_reason": {
+    "placeholders": {
+      "reason": {"type": "String"}
+    }
+  },
+  "g_key_sim_unavailable": "Simulation unavailable for this network"
 }

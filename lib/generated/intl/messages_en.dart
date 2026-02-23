@@ -122,6 +122,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m43(amount) => "≈ ${amount} USDT";
 
+  static String m85(reason) => "Reason: ${reason}";
+
   static String m44(value) =>
       "Are you sure you want to delete the contact ${value}?";
 
@@ -131,7 +133,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m47(value) => "${value} days remaining";
 
-  static String m85(value) =>
+  static String m86(value) =>
       "Unstaking takes ${value} days. Your tokens will be locked during this period.";
 
   static String m48(value) => "You do not have enough \"${value}\"";
@@ -2690,6 +2692,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_sign_in_failed": MessageLookupByLibrary.simpleMessage(
       "Sign in failed",
     ),
+    "g_key_sim_reverted": MessageLookupByLibrary.simpleMessage(
+      "Transaction will likely fail",
+    ),
+    "g_key_sim_reverted_reason": m85,
+    "g_key_sim_simulating": MessageLookupByLibrary.simpleMessage(
+      "Simulating transaction…",
+    ),
+    "g_key_sim_success": MessageLookupByLibrary.simpleMessage(
+      "Transaction simulation passed",
+    ),
+    "g_key_sim_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Simulation unavailable for this network",
+    ),
     "g_key_social_login": MessageLookupByLibrary.simpleMessage("Social Login"),
     "g_key_squad": MessageLookupByLibrary.simpleMessage("Chat"),
     "g_key_squad_k11": MessageLookupByLibrary.simpleMessage(
@@ -2799,7 +2814,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_unbonding_period": MessageLookupByLibrary.simpleMessage(
       "Unbonding Period",
     ),
-    "g_key_stake_unbonding_warning": m85,
+    "g_key_stake_unbonding_warning": m86,
     "g_key_stake_unstake": MessageLookupByLibrary.simpleMessage("Unstake"),
     "g_key_stake_updating": MessageLookupByLibrary.simpleMessage("Updating..."),
     "g_key_stake_uptime": MessageLookupByLibrary.simpleMessage("Uptime"),

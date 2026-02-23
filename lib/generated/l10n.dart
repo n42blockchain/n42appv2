@@ -15673,6 +15673,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Simulating transaction…`
+  String get g_key_sim_simulating {
+    return Intl.message(
+      'Simulating transaction…',
+      name: 'g_key_sim_simulating',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transaction simulation passed`
+  String get g_key_sim_success {
+    return Intl.message(
+      'Transaction simulation passed',
+      name: 'g_key_sim_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transaction will likely fail`
+  String get g_key_sim_reverted {
+    return Intl.message(
+      'Transaction will likely fail',
+      name: 'g_key_sim_reverted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reason: {reason}`
+  String g_key_sim_reverted_reason(String reason) {
+    return Intl.message(
+      'Reason: $reason',
+      name: 'g_key_sim_reverted_reason',
+      desc: '',
+      args: [reason],
+    );
+  }
+
+  /// `Simulation unavailable for this network`
+  String get g_key_sim_unavailable {
+    return Intl.message(
+      'Simulation unavailable for this network',
+      name: 'g_key_sim_unavailable',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

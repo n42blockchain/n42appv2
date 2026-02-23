@@ -1,4 +1,6 @@
 import 'package:n42appv2/core/app/app_globals.dart';
+import 'package:n42appv2/core/security/tx_simulation_result.dart';
+import 'package:n42appv2/core/security/tx_simulation_service.dart';
 import 'package:n42appv2/src/component/enums/coin_type.dart';
 import 'package:n42appv2/core/storage/sp_util.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
@@ -11,6 +13,7 @@ import 'package:n42appv2/src/wallet/widgets/ens_address_display.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/prompt_widget.dart';
+import 'package:n42appv2/src/widgets/tx_simulation_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:n42appv2/generated/l10n.dart';
@@ -34,6 +37,7 @@ class WalletBaseSend extends StatefulWidget {
 class _WalletBaseSendState extends State<WalletBaseSend> {
   Map<String,dynamic> coinInfo={};
   String gasPrice="";
+  TxSimulationResult _simResult = TxSimulationResult.simulating();
 
   //账号安全
   Map<String,dynamic> securityMap={
@@ -52,6 +56,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     }
     init();
     initSecurity();
+    _runSimulation();
   }
   void init(){
     //计算gasPrice
@@ -150,6 +155,61 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
       }
     }
   }
+
+  Future<void> _runSimulation() async {
+    final bt = coinInfo['blockchainType'] as String? ?? '';
+    // Only EVM chains support eth_call simulation
+    if (bt != 'Ethereum') {
+      if (mounted) setState(() => _simResult = TxSimulationResult.unavailable());
+      return;
+    }
+
+    final m = widget.transationRecordModel;
+    if (m == null) {
+      if (mounted) setState(() => _simResult = TxSimulationResult.unavailable());
+      return;
+    }
+
+    final coinType = coinInfo['coinType'] as String? ?? '';
+    final isTest = m.isTest == 1;
+    final data = _buildCalldata(m);
+    // Native transfer: send value. Token transfer: value = 0 (encoded in calldata)
+    final BigInt? value = m.contract.isEmpty
+        ? BigInt.tryParse(m.price.toString())
+        : BigInt.zero;
+
+    final result = await TxSimulationService.simulate(
+      coinType: coinType,
+      from: m.from1,
+      to: m.to1,
+      data: data,
+      value: (value != null && value > BigInt.zero) ? value : null,
+      isTest: isTest,
+    );
+    if (mounted) setState(() => _simResult = result);
+  }
+
+  /// Reconstruct calldata from [TransationRecordModel]:
+  /// - Native transfer (contract empty) → "0x"
+  /// - ERC-20 transfer(address,uint256) → "0xa9059cbb" + padded address + padded amount
+  /// - NFT or unknown contract call → "0x" (degraded, no revert detection)
+  String _buildCalldata(TransationRecordModel m) {
+    if (m.contract.isEmpty) {
+      // Native token transfer — no calldata
+      return '0x';
+    }
+    if (widget.isNft) {
+      // Cannot reconstruct NFT calldata without full ABI — degrade gracefully
+      return '0x';
+    }
+    // Standard ERC-20 transfer(address,uint256)
+    final toAddress = m.to1.toLowerCase().replaceFirst('0x', '');
+    final paddedTo = toAddress.padLeft(64, '0');
+    final amount = BigInt.tryParse(m.price.toString()) ?? BigInt.zero;
+    final paddedAmount = amount.toRadixString(16).padLeft(64, '0');
+    return '0xa9059cbb$paddedTo$paddedAmount';
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -208,6 +268,8 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        TxSimulationCard(result: _simResult),
+                        SizedBox(height: ScreenUtil().setWidth(16)),
                         Padding(
                           padding: EdgeInsets.only(
                             bottom: ScreenUtil().setWidth(30.0),

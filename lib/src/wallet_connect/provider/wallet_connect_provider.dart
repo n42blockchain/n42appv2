@@ -312,6 +312,7 @@ class WalletConnectProvider with ChangeNotifier, WidgetsBindingObserver {
         final trMap = eventData.params![0] as Map<String, dynamic>;
         actionDataMap = {
           "network": networkName,
+          "coinType": coinModels[coinModelsIndex].coin['coinType'] ?? '',
           "gas": web3.hexToInt(trMap['gas'] ?? "0x0").toInt().toString(),
           "from": trMap['from'] ?? "0x",
           "to": trMap['to'] ?? "0x",
