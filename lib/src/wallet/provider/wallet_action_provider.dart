@@ -445,9 +445,54 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
       cm.walletAccess=this;
       _coinModels.add(cm);
     }
+    _applyChainOrder();
     notifyListeners();
     await buildCoinModelInfo();
     globalTripInstance.selectUndoneTr();
+  }
+
+  /// 按 walletInfo.chainOrder 重排 _coinModels。
+  /// chainOrder 为空时直接返回（维持 walletMap 键顺序）。
+  /// 不在 chainOrder 中的链追加到末尾（兼容自动添加的新链）。
+  void _applyChainOrder() {
+    if (walletInfo.chainOrder.isEmpty) return;
+    final ordered = <CoinModel>[];
+    final remaining = List<CoinModel>.from(_coinModels);
+    for (final coinType in walletInfo.chainOrder) {
+      final idx = remaining.indexWhere((cm) => cm.coin['coinType'] == coinType);
+      if (idx != -1) {
+        ordered.add(remaining.removeAt(idx));
+      }
+    }
+    // 不在 chainOrder 中的新链追加到末尾
+    ordered.addAll(remaining);
+    _coinModels = ordered;
+  }
+
+  /// 拖拽重排链顺序并持久化。
+  void reorderChain(int oldIndex, int newIndex) {
+    if (newIndex > oldIndex) newIndex--;
+    final item = _coinModels.removeAt(oldIndex);
+    _coinModels.insert(newIndex, item);
+    walletInfo.chainOrder = _coinModels
+        .map((m) => m.coin['coinType'] as String? ?? '')
+        .where((s) => s.isNotEmpty)
+        .toList();
+    buildCoinModelInfo();
+    saveCoinSort();
+  }
+
+  /// 切换链的显示/隐藏状态。
+  void toggleChainVisibility(CoinModel cm) {
+    final coinType = cm.coin['coinType'] as String?;
+    if (coinType == null) return;
+    cm.showList = !cm.showList;
+    // 同步到 walletMap
+    if (walletMap.containsKey(coinType)) {
+      walletMap[coinType]['showList'] = cm.showList;
+    }
+    buildCoinModelInfo();
+    saveWalletInfo(walletInfo, walletIndex);
   }
   /// 聚合代币列表 (USDT, USDC)
   List<AggregatedCoinModel> _aggregatedCoins = [];
@@ -680,7 +725,8 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
         walletInfo.coinSort['assets']=1;
       }
       walletInfo.coinSort['name']=-1;
-    }else{
+      walletInfo.coinSort['change']=-1;
+    }else if(type=="name"){
       if(walletInfo.coinSort['name'] == 0){
         walletInfo.coinSort['name']=1;
       }else if(walletInfo.coinSort['name'] == 1){
@@ -689,9 +735,21 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
         walletInfo.coinSort['name']=1;
       }
       walletInfo.coinSort['assets']=-1;
+      walletInfo.coinSort['change']=-1;
+    }else if(type=="change"){
+      // change 循环：-1→0→1→-1（-1=不排序, 0=降序, 1=升序）
+      final cur = walletInfo.coinSort['change'] ?? -1;
+      if(cur == -1){
+        walletInfo.coinSort['change']=0;
+      }else if(cur == 0){
+        walletInfo.coinSort['change']=1;
+      }else{
+        walletInfo.coinSort['change']=-1;
+      }
+      walletInfo.coinSort['assets']=-1;
+      walletInfo.coinSort['name']=-1;
     }
 
-    //setCoinSort();
     coinSortAssets();
     notifyListeners();
   }
@@ -714,6 +772,14 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
         String bName=b.coin['miniName'];
         return sortString(bName,aName);
       });
+    }
+    final changeSort = walletInfo.coinSort['change'] ?? -1;
+    if(changeSort == 0){
+      // 按 24h 涨跌幅降序（涨幅最大在前）
+      coinList.sort((a, b) => (b.percentage as double).compareTo(a.percentage as double));
+    }else if(changeSort == 1){
+      // 按 24h 涨跌幅升序（涨幅最小在前）
+      coinList.sort((a, b) => (a.percentage as double).compareTo(b.percentage as double));
     }
     // 任何排序后，置顶代币始终在最前面
     _elevatePinnedToTop();

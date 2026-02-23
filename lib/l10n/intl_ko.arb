@@ -1791,18 +1791,16 @@
   "g_portfolio_movers": "24h Movers",
   "g_portfolio_gainers": "Top Gainers",
   "g_theme_accent_color": "Accent Color",
-  "g_theme_accent_reset": "Reset to default"
-,
+  "g_theme_accent_reset": "Reset to default",
   "g_referral_invite_code": "초대 코드",
   "g_referral_stats_title": "추천 통계",
   "g_referral_invited": "초대됨",
   "g_referral_downloaded": "다운로드",
   "g_referral_mining": "채굴 노드",
-  "g_referral_reward": "보상 (N)"
-,
+  "g_referral_reward": "보상 (N)",
   "g_portfolio_pie_total": "합계",
   "g_portfolio_losers": "하락 순위",
-  "g_portfolio_all_holdings": "전체 보유 자산"
-,
-  "g_version_later": "나중에"
+  "g_portfolio_all_holdings": "전체 보유 자산",
+  "g_version_later": "나중에",
+  "g_key_manage_chains": "Manage Chains"
 }

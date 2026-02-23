@@ -15913,6 +15913,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Manage Chains`
+  String get g_key_manage_chains {
+    return Intl.message(
+      'Manage Chains',
+      name: 'g_key_manage_chains',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

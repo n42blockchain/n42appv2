@@ -1748,18 +1748,16 @@
   "g_portfolio_movers": "24h Movers",
   "g_portfolio_gainers": "Top Gainers",
   "g_theme_accent_color": "Accent Color",
-  "g_theme_accent_reset": "Reset to default"
-,
+  "g_theme_accent_reset": "Reset to default",
   "g_referral_invite_code": "Davet kodu",
   "g_referral_stats_title": "Referans İstatistikleri",
   "g_referral_invited": "Davet Edildi",
   "g_referral_downloaded": "İndirildi",
   "g_referral_mining": "Madencilik Düğümleri",
-  "g_referral_reward": "Ödül (N)"
-,
+  "g_referral_reward": "Ödül (N)",
   "g_portfolio_pie_total": "Toplam",
   "g_portfolio_losers": "En Büyük Kayıplar",
-  "g_portfolio_all_holdings": "Tüm Varlıklar"
-,
-  "g_version_later": "Sonra"
+  "g_portfolio_all_holdings": "Tüm Varlıklar",
+  "g_version_later": "Sonra",
+  "g_key_manage_chains": "Manage Chains"
 }

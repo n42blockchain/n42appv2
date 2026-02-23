@@ -1748,18 +1748,16 @@
   "g_portfolio_movers": "24h Movers",
   "g_portfolio_gainers": "Top Gainers",
   "g_theme_accent_color": "Accent Color",
-  "g_theme_accent_reset": "Reset to default"
-,
+  "g_theme_accent_reset": "Reset to default",
   "g_referral_invite_code": "Код приглашения",
   "g_referral_stats_title": "Статистика рефералов",
   "g_referral_invited": "Приглашено",
   "g_referral_downloaded": "Загружено",
   "g_referral_mining": "Майнинговые узлы",
-  "g_referral_reward": "Награда (N)"
-,
+  "g_referral_reward": "Награда (N)",
   "g_portfolio_pie_total": "Итого",
   "g_portfolio_losers": "Наибольшие потери",
-  "g_portfolio_all_holdings": "Все активы"
-,
-  "g_version_later": "Позже"
+  "g_portfolio_all_holdings": "Все активы",
+  "g_version_later": "Позже",
+  "g_key_manage_chains": "Manage Chains"
 }

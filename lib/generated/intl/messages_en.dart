@@ -2555,6 +2555,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_m_7": MessageLookupByLibrary.simpleMessage("More"),
     "g_key_m_8": MessageLookupByLibrary.simpleMessage("Links"),
     "g_key_m_9": MessageLookupByLibrary.simpleMessage("Website"),
+    "g_key_manage_chains": MessageLookupByLibrary.simpleMessage(
+      "Manage Chains",
+    ),
     "g_key_mining_available": MessageLookupByLibrary.simpleMessage("Available"),
     "g_key_mining_requires_staking": MessageLookupByLibrary.simpleMessage(
       "Requires staking",

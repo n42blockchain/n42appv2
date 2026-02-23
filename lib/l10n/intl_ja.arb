@@ -1748,18 +1748,16 @@
   "g_portfolio_movers": "24h Movers",
   "g_portfolio_gainers": "Top Gainers",
   "g_theme_accent_color": "Accent Color",
-  "g_theme_accent_reset": "Reset to default"
-,
+  "g_theme_accent_reset": "Reset to default",
   "g_referral_invite_code": "招待コード",
   "g_referral_stats_title": "招待統計",
   "g_referral_invited": "招待済み",
   "g_referral_downloaded": "ダウンロード",
   "g_referral_mining": "マイニングノード",
-  "g_referral_reward": "報酬 (N)"
-,
+  "g_referral_reward": "報酬 (N)",
   "g_portfolio_pie_total": "合計",
   "g_portfolio_losers": "トップ下落",
-  "g_portfolio_all_holdings": "全保有資産"
-,
-  "g_version_later": "後で"
+  "g_portfolio_all_holdings": "全保有資産",
+  "g_version_later": "後で",
+  "g_key_manage_chains": "Manage Chains"
 }

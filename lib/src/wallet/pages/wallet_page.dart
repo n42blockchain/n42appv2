@@ -25,6 +25,7 @@ import 'package:n42appv2/src/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_chain_info.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_chain_info_xrp.dart';
 import 'package:n42appv2/src/wallet/pages/wallet_manage/wallet_list.dart';
+import 'package:n42appv2/src/wallet/pages/manage_chains_page.dart';
 import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/wallet/widgets/create_wallet_button.dart';
 import 'package:n42appv2/src/wallet/widgets/feature_entry_cards.dart';
@@ -907,13 +908,21 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                     waValue.walletInfo.coinSort['name'] ?? -1,
                     () => waValue.setCoinSortAssets("name"),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(24)),
+                  SizedBox(width: ScreenUtil().setWidth(12)),
                   // 按资产排序
                   _buildSortButton(
                     S.of(context).g_key_198,
                     "assets",
                     waValue.walletInfo.coinSort['assets'] ?? -1,
                     () => waValue.setCoinSortAssets("assets"),
+                  ),
+                  SizedBox(width: ScreenUtil().setWidth(12)),
+                  // 按 24h 涨跌幅排序
+                  _buildSortButton(
+                    '24h%',
+                    "change",
+                    waValue.walletInfo.coinSort['change'] ?? -1,
+                    () => waValue.setCoinSortAssets("change"),
                   ),
                   const Spacer(),
                   // 小额资产隐藏开关
@@ -1546,6 +1555,41 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   //切换网络
   void showChangeNetwork(WalletActionProvider walletValue) {
     List<Widget> childs = [];
+    // 顶部标题行 + 管理链按钮
+    childs.add(Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(20),
+        vertical: ScreenUtil().setWidth(8),
+      ),
+      child: Row(
+        children: [
+          Text(
+            S.of(context).g_token_m_key_4,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+              fontWeight: FontWeight.bold,
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+            ),
+          ),
+          const Spacer(),
+          IconButton(
+            icon: Icon(
+              Icons.tune_rounded,
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+              size: ScreenUtil().setWidth(40),
+            ),
+            tooltip: S.of(context).g_key_manage_chains,
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ManageChainsPage()),
+              );
+            },
+          ),
+        ],
+      ),
+    ));
     childs.add(Container(
       constraints: BoxConstraints(
         maxHeight: ScreenUtil().setWidth(600.0),

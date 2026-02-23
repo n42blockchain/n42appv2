@@ -126,7 +126,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m47(value) => "${value} days remaining";
 
-  static String m85(value) =>
+  static String m90(value) =>
       "Unstaking takes ${value} days. Your tokens will be locked during this period.";
 
   static String m48(value) => "\"${value}\"이(가) 부족합니다";
@@ -2200,6 +2200,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_m_7": MessageLookupByLibrary.simpleMessage("더 보기"),
     "g_key_m_8": MessageLookupByLibrary.simpleMessage("링크"),
     "g_key_m_9": MessageLookupByLibrary.simpleMessage("웹사이트"),
+    "g_key_manage_chains": MessageLookupByLibrary.simpleMessage(
+      "Manage Chains",
+    ),
     "g_key_mining_available": MessageLookupByLibrary.simpleMessage("Available"),
     "g_key_mining_requires_staking": MessageLookupByLibrary.simpleMessage(
       "Requires staking",
@@ -2412,7 +2415,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_unbonding_period": MessageLookupByLibrary.simpleMessage(
       "언본딩 기간",
     ),
-    "g_key_stake_unbonding_warning": m85,
+    "g_key_stake_unbonding_warning": m90,
     "g_key_stake_unstake": MessageLookupByLibrary.simpleMessage("언스테이크"),
     "g_key_stake_updating": MessageLookupByLibrary.simpleMessage("Updating..."),
     "g_key_stake_uptime": MessageLookupByLibrary.simpleMessage("가동 시간"),

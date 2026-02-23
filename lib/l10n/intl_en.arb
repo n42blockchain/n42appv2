@@ -1906,5 +1906,6 @@
   "g_key_token_discovery_deselect_all": "Deselect all",
   "g_key_token_discovery_ignore": "Ignore",
   "g_key_token_discovery_added": "Token added",
-  "g_key_token_discovery_empty": "No new tokens found"
+  "g_key_token_discovery_empty": "No new tokens found",
+  "g_key_manage_chains": "Manage Chains"
 }

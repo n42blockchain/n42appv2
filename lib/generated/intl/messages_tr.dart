@@ -2433,6 +2433,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_m_7": MessageLookupByLibrary.simpleMessage("Daha Fazla"),
     "g_key_m_8": MessageLookupByLibrary.simpleMessage("Bağlantılar"),
     "g_key_m_9": MessageLookupByLibrary.simpleMessage("Web sitesi"),
+    "g_key_manage_chains": MessageLookupByLibrary.simpleMessage(
+      "Manage Chains",
+    ),
     "g_key_mining_available": MessageLookupByLibrary.simpleMessage("Available"),
     "g_key_mining_requires_staking": MessageLookupByLibrary.simpleMessage(
       "Requires staking",

@@ -133,7 +133,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m47(value) => "${value} days remaining";
 
-  static String m85(value) =>
+  static String m90(value) =>
       "Unstaking takes ${value} days. Your tokens will be locked during this period.";
 
   static String m48(value) => "No tienes suficiente \"${value}\"";
@@ -2614,6 +2614,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_m_7": MessageLookupByLibrary.simpleMessage("Más"),
     "g_key_m_8": MessageLookupByLibrary.simpleMessage("Enlaces"),
     "g_key_m_9": MessageLookupByLibrary.simpleMessage("Sitio Web"),
+    "g_key_manage_chains": MessageLookupByLibrary.simpleMessage(
+      "Manage Chains",
+    ),
     "g_key_mining_available": MessageLookupByLibrary.simpleMessage("Available"),
     "g_key_mining_requires_staking": MessageLookupByLibrary.simpleMessage(
       "Requires staking",
@@ -2864,7 +2867,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_unbonding_period": MessageLookupByLibrary.simpleMessage(
       "Período de Desvinculación",
     ),
-    "g_key_stake_unbonding_warning": m85,
+    "g_key_stake_unbonding_warning": m90,
     "g_key_stake_unstake": MessageLookupByLibrary.simpleMessage(
       "Retirar Apuesta",
     ),

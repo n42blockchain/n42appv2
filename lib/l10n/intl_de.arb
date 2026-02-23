@@ -1748,18 +1748,16 @@
   "g_portfolio_movers": "24h Movers",
   "g_portfolio_gainers": "Top Gainers",
   "g_theme_accent_color": "Accent Color",
-  "g_theme_accent_reset": "Reset to default"
-,
+  "g_theme_accent_reset": "Reset to default",
   "g_referral_invite_code": "Einladungscode",
   "g_referral_stats_title": "Empfehlungsstatistiken",
   "g_referral_invited": "Eingeladen",
   "g_referral_downloaded": "Heruntergeladen",
   "g_referral_mining": "Mining-Knoten",
-  "g_referral_reward": "Belohnung (N)"
-,
+  "g_referral_reward": "Belohnung (N)",
   "g_portfolio_pie_total": "Gesamt",
   "g_portfolio_losers": "Top Verlierer",
-  "g_portfolio_all_holdings": "Alle Bestände"
-,
-  "g_version_later": "Später"
+  "g_portfolio_all_holdings": "Alle Bestände",
+  "g_version_later": "Später",
+  "g_key_manage_chains": "Manage Chains"
 }
