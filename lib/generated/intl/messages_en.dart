@@ -1577,7 +1577,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_approval_success": MessageLookupByLibrary.simpleMessage(
       "Approved! Tap Swap to continue.",
     ),
+    "g_key_dex_approve_exact": MessageLookupByLibrary.simpleMessage(
+      "Exact Amount",
+    ),
     "g_key_dex_approve_required": m85,
+    "g_key_dex_approve_unlimited": MessageLookupByLibrary.simpleMessage(
+      "Unlimited",
+    ),
+    "g_key_dex_approve_unlimited_info": MessageLookupByLibrary.simpleMessage(
+      "Unlimited approval: the router can spend this token any time. Standard practice, but carries risk if the contract is compromised.",
+    ),
     "g_key_dex_approving": MessageLookupByLibrary.simpleMessage("Approving…"),
     "g_key_dex_best_route": MessageLookupByLibrary.simpleMessage("Best Route"),
     "g_key_dex_best_source": MessageLookupByLibrary.simpleMessage(
@@ -1599,6 +1608,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_no_tokens": MessageLookupByLibrary.simpleMessage("No tokens"),
     "g_key_dex_no_tokens_found": MessageLookupByLibrary.simpleMessage(
       "No tokens found",
+    ),
+    "g_key_dex_price_chart": MessageLookupByLibrary.simpleMessage(
+      "Price Chart",
     ),
     "g_key_dex_price_impact": MessageLookupByLibrary.simpleMessage(
       "Price Impact",

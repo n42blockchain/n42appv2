@@ -1887,6 +1887,10 @@
   "g_key_dex_approval_success": "Approved! Tap Swap to continue.",
   "g_key_dex_sol_note": "Solana swap: sign the transaction in your Solana wallet.",
   "g_key_dex_quote_refreshed": "Quote refreshed",
+  "g_key_dex_approve_unlimited": "Unlimited",
+  "g_key_dex_approve_exact": "Exact Amount",
+  "g_key_dex_approve_unlimited_info": "Unlimited approval: the router can spend this token any time. Standard practice, but carries risk if the contract is compromised.",
+  "g_key_dex_price_chart": "Price Chart",
 
   "g_key_token_discovery_banner": "{count, plural, =1{1 new token detected} other{{count} new tokens detected}} — tap to review",
   "@g_key_token_discovery_banner": {

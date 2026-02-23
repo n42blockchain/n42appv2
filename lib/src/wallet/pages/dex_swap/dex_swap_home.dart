@@ -5,6 +5,7 @@ import 'package:n42appv2/src/component/enums/load.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/src/wallet/api/dex_swap_api.dart';
+import 'package:n42appv2/src/wallet/api/market_api.dart';
 import 'package:n42appv2/src/wallet/api/transfer_api.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/models/dex/dex_quote_model.dart';
@@ -16,6 +17,7 @@ import 'package:n42appv2/src/wallet/provider/wallet_action_provider.dart';
 import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/image_network.dart';
+import 'package:n42appv2/src/widgets/line_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -48,6 +50,32 @@ String _coinTypeForChain(String dexChain) {
 
 /// Seconds before a fetched quote is considered stale and auto-refreshed.
 const int _kQuoteTtlSeconds = 30;
+
+/// Symbol → CoinGecko ID mapping for common DeFi tokens.
+/// Used to fetch price chart data. Unmapped tokens show no chart.
+const Map<String, String> _kSymbolToGeckoId = {
+  'ETH':   'ethereum',
+  'WETH':  'weth',
+  'BTC':   'bitcoin',
+  'WBTC':  'wrapped-bitcoin',
+  'BNB':   'binancecoin',
+  'MATIC': 'matic-network',
+  'SOL':   'solana',
+  'USDC':  'usd-coin',
+  'USDT':  'tether',
+  'DAI':   'dai',
+  'ARB':   'arbitrum',
+  'OP':    'optimism',
+  'LINK':  'chainlink',
+  'UNI':   'uniswap',
+  'AAVE':  'aave',
+  'CRV':   'curve-dao-token',
+  'MKR':   'maker',
+  'SNX':   'synthetix-network-token',
+  'PEPE':  'pepe',
+  'SHIB':  'shiba-inu',
+  'DOGE':  'dogecoin',
+};
 
 class DexSwapHome extends ConsumerStatefulWidget {
   const DexSwapHome({super.key});
@@ -82,10 +110,18 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   // ── ERC-20 approval state ─────────────────────────────────────────────────
   bool _needsApproval = false;
   Load _approveLoad = Load.finish;
+  /// When true, approves exact amountIn instead of MaxUint256.
+  bool _exactApprove = false;
 
   // ── Swap / error state ────────────────────────────────────────────────────
   Load _swapLoad = Load.finish;
   String _errorMsg = '';
+
+  // ── Price chart state ─────────────────────────────────────────────────────
+  bool _showChart = false;
+  List<double> _chartPrices = [];
+  bool _chartLoading = false;
+  int _chartPeriodDays = 1;
 
   // ── Wallet addresses by chain ─────────────────────────────────────────────
   /// EVM 0x address (all EVM chains share the same key)
@@ -147,6 +183,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       _needsApproval = false;
       _errorMsg = '';
       _quoteSecsLeft = 0;
+      _chartPrices = [];
     });
     _expiryTicker?.cancel();
     _amountCtrl.clear();
@@ -187,6 +224,32 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     final amount = _amountCtrl.text.trim();
     if (amount.isNotEmpty && amount != '0' && _tokenIn != null && _tokenOut != null) {
       _fetchQuote(amount);
+    }
+  }
+
+  // ── Price chart ───────────────────────────────────────────────────────────
+
+  /// Fetch price history for [_tokenIn] from CoinGecko.
+  /// Silently clears chart if the token is unknown or the request fails.
+  Future<void> _fetchPriceChart() async {
+    if (_tokenIn == null) {
+      setState(() => _chartPrices = []);
+      return;
+    }
+    final geckoId = _kSymbolToGeckoId[_tokenIn!.symbol.toUpperCase()];
+    if (geckoId == null) {
+      setState(() => _chartPrices = []);
+      return;
+    }
+    setState(() => _chartLoading = true);
+    try {
+      final data = await MarketApi()
+          .getMarketChart(geckoId, days: _chartPeriodDays);
+      if (mounted) setState(() => _chartPrices = data['prices'] ?? []);
+    } catch (_) {
+      if (mounted) setState(() => _chartPrices = []);
+    } finally {
+      if (mounted) setState(() => _chartLoading = false);
     }
   }
 
@@ -299,8 +362,14 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       _errorMsg = '';
     });
 
+    // Exact mode: approve precisely the current input amount; otherwise MaxUint256.
+    BigInt? exactAmount;
+    if (_exactApprove && _tokenIn != null) {
+      final wei = _toWei(_amountCtrl.text.trim(), _tokenIn!.decimals);
+      if (wei > BigInt.zero) exactAmount = wei;
+    }
     final calldata =
-        DexSwapApi.buildApproveCalldata(q.routerAddr); // unlimited approval
+        DexSwapApi.buildApproveCalldata(q.routerAddr, amount: exactAmount);
 
     final MessageModel txRes = await _transferApi.transfer(
       _chain,
@@ -436,6 +505,24 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
         text: s.g_key_earn_dex_swap,
         actions: [
           InkWell(
+            onTap: () {
+              setState(() => _showChart = !_showChart);
+              if (_showChart && _chartPrices.isEmpty) _fetchPriceChart();
+            },
+            child: Container(
+              margin: EdgeInsets.only(right: ScreenUtil().setWidth(16)),
+              child: Icon(
+                Icons.show_chart_rounded,
+                color: _showChart
+                    ? AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.mainBlueColor.name)
+                    : AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                size: ScreenUtil().setWidth(48),
+              ),
+            ),
+          ),
+          InkWell(
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const DexSwapHistory()),
@@ -459,6 +546,10 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _chainChips(),
+              if (_showChart) ...[
+                SizedBox(height: ScreenUtil().setWidth(16)),
+                _chartSection(),
+              ],
               SizedBox(height: ScreenUtil().setWidth(16)),
               _slippageRow(),
               SizedBox(height: ScreenUtil().setWidth(24)),
@@ -482,6 +573,173 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
               SizedBox(height: ScreenUtil().setWidth(40)),
               _actionButtons(),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ── Price chart section ───────────────────────────────────────────────────
+
+  Widget _chartSection() {
+    final s = S.of(context);
+    final blueColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name);
+    final subText = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final mainText = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainTextColor.name);
+
+    const periods = [
+      {'label': '1D', 'days': 1},
+      {'label': '7D', 'days': 7},
+      {'label': '1M', 'days': 30},
+    ];
+
+    return Container(
+      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      decoration: BoxDecoration(
+        color: AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.itemBgColor4.name),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header: label + token symbol + period selector
+          Row(
+            children: [
+              Text(
+                _tokenIn != null
+                    ? '${_tokenIn!.symbol} · ${s.g_key_dex_price_chart}'
+                    : s.g_key_dex_price_chart,
+                style: TextStyle(
+                  color: mainText,
+                  fontSize: ScreenUtil().setSp(26),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const Spacer(),
+              ...periods.map((p) {
+                final isSelected = _chartPeriodDays == p['days'] as int;
+                return GestureDetector(
+                  onTap: () {
+                    if (_chartPeriodDays == p['days'] as int) return;
+                    setState(() => _chartPeriodDays = p['days'] as int);
+                    _fetchPriceChart();
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(left: ScreenUtil().setWidth(8)),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: ScreenUtil().setWidth(14),
+                      vertical: ScreenUtil().setWidth(6),
+                    ),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? blueColor.withValues(alpha: 0.15)
+                          : Colors.transparent,
+                      borderRadius:
+                          BorderRadius.circular(ScreenUtil().setWidth(20)),
+                    ),
+                    child: Text(
+                      p['label'] as String,
+                      style: TextStyle(
+                        color: isSelected ? blueColor : subText,
+                        fontSize: ScreenUtil().setSp(22),
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            ],
+          ),
+          SizedBox(height: ScreenUtil().setWidth(12)),
+
+          // Chart body
+          if (_chartLoading)
+            SizedBox(
+              height: ScreenUtil().setWidth(160),
+              child: const Center(child: CircularProgressIndicator()),
+            )
+          else if (_chartPrices.isEmpty)
+            SizedBox(
+              height: ScreenUtil().setWidth(100),
+              child: Center(
+                child: Text(
+                  _tokenIn == null
+                      ? s.g_key_dex_select_token
+                      : 'No chart data',
+                  style: TextStyle(color: subText, fontSize: ScreenUtil().setSp(24)),
+                ),
+              ),
+            )
+          else ...[
+            LineChart(
+              _chartPrices,
+              _chartPrices.last >= _chartPrices.first, // isUp
+              ScreenUtil().setWidth(160),
+              0,
+            ),
+            SizedBox(height: ScreenUtil().setWidth(4)),
+            // Price range labels
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '\$${_chartPrices.reduce((a, b) => a < b ? a : b).toStringAsFixed(2)}',
+                  style: TextStyle(
+                      color: subText, fontSize: ScreenUtil().setSp(20)),
+                ),
+                Text(
+                  '\$${_chartPrices.reduce((a, b) => a > b ? a : b).toStringAsFixed(2)}',
+                  style: TextStyle(
+                      color: subText, fontSize: ScreenUtil().setSp(20)),
+                ),
+              ],
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  // ── Approve toggle chip ───────────────────────────────────────────────────
+
+  Widget _approveToggleChip({
+    required String label,
+    required bool selected,
+    required VoidCallback onTap,
+  }) {
+    final mainText = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainTextColor.name);
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(16),
+          vertical: ScreenUtil().setWidth(6),
+        ),
+        decoration: BoxDecoration(
+          color: selected
+              ? const Color(0xFFFF9800).withValues(alpha: 0.2)
+              : Colors.transparent,
+          border: Border.all(
+            color: selected
+                ? const Color(0xFFFF9800)
+                : mainText.withValues(alpha: 0.25),
+            width: 1.0,
+          ),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: selected ? const Color(0xFFFF9800) : mainText,
+            fontSize: ScreenUtil().setSp(22),
+            fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
           ),
         ),
       ),
@@ -595,8 +853,10 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
             _tokenIn = result;
             _quote = null;
             _needsApproval = false;
+            _chartPrices = [];
           });
           _onAmountChanged();
+          if (_showChart) _fetchPriceChart();
         }
       },
     );
@@ -860,29 +1120,63 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
             Container(
               padding: EdgeInsets.symmetric(
                 horizontal: ScreenUtil().setWidth(12),
-                vertical: ScreenUtil().setWidth(8),
+                vertical: ScreenUtil().setWidth(10),
               ),
               decoration: BoxDecoration(
                 color: const Color(0xFFFF9800).withAlpha(20),
                 borderRadius:
                     BorderRadius.circular(ScreenUtil().setWidth(8)),
               ),
-              child: Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.lock_outline,
-                      color: const Color(0xFFFF9800),
-                      size: ScreenUtil().setWidth(28)),
-                  SizedBox(width: ScreenUtil().setWidth(8)),
-                  Expanded(
-                    child: Text(
-                      s.g_key_dex_approve_required(
-                          _tokenIn?.symbol ?? ''),
+                  // Header row
+                  Row(
+                    children: [
+                      Icon(Icons.lock_outline,
+                          color: const Color(0xFFFF9800),
+                          size: ScreenUtil().setWidth(28)),
+                      SizedBox(width: ScreenUtil().setWidth(8)),
+                      Expanded(
+                        child: Text(
+                          s.g_key_dex_approve_required(
+                              _tokenIn?.symbol ?? ''),
+                          style: TextStyle(
+                            color: const Color(0xFFFF9800),
+                            fontSize: ScreenUtil().setSp(22),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: ScreenUtil().setWidth(10)),
+                  // Unlimited / Exact toggle
+                  Row(
+                    children: [
+                      _approveToggleChip(
+                        label: s.g_key_dex_approve_unlimited,
+                        selected: !_exactApprove,
+                        onTap: () => setState(() => _exactApprove = false),
+                      ),
+                      SizedBox(width: ScreenUtil().setWidth(8)),
+                      _approveToggleChip(
+                        label: s.g_key_dex_approve_exact,
+                        selected: _exactApprove,
+                        onTap: () => setState(() => _exactApprove = true),
+                      ),
+                    ],
+                  ),
+                  // Unlimited security warning
+                  if (!_exactApprove) ...[
+                    SizedBox(height: ScreenUtil().setWidth(8)),
+                    Text(
+                      s.g_key_dex_approve_unlimited_info,
                       style: TextStyle(
-                        color: const Color(0xFFFF9800),
-                        fontSize: ScreenUtil().setSp(22),
+                        color: const Color(0xFFFF9800).withValues(alpha: 0.75),
+                        fontSize: ScreenUtil().setSp(20),
                       ),
                     ),
-                  ),
+                  ],
                 ],
               ),
             ),

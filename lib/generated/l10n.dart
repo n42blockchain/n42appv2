@@ -15824,6 +15824,46 @@ class S {
     );
   }
 
+  /// `Unlimited`
+  String get g_key_dex_approve_unlimited {
+    return Intl.message(
+      'Unlimited',
+      name: 'g_key_dex_approve_unlimited',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exact Amount`
+  String get g_key_dex_approve_exact {
+    return Intl.message(
+      'Exact Amount',
+      name: 'g_key_dex_approve_exact',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unlimited approval: the router can spend this token any time. Standard practice, but carries risk if the contract is compromised.`
+  String get g_key_dex_approve_unlimited_info {
+    return Intl.message(
+      'Unlimited approval: the router can spend this token any time. Standard practice, but carries risk if the contract is compromised.',
+      name: 'g_key_dex_approve_unlimited_info',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price Chart`
+  String get g_key_dex_price_chart {
+    return Intl.message(
+      'Price Chart',
+      name: 'g_key_dex_price_chart',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `{count, plural, =1{1 new token detected} other{{count} new tokens detected}} — tap to review`
   String g_key_token_discovery_banner(int count) {
     return Intl.message(
