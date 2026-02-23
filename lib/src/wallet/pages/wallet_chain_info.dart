@@ -18,8 +18,10 @@ import 'package:n42appv2/src/wallet/models/transaction/btc_tran_detail.dart';
 import 'package:n42appv2/src/wallet/models/transaction/common_response_item_model.dart';
 import 'package:n42appv2/src/wallet/models/transaction/sol_transaction_item.dart';
 import 'package:n42appv2/src/wallet/models/transation_record_model.dart';
+import 'package:n42appv2/src/wallet/api/simplehash_nft_api.dart';
 import 'package:n42appv2/src/wallet/pages/add_token/wallet_coin_token_add2.dart';
 import 'package:n42appv2/src/wallet/pages/market/market_coin_info.dart';
+import 'package:n42appv2/src/wallet/pages/nft/nft_list_page.dart';
 import 'package:n42appv2/src/wallet/pages/send/unified_send_page.dart';
 import 'package:n42appv2/src/wallet/pages/batch_transfer/batch_transfer_page.dart';
 import 'package:n42appv2/src/wallet/provider/batch_transfer_provider.dart';
@@ -1351,6 +1353,51 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo> {
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
+                  ),
+                ),
+              ],
+            )),
+      ));
+    }
+    // NFT Gallery — 非合约代币 且 链在 SimpleHash 支持列表中
+    if (widget.coinModel.coin['isContract'] != true &&
+        SimpleHashNftApi.chainMap.containsKey(
+            (widget.coinModel.coin['coinType'] as String? ?? '').toUpperCase())) {
+      childs.add(Divider(
+        height: ScreenUtil().setWidth(1),
+        indent: 0,
+        endIndent: 0,
+      ));
+      childs.add(InkWell(
+        onTap: () async {
+          Navigator.pop(context);
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NftListPage(widget.coinModel),
+            ),
+          );
+        },
+        child: Container(
+            padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                SizedBox(
+                  width: ScreenUtil().setWidth(40.0),
+                  height: ScreenUtil().setWidth(40.0),
+                  child: Icon(
+                    Icons.collections_outlined,
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                    size: ScreenUtil().setWidth(40.0),
+                  ),
+                ),
+                SizedBox(width: ScreenUtil().setWidth(20.0)),
+                Text(
+                  S.of(context).g_key_nft_gallery,
+                  style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                    fontSize: ScreenUtil().setSp(30.0),
                   ),
                 ),
               ],

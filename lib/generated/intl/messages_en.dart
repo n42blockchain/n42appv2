@@ -1517,6 +1517,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "To burn an NFT, please go to the NFT details page and tap the \"Burn\" button.",
     ),
     "g_key_burn_nft_title": MessageLookupByLibrary.simpleMessage("Burn NFT"),
+    "g_key_chain_transfer_not_supported": MessageLookupByLibrary.simpleMessage(
+      "This chain does not support transfers yet, stay tuned",
+    ),
     "g_key_change_email": MessageLookupByLibrary.simpleMessage("Change Email"),
     "g_key_change_password": MessageLookupByLibrary.simpleMessage(
       "Change Password",
@@ -2540,6 +2543,39 @@ class MessageLookup extends MessageLookupByLibrary {
       "Transaction submitted",
     ),
     "g_key_nft_47": MessageLookupByLibrary.simpleMessage("Select video"),
+    "g_key_nft_address_invalid": MessageLookupByLibrary.simpleMessage(
+      "Invalid wallet address",
+    ),
+    "g_key_nft_balance": MessageLookupByLibrary.simpleMessage("Balance"),
+    "g_key_nft_burn_confirm": MessageLookupByLibrary.simpleMessage(
+      "This action is irreversible. The NFT will be sent to the burn address.",
+    ),
+    "g_key_nft_burn_evm_only": MessageLookupByLibrary.simpleMessage(
+      "Burn is only supported on EVM chains",
+    ),
+    "g_key_nft_burn_sol_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Solana NFT burn is coming soon",
+    ),
+    "g_key_nft_burn_title": MessageLookupByLibrary.simpleMessage("Burn NFT"),
+    "g_key_nft_contract": MessageLookupByLibrary.simpleMessage("Contract"),
+    "g_key_nft_error_retry": MessageLookupByLibrary.simpleMessage(
+      "Failed to load NFTs. Tap to retry.",
+    ),
+    "g_key_nft_gallery": MessageLookupByLibrary.simpleMessage("NFT Gallery"),
+    "g_key_nft_no_items": MessageLookupByLibrary.simpleMessage("No NFTs found"),
+    "g_key_nft_no_url": MessageLookupByLibrary.simpleMessage(
+      "No explorer link available",
+    ),
+    "g_key_nft_open_browser": MessageLookupByLibrary.simpleMessage(
+      "View on Explorer",
+    ),
+    "g_key_nft_quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
+    "g_key_nft_send": MessageLookupByLibrary.simpleMessage("Send NFT"),
+    "g_key_nft_send_sol_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Solana NFT transfers are coming soon",
+    ),
+    "g_key_nft_token_id": MessageLookupByLibrary.simpleMessage("Token ID"),
+    "g_key_nft_type": MessageLookupByLibrary.simpleMessage("Type"),
     "g_key_no_linked_accounts": MessageLookupByLibrary.simpleMessage(
       "No linked accounts",
     ),
@@ -2640,6 +2676,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_send_code": MessageLookupByLibrary.simpleMessage(
       "Send Verification Code",
+    ),
+    "g_key_send_memo_hint": MessageLookupByLibrary.simpleMessage("Memo / Note"),
+    "g_key_send_memo_label": MessageLookupByLibrary.simpleMessage(
+      "Memo / Note (optional)",
     ),
     "g_key_set_new_password_desc": MessageLookupByLibrary.simpleMessage(
       "Set your new password",

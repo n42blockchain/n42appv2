@@ -15513,6 +15513,166 @@ class S {
       args: [],
     );
   }
+
+  /// `NFT Gallery`
+  String get g_key_nft_gallery {
+    return Intl.message(
+      'NFT Gallery',
+      name: 'g_key_nft_gallery',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No NFTs found`
+  String get g_key_nft_no_items {
+    return Intl.message(
+      'No NFTs found',
+      name: 'g_key_nft_no_items',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send NFT`
+  String get g_key_nft_send {
+    return Intl.message('Send NFT', name: 'g_key_nft_send', desc: '', args: []);
+  }
+
+  /// `Burn NFT`
+  String get g_key_nft_burn_title {
+    return Intl.message(
+      'Burn NFT',
+      name: 'g_key_nft_burn_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This action is irreversible. The NFT will be sent to the burn address.`
+  String get g_key_nft_burn_confirm {
+    return Intl.message(
+      'This action is irreversible. The NFT will be sent to the burn address.',
+      name: 'g_key_nft_burn_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Token ID`
+  String get g_key_nft_token_id {
+    return Intl.message(
+      'Token ID',
+      name: 'g_key_nft_token_id',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Type`
+  String get g_key_nft_type {
+    return Intl.message('Type', name: 'g_key_nft_type', desc: '', args: []);
+  }
+
+  /// `Balance`
+  String get g_key_nft_balance {
+    return Intl.message(
+      'Balance',
+      name: 'g_key_nft_balance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contract`
+  String get g_key_nft_contract {
+    return Intl.message(
+      'Contract',
+      name: 'g_key_nft_contract',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View on Explorer`
+  String get g_key_nft_open_browser {
+    return Intl.message(
+      'View on Explorer',
+      name: 'g_key_nft_open_browser',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Solana NFT transfers are coming soon`
+  String get g_key_nft_send_sol_unsupported {
+    return Intl.message(
+      'Solana NFT transfers are coming soon',
+      name: 'g_key_nft_send_sol_unsupported',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Solana NFT burn is coming soon`
+  String get g_key_nft_burn_sol_unsupported {
+    return Intl.message(
+      'Solana NFT burn is coming soon',
+      name: 'g_key_nft_burn_sol_unsupported',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No explorer link available`
+  String get g_key_nft_no_url {
+    return Intl.message(
+      'No explorer link available',
+      name: 'g_key_nft_no_url',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quantity`
+  String get g_key_nft_quantity {
+    return Intl.message(
+      'Quantity',
+      name: 'g_key_nft_quantity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid wallet address`
+  String get g_key_nft_address_invalid {
+    return Intl.message(
+      'Invalid wallet address',
+      name: 'g_key_nft_address_invalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Burn is only supported on EVM chains`
+  String get g_key_nft_burn_evm_only {
+    return Intl.message(
+      'Burn is only supported on EVM chains',
+      name: 'g_key_nft_burn_evm_only',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to load NFTs. Tap to retry.`
+  String get g_key_nft_error_retry {
+    return Intl.message(
+      'Failed to load NFTs. Tap to retry.',
+      name: 'g_key_nft_error_retry',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

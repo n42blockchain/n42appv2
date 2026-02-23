@@ -104,6 +104,26 @@ class ApiKeysConfig {
     defaultValue: 'llama-3.3-70b-versatile',
   );
 
+  // ==================== CoinGecko ====================
+
+  /// CoinGecko Demo/Pro API Key
+  /// 免费 Demo key: https://www.coingecko.com/en/developers/dashboard
+  /// 配置方式: flutter run --dart-define=COINGECKO_API_KEY=CG-xxxx
+  static const String coinGeckoApiKey = String.fromEnvironment(
+    'COINGECKO_API_KEY',
+    defaultValue: '',
+  );
+
+  // ==================== SimpleHash ====================
+
+  /// SimpleHash NFT API Key
+  /// 文档: https://docs.simplehash.com
+  /// 配置方式: flutter run --dart-define=SIMPLE_HASH_API_KEY=xxx
+  static const String simpleHashApiKey = String.fromEnvironment(
+    'SIMPLE_HASH_API_KEY',
+    defaultValue: '',
+  );
+
   // ==================== Default Keys (Development Only) ====================
   // WARNING: These are placeholder keys for development
   // In production, always use environment variables

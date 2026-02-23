@@ -1829,5 +1829,22 @@
 ,
   "g_key_send_memo_label": "Memo / Note (optional)",
   "g_key_send_memo_hint": "Memo / Note",
-  "g_key_chain_transfer_not_supported": "This chain does not support transfers yet, stay tuned"
+  "g_key_chain_transfer_not_supported": "This chain does not support transfers yet, stay tuned",
+  "g_key_nft_gallery": "NFT Gallery",
+  "g_key_nft_no_items": "No NFTs found",
+  "g_key_nft_send": "Send NFT",
+  "g_key_nft_burn_title": "Burn NFT",
+  "g_key_nft_burn_confirm": "This action is irreversible. The NFT will be sent to the burn address.",
+  "g_key_nft_token_id": "Token ID",
+  "g_key_nft_type": "Type",
+  "g_key_nft_balance": "Balance",
+  "g_key_nft_contract": "Contract",
+  "g_key_nft_open_browser": "View on Explorer",
+  "g_key_nft_send_sol_unsupported": "Solana NFT transfers are coming soon",
+  "g_key_nft_burn_sol_unsupported": "Solana NFT burn is coming soon",
+  "g_key_nft_no_url": "No explorer link available",
+  "g_key_nft_quantity": "Quantity",
+  "g_key_nft_address_invalid": "Invalid wallet address",
+  "g_key_nft_burn_evm_only": "Burn is only supported on EVM chains",
+  "g_key_nft_error_retry": "Failed to load NFTs. Tap to retry."
 }

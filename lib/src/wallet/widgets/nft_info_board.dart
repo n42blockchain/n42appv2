@@ -67,15 +67,15 @@ class NftInfoBoard extends StatelessWidget {
 
           // Token ID
           if (tokenId != null && tokenId!.isNotEmpty)
-            _buildInfoRow(context, 'Token ID', '#$tokenId'),
+            _buildInfoRow(context, S.of(context).g_key_nft_token_id, '#$tokenId'),
 
           // NFT 类型
           if (nftType != null && nftType!.isNotEmpty)
-            _buildInfoRow(context, 'Type', nftType!),
+            _buildInfoRow(context, S.of(context).g_key_nft_type, nftType!),
 
           // ERC1155 数量
           if (nftType == 'ERC1155' && balance != null)
-            _buildInfoRow(context, 'Balance', balance!),
+            _buildInfoRow(context, S.of(context).g_key_nft_balance, balance!),
 
           SizedBox(height: ScreenUtil().setWidth(30)),
 
@@ -132,7 +132,7 @@ class NftInfoBoard extends StatelessWidget {
                     children: [
                       Flexible(
                         child: Text(
-                          'Contract: ${_shortenAddress(contractAddress!)}',
+                          '${S.of(context).g_key_nft_contract}: ${_shortenAddress(contractAddress!)}',
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(24),
                             color: AppThemeUtils.getColorByKey(
@@ -337,7 +337,7 @@ class NftInfoBoard extends StatelessWidget {
             ),
             SizedBox(width: ScreenUtil().setWidth(8)),
             Text(
-              'Burn NFT',
+              S.of(context).g_key_nft_burn_title,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28),
                 fontWeight: FontWeight.w600,
