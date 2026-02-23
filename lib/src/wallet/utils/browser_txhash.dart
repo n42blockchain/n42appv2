@@ -1,6 +1,6 @@
 //获取浏览器地址，根据交易hash
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
-import 'package:n42_wallet/src/https/request_url.dart';
+import 'package:n42_wallet/src/http/request_url.dart';
 
 String getBrowserTxHash(String coinType,String txHash,{bool? isTest}){
   coinType=coinType.toUpperCase();

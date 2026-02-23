@@ -6,7 +6,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/http/base_api.dart';
 import 'package:n42_wallet/src/models/message_model.dart';
 import 'package:n42_wallet/src/wallet/models/batch_transfer_model.dart';
 

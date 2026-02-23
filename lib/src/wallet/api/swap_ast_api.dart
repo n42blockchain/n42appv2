@@ -1,5 +1,5 @@
 import 'package:n42_wallet/core/config/app_config.dart';
-import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/http/base_api.dart';
 import 'package:n42_wallet/src/models/message_model.dart';
 
 class SwapAstApi{

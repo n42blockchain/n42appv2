@@ -24,5 +24,5 @@ export 'data/repositories/mining_repository_impl.dart';
 
 // Presentation Layer
 export 'presentation/providers/mining_providers.dart';
-// Pages still live in lib/src/miningV2/ (V2 implementation, migration pending):
+// Pages still live in lib/src/mining_v2/ (V2 implementation, migration pending):
 // export 'presentation/pages/mining_today_v2.dart';

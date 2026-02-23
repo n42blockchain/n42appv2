@@ -12,7 +12,7 @@ import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/shared/di/service_locator.dart';
-import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/http/base_api.dart';
 import 'package:n42_wallet/src/wallet/api/market_api.dart';
 import 'package:n42_wallet/src/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/src/wallet/models/coin_model.dart';

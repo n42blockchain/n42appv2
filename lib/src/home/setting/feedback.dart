@@ -5,7 +5,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/src/component/enums/load.dart';
 import 'package:n42_wallet/src/home/models/appendix_model.dart';
-import 'package:n42_wallet/src/https/ipfs_api.dart';
+import 'package:n42_wallet/src/http/ipfs_api.dart';
 import 'package:n42_wallet/src/login/api/user_info_api.dart';
 import 'package:n42_wallet/src/models/message_model.dart';
 import 'package:n42_wallet/src/utils/regular.dart';

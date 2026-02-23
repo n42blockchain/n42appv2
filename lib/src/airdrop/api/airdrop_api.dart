@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:n42_wallet/src/airdrop/models/airdrop_model.dart';
-import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/http/base_api.dart';
 import 'package:n42_wallet/src/models/message_model.dart';
 
 /// 空投追踪 API

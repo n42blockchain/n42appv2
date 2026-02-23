@@ -1,5 +1,5 @@
 ﻿import 'package:n42_wallet/core/config/app_config.dart';
-import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/http/base_api.dart';
 import 'package:flutter/foundation.dart';
 
 ///@author zhc 2023/2/13 11:21

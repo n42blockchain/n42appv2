@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/http/base_api.dart';
 import 'package:n42_wallet/src/models/message_model.dart';
 import 'package:n42_wallet/src/wallet/utils/chain_util.dart';
 import 'package:crypto/crypto.dart';

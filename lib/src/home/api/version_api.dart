@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/src/home/models/version_info_model.dart';
-import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/http/base_api.dart';
 
 class VersionApi {
   final String url;

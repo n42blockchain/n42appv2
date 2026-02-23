@@ -9,7 +9,7 @@ import 'package:dartz/dartz.dart';
 import 'package:n42_wallet/core/error/failures.dart';
 import 'package:n42_wallet/features/mining/domain/entities/mining_entity.dart';
 import 'package:n42_wallet/features/mining/domain/repositories/mining_repository.dart';
-import 'package:n42_wallet/src/miningV2/provider/mining_v2_provider.dart';
+import 'package:n42_wallet/src/mining_v2/provider/mining_v2_provider.dart';
 
 /// Concrete [MiningRepository] implementation backed by [MiningV2Provider].
 ///

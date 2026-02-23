@@ -1,6 +1,6 @@
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
-import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/http/base_api.dart';
 
 class ExchangeApi{
   late String url;

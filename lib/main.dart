@@ -26,9 +26,9 @@ import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet
 import 'package:n42_wallet/features/mining/data/repositories/mining_repository_impl.dart';
 import 'package:n42_wallet/features/mining/domain/repositories/mining_repository.dart';
 import 'package:n42_wallet/features/mining/presentation/providers/mining_providers.dart';
-import 'package:n42_wallet/src/miningV2/provider/mining_v2_provider.dart';
-import 'package:n42_wallet/src/miningV1/provider/mining_v1_providers.dart';
-import 'package:n42_wallet/src/miningV1/provider/mining_provider.dart' show MiningProvider;
+import 'package:n42_wallet/src/mining_v2/provider/mining_v2_provider.dart';
+import 'package:n42_wallet/src/mining_v1/provider/mining_v1_providers.dart';
+import 'package:n42_wallet/src/mining_v1/provider/mining_provider.dart' show MiningProvider;
 import 'package:n42_wallet/src/utils/app_push_utils.dart';
 import 'package:n42_wallet/src/utils/notfication_utils.dart';
 import 'package:n42_wallet/src/wallet/pages/create_wallet/create/create_one.dart';
@@ -57,7 +57,7 @@ import 'package:n42_wallet/core/security/wallet_data_migration.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:n42_wallet/src/wallet/n42_wallet_bridge.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
-import 'package:n42_wallet/src/https/request_url.dart';
+import 'package:n42_wallet/src/http/request_url.dart';
 
 /// Global ProviderContainer for Riverpod
 /// This is used during the migration phase to bridge Provider and Riverpod

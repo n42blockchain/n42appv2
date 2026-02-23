@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/api_keys_config.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
-import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/http/base_api.dart';
 // [FIX A1] Import OhlcPoint from the model layer, NOT from the UI widget layer.
 import 'package:n42_wallet/src/wallet/models/ohlc_point.dart';
 

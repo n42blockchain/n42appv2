@@ -3,8 +3,8 @@ import 'package:n42_wallet/core/config/api_keys_config.dart';
 import 'package:n42_wallet/core/utils/message_model_bridge.dart';
 import 'package:n42_wallet/core/utils/result.dart';
 import 'package:n42_wallet/src/component/enums/coin_type.dart';
-import 'package:n42_wallet/src/https/base_api.dart';
-import 'package:n42_wallet/src/https/request_url.dart';
+import 'package:n42_wallet/src/http/base_api.dart';
+import 'package:n42_wallet/src/http/request_url.dart';
 import 'package:n42_wallet/src/models/message_model.dart';
 
 class DotApi{

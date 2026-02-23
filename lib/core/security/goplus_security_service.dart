@@ -5,7 +5,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/security/goplus_security_result.dart';
-import 'package:n42_wallet/src/https/base_api.dart';
+import 'package:n42_wallet/src/http/base_api.dart';
 
 /// GoPlus Security API 客户端
 ///
