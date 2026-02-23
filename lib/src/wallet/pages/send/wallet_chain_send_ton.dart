@@ -450,15 +450,6 @@ class _WalletChainSendTonState extends ConsumerState<WalletChainSendTon> {
       if (mounted) setState(() {});
     }
   }
-  void scanQR() async{
-    String? scanValue =await Navigator.push(context, MaterialPageRoute(builder: (context)=>ScanPage()));
-    if (!mounted) return;
-    if(scanValue !=null){
-      toTextEditingController.text=scanValue;
-      toAddressCheck(scanValue);
-    }
-    Navigator.pop(context);
-  }
   Future<void> maxTag()async{
     if(gasLimitLoad==Load.loading)return;
     if(widget.coinModel.coin['isContract']){
@@ -545,17 +536,12 @@ class _WalletChainSendTonState extends ConsumerState<WalletChainSendTon> {
             maxLines: 3,
             height: ScreenUtil().setWidth(170.0),
             errorMessage: toErrorMessage,
-            rightWidget1: Container(
-              width: ScreenUtil().setWidth(60.0),
-              height: ScreenUtil().setWidth(60.0),
-              padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
-              child: Icon(
-                Icons.add,
-                size: ScreenUtil().setWidth(50.0),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-              ),
-            ),
-            rightOnTap1: searchToAddressWidget,
+            rightWidget3: _iconBtn(Icons.qr_code_scanner),
+            rightOnTap3: scanQR,
+            rightWidget1: _iconBtn(Icons.paste_outlined),
+            rightOnTap1: pasteAddress,
+            rightWidget2: _iconBtn(Icons.menu_book_outlined),
+            rightOnTap2: searchToAddressWidget,
             bgColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
           ),
         ],
@@ -712,6 +698,7 @@ class _WalletChainSendTonState extends ConsumerState<WalletChainSendTon> {
                   endIndent: ScreenUtil().setWidth(30.0),
                 ),
                 ownerAddress(),
+                amountUsdWidget(),
               ],
             ),
           ),
@@ -920,6 +907,59 @@ class _WalletChainSendTonState extends ConsumerState<WalletChainSendTon> {
     );
     sheetBottom(context, S.of(context).g_face_match_key1, child);
   }
+  Future<void> scanQR() async {
+    final String? scanValue = await Navigator.push<String>(
+        context, MaterialPageRoute(builder: (_) => ScanPage()));
+    if (!mounted) return;
+    if (scanValue != null) {
+      toTextEditingController.text = scanValue;
+      toAddressCheck(scanValue);
+    }
+  }
+
+  Future<void> pasteAddress() async {
+    final cd = await Clipboard.getData(Clipboard.kTextPlain);
+    if (!mounted) return;
+    if (cd?.text != null && cd!.text != 'null') {
+      toTextEditingController.text = cd.text!;
+      toAddressCheck(cd.text!);
+    }
+  }
+
+  Widget _iconBtn(IconData icon) => Container(
+        width: ScreenUtil().setWidth(50.0),
+        height: ScreenUtil().setWidth(50.0),
+        padding: EdgeInsets.all(ScreenUtil().setWidth(6.0)),
+        child: Icon(
+          icon,
+          size: ScreenUtil().setWidth(38.0),
+          color: AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.mainBlueColor.name),
+        ),
+      );
+
+  Widget amountUsdWidget() {
+    final amount = double.tryParse(valueTextEditingController.text) ?? 0.0;
+    final price = widget.coinModel.coinPrice;
+    if (price <= 0 || amount <= 0) return const SizedBox.shrink();
+    final usd = amount * price;
+    final usdStr = usd < 0.01 ? '< \$0.01' : '\$${usd.toStringAsFixed(2)}';
+    return Padding(
+      padding: EdgeInsets.only(
+        left: ScreenUtil().setWidth(30),
+        bottom: ScreenUtil().setWidth(12),
+      ),
+      child: Text(
+        '≈ $usdStr',
+        style: TextStyle(
+          fontSize: ScreenUtil().setSp(24),
+          color: AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.itemSubtitleTextColor.name),
+        ),
+      ),
+    );
+  }
+
   void searchToAddressWidget() {
     showAddressPickerSheet(
       context,

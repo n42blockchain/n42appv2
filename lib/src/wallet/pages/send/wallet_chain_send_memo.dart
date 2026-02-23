@@ -1,4 +1,5 @@
 import 'package:n42appv2/src/component/enums/load.dart';
+import 'package:n42appv2/src/component/pages/scan_page.dart';
 import 'package:n42appv2/src/models/message_model.dart';
 import 'package:n42appv2/src/sqlite/app_database.dart';
 import 'package:n42appv2/src/utils/data_utils.dart';
@@ -16,6 +17,7 @@ import 'package:n42appv2/src/widgets/app_bar_widget.dart';
 import 'package:n42appv2/src/widgets/button_widget.dart';
 import 'package:n42appv2/src/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42appv2/features/wallet/presentation/providers/transaction_providers.dart';
@@ -330,6 +332,59 @@ class _WalletChainSendMemoState extends ConsumerState<WalletChainSendMemo> {
     FocusScope.of(context).requestFocus(FocusNode());
   }
 
+  Future<void> _scanQR() async {
+    final String? scanValue = await Navigator.push<String>(
+        context, MaterialPageRoute(builder: (_) => ScanPage()));
+    if (!mounted) return;
+    if (scanValue != null) {
+      _toCtrl.text = scanValue;
+      _toAddressCheck(scanValue);
+    }
+  }
+
+  Future<void> _pasteAddress() async {
+    final cd = await Clipboard.getData(Clipboard.kTextPlain);
+    if (!mounted) return;
+    if (cd?.text != null && cd!.text != 'null') {
+      _toCtrl.text = cd.text!;
+      _toAddressCheck(cd.text!);
+    }
+  }
+
+  Widget _iconBtn(IconData icon) => Container(
+        width: ScreenUtil().setWidth(50.0),
+        height: ScreenUtil().setWidth(50.0),
+        padding: EdgeInsets.all(ScreenUtil().setWidth(6.0)),
+        child: Icon(
+          icon,
+          size: ScreenUtil().setWidth(38.0),
+          color: AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.mainBlueColor.name),
+        ),
+      );
+
+  Widget _buildUsdEquivalent() {
+    final amount = double.tryParse(_valueCtrl.text) ?? 0.0;
+    final price = widget.coinModel.coinPrice;
+    if (price <= 0 || amount <= 0) return const SizedBox.shrink();
+    final usd = amount * price;
+    final usdStr = usd < 0.01 ? '< \$0.01' : '\$${usd.toStringAsFixed(2)}';
+    return Padding(
+      padding: EdgeInsets.only(
+        left: ScreenUtil().setWidth(30),
+        bottom: ScreenUtil().setWidth(12),
+      ),
+      child: Text(
+        '≈ $usdStr',
+        style: TextStyle(
+          fontSize: ScreenUtil().setSp(24),
+          color: AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.itemSubtitleTextColor.name),
+        ),
+      ),
+    );
+  }
+
   // ────────────────────────────────────────── build ─────────────────────────
 
   @override
@@ -407,18 +462,12 @@ class _WalletChainSendMemoState extends ConsumerState<WalletChainSendMemo> {
             errorMessage: _toError,
             bgColor: AppThemeUtils.getColorByKey(
                 context, AppThemeKeys.itemBgColor.name),
-            rightWidget1: Container(
-              width: ScreenUtil().setWidth(60.0),
-              height: ScreenUtil().setWidth(60.0),
-              padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
-              child: Icon(
-                Icons.add,
-                size: ScreenUtil().setWidth(50.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-              ),
-            ),
-            rightOnTap1: _showAddressPicker,
+            rightWidget3: _iconBtn(Icons.qr_code_scanner),
+            rightOnTap3: _scanQR,
+            rightWidget1: _iconBtn(Icons.paste_outlined),
+            rightOnTap1: _pasteAddress,
+            rightWidget2: _iconBtn(Icons.menu_book_outlined),
+            rightOnTap2: _showAddressPicker,
           ),
         ],
       ),
@@ -543,6 +592,7 @@ class _WalletChainSendMemoState extends ConsumerState<WalletChainSendMemo> {
                   endIndent: ScreenUtil().setWidth(20.0),
                 ),
                 _buildOwnerAddress(),
+                _buildUsdEquivalent(),
               ],
             ),
           ),

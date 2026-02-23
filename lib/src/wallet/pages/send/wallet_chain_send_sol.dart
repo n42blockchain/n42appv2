@@ -468,14 +468,57 @@ class _WalletChainSendSolState extends ConsumerState<WalletChainSendSol> {
       if (mounted) setState(() {});
     }
   }
-  void scanQR() async{
-    String? scanValue =await Navigator.push(context, MaterialPageRoute(builder: (context)=>ScanPage()));
+  void scanQR() async {
+    final String? scanValue = await Navigator.push<String>(
+        context, MaterialPageRoute(builder: (_) => ScanPage()));
     if (!mounted) return;
-    if(scanValue !=null){
-      toTextEditingController.text=scanValue;
+    if (scanValue != null) {
+      toTextEditingController.text = scanValue;
       toAddressCheck(scanValue);
     }
-    Navigator.pop(context);
+  }
+
+  Future<void> pasteAddress() async {
+    final cd = await Clipboard.getData(Clipboard.kTextPlain);
+    if (!mounted) return;
+    if (cd?.text != null && cd!.text != 'null') {
+      toTextEditingController.text = cd.text!;
+      toAddressCheck(cd.text!);
+    }
+  }
+
+  Widget _iconBtn(IconData icon) => Container(
+        width: ScreenUtil().setWidth(50.0),
+        height: ScreenUtil().setWidth(50.0),
+        padding: EdgeInsets.all(ScreenUtil().setWidth(6.0)),
+        child: Icon(
+          icon,
+          size: ScreenUtil().setWidth(38.0),
+          color: AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.mainBlueColor.name),
+        ),
+      );
+
+  Widget amountUsdWidget() {
+    final amount = double.tryParse(valueTextEditingController.text) ?? 0.0;
+    final price = widget.coinModel.coinPrice;
+    if (price <= 0 || amount <= 0) return const SizedBox.shrink();
+    final usd = amount * price;
+    final usdStr = usd < 0.01 ? '< \$0.01' : '\$${usd.toStringAsFixed(2)}';
+    return Padding(
+      padding: EdgeInsets.only(
+        left: ScreenUtil().setWidth(30),
+        bottom: ScreenUtil().setWidth(12),
+      ),
+      child: Text(
+        '≈ $usdStr',
+        style: TextStyle(
+          fontSize: ScreenUtil().setSp(24),
+          color: AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.itemSubtitleTextColor.name),
+        ),
+      ),
+    );
   }
   Future<void> maxTag()async{
     if(gasLimitLoad==Load.loading)return;
@@ -584,71 +627,13 @@ class _WalletChainSendSolState extends ConsumerState<WalletChainSendSol> {
             maxLines: 3,
             height: ScreenUtil().setWidth(170.0),
             errorMessage: toErrorMessage,
-            rightWidget1: Container(
-              width: ScreenUtil().setWidth(60.0),
-              height: ScreenUtil().setWidth(60.0),
-              padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
-              child: Icon(
-                Icons.add,
-                size: ScreenUtil().setWidth(50.0),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-              ),
-            ),
-            rightOnTap1: searchToAddressWidget,
+            rightWidget3: _iconBtn(Icons.qr_code_scanner),
+            rightOnTap3: scanQR,
+            rightWidget1: _iconBtn(Icons.paste_outlined),
+            rightOnTap1: pasteAddress,
+            rightWidget2: _iconBtn(Icons.menu_book_outlined),
+            rightOnTap2: searchToAddressWidget,
             bgColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-            /*
-            rightWidget3: widget.coinModel.coin['blockchainType']==BlockchainType.Ethereum.name?Container(
-              width: ScreenUtil().setWidth(60.0),
-              height: ScreenUtil().setWidth(60.0),
-              padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
-              child: Icon(
-                Icons.face_outlined,
-                size: ScreenUtil().setWidth(50.0),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-              ),
-            ):null,
-            rightOnTap3: widget.coinModel.coin['blockchainType']==BlockchainType.Ethereum.name?faceMatchTypeWidget:null,
-            rightWidget1: Container(
-              width: ScreenUtil().setWidth(60.0),
-              height: ScreenUtil().setWidth(60.0),
-              padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
-              child: Image.asset(
-                "assets/wallet/scan.png",
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                width: ScreenUtil().setWidth(50.0),
-                height: ScreenUtil().setWidth(50.0),
-              ),
-            ),
-            rightWidget2: Container(
-              //margin: EdgeInsets.only(left: scr.setWidth(10.0)),
-              height: ScreenUtil().setWidth(60.0),
-              padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
-              decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(60.0),)),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                S.of(context).g_key_166,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26.0),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
-                ),
-              ),
-            ),
-            rightOnTap1: scanQR,
-            rightOnTap2: ()async{
-              ClipboardData? cd = await Clipboard.getData(Clipboard.kTextPlain);
-              if(cd !=null){
-                if(cd.text !=null && cd.text != "null"){
-                  toTextEditingController.text=cd.text??"";
-                  setState(() {
-                  });
-                  toAddressCheck(cd.text??"");
-                }
-              }
-            },
-            */
           ),
         ],
       ),
@@ -746,6 +731,7 @@ class _WalletChainSendSolState extends ConsumerState<WalletChainSendSol> {
                   endIndent: ScreenUtil().setWidth(20.0),
                 ),
                 ownerAddress(),
+                amountUsdWidget(),
               ],
             ),
           ),
