@@ -5,7 +5,6 @@ import 'package:n42appv2/src/utils/data_utils.dart';
 import 'package:n42appv2/src/utils/regular.dart';
 import 'package:n42appv2/presentation/themes/theme_adapter.dart';
 import 'package:n42appv2/core/utils/toast_utils.dart';
-import 'package:n42appv2/src/wallet/api/token_view_api.dart';
 import 'package:n42appv2/src/wallet/api/transfer_api.dart';
 import 'package:n42appv2/src/wallet/models/coin_model.dart';
 import 'package:n42appv2/src/wallet/models/transation_record_model.dart';
@@ -53,12 +52,6 @@ class _WalletChainSendMemoState extends ConsumerState<WalletChainSendMemo> {
   DataUtils get dataUtils {
     _dataUtils ??= DataUtils();
     return _dataUtils!;
-  }
-
-  TokenViewApi? _tokenViewApi;
-  TokenViewApi get tokenViewApi {
-    _tokenViewApi ??= TokenViewApi();
-    return _tokenViewApi!;
   }
 
   final TextEditingController _toCtrl = TextEditingController();
@@ -225,10 +218,12 @@ class _WalletChainSendMemoState extends ConsumerState<WalletChainSendMemo> {
         : widget.coinModel.balance;
 
     if (_totalGasPrice > uBalance) {
+      ToastUtils.show(S.current.g_key_47);
       setState(() => _load = Load.finish);
       return;
     }
     if (widget.coinModel.balance == BigInt.zero) {
+      ToastUtils.show(S.current.g_key_47);
       setState(() => _load = Load.finish);
       return;
     }
@@ -299,7 +294,7 @@ class _WalletChainSendMemoState extends ConsumerState<WalletChainSendMemo> {
       _errorMessage = e.toString();
       // 对于该链暂不支持的情况，展示友好提示
       final friendly = _isFriendlyError(e.toString())
-          ? '该链暂不支持转账，敬请期待'
+          ? S.current.g_key_chain_transfer_not_supported
           : e.toString();
       ToastUtils.show(friendly);
     } finally {
@@ -315,7 +310,7 @@ class _WalletChainSendMemoState extends ConsumerState<WalletChainSendMemo> {
     return keywords.any(lower.contains);
   }
 
-  Future<void> _maxTag() async {
+  void _maxTag() {
     if (widget.coinModel.coin['isContract'] == true) {
       _valueCtrl.text = widget.coinModel.balanceStringAll();
       _transferValue = widget.coinModel.balance;
@@ -589,7 +584,7 @@ class _WalletChainSendMemoState extends ConsumerState<WalletChainSendMemo> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Memo / Note (optional)',
+            S.of(context).g_key_send_memo_label,
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.mainTextColor.name),
@@ -601,7 +596,7 @@ class _WalletChainSendMemoState extends ConsumerState<WalletChainSendMemo> {
             context,
             controller: _memoCtrl,
             focusNode: _memoNode,
-            hintText: 'Memo / Note',
+            hintText: S.of(context).g_key_send_memo_hint,
             onEditingComplete: () =>
                 FocusScope.of(context).requestFocus(FocusNode()),
             maxLines: 2,

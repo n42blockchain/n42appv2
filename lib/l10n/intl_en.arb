@@ -1826,4 +1826,8 @@
   "g_portfolio_all_holdings": "All Holdings"
 ,
   "g_version_later": "Later"
+,
+  "g_key_send_memo_label": "Memo / Note (optional)",
+  "g_key_send_memo_hint": "Memo / Note",
+  "g_key_chain_transfer_not_supported": "This chain does not support transfers yet, stay tuned"
 }

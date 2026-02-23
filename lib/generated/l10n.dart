@@ -15483,6 +15483,36 @@ class S {
   String get g_version_later {
     return Intl.message('Later', name: 'g_version_later', desc: '', args: []);
   }
+
+  /// `Memo / Note (optional)`
+  String get g_key_send_memo_label {
+    return Intl.message(
+      'Memo / Note (optional)',
+      name: 'g_key_send_memo_label',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Memo / Note`
+  String get g_key_send_memo_hint {
+    return Intl.message(
+      'Memo / Note',
+      name: 'g_key_send_memo_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This chain does not support transfers yet, stay tuned`
+  String get g_key_chain_transfer_not_supported {
+    return Intl.message(
+      'This chain does not support transfers yet, stay tuned',
+      name: 'g_key_chain_transfer_not_supported',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
