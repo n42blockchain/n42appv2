@@ -16,9 +16,5 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">localhost</domain>
         <domain includeSubdomains="true">10.0.2.2</domain>
-        <!-- N42 测试节点 (仅开发阶段，正式发布前应移除或改用 HTTPS) -->
-        <domain includeSubdomains="true">5.161.252.59</domain>
-        <domain includeSubdomains="true">54.243.83.152</domain>
-        <domain includeSubdomains="true">18.170.108.78</domain>
     </domain-config>
 </network-security-config>
