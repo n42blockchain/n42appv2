@@ -256,55 +256,54 @@ class _SplashTagline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isAllCaps =
+        variant.mainText == variant.mainText.toUpperCase() &&
+        variant.mainText.contains(RegExp(r'[A-Z]'));
+
+    // ── 标签行：topLabel + mainText + midLabel 拼成一段富文本 ──
+    // 空间足够时自然排在一行；太长则自动换行
+    final labelSpans = <InlineSpan>[
+      if (variant.topLabel != null) ...[
+        TextSpan(
+          text: '${variant.topLabel} ',
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(22),
+            fontWeight: FontWeight.w500,
+            color: Colors.white.withValues(alpha: 0.75),
+            letterSpacing: 0.3,
+          ),
+        ),
+      ],
+      TextSpan(
+        text: variant.mainText,
+        style: TextStyle(
+          fontSize: ScreenUtil().setSp(36),
+          fontWeight: FontWeight.w800,
+          color: Colors.white,
+          letterSpacing: isAllCaps ? 2.0 : 0.5,
+        ),
+      ),
+      if (variant.midLabel != null)
+        TextSpan(
+          text: ' ${variant.midLabel}',
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(22),
+            fontWeight: FontWeight.w500,
+            color: Colors.white.withValues(alpha: 0.75),
+            letterSpacing: 0.3,
+          ),
+        ),
+    ];
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // 上方小标签
-        if (variant.topLabel != null) ...[
-          Text(
-            variant.topLabel!,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(22),
-              fontWeight: FontWeight.w500,
-              color: Colors.white.withValues(alpha: 0.75),
-              letterSpacing: 0.5,
-              height: 1.3,
-            ),
-          ),
-          SizedBox(height: ScreenUtil().setWidth(4)),
-        ],
-
-        // 主体大字
-        Text(
-          variant.mainText,
+        // 标签行（尽量一行显示，放不下自动换行）
+        Text.rich(
+          TextSpan(children: labelSpans),
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(36),
-            fontWeight: FontWeight.w800,
-            color: Colors.white,
-            letterSpacing: variant.mainText == variant.mainText.toUpperCase()
-                ? 2.0   // 全大写时加字间距（如 "OWNS"）
-                : 0.5,
-            height: 1.15,
-          ),
+          softWrap: true,
         ),
-
-        // 中间小标签（如 "Matters" / "Won't Forget"）
-        if (variant.midLabel != null) ...[
-          SizedBox(height: ScreenUtil().setWidth(4)),
-          Text(
-            variant.midLabel!,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(22),
-              fontWeight: FontWeight.w500,
-              color: Colors.white.withValues(alpha: 0.75),
-              letterSpacing: 0.5,
-              height: 1.3,
-            ),
-          ),
-        ],
 
         // 副标题（中/日/韩等表意文字加大字间距）
         if (variant.subText != null) ...[
