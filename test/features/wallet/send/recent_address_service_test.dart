@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/wallet/services/recent_address_service.dart';
+import 'package:n42_wallet/features/wallet/services/recent_address_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {

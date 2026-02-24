@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/hardware_wallet/models/hardware_wallet_models.dart';
+import 'package:n42_wallet/features/hardware_wallet/models/hardware_wallet_models.dart';
 
 void main() {
   group('HardwareWalletModels Tests', () {

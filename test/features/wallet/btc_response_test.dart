@@ -2,7 +2,7 @@
 // Pure Dart data classes — no platform dependencies.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/wallet/models/transaction/btc_response.dart';
+import 'package:n42_wallet/features/wallet/models/transaction/btc_response.dart';
 
 const _kTxrefJson = <String, dynamic>{
   'tx_hash': '0xabcdef1234567890',

@@ -2,7 +2,7 @@
 // Pure Dart — only intl and decimal deps, no platform dependencies.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/utils/regular.dart';
+import 'package:n42_wallet/features/utils/regular.dart';
 
 void main() {
   final reg = Regular();

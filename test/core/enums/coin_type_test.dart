@@ -6,7 +6,7 @@
 // Author: Jiang Yiwei
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/component/enums/coin_type.dart';
+import 'package:n42_wallet/features/component/enums/coin_type.dart';
 
 void main() {
   group('CoinType Enum', () {

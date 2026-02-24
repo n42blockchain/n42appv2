@@ -2,7 +2,7 @@
 // These nested classes have no platform dependencies (no AppGlobals, no GetIt).
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/wallet/models/btc_transaction_recode_model.dart';
+import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
 
 void main() {
   // ─────────────────────────────────────────────────

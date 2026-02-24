@@ -2,7 +2,7 @@
 // AddressValidator.getAddressPreview — all pure Dart with no platform deps.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/wallet/utils/address_validator.dart';
+import 'package:n42_wallet/features/wallet/utils/validation/address_validator.dart';
 
 void main() {
   // ─────────────────────────────────────────────────

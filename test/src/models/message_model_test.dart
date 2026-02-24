@@ -2,7 +2,7 @@
 // Minimal pure Dart class — no platform dependencies.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/models/message_model.dart';
+import 'package:n42_wallet/features/models/message_model.dart';
 
 void main() {
   group('MessageModel default constructor', () {

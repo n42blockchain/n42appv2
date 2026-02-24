@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/core/security/phishing_detector.dart';
+import 'package:n42_wallet/core/security/phishing_detector.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {

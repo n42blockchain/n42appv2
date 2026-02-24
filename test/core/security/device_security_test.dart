@@ -6,7 +6,7 @@
 // Author: Jiang Yiwei
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/core/security/device_security.dart';
+import 'package:n42_wallet/core/security/device_security.dart';
 
 void main() {
   group('DeviceSecurityService', () {

@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/core/utils/result.dart';
+import 'package:n42_wallet/core/utils/result.dart';
 
 void main() {
   // ---------------------------------------------------------------------------

@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart' show Locale;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:n42appv2/core/providers/core_providers.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {

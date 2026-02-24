@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/wallet/pages/aa/session_key_manage_page.dart';
+import 'package:n42_wallet/features/wallet/pages/aa/session_key_models.dart';
 
 void main() {
   group('SessionKeyPermission Tests', () {

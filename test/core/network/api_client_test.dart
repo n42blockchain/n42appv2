@@ -3,8 +3,8 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:dio/dio.dart';
 
-import 'package:n42appv2/core/network/api_client.dart';
-import 'package:n42appv2/core/security/secure_storage.dart';
+import 'package:n42_wallet/core/network/api_client.dart';
+import 'package:n42_wallet/core/security/secure_storage.dart';
 
 import 'api_client_test.mocks.dart';
 

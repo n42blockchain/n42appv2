@@ -4,7 +4,7 @@
 //   NonceKeys — BigInt nonce key space identifiers.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/wallet/aa/core/aa_constants.dart';
+import 'package:n42_wallet/features/wallet/aa/core/aa_constants.dart';
 
 void main() {
   // ─────────────────────────────────────────────────

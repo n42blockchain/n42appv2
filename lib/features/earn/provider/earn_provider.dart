@@ -106,6 +106,10 @@ class EarnState {
 
   // ── 汇总计算 ───────────────────────────────────────────────────────────────
 
+  /// 所有活跃仓位的总质押原始链上数量（最小单位，BigInt 累加）
+  BigInt get totalStakedRaw =>
+      activePositions.fold(BigInt.zero, (sum, p) => sum + p.stakedAmount);
+
   /// 所有活跃/解绑中仓位的总质押 USD 价值
   double get totalStakedUsd => activePositions.fold(0.0, (sum, p) {
     final amount = tokenAmount(p.stakedAmount, p.protocol.chainType);

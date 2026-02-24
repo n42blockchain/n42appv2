@@ -3,7 +3,7 @@
 // Note: only fromJson (snake_case keys) — no toJson method.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/wallet/models/ast_swap/swap_ast_order_model.dart';
+import 'package:n42_wallet/features/wallet/models/ast_swap/swap_ast_order_model.dart';
 
 const _kFullJson = <String, dynamic>{
   'id': 42,

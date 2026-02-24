@@ -3,9 +3,9 @@
 // All models store URL/metadata and support fromJson/getMap round-trips.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/browser/models/browser_collection_model.dart';
-import 'package:n42appv2/src/browser/models/browser_history_model.dart';
-import 'package:n42appv2/src/browser/models/browser_search_history_model.dart';
+import 'package:n42_wallet/features/browser/models/browser_collection_model.dart';
+import 'package:n42_wallet/features/browser/models/browser_history_model.dart';
+import 'package:n42_wallet/features/browser/models/browser_search_history_model.dart';
 
 void main() {
   // ─────────────────────────────────────────────────

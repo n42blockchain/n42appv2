@@ -2,7 +2,7 @@
 // Pure Dart configuration classes — no platform-level side effects.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/wallet/models/aggregated_token.dart';
+import 'package:n42_wallet/features/wallet/models/aggregated_token.dart';
 
 void main() {
   // ─────────────────────────────────────────────────

@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/core/network/circuit_breaker_interceptor.dart';
+import 'package:n42_wallet/core/network/circuit_breaker_interceptor.dart';
 
 // ---------------------------------------------------------------------------
 // Mock HTTP adapter (same pattern as retry_interceptor_test.dart)

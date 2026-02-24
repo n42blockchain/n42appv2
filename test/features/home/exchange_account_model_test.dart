@@ -2,7 +2,7 @@
 // Pure Dart data class — no platform dependencies.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/home/models/exchange_account_model.dart';
+import 'package:n42_wallet/features/home/models/exchange_account_model.dart';
 
 void main() {
   // ─────────────────────────────────────────────────

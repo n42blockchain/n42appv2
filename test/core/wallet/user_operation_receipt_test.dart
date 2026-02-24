@@ -4,7 +4,7 @@
 //   the private _parseBigInt / _parseInt helpers exercised through fromJson.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/wallet/aa/models/user_operation_receipt.dart';
+import 'package:n42_wallet/features/wallet/aa/models/user_operation_receipt.dart';
 
 // ─────────────────────────────────────────────────
 // Helpers

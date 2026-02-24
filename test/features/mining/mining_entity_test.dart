@@ -5,7 +5,7 @@
 // MiningStatusEntity; MiningRewardsEntity; MiningStatisticsEntity.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/features/mining/domain/entities/mining_entity.dart';
+import 'package:n42_wallet/features/mining/domain/entities/mining_entity.dart';
 
 void main() {
   // ─────────────────────────────────────────────────

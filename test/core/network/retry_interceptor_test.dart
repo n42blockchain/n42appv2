@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/core/network/retry_interceptor.dart';
+import 'package:n42_wallet/core/network/retry_interceptor.dart';
 
 /// A controllable HTTP adapter for testing.
 ///

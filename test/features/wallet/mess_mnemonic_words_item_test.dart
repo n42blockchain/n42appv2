@@ -2,7 +2,7 @@
 // Pure Dart data class — no platform dependencies.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/wallet/models/mess_mnemonic_words_item.dart';
+import 'package:n42_wallet/features/wallet/models/mess_mnemonic_words_item.dart';
 
 void main() {
   group('MessMnemonicWordsItem constructor', () {

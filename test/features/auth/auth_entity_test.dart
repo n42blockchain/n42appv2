@@ -4,7 +4,7 @@
 // SecuritySettingsEntity (defaults, copyWith, equality).
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/features/auth/domain/entities/auth_entity.dart';
+import 'package:n42_wallet/features/auth/domain/entities/auth_entity.dart';
 
 void main() {
   // ─────────────────────────────────────────────────

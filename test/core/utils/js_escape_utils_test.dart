@@ -2,7 +2,7 @@
 // Verifies each special character substitution and passthrough behaviour.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/core/utils/js_escape_utils.dart';
+import 'package:n42_wallet/core/utils/js_escape_utils.dart';
 
 void main() {
   group('JsEscapeUtils.escapeJs', () {

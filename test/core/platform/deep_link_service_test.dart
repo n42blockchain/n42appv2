@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/core/platform/deep_link_service.dart';
+import 'package:n42_wallet/core/platform/deep_link_service.dart';
 
 void main() {
   group('DeepLinkService - URI Parsing', () {

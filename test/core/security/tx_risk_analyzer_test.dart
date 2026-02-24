@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/core/security/tx_risk_analyzer.dart';
+import 'package:n42_wallet/core/security/tx_risk_analyzer.dart';
 
 void main() {
   group('TxRiskAnalyzer', () {

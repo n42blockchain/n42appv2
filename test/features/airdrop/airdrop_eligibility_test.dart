@@ -4,8 +4,8 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/airdrop/models/airdrop_model.dart';
-import 'package:n42appv2/src/models/message_model.dart';
+import 'package:n42_wallet/features/airdrop/models/airdrop_model.dart';
+import 'package:n42_wallet/features/models/message_model.dart';
 
 void main() {
   group('Airdrop Eligibility Bug-Fix Tests', () {

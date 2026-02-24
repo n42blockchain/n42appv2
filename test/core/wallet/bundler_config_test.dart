@@ -3,7 +3,7 @@
 //   BundlerHealthCheck — no network, platform, or native dependencies.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/wallet/aa/bundler/bundler_config.dart';
+import 'package:n42_wallet/features/wallet/aa/bundler/bundler_config.dart';
 
 void main() {
   // ─────────────────────────────────────────────────

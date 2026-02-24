@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/loyalty/models/loyalty_model.dart';
+import 'package:n42_wallet/features/loyalty/models/loyalty_model.dart';
 
 void main() {
   group('LoyaltyModel Tests', () {

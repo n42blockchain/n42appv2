@@ -10,9 +10,9 @@
 //   - EnsService cache behaviour (via stub TokenViewApi)
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/models/message_model.dart';
-import 'package:n42appv2/src/wallet/api/token_view_api.dart';
-import 'package:n42appv2/src/wallet/services/ens_service.dart';
+import 'package:n42_wallet/features/models/message_model.dart';
+import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 
 // ---------------------------------------------------------------------------
 // Stub TokenViewApi — returns controlled responses without network I/O
@@ -178,8 +178,8 @@ void main() {
       expect(EnsService.chainSupportsEns('ARB'), isTrue);
     });
 
-    test('SOL is NOT supported', () {
-      expect(EnsService.chainSupportsEns('SOL'), isFalse);
+    test('SOL is supported (SNS + UD)', () {
+      expect(EnsService.chainSupportsEns('SOL'), isTrue);
     });
 
     test('BTC is NOT supported', () {

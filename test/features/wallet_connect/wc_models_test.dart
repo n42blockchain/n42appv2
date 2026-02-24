@@ -8,8 +8,8 @@
 //   - WCEthSignMessage (enum values and construction)
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/wallet_connect/models/wc_eth_sign_transcation.dart';
-import 'package:n42appv2/src/wallet_connect/models/wc_eth_sign_message.dart';
+import 'package:n42_wallet/features/wallet_connect/models/wc_eth_sign_transcation.dart';
+import 'package:n42_wallet/features/wallet_connect/models/wc_eth_sign_message.dart';
 
 void main() {
   // -------------------------------------------------------------------------

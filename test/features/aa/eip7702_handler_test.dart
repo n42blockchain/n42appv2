@@ -6,12 +6,12 @@
 import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:web3dart/web3dart.dart';
-import 'package:n42appv2/src/wallet/aa/core/aa_config.dart';
-import 'package:n42appv2/src/wallet/aa/models/smart_account.dart';
-import 'package:n42appv2/src/wallet/aa/models/user_operation.dart';
-import 'package:n42appv2/src/wallet/aa/utils/eip7702_handler.dart';
-import 'package:n42appv2/src/wallet/aa/account/account_types/simple7702_account.dart';
-import 'package:n42appv2/src/wallet/aa/builder/calldata_builder.dart';
+import 'package:n42_wallet/features/wallet/aa/core/aa_config.dart';
+import 'package:n42_wallet/features/wallet/aa/models/smart_account.dart';
+import 'package:n42_wallet/features/wallet/aa/models/user_operation.dart';
+import 'package:n42_wallet/features/wallet/aa/utils/eip7702_handler.dart';
+import 'package:n42_wallet/features/wallet/aa/account/account_types/simple7702_account.dart';
+import 'package:n42_wallet/features/wallet/aa/builder/calldata_builder.dart';
 
 // ─── Test helpers ────────────────────────────────────────────────────────────
 

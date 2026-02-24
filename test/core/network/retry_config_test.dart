@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/core/network/retry_config.dart';
-import 'package:n42appv2/core/network/retry_interceptor.dart';
+import 'package:n42_wallet/core/network/retry_config.dart';
+import 'package:n42_wallet/core/network/retry_interceptor.dart';
 
 void main() {
   group('RetryConfig presets', () {

@@ -5,7 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/wallet/widgets/feature_entry_cards.dart';
+import 'package:n42_wallet/features/wallet/widgets/feature_entry_cards.dart';
 
 import '../helpers/widget_test_helpers.dart';
 

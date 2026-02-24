@@ -8,7 +8,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:decimal/decimal.dart';
-import 'package:n42appv2/src/wallet/utils/chain_util.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 
 void main() {
   // ─────────────────────────────────────────────────

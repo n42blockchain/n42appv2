@@ -3,7 +3,7 @@
 // BrowserSettingsEntity (defaults, copyWith), TabEntity (copyWith).
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/features/browser/domain/entities/browser_entity.dart';
+import 'package:n42_wallet/features/browser/domain/entities/browser_entity.dart';
 
 void main() {
   final ts = DateTime.utc(2024, 6, 1, 12, 0);

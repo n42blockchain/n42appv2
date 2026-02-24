@@ -6,8 +6,8 @@
 // T-5: Tests for AirdropFilter state logic (P2 filter/notification)
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/airdrop/models/airdrop_model.dart';
-import 'package:n42appv2/src/airdrop/provider/airdrop_provider.dart';
+import 'package:n42_wallet/features/airdrop/models/airdrop_model.dart';
+import 'package:n42_wallet/features/airdrop/provider/airdrop_provider.dart';
 
 void main() {
   group('AirdropFilter default state', () {

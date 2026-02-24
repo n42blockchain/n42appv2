@@ -10,7 +10,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/data/models/user_info.dart';
+import 'package:n42_wallet/data/models/user_info.dart';
 
 void main() {
   group('UserInfo.fromJson', () {

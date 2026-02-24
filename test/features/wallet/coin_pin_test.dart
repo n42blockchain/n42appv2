@@ -13,7 +13,7 @@
 //   - _buildCoinListView pinnedCount computation logic
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/wallet/models/wallet_info.dart';
+import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 
 // ──────────────────────────────────────────────────────────────────────────────
 // Minimal CoinModel stub (avoids platform-channel imports of the real class)

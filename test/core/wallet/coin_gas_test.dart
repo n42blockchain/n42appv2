@@ -4,7 +4,7 @@
 // unknown string (index==-1 → 50000), and enum values not in switch (→ 0).
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/wallet/utils/coin_gas.dart';
+import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 
 void main() {
   // ─────────────────────────────────────────────────

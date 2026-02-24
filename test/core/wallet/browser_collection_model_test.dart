@@ -2,7 +2,7 @@
 // Pure Dart model — no platform deps.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/browser/models/browser_collection_model.dart';
+import 'package:n42_wallet/features/browser/models/browser_collection_model.dart';
 
 void main() {
   // ─────────────────────────────────────────────────
@@ -101,9 +101,9 @@ void main() {
       expect(map['desc'], 'desc');
     });
 
-    test('returns exactly 3 keys', () {
+    test('returns exactly 5 keys', () {
       final m = BrowserCollectionModel('u', 'n', 'd');
-      expect(m.getMapDb().length, 3);
+      expect(m.getMapDb().length, 5);
     });
 
     test('reflects current field values', () {
@@ -137,9 +137,9 @@ void main() {
       expect(map['desc'], 'A site');
     });
 
-    test('returns exactly 4 keys', () {
+    test('returns exactly 6 keys', () {
       final m = BrowserCollectionModel('u', 'n', 'd');
-      expect(m.getMap().length, 4);
+      expect(m.getMap().length, 6);
     });
 
     test('id null when not set', () {

@@ -2,7 +2,7 @@
 // Pure Dart data classes — no platform dependencies.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/wallet/models/transaction/btc_tran_detail.dart';
+import 'package:n42_wallet/features/wallet/models/transaction/btc_tran_detail.dart';
 
 const _kInputJson = <String, dynamic>{
   'prev_hash': 'prevTxHash001',

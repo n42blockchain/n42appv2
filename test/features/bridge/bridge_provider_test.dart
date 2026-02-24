@@ -13,8 +13,8 @@
 //   4. Pure routing-logic helpers extracted locally
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/bridge/models/bridge_models.dart';
-import 'package:n42appv2/src/bridge/provider/bridge_provider.dart';
+import 'package:n42_wallet/features/bridge/models/bridge_models.dart';
+import 'package:n42_wallet/features/bridge/provider/bridge_provider.dart';
 
 // ---------------------------------------------------------------------------
 // Pure-function mirrors of BridgeProvider business logic
@@ -54,8 +54,8 @@ void main() {
       expect(BridgeState.values, contains(BridgeState.error));
     });
 
-    test('has exactly 8 values', () {
-      expect(BridgeState.values.length, 8);
+    test('has exactly 9 values', () {
+      expect(BridgeState.values.length, 9);
     });
   });
 

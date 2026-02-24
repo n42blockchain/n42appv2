@@ -3,7 +3,7 @@
 // flustars_flutter3's DateUtil which requires Flutter binding initialisation.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/utils/data_utils.dart';
+import 'package:n42_wallet/features/utils/data_utils.dart';
 
 void main() {
   final utils = DataUtils();

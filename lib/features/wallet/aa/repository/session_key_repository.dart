@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../../sqlite/app_database.dart';
-import '../../pages/aa/session_key_manage_page.dart';
+import '../../pages/aa/session_key_models.dart';
 
 /// SQLite-backed repository for [SessionKeyData].
 ///

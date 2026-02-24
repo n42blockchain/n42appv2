@@ -2,7 +2,7 @@
 // Uses the crypto + convert packages — pure Dart, no platform dependencies.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/utils/md5_util.dart';
+import 'package:n42_wallet/features/utils/md5_util.dart';
 
 void main() {
   final util = Md5Util();

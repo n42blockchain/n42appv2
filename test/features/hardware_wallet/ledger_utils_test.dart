@@ -11,7 +11,7 @@
 // instantiating any platform-dependent services.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/hardware_wallet/models/hardware_wallet_models.dart';
+import 'package:n42_wallet/features/hardware_wallet/models/hardware_wallet_models.dart';
 
 // ---------------------------------------------------------------------------
 // Local BIP-32 path utility (mirrors what ledger_service would use internally)

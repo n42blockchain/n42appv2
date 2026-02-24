@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/core/error/failures.dart';
+import 'package:n42_wallet/core/error/failures.dart';
 
 void main() {
   group('Failure', () {

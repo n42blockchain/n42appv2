@@ -2,7 +2,7 @@
 // Pure Dart data class — no platform dependencies.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/wallet/models/transaction/common_response_item_model.dart';
+import 'package:n42_wallet/features/wallet/models/transaction/common_response_item_model.dart';
 
 const _kFullJson = {
   'blockNumber': '10475175',

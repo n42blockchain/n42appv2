@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/wallet/utils/all_chain.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/chain_url_registry.dart';
 
 // Alias for easier usage in tests
 Map<String, dynamic> get all_chain => allChainUrlMap;

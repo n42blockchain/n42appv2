@@ -11,7 +11,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/miningV2/utils/mining_utils.dart';
+import 'package:n42_wallet/features/mining_v2/utils/mining_utils.dart';
 
 void main() {
   group('miningCalculateReward — pure math function', () {

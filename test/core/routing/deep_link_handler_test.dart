@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/core/platform/deep_link_service.dart';
-import 'package:n42appv2/core/routing/deep_link_handler.dart';
+import 'package:n42_wallet/core/platform/deep_link_service.dart';
+import 'package:n42_wallet/core/routing/deep_link_handler.dart';
 
 /// A minimal mock of DeepLinkService for testing DeepLinkHandler.
 ///

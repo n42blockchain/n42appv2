@@ -4,8 +4,8 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/core/security/goplus_security_result.dart';
-import 'package:n42appv2/core/security/goplus_security_service.dart';
+import 'package:n42_wallet/core/security/goplus_security_result.dart';
+import 'package:n42_wallet/core/security/goplus_security_service.dart';
 
 void main() {
   // ── GoplusSecurityResult.fromTokenJson ───────────────────────────────────

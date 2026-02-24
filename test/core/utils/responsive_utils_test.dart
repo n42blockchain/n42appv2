@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/core/utils/responsive_utils.dart';
+import 'package:n42_wallet/core/utils/responsive_utils.dart';
 
 void main() {
   group('ResponsiveUtils', () {

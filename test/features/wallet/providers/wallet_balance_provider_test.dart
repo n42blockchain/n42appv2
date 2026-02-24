@@ -10,7 +10,7 @@
 // directly, and verify the try-catch guard behaviour via a lightweight fake.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 
 /// Lightweight fake that mirrors the relevant slice of WalletActionProvider.
 class FakeWapAdapter {

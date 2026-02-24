@@ -9,7 +9,7 @@
 // functions so they can be tested without network or platform dependencies.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/miningV2/models/mining_withdrawals_daily.dart';
+import 'package:n42_wallet/features/mining_v2/models/mining_withdrawals_daily.dart';
 
 // ---------------------------------------------------------------------------
 // Pure mirrors of logic from mining_api.dart

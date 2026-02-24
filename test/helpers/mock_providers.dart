@@ -8,8 +8,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
-import 'package:n42appv2/core/error/failures.dart';
-import 'package:n42appv2/domain/entities/wallet.dart' as domain;
+import 'package:n42_wallet/core/error/failures.dart';
+import 'package:n42_wallet/domain/entities/wallet.dart' as domain;
 
 /// Simple Mock Wallet Repository for UseCase Testing
 ///

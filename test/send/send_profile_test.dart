@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/wallet/pages/send/send_profile.dart';
+import 'package:n42_wallet/features/wallet/pages/send/send_profile.dart';
 
 void main() {
   group('resolveSendProfile — UTXO chains', () {

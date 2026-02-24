@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/bridge/models/bridge_models.dart';
+import 'package:n42_wallet/features/bridge/models/bridge_models.dart';
 
 void main() {
   group('BridgeModels Tests', () {

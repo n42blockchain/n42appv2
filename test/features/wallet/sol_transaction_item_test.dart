@@ -2,7 +2,7 @@
 // Pure Dart data class — no platform dependencies.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/wallet/models/transaction/sol_transaction_item.dart';
+import 'package:n42_wallet/features/wallet/models/transaction/sol_transaction_item.dart';
 
 const _kFullJson = <String, dynamic>{
   '_id': 'doc-id-abc',

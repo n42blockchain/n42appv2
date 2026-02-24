@@ -5,7 +5,7 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/core/state/async_state.dart';
+import 'package:n42_wallet/core/state/async_state.dart';
 
 void main() {
   // ─────────────────────────────────────────────────

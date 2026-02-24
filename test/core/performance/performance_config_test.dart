@@ -6,7 +6,7 @@
 // Author: Jiang Yiwei
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/core/performance/performance_config.dart';
+import 'package:n42_wallet/core/performance/performance_config.dart';
 
 void main() {
   group('PerformanceConfig', () {

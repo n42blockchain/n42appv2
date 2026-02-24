@@ -4,7 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42appv2/src/wallet/aa/core/aa_config.dart';
+import 'package:n42_wallet/features/wallet/aa/core/aa_config.dart';
 
 void main() {
   group('EntryPointVersion Tests', () {
@@ -241,7 +241,7 @@ void main() {
       expect(v07Config.simple7702AccountFactory, isNull);
     });
 
-    test('getBundlerUrlWithKey should append API key correctly', () {
+    test('getBundlerUrlWithKey returns bundlerUrl regardless of key (deprecated: key via Authorization header)', () {
       final config = AAChainConfig(
         chainId: 1,
         bundlerUrl: 'https://example.com/bundler',
@@ -259,7 +259,7 @@ void main() {
       );
       expect(
         config.getBundlerUrlWithKey('myapikey'),
-        'https://example.com/bundler?apikey=myapikey',
+        'https://example.com/bundler',
       );
     });
   });

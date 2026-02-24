@@ -7,12 +7,12 @@ import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:n42appv2/src/wallet/aa/utils/gas_estimator.dart';
-import 'package:n42appv2/src/wallet/aa/core/aa_constants.dart';
-import 'package:n42appv2/src/wallet/aa/builder/user_op_builder.dart';
-import 'package:n42appv2/src/wallet/aa/models/smart_account.dart';
-import 'package:n42appv2/src/wallet/aa/bundler/bundler_client.dart';
-import 'package:n42appv2/src/wallet/aa/core/aa_errors.dart';
+import 'package:n42_wallet/features/wallet/aa/utils/gas_estimator.dart';
+import 'package:n42_wallet/features/wallet/aa/core/aa_constants.dart';
+import 'package:n42_wallet/features/wallet/aa/builder/user_op_builder.dart';
+import 'package:n42_wallet/features/wallet/aa/models/smart_account.dart';
+import 'package:n42_wallet/features/wallet/aa/bundler/bundler_client.dart';
+import 'package:n42_wallet/features/wallet/aa/core/aa_errors.dart';
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
