@@ -148,4 +148,12 @@ mixin _TransferBaseMixin {
     }
     return json.encode(addrssList);
   }
+
+  Future<MessageModel> getBalanceAllTrx(String fromAddress,
+      {String contractAddress = ""}) async {
+    MessageModel mm = await tokenViewApi.getBalance(
+        BlockchainType.Tron.name, CoinType.TRX.name, fromAddress,contract: contractAddress,
+        isTest: false) ?? MessageModel.error();
+    return mm;
+  }
 }
