@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'splash_variants.dart';
+
 /// 启动页面
 /// 
 /// 显示应用 Logo 和加载动画，在后台完成初始化
@@ -24,6 +26,9 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
   late Animation<double> _scaleAnimation;
   bool _isLoading = true;
   String _loadingText = 'Starting...';
+
+  // 每次启动随机选一条文字变体
+  final SplashVariant _variant = pickRandomVariant();
 
   @override
   void initState() {
@@ -189,17 +194,10 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
                   ),
                 ),
                 
-                SizedBox(height: ScreenUtil().setWidth(16)),
-                
-                // 副标题
-                Text(
-                  'Your Gateway to Web3',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
-                    color: Colors.white.withValues(alpha:0.7),
-                    letterSpacing: 1,
-                  ),
-                ),
+                SizedBox(height: ScreenUtil().setWidth(20)),
+
+                // 随机启动文字组（参考图样式）
+                _SplashTagline(variant: _variant),
                 
                 const Spacer(flex: 2),
                 
@@ -242,6 +240,88 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
           ),
         ),
       ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 随机启动文字组件
+// 布局参考设计稿：小标签 + 大主字 + 小标签 + 副标题（带字间距）
+// ---------------------------------------------------------------------------
+
+class _SplashTagline extends StatelessWidget {
+  final SplashVariant variant;
+
+  const _SplashTagline({required this.variant});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // 上方小标签
+        if (variant.topLabel != null) ...[
+          Text(
+            variant.topLabel!,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(22),
+              fontWeight: FontWeight.w500,
+              color: Colors.white.withValues(alpha: 0.75),
+              letterSpacing: 0.5,
+              height: 1.3,
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(4)),
+        ],
+
+        // 主体大字
+        Text(
+          variant.mainText,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(36),
+            fontWeight: FontWeight.w800,
+            color: Colors.white,
+            letterSpacing: variant.mainText == variant.mainText.toUpperCase()
+                ? 2.0   // 全大写时加字间距（如 "OWNS"）
+                : 0.5,
+            height: 1.15,
+          ),
+        ),
+
+        // 中间小标签（如 "Matters" / "Won't Forget"）
+        if (variant.midLabel != null) ...[
+          SizedBox(height: ScreenUtil().setWidth(4)),
+          Text(
+            variant.midLabel!,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(22),
+              fontWeight: FontWeight.w500,
+              color: Colors.white.withValues(alpha: 0.75),
+              letterSpacing: 0.5,
+              height: 1.3,
+            ),
+          ),
+        ],
+
+        // 副标题（中/日/韩等表意文字加大字间距）
+        if (variant.subText != null) ...[
+          SizedBox(height: ScreenUtil().setWidth(10)),
+          Text(
+            variant.subText!,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(20),
+              fontWeight: FontWeight.w600,
+              color: Colors.white.withValues(alpha: 0.85),
+              letterSpacing: variant.subTextSpaced ? 4.0 : 0.5,
+              height: 1.4,
+            ),
+          ),
+        ],
+      ],
     );
   }
 }
