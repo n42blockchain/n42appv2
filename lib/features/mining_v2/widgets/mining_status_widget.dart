@@ -155,7 +155,7 @@ class MiningStatusWidget extends StatelessWidget {
                   isActive ? S.current.g_key_193 : S.current.g_mining_key_47,
                   style: TextStyle(
                     color: statusColor,
-                    fontSize: ScreenUtil().setSp(30),
+                    fontSize: ScreenUtil().setSp(28),
                     fontWeight: FontWeight.w700,
                   ),
                   maxLines: 1,
@@ -254,7 +254,7 @@ class MiningStatusWidget extends StatelessWidget {
                       : mpValue.walletNBalance.toStringAsFixed(2),
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(32),
+                    fontSize: ScreenUtil().setSp(30),
                     fontWeight: FontWeight.w700,
                   ),
                   maxLines: 1,
@@ -265,7 +265,7 @@ class MiningStatusWidget extends StatelessWidget {
                 CoinType.N.name,
                 style: TextStyle(
                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(24),
+                  fontSize: ScreenUtil().setSp(22),
                   fontWeight: FontWeight.w600,
                 ),
               ),

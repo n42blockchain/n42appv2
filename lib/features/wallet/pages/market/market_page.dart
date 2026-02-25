@@ -420,7 +420,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
                     Text(
                       'Markets',
                       style: TextStyle(
-                        fontSize: 36.sp,
+                        fontSize: 32.sp,
                         fontWeight: FontWeight.bold,
                         color: textColor,
                         letterSpacing: -0.5,
@@ -449,12 +449,12 @@ class _MarketPageState extends ConsumerState<MarketPage>
             isScrollable: true,
             tabAlignment: TabAlignment.start,
             labelStyle: TextStyle(
-              fontSize: 27.sp,
+              fontSize: 24.sp,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.2,
             ),
             unselectedLabelStyle: TextStyle(
-              fontSize: 27.sp,
+              fontSize: 24.sp,
               fontWeight: FontWeight.w400,
             ),
             tabs: [
@@ -627,7 +627,7 @@ class _CoinTile extends StatelessWidget {
                           child: Text(
                             '#$_rank',
                             style: TextStyle(
-                                fontSize: 17.sp, color: subColor, fontWeight: FontWeight.w500),
+                                fontSize: 16.sp, color: subColor, fontWeight: FontWeight.w500),
                           ),
                         ),
                         SizedBox(width: 6.w),
@@ -636,7 +636,7 @@ class _CoinTile extends StatelessWidget {
                         child: Text(
                           _name,
                           style: TextStyle(
-                              fontSize: 27.sp,
+                              fontSize: 24.sp,
                               fontWeight: FontWeight.w600,
                               color: textColor,
                               letterSpacing: -0.2),
@@ -649,7 +649,7 @@ class _CoinTile extends StatelessWidget {
                   Text(
                     _symbol.toUpperCase(),
                     style: TextStyle(
-                        fontSize: 21.sp,
+                        fontSize: 20.sp,
                         color: subColor,
                         letterSpacing: 0.3),
                   ),
@@ -665,7 +665,7 @@ class _CoinTile extends StatelessWidget {
                   Text(
                     _price > 0 ? '\$${_formatPrice(_price)}' : '--',
                     style: TextStyle(
-                        fontSize: 27.sp,
+                        fontSize: 24.sp,
                         fontWeight: FontWeight.w600,
                         color: textColor),
                   ),
@@ -1069,7 +1069,7 @@ class _FearGreedBadge extends StatelessWidget {
         Text(
           'Fear & Greed',
           style: TextStyle(
-            fontSize: 17.sp,
+            fontSize: 16.sp,
             color: AppThemeUtils.getColorByKey(
                     context, AppThemeKeys.mainTextColor.name)
                 .withAlpha(90),
@@ -1171,7 +1171,7 @@ class _NewsCard extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize: 26.sp,
+                          fontSize: 24.sp,
                           fontWeight: FontWeight.w500,
                           color: textColor,
                           height: 1.35,
@@ -1186,7 +1186,7 @@ class _NewsCard extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                  fontSize: 20.sp, color: subColor),
+                                  fontSize: 18.sp, color: subColor),
                             ),
                           ),
                           Padding(
@@ -1194,12 +1194,12 @@ class _NewsCard extends StatelessWidget {
                                 EdgeInsets.symmetric(horizontal: 6.w),
                             child: Text('·',
                                 style: TextStyle(
-                                    fontSize: 20.sp, color: subColor)),
+                                    fontSize: 18.sp, color: subColor)),
                           ),
                           Text(
                             article.timeAgo(),
                             style: TextStyle(
-                                fontSize: 20.sp, color: subColor),
+                                fontSize: 18.sp, color: subColor),
                           ),
                         ],
                       ),

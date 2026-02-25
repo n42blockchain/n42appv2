@@ -135,7 +135,7 @@ class _WalletBoardState extends State<WalletBoard> {
                   S.of(context).g_key_29,
                   style: TextStyle(
                     color: Colors.white.withAlpha(160),
-                    fontSize: ScreenUtil().setSp(22),
+                    fontSize: ScreenUtil().setSp(20),
                     fontWeight: FontWeight.w400,
                     letterSpacing: 0.5,
                   ),
@@ -146,7 +146,7 @@ class _WalletBoardState extends State<WalletBoard> {
                   _formatUsd(widget.accountPrice),
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: ScreenUtil().setSp(54),
+                    fontSize: ScreenUtil().setSp(48),
                     fontWeight: FontWeight.bold,
                     letterSpacing: -0.5,
                     height: 1.1,
@@ -161,7 +161,7 @@ class _WalletBoardState extends State<WalletBoard> {
                         '≈ ¥${oCcyCny.format(cny)}',
                         style: TextStyle(
                           color: Colors.white.withAlpha(180),
-                          fontSize: ScreenUtil().setSp(24),
+                          fontSize: ScreenUtil().setSp(22),
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -181,7 +181,7 @@ class _WalletBoardState extends State<WalletBoard> {
                           _lastUpdatedLabel(),
                           style: TextStyle(
                             color: Colors.white.withAlpha(180),
-                            fontSize: ScreenUtil().setSp(18),
+                            fontSize: ScreenUtil().setSp(16),
                           ),
                         ),
                       ),
@@ -255,7 +255,7 @@ class _WalletBoardState extends State<WalletBoard> {
             label,
             style: TextStyle(
               color: Colors.white.withAlpha(220),
-              fontSize: ScreenUtil().setSp(22),
+              fontSize: ScreenUtil().setSp(20),
               fontWeight: FontWeight.w500,
             ),
           ),

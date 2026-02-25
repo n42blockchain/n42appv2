@@ -151,7 +151,7 @@ class _MiningTodayV2State extends ConsumerState<MiningTodayV2> with AutomaticKee
                                 walletName,
                                 style: TextStyle(
                                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                                  fontSize: ScreenUtil().setSp(30),
+                                  fontSize: ScreenUtil().setSp(28),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -494,7 +494,7 @@ class _MiningTodayV2State extends ConsumerState<MiningTodayV2> with AutomaticKee
                           : S.current.g_mining_key_47,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: ScreenUtil().setSp(30),
+                        fontSize: ScreenUtil().setSp(28),
                         fontWeight: FontWeight.w700,
                       ),
                     ),

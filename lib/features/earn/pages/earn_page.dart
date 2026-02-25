@@ -181,7 +181,7 @@ class _EarnPageState extends ConsumerState<EarnPage> {
               Text(
                 S.of(context).g_key_earn_total_earnings,
                 style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
+                  fontSize: ScreenUtil().setSp(22),
                   color: Colors.white.withAlpha(200),
                 ),
               ),
@@ -213,7 +213,7 @@ class _EarnPageState extends ConsumerState<EarnPage> {
                           Text(
                             apyLabel,
                             style: TextStyle(
-                              fontSize: ScreenUtil().setSp(22),
+                              fontSize: ScreenUtil().setSp(20),
                               color: Colors.greenAccent,
                               fontWeight: FontWeight.w600,
                             ),
@@ -229,7 +229,7 @@ class _EarnPageState extends ConsumerState<EarnPage> {
                 ? '...'
                 : '\$${earnState.totalStakedUsd.toStringAsFixed(2)}',
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(56),
+              fontSize: ScreenUtil().setSp(48),
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
@@ -278,7 +278,7 @@ class _EarnPageState extends ConsumerState<EarnPage> {
                 Text(
                   label,
                   style: TextStyle(
-                    fontSize: ScreenUtil().setSp(20),
+                    fontSize: ScreenUtil().setSp(18),
                     color: Colors.white.withAlpha(150),
                   ),
                   maxLines: 1,
@@ -287,7 +287,7 @@ class _EarnPageState extends ConsumerState<EarnPage> {
                 Text(
                   value,
                   style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
+                    fontSize: ScreenUtil().setSp(22),
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
@@ -320,7 +320,7 @@ class _EarnPageState extends ConsumerState<EarnPage> {
           Text(
             S.of(context).g_key_earn_more,
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(32),
+              fontSize: ScreenUtil().setSp(30),
               fontWeight: FontWeight.bold,
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.mainTextColor.name),
@@ -606,7 +606,7 @@ class _EarnPageState extends ConsumerState<EarnPage> {
           Text(
             s.g_key_earn_quick_tools,
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(32),
+              fontSize: ScreenUtil().setSp(30),
               fontWeight: FontWeight.bold,
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.mainTextColor.name),
@@ -1039,7 +1039,7 @@ class _EarnPageState extends ConsumerState<EarnPage> {
           Text(
             s.g_key_earn_recommended,
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(32),
+              fontSize: ScreenUtil().setSp(30),
               fontWeight: FontWeight.bold,
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.mainTextColor.name),

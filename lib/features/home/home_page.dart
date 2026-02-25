@@ -325,7 +325,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     // iPad 竖屏：使用固定高度，不依赖 ScreenUtil
     final barHeight = isWide ? 64.0 : ScreenUtil().setWidth(116.0);
     final iconSize = isWide ? 22.0 : ScreenUtil().setWidth(40.0);
-    final fontSize = isWide ? 11.0 : ScreenUtil().setSp(19.0);
+    final fontSize = isWide ? 11.0 : ScreenUtil().setSp(20.0);
     final borderWidth = isWide ? 0.5 : ScreenUtil().setWidth(0.8);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -389,7 +389,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
       {double? fixedIconSize, double? fixedFontSize}) {
     double width = MediaQuery.of(context).size.width / pagesLength;
     final iSize = fixedIconSize ?? ScreenUtil().setWidth(40.0);
-    final fSize = fixedFontSize ?? ScreenUtil().setSp(19.0);
+    final fSize = fixedFontSize ?? ScreenUtil().setSp(20.0);
     final unselectedColor = AppThemeUtils.getColorByKey(
         context, AppThemeKeys.mainTextColor.name).withAlpha(100);
 
@@ -443,7 +443,7 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
     double width = MediaQuery.of(context).size.width / pagesLength;
     final currentIndex = ref.watch(homeTabIndexProvider);
     final iSize = fixedIconSize ?? ScreenUtil().setWidth(40.0);
-    final fSize = fixedFontSize ?? ScreenUtil().setSp(19.0);
+    final fSize = fixedFontSize ?? ScreenUtil().setSp(20.0);
     final isSelected = currentIndex == index;
 
     final selectedColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
