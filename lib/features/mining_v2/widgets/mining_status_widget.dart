@@ -48,12 +48,32 @@ class MiningStatusWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        gradient: isActive
+            ? LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: isDark
+                    ? [const Color(0xFF0D2A18), const Color(0xFF0A2010)]
+                    : [const Color(0xFFE8F5E9), const Color(0xFFF1F8E9)],
+              )
+            : null,
+        color: isActive ? null : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
         border: Border.all(
-          color: isDark ? Colors.white.withValues(alpha: 0.06) : Colors.black.withValues(alpha: 0.04),
+          color: isActive
+              ? statusColor.withValues(alpha: 0.25)
+              : (isDark ? Colors.white.withValues(alpha: 0.06) : Colors.black.withValues(alpha: 0.04)),
           width: 1,
         ),
+        boxShadow: isActive
+            ? [
+                BoxShadow(
+                  color: statusColor.withValues(alpha: 0.12),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ]
+            : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

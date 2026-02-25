@@ -1,8 +1,5 @@
-//看板类型
 import 'dart:io';
 
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-import 'package:n42_wallet/features/wallet/widgets/board_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -72,84 +69,138 @@ class _WalletBoardState extends State<WalletBoard> {
   @override
   Widget build(BuildContext context) {
     final cny = widget.accountPrice * widget.usdToCnyRate;
-    return SizedBox(
-      width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Container(
+      margin: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(24),
+        vertical: ScreenUtil().setWidth(16),
+      ),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: isDark
+              ? [const Color(0xFF0F2044), const Color(0xFF1A0B3B)]
+              : [const Color(0xFF1565C0), const Color(0xFF7B1FA2)],
+          stops: const [0.0, 1.0],
+        ),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(28)),
+        boxShadow: [
+          BoxShadow(
+            color: isDark
+                ? const Color(0xFF1565C0).withAlpha(60)
+                : const Color(0xFF1565C0).withAlpha(80),
+            blurRadius: 24,
+            offset: const Offset(0, 8),
+            spreadRadius: 0,
+          ),
+        ],
+      ),
+      child: Stack(
         children: [
-          // ── USD 总额（加粗突出）──
-          Padding(
-            padding: EdgeInsets.only(
-              top: ScreenUtil().setWidth(30),
-              left: ScreenUtil().setWidth(30),
-              right: ScreenUtil().setWidth(30),
-              bottom: ScreenUtil().setWidth(2),
-            ),
-            child: Text(
-              _formatUsd(widget.accountPrice),
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-                fontSize: ScreenUtil().setSp(44),   // 40 → 44，突出层级
-                fontWeight: FontWeight.bold,
-                letterSpacing: -0.5,
+          // 装饰性背景圆圈
+          Positioned(
+            right: -ScreenUtil().setWidth(30),
+            top: -ScreenUtil().setWidth(30),
+            child: Container(
+              width: ScreenUtil().setWidth(200),
+              height: ScreenUtil().setWidth(200),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withAlpha(10),
               ),
             ),
           ),
-          // ── CNY 折算 + 汇率更新时间 ──
-          Padding(
-            padding: EdgeInsets.only(
-              left: ScreenUtil().setWidth(30),
-              bottom: ScreenUtil().setWidth(18),
+          Positioned(
+            right: ScreenUtil().setWidth(40),
+            bottom: -ScreenUtil().setWidth(20),
+            child: Container(
+              width: ScreenUtil().setWidth(120),
+              height: ScreenUtil().setWidth(120),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withAlpha(6),
+              ),
             ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
+          ),
+          // 主内容
+          Padding(
+            padding: EdgeInsets.all(ScreenUtil().setWidth(28)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (widget.accountPrice > 0) ...[
-                  Text(
-                    '≈ ¥${oCcyCny.format(cny)}',
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemSubtitleTextColor.name),
-                      fontSize: ScreenUtil().setSp(26),
-                      fontWeight: FontWeight.w500,
-                    ),
+                // 总资产标签
+                Text(
+                  S.of(context).g_key_29,
+                  style: TextStyle(
+                    color: Colors.white.withAlpha(160),
+                    fontSize: ScreenUtil().setSp(22),
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: 0.5,
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(10)),
-                ],
-                // 最后更新时间（细灰字）
-                if (widget.priceLastUpdated != null)
-                  Text(
-                    _lastUpdatedLabel(),
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.itemSubtitleTextColor.name)
-                          .withValues(alpha: 0.5),
-                      fontSize: ScreenUtil().setSp(20),
-                    ),
+                ),
+                SizedBox(height: ScreenUtil().setWidth(8)),
+                // USD 总额
+                Text(
+                  _formatUsd(widget.accountPrice),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: ScreenUtil().setSp(54),
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: -0.5,
+                    height: 1.1,
                   ),
-                if (widget.accountPrice == 0 && widget.priceLastUpdated == null)
-                  SizedBox(height: ScreenUtil().setWidth(22)),
+                ),
+                SizedBox(height: ScreenUtil().setWidth(6)),
+                // CNY + 更新时间行
+                Row(
+                  children: [
+                    if (widget.accountPrice > 0) ...[
+                      Text(
+                        '≈ ¥${oCcyCny.format(cny)}',
+                        style: TextStyle(
+                          color: Colors.white.withAlpha(180),
+                          fontSize: ScreenUtil().setSp(24),
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(width: ScreenUtil().setWidth(12)),
+                    ],
+                    if (widget.priceLastUpdated != null)
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil().setWidth(10),
+                          vertical: ScreenUtil().setWidth(3),
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withAlpha(20),
+                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+                        ),
+                        child: Text(
+                          _lastUpdatedLabel(),
+                          style: TextStyle(
+                            color: Colors.white.withAlpha(180),
+                            fontSize: ScreenUtil().setSp(18),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+                SizedBox(height: ScreenUtil().setWidth(28)),
+                // 分割线
+                Container(
+                  height: 1,
+                  color: Colors.white.withAlpha(30),
+                ),
+                SizedBox(height: ScreenUtil().setWidth(24)),
+                // 操作按钮行
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: buttonList(),
+                ),
               ],
             ),
-          ),
-          // ── 操作按钮行 ──
-          Padding(
-            padding:
-                EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: buttonList(),
-            ),
-          ),
-          SizedBox(height: ScreenUtil().setWidth(30)),
-          Divider(
-            height: 1,
-            endIndent: 0,
-            indent: 0,
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.dividerColor.name),
           ),
         ],
       ),
@@ -157,68 +208,59 @@ class _WalletBoardState extends State<WalletBoard> {
   }
 
   List<Widget> buttonList() {
-    return [
-      Flexible(child: sendWidget()),
-      SizedBox(width: ScreenUtil().setWidth(20)),
-      Flexible(child: receiveWidget()),
-      if (Platform.isAndroid) ...[
-        SizedBox(width: ScreenUtil().setWidth(20)),
-        Flexible(child: buyWidget()),
-        SizedBox(width: ScreenUtil().setWidth(20)),
-        Flexible(child: sellWidget()),
-      ],
+    final buttons = <Widget>[
+      _buildActionBtn(S.of(context).g_key_100, 'assets/wallet/w_send.png', widget.sendTap),
+      SizedBox(width: ScreenUtil().setWidth(32)),
+      _buildActionBtn(S.of(context).g_key_33, 'assets/wallet/w_receive.png', widget.receiveTap),
     ];
+    if (Platform.isAndroid) {
+      buttons.addAll([
+        SizedBox(width: ScreenUtil().setWidth(32)),
+        _buildActionBtn(S.of(context).g_key_211, 'assets/wallet/w_buy.png', widget.buyTap),
+        SizedBox(width: ScreenUtil().setWidth(32)),
+        _buildActionBtn(S.of(context).g_key_212, 'assets/wallet/w_sell.png', widget.sellTap),
+      ]);
+    }
+    return buttons;
   }
 
-  Widget emptyWidget() {
-    return const Expanded(child: SizedBox());
-  }
-
-  Widget sendWidget() {
-    return BoardItem(
-      action: S.of(context).g_key_100,
-      imagePath: 'assets/wallet/w_send.png',
-      onTap: widget.sendTap,
-    );
-  }
-
-  Widget swapWidget() {
-    return BoardItem(
-      action: S.of(context).g_swap_key_35,
-      imagePath: 'assets/wallet/w_swap.png',
-      onTap: widget.swapTap,
-    );
-  }
-
-  Widget receiveWidget() {
-    return BoardItem(
-      action: S.of(context).g_key_33,
-      imagePath: 'assets/wallet/w_receive.png',
-      onTap: widget.receiveTap,
-    );
-  }
-
-  Widget paymentCodeWidget() {
-    return BoardItem(
-      action: 'Payment code',
-      imagePath: 'assets/wallet/w_receive.png',
-      onTap: widget.paymentCodeTap,
-    );
-  }
-
-  Widget buyWidget() {
-    return BoardItem(
-      action: S.of(context).g_key_211,
-      imagePath: 'assets/wallet/w_buy.png',
-      onTap: widget.buyTap,
-    );
-  }
-
-  Widget sellWidget() {
-    return BoardItem(
-      action: S.of(context).g_key_212,
-      imagePath: 'assets/wallet/w_sell.png',
-      onTap: widget.sellTap,
+  Widget _buildActionBtn(String label, String imagePath, GestureTapCallback? onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: ScreenUtil().setWidth(96),
+            height: ScreenUtil().setWidth(96),
+            decoration: BoxDecoration(
+              color: Colors.white.withAlpha(28),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+              border: Border.all(
+                color: Colors.white.withAlpha(40),
+                width: 1,
+              ),
+            ),
+            child: Center(
+              child: Image.asset(
+                imagePath,
+                width: ScreenUtil().setWidth(44),
+                height: ScreenUtil().setWidth(44),
+                color: Colors.white,
+              ),
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(8)),
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.white.withAlpha(220),
+              fontSize: ScreenUtil().setSp(22),
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -392,44 +392,71 @@ class _MarketPageState extends ConsumerState<MarketPage>
         AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
     final dividerColor =
         AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      color: itemBgColor,
+      decoration: BoxDecoration(
+        color: itemBgColor,
+        boxShadow: [
+          BoxShadow(
+            color: isDark ? Colors.black.withAlpha(40) : Colors.black.withAlpha(8),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // 标题+操作行
           Padding(
-            padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 8.h),
+            padding: EdgeInsets.fromLTRB(20.w, 16.h, 16.w, 0),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(
-                  'Markets',
-                  style: TextStyle(
-                    fontSize: 32.sp,
-                    fontWeight: FontWeight.bold,
-                    color: textColor,
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Markets',
+                      style: TextStyle(
+                        fontSize: 36.sp,
+                        fontWeight: FontWeight.bold,
+                        color: textColor,
+                        letterSpacing: -0.5,
+                      ),
+                    ),
+                    if (_fearGreed != null)
+                      Padding(
+                        padding: EdgeInsets.only(top: 4.h),
+                        child: _FearGreedBadge(data: _fearGreed!),
+                      ),
+                  ],
                 ),
               ],
             ),
           ),
-          // Fear & Greed pill
-          if (_fearGreed != null)
-            Padding(
-              padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 8.h),
-              child: _FearGreedBadge(data: _fearGreed!),
-            ),
+          SizedBox(height: 8.h),
+          // TabBar
           TabBar(
             controller: _tabController,
             labelColor: accentColor,
-            unselectedLabelColor: textColor.withAlpha(153),
+            unselectedLabelColor: textColor.withAlpha(130),
             indicatorColor: accentColor,
-            indicatorWeight: 2,
+            indicatorSize: TabBarIndicatorSize.label,
+            indicatorWeight: 2.5,
             dividerColor: dividerColor,
             isScrollable: true,
             tabAlignment: TabAlignment.start,
-            labelStyle:
-                TextStyle(fontSize: 26.sp, fontWeight: FontWeight.w600),
-            unselectedLabelStyle: TextStyle(fontSize: 26.sp),
+            labelStyle: TextStyle(
+              fontSize: 27.sp,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.2,
+            ),
+            unselectedLabelStyle: TextStyle(
+              fontSize: 27.sp,
+              fontWeight: FontWeight.w400,
+            ),
             tabs: [
               Tab(text: S.of(context).g_market_trending),
               Tab(text: S.of(context).g_market_search),
@@ -555,140 +582,147 @@ class _CoinTile extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            height: 88.h,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: Row(
+      splashColor: Colors.transparent,
+      highlightColor: AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.mainBlueColor.name)
+          .withAlpha(8),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+        child: Row(
+          children: [
+            // Coin icon with circular clip
+            Container(
+              width: 52.w,
+              height: 52.w,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(26.r),
+                color: dividerColor.withAlpha(60),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(26.r),
+                child: ImageNetWork(
+                  imageUrl: _imageUrl,
+                  width: 52.w,
+                  height: 52.w,
+                ),
+              ),
+            ),
+            SizedBox(width: 12.w),
+            // Rank + name/symbol
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Coin icon
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(24.r),
-                    child: ImageNetWork(
-                      imageUrl: _imageUrl,
-                      width: 48.w,
-                      height: 48.w,
-                    ),
-                  ),
-                  SizedBox(width: 12.w),
-                  // Rank + name/symbol
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            if (_rank != null) ...[
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 4.w, vertical: 1.h),
-                                decoration: BoxDecoration(
-                                  color: dividerColor,
-                                  borderRadius:
-                                      BorderRadius.circular(3.r),
-                                ),
-                                child: Text(
-                                  '#$_rank',
-                                  style: TextStyle(
-                                      fontSize: 18.sp, color: subColor),
-                                ),
-                              ),
-                              SizedBox(width: 6.w),
-                            ],
-                            Flexible(
-                              child: Text(
-                                _name,
-                                style: TextStyle(
-                                    fontSize: 28.sp,
-                                    fontWeight: FontWeight.w600,
-                                    color: textColor),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
+                  Row(
+                    children: [
+                      if (_rank != null) ...[
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 5.w, vertical: 1.h),
+                          decoration: BoxDecoration(
+                            color: dividerColor.withAlpha(80),
+                            borderRadius: BorderRadius.circular(4.r),
+                          ),
+                          child: Text(
+                            '#$_rank',
+                            style: TextStyle(
+                                fontSize: 17.sp, color: subColor, fontWeight: FontWeight.w500),
+                          ),
                         ),
-                        SizedBox(height: 3.h),
-                        Text(
-                          _symbol.toUpperCase(),
-                          style:
-                              TextStyle(fontSize: 22.sp, color: subColor),
-                        ),
+                        SizedBox(width: 6.w),
                       ],
-                    ),
-                  ),
-                  // Price / pct
-                  if (showPrice) ...[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          _price > 0
-                              ? '\$${_formatPrice(_price)}'
-                              : '--',
+                      Flexible(
+                        child: Text(
+                          _name,
                           style: TextStyle(
-                              fontSize: 28.sp,
+                              fontSize: 27.sp,
                               fontWeight: FontWeight.w600,
-                              color: textColor),
-                        ),
-                        SizedBox(height: 3.h),
-                        Text(
-                          '${isPositive ? '+' : ''}${_pct24h.toStringAsFixed(2)}%',
-                          style:
-                              TextStyle(fontSize: 22.sp, color: pctColor),
-                        ),
-                      ],
-                    ),
-                    SizedBox(width: 6.w),
-                  ],
-                  // Bell icon (price alert)
-                  if (_coinId.isNotEmpty)
-                    GestureDetector(
-                      onTap: () => onSetAlert(context, coin),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 4.w),
-                        child: Icon(
-                          alertActive
-                              ? Icons.notifications_active_rounded
-                              : Icons.notifications_none_rounded,
-                          color: alertActive
-                              ? AppThemeUtils.getColorByKey(
-                                  context,
-                                  AppThemeKeys.mainBlueColor.name)
-                              : subColor,
-                          size: 28.sp,
+                              color: textColor,
+                              letterSpacing: -0.2),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                    ),
-                  SizedBox(width: 2.w),
-                  // Star (watchlist)
-                  GestureDetector(
-                    onTap: () => onToggleWatchlist(_symbol),
-                    child: Icon(
-                      inWatchlist
-                          ? Icons.star_rounded
-                          : Icons.star_outline_rounded,
-                      color: inWatchlist
-                          ? const Color(0xFFFACC15)
-                          : subColor,
-                      size: 30.sp,
-                    ),
+                    ],
+                  ),
+                  SizedBox(height: 3.h),
+                  Text(
+                    _symbol.toUpperCase(),
+                    style: TextStyle(
+                        fontSize: 21.sp,
+                        color: subColor,
+                        letterSpacing: 0.3),
                   ),
                 ],
               ),
             ),
-          ),
-          Divider(
-              height: 1,
-              thickness: 0.5,
-              color: dividerColor,
-              indent: 68.w,
-              endIndent: 0),
-        ],
+            // Price / pct
+            if (showPrice) ...[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    _price > 0 ? '\$${_formatPrice(_price)}' : '--',
+                    style: TextStyle(
+                        fontSize: 27.sp,
+                        fontWeight: FontWeight.w600,
+                        color: textColor),
+                  ),
+                  SizedBox(height: 3.h),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 6.w, vertical: 2.h),
+                    decoration: BoxDecoration(
+                      color: pctColor.withAlpha(22),
+                      borderRadius: BorderRadius.circular(6.r),
+                    ),
+                    child: Text(
+                      '${isPositive ? '+' : ''}${_pct24h.toStringAsFixed(2)}%',
+                      style: TextStyle(
+                          fontSize: 20.sp,
+                          color: pctColor,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(width: 6.w),
+            ],
+            // Bell icon (price alert)
+            if (_coinId.isNotEmpty)
+              GestureDetector(
+                onTap: () => onSetAlert(context, coin),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 4.w),
+                  child: Icon(
+                    alertActive
+                        ? Icons.notifications_active_rounded
+                        : Icons.notifications_none_rounded,
+                    color: alertActive
+                        ? AppThemeUtils.getColorByKey(
+                            context, AppThemeKeys.mainBlueColor.name)
+                        : subColor,
+                    size: 26.sp,
+                  ),
+                ),
+              ),
+            SizedBox(width: 2.w),
+            // Star (watchlist)
+            GestureDetector(
+              onTap: () => onToggleWatchlist(_symbol),
+              child: Icon(
+                inWatchlist
+                    ? Icons.star_rounded
+                    : Icons.star_outline_rounded,
+                color: inWatchlist
+                    ? const Color(0xFFFACC15)
+                    : subColor,
+                size: 28.sp,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -987,29 +1021,45 @@ class _FearGreedBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final level = data.level;
     final color = Color(level.colorValue);
-    final bgColor = color.withAlpha(26); // 10% opacity background
+    final bgColor = color.withAlpha(22);
 
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          padding:
-              EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+          padding: EdgeInsets.symmetric(horizontal: 9.w, vertical: 3.h),
           decoration: BoxDecoration(
             color: bgColor,
-            borderRadius: BorderRadius.circular(20.r),
-            border: Border.all(color: color.withAlpha(80)),
+            borderRadius: BorderRadius.circular(16.r),
+            border: Border.all(color: color.withAlpha(60), width: 1),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(level.emoji, style: TextStyle(fontSize: 20.sp)),
+              Text(level.emoji, style: TextStyle(fontSize: 16.sp)),
               SizedBox(width: 4.w),
               Text(
-                '${data.classification}  ${data.value}',
+                data.classification,
                 style: TextStyle(
-                  fontSize: 20.sp,
+                  fontSize: 18.sp,
                   color: color,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              SizedBox(width: 4.w),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
+                decoration: BoxDecoration(
+                  color: color.withAlpha(40),
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                child: Text(
+                  '${data.value}',
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    color: color,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ],
@@ -1019,10 +1069,10 @@ class _FearGreedBadge extends StatelessWidget {
         Text(
           'Fear & Greed',
           style: TextStyle(
-            fontSize: 18.sp,
+            fontSize: 17.sp,
             color: AppThemeUtils.getColorByKey(
                     context, AppThemeKeys.mainTextColor.name)
-                .withAlpha(100),
+                .withAlpha(90),
           ),
         ),
       ],

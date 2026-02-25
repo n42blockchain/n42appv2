@@ -237,6 +237,8 @@ class _MiningTodayV2State extends ConsumerState<MiningTodayV2> with AutomaticKee
                       final mpValue = ref.watch(miningBridgeProvider);
                       return Column(
                         children: [
+                          // 顶部渐变 Banner
+                          _buildMiningBanner(context, mpValue),
                           //没有质押展示 选择plans
                           if (mpValue.depositsEnable == false)
                             Column(
@@ -401,6 +403,131 @@ class _MiningTodayV2State extends ConsumerState<MiningTodayV2> with AutomaticKee
           ],
         ),
 
+      ),
+    );
+  }
+
+  /// 顶部渐变 Banner：展示挖矿状态摘要
+  Widget _buildMiningBanner(BuildContext context, MiningV2Provider mpValue) {
+    final isActive = mpValue.miningStatus == true;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final statusColor = isActive ? const Color(0xFF32D74B) : const Color(0xFFFF9500);
+
+    return Container(
+      margin: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(30),
+        vertical: ScreenUtil().setWidth(12),
+      ),
+      padding: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(24),
+        vertical: ScreenUtil().setWidth(20),
+      ),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: isDark
+              ? [const Color(0xFF0F1D38), const Color(0xFF1A0B3B)]
+              : [const Color(0xFF1565C0), const Color(0xFF5E35B1)],
+        ),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF1565C0).withAlpha(isDark ? 50 : 70),
+            blurRadius: 20,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          // 挖矿图标
+          Container(
+            width: ScreenUtil().setWidth(72),
+            height: ScreenUtil().setWidth(72),
+            decoration: BoxDecoration(
+              color: Colors.white.withAlpha(18),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+            ),
+            child: Icon(
+              Icons.developer_board_rounded,
+              color: Colors.white.withAlpha(220),
+              size: ScreenUtil().setWidth(38),
+            ),
+          ),
+          SizedBox(width: ScreenUtil().setWidth(20)),
+          // 内容
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  S.of(context).g_home_key3,
+                  style: TextStyle(
+                    color: Colors.white.withAlpha(160),
+                    fontSize: ScreenUtil().setSp(22),
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                SizedBox(height: ScreenUtil().setWidth(4)),
+                Row(
+                  children: [
+                    Container(
+                      width: ScreenUtil().setWidth(10),
+                      height: ScreenUtil().setWidth(10),
+                      margin: EdgeInsets.only(right: ScreenUtil().setWidth(8)),
+                      decoration: BoxDecoration(
+                        color: statusColor,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: statusColor.withAlpha(120),
+                            blurRadius: 6,
+                            spreadRadius: 1,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Text(
+                      isActive
+                          ? S.current.g_key_193
+                          : S.current.g_mining_key_47,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: ScreenUtil().setSp(30),
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          // N余额
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                S.of(context).g_key_29,
+                style: TextStyle(
+                  color: Colors.white.withAlpha(140),
+                  fontSize: ScreenUtil().setSp(20),
+                ),
+              ),
+              SizedBox(height: ScreenUtil().setWidth(4)),
+              Text(
+                mpValue.depositsEnable ?? false
+                    ? '${mpValue.balanceInBeacon} N'
+                    : '${mpValue.walletNBalance.toStringAsFixed(2)} N',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: ScreenUtil().setSp(26),
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

@@ -154,19 +154,21 @@ class _EarnPageState extends ConsumerState<EarnPage> {
 
     return Container(
       margin: EdgeInsets.all(ScreenUtil().setWidth(24)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(ScreenUtil().setWidth(26)),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF667eea), Color(0xFF764ba2)],
+          colors: [Color(0xFF1565C0), Color(0xFF6A0DAD)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
+          stops: [0.0, 1.0],
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(28)),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF667eea).withAlpha(60),
-            blurRadius: 20,
+            color: const Color(0xFF1565C0).withAlpha(70),
+            blurRadius: 24,
             offset: const Offset(0, 10),
+            spreadRadius: 0,
           ),
         ],
       ),
@@ -612,11 +614,19 @@ class _EarnPageState extends ConsumerState<EarnPage> {
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+            padding: EdgeInsets.symmetric(
+              horizontal: ScreenUtil().setWidth(8),
+              vertical: ScreenUtil().setWidth(16),
+            ),
             decoration: BoxDecoration(
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.itemBgColor.name),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+              border: Border.all(
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.dividerColor.name).withAlpha(60),
+                width: 1,
+              ),
             ),
             child: Row(
               children: [
@@ -681,19 +691,24 @@ class _EarnPageState extends ConsumerState<EarnPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: ScreenUtil().setWidth(56),
-              height: ScreenUtil().setWidth(56),
+              width: ScreenUtil().setWidth(72),
+              height: ScreenUtil().setWidth(72),
               decoration: BoxDecoration(
-                color: color.withAlpha(25),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                color: color.withAlpha(20),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                border: Border.all(
+                  color: color.withAlpha(40),
+                  width: 1,
+                ),
               ),
-              child: Icon(icon, color: color, size: ScreenUtil().setWidth(28)),
+              child: Icon(icon, color: color, size: ScreenUtil().setWidth(34)),
             ),
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: ScreenUtil().setWidth(10)),
             Text(
               label,
               style: TextStyle(
-                fontSize: ScreenUtil().setSp(20),
+                fontSize: ScreenUtil().setSp(21),
+                fontWeight: FontWeight.w500,
                 color: AppThemeUtils.getColorByKey(
                     context, AppThemeKeys.mainTextColor.name),
               ),

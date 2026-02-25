@@ -34,11 +34,18 @@ class MiningDataBroad extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(18)),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
           border: Border.all(
-            color: isDark ? Colors.white.withValues(alpha: 0.06) : Colors.black.withValues(alpha: 0.04),
+            color: accentColor.withValues(alpha: isDark ? 0.12 : 0.08),
             width: 1,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: accentColor.withValues(alpha: isDark ? 0.06 : 0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         padding: EdgeInsets.all(ScreenUtil().setWidth(18)),
         child: Column(

@@ -323,10 +323,11 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
   Widget _buildBottomNavBar(BuildContext context) {
     final isWide = ResponsiveUtils.isTablet(context);
     // iPad 竖屏：使用固定高度，不依赖 ScreenUtil
-    final barHeight = isWide ? 56.0 : ScreenUtil().setWidth(100.0);
-    final iconSize = isWide ? 22.0 : ScreenUtil().setWidth(36.0);
-    final fontSize = isWide ? 11.0 : ScreenUtil().setSp(20.0);
-    final borderWidth = isWide ? 0.5 : ScreenUtil().setWidth(1.0);
+    final barHeight = isWide ? 64.0 : ScreenUtil().setWidth(116.0);
+    final iconSize = isWide ? 22.0 : ScreenUtil().setWidth(40.0);
+    final fontSize = isWide ? 11.0 : ScreenUtil().setSp(19.0);
+    final borderWidth = isWide ? 0.5 : ScreenUtil().setWidth(0.8);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       width: double.infinity,
@@ -336,10 +337,18 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
         border: Border(
           top: BorderSide(
               width: borderWidth,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name)),
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name).withAlpha(80)),
         ),
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        boxShadow: [
+          BoxShadow(
+            color: isDark
+                ? Colors.black.withAlpha(60)
+                : Colors.black.withAlpha(12),
+            blurRadius: 16,
+            offset: const Offset(0, -4),
+          ),
+        ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -379,20 +388,15 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
   Widget _buildChatBottomItem(String title, String imagePath, GlobalKey key, int pagesLength,
       {double? fixedIconSize, double? fixedFontSize}) {
     double width = MediaQuery.of(context).size.width / pagesLength;
-    final iSize = fixedIconSize ?? ScreenUtil().setWidth(36.0);
-    final fSize = fixedFontSize ?? ScreenUtil().setSp(20.0);
-
-    // 聊天 tab 始终显示未选中状态（因为它是跳转而不是切换）
-    Widget child = Image.asset(
-      imagePath,
-      width: iSize,
-      height: iSize,
-      fit: BoxFit.cover,
-      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-    );
+    final iSize = fixedIconSize ?? ScreenUtil().setWidth(40.0);
+    final fSize = fixedFontSize ?? ScreenUtil().setSp(19.0);
+    final unselectedColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainTextColor.name).withAlpha(100);
 
     return InkWell(
       onTap: _navigateToChat,
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
       child: SizedBox(
         key: key,
         width: width,
@@ -401,13 +405,31 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            child,
+            Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(18),
+                vertical: ScreenUtil().setWidth(6),
+              ),
+              decoration: const BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              child: Image.asset(
+                imagePath,
+                width: iSize,
+                height: iSize,
+                fit: BoxFit.cover,
+                color: unselectedColor,
+              ),
+            ),
+            SizedBox(height: ScreenUtil().setWidth(1)),
             Text(
               title,
               style: TextStyle(
                 fontSize: fSize,
-                height: 1.5,
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                height: 1.2,
+                fontWeight: FontWeight.w400,
+                color: unselectedColor,
               ),
             ),
           ],
@@ -419,26 +441,22 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
   Widget _buildBottomItem(String title, int index, String imagePath, GlobalKey key, int pagesLength,
       {double? fixedIconSize, double? fixedFontSize}) {
     double width = MediaQuery.of(context).size.width / pagesLength;
-    // Use Riverpod homeTabIndexProvider
     final currentIndex = ref.watch(homeTabIndexProvider);
-    final iSize = fixedIconSize ?? ScreenUtil().setWidth(36.0);
-    final fSize = fixedFontSize ?? ScreenUtil().setSp(20.0);
+    final iSize = fixedIconSize ?? ScreenUtil().setWidth(40.0);
+    final fSize = fixedFontSize ?? ScreenUtil().setSp(19.0);
+    final isSelected = currentIndex == index;
 
-    Widget child = Image.asset(
-      imagePath,
-      width: iSize,
-      height: iSize,
-      fit: BoxFit.cover,
-      color: currentIndex == index
-          ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-          : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-    );
+    final selectedColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final unselectedColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainTextColor.name).withAlpha(100);
+
     return InkWell(
       onTap: () {
-        // Use Riverpod homeTabIndexProvider
         if (index == currentIndex) return;
         ref.read(homeTabIndexProvider.notifier).state = index;
       },
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
       child: SizedBox(
         key: key,
         width: width,
@@ -447,15 +465,35 @@ class _HomePageState extends ConsumerState<HomePage> with WidgetsBindingObserver
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            child,
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeInOut,
+              padding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(18),
+                vertical: ScreenUtil().setWidth(6),
+              ),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? selectedColor.withAlpha(22)
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+              ),
+              child: Image.asset(
+                imagePath,
+                width: iSize,
+                height: iSize,
+                fit: BoxFit.cover,
+                color: isSelected ? selectedColor : unselectedColor,
+              ),
+            ),
+            SizedBox(height: ScreenUtil().setWidth(1)),
             Text(
               title,
               style: TextStyle(
                 fontSize: fSize,
-                height: 1.5,
-                color: currentIndex == index
-                    ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-                    : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                height: 1.2,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                color: isSelected ? selectedColor : unselectedColor,
               ),
             ),
           ],
