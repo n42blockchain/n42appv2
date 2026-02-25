@@ -95,6 +95,10 @@ class WalletInfo {
     }
   }
 
+  /// SECURITY: 包含 mnemonic / password / privateKey 敏感字段。
+  /// 仅可通过 SPUtil.setWalletInfo() → SecureStorage 路径使用。
+  /// 严禁用于日志、网络请求、错误上报或非加密存储。
+  /// 如需对外展示或传递，请使用 [toJsonPublic]。
   Map<String, dynamic> toJson() {
     return {
       "walletName": walletName,
@@ -113,6 +117,23 @@ class WalletInfo {
       "watchOnly": watchOnly,
       "watchAddress": watchAddress,
       "aaAccountInfo": aaAccountInfo?.toJson(),
+    };
+  }
+
+  /// 不含敏感字段的序列化方法，用于 UI 展示、日志、分析等场景。
+  Map<String, dynamic> toJsonPublic() {
+    return {
+      "walletName": walletName,
+      "UUID": walletUuid,
+      "timestamp": timestamp,
+      "coinSort": coinSort,
+      "networkIndex": networkIndex,
+      "pinnedCoins": pinnedCoins,
+      "chainOrder": chainOrder,
+      "faceBinding": faceBinding,
+      "mainWallet": mainWallet,
+      "watchOnly": watchOnly,
+      "watchAddress": watchAddress,
     };
   }
 

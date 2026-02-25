@@ -1,3 +1,4 @@
+import 'dart:async' show unawaited;
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -41,22 +42,22 @@ class _ImportOneState extends ConsumerState<ImportOne> with WidgetsBindingObserv
     // 读取复制文本
     ClipboardData? clipboardData =
     await Clipboard.getData(Clipboard.kTextPlain);
-    if (!mounted) return;
-    if (clipboardData != null) {
-      String? text = clipboardData.text;
-      if (text != null && text !="null" && text !="") {
-
-        checkInput(text);
-        bool checkMnemonic = await Trustdart().checkMnemonic(inputMW);
-        if (!mounted) return;
-        if(checkMnemonic){
-          inputEditingController.text=inputMW;
-        }else{
-          inputMW="";
-        }
-        Clipboard.setData(const ClipboardData(text: ""));
-        setState(() {});
+    final text = clipboardData?.text;
+    // 获取后立即清空剪贴板：无论后续逻辑是否执行（!mounted / 异常），助记词不残留
+    unawaited(Clipboard.setData(const ClipboardData(text: "")));
+    if (!mounted || text == null || text == "null" || text.isEmpty) return;
+    try {
+      checkInput(text);
+      bool checkMnemonic = await Trustdart().checkMnemonic(inputMW);
+      if (!mounted) return;
+      if (checkMnemonic) {
+        inputEditingController.text = inputMW;
+      } else {
+        inputMW = "";
       }
+      setState(() {});
+    } catch (e) {
+      debugPrint('import_one: checkMnemonic failed: $e');
     }
   }
 

@@ -1138,17 +1138,32 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
         debugPrint('WalletActionProvider: Skipping wallet ${wInfo.walletName} - N chain baseInfo or path is null');
         continue;
       }
-      String path=getPathWithIndex(nChainConfig['baseInfo']['path'][nChainConfig['addrType']], nChainConfig['pathIndex']);
-      String privateKeyStr=await trustdart.getPrivateKeyAndPublicKeyPair(
-        CoinType.N.name,
-        path,
-        mnemonic: wInfo.mnemonic??"",
-        pk: wInfo.privateKey??"",
-      );
-      Map<dynamic,dynamic> pkPair=json.decode(privateKeyStr);
-      final pubKey = bytesToHex(base64Decode(pkPair['publicKey'].toString()));//hexUtils.uint8ToHex(base64Decode(pkPair['publicKey'].toString()));
-      final privateKey = bytesToHex(base64Decode(pkPair['privateKey'].toString()));//hexUtils.uint8ToHex(base64Decode(pkPair['privateKey'].toString()));
-      _publicKeyAndPrivateKeyPair![pubKey] = privateKey;
+      // EDGE-M03: 验证路径配置完整性，防止 addrType 不存在时产生难以追踪的空指针
+      final pathMap = nChainConfig['baseInfo']?['path'];
+      final addrType = nChainConfig['addrType'] as String?;
+      if (pathMap == null || addrType == null || pathMap[addrType] == null) {
+        debugPrint('WalletActionProvider: Invalid path config for ${wInfo.walletName}, addrType=$addrType');
+        continue;
+      }
+      try {
+        String path=getPathWithIndex(pathMap[addrType], nChainConfig['pathIndex']);
+        String privateKeyStr=await trustdart.getPrivateKeyAndPublicKeyPair(
+          CoinType.N.name,
+          path,
+          mnemonic: wInfo.mnemonic??"",
+          pk: wInfo.privateKey??"",
+        );
+        if (privateKeyStr.isEmpty) {
+          debugPrint('WalletActionProvider: Empty key pair response for ${wInfo.walletName}');
+          continue;
+        }
+        Map<dynamic,dynamic> pkPair=json.decode(privateKeyStr);
+        final pubKey = bytesToHex(base64Decode(pkPair['publicKey'].toString()));
+        final privateKey = bytesToHex(base64Decode(pkPair['privateKey'].toString()));
+        _publicKeyAndPrivateKeyPair![pubKey] = privateKey;
+      } catch (e) {
+        debugPrint('WalletActionProvider: Failed to load key pair for ${wInfo.walletName}: $e');
+      }
     }
   }
   String? getPrivateKeyWithPublicKey(String publicKey){

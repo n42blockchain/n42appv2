@@ -181,8 +181,12 @@ class PhishingDetector {
 
     try {
       final map = jsonDecode(cachedJson) as Map<String, dynamic>;
-      final blacklist = (map['blacklist'] as List<dynamic>? ?? []).cast<String>();
-      final whitelist = (map['whitelist'] as List<dynamic>? ?? []).cast<String>();
+      final blacklist = (map['blacklist'] is List)
+          ? (map['blacklist'] as List<dynamic>).whereType<String>().toList()
+          : <String>[];
+      final whitelist = (map['whitelist'] is List)
+          ? (map['whitelist'] as List<dynamic>).whereType<String>().toList()
+          : <String>[];
       _blocklist.addAll(blacklist);
       _whitelist.addAll(whitelist);
       debugPrint(
@@ -224,8 +228,12 @@ class PhishingDetector {
       client.close();
 
       final map = jsonDecode(body) as Map<String, dynamic>;
-      final blacklist = (map['blacklist'] as List<dynamic>? ?? []).cast<String>();
-      final whitelist = (map['whitelist'] as List<dynamic>? ?? []).cast<String>();
+      final blacklist = (map['blacklist'] is List)
+          ? (map['blacklist'] as List<dynamic>).whereType<String>().toList()
+          : <String>[];
+      final whitelist = (map['whitelist'] is List)
+          ? (map['whitelist'] as List<dynamic>).whereType<String>().toList()
+          : <String>[];
 
       _blocklist.addAll(blacklist);
       _whitelist.addAll(whitelist);

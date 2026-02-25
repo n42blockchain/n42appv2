@@ -79,8 +79,7 @@ class _MiningImportState extends ConsumerState<MiningImport> {
         password: password,
       );
 
-      // 解密成功，可以在这里处理解密后的数据
-      debugPrint("解密成功: ${jsonEncode(secretMap)}");
+      debugPrint("解密成功: validator.publicKey=${secretMap['validator']?['publicKey']}");
       bool isMining=true;
       MessageModel bvRmm= await MiningApi.init().getBeaconValidator(secretMap['validator']['publicKey']);
       if(bvRmm.error==false){
