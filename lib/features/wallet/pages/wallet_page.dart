@@ -1302,6 +1302,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   }
 
   Widget _mainCoin(CoinModel coinInfo, String key, String group,) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     String balanceStr = "";
     double balance = coinInfo.value;
     if (balance >= 1000000000) {
@@ -1408,7 +1409,22 @@ class _WalletPageState extends ConsumerState<WalletPage> {
           ],
         ),
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+          margin: EdgeInsets.symmetric(
+            horizontal: ScreenUtil().setWidth(24),
+            vertical: ScreenUtil().setWidth(4),
+          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: ScreenUtil().setWidth(16),
+            vertical: ScreenUtil().setWidth(14),
+          ),
+          decoration: BoxDecoration(
+            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+            border: Border.all(
+              color: isDark ? Colors.white.withAlpha(10) : Colors.black.withAlpha(6),
+              width: 0.8,
+            ),
+          ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -1483,7 +1499,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                           child: Text(
                             coinInfo.coin['miniName'] ?? '',
                             style: TextStyle(
-                              fontSize: ScreenUtil().setSp(30),
+                              fontSize: ScreenUtil().setSp(28),
                               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                               fontWeight: FontWeight.w600,
                               letterSpacing: 0.3,
@@ -1493,7 +1509,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                         Text(
                           valueBalanceStr,
                           style: TextStyle(
-                            fontSize: ScreenUtil().setSp(30),
+                            fontSize: ScreenUtil().setSp(28),
                             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                             fontWeight: FontWeight.w600,
                           ),
@@ -1512,7 +1528,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                             Text(
                               "\$${coinInfo.coinPriceString()}",
                               style: TextStyle(
-                                fontSize: ScreenUtil().setSp(24),
+                                fontSize: ScreenUtil().setSp(22),
                                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
                               ),
                             ),
@@ -1523,7 +1539,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                         Text(
                           "\$$balanceStr",
                           style: TextStyle(
-                            fontSize: ScreenUtil().setSp(24),
+                            fontSize: ScreenUtil().setSp(22),
                             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
                           ),
                         ),

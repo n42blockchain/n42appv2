@@ -504,8 +504,7 @@ class _EarnPageState extends ConsumerState<EarnPage> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: ScreenUtil().setWidth(220),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+        width: ScreenUtil().setWidth(230),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: gradientColors,
@@ -521,72 +520,110 @@ class _EarnPageState extends ConsumerState<EarnPage> {
             ),
           ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: ScreenUtil().setWidth(48),
-                  height: ScreenUtil().setWidth(48),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+          child: Stack(
+            children: [
+              // 右上装饰圆
+              Positioned(
+                right: -ScreenUtil().setWidth(20),
+                top: -ScreenUtil().setWidth(20),
+                child: Container(
+                  width: ScreenUtil().setWidth(100),
+                  height: ScreenUtil().setWidth(100),
                   decoration: BoxDecoration(
-                    color: Colors.white.withAlpha(50),
-                    borderRadius:
-                        BorderRadius.circular(ScreenUtil().setWidth(12)),
+                    shape: BoxShape.circle,
+                    color: Colors.white.withAlpha(18),
                   ),
-                  child: Icon(icon,
-                      color: Colors.white, size: ScreenUtil().setWidth(28)),
                 ),
-                if (badge != null)
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(10),
-                      vertical: ScreenUtil().setWidth(4),
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withAlpha(50),
-                      borderRadius:
-                          BorderRadius.circular(ScreenUtil().setWidth(10)),
-                    ),
-                    child: Text(
-                      badge,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(18),
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+              ),
+              // 左下装饰圆
+              Positioned(
+                left: -ScreenUtil().setWidth(12),
+                bottom: -ScreenUtil().setWidth(12),
+                child: Container(
+                  width: ScreenUtil().setWidth(64),
+                  height: ScreenUtil().setWidth(64),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withAlpha(10),
                   ),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(32),
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(height: ScreenUtil().setWidth(4)),
-                Text(
-                  subtitle,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
-                    color: Colors.white.withAlpha(200),
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+              ),
+              // 主内容
+              Padding(
+                padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: ScreenUtil().setWidth(48),
+                          height: ScreenUtil().setWidth(48),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withAlpha(50),
+                            borderRadius:
+                                BorderRadius.circular(ScreenUtil().setWidth(12)),
+                          ),
+                          child: Icon(icon,
+                              color: Colors.white, size: ScreenUtil().setWidth(28)),
+                        ),
+                        if (badge != null)
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: ScreenUtil().setWidth(10),
+                              vertical: ScreenUtil().setWidth(4),
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withAlpha(50),
+                              borderRadius:
+                                  BorderRadius.circular(ScreenUtil().setWidth(20)),
+                            ),
+                            child: Text(
+                              badge,
+                              style: TextStyle(
+                                fontSize: ScreenUtil().setSp(16),
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: TextStyle(
+                            fontSize: ScreenUtil().setSp(28),
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(height: ScreenUtil().setWidth(4)),
+                        Text(
+                          subtitle,
+                          style: TextStyle(
+                            fontSize: ScreenUtil().setSp(20),
+                            color: Colors.white.withAlpha(200),
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );

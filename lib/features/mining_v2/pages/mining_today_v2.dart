@@ -265,10 +265,10 @@ class _MiningTodayV2State extends ConsumerState<MiningTodayV2> with AutomaticKee
                               titleModel: TitleModel(),
                               barChartModel: mpValue.isShowDefaultBar
                                   ? BarChartModel(
-                                bgColor: const Color.fromRGBO(25, 118, 249, 0.1),
-                                fgColor: const Color.fromRGBO(25, 118, 249, 0.1),
-                                fgColorMax: const Color.fromRGBO(25, 118, 249, 0.1),
-                                touchColor: const Color.fromRGBO(25, 118, 249, 0.1),
+                                bgColor: const Color.fromRGBO(25, 118, 249, 0.08),
+                                fgColor: const Color.fromRGBO(25, 118, 249, 0.22),
+                                fgColorMax: const Color.fromRGBO(25, 118, 249, 0.22),
+                                touchColor: const Color.fromRGBO(25, 118, 249, 0.3),
                                 width: ScreenUtil().setWidth(20),
                                 values: [10, 10, 10, 10, 10, 10, 10],
                               )
@@ -373,7 +373,7 @@ class _MiningTodayV2State extends ConsumerState<MiningTodayV2> with AutomaticKee
                               child: Text(
                                 S.of(context).g_mining_key_88,
                                 style: TextStyle(
-                                  fontSize: ScreenUtil().setSp(30),
+                                  fontSize: ScreenUtil().setSp(24),
                                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name),
                                 ),
                               ),
@@ -385,7 +385,7 @@ class _MiningTodayV2State extends ConsumerState<MiningTodayV2> with AutomaticKee
                               child: Text(
                                 S.of(context).g_mining_key_115,
                                 style: TextStyle(
-                                  fontSize: ScreenUtil().setSp(30),
+                                  fontSize: ScreenUtil().setSp(24),
                                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name),
                                 ),
                               ),
