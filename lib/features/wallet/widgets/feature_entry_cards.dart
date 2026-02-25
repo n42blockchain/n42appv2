@@ -25,21 +25,28 @@ class EnsEntryCard extends StatelessWidget {
     return GestureDetector(
       onTap: hasEns ? onTap : onRegisterTap,
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(28)),
+        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              const Color(0xFF5B8DEF).withValues(alpha:0.15),
-              const Color(0xFF8B5CF6).withValues(alpha:0.15),
+              const Color(0xFF5B8DEF).withValues(alpha:0.12),
+              const Color(0xFF8B5CF6).withValues(alpha:0.12),
             ],
           ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
           border: Border.all(
-            color: const Color(0xFF5B8DEF).withValues(alpha:0.3),
+            color: const Color(0xFF5B8DEF).withValues(alpha:0.25),
             width: 1,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF5B8DEF).withValues(alpha:0.08),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Row(
           children: [
@@ -75,7 +82,7 @@ class EnsEntryCard extends StatelessWidget {
                   Text(
                     hasEns ? ensName! : S.of(context).g_key_ens_get_your_name,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(32),
+                      fontSize: ScreenUtil().setSp(28),
                       fontWeight: FontWeight.w600,
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                     ),
@@ -86,7 +93,7 @@ class EnsEntryCard extends StatelessWidget {
                         ? S.of(context).g_key_ens_manage_your_identity
                         : S.of(context).g_key_ens_register_description,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
+                      fontSize: ScreenUtil().setSp(22),
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
                     ),
                     maxLines: 2,
@@ -151,21 +158,28 @@ class SmartAccountEntryCard extends StatelessWidget {
     return GestureDetector(
       onTap: hasSmartAccount ? onTap : onCreateTap,
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(28)),
+        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              const Color(0xFFFF6B6B).withValues(alpha:0.15),
-              const Color(0xFFFFE66D).withValues(alpha:0.15),
+              const Color(0xFFFF6B6B).withValues(alpha:0.12),
+              const Color(0xFFFFE66D).withValues(alpha:0.12),
             ],
           ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
           border: Border.all(
-            color: const Color(0xFFFF6B6B).withValues(alpha:0.3),
+            color: const Color(0xFFFF6B6B).withValues(alpha:0.25),
             width: 1,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFFFF6B6B).withValues(alpha:0.08),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Row(
           children: [
@@ -225,7 +239,7 @@ class SmartAccountEntryCard extends StatelessWidget {
                               ? S.of(context).g_key_aa_smart_account
                               : S.of(context).g_key_aa_create_smart_account,
                           style: TextStyle(
-                            fontSize: ScreenUtil().setSp(30),
+                            fontSize: ScreenUtil().setSp(28),
                             fontWeight: FontWeight.w600,
                             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                           ),
@@ -251,7 +265,7 @@ class SmartAccountEntryCard extends StatelessWidget {
                                 ? S.of(context).g_key_aa_deployed
                                 : S.of(context).g_key_aa_not_deployed,
                             style: TextStyle(
-                              fontSize: ScreenUtil().setSp(18),
+                              fontSize: ScreenUtil().setSp(16),
                               color: isDeployed ? const Color(0xFF4CAF50) : const Color(0xFFFF9800),
                               fontWeight: FontWeight.w500,
                             ),
@@ -468,13 +482,20 @@ class FeatureEntryHorizontal extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: gradientColors.map((c) => c.withValues(alpha:0.15)).toList(),
+            colors: gradientColors.map((c) => c.withValues(alpha:0.12)).toList(),
           ),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
           border: Border.all(
-            color: gradientColors[0].withValues(alpha:0.3),
+            color: gradientColors[0].withValues(alpha:0.25),
             width: 1,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: gradientColors[0].withValues(alpha:0.08),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ],
         ),
         child: Row(
           children: [
@@ -525,7 +546,7 @@ class FeatureEntryHorizontal extends StatelessWidget {
                     child: Text(
                       title,
                       style: TextStyle(
-                        fontSize: ScreenUtil().setSp(26),
+                        fontSize: ScreenUtil().setSp(24),
                         fontWeight: FontWeight.w600,
                         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                       ),

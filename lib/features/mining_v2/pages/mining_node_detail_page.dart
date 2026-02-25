@@ -326,7 +326,7 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage> {
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.itemSubtitleTextColor.name),
-              fontSize: ScreenUtil().setSp(26),
+              fontSize: ScreenUtil().setSp(24),
             ),
           ),
           const Spacer(),
@@ -337,7 +337,7 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage> {
                 color: valueColor ??
                     AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(26),
+                fontSize: ScreenUtil().setSp(24),
                 fontWeight: FontWeight.w500,
               ),
               textAlign: TextAlign.end,
@@ -367,7 +367,7 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage> {
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.itemSubtitleTextColor.name),
-              fontSize: ScreenUtil().setSp(26),
+              fontSize: ScreenUtil().setSp(24),
             ),
           ),
           const Spacer(),
@@ -539,16 +539,36 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage> {
   // ── Empty state ────────────────────────────────────────────────────────
 
   Widget _buildEmpty(BuildContext context) {
+    final subColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
     return SizedBox(
       height: ScreenUtil().setWidth(400),
       child: Center(
-        child: Text(
-          S.of(context).g_mining_key_47,
-          style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name),
-            fontSize: ScreenUtil().setSp(28),
-          ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: ScreenUtil().setWidth(96),
+              height: ScreenUtil().setWidth(96),
+              decoration: BoxDecoration(
+                color: subColor.withValues(alpha: 0.08),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.hub_outlined,
+                size: ScreenUtil().setWidth(48),
+                color: subColor.withValues(alpha: 0.5),
+              ),
+            ),
+            SizedBox(height: ScreenUtil().setWidth(20)),
+            Text(
+              S.of(context).g_mining_key_47,
+              style: TextStyle(
+                color: subColor,
+                fontSize: ScreenUtil().setSp(24),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -567,6 +587,15 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage> {
             : Colors.black.withValues(alpha: 0.04),
         width: 1,
       ),
+      boxShadow: [
+        BoxShadow(
+          color: isDark
+              ? Colors.black.withValues(alpha: 0.18)
+              : Colors.black.withValues(alpha: 0.05),
+          blurRadius: 10,
+          offset: const Offset(0, 3),
+        ),
+      ],
     );
   }
 

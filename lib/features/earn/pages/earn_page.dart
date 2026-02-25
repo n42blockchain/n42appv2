@@ -744,7 +744,7 @@ class _EarnPageState extends ConsumerState<EarnPage> {
             Text(
               label,
               style: TextStyle(
-                fontSize: ScreenUtil().setSp(21),
+                fontSize: ScreenUtil().setSp(20),
                 fontWeight: FontWeight.w500,
                 color: AppThemeUtils.getColorByKey(
                     context, AppThemeKeys.mainTextColor.name),
@@ -903,8 +903,15 @@ class _EarnPageState extends ConsumerState<EarnPage> {
                   ? Colors.orange
                   : AppThemeUtils.getColorByKey(
                       context, AppThemeKeys.mainBlueColor.name))
-              .withAlpha(30),
+              .withAlpha(50),
         ),
+        boxShadow: [
+          BoxShadow(
+            color: (isUnbonding ? Colors.orange : color).withAlpha(18),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: Row(
         children: [

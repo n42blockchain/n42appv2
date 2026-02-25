@@ -835,16 +835,16 @@ class _SearchTab extends StatelessWidget {
           child: TextField(
             controller: controller,
             onChanged: onChanged,
-            style: TextStyle(color: textColor, fontSize: 26.sp),
+            style: TextStyle(color: textColor, fontSize: 24.sp),
             decoration: InputDecoration(
               hintText: S.of(context).g_market_search_hint,
-              hintStyle: TextStyle(color: subColor, fontSize: 26.sp),
+              hintStyle: TextStyle(color: subColor, fontSize: 24.sp),
               prefixIcon:
-                  Icon(Icons.search, color: subColor, size: 28.sp),
+                  Icon(Icons.search, color: subColor, size: 26.sp),
               suffixIcon: controller.text.isNotEmpty
                   ? IconButton(
                       icon: Icon(Icons.clear,
-                          color: subColor, size: 26.sp),
+                          color: subColor, size: 24.sp),
                       onPressed: () {
                         controller.clear();
                         onChanged('');
@@ -854,9 +854,9 @@ class _SearchTab extends StatelessWidget {
               filled: true,
               fillColor: itemBgColor,
               contentPadding: EdgeInsets.symmetric(
-                  horizontal: 12.w, vertical: 10.h),
+                  horizontal: 16.w, vertical: 12.h),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.r),
+                borderRadius: BorderRadius.circular(16.r),
                 borderSide: BorderSide.none,
               ),
             ),
@@ -983,12 +983,20 @@ class _EmptyState extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 64.sp, color: subColor),
-          SizedBox(height: 12.h),
+          Container(
+            width: 88.w,
+            height: 88.w,
+            decoration: BoxDecoration(
+              color: subColor.withAlpha(14),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, size: 48.sp, color: subColor.withAlpha(160)),
+          ),
+          SizedBox(height: 16.h),
           Text(
             message,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 26.sp, color: subColor),
+            style: TextStyle(fontSize: 24.sp, color: subColor),
           ),
         ],
       ),
