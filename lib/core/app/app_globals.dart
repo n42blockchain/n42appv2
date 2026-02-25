@@ -8,6 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/data/models/user_info.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
 
@@ -45,7 +46,11 @@ class AppGlobals {
     final navContext = navigatorKey.currentContext;
     if (navContext != null) return navContext;
     // Fallback to manually set context
-    return _appContext!;
+    if (_appContext != null) return _appContext!;
+    throw StateError(
+      'AppGlobals.appContext: no BuildContext available. '
+      'Ensure the navigator is mounted before accessing appContext.',
+    );
   }
 
   static set appContext(BuildContext context) {
@@ -62,22 +67,25 @@ class AppGlobals {
   static int get nextId => ++_currentId;
 
   /// Handle user login
-  /// 
+  ///
   /// Sets up user state and initializes related services.
+  /// Also syncs the auth token to SecureStorage so both storage paths stay consistent.
   static Future<void> login(UserInfo info) async {
     userInfo = info;
+    if (info.token != null && info.token!.isNotEmpty) {
+      await SecureStorage().saveToken(info.token!);
+    }
     globalWapAdapter.initWallet(shouldInitCoinInfo: true);
     globalWcpInstance.cleanDataLogout();
-    // Note: Provider access should be done through proper DI
-    // The following calls should be refactored to use events or DI
   }
 
   /// Handle user logout
-  /// 
-  /// Clears user state and related data.
+  ///
+  /// Clears user state from both SharedPreferences and SecureStorage.
   static Future<void> logout() async {
     try {
       await SPUtil().saveUserInfo(null);
+      await SecureStorage().clearUserData();
       userInfo = null;
     } catch (err) {
       debugPrint('Logout error: $err');

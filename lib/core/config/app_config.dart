@@ -182,10 +182,55 @@ class AppConfig {
 
 
   // ============ Debug Helpers ============
-  
+
   /// Check if running in debug mode
   static bool get isDebug => kDebugMode;
 
   /// Get current environment name
   static String get environmentName => isOnline ? 'Production' : 'Development';
+
+  // ============ Security Validation ============
+
+  /// 在 Debug 模式下检查明文 WebSocket 和裸 IP 配置
+  ///
+  /// ws:// URLs 需升级为 wss://，裸 IP 需替换为带合法 TLS 证书的域名。
+  /// 这些问题需在服务端完成 TLS 配置后修改对应 URL。
+  static void validateUrlsInDebug() {
+    if (!kDebugMode) return;
+
+    final warnings = <String>[];
+
+    // 检查 IM WebSocket — 主网使用明文 ws://
+    final imWsMain = (apiUrl['imWsHost'] as Map)['main'] as String;
+    if (imWsMain.startsWith('ws://')) {
+      warnings.add('imWsHost.main uses unencrypted ws:// ($imWsMain) — upgrade to wss://');
+    }
+
+    // 检查 Mining WebSocket
+    if (miningWebSocketUrl.startsWith('ws://')) {
+      warnings.add('miningWebSocketUrl uses unencrypted ws:// ($miningWebSocketUrl)'
+          ' — override via --dart-define=MINING_WS_URL=wss://...');
+    }
+
+    // 检查 IM HTTP 主网是否使用裸 IP
+    final imHttpMain = (apiUrl['imHttpHost'] as Map)['main'] as String;
+    if (RegExp(r'https?://\d+\.\d+\.\d+\.\d+').hasMatch(imHttpMain)) {
+      warnings.add('imHttpHost.main uses bare IP ($imHttpMain)'
+          ' — replace with a domain name backed by a valid TLS certificate');
+    }
+
+    if (warnings.isNotEmpty) {
+      debugPrint('⚠️ [AppConfig] Network security warnings:');
+      for (final w in warnings) {
+        debugPrint('   - $w');
+      }
+    }
+  }
+}
+
+/// 应用配置初始化
+///
+/// 在应用启动时调用以验证 URL 安全性配置
+void initAppConfig() {
+  AppConfig.validateUrlsInDebug();
 }

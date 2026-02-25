@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/constants/language_constants.dart';
@@ -329,18 +330,6 @@ class ScreenLockState {
     };
   }
 
-  /// Verify password
-  bool verifyPassword(String password) => lockPassword == password;
-
-  /// Verify gesture pattern
-  bool verifyGesture(List<int> gesture) {
-    if (gesturePassword.length != gesture.length) return false;
-    for (int i = 0; i < gesture.length; i++) {
-      if (gesturePassword[i] != gesture[i]) return false;
-    }
-    return true;
-  }
-
   factory ScreenLockState.fromMap(Map<String, dynamic>? map) {
     if (map == null) return const ScreenLockState();
     return ScreenLockState(
@@ -353,6 +342,18 @@ class ScreenLockState {
       gesturePassword: List<int>.from(map['gesturePW'] ?? []),
       passwordLockTimestamp: map['PWLock'] ?? 0,
     );
+  }
+
+  /// Verify numeric/text password
+  bool verifyPassword(String password) => lockPassword == password;
+
+  /// Verify gesture pattern
+  bool verifyGesture(List<int> gesture) {
+    if (gesturePassword.length != gesture.length) return false;
+    for (int i = 0; i < gesture.length; i++) {
+      if (gesturePassword[i] != gesture[i]) return false;
+    }
+    return true;
   }
 }
 
@@ -425,11 +426,11 @@ class ScreenLockNotifier extends StateNotifier<ScreenLockState> {
   bool get hasAnyLockEnabled => 
       state.isLocked || state.gestureEnabled || state.faceEnabled || state.fingerprintEnabled;
 
-  bool verifyPassword(String password) => state.lockPassword == password;
-  
-  bool verifyGesture(List<int> gesture) =>
-      state.gesturePassword.length == gesture.length &&
-      List.generate(gesture.length, (i) => state.gesturePassword[i] == gesture[i]).every((e) => e);
+  /// Delegates to [ScreenLockState.verifyPassword] — single source of truth.
+  bool verifyPassword(String password) => state.verifyPassword(password);
+
+  /// Delegates to [ScreenLockState.verifyGesture] — single source of truth.
+  bool verifyGesture(List<int> gesture) => state.verifyGesture(gesture);
 }
 
 // ============================================
@@ -438,13 +439,21 @@ class ScreenLockNotifier extends StateNotifier<ScreenLockState> {
 
 /// Performs app startup initialization: loads user info, lock screen data,
 /// and sets app load state to finished.
-final appInitProvider = FutureProvider.autoDispose<void>((ref) async {
+///
+/// Not autoDispose: this is a one-shot initialization provider.
+/// Its completed state is intentionally kept alive for the lifetime of the app.
+final appInitProvider = FutureProvider<void>((ref) async {
   final spUtil = ref.read(spUtilProvider);
+  final secureStorage = SecureStorage();
   try {
     final userInfoJson = await spUtil.getUserInfo();
     if (userInfoJson != null) {
       final userInfo = UserInfo.fromJson(userInfoJson);
       AppGlobals.userInfo = userInfo;
+      // Sync token to SecureStorage on startup load
+      if (userInfo.token != null && userInfo.token!.isNotEmpty) {
+        await secureStorage.saveToken(userInfo.token!);
+      }
       final sharedInfo = SharedUserInfo(
         uuid: userInfo.uuid ?? '',
         email: userInfo.email ?? '',
@@ -465,6 +474,10 @@ final appInitProvider = FutureProvider.autoDispose<void>((ref) async {
       ).timeout(const Duration(seconds: 8), onTimeout: () => null);
       if (freshUser != null) {
         AppGlobals.userInfo = freshUser;
+        // Sync fresh token to SecureStorage
+        if (freshUser.token != null && freshUser.token!.isNotEmpty) {
+          await secureStorage.saveToken(freshUser.token!);
+        }
         final freshShared = SharedUserInfo(
           uuid: freshUser.uuid ?? '',
           email: freshUser.email ?? '',

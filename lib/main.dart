@@ -127,6 +127,7 @@ void main() async {
   // This removes hardcoded API keys from source code
   initApiKeys(); // Validate API keys configuration in debug mode
   initRpcConfig(); // Validate RPC URLs security in debug mode
+  initAppConfig(); // Validate WebSocket/IP URL security in debug mode
   RequestUrl.initializeApiKeys(); // Update URLs with actual API keys
 
   FlutterError.onError = (errorDetails) {
@@ -374,12 +375,8 @@ class _N42AppV2State extends ConsumerState<N42AppV2> {
 
     return SplashPage(
       onInit: () async {
-        // 等待加载完成，最多 10 秒
-        int waitCount = 0;
-        while (ref.read(appLoadStateProvider) == Load.loading && waitCount < 100) {
-          await Future.delayed(const Duration(milliseconds: 100));
-          waitCount++;
-        }
+        // 直接等待 appInitProvider 完成，无需轮询
+        await ref.read(appInitProvider.future);
       },
       onComplete: () {
         if (mounted) {

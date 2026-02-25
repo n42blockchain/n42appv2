@@ -249,10 +249,14 @@ class AppPushUtils {
 
   ///对消息统一处理
   static void _handleMessage(Map<String, dynamic> data) {
+    final ctx = AppGlobals.navigatorKey.currentContext;
+    if (ctx == null) {
+      debugPrint('[AppPushUtils] _handleMessage: navigator context unavailable, skipping');
+      return;
+    }
     // 未登录 统一去登录
-    if (AppGlobals.userInfo==null) {
-      Navigator.push(AppGlobals.navigatorKey.currentContext!,
-          MaterialPageRoute(builder: (_) => LoginPage()));
+    if (AppGlobals.userInfo == null) {
+      Navigator.push(ctx, MaterialPageRoute(builder: (_) => LoginPage()));
       return;
     }
     if (data['type'] == 'device_login') {
@@ -267,7 +271,7 @@ class AppPushUtils {
     else if (data['type'] == 'payment_received') {
       // 「确认收款」通知 — 跳转到支付历史页
       Navigator.push(
-        AppGlobals.navigatorKey.currentContext!,
+        ctx,
         MaterialPageRoute(builder: (_) => const PaymentHistory()),
       );
     }
@@ -286,7 +290,7 @@ class AppPushUtils {
       String bUri = getBrowserTxHash(
           txContent['coin'], txContent['hash'] ?? "",
           isTest: isTest);
-      Navigator.push(AppGlobals.navigatorKey.currentContext!,
+      Navigator.push(ctx,
           MaterialPageRoute(builder: (_) => BrowserPage(bUri,
             //"Transaction"
           )));
@@ -306,7 +310,7 @@ class AppPushUtils {
       String bUri = getBrowserTxHash(
           txContent['coin'], txContent['hash'] ?? "",
           isTest: isTest);
-      Navigator.push(AppGlobals.navigatorKey.currentContext!,
+      Navigator.push(ctx,
           MaterialPageRoute(builder: (_) => BrowserPage(bUri,
             //"Transaction"
           )));
@@ -330,7 +334,7 @@ class AppPushUtils {
         "content": content,
         "created": dateFormat.format(DateTime.now()),
       };
-      Navigator.push(AppGlobals.navigatorKey.currentContext!,
+      Navigator.push(ctx,
           MaterialPageRoute(builder: (_) => MessageInfo(infoMap)));
     }
     /*
@@ -342,7 +346,7 @@ class AppPushUtils {
         // JSON 解析失败时使用空 map，安全忽略
       }
       Navigator.push(
-          AppGlobals.navigatorKey.currentContext!,
+          ctx,
           MaterialPageRoute(
               builder: (_) => NftUserHome(
                 user_uuid: txContent['follow_uuid'] ?? "",
@@ -351,7 +355,7 @@ class AppPushUtils {
     }
     else if (data['type'] == "normal_trending") {
       Navigator.push(
-          AppGlobals.navigatorKey.currentContext!,
+          ctx,
           MaterialPageRoute(
               builder: (_) => NftSearch(
                 searchMap: {"specify_24h_like": true},
@@ -360,7 +364,7 @@ class AppPushUtils {
     */
     else if (data['type'] == "tell_friends") {
       Navigator.push(
-          AppGlobals.navigatorKey.currentContext!,
+          ctx,
           MaterialPageRoute(
             builder: (_) => SettingShare(),
           ));
@@ -369,7 +373,7 @@ class AppPushUtils {
         data['type'] == "Tell Friends #2_normal") {
       //跳转分享页
       Navigator.push(
-          AppGlobals.navigatorKey.currentContext!,
+          ctx,
           MaterialPageRoute(
             builder: (_) => SettingShare(),
           ));
@@ -378,40 +382,40 @@ class AppPushUtils {
     else if (data['type'] == "NFTHome #1_normal" ||
         data['type'] == "NFTHome #2_normal") {
       //跳转NFT主页
-      Navigator.of(AppGlobals.navigatorKey.currentContext!)
+      Navigator.of(ctx)
           .popUntil((route) => route.isFirst);
       ProviderUtil.publicProvider().setSelectIndex(2);
     } */
     else if (data['type'] == "ChatHome #1_normal" ||
         data['type'] == "ChatHome #2_normal") {
       //跳转聊天主页
-      Navigator.of(AppGlobals.navigatorKey.currentContext!)
+      Navigator.of(ctx)
           .popUntil((route) => route.isFirst);
       // 使用 Riverpod - 通过 globalProviderContainer
       globalProviderContainer.read(mainTabSelectIndexProvider.notifier).state = 2;
     }
     else if (data['type'] == "News_normal") {
       //跳转新闻列表页面
-      Navigator.of(AppGlobals.navigatorKey.currentContext!)
+      Navigator.of(ctx)
           .popUntil((route) => route.isFirst);
       globalProviderContainer.read(mainTabSelectIndexProvider.notifier).state = 0;
     }
     else if (data['type'] == "Login_normal") {
       //跳转创建钱包
-      Navigator.of(AppGlobals.navigatorKey.currentContext!)
+      Navigator.of(ctx)
           .popUntil((route) => route.isFirst);
       globalProviderContainer.read(mainTabSelectIndexProvider.notifier).state = 0;
     }
     else if (data['type'] == "AboutSettings_normal") {
       //跳转关于我们页面
-      Navigator.push(AppGlobals.navigatorKey.currentContext!,
+      Navigator.push(ctx,
           MaterialPageRoute(
             builder: (_) => AboutApp(),));
     }
     else if (data['type'] == "WalletHome #1_normal" ||
         data['type'] == "WalletHome #2_normal") {
       //跳转钱包页面
-      Navigator.of(AppGlobals.navigatorKey.currentContext!)
+      Navigator.of(ctx)
           .popUntil((route) => route.isFirst);
       globalProviderContainer.read(mainTabSelectIndexProvider.notifier).state = 0;
     }
@@ -419,7 +423,7 @@ class AppPushUtils {
       //跳转设置个人信息页面
       if (AppGlobals.userInfo !=null) {
         Navigator.push(
-            AppGlobals.navigatorKey.currentContext!,
+            ctx,
             MaterialPageRoute(
               builder: (_) => PersonalSetting(),
             ));
@@ -427,7 +431,7 @@ class AppPushUtils {
     }
     else if (data['type'] == "Homepage_normal") {
       //跳转主页
-      Navigator.of(AppGlobals.navigatorKey.currentContext!)
+      Navigator.of(ctx)
           .popUntil((route) => route.isFirst);
       globalProviderContainer.read(mainTabSelectIndexProvider.notifier).state = 0;
     }
