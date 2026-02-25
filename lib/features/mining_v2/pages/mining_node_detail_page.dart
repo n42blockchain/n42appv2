@@ -386,19 +386,14 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage> {
         return _wsDot(context, const Color(0xFFFF9500),
             S.of(context).g_mining_node_key5);
       case WebSocketState.connecting:
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              width: ScreenUtil().setWidth(20),
-              height: ScreenUtil().setWidth(20),
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-              ),
-            ),
-          ],
+        return SizedBox(
+          width: ScreenUtil().setWidth(20),
+          height: ScreenUtil().setWidth(20),
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.mainBlueColor.name),
+          ),
         );
       case WebSocketState.disconnected:
         return _wsDot(context, const Color(0xffEB5851),

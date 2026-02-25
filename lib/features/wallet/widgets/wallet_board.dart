@@ -89,8 +89,8 @@ class _WalletBoardState extends State<WalletBoard> {
         boxShadow: [
           BoxShadow(
             color: isDark
-                ? const Color(0xFF1565C0).withAlpha(60)
-                : const Color(0xFF1565C0).withAlpha(80),
+                ? const Color(0xFF1565C0).withValues(alpha: 0.24)
+                : const Color(0xFF1565C0).withValues(alpha: 0.31),
             blurRadius: 24,
             offset: const Offset(0, 8),
             spreadRadius: 0,
@@ -108,7 +108,7 @@ class _WalletBoardState extends State<WalletBoard> {
               height: ScreenUtil().setWidth(200),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withAlpha(10),
+                color: Colors.white.withValues(alpha: 0.04),
               ),
             ),
           ),
@@ -120,7 +120,7 @@ class _WalletBoardState extends State<WalletBoard> {
               height: ScreenUtil().setWidth(120),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withAlpha(6),
+                color: Colors.white.withValues(alpha: 0.02),
               ),
             ),
           ),
@@ -134,7 +134,7 @@ class _WalletBoardState extends State<WalletBoard> {
                 Text(
                   S.of(context).g_key_29,
                   style: TextStyle(
-                    color: Colors.white.withAlpha(160),
+                    color: Colors.white.withValues(alpha: 0.63),
                     fontSize: ScreenUtil().setSp(20),
                     fontWeight: FontWeight.w400,
                     letterSpacing: 0.5,
@@ -160,7 +160,7 @@ class _WalletBoardState extends State<WalletBoard> {
                       Text(
                         '≈ ¥${oCcyCny.format(cny)}',
                         style: TextStyle(
-                          color: Colors.white.withAlpha(180),
+                          color: Colors.white.withValues(alpha: 0.71),
                           fontSize: ScreenUtil().setSp(22),
                           fontWeight: FontWeight.w400,
                         ),
@@ -174,13 +174,13 @@ class _WalletBoardState extends State<WalletBoard> {
                           vertical: ScreenUtil().setWidth(3),
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white.withAlpha(20),
+                          color: Colors.white.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
                         ),
                         child: Text(
                           _lastUpdatedLabel(),
                           style: TextStyle(
-                            color: Colors.white.withAlpha(180),
+                            color: Colors.white.withValues(alpha: 0.71),
                             fontSize: ScreenUtil().setSp(16),
                           ),
                         ),
@@ -191,14 +191,11 @@ class _WalletBoardState extends State<WalletBoard> {
                 // 分割线
                 Container(
                   height: 1,
-                  color: Colors.white.withAlpha(30),
+                  color: Colors.white.withValues(alpha: 0.12),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(24)),
                 // 操作按钮行
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: buttonList(),
-                ),
+                Row(children: buttonList()),
               ],
             ),
           ),
@@ -234,10 +231,10 @@ class _WalletBoardState extends State<WalletBoard> {
             width: ScreenUtil().setWidth(96),
             height: ScreenUtil().setWidth(96),
             decoration: BoxDecoration(
-              color: Colors.white.withAlpha(28),
+              color: Colors.white.withValues(alpha: 0.11),
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
               border: Border.all(
-                color: Colors.white.withAlpha(40),
+                color: Colors.white.withValues(alpha: 0.16),
                 width: 1,
               ),
             ),
@@ -254,7 +251,7 @@ class _WalletBoardState extends State<WalletBoard> {
           Text(
             label,
             style: TextStyle(
-              color: Colors.white.withAlpha(220),
+              color: Colors.white.withValues(alpha: 0.86),
               fontSize: ScreenUtil().setSp(20),
               fontWeight: FontWeight.w500,
             ),
