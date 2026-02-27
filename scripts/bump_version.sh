@@ -13,6 +13,10 @@ PUBSPEC="$(git rev-parse --show-toplevel)/pubspec.yaml"
 CURRENT=$(grep '^version:' "$PUBSPEC" | sed 's/version: *//')
 VERSION_NAME=$(echo "$CURRENT" | cut -d'+' -f1)
 BUILD_NUM=$(echo "$CURRENT" | cut -d'+' -f2)
+# If no '+' exists, cut returns the whole string; treat as 0
+if [ "$BUILD_NUM" = "$VERSION_NAME" ] || [ -z "$BUILD_NUM" ]; then
+  BUILD_NUM=0
+fi
 
 NEW_BUILD=$((BUILD_NUM + 1))
 NEW_VERSION="${VERSION_NAME}+${NEW_BUILD}"
