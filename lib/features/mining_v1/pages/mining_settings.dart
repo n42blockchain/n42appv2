@@ -35,25 +35,22 @@ class _MiningSettingsState extends State<MiningSettings> {
   //当前用户选中的节点
   Map? currentNode;
 
-  int backgroundMiningMusic=0;//0:default,1:空白
+  int backgroundMiningMusic = 0; //0:default,1:空白
   List<String>? bgmMusicList;
-  List<String> get BGMMusicList{
-    if(bgmMusicList==null){
-      bgmMusicList=[
-        S.of(context).g_mining_key35,
-        S.of(context).g_mining_key36,
-      ];
-    }
+  List<String> get bgmMusicOptions {
+    bgmMusicList ??= [
+      S.of(context).g_mining_key35,
+      S.of(context).g_mining_key36,
+    ];
     return bgmMusicList!;
   }
+
   List<String>? netList;
-  List<String> get NetList{
-    if(netList==null){
-      netList=[
-        S.of(context).g_key_148,
-        S.of(context).g_key_147,
-      ];
-    }
+  List<String> get networkOptions {
+    netList ??= [
+      S.of(context).g_key_148,
+      S.of(context).g_key_147,
+    ];
     return netList!;
   }
 
@@ -63,16 +60,16 @@ class _MiningSettingsState extends State<MiningSettings> {
     initData();
   }
 
-  initData() async {
+  Future<void> initData() async {
     // 获取缓存配置的挖矿节点
     // 获取挖矿是否开启
-    SPUtil sPUtils=SPUtil();
+    SPUtil sPUtils = SPUtil();
     final openState = await sPUtils.getOpenMining();
     isSwitched = openState;
 
-    int? bgmm= await sPUtils.getBackgroundMiningMusic();
-    if(bgmm !=null){
-      backgroundMiningMusic=bgmm;
+    int? bgmm = await sPUtils.getBackgroundMiningMusic();
+    if (bgmm != null) {
+      backgroundMiningMusic = bgmm;
     }
 
     //node list
@@ -93,12 +90,15 @@ class _MiningSettingsState extends State<MiningSettings> {
       setState(() {});
     }
   }
-  networkChange(bool value)async{
+
+  Future<void> networkChange(bool value) async {
     await SPUtil().setIsMainChainMining(value);
-    eventBus.fire(EventPublic(EventPublicType.selectMiningWallet,intValue: globalMiningV1.walletIndex));
+    eventBus.fire(EventPublic(EventPublicType.selectMiningWallet,
+        intValue: globalMiningV1.walletIndex));
     initData();
     Navigator.pop(context);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,171 +112,13 @@ class _MiningSettingsState extends State<MiningSettings> {
             padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
             child: Column(
               children: [
-                wrapItem(Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      S.of(context).g_mining_key82,
-                      style: TextStyle(
-                          fontSize: ScreenUtil().setSp(32),
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name)),
-                    ),
-                    Switch(
-                      onChanged: (bool value) async {
-                        var connectivityResult =
-                        await (Connectivity().checkConnectivity());
-                        debugPrint("connectivityResult ：$connectivityResult");
-                        setState(() {
-                          isSwitched = !isSwitched;
-                          SPUtil().setMiningOpen(isSwitched);
-                          if (isSwitched) {
-                            MiningUtils.startMining();
-                          } else {
-                            MiningUtils.stopMining();
-                          }
-                        });
-                      },
-                      value: isSwitched,
-                    )
-                  ],
-                )),
-                SizedBox(
-                  height: ScreenUtil().setWidth(40),
-                ),
-                wrapItem(Padding(
-                  padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
-                  child: Row(
-                    children: [
-                      Text(
-                        S.of(context).g_mining_key83,
-                        style: TextStyle(
-                            fontSize: ScreenUtil().setSp(32),
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.mainTextColor.name)),
-                      ),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          // 选择节点
-                          sheetBottom(
-                            context,
-                            "",
-                            _buildList(context),
-                          );
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              currentNode?["name"] ?? '',
-                              style: TextStyle(
-                                  color: AppThemeUtils.getColorByKey(
-                                      context, AppThemeKeys.mainTextColor.name),
-                                  fontSize: ScreenUtil().setSp(32)),
-                            ),
-                            const Icon(Icons.arrow_drop_down_sharp)
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                )),
-                SizedBox(
-                  height: ScreenUtil().setWidth(40),
-                ),
-                if(Platform.isIOS)
-                wrapItem(Padding(
-                  padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          S.of(context).g_mining_key34,
-                          style: TextStyle(
-                              fontSize: ScreenUtil().setSp(32),
-                              color: AppThemeUtils.getColorByKey(
-                                  context, AppThemeKeys.mainTextColor.name)),
-                        ),
-                      ),
-                      SizedBox(width: ScreenUtil().setWidth(60),),
-                      GestureDetector(
-                        onTap: () {
-                          _buildList_music();
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              BGMMusicList[backgroundMiningMusic],
-                              style: TextStyle(
-                                  color: AppThemeUtils.getColorByKey(
-                                      context, AppThemeKeys.mainTextColor.name),
-                                  fontSize: ScreenUtil().setSp(32)),
-                            ),
-                            const Icon(Icons.arrow_drop_down_sharp)
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                )),
-                if(Platform.isIOS)
-                SizedBox(
-                  height: ScreenUtil().setWidth(40),
-                ),
-                wrapItem(Padding(
-                  padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              S.of(context).g_mining_key84,
-                              style: TextStyle(
-                                  fontSize: ScreenUtil().setSp(32),
-                                  color: AppThemeUtils.getColorByKey(
-                                      context, AppThemeKeys.mainTextColor.name)),
-                            ),
-                            Text(
-                              S.of(context).g_mining_key85,
-                              style: TextStyle(
-                                  fontSize: ScreenUtil().setSp(28),
-                                  color: AppThemeUtils.getColorByKey(
-                                      context, AppThemeKeys.mainGreyColor.name)),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: ScreenUtil().setWidth(60),),
-                      GestureDetector(
-                        onTap: () {
-                          _buildList_network();
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              NetList[AppConfig.isMainChainMining==true?0:1],
-                              style: TextStyle(
-                                  color: AppThemeUtils.getColorByKey(
-                                      context, AppThemeKeys.mainTextColor.name),
-                                  fontSize: ScreenUtil().setSp(32)),
-                            ),
-                            const Icon(Icons.arrow_drop_down_sharp)
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                )),
+                _buildSwitchItem(),
+                SizedBox(height: ScreenUtil().setWidth(40)),
+                _buildNodeSelector(),
+                SizedBox(height: ScreenUtil().setWidth(40)),
+                if (Platform.isIOS) _buildBgmSelector(),
+                if (Platform.isIOS) SizedBox(height: ScreenUtil().setWidth(40)),
+                _buildNetworkSelector(),
               ],
             ),
           );
@@ -285,7 +127,164 @@ class _MiningSettingsState extends State<MiningSettings> {
     );
   }
 
-  _buildList(BuildContext context) {
+  Widget _buildSwitchItem() {
+    return wrapItem(Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          S.of(context).g_mining_key82,
+          style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.mainTextColor.name)),
+        ),
+        Switch(
+          onChanged: (bool value) async {
+            var connectivityResult =
+                await (Connectivity().checkConnectivity());
+            debugPrint("connectivityResult ：$connectivityResult");
+            setState(() {
+              isSwitched = !isSwitched;
+              SPUtil().setMiningOpen(isSwitched);
+              if (isSwitched) {
+                MiningUtils.startMining();
+              } else {
+                MiningUtils.stopMining();
+              }
+            });
+          },
+          value: isSwitched,
+        )
+      ],
+    ));
+  }
+
+  Widget _buildNodeSelector() {
+    return wrapItem(Padding(
+      padding:
+          EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+      child: Row(
+        children: [
+          Text(
+            S.of(context).g_mining_key83,
+            style: TextStyle(
+                fontSize: ScreenUtil().setSp(32),
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainTextColor.name)),
+          ),
+          const Spacer(),
+          GestureDetector(
+            onTap: () {
+              sheetBottom(context, "", _buildNodeList(context));
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  currentNode?["name"] ?? '',
+                  style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.mainTextColor.name),
+                      fontSize: ScreenUtil().setSp(32)),
+                ),
+                const Icon(Icons.arrow_drop_down_sharp)
+              ],
+            ),
+          ),
+        ],
+      ),
+    ));
+  }
+
+  Widget _buildBgmSelector() {
+    return wrapItem(Padding(
+      padding:
+          EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: Text(
+              S.of(context).g_mining_key34,
+              style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32),
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainTextColor.name)),
+            ),
+          ),
+          SizedBox(width: ScreenUtil().setWidth(60)),
+          GestureDetector(
+            onTap: () => _showMusicSheet(),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  bgmMusicOptions[backgroundMiningMusic],
+                  style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.mainTextColor.name),
+                      fontSize: ScreenUtil().setSp(32)),
+                ),
+                const Icon(Icons.arrow_drop_down_sharp)
+              ],
+            ),
+          ),
+        ],
+      ),
+    ));
+  }
+
+  Widget _buildNetworkSelector() {
+    return wrapItem(Padding(
+      padding:
+          EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  S.of(context).g_mining_key84,
+                  style: TextStyle(
+                      fontSize: ScreenUtil().setSp(32),
+                      color: AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.mainTextColor.name)),
+                ),
+                Text(
+                  S.of(context).g_mining_key85,
+                  style: TextStyle(
+                      fontSize: ScreenUtil().setSp(28),
+                      color: AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.mainGreyColor.name)),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: ScreenUtil().setWidth(60)),
+          GestureDetector(
+            onTap: () => _showNetworkSheet(),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  networkOptions[AppConfig.isMainChainMining == true ? 0 : 1],
+                  style: TextStyle(
+                      color: AppThemeUtils.getColorByKey(
+                          context, AppThemeKeys.mainTextColor.name),
+                      fontSize: ScreenUtil().setSp(32)),
+                ),
+                const Icon(Icons.arrow_drop_down_sharp)
+              ],
+            ),
+          ),
+        ],
+      ),
+    ));
+  }
+
+  Widget _buildNodeList(BuildContext context) {
     List<Widget> list = nodeList.map((e) {
       return ItemMiningNode(
         countryName: e["name"],
@@ -314,207 +313,155 @@ class _MiningSettingsState extends State<MiningSettings> {
     );
   }
 
-  _buildList_music() {
-    Widget child=Container(
-      width: double.infinity,
-      child: Column(
-        children: [
-          InkWell(
-            onTap: ()async{
-              if(0 != backgroundMiningMusic){
-                setState(() {
-                  backgroundMiningMusic=0;
-                });
-                await SPUtil().setBackgroundMiningMusic(backgroundMiningMusic);
-              }
-              Navigator.pop(context);
-            },
-            child: Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(ScreenUtil().setWidth(24),),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-                border: Border.all(color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBorderColor.name),width: ScreenUtil().setWidth(1)),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Column(
+  /// Reusable option item for bottom sheets (music / network selectors).
+  Widget _buildOptionItem({
+    required String label,
+    String? subtitle,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          border: Border.all(
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.itemBorderColor.name),
+            width: ScreenUtil().setWidth(1),
+          ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: subtitle != null
+                  ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          BGMMusicList[0],
+                          label,
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(30),
-                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                            color: AppThemeUtils.getColorByKey(
+                                context, AppThemeKeys.mainTextColor.name),
                           ),
                         ),
-                        SizedBox(height: ScreenUtil().setWidth(10),),
+                        SizedBox(height: ScreenUtil().setWidth(10)),
                         Text(
-                          S.of(context).g_mining_key37,
+                          subtitle,
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(26),
-                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                            color: AppThemeUtils.getColorByKey(context,
+                                AppThemeKeys.itemSubtitleTextColor.name),
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                  if(0==backgroundMiningMusic)
-                    Icon(
-                      Icons.check,
-                      size: ScreenUtil().setWidth(48),
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
                     )
-                ],
-              ),
+                  : Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(30),
+                        color: AppThemeUtils.getColorByKey(
+                            context, AppThemeKeys.mainTextColor.name),
+                      ),
+                    ),
             ),
-          ),
-          SizedBox(height: ScreenUtil().setWidth(24),),
-          InkWell(
-            onTap: ()async{
-              if(1 != backgroundMiningMusic){
+            if (isSelected)
+              Icon(
+                Icons.check,
+                size: ScreenUtil().setWidth(48),
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainBlueColor.name),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showMusicSheet() {
+    final child = SizedBox(
+      width: double.infinity,
+      child: Column(
+        children: [
+          _buildOptionItem(
+            label: bgmMusicOptions[0],
+            subtitle: S.of(context).g_mining_key37,
+            isSelected: backgroundMiningMusic == 0,
+            onTap: () async {
+              if (0 != backgroundMiningMusic) {
                 setState(() {
-                  backgroundMiningMusic=1;
+                  backgroundMiningMusic = 0;
                 });
                 await SPUtil().setBackgroundMiningMusic(backgroundMiningMusic);
               }
               Navigator.pop(context);
             },
-            child: Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(ScreenUtil().setWidth(24),),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-                border: Border.all(color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBorderColor.name),width: ScreenUtil().setWidth(1)),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      BGMMusicList[1],
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(30),
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                      ),
-                    ),
-                  ),
-                  if(1==backgroundMiningMusic)
-                    Icon(
-                      Icons.check,
-                      size: ScreenUtil().setWidth(48),
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                    )
-                ],
-              ),
-            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(24)),
+          _buildOptionItem(
+            label: bgmMusicOptions[1],
+            isSelected: backgroundMiningMusic == 1,
+            onTap: () async {
+              if (1 != backgroundMiningMusic) {
+                setState(() {
+                  backgroundMiningMusic = 1;
+                });
+                await SPUtil().setBackgroundMiningMusic(backgroundMiningMusic);
+              }
+              Navigator.pop(context);
+            },
           ),
         ],
       ),
     );
-    sheetBottom(
-      context,
-      "",
-      child,
-    );
+    sheetBottom(context, "", child);
   }
-  _buildList_network() {
-    Widget child=Container(
+
+  void _showNetworkSheet() {
+    final child = SizedBox(
       width: double.infinity,
       child: Column(
         children: [
-          InkWell(
-            onTap: ()async{
-              if(AppConfig.isMainChainMining==false){
+          _buildOptionItem(
+            label: networkOptions[0],
+            isSelected: AppConfig.isMainChainMining == true,
+            onTap: () async {
+              if (AppConfig.isMainChainMining == false) {
                 networkChange(true);
               }
               Navigator.pop(context);
             },
-            child: Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(ScreenUtil().setWidth(24),),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-                border: Border.all(color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBorderColor.name),width: ScreenUtil().setWidth(1)),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      NetList[0],
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(30),
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                      ),
-                    ),
-                  ),
-                  if(AppConfig.isMainChainMining==true)
-                    Icon(
-                      Icons.check,
-                      size: ScreenUtil().setWidth(48),
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                    )
-                ],
-              ),
-            ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(24),),
-          InkWell(
-            onTap: ()async{
-              if(AppConfig.isMainChainMining==true){
+          SizedBox(height: ScreenUtil().setWidth(24)),
+          _buildOptionItem(
+            label: networkOptions[1],
+            isSelected: AppConfig.isMainChainMining == false,
+            onTap: () async {
+              if (AppConfig.isMainChainMining == true) {
                 networkChange(false);
               }
               Navigator.pop(context);
             },
-            child: Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(ScreenUtil().setWidth(24),),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-                border: Border.all(color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBorderColor.name),width: ScreenUtil().setWidth(1)),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      NetList[1],
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(30),
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                      ),
-                    ),
-                  ),
-                  if(AppConfig.isMainChainMining==false)
-                    Icon(
-                      Icons.check,
-                      size: ScreenUtil().setWidth(48),
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                    )
-                ],
-              ),
-            ),
           ),
         ],
       ),
     );
-    sheetBottom(
-      context,
-      "",
-      child,
-    );
+    sheetBottom(context, "", child);
   }
 
-  wrapItem(Widget child) {
+  Widget wrapItem(Widget child) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24), vertical: ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(24),
+          vertical: ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
-          color:
-          AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.itemBgColor.name),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16))),
       child: child,
     );
