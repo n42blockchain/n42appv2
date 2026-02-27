@@ -2,45 +2,39 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:web3dart/web3dart.dart';
 
-class CreateP2WSH{
-  String? p2wsh(int lockTime,{String? uPubKey,String? cPubKey}) {
+class CreateP2WSH {
+  String? p2wsh(int lockTime, {String? uPubKey, String? cPubKey}) {
     // 示例：用户公钥和 Canister 公钥
     uPubKey ??= '02a50eb66887d03fe186b608f477d99bc7631f56e34e3a4843565c55f1aa0c043a';
     cPubKey ??= '03cc9054981c2c0c891db4d99818dde7e4a7d0b272b4464a48e5c03de8652fc721';
+
     final userPubKey = Uint8List.fromList(hexToBytes(uPubKey));
     final canisterPubKey = Uint8List.fromList(hexToBytes(cPubKey));
 
-    // 质押时间（区块高度）
-    //final lockTime = 800000;
-
-    // 构建锁定脚本
     final redeemScript = buildRedeemScript(userPubKey, canisterPubKey, lockTime);
     final scriptHash = sha256a(redeemScript);
-
-    // 生成 P2WSH 地址
-    final p2wshAddress = createP2WSHAddress(scriptHash);
-    return p2wshAddress;
+    return createP2WSHAddress(scriptHash);
   }
+
   /// 构建锁定脚本
   Uint8List buildRedeemScript(Uint8List userPubKey, Uint8List canisterPubKey, int lockTime) {
-    List<int> script1=[0x63];
-    script1.addAll(encodeNumber(lockTime).toList());
-    script1.addAll([0xb1, 0x75]);
-    script1.addAll(userPubKey.toList());
-    script1.addAll([0xac]);
-    script1.addAll([0x67]);
-    script1.addAll(canisterPubKey.toList());
-    script1.addAll([0xac]);
-    script1.addAll([0x68]);
-
-    return Uint8List.fromList(script1);
+    return Uint8List.fromList([
+      0x63,
+      ...encodeNumber(lockTime),
+      0xb1, 0x75,
+      ...userPubKey,
+      0xac,
+      0x67,
+      ...canisterPubKey,
+      0xac,
+      0x68,
+    ]);
   }
 
   /// 将数字编码为比特币脚本格式
   Uint8List encodeNumber(int number) {
-    if (number == 0) {
-      return Uint8List.fromList([0x00]);
-    }
+    if (number == 0) return Uint8List.fromList([0x00]);
+
     final bytes = Uint8List(8);
     var value = number;
     var length = 0;
@@ -51,43 +45,36 @@ class CreateP2WSH{
     }
     return bytes.sublist(0, length);
   }
+
   /// 计算 SHA-256 哈希
   Uint8List sha256a(Uint8List data) {
-    final hash = sha256.convert(data);
-    return Uint8List.fromList(hash.bytes);
+    return Uint8List.fromList(sha256.convert(data).bytes);
   }
+
   /// 生成 P2WSH 地址
   String createP2WSHAddress(Uint8List scriptHash) {
-    // 生成 P2WSH 地址
     final p2wshAddress = bech32Encode('bc', scriptHash);
     if (kDebugMode) debugPrint('P2WSH Address: $p2wshAddress');
     return p2wshAddress;
   }
+
   /// Bech32 字符集
   final String _charset = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
 
   /// Bech32 编码
   String bech32Encode(String hrp, Uint8List data) {
-    // 1. 将 HRP 转换为小写
     hrp = hrp.toLowerCase();
-
-    // 2. 将数据部分转换为 5 位一组
     final converted = _convertBits(data, 8, 5, true);
-
-    // 3. 计算校验和
     final checksum = _createChecksum(hrp, converted);
 
-    // 4. 组合 HRP、数据和校验和
     final combined = Uint8List(converted.length + checksum.length)
       ..setAll(0, converted)
       ..setAll(converted.length, checksum);
 
-    // 5. 将数据编码为 Bech32 字符串
     final bech32 = StringBuffer('${hrp}1');
     for (final value in combined) {
       bech32.write(_charset[value]);
     }
-
     return bech32.toString();
   }
 
@@ -146,9 +133,7 @@ class CreateP2WSH{
       final top = chk >> 25;
       chk = (chk & 0x1ffffff) << 5 ^ value;
       for (var i = 0; i < 5; i++) {
-        if ((top >> i) & 1 == 1) {
-          chk ^= generator[i];
-        }
+        if ((top >> i) & 1 == 1) chk ^= generator[i];
       }
     }
     return chk;

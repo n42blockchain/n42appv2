@@ -8,17 +8,18 @@ class ApiProviderException implements Exception {
   final String message;
   final int? statusCode;
   final Map<String, dynamic>? responseData;
-  const ApiProviderException(this.message,
-      [this.statusCode, this.responseData]);
+
+  const ApiProviderException(this.message, [this.statusCode, this.responseData]);
+
   @override
-  String toString() {
-    return "status: $statusCode $message ${responseData ?? ""}";
-  }
+  String toString() => 'status: $statusCode $message ${responseData ?? ""}';
 }
 
 class BitcoinApiService implements ApiService {
   BitcoinApiService([http.Client? client]) : _client = client ?? http.Client();
+
   final http.Client _client;
+
   @override
   Future<T> get<T>(String url) async {
     final response = await _client.get(Uri.parse(url));
@@ -26,28 +27,22 @@ class BitcoinApiService implements ApiService {
   }
 
   @override
-  Future<T> post<T>(String url,
-      {Map<String, String> headers = const {"Content-Type": "application/json"},
-        Object? body}) async {
-    final response =
-    await _client.post(Uri.parse(url), headers: headers, body: body);
+  Future<T> post<T>(
+    String url, {
+    Map<String, String> headers = const {'Content-Type': 'application/json'},
+    Object? body,
+  }) async {
+    final response = await _client.post(Uri.parse(url), headers: headers, body: body);
     return _readResponse<T>(response);
   }
 
   T _readResponse<T>(http.Response response) {
-    final String toString = _readBody(response);
-    switch (T) {
-      case const (String):
-        return toString as T;
-      case const (List):
-      case const (Map):
-        return jsonDecode(toString) as T;
-      default:
-        try {
-          return jsonDecode(toString) as T;
-        } catch (e) {
-          throw const ApiProviderException("invalid request");
-        }
+    final body = _readBody(response);
+    if (T == String) return body as T;
+    try {
+      return jsonDecode(body) as T;
+    } catch (e) {
+      throw const ApiProviderException('invalid request');
     }
   }
 
@@ -58,16 +53,18 @@ class BitcoinApiService implements ApiService {
 
   void _readErr(http.Response response) {
     if (response.statusCode == 200 || response.statusCode == 201) return;
-    String toString = StringUtils.decode(response.bodyBytes);
+
+    final body = StringUtils.decode(response.bodyBytes);
     Map<String, dynamic>? errorResult;
     try {
-      if (toString.isNotEmpty) {
-        errorResult = StringUtils.toJson(toString);
-      }
+      if (body.isNotEmpty) errorResult = StringUtils.toJson(body);
     } catch (_) {
       // JSON 解析失败时 errorResult 保持为 null，安全忽略
     }
-    toString = toString.isEmpty ? "request_error" : toString;
-    throw ApiProviderException(toString, response.statusCode, errorResult);
+    throw ApiProviderException(
+      body.isEmpty ? 'request_error' : body,
+      response.statusCode,
+      errorResult,
+    );
   }
 }

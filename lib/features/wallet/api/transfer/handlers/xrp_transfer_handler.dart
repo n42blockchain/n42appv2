@@ -13,24 +13,14 @@ class XrpTransferHandler extends BaseTransferHandler {
   String get chainSymbol => 'XRP';
 
   @override
-  bool supports(String chainSymbol) {
-    return chainSymbol.toUpperCase() == 'XRP';
-  }
+  bool supports(String chainSymbol) => chainSymbol.toUpperCase() == 'XRP';
 
   @override
-  Future<MessageModel> transfer(TransferParams params) async {
-    // TODO: Migrate from transfer_api.dart transferXrp method
-    return createError('XRP transfer not yet migrated');
-  }
+  // TODO: Migrate from transfer_api.dart transferXrp method
+  Future<MessageModel> transfer(TransferParams params) => notYetMigrated();
 
   @override
-  Future<GasEstimation> estimateGas(TransferParams params) async {
-    // TODO: Implement gas estimation
-    return GasEstimation(
-      gasLimit: BigInt.zero,
-      gasPrice: BigInt.zero,
-      totalFee: BigInt.zero,
-      errorMessage: 'Not implemented',
-    );
-  }
+  // TODO: Implement gas estimation
+  Future<GasEstimation> estimateGas(TransferParams params) async =>
+      notImplementedGas();
 }

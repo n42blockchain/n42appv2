@@ -8,31 +8,20 @@ import '../transfer_handler.dart';
 import 'base_transfer_handler.dart';
 
 /// Transfer handler for Tron chain
+// Active implementation: see transfer_api.dart for the working transfer methods
 class TrxTransferHandler extends BaseTransferHandler {
-  // Active implementation: see transfer_api.dart for the working transfer methods
-
   @override
   String get chainSymbol => 'TRX';
 
   @override
-  bool supports(String chainSymbol) {
-    return chainSymbol.toUpperCase() == 'TRX';
-  }
+  bool supports(String chainSymbol) => chainSymbol.toUpperCase() == 'TRX';
 
   @override
-  Future<MessageModel> transfer(TransferParams params) async {
-    // TODO: Migrate from transfer_api.dart transferTrx method
-    return createError('TRX transfer not yet migrated');
-  }
+  // TODO: Migrate from transfer_api.dart transferTrx method
+  Future<MessageModel> transfer(TransferParams params) => notYetMigrated();
 
   @override
-  Future<GasEstimation> estimateGas(TransferParams params) async {
-    // TODO: Implement gas estimation
-    return GasEstimation(
-      gasLimit: BigInt.zero,
-      gasPrice: BigInt.zero,
-      totalFee: BigInt.zero,
-      errorMessage: 'Not implemented',
-    );
-  }
+  // TODO: Implement gas estimation
+  Future<GasEstimation> estimateGas(TransferParams params) async =>
+      notImplementedGas();
 }

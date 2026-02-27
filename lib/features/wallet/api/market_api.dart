@@ -2,11 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/api_keys_config.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
-// [FIX A1] Import OhlcPoint from the model layer, NOT from the UI widget layer.
 import 'package:n42_wallet/features/wallet/models/ohlc_point.dart';
 
 class MarketApi {
-  // [FIX] Use final for fields that are never reassigned after construction.
   final String _url;
   final Map<String, String> _header;
 
@@ -14,7 +12,6 @@ class MarketApi {
       : _url = AppConfig.getApiUrlOnline('marketHost'),
         _header = const {'content-type': 'application/json'};
 
-  // [FIX] Single location for the CoinGecko base URL.
   // 有 API key 时使用 Pro endpoint（更高限额），否则用免费 endpoint。
   static String get _geckoBase {
     final key = ApiKeysConfig.coinGeckoApiKey;
@@ -53,12 +50,10 @@ class MarketApi {
         return {'error': true, 'data': 'No coins specified'};
       }
 
-      final requestUrl = '$_url/r/targetCoinMarketsList?coin=$cleanedCoins';
-      // [FIX M5] Keep only essential log; remove per-item data dumps.
       debugPrint('MarketApi.getWalletCoinsInfo: $cleanedCoins');
 
       final data = await BaseApi.requestEmptyH.get<dynamic>(
-        requestUrl,
+        '$_url/r/targetCoinMarketsList?coin=$cleanedCoins',
         params: {},
         header: _header,
       );
@@ -80,21 +75,17 @@ class MarketApi {
   Future<List<OhlcPoint>> getOhlcvData(String geckoId, {int days = 1}) async {
     if (geckoId.isEmpty) return [];
     try {
-      // [FIX S1] URI-encode geckoId to prevent path injection.
       final encodedId = Uri.encodeComponent(geckoId);
-      final requestUrl =
-          '$_geckoBase/coins/$encodedId/ohlc?vs_currency=usd&days=$days';
       debugPrint('MarketApi.getOhlcvData: $encodedId days=$days');
 
       final raw = await BaseApi.requestEmptyH.get<dynamic>(
-        requestUrl,
+        '$_geckoBase/coins/$encodedId/ohlc?vs_currency=usd&days=$days',
         params: {},
         header: _geckoHeader,
       );
 
       if (raw == null || raw is! List) return [];
 
-      // [FIX M3] Validate OHLC constraints via OhlcPoint.isValid.
       return raw
           .whereType<List>()
           .where((item) => item.length >= 5)
@@ -122,14 +113,11 @@ class MarketApi {
     const empty = {'prices': <double>[], 'volumes': <double>[]};
     if (geckoId.isEmpty) return empty;
     try {
-      // [FIX S1] URI-encode geckoId.
       final encodedId = Uri.encodeComponent(geckoId);
-      final requestUrl =
-          '$_geckoBase/coins/$encodedId/market_chart?vs_currency=usd&days=$days';
       debugPrint('MarketApi.getMarketChart: $encodedId days=$days');
 
       final raw = await BaseApi.requestEmptyH.get<dynamic>(
-        requestUrl,
+        '$_geckoBase/coins/$encodedId/market_chart?vs_currency=usd&days=$days',
         params: {},
         header: _geckoHeader,
       );
@@ -152,13 +140,12 @@ class MarketApi {
   /// market_cap_rank, data 等字段。网络异常或解析失败返回空列表。
   Future<List<Map<String, dynamic>>> getTrendingCoins() async {
     try {
-      final requestUrl = '$_geckoBase/search/trending';
       debugPrint('MarketApi.getTrendingCoins');
 
       final raw = await BaseApi.requestEmptyH.get<dynamic>(
-        requestUrl,
+        '$_geckoBase/search/trending',
         params: {},
-        header: _header,
+        header: _geckoHeader,
       );
 
       if (raw == null || raw is! Map) return [];
@@ -188,14 +175,12 @@ class MarketApi {
   Future<List<Map<String, dynamic>>> searchCoins(String query) async {
     if (query.trim().isEmpty) return [];
     try {
-      final requestUrl =
-          '$_geckoBase/search?q=${Uri.encodeQueryComponent(query.trim())}';
       debugPrint('MarketApi.searchCoins: $query');
 
       final raw = await BaseApi.requestEmptyH.get<dynamic>(
-        requestUrl,
+        '$_geckoBase/search?q=${Uri.encodeQueryComponent(query.trim())}',
         params: {},
-        header: _header,
+        header: _geckoHeader,
       );
 
       if (raw == null || raw is! Map) return [];

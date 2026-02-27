@@ -166,27 +166,23 @@ mixin EthTokenApiMixin on TokenApiBase {
       );
     }
 
-    Map<String, dynamic> params;
+    final gasPriceHex = '0x${gasPrice.toRadixString(16)}';
+    final gasPriceKey =
+        get1559WithChainSymbol(coinType) ? 'maxFeePerGas' : 'gasPrice';
+
+    final Map<String, dynamic> params;
 
     if (contract.isEmpty) {
       params = {
         'from': from,
         'to': to,
         'gas': '0x${gas.toRadixString(16)}',
+        gasPriceKey: gasPriceHex,
         'coin': coinType,
         'net_mode': isTest ? 'test' : 'main',
         'id': AppGlobals.nextId,
+        if (data.isNotEmpty) 'data': data,
       };
-
-      if (get1559WithChainSymbol(coinType)) {
-        params['maxFeePerGas'] = '0x${gasPrice.toRadixString(16)}';
-      } else {
-        params['gasPrice'] = '0x${gasPrice.toRadixString(16)}';
-      }
-
-      if (data.isNotEmpty) {
-        params['data'] = data;
-      }
     } else {
       final toAddress = strip0x(to);
       var methodSig = bytesToHex(keccakAscii('transfer(address,uint256)'));
@@ -199,16 +195,11 @@ mixin EthTokenApiMixin on TokenApiBase {
         'to': contract,
         'gas': '0x${gas.toRadixString(16)}',
         'data': '0x${methodSig}000000000000000000000000$toAddress$valueHex',
+        gasPriceKey: gasPriceHex,
         'coin': coinType,
         'net_mode': isTest ? 'test' : 'main',
         'id': AppGlobals.nextId,
       };
-
-      if (get1559WithChainSymbol(coinType)) {
-        params['maxFeePerGas'] = '0x${gasPrice.toRadixString(16)}';
-      } else {
-        params['gasPrice'] = '0x${gasPrice.toRadixString(16)}';
-      }
     }
 
     return await getGasEstimateEth(params);

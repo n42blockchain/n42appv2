@@ -23,6 +23,10 @@ class GasTrackerApi {
     return _instance!;
   }
 
+  static const Map<String, String> _jsonHeader = {
+    'content-type': 'application/json',
+  };
+
   /// 获取 Gas 估算数据
   ///
   /// [coinType] 链符号，如 ETH、BNB 等
@@ -36,7 +40,6 @@ class GasTrackerApi {
     BigInt? customGasLimit,
   }) async {
     try {
-      // 获取链配置
       final chainConfig = chainUrlMap[coinType];
       if (chainConfig == null) {
         return MessageModel.error()..data = 'Unsupported chain: $coinType';
@@ -57,14 +60,11 @@ class GasTrackerApi {
         return MessageModel.error()..data = 'RPC endpoint not configured';
       }
 
-      // 计算 gas limit
-      final gasLimit = customGasLimit ?? BigInt.from(getCoinGas(coinType, contract: isContract));
-
-      // 检查是否支持 EIP-1559
+      final gasLimit =
+          customGasLimit ?? BigInt.from(getCoinGas(coinType, contract: isContract));
       final supportsEIP1559 = get1559WithChainSymbol(coinType);
 
       if (supportsEIP1559) {
-        // 获取 EIP-1559 费用历史
         return await _getEIP1559GasEstimate(
           rpc: rpc,
           gasLimit: gasLimit,
@@ -73,7 +73,6 @@ class GasTrackerApi {
           unit: unit,
         );
       } else {
-        // Legacy 模式
         return await _getLegacyGasEstimate(
           rpc: rpc,
           gasLimit: gasLimit,
@@ -96,7 +95,6 @@ class GasTrackerApi {
     required String unit,
   }) async {
     try {
-      // 调用 eth_feeHistory 获取历史数据
       final feeHistoryResult = await _callEthFeeHistory(rpc, 10, [10, 50, 90]);
 
       if (feeHistoryResult.error) {
@@ -118,13 +116,13 @@ class GasTrackerApi {
           .toList();
 
       // 解析 reward（优先费历史）
-      final rewardList = (feeHistory['reward'] as List<dynamic>?)
-          ?.map((e) => (e as List<dynamic>)
-              .map((r) => _hexToBigInt(r.toString()))
-              .toList())
-          .toList() ?? [];
+      final rewardList =
+          (feeHistory['reward'] as List<dynamic>?)
+              ?.map((e) =>
+                  (e as List<dynamic>).map((r) => _hexToBigInt(r.toString())).toList())
+              .toList() ??
+          [];
 
-      // 创建估算模型
       final gasEstimate = GasEstimateModel.fromFeeHistory(
         baseFeeHistory: baseFeeList,
         rewardHistory: rewardList,
@@ -135,10 +133,7 @@ class GasTrackerApi {
         unit: unit,
       );
 
-      final mm = MessageModel();
-      mm.error = false;
-      mm.data = gasEstimate;
-      return mm;
+      return MessageModel()..data = gasEstimate;
     } catch (e) {
       // 降级到 legacy 模式
       return await _getLegacyGasEstimate(
@@ -160,16 +155,11 @@ class GasTrackerApi {
     required String unit,
   }) async {
     try {
-      // 获取当前 gas price
       final gasPriceResult = await _callEthGasPrice(rpc);
-
-      if (gasPriceResult.error) {
-        return gasPriceResult;
-      }
+      if (gasPriceResult.error) return gasPriceResult;
 
       final currentGasPrice = gasPriceResult.data as BigInt;
 
-      // 创建三档估算
       final gasEstimate = GasEstimateModel(
         supportsEIP1559: false,
         slow: GasOption.legacy(
@@ -190,10 +180,36 @@ class GasTrackerApi {
         unit: unit,
       );
 
-      final mm = MessageModel();
-      mm.error = false;
-      mm.data = gasEstimate;
-      return mm;
+      return MessageModel()..data = gasEstimate;
+    } catch (e) {
+      return MessageModel.error()..data = e.toString();
+    }
+  }
+
+  // ── RPC helpers ───────────────────────────────────────────────────────────
+
+  /// 解析通用 RPC 响应，提取 result 字段
+  MessageModel _parseRpcResponse(dynamic response) {
+    if (response['error'] != null) {
+      return MessageModel.error()
+        ..data = response['error']['message'] ?? 'RPC error';
+    }
+    if (response['result'] != null) {
+      return MessageModel()..data = response['result'];
+    }
+    return MessageModel.error()..data = 'Invalid response';
+  }
+
+  /// 执行 RPC 调用并返回解析结果
+  Future<MessageModel> _callRpc(String rpc, Map<String, dynamic> body) async {
+    try {
+      final response = await BaseApi.requestEmptyH.post(
+        rpc,
+        params: body,
+        data: body,
+        header: _jsonHeader,
+      );
+      return _parseRpcResponse(response);
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
@@ -204,9 +220,8 @@ class GasTrackerApi {
     String rpc,
     int blockCount,
     List<int> rewardPercentiles,
-  ) async {
-    try {
-      final params = {
+  ) =>
+      _callRpc(rpc, {
         'jsonrpc': '2.0',
         'method': 'eth_feeHistory',
         'params': [
@@ -215,113 +230,30 @@ class GasTrackerApi {
           rewardPercentiles,
         ],
         'id': 1,
-      };
+      });
 
-      final response = await BaseApi.requestEmptyH.post(
-        rpc,
-        params: params,
-        data: params,
-        header: {'content-type': 'application/json'},
-      );
-
-      final mm = MessageModel();
-
-      if (response['error'] != null) {
-        mm.error = true;
-        mm.data = response['error']['message'] ?? 'RPC error';
-        return mm;
-      }
-
-      if (response['result'] != null) {
-        mm.error = false;
-        mm.data = response['result'];
-        return mm;
-      }
-
-      mm.error = true;
-      mm.data = 'Invalid response';
-      return mm;
-    } catch (e) {
-      return MessageModel.error()..data = e.toString();
-    }
-  }
-
-  /// 调用 eth_gasPrice RPC
+  /// 调用 eth_gasPrice RPC，result 转为 BigInt
   Future<MessageModel> _callEthGasPrice(String rpc) async {
-    try {
-      final params = {
-        'jsonrpc': '2.0',
-        'method': 'eth_gasPrice',
-        'params': [],
-        'id': 1,
-      };
-
-      final response = await BaseApi.requestEmptyH.post(
-        rpc,
-        params: params,
-        data: params,
-        header: {'content-type': 'application/json'},
-      );
-
-      final mm = MessageModel();
-
-      if (response['error'] != null) {
-        mm.error = true;
-        mm.data = response['error']['message'] ?? 'RPC error';
-        return mm;
-      }
-
-      if (response['result'] != null) {
-        mm.error = false;
-        mm.data = _hexToBigInt(response['result'].toString());
-        return mm;
-      }
-
-      mm.error = true;
-      mm.data = 'Invalid response';
-      return mm;
-    } catch (e) {
-      return MessageModel.error()..data = e.toString();
-    }
+    final result = await _callRpc(rpc, {
+      'jsonrpc': '2.0',
+      'method': 'eth_gasPrice',
+      'params': [],
+      'id': 1,
+    });
+    if (!result.error) result.data = _hexToBigInt(result.data.toString());
+    return result;
   }
 
   /// 调用 eth_maxPriorityFeePerGas RPC
   Future<MessageModel> getMaxPriorityFeePerGas(String rpc) async {
-    try {
-      final params = {
-        'jsonrpc': '2.0',
-        'method': 'eth_maxPriorityFeePerGas',
-        'params': [],
-        'id': 1,
-      };
-
-      final response = await BaseApi.requestEmptyH.post(
-        rpc,
-        params: params,
-        data: params,
-        header: {'content-type': 'application/json'},
-      );
-
-      final mm = MessageModel();
-
-      if (response['error'] != null) {
-        mm.error = true;
-        mm.data = response['error']['message'] ?? 'RPC error';
-        return mm;
-      }
-
-      if (response['result'] != null) {
-        mm.error = false;
-        mm.data = _hexToBigInt(response['result'].toString());
-        return mm;
-      }
-
-      mm.error = true;
-      mm.data = 'Invalid response';
-      return mm;
-    } catch (e) {
-      return MessageModel.error()..data = e.toString();
-    }
+    final result = await _callRpc(rpc, {
+      'jsonrpc': '2.0',
+      'method': 'eth_maxPriorityFeePerGas',
+      'params': [],
+      'id': 1,
+    });
+    if (!result.error) result.data = _hexToBigInt(result.data.toString());
+    return result;
   }
 
   /// 获取当前区块的 base fee
@@ -347,38 +279,22 @@ class GasTrackerApi {
         return MessageModel.error()..data = 'RPC not configured';
       }
 
-      final params = {
+      final result = await _callRpc(rpc, {
         'jsonrpc': '2.0',
         'method': 'eth_getBlockByNumber',
         'params': ['latest', false],
         'id': 1,
-      };
+      });
 
-      final response = await BaseApi.requestEmptyH.post(
-        rpc,
-        params: params,
-        data: params,
-        header: {'content-type': 'application/json'},
-      );
+      if (result.error) return result;
 
-      final mm = MessageModel();
-
-      if (response['error'] != null) {
-        mm.error = true;
-        mm.data = response['error']['message'] ?? 'RPC error';
-        return mm;
+      final block = result.data;
+      if (block != null && block['baseFeePerGas'] != null) {
+        return MessageModel()
+          ..data = _hexToBigInt(block['baseFeePerGas'].toString());
       }
 
-      final result = response['result'];
-      if (result != null && result['baseFeePerGas'] != null) {
-        mm.error = false;
-        mm.data = _hexToBigInt(result['baseFeePerGas'].toString());
-        return mm;
-      }
-
-      mm.error = true;
-      mm.data = 'baseFeePerGas not available';
-      return mm;
+      return MessageModel.error()..data = 'baseFeePerGas not available';
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
@@ -386,23 +302,16 @@ class GasTrackerApi {
 
   /// 将十六进制字符串转换为 BigInt
   BigInt _hexToBigInt(String hex) {
-    if (hex.startsWith('0x') || hex.startsWith('0X')) {
-      hex = hex.substring(2);
-    }
-    if (hex.isEmpty) return BigInt.zero;
-    return BigInt.parse(hex, radix: 16);
+    final clean =
+        (hex.startsWith('0x') || hex.startsWith('0X')) ? hex.substring(2) : hex;
+    if (clean.isEmpty) return BigInt.zero;
+    return BigInt.parse(clean, radix: 16);
   }
 
   /// 格式化确认时间（通用缩写，便于 i18n）
   static String formatEstimatedTime(int seconds) {
-    if (seconds < 60) {
-      return '~${seconds}s';
-    } else if (seconds < 3600) {
-      final minutes = seconds ~/ 60;
-      return '~${minutes}min';
-    } else {
-      final hours = seconds ~/ 3600;
-      return '~${hours}hr';
-    }
+    if (seconds < 60) return '~${seconds}s';
+    if (seconds < 3600) return '~${seconds ~/ 60}min';
+    return '~${seconds ~/ 3600}hr';
   }
 }

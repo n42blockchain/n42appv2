@@ -1,0 +1,374 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
+import 'package:n42_wallet/features/component/enums/coin_type.dart';
+import 'package:n42_wallet/features/utils/regular.dart';
+import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_chain_info.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_chain_info_xrp.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_page_helpers.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/features/widgets/image_network.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+
+/// 代币列表单行：包含滑动删除、图标、名称、价格、涨跌幅、图钉按钮。
+class WalletCoinItem extends ConsumerWidget {
+  WalletCoinItem({
+    required this.coinInfo,
+    required this.itemKey,
+    required this.group,
+  }) : super(key: ValueKey(itemKey));
+
+  final CoinModel coinInfo;
+  final String itemKey;
+  final String group;
+
+  final _oCcy = NumberFormat("#,##0.0#", "en_US");
+  final _regular = Regular();
+
+  String _formatBalance(double balance) {
+    if (balance >= 1000000000) return _regular.getMoneyAbbreviation(balance);
+    if (balance > 0 && balance < 0.0000000009) {
+      return _regular.getMoneyAbbreviationDecimal(balance);
+    }
+    return _oCcy.format(balance);
+  }
+
+  String _formatTokenBalance(CoinModel coin) {
+    final balance = coin.balanceDoubleAll();
+    if (balance > 1000000000) return _regular.getMoneyAbbreviation(balance);
+    if (balance > 0 && balance < 0.0000000009) {
+      return _regular.getMoneyAbbreviationDecimal(balance);
+    }
+    return coin.balanceString();
+  }
+
+  void _onTap(BuildContext context) {
+    if (coinInfo.coin['isAggregated'] == true) {
+      ToastUtils.show(S.of(context).g_key_aa_coming_soon);
+      return;
+    }
+    if (coinInfo.coin['coinType'] == CoinType.XRP.name) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => WalletChainInfoXRP(coinInfo)),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => WalletChainInfo(coinInfo)),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final balanceStr = _formatBalance(coinInfo.value);
+    final tokenBalanceStr = _formatTokenBalance(coinInfo);
+
+    final coinIcon = coinInfo.coin['icon'] ?? '';
+    final Widget image = coinIcon.isEmpty
+        ? Image.asset("assets/img/list_default.png")
+        : ImageNetWork(
+            imageUrl: coinIcon,
+            placeholder: "assets/img/list_default.png",
+          );
+
+    final Widget? mainImage = coinInfo.coin['isContract'] == true
+        ? ImageNetWork(
+            imageUrl: coinInfo.mainCoinIcon ?? "",
+            placeholder: "assets/img/list_default.png",
+          )
+        : null;
+
+    final canEdit = coinInfo.coin['canEdit'] == true;
+    final deleteColor = canEdit
+        ? AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.errorTextColor.name)
+        : const Color(0xFF6B6B6B);
+
+    final Widget refreshWidget = coinInfo.loadError
+        ? Container(
+            height: ScreenUtil().setWidth(30.0),
+            width: ScreenUtil().setWidth(30.0),
+            margin: EdgeInsets.only(right: ScreenUtil().setWidth(6.0)),
+            child: Image.asset(
+              "assets/img/error.png",
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.textColorOrange.name),
+            ),
+          )
+        : const SizedBox();
+
+    return InkWell(
+      onTap: () => _onTap(context),
+      child: Slidable(
+        key: ValueKey(itemKey),
+        groupTag: group,
+        closeOnScroll: true,
+        endActionPane: ActionPane(
+          motion: const ScrollMotion(),
+          extentRatio: 0.2,
+          children: [
+            SlidableAction(
+              onPressed: (_) {
+                if (!canEdit) return;
+                if (coinInfo.coin['isContract'] == true) {
+                  ref.read(wapBridgeProvider).removeWalletChainToken(
+                    coinInfo.coin,
+                    symbol: coinInfo.coin["coinType"],
+                    miniName: coinInfo.coin['miniName'],
+                  );
+                } else {
+                  ref.read(wapBridgeProvider).removeWalletChain(
+                    coinInfo.coin['mKey'],
+                    coinInfo.coin['unit'],
+                  );
+                }
+              },
+              backgroundColor: deleteColor,
+              foregroundColor: Colors.white,
+              icon: Icons.delete,
+              autoClose: true,
+            ),
+          ],
+        ),
+        child: Container(
+          margin: EdgeInsets.symmetric(
+            horizontal: ScreenUtil().setWidth(24),
+            vertical: ScreenUtil().setWidth(4),
+          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: ScreenUtil().setWidth(16),
+            vertical: ScreenUtil().setWidth(14),
+          ),
+          decoration: BoxDecoration(
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.itemBgColor.name),
+            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+            border: Border.all(
+              color: isDark
+                  ? Colors.white.withAlpha(10)
+                  : Colors.black.withAlpha(6),
+              width: 0.8,
+            ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              refreshWidget,
+              _CoinIcon(
+                image: image,
+                mainImage: mainImage,
+              ),
+              Expanded(
+                child: _CoinInfo(
+                  coinInfo: coinInfo,
+                  balanceStr: balanceStr,
+                  tokenBalanceStr: tokenBalanceStr,
+                ),
+              ),
+              if (coinInfo.coin['isAggregated'] != true)
+                WalletPinIconButton(
+                  isPinned: coinInfo.isPinned,
+                  onTap: () =>
+                      ref.read(wapBridgeProvider).togglePinCoin(coinInfo),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ── 代币图标（支持主链小图标叠加）────────────────────────────────────────────
+
+class _CoinIcon extends StatelessWidget {
+  const _CoinIcon({required this.image, this.mainImage});
+
+  final Widget image;
+  final Widget? mainImage;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: ScreenUtil().setWidth(48),
+      height: ScreenUtil().setWidth(48),
+      margin: EdgeInsets.only(right: ScreenUtil().setWidth(14)),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+            child: image,
+          ),
+          if (mainImage != null)
+            Positioned(
+              top: -2,
+              left: -2,
+              height: ScreenUtil().setWidth(20),
+              width: ScreenUtil().setWidth(20),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.circular(ScreenUtil().setWidth(10)),
+                  border: Border.all(
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.backGroundColor.name),
+                    width: 1.5,
+                  ),
+                ),
+                child: ClipRRect(
+                  borderRadius:
+                      BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  child: mainImage,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── 代币名称、价格、涨跌幅信息列 ─────────────────────────────────────────────
+
+class _CoinInfo extends StatelessWidget {
+  const _CoinInfo({
+    required this.coinInfo,
+    required this.balanceStr,
+    required this.tokenBalanceStr,
+  });
+
+  final CoinModel coinInfo;
+  final String balanceStr;
+  final String tokenBalanceStr;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (coinInfo.isPinned)
+              Padding(
+                padding: EdgeInsets.only(right: ScreenUtil().setWidth(6)),
+                child: Icon(
+                  Icons.push_pin,
+                  size: ScreenUtil().setWidth(22),
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainBlueColor.name),
+                ),
+              ),
+            Expanded(
+              child: Text(
+                coinInfo.coin['miniName'] ?? '',
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(28),
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainTextColor.name),
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.3,
+                ),
+              ),
+            ),
+            Text(
+              tokenBalanceStr,
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(28),
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainTextColor.name),
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.right,
+            ),
+          ],
+        ),
+        SizedBox(height: ScreenUtil().setWidth(6)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Text(
+                  "\$${coinInfo.coinPriceString()}",
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(22),
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                  ),
+                ),
+                SizedBox(width: ScreenUtil().setWidth(8)),
+                CoinPercentageBadge(percentage: coinInfo.percentage),
+              ],
+            ),
+            Text(
+              "\$$balanceStr",
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(22),
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.itemSubtitleTextColor.name),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+// ── 涨跌幅 Badge ─────────────────────────────────────────────────────────────
+
+class CoinPercentageBadge extends StatelessWidget {
+  const CoinPercentageBadge({super.key, required this.percentage});
+
+  final num percentage;
+
+  @override
+  Widget build(BuildContext context) {
+    final isPositive = percentage >= 0;
+    final color = isPositive
+        ? AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.rightTextColor.name)
+        : AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.errorTextColor.name);
+
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(8),
+        vertical: ScreenUtil().setWidth(3),
+      ),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+      ),
+      child: Text(
+        "${isPositive ? '+' : ''}${percentage.toStringAsFixed(2)}%",
+        style: TextStyle(
+          fontSize: ScreenUtil().setSp(22),
+          color: color,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+}

@@ -23,20 +23,6 @@ mixin _TransferCosmosFamilyMixin on _TransferBaseMixin {
     } else {
       chainBalance = mm.data;
     }
-    /*BigInt balance = BigInt.zero;
-    if (contractAddress != "") {
-      MessageModel mmToken = await getBalanceAllTrx(fromAddress, contractAddress: contractAddress);
-      if (mmToken.error == true) {
-        return mmToken;
-      } else {
-        balance = mmToken.data;
-      }
-      if (balance == BigInt.zero) {
-        MessageModel mme = MessageModel.error();
-        mme.data = S.current.g_key_wallet_m4;//"TRC20 余额不足";
-        return mme;
-      }
-    }*/
     if (chainBalance == BigInt.zero) {
       MessageModel mme = MessageModel.error();
       mme.data = S.current.g_key_wallet_m5(coinType);//"TRX 余额不足";
@@ -67,31 +53,14 @@ mixin _TransferCosmosFamilyMixin on _TransferBaseMixin {
         mme.data = S.current.g_key_wallet_m5(CoinType.ATOM.name);
         return mme;
       }
-    } /*else {
-      valuePrice=ethToWeiString(value.toString(), tokenDecimals);
-      if (valuePrice > balance) {
-        MessageModel mme = MessageModel.error();
-        mme.data = S.current.g_key_wallet_m4;
-        return mme;
-      }
-      if (totalGasPrice > chainBalance) {
-        MessageModel mme = MessageModel.error();
-        mme.data = S.current.g_key_wallet_m5(CoinType.ATOM.name);
-        return mme;
-      }
-    }*/
-    MessageModel mmtx=await transferAtomSend(fromAddress, toAddress, valuePrice, path, totalGasPrice,contractAddress: contractAddress);
-    if(mmtx.error==false){
-      MessageModel mmr = MessageModel();
-      mmr.data = {
-        "txHash":mmtx.data,
-        "value":value,
-      };
-      return mmr;
-    }else{
-      return mmtx;
     }
+    MessageModel mmtx = await transferAtomSend(fromAddress, toAddress, valuePrice, path, totalGasPrice, contractAddress: contractAddress);
+    if (mmtx.error == false) {
+      return MessageModel()..data = {"txHash": mmtx.data, "value": value};
+    }
+    return mmtx;
   }
+
   Future<MessageModel> transferAptSend(String fromAddress, String toAddress, BigInt valuePrice, String path,int gas,BigInt totalGasPrice,String coinType,int chainId,
       {String contractAddress = "",String contractModule="",String contractName="",String isTest="main",String? privateKey})async{
     AptApi aptApi=AptApi(isTest: isTest=="main"?false:true);
@@ -230,18 +199,13 @@ mixin _TransferCosmosFamilyMixin on _TransferBaseMixin {
         return mme;
       }
     }
-    MessageModel mmtx=await transferAtomSend(fromAddress, toAddress, valuePrice, path, totalGasPrice,contractAddress: contractAddress);
-    if(mmtx.error==false){
-      MessageModel mmr = MessageModel();
-      mmr.data = {
-        "txHash":mmtx.data,
-        "value":value,
-      };
-      return mmr;
-    }else{
-      return mmtx;
+    MessageModel mmtx = await transferAtomSend(fromAddress, toAddress, valuePrice, path, totalGasPrice, contractAddress: contractAddress);
+    if (mmtx.error == false) {
+      return MessageModel()..data = {"txHash": mmtx.data, "value": value};
     }
+    return mmtx;
   }
+
   Future<MessageModel> transferDotSend(String fromAddress, String toAddress, BigInt valuePrice, String path,BigInt totalGasPrice,String coinType,
       {String contractAddress = "",String isTest="main",String? privateKey,bool returnSignHash=false})async{
     DotApi dotApi=DotApi();
@@ -276,11 +240,8 @@ mixin _TransferCosmosFamilyMixin on _TransferBaseMixin {
       "transactionVersion":getRuntimeVersion.data['transactionVersion'],
       "blockNumber":dataUtils.hexToBigInt(blockNumber.data['number']).toInt(),
     };
-    if(contractAddress !=""){
-
-    }
     String signStr;
-    if(privateKey ==null){
+    if (privateKey == null) {
       if (!AppGlobals.appContext.mounted) {
         return MessageModel.error()..data = 'Context is no longer valid';
       }
@@ -288,9 +249,9 @@ mixin _TransferCosmosFamilyMixin on _TransferBaseMixin {
         coinType,
         path,
         signMap,
-        mnemonic: globalWapAdapter.walletInfo.mnemonic??"",
+        mnemonic: globalWapAdapter.walletInfo.mnemonic ?? "",
       );
-    }else{
+    } else {
       signStr = await trustdart.signTransaction(coinType, path, signMap, pk:privateKey,);
     }
     if(signStr==""){
@@ -376,19 +337,14 @@ mixin _TransferCosmosFamilyMixin on _TransferBaseMixin {
         return mme;
       }
     }
-    MessageModel mmtx=await transferAtomSend(fromAddress, toAddress, valuePrice, path, totalGasPrice,contractAddress: contractAddress);
-    if(mmtx.error==false){
-      MessageModel mmr = MessageModel();
-      mmr.data = {
-        "txHash":mmtx.data,
-        "value":value,
-      };
-      return mmr;
-    }else{
-      return mmtx;
+    MessageModel mmtx = await transferAtomSend(fromAddress, toAddress, valuePrice, path, totalGasPrice, contractAddress: contractAddress);
+    if (mmtx.error == false) {
+      return MessageModel()..data = {"txHash": mmtx.data, "value": value};
     }
+    return mmtx;
   }
-  Future<MessageModel> transferAtomSend(String fromAddress, String toAddress, BigInt valuePrice, String path,BigInt totalGasPrice,
+
+  Future<MessageModel> transferAtomSend(String fromAddress, String toAddress, BigInt valuePrice, String path, BigInt totalGasPrice,
       {String contractAddress = "",String isTest="main",String? privateKey})async{
     AtomApi atomApi=AtomApi();
     MessageModel amm=await atomApi.getAccounts(fromAddress);
@@ -411,11 +367,8 @@ mixin _TransferCosmosFamilyMixin on _TransferBaseMixin {
         "denom":"uatom",
       },
     };
-    if(contractAddress !=""){
-
-    }
     String signStr;
-    if(privateKey ==null){
+    if (privateKey == null) {
       if (!AppGlobals.appContext.mounted) {
         return MessageModel.error()..data = 'Context is no longer valid';
       }

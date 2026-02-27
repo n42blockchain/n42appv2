@@ -6,17 +6,19 @@ part of '../transfer_api.dart';
 /// symbolDealWith, validateSignature, getAddressList
 mixin _TransferBaseMixin {
   TokenViewApi? _tokenViewApi;
-  TokenViewApi get tokenViewApi{
+  TokenViewApi get tokenViewApi {
     _tokenViewApi ??= TokenViewApi();
     return _tokenViewApi!;
   }
+
   DataUtils? _dataUtils;
-  DataUtils get dataUtils{
+  DataUtils get dataUtils {
     _dataUtils ??= DataUtils();
     return _dataUtils!;
   }
+
   Trustdart? _trustdart;
-  Trustdart get trustdart{
+  Trustdart get trustdart {
     _trustdart ??= Trustdart();
     return _trustdart!;
   }
@@ -31,20 +33,13 @@ mixin _TransferBaseMixin {
     return address;
   }
   //Symbol处理
-  String symbolDealWith(String symbol){
-    if(symbol == "BSC"){
-      symbol = "BNB";
-      return symbol;
-    }
-    if(symbol == "AVAXC"){
-      symbol = "AVAX";
-      return symbol;
-    }
-    if(symbol == "OPTIMISM"){
-      symbol = "OP";
-      return symbol;
-    }
-    return symbol;
+  String symbolDealWith(String symbol) {
+    return switch (symbol) {
+      "BSC" => "BNB",
+      "AVAXC" => "AVAX",
+      "OPTIMISM" => "OP",
+      _ => symbol,
+    };
   }
 
   /// Validate signed transaction before broadcasting

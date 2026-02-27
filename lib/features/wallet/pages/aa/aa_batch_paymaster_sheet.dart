@@ -1,0 +1,73 @@
+// Copyright 2021-2026 N42 Inc. All rights reserved.
+// Use of this source code is governed by a dual license:
+// Apache License 2.0 and MIT License.
+// See LICENSE file in the project root for full license information.
+
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/features/wallet/widgets/aa/paymaster_option_card.dart';
+
+/// Paymaster 选择底部弹层
+///
+/// 展示可选的 Paymaster 方案（自付 / 赞助），选中后回调给主页面。
+class PaymasterSelectionSheet extends StatelessWidget {
+  final PaymasterOption selected;
+  final ValueChanged<PaymasterOption> onSelect;
+
+  const PaymasterSelectionSheet({
+    super.key,
+    required this.selected,
+    required this.onSelect,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final options = [
+      PaymasterOption.none,
+      PaymasterOption.sponsored,
+    ];
+
+    return Container(
+      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      decoration: BoxDecoration(
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(ScreenUtil().setWidth(24))),
+      ),
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Paymaster',
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(32),
+                fontWeight: FontWeight.bold,
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              ),
+            ),
+            SizedBox(height: ScreenUtil().setWidth(16)),
+            ...options.map((option) {
+              final isSelected = option.type == selected.type;
+              return GestureDetector(
+                onTap: () => onSelect(option),
+                child: Container(
+                  margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
+                  decoration: isSelected
+                      ? BoxDecoration(
+                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                          border: Border.all(color: const Color(0xFFFF9800), width: 2),
+                        )
+                      : null,
+                  child: PaymasterOptionCard(option: option, isSelected: isSelected),
+                ),
+              );
+            }),
+            SizedBox(height: ScreenUtil().setWidth(8)),
+          ],
+        ),
+      ),
+    );
+  }
+}

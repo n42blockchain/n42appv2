@@ -86,6 +86,18 @@ abstract class BaseTransferHandler implements TransferHandler {
     return model;
   }
 
+  /// Return a not-yet-migrated error for stub handlers
+  Future<MessageModel> notYetMigrated() async =>
+      createError('$chainSymbol transfer not yet migrated');
+
+  /// Return a not-implemented GasEstimation for stub handlers
+  GasEstimation notImplementedGas() => GasEstimation(
+        gasLimit: BigInt.zero,
+        gasPrice: BigInt.zero,
+        totalFee: BigInt.zero,
+        errorMessage: 'Not implemented',
+      );
+
   @override
   Future<MessageModel> transferFromModel({
     TransationRecordModel? trModel,

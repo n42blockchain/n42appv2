@@ -19,30 +19,18 @@ class DotTransferHandler extends BaseTransferHandler {
   String get chainSymbol => _chainSymbol;
 
   /// Set of supported Polkadot ecosystem chain symbols
-  static const Set<String> supportedChains = {
-    'DOT',
-    'KSM',
-  };
+  static const Set<String> supportedChains = {'DOT', 'KSM'};
 
   @override
-  bool supports(String chainSymbol) {
-    return supportedChains.contains(chainSymbol.toUpperCase());
-  }
+  bool supports(String chainSymbol) =>
+      supportedChains.contains(chainSymbol.toUpperCase());
 
   @override
-  Future<MessageModel> transfer(TransferParams params) async {
-    // TODO: Migrate from transfer_api.dart transferDot method
-    return createError('${params.chainSymbol} transfer not yet migrated');
-  }
+  // TODO: Migrate from transfer_api.dart transferDot method
+  Future<MessageModel> transfer(TransferParams params) => notYetMigrated();
 
   @override
-  Future<GasEstimation> estimateGas(TransferParams params) async {
-    // TODO: Implement gas estimation
-    return GasEstimation(
-      gasLimit: BigInt.zero,
-      gasPrice: BigInt.zero,
-      totalFee: BigInt.zero,
-      errorMessage: 'Not implemented',
-    );
-  }
+  // TODO: Implement gas estimation
+  Future<GasEstimation> estimateGas(TransferParams params) async =>
+      notImplementedGas();
 }

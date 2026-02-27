@@ -1,19 +1,18 @@
-//返回币的基础gas费
+// 返回币的基础 gas 费
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 
-int getCoinGas(String coinType,{bool contract=false}){
-  int index=CoinType.values.indexWhere((element) => element.name==coinType?true:false);
-  int gas=0;
-  if(index==-1)return 50000;
-  CoinType ct=CoinType.values[index];
-  switch(ct){
-    case CoinType.N :
-    case CoinType.ETH :
-    case CoinType.MATIC :
-    case CoinType.HT :
-    case CoinType.XDAI :
-    case CoinType.CELO :
-    case CoinType.FTM :
+int getCoinGas(String coinType, {bool contract = false}) {
+  final index = CoinType.values.indexWhere((e) => e.name == coinType);
+  if (index == -1) return 50000;
+
+  switch (CoinType.values[index]) {
+    case CoinType.N:
+    case CoinType.ETH:
+    case CoinType.MATIC:
+    case CoinType.HT:
+    case CoinType.XDAI:
+    case CoinType.CELO:
+    case CoinType.FTM:
     case CoinType.MOVE:
     case CoinType.VIC:
     case CoinType.TT:
@@ -29,7 +28,7 @@ int getCoinGas(String coinType,{bool contract=false}){
     case CoinType.MTR:
     case CoinType.OKT:
     case CoinType.AURORA:
-    case CoinType.AVAX :
+    case CoinType.AVAX:
     case CoinType.ETC:
     case CoinType.CLO:
     case CoinType.POA:
@@ -41,73 +40,43 @@ int getCoinGas(String coinType,{bool contract=false}){
     case CoinType.BASE:
     case CoinType.ARB:
     case CoinType.S:
-      if(contract==false){
-        gas=50000;
-      }else{
-        gas=500000;
-      }
-      break;
+      return contract ? 500000 : 50000;
     case CoinType.SOL:
-      gas=1;
-      break;
+      return 1;
     case CoinType.TRX:
-      if(contract==false){
-        gas=21000;
-      }else{
-        gas=70000;
-      }
-      break;
+      return contract ? 70000 : 21000;
     case CoinType.BTC:
-      gas=5;
-      break;
+      return 5;
     case CoinType.LTC:
-      gas=3;
-      break;
     case CoinType.BCH:
-      gas=3;
-      break;
+      return 3;
     case CoinType.DOGE:
-      gas=1000;
-      break;
+      return 1000;
     case CoinType.DASH:
-      gas=10;
-      break;
     case CoinType.VIA:
     case CoinType.DGB:
     case CoinType.MONA:
     case CoinType.BTG:
     case CoinType.RVN:
-      gas=10;
-      break;
+      return 10;
     case CoinType.XTZ:
     case CoinType.XRP:
     case CoinType.ALGO:
     case CoinType.ATOM:
     case CoinType.SUI:
     case CoinType.TON:
-      gas=1;
-      break;
+      return 1;
     case CoinType.FIL:
-      gas=10000000;
-      break;
+      return 10000000;
     case CoinType.DOT:
     case CoinType.ACA:
     case CoinType.KSM:
-      gas=1;
-      break;
+      return 1;
     case CoinType.APT:
-      gas=100;
-      break;
+      return 100;
     case CoinType.ZIL:
-      if(contract==false){
-        gas=1;
-      }else{
-        gas=8000;
-      }
-      break;
+      return contract ? 8000 : 1;
     default:
-    gas=0;
-      break;
+      return 0;
   }
-  return gas;
 }

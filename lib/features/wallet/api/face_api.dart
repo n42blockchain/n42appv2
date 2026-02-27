@@ -6,13 +6,12 @@ import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:dio/dio.dart';
 
 class FaceApi {
-  late String url;
-  late Map<String, String> header;
+  final String _url;
+  final Map<String, String> _header;
 
-  FaceApi() {
-    url = AppConfig.apiUrl['face'];
-    header = {'content-type': 'application/x-www-form-urlencoded'};
-  }
+  FaceApi()
+      : _url = AppConfig.apiUrl['face'],
+        _header = const {'content-type': 'application/x-www-form-urlencoded'};
 
   // ── 内部工具：统一解析响应 ────────────────────────────────────────────────
   //
@@ -22,25 +21,44 @@ class FaceApi {
   //
   // 优先识别格式 A；若无 "code" 字段则按格式 B 处理（向后兼容）。
   MessageModel _parseResponse(dynamic data) {
-    final mm = MessageModel();
     if (data == null) {
-      mm.error = true;
-      mm.data = 'Empty response from server';
-      return mm;
+      return MessageModel.error()..data = 'Empty response from server';
     }
     if (data is Map && data.containsKey('code')) {
       // 格式 A：带 code 包装
       if (data['code'] == 200) {
-        mm.data = data['data'];
-      } else {
-        mm.error = true;
-        mm.data = data['err'] ?? data['message'] ?? 'Error ${data['code']}';
+        return MessageModel()..data = data['data'];
       }
-    } else {
-      // 格式 B：直接数据（向后兼容）
-      mm.data = data;
+      return MessageModel.error()
+        ..data = data['err'] ?? data['message'] ?? 'Error ${data['code']}';
     }
-    return mm;
+    // 格式 B：直接数据（向后兼容）
+    return MessageModel()..data = data;
+  }
+
+  // ── 构建 MultipartFile ────────────────────────────────────────────────────
+  Future<MultipartFile> _buildMultipart(
+      dynamic file, String filename, int type) async {
+    if (type == 0) return MultipartFile.fromFile(file, filename: filename);
+    return MultipartFile.fromBytes(file as List<int>, filename: filename);
+  }
+
+  // ── 统一执行 POST 并解析响应 ──────────────────────────────────────────────
+  Future<MessageModel> _postFace(String path, FormData fd) async {
+    try {
+      final data = await BaseApi.requestEmptyH.post(
+        '$_url/$path',
+        params: {},
+        data: fd,
+        header: _header,
+        addUserInfo: true,
+      );
+      return _parseResponse(data);
+    } on DioException catch (e) {
+      return MessageModel.error()..data = e.message ?? e.toString();
+    } catch (e) {
+      return MessageModel.error()..data = e.toString();
+    }
   }
 
   // ── 绑定人脸到钱包地址 ────────────────────────────────────────────────────
@@ -55,28 +73,9 @@ class FaceApi {
     String filename, {
     int type = 0,
   }) async {
-    try {
-      final MultipartFile f = type == 0
-          ? await MultipartFile.fromFile(file, filename: filename)
-          : MultipartFile.fromBytes(file as List<int>, filename: filename);
-      final fd = FormData.fromMap({"face": f, "address": address});
-      final data = await BaseApi.requestEmptyH.post(
-        '$url/address_upload_face',
-        params: {},
-        data: fd,
-        header: header,
-        addUserInfo: true,
-      );
-      return _parseResponse(data);
-    } on DioException catch (e) {
-      final mm = MessageModel.error();
-      mm.data = e.message ?? e.toString();
-      return mm;
-    } catch (e) {
-      final mm = MessageModel.error();
-      mm.data = e.toString();
-      return mm;
-    }
+    final f = await _buildMultipart(file, filename, type);
+    final fd = FormData.fromMap({'face': f, 'address': address});
+    return _postFace('address_upload_face', fd);
   }
 
   // ── 人脸检测与匹配 ────────────────────────────────────────────────────────
@@ -90,28 +89,9 @@ class FaceApi {
     String filename, {
     int type = 0,
   }) async {
-    try {
-      final MultipartFile f = type == 0
-          ? await MultipartFile.fromFile(file, filename: filename)
-          : MultipartFile.fromBytes(file as List<int>, filename: filename);
-      final fd = FormData.fromMap({"face": f});
-      final data = await BaseApi.requestEmptyH.post(
-        '$url/detect_face',
-        params: {},
-        data: fd,
-        header: header,
-        addUserInfo: true,
-      );
-      return _parseResponse(data);
-    } on DioException catch (e) {
-      final mm = MessageModel.error();
-      mm.data = e.message ?? e.toString();
-      return mm;
-    } catch (e) {
-      final mm = MessageModel.error();
-      mm.data = e.toString();
-      return mm;
-    }
+    final f = await _buildMultipart(file, filename, type);
+    final fd = FormData.fromMap({'face': f});
+    return _postFace('detect_face', fd);
   }
 
   // ── 解绑人脸 ──────────────────────────────────────────────────────────────
@@ -120,21 +100,17 @@ class FaceApi {
   Future<MessageModel> deleteBinding(String address) async {
     try {
       final data = await BaseApi.requestEmptyH.delete(
-        '$url/delete_face',
-        params: {"address": address},
-        data: {"address": address},
-        header: header,
+        '$_url/delete_face',
+        params: {'address': address},
+        data: {'address': address},
+        header: _header,
         addUserInfo: true,
       );
       return _parseResponse(data);
     } on DioException catch (e) {
-      final mm = MessageModel.error();
-      mm.data = e.message ?? e.toString();
-      return mm;
+      return MessageModel.error()..data = e.message ?? e.toString();
     } catch (e) {
-      final mm = MessageModel.error();
-      mm.data = e.toString();
-      return mm;
+      return MessageModel.error()..data = e.toString();
     }
   }
 }

@@ -1,0 +1,310 @@
+import 'package:n42_wallet/features/component/enums/load.dart';
+import 'package:n42_wallet/features/utils/regular.dart';
+import 'package:n42_wallet/features/wallet/models/ast_swap/swap_ast_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/pages/add_token/wallet_coin_add_all.dart';
+import 'package:n42_wallet/features/wallet/pages/ast_swap/swap_ast_select_chain.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/features/widgets/image_network.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:decimal/decimal.dart' as dec;
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+/// 兑换页"您支付"区域，包含输入框、链选择、代币余额和添加代币提示。
+class SwapAstPayWidget extends ConsumerWidget {
+  final TextEditingController payController;
+  final FocusNode payNode;
+  final FocusNode getNode;
+  final SwapAstModel? youPay;
+  final CoinModel? payCoinModel;
+  final Map<String, dynamic>? token;
+  final bool hasValidInput;
+  final List<SwapAstModel> swapAstList;
+  final Regular regular;
+  final void Function(String value) onPayChanged;
+  final void Function() onPayEditingComplete;
+  final void Function(SwapAstModel selected) onChainSelected;
+  final void Function() onAddToken;
+  final void Function() onCloseKeyboard;
+
+  const SwapAstPayWidget({
+    super.key,
+    required this.payController,
+    required this.payNode,
+    required this.getNode,
+    required this.youPay,
+    required this.payCoinModel,
+    required this.token,
+    required this.hasValidInput,
+    required this.swapAstList,
+    required this.regular,
+    required this.onPayChanged,
+    required this.onPayEditingComplete,
+    required this.onChainSelected,
+    required this.onAddToken,
+    required this.onCloseKeyboard,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final Color balanceColor = hasValidInput
+        ? AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name)
+        : AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
+
+    return Container(
+      margin: EdgeInsets.only(
+        top: ScreenUtil().setWidth(30),
+        left: ScreenUtil().setWidth(30),
+        right: ScreenUtil().setWidth(30),
+        bottom: ScreenUtil().setWidth(20),
+      ),
+      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      decoration: BoxDecoration(
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor4.name),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildHeader(context),
+          _buildInputRow(context),
+          if (payCoinModel == null && youPay != null)
+            _buildAddRow(
+              context,
+              ref,
+              label: S.of(context).g_swap_key_14(youPay?.payChain ?? ""),
+              coinName: youPay?.payChain ?? "",
+            ),
+          if (payCoinModel != null)
+            _buildBalanceRow(context, balanceColor),
+          if (payCoinModel != null && token == null)
+            _buildAddRow(
+              context,
+              ref,
+              label: S.of(context).g_swap_key_14(youPay?.payCoin ?? ""),
+              coinName: youPay?.payCoin ?? "",
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          S.of(context).g_swap_key_3,
+          style: TextStyle(
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.itemTextColor.name),
+            fontSize: ScreenUtil().setSp(30),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            '${payCoinModel?.coin['name'] ?? ""}(${payCoinModel?.coin['miniName'] ?? ""})',
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.mainBlueColor.name),
+              fontSize: ScreenUtil().setSp(30),
+            ),
+            textAlign: TextAlign.right,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInputRow(BuildContext context) {
+    return SizedBox(
+      height: ScreenUtil().setWidth(100),
+      width: double.infinity,
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              style: TextStyle(
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.itemTextColor.name),
+                fontSize: ScreenUtil().setWidth(50.0),
+              ),
+              controller: payController,
+              focusNode: payNode,
+              textInputAction: TextInputAction.next,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(
+                hintText: S.of(context).g_key_44,
+                hintStyle: TextStyle(
+                  fontSize: ScreenUtil().setWidth(50.0),
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.textFieldHintColor.name),
+                ),
+                border: InputBorder.none,
+                errorBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                isCollapsed: true,
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: ScreenUtil().setWidth(10.0)),
+              ),
+              maxLines: 1,
+              onChanged: onPayChanged,
+              onEditingComplete: () {
+                FocusScope.of(context).requestFocus(getNode);
+                onPayEditingComplete();
+              },
+            ),
+          ),
+          _buildChainSelector(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChainSelector(BuildContext context) {
+    return InkWell(
+      onTap: () async {
+        onCloseKeyboard();
+        final SwapAstModel? rModel = await Navigator.push<SwapAstModel>(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SwapAstSelectChain(swapAstList),
+          ),
+        );
+        if (rModel != null) {
+          onChainSelected(rModel);
+        }
+      },
+      child: Container(
+        width: ScreenUtil().setWidth(200),
+        margin: EdgeInsets.only(left: ScreenUtil().setWidth(20)),
+        child: Row(
+          children: [
+            SizedBox(
+              width: ScreenUtil().setWidth(52),
+              height: ScreenUtil().setWidth(52),
+              child: ImageNetWork(
+                imageUrl: youPay?.uri ?? "",
+                placeholder: "assets/img/list_default.png",
+              ),
+            ),
+            Expanded(
+              child: Text(
+                youPay?.payCoin ?? "",
+                style: TextStyle(
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.itemTextColor.name),
+                  fontSize: ScreenUtil().setSp(30),
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(
+              width: ScreenUtil().setWidth(40),
+              child: Icon(
+                Icons.arrow_forward_ios,
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.itemBorderColor.name),
+                size: ScreenUtil().setWidth(40),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBalanceRow(BuildContext context, Color balanceColor) {
+    final double balance = youPay?.balance ?? 0;
+    final String balanceText = regular.formartNumDouble(
+      dec.Decimal.parse(balance.toString()).toDouble(),
+      14,
+      isCrop: true,
+      isFill0: false,
+    ).toString();
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text(
+          "${S.of(context).g_key_29}:$balanceText",
+          style: TextStyle(
+            color: balanceColor,
+            fontSize: ScreenUtil().setSp(26),
+          ),
+        ),
+        if (youPay?.load == Load.loading)
+          SizedBox(
+            width: ScreenUtil().setWidth(26),
+            height: ScreenUtil().setWidth(26),
+            child: const CircularProgressIndicator(),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildAddRow(
+    BuildContext context,
+    WidgetRef ref, {
+    required String label,
+    required String coinName,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.errorTextColor.name),
+            fontSize: ScreenUtil().setSp(26),
+          ),
+        ),
+        InkWell(
+          onTap: () async {
+            onCloseKeyboard();
+            final bool r = await Navigator.push<bool>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => WalletCoinAddAll(coinName),
+                  ),
+                ) ??
+                false;
+            if (!context.mounted) return;
+            if (r) {
+              await ref
+                  .read(wapBridgeProvider)
+                  .initWallet(shouldInitCoinInfo: true);
+              onAddToken();
+            }
+          },
+          child: Container(
+            height: ScreenUtil().setWidth(50),
+            padding:
+                EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.mainButtonBgColor.name),
+              borderRadius:
+                  BorderRadius.circular(ScreenUtil().setWidth(50)),
+            ),
+            child: Text(
+              S.of(context).g_key_wallet_k47,
+              style: TextStyle(
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainButtonTextColor.name),
+                fontSize: ScreenUtil().setSp(22),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}

@@ -4,13 +4,12 @@ import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 
 class DexSwapApi {
-  late final String _base;
-  late final Map<String, String> _header;
+  final String _base;
+  final Map<String, String> _header;
 
-  DexSwapApi() {
-    _base = AppConfig.getApiUrlOnline('exchangeHost');
-    _header = {'content-type': 'application/json'};
-  }
+  DexSwapApi()
+      : _base = AppConfig.getApiUrlOnline('exchangeHost'),
+        _header = const {'content-type': 'application/json'};
 
   /// GET /v1/dex/tokens?chain=ETH[&q=usdc]
   ///
@@ -25,13 +24,9 @@ class DexSwapApi {
         params: params,
         header: _header,
       );
-      final mm = MessageModel();
-      mm.data = data['data'];
-      return mm;
+      return MessageModel()..data = data['data'];
     } catch (e) {
-      final mm = MessageModel.error();
-      mm.data = e.toString();
-      return mm;
+      return MessageModel.error()..data = e.toString();
     }
   }
 
@@ -48,58 +43,41 @@ class DexSwapApi {
     required String userAddr,
     int slippageBps = 50,
   }) async {
-    final body = {
-      'chain': chain,
-      'token_in': tokenIn,
-      'token_out': tokenOut,
-      'amount_in': amountIn,
-      'user_addr': userAddr,
-      'slippage_bps': slippageBps,
-    };
     try {
       final data = await BaseApi.requestEmptyH.post(
         '$_base/v1/dex/quote',
         params: {},
-        data: body,
+        data: {
+          'chain': chain,
+          'token_in': tokenIn,
+          'token_out': tokenOut,
+          'amount_in': amountIn,
+          'user_addr': userAddr,
+          'slippage_bps': slippageBps,
+        },
         header: _header,
       );
-      final mm = MessageModel();
-      if (data['code'] == 200) {
-        mm.data = data['data'];
-      } else {
-        mm.error = true;
-        mm.data = data['msg'] ?? data['err'] ?? 'Quote failed';
-      }
-      return mm;
+      if (data['code'] == 200) return MessageModel()..data = data['data'];
+      return MessageModel.error()
+        ..data = data['msg'] ?? data['err'] ?? 'Quote failed';
     } catch (e) {
-      final mm = MessageModel.error();
-      mm.data = e.toString();
-      return mm;
+      return MessageModel.error()..data = e.toString();
     }
   }
 
   /// POST /v1/dex/commit
   Future<MessageModel> commit(
       String uuid, String orderId, String txHash) async {
-    final body = {
-      'uuid': uuid,
-      'order_id': orderId,
-      'tx_hash': txHash,
-    };
     try {
       await BaseApi.requestEmptyH.post(
         '$_base/v1/dex/commit',
         params: {},
-        data: body,
+        data: {'uuid': uuid, 'order_id': orderId, 'tx_hash': txHash},
         header: _header,
       );
-      final mm = MessageModel();
-      mm.data = true;
-      return mm;
+      return MessageModel()..data = true;
     } catch (e) {
-      final mm = MessageModel.error();
-      mm.data = e.toString();
-      return mm;
+      return MessageModel.error()..data = e.toString();
     }
   }
 
@@ -112,13 +90,9 @@ class DexSwapApi {
         params: {'user': uuid, 'page': page, 'size': size},
         header: _header,
       );
-      final mm = MessageModel();
-      mm.data = data['data']['list'];
-      return mm;
+      return MessageModel()..data = data['data']['list'];
     } catch (e) {
-      final mm = MessageModel.error();
-      mm.data = e.toString();
-      return mm;
+      return MessageModel.error()..data = e.toString();
     }
   }
 
@@ -141,9 +115,7 @@ class DexSwapApi {
     try {
       // allowance(address owner, address spender) → uint256
       // selector: 0xdd62ed3e
-      final ownerPadded = _pad32(owner);
-      final spenderPadded = _pad32(spender);
-      final data = '0xdd62ed3e$ownerPadded$spenderPadded';
+      final data = '0xdd62ed3e${_pad32(owner)}${_pad32(spender)}';
 
       final result = await EthAPI()
           .baseRPCEth(
@@ -174,9 +146,9 @@ class DexSwapApi {
   /// Passing [amount] = null sets unlimited approval (uint256.max).
   static String buildApproveCalldata(String spender, {BigInt? amount}) {
     // approve(address,uint256) selector: 0x095ea7b3
-    final spenderPadded = _pad32(spender);
-    final amountHex = (amount ?? _maxUint256).toRadixString(16).padLeft(64, '0');
-    return '0x095ea7b3$spenderPadded$amountHex';
+    final amountHex =
+        (amount ?? _maxUint256).toRadixString(16).padLeft(64, '0');
+    return '0x095ea7b3${_pad32(spender)}$amountHex';
   }
 
   // ── Private helpers ───────────────────────────────────────────────────────

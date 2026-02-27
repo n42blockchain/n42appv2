@@ -13,24 +13,14 @@ class TonTransferHandler extends BaseTransferHandler {
   String get chainSymbol => 'TON';
 
   @override
-  bool supports(String chainSymbol) {
-    return chainSymbol.toUpperCase() == 'TON';
-  }
+  bool supports(String chainSymbol) => chainSymbol.toUpperCase() == 'TON';
 
   @override
-  Future<MessageModel> transfer(TransferParams params) async {
-    // TODO: Migrate from transfer_api.dart transferTon method
-    return createError('TON transfer not yet migrated');
-  }
+  // TODO: Migrate from transfer_api.dart transferTon method
+  Future<MessageModel> transfer(TransferParams params) => notYetMigrated();
 
   @override
-  Future<GasEstimation> estimateGas(TransferParams params) async {
-    // TODO: Implement gas estimation
-    return GasEstimation(
-      gasLimit: BigInt.zero,
-      gasPrice: BigInt.zero,
-      totalFee: BigInt.zero,
-      errorMessage: 'Not implemented',
-    );
-  }
+  // TODO: Implement gas estimation
+  Future<GasEstimation> estimateGas(TransferParams params) async =>
+      notImplementedGas();
 }

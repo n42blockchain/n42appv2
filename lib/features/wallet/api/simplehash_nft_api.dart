@@ -47,8 +47,7 @@ class SimpleHashNftApi {
       return [];
     }
 
-    final key = ApiKeysConfig.simpleHashApiKey;
-    if (key.isEmpty) {
+    if (ApiKeysConfig.simpleHashApiKey.isEmpty) {
       debugPrint('SimpleHashNftApi: SIMPLE_HASH_API_KEY not configured');
       return [];
     }
@@ -59,7 +58,6 @@ class SimpleHashNftApi {
 
     try {
       do {
-        final url = '$_base/nfts/owners_v2';
         final params = <String, dynamic>{
           'chains': chainSlug,
           'wallet_addresses': address,
@@ -68,7 +66,7 @@ class SimpleHashNftApi {
         }..removeWhere((_, v) => v == null);
 
         final raw = await BaseApi.requestEmptyH.get<dynamic>(
-          url,
+          '$_base/nfts/owners_v2',
           params: params,
           header: _authHeader,
         );
@@ -99,12 +97,10 @@ class SimpleHashNftApi {
 
   /// 获取单个 NFT 详情（用于刷新）
   Future<NftModel?> fetchNftById(String nftId) async {
-    final key = ApiKeysConfig.simpleHashApiKey;
-    if (key.isEmpty) return null;
+    if (ApiKeysConfig.simpleHashApiKey.isEmpty) return null;
     try {
-      final encodedId = Uri.encodeComponent(nftId);
       final raw = await BaseApi.requestEmptyH.get<dynamic>(
-        '$_base/nfts/$encodedId',
+        '$_base/nfts/${Uri.encodeComponent(nftId)}',
         params: {},
         header: _authHeader,
       );

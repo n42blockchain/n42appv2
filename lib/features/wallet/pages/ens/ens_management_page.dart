@@ -7,88 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/features/wallet/pages/ens/ens_chain_config.dart';
+import 'package:n42_wallet/features/wallet/pages/ens/ens_management_widgets.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_renew_page.dart';
+import 'package:n42_wallet/features/wallet/pages/ens/ens_subdomain_sheet.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 
-/// 支持 ENS 的链配置（用于域名后缀匹配与颜色展示）
-class EnsChainConfig {
-  final String id;
-  final String name;
-  final String symbol;
-  final int chainId;
-  final String? iconPath;
-  final Color color;
-  final String suffix; // ENS 域名后缀
-
-  const EnsChainConfig({
-    required this.id,
-    required this.name,
-    required this.symbol,
-    required this.chainId,
-    this.iconPath,
-    required this.color,
-    required this.suffix,
-  });
-
-  static const List<EnsChainConfig> supportedChains = [
-    EnsChainConfig(
-      id: 'n42',
-      name: 'N42',
-      symbol: 'N',
-      chainId: 42,
-      color: Color(0xFF6366F1),
-      suffix: '.n42',
-    ),
-    EnsChainConfig(
-      id: 'ethereum',
-      name: 'Ethereum',
-      symbol: 'ETH',
-      chainId: 1,
-      color: Color(0xFF627EEA),
-      suffix: '.eth',
-    ),
-    EnsChainConfig(
-      id: 'sepolia',
-      name: 'Sepolia',
-      symbol: 'ETH',
-      chainId: 11155111,
-      color: Color(0xFF9B8AFF),
-      suffix: '.eth',
-    ),
-    EnsChainConfig(
-      id: 'base',
-      name: 'Base',
-      symbol: 'ETH',
-      chainId: 8453,
-      color: Color(0xFF0052FF),
-      suffix: '.base.eth',
-    ),
-    EnsChainConfig(
-      id: 'arbitrum',
-      name: 'Arbitrum',
-      symbol: 'ETH',
-      chainId: 42161,
-      color: Color(0xFF28A0F0),
-      suffix: '.arb',
-    ),
-  ];
-
-  static EnsChainConfig get defaultChain => supportedChains[1]; // Ethereum
-
-  /// 从完整域名后缀自动推断所在链
-  static EnsChainConfig fromDomainName(String name) {
-    final lower = name.toLowerCase();
-    // 最长后缀优先（.base.eth 比 .eth 更具体）
-    final sorted = List<EnsChainConfig>.from(supportedChains)
-      ..sort((a, b) => b.suffix.length.compareTo(a.suffix.length));
-    for (final chain in sorted) {
-      if (lower.endsWith(chain.suffix)) return chain;
-    }
-    return defaultChain;
-  }
-}
+export 'package:n42_wallet/features/wallet/pages/ens/ens_chain_config.dart';
 
 /// ENS 管理页面
 ///
@@ -177,8 +103,7 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
 
   // ── 工具方法 ─────────────────────────────────────
 
-  bool _isValidAddress(String addr) =>
-      _hexAddrRegex.hasMatch(addr.trim());
+  bool _isValidAddress(String addr) => _hexAddrRegex.hasMatch(addr.trim());
 
   void _copyToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text));
@@ -251,7 +176,6 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
     }
 
     final result = await _ensService.setTextRecords(widget.ownedEns.name, records);
-
     if (mounted) {
       setState(() => _isLoading = false);
       if (!result.error) {
@@ -298,207 +222,13 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
   }
 
   Future<void> _showCreateSubdomainSheet() async {
-    final labelController = TextEditingController();
-    final ownerController = TextEditingController(text: widget.walletAddress);
-    String? labelError;
-    String? ownerError;
-    bool creating = false;
-
-    await showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(ScreenUtil().setWidth(24)),
-        ),
-      ),
-      builder: (sheetCtx) {
-        return StatefulBuilder(
-          builder: (ctx, setSheetState) {
-            Future<void> onCreate() async {
-              final label = labelController.text.trim();
-              final owner = ownerController.text.trim();
-
-              // 验证标签
-              if (!_ensService.isValidSubdomainLabel(label)) {
-                setSheetState(
-                  () => labelError = S.of(ctx).g_key_ens_subdomain_invalid_label,
-                );
-                return;
-              }
-              // 验证所有者地址
-              if (owner.isNotEmpty && !_isValidAddress(owner)) {
-                setSheetState(
-                  () => ownerError = S.of(ctx).g_key_ens_invalid_address,
-                );
-                return;
-              }
-
-              setSheetState(() {
-                creating = true;
-                labelError = null;
-                ownerError = null;
-              });
-
-              // 在 await 前缓存依赖 context 的字符串和 Navigator
-              final nav = Navigator.of(sheetCtx);
-              final errorFallback = S.of(context).g_key_error_3;
-              final successMsg = S.of(context).g_key_ens_subdomain_created;
-
-              final effectiveOwner =
-                  owner.isNotEmpty ? owner : widget.walletAddress;
-              final result = await _ensService.createSubdomain(
-                widget.ownedEns.name,
-                label,
-                effectiveOwner,
-              );
-
-              if (!mounted) return;
-
-              if (result.error) {
-                setSheetState(() => creating = false);
-                nav.pop();
-                _showError(result.data?.toString() ?? errorFallback);
-              } else {
-                nav.pop();
-                _showSuccess(successMsg);
-                _loadSubdomains();
-              }
-            }
-
-            return Padding(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(ctx).viewInsets.bottom,
-              ),
-              child: SingleChildScrollView(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // 标题
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          S.of(ctx).g_key_ens_subdomain_create,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(32),
-                            fontWeight: FontWeight.bold,
-                            color: AppThemeUtils.getColorByKey(
-                              ctx,
-                              AppThemeKeys.mainTextColor.name,
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () => Navigator.pop(sheetCtx),
-                          icon: const Icon(Icons.close),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: ScreenUtil().setWidth(8)),
-                    // 预览
-                    if (labelController.text.trim().isNotEmpty)
-                      Container(
-                        margin:
-                            EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(16),
-                          vertical: ScreenUtil().setWidth(10),
-                        ),
-                        decoration: BoxDecoration(
-                          color: _domainChain.color.withAlpha(20),
-                          borderRadius:
-                              BorderRadius.circular(ScreenUtil().setWidth(10)),
-                        ),
-                        child: Text(
-                          '${labelController.text.trim()}.${widget.ownedEns.name}',
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(26),
-                            fontWeight: FontWeight.w600,
-                            color: _domainChain.color,
-                          ),
-                        ),
-                      ),
-                    SizedBox(height: ScreenUtil().setWidth(8)),
-                    // 标签输入
-                    TextField(
-                      controller: labelController,
-                      autofocus: true,
-                      textInputAction: TextInputAction.next,
-                      onChanged: (_) => setSheetState(() => labelError = null),
-                      decoration: InputDecoration(
-                        labelText: S.of(ctx).g_key_ens_subdomain_label,
-                        hintText: S.of(ctx).g_key_ens_subdomain_label_hint,
-                        errorText: labelError,
-                        border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(ScreenUtil().setWidth(12)),
-                        ),
-                        suffixText: '.${widget.ownedEns.name}',
-                        suffixStyle: TextStyle(
-                          color: _domainChain.color,
-                          fontWeight: FontWeight.w500,
-                          fontSize: ScreenUtil().setSp(22),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: ScreenUtil().setWidth(16)),
-                    // 所有者地址
-                    TextField(
-                      controller: ownerController,
-                      onChanged: (_) => setSheetState(() => ownerError = null),
-                      decoration: InputDecoration(
-                        labelText: S.of(ctx).g_key_ens_subdomain_owner,
-                        hintText: S.of(ctx).g_key_ens_subdomain_owner_hint,
-                        errorText: ownerError,
-                        border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(ScreenUtil().setWidth(12)),
-                        ),
-                      ),
-                      style: TextStyle(fontSize: ScreenUtil().setSp(24)),
-                    ),
-                    SizedBox(height: ScreenUtil().setWidth(24)),
-                    // 创建按钮
-                    SizedBox(
-                      height: ScreenUtil().setWidth(88),
-                      child: ElevatedButton(
-                        onPressed: creating ? null : onCreate,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _domainChain.color,
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(ScreenUtil().setWidth(14)),
-                          ),
-                        ),
-                        child: creating
-                            ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : Text(
-                                S.of(ctx).g_key_ens_subdomain_create,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                      ),
-                    ),
-                    SizedBox(height: ScreenUtil().setWidth(8)),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
+    await EnsCreateSubdomainSheet.show(
+      context,
+      parentName: widget.ownedEns.name,
+      walletAddress: widget.walletAddress,
+      domainChain: _domainChain,
+      ensService: _ensService,
+      onCreated: _loadSubdomains,
     );
   }
 
@@ -528,8 +258,7 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
     if (confirm != true) return;
 
     setState(() => _isLoading = true);
-    final result =
-        await _ensService.deleteSubdomain(widget.ownedEns.name, sub.label);
+    final result = await _ensService.deleteSubdomain(widget.ownedEns.name, sub.label);
     if (mounted) {
       setState(() => _isLoading = false);
       if (!result.error) {
@@ -549,63 +278,57 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
 
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (ctx) {
-        return StatefulBuilder(
-          builder: (ctx, setDialogState) {
-            return AlertDialog(
-              title: Text(S.of(ctx).g_key_ens_transfer),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    S.of(ctx).g_key_ens_transfer_warning,
-                    style: TextStyle(
-                      color: Colors.orange,
-                      fontSize: ScreenUtil().setSp(24),
-                    ),
-                  ),
-                  SizedBox(height: ScreenUtil().setWidth(16)),
-                  TextField(
-                    controller: controller,
-                    onChanged: (_) =>
-                        setDialogState(() => validationError = null),
-                    decoration: InputDecoration(
-                      labelText: S.of(ctx).g_key_ens_new_owner,
-                      hintText: '0x...',
-                      errorText: validationError,
-                      border: const OutlineInputBorder(),
-                    ),
-                  ),
-                ],
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          title: Text(S.of(ctx).g_key_ens_transfer),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                S.of(ctx).g_key_ens_transfer_warning,
+                style: TextStyle(
+                  color: Colors.orange,
+                  fontSize: ScreenUtil().setSp(24),
+                ),
               ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(ctx, false),
-                  child: Text(S.of(ctx).g_key_79),
+              SizedBox(height: ScreenUtil().setWidth(16)),
+              TextField(
+                controller: controller,
+                onChanged: (_) => setDialogState(() => validationError = null),
+                decoration: InputDecoration(
+                  labelText: S.of(ctx).g_key_ens_new_owner,
+                  hintText: '0x...',
+                  errorText: validationError,
+                  border: const OutlineInputBorder(),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    final addr = controller.text.trim();
-                    if (!_isValidAddress(addr)) {
-                      setDialogState(() =>
-                          validationError =
-                              S.of(ctx).g_key_ens_invalid_address);
-                      return;
-                    }
-                    Navigator.pop(ctx, true);
-                  },
-                  style:
-                      ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                  child: Text(
-                    S.of(ctx).g_key_ens_transfer,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ),
-              ],
-            );
-          },
-        );
-      },
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: Text(S.of(ctx).g_key_79),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final addr = controller.text.trim();
+                if (!_isValidAddress(addr)) {
+                  setDialogState(
+                    () => validationError = S.of(ctx).g_key_ens_invalid_address,
+                  );
+                  return;
+                }
+                Navigator.pop(ctx, true);
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              child: Text(
+                S.of(ctx).g_key_ens_transfer,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
 
     if (confirmed == true) {
@@ -640,17 +363,42 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildDomainCard(),
+                EnsDomainCard(
+                  ownedEns: widget.ownedEns,
+                  domainChain: _domainChain,
+                ),
                 SizedBox(height: ScreenUtil().setWidth(20)),
-                _buildQuickActions(),
+                EnsQuickActions(
+                  ownedEns: widget.ownedEns,
+                  domainChain: _domainChain,
+                  onRenew: _navigateToRenew,
+                  onSetPrimary: widget.ownedEns.isPrimary ? null : _setPrimaryName,
+                  onCopy: () => _copyToClipboard(widget.ownedEns.name),
+                ),
                 SizedBox(height: ScreenUtil().setWidth(24)),
-                _buildAddressSection(),
+                EnsAddressSection(
+                  controller: _resolvedAddressController,
+                  onSave: _saveResolvedAddress,
+                  onChanged: () => setState(() {}),
+                ),
                 SizedBox(height: ScreenUtil().setWidth(24)),
-                _buildTextRecordsSection(),
+                EnsTextRecordsSection(
+                  controllers: _recordControllers,
+                  recordKeys: _commonRecordKeys,
+                  onSave: _saveTextRecords,
+                ),
                 SizedBox(height: ScreenUtil().setWidth(24)),
-                _buildSubdomainSection(),
+                EnsSubdomainSection(
+                  subdomains: _subdomains,
+                  isLoading: _subdomainsLoading,
+                  domainChain: _domainChain,
+                  onRefresh: _loadSubdomains,
+                  onCreate: _showCreateSubdomainSheet,
+                  onCopy: (sub) => _copyToClipboard(sub.fullName),
+                  onDelete: _deleteSubdomain,
+                ),
                 SizedBox(height: ScreenUtil().setWidth(24)),
-                _buildAdvancedSection(),
+                EnsAdvancedSection(onTransfer: _showTransferDialog),
                 SizedBox(height: ScreenUtil().setWidth(40)),
               ],
             ),
@@ -660,684 +408,6 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
               color: Colors.black.withAlpha(50),
               child: const Center(child: CircularProgressIndicator()),
             ),
-        ],
-      ),
-    );
-  }
-
-  // ── 域名信息卡片 ──────────────────────────────────
-
-  Widget _buildDomainCard() {
-    final isExpiringSoon = widget.ownedEns.isExpiringSoon;
-    final isExpired = widget.ownedEns.isExpired;
-
-    return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: isExpired
-              ? [Colors.red.withAlpha(30), Colors.red.withAlpha(10)]
-              : isExpiringSoon
-                  ? [Colors.orange.withAlpha(30), Colors.orange.withAlpha(10)]
-                  : [
-                      AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainBlueColor.name,
-                      ).withAlpha(30),
-                      AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainBlueColor.name,
-                      ).withAlpha(10),
-                    ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-      ),
-      child: Column(
-        children: [
-          // 头像
-          if (widget.ownedEns.avatar != null)
-            ClipRRect(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(40)),
-              child: Image.network(
-                widget.ownedEns.avatar!,
-                width: ScreenUtil().setWidth(80),
-                height: ScreenUtil().setWidth(80),
-                fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => _buildDefaultAvatar(),
-              ),
-            )
-          else
-            _buildDefaultAvatar(),
-          SizedBox(height: ScreenUtil().setWidth(16)),
-
-          // 域名
-          Text(
-            widget.ownedEns.name,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(36),
-              fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
-            ),
-          ),
-
-          SizedBox(height: ScreenUtil().setWidth(8)),
-
-          // 标签行：链标签 + 主要名称标识
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // 链徽章
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(12),
-                  vertical: ScreenUtil().setWidth(4),
-                ),
-                decoration: BoxDecoration(
-                  color: _domainChain.color.withAlpha(25),
-                  borderRadius:
-                      BorderRadius.circular(ScreenUtil().setWidth(12)),
-                  border: Border.all(
-                    color: _domainChain.color.withAlpha(60),
-                  ),
-                ),
-                child: Text(
-                  _domainChain.name,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(20),
-                    color: _domainChain.color,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              if (widget.ownedEns.isPrimary) ...[
-                SizedBox(width: ScreenUtil().setWidth(8)),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(12),
-                    vertical: ScreenUtil().setWidth(4),
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.green.withAlpha(30),
-                    borderRadius:
-                        BorderRadius.circular(ScreenUtil().setWidth(12)),
-                  ),
-                  child: Text(
-                    S.of(context).g_key_ens_primary,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(20),
-                      color: Colors.green,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ],
-            ],
-          ),
-
-          SizedBox(height: ScreenUtil().setWidth(16)),
-
-          // 到期信息
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                isExpired
-                    ? Icons.error
-                    : isExpiringSoon
-                        ? Icons.warning
-                        : Icons.access_time,
-                size: ScreenUtil().setWidth(20),
-                color: isExpired
-                    ? Colors.red
-                    : isExpiringSoon
-                        ? Colors.orange
-                        : AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemSubtitleTextColor.name,
-                          ),
-              ),
-              SizedBox(width: ScreenUtil().setWidth(6)),
-              Text(
-                isExpired
-                    ? S.of(context).g_key_ens_expired
-                    : '${S.of(context).g_key_ens_expires}: ${widget.ownedEns.formattedExpiresAt}',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: isExpired
-                      ? Colors.red
-                      : isExpiringSoon
-                          ? Colors.orange
-                          : AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.itemSubtitleTextColor.name,
-                            ),
-                ),
-              ),
-            ],
-          ),
-
-          if (!isExpired)
-            Text(
-              '${widget.ownedEns.daysUntilExpiry} ${S.of(context).g_key_ens_days_left}',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ).withAlpha(150),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDefaultAvatar() {
-    return Container(
-      width: ScreenUtil().setWidth(80),
-      height: ScreenUtil().setWidth(80),
-      decoration: BoxDecoration(
-        color: _domainChain.color.withAlpha(30),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(40)),
-      ),
-      child: Center(
-        child: Text(
-          widget.ownedEns.name.substring(0, 1).toUpperCase(),
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(36),
-            fontWeight: FontWeight.bold,
-            color: _domainChain.color,
-          ),
-        ),
-      ),
-    );
-  }
-
-  // ── 快捷操作 ─────────────────────────────────────
-
-  Widget _buildQuickActions() {
-    return Row(
-      children: [
-        Expanded(
-          child: _buildActionButton(
-            icon: Icons.autorenew,
-            label: S.of(context).g_key_ens_renew,
-            color: const Color(0xFF66BB6A),
-            onTap: _navigateToRenew,
-          ),
-        ),
-        SizedBox(width: ScreenUtil().setWidth(12)),
-        Expanded(
-          child: _buildActionButton(
-            icon: Icons.star,
-            label: S.of(context).g_key_ens_set_primary,
-            color: const Color(0xFFFFA726),
-            onTap: widget.ownedEns.isPrimary ? null : _setPrimaryName,
-          ),
-        ),
-        SizedBox(width: ScreenUtil().setWidth(12)),
-        Expanded(
-          child: _buildActionButton(
-            icon: Icons.content_copy,
-            label: S.of(context).g_key_119,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainBlueColor.name,
-            ),
-            onTap: () => _copyToClipboard(widget.ownedEns.name),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildActionButton({
-    required IconData icon,
-    required String label,
-    required Color color,
-    VoidCallback? onTap,
-  }) {
-    final isDisabled = onTap == null;
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
-        decoration: BoxDecoration(
-          color: isDisabled ? Colors.grey.withAlpha(20) : color.withAlpha(20),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-          border: Border.all(
-            color:
-                isDisabled ? Colors.grey.withAlpha(30) : color.withAlpha(40),
-          ),
-        ),
-        child: Column(
-          children: [
-            Icon(
-              icon,
-              size: ScreenUtil().setWidth(28),
-              color: isDisabled ? Colors.grey : color,
-            ),
-            SizedBox(height: ScreenUtil().setWidth(6)),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                fontWeight: FontWeight.w500,
-                color: isDisabled
-                    ? Colors.grey
-                    : AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor.name,
-                      ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // ── 解析地址 section ──────────────────────────────
-
-  Widget _buildAddressSection() {
-    return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-      decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                S.of(context).g_key_ens_resolved_address,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  fontWeight: FontWeight.w600,
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: _saveResolvedAddress,
-                child: Text(S.of(context).g_key_115),
-              ),
-            ],
-          ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
-          TextField(
-            controller: _resolvedAddressController,
-            decoration: InputDecoration(
-              hintText: '0x...',
-              prefixIcon:
-                  const Icon(Icons.account_balance_wallet_outlined, size: 20),
-              border: OutlineInputBorder(
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(12)),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(16),
-                vertical: ScreenUtil().setWidth(14),
-              ),
-              suffixIcon: _resolvedAddressController.text.isNotEmpty
-                  ? IconButton(
-                      icon: const Icon(Icons.clear, size: 18),
-                      onPressed: () =>
-                          setState(() => _resolvedAddressController.clear()),
-                    )
-                  : null,
-            ),
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              fontFamily: 'monospace',
-            ),
-            onChanged: (_) => setState(() {}),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ── 文本记录 section ──────────────────────────────
-
-  Widget _buildTextRecordsSection() {
-    return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-      decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                S.of(context).g_key_ens_text_records,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  fontWeight: FontWeight.w600,
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: _saveTextRecords,
-                child: Text(S.of(context).g_key_115),
-              ),
-            ],
-          ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
-          ..._commonRecordKeys.map(_buildRecordField),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRecordField(String key) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
-      child: TextField(
-        controller: _recordControllers[key],
-        decoration: InputDecoration(
-          labelText: _getRecordLabel(key),
-          prefixIcon: Icon(_getRecordIcon(key), size: 20),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-          ),
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(16),
-            vertical: ScreenUtil().setWidth(14),
-          ),
-        ),
-        style: TextStyle(fontSize: ScreenUtil().setSp(26)),
-      ),
-    );
-  }
-
-  String _getRecordLabel(String key) {
-    switch (key) {
-      case 'email':
-        return 'Email';
-      case 'url':
-        return 'Website';
-      case 'com.twitter':
-        return 'Twitter / X';
-      case 'com.github':
-        return 'GitHub';
-      case 'com.discord':
-        return 'Discord';
-      case 'org.telegram':
-        return 'Telegram';
-      case 'description':
-        return 'Description';
-      default:
-        return key;
-    }
-  }
-
-  IconData _getRecordIcon(String key) {
-    switch (key) {
-      case 'email':
-        return Icons.email_outlined;
-      case 'url':
-        return Icons.link;
-      case 'com.twitter':
-        return Icons.alternate_email;
-      case 'com.github':
-        return Icons.code;
-      case 'com.discord':
-        return Icons.chat_bubble_outline;
-      case 'org.telegram':
-        return Icons.send_outlined;
-      case 'description':
-        return Icons.description_outlined;
-      default:
-        return Icons.text_fields;
-    }
-  }
-
-  // ── 子域名 section ───────────────────────────────
-
-  Widget _buildSubdomainSection() {
-    return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-      decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // 标题行
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                S.of(context).g_key_ens_subdomains,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  fontWeight: FontWeight.w600,
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
-                ),
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // 刷新
-                  IconButton(
-                    icon: const Icon(Icons.refresh, size: 20),
-                    onPressed: _subdomainsLoading ? null : _loadSubdomains,
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
-                  ),
-                  // 创建
-                  IconButton(
-                    icon: const Icon(Icons.add_circle_outline, size: 22),
-                    onPressed: _showCreateSubdomainSheet,
-                    color: _domainChain.color,
-                  ),
-                ],
-              ),
-            ],
-          ),
-
-          // 内容区
-          if (_subdomainsLoading)
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(24)),
-              child: const Center(child: CircularProgressIndicator()),
-            )
-          else if (_subdomains.isEmpty)
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
-              child: Center(
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.subdirectory_arrow_right,
-                      size: ScreenUtil().setWidth(48),
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ).withAlpha(100),
-                    ),
-                    SizedBox(height: ScreenUtil().setWidth(8)),
-                    Text(
-                      S.of(context).g_key_ens_subdomain_empty,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24),
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.itemSubtitleTextColor.name,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          else
-            ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: _subdomains.length,
-              separatorBuilder: (_, _) => const Divider(height: 1),
-              itemBuilder: (_, i) => _buildSubdomainItem(_subdomains[i]),
-            ),
-
-          // "创建子域名" 按钮（底部）
-          SizedBox(height: ScreenUtil().setWidth(12)),
-          OutlinedButton.icon(
-            onPressed: _showCreateSubdomainSheet,
-            icon: Icon(
-              Icons.add,
-              size: ScreenUtil().setWidth(20),
-              color: _domainChain.color,
-            ),
-            label: Text(
-              S.of(context).g_key_ens_subdomain_create,
-              style: TextStyle(color: _domainChain.color),
-            ),
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(color: _domainChain.color.withAlpha(80)),
-              shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(12)),
-              ),
-              minimumSize:
-                  Size(double.infinity, ScreenUtil().setWidth(80)),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSubdomainItem(SubdomainInfo sub) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(12)),
-      child: Row(
-        children: [
-          // 图标
-          Container(
-            width: ScreenUtil().setWidth(40),
-            height: ScreenUtil().setWidth(40),
-            decoration: BoxDecoration(
-              color: _domainChain.color.withAlpha(20),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-            ),
-            child: Icon(
-              Icons.subdirectory_arrow_right,
-              size: ScreenUtil().setWidth(20),
-              color: _domainChain.color,
-            ),
-          ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
-          // 名称 + 所有者
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  sub.fullName,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
-                    fontWeight: FontWeight.w500,
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
-                  ),
-                ),
-                if (sub.owner.isNotEmpty)
-                  Text(
-                    '${sub.owner.substring(0, 6)}...${sub.owner.substring(sub.owner.length - 4)}',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ),
-                      fontFamily: 'monospace',
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          // 操作按钮
-          IconButton(
-            icon: const Icon(Icons.copy_outlined, size: 18),
-            onPressed: () => _copyToClipboard(sub.fullName),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete_outline, size: 18),
-            onPressed: () => _deleteSubdomain(sub),
-            color: Colors.red.withAlpha(180),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ── 高级操作 section ──────────────────────────────
-
-  Widget _buildAdvancedSection() {
-    return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-      decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            S.of(context).g_key_ens_advanced,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
-            ),
-          ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.swap_horiz, color: Colors.red),
-            title: Text(S.of(context).g_key_ens_transfer),
-            subtitle: Text(S.of(context).g_key_ens_transfer_desc),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: _showTransferDialog,
-          ),
         ],
       ),
     );

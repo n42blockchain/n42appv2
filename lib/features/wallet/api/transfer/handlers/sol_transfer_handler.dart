@@ -8,31 +8,20 @@ import '../transfer_handler.dart';
 import 'base_transfer_handler.dart';
 
 /// Transfer handler for Solana chain
+// Active implementation: see transfer_api.dart for the working transfer methods
 class SolTransferHandler extends BaseTransferHandler {
-  // Active implementation: see transfer_api.dart for the working transfer methods
-
   @override
   String get chainSymbol => 'SOL';
 
   @override
-  bool supports(String chainSymbol) {
-    return chainSymbol.toUpperCase() == 'SOL';
-  }
+  bool supports(String chainSymbol) => chainSymbol.toUpperCase() == 'SOL';
 
   @override
-  Future<MessageModel> transfer(TransferParams params) async {
-    // TODO: Migrate from transfer_api.dart transferSol method
-    return createError('SOL transfer not yet migrated');
-  }
+  // TODO: Migrate from transfer_api.dart transferSol method
+  Future<MessageModel> transfer(TransferParams params) => notYetMigrated();
 
   @override
-  Future<GasEstimation> estimateGas(TransferParams params) async {
-    // TODO: Implement gas estimation
-    return GasEstimation(
-      gasLimit: BigInt.zero,
-      gasPrice: BigInt.zero,
-      totalFee: BigInt.zero,
-      errorMessage: 'Not implemented',
-    );
-  }
+  // TODO: Implement gas estimation
+  Future<GasEstimation> estimateGas(TransferParams params) async =>
+      notImplementedGas();
 }

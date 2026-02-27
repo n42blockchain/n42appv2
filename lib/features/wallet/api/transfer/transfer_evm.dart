@@ -89,15 +89,7 @@ mixin _TransferEvmMixin on _TransferBaseMixin {
       nonceHex = dataUtils.bigIntToHex(mmn.data, need0x: false);
     }
     String gasPriceHex = dataUtils.bigIntToHex(gasPrice, need0x: false);
-    String amountHex;
-    if(contractAddress==""){
-      amountHex=dataUtils.bigIntToHex(valuePrice,
-          need0x: false);
-    }else{
-      amountHex=dataUtils.bigIntToHex(valuePrice,
-          need0x: false);
-    }
-
+    String amountHex = dataUtils.bigIntToHex(valuePrice, need0x: false);
 
     String chainIdHex =
     dataUtils.bigIntToHex(BigInt.from(isTest?txChainMap['baseInfo']['chainId_test']:txChainMap['baseInfo']['chainId']), need0x: false);
@@ -317,8 +309,6 @@ mixin _TransferEvmMixin on _TransferBaseMixin {
         messageHex= bytesToHex(message.codeUnits);
       }
     }
-
-    //"data:image/png;base64,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";
 
     Map<String, String> signMap = {
       "chainId": chainIdHex,

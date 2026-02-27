@@ -102,14 +102,10 @@ class AATransferHandler extends BaseTransferHandler {
   @override
   Future<MessageModel> transfer(TransferParams params) async {
     try {
-      // Validate AA params
       if (params is! AATransferParams) {
         return createError('Invalid parameters: AATransferParams required');
       }
 
-      final aaParams = params;
-
-      // Validate chain support
       if (!AAConfig.isChainSupported(normalizeSymbol(params.chainSymbol))) {
         return createError(S.current.g_key_wallet_m1(params.chainSymbol));
       }
@@ -119,20 +115,13 @@ class AATransferHandler extends BaseTransferHandler {
         return createError('Chain configuration not found');
       }
 
-      // Build the UserOperation
-      final userOp = await _buildUserOperation(aaParams, chainConfig);
+      final userOp = await _buildUserOperation(params, chainConfig);
 
-      // Estimate gas
       final bundler = _getBundlerClient();
       final gasEstimate = await bundler.estimateUserOperationGas(userOp);
-
-      // Apply gas estimates with buffer
       final userOpWithGas = gasEstimate.withBuffer(AAConstants.gasBufferMultiplier).applyTo(userOp);
 
-      // Sign the UserOperation
-      final signedUserOp = await _signUserOperation(userOpWithGas, aaParams, chainConfig);
-
-      // Send to bundler
+      final signedUserOp = await _signUserOperation(userOpWithGas, params, chainConfig);
       final userOpHash = await bundler.sendUserOperation(signedUserOp);
 
       debugPrint('AATransferHandler: UserOp sent, hash: $userOpHash');

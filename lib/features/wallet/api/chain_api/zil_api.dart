@@ -12,31 +12,31 @@ class ZilApi {
         : 'https://api.zilliqa.com';
   }
 
-  /// Get account balance
-  Future<MessageModel> getBalance(String address,{bool nonce=false}) async {
-    try {
-      Map<String,dynamic> params={
-    'id': '1',
-    'jsonrpc': '2.0',
-    'method': 'GetBalance',
-    'params': [address]
-    };
-      final response = await BaseApi.requestEmptyH.post(
-        _baseUrl,
-        params: {},
-        data: params,
-        header: {'Content-Type': 'application/json'},
-      );
+  Future<Map<String, dynamic>?> _rpc(String method, List<dynamic> params) async {
+    final response = await BaseApi.requestEmptyH.post(
+      _baseUrl,
+      params: {},
+      data: {'id': '1', 'jsonrpc': '2.0', 'method': method, 'params': params},
+      header: {'Content-Type': 'application/json'},
+    );
+    return response as Map<String, dynamic>?;
+  }
 
-      MessageModel mm = MessageModel();
+  static MessageModel _errorMm(dynamic e) => MessageModel.error()..data = e.toString();
+
+  /// Get account balance
+  Future<MessageModel> getBalance(String address, {bool nonce = false}) async {
+    try {
+      final response = await _rpc('GetBalance', [address]);
+      final mm = MessageModel();
       if (response != null && response['result'] != null) {
         // ZIL balance is in Qa (10^-12 ZIL)
-        if(nonce){
-          mm.data={
-            'balance':BigInt.parse(response['result']['balance'] ?? '0'),
-            'nonce':response['result']['nonce']
+        if (nonce) {
+          mm.data = {
+            'balance': BigInt.parse(response['result']['balance'] ?? '0'),
+            'nonce': response['result']['nonce'],
           };
-        }else{
+        } else {
           mm.data = BigInt.parse(response['result']['balance'] ?? '0');
         }
       } else if (response != null && response['error'] != null) {
@@ -53,28 +53,15 @@ class ZilApi {
       }
       return mm;
     } catch (e) {
-      MessageModel mm = MessageModel.error();
-      mm.data = e.toString();
-      return mm;
+      return _errorMm(e);
     }
   }
 
   /// Get minimum gas price
   Future<MessageModel> getMinimumGasPrice() async {
     try {
-      final response = await BaseApi.requestEmptyH.post(
-        _baseUrl,
-        params: {},
-        data: {
-          'id': '1',
-          'jsonrpc': '2.0',
-          'method': 'GetMinimumGasPrice',
-          'params': []
-        },
-        header: {'Content-Type': 'application/json'},
-      );
-
-      MessageModel mm = MessageModel();
+      final response = await _rpc('GetMinimumGasPrice', []);
+      final mm = MessageModel();
       if (response != null && response['result'] != null) {
         mm.data = BigInt.parse(response['result']);
       } else {
@@ -83,28 +70,15 @@ class ZilApi {
       }
       return mm;
     } catch (e) {
-      MessageModel mm = MessageModel.error();
-      mm.data = e.toString();
-      return mm;
+      return _errorMm(e);
     }
   }
 
   /// Get network ID
   Future<MessageModel> getNetworkId() async {
     try {
-      final response = await BaseApi.requestEmptyH.post(
-        _baseUrl,
-        params: {},
-        data: {
-          'id': '1',
-          'jsonrpc': '2.0',
-          'method': 'GetNetworkId',
-          'params': []
-        },
-        header: {'Content-Type': 'application/json'},
-      );
-
-      MessageModel mm = MessageModel();
+      final response = await _rpc('GetNetworkId', []);
+      final mm = MessageModel();
       if (response != null && response['result'] != null) {
         mm.data = response['result'];
       } else {
@@ -113,32 +87,19 @@ class ZilApi {
       }
       return mm;
     } catch (e) {
-      MessageModel mm = MessageModel.error();
-      mm.data = e.toString();
-      return mm;
+      return _errorMm(e);
     }
   }
 
   /// Get latest block number
   Future<MessageModel> getLatestTxBlock() async {
     try {
-      final response = await BaseApi.requestEmptyH.post(
-        _baseUrl,
-        params: {},
-        data: {
-          'id': '1',
-          'jsonrpc': '2.0',
-          'method': 'GetLatestTxBlock',
-          'params': []
-        },
-        header: {'Content-Type': 'application/json'},
-      );
-
-      MessageModel mm = MessageModel();
+      final response = await _rpc('GetLatestTxBlock', []);
+      final mm = MessageModel();
       if (response != null && response['result'] != null) {
         mm.data = {
           'header': response['result']['header'],
-          'body': response['result']['body']
+          'body': response['result']['body'],
         };
       } else {
         mm.error = true;
@@ -146,28 +107,15 @@ class ZilApi {
       }
       return mm;
     } catch (e) {
-      MessageModel mm = MessageModel.error();
-      mm.data = e.toString();
-      return mm;
+      return _errorMm(e);
     }
   }
 
   /// Send signed transaction
   Future<MessageModel> createTransaction(Map<String, dynamic> txParams) async {
     try {
-      final response = await BaseApi.requestEmptyH.post(
-        _baseUrl,
-        params: {},
-        data: {
-          'id': '1',
-          'jsonrpc': '2.0',
-          'method': 'CreateTransaction',
-          'params': [txParams]
-        },
-        header: {'Content-Type': 'application/json'},
-      );
-
-      MessageModel mm = MessageModel();
+      final response = await _rpc('CreateTransaction', [txParams]);
+      final mm = MessageModel();
       if (response != null && response['result'] != null) {
         mm.data = response['result']['TranID'];
       } else if (response != null && response['error'] != null) {
@@ -179,28 +127,15 @@ class ZilApi {
       }
       return mm;
     } catch (e) {
-      MessageModel mm = MessageModel.error();
-      mm.data = e.toString();
-      return mm;
+      return _errorMm(e);
     }
   }
 
   /// Get transaction by hash
   Future<MessageModel> getTransaction(String txHash) async {
     try {
-      final response = await BaseApi.requestEmptyH.post(
-        _baseUrl,
-        params: {},
-        data: {
-          'id': '1',
-          'jsonrpc': '2.0',
-          'method': 'GetTransaction',
-          'params': [txHash]
-        },
-        header: {'Content-Type': 'application/json'},
-      );
-
-      MessageModel mm = MessageModel();
+      final response = await _rpc('GetTransaction', [txHash]);
+      final mm = MessageModel();
       if (response != null && response['result'] != null) {
         mm.data = response['result'];
       } else {
@@ -209,28 +144,15 @@ class ZilApi {
       }
       return mm;
     } catch (e) {
-      MessageModel mm = MessageModel.error();
-      mm.data = e.toString();
-      return mm;
+      return _errorMm(e);
     }
   }
 
   /// Get transactions for address
   Future<MessageModel> getTransactionsForTxBlock(String blockNum) async {
     try {
-      final response = await BaseApi.requestEmptyH.post(
-        _baseUrl,
-        params: {},
-        data: {
-          'id': '1',
-          'jsonrpc': '2.0',
-          'method': 'GetTransactionsForTxBlock',
-          'params': [blockNum]
-        },
-        header: {'Content-Type': 'application/json'},
-      );
-
-      MessageModel mm = MessageModel();
+      final response = await _rpc('GetTransactionsForTxBlock', [blockNum]);
+      final mm = MessageModel();
       if (response != null && response['result'] != null) {
         mm.data = response['result'];
       } else {
@@ -238,9 +160,7 @@ class ZilApi {
       }
       return mm;
     } catch (e) {
-      MessageModel mm = MessageModel.error();
-      mm.data = e.toString();
-      return mm;
+      return _errorMm(e);
     }
   }
 }
