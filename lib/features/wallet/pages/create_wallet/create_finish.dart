@@ -43,6 +43,7 @@ class _CreateFinishState extends ConsumerState<CreateFinish> {
     return Future.value(false);
   }
   Future<void> createWallet()async{
+    _wInfo=widget.wInfo;
     final walletActionProvider =ref.read(wapBridgeProvider);
     if(_wInfo==null){
       _wInfo=WalletInfo(

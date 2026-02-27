@@ -44,7 +44,7 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                       from: transactionModel.address,
                       to: transactionModel.to1,
                       txHash: transactionModel.txHash,
-                      value: transactionModel.price_double().toString(),
+                      value: transactionModel.priceDouble().toString(),
                       coinType: transactionModel.coin['coinType'],
                       //gas: transactionModel.gas_double.toString(),
                       time: transactionModel.getTxTimeStr(),
@@ -66,10 +66,8 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                         from: "",//transactionModel.from1,
                         to: transactionModel.to1,
                         txHash: transactionModel.txHash,
-                        value: transactionModel.price_double().toString(),
+                        value: transactionModel.priceDouble().toString(),
                         coinType: transactionModel.coin['coinType'],
-                        //gas: transactionModel.gas.toString(),
-                        //gasPrice: transactionModel.gasPrice_double().toString(),
                         time: DateTime.fromMillisecondsSinceEpoch(int.parse(transactionModel.txTime)).toString(),
                       )));
             }
@@ -171,7 +169,7 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                     Expanded(
                       flex: 1,
                       child: Text(
-                        '${transactionModel.price_double()} ${transactionModel.coin['unit'].toUpperCase()}',
+                        '${transactionModel.priceDouble()} ${transactionModel.coin['unit'].toUpperCase()}',
                         style: TextStyle(
                           color: AppThemeUtils.getColorByKey(
                               context, AppThemeKeys.mainTextColor.name),
@@ -257,7 +255,7 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                       from: transactionModel.address,
                       to: transactionModel.to1,
                       txHash: transactionModel.txHash,
-                      value: transactionModel.price_double().toString(),
+                      value: transactionModel.priceDouble().toString(),
                       coinType: transactionModel.coin['coinType'],
                       //gas: transactionModel.gas_double.toString(),
                       time: DateTime.fromMillisecondsSinceEpoch(int.parse(transactionModel.txTime)*1000).toString(),
@@ -292,10 +290,8 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                         from: transactionModel.from1,
                         to: transactionModel.to1,
                         txHash: transactionModel.txHash,
-                        value: transactionModel.price_double().toString(),
+                        value: transactionModel.priceDouble().toString(),
                         coinType: transactionModel.coin['coinType'],
-                        //gas: transactionModel.gas.toString(),
-                        //gasPrice: transactionModel.gasPrice_double().toString(),
                         time: transactionModel.getTxTimeStr(),
                         isTest: coinModel?.isTest,
                       )));
@@ -417,7 +413,7 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                     Expanded(
                       flex: 1,
                       child: Text(
-                        '${transactionModel.price_double()} ${transactionModel.coin['unit'].toUpperCase()}',
+                        '${transactionModel.priceDouble()} ${transactionModel.coin['unit'].toUpperCase()}',
                         style: TextStyle(
                           color: AppThemeUtils.getColorByKey(
                               context, AppThemeKeys.mainTextColor.name),
