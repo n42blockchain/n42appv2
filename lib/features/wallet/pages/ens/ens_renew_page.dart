@@ -10,6 +10,7 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/services/ens_expiry_reminder_service.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens/ens_price_card.dart';
+import 'package:n42_wallet/features/wallet/widgets/ens/ens_renew_success_card.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 
 /// ENS 续费页面
@@ -38,9 +39,6 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
   bool _isLoadingPrice = false;
   bool _isRenewing = false;
   RenewResult? _renewResult;
-  // 到期提醒状态
-  bool _reminderEnabled = true;
-  bool _reminderSaving = false;
 
   @override
   void initState() {
@@ -95,7 +93,6 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
           widget.ownedEns.name,
           result.data!.newExpiresAt!,
         );
-        if (mounted) setState(() => _reminderEnabled = true);
       }
     }
   }
@@ -117,7 +114,10 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
 
             // 续费成功后显示结果
             if (_renewResult?.success == true) ...[
-              _buildSuccessCard(),
+              EnsRenewSuccessCard(
+                ensName: widget.ownedEns.name,
+                renewResult: _renewResult!,
+              ),
               SizedBox(height: ScreenUtil().setWidth(24)),
             ],
 
@@ -134,8 +134,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
               SizedBox(height: ScreenUtil().setWidth(24)),
 
               // 新到期时间预览
-              if (_priceInfo != null)
-                _buildExpiryPreview(),
+              if (_priceInfo != null) _buildExpiryPreview(),
               SizedBox(height: ScreenUtil().setWidth(32)),
             ],
 
@@ -151,24 +150,30 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
     final isExpiringSoon = widget.ownedEns.isExpiringSoon;
     final isExpired = widget.ownedEns.isExpired;
 
+    final Color statusColor;
+    final IconData statusIcon;
+    final List<Color> gradientColors;
+
+    if (isExpired) {
+      statusColor = Colors.red;
+      statusIcon = Icons.error;
+      gradientColors = [Colors.red.withAlpha(30), Colors.red.withAlpha(10)];
+    } else if (isExpiringSoon) {
+      statusColor = Colors.orange;
+      statusIcon = Icons.warning;
+      gradientColors = [Colors.orange.withAlpha(30), Colors.orange.withAlpha(10)];
+    } else {
+      statusColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+      statusIcon = Icons.access_time;
+      final blue = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+      gradientColors = [blue.withAlpha(30), blue.withAlpha(10)];
+    }
+
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: isExpired
-              ? [Colors.red.withAlpha(30), Colors.red.withAlpha(10)]
-              : isExpiringSoon
-                  ? [Colors.orange.withAlpha(30), Colors.orange.withAlpha(10)]
-                  : [
-                      AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainBlueColor.name,
-                      ).withAlpha(30),
-                      AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainBlueColor.name,
-                      ).withAlpha(10),
-                    ],
+          colors: gradientColors,
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -191,22 +196,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                isExpired
-                    ? Icons.error
-                    : isExpiringSoon
-                        ? Icons.warning
-                        : Icons.access_time,
-                size: ScreenUtil().setWidth(20),
-                color: isExpired
-                    ? Colors.red
-                    : isExpiringSoon
-                        ? Colors.orange
-                        : AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemSubtitleTextColor.name,
-                          ),
-              ),
+              Icon(statusIcon, size: ScreenUtil().setWidth(20), color: statusColor),
               SizedBox(width: ScreenUtil().setWidth(6)),
               Text(
                 isExpired
@@ -214,14 +204,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                     : '${S.of(context).g_key_ens_expires}: ${widget.ownedEns.formattedExpiresAt}',
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(24),
-                  color: isExpired
-                      ? Colors.red
-                      : isExpiringSoon
-                          ? Colors.orange
-                          : AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.itemSubtitleTextColor.name,
-                            ),
+                  color: statusColor,
                 ),
               ),
             ],
@@ -315,9 +298,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
       decoration: BoxDecoration(
         color: Colors.green.withAlpha(20),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-        border: Border.all(
-          color: Colors.green.withAlpha(40),
-        ),
+        border: Border.all(color: Colors.green.withAlpha(40)),
       ),
       child: Column(
         children: [
@@ -348,11 +329,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8)),
-            child: Icon(
-              Icons.arrow_downward,
-              size: ScreenUtil().setWidth(24),
-              color: Colors.green,
-            ),
+            child: Icon(Icons.arrow_downward, size: ScreenUtil().setWidth(24), color: Colors.green),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -375,141 +352,6 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
               ),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSuccessCard() {
-    return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
-      decoration: BoxDecoration(
-        color: Colors.green.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-        border: Border.all(
-          color: Colors.green.withAlpha(50),
-        ),
-      ),
-      child: Column(
-        children: [
-          Icon(
-            Icons.check_circle,
-            size: ScreenUtil().setWidth(64),
-            color: Colors.green,
-          ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
-          Text(
-            S.of(context).g_key_ens_renew_success,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              fontWeight: FontWeight.bold,
-              color: Colors.green,
-            ),
-          ),
-          if (_renewResult?.newExpiresAt != null) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
-            Text(
-              '${S.of(context).g_key_ens_new_expiry}: ${_formatDate(_renewResult!.newExpiresAt!)}',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
-              ),
-            ),
-          ],
-          if (_renewResult?.txHash != null) ...[
-            SizedBox(height: ScreenUtil().setWidth(12)),
-            Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(12),
-                vertical: ScreenUtil().setWidth(8),
-              ),
-              decoration: BoxDecoration(
-                color: Colors.green.withAlpha(20),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
-              ),
-              child: Text(
-                'Tx: ${_shortenHash(_renewResult!.txHash!)}',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
-                  fontFamily: 'monospace',
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
-                ),
-              ),
-            ),
-          ],
-          // 到期提醒开关
-          if (_renewResult?.newExpiresAt != null) ...[
-            SizedBox(height: ScreenUtil().setWidth(20)),
-            Divider(color: Colors.green.withAlpha(50)),
-            SizedBox(height: ScreenUtil().setWidth(8)),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        S.of(context).g_key_ens_reminder_enable,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(26),
-                          fontWeight: FontWeight.w600,
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: ScreenUtil().setWidth(4)),
-                      Text(
-                        S.of(context).g_key_ens_reminder_hint,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(22),
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemSubtitleTextColor.name,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Switch(
-                  value: _reminderEnabled,
-                  activeThumbColor: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
-                  onChanged: _reminderSaving
-                      ? null
-                      : (value) async {
-                          setState(() => _reminderSaving = true);
-                          if (value) {
-                            await EnsExpiryReminderService.setReminder(
-                              widget.ownedEns.name,
-                              _renewResult!.newExpiresAt!,
-                            );
-                          } else {
-                            await EnsExpiryReminderService.disableReminder(
-                              widget.ownedEns.name,
-                            );
-                          }
-                          if (mounted) {
-                            setState(() {
-                              _reminderEnabled = value;
-                              _reminderSaving = false;
-                            });
-                          }
-                        },
-                ),
-              ],
-            ),
-          ],
         ],
       ),
     );
@@ -572,10 +414,5 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
 
   String _formatDate(DateTime date) {
     return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
-  }
-
-  String _shortenHash(String hash) {
-    if (hash.length <= 16) return hash;
-    return '${hash.substring(0, 10)}...${hash.substring(hash.length - 6)}';
   }
 }
