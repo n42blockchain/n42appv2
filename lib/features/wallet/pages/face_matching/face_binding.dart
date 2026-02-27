@@ -1,6 +1,7 @@
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 
 import 'dart:io' as io;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
@@ -121,10 +122,62 @@ class _FaceBindingState extends ConsumerState<FaceBinding>
 
   // ── 核心流程 ──────────────────────────────────────────────────────────────
 
+  static const _kFaceConsentKey = 'face_biometric_consent_given';
+
+  Future<bool> _hasFaceConsent() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_kFaceConsentKey) ?? false;
+  }
+
+  Future<void> _saveFaceConsent() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_kFaceConsentKey, true);
+  }
+
+  Future<bool> _showFaceConsentDialog() async {
+    if (!mounted) return false;
+    return await showDialog<bool>(
+          context: context,
+          barrierDismissible: false,
+          builder: (ctx) => AlertDialog(
+            title: Text(S.of(ctx).g_face_match_key6),
+            content: const Text(
+              'N42 Wallet will capture your facial image using the device camera. '
+              'This image is transmitted to N42 servers to bind or verify your identity '
+              'with your wallet address, and is stored securely.\n\n'
+              'By continuing, you consent to the collection and remote processing of '
+              'your biometric data as described in the N42 Privacy Policy.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, false),
+                child: Text(S.of(ctx).g_key_79),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, true),
+                child: Text(S.of(ctx).g_chat_key_50),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   Future<void> _init() async {
     // SDK 初始化失败时显示错误提示和重试按钮
     final ok = await initialize();
     if (!ok) return; // errorMessage 已在 initialize() 内 setState
+
+    // 首次使用前需用户明确同意生物特征数据采集与传输
+    if (!await _hasFaceConsent()) {
+      final agreed = await _showFaceConsentDialog();
+      if (!agreed) {
+        if (mounted) Navigator.pop(context);
+        return;
+      }
+      await _saveFaceConsent();
+    }
+
     _useCamera();
   }
 
