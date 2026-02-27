@@ -1,0 +1,457 @@
+// Copyright 2021-2026 N42 Inc. All rights reserved.
+// Use of this source code is governed by a dual license:
+// Apache License 2.0 and MIT License.
+// See LICENSE file in the project root for full license information.
+
+part of 'hardware_wallet_accounts_page.dart';
+
+/// 未连接状态视图
+class _HWNotConnectedView extends StatelessWidget {
+  final VoidCallback onGoBack;
+
+  const _HWNotConnectedView({required this.onGoBack});
+
+  @override
+  Widget build(BuildContext context) {
+    final s = S.of(context);
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.bluetooth_disabled,
+            size: ScreenUtil().setWidth(80),
+            color: AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.itemSubtitleTextColor.name,
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(20)),
+          Text(
+            s.g_key_hw_not_connected,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(30),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(20)),
+          ElevatedButton(
+            onPressed: onGoBack,
+            child: Text(s.g_key_hw_go_back),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 设备信息卡片
+class _HWDeviceInfoCard extends StatelessWidget {
+  final HardwareWalletDevice device;
+
+  const _HWDeviceInfoCard({required this.device});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      decoration: BoxDecoration(
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: ScreenUtil().setWidth(48),
+            height: ScreenUtil().setWidth(48),
+            decoration: BoxDecoration(
+              color: Colors.green.withAlpha(30),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+            ),
+            child: Icon(
+              Icons.check_circle,
+              color: Colors.green,
+              size: ScreenUtil().setWidth(28),
+            ),
+          ),
+          SizedBox(width: ScreenUtil().setWidth(16)),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  device.name,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(28),
+                    fontWeight: FontWeight.w600,
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.mainTextColor.name,
+                    ),
+                  ),
+                ),
+                Text(
+                  S.of(context).g_key_hw_connected,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    color: Colors.green,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 币种选择器
+class _HWCoinSelector extends StatelessWidget {
+  final List<Map<String, String>> coins;
+  final String selectedCoinType;
+  final ValueChanged<String> onCoinSelected;
+
+  const _HWCoinSelector({
+    required this.coins,
+    required this.selectedCoinType,
+    required this.onCoinSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: ScreenUtil().setWidth(80),
+      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: coins.length,
+        itemBuilder: (context, index) {
+          final coin = coins[index];
+          final isSelected = coin['symbol'] == selectedCoinType;
+
+          return GestureDetector(
+            onTap: () => onCoinSelected(coin['symbol']!),
+            child: Container(
+              margin: EdgeInsets.only(right: ScreenUtil().setWidth(12)),
+              padding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(20),
+                vertical: ScreenUtil().setWidth(12),
+              ),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainBlueColor.name,
+                      )
+                    : AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.itemBgColor.name,
+                      ),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    coin['symbol']!,
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(26),
+                      fontWeight: FontWeight.w600,
+                      color: isSelected
+                          ? Colors.white
+                          : AppThemeUtils.getColorByKey(
+                              context,
+                              AppThemeKeys.mainTextColor.name,
+                            ),
+                    ),
+                  ),
+                  SizedBox(width: ScreenUtil().setWidth(8)),
+                  Text(
+                    coin['name']!,
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(22),
+                      color: isSelected
+                          ? Colors.white70
+                          : AppThemeUtils.getColorByKey(
+                              context,
+                              AppThemeKeys.itemSubtitleTextColor.name,
+                            ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+/// 加载中视图
+class _HWLoadingView extends StatelessWidget {
+  const _HWLoadingView();
+
+  @override
+  Widget build(BuildContext context) {
+    final s = S.of(context);
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const CircularProgressIndicator(),
+          SizedBox(height: ScreenUtil().setWidth(20)),
+          Text(
+            s.g_key_hw_loading_accounts,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(26),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(8)),
+          Text(
+            s.g_key_hw_loading_hint,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(22),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 空账户视图
+class _HWEmptyAccountsView extends StatelessWidget {
+  final String appName;
+  final VoidCallback onRetry;
+
+  const _HWEmptyAccountsView({
+    required this.appName,
+    required this.onRetry,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.account_balance_wallet_outlined,
+            size: ScreenUtil().setWidth(60),
+            color: AppThemeUtils.getColorByKey(
+              context,
+              AppThemeKeys.itemSubtitleTextColor.name,
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(16)),
+          Text(
+            S.of(context).g_key_hw_no_accounts_found,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(28),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(8)),
+          Text(
+            S.of(context).g_key_hw_open_ledger_app_hint(appName),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(24),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(20)),
+          ElevatedButton(
+            onPressed: onRetry,
+            child: Text(S.of(context).g_key_aa_retry),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 加载更多按钮
+class _HWLoadMoreButton extends StatelessWidget {
+  final bool isLoading;
+  final VoidCallback onLoadMore;
+
+  const _HWLoadMoreButton({
+    required this.isLoading,
+    required this.onLoadMore,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+      child: isLoading
+          ? Center(child: CircularProgressIndicator(strokeWidth: 2))
+          : TextButton(
+              onPressed: onLoadMore,
+              child: Text(
+                S.of(context).g_key_hw_load_more,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(26),
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ),
+                ),
+              ),
+            ),
+    );
+  }
+}
+
+/// 单个账户列表项
+class _HWAccountItem extends StatelessWidget {
+  final HardwareWalletAccount account;
+  final ValueChanged<String> onCopy;
+  final ValueChanged<HardwareWalletAccount> onUse;
+
+  const _HWAccountItem({
+    required this.account,
+    required this.onCopy,
+    required this.onUse,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
+      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      decoration: BoxDecoration(
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: ScreenUtil().setWidth(40),
+                height: ScreenUtil().setWidth(40),
+                decoration: BoxDecoration(
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ).withAlpha(30),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    '${account.index + 1}',
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(24),
+                      fontWeight: FontWeight.bold,
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainBlueColor.name,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: ScreenUtil().setWidth(12)),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      account.displayName,
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(28),
+                        fontWeight: FontWeight.w600,
+                        color: AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.mainTextColor.name,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: ScreenUtil().setWidth(4)),
+                    Text(
+                      account.derivationPath,
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(22),
+                        color: AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.itemSubtitleTextColor.name,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              IconButton(
+                onPressed: () => onCopy(account.address),
+                icon: Icon(
+                  Icons.copy,
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainBlueColor.name,
+                  ),
+                  size: ScreenUtil().setWidth(28),
+                ),
+              ),
+              IconButton(
+                onPressed: () => onUse(account),
+                icon: Icon(
+                  Icons.add_circle_outline,
+                  color: Colors.green,
+                  size: ScreenUtil().setWidth(28),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: ScreenUtil().setWidth(12)),
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
+            decoration: BoxDecoration(
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.mainBlueColor.name,
+              ).withAlpha(10),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+            ),
+            child: Text(
+              account.address,
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(22),
+                fontFamily: 'monospace',
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.mainTextColor.name,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

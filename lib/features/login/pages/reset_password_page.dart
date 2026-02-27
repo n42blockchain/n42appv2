@@ -15,6 +15,8 @@ import 'package:n42_wallet/features/utils/md5_util.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
 
+part 'reset_password_widgets.dart';
+
 /// 重置密码页面（忘记密码流程）
 class ResetPasswordPage extends StatefulWidget {
   final String? initialEmail;
@@ -78,7 +80,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 SizedBox(height: ScreenUtil().setWidth(20)),
 
                 // 步骤指示器
-                _buildStepIndicator(),
+                _ResetPasswordStepIndicator(
+                  currentStep: _currentStep,
+                ),
 
                 SizedBox(height: ScreenUtil().setWidth(40)),
 
@@ -94,78 +98,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     );
   }
 
-  Widget _buildStepIndicator() {
-    return Row(
-      children: [
-        _buildStepDot(0, S.of(context).g_key_step_email),
-        _buildStepLine(0),
-        _buildStepDot(1, S.of(context).g_key_step_verify),
-        _buildStepLine(1),
-        _buildStepDot(2, S.of(context).g_key_step_password),
-      ],
-    );
-  }
-
-  Widget _buildStepDot(int step, String label) {
-    final isActive = _currentStep >= step;
-    final isCurrent = _currentStep == step;
-
-    return Column(
-      children: [
-        Container(
-          width: ScreenUtil().setWidth(40),
-          height: ScreenUtil().setWidth(40),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: isActive
-                ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-                : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-            border: isCurrent
-                ? Border.all(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                    width: 2,
-                  )
-                : null,
-          ),
-          child: Center(
-            child: isActive && !isCurrent
-                ? Icon(Icons.check, color: Colors.white, size: ScreenUtil().setWidth(24))
-                : Text(
-                    '${step + 1}',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
-                      fontWeight: FontWeight.bold,
-                      color: isActive ? Colors.white : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                    ),
-                  ),
-          ),
-        ),
-        SizedBox(height: ScreenUtil().setWidth(8)),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(22),
-            color: isActive
-                ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name)
-                : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStepLine(int afterStep) {
-    final isActive = _currentStep > afterStep;
-    return Expanded(
-      child: Container(
-        height: 2,
-        margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(32)),
-        color: isActive
-            ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-            : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-      ),
-    );
-  }
+  // ==================== 步骤 UI ====================
 
   Widget _buildEmailStep() {
     return Column(
@@ -179,45 +112,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           ),
         ),
         SizedBox(height: ScreenUtil().setWidth(32)),
-
-        // 邮箱输入
-        Text(
-          S.of(context).g_key_email,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(28),
-            fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-          ),
-        ),
-        SizedBox(height: ScreenUtil().setWidth(12)),
-        TextFormField(
+        _ResetPasswordInputField(
           controller: _emailController,
+          label: S.of(context).g_key_email,
+          hint: S.of(context).g_key_enter_email,
           keyboardType: TextInputType.emailAddress,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(30),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-          ),
-          decoration: InputDecoration(
-            hintText: S.of(context).g_key_enter_email,
-            hintStyle: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-            ),
-            filled: true,
-            fillColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-              borderSide: BorderSide.none,
-            ),
-            contentPadding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(20),
-              vertical: ScreenUtil().setWidth(16),
-            ),
-            prefixIcon: Icon(
-              Icons.email_outlined,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-            ),
-          ),
+          prefixIcon: Icons.email_outlined,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return S.of(context).g_key_email_required;
@@ -228,10 +128,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             return null;
           },
         ),
-
         SizedBox(height: ScreenUtil().setWidth(48)),
-
-        // 发送验证码按钮
         SizedBox(
           width: double.infinity,
           height: ScreenUtil().setWidth(88),
@@ -265,45 +162,13 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           ),
         ),
         SizedBox(height: ScreenUtil().setWidth(32)),
-
-        // 验证码输入
-        Text(
-          S.of(context).g_key_verification_code,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(28),
-            fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-          ),
-        ),
-        SizedBox(height: ScreenUtil().setWidth(12)),
-        TextFormField(
+        _ResetPasswordInputField(
           controller: _codeController,
+          label: S.of(context).g_key_verification_code,
+          hint: '000000',
           keyboardType: TextInputType.number,
           maxLength: 6,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(30),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-            letterSpacing: 8,
-          ),
-          decoration: InputDecoration(
-            hintText: '000000',
-            hintStyle: TextStyle(
-              fontSize: ScreenUtil().setSp(30),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-              letterSpacing: 8,
-            ),
-            filled: true,
-            fillColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-              borderSide: BorderSide.none,
-            ),
-            contentPadding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(20),
-              vertical: ScreenUtil().setWidth(16),
-            ),
-            counterText: '',
-          ),
+          letterSpacing: 8,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return S.of(context).g_key_code_required;
@@ -314,10 +179,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             return null;
           },
         ),
-
         SizedBox(height: ScreenUtil().setWidth(16)),
-
-        // 重新发送
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -347,10 +209,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             ),
           ],
         ),
-
         SizedBox(height: ScreenUtil().setWidth(32)),
-
-        // 下一步按钮
         SizedBox(
           width: double.infinity,
           height: ScreenUtil().setWidth(88),
@@ -379,30 +238,22 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           ),
         ),
         SizedBox(height: ScreenUtil().setWidth(32)),
-
-        // 新密码
-        _buildPasswordField(
+        _ResetPasswordField(
           controller: _passwordController,
           label: S.of(context).g_key_new_password,
           hint: S.of(context).g_key_enter_new_password,
           obscure: _obscurePassword,
           onToggle: () => setState(() => _obscurePassword = !_obscurePassword),
         ),
-
         SizedBox(height: ScreenUtil().setWidth(24)),
-
-        // 确认密码
-        _buildPasswordField(
+        _ResetPasswordField(
           controller: _confirmPasswordController,
           label: S.of(context).g_key_confirm_new_password,
           hint: S.of(context).g_key_enter_confirm_password,
           obscure: _obscureConfirmPassword,
           onToggle: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
         ),
-
         SizedBox(height: ScreenUtil().setWidth(48)),
-
-        // 重置密码按钮
         SizedBox(
           width: double.infinity,
           height: ScreenUtil().setWidth(88),
@@ -424,69 +275,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     );
   }
 
-  Widget _buildPasswordField({
-    required TextEditingController controller,
-    required String label,
-    required String hint,
-    required bool obscure,
-    required VoidCallback onToggle,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(28),
-            fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-          ),
-        ),
-        SizedBox(height: ScreenUtil().setWidth(12)),
-        TextFormField(
-          controller: controller,
-          obscureText: obscure,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(30),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-          ),
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-            ),
-            filled: true,
-            fillColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-              borderSide: BorderSide.none,
-            ),
-            contentPadding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(20),
-              vertical: ScreenUtil().setWidth(16),
-            ),
-            suffixIcon: IconButton(
-              icon: Icon(
-                obscure ? Icons.visibility_off : Icons.visibility,
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-              ),
-              onPressed: onToggle,
-            ),
-          ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return S.of(context).g_key_password_required;
-            }
-            if (value.length < 6) {
-              return S.of(context).g_key_password_min_length;
-            }
-            return null;
-          },
-        ),
-      ],
-    );
-  }
+  // ==================== 业务逻辑 ====================
 
   void _startCountdown() {
     _countdown = 60;

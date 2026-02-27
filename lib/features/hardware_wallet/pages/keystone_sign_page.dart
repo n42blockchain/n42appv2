@@ -14,6 +14,9 @@ import 'package:n42_wallet/features/hardware_wallet/service/keystone_service.dar
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+part 'keystone_pair_page.dart';
+part 'keystone_scan_overlay.dart';
+
 /// Keystone 气隙 QR 签名页面
 ///
 /// 两步流程：
@@ -178,24 +181,17 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // 说明文字
-          _buildInfoCard(
-            context,
+          _KeystoneInfoCard(
             icon: Icons.qr_code_scanner,
             message: s.g_key_hw_keystone_scan_request_hint,
           ),
           SizedBox(height: ScreenUtil().setWidth(24)),
-
-          // QR 码
           Expanded(
             child: Center(
               child: _buildQrCode(),
             ),
           ),
-
           SizedBox(height: ScreenUtil().setWidth(24)),
-
-          // 下一步按钮
           ElevatedButton(
             onPressed: _proceedToScan,
             style: ElevatedButton.styleFrom(
@@ -259,21 +255,16 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
   Widget _buildScanStep(BuildContext context, S s) {
     return Column(
       children: [
-        // 说明文字
         Padding(
           padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-          child: _buildInfoCard(
-            context,
+          child: _KeystoneInfoCard(
             icon: Icons.camera_alt,
             message: s.g_key_hw_keystone_scan_response_hint,
           ),
         ),
-
-        // 扫描区域
         Expanded(
           child: Stack(
             children: [
-              // Camera view
               if (_scannerController != null)
                 MobileScanner(
                   controller: _scannerController!,
@@ -281,20 +272,17 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
                 )
               else
                 const Center(child: CircularProgressIndicator()),
-
-              // 扫描框遮罩
-              _buildScanOverlay(context),
-
-              // 错误提示
+              _ScanOverlayPainter.buildOverlay(context),
               if (_scanError != null)
                 Positioned(
                   bottom: ScreenUtil().setWidth(120),
                   left: ScreenUtil().setWidth(30),
                   right: ScreenUtil().setWidth(30),
-                  child: _buildScanErrorCard(context, s),
+                  child: _KeystoneScanErrorCard(
+                    error: _scanError!,
+                    onRetry: _retryScanning,
+                  ),
                 ),
-
-              // 加载中
               if (_isScanning)
                 const Center(
                   child: CircularProgressIndicator(color: Colors.white),
@@ -305,297 +293,4 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
       ],
     );
   }
-
-  Widget _buildScanOverlay(BuildContext context) {
-    final scanBoxSize = ScreenUtil().setWidth(260);
-    return CustomPaint(
-      painter: _ScanOverlayPainter(
-        scanBoxSize: scanBoxSize,
-        borderColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainBlueColor.name),
-      ),
-      child: const SizedBox.expand(),
-    );
-  }
-
-  Widget _buildScanErrorCard(BuildContext context, S s) {
-    return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
-      decoration: BoxDecoration(
-        color: Colors.red.shade900.withAlpha(230),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            _scanError ?? s.g_key_hw_keystone_scan_error,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: Colors.white,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
-          GestureDetector(
-            onTap: _retryScanning,
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(24),
-                vertical: ScreenUtil().setWidth(10),
-              ),
-              decoration: BoxDecoration(
-                color: Colors.white24,
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
-              ),
-              child: Text(
-                s.g_key_hw_load_more, // reuse retry-style label
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ==================== Shared helpers ====================
-
-  Widget _buildInfoCard(
-    BuildContext context, {
-    required IconData icon,
-    required String message,
-  }) {
-    return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-      decoration: BoxDecoration(
-        color:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name),
-            size: ScreenUtil().setWidth(36),
-          ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
-          Expanded(
-            child: Text(
-              message,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ==================== Keystone pair page ====================
-
-/// Keystone 配对页面：扫描设备的 xpub/sync QR 码以导入账户
-class KeystonePairPage extends StatefulWidget {
-  final Function(String xpub, String? fingerprint) onPaired;
-
-  const KeystonePairPage({super.key, required this.onPaired});
-
-  @override
-  State<KeystonePairPage> createState() => _KeystonePairPageState();
-}
-
-class _KeystonePairPageState extends State<KeystonePairPage> {
-  final KeystoneService _keystoneService = KeystoneService();
-  final MobileScannerController _controller = MobileScannerController(
-    detectionSpeed: DetectionSpeed.normal,
-    facing: CameraFacing.back,
-  );
-
-  bool _isProcessing = false;
-  String? _error;
-
-  void _onDetected(BarcodeCapture capture) {
-    if (_isProcessing) return;
-
-    final raw = capture.barcodes.firstOrNull?.rawValue;
-    if (raw == null || raw.isEmpty) return;
-
-    setState(() => _isProcessing = true);
-    _controller.stop();
-
-    try {
-      final info = _keystoneService.parseSyncQr(raw);
-      if (mounted) {
-        widget.onPaired(info.xpub, info.masterFingerprint);
-      }
-    } catch (e) {
-      setState(() {
-        _error = 'Failed to parse Keystone QR: $e';
-        _isProcessing = false;
-      });
-      _controller.start();
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final s = S.of(context);
-    return Scaffold(
-      appBar: AppBarWidget(text: s.g_key_hw_keystone_connect_title),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-              child: Container(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
-                decoration: BoxDecoration(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemBgColor.name),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.qr_code_scanner,
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
-                      size: ScreenUtil().setWidth(36),
-                    ),
-                    SizedBox(width: ScreenUtil().setWidth(12)),
-                    Expanded(
-                      child: Text(
-                        s.g_key_hw_keystone_scan_xpub_hint,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(24),
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              child: Stack(
-                children: [
-                  MobileScanner(
-                    controller: _controller,
-                    onDetect: _onDetected,
-                  ),
-                  if (_error != null)
-                    Positioned(
-                      bottom: ScreenUtil().setWidth(40),
-                      left: ScreenUtil().setWidth(30),
-                      right: ScreenUtil().setWidth(30),
-                      child: Container(
-                        padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
-                        decoration: BoxDecoration(
-                          color: Colors.red.shade900.withAlpha(220),
-                          borderRadius:
-                              BorderRadius.circular(ScreenUtil().setWidth(12)),
-                        ),
-                        child: Text(
-                          _error!,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(24),
-                            color: Colors.white,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  if (_isProcessing)
-                    const Center(
-                        child: CircularProgressIndicator(color: Colors.white)),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ==================== Custom painter ====================
-
-class _ScanOverlayPainter extends CustomPainter {
-  final double scanBoxSize;
-  final Color borderColor;
-
-  _ScanOverlayPainter({required this.scanBoxSize, required this.borderColor});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = Colors.black54;
-
-    final centerX = size.width / 2;
-    final centerY = size.height / 2;
-    final half = scanBoxSize / 2;
-
-    final outerRect = Rect.fromLTWH(0, 0, size.width, size.height);
-    final innerRect = Rect.fromLTRB(
-      centerX - half,
-      centerY - half,
-      centerX + half,
-      centerY + half,
-    );
-
-    final path = Path()
-      ..addRect(outerRect)
-      ..addRect(innerRect)
-      ..fillType = PathFillType.evenOdd;
-
-    canvas.drawPath(path, paint);
-
-    // Corner brackets
-    final bracketPaint = Paint()
-      ..color = borderColor
-      ..strokeWidth = 3
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
-
-    const cornerLen = 24.0;
-    final r = innerRect;
-
-    // Top-left
-    canvas.drawLine(r.topLeft, r.topLeft.translate(cornerLen, 0), bracketPaint);
-    canvas.drawLine(r.topLeft, r.topLeft.translate(0, cornerLen), bracketPaint);
-    // Top-right
-    canvas.drawLine(
-        r.topRight, r.topRight.translate(-cornerLen, 0), bracketPaint);
-    canvas.drawLine(
-        r.topRight, r.topRight.translate(0, cornerLen), bracketPaint);
-    // Bottom-left
-    canvas.drawLine(
-        r.bottomLeft, r.bottomLeft.translate(cornerLen, 0), bracketPaint);
-    canvas.drawLine(
-        r.bottomLeft, r.bottomLeft.translate(0, -cornerLen), bracketPaint);
-    // Bottom-right
-    canvas.drawLine(
-        r.bottomRight, r.bottomRight.translate(-cornerLen, 0), bracketPaint);
-    canvas.drawLine(
-        r.bottomRight, r.bottomRight.translate(0, -cornerLen), bracketPaint);
-  }
-
-  @override
-  bool shouldRepaint(_ScanOverlayPainter old) =>
-      old.scanBoxSize != scanBoxSize || old.borderColor != borderColor;
 }

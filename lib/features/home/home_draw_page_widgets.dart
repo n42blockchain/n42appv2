@@ -1,0 +1,298 @@
+part of 'home_draw_page.dart';
+
+// ── Drawer widget components ─────────────────────────────────────────────────
+
+extension on _HomeDrawPageState {
+  Widget buildUserAccount(dynamic currentUser) {
+    // 优先使用 Chat 插件的用户信息（从流中更新）
+    final chatUser = _chatUser ?? N42Chat.currentUser;
+    final userInfo = AppGlobals.userInfo;
+    final isChatLoggedIn = N42Chat.isLoggedIn;
+    final isWalletLoggedIn = currentUser != null || userInfo != null;
+
+    // 显示名称和头像优先使用 chat 用户
+    final displayName = chatUser?.displayName ?? currentUser?.name ?? userInfo?.name;
+    final displayAvatar = chatUser?.avatarUrl ?? currentUser?.image ?? userInfo?.image ?? '';
+    final displayEmail = chatUser?.userId ?? currentUser?.email ?? userInfo?.email ?? '';
+    final isLoggedIn = isChatLoggedIn || isWalletLoggedIn;
+
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.1),
+            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.05),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        border: Border.all(
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.1),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              // 头像 - 点击进入 chat
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),
+                  );
+                },
+                child: Container(
+                  width: ScreenUtil().setWidth(72),
+                  height: ScreenUtil().setWidth(72),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(36)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  clipBehavior: Clip.hardEdge,
+                  child: ImageNetWork(
+                    imageUrl: displayAvatar,
+                    placeholder: "assets/img/person_def_1.png",
+                  ),
+                ),
+              ),
+              SizedBox(width: ScreenUtil().setWidth(16)),
+              // 用户信息
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),
+                    );
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        isLoggedIn ? (displayName ?? '-') : S.of(context).g_key_login,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                          fontWeight: FontWeight.w600,
+                          fontSize: ScreenUtil().setSp(32),
+                          letterSpacing: 0.3,
+                        ),
+                      ),
+                      if (isLoggedIn) ...[
+                        SizedBox(height: ScreenUtil().setWidth(6)),
+                        Text(
+                          displayEmail,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                            fontSize: ScreenUtil().setSp(24),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: ScreenUtil().setWidth(16)),
+          // 邀请朋友按钮 - 跳转到 chat
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),
+              );
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(20),
+                vertical: ScreenUtil().setWidth(12),
+              ),
+              decoration: BoxDecoration(
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.person_add_rounded,
+                    size: ScreenUtil().setWidth(20),
+                    color: Colors.white,
+                  ),
+                  SizedBox(width: ScreenUtil().setWidth(8)),
+                  Text(
+                    S.of(context).g_home_key9,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: ScreenUtil().setSp(24),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Notification button with unread count badge
+  Widget buildNotificationButton() {
+    final messageNotReadCount = ref.watch(unreadCountProvider);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const MessageList()),
+          );
+        },
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(22)),
+        child: Container(
+          width: ScreenUtil().setWidth(44),
+          height: ScreenUtil().setWidth(44),
+          decoration: BoxDecoration(
+            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(22)),
+          ),
+          child: Stack(
+            children: [
+              Center(
+                child: Icon(
+                  Icons.notifications_outlined,
+                  size: ScreenUtil().setWidth(24),
+                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                ),
+              ),
+              if (messageNotReadCount != 0)
+                Positioned(
+                  top: ScreenUtil().setWidth(4),
+                  right: ScreenUtil().setWidth(4),
+                  child: Container(
+                    constraints: BoxConstraints(
+                      minWidth: ScreenUtil().setWidth(18),
+                      minHeight: ScreenUtil().setWidth(18),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(4)),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      "${messageNotReadCount > 99 ? '99+' : messageNotReadCount}",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: ScreenUtil().setSp(12),
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// 登录/退出按钮 - 使用 Chat 插件登录状态
+  Widget buildLoginLogoutButton(dynamic currentUser) {
+    final isChatLoggedIn = N42Chat.isLoggedIn;
+    final isWalletLoggedIn = currentUser != null;
+    final isLoggedIn = isChatLoggedIn || isWalletLoggedIn;
+
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () async {
+            if (isLoggedIn) {
+              final res = await tipsDialog2(context, S.of(context).g_key_logout_sure);
+              if (!mounted) return;
+              if (res != null && res) {
+                try {
+                  await AppGlobals.logout();
+                  await N42Chat.logout();
+                  if (!mounted) return;
+                  Scaffold.of(context).closeDrawer();
+                } catch (err) {
+                  debugPrint("logout err: ${err.toString()}");
+                }
+              }
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => N42Chat.chatWidget()),
+              );
+              Scaffold.of(context).closeDrawer();
+            }
+          },
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              vertical: ScreenUtil().setWidth(16),
+              horizontal: ScreenUtil().setWidth(20),
+            ),
+            decoration: BoxDecoration(
+              color: isLoggedIn
+                  ? AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name).withValues(alpha:0.1)
+                  : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.1),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+              border: Border.all(
+                color: isLoggedIn
+                    ? AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name).withValues(alpha:0.3)
+                    : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.3),
+                width: 1,
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  isLoggedIn ? Icons.logout_rounded : Icons.chat_rounded,
+                  size: ScreenUtil().setWidth(24),
+                  color: isLoggedIn
+                      ? AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name)
+                      : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                ),
+                SizedBox(width: ScreenUtil().setWidth(12)),
+                Text(
+                  isLoggedIn ? S.of(context).g_key_logout : S.of(context).g_key_login,
+                  style: TextStyle(
+                    color: isLoggedIn
+                        ? AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name)
+                        : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                    fontSize: ScreenUtil().setSp(28),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
