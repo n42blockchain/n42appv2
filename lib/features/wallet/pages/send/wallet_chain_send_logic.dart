@@ -252,59 +252,43 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     if (value.isEmpty) value = valueTextEditingController.text;
     final int decimals = coinModel.coin['decimals'] ?? 18;
     final int minValue = decimals == 0 ? 1 : 0;
-    if (value.isEmpty) {
-      amountErrorMessage = S.of(context).g_key_46(minValue);
-      setState(() {});
-      return;
-    }
-    final bool isValidInteger = regular.regularNums(value);
-    final bool isValidDecimal = regular.regularDouble(value);
-    if (decimals == 0) {
-      if (!isValidInteger) {
-        amountErrorMessage = S.of(context).g_key_134;
-        setState(() {});
-        return;
-      }
-    } else {
-      if (!isValidInteger && !isValidDecimal) {
-        amountErrorMessage = S.of(context).g_key_134;
-        setState(() {});
-        return;
-      }
+
+    // 格式校验
+    if (value.isEmpty) { _setAmountError(S.of(context).g_key_46(minValue)); return; }
+    final isValidNum = regular.regularNums(value);
+    final isValidDec = regular.regularDouble(value);
+    if (decimals == 0 ? !isValidNum : (!isValidNum && !isValidDec)) {
+      _setAmountError(S.of(context).g_key_134); return;
     }
     Decimal decimalValue;
-    try {
-      decimalValue = Decimal.parse(value);
-    } catch (_) {
-      amountErrorMessage = S.of(context).g_key_134;
-      setState(() {});
-      return;
+    try { decimalValue = Decimal.parse(value); } catch (_) {
+      _setAmountError(S.of(context).g_key_134); return;
     }
-    if (decimalValue < Decimal.fromInt(minValue) ||
-        decimalValue == Decimal.zero) {
-      amountErrorMessage = S.of(context).g_key_46(minValue);
-      setState(() {});
-      return;
+    if (decimalValue < Decimal.fromInt(minValue) || decimalValue == Decimal.zero) {
+      _setAmountError(S.of(context).g_key_46(minValue)); return;
     }
+
+    // 余额校验
     final BigInt valueBi = ethToWeiString(value, decimals);
     if (coinModel.coin['blockchainType'] == BlockchainType.Ripple.name) {
       final reserveAmount = ethToWeiString('10', decimals);
       if (valueBi + totalGasPrice > coinModel.balance - reserveAmount) {
-        amountErrorMessage = S.of(context).g_key_47;
-        setState(() {});
-        return;
+        _setAmountError(S.of(context).g_key_47); return;
       }
     } else if (coinModel.coin['isContract'] == false) {
       if (valueBi + totalGasPrice > coinModel.balance) {
-        amountErrorMessage = S.of(context).g_key_47;
-        setState(() {});
-        return;
+        _setAmountError(S.of(context).g_key_47); return;
       }
       transferValue = valueBi;
     } else {
       transferValue = valueBi;
     }
     amountErrorMessage = '';
+    setState(() {});
+  }
+
+  void _setAmountError(String msg) {
+    amountErrorMessage = msg;
     setState(() {});
   }
 
@@ -387,11 +371,8 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     if (coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name) {
       trModel.message = noteTextEditingController.text.trim();
     }
-    final chainUnit = (chainModel == null
-            ? coinModel.coin['unit']
-            : chainModel!.coin['unit'])
-        .toString()
-        .toUpperCase();
+    final chainUnit = (chainModel?.coin['unit'] ?? coinModel.coin['unit'])
+        .toString().toUpperCase();
     final check = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
@@ -464,27 +445,17 @@ Future<MessageModel> _callGasEstimateApi({
   required BigInt gaslimit,
 }) async {
   final coinType = coinModel.coin['coinType'] as String;
-  final noLatestChains = {
-    CoinType.OKT.name,
-    CoinType.MTR.name,
-    CoinType.METIS.name,
-    CoinType.VIC.name,
-    CoinType.BOBA.name,
-    CoinType.OP.name,
-    CoinType.GO.name,
-  };
+  const noLatestChains = {'OKT', 'MTR', 'METIS', 'VIC', 'BOBA', 'OP', 'GO'};
+
+  final weiValue = ethToWeiString(price, coinModel.coin['decimals']);
+  final contract = coinModel.isTest
+      ? coinModel.coin['contract_test']
+      : coinModel.coin['contract'];
 
   if (coinModel.coin['blockchainType'] == BlockchainType.Tron.name) {
     return TrxApi().getGasEstimateTrx(
-      coinModel.address,
-      toAddr,
-      gasPrice,
-      ethToWeiString(price, coinModel.coin['decimals']),
-      gaslimit,
-      contract: coinModel.isTest
-          ? coinModel.coin['contract_test']
-          : coinModel.coin['contract'],
-      isTest: coinModel.isTest,
+      coinModel.address, toAddr, gasPrice, weiValue, gaslimit,
+      contract: contract, isTest: coinModel.isTest,
     );
   }
 
@@ -492,15 +463,8 @@ Future<MessageModel> _callGasEstimateApi({
       ? coinModel.coin['service_test']
       : coinModel.coin['service'];
   return EthAPI.init(null, rpc, null).getGasLimit(
-    coinModel.address,
-    toAddr,
-    gasPrice,
-    ethToWeiString(price, coinModel.coin['decimals']),
-    gaslimit,
-    contract: coinModel.isTest
-        ? coinModel.coin['contract_test']
-        : coinModel.coin['contract'],
-    isTest: coinModel.isTest,
+    coinModel.address, toAddr, gasPrice, weiValue, gaslimit,
+    contract: contract, isTest: coinModel.isTest,
     addLatest: !noLatestChains.contains(coinType),
   );
 }

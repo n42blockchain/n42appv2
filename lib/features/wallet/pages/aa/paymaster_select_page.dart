@@ -46,40 +46,29 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
     _loadPaymasterOptions();
   }
 
+  String get _resolvedSymbol => widget.chainSymbol.isNotEmpty
+      ? widget.chainSymbol
+      : _chainSymbolFromId(widget.chainId);
+
   Future<void> _loadPaymasterOptions() async {
-    setState(() {
-      _loadState = _LoadState.loading;
-    });
-
+    setState(() => _loadState = _LoadState.loading);
     try {
-      final symbol = widget.chainSymbol.isNotEmpty
-          ? widget.chainSymbol
-          : _chainSymbolFromId(widget.chainId);
-
       final options = await PaymasterService.loadOptions(
         chainId: widget.chainId,
-        chainSymbol: symbol,
+        chainSymbol: _resolvedSymbol,
         apiKey: AAConfig.getBundlerApiKey(),
       );
-
       if (mounted) {
         setState(() {
           _availableOptions = options;
           _loadState = _LoadState.success;
-          // Re-sync selected option — preserve type + tokenSymbol
           _selectedOption = _findMatchingOption(options, _selectedOption)
               ?? PaymasterOption.none;
         });
       }
     } catch (e) {
-      // Do not expose raw exception messages (may leak API URLs / stack traces)
-      assert(() {
-        debugPrint('[PaymasterSelectPage] loadOptions error: $e');
-        return true;
-      }());
-      if (mounted) {
-        setState(() => _loadState = _LoadState.error);
-      }
+      assert(() { debugPrint('[PaymasterSelectPage] loadOptions error: $e'); return true; }());
+      if (mounted) setState(() => _loadState = _LoadState.error);
     }
   }
 
@@ -147,11 +136,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
       context, AppThemeKeys.mainBlueColor.name,
     );
     final supportedChains = PaymasterService.supportedChainSymbols;
-    final isCurrentChainSupported = AAConfig.isChainSupported(
-      widget.chainSymbol.isNotEmpty
-          ? widget.chainSymbol
-          : _chainSymbolFromId(widget.chainId),
-    );
+    final isCurrentChainSupported = AAConfig.isChainSupported(_resolvedSymbol);
 
     return Container(
       margin: EdgeInsets.all(ScreenUtil().setWidth(24)),
@@ -226,9 +211,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
   Widget _buildChainChips(List<String> chains) {
     final blueColor = AppThemeUtils.getColorByKey(
         context, AppThemeKeys.mainBlueColor.name);
-    final currentSymbol = widget.chainSymbol.isNotEmpty
-        ? widget.chainSymbol.toUpperCase()
-        : _chainSymbolFromId(widget.chainId).toUpperCase();
+    final currentSymbol = _resolvedSymbol.toUpperCase();
 
     return Row(
       children: chains.take(5).map((sym) {
@@ -463,41 +446,24 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
 
   // ── Helpers ───────────────────────────────────────────────────────────────
 
-  Color _getSelectedColor() {
-    switch (_selectedOption.type) {
-      case PaymasterType.none:
-        return AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainBlueColor.name);
-      case PaymasterType.sponsored:
-        return Colors.green;
-      case PaymasterType.erc20:
-        return Colors.purple;
-    }
-  }
+  Color _getSelectedColor() => switch (_selectedOption.type) {
+    PaymasterType.none => AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+    PaymasterType.sponsored => Colors.green,
+    PaymasterType.erc20 => Colors.purple,
+  };
 
-  IconData _getSelectedIcon() {
-    switch (_selectedOption.type) {
-      case PaymasterType.none:
-        return Icons.account_balance_wallet;
-      case PaymasterType.sponsored:
-        return Icons.card_giftcard;
-      case PaymasterType.erc20:
-        return Icons.token;
-    }
-  }
+  IconData _getSelectedIcon() => switch (_selectedOption.type) {
+    PaymasterType.none => Icons.account_balance_wallet,
+    PaymasterType.sponsored => Icons.card_giftcard,
+    PaymasterType.erc20 => Icons.token,
+  };
 
-  String _getSelectedTitle() {
-    switch (_selectedOption.type) {
-      case PaymasterType.none:
-        return S.of(context).g_key_aa_pay_with_eth;
-      case PaymasterType.sponsored:
-        return S.of(context).g_key_aa_sponsored;
-      case PaymasterType.erc20:
-        return '${S.of(context).g_key_aa_pay_with} ${_selectedOption.tokenSymbol ?? 'Token'}';
-    }
-  }
+  String _getSelectedTitle() => switch (_selectedOption.type) {
+    PaymasterType.none => S.of(context).g_key_aa_pay_with_eth,
+    PaymasterType.sponsored => S.of(context).g_key_aa_sponsored,
+    PaymasterType.erc20 => '${S.of(context).g_key_aa_pay_with} ${_selectedOption.tokenSymbol ?? 'Token'}',
+  };
 
-  /// Resolve chain symbol from chain ID using [AAConfig.chainIds].
   static String _chainSymbolFromId(int chainId) {
     for (final entry in AAConfig.chainIds.entries) {
       if (entry.value == chainId) return entry.key;

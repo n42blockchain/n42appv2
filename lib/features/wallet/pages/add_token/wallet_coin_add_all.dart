@@ -28,6 +28,7 @@ part 'wallet_coin_add_all_data.dart';
 part 'wallet_coin_add_all_logic.dart';
 part 'wallet_coin_add_all_search_ui.dart';
 part 'wallet_coin_add_all_import_ui.dart';
+part 'wallet_coin_add_all_import_form_ui.dart';
 part 'wallet_coin_add_all_network_dialog.dart';
 
 class WalletCoinAddAll extends ConsumerStatefulWidget {
