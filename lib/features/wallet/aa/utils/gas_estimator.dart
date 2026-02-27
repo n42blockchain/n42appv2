@@ -405,6 +405,23 @@ class GasDeviationDetector {
 
 /// Gas price fetcher for AA operations
 class AAGasPriceProvider {
+  /// Build a [GasPriceRecommendation] for [speed] given current fee parameters.
+  static GasPriceRecommendation _buildRecommendation({
+    required BigInt baseFee,
+    required BigInt priorityFee,
+    required GasSpeed speed,
+  }) {
+    final adjustedPriorityFee = priorityFee *
+        BigInt.from((speed.multiplier * 100).round()) ~/
+        BigInt.from(100);
+    return GasPriceRecommendation(
+      maxFeePerGas: baseFee * BigInt.two + adjustedPriorityFee,
+      maxPriorityFeePerGas: adjustedPriorityFee,
+      baseFee: baseFee,
+      speed: speed,
+    );
+  }
+
   /// Get recommended gas prices for UserOperations
   ///
   /// Returns EIP-1559 gas prices (maxFeePerGas and maxPriorityFeePerGas).
@@ -413,17 +430,8 @@ class AAGasPriceProvider {
     required BigInt priorityFee,
     GasSpeed speed = GasSpeed.standard,
   }) async {
-    final multiplier = speed.multiplier;
-    final adjustedPriorityFee =
-        priorityFee * BigInt.from((multiplier * 100).round()) ~/ BigInt.from(100);
-    final maxFeePerGas = baseFee * BigInt.two + adjustedPriorityFee;
-
-    return GasPriceRecommendation(
-      maxFeePerGas: maxFeePerGas,
-      maxPriorityFeePerGas: adjustedPriorityFee,
-      baseFee: baseFee,
-      speed: speed,
-    );
+    return _buildRecommendation(
+        baseFee: baseFee, priorityFee: priorityFee, speed: speed);
   }
 
   /// Get gas prices for all speed tiers
@@ -431,67 +439,25 @@ class AAGasPriceProvider {
     required BigInt baseFee,
     required BigInt priorityFee,
   }) {
-    return GasSpeed.values.map((speed) {
-      final multiplier = speed.multiplier;
-      final adjustedPriorityFee =
-          priorityFee * BigInt.from((multiplier * 100).round()) ~/ BigInt.from(100);
-      final maxFeePerGas = baseFee * BigInt.two + adjustedPriorityFee;
-
-      return GasPriceRecommendation(
-        maxFeePerGas: maxFeePerGas,
-        maxPriorityFeePerGas: adjustedPriorityFee,
-        baseFee: baseFee,
-        speed: speed,
-      );
-    }).toList();
+    return GasSpeed.values
+        .map((speed) => _buildRecommendation(
+            baseFee: baseFee, priorityFee: priorityFee, speed: speed))
+        .toList();
   }
 }
 
 /// Gas speed options
 enum GasSpeed {
-  slow,
-  standard,
-  fast,
-  instant;
+  slow(0.8, 'Slow', Duration(minutes: 10)),
+  standard(1.0, 'Standard', Duration(minutes: 3)),
+  fast(1.3, 'Fast', Duration(seconds: 30)),
+  instant(1.6, 'Instant', Duration(seconds: 15));
 
-  double get multiplier {
-    switch (this) {
-      case GasSpeed.slow:
-        return 0.8;
-      case GasSpeed.standard:
-        return 1.0;
-      case GasSpeed.fast:
-        return 1.3;
-      case GasSpeed.instant:
-        return 1.6;
-    }
-  }
+  const GasSpeed(this.multiplier, this.displayName, this.estimatedTime);
 
-  String get displayName {
-    switch (this) {
-      case GasSpeed.slow:
-        return 'Slow';
-      case GasSpeed.standard:
-        return 'Standard';
-      case GasSpeed.fast:
-        return 'Fast';
-      case GasSpeed.instant:
-        return 'Instant';
-    }
-  }
-
-  Duration get estimatedTime {
-    switch (this) {
-      case GasSpeed.slow:
-        return const Duration(minutes: 10);
-      case GasSpeed.standard:
-        return const Duration(minutes: 3);
-      case GasSpeed.fast:
-        return const Duration(seconds: 30);
-      case GasSpeed.instant:
-        return const Duration(seconds: 15);
-    }
-  }
+  final double multiplier;
+  final String displayName;
+  final Duration estimatedTime;
 }
 
 /// Gas price recommendation
@@ -519,16 +485,11 @@ class GasPriceRecommendation {
   }
 
   /// Format maxFeePerGas as Gwei
-  String get maxFeeGwei {
-    final gwei = maxFeePerGas.toDouble() / 1e9;
-    return gwei.toStringAsFixed(2);
-  }
+  String get maxFeeGwei => (maxFeePerGas.toDouble() / 1e9).toStringAsFixed(2);
 
   /// Format maxPriorityFeePerGas as Gwei
-  String get priorityFeeGwei {
-    final gwei = maxPriorityFeePerGas.toDouble() / 1e9;
-    return gwei.toStringAsFixed(2);
-  }
+  String get priorityFeeGwei =>
+      (maxPriorityFeePerGas.toDouble() / 1e9).toStringAsFixed(2);
 
   @override
   String toString() =>

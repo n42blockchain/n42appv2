@@ -11,6 +11,8 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 import 'package:n42_wallet/features/wallet/utils/validation/address_validator.dart';
 
+part 'ens_address_text.dart';
+
 /// ENS 地址显示样式
 enum EnsDisplayStyle {
   /// 紧凑模式 - 单行显示，ENS 名称优先
@@ -114,6 +116,15 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
     }
   }
 
+  void _markResolved({String? ensName}) {
+    if (!mounted) return;
+    setState(() {
+      _ensName = ensName;
+      _isLoading = false;
+      _hasResolved = true;
+    });
+  }
+
   Future<void> _resolveEns() async {
     if (_hasResolved) return;
     if (widget.address.isEmpty) {
@@ -123,55 +134,28 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
 
     // 如果已知 ENS 名称，直接使用
     if (widget.knownEnsName != null && widget.knownEnsName!.isNotEmpty) {
-      setState(() {
-        _ensName = widget.knownEnsName;
-        _isLoading = false;
-        _hasResolved = true;
-      });
-      // 仍然尝试获取头像
-      if (widget.showAvatar) {
-        _fetchAvatar(widget.knownEnsName!);
-      }
+      _markResolved(ensName: widget.knownEnsName);
+      if (widget.showAvatar) _fetchAvatar(widget.knownEnsName!);
       return;
     }
 
     // 检查链是否支持 ENS
     if (!EnsService.chainSupportsEns(widget.coinType)) {
-      setState(() {
-        _isLoading = false;
-        _hasResolved = true;
-      });
+      _markResolved();
       return;
     }
 
     setState(() => _isLoading = true);
 
     try {
-      // 反向解析地址获取 ENS 名称
       final ensName = await _ensService.resolveAddress(
         widget.address,
         coinType: widget.coinType,
       );
-
-      if (mounted) {
-        setState(() {
-          _ensName = ensName;
-          _isLoading = false;
-          _hasResolved = true;
-        });
-
-        // 如果有 ENS 名称，获取头像
-        if (ensName != null && widget.showAvatar) {
-          _fetchAvatar(ensName);
-        }
-      }
+      _markResolved(ensName: ensName);
+      if (ensName != null && widget.showAvatar) _fetchAvatar(ensName);
     } catch (e) {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-          _hasResolved = true;
-        });
-      }
+      _markResolved();
     }
   }
 
@@ -219,6 +203,14 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
     }
   }
 
+  /// 小型复制图标（compact / full / addressOnly 共用）
+  Widget _buildCopyIcon(double size, Color color) {
+    return Padding(
+      padding: EdgeInsets.only(left: ScreenUtil().setWidth(8)),
+      child: Icon(Icons.copy_rounded, size: size, color: color),
+    );
+  }
+
   /// 紧凑模式 - ENS 名称优先，没有则显示地址预览
   Widget _buildCompact(
     Color textColor,
@@ -226,8 +218,8 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
     double fontSize,
     double avatarSize,
   ) {
-    final displayText = _ensName ??
-        AddressValidator.getAddressPreview(widget.address);
+    final displayText =
+        _ensName ?? AddressValidator.getAddressPreview(widget.address);
 
     return GestureDetector(
       onTap: widget.onTap ?? (widget.showCopy ? _copyAddress : null),
@@ -253,14 +245,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
                     overflow: TextOverflow.ellipsis,
                   ),
           ),
-          if (widget.showCopy) ...[
-            SizedBox(width: ScreenUtil().setWidth(8)),
-            Icon(
-              Icons.copy_rounded,
-              size: fontSize,
-              color: subtitleColor,
-            ),
-          ],
+          if (widget.showCopy) _buildCopyIcon(fontSize, subtitleColor),
         ],
       ),
     );
@@ -328,14 +313,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
               ],
             ),
           ),
-          if (widget.showCopy) ...[
-            SizedBox(width: ScreenUtil().setWidth(8)),
-            Icon(
-              Icons.copy_rounded,
-              size: fontSize,
-              color: subtitleColor,
-            ),
-          ],
+          if (widget.showCopy) _buildCopyIcon(fontSize, subtitleColor),
         ],
       ),
     );
@@ -444,58 +422,50 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          if (widget.showCopy) ...[
-            SizedBox(width: ScreenUtil().setWidth(8)),
-            Icon(
-              Icons.copy_rounded,
-              size: fontSize,
-              color: textColor.withValues(alpha: 0.6),
-            ),
-          ],
+          if (widget.showCopy)
+            _buildCopyIcon(fontSize, textColor.withValues(alpha: 0.6)),
         ],
       ),
     );
   }
 
   Widget _buildAvatar(double size) {
-    if (_avatarUrl != null) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(size / 2),
-        child: Image.network(
-          _avatarUrl!,
-          width: size,
-          height: size,
-          fit: BoxFit.cover,
-          errorBuilder: (_, _, _) => _buildDefaultAvatar(size),
-        ),
-      );
-    }
-    return _buildDefaultAvatar(size);
-  }
-
-  Widget _buildDefaultAvatar(double size) {
     final blueColor =
         AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
     final initial = _ensName?.isNotEmpty == true
         ? _ensName![0].toUpperCase()
         : (widget.address.length > 2 ? widget.address[2].toUpperCase() : '?');
+    final radius = BorderRadius.circular(size / 2);
 
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: blueColor.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(size / 2),
-      ),
-      child: Center(
-        child: Text(
-          initial,
-          style: TextStyle(
-            fontSize: size * 0.5,
-            fontWeight: FontWeight.bold,
-            color: blueColor,
+    Widget defaultAvatar() => Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            color: blueColor.withValues(alpha: 0.2),
+            borderRadius: radius,
           ),
-        ),
+          child: Center(
+            child: Text(
+              initial,
+              style: TextStyle(
+                fontSize: size * 0.5,
+                fontWeight: FontWeight.bold,
+                color: blueColor,
+              ),
+            ),
+          ),
+        );
+
+    if (_avatarUrl == null) return defaultAvatar();
+
+    return ClipRRect(
+      borderRadius: radius,
+      child: Image.network(
+        _avatarUrl!,
+        width: size,
+        height: size,
+        fit: BoxFit.cover,
+        errorBuilder: (_, _, _) => defaultAvatar(),
       ),
     );
   }
@@ -514,35 +484,3 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
   }
 }
 
-/// 简化的地址显示组件 - 用于列表等紧凑场景
-class EnsAddressText extends StatelessWidget {
-  final String address;
-  final String coinType;
-  final TextStyle? style;
-  final int maxLines;
-  final String? knownEnsName;
-
-  const EnsAddressText({
-    super.key,
-    required this.address,
-    this.coinType = 'ETH',
-    this.style,
-    this.maxLines = 1,
-    this.knownEnsName,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return EnsAddressDisplay(
-      address: address,
-      coinType: coinType,
-      style: EnsDisplayStyle.compact,
-      showAvatar: false,
-      showCopy: false,
-      textColor: style?.color,
-      fontSize: style?.fontSize,
-      maxLines: maxLines,
-      knownEnsName: knownEnsName,
-    );
-  }
-}

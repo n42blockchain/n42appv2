@@ -408,26 +408,16 @@ class BridgeStatusResponse {
     this.error,
   });
 
+  static const _statusMap = <String, BridgeTransactionStatus>{
+    'DONE': BridgeTransactionStatus.completed,
+    'FAILED': BridgeTransactionStatus.failed,
+    'PENDING': BridgeTransactionStatus.pending,
+  };
+
   factory BridgeStatusResponse.fromJson(Map<String, dynamic> json) {
     final statusStr = json['status']?.toString().toUpperCase() ?? 'PENDING';
-    BridgeTransactionStatus status;
-
-    switch (statusStr) {
-      case 'DONE':
-        status = BridgeTransactionStatus.completed;
-        break;
-      case 'FAILED':
-        status = BridgeTransactionStatus.failed;
-        break;
-      case 'PENDING':
-        status = BridgeTransactionStatus.pending;
-        break;
-      default:
-        status = BridgeTransactionStatus.inProgress;
-    }
-
     return BridgeStatusResponse(
-      status: status,
+      status: _statusMap[statusStr] ?? BridgeTransactionStatus.inProgress,
       substatus: json['substatus'],
       destinationTxHash: json['receiving']?['txHash'],
       error: json['error'],
@@ -449,70 +439,41 @@ class BridgeChainIds {
   static const int scroll = 534352;
   static const int zksync = 324;
 
+  /// 名称/别名 -> 链 ID 查表
+  static const _nameToId = <String, int>{
+    'eth': ethereum, 'ethereum': ethereum,
+    'op': optimism, 'optimism': optimism,
+    'bnb': bsc, 'bsc': bsc,
+    'matic': polygon, 'polygon': polygon,
+    'ftm': fantom, 'fantom': fantom,
+    'arb': arbitrum, 'arbitrum': arbitrum,
+    'avax': avalanche, 'avalanche': avalanche,
+    'base': base,
+    'linea': linea,
+    'scroll': scroll,
+    'zksync': zksync,
+  };
+
+  /// 链 ID -> 显示名称查表
+  static const _idToName = <int, String>{
+    ethereum: 'Ethereum',
+    optimism: 'Optimism',
+    bsc: 'BNB Chain',
+    polygon: 'Polygon',
+    fantom: 'Fantom',
+    arbitrum: 'Arbitrum',
+    avalanche: 'Avalanche',
+    base: 'Base',
+    linea: 'Linea',
+    scroll: 'Scroll',
+    zksync: 'zkSync Era',
+  };
+
   /// 根据链名称获取链 ID
-  static int? getChainId(String chainName) {
-    switch (chainName.toLowerCase()) {
-      case 'eth':
-      case 'ethereum':
-        return ethereum;
-      case 'op':
-      case 'optimism':
-        return optimism;
-      case 'bnb':
-      case 'bsc':
-        return bsc;
-      case 'matic':
-      case 'polygon':
-        return polygon;
-      case 'ftm':
-      case 'fantom':
-        return fantom;
-      case 'arb':
-      case 'arbitrum':
-        return arbitrum;
-      case 'avax':
-      case 'avalanche':
-        return avalanche;
-      case 'base':
-        return base;
-      case 'linea':
-        return linea;
-      case 'scroll':
-        return scroll;
-      case 'zksync':
-        return zksync;
-      default:
-        return null;
-    }
-  }
+  static int? getChainId(String chainName) =>
+      _nameToId[chainName.toLowerCase()];
 
   /// 获取链名称
-  static String getChainName(int chainId) {
-    switch (chainId) {
-      case ethereum:
-        return 'Ethereum';
-      case optimism:
-        return 'Optimism';
-      case bsc:
-        return 'BNB Chain';
-      case polygon:
-        return 'Polygon';
-      case fantom:
-        return 'Fantom';
-      case arbitrum:
-        return 'Arbitrum';
-      case avalanche:
-        return 'Avalanche';
-      case base:
-        return 'Base';
-      case linea:
-        return 'Linea';
-      case scroll:
-        return 'Scroll';
-      case zksync:
-        return 'zkSync Era';
-      default:
-        return 'Unknown';
-    }
-  }
+  static String getChainName(int chainId) =>
+      _idToName[chainId] ?? 'Unknown';
 }

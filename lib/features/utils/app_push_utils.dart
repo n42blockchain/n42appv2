@@ -1,4 +1,4 @@
-﻿// android通知的通道
+// android通知的通道
 
 import 'dart:convert';
 
@@ -24,6 +24,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_new_badger/flutter_new_badger.dart';
 import 'package:intl/intl.dart';
+
+part 'app_push_navigation.dart';
 
 late AndroidNotificationChannel channel;
 
@@ -186,7 +188,7 @@ class AppPushUtils {
       debugPrint('从后台打开应用，自动清除通知');
 
       /// 打开对应的页面
-      _handleMessage(message.data);
+      _PushNavigation.handleMessage(message.data);
     });
 
     ///应用从终止状态打开
@@ -194,7 +196,7 @@ class AppPushUtils {
     if (m != null) {
       debugPrint('应用从终止状态打开:${m.notification?.title}');
       //这种情况待测试
-      _handleMessage(m.data);
+      _PushNavigation.handleMessage(m.data);
     }
 
     //token更新监听
@@ -240,210 +242,10 @@ class AppPushUtils {
         final map = json.decode(payload);
         debugPrint("map : $map");
         //建议参数中携带type，区分不同的通知类型，
-        _handleMessage(map);
+        _PushNavigation.handleMessage(map);
       }
     } catch (err) {
       debugPrint("点击前台通知消息err ：${err.toString()}");
-    }
-  }
-
-  ///对消息统一处理
-  static void _handleMessage(Map<String, dynamic> data) {
-    final ctx = AppGlobals.navigatorKey.currentContext;
-    if (ctx == null) {
-      debugPrint('[AppPushUtils] _handleMessage: navigator context unavailable, skipping');
-      return;
-    }
-    // 未登录 统一去登录
-    if (AppGlobals.userInfo == null) {
-      Navigator.push(ctx, MaterialPageRoute(builder: (_) => LoginPage()));
-      return;
-    }
-    if (data['type'] == 'device_login') {
-      // 点击设备登录通知打开 App 时，通过 EventBus 触发弹窗
-      _handleDeviceLoginNotification(data);
-      return;
-    }
-    else if (data['type'] == 'chat') {
-      // Chat notifications are handled by n42_chat plugin
-      debugPrint("Chat notification tapped - handled by n42_chat plugin");
-    }
-    else if (data['type'] == 'payment_received') {
-      // 「确认收款」通知 — 跳转到支付历史页
-      Navigator.push(
-        ctx,
-        MaterialPageRoute(builder: (_) => const PaymentHistory()),
-      );
-    }
-    else if (data['type'] == 'transfer') {
-      Map<String, dynamic> txContent = {};
-      try {
-        txContent = json.decode(data['data']);
-      } catch (_) {
-        // JSON 解析失败时使用空 map，安全忽略
-      }
-      String? isTestStr = txContent['network'];
-      bool? isTest;
-      if (isTestStr != null) {
-        isTest = isTestStr == "test" ? true : false;
-      }
-      String bUri = getBrowserTxHash(
-          txContent['coin'], txContent['hash'] ?? "",
-          isTest: isTest);
-      Navigator.push(ctx,
-          MaterialPageRoute(builder: (_) => BrowserPage(bUri,
-            //"Transaction"
-          )));
-    }
-    else if (data['type'] == "normal_transaction_failed") {
-      Map<String, dynamic> txContent = {};
-      try {
-        txContent = json.decode(data['data']);
-      } catch (_) {
-        // JSON 解析失败时使用空 map，安全忽略
-      }
-      String? isTestStr = txContent['network'];
-      bool? isTest;
-      if (isTestStr != null) {
-        isTest = isTestStr == "test" ? true : false;
-      }
-      String bUri = getBrowserTxHash(
-          txContent['coin'], txContent['hash'] ?? "",
-          isTest: isTest);
-      Navigator.push(ctx,
-          MaterialPageRoute(builder: (_) => BrowserPage(bUri,
-            //"Transaction"
-          )));
-    }
-    else if (data['type'] == 'normal_price_changed') {
-      Map<String, dynamic> txContent = {};
-      try {
-        txContent = json.decode(data['data']);
-      } catch (_) {
-        // JSON 解析失败时使用空 map，安全忽略
-      }
-      String chain = (txContent['chain'] ?? "").toUpperCase();
-      double percentage = txContent['percentage'] ?? 0;
-      String content =
-          "Over $percentage% change in the price of $chain within 24 hours. ";
-      //int created = (txContent['created']??0) as int;
-      //String createTime=DateTime.fromMicrosecondsSinceEpoch(created*1000).toString();
-      DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
-      Map<String, dynamic> infoMap = {
-        "title": data['body'],
-        "content": content,
-        "created": dateFormat.format(DateTime.now()),
-      };
-      Navigator.push(ctx,
-          MaterialPageRoute(builder: (_) => MessageInfo(infoMap)));
-    }
-    /*
-    else if (data['type'] == "normal_followed") {
-      Map<String, dynamic> txContent = {};
-      try {
-        txContent = json.decode(data['data']);
-      } catch (_) {
-        // JSON 解析失败时使用空 map，安全忽略
-      }
-      Navigator.push(
-          ctx,
-          MaterialPageRoute(
-              builder: (_) => NftUserHome(
-                user_uuid: txContent['follow_uuid'] ?? "",
-                getUserInfo: true,
-              )));
-    }
-    else if (data['type'] == "normal_trending") {
-      Navigator.push(
-          ctx,
-          MaterialPageRoute(
-              builder: (_) => NftSearch(
-                searchMap: {"specify_24h_like": true},
-              )));
-    }
-    */
-    else if (data['type'] == "tell_friends") {
-      Navigator.push(
-          ctx,
-          MaterialPageRoute(
-            builder: (_) => SettingShare(),
-          ));
-    }
-    else if (data['type'] == "Tell Friends #1_normal" ||
-        data['type'] == "Tell Friends #2_normal") {
-      //跳转分享页
-      Navigator.push(
-          ctx,
-          MaterialPageRoute(
-            builder: (_) => SettingShare(),
-          ));
-    }
-    /*
-    else if (data['type'] == "NFTHome #1_normal" ||
-        data['type'] == "NFTHome #2_normal") {
-      //跳转NFT主页
-      Navigator.of(ctx)
-          .popUntil((route) => route.isFirst);
-      ProviderUtil.publicProvider().setSelectIndex(2);
-    } */
-    else if (data['type'] == "ChatHome #1_normal" ||
-        data['type'] == "ChatHome #2_normal") {
-      //跳转聊天主页
-      Navigator.of(ctx)
-          .popUntil((route) => route.isFirst);
-      // 使用 Riverpod - 通过 globalProviderContainer
-      globalProviderContainer.read(mainTabSelectIndexProvider.notifier).state = 2;
-    }
-    else if (data['type'] == "News_normal") {
-      //跳转新闻列表页面
-      Navigator.of(ctx)
-          .popUntil((route) => route.isFirst);
-      globalProviderContainer.read(mainTabSelectIndexProvider.notifier).state = 0;
-    }
-    else if (data['type'] == "Login_normal") {
-      //跳转创建钱包
-      Navigator.of(ctx)
-          .popUntil((route) => route.isFirst);
-      globalProviderContainer.read(mainTabSelectIndexProvider.notifier).state = 0;
-    }
-    else if (data['type'] == "AboutSettings_normal") {
-      //跳转关于我们页面
-      Navigator.push(ctx,
-          MaterialPageRoute(
-            builder: (_) => AboutApp(),));
-    }
-    else if (data['type'] == "WalletHome #1_normal" ||
-        data['type'] == "WalletHome #2_normal") {
-      //跳转钱包页面
-      Navigator.of(ctx)
-          .popUntil((route) => route.isFirst);
-      globalProviderContainer.read(mainTabSelectIndexProvider.notifier).state = 0;
-    }
-    else if (data['type'] == "SettingsProfile_normal") {
-      //跳转设置个人信息页面
-      if (AppGlobals.userInfo !=null) {
-        Navigator.push(
-            ctx,
-            MaterialPageRoute(
-              builder: (_) => PersonalSetting(),
-            ));
-      }
-    }
-    else if (data['type'] == "Homepage_normal") {
-      //跳转主页
-      Navigator.of(ctx)
-          .popUntil((route) => route.isFirst);
-      globalProviderContainer.read(mainTabSelectIndexProvider.notifier).state = 0;
-    }
-    else if (data['type'] == 110 || data['type'] == 100 || data['type'] == 101) {
-      // Chat notifications are handled by n42_chat plugin
-      // Navigate to chat interface
-      // flutter_local_notifications 20.0.0 使用命名参数
-      flutterLocalNotificationsPlugin.cancel(id: data['type']);
-      debugPrint("Chat notification tapped - handled by n42_chat plugin");
-    }
-    else {
-      debugPrint("未知消息类型，无法处理");
     }
   }
 

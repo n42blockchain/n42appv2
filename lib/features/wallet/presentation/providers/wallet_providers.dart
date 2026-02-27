@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
+export 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 
 /// Wallet Info Data for Provider
@@ -272,29 +273,28 @@ class WalletListNotifier extends AsyncNotifier<List<WalletInfoData>> {
   }
 }
 
-/// Selected Wallet Index Provider
-final selectedWalletIndexProvider =
-    StateNotifierProvider<SelectedWalletIndexNotifier, int>((ref) {
-  return SelectedWalletIndexNotifier(ref);
-});
-
-class SelectedWalletIndexNotifier extends StateNotifier<int> {
+/// Base class for wallet-index state notifiers with storage persistence.
+///
+/// Subclasses specify [storageKey] to read/write the correct field.
+abstract class _WalletIndexNotifier extends StateNotifier<int> {
   final Ref _ref;
-  
-  SelectedWalletIndexNotifier(this._ref) : super(0) {
+
+  /// JSON key inside the user's wallet map (e.g. 'index', 'miningIndex').
+  String get storageKey;
+
+  /// Fallback key when [storageKey] is missing (null = no fallback).
+  String? get fallbackKey => null;
+
+  _WalletIndexNotifier(this._ref) : super(0) {
     _loadFromStorage();
   }
 
   Future<void> _loadFromStorage() async {
-    final spUtil = _ref.read(spUtilProvider);
-    final walletAll = await spUtil.getWalletInfo();
-    
-    if (walletAll != null) {
-      final userUUID = AppGlobals.userInfo?.uuid ?? 'AstranetWallet';
-      final walletUser = walletAll[userUUID] ?? walletAll['AstranetWallet'];
-      if (walletUser != null) {
-        state = walletUser['index'] ?? 0;
-      }
+    final walletUser = await _getUserWalletMap();
+    if (walletUser != null) {
+      state = walletUser[storageKey] ??
+          (fallbackKey != null ? walletUser[fallbackKey] : null) ??
+          0;
     }
   }
 
@@ -306,15 +306,35 @@ class SelectedWalletIndexNotifier extends StateNotifier<int> {
   Future<void> _saveToStorage() async {
     final spUtil = _ref.read(spUtilProvider);
     final walletAll = await spUtil.getWalletInfo();
-    
     if (walletAll != null) {
       final userUUID = AppGlobals.userInfo?.uuid ?? 'AstranetWallet';
       if (walletAll[userUUID] != null) {
-        walletAll[userUUID]['index'] = state;
+        walletAll[userUUID][storageKey] = state;
         await spUtil.setWalletInfo(walletAll);
       }
     }
   }
+
+  Future<Map<String, dynamic>?> _getUserWalletMap() async {
+    final spUtil = _ref.read(spUtilProvider);
+    final walletAll = await spUtil.getWalletInfo();
+    if (walletAll == null) return null;
+    final userUUID = AppGlobals.userInfo?.uuid ?? 'AstranetWallet';
+    return walletAll[userUUID] ?? walletAll['AstranetWallet'];
+  }
+}
+
+/// Selected Wallet Index Provider
+final selectedWalletIndexProvider =
+    StateNotifierProvider<SelectedWalletIndexNotifier, int>((ref) {
+  return SelectedWalletIndexNotifier(ref);
+});
+
+class SelectedWalletIndexNotifier extends _WalletIndexNotifier {
+  SelectedWalletIndexNotifier(super.ref);
+
+  @override
+  String get storageKey => 'index';
 }
 
 /// Current Wallet Provider (Derived)
@@ -424,43 +444,14 @@ final miningWalletIndexProvider =
   return MiningWalletIndexNotifier(ref);
 });
 
-class MiningWalletIndexNotifier extends StateNotifier<int> {
-  final Ref _ref;
-  
-  MiningWalletIndexNotifier(this._ref) : super(0) {
-    _loadFromStorage();
-  }
+class MiningWalletIndexNotifier extends _WalletIndexNotifier {
+  MiningWalletIndexNotifier(super.ref);
 
-  Future<void> _loadFromStorage() async {
-    final spUtil = _ref.read(spUtilProvider);
-    final walletAll = await spUtil.getWalletInfo();
-    
-    if (walletAll != null) {
-      final userUUID = AppGlobals.userInfo?.uuid ?? 'AstranetWallet';
-      final walletUser = walletAll[userUUID] ?? walletAll['AstranetWallet'];
-      if (walletUser != null) {
-        state = walletUser['miningIndex'] ?? walletUser['index'] ?? 0;
-      }
-    }
-  }
+  @override
+  String get storageKey => 'miningIndex';
 
-  void select(int index) {
-    state = index;
-    _saveToStorage();
-  }
-
-  Future<void> _saveToStorage() async {
-    final spUtil = _ref.read(spUtilProvider);
-    final walletAll = await spUtil.getWalletInfo();
-    
-    if (walletAll != null) {
-      final userUUID = AppGlobals.userInfo?.uuid ?? 'AstranetWallet';
-      if (walletAll[userUUID] != null) {
-        walletAll[userUUID]['miningIndex'] = state;
-        await spUtil.setWalletInfo(walletAll);
-      }
-    }
-  }
+  @override
+  String? get fallbackKey => 'index';
 }
 
 /// Mining Wallet Provider (Derived)
