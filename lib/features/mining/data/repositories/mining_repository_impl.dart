@@ -80,17 +80,7 @@ class MiningRepositoryImpl implements MiningRepository {
 
   DateTime _parseDayToDateTime(String? day) {
     if (day == null) return DateTime.now();
-    try {
-      final parts = day.split('-');
-      if (parts.length == 3) {
-        return DateTime(
-          int.parse(parts[0]),
-          int.parse(parts[1]),
-          int.parse(parts[2]),
-        );
-      }
-    } catch (_) {}
-    return DateTime.now();
+    return DateTime.tryParse(day) ?? DateTime.now();
   }
 
   // ─── MiningRepository interface ─────────────────────────────────────────────
@@ -152,10 +142,7 @@ class MiningRepositoryImpl implements MiningRepository {
     int limit = 20,
   }) async {
     try {
-      final all = List.generate(
-        _v2.taskList.length,
-        (i) => _sessionFromDailyWithdrawal(i),
-      );
+      final all = [for (var i = 0; i < _v2.taskList.length; i++) _sessionFromDailyWithdrawal(i)];
       final start = (page - 1) * limit;
       if (start >= all.length) return const Right([]);
       return Right(all.sublist(start, (start + limit).clamp(0, all.length)));

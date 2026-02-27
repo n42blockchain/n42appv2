@@ -22,14 +22,7 @@ class TaskDetailPage extends StatefulWidget {
 }
 
 class _TaskDetailPageState extends State<TaskDetailPage> {
-  DataUtils? _dataUtils;
-  DataUtils get dataUtils{
-    if(_dataUtils==null){
-      _dataUtils=DataUtils();
-    }
-    return _dataUtils!;
-  }
-  int status = 0;
+  late final DataUtils dataUtils = DataUtils();
   bool isLoading = true;
   Map? taskDetailResponse;
 
@@ -62,9 +55,7 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
           Row(
             children: [
               RoundRefreshIcon(
-                refreshData: () async {
-                  await initData();
-                },
+                refreshData: () => initData(),
               ),
               SizedBox(width: ScreenUtil().setWidth(24),)
             ],

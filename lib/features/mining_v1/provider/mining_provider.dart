@@ -7,7 +7,6 @@ import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
-import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -96,26 +95,20 @@ class MiningProvider extends ChangeNotifier {
   }
 
   Future<bool> checkHostNode(String host) async {
-    const int maxAttempts = 3;
-    for (int i = 0; i < maxAttempts; i++) {
-      final flag = await checkHostConnection(host);
-      if (flag) {
-        return true;
-      }
+    for (int i = 0; i < 3; i++) {
+      if (await checkHostConnection(host)) return true;
     }
     return false;
   }
 
   Future<bool> checkHostConnection(String url) async {
     try {
-      final dio = Dio();
-      final response = await dio.get(url);
+      final response = await Dio().get(url);
       return response.statusCode == 200;
-    } catch (e) {
+    } catch (_) {
       return false;
     }
   }
-
 
   Future<bool> checkAddressIsDepositAst(String address) async {
     try {

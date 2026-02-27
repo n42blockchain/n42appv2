@@ -18,64 +18,25 @@ class SelectMiningPlans extends StatefulWidget {
 class _SelectMiningPlansState extends State<SelectMiningPlans> {
   final PageController _controller = PageController();
   int currentPage = 0;
-  //bool pageDataLoading = false;
+  final List<int> depositsList = [50, 100, 500];
+  late final dynamic eventBusFn;
 
-  //bool canDeposits50Ast = false;
-  //bool canDeposits100Ast = false;
-  //bool canDeposits500Ast = false;
-
-  List<int> depositsList = [50,100,500];
-  var eventBusFn;
   @override
   void initState() {
     super.initState();
-    eventBusFn=eventBus.on().listen((event) {
+    eventBusFn = eventBus.on().listen((event) {
       if (event is EventPublic &&
           event.type == EventPublicType.selectMiningplansPop) {
         Navigator.pop(context);
       }
     });
-    //checkDepositsEnable();
   }
+
   @override
   void dispose() {
-    // TODO: implement dispose
     eventBusFn.cancel();
     super.dispose();
   }
-/*
-  checkDepositsEnable() async {
-    try {
-      setState(() {
-        pageDataLoading = true;
-      });
-      final data = await MiningApi.getDepositRemain();
-      debugPrint("getDepositRemain data: $data");
-      if (data != null && data is List) {
-        for (int i = 0; i < data.length; i++) {
-          if (i == 0 && data[i] > BigInt.zero) {
-            canDeposits50Ast = true;
-            depositsList.add(50);
-          } else if (i == 1 && data[i] > BigInt.zero) {
-            canDeposits100Ast = true;
-            depositsList.add(100);
-          } else if (i == 2 && data[i] > BigInt.zero) {
-            canDeposits500Ast = true;
-            depositsList.add(500);
-          }
-        }
-      }
-    } catch (err) {
-      debugPrint("getDepositRemain err： ${err.toString()}");
-    } finally {
-      if (mounted) {
-        setState(() {
-          pageDataLoading = false;
-        });
-      }
-    }
-  }
-*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,10 +116,7 @@ class _SelectMiningPlansState extends State<SelectMiningPlans> {
                       ],
                     ),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(148),),
-                  /*SizedBox(
-              height: ScreenUtil().setWidth(120),
-            )*/
+                  SizedBox(height: ScreenUtil().setWidth(148)),
                 ],
               ),
             ),

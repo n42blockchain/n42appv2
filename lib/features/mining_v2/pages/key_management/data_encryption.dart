@@ -43,10 +43,8 @@ Future<String> encryptSecret({
 
     // 生成随机 salt (16 字节) 和 IV (12 字节，AES-GCM 标准)
     final random = Random.secure();
-    final saltBytes = List<int>.generate(16, (_) => random.nextInt(256));
-    final ivBytes = List<int>.generate(12, (_) => random.nextInt(256));
-    final salt = Uint8List.fromList(saltBytes);
-    final iv = Uint8List.fromList(ivBytes);
+    final salt = Uint8List.fromList(List<int>.generate(16, (_) => random.nextInt(256)));
+    final iv = Uint8List.fromList(List<int>.generate(12, (_) => random.nextInt(256)));
 
     // 配置 PBKDF2 密钥派生函数
     // 使用 SHA-256，150000 次迭代，生成 256 位（32 字节）密钥
@@ -180,40 +178,23 @@ Future<Map<String, dynamic>> decryptSecret({
     final ciphertext = base64Decode(ciphertextBase64);
     final tag = base64Decode(tagBase64);
 
-    // 配置 PBKDF2 密钥派生函数（使用与加密时相同的参数）
+    // 使用与加密时相同的参数派生解密密钥
     final pbkdf2 = Pbkdf2(
       macAlgorithm: Hmac.sha256(),
       iterations: iterations,
-      bits: dklen * 8, // dklen 是字节数，bits 是位数
+      bits: dklen * 8,
     );
-
-    // 从密码派生解密密钥（使用相同的 salt）
     final key = await pbkdf2.deriveKey(
       secretKey: SecretKey(utf8.encode(password)),
       nonce: salt,
     );
 
-    // 使用 AES-256-GCM 进行解密
+    // AES-256-GCM 解密
     final aesGcm = AesGcm.with256bits();
+    final secretBox = SecretBox(ciphertext, nonce: iv, mac: Mac(tag));
+    final decrypted = await aesGcm.decrypt(secretBox, secretKey: key);
 
-    // 构建 SecretBox（包含密文和认证标签）
-    final secretBox = SecretBox(
-      ciphertext,
-      nonce: iv,
-      mac: Mac(tag),
-    );
-
-    // 解密
-    final decrypted = await aesGcm.decrypt(
-      secretBox,
-      secretKey: key,
-    );
-
-    // 将解密后的字节转换为字符串，然后解析为 JSON 对象
-    final decryptedJson = utf8.decode(decrypted);
-    final data = jsonDecode(decryptedJson) as Map<String, dynamic>;
-    
-    return data;
+    return jsonDecode(utf8.decode(decrypted)) as Map<String, dynamic>;
   } on ArgumentError {
     rethrow;
   } catch (e) {

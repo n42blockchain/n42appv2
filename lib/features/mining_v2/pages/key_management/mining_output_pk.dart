@@ -101,11 +101,29 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
   }
 
   void _copyEncryptedData() {
-    debugPrint(_encryptedData);
     Clipboard.setData(ClipboardData(text: _encryptedData));
     ToastUtils.show(S.of(context).copy);
     setState(() {
       copyEncrypte=true;
+    });
+  }
+
+  Widget _buildObscureToggle() {
+    return Container(
+      width: ScreenUtil().setWidth(50.0),
+      height: ScreenUtil().setWidth(50.0),
+      alignment: Alignment.center,
+      child: Image.asset(
+        'assets/login/${obscure ? "icon_denglu_yincang" : "icon_denglu_xianshi"}.png',
+        width: ScreenUtil().setWidth(34.0),
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+      ),
+    );
+  }
+
+  void _toggleObscure() {
+    setState(() {
+      obscure = !obscure;
     });
   }
 
@@ -156,21 +174,8 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
                   FocusScope.of(context).requestFocus(_confirmFocus);
                 },
                 obscure: obscure,
-                rightWidget1: Container(
-                  width: ScreenUtil().setWidth(50.0),
-                  height: ScreenUtil().setWidth(50.0),
-                  alignment: Alignment.center,
-                  child: Image.asset(
-                    'assets/login/${obscure?"icon_denglu_yincang":"icon_denglu_xianshi"}.png',
-                    width: ScreenUtil().setWidth(34.0),
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                  ),
-                ),
-                rightOnTap1: (){
-                  setState(() {
-                    obscure=!obscure;
-                  });
-                },
+                rightWidget1: _buildObscureToggle(),
+                rightOnTap1: _toggleObscure,
               ),
               SizedBox(height: ScreenUtil().setWidth(40)),
               Text(
@@ -192,21 +197,8 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
                   FocusScope.of(context).requestFocus(FocusNode());
                 },
                 obscure: obscure,
-                rightWidget1: Container(
-                  width: ScreenUtil().setWidth(50.0),
-                  height: ScreenUtil().setWidth(50.0),
-                  alignment: Alignment.center,
-                  child: Image.asset(
-                    'assets/login/${obscure?"icon_denglu_yincang":"icon_denglu_xianshi"}.png',
-                    width: ScreenUtil().setWidth(34.0),
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                  ),
-                ),
-                rightOnTap1: (){
-                  setState(() {
-                    obscure=!obscure;
-                  });
-                },
+                rightWidget1: _buildObscureToggle(),
+                rightOnTap1: _toggleObscure,
               ),
             ],
 

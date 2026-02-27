@@ -21,17 +21,8 @@ class MiningTaskList extends StatefulWidget {
 }
 
 class _MiningTaskListState extends State<MiningTaskList> {
-  DataUtils? _dataUtils;
-  DataUtils get dataUtils{
-    if(_dataUtils==null){
-      _dataUtils=DataUtils();
-    }
-    return _dataUtils!;
-  }
+  late final DataUtils dataUtils = DataUtils();
 
-  //任务列表分页数据
-  int pageSize = 20;
-  bool isLoadingTaskList = true;
   String? fromBlockNum;
 
   @override

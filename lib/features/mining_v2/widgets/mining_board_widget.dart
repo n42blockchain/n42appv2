@@ -8,7 +8,9 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 
 class MiningBoardWidget extends StatelessWidget {
   final int nNum;
-  final int cReward;//单次验证收益
+
+  /// 单次验证收益
+  final int cReward;
 
   const MiningBoardWidget({
     super.key,
@@ -16,10 +18,13 @@ class MiningBoardWidget extends StatelessWidget {
     required this.cReward,
   });
 
+  bool _isDark(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark;
+
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+    final isDark = _isDark(context);
+
     return Container(
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
@@ -84,8 +89,8 @@ class MiningBoardWidget extends StatelessWidget {
 
   Widget _buildBoard(BuildContext context) {
     const String bigImage = "assets/mining/ast_50.png";
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+    final isDark = _isDark(context);
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -212,7 +217,7 @@ class MiningBoardWidget extends StatelessWidget {
     
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).brightness == Brightness.dark
+        color: _isDark(context)
             ? Colors.white.withValues(alpha:0.03)
             : Colors.grey.withValues(alpha:0.03),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),

@@ -18,17 +18,26 @@ class MiningPlans extends StatefulWidget {
 class _MiningPlansState extends State<MiningPlans> {
   final PageController _controller = PageController();
   int currentPage = 0;
-  List<int> depositsList = [50,100,500];
+  final List<int> depositsList = [50, 100, 500];
+
+  String _titleForPage(int page) {
+    switch (page) {
+      case 0:
+        return S.of(context).g_mining_key_62;
+      case 1:
+        return S.of(context).g_mining_key_61;
+      default:
+        return S.of(context).g_mining_key_63;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final lastPage = depositsList.length - 1;
     return Column(
       children: [
         AppHomeTopBar(
-          title: currentPage == 0
-              ? S.of(context).g_mining_key_62
-              : currentPage == 1
-              ? S.of(context).g_mining_key_61
-              : S.of(context).g_mining_key_63,
+          title: _titleForPage(currentPage),
           onLeftImageClick: () {
             Scaffold.of(context).openDrawer();
           },
@@ -36,7 +45,6 @@ class _MiningPlansState extends State<MiningPlans> {
           actions: [
             GestureDetector(
               child: Text(
-                // "Skip",
                 S.of(context).g_mining_key_52,
                 style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
@@ -44,11 +52,7 @@ class _MiningPlansState extends State<MiningPlans> {
                     fontSize: ScreenUtil().setSp(30)),
               ),
               onTap: () async {
-                showSKipConfirmDialog(context,() async {
-                  //await MiningUtils.setMiningSkip(true);
-                  //globalMiningV1.setSkipPlans(true);
-                });
-
+                showSKipConfirmDialog(context, () async {});
               },
             ),
           ],
@@ -68,17 +72,7 @@ class _MiningPlansState extends State<MiningPlans> {
                       currentPage = index;
                     });
                   },
-                  children: const [
-                    ASTMiningBoard(
-                      astNum: 50,
-                    ),
-                    ASTMiningBoard(
-                      astNum: 100,
-                    ),
-                    ASTMiningBoard(
-                      astNum: 500,
-                    ),
-                  ],
+                  children: depositsList.map((e) => ASTMiningBoard(astNum: e)).toList(),
                 ),
               ),
               Positioned(
@@ -119,7 +113,7 @@ class _MiningPlansState extends State<MiningPlans> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                if (currentPage < 2) {
+                                if (currentPage < lastPage) {
                                   _controller.animateToPage(currentPage + 1,
                                       duration: const Duration(milliseconds: 500),
                                       curve: Curves.easeInOut);
@@ -129,7 +123,7 @@ class _MiningPlansState extends State<MiningPlans> {
                                 "assets/mining/youjiantou.png",
                                 width: ScreenUtil().setWidth(44),
                                 fit: BoxFit.cover,
-                                color: currentPage < 2
+                                color: currentPage < lastPage
                                     ? AppThemeUtils.getColorByKey(
                                     context, AppThemeKeys.mainTextColor.name)
                                     : AppThemeUtils.getColorByKey(

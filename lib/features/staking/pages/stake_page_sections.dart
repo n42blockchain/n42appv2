@@ -144,12 +144,12 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
       return Center(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
-          child: CircularProgressIndicator(strokeWidth: 2),
+          child: const CircularProgressIndicator(strokeWidth: 2),
         ),
       );
     }
 
-    if (widget.userAddress == null || widget.userAddress!.isEmpty) {
+    if (widget.userAddress?.isEmpty ?? true) {
       return _buildNoWalletHint(context);
     }
 
@@ -212,9 +212,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        pos.validator != null
-                            ? pos.validator!.name
-                            : widget.protocol.name,
+                        pos.validator?.name ?? widget.protocol.name,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(28),
                           fontWeight: FontWeight.w600,

@@ -55,47 +55,30 @@ mixin AirdropHomeLogicMixin on State<AirdropHomePage> {
   // Status / chain / type badges
   // ---------------------------------------------------------------------------
 
+  static final _statusProps = {
+    AirdropStatus.upcoming: (color: Colors.blue, text: 'Upcoming'),
+    AirdropStatus.active: (color: Colors.green, text: 'Active'),
+    AirdropStatus.claimed: (color: Colors.grey, text: 'Claimed'),
+    AirdropStatus.expired: (color: Colors.red, text: 'Expired'),
+    AirdropStatus.ineligible: (color: Colors.orange, text: 'Not Eligible'),
+  };
+
   Widget buildStatusBadge(AirdropStatus status) {
-    Color color;
-    String text;
-
-    switch (status) {
-      case AirdropStatus.upcoming:
-        color = Colors.blue;
-        text = 'Upcoming';
-        break;
-      case AirdropStatus.active:
-        color = Colors.green;
-        text = 'Active';
-        break;
-      case AirdropStatus.claimed:
-        color = Colors.grey;
-        text = 'Claimed';
-        break;
-      case AirdropStatus.expired:
-        color = Colors.red;
-        text = 'Expired';
-        break;
-      case AirdropStatus.ineligible:
-        color = Colors.orange;
-        text = 'Not Eligible';
-        break;
-    }
-
+    final props = _statusProps[status]!;
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(8),
         vertical: ScreenUtil().setWidth(3),
       ),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 30 / 255),
+        color: props.color.withValues(alpha: 30 / 255),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
       ),
       child: Text(
-        text,
+        props.text,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(20),
-          color: color,
+          color: props.color,
           fontWeight: FontWeight.w600,
         ),
       ),
@@ -124,43 +107,29 @@ mixin AirdropHomeLogicMixin on State<AirdropHomePage> {
     );
   }
 
+  static final _typeProps = {
+    AirdropType.token: (color: Colors.purple, text: 'Token'),
+    AirdropType.nft: (color: Colors.pink, text: 'NFT'),
+    AirdropType.points: (color: Colors.amber, text: 'Points'),
+    AirdropType.testnet: (color: Colors.teal, text: 'Testnet'),
+  };
+
   Widget buildTypeTag(AirdropType type) {
-    String text;
-    Color color;
-
-    switch (type) {
-      case AirdropType.token:
-        text = 'Token';
-        color = Colors.purple;
-        break;
-      case AirdropType.nft:
-        text = 'NFT';
-        color = Colors.pink;
-        break;
-      case AirdropType.points:
-        text = 'Points';
-        color = Colors.amber;
-        break;
-      case AirdropType.testnet:
-        text = 'Testnet';
-        color = Colors.teal;
-        break;
-    }
-
+    final props = _typeProps[type]!;
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(8),
         vertical: ScreenUtil().setWidth(3),
       ),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 20 / 255),
+        color: props.color.withValues(alpha: 20 / 255),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
       ),
       child: Text(
-        text,
+        props.text,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(20),
-          color: color,
+          color: props.color,
           fontWeight: FontWeight.w500,
         ),
       ),

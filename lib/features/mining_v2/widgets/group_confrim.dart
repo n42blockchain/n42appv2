@@ -14,9 +14,7 @@ Future<bool?> showGroupConfirmDialog(
     barrierDismissible: false,
     builder: (_) => AlertDialog(
       contentPadding: const EdgeInsets.all(0),
-      //这是宽度沾满宽度
       insetPadding: EdgeInsets.all(ScreenUtil().setWidth(28)),
-      //设置圆角
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24))),
       content: Container(
           decoration: BoxDecoration(
@@ -54,7 +52,6 @@ class GroupConfirm extends StatelessWidget {
             'assets/img/ast_nft.png',
             width: ScreenUtil().setWidth(160),
             fit: BoxFit.cover,
-            //color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
           ),
           SizedBox(
             height: ScreenUtil().setWidth(80),
@@ -69,37 +66,21 @@ class GroupConfirm extends StatelessWidget {
           SizedBox(
             height: ScreenUtil().setWidth(54),
           ),
-          Text(
-            // "Are you sure you want to lock $num AsT until $lockDate to run a node?",
+          ...[
             S.of(context).g_mining_key76(num.toString(), lockDate),
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(28)),
-          ),
-          SizedBox(
-            height: ScreenUtil().setWidth(10),
-          ),
-          Text(
             S.of(context).g_mining_key86,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(28)),
-          ),
-          SizedBox(
-            height: ScreenUtil().setWidth(10),
-          ),
-          Text(
             S.of(context).g_mining_key87,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(28)),
-          ),
+          ].expand((text) => [
+            Text(
+              text,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                fontSize: ScreenUtil().setSp(28),
+              ),
+            ),
+            SizedBox(height: ScreenUtil().setWidth(10)),
+          ]),
           SizedBox(
             height: ScreenUtil().setWidth(90),
           ),

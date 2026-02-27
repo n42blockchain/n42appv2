@@ -200,8 +200,6 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
   Widget _buildStakeEstimate(BuildContext context, StakingProvider provider) {
     final amountText = _amountController.text;
     final amount = double.tryParse(amountText) ?? 0;
-
-    // 计算年收益
     final yearlyReward = amount * provider.currentApy / 100;
     final dailyReward = yearlyReward / 365;
 
@@ -213,86 +211,62 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
       ),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                S.of(context).g_key_stake_estimated_daily,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
-                ),
-              ),
-              Text(
-                '${dailyReward.toStringAsFixed(6)} ${widget.protocol.chainSymbol}',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
-                  fontWeight: FontWeight.w600,
-                  color: Colors.green,
-                ),
-              ),
-            ],
+          _buildEstimateRow(
+            context,
+            label: S.of(context).g_key_stake_estimated_daily,
+            value: '${dailyReward.toStringAsFixed(6)} ${widget.protocol.chainSymbol}',
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                S.of(context).g_key_stake_estimated_yearly,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
-                ),
-              ),
-              Text(
-                '${yearlyReward.toStringAsFixed(4)} ${widget.protocol.chainSymbol}',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
-                  fontWeight: FontWeight.w600,
-                  color: Colors.green,
-                ),
-              ),
-            ],
+          _buildEstimateRow(
+            context,
+            label: S.of(context).g_key_stake_estimated_yearly,
+            value: '${yearlyReward.toStringAsFixed(4)} ${widget.protocol.chainSymbol}',
           ),
           if (widget.protocol.isLiquid) ...[
             SizedBox(height: ScreenUtil().setWidth(12)),
             Divider(),
             SizedBox(height: ScreenUtil().setWidth(12)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  S.of(context).g_key_stake_you_receive,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
-                  ),
-                ),
-                Text(
-                  '~$amountText ${widget.protocol.liquidTokenSymbol}',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
-                    fontWeight: FontWeight.w600,
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
-                  ),
-                ),
-              ],
+            _buildEstimateRow(
+              context,
+              label: S.of(context).g_key_stake_you_receive,
+              value: '~$amountText ${widget.protocol.liquidTokenSymbol}',
+              valueColor: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.mainTextColor.name,
+              ),
             ),
           ],
         ],
       ),
+    );
+  }
+
+  Widget _buildEstimateRow(
+    BuildContext context, {
+    required String label,
+    required String value,
+    Color? valueColor,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(26),
+            color: AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.itemSubtitleTextColor.name,
+            ),
+          ),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(26),
+            fontWeight: FontWeight.w600,
+            color: valueColor ?? Colors.green,
+          ),
+        ),
+      ],
     );
   }
 
@@ -328,11 +302,7 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
                 ),
               )
             : Text(
-                isValidatorRequired
-                    ? S.of(context).g_key_stake_select_a_validator
-                    : !isAmountValid
-                        ? '${S.of(context).g_key_stake_min_stake}: ${widget.protocol.minStakeAmount} ${widget.protocol.chainSymbol}'
-                        : S.of(context).g_key_stake_stake,
+                _stakeButtonLabel(context, isValidatorRequired, isAmountValid),
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(32),
                   fontWeight: FontWeight.bold,
@@ -346,5 +316,19 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
               ),
       ),
     );
+  }
+
+  String _stakeButtonLabel(
+    BuildContext context,
+    bool isValidatorRequired,
+    bool isAmountValid,
+  ) {
+    if (isValidatorRequired) {
+      return S.of(context).g_key_stake_select_a_validator;
+    }
+    if (!isAmountValid) {
+      return '${S.of(context).g_key_stake_min_stake}: ${widget.protocol.minStakeAmount} ${widget.protocol.chainSymbol}';
+    }
+    return S.of(context).g_key_stake_stake;
   }
 }

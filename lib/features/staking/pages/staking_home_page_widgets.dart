@@ -51,25 +51,21 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
         ),
         labelPadding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(8)),
         tabs: [
-          Tab(
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
-                child: Text(S.of(context).g_key_stake_protocols),
-              ),
-            ),
-          ),
-          Tab(
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
-                child: Text(S.of(context).g_key_stake_positions),
-              ),
-            ),
-          ),
+          _fittedTab(S.of(context).g_key_stake_protocols),
+          _fittedTab(S.of(context).g_key_stake_positions),
         ],
+      ),
+    );
+  }
+
+  Widget _fittedTab(String label) {
+    return Tab(
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
+          child: Text(label),
+        ),
       ),
     );
   }
@@ -217,11 +213,9 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
                 ),
               ),
         Text(
-          liveApys.containsKey(protocol.id)
-              ? S.of(context).g_key_stake_apy
-              : (loadingApys
-                  ? S.of(context).g_key_stake_updating
-                  : S.of(context).g_key_stake_apy),
+          loadingApys && !liveApys.containsKey(protocol.id)
+              ? S.of(context).g_key_stake_updating
+              : S.of(context).g_key_stake_apy,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(22),
             color: AppThemeUtils.getColorByKey(

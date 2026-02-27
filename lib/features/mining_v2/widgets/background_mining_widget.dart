@@ -7,8 +7,6 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/mining_v2/pages/mining_background.dart';
 import 'package:n42_wallet/features/mining_v2/provider/mining_v2_provider.dart';
 
-/// Background Mining Widget - 后台挖矿组件
-
 /// Background Mining Widget
 ///
 /// Shows background mining status and launch button.
@@ -58,7 +56,7 @@ class BackgroundMiningWidget extends StatelessWidget {
           _buildIcon(context),
           SizedBox(width: ScreenUtil().setWidth(16)),
           _buildTitleSection(context, isEnabled),
-          _buildLaunchButton(context, isEnabled),
+          _buildLaunchButton(context, isEnabled, isDark),
         ],
       ),
     );
@@ -112,10 +110,7 @@ class BackgroundMiningWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildLaunchButton(BuildContext context, bool isEnabled) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    // 禁用状态下的颜色 - 根据主题调整
+  Widget _buildLaunchButton(BuildContext context, bool isEnabled, bool isDark) {
     final disabledBgColor = isDark
         ? const Color(0xFF3A4A5C)  // 暗色主题：深蓝灰色
         : const Color(0xFFE0E0E0); // 亮色主题：浅灰色

@@ -24,7 +24,6 @@ class MiningUtils{
       }
       WalletActionProvider wap=globalWapAdapter;
       MiningProvider mp=globalMiningV1;
-      //获取ast的 private key
       WalletInfo walletInfo=wap.walletInfoLsit[mp.walletIndex];
 
       final Map<String, dynamic>? map = walletInfo.coinInfo;
@@ -41,13 +40,10 @@ class MiningUtils{
       }
       final pk = base64Decode(privateKey??"");
       final astAddress = addressMap['legacy'];
-
-      // ast 配置信息
       String webSocketUrl = await MiningCacheUtils.getCurrentSocketUrl();
       final data = await MiningPluginUtils.initSetting(
           astAddress, cachePath,
           bytesToHex(pk),
-          //HexUtils().uint8ToHex(pk),
           webSocketUrl);
       if (data != null && data["code"] == 0) {
         return true;
@@ -56,13 +52,10 @@ class MiningUtils{
     }catch(e){
       return false;
     }
-
-
   }
 
   static startMining() async {
     try {
-      //判断用户是否开启挖矿
       final openState = await SPUtil().getOpenMining();
       if (!openState) {
         return;
@@ -88,19 +81,6 @@ class MiningUtils{
   }
 
   static Future isMainChainMining() async {
-    // return await SPUtils.getBoolValue(SPKey.mainChainMining,
-    //     defaultValue: true);
     return AppConfig.isMainChainMining;
   }
-/*
-  //设置是否跳过
-  static Future setMiningSkip(bool value) async {
-    return await SPUtil().setBoolValue(SPkey.isSkipMiningPlans.name, value);
-  }
-
-  //是否跳过挖矿计划
-  static Future isSkipPlans() async {
-    return await SPUtil().getBoolValue(SPkey.isSkipMiningPlans.name,
-        defaultValue: false);
-  }*/
 }

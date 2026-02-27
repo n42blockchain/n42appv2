@@ -29,7 +29,7 @@ Future<bool?> showSKipConfirmDialog(
 class SkipDialogView extends StatelessWidget {
   final GestureTapCallback? sureCall;
 
-  const SkipDialogView({Key? key, this.sureCall}) : super(key: key);
+  const SkipDialogView({super.key, this.sureCall});
 
   @override
   Widget build(BuildContext context) {
@@ -107,9 +107,7 @@ class SkipDialogView extends StatelessWidget {
                 Expanded(
                   child: InkWell(
                     onTap: () {
-                      if (sureCall != null) {
-                        sureCall!();
-                      }
+                      sureCall?.call();
                       Navigator.of(context).pop(true);
                     },
                     child: Container(

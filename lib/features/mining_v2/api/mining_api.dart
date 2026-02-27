@@ -42,43 +42,38 @@ class MiningApi{
   }
   Future<String?> createDepositUnsignedTx(String validatorPrivateKey,String withdrawalAddress,String depositValueWeiInHex)async{
     try{
-      String? res=await mining.miningCreateDepositUnsignedTx({
+      return await mining.miningCreateDepositUnsignedTx({
         "depositContractAddress": _depositContractAddress,
         "validatorPrivateKey": validatorPrivateKey,
         "withdrawalAddress": withdrawalAddress,
         "depositValueWeiInHex": depositValueWeiInHex,
       });
-      return res;
     }catch(e){
       return null;
     }
   }
   Future<String?> runClient(String validatorPrivateKey)async{
     try{
-      String? res=await mining.miningRunClient({
+      return await mining.miningRunClient({
         "wsUrl": wsUrl, "validatorPrivateKey": validatorPrivateKey
       });
-      return res;
     }catch(e){
       return null;
     }
-
   }
   Future<String?> miningCreateGetExitFeeUnsignedTx()async{
     try{
-      String? res=await mining.miningCreateGetExitFeeUnsignedTx();
-      return res;
+      return await mining.miningCreateGetExitFeeUnsignedTx();
     }catch(e){
       return null;
     }
   }
   Future<String?> miningCreateExitUnsignedTx(String feeWeiInHex,String validatorPublicKey)async{
     try{
-      String? res=await mining.miningCreateExitUnsignedTx({
+      return await mining.miningCreateExitUnsignedTx({
         "feeWeiInHex": feeWeiInHex,
         "validatorPublicKey": validatorPublicKey,
       });
-      return res;
     }catch(e){
       return null;
     }
@@ -101,26 +96,23 @@ class MiningApi{
       return mm;
 
     } catch (e) {
-      MessageModel mm=MessageModel.error();
-      return mm;
+      return MessageModel.error();
     }
   }
   //获取总收益
   Future<MessageModel> getMiningWithdrawalsDailySummary(String address)async{
     try {
-      //https://testnet2.n42.world/api/v2/addresses/0xCC5BC02C7cD8E7bda6D17128f3B20949040c5131/withdrawals-daily/summary
       var data = await BaseApi.requestEmptyH.get("$_explorerApiBase/api/v2/addresses/$address/withdrawals-daily/summary", params: {});
-      MessageModel mm=MessageModel();
       if(data != null){
+        final mm = MessageModel();
         mm.data = data['total_amount'];
         return mm;
       }
+      final mm = MessageModel();
       mm.error=true;
       return mm;
-
     } catch (e) {
-      MessageModel mm=MessageModel.error();
-      return mm;
+      return MessageModel.error();
     }
   }
   Future<MessageModel> getBeaconValidator(String pubKey)async{
@@ -145,9 +137,7 @@ class MiningApi{
       }
       return mm;
     }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e.toString();
-      return mm;
+      return MessageModel.error()..data=e.toString();
     }
   }
 }

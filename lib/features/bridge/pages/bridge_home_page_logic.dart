@@ -123,11 +123,7 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
       final privateKey = walletInfo.privateKey ?? '';
 
       if (mnemonic.isEmpty && privateKey.isEmpty) {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(S.of(context).g_key_210)),
-          );
-        }
+        _showSnack(context, S.of(context).g_key_210);
         return null;
       }
 
@@ -137,13 +133,7 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
 
       final coinInfo = walletProvider.walletMap[chainSymbol];
       if (coinInfo == null) {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content:
-                    Text(S.of(context).g_key_bridge_chain_not_supported)),
-          );
-        }
+        _showSnack(context, S.of(context).g_key_bridge_chain_not_supported);
         return null;
       }
 
@@ -163,58 +153,37 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
       );
 
       if (signedTx.isEmpty) {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(S.of(context).g_key_175)),
-          );
-        }
+        _showSnack(context, S.of(context).g_key_175);
         return null;
       }
 
-      // signTransaction 返回已广播的 txHash 或原始 signedTx
-      // 直接返回非空字符串作为 txHash 标识
-      return extractTxHash(signedTx);
+      return signedTx;
     } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
-      }
+      _showSnack(context, e.toString());
       return null;
     }
   }
 
-  /// 从 signTransaction 结果中提取 txHash
-  ///
-  /// - 若结果已是 0x 开头 66 字符的哈希，直接返回
-  /// - 否则仍返回原值（让调用方决定如何处理）
-  String? extractTxHash(String signedTx) {
-    if (signedTx.isEmpty) return null;
-    return signedTx;
-  }
-
-  String getChainSymbol(int chainId) {
-    switch (chainId) {
-      case BridgeChainIds.ethereum:
-        return 'ETH';
-      case BridgeChainIds.bsc:
-        return 'BNB';
-      case BridgeChainIds.polygon:
-        return 'MATIC';
-      case BridgeChainIds.arbitrum:
-        return 'ARB';
-      case BridgeChainIds.optimism:
-        return 'OP';
-      case BridgeChainIds.avalanche:
-        return 'AVAX';
-      case BridgeChainIds.base:
-        return 'BASE';
-      case BridgeChainIds.fantom:
-        return 'FTM';
-      default:
-        return 'ETH';
+  void _showSnack(BuildContext context, String message) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
     }
   }
+
+  static const _chainSymbols = {
+    BridgeChainIds.ethereum: 'ETH',
+    BridgeChainIds.bsc: 'BNB',
+    BridgeChainIds.polygon: 'MATIC',
+    BridgeChainIds.arbitrum: 'ARB',
+    BridgeChainIds.optimism: 'OP',
+    BridgeChainIds.avalanche: 'AVAX',
+    BridgeChainIds.base: 'BASE',
+    BridgeChainIds.fantom: 'FTM',
+  };
+
+  String getChainSymbol(int chainId) => _chainSymbols[chainId] ?? 'ETH';
 
   // ─── 工具方法 ────────────────────────────────────────────────────────────────
 

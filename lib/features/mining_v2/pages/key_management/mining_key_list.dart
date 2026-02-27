@@ -66,9 +66,7 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
                 Row(
                   children: [
                     Expanded(
-                      flex: 1,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(miningKeyList[index],
@@ -89,12 +87,10 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
                         ],
                       ),
                     ),
-                    SizedBox(width: 10,),
-                    if(isMining==false)
+                    const SizedBox(width: 10),
+                    if(!isMining)
                       InkWell(
-                        onTap: (){
-                          removeKey(index);
-                        },
+                        onTap: () => removeKey(index),
                         child: Icon(
                           Icons.delete_forever_outlined,
                           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
@@ -103,9 +99,7 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
                       ),
                     if(isMining)
                       InkWell(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>MiningOutputTip(value: keyValue['keypart'],)));
-                        },
+                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => MiningOutputTip(value: keyValue['keypart']))),
                         child: Icon(
                           Icons.output_outlined,
                           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
@@ -129,9 +123,9 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
                         fontSize: ScreenUtil().setSp(32),
                       ),
                     ),),
-                    SizedBox(width: 10,),
+                    const SizedBox(width: 10),
                     InkWell(
-                      onTap: (){
+                      onTap: () {
                         Clipboard.setData(ClipboardData(text: keyValue['keypart']['publicKey']));
                         ToastUtils.show(S.of(context).copy);
                       },

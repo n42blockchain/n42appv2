@@ -40,9 +40,6 @@ class _MiningHomePageState extends State<MiningHomePage> with AutomaticKeepAlive
     });
   }
   initData(int walletIndex)async{
-    /// 绑定用户的地址到服务器
-    //ExchangeAccountUtils exchangeAccountUtils=ExchangeAccountUtils();
-    //exchangeAccountUtils.init();
     AppConfig.isMainChainMining= await SPUtil().getIsMainChainMining()??true;
     await MiningUtils.stopMining();
     MiningApi.cleanToken();
@@ -52,15 +49,6 @@ class _MiningHomePageState extends State<MiningHomePage> with AutomaticKeepAlive
     await mp.checkAddressMiningStatus(wIndex: walletIndex);
     ///挖矿逻辑初始化
     await MiningUtils.initEvmSdk();
-    // 请注意，在安卓上，这并不能保证连接到互联网。例如，该应用程序可能具有wifi访问权限，但它可能是VPN或无法访问的酒店WiFi。
-    // var connectivityResult = await (Connectivity().checkConnectivity());
-    // debugPrint("connectivityResult ：$connectivityResult");
-    // if (connectivityResult == ConnectivityResult.wifi) {
-
-    //   //evm start
-    //   MiningUtils.startMining();
-    // }
-    //MiningType? type = ProviderUtil.miningProvider().miningType;
     MiningUtils.startMining();
     eventBus.fire(EventPublic(EventPublicType.refreshMiningData));
   }

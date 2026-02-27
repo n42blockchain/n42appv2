@@ -7,7 +7,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 class AstLevel extends StatelessWidget {
   final int astNum;
 
-  const AstLevel({Key? key, required this.astNum}) : super(key: key);
+  const AstLevel({super.key, required this.astNum});
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +24,18 @@ class AstLevel extends StatelessWidget {
     );
   }
 
-  _buildBoard(BuildContext context) {
-    String bigImage = "assets/mining/ast_$astNum.png";
-    String levelText = astNum == 50
-        ? S.of(context).g_mining_key_62
-        : astNum == 100
-        ? S.of(context).g_mining_key_61
-        : S.of(context).g_mining_key_63;
-    String times = astNum == 50 ? "70" : astNum == 100 ? "15" : "15";
+  Widget _buildBoard(BuildContext context) {
+    final String bigImage = "assets/mining/ast_$astNum.png";
+    String levelText;
+    switch (astNum) {
+      case 50:
+        levelText = S.of(context).g_mining_key_62;
+      case 100:
+        levelText = S.of(context).g_mining_key_61;
+      default:
+        levelText = S.of(context).g_mining_key_63;
+    }
+    final String times = astNum == 50 ? "70" : "15";
     return Column(
       children: [
         Row(
@@ -122,71 +126,48 @@ class AstLevel extends StatelessWidget {
         SizedBox(
           height: ScreenUtil().setWidth(72),
         ),
-        Row(//373739
+        Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                  color:Theme.of(context).brightness == Brightness.dark ? const Color(0xff373739):  const Color(0xffEDEFF2),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30))),
-              padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(12), vertical: ScreenUtil().setWidth(6)),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Image.asset(
-                    "assets/mining/icon_full_node.png",
-                    width: ScreenUtil().setWidth(24),
-                    fit: BoxFit.cover,
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                  ),
-                  SizedBox(
-                    width: ScreenUtil().setWidth(12),
-                  ),
-                  Text(
-                    S.of(context).g_mining_key_64,
-                    style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainTextColor.name),
-                        fontSize: ScreenUtil().setWidth(24)),
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              width: ScreenUtil().setWidth(32),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  color:Theme.of(context).brightness == Brightness.dark ? const Color(0xff373739):  const Color(0xffEDEFF2),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30))),
-              padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(12), vertical: ScreenUtil().setWidth(6)),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Image.asset(
-                    "assets/mining/lock_time.png",
-                    width: ScreenUtil().setWidth(24),
-                    fit: BoxFit.cover,
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                  ),
-                  SizedBox(
-                    width: ScreenUtil().setWidth(12),
-                  ),
-                  Text(
-                    "$times ${S.of(context).g_mining_key_65}",
-                    style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainTextColor.name),
-                        fontSize: ScreenUtil().setSp(24)),
-                  )
-                ],
-              ),
-            ),
+            _buildTag(context, "assets/mining/icon_full_node.png", S.of(context).g_mining_key_64),
+            SizedBox(width: ScreenUtil().setWidth(32)),
+            _buildTag(context, "assets/mining/lock_time.png", "$times ${S.of(context).g_mining_key_65}"),
           ],
         ),
       ],
+    );
+  }
+
+  Widget _buildTag(BuildContext context, String iconAsset, String label) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final tagBg = isDark ? const Color(0xff373739) : const Color(0xffEDEFF2);
+    final textColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: tagBg,
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
+      ),
+      padding: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(12),
+        vertical: ScreenUtil().setWidth(6),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset(
+            iconAsset,
+            width: ScreenUtil().setWidth(24),
+            fit: BoxFit.cover,
+            color: textColor,
+          ),
+          SizedBox(width: ScreenUtil().setWidth(12)),
+          Text(
+            label,
+            style: TextStyle(color: textColor, fontSize: ScreenUtil().setSp(24)),
+          ),
+        ],
+      ),
     );
   }
 }

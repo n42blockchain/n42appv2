@@ -119,10 +119,8 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 协议 + 标签
             Row(
               children: [
-                // 第一个 step logo
                 if (route.steps.isNotEmpty &&
                     route.steps.first.toolLogoUri.isNotEmpty)
                   ClipRRect(
@@ -189,7 +187,6 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
 
             SizedBox(height: ScreenUtil().setWidth(16)),
 
-            // 接收量 + 最小接收量
             Row(
               children: [
                 Expanded(
@@ -231,7 +228,6 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
                   ),
                 ),
 
-                // Gas + 时间
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -251,7 +247,6 @@ mixin BridgeHomeSectionsMixin on ConsumerState<BridgeHomePage>,
               ],
             ),
 
-            // 步骤详情
             if (route.steps.length > 1) ...[
               SizedBox(height: ScreenUtil().setWidth(12)),
               Wrap(

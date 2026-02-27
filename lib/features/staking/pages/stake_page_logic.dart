@@ -70,24 +70,18 @@ mixin _StakeLogicMixin on State<StakePage> {
   }
 
   Future<void> _loadBalance() async {
-    final symbol = widget.protocol.chainSymbol;
+    BigInt balance = BigInt.zero;
     try {
-      final coinModels = globalWapAdapter.coinModels;
-      final cm = coinModels.where((c) => c.coin['coinType'] == symbol).firstOrNull;
+      final symbol = widget.protocol.chainSymbol;
+      final cm = globalWapAdapter.coinModels
+          .where((c) => c.coin['coinType'] == symbol)
+          .firstOrNull;
       if (cm != null) {
-        final rawBalance = cm.isTest
-            ? (cm.coin['balance_test'] ?? '0')
-            : (cm.coin['balance'] ?? '0');
-        setState(() {
-          _balance = BigInt.tryParse(rawBalance) ?? BigInt.zero;
-        });
-        return;
+        final key = cm.isTest ? 'balance_test' : 'balance';
+        balance = BigInt.tryParse(cm.coin[key] ?? '0') ?? BigInt.zero;
       }
     } catch (_) {}
-    // Fallback: zero balance if wallet data unavailable
-    setState(() {
-      _balance = BigInt.zero;
-    });
+    setState(() => _balance = balance);
   }
 
   // ── Navigation ──────────────────────────────────────────────────────────

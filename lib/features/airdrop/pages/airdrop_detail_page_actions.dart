@@ -11,47 +11,30 @@ mixin AirdropDetailActionsMixin on State<AirdropDetailPage>, AirdropDetailLogicM
   // Status / chain / type badges
   // ---------------------------------------------------------------------------
 
+  static final _statusProps = {
+    AirdropStatus.upcoming: (color: Colors.blue, text: 'Upcoming'),
+    AirdropStatus.active: (color: Colors.green, text: 'Active'),
+    AirdropStatus.claimed: (color: Colors.grey, text: 'Claimed'),
+    AirdropStatus.expired: (color: Colors.red, text: 'Expired'),
+    AirdropStatus.ineligible: (color: Colors.orange, text: 'Not Eligible'),
+  };
+
   Widget buildStatusBadge(BuildContext context, AirdropStatus status) {
-    Color color;
-    String text;
-
-    switch (status) {
-      case AirdropStatus.upcoming:
-        color = Colors.blue;
-        text = 'Upcoming';
-        break;
-      case AirdropStatus.active:
-        color = Colors.green;
-        text = 'Active';
-        break;
-      case AirdropStatus.claimed:
-        color = Colors.grey;
-        text = 'Claimed';
-        break;
-      case AirdropStatus.expired:
-        color = Colors.red;
-        text = 'Expired';
-        break;
-      case AirdropStatus.ineligible:
-        color = Colors.orange;
-        text = 'Not Eligible';
-        break;
-    }
-
+    final props = _statusProps[status]!;
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(12),
         vertical: ScreenUtil().setWidth(6),
       ),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 30 / 255),
+        color: props.color.withValues(alpha: 30 / 255),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
       ),
       child: Text(
-        text,
+        props.text,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(24),
-          color: color,
+          color: props.color,
           fontWeight: FontWeight.w600,
         ),
       ),
@@ -80,43 +63,29 @@ mixin AirdropDetailActionsMixin on State<AirdropDetailPage>, AirdropDetailLogicM
     );
   }
 
+  static final _typeProps = {
+    AirdropType.token: (color: Colors.purple, text: 'Token'),
+    AirdropType.nft: (color: Colors.pink, text: 'NFT'),
+    AirdropType.points: (color: Colors.amber, text: 'Points'),
+    AirdropType.testnet: (color: Colors.teal, text: 'Testnet'),
+  };
+
   Widget buildTypeTag(BuildContext context, AirdropType type) {
-    String text;
-    Color color;
-
-    switch (type) {
-      case AirdropType.token:
-        text = 'Token';
-        color = Colors.purple;
-        break;
-      case AirdropType.nft:
-        text = 'NFT';
-        color = Colors.pink;
-        break;
-      case AirdropType.points:
-        text = 'Points';
-        color = Colors.amber;
-        break;
-      case AirdropType.testnet:
-        text = 'Testnet';
-        color = Colors.teal;
-        break;
-    }
-
+    final props = _typeProps[type]!;
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(10),
         vertical: ScreenUtil().setWidth(4),
       ),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 20 / 255),
+        color: props.color.withValues(alpha: 20 / 255),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
       ),
       child: Text(
-        text,
+        props.text,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(22),
-          color: color,
+          color: props.color,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -129,52 +98,18 @@ mixin AirdropDetailActionsMixin on State<AirdropDetailPage>, AirdropDetailLogicM
 
   Widget buildActionButtons(BuildContext context, AirdropModel airdrop) {
     if (airdrop.status == AirdropStatus.claimed) {
-      return Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-        decoration: BoxDecoration(
-          color: Colors.green.withValues(alpha: 20 / 255),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.check_circle, color: Colors.green),
-            SizedBox(width: ScreenUtil().setWidth(8)),
-            Text(
-              'Already Claimed',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                color: Colors.green,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
+      return _buildStatusBanner(
+        color: Colors.green,
+        icon: Icons.check_circle,
+        label: 'Already Claimed',
       );
     }
 
     if (airdrop.status == AirdropStatus.expired) {
-      return Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-        decoration: BoxDecoration(
-          color: Colors.red.withValues(alpha: 20 / 255),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.cancel, color: Colors.red),
-            SizedBox(width: ScreenUtil().setWidth(8)),
-            Text(
-              'Claim Period Ended',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                color: Colors.red,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
+      return _buildStatusBanner(
+        color: Colors.red,
+        icon: Icons.cancel,
+        label: 'Claim Period Ended',
       );
     }
 
@@ -320,6 +255,35 @@ mixin AirdropDetailActionsMixin on State<AirdropDetailPage>, AirdropDetailLogicM
             ),
           ),
       ],
+    );
+  }
+
+  Widget _buildStatusBanner({
+    required Color color,
+    required IconData icon,
+    required String label,
+  }) {
+    return Container(
+      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 20 / 255),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, color: color),
+          SizedBox(width: ScreenUtil().setWidth(8)),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(28),
+              color: color,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

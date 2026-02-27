@@ -261,7 +261,6 @@ class MiningRiskCard extends StatelessWidget {
           ),
           SizedBox(width: ScreenUtil().setWidth(10)),
           Expanded(
-            flex: 1,
             child: Text(
               S.of(context).g_mining_key_116(32),
               style: TextStyle(

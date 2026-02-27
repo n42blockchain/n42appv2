@@ -22,7 +22,7 @@ class MiningStatusWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isActive = mpValue.miningStatus == true;
+    final isActive = mpValue.miningStatus;
     final statusColor = isActive ? const Color(0xff32D74B) : const Color(0xffEB5851);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -107,7 +107,7 @@ class MiningStatusWidget extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              if (mpValue.depositsEnable == true)
+              if (mpValue.depositsEnable == true) ...[
                 InkWell(
                   onTap: () {
                     if (isActive) {
@@ -126,7 +126,6 @@ class MiningStatusWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (mpValue.depositsEnable == true)
                 InkWell(
                   onTap: () {
                     Navigator.of(context).push(
@@ -144,6 +143,7 @@ class MiningStatusWidget extends StatelessWidget {
                     ),
                   ),
                 ),
+              ],
             ],
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),

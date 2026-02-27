@@ -96,37 +96,22 @@ mixin StakingHomePageLogicMixin on State<StakingHomePage> {
 
   // ─── Helpers ──────────────────────────────────────────────────────────────
 
-  String formatAmount(BigInt amount, String symbol) {
-    // 根据不同链使用不同的精度
-    int decimals;
-    switch (symbol) {
-      case 'ETH':
-        decimals = 18;
-        break;
-      case 'SOL':
-        decimals = 9;
-        break;
-      case 'ATOM':
-        decimals = 6;
-        break;
-      case 'DOT':
-        decimals = 10;
-        break;
-      default:
-        decimals = 18;
-    }
+  // 链符号 -> 精度映射
+  static const _chainDecimals = {
+    'ETH': 18,
+    'SOL': 9,
+    'ATOM': 6,
+    'DOT': 10,
+  };
 
+  String formatAmount(BigInt amount, String symbol) {
+    final decimals = _chainDecimals[symbol] ?? 18;
     final value = amount.toDouble() / BigInt.from(10).pow(decimals).toDouble();
     return '${value.toStringAsFixed(4)} $symbol';
   }
 
   void navigateToStakePage(BuildContext context, StakingProtocol protocol) {
-    // 获取对应链的用户地址
-    String? userAddress;
-    if (widget.userAddresses != null) {
-      userAddress = widget.userAddresses![protocol.chainType];
-    }
-
+    final userAddress = widget.userAddresses?[protocol.chainType];
     Navigator.push(
       context,
       MaterialPageRoute(

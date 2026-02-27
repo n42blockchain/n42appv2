@@ -70,11 +70,8 @@ class _MiningPlansV2State extends State<MiningPlansV2> {
                     MiningBoardWidget(
                       nNum: 32,cReward: cReward,
                     ),
-                    Spacer(),
-                    SizedBox(height: ScreenUtil().setWidth(148),),
-                    /*SizedBox(
-              height: ScreenUtil().setWidth(120),
-            )*/
+                    const Spacer(),
+                    SizedBox(height: ScreenUtil().setWidth(148)),
                   ],
                 ),
               ),

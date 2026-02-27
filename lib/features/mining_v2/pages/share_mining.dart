@@ -55,11 +55,17 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
     if (widget.fromType == 0 || widget.fromType == 1) {
       return S.of(context).g_mining_key60;
     }
-    String topS = widget.astValue == 50
-        ? S.of(context).g_mining_key_67
-        : widget.astValue == 100
-        ? S.of(context).g_mining_key_66
-        : S.of(context).g_mining_key_68;
+    String topS;
+    switch (widget.astValue) {
+      case 50:
+        topS = S.of(context).g_mining_key_67;
+        break;
+      case 100:
+        topS = S.of(context).g_mining_key_66;
+        break;
+      default:
+        topS = S.of(context).g_mining_key_68;
+    }
     return S.of(context).g_mining_key63(topS);
   }
 

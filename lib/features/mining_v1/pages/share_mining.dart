@@ -16,13 +16,13 @@ class ShareMining extends StatefulWidget {
   final String? groupName;
   final String? groupId;
 
-  const ShareMining(
-      {Key? key,
-        this.fromType = 0,
-        this.astValue,
-        this.groupName,
-        this.groupId})
-      : super(key: key);
+  const ShareMining({
+    super.key,
+    this.fromType = 0,
+    this.astValue,
+    this.groupName,
+    this.groupId,
+  });
 
   @override
   State<ShareMining> createState() => _ShareMiningState();
@@ -33,16 +33,19 @@ class _ShareMiningState extends State<ShareMining> {
     if (widget.fromType == 0 || widget.fromType == 1) {
       return S.of(context).g_mining_key60;
     }
-    //括号内三种级别Entry, Advanced, Pro。
-    String topS = widget.astValue == 50
-        ? S.of(context).g_mining_key_67
-        : widget.astValue == 100
-        ? S.of(context).g_mining_key_66
-        : S.of(context).g_mining_key_68;
+    String topS;
+    switch (widget.astValue) {
+      case 50:
+        topS = S.of(context).g_mining_key_67;
+      case 100:
+        topS = S.of(context).g_mining_key_66;
+      default:
+        topS = S.of(context).g_mining_key_68;
+    }
     return S.of(context).g_mining_key63(topS);
   }
 
-  generateShareText() {
+  String generateShareText() {
     if (widget.fromType == 0 || widget.fromType == 1) {
       final shareUrl =
           "${AppConfig.apiUrl['walletamazeBrowser']}?type=group_mining&id=${widget.groupId}";
@@ -149,15 +152,12 @@ class _ShareMiningState extends State<ShareMining> {
                     margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(30),),
                     child: buttonStyle2(context, () async {
                       if (widget.fromType == 2) {
-                        globalMiningV1
-                            .setMiningType(MiningType.N);
+                        globalMiningV1.setMiningType(MiningType.N);
                       }
                       globalMiningV1.setDepositsEnable(true);
-                      //eventBus.fire(EventPublic(EventPublicType.finishPage));
                       eventBus.fire(EventPublic(EventPublicType.refreshMiningData));
                       eventBus.fire(EventPublic(EventPublicType.selectMiningplansPop));
-                      Navigator.pop(context,true);
-                      //Navigator.popUntil(context, ModalRoute.withName('/TodayMiningPage'));
+                      Navigator.pop(context, true);
                     }, S.of(context).g_mining_key62,
                     ),
                   ),
