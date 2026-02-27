@@ -209,20 +209,8 @@ class AppDatabase {
     }
     // Version 3: 加密数据库，结构无变化
     if (oldVersion < 4) {
-      // Version 4: 为高频查询字段添加索引，提升检索性能
+      // Version 4+5: 为高频查询字段添加索引（含复合索引），提升检索性能
       await _createIndexes(db);
-    }
-    if (oldVersion < 5) {
-      // Version 5: 添加复合索引（address+txTime），优化钱包历史列表查询
-      await db.execute(
-        'CREATE INDEX IF NOT EXISTS idx_tx_addr_time ON TransationRecord(address, txTime)',
-      );
-      await db.execute(
-        'CREATE INDEX IF NOT EXISTS idx_btc_addr_time ON BtcTransactionRecord(address, txTime)',
-      );
-      await db.execute(
-        'CREATE INDEX IF NOT EXISTS idx_msg_conv_time ON Messages(conversationId, sendTime)',
-      );
     }
   }
 

@@ -88,19 +88,16 @@ class PerformanceConfig {
   /// 平均帧时间（毫秒），无帧数据时返回 0
   static double get averageFrameTime {
     if (_frameRecords.isEmpty) return 0;
-    final total = _frameRecords.fold<int>(
-      0,
-      (sum, r) => sum + r.totalDuration,
-    );
+    final total =
+        _frameRecords.fold<int>(0, (sum, r) => sum + r.totalDuration);
     return total / _frameRecords.length / 1000; // 微秒 → 毫秒
   }
 
   /// Jank 帧占比（0-1），无帧数据时返回 0
   static double get jankRate {
     if (_frameRecords.isEmpty) return 0;
-    final jankCount = _frameRecords
-        .where((r) => r.totalDuration > _jankThresholdUs)
-        .length;
+    final jankCount =
+        _frameRecords.where((r) => r.totalDuration > _jankThresholdUs).length;
     return jankCount / _frameRecords.length;
   }
 
@@ -145,14 +142,11 @@ class ImageCacheConfig {
   /// 配置 Flutter 图片缓存
   ///
   /// [maxCacheSize] — 最大缓存条目数。
-  /// [maxCacheWidth] — 基于宽度估算的最大缓存字节数（width² × 4 bytes/px）。
+  /// [maxCacheWidth] — 基于宽度估算的最大缓存字节数（width² × 4 bytes/px，ARGB）。
   static void configure({int? maxCacheSize, int? maxCacheWidth}) {
     final cache = PaintingBinding.instance.imageCache;
-    if (maxCacheSize != null) {
-      cache.maximumSize = maxCacheSize;
-    }
+    if (maxCacheSize != null) cache.maximumSize = maxCacheSize;
     if (maxCacheWidth != null) {
-      // 用宽度的平方乘以 4（ARGB）估算最大字节数
       cache.maximumSizeBytes = maxCacheWidth * maxCacheWidth * 4;
     }
   }

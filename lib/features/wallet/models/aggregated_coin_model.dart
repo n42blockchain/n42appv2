@@ -125,13 +125,9 @@ class AggregatedCoinModel extends CoinModel {
 
   /// 更新某条链的余额
   void updateChainBalance(String chainSymbol, BigInt newBalance, String address) {
-    ChainTokenConfig? config;
-    for (final c in tokenConfig.chains) {
-      if (c.chainSymbol == chainSymbol) {
-        config = c;
-        break;
-      }
-    }
+    final config = tokenConfig.chains
+        .where((c) => c.chainSymbol == chainSymbol)
+        .firstOrNull;
     if (config == null) return; // 不支持的链静默返回
 
     chainBalances[chainSymbol.toUpperCase()] = ChainBalance(

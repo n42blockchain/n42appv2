@@ -79,19 +79,21 @@ class RpcConfig {
   static void validateSecurityInDebug() {
     if (!kDebugMode) return;
 
-    final insecureUrls = <String>[];
+    // 所有需要检查的可配置端点（static const 支持运行时覆盖，需纳入检查）
+    final checkTargets = <String, String>{
+      'BTC_TESTNET_RPC': btcTestnetRpc,
+      'BTC_MAINNET_RPC': btcMainnetRpc,
+    };
 
-    if (btcTestnetRpc.startsWith('http://')) {
-      insecureUrls.add('BTC_TESTNET_RPC: $btcTestnetRpc');
-    }
-    if (btcMainnetRpc.startsWith('http://')) {
-      insecureUrls.add('BTC_MAINNET_RPC: $btcMainnetRpc');
-    }
+    final insecureEntries = checkTargets.entries
+        .where((e) => e.value.startsWith('http://'))
+        .map((e) => '${e.key}: ${e.value}')
+        .toList();
 
-    if (insecureUrls.isNotEmpty) {
+    if (insecureEntries.isNotEmpty) {
       debugPrint('⚠️ [RpcConfig] WARNING: Insecure HTTP connections detected:');
-      for (final url in insecureUrls) {
-        debugPrint('   - $url');
+      for (final entry in insecureEntries) {
+        debugPrint('   - $entry');
       }
       debugPrint('   Consider upgrading to HTTPS or using VPN/proxy');
     }
@@ -105,13 +107,8 @@ class RpcConfig {
   /// 获取安全的 URL（如果可能）
   /// 如果没有 HTTPS 替代方案，返回原 URL 并打印警告
   static String getSecureUrl(String url, {String? fallbackHttps}) {
-    if (isSecureUrl(url)) {
-      return url;
-    }
-
-    if (fallbackHttps != null) {
-      return fallbackHttps;
-    }
+    if (isSecureUrl(url)) return url;
+    if (fallbackHttps != null) return fallbackHttps;
 
     if (kDebugMode) {
       debugPrint('⚠️ [RpcConfig] Using insecure URL: $url');

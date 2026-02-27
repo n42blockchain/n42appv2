@@ -96,8 +96,7 @@ class WalletDataMigration {
   /// 获取钱包唯一标识
   String _getWalletId(Map<String, dynamic> wallet, String userUuid, int index) {
     // 优先使用 timestamp，否则使用 userUuid + index
-    final timestamp = wallet['timestamp'] as String?;
-    return timestamp ?? '${userUuid}_$index';
+    return (wallet['timestamp'] as String?) ?? '${userUuid}_$index';
   }
 
   /// 迁移单个钱包的敏感数据
@@ -107,10 +106,7 @@ class WalletDataMigration {
     // 迁移助记词
     final mnemonic = wallet['mnemonic'] as String?;
     if (mnemonic != null && mnemonic.isNotEmpty) {
-      await _secureStorage.saveMnemonic(
-        walletId: walletId,
-        mnemonic: mnemonic,
-      );
+      await _secureStorage.saveMnemonic(walletId: walletId, mnemonic: mnemonic);
       migratedFields++;
       debugPrint('[WalletDataMigration] Migrated mnemonic for wallet: $walletId');
     }
@@ -118,10 +114,7 @@ class WalletDataMigration {
     // 迁移私钥
     final privateKey = wallet['privateKey'] as String?;
     if (privateKey != null && privateKey.isNotEmpty) {
-      await _secureStorage.savePrivateKey(
-        address: walletId,
-        privateKey: privateKey,
-      );
+      await _secureStorage.savePrivateKey(address: walletId, privateKey: privateKey);
       migratedFields++;
       debugPrint('[WalletDataMigration] Migrated privateKey for wallet: $walletId');
     }
@@ -140,24 +133,15 @@ class WalletDataMigration {
   /// 清理钱包数据，移除敏感信息
   Map<String, dynamic> _sanitizeWalletData(Map<String, dynamic> wallet) {
     final sanitized = Map<String, dynamic>.from(wallet);
-
-    // 移除敏感字段，用占位符替代以保持向后兼容
-    if (sanitized.containsKey('mnemonic')) {
-      sanitized['mnemonic'] = null; // 标记为已迁移
+    // 移除敏感字段，用 null 替代以保持向后兼容
+    for (final field in ['mnemonic', 'privateKey', 'password']) {
+      if (sanitized.containsKey(field)) sanitized[field] = null;
     }
-    if (sanitized.containsKey('privateKey')) {
-      sanitized['privateKey'] = null;
-    }
-    if (sanitized.containsKey('password')) {
-      sanitized['password'] = null;
-    }
-
     return sanitized;
   }
 
   /// 保存钱包密码到 SecureStorage
   Future<void> _saveWalletPassword(String walletId, String password) async {
-    // 使用 saveWalletCredentials 方法存储密码
     await _secureStorage.saveWalletCredentials(
       address: '$_walletPasswordPrefix$walletId',
       credentials: {'password': password},
@@ -189,12 +173,8 @@ class WalletDataMigration {
 /// 扩展 SecureStorage 以支持钱包凭证访问
 extension WalletCredentialsExtension on SecureStorage {
   /// 获取迁移后的助记词
-  Future<String?> getWalletMnemonic(String walletId) async {
-    return getMnemonic(walletId);
-  }
+  Future<String?> getWalletMnemonic(String walletId) => getMnemonic(walletId);
 
   /// 获取迁移后的私钥
-  Future<String?> getWalletPrivateKey(String walletId) async {
-    return getPrivateKey(walletId);
-  }
+  Future<String?> getWalletPrivateKey(String walletId) => getPrivateKey(walletId);
 }

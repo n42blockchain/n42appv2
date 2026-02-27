@@ -34,10 +34,10 @@ enum DeepLinkType {
 class DeepLinkData {
   /// 链接类型
   final DeepLinkType type;
-  
+
   /// 原始 URI
   final Uri uri;
-  
+
   /// 解析的参数
   final Map<String, String> params;
 
@@ -52,48 +52,38 @@ class DeepLinkData {
 }
 
 /// Deep Link 服务
-/// 
+///
 /// 统一处理 Android 和 iOS 的 Deep Link
 class DeepLinkService {
-  late final AppLinks _appLinks;
+  final _appLinks = AppLinks();
   StreamSubscription<Uri>? _subscription;
-  
+
   /// Deep Link 流控制器
   final _deepLinkController = StreamController<DeepLinkData>.broadcast();
-  
+
   /// Deep Link 流
   Stream<DeepLinkData> get deepLinkStream => _deepLinkController.stream;
-  
-  /// 最后一个 Deep Link
-  DeepLinkData? _lastDeepLink;
-  DeepLinkData? get lastDeepLink => _lastDeepLink;
 
-  DeepLinkService() {
-    _appLinks = AppLinks();
-  }
+  DeepLinkData? _lastDeepLink;
+
+  /// 最后一个 Deep Link
+  DeepLinkData? get lastDeepLink => _lastDeepLink;
 
   /// 初始化服务
   Future<void> init() async {
-    // 处理应用启动时的 Deep Link
     try {
       final initialUri = await _appLinks.getInitialLink();
-      if (initialUri != null) {
-        _handleUri(initialUri);
-      }
+      if (initialUri != null) _handleUri(initialUri);
     } catch (e) {
       debugPrint('Failed to get initial link: $e');
     }
 
-    // 监听运行时的 Deep Link
     _subscription = _appLinks.uriLinkStream.listen(
       _handleUri,
-      onError: (e) {
-        debugPrint('Deep link stream error: $e');
-      },
+      onError: (e) => debugPrint('Deep link stream error: $e'),
     );
   }
 
-  /// 处理 URI
   void _handleUri(Uri uri) {
     // 仅在 debug 模式打印完整 URI，避免 release 模式泄露 symKey 等敏感参数
     assert(() {
@@ -106,9 +96,7 @@ class DeepLinkService {
     _deepLinkController.add(data);
   }
 
-  /// 解析 URI
   DeepLinkData _parseUri(Uri uri) {
-    // 处理 WalletConnect
     if (_isWalletConnectUri(uri)) {
       return DeepLinkData(
         type: DeepLinkType.walletConnect,
@@ -116,57 +104,38 @@ class DeepLinkService {
         params: {'wcUri': uri.toString()},
       );
     }
-
-    // 处理 n42:// scheme
     if (uri.scheme == 'n42' || uri.scheme == 'n42app') {
       return _parseN42Uri(uri);
     }
-
-    // 处理应用 scheme (astraapp://)
     if (uri.scheme == 'astraapp') {
       return _parseAstraAppUri(uri);
     }
-
-    return DeepLinkData(
-      type: DeepLinkType.unknown,
-      uri: uri,
-      params: uri.queryParameters,
-    );
+    return _unknownLink(uri, uri.queryParameters);
   }
 
-  /// 检查是否是 WalletConnect URI
-  ///
   /// WalletConnect v2 URI 格式: wc:{topic}@2?relay-protocol=irn&symKey=...
   /// 也支持通过其他 scheme 传入的 WC URI（query 中包含 relay-protocol + symKey）
   bool _isWalletConnectUri(Uri uri) {
     if (uri.scheme == 'wc') return true;
-    final uriString = uri.toString();
-    return uriString.contains('relay-protocol') &&
-           uriString.contains('symKey');
+    final s = uri.toString();
+    return s.contains('relay-protocol') && s.contains('symKey');
   }
 
-  /// 解析 AstraApp URI
   DeepLinkData _parseAstraAppUri(Uri uri) {
     final params = uri.queryParameters;
-    final type = params['type'];
-
-    switch (type) {
+    switch (params['type']) {
       case 'group_mining':
         return DeepLinkData(
           type: DeepLinkType.groupMining,
           uri: uri,
-          params: {
-            'groupId': params['id'] ?? '',
-          },
+          params: {'groupId': params['id'] ?? ''},
         );
-      
       case 'full_node':
         return DeepLinkData(
           type: DeepLinkType.fullNode,
           uri: uri,
           params: params,
         );
-      
       case 'friendCard':
         return DeepLinkData(
           type: DeepLinkType.friendCard,
@@ -176,18 +145,11 @@ class DeepLinkService {
             'email': params['email'] ?? '',
           },
         );
-      
       default:
-        return DeepLinkData(
-          type: DeepLinkType.unknown,
-          uri: uri,
-          params: params,
-        );
+        return _unknownLink(uri, params);
     }
   }
 
-  /// 解析 N42 URI
-  ///
   /// 支持格式:
   /// - n42://chat/{roomId} - 打开指定聊天
   /// - n42://user/{userId} - 打开用户主页
@@ -202,20 +164,13 @@ class DeepLinkService {
     String id;
 
     if (host.isNotEmpty && knownActions.contains(host)) {
-      // n42://chat/roomId 格式: host 是 action，path 第一段是 id
       action = host;
-      final pathSegments = uri.pathSegments;
-      id = pathSegments.isNotEmpty ? pathSegments.first : '';
+      id = uri.pathSegments.isNotEmpty ? uri.pathSegments.first : '';
     } else if (uri.pathSegments.isNotEmpty) {
-      // 路径式格式: n42:///chat/roomId 或 host 不是已知 action
       action = uri.pathSegments.first;
       id = uri.pathSegments.length > 1 ? uri.pathSegments[1] : '';
     } else {
-      return DeepLinkData(
-        type: DeepLinkType.unknown,
-        uri: uri,
-        params: uri.queryParameters,
-      );
+      return _unknownLink(uri, uri.queryParameters);
     }
 
     switch (action) {
@@ -238,18 +193,15 @@ class DeepLinkService {
           params: {'groupId': id, ...uri.queryParameters},
         );
       default:
-        return DeepLinkData(
-          type: DeepLinkType.unknown,
-          uri: uri,
-          params: uri.queryParameters,
-        );
+        return _unknownLink(uri, uri.queryParameters);
     }
   }
 
+  DeepLinkData _unknownLink(Uri uri, Map<String, String> params) =>
+      DeepLinkData(type: DeepLinkType.unknown, uri: uri, params: params);
+
   /// 手动处理 URI
-  void handleUri(Uri uri) {
-    _handleUri(uri);
-  }
+  void handleUri(Uri uri) => _handleUri(uri);
 
   /// 清除最后一个 Deep Link
   void clearLastDeepLink() {
@@ -262,4 +214,3 @@ class DeepLinkService {
     await _deepLinkController.close();
   }
 }
-

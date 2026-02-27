@@ -39,20 +39,16 @@ sealed class Result<T, E> {
   bool get isFailure => this is Failure<T, E>;
 
   /// Returns the success value or null if this is a failure
-  T? get valueOrNull {
-    if (this is Success<T, E>) {
-      return (this as Success<T, E>).value;
-    }
-    return null;
-  }
+  T? get valueOrNull => switch (this) {
+    Success(value: final v) => v,
+    Failure() => null,
+  };
 
   /// Returns the error or null if this is a success
-  E? get errorOrNull {
-    if (this is Failure<T, E>) {
-      return (this as Failure<T, E>).error;
-    }
-    return null;
-  }
+  E? get errorOrNull => switch (this) {
+    Success() => null,
+    Failure(error: final e) => e,
+  };
 
   /// Returns the value if success, or the result of [orElse] if failure
   T getOrElse(T Function(E error) orElse) {
@@ -304,17 +300,13 @@ final class UnknownError extends AppError {
 extension ResultExtensions<T, E> on Result<T, E> {
   /// Execute side effect on success
   Result<T, E> onSuccess(void Function(T value) action) {
-    if (this is Success<T, E>) {
-      action((this as Success<T, E>).value);
-    }
+    if (this case Success(value: final v)) action(v);
     return this;
   }
 
   /// Execute side effect on failure
   Result<T, E> onFailure(void Function(E error) action) {
-    if (this is Failure<T, E>) {
-      action((this as Failure<T, E>).error);
-    }
+    if (this case Failure(error: final e)) action(e);
     return this;
   }
 }

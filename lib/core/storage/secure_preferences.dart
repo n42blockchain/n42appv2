@@ -57,15 +57,11 @@ class SecurePreferences {
   Future<void> _migrateFromSharedPreferences() async {
     for (final key in _sensitiveKeys) {
       try {
-        // 检查 SharedPreferences 中是否有此键
         final value = _prefs?.getString(key);
         if (value != null && value.isNotEmpty) {
-          // 检查 SecureStorage 中是否已有此键
           final secureValue = await _secureStorage.read(key: key);
           if (secureValue == null) {
-            // 迁移到 SecureStorage
             await _secureStorage.write(key: key, value: value);
-            // 从 SharedPreferences 中删除
             await _prefs?.remove(key);
             if (kDebugMode) {
               debugPrint('[SecurePreferences] Migrated key: $key');
@@ -80,30 +76,48 @@ class SecurePreferences {
     }
   }
 
+  /// 从安全存储读取并解码 JSON 对象，失败时返回 null
+  Future<Map<String, dynamic>?> _readSecureJson(String key) async {
+    final data = await _secureStorage.read(key: key);
+    if (data == null || data.isEmpty) return null;
+    try {
+      return jsonDecode(data) as Map<String, dynamic>;
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('[SecurePreferences] Failed to decode $key: $e');
+      }
+      return null;
+    }
+  }
+
+  /// 读取安全存储中的 Map，更新指定 uuid 对应的值，再写回
+  Future<void> _updateSecureMap(
+    String key,
+    String uuid,
+    Map<String, dynamic> value,
+  ) async {
+    Map<String, dynamic> allData = {};
+    final existing = await _secureStorage.read(key: key);
+    if (existing != null && existing.isNotEmpty) {
+      try {
+        allData = jsonDecode(existing) as Map<String, dynamic>;
+      } catch (_) {
+        // JSON 解析失败时使用默认值，安全忽略
+      }
+    }
+    allData[uuid] = value;
+    await _secureStorage.write(key: key, value: jsonEncode(allData));
+  }
+
   // ==================== 钱包信息（敏感） ====================
 
   /// 保存钱包信息
   Future<void> setWalletInfo(Map<String, dynamic> map) async {
-    await _secureStorage.write(
-      key: 'walletInfo',
-      value: jsonEncode(map),
-    );
+    await _secureStorage.write(key: 'walletInfo', value: jsonEncode(map));
   }
 
   /// 获取钱包信息
-  Future<Map<String, dynamic>?> getWalletInfo() async {
-    final data = await _secureStorage.read(key: 'walletInfo');
-    if (data != null && data.isNotEmpty) {
-      try {
-        return jsonDecode(data) as Map<String, dynamic>;
-      } catch (e) {
-        if (kDebugMode) {
-          debugPrint('[SecurePreferences] Failed to decode walletInfo: $e');
-        }
-      }
-    }
-    return null;
-  }
+  Future<Map<String, dynamic>?> getWalletInfo() => _readSecureJson('walletInfo');
 
   /// 删除钱包信息
   Future<void> removeWalletInfo() async {
@@ -114,63 +128,23 @@ class SecurePreferences {
 
   /// 保存安全设置
   Future<void> setSecurity(Map<String, dynamic> value) async {
-    await _secureStorage.write(
-      key: 'security',
-      value: jsonEncode(value),
-    );
+    await _secureStorage.write(key: 'security', value: jsonEncode(value));
   }
 
   /// 获取安全设置
-  Future<Map<String, dynamic>?> getSecurity() async {
-    final data = await _secureStorage.read(key: 'security');
-    if (data != null && data.isNotEmpty) {
-      try {
-        return jsonDecode(data) as Map<String, dynamic>;
-      } catch (e) {
-        if (kDebugMode) {
-          debugPrint('[SecurePreferences] Failed to decode security: $e');
-        }
-      }
-    }
-    return null;
-  }
+  Future<Map<String, dynamic>?> getSecurity() => _readSecureJson('security');
 
   // ==================== 锁屏设置（敏感） ====================
 
   /// 保存锁屏设置
   Future<void> setLockScreen(String uuid, Map<String, dynamic> value) async {
-    // 获取现有数据
-    Map<String, dynamic> allData = {};
-    final existing = await _secureStorage.read(key: 'lockScreen');
-    if (existing != null && existing.isNotEmpty) {
-      try {
-        allData = jsonDecode(existing) as Map<String, dynamic>;
-      } catch (_) {
-        // JSON 解析失败时使用默认值，安全忽略
-      }
-    }
-    // 更新指定用户的数据
-    allData[uuid] = value;
-    await _secureStorage.write(
-      key: 'lockScreen',
-      value: jsonEncode(allData),
-    );
+    await _updateSecureMap('lockScreen', uuid, value);
   }
 
   /// 获取锁屏设置
   Future<Map<String, dynamic>?> getLockScreen(String uuid) async {
-    final data = await _secureStorage.read(key: 'lockScreen');
-    if (data != null && data.isNotEmpty) {
-      try {
-        final allData = jsonDecode(data) as Map<String, dynamic>;
-        return allData[uuid] as Map<String, dynamic>?;
-      } catch (e) {
-        if (kDebugMode) {
-          debugPrint('[SecurePreferences] Failed to decode lockScreen: $e');
-        }
-      }
-    }
-    return null;
+    final allData = await _readSecureJson('lockScreen');
+    return allData?[uuid] as Map<String, dynamic>?;
   }
 
   // ==================== 用户信息（敏感） ====================
@@ -180,26 +154,24 @@ class SecurePreferences {
     if (value == null) {
       await _secureStorage.delete(key: 'userInfo');
     } else {
-      await _secureStorage.write(
-        key: 'userInfo',
-        value: jsonEncode(value),
-      );
+      await _secureStorage.write(key: 'userInfo', value: jsonEncode(value));
     }
   }
 
   /// 获取用户信息
-  Future<Map<String, dynamic>?> getUserInfo() async {
-    final data = await _secureStorage.read(key: 'userInfo');
-    if (data != null && data.isNotEmpty) {
-      try {
-        return jsonDecode(data) as Map<String, dynamic>;
-      } catch (e) {
-        if (kDebugMode) {
-          debugPrint('[SecurePreferences] Failed to decode userInfo: $e');
-        }
-      }
-    }
-    return null;
+  Future<Map<String, dynamic>?> getUserInfo() => _readSecureJson('userInfo');
+
+  // ==================== 挖矿数据（敏感） ====================
+
+  /// 保存挖矿数据
+  Future<void> setMiningData(String uuid, Map<String, dynamic> value) async {
+    await _updateSecureMap('miningData', uuid, value);
+  }
+
+  /// 获取挖矿数据
+  Future<Map<String, dynamic>?> getMiningData(String uuid) async {
+    final allData = await _readSecureJson('miningData');
+    return allData?[uuid] as Map<String, dynamic>?;
   }
 
   // ==================== 非敏感数据（使用 SharedPreferences） ====================
@@ -232,14 +204,12 @@ class SecurePreferences {
   Future<Map<String, dynamic>?> getBrowserSetting() async {
     await init();
     final data = _prefs?.getString('browserSetting');
-    if (data != null && data.isNotEmpty) {
-      try {
-        return jsonDecode(data) as Map<String, dynamic>;
-      } catch (_) {
-        // JSON 解析失败时使用默认值，安全忽略
-      }
+    if (data == null || data.isEmpty) return null;
+    try {
+      return jsonDecode(data) as Map<String, dynamic>;
+    } catch (_) {
+      return null;
     }
-    return null;
   }
 
   /// 设置浏览器设置
@@ -294,42 +264,6 @@ class SecurePreferences {
   Future<void> setBackgroundMiningMusic(int value) async {
     await init();
     await _prefs?.setInt('backgroundMiningMusic', value);
-  }
-
-  // ==================== 挖矿数据（敏感） ====================
-
-  /// 保存挖矿数据
-  Future<void> setMiningData(String uuid, Map<String, dynamic> value) async {
-    Map<String, dynamic> allData = {};
-    final existing = await _secureStorage.read(key: 'miningData');
-    if (existing != null && existing.isNotEmpty) {
-      try {
-        allData = jsonDecode(existing) as Map<String, dynamic>;
-      } catch (_) {
-        // JSON 解析失败时使用默认值，安全忽略
-      }
-    }
-    allData[uuid] = value;
-    await _secureStorage.write(
-      key: 'miningData',
-      value: jsonEncode(allData),
-    );
-  }
-
-  /// 获取挖矿数据
-  Future<Map<String, dynamic>?> getMiningData(String uuid) async {
-    final data = await _secureStorage.read(key: 'miningData');
-    if (data != null && data.isNotEmpty) {
-      try {
-        final allData = jsonDecode(data) as Map<String, dynamic>;
-        return allData[uuid] as Map<String, dynamic>?;
-      } catch (e) {
-        if (kDebugMode) {
-          debugPrint('[SecurePreferences] Failed to decode miningData: $e');
-        }
-      }
-    }
-    return null;
   }
 
   // ==================== 清理方法 ====================

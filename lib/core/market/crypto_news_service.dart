@@ -42,13 +42,12 @@ class NewsArticle {
     }
 
     final imgRaw = json['imageurl']?.toString() ?? '';
-    final imgUrl = imgRaw.isNotEmpty ? imgRaw : null;
 
     return NewsArticle(
       id: json['id']?.toString() ?? '',
       title: json['title']?.toString() ?? '',
       url: json['url']?.toString() ?? '',
-      imageUrl: imgUrl,
+      imageUrl: imgRaw.isNotEmpty ? imgRaw : null,
       sourceName: srcName,
       publishedAt: ts > 0
           ? DateTime.fromMillisecondsSinceEpoch(ts * 1000)
@@ -83,11 +82,11 @@ class CryptoNewsService {
   static DateTime? _cachedAt;
 
   static Future<List<NewsArticle>> fetchLatest() async {
-    if (_cached != null && _cachedAt != null) {
-      if (DateTime.now().difference(_cachedAt!) <
-          const Duration(minutes: 15)) {
-        return _cached!;
-      }
+    final cachedAt = _cachedAt;
+    if (_cached != null &&
+        cachedAt != null &&
+        DateTime.now().difference(cachedAt) < const Duration(minutes: 15)) {
+      return _cached!;
     }
     try {
       final raw = await BaseApi.requestEmptyH.get<dynamic>(
@@ -101,8 +100,7 @@ class CryptoNewsService {
 
       final articles = data
           .whereType<Map<dynamic, dynamic>>()
-          .map((m) => NewsArticle.fromCryptoCompare(
-              Map<String, dynamic>.from(m)))
+          .map((m) => NewsArticle.fromCryptoCompare(Map<String, dynamic>.from(m)))
           .where((a) => a.title.isNotEmpty && a.url.isNotEmpty)
           .toList();
 

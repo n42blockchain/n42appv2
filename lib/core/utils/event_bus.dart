@@ -97,5 +97,3 @@ enum EventPublicType {
   /// Browser URL blocked
   blockUri,
 }
-
-

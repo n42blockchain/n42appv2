@@ -17,6 +17,38 @@ import 'package:injectable/injectable.dart';
 class SecureStorage {
   late final FlutterSecureStorage _storage;
 
+  // 存储键名常量
+  static const String _keyToken = 'auth_token';
+  static const String _keyUuid = 'user_uuid';
+  static const String _keyEmail = 'user_email';
+  static const String _keyUserInfo = 'user_info';
+  static const String _keyWalletPrefix = 'wallet_';
+  static const String _keyMnemonicPrefix = 'mnemonic_';
+  static const String _keyPrivateKeyPrefix = 'pk_';
+  static const String _keyBiometricEnabled = 'biometric_enabled';
+  static const String _keyGesturePassword = 'gesture_password';
+  static const String _keyDeviceId = 'n42_device_id';
+
+  SecureStorage() {
+    _storage = const FlutterSecureStorage(
+      // Android：flutter_secure_storage v9+ 默认使用 AES-256-GCM custom cipher，
+      // 同时加密 key 和 value，防止通过文件系统侧信道推断内容。
+      // 注意：encryptedSharedPreferences (Jetpack Security) 在 v11 中已废弃，
+      // 库会在首次访问时自动将旧数据迁移到 custom cipher，无需额外配置。
+      aOptions: AndroidOptions(
+        sharedPreferencesName: 'n42_secure_prefs',
+        preferencesKeyPrefix: 'n42_',
+      ),
+      // iOS：first_unlock_this_device
+      // - 设备重启后首次解锁即可访问（适合 App 后台唤醒场景）
+      // - 不同步到 iCloud Keychain / 不迁移到新设备（钱包密钥适合此级别）
+      iOptions: IOSOptions(
+        accessibility: KeychainAccessibility.first_unlock_this_device,
+        accountName: 'n42wallet',
+      ),
+    );
+  }
+
   /// 安全擦除字节数组
   ///
   /// 将数据覆写为零，防止内存残留
@@ -56,41 +88,9 @@ class SecureStorage {
   static SensitiveData<T> wrapSensitive<T>(T data) {
     return SensitiveData<T>(data);
   }
-  
-  // 存储键名常量
-  static const String _keyToken = 'auth_token';
-  static const String _keyUuid = 'user_uuid';
-  static const String _keyEmail = 'user_email';
-  static const String _keyUserInfo = 'user_info';
-  static const String _keyWalletPrefix = 'wallet_';
-  static const String _keyMnemonicPrefix = 'mnemonic_';
-  static const String _keyPrivateKeyPrefix = 'pk_';
-  static const String _keyBiometricEnabled = 'biometric_enabled';
-  static const String _keyGesturePassword = 'gesture_password';
-  static const String _keyDeviceId = 'n42_device_id';
-
-  SecureStorage() {
-    _storage = const FlutterSecureStorage(
-      // Android：flutter_secure_storage v9+ 默认使用 AES-256-GCM custom cipher，
-      // 同时加密 key 和 value，防止通过文件系统侧信道推断内容。
-      // 注意：encryptedSharedPreferences (Jetpack Security) 在 v11 中已废弃，
-      // 库会在首次访问时自动将旧数据迁移到 custom cipher，无需额外配置。
-      aOptions: AndroidOptions(
-        sharedPreferencesName: 'n42_secure_prefs',
-        preferencesKeyPrefix: 'n42_',
-      ),
-      // iOS：first_unlock_this_device
-      // - 设备重启后首次解锁即可访问（适合 App 后台唤醒场景）
-      // - 不同步到 iCloud Keychain / 不迁移到新设备（钱包密钥适合此级别）
-      iOptions: IOSOptions(
-        accessibility: KeychainAccessibility.first_unlock_this_device,
-        accountName: 'n42wallet',
-      ),
-    );
-  }
 
   // ==================== Token 管理 ====================
-  
+
   /// 保存认证 Token
   Future<void> saveToken(String token) async {
     await _storage.write(key: _keyToken, value: token);
@@ -107,7 +107,7 @@ class SecureStorage {
   }
 
   // ==================== 用户信息 ====================
-  
+
   /// 保存用户 UUID
   Future<void> saveUuid(String uuid) async {
     await _storage.write(key: _keyUuid, value: uuid);
@@ -151,7 +151,7 @@ class SecureStorage {
   }
 
   // ==================== 钱包凭证 ====================
-  
+
   /// 保存钱包信息
   Future<void> saveWalletCredentials({
     required String address,
@@ -181,19 +181,15 @@ class SecureStorage {
   }
 
   // ==================== 助记词管理 ====================
-  
+
   /// 保存助记词（加密存储）
-  /// 
+  ///
   /// ⚠️ 助记词是极度敏感的信息，必须加密存储
   Future<void> saveMnemonic({
     required String walletId,
     required String mnemonic,
   }) async {
-    // 额外的内存保护：使用后立即清除
-    await _storage.write(
-      key: '$_keyMnemonicPrefix$walletId',
-      value: mnemonic,
-    );
+    await _storage.write(key: '$_keyMnemonicPrefix$walletId', value: mnemonic);
   }
 
   /// 获取助记词
@@ -207,18 +203,15 @@ class SecureStorage {
   }
 
   // ==================== 私钥管理 ====================
-  
+
   /// 保存私钥（加密存储）
-  /// 
+  ///
   /// ⚠️ 私钥是极度敏感的信息，必须加密存储
   Future<void> savePrivateKey({
     required String address,
     required String privateKey,
   }) async {
-    await _storage.write(
-      key: '$_keyPrivateKeyPrefix$address',
-      value: privateKey,
-    );
+    await _storage.write(key: '$_keyPrivateKeyPrefix$address', value: privateKey);
   }
 
   /// 获取私钥
@@ -232,13 +225,10 @@ class SecureStorage {
   }
 
   // ==================== 安全设置 ====================
-  
+
   /// 设置生物识别启用状态
   Future<void> setBiometricEnabled(bool enabled) async {
-    await _storage.write(
-      key: _keyBiometricEnabled,
-      value: enabled.toString(),
-    );
+    await _storage.write(key: _keyBiometricEnabled, value: enabled.toString());
   }
 
   /// 获取生物识别启用状态
@@ -249,10 +239,7 @@ class SecureStorage {
 
   /// 保存手势密码
   Future<void> saveGesturePassword(List<int> pattern) async {
-    await _storage.write(
-      key: _keyGesturePassword,
-      value: jsonEncode(pattern),
-    );
+    await _storage.write(key: _keyGesturePassword, value: jsonEncode(pattern));
   }
 
   /// 获取手势密码
@@ -285,7 +272,7 @@ class SecureStorage {
   }
 
   // ==================== 通用方法 ====================
-  
+
   /// 清除所有存储数据
   Future<void> clearAll() async {
     await _storage.deleteAll();
@@ -293,18 +280,19 @@ class SecureStorage {
 
   /// 清除用户相关数据（登出时调用）
   Future<void> clearUserData() async {
-    await deleteToken();
-    await _storage.delete(key: _keyUuid);
-    await _storage.delete(key: _keyEmail);
-    await _storage.delete(key: _keyUserInfo);
+    await Future.wait([
+      _storage.delete(key: _keyToken),
+      _storage.delete(key: _keyUuid),
+      _storage.delete(key: _keyEmail),
+      _storage.delete(key: _keyUserInfo),
+    ]);
   }
 
   /// 检查是否有存储的凭证
   Future<bool> hasCredentials() async {
     final token = await getToken();
     final uuid = await getUuid();
-    return token != null && token.isNotEmpty &&
-           uuid != null && uuid.isNotEmpty;
+    return token != null && token.isNotEmpty && uuid != null && uuid.isNotEmpty;
   }
 }
 
@@ -331,9 +319,7 @@ class SensitiveData<T> {
   ///
   /// 如果已被 dispose 则抛出异常
   T get value {
-    if (_disposed) {
-      throw StateError('SensitiveData has been disposed');
-    }
+    if (_disposed) throw StateError('SensitiveData has been disposed');
     return _value as T;
   }
 
@@ -344,7 +330,6 @@ class SensitiveData<T> {
   void dispose() {
     if (_disposed) return;
 
-    // 尝试清除数据
     if (_value is Uint8List) {
       SecureStorage.secureWipeBytes(_value as Uint8List);
     } else if (_value is List<int>) {
@@ -358,4 +343,3 @@ class SensitiveData<T> {
     _disposed = true;
   }
 }
-

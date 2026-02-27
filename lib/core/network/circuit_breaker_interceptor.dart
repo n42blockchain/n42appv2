@@ -89,7 +89,9 @@ class CircuitBreakerInterceptor extends Interceptor {
       case CircuitState.halfOpen:
         handler.next(options);
       case CircuitState.open:
-        if (_shouldAttemptRecovery()) {
+        if (_lastFailureTime != null &&
+            DateTime.now().difference(_lastFailureTime!) >=
+                config.recoveryTimeout) {
           _state = CircuitState.halfOpen;
           handler.next(options);
         } else {
@@ -108,47 +110,26 @@ class CircuitBreakerInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    _recordSuccess();
+    _failureCount = 0;
+    _state = CircuitState.closed;
     handler.next(response);
   }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     if (_isTripError(err)) {
-      _recordFailure();
+      _failureCount++;
+      _lastFailureTime = DateTime.now();
+      if (_failureCount >= config.failureThreshold) {
+        _state = CircuitState.open;
+      }
     }
     handler.next(err);
   }
 
-  /// Whether enough time has elapsed since the last failure to allow a probe.
-  bool _shouldAttemptRecovery() {
-    if (_lastFailureTime == null) return true;
-    return DateTime.now().difference(_lastFailureTime!) >=
-        config.recoveryTimeout;
-  }
-
-  /// Record a successful response — resets the failure counter and closes
-  /// the circuit.
-  void _recordSuccess() {
-    _failureCount = 0;
-    _state = CircuitState.closed;
-  }
-
-  /// Record a trip-eligible failure. Opens the circuit when the threshold
-  /// is reached.
-  void _recordFailure() {
-    _failureCount++;
-    _lastFailureTime = DateTime.now();
-    if (_failureCount >= config.failureThreshold) {
-      _state = CircuitState.open;
-    }
-  }
-
   /// Whether the error type should count towards tripping the circuit.
   bool _isTripError(DioException err) {
-    if (config.tripExceptionTypes.contains(err.type)) {
-      return true;
-    }
+    if (config.tripExceptionTypes.contains(err.type)) return true;
     if (err.type == DioExceptionType.badResponse) {
       final code = err.response?.statusCode;
       return code != null && config.tripStatusCodes.contains(code);

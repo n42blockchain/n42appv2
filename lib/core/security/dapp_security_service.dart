@@ -249,19 +249,15 @@ class DAppPermissionsTracker {
 
   // ── Private helpers ───────────────────────────────────────────────────────
 
+  static Future<SharedPreferences> _prefs() => SharedPreferences.getInstance();
+
   static Future<Map<String, List<String>>> _load() async {
     if (_mem != null) return Map.from(_mem!);
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final raw = prefs.getString(_spKey);
+      final raw = (await _prefs()).getString(_spKey);
       if (raw == null) return {};
-      final decoded = json.decode(raw) as Map<String, dynamic>;
-      return decoded.map(
-        (k, v) => MapEntry(
-          k,
-          (v as List).cast<String>(),
-        ),
-      );
+      final decoded = jsonDecode(raw) as Map<String, dynamic>;
+      return decoded.map((k, v) => MapEntry(k, (v as List).cast<String>()));
     } catch (e) {
       debugPrint('DAppPermissionsTracker._load error: $e');
       return {};
@@ -270,8 +266,7 @@ class DAppPermissionsTracker {
 
   static Future<void> _save(Map<String, List<String>> map) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(_spKey, json.encode(map));
+      await (await _prefs()).setString(_spKey, jsonEncode(map));
     } catch (e) {
       debugPrint('DAppPermissionsTracker._save error: $e');
     }

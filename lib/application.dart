@@ -1,15 +1,16 @@
+import 'package:flutter/material.dart';
+
 import 'package:n42_wallet/core/providers/core_providers.dart';
+import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/data/models/user_info.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
 import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
-import 'package:n42_wallet/core/storage/sp_util.dart';
-import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
-import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
-import 'package:flutter/material.dart';
-import 'package:n42_wallet/data/models/user_info.dart';
 
 /// Legacy Application class - 已部分迁移到 Riverpod
-/// 
+///
 /// 保留此类以兼容旧代码，新代码应使用 AppGlobals 和 Riverpod
 @Deprecated('Use AppGlobals and Riverpod providers instead')
 class Application {
@@ -19,30 +20,25 @@ class Application {
   static RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
   static UserInfo? userInfo;
   static int currentId = 0;
-  
+
   /// 用户登录
-  static Future login(UserInfo info) async {
+  static Future<void> login(UserInfo info) async {
     userInfo = info;
-    // 更新 Riverpod 状态
-    globalProviderContainer.read(currentUserProvider.notifier).setUser(
-      SharedUserInfo.fromLegacyUserInfo(info),
-    );
-    // 刷新钱包列表
+    globalProviderContainer
+        .read(currentUserProvider.notifier)
+        .setUser(SharedUserInfo.fromLegacyUserInfo(info));
     globalProviderContainer.invalidate(walletListProvider);
-    // 通过 Legacy Provider 初始化钱包
     globalWapAdapter.initWallet(shouldInitCoinInfo: true);
     globalWcpInstance.cleanDataLogout();
   }
-  
+
   /// 用户退出
-  static Future logout() async {
+  static Future<void> logout() async {
     try {
       await SPUtil().saveUserInfo(null);
-      Application.userInfo = null;
-      // 清除 Riverpod 状态
+      userInfo = null;
       globalProviderContainer.read(currentUserProvider.notifier).clearUser();
       globalProviderContainer.invalidate(walletListProvider);
-      // 通过 Legacy Provider 清理
       if (!AppContext.mounted) return;
       globalWapAdapter.initWallet();
       globalWcpInstance.cleanDataLogout();

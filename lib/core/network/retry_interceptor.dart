@@ -86,13 +86,9 @@ class RetryInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    if (!_isRetryable(err)) {
-      return handler.next(err);
-    }
-
     final options = err.requestOptions;
 
-    if (!_shouldRetry(options)) {
+    if (!_isRetryable(err) || !_shouldRetry(options)) {
       return handler.next(err);
     }
 
@@ -104,8 +100,6 @@ class RetryInterceptor extends Interceptor {
       return handler.next(err);
     }
 
-    final delay = _calculateDelay(attempt, err);
-
     // Check if request was cancelled before waiting.
     if (options.cancelToken?.isCancelled == true) {
       return handler.next(err);
@@ -113,12 +107,11 @@ class RetryInterceptor extends Interceptor {
 
     // Skip retry when device has no network connection.
     final connectivityResults = await _connectivity.checkConnectivity();
-    final hasNetwork = connectivityResults.any(
-      (r) => r != ConnectivityResult.none,
-    );
+    final hasNetwork =
+        connectivityResults.any((r) => r != ConnectivityResult.none);
     if (!hasNetwork) return handler.next(err);
 
-    await Future<void>.delayed(delay);
+    await Future<void>.delayed(_calculateDelay(attempt, err));
 
     // Check again after the delay.
     if (options.cancelToken?.isCancelled == true) {
@@ -146,21 +139,14 @@ class RetryInterceptor extends Interceptor {
     }
 
     // Timeout / connection errors.
-    if (policy.retryableExceptionTypes.contains(err.type)) {
-      return true;
-    }
+    if (policy.retryableExceptionTypes.contains(err.type)) return true;
 
-    // Bad response — check status code.
+    // Bad response — check status code. 429 Too Many Requests is always retryable.
     if (err.type == DioExceptionType.badResponse) {
       final statusCode = err.response?.statusCode;
-      if (statusCode != null && policy.retryableStatusCodes.contains(statusCode)) {
-        return true;
-      }
-      // 429 Too Many Requests — always retryable.
-      if (statusCode == 429) {
-        return true;
-      }
-      return false;
+      return statusCode != null &&
+          (policy.retryableStatusCodes.contains(statusCode) ||
+              statusCode == 429);
     }
 
     return false;
@@ -170,9 +156,7 @@ class RetryInterceptor extends Interceptor {
   bool _shouldRetry(RequestOptions options) {
     // Per-request explicit override.
     final extraEnabled = options.extra[RetryOptions.kRetryEnabled];
-    if (extraEnabled is bool) {
-      return extraEnabled;
-    }
+    if (extraEnabled is bool) return extraEnabled;
 
     // Default: only retry methods in the policy allow-list.
     return policy.retryableMethods.contains(options.method.toUpperCase());
@@ -185,13 +169,11 @@ class RetryInterceptor extends Interceptor {
     // Check for Retry-After header on 429 responses.
     if (err.response?.statusCode == 429) {
       final retryAfter = err.response?.headers.value('retry-after');
-      if (retryAfter != null) {
-        final seconds = int.tryParse(retryAfter);
-        if (seconds != null && seconds > 0) {
-          // Clamp to maxDelay for safety.
-          final serverDelay = Duration(seconds: seconds);
-          return serverDelay > policy.maxDelay ? policy.maxDelay : serverDelay;
-        }
+      final seconds = retryAfter != null ? int.tryParse(retryAfter) : null;
+      if (seconds != null && seconds > 0) {
+        // Clamp to maxDelay for safety.
+        final serverDelay = Duration(seconds: seconds);
+        return serverDelay > policy.maxDelay ? policy.maxDelay : serverDelay;
       }
     }
 

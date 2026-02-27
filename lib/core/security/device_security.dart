@@ -106,53 +106,33 @@ class DeviceSecurityService {
 
   /// Android Root 检测 — 检查常见 su 二进制和 root 管理器 APK 路径。
   bool _isAndroidRooted() {
-    const List<String> rootPaths = [
+    return _anyPathExists([
       // su binary locations
-      '/system/xbin/su',
-      '/system/bin/su',
-      '/data/local/xbin/su',
-      '/data/local/bin/su',
-      '/sbin/su',
-      '/su/bin/su',
-      '/system/sd/xbin/su',
-      '/system/bin/failsafe/su',
+      '/system/xbin/su', '/system/bin/su',
+      '/data/local/xbin/su', '/data/local/bin/su',
+      '/sbin/su', '/su/bin/su',
+      '/system/sd/xbin/su', '/system/bin/failsafe/su',
       '/data/local/su',
       // Root management apps
-      '/system/app/Superuser.apk',
-      '/system/app/SuperSU.apk',
+      '/system/app/Superuser.apk', '/system/app/SuperSU.apk',
       '/data/app/eu.chainfire.supersu-1.apk',
       '/data/app/eu.chainfire.supersu-2.apk',
       // Magisk (systemless root)
-      '/sbin/.magisk',
-      '/sbin/.core/mirror',
-      '/sbin/.core/img',
-    ];
-    return rootPaths.any((path) {
-      try {
-        return File(path).existsSync();
-      } catch (_) {
-        return false;
-      }
-    });
+      '/sbin/.magisk', '/sbin/.core/mirror', '/sbin/.core/img',
+    ]);
   }
 
   /// iOS 越狱检测 — 检查常见越狱工具和 Cydia 安装路径。
   bool _isIosJailbroken() {
-    const List<String> jailbreakPaths = [
+    return _anyPathExists([
       // Package managers
-      '/Applications/Cydia.app',
-      '/Applications/Sileo.app',
-      '/Applications/Zebra.app',
-      '/Applications/Installer.app',
+      '/Applications/Cydia.app', '/Applications/Sileo.app',
+      '/Applications/Zebra.app', '/Applications/Installer.app',
       // APT / dpkg infrastructure
-      '/private/var/lib/apt',
-      '/private/var/lib/cydia',
-      '/etc/apt',
-      '/usr/libexec/cydia',
+      '/private/var/lib/apt', '/private/var/lib/cydia',
+      '/etc/apt', '/usr/libexec/cydia',
       // SSH server (not present on stock iOS)
-      '/usr/sbin/sshd',
-      '/usr/bin/sshd',
-      '/usr/libexec/ssh-keysign',
+      '/usr/sbin/sshd', '/usr/bin/sshd', '/usr/libexec/ssh-keysign',
       // Mobile substrate / Tweak loader
       '/Library/MobileSubstrate/MobileSubstrate.dylib',
       '/Library/MobileSubstrate/DynamicLibraries/LiveClock.plist',
@@ -163,11 +143,14 @@ class DeviceSecurityService {
       // Bash shell (not present on stock iOS; installed by many jailbreaks)
       '/bin/bash',
       // Stash directories (jailbreak-specific)
-      '/private/var/stash',
-      '/private/var/tmp/cydia.log',
+      '/private/var/stash', '/private/var/tmp/cydia.log',
       '/private/var/mobile/Library/SBSettings/Themes',
-    ];
-    return jailbreakPaths.any((path) {
+    ]);
+  }
+
+  /// 检查路径列表中是否存在任意一个文件，安全地忽略访问异常。
+  bool _anyPathExists(List<String> paths) {
+    return paths.any((path) {
       try {
         return File(path).existsSync();
       } catch (_) {

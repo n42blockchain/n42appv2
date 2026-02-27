@@ -29,32 +29,23 @@ abstract final class RetryConfig {
 
 /// Extension methods on [Options] for convenient per-request retry control.
 extension RetryOptionsExtension on Options {
-  /// Returns a copy with retry disabled for this request.
-  Options noRetry() {
+  // Copies common fields and merges [extraOverrides] into the extra map.
+  Options _copyWith(Map<String, dynamic> extraOverrides) {
     return Options(
       method: method,
       headers: headers,
       contentType: contentType,
       responseType: responseType,
-      extra: {...?extra, RetryOptions.kRetryEnabled: false},
+      extra: {...?extra, ...extraOverrides},
     );
   }
 
+  /// Returns a copy with retry disabled for this request.
+  Options noRetry() => _copyWith({RetryOptions.kRetryEnabled: false});
+
   /// Returns a copy with retry explicitly enabled (e.g. for idempotent POST).
-  Options withRetry({int? maxRetries}) {
-    final extraMap = <String, dynamic>{
-      ...?extra,
-      RetryOptions.kRetryEnabled: true,
-    };
-    if (maxRetries != null) {
-      extraMap[RetryOptions.kMaxRetries] = maxRetries;
-    }
-    return Options(
-      method: method,
-      headers: headers,
-      contentType: contentType,
-      responseType: responseType,
-      extra: extraMap,
-    );
-  }
+  Options withRetry({int? maxRetries}) => _copyWith({
+        RetryOptions.kRetryEnabled: true,
+        if (maxRetries != null) RetryOptions.kMaxRetries: maxRetries,
+      });
 }

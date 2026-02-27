@@ -14,54 +14,43 @@ import 'package:n42_wallet/core/app/app_globals.dart';
 ///
 /// Provides centralized toast/snackbar functionality with consistent styling.
 class ToastUtils {
-  /// Show a simple toast message
-  static void show(String message) {
+  static void _showToast(
+    String message, {
+    Toast length = Toast.LENGTH_SHORT,
+    Color backgroundColor = const Color.fromRGBO(0, 0, 0, 0.5),
+  }) {
     Fluttertoast.showToast(
       msg: message,
-      toastLength: Toast.LENGTH_SHORT,
+      toastLength: length,
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 7,
-      backgroundColor: const Color.fromRGBO(0, 0, 0, 0.5),
-      textColor: const Color(0xffffffff),
+      backgroundColor: backgroundColor,
+      textColor: Colors.white,
       fontSize: 14.0,
     );
   }
+
+  /// Show a simple toast message
+  static void show(String message) => _showToast(message);
 
   /// Show a success toast
-  static void showSuccess(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER,
-      backgroundColor: Colors.green.withValues(alpha:0.8),
-      textColor: Colors.white,
-      fontSize: 14.0,
-    );
-  }
+  static void showSuccess(String message) => _showToast(
+        message,
+        backgroundColor: Colors.green.withValues(alpha: 0.8),
+      );
 
   /// Show an error toast
-  static void showError(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.CENTER,
-      backgroundColor: Colors.red.withValues(alpha:0.8),
-      textColor: Colors.white,
-      fontSize: 14.0,
-    );
-  }
+  static void showError(String message) => _showToast(
+        message,
+        length: Toast.LENGTH_LONG,
+        backgroundColor: Colors.red.withValues(alpha: 0.8),
+      );
 
   /// Show a warning toast
-  static void showWarning(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER,
-      backgroundColor: Colors.orange.withValues(alpha:0.8),
-      textColor: Colors.white,
-      fontSize: 14.0,
-    );
-  }
+  static void showWarning(String message) => _showToast(
+        message,
+        backgroundColor: Colors.orange.withValues(alpha: 0.8),
+      );
 
   // ========== Custom UI Toast ==========
 
@@ -98,21 +87,15 @@ class ToastUtils {
         borderRadius: BorderRadius.circular(12.0),
         color: Colors.blueGrey,
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                AppGlobals.navigatorKey.currentContext,
-                AppThemeKeys.mainTextColor.name,
-              ),
-            ),
+      child: Text(
+        title,
+        style: TextStyle(
+          color: AppThemeUtils.getColorByKey(
+            AppGlobals.navigatorKey.currentContext,
+            AppThemeKeys.mainTextColor.name,
           ),
-        ],
+        ),
       ),
     );
   }
 }
-

@@ -15,18 +15,11 @@ class SecureMemory {
   static final Random _secureRandom = Random.secure();
 
   /// Create a secure byte array that can be zeroed out
-  static Uint8List createSecureBytes(int length) {
-    return Uint8List(length);
-  }
+  static Uint8List createSecureBytes(int length) => Uint8List(length);
 
   /// Securely copy data into a new Uint8List
-  static Uint8List secureClone(List<int> data) {
-    final result = Uint8List(data.length);
-    for (int i = 0; i < data.length; i++) {
-      result[i] = data[i];
-    }
-    return result;
-  }
+  static Uint8List secureClone(List<int> data) =>
+      Uint8List.fromList(data);
 
   /// Zero out a byte array to remove sensitive data from memory
   ///
@@ -35,11 +28,7 @@ class SecureMemory {
   /// - Mnemonics
   /// - Passwords
   /// - Seeds
-  static void zeroOut(Uint8List data) {
-    for (int i = 0; i < data.length; i++) {
-      data[i] = 0;
-    }
-  }
+  static void zeroOut(Uint8List data) => data.fillRange(0, data.length, 0);
 
   /// Zero out a list of bytes
   static void zeroOutList(List<int> data) {
@@ -58,16 +47,12 @@ class SecureMemory {
   }
 
   /// Convert string to secure bytes (UTF-8 encoded)
-  static Uint8List stringToSecureBytes(String str) {
-    final codeUnits = str.codeUnits;
-    return Uint8List.fromList(codeUnits);
-  }
+  static Uint8List stringToSecureBytes(String str) =>
+      Uint8List.fromList(str.codeUnits);
 
   /// Compare two byte arrays in constant time to prevent timing attacks
   static bool constantTimeEquals(Uint8List a, Uint8List b) {
-    if (a.length != b.length) {
-      return false;
-    }
+    if (a.length != b.length) return false;
     int result = 0;
     for (int i = 0; i < a.length; i++) {
       result |= a[i] ^ b[i];
@@ -99,9 +84,7 @@ class SecureString {
   ///
   /// WARNING: This creates a new String object. Use sparingly.
   String get value {
-    if (_data == null) {
-      throw StateError('SecureString has been disposed');
-    }
+    if (_data == null) throw StateError('SecureString has been disposed');
     return String.fromCharCodes(_data!);
   }
 
@@ -120,10 +103,7 @@ class SecureString {
   }
 
   @override
-  String toString() {
-    // Prevent accidental logging of sensitive data
-    return 'SecureString(****)';
-  }
+  String toString() => 'SecureString(****)';
 }
 
 /// A wrapper for sensitive key data using Uint8List
@@ -150,14 +130,10 @@ class SecureKey {
   Uint8List? get bytes => _data;
 
   /// Get byte at index
-  int? operator [](int index) {
-    return _data?[index];
-  }
+  int? operator [](int index) => _data?[index];
 
   /// Set byte at index
-  void operator []=(int index, int value) {
-    _data?[index] = value;
-  }
+  void operator []=(int index, int value) => _data?[index] = value;
 
   /// Get the length of the key
   int get length => _data?.length ?? 0;
@@ -175,15 +151,10 @@ class SecureKey {
 
   /// Compare with another SecureKey in constant time
   bool equals(SecureKey other) {
-    if (_data == null || other._data == null) {
-      return false;
-    }
+    if (_data == null || other._data == null) return false;
     return SecureMemory.constantTimeEquals(_data!, other._data!);
   }
 
   @override
-  String toString() {
-    // Prevent accidental logging of sensitive data
-    return 'SecureKey(length: $length)';
-  }
+  String toString() => 'SecureKey(length: $length)';
 }

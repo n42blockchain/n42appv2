@@ -30,6 +30,16 @@ class SPUtil {
     return prefs!;
   }
 
+  /// 解析存储的 JSON 字符串为字符串列表，失败时返回空列表
+  List<String> _decodeJsonList(String? raw) {
+    if (raw == null || raw.isEmpty) return [];
+    try {
+      return (json.decode(raw) as List<dynamic>).cast<String>();
+    } catch (_) {
+      return [];
+    }
+  }
+
   // ==================== 非敏感设置 ====================
 
   // 是否阅读了登录、安全条款
@@ -40,8 +50,7 @@ class SPUtil {
 
   Future<bool> getReadLoginClause() async {
     await initPrefs();
-    bool? value = prefs?.getBool(SPkey.readLoginClause.name);
-    return value ?? false;
+    return prefs?.getBool(SPkey.readLoginClause.name) ?? false;
   }
 
   // app主题模式0系统，1亮，2暗
@@ -85,10 +94,8 @@ class SPUtil {
 
   Future<Map<String, dynamic>?> getBrowserSetting() async {
     await initPrefs();
-    String? r = prefs?.getString(SPkey.browserSetting.name);
-    if (r == null) {
-      return null;
-    }
+    final r = prefs?.getString(SPkey.browserSetting.name);
+    if (r == null) return null;
     return json.decode(r);
   }
 
@@ -115,11 +122,7 @@ class SPUtil {
 
   // 保存用户信息（安全存储）
   Future<void> saveUserInfo(UserInfo? info) async {
-    if (info == null) {
-      await _securePrefs.setUserInfo(null);
-    } else {
-      await _securePrefs.setUserInfo(info.toJson());
-    }
+    await _securePrefs.setUserInfo(info?.toJson());
   }
 
   // 保存用户信息 (JSON format for SharedUserInfo)（安全存储）
@@ -251,13 +254,7 @@ class SPUtil {
   // 行情自选列表（存储 coin symbol lowercase）
   Future<List<String>> getMarketWatchlist() async {
     await initPrefs();
-    final raw = prefs?.getString(SPkey.marketWatchlist.name);
-    if (raw == null || raw.isEmpty) return [];
-    try {
-      return (json.decode(raw) as List<dynamic>).cast<String>();
-    } catch (_) {
-      return [];
-    }
+    return _decodeJsonList(prefs?.getString(SPkey.marketWatchlist.name));
   }
 
   Future<void> saveMarketWatchlist(List<String> list) async {
@@ -268,13 +265,7 @@ class SPUtil {
   // 资产搜索历史（最近 10 条关键词，按时间倒序）
   Future<List<String>> getCoinSearchHistory() async {
     await initPrefs();
-    final raw = prefs?.getString(SPkey.coinSearchHistory.name);
-    if (raw == null || raw.isEmpty) return [];
-    try {
-      return (json.decode(raw) as List<dynamic>).cast<String>();
-    } catch (_) {
-      return [];
-    }
+    return _decodeJsonList(prefs?.getString(SPkey.coinSearchHistory.name));
   }
 
   Future<void> saveCoinSearchHistory(List<String> history) async {
@@ -306,6 +297,7 @@ class SPUtil {
   }
 
   /// 更新某地址挖矿状态中的某个子字段
+  // ignore: non_constant_identifier_names
   Future<void> setMiningStatus_child(
       String address, String key, dynamic value) async {
     await initPrefs();
@@ -429,13 +421,9 @@ class SPUtil {
   /// token discovery flow (stored in lower-case).
   Future<Set<String>> getIgnoredTokenContracts() async {
     await initPrefs();
-    final raw = prefs?.getString(SPkey.ignoredTokenContracts.name);
-    if (raw == null || raw.isEmpty) return {};
-    try {
-      return (json.decode(raw) as List<dynamic>).map((e) => e as String).toSet();
-    } catch (_) {
-      return {};
-    }
+    return _decodeJsonList(
+      prefs?.getString(SPkey.ignoredTokenContracts.name),
+    ).toSet();
   }
 
   /// Persists [contracts] to the ignored list (merges with existing).
@@ -486,4 +474,3 @@ enum SPkey {
   ignoredTokenContracts, // 代币自动发现：用户手动忽略的合约地址 JSON List<String>
   smallAssetsThreshold, // 小额资产过滤阈值（double: 0=关闭, 1/5/10/50 表示过滤低于该 USD 价值的代币）
 }
-

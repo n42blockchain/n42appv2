@@ -3,179 +3,115 @@ import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/core/network/request_url.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
 
-class AtomApi{
-  Future<MessageModel> getBalance(String address,String token)async{
-    try{
-      String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
-      uri+='cosmos/bank/v1beta1/balances/$address';
-      var data=await BaseApi.requestEmptyH.get(
-        uri,
+class AtomApi {
+  static const Map<String, String> _jsonHeader = {'Content-Type': 'application/json'};
+
+  String _uri() => RequestUrl().getUrl2(CoinType.ATOM.name, 'api', isTest: false);
+
+  Future<MessageModel> getBalance(String address, String token) async {
+    try {
+      final data = await BaseApi.requestEmptyH.get(
+        '${_uri()}cosmos/bank/v1beta1/balances/$address',
         params: {},
         defaultReturn: false,
-        header: {
-          "Content-Type":"application/json",
-
-        },
+        header: _jsonHeader,
       );
-      MessageModel mm=MessageModel();
-      List<dynamic> balances=data['balances'];
-      mm.data=BigInt.zero;
-      if(token==""){
-        for(int i=0;i<balances.length;i++){
-          Map<String,dynamic> b=balances[i];
-          if(b['denom']=='uatom'){
-            mm.data=BigInt.parse(b['amount']);
-            break;
-          }
-        }
-      }else{
-        for(int i=0;i<balances.length;i++){
-          Map<String,dynamic> b=balances[i];
-          if(b['denom']==token){
-            mm.data=BigInt.parse(b['amount'].toString());
-            break;
-          }
+      final List<dynamic> balances = data['balances'];
+      final denom = token == '' ? 'uatom' : token;
+      BigInt balance = BigInt.zero;
+      for (final b in balances) {
+        if ((b as Map<String, dynamic>)['denom'] == denom) {
+          balance = BigInt.parse(b['amount'].toString());
+          break;
         }
       }
-      return mm;
-
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e;
-      return mm;
+      return MessageModel()..data = balance;
+    } catch (e) {
+      return MessageModel.error()..data = e;
     }
   }
+
   //cosmos/auth/v1beta1/accounts/
-  Future<MessageModel> getAccounts(String address)async{
-    try{
-      String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
-      var data=await await BaseApi.requestEmptyH.get(
-        '${uri}cosmos/auth/v1beta1/accounts/$address',
+  Future<MessageModel> getAccounts(String address) async {
+    try {
+      final data = await BaseApi.requestEmptyH.get(
+        '${_uri()}cosmos/auth/v1beta1/accounts/$address',
         params: {},
         defaultReturn: false,
-        header: {
-          "Content-Type":"application/json",
-
-        },
+        header: _jsonHeader,
       );
-      MessageModel mm=MessageModel();
-      mm.data=data['account'];
-      return mm;
-
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e;
-      return mm;
+      return MessageModel()..data = data['account'];
+    } catch (e) {
+      return MessageModel.error()..data = e;
     }
   }
+
   //cosmos/bank/v1beta1/denoms_metadata/
-  Future<MessageModel> getMetadata(String denom)async{
-    try{
-      String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
-      var data=await await BaseApi.requestEmptyH.get(
-        '${uri}cosmos/bank/v1beta1/denoms_metadata/$denom',
+  Future<MessageModel> getMetadata(String denom) async {
+    try {
+      final data = await BaseApi.requestEmptyH.get(
+        '${_uri()}cosmos/bank/v1beta1/denoms_metadata/$denom',
         params: {},
         defaultReturn: false,
-        header: {
-          "Content-Type":"application/json",
-
-        },
+        header: _jsonHeader,
       );
-      MessageModel mm=MessageModel();
-      mm.data=data['metadata'];
-      return mm;
-
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e;
-      return mm;
+      return MessageModel()..data = data['metadata'];
+    } catch (e) {
+      return MessageModel.error()..data = e;
     }
   }
+
   //cosmos/tx/v1beta1/txs/
-  Future<MessageModel> getTxs(String txHash)async{
-    try{
-      String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
-      var data=await await BaseApi.requestEmptyH.get(
-        '${uri}cosmos/tx/v1beta1/txs/$txHash',
+  Future<MessageModel> getTxs(String txHash) async {
+    try {
+      final data = await BaseApi.requestEmptyH.get(
+        '${_uri()}cosmos/tx/v1beta1/txs/$txHash',
         params: {},
         defaultReturn: false,
-        header: {
-          "Content-Type":"application/json",
-
-        },
+        header: _jsonHeader,
       );
-      MessageModel mm=MessageModel();
-      mm.data=data['metadata'];
-      return mm;
-
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e;
-      return mm;
+      return MessageModel()..data = data['metadata'];
+    } catch (e) {
+      return MessageModel.error()..data = e;
     }
   }
+
   //cosmos/tx/v1beta1/txs
   Future<MessageModel> sendTxs(dynamic rawTx) async {
-    try{
-      String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
-      var data=await BaseApi.requestEmptyH.post(
-        '${uri}cosmos/tx/v1beta1/txs',
+    try {
+      final data = await BaseApi.requestEmptyH.post(
+        '${_uri()}cosmos/tx/v1beta1/txs',
         params: {},
-        data: {
-          "tx_bytes":rawTx,
-          "mode":"BROADCAST_MODE_SYNC"
-        },
+        data: {'tx_bytes': rawTx, 'mode': 'BROADCAST_MODE_SYNC'},
         defaultReturn: false,
-        header: {
-          "Content-Type":"application/json",
-
-        },
+        header: _jsonHeader,
       );
-      MessageModel mm=MessageModel();
-      if(data['tx_response']==null){
-        mm.data=data['message'];
-      }else{
-        mm.data=data['tx_response']['txhash'];
-      }
+      final mm = MessageModel();
+      mm.data = data['tx_response'] == null ? data['message'] : data['tx_response']['txhash'];
       return mm;
-
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e;
-      return mm;
+    } catch (e) {
+      return MessageModel.error()..data = e;
     }
   }
+
   //cosmos/tx/v1beta1/simulate
   Future<MessageModel> sendTxsSimulate(dynamic rawTx) async {
-    try{
-      String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
-      var data=await BaseApi.requestEmptyH.post(
-        '${uri}cosmos/tx/v1beta1/simulate',
+    try {
+      final data = await BaseApi.requestEmptyH.post(
+        '${_uri()}cosmos/tx/v1beta1/simulate',
         params: {},
-        data: {
-          "tx_bytes":rawTx,
-          "mode":"BROADCAST_MODE_SYNC"
-        },
+        data: {'tx_bytes': rawTx, 'mode': 'BROADCAST_MODE_SYNC'},
         defaultReturn: false,
-        header: {
-          "Content-Type":"application/json",
-
-        },
+        header: _jsonHeader,
       );
-      MessageModel mm=MessageModel();
-      if(data['tx_response']==null){
-        mm.data=data['message'];
-      }else{
-        mm.data=data['tx_response']['txhash'];
-      }
+      final mm = MessageModel();
+      mm.data = data['tx_response'] == null ? data['message'] : data['tx_response']['txhash'];
       return mm;
-
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e;
-      return mm;
+    } catch (e) {
+      return MessageModel.error()..data = e;
     }
   }
+
   /*
   * {
             "state": "STATE_OPEN",
@@ -201,26 +137,17 @@ connection_hops: 连接跳跃，表示通道之间的连接路径。
 version: IBC 协议的版本，通常会标明使用的版本号（如 ics20-1）。
         * */
   ///ibc/core/channel/v1/channels
-  Future<MessageModel> getChannels()async{
-    try{
-      String uri=RequestUrl().getUrl2(CoinType.ATOM.name,'api',isTest:false);
-      var data=await await BaseApi.requestEmptyH.get(
-        '${uri}ibc/core/channel/v1/channels',
+  Future<MessageModel> getChannels() async {
+    try {
+      final data = await BaseApi.requestEmptyH.get(
+        '${_uri()}ibc/core/channel/v1/channels',
         params: {},
         defaultReturn: false,
-        header: {
-          "Content-Type":"application/json",
-
-        },
+        header: _jsonHeader,
       );
-      MessageModel mm=MessageModel();
-      mm.data=data['channels'];
-      return mm;
-
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e;
-      return mm;
+      return MessageModel()..data = data['channels'];
+    } catch (e) {
+      return MessageModel.error()..data = e;
     }
   }
 }

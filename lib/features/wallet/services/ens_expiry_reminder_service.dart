@@ -285,13 +285,16 @@ class EnsExpiryReminderService {
   /// 生成稳定、正值的通知 ID（域名 × 提醒阈值）
   static int _notificationId(String domainName, int daysLeft) {
     // 将 daysLeft 归入最近触发的阈值桶以保持 ID 稳定
-    final bucket = daysLeft >= 30
-        ? 30
-        : daysLeft >= 7
-            ? 7
-            : daysLeft >= 1
-                ? 1
-                : 0; // 0 = expired / today
+    final int bucket;
+    if (daysLeft >= 30) {
+      bucket = 30;
+    } else if (daysLeft >= 7) {
+      bucket = 7;
+    } else if (daysLeft >= 1) {
+      bucket = 1;
+    } else {
+      bucket = 0; // 0 = expired / today
+    }
     return (domainName.hashCode ^ bucket.hashCode) & 0x7FFFFFFF;
   }
 }

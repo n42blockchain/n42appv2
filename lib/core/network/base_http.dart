@@ -5,16 +5,17 @@
 //
 // Author: Jiang Yiwei
 
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
-import 'dart:io';
-import 'dart:convert';
 import 'package:n42_wallet/core/app/app_globals.dart';
-import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
-import 'package:n42_wallet/core/security/security_config.dart';
 import 'package:n42_wallet/core/network/circuit_breaker_interceptor.dart';
 import 'package:n42_wallet/core/network/retry_interceptor.dart';
+import 'package:n42_wallet/core/security/security_config.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 /// Base HTTP Client
 ///
@@ -28,15 +29,15 @@ class BaseHttp {
   final String baseUrl;
   final String baseUrlTest;
 
-  late Dio _dio;
-  late BaseOptions _options;
-
   /// Content-Type:
   /// - 0: application/json
   /// - 1: multipart/form-data
   /// - 2: application/x-www-form-urlencoded
   final int headerType;
   final Map<String, String> headerMap;
+
+  late Dio _dio;
+  late BaseOptions _options;
 
   /// Creates a new HTTP client instance
   ///
@@ -50,11 +51,33 @@ class BaseHttp {
     this.headerMap, {
     this.headerType = 0,
   }) {
-    _options = _createBaseOptions();
-    _dio = Dio(_options);
-    _dio.interceptors.add(CircuitBreakerInterceptor());
-    _dio.interceptors.add(RetryInterceptor(dio: _dio));
+    _initDio();
+  }
+
+  // ---------------------------------------------------------------------------
+  // Initialization
+  // ---------------------------------------------------------------------------
+
+  /// Reset Dio connection with optional test mode
+  void reSetDio(bool isTest) {
+    _initDio();
+  }
+
+  void _initDio() {
+    _options = _buildBaseOptions();
+    _dio = Dio(_options)
+      ..interceptors.add(CircuitBreakerInterceptor())
+      ..interceptors.add(RetryInterceptor(dio: _dio));
     _configureHttpAdapter();
+  }
+
+  BaseOptions _buildBaseOptions() {
+    return BaseOptions(
+      baseUrl: AppConfig.isOnline ? baseUrl : baseUrlTest,
+      connectTimeout: const Duration(milliseconds: 60000),
+      receiveTimeout: const Duration(milliseconds: 60000),
+      headers: {_contentTypeKey: _contentTypeString, ...headerMap},
+    );
   }
 
   /// Configure HTTP adapter with SSL handling
@@ -63,45 +86,33 @@ class BaseHttp {
       ..createHttpClient = () {
         final client = HttpClient();
         // Use unified security configuration for SSL certificate verification
-        client.badCertificateCallback = (X509Certificate cert, String host, int port) {
-          return SecurityConfig.verifySslCertificate(cert, host, port);
-        };
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) =>
+                SecurityConfig.verifySslCertificate(cert, host, port);
         return client;
       };
   }
 
-  /// Reset Dio connection with optional test mode
-  void reSetDio(bool isTest) {
-    _options = _createBaseOptions(isTest: isTest);
-    _dio = Dio(_options);
-    _dio.interceptors.add(CircuitBreakerInterceptor());
-    _dio.interceptors.add(RetryInterceptor(dio: _dio));
-    _configureHttpAdapter();
-  }
+  // ---------------------------------------------------------------------------
+  // Content-Type helpers
+  // ---------------------------------------------------------------------------
 
-  /// Create base options for Dio
-  BaseOptions _createBaseOptions({bool isTest = false}) {
-    Map<String, String> header = _getContentTypeHeader();
-    header.addAll(headerMap);
-
-    return BaseOptions(
-      baseUrl: AppConfig.isOnline ? baseUrl : baseUrlTest,
-      connectTimeout: const Duration(milliseconds: 60000),
-      receiveTimeout: const Duration(milliseconds: 60000),
-      headers: header,
-    );
-  }
-
-  Map<String, String> _getContentTypeHeader() {
+  String get _contentTypeString {
     switch (headerType) {
       case 0:
-        return {'content-type': 'application/json'};
+        return 'application/json';
       case 1:
-        return {'content-type': 'multipart/form-data'};
+        return 'multipart/form-data';
       default:
-        return {'content-type': 'application/x-www-form-urlencoded'};
+        return 'application/x-www-form-urlencoded';
     }
   }
+
+  static const String _contentTypeKey = 'content-type';
+
+  // ---------------------------------------------------------------------------
+  // Core request
+  // ---------------------------------------------------------------------------
 
   /// Core request method
   Future<T> _request<T>(
@@ -127,27 +138,22 @@ class BaseHttp {
     }
 
     try {
-      Options options = Options(method: method);
-      options.contentType = _getContentTypeString();
-      if (enableRetry) {
-        options.extra = {
-          ...?options.extra,
-          RetryOptions.kRetryEnabled: true,
-        };
+      final options = Options(
+        method: method,
+        contentType: _contentTypeString,
+        extra: enableRetry ? {RetryOptions.kRetryEnabled: true} : null,
+        headers: {
+          if (header != null) ...header,
+          if (userInfo != null) ...userInfo,
+        },
+      );
+
+      // Preserve explicit content-type from caller header if provided
+      if (header != null && header['content-type'] == null) {
+        options.contentType = _contentTypeString;
       }
 
-      if (header != null) {
-        options.headers = {...?options.headers, ...header};
-        if (header['content-type'] == null) {
-          options.contentType = _getContentTypeString();
-        }
-      }
-
-      if (userInfo != null) {
-        options.headers = {...?options.headers, ...userInfo};
-      }
-
-      final response = await _dio.request(
+      final response = await _dio.request<dynamic>(
         path,
         data: data,
         queryParameters: params,
@@ -165,39 +171,30 @@ class BaseHttp {
     }
   }
 
-  String _getContentTypeString() {
-    switch (headerType) {
-      case 0:
-        return 'application/json';
-      case 1:
-        return 'multipart/form-data';
-      default:
-        return 'application/x-www-form-urlencoded';
-    }
-  }
+  // ---------------------------------------------------------------------------
+  // Response & error handling
+  // ---------------------------------------------------------------------------
 
-  T _handleResponse<T>(Response response, bool defaultReturn) {
-    if (response.statusCode == 200 ||
-        response.statusCode == 201 ||
-        response.statusCode == 202) {
-      if (response.data == null) {
-        throw S.current.g_key_error_1;
+  T _handleResponse<T>(Response<dynamic> response, bool defaultReturn) {
+    final statusCode = response.statusCode;
+    if (statusCode != 200 && statusCode != 201 && statusCode != 202) {
+      throw _handleHttpError(statusCode);
+    }
+
+    if (response.data == null) {
+      throw S.current.g_key_error_1;
+    }
+
+    try {
+      if (!defaultReturn) {
+        return response.data as T;
       }
-      try {
-        if (defaultReturn) {
-          if (response.data is Map || response.data is List) {
-            return response.data;
-          } else {
-            return json.decode(response.data.toString());
-          }
-        } else {
-          return response.data;
-        }
-      } catch (e) {
-        throw S.current.g_key_error_1;
+      if (response.data is Map || response.data is List) {
+        return response.data as T;
       }
-    } else {
-      throw _handleHttpError(response.statusCode);
+      return json.decode(response.data.toString()) as T;
+    } catch (e) {
+      throw S.current.g_key_error_1;
     }
   }
 
@@ -213,19 +210,16 @@ class BaseHttp {
         return S.current.g_key_error_27;
       case DioExceptionType.badResponse:
         final response = error.response;
-        if (response != null) {
-          final data = response.data;
-          if (data is Map && data.containsKey('error')) {
-            final errorData = data['error'];
-            if (errorData is Map && errorData.containsKey('message')) {
-              return errorData['message'].toString();
-            } else if (errorData is String) {
-              return errorData;
-            }
+        if (response == null) return S.current.g_key_error_28;
+        final data = response.data;
+        if (data is Map && data.containsKey('error')) {
+          final errorData = data['error'];
+          if (errorData is Map && errorData.containsKey('message')) {
+            return errorData['message'].toString();
           }
-          return _handleHttpError(response.statusCode);
+          if (errorData is String) return errorData;
         }
-        return S.current.g_key_error_28;
+        return _handleHttpError(response.statusCode);
       case DioExceptionType.cancel:
         return S.current.g_key_error_8;
       case DioExceptionType.unknown:
@@ -264,6 +258,10 @@ class BaseHttp {
         return '${S.current.g_key_error_22}$errorCode';
     }
   }
+
+  // ---------------------------------------------------------------------------
+  // Public HTTP methods
+  // ---------------------------------------------------------------------------
 
   /// GET request
   Future<T> get<T>(
@@ -351,17 +349,18 @@ class BaseHttp {
     );
   }
 
+  // ---------------------------------------------------------------------------
+  // Auth helpers
+  // ---------------------------------------------------------------------------
+
   /// Get user authentication token headers
   Map<String, String>? getUserToken() {
     final user = AppGlobals.userInfo;
-    if (user != null) {
-      return {
-        'Source': 'app',
-        'Uuid': user.uuid ?? '',
-        'Token': user.token ?? '',
-      };
-    }
-    return null;
+    if (user == null) return null;
+    return {
+      'Source': 'app',
+      'Uuid': user.uuid ?? '',
+      'Token': user.token ?? '',
+    };
   }
 }
-

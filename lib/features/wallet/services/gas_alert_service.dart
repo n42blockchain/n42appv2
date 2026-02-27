@@ -174,6 +174,25 @@ class GasAlertService {
 
   // ── 内部：发送本地通知 ────────────────────────────────
 
+  static const _androidDetails = AndroidNotificationDetails(
+    'high_importance_channel',
+    'High Importance Notifications',
+    channelDescription: 'This channel is used for important notifications.',
+    importance: Importance.high,
+    priority: Priority.high,
+  );
+
+  static const _iosDetails = DarwinNotificationDetails(
+    presentAlert: true,
+    presentBadge: true,
+    presentSound: true,
+  );
+
+  static const _notificationDetails = NotificationDetails(
+    android: _androidDetails,
+    iOS: _iosDetails,
+  );
+
   static Future<void> _sendNotification(
     String symbol,
     String networkName,
@@ -181,19 +200,6 @@ class GasAlertService {
     GasAlertConfig config,
   ) async {
     try {
-      const androidDetails = AndroidNotificationDetails(
-        'high_importance_channel',
-        'High Importance Notifications',
-        channelDescription: 'This channel is used for important notifications.',
-        importance: Importance.high,
-        priority: Priority.high,
-      );
-      const iosDetails = DarwinNotificationDetails(
-        presentAlert: true,
-        presentBadge: true,
-        presentSound: true,
-      );
-
       final direction = config.alertBelow ? 'below' : 'above';
       final body =
           '$networkName gas is ${price.toStringAsFixed(2)} Gwei '
@@ -203,10 +209,7 @@ class GasAlertService {
         id: symbol.hashCode & 0x7FFFFFFF, // ensure positive
         title: 'Gas Alert: $networkName',
         body: body,
-        notificationDetails: const NotificationDetails(
-          android: androidDetails,
-          iOS: iosDetails,
-        ),
+        notificationDetails: _notificationDetails,
       );
     } catch (e) {
       debugPrint('[GasAlertService] _sendNotification error: $e');

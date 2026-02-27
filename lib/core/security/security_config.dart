@@ -5,13 +5,14 @@
 //
 // Author: Jiang Yiwei
 
-import 'dart:io';
-import 'package:flutter/foundation.dart';
-import 'package:crypto/crypto.dart';
 import 'dart:convert';
+import 'dart:io';
+
+import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart';
 
 /// 安全配置
-/// 
+///
 /// 统一管理应用安全相关的配置和工具
 class SecurityConfig {
   SecurityConfig._();
@@ -76,46 +77,15 @@ class SecurityConfig {
   /// Certificate expiry warning threshold in days
   static const int certExpiryWarningDays = 30;
 
-  /// Check if certificate pinning is properly configured
-  ///
-  /// Returns false if still using placeholder values
-  static bool get isCertPinningConfigured {
-    // Check if fingerprints have been replaced from placeholders
-    // The placeholder value starts with a known pattern
-    const placeholderPattern = 'sha256/47DEQpj8HBSa';
-    final hasPlaceholder = allowedCertFingerprints.any((fp) => fp.contains(placeholderPattern));
-    if (hasPlaceholder) {
-      debugPrint('WARNING: SSL certificate pinning uses placeholder fingerprints. '
-          'Replace with real server certificate fingerprints before production deployment.');
-    }
-    return !hasPlaceholder || kDebugMode; // Allow in debug mode
-  }
-
   /// 敏感数据关键字（用于日志脱敏）
   static const List<String> sensitiveKeys = [
     // 认证相关
-    'token',
-    'authorization',
-    'password',
-    'secret',
-    'api_key',
-    'apikey',
-    'access_token',
-    'refresh_token',
-    'bearer',
+    'token', 'authorization', 'password', 'secret', 'api_key', 'apikey',
+    'access_token', 'refresh_token', 'bearer',
     // 钱包相关
-    'mnemonic',
-    'private_key',
-    'privatekey',
-    'pk',
-    'seed',
-    'keystore',
+    'mnemonic', 'private_key', 'privatekey', 'pk', 'seed', 'keystore',
     // 用户相关
-    'email',
-    'phone',
-    'ssn',
-    'credit_card',
-    'cvv',
+    'email', 'phone', 'ssn', 'credit_card', 'cvv',
   ];
 
   /// 检查是否为 Release 模式
@@ -128,43 +98,45 @@ class SecurityConfig {
   static bool get isProfile => kProfileMode;
 
   /// 检查是否应启用日志
-  /// 
+  ///
   /// 仅在 Debug 模式下启用
   static bool get shouldEnableLogging => kDebugMode;
 
   /// 检查是否应启用 SSL Pinning
-  /// 
+  ///
   /// 仅在 Release 模式下强制启用
   static bool get shouldEnableSslPinning => kReleaseMode;
+
+  /// Check if certificate pinning is properly configured
+  ///
+  /// Returns false if still using placeholder values
+  static bool get isCertPinningConfigured {
+    const placeholderPattern = 'sha256/47DEQpj8HBSa';
+    final hasPlaceholder = allowedCertFingerprints.any(
+      (fp) => fp.contains(placeholderPattern),
+    );
+    if (hasPlaceholder) {
+      debugPrint('WARNING: SSL certificate pinning uses placeholder fingerprints. '
+          'Replace with real server certificate fingerprints before production deployment.');
+    }
+    return !hasPlaceholder || kDebugMode;
+  }
 
   /// 验证 SSL 证书
   ///
   /// 在 Release 模式下进行严格验证
   static bool verifySslCertificate(X509Certificate cert, String host, int port) {
-    // Debug 模式下允许自签名证书
-    if (kDebugMode) {
-      return true;
-    }
+    if (kDebugMode) return true;
 
-    // 检查是否为需要 Pinning 的主机
-    final isPinnedHost = pinnedHosts.any(
-      (pinnedHost) => host.endsWith(pinnedHost),
-    );
+    final isPinnedHost = pinnedHosts.any((pinnedHost) => host.endsWith(pinnedHost));
+    if (!isPinnedHost) return true;
 
-    if (!isPinnedHost) {
-      // 非 Pinning 主机使用系统默认验证
-      return true;
-    }
-
-    // Check if certificate pinning is properly configured
     if (!isCertPinningConfigured) {
       debugPrint('⚠️ WARNING: SSL Pinning not configured for $host. '
-                 'Update allowedCertFingerprints with real certificate fingerprints.');
-      // In release mode without proper configuration, fail secure
+          'Update allowedCertFingerprints with real certificate fingerprints.');
       return false;
     }
 
-    // 验证证书指纹
     if (allowedCertFingerprints.isEmpty && backupCertFingerprints.isEmpty) {
       debugPrint('⚠️ WARNING: No certificate fingerprints configured for $host');
       return false;
@@ -173,12 +145,8 @@ class SecurityConfig {
     try {
       final fingerprint = _getCertFingerprint(cert);
 
-      // Check against primary fingerprints
-      if (allowedCertFingerprints.contains(fingerprint)) {
-        return true;
-      }
+      if (allowedCertFingerprints.contains(fingerprint)) return true;
 
-      // Check against backup fingerprints (for certificate rotation)
       if (backupCertFingerprints.contains(fingerprint)) {
         debugPrint('ℹ️ INFO: Using backup certificate for $host');
         return true;
@@ -199,9 +167,7 @@ class SecurityConfig {
   /// Returns the number of days until certificate expires, or -1 if unknown
   static int getCertificateExpiryDays(X509Certificate cert) {
     try {
-      final endDate = cert.endValidity;
-      final now = DateTime.now();
-      return endDate.difference(now).inDays;
+      return cert.endValidity.difference(DateTime.now()).inDays;
     } catch (e) {
       return -1;
     }
@@ -209,15 +175,8 @@ class SecurityConfig {
 
   /// Check if certificate is expiring soon
   static bool isCertificateExpiringSoon(X509Certificate cert) {
-    final daysUntilExpiry = getCertificateExpiryDays(cert);
-    return daysUntilExpiry >= 0 && daysUntilExpiry <= certExpiryWarningDays;
-  }
-
-  /// 获取证书 SHA-256 指纹
-  static String _getCertFingerprint(X509Certificate cert) {
-    final der = cert.der;
-    final digest = sha256.convert(der);
-    return 'sha256/${base64Encode(digest.bytes)}';
+    final days = getCertificateExpiryDays(cert);
+    return days >= 0 && days <= certExpiryWarningDays;
   }
 
   /// 检查字符串是否包含敏感关键字
@@ -227,74 +186,62 @@ class SecurityConfig {
   }
 
   /// 脱敏敏感数据
-  /// 
+  ///
   /// 将敏感数据替换为 ******
   static String maskSensitiveData(String key, dynamic value) {
-    if (isSensitiveKey(key)) {
-      return '******';
-    }
-    return value?.toString() ?? 'null';
+    return isSensitiveKey(key) ? '******' : (value?.toString() ?? 'null');
   }
 
   /// 深度脱敏 Map 数据
   static Map<String, dynamic> maskSensitiveMap(Map<String, dynamic> data) {
-    final result = <String, dynamic>{};
-    
-    for (final entry in data.entries) {
-      if (entry.value is Map<String, dynamic>) {
-        result[entry.key] = maskSensitiveMap(entry.value as Map<String, dynamic>);
-      } else if (entry.value is List) {
-        result[entry.key] = _maskSensitiveList(entry.value as List);
-      } else if (isSensitiveKey(entry.key)) {
-        result[entry.key] = '******';
-      } else {
-        result[entry.key] = entry.value;
+    return data.map((key, value) {
+      if (value is Map<String, dynamic>) {
+        return MapEntry(key, maskSensitiveMap(value));
+      } else if (value is List) {
+        return MapEntry(key, _maskSensitiveList(value));
+      } else if (isSensitiveKey(key)) {
+        return MapEntry(key, '******');
       }
-    }
-    
-    return result;
+      return MapEntry(key, value);
+    });
   }
 
   /// 深度脱敏 List 数据
   static List _maskSensitiveList(List data) {
     return data.map((item) {
-      if (item is Map<String, dynamic>) {
-        return maskSensitiveMap(item);
-      } else if (item is List) {
-        return _maskSensitiveList(item);
-      }
+      if (item is Map<String, dynamic>) return maskSensitiveMap(item);
+      if (item is List) return _maskSensitiveList(item);
       return item;
     }).toList();
   }
 
   /// 安全日志输出
-  /// 
+  ///
   /// 仅在 Debug 模式下输出，并自动脱敏
   static void secureLog(String message, {Map<String, dynamic>? data}) {
     if (!kDebugMode) return;
-
     if (data != null) {
-      final maskedData = maskSensitiveMap(data);
-      debugPrint('$message: ${jsonEncode(maskedData)}');
+      debugPrint('$message: ${jsonEncode(maskSensitiveMap(data))}');
     } else {
       debugPrint(message);
     }
   }
+
+  /// 获取证书 SHA-256 指纹
+  static String _getCertFingerprint(X509Certificate cert) {
+    final digest = sha256.convert(cert.der);
+    return 'sha256/${base64Encode(digest.bytes)}';
+  }
 }
 
 /// 安全的 HttpOverrides
-/// 
+///
 /// 仅在 Debug 模式下允许绕过 SSL 验证
 class SecureHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     final client = super.createHttpClient(context);
-    
-    client.badCertificateCallback = (cert, host, port) {
-      return SecurityConfig.verifySslCertificate(cert, host, port);
-    };
-    
+    client.badCertificateCallback = SecurityConfig.verifySslCertificate;
     return client;
   }
 }
-

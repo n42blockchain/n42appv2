@@ -38,6 +38,20 @@ ProviderContainer get providerContainer {
   return _providerContainer!;
 }
 
+/// Register [T] with GetIt only if not already registered.
+void _registerIfAbsent<T extends Object>(T Function() factory) {
+  if (!getIt.isRegistered<T>()) {
+    getIt.registerLazySingleton<T>(factory);
+  }
+}
+
+/// Register [T] as an eager singleton with GetIt only if not already registered.
+void _registerSingletonIfAbsent<T extends Object>(T instance) {
+  if (!getIt.isRegistered<T>()) {
+    getIt.registerSingleton<T>(instance);
+  }
+}
+
 /// Configure Dependencies
 ///
 /// Call this at app startup to initialize all dependencies.
@@ -48,72 +62,39 @@ Future<void> configureDependencies(
   Env env, {
   required ProviderContainer container,
 }) async {
-  // Store Riverpod container reference
   _providerContainer = container;
 
-  // ============ Core Services ============
+  // Core storage
+  _registerIfAbsent<SPUtil>(() => SPUtil());
+  _registerIfAbsent<AppDatabase>(() => AppDatabase.instance);
+  _registerSingletonIfAbsent<ProviderContainer>(container);
 
-  // Storage
-  if (!getIt.isRegistered<SPUtil>()) {
-    getIt.registerLazySingleton<SPUtil>(() => SPUtil());
-  }
-  if (!getIt.isRegistered<AppDatabase>()) {
-    getIt.registerLazySingleton<AppDatabase>(() => AppDatabase.instance);
-  }
-
-  // Register ProviderContainer
-  if (!getIt.isRegistered<ProviderContainer>()) {
-    getIt.registerSingleton<ProviderContainer>(container);
-  }
-
-  // ============ Shared Services ============
-
-  // Initialize shared service locator
+  // Shared service locator
   await ServiceLocatorSetup.initialize();
 
-  // Register wallet service with ProviderContainer
+  // Feature services
   if (!getIt.isRegistered<WalletServiceImpl>()) {
     final walletService = WalletServiceImpl(container);
     getIt.registerSingleton<WalletServiceImpl>(walletService);
     ServiceLocatorSetup.registerWalletService(walletService);
   }
 
-  // Register mining service
   if (!getIt.isRegistered<MiningServiceImpl>()) {
     final miningService = MiningServiceImpl();
     getIt.registerSingleton<MiningServiceImpl>(miningService);
     ServiceLocatorSetup.registerMiningService(miningService);
   }
 
-  // Register chat crypto service
   if (!getIt.isRegistered<ChatCryptoServiceImpl>()) {
     final chatCryptoService = ChatCryptoServiceImpl(container);
     getIt.registerSingleton<ChatCryptoServiceImpl>(chatCryptoService);
     ServiceLocatorSetup.registerChatCryptoService(chatCryptoService);
   }
 
-  // ============ Feature-specific registrations ============
-
-  // ============ Wallet Services ============
-
-  // Token View API - handles token/balance queries
-  if (!getIt.isRegistered<TokenViewApi>()) {
-    getIt.registerLazySingleton<TokenViewApi>(() => TokenViewApi());
-  }
-
-  // ============ Platform Services ============
-
-  // Deep Link Service - handles deep link URI parsing
-  if (!getIt.isRegistered<DeepLinkService>()) {
-    getIt.registerLazySingleton<DeepLinkService>(() => DeepLinkService());
-  }
-
-  // ============ Security Services ============
-
-  // Secure Storage - handles encrypted credential storage
-  if (!getIt.isRegistered<SecureStorage>()) {
-    getIt.registerLazySingleton<SecureStorage>(() => SecureStorage());
-  }
+  // Platform and security
+  _registerIfAbsent<TokenViewApi>(() => TokenViewApi());
+  _registerIfAbsent<DeepLinkService>(() => DeepLinkService());
+  _registerIfAbsent<SecureStorage>(() => SecureStorage());
 }
 
 /// Reset dependencies (for testing)
@@ -136,6 +117,6 @@ MiningServiceImpl get miningServiceImpl => getIt<MiningServiceImpl>();
 /// Convenience accessors - Wallet APIs
 TokenViewApi get tokenViewApi => getIt<TokenViewApi>();
 
-// Shared service accessors (through interface)
+/// Shared service accessors (through interface)
 IWalletService get walletService => serviceLocator<IWalletService>();
 IMiningService get miningService => serviceLocator<IMiningService>();

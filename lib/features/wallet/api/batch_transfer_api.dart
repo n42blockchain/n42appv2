@@ -10,20 +10,18 @@ import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/features/wallet/models/batch_transfer_model.dart';
 
+part 'batch_transfer_encoding.dart';
+
 /// Multicall3 批量转账 API
 ///
 /// 使用 Multicall3 合约实现批量转账，节省 Gas 费用
 class BatchTransferApi {
   // Multicall3 合约地址 (大多数 EVM 链通用)
-  static const String multicall3Address = '0xcA11bde05977b3631167028862bE2a173976CA11';
+  static const String multicall3Address =
+      '0xcA11bde05977b3631167028862bE2a173976CA11';
 
-  // 函数选择器
-  static const String aggregateSelector = '0x252dba42'; // aggregate(Call[])
-  static const String aggregate3Selector = '0x82ad56cb'; // aggregate3(Call3[])
-  static const String tryAggregateSelector = '0xbce38bd7'; // tryAggregate(bool,Call[])
-
-  // ERC20 transfer 函数选择器
-  static const String erc20TransferSelector = '0xa9059cbb'; // transfer(address,uint256)
+  // ERC20 transfer 函数选择器: transfer(address,uint256)
+  static const String erc20TransferSelector = '0xa9059cbb';
 
   // 不同链上的 Multicall3 地址映射
   static const Map<String, String> multicall3Addresses = {
@@ -50,7 +48,8 @@ class BatchTransferApi {
 
   /// 解析 CSV 内容
   CsvParseResult parseCsv(String csvContent, int decimals) {
-    final lines = csvContent.split('\n')
+    final lines = csvContent
+        .split('\n')
         .map((e) => e.trim())
         .where((e) => e.isNotEmpty)
         .toList();
@@ -59,19 +58,15 @@ class BatchTransferApi {
       return CsvParseResult.failure(['CSV file is empty'], 0);
     }
 
-    // 检查是否有表头（第一行包含非地址内容）
-    int startIndex = 0;
-    if (!lines[0].startsWith('0x')) {
-      startIndex = 1; // 跳过表头
-    }
+    // 如果第一行不是地址则视为表头，跳过
+    final startIndex = lines[0].startsWith('0x') ? 0 : 1;
 
     final items = <BatchTransferItem>[];
     final errors = <String>[];
 
     for (int i = startIndex; i < lines.length; i++) {
       try {
-        final item = BatchTransferItem.fromCsvRow(lines[i], i, decimals);
-        items.add(item);
+        items.add(BatchTransferItem.fromCsvRow(lines[i], i, decimals));
       } catch (e) {
         errors.add(e.toString());
       }
@@ -80,11 +75,9 @@ class BatchTransferApi {
     if (items.isEmpty) {
       return CsvParseResult.failure(errors, lines.length - startIndex);
     }
-
     if (errors.isNotEmpty) {
       return CsvParseResult.partial(items, errors, lines.length - startIndex);
     }
-
     return CsvParseResult.success(items, lines.length - startIndex);
   }
 
@@ -100,17 +93,12 @@ class BatchTransferApi {
       final multicallAddr = getMulticall3Address(chainSymbol);
       final isNative = tokenAddress == null || tokenAddress.isEmpty;
 
-      BigInt totalValue = BigInt.zero;
-      String data;
-
-      if (isNative) {
-        // 原生代币批量转账：使用 aggregate3Value
-        data = _buildNativeMulticallData(items);
-        totalValue = items.fold(BigInt.zero, (sum, item) => sum + item.amount);
-      } else {
-        // ERC20 代币批量转账
-        data = _buildErc20MulticallData(tokenAddress, items);
-      }
+      final data = isNative
+          ? _buildNativeMulticallData(items)
+          : _buildErc20MulticallData(tokenAddress, items);
+      final totalValue = isNative
+          ? items.fold(BigInt.zero, (sum, item) => sum + item.amount)
+          : BigInt.zero;
 
       final params = {
         'jsonrpc': '2.0',
@@ -120,10 +108,9 @@ class BatchTransferApi {
             'from': fromAddress,
             'to': multicallAddr,
             'data': data,
-            if (!isNative || totalValue == BigInt.zero)
-              'value': '0x0'
-            else
-              'value': '0x${totalValue.toRadixString(16)}',
+            'value': totalValue == BigInt.zero
+                ? '0x0'
+                : '0x${totalValue.toRadixString(16)}',
           }
         ],
         'id': 1,
@@ -139,13 +126,14 @@ class BatchTransferApi {
       if (response['result'] != null) {
         final gasLimit = _hexToBigInt(response['result'].toString());
         // 增加 30% 安全边际（批量交易更复杂）
-        final safeGasLimit = gasLimit * BigInt.from(130) ~/ BigInt.from(100);
+        final safeGasLimit =
+            gasLimit * BigInt.from(130) ~/ BigInt.from(100);
         return MessageModel()
           ..error = false
           ..data = safeGasLimit;
       }
 
-      // 默认估算：每笔转账约 21000 gas (原生) 或 65000 gas (ERC20)
+      // 默认估算：原生 ~21000/笔，ERC20 ~65000/笔
       final defaultGas = isNative
           ? BigInt.from(21000 * items.length + 50000)
           : BigInt.from(65000 * items.length + 50000);
@@ -153,11 +141,9 @@ class BatchTransferApi {
         ..error = false
         ..data = defaultGas;
     } catch (e) {
-      // 回退到简单估算
-      final defaultGas = BigInt.from(100000 * items.length);
       return MessageModel()
         ..error = false
-        ..data = defaultGas;
+        ..data = BigInt.from(100000 * items.length);
     }
   }
 
@@ -169,7 +155,6 @@ class BatchTransferApi {
     required String? tokenAddress,
     required List<BatchTransferItem> items,
   }) async {
-    // 获取 gas limit
     final gasLimitResult = await estimateBatchGas(
       rpcUrl: rpcUrl,
       chainSymbol: chainSymbol,
@@ -177,39 +162,37 @@ class BatchTransferApi {
       tokenAddress: tokenAddress,
       items: items,
     );
+    final gasLimit =
+        gasLimitResult.data as BigInt? ?? BigInt.from(500000);
 
-    final gasLimit = gasLimitResult.data as BigInt? ?? BigInt.from(500000);
-
-    // 尝试获取 EIP-1559 费用
+    // 尝试 EIP-1559
     try {
       final feeHistoryParams = {
         'jsonrpc': '2.0',
         'method': 'eth_feeHistory',
-        'params': [4, 'latest', [25, 50, 75]],
+        'params': [4, 'latest', <int>[25, 50, 75]],
         'id': 1,
       };
-
       final feeResponse = await BaseApi.requestEmptyH.post(
         rpcUrl,
         params: feeHistoryParams,
         data: feeHistoryParams,
         header: {'Content-Type': 'application/json'},
       );
-
       if (feeResponse['result'] != null) {
-        final result = feeResponse['result'];
-        final baseFeeHistory = result['baseFeePerGas'] as List<dynamic>?;
-
+        final baseFeeHistory =
+            feeResponse['result']['baseFeePerGas'] as List<dynamic>?;
         if (baseFeeHistory != null && baseFeeHistory.isNotEmpty) {
-          final latestBaseFee = _hexToBigInt(baseFeeHistory.last.toString());
-          final maxPriorityFee = BigInt.from(1500000000); // 1.5 Gwei
-          final maxFee = latestBaseFee * BigInt.from(2) + maxPriorityFee;
-
+          final latestBaseFee =
+              _hexToBigInt(baseFeeHistory.last.toString());
+          const maxPriorityFee = 1500000000; // 1.5 Gwei
+          final maxPriorityBig = BigInt.from(maxPriorityFee);
+          final maxFee = latestBaseFee * BigInt.from(2) + maxPriorityBig;
           return BatchGasEstimate(
             gasLimit: gasLimit,
-            gasPrice: latestBaseFee + maxPriorityFee,
+            gasPrice: latestBaseFee + maxPriorityBig,
             maxFeePerGas: maxFee,
-            maxPriorityFeePerGas: maxPriorityFee,
+            maxPriorityFeePerGas: maxPriorityBig,
             totalFee: gasLimit * maxFee,
             isEip1559: true,
           );
@@ -224,19 +207,18 @@ class BatchTransferApi {
       final gasPriceParams = {
         'jsonrpc': '2.0',
         'method': 'eth_gasPrice',
-        'params': [],
+        'params': <dynamic>[],
         'id': 1,
       };
-
       final gasPriceResponse = await BaseApi.requestEmptyH.post(
         rpcUrl,
         params: gasPriceParams,
         data: gasPriceParams,
         header: {'Content-Type': 'application/json'},
       );
-
       if (gasPriceResponse['result'] != null) {
-        final gasPrice = _hexToBigInt(gasPriceResponse['result'].toString());
+        final gasPrice =
+            _hexToBigInt(gasPriceResponse['result'].toString());
         return BatchGasEstimate(
           gasLimit: gasLimit,
           gasPrice: gasPrice,
@@ -275,15 +257,12 @@ class BatchTransferApi {
       final multicallAddr = getMulticall3Address(chainSymbol);
       final isNative = tokenAddress == null || tokenAddress.isEmpty;
 
-      BigInt totalValue = BigInt.zero;
-      String data;
-
-      if (isNative) {
-        data = _buildNativeMulticallData(items);
-        totalValue = items.fold(BigInt.zero, (sum, item) => sum + item.amount);
-      } else {
-        data = _buildErc20MulticallData(tokenAddress, items);
-      }
+      final data = isNative
+          ? _buildNativeMulticallData(items)
+          : _buildErc20MulticallData(tokenAddress, items);
+      final totalValue = isNative
+          ? items.fold(BigInt.zero, (sum, item) => sum + item.amount)
+          : BigInt.zero;
 
       final txData = <String, String>{
         'chainId': '0x${chainId.toRadixString(16)}',
@@ -296,7 +275,8 @@ class BatchTransferApi {
 
       if (maxFeePerGas != null && maxPriorityFeePerGas != null) {
         txData['maxFeePerGas'] = '0x${maxFeePerGas.toRadixString(16)}';
-        txData['maxPriorityFeePerGas'] = '0x${maxPriorityFeePerGas.toRadixString(16)}';
+        txData['maxPriorityFeePerGas'] =
+            '0x${maxPriorityFeePerGas.toRadixString(16)}';
         txData['type'] = '0x2';
       } else if (gasPrice != null) {
         txData['gasPrice'] = '0x${gasPrice.toRadixString(16)}';
@@ -325,14 +305,12 @@ class BatchTransferApi {
         'params': [address, 'pending'],
         'id': 1,
       };
-
       final response = await BaseApi.requestEmptyH.post(
         rpcUrl,
         params: params,
         data: params,
         header: {'Content-Type': 'application/json'},
       );
-
       if (response['result'] != null) {
         return _hexToBigInt(response['result'].toString()).toInt();
       }
@@ -343,7 +321,8 @@ class BatchTransferApi {
   }
 
   /// 广播交易
-  Future<MessageModel> broadcastTransaction(String rpcUrl, String signedTx) async {
+  Future<MessageModel> broadcastTransaction(
+      String rpcUrl, String signedTx) async {
     try {
       final params = {
         'jsonrpc': '2.0',
@@ -351,14 +330,12 @@ class BatchTransferApi {
         'params': [signedTx],
         'id': 1,
       };
-
       final response = await BaseApi.requestEmptyH.post(
         rpcUrl,
         params: params,
         data: params,
         header: {'Content-Type': 'application/json'},
       );
-
       if (response['result'] != null) {
         return MessageModel()
           ..error = false
@@ -366,9 +343,9 @@ class BatchTransferApi {
       } else if (response['error'] != null) {
         return MessageModel()
           ..error = true
-          ..data = response['error']['message'] ?? 'Transaction failed';
+          ..data =
+              response['error']['message'] ?? 'Transaction failed';
       }
-
       return MessageModel.error()..data = 'Unknown error';
     } catch (e) {
       return MessageModel.error()..data = e.toString();
@@ -401,137 +378,5 @@ class BatchTransferApi {
       } catch (_) {}
     }
     return null;
-  }
-
-  // ============ Helper Methods ============
-
-  /// 构建原生代币 Multicall 数据 (aggregate3Value)
-  String _buildNativeMulticallData(List<BatchTransferItem> items) {
-    // aggregate3Value(Call3Value[] calldata calls)
-    // Call3Value: { target, allowFailure, value, callData }
-    const selector = '0xe8917eb5';
-
-    // 构建 calls 数组
-    final callsData = StringBuffer();
-
-    // 数组偏移 (32 bytes)
-    callsData.write(_padLeft('20', 64)); // 偏移到数组位置
-
-    // 数组长度
-    callsData.write(_padLeft(items.length.toRadixString(16), 64));
-
-    // 每个 Call3Value 结构的偏移
-    int currentOffset = items.length * 32; // 初始偏移
-    final offsets = <String>[];
-    final structures = <String>[];
-
-    for (int i = 0; i < items.length; i++) {
-      offsets.add(_padLeft(currentOffset.toRadixString(16), 64));
-
-      final item = items[i];
-      final structure = StringBuffer();
-
-      // target (address)
-      structure.write(_padLeft(item.toAddress.toLowerCase().replaceFirst('0x', ''), 64));
-      // allowFailure (bool) - false
-      structure.write(_padLeft('0', 64));
-      // value (uint256)
-      structure.write(_padLeft(item.amount.toRadixString(16), 64));
-      // callData offset
-      structure.write(_padLeft('80', 64)); // 4 * 32 = 128 = 0x80
-      // callData length (0 for native transfer)
-      structure.write(_padLeft('0', 64));
-
-      structures.add(structure.toString());
-      currentOffset += 160; // 5 * 32 bytes per structure
-    }
-
-    // 组装最终数据
-    final result = StringBuffer(selector);
-    result.write(callsData);
-    for (final offset in offsets) {
-      result.write(offset);
-    }
-    for (final structure in structures) {
-      result.write(structure);
-    }
-
-    return result.toString();
-  }
-
-  /// 构建 ERC20 Multicall 数据 (aggregate3)
-  String _buildErc20MulticallData(String tokenAddress, List<BatchTransferItem> items) {
-    // aggregate3(Call3[] calldata calls)
-    // Call3: { target, allowFailure, callData }
-    const selector = '0x82ad56cb';
-
-    final result = StringBuffer(selector);
-
-    // 数组偏移
-    result.write(_padLeft('20', 64));
-
-    // 数组长度
-    result.write(_padLeft(items.length.toRadixString(16), 64));
-
-    // 计算每个 Call3 的偏移
-    int baseOffset = items.length * 32;
-    final offsets = <String>[];
-    final calls = <String>[];
-
-    for (int i = 0; i < items.length; i++) {
-      offsets.add(_padLeft(baseOffset.toRadixString(16), 64));
-
-      final item = items[i];
-      final callData = _buildErc20TransferData(item.toAddress, item.amount);
-      final callDataBytes = (callData.length - 2) ~/ 2; // 去除 0x 后的字节数
-
-      final call = StringBuffer();
-      // target (token address)
-      call.write(_padLeft(tokenAddress.toLowerCase().replaceFirst('0x', ''), 64));
-      // allowFailure (bool) - false
-      call.write(_padLeft('0', 64));
-      // callData offset (固定 0x60 = 96)
-      call.write(_padLeft('60', 64));
-      // callData length
-      call.write(_padLeft(callDataBytes.toRadixString(16), 64));
-      // callData (padded to 32 bytes)
-      final paddedCallData = callData.replaceFirst('0x', '');
-      final paddedLength = ((paddedCallData.length + 63) ~/ 64) * 64;
-      call.write(paddedCallData.padRight(paddedLength, '0'));
-
-      calls.add(call.toString());
-      baseOffset += 128 + paddedLength ~/ 2; // 4 * 32 + callData
-    }
-
-    // 写入偏移
-    for (final offset in offsets) {
-      result.write(offset);
-    }
-
-    // 写入 call 数据
-    for (final call in calls) {
-      result.write(call);
-    }
-
-    return result.toString();
-  }
-
-  /// 构建 ERC20 transfer 调用数据
-  String _buildErc20TransferData(String to, BigInt amount) {
-    final toPadded = _padLeft(to.toLowerCase().replaceFirst('0x', ''), 64);
-    final amountHex = _padLeft(amount.toRadixString(16), 64);
-    return '$erc20TransferSelector$toPadded$amountHex';
-  }
-
-  String _padLeft(String str, int length) {
-    return str.padLeft(length, '0');
-  }
-
-  BigInt _hexToBigInt(String hex) {
-    if (hex.startsWith('0x') || hex.startsWith('0X')) {
-      hex = hex.substring(2);
-    }
-    if (hex.isEmpty) return BigInt.zero;
-    return BigInt.parse(hex, radix: 16);
   }
 }

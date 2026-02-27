@@ -50,32 +50,31 @@ class NftModel {
   });
 
   factory NftModel.fromSimpleHash(Map<String, dynamic> json) {
-    final nft = json;
-    final contract = nft['contract'] as Map<String, dynamic>? ?? {};
-    final collection = nft['collection'] as Map<String, dynamic>? ?? {};
+    final contract = json['contract'] as Map<String, dynamic>? ?? {};
+    final collection = json['collection'] as Map<String, dynamic>? ?? {};
 
     // 图片 URL：优先使用 previews，再用 image_url
-    final previews = nft['previews'] as Map<String, dynamic>?;
-    String? imageUrl = previews?['image_small_url'] as String? ??
+    final previews = json['previews'] as Map<String, dynamic>?;
+    final imageUrl = previews?['image_small_url'] as String? ??
         previews?['image_medium_url'] as String? ??
-        nft['image_url'] as String?;
+        json['image_url'] as String?;
 
     // 动画/视频 URL
-    final animationUrl = nft['animation_url'] as String? ??
-        (nft['extra_metadata'] as Map?)?['animation_original_url'] as String?;
+    final animationUrl = json['animation_url'] as String? ??
+        (json['extra_metadata'] as Map?)?['animation_original_url'] as String?;
 
     // NFT 类型
     final contractType = contract['type'] as String? ?? '';
     final nftType = contractType.isNotEmpty ? contractType : 'ERC721';
 
     // 余额：quantity_string（字符串）优先，回退到 quantity（整数）字段
-    final rawQ = nft['quantity_string'] ?? nft['quantity'];
+    final rawQ = json['quantity_string'] ?? json['quantity'];
     final balance = rawQ is int
         ? rawQ
         : (rawQ is String ? (int.tryParse(rawQ) ?? 1) : 1);
 
     // OpenSea / marketplace URL
-    final marketplaces = nft['markets'] as List<dynamic>?;
+    final marketplaces = json['markets'] as List<dynamic>?;
     String? openseaUrl;
     if (marketplaces != null) {
       for (final m in marketplaces) {
@@ -86,7 +85,7 @@ class NftModel {
       }
     }
     // 备用：从 external_url 取
-    openseaUrl ??= nft['external_url'] as String?;
+    openseaUrl ??= json['external_url'] as String?;
 
     // Collection 地板价（取第一条 floor_prices 记录）
     double? floorPrice;
@@ -110,29 +109,28 @@ class NftModel {
     final collectionName = collection['name'] as String?;
 
     // Ordinals 铭文编号
-    final extraMetadata = nft['extra_metadata'] as Map?;
+    final extraMetadata = json['extra_metadata'] as Map?;
     int? inscriptionNumber;
     if (extraMetadata != null) {
       final rawNum = extraMetadata['inscription_number'];
       if (rawNum != null) {
-        inscriptionNumber = rawNum is int
-            ? rawNum
-            : int.tryParse(rawNum.toString());
+        inscriptionNumber =
+            rawNum is int ? rawNum : int.tryParse(rawNum.toString());
       }
     }
 
     return NftModel(
-      nftId: nft['nft_id'] as String? ?? '',
-      name: nft['name'] as String? ??
+      nftId: json['nft_id'] as String? ?? '',
+      name: json['name'] as String? ??
           collectionName ??
-          'NFT #${nft['token_id']}',
+          'NFT #${json['token_id']}',
       imageUrl: imageUrl,
-      description: nft['description'] as String?,
+      description: json['description'] as String?,
       contractAddress: contract['address'] as String? ?? '',
-      tokenId: nft['token_id'] as String? ?? '',
+      tokenId: json['token_id'] as String? ?? '',
       nftType: nftType,
       balance: balance,
-      chain: nft['chain'] as String? ?? '',
+      chain: json['chain'] as String? ?? '',
       openseaUrl: openseaUrl,
       floorPrice: floorPrice,
       floorPriceSymbol: floorPriceSymbol,

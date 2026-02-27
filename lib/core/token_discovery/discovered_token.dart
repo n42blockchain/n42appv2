@@ -28,20 +28,17 @@ class DiscoveredToken {
   String get humanBalance {
     if (rawBalance == BigInt.zero) return '0';
     if (decimals <= 0) return rawBalance.toString();
-    try {
-      final scale = BigInt.from(10).pow(decimals);
-      final intPart = rawBalance ~/ scale;
-      final fracPart = rawBalance % scale;
-      if (fracPart == BigInt.zero) return intPart.toString();
-      final fracStr = fracPart.toString().padLeft(decimals, '0');
-      // Trim trailing zeros, keep at most 6 decimal places.
-      final trimmed = fracStr.substring(0, min(6, fracStr.length));
-      final meaningful = trimmed.replaceAll(RegExp(r'0+$'), '');
-      if (meaningful.isEmpty) return intPart.toString();
-      return '$intPart.$meaningful';
-    } catch (_) {
-      return rawBalance.toString();
-    }
+    final scale = BigInt.from(10).pow(decimals);
+    final intPart = rawBalance ~/ scale;
+    final fracPart = rawBalance % scale;
+    if (fracPart == BigInt.zero) return intPart.toString();
+    final fracStr = fracPart.toString().padLeft(decimals, '0');
+    // Trim trailing zeros, keep at most 6 decimal places.
+    final meaningful = fracStr
+        .substring(0, min(6, fracStr.length))
+        .replaceAll(RegExp(r'0+$'), '');
+    if (meaningful.isEmpty) return intPart.toString();
+    return '$intPart.$meaningful';
   }
 
   /// Display name: symbol if available, otherwise truncated contract address.

@@ -1,5 +1,5 @@
-class SOLTransactionItem{
-  String? _id;
+class SOLTransactionItem {
+  String? id; // maps to '_id' in JSON
   String? src;
   String? dst;
   int? lamport;
@@ -11,31 +11,46 @@ class SOLTransactionItem{
   int? decimals;
   int? txNumberSolTransfer;
 
-  SOLTransactionItem(this._id,this.src, this.dst, this.lamport, this.blockTime, this.slot, this.txHash, this.status, this.fee, this.decimals, this.txNumberSolTransfer);
-  factory SOLTransactionItem.fromJson(Map<String,dynamic>map)=>SOLTransactionItem(
-    map['_id'] as String?,
-    map['src'] as String?,
-    map['dst'] as String?,
-    map['lamport'] as int?,
-    map['blockTime'] as int?,
-    map['slot'] as int?,
-    map['txHash'] as String?,
-    map['status'] as String?,
-    map['fee'] as int?,
-    map['decimals'] as int?,
-    map['txNumberSolTransfer'] as int?,
+  SOLTransactionItem(
+    this.id,
+    this.src,
+    this.dst,
+    this.lamport,
+    this.blockTime,
+    this.slot,
+    this.txHash,
+    this.status,
+    this.fee,
+    this.decimals,
+    this.txNumberSolTransfer,
   );
-  Map<String, dynamic> toJson()=><String, dynamic>{
-    '_id': _id,
-    'src': src,
-    'dst': dst,
-    'lamport': lamport,
-    'blockTime': blockTime,
-    'slot': slot,
-    'txHash': txHash,
-    'status': status,
-    'fee': fee,
-    'decimals': decimals,
-    'txNumberSolTransfer': txNumberSolTransfer,
-  };
+
+  factory SOLTransactionItem.fromJson(Map<String, dynamic> map) =>
+      SOLTransactionItem(
+        map['_id'] as String?,
+        map['src'] as String?,
+        map['dst'] as String?,
+        map['lamport'] as int?,
+        map['blockTime'] as int?,
+        map['slot'] as int?,
+        map['txHash'] as String?,
+        map['status'] as String?,
+        map['fee'] as int?,
+        map['decimals'] as int?,
+        map['txNumberSolTransfer'] as int?,
+      );
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        '_id': id,
+        'src': src,
+        'dst': dst,
+        'lamport': lamport,
+        'blockTime': blockTime,
+        'slot': slot,
+        'txHash': txHash,
+        'status': status,
+        'fee': fee,
+        'decimals': decimals,
+        'txNumberSolTransfer': txNumberSolTransfer,
+      };
 }

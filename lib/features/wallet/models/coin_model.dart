@@ -101,95 +101,64 @@ class CoinModel {
   CoinModel.fromMap(Map<String, dynamic> map, ) {
     coin = map;
   }
-  //setAddress,是否设置钱包的地址Map
-  Future<void> buildWallet({String pk="",bool setAddress=true,int? walletIndex, ICoinModelWalletAccess? walletAccess}) async {
+  // setAddress 控制是否将地址写回 walletAccess
+  Future<void> buildWallet({String pk = "", bool setAddress = true, int? walletIndex, ICoinModelWalletAccess? walletAccess}) async {
     walletAccess ??= this.walletAccess;
-    String coinType = coin['coinType'];
-    if (address == null) {
-      if(walletIndex==null){
-        if (walletAccess == null) {
-          debugPrint('CoinModel.buildWallet: walletAccess is required');
-          loadError = true;
-          return;
-        }
-        WalletInfo info = walletAccess.walletInfo;
+    if (address != null) return;
 
-        // 观察钱包：直接使用存储的观察地址，跳过密钥推导
-        if (info.watchOnly && info.watchAddress.isNotEmpty) {
-          address = info.watchAddress;
-          addressType[addrType] = info.watchAddress;
-          if (setAddress) {
-            walletAccess.setAddress(coinType, addressType);
-          }
-          return;
-        }
+    if (walletAccess == null) {
+      debugPrint('CoinModel.buildWallet: walletAccess is required');
+      loadError = true;
+      return;
+    }
 
-        Map<String, dynamic>? pathMap = coin['path'];
-        if (pathMap == null) {
-          debugPrint('CoinModel.buildWallet: path is null for $coinType');
-          loadError = true;
-          return;
-        }
-        Map<Object?, Object?> rm= await Trustdart().generateAddress(
-          coinType,
-          getPathWithIndex(pathMap[addrType], pathIndex),
-          pathMap[addrType],
-          mnemonic: info.mnemonic??"",
-          pk: privateKey??"",
-          isTest:isTest,
-        );
-        List<Object?> keyList=rm.keys.toList();
-        for(int i=0;i<keyList.length;i++){
-          String key=keyList[i] as String;
-          addressType[key]=rm[keyList[i]];
-        }
-        // 安全检查：确保 rm[addrType] 不为 null 且不为空
-        final generatedAddress = rm[addrType];
-        if (generatedAddress == null || (generatedAddress as String).isEmpty) {
-          debugPrint('CoinModel.buildWallet: Failed to generate address for $coinType (addrType: $addrType)');
-          loadError = true;
-          walletAccess.refresh();
-          return;
-        }
-        address = generatedAddress;
-        if(setAddress){
-          walletAccess.setAddress(coinType, addressType);
-        }
-      }else{
-        if (walletAccess == null) {
-          debugPrint('CoinModel.buildWallet: walletAccess is required');
-          loadError = true;
-          return;
-        }
-        WalletInfo info = walletAccess.walletInfoList[walletIndex];
-        Map<String, dynamic>? pathMap = coin['path'];
-        if (pathMap == null) {
-          debugPrint('CoinModel.buildWallet: path is null for $coinType');
-          loadError = true;
-          return;
-        }
-        Map<Object?, Object?> rm = await Trustdart().generateAddress(
-          coinType,
-          getPathWithIndex(pathMap[addrType], pathIndex),
-          pathMap[addrType],
-          mnemonic:  info.mnemonic??"",
-          pk: privateKey??"",
-          isTest: isTest,
-        );
-        List<Object?> keyList=rm.keys.toList();
-        for(int i=0;i<keyList.length;i++){
-          String key=keyList[i] as String;
-          addressType[key]=rm[keyList[i]];
-        }
-        // 安全检查：确保 rm[addrType] 不为 null 且不为空
-        final generatedAddress = rm[addrType];
-        if (generatedAddress == null || (generatedAddress as String).isEmpty) {
-          debugPrint('CoinModel.buildWallet: Failed to generate address for $coinType (addrType: $addrType)');
-          loadError = true;
-          return;
-        }
-        address = generatedAddress;
+    final String coinType = coin['coinType'];
+    final WalletInfo info = walletIndex == null
+        ? walletAccess.walletInfo
+        : walletAccess.walletInfoList[walletIndex];
+
+    // 观察钱包：直接使用存储的观察地址，跳过密钥推导（仅对主钱包生效）
+    if (walletIndex == null && info.watchOnly && info.watchAddress.isNotEmpty) {
+      address = info.watchAddress;
+      addressType[addrType] = info.watchAddress;
+      if (setAddress) {
+        walletAccess.setAddress(coinType, addressType);
       }
+      return;
+    }
+
+    final Map<String, dynamic>? pathMap = coin['path'];
+    if (pathMap == null) {
+      debugPrint('CoinModel.buildWallet: path is null for $coinType');
+      loadError = true;
+      return;
+    }
+
+    final Map<Object?, Object?> rm = await Trustdart().generateAddress(
+      coinType,
+      getPathWithIndex(pathMap[addrType], pathIndex),
+      pathMap[addrType],
+      mnemonic: info.mnemonic ?? "",
+      pk: privateKey ?? "",
+      isTest: isTest,
+    );
+
+    for (final key in rm.keys) {
+      addressType[key as String] = rm[key];
+    }
+
+    // 安全检查：确保 rm[addrType] 不为 null 且不为空
+    final generatedAddress = rm[addrType];
+    if (generatedAddress == null || (generatedAddress as String).isEmpty) {
+      debugPrint('CoinModel.buildWallet: Failed to generate address for $coinType (addrType: $addrType)');
+      loadError = true;
+      walletAccess.refresh();
+      return;
+    }
+
+    address = generatedAddress;
+    if (walletIndex == null && setAddress) {
+      walletAccess.setAddress(coinType, addressType);
     }
   }
   Future<void> getBalanceDefault()async{

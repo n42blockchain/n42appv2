@@ -26,48 +26,39 @@ enum BatchTransferState {
 class BatchTransferProvider extends ChangeNotifier {
   final BatchTransferApi _api = BatchTransferApi();
 
-  // 状态
   BatchTransferState _state = BatchTransferState.initial;
   BatchTransferState get state => _state;
 
-  // 转账项目
   List<BatchTransferItem> _items = [];
   List<BatchTransferItem> get items => _items;
 
-  // 解析错误
   List<String> _parseErrors = [];
   List<String> get parseErrors => _parseErrors;
 
-  // Gas 估算
   BatchGasEstimate? _gasEstimate;
   BatchGasEstimate? get gasEstimate => _gasEstimate;
 
-  // 链信息
   String _chainSymbol = '';
   String get chainSymbol => _chainSymbol;
 
   String _rpcUrl = '';
   int _chainId = 1;
 
-  // Token 信息
   String? _tokenAddress;
   String _tokenSymbol = '';
   int _decimals = 18;
   String get tokenSymbol => _tokenSymbol;
 
-  // 发送地址
   String _fromAddress = '';
   String get fromAddress => _fromAddress;
 
-  // 错误信息
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  // 交易结果
   String? _txHash;
   String? get txHash => _txHash;
 
-  // 计算属性：缓存总额，避免 addItem 时 O(n²) 重复求和
+  // 缓存总额，避免 addItem 时 O(n²) 重复求和
   BigInt _cachedTotalAmount = BigInt.zero;
   BigInt get totalAmount => _cachedTotalAmount;
   int get recipientCount => _items.length;
@@ -108,7 +99,6 @@ class BatchTransferProvider extends ChangeNotifier {
 
     try {
       final result = _api.parseCsv(csvContent, _decimals);
-
       _items = result.items;
       _cachedTotalAmount = result.items.fold(BigInt.zero, (s, i) => s + i.amount);
       _parseErrors = result.errors;
@@ -129,40 +119,33 @@ class BatchTransferProvider extends ChangeNotifier {
 
   /// 手动添加转账项
   void addItem(String toAddress, BigInt amount, {String? memo}) {
-    final item = BatchTransferItem(
+    _items.add(BatchTransferItem(
       id: 'item_${_items.length}',
       toAddress: toAddress,
       amount: amount,
       memo: memo,
-    );
-    _items.add(item);
-    _cachedTotalAmount += amount; // 增量更新，O(1)
+    ));
+    _cachedTotalAmount += amount;
 
     if (_state == BatchTransferState.initial) {
       _state = BatchTransferState.ready;
     }
-
-    // 清除之前的 gas 估算
-    _gasEstimate = null;
-
+    _invalidateGasEstimate();
     notifyListeners();
   }
 
   /// 移除转账项
   void removeItem(int index) {
-    if (index >= 0 && index < _items.length) {
-      _cachedTotalAmount -= _items[index].amount; // 先减再移除
-      _items.removeAt(index);
+    if (index < 0 || index >= _items.length) return;
 
-      if (_items.isEmpty) {
-        _state = BatchTransferState.initial;
-      }
+    _cachedTotalAmount -= _items[index].amount;
+    _items.removeAt(index);
 
-      // 清除之前的 gas 估算
-      _gasEstimate = null;
-
-      notifyListeners();
+    if (_items.isEmpty) {
+      _state = BatchTransferState.initial;
     }
+    _invalidateGasEstimate();
+    notifyListeners();
   }
 
   /// 清除所有项目
@@ -178,20 +161,17 @@ class BatchTransferProvider extends ChangeNotifier {
 
   /// 更新转账项金额
   void updateItemAmount(int index, BigInt newAmount) {
-    if (index >= 0 && index < _items.length) {
-      _cachedTotalAmount = _cachedTotalAmount - _items[index].amount + newAmount; // 增量调整
-      _items[index] = BatchTransferItem(
-        id: _items[index].id,
-        toAddress: _items[index].toAddress,
-        amount: newAmount,
-        memo: _items[index].memo,
-      );
+    if (index < 0 || index >= _items.length) return;
 
-      // 清除之前的 gas 估算
-      _gasEstimate = null;
-
-      notifyListeners();
-    }
+    _cachedTotalAmount = _cachedTotalAmount - _items[index].amount + newAmount;
+    _items[index] = BatchTransferItem(
+      id: _items[index].id,
+      toAddress: _items[index].toAddress,
+      amount: newAmount,
+      memo: _items[index].memo,
+    );
+    _invalidateGasEstimate();
+    notifyListeners();
   }
 
   /// 估算 Gas
@@ -213,7 +193,6 @@ class BatchTransferProvider extends ChangeNotifier {
         tokenAddress: _tokenAddress,
         items: _items,
       );
-
       _state = BatchTransferState.gasEstimated;
     } catch (e) {
       _state = BatchTransferState.error;
@@ -235,7 +214,6 @@ class BatchTransferProvider extends ChangeNotifier {
 
     try {
       final nonce = await _api.getNonce(_rpcUrl, _fromAddress);
-
       final result = await _api.buildBatchTransaction(
         chainSymbol: _chainSymbol,
         fromAddress: _fromAddress,
@@ -282,8 +260,6 @@ class BatchTransferProvider extends ChangeNotifier {
       }
 
       _txHash = result.data.toString();
-
-      // 等待链上确认
       _state = BatchTransferState.awaitingConfirmation;
       notifyListeners();
 
@@ -292,27 +268,18 @@ class BatchTransferProvider extends ChangeNotifier {
       if (receipt != null && receipt['status'] == '0x1') {
         // 交易成功上链
         _state = BatchTransferState.success;
-        for (var item in _items) {
-          item.status = BatchTransferStatus.success;
-          item.txHash = _txHash;
-        }
+        _updateItemStatuses(BatchTransferStatus.success);
       } else if (receipt != null) {
         // 交易已上链但 reverted
         _errorMessage = 'Transaction reverted on-chain';
         _state = BatchTransferState.error;
-        for (var item in _items) {
-          item.status = BatchTransferStatus.failed;
-          item.txHash = _txHash;
-        }
+        _updateItemStatuses(BatchTransferStatus.failed);
         notifyListeners();
         return false;
       } else {
         // 超时：交易已广播但确认超时，标记为 pending
         _state = BatchTransferState.success;
-        for (var item in _items) {
-          item.status = BatchTransferStatus.pending;
-          item.txHash = _txHash;
-        }
+        _updateItemStatuses(BatchTransferStatus.pending);
       }
 
       notifyListeners();
@@ -356,12 +323,9 @@ class BatchTransferProvider extends ChangeNotifier {
     final wholePart = amount ~/ divisor;
     final fractionalPart = amount % divisor;
 
-    if (fractionalPart == BigInt.zero) {
-      return wholePart.toString();
-    }
+    if (fractionalPart == BigInt.zero) return wholePart.toString();
 
     final fractionalStr = fractionalPart.toString().padLeft(_decimals, '0');
-    // 移除尾部零
     final trimmed = fractionalStr.replaceAll(RegExp(r'0+$'), '');
     return '$wholePart.$trimmed';
   }
@@ -383,8 +347,7 @@ class BatchTransferProvider extends ChangeNotifier {
     final buf = StringBuffer();
     // UTF-8 BOM — Excel 识别中文不乱码
     buf.write('\uFEFF');
-    buf.writeln(
-        'No,Address,Amount ($_tokenSymbol),Memo,Status,TxHash,Error,Time');
+    buf.writeln('No,Address,Amount ($_tokenSymbol),Memo,Status,TxHash,Error,Time');
     final time = DateTime.now()
         .toIso8601String()
         .replaceFirst('T', ' ')
@@ -399,6 +362,19 @@ class BatchTransferProvider extends ChangeNotifier {
           '${i + 1},${item.toAddress},$amount,$memo,${item.status.name},$txHash,$error,$time');
     }
     return buf.toString();
+  }
+
+  // ---------- private helpers ----------
+
+  void _invalidateGasEstimate() {
+    _gasEstimate = null;
+  }
+
+  void _updateItemStatuses(BatchTransferStatus status) {
+    for (final item in _items) {
+      item.status = status;
+      item.txHash = _txHash;
+    }
   }
 
   /// RFC-4180 CSV 字段转义：含逗号、双引号、换行时加引号包裹

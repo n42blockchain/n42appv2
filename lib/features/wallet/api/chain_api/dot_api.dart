@@ -7,107 +7,97 @@ import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/core/network/request_url.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
 
-class DotApi{
-  //获取余额
-  Future<MessageModel> getTokens(String address,String coinType,{bool isTest=false})async{
-    try{
-      MessageModel mm=MessageModel();
-      String url=RequestUrl().getUrl2(coinType, "api",isTest: isTest);
-      url="${url}api/scan/account/tokens";
-      Map<String,dynamic> pMap={
-        "address":address
-      };
-      final data=await BaseApi.requestEmptyH.post(url, params: {},data: pMap,header: {"x-api-key":ApiKeysConfig.dotApiKey});
-      if(data['code'] !=0){
-        mm.error=true;
-        mm.data="error";
-      }else{
-        if(data['data']['native']==null){
-          mm.data=BigInt.zero;
-        }else{
-          bool find=false;
-          for(Map c in data['data']['native']){
-            //if(c['symbol']==coinType){
-              mm.data=BigInt.parse(c['balance']);
-              find=true;
-            //}
-          }
-          if(find==false){
-            mm.data=BigInt.zero;
-          }
+class DotApi {
+  /// 获取余额
+  Future<MessageModel> getTokens(String address, String coinType, {bool isTest = false}) async {
+    try {
+      final mm = MessageModel();
+      final url = '${RequestUrl().getUrl2(coinType, "api", isTest: isTest)}api/scan/account/tokens';
+      final data = await BaseApi.requestEmptyH.post(
+        url,
+        params: {},
+        data: {'address': address},
+        header: {'x-api-key': ApiKeysConfig.dotApiKey},
+      );
+      if (data['code'] != 0) {
+        mm.error = true;
+        mm.data = 'error';
+      } else if (data['data']['native'] == null) {
+        mm.data = BigInt.zero;
+      } else {
+        bool find = false;
+        for (final Map c in data['data']['native']) {
+          mm.data = BigInt.parse(c['balance']);
+          find = true;
         }
+        if (!find) mm.data = BigInt.zero;
       }
       return mm;
-    }catch(e){
-      MessageModel mm=MessageModel.error();
-      mm.data=e.toString();
-      return mm;
+    } catch (e) {
+      return MessageModel.error()..data = e.toString();
     }
   }
-  //GenesisHash=0和BlockHash=nll
-  Future<MessageModel> getGenesisHash({int? index,bool isTest=false})async {
+
+  /// GenesisHash=0 和 BlockHash=null
+  Future<MessageModel> getGenesisHash({int? index, bool isTest = false}) async {
     return resultToMessageModel(
-      await baseRPC("chain_getBlockHash",index==null?[]:[index],isTest: isTest),
+      await baseRPC('chain_getBlockHash', index == null ? [] : [index], isTest: isTest),
     );
   }
-  Future<MessageModel> getNonce(String address,{bool isTest=false})async{
+
+  Future<MessageModel> getNonce(String address, {bool isTest = false}) async {
     return resultToMessageModel(
-      await baseRPC("system_accountNextIndex",[address],isTest: isTest),
+      await baseRPC('system_accountNextIndex', [address], isTest: isTest),
     );
   }
-  Future<MessageModel> getChainHeader({bool isTest=false})async{
+
+  Future<MessageModel> getChainHeader({bool isTest = false}) async {
     return resultToMessageModel(
-      await baseRPC("chain_getHeader",[],isTest: isTest),
+      await baseRPC('chain_getHeader', [], isTest: isTest),
     );
   }
-  //获取specVersion、TransactionVersion
-  Future<MessageModel> getRuntimeVersion({bool isTest=false})async {
+
+  /// 获取 specVersion、transactionVersion
+  Future<MessageModel> getRuntimeVersion({bool isTest = false}) async {
     return resultToMessageModel(
-      await baseRPC("state_getRuntimeVersion",[],isTest: isTest),
-    );
-    /*{
-  "jsonrpc": "2.0",
-  "result": {
-    "specName": "polkadot",
-    "implName": "parity-polkadot",
-    "authoringVersion": 1,
-    "specVersion": 9430,
-    "implVersion": 1,
-    "apis": [...],
-    "transactionVersion": 20,
-    "stateVersion": 0
-  },
-  "id": 1
-}
-    * */
-  }
-  //发送交易（明确禁用重试，防止双发）
-  Future<MessageModel> submitTxHash(String hash,{bool isTest=false})async{
-    return resultToMessageModel(
-      await baseRPC("author_submitExtrinsic",[hash],isTest: isTest,enableRetry: false),
+      await baseRPC('state_getRuntimeVersion', [], isTest: isTest),
     );
   }
-  //估算gas费
-  Future<MessageModel> getGasPrice(String txHash,{bool isTest=false})async{
+
+  /// 发送交易（明确禁用重试，防止双发）
+  Future<MessageModel> submitTxHash(String hash, {bool isTest = false}) async {
     return resultToMessageModel(
-      await baseRPC("payment_queryInfo",[txHash],isTest: isTest),
+      await baseRPC('author_submitExtrinsic', [hash], isTest: isTest, enableRetry: false),
     );
   }
+
+  /// 估算 gas 费
+  Future<MessageModel> getGasPrice(String txHash, {bool isTest = false}) async {
+    return resultToMessageModel(
+      await baseRPC('payment_queryInfo', [txHash], isTest: isTest),
+    );
+  }
+
   Future<Result<dynamic, AppError>> baseRPC(
     String method,
-    var value, {
+    dynamic value, {
     bool? isTest = false,
     bool enableRetry = true,
   }) async {
     try {
-      Map<String,dynamic> postData={"jsonrpc":"2.0","method":method,"params":value,"id":AppGlobals.nextId};
-      final data=await BaseApi.requestEmptyH.post(
-        RequestUrl().getUrl2(CoinType.DOT.name, "rpc",isTest: isTest),
+      final postData = {
+        'jsonrpc': '2.0',
+        'method': method,
+        'params': value,
+        'id': AppGlobals.nextId,
+      };
+      final data = await BaseApi.requestEmptyH.post(
+        RequestUrl().getUrl2(CoinType.DOT.name, 'rpc', isTest: isTest),
         params: {},
         data: postData,
         enableRetry: enableRetry,
       );
-      if(data.containsKey('error')){
+      if (data.containsKey('error')) {
         final errorMsg = data['error'] is Map
             ? (data['error']['message']?.toString() ?? 'RPC error')
             : data['error']?.toString() ?? 'RPC error';

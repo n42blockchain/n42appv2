@@ -2,10 +2,10 @@
 abstract class AppException implements Exception {
   /// 异常消息
   final String message;
-  
+
   /// 异常代码（可选）
   final String? code;
-  
+
   /// 原始错误（可选）
   final dynamic originalError;
 
@@ -20,7 +20,7 @@ abstract class AppException implements Exception {
 }
 
 /// 服务器异常
-/// 
+///
 /// 当 API 返回错误状态码时抛出
 class ServerException extends AppException {
   /// HTTP 状态码
@@ -38,7 +38,7 @@ class ServerException extends AppException {
 }
 
 /// 网络异常
-/// 
+///
 /// 当网络连接失败时抛出
 class NetworkException extends AppException {
   const NetworkException({
@@ -58,7 +58,7 @@ class TimeoutException extends AppException {
 }
 
 /// 缓存异常
-/// 
+///
 /// 当本地缓存操作失败时抛出
 class CacheException extends AppException {
   const CacheException({
@@ -69,7 +69,7 @@ class CacheException extends AppException {
 }
 
 /// 认证异常
-/// 
+///
 /// 当用户认证失败或 Token 过期时抛出
 class AuthException extends AppException {
   const AuthException({
@@ -98,7 +98,7 @@ class PermissionException extends AppException {
 }
 
 /// 验证异常
-/// 
+///
 /// 当输入数据验证失败时抛出
 class ValidationException extends AppException {
   /// 验证错误详情
@@ -147,4 +147,3 @@ class BiometricException extends AppException {
     super.originalError,
   });
 }
-

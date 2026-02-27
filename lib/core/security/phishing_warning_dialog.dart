@@ -22,17 +22,20 @@ Future<bool?> showPhishingWarningDialog(
 ) async {
   final s = S.of(context);
 
+  Color themeColor(AppThemeKeys key) =>
+      AppThemeUtils.getColorByKey(context, key.name);
+
   final result = await tipsDialog3(
     context,
     Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: themeColor(AppThemeKeys.itemBgColor),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // ── Warning header (red) ───────────────────────────────────────────
+          // ── Warning header (red) ──────────────────────────────────────────
           Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(
@@ -40,8 +43,7 @@ Future<bool?> showPhishingWarningDialog(
               horizontal: ScreenUtil().setWidth(24),
             ),
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.errorBgColor.name),
+              color: themeColor(AppThemeKeys.errorBgColor),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(ScreenUtil().setWidth(16)),
                 topRight: Radius.circular(ScreenUtil().setWidth(16)),
@@ -51,8 +53,7 @@ Future<bool?> showPhishingWarningDialog(
               children: [
                 Icon(
                   Icons.warning_amber_rounded,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.errorTextColor.name),
+                  color: themeColor(AppThemeKeys.errorTextColor),
                   size: ScreenUtil().setWidth(44),
                 ),
                 SizedBox(width: ScreenUtil().setWidth(12)),
@@ -62,8 +63,7 @@ Future<bool?> showPhishingWarningDialog(
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(32),
                       fontWeight: FontWeight.bold,
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.errorTextColor.name),
+                      color: themeColor(AppThemeKeys.errorTextColor),
                     ),
                   ),
                 ),
@@ -71,7 +71,7 @@ Future<bool?> showPhishingWarningDialog(
             ),
           ),
 
-          // ── Body ──────────────────────────────────────────────────────────
+          // ── Body ─────────────────────────────────────────────────────────
           Padding(
             padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
             child: Column(
@@ -81,8 +81,7 @@ Future<bool?> showPhishingWarningDialog(
                   s.g_phishing_warning_body,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(28),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
+                    color: themeColor(AppThemeKeys.mainTextColor),
                     height: 1.5,
                   ),
                 ),
@@ -91,8 +90,7 @@ Future<bool?> showPhishingWarningDialog(
                   s.g_phishing_warning_url_label,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.ff888888.name),
+                    color: themeColor(AppThemeKeys.ff888888),
                   ),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(8)),
@@ -100,16 +98,15 @@ Future<bool?> showPhishingWarningDialog(
                   width: double.infinity,
                   padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
                   decoration: BoxDecoration(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.errorBgColor.name),
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                    color: themeColor(AppThemeKeys.errorBgColor),
+                    borderRadius:
+                        BorderRadius.circular(ScreenUtil().setWidth(8)),
                   ),
                   child: Text(
                     url,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(24),
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.errorTextColor.name),
+                      color: themeColor(AppThemeKeys.errorTextColor),
                     ),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
@@ -121,7 +118,7 @@ Future<bool?> showPhishingWarningDialog(
 
           Divider(height: ScreenUtil().setWidth(1)),
 
-          // ── Action buttons ────────────────────────────────────────────────
+          // ── Action buttons ───────────────────────────────────────────────
           IntrinsicHeight(
             child: Row(
               children: [
@@ -140,8 +137,7 @@ Future<bool?> showPhishingWarningDialog(
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(30),
                           fontWeight: FontWeight.bold,
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainBlueColor.name),
+                          color: themeColor(AppThemeKeys.mainBlueColor),
                         ),
                       ),
                     ),
@@ -164,8 +160,7 @@ Future<bool?> showPhishingWarningDialog(
                         s.g_phishing_proceed_anyway,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(30),
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.ff888888.name),
+                          color: themeColor(AppThemeKeys.ff888888),
                         ),
                       ),
                     ),

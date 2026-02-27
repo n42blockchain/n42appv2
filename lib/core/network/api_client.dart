@@ -17,27 +17,30 @@ import 'package:n42_wallet/core/security/secure_storage.dart';
 /// - Error 拦截器：统一错误日志
 class ApiClient {
   final SecureStorage _secureStorage;
-  late final Dio _dio;
+  final Dio _dio;
 
   Dio get dio => _dio;
 
-  ApiClient(this._secureStorage) {
-    _dio = Dio(
-      BaseOptions(
-        connectTimeout: const Duration(seconds: 30),
-        receiveTimeout: const Duration(seconds: 30),
-        sendTimeout: const Duration(seconds: 30),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-      ),
-    );
+  /// 日志中需要过滤的敏感请求头
+  static const _sensitiveHeaders = ['Authorization', 'authorization', 'Cookie', 'cookie'];
+
+  ApiClient(this._secureStorage)
+      : _dio = Dio(
+          BaseOptions(
+            connectTimeout: const Duration(seconds: 30),
+            receiveTimeout: const Duration(seconds: 30),
+            sendTimeout: const Duration(seconds: 30),
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+          ),
+        ) {
     _setupInterceptors();
   }
 
   void _setupInterceptors() {
-    // 1. Auth 拦截器：注入认证 Token
+    // 1. Auth + Logging 请求拦截器：注入 Token，输出安全日志
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
@@ -45,43 +48,31 @@ class ApiClient {
           if (token != null && token.isNotEmpty) {
             options.headers['Authorization'] = 'Bearer $token';
           }
-          handler.next(options);
-        },
-      ),
-    );
-
-    // 2. Logging 拦截器：过滤敏感 header（Authorization / Cookie）
-    _dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (options, handler) {
           if (kDebugMode) {
             final safeHeaders = Map<String, dynamic>.from(options.headers)
-              ..remove('Authorization')
-              ..remove('authorization')
-              ..remove('Cookie')
-              ..remove('cookie');
-            debugPrint('[ApiClient] → ${options.method} ${options.path} '
-                'headers: $safeHeaders');
+              ..removeWhere((key, _) => _sensitiveHeaders.contains(key));
+            debugPrint('[ApiClient] → ${options.method} ${options.path} headers: $safeHeaders');
           }
           handler.next(options);
         },
         onResponse: (response, handler) {
           if (kDebugMode) {
-            debugPrint('[ApiClient] ← ${response.statusCode} '
-                '${response.requestOptions.path}');
+            debugPrint('[ApiClient] ← ${response.statusCode} ${response.requestOptions.path}');
           }
           handler.next(response);
         },
       ),
     );
 
-    // 3. Retry 拦截器：超时时重试一次
+    // 2. Retry + Error 错误拦截器：超时重试一次，输出统一错误日志
     _dio.interceptors.add(
       InterceptorsWrapper(
         onError: (error, handler) async {
-          if (error.type == DioExceptionType.connectionTimeout ||
+          final isTimeout = error.type == DioExceptionType.connectionTimeout ||
               error.type == DioExceptionType.receiveTimeout ||
-              error.type == DioExceptionType.sendTimeout) {
+              error.type == DioExceptionType.sendTimeout;
+
+          if (isTimeout) {
             try {
               final response = await _dio.fetch(error.requestOptions);
               handler.resolve(response);
@@ -90,15 +81,7 @@ class ApiClient {
               // 重试也失败，继续传递原始错误
             }
           }
-          handler.next(error);
-        },
-      ),
-    );
 
-    // 4. Error 拦截器：统一错误日志
-    _dio.interceptors.add(
-      InterceptorsWrapper(
-        onError: (error, handler) {
           if (kDebugMode) {
             debugPrint('[ApiClient] ${error.requestOptions.method} '
                 '${error.requestOptions.path} → '
@@ -115,11 +98,7 @@ class ApiClient {
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) {
-    return _dio.get<T>(
-      path,
-      queryParameters: queryParameters,
-      options: options,
-    );
+    return _dio.get<T>(path, queryParameters: queryParameters, options: options);
   }
 
   Future<Response<T>> post<T>(
@@ -128,12 +107,7 @@ class ApiClient {
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) {
-    return _dio.post<T>(
-      path,
-      data: data,
-      queryParameters: queryParameters,
-      options: options,
-    );
+    return _dio.post<T>(path, data: data, queryParameters: queryParameters, options: options);
   }
 
   Future<Response<T>> put<T>(
@@ -142,12 +116,7 @@ class ApiClient {
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) {
-    return _dio.put<T>(
-      path,
-      data: data,
-      queryParameters: queryParameters,
-      options: options,
-    );
+    return _dio.put<T>(path, data: data, queryParameters: queryParameters, options: options);
   }
 
   Future<Response<T>> delete<T>(
@@ -156,12 +125,7 @@ class ApiClient {
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) {
-    return _dio.delete<T>(
-      path,
-      data: data,
-      queryParameters: queryParameters,
-      options: options,
-    );
+    return _dio.delete<T>(path, data: data, queryParameters: queryParameters, options: options);
   }
 
   Future<Response<T>> patch<T>(
@@ -170,11 +134,6 @@ class ApiClient {
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) {
-    return _dio.patch<T>(
-      path,
-      data: data,
-      queryParameters: queryParameters,
-      options: options,
-    );
+    return _dio.patch<T>(path, data: data, queryParameters: queryParameters, options: options);
   }
 }

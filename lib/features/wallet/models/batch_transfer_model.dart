@@ -62,8 +62,6 @@ class BatchTransferItem {
   }
 
   static bool _isValidEthAddress(String address) {
-    if (!address.startsWith('0x')) return false;
-    if (address.length != 42) return false;
     return RegExp(r'^0x[a-fA-F0-9]{40}$').hasMatch(address);
   }
 

@@ -245,18 +245,11 @@ class GasEstimateModel {
     final latestBaseFee = baseFeeHistory.last;
 
     // 计算优先费的百分位数
-    final flatRewards = rewardHistory.expand((r) => r).toList();
-    flatRewards.sort();
+    final flatRewards = rewardHistory.expand((r) => r).toList()..sort();
 
-    BigInt getPercentile(List<BigInt> list, int percentile) {
-      if (list.isEmpty) return BigInt.zero;
-      final index = (list.length * percentile / 100).floor().clamp(0, list.length - 1);
-      return list[index];
-    }
-
-    final slowPriorityFee = getPercentile(flatRewards, 10);
-    final standardPriorityFee = getPercentile(flatRewards, 50);
-    final fastPriorityFee = getPercentile(flatRewards, 90);
+    final slowPriorityFee = _percentile(flatRewards, 10);
+    final standardPriorityFee = _percentile(flatRewards, 50);
+    final fastPriorityFee = _percentile(flatRewards, 90);
 
     // 预测下一个区块的基础费（最多增加12.5%）
     final nextBaseFee = latestBaseFee * BigInt.from(1000 + GasConstants.baseFeeMaxIncreasePermille) ~/ BigInt.from(1000);
@@ -320,6 +313,12 @@ class GasEstimateModel {
       'selectedSpeed': selectedSpeed.index,
     };
   }
+
+  static BigInt _percentile(List<BigInt> list, int percentile) {
+    if (list.isEmpty) return BigInt.zero;
+    final index = (list.length * percentile / 100).floor().clamp(0, list.length - 1);
+    return list[index];
+  }
 }
 
 /// Gas 选项（支持 EIP-1559 和 Legacy）
@@ -370,20 +369,12 @@ class GasOption {
 
   /// 计算总费用
   BigInt totalFee(BigInt gasLimit) {
-    if (eip1559 != null) {
-      return eip1559!.totalFee(gasLimit);
-    } else if (legacy != null) {
-      return legacy!.totalFee(gasLimit);
-    }
-    return BigInt.zero;
+    return eip1559?.totalFee(gasLimit) ?? legacy?.totalFee(gasLimit) ?? BigInt.zero;
   }
 
   /// 获取用于签名的 gas price（兼容 legacy 系统）
   BigInt get effectiveGasPrice {
-    if (eip1559 != null) {
-      return eip1559!.maxFeePerGas;
-    }
-    return legacy?.gasPrice ?? BigInt.zero;
+    return eip1559?.maxFeePerGas ?? legacy?.gasPrice ?? BigInt.zero;
   }
 
   /// 获取 maxPriorityFeePerGas（仅 EIP-1559）

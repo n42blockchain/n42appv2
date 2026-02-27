@@ -62,12 +62,10 @@ class FearGreedData {
 
   factory FearGreedData.fromJson(Map<String, dynamic> json) {
     final v = int.tryParse(json['value']?.toString() ?? '') ?? 50;
-    final ts =
-        int.tryParse(json['timestamp']?.toString() ?? '') ?? 0;
+    final ts = int.tryParse(json['timestamp']?.toString() ?? '') ?? 0;
     return FearGreedData(
       value: v.clamp(0, 100),
-      classification:
-          json['value_classification'] as String? ?? 'Neutral',
+      classification: json['value_classification'] as String? ?? 'Neutral',
       updatedAt: ts > 0
           ? DateTime.fromMillisecondsSinceEpoch(ts * 1000)
           : DateTime.now(),
@@ -99,11 +97,11 @@ class FearGreedService {
   static DateTime? _cachedAt;
 
   static Future<FearGreedData?> fetch() async {
-    if (_cached != null && _cachedAt != null) {
-      if (DateTime.now().difference(_cachedAt!) <
-          const Duration(hours: 1)) {
-        return _cached;
-      }
+    final cachedAt = _cachedAt;
+    if (_cached != null &&
+        cachedAt != null &&
+        DateTime.now().difference(cachedAt) < const Duration(hours: 1)) {
+      return _cached;
     }
     try {
       final raw = await BaseApi.requestEmptyH.get<dynamic>(
@@ -116,8 +114,7 @@ class FearGreedService {
       if (data is! List || data.isEmpty) return null;
       final entry = data.first;
       if (entry is! Map) return null;
-      final result =
-          FearGreedData.fromJson(Map<String, dynamic>.from(entry));
+      final result = FearGreedData.fromJson(Map<String, dynamic>.from(entry));
       _cached = result;
       _cachedAt = DateTime.now();
       return result;

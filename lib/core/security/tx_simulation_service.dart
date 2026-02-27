@@ -130,11 +130,10 @@ class TxSimulationService {
           )
           .timeout(_gasTimeout);
 
-      if (result.isSuccess) {
-        final hex = result.valueOrNull?.toString() ?? '';
-        if (hex.startsWith('0x') && hex.length > 2) {
-          return BigInt.tryParse(hex.substring(2), radix: 16);
-        }
+      if (!result.isSuccess) return null;
+      final hex = result.valueOrNull?.toString() ?? '';
+      if (hex.startsWith('0x') && hex.length > 2) {
+        return BigInt.tryParse(hex.substring(2), radix: 16);
       }
       return null;
     } catch (_) {
@@ -151,10 +150,9 @@ class TxSimulationService {
   /// 3. Return null — card will show generic "Transaction will likely fail"
   static String? _extractRevertReason(BlockchainError error) {
     // 1. Try ABI-encoded data attached to the JSON-RPC error object
-    final originalError = error.originalError;
-    if (originalError is Map) {
-      final rawData = originalError['data'];
-      // data may be a String or absent; guard type
+    final original = error.originalError;
+    if (original is Map) {
+      final rawData = original['data'];
       if (rawData is String) {
         final decoded = _decodeRevertData(rawData);
         if (decoded != null) return decoded;
@@ -164,14 +162,12 @@ class TxSimulationService {
     // 2. Parse human-readable message from EVM node
     final msg = error.message;
     const prefix = 'execution reverted:';
-    if (msg.toLowerCase().contains(prefix)) {
-      final idx = msg.toLowerCase().indexOf(prefix);
-      final reason = msg.substring(idx + prefix.length).trim();
+    final lower = msg.toLowerCase();
+    if (lower.contains(prefix)) {
+      final reason = msg.substring(lower.indexOf(prefix) + prefix.length).trim();
       return reason.isNotEmpty ? reason : null;
     }
-    if (msg.toLowerCase().contains('revert')) {
-      return msg;
-    }
+    if (lower.contains('revert')) return msg;
 
     return null;
   }
@@ -180,8 +176,8 @@ class TxSimulationService {
   ///   Error(string)  — selector 0x08c379a0
   ///   Panic(uint256) — selector 0x4e487b71
   static String? _decodeRevertData(String hexData) {
-    if (hexData.length < 10) return null;
-    final clean = hexData.startsWith('0x') ? hexData.substring(2) : hexData;
+    final clean =
+        hexData.startsWith('0x') ? hexData.substring(2) : hexData;
     if (clean.length < 8) return null;
 
     final selector = clean.substring(0, 8).toLowerCase();
@@ -191,9 +187,7 @@ class TxSimulationService {
       try {
         // Need at least: selector(8) + offset(64) + length(64) = 136 chars
         if (clean.length < 136) return null;
-        final lengthHex = clean.substring(8 + 64, 8 + 128);
-        final length = int.parse(lengthHex, radix: 16);
-        // Validate bounds before slicing
+        final length = int.parse(clean.substring(8 + 64, 8 + 128), radix: 16);
         final required = 8 + 128 + length * 2;
         if (clean.length < required || length > 4096) return null;
         final stringHex = clean.substring(8 + 128, required);

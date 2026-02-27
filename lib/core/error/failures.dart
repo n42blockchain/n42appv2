@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
 
 /// 失败基类
-/// 
+///
 /// 使用 Failure 而非直接抛出异常，便于函数式错误处理
 /// 配合 dartz 的 `Either<Failure, T>` 使用
 abstract class Failure extends Equatable {
   /// 失败消息
   final String message;
-  
+
   /// 失败代码
   final String? code;
 
@@ -145,4 +145,3 @@ class UnexpectedFailure extends Failure {
     super.code = 'UNEXPECTED_ERROR',
   });
 }
-

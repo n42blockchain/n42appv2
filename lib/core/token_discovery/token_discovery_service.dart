@@ -206,9 +206,7 @@ class TokenDiscoveryService {
   }) async {
     try {
       // balanceOf(address) selector: 0x70a08231
-      final stripped = address.toLowerCase().startsWith('0x')
-          ? address.substring(2).toLowerCase()
-          : address.toLowerCase();
+      final stripped = address.replaceFirst(RegExp(r'^0x', caseSensitive: false), '').toLowerCase();
       final calldata = '0x70a08231${stripped.padLeft(64, '0')}';
 
       final result = await EthAPI()
@@ -265,11 +263,9 @@ class TokenDiscoveryService {
         )
         .timeout(const Duration(seconds: 12));
 
-    if (!result.isSuccess) return [];
+    if (!result.isSuccess || result.valueOrNull == null) return [];
 
-    final data = result.valueOrNull;
-    if (data == null) return [];
-
+    final data = result.valueOrNull!;
     final accounts = data['value'] as List<dynamic>? ?? [];
     final results = <DiscoveredToken>[];
 

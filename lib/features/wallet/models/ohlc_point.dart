@@ -49,4 +49,3 @@ class OhlcPoint {
   @override
   String toString() => 'OhlcPoint(O:$open H:$high L:$low C:$close)';
 }
-

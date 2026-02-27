@@ -186,40 +186,42 @@ class CoinPriceAlertService {
 
   // ── 内部：发送本地通知 ─────────────────────────────────────────────────────
 
+  static const _androidDetails = AndroidNotificationDetails(
+    'high_importance_channel',
+    'High Importance Notifications',
+    channelDescription: 'This channel is used for important notifications.',
+    importance: Importance.high,
+    priority: Priority.high,
+  );
+
+  static const _iosDetails = DarwinNotificationDetails(
+    presentAlert: true,
+    presentBadge: true,
+    presentSound: true,
+  );
+
+  static const _notificationDetails = NotificationDetails(
+    android: _androidDetails,
+    iOS: _iosDetails,
+  );
+
   static Future<void> _sendNotification(
     double currentPrice,
     CoinPriceAlertConfig config,
   ) async {
     try {
-      const androidDetails = AndroidNotificationDetails(
-        'high_importance_channel',
-        'High Importance Notifications',
-        channelDescription: 'This channel is used for important notifications.',
-        importance: Importance.high,
-        priority: Priority.high,
-      );
-      const iosDetails = DarwinNotificationDetails(
-        presentAlert: true,
-        presentBadge: true,
-        presentSound: true,
-      );
-
       final direction = config.alertAbove ? 'reached' : 'dropped to';
       final body =
           '${config.name} (${config.symbol.toUpperCase()}) has $direction '
           '\$${_fmtPrice(currentPrice)}. '
           'Your target: \$${_fmtPrice(config.targetPrice)}.';
-
       final notificationId = ('price_${config.coinId}'.hashCode) & 0x7FFFFFFF;
 
       await FlutterLocalNotificationsPlugin().show(
         id: notificationId,
         title: '${config.alertAbove ? '🚀' : '📉'} Price Alert: ${config.name}',
         body: body,
-        notificationDetails: const NotificationDetails(
-          android: androidDetails,
-          iOS: iosDetails,
-        ),
+        notificationDetails: _notificationDetails,
       );
     } catch (e) {
       debugPrint('[CoinPriceAlertService] _sendNotification error: $e');

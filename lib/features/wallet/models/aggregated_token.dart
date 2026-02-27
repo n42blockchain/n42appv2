@@ -201,11 +201,6 @@ class AggregatedTokens {
   /// 根据符号获取聚合代币
   static AggregatedToken? getBySymbol(String symbol) {
     final upperSymbol = symbol.toUpperCase();
-    for (final token in all) {
-      if (token.symbol == upperSymbol) {
-        return token;
-      }
-    }
-    return null;
+    return all.where((t) => t.symbol == upperSymbol).firstOrNull;
   }
 }

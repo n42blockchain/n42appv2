@@ -1,54 +1,41 @@
-﻿import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
 
 class ActivityApi {
-  late String url;
-  late Map<String,String> header;
-  ActivityApi(){
-    url=AppConfig.getApiUrlOnline('activiteHost');
-    header={'content-type': 'application/json'};
-  }
-  //数据收集接口，发送推送
-  Future<MessageModel> collectDelayPush(String nftData,{String event="create_nft"}) async {
+  final String url = AppConfig.getApiUrlOnline('activiteHost');
+  final Map<String, String> header = {'content-type': 'application/json'};
+
+  // 将 POST 请求结果统一转换为 MessageModel，消除两个方法的重复逻辑
+  Future<MessageModel> _post(String path, Map<String, dynamic> body) async {
     try {
-      MessageModel mm = MessageModel();
-      Map<String, dynamic> postData = {
-        "event": event,
-        "data": nftData,
-      };
-      final data = await BaseApi.requestEmptyH
-          .post('$url/w/collect/delay/push', params: {}, data: postData,header: header,);
+      final data = await BaseApi.requestEmptyH.post(
+        '$url$path',
+        params: {},
+        data: body,
+        header: header,
+      );
       if (data['code'] == 200) {
-        mm.data = true;
-      } else {
-        mm.error = true;
-        mm.data = data['err'];
+        return MessageModel()..data = true;
       }
-      return mm;
+      return MessageModel()
+        ..error = true
+        ..data = data['err'];
     } catch (e) {
-      MessageModel mm = MessageModel.error();
-      mm.data = e.toString();
-      return mm;
+      return MessageModel.error()..data = e.toString();
     }
   }
-  //数据收集接口，修改 用户创建的NFT
-  Future<MessageModel> collectPushUpdate(Map<String, dynamic> nftData) async{
-    try {
-      MessageModel mm = MessageModel();
-      final data = await BaseApi.requestEmptyH
-          .post('$url/w/collect/update', params: {}, data: nftData,header: header,);
-      if (data['code'] == 200) {
-        mm.data = true;
-      } else {
-        mm.error = true;
-        mm.data = data['err'];
-      }
-      return mm;
-    } catch (e) {
-      MessageModel mm = MessageModel.error();
-      mm.data = e.toString();
-      return mm;
-    }
+
+  // 数据收集接口，发送推送
+  Future<MessageModel> collectDelayPush(
+    String nftData, {
+    String event = 'create_nft',
+  }) {
+    return _post('/w/collect/delay/push', {'event': event, 'data': nftData});
+  }
+
+  // 数据收集接口，修改用户创建的 NFT
+  Future<MessageModel> collectPushUpdate(Map<String, dynamic> nftData) {
+    return _post('/w/collect/update', nftData);
   }
 }
