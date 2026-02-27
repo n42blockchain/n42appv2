@@ -31,54 +31,27 @@ import 'package:n42_wallet/features/widgets/container_widget.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 import 'package:web3dart/web3dart.dart';
 
+part 'wallet_chain_send_ton_logic.dart';
+part 'wallet_chain_send_ton_widgets.dart';
+
 class WalletChainSendTon extends ConsumerStatefulWidget {
   final CoinModel coinModel;
-  const WalletChainSendTon(this.coinModel,{super.key});
+  const WalletChainSendTon(this.coinModel, {super.key});
 
   @override
-  ConsumerState<WalletChainSendTon> createState() => _WalletChainSendTonState();
+  ConsumerState<WalletChainSendTon> createState() =>
+      _WalletChainSendTonState();
 }
 
-class _WalletChainSendTonState extends ConsumerState<WalletChainSendTon> {
-  CoinModel? chainModel;
-  Regular? regular;
-  Regular get _regular{
-    regular ??= Regular();
-    return regular!;
-  }
-  DataUtils? _dataUtils;
-  DataUtils get dataUtils{
-    _dataUtils ??= DataUtils();
-    return _dataUtils!;
-  }
-  TextEditingController toTextEditingController=TextEditingController();
-  TextEditingController valueTextEditingController=TextEditingController();
-  TextEditingController noteTextEditingController=TextEditingController();
-  FocusNode toNode=FocusNode();
-  FocusNode valueNode=FocusNode();
-  FocusNode noteNode=FocusNode();
-
-  String toErrorMessage="";
-  String noteErrorMessage="";
-  String amountErrorMessage="";
-  String errorMessage="";
-
-  BigInt totalGasPrice=BigInt.zero;
-  BigInt gasPrice=BigInt.zero;
-  BigInt gasPriceEth=BigInt.zero;
-  BigInt gas=BigInt.zero;
-  BigInt gasEth=BigInt.zero;
-  BigInt transferValue=BigInt.zero;//转账金额
-
-
-  Load load=Load.loading;
-  Load gasLimitLoad=Load.finish;
+class _WalletChainSendTonState extends ConsumerState<WalletChainSendTon>
+    with _TonSendLogicMixin, _TonSendWidgetsMixin {
   @override
   void initState() {
     super.initState();
-    valueTextEditingController.text="0";
+    valueTextEditingController.text = "0";
     initData();
   }
+
   @override
   void dispose() {
     toTextEditingController.dispose();
@@ -90,376 +63,74 @@ class _WalletChainSendTonState extends ConsumerState<WalletChainSendTon> {
     super.dispose();
   }
 
-  Future<void> initData()async{
-    //判断是否是代币
-    if(widget.coinModel.coin['isContract']){
-      WalletActionProvider wap=ref.read(wapBridgeProvider);
-      int cIndex=wap.coinModels.indexWhere((element){
-        if(element.coin['coinType']==widget.coinModel.coin['coinType']){
-          if(widget.coinModel.privateKey !=null){
-            if(element.privateKey==widget.coinModel.privateKey){
-              return true;
-            }else{
-              return false;
-            }
-          }else{
-            return true;
-          }
-        }
-        return false;
-      });
-      chainModel=wap.coinModels[cIndex];
-      await chainModel?.getBalance();
-      if (!mounted) return;
-      setState(() {});
-    }
-    gas=BigInt.from(getCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
-    await getBalance();
-    await getGasPrice();
-  }
-  //获取余额
-  Future<void> getBalance()async{
-    setState(() {
-      load=Load.loading;
-    });
-    bool isOk=await widget.coinModel.getBalance(getToken: false);
-    if (!mounted) return;
-    if(isOk==false){
-      load=Load.finish;
-      errorMessage=S.current.g_key_t_44;
-      ToastUtils.show(S.current.g_key_t_44);
-      setState((){});
-      return;
-    }
-  }
-  //获取旷工费
-  Future<void> getGasPrice()async{
-    /*setState(() {
-      load=Load.loading;
-    });
-    String? rpc=widget.coinModel.coin['custom']==true?widget.coinModel.coin['service']:null;
-    /*if(widget.coinModel.isTest){
-      rpc=widget.coinModel.coin['service_test'];
-    }else{
-      rpc=widget.coinModel.coin['service'];
-    }*/
-    MessageModel mm=await tokenViewApi.getGasPrice(
-      widget.coinModel.coin['blockchainType'],
-      widget.coinModel.coin['coinType'],
-      isTest:widget.coinModel.isTest,
-      rpc: rpc,
+  Widget coinTypeWidget() {
+    return Column(
+      children: [
+        RecentAddressBar(
+          coinType: widget.coinModel.coin['coinType'] ?? '',
+          onSelected: (addr) {
+            toTextEditingController.text = addr;
+            toAddressCheck(addr);
+          },
+        ),
+        toWidget(),
+        amountWidget(),
+        noteWidget(),
+        minerFeeWidget(),
+        errorMessageWidget(),
+        const SizedBox(height: 100),
+      ],
     );
-    if(mm.error==false){
-      gasPrice=mm.data;
-      if(get1559WithChainSymbol(widget.coinModel.coin['coinType']) && widget.coinModel.coin['blockchainType']==BlockchainType.Ethereum.name){
-        gasPrice=gasPrice*BigInt.from(2);
-      }
-    }else{
-      errorMessage=mm.data.toString();
-      ToastUtils.show(errorMessage);
-    }*/
-    totalGasPrice=BigInt.from(1000000);//gasPrice*gas;
-    load=Load.finish;
-    setState(() {});
   }
 
-  //eth 模拟交易
-  Future<dynamic> estimateGasEthLocal({bool checkAddress=true})async{
-    closeKeyboard();
-    if(gasLimitLoad==Load.loading)return;
-    setState(() {
-      gasLimitLoad=Load.loading;
-    });
-    if(widget.coinModel.coin['blockchainType'] != BlockchainType.Ethereum.name && widget.coinModel.coin['blockchainType'] !=BlockchainType.Tron.name){
-      return;
-    }
-    try{
-      String? toAddr;
-      if(checkAddress){
-        if(amountErrorMessage !="")return;
-        toAddr=await toAddressCheck(toTextEditingController.text.trim());
-        if(toAddr==null){
-          return;
-        }
-      }else{
-        toAddr=toTextEditingController.text.trim();
-      }
-      if(toErrorMessage !="")return;
-      String price=valueTextEditingController.text;
-      if(price==""){
-        return;
-      }
-      bool addLatest=true;
-      if(widget.coinModel.coin['coinType']==CoinType.OKT.name
-          || widget.coinModel.coin['coinType']==CoinType.MTR.name
-          || widget.coinModel.coin['coinType']==CoinType.METIS.name
-          || widget.coinModel.coin['coinType']==CoinType.VIC.name
-          || widget.coinModel.coin['coinType']==CoinType.BOBA.name
-          || widget.coinModel.coin['coinType']==CoinType.OP.name
-          || widget.coinModel.coin['coinType']==CoinType.GO.name){
-        addLatest=false;
-      }
-      //await getGasPrice();
-      BigInt gaslimit=BigInt.from(getCoinGas(widget.coinModel.coin['coinType'],contract:widget.coinModel.coin['isContract']));
-      MessageModel ethMessage;
-      if(widget.coinModel.coin['blockchainType'] ==BlockchainType.Tron.name){
-        TrxApi trxApi=TrxApi();
-        ethMessage=await trxApi.getGasEstimateTrx(
-          widget.coinModel.address,
-          toAddr,
-          gasPrice,
-          ethToWeiString(price,widget.coinModel.coin['decimals']),
-          gaslimit,
-          contract: widget.coinModel.isTest?widget.coinModel.coin['contract_test']:widget.coinModel.coin['contract'],
-          isTest:widget.coinModel.isTest,
-        );
-      }
-      else{
-        String rpc;
-        if(widget.coinModel.isTest){
-          rpc=widget.coinModel.coin['service_test'];
-        }else{
-          rpc=widget.coinModel.coin['service'];
-        }
-        EthAPI ethAPI=EthAPI.init(null, rpc, null);
-        ethMessage=await ethAPI.getGasLimit(
-          widget.coinModel.address,
-          toAddr,
-          gasPrice,
-          ethToWeiString(price,widget.coinModel.coin['decimals']),
-          gaslimit,
-          contract: widget.coinModel.isTest?widget.coinModel.coin['contract_test']:widget.coinModel.coin['contract'],
-          isTest: widget.coinModel.isTest,
-          addLatest:addLatest,
-        );
+  // 提交按钮
+  Widget sendButtonWidget() {
+    final String title = S.of(context).g_key_48;
+    final bool isLoading = load == Load.loading;
 
-      }
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: 0,
+      child: Column(
+        children: [
+          Divider(
+            height: ScreenUtil().setWidth(1),
+            indent: 0,
+            endIndent: 0,
+          ),
+          Container(
+            padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+            height: ScreenUtil().setWidth(148.0),
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.backGroundColor.name),
+            child: buttonStyle6(
+              context,
+              () async {
+                sendTransaction();
+              },
+              isLoading ? '${S.of(context).g_key_106}...' : title,
+              AppThemeUtils.getColorByKey(
+                context,
+                isLoading
+                    ? AppThemeKeys.mainButtonBgColor3.name
+                    : AppThemeKeys.mainButtonBgColor.name,
+              ),
+              AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.mainButtonTextColor.name),
+              isLoading,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-      if(ethMessage.error==false){
-        gas=ethMessage.data;
-        if(widget.coinModel.coin['coinType']==CoinType.BOBA.name
-            || widget.coinModel.coin['coinType']==CoinType.OP.name){
-          gas=BigInt.from(gas.toInt()*1.5);
-        }
-        if(widget.coinModel.coin['blockchainType']==BlockchainType.Ethereum.name && widget.coinModel.coin['isContract']==false){
-          String note=noteTextEditingController.text.trim();
-          if(note !=""){
-            String noteHex=bytesToHex(note.codeUnits);
-            gas=gas+BigInt.from((noteHex.length*8));
-          }
-        }
-        totalGasPrice=gasPrice*gas;
-        errorMessage="";
-        return true;
-      }else{
-        errorMessage=ethMessage.data;
-        return false;
-      }
-    }catch(e){
-      errorMessage=e.toString();
-      return false;
-    }finally{
-      setState(() {
-        gasLimitLoad=Load.finish;
-      });
-    }
-  }
-  //检查 amount 输入是否正确
-  void amountCheck({String value=""}){
-    if(value==""){
-      value=valueTextEditingController.text;
-    }
-    int minValue=0;
-    if(widget.coinModel.coin['decimals']==0){
-      minValue=1;
-    }
-    if (value.isEmpty) {
-      amountErrorMessage= S.of(context).g_key_46(minValue);
-      setState(() {});
-      return;
-    }
-    bool checkValue1=false;
-    if(widget.coinModel.coin['decimals']==0){
-      checkValue1=_regular.regularNums(value.toString());
-      if(checkValue1==false){
-        amountErrorMessage= S.of(context).g_key_134;
-        setState(() {});
-        return;
-      }
-    }else{
-      checkValue1=_regular.regularNums(value.toString());
-    }
-    bool checkValue=_regular.regularDouble(value.toString());
-    double dValue=double.parse(value);
-    if(checkValue==false && checkValue1==false){
-      amountErrorMessage= S.of(context).g_key_134;
-      setState(() {});
-      return;
-    } else if(dValue<minValue){
-      amountErrorMessage= S.of(context).g_key_46(minValue);
-      setState(() {});
-      return;
-    }else if(dValue==0){
-      amountErrorMessage= S.of(context).g_key_46(minValue);
-      setState(() {});
-      return;
-    }
-    amountErrorMessage="";
-    setState(() {});
-  }
-  //检查转账地址是否正确
-  Future<String?> toAddressCheck(String addr)async{
-    if(addr==""){
-      toErrorMessage=S.current.g_key_41;
-      setState(() {});
-      return null;
-    }else{
-      List<String> addrList=addr.split(":");
-      if(addrList.length==2){
-        addr=addrList[1];
-      }
-      bool check=await Trustdart().validateAddress(widget.coinModel.coin['coinType'], addr);
-      if(check){
-        if(addr.toUpperCase()==widget.coinModel.address.toString().toUpperCase()){
-          toErrorMessage=S.current.g_key_t_50;
-          setState(() {});
-          return null;
-        }else{
-          toErrorMessage="";
-          setState(() {});
-          return addr;
-        }
-      }else{
-        toErrorMessage=S.current.g_key_t_50;
-        setState(() {});
-        return null;
-      }
-    }
-  }
-  Future<void> sendTransaction()async{
-    if(load==Load.loading){
-      ToastUtils.show("loading");
-      return;
-    }
-    if(amountErrorMessage !="")return;
-    closeKeyboard();
-    amountCheck();
-    if(amountErrorMessage !=""){
-      return;
-    }
-    setState(() {
-      load=Load.loading;
-    });
-    String? toAddr=await toAddressCheck(toTextEditingController.text.trim());
-    if(toAddr == null) {
-      setState(() {
-        load=Load.finish;
-      });
-      return;
-    }
-    /*await estimateGasEthLocal(checkAddress: false);
-    if(errorMessage != ""){
-      setState(() {
-        load=Load.finish;
-      });
-      return;
-    }*/
-    BigInt uBalance=widget.coinModel.balance;
-    if(widget.coinModel.coin['isContract']){
-      uBalance=chainModel?.balance??BigInt.zero;
-    }
-    if(totalGasPrice > uBalance){
-      setState(() {
-        load=Load.finish;
-      });
-      return;
-    }
-    if(widget.coinModel.balance==BigInt.zero){
-      setState(() {
-        load=Load.finish;
-      });
-      return;
-    }
-    if (!mounted) return;
-    transferValue=ethToWeiString(valueTextEditingController.text,widget.coinModel.coin['decimals']);
-    TransationRecordModel trModel=TransationRecordModel();
-    trModel.address=widget.coinModel.address.toString();
-    trModel.from1=widget.coinModel.address.toString();
-    trModel.to1=toAddr;//toTextEditingController.text;
-    trModel.addrType=widget.coinModel.addrType;
-    trModel.coin=widget.coinModel.coin;
-    trModel.coinMiniName=widget.coinModel.coin['coinType'];
-    trModel.walletIndex=ref.read(wapBridgeProvider).walletIndex;
-    trModel.contract=widget.coinModel.isTest?widget.coinModel.coin['contract_test']:widget.coinModel.coin['contract'];
-    trModel.isTest=widget.coinModel.isTest?1:0;
-    trModel.gasPrice=totalGasPrice;
-    trModel.gas=gas.toInt();
-    trModel.gasPriceValue=gasPrice;
-    trModel.price=transferValue;
-    bool check=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletBaseSend(trModel,null,chainModel==null?widget.coinModel.coin['unit'].toString().toUpperCase():chainModel!.coin['unit'].toString().toUpperCase())));
-    if (!mounted) return;
-    if(check){
-      signTx(trModel);
-    }else{
-      setState(() {
-        load=Load.finish;
-      });
-    }
-  }
-  Future<void> signTx(TransationRecordModel trModel)async{
-    try{
-      TransferApi transferApi=TransferApi();
-      MessageModel mm=await transferApi.transferWallet(
-        trModel: trModel,
-        privateKey: widget.coinModel.privateKey,
-        pathIndex: widget.coinModel.pathIndex,
-      );
-      if (!mounted) return;
-      if(mm.error){
-        errorMessage=mm.data;
-      }else{
-        trModel.txHash=mm.data;
-        AppDatabase appDatabase =AppDatabase();
-        trModel.trId=await appDatabase.insertTransationRecord(trModel);
-        if (!mounted) return;
-        ref.read(tripBridgeProvider).addUndoneTr(trModel,1);
-        await RecentAddressService.save(
-          widget.coinModel.coin['coinType'] ?? '',
-          toTextEditingController.text.trim(),
-        );
-        ToastUtils.show(S.current.g_key_nft_41);
-        Navigator.pop(context);
-      }
-    }catch(e){
-      errorMessage=e.toString();
-      ToastUtils.show(e.toString());
-    }finally{
-      load=Load.finish;
-      if (mounted) setState(() {});
-    }
-  }
-  Future<void> maxTag()async{
-    if(gasLimitLoad==Load.loading)return;
-    if(widget.coinModel.coin['isContract']){
-      valueTextEditingController.text=widget.coinModel.balanceStringAll();
-      transferValue=widget.coinModel.balance;
-      estimateGasEthLocal();
-    }else{
-      transferValue=widget.coinModel.balance-totalGasPrice;
-      valueTextEditingController.text=toEther(transferValue.toString(),widget.coinModel.coin['decimals']).toString();
-    }
-    amountErrorMessage="";
-    setState(() {});
-  }
-  //关闭键盘
-  void closeKeyboard(){
-    FocusScope.of(context).requestFocus(FocusNode());
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text:"${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}",
+        text: "${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}",
       ),
       body: SafeArea(
         child: GestureDetector(
@@ -476,374 +147,6 @@ class _WalletChainSendTonState extends ConsumerState<WalletChainSendTon> {
           ),
         ),
       ),
-    );
-  }
-  Widget coinTypeWidget(){
-    List<Widget> cChildren=[
-      RecentAddressBar(
-        coinType: widget.coinModel.coin['coinType'] ?? '',
-        onSelected: (addr) {
-          toTextEditingController.text = addr;
-          toAddressCheck(addr);
-        },
-      ),
-      toWidget(),
-      amountWidget(),
-      noteWidget(),
-      minerFeeWidget(),
-      errorMessageWidget(),
-      SizedBox(height: 100,),
-    ];
-    return Column(
-      children: cChildren,
-    );
-  }
-  Widget toWidget(){
-    return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            S.of(context).g_key_38,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
-          ),
-          SizedBox(height: ScreenUtil().setWidth(20.0),),
-          textFieldStyle2(
-            context,
-            controller: toTextEditingController,
-            focusNode: toNode,
-            hintText: S.of(context).g_key_155,
-            onEditingComplete: (){
-              FocusScope.of(context).requestFocus(valueNode);
-              toAddressCheck(toTextEditingController.text.trim());
-            },
-            maxLines: 3,
-            height: ScreenUtil().setWidth(170.0),
-            errorMessage: toErrorMessage,
-            rightWidget3: buildSendIconBtn(context, Icons.qr_code_scanner),
-            rightOnTap3: scanQR,
-            rightWidget1: buildSendIconBtn(context, Icons.paste_outlined),
-            rightOnTap1: pasteAddress,
-            rightWidget2: buildSendIconBtn(context, Icons.menu_book_outlined),
-            rightOnTap2: searchToAddressWidget,
-            bgColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-          ),
-        ],
-      ),
-    );
-  }
-  Widget noteWidget(){
-    if(widget.coinModel.coin['blockchainType']==BlockchainType.Ethereum.name && widget.coinModel.coin['isContract']==false) {
-      return Container(
-        margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              S.of(context).g_key_wallet_k58,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(28.0),
-              ),
-            ),
-            SizedBox(height: ScreenUtil().setWidth(20.0),),
-            textFieldStyle2(
-              context,
-              controller: noteTextEditingController,
-              focusNode: noteNode,
-              hintText: S.of(context).nicknameMessage(100),
-              errorMessage: noteErrorMessage,
-              suffix: Text(
-                "${noteTextEditingController.text.length}/100",
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(20.0),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
-                ),
-              ),
-              onEditingComplete: () {
-                FocusScope.of(context).requestFocus(toNode);
-              },
-              onChanged: (String value){
-                if(value.length>100){
-                  noteErrorMessage=S.of(context).nicknameMessage(100);
-                }else{
-                  noteErrorMessage="";
-                }
-                setState(() {});
-              },
-              maxLines: 2,
-              height: ScreenUtil().setWidth(108.0),
-              bgColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-            ),
-          ],
-        ),
-      );
-    }
-    return SizedBox();
-  }
-  Widget amountWidget(){
-    return containerStyle1(
-      context,
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(
-              left:ScreenUtil().setWidth(30.0),
-              right:ScreenUtil().setWidth(30.0),
-              top: ScreenUtil().setWidth(30.0),
-            ),
-            child: Row(
-              children: [
-                Text(
-                  S.of(context).g_key_44,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(28.0),
-                  ),
-                ),
-                SizedBox(width: ScreenUtil().setWidth(20.0),),
-                Expanded(flex: 1,child: amountBalanceWidget(),),
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
-            decoration: BoxDecoration(
-              borderRadius:BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xff101828).withAlpha((0 * 255).round()),  //底色,阴影颜色
-                  offset: Offset(0, 1), //阴影位置,从什么位置开始
-                  blurRadius: ScreenUtil().setWidth(4.0),  // 阴影模糊层度
-                  spreadRadius: 0, )
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                textFieldStyle2(
-                  context,
-                  controller: valueTextEditingController,
-                  focusNode: valueNode,
-                  hintText: S.of(context).g_key_44,
-                  hintStyle: TextStyle(
-                    fontSize: ScreenUtil().setSp(54.0),
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textFieldHintColor.name),
-                  ),
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  onChanged: (value){
-                    amountCheck(value: value);
-                  },
-                  onEditingComplete: (){
-                    amountCheck();
-                    FocusScope.of(context).requestFocus(toNode);
-                  },
-                  fontSize: ScreenUtil().setWidth(70.0),
-                  height: ScreenUtil().setWidth(120.0),
-                  boxShadow:BoxShadow(
-                    color: Color(0xff101828).withAlpha((0 * 255).round()),  //底色,阴影颜色
-                    offset: Offset(0, 0), //阴影位置,从什么位置开始
-                    blurRadius: ScreenUtil().setWidth(0),  // 阴影模糊层度
-                    spreadRadius: 0, ),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(ScreenUtil().setWidth(16.0)),
-                    topRight: Radius.circular(ScreenUtil().setWidth(16.0)),
-                  ),
-                  bgColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-                  errorMessage: amountErrorMessage,
-                  messageMargin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
-                  rightWidget1: Container(
-                    margin: EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
-                    height: ScreenUtil().setWidth(60.0),
-                    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
-                    decoration: BoxDecoration(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                      borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(60.0),)),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      S.of(context).g_key_197,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(26.0),
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
-                      ),
-                    ),
-                  ),
-                  rightOnTap1: (){
-                    maxTag();
-                  },
-                ),
-                Divider(
-                  height: ScreenUtil().setWidth(1.0),
-                  indent: ScreenUtil().setWidth(30.0),
-                  endIndent: ScreenUtil().setWidth(30.0),
-                ),
-                ownerAddress(),
-                buildUsdEquivalent(context, valueTextEditingController.text, widget.coinModel.coinPrice),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-  Widget amountBalanceWidget(){
-    String unit=widget.coinModel.coin['unit'].toString().toUpperCase();
-    return Text(
-      '${widget.coinModel.balanceStringAll()} $unit',
-      style: TextStyle(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-        fontSize: ScreenUtil().setSp(28.0),
-      ),
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      textAlign: TextAlign.right,
-    );
-  }
-  Widget ownerAddress(){
-    final addr=dataUtils.addressFarmat(widget.coinModel.address.toString());
-    return Container(
-      padding: EdgeInsets.only(
-        top: ScreenUtil().setWidth(20.0),
-        bottom: ScreenUtil().setWidth(20.0),
-        right: ScreenUtil().setWidth(30.0),
-        left: ScreenUtil().setWidth(30.0),
-      ),
-      child: Text(addr,
-        style: TextStyle(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-          fontSize: ScreenUtil().setSp(30.0),
-        ),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
-    );
-  }
-  //旷工费
-  Widget minerFeeWidget() {
-    final isContract = widget.coinModel.coin['isContract'] == true;
-    final int decimals = isContract
-        ? (chainModel?.coin['decimals'] ?? 0)
-        : widget.coinModel.coin['decimals'] as int;
-    final title = widget.coinModel.coin['coinType']?.toString() ?? '';
-    final feeText = '${toEther(totalGasPrice.toString(), decimals)} $title';
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        if (isContract)
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30.0),
-              vertical: ScreenUtil().setWidth(8.0),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  S.of(context).g_key_29,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                    fontSize: ScreenUtil().setSp(28.0),
-                  ),
-                ),
-                Text(
-                  '${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}',
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
-                    fontSize: ScreenUtil().setSp(28.0),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        NonEvmFeeCompact(
-          feeText: feeText,
-          onTap: null,
-        ),
-      ],
-    );
-  }
-  Widget errorMessageWidget(){
-    if(errorMessage==""){
-      return SizedBox();
-    }else{
-      return Container(
-        margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0),left: ScreenUtil().setWidth(30),right: ScreenUtil().setWidth(30)),
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0),vertical: ScreenUtil().setWidth(30.0)),
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorBgColor2.name),
-        ),
-        child: Text(
-          errorMessage,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(28.0),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
-          ),
-        ),
-      );
-    }
-
-  }
-  //提交按钮
-  Widget sendButtonWidget(){
-    String title=S.of(context).g_key_48;
-    return Positioned(
-      left: 0,
-      right: 0,
-      bottom: 0,
-      child: Column(
-        children: [
-          Divider(
-            height: ScreenUtil().setWidth(1),
-            indent: 0,
-            endIndent: 0,
-          ),
-          Container(
-            padding: EdgeInsets.all( ScreenUtil().setWidth(30.0)),
-            height: ScreenUtil().setWidth(148.0),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-            child: buttonStyle6(
-              context, ()async{
-              sendTransaction();
-            },
-              load==Load.loading?'${S.of(context).g_key_106}...':title,
-              AppThemeUtils.getColorByKey(
-                context, load==Load.loading?
-              AppThemeKeys.mainButtonBgColor3.name:
-              AppThemeKeys.mainButtonBgColor.name,
-              ),
-              AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
-              load==Load.loading,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-  void scanQR() => performScanQR(context,
-      controller: toTextEditingController, onAddress: toAddressCheck);
-
-  void pasteAddress() => performPasteAddress(context,
-      controller: toTextEditingController, onAddress: toAddressCheck);
-
-  void searchToAddressWidget() {
-    showAddressPickerSheet(
-      context,
-      coinModel: widget.coinModel,
-      onAddressSelected: (addr) {
-        toTextEditingController.text = addr;
-        toAddressCheck(addr);
-      },
     );
   }
 }

@@ -1,0 +1,133 @@
+// Copyright 2021-2026 N42 Inc. All rights reserved.
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+
+import 'session_key_models.dart';
+
+/// Read-only bottom sheet that displays all fields of a [SessionKeyData].
+class KeyDetailsSheet extends StatelessWidget {
+  final SessionKeyData keyData;
+
+  const KeyDetailsSheet({super.key, required this.keyData});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      decoration: BoxDecoration(
+        color:
+            AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(ScreenUtil().setWidth(24)),
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Container(
+              width: ScreenUtil().setWidth(40),
+              height: ScreenUtil().setWidth(4),
+              decoration: BoxDecoration(
+                color: Colors.grey.withAlpha(50),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(20)),
+          Text(
+            S.of(context).g_key_aa_session_details,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(32),
+              fontWeight: FontWeight.bold,
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.mainTextColor.name,
+              ),
+            ),
+          ),
+          SizedBox(height: ScreenUtil().setWidth(20)),
+          _row(context, S.of(context).g_key_aa_label, keyData.label),
+          _row(context, S.of(context).g_key_aa_permission,
+              _permLabel(context, keyData.permission)),
+          _row(context, S.of(context).g_key_aa_created,
+              _date(keyData.createdAt)),
+          _row(context, S.of(context).g_key_aa_expires,
+              _date(keyData.expiresAt)),
+          _row(context, S.of(context).g_key_aa_transactions,
+              '${keyData.transactionCount ?? 0}'),
+          if (keyData.spendingToken != null && keyData.spendingLimit != null)
+            _row(
+              context,
+              S.of(context).g_key_aa_spending_limit,
+              '${_formatBigInt(keyData.spendingLimit!, 18)} ${keyData.spendingToken}',
+            ),
+          SizedBox(height: ScreenUtil().setWidth(24)),
+        ],
+      ),
+    );
+  }
+
+  Widget _row(BuildContext context, String label, String value) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(24),
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
+            ),
+          ),
+          Flexible(
+            child: Text(
+              value,
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(24),
+                fontWeight: FontWeight.w500,
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.mainTextColor.name,
+                ),
+              ),
+              textAlign: TextAlign.end,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _permLabel(BuildContext context, SessionKeyPermission p) {
+    switch (p) {
+      case SessionKeyPermission.transfer:
+        return S.of(context).g_key_aa_session_preset_transfer;
+      case SessionKeyPermission.approve:
+        return S.of(context).g_key_aa_approve;
+      case SessionKeyPermission.contractCall:
+        return S.of(context).g_key_aa_session_preset_contract;
+      case SessionKeyPermission.full:
+        return S.of(context).g_key_aa_session_preset_full;
+    }
+  }
+
+  static String _date(DateTime d) =>
+      '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+
+  static String _formatBigInt(BigInt value, int decimals) {
+    if (value == BigInt.zero) return '0';
+    final pow = BigInt.from(10).pow(decimals);
+    final whole = value ~/ pow;
+    final frac = (value % pow).toString().padLeft(decimals, '0');
+    final trimmed = frac.replaceAll(RegExp(r'0+$'), '');
+    return trimmed.isEmpty ? whole.toString() : '$whole.$trimmed';
+  }
+}
