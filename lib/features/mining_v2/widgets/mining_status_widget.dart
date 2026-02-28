@@ -30,12 +30,10 @@ class MiningStatusWidget extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
       child: Row(
         children: [
-          // Mining status card
           Expanded(
             child: _buildStatusCard(context, isActive, statusColor, isDark),
           ),
           SizedBox(width: ScreenUtil().setWidth(16)),
-          // Balance card
           Expanded(
             child: _buildBalanceCard(context, isDark),
           ),
@@ -78,17 +76,12 @@ class MiningStatusWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Title row
           Row(
             children: [
-              Container(
-                width: ScreenUtil().setWidth(36),
-                height: ScreenUtil().setWidth(36),
-                decoration: BoxDecoration(
-                  color: statusColor.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
-                ),
-                child: Icon(
+              _buildIconBox(
+                ScreenUtil().setWidth(36),
+                statusColor.withValues(alpha: 0.15),
+                Icon(
                   isActive ? Icons.verified_outlined : Icons.pause_circle_outline,
                   size: ScreenUtil().setWidth(20),
                   color: statusColor,
@@ -147,7 +140,6 @@ class MiningStatusWidget extends StatelessWidget {
             ],
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
-          // Status text + WS indicator dot
           Row(
             children: [
               Expanded(
@@ -162,7 +154,6 @@ class MiningStatusWidget extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              // WS connected green dot (only when connected)
               if (mpValue.wsConnected)
                 Container(
                   width: ScreenUtil().setWidth(8),
@@ -173,7 +164,6 @@ class MiningStatusWidget extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                 ),
-              // Status indicator dot
               Container(
                 width: ScreenUtil().setWidth(14),
                 height: ScreenUtil().setWidth(14),
@@ -211,17 +201,12 @@ class MiningStatusWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Title row
           Row(
             children: [
-              Container(
-                width: ScreenUtil().setWidth(36),
-                height: ScreenUtil().setWidth(36),
-                decoration: BoxDecoration(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
-                ),
-                child: Icon(
+              _buildIconBox(
+                ScreenUtil().setWidth(36),
+                AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha: 0.15),
+                Icon(
                   Icons.account_balance_wallet_outlined,
                   size: ScreenUtil().setWidth(20),
                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
@@ -273,6 +258,18 @@ class MiningStatusWidget extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildIconBox(double size, Color bgColor, Widget icon) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+      ),
+      child: icon,
     );
   }
 }

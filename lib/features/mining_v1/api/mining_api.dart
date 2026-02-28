@@ -18,16 +18,9 @@ class MiningApi {
   static MiningToken? _token;
   static Web3Client? _client;
 
-  /// 主网开始挖矿节点高度
   static int mainBeijingBlock = 770000;
-
-  /// 测试网开始挖矿节点高度
   static int testBeijingBlock = 40000;
-
-  /// 每个奖励周期的区块数
   static const int _rewardInterval = 10800;
-
-  /// 每日区块数 (24*60*60/8)
   static const double _dayBlockCount = 24 * 60 * 60 / 8;
 
   static Future<void> cleanToken() async {
@@ -70,7 +63,6 @@ class MiningApi {
     return bytesToHex(pk);
   }
 
-  /// 获取凭证（内部公用）
   static Future<EthPrivateKey> _getCredentials() async {
     await createToken();
     final privateKey = await getPrivateKey();
@@ -98,7 +90,6 @@ class MiningApi {
     return await _token?.lockTime(address, credentials: credentials);
   }
 
-  /// Returns a receipt of a transaction based on its hash.
   static Future getTransactionReceipt(String hashTx) async {
     await createToken();
     return await _client?.getTransactionReceipt(hashTx);
@@ -114,17 +105,14 @@ class MiningApi {
     return await _token?.unlock(credentials: credentials);
   }
 
-  /// 构建 JSON-RPC 请求参数
   static Map<String, dynamic> _rpcParams(String method, List<dynamic> params) =>
       {"jsonrpc": "2.0", "method": method, "params": params, "id": 1};
 
-  /// 向链节点发送 JSON-RPC POST 请求
   static Future _postRpc(String chainUrl, String method, List<dynamic> params) async {
     final p = _rpcParams(method, params);
     return await BaseApi.requestEmptyH.post(chainUrl, data: p, params: p);
   }
 
-  /// 获取起始区块高度（主网/测试网）
   static Future<int> _getStartBlockHeight() async {
     final isMain = await MiningUtils.isMainChainMining();
     return isMain ? mainBeijingBlock : testBeijingBlock;
@@ -167,7 +155,6 @@ class MiningApi {
         [address, fromBlockNum ?? "latest", pageSize]);
   }
 
-  /// 获取最后一次出块之后挖矿活动进行的时间
   static Future getCurrentMiningTime(String address) async {
     final chainUrl = await MiningCacheUtils.getCurrentMiningNodeIp();
     final int currentBlockHeight = await MiningApi.getBlockNumber();
@@ -182,8 +169,6 @@ class MiningApi {
         [address, '0x$from', _rewardInterval, '0x$to']);
   }
 
-  /// 获取最后一次发放奖励时做过多少时间的任务
-  /// 返回任务数 * 8s 就是时间
   static Future getLastCycleMiningTime(String address) async {
     final chainUrl = await MiningCacheUtils.getCurrentMiningNodeIp();
     final int currentBlockHeight = await MiningApi.getBlockNumber();
@@ -205,7 +190,6 @@ class MiningApi {
     return _postRpc(chainUrl, "eth_getBlockByNumber", [blockNumber, true]);
   }
 
-  /// 获取当前地址所有的收益发放列表
   static Future getAllRewardsList(String address) async {
     final chainUrl = await MiningCacheUtils.getCurrentMiningNodeIp();
     final startBlockHeight = await _getStartBlockHeight();
@@ -213,7 +197,6 @@ class MiningApi {
     return _postRpc(chainUrl, "apos_getRewards", [address, '0x$from', 'latest']);
   }
 
-  /// 生成最近7天的发放奖励次数数组
   static Future<List<int>> generateRewardsArray() async {
     final flagNum = await getLastEpochNum();
     return List.generate(7, (i) => flagNum - 6 + i);
@@ -225,7 +208,6 @@ class MiningApi {
     return (currentBlockHeight - startBlockHeight) ~/ _rewardInterval;
   }
 
-  /// 获取挖矿柱状图数据
   static Future getMiningBarChartData(String address,
       {int? currEpochNum}) async {
     final isMain = await MiningUtils.isMainChainMining();
@@ -236,7 +218,6 @@ class MiningApi {
     return await BaseApi.requestEmptyH.get(requestUrl, params: {});
   }
 
-  /// 获取当前地址未发放的奖励金额（不含当天挖矿）
   static Future getAccountRewardUnpaid(String address) async {
     final chainUrl = await MiningCacheUtils.getCurrentMiningNodeIp();
     return _postRpc(chainUrl, "apos_getAccountRewardUnpaid", [address]);

@@ -24,7 +24,6 @@ import 'package:n42_wallet/features/mining_v2/provider/mining_v2_provider.dart';
 class MiningRepositoryImpl implements MiningRepository {
   final MiningV2Provider _v2;
 
-  // Stream controller that re-emits V2 state changes as [MiningStatusEntity].
   final StreamController<MiningStatusEntity> _statusStreamController =
       StreamController<MiningStatusEntity>.broadcast();
 
@@ -38,8 +37,6 @@ class MiningRepositoryImpl implements MiningRepository {
     };
     _v2.addListener(_v2Listener!);
   }
-
-  // ─── Helpers ────────────────────────────────────────────────────────────────
 
   MiningStatusEntity _buildStatusEntity() {
     return MiningStatusEntity(
@@ -83,8 +80,6 @@ class MiningRepositoryImpl implements MiningRepository {
     return DateTime.tryParse(day) ?? DateTime.now();
   }
 
-  // ─── MiningRepository interface ─────────────────────────────────────────────
-
   @override
   Future<Either<Failure, MiningStatusEntity>> getMiningStatus() async {
     return Right(_buildStatusEntity());
@@ -106,9 +101,6 @@ class MiningRepositoryImpl implements MiningRepository {
     required String planId,
     required String walletAddress,
   }) async {
-    // V2 uses native staking flow (createDepositUnsignedTx). Callers should
-    // use MiningV2Provider directly for the full staking flow. This shim
-    // returns the current session if mining is already active.
     if (_v2.depositsEnable == true) {
       return Right(MiningSessionEntity(
         id: 'active-${walletAddress.hashCode}',
@@ -128,8 +120,6 @@ class MiningRepositoryImpl implements MiningRepository {
 
   @override
   Future<Either<Failure, void>> stopMining(String sessionId) async {
-    // Actual unstaking uses V2's createExitDepositUnsignedTx().
-    // Domain callers should trigger that via MiningV2Provider directly.
     return const Left(
       ServerFailure(message: 'Use MiningV2Provider.createExitDepositUnsignedTx() to stop mining.'),
     );
@@ -198,21 +188,11 @@ class MiningRepositoryImpl implements MiningRepository {
       if (targetPubKey.isEmpty) return const Right(null);
       if (_v2.depositsEnable != true) return const Right(null);
 
-      // Determine node status from V2 provider's cached beacon state.
-      // showRedemption=true  → activation complete and ready
-      // showRedemption2=true → exit_timestamp == 0 (normal/active)
-      // showRedemption2=false → exit_timestamp != 0 (has exited or exiting)
-      NodeStatus status;
-      if (!_v2.showRedemption2 && _v2.exitTimestamp != 0) {
-        // Node has exited the beacon chain
-        status = NodeStatus.offline;
-      } else if (_v2.showRedemption) {
-        // Activation complete; online if WebSocket mining is active
-        status = _v2.miningStatus ? NodeStatus.online : NodeStatus.offline;
-      } else {
-        // Pending activation
-        status = NodeStatus.syncing;
-      }
+      final status = (!_v2.showRedemption2 && _v2.exitTimestamp != 0)
+          ? NodeStatus.offline
+          : _v2.showRedemption
+              ? (_v2.miningStatus ? NodeStatus.online : NodeStatus.offline)
+              : NodeStatus.syncing;
 
       final inactivityPct = double.tryParse(_v2.inactivityScorePercentage) ?? 0.0;
       final uptimePercentage = (100.0 - inactivityPct).clamp(0.0, 100.0);

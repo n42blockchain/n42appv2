@@ -1,30 +1,16 @@
 part of 'mining_v2_provider.dart';
 
-// ============================================================================
-// Beacon Validator, Withdrawal History & Chart Data
-//
-// Manages beacon-chain validator state polling, mining withdrawal queries,
-// 7-day histogram computation, and the [FullNodeEntity] view-model.
-// ============================================================================
-
 mixin _MiningBeaconMixin on _MiningStateMixin {
-  // ==================== Full Node Entity ====================
-
-  /// Builds a [FullNodeEntity] from the cached beacon state.
-  /// Returns null if not staked or pubkey is unavailable.
   FullNodeEntity? get fullNodeEntity {
     if (depositsEnable != true) return null;
     final pubKey = miningKeypart?['publicKey'] ?? '';
     if (pubKey.isEmpty) return null;
 
-    NodeStatus status;
-    if (!showRedemption2 && exitTimestamp != 0) {
-      status = NodeStatus.offline;
-    } else if (showRedemption) {
-      status = miningStatus ? NodeStatus.online : NodeStatus.offline;
-    } else {
-      status = NodeStatus.syncing;
-    }
+    final status = (!showRedemption2 && exitTimestamp != 0)
+        ? NodeStatus.offline
+        : showRedemption
+            ? (miningStatus ? NodeStatus.online : NodeStatus.offline)
+            : NodeStatus.syncing;
 
     final inactivityPct = double.tryParse(inactivityScorePercentage) ?? 0.0;
     return FullNodeEntity(
@@ -39,8 +25,6 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
           : null,
     );
   }
-
-  // ==================== Load Mining Data ====================
 
   @override
   Future<void> loadMiningData() async {
@@ -74,9 +58,6 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
     }
   }
 
-  // ==================== Status Polling ====================
-
-  /// Start periodic beacon-validator polling every [kMiningStatusIntervalSeconds] seconds.
   void _startStatusPolling() {
     statusPollTimer?.cancel();
     statusPollTimer = Timer.periodic(
@@ -84,8 +65,6 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
       (_) => getBeaconValidator(),
     );
   }
-
-  // ==================== Beacon Validator Timer ====================
 
   @override
   void starBeaconValidatorTimer({int waitSeconds = kBeaconValidatorWaitSeconds}) {
@@ -101,8 +80,6 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
     beaconValidatorTimer?.cancel();
     beaconValidatorTimer = null;
   }
-
-  // ==================== Beacon Validator Query ====================
 
   @override
   Future<void> getBeaconValidator() async {
@@ -121,14 +98,13 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
       inactivityScorePercentage = isp.toStringAsFixed(2);
 
       if (isp <= kLowRiskThreshold) {
-        inactivityTitle = S.current.g_mining_key_84; // "Low Risk"
+        inactivityTitle = S.current.g_mining_key_84;
       } else if (isp <= kModerateRiskThreshold) {
-        inactivityTitle = S.current.g_mining_key_85; // "Moderately Risk"
+        inactivityTitle = S.current.g_mining_key_85;
       } else {
-        inactivityTitle = S.current.g_mining_key_87; // "High Risk"
+        inactivityTitle = S.current.g_mining_key_87;
       }
 
-      // 高风险预警：inactivity score 超过 66% 时弹 Toast（每次冷启动只弹一次）
       if (isp > kModerateRiskThreshold && !inactivityWarningShown) {
         inactivityWarningShown = true;
         ToastUtils.show(S.current.g_mining_inactivity_warning);
@@ -146,8 +122,7 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
         }
       }
 
-      // ---------- activation ----------
-      int timestamp = rmm.data['activation_timestamp'];
+      final int timestamp = rmm.data['activation_timestamp'];
       if (timestamp == 0) {
         activationTime = null;
         showRedemption = false;
@@ -165,8 +140,7 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
         }
       }
 
-      // ---------- exit ----------
-      int eTimestamp = rmm.data['exit_timestamp'];
+      final int eTimestamp = rmm.data['exit_timestamp'];
       exitTimestamp = eTimestamp;
       if (eTimestamp == 0) {
         showRedemption2 = true;
@@ -187,8 +161,6 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
       notifyListeners();
     }
   }
-
-  // ==================== Withdrawal Data ====================
 
   @override
   void startWithdrawalTimer() {
@@ -221,8 +193,7 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
         address ?? "",
       );
       if (rmm.error == false) {
-        // Each valid mining cycle takes kMiningCycleSeconds (128 seconds)
-        taskList = rmm.data;
+          taskList = rmm.data;
         final List<String> todayStr = _getTimeFormat(today);
         final List<String> yesterdayStr = _getTimeFormat(yesterday);
 
@@ -251,8 +222,6 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
       notifyListeners();
     }
   }
-
-  // ==================== 7-Day Chart ====================
 
   List<String> _getTimeFormat(DateTime date) {
     final String year = date.year.toString();

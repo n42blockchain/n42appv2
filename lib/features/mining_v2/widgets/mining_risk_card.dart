@@ -51,13 +51,9 @@ class MiningRiskCard extends StatelessWidget {
   }
 
   Color _getRiskColor(double scoreValue) {
-    if (scoreValue <= kLowRiskThreshold) {
-      return const Color(0xFF4CAF50); // Green - low risk
-    } else if (scoreValue <= kModerateRiskThreshold) {
-      return const Color(0xFFFF9800); // Orange - moderate risk
-    } else {
-      return const Color(0xFFF44336); // Red - high risk
-    }
+    if (scoreValue <= kLowRiskThreshold) return const Color(0xFF4CAF50);
+    if (scoreValue <= kModerateRiskThreshold) return const Color(0xFFFF9800);
+    return const Color(0xFFF44336);
   }
 
   Widget _buildHeader(BuildContext context, Color riskColor) {
@@ -65,7 +61,6 @@ class MiningRiskCard extends StatelessWidget {
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       child: Row(
         children: [
-          // Risk icon
           Container(
             width: ScreenUtil().setWidth(80),
             height: ScreenUtil().setWidth(80),
@@ -89,7 +84,6 @@ class MiningRiskCard extends StatelessWidget {
             ),
           ),
           SizedBox(width: ScreenUtil().setWidth(20)),
-          // Risk title and description
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
