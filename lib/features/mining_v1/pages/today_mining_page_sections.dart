@@ -6,7 +6,7 @@ part of 'today_mining_page.dart';
 /// [_LogicMixin] (transitively) for all state fields.
 /// Contains background mining and mining activity sections.
 mixin _SectionsMixin on _WidgetsMixin {
-  backgroundMiningWidget(MiningProvider mpValue) {
+  Widget backgroundMiningWidget(MiningProvider mpValue) {
     if (mpValue.depositsEnable == false) {
       return SizedBox();
     }
@@ -34,7 +34,6 @@ mixin _SectionsMixin on _WidgetsMixin {
                 horizontal: ScreenUtil().setWidth(16),
               ),
               child: Text(
-                // 'Background Mining',
                 S.of(context).g_mining_key_9,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(26),
@@ -70,7 +69,7 @@ mixin _SectionsMixin on _WidgetsMixin {
     );
   }
 
-  miningActivityWidget(MiningProvider mpValue) {
+  Widget miningActivityWidget(MiningProvider mpValue) {
     if (mpValue.depositsEnable == true) {
       return Container(
         margin: EdgeInsets.only(top: ScreenUtil().setWidth(20)),
@@ -80,7 +79,6 @@ mixin _SectionsMixin on _WidgetsMixin {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              // "Mining Activity",
               S.of(context).g_mining_key31,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(30),
@@ -228,105 +226,63 @@ mixin _SectionsMixin on _WidgetsMixin {
     );
   }
 
-  yourTierWidget() {
+  Widget yourTierWidget() {
     return Row(
       children: [
-        Expanded(
-          child: Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30),
-              vertical: ScreenUtil().setWidth(26),
-            ),
-            decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor.name),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  S.of(context).g_mining_key38,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
-                    fontSize: ScreenUtil().setSp(24),
-                  ),
-                ),
-                SizedBox(
-                  height: ScreenUtil().setWidth(30),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '$currDepositsOfValue ${CoinType.N.name}',
-                      style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.itemTextColor.name),
-                        fontSize: ScreenUtil().setSp(32),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+        _tierCard(
+          title: S.of(context).g_mining_key38,
+          value: '$currDepositsOfValue ${CoinType.N.name}',
         ),
-        SizedBox(
-          width: ScreenUtil().setWidth(24),
-        ),
-        Expanded(
-          child: Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30),
-              vertical: ScreenUtil().setWidth(26),
-            ),
-            decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor.name),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Tier Value",
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
-                    fontSize: ScreenUtil().setSp(24),
-                  ),
-                ),
-                SizedBox(
-                  height: ScreenUtil().setWidth(30),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "\$${NumberFormat("#,##0.0#", "en_US").format((astPrice * currDepositsOfValue))}",
-                      style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.itemTextColor.name),
-                        fontSize: ScreenUtil().setSp(32),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+        SizedBox(width: ScreenUtil().setWidth(24)),
+        _tierCard(
+          title: "Tier Value",
+          value: "\$${NumberFormat("#,##0.0#", "en_US").format(astPrice * currDepositsOfValue)}",
         ),
       ],
     );
   }
 
-  nextRewardInWidget() {
+  Widget _tierCard({required String title, required String value}) {
+    return Expanded(
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(30),
+          vertical: ScreenUtil().setWidth(26),
+        ),
+        decoration: BoxDecoration(
+          color: AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.itemBgColor.name),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                fontSize: ScreenUtil().setSp(24),
+              ),
+            ),
+            SizedBox(height: ScreenUtil().setWidth(30)),
+            Text(
+              value,
+              style: TextStyle(
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.itemTextColor.name),
+                fontSize: ScreenUtil().setSp(32),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget nextRewardInWidget() {
     return Container(
       padding: EdgeInsets.symmetric(
         vertical: ScreenUtil().setWidth(18),

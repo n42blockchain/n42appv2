@@ -1,13 +1,10 @@
-﻿import 'dart:convert';
-
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/mining_v2/api/mining_api.dart';
 import 'package:n42_wallet/features/mining_v2/pages/key_management/data_encryption.dart';
 import 'package:n42_wallet/features/mining_v2/pages/key_management/file_import.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -25,27 +22,20 @@ class MiningImport extends ConsumerStatefulWidget {
 }
 
 class _MiningImportState extends ConsumerState<MiningImport> {
-  // 控制器和焦点节点
   final TextEditingController _encryptedDataController = TextEditingController();
   final FocusNode _encryptedDataFocusNode = FocusNode();
   final TextEditingController _passwordController = TextEditingController();
   final FocusNode _passwordFocusNode = FocusNode();
 
-  // 状态变量
   String _encryptedDataErrorMessage = "";
   String _passwordErrorMessage = "";
   String _errorMessage = "";
   Load _load = Load.finish;
-  bool obscure=true;
+  bool obscure = true;
 
-  // 常量
   static const int _passwordLength = 8;
   static const double _fieldSpacing = 10.0;
 
-  @override
-  void initState() {
-    super.initState();
-  }
   @override
   void dispose() {
     _encryptedDataController.dispose();
@@ -59,11 +49,8 @@ class _MiningImportState extends ConsumerState<MiningImport> {
   Future<void> _importPrivateKey() async {
     if (!mounted) return;
 
-    // 获取输入值
     final encryptedData = _encryptedDataController.text.trim();
     final password = _passwordController.text.trim();
-
-    // 验证输入
     if (!_validateEncryptedData(encryptedData)) return;
     if (!_validatePassword(password)) return;
 
@@ -73,33 +60,30 @@ class _MiningImportState extends ConsumerState<MiningImport> {
         _errorMessage = "";
       });
 
-      // 解密数据
       final secretMap = await decryptSecret(
         encryptedData: encryptedData,
         password: password,
       );
 
-      debugPrint("解密成功: validator.publicKey=${secretMap['validator']?['publicKey']}");
-      bool isMining=true;
-      MessageModel bvRmm= await MiningApi.init().getBeaconValidator(secretMap['validator']['publicKey']);
-      if(bvRmm.error==false){
-        int eTimestamp=bvRmm.data?['exit_timestamp']??0;
-        if(eTimestamp!=0){
-          isMining=false;
-        }
+      bool isMining = true;
+      final bvRmm = await MiningApi.init().getBeaconValidator(
+          secretMap['validator']['publicKey']);
+      if (bvRmm.error == false) {
+        final eTimestamp = bvRmm.data?['exit_timestamp'] ?? 0;
+        if (eTimestamp != 0) isMining = false;
       }
-      secretMap['isMining']=isMining;
+      secretMap['isMining'] = isMining;
+
       if (!mounted) return;
-      MessageModel rmm=await ref.read(miningBridgeProvider).setMiningDataImport(secretMap,password);
+      final rmm = await ref.read(miningBridgeProvider)
+          .setMiningDataImport(secretMap, password);
       if (!mounted) return;
-      String messageStr=S.of(context).g_mining_key_104;
-      if(rmm.error){
-        messageStr=rmm.data as String;
-      }
+
+      final messageStr = rmm.error
+          ? rmm.data as String
+          : S.of(context).g_mining_key_104;
       ToastUtils.show(messageStr);
-      if(rmm.error==false){
-        Navigator.pop(context);
-      }
+      if (!rmm.error) Navigator.pop(context);
     } catch (e) {
       if (mounted) {
         setState(() {
@@ -141,7 +125,7 @@ class _MiningImportState extends ConsumerState<MiningImport> {
     }
     if (trimmedValue.length != _passwordLength) {
       setState(() {
-        _passwordErrorMessage = S.of(context).g_mining_key_98(_passwordLength);//"请输入$_passwordLength位密码！";
+        _passwordErrorMessage = S.of(context).g_mining_key_98(_passwordLength);
       });
       return false;
     }
@@ -155,15 +139,15 @@ class _MiningImportState extends ConsumerState<MiningImport> {
   String _getErrorMessage(dynamic error) {
     final errorStr = error.toString();
     if (errorStr.contains('解密失败')) {
-      return S.of(context).g_mining_key_107;//"解密失败，请检查密码是否正确!";
+      return S.of(context).g_mining_key_107;
     }
     if (errorStr.contains('不支持的加密版本')) {
-      return S.of(context).g_mining_key_108;//"不支持的加密数据格式!";
+      return S.of(context).g_mining_key_108;
     }
     if (errorStr.contains('ArgumentError')) {
       return errorStr.replaceAll('ArgumentError: ', '');
     }
-    return S.of(context).g_mining_key_109(errorStr);//"导入失败: $errorStr";
+    return S.of(context).g_mining_key_109(errorStr);
   }
 
   /// 从剪贴板粘贴
@@ -222,7 +206,6 @@ class _MiningImportState extends ConsumerState<MiningImport> {
             _buildPasswordField(),
             if (_errorMessage.isNotEmpty) _buildErrorMessage(),
             SizedBox(height: ScreenUtil().setWidth(_fieldSpacing)),
-            //_buildImportButton(),
           ],
         ),
       ),
@@ -326,23 +309,19 @@ class _MiningImportState extends ConsumerState<MiningImport> {
       },
       height: ScreenUtil().setWidth(88),
       errorMessage: _passwordErrorMessage,
-      hintText: S.of(context).g_mining_key_98(_passwordLength),//"请输入$_passwordLength位密码",
+      hintText: S.of(context).g_mining_key_98(_passwordLength),
       obscure: obscure,
       rightWidget1: Container(
         width: ScreenUtil().setWidth(50.0),
         height: ScreenUtil().setWidth(50.0),
         alignment: Alignment.center,
         child: Image.asset(
-          'assets/login/${obscure?"icon_denglu_yincang":"icon_denglu_xianshi"}.png',
+          'assets/login/${obscure ? "icon_denglu_yincang" : "icon_denglu_xianshi"}.png',
           width: ScreenUtil().setWidth(34.0),
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
         ),
       ),
-      rightOnTap1: (){
-        setState(() {
-          obscure=!obscure;
-        });
-      },
+      rightOnTap1: () => setState(() => obscure = !obscure),
     );
   }
 

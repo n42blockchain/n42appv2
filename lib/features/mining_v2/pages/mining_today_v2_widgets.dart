@@ -12,41 +12,33 @@ mixin _MiningTodayV2WidgetsMixin on ConsumerState<MiningTodayV2>, _MiningTodayV2
         builder: (context) {
           final walletName = ref.watch(
               miningBridgeProvider.select((p) => p.walletName));
+          final blueColor = AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.mainBlueColor.name);
           return InkWell(
-            onTap: () {
-              showChangeAddress();
-            },
+            onTap: showChangeAddress,
             child: Container(
               height: ScreenUtil().setWidth(80),
               alignment: Alignment.center,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         walletName,
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainBlueColor.name),
+                          color: blueColor,
                           fontSize: ScreenUtil().setSp(28),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      if (AppConfig.isMainChainMining == false)
+                      if (!AppConfig.isMainChainMining)
                         Text(
-                          AppConfig.isMainChainMining == true
-                              ? S.of(context).g_key_148
-                              : S.of(context).g_key_147,
+                          S.of(context).g_key_147,
                           style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.mainBlueColor.name),
+                            color: blueColor,
                             fontSize: ScreenUtil().setSp(20),
                           ),
                         ),
@@ -57,8 +49,7 @@ mixin _MiningTodayV2WidgetsMixin on ConsumerState<MiningTodayV2>, _MiningTodayV2
                     width: ScreenUtil().setWidth(40),
                     child: Icon(
                       Icons.arrow_drop_down,
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
+                      color: blueColor,
                       size: ScreenUtil().setWidth(40),
                     ),
                   ),
@@ -152,7 +143,6 @@ mixin _MiningTodayV2WidgetsMixin on ConsumerState<MiningTodayV2>, _MiningTodayV2
       ),
       child: Row(
         children: [
-          // 挖矿图标
           Container(
             width: ScreenUtil().setWidth(72),
             height: ScreenUtil().setWidth(72),
@@ -168,7 +158,6 @@ mixin _MiningTodayV2WidgetsMixin on ConsumerState<MiningTodayV2>, _MiningTodayV2
             ),
           ),
           SizedBox(width: ScreenUtil().setWidth(20)),
-          // 内容
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,7 +205,6 @@ mixin _MiningTodayV2WidgetsMixin on ConsumerState<MiningTodayV2>, _MiningTodayV2
               ],
             ),
           ),
-          // N余额
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -337,6 +325,7 @@ mixin _MiningTodayV2WidgetsMixin on ConsumerState<MiningTodayV2>, _MiningTodayV2
 
   /// 赎回按钮和提示区域
   Widget buildRedemptionSection(BuildContext context, MiningV2Provider mpValue) {
+    final isLoading = mpValue.exitDepositLoad == Load.loading;
     return Column(
       children: [
         if (mpValue.showRedemption == true && mpValue.redeem == false)
@@ -349,54 +338,45 @@ mixin _MiningTodayV2WidgetsMixin on ConsumerState<MiningTodayV2>, _MiningTodayV2
             child: buttonStyle6(
               context,
               () {
-                if (mpValue.exitDepositLoad == Load.finish) {
-                  unLockAstMining();
-                }
+                if (!isLoading) unLockAstMining();
               },
               S.of(context).g_mining_key_77,
               AppThemeUtils.getColorByKey(
                   context,
-                  mpValue.exitDepositLoad == Load.loading
+                  isLoading
                       ? AppThemeKeys.mainButtonBgColor3.name
                       : AppThemeKeys.mainButtonBgColor.name),
               AppThemeUtils.getColorByKey(
                   context,
-                  mpValue.exitDepositLoad == Load.loading
+                  isLoading
                       ? AppThemeKeys.mainButtonTextColor3.name
                       : AppThemeKeys.mainButtonTextColor.name),
-              mpValue.exitDepositLoad == Load.loading,
+              isLoading,
             ),
           ),
         if (mpValue.depositsEnable == true &&
             mpValue.showRedemption == false)
-          Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
-            width: double.infinity,
-            child: Text(
-              S.of(context).g_mining_key_88,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.textColorOrange.name),
-              ),
-            ),
-          ),
+          _buildOrangeTip(S.of(context).g_mining_key_88),
         if (mpValue.depositsEnable == true &&
             mpValue.redeem == true &&
             mpValue.showRedemption2 == true)
-          Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
-            width: double.infinity,
-            child: Text(
-              S.of(context).g_mining_key_115,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.textColorOrange.name),
-              ),
-            ),
-          ),
+          _buildOrangeTip(S.of(context).g_mining_key_115),
       ],
+    );
+  }
+
+  Widget _buildOrangeTip(String text) {
+    return Container(
+      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      width: double.infinity,
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: ScreenUtil().setSp(24),
+          color: AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.textColorOrange.name),
+        ),
+      ),
     );
   }
 }

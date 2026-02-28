@@ -1,14 +1,6 @@
 part of 'mining_v2_provider.dart';
 
-// ============================================================================
-// Mining Actions
-//
-// Wallet operations, deposit/exit transactions, tx-hash polling, and
-// mining-data persistence.
-// ============================================================================
-
 mixin _MiningActionsMixin on _MiningStateMixin {
-  // ==================== Wallet List Management ====================
 
   /// Get all wallets that support N chain (for mining).
   List<MiningWalletInfo> get miningWalletList {
@@ -47,8 +39,6 @@ mixin _MiningActionsMixin on _MiningStateMixin {
     notifyListeners();
   }
 
-  // ==================== Wallet Validation Helper ====================
-
   /// Returns the WalletInfo at the current mining index, or null if invalid.
   WalletInfo? _getMiningWalletInfo() {
     final wap = globalWapAdapter;
@@ -58,10 +48,7 @@ mixin _MiningActionsMixin on _MiningStateMixin {
     return wap.walletInfoLsit[idx];
   }
 
-  // ==================== Address Mining Status ====================
-
-  /// 抱团挖矿/质押NFT/质押N
-  /// 新增：FUJI NFT 质押
+  /// Check address mining status: staking N / NFT / group mining.
   @override
   Future<void> checkAddressMiningStatus() async {
     inactivityWarningShown = false; // 每次冷启动重置，允许重新检测
@@ -96,7 +83,6 @@ mixin _MiningActionsMixin on _MiningStateMixin {
       }
       loadMiningData();
 
-      // 获取钱包中 N 币余额
       await getWalletNBalance(address ?? "", cInfo);
     } catch (err) {
       setDepositsEnable(false);
@@ -106,7 +92,6 @@ mixin _MiningActionsMixin on _MiningStateMixin {
     }
   }
 
-  // ==================== Private Key ====================
 
   Future<void> getWalletPrivateKey() async {
     try {
@@ -145,7 +130,6 @@ mixin _MiningActionsMixin on _MiningStateMixin {
     }
   }
 
-  // ==================== N Coin Balance ====================
 
   Future<void> getNprice(WalletActionProvider wap) async {
     final coinInfo = wap.getCoinPriceWithUnit(CoinType.N.name);
@@ -174,7 +158,6 @@ mixin _MiningActionsMixin on _MiningStateMixin {
     }
   }
 
-  // ==================== Mining Data Persistence ====================
 
   void setDepositTxHash(String txHash) {
     depositTxHash = txHash;
@@ -226,15 +209,11 @@ mixin _MiningActionsMixin on _MiningStateMixin {
     String importAddress = "";
     WalletInfo wInfo;
 
-    // 导入钱包
     if (index == -1) {
       if (value['mnemonicWords'] != "") {
-        bool checkMnemonic = await Trustdart().checkMnemonic(value['mnemonicWords']);
+        final checkMnemonic = await Trustdart().checkMnemonic(value['mnemonicWords']);
         if (checkMnemonic == false) {
-          // 助记词输入错误
-          MessageModel rmm = MessageModel.error();
-          rmm.data = S.current.w_key_12;
-          return rmm;
+          return MessageModel.error()..data = S.current.w_key_12;
         } else {
           wInfo = WalletInfo(mnemonic: value['mnemonicWords']);
         }
@@ -268,7 +247,6 @@ mixin _MiningActionsMixin on _MiningStateMixin {
 
     miningData ??= {};
     if (miningData?[importAddress] != null) {
-      // "验证者已经存在"
       return MessageModel.error()..data = S.current.g_mining_key_83;
     }
 
@@ -284,9 +262,7 @@ mixin _MiningActionsMixin on _MiningStateMixin {
     return MessageModel();
   }
 
-  // ==================== Deposit (Staking) ====================
-
-  /// 质押
+  /// Create deposit (staking) unsigned transaction.
   Future<void> createDepositUnsignedTx(
     int amount,
     Map<String, dynamic> encrypteData,
@@ -339,7 +315,6 @@ mixin _MiningActionsMixin on _MiningStateMixin {
     );
   }
 
-  // ==================== Exit Deposit (Un-staking) ====================
 
   Future<void> createExitDepositUnsignedTx() async {
     exitDepositLoad = Load.loading;
@@ -393,7 +368,6 @@ mixin _MiningActionsMixin on _MiningStateMixin {
     );
   }
 
-  // ==================== Tx Hash Utilities ====================
 
   @override
   void endCheckTxHash() {
@@ -406,7 +380,6 @@ mixin _MiningActionsMixin on _MiningStateMixin {
     return rmm.error;
   }
 
-  // ==================== Run Mining Client ====================
 
   Future<void> runMining() async {
     final String? rData = await mining.runClient(
@@ -424,7 +397,6 @@ mixin _MiningActionsMixin on _MiningStateMixin {
     notifyListeners();
   }
 
-  // ==================== API Helpers ====================
 
   Future<String?> _miningCreateGetExitFeeUnsignedTx() async {
     return mining.miningCreateGetExitFeeUnsignedTx();
