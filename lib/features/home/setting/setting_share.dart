@@ -59,35 +59,31 @@ class _SettingShareState extends State<SettingShare> {
   }
 
   Future<void> _loadMiningReward() async {
-    final data = await loginApi.getInviteeMiningInfo(_uuid ?? '');
-    if (data != null) {
-      rewardTotal = double.parse((data['total_reward'] ?? "0.0").toString());
-      setState(() {});
-    }
+    final data = await loginApi.getInviteeMiningInfo(_uuid!);
+    if (data == null) return;
+    rewardTotal = double.parse((data['total_reward'] ?? "0.0").toString());
+    setState(() {});
   }
 
   Future<void> _loadMiningCount() async {
-    final data = await loginApi.getInviteeMiningCount(_uuid ?? '');
-    if (data != null) {
-      miningTotal = int.parse((data['total'] ?? 0).toString());
-      setState(() {});
-    }
+    final data = await loginApi.getInviteeMiningCount(_uuid!);
+    if (data == null) return;
+    miningTotal = int.parse((data['total'] ?? 0).toString());
+    setState(() {});
   }
 
   Future<void> _loadInviteeDownloadCount() async {
-    final data = await loginApi.getInviteeDownloadList(_uuid ?? '');
-    if (data != null) {
-      inviteeTotalDown = int.parse(data['total'].toString());
-      setState(() {});
-    }
+    final data = await loginApi.getInviteeDownloadList(_uuid!);
+    if (data == null) return;
+    inviteeTotalDown = int.parse(data['total'].toString());
+    setState(() {});
   }
 
   Future<void> _loadInviteeCount() async {
-    final data = await loginApi.getInviteeList(_uuid ?? '');
-    if (data != null) {
-      inviteeTotal = int.parse(data['total'].toString());
-      setState(() {});
-    }
+    final data = await loginApi.getInviteeList(_uuid!);
+    if (data == null) return;
+    inviteeTotal = int.parse(data['total'].toString());
+    setState(() {});
   }
 
   /// 截图并分享（内存直接分享）

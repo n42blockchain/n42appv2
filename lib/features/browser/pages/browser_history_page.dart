@@ -143,9 +143,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () async {
-          await refreshHistoryList();
-        },
+        onRefresh: refreshHistoryList,
         backgroundColor: AppThemeUtils.getColorByKey(
             context, AppThemeKeys.mainButtonBgColor.name),
         color: AppThemeUtils.getColorByKey(
@@ -327,9 +325,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
     return EmptyView(
       type: EmptyType.noData,
       canRefresh: true,
-      onPressed: () {
-        refreshHistoryList();
-      },
+      onPressed: refreshHistoryList,
     );
   }
 }

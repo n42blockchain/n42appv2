@@ -62,7 +62,7 @@ class GesturePasswordSettingState extends State<GesturePasswordSetting> {
     return false;
   }
 
-  List<int> _parsePoints(String value) =>
+  List<int> _parseIntList(String value) =>
       value.split(',').map(int.parse).toList();
 
   // ────────────────────────────────────────────────────────────────────────
@@ -80,7 +80,7 @@ class GesturePasswordSettingState extends State<GesturePasswordSetting> {
   Future<void> _handleType0(String value) async {
     if (cachedData['0']['index'] == "1") {
       // ── First draw: check strength ──────────────────────────────────────
-      final strength = GesturePatternStrength.evaluate(_parsePoints(value));
+      final strength = GesturePatternStrength.evaluate(_parseIntList(value));
       if (strength == PatternStrength.weak) {
         setState(() => _currentStrength = strength);
         return; // block advancing — user must redraw
@@ -140,7 +140,7 @@ class GesturePasswordSettingState extends State<GesturePasswordSetting> {
       }
     } else if (index == "2") {
       // ── New password first draw: check strength ─────────────────────────
-      final strength = GesturePatternStrength.evaluate(_parsePoints(value));
+      final strength = GesturePatternStrength.evaluate(_parseIntList(value));
       if (strength == PatternStrength.weak) {
         setState(() => _currentStrength = strength);
         return; // block advancing — user must redraw
@@ -386,18 +386,16 @@ class GesturePasswordSettingState extends State<GesturePasswordSetting> {
   List<int>? getAnswer() {
     if (widget.type == 0) {
       if (cachedData['0']['index'] == "1") return null;
-      return _stringToIntArray(cachedData['0']["1"]);
+      return _parseIntList(cachedData['0']["1"]);
     } else {
       if (cachedData['1']['index'] == "1") {
-        return _stringToIntArray(cachedData['1']["1"]['old']);
+        return _parseIntList(cachedData['1']["1"]['old']);
       } else if (cachedData['1']['index'] == "2") {
         return null;
       } else {
-        return _stringToIntArray(cachedData['1']["2"]);
+        return _parseIntList(cachedData['1']["2"]);
       }
     }
   }
 
-  List<int> _stringToIntArray(String answer) =>
-      answer.split(',').map(int.parse).toList();
 }

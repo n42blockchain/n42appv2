@@ -124,8 +124,6 @@ class UrCodec {
   ///
   /// Throws [UrCodecException] if any word is not in the word list.
   static Uint8List bytewordsDecode(String encoded) {
-    // Build lookup lazily
-    _wordToIndex; // ensure initialized
     final words = encoded.toLowerCase().trim().split(RegExp(r'\s+'));
     final result = Uint8List(words.length);
     for (var i = 0; i < words.length; i++) {

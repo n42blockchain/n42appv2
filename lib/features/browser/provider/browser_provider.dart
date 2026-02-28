@@ -11,7 +11,6 @@ import 'package:n42_wallet/features/browser/handler/dapp_request_handler.dart';
 import 'package:n42_wallet/features/browser/js/ethereum_provider.dart';
 import 'package:n42_wallet/features/browser/pages/browser_collection.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:flutter/material.dart';
@@ -61,9 +60,6 @@ class BrowserProvider extends ChangeNotifier {
     showWList=value;
     notifyListeners();
   }
-  /// URL to block from navigation. Empty string means no blocking.
-  final String _blockUri = "";
-
   TextEditingController? titleEditingController;
   FocusNode? titleFocusNode;
   ConnectDAPP? connectDAPPCallBack;
@@ -255,7 +251,6 @@ class BrowserProvider extends ChangeNotifier {
     WebViewController wv=wvcList[wListIndex];
     wv.loadRequest(Uri.parse(url));
     wInfoList[wListIndex]['openUrl']=url;
-    //notifyListeners();
   }
   //显示webView
   void wListShow(int index) {
@@ -316,12 +311,6 @@ class BrowserProvider extends ChangeNotifier {
     notifyListeners();
   }
   bool checkUrl(String url) {
-    if (_blockUri != "") {
-      if (_blockUri == url) {
-        eventBus.fire(EventPublic(EventPublicType.blockUri));
-        return false;
-      }
-    }
     final uri = Uri.parse(url);
     // 拦截危险 URL 协议：javascript: 可用于 XSS；data: / blob: 可绕过 CSP；file: 可读本地文件
     const blockedSchemes = {'javascript', 'data', 'blob', 'file'};

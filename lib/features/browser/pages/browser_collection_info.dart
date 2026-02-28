@@ -86,9 +86,7 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
         text: S.of(context).g_browser_key5,
         actions: [
           InkWell(
-            onTap: (){
-              deleteCollection();
-            },
+            onTap: deleteCollection,
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
               height: ScreenUtil().setWidth(40.0),
@@ -127,7 +125,16 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
       ),
     );
   }
-  Widget titleWidget(){
+  /// Shared form field builder to eliminate repetition across title/url/desc.
+  Widget _buildFormField({
+    required String label,
+    required String hintText,
+    required TextEditingController controller,
+    required FocusNode focusNode,
+    required FocusNode nextFocusNode,
+    required String errorMessage,
+    int maxLines = 1,
+  }) {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(30.0),
@@ -139,7 +146,7 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
           SizedBox(
             height: ScreenUtil().setWidth(40.0),
             child: Text(
-              S.of(context).g_browser_key6,
+              label,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28.0),
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
@@ -149,192 +156,78 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
           Container(
             alignment: Alignment.center,
             padding: EdgeInsets.only(left: ScreenUtil().setWidth(32.0)),
-            margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0),),
+            margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(20.0))),
               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
             ),
             child: TextField(
-              //key: _toKey,
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
               ),
-              controller: titleEditingController,
-              focusNode: titleNode,
+              controller: controller,
+              focusNode: focusNode,
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
-                hintText: S.of(context).g_browser_key7,
+                hintText: hintText,
                 border: InputBorder.none,
                 errorBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
               ),
-              maxLines: 1,
-              onSubmitted: (value){
-                FocusScope.of(context).requestFocus(urlNode);
+              maxLines: maxLines,
+              onSubmitted: (_) {
+                FocusScope.of(context).requestFocus(nextFocusNode);
               },
             ),
           ),
-          Visibility(
-            visible: titleErrorMessage!="",
-            child: Container(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                titleErrorMessage,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
-                  fontSize: ScreenUtil().setSp(24.0),
-                ),
+          if (errorMessage.isNotEmpty)
+            Text(
+              errorMessage,
+              style: TextStyle(
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+                fontSize: ScreenUtil().setSp(24.0),
               ),
             ),
-          ),
         ],
       ),
     );
   }
-  Widget urlWidget(){
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(30.0),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: ScreenUtil().setWidth(40.0),
-            child: Text(
-              S.of(context).g_browser_key8,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28.0),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-              ),
-            ),
-          ),
-          Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.only(left: ScreenUtil().setWidth(32.0)),
-            margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0),),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(20.0))),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-            ),
-            child: TextField(
-              //key: _toKey,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-              ),
-              controller: urlEditingController,
-              focusNode: urlNode,
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                hintText: S.of(context).g_browser_key1,
-                border: InputBorder.none,
-                errorBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-              ),
-              maxLines: 1,
-              onSubmitted: (value){
-                FocusScope.of(context).requestFocus(descNode);
-              },
-            ),
-          ),
-          Visibility(
-            visible: urlErrorMessage!="",
-            child: Container(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                urlErrorMessage,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
-                  fontSize: ScreenUtil().setSp(24.0),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-  Widget descWidget(){
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(30.0),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: ScreenUtil().setWidth(40.0),
-            child: Text(
-              S.of(context).g_browser_key9,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28.0),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-              ),
-            ),
-          ),
-          Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.only(left: ScreenUtil().setWidth(32.0)),
-            margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0),),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(20.0))),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-            ),
-            child: TextField(
-              //key: _toKey,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-              ),
-              controller: descEditingController,
-              focusNode: descNode,
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                hintText: S.of(context).g_browser_key10,
-                border: InputBorder.none,
-                errorBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-              ),
-              maxLines: 5,
-              onSubmitted: (value){
-                FocusScope.of(context).requestFocus(titleNode);
-              },
-            ),
-          ),
-          Visibility(
-            visible: descErrorMessage!="",
-            child: Container(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                descErrorMessage,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
-                  fontSize: ScreenUtil().setSp(24.0),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+
+  Widget titleWidget() => _buildFormField(
+    label: S.of(context).g_browser_key6,
+    hintText: S.of(context).g_browser_key7,
+    controller: titleEditingController,
+    focusNode: titleNode,
+    nextFocusNode: urlNode,
+    errorMessage: titleErrorMessage,
+  );
+
+  Widget urlWidget() => _buildFormField(
+    label: S.of(context).g_browser_key8,
+    hintText: S.of(context).g_browser_key1,
+    controller: urlEditingController,
+    focusNode: urlNode,
+    nextFocusNode: descNode,
+    errorMessage: urlErrorMessage,
+  );
+
+  Widget descWidget() => _buildFormField(
+    label: S.of(context).g_browser_key9,
+    hintText: S.of(context).g_browser_key10,
+    controller: descEditingController,
+    focusNode: descNode,
+    nextFocusNode: titleNode,
+    errorMessage: descErrorMessage,
+    maxLines: 5,
+  );
   Widget saveWidget(){
     return Container(
       height: ScreenUtil().setWidth(148.0),
       width: double.infinity,
       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
       padding: EdgeInsets.all( ScreenUtil().setWidth(30.0)),
-      child: buttonStyle2(
-        context,
-            (){
-          _saveUrl();
-        },
-        S.of(context).g_key_115,
-      ),
+      child: buttonStyle2(context, _saveUrl, S.of(context).g_key_115),
     );
   }
 }

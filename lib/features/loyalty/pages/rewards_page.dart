@@ -257,33 +257,32 @@ class RewardsPage extends StatelessWidget {
                 // 过期时间
                 if (reward.expiresAt != null) ...[
                   SizedBox(height: ScreenUtil().setWidth(8)),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.access_time,
-                        size: ScreenUtil().setWidth(20),
-                        color: _isExpiringSoon(reward.expiresAt!)
-                            ? Colors.orange
-                            : AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.itemSubtitleTextColor.name,
-                              ),
-                      ),
-                      SizedBox(width: ScreenUtil().setWidth(4)),
-                      Text(
-                        'Expires ${_getExpiryText(reward.expiresAt!)}',
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(22),
-                          color: _isExpiringSoon(reward.expiresAt!)
-                              ? Colors.orange
-                              : AppThemeUtils.getColorByKey(
-                                  context,
-                                  AppThemeKeys.itemSubtitleTextColor.name,
-                                ),
+                  Builder(builder: (_) {
+                    final expiringSoon = _isExpiringSoon(reward.expiresAt!);
+                    final expiryColor = expiringSoon
+                        ? Colors.orange
+                        : AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.itemSubtitleTextColor.name,
+                          );
+                    return Row(
+                      children: [
+                        Icon(
+                          Icons.access_time,
+                          size: ScreenUtil().setWidth(20),
+                          color: expiryColor,
                         ),
-                      ),
-                    ],
-                  ),
+                        SizedBox(width: ScreenUtil().setWidth(4)),
+                        Text(
+                          'Expires ${_getExpiryText(reward.expiresAt!)}',
+                          style: TextStyle(
+                            fontSize: ScreenUtil().setSp(22),
+                            color: expiryColor,
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
                 ],
 
                 // 兑换按钮
@@ -467,7 +466,6 @@ class RewardsPage extends StatelessWidget {
     if (!context.mounted) return;
 
     // 执行兑换
-    final provider = this.provider;
     final success = await provider.redeemReward(reward.id);
 
     if (!context.mounted) return;

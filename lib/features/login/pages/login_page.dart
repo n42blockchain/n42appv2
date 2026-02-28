@@ -64,10 +64,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Widget build(BuildContext context) {
     ToastUtils.init(context);
     return Scaffold(
-      appBar: widget.type==0?AppBarWidget(
-        text: S.of(context).login_button_text,
-      ):null,
-      // backgroundColor: Theme.of(context).primaryColor,
+      appBar: widget.type == 0
+          ? AppBarWidget(text: S.of(context).login_button_text)
+          : null,
       resizeToAvoidBottomInset: false,
       body: GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -114,8 +113,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           keyboardType: TextInputType.emailAddress,
                           textInputAction: TextInputAction.done,
                           errorMessage: unameErrorMessage,
-                          //bgColor: Colors.transparent,
-                          //padding: EdgeInsets.all(0),
                           hintStyle: TextStyle(
                             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.hintTextColor.name),
                             fontSize: ScreenUtil().setSp(30.0),
@@ -142,8 +139,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             hintText:S.of(context).login_password,
                             keyboardType: TextInputType.text,
                             textInputAction: TextInputAction.done,
-                            //bgColor: Colors.transparent,
-                            //padding: EdgeInsets.all(0),
                             hintStyle: TextStyle(
                               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.hintTextColor.name),
                               fontSize: ScreenUtil().setSp(30.0),
@@ -192,10 +187,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                       ),
                                       recognizer: TapGestureRecognizer()
                                         ..onTap = () async {
-                                          bool? rData=await Navigator.push(this.context, MaterialPageRoute(builder: (context)=>AccountCreateAndReset(type: HandType.createAccount,pushType: widget.type,)));
+                                          bool? rData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>AccountCreateAndReset(type: HandType.createAccount,pushType: widget.type,)));
                                           if (!mounted) return;
                                           if(rData==true){
-                                            Navigator.pop(this.context);
+                                            Navigator.pop(context);
                                           }
                                         }
                                   ),
@@ -208,7 +203,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           isSelectedUserProtocol: isSelectedUserProtocol,
                           onLoginSuccess: () {
                             if (widget.type == 0) {
-                              Navigator.pop(this.context);
+                              Navigator.pop(context);
                             }
                           },
                         ),
@@ -283,7 +278,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             if (!mounted) return;
                             if (data != null) {
                               if (data["code"] == 200) {
-                                //AmplitudeUtils.accountLoggedIn();
                                 UserInfo userInfo = UserInfo.fromJson(data['data']);
                                 await SPUtil().saveUserInfo(userInfo);
                                 if (!mounted) return;
@@ -294,18 +288,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 await AppGlobals.login(userInfo);
                                 if (!mounted) return;
                                 if(widget.type==0){
-                                  Navigator.pop(this.context);
+                                  Navigator.pop(context);
                                 }
-                                /*Navigator.pushAndRemoveUntil(this.context,
-                                    MaterialPageRoute(builder: (_) => App()),
-                                        (route) => false);*/
                               } else if (data["code"] == -403) {
                                 ToastUtils.showFtToast(
-                                    title: S.of(this.context).code_403);
+                                    title: S.of(context).code_403);
                               } else if (data["code"] == -1301) {
                                 ToastUtils.showFtToast(
-                                    title: S.of(this.context).g_key_error_1301);
-                              }else {
+                                    title: S.of(context).g_key_error_1301);
+                              } else {
                                 ToastUtils.showFtToast(title: data["err"]);
                               }
                             }
@@ -315,7 +306,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             setState(() {
                               load=Load.finish;
                             });
-                            //EasyLoading.dismiss();
                           }
                         },
                         S.of(context).login_button_text,
@@ -339,27 +329,25 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      // color: Colors.red,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           RichText(
-            text:TextSpan(
-              //style: TextStyle(fontSize: scr.setSp(32.0),),
+            text: TextSpan(
                 children: [
                   TextSpan(
                     text: S.of(context).login_forgot_password,
                     style: TextStyle(fontSize: ScreenUtil().setSp(32.0), color: textColor,fontWeight: FontWeight.w500),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () async{
-                        bool? rData=await Navigator.push(this.context,MaterialPageRoute(
+                        bool? rData=await Navigator.push(context,MaterialPageRoute(
                             builder: (_) =>  AccountCreateAndReset(
                               type: HandType.restPassword,
                               pushType: widget.type,
                             )));
                         if (!mounted) return;
                         if(rData==true){
-                          Navigator.pop(this.context);
+                          Navigator.pop(context);
                         }
                       },
                   ),

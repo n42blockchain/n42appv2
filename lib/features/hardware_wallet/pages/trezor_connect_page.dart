@@ -203,9 +203,8 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
-          _buildStep(context, '1', _stepText1()),
-          _buildStep(context, '2', _stepText2()),
-          _buildStep(context, '3', _stepText3()),
+          ..._stepTexts.indexed.map((e) =>
+              _buildStep(context, '${e.$1 + 1}', e.$2)),
         ],
       ),
     );
@@ -213,9 +212,11 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
 
   // Step text helpers (not i18n-key'd to reduce key explosion; these are
   // supplementary guidance text that matches Trezor's own wording)
-  String _stepText1() => 'Connect Trezor to your phone with a USB-OTG cable';
-  String _stepText2() => 'Enter your PIN on the Trezor device if prompted';
-  String _stepText3() => 'Tap "Connect" below to establish the connection';
+  static const _stepTexts = [
+    'Connect Trezor to your phone with a USB-OTG cable',
+    'Enter your PIN on the Trezor device if prompted',
+    'Tap "Connect" below to establish the connection',
+  ];
 
   Widget _buildStep(BuildContext context, String number, String text) {
     return Padding(

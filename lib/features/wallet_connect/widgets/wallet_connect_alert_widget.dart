@@ -139,10 +139,7 @@ class _WalletConnectAlertWidgetState
         ),
 
         // ── Action buttons — always visible at bottom ─────────────────────────
-        if (isTransaction)
-          _buildTransactionButtons(context)
-        else
-          _buildMessageButtons(context),
+        _buildActionButtons(context, isTransaction),
       ],
     );
   }
@@ -232,39 +229,25 @@ class _WalletConnectAlertWidgetState
 
   // ── Buttons ───────────────────────────────────────────────────────────────────
 
-  Widget _buildTransactionButtons(BuildContext context) {
+  Widget _buildActionButtons(BuildContext context, bool isTransaction) {
     final s = S.of(context);
+    final wcp = ref.read(wcpBridgeProvider);
     return _buttonRow(
       context,
       cancelLabel: s.g_connect_key3,
       onCancel: () {
-        ref
-            .read(wcpBridgeProvider)
-            .cancelTap(WalletConnectState.transaction);
+        wcp.cancelTap(isTransaction
+            ? WalletConnectState.transaction
+            : WalletConnectState.messageSign);
         Navigator.pop(context);
       },
       confirmLabel: s.g_key_78,
       onConfirm: () {
-        ref.read(wcpBridgeProvider).transactionSignTap();
-        Navigator.pop(context);
-      },
-    );
-  }
-
-  Widget _buildMessageButtons(BuildContext context) {
-    final s = S.of(context);
-    return _buttonRow(
-      context,
-      cancelLabel: s.g_connect_key3,
-      onCancel: () {
-        ref
-            .read(wcpBridgeProvider)
-            .cancelTap(WalletConnectState.messageSign);
-        Navigator.pop(context);
-      },
-      confirmLabel: s.g_key_78,
-      onConfirm: () {
-        ref.read(wcpBridgeProvider).messageSignTap();
+        if (isTransaction) {
+          wcp.transactionSignTap();
+        } else {
+          wcp.messageSignTap();
+        }
         Navigator.pop(context);
       },
     );

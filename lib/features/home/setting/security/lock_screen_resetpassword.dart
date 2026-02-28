@@ -38,92 +38,44 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
     confirmFocusNode.dispose();
     super.dispose();
   }
+  /// Validate a field: check length and numeric format.
+  /// Returns an error message or empty string on success.
+  String _validatePassword(String value) {
+    if (!checkStrLength(value)) return S.of(context).g_lock_key13;
+    if (!Regular().regularNums(value)) return S.of(context).g_lock_key13;
+    return "";
+  }
+
   void sure(){
     final screenLockState = ref.read(screenLockProvider);
-    
+
     if(widget.type==1){
       //旧密码
-      String oldStr=oldEditingController.text;
-      bool oldOk=checkStrLength(oldStr);
-      if(oldOk){
-        oldErrorMessage="";
-      }else{
-        oldErrorMessage=S.of(context).g_lock_key13;
-        setState(() {
-        });
-        return;
+      final oldStr = oldEditingController.text;
+      oldErrorMessage = checkStrLength(oldStr) ? "" : S.of(context).g_lock_key13;
+      if(oldErrorMessage.isEmpty && oldStr != screenLockState.lockPassword){
+        oldErrorMessage = S.of(context).g_key_t_34;
       }
-      if(oldStr==screenLockState.lockPassword){
-        oldErrorMessage="";
-      }
-      else{
-        oldErrorMessage=S.of(context).g_key_t_34;
-        setState(() {
-        });
-        return;
-      }
+      if(oldErrorMessage.isNotEmpty){ setState(() {}); return; }
     }
     //新密码
-    String newStr=newEditingController.text;
-    bool newOk=checkStrLength(newStr);
-    if(newOk){
-      newErrorMessage="";
-    }else{
-      newErrorMessage=S.of(context).g_lock_key13;
-      setState(() {
-      });
-      return;
-    }
-    Regular regular=Regular();
-    newOk=regular.regularNums(newStr);
-    if(newOk){
-      newErrorMessage="";
-    }else{
-      newErrorMessage=S.of(context).g_lock_key13;
-      setState(() {
-      });
-      return;
-    }
+    final newStr = newEditingController.text;
+    newErrorMessage = _validatePassword(newStr);
+    if(newErrorMessage.isNotEmpty){ setState(() {}); return; }
+
     //确认密码
-    String confirmStr=confirmEditingController.text;
-    bool confirmOk=checkStrLength(confirmStr);
-    if(confirmOk){
-      confirmErrorMessage="";
-    }else{
-      confirmErrorMessage=S.of(context).g_lock_key13;
-      setState(() {
-      });
-      return;
+    final confirmStr = confirmEditingController.text;
+    confirmErrorMessage = _validatePassword(confirmStr);
+    if(confirmErrorMessage.isEmpty && newStr != confirmStr){
+      confirmErrorMessage = S.of(context).password_diff;
     }
-    confirmOk=regular.regularNums(confirmStr);
-    if(confirmOk){
-      confirmErrorMessage="";
-    }else{
-      confirmErrorMessage=S.of(context).g_lock_key13;
-      setState(() {
-      });
-      return;
-    }
-    if(newStr==confirmStr){
-      confirmErrorMessage="";
-    }else{
-      confirmErrorMessage=S.of(context).password_diff;
-      setState(() {
-      });
-      return;
-    }
+    if(confirmErrorMessage.isNotEmpty){ setState(() {}); return; }
+
     ref.read(screenLockProvider.notifier).setLockPassword(confirmStr);
     Navigator.pop(context,true);
   }
   //检查输入字符串的位数
-  bool checkStrLength(String inputStr){
-    int len=inputStr.length;
-    if(len ==6){
-      return true;
-    }else{
-      return false;
-    }
-  }
+  bool checkStrLength(String inputStr) => inputStr.length == 6;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -174,13 +126,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
                   ScreenUtil().setWidth(30.0),
                 ),
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                child:buttonStyle2(
-                  context,
-                      ()async{
-                    sure();
-                  },
-                  S.of(context).g_key_78,
-                ),
+                child: buttonStyle2(context, sure, S.of(context).g_key_78),
               ),
             ],
           ),
@@ -188,105 +134,65 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
       ],
     );
   }
-  //旧密码
-  Widget oldPWWidget(){
+  /// Builds a password field section with title, input, error, and divider.
+  Widget _buildPasswordSection({
+    required String title,
+    required TextEditingController controller,
+    required FocusNode focusNode,
+    required String hintStr,
+    required bool obscure,
+    required VoidCallback onFinish,
+    required VoidCallback onToggleObscure,
+    required String errorMessage,
+  }) {
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          titleWidget(S.of(context).g_lock_key10),
-          passwordWidget(
-            oldEditingController,
-            oldFocusNode,
-            "6-digit number",
-            obscureOld,
-                (){
-              FocusScope.of(context).requestFocus(newFocusNode);
-            },
-                (){
-              setState(() {
-                obscureOld=!obscureOld;
-              });
-            },
-          ),
-          errorMessageWidget(oldErrorMessage),
-          Divider(
-            height: ScreenUtil().setWidth(1.0),
-            indent: 0,
-            endIndent: 0,
-          ),
+          titleWidget(title),
+          passwordWidget(controller, focusNode, hintStr, obscure, onFinish, onToggleObscure),
+          errorMessageWidget(errorMessage),
+          Divider(height: ScreenUtil().setWidth(1.0), indent: 0, endIndent: 0),
         ],
       ),
     );
   }
-  //旧密码
-  Widget newPWWidget(){
-    return Container(
-      margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          titleWidget(S.of(context).g_lock_key11),
-          passwordWidget(
-            newEditingController,
-            newFocusNode,
-            S.of(context).g_lock_key13,
-            obscureNew,
-                (){
-              FocusScope.of(context).requestFocus(confirmFocusNode);
-            }, (){
-            setState(() {
-              obscureNew=!obscureNew;
-            });
-          },
-          ),
-          errorMessageWidget(newErrorMessage),
-          Divider(
-            height: ScreenUtil().setWidth(1.0),
-            indent: 0,
-            endIndent: 0,
-          ),
-        ],
-      ),
-    );
-  }
-  //旧密码
-  Widget confirmPWWidget(){
-    return Container(
-      margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          titleWidget(S.of(context).g_lock_key12),
-          passwordWidget(
-              confirmEditingController,
-              confirmFocusNode,
-              S.of(context).g_lock_key13,
-              obscureConfirm,
-                  (){
-                if(widget.type==1){
-                  FocusScope.of(context).requestFocus(oldFocusNode);
-                }else{
-                  FocusScope.of(context).requestFocus(newFocusNode);
-                }
-              },
-                  (){
-                setState(() {
-                  obscureConfirm=!obscureConfirm;
-                });
-              }
-          ),
-          errorMessageWidget(confirmErrorMessage),
-          Divider(
-            height: ScreenUtil().setWidth(1.0),
-            indent: 0,
-            endIndent: 0,
-          ),
-        ],
-      ),
-    );
-  }
+
+  Widget oldPWWidget() => _buildPasswordSection(
+    title: S.of(context).g_lock_key10,
+    controller: oldEditingController,
+    focusNode: oldFocusNode,
+    hintStr: "6-digit number",
+    obscure: obscureOld,
+    onFinish: () => FocusScope.of(context).requestFocus(newFocusNode),
+    onToggleObscure: () => setState(() => obscureOld = !obscureOld),
+    errorMessage: oldErrorMessage,
+  );
+
+  Widget newPWWidget() => _buildPasswordSection(
+    title: S.of(context).g_lock_key11,
+    controller: newEditingController,
+    focusNode: newFocusNode,
+    hintStr: S.of(context).g_lock_key13,
+    obscure: obscureNew,
+    onFinish: () => FocusScope.of(context).requestFocus(confirmFocusNode),
+    onToggleObscure: () => setState(() => obscureNew = !obscureNew),
+    errorMessage: newErrorMessage,
+  );
+
+  Widget confirmPWWidget() => _buildPasswordSection(
+    title: S.of(context).g_lock_key12,
+    controller: confirmEditingController,
+    focusNode: confirmFocusNode,
+    hintStr: S.of(context).g_lock_key13,
+    obscure: obscureConfirm,
+    onFinish: () => FocusScope.of(context).requestFocus(
+      widget.type == 1 ? oldFocusNode : newFocusNode,
+    ),
+    onToggleObscure: () => setState(() => obscureConfirm = !obscureConfirm),
+    errorMessage: confirmErrorMessage,
+  );
   Widget titleWidget(String title){
     return Text(
       title,
@@ -301,20 +207,17 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
       FocusNode fn,
       String hintStr,
       bool obscure,
-      Function finishTap,
-      Function obscureChange
+      VoidCallback finishTap,
+      VoidCallback obscureChange,
       ){
-    return Container(
-      constraints: BoxConstraints(
-        maxHeight: ScreenUtil().setWidth(72.0),
-        minHeight: ScreenUtil().setWidth(72.0),
-      ),
+    return SizedBox(
+      height: ScreenUtil().setWidth(72.0),
       child: TextField(
         style: TextStyle(
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
           fontSize: ScreenUtil().setSp(30.0),
         ),
-        obscureText:obscure,
+        obscureText: obscure,
         controller: controller,
         focusNode: fn,
         textInputAction: TextInputAction.done,
@@ -327,30 +230,24 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
           isCollapsed: true,
           contentPadding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
           suffix: InkWell(
-            onTap: (){
-              obscureChange();
-            },
+            onTap: obscureChange,
             child: SizedBox(
               height: ScreenUtil().setSp(40.0),
               width: ScreenUtil().setSp(40.0),
               child: Image.asset(
-                "assets/login/${obscure?'icon_denglu_yincang':'icon_denglu_xianshi'}.png",
+                "assets/login/${obscure ? 'icon_denglu_yincang' : 'icon_denglu_xianshi'}.png",
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
               ),
             ),
           ),
         ),
         maxLines: 1,
-        onEditingComplete: (){
-          finishTap();
-        },
+        onEditingComplete: finishTap,
       ),
     );
   }
   Widget errorMessageWidget(String message){
-    if(message==""){
-      return SizedBox();
-    }
+    if(message.isEmpty) return const SizedBox.shrink();
     return Text(
       message,
       style: TextStyle(

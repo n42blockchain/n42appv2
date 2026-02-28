@@ -417,44 +417,49 @@ class _DeviceScanPageState extends State<DeviceScanPage>
   }
 
   void _showPermissionDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Bluetooth Permission Required'),
-        content: Text(
-          'Please grant Bluetooth permission to scan for hardware wallets.',
+    _showAlertDialog(
+      title: 'Bluetooth Permission Required',
+      content: 'Please grant Bluetooth permission to scan for hardware wallets.',
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancel'),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _startScan();
-            },
-            child: Text('Try Again'),
-          ),
-        ],
-      ),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+            _startScan();
+          },
+          child: const Text('Try Again'),
+        ),
+      ],
     );
   }
 
   void _showBluetoothDisabledDialog() {
+    _showAlertDialog(
+      title: 'Bluetooth Disabled',
+      content: 'Please enable Bluetooth in your device settings to connect to your hardware wallet.',
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('OK'),
+        ),
+      ],
+    );
+  }
+
+  void _showAlertDialog({
+    required String title,
+    required String content,
+    required List<Widget> actions,
+  }) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Bluetooth Disabled'),
-        content: Text(
-          'Please enable Bluetooth in your device settings to connect to your hardware wallet.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('OK'),
-          ),
-        ],
+        title: Text(title),
+        content: Text(content),
+        actions: actions,
       ),
     );
   }
