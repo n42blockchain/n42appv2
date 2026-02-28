@@ -138,7 +138,11 @@ class MarketApi {
   ///
   /// 返回 trending coins 的 item 列表，每项包含 id, name, symbol, thumb, large,
   /// market_cap_rank, data 等字段。网络异常或解析失败返回空列表。
+  ///
+  /// 无 API key 时直接返回空列表，由调用方切换至 N42 后端 fallback。
+  /// 免费端点在中国大陆不可访问，不应浪费 60s 超时。
   Future<List<Map<String, dynamic>>> getTrendingCoins() async {
+    if (ApiKeysConfig.coinGeckoApiKey.isEmpty) return [];
     try {
       debugPrint('MarketApi.getTrendingCoins');
 
