@@ -15,9 +15,7 @@ import 'package:n42_wallet/features/wallet/pages/face_matching/face_match.dart';
 import 'package:n42_wallet/features/wallet/services/recent_address_service.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
 
-// ─── 共享小部件 ─────────────────────────────────────────────────────────────
-
-/// 地址输入框右侧的小图标按钮（扫码 / 粘贴 / 地址簿）。
+/// Small icon button for the address input field (scan / paste / address book).
 Widget buildSendIconBtn(BuildContext context, IconData icon) {
   return Container(
     width: ScreenUtil().setWidth(50.0),
@@ -32,10 +30,9 @@ Widget buildSendIconBtn(BuildContext context, IconData icon) {
   );
 }
 
-/// 金额输入框下方的 USD 等值显示。
+/// USD equivalent display below the amount input field.
 ///
-/// [amountText] 为当前输入的金额字符串，[coinPrice] 为币价（USD）。
-/// 当价格或金额无效时返回空占位。
+/// Returns empty placeholder when price or amount is invalid.
 Widget buildUsdEquivalent(
     BuildContext context, String amountText, double coinPrice) {
   final amount = double.tryParse(amountText) ?? 0.0;
@@ -58,10 +55,7 @@ Widget buildUsdEquivalent(
   );
 }
 
-/// 扫码并填入地址。
-///
-/// [controller] 为目标地址输入框控制器。
-/// [onAddress] 在扫码成功后回调（通常用于触发地址校验）。
+/// Scan QR code and fill in address.
 Future<void> performScanQR(
   BuildContext context, {
   required TextEditingController controller,
@@ -76,10 +70,7 @@ Future<void> performScanQR(
   }
 }
 
-/// 粘贴剪贴板内容并填入地址。
-///
-/// [controller] 为目标地址输入框控制器。
-/// [onAddress] 在粘贴成功后回调（通常用于触发地址校验）。
+/// Paste clipboard content into address field.
 Future<void> performPasteAddress(
   BuildContext context, {
   required TextEditingController controller,
@@ -93,14 +84,9 @@ Future<void> performPasteAddress(
   }
 }
 
-// ─── 地址选择弹窗 ──────────────────────────────────────────────────────────
-
-/// 显示地址选择底部弹窗（地址簿 / 扫码 / 粘贴 / EVM 人脸识别）。
+/// Show address picker bottom sheet (address book / scan / paste / EVM face match).
 ///
-/// [isEvm] 为 true 时追加人脸识别选项（仅 EVM 链支持）。
-/// [onAddressSelected] 在用户选定地址后回调，由调用方处理地址赋值和验证。
-/// [onScanQR] 扫码按钮回调（由调用方提供，因为各页面扫码后的处理逻辑相同）。
-///   若传 null，则使用内置实现：推送 ScanPage 然后 pop 弹窗。
+/// When [isEvm] is true, face match options are appended.
 Future<void> showAddressPickerSheet(
   BuildContext context, {
   required CoinModel coinModel,
@@ -108,28 +94,25 @@ Future<void> showAddressPickerSheet(
   VoidCallback? onScanQR,
   bool isEvm = false,
 }) async {
-  // 扫码默认实现
   void defaultScanQR() async {
-    String? scanValue = await Navigator.push(
+    final scanValue = await Navigator.push(
         context, MaterialPageRoute(builder: (_) => ScanPage()));
     if (!context.mounted) return;
-    if (scanValue != null) {
-      onAddressSelected(scanValue);
-    }
+    if (scanValue != null) onAddressSelected(scanValue as String);
     if (context.mounted) Navigator.pop(context);
   }
 
   final scanAction = onScanQR ?? defaultScanQR;
+  final blueColor = AppThemeUtils.getColorByKey(
+      context, AppThemeKeys.mainBlueColor.name);
+  final divider = Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0);
+  final iconSize = ScreenUtil().setWidth(48);
 
-  // 构建弹窗中每一行的通用布局
-  Widget buildSheetRow(BuildContext context, {
+  Widget buildSheetRow(BuildContext ctx, {
     required Widget iconWidget,
     required String label,
     required VoidCallback onTap,
   }) {
-    final blueColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
-    final iconSize = ScreenUtil().setWidth(48);
     return InkWell(
       onTap: onTap,
       child: SizedBox(
@@ -158,13 +141,7 @@ Future<void> showAddressPickerSheet(
     );
   }
 
-  final blueColor = AppThemeUtils.getColorByKey(
-      context, AppThemeKeys.mainBlueColor.name);
-  final divider = Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0);
-  final iconSize = ScreenUtil().setWidth(48);
-
   final List<Widget> childs = [
-    // ── 地址簿 ──────────────────────────────────────
     buildSheetRow(context,
       iconWidget: Image.asset('assets/wallet/addressBook.png',
           color: blueColor, height: iconSize, width: iconSize),
@@ -179,8 +156,6 @@ Future<void> showAddressPickerSheet(
       },
     ),
     divider,
-
-    // ── 扫码 ────────────────────────────────────────
     buildSheetRow(context,
       iconWidget: Image.asset('assets/wallet/scan.png',
           color: blueColor, height: iconSize, width: iconSize),
@@ -188,8 +163,6 @@ Future<void> showAddressPickerSheet(
       onTap: scanAction,
     ),
     divider,
-
-    // ── 粘贴 ────────────────────────────────────────
     buildSheetRow(context,
       iconWidget: Icon(Icons.paste_outlined, color: blueColor, size: iconSize),
       label: S.of(context).g_key_166,
@@ -205,7 +178,6 @@ Future<void> showAddressPickerSheet(
     divider,
   ];
 
-  // ── EVM 专属：人脸识别（拍照 / 相册） ──────────────
   if (isEvm) {
     Future<void> faceMatchAction(int type) async {
       final address = await Navigator.push<String>(
@@ -234,11 +206,9 @@ Future<void> showAddressPickerSheet(
       Column(children: childs));
 }
 
-/// 地址输入框上方的最近转账地址快选条。
+/// Recent address quick-select bar above the address input field.
 ///
-/// - 无历史时隐藏（不占空间）。
-/// - 有历史时显示横向滚动的 [ActionChip]。
-/// - 点击 chip → 调用 [onSelected] 填入地址。
+/// Hidden when no history exists. Shows horizontal scrolling [ActionChip]s.
 class RecentAddressBar extends StatefulWidget {
   final String coinType;
   final ValueChanged<String> onSelected;
@@ -265,14 +235,12 @@ class _RecentAddressBarState extends State<RecentAddressBar> {
   Future<void> _load() async {
     final list =
         await RecentAddressService.load(widget.coinType, maxCount: 5);
-    if (mounted) {
-      setState(() => _entries = list);
-    }
+    if (mounted) setState(() => _entries = list);
   }
 
   String _formatAddress(String addr) {
     if (addr.length <= 10) return addr;
-    return '${addr.substring(0, 6)}…${addr.substring(addr.length - 4)}';
+    return '${addr.substring(0, 6)}...${addr.substring(addr.length - 4)}';
   }
 
   @override
@@ -289,10 +257,9 @@ class _RecentAddressBarState extends State<RecentAddressBar> {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: _entries.map((entry) {
-            final label =
-                entry.name?.isNotEmpty == true
-                    ? entry.name!
-                    : _formatAddress(entry.address);
+            final label = (entry.name?.isNotEmpty == true)
+                ? entry.name!
+                : _formatAddress(entry.address);
             return Padding(
               padding: EdgeInsets.only(right: ScreenUtil().setWidth(8)),
               child: ActionChip(

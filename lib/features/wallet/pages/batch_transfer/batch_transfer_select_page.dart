@@ -15,39 +15,48 @@ import 'package:n42_wallet/features/wallet/provider/batch_transfer_provider.dart
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 
-/// 批量转账代币选择页面
+/// Batch transfer token selection page.
 class BatchTransferSelectPage extends ConsumerWidget {
   const BatchTransferSelectPage({super.key});
+
+  static const _evmChains = {
+    'ETH', 'BNB', 'MATIC', 'ARB', 'OP', 'AVAX', 'FTM', 'CRO', 'CELO',
+  };
+
+  static const _chainColors = {
+    'ETH': Color(0xFF627EEA),
+    'BNB': Color(0xFFF3BA2F),
+    'MATIC': Color(0xFF8247E5),
+    'ARB': Color(0xFF28A0F0),
+    'OP': Color(0xFFFF0420),
+    'AVAX': Color(0xFFE84142),
+    'FTM': Color(0xFF1969FF),
+    'CRO': Color(0xFF002D74),
+    'CELO': Color(0xFF35D07F),
+  };
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final waProvider = ref.watch(wapBridgeProvider);
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_batch_title,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_batch_title),
       body: _buildBody(context, waProvider),
     );
   }
 
   Widget _buildBody(BuildContext context, dynamic waProvider) {
-    // 过滤出支持批量转账的代币（EVM 链）
     final supportedCoins = waProvider.coinList.where((coin) {
       final chainSymbol = coin.coin['symbol'] ?? '';
-      return _isEvmChain(chainSymbol);
+      return _evmChains.contains((chainSymbol as String).toUpperCase());
     }).toList();
 
-    if (supportedCoins.isEmpty) {
-      return _buildEmptyState(context);
-    }
+    if (supportedCoins.isEmpty) return _buildEmptyState(context);
 
     return ListView(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       children: [
-        // 说明卡片
         _buildInfoCard(context),
         SizedBox(height: ScreenUtil().setWidth(24)),
-        // 代币列表
         Text(
           S.of(context).g_key_batch_select_token,
           style: TextStyle(
@@ -63,13 +72,6 @@ class BatchTransferSelectPage extends ConsumerWidget {
     );
   }
 
-  bool _isEvmChain(String chainSymbol) {
-    const evmChains = [
-      'ETH', 'BNB', 'MATIC', 'ARB', 'OP', 'AVAX', 'FTM', 'CRO', 'CELO'
-    ];
-    return evmChains.contains(chainSymbol.toUpperCase());
-  }
-
   Widget _buildEmptyState(BuildContext context) {
     final subtitleText = AppThemeUtils.getColorByKey(
         context, AppThemeKeys.itemSubtitleTextColor.name);
@@ -79,27 +81,17 @@ class BatchTransferSelectPage extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.send_rounded,
-              size: ScreenUtil().setWidth(80),
-              color: subtitleText,
-            ),
+            Icon(Icons.send_rounded, size: ScreenUtil().setWidth(80), color: subtitleText),
             SizedBox(height: ScreenUtil().setWidth(16)),
             Text(
               S.of(context).g_key_batch_no_supported,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                color: subtitleText,
-              ),
+              style: TextStyle(fontSize: ScreenUtil().setSp(28), color: subtitleText),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: ScreenUtil().setWidth(8)),
             Text(
               S.of(context).g_key_batch_evm_only,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: subtitleText,
-              ),
+              style: TextStyle(fontSize: ScreenUtil().setSp(24), color: subtitleText),
               textAlign: TextAlign.center,
             ),
           ],
@@ -124,11 +116,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
       ),
       child: Row(
         children: [
-          Icon(
-            Icons.send_rounded,
-            size: ScreenUtil().setWidth(48),
-            color: const Color(0xFF00BCD4),
-          ),
+          Icon(Icons.send_rounded, size: ScreenUtil().setWidth(48), color: const Color(0xFF00BCD4)),
           SizedBox(width: ScreenUtil().setWidth(16)),
           Expanded(
             child: Column(
@@ -164,7 +152,8 @@ class BatchTransferSelectPage extends ConsumerWidget {
     final chainSymbol = (coin.coin['symbol'] ?? '') as String;
     final name = (coin.coin['name'] ?? chainSymbol) as String;
     final decimals = (coin.coin['decimals'] ?? 18) as int;
-    final chainColor = _getChainColor(chainSymbol);
+    final chainColor =
+        _chainColors[chainSymbol.toUpperCase()] ?? const Color(0xFF607D8B);
     final mainText = AppThemeUtils.getColorByKey(
         context, AppThemeKeys.mainTextColor.name);
     final subtitleText = AppThemeUtils.getColorByKey(
@@ -182,7 +171,6 @@ class BatchTransferSelectPage extends ConsumerWidget {
         ),
         child: Row(
           children: [
-            // 代币图标
             Container(
               width: ScreenUtil().setWidth(48),
               height: ScreenUtil().setWidth(48),
@@ -202,7 +190,6 @@ class BatchTransferSelectPage extends ConsumerWidget {
               ),
             ),
             SizedBox(width: ScreenUtil().setWidth(12)),
-            // 代币信息
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -219,17 +206,13 @@ class BatchTransferSelectPage extends ConsumerWidget {
                   ),
                   Text(
                     chainSymbol,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: subtitleText,
-                    ),
+                    style: TextStyle(fontSize: ScreenUtil().setSp(22), color: subtitleText),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
             ),
-            // 余额
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -243,10 +226,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
                 ),
                 Text(
                   chainSymbol,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
-                    color: subtitleText,
-                  ),
+                  style: TextStyle(fontSize: ScreenUtil().setSp(22), color: subtitleText),
                 ),
               ],
             ),
@@ -266,14 +246,15 @@ class BatchTransferSelectPage extends ConsumerWidget {
       final fracLen = decimals > 4 ? 4 : decimals;
       final fracStr = fracPart.toString().padLeft(decimals, '0').substring(0, fracLen);
       return '$intPart.$fracStr';
-    } catch (e) {
+    } catch (_) {
       return '0.0000';
     }
   }
 
   void _navigateToBatchTransfer(BuildContext context, CoinModel coin) {
     final chainSymbol = (coin.coin['symbol'] ?? '') as String;
-    final baseInfo = _getBaseInfo(chainSymbol);
+    final config = chainUrlMap[chainSymbol];
+    final baseInfo = (config?['baseInfo'] as Map<String, dynamic>?) ?? {};
     final address = coin.address?.toString() ?? '';
     final decimals = (coin.coin['decimals'] ?? 18) as int;
 
@@ -292,26 +273,5 @@ class BatchTransferSelectPage extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  /// 从 chainUrlMap 获取链基础配置（rpcUrl、chainId 等）
-  Map<String, dynamic> _getBaseInfo(String chainSymbol) {
-    final config = chainUrlMap[chainSymbol];
-    return (config?['baseInfo'] as Map<String, dynamic>?) ?? {};
-  }
-
-  Color _getChainColor(String chainSymbol) {
-    const chainColors = {
-      'ETH': Color(0xFF627EEA),
-      'BNB': Color(0xFFF3BA2F),
-      'MATIC': Color(0xFF8247E5),
-      'ARB': Color(0xFF28A0F0),
-      'OP': Color(0xFFFF0420),
-      'AVAX': Color(0xFFE84142),
-      'FTM': Color(0xFF1969FF),
-      'CRO': Color(0xFF002D74),
-      'CELO': Color(0xFF35D07F),
-    };
-    return chainColors[chainSymbol.toUpperCase()] ?? const Color(0xFF607D8B);
   }
 }

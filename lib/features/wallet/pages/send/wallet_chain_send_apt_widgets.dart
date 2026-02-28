@@ -70,7 +70,7 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
                 ),
               ),
               SizedBox(width: ScreenUtil().setWidth(20.0)),
-              Expanded(flex: 1, child: amountBalanceWidget()),
+              Expanded(child: amountBalanceWidget()),
             ],
           ),
           Container(
@@ -85,7 +85,6 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
                   color: const Color(0xff101828).withAlpha(13),
                   offset: const Offset(0, 1),
                   blurRadius: ScreenUtil().setWidth(4.0),
-                  spreadRadius: 0,
                 ),
               ],
             ),
@@ -104,21 +103,14 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
                   ),
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
-                  onChanged: (value) {
-                    amountCheck(value: value);
-                  },
+                  onChanged: (value) => amountCheck(value: value),
                   onEditingComplete: () {
                     amountCheck();
                     FocusScope.of(context).requestFocus(toNode);
                   },
                   fontSize: ScreenUtil().setWidth(70.0),
                   height: ScreenUtil().setWidth(120.0),
-                  boxShadow: BoxShadow(
-                    color: const Color(0xff101828).withAlpha(0),
-                    offset: const Offset(0, 0),
-                    blurRadius: ScreenUtil().setWidth(0),
-                    spreadRadius: 0,
-                  ),
+                  boxShadow: const BoxShadow(color: Color(0x00101828)),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(ScreenUtil().setWidth(16.0)),
                     topRight: Radius.circular(ScreenUtil().setWidth(16.0)),
@@ -185,12 +177,10 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
   Widget ownerAddress() {
     final String addr =
         dataUtils.addressFarmat(widget.coinModel.address.toString());
-    return Container(
-      padding: EdgeInsets.only(
-        top: ScreenUtil().setWidth(20.0),
-        bottom: ScreenUtil().setWidth(20.0),
-        right: ScreenUtil().setWidth(30.0),
-        left: ScreenUtil().setWidth(30.0),
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: ScreenUtil().setWidth(20.0),
+        horizontal: ScreenUtil().setWidth(30.0),
       ),
       child: Text(
         addr,
@@ -228,8 +218,8 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
                 Text(
                   S.of(context).g_key_29,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context,
-                        AppThemeKeys.itemSubtitleTextColor.name),
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.itemSubtitleTextColor.name),
                     fontSize: ScreenUtil().setSp(28.0),
                   ),
                 ),
@@ -253,15 +243,14 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
   }
 
   Widget errorMessageWidget() {
-    if (errorMessage.isEmpty) return const SizedBox();
+    if (errorMessage.isEmpty) return const SizedBox.shrink();
     return Container(
       margin: EdgeInsets.only(
-          top: ScreenUtil().setWidth(20.0),
-          left: ScreenUtil().setWidth(30),
-          right: ScreenUtil().setWidth(30)),
-      padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30.0),
-          vertical: ScreenUtil().setWidth(30.0)),
+        top: ScreenUtil().setWidth(20.0),
+        left: ScreenUtil().setWidth(30),
+        right: ScreenUtil().setWidth(30),
+      ),
+      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius:
@@ -281,7 +270,7 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
   }
 
   Widget sendButtonWidget() {
-    final String title = S.of(context).g_key_48;
+    final bool isLoading = load == Load.loading;
     return Positioned(
       left: 0,
       right: 0,
@@ -296,21 +285,17 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
                 context, AppThemeKeys.backGroundColor.name),
             child: buttonStyle6(
               context,
-              () async {
-                sendTransaction();
-              },
-              load == Load.loading
-                  ? '${S.of(context).g_key_106}...'
-                  : title,
+              sendTransaction,
+              isLoading ? '${S.of(context).g_key_106}...' : S.of(context).g_key_48,
               AppThemeUtils.getColorByKey(
                 context,
-                load == Load.loading
+                isLoading
                     ? AppThemeKeys.mainButtonBgColor3.name
                     : AppThemeKeys.mainButtonBgColor.name,
               ),
               AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.mainButtonTextColor.name),
-              load == Load.loading,
+              isLoading,
             ),
           ),
         ],

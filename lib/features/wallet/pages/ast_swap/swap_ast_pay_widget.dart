@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-/// 兑换页"您支付"区域，包含输入框、链选择、代币余额和添加代币提示。
+/// "You Pay" section in the swap page: input, chain selector, balance, and add-token prompt.
 class SwapAstPayWidget extends ConsumerWidget {
   final TextEditingController payController;
   final FocusNode payNode;
@@ -50,10 +50,12 @@ class SwapAstPayWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final colorKey = hasValidInput
-        ? AppThemeKeys.itemTextColor.name
-        : AppThemeKeys.errorTextColor.name;
-    final Color balanceColor = AppThemeUtils.getColorByKey(context, colorKey);
+    final balanceColor = AppThemeUtils.getColorByKey(
+      context,
+      hasValidInput
+          ? AppThemeKeys.itemTextColor.name
+          : AppThemeKeys.errorTextColor.name,
+    );
 
     return Container(
       margin: EdgeInsets.fromLTRB(
@@ -73,18 +75,14 @@ class SwapAstPayWidget extends ConsumerWidget {
           _buildHeader(context),
           _buildInputRow(context),
           if (payCoinModel == null && youPay != null)
-            _buildAddRow(
-              context,
-              ref,
+            _buildAddRow(context, ref,
               label: S.of(context).g_swap_key_14(youPay?.payChain ?? ""),
               coinName: youPay?.payChain ?? "",
             ),
           if (payCoinModel != null)
             _buildBalanceRow(context, balanceColor),
           if (payCoinModel != null && token == null)
-            _buildAddRow(
-              context,
-              ref,
+            _buildAddRow(context, ref,
               label: S.of(context).g_swap_key_14(youPay?.payCoin ?? ""),
               coinName: youPay?.payCoin ?? "",
             ),
@@ -169,15 +167,11 @@ class SwapAstPayWidget extends ConsumerWidget {
     return InkWell(
       onTap: () async {
         onCloseKeyboard();
-        final SwapAstModel? rModel = await Navigator.push<SwapAstModel>(
+        final rModel = await Navigator.push<SwapAstModel>(
           context,
-          MaterialPageRoute(
-            builder: (context) => SwapAstSelectChain(swapAstList),
-          ),
+          MaterialPageRoute(builder: (_) => SwapAstSelectChain(swapAstList)),
         );
-        if (rModel != null) {
-          onChainSelected(rModel);
-        }
+        if (rModel != null) onChainSelected(rModel);
       },
       child: Container(
         width: ScreenUtil().setWidth(200),
@@ -233,10 +227,7 @@ class SwapAstPayWidget extends ConsumerWidget {
       children: [
         Text(
           "${S.of(context).g_key_29}:$balanceText",
-          style: TextStyle(
-            color: balanceColor,
-            fontSize: ScreenUtil().setSp(26),
-          ),
+          style: TextStyle(color: balanceColor, fontSize: ScreenUtil().setSp(26)),
         ),
         if (youPay?.load == Load.loading)
           SizedBox(
@@ -267,31 +258,25 @@ class SwapAstPayWidget extends ConsumerWidget {
         InkWell(
           onTap: () async {
             onCloseKeyboard();
-            final bool r = await Navigator.push<bool>(
+            final r = await Navigator.push<bool>(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => WalletCoinAddAll(coinName),
-                  ),
+                  MaterialPageRoute(builder: (_) => WalletCoinAddAll(coinName)),
                 ) ??
                 false;
             if (!context.mounted) return;
             if (r) {
-              await ref
-                  .read(wapBridgeProvider)
-                  .initWallet(shouldInitCoinInfo: true);
+              await ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
               onAddToken();
             }
           },
           child: Container(
             height: ScreenUtil().setWidth(50),
-            padding:
-                EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
+            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.mainButtonBgColor.name),
-              borderRadius:
-                  BorderRadius.circular(ScreenUtil().setWidth(50)),
+              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(50)),
             ),
             child: Text(
               S.of(context).g_key_wallet_k47,
