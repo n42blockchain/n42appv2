@@ -19,7 +19,8 @@ extension WalletActionProviderMarket on WalletActionProvider {
       // 同时请求 cny 报价，用于推导 USD→CNY 汇率
       final url = '$baseUrl/simple/price?ids=$geckoIds&vs_currencies=usd,cny&include_24hr_change=true';
 
-      final response = await BaseApi.requestEmptyH.get(url, params: {}, header: {'content-type': 'application/json'});
+      final response = await BaseApi.requestEmptyH.get(url, params: {}, header: {'content-type': 'application/json'})
+          .timeout(const Duration(seconds: 8), onTimeout: () => null);
 
       if (response != null && response is Map) {
         final newPrices = <String, Map<String, double>>{};

@@ -93,7 +93,7 @@ class CryptoNewsService {
         _url,
         params: {},
         header: <String, dynamic>{},
-      );
+      ).timeout(const Duration(seconds: 8), onTimeout: () => null);
       if (raw == null || raw is! Map) return [];
       final data = raw['Data'];
       if (data is! List) return [];

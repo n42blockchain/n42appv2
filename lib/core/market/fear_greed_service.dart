@@ -108,7 +108,7 @@ class FearGreedService {
         _url,
         params: {},
         header: <String, dynamic>{},
-      );
+      ).timeout(const Duration(seconds: 8), onTimeout: () => null);
       if (raw == null || raw is! Map) return null;
       final data = raw['data'];
       if (data is! List || data.isEmpty) return null;

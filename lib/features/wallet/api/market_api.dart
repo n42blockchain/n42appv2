@@ -82,7 +82,7 @@ class MarketApi {
         '$_geckoBase/coins/$encodedId/ohlc?vs_currency=usd&days=$days',
         params: {},
         header: _geckoHeader,
-      );
+      ).timeout(const Duration(seconds: 15), onTimeout: () => null);
 
       if (raw == null || raw is! List) return [];
 
@@ -120,7 +120,7 @@ class MarketApi {
         '$_geckoBase/coins/$encodedId/market_chart?vs_currency=usd&days=$days',
         params: {},
         header: _geckoHeader,
-      );
+      ).timeout(const Duration(seconds: 15), onTimeout: () => null);
 
       if (raw == null || raw is! Map) return empty;
 
@@ -139,10 +139,10 @@ class MarketApi {
   /// 返回 trending coins 的 item 列表，每项包含 id, name, symbol, thumb, large,
   /// market_cap_rank, data 等字段。网络异常或解析失败返回空列表。
   ///
-  /// 无 API key 时直接返回空列表，由调用方切换至 N42 后端 fallback。
-  /// 免费端点在中国大陆不可访问，不应浪费 60s 超时。
+  /// 使用 8 秒 Dart 级超时：在可访问地区（如加拿大）CoinGecko 通常 ~1s 返回；
+  /// 在封锁地区 8s 后返回空列表，由调用方切换至 N42 后端 fallback，
+  /// 避免占用 Dio 的 60s + RetryInterceptor 的 3x 重试（总计 4 分钟）。
   Future<List<Map<String, dynamic>>> getTrendingCoins() async {
-    if (ApiKeysConfig.coinGeckoApiKey.isEmpty) return [];
     try {
       debugPrint('MarketApi.getTrendingCoins');
 
@@ -150,7 +150,7 @@ class MarketApi {
         '$_geckoBase/search/trending',
         params: {},
         header: _geckoHeader,
-      );
+      ).timeout(const Duration(seconds: 8), onTimeout: () => null);
 
       if (raw == null || raw is! Map) return [];
       final coins = raw['coins'];
@@ -185,7 +185,7 @@ class MarketApi {
         '$_geckoBase/search?q=${Uri.encodeQueryComponent(query.trim())}',
         params: {},
         header: _geckoHeader,
-      );
+      ).timeout(const Duration(seconds: 8), onTimeout: () => null);
 
       if (raw == null || raw is! Map) return [];
       final coins = raw['coins'];
