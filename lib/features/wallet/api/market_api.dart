@@ -197,6 +197,38 @@ class MarketApi {
     }
   }
 
+  /// 硬编码热门币列表，当 CoinGecko trending 不可用时作为 fallback。
+  static const String _fallbackTrendingSymbols =
+      'btc,eth,sol,bnb,xrp,ada,avax,doge,dot,link';
+
+  /// 从 N42 后端获取 fallback trending 数据。
+  ///
+  /// 返回格式与 watchlist 一致（`coin`, `name`, `price`, `price_change_per_24h`,
+  /// `image`, `coin_gecko_id`, `market_cap_rank`），调用方可直接以
+  /// [_CoinSource.watchlist] 方式渲染。
+  Future<List<Map<String, dynamic>>> getFallbackTrendingCoins() async {
+    try {
+      debugPrint('MarketApi.getFallbackTrendingCoins');
+
+      final resp = await getWalletCoinsInfo(_fallbackTrendingSymbols);
+      if (resp['error'] != false) return [];
+
+      final rawData = resp['data'];
+      final coins = (rawData is List)
+          ? rawData
+          : (rawData is Map ? rawData['data'] : null);
+      if (coins is! List) return [];
+
+      return coins
+          .whereType<Map<dynamic, dynamic>>()
+          .map((c) => Map<String, dynamic>.from(c))
+          .toList();
+    } catch (e, st) {
+      debugPrint('MarketApi.getFallbackTrendingCoins error: $e\n$st');
+      return [];
+    }
+  }
+
   /// 获取币的基本详情信息（N42 market API → CoinGecko proxy）
   Future<Map<String, dynamic>> getWalletCoinsBaseInfo(String coinName) async {
     if (coinName.isEmpty) return {'error': true, 'data': '未找到该币'};
