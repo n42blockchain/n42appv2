@@ -143,10 +143,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
     for (final c in coins) {
       if (c is! Map) continue;
       final sym = c['coin']?.toString().toLowerCase() ?? '';
-      final v = c['price'];
-      final price = (v is num)
-          ? v.toDouble()
-          : double.tryParse(v?.toString() ?? '') ?? 0.0;
+      final price = _parsePrice(c['price']);
       if (sym.isNotEmpty && price > 0) prices[sym] = price;
     }
 
@@ -169,6 +166,19 @@ class _MarketPageState extends ConsumerState<MarketPage>
     );
     if (changed == true) await _loadAlerts();
   }
+
+  /// Parse a numeric price from a dynamic value (num or String).
+  double _parsePrice(dynamic v) =>
+      (v is num) ? v.toDouble() : double.tryParse(v?.toString() ?? '') ?? 0.0;
+
+  /// Parse the price from a trending coin's nested data structure.
+  double _parseTrendingPrice(Map<String, dynamic> coin) =>
+      double.tryParse(
+        (coin['data']?['price'] ?? '')
+            .toString()
+            .replaceAll(r'$', '')
+            .replaceAll(',', ''),
+      ) ?? 0.0;
 
   // ─── Data loaders ───────────────────────────────────────────────────────────
 
@@ -257,11 +267,6 @@ class _MarketPageState extends ConsumerState<MarketPage>
       Map<String, dynamic> coin, _CoinSource source) {
     switch (source) {
       case _CoinSource.trending:
-        final priceStr = (coin['data']?['price'] ?? '')
-            .toString()
-            .replaceAll(r'$', '')
-            .replaceAll(',', '');
-        final price = double.tryParse(priceStr) ?? 0.0;
         final pct =
             coin['data']?['price_change_percentage_24h']?['usd'] ?? 0.0;
         return {
@@ -269,9 +274,8 @@ class _MarketPageState extends ConsumerState<MarketPage>
           'coin': (coin['symbol'] ?? '').toString().toLowerCase(),
           'name': coin['name'] ?? '',
           'image': coin['large'] ?? coin['thumb'] ?? '',
-          'price': price,
-          'price_change_per_24h':
-              pct is num ? pct.toDouble() : 0.0,
+          'price': _parseTrendingPrice(coin),
+          'price_change_per_24h': pct is num ? pct.toDouble() : 0.0,
         };
 
       case _CoinSource.search:
@@ -290,14 +294,8 @@ class _MarketPageState extends ConsumerState<MarketPage>
           'coin': coin['coin'] ?? '',
           'name': coin['name'] ?? '',
           'image': coin['image'] ?? '',
-          'price': (coin['price'] is num)
-              ? (coin['price'] as num).toDouble()
-              : double.tryParse(coin['price']?.toString() ?? '') ?? 0.0,
-          'price_change_per_24h': (coin['price_change_per_24h'] is num)
-              ? (coin['price_change_per_24h'] as num).toDouble()
-              : double.tryParse(
-                      coin['price_change_per_24h']?.toString() ?? '') ??
-                  0.0,
+          'price': _parsePrice(coin['price']),
+          'price_change_per_24h': _parsePrice(coin['price_change_per_24h']),
         };
     }
   }
@@ -329,17 +327,13 @@ class _MarketPageState extends ConsumerState<MarketPage>
                   priceAlerts: _priceAlerts,
                   onTap: (c) => _navigateToDetail(c, _CoinSource.trending),
                   onToggleWatchlist: _toggleWatchlist,
-                  onSetAlert: (ctx, c) {
-                    final id = c['id']?.toString() ?? '';
-                    final sym = (c['symbol'] ?? '').toString().toLowerCase();
-                    final name = c['name']?.toString() ?? '';
-                    final priceStr = (c['data']?['price'] ?? '')
-                        .toString()
-                        .replaceAll(r'$', '')
-                        .replaceAll(',', '');
-                    final price = double.tryParse(priceStr) ?? 0.0;
-                    _openAlertSheet(ctx, id, sym, name, price);
-                  },
+                  onSetAlert: (ctx, c) => _openAlertSheet(
+                    ctx,
+                    c['id']?.toString() ?? '',
+                    (c['symbol'] ?? '').toString().toLowerCase(),
+                    c['name']?.toString() ?? '',
+                    _parseTrendingPrice(c),
+                  ),
                   onRefresh: _loadTrending,
                 ),
                 _SearchTab(
@@ -351,12 +345,13 @@ class _MarketPageState extends ConsumerState<MarketPage>
                   onChanged: _onSearchChanged,
                   onTap: (c) => _navigateToDetail(c, _CoinSource.search),
                   onToggleWatchlist: _toggleWatchlist,
-                  onSetAlert: (ctx, c) {
-                    final id = c['id']?.toString() ?? '';
-                    final sym = (c['symbol'] ?? '').toString().toLowerCase();
-                    final name = c['name']?.toString() ?? '';
-                    _openAlertSheet(ctx, id, sym, name, 0.0);
-                  },
+                  onSetAlert: (ctx, c) => _openAlertSheet(
+                    ctx,
+                    c['id']?.toString() ?? '',
+                    (c['symbol'] ?? '').toString().toLowerCase(),
+                    c['name']?.toString() ?? '',
+                    0.0,
+                  ),
                 ),
                 _WatchlistTab(
                   coins: _watchlistCoins,
@@ -365,16 +360,13 @@ class _MarketPageState extends ConsumerState<MarketPage>
                   priceAlerts: _priceAlerts,
                   onTap: (c) => _navigateToDetail(c, _CoinSource.watchlist),
                   onToggleWatchlist: _toggleWatchlist,
-                  onSetAlert: (ctx, c) {
-                    final id = c['coin_gecko_id']?.toString() ?? '';
-                    final sym = (c['coin'] ?? '').toString().toLowerCase();
-                    final name = c['name']?.toString() ?? '';
-                    final v = c['price'];
-                    final price = (v is num)
-                        ? v.toDouble()
-                        : double.tryParse(v?.toString() ?? '') ?? 0.0;
-                    _openAlertSheet(ctx, id, sym, name, price);
-                  },
+                  onSetAlert: (ctx, c) => _openAlertSheet(
+                    ctx,
+                    c['coin_gecko_id']?.toString() ?? '',
+                    (c['coin'] ?? '').toString().toLowerCase(),
+                    c['name']?.toString() ?? '',
+                    _parsePrice(c['price']),
+                  ),
                   onRefresh: _loadWatchlist,
                 ),
                 _NewsTab(

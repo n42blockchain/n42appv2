@@ -12,7 +12,6 @@ import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
-// switch_widget replaced with Flutter's built-in Switch
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -36,22 +35,21 @@ class _MiningSettingsState extends State<MiningSettings> {
   Map? currentNode;
 
   int backgroundMiningMusic = 0; //0:default,1:空白
-  List<String>? bgmMusicList;
-  List<String> get bgmMusicOptions {
-    bgmMusicList ??= [
+  late final List<String> bgmMusicOptions;
+  late final List<String> networkOptions;
+  bool _optionsInitialized = false;
+
+  void _ensureOptions() {
+    if (_optionsInitialized) return;
+    _optionsInitialized = true;
+    bgmMusicOptions = [
       S.of(context).g_mining_key35,
       S.of(context).g_mining_key36,
     ];
-    return bgmMusicList!;
-  }
-
-  List<String>? netList;
-  List<String> get networkOptions {
-    netList ??= [
+    networkOptions = [
       S.of(context).g_key_148,
       S.of(context).g_key_147,
     ];
-    return netList!;
   }
 
   @override
@@ -61,34 +59,15 @@ class _MiningSettingsState extends State<MiningSettings> {
   }
 
   Future<void> initData() async {
-    // 获取缓存配置的挖矿节点
-    // 获取挖矿是否开启
-    SPUtil sPUtils = SPUtil();
-    final openState = await sPUtils.getOpenMining();
-    isSwitched = openState;
+    final sp = SPUtil();
+    isSwitched = await sp.getOpenMining();
+    backgroundMiningMusic = await sp.getBackgroundMiningMusic() ?? backgroundMiningMusic;
 
-    int? bgmm = await sPUtils.getBackgroundMiningMusic();
-    if (bgmm != null) {
-      backgroundMiningMusic = bgmm;
-    }
+    final key = AppConfig.isMainChainMining ? "main" : "test";
+    nodeList = miningNodeMap[key] as List<Map>;
+    currentNode = await sp.getCurrNodeAddress() ?? nodeList[0];
 
-    //node list
-    if (AppConfig.isMainChainMining) {
-      nodeList = miningNodeMap["main"] as List<Map>;
-    } else {
-      nodeList = miningNodeMap["test"] as List<Map>;
-    }
-
-    Map? nodeMap = await sPUtils.getCurrNodeAddress();
-    if (nodeMap != null) {
-      currentNode = nodeMap;
-    } else {
-      currentNode = nodeList[0];
-    }
-
-    if (mounted) {
-      setState(() {});
-    }
+    if (mounted) setState(() {});
   }
 
   Future<void> networkChange(bool value) async {
@@ -101,6 +80,7 @@ class _MiningSettingsState extends State<MiningSettings> {
 
   @override
   Widget build(BuildContext context) {
+    _ensureOptions();
     return Scaffold(
       appBar: AppBarWidget(
         text: S.current.g_mining_key33,
@@ -127,6 +107,12 @@ class _MiningSettingsState extends State<MiningSettings> {
     );
   }
 
+  Color _mainTextColor() =>
+      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+
+  Color _greyColor() =>
+      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainGreyColor.name);
+
   Widget _buildSwitchItem() {
     return wrapItem(Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -135,8 +121,7 @@ class _MiningSettingsState extends State<MiningSettings> {
           S.of(context).g_mining_key82,
           style: TextStyle(
               fontSize: ScreenUtil().setSp(32),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name)),
+              color: _mainTextColor()),
         ),
         Switch(
           onChanged: (bool value) async {
@@ -160,6 +145,7 @@ class _MiningSettingsState extends State<MiningSettings> {
   }
 
   Widget _buildNodeSelector() {
+    final textColor = _mainTextColor();
     return wrapItem(Padding(
       padding:
           EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
@@ -168,24 +154,18 @@ class _MiningSettingsState extends State<MiningSettings> {
           Text(
             S.of(context).g_mining_key83,
             style: TextStyle(
-                fontSize: ScreenUtil().setSp(32),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name)),
+                fontSize: ScreenUtil().setSp(32), color: textColor),
           ),
           const Spacer(),
           GestureDetector(
-            onTap: () {
-              sheetBottom(context, "", _buildNodeList(context));
-            },
+            onTap: () => sheetBottom(context, "", _buildNodeList(context)),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
                   currentNode?["name"] ?? '',
                   style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(32)),
+                      color: textColor, fontSize: ScreenUtil().setSp(32)),
                 ),
                 const Icon(Icons.arrow_drop_down_sharp)
               ],
@@ -197,6 +177,7 @@ class _MiningSettingsState extends State<MiningSettings> {
   }
 
   Widget _buildBgmSelector() {
+    final textColor = _mainTextColor();
     return wrapItem(Padding(
       padding:
           EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
@@ -207,23 +188,19 @@ class _MiningSettingsState extends State<MiningSettings> {
             child: Text(
               S.of(context).g_mining_key34,
               style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name)),
+                  fontSize: ScreenUtil().setSp(32), color: textColor),
             ),
           ),
           SizedBox(width: ScreenUtil().setWidth(60)),
           GestureDetector(
-            onTap: () => _showMusicSheet(),
+            onTap: _showMusicSheet,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
                   bgmMusicOptions[backgroundMiningMusic],
                   style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(32)),
+                      color: textColor, fontSize: ScreenUtil().setSp(32)),
                 ),
                 const Icon(Icons.arrow_drop_down_sharp)
               ],
@@ -235,6 +212,7 @@ class _MiningSettingsState extends State<MiningSettings> {
   }
 
   Widget _buildNetworkSelector() {
+    final textColor = _mainTextColor();
     return wrapItem(Padding(
       padding:
           EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
@@ -248,32 +226,26 @@ class _MiningSettingsState extends State<MiningSettings> {
                 Text(
                   S.of(context).g_mining_key84,
                   style: TextStyle(
-                      fontSize: ScreenUtil().setSp(32),
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name)),
+                      fontSize: ScreenUtil().setSp(32), color: textColor),
                 ),
                 Text(
                   S.of(context).g_mining_key85,
                   style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainGreyColor.name)),
+                      fontSize: ScreenUtil().setSp(28), color: _greyColor()),
                 ),
               ],
             ),
           ),
           SizedBox(width: ScreenUtil().setWidth(60)),
           GestureDetector(
-            onTap: () => _showNetworkSheet(),
+            onTap: _showNetworkSheet,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
-                  networkOptions[AppConfig.isMainChainMining == true ? 0 : 1],
+                  networkOptions[AppConfig.isMainChainMining ? 0 : 1],
                   style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(32)),
+                      color: textColor, fontSize: ScreenUtil().setSp(32)),
                 ),
                 const Icon(Icons.arrow_drop_down_sharp)
               ],
@@ -320,6 +292,12 @@ class _MiningSettingsState extends State<MiningSettings> {
     required bool isSelected,
     required VoidCallback onTap,
   }) {
+    final textColor = _mainTextColor();
+    final labelText = Text(
+      label,
+      style: TextStyle(fontSize: ScreenUtil().setSp(30), color: textColor),
+    );
+
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -342,14 +320,7 @@ class _MiningSettingsState extends State<MiningSettings> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          label,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(30),
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.mainTextColor.name),
-                          ),
-                        ),
+                        labelText,
                         SizedBox(height: ScreenUtil().setWidth(10)),
                         Text(
                           subtitle,
@@ -361,14 +332,7 @@ class _MiningSettingsState extends State<MiningSettings> {
                         ),
                       ],
                     )
-                  : Text(
-                      label,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(30),
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainTextColor.name),
-                      ),
-                    ),
+                  : labelText,
             ),
             if (isSelected)
               Icon(
@@ -383,75 +347,69 @@ class _MiningSettingsState extends State<MiningSettings> {
     );
   }
 
+  void _selectBgmOption(int index) async {
+    if (index != backgroundMiningMusic) {
+      setState(() => backgroundMiningMusic = index);
+      await SPUtil().setBackgroundMiningMusic(backgroundMiningMusic);
+    }
+    Navigator.pop(context);
+  }
+
   void _showMusicSheet() {
-    final child = SizedBox(
-      width: double.infinity,
-      child: Column(
-        children: [
-          _buildOptionItem(
-            label: bgmMusicOptions[0],
-            subtitle: S.of(context).g_mining_key37,
-            isSelected: backgroundMiningMusic == 0,
-            onTap: () async {
-              if (0 != backgroundMiningMusic) {
-                setState(() {
-                  backgroundMiningMusic = 0;
-                });
-                await SPUtil().setBackgroundMiningMusic(backgroundMiningMusic);
-              }
-              Navigator.pop(context);
-            },
-          ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
-          _buildOptionItem(
-            label: bgmMusicOptions[1],
-            isSelected: backgroundMiningMusic == 1,
-            onTap: () async {
-              if (1 != backgroundMiningMusic) {
-                setState(() {
-                  backgroundMiningMusic = 1;
-                });
-                await SPUtil().setBackgroundMiningMusic(backgroundMiningMusic);
-              }
-              Navigator.pop(context);
-            },
-          ),
-        ],
+    sheetBottom(
+      context,
+      "",
+      SizedBox(
+        width: double.infinity,
+        child: Column(
+          children: [
+            _buildOptionItem(
+              label: bgmMusicOptions[0],
+              subtitle: S.of(context).g_mining_key37,
+              isSelected: backgroundMiningMusic == 0,
+              onTap: () => _selectBgmOption(0),
+            ),
+            SizedBox(height: ScreenUtil().setWidth(24)),
+            _buildOptionItem(
+              label: bgmMusicOptions[1],
+              isSelected: backgroundMiningMusic == 1,
+              onTap: () => _selectBgmOption(1),
+            ),
+          ],
+        ),
       ),
     );
-    sheetBottom(context, "", child);
   }
 
   void _showNetworkSheet() {
-    final child = SizedBox(
-      width: double.infinity,
-      child: Column(
-        children: [
-          _buildOptionItem(
-            label: networkOptions[0],
-            isSelected: AppConfig.isMainChainMining == true,
-            onTap: () async {
-              if (AppConfig.isMainChainMining == false) {
-                networkChange(true);
-              }
-              Navigator.pop(context);
-            },
-          ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
-          _buildOptionItem(
-            label: networkOptions[1],
-            isSelected: AppConfig.isMainChainMining == false,
-            onTap: () async {
-              if (AppConfig.isMainChainMining == true) {
-                networkChange(false);
-              }
-              Navigator.pop(context);
-            },
-          ),
-        ],
+    sheetBottom(
+      context,
+      "",
+      SizedBox(
+        width: double.infinity,
+        child: Column(
+          children: [
+            _buildOptionItem(
+              label: networkOptions[0],
+              isSelected: AppConfig.isMainChainMining,
+              onTap: () {
+                if (!AppConfig.isMainChainMining) networkChange(true);
+                Navigator.pop(context);
+              },
+            ),
+            SizedBox(height: ScreenUtil().setWidth(24)),
+            _buildOptionItem(
+              label: networkOptions[1],
+              isSelected: !AppConfig.isMainChainMining,
+              onTap: () {
+                if (AppConfig.isMainChainMining) networkChange(false);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
       ),
     );
-    sheetBottom(context, "", child);
   }
 
   Widget wrapItem(Widget child) {

@@ -78,30 +78,19 @@ class AAGasEstimator {
 
     gas += _calldataCost(userOp.callData);
 
-    if (userOp.initCode != null && userOp.initCode!.isNotEmpty) {
-      gas += _calldataCost(userOp.initCode!);
-    }
-
-    if (userOp.paymasterAndData != null &&
-        userOp.paymasterAndData!.isNotEmpty) {
-      gas += _calldataCost(userOp.paymasterAndData!);
+    // Add costs for optional data fields when present.
+    for (final data in [userOp.initCode, userOp.paymasterAndData]) {
+      if (data != null && data.isNotEmpty) gas += _calldataCost(data);
     }
 
     // Enforce minimum pre-verification gas.
-    if (gas < BigInt.from(AAConstants.minPreVerificationGas)) {
-      gas = BigInt.from(AAConstants.minPreVerificationGas);
-    }
-
-    return gas;
+    final minGas = BigInt.from(AAConstants.minPreVerificationGas);
+    return gas < minGas ? minGas : gas;
   }
 
   /// EIP-2028 byte cost: 4 gas for zero bytes, 16 gas for non-zero bytes.
   static BigInt _calldataCost(Uint8List data) {
-    var cost = 0;
-    for (final byte in data) {
-      cost += byte == 0 ? 4 : 16;
-    }
-    return BigInt.from(cost);
+    return BigInt.from(data.fold<int>(0, (sum, b) => sum + (b == 0 ? 4 : 16)));
   }
 
   /// Estimate total gas cost in wei
@@ -124,13 +113,12 @@ class AAGasEstimator {
   /// Returns false for obviously wrong values (too low to execute, or so high
   /// they indicate a mis-configuration or simulation error).
   static bool validateGasEstimates(GasEstimateResult estimate) {
-    if (estimate.verificationGasLimit < BigInt.from(50000)) return false;
-    if (estimate.verificationGasLimit > BigInt.from(10000000)) return false;
-    if (estimate.callGasLimit < BigInt.from(21000)) return false;
-    if (estimate.callGasLimit > BigInt.from(30000000)) return false;
-    if (estimate.preVerificationGas < BigInt.from(21000)) return false;
-    if (estimate.preVerificationGas > BigInt.from(1000000)) return false;
-    return true;
+    bool inRange(BigInt value, int min, int max) =>
+        value >= BigInt.from(min) && value <= BigInt.from(max);
+
+    return inRange(estimate.verificationGasLimit, 50000, 10000000) &&
+        inRange(estimate.callGasLimit, 21000, 30000000) &&
+        inRange(estimate.preVerificationGas, 21000, 1000000);
   }
 }
 
@@ -262,121 +250,98 @@ class GasDeviationDetector {
     final warning = <GasDeviationWarning>[];
     final info = <GasDeviationWarning>[];
 
+    void add(GasDeviationSeverity s, GasDeviationWarning w) {
+      switch (s) {
+        case GasDeviationSeverity.critical: critical.add(w);
+        case GasDeviationSeverity.warning:  warning.add(w);
+        case GasDeviationSeverity.info:     info.add(w);
+      }
+    }
+
+    /// Create and bucket a gas warning with a formatted gas placeholder.
+    void addGasWarn(GasDeviationWarningType type, GasDeviationSeverity severity,
+        String titleKey, String descKey, BigInt gas) {
+      add(severity, GasDeviationWarning(
+        type: type, severity: severity,
+        titleKey: titleKey, descKey: descKey,
+        hasGasPlaceholder: true, gasValue: _formatGas(gas),
+      ));
+    }
+
     final total = estimate.totalGas;
     final verify = estimate.verificationGasLimit;
     final call = estimate.callGasLimit;
 
     // ── 1. Total gas checks ──────────────────────────────────────────────
     if (total >= _bTotalCrit) {
-      critical.add(GasDeviationWarning(
-        type: GasDeviationWarningType.totalGasVeryHigh,
-        severity: GasDeviationSeverity.critical,
-        titleKey: 'g_key_aa_gas_warn_total_high',
-        descKey: 'g_key_aa_gas_warn_total_high_desc',
-        hasGasPlaceholder: true,
-        gasValue: _formatGas(total),
-      ));
+      addGasWarn(GasDeviationWarningType.totalGasVeryHigh,
+          GasDeviationSeverity.critical,
+          'g_key_aa_gas_warn_total_high', 'g_key_aa_gas_warn_total_high_desc', total);
     } else if (total >= _bTotal) {
-      warning.add(GasDeviationWarning(
-        type: GasDeviationWarningType.totalGasVeryHigh,
-        severity: GasDeviationSeverity.warning,
-        titleKey: 'g_key_aa_gas_warn_total_high',
-        descKey: 'g_key_aa_gas_warn_total_high_desc',
-        hasGasPlaceholder: true,
-        gasValue: _formatGas(total),
-      ));
+      addGasWarn(GasDeviationWarningType.totalGasVeryHigh,
+          GasDeviationSeverity.warning,
+          'g_key_aa_gas_warn_total_high', 'g_key_aa_gas_warn_total_high_desc', total);
     }
 
     // ── 2. Verification gas check ────────────────────────────────────────
     if (verify >= _bVerify) {
-      warning.add(GasDeviationWarning(
-        type: GasDeviationWarningType.verificationGasHigh,
-        severity: GasDeviationSeverity.warning,
-        titleKey: 'g_key_aa_gas_warn_verify_high',
-        descKey: 'g_key_aa_gas_warn_verify_high_desc',
-        hasGasPlaceholder: true,
-        gasValue: _formatGas(verify),
-      ));
+      addGasWarn(GasDeviationWarningType.verificationGasHigh,
+          GasDeviationSeverity.warning,
+          'g_key_aa_gas_warn_verify_high', 'g_key_aa_gas_warn_verify_high_desc', verify);
     }
 
     // ── 3. Call gas check ────────────────────────────────────────────────
     if (call >= _bCall) {
-      warning.add(GasDeviationWarning(
-        type: GasDeviationWarningType.callGasHigh,
-        severity: GasDeviationSeverity.warning,
-        titleKey: 'g_key_aa_gas_warn_call_high',
-        descKey: 'g_key_aa_gas_warn_call_high_desc',
-        hasGasPlaceholder: true,
-        gasValue: _formatGas(call),
-      ));
+      addGasWarn(GasDeviationWarningType.callGasHigh,
+          GasDeviationSeverity.warning,
+          'g_key_aa_gas_warn_call_high', 'g_key_aa_gas_warn_call_high_desc', call);
     }
 
     // ── 4. Paymaster overhead check ──────────────────────────────────────
     // Check both warning (>20 %) and critical (>75 %) levels.
     // A paymaster consuming >75 % of total gas is almost certainly misconfigured.
-    final pmVerify = estimate.paymasterVerificationGasLimit ?? BigInt.zero;
-    final pmPost = estimate.paymasterPostOpGasLimit ?? BigInt.zero;
-    final pmTotal = pmVerify + pmPost;
+    final pmTotal = (estimate.paymasterVerificationGasLimit ?? BigInt.zero) +
+        (estimate.paymasterPostOpGasLimit ?? BigInt.zero);
     if (pmTotal > BigInt.zero && total > BigInt.zero) {
       final pct = (pmTotal * _b100) ~/ total;
       if (pct >= _bPmCritPct) {
-        critical.add(GasDeviationWarning(
-          type: GasDeviationWarningType.paymasterOverhead,
-          severity: GasDeviationSeverity.critical,
-          titleKey: 'g_key_aa_gas_warn_paymaster',
-          descKey: 'g_key_aa_gas_warn_paymaster_desc',
-          hasGasPlaceholder: true,
-          gasValue: _formatGas(pmTotal),
-        ));
+        addGasWarn(GasDeviationWarningType.paymasterOverhead,
+            GasDeviationSeverity.critical,
+            'g_key_aa_gas_warn_paymaster', 'g_key_aa_gas_warn_paymaster_desc', pmTotal);
       } else if (pct >= _bPmWarnPct) {
-        info.add(GasDeviationWarning(
-          type: GasDeviationWarningType.paymasterOverhead,
-          severity: GasDeviationSeverity.info,
-          titleKey: 'g_key_aa_gas_warn_paymaster',
-          descKey: 'g_key_aa_gas_warn_paymaster_desc',
-          hasGasPlaceholder: true,
-          gasValue: _formatGas(pmTotal),
-        ));
+        addGasWarn(GasDeviationWarningType.paymasterOverhead,
+            GasDeviationSeverity.info,
+            'g_key_aa_gas_warn_paymaster', 'g_key_aa_gas_warn_paymaster_desc', pmTotal);
       }
     }
 
     // ── 5. Deployment overhead info ──────────────────────────────────────
     if (isFirstTransaction) {
-      info.add(GasDeviationWarning(
-        type: GasDeviationWarningType.deploymentOverhead,
-        severity: GasDeviationSeverity.info,
-        titleKey: 'g_key_aa_gas_warn_deploy',
-        descKey: 'g_key_aa_gas_warn_deploy_desc',
-        hasGasPlaceholder: true,
-        gasValue: _formatGas(BigInt.from(AAConstants.accountDeploymentGas)),
-      ));
+      addGasWarn(GasDeviationWarningType.deploymentOverhead,
+          GasDeviationSeverity.info,
+          'g_key_aa_gas_warn_deploy', 'g_key_aa_gas_warn_deploy_desc',
+          BigInt.from(AAConstants.accountDeploymentGas));
     }
 
     // ── 6. Client vs bundler deviation check ─────────────────────────────
     // Deviation = (clientEstimate − bundlerTotal) / bundlerTotal × 100
     //
     // Positive value: client expects MORE gas than bundler → under-estimate risk.
-    //
-    // Example: bundler=250k, client=500k → pct = 250k/250k×100 = 100 → critical
-    //          bundler=250k, client=375k → pct = 125k/250k×100 =  50 → warning
     if (clientEstimate != null &&
         clientEstimate > BigInt.zero &&
         total > BigInt.zero) {
       final diff = clientEstimate - total;
       if (diff > BigInt.zero) {
         final pct = (diff * _b100) ~/ total;
-
-        if (pct >= _bDevCritPct) {
-          critical.add(const GasDeviationWarning(
+        final GasDeviationSeverity? severity = pct >= _bDevCritPct
+            ? GasDeviationSeverity.critical
+            : pct >= _bDevWarnPct
+                ? GasDeviationSeverity.warning
+                : null;
+        if (severity != null) {
+          add(severity, GasDeviationWarning(
             type: GasDeviationWarningType.possibleUnderEstimate,
-            severity: GasDeviationSeverity.critical,
-            titleKey: 'g_key_aa_gas_warn_under_est',
-            descKey: 'g_key_aa_gas_warn_under_est_desc',
-          ));
-        } else if (pct >= _bDevWarnPct) {
-          warning.add(const GasDeviationWarning(
-            type: GasDeviationWarningType.possibleUnderEstimate,
-            severity: GasDeviationSeverity.warning,
+            severity: severity,
             titleKey: 'g_key_aa_gas_warn_under_est',
             descKey: 'g_key_aa_gas_warn_under_est_desc',
           ));

@@ -199,20 +199,17 @@ class OwnedEns {
     };
   }
 
-  /// 检查是否即将过期 (30 天内)
-  bool get isExpiringSoon {
-    final daysUntilExpiry = expiresAt.difference(DateTime.now()).inDays;
-    return daysUntilExpiry > 0 && daysUntilExpiry <= 30;
-  }
-
-  /// 检查是否已过期
-  bool get isExpired => DateTime.now().isAfter(expiresAt);
-
   /// 获取剩余天数
   int get daysUntilExpiry {
     final days = expiresAt.difference(DateTime.now()).inDays;
     return days > 0 ? days : 0;
   }
+
+  /// 检查是否即将过期 (30 天内)
+  bool get isExpiringSoon => daysUntilExpiry > 0 && daysUntilExpiry <= 30;
+
+  /// 检查是否已过期
+  bool get isExpired => daysUntilExpiry == 0 && DateTime.now().isAfter(expiresAt);
 
   /// 获取格式化的过期时间
   String get formattedExpiresAt {
@@ -313,24 +310,23 @@ class CommitResult {
     };
   }
 
+  /// 自 commitTime 以来经过的秒数
+  int get _elapsedSeconds => DateTime.now().difference(commitTime).inSeconds;
+
   /// 检查是否可以注册
   bool get canRegister {
-    final elapsed = DateTime.now().difference(commitTime).inSeconds;
+    final elapsed = _elapsedSeconds;
     return elapsed >= minWaitTime && elapsed <= maxWaitTime;
   }
 
   /// 获取剩余等待时间 (秒)
   int get remainingWaitTime {
-    final elapsed = DateTime.now().difference(commitTime).inSeconds;
-    final remaining = minWaitTime - elapsed;
+    final remaining = minWaitTime - _elapsedSeconds;
     return remaining > 0 ? remaining : 0;
   }
 
   /// 检查承诺是否已过期
-  bool get isExpired {
-    final elapsed = DateTime.now().difference(commitTime).inSeconds;
-    return elapsed > maxWaitTime;
-  }
+  bool get isExpired => _elapsedSeconds > maxWaitTime;
 }
 
 /// 注册参数

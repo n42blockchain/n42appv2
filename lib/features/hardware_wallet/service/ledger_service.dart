@@ -176,15 +176,12 @@ class LedgerService {
           details: e.details?.toString(),
         );
         debugPrint('Connect attempt $attempt/$_maxConnectRetries failed: ${e.message}');
-
-        if (attempt < _maxConnectRetries) {
-          await Future.delayed(Duration(seconds: attempt));
-        }
       } on HardwareWalletError catch (e) {
         lastError = e;
-        if (attempt < _maxConnectRetries) {
-          await Future.delayed(Duration(seconds: attempt));
-        }
+      }
+
+      if (attempt < _maxConnectRetries) {
+        await Future.delayed(Duration(seconds: attempt));
       }
     }
 
