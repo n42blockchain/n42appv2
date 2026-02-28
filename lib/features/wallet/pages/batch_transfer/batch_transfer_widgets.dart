@@ -132,7 +132,6 @@ class BatchAddItemForm extends StatelessWidget {
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
 
-          // 地址输入
           TextField(
             controller: addressController,
             decoration: InputDecoration(
@@ -146,7 +145,6 @@ class BatchAddItemForm extends StatelessWidget {
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
 
-          // 金额 + 备注
           Row(
             children: [
               Expanded(
@@ -174,7 +172,6 @@ class BatchAddItemForm extends StatelessWidget {
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
 
-          // 添加按钮
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(

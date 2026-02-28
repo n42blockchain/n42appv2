@@ -1,168 +1,156 @@
 part of 'wallet_coin_add_all.dart';
 
-/// Network-switching bottom sheet dialog for [_WalletCoinAddAllState].
 extension _WalletCoinAddAllNetworkDialog on _WalletCoinAddAllState {
-  //切换网络
   void showChangeNetwork() {
     if (load == Load.loading) return;
-    List<Widget> childs = [];
-    childs.add(Container(
-      constraints: BoxConstraints(
-        maxHeight: ScreenUtil().setWidth(600.0),
+
+    final itemCount = importType == 0 ? netChains.length + 1 : chainsToken.length;
+
+    sheetBottom(
+      context,
+      "",
+      Column(
+        children: [
+          Container(
+            constraints: BoxConstraints(maxHeight: ScreenUtil().setWidth(600.0)),
+            child: ListView.separated(
+              itemCount: itemCount,
+              separatorBuilder: (_, __) => Divider(
+                height: 0.1,
+                indent: 0,
+                endIndent: 0,
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name),
+              ),
+              itemBuilder: (context, int index) {
+                if (importType == 0 && index == 0) {
+                  return _buildAllNetworkItem(networkIndex == -1);
+                }
+                return _buildChainItem(context, index);
+              },
+            ),
+          ),
+        ],
       ),
-      child: ListView.separated(
-        itemCount: importType == 0 ? netChains.length + 1 : chainsToken.length,
-        itemBuilder: (context, int index) {
-          bool selected = false;
-          Map<String, dynamic>? coinInfo;
-          if (importType == 0) {
-            if (networkIndex == index - 1) {
-              selected = true;
-            }
-            if (index == 0) {
-              return InkWell(
-                onTap: () {
-                  setNetworkIndex(-1, "");
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    vertical: ScreenUtil().setWidth(30.0),
-                    horizontal: ScreenUtil().setWidth(20.0),
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(
-                          width: ScreenUtil().setWidth(1.0),
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.itemLineColor.name),
-                        )),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        S.of(context).g_token_m_key_4,
-                        style: TextStyle(
-                            fontSize: ScreenUtil().setSp(30.0),
-                            color: AppThemeUtils.getColorByKey(
-                                context, "mainTextColor"),
-                            fontWeight: FontWeight.bold),
-                      ),
-                      if (selected)
-                        Icon(
-                          Icons.check,
-                          size: ScreenUtil().setWidth(40.0),
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainBlueColor.name),
-                        ),
-                    ],
+    );
+  }
+
+  Widget _buildAllNetworkItem(bool selected) {
+    return _networkRowWrapper(
+      onTap: () {
+        setNetworkIndex(-1, "");
+        Navigator.pop(context);
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            S.of(context).g_token_m_key_4,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(30.0),
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          if (selected) _checkIcon(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChainItem(BuildContext context, int index) {
+    final bool selected;
+    final Map<String, dynamic>? coinInfo;
+
+    if (importType == 0) {
+      selected = networkIndex == index - 1;
+      coinInfo = netChains[netChains.keys.toList()[index - 1]];
+    } else {
+      selected = networkIndexToken == index;
+      coinInfo = netChains[chainsToken.keys.toList()[index]];
+    }
+
+    if (coinInfo == null) return const SizedBox.shrink();
+
+    final isN42 = coinInfo['baseInfo']['miniName'] == CoinType.N.name;
+    final symbolStr = isN42 ? CoinType.N.name : coinInfo['baseInfo']['miniName'] as String;
+    final nameStr = isN42 ? "N42" : coinInfo['baseInfo']['name'] as String;
+    final image = isN42
+        ? Image.asset('assets/images/ast.png')
+        : ImageNetWork(
+            imageUrl: coinInfo['baseInfo']['icon'],
+            placeholder: "assets/img/list_default.png",
+          );
+
+    return _networkRowWrapper(
+      onTap: () {
+        final adjustedIndex = importType == 0 ? index - 1 : index;
+        setNetworkIndex(adjustedIndex, coinInfo!['baseInfo']['name']);
+        Navigator.pop(context);
+      },
+      child: Row(
+        children: [
+          SizedBox(
+            width: ScreenUtil().setWidth(52.0),
+            height: ScreenUtil().setWidth(52.0),
+            child: image,
+          ),
+          SizedBox(width: ScreenUtil().setWidth(10.0)),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  symbolStr,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(30.0),
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              );
-            }
-            coinInfo = netChains[netChains.keys.toList()[index - 1]];
-          } else {
-            if (networkIndexToken == index) {
-              selected = true;
-            }
-            coinInfo = netChains[chainsToken.keys.toList()[index]];
-          }
-          if (coinInfo == null) return Container();
-          Widget image;
-          String symbolStr = coinInfo['baseInfo']['miniName'];
-          String nameStr = coinInfo['baseInfo']['name'];
-          if (coinInfo['baseInfo']['miniName'] == CoinType.N.name) {
-            image = Image.asset('assets/images/ast.png');
-            symbolStr = CoinType.N.name;
-            nameStr = "N42";
-          } else {
-            image = ImageNetWork(imageUrl:
-              coinInfo['baseInfo']['icon'],
-              placeholder: "assets/img/list_default.png",
-            );
-          }
-          return InkWell(
-            onTap: () {
-              if (importType == 0) {
-                setNetworkIndex(index - 1, coinInfo!['baseInfo']['name']);
-              } else {
-                setNetworkIndex(index, coinInfo!['baseInfo']['name']);
-              }
-              Navigator.pop(context);
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                vertical: ScreenUtil().setWidth(30.0),
-                horizontal: ScreenUtil().setWidth(20.0),
-              ),
-              decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(
-                      width: ScreenUtil().setWidth(1.0),
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemLineColor.name),
-                    )),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    width: ScreenUtil().setWidth(52.0),
-                    height: ScreenUtil().setWidth(52.0),
-                    margin: EdgeInsets.only(right: ScreenUtil().setWidth(10.0)),
-                    child: image,
+                Text(
+                  nameStr,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(30.0),
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.itemSubtitleTextColor.name),
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          symbolStr,
-                          style: TextStyle(
-                              fontSize: ScreenUtil().setSp(30.0),
-                              color: AppThemeUtils.getColorByKey(
-                                  context, "mainTextColor"),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(nameStr,
-                            style: TextStyle(
-                              fontSize: ScreenUtil().setSp(30.0),
-                              color: AppThemeUtils.getColorByKey(
-                                  context, AppThemeKeys.itemSubtitleTextColor.name),
-                            )),
-                      ],
-                    ),
-                  ),
-                  if (selected)
-                    Icon(
-                      Icons.check,
-                      size: ScreenUtil().setWidth(40.0),
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
-                    ),
-                ],
-              ),
+                ),
+              ],
             ),
-          );
-        },
-        separatorBuilder: (context, int index) {
-          return Divider(
-            endIndent: 0,
-            indent: 0,
-            height: 0.1,
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name),
-          );
-        },
+          ),
+          if (selected) _checkIcon(),
+        ],
       ),
-    ));
-    sheetBottom(
-        context,
-        "",
-        Column(
-          children: childs,
-        ));
+    );
+  }
+
+  Widget _networkRowWrapper({required VoidCallback onTap, required Widget child}) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          vertical: ScreenUtil().setWidth(30.0),
+          horizontal: ScreenUtil().setWidth(20.0),
+        ),
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              width: ScreenUtil().setWidth(1.0),
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name),
+            ),
+          ),
+        ),
+        child: child,
+      ),
+    );
+  }
+
+  Widget _checkIcon() {
+    return Icon(
+      Icons.check,
+      size: ScreenUtil().setWidth(40.0),
+      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+    );
   }
 }
