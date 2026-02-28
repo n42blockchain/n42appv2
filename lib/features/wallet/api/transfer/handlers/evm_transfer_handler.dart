@@ -116,18 +116,15 @@ class EvmTransferHandler extends BaseTransferHandler {
     bool maxValue = true,
     String? message,
   }) async {
-    final gas = getCoinGas(coinType, contract: contractAddress.isNotEmpty);
-
-    BigInt balance = BigInt.zero;
-    BigInt chainBalance = BigInt.zero;
+    final isContract = contractAddress.isNotEmpty;
+    final gas = getCoinGas(coinType, contract: isContract);
 
     // Get token balance if contract transfer
-    if (contractAddress.isNotEmpty) {
+    BigInt balance = BigInt.zero;
+    if (isContract) {
       final mm = await getBalanceEth(
-        coinType,
-        fromAddress,
-        contract: contractAddress,
-        isTest: isTest,
+        coinType, fromAddress,
+        contract: contractAddress, isTest: isTest,
       );
       if (mm.error) return mm;
       balance = mm.data;
@@ -139,45 +136,34 @@ class EvmTransferHandler extends BaseTransferHandler {
     // Get chain balance for gas
     final mmchain = await getBalanceEth(coinType, fromAddress, contract: '', isTest: isTest);
     if (mmchain.error) return mmchain;
-    chainBalance = mmchain.data;
+    final chainBalance = mmchain.data as BigInt;
     if (chainBalance == BigInt.zero) {
       return createError(S.current.g_key_wallet_m5(coinType));
     }
 
     // Get gas price
     final mmg = await tokenViewApi.getGasPrice(
-      BlockchainType.Ethereum.name,
-      coinType,
-      isTest: isTest,
+      BlockchainType.Ethereum.name, coinType, isTest: isTest,
     ) ?? MessageModel.error();
     if (mmg.error) return mmg;
 
-    BigInt gasPrice2 = mmg.data;
-    BigInt gasPrice = mmg.data;
-    if (get1559WithChainSymbol(coinType)) {
-      gasPrice = gasPrice * BigInt.from(2);
-    }
+    final baseFee = mmg.data as BigInt;
+    final gasPrice = get1559WithChainSymbol(coinType)
+        ? baseFee * BigInt.from(2)
+        : baseFee;
 
     // Estimate gas
-    int gasLimit = gas;
     final estimateMm = await TokenViewApi().getGasEstimateEthV2(
-      fromAddress,
-      toAddress,
-      gasPrice,
-      ethToWeiString(value.toString(), contractAddress.isEmpty ? decimals : tokenDecimals),
-      BigInt.from(gas),
-      coinType,
-      contract: contractAddress,
-      isTest: isTest,
+      fromAddress, toAddress, gasPrice,
+      ethToWeiString(value.toString(), isContract ? tokenDecimals : decimals),
+      BigInt.from(gas), coinType,
+      contract: contractAddress, isTest: isTest,
     );
+    if (estimateMm.error) return estimateMm;
 
-    if (!estimateMm.error) {
-      gasLimit = (estimateMm.data as BigInt).toInt();
-      if (coinType == CoinType.OP.name || coinType == CoinType.BOBA.name) {
-        gasLimit = (gasLimit * 1.5).toInt();
-      }
-    } else {
-      return estimateMm;
+    int gasLimit = (estimateMm.data as BigInt).toInt();
+    if (coinType == CoinType.OP.name || coinType == CoinType.BOBA.name) {
+      gasLimit = (gasLimit * 1.5).toInt();
     }
 
     final totalGasPrice = gasPrice * BigInt.from(gasLimit);
@@ -186,17 +172,14 @@ class EvmTransferHandler extends BaseTransferHandler {
     BigInt valuePrice;
     double adjustedValue = value;
 
-    if (contractAddress.isEmpty) {
+    if (!isContract) {
       valuePrice = ethToWeiString(value.toString(), decimals);
       if (valuePrice == chainBalance && maxValue) {
         valuePrice = valuePrice - totalGasPrice;
         adjustedValue = toEther(valuePrice.toString(), decimals).toDouble();
       }
-      if (adjustedValue < 0) {
-        return createError(S.current.g_key_wallet_m5(coinType == CoinType.N.name ? CoinType.N.name : coinType));
-      }
-      if (totalGasPrice + valuePrice > chainBalance) {
-        return createError(S.current.g_key_wallet_m5(coinType == CoinType.N.name ? CoinType.N.name : coinType));
+      if (adjustedValue < 0 || totalGasPrice + valuePrice > chainBalance) {
+        return createError(S.current.g_key_wallet_m5(coinType));
       }
     } else {
       valuePrice = ethToWeiString(value.toString(), tokenDecimals);
@@ -204,7 +187,7 @@ class EvmTransferHandler extends BaseTransferHandler {
         return createError(S.current.g_key_wallet_m4);
       }
       if (totalGasPrice > chainBalance) {
-        return createError(S.current.g_key_wallet_m5(coinType == CoinType.N.name ? CoinType.N.name : coinType));
+        return createError(S.current.g_key_wallet_m5(coinType));
       }
     }
 
@@ -215,7 +198,7 @@ class EvmTransferHandler extends BaseTransferHandler {
       valuePrice: valuePrice,
       path: path,
       gasPrice: gasPrice,
-      gasPrice2: gasPrice2,
+      gasPrice2: baseFee,
       gas: gasLimit,
       coinType: coinType,
       chainId: chainId,

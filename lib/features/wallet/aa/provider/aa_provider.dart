@@ -127,10 +127,8 @@ class AAProvider extends ChangeNotifier {
       );
 
       // Check if already deployed
-      final isDeployed = await _checkDeploymentStatus(account.address, chainId);
-      final updatedAccount = account.copyWith(
-        state: isDeployed ? SmartAccountState.deployed : SmartAccountState.notDeployed,
-      );
+      final state = await _resolveDeploymentState(account.address, chainId);
+      final updatedAccount = account.copyWith(state: state);
 
       // Save to wallet info
       _walletInfo.addSmartAccount(updatedAccount);
@@ -162,11 +160,7 @@ class AAProvider extends ChangeNotifier {
       for (final entry in aaAccountInfo!.smartAccounts.entries) {
         final chainId = entry.key;
         for (final account in entry.value) {
-          final isDeployed = await _checkDeploymentStatus(account.address, chainId);
-          final newState = isDeployed
-              ? SmartAccountState.deployed
-              : SmartAccountState.notDeployed;
-
+          final newState = await _resolveDeploymentState(account.address, chainId);
           if (account.state != newState) {
             _walletInfo.updateSmartAccountState(account.address, chainId, newState);
           }
@@ -185,16 +179,17 @@ class AAProvider extends ChangeNotifier {
   /// Check deployment status for a specific account
   Future<bool> checkAccountDeployment(SmartAccount account) async {
     try {
-      final isDeployed = await _checkDeploymentStatus(
+      final newState = await _resolveDeploymentState(
         account.address,
         account.chainId,
       );
+      final isDeployed = newState == SmartAccountState.deployed;
 
       if (isDeployed != account.isDeployed) {
         _walletInfo.updateSmartAccountState(
           account.address,
           account.chainId,
-          isDeployed ? SmartAccountState.deployed : SmartAccountState.notDeployed,
+          newState,
         );
         await _saveWalletInfo();
         notifyListeners();
@@ -238,13 +233,10 @@ class AAProvider extends ChangeNotifier {
 
   /// Get bundler client for a chain
   BundlerClient getBundlerClient(String chainSymbol) {
-    if (!_bundlerClients.containsKey(chainSymbol)) {
-      _bundlerClients[chainSymbol] = BundlerClient.forChain(
-        chainSymbol,
-        apiKey: _bundlerApiKey,
-      );
-    }
-    return _bundlerClients[chainSymbol]!;
+    return _bundlerClients.putIfAbsent(
+      chainSymbol,
+      () => BundlerClient.forChain(chainSymbol, apiKey: _bundlerApiKey),
+    );
   }
 
   /// Track a pending transaction
@@ -272,24 +264,16 @@ class AAProvider extends ChangeNotifier {
 
     try {
       final client = getBundlerClient(chainSymbol);
-      final receipt = await client.waitForReceipt(userOpHash, timeout: timeout);
+      return await client.waitForReceipt(userOpHash, timeout: timeout);
+    } finally {
       completePendingTransaction(userOpHash);
-      return receipt;
-    } catch (e) {
-      completePendingTransaction(userOpHash);
-      rethrow;
     }
   }
 
   /// Get all smart accounts across all chains
   List<SmartAccount> get allSmartAccounts {
-    final accounts = <SmartAccount>[];
-    if (aaAccountInfo != null) {
-      for (final chainAccounts in aaAccountInfo!.smartAccounts.values) {
-        accounts.addAll(chainAccounts);
-      }
-    }
-    return accounts;
+    if (aaAccountInfo == null) return [];
+    return aaAccountInfo!.smartAccounts.values.expand((a) => a).toList();
   }
 
   /// Get total count of smart accounts
@@ -298,15 +282,19 @@ class AAProvider extends ChangeNotifier {
   // ==================== Private Methods ====================
 
   String? _getOwnerAddress(int chainId) {
-    // Get the ETH address from wallet
     final chainSymbol = _chainIdToSymbol(chainId);
-    final chainMap = _walletProvider.walletMap[chainSymbol];
-    if (chainMap == null) return null;
+    if (_walletProvider.walletMap[chainSymbol] == null) return null;
 
     final address = _walletProvider.getAddress(chainSymbol);
     if (address == null) return null;
 
     return address['legacy'] ?? address.toString();
+  }
+
+  /// Maps deployment check to a [SmartAccountState].
+  Future<SmartAccountState> _resolveDeploymentState(String address, int chainId) async {
+    final isDeployed = await _checkDeploymentStatus(address, chainId);
+    return isDeployed ? SmartAccountState.deployed : SmartAccountState.notDeployed;
   }
 
   Future<bool> _checkDeploymentStatus(String address, int chainId) async {

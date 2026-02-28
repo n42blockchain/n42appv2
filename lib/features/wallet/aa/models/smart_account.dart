@@ -269,22 +269,21 @@ class AAAccountInfo {
   bool removeAccount(String address, int chainId) {
     final accounts = smartAccounts[chainId];
     if (accounts == null) return false;
-
+    final lowerAddress = address.toLowerCase();
     final index = accounts.indexWhere(
-      (a) => a.address.toLowerCase() == address.toLowerCase(),
+      (a) => a.address.toLowerCase() == lowerAddress,
     );
-    if (index >= 0) {
-      accounts.removeAt(index);
-      return true;
-    }
-    return false;
+    if (index < 0) return false;
+    accounts.removeAt(index);
+    return true;
   }
 
   /// Find account by address across all chains
   SmartAccount? findAccount(String address) {
+    final lowerAddress = address.toLowerCase();
     for (final accounts in smartAccounts.values) {
       for (final account in accounts) {
-        if (account.address.toLowerCase() == address.toLowerCase()) {
+        if (account.address.toLowerCase() == lowerAddress) {
           return account;
         }
       }
@@ -293,52 +292,37 @@ class AAAccountInfo {
   }
 
   factory AAAccountInfo.fromJson(Map<String, dynamic> json) {
-    final accountsMap = <int, List<SmartAccount>>{};
-
     final rawAccounts = json['smartAccounts'] as Map<String, dynamic>?;
-    if (rawAccounts != null) {
-      for (final entry in rawAccounts.entries) {
-        final chainId = int.parse(entry.key);
-        final accounts = (entry.value as List<dynamic>)
+    final accountsMap = rawAccounts?.map(
+      (key, value) => MapEntry(
+        int.parse(key),
+        (value as List<dynamic>)
             .map((e) => SmartAccount.fromJson(e as Map<String, dynamic>))
-            .toList();
-        accountsMap[chainId] = accounts;
-      }
-    }
+            .toList(),
+      ),
+    ) ?? {};
 
-    final paymasters = <int, String>{};
     final rawPaymasters = json['defaultPaymasters'] as Map<String, dynamic>?;
-    if (rawPaymasters != null) {
-      for (final entry in rawPaymasters.entries) {
-        paymasters[int.parse(entry.key)] = entry.value as String;
-      }
-    }
+    final paymasters = rawPaymasters?.map(
+      (key, value) => MapEntry(int.parse(key), value as String),
+    );
 
     return AAAccountInfo(
       smartAccounts: accountsMap,
       preferAA: json['preferAA'] as bool? ?? false,
-      defaultPaymasters: paymasters.isNotEmpty ? paymasters : null,
+      defaultPaymasters: paymasters?.isNotEmpty == true ? paymasters : null,
     );
   }
 
   Map<String, dynamic> toJson() {
-    final accountsJson = <String, dynamic>{};
-    for (final entry in smartAccounts.entries) {
-      accountsJson[entry.key.toString()] =
-          entry.value.map((a) => a.toJson()).toList();
-    }
-
-    final paymasterJson = <String, String>{};
-    if (defaultPaymasters != null) {
-      for (final entry in defaultPaymasters!.entries) {
-        paymasterJson[entry.key.toString()] = entry.value;
-      }
-    }
-
     return {
-      'smartAccounts': accountsJson,
+      'smartAccounts': smartAccounts.map(
+        (key, value) => MapEntry(key.toString(), value.map((a) => a.toJson()).toList()),
+      ),
       'preferAA': preferAA,
-      'defaultPaymasters': paymasterJson,
+      'defaultPaymasters': defaultPaymasters?.map(
+        (key, value) => MapEntry(key.toString(), value),
+      ) ?? <String, String>{},
     };
   }
 

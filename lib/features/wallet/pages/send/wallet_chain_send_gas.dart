@@ -41,25 +41,21 @@ class StandardMinerFeeWidget extends StatelessWidget {
         AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
     Widget gasLimitWidget = const SizedBox.shrink();
 
-    int decimals = coinModel.coin['decimals'] as int;
+    // isContract 时统一使用主链精度
+    int decimals = isContract
+        ? (chainModel?.coin['decimals'] ?? 0)
+        : coinModel.coin['decimals'] as int;
 
     if (blockchainType == BlockchainType.Ethereum.name) {
-      final unit = coinModel.coin['unit'].toString().toUpperCase();
-      if (isContract) {
-        decimals = chainModel?.coin['decimals'] ?? 0;
-        final chainUnit =
-            (chainModel?.coin['unit'] ?? '').toString().toUpperCase();
-        final chainBalance = chainModel?.balance ?? BigInt.zero;
-        if (totalGasPrice > chainBalance) {
-          totalGasPriceColor = AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.errorTextColor.name);
-        }
-        totalGasPriceStr =
-            '${Decimal.parse(toEther(totalGasPrice.toString(), decimals).toString())}$chainUnit';
-      } else {
-        totalGasPriceStr =
-            '${Decimal.parse(toEther(totalGasPrice.toString(), decimals).toString())}$unit';
+      final displayUnit = isContract
+          ? (chainModel?.coin['unit'] ?? '').toString().toUpperCase()
+          : coinModel.coin['unit'].toString().toUpperCase();
+      if (isContract && totalGasPrice > (chainModel?.balance ?? BigInt.zero)) {
+        totalGasPriceColor = AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.errorTextColor.name);
       }
+      totalGasPriceStr =
+          '${Decimal.parse(toEther(totalGasPrice.toString(), decimals).toString())}$displayUnit';
       gasPriceStr =
           '${Decimal.parse(toGWei(gasPrice.toString()).toString())}Gwei';
       gasLimitWidget = _GasLimitRow(
@@ -68,13 +64,11 @@ class StandardMinerFeeWidget extends StatelessWidget {
         useExpanded: true,
       );
     } else if (blockchainType == BlockchainType.Tron.name) {
-      if (isContract) {
-        decimals = chainModel?.coin['decimals'] ?? 0;
-        if (toEther(totalGasPrice.toString(), decimals).toDouble() >
-            (chainModel?.balanceDoubleAll() ?? 0)) {
-          totalGasPriceColor = AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.errorTextColor.name);
-        }
+      if (isContract &&
+          toEther(totalGasPrice.toString(), decimals).toDouble() >
+              (chainModel?.balanceDoubleAll() ?? 0)) {
+        totalGasPriceColor = AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.errorTextColor.name);
       }
       totalGasPriceStr = '${toEther(totalGasPrice.toString(), decimals)} $coinType';
       gasPriceStr = '${toEther(gasPrice.toString(), decimals)} $coinType';
@@ -84,9 +78,6 @@ class StandardMinerFeeWidget extends StatelessWidget {
         useExpanded: false,
       );
     } else {
-      if (isContract) {
-        decimals = chainModel?.coin['decimals'] ?? 0;
-      }
       totalGasPriceStr = '${toEther(totalGasPrice.toString(), decimals)} $coinType';
       gasPriceStr = '${toEther(gasPrice.toString(), decimals)} $coinType';
     }

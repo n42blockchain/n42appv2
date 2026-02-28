@@ -20,11 +20,7 @@ class CreateThree extends StatefulWidget {
 }
 
 class _CreateThreeState extends State<CreateThree> {
-  DataUtils? _dataUtils;
-  DataUtils get dataUtils{
-    _dataUtils ??= DataUtils();
-    return _dataUtils!;
-  }
+  late final DataUtils dataUtils = DataUtils();
   /// 助记词
   late String mnemonicWords;
 
@@ -50,11 +46,11 @@ class _CreateThreeState extends State<CreateThree> {
       setState(() {
         mnemonicWordsList = mnemonicWords.split(" ");
         //克隆一个数组，然后打乱
-        var list = dataUtils.shuffle(mnemonicWordsList);
-        messMnemonicWordsList = [];
-        for (int i = 0; i < list.length; i++) {
-          messMnemonicWordsList.add(MessMnemonicWordsItem(list[i], false, i));
-        }
+        final list = dataUtils.shuffle(mnemonicWordsList);
+        messMnemonicWordsList = List.generate(
+          list.length,
+          (i) => MessMnemonicWordsItem(list[i], false, i),
+        );
       });
     }
   }
@@ -67,8 +63,23 @@ class _CreateThreeState extends State<CreateThree> {
 
     initData();
   }
+  Widget _buildProgressBar(BuildContext context, Color color) {
+    return Container(
+      height: ScreenUtil().setWidth(10.0),
+      width: ScreenUtil().setWidth(88.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
+        color: color,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final activeColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final inactiveColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name);
+    final gap = SizedBox(width: ScreenUtil().setWidth(20.0));
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
@@ -77,41 +88,13 @@ class _CreateThreeState extends State<CreateThree> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                height: ScreenUtil().setWidth(10.0),
-                width: ScreenUtil().setWidth(88.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                ),
-              ),
-              SizedBox(width: ScreenUtil().setWidth(20.0),),
-              Container(
-                height: ScreenUtil().setWidth(10.0),
-                width: ScreenUtil().setWidth(88.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                ),
-              ),
-              SizedBox(width: ScreenUtil().setWidth(20.0),),
-              Container(
-                height: ScreenUtil().setWidth(10.0),
-                width: ScreenUtil().setWidth(88.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                ),
-              ),
-              SizedBox(width: ScreenUtil().setWidth(20.0),),
-              Container(
-                height: ScreenUtil().setWidth(10.0),
-                width: ScreenUtil().setWidth(88.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
-                ),
-              ),
+              _buildProgressBar(context, activeColor),
+              gap,
+              _buildProgressBar(context, activeColor),
+              gap,
+              _buildProgressBar(context, activeColor),
+              gap,
+              _buildProgressBar(context, inactiveColor),
             ],
           ),
         ),
@@ -274,8 +257,7 @@ class _CreateThreeState extends State<CreateThree> {
             //子组件宽高长度比例
             childAspectRatio: 2.4),
         itemBuilder: (context, index) {
-
-          if(userHandList.length-1<index){
+          if(index >= userHandList.length){
             return Container(
               decoration: BoxDecoration(
                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor8.name),

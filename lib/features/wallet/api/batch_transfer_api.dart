@@ -23,16 +23,20 @@ class BatchTransferApi {
   // ERC20 transfer 函数选择器: transfer(address,uint256)
   static const String erc20TransferSelector = '0xa9059cbb';
 
+  static const Map<String, String> _jsonHeaders = {
+    'Content-Type': 'application/json',
+  };
+
   // 不同链上的 Multicall3 地址映射
   static const Map<String, String> multicall3Addresses = {
-    'ETH': '0xcA11bde05977b3631167028862bE2a173976CA11',
-    'BSC': '0xcA11bde05977b3631167028862bE2a173976CA11',
-    'POLYGON': '0xcA11bde05977b3631167028862bE2a173976CA11',
-    'ARBITRUM': '0xcA11bde05977b3631167028862bE2a173976CA11',
-    'OPTIMISM': '0xcA11bde05977b3631167028862bE2a173976CA11',
-    'AVALANCHE': '0xcA11bde05977b3631167028862bE2a173976CA11',
-    'FANTOM': '0xcA11bde05977b3631167028862bE2a173976CA11',
-    'BASE': '0xcA11bde05977b3631167028862bE2a173976CA11',
+    'ETH': multicall3Address,
+    'BSC': multicall3Address,
+    'POLYGON': multicall3Address,
+    'ARBITRUM': multicall3Address,
+    'OPTIMISM': multicall3Address,
+    'AVALANCHE': multicall3Address,
+    'FANTOM': multicall3Address,
+    'BASE': multicall3Address,
     'ZKSYNC': '0xF9cda624FBC7e059355ce98a31693d299FACd963',
   };
 
@@ -44,6 +48,37 @@ class BatchTransferApi {
   /// 检查链是否支持 Multicall3
   bool supportsMulticall(String chainSymbol) {
     return multicall3Addresses.containsKey(chainSymbol.toUpperCase());
+  }
+
+  /// 构建 multicall 调用数据和总值
+  ({String data, BigInt totalValue}) _buildMulticallParams({
+    required String? tokenAddress,
+    required List<BatchTransferItem> items,
+  }) {
+    final isNative = tokenAddress == null || tokenAddress.isEmpty;
+    final data = isNative
+        ? _buildNativeMulticallData(items)
+        : _buildErc20MulticallData(tokenAddress, items);
+    final totalValue = isNative
+        ? items.fold(BigInt.zero, (sum, item) => sum + item.amount)
+        : BigInt.zero;
+    return (data: data, totalValue: totalValue);
+  }
+
+  /// 执行 JSON-RPC 调用
+  Future<dynamic> _rpcCall(String rpcUrl, String method, List<dynamic> params) {
+    final body = {
+      'jsonrpc': '2.0',
+      'method': method,
+      'params': params,
+      'id': 1,
+    };
+    return BaseApi.requestEmptyH.post(
+      rpcUrl,
+      params: body,
+      data: body,
+      header: _jsonHeaders,
+    );
   }
 
   /// 解析 CSV 内容
@@ -72,13 +107,12 @@ class BatchTransferApi {
       }
     }
 
-    if (items.isEmpty) {
-      return CsvParseResult.failure(errors, lines.length - startIndex);
-    }
+    final totalRows = lines.length - startIndex;
+    if (items.isEmpty) return CsvParseResult.failure(errors, totalRows);
     if (errors.isNotEmpty) {
-      return CsvParseResult.partial(items, errors, lines.length - startIndex);
+      return CsvParseResult.partial(items, errors, totalRows);
     }
-    return CsvParseResult.success(items, lines.length - startIndex);
+    return CsvParseResult.success(items, totalRows);
   }
 
   /// 估算批量转账 Gas
@@ -91,59 +125,38 @@ class BatchTransferApi {
   }) async {
     try {
       final multicallAddr = getMulticall3Address(chainSymbol);
-      final isNative = tokenAddress == null || tokenAddress.isEmpty;
-
-      final data = isNative
-          ? _buildNativeMulticallData(items)
-          : _buildErc20MulticallData(tokenAddress, items);
-      final totalValue = isNative
-          ? items.fold(BigInt.zero, (sum, item) => sum + item.amount)
-          : BigInt.zero;
-
-      final params = {
-        'jsonrpc': '2.0',
-        'method': 'eth_estimateGas',
-        'params': [
-          {
-            'from': fromAddress,
-            'to': multicallAddr,
-            'data': data,
-            'value': totalValue == BigInt.zero
-                ? '0x0'
-                : '0x${totalValue.toRadixString(16)}',
-          }
-        ],
-        'id': 1,
-      };
-
-      final response = await BaseApi.requestEmptyH.post(
-        rpcUrl,
-        params: params,
-        data: params,
-        header: {'Content-Type': 'application/json'},
+      final params = _buildMulticallParams(
+        tokenAddress: tokenAddress,
+        items: items,
       );
+
+      final response = await _rpcCall(rpcUrl, 'eth_estimateGas', [
+        {
+          'from': fromAddress,
+          'to': multicallAddr,
+          'data': params.data,
+          'value': params.totalValue == BigInt.zero
+              ? '0x0'
+              : '0x${params.totalValue.toRadixString(16)}',
+        }
+      ]);
 
       if (response['result'] != null) {
         final gasLimit = _hexToBigInt(response['result'].toString());
         // 增加 30% 安全边际（批量交易更复杂）
         final safeGasLimit =
             gasLimit * BigInt.from(130) ~/ BigInt.from(100);
-        return MessageModel()
-          ..error = false
-          ..data = safeGasLimit;
+        return MessageModel()..data = safeGasLimit;
       }
 
       // 默认估算：原生 ~21000/笔，ERC20 ~65000/笔
+      final isNative = tokenAddress == null || tokenAddress.isEmpty;
       final defaultGas = isNative
           ? BigInt.from(21000 * items.length + 50000)
           : BigInt.from(65000 * items.length + 50000);
-      return MessageModel()
-        ..error = false
-        ..data = defaultGas;
+      return MessageModel()..data = defaultGas;
     } catch (e) {
-      return MessageModel()
-        ..error = false
-        ..data = BigInt.from(100000 * items.length);
+      return MessageModel()..data = BigInt.from(100000 * items.length);
     }
   }
 
@@ -167,26 +180,15 @@ class BatchTransferApi {
 
     // 尝试 EIP-1559
     try {
-      final feeHistoryParams = {
-        'jsonrpc': '2.0',
-        'method': 'eth_feeHistory',
-        'params': [4, 'latest', <int>[25, 50, 75]],
-        'id': 1,
-      };
-      final feeResponse = await BaseApi.requestEmptyH.post(
-        rpcUrl,
-        params: feeHistoryParams,
-        data: feeHistoryParams,
-        header: {'Content-Type': 'application/json'},
-      );
+      final feeResponse =
+          await _rpcCall(rpcUrl, 'eth_feeHistory', [4, 'latest', <int>[25, 50, 75]]);
       if (feeResponse['result'] != null) {
         final baseFeeHistory =
             feeResponse['result']['baseFeePerGas'] as List<dynamic>?;
         if (baseFeeHistory != null && baseFeeHistory.isNotEmpty) {
           final latestBaseFee =
               _hexToBigInt(baseFeeHistory.last.toString());
-          const maxPriorityFee = 1500000000; // 1.5 Gwei
-          final maxPriorityBig = BigInt.from(maxPriorityFee);
+          final maxPriorityBig = BigInt.from(1500000000); // 1.5 Gwei
           final maxFee = latestBaseFee * BigInt.from(2) + maxPriorityBig;
           return BatchGasEstimate(
             gasLimit: gasLimit,
@@ -204,18 +206,8 @@ class BatchTransferApi {
 
     // Legacy gas price
     try {
-      final gasPriceParams = {
-        'jsonrpc': '2.0',
-        'method': 'eth_gasPrice',
-        'params': <dynamic>[],
-        'id': 1,
-      };
-      final gasPriceResponse = await BaseApi.requestEmptyH.post(
-        rpcUrl,
-        params: gasPriceParams,
-        data: gasPriceParams,
-        header: {'Content-Type': 'application/json'},
-      );
+      final gasPriceResponse =
+          await _rpcCall(rpcUrl, 'eth_gasPrice', <dynamic>[]);
       if (gasPriceResponse['result'] != null) {
         final gasPrice =
             _hexToBigInt(gasPriceResponse['result'].toString());
@@ -255,21 +247,17 @@ class BatchTransferApi {
   }) async {
     try {
       final multicallAddr = getMulticall3Address(chainSymbol);
-      final isNative = tokenAddress == null || tokenAddress.isEmpty;
-
-      final data = isNative
-          ? _buildNativeMulticallData(items)
-          : _buildErc20MulticallData(tokenAddress, items);
-      final totalValue = isNative
-          ? items.fold(BigInt.zero, (sum, item) => sum + item.amount)
-          : BigInt.zero;
+      final params = _buildMulticallParams(
+        tokenAddress: tokenAddress,
+        items: items,
+      );
 
       final txData = <String, String>{
         'chainId': '0x${chainId.toRadixString(16)}',
         'nonce': '0x${nonce.toRadixString(16)}',
         'to': multicallAddr,
-        'value': '0x${totalValue.toRadixString(16)}',
-        'data': data,
+        'value': '0x${params.totalValue.toRadixString(16)}',
+        'data': params.data,
         'gasLimit': '0x${gasLimit.toRadixString(16)}',
       };
 
@@ -283,13 +271,12 @@ class BatchTransferApi {
       }
 
       return MessageModel()
-        ..error = false
         ..data = {
           'txData': txData,
-          'rawData': data,
+          'rawData': params.data,
           'multicallAddress': multicallAddr,
           'recipientCount': items.length,
-          'totalValue': totalValue.toString(),
+          'totalValue': params.totalValue.toString(),
         };
     } catch (e) {
       return MessageModel.error()..data = e.toString();
@@ -299,18 +286,8 @@ class BatchTransferApi {
   /// 获取 nonce
   Future<int> getNonce(String rpcUrl, String address) async {
     try {
-      final params = {
-        'jsonrpc': '2.0',
-        'method': 'eth_getTransactionCount',
-        'params': [address, 'pending'],
-        'id': 1,
-      };
-      final response = await BaseApi.requestEmptyH.post(
-        rpcUrl,
-        params: params,
-        data: params,
-        header: {'Content-Type': 'application/json'},
-      );
+      final response =
+          await _rpcCall(rpcUrl, 'eth_getTransactionCount', [address, 'pending']);
       if (response['result'] != null) {
         return _hexToBigInt(response['result'].toString()).toInt();
       }
@@ -324,27 +301,14 @@ class BatchTransferApi {
   Future<MessageModel> broadcastTransaction(
       String rpcUrl, String signedTx) async {
     try {
-      final params = {
-        'jsonrpc': '2.0',
-        'method': 'eth_sendRawTransaction',
-        'params': [signedTx],
-        'id': 1,
-      };
-      final response = await BaseApi.requestEmptyH.post(
-        rpcUrl,
-        params: params,
-        data: params,
-        header: {'Content-Type': 'application/json'},
-      );
+      final response =
+          await _rpcCall(rpcUrl, 'eth_sendRawTransaction', [signedTx]);
       if (response['result'] != null) {
-        return MessageModel()
-          ..error = false
-          ..data = response['result'].toString();
+        return MessageModel()..data = response['result'].toString();
       } else if (response['error'] != null) {
         return MessageModel()
           ..error = true
-          ..data =
-              response['error']['message'] ?? 'Transaction failed';
+          ..data = response['error']['message'] ?? 'Transaction failed';
       }
       return MessageModel.error()..data = 'Unknown error';
     } catch (e) {
@@ -371,7 +335,7 @@ class BatchTransferApi {
             'params': [txHash],
             'id': 1,
           }),
-          headers: {'Content-Type': 'application/json'},
+          headers: _jsonHeaders,
         );
         final result = jsonDecode(resp.body)['result'];
         if (result != null) return Map<String, dynamic>.from(result);

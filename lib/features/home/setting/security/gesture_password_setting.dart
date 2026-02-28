@@ -227,6 +227,22 @@ class GesturePasswordSettingState extends State<GesturePasswordSetting> {
   // Tip text
   // ────────────────────────────────────────────────────────────────────────
 
+  /// Subtitle for the first-draw step (shared by type 0 and type 1).
+  String _firstDrawSubtitle() {
+    if (_currentStrength == PatternStrength.weak) {
+      return S.of(context).g_key_gesture_too_simple;
+    }
+    return S.of(context).g_lock_key18;
+  }
+
+  /// Subtitle for the confirmation step based on error count.
+  String _confirmationSubtitle(int errCount) {
+    if (errCount == 0) return S.of(context).g_lock_key19;
+    final remaining = '${3 - errCount}';
+    if (errCount == 2) return S.of(context).g_lock_key25(remaining);
+    return S.of(context).g_lock_key21(remaining);
+  }
+
   Widget tipTextWidget() {
     String titleStr = "";
     String subtitleStr = "";
@@ -235,23 +251,10 @@ class GesturePasswordSettingState extends State<GesturePasswordSetting> {
       titleStr = S.of(context).g_lock_key17;
       if (cachedData["0"]["index"] == "1") {
         // First draw step
-        if (_currentStrength == PatternStrength.weak) {
-          subtitleStr = S.of(context).g_key_gesture_too_simple;
-        } else {
-          subtitleStr = S.of(context).g_lock_key18;
-        }
+        subtitleStr = _firstDrawSubtitle();
       } else {
         // Confirmation step
-        final int errCount = cachedData["0"]["errorCount"];
-        if (errCount == 0) {
-          subtitleStr = S.of(context).g_lock_key19;
-        } else if (errCount == 2) {
-          subtitleStr = S.of(context)
-              .g_lock_key25("${3 - errCount}");
-        } else {
-          subtitleStr = S.of(context)
-              .g_lock_key21("${3 - errCount}");
-        }
+        subtitleStr = _confirmationSubtitle(cachedData["0"]["errorCount"]);
       }
     } else {
       if (cachedData["1"]["index"] == "1") {
@@ -259,31 +262,19 @@ class GesturePasswordSettingState extends State<GesturePasswordSetting> {
         titleStr = S.of(context).g_lock_key20;
         final int errCount = cachedData["1"]["1"]["errorCount"];
         if (errCount != 0) {
+          final remaining = '${3 - errCount}';
           subtitleStr = errCount == 2
-              ? S.of(context).g_lock_key25("${3 - errCount}")
-              : S.of(context).g_lock_key21("${3 - errCount}");
+              ? S.of(context).g_lock_key25(remaining)
+              : S.of(context).g_lock_key21(remaining);
         }
       } else {
         titleStr = S.of(context).g_lock_key17;
         if (cachedData["1"]["index"] == "2") {
           // New password first draw step
-          if (_currentStrength == PatternStrength.weak) {
-            subtitleStr = S.of(context).g_key_gesture_too_simple;
-          } else {
-            subtitleStr = S.of(context).g_lock_key18;
-          }
+          subtitleStr = _firstDrawSubtitle();
         } else {
           // Confirmation step
-          final int errCount = cachedData["1"]["errorCount"];
-          if (errCount == 0) {
-            subtitleStr = S.of(context).g_lock_key19;
-          } else if (errCount == 2) {
-            subtitleStr = S.of(context)
-                .g_lock_key25("${3 - errCount}");
-          } else {
-            subtitleStr = S.of(context)
-                .g_lock_key21("${3 - errCount}");
-          }
+          subtitleStr = _confirmationSubtitle(cachedData["1"]["errorCount"]);
         }
       }
     }
@@ -326,21 +317,21 @@ class GesturePasswordSettingState extends State<GesturePasswordSetting> {
 
   Widget _buildStrengthIndicator() {
     final PatternStrength strength = _currentStrength!;
-    final int litBars = strength == PatternStrength.weak
-        ? 1
-        : strength == PatternStrength.medium
-            ? 2
-            : 3;
-    final Color barColor = strength == PatternStrength.weak
-        ? const Color(0xFFE53935) // red
-        : strength == PatternStrength.medium
-            ? const Color(0xFFFFA726) // orange
-            : const Color(0xFF43A047); // green
-    final String label = strength == PatternStrength.weak
-        ? S.of(context).g_key_gesture_weak
-        : strength == PatternStrength.medium
-            ? S.of(context).g_key_gesture_medium
-            : S.of(context).g_key_gesture_strong;
+    final int litBars = switch (strength) {
+      PatternStrength.weak => 1,
+      PatternStrength.medium => 2,
+      PatternStrength.strong => 3,
+    };
+    final Color barColor = switch (strength) {
+      PatternStrength.weak => const Color(0xFFE53935),   // red
+      PatternStrength.medium => const Color(0xFFFFA726), // orange
+      PatternStrength.strong => const Color(0xFF43A047), // green
+    };
+    final String label = switch (strength) {
+      PatternStrength.weak => S.of(context).g_key_gesture_weak,
+      PatternStrength.medium => S.of(context).g_key_gesture_medium,
+      PatternStrength.strong => S.of(context).g_key_gesture_strong,
+    };
 
     final double barW = ScreenUtil().setWidth(60.0);
     final double barH = ScreenUtil().setWidth(8.0);

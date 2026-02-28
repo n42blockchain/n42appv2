@@ -140,18 +140,13 @@ class BaseHttp {
     try {
       final options = Options(
         method: method,
-        contentType: _contentTypeString,
+        contentType: header?['content-type'] as String? ?? _contentTypeString,
         extra: enableRetry ? {RetryOptions.kRetryEnabled: true} : null,
         headers: {
           if (header != null) ...header,
           if (userInfo != null) ...userInfo,
         },
       );
-
-      // Preserve explicit content-type from caller header if provided
-      if (header != null && header['content-type'] == null) {
-        options.contentType = _contentTypeString;
-      }
 
       final response = await _dio.request<dynamic>(
         path,
@@ -175,9 +170,11 @@ class BaseHttp {
   // Response & error handling
   // ---------------------------------------------------------------------------
 
+  static const _successCodes = {200, 201, 202};
+
   T _handleResponse<T>(Response<dynamic> response, bool defaultReturn) {
     final statusCode = response.statusCode;
-    if (statusCode != 200 && statusCode != 201 && statusCode != 202) {
+    if (!_successCodes.contains(statusCode)) {
       throw _handleHttpError(statusCode);
     }
 

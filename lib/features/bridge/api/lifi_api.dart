@@ -38,18 +38,14 @@ class LiFiApi {
       );
 
       final mm = MessageModel();
-
       if (response is Map && response['chains'] != null) {
-        final chains = (response['chains'] as List<dynamic>)
+        mm.data = (response['chains'] as List<dynamic>)
             .map((c) => BridgeChain.fromJson(c))
             .toList();
-        mm.data = chains;
-        mm.error = false;
       } else {
         mm.error = true;
         mm.data = 'Failed to get chains';
       }
-
       return mm;
     } catch (e) {
       return MessageModel.error()..data = e.toString();
@@ -59,10 +55,9 @@ class LiFiApi {
   /// 获取指定链上的代币列表
   Future<MessageModel> getTokens({int? chainId}) async {
     try {
-      String url = '$_baseUrl/tokens';
-      if (chainId != null) {
-        url += '?chains=$chainId';
-      }
+      final url = chainId != null
+          ? '$_baseUrl/tokens?chains=$chainId'
+          : '$_baseUrl/tokens';
 
       final response = await BaseApi.requestEmptyH.get(
         url,
@@ -71,11 +66,9 @@ class LiFiApi {
       );
 
       final mm = MessageModel();
-
       if (response is Map && response['tokens'] != null) {
         final tokensMap = response['tokens'] as Map<String, dynamic>;
         final tokens = <BridgeToken>[];
-
         tokensMap.forEach((chainKey, tokenList) {
           if (tokenList is List) {
             for (final t in tokenList) {
@@ -83,14 +76,11 @@ class LiFiApi {
             }
           }
         });
-
         mm.data = tokens;
-        mm.error = false;
       } else {
         mm.error = true;
         mm.data = 'Failed to get tokens';
       }
-
       return mm;
     } catch (e) {
       return MessageModel.error()..data = e.toString();
@@ -102,8 +92,7 @@ class LiFiApi {
   /// 返回可用的跨链路由列表，按推荐程度排序
   Future<MessageModel> getQuote(BridgeQuoteRequest request) async {
     try {
-      final queryParams = request.toQueryParams();
-      final queryString = queryParams.entries
+      final queryString = request.toQueryParams().entries
           .map((e) => '${e.key}=${Uri.encodeComponent(e.value)}')
           .join('&');
 
@@ -114,7 +103,6 @@ class LiFiApi {
       );
 
       final mm = MessageModel();
-
       if (response is Map) {
         if (response['error'] != null || response['message'] != null) {
           mm.error = true;
@@ -123,13 +111,11 @@ class LiFiApi {
           // 单个报价转换为路由格式
           final route = BridgeRoute.fromJson(response as Map<String, dynamic>);
           mm.data = BridgeQuoteResponse(routes: [route]);
-          mm.error = false;
         }
       } else {
         mm.error = true;
         mm.data = 'Invalid response';
       }
-
       return mm;
     } catch (e) {
       return MessageModel.error()..data = e.toString();
@@ -163,23 +149,17 @@ class LiFiApi {
       );
 
       final mm = MessageModel();
-
       if (response is Map) {
         if (response['routes'] != null) {
           mm.data = BridgeQuoteResponse.fromJson(response as Map<String, dynamic>);
-          mm.error = false;
-        } else if (response['message'] != null) {
-          mm.error = true;
-          mm.data = response['message'];
         } else {
           mm.error = true;
-          mm.data = 'No routes available';
+          mm.data = response['message'] ?? 'No routes available';
         }
       } else {
         mm.error = true;
         mm.data = 'Invalid response';
       }
-
       return mm;
     } catch (e) {
       return MessageModel.error()..data = e.toString();
@@ -201,11 +181,9 @@ class LiFiApi {
       );
 
       final mm = MessageModel();
-
       if (response is Map) {
         if (response['transactionRequest'] != null) {
           mm.data = BridgeTransactionResponse.fromJson(response as Map<String, dynamic>);
-          mm.error = false;
         } else {
           mm.error = true;
           mm.data = response['message'] ?? 'Failed to get transaction';
@@ -214,7 +192,6 @@ class LiFiApi {
         mm.error = true;
         mm.data = 'Invalid response';
       }
-
       return mm;
     } catch (e) {
       return MessageModel.error()..data = e.toString();
@@ -231,14 +208,12 @@ class LiFiApi {
     required String bridge,
   }) async {
     try {
-      final queryParams = {
+      final queryString = {
         'txHash': txHash,
         'fromChain': fromChainId.toString(),
         'toChain': toChainId.toString(),
         'bridge': bridge,
-      };
-
-      final queryString = queryParams.entries
+      }.entries
           .map((e) => '${e.key}=${Uri.encodeComponent(e.value)}')
           .join('&');
 
@@ -249,15 +224,12 @@ class LiFiApi {
       );
 
       final mm = MessageModel();
-
       if (response is Map) {
         mm.data = BridgeStatusResponse.fromJson(response as Map<String, dynamic>);
-        mm.error = false;
       } else {
         mm.error = true;
         mm.data = 'Invalid response';
       }
-
       return mm;
     } catch (e) {
       return MessageModel.error()..data = e.toString();
@@ -274,15 +246,12 @@ class LiFiApi {
       );
 
       final mm = MessageModel();
-
       if (response is Map && response['bridges'] != null) {
         mm.data = response['bridges'];
-        mm.error = false;
       } else {
         mm.error = true;
         mm.data = 'Failed to get tools';
       }
-
       return mm;
     } catch (e) {
       return MessageModel.error()..data = e.toString();
@@ -303,15 +272,12 @@ class LiFiApi {
       );
 
       final mm = MessageModel();
-
       if (response is Map && response['amount'] != null) {
         mm.data = BigInt.parse(response['amount'].toString());
-        mm.error = false;
       } else {
         mm.error = true;
         mm.data = 'Failed to get balance';
       }
-
       return mm;
     } catch (e) {
       return MessageModel.error()..data = e.toString();
@@ -333,15 +299,12 @@ class LiFiApi {
       );
 
       final mm = MessageModel();
-
       if (response is Map) {
         mm.data = response;
-        mm.error = false;
       } else {
         mm.error = true;
         mm.data = 'Failed to get approval status';
       }
-
       return mm;
     } catch (e) {
       return MessageModel.error()..data = e.toString();
@@ -356,10 +319,8 @@ class LiFiApi {
     String? amount,
   }) async {
     try {
-      String url = '$_baseUrl/approval/transaction?chainId=$chainId&tokenAddress=$tokenAddress&spenderAddress=$spenderAddress';
-      if (amount != null) {
-        url += '&amount=$amount';
-      }
+      final baseUrl = '$_baseUrl/approval/transaction?chainId=$chainId&tokenAddress=$tokenAddress&spenderAddress=$spenderAddress';
+      final url = amount != null ? '$baseUrl&amount=$amount' : baseUrl;
 
       final response = await BaseApi.requestEmptyH.get(
         url,
@@ -368,15 +329,12 @@ class LiFiApi {
       );
 
       final mm = MessageModel();
-
       if (response is Map && response['transactionRequest'] != null) {
         mm.data = response['transactionRequest'];
-        mm.error = false;
       } else {
         mm.error = true;
         mm.data = response['message'] ?? 'Failed to get approval transaction';
       }
-
       return mm;
     } catch (e) {
       return MessageModel.error()..data = e.toString();

@@ -150,12 +150,7 @@ class BatchTransferProvider extends ChangeNotifier {
 
   /// 清除所有项目
   void clearItems() {
-    _items = [];
-    _cachedTotalAmount = BigInt.zero;
-    _parseErrors = [];
-    _state = BatchTransferState.initial;
-    _gasEstimate = null;
-    _errorMessage = null;
+    _resetSharedState();
     notifyListeners();
   }
 
@@ -305,14 +300,9 @@ class BatchTransferProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 重置状态
+  /// 重置状态（含 txHash 清理，比 clearItems 更彻底）
   void reset() {
-    _state = BatchTransferState.initial;
-    _items = [];
-    _cachedTotalAmount = BigInt.zero;
-    _parseErrors = [];
-    _gasEstimate = null;
-    _errorMessage = null;
+    _resetSharedState();
     _txHash = null;
     notifyListeners();
   }
@@ -366,6 +356,16 @@ class BatchTransferProvider extends ChangeNotifier {
 
   // ---------- private helpers ----------
 
+  /// Shared state reset used by both [clearItems] and [reset].
+  void _resetSharedState() {
+    _items = [];
+    _cachedTotalAmount = BigInt.zero;
+    _parseErrors = [];
+    _state = BatchTransferState.initial;
+    _gasEstimate = null;
+    _errorMessage = null;
+  }
+
   void _invalidateGasEstimate() {
     _gasEstimate = null;
   }
@@ -378,11 +378,9 @@ class BatchTransferProvider extends ChangeNotifier {
   }
 
   /// RFC-4180 CSV 字段转义：含逗号、双引号、换行时加引号包裹
+  static final _csvSpecialChars = RegExp(r'[,"\r\n]');
   static String _escapeCsvField(String field) {
-    if (field.contains(',') ||
-        field.contains('"') ||
-        field.contains('\n') ||
-        field.contains('\r')) {
+    if (_csvSpecialChars.hasMatch(field)) {
       return '"${field.replaceAll('"', '""')}"';
     }
     return field;

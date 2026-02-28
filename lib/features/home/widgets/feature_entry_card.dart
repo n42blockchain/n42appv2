@@ -68,6 +68,47 @@ class FeatureEntryCard extends StatelessWidget {
     }
   }
 
+  // ────────────────────────────────────────────────────────────────────────
+  // Shared helpers
+  // ────────────────────────────────────────────────────────────────────────
+
+  /// Resolve icon color, falling back to theme primary blue.
+  Color _resolvedIconColor(BuildContext context) =>
+      iconColor ?? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+
+  /// Rounded-square icon container reused across medium / small / icon styles.
+  Widget _buildIconBox(BuildContext context, {
+    required double size,
+    required double iconSize,
+    required double radius,
+    Color? bgColor,
+    Color? fgColor,
+  }) {
+    final color = fgColor ?? _resolvedIconColor(context);
+    return Container(
+      width: ScreenUtil().setWidth(size),
+      height: ScreenUtil().setWidth(size),
+      decoration: BoxDecoration(
+        color: bgColor ?? color.withAlpha(30),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(radius)),
+      ),
+      child: Icon(icon, color: color, size: ScreenUtil().setWidth(iconSize)),
+    );
+  }
+
+  /// NEW / HOT badge (only rendered when [isNew] or [isHot] is true).
+  Widget? _buildStatusBadge() {
+    if (!isNew && !isHot) return null;
+    return _buildBadge(
+      isNew ? 'NEW' : 'HOT',
+      isNew ? Colors.green : Colors.orange,
+    );
+  }
+
+  // ────────────────────────────────────────────────────────────────────────
+  // Card variants
+  // ────────────────────────────────────────────────────────────────────────
+
   /// 大卡片样式 - 适合主要功能展示
   Widget _buildLargeCard(BuildContext context) {
     final bgColor = backgroundColor ??
@@ -96,19 +137,9 @@ class FeatureEntryCard extends StatelessWidget {
         child: Row(
           children: [
             // 图标
-            Container(
-              width: ScreenUtil().setWidth(64),
-              height: ScreenUtil().setWidth(64),
-              decoration: BoxDecoration(
-                color: Colors.white24,
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-              ),
-              child: Icon(
-                icon,
-                color: Colors.white,
-                size: ScreenUtil().setWidth(36),
-              ),
-            ),
+            _buildIconBox(context,
+                size: 64, iconSize: 36, radius: 16,
+                bgColor: Colors.white24, fgColor: Colors.white),
             SizedBox(width: ScreenUtil().setWidth(20)),
 
             // 内容
@@ -126,9 +157,9 @@ class FeatureEntryCard extends StatelessWidget {
                           color: Colors.white,
                         ),
                       ),
-                      if (isNew || isHot) ...[
+                      if (_buildStatusBadge() != null) ...[
                         SizedBox(width: ScreenUtil().setWidth(8)),
-                        _buildBadge(isNew ? 'NEW' : 'HOT', isNew ? Colors.green : Colors.orange),
+                        _buildStatusBadge()!,
                       ],
                     ],
                   ),
@@ -163,8 +194,6 @@ class FeatureEntryCard extends StatelessWidget {
   Widget _buildMediumCard(BuildContext context) {
     final bgColor = backgroundColor ??
         AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
-    final primaryColor = iconColor ??
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
 
     return GestureDetector(
       onTap: onTap,
@@ -181,19 +210,7 @@ class FeatureEntryCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // 图标
-                Container(
-                  width: ScreenUtil().setWidth(48),
-                  height: ScreenUtil().setWidth(48),
-                  decoration: BoxDecoration(
-                    color: primaryColor.withAlpha(30),
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-                  ),
-                  child: Icon(
-                    icon,
-                    color: primaryColor,
-                    size: ScreenUtil().setWidth(28),
-                  ),
-                ),
+                _buildIconBox(context, size: 48, iconSize: 28, radius: 12),
 
                 // 标签
                 if (tag != null)
@@ -216,8 +233,7 @@ class FeatureEntryCard extends StatelessWidget {
                     ),
                   ),
 
-                if (isNew || isHot)
-                  _buildBadge(isNew ? 'NEW' : 'HOT', isNew ? Colors.green : Colors.orange),
+                if (_buildStatusBadge() != null) _buildStatusBadge()!,
               ],
             ),
 
@@ -256,9 +272,6 @@ class FeatureEntryCard extends StatelessWidget {
 
   /// 小卡片样式 - 适合一行3-4个的布局
   Widget _buildSmallCard(BuildContext context) {
-    final primaryColor = iconColor ??
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -276,19 +289,7 @@ class FeatureEntryCard extends StatelessWidget {
             Stack(
               clipBehavior: Clip.none,
               children: [
-                Container(
-                  width: ScreenUtil().setWidth(48),
-                  height: ScreenUtil().setWidth(48),
-                  decoration: BoxDecoration(
-                    color: primaryColor.withAlpha(30),
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-                  ),
-                  child: Icon(
-                    icon,
-                    color: primaryColor,
-                    size: ScreenUtil().setWidth(28),
-                  ),
-                ),
+                _buildIconBox(context, size: 48, iconSize: 28, radius: 12),
                 if (badge != null)
                   Positioned(
                     top: -4,
@@ -334,27 +335,12 @@ class FeatureEntryCard extends StatelessWidget {
 
   /// 图标卡片样式 - 最紧凑的样式
   Widget _buildIconCard(BuildContext context) {
-    final primaryColor = iconColor ??
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-
     return GestureDetector(
       onTap: onTap,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            width: ScreenUtil().setWidth(56),
-            height: ScreenUtil().setWidth(56),
-            decoration: BoxDecoration(
-              color: primaryColor.withAlpha(30),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
-            ),
-            child: Icon(
-              icon,
-              color: primaryColor,
-              size: ScreenUtil().setWidth(32),
-            ),
-          ),
+          _buildIconBox(context, size: 56, iconSize: 32, radius: 14),
           SizedBox(height: ScreenUtil().setWidth(8)),
           Text(
             title,

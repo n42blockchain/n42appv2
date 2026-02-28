@@ -12,17 +12,54 @@ class BtcTxBuilder {
   final BtcTxCrypto _crypto = BtcTxCrypto();
   final BtcTxScript _script = BtcTxScript();
 
-  /// 构建单个输入的序列化字节（不含 scriptSig，sequence=0xFFFFFFFF）
-  Uint8List createRawInput(Map<String, dynamic> input) {
-    final ByteData data = ByteData(180);
-    int offset = 0;
-
-    final Uint8List txidBytes =
+  /// 将 txid（小端）+ vout 写入 ByteData，返回写入后的 offset
+  int _writeTxidVout(ByteData data, int offset, Map<String, dynamic> input) {
+    final txidBytes =
         Uint8List.fromList(hex.decode(input['txid']).reversed.toList());
     data.buffer.asUint8List().setRange(offset, offset + 32, txidBytes);
     offset += 32;
     data.setUint32(offset, input['vout'] as int, Endian.little);
-    offset += 4;
+    return offset + 4;
+  }
+
+  /// 构建 uint32 小端字节
+  Uint8List _uint32LE(int value) {
+    final bd = ByteData(4);
+    bd.setUint32(0, value, Endian.little);
+    return bd.buffer.asUint8List(0, 4);
+  }
+
+  /// 构建单字节
+  Uint8List _uint8(int value) {
+    final bd = ByteData(1);
+    bd.setUint8(0, value);
+    return bd.buffer.asUint8List(0, 1);
+  }
+
+  /// 构建 SegWit 标记字节 (0x00, 0x01)
+  Uint8List _segwitTag() {
+    final bd = ByteData(2);
+    bd.setUint8(0, 0x00);
+    bd.setUint8(1, 0x01);
+    return bd.buffer.asUint8List(0, 2);
+  }
+
+  /// 将多个 Uint8List 拼接为一个
+  Uint8List _concat(List<Uint8List> parts) {
+    final totalLength = parts.fold<int>(0, (sum, p) => sum + p.length);
+    final result = Uint8List(totalLength);
+    int offset = 0;
+    for (final part in parts) {
+      result.setRange(offset, offset + part.length, part);
+      offset += part.length;
+    }
+    return result;
+  }
+
+  /// 构建单个输入的序列化字节（不含 scriptSig，sequence=0xFFFFFFFF）
+  Uint8List createRawInput(Map<String, dynamic> input) {
+    final ByteData data = ByteData(180);
+    int offset = _writeTxidVout(data, 0, input);
 
     // P2WPKH 输入不含 scriptSig
     data.setUint8(offset, 0x00);
@@ -36,19 +73,12 @@ class BtcTxBuilder {
   /// 构建带 scriptPubKey 的输入序列化字节（用于签名预映像）
   Uint8List createRawInputAll(Map<String, dynamic> input) {
     final ByteData data = ByteData(180);
-    int offset = 0;
+    int offset = _writeTxidVout(data, 0, input);
 
-    final Uint8List txidBytes =
-        Uint8List.fromList(hex.decode(input['txid']).reversed.toList());
-    data.buffer.asUint8List().setRange(offset, offset + 32, txidBytes);
-    offset += 32;
-    data.setUint32(offset, input['vout'] as int, Endian.little);
-    offset += 4;
-
-    final Uint8List scriptBytes =
-        Uint8List.fromList(hex.decode(input['scriptPubKey']).toList());
-    data.buffer.asUint8List().setRange(
-        offset, offset + scriptBytes.length, scriptBytes);
+    final scriptBytes = Uint8List.fromList(hex.decode(input['scriptPubKey']));
+    data.buffer
+        .asUint8List()
+        .setRange(offset, offset + scriptBytes.length, scriptBytes);
     offset += scriptBytes.length;
 
     data.setUint32(offset, 0xffffffff, Endian.little);
@@ -90,12 +120,7 @@ class BtcTxBuilder {
 
     // 输入列表
     for (var input in inputs) {
-      final Uint8List txidBytes =
-          Uint8List.fromList(hex.decode(input['txid']).reversed.toList());
-      data.buffer.asUint8List().setRange(offset, offset + 32, txidBytes);
-      offset += 32;
-      data.setUint32(offset, input['vout'] as int, Endian.little);
-      offset += 4;
+      offset = _writeTxidVout(data, offset, input);
       data.setUint8(offset, 0x00); // 空 scriptSig
       offset += 1;
       data.setUint32(offset, 0xffffffff, Endian.little);
@@ -111,13 +136,14 @@ class BtcTxBuilder {
     // 接收方输出
     data.setUint64(offset, sendAmount, Endian.little);
     offset += 8;
-    final Uint8List scriptPubKey =
-        _script.getScriptPubKey(Uint8List.fromList(hex.decode(recipientScriptPubkey)));
+    final scriptPubKey = _script
+        .getScriptPubKey(Uint8List.fromList(hex.decode(recipientScriptPubkey)));
     data.setUint8(offset, scriptPubKey.length);
     offset += 1;
     if (kDebugMode) debugPrint(bytesToHex(data.buffer.asUint8List(0, offset)));
-    data.buffer.asUint8List().setRange(
-        offset, offset + scriptPubKey.length, scriptPubKey);
+    data.buffer
+        .asUint8List()
+        .setRange(offset, offset + scriptPubKey.length, scriptPubKey);
     offset += scriptPubKey.length;
     if (kDebugMode) debugPrint(bytesToHex(data.buffer.asUint8List(0, offset)));
 
@@ -125,11 +151,12 @@ class BtcTxBuilder {
     if (changeAmount > 0) {
       data.setUint64(offset, changeAmount, Endian.little);
       offset += 8;
-      final Uint8List changeScript = _script.getP2WPKHScript(publicKey);
+      final changeScript = _script.getP2WPKHScript(publicKey);
       data.setUint8(offset, changeScript.length);
       offset += 1;
-      data.buffer.asUint8List().setRange(
-          offset, offset + changeScript.length, changeScript);
+      data.buffer
+          .asUint8List()
+          .setRange(offset, offset + changeScript.length, changeScript);
       offset += changeScript.length;
     }
     if (kDebugMode) debugPrint(bytesToHex(data.buffer.asUint8List(0, offset)));
@@ -149,88 +176,52 @@ class BtcTxBuilder {
     Uint8List publicKey,
     String pubKeyStr,
   ) {
-    final Map<String, dynamic> trxMap = {};
-
-    // 版本号（version=2）
-    final ByteData dataVersion = ByteData(4);
-    dataVersion.setUint32(0, 2, Endian.little);
-    trxMap['version'] = dataVersion.buffer.asUint8List(0, 4);
-
-    // SegWit 标记
-    final ByteData dataTag = ByteData(2);
-    dataTag.setUint8(0, 0x00);
-    dataTag.setUint8(1, 0x01);
-    trxMap['tag'] = dataTag.buffer.asUint8List(0, 2);
-
-    // 输入数量
-    final ByteData dataInputCount = ByteData(1);
-    dataInputCount.setUint8(0, inputs.length);
-    trxMap['inputCount'] = dataInputCount.buffer.asUint8List(0, 1);
-
-    // 普通输入序列化（不含 scriptPubKey）
-    trxMap['inputs'] = inputs.map(createRawInput).toList();
-
-    // 带 scriptPubKey 的输入序列化（用于签名）
-    trxMap['inputsAll'] = inputs.map(createRawInputAll).toList();
-
-    // 输出数量
-    final ByteData dataOutputCount = ByteData(1);
-    dataOutputCount.setUint8(0, changeAmount > 0 ? 2 : 1);
-    trxMap['outputCount'] = dataOutputCount.buffer.asUint8List(0, 1);
-
-    // 接收方输出
-    trxMap['output1'] = _buildOutput(sendAmount,
-        _script.getScriptPubKeyFromBech32(recipient));
-
-    // 找零输出
-    if (changeAmount > 0) {
-      trxMap['output2'] = _buildOutput(changeAmount,
-          _script.getScriptPubKeyFromBech32(fromAddress));
-    }
+    final trxMap = _buildSegwitBase(
+      inputs: inputs,
+      recipient: recipient,
+      sendAmount: sendAmount,
+      changeAmount: changeAmount,
+      fromAddress: fromAddress,
+      versionNum: 2,
+    );
 
     // 拼接完整交易字节（txRow）
-    Uint8List ips = trxMap['inputs'][0] as Uint8List;
-    for (int i = 1; i < (trxMap['inputs'] as List).length; i++) {
-      ips = Uint8List.fromList(ips + (trxMap['inputs'][i] as Uint8List));
-    }
-    final Uint8List output2 = trxMap['output2'] as Uint8List? ?? Uint8List(0);
-    trxMap['txRow'] = Uint8List.fromList(
-        (trxMap['version'] as Uint8List) +
-        (trxMap['tag'] as Uint8List) +
-        (trxMap['inputCount'] as Uint8List) +
-        ips +
-        (trxMap['outputCount'] as Uint8List) +
-        (trxMap['output1'] as Uint8List) +
-        output2);
+    final ips = _concat(trxMap['inputs'] as List<Uint8List>);
+    final output2 = trxMap['output2'] as Uint8List? ?? Uint8List(0);
+    trxMap['txRow'] = _concat([
+      trxMap['version'] as Uint8List,
+      trxMap['tag'] as Uint8List,
+      trxMap['inputCount'] as Uint8List,
+      ips,
+      trxMap['outputCount'] as Uint8List,
+      trxMap['output1'] as Uint8List,
+      output2,
+    ]);
 
     // 各输入的签名预映像（txRowAll）
-    final ByteData dataSignAll = ByteData(4);
-    dataSignAll.setUint32(0, 1, Endian.little);
-    final ByteData dataLocktime = ByteData(4);
-    dataLocktime.setUint32(0, 0, Endian.little);
+    final locktime = _uint32LE(0);
+    final sighashAll = _uint32LE(1);
+    final inputsList = trxMap['inputs'] as List<Uint8List>;
+    final inputsAllList = trxMap['inputsAll'] as List<Uint8List>;
 
     final List<Uint8List> txRawAll = [];
-    final int inputCount = (trxMap['inputs'] as List).length;
-    for (int j = 0; j < inputCount; j++) {
-      Uint8List ipsAll = Uint8List(0);
-      for (int i = 0; i < inputCount; i++) {
-        final Uint8List part = (i == j)
-            ? trxMap['inputsAll'][i] as Uint8List
-            : trxMap['inputs'][i] as Uint8List;
-        ipsAll = Uint8List.fromList(ipsAll + part);
+    for (int j = 0; j < inputsList.length; j++) {
+      final parts = <Uint8List>[];
+      for (int i = 0; i < inputsList.length; i++) {
+        parts.add(i == j ? inputsAllList[i] : inputsList[i]);
       }
-      final Uint8List row = Uint8List.fromList(
-          (trxMap['version'] as Uint8List) +
-          (trxMap['tag'] as Uint8List) +
-          (trxMap['inputCount'] as Uint8List) +
-          ipsAll +
-          (trxMap['outputCount'] as Uint8List) +
-          (trxMap['output1'] as Uint8List) +
-          output2);
-      txRawAll.add(Uint8List.fromList(
-          row +
-          dataLocktime.buffer.asUint8List(0, 4) +
-          dataSignAll.buffer.asUint8List(0, 4)));
+      final row = _concat([
+        trxMap['version'] as Uint8List,
+        trxMap['tag'] as Uint8List,
+        trxMap['inputCount'] as Uint8List,
+        _concat(parts),
+        trxMap['outputCount'] as Uint8List,
+        trxMap['output1'] as Uint8List,
+        output2,
+        locktime,
+        sighashAll,
+      ]);
+      txRawAll.add(row);
     }
     trxMap['txRowAll'] = txRawAll;
 
@@ -251,76 +242,46 @@ class BtcTxBuilder {
     Uint8List publicKey,
     String pubKeyStr,
   ) {
-    final Map<String, dynamic> trxMap = {};
-
-    // 版本号（version=1，Taproot）
-    final ByteData dataVersion = ByteData(4);
-    dataVersion.setUint32(0, 1, Endian.little);
-    trxMap['version'] = dataVersion.buffer.asUint8List(0, 4);
-
-    // SegWit 标记
-    final ByteData dataTag = ByteData(2);
-    dataTag.setUint8(0, 0x00);
-    dataTag.setUint8(1, 0x01);
-    trxMap['tag'] = dataTag.buffer.asUint8List(0, 2);
-
-    // 输入数量
-    final ByteData dataInputCount = ByteData(1);
-    dataInputCount.setUint8(0, inputs.length);
-    trxMap['inputCount'] = dataInputCount.buffer.asUint8List(0, 1);
-
-    // 输入序列化
-    trxMap['inputs'] = inputs.map(createRawInput).toList();
-    trxMap['inputsAll'] = inputs.map(createRawInputAll).toList();
-
-    // 输出数量
-    final ByteData dataOutputCount = ByteData(1);
-    dataOutputCount.setUint8(0, changeAmount > 0 ? 2 : 1);
-    trxMap['outputCount'] = dataOutputCount.buffer.asUint8List(0, 1);
-
-    // 输出
-    trxMap['output1'] = _buildOutput(sendAmount,
-        _script.getScriptPubKeyFromBech32(recipient));
-    if (changeAmount > 0) {
-      trxMap['output2'] = _buildOutput(changeAmount,
-          _script.getScriptPubKeyFromBech32(fromAddress));
-    }
+    final trxMap = _buildSegwitBase(
+      inputs: inputs,
+      recipient: recipient,
+      sendAmount: sendAmount,
+      changeAmount: changeAmount,
+      fromAddress: fromAddress,
+      versionNum: 1,
+    );
 
     // 拼接 txRow
-    Uint8List ips = trxMap['inputs'][0] as Uint8List;
-    for (int i = 1; i < (trxMap['inputs'] as List).length; i++) {
-      ips = Uint8List.fromList(ips + (trxMap['inputs'][i] as Uint8List));
-    }
-    final Uint8List output2 = trxMap['output2'] as Uint8List? ?? Uint8List(0);
-    trxMap['txRow'] = Uint8List.fromList(
-        (trxMap['version'] as Uint8List) +
-        (trxMap['tag'] as Uint8List) +
-        (trxMap['inputCount'] as Uint8List) +
-        ips +
-        (trxMap['outputCount'] as Uint8List) +
-        (trxMap['output1'] as Uint8List) +
-        output2);
+    final ips = _concat(trxMap['inputs'] as List<Uint8List>);
+    final output2 = trxMap['output2'] as Uint8List? ?? Uint8List(0);
+    trxMap['txRow'] = _concat([
+      trxMap['version'] as Uint8List,
+      trxMap['tag'] as Uint8List,
+      trxMap['inputCount'] as Uint8List,
+      ips,
+      trxMap['outputCount'] as Uint8List,
+      trxMap['output1'] as Uint8List,
+      output2,
+    ]);
 
     // 构建 TapSighash 签名预映像（BIP-341）
-    final Uint8List tapSighash =
-        _crypto.sha256s(utf8.encode('TapSighash'));
-    final Uint8List version = trxMap['version'] as Uint8List;
-
-    final ByteData locktimeData = ByteData(4);
-    locktimeData.setUint32(0, 0xffffffff, Endian.little);
-    final Uint8List locktime = locktimeData.buffer.asUint8List(0, 4);
+    final tapSighash = _crypto.sha256s(utf8.encode('TapSighash'));
+    final version = trxMap['version'] as Uint8List;
+    final locktime = _uint32LE(0xffffffff);
 
     // HashPrevouts / HashAmounts / HashScriptPubKeys / HashSequences
-    final ByteData hashPrevoutsData = ByteData(inputs.length * 36);
-    final ByteData hashAmountsData = ByteData(inputs.length * 8);
-    final ByteData hashScriptPubKeysData = ByteData(inputs.length * 100);
-    final ByteData hashSequencesData = ByteData(inputs.length * 4);
+    final hashPrevoutsData = ByteData(inputs.length * 36);
+    final hashAmountsData = ByteData(inputs.length * 8);
+    final hashScriptPubKeysData = ByteData(inputs.length * 100);
+    final hashSequencesData = ByteData(inputs.length * 4);
     int off1 = 0, off2 = 0, off3 = 0, off4 = 0;
 
     for (var input in inputs) {
-      final Uint8List txidBytes =
+      final txidBytes =
           Uint8List.fromList(hex.decode(input['txid']).reversed.toList());
-      hashPrevoutsData.buffer.asUint8List().setRange(off1, off1 + 32, txidBytes);
+      hashPrevoutsData.buffer
+          .asUint8List()
+          .setRange(off1, off1 + 32, txidBytes);
       off1 += 32;
       hashPrevoutsData.setUint32(off1, input['vout'] as int, Endian.little);
       off1 += 4;
@@ -328,44 +289,65 @@ class BtcTxBuilder {
       hashAmountsData.setUint64(off2, changeAmount, Endian.little);
       off2 += 8;
 
-      final Uint8List scriptBytes =
-          Uint8List.fromList(hex.decode(input['scriptPubKey']).toList());
-      hashScriptPubKeysData.buffer.asUint8List().setRange(
-          off3, off3 + scriptBytes.length, scriptBytes);
+      final scriptBytes = Uint8List.fromList(hex.decode(input['scriptPubKey']));
+      hashScriptPubKeysData.buffer
+          .asUint8List()
+          .setRange(off3, off3 + scriptBytes.length, scriptBytes);
       off3 += scriptBytes.length;
 
       hashSequencesData.setUint32(off4, 0xffffffff, Endian.little);
       off4 += 4;
     }
 
-    final Uint8List inputData = Uint8List.fromList(
-      _crypto.sha256s(hashPrevoutsData.buffer.asUint8List(0, off1)) +
-          _crypto.sha256s(hashAmountsData.buffer.asUint8List(0, off2)) +
-          _crypto.sha256s(hashScriptPubKeysData.buffer.asUint8List(0, off3)) +
-          _crypto.sha256s(hashSequencesData.buffer.asUint8List(0, off4)),
-    );
+    final inputData = _concat([
+      _crypto.sha256s(hashPrevoutsData.buffer.asUint8List(0, off1)),
+      _crypto.sha256s(hashAmountsData.buffer.asUint8List(0, off2)),
+      _crypto.sha256s(hashScriptPubKeysData.buffer.asUint8List(0, off3)),
+      _crypto.sha256s(hashSequencesData.buffer.asUint8List(0, off4)),
+    ]);
 
     // HashOutputs
-    final Uint8List outputData = Uint8List.fromList(
-        (trxMap['output1'] as Uint8List) + output2);
-    final Uint8List outputDataHash = _crypto.sha256s(outputData);
+    final outputData = _concat([trxMap['output1'] as Uint8List, output2]);
+    final outputDataHash = _crypto.sha256s(outputData);
 
-    // KeyVersion（0x00）
-    final ByteData keyVersionData = ByteData(1);
-    keyVersionData.setUint8(0, 0);
+    // KeyVersion（0x00）+ SighashType（SIGHASH_ALL = 0x00）
+    trxMap['txRowAll'] = _concat([
+      tapSighash,
+      version,
+      locktime,
+      inputData,
+      outputDataHash,
+      _uint8(0), // KeyVersion
+      _uint8(0), // SighashType
+    ]);
 
-    // SighashType（SIGHASH_ALL = 0x00）
-    final ByteData sighashData = ByteData(1);
-    sighashData.setUint8(0, 0);
+    return trxMap;
+  }
 
-    trxMap['txRowAll'] = Uint8List.fromList(
-        tapSighash +
-        version +
-        locktime +
-        inputData +
-        outputDataHash +
-        keyVersionData.buffer.asUint8List(0, 1) +
-        sighashData.buffer.asUint8List(0, 1));
+  /// 构建 SegWit 交易的公共部分（version/tag/inputs/outputs）
+  Map<String, dynamic> _buildSegwitBase({
+    required List<Map<String, dynamic>> inputs,
+    required String recipient,
+    required int sendAmount,
+    required int changeAmount,
+    required String fromAddress,
+    required int versionNum,
+  }) {
+    final trxMap = <String, dynamic>{
+      'version': _uint32LE(versionNum),
+      'tag': _segwitTag(),
+      'inputCount': _uint8(inputs.length),
+      'inputs': inputs.map(createRawInput).toList(),
+      'inputsAll': inputs.map(createRawInputAll).toList(),
+      'outputCount': _uint8(changeAmount > 0 ? 2 : 1),
+      'output1': _buildOutput(
+          sendAmount, _script.getScriptPubKeyFromBech32(recipient)),
+    };
+
+    if (changeAmount > 0) {
+      trxMap['output2'] = _buildOutput(
+          changeAmount, _script.getScriptPubKeyFromBech32(fromAddress));
+    }
 
     return trxMap;
   }
@@ -378,8 +360,9 @@ class BtcTxBuilder {
     offset += 8;
     data.setUint8(offset, scriptPubKey.length);
     offset += 1;
-    data.buffer.asUint8List().setRange(
-        offset, offset + scriptPubKey.length, scriptPubKey);
+    data.buffer
+        .asUint8List()
+        .setRange(offset, offset + scriptPubKey.length, scriptPubKey);
     offset += scriptPubKey.length;
     return data.buffer.asUint8List(0, offset);
   }

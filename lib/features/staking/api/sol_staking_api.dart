@@ -15,7 +15,7 @@ class SolStakingApi {
   static const String _mainnetRpc = 'https://api.mainnet-beta.solana.com';
   static const String _stakeProgramId = 'Stake11111111111111111111111111111111111111';
 
-  final Map<String, String> _headers = {
+  static const Map<String, String> _headers = {
     'Content-Type': 'application/json',
   };
 
@@ -23,29 +23,47 @@ class SolStakingApi {
     return chainUrlMap['SOL']?['baseInfo']?['service'] ?? _mainnetRpc;
   }
 
+  /// 构建 JSON-RPC 请求体
+  Map<String, dynamic> _rpcBody(String method, [List<dynamic> params = const []]) {
+    return {
+      'jsonrpc': '2.0',
+      'id': 1,
+      'method': method,
+      'params': params,
+    };
+  }
+
+  /// 执行 JSON-RPC 调用
+  Future<dynamic> _rpcCall(String method, [List<dynamic> params = const []]) {
+    final body = _rpcBody(method, params);
+    return BaseApi.requestEmptyH.post(
+      _rpc,
+      params: body,
+      data: body,
+      header: _headers,
+    );
+  }
+
+  /// 构建质押交易成功的 MessageModel
+  MessageModel _buildTxResponse(Map<String, dynamic> txData) {
+    return MessageModel()
+      ..data = StakingTransactionResponse.success(
+        txHash: '',
+        txData: txData,
+      );
+  }
+
   /// 获取验证者列表
   Future<MessageModel> getValidators({int limit = 100}) async {
     try {
-      final params = {
-        'jsonrpc': '2.0',
-        'id': 1,
-        'method': 'getVoteAccounts',
-        'params': [],
-      };
-
-      final response = await BaseApi.requestEmptyH.post(
-        _rpc,
-        params: params,
-        data: params,
-        header: _headers,
-      );
+      final response = await _rpcCall('getVoteAccounts');
 
       final mm = MessageModel();
-
       if (response['result'] != null) {
-        final currentValidators = response['result']['current'] as List<dynamic>? ?? [];
+        final currentValidators =
+            response['result']['current'] as List<dynamic>? ?? [];
 
-        final validators = currentValidators.take(limit).map((v) {
+        mm.data = currentValidators.take(limit).map((v) {
           final commission = v['commission'] ?? 0;
           // 估算 APY: 基础 APY 减去佣金
           final baseApy = 7.0;
@@ -53,25 +71,24 @@ class SolStakingApi {
 
           return Validator(
             address: v['votePubkey'] ?? '',
-            name: shortenStakingAddress(v['votePubkey'] ?? '', prefixLen: 6, suffixLen: 4),
+            name: shortenStakingAddress(v['votePubkey'] ?? '',
+                prefixLen: 6, suffixLen: 4),
             description: 'Solana Validator',
             logoUri: '',
             commission: commission.toDouble(),
             apy: apy,
-            totalStaked: BigInt.tryParse(v['activatedStake']?.toString() ?? '0') ?? BigInt.zero,
+            totalStaked:
+                BigInt.tryParse(v['activatedStake']?.toString() ?? '0') ??
+                    BigInt.zero,
             delegatorCount: 0, // 无法从此 API 获取
             isActive: true,
             uptime: 100.0,
           );
         }).toList();
-
-        mm.data = validators;
-        mm.error = false;
       } else {
         mm.error = true;
         mm.data = response['error']?['message'] ?? 'Failed to get validators';
       }
-
       return mm;
     } catch (e) {
       return MessageModel.error()..data = e.toString();
@@ -81,35 +98,22 @@ class SolStakingApi {
   /// 获取用户的质押账户
   Future<MessageModel> getStakeAccounts(String walletAddress) async {
     try {
-      final params = {
-        'jsonrpc': '2.0',
-        'id': 1,
-        'method': 'getProgramAccounts',
-        'params': [
-          _stakeProgramId,
-          {
-            'encoding': 'jsonParsed',
-            'filters': [
-              {
-                'memcmp': {
-                  'offset': 12,
-                  'bytes': walletAddress,
-                },
+      final response = await _rpcCall('getProgramAccounts', [
+        _stakeProgramId,
+        {
+          'encoding': 'jsonParsed',
+          'filters': [
+            {
+              'memcmp': {
+                'offset': 12,
+                'bytes': walletAddress,
               },
-            ],
-          },
-        ],
-      };
-
-      final response = await BaseApi.requestEmptyH.post(
-        _rpc,
-        params: params,
-        data: params,
-        header: _headers,
-      );
+            },
+          ],
+        },
+      ]);
 
       final mm = MessageModel();
-
       if (response['result'] != null) {
         final accounts = response['result'] as List<dynamic>;
         final positions = <StakingPosition>[];
@@ -124,18 +128,20 @@ class SolStakingApi {
           final delegation = stake['delegation'];
           if (delegation == null) continue;
 
-          final stakeAmount = BigInt.tryParse(delegation['stake']?.toString() ?? '0') ?? BigInt.zero;
+          final stakeAmount =
+              BigInt.tryParse(delegation['stake']?.toString() ?? '0') ??
+                  BigInt.zero;
           final validatorAddress = delegation['voter'] ?? '';
 
           // 确定状态
           StakingPositionStatus status;
           DateTime? unbondingAt;
 
-          if (stake['meta']?['deactivationEpoch'] != null) {
-            final deactivationEpochStr = stake['meta']['deactivationEpoch'].toString();
+          final deactivationEpochStr =
+              stake['meta']?['deactivationEpoch']?.toString();
+          if (deactivationEpochStr != null) {
             // max uint64 in string form to avoid integer overflow
-            final isMaxEpoch = deactivationEpochStr == '18446744073709551615';
-            if (isMaxEpoch) {
+            if (deactivationEpochStr == '18446744073709551615') {
               status = StakingPositionStatus.active;
             } else {
               status = StakingPositionStatus.unbonding;
@@ -151,7 +157,8 @@ class SolStakingApi {
             protocol: StakingProtocols.solNative,
             validator: Validator(
               address: validatorAddress,
-              name: shortenStakingAddress(validatorAddress, prefixLen: 6, suffixLen: 4),
+              name: shortenStakingAddress(validatorAddress,
+                  prefixLen: 6, suffixLen: 4),
               description: '',
               logoUri: '',
               commission: 0,
@@ -171,12 +178,11 @@ class SolStakingApi {
         }
 
         mm.data = positions;
-        mm.error = false;
       } else {
         mm.error = true;
-        mm.data = response['error']?['message'] ?? 'Failed to get stake accounts';
+        mm.data =
+            response['error']?['message'] ?? 'Failed to get stake accounts';
       }
-
       return mm;
     } catch (e) {
       return MessageModel.error()..data = e.toString();
@@ -186,35 +192,21 @@ class SolStakingApi {
   /// 获取当前 epoch 信息
   Future<MessageModel> getEpochInfo() async {
     try {
-      final params = {
-        'jsonrpc': '2.0',
-        'id': 1,
-        'method': 'getEpochInfo',
-        'params': [],
-      };
-
-      final response = await BaseApi.requestEmptyH.post(
-        _rpc,
-        params: params,
-        data: params,
-        header: _headers,
-      );
+      final response = await _rpcCall('getEpochInfo');
 
       final mm = MessageModel();
-
       if (response['result'] != null) {
+        final result = response['result'];
         mm.data = {
-          'epoch': response['result']['epoch'],
-          'slotIndex': response['result']['slotIndex'],
-          'slotsInEpoch': response['result']['slotsInEpoch'],
-          'absoluteSlot': response['result']['absoluteSlot'],
+          'epoch': result['epoch'],
+          'slotIndex': result['slotIndex'],
+          'slotsInEpoch': result['slotsInEpoch'],
+          'absoluteSlot': result['absoluteSlot'],
         };
-        mm.error = false;
       } else {
         mm.error = true;
         mm.data = 'Failed to get epoch info';
       }
-
       return mm;
     } catch (e) {
       return MessageModel.error()..data = e.toString();
@@ -224,36 +216,18 @@ class SolStakingApi {
   /// 获取质押最低金额
   Future<MessageModel> getStakeMinimumDelegation() async {
     try {
-      final params = {
-        'jsonrpc': '2.0',
-        'id': 1,
-        'method': 'getStakeMinimumDelegation',
-        'params': [],
-      };
-
-      final response = await BaseApi.requestEmptyH.post(
-        _rpc,
-        params: params,
-        data: params,
-        header: _headers,
-      );
+      final response = await _rpcCall('getStakeMinimumDelegation');
 
       final mm = MessageModel();
-
       if (response['result']?['value'] != null) {
         mm.data = BigInt.from(response['result']['value']);
-        mm.error = false;
       } else {
         // 默认最低 0.01 SOL
         mm.data = BigInt.from(10000000); // 0.01 SOL in lamports
-        mm.error = false;
       }
-
       return mm;
     } catch (e) {
-      return MessageModel()
-        ..error = false
-        ..data = BigInt.from(10000000);
+      return MessageModel()..data = BigInt.from(10000000);
     }
   }
 
@@ -262,37 +236,19 @@ class SolStakingApi {
     try {
       // Solana 原生质押的 APY 约为 7%
       // 实际值取决于网络状态和通胀率
-      final params = {
-        'jsonrpc': '2.0',
-        'id': 1,
-        'method': 'getInflationRate',
-        'params': [],
-      };
-
-      final response = await BaseApi.requestEmptyH.post(
-        _rpc,
-        params: params,
-        data: params,
-        header: _headers,
-      );
+      final response = await _rpcCall('getInflationRate');
 
       final mm = MessageModel();
-
       if (response['result'] != null) {
         // 通胀率约等于质押 APY
         final total = response['result']['total'] ?? 0.07;
         mm.data = (total * 100).toDouble();
-        mm.error = false;
       } else {
         mm.data = 7.0;
-        mm.error = false;
       }
-
       return mm;
     } catch (e) {
-      return MessageModel()
-        ..error = false
-        ..data = 7.0;
+      return MessageModel()..data = 7.0;
     }
   }
 
@@ -309,22 +265,13 @@ class SolStakingApi {
     required BigInt amount,
   }) async {
     try {
-      // Solana 质押交易需要特殊的序列化
-      // 这里只返回交易参数，实际签名需要在钱包端完成
-      final txData = {
+      return _buildTxResponse({
         'type': 'stake',
         'from': fromAddress,
         'validator': validatorAddress,
         'amount': amount.toString(),
         'stakeProgramId': _stakeProgramId,
-      };
-
-      return MessageModel()
-        ..error = false
-        ..data = StakingTransactionResponse.success(
-          txHash: '',
-          txData: txData,
-        );
+      });
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
@@ -336,19 +283,12 @@ class SolStakingApi {
     required String fromAddress,
   }) async {
     try {
-      final txData = {
+      return _buildTxResponse({
         'type': 'deactivate',
         'stakeAccount': stakeAccountAddress,
         'authority': fromAddress,
         'stakeProgramId': _stakeProgramId,
-      };
-
-      return MessageModel()
-        ..error = false
-        ..data = StakingTransactionResponse.success(
-          txHash: '',
-          txData: txData,
-        );
+      });
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
@@ -361,23 +301,15 @@ class SolStakingApi {
     required BigInt amount,
   }) async {
     try {
-      final txData = {
+      return _buildTxResponse({
         'type': 'withdraw',
         'stakeAccount': stakeAccountAddress,
         'to': toAddress,
         'amount': amount.toString(),
         'stakeProgramId': _stakeProgramId,
-      };
-
-      return MessageModel()
-        ..error = false
-        ..data = StakingTransactionResponse.success(
-          txHash: '',
-          txData: txData,
-        );
+      });
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
   }
-
 }

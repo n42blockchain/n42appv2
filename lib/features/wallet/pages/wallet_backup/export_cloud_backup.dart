@@ -51,10 +51,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
   void initState() {
     super.initState();
     // 默认全选
-    final count = _wallets.length;
-    for (var i = 0; i < count; i++) {
-      _selectedIndexes.add(i);
-    }
+    _selectedIndexes.addAll(List.generate(_wallets.length, (i) => i));
   }
 
   @override
@@ -174,46 +171,16 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
 
           // 密码
           _label('Backup Password'),
-          containerStyle1(
-            context,
-            height: ScreenUtil().setWidth(120),
-            padding:
-                EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
-            margin:
-                EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
-            child: CommInput(
-              type: InputFieldType.password,
-              hintText: 'Set a strong backup password (min 8 chars)',
-              controller: _passwordController,
-              maxLines: 1,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.ff888888.name),
-                fontSize: ScreenUtil().setSp(26),
-              ),
-            ),
+          _buildPasswordField(
+            controller: _passwordController,
+            hintText: 'Set a strong backup password (min 8 chars)',
           ),
 
           // 确认密码
           _label('Confirm Password'),
-          containerStyle1(
-            context,
-            height: ScreenUtil().setWidth(120),
-            padding:
-                EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
-            margin:
-                EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
-            child: CommInput(
-              type: InputFieldType.password,
-              hintText: 'Re-enter the backup password',
-              controller: _confirmController,
-              maxLines: 1,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.ff888888.name),
-                fontSize: ScreenUtil().setSp(26),
-              ),
-            ),
+          _buildPasswordField(
+            controller: _confirmController,
+            hintText: 'Re-enter the backup password',
           ),
 
           // 错误
@@ -272,6 +239,16 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
         ),
       );
 
+  void _toggleSelection(int index) {
+    setState(() {
+      if (_selectedIndexes.contains(index)) {
+        _selectedIndexes.remove(index);
+      } else {
+        _selectedIndexes.add(index);
+      }
+    });
+  }
+
   Widget _walletTile(WalletInfo wallet, int index) {
     final isSelected = _selectedIndexes.contains(index);
     return containerStyle1(
@@ -329,29 +306,35 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
             value: isSelected,
             activeColor: AppThemeUtils.getColorByKey(
                 context, AppThemeKeys.mainBlueColor.name),
-            onChanged: (v) {
-              setState(() {
-                if (v == true) {
-                  _selectedIndexes.add(index);
-                } else {
-                  _selectedIndexes.remove(index);
-                }
-              });
-            },
+            onChanged: (_) => _toggleSelection(index),
           ),
         ],
       ),
-      onTap: () {
-        setState(() {
-          if (isSelected) {
-            _selectedIndexes.remove(index);
-          } else {
-            _selectedIndexes.add(index);
-          }
-        });
-      },
+      onTap: () => _toggleSelection(index),
     );
   }
+
+  Widget _buildPasswordField({
+    required TextEditingController controller,
+    required String hintText,
+  }) =>
+      containerStyle1(
+        context,
+        height: ScreenUtil().setWidth(120),
+        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
+        margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+        child: CommInput(
+          type: InputFieldType.password,
+          hintText: hintText,
+          controller: controller,
+          maxLines: 1,
+          style: TextStyle(
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.ff888888.name),
+            fontSize: ScreenUtil().setSp(26),
+          ),
+        ),
+      );
 
   Widget _label(String text) => Text(
         text,
