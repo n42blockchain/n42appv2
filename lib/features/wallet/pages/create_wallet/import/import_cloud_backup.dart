@@ -116,22 +116,18 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
 
       int imported = 0;
       int skipped = 0;
+      final wap = ref.read(wapBridgeProvider);
       for (final w in wallets) {
         final info = WalletInfo(
           walletName: w['walletName'] as String?,
           mnemonic: w['mnemonic'] as String?,
           privateKey: w['privateKey'] as String?,
-          walletUuid: ref.read(wapBridgeProvider).userUUID,
+          walletUuid: wap.userUUID,
           timestamp: w['timestamp'] as String?,
         );
-        final ok =
-            await ref.read(wapBridgeProvider).addImportWalletInfo(info);
+        final ok = await wap.addImportWalletInfo(info);
         if (!mounted) return;
-        if (ok) {
-          imported++;
-        } else {
-          skipped++;
-        }
+        ok ? imported++ : skipped++;
       }
 
       if (!mounted) return;
@@ -150,7 +146,8 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
     }
   }
 
-  // ── Build ─────────────────────────────────────────────────
+  Color _color(AppThemeKeys key) =>
+      AppThemeUtils.getColorByKey(context, key.name);
 
   @override
   Widget build(BuildContext context) {
@@ -173,124 +170,108 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
   }
 
   Widget _buildBody() {
+    final su = ScreenUtil();
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(20),
+        horizontal: su.setWidth(30),
+        vertical: su.setWidth(20),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 说明
           Text(
             'Restore your wallets from an encrypted backup stored on iCloud Drive or Google Drive.',
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
-              fontSize: ScreenUtil().setSp(28),
+              color: _color(AppThemeKeys.itemSubtitleTextColor),
+              fontSize: su.setSp(28),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(40)),
+          SizedBox(height: su.setWidth(40)),
 
-          // 文件选择
           _label('Backup File'),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: su.setWidth(16)),
           containerStyle1(
             context,
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(20),
-              vertical: ScreenUtil().setWidth(20),
-            ),
-            margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(30)),
+                horizontal: su.setWidth(20), vertical: su.setWidth(20)),
+            margin: EdgeInsets.only(bottom: su.setWidth(30)),
             child: Row(
               children: [
                 Expanded(
                   child: Text(
                     _selectedFileName ?? 'No file selected',
                     style: TextStyle(
-                      color: _selectedFileName != null
-                          ? AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name)
-                          : AppThemeUtils.getColorByKey(context,
-                              AppThemeKeys.itemSubtitleTextColor.name),
-                      fontSize: ScreenUtil().setSp(28),
+                      color: _color(_selectedFileName != null
+                          ? AppThemeKeys.mainTextColor
+                          : AppThemeKeys.itemSubtitleTextColor),
+                      fontSize: su.setSp(28),
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(16)),
+                SizedBox(width: su.setWidth(16)),
                 _chip('Select', onTap: _pickFile),
               ],
             ),
             onTap: _pickFile,
           ),
 
-          // 密码
           _label('Backup Password'),
           containerStyle1(
             context,
-            height: ScreenUtil().setWidth(120),
-            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
-            margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+            height: su.setWidth(120),
+            padding: EdgeInsets.symmetric(horizontal: su.setWidth(20)),
+            margin: EdgeInsets.symmetric(vertical: su.setWidth(20)),
             child: CommInput(
               type: InputFieldType.password,
               hintText: 'Enter the password used when creating the backup',
               controller: _passwordController,
               maxLines: 1,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.ff888888.name),
-                fontSize: ScreenUtil().setSp(26),
+                color: _color(AppThemeKeys.ff888888),
+                fontSize: su.setSp(26),
               ),
             ),
           ),
 
-          // 错误
           if (_error.isNotEmpty) ...[
             Container(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+              padding: EdgeInsets.all(su.setWidth(20)),
               decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.errorBgColor.name),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                color: _color(AppThemeKeys.errorBgColor),
+                borderRadius: BorderRadius.circular(su.setWidth(8)),
               ),
               child: Text(
                 _error,
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.errorTextColor.name),
-                  fontSize: ScreenUtil().setSp(26),
+                  color: _color(AppThemeKeys.errorTextColor),
+                  fontSize: su.setSp(26),
                 ),
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            SizedBox(height: su.setWidth(16)),
           ],
 
-          // 安全提示
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(
-                Icons.shield_outlined,
-                size: ScreenUtil().setWidth(32),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-              ),
-              SizedBox(width: ScreenUtil().setWidth(12)),
+              Icon(Icons.shield_outlined,
+                  size: su.setWidth(32),
+                  color: _color(AppThemeKeys.mainBlueColor)),
+              SizedBox(width: su.setWidth(12)),
               Expanded(
                 child: Text(
                   'Your backup is encrypted with AES-256 + PBKDF2. Only the correct password can restore it.',
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
-                    fontSize: ScreenUtil().setSp(24),
+                    color: _color(AppThemeKeys.itemSubtitleTextColor),
+                    fontSize: su.setSp(24),
                   ),
                 ),
               ),
             ],
           ),
 
-          SizedBox(height: ScreenUtil().setWidth(160)),
+          SizedBox(height: su.setWidth(160)),
         ],
       ),
     );
@@ -299,60 +280,53 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
   Widget _label(String text) => Text(
         text,
         style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name),
+          color: _color(AppThemeKeys.mainTextColor),
           fontWeight: FontWeight.bold,
           fontSize: ScreenUtil().setSp(32),
         ),
       );
 
-  Widget _chip(String text, {required VoidCallback onTap}) => GestureDetector(
-        onTap: onTap,
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(24),
-            vertical: ScreenUtil().setWidth(12),
-          ),
-          decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-          ),
-          child: Text(
-            text,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: ScreenUtil().setSp(26),
-            ),
+  Widget _chip(String text, {required VoidCallback onTap}) {
+    final su = ScreenUtil();
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+            horizontal: su.setWidth(24), vertical: su.setWidth(12)),
+        decoration: BoxDecoration(
+          color: _color(AppThemeKeys.mainBlueColor),
+          borderRadius: BorderRadius.circular(su.setWidth(20)),
+        ),
+        child: Text(text,
+            style: TextStyle(color: Colors.white, fontSize: su.setSp(26))),
+      ),
+    );
+  }
+
+  Widget _buildBottomBar() {
+    final su = ScreenUtil();
+    final bool isLoading = _load == Load.loading;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Divider(height: su.setWidth(1)),
+        Container(
+          padding: EdgeInsets.all(su.setWidth(30)),
+          height: su.setWidth(148),
+          width: double.infinity,
+          color: _color(AppThemeKeys.backGroundColor),
+          child: buttonStyle6(
+            context,
+            () { if (!isLoading) _import(); },
+            'Import Wallets',
+            _color(isLoading
+                ? AppThemeKeys.mainButtonBgColor3
+                : AppThemeKeys.mainButtonBgColor),
+            _color(AppThemeKeys.mainButtonTextColor),
+            isLoading,
           ),
         ),
-      );
-
-  Widget _buildBottomBar() => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Divider(height: ScreenUtil().setWidth(1)),
-          Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-            height: ScreenUtil().setWidth(148),
-            width: double.infinity,
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.backGroundColor.name),
-            child: buttonStyle6(
-              context,
-              () { if (_load != Load.loading) _import(); },
-              'Import Wallets',
-              AppThemeUtils.getColorByKey(
-                context,
-                _load == Load.loading
-                    ? AppThemeKeys.mainButtonBgColor3.name
-                    : AppThemeKeys.mainButtonBgColor.name,
-              ),
-              AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonTextColor.name),
-              _load == Load.loading,
-            ),
-          ),
-        ],
-      );
+      ],
+    );
+  }
 }

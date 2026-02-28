@@ -42,8 +42,6 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver {
   // 是否有可提交的图片（裁剪完毕）
   bool get _hasImage => createModel.imgMini != null;
 
-  // ── 生命周期 ──────────────────────────────────────────────────────────────
-
   @override
   void initState() {
     super.initState();
@@ -65,63 +63,62 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver {
     }
   }
 
-  // ── 权限初始化 ────────────────────────────────────────────────────────────
-
   void _initPermissions() {
-    if (widget.matchType == 1) {
-      _initPhoto();
-    } else {
-      _initCamera();
-    }
+    final bool isPhoto = widget.matchType == 1;
+    _checkPermission(
+      isPhoto ? 'Photo' : 'Camera',
+      isPhoto ? Permission.photos : Permission.camera,
+      (ok) {
+        if (isPhoto) {
+          photoOK = ok;
+        } else {
+          cameraOK = ok;
+        }
+      },
+    );
   }
 
-  Future<void> _initPhoto() async {
+  Future<void> _checkPermission(
+    String iosKey,
+    Permission androidPerm,
+    void Function(bool) setter,
+  ) async {
     if (Platform.isIOS) {
-      final rData = await Trustdart().getPermissions('Photo');
-      // "notDetermined" → image_picker 会在调用时触发系统授权弹窗
-      photoOK = rData == 'notDetermined' || rData == 'authorized';
+      final rData = await Trustdart().getPermissions(iosKey);
+      setter(rData == 'notDetermined' || rData == 'authorized');
     } else {
-      final status = await Permission.photos.status;
-      photoOK = !(status.isPermanentlyDenied ||
+      final status = await androidPerm.status;
+      setter(!(status.isPermanentlyDenied ||
           status.isLimited ||
-          status.isDenied);
+          status.isDenied));
     }
     if (!mounted) return;
     setState(() {});
-    if (photoOK) _selectImage();
+    final bool ok = widget.matchType == 1 ? photoOK : cameraOK;
+    if (ok) _selectImage();
   }
 
-  Future<void> _initCamera() async {
-    if (Platform.isIOS) {
-      final rData = await Trustdart().getPermissions('Camera');
-      cameraOK = rData == 'notDetermined' || rData == 'authorized';
-    } else {
-      final status = await Permission.camera.status;
-      cameraOK = !(status.isPermanentlyDenied ||
-          status.isLimited ||
-          status.isDenied);
-    }
-    if (!mounted) return;
-    setState(() {});
-    if (cameraOK) _selectImage();
-  }
-
-  // ── 图片选取 ──────────────────────────────────────────────────────────────
-
-  /// 统一入口：根据 matchType 调用相册或相机
   void _selectImage() {
-    if (widget.matchType == 1) {
-      _getImageFromGallery();
-    } else {
-      _getImageFromCamera();
-    }
+    final source = widget.matchType == 1
+        ? i_picker.ImageSource.gallery
+        : i_picker.ImageSource.camera;
+    _pickImage(source);
   }
 
-  Future<void> _getImageFromCamera() async {
+  Future<void> _pickImage(i_picker.ImageSource source) async {
     try {
-      final picker = i_picker.ImagePicker();
-      final img = await picker.pickImage(source: i_picker.ImageSource.camera);
-      if (img == null) return; // 用户取消
+      final img = await i_picker.ImagePicker().pickImage(source: source);
+      if (img == null) return;
+
+      if (source == i_picker.ImageSource.gallery) {
+        if (createModel.imageFile?.path == img.path) return;
+        final imgType = _getImageType(img.path);
+        if (imgType?.toLowerCase() == 'gif') return;
+        createModel
+          ..imgCount = 0
+          ..imgMini = null;
+      }
+
       createModel
         ..imgType = _getImageType(img.path)
         ..imageFile = img
@@ -131,38 +128,7 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver {
       setState(() {});
       _imageCrop();
     } on PlatformException {
-      // 权限被拒绝（部分 Android 机型）→ 静默返回，已由权限页面处理
-    } catch (e) {
-      if (!mounted) return;
-      ToastUtils.show(S.of(context).g_face_match_key3);
-    }
-  }
-
-  Future<void> _getImageFromGallery() async {
-    try {
-      final picker = i_picker.ImagePicker();
-      final img = await picker.pickImage(source: i_picker.ImageSource.gallery);
-      if (img == null) return; // 用户取消，保持当前状态
-
-      // 路径相同 → 用户重新确认了同一张图，无需重新裁剪
-      final isSame = createModel.imageFile?.path == img.path;
-      if (isSame) return;
-
-      final imgType = _getImageType(img.path);
-      if (imgType?.toLowerCase() == 'gif') return; // 拒绝 GIF
-
-      createModel
-        ..imgType = imgType
-        ..imageFile = img
-        ..imgFile = File(img.path)
-        ..imgTotal = await img.length() * 1.0
-        ..imgCount = 0
-        ..imgMini = null;
-      if (!mounted) return;
-      setState(() {});
-      _imageCrop();
-    } on PlatformException {
-      // 权限被拒绝（部分 Android 机型）
+      // Permission denied on some Android devices
     } catch (e) {
       if (!mounted) return;
       ToastUtils.show(S.of(context).g_face_match_key3);
@@ -189,8 +155,6 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver {
     if (dotIndex == -1) return null;
     return path.substring(dotIndex + 1);
   }
-
-  // ── 人脸匹配 API ──────────────────────────────────────────────────────────
 
   Future<void> _match() async {
     if (load == Load.loading) return;
@@ -223,8 +187,6 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver {
       Navigator.pop(context); // null → 未匹配
     }
   }
-
-  // ── UI ────────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {

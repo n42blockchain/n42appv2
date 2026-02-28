@@ -206,10 +206,10 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
   }
 
   CoinModel? getChainCoinModel(String symbol) {
-    if (symbol == "BSC") symbol = CoinType.BNB.name;
+    final String normalized = symbol == "BSC" ? CoinType.BNB.name : symbol;
     final List<CoinModel> rList =
-        ref.read(wapBridgeProvider).getCoinModelWithSymbols(symbols: symbol);
-    return rList.isNotEmpty ? rList[0] : null;
+        ref.read(wapBridgeProvider).getCoinModelWithSymbols(symbols: normalized);
+    return rList.isNotEmpty ? rList.first : null;
   }
 
   void getUsdtMap(String chainSymbol, String contractAddress) {
@@ -228,17 +228,13 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
   }
 
   Future<void> getBalanceChainPay() async {
-    if (payCoinModel == null) return;
-    if (payLoad == Load.loading) return;
+    if (payCoinModel == null || payLoad == Load.loading) return;
     setState(() => payLoad = Load.loading);
-
-    final MessageModel rData = await _tokenViewApi.getBalance(
-          payCoinModel!.coin['blockchainType'] as String,
-          payCoinModel!.coin['coinType'] as String,
-          payCoinModel!.address.toString()) ??
-        MessageModel.error();
-    payCoinModel!.balance =
-        rData.error ? BigInt.zero : rData.data as BigInt;
+    payCoinModel!.balance = await _fetchBalance(
+      payCoinModel!.coin['blockchainType'] as String,
+      payCoinModel!.coin['coinType'] as String,
+      payCoinModel!.address.toString(),
+    );
     setState(() => payLoad = Load.finish);
   }
 
@@ -253,29 +249,29 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
           contract: youPay?.payCoinContract ?? "") ??
         MessageModel.error();
 
-    if (rData.error) {
-      youPay!.balance = 0;
-    } else {
-      youPay!.balance =
-          toEther(rData.data.toString(), youPay?.payCoinDecimal ?? 6)
-              .toDouble();
-    }
+    youPay!.balance = rData.error
+        ? 0
+        : toEther(rData.data.toString(), youPay?.payCoinDecimal ?? 6).toDouble();
     setState(() => youPay!.load = Load.finish);
   }
 
   Future<void> getBalanceGet() async {
-    if (getCoinModel == null) return;
-    if (getLoad == Load.loading) return;
+    if (getCoinModel == null || getLoad == Load.loading) return;
     setState(() => getLoad = Load.loading);
-
-    final MessageModel rData = await _tokenViewApi.getBalance(
-          BlockchainType.Ethereum.name,
-          CoinType.N.name,
-          getCoinModel!.address.toString()) ??
-        MessageModel.error();
-    getCoinModel!.balance =
-        rData.error ? BigInt.zero : rData.data as BigInt;
+    getCoinModel!.balance = await _fetchBalance(
+      BlockchainType.Ethereum.name,
+      CoinType.N.name,
+      getCoinModel!.address.toString(),
+    );
     setState(() => getLoad = Load.finish);
+  }
+
+  Future<BigInt> _fetchBalance(
+      String blockchainType, String coinType, String address) async {
+    final MessageModel rData =
+        await _tokenViewApi.getBalance(blockchainType, coinType, address) ??
+            MessageModel.error();
+    return rData.error ? BigInt.zero : rData.data as BigInt;
   }
 
   // ---------------------------------------------------------------------------

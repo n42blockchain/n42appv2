@@ -1,11 +1,7 @@
 part of 'wallet_coin_add_all.dart';
 
 /// Search-tab UI widgets for [_WalletCoinAddAllState].
-///
-/// Contains: coinListWidget, coinItem, _buildPopularSection, _popularChip.
 extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
-
-  /// 判断行项是否应显示（过滤 unit 与 coin_name 不一致的条目）
   bool _shouldShowRow(Map<String, dynamic> row) {
     final unit = row['unit']?.toString() ?? '';
     if (unit.isEmpty) return true;
@@ -52,8 +48,6 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
       ),
     );
   }
-
-  // ── 热门代币推荐区 ────────────────────────────────────────────
 
   Widget _buildPopularSection() {
     final su = ScreenUtil();
@@ -293,17 +287,12 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
     );
   }
 
-  /// coinItem 行尾的操作按钮（加载中 / 添加 / 移除）
   Widget _coinItemTrailingAction(
     Map<String, dynamic> rowValue,
     ScreenUtil su,
     Color buttonBg,
   ) {
-    final bool isEditing = rowValue['edit'] == true;
-    final bool isAdded = rowValue['isAdd'] == true;
-    final bool canEdit = rowValue['canEdit'] == true;
-
-    if (isEditing) {
+    if (rowValue['edit'] == true) {
       return Container(
         padding: EdgeInsets.all(su.setWidth(19.0)),
         width: su.setWidth(78.0),
@@ -311,40 +300,24 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
         child: CircularProgressIndicator(),
       );
     }
+    if (rowValue['canEdit'] != true) return const SizedBox.shrink();
 
-    if (!canEdit) return const SizedBox.shrink();
-
-    if (!isAdded) {
-      return InkWell(
-        onTap: () {
-          if (rowValue['contract'] == "") {
-            addCoin(rowValue);
-          } else {
-            addCoinToken(rowValue);
-          }
-        },
-        child: Container(
-          padding: EdgeInsets.all(su.setWidth(19.0)),
-          width: su.setWidth(78.0),
-          height: su.setWidth(78.0),
-          child: Icon(Icons.add, color: buttonBg),
-        ),
-      );
-    }
+    final bool isAdded = rowValue['isAdd'] == true;
+    final bool isContract = rowValue['contract'] != "";
 
     return InkWell(
       onTap: () {
-        if (rowValue['contract'] == "") {
-          removeCoin(rowValue);
+        if (isAdded) {
+          isContract ? removeCoinToken(rowValue) : removeCoin(rowValue);
         } else {
-          removeCoinToken(rowValue);
+          isContract ? addCoinToken(rowValue) : addCoin(rowValue);
         }
       },
       child: Container(
-        padding: EdgeInsets.all(su.setWidth(20.0)),
-        width: su.setWidth(80.0),
-        height: su.setWidth(80.0),
-        child: Icon(Icons.remove, color: buttonBg),
+        padding: EdgeInsets.all(su.setWidth(19.0)),
+        width: su.setWidth(78.0),
+        height: su.setWidth(78.0),
+        child: Icon(isAdded ? Icons.remove : Icons.add, color: buttonBg),
       ),
     );
   }

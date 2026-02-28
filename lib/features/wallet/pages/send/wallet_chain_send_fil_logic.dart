@@ -1,9 +1,6 @@
 part of 'wallet_chain_send_fil.dart';
 
 /// Business logic mixin for [_WalletChainSendFilState].
-///
-/// Declares all shared state fields and contains initialization, balance
-/// loading, gas estimation, input validation, and transaction submission.
 mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
   CoinModel? chainModel;
 
@@ -27,13 +24,12 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
   BigInt gas = BigInt.zero;
   String gasFeeCap = "0";
   String gasPremium = "0";
-  BigInt transferValue = BigInt.zero; // 转账金额
+  BigInt transferValue = BigInt.zero;
 
   Load load = Load.loading;
   Load gasLimitLoad = Load.finish;
 
   Future<void> initData() async {
-    // 判断是否是代币
     if (widget.coinModel.coin['isContract']) {
       final WalletActionProvider wap = ref.read(wapBridgeProvider);
       final int cIndex = wap.coinModels.indexWhere((element) {
@@ -56,101 +52,72 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     await getBalance();
   }
 
-  // 获取余额
   Future<void> getBalance() async {
-    setState(() {
-      load = Load.loading;
-    });
+    setState(() => load = Load.loading);
     final bool isOk = await widget.coinModel.getBalance(getToken: false);
-    if (isOk == false) {
-      load = Load.finish;
+    if (!isOk) {
       errorMessage = S.current.g_key_t_44;
       ToastUtils.show(S.current.g_key_t_44);
-      setState(() {});
-      return;
-    } else {
-      setState(() {
-        load = Load.finish;
-      });
     }
+    setState(() => load = Load.finish);
   }
 
-  // 检查 amount 输入是否正确
   void amountCheck({String value = ""}) {
-    if (value == "") {
-      value = valueTextEditingController.text;
-    }
-    if (value.isEmpty) {
-      amountErrorMessage = S.of(context).g_key_46(0);
-      setState(() {});
-      return;
-    }
-    final bool checkValue = regular.regularDouble(value.toString());
-    final bool checkValue1 = regular.regularNums(value.toString());
-    if (checkValue == false && checkValue1 == false) {
-      amountErrorMessage = S.of(context).g_key_134;
-      setState(() {});
-      return;
-    } else if (double.parse(value) <= 0) {
-      amountErrorMessage = S.of(context).g_key_46(0);
-      setState(() {});
-      return;
-    }
-    if (widget.coinModel.coin['blockchainType'] == BlockchainType.Ripple.name) {
-      final BigInt valueBi =
-          ethToWeiString(value, widget.coinModel.coin['decimals']);
-      if (valueBi + totalGasPrice >
-          widget.coinModel.balance -
-              ethToWeiString("10", widget.coinModel.coin['decimals'])) {
-        amountErrorMessage = S.of(context).g_key_47;
-        setState(() {});
-        return;
-      }
-    } else {
-      final BigInt valueBi =
-          ethToWeiString(value, widget.coinModel.coin['decimals']);
-      if (widget.coinModel.coin['isContract'] == false) {
-        if (valueBi + totalGasPrice > widget.coinModel.balance) {
-          amountErrorMessage = S.of(context).g_key_47;
-          setState(() {});
-          return;
-        }
-      }
-      transferValue = valueBi;
-    }
-    amountErrorMessage = "";
+    if (value.isEmpty) value = valueTextEditingController.text;
+
+    final String? error = _validateAmount(value);
+    amountErrorMessage = error ?? "";
     setState(() {});
   }
 
-  // 检查转账地址是否正确
+  String? _validateAmount(String value) {
+    if (value.isEmpty) return S.of(context).g_key_46(0);
+
+    final bool isValid =
+        regular.regularDouble(value) || regular.regularNums(value);
+    if (!isValid) return S.of(context).g_key_134;
+    if (double.parse(value) <= 0) return S.of(context).g_key_46(0);
+
+    final int decimals = widget.coinModel.coin['decimals'] as int;
+    final BigInt valueBi = ethToWeiString(value, decimals);
+
+    if (widget.coinModel.coin['blockchainType'] == BlockchainType.Ripple.name) {
+      final BigInt reserve = ethToWeiString("10", decimals);
+      if (valueBi + totalGasPrice > widget.coinModel.balance - reserve) {
+        return S.of(context).g_key_47;
+      }
+    } else {
+      if (!widget.coinModel.coin['isContract'] &&
+          valueBi + totalGasPrice > widget.coinModel.balance) {
+        return S.of(context).g_key_47;
+      }
+      transferValue = valueBi;
+    }
+    return null;
+  }
+
   Future<String?> toAddressCheck(String addr) async {
-    if (addr == "") {
+    if (addr.isEmpty) {
       toErrorMessage = S.current.g_key_41;
       setState(() {});
       return null;
     }
-    final List<String> addrList = addr.split(":");
-    if (addrList.length == 2) {
-      addr = addrList[1];
-    }
-    final bool check =
+    final List<String> parts = addr.split(":");
+    if (parts.length == 2) addr = parts[1];
+
+    final bool valid =
         await Trustdart().validateAddress(widget.coinModel.coin['coinType'], addr);
-    if (check) {
-      if (addr.toUpperCase() ==
-          widget.coinModel.address.toString().toUpperCase()) {
-        toErrorMessage = S.current.g_key_t_50;
-        setState(() {});
-        return null;
-      } else {
-        toErrorMessage = "";
-        setState(() {});
-        return addr;
-      }
-    } else {
+    final bool isSelf =
+        addr.toUpperCase() == widget.coinModel.address.toString().toUpperCase();
+
+    if (!valid || isSelf) {
       toErrorMessage = S.current.g_key_t_50;
       setState(() {});
       return null;
     }
+    toErrorMessage = "";
+    setState(() {});
+    return addr;
   }
 
   Future<void> sendTransaction() async {
@@ -160,41 +127,24 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     }
     closeKeyboard();
     amountCheck();
-    if (amountErrorMessage != "") return;
-    setState(() {
-      load = Load.loading;
-    });
+    if (amountErrorMessage.isNotEmpty) return;
+
+    setState(() => load = Load.loading);
+
     final String? toAddr =
         await toAddressCheck(toTextEditingController.text);
-    if (toAddr == null) {
-      setState(() {
-        load = Load.finish;
-      });
-      return;
-    }
+    if (toAddr == null) return _resetLoad();
+
     await estimateGasEthLocal();
-    if (errorMessage != "") {
-      setState(() {
-        load = Load.finish;
-      });
-      return;
+    if (errorMessage.isNotEmpty) return _resetLoad();
+
+    final BigInt uBalance = widget.coinModel.coin['isContract']
+        ? (chainModel?.balance ?? BigInt.zero)
+        : widget.coinModel.balance;
+    if (totalGasPrice > uBalance || widget.coinModel.balance == BigInt.zero) {
+      return _resetLoad();
     }
-    BigInt uBalance = widget.coinModel.balance;
-    if (widget.coinModel.coin['isContract']) {
-      uBalance = chainModel?.balance ?? BigInt.zero;
-    }
-    if (totalGasPrice > uBalance) {
-      setState(() {
-        load = Load.finish;
-      });
-      return;
-    }
-    if (widget.coinModel.balance == BigInt.zero) {
-      setState(() {
-        load = Load.finish;
-      });
-      return;
-    }
+
     final FilApi filApi = FilApi();
     final MessageModel rDataNonce = await filApi.getNonce(
       widget.coinModel.address.toString(),
@@ -202,30 +152,29 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     );
     if (!mounted) return;
     if (rDataNonce.error) {
-      setState(() {
-        errorMessage = rDataNonce.data;
-        load = Load.finish;
-      });
-      return;
+      errorMessage = rDataNonce.data;
+      return _resetLoad();
     }
-    final TransationRecordModel trModel = TransationRecordModel();
-    trModel.address = widget.coinModel.address.toString();
-    trModel.from1 = widget.coinModel.address.toString();
-    trModel.to1 = toAddr;
-    trModel.addrType = widget.coinModel.addrType;
-    trModel.coin = widget.coinModel.coin;
-    trModel.coinMiniName = widget.coinModel.coin['coinType'];
-    trModel.walletIndex = ref.read(wapBridgeProvider).walletIndex;
-    trModel.contract = widget.coinModel.isTest
-        ? widget.coinModel.coin['contract_test']
-        : widget.coinModel.coin['contract'];
-    trModel.isTest = widget.coinModel.isTest ? 1 : 0;
-    trModel.gasPrice = totalGasPrice;
-    trModel.gas = gas.toInt();
-    trModel.gasPriceValue = BigInt.zero;
-    trModel.price = transferValue;
-    trModel.other = FilTrModel(gasFeeCap, gasPremium);
-    trModel.nonce = rDataNonce.data.toString();
+
+    final String addr = widget.coinModel.address.toString();
+    final TransationRecordModel trModel = TransationRecordModel()
+      ..address = addr
+      ..from1 = addr
+      ..to1 = toAddr
+      ..addrType = widget.coinModel.addrType
+      ..coin = widget.coinModel.coin
+      ..coinMiniName = widget.coinModel.coin['coinType']
+      ..walletIndex = ref.read(wapBridgeProvider).walletIndex
+      ..contract = widget.coinModel.isTest
+          ? widget.coinModel.coin['contract_test']
+          : widget.coinModel.coin['contract']
+      ..isTest = widget.coinModel.isTest ? 1 : 0
+      ..gasPrice = totalGasPrice
+      ..gas = gas.toInt()
+      ..gasPriceValue = BigInt.zero
+      ..price = transferValue
+      ..other = FilTrModel(gasFeeCap, gasPremium)
+      ..nonce = rDataNonce.data.toString();
 
     final bool check = await Navigator.push(
       context,
@@ -238,11 +187,11 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     if (check) {
       signTx(trModel);
     } else {
-      setState(() {
-        load = Load.finish;
-      });
+      _resetLoad();
     }
   }
+
+  void _resetLoad() => setState(() => load = Load.finish);
 
   Future<void> signTx(TransationRecordModel trModel) async {
     if (signTxCheck() == false) return;
@@ -284,29 +233,24 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
   Future<bool?> estimateGasEthLocal() async {
     closeKeyboard();
     if (gasLimitLoad == Load.loading) return null;
-    setState(() {
-      gasLimitLoad = Load.loading;
-    });
+    setState(() => gasLimitLoad = Load.loading);
     try {
-      if (amountErrorMessage != "") return null;
+      if (amountErrorMessage.isNotEmpty) return null;
       final String? toAddr =
           await toAddressCheck(toTextEditingController.text);
-      if (toAddr == null) return null;
-      if (toErrorMessage != "") return null;
+      if (toAddr == null || toErrorMessage.isNotEmpty) return null;
       final String price = valueTextEditingController.text;
-      if (price == "") return null;
-      final BigInt gaslimit =
-          BigInt.from(getCoinGas(widget.coinModel.coin['coinType']));
-      final FilApi filApi = FilApi();
-      final MessageModel ethMessage = await filApi.getGasLimit(
+      if (price.isEmpty) return null;
+
+      final MessageModel ethMessage = await FilApi().getGasLimit(
         widget.coinModel.address,
         toAddr,
-        gaslimit,
+        BigInt.from(getCoinGas(widget.coinModel.coin['coinType'])),
         value:
             ethToWeiString(price, widget.coinModel.coin['decimals']).toString(),
         isTest: widget.coinModel.isTest,
       );
-      if (ethMessage.error == false) {
+      if (!ethMessage.error) {
         gas = BigInt.parse(ethMessage.data['GasLimit'].toString());
         gasFeeCap = ethMessage.data['GasFeeCap'];
         gasPremium = ethMessage.data['GasPremium'];
@@ -314,17 +258,14 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
         totalGasPrice = gasPrice * gas;
         errorMessage = "";
         return true;
-      } else {
-        errorMessage = ethMessage.data;
-        return false;
       }
+      errorMessage = ethMessage.data;
+      return false;
     } catch (e) {
       errorMessage = e.toString();
       return false;
     } finally {
-      setState(() {
-        gasLimitLoad = Load.finish;
-      });
+      setState(() => gasLimitLoad = Load.finish);
     }
   }
 
@@ -355,7 +296,6 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     setState(() {});
   }
 
-  // 关闭键盘
   void closeKeyboard() {
     FocusScope.of(context).requestFocus(FocusNode());
   }
