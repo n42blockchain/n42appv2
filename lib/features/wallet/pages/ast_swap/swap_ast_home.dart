@@ -120,15 +120,10 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
     setState(() {});
     getBalanceChainPay();
     getBalancePay();
-    final bool rCoinPrice = await getCoinPrice();
-    if (!mounted) return;
-    if (rCoinPrice) {
-      final bool rGasPrice = await getGasPrice();
-      if (!mounted) return;
-      if (rGasPrice) {
-        await estimateGasEth();
-      }
-    }
+
+    if (!await getCoinPrice() || !mounted) return;
+    if (!await getGasPrice() || !mounted) return;
+    await estimateGasEth();
   }
 
   // ---------------------------------------------------------------------------
@@ -137,25 +132,12 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
 
   Future<void> init() async {
     getAstChainModel();
-    bool ok = await getAstList();
-    if (!ok) {
-      load = Load.error;
-      setState(() {});
-      return;
-    }
-    ok = await getCoinPrice();
-    if (!ok) {
-      load = Load.error;
-      setState(() {});
-      return;
-    }
-    ok = await getGasPrice();
+    final bool ok =
+        await getAstList() && await getCoinPrice() && await getGasPrice();
     if (ok) {
       estimateGasEth();
-      load = Load.finish;
-    } else {
-      load = Load.error;
     }
+    load = ok ? Load.finish : Load.error;
     setState(() {});
   }
 
@@ -334,45 +316,45 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
   // Input handling
   // ---------------------------------------------------------------------------
 
+  bool _isValidNumericInput(String value) =>
+      _regular.regularNums(value) || _regular.regularDouble(value);
+
+  String _formatAmount(double value) => _regular
+      .formartNumDouble(dec.Decimal.parse(value.toString()).toDouble(), 8,
+          isCrop: true, isFill0: false)
+      .toString();
+
   void payInput({String? value}) {
     value ??= payTextEditingController.text;
-    if (!_regular.regularNums(value) && !_regular.regularDouble(value)) return;
-    if (value == "0") return;
-    final double getValue = dec.Decimal.parse(value).toDouble() *
+    if (!_isValidNumericInput(value) || value == "0") return;
+    final double converted = dec.Decimal.parse(value).toDouble() *
         ((youPay?.price ?? 0) / (getCoinModel?.coinPrice ?? 0));
-    getTextEditingController.text =
-        '${_regular.formartNumDouble(dec.Decimal.parse(getValue.toString()).toDouble(), 8, isCrop: true, isFill0: false)}';
+    getTextEditingController.text = _formatAmount(converted);
     setState(() {});
   }
 
   void getInput({String? value}) {
     value ??= getTextEditingController.text;
-    if (!_regular.regularNums(value) && !_regular.regularDouble(value)) return;
-    if (value == "0") return;
-    final double p = (getCoinModel?.coinPrice ?? 0) / (youPay?.price ?? 0);
-    final double payValue = double.parse(value) * p;
-    payTextEditingController.text =
-        '${_regular.formartNumDouble(dec.Decimal.parse(payValue.toString()).toDouble(), 8, isCrop: true, isFill0: false)}';
+    if (!_isValidNumericInput(value) || value == "0") return;
+    final double ratio = (getCoinModel?.coinPrice ?? 0) / (youPay?.price ?? 0);
+    final double converted = double.parse(value) * ratio;
+    payTextEditingController.text = _formatAmount(converted);
     setState(() {});
   }
 
   bool checkPayInput() {
     final String value = payTextEditingController.text;
-    if (!_regular.regularNums(value) && !_regular.regularDouble(value)) {
-      return false;
-    }
+    if (!_isValidNumericInput(value)) return false;
     final double pay = double.parse(value);
-    if (pay == 0) return false;
-    if ((youPay?.balance ?? 0) < pay) return false;
-    return true;
+    return pay > 0 && (youPay?.balance ?? 0) >= pay;
   }
 
   void percentTap(int percent) {
     if (load != Load.finish) return;
     final double ypBalance = youPay?.balance ?? 0;
     if (ypBalance <= 0) return;
-    payTextEditingController.text = '${_regular.formartNumDouble(
-      ypBalance * (percent / 100), 8, isCrop: true, isFill0: false)}';
-    payInput(value: (ypBalance * (percent / 100)).toString());
+    final double amount = ypBalance * (percent / 100);
+    payTextEditingController.text = _formatAmount(amount);
+    payInput(value: amount.toString());
   }
 }

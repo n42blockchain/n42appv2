@@ -5,6 +5,78 @@
 
 part of 'feature_entry_cards.dart';
 
+// ── Shared card decoration helper ─────────────────────────────────────────
+
+/// Builds the standard gradient card decoration used by entry cards.
+BoxDecoration _cardDecoration({
+  required Color primaryColor,
+  required Color secondaryColor,
+  required double borderRadius,
+}) {
+  return BoxDecoration(
+    gradient: LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [
+        primaryColor.withValues(alpha: 0.12),
+        secondaryColor.withValues(alpha: 0.12),
+      ],
+    ),
+    borderRadius: BorderRadius.circular(borderRadius),
+    border: Border.all(
+      color: primaryColor.withValues(alpha: 0.25),
+      width: 1,
+    ),
+    boxShadow: [
+      BoxShadow(
+        color: primaryColor.withValues(alpha: 0.08),
+        blurRadius: 12,
+        offset: const Offset(0, 4),
+      ),
+    ],
+  );
+}
+
+/// Builds a circular icon container with a gradient background.
+Widget _gradientCircle({
+  required double size,
+  required Color startColor,
+  required Color endColor,
+  required Widget child,
+}) {
+  return Container(
+    width: size,
+    height: size,
+    decoration: BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [startColor, endColor],
+      ),
+      borderRadius: BorderRadius.circular(size / 2),
+    ),
+    child: child,
+  );
+}
+
+/// Builds the trailing circular action indicator.
+Widget _trailingAction({
+  required double size,
+  required Color color,
+  required IconData icon,
+  required double iconSize,
+}) {
+  return Container(
+    width: size,
+    height: size,
+    decoration: BoxDecoration(
+      color: color.withValues(alpha: 0.2),
+      borderRadius: BorderRadius.circular(size / 2),
+    ),
+    child: Icon(icon, color: color, size: iconSize),
+  );
+}
+
 // ============================================
 // ENS Entry Card
 // ============================================
@@ -29,60 +101,38 @@ class EnsEntryCard extends StatelessWidget {
     final hasEns = ensName != null && ensName!.isNotEmpty;
     const ensBlue = Color(0xFF5B8DEF);
     const ensPurple = Color(0xFF8B5CF6);
+    final su = ScreenUtil();
+    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final circleSize = su.setWidth(80);
 
     return GestureDetector(
       onTap: hasEns ? onTap : onRegisterTap,
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              ensBlue.withValues(alpha: 0.12),
-              ensPurple.withValues(alpha: 0.12),
-            ],
-          ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-          border: Border.all(
-            color: ensBlue.withValues(alpha: 0.25),
-            width: 1,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: ensBlue.withValues(alpha: 0.08),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
+        padding: EdgeInsets.all(su.setWidth(20)),
+        decoration: _cardDecoration(
+          primaryColor: ensBlue,
+          secondaryColor: ensPurple,
+          borderRadius: su.setWidth(20),
         ),
         child: Row(
           children: [
-            // ENS Logo / Avatar
-            Container(
-              width: ScreenUtil().setWidth(80),
-              height: ScreenUtil().setWidth(80),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [ensBlue, ensPurple],
-                ),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(40)),
-              ),
+            _gradientCircle(
+              size: circleSize,
+              startColor: ensBlue,
+              endColor: ensPurple,
               child: hasEns && avatarUrl != null
                   ? ClipRRect(
-                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(40)),
+                      borderRadius: BorderRadius.circular(circleSize / 2),
                       child: Image.network(
                         avatarUrl!,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => _buildEnsIcon(),
+                        errorBuilder: (_, __, ___) => _buildEnsIcon(),
                       ),
                     )
                   : _buildEnsIcon(),
             ),
-            SizedBox(width: ScreenUtil().setWidth(24)),
-            // Content
+            SizedBox(width: su.setWidth(24)),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,19 +140,19 @@ class EnsEntryCard extends StatelessWidget {
                   Text(
                     hasEns ? ensName! : S.of(context).g_key_ens_get_your_name,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
+                      fontSize: su.setSp(28),
                       fontWeight: FontWeight.w600,
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                      color: mainText,
                     ),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(8)),
+                  SizedBox(height: su.setWidth(8)),
                   Text(
                     hasEns
                         ? S.of(context).g_key_ens_manage_your_identity
                         : S.of(context).g_key_ens_register_description,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                      fontSize: su.setSp(22),
+                      color: subtitleColor,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -110,19 +160,11 @@ class EnsEntryCard extends StatelessWidget {
                 ],
               ),
             ),
-            // Arrow
-            Container(
-              width: ScreenUtil().setWidth(56),
-              height: ScreenUtil().setWidth(56),
-              decoration: BoxDecoration(
-                color: ensBlue.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(28)),
-              ),
-              child: Icon(
-                hasEns ? Icons.settings_outlined : Icons.add_rounded,
-                color: ensBlue,
-                size: ScreenUtil().setWidth(32),
-              ),
+            _trailingAction(
+              size: su.setWidth(56),
+              color: ensBlue,
+              icon: hasEns ? Icons.settings_outlined : Icons.add_rounded,
+              iconSize: su.setWidth(32),
             ),
           ],
         ),
@@ -169,81 +211,58 @@ class SmartAccountEntryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     const cardRed = Color(0xFFFF6B6B);
     const cardYellow = Color(0xFFFFE66D);
-    const deployedGreen = Color(0xFF4CAF50);
-    const pendingOrange = Color(0xFFFF9800);
+    final statusColor = isDeployed ? const Color(0xFF4CAF50) : const Color(0xFFFF9800);
+    final su = ScreenUtil();
+    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final circleSize = su.setWidth(80);
 
     return GestureDetector(
       onTap: hasSmartAccount ? onTap : onCreateTap,
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              cardRed.withValues(alpha: 0.12),
-              cardYellow.withValues(alpha: 0.12),
-            ],
-          ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-          border: Border.all(
-            color: cardRed.withValues(alpha: 0.25),
-            width: 1,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: cardRed.withValues(alpha: 0.08),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
+        padding: EdgeInsets.all(su.setWidth(20)),
+        decoration: _cardDecoration(
+          primaryColor: cardRed,
+          secondaryColor: cardYellow,
+          borderRadius: su.setWidth(20),
         ),
         child: Row(
           children: [
-            // AA Icon
-            Container(
-              width: ScreenUtil().setWidth(80),
-              height: ScreenUtil().setWidth(80),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [cardRed, cardYellow],
-                ),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(40)),
-              ),
+            _gradientCircle(
+              size: circleSize,
+              startColor: cardRed,
+              endColor: cardYellow,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
                   Icon(
                     Icons.account_balance_wallet_rounded,
                     color: Colors.white,
-                    size: ScreenUtil().setWidth(40),
+                    size: su.setWidth(40),
                   ),
                   if (hasSmartAccount)
                     Positioned(
-                      right: ScreenUtil().setWidth(4),
-                      bottom: ScreenUtil().setWidth(4),
+                      right: su.setWidth(4),
+                      bottom: su.setWidth(4),
                       child: Container(
-                        width: ScreenUtil().setWidth(24),
-                        height: ScreenUtil().setWidth(24),
+                        width: su.setWidth(24),
+                        height: su.setWidth(24),
                         decoration: BoxDecoration(
-                          color: isDeployed ? deployedGreen : pendingOrange,
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                          color: statusColor,
+                          borderRadius: BorderRadius.circular(su.setWidth(12)),
                           border: Border.all(color: Colors.white, width: 2),
                         ),
                         child: Icon(
                           isDeployed ? Icons.check : Icons.hourglass_empty,
                           color: Colors.white,
-                          size: ScreenUtil().setWidth(14),
+                          size: su.setWidth(14),
                         ),
                       ),
                     ),
                 ],
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(24)),
-            // Content
+            SizedBox(width: su.setWidth(24)),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -256,34 +275,32 @@ class SmartAccountEntryCard extends StatelessWidget {
                               ? S.of(context).g_key_aa_smart_account
                               : S.of(context).g_key_aa_create_smart_account,
                           style: TextStyle(
-                            fontSize: ScreenUtil().setSp(28),
+                            fontSize: su.setSp(28),
                             fontWeight: FontWeight.w600,
-                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                            color: mainText,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       if (hasSmartAccount) ...[
-                        SizedBox(width: ScreenUtil().setWidth(10)),
+                        SizedBox(width: su.setWidth(10)),
                         Container(
                           padding: EdgeInsets.symmetric(
-                            horizontal: ScreenUtil().setWidth(10),
-                            vertical: ScreenUtil().setWidth(4),
+                            horizontal: su.setWidth(10),
+                            vertical: su.setWidth(4),
                           ),
                           decoration: BoxDecoration(
-                            color: isDeployed
-                                ? deployedGreen.withValues(alpha: 0.2)
-                                : pendingOrange.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                            color: statusColor.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(su.setWidth(8)),
                           ),
                           child: Text(
                             isDeployed
                                 ? S.of(context).g_key_aa_deployed
                                 : S.of(context).g_key_aa_not_deployed,
                             style: TextStyle(
-                              fontSize: ScreenUtil().setSp(16),
-                              color: isDeployed ? deployedGreen : pendingOrange,
+                              fontSize: su.setSp(16),
+                              color: statusColor,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -291,14 +308,14 @@ class SmartAccountEntryCard extends StatelessWidget {
                       ],
                     ],
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(8)),
+                  SizedBox(height: su.setWidth(8)),
                   Text(
                     hasSmartAccount
                         ? _formatAddress(accountAddress ?? '')
                         : S.of(context).g_key_aa_gasless_transactions,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                      fontSize: su.setSp(22),
+                      color: subtitleColor,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -306,19 +323,11 @@ class SmartAccountEntryCard extends StatelessWidget {
                 ],
               ),
             ),
-            // Arrow
-            Container(
-              width: ScreenUtil().setWidth(56),
-              height: ScreenUtil().setWidth(56),
-              decoration: BoxDecoration(
-                color: cardRed.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(28)),
-              ),
-              child: Icon(
-                hasSmartAccount ? Icons.arrow_forward_ios_rounded : Icons.add_rounded,
-                color: cardRed,
-                size: ScreenUtil().setWidth(28),
-              ),
+            _trailingAction(
+              size: su.setWidth(56),
+              color: cardRed,
+              icon: hasSmartAccount ? Icons.arrow_forward_ios_rounded : Icons.add_rounded,
+              iconSize: su.setWidth(28),
             ),
           ],
         ),

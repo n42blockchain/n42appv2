@@ -242,12 +242,20 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
     );
   }
 
+  Future<void> _pushAndCallback(BuildContext context, Widget page) async {
+    final r = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => page),
+    );
+    if (r == true) onBack();
+  }
+
   Future<void> _onItemTap(BuildContext context) async {
     if (_isBtcType) {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => TransactionDetailPage(
+          builder: (_) => TransactionDetailPage(
             from: transactionModel.address,
             to: transactionModel.to1,
             txHash: transactionModel.txHash,
@@ -261,44 +269,26 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
       return;
     }
 
-    // 非 BTC 类型
     final blockchainType = coinModel!.coin['blockchainType'];
     final coinType = coinModel!.coin['coinType'];
+    final txHash = transactionModel.txHash;
 
     if (blockchainType == BlockchainType.Ethereum.name) {
       if (coinType == CoinType.N.name) {
-        final r = await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TransactionRetry(coinModel!, transactionModel.txHash),
-          ),
-        );
-        if (r == true) onBack();
+        _pushAndCallback(context, TransactionRetry(coinModel!, txHash));
       } else {
-        final r = await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TransactionDetailEth(coinModel!, transactionModel.txHash),
-          ),
-        );
-        if (r == true) onBack();
+        _pushAndCallback(context, TransactionDetailEth(coinModel!, txHash));
       }
     } else if (blockchainType == BlockchainType.Tron.name) {
-      final r = await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => TransactionDetailTrx(coinModel!, transactionModel.txHash),
-        ),
-      );
-      if (r == true) onBack();
+      _pushAndCallback(context, TransactionDetailTrx(coinModel!, txHash));
     } else {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => TransactionDetailPage(
+          builder: (_) => TransactionDetailPage(
             from: transactionModel.from1,
             to: transactionModel.to1,
-            txHash: transactionModel.txHash,
+            txHash: txHash,
             value: transactionModel.priceDouble().toString(),
             coinType: transactionModel.coin['coinType'],
             time: transactionModel.getTxTimeStr(),
@@ -309,13 +299,11 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
     }
   }
 
-  //获取购买状态文本
-  String getBuyStateText(int state) {
-    switch (state) {
-      case 0: return S.current.g_key_t_2;
-      case 1: return S.current.g_key_t_1;
-      case 2: return S.current.g_key_t_3;
-      default: return "";
-    }
-  }
+  /// 获取交易状态文本
+  String getBuyStateText(int state) => switch (state) {
+        0 => S.current.g_key_t_2,
+        1 => S.current.g_key_t_1,
+        2 => S.current.g_key_t_3,
+        _ => "",
+      };
 }

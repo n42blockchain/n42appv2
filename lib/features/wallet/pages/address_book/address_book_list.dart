@@ -280,6 +280,10 @@ class _AddressBookListState extends State<AddressBookList>
   }
 
   Widget _buildSearchBar(Color mainText, Color blueColor, Color itemBg) {
+    final radius = BorderRadius.circular(ScreenUtil().setWidth(50));
+    final defaultSide = BorderSide(color: mainText.withValues(alpha: 0.15));
+    final fontSize = ScreenUtil().setSp(28);
+
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(30),
@@ -287,10 +291,7 @@ class _AddressBookListState extends State<AddressBookList>
       ),
       child: TextField(
         controller: _searchCtrl,
-        style: TextStyle(
-          color: mainText,
-          fontSize: ScreenUtil().setSp(28),
-        ),
+        style: TextStyle(color: mainText, fontSize: fontSize),
         decoration: InputDecoration(
           prefixIcon: Icon(
             Icons.search,
@@ -300,7 +301,7 @@ class _AddressBookListState extends State<AddressBookList>
           hintText: S.of(context).search,
           hintStyle: TextStyle(
             color: mainText.withValues(alpha: 0.35),
-            fontSize: ScreenUtil().setSp(28),
+            fontSize: fontSize,
           ),
           suffixIcon: _searchCtrl.text.isNotEmpty
               ? IconButton(
@@ -317,20 +318,11 @@ class _AddressBookListState extends State<AddressBookList>
             vertical: ScreenUtil().setWidth(18),
           ),
           border: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(ScreenUtil().setWidth(50)),
-            borderSide:
-                BorderSide(color: mainText.withValues(alpha: 0.15)),
-          ),
+              borderRadius: radius, borderSide: defaultSide),
           enabledBorder: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(ScreenUtil().setWidth(50)),
-            borderSide:
-                BorderSide(color: mainText.withValues(alpha: 0.15)),
-          ),
+              borderRadius: radius, borderSide: defaultSide),
           focusedBorder: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(ScreenUtil().setWidth(50)),
+            borderRadius: radius,
             borderSide: BorderSide(color: blueColor, width: 1.5),
           ),
           filled: true,

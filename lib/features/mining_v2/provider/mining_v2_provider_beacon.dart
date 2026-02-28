@@ -98,10 +98,8 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
 
   @override
   void endBeaconValidatorTimer() {
-    if (beaconValidatorTimer != null) {
-      beaconValidatorTimer!.cancel();
-      beaconValidatorTimer = null;
-    }
+    beaconValidatorTimer?.cancel();
+    beaconValidatorTimer = null;
   }
 
   // ==================== Beacon Validator Query ====================
@@ -116,9 +114,9 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
         9,
       ).toDouble();
 
-      int iscore = rmm.data?['inactivity_score'] ?? 0;
-      debugPrint('iscore:$iscore');
-      iscore = iscore > kMaxInactivityScore ? kMaxInactivityScore : iscore;
+      final int rawScore = rmm.data?['inactivity_score'] ?? 0;
+      debugPrint('iscore:$rawScore');
+      final int iscore = rawScore.clamp(0, kMaxInactivityScore);
       double isp = ((iscore / kMaxInactivityScore) * 100);
       inactivityScorePercentage = isp.toStringAsFixed(2);
 
@@ -197,18 +195,14 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
     withdrawalTimer?.cancel();
     withdrawalTimer = Timer.periodic(
       const Duration(seconds: kWithdrawalRefreshIntervalSeconds),
-      (timer) async {
-        getMiningWithdrawalsDaily();
-      },
+      (_) => getMiningWithdrawalsDaily(),
     );
   }
 
   @override
   void endWithdrawalTimer() {
-    if (withdrawalTimer != null) {
-      withdrawalTimer!.cancel();
-      withdrawalTimer = null;
-    }
+    withdrawalTimer?.cancel();
+    withdrawalTimer = null;
   }
 
   @override
@@ -289,24 +283,22 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
   void _generateBarTipData() {
     if (barChartValues.isEmpty || barChartValues.length != kMiningHistoryDays) return;
 
+    final whiteColor = AppThemeUtils.getColorByKey(
+      AppGlobals.appContext,
+      AppThemeKeys.mainWhiteColor.name,
+    );
+    final normalStyle = TextStyle(
+      fontSize: ScreenUtil().setSp(20),
+      color: whiteColor,
+    );
+    final boldStyle = TextStyle(
+      fontSize: ScreenUtil().setSp(22),
+      color: whiteColor,
+      fontWeight: FontWeight.bold,
+    );
+
     barChartAlertMessageList = [];
     for (int i = 0; i < barChartValues.length; i++) {
-      final normalStyle = TextStyle(
-        fontSize: ScreenUtil().setSp(20),
-        color: AppThemeUtils.getColorByKey(
-          AppGlobals.appContext,
-          AppThemeKeys.mainWhiteColor.name,
-        ),
-      );
-      final boldStyle = TextStyle(
-        fontSize: ScreenUtil().setSp(22),
-        color: AppThemeUtils.getColorByKey(
-          AppGlobals.appContext,
-          AppThemeKeys.mainWhiteColor.name,
-        ),
-        fontWeight: FontWeight.bold,
-      );
-
       barChartAlertMessageList.add(
         AlertMessageGroup(
           titles: [

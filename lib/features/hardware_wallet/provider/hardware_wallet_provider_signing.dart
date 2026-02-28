@@ -14,61 +14,51 @@ mixin _HardwareWalletSigningMixin on ChangeNotifier {
 
   // ============ 签名方法 ============
 
+  /// Executes a signing operation with connection guard and error handling.
+  Future<HardwareWalletSignResponse> _guardedSign(
+    Future<HardwareWalletSignResponse> Function() action,
+  ) async {
+    if (!isConnected) {
+      return HardwareWalletSignResponse.error('No device connected');
+    }
+    try {
+      return await action();
+    } on HardwareWalletError catch (e) {
+      return HardwareWalletSignResponse.error(e.userFriendlyMessage);
+    }
+  }
+
   /// 签名以太坊交易
   Future<HardwareWalletSignResponse> signEthereumTransaction({
     required String derivationPath,
     required Uint8List rawTx,
-  }) async {
-    if (!isConnected) {
-      return HardwareWalletSignResponse.error('No device connected');
-    }
-
-    try {
-      return await _ledgerService.signEthereumTransaction(
-        derivationPath: derivationPath,
-        rawTx: rawTx,
-      );
-    } on HardwareWalletError catch (e) {
-      return HardwareWalletSignResponse.error(e.userFriendlyMessage);
-    }
+  }) {
+    return _guardedSign(() => _ledgerService.signEthereumTransaction(
+          derivationPath: derivationPath,
+          rawTx: rawTx,
+        ));
   }
 
   /// 签名以太坊消息
   Future<HardwareWalletSignResponse> signEthereumMessage({
     required String derivationPath,
     required String message,
-  }) async {
-    if (!isConnected) {
-      return HardwareWalletSignResponse.error('No device connected');
-    }
-
-    try {
-      return await _ledgerService.signEthereumMessage(
-        derivationPath: derivationPath,
-        message: message,
-      );
-    } on HardwareWalletError catch (e) {
-      return HardwareWalletSignResponse.error(e.userFriendlyMessage);
-    }
+  }) {
+    return _guardedSign(() => _ledgerService.signEthereumMessage(
+          derivationPath: derivationPath,
+          message: message,
+        ));
   }
 
   /// 签名比特币交易
   Future<HardwareWalletSignResponse> signBitcoinTransaction({
     required String derivationPath,
     required Map<String, dynamic> txData,
-  }) async {
-    if (!isConnected) {
-      return HardwareWalletSignResponse.error('No device connected');
-    }
-
-    try {
-      return await _ledgerService.signBitcoinTransaction(
-        derivationPath: derivationPath,
-        txData: txData,
-      );
-    } on HardwareWalletError catch (e) {
-      return HardwareWalletSignResponse.error(e.userFriendlyMessage);
-    }
+  }) {
+    return _guardedSign(() => _ledgerService.signBitcoinTransaction(
+          derivationPath: derivationPath,
+          txData: txData,
+        ));
   }
 
   /// 通用签名方法
@@ -76,12 +66,12 @@ mixin _HardwareWalletSigningMixin on ChangeNotifier {
   /// 根据当前设备类型和 coinType 路由到对应的签名实现：
   ///
   /// **Trezor 设备**：
-  /// - EVM / BTC / SOL / ATOM / DOT / TRX → Trezor 平台通道
+  /// - EVM / BTC / SOL / ATOM / DOT / TRX -> Trezor 平台通道
   ///
   /// **Ledger 设备**：
-  /// - EVM 链 → signEthereumTransaction / signEthereumMessage
-  /// - BTC/LTC/DOGE/BCH → signBitcoinTransaction
-  /// - SOL/ATOM/DOT/TRX → signChainTransaction（native 实现）
+  /// - EVM 链 -> signEthereumTransaction / signEthereumMessage
+  /// - BTC/LTC/DOGE/BCH -> signBitcoinTransaction
+  /// - SOL/ATOM/DOT/TRX -> signChainTransaction（native 实现）
   ///
   /// **Keystone 设备**：
   /// - 返回 [HardwareWalletSignResponse] 标记为需要 QR 签名。
@@ -97,7 +87,7 @@ mixin _HardwareWalletSigningMixin on ChangeNotifier {
 
     // ── Trezor ──────────────────────────────────────────────────
     if (_currentDevice?.isTrezor ?? false) {
-      return await _signWithTrezor(request, coinType);
+      return _signWithTrezor(request, coinType);
     }
 
     // ── Keystone ────────────────────────────────────────────────
@@ -113,7 +103,7 @@ mixin _HardwareWalletSigningMixin on ChangeNotifier {
     }
 
     // ── Ledger ──────────────────────────────────────────────────
-    return await _signWithLedger(request, coinType);
+    return _signWithLedger(request, coinType);
   }
 
   Future<HardwareWalletSignResponse> _signWithLedger(
@@ -122,33 +112,32 @@ mixin _HardwareWalletSigningMixin on ChangeNotifier {
   ) async {
     if (_isEvmChain(coinType)) {
       if (request.signType == HardwareWalletSignType.message) {
-        return await signEthereumMessage(
+        return signEthereumMessage(
           derivationPath: request.derivationPath,
           message: request.message ?? '',
         );
-      } else {
-        final rawTx = _serializeEthTransaction(request.transactionData);
-        return await signEthereumTransaction(
-          derivationPath: request.derivationPath,
-          rawTx: rawTx,
-        );
       }
+      final rawTx = _serializeEthTransaction(request.transactionData);
+      return signEthereumTransaction(
+        derivationPath: request.derivationPath,
+        rawTx: rawTx,
+      );
     }
 
     if (_isBitcoinLikeChain(coinType)) {
-      return await signBitcoinTransaction(
+      return signBitcoinTransaction(
         derivationPath: request.derivationPath,
         txData: request.transactionData,
       );
     }
 
-    // SOL / ATOM / DOT / TRX — 通过 native 实现
+    // SOL / ATOM / DOT / TRX -- 通过 native 实现
     switch (coinType) {
       case 'SOL':
       case 'ATOM':
       case 'DOT':
       case 'TRX':
-        return await _ledgerService.signChainTransaction(
+        return _ledgerService.signChainTransaction(
           coinType: coinType,
           derivationPath: request.derivationPath,
           txData: request.transactionData,
@@ -166,35 +155,35 @@ mixin _HardwareWalletSigningMixin on ChangeNotifier {
   ) async {
     if (_isEvmChain(coinType)) {
       if (request.signType == HardwareWalletSignType.message) {
-        return await _trezorService.signMessage(
+        return _trezorService.signMessage(
           derivationPath: request.derivationPath,
           messageBytes: Uint8List.fromList(
             (request.message ?? '').codeUnits,
           ),
         );
-      } else if (request.signType == HardwareWalletSignType.typedData) {
-        return await _trezorService.signTypedData(
+      }
+      if (request.signType == HardwareWalletSignType.typedData) {
+        return _trezorService.signTypedData(
           derivationPath: request.derivationPath,
           typedDataJson: request.message ?? '{}',
         );
-      } else {
-        return await _trezorService.signEthTransaction(
-          derivationPath: request.derivationPath,
-          txData: request.transactionData,
-        );
       }
+      return _trezorService.signEthTransaction(
+        derivationPath: request.derivationPath,
+        txData: request.transactionData,
+      );
     }
 
     if (_isBitcoinLikeChain(coinType)) {
       final psbtHex = request.transactionData['psbtHex'] as String? ?? '';
-      return await _trezorService.signBtcTransaction(
+      return _trezorService.signBtcTransaction(
         derivationPath: request.derivationPath,
         psbtHex: psbtHex,
       );
     }
 
     // SOL / other via generic channel
-    return await _trezorService.signChainTransaction(
+    return _trezorService.signChainTransaction(
       coinType: coinType,
       derivationPath: request.derivationPath,
       txData: request.transactionData,
@@ -205,14 +194,13 @@ mixin _HardwareWalletSigningMixin on ChangeNotifier {
 
   /// 序列化以太坊交易为 RLP 编码字节
   Uint8List _serializeEthTransaction(Map<String, dynamic> txData) {
-    final bool isEip1559 =
+    final isEip1559 =
         txData.containsKey('maxFeePerGas') || txData.containsKey('maxPriorityFeePerGas');
 
     if (isEip1559) {
       return _serializeEip1559Transaction(txData);
-    } else {
-      return _serializeLegacyTransaction(txData);
     }
+    return _serializeLegacyTransaction(txData);
   }
 
   /// 序列化 EIP-1559 (type 2) 交易
@@ -226,7 +214,7 @@ mixin _HardwareWalletSigningMixin on ChangeNotifier {
       _rlpEncode(txData['to'] ?? ''),
       _rlpEncode(txData['value'] ?? '0x0'),
       _rlpEncode(txData['data'] ?? '0x'),
-      ...[_rlpEncodeList([])],
+      _rlpEncodeList([]),
     ];
 
     final payload = items.expand((e) => e).toList();
@@ -270,21 +258,25 @@ mixin _HardwareWalletSigningMixin on ChangeNotifier {
 
       final bytes = _hexToBytes(hexStr);
 
+      // Address (20 bytes) -- encode without stripping leading zeros
       if (bytes.length == 20) {
-        return bytes.length < 56
-            ? [0x80 + bytes.length, ...bytes]
-            : [0xb7 + _intToMinBytes(bytes.length).length, ..._intToMinBytes(bytes.length), ...bytes];
+        return _rlpEncodeBytes(bytes);
       }
 
       final stripped = _stripLeadingZeroBytes(bytes);
       if (stripped.isEmpty) return [0x80];
       if (stripped.length == 1 && stripped[0] < 0x80) return stripped;
-      if (stripped.length < 56) return [0x80 + stripped.length, ...stripped];
-      final lenBytes = _intToMinBytes(stripped.length);
-      return [0xb7 + lenBytes.length, ...lenBytes, ...stripped];
+      return _rlpEncodeBytes(stripped);
     }
 
     return [0x80];
+  }
+
+  /// RLP 编码字节序列
+  List<int> _rlpEncodeBytes(List<int> bytes) {
+    if (bytes.length < 56) return [0x80 + bytes.length, ...bytes];
+    final lenBytes = _intToMinBytes(bytes.length);
+    return [0xb7 + lenBytes.length, ...lenBytes, ...bytes];
   }
 
   /// RLP 编码列表（已编码的各字段拼接在一起）
@@ -311,11 +303,10 @@ mixin _HardwareWalletSigningMixin on ChangeNotifier {
   /// 十六进制字符串转字节列表
   List<int> _hexToBytes(String hex) {
     final normalized = hex.length % 2 != 0 ? '0$hex' : hex;
-    final bytes = <int>[];
-    for (var i = 0; i < normalized.length; i += 2) {
-      bytes.add(int.parse(normalized.substring(i, i + 2), radix: 16));
-    }
-    return bytes;
+    return [
+      for (var i = 0; i < normalized.length; i += 2)
+        int.parse(normalized.substring(i, i + 2), radix: 16),
+    ];
   }
 
   /// 去除字节列表前导零

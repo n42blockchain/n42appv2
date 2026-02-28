@@ -210,6 +210,15 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
     required Color mainText,
     required Color blueColor,
   }) {
+    final btnRadius = BorderRadius.circular(ScreenUtil().setWidth(16));
+    final btnPadding =
+        EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(28));
+    final btnTextStyle = TextStyle(
+      fontSize: ScreenUtil().setSp(32),
+      fontWeight: FontWeight.w600,
+    );
+    final iconSize = ScreenUtil().setWidth(36);
+
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(60),
@@ -221,24 +230,14 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
           // 显眼的复制地址按钮
           ElevatedButton.icon(
             onPressed: copyAddress,
-            icon: Icon(
-              Icons.copy_outlined,
-              size: ScreenUtil().setWidth(36),
-            ),
+            icon: Icon(Icons.copy_outlined, size: iconSize),
             label: Text(S.of(context).g_key_119), // "Copy"
             style: ElevatedButton.styleFrom(
               backgroundColor: blueColor,
               foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(
-                  vertical: ScreenUtil().setWidth(28)),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                    ScreenUtil().setWidth(16)),
-              ),
-              textStyle: TextStyle(
-                fontSize: ScreenUtil().setSp(32),
-                fontWeight: FontWeight.w600,
-              ),
+              padding: btnPadding,
+              shape: RoundedRectangleBorder(borderRadius: btnRadius),
+              textStyle: btnTextStyle,
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(20)),
@@ -246,24 +245,14 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
           // 分享链接按钮（分享地址文本 / payment URI）
           OutlinedButton.icon(
             onPressed: shareLink,
-            icon: Icon(
-              Icons.link_rounded,
-              size: ScreenUtil().setWidth(36),
-            ),
+            icon: Icon(Icons.link_rounded, size: iconSize),
             label: Text(S.of(context).g_key_share_link),
             style: OutlinedButton.styleFrom(
               foregroundColor: blueColor,
               side: BorderSide(color: blueColor, width: 1.2),
-              padding: EdgeInsets.symmetric(
-                  vertical: ScreenUtil().setWidth(28)),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                    ScreenUtil().setWidth(16)),
-              ),
-              textStyle: TextStyle(
-                fontSize: ScreenUtil().setSp(32),
-                fontWeight: FontWeight.w600,
-              ),
+              padding: btnPadding,
+              shape: RoundedRectangleBorder(borderRadius: btnRadius),
+              textStyle: btnTextStyle,
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(36)),
@@ -280,59 +269,58 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
           SizedBox(height: ScreenUtil().setWidth(16)),
 
           // 金额输入框（实时刷新 QR）
-          TextField(
-            controller: amountCtrl,
-            keyboardType: const TextInputType.numberWithOptions(
-                decimal: true),
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(
-                  RegExp(r'^\d*\.?\d*')),
-            ],
-            style: TextStyle(
-              color: mainText,
-              fontSize: ScreenUtil().setSp(28),
-            ),
-            decoration: InputDecoration(
-              hintText: '0.0',
-              hintStyle: TextStyle(
-                color: mainText.withValues(alpha: 0.35),
-                fontSize: ScreenUtil().setSp(28),
-              ),
-              suffixIcon: amountCtrl.text.isNotEmpty
-                  ? IconButton(
-                      icon: Icon(
-                        Icons.clear,
-                        size: ScreenUtil().setWidth(36),
-                        color: mainText.withValues(alpha: 0.5),
-                      ),
-                      onPressed: amountCtrl.clear,
-                    )
-                  : null,
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(28),
-                vertical: ScreenUtil().setWidth(22),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(
-                    ScreenUtil().setWidth(16)),
-                borderSide:
-                    const BorderSide(color: Color(0xFFE4E4E4)),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(
-                    ScreenUtil().setWidth(16)),
-                borderSide:
-                    const BorderSide(color: Color(0xFFE4E4E4)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(
-                    ScreenUtil().setWidth(16)),
-                borderSide:
-                    BorderSide(color: blueColor, width: 1.5),
-              ),
-            ),
-          ),
+          _buildAmountField(mainText: mainText, blueColor: blueColor),
         ],
+      ),
+    );
+  }
+
+  // ─── 金额输入框 ─────────────────────────────────────────────────────────────
+
+  Widget _buildAmountField({
+    required Color mainText,
+    required Color blueColor,
+  }) {
+    final radius = BorderRadius.circular(ScreenUtil().setWidth(16));
+    const defaultSide = BorderSide(color: Color(0xFFE4E4E4));
+    final fontSize = ScreenUtil().setSp(28);
+
+    return TextField(
+      controller: amountCtrl,
+      keyboardType:
+          const TextInputType.numberWithOptions(decimal: true),
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+      ],
+      style: TextStyle(color: mainText, fontSize: fontSize),
+      decoration: InputDecoration(
+        hintText: '0.0',
+        hintStyle: TextStyle(
+          color: mainText.withValues(alpha: 0.35),
+          fontSize: fontSize,
+        ),
+        suffixIcon: amountCtrl.text.isNotEmpty
+            ? IconButton(
+                icon: Icon(
+                  Icons.clear,
+                  size: ScreenUtil().setWidth(36),
+                  color: mainText.withValues(alpha: 0.5),
+                ),
+                onPressed: amountCtrl.clear,
+              )
+            : null,
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(28),
+          vertical: ScreenUtil().setWidth(22),
+        ),
+        border: OutlineInputBorder(
+            borderRadius: radius, borderSide: defaultSide),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: radius, borderSide: defaultSide),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: radius,
+          borderSide: BorderSide(color: blueColor, width: 1.5),
+        ),
       ),
     );
   }
