@@ -65,9 +65,9 @@ class BaseHttp {
 
   void _initDio() {
     _options = _buildBaseOptions();
-    _dio = Dio(_options)
-      ..interceptors.add(CircuitBreakerInterceptor())
-      ..interceptors.add(RetryInterceptor(dio: _dio));
+    _dio = Dio(_options);
+    _dio.interceptors.add(CircuitBreakerInterceptor());
+    _dio.interceptors.add(RetryInterceptor(dio: _dio));
     _configureHttpAdapter();
   }
 

@@ -80,52 +80,56 @@ extension WalletActionProviderMarket on WalletActionProvider {
 
   ///获取钱包 币的基本数据，成功后初始化主页币列表
   Future<void> getCoinInfo() async {
-    //钱包币列表，默认查询币种的当前价格等基本信息
-    String coinSelectPriceKeys="";
-    for(CoinModel cm in coinList){
-      coinSelectPriceKeys+="${cm.coin['miniName'].toString().toLowerCase()},";
-    }
+    try{
+      //钱包币列表，默认查询币种的当前价格等基本信息
+      String coinSelectPriceKeys="";
+      for(CoinModel cm in coinList){
+        coinSelectPriceKeys+="${cm.coin['miniName'].toString().toLowerCase()},";
+      }
 
-    // 先获取稳定币价格（从 CoinGecko，含 CNY 汇率推导，有 5 分钟缓存）
-    await _fetchStablecoinPrices();
+      // 先获取稳定币价格（从 CoinGecko，含 CNY 汇率推导，有 5 分钟缓存）
+      await _fetchStablecoinPrices();
 
-    // 市场数据防重复请求：30s 内已有新鲜数据则跳过网络请求，直接用缓存重算总余额
-    final now = DateTime.now();
-    final marketDataFresh = _coinMarketInfoFetchTime != null &&
-        now.difference(_coinMarketInfoFetchTime!) < WalletActionProvider._marketInfoMinInterval &&
-        _coinMarketInfo.isNotEmpty;
+      // 市场数据防重复请求：30s 内已有新鲜数据则跳过网络请求，直接用缓存重算总余额
+      final now = DateTime.now();
+      final marketDataFresh = _coinMarketInfoFetchTime != null &&
+          now.difference(_coinMarketInfoFetchTime!) < WalletActionProvider._marketInfoMinInterval &&
+          _coinMarketInfo.isNotEmpty;
 
-    if (!marketDataFresh) {
-      //查询coins中的币种信息
-      var list = await MarketApi().getWalletCoinsInfo(coinSelectPriceKeys);
-      if (list['error'] == true) {
-        debugPrint('WalletActionProvider: getCoinInfo failed: ${list['data']}');
-        // 静默失败：保留旧缓存价格，不打扰用户（仅首次无数据时才 Toast）
-        if (_coinMarketInfo.isEmpty) {
-          ToastUtils.show(S.current.g_key_5);
+      if (!marketDataFresh) {
+        //查询coins中的币种信息
+        var list = await MarketApi().getWalletCoinsInfo(coinSelectPriceKeys);
+        if (list['error'] == true) {
+          debugPrint('WalletActionProvider: getCoinInfo failed: ${list['data']}');
+          // 静默失败：保留旧缓存价格，不打扰用户（仅首次无数据时才 Toast）
+          if (_coinMarketInfo.isEmpty) {
+            ToastUtils.show(S.current.g_key_5);
+          }
+        } else {
+          final data = list['data'];
+          if (data != null && data['data'] != null) {
+            _coinMarketInfo = data['data'];
+            _coinMarketInfoFetchTime = now;
+            debugPrint('WalletActionProvider: Loaded ${_coinMarketInfo.length} coins market info');
+          }
         }
       } else {
-        final data = list['data'];
-        if (data != null && data['data'] != null) {
-          _coinMarketInfo = data['data'];
-          _coinMarketInfoFetchTime = now;
-          debugPrint('WalletActionProvider: Loaded ${_coinMarketInfo.length} coins market info');
-        }
+        debugPrint('WalletActionProvider: Market data fresh (${now.difference(_coinMarketInfoFetchTime!).inSeconds}s old), skip fetch');
       }
-    } else {
-      debugPrint('WalletActionProvider: Market data fresh (${now.difference(_coinMarketInfoFetchTime!).inSeconds}s old), skip fetch');
-    }
 
-    // 无论是否重新拉取，都用最新缓存重算价格和总余额
-    for(CoinModel cm in coinList){
-      getCoinPrice(cm);
-    }
-    calculateBalanceWidthCoinModel();
-    // 记录本次成功更新时间（用于 UI 展示"更新于 X 分钟前"）
-    _priceLastUpdated = now;
-    refresh();
+      // 无论是否重新拉取，都用最新缓存重算价格和总余额
+      for(CoinModel cm in coinList){
+        getCoinPrice(cm);
+      }
+      calculateBalanceWidthCoinModel();
+      // 记录本次成功更新时间（用于 UI 展示"更新于 X 分钟前"）
+      _priceLastUpdated = now;
+      refresh();
 
-    addCoinRefreshMap();
+      addCoinRefreshMap();
+    }catch(e){
+      print(e.toString());
+    }
   }
 
   //获取币的 美元价格

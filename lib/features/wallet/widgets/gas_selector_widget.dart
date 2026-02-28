@@ -339,6 +339,9 @@ class GasSelectorCompact extends StatelessWidget {
           horizontal: ScreenUtil().setWidth(30),
           vertical: ScreenUtil().setWidth(20),
         ),
+        margin: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(30),
+        ),
         decoration: BoxDecoration(
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),

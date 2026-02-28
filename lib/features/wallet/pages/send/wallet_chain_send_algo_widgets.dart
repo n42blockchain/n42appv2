@@ -297,7 +297,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
   Widget amountBalanceWidget() {
     final String unit = widget.coinModel.coin['unit'];
     final double minBalance = toEther(
-      widget.coinModel.other.minBalance.toString(),
+      widget.coinModel.other?.minBalance??BigInt.zero.toString(),
       widget.coinModel.coin['decimals'] ?? 0,
     ).toDouble();
     final double availableBalance =

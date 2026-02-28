@@ -74,6 +74,9 @@ class NonEvmFeeCompact extends StatelessWidget {
           horizontal: ScreenUtil().setWidth(30),
           vertical: ScreenUtil().setWidth(20),
         ),
+        margin: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(30),
+        ),
         decoration: BoxDecoration(
           color: itemBg,
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
@@ -215,8 +218,11 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
     final unit = widget.feeModel.unit;
     final formatted = Decimal.parse(toEther(fee.toString(), decimals).toString());
 
-    return Padding(
+    return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      margin: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(30),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

@@ -113,7 +113,7 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
         child: Container(
           width: ScreenUtil().setWidth(80.0),
           height: ScreenUtil().setWidth(80.0),
-          alignment: Alignment.center,
+          alignment: Alignment.centerLeft,
           child: Image.asset(
             widget.onLeftImageUri ?? "",
             width: ScreenUtil().setWidth(44),
