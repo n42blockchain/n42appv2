@@ -11,18 +11,6 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/services/coin_price_alert_service.dart';
 
 /// 价格到达提醒配置底部弹窗
-///
-/// 调用方式：
-/// ```dart
-/// final changed = await showPriceAlertSheet(
-///   context: context,
-///   coinId:  'bitcoin',
-///   symbol:  'btc',
-///   name:    'Bitcoin',
-///   currentPrice: 95000.0, // optional, 0 = unknown
-/// );
-/// if (changed == true) { /* reload alert states */ }
-/// ```
 Future<bool?> showPriceAlertSheet({
   required BuildContext context,
   required String coinId,
@@ -42,8 +30,6 @@ Future<bool?> showPriceAlertSheet({
     ),
   );
 }
-
-// ─── Private sheet widget ─────────────────────────────────────────────────────
 
 class _PriceAlertSheet extends StatefulWidget {
   final String coinId;
@@ -92,11 +78,8 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
         _priceCtrl.text = _fmtForInput(config.targetPrice);
         _alertAbove = config.alertAbove;
         _enabled = config.enabled;
-      } else {
-        // Pre-fill with current price if available
-        if (widget.currentPrice > 0) {
-          _priceCtrl.text = _fmtForInput(widget.currentPrice);
-        }
+      } else if (widget.currentPrice > 0) {
+        _priceCtrl.text = _fmtForInput(widget.currentPrice);
       }
       _loading = false;
     });
@@ -170,7 +153,6 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ── Handle bar ─────────────────────────────────────────────
                 Center(
                   child: Container(
                     width: 40.w,
@@ -182,8 +164,6 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                   ),
                 ),
                 SizedBox(height: 16.h),
-
-                // ── Title ──────────────────────────────────────────────────
                 Row(
                   children: [
                     Icon(Icons.notifications_outlined,
@@ -210,7 +190,6 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                   ],
                 ),
 
-                // ── Current price hint ─────────────────────────────────────
                 if (widget.currentPrice > 0) ...[
                   SizedBox(height: 4.h),
                   Text(
@@ -220,7 +199,6 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                 ],
                 SizedBox(height: 20.h),
 
-                // ── Direction toggle ───────────────────────────────────────
                 Text(
                   S.of(context).g_alert_direction,
                   style: TextStyle(fontSize: 13.sp, color: subColor),
@@ -249,7 +227,6 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                 ),
                 SizedBox(height: 20.h),
 
-                // ── Target price input ─────────────────────────────────────
                 Text(
                   S.of(context).g_alert_target_price,
                   style: TextStyle(fontSize: 13.sp, color: subColor),
@@ -292,7 +269,6 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                 ),
                 SizedBox(height: 20.h),
 
-                // ── Enable switch ──────────────────────────────────────────
                 Row(
                   children: [
                     Text(
@@ -310,7 +286,6 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                 ),
                 SizedBox(height: 24.h),
 
-                // ── Save button ────────────────────────────────────────────
                 SizedBox(
                   width: double.infinity,
                   height: 50.h,
@@ -345,8 +320,6 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
     );
   }
 }
-
-// ─── Direction chip ──────────────────────────────────────────────────────────
 
 class _DirectionChip extends StatelessWidget {
   final String label;
@@ -392,8 +365,6 @@ class _DirectionChip extends StatelessWidget {
     );
   }
 }
-
-// ─── Helpers ─────────────────────────────────────────────────────────────────
 
 /// Remove trailing zeros and a dangling decimal point.
 String _trimTrailingZeros(String s) {

@@ -30,7 +30,6 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
   Load get load;
   set load(Load v);
 
-  /// Fetch transactions from local DB. Supports paging and refresh.
   Future<void> getTransactionData(Load loadType) async {
     if (load != Load.finish) return;
     if (loadType == Load.nextPage && lastPage) return;
@@ -80,7 +79,6 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
     }
   }
 
-  /// Fetch and sync transactions from remote API for all blockchain types.
   Future<void> getTransactionDataNetwork(Load loadType) async {
     final coinModel = getCoinModel();
     final addr = coinModel.address.toString();
@@ -122,7 +120,6 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
     await _syncCommonTxRecords(cril, isEth: false);
   }
 
-  /// Shared sync logic for ETH and TRX transaction records.
   Future<void> _syncCommonTxRecords(
     List<CommonResponseItemModel>? cril, {
     required bool isEth,
@@ -242,13 +239,11 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
     if (isEdit) getTransactionData(Load.refresh);
   }
 
-  /// Parse BTC confirmed timestamp to epoch seconds string.
   String _parseBtcTimestamp(String? confirmed) {
     return (DateTime.parse(confirmed ?? '').millisecondsSinceEpoch ~/ 1000)
         .toString();
   }
 
-  /// Build InputModel list from BTC transaction inputs.
   List<InputModel>? _buildBtcInputModels(List<dynamic>? inputs) {
     if (inputs == null) return null;
     return [
@@ -261,7 +256,6 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
     ];
   }
 
-  /// Build OutputModel list from BTC transaction outputs.
   List<OutputModel>? _buildBtcOutputModels(List<dynamic>? outputs) {
     if (outputs == null) return null;
     return [
@@ -273,7 +267,6 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
     ];
   }
 
-  /// Solana transaction sync — maps SOLTransactionItem to local DB.
   Future<void> getTransactionDataNetworkSol(
       List<SOLTransactionItem>? cril) async {
     if (cril == null) return;
@@ -320,7 +313,6 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
     if (isEdit) getTransactionData(Load.refresh);
   }
 
-  /// Generic transaction sync for DOT / APT / TON — reuses CommonResponseItemModel.
   Future<void> getTransactionDataNetworkGeneric(
       List<CommonResponseItemModel>? cril) async {
     if (cril == null) return;
@@ -418,6 +410,5 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
     return false;
   }
 
-  /// Subclasses must provide access to the current CoinModel.
   dynamic getCoinModel();
 }

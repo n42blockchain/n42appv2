@@ -53,83 +53,51 @@ class _AAHomePageState extends State<AAHomePage> {
   }
 
   void _loadAccounts() {
-    if (widget.accountInfo != null) {
-      accounts = [];
-      for (final accountList in widget.accountInfo!.smartAccounts.values) {
-        accounts.addAll(accountList);
-      }
-    }
+    accounts = [
+      if (widget.accountInfo != null)
+        for (final list in widget.accountInfo!.smartAccounts.values) ...list,
+    ];
     setState(() {});
   }
 
+  Future<void> _pushPage(Widget page) =>
+      Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+
   void navigateToCreateAccount() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AAAccountCreatePage(
-          ownerAddress: widget.walletAddress,
-        ),
-      ),
-    ).then((_) => _loadAccounts());
+    _pushPage(AAAccountCreatePage(ownerAddress: widget.walletAddress))
+        .then((_) => _loadAccounts());
   }
 
   void navigateToAccountList() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AAAccountListPage(
-          walletAddress: widget.walletAddress,
-          accountInfo: widget.accountInfo,
-        ),
-      ),
-    );
+    _pushPage(AAAccountListPage(
+      walletAddress: widget.walletAddress,
+      accountInfo: widget.accountInfo,
+    ));
   }
 
   void navigateToAccountDetail(SmartAccount account) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AAAccountDetailPage(
-          account: account,
-          walletAddress: widget.walletAddress,
-        ),
-      ),
-    );
+    _pushPage(AAAccountDetailPage(
+      account: account,
+      walletAddress: widget.walletAddress,
+    ));
   }
 
   void navigateToSend(SmartAccount account) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AASendPage(
-          account: account,
-          walletAddress: widget.walletAddress,
-        ),
-      ),
-    );
+    _pushPage(AASendPage(
+      account: account,
+      walletAddress: widget.walletAddress,
+    ));
   }
 
   void navigateToBatchTransaction(SmartAccount account) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AABatchTransactionPage(
-          account: account,
-          walletAddress: widget.walletAddress,
-        ),
-      ),
-    );
+    _pushPage(AABatchTransactionPage(
+      account: account,
+      walletAddress: widget.walletAddress,
+    ));
   }
 
   void navigateToSessionKeys(SmartAccount account) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SessionKeyManagePage(
-          account: account,
-        ),
-      ),
-    );
+    _pushPage(SessionKeyManagePage(account: account));
   }
 
   @override
@@ -143,19 +111,12 @@ class _AAHomePageState extends State<AAHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // 顶部说明卡片
             buildHeaderCard(),
             SizedBox(height: ScreenUtil().setWidth(24)),
-
-            // 功能入口
             buildFeatureCards(),
             SizedBox(height: ScreenUtil().setWidth(24)),
-
-            // 高级功能
             buildAdvancedFeatures(),
             SizedBox(height: ScreenUtil().setWidth(24)),
-
-            // 智能账户列表
             buildAccountsSection(),
           ],
         ),

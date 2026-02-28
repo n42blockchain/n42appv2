@@ -40,8 +40,6 @@ class WalletChainSend extends ConsumerStatefulWidget {
 
 class _WalletChainSendState extends ConsumerState<WalletChainSend>
     with EnsResolveMixin, SendLogicMixin {
-  // ── SendLogicMixin abstract requirements ──────────────────────────────────
-
   @override
   CoinModel get coinModel => widget.coinModel;
 
@@ -53,8 +51,6 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
   @override
   set chainModel(CoinModel? v) => _chainModel = v;
 
-  // ── Lazy tool instances ───────────────────────────────────────────────────
-
   @override
   late final Regular regular = Regular();
 
@@ -65,8 +61,6 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
 
   late final AddressValidator addressValidator =
       AddressValidator(tokenViewApi: tokenViewApi);
-
-  // ── Input controllers ─────────────────────────────────────────────────────
 
   @override
   final TextEditingController toTextEditingController =
@@ -109,8 +103,6 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
       widget.coinModel.coin['coinType'] as String,
     );
   }
-
-  // ── Address validation ────────────────────────────────────────────────────
 
   @override
   Future<String?> toAddressCheck(String addr) async {
@@ -162,8 +154,6 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
     FocusScope.of(context).requestFocus(FocusNode());
   }
 
-  // ── Gas settings navigation ───────────────────────────────────────────────
-
   Future<void> _openGasSettings() async {
     if (gasEstimate == null) return;
     final result = await Navigator.push<GasEstimateModel>(
@@ -181,14 +171,10 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
     }
   }
 
-  // ── SendLogicMixin: WalletBaseSend factory ────────────────────────────────
-
   @override
   Widget buildWalletBaseSend(
           TransationRecordModel trModel, String chainUnit) =>
       WalletBaseSend(trModel, null, chainUnit);
-
-  // ── Scan / address picker / face match ───────────────────────────────────
 
   void scanQR() async {
     final nav = Navigator.of(context);
@@ -267,15 +253,11 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
     );
   }
 
-  // ── Theme helper ─────────────────────────────────────────────────────────
-
   Color _themeColor(AppThemeKeys key) =>
       AppThemeUtils.getColorByKey(context, key.name);
 
   bool get _isEvm =>
       widget.coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name;
-
-  // ── Build ─────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {

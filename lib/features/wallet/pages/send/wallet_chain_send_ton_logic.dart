@@ -72,36 +72,26 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
     await getGasPrice();
   }
 
-  // 获取余额
   Future<void> getBalance() async {
-    setState(() {
-      load = Load.loading;
-    });
+    setState(() => load = Load.loading);
     final bool isOk = await widget.coinModel.getBalance(getToken: false);
     if (!mounted) return;
-    if (isOk == false) {
-      load = Load.finish;
+    if (!isOk) {
       errorMessage = S.current.g_key_t_44;
       ToastUtils.show(S.current.g_key_t_44);
-      setState(() {});
-      return;
     }
+    setState(() => load = Load.finish);
   }
 
-  // 获取矿工费
   Future<void> getGasPrice() async {
-    totalGasPrice = BigInt.from(1000000); // gasPrice * gas
-    load = Load.finish;
-    setState(() {});
+    totalGasPrice = BigInt.from(1000000);
+    setState(() => load = Load.finish);
   }
 
-  // eth 模拟交易
   Future<dynamic> estimateGasEthLocal({bool checkAddress = true}) async {
     closeKeyboard();
     if (gasLimitLoad == Load.loading) return;
-    setState(() {
-      gasLimitLoad = Load.loading;
-    });
+    setState(() => gasLimitLoad = Load.loading);
 
     final isEthereum = _blockchainType == BlockchainType.Ethereum.name;
     final isTron = _blockchainType == BlockchainType.Tron.name;
@@ -175,17 +165,12 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
       errorMessage = e.toString();
       return false;
     } finally {
-      setState(() {
-        gasLimitLoad = Load.finish;
-      });
+      setState(() => gasLimitLoad = Load.finish);
     }
   }
 
-  // 检查 amount 输入是否正确
   void amountCheck({String value = ""}) {
-    if (value == "") {
-      value = valueTextEditingController.text;
-    }
+    if (value.isEmpty) value = valueTextEditingController.text;
     final int minValue = _decimals == 0 ? 1 : 0;
 
     if (value.isEmpty) {
@@ -194,51 +179,37 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
       return;
     }
 
-    bool checkValue1 = false;
-    if (_decimals == 0) {
-      checkValue1 = regular.regularNums(value);
-      if (checkValue1 == false) {
-        amountErrorMessage = S.of(context).g_key_134;
-        setState(() {});
-        return;
-      }
-    } else {
-      checkValue1 = regular.regularNums(value);
-    }
-
-    final bool checkValue = regular.regularDouble(value);
-    final double dValue = double.parse(value);
-
-    if (checkValue == false && checkValue1 == false) {
+    final checkValue1 = regular.regularNums(value);
+    if (_decimals == 0 && !checkValue1) {
       amountErrorMessage = S.of(context).g_key_134;
       setState(() {});
       return;
-    } else if (dValue < minValue || dValue == 0) {
-      amountErrorMessage = S.of(context).g_key_46(minValue);
-      setState(() {});
-      return;
     }
 
-    amountErrorMessage = "";
+    final checkValue = regular.regularDouble(value);
+    final dValue = double.parse(value);
+
+    if (!checkValue && !checkValue1) {
+      amountErrorMessage = S.of(context).g_key_134;
+    } else if (dValue <= 0 || dValue < minValue) {
+      amountErrorMessage = S.of(context).g_key_46(minValue);
+    } else {
+      amountErrorMessage = "";
+    }
     setState(() {});
   }
 
-  // 检查转账地址是否正确
   Future<String?> toAddressCheck(String addr) async {
-    if (addr == "") {
+    if (addr.isEmpty) {
       toErrorMessage = S.current.g_key_41;
       setState(() {});
       return null;
     }
-    final List<String> addrList = addr.split(":");
-    if (addrList.length == 2) {
-      addr = addrList[1];
-    }
-    final bool check =
-        await Trustdart().validateAddress(_coinType, addr);
-    if (!check ||
-        addr.toUpperCase() ==
-            widget.coinModel.address.toString().toUpperCase()) {
+    final parts = addr.split(":");
+    if (parts.length == 2) addr = parts[1];
+
+    final valid = await Trustdart().validateAddress(_coinType, addr);
+    if (!valid || addr.toUpperCase() == widget.coinModel.address.toString().toUpperCase()) {
       toErrorMessage = S.current.g_key_t_50;
       setState(() {});
       return null;
@@ -253,40 +224,30 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
       ToastUtils.show("loading");
       return;
     }
-    if (amountErrorMessage != "") return;
+    if (amountErrorMessage.isNotEmpty) return;
     closeKeyboard();
     amountCheck();
-    if (amountErrorMessage != "") return;
+    if (amountErrorMessage.isNotEmpty) return;
 
-    setState(() {
-      load = Load.loading;
-    });
+    setState(() => load = Load.loading);
 
     final String? toAddr =
         await toAddressCheck(toTextEditingController.text.trim());
     if (toAddr == null) {
-      setState(() {
-        load = Load.finish;
-      });
+      setState(() => load = Load.finish);
       return;
     }
 
-    BigInt uBalance = widget.coinModel.balance;
-    if (_isContract) {
-      uBalance = chainModel?.balance ?? BigInt.zero;
-    }
+    final uBalance = _isContract
+        ? (chainModel?.balance ?? BigInt.zero)
+        : widget.coinModel.balance;
     if (totalGasPrice > uBalance || widget.coinModel.balance == BigInt.zero) {
-      setState(() {
-        load = Load.finish;
-      });
+      setState(() => load = Load.finish);
       return;
     }
 
     if (!mounted) return;
-    transferValue = ethToWeiString(
-      valueTextEditingController.text,
-      _decimals,
-    );
+    transferValue = ethToWeiString(valueTextEditingController.text, _decimals);
 
     final TransationRecordModel trModel = TransationRecordModel();
     trModel.address = widget.coinModel.address.toString();
@@ -317,9 +278,7 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
     if (check) {
       signTx(trModel);
     } else {
-      setState(() {
-        load = Load.finish;
-      });
+      setState(() => load = Load.finish);
     }
   }
 
@@ -374,7 +333,6 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
     setState(() {});
   }
 
-  // 关闭键盘
   void closeKeyboard() {
     FocusScope.of(context).requestFocus(FocusNode());
   }

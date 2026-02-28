@@ -40,13 +40,11 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
   late GasSpeed _selectedSpeed;
   bool _isCustomMode = false;
 
-  // 自定义输入控制器
   final _gasLimitController = TextEditingController();
   final _gasPriceController = TextEditingController();
   final _maxPriorityFeeController = TextEditingController();
   final _maxFeeController = TextEditingController();
 
-  /// Shorthand for theme color lookup
   Color _themeColor(BuildContext context, AppThemeKeys key) =>
       AppThemeUtils.getColorByKey(context, key.name);
 
@@ -155,11 +153,8 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 网络状态指示
                     _buildNetworkStatus(context),
                     SizedBox(height: ScreenUtil().setWidth(30)),
-
-                    // Gas 速度选择器
                     GasSelectorWidget(
                       gasEstimate: _gasEstimate,
                       onSpeedChanged: _onSpeedChanged,
@@ -170,7 +165,6 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
 
                     SizedBox(height: ScreenUtil().setWidth(30)),
 
-                    // 自定义模式开关
                     if (widget.allowCustom) ...[
                       _buildCustomToggle(context),
                       if (_isCustomMode) ...[
@@ -183,7 +177,6 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
               ),
             ),
 
-            // 确认按钮
             _buildConfirmButton(context),
           ],
         ),
@@ -191,7 +184,6 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
     );
   }
 
-  /// Resolve network status (text, color, icon) from base fee level
   ({String text, Color color, IconData icon}) _resolveNetworkStatus(BuildContext context) {
     final baseFee = _gasEstimate.baseFee;
     final l10n = S.of(context);
