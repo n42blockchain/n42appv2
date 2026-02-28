@@ -133,9 +133,8 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
     }
   }
 
-  /// 搜索币列表
   Future<void> seachCoin() async {
-    if (inputEditingController.text != "" || networkIndex != -1) {
+    if (inputEditingController.text.isNotEmpty || networkIndex != -1) {
       try {
         coinlistSeach = [];
         final inputStr = inputEditingController.text.toLowerCase();
@@ -154,9 +153,8 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
     setState(() {});
   }
 
-  /// 检查转账地址是否正确
   Future<bool> addressCheck(String addr) async {
-    if (addr == "") {
+    if (addr.isEmpty) {
       tokenErrorMessage = S.of(context).g_key_41;
       return false;
     }

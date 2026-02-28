@@ -66,7 +66,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
                 ),
               ),
               SizedBox(width: ScreenUtil().setWidth(20.0)),
-              Expanded(flex: 1, child: amountBalanceWidget()),
+              Expanded(child: amountBalanceWidget()),
             ],
           ),
           containerStyle1(
@@ -172,16 +172,13 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
     );
   }
 
-  // Displays the sender's address in compact formatted form.
   Widget ownerAddress() {
     final String addr =
         dataUtils.addressFarmat(widget.coinModel.address.toString());
-    return Container(
-      padding: EdgeInsets.only(
-        top: ScreenUtil().setWidth(20.0),
-        bottom: ScreenUtil().setWidth(20.0),
-        right: ScreenUtil().setWidth(30.0),
-        left: ScreenUtil().setWidth(30.0),
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: ScreenUtil().setWidth(20.0),
+        horizontal: ScreenUtil().setWidth(30.0),
       ),
       child: Text(
         addr,
@@ -254,7 +251,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
               fontSize: ScreenUtil().setSp(30.0),
             ),
           ),
-          const Expanded(flex: 1, child: SizedBox()),
+          const Spacer(),
           Text(
             '$gasFees ${widget.coinModel.coin['unit']}',
             style: TextStyle(
@@ -268,16 +265,14 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
               width: ScreenUtil().setWidth(36.0),
               margin: EdgeInsets.only(right: ScreenUtil().setWidth(20.0)),
               child: const CircularProgressIndicator(),
-            )
-          else
-            const SizedBox(),
+            ),
         ],
       ),
     );
   }
 
   Widget errorMessageWidget() {
-    if (errorMessage == '') return const SizedBox();
+    if (errorMessage.isEmpty) return const SizedBox.shrink();
     return Container(
       margin: EdgeInsets.only(
         top: ScreenUtil().setWidth(20.0),

@@ -241,11 +241,9 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
 
   void _toggleSelection(int index) {
     setState(() {
-      if (_selectedIndexes.contains(index)) {
-        _selectedIndexes.remove(index);
-      } else {
-        _selectedIndexes.add(index);
-      }
+      _selectedIndexes.contains(index)
+          ? _selectedIndexes.remove(index)
+          : _selectedIndexes.add(index);
     });
   }
 

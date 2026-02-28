@@ -66,7 +66,6 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
     await getGasPrice();
   }
 
-  // 获取余额
   Future<void> getBalance() async {
     load = Load.loading;
     setState(() {});
@@ -75,12 +74,11 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
     if (!isOk) {
       load = Load.finish;
       errorMessage = S.current.g_key_t_44;
-      ToastUtils.show(S.current.g_key_t_44);
+      ToastUtils.show(errorMessage);
       setState(() {});
     }
   }
 
-  // 获取矿工费
   Future<void> getGasPrice() async {
     load = Load.loading;
     setState(() {});
@@ -97,7 +95,6 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
     setState(() {});
   }
 
-  // eth 模拟交易
   Future<dynamic> estimateGasEthLocal({bool checkAddress = true}) async {
     closeKeyboard();
     if (gasLimitLoad == Load.loading) return;
@@ -150,9 +147,8 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
     }
   }
 
-  // 检查 amount 输入是否正确
   void amountCheck({String value = ""}) {
-    if (value == "") {
+    if (value.isEmpty) {
       value = valueTextEditingController.text;
     }
     final int decimals = widget.coinModel.coin['decimals'] as int;
@@ -199,9 +195,8 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
     setState(() {});
   }
 
-  // 检查转账地址是否正确
   Future<String?> toAddressCheck(String addr) async {
-    if (addr == "") {
+    if (addr.isEmpty) {
       toErrorMessage = S.current.g_key_41;
       setState(() {});
       return null;
