@@ -55,20 +55,16 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
 
   // ── Lazy tool instances ───────────────────────────────────────────────────
 
-  Regular? _regular;
   @override
-  Regular get regular => _regular ??= Regular();
+  late final Regular regular = Regular();
 
-  DataUtils? _dataUtils;
-  DataUtils get dataUtils => _dataUtils ??= DataUtils();
+  late final DataUtils dataUtils = DataUtils();
 
-  TokenViewApi? _tokenViewApi;
   @override
-  TokenViewApi get tokenViewApi => _tokenViewApi ??= TokenViewApi();
+  late final TokenViewApi tokenViewApi = TokenViewApi();
 
-  AddressValidator? _addressValidator;
-  AddressValidator get addressValidator =>
-      _addressValidator ??= AddressValidator(tokenViewApi: tokenViewApi);
+  late final AddressValidator addressValidator =
+      AddressValidator(tokenViewApi: tokenViewApi);
 
   // ── Input controllers ─────────────────────────────────────────────────────
 
@@ -229,6 +225,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
   }
 
   Widget _faceMatchOption(BuildContext context, int mode, String label) {
+    final sw = ScreenUtil().setWidth;
     return InkWell(
       onTap: () async {
         final nav = Navigator.of(context);
@@ -244,14 +241,13 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
         nav.pop();
       },
       child: SizedBox(
-        height: ScreenUtil().setWidth(88.0),
+        height: sw(88.0),
         width: double.infinity,
         child: Text(
           label,
           style: TextStyle(
-            fontSize: ScreenUtil().setWidth(32.0),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
+            fontSize: sw(32.0),
+            color: _themeColor(AppThemeKeys.mainTextColor),
           ),
           textAlign: TextAlign.center,
         ),
@@ -270,6 +266,14 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
       isEvm: true,
     );
   }
+
+  // ── Theme helper ─────────────────────────────────────────────────────────
+
+  Color _themeColor(AppThemeKeys key) =>
+      AppThemeUtils.getColorByKey(context, key.name);
+
+  bool get _isEvm =>
+      widget.coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name;
 
   // ── Build ─────────────────────────────────────────────────────────────────
 
@@ -299,11 +303,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
   }
 
   Widget _buildScrollContent() {
-    final isEth = widget.coinModel.coin['blockchainType'] ==
-        BlockchainType.Ethereum.name;
-    final isContract =
-        widget.coinModel.coin['isContract'] as bool? ?? false;
-
+    final isContract = widget.coinModel.coin['isContract'] as bool? ?? false;
     return Column(
       children: [
         RecentAddressBar(
@@ -333,7 +333,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
           onEditingComplete: amountCheck,
           onMaxTap: maxTag,
         ),
-        if (isEth && !isContract)
+        if (_isEvm && !isContract)
           SendNoteWidget(
             controller: noteTextEditingController,
             focusNode: noteNode,
@@ -353,9 +353,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
   }
 
   Widget _buildMinerFee() {
-    final isEvm = widget.coinModel.coin['blockchainType'] ==
-        BlockchainType.Ethereum.name;
-    if (gasEstimate != null && useAdvancedGas && isEvm) {
+    if (gasEstimate != null && useAdvancedGas && _isEvm) {
       return AdvancedMinerFeeWidget(
         coinModel: widget.coinModel,
         chainModel: _chainModel,
@@ -375,32 +373,28 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
 
   Widget _buildSendButton() {
     final isLoading = load == Load.loading;
+    final sw = ScreenUtil().setWidth;
     return Positioned(
       left: 0,
       right: 0,
       bottom: 0,
       child: Column(
         children: [
-          Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
+          Divider(height: sw(1), indent: 0, endIndent: 0),
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
-            height: ScreenUtil().setWidth(148.0),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.backGroundColor.name),
+            padding: EdgeInsets.all(sw(30.0)),
+            height: sw(148.0),
+            color: _themeColor(AppThemeKeys.backGroundColor),
             child: buttonStyle6(
               context,
-              () => sendTransaction(),
+              sendTransaction,
               isLoading
                   ? '${S.of(context).g_key_106}...'
                   : S.of(context).g_key_48,
-              AppThemeUtils.getColorByKey(
-                context,
-                isLoading
-                    ? AppThemeKeys.mainButtonBgColor3.name
-                    : AppThemeKeys.mainButtonBgColor.name,
-              ),
-              AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonTextColor.name),
+              _themeColor(isLoading
+                  ? AppThemeKeys.mainButtonBgColor3
+                  : AppThemeKeys.mainButtonBgColor),
+              _themeColor(AppThemeKeys.mainButtonTextColor),
               isLoading,
             ),
           ),

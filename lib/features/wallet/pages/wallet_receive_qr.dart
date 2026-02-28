@@ -120,19 +120,25 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
   }
 
   void _initData() {
-    network = widget.chainCoinModel.coin['name'] ?? '';
-    logoUrl = widget.chainCoinModel.coin['icon'] ?? '';
-    blockchainType = widget.chainCoinModel.coin['blockchainType'] ?? '';
-    // coinType 始终取主链（用于品牌色；token 地址也在同一链上）
-    coinType = widget.chainCoinModel.coin['coinType'] ?? '';
+    _applyChainData(
+      widget.chainCoinModel,
+      displayModel: widget.tokenCoinModel ?? widget.chainCoinModel,
+    );
+  }
 
-    if (widget.tokenCoinModel == null) {
-      symbol = widget.chainCoinModel.coin['miniName'] ?? '';
-      address = widget.chainCoinModel.address;
-    } else {
-      symbol = widget.tokenCoinModel!.coin['miniName'] ?? '';
-      address = widget.tokenCoinModel!.address;
-    }
+  /// 从 CoinModel 提取链和显示数据到字段。
+  ///
+  /// [chainModel] 用于链级别属性（name/icon/blockchainType/coinType），
+  /// [displayModel] 用于显示属性（miniName/address），默认同 chainModel。
+  void _applyChainData(CoinModel chainModel, {CoinModel? displayModel}) {
+    final dm = displayModel ?? chainModel;
+    network = chainModel.coin['name'] ?? '';
+    logoUrl = chainModel.coin['icon'] ?? '';
+    blockchainType = chainModel.coin['blockchainType'] ?? '';
+    // coinType 始终取主链（用于品牌色；token 地址也在同一链上）
+    coinType = chainModel.coin['coinType'] ?? '';
+    symbol = dm.coin['miniName'] ?? '';
+    address = dm.address;
     qrData = address;
   }
 
@@ -149,13 +155,7 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
   void _switchChain(CoinModel cm) {
     if (cm.address.isEmpty) return;
     setState(() {
-      network = cm.coin['name'] ?? '';
-      logoUrl = cm.coin['icon'] ?? '';
-      blockchainType = cm.coin['blockchainType'] ?? '';
-      coinType = cm.coin['coinType'] ?? '';
-      symbol = cm.coin['miniName'] ?? '';
-      address = cm.address;
-      qrData = address;
+      _applyChainData(cm);
       amountCtrl.clear(); // 不同链单位不同，清空金额
     });
   }
@@ -228,6 +228,7 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
   @override
   Widget build(BuildContext context) {
     final waValue = ref.watch(wapBridgeProvider);
+    final su = ScreenUtil();
 
     final bgColor = AppThemeUtils.getColorByKey(
         context, AppThemeKeys.backGroundColor.name);
@@ -235,7 +236,7 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
         context, AppThemeKeys.mainTextColor.name);
     final blueColor = AppThemeUtils.getColorByKey(
         context, AppThemeKeys.mainBlueColor.name);
-    final cc = chainColor;
+    final w40 = su.setWidth(40.0);
 
     return Scaffold(
       appBar: AppBarWidget(
@@ -244,38 +245,32 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
           InkWell(
             onTap: _shareScreenshot,
             child: Container(
-              width: ScreenUtil().setWidth(40.0),
-              height: ScreenUtil().setWidth(40.0),
-              margin: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(30.0)),
-              child: Icon(
-                Icons.share,
-                size: ScreenUtil().setWidth(40.0),
-                color: blueColor,
-              ),
+              width: w40,
+              height: w40,
+              margin: EdgeInsets.symmetric(horizontal: su.setWidth(30.0)),
+              child: Icon(Icons.share, size: w40, color: blueColor),
             ),
           ),
         ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding:
-              EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(24)),
+          padding: EdgeInsets.symmetric(vertical: su.setWidth(24)),
           child: Column(
             children: [
-              // ── 链选择器（不进截图）──────────────────────────────────────────
+              // ── 链选择器（不进截图）
               buildChainSelector(waValue.coinModels, blueColor, mainText),
-              SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: su.setWidth(20)),
 
-              // ── QR 卡片 ──────────────────────────────────────────────────────
+              // ── QR 卡片
               buildQrCard(
                 bgColor: bgColor,
                 mainText: mainText,
                 blueColor: blueColor,
-                chainColor: cc,
+                chainColor: chainColor,
               ),
 
-              // ── 交互区 ──────────────────────────────────────────────────────
+              // ── 交互区
               buildInteractionArea(
                 mainText: mainText,
                 blueColor: blueColor,

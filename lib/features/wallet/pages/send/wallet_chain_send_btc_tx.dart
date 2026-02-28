@@ -7,15 +7,13 @@ part of 'wallet_chain_send_btc.dart';
 mixin _BtcSendTxMixin on _BtcSendLogicMixin {
   // Fetch UTXO list (paginated). Pass allUTXO=true to load all pages.
   Future<void> getUTXO({bool allUTXO = false}) async {
+    if (utxoLoad == Load.loading || utxoLastPage) return;
+    utxoLoad = Load.loading;
+    setState(() {});
     try {
-      if (utxoLoad == Load.loading) return;
-      if (utxoLastPage) return;
-      utxoLoad = Load.loading;
-      setState(() {});
-      String utxoPath = widget.coinModel.address;
-      if (widget.coinModel.coin['coinType'] == CoinType.BCH.name) {
-        utxoPath = widget.coinModel.addressType['legacy'];
-      }
+      final utxoPath = widget.coinModel.coin['coinType'] == CoinType.BCH.name
+          ? widget.coinModel.addressType['legacy'] as String
+          : widget.coinModel.address;
       final mm = await tokenViewApi.getUTXOBtc(
         widget.coinModel.coin['coinType'],
         utxoPath,
@@ -28,20 +26,20 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
         ToastUtils.show(errorMessage);
         utxoLoad = Load.finish;
         setState(() {});
+        return;
+      }
+      unspents.addAll(mm.data);
+      if (unspents.length < utxoPageSize * utxoPageNum) {
+        utxoLastPage = true;
       } else {
-        unspents.addAll(mm.data);
-        if (unspents.length < (utxoPageSize * utxoPageNum)) {
-          utxoLastPage = true;
-        } else {
-          utxoPageNum++;
-        }
-        utxoLoad = Load.finish;
-        setState(() {});
-        if (allUTXO) {
-          getUTXO(allUTXO: allUTXO);
-        } else {
-          calculateGasFee();
-        }
+        utxoPageNum++;
+      }
+      utxoLoad = Load.finish;
+      setState(() {});
+      if (allUTXO) {
+        getUTXO(allUTXO: allUTXO);
+      } else {
+        calculateGasFee();
       }
     } catch (e) {
       errorMessage = e.toString();
@@ -124,25 +122,21 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
     }
     trModel = await transatroinBuilder1To1(trModel, unspents);
     if (!mounted) return;
-    if (trModel.txHash != '') {
-      await AppDatabase().insertBtcTransactionRecord(trModel);
-      if (!mounted) return;
-      ref.read(tripBridgeProvider).addUndoneTr(trModel, 0);
-      await RecentAddressService.save(
-        widget.coinModel.coin['coinType'] ?? '',
-        toTextEditingController.text.trim(),
-      );
-      ToastUtils.show(S.current.g_key_nft_41);
-      if (toTextFieldEnabel == false) {
-        Navigator.pop(context, trModel.txHash);
-      } else {
-        Navigator.pop(context);
-      }
-    } else {
+    if (trModel.txHash == '') {
       ToastUtils.show(errorMessage);
       load = Load.finish;
       setState(() {});
+      return;
     }
+    await AppDatabase().insertBtcTransactionRecord(trModel);
+    if (!mounted) return;
+    ref.read(tripBridgeProvider).addUndoneTr(trModel, 0);
+    await RecentAddressService.save(
+      widget.coinModel.coin['coinType'] ?? '',
+      toTextEditingController.text.trim(),
+    );
+    ToastUtils.show(S.current.g_key_nft_41);
+    Navigator.pop(context, toTextFieldEnabel ? null : trModel.txHash);
   }
 
   // Build and sign a 1-to-1 BTC transaction from the UTXO list.

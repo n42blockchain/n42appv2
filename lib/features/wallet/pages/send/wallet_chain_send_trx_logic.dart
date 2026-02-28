@@ -68,30 +68,25 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
 
   // 获取余额
   Future<void> getBalance() async {
-    setState(() {
-      load = Load.loading;
-    });
+    load = Load.loading;
+    setState(() {});
     final bool isOk = await widget.coinModel.getBalance(getToken: false);
     if (!mounted) return;
-    if (isOk == false) {
+    if (!isOk) {
       load = Load.finish;
       errorMessage = S.current.g_key_t_44;
       ToastUtils.show(S.current.g_key_t_44);
       setState(() {});
-      return;
     }
   }
 
   // 获取矿工费
   Future<void> getGasPrice() async {
-    setState(() {
-      load = Load.loading;
-    });
-    final MessageModel mm = await TrxApi().getGasPriceTrx(
-      isTest: widget.coinModel.isTest,
-    );
+    load = Load.loading;
+    setState(() {});
+    final mm = await TrxApi().getGasPriceTrx(isTest: widget.coinModel.isTest);
     if (!mounted) return;
-    if (mm.error == false) {
+    if (!mm.error) {
       gasPrice = mm.data;
     } else {
       errorMessage = mm.data.toString();
@@ -106,31 +101,26 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
   Future<dynamic> estimateGasEthLocal({bool checkAddress = true}) async {
     closeKeyboard();
     if (gasLimitLoad == Load.loading) return;
-    setState(() {
-      gasLimitLoad = Load.loading;
-    });
+    gasLimitLoad = Load.loading;
+    setState(() {});
     try {
       String? toAddr;
       if (checkAddress) {
         if (amountErrorMessage != "") return;
         toAddr = await toAddressCheck(toTextEditingController.text.trim());
-        if (toAddr == null) {
-          return;
-        }
+        if (toAddr == null) return;
       } else {
         toAddr = toTextEditingController.text.trim();
       }
       if (toErrorMessage != "") return;
-      final String price = valueTextEditingController.text;
-      if (price == "") {
-        return;
-      }
-      final BigInt gaslimit = BigInt.from(getCoinGas(
+      final price = valueTextEditingController.text;
+      if (price == "") return;
+
+      final gaslimit = BigInt.from(getCoinGas(
         widget.coinModel.coin['coinType'],
         contract: widget.coinModel.coin['isContract'],
       ));
-      final TrxApi trxApi = TrxApi();
-      final MessageModel ethMessage = await trxApi.getGasEstimateTrx(
+      final ethMessage = await TrxApi().getGasEstimateTrx(
         widget.coinModel.address,
         toAddr,
         gasPrice,
@@ -143,22 +133,20 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
       );
       if (!mounted) return false;
 
-      if (ethMessage.error == false) {
+      if (!ethMessage.error) {
         gas = ethMessage.data;
         totalGasPrice = gasPrice * gas;
         errorMessage = "";
         return true;
-      } else {
-        errorMessage = ethMessage.data;
-        return false;
       }
+      errorMessage = ethMessage.data;
+      return false;
     } catch (e) {
       errorMessage = e.toString();
       return false;
     } finally {
-      setState(() {
-        gasLimitLoad = Load.finish;
-      });
+      gasLimitLoad = Load.finish;
+      if (mounted) setState(() {});
     }
   }
 
@@ -167,50 +155,45 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
     if (value == "") {
       value = valueTextEditingController.text;
     }
-    int minValue = 0;
-    if (widget.coinModel.coin['decimals'] == 0) {
-      minValue = 1;
-    }
+    final int decimals = widget.coinModel.coin['decimals'] as int;
+    final int minValue = decimals == 0 ? 1 : 0;
+
     if (value.isEmpty) {
       amountErrorMessage = S.of(context).g_key_46(minValue);
       setState(() {});
       return;
     }
-    bool checkValue1 = false;
-    if (widget.coinModel.coin['decimals'] == 0) {
-      checkValue1 = _regular.regularNums(value.toString());
-      if (checkValue1 == false) {
-        amountErrorMessage = S.of(context).g_key_134;
-        setState(() {});
-        return;
-      }
-    } else {
-      checkValue1 = _regular.regularNums(value.toString());
-    }
-    final bool checkValue = _regular.regularDouble(value.toString());
-    final double dValue = double.parse(value);
-    if (checkValue == false && checkValue1 == false) {
+
+    final bool isInteger = _regular.regularNums(value);
+    final bool isDouble = _regular.regularDouble(value);
+
+    // 整数精度币种必须为整数
+    if (decimals == 0 && !isInteger) {
       amountErrorMessage = S.of(context).g_key_134;
       setState(() {});
       return;
-    } else if (dValue < minValue) {
-      amountErrorMessage = S.of(context).g_key_46(minValue);
+    }
+    if (!isDouble && !isInteger) {
+      amountErrorMessage = S.of(context).g_key_134;
       setState(() {});
       return;
-    } else if (dValue == 0) {
+    }
+
+    final double dValue = double.parse(value);
+    if (dValue <= 0 || dValue < minValue) {
       amountErrorMessage = S.of(context).g_key_46(minValue);
       setState(() {});
       return;
     }
-    final BigInt valueBi =
-        ethToWeiString(value, widget.coinModel.coin['decimals']);
-    if (widget.coinModel.coin['isContract'] == false) {
-      if (valueBi + totalGasPrice > widget.coinModel.balance) {
-        amountErrorMessage = S.of(context).g_key_47;
-        setState(() {});
-        return;
-      }
+
+    final BigInt valueBi = ethToWeiString(value, decimals);
+    if (widget.coinModel.coin['isContract'] == false &&
+        valueBi + totalGasPrice > widget.coinModel.balance) {
+      amountErrorMessage = S.of(context).g_key_47;
+      setState(() {});
+      return;
     }
+
     transferValue = valueBi;
     amountErrorMessage = "";
     setState(() {});
@@ -223,28 +206,22 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
       setState(() {});
       return null;
     }
-    final List<String> addrList = addr.split(":");
-    if (addrList.length == 2) {
-      addr = addrList[1];
+    final parts = addr.split(":");
+    if (parts.length == 2) {
+      addr = parts[1];
     }
-    final bool check = await Trustdart()
+    final isValid = await Trustdart()
         .validateAddress(widget.coinModel.coin['coinType'], addr);
-    if (check) {
-      if (addr.toUpperCase() ==
-          widget.coinModel.address.toString().toUpperCase()) {
-        toErrorMessage = S.current.g_key_t_50;
-        setState(() {});
-        return null;
-      } else {
-        toErrorMessage = "";
-        setState(() {});
-        return addr;
-      }
-    } else {
+    if (!isValid ||
+        addr.toUpperCase() ==
+            widget.coinModel.address.toString().toUpperCase()) {
       toErrorMessage = S.current.g_key_t_50;
       setState(() {});
       return null;
     }
+    toErrorMessage = "";
+    setState(() {});
+    return addr;
   }
 
   Future<void> sendTransaction() async {
@@ -255,63 +232,49 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
     if (amountErrorMessage != "") return;
     closeKeyboard();
     amountCheck();
-    if (amountErrorMessage != "") {
-      return;
-    }
-    setState(() {
-      load = Load.loading;
-    });
+    if (amountErrorMessage != "") return;
+
+    setState(() => load = Load.loading);
+
     final String? toAddr =
         await toAddressCheck(toTextEditingController.text.trim());
     if (toAddr == null) {
-      setState(() {
-        load = Load.finish;
-      });
+      setState(() => load = Load.finish);
       return;
     }
     await estimateGasEthLocal(checkAddress: false);
     if (errorMessage != "") {
-      setState(() {
-        load = Load.finish;
-      });
+      setState(() => load = Load.finish);
       return;
     }
-    BigInt uBalance = widget.coinModel.balance;
-    if (widget.coinModel.coin['isContract']) {
-      uBalance = chainModel?.balance ?? BigInt.zero;
-    }
-    if (totalGasPrice > uBalance) {
-      setState(() {
-        load = Load.finish;
-      });
-      return;
-    }
-    if (widget.coinModel.balance == BigInt.zero) {
-      setState(() {
-        load = Load.finish;
-      });
+    final BigInt uBalance = widget.coinModel.coin['isContract']
+        ? (chainModel?.balance ?? BigInt.zero)
+        : widget.coinModel.balance;
+    if (totalGasPrice > uBalance || widget.coinModel.balance == BigInt.zero) {
+      setState(() => load = Load.finish);
       return;
     }
     if (!mounted) return;
-    final TransationRecordModel trModel = TransationRecordModel();
-    trModel.address = widget.coinModel.address.toString();
-    trModel.from1 = widget.coinModel.address.toString();
-    trModel.to1 = toAddr;
-    trModel.addrType = widget.coinModel.addrType;
-    trModel.coin = widget.coinModel.coin;
-    trModel.coinMiniName = widget.coinModel.coin['coinType'];
-    trModel.walletIndex = ref.read(wapBridgeProvider).walletIndex;
-    trModel.contract = widget.coinModel.isTest
-        ? widget.coinModel.coin['contract_test']
-        : widget.coinModel.coin['contract'];
-    trModel.isTest = widget.coinModel.isTest ? 1 : 0;
-    trModel.gasPrice = totalGasPrice;
-    trModel.gas = gas.toInt();
-    trModel.gasPriceValue = gasPrice;
-    trModel.price = transferValue;
-    final String feeUnit = chainModel == null
-        ? widget.coinModel.coin['unit'].toString().toUpperCase()
-        : chainModel!.coin['unit'].toString().toUpperCase();
+
+    final trModel = TransationRecordModel()
+      ..address = widget.coinModel.address.toString()
+      ..from1 = widget.coinModel.address.toString()
+      ..to1 = toAddr
+      ..addrType = widget.coinModel.addrType
+      ..coin = widget.coinModel.coin
+      ..coinMiniName = widget.coinModel.coin['coinType']
+      ..walletIndex = ref.read(wapBridgeProvider).walletIndex
+      ..contract = widget.coinModel.isTest
+          ? widget.coinModel.coin['contract_test']
+          : widget.coinModel.coin['contract']
+      ..isTest = widget.coinModel.isTest ? 1 : 0
+      ..gasPrice = totalGasPrice
+      ..gas = gas.toInt()
+      ..gasPriceValue = gasPrice
+      ..price = transferValue;
+
+    final feeUnit =
+        (chainModel ?? widget.coinModel).coin['unit'].toString().toUpperCase();
     final bool check = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -322,9 +285,7 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
     if (check) {
       signTx(trModel);
     } else {
-      setState(() {
-        load = Load.finish;
-      });
+      setState(() => load = Load.finish);
     }
   }
 
@@ -400,7 +361,6 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
     setState(() {});
   }
 
-  // 关闭键盘
   void closeKeyboard() {
     FocusScope.of(context).requestFocus(FocusNode());
   }

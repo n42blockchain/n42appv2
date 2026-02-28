@@ -13,6 +13,9 @@ import 'package:web3dart/web3dart.dart';
 
 import 'token_api_base.dart';
 
+/// Net mode string from isTest flag.
+String _netMode(bool isTest) => isTest ? 'test' : 'main';
+
 /// Ethereum and EVM-compatible chain API methods
 ///
 /// Provides balance, gas estimation, transaction, and nonce methods
@@ -35,52 +38,38 @@ mixin EthTokenApiMixin on TokenApiBase {
     String? rpc,
   }) async {
     try {
-      if (rpc == null) {
-        dynamic a;
-        if (contract.isEmpty) {
-          final params = <String, dynamic>{
-            'address': address,
-            'coin': coinType.toLowerCase(),
-            'net_mode': isTest ? 'test' : 'main',
-            'tag': 'latest',
-          };
-          a = await httpClient.post(
-            '${url}v2/eth/balance',
-            params: params,
-            data: params,
-            header: header,
-          );
-        } else {
-          final params = <String, dynamic>{
-            'from': address,
-            'to': contract,
-            'coin': coinType.toLowerCase(),
-            'net_mode': isTest ? 'test' : 'main',
-            'tag': 'latest',
-          };
-          a = await httpClient.post(
-            '${url}v2/eth/call',
-            params: params,
-            data: params,
-            header: header,
-          );
-        }
-
-        final mm = MessageModel.error();
-        if (a['code'] == 200) {
-          mm.error = false;
-          String result = a['data']['result'];
-          if (result == '0x') {
-            result = '0x0';
-          }
-          mm.data = hexToInt(result);
-        } else {
-          mm.data = errorMessage(a['code']);
-        }
-        return mm;
-      } else {
+      if (rpc != null) {
         return await EthAPI.init(null, rpc, null).getBalance(address, contract);
       }
+
+      final coin = coinType.toLowerCase();
+      final netMode = _netMode(isTest);
+
+      final String endpoint;
+      final Map<String, dynamic> params;
+      if (contract.isEmpty) {
+        endpoint = '${url}v2/eth/balance';
+        params = {
+          'address': address, 'coin': coin, 'net_mode': netMode, 'tag': 'latest',
+        };
+      } else {
+        endpoint = '${url}v2/eth/call';
+        params = {
+          'from': address, 'to': contract, 'coin': coin, 'net_mode': netMode, 'tag': 'latest',
+        };
+      }
+
+      final response = await httpClient.post(endpoint, params: params, data: params, header: header);
+      final mm = MessageModel.error();
+      if (response['code'] == 200) {
+        mm.error = false;
+        String result = response['data']['result'];
+        if (result == '0x') result = '0x0';
+        mm.data = hexToInt(result);
+      } else {
+        mm.data = errorMessage(response['code']);
+      }
+      return mm;
     } catch (e) {
       return createError(e.toString());
     }
@@ -89,21 +78,23 @@ mixin EthTokenApiMixin on TokenApiBase {
   /// Get all token balances for an ETH address
   Future<MessageModel> getAllTokenBalanceEth(String coinType, String address) async {
     try {
-      final a = await httpClient.get(
+      final response = await httpClient.get(
         '${url}v1/vipapi/eth-class/address/balance?coin=${coinType.toLowerCase()}&address=${address.toLowerCase()}',
         params: <String, dynamic>{},
         header: header,
       );
 
+      final code = response['code'];
       final mm = MessageModel.error();
-      if (a['code'] == 1 || a['code'] == 0) {
-        mm.error = false;
-        mm.data = a['data'];
-      } else if (a['code'] == 404 || a['code'] == 400) {
-        mm.error = false;
-        mm.data = [];
-      } else {
-        mm.data = errorMessage(a['code']);
+      switch (code) {
+        case 0 || 1:
+          mm.error = false;
+          mm.data = response['data'];
+        case 400 || 404:
+          mm.error = false;
+          mm.data = [];
+        default:
+          mm.data = errorMessage(code);
       }
       return mm;
     } catch (e) {
@@ -158,7 +149,7 @@ mixin EthTokenApiMixin on TokenApiBase {
     final gasPriceHex = '0x${gasPrice.toRadixString(16)}';
     final gasPriceKey = get1559WithChainSymbol(coinType) ? 'maxFeePerGas' : 'gasPrice';
     final gasHex = '0x${gas.toRadixString(16)}';
-    final netMode = isTest ? 'test' : 'main';
+    final netMode = _netMode(isTest);
 
     final Map<String, dynamic> params;
     if (contract.isEmpty) {
@@ -189,7 +180,7 @@ mixin EthTokenApiMixin on TokenApiBase {
     Map<String, dynamic> params, {
     bool parseHex = false,
   }) async {
-    final a = await httpClient.post('${url}$endpoint', params: params, data: params, header: header);
+    final a = await httpClient.post('$url$endpoint', params: params, data: params, header: header);
     final mm = MessageModel.error();
     if (a['code'] == 200) {
       if (a['data']['error']['code'] != 0) {
@@ -249,15 +240,15 @@ mixin EthTokenApiMixin on TokenApiBase {
     try {
       if (rpc != null) return EthAPI.init(null, rpc, null).getTransactionReceipt(txHash);
       final params = <String, dynamic>{
-        'tx_hash': txHash, 'coin': coinType, 'net_mode': isTest ? 'test' : 'main',
+        'tx_hash': txHash, 'coin': coinType, 'net_mode': _netMode(isTest),
       };
-      final a = await httpClient.post('${url}v2/eth/transaction/receipt', params: params, data: params, header: header);
+      final response = await httpClient.post('${url}v2/eth/transaction/receipt', params: params, data: params, header: header);
       final mm = MessageModel.error();
-      if (a['code'] == 200) {
+      if (response['code'] == 200) {
         mm.error = false;
-        mm.data = a['data'];
+        mm.data = response['data'];
       } else {
-        mm.data = errorMessage(a['code']);
+        mm.data = errorMessage(response['code']);
       }
       return mm;
     } catch (e) {
@@ -274,7 +265,7 @@ mixin EthTokenApiMixin on TokenApiBase {
     try {
       if (rpc != null) return EthAPI.init(null, rpc, null).getGasPrice();
       return _postWithErrorCheck('v2/eth/gas/price', {
-        'coin': coinType, 'net_mode': isTest ? 'test' : 'main',
+        'coin': coinType, 'net_mode': _netMode(isTest),
       }, parseHex: true);
     } catch (e) {
       return createError(e.toString());
@@ -284,18 +275,18 @@ mixin EthTokenApiMixin on TokenApiBase {
   /// Resolve ENS domain to address
   Future<MessageModel> getEnsResolve(String domain) async {
     try {
-      final a = await httpClient.get(
+      final response = await httpClient.get(
         '${url}v1/ens/resolve?domain=$domain',
         params: <String, dynamic>{},
         header: header,
       );
 
       final mm = MessageModel();
-      if (a['code'] == 200) {
-        mm.data = a['data'];
+      if (response['code'] == 200) {
+        mm.data = response['data'];
       } else {
         mm.error = true;
-        mm.data = errorMessage(a['code']);
+        mm.data = errorMessage(response['code']);
       }
       return mm;
     } catch (e) {

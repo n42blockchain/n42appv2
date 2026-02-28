@@ -171,34 +171,23 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
   }
 
   void _checkAlerts() {
-    final prices = <String, double>{};
-    final names = <String, String>{};
-    for (final n in _networks) {
-      final d = _gasData[n.symbol];
-      if (d != null) prices[n.symbol] = d.gasPrice;
-      names[n.symbol] = n.name;
-    }
+    final prices = {
+      for (final n in _networks)
+        if (_gasData[n.symbol] != null) n.symbol: _gasData[n.symbol]!.gasPrice,
+    };
+    final names = {for (final n in _networks) n.symbol: n.name};
     GasAlertService.checkAndNotify(prices, names);
   }
 
-  String _getRpcUrl(String symbol) {
-    switch (symbol) {
-      case 'ETH':
-        return RpcConfig.ethMainnetRpc;
-      case 'BNB':
-        return RpcConfig.bscMainnetRpc;
-      case 'MATIC':
-        return RpcConfig.polygonMainnetRpc;
-      case 'ARB':
-        return RpcConfig.arbitrumMainnetRpc;
-      case 'OP':
-        return RpcConfig.optimismMainnetRpc;
-      case 'AVAX':
-        return RpcConfig.avalancheMainnetRpc;
-      default:
-        return '';
-    }
-  }
+  String _getRpcUrl(String symbol) => switch (symbol) {
+    'ETH'  => RpcConfig.ethMainnetRpc,
+    'BNB'  => RpcConfig.bscMainnetRpc,
+    'MATIC' => RpcConfig.polygonMainnetRpc,
+    'ARB'  => RpcConfig.arbitrumMainnetRpc,
+    'OP'   => RpcConfig.optimismMainnetRpc,
+    'AVAX' => RpcConfig.avalancheMainnetRpc,
+    _      => '',
+  };
 
   // ── 提醒配置底部弹窗 ─────────────────────────────────────
 
@@ -267,11 +256,12 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
   }
 
   Widget _buildContent() {
+    final spacing = ScreenUtil().setWidth(24);
     return ListView(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(spacing),
       children: [
         buildHeader(),
-        SizedBox(height: ScreenUtil().setWidth(24)),
+        SizedBox(height: spacing),
         ..._networks.map(buildNetworkCard),
         SizedBox(height: ScreenUtil().setWidth(16)),
         buildFooter(),
