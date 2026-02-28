@@ -138,12 +138,10 @@ class _QrCodeMenu extends StatelessWidget {
       ),
       color: AppThemeUtils.getColorByKey(
           context, AppThemeKeys.itemBgColor.name),
-      onSelected: (value) {
-        if (value == 0) {
-          onScanTap();
-        } else if (value == 1) {
-          onReceiveTap();
-        }
+      onSelected: (value) => switch (value) {
+        0 => onScanTap(),
+        1 => onReceiveTap(),
+        _ => null,
       },
       itemBuilder: (context) => [
         _buildMenuItem(
@@ -203,6 +201,7 @@ class _WalletConnectButton extends ConsumerWidget {
     final isConnected = wc.walletConnectState != WalletConnectState.disconnect &&
         wc.dAppTopic != null &&
         wc.metadata != null;
+    final iconUrl = wc.metadata?.icons.firstOrNull ?? "";
 
     return InkWell(
       onTap: onTap,
@@ -215,9 +214,7 @@ class _WalletConnectButton extends ConsumerWidget {
             Positioned.fill(
               child: isConnected
                   ? ImageNetWork(
-                      imageUrl: (wc.metadata?.icons.isEmpty ?? true)
-                          ? ""
-                          : wc.metadata!.icons[0],
+                      imageUrl: iconUrl,
                       placeholder: "assets/img/list_default.png",
                     )
                   : Image.asset(

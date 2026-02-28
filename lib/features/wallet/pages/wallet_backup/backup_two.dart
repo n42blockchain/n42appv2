@@ -19,31 +19,37 @@ class BackupTwo extends StatefulWidget {
 }
 
 class _BackupTwoState extends State<BackupTwo> {
-  DataUtils? _dataUtils;
-  DataUtils get dataUtils{
-    _dataUtils ??= DataUtils();
-    return _dataUtils!;
-  }
+  late final DataUtils dataUtils = DataUtils();
+
   //原始集合
-  var mnemonicWordsList = [];
+  late final List<String> mnemonicWordsList;
 
   // 打乱的助记词
-  List<MessMnemonicWordsItem> messMnemonicWordsList = [];
+  late final List<MessMnemonicWordsItem> messMnemonicWordsList;
 
   // 用户点击之后 按顺序生成的集合
   List<MessMnemonicWordsItem> userHandList = [];
   //按钮是否可点击
   bool isCanClick = false;
+
+  SliverGridDelegateWithFixedCrossAxisCount get _gridDelegate =>
+      SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        mainAxisSpacing: ScreenUtil().setWidth(20.0),
+        crossAxisSpacing: ScreenUtil().setWidth(20.0),
+        childAspectRatio: 2.4,
+      );
+
   @override
   void initState() {
+    super.initState();
     mnemonicWordsList = widget.walletInfo.mnemonic!.split(" ");
     //克隆一个数组，然后打乱
-    var list = dataUtils.shuffle(mnemonicWordsList);
-    messMnemonicWordsList = [];
-    for (int i = 0; i < list.length; i++) {
-      messMnemonicWordsList.add(MessMnemonicWordsItem(list[i], false, i));
-    }
-    super.initState();
+    final list = dataUtils.shuffle(mnemonicWordsList);
+    messMnemonicWordsList = [
+      for (int i = 0; i < list.length; i++)
+        MessMnemonicWordsItem(list[i], false, i),
+    ];
   }
   @override
   Widget build(BuildContext context) {
@@ -59,7 +65,6 @@ class _BackupTwoState extends State<BackupTwo> {
                 padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(
                       alignment: Alignment.center,
@@ -92,11 +97,7 @@ class _BackupTwoState extends State<BackupTwo> {
               right: 0,
               child: Column(
                 children: [
-                  Divider(
-                    height: 1,
-                    indent: 0,
-                    endIndent: 0,
-                  ),
+                  Divider(height: 1),
                   Container(
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
@@ -136,21 +137,12 @@ class _BackupTwoState extends State<BackupTwo> {
   //根据用户点击顺序生成的list
   Widget _buildUserHandList() {
     return GridView.builder(
-        itemCount: messMnemonicWordsList.length,//userHandList.length,
+        itemCount: messMnemonicWordsList.length,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          //横轴元素个数
-            crossAxisCount: 3,
-            //纵轴间距
-            mainAxisSpacing: ScreenUtil().setWidth(20.0),
-            //横轴间距
-            crossAxisSpacing: ScreenUtil().setWidth(20.0),
-            //子组件宽高长度比例
-            childAspectRatio: 2.4),
+        gridDelegate: _gridDelegate,
         itemBuilder: (context, index) {
-
-          if(userHandList.length-1<index){
+          if (index >= userHandList.length) {
             return Container(
               decoration: BoxDecoration(
                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor8.name),
@@ -159,7 +151,7 @@ class _BackupTwoState extends State<BackupTwo> {
             );
           }
           /// 对比当前位置的助记词和元数据中的是否一致
-          MessMnemonicWordsItem? item = userHandList[index];
+          final item = userHandList[index];
           final flag = item.word != mnemonicWordsList[index];
           return Stack(
             fit: StackFit.expand,
@@ -223,21 +215,11 @@ class _BackupTwoState extends State<BackupTwo> {
         itemCount: messMnemonicWordsList.length,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          //横轴元素个数
-            crossAxisCount: 3,
-            //纵轴间距
-            mainAxisSpacing: ScreenUtil().setWidth(20.0),
-            //横轴间距
-            crossAxisSpacing: ScreenUtil().setWidth(20.0),
-            //子组件宽高长度比例
-            childAspectRatio: 2.4),
+        gridDelegate: _gridDelegate,
         itemBuilder: (context, index) {
-          MessMnemonicWordsItem item = messMnemonicWordsList[index];
+          final item = messMnemonicWordsList[index];
           return GestureDetector(
-            key: ValueKey(
-              messMnemonicWordsList[index],
-            ),
+            key: ValueKey(item),
             onTap: () async {
               //助记词是可以重复的12个单词
               if (!item.isSelected) {

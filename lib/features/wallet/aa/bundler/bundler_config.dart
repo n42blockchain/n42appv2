@@ -107,9 +107,11 @@ class BundlerProviders {
 
   /// Get provider by name
   static BundlerConfig? getByName(String name) {
-    return all.firstWhere(
-      (p) => p.name.toLowerCase() == name.toLowerCase(),
-    );
+    final lower = name.toLowerCase();
+    for (final p in all) {
+      if (p.name.toLowerCase() == lower) return p;
+    }
+    return null;
   }
 
   /// Get providers supporting a chain
@@ -171,7 +173,7 @@ class MultiBundlerConfig {
 
     return MultiBundlerConfig(
       primaryUrl: config.bundlerUrl,
-      backupUrls: config.backupBundlerUrl != null ? [config.backupBundlerUrl!] : [],
+      backupUrls: [if (config.backupBundlerUrl != null) config.backupBundlerUrl!],
       strategy: strategy,
       entryPoint: config.entryPoint,
       apiKeys: apiKeys,
@@ -183,10 +185,9 @@ class MultiBundlerConfig {
 
   /// Apply API key to URL if available
   String applyApiKey(String url, String providerName) {
-    if (apiKeys == null || !apiKeys!.containsKey(providerName)) {
-      return url;
-    }
-    return '$url?apikey=${apiKeys![providerName]}';
+    final key = apiKeys?[providerName];
+    if (key == null) return url;
+    return '$url?apikey=$key';
   }
 }
 

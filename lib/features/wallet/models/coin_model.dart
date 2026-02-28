@@ -192,18 +192,16 @@ class CoinModel {
         await buildWallet(walletAccess: walletAccess);
       }
       // getBalanceWithCoinModel 返回 true 表示有错误，false 表示成功
-      bool hasError = await walletAccess.getBalanceWithCoinModel(this);
-      if(hasError){
+      final bool hasError = await walletAccess.getBalanceWithCoinModel(this);
+      loadError = false;
+      if (hasError) {
         // 获取余额失败，但不设置 loadError，因为已经使用了缓存的余额
-        loadError = false;
         walletAccess.refresh();
         return false;
-      }else{
-        // 获取余额成功
-        loadError = false;
-        walletAccess.calculateBalanceWidthCoinModel();
-        return true;
       }
+      // 获取余额成功
+      walletAccess.calculateBalanceWidthCoinModel();
+      return true;
     } catch (e) {
       debugPrint('CoinModel.getBalance error: $e');
       loadError = true;
@@ -213,7 +211,6 @@ class CoinModel {
     }
   }
 }
-
 
 class AlgoModel {
   int? code;
@@ -244,10 +241,7 @@ class XrpModel{
     loadBase=data['load_base'];
     loadFactor=data['load_factor'];
   }
-  int get getLockAmount{
-    int sum=reserveBase+ownerCount*reserveInc;
-    return sum;
-  }
+  int get getLockAmount => reserveBase + ownerCount * reserveInc;
 }
 class XlmModel{
   bool account=false;

@@ -19,29 +19,21 @@ class ImportOne extends ConsumerStatefulWidget {
   ConsumerState<ImportOne> createState() => _ImportOneState();
 }
 
-class _ImportOneState extends ConsumerState<ImportOne> with WidgetsBindingObserver{
-  TextEditingController inputEditingController=TextEditingController();
-  String inputMW="";
-  String errorMessage="";
+class _ImportOneState extends ConsumerState<ImportOne> with WidgetsBindingObserver {
+  TextEditingController inputEditingController = TextEditingController();
+  String inputMW = "";
+  String errorMessage = "";
 
-  void checkInput(String value){
-    value=value.trim();
-    List<String> mws=value.split(" ");
-    String cValue="";
-    for(String mw in mws){
-      mw=mw.trim();
-      if(mw !=""){
-        cValue="$cValue $mw";
-      }
-    }
+  void checkInput(String value) {
+    final words = value.trim().split(" ").where((w) => w.trim().isNotEmpty);
     setState(() {
-      inputMW=cValue.trim().toLowerCase();
+      inputMW = words.join(" ").toLowerCase();
     });
   }
+
   void handlerCopyText() async {
     // 读取复制文本
-    ClipboardData? clipboardData =
-    await Clipboard.getData(Clipboard.kTextPlain);
+    ClipboardData? clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
     final text = clipboardData?.text;
     // 获取后立即清空剪贴板：无论后续逻辑是否执行（!mounted / 异常），助记词不残留
     unawaited(Clipboard.setData(const ClipboardData(text: "")));
@@ -67,11 +59,13 @@ class _ImportOneState extends ConsumerState<ImportOne> with WidgetsBindingObserv
     WidgetsBinding.instance.addObserver(this);
     handlerCopyText();
   }
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,7 +84,7 @@ class _ImportOneState extends ConsumerState<ImportOne> with WidgetsBindingObserv
                   color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(20.0),),
+              SizedBox(width: ScreenUtil().setWidth(20.0)),
               Container(
                 height: ScreenUtil().setWidth(10.0),
                 width: ScreenUtil().setWidth(144.0),
@@ -103,7 +97,7 @@ class _ImportOneState extends ConsumerState<ImportOne> with WidgetsBindingObserv
           ),
         ),
         actions: [
-          SizedBox(width: ScreenUtil().setWidth(130.0),),
+          SizedBox(width: ScreenUtil().setWidth(130.0)),
         ],
         leadingWidth: ScreenUtil().setWidth(130.0),
       ),
@@ -115,7 +109,7 @@ class _ImportOneState extends ConsumerState<ImportOne> with WidgetsBindingObserv
                 child: Column(
                   children: [
                     Container(
-                      margin: EdgeInsets.only(top: ScreenUtil().setWidth(30.0),bottom: ScreenUtil().setWidth(30.0),left: ScreenUtil().setWidth(30.0),right: ScreenUtil().setWidth(30.0),),
+                      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
                       alignment: Alignment.center,
                       child: Text(
                         S.of(context).g_key_wallet_c6,
@@ -127,7 +121,7 @@ class _ImportOneState extends ConsumerState<ImportOne> with WidgetsBindingObserv
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(60.0),vertical: ScreenUtil().setWidth(60.0),),
+                      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(60.0), vertical: ScreenUtil().setWidth(60.0)),
                       alignment: Alignment.center,
                       child: Text(
                         S.of(context).g_key_wallet_c7,
@@ -140,10 +134,10 @@ class _ImportOneState extends ConsumerState<ImportOne> with WidgetsBindingObserv
                     ),
                     Container(
                       width: double.infinity,
-                      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20),horizontal: ScreenUtil().setWidth(20)),
+                      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20), horizontal: ScreenUtil().setWidth(20)),
                       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
                       decoration: BoxDecoration(
-                        color:  AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
                         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
                       ),
                       child: TextField(
@@ -163,12 +157,8 @@ class _ImportOneState extends ConsumerState<ImportOne> with WidgetsBindingObserv
                           contentPadding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
                         ),
                         maxLines: 8,
-                        onChanged: (String value){
-                          checkInput(value);
-                        },
-                        onEditingComplete: (){
-                          FocusScope.of(context).requestFocus(FocusNode());
-                        },
+                        onChanged: checkInput,
+                        onEditingComplete: () => FocusScope.of(context).requestFocus(FocusNode()),
                       ),
                     ),
                     Container(
@@ -177,12 +167,12 @@ class _ImportOneState extends ConsumerState<ImportOne> with WidgetsBindingObserv
                       child: Text(
                         inputMW,
                         style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                            fontSize: ScreenUtil().setSp(32)
+                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                          fontSize: ScreenUtil().setSp(32),
                         ),
                       ),
                     ),
-                    if(errorMessage !="")
+                    if (errorMessage.isNotEmpty)
                       Container(
                         alignment: Alignment.center,
                         padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
@@ -194,8 +184,8 @@ class _ImportOneState extends ConsumerState<ImportOne> with WidgetsBindingObserv
                         child: Text(
                           errorMessage,
                           style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
-                              fontSize: ScreenUtil().setSp(26)
+                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+                            fontSize: ScreenUtil().setSp(26),
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -220,42 +210,39 @@ class _ImportOneState extends ConsumerState<ImportOne> with WidgetsBindingObserv
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
                     width: double.infinity,
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                    child: buttonStyle2(context,
-                          ()async{
-                        if(inputMW =="")return;
-                        bool checkMnemonic =
-                        await Trustdart().checkMnemonic(inputMW);
+                    child: buttonStyle2(
+                      context,
+                      () async {
+                        if (inputMW.isEmpty) return;
+                        bool checkMnemonic = await Trustdart().checkMnemonic(inputMW);
                         if (!mounted) return;
-                        if (checkMnemonic == false) {
+                        if (!checkMnemonic) {
                           //助记词输入错误
-                          errorMessage=S.of(this.context).w_key_12;
-                          setState(() {
-                          });
+                          errorMessage = S.of(this.context).w_key_12;
+                          setState(() {});
                           ToastUtils.show(errorMessage);
                           return;
-                        }else{
-                          WalletInfo? fWalletInfo= ref.read(wapBridgeProvider).findWallet(mnemonic: inputMW);
-                          if(fWalletInfo ==null){
-                            errorMessage="";
-                          }else{
-                            errorMessage=S.of(this.context).g_key_214(fWalletInfo.walletName??"");
-                            setState(() {
-                            });
-                            ToastUtils.show(errorMessage);
-                            return;
-                          }
                         }
-                        setState(() {
-                        });
+                        WalletInfo? fWalletInfo = ref.read(wapBridgeProvider).findWallet(mnemonic: inputMW);
+                        if (fWalletInfo != null) {
+                          errorMessage = S.of(this.context).g_key_214(fWalletInfo.walletName ?? "");
+                          setState(() {});
+                          ToastUtils.show(errorMessage);
+                          return;
+                        }
+                        errorMessage = "";
+                        setState(() {});
                         WalletInfo wInfo = WalletInfo(
-                            walletName: "",
-                            password: "",
-                            //path: WalletPath.init(),
-                            walletUuid: ref.read(wapBridgeProvider).userUUID,
-                            mnemonic: inputMW
+                          walletName: "",
+                          password: "",
+                          //path: WalletPath.init(),
+                          walletUuid: ref.read(wapBridgeProvider).userUUID,
+                          mnemonic: inputMW,
                         );
-                        await Navigator.push(this.context,MaterialPageRoute(
-                            builder: (_) => CreatePassword(wInfo, createMetod: "Import",)));
+                        await Navigator.push(
+                          this.context,
+                          MaterialPageRoute(builder: (_) => CreatePassword(wInfo, createMetod: "Import")),
+                        );
                         if (!mounted) return;
                         Navigator.pop(this.context);
                       },

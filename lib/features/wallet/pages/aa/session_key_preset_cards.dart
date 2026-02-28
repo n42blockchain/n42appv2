@@ -50,34 +50,37 @@ class SessionKeyPresetCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final gap = SizedBox(height: ScreenUtil().setWidth(12));
+    final s = S.of(context);
+
     return Column(
       children: [
         _PresetCard(
           preset: SessionKeyPermission.transfer,
           selected: selected,
           onChanged: onChanged,
-          riskLabel: S.of(context).g_key_aa_session_risk_low,
-          can: [S.of(context).g_key_aa_session_transfer_can],
-          cannot: [S.of(context).g_key_aa_session_preset_contract],
+          riskLabel: s.g_key_aa_session_risk_low,
+          can: [s.g_key_aa_session_transfer_can],
+          cannot: [s.g_key_aa_session_preset_contract],
           presetInfo: _presetInfo(context, SessionKeyPermission.transfer),
         ),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        gap,
         _PresetCard(
           preset: SessionKeyPermission.contractCall,
           selected: selected,
           onChanged: onChanged,
-          riskLabel: S.of(context).g_key_aa_session_risk_medium,
-          can: [S.of(context).g_key_aa_session_contract_can],
-          cannot: [S.of(context).g_key_aa_session_transfer_can],
+          riskLabel: s.g_key_aa_session_risk_medium,
+          can: [s.g_key_aa_session_contract_can],
+          cannot: [s.g_key_aa_session_transfer_can],
           presetInfo: _presetInfo(context, SessionKeyPermission.contractCall),
         ),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        gap,
         _PresetCard(
           preset: SessionKeyPermission.full,
           selected: selected,
           onChanged: onChanged,
-          riskLabel: S.of(context).g_key_aa_session_risk_high,
-          can: [S.of(context).g_key_aa_session_full_warning],
+          riskLabel: s.g_key_aa_session_risk_high,
+          can: [s.g_key_aa_session_full_warning],
           cannot: const [],
           isHighRisk: true,
           presetInfo: _presetInfo(context, SessionKeyPermission.full),

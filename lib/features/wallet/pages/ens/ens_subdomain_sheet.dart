@@ -110,18 +110,16 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
     final errorFallback = S.of(context).g_key_error_3;
     final successMsg = S.of(context).g_key_ens_subdomain_created;
 
-    final effectiveOwner = owner.isNotEmpty ? owner : widget.walletAddress;
     final result = await widget.ensService.createSubdomain(
       widget.parentName,
       label,
-      effectiveOwner,
+      owner.isNotEmpty ? owner : widget.walletAddress,
     );
 
     if (!mounted) return;
 
+    nav.pop();
     if (result.error) {
-      setState(() => _creating = false);
-      nav.pop();
       // 通过外部 ScaffoldMessenger 显示错误，需返回 error 信息
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -130,7 +128,6 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
         ),
       );
     } else {
-      nav.pop();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(successMsg), backgroundColor: Colors.green),
       );

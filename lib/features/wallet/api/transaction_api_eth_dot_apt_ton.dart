@@ -30,8 +30,7 @@ extension TransactionApiEthDotAptTon on TransactionApi {
       final data = await BaseApi.requestEmptyH
           .get(requestUrl, params: {}, header: header);
       if (data != null && data['status'] == '1') {
-        final response = data['result'] as List;
-        mm.data = response
+        mm.data = (data['result'] as List)
             .map((e) => CommonResponseItemModel.fromJson(e))
             .toList();
       } else {
@@ -70,8 +69,7 @@ extension TransactionApiEthDotAptTon on TransactionApi {
       final data = await BaseApi.requestEmptyH
           .get(requestUrl, params: {}, header: header);
       if (data != null && data['status'] == '1') {
-        final response = data['result'] as List;
-        mm.data = response
+        mm.data = (data['result'] as List)
             .map((e) => CommonResponseItemModel.fromJson(e))
             .toList();
       } else {

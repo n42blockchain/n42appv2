@@ -77,23 +77,23 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
     final amount = double.tryParse(_amountController.text.trim()) ?? 0;
     const decimals = 18;
     final amountWei = BigInt.from((amount * 1e18).round());
+    final isCustom = _selectedType == BatchOperationType.custom;
 
     final isErc20 = _selectedType == BatchOperationType.transfer &&
         !_ethLikeTokens.contains(_selectedToken) &&
         _tokenAddressController.text.trim().isNotEmpty;
 
+    final needsTokenAddress =
+        isErc20 || _selectedType == BatchOperationType.approve;
+
     final operation = BatchOperation(
       type: _selectedType,
       targetAddress: to,
-      tokenSymbol: _selectedType == BatchOperationType.custom ? null : _selectedToken,
-      tokenAddress: (isErc20 || _selectedType == BatchOperationType.approve)
-          ? _tokenAddressController.text.trim()
-          : null,
-      amount: _selectedType == BatchOperationType.custom ? null : amountWei,
-      decimals: _selectedType == BatchOperationType.custom ? null : decimals,
-      customData: _selectedType == BatchOperationType.custom
-          ? _calldataController.text.trim()
-          : null,
+      tokenSymbol: isCustom ? null : _selectedToken,
+      tokenAddress: needsTokenAddress ? _tokenAddressController.text.trim() : null,
+      amount: isCustom ? null : amountWei,
+      decimals: isCustom ? null : decimals,
+      customData: isCustom ? _calldataController.text.trim() : null,
     );
 
     widget.onAdd(operation);
