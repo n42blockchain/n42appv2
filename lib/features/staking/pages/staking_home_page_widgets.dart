@@ -18,6 +18,11 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 /// Contains all UI builder methods for tabs, cards, and list items.
 mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
     StakingHomePageLogicMixin {
+  // ── Theme helpers ──────────────────────────────────────────────────────────
+
+  Color _themeColor(AppThemeKeys key) =>
+      AppThemeUtils.getColorByKey(context, key.name);
+
   // ── Tab bar ──────────────────────────────────────────────────────────────────
 
   Widget buildTabBar(BuildContext context) {
@@ -27,20 +32,17 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
         vertical: ScreenUtil().setWidth(16),
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: _themeColor(AppThemeKeys.itemBgColor),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: TabBar(
         controller: tabController,
         indicator: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+          color: _themeColor(AppThemeKeys.mainBlueColor),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
         ),
         labelColor: Colors.white,
-        unselectedLabelColor: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemSubtitleTextColor.name,
-        ),
+        unselectedLabelColor: _themeColor(AppThemeKeys.itemSubtitleTextColor),
         labelStyle: TextStyle(
           fontSize: ScreenUtil().setSp(26),
           fontWeight: FontWeight.w600,
@@ -98,7 +100,7 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
         margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
         padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: _themeColor(AppThemeKeys.itemBgColor),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
         ),
         child: Row(
@@ -128,10 +130,7 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
                     protocol.description,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(26),
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ),
+                      color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -145,10 +144,7 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
             SizedBox(width: ScreenUtil().setWidth(8)),
             Icon(
               Icons.chevron_right,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
             ),
           ],
         ),
@@ -167,19 +163,13 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(32),
             fontWeight: FontWeight.bold,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
+            color: _themeColor(AppThemeKeys.mainTextColor),
           ),
         ),
         stakingTag(
           context: context,
           label: protocol.chainSymbol,
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainBlueColor.name,
-          ),
+          color: _themeColor(AppThemeKeys.mainBlueColor),
         ),
         if (protocol.isLiquid)
           stakingTag(
@@ -192,10 +182,12 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
   }
 
   Widget _buildApyColumn(BuildContext context, StakingProtocol protocol) {
+    final isApyLoading = loadingApys && !liveApys.containsKey(protocol.id);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        loadingApys && !liveApys.containsKey(protocol.id)
+        isApyLoading
             ? SizedBox(
                 width: ScreenUtil().setWidth(20),
                 height: ScreenUtil().setWidth(20),
@@ -213,15 +205,12 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
                 ),
               ),
         Text(
-          loadingApys && !liveApys.containsKey(protocol.id)
+          isApyLoading
               ? S.of(context).g_key_stake_updating
               : S.of(context).g_key_stake_apy,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(22),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+            color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
           ),
         ),
         SizedBox(height: ScreenUtil().setWidth(8)),
@@ -232,10 +221,7 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
               : S.of(context).g_key_stake_no_lock,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(22),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+            color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
           ),
         ),
       ],
@@ -300,8 +286,7 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
+        color: _themeColor(AppThemeKeys.itemBgColor),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
         border: isUnbonding
             ? Border.all(color: Colors.orange.withAlpha(100), width: 1)
@@ -317,10 +302,7 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
               '${S.of(context).g_key_stake_validator}: ${position.validator!.name}',
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(24),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+                color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
               ),
             ),
           ],
@@ -344,10 +326,7 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(30),
             fontWeight: FontWeight.bold,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
+            color: _themeColor(AppThemeKeys.mainTextColor),
           ),
         ),
         SizedBox(width: ScreenUtil().setWidth(8)),
@@ -382,10 +361,7 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
               S.of(context).g_key_stake_staked,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(22),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+                color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
               ),
             ),
             Text(
@@ -394,10 +370,7 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28),
                 fontWeight: FontWeight.w600,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: _themeColor(AppThemeKeys.mainTextColor),
               ),
             ),
           ],
@@ -410,10 +383,7 @@ mixin StakingHomePageWidgetsMixin on State<StakingHomePage>,
                 S.of(context).g_key_stake_rewards,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(22),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
+                  color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
                 ),
               ),
               Text(

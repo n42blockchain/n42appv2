@@ -23,6 +23,16 @@ class _DeviceScanPageState extends State<DeviceScanPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
 
+  /// 常用主题色快捷方法
+  Color _blueColor(BuildContext context) =>
+      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+
+  Color _subtitleColor(BuildContext context) =>
+      AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+
+  Color _textColor(BuildContext context) =>
+      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+
   @override
   void initState() {
     super.initState();
@@ -49,18 +59,14 @@ class _DeviceScanPageState extends State<DeviceScanPage>
     // 检查蓝牙权限
     final hasPermission = await provider.requestPermissions();
     if (!hasPermission) {
-      if (mounted) {
-        _showPermissionDialog();
-      }
+      if (mounted) _showPermissionDialog();
       return;
     }
 
     // 检查蓝牙是否可用
     final isAvailable = await provider.checkBluetoothAvailable();
     if (!isAvailable) {
-      if (mounted) {
-        _showBluetoothDisabledDialog();
-      }
+      if (mounted) _showBluetoothDisabledDialog();
       return;
     }
 
@@ -106,9 +112,11 @@ class _DeviceScanPageState extends State<DeviceScanPage>
 
   Widget _buildScanAnimation(BuildContext context, HardwareWalletProvider provider) {
     final isScanning = provider.isScanning;
+    final blueColor = _blueColor(context);
+    final su = ScreenUtil();
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(40)),
+      padding: EdgeInsets.all(su.setWidth(40)),
       child: Column(
         children: [
           Stack(
@@ -121,16 +129,14 @@ class _DeviceScanPageState extends State<DeviceScanPage>
                     animation: _animationController,
                     builder: (context, child) {
                       final value = (_animationController.value + index * 0.33) % 1.0;
+                      final size = su.setWidth(200 + value * 100);
                       return Container(
-                        width: ScreenUtil().setWidth(200 + value * 100),
-                        height: ScreenUtil().setWidth(200 + value * 100),
+                        width: size,
+                        height: size,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainBlueColor.name,
-                            ).withAlpha((255 * (1 - value)).toInt()),
+                            color: blueColor.withAlpha((255 * (1 - value)).toInt()),
                             width: 2,
                           ),
                         ),
@@ -141,50 +147,41 @@ class _DeviceScanPageState extends State<DeviceScanPage>
 
               // 中心图标
               Container(
-                width: ScreenUtil().setWidth(120),
-                height: ScreenUtil().setWidth(120),
+                width: su.setWidth(120),
+                height: su.setWidth(120),
                 decoration: BoxDecoration(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ).withAlpha(30),
+                  color: blueColor.withAlpha(30),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   Icons.bluetooth_searching,
-                  size: ScreenUtil().setWidth(60),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
+                  size: su.setWidth(60),
+                  color: blueColor,
                 ),
               ),
             ],
           ),
 
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: su.setWidth(24)),
 
           Text(
             isScanning ? 'Searching for devices...' : 'Search complete',
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(30),
+              fontSize: su.setSp(30),
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              color: _textColor(context),
             ),
           ),
 
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: su.setWidth(8)),
 
           Text(
             isScanning
                 ? 'Make sure your Ledger is unlocked and Bluetooth is enabled'
                 : '${provider.discoveredDevices.length} device(s) found',
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              fontSize: su.setSp(24),
+              color: _subtitleColor(context),
             ),
             textAlign: TextAlign.center,
           ),
@@ -195,29 +192,25 @@ class _DeviceScanPageState extends State<DeviceScanPage>
 
   Widget _buildDeviceList(BuildContext context, HardwareWalletProvider provider) {
     final devices = provider.discoveredDevices;
+    final su = ScreenUtil();
 
     if (devices.isEmpty) {
+      final subtitle = _subtitleColor(context);
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               provider.isScanning ? Icons.bluetooth_searching : Icons.bluetooth_disabled,
-              size: ScreenUtil().setWidth(60),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              size: su.setWidth(60),
+              color: subtitle,
             ),
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            SizedBox(height: su.setWidth(16)),
             Text(
               provider.isScanning ? 'Looking for devices...' : 'No devices found',
               style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+                fontSize: su.setSp(28),
+                color: subtitle,
               ),
             ),
           ],
@@ -226,12 +219,9 @@ class _DeviceScanPageState extends State<DeviceScanPage>
     }
 
     return ListView.builder(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.symmetric(horizontal: su.setWidth(30)),
       itemCount: devices.length,
-      itemBuilder: (context, index) {
-        final device = devices[index];
-        return _buildDeviceItem(context, provider, device);
-      },
+      itemBuilder: (context, index) => _buildDeviceItem(context, provider, devices[index]),
     );
   }
 
@@ -242,40 +232,36 @@ class _DeviceScanPageState extends State<DeviceScanPage>
   ) {
     final isConnecting =
         provider.connectionState == HardwareWalletConnectionState.connecting;
+    final blueColor = _blueColor(context);
+    final su = ScreenUtil();
 
     return GestureDetector(
       onTap: isConnecting ? null : () => _connectDevice(context, provider, device),
       child: Container(
-        margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+        margin: EdgeInsets.only(bottom: su.setWidth(12)),
+        padding: EdgeInsets.all(su.setWidth(20)),
         decoration: BoxDecoration(
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: BorderRadius.circular(su.setWidth(12)),
         ),
         child: Row(
           children: [
             // 设备图标
             Container(
-              width: ScreenUtil().setWidth(56),
-              height: ScreenUtil().setWidth(56),
+              width: su.setWidth(56),
+              height: su.setWidth(56),
               decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ).withAlpha(30),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                color: blueColor.withAlpha(30),
+                borderRadius: BorderRadius.circular(su.setWidth(12)),
               ),
               child: Icon(
                 Icons.usb,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
-                size: ScreenUtil().setWidth(32),
+                color: blueColor,
+                size: su.setWidth(32),
               ),
             ),
 
-            SizedBox(width: ScreenUtil().setWidth(16)),
+            SizedBox(width: su.setWidth(16)),
 
             // 设备信息
             Expanded(
@@ -285,23 +271,20 @@ class _DeviceScanPageState extends State<DeviceScanPage>
                   Text(
                     device.name,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
+                      fontSize: su.setSp(28),
                       fontWeight: FontWeight.w600,
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor.name,
-                      ),
+                      color: _textColor(context),
                     ),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(4)),
+                  SizedBox(height: su.setWidth(4)),
                   Row(
                     children: [
                       // 信号强度
                       ...List.generate(4, (index) {
                         return Container(
-                          width: ScreenUtil().setWidth(6),
-                          height: ScreenUtil().setWidth(8 + index * 4),
-                          margin: EdgeInsets.only(right: ScreenUtil().setWidth(2)),
+                          width: su.setWidth(6),
+                          height: su.setWidth(8 + index * 4),
+                          margin: EdgeInsets.only(right: su.setWidth(2)),
                           decoration: BoxDecoration(
                             color: index < device.signalStrength
                                 ? Colors.green
@@ -310,15 +293,12 @@ class _DeviceScanPageState extends State<DeviceScanPage>
                           ),
                         );
                       }),
-                      SizedBox(width: ScreenUtil().setWidth(8)),
+                      SizedBox(width: su.setWidth(8)),
                       Text(
                         device.isLedger ? 'Ledger Device' : 'Unknown',
                         style: TextStyle(
-                          fontSize: ScreenUtil().setSp(24),
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemSubtitleTextColor.name,
-                          ),
+                          fontSize: su.setSp(24),
+                          color: _subtitleColor(context),
                         ),
                       ),
                     ],
@@ -330,17 +310,14 @@ class _DeviceScanPageState extends State<DeviceScanPage>
             // 连接按钮
             if (isConnecting)
               SizedBox(
-                width: ScreenUtil().setWidth(32),
-                height: ScreenUtil().setWidth(32),
+                width: su.setWidth(32),
+                height: su.setWidth(32),
                 child: CircularProgressIndicator(strokeWidth: 2),
               )
             else
               Icon(
                 Icons.chevron_right,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+                color: _subtitleColor(context),
               ),
           ],
         ),
@@ -349,28 +326,24 @@ class _DeviceScanPageState extends State<DeviceScanPage>
   }
 
   Widget _buildBottomActions(BuildContext context, HardwareWalletProvider provider) {
+    final su = ScreenUtil();
     return Padding(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.all(su.setWidth(30)),
       child: SizedBox(
         width: double.infinity,
         child: ElevatedButton(
           onPressed: provider.isScanning ? _stopScan : _startScan,
           style: ElevatedButton.styleFrom(
-            backgroundColor: provider.isScanning
-                ? Colors.orange
-                : AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
-            padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
+            backgroundColor: provider.isScanning ? Colors.orange : _blueColor(context),
+            padding: EdgeInsets.symmetric(vertical: su.setWidth(18)),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+              borderRadius: BorderRadius.circular(su.setWidth(12)),
             ),
           ),
           child: Text(
             provider.isScanning ? 'Stop Scanning' : 'Scan Again',
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(30),
+              fontSize: su.setSp(30),
               fontWeight: FontWeight.w600,
               color: Colors.white,
             ),

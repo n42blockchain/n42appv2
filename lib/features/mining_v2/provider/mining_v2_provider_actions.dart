@@ -13,22 +13,18 @@ mixin _MiningActionsMixin on _MiningStateMixin {
   /// Get all wallets that support N chain (for mining).
   List<MiningWalletInfo> get miningWalletList {
     try {
-      WalletActionProvider wap = globalWapAdapter;
-      List<MiningWalletInfo> result = [];
-
-      for (int i = 0; i < wap.walletInfoLsit.length; i++) {
-        WalletInfo wInfo = wap.walletInfoLsit[i];
-        if (wInfo.coinInfo?[CoinType.N.name] != null) {
-          result.add(MiningWalletInfo(
-            index: i,
-            name: wInfo.walletName ?? 'Account${i + 1}',
-            address: wInfo.coinInfo?[CoinType.N.name]?['address'] ?? '',
-            isMainWallet: wInfo.mainWallet,
-            hasCoinN: true,
-          ));
-        }
-      }
-      return result;
+      final wap = globalWapAdapter;
+      return [
+        for (int i = 0; i < wap.walletInfoLsit.length; i++)
+          if (wap.walletInfoLsit[i].coinInfo?[CoinType.N.name] != null)
+            MiningWalletInfo(
+              index: i,
+              name: wap.walletInfoLsit[i].walletName ?? 'Account${i + 1}',
+              address: wap.walletInfoLsit[i].coinInfo?[CoinType.N.name]?['address'] ?? '',
+              isMainWallet: wap.walletInfoLsit[i].mainWallet,
+              hasCoinN: true,
+            ),
+      ];
     } catch (e) {
       debugPrint('miningWalletList error: $e');
       return [];
@@ -51,6 +47,17 @@ mixin _MiningActionsMixin on _MiningStateMixin {
     notifyListeners();
   }
 
+  // ==================== Wallet Validation Helper ====================
+
+  /// Returns the WalletInfo at the current mining index, or null if invalid.
+  WalletInfo? _getMiningWalletInfo() {
+    final wap = globalWapAdapter;
+    if (wap.walletInfoLsit.isEmpty) return null;
+    final idx = wap.walletMiningIndex;
+    if (idx < 0 || idx >= wap.walletInfoLsit.length) return null;
+    return wap.walletInfoLsit[idx];
+  }
+
   // ==================== Address Mining Status ====================
 
   /// 抱团挖矿/质押NFT/质押N
@@ -59,13 +66,8 @@ mixin _MiningActionsMixin on _MiningStateMixin {
   Future<void> checkAddressMiningStatus() async {
     inactivityWarningShown = false; // 每次冷启动重置，允许重新检测
     try {
-      WalletActionProvider wap = globalWapAdapter;
-      if (wap.walletInfoLsit.isEmpty) return;
-
-      final miningIndex = wap.walletMiningIndex;
-      if (miningIndex < 0 || miningIndex >= wap.walletInfoLsit.length) return;
-
-      WalletInfo wInfo = wap.walletInfoLsit[miningIndex];
+      final WalletInfo? wInfo = _getMiningWalletInfo();
+      if (wInfo == null) return;
       Map<String, dynamic>? cInfo = wInfo.coinInfo?[CoinType.N.name];
       if (cInfo == null) return;
 
@@ -108,22 +110,14 @@ mixin _MiningActionsMixin on _MiningStateMixin {
 
   Future<void> getWalletPrivateKey() async {
     try {
-      WalletActionProvider wap = globalWapAdapter;
-      if (wap.walletInfoLsit.isEmpty) {
-        errorMessage = "Wallet not available!";
+      final WalletInfo? wInfo = _getMiningWalletInfo();
+      if (wInfo == null) {
+        errorMessage = "Wallet not available or mining index invalid!";
         notifyListeners();
         return;
       }
 
-      final miningIndex = wap.walletMiningIndex;
-      if (miningIndex < 0 || miningIndex >= wap.walletInfoLsit.length) {
-        errorMessage = "Mining wallet index invalid!";
-        notifyListeners();
-        return;
-      }
-
-      WalletInfo wInfo = wap.walletInfoLsit[miningIndex];
-      String? pk = wInfo.privateKey;
+      final String? pk = wInfo.privateKey;
 
       if (pk == null || pk.isEmpty) {
         Map<String, dynamic>? nCoinInfo = wInfo.coinInfo?[CoinType.N.name];
@@ -154,7 +148,7 @@ mixin _MiningActionsMixin on _MiningStateMixin {
   // ==================== N Coin Balance ====================
 
   Future<void> getNprice(WalletActionProvider wap) async {
-    Map<String, dynamic>? coinInfo = wap.getCoinPriceWithUnit(CoinType.N.name);
+    final coinInfo = wap.getCoinPriceWithUnit(CoinType.N.name);
     nPrice = coinInfo?['coinPrice'] ?? 0;
   }
 
@@ -273,26 +267,21 @@ mixin _MiningActionsMixin on _MiningStateMixin {
     }
 
     miningData ??= {};
-    if (miningData?[importAddress] == null) {
-      miningData![importAddress] = {
-        'isMining': value['isMining'],
-        'keypart': value['validator'],
-        'redeem': false,
-      };
-      SPUtil().setMiningData(miningData!);
-      if (index == -1) {
-        wap.setWalletMiningIndex(wap.walletInfoLsit.length - 1);
-      } else {
-        wap.setWalletMiningIndex(index);
-      }
-      MessageModel rmm = MessageModel();
-      return rmm;
-    } else {
-      MessageModel rmm = MessageModel.error();
+    if (miningData?[importAddress] != null) {
       // "验证者已经存在"
-      rmm.data = S.current.g_mining_key_83;
-      return rmm;
+      return MessageModel.error()..data = S.current.g_mining_key_83;
     }
+
+    miningData![importAddress] = {
+      'isMining': value['isMining'],
+      'keypart': value['validator'],
+      'redeem': false,
+    };
+    SPUtil().setMiningData(miningData!);
+    wap.setWalletMiningIndex(
+      index == -1 ? wap.walletInfoLsit.length - 1 : index,
+    );
+    return MessageModel();
   }
 
   // ==================== Deposit (Staking) ====================
@@ -408,10 +397,8 @@ mixin _MiningActionsMixin on _MiningStateMixin {
 
   @override
   void endCheckTxHash() {
-    if (txCheckTimer != null) {
-      txCheckTimer!.cancel();
-      txCheckTimer = null;
-    }
+    txCheckTimer?.cancel();
+    txCheckTimer = null;
   }
 
   Future<bool> _checkTxHash(String txHash) async {
@@ -422,19 +409,17 @@ mixin _MiningActionsMixin on _MiningStateMixin {
   // ==================== Run Mining Client ====================
 
   Future<void> runMining() async {
-    String? rData = await mining.runClient(
+    final String? rData = await mining.runClient(
       miningKeypart?['privateKey'] ?? "",
     );
-    if (rData != null) {
-      if (rData == "Client started") {
-        miningStatus = true;
-        errorMessage = "";
-      } else {
-        miningStatus = false;
-        errorMessage = rData;
-      }
-    } else {
+    if (rData == null) {
       errorMessage = 'Running the "runClient" method failed!';
+    } else if (rData == "Client started") {
+      miningStatus = true;
+      errorMessage = "";
+    } else {
+      miningStatus = false;
+      errorMessage = rData;
     }
     notifyListeners();
   }

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
@@ -49,18 +48,10 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
   String _lastSyncFingerprint = '';
   String defaultWalletUUID="AstranetWallet";
   String get userUUID{
-    if(AppGlobals.userInfo==null){
-      return defaultWalletUUID;
-    }else{
-      return AppGlobals.userInfo?.uuid??"";
-    }
+    if(AppGlobals.userInfo==null) return defaultWalletUUID;
+    return AppGlobals.userInfo?.uuid??"";
   }
-  TokenViewApi? _tokenViewApi;
-  TokenViewApi get tokenViewApi{
-    _tokenViewApi ??= TokenViewApi();
-    return _tokenViewApi!;
-  }
-  //bool existWallet = false; //是否存在钱包
+  late final TokenViewApi tokenViewApi = TokenViewApi();
   Load _load = Load.finish; //当前状态
   Load get load => _load;
   Load loadBalance = Load.finish;
@@ -98,7 +89,6 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
     if(index==walletMiningIndex)return;
     walletMiningIndex=index;
     await saveWalletInfo(walletInfoLsit[walletIndex], walletIndex);
-    //eventBus.fire(EventPublic(EventPublicType.selectMiningWallet, intValue: walletMiningIndex));
   }
   Map<String,String>? _publicKeyAndPrivateKeyPair;//_walletInfoLsit所有钱包N的公钥私钥对
   Future<Map<String,String>> publicKeyAndPrivateKeyPair() async{
@@ -149,20 +139,8 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
   }
 
   /// 深拷贝链配置，确保所有嵌套对象都被正确复制
-  Map<String, dynamic> _deepCopyChainConfig(Map<String, dynamic> config) {
-    final copy = <String, dynamic>{};
-    for (final key in config.keys) {
-      final value = config[key];
-      if (value is Map) {
-        copy[key] = _deepCopyMap(value);
-      } else if (value is List) {
-        copy[key] = _deepCopyList(value);
-      } else {
-        copy[key] = value;
-      }
-    }
-    return copy;
-  }
+  Map<String, dynamic> _deepCopyChainConfig(Map<String, dynamic> config) =>
+      _deepCopyMap(config);
 
   /// 深拷贝 Map
   Map<String, dynamic> _deepCopyMap(Map map) {
@@ -202,7 +180,6 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
   double _balanceTotal = 0.0;
   double get balanceTotal => _balanceTotal;
   void setBalanceTotal(double price) {
-    //if(existWallet==false)return;
     _balanceTotal = price;
     notifyListeners();
   }
@@ -274,34 +251,16 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
   }
   //返回 coinType 的主链 coinmodel
   CoinModel? getCoinModelWithCoinType(String coinType){
-    CoinModel? rCoinModel;
-    int index=_coinModels.indexWhere((element){
-      if(element.coin['coinType']==coinType){
-        return true;
-      }
-      return false;
-    });
-    if(index !=-1){
-      rCoinModel=_coinModels[index];
-    }
-    return rCoinModel;
+    final index = _coinModels.indexWhere((e) => e.coin['coinType'] == coinType);
+    return index != -1 ? _coinModels[index] : null;
   }
-//返回对应symbol 的coinmodel 列表
+//返回对应symbol 的coinmodel 列表（每个 symbol 只取第一个匹配）
   List<CoinModel> getCoinModelWithSymbols({String symbols="ETH,BNB,TRX,OKT"}){
-    List<String> symbolList=symbols.split(",");
-    List<CoinModel> cList=[];
-    for(String symbol in symbolList){
-      int index=coinModels.indexWhere((element) {
-        if(element.coin['coinType']==symbol){
-          return true;
-        }
-        return false;
-      });
-      if(index !=-1){
-        cList.add(coinModels[index]);
-      }
-    }
-    return cList;
+    final symbolList = symbols.split(",");
+    return [
+      for (final symbol in symbolList)
+        if (getCoinModelWithCoinType(symbol) case final cm?) cm,
+    ];
   }
 
   /// 聚合代币列表 (USDT, USDC)
@@ -371,7 +330,6 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
       tBalance +=coinList[i].value;
     }
     setBalanceTotal(tBalance);
-    //getTokens_top();
   }
   @override
   Future<bool> getBalanceWithCoinModel(CoinModel coinModel)async{
@@ -388,14 +346,8 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
     }
     //合约地址
     String contract= "";
-    if(coinModel.coin['isContract']==false){
-    }else{
-      //获取 合约地址
-      if(coinModel.isTest){
-        contract=coinModel.coin['contract_test'];
-      }else{
-        contract=coinModel.coin['contract'];
-      }
+    if(coinModel.coin['isContract']==true){
+      contract = coinModel.isTest ? coinModel.coin['contract_test'] : coinModel.coin['contract'];
     }
     if(coinModel.coin['isContract'] && coinModel.coin['coinType']==CoinType.ALGO.name){
       return await getBalanceTokenAlgoWithCoinModel(coinModel);
@@ -410,49 +362,40 @@ class WalletActionProvider extends ChangeNotifier implements ICoinModelWalletAcc
         isTest: coinModel.isTest ,
       rpc: coinModel.coin['coinType']==CoinType.N.name?coinModel.coin['service_test']:null,
     ) ?? MessageModel.error();
+    _applyMarketPrice(coinModel);
+
     if(mm.error){
       // 网络请求失败，使用缓存的余额数据
       debugPrint('WalletActionProvider: Balance fetch failed for ${coinModel.coin['miniName']}, using cached balance');
-
-      // 尝试从市场数据更新价格信息
-      Map<String,dynamic>? coinInfo=getCoinPriceWithUnit(coinModel.coin['unit'].toString());
-      if(coinInfo != null){
-        coinModel.coin['percentage']=coinInfo['percentage'];
-        coinModel.coin['coinPrice']=coinModel.isTest?0.0:coinInfo['coinPrice'];
-        coinModel.coin['icon']=coinInfo['icon'];
-      }
-
       _safeUpdateWalletMap(coinModel);
       coinModel.getBalanceDefault();
-      // 不设置 loadError，因为我们已经使用了缓存数据
       coinModel.loadError = false;
       return true;
     }
-    else{
-      BigInt balance=BigInt.zero;
-      if(coinModel.coin['coinType']==CoinType.ALGO.name){
-        balance=mm.data['balance'];
-        coinModel.other=AlgoModel.fromMinBalance(mm.data['minBalance']);
-      }else if(coinModel.coin['coinType']==CoinType.XRP.name){
-        balance=mm.data['balance'];
-        coinModel.other=XrpModel(mm.data['sequence'],mm.data['account'],mm.data['ownerCount']);
-      }else{
-        balance=mm.data;
-      }
-      Map<String,dynamic>? coinInfo=getCoinPriceWithUnit(coinModel.coin['unit'].toString());
-      if(coinInfo != null){
-        coinModel.coin['percentage']=coinInfo['percentage'];
-        coinModel.coin['coinPrice']=coinModel.isTest?0.0:coinInfo['coinPrice'];
-        coinModel.coin['icon']=coinInfo['icon'];
-      }
-      if(coinModel.isTest){
-        coinModel.coin['balance_test']=balance.toString();
-      }else{
-        coinModel.coin['balance']=balance.toString();
-      }
-      _safeUpdateWalletMap(coinModel);
-      coinModel.getBalanceDefault();
-      return false;
+
+    BigInt balance=BigInt.zero;
+    if(coinModel.coin['coinType']==CoinType.ALGO.name){
+      balance=mm.data['balance'];
+      coinModel.other=AlgoModel.fromMinBalance(mm.data['minBalance']);
+    }else if(coinModel.coin['coinType']==CoinType.XRP.name){
+      balance=mm.data['balance'];
+      coinModel.other=XrpModel(mm.data['sequence'],mm.data['account'],mm.data['ownerCount']);
+    }else{
+      balance=mm.data;
     }
+    final balanceKey = coinModel.isTest ? 'balance_test' : 'balance';
+    coinModel.coin[balanceKey] = balance.toString();
+    _safeUpdateWalletMap(coinModel);
+    coinModel.getBalanceDefault();
+    return false;
+  }
+
+  /// 从市场数据更新 coinModel 的价格信息
+  void _applyMarketPrice(CoinModel coinModel) {
+    final coinInfo = getCoinPriceWithUnit(coinModel.coin['unit'].toString());
+    if (coinInfo == null) return;
+    coinModel.coin['percentage'] = coinInfo['percentage'];
+    coinModel.coin['coinPrice'] = coinModel.isTest ? 0.0 : coinInfo['coinPrice'];
+    coinModel.coin['icon'] = coinInfo['icon'];
   }
 }

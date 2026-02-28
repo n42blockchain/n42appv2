@@ -38,10 +38,14 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
   Load load=Load.finish;
   String errorMessage="";
   Map<String,dynamic> selectChain=allChainUrlMap[CoinType.N.name];
-  @override
-  void initState() {
-    super.initState();
+
+  /// 显示错误消息的辅助方法
+  void _showError(String message) {
+    errorMessage = message;
+    setState(() {});
+    ToastUtils.show(errorMessage);
   }
+
   /// Enhanced private key validation
   ///
   /// Security features:
@@ -51,38 +55,28 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
   /// - Post-import public key generation verification
   Future<MessageModel> checkPraviteKey(String pk) async {
     MessageModel mm = MessageModel();
+    final invalidKeyMsg = S.of(context).g_key_210;
 
     // Layer 1: Trim whitespace
     pk = pk.trim();
 
+    MessageModel invalidKey() {
+      mm.error = true;
+      mm.data = invalidKeyMsg;
+      return mm;
+    }
+
     // Layer 2: Format and length validation
     if (pk.length == 66) {
       // Hex format with 0x prefix
-      String sStr = pk.substring(0, 2);
-      if (sStr.toLowerCase() != "0x") {
-        mm.error = true;
-        mm.data = S.of(context).g_key_210;
-        return mm;
-      }
-      if (!Regular().regularHex(pk)) {
-        mm.error = true;
-        mm.data = S.of(context).g_key_210;
-        return mm;
-      }
+      if (pk.substring(0, 2).toLowerCase() != "0x") return invalidKey();
+      if (!Regular().regularHex(pk)) return invalidKey();
     } else if (pk.length == 64) {
       // Hex format without prefix
-      if (!Regular().regularHex(pk)) {
-        mm.error = true;
-        mm.data = S.of(context).g_key_210;
-        return mm;
-      }
+      if (!Regular().regularHex(pk)) return invalidKey();
     } else if (pk.length == 51 || pk.length == 52) {
       // WIF format (Bitcoin)
-      if (!Regular().regularBase58(pk)) {
-        mm.error = true;
-        mm.data = S.of(context).g_key_210;
-        return mm;
-      }
+      if (!Regular().regularBase58(pk)) return invalidKey();
       // Layer 3: WIF checksum verification
       mm = decodeWIF(pk);
       if (mm.error) {
@@ -98,11 +92,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
       return mm;
     } else {
       // Base58 format
-      if (!Regular().regularBase58(pk)) {
-        mm.error = true;
-        mm.data = S.of(context).g_key_210;
-        return mm;
-      }
+      if (!Regular().regularBase58(pk)) return invalidKey();
       mm = decodeBase58(pk);
       return mm;
     }
@@ -233,12 +223,11 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                         ),
                         InkWell(
                           onTap: ()async{
-                            ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
+                            final data = await Clipboard.getData(Clipboard.kTextPlain);
                             if (!mounted) return;
-                            if (data != null) {
-                              if (data.text != null && data.text != "null") {
-                                _keystoreController.text = data.text!;
-                              }
+                            final text = data?.text;
+                            if (text != null && text != "null") {
+                              _keystoreController.text = text;
                             }
                           },
                           child: Container(
@@ -388,17 +377,13 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                           String keystoreJson = _keystoreController.text.trim();
 
                           if (keystoreJson.isEmpty) {
-                            errorMessage=S.of(context).g_key_210;
-                            setState(() {});
-                            ToastUtils.show(errorMessage);
+                            _showError(S.of(context).g_key_210);
                             return;
                           }
                           MessageModel mm=await checkPraviteKey(keystoreJson);
                           if (!mounted) return;
                           if(mm.error){
-                            errorMessage=S.of(context).g_key_210;
-                            setState(() {});
-                            ToastUtils.show(errorMessage);
+                            _showError(S.of(context).g_key_210);
                             return;
                           }
                           keystoreJson=mm.data;
@@ -416,9 +401,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                             String base64Str=base64Encode(ksjByte);
                             WalletInfo? findWalletInfo=ref.read(wapBridgeProvider).findWallet(pk: base64Str);
                             if(findWalletInfo != null){
-                              errorMessage=S.of(context).g_key_214(findWalletInfo.walletName??"");
-                              setState(() {});
-                              ToastUtils.show(errorMessage);
+                              _showError(S.of(context).g_key_214(findWalletInfo.walletName??""));
                               return;
                             }
                             WalletInfo wInfo = WalletInfo(
@@ -436,9 +419,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                             if (!mounted) return;
                             Navigator.of(context).pop(true);
                           }else{
-                            errorMessage=S.of(context).g_key_210;
-                            setState(() {});
-                            ToastUtils.show(errorMessage);
+                            _showError(S.of(context).g_key_210);
                           }
                         },
                         S.of(context).g_key_78,

@@ -93,6 +93,9 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
   /// 防抖延迟时间
   static const _debounceDelay = Duration(milliseconds: 500);
 
+  /// ENS 解析成功颜色
+  static const _successColor = Color(0xFF4CAF50);
+
   @override
   void initState() {
     super.initState();
@@ -163,18 +166,16 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
   /// 异步加载 ENS 头像：优先使用已内联在解析结果中的 avatar URL，
   /// 否则单独请求 getAvatar。
   Future<void> _loadAvatar(EnsResolutionResult result, String ensName) async {
-    String? url = result.avatar;
-    if (url == null || url.isEmpty) {
+    var url = result.avatar;
+    if (url?.isNotEmpty != true) {
       try {
         url = await _ensService.getAvatar(ensName);
       } catch (_) {
         url = null;
       }
     }
-    if (!mounted) return;
-    if (url != null && url.isNotEmpty) {
-      setState(() => _avatarUrl = url);
-    }
+    if (!mounted || url?.isNotEmpty != true) return;
+    setState(() => _avatarUrl = url);
   }
 
   void _validateAddress(String address) {
@@ -192,16 +193,16 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
     widget.onEnsStatusChanged?.call(status, result);
   }
 
+  Color _themeColor(String key) =>
+      AppThemeUtils.getColorByKey(context, key);
+
   @override
   Widget build(BuildContext context) {
-    final mainTextColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final bgColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
-    final blueColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final mainTextColor = _themeColor(AppThemeKeys.mainTextColor.name);
+    final subtitleColor = _themeColor(AppThemeKeys.itemSubtitleTextColor.name);
+    final bgColor = _themeColor(AppThemeKeys.itemBgColor.name);
+    final blueColor = _themeColor(AppThemeKeys.mainBlueColor.name);
+    final su = ScreenUtil();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,17 +211,16 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
         Container(
           decoration: BoxDecoration(
             color: bgColor,
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+            borderRadius: BorderRadius.circular(su.setWidth(12)),
             border: Border.all(
               color: _getBorderColor(subtitleColor, blueColor),
-              width: 1,
             ),
           ),
           child: TextField(
             controller: widget.controller,
             focusNode: widget.focusNode,
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+              fontSize: su.setSp(28),
               color: mainTextColor,
             ),
             decoration: InputDecoration(
@@ -228,19 +228,17 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
               hintText: widget.hintText ?? 'Address or ENS name',
               hintStyle: TextStyle(
                 color: subtitleColor,
-                fontSize: ScreenUtil().setSp(26),
+                fontSize: su.setSp(26),
               ),
               contentPadding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(16),
-                vertical: ScreenUtil().setWidth(14),
+                horizontal: su.setWidth(16),
+                vertical: su.setWidth(14),
               ),
               border: InputBorder.none,
               suffixIcon: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // ENS 解析状态指示器
                   _buildStatusIndicator(blueColor, subtitleColor),
-                  // 自定义后缀图标
                   ...?widget.suffixIcons,
                 ],
               ),
@@ -253,7 +251,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
           _buildResolvedCard(blueColor, subtitleColor, mainTextColor),
 
         // 外部错误信息（父组件传入）
-        if (widget.errorText != null && widget.errorText!.isNotEmpty)
+        if (widget.errorText?.isNotEmpty == true)
           _buildHintText(widget.errorText!, Colors.red),
 
         // ENS 解析失败信息
@@ -268,7 +266,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
       case EnsResolveStatus.resolving:
         return activeColor.withValues(alpha: 0.5);
       case EnsResolveStatus.resolved:
-        return const Color(0xFF4CAF50);
+        return _successColor;
       case EnsResolveStatus.failed:
         return Colors.orange;
       case EnsResolveStatus.idle:
@@ -277,17 +275,12 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
   }
 
   Widget _buildHintText(String text, Color color) {
+    final su = ScreenUtil();
     return Padding(
-      padding: EdgeInsets.only(
-        top: ScreenUtil().setWidth(8),
-        left: ScreenUtil().setWidth(4),
-      ),
+      padding: EdgeInsets.only(top: su.setWidth(8), left: su.setWidth(4)),
       child: Text(
         text,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(22),
-          color: color,
-        ),
+        style: TextStyle(fontSize: su.setSp(22), color: color),
       ),
     );
   }
@@ -295,35 +288,32 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
   Widget _buildStatusIndicator(Color blueColor, Color subtitleColor) {
     if (_status == EnsResolveStatus.idle) return const SizedBox.shrink();
 
-    final Widget indicator;
-    switch (_status) {
-      case EnsResolveStatus.resolving:
-        indicator = SizedBox(
-          width: ScreenUtil().setWidth(24),
-          height: ScreenUtil().setWidth(24),
+    final su = ScreenUtil();
+    final iconSize = su.setWidth(28);
+    final Widget indicator = switch (_status) {
+      EnsResolveStatus.resolving => SizedBox(
+          width: su.setWidth(24),
+          height: su.setWidth(24),
           child: CircularProgressIndicator(
             strokeWidth: 2,
             valueColor: AlwaysStoppedAnimation<Color>(blueColor),
           ),
-        );
-      case EnsResolveStatus.resolved:
-        indicator = Icon(
+        ),
+      EnsResolveStatus.resolved => Icon(
           Icons.check_circle,
-          color: const Color(0xFF4CAF50),
-          size: ScreenUtil().setWidth(28),
-        );
-      case EnsResolveStatus.failed:
-        indicator = Icon(
+          color: _successColor,
+          size: iconSize,
+        ),
+      EnsResolveStatus.failed => Icon(
           Icons.warning_amber_rounded,
           color: Colors.orange,
-          size: ScreenUtil().setWidth(28),
-        );
-      case EnsResolveStatus.idle:
-        indicator = const SizedBox.shrink(); // unreachable
-    }
+          size: iconSize,
+        ),
+      EnsResolveStatus.idle => const SizedBox.shrink(),
+    };
 
     return Padding(
-      padding: EdgeInsets.only(right: ScreenUtil().setWidth(12)),
+      padding: EdgeInsets.only(right: su.setWidth(12)),
       child: indicator,
     );
   }
@@ -335,6 +325,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
     Color subtitleColor,
     Color mainTextColor,
   ) {
+    final su = ScreenUtil();
     final resolvedAddr = _resolveResult!.address!;
     final shortAddr = AddressValidator.getAddressPreview(
       resolvedAddr,
@@ -345,23 +336,23 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
     return GestureDetector(
       onTap: () => _copyAddress(resolvedAddr),
       child: Container(
-        margin: EdgeInsets.only(top: ScreenUtil().setWidth(8)),
+        margin: EdgeInsets.only(top: su.setWidth(8)),
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(12),
-          vertical: ScreenUtil().setWidth(10),
+          horizontal: su.setWidth(12),
+          vertical: su.setWidth(10),
         ),
         decoration: BoxDecoration(
-          color: const Color(0xFF4CAF50).withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+          color: _successColor.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(su.setWidth(8)),
           border: Border.all(
-            color: const Color(0xFF4CAF50).withValues(alpha: 0.3),
+            color: _successColor.withValues(alpha: 0.3),
           ),
         ),
         child: Row(
           children: [
             // 头像（有时才显示）或默认的 verified 图标
             _buildAvatarWidget(),
-            SizedBox(width: ScreenUtil().setWidth(8)),
+            SizedBox(width: su.setWidth(8)),
 
             // 地址信息列
             Expanded(
@@ -369,20 +360,18 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // 副标题：Resolved Address
                   Text(
                     S.of(context).g_key_ens_resolved_address,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(20),
+                      fontSize: su.setSp(20),
                       color: subtitleColor,
                     ),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(2)),
-                  // 主体：缩短地址（6+4）
+                  SizedBox(height: su.setWidth(2)),
                   Text(
                     shortAddr,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(26),
+                      fontSize: su.setSp(26),
                       fontWeight: FontWeight.w600,
                       color: mainTextColor,
                       fontFamily: 'monospace',
@@ -395,32 +384,30 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
             // 来源链徽章（若有）
             if (_resolveResult?.sourceChain != null)
               Container(
-                margin: EdgeInsets.only(left: ScreenUtil().setWidth(4)),
+                margin: EdgeInsets.only(left: su.setWidth(4)),
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(8),
-                  vertical: ScreenUtil().setWidth(4),
+                  horizontal: su.setWidth(8),
+                  vertical: su.setWidth(4),
                 ),
                 decoration: BoxDecoration(
                   color: blueColor.withValues(alpha: 0.1),
-                  borderRadius:
-                      BorderRadius.circular(ScreenUtil().setWidth(6)),
+                  borderRadius: BorderRadius.circular(su.setWidth(6)),
                 ),
                 child: Text(
                   _resolveResult!.sourceChain!,
                   style: TextStyle(
-                    fontSize: ScreenUtil().setSp(18),
+                    fontSize: su.setSp(18),
                     fontWeight: FontWeight.w600,
                     color: blueColor,
                   ),
                 ),
               ),
 
-            // 复制图标提示
-            SizedBox(width: ScreenUtil().setWidth(6)),
+            SizedBox(width: su.setWidth(6)),
             Icon(
               Icons.copy_rounded,
               color: subtitleColor,
-              size: ScreenUtil().setWidth(20),
+              size: su.setWidth(20),
             ),
           ],
         ),
@@ -430,23 +417,23 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
 
   /// 头像组件：如有 URL 则显示网络图片，否则显示 verified 图标
   Widget _buildAvatarWidget() {
-    if (_avatarUrl != null) {
-      return ClipOval(
-        child: Image.network(
-          _avatarUrl!,
-          width: ScreenUtil().setWidth(32),
-          height: ScreenUtil().setWidth(32),
-          fit: BoxFit.cover,
-          errorBuilder: (ctx, err, st) => _verifiedIcon(),
-        ),
-      );
-    }
-    return _verifiedIcon();
+    final avatarUrl = _avatarUrl;
+    if (avatarUrl == null) return _verifiedIcon();
+    final size = ScreenUtil().setWidth(32);
+    return ClipOval(
+      child: Image.network(
+        avatarUrl,
+        width: size,
+        height: size,
+        fit: BoxFit.cover,
+        errorBuilder: (_, _, _) => _verifiedIcon(),
+      ),
+    );
   }
 
   Widget _verifiedIcon() => Icon(
         Icons.verified,
-        color: const Color(0xFF4CAF50),
+        color: _successColor,
         size: ScreenUtil().setWidth(24),
       );
 

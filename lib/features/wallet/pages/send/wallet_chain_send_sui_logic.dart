@@ -7,14 +7,9 @@ part of 'wallet_chain_send_sui.dart';
 mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
   CoinModel? chainModel;
 
-  Regular? _logicRegular;
-  Regular get regular => _logicRegular ??= Regular();
-
-  DataUtils? _logicDataUtils;
-  DataUtils get dataUtils => _logicDataUtils ??= DataUtils();
-
-  TokenViewApi? _logicTokenViewApi;
-  TokenViewApi get tokenViewApi => _logicTokenViewApi ??= TokenViewApi();
+  late final Regular regular = Regular();
+  late final DataUtils dataUtils = DataUtils();
+  late final TokenViewApi tokenViewApi = TokenViewApi();
 
   final NumberFormat oCcy = NumberFormat("#,##0.00########", "en_US");
 
@@ -72,12 +67,10 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
 
   // 获取余额
   Future<void> getBalance() async {
-    setState(() {
-      load = Load.loading;
-    });
+    setState(() => load = Load.loading);
     final bool isOk = await widget.coinModel.getBalance(getToken: false);
     if (!mounted) return;
-    if (isOk == false) {
+    if (!isOk) {
       load = Load.finish;
       errorMessage = S.current.g_key_t_44;
       ToastUtils.show(S.current.g_key_t_44);
@@ -87,9 +80,7 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
 
   // 获取旷工费
   Future<void> getGasPrice() async {
-    setState(() {
-      load = Load.loading;
-    });
+    setState(() => load = Load.loading);
     final String? rpc = widget.coinModel.coin['custom'] == true
         ? widget.coinModel.coin['service']
         : null;
@@ -117,25 +108,22 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
     final List<dynamic> v = await SuiApi(isTest: widget.coinModel.isTest)
         .getOwnedObjects(widget.coinModel.address);
     if (!mounted) return;
-    utxos = [];
-    for (final Map utxo in v) {
-      final Map<String, dynamic> u = {
-        "objectId": utxo['data']['objectId'],
-        "objectDigest": utxo['data']['digest'],
-        "version": utxo['data']['version'],
-        "balance": utxo['data']['content']['fields']['balance'],
-      };
-      utxos.add(u);
-    }
+    utxos = [
+      for (final Map utxo in v)
+        {
+          "objectId": utxo['data']['objectId'],
+          "objectDigest": utxo['data']['digest'],
+          "version": utxo['data']['version'],
+          "balance": utxo['data']['content']['fields']['balance'],
+        },
+    ];
   }
 
   // eth 模拟交易
   Future<dynamic> estimateGasEthLocal({bool checkAddress = true}) async {
     closeKeyboard();
     if (gasLimitLoad == Load.loading) return;
-    setState(() {
-      gasLimitLoad = Load.loading;
-    });
+    setState(() => gasLimitLoad = Load.loading);
     try {
       String? toAddr;
       if (checkAddress) {
@@ -197,53 +185,46 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
 
   // 检查 amount 输入是否正确
   void amountCheck({String value = ""}) {
-    if (value == "") {
-      value = valueTextEditingController.text;
+    if (value.isEmpty) value = valueTextEditingController.text;
+
+    final int minValue = widget.coinModel.coin['decimals'] == 0 ? 1 : 0;
+
+    void setError(String msg) {
+      amountErrorMessage = msg;
+      setState(() {});
     }
-    int minValue = 0;
-    if (widget.coinModel.coin['decimals'] == 0) {
-      minValue = 1;
-    }
+
     if (value.isEmpty) {
-      amountErrorMessage = S.of(context).g_key_46(minValue);
-      setState(() {});
+      setError(S.of(context).g_key_46(minValue));
       return;
     }
-    bool checkValue1 = false;
-    if (widget.coinModel.coin['decimals'] == 0) {
-      checkValue1 = regular.regularNums(value.toString());
-      if (checkValue1 == false) {
-        amountErrorMessage = S.of(context).g_key_134;
-        setState(() {});
-        return;
-      }
-    } else {
-      checkValue1 = regular.regularNums(value.toString());
+
+    final bool checkNums = regular.regularNums(value);
+    if (widget.coinModel.coin['decimals'] == 0 && !checkNums) {
+      setError(S.of(context).g_key_134);
+      return;
     }
-    final bool checkValue = regular.regularDouble(value.toString());
+
+    final bool checkDouble = regular.regularDouble(value);
     final double dValue = double.parse(value);
-    if (checkValue == false && checkValue1 == false) {
-      amountErrorMessage = S.of(context).g_key_134;
-      setState(() {});
-      return;
-    } else if (dValue < minValue) {
-      amountErrorMessage = S.of(context).g_key_46(minValue);
-      setState(() {});
-      return;
-    } else if (dValue == 0) {
-      amountErrorMessage = S.of(context).g_key_46(minValue);
-      setState(() {});
+
+    if (!checkDouble && !checkNums) {
+      setError(S.of(context).g_key_134);
       return;
     }
+    if (dValue <= 0 || dValue < minValue) {
+      setError(S.of(context).g_key_46(minValue));
+      return;
+    }
+
     final BigInt valueBi =
         ethToWeiString(value, widget.coinModel.coin['decimals']);
-    if (widget.coinModel.coin['isContract'] == false) {
-      if (valueBi + totalGasPrice > widget.coinModel.balance) {
-        amountErrorMessage = S.of(context).g_key_47;
-        setState(() {});
-        return;
-      }
+    if (!widget.coinModel.coin['isContract'] &&
+        valueBi + totalGasPrice > widget.coinModel.balance) {
+      setError(S.of(context).g_key_47);
+      return;
     }
+
     transferValue = valueBi;
     amountErrorMessage = "";
     setState(() {});
@@ -251,34 +232,30 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
 
   // 检查转账地址是否正确
   Future<String?> toAddressCheck(String addr) async {
-    if (addr == "") {
+    if (addr.isEmpty) {
       toErrorMessage = S.current.g_key_41;
       setState(() {});
       return null;
     }
+
     final List<String> addrList = addr.split(":");
-    if (addrList.length == 2) {
-      addr = addrList[1];
-    }
-    final bool check =
+    if (addrList.length == 2) addr = addrList[1];
+
+    final bool valid =
         await Trustdart().validateAddress(widget.coinModel.coin['coinType'], addr);
-    if (check) {
-      if (addr.toUpperCase() ==
-          widget.coinModel.address.toString().toUpperCase()) {
-        toErrorMessage = S.current.g_key_t_50;
-        setState(() {});
-        return null;
-      } else {
-        toErrorMessage = "";
-        setState(() {});
-        return addr;
-      }
-    } else {
+
+    if (!valid || addr.toUpperCase() == widget.coinModel.address.toString().toUpperCase()) {
       toErrorMessage = S.current.g_key_t_50;
       setState(() {});
       return null;
     }
+
+    toErrorMessage = "";
+    setState(() {});
+    return addr;
   }
+
+  void _resetLoad() => setState(() => load = Load.finish);
 
   Future<void> sendTransaction() async {
     if (load == Load.loading) {
@@ -289,41 +266,22 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
     closeKeyboard();
     amountCheck();
     if (amountErrorMessage != "") return;
-    setState(() {
-      load = Load.loading;
-    });
+
+    setState(() => load = Load.loading);
+
     final String? toAddr =
         await toAddressCheck(toTextEditingController.text.trim());
-    if (toAddr == null) {
-      setState(() {
-        load = Load.finish;
-      });
-      return;
-    }
+    if (toAddr == null) { _resetLoad(); return; }
+
     await estimateGasEthLocal(checkAddress: false);
     if (!mounted) return;
-    if (errorMessage != "") {
-      setState(() {
-        load = Load.finish;
-      });
-      return;
-    }
-    BigInt uBalance = widget.coinModel.balance;
-    if (widget.coinModel.coin['isContract']) {
-      uBalance = chainModel?.balance ?? BigInt.zero;
-    }
-    if (totalGasPrice > uBalance) {
-      setState(() {
-        load = Load.finish;
-      });
-      return;
-    }
-    if (widget.coinModel.balance == BigInt.zero) {
-      setState(() {
-        load = Load.finish;
-      });
-      return;
-    }
+    if (errorMessage != "") { _resetLoad(); return; }
+
+    final BigInt uBalance = widget.coinModel.coin['isContract']
+        ? (chainModel?.balance ?? BigInt.zero)
+        : widget.coinModel.balance;
+    if (totalGasPrice > uBalance) { _resetLoad(); return; }
+    if (widget.coinModel.balance == BigInt.zero) { _resetLoad(); return; }
     if (!mounted) return;
     final TransationRecordModel trModel = TransationRecordModel();
     trModel.address = widget.coinModel.address.toString();
@@ -358,14 +316,12 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
     if (check) {
       signTx(trModel);
     } else {
-      setState(() {
-        load = Load.finish;
-      });
+      _resetLoad();
     }
   }
 
   Future<void> signTx(TransationRecordModel trModel) async {
-    if (signTxCheck() == false) return;
+    if (!signTxCheck()) return;
     try {
       final TransferApi transferApi = TransferApi();
       final MessageModel mm = await transferApi.transferWallet(
@@ -400,20 +356,14 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
   }
 
   bool signTxCheck() {
-    if (widget.coinModel.coin['blockchainType'] ==
-        BlockchainType.Ethereum.name) {
-      if (widget.coinModel.coin['isContract']) {
-        final BigInt chainBalance = chainModel?.balance ?? BigInt.zero;
-        if (chainBalance == BigInt.zero) {
-          ToastUtils.show(
-              S.current.g_key_t_29(chainModel?.coin['coinType'] ?? ""));
-          return false;
-        } else if (totalGasPrice > chainBalance) {
-          ToastUtils.show(
-              S.current.g_key_t_29(chainModel?.coin['coinType'] ?? ""));
-          return false;
-        }
-      }
+    if (widget.coinModel.coin['blockchainType'] != BlockchainType.Ethereum.name) return true;
+    if (!widget.coinModel.coin['isContract']) return true;
+
+    final BigInt chainBalance = chainModel?.balance ?? BigInt.zero;
+    if (chainBalance == BigInt.zero || totalGasPrice > chainBalance) {
+      ToastUtils.show(
+          S.current.g_key_t_29(chainModel?.coin['coinType'] ?? ""));
+      return false;
     }
     return true;
   }
