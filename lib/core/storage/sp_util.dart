@@ -372,29 +372,6 @@ class SPUtil {
 
   // ==================== 通用方法 ====================
 
-  /// put object.
-  Future<bool> putObject(String key, Object? value) async {
-    await initPrefs();
-    return await prefs!.setString(key, value == null ? "" : json.encode(value));
-  }
-
-  /// get obj.
-  Future<T> getObj<T>(
-    String key,
-    T Function(Map v) f, {
-    required T defValue,
-  }) async {
-    Map? map = await getObject(key);
-    return map == null ? defValue : f(map);
-  }
-
-  /// get object.
-  Future<Map<String, dynamic>?> getObject(String key) async {
-    await initPrefs();
-    String? data = prefs?.getString(key);
-    return (data == null || data.isEmpty) ? null : json.decode(data);
-  }
-
   /// 保存bool值
   Future<bool?> setBoolValue(String key, bool value) async {
     await initPrefs();
@@ -406,13 +383,6 @@ class SPUtil {
   Future<bool> getBoolValue(String key, {bool? defaultValue = false}) async {
     await initPrefs();
     return prefs?.getBool(key) ?? defaultValue ?? false;
-  }
-
-  /// get List object.
-  Future<Object?> getListObject(String key) async {
-    await initPrefs();
-    String? data = prefs?.getString(key);
-    return (data == null || data.isEmpty) ? null : json.decode(data);
   }
 
   // ── Token auto-discovery: ignored contracts ──────────────────────────────

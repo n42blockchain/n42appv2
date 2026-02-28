@@ -45,45 +45,39 @@ class ChatCryptoServiceImpl implements IChatCryptoService {
     return wallets.whenOrNull(data: (list) => list) ?? [];
   }
 
-  /// Get the main wallet's data
+  /// Get the main wallet (marked as main, or first fallback)
   WalletInfoData? _getMainWallet() {
     final wallets = _getAllWallets();
     if (wallets.isEmpty) return null;
+    return wallets.where((w) => w.isMainWallet).firstOrNull ?? wallets.first;
+  }
 
-    // Find wallet marked as main
-    final mainWallet = wallets.where((w) => w.isMainWallet).firstOrNull;
-    if (mainWallet != null) return mainWallet;
+  /// Resolve the N-chain derivation path for a wallet.
+  /// Returns null if coinInfo is missing or incomplete.
+  String? _resolveDerivationPath(WalletInfoData wallet) {
+    final astMap = wallet.coinInfo?[CoinType.N.name];
+    if (astMap == null) return null;
 
-    // Fallback to first wallet if no main wallet
-    return wallets.first;
+    final int pathIndex = astMap['pathIndex'] ?? 0;
+    final addrType = astMap['addrType'] ?? 'legacy';
+    return getPathWithIndex(astMap["baseInfo"]["path"][addrType], pathIndex);
   }
 
   @override
   Future<String?> getPublicKeyForChat() async {
     final wallet = _getMainWallet();
     if (wallet == null) return null;
+    final path = _resolveDerivationPath(wallet);
+    if (path == null) return null;
 
     try {
-      final coinInfo = wallet.coinInfo;
-      final astMap = coinInfo?[CoinType.N.name];
-      if (astMap == null) return null;
-
-      final int pathIndex = astMap['pathIndex'] ?? 0;
-      final addrType = astMap['addrType'] ?? 'legacy';
-      final path = getPathWithIndex(
-        astMap["baseInfo"]["path"][addrType],
-        pathIndex,
-      );
-
       final publicKey = await Trustdart().getPublicKey(
         CoinType.N.name,
         path,
         mnemonic: wallet.mnemonic ?? "",
         pk: wallet.privateKey ?? "",
       );
-
-      final pk = base64Decode(publicKey);
-      return bytesToHex(pk);
+      return bytesToHex(base64Decode(publicKey));
     } catch (e) {
       return null;
     }
@@ -93,19 +87,10 @@ class ChatCryptoServiceImpl implements IChatCryptoService {
   Future<String?> getPrivateKeyForChat() async {
     final wallet = _getMainWallet();
     if (wallet == null) return null;
+    final path = _resolveDerivationPath(wallet);
+    if (path == null) return null;
 
     try {
-      final coinInfo = wallet.coinInfo;
-      final astMap = coinInfo?[CoinType.N.name];
-      if (astMap == null) return null;
-
-      final int pathIndex = astMap['pathIndex'] ?? 0;
-      final addrType = astMap['addrType'] ?? 'legacy';
-      final path = getPathWithIndex(
-        astMap["baseInfo"]["path"][addrType],
-        pathIndex,
-      );
-
       String? privateKey = wallet.privateKey;
       if (privateKey == null && wallet.mnemonic != null) {
         privateKey = await Trustdart().getPrivateKey(
@@ -114,11 +99,8 @@ class ChatCryptoServiceImpl implements IChatCryptoService {
           path,
         );
       }
-
       if (privateKey == null) return null;
-
-      final pk = base64Decode(privateKey);
-      return bytesToHex(pk);
+      return bytesToHex(base64Decode(privateKey));
     } catch (e) {
       return null;
     }
@@ -173,26 +155,15 @@ class ChatCryptoServiceImpl implements IChatCryptoService {
     }
 
     final Map<String, String> keyPairs = {};
-    final wallets = _getAllWallets();
     final trustdart = Trustdart();
 
-    for (final wallet in wallets) {
-      // Only process main wallets (for security)
+    for (final wallet in _getAllWallets()) {
       if (!wallet.isMainWallet) continue;
 
+      final path = _resolveDerivationPath(wallet);
+      if (path == null) continue;
+
       try {
-        final coinInfo = wallet.coinInfo;
-        final astMap = coinInfo?[CoinType.N.name];
-        if (astMap == null) continue;
-
-        final int pathIndex = astMap['pathIndex'] ?? 0;
-        final addrType = astMap['addrType'] ?? 'legacy';
-        final path = getPathWithIndex(
-          astMap["baseInfo"]["path"][addrType],
-          pathIndex,
-        );
-
-        // Get both public and private key pair
         final pairJson = await trustdart.getPrivateKeyAndPublicKeyPair(
           CoinType.N.name,
           path,
@@ -207,11 +178,9 @@ class ChatCryptoServiceImpl implements IChatCryptoService {
 
         keyPairs[pubKey] = privateKey;
 
-        // Track public key for cache validation (not the private key)
         _cachedPublicKeys ??= {};
         _cachedPublicKeys![pubKey] = true;
       } catch (e) {
-        // Continue with next wallet
         continue;
       }
     }
@@ -253,17 +222,13 @@ class ChatCryptoServiceImpl implements IChatCryptoService {
 
   /// Dispose and securely clear all cached data
   void dispose() {
-    // Clear public key cache
     _cachedPublicKeys?.clear();
-    _cachedPublicKeys = null;
-    _cacheTimestamp = null;
+    clearCache();
   }
 }
 
 /// Provider for IChatCryptoService
 final chatCryptoServiceProvider = Provider<IChatCryptoService>((ref) {
-  // We need the container - in a real app this would be injected
-  // For now, create a temporary container (will be improved during full migration)
   final container = ProviderContainer();
   final service = ChatCryptoServiceImpl(container);
   ref.onDispose(() {

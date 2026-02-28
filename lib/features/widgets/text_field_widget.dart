@@ -1,6 +1,89 @@
-﻿import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+/// Resolves border and text colors based on error state and focus.
+({Color borderColor, Color textColor}) _resolveColors(
+  BuildContext context, {
+  required String errorMessage,
+  required Color? borderColorOverride,
+  required FocusNode? focusNode,
+}) {
+  if (errorMessage != "") {
+    final errorColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
+    return (borderColor: errorColor, textColor: errorColor);
+  }
+
+  final defaultBorder = borderColorOverride ??
+      AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBorderColor.name);
+  final textColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name);
+
+  if (focusNode != null && focusNode.hasFocus) {
+    final focusBorder = borderColorOverride ??
+        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    return (borderColor: focusBorder, textColor: textColor);
+  }
+
+  return (borderColor: defaultBorder, textColor: textColor);
+}
+
+/// Builds the common message widget shown below a text field.
+Widget? _buildMessageWidget(
+  BuildContext context, {
+  required String message,
+  required String errorMessage,
+  required EdgeInsetsGeometry? messageMargin,
+}) {
+  if (errorMessage != "") {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
+      margin: messageMargin,
+      width: double.infinity,
+      child: Text(
+        errorMessage,
+        style: TextStyle(
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+          fontSize: ScreenUtil().setSp(28.0),
+        ),
+      ),
+    );
+  }
+  if (message != "") {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
+      margin: messageMargin,
+      width: double.infinity,
+      child: Text(
+        message,
+        style: TextStyle(
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+          fontSize: ScreenUtil().setSp(28.0),
+        ),
+      ),
+    );
+  }
+  return null;
+}
+
+/// Builds the common InputDecoration used by both text field styles.
+InputDecoration _buildInputDecoration({
+  required EdgeInsets? contentPadding,
+  required String hintText,
+  required TextStyle? hintStyle,
+  required Widget? suffix,
+}) {
+  return InputDecoration(
+    contentPadding: contentPadding ??
+        EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
+    isCollapsed: true,
+    hintText: hintText,
+    hintStyle: hintStyle,
+    border: InputBorder.none,
+    enabledBorder: InputBorder.none,
+    focusedBorder: InputBorder.none,
+    suffix: suffix,
+  );
+}
 
 Widget textFieldStyle2(
     BuildContext context,
@@ -39,150 +122,78 @@ Widget textFieldStyle2(
       Widget? leftWidget,
       VoidCallback? leftOnTap,
     }) {
-  Color bdColor=borderColor??AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBorderColor.name);
-  Color textColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name);
-  if(errorMessage !=""){
-    bdColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
-    textColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
-  }else{
-    if(focusNode !=null){
-      if(focusNode.hasFocus){
-        bdColor=borderColor??AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-      }
-    }
-  }
+  final colors = _resolveColors(context,
+      errorMessage: errorMessage, borderColorOverride: borderColor, focusNode: focusNode);
+  final defaultHeight = ScreenUtil().setWidth(88.0);
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Container(
-        padding: padding??EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+        padding: padding ?? EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
         decoration: BoxDecoration(
-          borderRadius:borderRadius?? BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
-          color: bgColor??AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor2.name),
+          borderRadius: borderRadius ?? BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
+          color: bgColor ?? AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor2.name),
           boxShadow: [
-            boxShadow??BoxShadow(
-              color: Color(0xff101828).withAlpha((0.05 * 255).round()),  //底色,阴影颜色
-              offset: Offset(0, 1), //阴影位置,从什么位置开始
-              blurRadius: ScreenUtil().setWidth(4.0),  // 阴影模糊层度
-              spreadRadius: 0, )
+            boxShadow ?? BoxShadow(
+              color: Color(0xff101828).withAlpha((0.05 * 255).round()),
+              offset: Offset(0, 1),
+              blurRadius: ScreenUtil().setWidth(4.0),
+              spreadRadius: 0,
+            )
           ],
-          border: borderWidth==0?null:Border.all(
+          border: borderWidth == 0 ? null : Border.all(
             width: borderWidth,
-            color: bdColor,
+            color: colors.borderColor,
           ),
         ),
         constraints: BoxConstraints(
-          maxHeight: height??ScreenUtil().setWidth(88.0),
-          minHeight: height??ScreenUtil().setWidth(88.0),
+          maxHeight: height ?? defaultHeight,
+          minHeight: height ?? defaultHeight,
         ),
         alignment: Alignment.center,
         child: Row(
           children: [
-            if(leftWidget !=null)
-              InkWell(
-                onTap: (){
-                  if(leftOnTap !=null) {
-                    leftOnTap();
-                  }
-                },
-                child: leftWidget,
-              ),
+            if (leftWidget != null)
+              InkWell(onTap: leftOnTap, child: leftWidget),
             Expanded(
-              flex: 1,
               child: TextField(
                 controller: controller,
                 focusNode: focusNode,
                 enabled: enabled,
-                style: style??TextStyle(
-                  color: textColor,
-                  fontSize: fontSize??ScreenUtil().setSp(32.0),
+                style: style ?? TextStyle(
+                  color: colors.textColor,
+                  fontSize: fontSize ?? ScreenUtil().setSp(32.0),
                 ),
-                textInputAction: textInputAction??TextInputAction.next,
-                keyboardType: keyboardType??TextInputType.text,
-                decoration: InputDecoration(
-                  contentPadding:contentPadding??
-                      EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
-                  isCollapsed: true,
+                textInputAction: textInputAction ?? TextInputAction.next,
+                keyboardType: keyboardType ?? TextInputType.text,
+                decoration: _buildInputDecoration(
+                  contentPadding: contentPadding,
                   hintText: hintText,
                   hintStyle: hintStyle,
-                  border: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
                   suffix: suffix,
                 ),
-                maxLines: maxLines??1,
-                onEditingComplete: () {
-                  if(onEditingComplete !=null) {
-                    onEditingComplete();
-                  }
-                },
-                onChanged: (value) {
-                  if(onChanged !=null) {
-                    onChanged(value);
-                  }
-                },
-                onSubmitted: (value){
-                  if(onSubmitted !=null) {
-                    onSubmitted(value);
-                  }
-                },
+                maxLines: maxLines ?? 1,
+                onEditingComplete: onEditingComplete,
+                onChanged: onChanged,
+                onSubmitted: onSubmitted,
               ),
             ),
-            if(rightWidget3 !=null)
-              InkWell(
-                onTap: rightOnTap3,
-                child: rightWidget3,
-              ),
-            if(rightWidget1 !=null)
-              InkWell(
-                onTap: (){
-                  if(rightOnTap1 !=null) {
-                    rightOnTap1();
-                  }
-                },
-                child: rightWidget1,
-              ),
-            if(rightWidget2 !=null)
-              InkWell(
-                onTap: (){
-                  if(rightOnTap2 !=null) {
-                    rightOnTap2();
-                  }
-                },
-                child: rightWidget2,
-              ),
+            if (rightWidget3 != null)
+              InkWell(onTap: rightOnTap3, child: rightWidget3),
+            if (rightWidget1 != null)
+              InkWell(onTap: rightOnTap1, child: rightWidget1),
+            if (rightWidget2 != null)
+              InkWell(onTap: rightOnTap2, child: rightWidget2),
           ],
         ),
       ),
-      if(message !="" && errorMessage=="")
-        Container(
-          padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
-          margin: messageMargin,
-          width: double.infinity,
-          child: Text(
-            message,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
-          ),
-        ),
-      if(errorMessage !="")
-        Container(
-          padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
-          margin: messageMargin,
-          width: double.infinity,
-          child: Text(
-            errorMessage,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
-          ),
-        ),
+      if (_buildMessageWidget(context, message: message, errorMessage: errorMessage, messageMargin: messageMargin) != null)
+        _buildMessageWidget(context, message: message, errorMessage: errorMessage, messageMargin: messageMargin)!,
     ],
   );
 }
+
 Widget textFieldStyle3(
     BuildContext context,
     {
@@ -203,7 +214,6 @@ Widget textFieldStyle3(
       EdgeInsets? padding,
       BorderRadius? borderRadius,
       Color? bgColor,
-      //BoxShadow? boxShadow,
       double? fontSize,
       int? maxLines,
       int? maxLengths,
@@ -220,125 +230,68 @@ Widget textFieldStyle3(
       Widget? leftWidget,
       VoidCallback? leftOnTap,
     }) {
-  Color bdColor=borderColor??AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBorderColor.name);
-  Color textColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name);
-  if(errorMessage !=""){
-    bdColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
-    textColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
-  }else{
-    if(focusNode !=null){
-      if(focusNode.hasFocus){
-        bdColor=borderColor??AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-      }
-    }
-  }
+  final colors = _resolveColors(context,
+      errorMessage: errorMessage, borderColorOverride: borderColor, focusNode: focusNode);
+  final defaultHeight = ScreenUtil().setWidth(88.0);
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Container(
-        padding: padding??EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+        padding: padding ?? EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
         decoration: BoxDecoration(
-          borderRadius:borderRadius?? BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
-          color: bgColor??AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor2.name),
-          border: borderWidth==0?null:Border.all(
+          borderRadius: borderRadius ?? BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
+          color: bgColor ?? AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor2.name),
+          border: borderWidth == 0 ? null : Border.all(
             width: borderWidth,
-            color: bdColor,
+            color: colors.borderColor,
           ),
         ),
         constraints: BoxConstraints(
-          maxHeight: height??ScreenUtil().setWidth(88.0),
-          minHeight: height??ScreenUtil().setWidth(88.0),
+          maxHeight: height ?? defaultHeight,
+          minHeight: height ?? defaultHeight,
         ),
         alignment: Alignment.center,
         child: Row(
           children: [
-            if(leftWidget !=null)
-              InkWell(
-                onTap: (){
-                  if(leftOnTap !=null) {
-                    leftOnTap();
-                  }
-                },
-                child: leftWidget,
-              ),
+            if (leftWidget != null)
+              InkWell(onTap: leftOnTap, child: leftWidget),
             Expanded(
-              flex: 1,
               child: TextField(
                 controller: controller,
                 focusNode: focusNode,
                 enabled: enabled,
-                style: style??TextStyle(
-                  color: textColor,
-                  fontSize: fontSize??ScreenUtil().setSp(32.0),
+                style: style ?? TextStyle(
+                  color: colors.textColor,
+                  fontSize: fontSize ?? ScreenUtil().setSp(32.0),
                 ),
-                textInputAction: textInputAction??TextInputAction.next,
-                keyboardType: keyboardType??TextInputType.text,
-                obscureText:obscure,
-                decoration: InputDecoration(
-                  contentPadding:contentPadding??
-                      EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
-                  isCollapsed: true,
+                textInputAction: textInputAction ?? TextInputAction.next,
+                keyboardType: keyboardType ?? TextInputType.text,
+                obscureText: obscure,
+                decoration: _buildInputDecoration(
+                  contentPadding: contentPadding,
                   hintText: hintText,
                   hintStyle: hintStyle,
-                  border: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
                   suffix: suffix,
                 ),
-                maxLines: maxLines??1,
+                maxLines: maxLines ?? 1,
                 maxLength: maxLengths,
-                onEditingComplete: () {
-                  if(onEditingComplete !=null) {
-                    onEditingComplete();
-                  }
-                },
-                onChanged: (value) {
-                  if(onChanged !=null) {
-                    onChanged(value);
-                  }
-                },
-                onSubmitted: (value){
-                  if(onSubmitted !=null) {
-                    onSubmitted(value);
-                  }
-                },
+                onEditingComplete: onEditingComplete,
+                onChanged: onChanged,
+                onSubmitted: onSubmitted,
               ),
             ),
-            if(rightWidget1 !=null)
-              InkWell(
-                onTap: (){
-                  if(rightOnTap1 !=null) {
-                    rightOnTap1();
-                  }
-                },
-                child: rightWidget1,
-              ),
-            if(rightWidget2 !=null)
-              InkWell(
-                onTap: (){
-                  if(rightOnTap2 !=null) {
-                    rightOnTap2();
-                  }
-                },
-                child: rightWidget2,
-              ),
+            if (rightWidget1 != null)
+              InkWell(onTap: rightOnTap1, child: rightWidget1),
+            if (rightWidget2 != null)
+              InkWell(onTap: rightOnTap2, child: rightWidget2),
           ],
         ),
       ),
-      if(message !="" && errorMessage=="")
-        Container(
-          padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
-          margin: messageMargin,
-          width: double.infinity,
-          child: Text(
-            message,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
-          ),
-        ),
-      if(errorMessage !="")
+      // Style3 uses a Row with icon for error messages
+      if (message != "" && errorMessage == "")
+        _buildMessageWidget(context, message: message, errorMessage: "", messageMargin: messageMargin)!,
+      if (errorMessage != "")
         Container(
           padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
           margin: messageMargin,
@@ -351,9 +304,8 @@ Widget textFieldStyle3(
                 height: ScreenUtil().setWidth(30.0),
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
               ),
-              SizedBox(width: 5,),
+              SizedBox(width: 5),
               Expanded(
-                flex: 1,
                 child: Text(
                   errorMessage,
                   style: TextStyle(

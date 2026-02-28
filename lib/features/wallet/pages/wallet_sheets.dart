@@ -8,7 +8,6 @@ import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_home.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/wallet_list.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
-import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/features/wallet/widgets/create_wallet_button.dart';
 import 'package:n42_wallet/features/wallet/widgets/wallet_search_coin.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
@@ -112,7 +111,7 @@ class _WalletAddressList extends StatelessWidget {
                   context, AppThemeKeys.mainButtonBgColor.name)
               : AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.itemSubtitleTextColor.name);
-          final isLocked = wInfo.mainWallet == true || isSelected;
+          final isLocked = wInfo.mainWallet || isSelected;
 
           return InkWell(
             onTap: () async {
@@ -223,8 +222,24 @@ class _AddTokenMenu extends StatelessWidget {
 
   final WidgetRef ref;
 
+  /// 通用：导航到子页面，返回 true 时刷新钱包，最后关闭弹窗。
+  Future<void> _pushAndRefresh(BuildContext context, Widget page) async {
+    final result = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (_) => page),
+    );
+    if (result == true) {
+      ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
+    }
+    if (context.mounted) Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final wi = ref.read(wapBridgeProvider).walletInfo;
+    final cType =
+        wi.privateKey != null ? wi.coinInfo?.keys.toList()[0] : null;
+
     return Container(
       alignment: Alignment.center,
       child: Column(
@@ -233,40 +248,13 @@ class _AddTokenMenu extends StatelessWidget {
         children: [
           _AddTokenMenuItem(
             label: S.of(context).g_token_m_key_20,
-            onTap: () async {
-              final wi = ref.read(wapBridgeProvider).walletInfo;
-              final cType = wi.privateKey != null
-                  ? wi.coinInfo?.keys.toList()[0]
-                  : null;
-              final result = await Navigator.push<bool>(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => WalletCoinAddAll("", coinType: cType),
-                ),
-              );
-              if (result == true) {
-                ref
-                    .read(wapBridgeProvider)
-                    .initWallet(shouldInitCoinInfo: true);
-              }
-              if (context.mounted) Navigator.pop(context);
-            },
+            onTap: () =>
+                _pushAndRefresh(context, WalletCoinAddAll("", coinType: cType)),
           ),
           Divider(height: ScreenUtil().setWidth(1)),
           _AddTokenMenuItem(
             label: S.of(context).g_token_m_key_19,
-            onTap: () async {
-              final result = await Navigator.push<bool>(
-                context,
-                MaterialPageRoute(builder: (_) => WalletChainAdd()),
-              );
-              if (result == true) {
-                ref
-                    .read(wapBridgeProvider)
-                    .initWallet(shouldInitCoinInfo: true);
-              }
-              if (context.mounted) Navigator.pop(context);
-            },
+            onTap: () => _pushAndRefresh(context, WalletChainAdd()),
           ),
         ],
       ),
@@ -346,8 +334,6 @@ void showSwapModeSheet(BuildContext context) {
   );
 }
 
-// ── 添加代币悬浮图标 ─────────────────────────────────────────────────────────
-
 // ── 未备份提示横幅 ────────────────────────────────────────────────────────────
 
 /// 页面底部固定横幅，提示用户备份钱包。
@@ -414,8 +400,6 @@ class BackupReminderBanner extends StatelessWidget {
     );
   }
 }
-
-// ── 添加代币悬浮图标 ─────────────────────────────────────────────────────────
 
 class AddTokenFloatingIcon extends StatelessWidget {
   const AddTokenFloatingIcon({super.key});

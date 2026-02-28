@@ -15,7 +15,6 @@ import 'package:n42_wallet/features/wallet/pages/transactions/transaction_histor
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_chain_info_sync.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_chain_info_xrp_actions.dart';
-import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/features/wallet/utils/browser/browser_address.dart';
 import 'package:n42_wallet/features/wallet/utils/browser/browser_token_address.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
@@ -157,7 +156,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
   @override
   Future<void> changeNet(bool isTest, Load loadType) async {
     try {
-      final wap = ref.read(wapBridgeProvider);
+      final wap = _walletProvider;
       wap.walletMap[widget.coinModel.coin['coinType']]['isTest'] = isTest;
       widget.coinModel.isTest = isTest;
       await wap.saveWalletInfo(wap.walletInfo, wap.walletIndex);
@@ -182,8 +181,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
     _eventBusFn = eventBus.on().listen((event) async {
       if (event is EventPublic &&
           event.type == EventPublicType.transferOk) {
-        getTransactionData(Load.refresh);
-        getTransactionDataNetwork(Load.refresh);
+        _refreshTransactions(Load.refresh);
         await widget.coinModel.getBalance();
         setState(() {});
       }
@@ -198,46 +196,51 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
     super.dispose();
   }
 
+  /// 同时刷新本地 + 网络交易列表
+  void _refreshTransactions(Load loadType) {
+    getTransactionData(loadType);
+    getTransactionDataNetwork(loadType);
+  }
+
   void _onScroll() {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final pixel = _scrollController.position.pixels;
     if (pixel > maxScroll - 200) {
-      getTransactionData(Load.nextPage);
-      getTransactionDataNetwork(Load.nextPage);
+      _refreshTransactions(Load.nextPage);
     }
   }
 
   void _initData() {
-    if (widget.coinModel.coin['isContract'] == true) {
-      final cIndex = ref.read(wapBridgeProvider).coinModels.indexWhere(
-            (e) => e.coin['coinType'] == widget.coinModel.coin['coinType'],
-          );
-      chainCoinModel = ref.read(wapBridgeProvider).coinModels[cIndex];
+    final wap = _walletProvider;
+    final coin = widget.coinModel.coin;
+
+    if (coin['isContract'] == true) {
+      final cIndex = wap.coinModels.indexWhere(
+        (e) => e.coin['coinType'] == coin['coinType'],
+      );
+      chainCoinModel = wap.coinModels[cIndex];
       _chainName = chainCoinModel?.coin['name'];
       _chainSymbol = chainCoinModel?.coin['miniName'];
-      _tokenName = widget.coinModel.coin['name'];
-      _tokenSymbol = widget.coinModel.coin['miniName'];
+      _tokenName = coin['name'];
+      _tokenSymbol = coin['miniName'];
       browserUrl = getBrowserTokenAddress(
-        widget.coinModel.coin['coinType'],
+        coin['coinType'],
         widget.coinModel.address,
-        widget.coinModel.coin['contract'],
+        coin['contract'],
         isTest: widget.coinModel.isTest,
       );
     } else {
-      _chainName = widget.coinModel.coin['name'];
-      _chainSymbol = widget.coinModel.coin['miniName'];
+      _chainName = coin['name'];
+      _chainSymbol = coin['miniName'];
       browserUrl = getBrowserAddress(
-        widget.coinModel.coin['coinType'],
+        coin['coinType'],
         widget.coinModel.address,
         isTest: widget.coinModel.isTest,
       );
       _getServiceState();
     }
-    marketInfo = ref
-        .read(wapBridgeProvider)
-        .getCoinPriceWithUnitAll(widget.coinModel.coin['unit']);
-    getTransactionData(Load.refresh);
-    getTransactionDataNetwork(Load.refresh);
+    marketInfo = wap.getCoinPriceWithUnitAll(coin['unit']);
+    _refreshTransactions(Load.refresh);
   }
 
   /// Fetches XRP server state to obtain reserve base and per-object reserve.
@@ -310,8 +313,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () async {
-                  getTransactionData(Load.refresh);
-                  getTransactionDataNetwork(Load.refresh);
+                  _refreshTransactions(Load.refresh);
                   await widget.coinModel.getBalance();
                 },
                 backgroundColor: AppThemeUtils.getColorByKey(

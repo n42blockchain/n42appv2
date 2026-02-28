@@ -47,12 +47,8 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
-              child: Row(
-                children: [
-                  // 左侧都显示头像
-                  _buildLeftWidget(userInfo?.image, messageNotReadCount),
-                ],
-              )),
+            child: _buildLeftWidget(userInfo?.image, messageNotReadCount),
+          ),
           if(widget.titleChild ==null)
             Center(
               child: widget.isText
@@ -78,16 +74,11 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
               child: widget.titleChild,
             ),
           Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  if (widget.actions != null && widget.actions!.isNotEmpty)
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: widget.actions!,
-                    )
-                ],
-              ))
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: widget.actions ?? [],
+            ),
+          )
         ],
       ),
     );

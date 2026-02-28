@@ -46,10 +46,6 @@ class LineChartState extends State<LineChart> with TickerProviderStateMixin{
   GlobalKey<State<StatefulWidget>> anchorKey = GlobalKey();
   late DrawLineChart drawLineChart;
   @override
-  void initState() {
-    super.initState();
-  }
-  @override
   Widget build(BuildContext context) {
     drawLineChart=DrawLineChart(
       Theme.of(context),
@@ -89,9 +85,6 @@ class DrawLineChart extends CustomPainter{
   Paint painter=Paint()..strokeWidth=1.5..style=PaintingStyle.stroke;
 
 
-  /// 横向线段间隔
-  //double LINE_SPACE = 20;
-
   /// 线段数量
   int lineNum = 5;
 
@@ -99,9 +92,6 @@ class DrawLineChart extends CustomPainter{
   late double width;
   ///整体高度
   late double height;
-
-  /// Y轴坐标文字宽度
-  //late double yTextwidth;
 
   /// x轴坐标单元间距
   late double unitWidth;
@@ -144,25 +134,19 @@ class DrawLineChart extends CustomPainter{
       }
       path = getCurvePath(v1, v2, i, path);
     }
-    //path.lineTo(width, (LINE_SPACE +ScreenUtil.getInstance().setSp(22.0))*4+ScreenUtil.getInstance().setSp(12.0));
-
     canvas.drawPath(path, painter);
     path.close();
   }
-  /// 画线
+  /// 画填充区域
   void drawValueLineFill(Canvas canvas) {
     Path path = Path();
     path.moveTo(0, height);
     for (int i = 0; i < values.length - 1; i++) {
       double v1 = values[i]*1.0;
       double v2 = values[i + 1]*1.0;
-      /*if (i == 0) {
-        path.moveTo(getX(i.toDouble()), getY(v1));
-      }*/
       path = getCurvePath(v1, v2, i, path);
     }
     path.lineTo(width, height);
-
     canvas.drawPath(path, painter);
     path.close();
   }

@@ -31,7 +31,7 @@ class UserEntity extends Equatable {
     this.inviteCode,
   });
 
-  /// Get display name
+  /// Get display name - prefer name, fallback to email prefix, then 'User'
   String get displayName {
     if (name != null && name!.isNotEmpty) return name!;
     if (email.contains('@')) return email.split('@').first;

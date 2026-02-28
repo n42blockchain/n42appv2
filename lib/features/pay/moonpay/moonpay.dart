@@ -29,17 +29,7 @@ class _MoonpayState extends State<Moonpay> {
   @override
   void initState() {
     super.initState();
-
-    // 初始化 URL
-    if (widget.type == 0) {
-      url = widget.coinModel == null
-          ? "https://n42.world/pay"
-          : "https://n42.world/pay?defaultCurrencyCode=${widget.coinModel!.coin['miniName']}&walletAddress=${widget.coinModel!.address}";
-    } else {
-      url = widget.coinModel == null
-          ? "https://n42.world/sell"
-          : "https://n42.world/sell?defaultCurrencyCode=${widget.coinModel!.coin['miniName']}";
-    }
+    url = _buildUrl();
 
     // 初始化 WebViewController
     webViewController = WebViewController()
@@ -77,6 +67,17 @@ class _MoonpayState extends State<Moonpay> {
         ),
       )
       ..loadRequest(Uri.parse(url));
+  }
+
+  String _buildUrl() {
+    final isBuy = widget.type == 0;
+    final base = isBuy ? "https://n42.world/pay" : "https://n42.world/sell";
+    final coin = widget.coinModel;
+    if (coin == null) return base;
+
+    final currencyParam = "defaultCurrencyCode=${coin.coin['miniName']}";
+    final walletParam = isBuy ? "&walletAddress=${coin.address}" : "";
+    return "$base?$currencyParam$walletParam";
   }
 
   Future<void> _updateNavButtons() async {
@@ -184,10 +185,12 @@ class _MoonpayState extends State<Moonpay> {
     );
   }
 
-  Widget _buildControlButton(
-      {required String icon, required VoidCallback onTap, Color? color}) {
+  Widget _buildControlButton({
+    required String icon,
+    required VoidCallback onTap,
+    Color? color,
+  }) {
     return Expanded(
-      flex: 1,
       child: InkWell(
         onTap: onTap,
         child: Container(
@@ -195,8 +198,9 @@ class _MoonpayState extends State<Moonpay> {
           height: ScreenUtil().setWidth(80.0),
           width: ScreenUtil().setWidth(60.0),
           padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(10.0),
-              vertical: ScreenUtil().setWidth(20.0)),
+            horizontal: ScreenUtil().setWidth(10.0),
+            vertical: ScreenUtil().setWidth(20.0),
+          ),
           child: Image.asset(
             icon,
             color: color ??

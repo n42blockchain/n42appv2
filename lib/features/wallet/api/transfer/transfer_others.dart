@@ -377,22 +377,19 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
   }
 
   Future<MessageModel> getBalanceAlgo(String fromAddress) async {
-    MessageModel mm = await tokenViewApi.getBalance(
+    return await tokenViewApi.getBalance(
         BlockchainType.Algorand.name, "ALGO", fromAddress,
         isTest: false) ?? MessageModel.error();
-    return mm;
   }
   Future<MessageModel> getBalanceXtz(String fromAddress) async {
-    MessageModel mm = await tokenViewApi.getBalance(
+    return await tokenViewApi.getBalance(
         BlockchainType.Tezos.name, "XTZ", fromAddress,
         isTest: false) ?? MessageModel.error();
-    return mm;
   }
   Future<MessageModel> getBalanceXrp(String fromAddress) async {
-    MessageModel mm = await tokenViewApi.getBalance(
+    return await tokenViewApi.getBalance(
         BlockchainType.Ripple.name, "XRP", fromAddress,
         isTest: false) ?? MessageModel.error();
-    return mm;
   }
 
   // Zilliqa 转账
@@ -474,7 +471,6 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
     };
 
     // 发送交易
-    MessageModel mmtx = await zilApi.createTransaction(txParams);
-    return mmtx;
+    return await zilApi.createTransaction(txParams);
   }
 }

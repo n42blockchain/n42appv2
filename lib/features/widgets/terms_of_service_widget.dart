@@ -27,11 +27,6 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
   bool _isInitialized = false;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_isInitialized) {
@@ -41,29 +36,16 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
   }
 
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   void initController() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final initialHost = Uri.parse(widget.url).host;
 
     _webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..addJavaScriptChannel("WalletChat", onMessageReceived: (message) {
-      })
+      ..addJavaScriptChannel("WalletChat", onMessageReceived: (_) {})
       ..setBackgroundColor(isDark ? const Color(0xFF1C1C1E) : Colors.white)
       ..setNavigationDelegate(
         NavigationDelegate(
-          onProgress: (int progress) {
-            // Update loading bar.
-          },
-          onPageStarted: (String url) {},
-          onPageFinished: (String url) async {
-          },
-          onWebResourceError: (WebResourceError error) {},
           onNavigationRequest: (NavigationRequest request) {
             final requestHost = Uri.parse(request.url).host;
             // If the link is to an external domain, open in browser
@@ -116,61 +98,14 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
               ),
             ],
           ),
-          // 滚动到底部按钮
           Positioned(
             right: ScreenUtil().setWidth(30),
             bottom: ScreenUtil().setWidth(180),
             child: Column(
               children: [
-                // 滚动到顶部
-                GestureDetector(
-                  onTap: _scrollToTop,
-                  child: Container(
-                    width: ScreenUtil().setWidth(120),
-                    height: ScreenUtil().setWidth(120),
-                    decoration: BoxDecoration(
-                      color: isDark ? Colors.grey[800] : Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha:0.2),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Icon(
-                      Icons.keyboard_arrow_up,
-                      size: ScreenUtil().setWidth(64),
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                    ),
-                  ),
-                ),
+                _buildScrollButton(isDark, Icons.keyboard_arrow_up, _scrollToTop),
                 SizedBox(height: ScreenUtil().setWidth(16)),
-                // 滚动到底部
-                GestureDetector(
-                  onTap: _scrollToBottom,
-                  child: Container(
-                    width: ScreenUtil().setWidth(120),
-                    height: ScreenUtil().setWidth(120),
-                    decoration: BoxDecoration(
-                      color: isDark ? Colors.grey[800] : Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha:0.2),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Icon(
-                      Icons.keyboard_arrow_down,
-                      size: ScreenUtil().setWidth(64),
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                    ),
-                  ),
-                ),
+                _buildScrollButton(isDark, Icons.keyboard_arrow_down, _scrollToBottom),
               ],
             ),
           ),
@@ -179,43 +114,29 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
     );
   }
 
-  Widget buildItemTitle(String title) {
-    return Text(
-      title,
-      style: TextStyle(
-          color:
-          AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-          fontWeight: FontWeight.bold,
-          fontSize: ScreenUtil().setSp(22)),
-    );
-  }
-
-  Widget buildItemContent(String content) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(16), vertical: ScreenUtil().setWidth(12)),
-          child: Container(
-            width: ScreenUtil().setWidth(8),
-            height: ScreenUtil().setWidth(8),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+  Widget _buildScrollButton(bool isDark, IconData icon, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: ScreenUtil().setWidth(120),
+        height: ScreenUtil().setWidth(120),
+        decoration: BoxDecoration(
+          color: isDark ? Colors.grey[800] : Colors.white,
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.2),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
             ),
-          ),
+          ],
         ),
-        Expanded(
-          child: Text(
-            content,
-            style: TextStyle(
-                color:
-                AppThemeUtils.getColorByKey(context, AppThemeKeys.ff888888.name),
-                fontSize: ScreenUtil().setSp(22)),
-          ),
-        )
-      ],
+        child: Icon(
+          icon,
+          size: ScreenUtil().setWidth(64),
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+        ),
+      ),
     );
   }
 }

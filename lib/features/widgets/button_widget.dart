@@ -4,9 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Widget buttonStyle1(BuildContext context, VoidCallback onTap, String title) {
   return TextButton(
-    onPressed: (){
-      onTap();
-    },
+    onPressed: onTap,
     style: ButtonStyle(
       backgroundColor:  ButtonStyleButton.allOrNull<Color>(
         AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),),
@@ -33,9 +31,7 @@ Widget buttonStyle1(BuildContext context, VoidCallback onTap, String title) {
 }
 Widget buttonStyle2(BuildContext context, VoidCallback? onTap, String title) {
   return TextButton(
-    onPressed: onTap != null ? (){
-      onTap();
-    } : null,
+    onPressed: onTap,
     style: ButtonStyle(
       backgroundColor: ButtonStyleButton.allOrNull<Color>(
         AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name)
@@ -105,12 +101,9 @@ Widget buttonStyle3(
     ),
   );
 }
-//自定义 颜色
 Widget buttonStyle5(BuildContext context, VoidCallback onTap, String title, Color backgroundColor, Color textColor, {Color? borderColor, double? circular}) {
   return TextButton(
-    onPressed: (){
-      onTap();
-    },
+    onPressed: onTap,
     style: ButtonStyle(
       backgroundColor:  ButtonStyleButton.allOrNull<Color>(backgroundColor),
       shape:ButtonStyleButton.allOrNull<RoundedRectangleBorder>(
@@ -142,7 +135,6 @@ Widget buttonStyle5(BuildContext context, VoidCallback onTap, String title, Colo
   );
 }
 
-//自定义 颜色 加载等待
 Widget buttonStyle6(BuildContext context,
     VoidCallback onTap,
     String title,
@@ -151,9 +143,7 @@ Widget buttonStyle6(BuildContext context,
     bool load,
     {Color? borderColor}) {
   return TextButton(
-    onPressed: (){
-      onTap();
-    },
+    onPressed: onTap,
     style: ButtonStyle(
       backgroundColor:  ButtonStyleButton.allOrNull<Color>(backgroundColor),
       shape:ButtonStyleButton.allOrNull<RoundedRectangleBorder>(

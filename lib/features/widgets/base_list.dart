@@ -13,7 +13,6 @@ typedef BuildItem = Function(
 typedef GetData = Future<List<dynamic>?> Function(int page, int pageSize);
 
 /// 封装上拉加载 下拉刷新
-/// 封装上拉加载 下拉刷新
 class BaseList extends StatefulWidget {
   final BuildItem buildItem;
   final GetData getData;
@@ -98,9 +97,7 @@ class BaseListState extends State<BaseList> {
 
   @override
   void dispose() {
-    if (_refreshController != null) {
-      _refreshController!.dispose();
-    }
+    _refreshController?.dispose();
     super.dispose();
   }
 
@@ -170,63 +167,33 @@ class BaseListState extends State<BaseList> {
       if (reset) {
         pageIndex = widget.pageIndex;
       }
-      // 修复 pageIndex 的bug
-      // else {
-      //   pageIndex++;
-      // }
-      if (widget.requestBegin != null) {
-        widget.requestBegin!();
-      }
+      widget.requestBegin?.call();
       final res = await widget.getData(pageIndex, pageSize) ?? [];
       pageIndex++;
       resLength = res.length;
-      if (!mounted) {
-        return;
-      }
+      if (!mounted) return;
+
       if (reset) {
         listData = res;
       } else {
         listData.addAll(res);
       }
-      // debugPrint("listData size ${listData.length}");
-      // debugPrint("listData ${json.encode(listData)}");
-      if (widget.requestCompleted != null) {
-        widget.requestCompleted!(true);
-      }
+      widget.requestCompleted?.call(true);
       setState(() {});
     } catch (err) {
       debugPrint('baseList err :$err');
-      if (!mounted) {
-        return;
-      }
-      if (reset) {
-        listData = [];
-      }
-
-      ///外部可以 接收到失败回调
-      if (widget.requestCompleted != null) {
-        widget.requestCompleted!(false);
-      }
+      if (!mounted) return;
+      if (reset) listData = [];
+      widget.requestCompleted?.call(false);
     } finally {
       if (mounted) {
         setState(() {
           loading = false;
           isFirst = false;
           if (_refreshController == null) return;
-
-          /// 每次请求发送完成 关闭刷新操作
-          if (reset) {
-            _refreshController?.finishRefresh();
-            //_refreshController?.finishRefresh(success: true, noMore: false);
-            //_refreshController?.resetLoadState();
-
-            /// 如果刷新操作 返回的数据都 < pageSize 证明不需要上啦加载
-            //_refreshController?.finishLoad(success: true, noMore: _isNoMore());
-            _refreshController?.finishLoad(_isNoMore() ? IndicatorResult.noMore : IndicatorResult.success);
-          } else {
-            //_refreshController?.finishLoad(success: true, noMore: _isNoMore());
-            _refreshController?.finishLoad(_isNoMore() ? IndicatorResult.noMore : IndicatorResult.success);
-          }
+          if (reset) _refreshController?.finishRefresh();
+          final loadResult = _isNoMore() ? IndicatorResult.noMore : IndicatorResult.success;
+          _refreshController?.finishLoad(loadResult);
         });
       }
     }

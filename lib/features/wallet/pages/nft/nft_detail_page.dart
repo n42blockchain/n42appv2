@@ -82,16 +82,22 @@ class _NftDetailPageState extends State<NftDetailPage> {
     super.dispose();
   }
 
-  // ── Send ──────────────────────────────────────────────────────────────────
-  void _handleSend() {
+  /// 检查 NFT 是否在不支持操作的链上，如果是则显示 toast 并返回 true。
+  bool _isUnsupportedChain() {
     if (nft.isSolana) {
       ToastUtils.showWarning(S.of(context).g_key_nft_send_sol_unsupported);
-      return;
+      return true;
     }
     if (nft.isOrdinal) {
       ToastUtils.showWarning(S.of(context).g_key_nft_ordinals_unsupported);
-      return;
+      return true;
     }
+    return false;
+  }
+
+  // ── Send ──────────────────────────────────────────────────────────────────
+  void _handleSend() {
+    if (_isUnsupportedChain()) return;
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -113,17 +119,13 @@ class _NftDetailPageState extends State<NftDetailPage> {
   // ── Browser ───────────────────────────────────────────────────────────────
   Future<void> _handleBrowser() async {
     final url = nft.openseaUrl;
-    if (url == null || url.isEmpty) {
-      if (!mounted) return;
-      ToastUtils.showWarning(S.of(context).g_key_nft_no_url);
-      return;
-    }
-    final uri = Uri.tryParse(url);
+    final uri = (url != null && url.isNotEmpty) ? Uri.tryParse(url) : null;
+
     if (uri == null) {
-      if (!mounted) return;
       ToastUtils.showWarning(S.of(context).g_key_nft_no_url);
       return;
     }
+
     final canLaunch = await canLaunchUrl(uri);
     if (!mounted) return;
     if (!canLaunch) {
@@ -135,14 +137,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
 
   // ── Burn ──────────────────────────────────────────────────────────────────
   Future<void> _handleBurn() async {
-    if (nft.isSolana) {
-      ToastUtils.showWarning(S.of(context).g_key_nft_burn_sol_unsupported);
-      return;
-    }
-    if (nft.isOrdinal) {
-      ToastUtils.showWarning(S.of(context).g_key_nft_ordinals_unsupported);
-      return;
-    }
+    if (_isUnsupportedChain()) return;
 
     // 确认弹窗
     final confirmed = await showDialog<bool>(

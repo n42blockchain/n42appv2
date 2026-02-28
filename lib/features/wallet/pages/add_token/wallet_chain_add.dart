@@ -31,24 +31,20 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
   late TextEditingController decimalController;
   late TextEditingController chainIdController;
   late TextEditingController rpcController;
-  //late TextEditingController apiController;
   late FocusNode nameNode;
   late FocusNode symbolNode;
   late FocusNode decimalNode;
   late FocusNode chainIdNode;
   late FocusNode rpcNode;
-  //late FocusNode apiNode;
   String nameErrorMessage="";
   String symbolErrorMessage="";
   String decimalErrorMessage="";
   String chainIdErrorMessage="";
   String rpcErrorMessage="";
-  //String apiErrorMessage="";
   String errorMessage="";
   Load load=Load.finish;
   Map<String,dynamic> ethMap={
     "showList":true,//主链币是否显示在主页列表中
-    //"sort":2,//列表排序依据
     "isTest":false,//是否时正式链
     "supportTest":true,//是否可以使用测试网络
     "addrType":"legacy",//地址类型
@@ -102,19 +98,11 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     decimalController=TextEditingController();
     chainIdController=TextEditingController();
     rpcController=TextEditingController();
-    //apiController=TextEditingController();
     nameNode=FocusNode();
     symbolNode=FocusNode();
     decimalNode=FocusNode();
     chainIdNode=FocusNode();
     rpcNode=FocusNode();
-    //apiNode=FocusNode();
-    /*nameController.text="N42";
-    symbolController.text="N";
-    decimalController.text="18";
-    chainIdController.text="94";
-    apiController.text="";
-    rpcController.text="https://rpc.n42.world";*/
     super.initState();
   }
   @override
@@ -124,43 +112,27 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     decimalController.dispose();
     chainIdController.dispose();
     rpcController.dispose();
-    //apiController.dispose();
     nameNode.dispose();
     symbolNode.dispose();
     decimalNode.dispose();
     chainIdNode.dispose();
     rpcNode.dispose();
-    //apiNode.dispose();
     super.dispose();
   }
   Future<void> addChain()async{
-    //if(load==Load.loading)return;
     String mKey=symbolController.text.toUpperCase();
     String chainIdStr=chainIdController.text;
     String name=nameController.text.toUpperCase();
     String decimalStr=decimalController.text;
     String rpcStr=rpcController.text;
-    //String apiStr=apiController.text;
     Regular reg=Regular();
-    if(name.isEmpty){
+    if(name.isEmpty || name.length>30){
       setState(() {
         nameErrorMessage=S.of(context).g_token_m_key_1(30);
       });
       return;
     }
-    if(name.length>30){
-      setState(() {
-        nameErrorMessage=S.of(context).g_token_m_key_1(30);
-      });
-      return;
-    }
-    if(mKey.isEmpty){
-      setState(() {
-        symbolErrorMessage=S.of(context).g_token_m_key_1(10);
-      });
-      return;
-    }
-    if(mKey.length>10){
+    if(mKey.isEmpty || mKey.length>10){
       setState(() {
         symbolErrorMessage=S.of(context).g_token_m_key_1(10);
       });
@@ -204,14 +176,6 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
       });
       return;
     }
-    /*if(apiStr!=""){
-      if(!isURL(apiStr)){
-        setState(() {
-          apiErrorMessage=S.of(context).g_token_m_key_21;
-        });
-        return;
-      }
-    }*/
     bool exist=await checkChain(mKey,chainId);
     if (!mounted) return;
     if(exist){
@@ -251,7 +215,6 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     ethMap['baseInfo']['decimals']=decimal;
     ethMap['baseInfo']['chainId']=chainId;
     ethMap['baseInfo']['service']=rpcStr;
-    //ethMap['baseInfo']['api']=apiStr;
     await ref.read(wapBridgeProvider).addWalletChain(ethMap);
     if (!mounted) return;
     setState(() {
@@ -260,12 +223,7 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     Navigator.pop(context,true);
   }
   Future<bool> checkChain(String symbol,int chainId)async{
-    Map<String,dynamic>? chainMap= allChainUrlMap[symbol];
-    if(chainMap==null){
-      return false;
-    }else{
-      return true;
-    }
+    return allChainUrlMap[symbol] != null;
   }
   Future<void> addDefaultChain(String symbol)async{
     await ref.read(wapBridgeProvider).addWalletChain(allChainUrlMap[symbol]);
@@ -381,26 +339,6 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
 
                         }
                     ),
-                    /*
-                    SizedBox(height: ScreenUtil().setWidth(20),),
-                    LoginTitle(title: S.of(context).g_token_m_key_18),
-                    SizedBox(height: ScreenUtil().setWidth(10),),
-                    textFieldStyle2(
-                        context,
-                        controller: apiController,
-                        focusNode: apiNode,
-                        hintText: S.of(context).g_token_m_key_18,
-                        maxLines: 1,
-                        height: ScreenUtil().setWidth(88.0),
-                        errorMessage: apiErrorMessage,
-                        onEditingComplete: (){
-                          FocusScope.of(context).requestFocus(FocusNode());
-                        },
-                        onChanged: (value){
-
-                        }
-                    ),
-                    */
                     SizedBox(height: ScreenUtil().setWidth(30),),
                     if(errorMessage !="")
                     Container(

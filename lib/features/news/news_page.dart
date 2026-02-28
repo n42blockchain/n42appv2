@@ -85,21 +85,17 @@ class _NewsPageState extends State<NewsPage> {
     String time, {
     GestureTapCallback? onTap,
   }) {
+    final gap = ScreenUtil().setWidth(30.0);
+    final radius = BorderRadius.circular(ScreenUtil().setWidth(16.0));
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: ScreenUtil().setWidth(30.0),
-          horizontal: ScreenUtil().setWidth(30.0),
-        ),
-        margin: EdgeInsets.only(
-          bottom: ScreenUtil().setWidth(30.0),
-          left: ScreenUtil().setWidth(30.0),
-          right: ScreenUtil().setWidth(30.0),
-        ),
+        padding: EdgeInsets.all(gap),
+        margin: EdgeInsets.only(bottom: gap, left: gap, right: gap),
         decoration: BoxDecoration(
           color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
+          borderRadius: radius,
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,9 +113,7 @@ class _NewsPageState extends State<NewsPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(
-                    height: ScreenUtil().setWidth(12.0),
-                  ),
+                  SizedBox(height: ScreenUtil().setWidth(12.0)),
                   Text(
                     time,
                     overflow: TextOverflow.ellipsis,
@@ -132,17 +126,13 @@ class _NewsPageState extends State<NewsPage> {
                 ],
               ),
             ),
-            SizedBox(
-              width: ScreenUtil().setWidth(30.0),
-            ),
+            SizedBox(width: gap),
             if (imageUrl.isNotEmpty)
               Container(
                 height: ScreenUtil().setWidth(108.0),
                 width: ScreenUtil().setWidth(160.0),
                 clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
-                ),
+                decoration: BoxDecoration(borderRadius: radius),
                 child: ImageNetWork(
                   key: ValueKey(imageUrl),
                   imageUrl: imageUrl,

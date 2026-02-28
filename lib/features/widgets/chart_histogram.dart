@@ -58,7 +58,6 @@ class _ChartHistogramState extends State<ChartHistogram> {
           ),
 
           AspectRatio(
-            // aspectRatio: 1.5,
             aspectRatio: 2,
             child: Stack(
               children: <Widget>[
@@ -142,31 +141,24 @@ class _ChartHistogramState extends State<ChartHistogram> {
     );
   }
 
-  List<BarChartGroupData> showingGroups() =>
-      List.generate(widget.barChartModel.values.length, (int i) {
-        double value = widget.barChartModel.values[i];
-        Color fg = widget.barChartModel.fgColor;
-        if (value == widget.barChartModel.maxValue) {
-          if (widget.barChartModel.fgColorMax != null) {
-            fg = widget.barChartModel.fgColorMax!;
-          }
-        }
-        return makeGroupData(
-          i,
-          value,
-          widget.barChartModel.bgColor,
-          fg,
-          widget.barChartModel.width,
-          isTouched: i == touchedIndex,
-        );
-      });
+  List<BarChartGroupData> showingGroups() {
+    final model = widget.barChartModel;
+    return List.generate(model.values.length, (int i) {
+      final value = model.values[i];
+      final fg = (value == model.maxValue && model.fgColorMax != null)
+          ? model.fgColorMax!
+          : model.fgColor;
+      return makeGroupData(
+        i, value, model.bgColor, fg, model.width,
+        isTouched: i == touchedIndex,
+      );
+    });
+  }
 
   BarChartData mainBarData() {
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
-          // tooltipBgColor: Colors.white,
-          //tooltipBgColor: const Color(0xffEDEFF2),
           tooltipMargin: -10,
           getTooltipItem: (group, groupIndex, rod, rodIndex) {
             if(widget.alertMessageGroups == null || widget.alertMessageGroups!.isEmpty) return null;
@@ -290,16 +282,8 @@ class BarChartModel {
     required this.values,
   }) {
     if (maxValue == -1) {
-      double maxNumber = values[0];
-      for (int i = 1; i < values.length; i++) {
-        if (values[i] > maxNumber) {
-          maxNumber = values[i];
-        }
-      }
-      maxValue = maxNumber;
-      if(maxValue==0){
-        maxValue=1;
-      }
+      maxValue = values.reduce((a, b) => a > b ? a : b);
+      if (maxValue == 0) maxValue = 1;
     }
   }
 }

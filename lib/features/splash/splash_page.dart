@@ -63,22 +63,14 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
 
   Future<void> _initialize() async {
     try {
-      // 确保动画至少播放 800ms（快速启动）
       final minDuration = Future.delayed(const Duration(milliseconds: 800));
 
-      // 执行初始化
       if (widget.onInit != null) {
-        if (mounted) {
-          setState(() {
-            _loadingText = 'Loading...';
-          });
-        }
+        if (mounted) setState(() => _loadingText = 'Loading...');
         await widget.onInit!();
       }
 
-      // 等待最小时间
       await minDuration;
-
       if (!mounted) return;
 
       setState(() {
@@ -86,14 +78,11 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
         _isLoading = false;
       });
 
-      // 短暂延迟后完成
       await Future.delayed(const Duration(milliseconds: 200));
-
       if (!mounted) return;
       widget.onComplete();
     } catch (e) {
       debugPrint('SplashPage: Initialize error: $e');
-      // 即使出错也要完成启动
       await Future.delayed(const Duration(milliseconds: 300));
       if (!mounted) return;
       widget.onComplete();
@@ -117,8 +106,8 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF1A237E), // 深蓝色
-              Color(0xFF0D1B2A), // 深色
+              Color(0xFF1A237E),
+              Color(0xFF0D1B2A),
             ],
           ),
         ),
@@ -138,108 +127,119 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Spacer(flex: 2),
-                
-                // Logo
-                Container(
-                  width: ScreenUtil().setWidth(200),
-                  height: ScreenUtil().setWidth(200),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(40)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF4FC3F7).withValues(alpha:0.3),
-                        blurRadius: 30,
-                        spreadRadius: 5,
-                      ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(40)),
-                    child: Image.asset(
-                      'assets/logo/logo.png',
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        // 如果图片加载失败，显示文字 Logo
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF4FC3F7),
-                            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(40)),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'N42',
-                              style: TextStyle(
-                                fontSize: ScreenUtil().setSp(60),
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                
+                _buildLogo(),
                 SizedBox(height: ScreenUtil().setWidth(40)),
-                
-                // 应用名称
-                Text(
-                  'N42 Wallet',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(48),
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    letterSpacing: 2,
-                  ),
-                ),
-                
+                _buildTitle(),
                 SizedBox(height: ScreenUtil().setWidth(20)),
-
-                // 随机启动文字组（参考图样式）
                 _SplashTagline(variant: _variant),
-                
                 const Spacer(flex: 2),
-                
-                // 加载指示器
-                if (_isLoading) ...[
-                  SizedBox(
-                    width: ScreenUtil().setWidth(40),
-                    height: ScreenUtil().setWidth(40),
-                    child: const CircularProgressIndicator(
-                      strokeWidth: 3,
-                      valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF4FC3F7)),
-                    ),
-                  ),
-                  SizedBox(height: ScreenUtil().setWidth(20)),
-                ],
-                
-                // 加载文字
-                Text(
-                  _loadingText,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: Colors.white.withValues(alpha:0.6),
-                  ),
-                ),
-                
-                SizedBox(height: ScreenUtil().setWidth(60)),
-                
-                // 版权信息
-                Text(
-                  '© 2021-2026 N42 Inc.',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
-                    color: Colors.white.withValues(alpha:0.4),
-                  ),
-                ),
-                
-                SizedBox(height: ScreenUtil().setWidth(40)),
+                _buildLoadingIndicator(),
+                _buildFooter(),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildLogo() {
+    final logoRadius = BorderRadius.circular(ScreenUtil().setWidth(40));
+    final logoSize = ScreenUtil().setWidth(200);
+
+    return Container(
+      width: logoSize,
+      height: logoSize,
+      decoration: BoxDecoration(
+        borderRadius: logoRadius,
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF4FC3F7).withValues(alpha: 0.3),
+            blurRadius: 30,
+            spreadRadius: 5,
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: logoRadius,
+        child: Image.asset(
+          'assets/logo/logo.png',
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFF4FC3F7),
+                borderRadius: logoRadius,
+              ),
+              child: Center(
+                child: Text(
+                  'N42',
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(60),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTitle() {
+    return Text(
+      'N42 Wallet',
+      style: TextStyle(
+        fontSize: ScreenUtil().setSp(48),
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+        letterSpacing: 2,
+      ),
+    );
+  }
+
+  Widget _buildLoadingIndicator() {
+    if (!_isLoading) return const SizedBox.shrink();
+    final indicatorSize = ScreenUtil().setWidth(40);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          width: indicatorSize,
+          height: indicatorSize,
+          child: const CircularProgressIndicator(
+            strokeWidth: 3,
+            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF4FC3F7)),
+          ),
+        ),
+        SizedBox(height: ScreenUtil().setWidth(20)),
+      ],
+    );
+  }
+
+  Widget _buildFooter() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          _loadingText,
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(24),
+            color: Colors.white.withValues(alpha: 0.6),
+          ),
+        ),
+        SizedBox(height: ScreenUtil().setWidth(60)),
+        Text(
+          '\u00a9 2021-2026 N42 Inc.',
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(22),
+            color: Colors.white.withValues(alpha: 0.4),
+          ),
+        ),
+        SizedBox(height: ScreenUtil().setWidth(40)),
+      ],
     );
   }
 }

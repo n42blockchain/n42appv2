@@ -66,91 +66,59 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     _runSimulation();
     _runGoplusCheck();
   }
+  /// 各链原生币 gas 价格精度（小数位数）
+  /// null 表示该链无 gas 费用（显示 "0"）
+  static const Map<BlockchainType, int?> _gasDecimals = {
+    BlockchainType.Bitcoin: 8,
+    BlockchainType.Ethereum: 18,
+    BlockchainType.Solana: 9,
+    BlockchainType.Tron: 6,
+    BlockchainType.Ripple: 6,
+    BlockchainType.Algorand: 6,
+    BlockchainType.Tezos: 6,
+    BlockchainType.Cosmos: 6,
+    BlockchainType.Filecoin: 18,
+    BlockchainType.Polkadot: null,
+    BlockchainType.Aptos: null,
+    BlockchainType.Sui: null,
+    BlockchainType.TheOpenNetwork: null,
+    BlockchainType.Stellar: 7,
+    BlockchainType.VeChain: 18,
+    BlockchainType.Harmony: 18,
+    BlockchainType.IoTeX: 18,
+    BlockchainType.Near: 24,
+    BlockchainType.Zilliqa: 12,
+    BlockchainType.Theta: 18,
+    BlockchainType.Cardano: 6,
+    BlockchainType.MultiversX: 18,
+    BlockchainType.Starknet: 18,
+    BlockchainType.EOSIO: null,   // EOS uses resource model
+    BlockchainType.Waves: 8,
+    BlockchainType.Neo: 8,
+    BlockchainType.Ontology: 9,
+    BlockchainType.NEM: 6,
+    BlockchainType.Nano: null,    // Nano is feeless
+    BlockchainType.Decred: 8,
+    BlockchainType.ICON: 18,
+    BlockchainType.IOST: 8,
+    BlockchainType.Ark: 8,
+    BlockchainType.Qtum: 8,
+    BlockchainType.Hive: null,    // Hive uses resource credits
+  };
+
   void init(){
     //计算gasPrice
     BlockchainType bt=BlockchainType.values.firstWhere((element) => element.name==coinInfo['blockchainType']?true:false);
-    switch(bt){
-      case BlockchainType.Bitcoin:
-        gasPrice='${toEther(widget.btcTransactionRecodeModel!.gasPrice.toString(), 8)} ${widget.mainCoinUnit}';
-        break;
-      case BlockchainType.Ethereum:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 18)} ${widget.mainCoinUnit}';
-        break;
-      case BlockchainType.Solana:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 9)} ${widget.mainCoinUnit}';
-        break;
-      case BlockchainType.Tron:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 6)} ${widget.mainCoinUnit}';
-        break;
-      case BlockchainType.Ripple:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 6)} ${widget.mainCoinUnit}';
-        break;
-      case BlockchainType.Algorand:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 6)} ${widget.mainCoinUnit}';
-        break;
-      case BlockchainType.Tezos:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 6)} ${widget.mainCoinUnit}';
-        break;
-      case BlockchainType.Cosmos:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 6)} ${widget.mainCoinUnit}';
-        break;
-      case BlockchainType.Filecoin:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 18)} ${widget.mainCoinUnit}';
-        break;
-      case BlockchainType.Polkadot:
-        gasPrice="0";
-      case BlockchainType.Aptos:
-        gasPrice="0";
-      case BlockchainType.Sui:
-        gasPrice="0";
-      case BlockchainType.TheOpenNetwork:
-        gasPrice="0";
-      case BlockchainType.Stellar:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 7)} ${widget.mainCoinUnit}';
-      case BlockchainType.VeChain:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 18)} ${widget.mainCoinUnit}';
-      case BlockchainType.Harmony:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 18)} ${widget.mainCoinUnit}';
-      case BlockchainType.IoTeX:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 18)} ${widget.mainCoinUnit}';
-      case BlockchainType.Near:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 24)} ${widget.mainCoinUnit}';
-      case BlockchainType.Zilliqa:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 12)} ${widget.mainCoinUnit}';
-      case BlockchainType.Theta:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 18)} ${widget.mainCoinUnit}';
-      case BlockchainType.Cardano:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 6)} ${widget.mainCoinUnit}';
-      case BlockchainType.MultiversX:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 18)} ${widget.mainCoinUnit}';
-      case BlockchainType.Starknet:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 18)} ${widget.mainCoinUnit}';
-      case BlockchainType.EOSIO:
-        gasPrice='0 ${widget.mainCoinUnit}'; // EOS uses resource model
-      case BlockchainType.Waves:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 8)} ${widget.mainCoinUnit}';
-      case BlockchainType.Neo:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 8)} ${widget.mainCoinUnit}';
-      case BlockchainType.Ontology:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 9)} ${widget.mainCoinUnit}';
-      case BlockchainType.NEM:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 6)} ${widget.mainCoinUnit}';
-      case BlockchainType.Nano:
-        gasPrice='0 ${widget.mainCoinUnit}'; // Nano is feeless
-      case BlockchainType.Decred:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 8)} ${widget.mainCoinUnit}';
-      case BlockchainType.ICON:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 18)} ${widget.mainCoinUnit}';
-      case BlockchainType.IOST:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 8)} ${widget.mainCoinUnit}';
-      case BlockchainType.Ark:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 8)} ${widget.mainCoinUnit}';
-      case BlockchainType.Qtum:
-        gasPrice='${toEther(widget.transationRecordModel!.gasPrice.toString(), 8)} ${widget.mainCoinUnit}';
-      case BlockchainType.Hive:
-        gasPrice='0 ${widget.mainCoinUnit}'; // Hive uses resource credits
+    final int? decimals = _gasDecimals[bt];
+    if (decimals == null) {
+      gasPrice = '0';
+      return;
     }
-
+    // Bitcoin 使用 btcTransactionRecodeModel，其余使用 transationRecordModel
+    final rawGas = bt == BlockchainType.Bitcoin
+        ? widget.btcTransactionRecodeModel!.gasPrice.toString()
+        : widget.transationRecordModel!.gasPrice.toString();
+    gasPrice = '${toEther(rawGas, decimals)} ${widget.mainCoinUnit}';
   }
   Future<void> initSecurity()async{
     Map<String,dynamic>? s=await SPUtil().getSecurity();
@@ -166,14 +134,9 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
 
   Future<void> _runSimulation() async {
     final bt = coinInfo['blockchainType'] as String? ?? '';
-    // Only EVM chains support eth_call simulation
-    if (bt != 'Ethereum') {
-      if (mounted) setState(() => _simResult = TxSimulationResult.unavailable());
-      return;
-    }
-
     final m = widget.transationRecordModel;
-    if (m == null) {
+    // Only EVM chains with a valid model support eth_call simulation
+    if (bt != 'Ethereum' || m == null) {
       if (mounted) setState(() => _simResult = TxSimulationResult.unavailable());
       return;
     }
@@ -243,10 +206,6 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     return '0xa9059cbb$paddedTo$paddedAmount';
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
   //关闭键盘
   void closeKeyboard(){
     FocusScope.of(context).requestFocus(FocusNode());

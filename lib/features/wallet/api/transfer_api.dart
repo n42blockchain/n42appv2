@@ -52,6 +52,17 @@ class TransferApi
         _TransferCosmosFamilyMixin,
         _TransferOthersMixin {
 
+  /// 交易成功后延迟上报活动事件
+  void _pushTransactionActivity(String coinType, dynamic txData, String network) {
+    final pushMap = {
+      "uuid": AppGlobals.userInfo?.uuid ?? "",
+      "coin": coinType,
+      "tx": txData,
+      "network": network,
+    };
+    ActivityApi().collectDelayPush(json.encode(pushMap), event: "transaction");
+  }
+
   ///转账方法
   /// chainSymbol 链缩写 例如：Bitcoin:btc或BTC都可以
   /// fromAddress 转出地址
@@ -203,14 +214,7 @@ class TransferApi
         );
     }
     if (txmm.error == false) {
-      Map<String, dynamic> pushMap = {
-        "uuid": AppGlobals.userInfo?.uuid??"",
-        "coin": coinType,
-        "tx": txmm.data['txHash'],
-        "network":isTest?"test":"main",
-      };
-      ActivityApi activityApi=ActivityApi();
-      activityApi.collectDelayPush(json.encode(pushMap), event: "transaction");
+      _pushTransactionActivity(coinType, txmm.data['txHash'], isTest ? "test" : "main");
     }
     return txmm;
   }
@@ -443,14 +447,7 @@ class TransferApi
         break;
     }
     if (txmm.error == false) {
-      Map<String, dynamic> pushMap = {
-        "uuid": AppGlobals.userInfo?.uuid??"",
-        "coin": coinType,
-        "tx": txmm.data,
-        "network":network,
-      };
-      ActivityApi activityApi=ActivityApi();
-      activityApi.collectDelayPush(json.encode(pushMap), event: "transaction");
+      _pushTransactionActivity(coinType, txmm.data, network);
     }
     return txmm;
   }

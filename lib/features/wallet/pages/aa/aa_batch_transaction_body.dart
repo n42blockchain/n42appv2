@@ -248,13 +248,12 @@ class AABatchTransactionBody extends StatelessWidget {
           ],
         ),
         SizedBox(height: ScreenUtil().setWidth(12)),
-        ...List.generate(operations.length, (index) {
-          return BatchOperationItem(
-            operation: operations[index],
-            index: index,
-            onRemove: () => onRemoveOperation(index),
-          );
-        }),
+        for (int i = 0; i < operations.length; i++)
+          BatchOperationItem(
+            operation: operations[i],
+            index: i,
+            onRemove: () => onRemoveOperation(i),
+          ),
       ],
     );
   }
