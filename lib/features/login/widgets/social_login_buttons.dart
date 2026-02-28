@@ -199,65 +199,45 @@ class _SocialLoginButtonsState extends ConsumerState<SocialLoginButtons> {
     );
   }
 
-  Future<void> _handleGoogleSignIn() async {
+  Future<void> _handleGoogleSignIn() => _handleSocialSignIn(
+    provider: 'google',
+    signIn: _authService.signInWithGoogle,
+    setLoading: (v) => setState(() => _isGoogleLoading = v),
+  );
+
+  Future<void> _handleAppleSignIn() => _handleSocialSignIn(
+    provider: 'apple',
+    signIn: _authService.signInWithApple,
+    setLoading: (v) => setState(() => _isAppleLoading = v),
+  );
+
+  Future<void> _handleSocialSignIn({
+    required String provider,
+    required Future<SocialAuthResult> Function() signIn,
+    required void Function(bool) setLoading,
+  }) async {
     if (!widget.isSelectedUserProtocol) {
       ToastUtils.show(S.of(context).selected_user_protocol);
       return;
     }
 
-    setState(() => _isGoogleLoading = true);
+    setLoading(true);
 
     try {
-      final result = await _authService.signInWithGoogle();
+      final result = await signIn();
 
       if (!mounted) return;
 
       if (result.cancelled) return; // user dismissed — no toast
       if (!result.success) {
-        widget.onError?.call(result.error ?? 'Google sign-in failed');
-        ToastUtils.show(result.error ?? 'Google sign-in failed');
+        final errorMsg = result.error ?? '$provider sign-in failed';
+        widget.onError?.call(errorMsg);
+        ToastUtils.show(errorMsg);
         return;
       }
 
       await _loginWithSocialToken(
-        provider: 'google',
-        idToken: result.idToken!,
-        accessToken: result.accessToken,
-      );
-    } catch (e) {
-      if (mounted) {
-        widget.onError?.call(e.toString());
-        ToastUtils.show(e.toString());
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isGoogleLoading = false);
-      }
-    }
-  }
-
-  Future<void> _handleAppleSignIn() async {
-    if (!widget.isSelectedUserProtocol) {
-      ToastUtils.show(S.of(context).selected_user_protocol);
-      return;
-    }
-
-    setState(() => _isAppleLoading = true);
-
-    try {
-      final result = await _authService.signInWithApple();
-
-      if (!mounted) return;
-
-      if (result.cancelled) return; // user dismissed — no toast
-      if (!result.success) {
-        widget.onError?.call(result.error ?? 'Apple sign-in failed');
-        ToastUtils.show(result.error ?? 'Apple sign-in failed');
-        return;
-      }
-
-      await _loginWithSocialToken(
-        provider: 'apple',
+        provider: provider,
         idToken: result.idToken!,
         accessToken: result.accessToken,
         rawNonce: result.rawNonce,
@@ -268,9 +248,7 @@ class _SocialLoginButtonsState extends ConsumerState<SocialLoginButtons> {
         ToastUtils.show(e.toString());
       }
     } finally {
-      if (mounted) {
-        setState(() => _isAppleLoading = false);
-      }
+      if (mounted) setLoading(false);
     }
   }
 

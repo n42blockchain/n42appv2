@@ -34,11 +34,7 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
 
   List<SmartAccount> get _allAccounts {
     if (widget.accountInfo == null) return [];
-    final accounts = <SmartAccount>[];
-    for (final list in widget.accountInfo!.smartAccounts.values) {
-      accounts.addAll(list);
-    }
-    return accounts;
+    return widget.accountInfo!.smartAccounts.values.expand((list) => list).toList();
   }
 
   List<SmartAccount> get _filteredAccounts {
@@ -179,81 +175,51 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
   }
 
   Widget _buildChainChip(String chain, String label) {
-    final isSelected = _filterChain == chain;
-
-    return GestureDetector(
+    final blue = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    return _buildFilterChip(
+      label: label,
+      isSelected: _filterChain == chain,
+      activeColor: blue,
+      selectedBgColor: blue,
+      selectedTextColor: Colors.white,
       onTap: () => setState(() => _filterChain = chain),
-      child: Container(
-        margin: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
-        padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(16),
-          vertical: ScreenUtil().setWidth(8),
-        ),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                )
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-          border: Border.all(
-            color: isSelected
-                ? AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  )
-                : AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ).withAlpha(50),
-          ),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(24),
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-            color: isSelected
-                ? Colors.white
-                : AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
-          ),
-        ),
-      ),
     );
   }
 
   Widget _buildStatusChip(SmartAccountState? status, String label) {
-    final isSelected = _filterStatus == status;
+    const statusColors = {
+      SmartAccountState.deployed: Colors.green,
+      SmartAccountState.notDeployed: Colors.grey,
+      SmartAccountState.deploying: Colors.orange,
+      SmartAccountState.error: Colors.red,
+    };
+    final chipColor = status == null
+        ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
+        : statusColors[status]!;
 
-    Color chipColor;
-    if (status == null) {
-      chipColor = AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.mainBlueColor.name,
-      );
-    } else {
-      switch (status) {
-        case SmartAccountState.deployed:
-          chipColor = Colors.green;
-          break;
-        case SmartAccountState.notDeployed:
-          chipColor = Colors.grey;
-          break;
-        case SmartAccountState.deploying:
-          chipColor = Colors.orange;
-          break;
-        case SmartAccountState.error:
-          chipColor = Colors.red;
-          break;
-      }
-    }
+    return _buildFilterChip(
+      label: label,
+      isSelected: _filterStatus == status,
+      activeColor: chipColor,
+      selectedBgColor: chipColor.withAlpha(20),
+      selectedTextColor: chipColor,
+      onTap: () => setState(() => _filterStatus = status),
+    );
+  }
+
+  Widget _buildFilterChip({
+    required String label,
+    required bool isSelected,
+    required Color activeColor,
+    required Color selectedBgColor,
+    required Color selectedTextColor,
+    required VoidCallback onTap,
+  }) {
+    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final mainTextColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
 
     return GestureDetector(
-      onTap: () => setState(() => _filterStatus = status),
+      onTap: onTap,
       child: Container(
         margin: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
         padding: EdgeInsets.symmetric(
@@ -261,15 +227,10 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
           vertical: ScreenUtil().setWidth(8),
         ),
         decoration: BoxDecoration(
-          color: isSelected ? chipColor.withAlpha(20) : Colors.transparent,
+          color: isSelected ? selectedBgColor : Colors.transparent,
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
           border: Border.all(
-            color: isSelected
-                ? chipColor
-                : AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ).withAlpha(50),
+            color: isSelected ? activeColor : subtitleColor.withAlpha(50),
           ),
         ),
         child: Text(
@@ -277,12 +238,7 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
           style: TextStyle(
             fontSize: ScreenUtil().setSp(24),
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-            color: isSelected
-                ? chipColor
-                : AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
+            color: isSelected ? selectedTextColor : mainTextColor,
           ),
         ),
       ),

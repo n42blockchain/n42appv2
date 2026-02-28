@@ -118,20 +118,15 @@ class LoyaltyProvider extends ChangeNotifier {
 
   /// 更新签到状态
   void _updateCheckInStatus() {
-    final checkInTask = _tasks.firstWhere(
-      (t) => t.type == TaskType.dailyCheckIn,
-      orElse: () => LoyaltyTask(
-        id: '',
-        title: '',
-        description: '',
-        type: TaskType.dailyCheckIn,
-        status: TaskStatus.available,
-        points: 0,
-      ),
-    );
-    _hasCheckedInToday = checkInTask.status == TaskStatus.completed ||
-        (checkInTask.maxCompletions != null &&
-            checkInTask.completedCount >= checkInTask.maxCompletions!);
+    final index = _tasks.indexWhere((t) => t.type == TaskType.dailyCheckIn);
+    if (index == -1) {
+      _hasCheckedInToday = false;
+      return;
+    }
+    final task = _tasks[index];
+    _hasCheckedInToday = task.status == TaskStatus.completed ||
+        (task.maxCompletions != null &&
+            task.completedCount >= task.maxCompletions!);
   }
 
   /// 加载积分历史
@@ -174,6 +169,25 @@ class LoyaltyProvider extends ChangeNotifier {
     }
   }
 
+  /// 创建更新积分后的账户副本
+  LoyaltyAccount _copyAccountWith({
+    int totalDelta = 0,
+    int availableDelta = 0,
+    int usedDelta = 0,
+  }) {
+    return LoyaltyAccount(
+      odAddress: _account.odAddress,
+      totalPoints: _account.totalPoints + totalDelta,
+      availablePoints: _account.availablePoints + availableDelta,
+      usedPoints: _account.usedPoints + usedDelta,
+      tier: _account.tier,
+      tierProgress: _account.tierProgress,
+      nextTierPoints: _account.nextTierPoints,
+      createdAt: _account.createdAt,
+      updatedAt: DateTime.now(),
+    );
+  }
+
   /// 每日签到
   Future<Map<String, dynamic>?> checkIn() async {
     if (_walletAddress == null || _hasCheckedInToday) return null;
@@ -183,19 +197,10 @@ class LoyaltyProvider extends ChangeNotifier {
       final data = result.data as Map<String, dynamic>;
       final pointsEarned = data['points_earned'] as int? ?? 0;
 
-      // 更新本地状态
-      _account = LoyaltyAccount(
-        odAddress: _account.odAddress,
-        totalPoints: _account.totalPoints + pointsEarned,
-        availablePoints: _account.availablePoints + pointsEarned,
-        usedPoints: _account.usedPoints,
-        tier: _account.tier,
-        tierProgress: _account.tierProgress,
-        nextTierPoints: _account.nextTierPoints,
-        createdAt: _account.createdAt,
-        updatedAt: DateTime.now(),
+      _account = _copyAccountWith(
+        totalDelta: pointsEarned,
+        availableDelta: pointsEarned,
       );
-
       _hasCheckedInToday = true;
       notifyListeners();
 
@@ -250,19 +255,10 @@ class LoyaltyProvider extends ChangeNotifier {
     );
 
     if (!result.error) {
-      // 更新本地积分
-      _account = LoyaltyAccount(
-        odAddress: _account.odAddress,
-        totalPoints: _account.totalPoints,
-        availablePoints: _account.availablePoints - reward.pointsCost,
-        usedPoints: _account.usedPoints + reward.pointsCost,
-        tier: _account.tier,
-        tierProgress: _account.tierProgress,
-        nextTierPoints: _account.nextTierPoints,
-        createdAt: _account.createdAt,
-        updatedAt: DateTime.now(),
+      _account = _copyAccountWith(
+        availableDelta: -reward.pointsCost,
+        usedDelta: reward.pointsCost,
       );
-
       notifyListeners();
       unawaited(refresh()); // 异步同步后端，防止重进页面积分复原
       return true;

@@ -3,7 +3,6 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/payment_code/payment_code.dart';
-import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
@@ -25,16 +24,19 @@ class SetAmount extends ConsumerStatefulWidget {
 }
 
 class _SetAmountState extends ConsumerState<SetAmount> {
-  Regular? _regular;
-  Regular get regular{
-    _regular ??= Regular();
-    return _regular!;
-  }
+  late final Regular regular = Regular();
   final oCcy = NumberFormat("#,##0.0#", "en_US");
   final TextEditingController amountController = TextEditingController();
   List<CoinModel> coinList=[];
   int coinListIndex=-1;
   String amountErrorMessage="";
+
+  /// 校验金额字符串，返回错误信息（合法时返回空字符串）
+  String _validateAmount(String value) {
+    if (regular.regularDouble(value) || regular.regularNums(value)) return "";
+    return S.of(context).g_key_payment_amount_invalid;
+  }
+
   @override
   void initState() {
     initCoin();
@@ -53,21 +55,15 @@ class _SetAmountState extends ConsumerState<SetAmount> {
       }
     }
     if(coinList.isNotEmpty){
+      coinListIndex=0;
       if(widget.amount !=null){
-        int index=coinList.indexWhere((e){
-          if(widget.amount!['coinType']==e.coin['coinType'] && widget.amount!['address']==e.address){
-            return true;
-          }
-          return false;
-        });
+        int index=coinList.indexWhere((e) =>
+          widget.amount!['coinType']==e.coin['coinType'] && widget.amount!['address']==e.address
+        );
         if(index !=-1){
           coinListIndex=index;
           amountController.text=widget.amount!["amount"].toString();
-        }else{
-          coinListIndex=0;
         }
-      }else{
-        coinListIndex=0;
       }
     }
     setState(() {});
@@ -99,28 +95,11 @@ class _SetAmountState extends ConsumerState<SetAmount> {
                 errorMessage: amountErrorMessage,
                 onEditingComplete: (){
                   FocusScope.of(context).requestFocus(FocusNode());
-                  String amountStr=amountController.text;
-                  if(regular.regularDouble(amountStr)==false){
-                    if(regular.regularNums(amountStr)==false){
-                      amountErrorMessage=S.of(context).g_key_payment_amount_invalid;
-                    }else{
-                      amountErrorMessage="";
-                    }
-                  }else{
-                    amountErrorMessage="";
-                  }
+                  amountErrorMessage = _validateAmount(amountController.text);
                   setState(() {});
                 },
                 onChanged: (String value){
-                  if(regular.regularDouble(value)==false){
-                    if(regular.regularNums(value)==false){
-                      amountErrorMessage=S.of(context).g_key_payment_amount_invalid;
-                    }else{
-                      amountErrorMessage="";
-                    }
-                  }else{
-                    amountErrorMessage="";
-                  }
+                  amountErrorMessage = _validateAmount(value);
                   setState(() {});
                 },
                 leftWidget: Padding(padding: EdgeInsets.only(right: ScreenUtil().setWidth(10.0)),
@@ -136,7 +115,6 @@ class _SetAmountState extends ConsumerState<SetAmount> {
             ),
             if (coinList.isEmpty)
               Expanded(
-                flex: 1,
                 child: Container(
                   height: ScreenUtil().setWidth(300.0),
                   color: AppThemeUtils.getColorByKey(
@@ -146,12 +124,10 @@ class _SetAmountState extends ConsumerState<SetAmount> {
               ),
             if(coinList.isNotEmpty)
               Expanded(
-                flex: 1,
                 child: ListView.builder(
                   padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                   itemCount: coinList.length,
                   itemBuilder: (context,index){
-
                     return _mainCoin(coinList[index],index);
                   },
                 ),
@@ -168,19 +144,11 @@ class _SetAmountState extends ConsumerState<SetAmount> {
               child: buttonStyle6(
                 context, (){
                   String amountStr=amountController.text;
-                  if(regular.regularDouble(amountStr)==false){
-                    if(regular.regularNums(amountStr)==false){
-                      setState(() {
-                        amountErrorMessage=S.of(context).g_key_payment_amount_invalid;
-                      });
-                      return;
-                    }else{
-                      amountErrorMessage="";
-                    }
-                  }else{
-                    amountErrorMessage="";
+                  amountErrorMessage = _validateAmount(amountStr);
+                  if (amountErrorMessage.isNotEmpty) {
+                    setState(() {});
+                    return;
                   }
-                  setState(() {});
                   Map<String,String> rmap={
                     "amount":amountController.text,
                     "coinType":coinList[coinListIndex].coin['coinType'],
@@ -203,25 +171,19 @@ class _SetAmountState extends ConsumerState<SetAmount> {
       ),
     );
   }
+  /// 格式化金额数值：大额缩写 / 极小值缩写 / 常规格式
+  String _formatBalance(double value, {String? fallback}) {
+    if (value >= 1000000000) return regular.getMoneyAbbreviation(value);
+    if (value > 0 && value < 0.0000000009) return regular.getMoneyAbbreviationDecimal(value);
+    return fallback ?? oCcy.format(value);
+  }
+
   Widget _mainCoin(CoinModel coinInfo,int index) {
-    String balanceStr = "";
-    double balance = coinInfo.value;
-    if (balance >= 1000000000) {
-      balanceStr = regular.getMoneyAbbreviation(balance);
-    }else if(balance>0 && balance <0.0000000009){
-      balanceStr=regular.getMoneyAbbreviationDecimal(balance);
-    } else {
-      balanceStr = oCcy.format(balance);
-    }
-    String valueBalanceStr="";
-    double valueBalance=coinInfo.balanceDoubleAll();
-    if(valueBalance>1000000000){
-      valueBalanceStr=regular.getMoneyAbbreviation(valueBalance);
-    }else if(valueBalance>0 && valueBalance <0.0000000009){
-      valueBalanceStr=regular.getMoneyAbbreviationDecimal(valueBalance);
-    }else{
-      valueBalanceStr=coinInfo.balanceString();
-    }
+    final balanceStr = _formatBalance(coinInfo.value);
+    final valueBalanceStr = _formatBalance(
+      coinInfo.balanceDoubleAll(),
+      fallback: coinInfo.balanceString(),
+    );
     Widget? mainImage;
     Widget image;
     if (coinInfo.coin['icon'] == "") {
@@ -282,7 +244,6 @@ class _SetAmountState extends ConsumerState<SetAmount> {
               ),
             ),
             Expanded(
-              flex: 1,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -291,7 +252,6 @@ class _SetAmountState extends ConsumerState<SetAmount> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        flex: 1,
                         child: Text(
                           "${coinInfo.coin['miniName']}(${coinInfo.coin['coinType']})",
                           style: TextStyle(
@@ -302,7 +262,6 @@ class _SetAmountState extends ConsumerState<SetAmount> {
                         ),
                       ),
                       Expanded(
-                        flex: 1,
                         child: Text(valueBalanceStr,
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(30.0),
@@ -329,7 +288,7 @@ class _SetAmountState extends ConsumerState<SetAmount> {
                       const SizedBox(
                         width: 6,
                       ),
-                      const Expanded(flex: 1, child: SizedBox()),
+                      const Expanded(child: SizedBox()),
                       Text("\$$balanceStr",
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(30.0),

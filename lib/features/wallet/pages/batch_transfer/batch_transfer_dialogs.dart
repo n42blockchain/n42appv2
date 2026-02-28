@@ -347,7 +347,6 @@ class _ResultRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
           '$label:',
@@ -365,7 +364,7 @@ class _ResultRow extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        trailing ?? const SizedBox.shrink(),
+        ?trailing,
       ],
     );
   }

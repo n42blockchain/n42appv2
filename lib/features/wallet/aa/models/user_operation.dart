@@ -98,9 +98,7 @@ class UserOperation {
     BigInt chainId, {
     EntryPointVersion version = EntryPointVersion.v08,
   }) {
-    final packedHash = _getPackedUserOpHash(version: version);
-
-    // Encode: packedHash + entryPoint + chainId
+    final packedHash = keccak256(_packUserOp(version: version));
     final entryPointBytes = hexToBytes(entryPoint.replaceFirst('0x', '').padLeft(64, '0'));
     final chainIdBytes = _bigIntToBytes32(chainId);
 
@@ -120,13 +118,6 @@ class UserOperation {
   /// Calculate hash using legacy version (v0.7)
   Uint8List getUserOpHashV07(String entryPoint, BigInt chainId) {
     return getUserOpHash(entryPoint, chainId, version: EntryPointVersion.v07);
-  }
-
-  /// Get packed UserOperation hash (intermediate step)
-  Uint8List _getPackedUserOpHash({EntryPointVersion version = EntryPointVersion.v08}) {
-    // Pack all UserOp fields
-    final packed = _packUserOp(version: version);
-    return keccak256(packed);
   }
 
   /// Pack UserOperation fields for hashing
@@ -187,8 +178,8 @@ class UserOperation {
     offset += 32;
 
     // EIP-7702 auth hash (v0.8 only)
-    if (hasEip7702 && eip7702AuthHash != null) {
-      packed.setAll(offset, eip7702AuthHash);
+    if (hasEip7702) {
+      packed.setAll(offset, eip7702AuthHash!);
     }
 
     return packed;
@@ -290,31 +281,25 @@ class UserOperation {
   }
 }
 
+// Shared helper: big-endian encode a BigInt into exactly 16 bytes.
+Uint8List _bigIntToBytes16(BigInt value) {
+  final bytes = Uint8List(16);
+  final valueBytes = intToBytes(value);
+  final start = 16 - valueBytes.length;
+  if (start >= 0 && valueBytes.length <= 16) {
+    bytes.setAll(start, valueBytes);
+  }
+  return bytes;
+}
+
 /// Helper class for building packed gas limits
 class PackedGasLimits {
   /// Pack verification and call gas limits into 32 bytes
   static Uint8List pack(BigInt verificationGasLimit, BigInt callGasLimit) {
     final packed = Uint8List(32);
-
-    // Verification gas limit in first 16 bytes
-    final vglBytes = _bigIntToBytes16(verificationGasLimit);
-    packed.setAll(0, vglBytes);
-
-    // Call gas limit in last 16 bytes
-    final cglBytes = _bigIntToBytes16(callGasLimit);
-    packed.setAll(16, cglBytes);
-
+    packed.setAll(0, _bigIntToBytes16(verificationGasLimit));
+    packed.setAll(16, _bigIntToBytes16(callGasLimit));
     return packed;
-  }
-
-  static Uint8List _bigIntToBytes16(BigInt value) {
-    final bytes = Uint8List(16);
-    final valueBytes = intToBytes(value);
-    final start = 16 - valueBytes.length;
-    if (start >= 0 && valueBytes.length <= 16) {
-      bytes.setAll(start, valueBytes);
-    }
-    return bytes;
   }
 }
 
@@ -323,25 +308,8 @@ class PackedGasFees {
   /// Pack maxPriorityFeePerGas and maxFeePerGas into 32 bytes
   static Uint8List pack(BigInt maxPriorityFeePerGas, BigInt maxFeePerGas) {
     final packed = Uint8List(32);
-
-    // Max priority fee in first 16 bytes
-    final mpfBytes = _bigIntToBytes16(maxPriorityFeePerGas);
-    packed.setAll(0, mpfBytes);
-
-    // Max fee in last 16 bytes
-    final mfBytes = _bigIntToBytes16(maxFeePerGas);
-    packed.setAll(16, mfBytes);
-
+    packed.setAll(0, _bigIntToBytes16(maxPriorityFeePerGas));
+    packed.setAll(16, _bigIntToBytes16(maxFeePerGas));
     return packed;
-  }
-
-  static Uint8List _bigIntToBytes16(BigInt value) {
-    final bytes = Uint8List(16);
-    final valueBytes = intToBytes(value);
-    final start = 16 - valueBytes.length;
-    if (start >= 0 && valueBytes.length <= 16) {
-      bytes.setAll(start, valueBytes);
-    }
-    return bytes;
   }
 }

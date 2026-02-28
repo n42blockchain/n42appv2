@@ -230,11 +230,17 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     // 相册权限未授权
     if (widget.matchType == 1 && !photoOK) {
-      return _photoPermissionWidget();
+      return _permissionWidget(
+        title: S.of(context).g_face_match_key7,
+        message: S.of(context).g_key_205,
+      );
     }
     // 相机权限未授权
     if (widget.matchType == 2 && !cameraOK) {
-      return _cameraPermissionWidget();
+      return _permissionWidget(
+        title: S.of(context).g_face_match_key6,
+        message: S.of(context).g_key_195,
+      );
     }
     return _mainWidget();
   }
@@ -297,9 +303,12 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver {
     );
   }
 
-  Widget _photoPermissionWidget() {
+  Widget _permissionWidget({
+    required String title,
+    required String message,
+  }) {
     return Scaffold(
-      appBar: AppBarWidget(text: S.of(context).g_face_match_key7),
+      appBar: AppBarWidget(text: title),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -308,50 +317,7 @@ class _FaceMatchState extends State<FaceMatch> with WidgetsBindingObserver {
               padding:
                   EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(40)),
               child: Text(
-                S.of(context).g_key_205,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(30),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            SizedBox(height: ScreenUtil().setWidth(36)),
-            TextButton(
-              onPressed: () async {
-                if (!_openedSystemSettings) {
-                  _openedSystemSettings = true;
-                  await openAppSettings();
-                }
-              },
-              child: Text(
-                S.of(context).g_face_5,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _cameraPermissionWidget() {
-    return Scaffold(
-      appBar: AppBarWidget(text: S.of(context).g_face_match_key6),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding:
-                  EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(40)),
-              child: Text(
-                S.of(context).g_key_195,
+                message,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(30),
                   color: AppThemeUtils.getColorByKey(

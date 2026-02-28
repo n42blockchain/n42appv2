@@ -311,18 +311,15 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   }
 
   Future<void> _onSubmit() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+    if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
-
     try {
-      final oldPwdHash = Md5Util().generateMd5(_oldPasswordController.text);
-      final newPwdHash = Md5Util().generateMd5(_newPasswordController.text);
-
-      final result = await UserInfoApi().changePassword(oldPwdHash, newPwdHash);
-
+      final md5 = Md5Util();
+      final result = await UserInfoApi().changePassword(
+        md5.generateMd5(_oldPasswordController.text),
+        md5.generateMd5(_newPasswordController.text),
+      );
       if (!mounted) return;
 
       if (result.error) {
@@ -332,13 +329,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         Navigator.pop(context, true);
       }
     } catch (e) {
-      if (mounted) {
-        ToastUtils.show(e.toString());
-      }
+      if (mounted) ToastUtils.show(e.toString());
     } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 }

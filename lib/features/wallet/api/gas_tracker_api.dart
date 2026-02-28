@@ -27,6 +27,36 @@ class GasTrackerApi {
     'content-type': 'application/json',
   };
 
+  /// 解析链配置并返回 RPC 端点和基础信息
+  ///
+  /// 成功时返回 `{rpc, decimals, unit, baseInfo}` 的 Map，
+  /// 失败时返回 [MessageModel.error]。
+  Object _resolveChainInfo(String coinType, {bool isTest = false}) {
+    final chainConfig = chainUrlMap[coinType];
+    if (chainConfig == null) {
+      return MessageModel.error()..data = 'Unsupported chain: $coinType';
+    }
+
+    final baseInfo = chainConfig['baseInfo'] as Map<String, dynamic>?;
+    if (baseInfo == null) {
+      return MessageModel.error()..data = 'Chain config error';
+    }
+
+    final rpc = isTest
+        ? baseInfo['service_test'] as String?
+        : baseInfo['service'] as String?;
+
+    if (rpc == null || rpc.isEmpty) {
+      return MessageModel.error()..data = 'RPC endpoint not configured';
+    }
+
+    return {
+      'rpc': rpc,
+      'decimals': baseInfo['decimals'] as int? ?? 18,
+      'unit': (baseInfo['unit'] ?? coinType).toString().toUpperCase(),
+    };
+  }
+
   /// 获取 Gas 估算数据
   ///
   /// [coinType] 链符号，如 ETH、BNB 等
@@ -40,25 +70,13 @@ class GasTrackerApi {
     BigInt? customGasLimit,
   }) async {
     try {
-      final chainConfig = chainUrlMap[coinType];
-      if (chainConfig == null) {
-        return MessageModel.error()..data = 'Unsupported chain: $coinType';
-      }
+      final resolved = _resolveChainInfo(coinType, isTest: isTest);
+      if (resolved is MessageModel) return resolved;
 
-      final baseInfo = chainConfig['baseInfo'] as Map<String, dynamic>?;
-      if (baseInfo == null) {
-        return MessageModel.error()..data = 'Chain config error';
-      }
-
-      final decimals = baseInfo['decimals'] as int? ?? 18;
-      final unit = (baseInfo['unit'] ?? coinType).toString().toUpperCase();
-      final rpc = isTest
-          ? baseInfo['service_test'] as String?
-          : baseInfo['service'] as String?;
-
-      if (rpc == null || rpc.isEmpty) {
-        return MessageModel.error()..data = 'RPC endpoint not configured';
-      }
+      final info = resolved as Map<String, dynamic>;
+      final rpc = info['rpc'] as String;
+      final decimals = info['decimals'] as int;
+      final unit = info['unit'] as String;
 
       final gasLimit =
           customGasLimit ?? BigInt.from(getCoinGas(coinType, contract: isContract));
@@ -262,22 +280,10 @@ class GasTrackerApi {
     bool isTest = false,
   }) async {
     try {
-      final chainConfig = chainUrlMap[coinType];
-      if (chainConfig == null) {
-        return MessageModel.error()..data = 'Unsupported chain';
-      }
+      final resolved = _resolveChainInfo(coinType, isTest: isTest);
+      if (resolved is MessageModel) return resolved;
 
-      final baseInfo = chainConfig['baseInfo'] as Map<String, dynamic>?;
-      String? rpc;
-      if (isTest) {
-        rpc = baseInfo?['service_test'] as String?;
-      } else {
-        rpc = baseInfo?['service'] as String?;
-      }
-
-      if (rpc == null || rpc.isEmpty) {
-        return MessageModel.error()..data = 'RPC not configured';
-      }
+      final rpc = (resolved as Map<String, dynamic>)['rpc'] as String;
 
       final result = await _callRpc(rpc, {
         'jsonrpc': '2.0',

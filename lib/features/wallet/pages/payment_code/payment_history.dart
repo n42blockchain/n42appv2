@@ -51,14 +51,9 @@ class _PaymentHistoryState extends State<PaymentHistory> {
         });
       } else {
         final raw = mm.data;
-        List<Map<String, dynamic>> parsed = [];
-        if (raw is List) {
-          for (final item in raw) {
-            if (item is Map) {
-              parsed.add(Map<String, dynamic>.from(item));
-            }
-          }
-        }
+        final parsed = (raw is List)
+            ? raw.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList()
+            : <Map<String, dynamic>>[];
         setState(() {
           dataList = parsed;
           load = Load.finish;
@@ -166,16 +161,15 @@ class _PaymentHistoryState extends State<PaymentHistory> {
   Widget _itemWidget(Map<String, dynamic> data) {
     final bool isIncoming = data["toUuid"]?.toString() == uuid;
     final String timeStr = _formatTime(data['txTime']);
+    final String dirColorKey = isIncoming
+        ? AppThemeKeys.rightTextColor.name
+        : AppThemeKeys.textColorOrange.name;
+    final Color dirColor = AppThemeUtils.getColorByKey(context, dirColorKey);
 
     final Widget dirIcon = Icon(
       isIncoming ? Icons.input_outlined : Icons.output_outlined,
       size: ScreenUtil().setWidth(40),
-      color: AppThemeUtils.getColorByKey(
-        context,
-        isIncoming
-            ? AppThemeKeys.rightTextColor.name
-            : AppThemeKeys.textColorOrange.name,
-      ),
+      color: dirColor,
     );
     final Widget dirLabel = Container(
       margin:
@@ -183,12 +177,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
       child: Text(
         isIncoming ? S.of(context).g_key_payment_incoming : S.of(context).g_key_payment_outgoing,
         style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            isIncoming
-                ? AppThemeKeys.rightTextColor.name
-                : AppThemeKeys.textColorOrange.name,
-          ),
+          color: dirColor,
           fontSize: ScreenUtil().setSp(28),
         ),
       ),
@@ -209,7 +198,6 @@ class _PaymentHistoryState extends State<PaymentHistory> {
             children: [
               dirIcon,
               Expanded(
-                flex: 1,
                 child: InkWell(
                   onTap: () {
                     final String openUrl = getBrowserTxHash(
@@ -253,7 +241,6 @@ class _PaymentHistoryState extends State<PaymentHistory> {
           Row(
             children: [
               Expanded(
-                flex: 1,
                 child: Container(
                   margin:
                       EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
@@ -303,7 +290,6 @@ class _PaymentHistoryState extends State<PaymentHistory> {
                 ),
               ),
               Expanded(
-                flex: 1,
                 child: Text(
                   (data['tokenPrice'] ?? "").toString().isNotEmpty
                       ? "\$ ${data['tokenPrice']}"

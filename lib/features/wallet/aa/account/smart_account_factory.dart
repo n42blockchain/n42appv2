@@ -81,8 +81,7 @@ class SmartAccountFactory {
 
     switch (type) {
       case SmartAccountType.simpleAccount:
-        final addr = await calculateSimpleAccountAddress(salt: accountSalt);
-        return addr;
+        return calculateSimpleAccountAddress(salt: accountSalt);
 
       case SmartAccountType.simple7702Account:
         // EIP-7702: the smart account address IS the EOA address
@@ -189,15 +188,11 @@ class SmartAccountFactory {
   }
 
   /// Get init code for deploying a SimpleAccount
-  Uint8List getInitCode({
-    BigInt? salt,
-  }) {
-    final accountSalt = salt ?? BigInt.zero;
-
+  Uint8List getInitCode({BigInt? salt}) {
     return CalldataBuilder.buildSimpleAccountInitCode(
       factoryAddress: _config.simpleAccountFactory,
       owner: _ownerAddress,
-      salt: accountSalt,
+      salt: salt ?? BigInt.zero,
     );
   }
 

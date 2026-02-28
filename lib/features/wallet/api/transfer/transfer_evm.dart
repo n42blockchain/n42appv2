@@ -20,20 +20,14 @@ mixin _TransferEvmMixin on _TransferBaseMixin {
     WalletActionProvider wap = globalWapAdapter;
     Map<String, dynamic>? txChainMap = wap.walletMap[coinType];
     if (txChainMap == null) {
-      MessageModel mm = MessageModel.error();
-      mm.data = S.current.g_key_wallet_m1(coinType);
-      return mm;
+      return MessageModel.error()..data = S.current.g_key_wallet_m1(coinType);
     }
     if (fromAddress == "") {
-      String? fAddress = wap.getAddress(coinType,
-          addrType: "legacy");
+      String? fAddress = wap.getAddress(coinType, addrType: "legacy");
       if (fAddress == null) {
-        MessageModel mm = MessageModel.error();
-        mm.data = S.current.g_key_wallet_m3(coinType);
-        return mm;
-      } else {
-        fromAddress = fAddress;
+        return MessageModel.error()..data = S.current.g_key_wallet_m3(coinType);
       }
+      fromAddress = fAddress;
     }
     //获取每个byte 消耗多少gas
     int gas =
@@ -41,15 +35,10 @@ mixin _TransferEvmMixin on _TransferBaseMixin {
     BigInt chainBalance = BigInt.zero;
     MessageModel mmchain =
     await getBalanceEth(coinType, fromAddress, contractAddress: "",isTest: isTest);
-    if (mmchain.error == true) {
-      return mmchain;
-    } else {
-      chainBalance = mmchain.data;
-    }
+    if (mmchain.error == true) return mmchain;
+    chainBalance = mmchain.data;
     if (chainBalance == BigInt.zero) {
-      MessageModel mme = MessageModel.error();
-      mme.data = S.current.g_key_wallet_m5(coinType);
-      return mme;
+      return MessageModel.error()..data = S.current.g_key_wallet_m5(coinType);
     }
     //获取gas 费
     BigInt gasPrice = BigInt.zero; //当前旷工费
@@ -57,14 +46,11 @@ mixin _TransferEvmMixin on _TransferBaseMixin {
     MessageModel mmg = await tokenViewApi.getGasPrice(
         BlockchainType.Ethereum.name, coinType,
         isTest: isTest) ?? MessageModel.error();
-    if (mmg.error == true) {
-      return mmg;
-    } else {
-      gasPrice2 = mmg.data;
-      gasPrice = mmg.data;
-      if(get1559WithChainSymbol(coinType)){
-        gasPrice=gasPrice*BigInt.from(2);
-      }
+    if (mmg.error == true) return mmg;
+    gasPrice2 = mmg.data;
+    gasPrice = mmg.data;
+    if(get1559WithChainSymbol(coinType)){
+      gasPrice=gasPrice*BigInt.from(2);
     }
     //gas费消耗最大数
     BigInt totalGasPrice = gasPrice * BigInt.from(gas);
@@ -74,20 +60,13 @@ mixin _TransferEvmMixin on _TransferBaseMixin {
       value=toEther(valuePrice.toString(),18).toDouble();
     }
     if (totalGasPrice + valuePrice > chainBalance) {
-      MessageModel mme = MessageModel.error();
-      mme.data = S.current.g_key_wallet_m5(coinType);
-      return mme;
+      return MessageModel.error()..data = S.current.g_key_wallet_m5(coinType);
     }
-
     //获取nonce值
     MessageModel mmn = await tokenViewApi.getTransactionCountEth(
         coinType, fromAddress,netMode:isTest?"test":"main");
-    String nonceHex = "";
-    if (mmn.error) {
-      return mmn;
-    } else {
-      nonceHex = dataUtils.bigIntToHex(mmn.data, need0x: false);
-    }
+    if (mmn.error) return mmn;
+    String nonceHex = dataUtils.bigIntToHex(mmn.data, need0x: false);
     String gasPriceHex = dataUtils.bigIntToHex(gasPrice, need0x: false);
     String amountHex = dataUtils.bigIntToHex(valuePrice, need0x: false);
 
@@ -107,25 +86,17 @@ mixin _TransferEvmMixin on _TransferBaseMixin {
       'erc721Or1155': erc721Or1155,
       "tokenId":dataUtils.bigIntToHex(BigInt.parse(tokenId),need0x: false),
       "trValue":dataUtils.bigIntToHex(BigInt.from(nftNum),need0x: false),
+      "is1559": get1559WithChainSymbol(coinType) ? 'true' : 'false',
     };
-    if(get1559WithChainSymbol(coinType)){
-      signMap["is1559"]='true';
-    }else{
-      signMap["is1559"]='false';
-    }
-    String signStr;
     //从keystore中取出助记词
     WalletInfo wi = wap.walletInfo;
     String path=txChainMap['baseInfo']['path'][txChainMap['addrType']];
     int pathIndex=txChainMap["pathIndex"]??0;
     path=getPathWithIndex(path, pathIndex);
-    signStr = await trustdart.signTransaction(
+    String signStr = await trustdart.signTransaction(
         coinType, path, signMap, mnemonic: wi.mnemonic??"",pk: wi.password??"");
-
     if(signStr==""){
-      MessageModel rmm=MessageModel.error();
-      rmm.data=S.current.g_key_wallet_m6;
-      return rmm;
+      return MessageModel.error()..data=S.current.g_key_wallet_m6;
     }
     signStr = "0x$signStr";
     // Validate signature before broadcast
@@ -146,28 +117,18 @@ mixin _TransferEvmMixin on _TransferBaseMixin {
     if(contractAddress !=""){
       MessageModel mm = await getBalanceEth(coinType, fromAddress,
           contractAddress: contractAddress,isTest:isTest);
-      if (mm.error == true) {
-        return mm;
-      } else {
-        balance = mm.data;
-      }
+      if (mm.error == true) return mm;
+      balance = mm.data;
       if (balance == BigInt.zero) {
-        MessageModel mme = MessageModel.error();
-        mme.data = S.current.g_key_wallet_m4;
-        return mme;
+        return MessageModel.error()..data = S.current.g_key_wallet_m4;
       }
     }
     MessageModel mmchain =
     await getBalanceEth(coinType, fromAddress, contractAddress: "",isTest:isTest);
-    if (mmchain.error == true) {
-      return mmchain;
-    } else {
-      chainBalance = mmchain.data;
-    }
+    if (mmchain.error == true) return mmchain;
+    chainBalance = mmchain.data;
     if (chainBalance == BigInt.zero) {
-      MessageModel mme = MessageModel.error();
-      mme.data = S.current.g_key_wallet_m5(coinType);
-      return mme;
+      return MessageModel.error()..data = S.current.g_key_wallet_m5(coinType);
     }
     //获取gas 费
     BigInt gasPrice = BigInt.zero; //当前旷工费
@@ -175,14 +136,11 @@ mixin _TransferEvmMixin on _TransferBaseMixin {
     MessageModel mmg = await tokenViewApi.getGasPrice(
         BlockchainType.Ethereum.name, coinType,
         isTest: isTest) ?? MessageModel.error();
-    if (mmg.error == true) {
-      return mmg;
-    } else {
-      gasPrice2 = mmg.data;
-      gasPrice = mmg.data;
-      if(get1559WithChainSymbol(coinType)){
-        gasPrice=gasPrice*BigInt.from(2);
-      }
+    if (mmg.error == true) return mmg;
+    gasPrice2 = mmg.data;
+    gasPrice = mmg.data;
+    if(get1559WithChainSymbol(coinType)){
+      gasPrice=gasPrice*BigInt.from(2);
     }
     //gas费消耗最大数
     BigInt totalGasPrice = BigInt.zero;
@@ -195,17 +153,14 @@ mixin _TransferEvmMixin on _TransferBaseMixin {
         coinType,
         contract: contractAddress,
         isTest: isTest,);
-    if(estimateMm.error==false){
-      gas=(estimateMm.data as BigInt).toInt();
-      if(coinType==CoinType.OP.name
-          || coinType==CoinType.BOBA.name){
-        gas=(gas*1.5).toInt();
-      }
-      totalGasPrice=gasPrice * BigInt.from(gas);
-    }else{
-      return estimateMm;
+    if(estimateMm.error==true) return estimateMm;
+    gas=(estimateMm.data as BigInt).toInt();
+    if(coinType==CoinType.OP.name || coinType==CoinType.BOBA.name){
+      gas=(gas*1.5).toInt();
     }
+    totalGasPrice=gasPrice * BigInt.from(gas);
 
+    final String displayCoinType = coinType==CoinType.N.name?CoinType.N.name:coinType;
     BigInt valuePrice = BigInt.zero;
     if (contractAddress == "") {
       valuePrice = ethToWeiString(value.toString(), decimals);
@@ -213,28 +168,16 @@ mixin _TransferEvmMixin on _TransferBaseMixin {
         valuePrice=valuePrice-totalGasPrice;
         value=toEther(valuePrice.toString(),decimals).toDouble();
       }
-      if(value<0){
-        MessageModel mme = MessageModel.error();
-        mme.data = S.current.g_key_wallet_m5(coinType==CoinType.N.name?CoinType.N.name:coinType);
-        return mme;
+      if(value<0 || totalGasPrice + valuePrice > chainBalance){
+        return MessageModel.error()..data = S.current.g_key_wallet_m5(displayCoinType);
       }
-      if (totalGasPrice + valuePrice > chainBalance) {
-        MessageModel mme = MessageModel.error();
-        mme.data = S.current.g_key_wallet_m5(coinType==CoinType.N.name?CoinType.N.name:coinType);
-        return mme;
-      }
-    }
-    else {
+    } else {
       valuePrice = ethToWeiString(value.toString(), tokenDecimals);
       if (valuePrice > balance) {
-        MessageModel mme = MessageModel.error();
-        mme.data = S.current.g_key_wallet_m4;
-        return mme;
+        return MessageModel.error()..data = S.current.g_key_wallet_m4;
       }
       if (totalGasPrice > chainBalance) {
-        MessageModel mme = MessageModel.error();
-        mme.data = S.current.g_key_wallet_m5(coinType==CoinType.N.name?CoinType.N.name:coinType);
-        return mme;
+        return MessageModel.error()..data = S.current.g_key_wallet_m5(displayCoinType);
       }
     }
     MessageModel rmm=await transferEthSend(
@@ -273,25 +216,19 @@ mixin _TransferEvmMixin on _TransferBaseMixin {
         bool returnSignHash=false,//返回签名数据
         String? rpc,
       })async{
-    String nonceHex = "";
     //获取nonce值
+    String nonceHex;
     if(nonce==null){
       MessageModel mmn = await tokenViewApi.getTransactionCountEth(
           coinType, fromAddress,
           netMode: isTest,rpc: rpc);
-      if (mmn.error) {
-        return mmn;
-      } else {
-        nonceHex = dataUtils.bigIntToHex(mmn.data, need0x: false);
-      }
+      if (mmn.error) return mmn;
+      nonceHex = dataUtils.bigIntToHex(mmn.data, need0x: false);
     }else{
       nonceHex = dataUtils.strip0x(nonce);
     }
-
     if(gasPrice==BigInt.zero){
-      MessageModel rmm=MessageModel.error();
-      rmm.data="Gas price error";
-      return rmm;
+      return MessageModel.error()..data="Gas price error";
     }
     String gasPriceHex = dataUtils.bigIntToHex(gasPrice,
         need0x: false);
@@ -301,14 +238,9 @@ mixin _TransferEvmMixin on _TransferBaseMixin {
         need0x: false);
     String chainIdHex = dataUtils.bigIntToHex(BigInt.from(chainId), need0x: false);
     String gasLimitHex = dataUtils.bigIntToHex(BigInt.from(gas*4), need0x: false);
-    String messageHex="";
-    if(message !=null){
-      if(Platform.isAndroid){
-        messageHex=message;
-      }else{
-        messageHex= bytesToHex(message.codeUnits);
-      }
-    }
+    String messageHex = message == null
+        ? ""
+        : Platform.isAndroid ? message : bytesToHex(message.codeUnits);
 
     Map<String, String> signMap = {
       "chainId": chainIdHex,
@@ -321,38 +253,27 @@ mixin _TransferEvmMixin on _TransferBaseMixin {
       'amount': amountHex,
       'msgData':messageHex,
       'erc721Or1155': erc721Or1155,
+      "is1559": get1559WithChainSymbol(coinType) ? 'true' : 'false',
     };
-    if(get1559WithChainSymbol(coinType)){
-      signMap["is1559"]='true';
-    }else{
-      signMap["is1559"]='false';
-    }
-    String signStr;
     //从keystore中取出助记词
+    String signStr;
     if(privateKey ==null){
       if (!AppGlobals.appContext.mounted) {
         return MessageModel.error()..data = 'Context is no longer valid';
       }
       signStr = await trustdart.signTransaction(
-        coinType,
-        path,
-        signMap,
+        coinType, path, signMap,
         mnemonic: globalWapAdapter.walletInfo.mnemonic??"",
       );
     }else{
-      signStr = await trustdart.signTransaction(coinType, path, signMap,  pk:privateKey,);
+      signStr = await trustdart.signTransaction(coinType, path, signMap, pk:privateKey);
     }
-
     if(signStr==""){
-      MessageModel rmm=MessageModel.error();
-      rmm.data=S.current.g_key_wallet_m6;
-      return rmm;
+      return MessageModel.error()..data=S.current.g_key_wallet_m6;
     }
     signStr = "0x$signStr";
     if(returnSignHash){
-      MessageModel rmm=MessageModel();
-      rmm.data=signStr;
-      return rmm;
+      return MessageModel()..data=signStr;
     }
     // Validate signature before broadcast
     final validationError = validateSignature(signStr, coinType);
@@ -365,9 +286,8 @@ mixin _TransferEvmMixin on _TransferBaseMixin {
   //获取余额 eth
   Future<MessageModel> getBalanceEth(String coinType, String fromAddress,
       {String contractAddress = "",bool isTest=false}) async {
-    MessageModel mm = await tokenViewApi.getBalance(
+    return await tokenViewApi.getBalance(
         BlockchainType.Ethereum.name, coinType, fromAddress,contract:contractAddress,
         isTest: isTest) ?? MessageModel.error();
-    return mm;
   }
 }

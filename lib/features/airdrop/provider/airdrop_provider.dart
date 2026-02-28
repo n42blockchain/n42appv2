@@ -218,10 +218,12 @@ class AirdropProvider extends ChangeNotifier {
   void _recalcStats() {
     int eligible = 0;
     int claimed = 0;
+    double totalValue = 0.0;
     double claimedValue = 0.0;
     double pendingValue = 0.0;
 
     for (final a in _airdrops) {
+      totalValue += a.estimatedValueUsd ?? 0;
       if (a.isEligible == true &&
           (a.status == AirdropStatus.active ||
               a.status == AirdropStatus.upcoming)) {
@@ -238,7 +240,7 @@ class AirdropProvider extends ChangeNotifier {
       totalAirdrops: _airdrops.length,
       eligibleAirdrops: eligible,
       claimedAirdrops: claimed,
-      totalValueUsd: _airdrops.fold(0.0, (s, a) => s + (a.estimatedValueUsd ?? 0)),
+      totalValueUsd: totalValue,
       claimedValueUsd: claimedValue,
       pendingValueUsd: pendingValue,
     );
@@ -265,12 +267,7 @@ class AirdropProvider extends ChangeNotifier {
     );
 
     if (!result.error) {
-      // 更新本地状态
-      final index = _airdrops.indexWhere((a) => a.id == airdropId);
-      if (index != -1) {
-        // 刷新数据
-        await refresh();
-      }
+      await refresh();
       return true;
     }
 

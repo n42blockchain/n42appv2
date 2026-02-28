@@ -50,48 +50,26 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
     _titleController.text=widget.wInfo.walletName??"";
     super.initState();
   }
+  Widget _stepIndicator() {
+    return Container(
+      height: ScreenUtil().setWidth(10.0),
+      width: ScreenUtil().setWidth(88.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+      ),
+    );
+  }
+
+  Widget _stepGap() => SizedBox(width: ScreenUtil().setWidth(20.0));
+
   @override
   Widget build(BuildContext context) {
-    List<Widget> titleChild=[
-      Container(
-        height: ScreenUtil().setWidth(10.0),
-        width: ScreenUtil().setWidth(88.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-        ),
-      ),
-      SizedBox(width: ScreenUtil().setWidth(20.0),),
-      Container(
-        height: ScreenUtil().setWidth(10.0),
-        width: ScreenUtil().setWidth(88.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-        ),
-      ),
-    ];
-    if(widget.createMetod=="Create"){
-      titleChild.addAll([
-        SizedBox(width: ScreenUtil().setWidth(20.0),),
-        Container(
-          height: ScreenUtil().setWidth(10.0),
-          width: ScreenUtil().setWidth(88.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-          ),
-        ),
-        SizedBox(width: ScreenUtil().setWidth(20.0),),
-        Container(
-          height: ScreenUtil().setWidth(10.0),
-          width: ScreenUtil().setWidth(88.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-          ),
-        ),
-      ]);
+    final int stepCount = widget.createMetod == "Create" ? 4 : 2;
+    final List<Widget> titleChild = [];
+    for (int i = 0; i < stepCount; i++) {
+      if (i > 0) titleChild.add(_stepGap());
+      titleChild.add(_stepIndicator());
     }
     return Scaffold(
       appBar: AppBar(
@@ -279,45 +257,35 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
                     child: buttonStyle6(context,
                             ()async{
-                      String wName=_titleController.text.trim();
-                      if(wName.isEmpty){
-                        titleErrorMessage=S.of(context).g_key_wallet_c34;
-                        ToastUtils.show(titleErrorMessage);
-                        return;
-                      }
-                      setState(() {
-                        titleErrorMessage="";
-                      });
-                      // 数据的校验
+                      final wName=_titleController.text.trim();
                       final password = _uPasswordController.text.trim();
                       final rPassword = _uPasswordConfirmController.text.trim();
-                      if (password.isEmpty) {
-                        uPasswordErrorMessage=S.of(context).g_key_21;
-                        ToastUtils.show(uPasswordErrorMessage);
+
+                      // 数据的校验
+                      String titleErr="", pwdErr="", confirmErr="";
+                      if(wName.isEmpty){
+                        titleErr=S.of(context).g_key_wallet_c34;
+                      } else if (password.isEmpty) {
+                        pwdErr=S.of(context).g_key_21;
+                      } else if (!Regular().isPassword(password)) {
+                        pwdErr=S.of(context).rest_Choose_password;
+                      } else if (rPassword.isEmpty) {
+                        confirmErr=S.of(context).g_key_21;
+                      } else if (password != rPassword) {
+                        confirmErr=S.of(context).g_key_25;
+                      }
+
+                      titleErrorMessage=titleErr;
+                      uPasswordErrorMessage=pwdErr;
+                      uPasswordConfirmErrorMessage=confirmErr;
+
+                      final firstError = [titleErr, pwdErr, confirmErr].firstWhere((e) => e.isNotEmpty, orElse: () => "");
+                      if(firstError.isNotEmpty){
+                        ToastUtils.show(firstError);
+                        setState(() {});
                         return;
                       }
-                      //if (password.length < AppConfig.walletPasswordLength) {
-                      if (!Regular().isPassword(password)) {
-                        uPasswordErrorMessage=S.of(context).rest_Choose_password;//S.of(context).g_key_wallet_m7(AppConfig.walletPasswordLength);
-                        ToastUtils.show(uPasswordErrorMessage);
-                        return;
-                      }
-                      setState(() {
-                        uPasswordErrorMessage="";
-                      });
-                      if (rPassword.isEmpty) {
-                        uPasswordConfirmErrorMessage=S.of(context).g_key_21;
-                        ToastUtils.show(uPasswordConfirmErrorMessage);
-                        return;
-                      }
-                      if (password != rPassword) {
-                        uPasswordConfirmErrorMessage=S.of(context).g_key_25;
-                        ToastUtils.show(uPasswordConfirmErrorMessage);
-                        return;
-                      }
-                      setState(() {
-                        uPasswordConfirmErrorMessage="";
-                      });
+
                       widget.wInfo.password=password;
                       widget.wInfo.walletName=wName;
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>CreateFinish(wInfo:widget.wInfo,createMetod: widget.createMetod,)));
