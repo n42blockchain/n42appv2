@@ -34,6 +34,9 @@ class EnsRegistrationService {
       : _baseUrl = AppConfig.getApiUrlOnline('tokenViewUri'),
         _headers = {'content-type': 'application/json'};
 
+  /// 去除 .eth 后缀的基础名称
+  String _baseName(String name) => normalizeName(name).replaceAll('.eth', '');
+
   // ============ 查询功能 ============
 
   /// 检查 ENS 名称可用性
@@ -92,12 +95,10 @@ class EnsRegistrationService {
         mm.data = EnsPrice.fromJson(response['data'] as Map<String, dynamic>);
       } else {
         mm.error = true;
-        mm.data = null;
       }
     } catch (e) {
       debugPrint('ENS price query error: $e');
       mm.error = true;
-      mm.data = null;
     }
 
     return mm;
@@ -172,7 +173,7 @@ class EnsRegistrationService {
     String? secret,
   }) async {
     final mm = MessageModel();
-    final normalizedName = normalizeName(name).replaceAll('.eth', '');
+    final normalizedName = _baseName(name);
     final secretValue = secret ?? _generateSecret();
 
     try {
@@ -204,12 +205,10 @@ class EnsRegistrationService {
         mm.data = result;
       } else {
         mm.error = true;
-        mm.data = null;
       }
     } catch (e) {
       debugPrint('ENS commit error: $e');
       mm.error = true;
-      mm.data = null;
     }
 
     return mm;
@@ -217,7 +216,7 @@ class EnsRegistrationService {
 
   /// 获取待处理的承诺
   CommitResult? getPendingCommitment(String name) {
-    return _pendingCommitments[normalizeName(name).replaceAll('.eth', '')];
+    return _pendingCommitments[_baseName(name)];
   }
 
   /// 回滚注册承诺（best-effort）
@@ -226,7 +225,7 @@ class EnsRegistrationService {
   /// 清除本地缓存并通知服务端回滚，服务端可将未完成的 order 标记为废弃。
   /// 此操作是 best-effort：服务端通知失败不会影响本地状态清理。
   Future<void> rollbackCommit(String name) async {
-    final normalizedName = normalizeName(name).replaceAll('.eth', '');
+    final normalizedName = _baseName(name);
     _pendingCommitments.remove(normalizedName);
     try {
       await BaseApi.requestEmptyH.post(
@@ -308,7 +307,7 @@ class EnsRegistrationService {
 
   /// 验证 ENS 名称格式（至少3字符，仅含字母/数字/连字符，不可首尾为连字符）
   bool isValidEnsName(String name) {
-    final normalized = normalizeName(name).replaceAll('.eth', '');
+    final normalized = _baseName(name);
     if (normalized.length < 3) return false;
     if (!RegExp(r'^[a-z0-9-]+$').hasMatch(normalized)) return false;
     if (normalized.startsWith('-') || normalized.endsWith('-')) return false;
@@ -321,7 +320,7 @@ class EnsRegistrationService {
   /// - 4 字符: standard（中等）
   /// - 5+ 字符: basic（基础价格）
   String getPricingTier(String name) {
-    final length = normalizeName(name).replaceAll('.eth', '').length;
+    final length = _baseName(name).length;
     if (length == 3) return 'premium';
     if (length == 4) return 'standard';
     return 'basic';

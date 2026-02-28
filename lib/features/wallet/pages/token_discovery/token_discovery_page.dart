@@ -68,7 +68,7 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
   }
 
   Future<void> _addSelected() async {
-    final toAdd = _selected.toList(); // snapshot before mutation
+    final toAdd = _selected; // snapshot before mutation (_selected returns a new list)
     for (final token in toAdd) {
       await _addToken(token);
     }
@@ -324,7 +324,7 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
           // Select-all toggle
           GestureDetector(
             onTap: () {
-              final allSelected = _selected.length == _tokens.length;
+              final allSelected = selectedCount == _tokens.length;
               setState(() {
                 for (final t in _tokens) {
                   t.isSelected = !allSelected;
@@ -332,7 +332,7 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
               });
             },
             child: Text(
-              _selected.length == _tokens.length
+              selectedCount == _tokens.length
                   ? S.of(context).g_key_token_discovery_deselect_all
                   : S.of(context).g_key_token_discovery_select_all,
               style: TextStyle(

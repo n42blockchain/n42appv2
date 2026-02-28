@@ -323,14 +323,11 @@ class _OwnerAddressRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final addr =
-        DataUtils().addressFarmat(coinModel.address.toString());
+    final addr = DataUtils().addressFarmat(coinModel.address.toString());
     return Container(
-      padding: EdgeInsets.only(
-        top: ScreenUtil().setWidth(20.0),
-        bottom: ScreenUtil().setWidth(20.0),
-        right: ScreenUtil().setWidth(30.0),
-        left: ScreenUtil().setWidth(30.0),
+      padding: EdgeInsets.symmetric(
+        vertical: ScreenUtil().setWidth(20.0),
+        horizontal: ScreenUtil().setWidth(30.0),
       ),
       child: Text(
         addr,

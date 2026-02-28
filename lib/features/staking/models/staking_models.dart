@@ -315,7 +315,6 @@ class StakingProtocols {
     apy: 7.0,
     minStakeAmount: 0.01,
     unbondingPeriodDays: 2,
-    isLiquid: false,
   );
 
   static final atomNative = StakingProtocol(
@@ -328,7 +327,6 @@ class StakingProtocols {
     apy: 15.0,
     minStakeAmount: 0.001,
     unbondingPeriodDays: 21,
-    isLiquid: false,
   );
 
   static final dotNative = StakingProtocol(
@@ -341,7 +339,6 @@ class StakingProtocols {
     apy: 12.0,
     minStakeAmount: 1.0,
     unbondingPeriodDays: 28,
-    isLiquid: false,
   );
 
   static List<StakingProtocol> get all => [
@@ -353,11 +350,10 @@ class StakingProtocols {
 
   /// 按 ID 查找协议，未找到时返回 null
   static StakingProtocol? getById(String id) {
-    try {
-      return all.firstWhere((p) => p.id == id);
-    } catch (_) {
-      return null;
+    for (final p in all) {
+      if (p.id == id) return p;
     }
+    return null;
   }
 
   /// 按链类型过滤协议列表

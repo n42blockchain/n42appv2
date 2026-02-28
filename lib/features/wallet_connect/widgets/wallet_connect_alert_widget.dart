@@ -200,31 +200,32 @@ class _WalletConnectAlertWidgetState
   // ── Data rows ─────────────────────────────────────────────────────────────────
 
   Widget _buildTransactionRows(BuildContext context) {
-    return Column(
-      children: [
-        _itemWidget(context, 'Network', widget.actionDataMap['network'] ?? ''),
-        _divider(context),
-        _itemWidget(context, 'From', widget.actionDataMap['from'] ?? ''),
-        _divider(context),
-        _itemWidget(context, 'To', widget.actionDataMap['to'] ?? ''),
-        _divider(context),
-        _itemWidget(context, 'Gas', widget.actionDataMap['gas'] ?? ''),
-        _divider(context),
-        _itemWidget(context, 'Data', widget.actionDataMap['data'] ?? ''),
-      ],
-    );
+    return _buildDataRows(context, [
+      ('Network', 'network'),
+      ('From', 'from'),
+      ('To', 'to'),
+      ('Gas', 'gas'),
+      ('Data', 'data'),
+    ]);
   }
 
   Widget _buildMessageRows(BuildContext context) {
-    return Column(
-      children: [
-        _itemWidget(context, 'Network', widget.actionDataMap['network'] ?? ''),
-        _divider(context),
-        _itemWidget(context, 'Address', widget.actionDataMap['from'] ?? ''),
-        _divider(context),
-        _itemWidget(context, 'Data', widget.actionDataMap['data'] ?? ''),
-      ],
-    );
+    return _buildDataRows(context, [
+      ('Network', 'network'),
+      ('Address', 'from'),
+      ('Data', 'data'),
+    ]);
+  }
+
+  /// Build labeled data rows with dividers between them.
+  Widget _buildDataRows(BuildContext context, List<(String, String)> fields) {
+    final children = <Widget>[];
+    for (var i = 0; i < fields.length; i++) {
+      if (i > 0) children.add(_divider(context));
+      final (label, key) = fields[i];
+      children.add(_itemWidget(context, label, widget.actionDataMap[key] ?? ''));
+    }
+    return Column(children: children);
   }
 
   // ── Buttons ───────────────────────────────────────────────────────────────────
@@ -232,22 +233,19 @@ class _WalletConnectAlertWidgetState
   Widget _buildActionButtons(BuildContext context, bool isTransaction) {
     final s = S.of(context);
     final wcp = ref.read(wcpBridgeProvider);
+    final cancelState = isTransaction
+        ? WalletConnectState.transaction
+        : WalletConnectState.messageSign;
     return _buttonRow(
       context,
       cancelLabel: s.g_connect_key3,
       onCancel: () {
-        wcp.cancelTap(isTransaction
-            ? WalletConnectState.transaction
-            : WalletConnectState.messageSign);
+        wcp.cancelTap(cancelState);
         Navigator.pop(context);
       },
       confirmLabel: s.g_key_78,
       onConfirm: () {
-        if (isTransaction) {
-          wcp.transactionSignTap();
-        } else {
-          wcp.messageSignTap();
-        }
+        isTransaction ? wcp.transactionSignTap() : wcp.messageSignTap();
         Navigator.pop(context);
       },
     );

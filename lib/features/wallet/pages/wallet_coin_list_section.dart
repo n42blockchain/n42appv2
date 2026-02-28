@@ -234,14 +234,7 @@ class _CoinListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int pinnedCount = 0;
-    for (final c in list) {
-      if ((c as CoinModel).isPinned) {
-        pinnedCount++;
-      } else {
-        break;
-      }
-    }
+    final pinnedCount = list.cast<CoinModel>().takeWhile((c) => c.isPinned).length;
 
     final needsDivider = pinnedCount > 0 && pinnedCount < list.length;
     final itemCount = list.length + (needsDivider ? 1 : 0);
@@ -253,7 +246,7 @@ class _CoinListView extends StatelessWidget {
       itemCount: itemCount,
       itemBuilder: (context, index) {
         if (needsDivider && index == pinnedCount) {
-          return _PinnedDivider();
+          return const _PinnedDivider();
         }
         final coinIndex =
             (needsDivider && index > pinnedCount) ? index - 1 : index;

@@ -25,8 +25,6 @@ class WalletCoinListHeader extends StatelessWidget {
   final VoidCallback onChangeNetwork;
   final ValueChanged<double> onThresholdChanged;
 
-  static const List<double> thresholdCycle = [0.0, 1.0, 5.0, 10.0, 50.0];
-
   String _networkLabel(BuildContext context) {
     if (waValue.walletInfo.networkIndex == -1) {
       return S.of(context).g_token_m_key_4;

@@ -140,14 +140,7 @@ class SecureStorage {
 
   /// 获取用户信息
   Future<Map<String, dynamic>?> getUserInfo() async {
-    final value = await _storage.read(key: _keyUserInfo);
-    if (value == null) return null;
-    try {
-      return jsonDecode(value) as Map<String, dynamic>;
-    } catch (e) {
-      debugPrint('Failed to decode user info: $e');
-      return null;
-    }
+    return _readJson<Map<String, dynamic>>(_keyUserInfo, 'user info');
   }
 
   // ==================== 钱包凭证 ====================
@@ -165,14 +158,10 @@ class SecureStorage {
 
   /// 获取钱包信息
   Future<Map<String, dynamic>?> getWalletCredentials(String address) async {
-    final value = await _storage.read(key: '$_keyWalletPrefix$address');
-    if (value == null) return null;
-    try {
-      return jsonDecode(value) as Map<String, dynamic>;
-    } catch (e) {
-      debugPrint('Failed to decode wallet credentials: $e');
-      return null;
-    }
+    return _readJson<Map<String, dynamic>>(
+      '$_keyWalletPrefix$address',
+      'wallet credentials',
+    );
   }
 
   /// 删除钱包信息
@@ -244,14 +233,11 @@ class SecureStorage {
 
   /// 获取手势密码
   Future<List<int>?> getGesturePassword() async {
-    final value = await _storage.read(key: _keyGesturePassword);
-    if (value == null) return null;
-    try {
-      return (jsonDecode(value) as List).cast<int>();
-    } catch (e) {
-      debugPrint('Failed to decode gesture password: $e');
-      return null;
-    }
+    final list = await _readJson<List<dynamic>>(
+      _keyGesturePassword,
+      'gesture password',
+    );
+    return list?.cast<int>();
   }
 
   /// 删除手势密码
@@ -269,6 +255,20 @@ class SecureStorage {
   /// 获取设备唯一标识
   Future<String?> getDeviceId() async {
     return _storage.read(key: _keyDeviceId);
+  }
+
+  // ==================== 内部辅助 ====================
+
+  /// 读取并解码 JSON 值，失败时返回 null
+  Future<T?> _readJson<T>(String key, String label) async {
+    final value = await _storage.read(key: key);
+    if (value == null) return null;
+    try {
+      return jsonDecode(value) as T;
+    } catch (e) {
+      debugPrint('Failed to decode $label: $e');
+      return null;
+    }
   }
 
   // ==================== 通用方法 ====================
@@ -290,8 +290,9 @@ class SecureStorage {
 
   /// 检查是否有存储的凭证
   Future<bool> hasCredentials() async {
-    final token = await getToken();
-    final uuid = await getUuid();
+    final results = await Future.wait([getToken(), getUuid()]);
+    final token = results[0];
+    final uuid = results[1];
     return token != null && token.isNotEmpty && uuid != null && uuid.isNotEmpty;
   }
 }

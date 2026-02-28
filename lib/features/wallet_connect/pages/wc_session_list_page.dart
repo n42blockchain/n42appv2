@@ -191,7 +191,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
 
   Widget _buildSessionCard(wallet_connect.SessionData session) {
     final meta = session.peer.metadata;
-    final iconUrl = (meta.icons.isNotEmpty) ? meta.icons[0] : "";
+    final iconUrl = meta.icons.isNotEmpty ? meta.icons[0] : "";
     final chains = _extractChains(session);
     final expiryDate = DateTime.fromMillisecondsSinceEpoch(session.expiry * 1000);
     final isExpired = expiryDate.isBefore(DateTime.now());
@@ -345,12 +345,11 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
     }
     return chainIds.map((id) {
       final parts = id.split(':');
-      if (parts[0] == 'eip155') {
-        return _chainNames[parts[1]] ?? 'EIP155:${parts[1]}';
-      } else if (parts[0] == 'tron') {
-        return 'TRON';
-      }
-      return id;
+      return switch (parts[0]) {
+        'eip155' => _chainNames[parts[1]] ?? 'EIP155:${parts[1]}',
+        'tron' => 'TRON',
+        _ => id,
+      };
     }).toList();
   }
 

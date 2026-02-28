@@ -63,6 +63,13 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
   bool _loading = false;
   bool _changed = false;
 
+  /// Shared validator for quantity and price fields.
+  String? _positiveNumberValidator(String? v) {
+    final n = double.tryParse(v ?? '');
+    if (n == null || n <= 0) return '> 0';
+    return null;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -127,9 +134,6 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
     final s = S.of(context);
 
     return PopScope(
-      onPopInvokedWithResult: (didPop, result) {
-        // result already set via Navigator.pop below; nothing extra needed.
-      },
       child: Container(
         decoration: BoxDecoration(
           color: bgColor,
@@ -196,13 +200,7 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
                           textColor: textColor,
                           subColor: subColor,
                           bgColor: bgColor,
-                          validator: (v) {
-                            final n = double.tryParse(v ?? '');
-                            if (n == null || n <= 0) {
-                              return '> 0';
-                            }
-                            return null;
-                          },
+                          validator: _positiveNumberValidator,
                         ),
                       ),
                       SizedBox(width: 12.w),
@@ -215,13 +213,7 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
                           textColor: textColor,
                           subColor: subColor,
                           bgColor: bgColor,
-                          validator: (v) {
-                            final n = double.tryParse(v ?? '');
-                            if (n == null || n <= 0) {
-                              return '> 0';
-                            }
-                            return null;
-                          },
+                          validator: _positiveNumberValidator,
                         ),
                       ),
                       SizedBox(width: 12.w),

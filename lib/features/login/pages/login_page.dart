@@ -36,21 +36,22 @@ class LoginPage extends ConsumerStatefulWidget {
 }
 
 class _LoginPageState extends ConsumerState<LoginPage> {
-  final TextEditingController _unameController = TextEditingController();
-  final TextEditingController _uPasswordController = TextEditingController();
-  final FocusNode _unameFocusNode=FocusNode();
-  final FocusNode _uPasswordFocusNode=FocusNode();
-  String unameErrorMessage="";
-  String uPasswordErrorMessage="";
+  final _unameController = TextEditingController();
+  final _uPasswordController = TextEditingController();
+  final _unameFocusNode = FocusNode();
+  final _uPasswordFocusNode = FocusNode();
+  String unameErrorMessage = "";
+  String uPasswordErrorMessage = "";
   bool isSelectedUserProtocol = false;
-  bool showPwd=true;//显示密码
-  Load load=Load.finish;
+  bool showPwd = true; //显示密码
+  Load load = Load.finish;
 
   @override
   void initState() {
     super.initState();
-    init();
+    _init();
   }
+
   @override
   void dispose() {
     _unameController.dispose();
@@ -187,11 +188,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                       ),
                                       recognizer: TapGestureRecognizer()
                                         ..onTap = () async {
-                                          bool? rData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>AccountCreateAndReset(type: HandType.createAccount,pushType: widget.type,)));
+                                          final rData = await Navigator.push<bool>(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) => AccountCreateAndReset(
+                                                type: HandType.createAccount,
+                                                pushType: widget.type,
+                                              ),
+                                            ),
+                                          );
                                           if (!mounted) return;
-                                          if(rData==true){
-                                            Navigator.pop(context);
-                                          }
+                                          if (rData == true) Navigator.pop(context);
                                         }
                                   ),
                                 ]
@@ -224,94 +231,23 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         setState(() {});
                       },
                     ),
-                    Divider(
-                      height: 1,
-                      endIndent: 0,
-                      indent: 0,
-                    ),
+                    const Divider(height: 1),
                     Container(
                       height: ScreenUtil().setWidth(148),
                       padding: EdgeInsets.all(ScreenUtil().setWidth(30.0),),
                       color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
                       child: buttonStyle6(
                         context,
-                            () async {
-                          final email = _unameController.value.text.trim();
-                          final password = _uPasswordController.value.text.trim();
-                          if (email.isEmpty) {
-                            setState(() {
-                              unameErrorMessage=S.of(context).please_enter_email;
-                            });
-                            ToastUtils.show(S.of(context).please_enter_email);
-                            return;
-                          }
-                          if (!Regular().isEmail(email)) {
-                            setState(() {
-                              unameErrorMessage=S.of(context).email_error;
-                            });
-                            ToastUtils.show(S.of(context).email_error);
-                            return;
-                          }
-                          unameErrorMessage="";
-                          if (password.isEmpty) {
-                            setState(() {
-                              uPasswordErrorMessage=S.of(context).please_enter_password;
-                            });
-                            ToastUtils.show(S.of(context).please_enter_password);
-                            return;
-                          }
-                          uPasswordErrorMessage="";
-                          setState(() {});
-                          if (!isSelectedUserProtocol) {
-                            ToastUtils.show(S.of(context).selected_user_protocol);
-                            return;
-                          }
-                          try {
-                            setState(() {
-                              load=Load.loading;
-                            });
-                            UserInfoApi loginApi=UserInfoApi();
-                            final deviceInfo = await DeviceInfoUtil().getFullDeviceInfo();
-                            final data = await loginApi.login(
-                                email, Md5Util().generateMd5(password),
-                                deviceInfo: deviceInfo);
-                            if (!mounted) return;
-                            if (data != null) {
-                              if (data["code"] == 200) {
-                                UserInfo userInfo = UserInfo.fromJson(data['data']);
-                                await SPUtil().saveUserInfo(userInfo);
-                                if (!mounted) return;
-                                // 使用 Riverpod 设置用户信息
-                                ref.read(currentUserProvider.notifier).setUser(
-                                  SharedUserInfo.fromLegacyUserInfo(userInfo),
-                                );
-                                await AppGlobals.login(userInfo);
-                                if (!mounted) return;
-                                if(widget.type==0){
-                                  Navigator.pop(context);
-                                }
-                              } else if (data["code"] == -403) {
-                                ToastUtils.showFtToast(
-                                    title: S.of(context).code_403);
-                              } else if (data["code"] == -1301) {
-                                ToastUtils.showFtToast(
-                                    title: S.of(context).g_key_error_1301);
-                              } else {
-                                ToastUtils.showFtToast(title: data["err"]);
-                              }
-                            }
-                          } catch (err) {
-                            ToastUtils.show(err.toString());
-                          } finally {
-                            setState(() {
-                              load=Load.finish;
-                            });
-                          }
-                        },
+                        _onLoginTap,
                         S.of(context).login_button_text,
-                        AppThemeUtils.getColorByKey(context, load==Load.loading?AppThemeKeys.mainButtonBgColor3.name:AppThemeKeys.mainButtonBgColor.name),
+                        AppThemeUtils.getColorByKey(
+                          context,
+                          load == Load.loading
+                              ? AppThemeKeys.mainButtonBgColor3.name
+                              : AppThemeKeys.mainButtonBgColor.name,
+                        ),
                         AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
-                        load==Load.loading,
+                        load == Load.loading,
                       ),
                     ),
                   ],
@@ -325,50 +261,106 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   Widget _buildText(BuildContext context) {
-    Color textColor =
-    AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          RichText(
-            text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: S.of(context).login_forgot_password,
-                    style: TextStyle(fontSize: ScreenUtil().setSp(32.0), color: textColor,fontWeight: FontWeight.w500),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () async{
-                        bool? rData=await Navigator.push(context,MaterialPageRoute(
-                            builder: (_) =>  AccountCreateAndReset(
-                              type: HandType.restPassword,
-                              pushType: widget.type,
-                            )));
-                        if (!mounted) return;
-                        if(rData==true){
-                          Navigator.pop(context);
-                        }
-                      },
-                  ),
-                ]),
+    final textColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    return Align(
+      alignment: Alignment.centerRight,
+      child: RichText(
+        text: TextSpan(
+          text: S.of(context).login_forgot_password,
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(32.0),
+            color: textColor,
+            fontWeight: FontWeight.w500,
           ),
-        ],
+          recognizer: TapGestureRecognizer()
+            ..onTap = () async {
+              final rData = await Navigator.push<bool>(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => AccountCreateAndReset(
+                    type: HandType.restPassword,
+                    pushType: widget.type,
+                  ),
+                ),
+              );
+              if (!mounted) return;
+              if (rData == true) Navigator.pop(context);
+            },
+        ),
       ),
     );
   }
 
-  void init() async {
-    SPUtil sPUtils=SPUtil();
-    isSelectedUserProtocol = await sPUtils.getReadLoginClause();
-    setState(() {});
-    final data = await sPUtils.getUserInfo();
+  void _init() async {
+    final spUtil = SPUtil();
+    isSelectedUserProtocol = await spUtil.getReadLoginClause();
+    final data = await spUtil.getUserInfo();
     if (data != null) {
-      UserInfo info = UserInfo.fromJson(data);
-      _unameController.text = info.email??"";
-      if (mounted) {
-        setState(() {});
+      _unameController.text = UserInfo.fromJson(data).email ?? "";
+    }
+    if (mounted) setState(() {});
+  }
+
+  /// Validate inputs and perform login.
+  Future<void> _onLoginTap() async {
+    final s = S.of(context);
+    final email = _unameController.text.trim();
+    final password = _uPasswordController.text.trim();
+
+    if (email.isEmpty) {
+      setState(() => unameErrorMessage = s.please_enter_email);
+      ToastUtils.show(s.please_enter_email);
+      return;
+    }
+    if (!Regular().isEmail(email)) {
+      setState(() => unameErrorMessage = s.email_error);
+      ToastUtils.show(s.email_error);
+      return;
+    }
+    unameErrorMessage = "";
+    if (password.isEmpty) {
+      setState(() => uPasswordErrorMessage = s.please_enter_password);
+      ToastUtils.show(s.please_enter_password);
+      return;
+    }
+    uPasswordErrorMessage = "";
+    setState(() {});
+    if (!isSelectedUserProtocol) {
+      ToastUtils.show(s.selected_user_protocol);
+      return;
+    }
+    try {
+      setState(() => load = Load.loading);
+      final deviceInfo = await DeviceInfoUtil().getFullDeviceInfo();
+      final data = await UserInfoApi().login(
+        email,
+        Md5Util().generateMd5(password),
+        deviceInfo: deviceInfo,
+      );
+      if (!mounted) return;
+      if (data == null) return;
+      if (data["code"] == 200) {
+        final userInfo = UserInfo.fromJson(data['data']);
+        await SPUtil().saveUserInfo(userInfo);
+        if (!mounted) return;
+        // 使用 Riverpod 设置用户信息
+        ref.read(currentUserProvider.notifier).setUser(
+          SharedUserInfo.fromLegacyUserInfo(userInfo),
+        );
+        await AppGlobals.login(userInfo);
+        if (!mounted) return;
+        if (widget.type == 0) Navigator.pop(context);
+      } else if (data["code"] == -403) {
+        ToastUtils.showFtToast(title: s.code_403);
+      } else if (data["code"] == -1301) {
+        ToastUtils.showFtToast(title: s.g_key_error_1301);
+      } else {
+        ToastUtils.showFtToast(title: data["err"]);
       }
+    } catch (err) {
+      ToastUtils.show(err.toString());
+    } finally {
+      setState(() => load = Load.finish);
     }
   }
 }

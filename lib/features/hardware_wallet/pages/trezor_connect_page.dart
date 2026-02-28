@@ -125,21 +125,24 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
   }
 
   Widget _buildDeviceIcon() {
+    final blueColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name);
+    final itemBg = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemBgColor.name);
+    final mainText = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainTextColor.name);
+    final size = ScreenUtil().setWidth(160);
+
     return ScaleTransition(
       scale: _pulseAnimation,
       child: Container(
-        width: ScreenUtil().setWidth(160),
-        height: ScreenUtil().setWidth(160),
+        width: size,
+        height: size,
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor.name)
-              .withAlpha(_isConnecting ? 200 : 255),
+          color: itemBg.withAlpha(_isConnecting ? 200 : 255),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(32)),
           border: Border.all(
-            color: _isConnecting
-                ? Colors.blue
-                : AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+            color: _isConnecting ? Colors.blue : blueColor,
             width: 2,
           ),
           boxShadow: _isConnecting
@@ -152,43 +155,35 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
                 ]
               : null,
         ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.usb,
-                size: ScreenUtil().setWidth(64),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.usb, size: ScreenUtil().setWidth(64), color: blueColor),
+            SizedBox(height: ScreenUtil().setWidth(12)),
+            Text(
+              'Trezor',
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(28),
+                fontWeight: FontWeight.w600,
+                color: mainText,
               ),
-              SizedBox(height: ScreenUtil().setWidth(12)),
-              Text(
-                'Trezor',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  fontWeight: FontWeight.w600,
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
   Widget _buildStepsCard(BuildContext context, S s) {
+    final itemBg = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemBgColor.name);
+    final mainText = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainTextColor.name);
+
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
-        color:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: itemBg,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
       ),
       child: Column(
@@ -198,8 +193,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
             s.g_key_hw_trezor_usb_hint,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: mainText,
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
@@ -219,18 +213,20 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
   ];
 
   Widget _buildStep(BuildContext context, String number, String text) {
+    final blueColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name);
+    final circleSize = ScreenUtil().setWidth(32);
+
     return Padding(
       padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: ScreenUtil().setWidth(32),
-            height: ScreenUtil().setWidth(32),
+            width: circleSize,
+            height: circleSize,
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name)
-                  .withAlpha(40),
+              color: blueColor.withAlpha(40),
               shape: BoxShape.circle,
             ),
             child: Center(
@@ -239,8 +235,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(22),
                   fontWeight: FontWeight.bold,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
+                  color: blueColor,
                 ),
               ),
             ),
@@ -305,15 +300,16 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
   }
 
   Widget _buildConnectButton(BuildContext context, S s) {
+    final blueColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name);
+    final spinnerSize = ScreenUtil().setWidth(24);
+
     return ElevatedButton(
       onPressed: _isConnecting ? null : _connectTrezor,
       style: ElevatedButton.styleFrom(
-        backgroundColor:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+        backgroundColor: blueColor,
         foregroundColor: Colors.white,
-        disabledBackgroundColor: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name)
-            .withAlpha(100),
+        disabledBackgroundColor: blueColor.withAlpha(100),
         padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
@@ -324,8 +320,8 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: ScreenUtil().setWidth(24),
-                  height: ScreenUtil().setWidth(24),
+                  width: spinnerSize,
+                  height: spinnerSize,
                   child: const CircularProgressIndicator(
                     strokeWidth: 2,
                     color: Colors.white,

@@ -55,25 +55,66 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
     }
   }
 
+  /// 带标签的输入框
+  Widget _buildTextField({
+    required String label,
+    required TextEditingController controller,
+    required String hint,
+    required double fontSize,
+    required Color textColor,
+    required Color hintColor,
+    required Color bgColor,
+    int maxLines = 1,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(26),
+            fontWeight: FontWeight.w500,
+            color: hintColor,
+          ),
+        ),
+        SizedBox(height: ScreenUtil().setWidth(12)),
+        Container(
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          ),
+          child: TextField(
+            controller: controller,
+            maxLines: maxLines,
+            style: TextStyle(fontSize: ScreenUtil().setSp(fontSize), color: textColor),
+            decoration: InputDecoration(
+              hintText: hint,
+              hintStyle: TextStyle(color: hintColor, fontSize: ScreenUtil().setSp(fontSize)),
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(24),
+                vertical: ScreenUtil().setWidth(20),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final mainText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainTextColor.name);
-    final subText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final blueColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
-    final itemBg = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemBgColor.name);
+    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final subText = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final itemBg = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
+    final s = S.of(context);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          S.of(context).g_key_watch_wallet,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(32),
-            fontWeight: FontWeight.w600,
-          ),
+          s.g_key_watch_wallet,
+          style: TextStyle(fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
       ),
@@ -94,16 +135,12 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.visibility_outlined,
-                      color: blueColor, size: ScreenUtil().setWidth(40)),
+                  Icon(Icons.visibility_outlined, color: blueColor, size: ScreenUtil().setWidth(40)),
                   SizedBox(width: ScreenUtil().setWidth(16)),
                   Expanded(
                     child: Text(
-                      S.of(context).g_key_watch_wallet_desc,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24),
-                        color: subText,
-                      ),
+                      s.g_key_watch_wallet_desc,
+                      style: TextStyle(fontSize: ScreenUtil().setSp(24), color: subText),
                     ),
                   ),
                 ],
@@ -112,77 +149,27 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
             SizedBox(height: ScreenUtil().setWidth(32)),
 
             // 钱包名称
-            Text(
-              'Name',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(26),
-                fontWeight: FontWeight.w500,
-                color: subText,
-              ),
-            ),
-            SizedBox(height: ScreenUtil().setWidth(12)),
-            Container(
-              decoration: BoxDecoration(
-                color: itemBg,
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-              ),
-              child: TextField(
-                controller: _nameCtrl,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  color: mainText,
-                ),
-                decoration: InputDecoration(
-                  hintText: S.of(context).g_key_watch_wallet,
-                  hintStyle: TextStyle(
-                    color: subText,
-                    fontSize: ScreenUtil().setSp(28),
-                  ),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(24),
-                    vertical: ScreenUtil().setWidth(20),
-                  ),
-                ),
-              ),
+            _buildTextField(
+              label: 'Name',
+              controller: _nameCtrl,
+              hint: s.g_key_watch_wallet,
+              fontSize: 28,
+              textColor: mainText,
+              hintColor: subText,
+              bgColor: itemBg,
             ),
             SizedBox(height: ScreenUtil().setWidth(24)),
 
             // EVM 地址
-            Text(
-              'Address',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(26),
-                fontWeight: FontWeight.w500,
-                color: subText,
-              ),
-            ),
-            SizedBox(height: ScreenUtil().setWidth(12)),
-            Container(
-              decoration: BoxDecoration(
-                color: itemBg,
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-              ),
-              child: TextField(
-                controller: _addressCtrl,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
-                  color: mainText,
-                ),
-                maxLines: 2,
-                decoration: InputDecoration(
-                  hintText: S.of(context).g_key_watch_address_hint,
-                  hintStyle: TextStyle(
-                    color: subText,
-                    fontSize: ScreenUtil().setSp(26),
-                  ),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(24),
-                    vertical: ScreenUtil().setWidth(20),
-                  ),
-                ),
-              ),
+            _buildTextField(
+              label: 'Address',
+              controller: _addressCtrl,
+              hint: s.g_key_watch_address_hint,
+              fontSize: 26,
+              textColor: mainText,
+              hintColor: subText,
+              bgColor: itemBg,
+              maxLines: 2,
             ),
             SizedBox(height: ScreenUtil().setWidth(48)),
 
@@ -195,21 +182,17 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: blueColor,
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(ScreenUtil().setWidth(20)),
+                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
                   ),
                 ),
                 child: _loading
                     ? SizedBox(
                         width: ScreenUtil().setWidth(40),
                         height: ScreenUtil().setWidth(40),
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
+                        child: const CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                       )
                     : Text(
-                        S.of(context).g_key_watch_wallet,
+                        s.g_key_watch_wallet,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(30),
                           fontWeight: FontWeight.w600,

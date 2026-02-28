@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/features/component/enums/load.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
@@ -34,37 +32,39 @@ class WalletManage extends ConsumerStatefulWidget {
 class _WalletManageState extends ConsumerState<WalletManage> {
   WalletInfo? walletInfo;
   List<CoinModel>? coinList;
-  bool showDelete=false;
-  bool deleteUnlock=false;//删除解锁
-  Load load=Load.finish;
-  bool showMainWallet=false;
+  bool showDelete = false;
+  bool showMainWallet = false;
 
   StreamSubscription? eventBusFn;
-  void initEventBus(){
-    eventBusFn=eventBus.on().listen((event) {
+
+  void initEventBus() {
+    eventBusFn = eventBus.on().listen((event) {
       if (event is EventPublic && event.type == EventPublicType.backup) {
         setState(() {
-          walletInfo=event.param as WalletInfo;
+          walletInfo = event.param as WalletInfo;
         });
       }
     });
   }
+
   @override
   void initState() {
     super.initState();
     initData();
   }
+
   @override
   void dispose() {
     eventBusFn?.cancel();
     super.dispose();
   }
+
   Future<void> initData() async {
     walletInfo = widget.walletInfo;
 
-    final isNonCurrentWallet = ref.read(wapBridgeProvider).walletIndex != widget.walletIndex;
     final hasN42Coin = walletInfo?.mainWallet == false &&
         (walletInfo?.coinInfo?.keys.any((e) => e.toString() == CoinType.N.name) ?? false);
+    final isNonCurrentWallet = ref.read(wapBridgeProvider).walletIndex != widget.walletIndex;
 
     showMainWallet = hasN42Coin;
     showDelete = isNonCurrentWallet && hasN42Coin;
@@ -72,80 +72,65 @@ class _WalletManageState extends ConsumerState<WalletManage> {
     setCoinList();
     setState(() {});
   }
-  Future<void> setCoinList()async{
+  Future<void> setCoinList() async {
     final keys = walletInfo!.coinInfo!.keys.toList();
-    coinList=[];
+    coinList = [];
     for (final key in keys) {
       final coinInfo = walletInfo!.coinInfo![key];
-      CoinModel cm = CoinModel.fromMap(coinInfo['baseInfo']);
-      cm.isTest = coinInfo['isTest'];
-      cm.addrType = coinInfo['addrType'];
-      cm.pathIndex = coinInfo['pathIndex'] ?? 0;
-      cm.privateKey = walletInfo!.privateKey;
+      final cm = CoinModel.fromMap(coinInfo['baseInfo'])
+        ..isTest = coinInfo['isTest']
+        ..addrType = coinInfo['addrType']
+        ..pathIndex = coinInfo['pathIndex'] ?? 0
+        ..privateKey = walletInfo!.privateKey;
       await cm.buildWallet(setAddress: false, walletIndex: widget.walletIndex);
       coinList!.add(cm);
     }
     setState(() {});
   }
-  void deleteWalletAlert(){
+  void deleteWalletAlert() {
     showDialog(
       context: context,
-      builder: (context){
+      builder: (ctx) {
+        final s = S.of(ctx);
+        final mainText = AppThemeUtils.getColorByKey(ctx, AppThemeKeys.mainTextColor.name);
+        final blueColor = AppThemeUtils.getColorByKey(ctx, AppThemeKeys.mainBlueColor.name);
+        final actionStyle = TextStyle(color: blueColor, fontSize: ScreenUtil().setSp(28.0));
+
         return AlertDialog(
           title: Text(
-            S.of(context).g_face_3,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(32.0),
-            ),
+            s.g_face_3,
+            style: TextStyle(color: mainText, fontSize: ScreenUtil().setSp(32.0)),
           ),
           content: Text(
-            S.of(context).g_key_192,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
+            s.g_key_192,
+            style: TextStyle(color: mainText, fontSize: ScreenUtil().setSp(28.0)),
           ),
           actions: [
             TextButton(
-              onPressed: (){
-                Navigator.pop(context);
-              },
-              child: Text(
-                S.of(context).g_key_79,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                  fontSize: ScreenUtil().setSp(28.0),
-                ),
-              ),
+              onPressed: () => Navigator.pop(ctx),
+              child: Text(s.g_key_79, style: actionStyle),
             ),
             TextButton(
-              onPressed: (){
+              onPressed: () {
                 deleteWallet();
-                Navigator.pop(context);
+                Navigator.pop(ctx);
               },
-              child: Text(
-                S.of(context).g_key_78,
-                style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                    fontSize: ScreenUtil().setSp(28.0)
-                ),
-              ),
+              child: Text(s.g_key_78, style: actionStyle),
             ),
           ],
         );
       },
     );
   }
-  Future<void> deleteWallet()async{
-    MessageModel? rmm=await ref.read(wapBridgeProvider).deleteWalletInfo(info:walletInfo);
+
+  Future<void> deleteWallet() async {
+    final rmm = await ref.read(wapBridgeProvider).deleteWalletInfo(info: walletInfo);
     if (!mounted) return;
-    if(rmm==null){
+    if (rmm == null) {
       Navigator.pop(context);
-    }else{
+    } else {
       ToastUtils.show(rmm.data);
     }
-
   }
   @override
   Widget build(BuildContext context) {
@@ -153,24 +138,22 @@ class _WalletManageState extends ConsumerState<WalletManage> {
       appBar: AppBarWidget(
         text: S.of(context).g_key_wallet_manage,
         actions: [
-          showDelete?
-          InkWell(
-            onTap: (){
-              deleteWalletAlert();
-            },
-            child: Container(
-              alignment: Alignment.center,
-              height: ScreenUtil().setWidth(100.0),
-              padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0),),
-              child: Text(
-                S.of(context).g_key_113,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(30.0),
+          if (showDelete)
+            InkWell(
+              onTap: deleteWalletAlert,
+              child: Container(
+                alignment: Alignment.center,
+                height: ScreenUtil().setWidth(100.0),
+                padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+                child: Text(
+                  S.of(context).g_key_113,
+                  style: TextStyle(
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    fontSize: ScreenUtil().setSp(30.0),
+                  ),
                 ),
               ),
             ),
-          ):SizedBox(),
         ],
       ),
       body: walletInfo == null
@@ -183,22 +166,18 @@ class _WalletManageState extends ConsumerState<WalletManage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _walletName(context, "${S.of(context).g_key_nft_2}: ", walletInfo!.walletName??""),
-                  if(walletInfo!.password != "")
-                    _itemWidget(S.of(context).g_key_206,()async{
-                      WalletInfo? info=await Navigator.push(context,MaterialPageRoute(
-                          builder: (_) => EditWalletPassword(walletInfo!,widget.walletIndex)));
-                      if(info !=null){
-                        setState(() {
-                          walletInfo=info;
-                        });
-                      }
+                  _walletName(context, "${S.of(context).g_key_nft_2}: ", walletInfo!.walletName ?? ""),
+                  if (walletInfo!.password != "")
+                    _itemWidget(S.of(context).g_key_206, () async {
+                      final info = await Navigator.push<WalletInfo>(context, MaterialPageRoute(
+                          builder: (_) => EditWalletPassword(walletInfo!, widget.walletIndex)));
+                      if (info != null) setState(() => walletInfo = info);
                     }),
-                  if(walletInfo!.password=="")
-                    _itemWidget(S.of(context).g_key_wallet_c38,()async{
+                  if (walletInfo!.password == "")
+                    _itemWidget(S.of(context).g_key_wallet_c38, () async {
                       initEventBus();
-                      await Navigator.push(context,MaterialPageRoute(
-                          builder: (_) => BackupOne(walletInfo!,widget.walletIndex)));
+                      await Navigator.push(context, MaterialPageRoute(
+                          builder: (_) => BackupOne(walletInfo!, widget.walletIndex)));
                     }),
                   _buildCoinList(context),
                   SizedBox(
@@ -208,148 +187,141 @@ class _WalletManageState extends ConsumerState<WalletManage> {
               ),
             ),
           ),
-          if(showMainWallet)
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              height: ScreenUtil().setWidth(148.0),
-              width: double.infinity,
-              padding: EdgeInsets.all(ScreenUtil().setWidth(30.0),),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-              child: buttonStyle2(
-                context, ()async{
-                  MessageModel mm=ref.read(wapBridgeProvider).setMainWallet(widget.walletIndex);
-                  if (!context.mounted) return;
-                  if(mm.error){
-                    ToastUtils.show(mm.data);
-                  }else{
-                    Navigator.pop(context,true);
-                  }
-                },
-                S.of(context).g_key_15,
+          if (showMainWallet)
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                height: ScreenUtil().setWidth(148.0),
+                width: double.infinity,
+                padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+                child: buttonStyle2(
+                  context, () async {
+                    final mm = ref.read(wapBridgeProvider).setMainWallet(widget.walletIndex);
+                    if (!context.mounted) return;
+                    if (mm.error) {
+                      ToastUtils.show(mm.data);
+                    } else {
+                      Navigator.pop(context, true);
+                    }
+                  },
+                  S.of(context).g_key_15,
+                ),
               ),
             ),
-          ),
         ],
       ),
     );
   }
 
+  /// 公共 tile 容器装饰
+  BoxDecoration get _tileDecoration => BoxDecoration(
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+      );
+
+  EdgeInsets get _tileMargin => EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(30.0),
+        vertical: ScreenUtil().setWidth(10.0),
+      );
+
+  EdgeInsets get _tilePadding => EdgeInsets.symmetric(
+        vertical: ScreenUtil().setWidth(20.0),
+        horizontal: ScreenUtil().setWidth(30.0),
+      );
+
   Widget _walletName(BuildContext context, String title, String value) {
+    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+
     return InkWell(
-      onTap: ()async{
+      onTap: () async {
         ///单独设置一个编辑页面
-        final res=await Navigator.push(context,MaterialPageRoute(
-            builder: (_) => EditWallet(walletInfo: walletInfo!,walletIndex: widget.walletIndex,)));
-        if(res !=null){
-          walletInfo=res;
+        final res = await Navigator.push(context, MaterialPageRoute(
+            builder: (_) => EditWallet(walletInfo: walletInfo!, walletIndex: widget.walletIndex)));
+        if (res != null) {
+          walletInfo = res;
           setState(() {});
         }
       },
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0), vertical: ScreenUtil().setWidth(10.0)),
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0),horizontal: ScreenUtil().setWidth(30.0)),
-        decoration: BoxDecoration(
-            color:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0))),
+        margin: _tileMargin,
+        padding: _tilePadding,
+        decoration: _tileDecoration,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
               title,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(32.0),),
+              style: TextStyle(color: mainText, fontSize: ScreenUtil().setSp(32.0)),
             ),
             Expanded(
               child: Text(
                 value,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(28.0),),
+                style: TextStyle(color: mainText, fontSize: ScreenUtil().setSp(28.0)),
                 textAlign: TextAlign.right,
               ),
             ),
-            SizedBox(
-              width: ScreenUtil().setWidth(20.0),
-            ),
-            Icon(
-              Icons.arrow_forward_ios_sharp,
-              size: ScreenUtil().setWidth(30.0),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-            ),
+            SizedBox(width: ScreenUtil().setWidth(20.0)),
+            Icon(Icons.arrow_forward_ios_sharp, size: ScreenUtil().setWidth(30.0), color: mainText),
           ],
         ),
       ),
     );
   }
+
   Widget _itemWidget(String title, VoidCallback onTap) {
+    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+
     return InkWell(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0), vertical: ScreenUtil().setWidth(10.0)),
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0),horizontal: ScreenUtil().setWidth(30.0)),
-        decoration: BoxDecoration(
-            color:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0))),
+        margin: _tileMargin,
+        padding: _tilePadding,
+        decoration: _tileDecoration,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Expanded(child: Text(
-              title,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(32.0),),
-            ),),
-
-            SizedBox(width: ScreenUtil().setWidth(10.0),),
-            Icon(
-              Icons.arrow_forward_ios_sharp,
-              size: ScreenUtil().setWidth(30.0),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(color: mainText, fontSize: ScreenUtil().setSp(32.0)),
+              ),
             ),
+            SizedBox(width: ScreenUtil().setWidth(10.0)),
+            Icon(Icons.arrow_forward_ios_sharp, size: ScreenUtil().setWidth(30.0), color: mainText),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildCoinList(
-      BuildContext context,
-      ) {
+  Widget _buildCoinList(BuildContext context) {
     if (coinList == null) return const EmptyView();
     return ListView.builder(
-        itemCount: coinList!.length,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (context, index) {
-          final CoinModel model = coinList![index];
-          return ItemWallet(
-            iconPath: model.coin['icon'] ?? "",
-            coinAddress: model.address ?? "",
-            coinType: model.coin['miniName'] ?? "",
-            fullName: model.coin['name'] ?? "",
-            onTap: () async{
-              // 点击 进入详情
-              bool? isEdit=await Navigator.push(context,MaterialPageRoute(
-                  builder: (BuildContext context) => OneCoinWalletManage(
-                    walletInfo: widget.walletInfo,
-                    model: model,walletIndex: widget.walletIndex,
-                  )));
-              if(isEdit != null){
-                initData();
-              }
-            },
-          );
-        });
+      itemCount: coinList!.length,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        final model = coinList![index];
+        return ItemWallet(
+          iconPath: model.coin['icon'] ?? "",
+          coinAddress: model.address ?? "",
+          coinType: model.coin['miniName'] ?? "",
+          fullName: model.coin['name'] ?? "",
+          onTap: () async {
+            // 点击 进入详情
+            final isEdit = await Navigator.push<bool>(context, MaterialPageRoute(
+                builder: (_) => OneCoinWalletManage(
+                  walletInfo: widget.walletInfo,
+                  model: model,
+                  walletIndex: widget.walletIndex,
+                )));
+            if (isEdit != null) initData();
+          },
+        );
+      },
+    );
   }
 }
