@@ -36,6 +36,11 @@ mixin _MiningFullNodeV2WidgetsMixin on ConsumerState<MiningFullNodeV2>, _MiningF
   Widget buildPayMethod(String icon, String payType,
       {bool isSelected = false, GestureTapCallback? onTap}) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final blueColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name);
+    final idleBorder = isDark
+        ? Colors.white.withValues(alpha: 0.08)
+        : Colors.black.withValues(alpha: 0.06);
 
     return GestureDetector(
       onTap: onTap,
@@ -47,12 +52,7 @@ mixin _MiningFullNodeV2WidgetsMixin on ConsumerState<MiningFullNodeV2>, _MiningF
           borderRadius:
               BorderRadius.circular(ScreenUtil().setWidth(16)),
           border: Border.all(
-            color: isSelected
-                ? AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name)
-                : (isDark
-                    ? Colors.white.withValues(alpha: 0.08)
-                    : Colors.black.withValues(alpha: 0.06)),
+            color: isSelected ? blueColor : idleBorder,
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -102,21 +102,20 @@ mixin _MiningFullNodeV2WidgetsMixin on ConsumerState<MiningFullNodeV2>, _MiningF
 
   /// 提示信息卡片
   Widget buildInfoTip(BuildContext context) {
+    final blueColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name);
+
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(20),
         vertical: ScreenUtil().setWidth(16),
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name)
-            .withValues(alpha: 0.06),
+        color: blueColor.withValues(alpha: 0.06),
         borderRadius:
             BorderRadius.circular(ScreenUtil().setWidth(12)),
         border: Border.all(
-          color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name)
-              .withValues(alpha: 0.15),
+          color: blueColor.withValues(alpha: 0.15),
           width: 1,
         ),
       ),
@@ -125,8 +124,7 @@ mixin _MiningFullNodeV2WidgetsMixin on ConsumerState<MiningFullNodeV2>, _MiningF
           Icon(
             Icons.info_outline,
             size: ScreenUtil().setWidth(32),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name),
+            color: blueColor,
           ),
           SizedBox(width: ScreenUtil().setWidth(12)),
           Expanded(
@@ -189,6 +187,9 @@ mixin _MiningFullNodeV2WidgetsMixin on ConsumerState<MiningFullNodeV2>, _MiningF
       GestureTapCallback? onTap,
       String? errTips,
       bool isEnough = true}) {
+    final blueColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name);
+
     return GestureDetector(
       onTap: onTap,
       child: Padding(
@@ -199,9 +200,7 @@ mixin _MiningFullNodeV2WidgetsMixin on ConsumerState<MiningFullNodeV2>, _MiningF
               width: ScreenUtil().setWidth(52),
               height: ScreenUtil().setWidth(52),
               decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainBlueColor.name)
-                    .withValues(alpha: 0.1),
+                color: blueColor.withValues(alpha: 0.1),
                 borderRadius:
                     BorderRadius.circular(ScreenUtil().setWidth(12)),
               ),
@@ -210,8 +209,7 @@ mixin _MiningFullNodeV2WidgetsMixin on ConsumerState<MiningFullNodeV2>, _MiningF
                   icon,
                   width: ScreenUtil().setWidth(28),
                   fit: BoxFit.contain,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
+                  color: blueColor,
                 ),
               ),
             ),
@@ -377,6 +375,14 @@ mixin _MiningFullNodeV2WidgetsMixin on ConsumerState<MiningFullNodeV2>, _MiningF
 
   /// 底部确认按钮
   Widget buildBottomButton(BuildContext context, Load depositLoad) {
+    final isLoading = depositLoad == Load.loading;
+    final bgColorKey = isLoading
+        ? AppThemeKeys.mainButtonBgColor3.name
+        : AppThemeKeys.mainButtonBgColor.name;
+    final textColorKey = isLoading
+        ? AppThemeKeys.mainButtonTextColor3.name
+        : AppThemeKeys.mainButtonTextColor.name;
+
     return Positioned(
       bottom: 0,
       left: 0,
@@ -396,41 +402,25 @@ mixin _MiningFullNodeV2WidgetsMixin on ConsumerState<MiningFullNodeV2>, _MiningF
             child: buttonStyle6(
               context,
               () async {
-                if (depositLoad == Load.loading) return;
-                if (_payType == 0) {
-                  if (_payMethod == 0) {
-                    if (nBalance == null ||
-                        nBalance! < widget.nNum) {
-                      await checkNBalance();
-                    }
-                    if (!mounted) return;
+                if (isLoading) return;
+                if (_payType != 0 || _payMethod != 0) return;
 
-                    if (nBalance == null ||
-                        nBalance! < widget.nNum) {
-                      return;
-                    }
-                    showGroupConfirmDialog(
-                        this.context, widget.nNum, '640s',
-                        () async {
-                      await handlerData();
-                    });
-                  }
+                if (nBalance == null || nBalance! < widget.nNum) {
+                  await checkNBalance();
                 }
+                if (!mounted) return;
+                if (nBalance == null || nBalance! < widget.nNum) return;
+
+                showGroupConfirmDialog(
+                    this.context, widget.nNum, '640s',
+                    () async {
+                  await handlerData();
+                });
               },
               S.of(context).g_key_78,
-              AppThemeUtils.getColorByKey(
-                context,
-                depositLoad == Load.loading
-                    ? AppThemeKeys.mainButtonBgColor3.name
-                    : AppThemeKeys.mainButtonBgColor.name,
-              ),
-              AppThemeUtils.getColorByKey(
-                context,
-                depositLoad == Load.loading
-                    ? AppThemeKeys.mainButtonTextColor3.name
-                    : AppThemeKeys.mainButtonTextColor.name,
-              ),
-              depositLoad == Load.loading,
+              AppThemeUtils.getColorByKey(context, bgColorKey),
+              AppThemeUtils.getColorByKey(context, textColorKey),
+              isLoading,
             ),
           ),
         ],
@@ -438,55 +428,48 @@ mixin _MiningFullNodeV2WidgetsMixin on ConsumerState<MiningFullNodeV2>, _MiningF
     );
   }
 
-  /// 通用单选圆圈指示器
-  Widget _buildRadioCircle(bool isSelected) {
+  /// 通用勾选圆圈指示器
+  Widget _buildSelectionCircle({
+    required bool isSelected,
+    required Color fillColor,
+    required Color borderColor,
+    required Color checkColor,
+  }) {
     return Container(
       width: ScreenUtil().setWidth(36),
       height: ScreenUtil().setWidth(36),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: isSelected
-            ? const Color(0xff32D74B)
-            : Colors.transparent,
+        color: isSelected ? fillColor : Colors.transparent,
         border: Border.all(
-          color: isSelected
-              ? Colors.transparent
-              : AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name),
+          color: isSelected ? Colors.transparent : borderColor,
           width: 2.0,
         ),
       ),
       child: isSelected
-          ? Icon(
-              Icons.check,
-              size: ScreenUtil().setWidth(22),
-              color: Colors.white,
-            )
+          ? Icon(Icons.check, size: ScreenUtil().setWidth(22), color: checkColor)
           : null,
+    );
+  }
+
+  /// 通用单选圆圈指示器
+  Widget _buildRadioCircle(bool isSelected) {
+    return _buildSelectionCircle(
+      isSelected: isSelected,
+      fillColor: const Color(0xff32D74B),
+      borderColor: AppThemeUtils.getColorByKey(
+          context, AppThemeKeys.itemSubtitleTextColor.name),
+      checkColor: Colors.white,
     );
   }
 
   /// 私钥保存勾选圆圈
   Widget _buildCheckCircle() {
-    return Container(
-      width: ScreenUtil().setWidth(36),
-      height: ScreenUtil().setWidth(36),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: savePrivateKey ? Colors.white : Colors.transparent,
-        border: Border.all(
-          color: Colors.white,
-          width: 2.0,
-        ),
-      ),
-      child: savePrivateKey
-          ? Icon(
-              Icons.check,
-              size: ScreenUtil().setWidth(22),
-              color: const Color(0xFFFF6B35),
-            )
-          : null,
+    return _buildSelectionCircle(
+      isSelected: savePrivateKey,
+      fillColor: Colors.white,
+      borderColor: Colors.white,
+      checkColor: const Color(0xFFFF6B35),
     );
   }
 }

@@ -28,6 +28,19 @@ class AccountDeployer {
 
   AccountDeployer({required AAChainConfig config}) : _config = config;
 
+  // ─── Reusable gas constants ────────────────────────────────────────────────
+
+  static final BigInt _eip7702VerificationGas = BigInt.from(
+    Simple7702GasConstants.authorizationGas +
+    Simple7702GasConstants.signatureValidation,
+  );
+  static final BigInt _deploymentGas =
+      BigInt.from(AAConstants.accountDeploymentGas);
+  static final BigInt _preVerificationGas =
+      BigInt.from(AAConstants.defaultPreVerificationGas);
+  static final BigInt _callGasLimit =
+      BigInt.from(AAConstants.defaultCallGasLimit);
+
   /// Create a factory for a specific chain
   factory AccountDeployer.forChain(
     String chainSymbol, {
@@ -133,7 +146,7 @@ class AccountDeployer {
       ..setInitCode(initCode)
       ..setGasLimits(
         // Increase verification gas for deployment
-        verificationGasLimit: BigInt.from(AAConstants.accountDeploymentGas),
+        verificationGasLimit: _deploymentGas,
       );
   }
 
@@ -189,25 +202,20 @@ class AccountDeployer {
         .setSenderFromAccount(account)
         .setNonce(nonce)
         .setCallData(execData)
-        .setPreVerificationGas(BigInt.from(AAConstants.defaultPreVerificationGas))
+        .setPreVerificationGas(_preVerificationGas)
         .setGasFees(
           maxFeePerGas: maxFeePerGas,
           maxPriorityFeePerGas: maxPriorityFeePerGas,
         );
 
     // Handle different account types
+    final BigInt verificationGas;
     if (account.type == SmartAccountType.simple7702Account) {
       // EIP-7702: Add authorization instead of init code
       if (eip7702Authorization != null) {
         builder.setEIP7702Auth(eip7702Authorization.encode());
       }
-      builder.setGasLimits(
-        verificationGasLimit: BigInt.from(
-          Simple7702GasConstants.authorizationGas +
-          Simple7702GasConstants.signatureValidation,
-        ),
-        callGasLimit: BigInt.from(AAConstants.defaultCallGasLimit),
-      );
+      verificationGas = _eip7702VerificationGas;
     } else {
       // Traditional smart account: Add init code
       final initCode = buildInitCodeForAccountType(
@@ -218,11 +226,13 @@ class AccountDeployer {
       if (initCode != null) {
         builder.setInitCode(initCode);
       }
-      builder.setGasLimits(
-        verificationGasLimit: BigInt.from(AAConstants.accountDeploymentGas),
-        callGasLimit: BigInt.from(AAConstants.defaultCallGasLimit),
-      );
+      verificationGas = _deploymentGas;
     }
+
+    builder.setGasLimits(
+      verificationGasLimit: verificationGas,
+      callGasLimit: _callGasLimit,
+    );
 
     return builder.build();
   }
@@ -251,13 +261,10 @@ class AccountDeployer {
         .setNonce(nonce)
         .setCallData(callData)
         .setGasLimits(
-          verificationGasLimit: BigInt.from(
-            Simple7702GasConstants.authorizationGas +
-            Simple7702GasConstants.signatureValidation,
-          ),
-          callGasLimit: BigInt.from(AAConstants.defaultCallGasLimit),
+          verificationGasLimit: _eip7702VerificationGas,
+          callGasLimit: _callGasLimit,
         )
-        .setPreVerificationGas(BigInt.from(AAConstants.defaultPreVerificationGas))
+        .setPreVerificationGas(_preVerificationGas)
         .setGasFees(
           maxFeePerGas: maxFeePerGas,
           maxPriorityFeePerGas: maxPriorityFeePerGas,
@@ -275,13 +282,10 @@ class AccountDeployer {
     SmartAccountType accountType = SmartAccountType.simpleAccount,
   }) {
     // EIP-7702 doesn't require deployment, only authorization
-    final gasUnits = accountType == SmartAccountType.simple7702Account
-        ? BigInt.from(
-            Simple7702GasConstants.authorizationGas +
-            AAConstants.defaultPreVerificationGas,
-          )
-        : BigInt.from(AAConstants.accountDeploymentGas) +
-            BigInt.from(AAConstants.defaultPreVerificationGas);
+    final baseGas = accountType == SmartAccountType.simple7702Account
+        ? BigInt.from(Simple7702GasConstants.authorizationGas)
+        : _deploymentGas;
+    final gasUnits = baseGas + _preVerificationGas;
 
     return DeploymentCostEstimate(
       gasUnits: gasUnits,

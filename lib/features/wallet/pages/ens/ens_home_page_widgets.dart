@@ -4,17 +4,18 @@ part of 'ens_home_page.dart';
 ///
 /// Depends on [_EnsHomeLogicMixin] for all shared state and business methods.
 mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
+  /// Shorthand for theme color lookup to reduce repetitive boilerplate.
+  Color _themeColor(String key) => AppThemeUtils.getColorByKey(context, key);
+
   Widget buildChainSelector() {
-    final subtitleColor = AppThemeUtils.getColorByKey(
-      context, AppThemeKeys.itemSubtitleTextColor.name,
-    );
+    final subtitleColor = _themeColor(AppThemeKeys.itemSubtitleTextColor.name);
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(16),
         vertical: ScreenUtil().setWidth(12),
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: _themeColor(AppThemeKeys.itemBgColor.name),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
         border: Border.all(color: selectedChain.color.withAlpha(40)),
       ),
@@ -77,6 +78,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
   }
 
   Widget _buildChainChip(EnsChainConfig chain, bool isSelected) {
+    final subtitleColor = _themeColor(AppThemeKeys.itemSubtitleTextColor.name);
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(14),
@@ -86,12 +88,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
         color: isSelected ? chain.color.withAlpha(25) : Colors.transparent,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
         border: Border.all(
-          color: isSelected
-              ? chain.color
-              : AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ).withAlpha(40),
+          color: isSelected ? chain.color : subtitleColor.withAlpha(40),
           width: isSelected ? 1.5 : 1,
         ),
       ),
@@ -124,10 +121,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               color: isSelected
                   ? chain.color
-                  : AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
+                  : _themeColor(AppThemeKeys.mainTextColor.name),
             ),
           ),
           if (isSelected) ...[
@@ -144,7 +138,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
   }
 
   Widget buildHeaderCard() {
-    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final blueColor = _themeColor(AppThemeKeys.mainBlueColor.name);
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
@@ -185,7 +179,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(32),
                     fontWeight: FontWeight.bold,
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    color: _themeColor(AppThemeKeys.mainTextColor.name),
                   ),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(4)),
@@ -193,9 +187,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
                   S.of(context).g_key_ens_description,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
-                    color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
+                    color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
                   ),
                 ),
               ],
@@ -255,7 +247,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
       child: Container(
         padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: _themeColor(AppThemeKeys.itemBgColor.name),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
           border: Border.all(
             color: color.withAlpha(40),
@@ -284,10 +276,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28),
                 fontWeight: FontWeight.w600,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: _themeColor(AppThemeKeys.mainTextColor.name),
               ),
             ),
             SizedBox(height: ScreenUtil().setWidth(4)),
@@ -295,10 +284,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
               subtitle,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(22),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+                color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -321,10 +307,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(30),
                 fontWeight: FontWeight.bold,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: _themeColor(AppThemeKeys.mainTextColor.name),
               ),
             ),
             if (ownedNames.isNotEmpty)
@@ -333,10 +316,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(26),
                   fontWeight: FontWeight.w600,
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
+                  color: _themeColor(AppThemeKeys.mainBlueColor.name),
                 ),
               ),
           ],
@@ -367,7 +347,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: _themeColor(AppThemeKeys.itemBgColor.name),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
       ),
       child: Column(
@@ -382,10 +362,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             errorMessage!,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
             ),
             textAlign: TextAlign.center,
           ),
@@ -400,18 +377,16 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
   }
 
   Widget _buildEmptyState() {
+    final blueColor = _themeColor(AppThemeKeys.mainBlueColor.name);
+    final subtitleColor = _themeColor(AppThemeKeys.itemSubtitleTextColor.name);
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: _themeColor(AppThemeKeys.itemBgColor.name),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
         border: Border.all(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainBlueColor.name,
-          ).withAlpha(30),
+          color: blueColor.withAlpha(30),
           width: 1,
-          style: BorderStyle.solid,
         ),
       ),
       child: Column(
@@ -419,10 +394,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
           Icon(
             Icons.domain_rounded,
             size: ScreenUtil().setWidth(64),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ).withAlpha(100),
+            color: subtitleColor.withAlpha(100),
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
           Text(
@@ -430,10 +402,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(28),
               fontWeight: FontWeight.w500,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: _themeColor(AppThemeKeys.mainTextColor.name),
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(8)),
@@ -441,10 +410,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             S.of(context).g_key_ens_get_started,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(24),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: subtitleColor,
             ),
             textAlign: TextAlign.center,
           ),
@@ -454,10 +420,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             icon: const Icon(Icons.search, size: 20),
             label: Text(S.of(context).g_key_ens_search_register),
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ),
+              backgroundColor: blueColor,
               foregroundColor: Colors.white,
               padding: EdgeInsets.symmetric(
                 horizontal: ScreenUtil().setWidth(24),

@@ -19,6 +19,11 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
   bool isCreating = false;
   String? addressError;
 
+  // ── Theme helpers ──────────────────────────────────────────────────────────
+
+  Color _themeColor(AppThemeKeys key) =>
+      AppThemeUtils.getColorByKey(context, key.name);
+
   // ── Section builders ───────────────────────────────────────────────────────
 
   /// Shared section title style used by label, chain, and type selectors.
@@ -26,12 +31,9 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
     return Text(
       title,
       style: TextStyle(
-        fontSize: ScreenUtil().setSp(26),
+        fontSize: 26.sp,
         fontWeight: FontWeight.w600,
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.mainTextColor.name,
-        ),
+        color: _themeColor(AppThemeKeys.mainTextColor),
       ),
     );
   }
@@ -41,19 +43,18 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSectionTitle(S.of(context).g_key_aa_account_name),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        SizedBox(height: 12.w),
         TextField(
           controller: labelController,
           decoration: InputDecoration(
             hintText: S.of(context).g_key_aa_account_name_hint,
             prefixIcon: const Icon(Icons.label_outline),
             border: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(ScreenUtil().setWidth(12)),
+              borderRadius: BorderRadius.circular(12.w),
             ),
             contentPadding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(16),
-              vertical: ScreenUtil().setWidth(14),
+              horizontal: 16.w,
+              vertical: 14.w,
             ),
           ),
         ),
@@ -63,61 +64,42 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
 
   Widget _buildChainSelector() {
     final chains = AAConfig.supportedChains.toList();
+    final blueColor = _themeColor(AppThemeKeys.mainBlueColor);
+    final itemBg = _themeColor(AppThemeKeys.itemBgColor);
+    final subtitleColor = _themeColor(AppThemeKeys.itemSubtitleTextColor);
+    final textColor = _themeColor(AppThemeKeys.mainTextColor);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Bug 2 fix: was g_key_17 (wrong key), now g_key_aa_select_chain
         _buildSectionTitle(S.of(context).g_key_aa_select_chain),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        SizedBox(height: 12.w),
         Wrap(
-          spacing: ScreenUtil().setWidth(12),
-          runSpacing: ScreenUtil().setWidth(12),
+          spacing: 12.w,
+          runSpacing: 12.w,
           children: chains.map((chain) {
             final isSelected = selectedChain == chain;
             return GestureDetector(
               onTap: () =>
                   (this as _AAAccountCreatePageState)._onChainChanged(chain),
               child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(20),
-                  vertical: ScreenUtil().setWidth(12),
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.w),
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.mainBlueColor.name,
-                        )
-                      : AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.itemBgColor.name,
-                        ),
-                  borderRadius:
-                      BorderRadius.circular(ScreenUtil().setWidth(12)),
+                  color: isSelected ? blueColor : itemBg,
+                  borderRadius: BorderRadius.circular(12.w),
                   border: Border.all(
                     color: isSelected
-                        ? AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainBlueColor.name,
-                          )
-                        : AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemSubtitleTextColor.name,
-                          ).withAlpha(30),
+                        ? blueColor
+                        : subtitleColor.withAlpha(30),
                   ),
                 ),
                 child: Text(
                   chain,
                   style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
+                    fontSize: 26.sp,
                     fontWeight: FontWeight.w600,
-                    color: isSelected
-                        ? Colors.white
-                        : AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
+                    color: isSelected ? Colors.white : textColor,
                   ),
                 ),
               ),
@@ -141,7 +123,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSectionTitle(S.of(context).g_key_aa_account_type),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        SizedBox(height: 12.w),
         ...types.map((type) => _buildTypeOption(type)),
       ],
     );
@@ -154,6 +136,9 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
         type == SmartAccountType.safe ||
         type == SmartAccountType.biconomy;
     final typeColor = _getTypeColor(type);
+    final itemBg = _themeColor(AppThemeKeys.itemBgColor);
+    final subtitleColor = _themeColor(AppThemeKeys.itemSubtitleTextColor);
+    final textColor = _themeColor(AppThemeKeys.mainTextColor);
 
     return GestureDetector(
       onTap: isAvailable
@@ -161,23 +146,13 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
               (this as _AAAccountCreatePageState)._onTypeChanged(type)
           : null,
       child: Container(
-        margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+        margin: EdgeInsets.only(bottom: 12.w),
+        padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
-          color: isSelected
-              ? typeColor.withAlpha(15)
-              : AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemBgColor.name,
-                ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+          color: isSelected ? typeColor.withAlpha(15) : itemBg,
+          borderRadius: BorderRadius.circular(14.w),
           border: Border.all(
-            color: isSelected
-                ? typeColor
-                : AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ).withAlpha(30),
+            color: isSelected ? typeColor : subtitleColor.withAlpha(30),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -186,20 +161,19 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
           child: Row(
             children: [
               Container(
-                width: ScreenUtil().setWidth(44),
-                height: ScreenUtil().setWidth(44),
+                width: 44.w,
+                height: 44.w,
                 decoration: BoxDecoration(
                   color: typeColor.withAlpha(25),
-                  borderRadius:
-                      BorderRadius.circular(ScreenUtil().setWidth(12)),
+                  borderRadius: BorderRadius.circular(12.w),
                 ),
                 child: Icon(
                   _getTypeIcon(type),
-                  size: ScreenUtil().setWidth(24),
+                  size: 24.w,
                   color: typeColor,
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(14)),
+              SizedBox(width: 14.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,30 +183,26 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
                         Text(
                           type.displayName,
                           style: TextStyle(
-                            fontSize: ScreenUtil().setSp(26),
+                            fontSize: 26.sp,
                             fontWeight: FontWeight.w600,
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainTextColor.name,
-                            ),
+                            color: textColor,
                           ),
                         ),
                         if (!isAvailable) ...[
-                          SizedBox(width: ScreenUtil().setWidth(8)),
+                          SizedBox(width: 8.w),
                           Container(
                             padding: EdgeInsets.symmetric(
-                              horizontal: ScreenUtil().setWidth(8),
-                              vertical: ScreenUtil().setWidth(2),
+                              horizontal: 8.w,
+                              vertical: 2.w,
                             ),
                             decoration: BoxDecoration(
                               color: Colors.grey.withAlpha(30),
-                              borderRadius: BorderRadius.circular(
-                                  ScreenUtil().setWidth(6)),
+                              borderRadius: BorderRadius.circular(6.w),
                             ),
                             child: Text(
                               S.of(context).g_key_aa_coming_soon,
                               style: TextStyle(
-                                fontSize: ScreenUtil().setSp(18),
+                                fontSize: 18.sp,
                                 color: Colors.grey,
                               ),
                             ),
@@ -240,26 +210,19 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
                         ],
                       ],
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(4)),
+                    SizedBox(height: 4.w),
                     Text(
                       _getTypeDescription(type),
                       style: TextStyle(
-                        fontSize: ScreenUtil().setSp(22),
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.itemSubtitleTextColor.name,
-                        ),
+                        fontSize: 22.sp,
+                        color: subtitleColor,
                       ),
                     ),
                   ],
                 ),
               ),
               if (isSelected)
-                Icon(
-                  Icons.check_circle,
-                  size: ScreenUtil().setWidth(28),
-                  color: typeColor,
-                ),
+                Icon(Icons.check_circle, size: 28.w, color: typeColor),
             ],
           ),
         ),
@@ -268,20 +231,13 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
   }
 
   Widget _buildPreviewSection() {
+    final blueColor = _themeColor(AppThemeKeys.mainBlueColor);
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.mainBlueColor.name,
-        ).withAlpha(15),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-        border: Border.all(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainBlueColor.name,
-          ).withAlpha(30),
-        ),
+        color: blueColor.withAlpha(15),
+        borderRadius: BorderRadius.circular(16.w),
+        border: Border.all(color: blueColor.withAlpha(30)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -289,25 +245,19 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
           Text(
             S.of(context).g_key_aa_preview_address,
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
+              fontSize: 24.sp,
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: _themeColor(AppThemeKeys.mainTextColor),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: 12.w),
           _buildPreviewAddressContent(),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: 8.w),
           Text(
             S.of(context).g_key_aa_counterfactual_note,
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(20),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              fontSize: 20.sp,
+              color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
             ),
           ),
         ],
@@ -316,24 +266,21 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
   }
 
   Widget _buildPreviewAddressContent() {
+    final subtitleColor = _themeColor(AppThemeKeys.itemSubtitleTextColor);
+    final blueColor = _themeColor(AppThemeKeys.mainBlueColor);
+
     if (isCalculating) {
       return Row(
         children: [
           SizedBox(
-            width: ScreenUtil().setWidth(20),
-            height: ScreenUtil().setWidth(20),
+            width: 20.w,
+            height: 20.w,
             child: const CircularProgressIndicator(strokeWidth: 2),
           ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: 12.w),
           Text(
             S.of(context).g_key_aa_address_calculating,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(22),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
-            ),
+            style: TextStyle(fontSize: 22.sp, color: subtitleColor),
           ),
         ],
       );
@@ -342,16 +289,12 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
     if (addressError != null) {
       return Row(
         children: [
-          Icon(Icons.error_outline,
-              size: ScreenUtil().setWidth(20), color: Colors.red),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          Icon(Icons.error_outline, size: 20.w, color: Colors.red),
+          SizedBox(width: 8.w),
           Expanded(
             child: Text(
               addressError!,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: Colors.red,
-              ),
+              style: TextStyle(fontSize: 22.sp, color: Colors.red),
             ),
           ),
           TextButton(
@@ -370,12 +313,9 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
             child: Text(
               previewAddress!,
               style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+                fontSize: 22.sp,
                 fontFamily: 'monospace',
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
+                color: blueColor,
               ),
             ),
           ),
@@ -389,14 +329,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
                 ),
               );
             },
-            icon: Icon(
-              Icons.copy,
-              size: ScreenUtil().setWidth(22),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ),
-            ),
+            icon: Icon(Icons.copy, size: 22.w, color: blueColor),
           ),
         ],
       );
@@ -407,28 +340,21 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
 
   Widget _buildInfoSection() {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: Colors.amber.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: BorderRadius.circular(12.w),
         border: Border.all(color: Colors.amber.withAlpha(40)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Icons.info_outline,
-            size: ScreenUtil().setWidth(22),
-            color: Colors.amber[700],
-          ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          Icon(Icons.info_outline, size: 22.w, color: Colors.amber[700]),
+          SizedBox(width: 12.w),
           Expanded(
             child: Text(
               S.of(context).g_key_aa_deployment_note,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: Colors.amber[700],
-              ),
+              style: TextStyle(fontSize: 22.sp, color: Colors.amber[700]),
             ),
           ),
         ],
@@ -443,21 +369,18 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
           ? null
           : (this as _AAAccountCreatePageState)._createAccount,
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.mainBlueColor.name,
-        ),
+        backgroundColor: _themeColor(AppThemeKeys.mainBlueColor),
         foregroundColor: Colors.white,
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
+        padding: EdgeInsets.symmetric(vertical: 18.w),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: BorderRadius.circular(16.w),
         ),
         disabledBackgroundColor: Colors.grey,
       ),
       child: isCreating
           ? SizedBox(
-              width: ScreenUtil().setWidth(24),
-              height: ScreenUtil().setWidth(24),
+              width: 24.w,
+              height: 24.w,
               child: const CircularProgressIndicator(
                 strokeWidth: 2,
                 valueColor: AlwaysStoppedAnimation(Colors.white),
@@ -465,10 +388,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
             )
           : Text(
               S.of(context).g_key_aa_create_account,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(30),
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.w600),
             ),
     );
   }

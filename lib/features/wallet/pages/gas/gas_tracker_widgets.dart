@@ -187,7 +187,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
             SizedBox(height: ScreenUtil().setWidth(24)),
             _buildEnabledToggle(context, itemBg, mainText, blueColor),
             SizedBox(height: ScreenUtil().setWidth(16)),
-            _buildThresholdSection(context, itemBg, subtitleText, mainText),
+            _buildThresholdSection(context, itemBg, subtitleText, mainText, bgColor),
             SizedBox(height: ScreenUtil().setWidth(24)),
             _buildSaveButton(context, blueColor),
             if (widget.existing != null) ...[
@@ -246,7 +246,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
   }
 
   Widget _buildThresholdSection(
-      BuildContext context, Color itemBg, Color subtitleText, Color mainText) {
+      BuildContext context, Color itemBg, Color subtitleText, Color mainText, Color bgColor) {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
@@ -283,7 +283,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
             ],
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
-          _buildThresholdInput(context, subtitleText, mainText),
+          _buildThresholdInput(context, subtitleText, mainText, bgColor),
           if (_error.isNotEmpty) ...[
             SizedBox(height: ScreenUtil().setWidth(6)),
             Text(
@@ -300,20 +300,21 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
     );
   }
 
-  Widget _buildThresholdInput(BuildContext context, Color subtitleText, Color mainText) {
+  Widget _buildThresholdInput(
+      BuildContext context, Color subtitleText, Color mainText, Color bgColor) {
+    final borderColor = _error.isNotEmpty
+        ? AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name)
+        : AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name);
+
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(16),
         vertical: ScreenUtil().setWidth(10),
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+        color: bgColor,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
-        border: Border.all(
-          color: _error.isNotEmpty
-              ? AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name)
-              : AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
-        ),
+        border: Border.all(color: borderColor),
       ),
       child: Row(
         children: [

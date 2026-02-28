@@ -4,7 +4,12 @@ part of 'wallet_chain_send_xrp.dart';
 ///
 /// Depends on [_XrpSendLogicMixin] for all shared state and business methods.
 mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
+  /// Shorthand for theme color lookup to reduce repetitive boilerplate.
+  Color _themeColor(String key) => AppThemeUtils.getColorByKey(context, key);
+
   Widget destinationTagWidget() {
+    final mainText = _themeColor(AppThemeKeys.mainTextColor.name);
+    final subtitleText = _themeColor(AppThemeKeys.itemSubtitleTextColor.name);
     return Container(
       margin: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(30.0),
@@ -18,8 +23,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
               Text(
                 'Destination Tag',
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                  color: mainText,
                   fontSize: ScreenUtil().setSp(28.0),
                 ),
               ),
@@ -27,8 +31,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
               Text(
                 '（可选）',
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                  color: subtitleText,
                   fontSize: ScreenUtil().setSp(24.0),
                 ),
               ),
@@ -41,20 +44,17 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
             keyboardType: TextInputType.number,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: mainText,
               fontSize: ScreenUtil().setSp(28.0),
             ),
             decoration: InputDecoration(
               hintText: '转账到交易所时通常必填',
               hintStyle: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: subtitleText,
                 fontSize: ScreenUtil().setSp(24.0),
               ),
               filled: true,
-              fillColor: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor.name),
+              fillColor: _themeColor(AppThemeKeys.itemBgColor.name),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: ScreenUtil().setWidth(20.0),
                 vertical: ScreenUtil().setWidth(16.0),
@@ -80,8 +80,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
           Text(
             S.of(context).g_key_38,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: _themeColor(AppThemeKeys.mainTextColor.name),
               fontSize: ScreenUtil().setSp(28.0),
             ),
           ),
@@ -104,13 +103,11 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
               child: Icon(
                 Icons.add,
                 size: ScreenUtil().setWidth(50.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                color: _themeColor(AppThemeKeys.mainBlueColor.name),
               ),
             ),
             rightOnTap1: searchToAddressWidget,
-            bgColor: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemBgColor.name),
+            bgColor: _themeColor(AppThemeKeys.itemBgColor.name),
           ),
         ],
       ),
@@ -118,6 +115,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
   }
 
   Widget amountWidget() {
+    final itemBgColor = _themeColor(AppThemeKeys.itemBgColor.name);
     return containerStyle1(
       context,
       margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
@@ -134,13 +132,12 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                 Text(
                   S.of(context).g_key_44,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
+                    color: _themeColor(AppThemeKeys.mainTextColor.name),
                     fontSize: ScreenUtil().setSp(28.0),
                   ),
                 ),
                 SizedBox(width: ScreenUtil().setWidth(20.0)),
-                Expanded(flex: 1, child: amountBalanceWidget()),
+                Expanded(child: amountBalanceWidget()),
               ],
             ),
           ),
@@ -149,16 +146,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(
                   Radius.circular(ScreenUtil().setWidth(16.0))),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor.name),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xff101828).withAlpha(0),
-                  offset: const Offset(0, 1),
-                  blurRadius: ScreenUtil().setWidth(4.0),
-                  spreadRadius: 0,
-                ),
-              ],
+              color: itemBgColor,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,8 +158,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                   hintText: S.of(context).g_key_44,
                   hintStyle: TextStyle(
                     fontSize: ScreenUtil().setSp(54.0),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.textFieldHintColor.name),
+                    color: _themeColor(AppThemeKeys.textFieldHintColor.name),
                   ),
                   keyboardType:
                       TextInputType.numberWithOptions(decimal: true),
@@ -184,18 +171,12 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                   },
                   fontSize: ScreenUtil().setWidth(70.0),
                   height: ScreenUtil().setWidth(120.0),
-                  boxShadow: BoxShadow(
-                    color: const Color(0xff101828).withAlpha(0),
-                    offset: const Offset(0, 0),
-                    blurRadius: ScreenUtil().setWidth(0),
-                    spreadRadius: 0,
-                  ),
+                  boxShadow: const BoxShadow(color: Colors.transparent),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(ScreenUtil().setWidth(16.0)),
                     topRight: Radius.circular(ScreenUtil().setWidth(16.0)),
                   ),
-                  bgColor: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemBgColor.name),
+                  bgColor: itemBgColor,
                   errorMessage: amountErrorMessage,
                   messageMargin: EdgeInsets.symmetric(
                       horizontal: ScreenUtil().setWidth(30.0)),
@@ -206,8 +187,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                     padding: EdgeInsets.symmetric(
                         horizontal: ScreenUtil().setWidth(20.0)),
                     decoration: BoxDecoration(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
+                      color: _themeColor(AppThemeKeys.mainBlueColor.name),
                       borderRadius: BorderRadius.all(
                           Radius.circular(ScreenUtil().setWidth(60.0))),
                     ),
@@ -216,14 +196,11 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                       S.of(context).g_key_197,
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(26.0),
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainWhiteColor.name),
+                        color: _themeColor(AppThemeKeys.mainWhiteColor.name),
                       ),
                     ),
                   ),
-                  rightOnTap1: () {
-                    maxTag();
-                  },
+                  rightOnTap1: maxTag,
                 ),
                 Divider(
                   height: ScreenUtil().setWidth(1.0),
@@ -254,8 +231,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
           Text(
             '${S.of(context).g_key_29}:${dec.Decimal.parse(tBalance.toString())} $unit',
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
+              color: _themeColor(AppThemeKeys.mainBlueColor.name),
               fontSize: ScreenUtil().setSp(28.0),
             ),
             maxLines: 1,
@@ -264,8 +240,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
           Text(
             '${S.of(context).g_key_xml_0}:$lockValue $unit',
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.errorTextColor.name),
+              color: _themeColor(AppThemeKeys.errorTextColor.name),
               fontSize: ScreenUtil().setSp(28.0),
             ),
             maxLines: 1,
@@ -274,8 +249,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
           Text(
             '${S.of(context).g_key_43}:${dec.Decimal.parse(uBalance.toString())} $unit',
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.rightTextColor.name),
+              color: _themeColor(AppThemeKeys.rightTextColor.name),
               fontSize: ScreenUtil().setSp(28.0),
             ),
             maxLines: 1,
@@ -287,8 +261,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
     return Text(
       '${widget.coinModel.balanceStringAll()} $unit',
       style: TextStyle(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainTextColor.name),
+        color: _themeColor(AppThemeKeys.mainTextColor.name),
         fontSize: ScreenUtil().setSp(28.0),
       ),
       maxLines: 1,
@@ -299,18 +272,15 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
 
   /// Returns the owner address row displayed below the amount input.
   Widget ownerAddress() {
-    return Container(
-      padding: EdgeInsets.only(
-        top: ScreenUtil().setWidth(20.0),
-        bottom: ScreenUtil().setWidth(20.0),
-        right: ScreenUtil().setWidth(30.0),
-        left: ScreenUtil().setWidth(30.0),
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(30.0),
+        vertical: ScreenUtil().setWidth(20.0),
       ),
       child: Text(
         widget.coinModel.address.toString(),
         style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name),
+          color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
           fontSize: ScreenUtil().setSp(30.0),
         ),
         maxLines: 1,
@@ -344,16 +314,14 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                 Text(
                   S.of(context).g_key_29,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context,
-                        AppThemeKeys.itemSubtitleTextColor.name),
+                    color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
                     fontSize: ScreenUtil().setSp(28.0),
                   ),
                 ),
                 Text(
                   '${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}',
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainButtonBgColor.name),
+                    color: _themeColor(AppThemeKeys.mainButtonBgColor.name),
                     fontSize: ScreenUtil().setSp(28.0),
                   ),
                 ),
@@ -370,6 +338,8 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
 
   Widget toAddressAccount() {
     if (accountXrp['address'] == "") return const SizedBox.shrink();
+    final buttonColor = _themeColor(AppThemeKeys.mainButtonBgColor.name);
+    final whiteColor = _themeColor(AppThemeKeys.mainWhiteColor.name);
     return Container(
       alignment: Alignment.center,
       margin: EdgeInsets.only(
@@ -377,15 +347,11 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
         left: ScreenUtil().setWidth(30.0),
         right: ScreenUtil().setWidth(30.0),
       ),
-      padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(30.0),
-      ),
+      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       decoration: BoxDecoration(
         borderRadius:
             BorderRadius.all(Radius.circular(ScreenUtil().setWidth(8.0))),
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
+        color: _themeColor(AppThemeKeys.itemBgColor.name),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -393,12 +359,10 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
           Row(
             children: [
               Expanded(
-                flex: 1,
                 child: Text(
                   S.of(context).g_key_t_46,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainButtonBgColor.name),
+                    color: buttonColor,
                     fontSize: ScreenUtil().setSp(28.0),
                   ),
                 ),
@@ -414,8 +378,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                     horizontal: ScreenUtil().setWidth(20.0),
                   ),
                   decoration: BoxDecoration(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainButtonBgColor.name),
+                    color: buttonColor,
                     borderRadius:
                         const BorderRadius.all(Radius.circular(10.0)),
                   ),
@@ -426,16 +389,12 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                         SizedBox(
                           height: ScreenUtil().setWidth(30.0),
                           width: ScreenUtil().setWidth(30.0),
-                          child: CircularProgressIndicator(
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.mainWhiteColor.name),
-                          ),
+                          child: CircularProgressIndicator(color: whiteColor),
                         ),
                       Text(
                         S.of(context).g_key_t_47,
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainWhiteColor.name),
+                          color: whiteColor,
                           fontSize: ScreenUtil().setSp(24.0),
                         ),
                       ),
@@ -448,19 +407,17 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
           Text(
             S.of(context).g_key_t_46,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
               fontSize: ScreenUtil().setSp(24.0),
             ),
           ),
-          Container(
+          Padding(
             padding:
                 EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
             child: Text(
               accountXrp['account'],
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainButtonBgColor.name),
+                color: buttonColor,
                 fontSize: ScreenUtil().setSp(24.0),
               ),
             ),
@@ -468,8 +425,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
           Text(
             accountXrp['error'],
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.errorTextColor.name),
+              color: _themeColor(AppThemeKeys.errorTextColor.name),
               fontSize: ScreenUtil().setSp(22.0),
             ),
           ),

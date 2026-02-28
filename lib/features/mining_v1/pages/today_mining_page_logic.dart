@@ -5,21 +5,8 @@ part of 'today_mining_page.dart';
 /// Declares all shared state fields and contains data loading, timer
 /// management, mining status, staking queries, and reward computation.
 mixin _LogicMixin on State<TodayMiningPage> {
-  DataUtils? _dataUtils;
-  DataUtils get dataUtils {
-    if (_dataUtils == null) {
-      _dataUtils = DataUtils();
-    }
-    return _dataUtils!;
-  }
+  late final DataUtils dataUtils = DataUtils();
 
-  /*FUJINftMiningRpcApi? fUJINftMiningRpcApi;
-  FUJINftMiningRpcApi get _fUJINftMiningRpcApi{
-    if(fUJINftMiningRpcApi==null){
-      fUJINftMiningRpcApi= FUJINftMiningRpcApi();
-    }
-    return fUJINftMiningRpcApi!;
-  }*/
   String astAddress = '';
 
   //任务列表分页数据
@@ -85,9 +72,7 @@ mixin _LogicMixin on State<TodayMiningPage> {
   }
 
   void disposeLogic() {
-    if (_timer != null && _timer!.isActive) {
-      _timer!.cancel();
-    }
+    _timer?.cancel();
     eventBusFn.cancel();
   }
 
@@ -98,22 +83,14 @@ mixin _LogicMixin on State<TodayMiningPage> {
     if (ms != null) {
       mValue = ms[astAddress]?['miningValue'];
     }
-    if (mValue == null) {
-      if (globalMiningV1.miningType == MiningType.N) {
+    if (globalMiningV1.miningType == MiningType.N) {
+      if (mValue == null) {
         await computerMaxY(astAddress);
-      }
-    } else {
-      if (globalMiningV1.miningType == MiningType.N) {
-        int value;
-        if (AppConfig.isMainChainMining) {
-          value = ms?[astAddress]?['miningValue']
-                  ?[MiningType.N.name.toLowerCase()] ??
-              0;
-        } else {
-          value = ms?[astAddress]?['miningValue']
-                  ?['${MiningType.N.name.toLowerCase()}test'] ??
-              0;
-        }
+      } else {
+        final key = AppConfig.isMainChainMining
+            ? MiningType.N.name.toLowerCase()
+            : '${MiningType.N.name.toLowerCase()}test';
+        final int value = ms?[astAddress]?['miningValue']?[key] ?? 0;
         await computerMaxY(astAddress, value: value);
       }
     }
@@ -143,20 +120,16 @@ mixin _LogicMixin on State<TodayMiningPage> {
       if (data != null) {
         astPrice = data["coinPrice"];
         debugPrint("astPrice:$astPrice");
-      } else {
-        var list = await MarketApi().getWalletCoinsInfo('n');
-        if (list['error']) {
-        } else {
-          //查询成功，将币的信息赋值到_coinslist
-          List<dynamic> nInfo = list['data']['data'];
-          if (nInfo.length != 0) {
-            astPrice =
-                Decimal.parse(nInfo[0]['price'].toString()).toDouble();
-          }
-        }
+        return;
+      }
+      final list = await MarketApi().getWalletCoinsInfo('n');
+      if (list['error']) return;
+      final List<dynamic> nInfo = list['data']['data'];
+      if (nInfo.isNotEmpty) {
+        astPrice = Decimal.parse(nInfo[0]['price'].toString()).toDouble();
       }
     } catch (err) {
-      //err
+      debugPrint("getAstPrice err: ${err.toString()}");
     }
   }
 
@@ -189,30 +162,19 @@ mixin _LogicMixin on State<TodayMiningPage> {
     try {
       final data24 = await MiningApi.getCurrentMiningTime(astAddress);
       debugPrint("getCurrentMining Time :$data24");
-      //{jsonrpc: 2.0, id: 1, result: {minedBlocks: [], totalBlocks: 0x0}}
-      if (data24 != null) {
-        String? total = data24["result"]['totalBlocks'];
-        if (total != null && total.isNotEmpty) {
-          BigInt value = hexToInt(total);
-          //_hexUtils.hexToBigInt(total) ?? BigInt.zero;
-          // debugPrint("getCurrentMining value :${value.toString()}");
-          BigInt result = value * BigInt.from(8);
-          // debugPrint("getCurrentMining result :${result.toString()}");
-          currMiningTime = result.toInt();
-          if (currMiningTime != 0) {
-            currentMiningTimes = formatElapsedTime(currMiningTime);
-          }
-        } else {
-          currMiningTime = 0;
+
+      final String? total = data24?["result"]?['totalBlocks'];
+      if (total != null && total.isNotEmpty) {
+        final BigInt value = hexToInt(total);
+        currMiningTime = (value * BigInt.from(8)).toInt();
+        if (currMiningTime != 0) {
+          currentMiningTimes = formatElapsedTime(currMiningTime);
         }
       } else {
         currMiningTime = 0;
       }
-      if (mounted) {
-        setState(() {});
-      }
+      if (mounted) setState(() {});
     } catch (err) {
-      //err
       debugPrint("err:${err.toString()}");
     }
   }
@@ -235,35 +197,29 @@ mixin _LogicMixin on State<TodayMiningPage> {
     try {
       final data = await MiningApi.getLastCycleMiningTime(astAddress);
       debugPrint("getLastCycleMiningTime Time :$data");
-      //{jsonrpc: 2.0, id: 1, result: {minedBlocks: [], totalBlocks: 0x0}}
-      if (data != null) {
-        String? total = data["result"]?['totalBlocks'];
-        if (total != null && total.isNotEmpty) {
-          BigInt value = hexToInt(total);
-          //_hexUtils.hexToBigInt(total) ?? BigInt.zero;
-          if (value != BigInt.zero) {
-            //根据做任务的个数计算奖励值
-            computeRewardsValueByTaskNum(value.toInt());
-          }
-          BigInt result = value * BigInt.from(8);
-          debugPrint("getCurrentMining result :${result.toString()}");
-          int nums = result.toInt();
-          if (nums != 0) {
-            lastCycleMiningTimes = formatElapsedTime(nums);
-          } else {
-            lastCycleMiningTimes == ["00", "00", "00"];
-          }
-        } else {
-          lastCycleMiningTimes == ["00", "00", "00"];
-        }
-      } else {
-        lastCycleMiningTimes == ["00", "00", "00"];
-        if (mounted) {
-          setState(() {});
-        }
+
+      if (data == null) {
+        lastCycleMiningTimes = ["00", "00", "00"];
+        if (mounted) setState(() {});
+        return;
       }
+
+      final String? total = data["result"]?['totalBlocks'];
+      if (total == null || total.isEmpty) {
+        lastCycleMiningTimes = ["00", "00", "00"];
+        return;
+      }
+
+      final BigInt value = hexToInt(total);
+      if (value != BigInt.zero) {
+        computeRewardsValueByTaskNum(value.toInt());
+      }
+
+      final int nums = (value * BigInt.from(8)).toInt();
+      debugPrint("getCurrentMining result :$nums");
+      lastCycleMiningTimes =
+          nums != 0 ? formatElapsedTime(nums) : ["00", "00", "00"];
     } catch (err) {
-      //err
       debugPrint("err:${err.toString()}");
     }
   }
@@ -353,18 +309,12 @@ mixin _LogicMixin on State<TodayMiningPage> {
 
   getMiningStatus() async {
     try {
-      //	"data":"started",//started,stopped
       final data = await MiningPluginUtils.status();
-      String? status = data?["data"];
-      if (status == "stopped") {
-        globalMiningV1.setMiningStatus(false);
-        MiningUtils.startMining();
-      } else {
-        globalMiningV1.setMiningStatus(true);
-      }
-    } catch (err) {
-      // err
-    }
+      final String? status = data?["data"];
+      final bool isRunning = status != "stopped";
+      globalMiningV1.setMiningStatus(isRunning);
+      if (!isRunning) MiningUtils.startMining();
+    } catch (_) {}
   }
 
   ///获取用户质押数量
@@ -378,14 +328,11 @@ mixin _LogicMixin on State<TodayMiningPage> {
         if (depositsOfResponse != null && depositsOfResponse is List) {
           BigInt astNum = depositsOfResponse[0];
           final aNumber = toEther("$astNum", 18).toDouble();
-          currDepositsOfValue = aNumber.toInt(); //100000000000000000000
+          currDepositsOfValue = aNumber.toInt();
           globalMiningV1.setDepositsNum(currDepositsOfValue);
           debugPrint("当前质押ast数量: $currDepositsOfValue");
-          if (AppConfig.isMainChainMining) {
-            setMiningValue("n", currDepositsOfValue);
-          } else {
-            setMiningValue("ntest", currDepositsOfValue);
-          }
+          final key = AppConfig.isMainChainMining ? "n" : "ntest";
+          setMiningValue(key, currDepositsOfValue);
         } else {
           currDepositsOfValue = 0;
           globalMiningV1.setDepositsNum(currDepositsOfValue);

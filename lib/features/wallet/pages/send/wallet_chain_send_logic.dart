@@ -102,35 +102,40 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
   Future<void> getBalance() async {
     setState(() => load = Load.loading);
     final isOk = await coinModel.getBalance(getToken: false);
-    if (isOk == false) {
-      load = Load.finish;
-      errorMessage = S.current.g_key_t_44;
-      ToastUtils.show(S.current.g_key_t_44);
-      setState(() {});
-    }
+    if (isOk != false) return;
+    load = Load.finish;
+    errorMessage = S.current.g_key_t_44;
+    ToastUtils.show(S.current.g_key_t_44);
+    setState(() {});
+  }
+
+  /// 解析当前 coinModel 的 RPC 地址（自定义链返回对应 service，否则 null）
+  String? _resolveRpc() {
+    if (coinModel.coin['custom'] != true) return null;
+    return coinModel.isTest
+        ? coinModel.coin['service_test']
+        : coinModel.coin['service'];
   }
 
   Future<void> getGasPrice() async {
     setState(() => load = Load.loading);
-    if (coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name) {
+    final blockchainType = coinModel.coin['blockchainType'] as String;
+    final coinType = coinModel.coin['coinType'] as String;
+    final isEthereum = blockchainType == BlockchainType.Ethereum.name;
+
+    if (isEthereum) {
       await _fetchAdvancedGasEstimate();
     }
-    final rpc = coinModel.coin['custom'] == true
-        ? (coinModel.isTest
-            ? coinModel.coin['service_test']
-            : coinModel.coin['service'])
-        : null;
     final mm = await tokenViewApi.getGasPrice(
-          coinModel.coin['blockchainType'],
-          coinModel.coin['coinType'],
+          blockchainType,
+          coinType,
           isTest: coinModel.isTest,
-          rpc: rpc,
+          rpc: _resolveRpc(),
         ) ??
         MessageModel.error();
     if (mm.error == false) {
       gasPrice = mm.data;
-      if (get1559WithChainSymbol(coinModel.coin['coinType']) &&
-          coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name) {
+      if (get1559WithChainSymbol(coinType) && isEthereum) {
         gasPrice = gasPrice * BigInt.from(2);
       }
     } else {
@@ -188,8 +193,9 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     closeKeyboard();
     if (gasLimitLoad == Load.loading) return;
     setState(() => gasLimitLoad = Load.loading);
-    if (coinModel.coin['blockchainType'] != BlockchainType.Ethereum.name &&
-        coinModel.coin['blockchainType'] != BlockchainType.Tron.name) {
+    final blockchainType = coinModel.coin['blockchainType'] as String;
+    if (blockchainType != BlockchainType.Ethereum.name &&
+        blockchainType != BlockchainType.Tron.name) {
       return;
     }
     try {
@@ -224,7 +230,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
         if (coinType == CoinType.BOBA.name || coinType == CoinType.OP.name) {
           gas = BigInt.from(gas.toInt() * 1.5);
         }
-        if (coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name &&
+        if (blockchainType == BlockchainType.Ethereum.name &&
             coinModel.coin['isContract'] == false) {
           final note = noteTextEditingController.text.trim();
           if (note.isNotEmpty) {
@@ -270,7 +276,8 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
 
     // 余额校验
     final BigInt valueBi = ethToWeiString(value, decimals);
-    if (coinModel.coin['blockchainType'] == BlockchainType.Ripple.name) {
+    final blockchainType = coinModel.coin['blockchainType'] as String;
+    if (blockchainType == BlockchainType.Ripple.name) {
       final reserveAmount = ethToWeiString('10', decimals);
       if (valueBi + totalGasPrice > coinModel.balance - reserveAmount) {
         _setAmountError(S.of(context).g_key_47); return;
@@ -423,14 +430,15 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
   }
 
   bool signTxCheck() {
-    if (coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name &&
-        (coinModel.coin['isContract'] as bool? ?? false)) {
-      final chainBalance = chainModel?.balance ?? BigInt.zero;
-      if (chainBalance == BigInt.zero || totalGasPrice > chainBalance) {
-        ToastUtils.show(
-            S.current.g_key_t_29(chainModel?.coin['coinType'] ?? ''));
-        return false;
-      }
+    final isEthContract =
+        coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name &&
+        (coinModel.coin['isContract'] as bool? ?? false);
+    if (!isEthContract) return true;
+    final chainBalance = chainModel?.balance ?? BigInt.zero;
+    if (chainBalance == BigInt.zero || totalGasPrice > chainBalance) {
+      ToastUtils.show(
+          S.current.g_key_t_29(chainModel?.coin['coinType'] ?? ''));
+      return false;
     }
     return true;
   }
@@ -451,8 +459,9 @@ Future<MessageModel> _callGasEstimateApi({
   final contract = coinModel.isTest
       ? coinModel.coin['contract_test']
       : coinModel.coin['contract'];
+  final blockchainType = coinModel.coin['blockchainType'] as String;
 
-  if (coinModel.coin['blockchainType'] == BlockchainType.Tron.name) {
+  if (blockchainType == BlockchainType.Tron.name) {
     return TrxApi().getGasEstimateTrx(
       coinModel.address, toAddr, gasPrice, weiValue, gaslimit,
       contract: contract, isTest: coinModel.isTest,
