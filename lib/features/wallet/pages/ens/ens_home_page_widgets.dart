@@ -335,11 +335,9 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
   }
 
   Widget _buildLoadingState() {
-    return Container(
+    return Padding(
       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(60)),
-      child: const Center(
-        child: CircularProgressIndicator(),
-      ),
+      child: const Center(child: CircularProgressIndicator()),
     );
   }
 

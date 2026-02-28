@@ -54,22 +54,13 @@ class CreateSessionKeySheet extends StatefulWidget {
 }
 
 class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
-  // ── Step 1: preset ────────────────────────────────────────────────────────
   SessionKeyPermission _preset = SessionKeyPermission.transfer;
-
-  // ── Step 2: DApp label ────────────────────────────────────────────────────
   final TextEditingController _labelCtrl = TextEditingController();
   final FocusNode _labelFocus = FocusNode();
-
-  // ── Step 3: expiry ────────────────────────────────────────────────────────
   Duration _expiry = const Duration(days: 1);
-
-  // ── Step 4: spending limit (transfer preset only) ─────────────────────────
   final TextEditingController _amountCtrl = TextEditingController();
   String _amountToken = 'ETH';
   bool _noLimit = true;
-
-  // ── Step 5: risk confirmation ─────────────────────────────────────────────
   bool _riskConfirmed = false;
   bool _isSaving = false;
 
@@ -80,8 +71,6 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
     _amountCtrl.dispose();
     super.dispose();
   }
-
-  // ── Preset metadata helper ────────────────────────────────────────────────
 
   /// Returns (label, riskColor) for the given [preset] in the current locale.
   ({String label, Color riskColor}) _presetInfo(SessionKeyPermission preset) =>
@@ -118,13 +107,8 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
         _ => S.of(context).g_key_aa_session_30d,
       };
 
-  // ── Theme helpers ────────────────────────────────────────────────────────
-  Color _mainTextColor() =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-  Color _blueColor() =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-
-  // ── Build ─────────────────────────────────────────────────────────────────
+  Color _themeColor(String key) =>
+      AppThemeUtils.getColorByKey(context, key);
 
   @override
   Widget build(BuildContext context) {
@@ -134,8 +118,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
       maxChildSize: 0.96,
       builder: (context, scrollController) => Container(
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemBgColor.name),
+          color: _themeColor(AppThemeKeys.itemBgColor.name),
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(ScreenUtil().setWidth(24)),
           ),
@@ -250,7 +233,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(32),
                 fontWeight: FontWeight.bold,
-                color: _mainTextColor(),
+                color: _themeColor(AppThemeKeys.mainTextColor.name),
               ),
             ),
           ),
@@ -269,12 +252,10 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
       style: TextStyle(
         fontSize: ScreenUtil().setSp(26),
         fontWeight: FontWeight.w700,
-        color: _mainTextColor(),
+        color: _themeColor(AppThemeKeys.mainTextColor.name),
       ),
     );
   }
-
-  // ── Step 2: Label ─────────────────────────────────────────────────────────
 
   Widget _buildLabelField() {
     return TextFormField(
@@ -296,10 +277,8 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
     );
   }
 
-  // ── Step 3: Expiry chips ──────────────────────────────────────────────────
-
   Widget _buildExpiryChips() {
-    final blueColor = _blueColor();
+    final blueColor = _themeColor(AppThemeKeys.mainBlueColor.name);
 
     return Wrap(
       spacing: ScreenUtil().setWidth(10),
@@ -329,10 +308,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
                 fontWeight: FontWeight.w600,
                 color: isSelected
                     ? blueColor
-                    : AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ),
+                    : _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
               ),
             ),
           ),
@@ -340,8 +316,6 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
       }).toList(),
     );
   }
-
-  // ── Create button ─────────────────────────────────────────────────────────
 
   Widget _buildCreateButton() {
     final canCreate = _riskConfirmed && !_isSaving;
@@ -353,7 +327,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
           child: ElevatedButton(
             onPressed: canCreate ? _submit : null,
             style: ElevatedButton.styleFrom(
-              backgroundColor: _blueColor(),
+              backgroundColor: _themeColor(AppThemeKeys.mainBlueColor.name),
               foregroundColor: Colors.white,
               disabledBackgroundColor: Colors.grey.withAlpha(50),
               padding:
@@ -384,8 +358,6 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
       ),
     );
   }
-
-  // ── Submit ────────────────────────────────────────────────────────────────
 
   Future<void> _submit() async {
     setState(() => _isSaving = true);
@@ -435,13 +407,6 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
     }
   }
 
-  // ── Helpers ───────────────────────────────────────────────────────────────
-
-  /// Generate a random-looking Ethereum address for the new session key.
-  ///
-  /// In production, this would be derived from the HD wallet using a
-  /// dedicated derivation path (e.g. m/44'/60'/0'/1/index) or generated
-  /// by the smart contract account system.
   static String _generateKeyAddress() {
     final rng = Random.secure();
     final bytes = List.generate(20, (_) => rng.nextInt(256));

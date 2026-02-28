@@ -9,8 +9,6 @@ import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/xrp_api.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
-import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
-import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_history_list.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_chain_info_sync.dart';
@@ -44,8 +42,6 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
     with
         WalletChainInfoSyncMixin<WalletChainInfoXRP>,
         WalletChainInfoXrpActionsMixin<WalletChainInfoXRP> {
-  // ── DB accessor ───────────────────────────────────────────────────────────
-
   AppDatabase? _dbInstance;
 
   @override
@@ -53,8 +49,6 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
     _dbInstance ??= AppDatabase();
     return _dbInstance!;
   }
-
-  // ── Display state ─────────────────────────────────────────────────────────
 
   String _chainName = '';
   String _chainSymbol = '';
@@ -69,8 +63,6 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
 
   @override
   String browserUrl = '';
-
-  // ── Pagination & transaction list ─────────────────────────────────────────
 
   @override
   Load load = Load.finish;
@@ -87,12 +79,8 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
   @override
   final List<dynamic> transactionList = [];
 
-  // ── Scroll & events ───────────────────────────────────────────────────────
-
   final ScrollController _scrollController = ScrollController();
   StreamSubscription? _eventBusFn;
-
-  // ── Mixin contract ────────────────────────────────────────────────────────
 
   @override
   CoinModel get coinModel => widget.coinModel;
@@ -100,11 +88,10 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
   @override
   dynamic getCoinModel() => widget.coinModel;
 
-  // ── Wallet provider ───────────────────────────────────────────────────────
-
   WalletActionProvider get _walletProvider => ref.read(wapBridgeProvider);
 
-  // ── Backup guard ──────────────────────────────────────────────────────────
+  /// Shorthand for theme color lookup.
+  Color _tc(String key) => AppThemeUtils.getColorByKey(context, key);
 
   @override
   Future<bool> ensureWalletBackedUp() async {
@@ -124,34 +111,34 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
     return false;
   }
 
-  // ── Actions (mixin contract implementation) ───────────────────────────────
-
-  @override
-  Future<void> handleSend({bool closeSheet = false}) async {
+  /// Runs [action] after ensuring wallet backup, then optionally closes sheet.
+  Future<void> _guardedAction(
+    Future<void> Function() action, {
+    bool closeSheet = false,
+  }) async {
     if (!await ensureWalletBackedUp()) {
-      if (!mounted) return;
-      if (closeSheet) Navigator.pop(context);
+      if (mounted && closeSheet) Navigator.pop(context);
       return;
     }
     if (!mounted) return;
-    await navigateToXrpSend();
-    await getTransactionData(Load.refresh);
-    if (!mounted) return;
-    if (closeSheet) Navigator.pop(context);
+    await action();
+    if (mounted && closeSheet) Navigator.pop(context);
   }
 
   @override
-  Future<void> handleReceive({bool closeSheet = false}) async {
-    if (!await ensureWalletBackedUp()) {
-      if (!mounted) return;
-      if (closeSheet) Navigator.pop(context);
-      return;
-    }
-    if (!mounted) return;
-    await navigateToReceive();
-    if (!mounted) return;
-    if (closeSheet) Navigator.pop(context);
-  }
+  Future<void> handleSend({bool closeSheet = false}) => _guardedAction(
+        () async {
+          await navigateToXrpSend();
+          await getTransactionData(Load.refresh);
+        },
+        closeSheet: closeSheet,
+      );
+
+  @override
+  Future<void> handleReceive({bool closeSheet = false}) => _guardedAction(
+        () => navigateToReceive(),
+        closeSheet: closeSheet,
+      );
 
   @override
   Future<void> changeNet(bool isTest, Load loadType) async {
@@ -170,8 +157,6 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
       ToastUtils.show(e.toString());
     }
   }
-
-  // ── Lifecycle ─────────────────────────────────────────────────────────────
 
   @override
   void initState() {
@@ -196,7 +181,6 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
     super.dispose();
   }
 
-  /// 同时刷新本地 + 网络交易列表
   void _refreshTransactions(Load loadType) {
     getTransactionData(loadType);
     getTransactionDataNetwork(loadType);
@@ -243,7 +227,6 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
     _refreshTransactions(Load.refresh);
   }
 
-  /// Fetches XRP server state to obtain reserve base and per-object reserve.
   Future<void> _getServiceState() async {
     final MessageModel mm = await XrpApi()
         .getServerStateXrp(isTest: widget.coinModel.isTest);
@@ -253,8 +236,6 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
     }
     setState(() {});
   }
-
-  // ── Build ─────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
@@ -267,8 +248,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
             Text(
               '$_chainSymbol ($_chainName)',
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                color: _tc(AppThemeKeys.mainTextColor.name),
                 fontSize: ScreenUtil().setSp(32.0),
                 fontWeight: FontWeight.bold,
               ),
@@ -279,8 +259,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
               Text(
                 '$_tokenSymbol($_tokenName)',
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                  color: _tc(AppThemeKeys.mainTextColor.name),
                   fontSize: ScreenUtil().setSp(24.0),
                 ),
                 maxLines: 1,
@@ -300,8 +279,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
               ),
               child: Image.asset(
                 'assets/wallet/w_actions.png',
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                color: _tc(AppThemeKeys.mainBlueColor.name),
               ),
             ),
           ),
@@ -316,10 +294,8 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
                   _refreshTransactions(Load.refresh);
                   await widget.coinModel.getBalance();
                 },
-                backgroundColor: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainButtonBgColor.name),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainWhiteColor.name),
+                backgroundColor: _tc(AppThemeKeys.mainButtonBgColor.name),
+                color: _tc(AppThemeKeys.mainWhiteColor.name),
                 displacement: ScreenUtil().setWidth(72.0),
                 child: ListView(
                   controller: _scrollController,
@@ -366,8 +342,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
                       child: Text(
                         S.of(context).g_coin_key_1,
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
+                          color: _tc(AppThemeKeys.mainTextColor.name),
                           fontSize: ScreenUtil().setSp(30.0),
                         ),
                       ),
@@ -415,32 +390,21 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
                 S.of(context).g_mining_key_49,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(30.0),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
+                  color: _tc(AppThemeKeys.mainBlueColor.name),
                 ),
               ),
             ),
           );
         }
 
-        if (widget.coinModel.coin['blockchainType'] ==
-            BlockchainType.Bitcoin.name) {
-          final BtcTransactionRecodeModel trm = transactionList[index];
-          return WalletChainInfoTransactionsItem(
-            coinModel: widget.coinModel,
-            type: 0,
-            transactionModel: trm,
-            onBack: () => getTransactionData(Load.refresh),
-          );
-        } else {
-          final TransationRecordModel trm = transactionList[index];
-          return WalletChainInfoTransactionsItem(
-            type: 1,
-            transactionModel: trm,
-            coinModel: widget.coinModel,
-            onBack: () => getTransactionData(Load.refresh),
-          );
-        }
+        final isBtc = widget.coinModel.coin['blockchainType'] ==
+            BlockchainType.Bitcoin.name;
+        return WalletChainInfoTransactionsItem(
+          coinModel: widget.coinModel,
+          type: isBtc ? 0 : 1,
+          transactionModel: transactionList[index],
+          onBack: () => getTransactionData(Load.refresh),
+        );
       },
     );
   }

@@ -22,7 +22,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddAddressPage extends ConsumerStatefulWidget {
-  /// 从列表页「扫码添加」流程传入，预填地址输入框
   final String? initialAddress;
   const AddAddressPage({this.initialAddress, super.key});
 
@@ -35,25 +34,24 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
   final nameController = TextEditingController();
   final descController = TextEditingController();
 
-  final addressFocusNode= FocusNode();
-  final nameFocusNode= FocusNode();
-  final descFocusNode= FocusNode();
+  final addressFocusNode = FocusNode();
+  final nameFocusNode = FocusNode();
+  final descFocusNode = FocusNode();
 
   var coinName = 'BTC';
-  var coinFullName= "Bitcoin";
+  var coinFullName = "Bitcoin";
   var coinType = 'BTC';
   var coinIcon = '';
-  var blockchainType=BlockchainType.Bitcoin.name;
+  var blockchainType = BlockchainType.Bitcoin.name;
 
-  String errorMessage="";
+  String errorMessage = "";
 
-  /// Shorthand for theme color lookup
   Color _themeColor(AppThemeKeys key) =>
       AppThemeUtils.getColorByKey(context, key.name);
+
   @override
   void initState() {
     super.initState();
-    // 预填地址（来自扫码添加流程）
     final initial = widget.initialAddress;
     if (initial != null && initial.isNotEmpty) {
       addressController.text = initial;
@@ -61,7 +59,6 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
     Future.microtask(() async {
       if (!mounted) return;
       final list = ref.read(wapBridgeProvider).coinModels;
-      debugPrint("list ===${list.length}");
       if (list.isEmpty || !mounted) return;
       setState(() {
         coinName = list[0].coin["coinType"];
@@ -70,6 +67,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       });
     });
   }
+
   @override
   void dispose() {
     addressController.dispose();
@@ -82,36 +80,32 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
   }
 
   Future<String?> addressCheck(String addr) async {
+    String? result;
+
     if (addr.isEmpty) {
       errorMessage = S.current.g_key_41;
-      setState(() {});
-      return null;
-    }
+    } else {
+      final parts = addr.split(":");
+      if (parts.length == 2) addr = parts[1];
 
-    // Strip URI scheme prefix (e.g. "ethereum:0x...")
-    final parts = addr.split(":");
-    if (parts.length == 2) addr = parts[1];
-
-    final isValid = await Trustdart().validateAddress(coinType, addr);
-    if (isValid) {
-      errorMessage = "";
-      setState(() {});
-      return addr;
-    }
-
-    // For ETH, try ENS resolution as fallback
-    if (coinType == CoinType.ETH.name) {
-      final rmm = await TokenViewApi().getEnsResolve(addr);
-      if (!rmm.error) {
+      if (await Trustdart().validateAddress(coinType, addr)) {
         errorMessage = "";
-        setState(() {});
-        return rmm.data;
+        result = addr;
+      } else if (coinType == CoinType.ETH.name) {
+        final rmm = await TokenViewApi().getEnsResolve(addr);
+        if (!rmm.error) {
+          errorMessage = "";
+          result = rmm.data;
+        } else {
+          errorMessage = S.current.g_key_t_50;
+        }
+      } else {
+        errorMessage = S.current.g_key_t_50;
       }
     }
 
-    errorMessage = S.current.g_key_t_50;
     setState(() {});
-    return null;
+    return result;
   }
 
   @override
@@ -171,20 +165,18 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
   Widget _buildSelectItem() {
     return GestureDetector(
       onTap: () async {
-        final CoinModel? data = await Navigator
-            .push(context,MaterialPageRoute(builder: (_) => const ChooseCoinsPage()));
-        if (!mounted) return;
-        debugPrint("data -name--->${data?.coin['name']}");
-        if (data != null) {
-          setState(() {
-            // coinName = data.coin["name"];
-            coinType = data.coin["coinType"];
-            coinName = data.coin["miniName"];
-            coinFullName= data.coin['name'];
-            coinIcon = data.coin["icon"]??"";
-            blockchainType=data.coin["blockchainType"];
-          });
-        }
+        final data = await Navigator.push<CoinModel>(
+          context,
+          MaterialPageRoute(builder: (_) => const ChooseCoinsPage()),
+        );
+        if (!mounted || data == null) return;
+        setState(() {
+          coinType = data.coin["coinType"];
+          coinName = data.coin["miniName"];
+          coinFullName = data.coin['name'];
+          coinIcon = data.coin["icon"] ?? "";
+          blockchainType = data.coin["blockchainType"];
+        });
       },
       child: containerStyle1(
         context,
@@ -273,7 +265,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       boxShadow: _noShadow,
       bgColor: _themeColor(AppThemeKeys.itemBgColor),
       messageMargin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
-      rightWidget3: blockchainType==BlockchainType.Ethereum.name?Container(
+      rightWidget3: blockchainType == BlockchainType.Ethereum.name ? Container(
         width: ScreenUtil().setWidth(60.0),
         height: ScreenUtil().setWidth(60.0),
         padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
@@ -282,8 +274,8 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
           size: ScreenUtil().setWidth(50.0),
           color: _themeColor(AppThemeKeys.mainBlueColor),
         ),
-      ):null,
-      rightOnTap3: blockchainType==BlockchainType.Ethereum.name?faceMatchTypeWidget:null,
+      ) : null,
+      rightOnTap3: blockchainType == BlockchainType.Ethereum.name ? faceMatchTypeWidget : null,
       rightWidget1: Container(
         width: ScreenUtil().setWidth(60.0),
         height: ScreenUtil().setWidth(60.0),
@@ -296,14 +288,12 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
         ),
       ),
       rightOnTap1: () async {
-        String? data = await Navigator
-            .push(context,MaterialPageRoute(builder: (_) => ScanPage()));
-        if (!mounted) return;
-        if(data != null){
-          setState(() {
-            addressController.text = data;
-          });
-        }
+        final data = await Navigator.push<String>(
+          context,
+          MaterialPageRoute(builder: (_) => ScanPage()),
+        );
+        if (!mounted || data == null) return;
+        setState(() => addressController.text = data);
       },
       rightWidget2: Container(
         padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
@@ -322,11 +312,10 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
         ),
       ),
       rightOnTap2: () async {
-        ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
-        if (data != null) {
-          if (data.text != null && data.text != "null") {
-            addressController.text = data.text!;
-          }
+        final data = await Clipboard.getData(Clipboard.kTextPlain);
+        final text = data?.text;
+        if (text != null && text != "null") {
+          addressController.text = text;
         }
       },
     );
@@ -359,13 +348,9 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
   void handlerData() async {
     final name = nameController.text.trim();
     final desc = descController.text.trim();
-    String? address = addressController.text.trim();
+    final address = await addressCheck(addressController.text.trim());
+    if (!mounted || address == null) return;
 
-    address=await addressCheck(address);
-    if (!mounted) return;
-    if(address==null){
-      return;
-    }
     if (coinType.isEmpty) {
       ToastUtils.show(S.of(context).g_key_address_3);
       return;

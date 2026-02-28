@@ -216,57 +216,51 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
     );
   }
 
-  Widget amountBalanceWidget() {
-    final String unit = widget.coinModel.coin['unit'];
-    if (widget.coinModel.coin['blockchainType'] ==
-        BlockchainType.Ripple.name) {
-      final double tBalance = widget.coinModel.balanceDoubleAll();
-      dec.Decimal uBalance = dec.Decimal.zero;
-      if (tBalance > lockValue.toDouble()) {
-        uBalance = dec.Decimal.parse(tBalance.toString()) - lockValue;
-      }
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Text(
-            '${S.of(context).g_key_29}:${dec.Decimal.parse(tBalance.toString())} $unit',
-            style: TextStyle(
-              color: _themeColor(AppThemeKeys.mainBlueColor.name),
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          Text(
-            '${S.of(context).g_key_xml_0}:$lockValue $unit',
-            style: TextStyle(
-              color: _themeColor(AppThemeKeys.errorTextColor.name),
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          Text(
-            '${S.of(context).g_key_43}:${dec.Decimal.parse(uBalance.toString())} $unit',
-            style: TextStyle(
-              color: _themeColor(AppThemeKeys.rightTextColor.name),
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      );
-    }
+  Widget _balanceLine(String label, String value, String colorKey) {
     return Text(
-      '${widget.coinModel.balanceStringAll()} $unit',
+      '$label:$value',
       style: TextStyle(
-        color: _themeColor(AppThemeKeys.mainTextColor.name),
+        color: _themeColor(colorKey),
         fontSize: ScreenUtil().setSp(28.0),
       ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      textAlign: TextAlign.right,
+    );
+  }
+
+  Widget amountBalanceWidget() {
+    final String unit = widget.coinModel.coin['unit'];
+    if (widget.coinModel.coin['blockchainType'] !=
+        BlockchainType.Ripple.name) {
+      return Text(
+        '${widget.coinModel.balanceStringAll()} $unit',
+        style: TextStyle(
+          color: _themeColor(AppThemeKeys.mainTextColor.name),
+          fontSize: ScreenUtil().setSp(28.0),
+        ),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        textAlign: TextAlign.right,
+      );
+    }
+
+    final double tBalance = widget.coinModel.balanceDoubleAll();
+    dec.Decimal uBalance = dec.Decimal.zero;
+    if (tBalance > lockValue.toDouble()) {
+      uBalance = dec.Decimal.parse(tBalance.toString()) - lockValue;
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        _balanceLine(S.of(context).g_key_29,
+            '${dec.Decimal.parse(tBalance.toString())} $unit',
+            AppThemeKeys.mainBlueColor.name),
+        _balanceLine(S.of(context).g_key_xml_0,
+            '$lockValue $unit', AppThemeKeys.errorTextColor.name),
+        _balanceLine(S.of(context).g_key_43,
+            '${dec.Decimal.parse(uBalance.toString())} $unit',
+            AppThemeKeys.rightTextColor.name),
+      ],
     );
   }
 

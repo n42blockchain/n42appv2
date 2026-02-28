@@ -38,23 +38,19 @@ class WalletBaseSend extends StatefulWidget {
 }
 
 class _WalletBaseSendState extends State<WalletBaseSend> {
-  Map<String,dynamic> coinInfo={};
-  String gasPrice="";
+  Map<String, dynamic> coinInfo = {};
+  String gasPrice = "";
   TxSimulationResult _simResult = TxSimulationResult.simulating();
 
-  /// Shorthand for theme color lookup
   Color _themeColor(AppThemeKeys key) =>
       AppThemeUtils.getColorByKey(context, key.name);
 
-  // GoPlus 合约安全检查结果
   GoplusSecurityResult? _goplResult;
   bool _goplLoading = false;
 
-  //账号安全
-  Map<String,dynamic> securityMap={
-    "email":false,
-    //"google":false,
-    "face":false,
+  Map<String, dynamic> securityMap = {
+    "email": false,
+    "face": false,
   };
   @override
   void initState() {
@@ -67,8 +63,6 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     _runSimulation();
     _runGoplusCheck();
   }
-  /// 各链原生币 gas 价格精度（小数位数）
-  /// null 表示该链无 gas 费用（显示 "0"）
   static const Map<BlockchainType, int?> _gasDecimals = {
     BlockchainType.Bitcoin: 8,
     BlockchainType.Ethereum: 18,
@@ -107,29 +101,24 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     BlockchainType.Hive: null,    // Hive uses resource credits
   };
 
-  void init(){
-    //计算gasPrice
-    BlockchainType bt=BlockchainType.values.firstWhere((e) => e.name==coinInfo['blockchainType']);
+  void init() {
+    final bt = BlockchainType.values.firstWhere((e) => e.name == coinInfo['blockchainType']);
     final int? decimals = _gasDecimals[bt];
     if (decimals == null) {
       gasPrice = '0';
       return;
     }
-    // Bitcoin 使用 btcTransactionRecodeModel，其余使用 transationRecordModel
     final rawGas = bt == BlockchainType.Bitcoin
         ? widget.btcTransactionRecodeModel!.gasPrice.toString()
         : widget.transationRecordModel!.gasPrice.toString();
     gasPrice = '${toEther(rawGas, decimals)} ${widget.mainCoinUnit}';
   }
-  Future<void> initSecurity()async{
-    Map<String,dynamic>? s=await SPUtil().getSecurity();
-    if(s!=null){
-      Map<String,dynamic>? userSecurityMap=s[AppGlobals.userInfo?.uuid??""];
-      if(userSecurityMap!=null){
-        setState(() {
-          securityMap=userSecurityMap;
-        });
-      }
+  Future<void> initSecurity() async {
+    final s = await SPUtil().getSecurity();
+    if (s == null) return;
+    final userSecurityMap = s[AppGlobals.userInfo?.uuid ?? ""];
+    if (userSecurityMap != null) {
+      setState(() => securityMap = userSecurityMap);
     }
   }
 
@@ -161,7 +150,6 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     if (mounted) setState(() => _simResult = result);
   }
 
-  /// GoPlus 合约安全检查（仅 EVM + ERC-20 合约，fail-open 设计）
   Future<void> _runGoplusCheck() async {
     final bt = coinInfo['blockchainType'] as String? ?? '';
     if (bt != 'Ethereum') return;
@@ -184,9 +172,6 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     }
   }
 
-  /// Reconstruct calldata from [TransationRecordModel]:
-  /// - Native transfer (contract empty) or NFT → "0x"
-  /// - ERC-20 transfer(address,uint256) → "0xa9059cbb" + padded address + padded amount
   String _buildCalldata(TransationRecordModel m) {
     if (m.contract.isEmpty || widget.isNft) return '0x';
 
@@ -196,14 +181,12 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     return '0xa9059cbb$toAddress$paddedAmount';
   }
 
-  //关闭键盘
-  void closeKeyboard(){
-    FocusScope.of(context).requestFocus(FocusNode());
-  }
-  Future<bool> _pageBack(){
-    if(Navigator.canPop(context)){
-      Navigator.pop(context,false);
-    }else{
+  void closeKeyboard() => FocusScope.of(context).requestFocus(FocusNode());
+
+  Future<bool> _pageBack() {
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context, false);
+    } else {
       SystemNavigator.pop();
     }
     return Future.value(false);
@@ -242,9 +225,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
         ),
         body: SafeArea(
           child: GestureDetector(
-            onTap: (){
-              closeKeyboard();
-            },
+            onTap: closeKeyboard,
             child: Stack(
               children: [
                 Positioned.fill(
@@ -312,30 +293,35 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                         height: ScreenUtil().setWidth(148),
                         child: Row(
                           children: [
-                            Expanded(child: SizedBox(
-                              width: double.infinity,
-                              height: ScreenUtil().setWidth(88.0),
-                              child: buttonStyle5(context, (){
-                                Navigator.pop(context,false);
-                              },
-                                S.of(context).g_key_79,
-                                _themeColor(AppThemeKeys.mainButtonTextColor),
-                                _themeColor(AppThemeKeys.mainButtonBgColor),
-                                borderColor: _themeColor(AppThemeKeys.mainButtonBgColor),
+                            Expanded(
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: ScreenUtil().setWidth(88.0),
+                                child: buttonStyle5(
+                                  context,
+                                  () => Navigator.pop(context, false),
+                                  S.of(context).g_key_79,
+                                  _themeColor(AppThemeKeys.mainButtonTextColor),
+                                  _themeColor(AppThemeKeys.mainButtonBgColor),
+                                  borderColor: _themeColor(AppThemeKeys.mainButtonBgColor),
+                                ),
                               ),
-                            ),),
+                            ),
                             SizedBox(width: ScreenUtil().setWidth(30.0)),
-                            Expanded(child: SizedBox(
-                              width: double.infinity,
-                              height: ScreenUtil().setWidth(88.0),
-                              child: buttonStyle2(context, ()async{
-                                bool r=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletSecurityVerification()));
-                                if (!context.mounted) return;
-                                if(r){
-                                  Navigator.pop(context,true);
-                                }
-                              }, S.of(context).g_key_t_31),
-                            ),),
+                            Expanded(
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: ScreenUtil().setWidth(88.0),
+                                child: buttonStyle2(context, () async {
+                                  final r = await Navigator.push<bool>(
+                                    context,
+                                    MaterialPageRoute(builder: (_) => WalletSecurityVerification()),
+                                  );
+                                  if (!context.mounted) return;
+                                  if (r == true) Navigator.pop(context, true);
+                                }, S.of(context).g_key_t_31),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -350,7 +336,6 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     );
   }
 
-  /// 构建地址标签（支持 ENS 显示）
   Widget _buildAddressLabel(String title, String address) {
     final su = ScreenUtil();
     return Container(
@@ -379,7 +364,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     );
   }
 
-  Widget tapLabelWidget(String title,String value,{bool copy=false}){
+  Widget tapLabelWidget(String title, String value, {bool copy = false}) {
     final su = ScreenUtil();
     return Container(
       margin: EdgeInsets.symmetric(vertical: su.setWidth(16.0)),
@@ -405,12 +390,12 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                   ),
                 ),
               ),
-              if(copy)
+              if (copy)
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     ToastUtils.init(context);
                     Clipboard.setData(ClipboardData(text: value));
-                    ToastUtils.showFtToast(child:successViewV1(S.of(context).copy),duration: 3);
+                    ToastUtils.showFtToast(child: successViewV1(S.of(context).copy), duration: 3);
                   },
                   child: Container(
                     margin: EdgeInsets.only(left: su.setWidth(20.0)),

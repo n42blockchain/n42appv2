@@ -114,12 +114,33 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
 
   Future<void> getTransactionDataNetworkEth(
       List<CommonResponseItemModel>? cril) async {
+    await _syncCommonTxRecords(cril, isEth: true);
+  }
+
+  Future<void> getTransactionDataNetworkTrx(
+      List<CommonResponseItemModel>? cril) async {
+    await _syncCommonTxRecords(cril, isEth: false);
+  }
+
+  /// Shared sync logic for ETH and TRX transaction records.
+  Future<void> _syncCommonTxRecords(
+    List<CommonResponseItemModel>? cril, {
+    required bool isEth,
+  }) async {
     if (cril == null) return;
     final coinModel = getCoinModel();
     bool isEdit = false;
 
     for (int i = cril.length - 1; i >= 0; i--) {
       final cri = cril[i];
+
+      // TRX: skip records whose contract doesn't match
+      if (!isEth &&
+          coinModel.coin['contract'].toString().toUpperCase() !=
+              (cri.contractAddress ?? '').toUpperCase()) {
+        continue;
+      }
+
       final rtrm = await db.selectTransationRecordTxHash(
           cri.hash ?? '0x', coinModel.address);
       if (!mounted) return;
@@ -129,50 +150,21 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
         final trm = _buildTxRecord(coinModel, cri, hash);
         trm.nonce = cri.nonce;
 
-        if (trm.contract == '') {
+        // ETH: decode input data as message for native transfers
+        if (isEth && trm.contract == '') {
           String input = cri.input ?? '0x';
           if (input == '0x') {
             input = '';
           } else {
             try {
               input = utf8.decode(hexToBytes(input));
-            } catch (e) {
+            } catch (_) {
               input = '';
             }
           }
           trm.message = input;
         }
-        await db.insertTransationRecord(trm);
-        isEdit = true;
-      } else {
-        if (await _updateTxTimeIfChanged(rtrm[0], cri.timeStamp ?? '0')) {
-          isEdit = true;
-        }
-      }
-    }
-    if (isEdit) getTransactionData(Load.refresh);
-  }
 
-  Future<void> getTransactionDataNetworkTrx(
-      List<CommonResponseItemModel>? cril) async {
-    if (cril == null) return;
-    final coinModel = getCoinModel();
-    bool isEdit = false;
-
-    for (int i = cril.length - 1; i >= 0; i--) {
-      final cri = cril[i];
-      if (coinModel.coin['contract'].toString().toUpperCase() !=
-          (cri.contractAddress ?? '').toUpperCase()) {
-        continue;
-      }
-      final rtrm = await db.selectTransationRecordTxHash(
-          cri.hash ?? '0x', coinModel.address);
-      if (!mounted) return;
-
-      if (rtrm.isEmpty) {
-        final hash = cri.hash ?? '';
-        final trm = _buildTxRecord(coinModel, cri, hash);
-        trm.nonce = cri.nonce;
         await db.insertTransationRecord(trm);
         isEdit = true;
       } else {
@@ -388,9 +380,6 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
     setState(() {});
   }
 
-  // ── 辅助方法 ─────────────────────────────────────────────────────────────
-
-  /// 构建通用的 TransationRecordModel（ETH / TRX / Generic 共用字段填充）
   TransationRecordModel _buildTxRecord(
     dynamic coinModel,
     CommonResponseItemModel cri,
@@ -417,7 +406,6 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
     return trm;
   }
 
-  /// 更新已有交易记录的时间戳（如果不同）
   Future<bool> _updateTxTimeIfChanged(
     TransationRecordModel trm,
     String newTime,

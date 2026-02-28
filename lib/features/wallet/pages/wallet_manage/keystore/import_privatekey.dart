@@ -35,29 +35,19 @@ class ImportPrivatekey extends ConsumerStatefulWidget {
 
 class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
   final _keystoreController = TextEditingController();
-  Load load=Load.finish;
-  String errorMessage="";
-  Map<String,dynamic> selectChain=allChainUrlMap[CoinType.N.name];
+  Load load = Load.finish;
+  String errorMessage = "";
+  Map<String, dynamic> selectChain = allChainUrlMap[CoinType.N.name];
 
-  /// 显示错误消息的辅助方法
   void _showError(String message) {
     errorMessage = message;
     setState(() {});
     ToastUtils.show(errorMessage);
   }
 
-  /// Enhanced private key validation
-  ///
-  /// Security features:
-  /// - Format validation (hex, WIF, base58)
-  /// - Length validation
-  /// - WIF checksum verification
-  /// - Post-import public key generation verification
   Future<MessageModel> checkPraviteKey(String pk) async {
-    MessageModel mm = MessageModel();
+    final mm = MessageModel();
     final invalidKeyMsg = S.of(context).g_key_210;
-
-    // Layer 1: Trim whitespace
     pk = pk.trim();
 
     MessageModel invalidKey() {
@@ -66,40 +56,29 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
       return mm;
     }
 
-    // Layer 2: Format and length validation
     if (pk.length == 66) {
-      // Hex format with 0x prefix
       if (pk.substring(0, 2).toLowerCase() != "0x") return invalidKey();
       if (!Regular().regularHex(pk)) return invalidKey();
     } else if (pk.length == 64) {
-      // Hex format without prefix
       if (!Regular().regularHex(pk)) return invalidKey();
     } else if (pk.length == 51 || pk.length == 52) {
-      // WIF format (Bitcoin)
       if (!Regular().regularBase58(pk)) return invalidKey();
-      // Layer 3: WIF checksum verification
-      mm = decodeWIF(pk);
-      if (mm.error) {
-        mm.data = 'Invalid WIF checksum';
-        return mm;
+      final wifResult = decodeWIF(pk);
+      if (wifResult.error) {
+        wifResult.data = 'Invalid WIF checksum';
+        return wifResult;
       }
-      // Verify the decoded key can generate valid address
-      final verifyResult = await _verifyPrivateKeyCanGenerateAddress(mm.data);
-      if (!verifyResult) {
-        mm.error = true;
-        mm.data = 'Private key cannot generate valid address';
+      if (!await _verifyPrivateKeyCanGenerateAddress(wifResult.data)) {
+        wifResult.error = true;
+        wifResult.data = 'Private key cannot generate valid address';
       }
-      return mm;
+      return wifResult;
     } else {
-      // Base58 format
       if (!Regular().regularBase58(pk)) return invalidKey();
-      mm = decodeBase58(pk);
-      return mm;
+      return decodeBase58(pk);
     }
 
-    // Layer 4: Verify the key can generate a valid public key
-    final verifyResult = await _verifyPrivateKeyCanGenerateAddress(pk);
-    if (!verifyResult) {
+    if (!await _verifyPrivateKeyCanGenerateAddress(pk)) {
       mm.error = true;
       mm.data = 'Private key cannot generate valid address';
       return mm;
@@ -109,13 +88,9 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
     return mm;
   }
 
-  /// Verify that a private key can generate a valid address
-  ///
-  /// This is a critical security check to ensure the imported key is valid
   Future<bool> _verifyPrivateKeyCanGenerateAddress(String privateKey) async {
     try {
-      // Try to generate an address using the private key
-      Map<Object?, Object?> rm = await Trustdart().generateAddress(
+      final rm = await Trustdart().generateAddress(
         CoinType.N.name,
         selectChain['baseInfo']['path'][selectChain['addrType']],
         selectChain['addrType'],
@@ -123,61 +98,46 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
         pk: privateKey,
         isImport: true,
       );
-
-      // Check if valid address was generated
       final address = rm['legacy'];
-      if (address == null || address.toString().isEmpty) {
-        return false;
-      }
-
-      // Additional validation: verify address format
-      final isValid = await Trustdart().validateAddress(
+      if (address == null || address.toString().isEmpty) return false;
+      return await Trustdart().validateAddress(
         selectChain['baseInfo']['mKey'] ?? CoinType.N.name,
         address.toString(),
       );
-
-      return isValid;
     } catch (e) {
       debugPrint('Private key verification failed: $e');
       return false;
     }
   }
+
   Uint8List sha256Twice(Uint8List data) {
     final first = sha256.convert(data).bytes;
     final second = sha256.convert(first).bytes;
     return Uint8List.fromList(second);
   }
-  MessageModel decodeBase58(String bs58){
-    MessageModel mm=MessageModel();
+
+  MessageModel decodeBase58(String bs58) {
+    final mm = MessageModel();
     final decoded = Uint8List.fromList(fast.Base58Decode(bs58));
-    mm.data=bytesToHex(decoded);
+    mm.data = bytesToHex(decoded);
     return mm;
   }
+
   MessageModel decodeWIF(String wif) {
-    MessageModel mm=MessageModel();
+    final mm = MessageModel();
     final decoded = Uint8List.fromList(fast.Base58Decode(wif));
-    if (decoded.length < 37) {
-      mm.error=true;
-      return mm;
-    }
+    if (decoded.length < 37) return mm..error = true;
 
     final payload = decoded.sublist(0, decoded.length - 4);
     final checksum = decoded.sublist(decoded.length - 4);
     final calculatedChecksum = sha256Twice(payload).sublist(0, 4);
 
-    if (!listEquals(checksum, calculatedChecksum)) {
-      mm.error=true;
-      return mm;
-    }
-
-    if (payload[0] != 0x80) {
-      mm.error=true;
-      return mm;
-    }
+    if (!listEquals(checksum, calculatedChecksum)) return mm..error = true;
+    if (payload[0] != 0x80) return mm..error = true;
 
     final isCompressed = payload.length == 34 && payload.last == 0x01;
     final privateKey = isCompressed ? payload.sublist(1, 33) : payload.sublist(1);
-    mm.data=bytesToHex(privateKey);
+    mm.data = bytesToHex(privateKey);
     return mm;
   }
 
@@ -188,6 +148,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
     }
     return true;
   }
+
   @override
   void dispose() {
     _keystoreController.dispose();
@@ -222,7 +183,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                           ),
                         ),
                         InkWell(
-                          onTap: ()async{
+                          onTap: () async {
                             final data = await Clipboard.getData(Clipboard.kTextPlain);
                             if (!mounted) return;
                             final text = data?.text;
@@ -254,10 +215,9 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                       context,
                       height: ScreenUtil().setWidth(440),
                       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
-                      margin: EdgeInsets.symmetric( vertical: ScreenUtil().setWidth(20)),
+                      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
                       child: CommInput(
                         type: InputFieldType.account,
-                        //"Keystore json文件内容"
                         hintText: S.of(context).g_key_209,
                         controller: _keystoreController,
                         maxLines: 30,
@@ -279,13 +239,13 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                     containerStyle1(
                       context,
                       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-                        margin: EdgeInsets.symmetric( vertical: ScreenUtil().setWidth(20)),
+                      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
                       child: Row(
                         children: [
                           Container(
                             width: ScreenUtil().setWidth(60),
                             height: ScreenUtil().setWidth(60),
-                            margin: EdgeInsets.only(right:ScreenUtil().setWidth(20)),
+                            margin: EdgeInsets.only(right: ScreenUtil().setWidth(20)),
                             child: ImageNetWork(imageUrl: selectChain['baseInfo']['icon']),
                           ),
                           Expanded(
@@ -312,7 +272,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                           Container(
                             width: ScreenUtil().setWidth(30),
                             height: ScreenUtil().setWidth(30),
-                            margin: EdgeInsets.only(left:ScreenUtil().setWidth(20)),
+                            margin: EdgeInsets.only(left: ScreenUtil().setWidth(20)),
                             child: Icon(
                               Icons.arrow_forward_ios,
                               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
@@ -321,17 +281,16 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                           ),
                         ],
                       ),
-                      onTap: ()async{
-                        Map<String,dynamic>? rData=await Navigator.push(context, MaterialPageRoute(builder: (context)=>ChooseImportCoin(selectChain: selectChain,)));
-                        if (!mounted) return;
-                        if(rData !=null){
-                          setState(() {
-                            selectChain=rData;
-                          });
-                        }
+                      onTap: () async {
+                        final rData = await Navigator.push<Map<String, dynamic>>(
+                          context,
+                          MaterialPageRoute(builder: (_) => ChooseImportCoin(selectChain: selectChain)),
+                        );
+                        if (!mounted || rData == null) return;
+                        setState(() => selectChain = rData);
                       }
                     ),
-                    if(errorMessage !="")
+                    if (errorMessage != "")
                       Container(
                         alignment: Alignment.center,
                         padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
@@ -372,22 +331,21 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                     child: buttonStyle6(
                         context,
                             () async {
-                          if(load==Load.loading)return;
+                          if (load == Load.loading) return;
                           FocusScope.of(context).requestFocus(FocusNode());
                           String keystoreJson = _keystoreController.text.trim();
-
                           if (keystoreJson.isEmpty) {
                             _showError(S.of(context).g_key_210);
                             return;
                           }
-                          MessageModel mm=await checkPraviteKey(keystoreJson);
+                          final mm = await checkPraviteKey(keystoreJson);
                           if (!mounted) return;
-                          if(mm.error){
+                          if (mm.error) {
                             _showError(S.of(context).g_key_210);
                             return;
                           }
-                          keystoreJson=mm.data;
-                          Map<Object?, Object?> rm= await Trustdart().generateAddress(
+                          keystoreJson = mm.data;
+                          final rm = await Trustdart().generateAddress(
                             CoinType.N.name,
                             selectChain['baseInfo']['path'][selectChain['addrType']],
                             selectChain['addrType'],
@@ -396,36 +354,43 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                             isImport: true,
                           );
                           if (!mounted) return;
-                          if(rm['legacy']!=""){
-                            Uint8List ksjByte=hexToBytes(keystoreJson);
-                            String base64Str=base64Encode(ksjByte);
-                            WalletInfo? findWalletInfo=ref.read(wapBridgeProvider).findWallet(pk: base64Str);
-                            if(findWalletInfo != null){
-                              _showError(S.of(context).g_key_214(findWalletInfo.walletName??""));
+                          if (rm['legacy'] != "") {
+                            final ksjByte = hexToBytes(keystoreJson);
+                            final base64Str = base64Encode(ksjByte);
+                            final findWalletInfo = ref.read(wapBridgeProvider).findWallet(pk: base64Str);
+                            if (findWalletInfo != null) {
+                              _showError(S.of(context).g_key_214(findWalletInfo.walletName ?? ""));
                               return;
                             }
-                            WalletInfo wInfo = WalletInfo(
-                                walletName: "",
-                                password: "",
-                                walletUuid: ref.read(wapBridgeProvider).userUUID,
-                                mnemonic: "",
+                            final wInfo = WalletInfo(
+                              walletName: "",
+                              password: "",
+                              walletUuid: ref.read(wapBridgeProvider).userUUID,
+                              mnemonic: "",
                               privateKey: base64Str,
-                              coinInfo: {selectChain['baseInfo']['mKey']:selectChain},
+                              coinInfo: {selectChain['baseInfo']['mKey']: selectChain},
                             );
-                            errorMessage="";
+                            errorMessage = "";
                             setState(() {});
-                            await Navigator.push(context,MaterialPageRoute(
-                                builder: (_) => CreatePassword(wInfo, createMetod: "PrivateKey",)));
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => CreatePassword(wInfo, createMetod: "PrivateKey")),
+                            );
                             if (!mounted) return;
                             Navigator.of(context).pop(true);
-                          }else{
+                          } else {
                             _showError(S.of(context).g_key_210);
                           }
                         },
                         S.of(context).g_key_78,
-                        AppThemeUtils.getColorByKey(context, load==Load.loading?AppThemeKeys.mainButtonBgColor3.name:AppThemeKeys.mainButtonBgColor.name),
+                        AppThemeUtils.getColorByKey(
+                          context,
+                          load == Load.loading
+                              ? AppThemeKeys.mainButtonBgColor3.name
+                              : AppThemeKeys.mainButtonBgColor.name,
+                        ),
                         AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
-                        load==Load.loading),
+                        load == Load.loading),
                   )
                 ],
               ),

@@ -11,7 +11,9 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'market_coin_info_helpers.dart';
 import 'market_coin_info_widgets.dart';
 
-// ─── header ────────────────────────────────────────────────────────────────
+/// Shorthand for theme color lookup used across all section builders.
+Color _tc(BuildContext context, String key) =>
+    AppThemeUtils.getColorByKey(context, key);
 
 Widget buildCoinInfoHeader(
   BuildContext context, {
@@ -21,8 +23,7 @@ Widget buildCoinInfoHeader(
   required VoidCallback onAlertTap,
 }) {
   final alertActive = alertConfig != null && alertConfig.enabled;
-  final textColor = AppThemeUtils.getColorByKey(
-      context, AppThemeKeys.mainTextColor.name);
+  final textColor = _tc(context, AppThemeKeys.mainTextColor.name);
   final iconSize = ScreenUtil().setWidth(44);
   final touchSize = ScreenUtil().setWidth(80);
 
@@ -64,8 +65,7 @@ Widget buildCoinInfoHeader(
             child: Text(
               '(${coin['name'] ?? ''})',
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: _tc(context, AppThemeKeys.itemSubtitleTextColor.name),
                 fontSize: ScreenUtil().setSp(20),
               ),
               maxLines: 1,
@@ -82,8 +82,7 @@ Widget buildCoinInfoHeader(
                     ? Icons.notifications_active_rounded
                     : Icons.notifications_none_rounded,
                 color: alertActive
-                    ? AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainBlueColor.name)
+                    ? _tc(context, AppThemeKeys.mainBlueColor.name)
                     : textColor,
                 size: iconSize,
               ),
@@ -103,11 +102,12 @@ Widget buildCoinPriceSection(
   required double priceChange24h,
   required Regular regular,
 }) {
-  final isUp   = priceChange24h >= 0;
-  final price  = toDouble(coin['price']);
-  final pctKey = isUp
+  final isUp    = priceChange24h >= 0;
+  final price   = toDouble(coin['price']);
+  final pctKey  = isUp
       ? AppThemeKeys.rightTextColor.name
       : AppThemeKeys.errorTextColor.name;
+  final pctColor = _tc(context, pctKey);
 
   return Padding(
     padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
@@ -119,8 +119,7 @@ Widget buildCoinPriceSection(
             style: TextStyle(
               fontSize: ScreenUtil().setSp(44),
               fontWeight: FontWeight.w700,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: _tc(context, AppThemeKeys.mainTextColor.name),
             ),
             maxLines: 2,
           ),
@@ -132,8 +131,7 @@ Widget buildCoinPriceSection(
             vertical: ScreenUtil().setWidth(6),
           ),
           decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(context, pctKey)
-                .withValues(alpha: 0.12),
+            color: pctColor.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
           ),
           child: Text(
@@ -141,7 +139,7 @@ Widget buildCoinPriceSection(
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(context, pctKey),
+              color: pctColor,
             ),
           ),
         ),
@@ -158,13 +156,10 @@ Widget buildPnlCard(
   required Map<String, dynamic> coin,
   required VoidCallback onAddTrade,
 }) {
-  final textColor   = AppThemeUtils.getColorByKey(
-      context, AppThemeKeys.mainTextColor.name);
+  final textColor   = _tc(context, AppThemeKeys.mainTextColor.name);
   final subColor    = textColor.withAlpha(153);
-  final cardBg      = AppThemeUtils.getColorByKey(
-      context, AppThemeKeys.itemBgColor.name);
-  final accentColor = AppThemeUtils.getColorByKey(
-      context, AppThemeKeys.mainBlueColor.name);
+  final cardBg      = _tc(context, AppThemeKeys.itemBgColor.name);
+  final accentColor = _tc(context, AppThemeKeys.mainBlueColor.name);
   final s = S.of(context);
 
   final summary      = CoinPnlSummary(trades);
@@ -255,7 +250,7 @@ Widget buildPeriodSelector(
               padding: EdgeInsets.symmetric(
                   vertical: ScreenUtil().setWidth(12)),
               decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(
+                color: _tc(
                   context,
                   selected
                       ? AppThemeKeys.mainButtonBgColor.name
@@ -273,8 +268,7 @@ Widget buildPeriodSelector(
                       selected ? FontWeight.w600 : FontWeight.w400,
                   color: selected
                       ? Colors.white
-                      : AppThemeUtils.getColorByKey(context,
-                          AppThemeKeys.itemSubtitleTextColor.name),
+                      : _tc(context, AppThemeKeys.itemSubtitleTextColor.name),
                 ),
               ),
             ),
@@ -402,8 +396,7 @@ Widget buildAboutSection(
             top: ScreenUtil().setWidth(24),
           ),
           decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemBgColor.name),
+            color: _tc(context, AppThemeKeys.itemBgColor.name),
             borderRadius: BorderRadius.circular(radius),
           ),
           child: Column(
@@ -412,8 +405,7 @@ Widget buildAboutSection(
                 desc,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(26),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                  color: _tc(context, AppThemeKeys.itemSubtitleTextColor.name),
                   overflow: TextOverflow.ellipsis,
                 ),
                 maxLines: 6,
@@ -432,8 +424,7 @@ Widget buildAboutSection(
                     child: Text(
                       s.g_key_m_7,
                       style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(context,
-                            AppThemeKeys.mainButtonBgColor.name),
+                        color: _tc(context, AppThemeKeys.mainButtonBgColor.name),
                         fontSize: ScreenUtil().setSp(28),
                       ),
                     ),
