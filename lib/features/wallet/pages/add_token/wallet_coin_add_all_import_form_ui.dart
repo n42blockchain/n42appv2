@@ -178,60 +178,46 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
     final double gap = su.setWidth(10);
     final double fontSize = su.setSp(24);
 
-    Widget content;
-    switch (_contractState) {
-      case 'loading':
-        content = Row(
-          children: [
-            SizedBox(
-              width: su.setWidth(24),
-              height: su.setWidth(24),
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: _formColor(AppThemeKeys.mainBlueColor.name),
-              ),
+    final content = switch (_contractState) {
+      'loading' => Row(children: [
+          SizedBox(
+            width: su.setWidth(24),
+            height: su.setWidth(24),
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: _formColor(AppThemeKeys.mainBlueColor.name),
             ),
-            SizedBox(width: su.setWidth(12)),
-            Text(
-              'Looking up token info…',
-              style: TextStyle(
-                fontSize: fontSize,
-                color: _formColor(AppThemeKeys.itemSubtitleTextColor.name),
-              ),
+          ),
+          SizedBox(width: su.setWidth(12)),
+          Text(
+            'Looking up token info…',
+            style: TextStyle(
+              fontSize: fontSize,
+              color: _formColor(AppThemeKeys.itemSubtitleTextColor.name),
             ),
-          ],
-        );
-      case 'found':
-        content = Row(
-          children: [
-            Icon(Icons.check_circle_outline,
-                color: Colors.green, size: iconSize),
-            SizedBox(width: gap),
-            Expanded(
-              child: Text(
-                'Token found: $_contractHint',
-                style: TextStyle(fontSize: fontSize, color: Colors.green),
-              ),
-            ),
-          ],
-        );
-      case 'notFound':
-        final Color orange = _formColor(AppThemeKeys.textColorOrange.name);
-        content = Row(
-          children: [
+          ),
+        ]),
+      'found' => Row(children: [
+          Icon(Icons.check_circle_outline, color: Colors.green, size: iconSize),
+          SizedBox(width: gap),
+          Expanded(child: Text(
+            'Token found: $_contractHint',
+            style: TextStyle(fontSize: fontSize, color: Colors.green),
+          )),
+        ]),
+      'notFound' => () {
+          final orange = _formColor(AppThemeKeys.textColorOrange.name);
+          return Row(children: [
             Icon(Icons.info_outline, color: orange, size: iconSize),
             SizedBox(width: gap),
-            Expanded(
-              child: Text(
-                'Token not found in list — fill symbol & decimals manually',
-                style: TextStyle(fontSize: fontSize, color: orange),
-              ),
-            ),
-          ],
-        );
-      default:
-        content = const SizedBox.shrink();
-    }
+            Expanded(child: Text(
+              'Token not found in list — fill symbol & decimals manually',
+              style: TextStyle(fontSize: fontSize, color: orange),
+            )),
+          ]);
+        }(),
+      _ => const SizedBox.shrink(),
+    };
 
     return Padding(
       padding: EdgeInsets.only(top: su.setWidth(12)),

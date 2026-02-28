@@ -119,18 +119,17 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
     if (!mounted) return;
 
     nav.pop();
+    final messenger = ScaffoldMessenger.of(context);
     if (result.error) {
-      // 通过外部 ScaffoldMessenger 显示错误，需返回 error 信息
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(result.data?.toString() ?? errorFallback),
-          backgroundColor: Colors.red,
-        ),
-      );
+      messenger.showSnackBar(SnackBar(
+        content: Text(result.data?.toString() ?? errorFallback),
+        backgroundColor: Colors.red,
+      ));
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(successMsg), backgroundColor: Colors.green),
-      );
+      messenger.showSnackBar(SnackBar(
+        content: Text(successMsg),
+        backgroundColor: Colors.green,
+      ));
       widget.onCreated();
     }
   }
@@ -183,20 +182,18 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
   Widget _buildPreview(BuildContext context) {
     final label = _labelController.text.trim();
     if (label.isEmpty) return const SizedBox.shrink();
+    final su = ScreenUtil();
     return Container(
-      margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-      padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(16),
-        vertical: ScreenUtil().setWidth(10),
-      ),
+      margin: EdgeInsets.only(bottom: su.setWidth(12)),
+      padding: EdgeInsets.symmetric(horizontal: su.setWidth(16), vertical: su.setWidth(10)),
       decoration: BoxDecoration(
         color: widget.domainChain.color.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+        borderRadius: BorderRadius.circular(su.setWidth(10)),
       ),
       child: Text(
         '$label.${widget.parentName}',
         style: TextStyle(
-          fontSize: ScreenUtil().setSp(26),
+          fontSize: su.setSp(26),
           fontWeight: FontWeight.w600,
           color: widget.domainChain.color,
         ),

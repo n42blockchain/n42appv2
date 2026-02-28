@@ -74,44 +74,39 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
     if (value.isEmpty) value = valueCtrl.text;
     final int minValue = widget.coinModel.coin['decimals'] == 0 ? 1 : 0;
 
-    if (value.isEmpty) {
-      amountError = S.of(context).g_key_46(minValue);
-      setState(() {});
-      return;
-    }
-    final bool isInt = _reg.regularNums(value);
-    final bool isDouble = _reg.regularDouble(value);
-    if (!isInt && !isDouble) {
-      amountError = S.of(context).g_key_134;
-      setState(() {});
-      return;
-    }
-    final double dv = double.tryParse(value) ?? 0;
-    if (dv <= 0 || dv < minValue) {
-      amountError = S.of(context).g_key_46(minValue);
+    final String error = _validateAmount(value, minValue);
+    if (error.isNotEmpty) {
+      amountError = error;
       setState(() {});
       return;
     }
 
     final BigInt valueBi =
         ethToWeiString(value, widget.coinModel.coin['decimals'] as int);
-    if (widget.coinModel.coin['isContract'] != true) {
-      if (valueBi + totalGasPrice > widget.coinModel.balance) {
-        amountError = S.of(context).g_key_47;
-        setState(() {});
-        return;
-      }
+    if (widget.coinModel.coin['isContract'] != true &&
+        valueBi + totalGasPrice > widget.coinModel.balance) {
+      amountError = S.of(context).g_key_47;
+      setState(() {});
+      return;
     }
     transferValue = valueBi;
     amountError = '';
     setState(() {});
   }
 
+  String _validateAmount(String value, int minValue) {
+    if (value.isEmpty) return S.of(context).g_key_46(minValue);
+    final bool isNum = _reg.regularNums(value) || _reg.regularDouble(value);
+    if (!isNum) return S.of(context).g_key_134;
+    final double dv = double.tryParse(value) ?? 0;
+    if (dv <= 0 || dv < minValue) return S.of(context).g_key_46(minValue);
+    return '';
+  }
+
   Future<String?> toAddressCheck(String addr) async {
     addr = addr.trim();
     if (addr.isEmpty) {
-      toError = S.current.g_key_41;
-      setState(() {});
+      _setToError(S.current.g_key_41);
       return null;
     }
     // 剥离 "chainName:address" 格式
@@ -121,20 +116,20 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
     final coinType = widget.coinModel.coin['coinType'] as String? ?? '';
     final bool ok = await Trustdart().validateAddress(coinType, addr);
     if (!mounted) return null;
-    if (!ok) {
-      toError = S.current.g_key_t_50;
-      setState(() {});
+
+    final bool isSelfSend = addr.toUpperCase() ==
+        widget.coinModel.address.toString().toUpperCase();
+    if (!ok || isSelfSend) {
+      _setToError(S.current.g_key_t_50);
       return null;
     }
-    if (addr.toUpperCase() ==
-        widget.coinModel.address.toString().toUpperCase()) {
-      toError = S.current.g_key_t_50;
-      setState(() {});
-      return null;
-    }
-    toError = '';
-    setState(() {});
+    _setToError('');
     return addr;
+  }
+
+  void _setToError(String msg) {
+    toError = msg;
+    setState(() {});
   }
 
   Future<void> sendTransaction() async {
@@ -158,12 +153,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
         ? (chainModel?.balance ?? BigInt.zero)
         : widget.coinModel.balance;
 
-    if (totalGasPrice > uBalance) {
-      ToastUtils.show(S.current.g_key_47);
-      setState(() => load = Load.finish);
-      return;
-    }
-    if (widget.coinModel.balance == BigInt.zero) {
+    if (totalGasPrice > uBalance || widget.coinModel.balance == BigInt.zero) {
       ToastUtils.show(S.current.g_key_47);
       setState(() => load = Load.finish);
       return;
@@ -233,7 +223,6 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
       }
     } catch (e) {
       errorMessage = e.toString();
-      // 对于该链暂不支持的情况，展示友好提示
       final friendly = _isFriendlyError(e.toString())
           ? S.current.g_key_chain_transfer_not_supported
           : e.toString();

@@ -89,74 +89,22 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
 
       final client = http.Client();
       try {
-        final gasPriceResponse = await client
-            .post(
-              Uri.parse(rpcUrl),
-              headers: {'Content-Type': 'application/json'},
-              body: jsonEncode(
-                  {'jsonrpc': '2.0', 'method': 'eth_gasPrice', 'params': [], 'id': 1}),
-            )
-            .timeout(const Duration(seconds: 10));
-
-        if (gasPriceResponse.statusCode != 200) return;
-
-        final gasPriceJson = jsonDecode(gasPriceResponse.body);
-        final gasPriceHex = gasPriceJson['result'] as String?;
+        final gasPriceHex = await _rpcCall(client, rpcUrl, 'eth_gasPrice', [], 1);
         if (gasPriceHex == null) return;
 
         final gasPrice = BigInt.parse(gasPriceHex.substring(2), radix: 16);
         final gasPriceGwei = gasPrice.toDouble() / 1e9;
 
-        BigInt? baseFee;
-        BigInt? priorityFee;
-
-        try {
-          final feeHistoryResponse = await client
-              .post(
-                Uri.parse(rpcUrl),
-                headers: {'Content-Type': 'application/json'},
-                body: jsonEncode({
-                  'jsonrpc': '2.0',
-                  'method': 'eth_feeHistory',
-                  'params': [1, 'latest', [25, 50, 75]],
-                  'id': 2,
-                }),
-              )
-              .timeout(const Duration(seconds: 10));
-
-          if (feeHistoryResponse.statusCode == 200) {
-            final result = jsonDecode(feeHistoryResponse.body)['result'];
-            if (result != null) {
-              final baseFeeList = result['baseFeePerGas'] as List?;
-              if (baseFeeList != null && baseFeeList.isNotEmpty) {
-                baseFee = BigInt.parse(
-                    (baseFeeList.last as String).substring(2),
-                    radix: 16);
-              }
-              final rewardList = result['reward'] as List?;
-              if (rewardList != null && rewardList.isNotEmpty) {
-                final rewards = rewardList.first as List;
-                if (rewards.isNotEmpty) {
-                  priorityFee = BigInt.parse(
-                      (rewards[1] as String).substring(2),
-                      radix: 16);
-                }
-              }
-            }
-          }
-        } catch (_) {
-          // EIP-1559 not supported on this network
-        }
+        final eip1559 = await _fetchEip1559(client, rpcUrl);
 
         if (mounted) {
           setState(() {
             _gasData[network.symbol] = NetworkGasData(
               gasPrice: gasPriceGwei,
-              baseFee: baseFee != null ? baseFee.toDouble() / 1e9 : null,
-              priorityFee: priorityFee != null ? priorityFee.toDouble() / 1e9 : null,
+              baseFee: eip1559.$1 != null ? eip1559.$1!.toDouble() / 1e9 : null,
+              priorityFee: eip1559.$2 != null ? eip1559.$2!.toDouble() / 1e9 : null,
               lastUpdated: DateTime.now(),
             );
-            // 追加到历史，保持最多 60 条
             final hist = _history.putIfAbsent(network.symbol, () => []);
             hist.add(gasPriceGwei);
             if (hist.length > 60) hist.removeAt(0);
@@ -167,6 +115,63 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
       }
     } catch (e) {
       debugPrint('Failed to fetch gas for ${network.symbol}: $e');
+    }
+  }
+
+  /// Makes a JSON-RPC call and returns the 'result' string, or null on failure.
+  Future<String?> _rpcCall(
+    http.Client client, String url, String method, List<dynamic> params, int id,
+  ) async {
+    final response = await client
+        .post(
+          Uri.parse(url),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({'jsonrpc': '2.0', 'method': method, 'params': params, 'id': id}),
+        )
+        .timeout(const Duration(seconds: 10));
+    if (response.statusCode != 200) return null;
+    return jsonDecode(response.body)['result'] as String?;
+  }
+
+  /// Fetches EIP-1559 base fee and priority fee; returns (null, null) if unsupported.
+  Future<(BigInt?, BigInt?)> _fetchEip1559(http.Client client, String rpcUrl) async {
+    try {
+      final response = await client
+          .post(
+            Uri.parse(rpcUrl),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              'jsonrpc': '2.0',
+              'method': 'eth_feeHistory',
+              'params': [1, 'latest', [25, 50, 75]],
+              'id': 2,
+            }),
+          )
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode != 200) return (null, null);
+
+      final result = jsonDecode(response.body)['result'];
+      if (result == null) return (null, null);
+
+      BigInt? baseFee;
+      final baseFeeList = result['baseFeePerGas'] as List?;
+      if (baseFeeList != null && baseFeeList.isNotEmpty) {
+        baseFee = BigInt.parse((baseFeeList.last as String).substring(2), radix: 16);
+      }
+
+      BigInt? priorityFee;
+      final rewardList = result['reward'] as List?;
+      if (rewardList != null && rewardList.isNotEmpty) {
+        final rewards = rewardList.first as List;
+        if (rewards.length > 1) {
+          priorityFee = BigInt.parse((rewards[1] as String).substring(2), radix: 16);
+        }
+      }
+
+      return (baseFee, priorityFee);
+    } catch (_) {
+      return (null, null);
     }
   }
 

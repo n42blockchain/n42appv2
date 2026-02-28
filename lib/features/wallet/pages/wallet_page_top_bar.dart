@@ -69,40 +69,40 @@ class _WalletTitleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final blueColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name);
+    final su = ScreenUtil();
     return InkWell(
       onTap: onTap,
       child: SizedBox(
-        height: ScreenUtil().setWidth(60),
+        height: su.setWidth(60),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (isWatchOnly)
               Padding(
-                padding: EdgeInsets.only(right: ScreenUtil().setWidth(6)),
+                padding: EdgeInsets.only(right: su.setWidth(6)),
                 child: Icon(
                   Icons.visibility_outlined,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
-                  size: ScreenUtil().setWidth(28),
+                  color: blueColor,
+                  size: su.setWidth(28),
                 ),
               ),
             Text(
               walletName,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-                fontSize: ScreenUtil().setSp(30),
+                color: blueColor,
+                fontSize: su.setSp(30),
                 fontWeight: FontWeight.bold,
               ),
             ),
             SizedBox(
-              height: ScreenUtil().setWidth(40),
-              width: ScreenUtil().setWidth(40),
+              height: su.setWidth(40),
+              width: su.setWidth(40),
               child: Icon(
                 Icons.arrow_drop_down,
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-                size: ScreenUtil().setWidth(40),
+                color: blueColor,
+                size: su.setWidth(40),
               ),
             ),
           ],
@@ -125,16 +125,17 @@ class _QrCodeMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final su = ScreenUtil();
     return PopupMenuButton<int>(
       icon: Icon(
         Icons.qr_code_rounded,
-        size: ScreenUtil().setWidth(52.0),
+        size: su.setWidth(52.0),
         color: AppThemeUtils.getColorByKey(
             context, AppThemeKeys.mainBlueColor.name),
       ),
-      offset: Offset(0, ScreenUtil().setWidth(80)),
+      offset: Offset(0, su.setWidth(80)),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: BorderRadius.circular(su.setWidth(16)),
       ),
       color: AppThemeUtils.getColorByKey(
           context, AppThemeKeys.itemBgColor.name),
@@ -144,18 +145,8 @@ class _QrCodeMenu extends StatelessWidget {
         _ => null,
       },
       itemBuilder: (context) => [
-        _buildMenuItem(
-          context,
-          value: 0,
-          icon: Icons.qr_code_scanner,
-          label: S.of(context).g_key_4,
-        ),
-        _buildMenuItem(
-          context,
-          value: 1,
-          icon: Icons.qr_code,
-          label: S.of(context).g_key_33,
-        ),
+        _buildMenuItem(context, value: 0, icon: Icons.qr_code_scanner, label: S.of(context).g_key_4),
+        _buildMenuItem(context, value: 1, icon: Icons.qr_code, label: S.of(context).g_key_33),
       ],
     );
   }

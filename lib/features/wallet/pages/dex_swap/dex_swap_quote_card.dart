@@ -38,12 +38,11 @@ class DexQuoteCard extends StatelessWidget {
 
   // ── Derived values ──────────────────────────────────────────────────────
 
-  Color _impactColor(BuildContext context) {
-    final num = quote.priceImpactNum;
-    if (num >= 3.0) return _colorRed;
-    if (num >= 1.0) return _colorOrange;
-    return AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-  }
+  Color _impactColor(BuildContext context) => switch (quote.priceImpactNum) {
+    >= 3.0 => _colorRed,
+    >= 1.0 => _colorOrange,
+    _      => AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+  };
 
   // ── Build ───────────────────────────────────────────────────────────────
 
@@ -236,8 +235,6 @@ class DexQuoteCard extends StatelessWidget {
     );
   }
 
-  // ── Row helpers ─────────────────────────────────────────────────────────
-
   Widget _rowWidget(
     BuildContext context,
     String label,
@@ -261,7 +258,7 @@ class DexQuoteCard extends StatelessWidget {
             SizedBox(width: ScreenUtil().setWidth(8)),
             trailing,
           ],
-          const Expanded(child: SizedBox()),
+          const Spacer(),
           Text(
             value,
             style: TextStyle(

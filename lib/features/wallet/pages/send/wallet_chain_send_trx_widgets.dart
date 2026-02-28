@@ -7,6 +7,8 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
   Color _themeColor(AppThemeKeys key) =>
       AppThemeUtils.getColorByKey(context, key.name);
 
+  double get _sp28 => ScreenUtil().setSp(28.0);
+
   Widget toWidget() {
     final sw = ScreenUtil().setWidth;
     return Container(
@@ -18,7 +20,7 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
             S.of(context).g_key_38,
             style: TextStyle(
               color: _themeColor(AppThemeKeys.mainTextColor),
-              fontSize: ScreenUtil().setSp(28.0),
+              fontSize: _sp28,
             ),
           ),
           SizedBox(height: sw(20.0)),
@@ -68,7 +70,7 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
             S.of(context).g_key_wallet_k58,
             style: TextStyle(
               color: _themeColor(AppThemeKeys.mainTextColor),
-              fontSize: ScreenUtil().setSp(28.0),
+              fontSize: _sp28,
             ),
           ),
           SizedBox(height: sw(20.0)),
@@ -115,7 +117,7 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
                 S.of(context).g_key_44,
                 style: TextStyle(
                   color: _themeColor(AppThemeKeys.mainTextColor),
-                  fontSize: ScreenUtil().setSp(28.0),
+                  fontSize: _sp28,
                 ),
               ),
               SizedBox(width: sw(20.0)),
@@ -202,7 +204,7 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
       '${widget.coinModel.balanceStringAll()} $unit',
       style: TextStyle(
         color: _themeColor(AppThemeKeys.mainTextColor),
-        fontSize: ScreenUtil().setSp(28.0),
+        fontSize: _sp28,
       ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
@@ -249,14 +251,14 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
                   S.of(context).g_key_29,
                   style: TextStyle(
                     color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-                    fontSize: ScreenUtil().setSp(28.0),
+                    fontSize: _sp28,
                   ),
                 ),
                 Text(
                   '${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}',
                   style: TextStyle(
                     color: _themeColor(AppThemeKeys.mainButtonBgColor),
-                    fontSize: ScreenUtil().setSp(28.0),
+                    fontSize: _sp28,
                   ),
                 ),
               ],

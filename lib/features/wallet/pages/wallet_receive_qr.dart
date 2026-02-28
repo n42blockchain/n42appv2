@@ -56,29 +56,18 @@ String _buildQrData({
   final trimmed = amount.trim();
   if (trimmed.isEmpty) return address;
 
-  switch (blockchainType) {
-    case 'Ethereum':
-      // EIP-681: ethereum:<address>?value=<wei_amount>
-      return 'ethereum:$address?value=$trimmed';
-    case 'Bitcoin':
-      // BIP-21: bitcoin:<address>?amount=<btc>
-      return 'bitcoin:$address?amount=$trimmed';
-    case 'Solana':
-      // Solana Pay: solana:<address>?amount=<sol>
-      return 'solana:$address?amount=$trimmed';
-    case 'TheOpenNetwork':
-      return 'ton:transfer/$address?amount=$trimmed';
-    case 'Tron':
-      return 'tron:$address?amount=$trimmed';
-    case 'Ripple':
-      return 'xrpl:$address?amount=$trimmed';
-    case 'Cosmos':
-      return 'cosmos:$address?amount=$trimmed';
-    case 'Near':
-      return 'near:$address?amount=$trimmed';
-    default:
-      return '$address?amount=$trimmed';
-  }
+  final prefix = switch (blockchainType) {
+    'Ethereum'       => 'ethereum:$address?value=',
+    'Bitcoin'        => 'bitcoin:$address?amount=',
+    'Solana'         => 'solana:$address?amount=',
+    'TheOpenNetwork' => 'ton:transfer/$address?amount=',
+    'Tron'           => 'tron:$address?amount=',
+    'Ripple'         => 'xrpl:$address?amount=',
+    'Cosmos'         => 'cosmos:$address?amount=',
+    'Near'           => 'near:$address?amount=',
+    _                => '$address?amount=',
+  };
+  return '$prefix$trimmed';
 }
 
 // ─── Widget ───────────────────────────────────────────────────────────────────
