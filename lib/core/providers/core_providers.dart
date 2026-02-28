@@ -121,40 +121,6 @@ final appLoadStateProvider = StateProvider<Load>((ref) => Load.loading);
 final appInitializedProvider = StateProvider<bool>((ref) => false);
 
 // ============================================
-// Chat Mode Provider
-// ============================================
-
-/// Use New Chat Provider (N42 Chat)
-final useNewChatProvider = StateNotifierProvider<UseNewChatNotifier, bool>((ref) {
-  return UseNewChatNotifier(ref.watch(spUtilProvider));
-});
-
-class UseNewChatNotifier extends StateNotifier<bool> {
-  final SPUtil _spUtil;
-
-  UseNewChatNotifier(this._spUtil) : super(true) {
-    _loadFromStorage();
-  }
-
-  Future<void> _loadFromStorage() async {
-    final useNewChat = await _spUtil.getUseNewChat();
-    if (!mounted) return;
-    state = useNewChat;
-  }
-
-  Future<void> setUseNewChat(bool value) async {
-    if (!mounted) return;
-    state = value;
-    await _spUtil.setUseNewChat(value);
-  }
-
-  void toggle() {
-    if (!mounted) return;
-    setUseNewChat(!state);
-  }
-}
-
-// ============================================
 // App Initialization Provider
 // ============================================
 

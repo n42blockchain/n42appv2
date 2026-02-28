@@ -118,19 +118,6 @@ class AppConfig {
     // 1inch Swap
     'swap1inch': 'https://api.1inch.dev/',
     
-    // IM (Instant Messaging) API
-    'imHttpHost': {
-      'main': 'https://5.161.249.184:10001', // TODO(production): Replace with domain name
-      'test': 'https://5.78.28.90:9394', // TODO(production): Replace with domain name
-    },
-
-    // IM WebSocket
-    // TODO(production): Upgrade ws:// to wss:// and replace IPs with domain names
-    'imWsHost': {
-      'main': 'ws://5.161.249.184:10002', // TODO(production): Upgrade to wss:// with domain name
-      'test': 'ws://5.78.28.90:9395', // TODO(production): Upgrade to wss:// with domain name
-    },
-    
     // Block Explorer API
     'blockBrowserHost': {
       'main': 'https://mainnet.n42.world',
@@ -200,23 +187,10 @@ class AppConfig {
 
     final warnings = <String>[];
 
-    // 检查 IM WebSocket — 主网使用明文 ws://
-    final imWsMain = (apiUrl['imWsHost'] as Map)['main'] as String;
-    if (imWsMain.startsWith('ws://')) {
-      warnings.add('imWsHost.main uses unencrypted ws:// ($imWsMain) — upgrade to wss://');
-    }
-
     // 检查 Mining WebSocket
     if (miningWebSocketUrl.startsWith('ws://')) {
       warnings.add('miningWebSocketUrl uses unencrypted ws:// ($miningWebSocketUrl)'
           ' — override via --dart-define=MINING_WS_URL=wss://...');
-    }
-
-    // 检查 IM HTTP 主网是否使用裸 IP
-    final imHttpMain = (apiUrl['imHttpHost'] as Map)['main'] as String;
-    if (RegExp(r'https?://\d+\.\d+\.\d+\.\d+').hasMatch(imHttpMain)) {
-      warnings.add('imHttpHost.main uses bare IP ($imHttpMain)'
-          ' — replace with a domain name backed by a valid TLS certificate');
     }
 
     if (warnings.isNotEmpty) {

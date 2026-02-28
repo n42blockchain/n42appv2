@@ -53,27 +53,13 @@ class ServiceLocatorSetup {
     serviceLocator.registerSingleton<IMiningService>(service);
   }
 
-  /// Register chat crypto service implementation
-  ///
-  /// Called by Chat feature during its initialization.
-  static void registerChatCryptoService(IChatCryptoService service) {
-    if (serviceLocator.isRegistered<IChatCryptoService>()) {
-      serviceLocator.unregister<IChatCryptoService>();
-    }
-    serviceLocator.registerSingleton<IChatCryptoService>(service);
-  }
-
   /// Check if wallet service is available
-  static bool get hasWalletService => 
+  static bool get hasWalletService =>
       serviceLocator.isRegistered<IWalletService>();
 
   /// Check if mining service is available
-  static bool get hasMiningService => 
+  static bool get hasMiningService =>
       serviceLocator.isRegistered<IMiningService>();
-
-  /// Check if chat crypto service is available
-  static bool get hasChatCryptoService => 
-      serviceLocator.isRegistered<IChatCryptoService>();
 
   /// Get wallet service (null-safe)
   static IWalletService? get walletService {
@@ -85,12 +71,6 @@ class ServiceLocatorSetup {
   static IMiningService? get miningService {
     if (!hasMiningService) return null;
     return serviceLocator<IMiningService>();
-  }
-
-  /// Get chat crypto service (null-safe)
-  static IChatCryptoService? get chatCryptoService {
-    if (!hasChatCryptoService) return null;
-    return serviceLocator<IChatCryptoService>();
   }
 
   /// Reset for testing
@@ -107,8 +87,5 @@ extension ServiceLocatorExtensions on GetIt {
 
   /// Get mining service
   IMiningService get miningService => get<IMiningService>();
-
-  /// Get chat crypto service
-  IChatCryptoService get chatCryptoService => get<IChatCryptoService>();
 }
 

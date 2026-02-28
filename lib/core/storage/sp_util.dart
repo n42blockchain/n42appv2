@@ -223,17 +223,6 @@ class SPUtil {
     await prefs?.remove(SPkey.lockPausedAt.name);
   }
 
-  // 是否使用新聊天模块 (N42 Chat)
-  Future<void> setUseNewChat(bool value) async {
-    await initPrefs();
-    await prefs?.setBool(SPkey.useNewChat.name, value);
-  }
-
-  Future<bool> getUseNewChat() async {
-    await initPrefs();
-    return prefs?.getBool(SPkey.useNewChat.name) ?? true;
-  }
-
   // 小额资产隐藏开关（< $1 USD 的代币不在资产列表中显示）
   Future<void> setHideSmallAssets(bool value) async {
     await initPrefs();
@@ -422,7 +411,6 @@ enum SPkey {
   showTermsOfService, // 显示服务条款
   miningData, // 挖矿数据（已迁移到 SecureStorage）
   readLoginClause, // 是否阅读登录条款
-  useNewChat, // 是否使用新聊天模块
   hideSmallAssets, // 小额资产隐藏（< $1 USD）
   coinSearchHistory, // 资产搜索历史记录（最近 10 条关键词）
   recentSendAddresses, // 最近转账地址 JSON：Map<coinType, List<{address,name?,time}>>

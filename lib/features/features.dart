@@ -10,7 +10,6 @@
 // Re-exports all feature modules for convenient importing.
 
 export 'wallet/wallet.dart';
-export 'chat/chat.dart';
 export 'mining/mining.dart';
 export 'browser/browser.dart';
 export 'auth/auth.dart';
