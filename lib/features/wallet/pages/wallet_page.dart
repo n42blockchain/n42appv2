@@ -185,33 +185,30 @@ class _WalletPageState extends ConsumerState<WalletPage> {
     }
 
     final scanStr = await _scan();
-    if (!mounted) return;
+    if (!mounted || scanStr.isEmpty) return;
 
     if (scanStr.contains('relay-protocol') && scanStr.contains('symKey')) {
       await _pushAndRefreshWc(WalletConnectPage(scanStr), wcp);
       return;
     }
 
-    if (scanStr.isEmpty) return;
     final idx = scanStr.indexOf(AppConfig.apiUrl['walletamazeBrowser']);
     if (idx == -1) return;
     final params = Uri.parse(scanStr).queryParameters;
-    if (params['type'] == 'payment') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => PaymentPage(
-            params["amount"],
-            params["user"],
-            params["coinType"],
-            params["address"],
-          ),
+    if (params['type'] != 'payment') return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => PaymentPage(
+          params["amount"],
+          params["user"],
+          params["coinType"],
+          params["address"],
         ),
-      );
-    }
+      ),
+    );
   }
 
-  /// push 一个 WC 页面，返回后刷新 provider
   Future<void> _pushAndRefreshWc(Widget page, dynamic wcp) async {
     await Navigator.push(
       context,
@@ -231,8 +228,8 @@ class _WalletPageState extends ConsumerState<WalletPage> {
 
   // ── WalletBoard callbacks ─────────────────────────────────────────────────
 
-  /// 通用操作守卫：watchOnly 拦截 + 无密码引导备份。
-  /// 返回 true 表示可以继续执行操作。
+  /// Returns true if the action can proceed. Blocks watchOnly wallets
+  /// (unless [blockWatchOnly] is false) and prompts backup for unprotected wallets.
   Future<bool> _guardAction(WalletActionProvider waValue,
       {bool blockWatchOnly = true}) async {
     if (blockWatchOnly && waValue.walletInfo.watchOnly) {
@@ -247,37 +244,29 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   }
 
   Future<void> _onSendTap(WalletActionProvider waValue) async {
-    if (await _guardAction(waValue) && mounted) {
-      showSearchCoinSheet(context, 0);
-    }
+    if (await _guardAction(waValue) && mounted) showSearchCoinSheet(context, 0);
   }
 
   Future<void> _onReceiveTap(WalletActionProvider waValue) async {
-    // 观察钱包允许查看接收地址；无密码时先引导备份
     if (await _guardAction(waValue, blockWatchOnly: false) && mounted) {
       showSearchCoinSheet(context, 1);
     }
   }
 
   Future<void> _onSwapTap(WalletActionProvider waValue) async {
-    if (await _guardAction(waValue) && mounted) {
-      showSwapModeSheet(context);
-    }
+    if (await _guardAction(waValue) && mounted) showSwapModeSheet(context);
   }
 
-  /// 引导用户先备份钱包（无密码时）
   Future<void> _promptBackup(WalletActionProvider waValue) async {
     final flag = await tipsDialog7(context);
-    if (!mounted) return;
-    if (flag == true) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          settings: const RouteSettings(name: 'BackupOne'),
-          builder: (_) => BackupOne(waValue.walletInfo, waValue.walletIndex),
-        ),
-      );
-    }
+    if (!mounted || flag != true) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        settings: const RouteSettings(name: 'BackupOne'),
+        builder: (_) => BackupOne(waValue.walletInfo, waValue.walletIndex),
+      ),
+    );
   }
 
   // ── build ─────────────────────────────────────────────────────────────────

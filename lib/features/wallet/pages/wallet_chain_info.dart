@@ -211,38 +211,39 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
   }
 
   void _initData() {
-    if (widget.coinModel.coin['isContract'] == true) {
-      final cIndex = ref.read(wapBridgeProvider).coinModels.indexWhere(
-            (e) => e.coin['coinType'] == widget.coinModel.coin['coinType'],
-          );
-      _chainCoinModel = ref.read(wapBridgeProvider).coinModels[cIndex];
+    final cm = widget.coinModel;
+    final coin = cm.coin;
+    final isContract = coin['isContract'] == true;
+
+    if (isContract) {
+      final wap = ref.read(wapBridgeProvider);
+      final cIndex = wap.coinModels.indexWhere(
+        (e) => e.coin['coinType'] == coin['coinType'],
+      );
+      _chainCoinModel = wap.coinModels[cIndex];
       _chainName = _chainCoinModel?.coin['name'];
       _chainSymbol = _chainCoinModel?.coin['miniName'];
-      _tokenName = widget.coinModel.coin['name'];
-      _tokenSymbol = widget.coinModel.coin['miniName'];
+      _tokenName = coin['name'];
+      _tokenSymbol = coin['miniName'];
       browserUrl = getBrowserTokenAddress(
-        widget.coinModel.coin['coinType'],
-        widget.coinModel.address,
-        widget.coinModel.coin['contract'],
-        isTest: widget.coinModel.isTest,
+        coin['coinType'], cm.address, coin['contract'],
+        isTest: cm.isTest,
       );
     } else {
-      _chainName = widget.coinModel.coin['name'];
-      _chainSymbol = widget.coinModel.coin['miniName'];
+      _chainName = coin['name'];
+      _chainSymbol = coin['miniName'];
       browserUrl = getBrowserAddress(
-        widget.coinModel.coin['coinType'],
-        widget.coinModel.address,
-        isTest: widget.coinModel.isTest,
+        coin['coinType'], cm.address,
+        isTest: cm.isTest,
       );
     }
+
     marketInfo = ref
         .read(wapBridgeProvider)
-        .getCoinPriceWithUnitAll(widget.coinModel.coin['unit']);
+        .getCoinPriceWithUnitAll(coin['unit']);
     getTransactionData(Load.refresh);
     getTransactionDataNetwork(Load.refresh);
   }
-
-  // ── Build ─────────────────────────────────────────────────────────────────
 
   // ── Theme helpers ────────────────────────────────────────────────────────
 
@@ -375,13 +376,12 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
           if (isEth)
             InkWell(
               onTap: () async {
-                final isN42 = cm.coin['coinType'] == CoinType.N.name;
-                final page = isN42
+                final Widget page = cm.coin['coinType'] == CoinType.N.name
                     ? TransactionRetry(cm, '')
                     : TransactionDetailEth(cm, '');
                 final r = await Navigator.push<bool>(
                   context,
-                  MaterialPageRoute(builder: (context) => page),
+                  MaterialPageRoute(builder: (_) => page),
                 );
                 if (r == true) getTransactionData(Load.refresh);
               },

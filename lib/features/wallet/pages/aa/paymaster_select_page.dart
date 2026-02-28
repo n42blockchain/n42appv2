@@ -442,12 +442,11 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
     PaymasterType.erc20 => '${S.of(context).g_key_aa_pay_with} ${_selectedOption.tokenSymbol ?? 'Token'}',
   };
 
-  static String _chainSymbolFromId(int chainId) {
-    for (final entry in AAConfig.chainIds.entries) {
-      if (entry.value == chainId) return entry.key;
-    }
-    return '';
-  }
+  static String _chainSymbolFromId(int chainId) =>
+      AAConfig.chainIds.entries
+          .where((e) => e.value == chainId)
+          .map((e) => e.key)
+          .firstOrNull ?? '';
 }
 
 enum _LoadState { loading, success, error }

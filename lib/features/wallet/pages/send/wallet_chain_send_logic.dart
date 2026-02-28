@@ -103,10 +103,9 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     setState(() => load = Load.loading);
     final isOk = await coinModel.getBalance(getToken: false);
     if (isOk != false) return;
-    load = Load.finish;
     errorMessage = S.current.g_key_t_44;
-    ToastUtils.show(S.current.g_key_t_44);
-    setState(() {});
+    ToastUtils.show(errorMessage);
+    setState(() => load = Load.finish);
   }
 
   /// 解析当前 coinModel 的 RPC 地址（自定义链返回对应 service，否则 null）
@@ -260,18 +259,28 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     final int minValue = decimals == 0 ? 1 : 0;
 
     // 格式校验
-    if (value.isEmpty) { _setAmountError(S.of(context).g_key_46(minValue)); return; }
+    if (value.isEmpty) {
+      _setAmountError(S.of(context).g_key_46(minValue));
+      return;
+    }
     final isValidNum = regular.regularNums(value);
     final isValidDec = regular.regularDouble(value);
-    if (decimals == 0 ? !isValidNum : (!isValidNum && !isValidDec)) {
-      _setAmountError(S.of(context).g_key_134); return;
+    final isValidFormat = decimals == 0 ? isValidNum : (isValidNum || isValidDec);
+    if (!isValidFormat) {
+      _setAmountError(S.of(context).g_key_134);
+      return;
     }
-    Decimal decimalValue;
-    try { decimalValue = Decimal.parse(value); } catch (_) {
-      _setAmountError(S.of(context).g_key_134); return;
+
+    final Decimal decimalValue;
+    try {
+      decimalValue = Decimal.parse(value);
+    } catch (_) {
+      _setAmountError(S.of(context).g_key_134);
+      return;
     }
     if (decimalValue < Decimal.fromInt(minValue) || decimalValue == Decimal.zero) {
-      _setAmountError(S.of(context).g_key_46(minValue)); return;
+      _setAmountError(S.of(context).g_key_46(minValue));
+      return;
     }
 
     // 余额校验
@@ -280,11 +289,13 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     if (blockchainType == BlockchainType.Ripple.name) {
       final reserveAmount = ethToWeiString('10', decimals);
       if (valueBi + totalGasPrice > coinModel.balance - reserveAmount) {
-        _setAmountError(S.of(context).g_key_47); return;
+        _setAmountError(S.of(context).g_key_47);
+        return;
       }
     } else if (coinModel.coin['isContract'] == false) {
       if (valueBi + totalGasPrice > coinModel.balance) {
-        _setAmountError(S.of(context).g_key_47); return;
+        _setAmountError(S.of(context).g_key_47);
+        return;
       }
       transferValue = valueBi;
     } else {
@@ -339,26 +350,41 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     closeKeyboard();
     amountCheck();
     if (amountErrorMessage != '') return;
+
     setState(() => load = Load.loading);
+
     final toAddr = await toAddressCheck(toTextEditingController.text.trim());
-    if (toAddr == null) {
-      setState(() => load = Load.finish);
-      return;
-    }
+    if (toAddr == null) return setState(() => load = Load.finish);
+
     await estimateGasEthLocal(checkAddress: false);
-    if (errorMessage != '') {
-      setState(() => load = Load.finish);
-      return;
-    }
-    BigInt uBalance = coinModel.balance;
-    if (coinModel.coin['isContract']) {
-      uBalance = chainModel?.balance ?? BigInt.zero;
-    }
+    if (errorMessage != '') return setState(() => load = Load.finish);
+
+    final uBalance = coinModel.coin['isContract']
+        ? (chainModel?.balance ?? BigInt.zero)
+        : coinModel.balance;
     if (totalGasPrice > uBalance || coinModel.balance == BigInt.zero) {
-      setState(() => load = Load.finish);
-      return;
+      return setState(() => load = Load.finish);
     }
     if (!mounted) return;
+
+    final trModel = _buildTransactionRecord(toAddr);
+    final chainUnit = (chainModel?.coin['unit'] ?? coinModel.coin['unit'])
+        .toString()
+        .toUpperCase();
+    final check = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(
+          builder: (_) => buildWalletBaseSend(trModel, chainUnit)),
+    );
+    if (!mounted) return;
+    if (check == true) {
+      signTx(trModel);
+    } else {
+      setState(() => load = Load.finish);
+    }
+  }
+
+  TransationRecordModel _buildTransactionRecord(String toAddr) {
     final trModel = TransationRecordModel()
       ..address = coinModel.address.toString()
       ..from1 = coinModel.address.toString()
@@ -378,19 +404,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     if (coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name) {
       trModel.message = noteTextEditingController.text.trim();
     }
-    final chainUnit = (chainModel?.coin['unit'] ?? coinModel.coin['unit'])
-        .toString().toUpperCase();
-    final check = await Navigator.push<bool>(
-      context,
-      MaterialPageRoute(
-          builder: (_) => buildWalletBaseSend(trModel, chainUnit)),
-    );
-    if (!mounted) return;
-    if (check == true) {
-      signTx(trModel);
-    } else {
-      setState(() => load = Load.finish);
-    }
+    return trModel;
   }
 
   /// Implemented in host State to construct the confirmation screen.

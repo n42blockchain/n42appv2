@@ -223,21 +223,19 @@ class _MarketPageState extends ConsumerState<MarketPage>
       _watchlistSymbols = symbols;
       _watchlistLoading = symbols.isNotEmpty;
     });
+    if (symbols.isEmpty) return;
 
-    if (symbols.isNotEmpty) {
-      final resp = await MarketApi().getWalletCoinsInfo(symbols.join(','));
-      if (!mounted) return;
-      final data = resp['data'];
-      final coins =
-          (data is List) ? data : (data is Map ? [data] : <dynamic>[]);
-      setState(() {
-        _watchlistCoins = coins
-            .whereType<Map<dynamic, dynamic>>()
-            .map((c) => Map<String, dynamic>.from(c))
-            .toList();
-        _watchlistLoading = false;
-      });
-    }
+    final resp = await MarketApi().getWalletCoinsInfo(symbols.join(','));
+    if (!mounted) return;
+    final data = resp['data'];
+    final coins = (data is List) ? data : (data is Map ? [data] : <dynamic>[]);
+    setState(() {
+      _watchlistCoins = coins
+          .whereType<Map<dynamic, dynamic>>()
+          .map((c) => Map<String, dynamic>.from(c))
+          .toList();
+      _watchlistLoading = false;
+    });
   }
 
   Future<void> _toggleWatchlist(String symbol) async {
@@ -265,39 +263,37 @@ class _MarketPageState extends ConsumerState<MarketPage>
 
   Map<String, dynamic> _normalize(
       Map<String, dynamic> coin, _CoinSource source) {
-    switch (source) {
-      case _CoinSource.trending:
-        final pct =
-            coin['data']?['price_change_percentage_24h']?['usd'] ?? 0.0;
-        return {
+    return switch (source) {
+      _CoinSource.trending => {
           'coin_gecko_id': coin['id'] ?? '',
           'coin': (coin['symbol'] ?? '').toString().toLowerCase(),
           'name': coin['name'] ?? '',
           'image': coin['large'] ?? coin['thumb'] ?? '',
           'price': _parseTrendingPrice(coin),
-          'price_change_per_24h': pct is num ? pct.toDouble() : 0.0,
-        };
-
-      case _CoinSource.search:
-        return {
+          'price_change_per_24h': _parseTrendingPct(coin),
+        },
+      _CoinSource.search => {
           'coin_gecko_id': coin['id'] ?? '',
           'coin': (coin['symbol'] ?? '').toString().toLowerCase(),
           'name': coin['name'] ?? '',
           'image': coin['large'] ?? coin['thumb'] ?? '',
           'price': 0.0,
           'price_change_per_24h': 0.0,
-        };
-
-      case _CoinSource.watchlist:
-        return {
+        },
+      _CoinSource.watchlist => {
           'coin_gecko_id': coin['coin_gecko_id'] ?? '',
           'coin': coin['coin'] ?? '',
           'name': coin['name'] ?? '',
           'image': coin['image'] ?? '',
           'price': _parsePrice(coin['price']),
           'price_change_per_24h': _parsePrice(coin['price_change_per_24h']),
-        };
-    }
+        },
+    };
+  }
+
+  double _parseTrendingPct(Map<String, dynamic> coin) {
+    final pct = coin['data']?['price_change_percentage_24h']?['usd'] ?? 0.0;
+    return pct is num ? pct.toDouble() : 0.0;
   }
 
   // ─── Build ──────────────────────────────────────────────────────────────────
