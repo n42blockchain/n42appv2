@@ -35,10 +35,6 @@ class WalletSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   }
 }
 
-/// 代币列表项中的图钉按钮。
-///
-/// 独立 [StatelessWidget] 以缩小 rebuild 范围：仅当 [isPinned] 变化时
-/// Flutter diff 算法才会重建此节点，不受父节点其他字段更新的影响。
 class WalletPinIconButton extends StatelessWidget {
   const WalletPinIconButton({
     required this.isPinned,
@@ -75,9 +71,6 @@ class WalletPinIconButton extends StatelessWidget {
   }
 }
 
-// ── Skeleton 加载占位组件 ────────────────────────────────────────────────────
-
-/// 资产列表骨架屏：初始加载时显示 5 个脉冲占位行，无需外部依赖。
 class WalletCoinListSkeleton extends StatefulWidget {
   const WalletCoinListSkeleton();
 
@@ -111,7 +104,6 @@ class _WalletCoinListSkeletonState extends State<WalletCoinListSkeleton>
     return AnimatedBuilder(
       animation: _anim,
       builder: (context, _) {
-        // 在背景色和稍亮色之间脉冲
         final base = AppThemeUtils.getColorByKey(
             context, AppThemeKeys.itemBgColor.name);
         final shimmer = Color.lerp(
@@ -137,6 +129,15 @@ class WalletSkeletonCoinRow extends StatelessWidget {
   const WalletSkeletonCoinRow({required this.shimmerColor});
   final Color shimmerColor;
 
+  Widget _shimmerBox(double w, double h, double radius) => Container(
+        width: ScreenUtil().setWidth(w),
+        height: ScreenUtil().setWidth(h),
+        decoration: BoxDecoration(
+          color: shimmerColor,
+          borderRadius: BorderRadius.circular(radius),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     final radius = ScreenUtil().setWidth(8);
@@ -145,7 +146,6 @@ class WalletSkeletonCoinRow extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // 圆形头像占位
           Container(
             width: ScreenUtil().setWidth(48),
             height: ScreenUtil().setWidth(48),
@@ -155,54 +155,23 @@ class WalletSkeletonCoinRow extends StatelessWidget {
               shape: BoxShape.circle,
             ),
           ),
-          // 文字占位
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 第一行：符号 + 数量
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      width: ScreenUtil().setWidth(80),
-                      height: ScreenUtil().setWidth(22),
-                      decoration: BoxDecoration(
-                        color: shimmerColor,
-                        borderRadius: BorderRadius.circular(radius),
-                      ),
-                    ),
-                    Container(
-                      width: ScreenUtil().setWidth(60),
-                      height: ScreenUtil().setWidth(22),
-                      decoration: BoxDecoration(
-                        color: shimmerColor,
-                        borderRadius: BorderRadius.circular(radius),
-                      ),
-                    ),
+                    _shimmerBox(80, 22, radius),
+                    _shimmerBox(60, 22, radius),
                   ],
                 ),
                 SizedBox(height: ScreenUtil().setWidth(10)),
-                // 第二行：价格 + 总价值
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      width: ScreenUtil().setWidth(100),
-                      height: ScreenUtil().setWidth(18),
-                      decoration: BoxDecoration(
-                        color: shimmerColor,
-                        borderRadius: BorderRadius.circular(radius),
-                      ),
-                    ),
-                    Container(
-                      width: ScreenUtil().setWidth(50),
-                      height: ScreenUtil().setWidth(18),
-                      decoration: BoxDecoration(
-                        color: shimmerColor,
-                        borderRadius: BorderRadius.circular(radius),
-                      ),
-                    ),
+                    _shimmerBox(100, 18, radius),
+                    _shimmerBox(50, 18, radius),
                   ],
                 ),
               ],

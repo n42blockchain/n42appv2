@@ -86,7 +86,7 @@ class _WalletChainSendTrxState extends ConsumerState<WalletChainSendTrx>
   }
 
   Widget errorMessageWidget() {
-    if (errorMessage == "") return const SizedBox();
+    if (errorMessage.isEmpty) return const SizedBox.shrink();
     final sw = ScreenUtil().setWidth;
     return Container(
       margin: EdgeInsets.only(top: sw(20.0), left: sw(30), right: sw(30)),

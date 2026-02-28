@@ -55,7 +55,6 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
     }
   }
 
-  /// 带标签的输入框
   Widget _buildTextField({
     required String label,
     required TextEditingController controller,
@@ -126,7 +125,6 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 说明文字
             Container(
               padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
               decoration: BoxDecoration(
@@ -147,8 +145,6 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
               ),
             ),
             SizedBox(height: ScreenUtil().setWidth(32)),
-
-            // 钱包名称
             _buildTextField(
               label: 'Name',
               controller: _nameCtrl,
@@ -159,8 +155,6 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
               bgColor: itemBg,
             ),
             SizedBox(height: ScreenUtil().setWidth(24)),
-
-            // EVM 地址
             _buildTextField(
               label: 'Address',
               controller: _addressCtrl,
@@ -172,8 +166,6 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
               maxLines: 2,
             ),
             SizedBox(height: ScreenUtil().setWidth(48)),
-
-            // 添加按钮
             SizedBox(
               width: double.infinity,
               height: ScreenUtil().setWidth(88),

@@ -1,18 +1,10 @@
 part of 'wallet_list.dart';
 
-/// 钱包列表展示 widget，混入 [_WalletListState]。
-///
-/// 包含分组列表、侧滑磁贴、钱包卡片。
-///
-/// 依赖 [_WalletListActionsMixin] 以访问 _switchWallet/_onManage/_onDelete。
 mixin _WalletListTilesMixin on _WalletListActionsMixin {
-  // ── 钱包列表（含分组 + 侧滑操作） ──────────────────────────────
-
   Widget _buildList() {
     final walletList = (this as _WalletListState).walletList;
     if (walletList.isEmpty) return const EmptyView();
 
-    // 分组：助记词 HD 钱包 vs 单链导入钱包
     final hdWallets = <_IndexedWallet>[];
     final singleWallets = <_IndexedWallet>[];
     for (var i = 0; i < walletList.length; i++) {
@@ -57,15 +49,9 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
         ),
       );
 
-  /// 单个钱包磁贴，带侧滑操作。
-  ///
-  /// UX：
-  ///   - Tap 非当前钱包 → 直接切换（无需密码，切换不暴露私钥）
-  ///   - Tap 当前钱包   → 进管理页（可能需要密码）
-  ///   - 左滑           → 显示「编辑」+「删除」
   Widget _walletTile(WalletInfo info, int index) {
     final activeIndex = ref.read(wapBridgeProvider).walletIndex;
-    final isActive = (activeIndex == index);
+    final isActive = activeIndex == index;
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -74,7 +60,6 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
       ),
       child: Slidable(
         key: ValueKey('wallet_$index'),
-        // 左滑 → 右侧操作区（编辑 + 删除）
         endActionPane: ActionPane(
           motion: const DrawerMotion(),
           extentRatio: 0.45,
@@ -91,7 +76,6 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
                 bottomLeft: Radius.circular(ScreenUtil().setWidth(12)),
               ),
             ),
-            // 只有非当前、非主钱包可以删除
             if (!isActive && info.mainWallet != true)
               SlidableAction(
                 onPressed: (_) => _onDelete(info),
@@ -115,13 +99,7 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
     final coinKeys = info.coinInfo?.keys.toList() ?? [];
 
     return GestureDetector(
-      onTap: () {
-        if (isActive) {
-          _onManage(info, index);
-        } else {
-          _switchWallet(index);
-        }
-      },
+      onTap: () => isActive ? _onManage(info, index) : _switchWallet(index),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: EdgeInsets.symmetric(
@@ -153,14 +131,12 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
         ),
         child: Row(
           children: [
-            // 头像 / 图标
             Image.asset(
               'assets/img/${isActive ? "ast" : "ast_h"}.png',
               width: ScreenUtil().setWidth(56),
             ),
             SizedBox(width: ScreenUtil().setWidth(16)),
 
-            // 名称 + 链信息
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,7 +154,6 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
                   ),
                   SizedBox(height: ScreenUtil().setWidth(4)),
                   Text(
-                    // 显示持有的链列表，最多 3 个
                     coinKeys.take(3).join(' · ') +
                         (coinKeys.length > 3
                             ? ' +${coinKeys.length - 3}'
@@ -193,7 +168,6 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
               ),
             ),
 
-            // 激活标志 或 右箭头
             if (isActive)
               Icon(
                 Icons.check_circle,

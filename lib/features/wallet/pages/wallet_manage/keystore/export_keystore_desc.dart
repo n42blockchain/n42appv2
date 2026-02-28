@@ -8,9 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-/// Keystore 导出警告说明页。
-///
-/// 用户必须勾选风险确认框后才能进入下一步（查看并复制 Keystore）。
 class ExportKeystoreDesc extends StatefulWidget {
   final String keystoreJson;
   const ExportKeystoreDesc({required this.keystoreJson, super.key});
@@ -20,8 +17,16 @@ class ExportKeystoreDesc extends StatefulWidget {
 }
 
 class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
-  /// 用户是否已勾选风险确认框
   bool _riskAcknowledged = false;
+
+  Widget _descItem(String text, Color color) => Text(
+        text,
+        style: TextStyle(
+          color: color,
+          fontSize: ScreenUtil().setSp(30),
+          height: 1.5,
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +51,6 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // ── 页面标题 ─────────────────────────────────────────
                     Text(
                       s.g_key_ex_keystore_1,
                       style: TextStyle(
@@ -57,7 +61,6 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
                     ),
                     SizedBox(height: ScreenUtil().setWidth(16)),
 
-                    // ── 安全警告框（红色底色） ────────────────────────────
                     Container(
                       width: double.infinity,
                       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
@@ -80,29 +83,11 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
                     Divider(height: ScreenUtil().setWidth(1)),
                     SizedBox(height: ScreenUtil().setWidth(24)),
 
-                    // ── 条目 1 ────────────────────────────────────────────
-                    Text(
-                      '1. ${s.g_key_ex_keystore_3}',
-                      style: TextStyle(
-                        color: subtitleColor,
-                        fontSize: ScreenUtil().setSp(30),
-                        height: 1.5,
-                      ),
-                    ),
+                    _descItem('1. ${s.g_key_ex_keystore_3}', subtitleColor),
                     SizedBox(height: ScreenUtil().setWidth(20)),
-
-                    // ── 条目 2 ────────────────────────────────────────────
-                    Text(
-                      '2. ${s.g_key_ex_keystore_4}',
-                      style: TextStyle(
-                        color: subtitleColor,
-                        fontSize: ScreenUtil().setSp(30),
-                        height: 1.5,
-                      ),
-                    ),
+                    _descItem('2. ${s.g_key_ex_keystore_4}', subtitleColor),
                     SizedBox(height: ScreenUtil().setWidth(40)),
 
-                    // ── 风险确认勾选框 ────────────────────────────────────
                     _RiskCheckbox(
                       label: s.g_key_ex_keystore_confirm_risk,
                       value: _riskAcknowledged,
@@ -110,14 +95,12 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
                           setState(() => _riskAcknowledged = v ?? false),
                     ),
 
-                    // 底部按钮的占位高度
                     SizedBox(height: ScreenUtil().setWidth(148)),
                   ],
                 ),
               ),
             ),
 
-            // ── 底部按钮 ──────────────────────────────────────────────────
             Positioned(
               bottom: 0,
               left: 0,
@@ -134,7 +117,6 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
                         context, AppThemeKeys.backGroundColor.name),
                     child: buttonStyle2(
                       context,
-                      // 未勾选时 onTap=null → buttonStyle2 自动禁用
                       _riskAcknowledged
                           ? () => Navigator.push(
                                 context,
@@ -158,7 +140,6 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
   }
 }
 
-/// 风险确认勾选框组件。
 class _RiskCheckbox extends StatelessWidget {
   final String label;
   final bool value;
