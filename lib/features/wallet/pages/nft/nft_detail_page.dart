@@ -82,17 +82,14 @@ class _NftDetailPageState extends State<NftDetailPage> {
     super.dispose();
   }
 
-  /// 检查 NFT 是否在不支持操作的链上，如果是则显示 toast 并返回 true。
   bool _isUnsupportedChain() {
-    if (nft.isSolana) {
-      ToastUtils.showWarning(S.of(context).g_key_nft_send_sol_unsupported);
-      return true;
-    }
-    if (nft.isOrdinal) {
-      ToastUtils.showWarning(S.of(context).g_key_nft_ordinals_unsupported);
-      return true;
-    }
-    return false;
+    final warning = nft.isSolana
+        ? S.of(context).g_key_nft_send_sol_unsupported
+        : nft.isOrdinal
+            ? S.of(context).g_key_nft_ordinals_unsupported
+            : null;
+    if (warning != null) ToastUtils.showWarning(warning);
+    return warning != null;
   }
 
   // ── Send ──────────────────────────────────────────────────────────────────
@@ -210,43 +207,33 @@ class _NftDetailPageState extends State<NftDetailPage> {
     );
   }
 
-  /// 构建媒体区域：视频播放器 or null（使用默认图片布局）
   Widget? _buildMediaWidget() {
     if (!nft.hasVideo) return null;
+    if (_chewieController != null) return Chewie(controller: _chewieController!);
+    if (!_videoError) return _buildVideoPlaceholder();
 
-    // 视频初始化出错时，降级显示图片 + 提示
-    if (_videoError) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (nft.imageUrl != null)
-            Expanded(
-              child: Image.network(nft.imageUrl!, fit: BoxFit.cover,
-                  errorBuilder: (ctx, err, st) => const SizedBox()),
-            ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Builder(
-              builder: (ctx) => Text(
-                S.of(ctx).g_key_nft_no_video_support,
-                style: TextStyle(
-                    fontSize: 12,
-                    color: AppThemeUtils.getColorByKey(
-                        ctx, AppThemeKeys.itemSubtitleTextColor.name)),
-              ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        if (nft.imageUrl != null)
+          Expanded(
+            child: Image.network(nft.imageUrl!, fit: BoxFit.cover,
+                errorBuilder: (ctx, err, st) => const SizedBox()),
+          ),
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: Builder(
+            builder: (ctx) => Text(
+              S.of(ctx).g_key_nft_no_video_support,
+              style: TextStyle(
+                  fontSize: 12,
+                  color: AppThemeUtils.getColorByKey(
+                      ctx, AppThemeKeys.itemSubtitleTextColor.name)),
             ),
           ),
-        ],
-      );
-    }
-
-    // 视频已初始化
-    if (_chewieController != null) {
-      return Chewie(controller: _chewieController!);
-    }
-
-    // 视频加载中
-    return _buildVideoPlaceholder();
+        ),
+      ],
+    );
   }
 
   @override

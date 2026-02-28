@@ -33,15 +33,13 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
 
   Future<void> initData() async {
     if (widget.coinModel.coin['isContract'] == true) {
-      WalletActionProvider wap = ref.read(wapBridgeProvider);
-      int cIndex = wap.coinModels.indexWhere((element) {
-        if (element.coin['coinType'] == widget.coinModel.coin['coinType']) {
-          if (widget.coinModel.privateKey != null) {
-            return element.privateKey == widget.coinModel.privateKey;
-          }
-          return true;
+      final wap = ref.read(wapBridgeProvider);
+      final cIndex = wap.coinModels.indexWhere((element) {
+        if (element.coin['coinType'] != widget.coinModel.coin['coinType']) return false;
+        if (widget.coinModel.privateKey != null) {
+          return element.privateKey == widget.coinModel.privateKey;
         }
-        return false;
+        return true;
       });
       if (cIndex != -1) {
         chainModel = wap.coinModels[cIndex];
@@ -57,24 +55,18 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
   }
 
   Future<void> getBalance() async {
-    setState(() {
-      load = Load.loading;
-    });
-    bool isOk = await widget.coinModel.getBalance(getToken: false);
+    setState(() => load = Load.loading);
+    final isOk = await widget.coinModel.getBalance(getToken: false);
     if (!mounted) return;
     if (!isOk) {
       errorMessage = S.current.g_key_t_44;
       ToastUtils.show(S.current.g_key_t_44);
     }
-    setState(() {
-      load = Load.finish;
-    });
+    setState(() => load = Load.finish);
   }
 
   Future<void> getGasPrice() async {
-    setState(() {
-      load = Load.loading;
-    });
+    setState(() => load = Load.loading);
     try {
       final aptApi = AptApi(isTest: widget.coinModel.isTest);
       final mmGas = await aptApi.getGasPrice();
@@ -83,48 +75,44 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
         gasPrice = mmGas.data as BigInt;
       }
     } catch (_) {
-      // 降级：使用默认 gas price
       gasPrice = BigInt.from(100);
     }
     totalGasPrice = gasPrice * gas;
     if (!mounted) return;
-    setState(() {
-      load = Load.finish;
-    });
+    setState(() => load = Load.finish);
+  }
+
+  void _setAmountError(String msg) {
+    amountErrorMessage = msg;
+    setState(() {});
   }
 
   void amountCheck({String value = ''}) {
+    if (value.isEmpty) value = valueTextEditingController.text;
     if (value.isEmpty) {
-      value = valueTextEditingController.text;
-    }
-    if (value.isEmpty) {
-      amountErrorMessage = S.of(context).g_key_46(0);
-      setState(() {});
+      _setAmountError(S.of(context).g_key_46(0));
       return;
     }
-    bool checkValue = regular.regularDouble(value);
-    bool checkInt = regular.regularNums(value);
-    double dValue = double.tryParse(value) ?? 0;
+    final checkValue = regular.regularDouble(value);
+    final checkInt = regular.regularNums(value);
+    final dValue = double.tryParse(value) ?? 0;
     if (!checkValue && !checkInt) {
-      amountErrorMessage = S.of(context).g_key_134;
-      setState(() {});
-      return;
-    } else if (dValue <= 0) {
-      amountErrorMessage = S.of(context).g_key_46(0);
-      setState(() {});
+      _setAmountError(S.of(context).g_key_134);
       return;
     }
-    BigInt valueBi = ethToWeiString(value, widget.coinModel.coin['decimals']);
+    if (dValue <= 0) {
+      _setAmountError(S.of(context).g_key_46(0));
+      return;
+    }
+    final valueBi = ethToWeiString(value, widget.coinModel.coin['decimals']);
     if (widget.coinModel.coin['isContract'] == false) {
       if (valueBi + totalGasPrice > widget.coinModel.balance) {
-        amountErrorMessage = S.of(context).g_key_47;
-        setState(() {});
+        _setAmountError(S.of(context).g_key_47);
         return;
       }
     }
     transferValue = valueBi;
-    amountErrorMessage = '';
-    setState(() {});
+    _setAmountError('');
   }
 
   Future<String?> toAddressCheck(String addr) async {
@@ -133,24 +121,24 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
       setState(() {});
       return null;
     }
-    bool check = await Trustdart()
+    final valid = await Trustdart()
         .validateAddress(widget.coinModel.coin['coinType'], addr);
     if (!mounted) return null;
-    if (check) {
-      if (addr.toUpperCase() ==
-          widget.coinModel.address.toString().toUpperCase()) {
-        toErrorMessage = S.current.g_key_t_50;
-        setState(() {});
-        return null;
-      }
-      toErrorMessage = '';
-      setState(() {});
-      return addr;
-    } else {
+
+    final isSelfAddress =
+        addr.toUpperCase() == widget.coinModel.address.toString().toUpperCase();
+    if (!valid || isSelfAddress) {
       toErrorMessage = S.current.g_key_t_50;
       setState(() {});
       return null;
     }
+    toErrorMessage = '';
+    setState(() {});
+    return addr;
+  }
+
+  void _finishLoading() {
+    setState(() => load = Load.finish);
   }
 
   Future<void> sendTransaction() async {
@@ -162,23 +150,17 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
     amountCheck();
     if (amountErrorMessage.isNotEmpty) return;
 
-    setState(() {
-      load = Load.loading;
-    });
+    setState(() => load = Load.loading);
 
     final String? toAddr =
         await toAddressCheck(toTextEditingController.text.trim());
     if (toAddr == null) {
-      setState(() {
-        load = Load.finish;
-      });
+      _finishLoading();
       return;
     }
 
     if (widget.coinModel.balance == BigInt.zero) {
-      setState(() {
-        load = Load.finish;
-      });
+      _finishLoading();
       return;
     }
 
@@ -187,31 +169,29 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
         : widget.coinModel.balance;
 
     if (totalGasPrice > uBalance) {
-      setState(() {
-        load = Load.finish;
-      });
+      _finishLoading();
       return;
     }
 
-    TransationRecordModel trModel = TransationRecordModel();
-    trModel.address = widget.coinModel.address.toString();
-    trModel.from1 = widget.coinModel.address.toString();
-    trModel.to1 = toAddr;
-    trModel.addrType = widget.coinModel.addrType;
-    trModel.coin = widget.coinModel.coin;
-    trModel.coinMiniName = widget.coinModel.coin['coinType'];
-    trModel.walletIndex = ref.read(wapBridgeProvider).walletIndex;
-    trModel.contract = widget.coinModel.isTest
-        ? widget.coinModel.coin['contract_test']
-        : widget.coinModel.coin['contract'];
-    trModel.isTest = widget.coinModel.isTest ? 1 : 0;
-    trModel.gasPrice = totalGasPrice;
-    trModel.gas = gas.toInt();
-    trModel.gasPriceValue = gasPrice;
-    trModel.price = transferValue;
-    trModel.coinId = widget.coinModel.isTest
-        ? widget.coinModel.coin['chainId_test']
-        : widget.coinModel.coin['chainId'];
+    final trModel = TransationRecordModel()
+      ..address = widget.coinModel.address.toString()
+      ..from1 = widget.coinModel.address.toString()
+      ..to1 = toAddr
+      ..addrType = widget.coinModel.addrType
+      ..coin = widget.coinModel.coin
+      ..coinMiniName = widget.coinModel.coin['coinType']
+      ..walletIndex = ref.read(wapBridgeProvider).walletIndex
+      ..contract = widget.coinModel.isTest
+          ? widget.coinModel.coin['contract_test']
+          : widget.coinModel.coin['contract']
+      ..isTest = widget.coinModel.isTest ? 1 : 0
+      ..gasPrice = totalGasPrice
+      ..gas = gas.toInt()
+      ..gasPriceValue = gasPrice
+      ..price = transferValue
+      ..coinId = widget.coinModel.isTest
+          ? widget.coinModel.coin['chainId_test']
+          : widget.coinModel.coin['chainId'];
 
     final bool check = await Navigator.push(
       context,
@@ -231,16 +211,13 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
     if (check) {
       signTx(trModel);
     } else {
-      setState(() {
-        load = Load.finish;
-      });
+      _finishLoading();
     }
   }
 
   Future<void> signTx(TransationRecordModel trModel) async {
     try {
-      final TransferApi transferApi = TransferApi();
-      final MessageModel mm = await transferApi.transferWallet(
+      final mm = await TransferApi().transferWallet(
         trModel: trModel,
         privateKey: widget.coinModel.privateKey,
         pathIndex: widget.coinModel.pathIndex,
@@ -250,7 +227,7 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
         errorMessage = mm.data;
       } else {
         trModel.txHash = mm.data;
-        AppDatabase appDatabase = AppDatabase();
+        final appDatabase = AppDatabase();
         trModel.trId = await appDatabase.insertTransationRecord(trModel);
         if (!mounted) return;
         ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);

@@ -57,13 +57,11 @@ mixin EnsResolveMixin<T extends StatefulWidget> on State<T> {
   }
 
   Future<void> _resolveEnsRealtime(String ensName, String coinType) async {
-    final result =
-        await ensService.resolveName(ensName, preferredChain: coinType);
+    final result = await ensService.resolveName(ensName, preferredChain: coinType);
     if (!mounted) return;
+    final resolved = result.success && result.address != null;
     setState(() {
-      ensStatus = result.success && result.address != null
-          ? EnsResolveStatus.resolved
-          : EnsResolveStatus.failed;
+      ensStatus = resolved ? EnsResolveStatus.resolved : EnsResolveStatus.failed;
       ensResult = result;
     });
   }
