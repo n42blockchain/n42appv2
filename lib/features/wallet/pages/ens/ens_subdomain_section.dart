@@ -89,31 +89,7 @@ class EnsSubdomainSection extends StatelessWidget {
         child: const Center(child: CircularProgressIndicator()),
       );
     }
-    if (subdomains.isEmpty) {
-      final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-      return Padding(
-        padding: EdgeInsets.symmetric(vertical: scr.setWidth(20)),
-        child: Center(
-          child: Column(
-            children: [
-              Icon(
-                Icons.subdirectory_arrow_right,
-                size: scr.setWidth(48),
-                color: subtitleColor.withAlpha(100),
-              ),
-              SizedBox(height: scr.setWidth(8)),
-              Text(
-                S.of(context).g_key_ens_subdomain_empty,
-                style: TextStyle(
-                  fontSize: scr.setSp(24),
-                  color: subtitleColor,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
+    if (subdomains.isEmpty) return _buildEmptyState(context, scr);
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -124,6 +100,33 @@ class EnsSubdomainSection extends StatelessWidget {
         domainChain: domainChain,
         onCopy: onCopy,
         onDelete: onDelete,
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context, ScreenUtil scr) {
+    final subtitleColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: scr.setWidth(20)),
+      child: Center(
+        child: Column(
+          children: [
+            Icon(
+              Icons.subdirectory_arrow_right,
+              size: scr.setWidth(48),
+              color: subtitleColor.withAlpha(100),
+            ),
+            SizedBox(height: scr.setWidth(8)),
+            Text(
+              S.of(context).g_key_ens_subdomain_empty,
+              style: TextStyle(
+                fontSize: scr.setSp(24),
+                color: subtitleColor,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -32,8 +32,6 @@ class CsvImportPage extends StatefulWidget {
   State<CsvImportPage> createState() => _CsvImportPageState();
 }
 
-/// State 直接 with 两个 mixin（validation 在前，format 在后，因为 format on validation）。
-/// 所有共享字段（_textController、_docExpanded、_validLineCount）由 _CsvValidationMixin 持有。
 class _CsvImportPageState extends State<CsvImportPage>
     with _CsvValidationMixin, _CsvFormatSectionMixin {
   @override
@@ -50,26 +48,14 @@ class _CsvImportPageState extends State<CsvImportPage>
     super.dispose();
   }
 
-  // ─── 统计有效数据行 ───────────────────────────────────────────────────────────
-
   void _updateStats() {
-    final lines = _textController.text
-        .split('\n')
-        .map((l) => l.trim())
-        .where((l) => l.isNotEmpty && !l.startsWith('#'))
-        .toList();
-
-    // 跳过可能的 header 行
-    final dataLines = lines.isNotEmpty &&
-            (lines[0].toLowerCase().startsWith('address') ||
-                !lines[0].startsWith('0x'))
-        ? lines.skip(1).toList()
-        : lines;
-
+    final lines = _filterDataLines(_textController.text);
+    final dataLines =
+        lines.isNotEmpty && _isHeaderLine(lines[0])
+            ? lines.skip(1).toList()
+            : lines;
     setState(() => _validLineCount = dataLines.length);
   }
-
-  // ─── Build ──────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
@@ -83,29 +69,20 @@ class _CsvImportPageState extends State<CsvImportPage>
             onPressed: _hasContent ? _importData : null,
             child: Text(
               S.of(context).g_key_batch_done,
-              style: TextStyle(
-                color: _hasContent ? blue : Colors.grey,
-              ),
+              style: TextStyle(color: _hasContent ? blue : Colors.grey),
             ),
           ),
         ],
       ),
       body: Column(
         children: [
-          // 格式文档区（可折叠）
           _buildFormatSection(),
-
-          // CSV 文本输入区
           Expanded(child: _buildInputSection()),
-
-          // 底部操作栏
           _buildBottomBar(),
         ],
       ),
     );
   }
-
-  // ─── 文本输入区 ──────────────────────────────────────────────────────────────
 
   Widget _buildInputSection() {
     final itemBg = AppThemeUtils.getColorByKey(
@@ -150,8 +127,6 @@ class _CsvImportPageState extends State<CsvImportPage>
     );
   }
 
-  // ─── 底部操作栏 ──────────────────────────────────────────────────────────────
-
   Widget _buildBottomBar() {
     final itemBg = AppThemeUtils.getColorByKey(
         context, AppThemeKeys.itemBgColor.name);
@@ -176,7 +151,6 @@ class _CsvImportPageState extends State<CsvImportPage>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // 统计行
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -198,7 +172,6 @@ class _CsvImportPageState extends State<CsvImportPage>
             ),
             SizedBox(height: ScreenUtil().setWidth(12)),
 
-            // 按钮行
             Row(
               children: [
                 Expanded(
