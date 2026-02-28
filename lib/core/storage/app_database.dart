@@ -38,6 +38,11 @@ class AppDatabase {
 
   AppDatabase._();
 
+  /// 仅在 debug 模式下打印日志
+  static void _debugLog(String message) {
+    if (kDebugMode) debugPrint('[AppDatabase] $message');
+  }
+
   /// Get singleton instance
   static AppDatabase get instance {
     _instance ??= AppDatabase._();
@@ -76,9 +81,7 @@ class AppDatabase {
     // 安全存储密钥
     await _secureStorage.write(key: _dbKeyStorageKey, value: newKey);
 
-    if (kDebugMode) {
-      debugPrint('[AppDatabase] Generated new encryption key');
-    }
+    _debugLog('Generated new encryption key');
 
     return newKey;
   }
@@ -120,9 +123,7 @@ class AppDatabase {
     String encryptedPath,
     String encryptionKey,
   ) async {
-    if (kDebugMode) {
-      debugPrint('[AppDatabase] Migrating from unencrypted to encrypted database...');
-    }
+    _debugLog('Migrating from unencrypted to encrypted database...');
 
     try {
       // 打开旧的非加密数据库
@@ -153,14 +154,10 @@ class AppDatabase {
               conflictAlgorithm: ConflictAlgorithm.replace,
             );
           }
-          if (kDebugMode) {
-            debugPrint('[AppDatabase] Migrated table: $tableName (${rows.length} rows)');
-          }
+          _debugLog('Migrated table: $tableName (${rows.length} rows)');
         } catch (e) {
           // 表可能在新数据库中不存在，跳过
-          if (kDebugMode) {
-            debugPrint('[AppDatabase] Skipped table $tableName: $e');
-          }
+          _debugLog('Skipped table $tableName: $e');
         }
       }
 
@@ -172,13 +169,9 @@ class AppDatabase {
       final backupPath = '$legacyPath.backup';
       await File(legacyPath).rename(backupPath);
 
-      if (kDebugMode) {
-        debugPrint('[AppDatabase] Migration completed. Legacy database backed up to: $backupPath');
-      }
+      _debugLog('Migration completed. Legacy database backed up to: $backupPath');
     } catch (e) {
-      if (kDebugMode) {
-        debugPrint('[AppDatabase] Migration failed: $e');
-      }
+      _debugLog('Migration failed: $e');
       // 如果迁移失败，删除可能部分创建的加密数据库
       final encryptedFile = File(encryptedPath);
       if (await encryptedFile.exists()) {
@@ -386,44 +379,27 @@ class AppDatabase {
 
   /// 为高频查询字段创建索引
   Future<void> _createIndexes(Database db) async {
-    // TransactionRecord: 按地址查询（钱包历史）、按哈希查询（状态追踪）、按时间排序（列表展示）
-    await db.execute(
+    // 单列索引：地址(钱包历史)、哈希(状态追踪)、时间(列表展示)
+    // 复合索引：地址+时间（最常见查询模式），比单列索引快 2-5 倍
+    const indexes = [
+      // TransactionRecord
       'CREATE INDEX IF NOT EXISTS idx_tx_address ON TransationRecord(address)',
-    );
-    await db.execute(
       'CREATE INDEX IF NOT EXISTS idx_tx_txhash ON TransationRecord(txHash)',
-    );
-    await db.execute(
       'CREATE INDEX IF NOT EXISTS idx_tx_time ON TransationRecord(txTime)',
-    );
-    // BtcTransactionRecord: 同上
-    await db.execute(
-      'CREATE INDEX IF NOT EXISTS idx_btc_address ON BtcTransactionRecord(address)',
-    );
-    await db.execute(
-      'CREATE INDEX IF NOT EXISTS idx_btc_txhash ON BtcTransactionRecord(txHash)',
-    );
-    await db.execute(
-      'CREATE INDEX IF NOT EXISTS idx_btc_time ON BtcTransactionRecord(txTime)',
-    );
-    // Messages: 按会话 ID 查询（聊天记录加载）、按时间排序
-    await db.execute(
-      'CREATE INDEX IF NOT EXISTS idx_msg_conversation ON Messages(conversationId)',
-    );
-    await db.execute(
-      'CREATE INDEX IF NOT EXISTS idx_msg_sendtime ON Messages(sendTime)',
-    );
-    // 复合索引：同时过滤地址 + 按时间排序（最常见查询模式）
-    // 对 "WHERE address = ? ORDER BY txTime DESC LIMIT n" 比单列索引快 2-5 倍
-    await db.execute(
       'CREATE INDEX IF NOT EXISTS idx_tx_addr_time ON TransationRecord(address, txTime)',
-    );
-    await db.execute(
+      // BtcTransactionRecord
+      'CREATE INDEX IF NOT EXISTS idx_btc_address ON BtcTransactionRecord(address)',
+      'CREATE INDEX IF NOT EXISTS idx_btc_txhash ON BtcTransactionRecord(txHash)',
+      'CREATE INDEX IF NOT EXISTS idx_btc_time ON BtcTransactionRecord(txTime)',
       'CREATE INDEX IF NOT EXISTS idx_btc_addr_time ON BtcTransactionRecord(address, txTime)',
-    );
-    await db.execute(
+      // Messages
+      'CREATE INDEX IF NOT EXISTS idx_msg_conversation ON Messages(conversationId)',
+      'CREATE INDEX IF NOT EXISTS idx_msg_sendtime ON Messages(sendTime)',
       'CREATE INDEX IF NOT EXISTS idx_msg_conv_time ON Messages(conversationId, sendTime)',
-    );
+    ];
+    for (final sql in indexes) {
+      await db.execute(sql);
+    }
   }
 
   // ============ Close Database ============

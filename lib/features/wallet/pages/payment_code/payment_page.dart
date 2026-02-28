@@ -50,12 +50,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
   int coinModelIndex=-1;
   Load load=Load.refresh;
   String errorMessage="";
-  Regular? _regular;
-  Regular get regular{
-    _regular ??= Regular();
-    return _regular!;
-  }
-  // 复用同一实例，避免每次方法调用创建新对象
+  late final Regular regular = Regular();
   final UserInfoApi _userInfoApi = UserInfoApi();
   final oCcy = NumberFormat("#,##0.0#", "en_US");
   /// UUID v4 格式正则（仅接受标准格式，防止注入任意字符串）
@@ -103,28 +98,21 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
   }
   Future<void> initCoinInfo()async{
     usdtInfo=ref.read(wapBridgeProvider).getCoinPriceWithUnit("usdt");
-    //查询coins中的币种信息
     var list = await MarketApi().getWalletCoinsInfo("usdt");
-    //判断查询是否成功
     if (list['error']) {
-      //查询失败，设置当前操作状态为error，并设置错误信息
-      //ToastUtils.show(S.current.g_key_5);
       errorMessage=S.current.g_key_5;
       setState(() {
         load=Load.finish;
       });
     } else {
-      //查询成功，将币的信息赋值到_coinslist
       List<dynamic> coinMarketInfo = list['data']['data'];
-      String keyStr = "usdt";
       for (var element in coinMarketInfo) {
-        if (element['coin'].toString().toLowerCase() == keyStr) {
-          Map<String,dynamic> rMap={};
-          rMap["icon"] = element['image'];
-          //设置币价
-          rMap['coinPrice']=Decimal.parse(element['price'].toString()).toDouble();
-          rMap['percentage']=Decimal.parse(element['price_change_per_24h'].toString()).toDouble();
-          usdtInfo= rMap;
+        if (element['coin'].toString().toLowerCase() == "usdt") {
+          usdtInfo = {
+            "icon": element['image'],
+            'coinPrice': Decimal.parse(element['price'].toString()).toDouble(),
+            'percentage': Decimal.parse(element['price_change_per_24h'].toString()).toDouble(),
+          };
           break;
         }
       }
@@ -166,19 +154,11 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
   }
   Future<void> initCoinMainModel()async{
     WalletActionProvider wap=ref.read(wapBridgeProvider);
+    final selectedCoin = coinModels[coinModelIndex];
     int cIndex=wap.coinModels.indexWhere((element){
-      if(element.coin['coinType']==coinModels[coinModelIndex].coin['coinType']){
-        if(coinModels[coinModelIndex].privateKey !=null){
-          if(element.privateKey==coinModels[coinModelIndex].privateKey){
-            return true;
-          }else{
-            return false;
-          }
-        }else{
-          return true;
-        }
-      }
-      return false;
+      if(element.coin['coinType'] != selectedCoin.coin['coinType']) return false;
+      if(selectedCoin.privateKey == null) return true;
+      return element.privateKey == selectedCoin.privateKey;
     });
     if(cIndex !=-1){
       coinMain=wap.coinModels[cIndex];
@@ -257,36 +237,48 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
     });
   }
 
+  Color _themeColor(AppThemeKeys key) =>
+      AppThemeUtils.getColorByKey(context, key.name);
+
+  String get _buttonLabel {
+    switch (load) {
+      case Load.loading: return 'Paying...';
+      case Load.refresh: return 'Loading...';
+      default: return 'Payment';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final mainText = _themeColor(AppThemeKeys.mainTextColor);
+    final bgColor = _themeColor(AppThemeKeys.backGroundColor);
+    final su = ScreenUtil();
+    final s = S.of(context);
+    final userName = userInfo?.name ?? "";
+
     return Scaffold(
-      backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_payment_title,
-      ),
+      backgroundColor: bgColor,
+      appBar: AppBarWidget(text: s.g_key_payment_title),
       body: SafeArea(
         child: Stack(
           children: [
             Positioned.fill(
               child: Padding(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                padding: EdgeInsets.all(su.setWidth(30)),
                 child: Column(
                   children: [
                     Container(
-                      padding: EdgeInsets.all(ScreenUtil().setWidth(30),),
+                      padding: EdgeInsets.all(su.setWidth(30)),
                       decoration: BoxDecoration(
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16),)
+                        color: _themeColor(AppThemeKeys.itemBgColor),
+                        borderRadius: BorderRadius.circular(su.setWidth(16)),
                       ),
                       child: Column(
                         children: [
-                          if((userInfo?.name??"") != "")
+                          if(userName.isNotEmpty)
                             Text(
-                              userInfo?.name??"",
-                              style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                                fontSize: ScreenUtil().setSp(30),
-                              ),
+                              userName,
+                              style: TextStyle(color: mainText, fontSize: su.setSp(30)),
                             ),
                           EnsAddressDisplay(
                             address: address,
@@ -294,23 +286,22 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                             style: EnsDisplayStyle.compact,
                             showAvatar: false,
                             showCopy: false,
-                            textColor: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.mainTextColor.name),
-                            fontSize: ScreenUtil().setSp(30),
+                            textColor: mainText,
+                            fontSize: su.setSp(30),
                           ),
                           Text(
                             "\$ $amount",
                             style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                              fontSize: ScreenUtil().setSp(100),
+                              color: mainText,
+                              fontSize: su.setSp(100),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
-                            S.of(context).g_key_payment_approx_usdt(usdtAmount),
+                            s.g_key_payment_approx_usdt(usdtAmount),
                             style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                              fontSize: ScreenUtil().setSp(60),
+                              color: mainText,
+                              fontSize: su.setSp(60),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -322,26 +313,26 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                       mainCoin(),
                     if(coinModelIndex !=-1)
                       usdtCoin(),
-                    if(errorMessage !="")
+                    if(errorMessage.isNotEmpty)
                       Container(
                         width: double.infinity,
-                        padding: EdgeInsets.all(ScreenUtil().setWidth(30),),
-                        margin: EdgeInsets.only(top: ScreenUtil().setWidth(30),),
+                        padding: EdgeInsets.all(su.setWidth(30)),
+                        margin: EdgeInsets.only(top: su.setWidth(30)),
                         decoration: BoxDecoration(
-                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorBgColor2.name),
-                            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16),)
+                          color: _themeColor(AppThemeKeys.errorBgColor2),
+                          borderRadius: BorderRadius.circular(su.setWidth(16)),
                         ),
                         alignment: Alignment.center,
                         child: Text(
                           errorMessage,
                           style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
-                            fontSize: ScreenUtil().setSp(26),
+                            color: _themeColor(AppThemeKeys.errorTextColor),
+                            fontSize: su.setSp(26),
                           ),
                           textAlign: TextAlign.center,
                         ),
                       ),
-                    SizedBox(height: ScreenUtil().setWidth(148),),
+                    SizedBox(height: su.setWidth(148)),
                   ],
                 ),
               ),
@@ -352,30 +343,24 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
               bottom: 0,
               child: Column(
                 children: [
-                  Divider(
-                    height: ScreenUtil().setWidth(1),
-                    indent: 0,
-                    endIndent: 0,
-                  ),
+                  Divider(height: su.setWidth(1), indent: 0, endIndent: 0),
                   Container(
-                    padding: EdgeInsets.all( ScreenUtil().setWidth(30.0)),
-                    height: ScreenUtil().setWidth(148.0),
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+                    padding: EdgeInsets.all(su.setWidth(30.0)),
+                    height: su.setWidth(148.0),
+                    color: bgColor,
                     child: buttonStyle6(
                       context, ()async{
-                        if(errorMessage !="" && load !=Load.refresh)return;
+                        if(errorMessage.isNotEmpty && load !=Load.refresh)return;
                       bool? r=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletSecurityVerification()));
                       if(r==true){
                         web3Transaction();
                       }
                     },
-                      load==Load.loading?'Paying...':load==Load.refresh?"Loading...":"Payment",
-                      AppThemeUtils.getColorByKey(
-                        context, load==Load.finish?
-                      AppThemeKeys.mainButtonBgColor.name:
-                      AppThemeKeys.mainButtonBgColor3.name,
-                      ),
-                      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
+                      _buttonLabel,
+                      _themeColor(load==Load.finish
+                          ? AppThemeKeys.mainButtonBgColor
+                          : AppThemeKeys.mainButtonBgColor3),
+                      _themeColor(AppThemeKeys.mainButtonTextColor),
                       (load==Load.loading || load==Load.refresh),
                     ),
                   ),

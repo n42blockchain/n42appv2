@@ -113,19 +113,13 @@ class _WalletPageState extends ConsumerState<WalletPage> {
     _discoveryScanned = true;
 
     try {
-      final knownContracts = <String>{};
-      for (final chainType in wap.walletMap.keys) {
-        final chainData = wap.walletMap[chainType];
-        final mainnets =
-            chainData['mainnets'] as Map<dynamic, dynamic>? ?? {};
-        for (final tokenData in mainnets.values) {
-          if (tokenData is Map) {
-            final contract =
-                (tokenData['contract'] as String?)?.toLowerCase() ?? '';
-            if (contract.isNotEmpty) knownContracts.add(contract);
-          }
-        }
-      }
+      final knownContracts = wap.walletMap.values
+          .expand((chainData) =>
+              (chainData['mainnets'] as Map<dynamic, dynamic>? ?? {}).values)
+          .whereType<Map>()
+          .map((t) => (t['contract'] as String?)?.toLowerCase() ?? '')
+          .where((c) => c.isNotEmpty)
+          .toSet();
 
       final ignoredContracts = await SPUtil().getIgnoredTokenContracts();
 
@@ -172,61 +166,59 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   // ── WalletConnect ─────────────────────────────────────────────────────────
 
   Future<void> _walletConnect() async {
-    final walletConnectProvider = ref.read(wcpBridgeProvider);
-    await walletConnectProvider.connectInit();
+    final wcp = ref.read(wcpBridgeProvider);
+    await wcp.connectInit();
 
-    final activeSessions = walletConnectProvider.getActiveSessions();
-    if (activeSessions.isNotEmpty) {
-      await Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => WcSessionListPage()),
-      );
-      if (!mounted) return;
-      walletConnectProvider.refresh();
+    if (wcp.getActiveSessions().isNotEmpty) {
+      await _pushAndRefreshWc(WcSessionListPage(), wcp);
       return;
     }
 
-    final state = walletConnectProvider.walletConnectState;
-    if (state == WalletConnectState.disconnect ||
+    final state = wcp.walletConnectState;
+    final shouldScan = state == WalletConnectState.disconnect ||
         state == WalletConnectState.loading ||
-        state == WalletConnectState.connectOK) {
-      final scanStr = await _scan();
-      if (!mounted) return;
+        state == WalletConnectState.connectOK;
 
-      if (scanStr.contains('relay-protocol') && scanStr.contains('symKey')) {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => WalletConnectPage(scanStr)),
-        );
-        if (!mounted) return;
-        walletConnectProvider.refresh();
-      } else if (scanStr.isNotEmpty) {
-        final idx = scanStr.indexOf(AppConfig.apiUrl['walletamazeBrowser']);
-        if (idx != -1) {
-          final params = Uri.parse(scanStr).queryParameters;
-          if (params['type'] == 'payment') {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => PaymentPage(
-                  params["amount"],
-                  params["user"],
-                  params["coinType"],
-                  params["address"],
-                ),
-              ),
-            );
-          }
-        }
-      }
-    } else {
-      await Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => WalletConnectPage("")),
-      );
-      if (!mounted) return;
-      walletConnectProvider.refresh();
+    if (!shouldScan) {
+      await _pushAndRefreshWc(WalletConnectPage(""), wcp);
+      return;
     }
+
+    final scanStr = await _scan();
+    if (!mounted) return;
+
+    if (scanStr.contains('relay-protocol') && scanStr.contains('symKey')) {
+      await _pushAndRefreshWc(WalletConnectPage(scanStr), wcp);
+      return;
+    }
+
+    if (scanStr.isEmpty) return;
+    final idx = scanStr.indexOf(AppConfig.apiUrl['walletamazeBrowser']);
+    if (idx == -1) return;
+    final params = Uri.parse(scanStr).queryParameters;
+    if (params['type'] == 'payment') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => PaymentPage(
+            params["amount"],
+            params["user"],
+            params["coinType"],
+            params["address"],
+          ),
+        ),
+      );
+    }
+  }
+
+  /// push 一个 WC 页面，返回后刷新 provider
+  Future<void> _pushAndRefreshWc(Widget page, dynamic wcp) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => page),
+    );
+    if (!mounted) return;
+    wcp.refresh();
   }
 
   Future<String> _scan() async {
@@ -239,35 +231,36 @@ class _WalletPageState extends ConsumerState<WalletPage> {
 
   // ── WalletBoard callbacks ─────────────────────────────────────────────────
 
-  Future<void> _onSendTap(WalletActionProvider waValue) async {
-    if (waValue.walletInfo.watchOnly) {
+  /// 通用操作守卫：watchOnly 拦截 + 无密码引导备份。
+  /// 返回 true 表示可以继续执行操作。
+  Future<bool> _guardAction(WalletActionProvider waValue,
+      {bool blockWatchOnly = true}) async {
+    if (blockWatchOnly && waValue.walletInfo.watchOnly) {
       ToastUtils.show(S.of(context).g_key_watch_only_cant_send);
-      return;
+      return false;
     }
     if (waValue.walletInfo.password == "") {
       await _promptBackup(waValue);
-    } else {
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> _onSendTap(WalletActionProvider waValue) async {
+    if (await _guardAction(waValue) && mounted) {
       showSearchCoinSheet(context, 0);
     }
   }
 
   Future<void> _onReceiveTap(WalletActionProvider waValue) async {
     // 观察钱包允许查看接收地址；无密码时先引导备份
-    if (!waValue.walletInfo.watchOnly && waValue.walletInfo.password == "") {
-      await _promptBackup(waValue);
-      return;
+    if (await _guardAction(waValue, blockWatchOnly: false) && mounted) {
+      showSearchCoinSheet(context, 1);
     }
-    showSearchCoinSheet(context, 1);
   }
 
   Future<void> _onSwapTap(WalletActionProvider waValue) async {
-    if (waValue.walletInfo.watchOnly) {
-      ToastUtils.show(S.of(context).g_key_watch_only_cant_send);
-      return;
-    }
-    if (waValue.walletInfo.password == "") {
-      await _promptBackup(waValue);
-    } else {
+    if (await _guardAction(waValue) && mounted) {
       showSwapModeSheet(context);
     }
   }

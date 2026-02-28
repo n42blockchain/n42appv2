@@ -91,58 +91,52 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
     super.dispose();
   }
 
+  // ─── coin field helpers ─────────────────────────────────────────────────────
+
+  String get _coinId => (_coin['coin_gecko_id'] ?? '').toString().trim();
+  String get _coinSymbol => (_coin['coin'] ?? '').toString().trim();
+  String get _coinName => (_coin['name'] ?? '').toString().trim();
+
   // ─── data fetching ─────────────────────────────────────────────────────────
 
   Future<void> _loadAlertConfig() async {
-    final coinId = (_coin['coin_gecko_id'] ?? '').toString().trim();
-    if (coinId.isEmpty) return;
+    if (_coinId.isEmpty) return;
     final all = await CoinPriceAlertService.loadAll();
     if (!mounted) return;
-    setState(() => _alertConfig = all[coinId]);
+    setState(() => _alertConfig = all[_coinId]);
   }
 
   Future<void> _loadTrades() async {
-    final coinId = (_coin['coin_gecko_id'] ?? '').toString().trim();
-    if (coinId.isEmpty) return;
-    final list = await PortfolioTradeService.getTradesForCoin(coinId);
+    if (_coinId.isEmpty) return;
+    final list = await PortfolioTradeService.getTradesForCoin(_coinId);
     if (!mounted) return;
     setState(() => _trades = list);
   }
 
   Future<void> _openTradeSheet() async {
-    final coinId = (_coin['coin_gecko_id'] ?? '').toString().trim();
-    final symbol = (_coin['coin'] ?? '').toString().trim();
-    final name   = (_coin['name'] ?? '').toString().trim();
-    final price  = toDouble(_coin['price']);
-
     final changed = await showTradeEntrySheet(
       context: context,
-      coinId: coinId,
-      symbol: symbol,
-      name: name,
-      currentPrice: price,
+      coinId: _coinId,
+      symbol: _coinSymbol,
+      name: _coinName,
+      currentPrice: toDouble(_coin['price']),
     );
     if (changed == true) await _loadTrades();
   }
 
   Future<void> _openAlertSheet() async {
-    final coinId = (_coin['coin_gecko_id'] ?? '').toString().trim();
-    final symbol = (_coin['coin'] ?? '').toString().trim();
-    final name   = (_coin['name'] ?? '').toString().trim();
-    final price  = toDouble(_coin['price']);
-
     final changed = await showPriceAlertSheet(
       context: context,
-      coinId: coinId,
-      symbol: symbol,
-      name: name,
-      currentPrice: price,
+      coinId: _coinId,
+      symbol: _coinSymbol,
+      name: _coinName,
+      currentPrice: toDouble(_coin['price']),
     );
     if (changed == true) await _loadAlertConfig();
   }
 
   Future<void> _fetchCoinPrice() async {
-    final coinSymbol = (_coin['coin'] ?? '').toString().trim();
+    final coinSymbol = _coinSymbol;
     if (coinSymbol.isEmpty) return;
 
     final result = await MarketApi().getWalletCoinsInfo(coinSymbol);
@@ -164,7 +158,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
   }
 
   Future<void> _fetchCoinInfo() async {
-    final geckoId = (_coin['coin_gecko_id'] ?? '').toString().trim();
+    final geckoId = _coinId;
     if (geckoId.isEmpty) {
       if (mounted) setState(() => _infoLoad = Load.error);
       return;
@@ -186,7 +180,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
   }
 
   Future<void> _fetchChartData() async {
-    final geckoId = (_coin['coin_gecko_id'] ?? '').toString().trim();
+    final geckoId = _coinId;
     if (geckoId.isEmpty) return;
 
     final generation = ++_chartGeneration;
@@ -195,17 +189,16 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
     final api  = MarketApi();
     final days = periodDays[_periodIndex];
 
-    // Both futures start immediately and run concurrently.
-    final ohlcFuture  = api.getOhlcvData(geckoId, days: days);
-    final chartFuture = api.getMarketChart(geckoId, days: days);
-    final ohlc  = await ohlcFuture;
-    final chart = await chartFuture;
+    final results = await Future.wait([
+      api.getOhlcvData(geckoId, days: days),
+      api.getMarketChart(geckoId, days: days),
+    ]);
 
     if (!mounted || generation != _chartGeneration) return;
 
     setState(() {
-      _ohlcvData    = ohlc;
-      _volumeData   = chart['volumes'] ?? [];
+      _ohlcvData    = results[0] as List<OhlcPoint>;
+      _volumeData   = (results[1] as Map<String, dynamic>)['volumes'] ?? [];
       _chartLoading = false;
     });
   }
@@ -308,8 +301,6 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final coinId = (_coin['coin_gecko_id'] ?? '').toString().trim();
-
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -392,7 +383,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
           ],
         ),
       ),
-      floatingActionButton: coinId.isNotEmpty
+      floatingActionButton: _coinId.isNotEmpty
           ? FloatingActionButton.small(
               onPressed: _openTradeSheet,
               tooltip: S.of(context).g_pnl_add_trade,

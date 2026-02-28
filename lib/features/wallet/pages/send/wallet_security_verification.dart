@@ -74,11 +74,9 @@ class _WalletSecurityVerificationState
   @override
   void dispose() {
     _emailTimer?.cancel();
-    _emailTimer = null;
     pwdTextEditingController.dispose();
     emailTextEditingController.dispose();
     googleTextEditingController.dispose();
-    emailSendWaitNum = 0;
     super.dispose();
   }
 
@@ -88,17 +86,14 @@ class _WalletSecurityVerificationState
       final Map<String, dynamic>? userSecurityMap =
           s[AppGlobals.userInfo?.uuid ?? ''];
       if (userSecurityMap != null) {
-        setState(() {
-          securityMap['email'] = userSecurityMap['email'];
-          securityMap['google'] = userSecurityMap['google'] ?? false;
-          securityMap['face'] = userSecurityMap['face'] ?? false;
-        });
+        securityMap['email'] = userSecurityMap['email'];
+        securityMap['google'] = userSecurityMap['google'] ?? false;
+        securityMap['face'] = userSecurityMap['face'] ?? false;
       }
     }
     if (!mounted) return;
-    if (ref.read(wapBridgeProvider).walletInfo.password != '') {
-      showWalletPassword = true;
-    }
+    showWalletPassword =
+        ref.read(wapBridgeProvider).walletInfo.password != '';
     setState(() {});
   }
 
@@ -107,16 +102,9 @@ class _WalletSecurityVerificationState
     final String pwdStr = pwdTextEditingController.text;
     final String oldPwdStr =
         ref.read(wapBridgeProvider).walletInfo.password ?? '';
-    if (oldPwdStr != pwdStr) {
-      setState(() {
-        pwdErrorMessage = S.of(context).g_key_t_34;
-      });
-      return false;
-    }
-    setState(() {
-      pwdErrorMessage = '';
-    });
-    return true;
+    final bool match = oldPwdStr == pwdStr;
+    setState(() => pwdErrorMessage = match ? '' : S.of(context).g_key_t_34);
+    return match;
   }
 
   // 关闭键盘
@@ -226,31 +214,28 @@ class _WalletSecurityVerificationState
 
   // 检查生物特征是否可用
   Future<void> _checkBiometrics(LocalAuthentication auth) async {
-    bool canCheckBiometrics;
+    bool canCheck;
     try {
-      canCheckBiometrics = await auth.canCheckBiometrics;
+      canCheck = await auth.canCheckBiometrics;
     } on PlatformException catch (_) {
-      canCheckBiometrics = false;
+      canCheck = false;
     }
-    if (canCheckBiometrics) {
-      final List<BiometricType> available =
-          await auth.getAvailableBiometrics();
-      canCheckBiometrics = available.isNotEmpty &&
-          (available.contains(BiometricType.face) ||
-              available.contains(BiometricType.strong) ||
-              available.contains(BiometricType.weak) ||
-              available.contains(BiometricType.fingerprint));
+    if (canCheck) {
+      const supportedTypes = {
+        BiometricType.face,
+        BiometricType.strong,
+        BiometricType.weak,
+        BiometricType.fingerprint,
+      };
+      final available = await auth.getAvailableBiometrics();
+      canCheck = available.any(supportedTypes.contains);
     }
-    if (canCheckBiometrics) {
-      setState(() {
-        faceErrorMessage = '';
-      });
-      await _authenticateWithBiometrics(auth);
-    } else {
-      setState(() {
-        faceErrorMessage = S.of(context).g_lock_key7;
-      });
+    if (!canCheck) {
+      setState(() => faceErrorMessage = S.of(context).g_lock_key7);
+      return;
     }
+    setState(() => faceErrorMessage = '');
+    await _authenticateWithBiometrics(auth);
   }
 
   // 执行生物特征验证
@@ -317,6 +302,9 @@ class _WalletSecurityVerificationState
     return Future.value(false);
   }
 
+  /// 重置 loading 状态
+  void _finishLoading() => setState(() => load = Load.finish);
+
   // 确认按钮：依次校验所有安全项
   Future<void> _onConfirm() async {
     closeKeyboard();
@@ -329,57 +317,33 @@ class _WalletSecurityVerificationState
 
     if (securityMap['face'] == true) {
       if (faceCheck != 1) {
-        setState(() {
-          faceErrorMessage = S.of(context).verification;
-        });
+        setState(() => faceErrorMessage = S.of(context).verification);
         return;
-      } else {
-        setState(() {
-          faceErrorMessage = '';
-        });
       }
+      setState(() => faceErrorMessage = '');
     }
 
-    setState(() {
-      load = Load.loading;
-    });
+    setState(() => load = Load.loading);
 
-    if (showWalletPassword) {
-      if (!checkPwd()) {
-        setState(() {
-          load = Load.finish;
-        });
-        return;
-      }
+    if (showWalletPassword && !checkPwd()) {
+      _finishLoading();
+      return;
     }
 
     if (securityMap['email'] == true) {
       final bool ok = await checkEmailVerification();
       if (!context.mounted) return;
-      if (!ok) {
-        setState(() {
-          load = Load.finish;
-        });
-        return;
-      }
+      if (!ok) { _finishLoading(); return; }
     }
 
     if (securityMap['google'] == true) {
       final bool ok = await checkGoogleVerification();
       if (!context.mounted) return;
-      if (!ok) {
-        setState(() {
-          load = Load.finish;
-        });
-        return;
-      }
+      if (!ok) { _finishLoading(); return; }
     }
 
     if (!context.mounted) return;
-    setState(() {
-      load = Load.finish;
-    });
-    // mounted 已检查，此处使用 context 安全
+    _finishLoading();
     // ignore: use_build_context_synchronously
     Navigator.pop(context, true);
   }
@@ -391,7 +355,7 @@ class _WalletSecurityVerificationState
       title: S.of(context).login_need_login,
     );
     if (!mounted) return;
-    if (flag != null && flag) {
+    if (flag == true) {
       await Navigator.pushNamed(context, '/LoginPage');
       if (!mounted) return;
       Navigator.popUntil(context, ModalRoute.withName('/'));

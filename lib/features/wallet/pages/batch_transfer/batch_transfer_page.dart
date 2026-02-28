@@ -201,20 +201,15 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
 
   BigInt _parseAmount(String amountStr) {
     try {
-      amountStr = amountStr.replaceAll(',', '');
-      if (amountStr.contains('.')) {
-        final parts = amountStr.split('.');
-        final intPart = parts[0];
-        var decPart = parts[1];
-        if (decPart.length > widget.decimals) {
-          decPart = decPart.substring(0, widget.decimals);
-        } else {
-          decPart = decPart.padRight(widget.decimals, '0');
-        }
-        return BigInt.parse('$intPart$decPart');
-      } else {
-        return BigInt.parse(amountStr) * BigInt.from(10).pow(widget.decimals);
+      final cleaned = amountStr.replaceAll(',', '');
+      if (!cleaned.contains('.')) {
+        return BigInt.parse(cleaned) * BigInt.from(10).pow(widget.decimals);
       }
+      final parts = cleaned.split('.');
+      final decPart = parts[1].length > widget.decimals
+          ? parts[1].substring(0, widget.decimals)
+          : parts[1].padRight(widget.decimals, '0');
+      return BigInt.parse('${parts[0]}$decPart');
     } catch (_) {
       return BigInt.zero;
     }

@@ -4,34 +4,36 @@ part of 'wallet_action_provider.dart';
 /// and coin list operations.
 extension WalletActionProviderToken on WalletActionProvider {
 
+  /// 从链配置中提取 token map（test 取 testnetContract，main 取 mainnets）。
+  /// 仅当 tokens 非空时返回，否则返回空 Map。
+  Map<String, dynamic> _extractTokens(Map<dynamic, dynamic> chainConfig) {
+    final Map<dynamic, dynamic> raw;
+    if (chainConfig['isTest'] == true) {
+      raw = chainConfig['testnets'][0]['testnetContract'] as Map<dynamic, dynamic>;
+    } else {
+      raw = chainConfig['mainnets'] as Map<dynamic, dynamic>;
+    }
+    if (raw.isEmpty) return {};
+    return Map<String, dynamic>.from(raw);
+  }
+
   //构建 币模型
   Future<void> buildCoinModel() async {
     if (_walletInfoLsit.isEmpty) return;
-    List<dynamic> keym =walletMap.keys.toList();
+    final keys = walletMap.keys.toList();
 
     _coinModels=[];
-    for (int i = 0; i < keym.length; i++) {
-      CoinModel cm = CoinModel.fromMap(walletMap[keym[i]]['baseInfo']);
-      bool? showList=walletMap[keym[i]]['showList'];
-      if(showList==null){
-        walletMap[keym[i]]['showList']=true;
-      }
-      cm.showList=walletMap[keym[i]]['showList'];
-      cm.isTest=walletMap[keym[i]]['isTest'];
-      cm.addrType=walletMap[keym[i]]['addrType'];
-      cm.custom=walletMap[keym[i]]['baseInfo']['custom']??false;
-      cm.pathIndex=walletMap[keym[i]]['pathIndex'] ?? 0;
-      if(cm.isTest){
-        Map<dynamic,dynamic> tokens=walletMap[keym[i]]['testnets'][0]['testnetContract'];
-        if(tokens.isNotEmpty){
-          cm.tokens=walletMap[keym[i]]['testnets'][0]['testnetContract'];
-        }
-      }else{
-        Map<dynamic,dynamic> tokens=walletMap[keym[i]]['mainnets'];
-        if(tokens.isNotEmpty){
-          cm.tokens=walletMap[keym[i]]['mainnets'];
-        }
-      }
+    for (final key in keys) {
+      final chain = walletMap[key];
+      chain['showList'] ??= true;
+      CoinModel cm = CoinModel.fromMap(chain['baseInfo']);
+      cm.showList=chain['showList'];
+      cm.isTest=chain['isTest'];
+      cm.addrType=chain['addrType'];
+      cm.custom=chain['baseInfo']['custom']??false;
+      cm.pathIndex=chain['pathIndex'] ?? 0;
+      final tokens = _extractTokens(chain);
+      if (tokens.isNotEmpty) cm.tokens = tokens;
       cm.privateKey=walletInfo.privateKey;
       cm.walletAccess=this;
       _coinModels.add(cm);
@@ -103,12 +105,8 @@ extension WalletActionProviderToken on WalletActionProvider {
           ethIndex = coinList.length; // 记录插入位置（ETH 之后）
         }
       }
-      List<String> tokenKeys=mm.tokens.keys.toList();
-      for(String key in tokenKeys){
-        Map<String,dynamic> token=mm.tokens[key];
-        CoinModel cm=buildTokenCoinModel(mm,token);
-        coinList.add(cm);
-        //setTokenBalanceTotal(tokenBalanceTotal+cm.value);
+      for(final token in mm.tokens.values){
+        coinList.add(buildTokenCoinModel(mm, token));
       }
       refresh();
     }
@@ -160,10 +158,8 @@ extension WalletActionProviderToken on WalletActionProvider {
             ethIndex = coinList.length;
           }
         }
-        List<String> tokenKeys=mm.tokens.keys.toList();
-        for(String key in tokenKeys){
-          CoinModel cm=buildTokenCoinModel(mm,mm.tokens[key]);
-          coinList.add(cm);
+        for(final token in mm.tokens.values){
+          coinList.add(buildTokenCoinModel(mm, token));
         }
         refresh();
       }
@@ -182,10 +178,8 @@ extension WalletActionProviderToken on WalletActionProvider {
         mm.getBalanceDefault();
         coinList.add(mm);
       }
-      List<String> tokenKeys=mm.tokens.keys.toList();
-      for(String key in tokenKeys){
-        CoinModel cm=buildTokenCoinModel(mm,mm.tokens[key]);
-        coinList.add(cm);
+      for(final token in mm.tokens.values){
+        coinList.add(buildTokenCoinModel(mm, token));
       }
       _syncPinnedState();
     }
@@ -221,41 +215,25 @@ extension WalletActionProviderToken on WalletActionProvider {
   Future<void> reBuildCoin(WalletInfo wInfo,String coinType)async{
     _walletInfoLsit[walletIndex]=wInfo;
     saveWalletInfo(walletInfo, walletIndex);
-    int cIndex = _coinModels.indexWhere((element){
-      if(element.coin['coinType']==coinType){
-        return true;
-      }
-      return false;
-    });
+    final cIndex = _coinModels.indexWhere((e) => e.coin['coinType'] == coinType);
     _coinModels[cIndex].coin=walletMap[coinType]['baseInfo'];
     _coinModels[cIndex].pathIndex=walletMap[coinType]['pathIndex'];
     _coinModels[cIndex].addrType=walletMap[coinType]['addrType'];
     _coinModels[cIndex].address=null;
 
-    int clIndex= coinList.indexWhere((element){
-      if(element.coin['coinType']==coinType && element.coin['isContract']==false){
-        return true;
-      }
-      return false;
-    });
+    final clIndex = coinList.indexWhere((e) =>
+      e.coin['coinType'] == coinType && e.coin['isContract'] == false);
     if(clIndex !=-1){
       coinList[clIndex]=_coinModels[cIndex];
       coinList[clIndex].buildWallet(walletAccess: this);
       coinList[clIndex].getBalanceDefault();
       if(coinList[clIndex].tokens.isNotEmpty){
-        List<String> tKeys=coinList[clIndex].tokens.keys.toList();
-        for(String tkey in tKeys){
-          Map<String,dynamic> token=coinList[clIndex].tokens[tkey];
-          int tIndex=coinList.indexWhere((element){
-            if(element.coin['coinType']==coinType && element.coin['contract']==token['contract']){
-              return true;
-            }
-            return false;
-          });
+        for(final token in coinList[clIndex].tokens.values){
+          final tIndex = coinList.indexWhere((e) =>
+            e.coin['coinType'] == coinType && e.coin['contract'] == token['contract']);
           if(tIndex != -1){
             coinList[tIndex]=buildTokenCoinModel(coinList[clIndex], token);
           }
-
         }
       }
     }
@@ -266,20 +244,17 @@ extension WalletActionProviderToken on WalletActionProvider {
 
   //添加主链币
   Future<void> addWalletChain(Map<String,dynamic> chainMap)async{
-    Map<String,dynamic>? cMap=walletMap[chainMap['baseInfo']['mKey']];
+    final mKey = chainMap['baseInfo']['mKey'];
+    final cMap = walletMap[mKey];
     if(cMap != null){
-      int index=_coinModels.indexWhere((element) {
-        if(element.coin['coinType']==chainMap['baseInfo']['coinType']){
-          return true;
-        }
-        return false;
-      });
+      final index = _coinModels.indexWhere((e) =>
+        e.coin['coinType'] == chainMap['baseInfo']['coinType']);
       _coinModels[index].showList=true;
       coinList.add(_coinModels[index]);
       getCoinPrice(coinList.last);
       coinList.last.getBalanceDefault();
       cMap['showList']=chainMap['showList'];
-      walletMap[chainMap['baseInfo']['mKey']]=cMap;
+      walletMap[mKey]=cMap;
     }
     else{
       CoinModel cm = CoinModel.fromMap(chainMap['baseInfo']);
@@ -288,22 +263,13 @@ extension WalletActionProviderToken on WalletActionProvider {
       cm.custom=chainMap['baseInfo']['custom']??false;
       cm.addrType=chainMap['addrType'];
       cm.pathIndex=chainMap['pathIndex'] ?? 0;
-      if(cm.isTest){
-        Map<dynamic,dynamic> tokens=chainMap['testnets'][0]['testnetContract'];
-        if(tokens.isNotEmpty){
-          cm.tokens=walletMap[chainMap['testnets']['testnetContract']];
-        }
-      }else{
-        Map<dynamic,dynamic> tokens=chainMap['mainnets'];
-        if(tokens.isNotEmpty){
-          cm.tokens=chainMap['mainnets'];
-        }
-      }
+      final tokens = _extractTokens(chainMap);
+      if (tokens.isNotEmpty) cm.tokens = tokens;
       _coinModels.add(cm);
       coinList.add(cm);
       getCoinPrice(cm);
       cm.getBalanceDefault();
-      walletMap[chainMap['baseInfo']['mKey']]=chainMap;
+      walletMap[mKey]=chainMap;
     }
     refresh();
     await saveWalletInfo(walletInfo, walletIndex);
@@ -381,12 +347,8 @@ extension WalletActionProviderToken on WalletActionProvider {
     }
     saveWalletInfo(walletInfo, walletIndex);
 
-    int coinIndex =_coinModels.indexWhere((element){
-      if(element.coin['coinType']==token['coinType']){
-        return true;
-      }
-      return false;
-    });
+    final coinIndex = _coinModels.indexWhere((e) =>
+      e.coin['coinType'] == token['coinType']);
     CoinModel mm=_coinModels[coinIndex];
     CoinModel cm=CoinModel.fromMap(token);
     cm.pathIndex=mm.pathIndex;
@@ -401,12 +363,7 @@ extension WalletActionProviderToken on WalletActionProvider {
 
   //将代币从当前钱包中移除
   void removeWalletChainToken(Map<String,dynamic> token,{String? symbol,String? miniName}){
-    String symbolStr;
-    if(symbol==null){
-      symbolStr=token['symbol'].toUpperCase();
-    }else{
-      symbolStr=symbol.toUpperCase();
-    }
+    final symbolStr = (symbol ?? token['symbol']).toString().toUpperCase();
     Map<String,dynamic>tokens;
     if(walletMap[symbolStr]['isTest']){
       tokens= walletMap[symbolStr]['testnets'][0]['testnetContract'];
@@ -427,7 +384,6 @@ extension WalletActionProviderToken on WalletActionProvider {
       if(cm.coin['coinType']==symbolStr){
         if(cm.coin['mKey']==token['contract'].toString().toUpperCase()){
           coinList.remove(cm);
-          //removeAt(i);
           break;
         }
       }
