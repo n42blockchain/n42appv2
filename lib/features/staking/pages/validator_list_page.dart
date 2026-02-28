@@ -43,6 +43,16 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
   ValidatorSortBy _sortBy = ValidatorSortBy.apy;
   bool _sortAscending = false;
 
+  // ── Theme color helpers ───────────────────────────────────────────────
+  Color _itemBgColor() =>
+      AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
+  Color _mainTextColor() =>
+      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+  Color _subtitleColor() =>
+      AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+  Color _blueColor() =>
+      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+
   @override
   void initState() {
     super.initState();
@@ -58,14 +68,14 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
 
   void _filterValidators(String query) {
     setState(() {
-      if (query.isEmpty) {
-        _filteredValidators = List.from(widget.validators);
-      } else {
-        _filteredValidators = widget.validators.where((v) {
-          return v.name.toLowerCase().contains(query.toLowerCase()) ||
-              v.address.toLowerCase().contains(query.toLowerCase());
-        }).toList();
-      }
+      final lowerQuery = query.toLowerCase();
+      _filteredValidators = query.isEmpty
+          ? List.from(widget.validators)
+          : widget.validators
+              .where((v) =>
+                  v.name.toLowerCase().contains(lowerQuery) ||
+                  v.address.toLowerCase().contains(lowerQuery))
+              .toList();
       _sortValidators();
     });
   }
@@ -134,7 +144,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
       margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: _itemBgColor(),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: TextField(
@@ -145,13 +155,10 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
             color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textFieldHintColor.name),
           ),
           border: InputBorder.none,
-          prefixIcon: Icon(
-            Icons.search,
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-          ),
+          prefixIcon: Icon(Icons.search, color: _subtitleColor()),
           suffixIcon: _searchController.text.isNotEmpty
               ? IconButton(
-                  icon: Icon(Icons.clear),
+                  icon: const Icon(Icons.clear),
                   onPressed: () {
                     _searchController.clear();
                     _filterValidators('');
@@ -173,7 +180,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
             S.of(context).g_key_stake_sort_by,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(24),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: _subtitleColor(),
             ),
           ),
           SizedBox(width: ScreenUtil().setWidth(12)),
@@ -198,9 +205,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
           vertical: ScreenUtil().setWidth(8),
         ),
         decoration: BoxDecoration(
-          color: isSelected
-              ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-              : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: isSelected ? _blueColor() : _itemBgColor(),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
         ),
         child: Row(
@@ -210,9 +215,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
               label,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(24),
-                color: isSelected
-                    ? Colors.white
-                    : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                color: isSelected ? Colors.white : _mainTextColor(),
               ),
             ),
             if (isSelected) ...[
@@ -230,22 +233,16 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
   }
 
   Widget _buildEmptyState(BuildContext context) {
+    final color = _subtitleColor();
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.search_off,
-            size: ScreenUtil().setWidth(80),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-          ),
+          Icon(Icons.search_off, size: ScreenUtil().setWidth(80), color: color),
           SizedBox(height: ScreenUtil().setWidth(20)),
           Text(
             S.of(context).g_key_stake_no_validators,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(30),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-            ),
+            style: TextStyle(fontSize: ScreenUtil().setSp(30), color: color),
           ),
         ],
       ),
@@ -258,20 +255,19 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
     bool isSelected,
     int rank,
   ) {
+    final blue = _blueColor();
+    final textColor = _mainTextColor();
+    final logoSize = ScreenUtil().setWidth(48);
+
     return GestureDetector(
       onTap: () => Navigator.pop(context, validator),
       child: Container(
         margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
         padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: _itemBgColor(),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-          border: isSelected
-              ? Border.all(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                  width: 2,
-                )
-              : null,
+          border: isSelected ? Border.all(color: blue, width: 2) : null,
         ),
         child: Row(
           children: [
@@ -280,10 +276,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
               width: ScreenUtil().setWidth(40),
               height: ScreenUtil().setWidth(40),
               decoration: BoxDecoration(
-                color: rank <= 3
-                    ? _getRankColor(rank)
-                    : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-                        .withAlpha(50),
+                color: rank <= 3 ? _getRankColor(rank) : blue.withAlpha(50),
                 shape: BoxShape.circle,
               ),
               child: Center(
@@ -292,10 +285,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(22),
                     fontWeight: FontWeight.bold,
-                    color: rank <= 3 ? Colors.white : AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
+                    color: rank <= 3 ? Colors.white : textColor,
                   ),
                 ),
               ),
@@ -309,9 +299,10 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
               child: validator.logoUri.isNotEmpty
                   ? Image.network(
                       validator.logoUri,
-                      width: ScreenUtil().setWidth(48),
-                      height: ScreenUtil().setWidth(48),
-                      errorBuilder: (ctx, error, stackTrace) => _buildDefaultValidatorLogo(context, validator),
+                      width: logoSize,
+                      height: logoSize,
+                      errorBuilder: (_, _, _) =>
+                          _buildDefaultValidatorLogo(context, validator),
                     )
                   : _buildDefaultValidatorLogo(context, validator),
             ),
@@ -331,10 +322,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(28),
                             fontWeight: FontWeight.w600,
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainTextColor.name,
-                            ),
+                            color: textColor,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -344,7 +332,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
                         Container(
                           width: ScreenUtil().setWidth(12),
                           height: ScreenUtil().setWidth(12),
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Colors.green,
                             shape: BoxShape.circle,
                           ),
@@ -356,25 +344,20 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
                     shortenStakingAddress(validator.address),
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(22),
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ),
+                      color: _subtitleColor(),
                     ),
                   ),
                   SizedBox(height: ScreenUtil().setWidth(8)),
                   Row(
                     children: [
                       _buildInfoChip(
-                        context,
-                        'APY',
+                        context, 'APY',
                         '${validator.apy.toStringAsFixed(1)}%',
                         Colors.green,
                       ),
                       SizedBox(width: ScreenUtil().setWidth(8)),
                       _buildInfoChip(
-                        context,
-                        'Fee',
+                        context, 'Fee',
                         '${validator.commission.toStringAsFixed(1)}%',
                         Colors.orange,
                       ),
@@ -386,11 +369,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
 
             // 选中标记
             if (isSelected)
-              Icon(
-                Icons.check_circle,
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                size: ScreenUtil().setWidth(36),
-              ),
+              Icon(Icons.check_circle, color: blue, size: ScreenUtil().setWidth(36)),
           ],
         ),
       ),
@@ -398,13 +377,11 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
   }
 
   Widget _buildDefaultValidatorLogo(BuildContext context, Validator validator) {
+    final size = ScreenUtil().setWidth(48);
     return Container(
-      width: ScreenUtil().setWidth(48),
-      height: ScreenUtil().setWidth(48),
-      decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-        shape: BoxShape.circle,
-      ),
+      width: size,
+      height: size,
+      decoration: BoxDecoration(color: _blueColor(), shape: BoxShape.circle),
       child: Center(
         child: Text(
           validator.name.substring(0, 1).toUpperCase(),
@@ -419,6 +396,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
   }
 
   Widget _buildInfoChip(BuildContext context, String label, String value, Color color) {
+    final sp20 = ScreenUtil().setSp(20);
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: ScreenUtil().setWidth(10),
@@ -431,25 +409,9 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(20),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
-            ),
-          ),
+          Text(label, style: TextStyle(fontSize: sp20, color: _subtitleColor())),
           SizedBox(width: ScreenUtil().setWidth(4)),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(20),
-              fontWeight: FontWeight.w600,
-              color: color,
-            ),
-          ),
+          Text(value, style: TextStyle(fontSize: sp20, fontWeight: FontWeight.w600, color: color)),
         ],
       ),
     );

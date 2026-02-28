@@ -57,13 +57,11 @@ mixin EnsResolveMixin<T extends StatefulWidget> on State<T> {
   }
 
   Future<void> _resolveEnsRealtime(String ensName, String coinType) async {
-    final result =
-        await ensService.resolveName(ensName, preferredChain: coinType);
+    final result = await ensService.resolveName(ensName, preferredChain: coinType);
     if (!mounted) return;
+    final resolved = result.success && result.address != null;
     setState(() {
-      ensStatus = result.success && result.address != null
-          ? EnsResolveStatus.resolved
-          : EnsResolveStatus.failed;
+      ensStatus = resolved ? EnsResolveStatus.resolved : EnsResolveStatus.failed;
       ensResult = result;
     });
   }
@@ -92,8 +90,6 @@ class EnsStatusBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (status == EnsResolveStatus.idle) return const SizedBox.shrink();
-
     final subtitleColor = AppThemeUtils.getColorByKey(
         context, AppThemeKeys.itemSubtitleTextColor.name);
     final mainTextColor =
@@ -101,26 +97,21 @@ class EnsStatusBanner extends StatelessWidget {
     final blueColor =
         AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
 
-    if (status == EnsResolveStatus.resolving) {
-      return _ResolvingBanner(
-          subtitleColor: subtitleColor, blueColor: blueColor);
-    }
-
-    if (status == EnsResolveStatus.failed) {
-      final errMsg = result?.error ?? S.of(context).g_key_t_50;
-      return _FailedBanner(message: errMsg);
-    }
-
-    if (status == EnsResolveStatus.resolved && result?.address != null) {
-      return _ResolvedBanner(
-        result: result!,
-        subtitleColor: subtitleColor,
-        mainTextColor: mainTextColor,
-        blueColor: blueColor,
-      );
-    }
-
-    return const SizedBox.shrink();
+    return switch (status) {
+      EnsResolveStatus.idle => const SizedBox.shrink(),
+      EnsResolveStatus.resolving => _ResolvingBanner(
+          subtitleColor: subtitleColor, blueColor: blueColor),
+      EnsResolveStatus.failed => _FailedBanner(
+          message: result?.error ?? S.of(context).g_key_t_50),
+      EnsResolveStatus.resolved => result?.address != null
+          ? _ResolvedBanner(
+              result: result!,
+              subtitleColor: subtitleColor,
+              mainTextColor: mainTextColor,
+              blueColor: blueColor,
+            )
+          : const SizedBox.shrink(),
+    };
   }
 }
 
@@ -135,23 +126,27 @@ class _ResolvingBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final su = ScreenUtil();
+    final w8 = su.setWidth(8);
+    final w20 = su.setWidth(20);
+
     return Padding(
-      padding: EdgeInsets.only(top: ScreenUtil().setWidth(8)),
+      padding: EdgeInsets.only(top: w8),
       child: Row(
         children: [
           SizedBox(
-            width: ScreenUtil().setWidth(20),
-            height: ScreenUtil().setWidth(20),
+            width: w20,
+            height: w20,
             child: CircularProgressIndicator(
               strokeWidth: 1.5,
               valueColor: AlwaysStoppedAnimation<Color>(blueColor),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          SizedBox(width: w8),
           Text(
             S.of(context).g_key_ens_resolving,
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(22),
+              fontSize: su.setSp(22),
               color: subtitleColor,
             ),
           ),
@@ -168,21 +163,21 @@ class _FailedBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final su = ScreenUtil();
+    final w6 = su.setWidth(6);
+
     return Padding(
-      padding: EdgeInsets.only(
-        top: ScreenUtil().setWidth(6),
-        left: ScreenUtil().setWidth(4),
-      ),
+      padding: EdgeInsets.only(top: w6, left: su.setWidth(4)),
       child: Row(
         children: [
           Icon(Icons.warning_amber_rounded,
-              color: Colors.orange, size: ScreenUtil().setWidth(20)),
-          SizedBox(width: ScreenUtil().setWidth(6)),
+              color: Colors.orange, size: su.setWidth(20)),
+          SizedBox(width: w6),
           Expanded(
             child: Text(
               message,
               style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+                fontSize: su.setSp(22),
                 color: Colors.orange,
               ),
             ),
@@ -208,12 +203,15 @@ class _ResolvedBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final su = ScreenUtil();
+    final w8 = su.setWidth(8);
     final resolvedAddr = result.address!;
     final shortAddr = AddressValidator.getAddressPreview(
       resolvedAddr,
       prefixLength: 6,
       suffixLength: 4,
     );
+    const successColor = Color(0xFF4CAF50);
 
     return GestureDetector(
       onTap: () {
@@ -227,26 +225,26 @@ class _ResolvedBanner extends StatelessWidget {
         );
       },
       child: Container(
-        margin: EdgeInsets.only(top: ScreenUtil().setWidth(8)),
+        margin: EdgeInsets.only(top: w8),
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(12),
-          vertical: ScreenUtil().setWidth(8),
+          horizontal: su.setWidth(12),
+          vertical: w8,
         ),
         decoration: BoxDecoration(
-          color: const Color(0xFF4CAF50).withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+          color: successColor.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(w8),
           border: Border.all(
-            color: const Color(0xFF4CAF50).withValues(alpha: 0.3),
+            color: successColor.withValues(alpha: 0.3),
           ),
         ),
         child: Row(
           children: [
             Icon(
               Icons.check_circle_outline,
-              color: const Color(0xFF4CAF50),
-              size: ScreenUtil().setWidth(20),
+              color: successColor,
+              size: su.setWidth(20),
             ),
-            SizedBox(width: ScreenUtil().setWidth(8)),
+            SizedBox(width: w8),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -255,14 +253,14 @@ class _ResolvedBanner extends StatelessWidget {
                   Text(
                     S.of(context).g_key_ens_resolved_address,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(20),
+                      fontSize: su.setSp(20),
                       color: subtitleColor,
                     ),
                   ),
                   Text(
                     shortAddr,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
+                      fontSize: su.setSp(24),
                       fontWeight: FontWeight.w600,
                       color: mainTextColor,
                       fontFamily: 'monospace',
@@ -274,28 +272,27 @@ class _ResolvedBanner extends StatelessWidget {
             if (result.sourceChain != null)
               Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(6),
-                  vertical: ScreenUtil().setWidth(3),
+                  horizontal: su.setWidth(6),
+                  vertical: su.setWidth(3),
                 ),
                 decoration: BoxDecoration(
                   color: blueColor.withValues(alpha: 0.1),
-                  borderRadius:
-                      BorderRadius.circular(ScreenUtil().setWidth(5)),
+                  borderRadius: BorderRadius.circular(su.setWidth(5)),
                 ),
                 child: Text(
                   result.sourceChain!,
                   style: TextStyle(
-                    fontSize: ScreenUtil().setSp(18),
+                    fontSize: su.setSp(18),
                     fontWeight: FontWeight.w600,
                     color: blueColor,
                   ),
                 ),
               ),
-            SizedBox(width: ScreenUtil().setWidth(4)),
+            SizedBox(width: su.setWidth(4)),
             Icon(
               Icons.copy_rounded,
               color: subtitleColor,
-              size: ScreenUtil().setWidth(18),
+              size: su.setWidth(18),
             ),
           ],
         ),

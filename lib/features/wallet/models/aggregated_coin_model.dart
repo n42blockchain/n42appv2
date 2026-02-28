@@ -50,24 +50,17 @@ class AggregatedCoinModel extends CoinModel {
   /// 是否为聚合代币
   bool get isAggregated => true;
 
-  /// 获取总余额（所有链余额之和，转换为统一精度）
+  /// 获取总余额（所有链余额之和，转换为统一 6 位精度）
   BigInt get totalBalance {
     BigInt total = BigInt.zero;
     for (final cb in chainBalances.values) {
-      // 统一转换为 6 位精度
-      if (cb.decimals == 6) {
-        total += cb.balance;
-      } else if (cb.decimals == 18) {
-        // 18 位精度转 6 位
-        total += cb.balance ~/ BigInt.from(10).pow(12);
+      final diff = cb.decimals - 6;
+      if (diff > 0) {
+        total += cb.balance ~/ BigInt.from(10).pow(diff);
+      } else if (diff < 0) {
+        total += cb.balance * BigInt.from(10).pow(-diff);
       } else {
-        // 其他精度转 6 位
-        final diff = cb.decimals - 6;
-        if (diff > 0) {
-          total += cb.balance ~/ BigInt.from(10).pow(diff);
-        } else {
-          total += cb.balance * BigInt.from(10).pow(-diff);
-        }
+        total += cb.balance;
       }
     }
     return total;
@@ -161,16 +154,11 @@ class AggregatedCoinModel extends CoinModel {
 
   /// 查询单链代币余额
   Future<BigInt> _fetchTokenBalance(ChainTokenConfig config, String address) async {
-    if (config.rules == 'SPL') {
-      // Solana SPL token 余额查询
-      return await _fetchSplTokenBalance(config, address);
-    } else if (config.rules == 'TRC20') {
-      // Tron TRC20 余额查询
-      return await _fetchTrc20Balance(config, address);
-    } else {
-      // EVM 链 ERC20/BEP20 余额查询
-      return await _fetchErc20Balance(config, address);
-    }
+    return switch (config.rules) {
+      'SPL'   => _fetchSplTokenBalance(config, address),
+      'TRC20' => _fetchTrc20Balance(config, address),
+      _       => _fetchErc20Balance(config, address),
+    };
   }
 
   /// HTTP 请求超时时间
@@ -241,10 +229,8 @@ class AggregatedCoinModel extends CoinModel {
   /// TRC20 余额查询 (Tron)
   Future<BigInt> _fetchTrc20Balance(ChainTokenConfig config, String address) async {
     try {
-      // 使用 config.rpcUrl 而非硬编码
-      final apiUrl = config.rpcUrl.endsWith('/')
-          ? '${config.rpcUrl}wallet/triggerconstantcontract'
-          : '${config.rpcUrl}/wallet/triggerconstantcontract';
+      final base = config.rpcUrl.endsWith('/') ? config.rpcUrl.substring(0, config.rpcUrl.length - 1) : config.rpcUrl;
+      final apiUrl = '$base/wallet/triggerconstantcontract';
 
       final response = await http.post(
         Uri.parse(apiUrl),

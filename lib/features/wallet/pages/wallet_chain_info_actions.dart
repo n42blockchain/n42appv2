@@ -40,30 +40,22 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
     final coinType = coinModel.coin['coinType'];
     final isTest = coinModel.isTest;
     final chainConfig = chainUrlMap[coinType];
+    final serviceKey = isTest ? 'service_test' : 'service';
+    final chainIdKey = isTest ? 'chainId_test' : 'chainId';
 
     String rpcUrl = '';
     int chainId = 1;
 
     if (chainConfig != null) {
-      rpcUrl = isTest
-          ? (chainConfig['baseInfo']?['service_test'] ?? '')
-          : (chainConfig['baseInfo']?['service'] ?? '');
+      rpcUrl = chainConfig['baseInfo']?[serviceKey] ?? '';
       chainId = isTest
-          ? (chainConfig['testnetChainID'] ??
-              chainConfig['baseInfo']?['chainId_test'] ??
-              1)
-          : (chainConfig['mainnetChainID'] ??
-              chainConfig['baseInfo']?['chainId'] ??
-              1);
+          ? (chainConfig['testnetChainID'] ?? chainConfig['baseInfo']?[chainIdKey] ?? 1)
+          : (chainConfig['mainnetChainID'] ?? chainConfig['baseInfo']?[chainIdKey] ?? 1);
     }
 
     if (coinModel.coin['custom'] == true) {
-      rpcUrl = isTest
-          ? (coinModel.coin['service_test'] ?? '')
-          : (coinModel.coin['service'] ?? '');
-      chainId = isTest
-          ? (coinModel.coin['chainId_test'] ?? 1)
-          : (coinModel.coin['chainId'] ?? 1);
+      rpcUrl = coinModel.coin[serviceKey] ?? '';
+      chainId = coinModel.coin[chainIdKey] ?? 1;
     }
 
     if (rpcUrl.isEmpty) {
@@ -93,272 +85,195 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
   }
 
   void showActionButtonListWidget() {
+    final sw = ScreenUtil().setWidth;
+    final l10n = S.of(context);
     final List<Widget> childs = [];
 
-    childs.add(_buildSheetItem(
-      icon: Image.asset(
-        'assets/wallet/w_send.png',
-        color: _blue,
-      ),
-      label: S.of(context).g_key_48,
+    void addItem({
+      required Widget icon,
+      required String label,
+      required VoidCallback onTap,
+    }) {
+      if (childs.isNotEmpty) childs.add(_divider());
+      childs.add(_buildSheetItem(icon: icon, label: label, onTap: onTap));
+    }
+
+    /// Push a page then close the sheet.
+    void pushAndClose(Widget page) async {
+      await Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+      if (!mounted) return;
+      Navigator.pop(context);
+    }
+
+    addItem(
+      icon: Image.asset('assets/wallet/w_send.png', color: _blue),
+      label: l10n.g_key_48,
       onTap: () async => handleSend(closeSheet: true),
-    ));
-    childs.add(_divider());
-
-    childs.add(_buildSheetItem(
-      icon: Image.asset(
-        'assets/wallet/w_receive.png',
-        color: _blue,
-      ),
-      label: S.of(context).g_key_33,
+    );
+    addItem(
+      icon: Image.asset('assets/wallet/w_receive.png', color: _blue),
+      label: l10n.g_key_33,
       onTap: () async => handleReceive(closeSheet: true),
-    ));
-    childs.add(_divider());
-
-    childs.add(_buildSheetItem(
-      icon: Image.asset(
-        'assets/wallet/w_explorer.png',
-        color: _blue,
-      ),
-      label: S.of(context).g_key_196,
-      onTap: () async {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => BrowserPage(browserUrl)),
-        );
-        if (!mounted) return;
-        Navigator.pop(context);
-      },
-    ));
-    childs.add(_divider());
-
-    childs.add(_buildSheetItem(
+    );
+    addItem(
+      icon: Image.asset('assets/wallet/w_explorer.png', color: _blue),
+      label: l10n.g_key_196,
+      onTap: () => pushAndClose(BrowserPage(browserUrl)),
+    );
+    addItem(
       icon: Image.asset('assets/wallet/w_buy.png', color: _blue),
-      label: S.of(context).g_key_211,
-      onTap: () async {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Moonpay(coinModel: coinModel)),
-        );
-        if (!mounted) return;
-        Navigator.pop(context);
-      },
-    ));
-    childs.add(_divider());
-
-    childs.add(_buildSheetItem(
+      label: l10n.g_key_211,
+      onTap: () => pushAndClose(Moonpay(coinModel: coinModel)),
+    );
+    addItem(
       icon: Image.asset('assets/wallet/w_sell.png', color: _blue),
-      label: S.of(context).g_key_212,
-      onTap: () async {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Moonpay(coinModel: coinModel, type: 1)),
-        );
-        if (!mounted) return;
-        Navigator.pop(context);
-      },
-    ));
+      label: l10n.g_key_212,
+      onTap: () => pushAndClose(Moonpay(coinModel: coinModel, type: 1)),
+    );
 
     // Batch Transfer — EVM chains only
     if (coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name) {
       childs.add(_divider());
-      childs.add(InkWell(
+      childs.add(_buildSheetItem(
+        icon: Icon(Icons.groups, color: _blue, size: sw(40.0)),
+        label: 'Batch Transfer',
         onTap: () async {
           await handleBatchTransfer();
           if (!mounted) return;
           Navigator.pop(context);
         },
-        child: Container(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-          alignment: Alignment.centerLeft,
-          child: Row(
-            children: [
-              SizedBox(
-                width: ScreenUtil().setWidth(40.0),
-                height: ScreenUtil().setWidth(40.0),
-                child: Icon(Icons.groups,
-                    color: _blue, size: ScreenUtil().setWidth(40.0)),
-              ),
-              SizedBox(width: ScreenUtil().setWidth(20.0)),
-              Text(
-                'Batch Transfer',
-                style: TextStyle(color: _blue, fontSize: ScreenUtil().setSp(30.0)),
-              ),
-              SizedBox(width: ScreenUtil().setWidth(10.0)),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(8),
-                  vertical: ScreenUtil().setWidth(2),
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
-                ),
-                child: Text(
-                  'NEW',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(18),
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
+        trailing: Container(
+          padding: EdgeInsets.symmetric(horizontal: sw(8), vertical: sw(2)),
+          decoration: BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.circular(sw(6)),
+          ),
+          child: Text(
+            'NEW',
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(18),
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
         ),
       ));
     }
 
-    // NFT Gallery — non-contract tokens on SimpleHash-supported chains
+    // NFT Gallery
     if (coinModel.coin['isContract'] != true &&
         SimpleHashNftApi.chainMap.containsKey(
             (coinModel.coin['coinType'] as String? ?? '').toUpperCase())) {
-      childs.add(_divider());
-      childs.add(_buildSheetItem(
-        icon: Icon(Icons.collections_outlined,
-            color: _blue, size: ScreenUtil().setWidth(40.0)),
-        label: S.of(context).g_key_nft_gallery,
+      addItem(
+        icon: Icon(Icons.collections_outlined, color: _blue, size: sw(40.0)),
+        label: l10n.g_key_nft_gallery,
         onTap: () async {
           Navigator.pop(context);
           await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => NftListPage(coinModel)),
+            MaterialPageRoute(builder: (_) => NftListPage(coinModel)),
           );
         },
-      ));
+      );
     }
 
-    // Add Token — not available for imported keys, BTC or contract tokens
+    // Add Token
     final bool canAddToken = coinModel.privateKey == null ||
         coinModel.coin['blockchainType'] == BlockchainType.Bitcoin.name ||
         coinModel.coin['isContract'] == true;
     if (!canAddToken) {
-      childs.add(_divider());
-      childs.add(_buildSheetItem(
+      addItem(
         icon: Image.asset('assets/wallet/addToken.png', color: _blue),
-        label: S.of(context).g_token_m_key_11,
+        label: l10n.g_token_m_key_11,
         onTap: () async {
           final bool r = await Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) => WalletCoinTokenAdd2(coinModel)),
+            MaterialPageRoute(builder: (_) => WalletCoinTokenAdd2(coinModel)),
           );
           if (!mounted) return;
           if (r) {
-            ref
-                .read(wapBridgeProvider)
-                .initWallet(shouldInitCoinInfo: true);
+            ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
           }
           Navigator.pop(context);
         },
-      ));
+      );
     }
 
-    // Network switch — only for select chain types
-    final supportedNetworkSwitch = {
-      CoinType.N.name,
-      CoinType.ETH.name,
-      CoinType.BTC.name,
-      CoinType.DOT.name,
-      CoinType.ZIL.name,
+    // Network switch
+    const supportedNetworkSwitch = {
+      'N', 'ETH', 'BTC', 'DOT', 'ZIL',
     };
     if (supportedNetworkSwitch.contains(coinModel.coin['coinType'])) {
-      final bool isTest = coinModel.isTest;
-      final Color mainColor = isTest
-          ? AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name)
-          : AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainButtonBgColor.name);
-      final Color testColor = isTest
-          ? AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainBlueColor.name)
-          : AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name);
-
       childs.add(_divider());
-      childs.add(Row(
-        children: [
-          Expanded(
-            child: InkWell(
-              onTap: () {
-                if (isTest) changeNet(false, Load.refresh);
-                Navigator.pop(context);
-              },
-              child: Container(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: ScreenUtil().setWidth(40.0),
-                      height: ScreenUtil().setWidth(40.0),
-                      child: Image.asset('assets/wallet/mainnet.png',
-                          color: mainColor),
-                    ),
-                    SizedBox(width: ScreenUtil().setWidth(20.0)),
-                    Text(
-                      S.of(context).g_key_148,
-                      style: TextStyle(
-                          color: mainColor, fontSize: ScreenUtil().setSp(30.0)),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: InkWell(
-              onTap: () {
-                if (!isTest) changeNet(true, Load.refresh);
-                Navigator.pop(context);
-              },
-              child: Container(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: ScreenUtil().setWidth(40.0),
-                      height: ScreenUtil().setWidth(40.0),
-                      child: Image.asset('assets/wallet/testnet.png',
-                          color: testColor),
-                    ),
-                    SizedBox(width: ScreenUtil().setWidth(20.0)),
-                    Text(
-                      S.of(context).g_key_147,
-                      style: TextStyle(
-                          color: testColor, fontSize: ScreenUtil().setSp(30.0)),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ));
+      childs.add(_buildNetworkSwitchRow());
     }
 
     // Coin Market Info
     if (marketInfo != null && marketInfo!['coin_gecko_id'] != '') {
-      childs.add(_divider());
-      childs.add(_buildSheetItem(
+      addItem(
         icon: Image.asset('assets/wallet/marketInfo.png', color: _blue),
-        label: S.of(context).g_key_213,
-        onTap: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MarketCoinInfo(marketInfo ?? {})),
-          );
-          if (!mounted) return;
-          Navigator.pop(context);
-        },
-      ));
+        label: l10n.g_key_213,
+        onTap: () => pushAndClose(MarketCoinInfo(marketInfo ?? {})),
+      );
     }
 
     sheetBottom(context, '', Column(children: childs));
+  }
+
+  Widget _buildNetworkSwitchRow() {
+    final bool isTest = coinModel.isTest;
+    final mainColor = AppThemeUtils.getColorByKey(
+      context,
+      isTest
+          ? AppThemeKeys.itemSubtitleTextColor.name
+          : AppThemeKeys.mainButtonBgColor.name,
+    );
+    final testColor = AppThemeUtils.getColorByKey(
+      context,
+      isTest
+          ? AppThemeKeys.mainBlueColor.name
+          : AppThemeKeys.itemSubtitleTextColor.name,
+    );
+
+    Widget netButton(String asset, String label, Color color, VoidCallback onTap) {
+      final sw = ScreenUtil().setWidth;
+      return Expanded(
+        child: InkWell(
+          onTap: onTap,
+          child: Container(
+            padding: EdgeInsets.all(sw(30)),
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                SizedBox(
+                  width: sw(40.0),
+                  height: sw(40.0),
+                  child: Image.asset(asset, color: color),
+                ),
+                SizedBox(width: sw(20.0)),
+                Text(
+                  label,
+                  style: TextStyle(color: color, fontSize: ScreenUtil().setSp(30.0)),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Row(
+      children: [
+        netButton('assets/wallet/mainnet.png', S.of(context).g_key_148, mainColor, () {
+          if (isTest) changeNet(false, Load.refresh);
+          Navigator.pop(context);
+        }),
+        netButton('assets/wallet/testnet.png', S.of(context).g_key_147, testColor, () {
+          if (!isTest) changeNet(true, Load.refresh);
+          Navigator.pop(context);
+        }),
+      ],
+    );
   }
 
   Color get _blue =>
@@ -374,27 +289,26 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
     required Widget icon,
     required String label,
     required VoidCallback onTap,
+    Widget? trailing,
   }) {
+    final sw = ScreenUtil().setWidth;
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        padding: EdgeInsets.all(sw(30)),
         alignment: Alignment.centerLeft,
         child: Row(
           children: [
-            SizedBox(
-              width: ScreenUtil().setWidth(40.0),
-              height: ScreenUtil().setWidth(40.0),
-              child: icon,
-            ),
-            SizedBox(width: ScreenUtil().setWidth(20.0)),
+            SizedBox(width: sw(40.0), height: sw(40.0), child: icon),
+            SizedBox(width: sw(20.0)),
             Text(
               label,
-              style: TextStyle(
-                color: _blue,
-                fontSize: ScreenUtil().setSp(30.0),
-              ),
+              style: TextStyle(color: _blue, fontSize: ScreenUtil().setSp(30.0)),
             ),
+            if (trailing != null) ...[
+              SizedBox(width: sw(10.0)),
+              trailing,
+            ],
           ],
         ),
       ),

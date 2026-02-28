@@ -28,7 +28,7 @@ class CreateBTCTX {
     for (Map utxo in inputs) {
       totalInputAmount += utxo['value'] as int;
       final MessageModel utxoTx = await getUTXOTxid(utxo['txid']);
-      if (utxoTx.error == false) {
+      if (!utxoTx.error) {
         selectedUTXOs.add({
           'txid': utxo['txid'],
           'vout': utxo['vout'],
@@ -216,9 +216,7 @@ class CreateBTCTX {
 
   Uint8List getP2WPKHScript(Uint8List publicKey) {
     // PubKeyHash = RIPEMD-160(SHA-256(PubKey))
-    final Uint8List sha256Hash = Uint8List.fromList(sha256.convert(publicKey).bytes);
-    final Uint8List pubKeyHash = ripemd160Hash(sha256Hash);
-
+    final Uint8List pubKeyHash = ripemd160Hash(sha256s(publicKey));
     // P2WPKH scriptPubKey: 0x00 + 0x14 + pubKeyHash
     return Uint8List.fromList([0x00, 0x14, ...pubKeyHash]);
   }

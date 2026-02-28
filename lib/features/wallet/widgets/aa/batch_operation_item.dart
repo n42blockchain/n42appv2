@@ -112,15 +112,19 @@ class BatchOperationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final opColor = _getOperationColor();
+    final subtitleColor = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.itemSubtitleTextColor.name,
+    );
+
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-        border: Border.all(
-          color: _getOperationColor().withAlpha(30),
-        ),
+        border: Border.all(color: opColor.withAlpha(30)),
       ),
       child: Row(
         children: [
@@ -129,7 +133,7 @@ class BatchOperationItem extends StatelessWidget {
             width: ScreenUtil().setWidth(32),
             height: ScreenUtil().setWidth(32),
             decoration: BoxDecoration(
-              color: _getOperationColor().withAlpha(20),
+              color: opColor.withAlpha(20),
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
             ),
             child: Center(
@@ -138,7 +142,7 @@ class BatchOperationItem extends StatelessWidget {
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(20),
                   fontWeight: FontWeight.bold,
-                  color: _getOperationColor(),
+                  color: opColor,
                 ),
               ),
             ),
@@ -146,7 +150,7 @@ class BatchOperationItem extends StatelessWidget {
           SizedBox(width: ScreenUtil().setWidth(12)),
 
           // 操作类型图标
-          _buildOperationIcon(),
+          _buildOperationIcon(opColor),
           SizedBox(width: ScreenUtil().setWidth(12)),
 
           // 操作详情
@@ -175,7 +179,7 @@ class BatchOperationItem extends StatelessWidget {
                           vertical: ScreenUtil().setWidth(2),
                         ),
                         decoration: BoxDecoration(
-                          color: _getOperationColor().withAlpha(20),
+                          color: opColor.withAlpha(20),
                           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
                         ),
                         child: Text(
@@ -183,7 +187,7 @@ class BatchOperationItem extends StatelessWidget {
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(20),
                             fontWeight: FontWeight.w600,
-                            color: _getOperationColor(),
+                            color: opColor,
                           ),
                         ),
                       ),
@@ -196,10 +200,7 @@ class BatchOperationItem extends StatelessWidget {
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(22),
                     fontFamily: 'monospace',
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
+                    color: subtitleColor,
                   ),
                 ),
                 if (operation.description != null) ...[
@@ -208,10 +209,7 @@ class BatchOperationItem extends StatelessWidget {
                     operation.description!,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(20),
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ).withAlpha(150),
+                      color: subtitleColor.withAlpha(150),
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -224,35 +222,16 @@ class BatchOperationItem extends StatelessWidget {
           // 操作按钮
           if (isEditable) ...[
             if (onEdit != null)
-              IconButton(
-                onPressed: onEdit,
-                icon: Icon(
-                  Icons.edit,
-                  size: ScreenUtil().setWidth(22),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
-                ),
-                constraints: BoxConstraints(
-                  maxWidth: ScreenUtil().setWidth(36),
-                  maxHeight: ScreenUtil().setWidth(36),
-                ),
-                padding: EdgeInsets.zero,
+              _buildActionButton(
+                onPressed: onEdit!,
+                icon: Icons.edit,
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
               ),
             if (onRemove != null)
-              IconButton(
-                onPressed: onRemove,
-                icon: Icon(
-                  Icons.delete_outline,
-                  size: ScreenUtil().setWidth(22),
-                  color: Colors.red,
-                ),
-                constraints: BoxConstraints(
-                  maxWidth: ScreenUtil().setWidth(36),
-                  maxHeight: ScreenUtil().setWidth(36),
-                ),
-                padding: EdgeInsets.zero,
+              _buildActionButton(
+                onPressed: onRemove!,
+                icon: Icons.delete_outline,
+                color: Colors.red,
               ),
           ],
         ],
@@ -260,60 +239,58 @@ class BatchOperationItem extends StatelessWidget {
     );
   }
 
-  Widget _buildOperationIcon() {
+  Widget _buildOperationIcon(Color opColor) {
     return Container(
       width: ScreenUtil().setWidth(40),
       height: ScreenUtil().setWidth(40),
       decoration: BoxDecoration(
-        color: _getOperationColor().withAlpha(20),
+        color: opColor.withAlpha(20),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
       ),
       child: Icon(
         _getOperationIcon(),
         size: ScreenUtil().setWidth(22),
-        color: _getOperationColor(),
+        color: opColor,
       ),
     );
   }
 
-  IconData _getOperationIcon() {
-    switch (operation.type) {
-      case BatchOperationType.transfer:
-        return Icons.send;
-      case BatchOperationType.approve:
-        return Icons.check_circle_outline;
-      case BatchOperationType.swap:
-        return Icons.swap_horiz;
-      case BatchOperationType.custom:
-        return Icons.code;
-    }
+  Widget _buildActionButton({
+    required VoidCallback onPressed,
+    required IconData icon,
+    required Color color,
+  }) {
+    return IconButton(
+      onPressed: onPressed,
+      icon: Icon(icon, size: ScreenUtil().setWidth(22), color: color),
+      constraints: BoxConstraints(
+        maxWidth: ScreenUtil().setWidth(36),
+        maxHeight: ScreenUtil().setWidth(36),
+      ),
+      padding: EdgeInsets.zero,
+    );
   }
 
-  Color _getOperationColor() {
-    switch (operation.type) {
-      case BatchOperationType.transfer:
-        return const Color(0xFF5E97F6);
-      case BatchOperationType.approve:
-        return const Color(0xFF66BB6A);
-      case BatchOperationType.swap:
-        return const Color(0xFFFF9800);
-      case BatchOperationType.custom:
-        return const Color(0xFF9C27B0);
-    }
-  }
+  IconData _getOperationIcon() => switch (operation.type) {
+        BatchOperationType.transfer => Icons.send,
+        BatchOperationType.approve => Icons.check_circle_outline,
+        BatchOperationType.swap => Icons.swap_horiz,
+        BatchOperationType.custom => Icons.code,
+      };
 
-  String _getOperationTitle(BuildContext context) {
-    switch (operation.type) {
-      case BatchOperationType.transfer:
-        return S.of(context).g_key_37;
-      case BatchOperationType.approve:
-        return S.of(context).g_key_aa_approve;
-      case BatchOperationType.swap:
-        return S.of(context).g_swap_key_35;
-      case BatchOperationType.custom:
-        return S.of(context).g_key_aa_custom;
-    }
-  }
+  Color _getOperationColor() => switch (operation.type) {
+        BatchOperationType.transfer => const Color(0xFF5E97F6),
+        BatchOperationType.approve => const Color(0xFF66BB6A),
+        BatchOperationType.swap => const Color(0xFFFF9800),
+        BatchOperationType.custom => const Color(0xFF9C27B0),
+      };
+
+  String _getOperationTitle(BuildContext context) => switch (operation.type) {
+        BatchOperationType.transfer => S.of(context).g_key_37,
+        BatchOperationType.approve => S.of(context).g_key_aa_approve,
+        BatchOperationType.swap => S.of(context).g_swap_key_35,
+        BatchOperationType.custom => S.of(context).g_key_aa_custom,
+      };
 
   String _shortenAddress(String address) {
     if (address.length <= 12) return address;

@@ -19,31 +19,23 @@ class ImportOne extends ConsumerStatefulWidget {
   ConsumerState<ImportOne> createState() => _ImportOneState();
 }
 
-class _ImportOneState extends ConsumerState<ImportOne> with WidgetsBindingObserver{
-  TextEditingController inputEditingController=TextEditingController();
-  String inputMW="";
-  String errorMessage="";
+class _ImportOneState extends ConsumerState<ImportOne>
+    with WidgetsBindingObserver {
+  TextEditingController inputEditingController = TextEditingController();
+  String inputMW = "";
+  String errorMessage = "";
 
-  void checkInput(String value){
-    value=value.trim();
-    List<String> mws=value.split(" ");
-    String cValue="";
-    for(String mw in mws){
-      mw=mw.trim();
-      if(mw !=""){
-        cValue="$cValue $mw";
-      }
-    }
+  void checkInput(String value) {
+    final words = value.trim().split(" ").where((w) => w.trim().isNotEmpty);
     setState(() {
-      inputMW=cValue.trim().toLowerCase();
+      inputMW = words.join(" ").toLowerCase();
     });
   }
-  void handlerCopyText() async {
-    // 读取复制文本
+
+  Future<void> handlerCopyText() async {
     ClipboardData? clipboardData =
-    await Clipboard.getData(Clipboard.kTextPlain);
+        await Clipboard.getData(Clipboard.kTextPlain);
     final text = clipboardData?.text;
-    // 获取后立即清空剪贴板：无论后续逻辑是否执行（!mounted / 异常），助记词不残留
     unawaited(Clipboard.setData(const ClipboardData(text: "")));
     if (!mounted || text == null || text == "null" || text.isEmpty) return;
     try {
@@ -67,44 +59,79 @@ class _ImportOneState extends ConsumerState<ImportOne> with WidgetsBindingObserv
     WidgetsBinding.instance.addObserver(this);
     handlerCopyText();
   }
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
+
+  Widget _buildStepIndicator(Color color) {
+    return Container(
+      height: ScreenUtil().setWidth(10.0),
+      width: ScreenUtil().setWidth(144.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
+        color: color,
+      ),
+    );
+  }
+
+  Future<void> _onSubmit() async {
+    if (inputMW.isEmpty) return;
+    bool checkMnemonic = await Trustdart().checkMnemonic(inputMW);
+    if (!mounted) return;
+    if (!checkMnemonic) {
+      errorMessage = S.of(context).w_key_12;
+      setState(() {});
+      ToastUtils.show(errorMessage);
+      return;
+    }
+    WalletInfo? fWalletInfo =
+        ref.read(wapBridgeProvider).findWallet(mnemonic: inputMW);
+    if (fWalletInfo != null) {
+      errorMessage = S.of(context).g_key_214(fWalletInfo.walletName ?? "");
+      setState(() {});
+      ToastUtils.show(errorMessage);
+      return;
+    }
+    errorMessage = "";
+    setState(() {});
+    WalletInfo wInfo = WalletInfo(
+      walletName: "",
+      password: "",
+      walletUuid: ref.read(wapBridgeProvider).userUUID,
+      mnemonic: inputMW,
+    );
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (_) => CreatePassword(wInfo, createMetod: "Import")),
+    );
+    if (!mounted) return;
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final activeColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name);
+    final inactiveColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.dividerColor.name);
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-        title: Container(
-          alignment: Alignment.center,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: ScreenUtil().setWidth(10.0),
-                width: ScreenUtil().setWidth(144.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                ),
-              ),
-              SizedBox(width: ScreenUtil().setWidth(20.0),),
-              Container(
-                height: ScreenUtil().setWidth(10.0),
-                width: ScreenUtil().setWidth(144.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
-                ),
-              ),
-            ],
-          ),
+        backgroundColor: AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.backGroundColor.name),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildStepIndicator(activeColor),
+            SizedBox(width: ScreenUtil().setWidth(20.0)),
+            _buildStepIndicator(inactiveColor),
+          ],
         ),
-        actions: [
-          SizedBox(width: ScreenUtil().setWidth(130.0),),
-        ],
+        actions: [SizedBox(width: ScreenUtil().setWidth(130.0))],
         leadingWidth: ScreenUtil().setWidth(130.0),
       ),
       body: SafeArea(
@@ -115,40 +142,52 @@ class _ImportOneState extends ConsumerState<ImportOne> with WidgetsBindingObserv
                 child: Column(
                   children: [
                     Container(
-                      margin: EdgeInsets.only(top: ScreenUtil().setWidth(30.0),bottom: ScreenUtil().setWidth(30.0),left: ScreenUtil().setWidth(30.0),right: ScreenUtil().setWidth(30.0),),
+                      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
                       alignment: Alignment.center,
                       child: Text(
                         S.of(context).g_key_wallet_c6,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(40.0),
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                          color: AppThemeUtils.getColorByKey(
+                              context, AppThemeKeys.mainTextColor.name),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(60.0),vertical: ScreenUtil().setWidth(60.0),),
+                      margin: EdgeInsets.symmetric(
+                        horizontal: ScreenUtil().setWidth(60.0),
+                        vertical: ScreenUtil().setWidth(60.0),
+                      ),
                       alignment: Alignment.center,
                       child: Text(
                         S.of(context).g_key_wallet_c7,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(32.0),
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                          color: AppThemeUtils.getColorByKey(
+                              context, AppThemeKeys.mainTextColor.name),
                         ),
                         textAlign: TextAlign.center,
                       ),
                     ),
                     Container(
                       width: double.infinity,
-                      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20),horizontal: ScreenUtil().setWidth(20)),
-                      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+                      padding: EdgeInsets.symmetric(
+                        vertical: ScreenUtil().setWidth(20),
+                        horizontal: ScreenUtil().setWidth(20),
+                      ),
+                      margin: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil().setWidth(30.0)),
                       decoration: BoxDecoration(
-                        color:  AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                        color: AppThemeUtils.getColorByKey(
+                            context, AppThemeKeys.itemBgColor.name),
+                        borderRadius: BorderRadius.circular(
+                            ScreenUtil().setWidth(8)),
                       ),
                       child: TextField(
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                          color: AppThemeUtils.getColorByKey(
+                              context, AppThemeKeys.mainBlueColor.name),
                           fontSize: ScreenUtil().setSp(32.0),
                         ),
                         controller: inputEditingController,
@@ -160,15 +199,13 @@ class _ImportOneState extends ConsumerState<ImportOne> with WidgetsBindingObserv
                           errorBorder: InputBorder.none,
                           focusedBorder: InputBorder.none,
                           isCollapsed: true,
-                          contentPadding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: ScreenUtil().setWidth(10.0)),
                         ),
                         maxLines: 8,
-                        onChanged: (String value){
-                          checkInput(value);
-                        },
-                        onEditingComplete: (){
-                          FocusScope.of(context).requestFocus(FocusNode());
-                        },
+                        onChanged: checkInput,
+                        onEditingComplete: () =>
+                            FocusScope.of(context).requestFocus(FocusNode()),
                       ),
                     ),
                     Container(
@@ -177,25 +214,30 @@ class _ImportOneState extends ConsumerState<ImportOne> with WidgetsBindingObserv
                       child: Text(
                         inputMW,
                         style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                            fontSize: ScreenUtil().setSp(32)
+                          color: AppThemeUtils.getColorByKey(
+                              context, AppThemeKeys.mainBlueColor.name),
+                          fontSize: ScreenUtil().setSp(32),
                         ),
                       ),
                     ),
-                    if(errorMessage !="")
+                    if (errorMessage.isNotEmpty)
                       Container(
                         alignment: Alignment.center,
                         padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                        margin: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
+                        margin:
+                            EdgeInsets.only(top: ScreenUtil().setWidth(30)),
                         decoration: BoxDecoration(
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorBgColor.name),
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                          color: AppThemeUtils.getColorByKey(
+                              context, AppThemeKeys.errorBgColor.name),
+                          borderRadius: BorderRadius.circular(
+                              ScreenUtil().setWidth(8)),
                         ),
                         child: Text(
                           errorMessage,
                           style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
-                              fontSize: ScreenUtil().setSp(26)
+                            color: AppThemeUtils.getColorByKey(
+                                context, AppThemeKeys.errorTextColor.name),
+                            fontSize: ScreenUtil().setSp(26),
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -210,55 +252,16 @@ class _ImportOneState extends ConsumerState<ImportOne> with WidgetsBindingObserv
               right: 0,
               child: Column(
                 children: [
-                  Divider(
-                    height: 1,
-                    indent: 0,
-                    endIndent: 0,
-                  ),
+                  const Divider(height: 1),
                   Container(
                     height: ScreenUtil().setWidth(148.0),
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
                     width: double.infinity,
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                    child: buttonStyle2(context,
-                          ()async{
-                        if(inputMW =="")return;
-                        bool checkMnemonic =
-                        await Trustdart().checkMnemonic(inputMW);
-                        if (!mounted) return;
-                        if (checkMnemonic == false) {
-                          //助记词输入错误
-                          errorMessage=S.of(this.context).w_key_12;
-                          setState(() {
-                          });
-                          ToastUtils.show(errorMessage);
-                          return;
-                        }else{
-                          WalletInfo? fWalletInfo= ref.read(wapBridgeProvider).findWallet(mnemonic: inputMW);
-                          if(fWalletInfo ==null){
-                            errorMessage="";
-                          }else{
-                            errorMessage=S.of(this.context).g_key_214(fWalletInfo.walletName??"");
-                            setState(() {
-                            });
-                            ToastUtils.show(errorMessage);
-                            return;
-                          }
-                        }
-                        setState(() {
-                        });
-                        WalletInfo wInfo = WalletInfo(
-                            walletName: "",
-                            password: "",
-                            //path: WalletPath.init(),
-                            walletUuid: ref.read(wapBridgeProvider).userUUID,
-                            mnemonic: inputMW
-                        );
-                        await Navigator.push(this.context,MaterialPageRoute(
-                            builder: (_) => CreatePassword(wInfo, createMetod: "Import",)));
-                        if (!mounted) return;
-                        Navigator.pop(this.context);
-                      },
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.backGroundColor.name),
+                    child: buttonStyle2(
+                      context,
+                      _onSubmit,
                       S.of(context).g_key_11,
                     ),
                   ),

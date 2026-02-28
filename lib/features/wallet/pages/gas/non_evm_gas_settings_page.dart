@@ -13,12 +13,12 @@ import 'package:n42_wallet/features/wallet/widgets/non_evm_fee_selector.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
 
-/// 非 EVM 链 Gas 设置页
+/// Non-EVM chain Gas settings page.
 ///
-/// 允许用户在 Slow/Standard/Fast 三档中选择，
-/// 可编辑链（BTC 等 UTXO 链）还支持自定义 sat/byte 输入。
+/// Allows the user to pick Slow/Standard/Fast tiers.
+/// Editable chains (BTC UTXO etc.) also support custom sat/byte input.
 ///
-/// 通过 `Navigator.pop(context, NonEvmFeeModel)` 返回更新后的模型。
+/// Returns `NonEvmGasResult` via `Navigator.pop`.
 class NonEvmGasSettingsPage extends StatefulWidget {
   final NonEvmFeeModel feeModel;
 
@@ -40,7 +40,6 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
   @override
   void initState() {
     super.initState();
-    // 复制模型——速度变更只影响本页，直到用户点确认才提交
     _feeModel = NonEvmFeeModel(
       chainSymbol: widget.feeModel.chainSymbol,
       unit: widget.feeModel.unit,
@@ -74,28 +73,22 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
     });
   }
 
-  NonEvmFeeOption _getOption(NonEvmFeeSpeed speed) {
-    switch (speed) {
-      case NonEvmFeeSpeed.slow:
-        return _feeModel.slow;
-      case NonEvmFeeSpeed.standard:
-        return _feeModel.standard;
-      case NonEvmFeeSpeed.fast:
-        return _feeModel.fast;
-    }
-  }
+  NonEvmFeeOption _getOption(NonEvmFeeSpeed speed) => switch (speed) {
+    NonEvmFeeSpeed.slow => _feeModel.slow,
+    NonEvmFeeSpeed.standard => _feeModel.standard,
+    NonEvmFeeSpeed.fast => _feeModel.fast,
+  };
 
   void _validateCustomRate(String value) {
     final rate = int.tryParse(value);
     setState(() {
       _customRateError = (rate == null || rate <= 0)
-          ? S.current.g_key_t_43 // "Enter a whole number greater than 0."
+          ? S.current.g_key_t_43
           : '';
     });
   }
 
   void _confirm() {
-    // 如果自定义模式下输入有误，阻止提交
     if (_isCustom && _customRateError.isNotEmpty) return;
 
     Navigator.pop(context, NonEvmGasResult(
@@ -128,15 +121,11 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(height: ScreenUtil().setWidth(20)),
-
-                  // 三档速度选择器
                   NonEvmFeeSelector(
                     feeModel: _feeModel,
                     onSpeedChanged: _onSpeedChanged,
                     showDetails: true,
                   ),
-
-                  // 自定义费率输入（仅 BTC 等可编辑链）
                   if (_feeModel.isEditable) ...[
                     SizedBox(height: ScreenUtil().setWidth(20)),
                     _buildCustomRateSection(context,
@@ -145,14 +134,11 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
                         subtitleText: subtitleText,
                         itemBg: itemBg),
                   ],
-
                   SizedBox(height: ScreenUtil().setWidth(30)),
                 ],
               ),
             ),
           ),
-
-          // 确认按钮
           Padding(
             padding: EdgeInsets.symmetric(
               horizontal: ScreenUtil().setWidth(30),
@@ -164,7 +150,7 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
               child: buttonStyle2(
                 context,
                 _confirm,
-                S.of(context).g_key_78, // "Confirm"
+                S.of(context).g_key_78,
               ),
             ),
           ),
@@ -182,6 +168,9 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
   }) {
     final feeRateUnit =
         _feeModel.currentOption.feeRateUnit ?? 'sat/byte';
+    final borderColor = _customRateError.isNotEmpty
+        ? AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name)
+        : AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name);
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
@@ -193,14 +182,9 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 标题行
           Row(
             children: [
-              Icon(
-                Icons.tune,
-                size: ScreenUtil().setWidth(36),
-                color: blueColor,
-              ),
+              Icon(Icons.tune, size: ScreenUtil().setWidth(36), color: blueColor),
               SizedBox(width: ScreenUtil().setWidth(12)),
               Text(
                 S.of(context).g_key_gas_custom,
@@ -213,8 +197,6 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
             ],
           ),
           SizedBox(height: ScreenUtil().setWidth(20)),
-
-          // 费率输入框
           Container(
             padding: EdgeInsets.symmetric(
               horizontal: ScreenUtil().setWidth(20),
@@ -224,13 +206,7 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.backGroundColor.name),
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-              border: Border.all(
-                color: _customRateError.isNotEmpty
-                    ? AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.errorTextColor.name)
-                    : AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.dividerColor.name),
-              ),
+              border: Border.all(color: borderColor),
             ),
             child: Row(
               children: [
@@ -244,7 +220,7 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
                       color: mainText,
                     ),
                     decoration: InputDecoration(
-                      hintText: S.of(context).g_key_t_43, // "Fee rate"
+                      hintText: S.of(context).g_key_t_43,
                       hintStyle: TextStyle(
                         fontSize: ScreenUtil().setSp(26),
                         color: subtitleText,
@@ -269,8 +245,6 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
               ],
             ),
           ),
-
-          // 错误提示
           if (_customRateError.isNotEmpty) ...[
             SizedBox(height: ScreenUtil().setWidth(8)),
             Text(
@@ -282,8 +256,6 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
               ),
             ),
           ],
-
-          // 参考网络平均费率
           SizedBox(height: ScreenUtil().setWidth(12)),
           Text(
             '${S.of(context).g_key_t_37}: '
@@ -299,15 +271,14 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
   }
 }
 
-/// 从 `NonEvmGasSettingsPage` 弹出时携带的结果
+/// Result returned from [NonEvmGasSettingsPage].
 ///
-/// 调用方应优先使用 [customFeeRate]（如果不为 null）
-/// 而非 [feeModel.currentOption.feeRate]。
+/// Callers should prefer [customFeeRate] (if non-null) over
+/// [feeModel.currentOption.feeRate].
 class NonEvmGasResult {
   final NonEvmFeeModel feeModel;
   final int? customFeeRate;
 
-  /// 实际应用的费率：自定义输入 > 档位费率 > null
   int? get effectiveFeeRate =>
       customFeeRate ?? feeModel.currentOption.feeRate;
 

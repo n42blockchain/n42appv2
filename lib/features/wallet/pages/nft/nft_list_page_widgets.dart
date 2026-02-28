@@ -3,32 +3,26 @@ part of 'nft_list_page.dart';
 /// Widget builder methods for [_NftListPageState].
 extension _NftListPageWidgets on _NftListPageState {
   Widget buildSearchBar(BuildContext context) {
+    final su = ScreenUtil();
+    final subtitleColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final borderRadius = BorderRadius.circular(su.setWidth(12));
+    final borderSide = BorderSide(color: subtitleColor.withAlpha(60));
+
     return Padding(
       padding: EdgeInsets.fromLTRB(
-        ScreenUtil().setWidth(16),
-        ScreenUtil().setWidth(12),
-        ScreenUtil().setWidth(16),
-        ScreenUtil().setWidth(4),
+        su.setWidth(16), su.setWidth(12), su.setWidth(16), su.setWidth(4),
       ),
       child: TextField(
         controller: _searchController,
         decoration: InputDecoration(
           hintText: S.of(context).g_key_nft_search_hint,
-          hintStyle: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name),
-          ),
-          prefixIcon: Icon(
-            Icons.search,
-            size: ScreenUtil().setWidth(28),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name),
-          ),
+          hintStyle: TextStyle(fontSize: su.setSp(26), color: subtitleColor),
+          prefixIcon: Icon(Icons.search, size: su.setWidth(28), color: subtitleColor),
           suffixIcon: _query.isNotEmpty
               ? IconButton(
                   icon: const Icon(Icons.clear),
-                  iconSize: ScreenUtil().setWidth(24),
+                  iconSize: su.setWidth(24),
                   onPressed: () {
                     _searchController.clear();
                     setState(() => _query = '');
@@ -36,30 +30,14 @@ extension _NftListPageWidgets on _NftListPageState {
                 )
               : null,
           contentPadding: EdgeInsets.symmetric(
-            vertical: ScreenUtil().setWidth(12),
-            horizontal: ScreenUtil().setWidth(16),
+            vertical: su.setWidth(12), horizontal: su.setWidth(16),
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-            borderSide: BorderSide(
-              color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name)
-                  .withAlpha(60),
-            ),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-            borderSide: BorderSide(
-              color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name)
-                  .withAlpha(60),
-            ),
-          ),
+          border: OutlineInputBorder(borderRadius: borderRadius, borderSide: borderSide),
+          enabledBorder: OutlineInputBorder(borderRadius: borderRadius, borderSide: borderSide),
           filled: true,
-          fillColor: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.backGroundColor.name),
+          fillColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
         ),
-        style: TextStyle(fontSize: ScreenUtil().setSp(26)),
+        style: TextStyle(fontSize: su.setSp(26)),
       ),
     );
   }
@@ -124,26 +102,21 @@ extension _NftListPageWidgets on _NftListPageState {
   }
 
   Widget buildError(BuildContext context) {
+    final su = ScreenUtil();
+    final subtitleColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
     return Center(
       child: GestureDetector(
         onTap: _retry,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.refresh,
-              size: ScreenUtil().setWidth(60),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
-            ),
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            Icon(Icons.refresh, size: su.setWidth(60),
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)),
+            SizedBox(height: su.setWidth(16)),
             Text(
               S.of(context).g_key_nft_error_retry,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
-              ),
+              style: TextStyle(fontSize: su.setSp(28), color: subtitleColor),
               textAlign: TextAlign.center,
             ),
           ],
@@ -153,24 +126,18 @@ extension _NftListPageWidgets on _NftListPageState {
   }
 
   Widget buildEmpty(BuildContext context) {
+    final su = ScreenUtil();
+    final subtitleColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            Icons.collections_outlined,
-            size: ScreenUtil().setWidth(80),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name),
-          ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          Icon(Icons.collections_outlined, size: su.setWidth(80), color: subtitleColor),
+          SizedBox(height: su.setWidth(20)),
           Text(
             S.of(context).g_key_nft_no_items,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(30),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
-            ),
+            style: TextStyle(fontSize: su.setSp(30), color: subtitleColor),
           ),
         ],
       ),
@@ -192,25 +159,21 @@ extension _NftListPageWidgets on _NftListPageState {
   }
 
   Widget _buildNftCard(BuildContext context, NftModel nft) {
+    final su = ScreenUtil();
+    final radius = BorderRadius.circular(su.setWidth(12));
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => NftDetailPage(nft, widget.coinModel),
-          ),
-        );
-      },
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => NftDetailPage(nft, widget.coinModel)),
+      ),
       child: Container(
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.backGroundColor.name),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+          borderRadius: radius,
           border: Border.all(
             color: AppThemeUtils.getColorByKey(
                     context, AppThemeKeys.itemSubtitleTextColor.name)
                 .withAlpha(40),
-            width: 1,
           ),
         ),
         child: Column(
@@ -225,47 +188,49 @@ extension _NftListPageWidgets on _NftListPageState {
   }
 
   Widget _buildImageSection(NftModel nft) {
+    final su = ScreenUtil();
+    final badgeRadius = BorderRadius.circular(su.setWidth(6));
     return Stack(
       fit: StackFit.expand,
       children: [
         ClipRRect(
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(ScreenUtil().setWidth(12)),
-            topRight: Radius.circular(ScreenUtil().setWidth(12)),
+            topLeft: Radius.circular(su.setWidth(12)),
+            topRight: Radius.circular(su.setWidth(12)),
           ),
           child: _buildThumbnail(nft),
         ),
         if (nft.hasVideo)
           Positioned(
-            top: ScreenUtil().setWidth(8),
-            right: ScreenUtil().setWidth(8),
+            top: su.setWidth(8),
+            right: su.setWidth(8),
             child: Container(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(4)),
+              padding: EdgeInsets.all(su.setWidth(4)),
               decoration: BoxDecoration(
                 color: Colors.black.withAlpha(140),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+                borderRadius: badgeRadius,
               ),
               child: Icon(Icons.play_circle_outline,
-                  color: Colors.white, size: ScreenUtil().setWidth(22)),
+                  color: Colors.white, size: su.setWidth(22)),
             ),
           ),
         if (nft.isOrdinal)
           Positioned(
-            top: ScreenUtil().setWidth(8),
-            left: ScreenUtil().setWidth(8),
+            top: su.setWidth(8),
+            left: su.setWidth(8),
             child: Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(6),
-                vertical: ScreenUtil().setWidth(3),
+                horizontal: su.setWidth(6),
+                vertical: su.setWidth(3),
               ),
               decoration: BoxDecoration(
                 color: const Color(0xFFF7931A).withAlpha(220),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+                borderRadius: badgeRadius,
               ),
               child: Text(
                 'BTC',
                 style: TextStyle(
-                  fontSize: ScreenUtil().setSp(18),
+                  fontSize: su.setSp(18),
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
@@ -277,33 +242,30 @@ extension _NftListPageWidgets on _NftListPageState {
   }
 
   Widget _buildInfoSection(BuildContext context, NftModel nft) {
+    final su = ScreenUtil();
     return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(10),
-        vertical: ScreenUtil().setWidth(8),
-      ),
+      padding: EdgeInsets.symmetric(horizontal: su.setWidth(10), vertical: su.setWidth(8)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             nft.name,
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
+              fontSize: su.setSp(24),
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           if (nft.floorPriceDisplay != null) ...[
-            SizedBox(height: ScreenUtil().setWidth(4)),
+            SizedBox(height: su.setWidth(4)),
             Row(
               children: [
                 Text(
                   '${S.of(context).g_key_nft_floor_price}: ',
                   style: TextStyle(
-                    fontSize: ScreenUtil().setSp(20),
+                    fontSize: su.setSp(20),
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.itemSubtitleTextColor.name),
                   ),
@@ -312,7 +274,7 @@ extension _NftListPageWidgets on _NftListPageState {
                   child: Text(
                     nft.floorPriceDisplay!,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(20),
+                      fontSize: su.setSp(20),
                       fontWeight: FontWeight.w500,
                       color: AppThemeUtils.getColorByKey(
                           context, AppThemeKeys.mainBlueColor.name),
@@ -335,28 +297,22 @@ extension _NftListPageWidgets on _NftListPageState {
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
-        placeholder: (context, url) => _buildPlaceholder(nft),
-        errorWidget: (context, url, error) => _buildPlaceholder(nft),
+        placeholder: (_, __) => _buildPlaceholder(nft),
+        errorWidget: (_, __, ___) => _buildPlaceholder(nft),
       );
     }
     return _buildPlaceholder(nft);
   }
 
   Widget _buildPlaceholder(NftModel nft) {
-    return Builder(
-      builder: (context) => Container(
-        color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name)
-            .withAlpha(20),
-        child: Center(
-          child: Icon(
-            nft.isOrdinal ? Icons.currency_bitcoin : Icons.image_outlined,
-            size: ScreenUtil().setWidth(50),
-            color: nft.isOrdinal
-                ? const Color(0xFFF7931A)
-                : AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-          ),
+    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    return Container(
+      color: blueColor.withAlpha(20),
+      child: Center(
+        child: Icon(
+          nft.isOrdinal ? Icons.currency_bitcoin : Icons.image_outlined,
+          size: ScreenUtil().setWidth(50),
+          color: nft.isOrdinal ? const Color(0xFFF7931A) : blueColor,
         ),
       ),
     );

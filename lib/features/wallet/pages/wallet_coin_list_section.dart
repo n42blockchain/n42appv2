@@ -10,9 +10,6 @@ import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
-// ── 代币列表 Section ─────────────────────────────────────────────────────────
-
-/// 代币列表主体（SliverList wrapper）
 class WalletCoinListSliver extends StatelessWidget {
   const WalletCoinListSliver({
     super.key,
@@ -54,8 +51,6 @@ class WalletCoinListSliver extends StatelessWidget {
   }
 }
 
-// ── 代币列表主体 ─────────────────────────────────────────────────────────────
-
 class _CoinListBody extends StatelessWidget {
   const _CoinListBody({
     required this.waValue,
@@ -77,26 +72,23 @@ class _CoinListBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final su = ScreenUtil();
+    final bgColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.backGroundColor.name);
     final displayList = smallAssetsThreshold > 0
         ? waValue.coinList.where((c) => c.value >= smallAssetsThreshold).toList()
         : waValue.coinList;
-
     final showSkeleton = waValue.coinList.isEmpty && waValue.buildwallet;
 
     return Container(
       width: double.infinity,
       alignment: Alignment.topCenter,
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.backGroundColor.name),
-        border: Border.all(
-          width: 2,
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.backGroundColor.name),
-        ),
+        color: bgColor,
+        border: Border.all(width: 2, color: bgColor),
       ),
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
-      margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
+      padding: EdgeInsets.symmetric(horizontal: su.setWidth(30.0)),
+      margin: EdgeInsets.only(bottom: su.setWidth(20.0)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -108,46 +100,51 @@ class _CoinListBody extends StatelessWidget {
               onAdded: onDiscoveryAdded,
             ),
           if (waValue.loadBalance == Load.loading)
-            Container(
-              width: double.infinity,
-              height: ScreenUtil().setWidth(60.0),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.textColorOrange.name),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
-              ),
-              child: Text(
-                S.of(context).g_key_208,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainWhiteColor.name),
-                ),
-              ),
-            ),
+            _LoadingBanner(su: su),
           if (showSkeleton) const WalletCoinListSkeleton(),
           if (!showSkeleton && displayList.isEmpty)
             Container(
-              height: ScreenUtil().setWidth(300.0),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.backGroundColor.name),
+              height: su.setWidth(300.0),
+              color: bgColor,
               child: smallAssetsThreshold > 0 && waValue.coinList.isNotEmpty
                   ? _AllHiddenHint(onShowAll: onShowAllTap)
                   : const EmptyView(),
             ),
           if (!showSkeleton && displayList.isNotEmpty)
-            _CoinListView(
-              list: displayList,
-              coinItemBuilder: coinItemBuilder,
-            ),
+            _CoinListView(list: displayList, coinItemBuilder: coinItemBuilder),
         ],
       ),
     );
   }
 }
 
-// ── Token Discovery Banner ───────────────────────────────────────────────────
+class _LoadingBanner extends StatelessWidget {
+  const _LoadingBanner({required this.su});
+
+  final ScreenUtil su;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: su.setWidth(60.0),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.textColorOrange.name),
+        borderRadius: BorderRadius.circular(su.setWidth(8)),
+      ),
+      child: Text(
+        S.of(context).g_key_208,
+        style: TextStyle(
+          fontSize: su.setSp(24),
+          color: AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.mainWhiteColor.name),
+        ),
+      ),
+    );
+  }
+}
 
 class _DiscoveryBanner extends StatelessWidget {
   const _DiscoveryBanner({
@@ -221,8 +218,6 @@ class _DiscoveryBanner extends StatelessWidget {
   }
 }
 
-// ── 代币列表 ListView（含置顶分隔行）───────────────────────────────────────
-
 class _CoinListView extends StatelessWidget {
   const _CoinListView({
     required this.list,
@@ -257,8 +252,6 @@ class _CoinListView extends StatelessWidget {
   }
 }
 
-// ── 置顶 / 普通分隔行 ────────────────────────────────────────────────────────
-
 class _PinnedDivider extends StatelessWidget {
   const _PinnedDivider();
 
@@ -290,8 +283,6 @@ class _PinnedDivider extends StatelessWidget {
     );
   }
 }
-
-// ── 全部资产被隐藏提示 ────────────────────────────────────────────────────────
 
 class _AllHiddenHint extends StatelessWidget {
   const _AllHiddenHint({required this.onShowAll});

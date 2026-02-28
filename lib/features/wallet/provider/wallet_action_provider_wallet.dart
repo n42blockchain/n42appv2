@@ -3,50 +3,33 @@ part of 'wallet_action_provider.dart';
 /// Wallet CRUD operations: create, import, delete, save, find, backup, key management.
 extension WalletActionProviderWallet on WalletActionProvider {
 
+  /// 从 JSON 列表解析钱包，填充 _walletInfoLsit 并设置 index。
+  void _loadWalletList(Map<String, dynamic> source) {
+    walletIndex = source['index'];
+    walletMiningIndex = source['miningIndex'] ?? walletIndex;
+    if (walletMiningIndex == -1) walletMiningIndex = walletIndex;
+    _walletInfoLsit = (source['wallet'] as List<dynamic>? ?? [])
+        .map((e) => WalletInfo.fromJson(e))
+        .toList();
+  }
+
   //读取钱包信息
   Future<void> getWalletInfo() async {
-    //if (walletInfoLsit.isNotEmpty) return;
-    //await checkWalletInfo();
-    Map<String, dynamic>? walletAll=await SPUtil().getWalletInfo();
-    if (walletAll == null){
+    Map<String, dynamic>? walletAll = await SPUtil().getWalletInfo();
+    if (walletAll == null) {
       await createWallet();
-    }else{
-      Map<String, dynamic>? walletUser=walletAll[userUUID];
-      if(walletUser !=null){
-        walletIndex=walletAll[userUUID]?['index'];
-        if(walletAll[userUUID]?['miningIndex']==null || walletAll[userUUID]?['miningIndex']==-1){
-          walletMiningIndex=walletIndex;
-        }else{
-          walletMiningIndex=walletAll[userUUID]?['miningIndex'];
-        }
-        List<dynamic> walletInfos =
-            walletAll[userUUID]?["wallet"]??[]; //await SPUtils.getWalletInfo();
-        _walletInfoLsit=[];
-        //await getCoinSort();//获取当前钱包币的排序缓存
-        for (int i = 0; i < walletInfos.length; i++) {
-          _walletInfoLsit.add(WalletInfo.fromJson(walletInfos[i]));
-        }
-        //await getPublicKeyAndPrivateKeyPairN();
-        //await createWallet();
-        //existWallet = true;
-      }
-      else{
-        Map<String, dynamic>? walletDefault=walletAll["AstranetWallet"];
-        if(walletDefault !=null){
-          walletIndex=walletDefault['index'];
-          walletMiningIndex=walletDefault['miningIndex']??walletIndex;
-          List<dynamic> walletInfos = walletDefault["wallet"]??[]; //await SPUtils.getWalletInfo();
-          _walletInfoLsit=[];
-          //await getCoinSort();//获取当前钱包币的排序缓存
-          for (int i = 0; i < walletInfos.length; i++) {
-            _walletInfoLsit.add(WalletInfo.fromJson(walletInfos[i]));
-          }
-          //await getPublicKeyAndPrivateKeyPairN();
-          walletAll[userUUID]=walletDefault;
+    } else {
+      final walletUser = walletAll[userUUID];
+      if (walletUser != null) {
+        _loadWalletList(walletUser);
+      } else {
+        final walletDefault = walletAll["AstranetWallet"];
+        if (walletDefault != null) {
+          _loadWalletList(walletDefault);
+          walletAll[userUUID] = walletDefault;
           walletAll.remove("AstranetWallet");
           await SPUtil().setWalletInfo(walletAll);
-          //saveWalletInfo(walletInfo, walletIndex,isNewWallet: true);
-        }else{
+        } else {
           await createWallet();
         }
       }
@@ -60,17 +43,13 @@ extension WalletActionProviderWallet on WalletActionProvider {
     buildwallet=true;
     try {
       await getWalletInfo();
-      // 同步新链到现有钱包
       await _syncNewChains();
-      //导入的钱包
-      //await initImportWallet();
       await buildCoinModel();
     } finally {
       buildwallet=false;
       refresh();
     }
     if(shouldInitCoinInfo){
-      ///发送一个event事件 对挖矿进行初始化
       eventBus.fire(EventPublic(EventPublicType.selectWallet,
           intValue: walletIndex,stringValue: "wallet"));
       initCoinInfo();
@@ -125,7 +104,6 @@ extension WalletActionProviderWallet on WalletActionProvider {
     wInfo.walletName="Account${walletInfoLsit.length+1}";
     wInfo.coinInfo = chainUrlMap;
     wInfo.mainWallet=true;
-    //根据导入时间设置时间戳 标记钱包的唯一标识
     wInfo.timestamp = "${DateTime.now().millisecondsSinceEpoch}";
     await addWalletInfo(wInfo);
   }
@@ -133,10 +111,8 @@ extension WalletActionProviderWallet on WalletActionProvider {
   ///添加钱包
   Future<void> addWalletInfo(WalletInfo info) async {
     try{
-      // 为了安全 存储时不在sp工具中存储助记词
-      //克隆一份数据 不污染数据源
-      Map<String, dynamic> newMap = info.toJson();//jsonDecode(jsonEncode(info));
-      WalletInfo newWalletInfo = WalletInfo.fromJson(newMap);
+      // 克隆一份数据，不污染数据源（存储时不保存助记词）
+      final newWalletInfo = WalletInfo.fromJson(info.toJson());
       _walletInfoLsit.add(info);
       walletIndex=_walletInfoLsit.length-1;
       if(walletMiningIndex ==-1){
@@ -144,12 +120,10 @@ extension WalletActionProviderWallet on WalletActionProvider {
       }
       await saveWalletInfo(newWalletInfo,walletIndex,isNewWallet: true);
       initWallet(shouldInitCoinInfo: true);
-      //await getPublicKeyAndPrivateKeyPairN();
       refresh();
     }catch(e){
       ToastUtils.show(e.toString());
     }
-
   }
 
   /// 添加观察钱包（Watch-only）
@@ -178,13 +152,7 @@ extension WalletActionProviderWallet on WalletActionProvider {
       _walletInfoLsit.removeAt(0);
       return null;
     } else {
-      int rIndex=_walletInfoLsit.indexWhere((element){
-        if(element==info){
-          return true;
-        }else{
-          return false;
-        }
-      });
+      final rIndex = _walletInfoLsit.indexWhere((e) => e == info);
       // 观察钱包：无私钥/助记词，直接删除，跳过挖矿地址检查
       if (!_walletInfoLsit[rIndex].watchOnly) {
         Map<String,dynamic> cInfo=_walletInfoLsit[rIndex].coinInfo?[CoinType.N.name];
@@ -221,35 +189,18 @@ extension WalletActionProviderWallet on WalletActionProvider {
   //isFirst 用户第一次创建钱包 缓存中还未有数据
   Future<int> checkWalletMnemonic(WalletInfo info) async {
     try{
-      bool rData=await Trustdart().checkMnemonic(info.mnemonic!);
-      if(rData==true){
-        return 0;
-      }else{
-        return -1;
-      }
+      final valid = await Trustdart().checkMnemonic(info.mnemonic!);
+      return valid ? 0 : -1;
     }catch(e){
       return -1;
     }
   }
 
   WalletInfo? findWallet({String pk="",String mnemonic=""}){
-    int index=walletInfoLsit.indexWhere((e){
-      if(pk !=""){
-        if(e.privateKey==pk){
-          return true;
-        }
-      }else{
-        if(e.mnemonic==mnemonic){
-          return true;
-        }
-      }
-      return false;
-    });
-    if(index == -1){
-      return null;
-    }else{
-      return walletInfoLsit[index];
-    }
+    final index = walletInfoLsit.indexWhere((e) =>
+      pk.isNotEmpty ? e.privateKey == pk : e.mnemonic == mnemonic,
+    );
+    return index == -1 ? null : walletInfoLsit[index];
   }
 
   //返回公钥、私钥对
@@ -305,44 +256,36 @@ extension WalletActionProviderWallet on WalletActionProvider {
 
   //设置主钱包
   MessageModel setMainWallet(int wIndex){
-    int index=walletInfoLsit.indexWhere((e){
-      if(e.mainWallet==true){
-        return true;
-      }
-      return false;
-    });
+    final index = walletInfoLsit.indexWhere((e) => e.mainWallet == true);
     if(index==-1){
-      MessageModel rmm=MessageModel.error();
+      final rmm = MessageModel.error();
       rmm.data="Main wallet not found!";
       return rmm;
-    }else{
-      walletInfoLsit[index].mainWallet=false;
-      walletInfoLsit[wIndex].mainWallet=true;
-      saveWalletInfoAll();
-      eventBus.fire(EventPublic(EventPublicType.selectWallet,
-          intValue: -1,stringValue: "mainwallet"));
-      MessageModel rmm=MessageModel();
-      return rmm;
     }
+    walletInfoLsit[index].mainWallet=false;
+    walletInfoLsit[wIndex].mainWallet=true;
+    saveWalletInfoAll();
+    eventBus.fire(EventPublic(EventPublicType.selectWallet,
+        intValue: -1,stringValue: "mainwallet"));
+    return MessageModel();
   }
 
   //保存钱包修改到SPUtil
   //isNewWallet，是否是添加新钱包
   Future<void> saveWalletInfo(WalletInfo newWalletInfo,int wIndex,{bool isNewWallet=false}) async{
     try{
-      SPUtil sPUtils=SPUtil();
+      final sPUtils = SPUtil();
       Map<String, dynamic>? walletAll = await sPUtils.getWalletInfo();
       if (walletAll == null) {
-        Map<String,dynamic> wallet=newWalletInfo.toJson();
         await sPUtils.setWalletInfo({
           userUUID: {
             "index":0,
             "miningIndex":0,
-            "wallet":[wallet],
+            "wallet":[newWalletInfo.toJson()],
           }
         });
       } else {
-        Map<String,dynamic>? userWallets=walletAll[userUUID];
+        final userWallets = walletAll[userUUID];
         if(userWallets==null){
           walletAll[userUUID] = {
             "index":0,
@@ -351,9 +294,7 @@ extension WalletActionProviderWallet on WalletActionProvider {
           };
         }else{
           if(isNewWallet){
-            List<dynamic> wallet=userWallets['wallet'];
-            wallet.add(newWalletInfo.toJson());
-            //userWallets['wallet']=wallet;
+            (userWallets['wallet'] as List).add(newWalletInfo.toJson());
           }else{
             userWallets['wallet'][wIndex]=newWalletInfo.toJson();
           }
@@ -364,9 +305,7 @@ extension WalletActionProviderWallet on WalletActionProvider {
         await sPUtils.setWalletInfo(walletAll);
       }
       await refreshWalletListNotifier();
-
     }catch(e){
-      //ToastUtils.show3(e.toString());
       debugPrint("saveWalletInfo error: $e");
     }
   }
@@ -418,9 +357,7 @@ extension WalletActionProviderWallet on WalletActionProvider {
 
   //添加一个导入钱包
   Future<bool> addImportWalletInfo(WalletInfo info) async {
-    //if( haveOne(info))return false;
     try{
-      // 检查 walletName 是否为 null
       if (info.walletName == null || info.walletName!.isEmpty) {
         debugPrint('WalletActionProvider: Cannot add import wallet - walletName is null or empty');
         return false;
@@ -431,26 +368,18 @@ extension WalletActionProviderWallet on WalletActionProvider {
         debugPrint('WalletActionProvider: Cannot add import wallet - chain config not found for $walletNameUpper');
         return false;
       }
-      List<String> chainMapWalletKeys=chainMapWallet.keys.toList();
-      Map<String,dynamic> chainMap={};
-      for(String key in chainMapWalletKeys){
-        chainMap[key]=chainMapWallet[key];
-      }
+      final chainMap = Map<String,dynamic>.from(chainMapWallet);
       chainMap['baseInfo']['isTest']=false;
       chainMap['baseInfo']['mainnets']={};
       chainMap['baseInfo']['balance']="0";
       chainMap['baseInfo']['balance_test']="0";
       chainMap['baseInfo']['canEdit']=false;
-      info.coinInfo= {
-        walletNameUpper:chainMap,
-      };
-      //walletInfo.importWallets.add(info);
+      info.coinInfo= {walletNameUpper: chainMap};
       await saveWalletInfo(info, walletInfoLsit.length,isNewWallet: true);
       initWallet();
       return true;
     }catch(e){
       return false;
     }
-
   }
 }

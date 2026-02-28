@@ -94,14 +94,12 @@ mixin _HardwareWalletConnectionMixin on ChangeNotifier {
   Future<void> _persistSavedDevices();
 
   /// 检查蓝牙是否可用
-  Future<bool> checkBluetoothAvailable() async {
-    return await _ledgerService.isBluetoothAvailable();
-  }
+  Future<bool> checkBluetoothAvailable() =>
+      _ledgerService.isBluetoothAvailable();
 
   /// 请求蓝牙权限
-  Future<bool> requestPermissions() async {
-    return await _ledgerService.requestBluetoothPermissions();
-  }
+  Future<bool> requestPermissions() =>
+      _ledgerService.requestBluetoothPermissions();
 
   /// 开始扫描设备
   Future<void> startScan() async {
@@ -126,77 +124,17 @@ mixin _HardwareWalletConnectionMixin on ChangeNotifier {
     notifyListeners();
   }
 
-  /// 连接设备
-  Future<bool> connectDevice(BluetoothDeviceInfo deviceInfo) async {
+  /// 通用连接流程：设置 connecting 状态，执行 [action]，成功则保存设备并返回它，
+  /// 失败则设置 error 状态并返回 null。
+  Future<HardwareWalletDevice?> _connectWith(
+    Future<HardwareWalletDevice> Function() action,
+  ) async {
     _errorMessage = null;
     _connectionState = HardwareWalletConnectionState.connecting;
     notifyListeners();
 
     try {
-      final device = await _ledgerService.connect(deviceInfo);
-      _currentDevice = device;
-      _connectionState = HardwareWalletConnectionState.connected;
-      await _saveDevice(device);
-      notifyListeners();
-      return true;
-    } on HardwareWalletError catch (e) {
-      _errorMessage = e.userFriendlyMessage;
-      _connectionState = HardwareWalletConnectionState.error;
-      notifyListeners();
-      return false;
-    }
-  }
-
-  /// 重新连接已保存的设备
-  Future<bool> reconnectDevice(HardwareWalletDevice device) async {
-    if (device.isTrezor) {
-      return await _reconnectTrezor(device);
-    }
-    if (device.isKeystone) {
-      _currentDevice = device.copyWith(isConnected: true);
-      _connectionState = HardwareWalletConnectionState.connected;
-      notifyListeners();
-      return true;
-    }
-    final deviceInfo = BluetoothDeviceInfo(
-      id: device.id,
-      name: device.name,
-      rssi: -50,
-    );
-    return await connectDevice(deviceInfo);
-  }
-
-  Future<bool> _reconnectTrezor(HardwareWalletDevice device) async {
-    _errorMessage = null;
-    _connectionState = HardwareWalletConnectionState.connecting;
-    notifyListeners();
-
-    try {
-      final connected = await _trezorService.connect();
-      _currentDevice = connected.copyWith(
-        id: device.id,
-        lastConnectedAt: DateTime.now(),
-      );
-      _connectionState = HardwareWalletConnectionState.connected;
-      await _saveDevice(_currentDevice!);
-      notifyListeners();
-      return true;
-    } on HardwareWalletError catch (e) {
-      _errorMessage = e.userFriendlyMessage;
-      _connectionState = HardwareWalletConnectionState.error;
-      notifyListeners();
-      return false;
-    }
-  }
-
-  /// 连接 Trezor 设备（USB）
-  Future<HardwareWalletDevice?> connectTrezor() async {
-    _errorMessage = null;
-    _connectionState = HardwareWalletConnectionState.connecting;
-    notifyListeners();
-
-    try {
-      final device = await _trezorService.connect();
+      final device = await action();
       _currentDevice = device;
       _connectionState = HardwareWalletConnectionState.connected;
       await _saveDevice(device);
@@ -209,6 +147,43 @@ mixin _HardwareWalletConnectionMixin on ChangeNotifier {
       return null;
     }
   }
+
+  /// 连接设备
+  Future<bool> connectDevice(BluetoothDeviceInfo deviceInfo) async {
+    final device = await _connectWith(() => _ledgerService.connect(deviceInfo));
+    return device != null;
+  }
+
+  /// 重新连接已保存的设备
+  Future<bool> reconnectDevice(HardwareWalletDevice device) async {
+    if (device.isTrezor) return _reconnectTrezor(device);
+    if (device.isKeystone) {
+      _currentDevice = device.copyWith(isConnected: true);
+      _connectionState = HardwareWalletConnectionState.connected;
+      notifyListeners();
+      return true;
+    }
+    return connectDevice(BluetoothDeviceInfo(
+      id: device.id,
+      name: device.name,
+      rssi: -50,
+    ));
+  }
+
+  Future<bool> _reconnectTrezor(HardwareWalletDevice device) async {
+    final result = await _connectWith(() async {
+      final connected = await _trezorService.connect();
+      return connected.copyWith(
+        id: device.id,
+        lastConnectedAt: DateTime.now(),
+      );
+    });
+    return result != null;
+  }
+
+  /// 连接 Trezor 设备（USB）
+  Future<HardwareWalletDevice?> connectTrezor() =>
+      _connectWith(() => _trezorService.connect());
 
   /// 注册 Keystone 气隙设备（从 xpub QR 扫描结果创建）
   Future<HardwareWalletDevice> registerKeystone(
@@ -234,54 +209,46 @@ mixin _HardwareWalletConnectionMixin on ChangeNotifier {
   /// 获取当前打开的应用
   Future<LedgerAppInfo?> getCurrentApp() async {
     if (!isConnected) return null;
-    return await _ledgerService.getCurrentApp();
+    return _ledgerService.getCurrentApp();
+  }
+
+  /// 通用地址获取：检查连接状态，调用 [fetch]，处理错误。
+  Future<String?> _getAddress(
+    Future<String?> Function() fetch,
+  ) async {
+    if (!isConnected) {
+      _errorMessage = 'No device connected';
+      notifyListeners();
+      return null;
+    }
+    try {
+      return await fetch();
+    } on HardwareWalletError catch (e) {
+      _errorMessage = e.userFriendlyMessage;
+      notifyListeners();
+      return null;
+    }
   }
 
   /// 获取以太坊地址
   Future<String?> getEthereumAddress({
     String derivationPath = "m/44'/60'/0'/0/0",
     bool display = false,
-  }) async {
-    if (!isConnected) {
-      _errorMessage = 'No device connected';
-      notifyListeners();
-      return null;
-    }
-
-    try {
-      return await _ledgerService.getEthereumAddress(
-        derivationPath: derivationPath,
-        display: display,
-      );
-    } on HardwareWalletError catch (e) {
-      _errorMessage = e.userFriendlyMessage;
-      notifyListeners();
-      return null;
-    }
-  }
+  }) =>
+      _getAddress(() => _ledgerService.getEthereumAddress(
+            derivationPath: derivationPath,
+            display: display,
+          ));
 
   /// 获取比特币地址
   Future<String?> getBitcoinAddress({
     String derivationPath = "m/84'/0'/0'/0/0",
     bool display = false,
-  }) async {
-    if (!isConnected) {
-      _errorMessage = 'No device connected';
-      notifyListeners();
-      return null;
-    }
-
-    try {
-      return await _ledgerService.getBitcoinAddress(
-        derivationPath: derivationPath,
-        display: display,
-      );
-    } on HardwareWalletError catch (e) {
-      _errorMessage = e.userFriendlyMessage;
-      notifyListeners();
-      return null;
-    }
-  }
+  }) =>
+      _getAddress(() => _ledgerService.getBitcoinAddress(
+            derivationPath: derivationPath,
+            display: display,
+          ));
 
   /// 删除已保存的设备
   Future<void> removeDevice(String deviceId) async {
@@ -295,36 +262,30 @@ mixin _HardwareWalletConnectionMixin on ChangeNotifier {
     notifyListeners();
   }
 
-  /// 加载账户列表（前 5 个）
-  Future<void> loadAccounts(String coinType) async {
-    if (!isConnected || _currentDevice == null) return;
-
-    _accounts = [];
-    _currentCoinType = coinType.toUpperCase();
-
-    await _loadAccountsFrom(coinType, startIndex: 0, count: 5);
-
+  /// 加载后保存设备并通知监听器
+  Future<void> _persistAccountsAndNotify() async {
     if (_currentDevice != null) {
       _currentDevice = _currentDevice!.copyWith(accounts: List.from(_accounts));
       await _saveDevice(_currentDevice!);
     }
-
     notifyListeners();
+  }
+
+  /// 加载账户列表（前 5 个）
+  Future<void> loadAccounts(String coinType) async {
+    if (!isConnected || _currentDevice == null) return;
+    _accounts = [];
+    _currentCoinType = coinType.toUpperCase();
+    await _loadAccountsFrom(coinType, startIndex: 0, count: 5);
+    await _persistAccountsAndNotify();
   }
 
   /// 加载更多账户（从当前最大 index 继续）
   Future<void> loadMoreAccounts() async {
     if (!isConnected || _currentDevice == null) return;
-
     final startIndex = _accounts.isEmpty ? 0 : _accounts.last.index + 1;
     await _loadAccountsFrom(_currentCoinType, startIndex: startIndex, count: 5);
-
-    if (_currentDevice != null) {
-      _currentDevice = _currentDevice!.copyWith(accounts: List.from(_accounts));
-      await _saveDevice(_currentDevice!);
-    }
-
-    notifyListeners();
+    await _persistAccountsAndNotify();
   }
 
   /// 内部：从 [startIndex] 开始加载 [count] 个账户

@@ -110,30 +110,26 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
     final errorFallback = S.of(context).g_key_error_3;
     final successMsg = S.of(context).g_key_ens_subdomain_created;
 
-    final effectiveOwner = owner.isNotEmpty ? owner : widget.walletAddress;
     final result = await widget.ensService.createSubdomain(
       widget.parentName,
       label,
-      effectiveOwner,
+      owner.isNotEmpty ? owner : widget.walletAddress,
     );
 
     if (!mounted) return;
 
+    nav.pop();
+    final messenger = ScaffoldMessenger.of(context);
     if (result.error) {
-      setState(() => _creating = false);
-      nav.pop();
-      // 通过外部 ScaffoldMessenger 显示错误，需返回 error 信息
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(result.data?.toString() ?? errorFallback),
-          backgroundColor: Colors.red,
-        ),
-      );
+      messenger.showSnackBar(SnackBar(
+        content: Text(result.data?.toString() ?? errorFallback),
+        backgroundColor: Colors.red,
+      ));
     } else {
-      nav.pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(successMsg), backgroundColor: Colors.green),
-      );
+      messenger.showSnackBar(SnackBar(
+        content: Text(successMsg),
+        backgroundColor: Colors.green,
+      ));
       widget.onCreated();
     }
   }
@@ -186,20 +182,18 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
   Widget _buildPreview(BuildContext context) {
     final label = _labelController.text.trim();
     if (label.isEmpty) return const SizedBox.shrink();
+    final su = ScreenUtil();
     return Container(
-      margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-      padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(16),
-        vertical: ScreenUtil().setWidth(10),
-      ),
+      margin: EdgeInsets.only(bottom: su.setWidth(12)),
+      padding: EdgeInsets.symmetric(horizontal: su.setWidth(16), vertical: su.setWidth(10)),
       decoration: BoxDecoration(
         color: widget.domainChain.color.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+        borderRadius: BorderRadius.circular(su.setWidth(10)),
       ),
       child: Text(
         '$label.${widget.parentName}',
         style: TextStyle(
-          fontSize: ScreenUtil().setSp(26),
+          fontSize: su.setSp(26),
           fontWeight: FontWeight.w600,
           color: widget.domainChain.color,
         ),

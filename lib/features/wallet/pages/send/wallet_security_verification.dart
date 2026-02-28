@@ -74,63 +74,42 @@ class _WalletSecurityVerificationState
   @override
   void dispose() {
     _emailTimer?.cancel();
-    _emailTimer = null;
     pwdTextEditingController.dispose();
     emailTextEditingController.dispose();
     googleTextEditingController.dispose();
-    emailSendWaitNum = 0;
     super.dispose();
   }
 
   Future<void> initSecurity() async {
-    final Map<String, dynamic>? s = await SPUtil().getSecurity();
-    if (s != null) {
-      final Map<String, dynamic>? userSecurityMap =
-          s[AppGlobals.userInfo?.uuid ?? ''];
-      if (userSecurityMap != null) {
-        setState(() {
-          securityMap['email'] = userSecurityMap['email'];
-          securityMap['google'] = userSecurityMap['google'] ?? false;
-          securityMap['face'] = userSecurityMap['face'] ?? false;
-        });
-      }
+    final s = await SPUtil().getSecurity();
+    final userMap = s?[AppGlobals.userInfo?.uuid ?? ''];
+    if (userMap is Map<String, dynamic>) {
+      securityMap['email'] = userMap['email'] ?? false;
+      securityMap['google'] = userMap['google'] ?? false;
+      securityMap['face'] = userMap['face'] ?? false;
     }
     if (!mounted) return;
-    if (ref.read(wapBridgeProvider).walletInfo.password != '') {
-      showWalletPassword = true;
-    }
+    showWalletPassword =
+        ref.read(wapBridgeProvider).walletInfo.password != '';
     setState(() {});
   }
 
-  // 验证钱包密码
   bool checkPwd() {
     final String pwdStr = pwdTextEditingController.text;
     final String oldPwdStr =
         ref.read(wapBridgeProvider).walletInfo.password ?? '';
-    if (oldPwdStr != pwdStr) {
-      setState(() {
-        pwdErrorMessage = S.of(context).g_key_t_34;
-      });
-      return false;
-    }
-    setState(() {
-      pwdErrorMessage = '';
-    });
-    return true;
+    final bool match = oldPwdStr == pwdStr;
+    setState(() => pwdErrorMessage = match ? '' : S.of(context).g_key_t_34);
+    return match;
   }
 
-  // 关闭键盘
   void closeKeyboard() {
     FocusScope.of(context).requestFocus(FocusNode());
   }
 
-  // 获取邮箱验证码
   Future<void> getEmailVerification() async {
-    if (emailLoad == Load.loading) return;
-    if (emailSendWait) return;
-    setState(() {
-      emailLoad = Load.loading;
-    });
+    if (emailLoad == Load.loading || emailSendWait) return;
+    setState(() => emailLoad = Load.loading);
     final MessageModel mm = await userInfoApi.getEmailVerification();
     if (!mounted) return;
     if (mm.error) {
@@ -140,12 +119,9 @@ class _WalletSecurityVerificationState
       emailSendWait = true;
       _startEmailCountdown();
     }
-    setState(() {
-      emailLoad = Load.finish;
-    });
+    setState(() => emailLoad = Load.finish);
   }
 
-  // 邮件发送倒计时
   void _startEmailCountdown() {
     _emailTimer = Timer(const Duration(seconds: 1), () {
       if (!mounted) return;
@@ -163,101 +139,69 @@ class _WalletSecurityVerificationState
 
   // 验证邮箱验证码
   Future<bool> checkEmailVerification() async {
-    final String codeStr = emailTextEditingController.text;
+    final codeStr = emailTextEditingController.text;
     if (codeStr.isEmpty) {
-      setState(() {
-        emailErrorMessage = S.of(context).rest_Please_enter;
-      });
+      setState(() => emailErrorMessage = S.of(context).rest_Please_enter);
       return false;
     }
     if (codeStr.length != 6) {
-      setState(() {
-        emailErrorMessage = S.of(context).email_code_input_error;
-      });
+      setState(() => emailErrorMessage = S.of(context).email_code_input_error);
       return false;
     }
-    final MessageModel mm =
-        await userInfoApi.checkEmailVerification(codeStr);
-    if (mm.error) {
-      setState(() {
-        emailErrorMessage = S.of(context).email_code_input_error;
-      });
-      return false;
-    }
-    setState(() {
-      emailErrorMessage = '';
-    });
-    return true;
+    final mm = await userInfoApi.checkEmailVerification(codeStr);
+    setState(() => emailErrorMessage = mm.error ? S.of(context).email_code_input_error : '');
+    return !mm.error;
   }
 
   // 谷歌验证码验证
   Future<bool> checkGoogleVerification() async {
-    final String codeStr = googleTextEditingController.text.trim();
+    final codeStr = googleTextEditingController.text.trim();
     if (codeStr.isEmpty) {
-      setState(() {
-        googleErrorMessage = S.of(context).rest_Please_enter;
-      });
+      setState(() => googleErrorMessage = S.of(context).rest_Please_enter);
       return false;
     }
     if (codeStr.length != 6 || !RegExp(r'^\d{6}$').hasMatch(codeStr)) {
-      setState(() {
-        googleErrorMessage = S.of(context).g_2fa_invalid_format;
-      });
+      setState(() => googleErrorMessage = S.of(context).g_2fa_invalid_format);
       return false;
     }
-    final MessageModel mm = await userInfoApi.checkGoogle(codeStr);
-    if (mm.error) {
-      setState(() {
-        googleErrorMessage = S.of(context).email_code_input_error;
-      });
-      return false;
-    }
-    setState(() {
-      googleErrorMessage = '';
-    });
-    return true;
+    final mm = await userInfoApi.checkGoogle(codeStr);
+    setState(() => googleErrorMessage = mm.error ? S.of(context).email_code_input_error : '');
+    return !mm.error;
   }
 
-  // 生物识别入口
   Future<void> faceVerification() async {
     final LocalAuthentication auth = LocalAuthentication();
     await _checkBiometrics(auth);
   }
 
-  // 检查生物特征是否可用
   Future<void> _checkBiometrics(LocalAuthentication auth) async {
-    bool canCheckBiometrics;
+    bool canCheck;
     try {
-      canCheckBiometrics = await auth.canCheckBiometrics;
+      canCheck = await auth.canCheckBiometrics;
     } on PlatformException catch (_) {
-      canCheckBiometrics = false;
+      canCheck = false;
     }
-    if (canCheckBiometrics) {
-      final List<BiometricType> available =
-          await auth.getAvailableBiometrics();
-      canCheckBiometrics = available.isNotEmpty &&
-          (available.contains(BiometricType.face) ||
-              available.contains(BiometricType.strong) ||
-              available.contains(BiometricType.weak) ||
-              available.contains(BiometricType.fingerprint));
+    if (canCheck) {
+      final available = await auth.getAvailableBiometrics();
+      canCheck = available.any(const {
+        BiometricType.face,
+        BiometricType.strong,
+        BiometricType.weak,
+        BiometricType.fingerprint,
+      }.contains);
     }
-    if (canCheckBiometrics) {
-      setState(() {
-        faceErrorMessage = '';
-      });
-      await _authenticateWithBiometrics(auth);
-    } else {
-      setState(() {
-        faceErrorMessage = S.of(context).g_lock_key7;
-      });
+    if (!canCheck) {
+      setState(() => faceErrorMessage = S.of(context).g_lock_key7);
+      return;
     }
+    setState(() => faceErrorMessage = '');
+    await _authenticateWithBiometrics(auth);
   }
 
-  // 执行生物特征验证
   Future<void> _authenticateWithBiometrics(LocalAuthentication auth) async {
-    bool authenticated = false;
+    bool authenticated;
     try {
-      final dynamic authMessage = Platform.isIOS
+      final authMessage = Platform.isIOS
           ? auth_ios.IOSAuthMessages(
               cancelButton: S.of(context).g_key_79,
               localizedFallbackTitle: S.of(context).g_face_8,
@@ -282,18 +226,15 @@ class _WalletSecurityVerificationState
     }
     setState(() {
       faceCheck = authenticated ? 1 : 2;
-      faceErrorMessage =
-          authenticated ? '' : S.of(context).g_lock_key6;
+      faceErrorMessage = authenticated ? '' : S.of(context).g_lock_key6;
     });
   }
 
-  // 跳转安全设置页
   Future<void> pushSetting() async {
     await Navigator.pushNamed(context, 'securitySetting');
     initSecurity();
   }
 
-  // 跳转编辑钱包密码页
   Future<void> pushEditWallet() async {
     final int wIndex = ref.read(wapBridgeProvider).walletIndex;
     await Navigator.push(
@@ -317,81 +258,50 @@ class _WalletSecurityVerificationState
     return Future.value(false);
   }
 
-  // 确认按钮：依次校验所有安全项
+  /// 重置 loading 状态
+  void _finishLoading() => setState(() => load = Load.finish);
+
+  bool get _anySecurityEnabled =>
+      showWalletPassword ||
+      securityMap['face'] == true ||
+      securityMap['email'] == true ||
+      securityMap['google'] == true;
+
   Future<void> _onConfirm() async {
     closeKeyboard();
-    if (load == Load.loading) return;
-    final bool anyEnabled = showWalletPassword ||
-        securityMap['face'] == true ||
-        securityMap['email'] == true ||
-        securityMap['google'] == true;
-    if (!anyEnabled) return;
+    if (load == Load.loading || !_anySecurityEnabled) return;
 
     if (securityMap['face'] == true) {
       if (faceCheck != 1) {
-        setState(() {
-          faceErrorMessage = S.of(context).verification;
-        });
-        return;
-      } else {
-        setState(() {
-          faceErrorMessage = '';
-        });
-      }
-    }
-
-    setState(() {
-      load = Load.loading;
-    });
-
-    if (showWalletPassword) {
-      if (!checkPwd()) {
-        setState(() {
-          load = Load.finish;
-        });
+        setState(() => faceErrorMessage = S.of(context).verification);
         return;
       }
+      setState(() => faceErrorMessage = '');
     }
+
+    setState(() => load = Load.loading);
+
+    if (showWalletPassword && !checkPwd()) { _finishLoading(); return; }
 
     if (securityMap['email'] == true) {
-      final bool ok = await checkEmailVerification();
-      if (!context.mounted) return;
-      if (!ok) {
-        setState(() {
-          load = Load.finish;
-        });
-        return;
-      }
+      if (!await checkEmailVerification()) { if (context.mounted) _finishLoading(); return; }
     }
-
     if (securityMap['google'] == true) {
-      final bool ok = await checkGoogleVerification();
-      if (!context.mounted) return;
-      if (!ok) {
-        setState(() {
-          load = Load.finish;
-        });
-        return;
-      }
+      if (!await checkGoogleVerification()) { if (context.mounted) _finishLoading(); return; }
     }
 
     if (!context.mounted) return;
-    setState(() {
-      load = Load.finish;
-    });
-    // mounted 已检查，此处使用 context 安全
-    // ignore: use_build_context_synchronously
+    _finishLoading();
     Navigator.pop(context, true);
   }
 
-  // 登录提醒对话框
   Future<void> showLoginDialog() async {
     final flag = await tipsDialog6(
       context,
       title: S.of(context).login_need_login,
     );
     if (!mounted) return;
-    if (flag != null && flag) {
+    if (flag == true) {
       await Navigator.pushNamed(context, '/LoginPage');
       if (!mounted) return;
       Navigator.popUntil(context, ModalRoute.withName('/'));
@@ -400,11 +310,6 @@ class _WalletSecurityVerificationState
 
   @override
   Widget build(BuildContext context) {
-    final bool anyEnabled = showWalletPassword ||
-        securityMap['face'] == true ||
-        securityMap['email'] == true ||
-        securityMap['google'] == true;
-
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
@@ -446,7 +351,7 @@ class _WalletSecurityVerificationState
                 left: 0,
                 bottom: 0,
                 right: 0,
-                child: _buildBottomBar(anyEnabled),
+                child: _buildBottomBar(_anySecurityEnabled),
               ),
             ],
           ),

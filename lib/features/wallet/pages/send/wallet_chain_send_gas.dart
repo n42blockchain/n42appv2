@@ -34,49 +34,43 @@ class StandardMinerFeeWidget extends StatelessWidget {
     final blockchainType = coinModel.coin['blockchainType'] as String;
     final coinType = coinModel.coin['coinType'] as String;
     final isContract = coinModel.coin['isContract'] as bool? ?? false;
+    final isEthereum = blockchainType == BlockchainType.Ethereum.name;
+    final isTron = blockchainType == BlockchainType.Tron.name;
 
-    String totalGasPriceStr;
-    String gasPriceStr;
-    Color totalGasPriceColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    Widget gasLimitWidget = const SizedBox.shrink();
-
-    // isContract 时统一使用主链精度
-    int decimals = isContract
+    final decimals = isContract
         ? (chainModel?.coin['decimals'] ?? 0)
         : coinModel.coin['decimals'] as int;
 
-    if (blockchainType == BlockchainType.Ethereum.name) {
+    var totalGasPriceColor =
+        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final errorColor =
+        AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
+
+    String totalGasPriceStr;
+    String gasPriceStr;
+    Widget gasLimitWidget = const SizedBox.shrink();
+
+    if (isEthereum) {
       final displayUnit = isContract
           ? (chainModel?.coin['unit'] ?? '').toString().toUpperCase()
           : coinModel.coin['unit'].toString().toUpperCase();
       if (isContract && totalGasPrice > (chainModel?.balance ?? BigInt.zero)) {
-        totalGasPriceColor = AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorTextColor.name);
+        totalGasPriceColor = errorColor;
       }
       totalGasPriceStr =
           '${Decimal.parse(toEther(totalGasPrice.toString(), decimals).toString())}$displayUnit';
       gasPriceStr =
           '${Decimal.parse(toGWei(gasPrice.toString()).toString())}Gwei';
-      gasLimitWidget = _GasLimitRow(
-        label: S.of(context).g_key_101,
-        value: '$gas',
-        useExpanded: true,
-      );
-    } else if (blockchainType == BlockchainType.Tron.name) {
+      gasLimitWidget = _GasLimitRow(label: S.of(context).g_key_101, value: '$gas');
+    } else if (isTron) {
       if (isContract &&
           toEther(totalGasPrice.toString(), decimals).toDouble() >
               (chainModel?.balanceDoubleAll() ?? 0)) {
-        totalGasPriceColor = AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorTextColor.name);
+        totalGasPriceColor = errorColor;
       }
       totalGasPriceStr = '${toEther(totalGasPrice.toString(), decimals)} $coinType';
       gasPriceStr = '${toEther(gasPrice.toString(), decimals)} $coinType';
-      gasLimitWidget = _GasLimitRow(
-        label: S.of(context).g_key_101,
-        value: '$gas',
-        useExpanded: false,
-      );
+      gasLimitWidget = _GasLimitRow(label: S.of(context).g_key_101, value: '$gas');
     } else {
       totalGasPriceStr = '${toEther(totalGasPrice.toString(), decimals)} $coinType';
       gasPriceStr = '${toEther(gasPrice.toString(), decimals)} $coinType';
@@ -349,12 +343,10 @@ class _GasLimitRow extends StatelessWidget {
   const _GasLimitRow({
     required this.label,
     required this.value,
-    required this.useExpanded,
   });
 
   final String label;
   final String value;
-  final bool useExpanded;
 
   @override
   Widget build(BuildContext context) {
@@ -362,10 +354,7 @@ class _GasLimitRow extends StatelessWidget {
         context, AppThemeKeys.itemSubtitleTextColor.name);
     final valueColor =
         AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final labelStyle =
-        TextStyle(color: labelColor, fontSize: ScreenUtil().setSp(28.0));
-    final valueStyle =
-        TextStyle(color: valueColor, fontSize: ScreenUtil().setSp(28.0));
+    final fontSize = ScreenUtil().setSp(28.0);
 
     return Container(
       margin: EdgeInsets.only(top: ScreenUtil().setWidth(30.0)),
@@ -373,16 +362,15 @@ class _GasLimitRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: labelStyle),
+          Text(label, style: TextStyle(color: labelColor, fontSize: fontSize)),
           SizedBox(width: ScreenUtil().setWidth(10)),
-          if (useExpanded)
-            Expanded(
-              child: Text(value, style: valueStyle, textAlign: TextAlign.right),
-            )
-          else ...[
-            Expanded(child: const SizedBox.shrink()),
-            Text(value, style: valueStyle),
-          ],
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(color: valueColor, fontSize: fontSize),
+              textAlign: TextAlign.right,
+            ),
+          ),
         ],
       ),
     );

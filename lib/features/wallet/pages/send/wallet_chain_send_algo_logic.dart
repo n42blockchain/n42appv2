@@ -62,11 +62,9 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
   }
 
   Future<void> getBalance() async {
-    setState(() {
-      load = Load.loading;
-    });
+    setState(() { load = Load.loading; });
     final bool isOk = await widget.coinModel.getBalance(getToken: false);
-    if (isOk == false) {
+    if (!isOk) {
       load = Load.finish;
       errorMessage = S.current.g_key_t_44;
       ToastUtils.show(S.current.g_key_t_44);
@@ -75,9 +73,7 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
   }
 
   Future<void> getGasPrice() async {
-    setState(() {
-      load = Load.loading;
-    });
+    setState(() { load = Load.loading; });
     final MessageModel mm = await tokenViewApi.getGasPrice(
           widget.coinModel.coin['blockchainType'],
           widget.coinModel.coin['coinType'],
@@ -87,7 +83,7 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
               : null,
         ) ??
         MessageModel.error();
-    if (mm.error == false) {
+    if (!mm.error) {
       gasPrice = BigInt.from(mm.data['min-fee']);
     } else {
       errorMessage = mm.data.toString();
@@ -121,7 +117,7 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
     }
     final BigInt valueBi =
         ethToWeiString(value, widget.coinModel.coin['decimals']);
-    if (widget.coinModel.coin['isContract'] == false) {
+    if (!widget.coinModel.coin['isContract']) {
       if (valueBi + totalGasPrice > widget.coinModel.balance) {
         amountErrorMessage = S.of(context).g_key_47;
         setState(() {});
@@ -143,9 +139,9 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
     if (addrList.length == 2) {
       addr = addrList[1];
     }
-    final bool check = await Trustdart()
+    final bool valid = await Trustdart()
         .validateAddress(widget.coinModel.coin['coinType'], addr);
-    if (!check ||
+    if (!valid ||
         addr.toUpperCase() ==
             widget.coinModel.address.toString().toUpperCase()) {
       toErrorMessage = S.current.g_key_t_50;
@@ -161,11 +157,21 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
     if (widget.coinModel.other == null) return;
     final AlgoModel algo = widget.coinModel.other as AlgoModel;
     if (algo.code == 404) {
-      setState(() {
-        algoTokenAdd = false;
-      });
+      algoTokenAdd = false;
+      setState(() {});
     }
   }
+
+  /// Resets load state and triggers a rebuild.
+  void _finishLoading() {
+    load = Load.finish;
+    setState(() {});
+  }
+
+  /// The unit string used for the send confirmation page.
+  String get _sendUnit => chainModel == null
+      ? widget.coinModel.coin['unit']
+      : chainModel!.coin['unit'];
 
   Future<void> sendTransaction() async {
     if (load == Load.loading) {
@@ -173,9 +179,7 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
       return;
     }
     if (amountErrorMessage != "") return;
-    setState(() {
-      load = Load.loading;
-    });
+    setState(() { load = Load.loading; });
     closeKeyboard();
     amountCheck();
     if (amountErrorMessage != "") return;
@@ -184,9 +188,7 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
         await toAddressCheck(toTextEditingController.text);
     if (!mounted) return;
     if (toAddr == null) {
-      setState(() {
-        load = Load.finish;
-      });
+      _finishLoading();
       return;
     }
 
@@ -201,63 +203,29 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
     );
     if (!mounted) return;
     if (toBalanceMM.error) {
-      setState(() {
-        errorMessage = toBalanceMM.data;
-        load = Load.finish;
-      });
+      errorMessage = toBalanceMM.data;
+      _finishLoading();
       return;
     }
     if (toBalanceMM.data['code'] == 404) {
-      setState(() {
-        errorMessage =
-            'To Address ($toAddr) did not add USDC ($contract) and cannot be traded.';
-        load = Load.finish;
-      });
+      errorMessage =
+          'To Address ($toAddr) did not add USDC ($contract) and cannot be traded.';
+      _finishLoading();
       return;
     }
-    setState(() {
-      errorMessage = "";
-    });
-
-    if (errorMessage != "") {
-      setState(() {
-        load = Load.finish;
-      });
-      return;
-    }
+    errorMessage = "";
 
     BigInt uBalance = widget.coinModel.balance;
     if (widget.coinModel.coin['isContract']) {
       uBalance = chainModel?.balance ?? BigInt.zero;
     }
     if (totalGasPrice > uBalance || widget.coinModel.balance == BigInt.zero) {
-      setState(() {
-        load = Load.finish;
-      });
+      _finishLoading();
       return;
     }
 
     final TransationRecordModel trModel = _buildTransactionRecord(toAddr);
-    final bool check = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => WalletBaseSend(
-          trModel,
-          null,
-          chainModel == null
-              ? widget.coinModel.coin['unit']
-              : chainModel!.coin['unit'],
-        ),
-      ),
-    );
-    if (!mounted) return;
-    if (check) {
-      signTx(trModel);
-    } else {
-      setState(() {
-        load = Load.finish;
-      });
-    }
+    await _confirmAndSign(trModel);
   }
 
   Future<void> sendTransactionAlgoTokenEdit(bool add) async {
@@ -266,21 +234,15 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
       return;
     }
     if (amountErrorMessage != "") return;
-    setState(() {
-      load = Load.loading;
-    });
+    setState(() { load = Load.loading; });
     closeKeyboard();
     if (errorMessage != "") {
-      setState(() {
-        load = Load.finish;
-      });
+      _finishLoading();
       return;
     }
     final BigInt uBalance = chainModel?.balance ?? BigInt.zero;
     if (totalGasPrice > uBalance) {
-      setState(() {
-        load = Load.finish;
-      });
+      _finishLoading();
       return;
     }
 
@@ -289,25 +251,22 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
     trModel.price = BigInt.zero;
     trModel.other = AlgoTrModel(add ? "Add" : "Delete");
 
+    await _confirmAndSign(trModel);
+  }
+
+  /// Shows the send confirmation page and signs on approval.
+  Future<void> _confirmAndSign(TransationRecordModel trModel) async {
     final bool check = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => WalletBaseSend(
-          trModel,
-          null,
-          chainModel == null
-              ? widget.coinModel.coin['unit']
-              : chainModel!.coin['unit'],
-        ),
+        builder: (context) => WalletBaseSend(trModel, null, _sendUnit),
       ),
     );
     if (!mounted) return;
     if (check) {
       signTx(trModel);
     } else {
-      setState(() {
-        load = Load.finish;
-      });
+      _finishLoading();
     }
   }
 

@@ -69,6 +69,8 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
   }
 
   Widget _buildEmpty(BuildContext context) {
+    final subtitleColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
     return RefreshIndicator(
       onRefresh: _onRefresh,
       child: ListView(
@@ -82,16 +84,14 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
                 Icon(
                   Icons.history,
                   size: ScreenUtil().setWidth(80),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                  color: subtitleColor,
                 ),
                 SizedBox(height: ScreenUtil().setWidth(20)),
                 Text(
                   S.of(context).g_key_132,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(30),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                    color: subtitleColor,
                   ),
                 ),
               ],
@@ -267,6 +267,10 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
     required String amountText,
     required CrossAxisAlignment alignment,
   }) {
+    final subtitleColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final mainColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainTextColor.name);
     return Column(
       crossAxisAlignment: alignment,
       children: [
@@ -274,8 +278,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
           chainName,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(24),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name),
+            color: subtitleColor,
           ),
         ),
         SizedBox(height: ScreenUtil().setWidth(4)),
@@ -284,8 +287,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
           style: TextStyle(
             fontSize: ScreenUtil().setSp(28),
             fontWeight: FontWeight.bold,
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
+            color: mainColor,
           ),
         ),
       ],
@@ -299,6 +301,10 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
     required String hash,
     required int chainId,
   }) {
+    final subtitleColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final blueColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name);
     return GestureDetector(
       onTap: () => _openExplorer(chainId, hash),
       child: Row(
@@ -307,8 +313,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
             '$label: ',
             style: TextStyle(
               fontSize: ScreenUtil().setSp(24),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: subtitleColor,
             ),
           ),
           Expanded(
@@ -316,8 +321,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
               _shortenHash(hash),
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(24),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                color: blueColor,
                 decoration: TextDecoration.underline,
               ),
               overflow: TextOverflow.ellipsis,
@@ -326,8 +330,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
           Icon(
             Icons.open_in_new,
             size: ScreenUtil().setWidth(26),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name),
+            color: blueColor,
           ),
         ],
       ),

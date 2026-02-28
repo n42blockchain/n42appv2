@@ -32,21 +32,17 @@ class _ErrorMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Visibility(
-      visible: message.isNotEmpty,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text(
-            message,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.errorTextColor.name),
-              fontSize: ScreenUtil().setSp(26.0),
-            ),
-            textAlign: TextAlign.end,
-          ),
-        ],
+    if (message.isEmpty) return const SizedBox.shrink();
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Text(
+        message,
+        style: TextStyle(
+          color: AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.errorTextColor.name),
+          fontSize: ScreenUtil().setSp(26.0),
+        ),
+        textAlign: TextAlign.end,
       ),
     );
   }
@@ -212,20 +208,25 @@ extension _SecurityVerificationBuild on _WalletSecurityVerificationState {
   }
 
   Widget _buildBottomBar(bool anyEnabled) {
+    final su = ScreenUtil();
+    final h88 = su.setWidth(88.0);
+    final pad30 = su.setWidth(30.0);
+
+    Color themeColor(String key) =>
+        AppThemeUtils.getColorByKey(context, key);
+
     return Column(
       children: [
-        Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
+        Divider(height: su.setWidth(1), indent: 0, endIndent: 0),
         Container(
-          height: ScreenUtil().setWidth(148.0),
-          padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.backGroundColor.name),
+          height: su.setWidth(148.0),
+          padding: EdgeInsets.all(pad30),
+          color: themeColor(AppThemeKeys.backGroundColor.name),
           child: Row(
             children: [
               Expanded(
                 child: SizedBox(
-                  width: double.infinity,
-                  height: ScreenUtil().setWidth(88.0),
+                  height: h88,
                   child: buttonStyle5(
                     context,
                     () {
@@ -234,36 +235,26 @@ extension _SecurityVerificationBuild on _WalletSecurityVerificationState {
                       Navigator.pop(context, false);
                     },
                     S.of(context).g_key_79,
-                    AppThemeUtils.getColorByKey(
-                      context,
-                      load == Load.finish
-                          ? AppThemeKeys.mainButtonTextColor.name
-                          : AppThemeKeys.mainButtonBgColor3.name,
-                    ),
-                    AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainButtonBgColor.name),
-                    borderColor: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainButtonBgColor.name),
+                    themeColor((load == Load.finish
+                        ? AppThemeKeys.mainButtonTextColor
+                        : AppThemeKeys.mainButtonBgColor3).name),
+                    themeColor(AppThemeKeys.mainButtonBgColor.name),
+                    borderColor: themeColor(AppThemeKeys.mainButtonBgColor.name),
                   ),
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(30.0)),
+              SizedBox(width: pad30),
               Expanded(
                 child: SizedBox(
-                  width: double.infinity,
-                  height: ScreenUtil().setWidth(88.0),
+                  height: h88,
                   child: buttonStyle6(
                     context,
                     _onConfirm,
                     S.of(context).g_key_78,
-                    AppThemeUtils.getColorByKey(
-                      context,
-                      (load == Load.finish && anyEnabled)
-                          ? AppThemeKeys.mainButtonBgColor.name
-                          : AppThemeKeys.mainButtonBgColor3.name,
-                    ),
-                    AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainButtonTextColor.name),
+                    themeColor(((load == Load.finish && anyEnabled)
+                        ? AppThemeKeys.mainButtonBgColor
+                        : AppThemeKeys.mainButtonBgColor3).name),
+                    themeColor(AppThemeKeys.mainButtonTextColor.name),
                     load == Load.loading,
                   ),
                 ),

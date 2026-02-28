@@ -67,31 +67,6 @@ class _WalletChainSendDotState extends ConsumerState<WalletChainSendDot>
 
   Widget coinTypeWidget() {
     final List<Widget> cChildren = [
-      /*
-      WalletChainInfoTitle(
-        title: Text(
-          "${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}",
-          style: TextStyle(
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-            fontSize: ScreenUtil().setSp(32.0),
-            fontWeight: FontWeight.bold,
-          ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        subtitle: null,
-        rightWidget: null,
-        rightImgUrl: "assets/wallet/addressBook.png",
-        rightTao: (){
-          Navigator.push(context, MaterialPageRoute(
-              builder: (context)=> AddressBookList(coinName: widget.coinModel.coin['coinType'],))).then((value)async{
-            if(value !=null){
-              toTextEditingController.text=value;
-            }
-          },);
-        },
-      ),
-      */
       RecentAddressBar(
         coinType: widget.coinModel.coin['coinType'] ?? '',
         onSelected: (addr) {
@@ -139,7 +114,6 @@ class _WalletChainSendDotState extends ConsumerState<WalletChainSendDot>
     );
   }
 
-  // 提交按钮
   Widget sendButtonWidget() {
     final String title = S.of(context).g_key_48;
     final bool isLoading = load == Load.loading;
@@ -157,9 +131,7 @@ class _WalletChainSendDotState extends ConsumerState<WalletChainSendDot>
                 context, AppThemeKeys.backGroundColor.name),
             child: buttonStyle6(
               context,
-              () async {
-                sendTransaction();
-              },
+              sendTransaction,
               isLoading ? '${S.of(context).g_key_106}...' : title,
               AppThemeUtils.getColorByKey(
                 context,
@@ -181,30 +153,7 @@ class _WalletChainSendDotState extends ConsumerState<WalletChainSendDot>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text:
-            "${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}",
-        /*actions: [
-          InkWell(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(
-                  builder: (context)=> AddressBookList(coinName: widget.coinModel.coin['coinType'],))).then((value)async{
-                if(value !=null){
-                  toTextEditingController.text=value;
-                }
-              },);
-            },
-            child: Container(
-              width: ScreenUtil().setWidth(40.0),
-              height: ScreenUtil().setWidth(40.0),
-              margin: EdgeInsets.only(right:ScreenUtil().setWidth(30.0),left: ScreenUtil().setWidth(20.0),),
-              child: Image.asset(
-                'assets/wallet/addressBook.png',
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-              ),
-            ),
-          ),
-        ],*/
+        text: "${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}",
       ),
       body: SafeArea(
         child: GestureDetector(

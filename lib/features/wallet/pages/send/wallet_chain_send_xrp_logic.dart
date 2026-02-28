@@ -75,11 +75,9 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
   }
 
   Future<void> getBalance() async {
-    setState(() {
-      load = Load.loading;
-    });
+    setState(() { load = Load.loading; });
     final bool isOk = await widget.coinModel.getBalance(getToken: false);
-    if (isOk == false) {
+    if (!isOk) {
       load = Load.finish;
       errorMessage = S.current.g_key_t_44;
       ToastUtils.show(S.current.g_key_t_44);
@@ -92,16 +90,14 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
     final MessageModel mm = await XrpApi().getServerStateXrp(
       isTest: widget.coinModel.isTest,
     );
-    if (mm.error == false) {
+    if (!mm.error) {
       widget.coinModel.other?.setServiceState(mm.data);
     }
     setState(() {});
   }
 
   Future<void> getGasPrice() async {
-    setState(() {
-      load = Load.loading;
-    });
+    setState(() { load = Load.loading; });
     final TokenViewApi tokenViewApi = TokenViewApi();
     final MessageModel mm = await tokenViewApi.getGasPrice(
           widget.coinModel.coin['blockchainType'],
@@ -109,7 +105,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
           isTest: widget.coinModel.isTest,
         ) ??
         MessageModel.error();
-    if (mm.error == false) {
+    if (!mm.error) {
       gasPrice = mm.data;
     } else {
       errorMessage = mm.data.toString();
@@ -129,9 +125,9 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
       setState(() {});
       return;
     }
-    final bool checkValue = regular.regularDouble(value.toString());
-    final bool checkValue1 = regular.regularNums(value.toString());
-    if (checkValue == false && checkValue1 == false) {
+    final bool checkValue = regular.regularDouble(value);
+    final bool checkValue1 = regular.regularNums(value);
+    if (!checkValue && !checkValue1) {
       amountErrorMessage = S.of(context).g_key_134;
       setState(() {});
       return;
@@ -165,25 +161,18 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
     if (addrList.length == 2) {
       addr = addrList[1];
     }
-    final bool check = await Trustdart()
+    final bool valid = await Trustdart()
         .validateAddress(widget.coinModel.coin['coinType'], addr);
-    if (check) {
-      if (addr.toUpperCase() ==
-          widget.coinModel.address.toString().toUpperCase()) {
-        toErrorMessage = S.current.g_key_t_50;
-        setState(() {});
-        return null;
-      } else {
-        await checkAccountXRP(addr);
-        toErrorMessage = "";
-        setState(() {});
-        return addr;
-      }
-    } else {
+    if (!valid ||
+        addr.toUpperCase() == widget.coinModel.address.toString().toUpperCase()) {
       toErrorMessage = S.current.g_key_t_50;
       setState(() {});
       return null;
     }
+    await checkAccountXRP(addr);
+    toErrorMessage = "";
+    setState(() {});
+    return addr;
   }
 
   /// Queries the XRP network to determine whether [addr] has been activated.
@@ -191,13 +180,11 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
     if (accountXrp['load'] == Load.loading) return;
     accountXrp['load'] = Load.loading;
     setState(() {});
-    final XrpApi xrpApi = XrpApi();
+
     final MessageModel mm =
-        await xrpApi.getAccountInfoXrp(addr, widget.coinModel.isTest);
+        await XrpApi().getAccountInfoXrp(addr, widget.coinModel.isTest);
     if (mm.error) {
       accountXrp['error'] = S.current.g_key_t_45(addr);
-      accountXrp['load'] = Load.finish;
-      setState(() {});
     } else {
       accountXrp['address'] = addr;
       if (mm.data['account'] == false) {
@@ -208,8 +195,14 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
         accountXrp['isCreate'] = true;
       }
       accountXrp['error'] = "";
-      accountXrp['load'] = Load.finish;
     }
+    accountXrp['load'] = Load.finish;
+    setState(() {});
+  }
+
+  /// Resets load state and triggers a rebuild.
+  void _finishLoading() {
+    load = Load.finish;
     setState(() {});
   }
 
@@ -222,46 +215,30 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
     amountCheck();
     if (amountErrorMessage != "") return;
 
-    setState(() {
-      load = Load.loading;
-    });
+    setState(() { load = Load.loading; });
     final String? toAddr =
         await toAddressCheck(toTextEditingController.text);
     if (toAddr == null) {
-      setState(() {
-        load = Load.finish;
-      });
+      _finishLoading();
       return;
     }
 
     amountCheck();
     if (!mounted) return;
     if (widget.coinModel.balance == BigInt.zero) {
-      setState(() {
-        load = Load.finish;
-      });
+      _finishLoading();
       return;
     }
+
     if (accountXrp['isCreate'] == false) {
       if (transferValue < BigInt.from(widget.coinModel.other.reserveBase)) {
         errorMessage =
             S.of(context).g_key_t_52(widget.coinModel.other.reserveBase);
-        setState(() {
-          load = Load.finish;
-        });
+        _finishLoading();
         return;
-      } else {
-        errorMessage = "";
       }
-    } else {
-      errorMessage = "";
     }
-    if (errorMessage != "") {
-      setState(() {
-        load = Load.finish;
-      });
-      return;
-    }
+    errorMessage = "";
 
     final TransationRecordModel trModel = _buildTransactionRecord(toAddr);
     final bool check = await Navigator.push(
@@ -278,9 +255,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
     if (check) {
       signTx(trModel);
     } else {
-      setState(() {
-        load = Load.finish;
-      });
+      _finishLoading();
     }
   }
 
@@ -314,7 +289,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
   }
 
   Future<void> signTx(TransationRecordModel trModel) async {
-    if (signTxCheck() == false) return;
+    if (!signTxCheck()) return;
     try {
       final TransferApi transferApi = TransferApi();
       final MessageModel mm = await transferApi.transferWallet(
@@ -347,20 +322,17 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
   }
 
   bool signTxCheck() {
-    if (widget.coinModel.coin['blockchainType'] ==
+    if (widget.coinModel.coin['blockchainType'] !=
         BlockchainType.Ethereum.name) {
-      if (widget.coinModel.coin['isContract']) {
-        final BigInt chainBalance = chainModel?.balance ?? BigInt.zero;
-        if (chainBalance == BigInt.zero) {
-          ToastUtils.show(
-              S.current.g_key_t_29(chainModel?.coin['coinType'] ?? ""));
-          return false;
-        } else if (totalGasPrice > chainBalance) {
-          ToastUtils.show(
-              S.current.g_key_t_29(chainModel?.coin['coinType'] ?? ""));
-          return false;
-        }
-      }
+      return true;
+    }
+    if (!widget.coinModel.coin['isContract']) return true;
+
+    final BigInt chainBalance = chainModel?.balance ?? BigInt.zero;
+    if (chainBalance == BigInt.zero || totalGasPrice > chainBalance) {
+      ToastUtils.show(
+          S.current.g_key_t_29(chainModel?.coin['coinType'] ?? ""));
+      return false;
     }
     return true;
   }

@@ -10,8 +10,6 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/batch_transfer_model.dart';
 import 'package:n42_wallet/features/wallet/provider/batch_transfer_provider.dart';
 
-// ─── TransferList ─────────────────────────────────────────────────────────────
-
 /// 转账列表（含空状态提示）
 class BatchTransferList extends StatelessWidget {
   final BatchTransferProvider provider;
@@ -78,8 +76,6 @@ class BatchTransferList extends StatelessWidget {
     );
   }
 }
-
-// ─── TransferListItem ─────────────────────────────────────────────────────────
 
 /// 单条转账记录（可左滑删除）
 class BatchTransferListItem extends StatelessWidget {
@@ -198,8 +194,6 @@ class BatchTransferListItem extends StatelessWidget {
   }
 }
 
-// ─── StatusBadge ─────────────────────────────────────────────────────────────
-
 /// 转账状态徽章
 class BatchStatusBadge extends StatelessWidget {
   final BatchTransferStatus status;
@@ -228,36 +222,22 @@ class BatchStatusBadge extends StatelessWidget {
 
 // ─── Shared helpers ───────────────────────────────────────────────────────────
 
-/// 将地址缩短为 `0x1234...5678` 格式
 String shortenAddress(String address) {
   if (address.length <= 12) return address;
   return '${address.substring(0, 8)}...${address.substring(address.length - 6)}';
 }
 
-/// 根据 [BatchTransferStatus] 返回对应的显示颜色
-Color batchStatusColor(BatchTransferStatus status) {
-  switch (status) {
-    case BatchTransferStatus.pending:
-      return Colors.grey;
-    case BatchTransferStatus.processing:
-      return Colors.blue;
-    case BatchTransferStatus.success:
-      return Colors.green;
-    case BatchTransferStatus.failed:
-      return Colors.red;
-  }
-}
+Color batchStatusColor(BatchTransferStatus status) => switch (status) {
+  BatchTransferStatus.pending => Colors.grey,
+  BatchTransferStatus.processing => Colors.blue,
+  BatchTransferStatus.success => Colors.green,
+  BatchTransferStatus.failed => Colors.red,
+};
 
-/// 根据 [BatchTransferStatus] 返回本地化状态文字
-String batchStatusText(BuildContext context, BatchTransferStatus status) {
-  switch (status) {
-    case BatchTransferStatus.pending:
-      return 'Pending';
-    case BatchTransferStatus.processing:
-      return S.of(context).g_key_batch_broadcasting;
-    case BatchTransferStatus.success:
-      return S.of(context).g_key_batch_done;
-    case BatchTransferStatus.failed:
-      return S.of(context).g_key_175;
-  }
-}
+String batchStatusText(BuildContext context, BatchTransferStatus status) =>
+    switch (status) {
+      BatchTransferStatus.pending => 'Pending',
+      BatchTransferStatus.processing => S.of(context).g_key_batch_broadcasting,
+      BatchTransferStatus.success => S.of(context).g_key_batch_done,
+      BatchTransferStatus.failed => S.of(context).g_key_175,
+    };

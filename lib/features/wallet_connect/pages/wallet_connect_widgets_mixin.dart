@@ -16,41 +16,43 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
   /// Override in host to provide scanner navigation.
   Future<String> scan();
 
+  // ── Theme helper ──────────────────────────────────────────────────────────
+
+  Color _themeColor(AppThemeKeys key) =>
+      AppThemeUtils.getColorByKey(context, key.name);
+
   // ── State-specific content widgets ────────────────────────────────────────
 
   Widget selectChainWidget(WalletConnectProvider connectV2) {
+    final su = ScreenUtil();
+    final mainText = _themeColor(AppThemeKeys.mainTextColor);
+    final divider = _themeColor(AppThemeKeys.dividerColor);
+
     return Column(
       children: [
         Expanded(
           child: ListView.separated(
-            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+            padding: EdgeInsets.symmetric(horizontal: su.setWidth(30)),
             itemBuilder: (context, int index) {
               final cm = connectV2.coinModels[index];
-              final isNativeCoin = cm.coin['coinType'] == CoinType.N.name;
-              final iconWidget = isNativeCoin
+              final iconWidget = cm.coin['coinType'] == CoinType.N.name
                   ? Image.asset("assets/img/ast.png")
-                  : ImageNetWork(
-                      imageUrl: cm.coin['icon'],
-                      placeholder: "assets/img/list_default.png",
-                    );
+                  : ImageNetWork(imageUrl: cm.coin['icon'], placeholder: "assets/img/list_default.png");
               return SizedBox(
-                height: ScreenUtil().setWidth(120),
+                height: su.setWidth(120),
                 width: double.infinity,
                 child: Row(
                   children: [
                     Container(
-                      height: ScreenUtil().setWidth(60),
-                      width: ScreenUtil().setWidth(60),
-                      margin: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
+                      height: su.setWidth(60),
+                      width: su.setWidth(60),
+                      margin: EdgeInsets.only(right: su.setWidth(10)),
                       child: iconWidget,
                     ),
                     Expanded(
                       child: Text(
                         cm.coin['name'],
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(30),
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                        ),
+                        style: TextStyle(fontSize: su.setSp(30), color: mainText),
                         textAlign: TextAlign.end,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
@@ -60,14 +62,12 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
                 ),
               );
             },
-            separatorBuilder: (context, int index) {
-              return Divider(
-                height: ScreenUtil().setWidth(1),
-                endIndent: 0,
-                indent: 1,
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
-              );
-            },
+            separatorBuilder: (context, int index) => Divider(
+              height: su.setWidth(1),
+              endIndent: 0,
+              indent: 1,
+              color: divider,
+            ),
             itemCount: connectV2.coinModels.length,
           ),
         ),
@@ -120,7 +120,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
   }
 
   Widget disconnectWidget(WalletConnectProvider connectV2) {
-    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final subtitleColor = _themeColor(AppThemeKeys.itemSubtitleTextColor);
     return Column(
       children: [
         Expanded(
@@ -176,84 +176,95 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
 
   Widget transactionOKWidget(WalletConnectProvider connectV2) {
     final data = connectV2.actionDataMap;
-    return Column(
-      children: [
-        keyValueItem("Network", data?['network'] ?? ""),
-        sectionDivider(),
-        keyValueItem("From", data?['from'] ?? ""),
-        sectionDivider(),
-        keyValueItem("To", data?['to'] ?? ""),
-        sectionDivider(),
-        keyValueItem("Data", data?['data'] ?? ""),
-        sectionDivider(),
-        const Spacer(),
-        _transactionOKButton(connectV2),
+    return _actionDetailWidget(
+      items: [
+        ("Network", data?['network'] ?? ""),
+        ("From", data?['from'] ?? ""),
+        ("To", data?['to'] ?? ""),
+        ("Data", data?['data'] ?? ""),
       ],
+      button: _stateButton(
+        connectV2,
+        readyState: WalletConnectState.transactionOK,
+        loadingState: WalletConnectState.transaction,
+        onCancel: () => connectV2.cancelTap(WalletConnectState.transaction),
+        onConfirm: () => connectV2.transactionSignTap(),
+      ),
     );
-  }
-
-  Widget _transactionOKButton(WalletConnectProvider connectV2) {
-    if (connectV2.walletConnectState == WalletConnectState.transactionOK) {
-      return bottomBar(
-        child: cancelConfirmRow(
-          onCancel: () => connectV2.cancelTap(WalletConnectState.transaction),
-          onConfirm: () => connectV2.transactionSignTap(),
-        ),
-      );
-    }
-    if (connectV2.walletConnectState == WalletConnectState.transaction) {
-      return buttonLoadingWidget("${S.of(context).g_key_106}...");
-    }
-    return const SizedBox();
   }
 
   Widget messageSignOKWidget(WalletConnectProvider connectV2) {
     final data = connectV2.actionDataMap;
+    return _actionDetailWidget(
+      items: [
+        ("Network", data?['network'] ?? ""),
+        ("Address", data?['from'] ?? ""),
+        ("Data", data?['data'] ?? ""),
+      ],
+      button: _stateButton(
+        connectV2,
+        readyState: WalletConnectState.messageSignOK,
+        loadingState: WalletConnectState.messageSign,
+        onCancel: () => connectV2.cancelTap(WalletConnectState.messageSign),
+        onConfirm: () => connectV2.messageSignTap(),
+      ),
+    );
+  }
+
+  /// Shared layout for transaction / message sign detail views.
+  Widget _actionDetailWidget({
+    required List<(String, String)> items,
+    required Widget button,
+  }) {
     return Column(
       children: [
-        keyValueItem("Network", data?['network'] ?? ""),
-        sectionDivider(),
-        keyValueItem("Address", data?['from'] ?? ""),
-        sectionDivider(),
-        keyValueItem("Data", data?['data'] ?? ""),
-        sectionDivider(),
+        for (int i = 0; i < items.length; i++) ...[
+          keyValueItem(items[i].$1, items[i].$2),
+          sectionDivider(),
+        ],
         const Spacer(),
-        _messageSignOKButton(connectV2),
+        button,
       ],
     );
   }
 
-  Widget _messageSignOKButton(WalletConnectProvider connectV2) {
-    if (connectV2.walletConnectState == WalletConnectState.messageSignOK) {
+  /// Returns cancel/confirm row, loading indicator, or empty based on state.
+  Widget _stateButton(
+    WalletConnectProvider connectV2, {
+    required WalletConnectState readyState,
+    required WalletConnectState loadingState,
+    required VoidCallback onCancel,
+    required VoidCallback onConfirm,
+  }) {
+    final state = connectV2.walletConnectState;
+    if (state == readyState) {
       return bottomBar(
-        child: cancelConfirmRow(
-          onCancel: () => connectV2.cancelTap(WalletConnectState.messageSign),
-          onConfirm: () => connectV2.messageSignTap(),
-        ),
+        child: cancelConfirmRow(onCancel: onCancel, onConfirm: onConfirm),
       );
     }
-    if (connectV2.walletConnectState == WalletConnectState.messageSign) {
+    if (state == loadingState) {
       return buttonLoadingWidget("${S.of(context).g_key_106}...");
     }
     return const SizedBox();
   }
 
   Widget errorWidget(WalletConnectProvider connectV2) {
+    final su = ScreenUtil();
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.all(ScreenUtil().setWidth(60)),
-          padding: EdgeInsets.all(ScreenUtil().setWidth(60)),
+          margin: EdgeInsets.all(su.setWidth(60)),
+          padding: EdgeInsets.all(su.setWidth(60)),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorBgColor.name),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+            color: _themeColor(AppThemeKeys.errorBgColor),
+            borderRadius: BorderRadius.circular(su.setWidth(8)),
           ),
           child: Text(
             connectV2.errorMessage,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
-              fontSize: ScreenUtil().setSp(26),
+              color: _themeColor(AppThemeKeys.errorTextColor),
+              fontSize: su.setSp(26),
             ),
             textAlign: TextAlign.center,
           ),
@@ -273,16 +284,17 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
 
   /// Standard bottom action bar container used across all states.
   Widget bottomBar({required Widget child}) {
+    final su = ScreenUtil();
     return Container(
-      height: ScreenUtil().setWidth(150),
+      height: su.setWidth(150),
       width: double.infinity,
       padding: EdgeInsets.only(
-        bottom: ScreenUtil().setWidth(36.0),
-        top: ScreenUtil().setWidth(26.0),
-        left: ScreenUtil().setWidth(30),
-        right: ScreenUtil().setWidth(30),
+        bottom: su.setWidth(36.0),
+        top: su.setWidth(26.0),
+        left: su.setWidth(30),
+        right: su.setWidth(30),
       ),
-      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+      color: _themeColor(AppThemeKeys.backGroundColor),
       child: child,
     );
   }
@@ -292,21 +304,23 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
     required VoidCallback onCancel,
     required VoidCallback onConfirm,
   }) {
+    final s = S.of(context);
     return Row(
       children: [
-        Expanded(child: actionButton(S.of(context).g_connect_key3, onCancel)),
+        Expanded(child: actionButton(s.g_connect_key3, onCancel)),
         SizedBox(width: ScreenUtil().setWidth(30)),
-        Expanded(child: actionButton(S.of(context).g_key_78, onConfirm)),
+        Expanded(child: actionButton(s.g_key_78, onConfirm)),
       ],
     );
   }
 
   Widget sectionDivider() {
+    final su = ScreenUtil();
     return Divider(
-      height: ScreenUtil().setWidth(1),
-      indent: ScreenUtil().setWidth(30),
-      endIndent: ScreenUtil().setWidth(30),
-      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
+      height: su.setWidth(1),
+      indent: su.setWidth(30),
+      endIndent: su.setWidth(30),
+      color: _themeColor(AppThemeKeys.dividerColor),
     );
   }
 
@@ -319,20 +333,21 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
   }
 
   Widget buttonLoadingWidget(String title) {
+    final su = ScreenUtil();
     return bottomBar(
       child: Container(
-        height: ScreenUtil().setWidth(88),
+        height: su.setWidth(88),
         width: double.infinity,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor3.name),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+          color: _themeColor(AppThemeKeys.mainButtonBgColor3),
+          borderRadius: BorderRadius.circular(su.setWidth(8)),
         ),
         child: Text(
           title,
           style: TextStyle(
-            fontSize: ScreenUtil().setSp(30.0),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
+            fontSize: su.setSp(30.0),
+            color: _themeColor(AppThemeKeys.mainButtonTextColor),
           ),
         ),
       ),
@@ -340,26 +355,21 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
   }
 
   Widget keyValueItem(String title, String value) {
-    final textColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final su = ScreenUtil();
+    final textColor = _themeColor(AppThemeKeys.mainTextColor);
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.all(su.setWidth(30)),
       child: Row(
         children: [
           Text(
             title,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              color: textColor,
-            ),
+            style: TextStyle(fontSize: su.setSp(28), color: textColor),
           ),
-          SizedBox(width: ScreenUtil().setWidth(20)),
+          SizedBox(width: su.setWidth(20)),
           Expanded(
             child: Text(
               value,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                color: textColor,
-              ),
+              style: TextStyle(fontSize: su.setSp(28), color: textColor),
               maxLines: 5,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.right,

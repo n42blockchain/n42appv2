@@ -129,7 +129,7 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
                   ),
                 ),
                 SizedBox(width: ScreenUtil().setWidth(20.0)),
-                Expanded(flex: 1, child: amountBalanceWidget()),
+                Expanded(child: amountBalanceWidget()),
               ],
             ),
           ),
@@ -210,9 +210,7 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
                       ),
                     ),
                   ),
-                  rightOnTap1: () {
-                    maxTag();
-                  },
+                  rightOnTap1: maxTag,
                 ),
                 Divider(
                   height: ScreenUtil().setWidth(1.0),
@@ -243,16 +241,13 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
     );
   }
 
-  // 返回账户地址
   Widget ownerAddress() {
     final String addr =
         dataUtils.addressFarmat(widget.coinModel.address.toString());
-    return Container(
-      padding: EdgeInsets.only(
-        top: ScreenUtil().setWidth(20.0),
-        bottom: ScreenUtil().setWidth(20.0),
-        right: ScreenUtil().setWidth(30.0),
-        left: ScreenUtil().setWidth(30.0),
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: ScreenUtil().setWidth(20.0),
+        horizontal: ScreenUtil().setWidth(30.0),
       ),
       child: Text(
         addr,
@@ -267,7 +262,6 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
     );
   }
 
-  // 旷工费
   Widget minerFeeWidget() {
     final bool isContract = widget.coinModel.coin['isContract'] == true;
     final int decimals = isContract
@@ -317,63 +311,41 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
   }
 
   void faceMatchTypeWidget() {
+    Widget faceMatchOption(int type, String label) {
+      return InkWell(
+        onTap: () async {
+          final String? address = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => FaceMatch(type)),
+          );
+          if (!mounted) return;
+          if (address != null) {
+            toTextEditingController.text = address;
+            toAddressCheck(address);
+          }
+          Navigator.pop(context);
+        },
+        child: SizedBox(
+          height: ScreenUtil().setWidth(88.0),
+          width: double.infinity,
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: ScreenUtil().setWidth(32.0),
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.mainTextColor.name),
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
+
     final Widget child = Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        InkWell(
-          onTap: () async {
-            final String? address = await Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => FaceMatch(1)),
-            );
-            if (!mounted) return;
-            if (address != null) {
-              toTextEditingController.text = address;
-              toAddressCheck(address);
-            }
-            Navigator.pop(context);
-          },
-          child: SizedBox(
-            height: ScreenUtil().setWidth(88.0),
-            width: double.infinity,
-            child: Text(
-              S.of(context).photograph,
-              style: TextStyle(
-                fontSize: ScreenUtil().setWidth(32.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-        InkWell(
-          onTap: () async {
-            final String? address = await Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => FaceMatch(2)),
-            );
-            if (!mounted) return;
-            if (address != null) {
-              toTextEditingController.text = address;
-              toAddressCheck(address);
-            }
-            Navigator.pop(context);
-          },
-          child: SizedBox(
-            height: ScreenUtil().setWidth(88.0),
-            width: double.infinity,
-            child: Text(
-              S.of(context).g_key_nft_16,
-              style: TextStyle(
-                fontSize: ScreenUtil().setWidth(32.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
+        faceMatchOption(1, S.of(context).photograph),
+        faceMatchOption(2, S.of(context).g_key_nft_16),
       ],
     );
     sheetBottom(context, S.of(context).g_face_match_key1, child);

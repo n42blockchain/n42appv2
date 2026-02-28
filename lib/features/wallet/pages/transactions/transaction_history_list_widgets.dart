@@ -1,9 +1,5 @@
 part of 'transaction_history_list.dart';
 
-/// Filter bottom sheet UI mixin for [_TransactionHistoryListState].
-///
-/// Requires [_TransactionHistoryLogicMixin] to be applied first so that
-/// filter state and logic methods are accessible.
 mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
   void showFilterSheet() {
     _TxFilter temp = filter;
@@ -29,26 +25,17 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // ---- Header row ----
                     _buildFilterHeader(ctx, setSS, () => temp = temp.clear(),
                         (t) => temp = t),
                     SizedBox(height: 12.h),
-
-                    // ---- Direction ----
-                    _buildDirectionSection(ctx, setSS, temp,
-                        (t) => temp = t),
+                    _buildDirectionSection(
+                        ctx, setSS, temp, (t) => temp = t),
                     SizedBox(height: 12.h),
-
-                    // ---- Status ----
                     _buildStatusSection(ctx, setSS, temp, (t) => temp = t),
                     SizedBox(height: 12.h),
-
-                    // ---- Date range ----
-                    _buildDateRangeSection(ctx, setSS, temp,
-                        (t) => temp = t),
+                    _buildDateRangeSection(
+                        ctx, setSS, temp, (t) => temp = t),
                     SizedBox(height: 16.h),
-
-                    // ---- Confirm ----
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -79,10 +66,7 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
       children: [
         Text(
           S.of(ctx).g_key_filter,
-          style: TextStyle(
-            fontSize: 18.sp,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
         ),
         const Spacer(),
         TextButton(
@@ -90,6 +74,13 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
           child: Text(S.of(ctx).g_key_reset),
         ),
       ],
+    );
+  }
+
+  Widget _sectionLabel(String text) {
+    return Text(
+      text,
+      style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
     );
   }
 
@@ -102,13 +93,7 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          S.of(ctx).g_key_tx_filter_direction,
-          style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        _sectionLabel(S.of(ctx).g_key_tx_filter_direction),
         SizedBox(height: 8.h),
         Wrap(
           spacing: 8.w,
@@ -146,13 +131,7 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          S.of(ctx).g_key_wallet_k33,
-          style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        _sectionLabel(S.of(ctx).g_key_wallet_k33),
         SizedBox(height: 8.h),
         Wrap(
           spacing: 8.w,
@@ -163,21 +142,18 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
               onSelected: (_) =>
                   setSS(() => onUpdate(temp.copyWith(status: null))),
             ),
-            // state 1 = Complete
             ChoiceChip(
               label: Text(S.of(ctx).g_key_t_1),
               selected: temp.status == 1,
               onSelected: (_) =>
                   setSS(() => onUpdate(temp.copyWith(status: 1))),
             ),
-            // state 0 = Pending
             ChoiceChip(
               label: Text(S.of(ctx).g_key_t_2),
               selected: temp.status == 0,
               onSelected: (_) =>
                   setSS(() => onUpdate(temp.copyWith(status: 0))),
             ),
-            // state 2 = Failure
             ChoiceChip(
               label: Text(S.of(ctx).g_key_t_3),
               selected: temp.status == 2,
@@ -196,31 +172,22 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
     _TxFilter temp,
     ValueChanged<_TxFilter> onUpdate,
   ) {
+    final hasDateFilter = temp.dateFrom != null || temp.dateTo != null;
+    final dateText = hasDateFilter
+        ? '${temp.dateFrom != null ? DateFormat('yyyy-MM-dd').format(temp.dateFrom!) : S.of(ctx).g_key_tx_filter_date_from}'
+            ' → '
+            '${temp.dateTo != null ? DateFormat('yyyy-MM-dd').format(temp.dateTo!) : S.of(ctx).g_key_tx_filter_date_to}'
+        : '${S.of(ctx).g_key_tx_filter_date_from} → ${S.of(ctx).g_key_tx_filter_date_to}';
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          S.of(ctx).g_key_tx_filter_date_range,
-          style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        _sectionLabel(S.of(ctx).g_key_tx_filter_date_range),
         SizedBox(height: 4.h),
         ListTile(
           contentPadding: EdgeInsets.zero,
-          title: Text(
-            temp.dateFrom == null && temp.dateTo == null
-                ? '${S.of(ctx).g_key_tx_filter_date_from} → ${S.of(ctx).g_key_tx_filter_date_to}'
-                : '${temp.dateFrom != null ? DateFormat('yyyy-MM-dd').format(temp.dateFrom!) : S.of(ctx).g_key_tx_filter_date_from}'
-                    ' → '
-                    '${temp.dateTo != null ? DateFormat('yyyy-MM-dd').format(temp.dateTo!) : S.of(ctx).g_key_tx_filter_date_to}',
-            style: TextStyle(fontSize: 14.sp),
-          ),
-          trailing: Icon(
-            Icons.calendar_today_outlined,
-            size: 20.r,
-          ),
+          title: Text(dateText, style: TextStyle(fontSize: 14.sp)),
+          trailing: Icon(Icons.calendar_today_outlined, size: 20.r),
           onTap: () async {
             final range = await showDateRangePicker(
               context: ctx,
@@ -241,13 +208,10 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
             }
           },
         ),
-        if (temp.dateFrom != null || temp.dateTo != null)
+        if (hasDateFilter)
           TextButton(
             onPressed: () => setSS(
-              () => onUpdate(temp.copyWith(
-                dateFrom: null,
-                dateTo: null,
-              )),
+              () => onUpdate(temp.copyWith(dateFrom: null, dateTo: null)),
             ),
             child: const Text('Clear dates'),
           ),

@@ -7,6 +7,10 @@ part of 'tasks_page.dart';
 
 /// 任务页面 Widget 构建方法
 mixin TasksWidgetsMixin on State<TasksPage>, TasksLogicMixin {
+  /// Shorthand for theme color lookup to reduce repetitive boilerplate.
+  Color _themeColor(BuildContext context, String key) =>
+      AppThemeUtils.getColorByKey(context, key);
+
   Widget _buildFilterBar(BuildContext context) {
     final total = widget.tasks.length;
     final available = widget.tasks.where((t) => t.canComplete).length;
@@ -31,7 +35,7 @@ mixin TasksWidgetsMixin on State<TasksPage>, TasksLogicMixin {
 
   Widget _filterChip(BuildContext context, String label, _TaskFilter value) {
     final selected = _filter == value;
-    final color = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final color = _themeColor(context, AppThemeKeys.mainBlueColor.name);
     return GestureDetector(
       onTap: () => setState(() => _filter = value),
       child: AnimatedContainer(
@@ -51,7 +55,7 @@ mixin TasksWidgetsMixin on State<TasksPage>, TasksLogicMixin {
             fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
             color: selected
                 ? Colors.white
-                : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                : _themeColor(context, AppThemeKeys.mainTextColor.name),
           ),
         ),
       ),
@@ -66,10 +70,7 @@ mixin TasksWidgetsMixin on State<TasksPage>, TasksLogicMixin {
           Icon(
             Icons.assignment_turned_in_outlined,
             size: ScreenUtil().setWidth(80),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+            color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor.name),
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
           Text(
@@ -78,10 +79,7 @@ mixin TasksWidgetsMixin on State<TasksPage>, TasksLogicMixin {
                 : 'No tasks available',
             style: TextStyle(
               fontSize: ScreenUtil().setSp(28),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor.name),
             ),
           ),
         ],
@@ -137,10 +135,7 @@ mixin TasksWidgetsMixin on State<TasksPage>, TasksLogicMixin {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(28),
               fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: _themeColor(context, AppThemeKeys.mainTextColor.name),
             ),
           ),
           SizedBox(width: ScreenUtil().setWidth(8)),
@@ -150,20 +145,15 @@ mixin TasksWidgetsMixin on State<TasksPage>, TasksLogicMixin {
               vertical: ScreenUtil().setWidth(2),
             ),
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ).withValues(alpha: 0.15),
+              color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor.name)
+                  .withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
             ),
             child: Text(
               '$count',
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(20),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+                color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor.name),
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -188,7 +178,7 @@ mixin TasksWidgetsMixin on State<TasksPage>, TasksLogicMixin {
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: _themeColor(context, AppThemeKeys.itemBgColor.name),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
         border: _getTaskCardBorder(task.type, isCompleted),
       ),
@@ -269,10 +259,7 @@ mixin TasksWidgetsMixin on State<TasksPage>, TasksLogicMixin {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(28),
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: _themeColor(context, AppThemeKeys.mainTextColor.name),
               decoration: isCompleted ? TextDecoration.lineThrough : null,
               decorationColor: Colors.green,
             ),
@@ -305,10 +292,7 @@ mixin TasksWidgetsMixin on State<TasksPage>, TasksLogicMixin {
       task.description,
       style: TextStyle(
         fontSize: ScreenUtil().setSp(24),
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemSubtitleTextColor.name,
-        ),
+        color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor.name),
       ),
     );
   }
@@ -329,10 +313,7 @@ mixin TasksWidgetsMixin on State<TasksPage>, TasksLogicMixin {
               '${task.completedCount}/${task.maxCompletions} completed',
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(22),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+                color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor.name),
               ),
             ),
             Text(
@@ -366,10 +347,7 @@ mixin TasksWidgetsMixin on State<TasksPage>, TasksLogicMixin {
         '${task.completedCount}/${task.maxCompletions}',
         style: TextStyle(
           fontSize: ScreenUtil().setSp(22),
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemSubtitleTextColor.name,
-          ),
+          color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor.name),
         ),
       ),
     );
@@ -379,10 +357,7 @@ mixin TasksWidgetsMixin on State<TasksPage>, TasksLogicMixin {
     final expiring = _isExpiringSoon(expiresAt);
     final color = expiring
         ? Colors.orange
-        : AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemSubtitleTextColor.name,
-          );
+        : _themeColor(context, AppThemeKeys.itemSubtitleTextColor.name);
 
     return Padding(
       padding: EdgeInsets.only(top: ScreenUtil().setWidth(4)),
@@ -477,10 +452,7 @@ mixin TasksWidgetsMixin on State<TasksPage>, TasksLogicMixin {
               ' · ${_relativeTime(task.lastCompletedAt!)}',
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(22),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+                color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor.name),
               ),
             ),
           ],

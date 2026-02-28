@@ -98,16 +98,14 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       if (!mounted) return;
       final WalletActionProvider wa = ref.read(wapBridgeProvider);
       for (final CoinModel cm in wa.coinModels) {
+        if (_evmAddr.isNotEmpty && _solAddr.isNotEmpty) break;
         final addr = cm.address ?? '';
+        if (addr.isEmpty) continue;
         if (addr.startsWith('0x') && _evmAddr.isEmpty) {
           _evmAddr = addr;
-        } else if (!addr.startsWith('0x') && _solAddr.isEmpty) {
-          // Heuristic: non-0x, 32–44 chars → Solana base58
-          if (addr.length >= 32 && addr.length <= 44) {
-            _solAddr = addr;
-          }
+        } else if (_solAddr.isEmpty && addr.length >= 32 && addr.length <= 44) {
+          _solAddr = addr;
         }
-        if (_evmAddr.isNotEmpty && _solAddr.isNotEmpty) break;
       }
       if (mounted) setState(() {});
     });
@@ -127,6 +125,14 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
 
   // ── Chain / amount change ─────────────────────────────────────────────────
 
+  /// Try to fetch a quote if both tokens are selected and the amount is valid.
+  void _tryFetchQuote() {
+    final amount = _amountCtrl.text.trim();
+    if (amount.isNotEmpty && amount != '0' && _tokenIn != null && _tokenOut != null) {
+      _fetchQuote(amount);
+    }
+  }
+
   void _onChainChanged(String chain) {
     _clearQuote();
     setState(() {
@@ -141,9 +147,8 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   void _onAmountChanged() {
     _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 600), () {
-      final amount = _amountCtrl.text.trim();
-      if (amount.isNotEmpty && amount != '0' && _tokenIn != null && _tokenOut != null) {
-        _fetchQuote(amount);
+      if (_tokenIn != null && _tokenOut != null) {
+        _tryFetchQuote();
       } else {
         _clearQuote();
       }
@@ -155,11 +160,8 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   void _onSlippageChanged(int bps) {
     if (_slippageBps == bps) return;
     setState(() => _slippageBps = bps);
-    _clearQuote(); // calldata must be re-fetched with new slippage
-    final amount = _amountCtrl.text.trim();
-    if (amount.isNotEmpty && amount != '0' && _tokenIn != null && _tokenOut != null) {
-      _fetchQuote(amount);
-    }
+    _clearQuote();
+    _tryFetchQuote();
   }
 
   // ── Price chart ───────────────────────────────────────────────────────────
@@ -167,9 +169,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   /// Fetch price history for [_tokenIn] from CoinGecko.
   /// Silently clears chart if the token is unknown or the request fails.
   Future<void> _fetchPriceChart() async {
-    final geckoId = _tokenIn == null
-        ? null
-        : kDexSymbolToGeckoId[_tokenIn!.symbol.toUpperCase()];
+    final geckoId = kDexSymbolToGeckoId[_tokenIn?.symbol.toUpperCase()];
     if (geckoId == null) {
       setState(() => _chartPrices = []);
       return;

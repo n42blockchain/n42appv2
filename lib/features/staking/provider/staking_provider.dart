@@ -110,43 +110,19 @@ class StakingProvider extends ChangeNotifier {
           // Lido 没有验证者选择，直接使用协议
           _validators = [];
           _currentApy = _selectedProtocol!.apy;
-
-          // 尝试获取实时 APY
-          final apyResult = await _ethApi.getLidoApy();
-          if (!apyResult.error && apyResult.data != null) {
-            _currentApy = apyResult.data as double;
-          }
+          _tryUpdateApy(await _ethApi.getLidoApy());
           break;
 
         case StakingChainType.solana:
-          final result = await _solApi.getValidators(limit: 100);
-          if (!result.error && result.data != null) {
-            _validators = result.data as List<Validator>;
-          } else {
-            _validators = [];
-          }
-
-          // 获取实时 APY
-          final apyResult = await _solApi.getEstimatedApy();
-          if (!apyResult.error && apyResult.data != null) {
-            _currentApy = apyResult.data as double;
-          }
+          _validators = _extractList<Validator>(
+              await _solApi.getValidators(limit: 100));
+          _tryUpdateApy(await _solApi.getEstimatedApy());
           break;
 
         case StakingChainType.cosmos:
-          final result = await _atomApi.getValidators(limit: 100);
-          if (!result.error && result.data != null) {
-            _validators = result.data as List<Validator>;
-          } else {
-            _validators = [];
-          }
-
-          // 获取实时 APY
-          final apyResult = await _atomApi.getInflationAndApy();
-          if (!apyResult.error && apyResult.data != null) {
-            final data = apyResult.data as Map<String, dynamic>;
-            _currentApy = data['apy'] ?? _selectedProtocol!.apy;
-          }
+          _validators = _extractList<Validator>(
+              await _atomApi.getValidators(limit: 100));
+          _tryUpdateApy(await _atomApi.getInflationAndApy(), mapKey: 'apy');
           break;
 
         case StakingChainType.polkadot:
@@ -171,36 +147,23 @@ class StakingProvider extends ChangeNotifier {
       switch (chainType) {
         case StakingChainType.ethereum:
           final result = await _ethApi.getStakingPosition(address);
-          if (!result.error && result.data != null) {
-            _positions = [result.data as StakingPosition];
-          } else {
-            _positions = [];
-          }
+          _positions = (!result.error && result.data != null)
+              ? [result.data as StakingPosition]
+              : [];
           break;
 
         case StakingChainType.solana:
-          final result = await _solApi.getStakeAccounts(address);
-          if (!result.error && result.data != null) {
-            _positions = result.data as List<StakingPosition>;
-          } else {
-            _positions = [];
-          }
+          _positions = _extractList<StakingPosition>(
+              await _solApi.getStakeAccounts(address));
           break;
 
         case StakingChainType.cosmos:
-          // 获取活跃委托
-          final delegationsResult = await _atomApi.getDelegations(address);
-          List<StakingPosition> allPositions = [];
-
-          if (!delegationsResult.error && delegationsResult.data != null) {
-            allPositions.addAll(delegationsResult.data as List<StakingPosition>);
-          }
-
-          // 获取解绑中的委托
-          final unbondingResult = await _atomApi.getUnbondingDelegations(address);
-          if (!unbondingResult.error && unbondingResult.data != null) {
-            allPositions.addAll(unbondingResult.data as List<StakingPosition>);
-          }
+          final allPositions = <StakingPosition>[
+            ..._extractList<StakingPosition>(
+                await _atomApi.getDelegations(address)),
+            ..._extractList<StakingPosition>(
+                await _atomApi.getUnbondingDelegations(address)),
+          ];
 
           // 获取待领取奖励并更新仓位
           final rewardsResult = await _atomApi.getDelegationRewards(address);
@@ -267,22 +230,15 @@ class StakingProvider extends ChangeNotifier {
             break;
 
           case StakingChainType.solana:
-            final result = await _solApi.getStakeAccounts(address);
-            if (!result.error && result.data != null) {
-              allPositions.addAll(result.data as List<StakingPosition>);
-            }
+            allPositions.addAll(_extractList<StakingPosition>(
+                await _solApi.getStakeAccounts(address)));
             break;
 
           case StakingChainType.cosmos:
-            final delegationsResult = await _atomApi.getDelegations(address);
-            if (!delegationsResult.error && delegationsResult.data != null) {
-              allPositions.addAll(delegationsResult.data as List<StakingPosition>);
-            }
-
-            final unbondingResult = await _atomApi.getUnbondingDelegations(address);
-            if (!unbondingResult.error && unbondingResult.data != null) {
-              allPositions.addAll(unbondingResult.data as List<StakingPosition>);
-            }
+            allPositions.addAll(_extractList<StakingPosition>(
+                await _atomApi.getDelegations(address)));
+            allPositions.addAll(_extractList<StakingPosition>(
+                await _atomApi.getUnbondingDelegations(address)));
             break;
 
           case StakingChainType.polkadot:
@@ -299,6 +255,25 @@ class StakingProvider extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  /// 从 API 结果中提取列表数据，失败时返回空列表
+  List<T> _extractList<T>(MessageModel result) {
+    if (!result.error && result.data != null) {
+      return result.data as List<T>;
+    }
+    return [];
+  }
+
+  /// 从 API 结果中更新 APY（如果请求成功）
+  void _tryUpdateApy(MessageModel result, {String? mapKey}) {
+    if (result.error || result.data == null) return;
+    if (mapKey != null) {
+      final data = result.data as Map<String, dynamic>;
+      _currentApy = data[mapKey] ?? _selectedProtocol!.apy;
+    } else {
+      _currentApy = result.data as double;
+    }
   }
 
   /// 从 API 结果中提取交易响应，统一处理成功/失败逻辑
@@ -439,15 +414,9 @@ class StakingProvider extends ChangeNotifier {
   /// 获取质押统计
   StakingStats getStats() {
     final activePos = activePositions;
-    BigInt totalStaked = BigInt.zero;
-    BigInt totalRewards = BigInt.zero;
-    double totalApy = 0;
-
-    for (final pos in activePos) {
-      totalStaked += pos.stakedAmount;
-      totalRewards += pos.pendingRewards;
-      totalApy += pos.protocol.apy;
-    }
+    final totalStaked = activePos.fold(BigInt.zero, (sum, p) => sum + p.stakedAmount);
+    final totalRewards = activePos.fold(BigInt.zero, (sum, p) => sum + p.pendingRewards);
+    final totalApy = activePos.fold(0.0, (sum, p) => sum + p.protocol.apy);
 
     return StakingStats(
       totalStaked: totalStaked,

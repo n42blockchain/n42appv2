@@ -8,80 +8,79 @@ part of 'wallet_coin_add_all.dart';
 /// Form-field widgets (addressWidget, symbolWidget, decimalWidget,
 /// _buildContractStateWidget) are in wallet_coin_add_all_import_form_ui.dart.
 extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
+  Color _btnBgColor() => AppThemeUtils.getColorByKey(
+        context,
+        load == Load.loading
+            ? AppThemeKeys.mainButtonBgColor3.name
+            : AppThemeKeys.mainButtonBgColor.name,
+      );
+
+  Color _btnTextColor() => AppThemeUtils.getColorByKey(
+        context,
+        AppThemeKeys.mainButtonTextColor.name,
+      );
+
   Widget coinListTokenWidget() {
     if (coinlistToken.isEmpty || showImportWidget) {
       return importTokenWidget();
-    } else {
-      return Column(
-        children: [
-          Expanded(
-            flex: 1,
-            child: ListView.separated(
-              itemCount: coinlistToken.length,
-              itemBuilder: (context, int index) {
-                Map<String, dynamic> rowValue = coinlistToken[index];
-                return coinItemToken(rowValue);
-              },
-              separatorBuilder: (context, int index) {
-                return Divider(
-                  height: 1,
-                  indent: 0,
-                  endIndent: 0,
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name),
-                );
-              },
+    }
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.separated(
+            itemCount: coinlistToken.length,
+            itemBuilder: (context, int index) => coinItemToken(coinlistToken[index]),
+            separatorBuilder: (context, int index) => Divider(
+              height: 1,
+              indent: 0,
+              endIndent: 0,
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name),
             ),
           ),
-          addButtonWidget(),
-        ],
-      );
-    }
+        ),
+        addButtonWidget(),
+      ],
+    );
   }
 
   Widget coinItemToken(Map<String, dynamic> rowValue) {
-    String symbol = rowValue['miniName'].toString();
+    final symbol = rowValue['miniName'].toString();
+    final bool isEditing = rowValue['edit'] as bool;
     return Container(
       padding: EdgeInsets.only(
         left: ScreenUtil().setWidth(20.0),
         top: ScreenUtil().setWidth(20.0),
         bottom: ScreenUtil().setWidth(20.0),
       ),
-      //color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor2),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Expanded(
-            flex: 1,
             child: Text(
               symbol,
               style: TextStyle(
                 fontSize: ScreenUtil().setWidth(30.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                 height: 1.3,
               ),
             ),
           ),
-          if (rowValue['edit'])
+          if (isEditing)
             Container(
               padding: EdgeInsets.all(ScreenUtil().setWidth(19.0)),
               width: ScreenUtil().setWidth(78.0),
               height: ScreenUtil().setWidth(78.0),
-              child: CircularProgressIndicator(),
-            ),
-          if (rowValue['edit'] == false)
+              child: const CircularProgressIndicator(),
+            )
+          else
             InkWell(
-              onTap: () {
-                removeCustomerCoinToken(rowValue);
-              },
+              onTap: () => removeCustomerCoinToken(rowValue),
               child: Container(
                 padding: EdgeInsets.all(ScreenUtil().setWidth(20.0)),
                 width: ScreenUtil().setWidth(80.0),
                 height: ScreenUtil().setWidth(80.0),
                 child: Icon(
                   Icons.remove,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainButtonBgColor.name),
+                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
                 ),
               ),
             ),
@@ -100,15 +99,13 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
                 Container(
                   padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
                   decoration: BoxDecoration(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.errorBgColor2.name),
+                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorBgColor2.name),
                     borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
                   ),
                   child: Text(
                     S.of(context).g_token_m_key_10,
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
+                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
                       fontSize: ScreenUtil().setSp(24.0),
                     ),
                     textAlign: TextAlign.center,
@@ -117,7 +114,7 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
                 addressWidget(),
                 symbolWidget(),
                 decimalWidget(),
-                SizedBox(height: ScreenUtil().setWidth(148),),
+                SizedBox(height: ScreenUtil().setWidth(148)),
               ],
             ),
           ),
@@ -138,77 +135,48 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
       width: double.infinity,
       child: buttonStyle6(
         context,
-            () {
-          setState(() {
-            showImportWidget = true;
-          });
-        },
+        () => setState(() => showImportWidget = true),
         S.of(context).g_key_159,
-        AppThemeUtils.getColorByKey(
-            context,
-            load == Load.loading
-                ? AppThemeKeys.mainButtonBgColor3.name
-                : AppThemeKeys.mainButtonBgColor.name),
-        AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainButtonTextColor.name),
+        _btnBgColor(),
+        _btnTextColor(),
         load == Load.loading,
       ),
     );
   }
 
   Widget importButtonWidget() {
+    final isLoading = load == Load.loading;
+    final btnH = ScreenUtil().setWidth(88.0);
     return SizedBox(
-      height: ScreenUtil().setWidth(88.0),
+      height: btnH,
       width: double.infinity,
       child: Row(
         children: [
-          if (showImportWidget)
+          if (showImportWidget) ...[
             Expanded(
-              flex: 1,
               child: SizedBox(
-                height: ScreenUtil().setWidth(88.0),
-                //44 / 375 *  MediaQuery.of(context).size.width,
+                height: btnH,
                 child: buttonStyle5(
                   context,
-                      () {
-                    setState(() {
-                      showImportWidget = false;
-                    });
-                  },
+                  () => setState(() => showImportWidget = false),
                   S.of(context).g_key_79,
-                  AppThemeUtils.getColorByKey(
-                      context,
-                      load == Load.loading
-                          ? AppThemeKeys.mainButtonBgColor3.name
-                          : AppThemeKeys.mainButtonBgColor.name),
-                  AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainButtonTextColor.name),
+                  _btnBgColor(),
+                  _btnTextColor(),
                 ),
               ),
             ),
-          if (showImportWidget)
-            SizedBox(
-              width: ScreenUtil().setWidth(30.0),
-            ),
+            SizedBox(width: ScreenUtil().setWidth(30.0)),
+          ],
           Expanded(
-            flex: 1,
             child: SizedBox(
-              height: ScreenUtil().setWidth(88.0),
-              //44 / 375 *  MediaQuery.of(context).size.width,
+              height: btnH,
               child: buttonStyle6(
                 context,
-                    () {
-                  importButton();
-                },
+                importButton,
                 S.of(context).g_token_m_key_9,
-                AppThemeUtils.getColorByKey(
-                    context,
-                    load == Load.loading
-                        ? AppThemeKeys.mainButtonBgColor3.name
-                        : AppThemeKeys.mainButtonBgColor.name),
-                AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainButtonTextColor.name),
-                load == Load.loading,
+                _btnBgColor(),
+                _btnTextColor(),
+                isLoading,
               ),
             ),
           ),

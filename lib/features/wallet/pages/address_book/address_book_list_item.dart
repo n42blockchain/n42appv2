@@ -12,13 +12,10 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
   Future<bool> Function(AddressBookModel info) get confirmDelete;
   Future<void> Function(AddressBookModel info) get deleteItem;
 
-  // ─── List Item ────────────────────────────────────────────────────────
-
   Widget buildItem(BuildContext context, int index) {
     final info = filteredItems[index];
     final content = _buildItemContent(context, info);
 
-    // 选择器模式：点击返回地址，不提供滑动删除
     if (isPickerMode) {
       return GestureDetector(
         onTap: () => Navigator.pop(context, info.address),
@@ -26,7 +23,6 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
       );
     }
 
-    // 普通模式：点击进入编辑页，支持左滑删除
     return Dismissible(
       key: ValueKey(info.id ?? '${info.address}_$index'),
       direction: DismissDirection.endToStart,
@@ -49,8 +45,6 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
       ),
     );
   }
-
-  // ─── Item Content ─────────────────────────────────────────────────────
 
   Widget _buildItemContent(BuildContext context, AddressBookModel info) {
     final mainText =
@@ -77,17 +71,14 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
       ),
       child: Row(
         children: [
-          // 联系人头像（首字母圆形 + 链图标徽章）
           _buildAvatar(info),
           SizedBox(width: ScreenUtil().setWidth(20)),
 
-          // 信息区
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                // 姓名 + 链名胶囊标签
                 Row(
                   children: [
                     Flexible(
@@ -124,7 +115,6 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
                 ),
                 SizedBox(height: ScreenUtil().setWidth(8)),
 
-                // 地址（支持 ENS 解析显示）
                 EnsAddressText(
                   address: info.address ?? '',
                   coinType: info.coinName ?? 'ETH',
@@ -134,7 +124,6 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
                   ),
                 ),
 
-                // 备注（可选）
                 if (info.desc != null && info.desc!.isNotEmpty) ...[
                   SizedBox(height: ScreenUtil().setWidth(6)),
                   Text(
@@ -151,7 +140,6 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
             ),
           ),
 
-          // 右箭头（仅普通模式显示）
           if (!isPickerMode)
             Icon(
               Icons.chevron_right,
@@ -163,8 +151,6 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
     );
   }
 
-  // ─── 联系人头像：首字母彩色圆形 + 链图标小徽章 ────────────────────────
-
   Widget _buildAvatar(AddressBookModel info) {
     final name = info.name ?? '';
     final initial = name.isNotEmpty ? name[0].toUpperCase() : '?';
@@ -175,7 +161,6 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        // 彩色圆形 + 首字母
         Container(
           width: avatarSize,
           height: avatarSize,
@@ -193,7 +178,6 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
             ),
           ),
         ),
-        // 链图标小徽章（右下角）
         Positioned(
           right: -ScreenUtil().setWidth(4),
           bottom: -ScreenUtil().setWidth(4),

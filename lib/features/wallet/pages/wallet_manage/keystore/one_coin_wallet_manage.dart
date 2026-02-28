@@ -47,11 +47,16 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage> with 
   @override
   String? pk;
   @override
-  int pathIndex=0;
+  int pathIndex = 0;
   @override
-  List<dynamic> pathList=[0];
+  List<dynamic> pathList = [0];
   @override
-  Load load=Load.finish;
+  Load load = Load.finish;
+
+  /// Shortcut to access the current coin's info map.
+  Map<String, dynamic> get _coinInfo =>
+      widget.walletInfo.coinInfo![widget.model.coin['coinType']];
+
   @override
   void initState() {
     super.initState();
@@ -60,117 +65,100 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage> with 
 
   Future<void> initData() async {
     mnemonic = widget.walletInfo.mnemonic;
-    addrType=widget.walletInfo.coinInfo![widget.model.coin['coinType']]['addrType'];
-    coinPath = widget.walletInfo.coinInfo![widget.model.coin['coinType']]['baseInfo']['path'][addrType];
-    pathList=widget.walletInfo.coinInfo![widget.model.coin['coinType']]['pathList']?? [0];
-    pathIndex=widget.walletInfo.coinInfo![widget.model.coin['coinType']]['pathIndex']?? 0;
-    pk=widget.walletInfo.privateKey;
+    addrType = _coinInfo['addrType'];
+    coinPath = _coinInfo['baseInfo']['path'][addrType];
+    pathList = _coinInfo['pathList'] ?? [0];
+    pathIndex = _coinInfo['pathIndex'] ?? 0;
+    pk = widget.walletInfo.privateKey;
     setState(() {});
   }
 
-  //添加 path index
   @override
-  void addPath(){
-    if(pathList.length>=10){
-      return;
-    }
-    pathList.add(pathList[pathList.length-1]+1);
+  void addPath() {
+    if (pathList.length >= 10) return;
+    pathList.add(pathList[pathList.length - 1] + 1);
     setState(() {});
   }
+
   @override
-  void removePath(int index){
+  void removePath(int index) {
     pathList.removeAt(index);
     setState(() {});
   }
+
   @override
-  void chagePath(int index){
-    pathIndex=pathList[index];
+  void chagePath(int index) {
+    pathIndex = pathList[index];
     setState(() {});
   }
-  Future<void> saveCoin()async{
-    widget.walletInfo.coinInfo![widget.model.coin['coinType']]['pathList']=pathList;
-    widget.walletInfo.coinInfo![widget.model.coin['coinType']]['pathIndex']=pathIndex;
-    widget.walletInfo.coinInfo![widget.model.coin['coinType']]['addrType']=addrType;
-    await ref.read(wapBridgeProvider).saveWalletInfo(widget.walletInfo,widget.walletIndex);
+
+  Future<void> saveCoin() async {
+    _coinInfo['pathList'] = pathList;
+    _coinInfo['pathIndex'] = pathIndex;
+    _coinInfo['addrType'] = addrType;
+    await ref.read(wapBridgeProvider).saveWalletInfo(widget.walletInfo, widget.walletIndex);
     if (!mounted) return;
-    if(ref.read(wapBridgeProvider).walletIndex == widget.walletIndex){
-      ref.read(wapBridgeProvider).reBuildCoin(widget.walletInfo,widget.model.coin['coinType']);
+    if (ref.read(wapBridgeProvider).walletIndex == widget.walletIndex) {
+      ref.read(wapBridgeProvider).reBuildCoin(widget.walletInfo, widget.model.coin['coinType']);
     }
-    Navigator.pop(context,true);
+    Navigator.pop(context, true);
   }
+
   @override
-  Future<void> jumpExportKeystoreDescPage({String? password})async{
-    setState(() {
-      load=Load.loading;
-    });
+  Future<void> jumpExportKeystoreDescPage({String? password}) async {
+    setState(() => load = Load.loading);
     await Future.delayed(const Duration(milliseconds: 300));
     if (!mounted) return;
     password ??= widget.walletInfo.password ?? "";
-    final keystoreJson= await Trustdart().getKeyStore(
+    final keystoreJson = await Trustdart().getKeyStore(
       widget.model.coin['coinType']!,
-      getPathWithIndex(coinPath!, widget.walletInfo.coinInfo![widget.model.coin['coinType']]['pathIndex']??0),
-      widget.walletInfo.coinInfo![widget.model.coin['coinType']]['addrType'],
+      getPathWithIndex(coinPath!, _coinInfo['pathIndex'] ?? 0),
+      _coinInfo['addrType'],
       password,
-      mnemonic: mnemonic??"",
-      pk:pk??"",
+      mnemonic: mnemonic ?? "",
+      pk: pk ?? "",
     );
     if (!mounted) return;
-    //test 反推一下
-    //success：目前支持的有： eth ast matic ETC avax  ht  xDAI FTM celo clo poa
-    //反推之后的address大小写有些不一致：0x7Ac869Ff8b6232f7cfC4370A2df4a81641Cba3d9 返推的 0x7ac869ff8b6232f7cfc4370a2df4a81641cba3d9
-
-    //keystore json 说明页面explain
-    Navigator.push(context,
-      MaterialPageRoute(
-          builder: (_) => ExportKeystoreDesc(
-            keystoreJson: keystoreJson,
-          )),
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => ExportKeystoreDesc(keystoreJson: keystoreJson)),
     );
   }
-  //显示切换地址类型
-  @override
-  void showChangeAddress(){
-    List<Widget> childs=[];
-    Map<String,dynamic> paths=widget.model.coin['path'];
-    List<String> keyList=paths.keys.toList();
-    for(int i=0;i<keyList.length;i++){
-      Color textColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-      if(widget.model.addrType==keyList[i]){
-        textColor=AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name);
-      }
-      childs.add(
-          InkWell(
-            onTap: ()async{
-              if(widget.model.addrType==keyList[i]){
 
-              }else{
-                widget.model.addrType=keyList[i];
-                addrType=keyList[i];
-                widget.model.address=null;
-                await widget.model.buildWallet();
-                if (!mounted) return;
-                coinPath=widget.model.coin['path'][widget.model.addrType];
-                setState(() {});
-              }
-              Navigator.pop(context);
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
-              alignment: Alignment.center,
-              child: Text(
-                keyList[i],
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: ScreenUtil().setSp(32.0),
-                ),
-              ),
-            ),
-          )
+  @override
+  void showChangeAddress() {
+    final Map<String, dynamic> paths = widget.model.coin['path'];
+    final keyList = paths.keys.toList();
+    final children = keyList.map((key) {
+      final isSelected = widget.model.addrType == key;
+      final textColor = AppThemeUtils.getColorByKey(
+        context,
+        isSelected ? AppThemeKeys.mainButtonBgColor.name : AppThemeKeys.mainTextColor.name,
       );
-    }
-    sheetBottom(context, "", Column(
-      children: childs,
-    ));
+      return InkWell(
+        onTap: () async {
+          if (!isSelected) {
+            widget.model.addrType = key;
+            addrType = key;
+            widget.model.address = null;
+            await widget.model.buildWallet();
+            if (!mounted) return;
+            coinPath = widget.model.coin['path'][widget.model.addrType];
+            setState(() {});
+          }
+          Navigator.pop(context);
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+          alignment: Alignment.center,
+          child: Text(
+            key,
+            style: TextStyle(color: textColor, fontSize: ScreenUtil().setSp(32.0)),
+          ),
+        ),
+      );
+    }).toList();
+    sheetBottom(context, "", Column(children: children));
   }
   @override
   Widget build(BuildContext context) {
@@ -208,12 +196,7 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage> with 
                     width: double.infinity,
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                     color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                    child: buttonStyle2(
-                      context,
-                      (){
-                        saveCoin();
-                      },
-                      S.of(context).g_key_115,),
+                    child: buttonStyle2(context, saveCoin, S.of(context).g_key_115),
                   ),
                 ],
               ),

@@ -1,71 +1,46 @@
 part of 'csv_import_page.dart';
 
-/// CSV state, validation and import logic mixin for [_CsvImportPageState].
-///
-/// Owns the text controller, stats counter, and expanded flag so that
-/// [_CsvFormatSectionMixin] (which depends on this mixin) can read them.
-/// Also handles data row parsing, per-row field validation, duplicate
-/// detection, and the validation summary dialog shown when issues are found.
+/// CSV validation, import logic and shared state for [_CsvImportPageState].
 mixin _CsvValidationMixin on State<CsvImportPage> {
   final TextEditingController _textController = TextEditingController();
-
-  // 有效数据行数（去掉注释、空行、header）
   int _validLineCount = 0;
-  // 格式文档是否展开
   bool _docExpanded = false;
 
   bool get _hasContent => _textController.text.trim().isNotEmpty;
 
-  void _showSnack(String message) {
+  void _showSnack(String message, {Color? color}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
         behavior: SnackBarBehavior.floating,
+        backgroundColor: color,
       ),
     );
   }
-
-  // ─── 验证 + 导入 ─────────────────────────────────────────────────────────────
 
   void _importData() {
     final rawContent = _textController.text.trim();
     if (rawContent.isEmpty) return;
 
-    // 过滤掉注释行和空行
-    final allLines = rawContent.split('\n');
-    final dataLines = allLines
-        .map((l) => l.trim())
-        .where((l) => l.isNotEmpty && !l.startsWith('#'))
-        .toList();
-
+    final dataLines = _filterDataLines(rawContent);
     if (dataLines.isEmpty) {
       _showSnack('No data found after removing comments.');
       return;
     }
 
-    // 检测并跳过 header
-    final hasHeader = dataLines[0].toLowerCase().startsWith('address') ||
-        (!dataLines[0].startsWith('0x') && !_looksLikeDataRow(dataLines[0]));
+    final hasHeader = _isHeaderLine(dataLines[0]);
     final rows = hasHeader ? dataLines.skip(1).toList() : dataLines;
 
     if (rows.isEmpty) {
       _showSnack('No data rows found (only header detected).');
       return;
     }
-
-    // Max 200 recipients check
     if (rows.length > 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(S.of(context).g_key_batch_max_recipients(200)),
-          backgroundColor: Colors.orange,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      _showSnack(S.of(context).g_key_batch_max_recipients(200),
+          color: Colors.orange);
       return;
     }
 
-    // 逐行验证
     final errors = <String>[];
     final seenAddresses = <String>{};
     int validCount = 0;
@@ -83,11 +58,10 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
       final address = parts[0].trim();
       final amount = parts[1].trim();
 
-      if (!_isValidEvmAddress(address)) {
+      if (!_evmAddressRegex.hasMatch(address)) {
         errors.add(S.of(context).g_key_batch_invalid_address(lineNum));
         continue;
       }
-
       if (!_isValidAmount(amount)) {
         errors.add(S.of(context).g_key_batch_invalid_amount(lineNum));
         continue;
@@ -96,18 +70,29 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
       final normalizedAddr = address.toLowerCase();
       if (seenAddresses.contains(normalizedAddr)) {
         errors.add(S.of(context).g_key_batch_duplicate_address(lineNum));
-        // 仍然计为有效（允许重复，警告即可）
       }
       seenAddresses.add(normalizedAddr);
       validCount++;
     }
 
     if (errors.isEmpty) {
-      // 全部有效，直接返回
       Navigator.pop(context, rawContent);
-    } else {
-      _showValidationDialog(validCount, errors, rawContent);
+      return;
     }
+    _showValidationDialog(validCount, errors, rawContent);
+  }
+
+  List<String> _filterDataLines(String rawContent) {
+    return rawContent
+        .split('\n')
+        .map((l) => l.trim())
+        .where((l) => l.isNotEmpty && !l.startsWith('#'))
+        .toList();
+  }
+
+  bool _isHeaderLine(String line) {
+    return line.toLowerCase().startsWith('address') ||
+        (!line.startsWith('0x') && !_looksLikeDataRow(line));
   }
 
   bool _looksLikeDataRow(String line) {
@@ -115,19 +100,11 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
     return parts.length >= 2 && parts[0].trim().startsWith('0x');
   }
 
-  bool _isValidEvmAddress(String address) {
-    return address.length == 42 &&
-        RegExp(r'^0x[a-fA-F0-9]{40}$').hasMatch(address);
-  }
+  static final _evmAddressRegex = RegExp(r'^0x[a-fA-F0-9]{40}$');
 
   bool _isValidAmount(String amount) {
-    try {
-      final value =
-          double.parse(amount.replaceAll(',', '').replaceAll(' ', ''));
-      return value > 0;
-    } catch (_) {
-      return false;
-    }
+    final value = double.tryParse(amount.replaceAll(',', '').replaceAll(' ', ''));
+    return value != null && value > 0;
   }
 
   void _clearInput() => _textController.clear();
@@ -141,13 +118,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
         '0x9876543210987654321098765432109876543210,0.5,';
 
     Clipboard.setData(const ClipboardData(text: template));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('${S.of(context).g_key_119} — Template'),
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    _showSnack('${S.of(context).g_key_119} — Template');
   }
 
   Future<void> _pasteFromClipboard() async {
@@ -156,17 +127,10 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
     if (data?.text != null && data!.text!.isNotEmpty) {
       _textController.text = data.text!;
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Clipboard is empty'),
-          duration: Duration(seconds: 1),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      _showSnack('Clipboard is empty');
     }
   }
 
-  /// 从文件系统选择 .csv / .txt 文件并读取内容
   Future<void> _pickFile() async {
     try {
       final result = await FilePicker.platform.pickFiles(
@@ -185,13 +149,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to read file: $e'),
-          backgroundColor: Colors.red,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      _showSnack('Failed to read file: $e', color: Colors.red);
     }
   }
 

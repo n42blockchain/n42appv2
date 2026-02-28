@@ -133,9 +133,10 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
     }
 
     // 如果已知 ENS 名称，直接使用
-    if (widget.knownEnsName != null && widget.knownEnsName!.isNotEmpty) {
-      _markResolved(ensName: widget.knownEnsName);
-      if (widget.showAvatar) _fetchAvatar(widget.knownEnsName!);
+    final knownName = widget.knownEnsName;
+    if (knownName != null && knownName.isNotEmpty) {
+      _markResolved(ensName: knownName);
+      if (widget.showAvatar) _fetchAvatar(knownName);
       return;
     }
 

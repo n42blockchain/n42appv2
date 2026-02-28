@@ -3,6 +3,29 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+// ---------------------------------------------------------------------------
+// Shared hex-string parsing helpers
+// ---------------------------------------------------------------------------
+
+BigInt _parseBigInt(dynamic value) {
+  if (value == null) return BigInt.zero;
+  if (value is BigInt) return value;
+  if (value is int) return BigInt.from(value);
+  final str = value.toString();
+  return str.startsWith('0x')
+      ? BigInt.parse(str.substring(2), radix: 16)
+      : BigInt.parse(str);
+}
+
+int _parseInt(dynamic value) {
+  if (value == null) return 0;
+  if (value is int) return value;
+  final str = value.toString();
+  return str.startsWith('0x')
+      ? int.parse(str.substring(2), radix: 16)
+      : int.parse(str);
+}
+
 /// Receipt for a completed UserOperation
 class UserOperationReceipt {
   /// The UserOperation hash
@@ -75,17 +98,6 @@ class UserOperationReceipt {
       'receipt': receipt.toJson(),
       'logs': logs.map((l) => l.toJson()).toList(),
     };
-  }
-
-  static BigInt _parseBigInt(dynamic value) {
-    if (value == null) return BigInt.zero;
-    if (value is BigInt) return value;
-    if (value is int) return BigInt.from(value);
-    final str = value.toString();
-    if (str.startsWith('0x')) {
-      return BigInt.parse(str.substring(2), radix: 16);
-    }
-    return BigInt.parse(str);
   }
 
   @override
@@ -176,27 +188,6 @@ class TransactionReceiptInfo {
   }
 
   bool get isSuccess => status == 1;
-
-  static BigInt _parseBigInt(dynamic value) {
-    if (value == null) return BigInt.zero;
-    if (value is BigInt) return value;
-    if (value is int) return BigInt.from(value);
-    final str = value.toString();
-    if (str.startsWith('0x')) {
-      return BigInt.parse(str.substring(2), radix: 16);
-    }
-    return BigInt.parse(str);
-  }
-
-  static int _parseInt(dynamic value) {
-    if (value == null) return 0;
-    if (value is int) return value;
-    final str = value.toString();
-    if (str.startsWith('0x')) {
-      return int.parse(str.substring(2), radix: 16);
-    }
-    return int.parse(str);
-  }
 }
 
 /// Event log from UserOperation execution
@@ -238,11 +229,11 @@ class UserOperationLog {
 
   factory UserOperationLog.fromJson(Map<String, dynamic> json) {
     return UserOperationLog(
-      logIndex: TransactionReceiptInfo._parseInt(json['logIndex']),
-      transactionIndex: TransactionReceiptInfo._parseInt(json['transactionIndex']),
+      logIndex: _parseInt(json['logIndex']),
+      transactionIndex: _parseInt(json['transactionIndex']),
       transactionHash: json['transactionHash'] as String? ?? '',
       blockHash: json['blockHash'] as String? ?? '',
-      blockNumber: TransactionReceiptInfo._parseBigInt(json['blockNumber']),
+      blockNumber: _parseBigInt(json['blockNumber']),
       address: json['address'] as String? ?? '',
       data: json['data'] as String? ?? '0x',
       topics: (json['topics'] as List<dynamic>?)

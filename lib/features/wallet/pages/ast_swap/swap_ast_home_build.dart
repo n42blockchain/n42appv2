@@ -172,7 +172,6 @@ extension _SwapAstHomeBuild on _SwapAstHomeState {
     );
   }
 
-
   Future<void> _onPreviewSwap() async {
     closeKeyboard();
     if (load != Load.finish) return;

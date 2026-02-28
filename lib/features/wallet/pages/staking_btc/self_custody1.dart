@@ -40,20 +40,19 @@ class SelfCustody1 extends ConsumerStatefulWidget {
   @override
   ConsumerState<SelfCustody1> createState() => _SelfCustody1State();
 }
-//01000000000103b4e1d30cf774b846bc6147f99f8ef11a6c300c61387a040dc68356e04c127bfb0000000000ffffffff607b3facebc1aedfb6c0a1448a37a1f727851e49c3135adaf8f81edc0e3feaa30000000000ffffffffc28c3d24f622f79dce51518a5a09cc7748e4baef93778e2327f5bd73b751a9d20500000000ffffffff02a086010000000000160014e6401c83bf5e7986cda4afff3d88ff897885dbe49e6a373000000000160014e6401c83bf5e7986cda4afff3d88ff897885dbe40140e69d8fec799297dd42ad45491d36e05e64c9dfaa6c8544b666b81b100aaf44242be38b37c6bfd096dc7dd2490bdac08a76db5e313f4619f460db8a5db764f9ea00000000
-//02000000000103b4e1d30cf774b846bc6147f99f8ef11a6c300c61387a040dc68356e04c127bfb0000000000ffffffff607b3facebc1aedfb6c0a1448a37a1f727851e49c3135adaf8f81edc0e3feaa30000000000ffffffffc28c3d24f622f79dce51518a5a09cc7748e4baef93778e2327f5bd73b751a9d20500000000ffffffff02a086010000000000160014e6401c83bf5e7986cda4afff3d88ff897885dbe49e6a373000000000160014e6401c83bf5e7986cda4afff3d88ff897885dbe4034064a9ed7a202a05831461b0ffe898e0b500e6b8472d083ba0a819eef044200ab95c3a9ee4518785c7104c5a17d7be51adc99724dba24e270d18cae623589ba20f40f724540c07ead1c412f6fb5a7ef204e36ed3e47bdd036d83754e2e6f2bdeff9a9a4fd72fbe794d75de673473f909dc01b0dddc0625b93f0846d944ffd01e7dc4406f4b37f0fcbdca1aaeda926af92e70b52327425a5f118d5b7c03e62c171a9174d3b296382aac93440a4fec103c2567c538101b690e5e236eb8a1af4ee2f3b79200000000
+
 class _SelfCustody1State extends ConsumerState<SelfCustody1> with _SelfCustody1LogicMixin {
   late WebViewController _controller;
 
-  /// 是否显示顶部风险提醒横幅（用户可手动关闭）
   bool _showBanner = true;
 
   TransferApi? _transferApi;
   @override
-  TransferApi get transferApi{
+  TransferApi get transferApi {
     _transferApi ??= TransferApi();
     return _transferApi!;
   }
+
   @override
   String? address;
   @override
@@ -62,38 +61,34 @@ class _SelfCustody1State extends ConsumerState<SelfCustody1> with _SelfCustody1L
   P2wshAddress? p2wshAddress;
   Uint8List? scriptByte;
   String? lockAmount;
-  //String? lockTimeStr;
   @override
   int? lockTimeInt;
   @override
   String? publicKey;
-
   @override
-  List<dynamic> unspents=[];//可用余额列表
+  List<dynamic> unspents = [];
   @override
-  int price=10000;
+  int price = 10000;
   @override
-  List<Map<String,dynamic>> inputUTXO=[];//交易输入utxo列表
+  List<Map<String, dynamic>> inputUTXO = [];
   @override
-  Map<String,dynamic> gasFeeLevel={
-    "error":false,
-    "averageValue":5,//服务器获取的平均价格 gas
-    "loading":false,
-    "gasFeeRate":5,//用户输入的 gas
-    "gasFees":0,//根据用户转账amount 和选择的gasFeeLevel 计算出gasFee
-    "signByteSize":0,//签名返回的 数据包大小
-    "maxValue":0,//全部转出的金额
+  Map<String, dynamic> gasFeeLevel = {
+    "error": false,
+    "averageValue": 5,
+    "loading": false,
+    "gasFeeRate": 5,
+    "gasFees": 0,
+    "signByteSize": 0,
+    "maxValue": 0,
   };
-
-  /// 获取 Staking WebView URL
-  String _getStakingUrl() {
-    return AppConfig.getApiUrlOnline('btcStaking');
-  }
 
   @override
   void initState() {
-    //createWallet();
-    //testdata();
+    super.initState();
+    _initWebViewController();
+  }
+
+  void _initWebViewController() {
     late final PlatformWebViewControllerCreationParams params;
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
       params = WebKitWebViewControllerCreationParams(
@@ -103,72 +98,73 @@ class _SelfCustody1State extends ConsumerState<SelfCustody1> with _SelfCustody1L
     } else {
       params = const PlatformWebViewControllerCreationParams();
     }
-    _controller =
-        WebViewController.fromPlatformCreationParams(params);
-    _controller
+
+    _controller = WebViewController.fromPlatformCreationParams(params)
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor( const Color(0xFF121212))
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onProgress: (int progress) {
-            debugPrint('WebView is loading (progress : $progress%)');
-          },
-          onPageStarted: (String url) {
-            debugPrint('Page started loading: $url');
-          },
-          onPageFinished: (String url) {
-          },
-          onWebResourceError: (WebResourceError error) {
-          },
-          onNavigationRequest: (NavigationRequest request) {
-            bool r=true;
-            if(r==true){
-              return NavigationDecision.navigate;
-            }else{
-              return NavigationDecision.prevent;
-            }
-          },
-          onUrlChange: (UrlChange change) {
-          },
+      ..setBackgroundColor(const Color(0xFF121212))
+      ..setNavigationDelegate(NavigationDelegate(
+        onNavigationRequest: (_) => NavigationDecision.navigate,
+      ))
+      ..loadRequest(Uri.parse(AppConfig.getApiUrlOnline('btcStaking')))
+      ..addJavaScriptChannel("N42APP",
+          onMessageReceived: _onJsMessage);
+  }
+
+  Future<void> _onJsMessage(JavaScriptMessage message) async {
+    final rdata = jsonDecode(message.message) as Map<String, dynamic>?;
+    if (rdata == null) return;
+
+    switch (rdata['type']) {
+      case 'get_canister_ecdsa_public_key':
+        await _handleEcdsaPublicKey(rdata);
+      case 'is_p2wsh_address_valid':
+        await _handleP2wshValidation(rdata);
+      case 'request_mint_vbtc':
+        final result = JsEscapeUtils.escapeJs(rdata['result']?.toString() ?? '');
+        _controller.runJavaScript('alert("来自Flutter的消息，我收到了:$result");');
+    }
+  }
+
+  Future<void> _handleEcdsaPublicKey(Map<String, dynamic> rdata) async {
+    final ecdsaKeyMap = jsonDecode(rdata['ecdsaKey']) as Map<String, dynamic>;
+    final ecdsaKeyList = ecdsaKeyMap.values.map((e) => e as int).toList();
+    final pKey = bytesToHex(ecdsaKeyList);
+    final nowTime = (DateTime.now().millisecondsSinceEpoch ~/ 1000) +
+        (double.parse(rdata['lockupTime']!) * 86400).toInt();
+    lockTimeInt = nowTime;
+    final p2wshAddr = await createP2WSH(nowTime, cPubKey: pKey);
+    lockAmount = rdata['amount'];
+    _controller.runJavaScript(
+        'is_p2wsh_address_valid("${JsEscapeUtils.escapeJs(p2wshAddr ?? "")}");');
+  }
+
+  Future<void> _handleP2wshValidation(Map<String, dynamic> rdata) async {
+    if (rdata['result'] != true) return;
+
+    final p2wshAddr = p2wshAddress!.toAddress(BitcoinNetwork.testnet);
+    final value = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => WalletChainSendBtc(
+          widget.coinModel,
+          toAddress: p2wshAddr,
+          toAmount: lockAmount!,
         ),
-      )
-      ..loadRequest(Uri.parse(_getStakingUrl()))
-      ..addJavaScriptChannel("N42APP", onMessageReceived: (JavaScriptMessage message) async{
-        Map<String,dynamic>?rdata=jsonDecode(message.message);
-        if(rdata !=null){
-          if(rdata['type']=="get_canister_ecdsa_public_key"){
-            Map<String,dynamic> ecdsaKeyMap=jsonDecode(rdata['ecdsaKey']);
-            List<int> ecdsaKeyList = ecdsaKeyMap.values.map((e) => e as int).toList();
-            String pKey=bytesToHex(ecdsaKeyList);
-            int nowTime=(DateTime.now().millisecondsSinceEpoch~/1000)+(double.parse(rdata['lockupTime']!)*86400).toInt();
-            lockTimeInt=nowTime;
-            String? p2wshAddr=await createP2WSH(nowTime,cPubKey: pKey);
-            //CreateP2WSH().p2wsh(rdata['lockupTime']);
-            lockAmount=rdata['amount'];
-            _controller.runJavaScript('is_p2wsh_address_valid("${JsEscapeUtils.escapeJs(p2wshAddr ?? "")}");');
-          }else if(rdata['type']=="is_p2wsh_address_valid"){
-            if(rdata["result"]==true){
-              String p2wshAddr=p2wshAddress!.toAddress(BitcoinNetwork.testnet);
-              final value=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletChainSendBtc(widget.coinModel,toAddress: p2wshAddr,toAmount: lockAmount!,)));
-              if (!mounted) return;
-              if(value !=null){
+      ),
+    );
+    if (!mounted || value == null) return;
 
-                String ethAddress=ref.read(wapBridgeProvider).getAddress(CoinType.N.name);
-                BigInt lockAmountInt=ethToWeiString(lockAmount!, 8);
-                //String alertStr='requestMintVbtc("${p2wshAddr}","${ethAddress}",${lockAmountInt},"${value}","${widget.coinModel.address}",${lockTimeInt},"${publicKey}");';
-                String alertStr='requestMintVbtc("${JsEscapeUtils.escapeJs(p2wshAddr)}","${JsEscapeUtils.escapeJs(ethAddress)}",$lockAmountInt,"${JsEscapeUtils.escapeJs(widget.coinModel.address)}",$lockTimeInt,"${JsEscapeUtils.escapeJs(publicKey ?? "")}");';
-                if (kDebugMode) debugPrint(alertStr);
-                _controller.runJavaScript(alertStr);
-              }
-            }
-          }else if(rdata['type']=="request_mint_vbtc"){
-            _controller.runJavaScript('alert("来自Flutter的消息，我收到了:${JsEscapeUtils.escapeJs(rdata['result']?.toString() ?? "")}");');
-          }
-        }
-
-      });
-
-    super.initState();
+    final ethAddress = ref.read(wapBridgeProvider).getAddress(CoinType.N.name);
+    final lockAmountInt = ethToWeiString(lockAmount!, 8);
+    final alertStr = 'requestMintVbtc('
+        '"${JsEscapeUtils.escapeJs(p2wshAddr)}",'
+        '"${JsEscapeUtils.escapeJs(ethAddress)}",'
+        '$lockAmountInt,'
+        '"${JsEscapeUtils.escapeJs(widget.coinModel.address)}",'
+        '$lockTimeInt,'
+        '"${JsEscapeUtils.escapeJs(publicKey ?? "")}");';
+    if (kDebugMode) debugPrint(alertStr);
+    _controller.runJavaScript(alertStr);
   }
 
   @override

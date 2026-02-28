@@ -57,15 +57,18 @@ class AATransactionPreview extends StatelessWidget {
     this.isLoading = false,
   });
 
+  // ─── Theme helpers ──────────────────────────────────────────────────────
+
+  Color _color(BuildContext context, AppThemeKeys key) =>
+      AppThemeUtils.getColorByKey(context, key.name);
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(24.w),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(ScreenUtil().setWidth(24)),
-        ),
+        color: _color(context, AppThemeKeys.itemBgColor),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24.w)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -78,37 +81,34 @@ class AATransactionPreview extends StatelessWidget {
               Text(
                 S.of(context).g_key_202,
                 style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32),
+                  fontSize: 32.sp,
                   fontWeight: FontWeight.bold,
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
+                  color: _color(context, AppThemeKeys.mainTextColor),
                 ),
               ),
               if (data.isGasSponsored)
                 const GasSponsoredIcon(isSponsored: true),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: 24.w),
 
           // 转账金额
           _buildAmountSection(context),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: 20.w),
 
           // 地址信息
           _buildAddressSection(context),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: 20.w),
 
           // Gas 信息
           _buildGasSection(context),
 
           // 批量操作列表
           if (data.batchOperations != null && data.batchOperations!.isNotEmpty) ...[
-            SizedBox(height: ScreenUtil().setWidth(20)),
+            SizedBox(height: 20.w),
             _buildBatchOperationsSection(context),
           ],
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: 24.w),
 
           // 操作按钮
           _buildActionButtons(context),
@@ -118,31 +118,27 @@ class AATransactionPreview extends StatelessWidget {
   }
 
   Widget _buildAmountSection(BuildContext context) {
-    final blueColor = AppThemeUtils.getColorByKey(
-      context, AppThemeKeys.mainBlueColor.name,
-    );
+    final blueColor = _color(context, AppThemeKeys.mainBlueColor);
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [blueColor.withAlpha(20), blueColor.withAlpha(5)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: BorderRadius.circular(16.w),
       ),
       child: Column(
         children: [
           Text(
             S.of(context).g_key_44,
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              fontSize: 24.sp,
+              color: _color(context, AppThemeKeys.itemSubtitleTextColor),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: 8.w),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -150,20 +146,18 @@ class AATransactionPreview extends StatelessWidget {
               Text(
                 data.amount,
                 style: TextStyle(
-                  fontSize: ScreenUtil().setSp(48),
+                  fontSize: 48.sp,
                   fontWeight: FontWeight.bold,
-                  color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name,
-                  ),
+                  color: _color(context, AppThemeKeys.mainTextColor),
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              SizedBox(width: 8.w),
               Padding(
-                padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(6)),
+                padding: EdgeInsets.only(bottom: 6.w),
                 child: Text(
                   data.tokenSymbol,
                   style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                    fontSize: 28.sp,
                     fontWeight: FontWeight.w600,
                     color: blueColor,
                   ),
@@ -178,13 +172,10 @@ class AATransactionPreview extends StatelessWidget {
 
   Widget _buildAddressSection(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.backGroundColor.name,
-        ).withAlpha(100),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        color: _color(context, AppThemeKeys.backGroundColor).withAlpha(100),
+        borderRadius: BorderRadius.circular(12.w),
       ),
       child: Column(
         children: [
@@ -195,14 +186,11 @@ class AATransactionPreview extends StatelessWidget {
             Icons.account_balance_wallet,
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8)),
+            padding: EdgeInsets.symmetric(vertical: 8.w),
             child: Icon(
               Icons.arrow_downward,
-              size: ScreenUtil().setWidth(24),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ),
+              size: 24.w,
+              color: _color(context, AppThemeKeys.mainBlueColor),
             ),
           ),
           _buildAddressRow(
@@ -222,39 +210,24 @@ class AATransactionPreview extends StatelessWidget {
     String address,
     IconData icon,
   ) {
+    final subtitleColor = _color(context, AppThemeKeys.itemSubtitleTextColor);
     return Row(
       children: [
-        Icon(
-          icon,
-          size: ScreenUtil().setWidth(22),
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemSubtitleTextColor.name,
-          ),
-        ),
-        SizedBox(width: ScreenUtil().setWidth(10)),
+        Icon(icon, size: 22.w, color: subtitleColor),
+        SizedBox(width: 10.w),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               label,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(20),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
-              ),
+              style: TextStyle(fontSize: 20.sp, color: subtitleColor),
             ),
             Text(
               _shortenAddress(address),
               style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
+                fontSize: 24.sp,
                 fontFamily: 'monospace',
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: _color(context, AppThemeKeys.mainTextColor),
               ),
             ),
           ],
@@ -265,18 +238,15 @@ class AATransactionPreview extends StatelessWidget {
 
   Widget _buildGasSection(BuildContext context) {
     final sponsored = data.isGasSponsored;
-    final subtitleColor = AppThemeUtils.getColorByKey(
-      context, AppThemeKeys.itemSubtitleTextColor.name,
-    );
-    final bgFallback = AppThemeUtils.getColorByKey(
-      context, AppThemeKeys.backGroundColor.name,
-    ).withAlpha(100);
+    final subtitleColor = _color(context, AppThemeKeys.itemSubtitleTextColor);
+    final bgFallback =
+        _color(context, AppThemeKeys.backGroundColor).withAlpha(100);
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: sponsored ? Colors.green.withAlpha(20) : bgFallback,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: BorderRadius.circular(12.w),
         border: sponsored ? Border.all(color: Colors.green.withAlpha(40)) : null,
       ),
       child: Row(
@@ -286,16 +256,13 @@ class AATransactionPreview extends StatelessWidget {
             children: [
               Icon(
                 Icons.local_gas_station,
-                size: ScreenUtil().setWidth(22),
+                size: 22.w,
                 color: sponsored ? Colors.green : subtitleColor,
               ),
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              SizedBox(width: 8.w),
               Text(
                 S.of(context).g_key_t_17,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: subtitleColor,
-                ),
+                style: TextStyle(fontSize: 24.sp, color: subtitleColor),
               ),
             ],
           ),
@@ -305,16 +272,16 @@ class AATransactionPreview extends StatelessWidget {
                 Text(
                   data.formattedGasCost,
                   style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
+                    fontSize: 24.sp,
                     decoration: TextDecoration.lineThrough,
                     color: subtitleColor,
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(8)),
+                SizedBox(width: 8.w),
                 Text(
                   S.of(context).g_key_aa_free,
                   style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
+                    fontSize: 26.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.green,
                   ),
@@ -325,11 +292,9 @@ class AATransactionPreview extends StatelessWidget {
             Text(
               data.formattedGasCost,
               style: TextStyle(
-                fontSize: ScreenUtil().setSp(26),
+                fontSize: 26.sp,
                 fontWeight: FontWeight.w600,
-                color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name,
-                ),
+                color: _color(context, AppThemeKeys.mainTextColor),
               ),
             ),
         ],
@@ -338,18 +303,14 @@ class AATransactionPreview extends StatelessWidget {
   }
 
   Widget _buildBatchOperationsSection(BuildContext context) {
-    final blueColor = AppThemeUtils.getColorByKey(
-      context, AppThemeKeys.mainBlueColor.name,
-    );
+    final blueColor = _color(context, AppThemeKeys.mainBlueColor);
     final ops = data.batchOperations!;
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.backGroundColor.name,
-        ).withAlpha(100),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        color: _color(context, AppThemeKeys.backGroundColor).withAlpha(100),
+        borderRadius: BorderRadius.circular(12.w),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -357,46 +318,42 @@ class AATransactionPreview extends StatelessWidget {
           Text(
             '${S.of(context).g_key_aa_batch_operations} (${ops.length})',
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
+              fontSize: 24.sp,
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name,
-              ),
+              color: _color(context, AppThemeKeys.mainTextColor),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: 8.w),
           for (final (i, op) in ops.indexed)
             Padding(
-              padding: EdgeInsets.only(top: ScreenUtil().setWidth(6)),
+              padding: EdgeInsets.only(top: 6.w),
               child: Row(
                 children: [
                   Container(
-                    width: ScreenUtil().setWidth(24),
-                    height: ScreenUtil().setWidth(24),
+                    width: 24.w,
+                    height: 24.w,
                     decoration: BoxDecoration(
                       color: blueColor.withAlpha(20),
-                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+                      borderRadius: BorderRadius.circular(6.w),
                     ),
                     child: Center(
                       child: Text(
                         '${i + 1}',
                         style: TextStyle(
-                          fontSize: ScreenUtil().setSp(18),
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
                           color: blueColor,
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(10)),
+                  SizedBox(width: 10.w),
                   Expanded(
                     child: Text(
                       op,
                       style: TextStyle(
-                        fontSize: ScreenUtil().setSp(22),
-                        color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemSubtitleTextColor.name,
-                        ),
+                        fontSize: 22.sp,
+                        color: _color(context, AppThemeKeys.itemSubtitleTextColor),
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -410,58 +367,43 @@ class AATransactionPreview extends StatelessWidget {
   }
 
   Widget _buildActionButtons(BuildContext context) {
+    final buttonRadius = BorderRadius.circular(14.w);
+    final buttonPadding = EdgeInsets.symmetric(vertical: 16.w);
+    final buttonTextStyle = TextStyle(fontSize: 28.sp, fontWeight: FontWeight.w600);
+
     return Row(
       children: [
         Expanded(
           child: OutlinedButton(
             onPressed: isLoading ? null : onCancel,
             style: OutlinedButton.styleFrom(
-              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
-              ),
+              padding: buttonPadding,
+              shape: RoundedRectangleBorder(borderRadius: buttonRadius),
             ),
-            child: Text(
-              S.of(context).g_key_79,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+            child: Text(S.of(context).g_key_79, style: buttonTextStyle),
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(16)),
+        SizedBox(width: 16.w),
         Expanded(
           flex: 2,
           child: ElevatedButton(
             onPressed: isLoading ? null : onConfirm,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ),
+              backgroundColor: _color(context, AppThemeKeys.mainBlueColor),
               foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
-              ),
+              padding: buttonPadding,
+              shape: RoundedRectangleBorder(borderRadius: buttonRadius),
             ),
             child: isLoading
                 ? SizedBox(
-                    width: ScreenUtil().setWidth(24),
-                    height: ScreenUtil().setWidth(24),
+                    width: 24.w,
+                    height: 24.w,
                     child: const CircularProgressIndicator(
                       strokeWidth: 2,
                       valueColor: AlwaysStoppedAnimation(Colors.white),
                     ),
                   )
-                : Text(
-                    S.of(context).g_key_78,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                : Text(S.of(context).g_key_78, style: buttonTextStyle),
           ),
         ),
       ],

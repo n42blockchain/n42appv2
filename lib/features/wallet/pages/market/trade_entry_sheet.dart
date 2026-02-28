@@ -295,11 +295,11 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
     );
   }
 
-  String _fmt(double v) {
-    if (v >= 1000) return v.toStringAsFixed(2);
-    if (v >= 1) return v.toStringAsFixed(4);
-    return v.toStringAsFixed(6);
-  }
+  String _fmt(double v) => v.toStringAsFixed(switch (v) {
+        >= 1000 => 2,
+        >= 1 => 4,
+        _ => 6,
+      });
 }
 
 // ─── Reusable numeric text field ─────────────────────────────────────────

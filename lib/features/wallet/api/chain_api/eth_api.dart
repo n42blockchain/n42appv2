@@ -18,32 +18,41 @@ class EthAPI {
   EthAPI();
   EthAPI.init(this.cType, this.rpc, this.api);
 
-  /// 获取余额（native 或 ERC-20 合约）
-  Future<MessageModel> getBalance(String address, String contract, {bool isTest = false, String? coinType}) async {
-    final coin = coinType ?? cType;
-    final Result<dynamic, AppError> result;
-    if (contract == '') {
-      result = await baseRPCEth('eth_getBalance', [address, 'latest'], coinType: coin, isTest: isTest);
-    } else {
-      final addr = strip0x(address);
-      result = await baseRPCEth(
-        'eth_call',
-        [{'from': address, 'to': contract, 'data': '0x70a08231000000000000000000000000$addr'}, 'latest'],
-        coinType: coin,
-        isTest: isTest,
-      );
-    }
+  /// Resolve coinType with fallback to instance cType.
+  String? _coin(String? coinType) => coinType ?? cType;
+
+  /// Execute RPC call and parse hex result to BigInt on success.
+  Future<MessageModel> _rpcWithHexParse(
+    String method,
+    dynamic params, {
+    String? coinType,
+    bool isTest = false,
+    bool enableRetry = true,
+  }) async {
+    final result = await baseRPCEth(method, params, coinType: _coin(coinType), isTest: isTest, enableRetry: enableRetry);
     final mm = resultToMessageModel(result);
     if (mm.error == false) mm.data = hexToInt(mm.data);
     return mm;
   }
 
+  /// 获取余额（native 或 ERC-20 合约）
+  Future<MessageModel> getBalance(String address, String contract, {bool isTest = false, String? coinType}) async {
+    final coin = _coin(coinType);
+    if (contract.isEmpty) {
+      return _rpcWithHexParse('eth_getBalance', [address, 'latest'], coinType: coin, isTest: isTest);
+    }
+    final addr = strip0x(address);
+    return _rpcWithHexParse(
+      'eth_call',
+      [{'from': address, 'to': contract, 'data': '0x70a08231000000000000000000000000$addr'}, 'latest'],
+      coinType: coin,
+      isTest: isTest,
+    );
+  }
+
   /// 获取 gasPrice
   Future<MessageModel> getGasPrice({bool isTest = false, String? coinType}) async {
-    final result = await baseRPCEth('eth_gasPrice', [], coinType: coinType ?? cType, isTest: isTest);
-    final mm = resultToMessageModel(result);
-    if (mm.error == false) mm.data = hexToInt(mm.data);
-    return mm;
+    return _rpcWithHexParse('eth_gasPrice', [], coinType: coinType, isTest: isTest);
   }
 
   /// 估算 gas limit
@@ -59,19 +68,20 @@ class EthAPI {
     bool isTest = false,
     bool addLatest = true,
   }) async {
-    final coin = coinType ?? cType;
+    final coin = _coin(coinType);
     final gasPriceHex = '0x${gasPrice.toRadixString(16)}';
     final gasPriceKey = get1559WithChainSymbol(coin ?? '') ? 'maxFeePerGas' : 'gasPrice';
+    final gasHex = '0x${gas.toRadixString(16)}';
 
     final Map<String, dynamic> params;
-    if (contract == '') {
+    if (contract.isEmpty) {
       params = {
         'from': from,
         'to': to,
-        'gas': '0x${gas.toRadixString(16)}',
+        'gas': gasHex,
         'value': '0x${value.toRadixString(16)}',
         gasPriceKey: gasPriceHex,
-        if (data != '') 'data': data,
+        if (data.isNotEmpty) 'data': data,
       };
     } else {
       final toAddress = strip0x(to);
@@ -80,72 +90,58 @@ class EthAPI {
       params = {
         'from': from,
         'to': contract,
-        'gas': '0x${gas.toRadixString(16)}',
+        'gas': gasHex,
         'data': '0x${selector}000000000000000000000000$toAddress$valueHex',
         'id': AppGlobals.nextId,
         gasPriceKey: gasPriceHex,
       };
     }
 
-    final result = await baseRPCEth('eth_estimateGas', [params, 'latest'], coinType: coin, isTest: isTest);
-    final mm = resultToMessageModel(result);
-    if (mm.error == false) mm.data = hexToInt(mm.data);
-    return mm;
+    return _rpcWithHexParse('eth_estimateGas', [params, 'latest'], coinType: coin, isTest: isTest);
   }
 
   Future<MessageModel> getGasLimitByMap(Map<String, dynamic> map, {String? coinType, bool isTest = false, bool addLatest = true}) async {
     final param = addLatest ? [map, 'latest'] : [map];
-    final result = await baseRPCEth('eth_estimateGas', param, coinType: coinType ?? cType, isTest: isTest);
-    final mm = resultToMessageModel(result);
-    if (mm.error == false) mm.data = hexToInt(mm.data);
-    return mm;
+    return _rpcWithHexParse('eth_estimateGas', param, coinType: coinType, isTest: isTest);
   }
 
   /// 获取交易收据
   Future<MessageModel> getTransactionReceipt(String txHash, {String? coinType, bool isTest = false}) async {
     return resultToMessageModel(
-      await baseRPCEth('eth_getTransactionReceipt', [txHash], coinType: coinType ?? cType, isTest: isTest),
+      await baseRPCEth('eth_getTransactionReceipt', [txHash], coinType: _coin(coinType), isTest: isTest),
     );
   }
 
   /// 获取交易信息
   Future<MessageModel> getTransactionByHash(String txHash, {String? coinType, bool isTest = false}) async {
     return resultToMessageModel(
-      await baseRPCEth('eth_getTransactionByHash', [txHash], coinType: coinType ?? cType, isTest: isTest),
+      await baseRPCEth('eth_getTransactionByHash', [txHash], coinType: _coin(coinType), isTest: isTest),
     );
   }
 
   /// 获取 nonce 值
   Future<MessageModel> getTransactionCount(String address, {String? coinType, bool isTest = false}) async {
-    final result = await baseRPCEth('eth_getTransactionCount', [address, 'latest'], coinType: coinType ?? cType, isTest: isTest);
-    final mm = resultToMessageModel(result);
-    if (mm.error == false) mm.data = hexToInt(mm.data);
-    return mm;
+    return _rpcWithHexParse('eth_getTransactionCount', [address, 'latest'], coinType: coinType, isTest: isTest);
   }
 
   /// 发送交易，返回交易 hash（明确禁用重试，防止双发）
   Future<MessageModel> sendTransaction(String value, {String? coinType, bool isTest = false}) async {
     return resultToMessageModel(
-      await baseRPCEth('eth_sendRawTransaction', [value], coinType: coinType ?? cType, isTest: isTest, enableRetry: false),
+      await baseRPCEth('eth_sendRawTransaction', [value], coinType: _coin(coinType), isTest: isTest, enableRetry: false),
     );
   }
 
   /// Raw eth_call，用于 AA 操作（如从 EntryPoint 获取 nonce）
   Future<MessageModel> ethCallRaw(String to, String data, {String? coinType, bool isTest = false}) async {
     return resultToMessageModel(
-      await baseRPCEth(
-        'eth_call',
-        [{'to': to, 'data': data}, 'latest'],
-        coinType: coinType ?? cType,
-        isTest: isTest,
-      ),
+      await baseRPCEth('eth_call', [{'to': to, 'data': data}, 'latest'], coinType: _coin(coinType), isTest: isTest),
     );
   }
 
   /// 获取合约代码（用于检查智能账户是否已部署）
   Future<MessageModel> getCode(String address, {String? coinType, bool isTest = false}) async {
     return resultToMessageModel(
-      await baseRPCEth('eth_getCode', [address, 'latest'], coinType: coinType ?? cType, isTest: isTest),
+      await baseRPCEth('eth_getCode', [address, 'latest'], coinType: _coin(coinType), isTest: isTest),
     );
   }
 
@@ -271,10 +267,11 @@ class EthAPI {
     int offset = 10,
   }) async {
     try {
-      final action = contractAddress == '' ? 'txlist' : 'tokentx';
+      final hasContract = contractAddress.isNotEmpty;
+      final action = hasContract ? 'tokentx' : 'txlist';
       final params = <String, dynamic>{
         'address': address, 'action': action, 'module': 'account', 'page': page, 'offset': offset,
-        if (contractAddress != '') 'contractaddress': contractAddress,
+        if (hasContract) 'contractaddress': contractAddress,
       };
       final apiUrl = coinType == null ? (api ?? '') : RequestUrl().getUrl2(coinType, 'api', isTest: isTest);
       final data = await BaseApi.requestEmptyH.get(apiUrl, params: params);

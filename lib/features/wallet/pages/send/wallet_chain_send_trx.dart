@@ -68,15 +68,6 @@ class _WalletChainSendTrxState extends ConsumerState<WalletChainSendTrx>
   Widget coinTypeWidget() {
     return Column(
       children: [
-        /*
-        WalletChainInfoTitle(
-          title: Text(
-            "${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}",
-            ...
-          ),
-          ...
-        ),
-        */
         RecentAddressBar(
           coinType: widget.coinModel.coin['coinType'] ?? '',
           onSelected: (addr) {
@@ -96,20 +87,13 @@ class _WalletChainSendTrxState extends ConsumerState<WalletChainSendTrx>
 
   Widget errorMessageWidget() {
     if (errorMessage == "") return const SizedBox();
+    final sw = ScreenUtil().setWidth;
     return Container(
-      margin: EdgeInsets.only(
-        top: ScreenUtil().setWidth(20.0),
-        left: ScreenUtil().setWidth(30),
-        right: ScreenUtil().setWidth(30),
-      ),
-      padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(30.0),
-      ),
+      margin: EdgeInsets.only(top: sw(20.0), left: sw(30), right: sw(30)),
+      padding: EdgeInsets.symmetric(horizontal: sw(30.0), vertical: sw(30.0)),
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
+        borderRadius: BorderRadius.all(Radius.circular(sw(16.0))),
         color: AppThemeUtils.getColorByKey(
             context, AppThemeKeys.errorBgColor2.name),
       ),
@@ -124,29 +108,27 @@ class _WalletChainSendTrxState extends ConsumerState<WalletChainSendTrx>
     );
   }
 
-  // 提交按钮
   Widget sendButtonWidget() {
-    final String title = S.of(context).g_key_48;
-    final bool isLoading = load == Load.loading;
-
+    final isLoading = load == Load.loading;
+    final sw = ScreenUtil().setWidth;
     return Positioned(
       left: 0,
       right: 0,
       bottom: 0,
       child: Column(
         children: [
-          Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
+          Divider(height: sw(1), indent: 0, endIndent: 0),
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
-            height: ScreenUtil().setWidth(148.0),
+            padding: EdgeInsets.all(sw(30.0)),
+            height: sw(148.0),
             color: AppThemeUtils.getColorByKey(
                 context, AppThemeKeys.backGroundColor.name),
             child: buttonStyle6(
               context,
-              () async {
-                sendTransaction();
-              },
-              isLoading ? '${S.of(context).g_key_106}...' : title,
+              sendTransaction,
+              isLoading
+                  ? '${S.of(context).g_key_106}...'
+                  : S.of(context).g_key_48,
               AppThemeUtils.getColorByKey(
                 context,
                 isLoading
@@ -164,66 +146,47 @@ class _WalletChainSendTrxState extends ConsumerState<WalletChainSendTrx>
   }
 
   void faceMatchTypeWidget() {
-    final Widget child = Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        InkWell(
-          onTap: () async {
-            final String? address = await Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => FaceMatch(1)),
-            );
-            if (!mounted) return;
-            if (address != null) {
-              toTextEditingController.text = address;
-              toAddressCheck(address);
-            }
-            Navigator.pop(context);
-          },
-          child: SizedBox(
-            height: ScreenUtil().setWidth(88.0),
-            width: double.infinity,
-            child: Text(
-              S.of(context).photograph,
-              style: TextStyle(
-                fontSize: ScreenUtil().setWidth(32.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-        InkWell(
-          onTap: () async {
-            final String? address = await Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => FaceMatch(2)),
-            );
-            if (!mounted) return;
-            if (address != null) {
-              toTextEditingController.text = address;
-              toAddressCheck(address);
-            }
-            Navigator.pop(context);
-          },
-          child: SizedBox(
-            height: ScreenUtil().setWidth(88.0),
-            width: double.infinity,
-            child: Text(
-              S.of(context).g_key_nft_16,
-              style: TextStyle(
-                fontSize: ScreenUtil().setWidth(32.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-      ],
+    sheetBottom(
+      context,
+      S.of(context).g_face_match_key1,
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          _faceMatchOption(1, S.of(context).photograph),
+          _faceMatchOption(2, S.of(context).g_key_nft_16),
+        ],
+      ),
     );
-    sheetBottom(context, S.of(context).g_face_match_key1, child);
+  }
+
+  Widget _faceMatchOption(int mode, String label) {
+    return InkWell(
+      onTap: () async {
+        final address = await Navigator.push<String>(
+          context,
+          MaterialPageRoute(builder: (_) => FaceMatch(mode)),
+        );
+        if (!mounted) return;
+        if (address != null) {
+          toTextEditingController.text = address;
+          toAddressCheck(address);
+        }
+        Navigator.pop(context);
+      },
+      child: SizedBox(
+        height: ScreenUtil().setWidth(88.0),
+        width: double.infinity,
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: ScreenUtil().setWidth(32.0),
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.mainTextColor.name),
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
   }
 
   @override
@@ -232,33 +195,6 @@ class _WalletChainSendTrxState extends ConsumerState<WalletChainSendTrx>
       appBar: AppBarWidget(
         text:
             "${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}",
-        /*actions: [
-          InkWell(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) => AddressBookList(
-                    coinName: widget.coinModel.coin['coinType']),
-              )).then((value) async {
-                if (value != null) {
-                  toTextEditingController.text = value;
-                }
-              });
-            },
-            child: Container(
-              width: ScreenUtil().setWidth(40.0),
-              height: ScreenUtil().setWidth(40.0),
-              margin: EdgeInsets.only(
-                right: ScreenUtil().setWidth(30.0),
-                left: ScreenUtil().setWidth(20.0),
-              ),
-              child: Image.asset(
-                'assets/wallet/addressBook.png',
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-              ),
-            ),
-          ),
-        ],*/
       ),
       body: SafeArea(
         child: GestureDetector(

@@ -36,22 +36,15 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
 
   String _categoryLabel(DAppCategory cat) {
     final s = S.of(context);
-    switch (cat.key) {
-      case 'popular':
-        return s.g_browser_key25;
-      case 'dex':
-        return s.g_browser_key26;
-      case 'defi':
-        return s.g_browser_key27;
-      case 'nft':
-        return s.g_browser_key28;
-      case 'bridge':
-        return s.g_browser_key29;
-      case 'tools':
-        return s.g_browser_key30;
-      default:
-        return cat.labelEn;
-    }
+    return switch (cat.key) {
+      'popular' => s.g_browser_key25,
+      'dex'     => s.g_browser_key26,
+      'defi'    => s.g_browser_key27,
+      'nft'     => s.g_browser_key28,
+      'bridge'  => s.g_browser_key29,
+      'tools'   => s.g_browser_key30,
+      _         => cat.labelEn,
+    };
   }
 
   @override
@@ -70,6 +63,10 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
   }
 
   Widget _buildTabBar() {
+    final blueColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name);
+    final tabFontSize = ScreenUtil().setSp(28);
+
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -84,25 +81,23 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
         controller: _tabController,
         isScrollable: true,
         tabAlignment: TabAlignment.start,
-        labelColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainBlueColor.name),
+        labelColor: blueColor,
         unselectedLabelColor: AppThemeUtils.getColorByKey(
             context, AppThemeKeys.itemSubtitleTextColor.name),
         labelStyle: TextStyle(
-          fontSize: ScreenUtil().setSp(28),
+          fontSize: tabFontSize,
           fontWeight: FontWeight.w600,
         ),
         unselectedLabelStyle: TextStyle(
-          fontSize: ScreenUtil().setSp(28),
+          fontSize: tabFontSize,
           fontWeight: FontWeight.normal,
         ),
-        indicatorColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainBlueColor.name),
+        indicatorColor: blueColor,
         indicatorWeight: 2,
         dividerHeight: 0,
-        tabs: DAppCategory.all.map((cat) {
-          return Tab(text: _categoryLabel(cat));
-        }).toList(),
+        tabs: DAppCategory.all
+            .map((cat) => Tab(text: _categoryLabel(cat)))
+            .toList(),
       ),
     );
   }
@@ -143,14 +138,14 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
 
   Widget _buildDAppItem(RecommendedDApp dapp) {
     final host = Uri.tryParse(dapp.url)?.host ?? dapp.url;
-    // First letter as avatar
     final letter = dapp.name.isNotEmpty ? dapp.name[0].toUpperCase() : '?';
+    final subtitleColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final radius = ScreenUtil().setWidth(20);
 
     return InkWell(
-      onTap: () {
-        Navigator.pop(context, dapp.url);
-      },
-      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+      onTap: () => Navigator.pop(context, dapp.url),
+      borderRadius: BorderRadius.circular(radius),
       child: Container(
         margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8)),
         padding: EdgeInsets.symmetric(
@@ -158,84 +153,87 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
           vertical: ScreenUtil().setWidth(20),
         ),
         decoration: BoxDecoration(
-          borderRadius:
-              BorderRadius.circular(ScreenUtil().setWidth(20)),
+          borderRadius: BorderRadius.circular(radius),
           color: AppThemeUtils.getColorByKey(
               context, AppThemeKeys.itemBgColor.name),
         ),
         child: Row(
           children: [
-            // DApp icon placeholder (first letter)
-            Container(
-              width: ScreenUtil().setWidth(80),
-              height: ScreenUtil().setWidth(80),
-              decoration: BoxDecoration(
-                color: _colorForLetter(letter),
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(16)),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                letter,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32),
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+            _buildAvatar(letter),
             SizedBox(width: ScreenUtil().setWidth(20)),
-            // DApp info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  _singleLineText(
                     dapp.name,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(30),
-                      fontWeight: FontWeight.w600,
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    fontSize: ScreenUtil().setSp(30),
+                    fontWeight: FontWeight.w600,
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.mainTextColor.name),
                   ),
                   SizedBox(height: ScreenUtil().setWidth(4)),
-                  Text(
+                  _singleLineText(
                     dapp.description,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemSubtitleTextColor.name),
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    fontSize: ScreenUtil().setSp(24),
+                    color: subtitleColor,
                   ),
                   SizedBox(height: ScreenUtil().setWidth(4)),
-                  Text(
+                  _singleLineText(
                     host,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.ff888888.name),
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    fontSize: ScreenUtil().setSp(22),
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.ff888888.name),
                   ),
                 ],
               ),
             ),
-            // Arrow
             Icon(
               Icons.chevron_right,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: subtitleColor,
               size: ScreenUtil().setWidth(40),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildAvatar(String letter) {
+    return Container(
+      width: ScreenUtil().setWidth(80),
+      height: ScreenUtil().setWidth(80),
+      decoration: BoxDecoration(
+        color: _colorForLetter(letter),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+      ),
+      alignment: Alignment.center,
+      child: Text(
+        letter,
+        style: TextStyle(
+          fontSize: ScreenUtil().setSp(32),
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
+  Widget _singleLineText(
+    String text, {
+    required double fontSize,
+    required Color color,
+    FontWeight? fontWeight,
+  }) {
+    return Text(
+      text,
+      style: TextStyle(
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        color: color,
+      ),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
     );
   }
 

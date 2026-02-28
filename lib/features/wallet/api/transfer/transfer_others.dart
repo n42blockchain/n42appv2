@@ -6,57 +6,92 @@ part of '../transfer_api.dart';
 /// transferXrp, transferXrpSend, transferFilSend, transferZilSend,
 /// getBalanceAlgo, getBalanceXtz, getBalanceXrp
 mixin _TransferOthersMixin on _TransferBaseMixin {
+
+  /// Common balance + gas validation for non-EVM transfers.
+  /// Returns `(adjustedValue, valuePrice, totalGasPrice)` on success,
+  /// or a [MessageModel] error.
+  Future<Object> _validateBalanceAndGas({
+    required String coinSymbol,
+    required String fromAddress,
+    required Future<MessageModel> Function(String) getBalance,
+    required String blockchainName,
+    required BigInt Function(dynamic gasPriceData) extractGasPrice,
+    required double value,
+    required int decimals,
+    required bool maxValue,
+  }) async {
+    // 获取余额
+    final mmchain = await getBalance(fromAddress);
+    if (mmchain.error == true) return mmchain;
+    final BigInt chainBalance = mmchain.data;
+    if (chainBalance == BigInt.zero) {
+      return MessageModel.error()..data = S.current.g_key_wallet_m5(coinSymbol);
+    }
+
+    // 获取 gas 费
+    final mmg = await tokenViewApi.getGasPrice(
+        blockchainName, coinSymbol, isTest: false) ?? MessageModel.error();
+    if (mmg.error == true) return mmg;
+    final BigInt gasPrice = extractGasPrice(mmg.data);
+
+    // 计算总 gas 费用
+    final int gas = getCoinGas(coinSymbol, contract: false);
+    final BigInt totalGasPrice = gasPrice * BigInt.from(gas);
+    BigInt valuePrice = ethToWeiString(value.toString(), decimals);
+    double adjustedValue = value;
+
+    if (valuePrice == chainBalance && maxValue) {
+      valuePrice = valuePrice - totalGasPrice;
+      adjustedValue = toEther(valuePrice.toString(), decimals).toDouble();
+    }
+    if (totalGasPrice + valuePrice > chainBalance) {
+      return MessageModel.error()..data = S.current.g_key_wallet_m5(coinSymbol);
+    }
+
+    return (adjustedValue, valuePrice, totalGasPrice);
+  }
+
+  /// Wrap a send result with txHash + value on success.
+  MessageModel _wrapSendResult(MessageModel rmm, double value) {
+    if (rmm.error == false) {
+      rmm.data = {"txHash": rmm.data, "value": value};
+    }
+    return rmm;
+  }
+
+  /// Return a sign-failure [MessageModel].
+  MessageModel _signFailureError() =>
+      MessageModel.error()..data = S.current.g_key_wallet_m6;
+
+  /// Check context validity before signing.
+  MessageModel? _checkContextMounted() {
+    if (!AppGlobals.appContext.mounted) {
+      return MessageModel.error()..data = 'Context is no longer valid';
+    }
+    return null;
+  }
+
   //Algorand转账
   Future<MessageModel> transferAlgo( String fromAddress,
       String toAddress, double value, int decimals, String path,{bool maxValue=true}) async {
-    //获取每个byte 消耗多少gas
-    int gas = getCoinGas("ALGO", contract: false);
-    //获取余额
-    BigInt chainBalance = BigInt.zero;
-    MessageModel mmchain = await getBalanceAlgo(fromAddress);
-    if (mmchain.error == true) {
-      return mmchain;
-    } else {
-      chainBalance = mmchain.data;
-    }
-    if (chainBalance == BigInt.zero) {
-      MessageModel mme = MessageModel.error();
-      mme.data = S.current.g_key_wallet_m5("ALGO");
-      return mme;
-    }
-    //获取gas 费
-    BigInt gasPrice = BigInt.zero; //当前旷工费
-    MessageModel mmg = await tokenViewApi.getGasPrice(
-        BlockchainType.Algorand.name, "ALGO",
-        isTest: false) ?? MessageModel.error();
-    if (mmg.error == true) {
-      return mmg;
-    } else {
-      gasPrice =BigInt.from(mmg.data['min-fee']);
-    }
-    //gas费消耗最大数
-    BigInt totalGasPrice = gasPrice * BigInt.from(gas);
-    BigInt valuePrice =  ethToWeiString(value.toString(), decimals);
-    if(valuePrice==chainBalance && maxValue){
-      valuePrice=valuePrice-totalGasPrice;
-      value=toEther(valuePrice.toString(),decimals).toDouble();
-    }
-    if (totalGasPrice + valuePrice > chainBalance) {
-      MessageModel mme = MessageModel.error();
-      mme.data = S.current.g_key_wallet_m5("ALGO");
-      return mme;
-    }
-    MessageModel rmm=await transferAlgoSend(
+    final result = await _validateBalanceAndGas(
+      coinSymbol: "ALGO",
+      fromAddress: fromAddress,
+      getBalance: getBalanceAlgo,
+      blockchainName: BlockchainType.Algorand.name,
+      extractGasPrice: (data) => BigInt.from(data['min-fee']),
+      value: value,
+      decimals: decimals,
+      maxValue: maxValue,
+    );
+    if (result is MessageModel) return result;
+    final (adjustedValue, valuePrice, _) = result as (double, BigInt, BigInt);
+
+    final rmm = await transferAlgoSend(
       fromAddress, toAddress,
       valuePrice.toString(), path,
     );
-    if(rmm.error==false){
-      rmm.data={
-        "txHash":rmm.data,
-        "value": value,
-      };
-    }
-    return rmm;
+    return _wrapSendResult(rmm, adjustedValue);
   }
   Future<MessageModel> transferAlgoSend(String fromAddress, String toAddress,
       String value, String path,{String contractAddress="",String isTest="main",String? privateKey,String type="ALGO"})async{
@@ -68,20 +103,16 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
     };
     AlgoApi algoApi=AlgoApi();
     MessageModel mminfo=await algoApi.getTransactionsParams(isTest: isTest=="main"?false:true);
-    if(mminfo.error){
-      return mminfo;
-    }else{
-      txData['fee']=mminfo.data['min-fee'];
-      txData['genesisId']=mminfo.data['genesis-id'];
-      txData['genesisHash']=mminfo.data['genesis-hash'];
-      txData['round']=mminfo.data['last-round'];
-    }
+    if(mminfo.error) return mminfo;
+    txData['fee']=mminfo.data['min-fee'];
+    txData['genesisId']=mminfo.data['genesis-id'];
+    txData['genesisHash']=mminfo.data['genesis-hash'];
+    txData['round']=mminfo.data['last-round'];
 
     Map<dynamic,dynamic> rValue;
     if(privateKey !=null){
-      if (!AppGlobals.appContext.mounted) {
-        return MessageModel.error()..data = 'Context is no longer valid';
-      }
+      final ctxError = _checkContextMounted();
+      if (ctxError != null) return ctxError;
       rValue = await trustdart.signTransactionByteArray(
         CoinType.ALGO.name,
         path,
@@ -91,68 +122,32 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
     }else{
       rValue = await trustdart.signTransactionByteArray(CoinType.ALGO.name, path, txData,  pk:privateKey!,);
     }
-    Uint8List signStr;
-    if(rValue['result']==true){
-      signStr=hexToBytes(rValue['signHash']);
-    }else{
-      MessageModel rmm = MessageModel.error();
-      rmm.data = S.current.g_key_wallet_m6;
-      return rmm;
-    }
+    if(rValue['result']!=true) return _signFailureError();
+    final Uint8List signStr=hexToBytes(rValue['signHash']);
     return await tokenViewApi.sendTx(BlockchainType.Algorand.name,"ALGO" , signStr,netMode: isTest) ?? MessageModel.error();
   }
 
   //Tezos转账
   Future<MessageModel> transferXtz( String fromAddress,
       String toAddress, double value, int decimals, String path,{bool maxValue=true}) async {
-    //获取每个byte 消耗多少gas
-    int gas = getCoinGas("XTZ", contract: false);
-    //获取余额
-    BigInt chainBalance = BigInt.zero;
-    MessageModel mmchain = await getBalanceXtz(fromAddress);
-    if (mmchain.error == true) {
-      return mmchain;
-    } else {
-      chainBalance = mmchain.data;
-    }
-    if (chainBalance == BigInt.zero) {
-      MessageModel mme = MessageModel.error();
-      mme.data = S.current.g_key_wallet_m5("XTZ");
-      return mme;
-    }
-    //获取gas 费
-    BigInt gasPrice = BigInt.zero; //当前旷工费
-    MessageModel mmg = await tokenViewApi.getGasPrice(
-        BlockchainType.Algorand.name, "XTZ",
-        isTest: false) ?? MessageModel.error();
-    if (mmg.error == true) {
-      return mmg;
-    } else {
-      gasPrice=mmg.data;
-    }
-    //gas费消耗最大数
-    BigInt totalGasPrice = gasPrice * BigInt.from(gas);
-    BigInt valuePrice =  ethToWeiString(value.toString(), decimals);
-    if(valuePrice==chainBalance && maxValue){
-      valuePrice=valuePrice-totalGasPrice;
-      value=toEther(valuePrice.toString(),decimals).toDouble();
-    }
-    if (totalGasPrice + valuePrice > chainBalance) {
-      MessageModel mme = MessageModel.error();
-      mme.data = S.current.g_key_wallet_m5("XTZ");
-      return mme;
-    }
-    MessageModel rmm=await transferXtzSend(
+    final result = await _validateBalanceAndGas(
+      coinSymbol: "XTZ",
+      fromAddress: fromAddress,
+      getBalance: getBalanceXtz,
+      blockchainName: BlockchainType.Algorand.name,
+      extractGasPrice: (data) => data as BigInt,
+      value: value,
+      decimals: decimals,
+      maxValue: maxValue,
+    );
+    if (result is MessageModel) return result;
+    final (adjustedValue, valuePrice, _) = result as (double, BigInt, BigInt);
+
+    final rmm = await transferXtzSend(
       fromAddress, toAddress,
       valuePrice.toInt(), path,
     );
-    if(rmm.error==false){
-      rmm.data={
-        "txHash":rmm.data,
-        "value": value,
-      };
-    }
-    return rmm;
+    return _wrapSendResult(rmm, adjustedValue);
   }
   Future<MessageModel> transferXtzSend(String fromAddress, String toAddress,
       int value, String path,{bool isTest=false,String? privateKey})async{
@@ -163,31 +158,23 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
       "counter":10,
       "gasLimit":1101,
       "storageLimit":257,
-      "reveal":true,//是否揭露
+      "reveal":true,
     };
     XtzApi xtzApi=XtzApi();
     MessageModel mmCounter=await xtzApi.getCounterXtz(fromAddress,isTest);
-    if(mmCounter.error){
-      return mmCounter;
-    }else{
-      signMap['counter']=int.parse(mmCounter.data.toString())+1;
-    }
+    if(mmCounter.error) return mmCounter;
+    signMap['counter']=int.parse(mmCounter.data.toString())+1;
+
     MessageModel mmBranch=await xtzApi.getBranchXgz(isTest);
-    if(mmBranch.error){
-      return mmBranch;
-    }else{
-      signMap['branch']=mmBranch.data.toString();
-    }
+    if(mmBranch.error) return mmBranch;
+    signMap['branch']=mmBranch.data.toString();
 
     MessageModel mmReveal=await xtzApi.getBalanceXtz(fromAddress,"","revealed",isTest);
-    if(mmReveal.error){
-      return mmReveal;
-    }else{
-      signMap['reveal']=mmReveal.data;
-    }
-    if (!AppGlobals.appContext.mounted) {
-      return MessageModel.error()..data = 'Context is no longer valid';
-    }
+    if(mmReveal.error) return mmReveal;
+    signMap['reveal']=mmReveal.data;
+
+    final ctxError = _checkContextMounted();
+    if (ctxError != null) return ctxError;
     WalletInfo wi = globalWapAdapter.walletInfo;
     String signStr=await trustdart.signTransaction(
       CoinType.XTZ.name,
@@ -196,12 +183,7 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
       mnemonic: wi.mnemonic??"",
       pk: wi.privateKey??"",
     );
-    if(signStr==""){
-      MessageModel rmm=MessageModel.error();
-      rmm.data=S.current.g_key_wallet_m6;
-      return rmm;
-    }
-    // Validate signature before broadcast
+    if(signStr=="") return _signFailureError();
     final xtzValidationError = validateSignature(signStr, CoinType.XTZ.name);
     if (xtzValidationError != null) return xtzValidationError;
     return await xtzApi.sendTxXtz(signStr,isTest);
@@ -209,78 +191,38 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
   //Ripple转账
   Future<MessageModel> transferXrp( String fromAddress,
       String toAddress, double value, int decimals, String path,{bool maxValue=true}) async {
-    //目标地址 是否创建了账号
-    bool isCreate=false;
+    // 检查目标地址是否已激活
     XrpApi xrpApi=XrpApi();
     MessageModel mm=await xrpApi.getAccountInfoXrp(toAddress, false);
     if(mm.error){
-      MessageModel rmm=MessageModel.error();
-      rmm.data=S.current.g_key_t_45(toAddress);
-      return rmm;
-    }else{
-      if(mm.data['validated']){
-        isCreate=true;
-      }
+      return MessageModel.error()..data=S.current.g_key_t_45(toAddress);
     }
-    if(isCreate==false){
-      if(value<10){
-        MessageModel rmm=MessageModel.error();
-        rmm.data=S.current.g_key_t_54;
-        return rmm;
-      }
+    final bool isCreate = mm.data['validated'] == true;
+    if(!isCreate && value<10){
+      return MessageModel.error()..data=S.current.g_key_t_54;
     }
 
-    //获取每个byte 消耗多少gas
-    int gas = getCoinGas("XRP", contract: false);
-    //获取余额
-    BigInt chainBalance = BigInt.zero;
-    MessageModel mmchain = await getBalanceXtz(fromAddress);
-    if (mmchain.error == true) {
-      return mmchain;
-    } else {
-      chainBalance = mmchain.data;
-    }
-    if (chainBalance == BigInt.zero) {
-      MessageModel mme = MessageModel.error();
-      mme.data = S.current.g_key_wallet_m5("XRP");
-      return mme;
-    }
-    //获取gas 费
-    BigInt gasPrice = BigInt.zero; //当前旷工费
-    MessageModel mmg = await tokenViewApi.getGasPrice(
-        BlockchainType.Algorand.name, "XRP",
-        isTest: false) ?? MessageModel.error();
-    if (mmg.error == true) {
-      return mmg;
-    } else {
-      gasPrice=mmg.data;
-    }
-    //gas费消耗最大数
-    BigInt totalGasPrice = gasPrice * BigInt.from(gas);
-    BigInt valuePrice =  ethToWeiString(value.toString(), decimals);
-    if(valuePrice==chainBalance && maxValue){
-      valuePrice=valuePrice-totalGasPrice;
-      value=toEther(valuePrice.toString(),decimals).toDouble();
-    }
-    if (totalGasPrice + valuePrice > chainBalance) {
-      MessageModel mme = MessageModel.error();
-      mme.data = S.current.g_key_wallet_m5("XRP");
-      return mme;
-    }
-    MessageModel rmm=await transferXrpSend(
+    final result = await _validateBalanceAndGas(
+      coinSymbol: "XRP",
+      fromAddress: fromAddress,
+      getBalance: getBalanceXtz,
+      blockchainName: BlockchainType.Algorand.name,
+      extractGasPrice: (data) => data as BigInt,
+      value: value,
+      decimals: decimals,
+      maxValue: maxValue,
+    );
+    if (result is MessageModel) return result;
+    final (adjustedValue, valuePrice, totalGasPrice) = result as (double, BigInt, BigInt);
+
+    final rmm = await transferXrpSend(
       fromAddress, toAddress,
       valuePrice,
       totalGasPrice,
       path,
       0,
     );
-    if(rmm.error==false){
-      rmm.data={
-        "txHash":rmm.data,
-        "value": value,
-      };
-    }
-    return rmm;
+    return _wrapSendResult(rmm, adjustedValue);
   }
   Future<MessageModel> transferXrpSend(String fromAddress, String toAddress,
       BigInt value,BigInt totalGasPrice, String path,int sequence,{bool isTest=false,String? privateKey,int? destinationTag})async{
@@ -292,38 +234,24 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
       "fee":totalGasPrice.toString(),
       "txType":"XRP",
       "issuer":"",
-      "currency":""
+      "currency":"",
+      if (destinationTag != null) "destinationTag": destinationTag,
     };
-    if (destinationTag != null) {
-      signMap['destinationTag'] = destinationTag;
-    }
     XrpApi xrpApi=XrpApi();
     if(sequence==0){
       MessageModel mmSequence=await xrpApi.getAccountInfoXrp(fromAddress,isTest);
-      if(mmSequence.error){
-        return mmSequence;
-      }else{
-        signMap['sequence']=mmSequence.data['sequence'];
-      }
+      if(mmSequence.error) return mmSequence;
+      signMap['sequence']=mmSequence.data['sequence'];
     }
     MessageModel mmLedgerIndex=await xrpApi.getLedgerXrp(isTest: isTest);
-    if(mmLedgerIndex.error){
-      return mmLedgerIndex;
-    }else{
-      signMap['ledgerIndex']=mmLedgerIndex.data;
-    }
-    if (!AppGlobals.appContext.mounted) {
-      return MessageModel.error()..data = 'Context is no longer valid';
-    }
+    if(mmLedgerIndex.error) return mmLedgerIndex;
+    signMap['ledgerIndex']=mmLedgerIndex.data;
+
+    final ctxError = _checkContextMounted();
+    if (ctxError != null) return ctxError;
     WalletInfo wi = globalWapAdapter.walletInfo;
     String signStr=await trustdart.signTransaction(CoinType.XRP.name, path, signMap,mnemonic: wi.mnemonic??"",pk: wi.privateKey??"",);
-
-    if(signStr==""){
-      MessageModel rmm=MessageModel.error();
-      rmm.data=S.current.g_key_wallet_m6;
-      return rmm;
-    }
-    // Validate signature before broadcast
+    if(signStr=="") return _signFailureError();
     final xrpValidationError = validateSignature(signStr, CoinType.XRP.name);
     if (xrpValidationError != null) return xrpValidationError;
     return await xrpApi.sendTxXrp(signStr,isTest);
@@ -340,38 +268,27 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
       String gasFeeCap,
       String gasPremium,{bool isTest=false,String? privateKey})async{
     Map<String,dynamic> signMap={
-      "amount":dataUtils.bigIntToHex(value, need0x: false),//value.toString(),
+      "amount":dataUtils.bigIntToHex(value, need0x: false),
       "toAddress":toAddress,
       "nonce":nonce,
       "gasLimit":gasLimit,
-      "gasFeeCap":dataUtils.bigIntToHex(BigInt.parse(gasFeeCap),need0x:false),//gasFeeCap,
-      "gasPremium":dataUtils.bigIntToHex(BigInt.parse(gasPremium),need0x:false),//gasPremium
+      "gasFeeCap":dataUtils.bigIntToHex(BigInt.parse(gasFeeCap),need0x:false),
+      "gasPremium":dataUtils.bigIntToHex(BigInt.parse(gasPremium),need0x:false),
     };
     String signStr;
-    //从keystore中取出助记词
     if(privateKey ==null){
-      if (!AppGlobals.appContext.mounted) {
-        return MessageModel.error()..data = 'Context is no longer valid';
-      }
+      final ctxError = _checkContextMounted();
+      if (ctxError != null) return ctxError;
       signStr = await trustdart.signTransaction(
-        CoinType.FIL.name,
-        path,
-        signMap,
+        CoinType.FIL.name, path, signMap,
         mnemonic: globalWapAdapter.walletInfo.mnemonic??"",
       );
     }else{
       signStr = await trustdart.signTransaction(CoinType.FIL.name, path, signMap, pk:privateKey,);
     }
-
-    if(signStr==""){
-      MessageModel rmm=MessageModel.error();
-      rmm.data=S.current.g_key_wallet_m6;
-      return rmm;
-    }
-    // Validate signature before broadcast
+    if(signStr=="") return _signFailureError();
     final filValidationError = validateSignature(signStr, CoinType.FIL.name);
     if (filValidationError != null) return filValidationError;
-    //signStr = "0x$signStr";
     FilApi filApi=FilApi();
     return await filApi.sendTx(signStr,isTest:isTest);
   }
@@ -395,36 +312,26 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
   // Zilliqa 转账
   Future<MessageModel> transferZilSend(String fromAddress, String toAddress, BigInt valuePrice, String path, int gas, BigInt gasPrice, String coinType,
       {String contractAddress = "", String isTest = "main", String? privateKey}) async {
-    ZilApi zilApi = ZilApi(isTest: isTest == "main" ? false : true);
+    ZilApi zilApi = ZilApi(isTest: isTest != "main");
 
-    // 获取网络 ID
     MessageModel networkIdMM = await zilApi.getNetworkId();
-    if (networkIdMM.error) {
-      return networkIdMM;
-    }
+    if (networkIdMM.error) return networkIdMM;
 
-    // 获取最新区块信息以获取版本号
     MessageModel latestBlockMM = await zilApi.getLatestTxBlock();
-    if (latestBlockMM.error) {
-      return latestBlockMM;
-    }
+    if (latestBlockMM.error) return latestBlockMM;
     int version = latestBlockMM.data['header']['Version'];
 
-    // 获取账户余额以获取 nonce
     MessageModel balanceMM = await zilApi.getBalance(fromAddress,nonce: true);
     if (balanceMM.error) {
-      // 账户未找到，nonce 为 0
-      if (balanceMM.data.toString().contains('not found') || balanceMM.data.toString().contains('-5')) {
-        // nonce = 0，继续执行
-      } else {
+      final errStr = balanceMM.data.toString();
+      if (!errStr.contains('not found') && !errStr.contains('-5')) {
         return balanceMM;
       }
     }
 
-    // 构建签名数据
     Map<String, dynamic> signMap = {
       "version": version,
-      "nonce": balanceMM.data['nonce']+1, // 需要从账户信息中获取，这里简化处理
+      "nonce": balanceMM.data['nonce']+1,
       "toAddress": toAddress,
       "amount": valuePrice.toString(),
       "gasPrice": gasPrice.toString(),
@@ -433,31 +340,21 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
       "data": "",
     };
 
-    // 签名交易
     String signStr;
     if (privateKey == null) {
-      if (!AppGlobals.appContext.mounted) {
-        return MessageModel.error()..data = 'Context is no longer valid';
-      }
+      final ctxError = _checkContextMounted();
+      if (ctxError != null) return ctxError;
       signStr = await trustdart.signTransaction(
-        coinType,
-        path,
-        signMap,
+        coinType, path, signMap,
         mnemonic: globalWapAdapter.walletInfo.mnemonic ?? "",
       );
     } else {
       signStr = await trustdart.signTransaction(coinType, path, signMap, pk: privateKey);
     }
+    if (signStr == "") return _signFailureError();
 
-    if (signStr == "") {
-      MessageModel rmm = MessageModel.error();
-      rmm.data = S.current.g_key_wallet_m6;
-      return rmm;
-    }
-
-    // 解析签名结果并构建交易参数
-    Map<String, dynamic> signedData = json.decode(signStr);
-    Map<String, dynamic> txParams = {
+    final Map<String, dynamic> signedData = json.decode(signStr);
+    final Map<String, dynamic> txParams = {
       "version": signedData['version'],
       "nonce": signedData['nonce'],
       "toAddr": signedData['toAddr'],
@@ -470,7 +367,6 @@ mixin _TransferOthersMixin on _TransferBaseMixin {
       "signature": signedData['signature'],
     };
 
-    // 发送交易
     return await zilApi.createTransaction(txParams);
   }
 }

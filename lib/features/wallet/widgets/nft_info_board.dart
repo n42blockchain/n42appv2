@@ -55,6 +55,16 @@ class NftInfoBoard extends StatelessWidget {
     this.burnTap,
   });
 
+  // ── 主题色辅助方法 ─────────────────────────────────────────────────────
+  Color _mainTextColor(BuildContext context) =>
+      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+
+  Color _subtitleColor(BuildContext context) =>
+      AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+
+  Color _blueColor(BuildContext context) =>
+      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -173,10 +183,7 @@ class NftInfoBoard extends StatelessWidget {
           style: TextStyle(
             fontSize: ScreenUtil().setSp(36),
             fontWeight: FontWeight.bold,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
+            color: _mainTextColor(context),
           ),
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
@@ -192,10 +199,7 @@ class NftInfoBoard extends StatelessWidget {
                     '${S.of(context).g_key_nft_contract}: ${_shortenAddress(contractAddress!)}',
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(24),
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ),
+                      color: _subtitleColor(context),
                     ),
                   ),
                 ),
@@ -203,10 +207,7 @@ class NftInfoBoard extends StatelessWidget {
                 Icon(
                   Icons.copy,
                   size: ScreenUtil().setWidth(24),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
+                  color: _blueColor(context),
                 ),
               ],
             ),
@@ -220,16 +221,13 @@ class NftInfoBoard extends StatelessWidget {
       width: ScreenUtil().setWidth(120),
       height: ScreenUtil().setWidth(120),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name)
-            .withAlpha(30),
+        color: _blueColor(context).withAlpha(30),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
       ),
       child: Icon(
         Icons.image,
         size: ScreenUtil().setWidth(60),
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainBlueColor.name),
+        color: _blueColor(context),
       ),
     );
   }
@@ -255,10 +253,7 @@ class NftInfoBoard extends StatelessWidget {
             '$label: ',
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: _subtitleColor(context),
             ),
           ),
           Expanded(
@@ -267,8 +262,7 @@ class NftInfoBoard extends StatelessWidget {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(26),
                 fontWeight: FontWeight.w500,
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                color: _mainTextColor(context),
               ),
             ),
           ),
@@ -278,9 +272,7 @@ class NftInfoBoard extends StatelessWidget {
   }
 
   Widget _buildFloorPriceRow(BuildContext context) {
-    final blueColor = AppThemeUtils.getColorByKey(
-      context, AppThemeKeys.mainBlueColor.name,
-    );
+    final blueColor = _blueColor(context);
     return Container(
       margin: EdgeInsets.only(top: ScreenUtil().setWidth(8)),
       padding: EdgeInsets.symmetric(
@@ -322,8 +314,7 @@ class NftInfoBoard extends StatelessWidget {
           style: TextStyle(
             fontSize: ScreenUtil().setSp(26),
             fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
+            color: _mainTextColor(context),
           ),
         ),
         SizedBox(height: ScreenUtil().setWidth(8)),
@@ -331,8 +322,7 @@ class NftInfoBoard extends StatelessWidget {
           description!,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(24),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name),
+            color: _subtitleColor(context),
             height: 1.5,
           ),
           maxLines: 6,
@@ -343,9 +333,7 @@ class NftInfoBoard extends StatelessWidget {
   }
 
   Widget _buildActionButtons(BuildContext context) {
-    final blueColor = AppThemeUtils.getColorByKey(
-      context, AppThemeKeys.mainBlueColor.name,
-    );
+    final blueColor = _blueColor(context);
     final actions = [
       (S.of(context).g_key_48, Icons.send, sendTap),       // Send
       (S.of(context).g_key_33, Icons.qr_code, receiveTap), // Receive

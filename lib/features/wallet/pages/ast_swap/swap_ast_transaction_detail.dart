@@ -18,134 +18,122 @@ class SwapAstTransactionDetail extends StatefulWidget {
 }
 
 class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
-  String stateStr="";
+  String stateStr = "";
   Color? stateColor;
   IconData? iconData;
-  String createStr="";
+  late String createStr;
   late SwapAstOrderModel _orderModel;
+
   @override
   void initState() {
-    _orderModel = widget.orderModel;  // Bug 1: 修复自赋值，改为从 widget 初始化
-    // Bug 2: 在 initState 中固定时间，避免每次 rebuild 取 DateTime.now()
+    super.initState();
+    _orderModel = widget.orderModel;
     final int tsMs = (_orderModel.created ?? 0) * 1000;
     createStr = dformat.formatDate(
       DateTime.fromMillisecondsSinceEpoch(tsMs),
       [dformat.yyyy, '/', dformat.mm, '/', dformat.dd, ' ', dformat.am, ' ', dformat.hh, ':', dformat.nn],
     );
-    getOrderDetail();
-    super.initState();
+    _loadOrderDetail();
   }
-  Future<void> getOrderDetail() async {
-    SwapAstApi swapAstApi=SwapAstApi();
-    MessageModel rData=await swapAstApi.getNftOrAstDetail(_orderModel.id??0);
-    if(rData.error==false){
-      setState(() {
-        _orderModel=SwapAstOrderModel.fromJson(rData.data);
-      });
+
+  Future<void> _loadOrderDetail() async {
+    final MessageModel rData =
+        await SwapAstApi().getNftOrAstDetail(_orderModel.id ?? 0);
+    if (!rData.error) {
+      setState(() => _orderModel = SwapAstOrderModel.fromJson(rData.data));
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_tran_4,
-      ),
-      body: bodyWidget(),
+      appBar: AppBarWidget(text: S.of(context).g_key_tran_4),
+      body: _buildBody(),
     );
   }
-  Widget bodyWidget() {
+
+  void _resolveStateDisplay() {
+    final s = S.of(context);
     switch (_orderModel.orderState) {
       case 1:
         iconData = Icons.error;
-        stateStr = S.of(context).g_swap_key_22;
-        stateColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
-        return successWidget();
+        stateStr = s.g_swap_key_22;
+        stateColor = _themeColor(AppThemeKeys.errorTextColor);
       case 2:
         iconData = Icons.error;
-        stateStr = S.of(context).g_key_79;
-        stateColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
-        return successWidget();
+        stateStr = s.g_key_79;
+        stateColor = _themeColor(AppThemeKeys.errorTextColor);
       case 0:
-        final hasTx = (_orderModel.payTx?.indexOf("0x") ?? -1) != -1;
-        stateStr = hasTx ? S.of(context).g_swap_key_24 : S.of(context).g_swap_key_23;
+        final hasTx = (_orderModel.payTx?.contains("0x") ?? false);
+        stateStr = hasTx ? s.g_swap_key_24 : s.g_swap_key_23;
         iconData = Icons.info_rounded;
-        stateColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name);
-        return processingWidget();
+        stateColor = _themeColor(AppThemeKeys.textColorOrange);
       case 5:
         iconData = Icons.check_circle;
-        stateStr = S.of(context).g_swap_key_18;
-        stateColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.rightTextColor.name);
-        return successWidget();
+        stateStr = s.g_swap_key_18;
+        stateColor = _themeColor(AppThemeKeys.rightTextColor);
       default:
         iconData = Icons.info_rounded;
-        stateStr = S.of(context).g_swap_key_25;
-        stateColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name);
-        return processingWidget();
+        stateStr = s.g_swap_key_25;
+        stateColor = _themeColor(AppThemeKeys.textColorOrange);
     }
   }
+
+  Color _themeColor(AppThemeKeys key) =>
+      AppThemeUtils.getColorByKey(context, key.name);
+
+  Widget _buildBody() {
+    _resolveStateDisplay();
+    return switch (_orderModel.orderState) {
+      0 || null => processingWidget(),
+      5 || 1 || 2 => successWidget(),
+      _ => processingWidget(),
+    };
+  }
   Widget processingWidget() {
+    final su = ScreenUtil();
+    final Color mainText = _themeColor(AppThemeKeys.mainTextColor);
+    final Color subtitle = _themeColor(AppThemeKeys.itemSubtitleTextColor);
+    final Color divider = _themeColor(AppThemeKeys.dividerColor);
+    final int state = _orderModel.orderState ?? 0;
+    final String pair =
+        "${_orderModel.payCoin ?? 'USDT'}/${_orderModel.type == 1 ? "NFT" : CoinType.N.name}";
+
     return Padding(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30),),
+      padding: EdgeInsets.all(su.setWidth(30)),
       child: Column(
         children: [
           Container(
-            height: ScreenUtil().setWidth(80),
+            height: su.setWidth(80),
             width: double.infinity,
-            margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(40)),
+            margin: EdgeInsets.only(bottom: su.setWidth(40)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
-                    Text(
-                      "${_orderModel.payCoin ?? 'USDT'}/${_orderModel.type==1?"NFT":CoinType.N.name}",
-                      style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                        fontSize: ScreenUtil().setSp(28),
-                      ),
-                    ),
+                    Text(pair, style: TextStyle(color: mainText, fontSize: su.setSp(28))),
                     Expanded(
-                      child: Text(
-                        "+${_orderModel.orderNum}",
-                        style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                          fontSize: ScreenUtil().setSp(28),
-                        ),
-                        textAlign: TextAlign.right,
-                      ),
+                      child: Text("+${_orderModel.orderNum}",
+                          style: TextStyle(color: mainText, fontSize: su.setSp(28)),
+                          textAlign: TextAlign.right),
                     ),
                   ],
                 ),
                 Row(
                   children: [
-                    Text(
-                      createStr,
-                      style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                        fontSize: ScreenUtil().setSp(24),
-                      ),
-                    ),
+                    Text(createStr, style: TextStyle(color: subtitle, fontSize: su.setSp(24))),
                     Expanded(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(right: ScreenUtil().setWidth(4)),
-                            child: Icon(
-                              iconData,
-                              color: stateColor,
-                              size: ScreenUtil().setWidth(30),
-                              fill: 0,
-                            ),
+                            padding: EdgeInsets.only(right: su.setWidth(4)),
+                            child: Icon(iconData, color: stateColor, size: su.setWidth(30), fill: 0),
                           ),
-                          Text(
-                            stateStr,
-                            style: TextStyle(
-                              color: stateColor,
-                              fontSize: ScreenUtil().setSp(24),
-                            ),
-                            textAlign: TextAlign.right,
-                          ),
+                          Text(stateStr,
+                              style: TextStyle(color: stateColor, fontSize: su.setSp(24)),
+                              textAlign: TextAlign.right),
                         ],
                       ),
                     ),
@@ -155,72 +143,38 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
             ),
           ),
           SizedBox(
-            height: ScreenUtil().setWidth(300),
+            height: su.setWidth(300),
             width: double.infinity,
             child: Row(
               children: [
                 SizedBox(
-                  width: ScreenUtil().setWidth(40),
+                  width: su.setWidth(40),
                   child: Column(
                     children: [
-                      SizedBox(
-                        height: ScreenUtil().setWidth(40),
-                        width: ScreenUtil().setWidth(40),
-                        child: Icon(
-                          (_orderModel.orderState??0)>=3?Icons.check_circle:Icons.radio_button_unchecked,
-                          color: AppThemeUtils.getColorByKey(context, (_orderModel.orderState??0)>=3?AppThemeKeys.rightTextColor.name:AppThemeKeys.dividerColor.name),
-                          size: ScreenUtil().setWidth(40),
-                        ),
-                      ),
-                      Expanded(
-                        child: VerticalDivider(
-                          width: ScreenUtil().setWidth(40),
-                          indent: 0,
-                          endIndent: 0,
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
-                        ),
-                      ),
-                      SizedBox(
-                        height: ScreenUtil().setWidth(40),
-                        width: ScreenUtil().setWidth(40),
-                        child: Icon(
-                          (_orderModel.orderState==3 || _orderModel.orderState==4)?Icons.check_circle:Icons.radio_button_unchecked,
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.rightTextColor.name),
-                          size: ScreenUtil().setWidth(40),
-                        ),
-                      ),
-                      Expanded(
-                        child: VerticalDivider(
-                          width: ScreenUtil().setWidth(40),
-                          indent: 0,
-                          endIndent: 0,
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
-                        ),
-                      ),
+                      _stepIcon(state >= 3, su, divider),
+                      _stepDivider(su, divider),
+                      _stepIcon(state == 3 || state == 4, su, divider),
+                      _stepDivider(su, divider),
                       Padding(
-                        padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
-                        child: Icon(
-                          _orderModel.orderState==5?Icons.check_circle:Icons.radio_button_unchecked,
-                          color: AppThemeUtils.getColorByKey(context, _orderModel.orderState==5?AppThemeKeys.rightTextColor.name:AppThemeKeys.dividerColor.name),
-                          size: ScreenUtil().setWidth(40),
-                        ),
+                        padding: EdgeInsets.only(bottom: su.setWidth(20)),
+                        child: _stepIconRaw(state == 5, su, divider),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(30),),
+                SizedBox(width: su.setWidth(30)),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       pRowWidget(_orderModel.payCoin ?? 'USDT'),
-                      SizedBox(height: ScreenUtil().setWidth(60)),
+                      SizedBox(height: su.setWidth(60)),
                       pRowWidget("Swap"),
-                      SizedBox(height: ScreenUtil().setWidth(60)),
+                      SizedBox(height: su.setWidth(60)),
                       pRowWidget(S.of(context).g_key_191),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -228,102 +182,109 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
       ),
     );
   }
+
+  Widget _stepIcon(bool completed, ScreenUtil su, Color dividerColor) {
+    return SizedBox(
+      height: su.setWidth(40),
+      width: su.setWidth(40),
+      child: _stepIconRaw(completed, su, dividerColor),
+    );
+  }
+
+  Widget _stepIconRaw(bool completed, ScreenUtil su, Color dividerColor) {
+    return Icon(
+      completed ? Icons.check_circle : Icons.radio_button_unchecked,
+      color: completed ? _themeColor(AppThemeKeys.rightTextColor) : dividerColor,
+      size: su.setWidth(40),
+    );
+  }
+
+  Expanded _stepDivider(ScreenUtil su, Color color) {
+    return Expanded(
+      child: VerticalDivider(
+        width: su.setWidth(40),
+        indent: 0,
+        endIndent: 0,
+        color: color,
+      ),
+    );
+  }
   Widget pRowWidget(String title) {
     return Expanded(
       child: Align(
         alignment: Alignment.centerLeft,
-        child: Text(
-          title,
-          style: TextStyle(
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-            fontSize: ScreenUtil().setSp(28),
-          ),
-        ),
+        child: Text(title,
+            style: TextStyle(
+                color: _themeColor(AppThemeKeys.mainTextColor),
+                fontSize: ScreenUtil().setSp(28))),
       ),
     );
   }
+
   Widget successWidget() {
+    final su = ScreenUtil();
+    final Color mainText = _themeColor(AppThemeKeys.mainTextColor);
+    final s = S.of(context);
+
     return Column(
       children: [
         Container(
-          height: ScreenUtil().setWidth(300),
+          height: su.setWidth(300),
           alignment: Alignment.bottomCenter,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10),),
+                padding: EdgeInsets.symmetric(vertical: su.setWidth(10)),
                 child: RichText(
                   text: TextSpan(
                     text: '${_orderModel.orderPrice}',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(40),
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                    ),
+                    style: TextStyle(fontSize: su.setSp(40), color: mainText),
                     children: [
                       TextSpan(
                         text: CoinType.N.name,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(24),
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                        ),
+                        style: TextStyle(fontSize: su.setSp(24), color: mainText),
                       ),
                     ],
                   ),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
+                padding: EdgeInsets.symmetric(vertical: su.setWidth(10)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
-                      child: Icon(
-                        iconData,
-                        color: stateColor,
-                        size: ScreenUtil().setWidth(40),
-                      ),
+                      padding: EdgeInsets.only(right: su.setWidth(10)),
+                      child: Icon(iconData, color: stateColor, size: su.setWidth(40)),
                     ),
-                    Text(
-                      stateStr,
-                      style: TextStyle(
-                        color: stateColor,
-                        fontSize: ScreenUtil().setSp(28),
-                      ),
-                    ),
+                    Text(stateStr,
+                        style: TextStyle(color: stateColor, fontSize: su.setSp(28))),
                   ],
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10),horizontal: ScreenUtil().setWidth(200)),
-                child: Text(
-                  S.of(context).g_key_tran_6,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(24),
-                  ),
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                ),
+                padding: EdgeInsets.symmetric(
+                    vertical: su.setWidth(10), horizontal: su.setWidth(200)),
+                child: Text(s.g_key_tran_6,
+                    style: TextStyle(color: mainText, fontSize: su.setSp(24)),
+                    textAlign: TextAlign.center,
+                    maxLines: 2),
               ),
             ],
           ),
         ),
         Divider(
-          height: ScreenUtil().setWidth(60),
-          indent: 0,
-          endIndent: 0,
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
+          height: su.setWidth(60),
+          color: _themeColor(AppThemeKeys.dividerColor),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+          padding: EdgeInsets.symmetric(horizontal: su.setWidth(30)),
           child: Column(
             children: [
-              rowWidget(S.of(context).g_key_tran_7,"${_orderModel.payNum} ${_orderModel.payCoin ?? 'USDT'}"),
-              rowWidget(S.of(context).g_key_tran_8,"${_orderModel.orderNum} ${CoinType.N.name}"),
-              rowWidget(S.of(context).g_key_wallet_k25,createStr),
+              _rowWidget(s.g_key_tran_7, "${_orderModel.payNum} ${_orderModel.payCoin ?? 'USDT'}"),
+              _rowWidget(s.g_key_tran_8, "${_orderModel.orderNum} ${CoinType.N.name}"),
+              _rowWidget(s.g_key_wallet_k25, createStr),
             ],
           ),
         ),
@@ -331,29 +292,23 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
       ],
     );
   }
-  Widget rowWidget(String title, String value) {
+
+  Widget _rowWidget(String title, String value) {
+    final su = ScreenUtil();
     return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: ScreenUtil().setWidth(10),
-      ),
+      padding: EdgeInsets.symmetric(vertical: su.setWidth(10)),
       child: Row(
         children: [
-          Text(
-            title,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-              fontSize: ScreenUtil().setSp(30),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              value,
+          Text(title,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(30),
-              ),
-              textAlign: TextAlign.end,
-            ),
+                  color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+                  fontSize: su.setSp(30))),
+          Expanded(
+            child: Text(value,
+                style: TextStyle(
+                    color: _themeColor(AppThemeKeys.mainTextColor),
+                    fontSize: su.setSp(30)),
+                textAlign: TextAlign.end),
           ),
         ],
       ),

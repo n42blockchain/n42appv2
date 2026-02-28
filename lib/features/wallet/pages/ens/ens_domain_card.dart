@@ -30,15 +30,20 @@ class EnsDomainCard extends StatelessWidget {
       AppThemeKeys.mainBlueColor.name,
     );
 
+    final Color gradientBase;
+    if (isExpired) {
+      gradientBase = Colors.red;
+    } else if (isExpiringSoon) {
+      gradientBase = Colors.orange;
+    } else {
+      gradientBase = themeBlue;
+    }
+
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: isExpired
-              ? [Colors.red.withAlpha(30), Colors.red.withAlpha(10)]
-              : isExpiringSoon
-                  ? [Colors.orange.withAlpha(30), Colors.orange.withAlpha(10)]
-                  : [themeBlue.withAlpha(30), themeBlue.withAlpha(10)],
+          colors: [gradientBase.withAlpha(30), gradientBase.withAlpha(10)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

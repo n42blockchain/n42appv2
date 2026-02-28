@@ -28,31 +28,23 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
   static const int _kAutoClrSeconds = 60;
 
   Timer? _clipTimer;
-  int _countdown = 0; // 0 = 未复制状态
+  int _countdown = 0;
 
   bool get _isCopied => _countdown > 0;
-
-  // ── 生命周期 ──────────────────────────────────────────────────────────────
 
   @override
   void dispose() {
     _stopTimer();
-    // 离开页面时强制清除剪贴板，防止未手动清除而残留
     Clipboard.setData(const ClipboardData(text: ''));
     super.dispose();
   }
 
-  // ── 剪贴板操作 ───────────────────────────────────────────────────────────
-
   void _copyToClipboard() {
     Clipboard.setData(ClipboardData(text: widget.keystoreJson));
-    if (mounted) {
-      ToastUtils.show(S.of(context).g_key_ex_keystore_11); // "Copied"
-    }
+    if (mounted) ToastUtils.show(S.of(context).g_key_ex_keystore_11);
     _startClearCountdown();
   }
 
-  /// 开始自动清除倒计时。
   void _startClearCountdown() {
     _stopTimer();
     setState(() => _countdown = _kAutoClrSeconds);
@@ -69,29 +61,26 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
     });
   }
 
-  /// 停止计时器（不清除剪贴板）。
   void _stopTimer() {
     _clipTimer?.cancel();
     _clipTimer = null;
   }
 
-  /// 清除剪贴板并重置状态。
   void _clearClipboard({bool fromTimer = false}) {
     _stopTimer();
     Clipboard.setData(const ClipboardData(text: ''));
     if (!mounted) return;
     setState(() => _countdown = 0);
-    if (!fromTimer) {
-      // 手动清除时给用户反馈
-      ToastUtils.show(S.of(context).g_key_ex_keystore_12); // "Copy cancelled"
-    }
+    if (!fromTimer) ToastUtils.show(S.of(context).g_key_ex_keystore_12);
   }
-
-  // ── UI ────────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
+    final scr = ScreenUtil();
+    final pad30 = scr.setWidth(30);
+    final bottomBarHeight = scr.setWidth(148);
+
     return Scaffold(
       appBar: AppBarWidget(text: s.g_key_ex_keystore),
       body: SafeArea(
@@ -99,60 +88,28 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
           children: [
             Positioned.fill(
               child: SingleChildScrollView(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                padding: EdgeInsets.all(pad30),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    buildItem(context, s.g_key_ex_keystore_5,
-                        s.g_key_ex_keystore_6),
-                    buildItem(context, s.g_key_ex_keystore_7,
-                        s.g_key_ex_keystore_8),
-                    buildItem(context, s.g_key_ex_keystore_9,
-                        s.g_key_ex_keystore_10),
-                    SizedBox(height: ScreenUtil().setWidth(40)),
-
-                    // ── Keystore JSON 展示框 ─────────────────────────────
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(16)),
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.itemBgColor.name),
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(30),
-                        vertical: ScreenUtil().setWidth(24),
-                      ),
-                      margin: EdgeInsets.symmetric(
-                          vertical: ScreenUtil().setWidth(24)),
-                      child: Text(
-                        widget.keystoreJson,
-                        style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.itemTextColor.name),
-                          fontSize: ScreenUtil().setSp(28),
-                        ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-
-                    // ── 已复制时显示倒计时提示 ────────────────────────────
+                    _buildItem(s.g_key_ex_keystore_5, s.g_key_ex_keystore_6),
+                    _buildItem(s.g_key_ex_keystore_7, s.g_key_ex_keystore_8),
+                    _buildItem(s.g_key_ex_keystore_9, s.g_key_ex_keystore_10),
+                    SizedBox(height: scr.setWidth(40)),
+                    _buildKeystoreBox(),
                     if (_isCopied) ...[
-                      SizedBox(height: ScreenUtil().setWidth(8)),
+                      SizedBox(height: scr.setWidth(8)),
                       _ClipboardCountdownHint(
                         seconds: _countdown,
                         textColor: AppThemeUtils.getColorByKey(
                             context, AppThemeKeys.ff888888.name),
                       ),
                     ],
-
-                    SizedBox(height: ScreenUtil().setWidth(148)),
+                    SizedBox(height: bottomBarHeight),
                   ],
                 ),
               ),
             ),
-
-            // ── 底部按钮 ──────────────────────────────────────────────────
             Positioned(
               bottom: 0,
               left: 0,
@@ -160,26 +117,17 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Divider(height: ScreenUtil().setWidth(1)),
+                  Divider(height: scr.setWidth(1)),
                   Container(
-                    height: ScreenUtil().setWidth(148),
+                    height: bottomBarHeight,
                     width: double.infinity,
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                    padding: EdgeInsets.all(pad30),
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.backGroundColor.name),
                     child: _isCopied
-                        // 已复制：显示"清除剪贴板（n s）"，点击立即手动清除
-                        ? buttonStyle2(
-                            context,
-                            _clearClipboard,
-                            '${s.g_key_ex_keystore_12} (${_countdown}s)',
-                          )
-                        // 未复制：显示"复制"
-                        : buttonStyle2(
-                            context,
-                            _copyToClipboard,
-                            s.g_key_119, // "Copy"
-                          ),
+                        ? buttonStyle2(context, _clearClipboard,
+                            '${s.g_key_ex_keystore_12} (${_countdown}s)')
+                        : buttonStyle2(context, _copyToClipboard, s.g_key_119),
                   ),
                 ],
               ),
@@ -190,28 +138,54 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
     );
   }
 
-  Widget buildItem(BuildContext context, String title, String action) {
+  Widget _buildKeystoreBox() {
+    final scr = ScreenUtil();
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(scr.setWidth(16)),
+        color: AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.itemBgColor.name),
+      ),
+      padding: EdgeInsets.symmetric(
+        horizontal: scr.setWidth(30),
+        vertical: scr.setWidth(24),
+      ),
+      margin: EdgeInsets.symmetric(vertical: scr.setWidth(24)),
+      child: Text(
+        widget.keystoreJson,
+        style: TextStyle(
+          color: AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.itemTextColor.name),
+          fontSize: scr.setSp(28),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildItem(String title, String action) {
+    final mainTextColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainTextColor.name);
+    final scr = ScreenUtil();
+
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.symmetric(vertical: scr.setWidth(20)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(32),
+              color: mainTextColor,
+              fontSize: scr.setSp(32),
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: scr.setWidth(12)),
           Text(
             action,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(28),
+              color: mainTextColor,
+              fontSize: scr.setSp(28),
             ),
           ),
         ],

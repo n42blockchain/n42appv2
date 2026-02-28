@@ -137,54 +137,36 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
     );
   }
 
-  // ─── Actions ─────────────────────────────────────────────────────────────────
-
-  void _pasteAddress() async {
+  Future<void> _pasteAddress() async {
     final data = await Clipboard.getData(Clipboard.kTextPlain);
     if (data?.text != null) {
       _addressController.text = data!.text!;
     }
   }
 
+  static final _ethAddrRegex = RegExp(r'^0x[0-9a-fA-F]{40}$');
+
   void _addItem() {
     final address = _addressController.text.trim();
     final amountStr = _amountController.text.trim();
     final memo = _memoController.text.trim();
 
-    if (address.isEmpty) {
-      _showSnackBar('Please enter an address');
-      return;
-    }
-
-    if (!RegExp(r'^0x[0-9a-fA-F]{40}$').hasMatch(address)) {
-      _showSnackBar('Invalid address format');
-      return;
-    }
-
-    if (amountStr.isEmpty) {
-      _showSnackBar('Please enter an amount');
-      return;
-    }
+    if (address.isEmpty) return _showSnackBar('Please enter an address');
+    if (!_ethAddrRegex.hasMatch(address)) return _showSnackBar('Invalid address format');
+    if (amountStr.isEmpty) return _showSnackBar('Please enter an amount');
 
     final amount = _parseAmount(amountStr);
-    if (amount <= BigInt.zero) {
-      _showSnackBar('Invalid amount');
-      return;
-    }
+    if (amount <= BigInt.zero) return _showSnackBar('Invalid amount');
 
     if (widget.batchTransferProvider.totalAmount + amount > widget.balance) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(S.of(context).g_key_batch_insufficient_balance(widget.tokenSymbol)),
-          backgroundColor: Colors.orange,
-        ),
+      return _showSnackBar(
+        S.of(context).g_key_batch_insufficient_balance(widget.tokenSymbol),
+        bg: Colors.orange,
       );
-      return;
     }
 
     widget.batchTransferProvider.addItem(
-      address,
-      amount,
+      address, amount,
       memo: memo.isEmpty ? null : memo,
     );
 
@@ -193,34 +175,29 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
     _memoController.clear();
   }
 
-  void _showSnackBar(String message) {
+  void _showSnackBar(String message, {Color? bg}) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
+      SnackBar(content: Text(message), backgroundColor: bg),
     );
   }
 
   BigInt _parseAmount(String amountStr) {
     try {
-      amountStr = amountStr.replaceAll(',', '');
-      if (amountStr.contains('.')) {
-        final parts = amountStr.split('.');
-        final intPart = parts[0];
-        var decPart = parts[1];
-        if (decPart.length > widget.decimals) {
-          decPart = decPart.substring(0, widget.decimals);
-        } else {
-          decPart = decPart.padRight(widget.decimals, '0');
-        }
-        return BigInt.parse('$intPart$decPart');
-      } else {
-        return BigInt.parse(amountStr) * BigInt.from(10).pow(widget.decimals);
+      final cleaned = amountStr.replaceAll(',', '');
+      if (!cleaned.contains('.')) {
+        return BigInt.parse(cleaned) * BigInt.from(10).pow(widget.decimals);
       }
+      final parts = cleaned.split('.');
+      final decPart = parts[1].length > widget.decimals
+          ? parts[1].substring(0, widget.decimals)
+          : parts[1].padRight(widget.decimals, '0');
+      return BigInt.parse('${parts[0]}$decPart');
     } catch (_) {
       return BigInt.zero;
     }
   }
 
-  void _importCsv() async {
+  Future<void> _importCsv() async {
     final result = await Navigator.push<String>(
       context,
       MaterialPageRoute(
@@ -237,7 +214,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
     }
   }
 
-  void _proceedToConfirm() async {
+  Future<void> _proceedToConfirm() async {
     final provider = widget.batchTransferProvider;
 
     await provider.estimateGas();
@@ -259,11 +236,10 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
     }
   }
 
-  void _executeTransfer() async {
+  Future<void> _executeTransfer() async {
     final provider = widget.batchTransferProvider;
     final walletProvider = ref.read(wapBridgeProvider);
 
-    // 在 async 操作之前捕获本地化字符串，避免跨异步 gap 使用 BuildContext
     final l10n = S.of(context);
     final messenger = ScaffoldMessenger.of(context);
 
@@ -344,7 +320,6 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
   }
 
   Future<void> _exportReport(BatchTransferProvider provider, BuildContext sheetCtx) async {
-    // 在 async 操作前捕获 l10n 字符串，避免跨异步 gap 使用 BuildContext
     final subject = S.of(sheetCtx).g_key_batch_export_csv;
     try {
       final csvContent = provider.generateReportCsv();
@@ -384,7 +359,6 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
   }
 
   String _formatGasFee(BigInt fee) {
-    // 转换为链原生代币（18 位小数）
     final divisor = BigInt.from(10).pow(18);
     final ethValue = fee ~/ divisor;
     final remainder = fee % divisor;

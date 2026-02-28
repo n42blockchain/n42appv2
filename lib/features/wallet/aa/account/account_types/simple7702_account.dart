@@ -197,10 +197,7 @@ class Simple7702AccountHelper {
   }
 
   Uint8List _encodeRlpList(List<Uint8List> items) {
-    var totalLength = 0;
-    for (final item in items) {
-      totalLength += item.length;
-    }
+    final totalLength = items.fold<int>(0, (sum, item) => sum + item.length);
 
     // Build header: short list (1 byte) or long list (1 + lengthBytes)
     Uint8List header;
@@ -277,7 +274,7 @@ class EIP7702Authorization {
   /// - 32-byte r and s components
   /// - v in {0, 1} (y-parity per EIP-7702) or {27, 28} (Ethereum legacy style)
   bool get isValid {
-    return r.length == 32 && s.length == 32 && (v == 27 || v == 28 || v == 0 || v == 1);
+    return r.length == 32 && s.length == 32 && const {0, 1, 27, 28}.contains(v);
   }
 
   /// Whether this authorization is a revocation.
@@ -294,37 +291,15 @@ class EIP7702Authorization {
   bool get isAnyChain => chainId == 0;
 
   /// Encode to bytes for UserOperation
+  /// Layout: chainId(32) + address(20) + nonce(32) + v(1) + r(32) + s(32) = 149 bytes
   Uint8List encode() {
-    // Encoding: chainId(32) + address(20) + nonce(32) + v(1) + r(32) + s(32)
     final result = Uint8List(149);
-    var offset = 0;
-
-    // Chain ID (32 bytes, big-endian)
-    final chainIdBytes = _bigIntToBytes32(BigInt.from(chainId));
-    result.setAll(offset, chainIdBytes);
-    offset += 32;
-
-    // Address (20 bytes)
-    final addressBytes = hexToBytes(address.replaceFirst('0x', ''));
-    result.setAll(offset, addressBytes);
-    offset += 20;
-
-    // Nonce (32 bytes, big-endian)
-    final nonceBytes = _bigIntToBytes32(nonce);
-    result.setAll(offset, nonceBytes);
-    offset += 32;
-
-    // v (1 byte)
-    result[offset] = v;
-    offset += 1;
-
-    // r (32 bytes)
-    result.setAll(offset, r);
-    offset += 32;
-
-    // s (32 bytes)
-    result.setAll(offset, s);
-
+    result.setAll(0, _bigIntToBytes32(BigInt.from(chainId)));          // chainId
+    result.setAll(32, hexToBytes(address.replaceFirst('0x', '')));     // address
+    result.setAll(52, _bigIntToBytes32(nonce));                        // nonce
+    result[84] = v;                                                     // v
+    result.setAll(85, r);                                               // r
+    result.setAll(117, s);                                              // s
     return result;
   }
 
@@ -424,10 +399,10 @@ class Simple7702GasConstants {
 
   /// Estimate gas for batch execute
   static BigInt estimateBatchGas(List<ExecuteCall> calls) {
-    var total = authorizationGas + signatureValidation + executeOverhead;
-    for (final call in calls) {
-      total += 25000 + (call.data.length ~/ 16) * 68;
-    }
+    final total = calls.fold<int>(
+      authorizationGas + signatureValidation + executeOverhead,
+      (sum, call) => sum + 25000 + (call.data.length ~/ 16) * 68,
+    );
     return BigInt.from(total);
   }
 }

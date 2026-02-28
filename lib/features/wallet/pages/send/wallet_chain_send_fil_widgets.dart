@@ -4,19 +4,63 @@ part of 'wallet_chain_send_fil.dart';
 ///
 /// Depends on [_FilSendLogicMixin] for all shared state and business methods.
 mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
-  Widget toWidget() {
+  /// Theme color shortcut
+  Color _tc(String key) => AppThemeUtils.getColorByKey(context, key);
+
+  EdgeInsets get _pageMargin => EdgeInsets.all(ScreenUtil().setWidth(30.0));
+
+  /// Pill-shaped action button (blue bg, white text, fully rounded)
+  Widget _pillButton({required String label, required VoidCallback onTap}) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
+        height: ScreenUtil().setWidth(60.0),
+        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
+        decoration: BoxDecoration(
+          color: _tc(AppThemeKeys.mainBlueColor.name),
+          borderRadius: BorderRadius.all(
+              Radius.circular(ScreenUtil().setWidth(60.0))),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(26.0),
+            color: _tc(AppThemeKeys.mainWhiteColor.name),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Inline error text below input fields
+  Widget _errorText(String message) {
+    if (message.isEmpty) return const SizedBox.shrink();
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      alignment: Alignment.centerLeft,
+      child: Text(
+        message,
+        style: TextStyle(
+          color: _tc(AppThemeKeys.errorTextColor.name),
+          fontSize: ScreenUtil().setSp(24.0),
+        ),
+      ),
+    );
+  }
+
+  Widget toWidget() {
+    final mainText = _tc(AppThemeKeys.mainTextColor.name);
+    final itemBg = _tc(AppThemeKeys.itemBgColor.name);
+
+    return Container(
+      margin: _pageMargin,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             S.of(context).g_key_38,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
+            style: TextStyle(color: mainText, fontSize: ScreenUtil().setSp(28.0)),
           ),
           Container(
             alignment: Alignment.center,
@@ -26,21 +70,18 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
             ),
             margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius:
-                  BorderRadius.all(Radius.circular(ScreenUtil().setWidth(8.0))),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor.name),
+              borderRadius: BorderRadius.all(
+                  Radius.circular(ScreenUtil().setWidth(8.0))),
+              color: itemBg,
             ),
             height: ScreenUtil().setWidth(88.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
-                  flex: 1,
                   child: TextField(
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
+                      color: mainText,
                       fontSize: ScreenUtil().setWidth(30.0),
                     ),
                     controller: toTextEditingController,
@@ -71,83 +112,47 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
                     padding: EdgeInsets.all(ScreenUtil().setWidth(8.0)),
                     child: Image.asset(
                       "assets/wallet/scan.png",
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
+                      color: _tc(AppThemeKeys.mainBlueColor.name),
                     ),
                   ),
                 ),
-                InkWell(
+                _pillButton(
+                  label: S.of(context).g_key_166,
                   onTap: () async {
-                    final ClipboardData? cd =
-                        await Clipboard.getData(Clipboard.kTextPlain);
-                    if (cd != null) {
-                      if (cd.text != null && cd.text != "null") {
-                        toTextEditingController.text = cd.text ?? "";
-                        setState(() {});
-                        toAddressCheck(cd.text ?? "");
-                      }
+                    final cd = await Clipboard.getData(Clipboard.kTextPlain);
+                    if (cd?.text != null && cd!.text != "null") {
+                      toTextEditingController.text = cd.text ?? "";
+                      setState(() {});
+                      toAddressCheck(cd.text ?? "");
                     }
                   },
-                  child: Container(
-                    margin:
-                        EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
-                    height: ScreenUtil().setWidth(60.0),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(20.0)),
-                    decoration: BoxDecoration(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
-                      borderRadius: BorderRadius.all(
-                          Radius.circular(ScreenUtil().setWidth(60.0))),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      S.of(context).g_key_166,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(26.0),
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainWhiteColor.name),
-                      ),
-                    ),
-                  ),
                 ),
               ],
             ),
           ),
-          if (toErrorMessage != "")
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                toErrorMessage,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.errorTextColor.name),
-                  fontSize: ScreenUtil().setSp(24.0),
-                ),
-              ),
-            ),
+          _errorText(toErrorMessage),
         ],
       ),
     );
   }
 
   Widget amountWidget() {
+    final mainText = _tc(AppThemeKeys.mainTextColor.name);
+    final itemBg = _tc(AppThemeKeys.itemBgColor.name);
+    final amountFontSize = ScreenUtil().setWidth(70.0);
+
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: _pageMargin,
       child: Column(
         children: [
           Row(
             children: [
               Text(
                 S.of(context).g_key_44,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(28.0),
-                ),
+                style: TextStyle(color: mainText, fontSize: ScreenUtil().setSp(28.0)),
               ),
               SizedBox(width: ScreenUtil().setWidth(20.0)),
-              Expanded(flex: 1, child: amountBalanceWidget()),
+              Expanded(child: amountBalanceWidget()),
             ],
           ),
           Container(
@@ -156,15 +161,11 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
               left: ScreenUtil().setWidth(30.0),
               right: ScreenUtil().setWidth(10.0),
             ),
-            margin: EdgeInsets.only(
-              top: ScreenUtil().setWidth(20.0),
-              bottom: ScreenUtil().setWidth(20.0),
-            ),
+            margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius:
-                  BorderRadius.all(Radius.circular(ScreenUtil().setWidth(8.0))),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor.name),
+              borderRadius: BorderRadius.all(
+                  Radius.circular(ScreenUtil().setWidth(8.0))),
+              color: itemBg,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,13 +174,8 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
-                      flex: 1,
                       child: TextField(
-                        style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
-                          fontSize: ScreenUtil().setWidth(70.0),
-                        ),
+                        style: TextStyle(color: mainText, fontSize: amountFontSize),
                         controller: valueTextEditingController,
                         focusNode: valueNode,
                         textInputAction: TextInputAction.next,
@@ -188,9 +184,8 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
                         decoration: InputDecoration(
                           hintText: S.of(context).g_key_44,
                           hintStyle: TextStyle(
-                            fontSize: ScreenUtil().setWidth(70.0),
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.textFieldHintColor.name),
+                            fontSize: amountFontSize,
+                            color: _tc(AppThemeKeys.textFieldHintColor.name),
                           ),
                           border: InputBorder.none,
                           errorBorder: InputBorder.none,
@@ -199,56 +194,17 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
                           contentPadding: const EdgeInsets.all(10.0),
                         ),
                         maxLines: 1,
-                        onChanged: (value) {
-                          amountCheck(value: value);
-                        },
+                        onChanged: (value) => amountCheck(value: value),
                         onEditingComplete: () {
                           amountCheck();
                           FocusScope.of(context).requestFocus(toNode);
                         },
                       ),
                     ),
-                    InkWell(
-                      onTap: () {
-                        maxTag();
-                      },
-                      child: Container(
-                        margin:
-                            EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
-                        height: ScreenUtil().setWidth(60.0),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: ScreenUtil().setWidth(20.0)),
-                        decoration: BoxDecoration(
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainBlueColor.name),
-                          borderRadius: BorderRadius.all(
-                              Radius.circular(ScreenUtil().setWidth(60.0))),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          S.of(context).g_key_197,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(26.0),
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.mainWhiteColor.name),
-                          ),
-                        ),
-                      ),
-                    ),
+                    _pillButton(label: S.of(context).g_key_197, onTap: maxTag),
                   ],
                 ),
-                if (amountErrorMessage != "")
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      amountErrorMessage,
-                      style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.errorTextColor.name),
-                        fontSize: ScreenUtil().setSp(24.0),
-                      ),
-                    ),
-                  ),
+                _errorText(amountErrorMessage),
                 Divider(
                   height: ScreenUtil().setWidth(1.0),
                   indent: 0,
@@ -268,8 +224,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
     return Text(
       '${widget.coinModel.balanceStringAll()} $unit',
       style: TextStyle(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainTextColor.name),
+        color: _tc(AppThemeKeys.mainTextColor.name),
         fontSize: ScreenUtil().setSp(28.0),
       ),
       maxLines: 1,
@@ -278,20 +233,14 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
     );
   }
 
-  // 返回账户地址
   Widget ownerAddress() {
-    final String addr = widget.coinModel.address.toString();
-    return Container(
-      padding: EdgeInsets.only(
-        top: ScreenUtil().setWidth(20.0),
-        bottom: ScreenUtil().setWidth(20.0),
-        right: ScreenUtil().setWidth(20.0),
-      ),
+    final vPad = ScreenUtil().setWidth(20.0);
+    return Padding(
+      padding: EdgeInsets.only(top: vPad, bottom: vPad, right: vPad),
       child: Text(
-        addr,
+        widget.coinModel.address.toString(),
         style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name),
+          color: _tc(AppThemeKeys.itemSubtitleTextColor.name),
           fontSize: ScreenUtil().setSp(30.0),
         ),
         maxLines: 1,
@@ -300,52 +249,41 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
     );
   }
 
-  // 矿工费
   Widget minerFeeWidget() {
     final int decimals = widget.coinModel.coin['decimals'] as int;
     final String unit = widget.coinModel.coin['unit']?.toString() ?? '';
     final String feeText =
         '${dec.Decimal.parse(toEther(totalGasPrice.toString(), decimals).toString())} $unit';
 
-    return NonEvmFeeCompact(
-      feeText: feeText,
-      onTap: null,
-    );
+    return NonEvmFeeCompact(feeText: feeText, onTap: null);
   }
 
   Widget errorMessageWidget() {
-    if (errorMessage == "") return const SizedBox.shrink();
+    if (errorMessage.isEmpty) return const SizedBox.shrink();
     return Container(
       margin: EdgeInsets.only(
         top: ScreenUtil().setWidth(20.0),
         left: ScreenUtil().setWidth(30),
         right: ScreenUtil().setWidth(30),
       ),
-      padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(30.0),
-      ),
+      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.all(Radius.circular(ScreenUtil().setWidth(8.0))),
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorBgColor2.name),
+        borderRadius: BorderRadius.all(
+            Radius.circular(ScreenUtil().setWidth(8.0))),
+        color: _tc(AppThemeKeys.errorBgColor2.name),
       ),
       child: Text(
         errorMessage,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(28.0),
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.errorTextColor.name),
+          color: _tc(AppThemeKeys.errorTextColor.name),
         ),
       ),
     );
   }
 
-  // 提交按钮
   Widget sendButtonWidget() {
-    final String title = S.of(context).g_key_48;
     final bool isLoading = load == Load.loading;
     return Positioned(
       left: 0,
@@ -357,22 +295,15 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
           Container(
             padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
             height: ScreenUtil().setWidth(148.0),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.backGroundColor.name),
+            color: _tc(AppThemeKeys.backGroundColor.name),
             child: buttonStyle6(
               context,
-              () async {
-                sendTransaction();
-              },
-              isLoading ? '${S.of(context).g_key_106}...' : title,
-              AppThemeUtils.getColorByKey(
-                context,
-                isLoading
-                    ? AppThemeKeys.mainButtonBgColor3.name
-                    : AppThemeKeys.mainButtonBgColor.name,
-              ),
-              AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonTextColor.name),
+              sendTransaction,
+              isLoading ? '${S.of(context).g_key_106}...' : S.of(context).g_key_48,
+              _tc(isLoading
+                  ? AppThemeKeys.mainButtonBgColor3.name
+                  : AppThemeKeys.mainButtonBgColor.name),
+              _tc(AppThemeKeys.mainButtonTextColor.name),
               isLoading,
             ),
           ),

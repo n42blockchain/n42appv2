@@ -39,6 +39,11 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
   _LoadState _loadState = _LoadState.loading;
   List<PaymasterOption> _availableOptions = [];
 
+  // ── Theme helpers ─────────────────────────────────────────────────────────
+
+  Color _themeColor(AppThemeKeys key) =>
+      AppThemeUtils.getColorByKey(context, key.name);
+
   @override
   void initState() {
     super.initState();
@@ -81,10 +86,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
   /// Find the matching option after a reload (preserves user selection).
   PaymasterOption? _findMatchingOption(
       List<PaymasterOption> options, PaymasterOption current) {
-    for (final o in options) {
-      if (_optionsMatch(o, current)) return o;
-    }
-    return null;
+    return options.where((o) => _optionsMatch(o, current)).firstOrNull;
   }
 
   void _onOptionSelected(PaymasterOption option) {
@@ -104,10 +106,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
             icon: Icon(
               Icons.refresh,
               size: ScreenUtil().setWidth(28),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: _themeColor(AppThemeKeys.mainTextColor),
             ),
             onPressed: _loadPaymasterOptions,
             tooltip: S.of(context).g_key_aa_paymaster_retry,
@@ -133,9 +132,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
   // ── Info section ──────────────────────────────────────────────────────────
 
   Widget _buildInfoSection() {
-    final blueColor = AppThemeUtils.getColorByKey(
-      context, AppThemeKeys.mainBlueColor.name,
-    );
+    final blueColor = _themeColor(AppThemeKeys.mainBlueColor);
     final supportedChains = PaymasterService.supportedChainSymbols;
     final isCurrentChainSupported = AAConfig.isChainSupported(_resolvedSymbol);
 
@@ -163,8 +160,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(28),
                   fontWeight: FontWeight.w600,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                  color: _themeColor(AppThemeKeys.mainTextColor),
                 ),
               ),
             ],
@@ -174,8 +170,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
             S.of(context).g_key_aa_paymaster_description,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(24),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
@@ -195,8 +190,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
                 '${supportedChains.length} ${S.of(context).g_key_aa_paymaster_chains_supported}',
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(22),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                  color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
                 ),
               ),
               const Spacer(),
@@ -237,8 +231,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
               fontWeight: isCurrent ? FontWeight.w700 : FontWeight.normal,
               color: isCurrent
                   ? blueColor
-                  : AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                  : _themeColor(AppThemeKeys.itemSubtitleTextColor),
             ),
           ),
         );
@@ -259,8 +252,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
             S.of(context).g_key_aa_paymaster_checking,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(24),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
             ),
           ),
         ],
@@ -283,8 +275,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28),
                 fontWeight: FontWeight.w600,
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                color: _themeColor(AppThemeKeys.mainTextColor),
               ),
             ),
             SizedBox(height: ScreenUtil().setWidth(24)),
@@ -305,7 +296,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
       itemCount: _availableOptions.length,
       itemBuilder: (context, index) {
         final option = _availableOptions[index];
-        final isSelected = _isOptionSelected(option);
+        final isSelected = _optionsMatch(option, _selectedOption);
         return Padding(
           padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
           child: PaymasterOptionCard(
@@ -318,18 +309,13 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
     );
   }
 
-  bool _isOptionSelected(PaymasterOption option) {
-    return _optionsMatch(option, _selectedOption);
-  }
-
   // ── Confirm button ────────────────────────────────────────────────────────
 
   Widget _buildConfirmButton() {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
+        color: _themeColor(AppThemeKeys.itemBgColor),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha(10),
@@ -348,8 +334,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
               child: ElevatedButton(
                 onPressed: _confirm,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
+                  backgroundColor: _themeColor(AppThemeKeys.mainBlueColor),
                   foregroundColor: Colors.white,
                   padding: EdgeInsets.symmetric(
                       vertical: ScreenUtil().setWidth(16)),
@@ -395,8 +380,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
                   S.of(context).g_key_aa_selected,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(20),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                    color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
                   ),
                 ),
                 Text(
@@ -404,8 +388,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(26),
                     fontWeight: FontWeight.w600,
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
+                    color: _themeColor(AppThemeKeys.mainTextColor),
                   ),
                 ),
               ],
@@ -442,7 +425,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
   // ── Helpers ───────────────────────────────────────────────────────────────
 
   Color _getSelectedColor() => switch (_selectedOption.type) {
-    PaymasterType.none => AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+    PaymasterType.none => _themeColor(AppThemeKeys.mainBlueColor),
     PaymasterType.sponsored => Colors.green,
     PaymasterType.erc20 => Colors.purple,
   };
@@ -459,12 +442,11 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
     PaymasterType.erc20 => '${S.of(context).g_key_aa_pay_with} ${_selectedOption.tokenSymbol ?? 'Token'}',
   };
 
-  static String _chainSymbolFromId(int chainId) {
-    for (final entry in AAConfig.chainIds.entries) {
-      if (entry.value == chainId) return entry.key;
-    }
-    return '';
-  }
+  static String _chainSymbolFromId(int chainId) =>
+      AAConfig.chainIds.entries
+          .where((e) => e.value == chainId)
+          .map((e) => e.key)
+          .firstOrNull ?? '';
 }
 
 enum _LoadState { loading, success, error }

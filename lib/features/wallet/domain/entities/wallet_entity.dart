@@ -152,19 +152,14 @@ class AssetEntity extends Equatable {
     final divisor = BigInt.from(10).pow(decimals);
     final whole = balance ~/ divisor;
     final fraction = balance.remainder(divisor);
-    
-    if (fraction == BigInt.zero) {
-      return whole.toString();
-    }
-    
-    final fractionStr = fraction.toString().padLeft(decimals, '0');
-    final trimmedFraction = fractionStr.replaceAll(RegExp(r'0+$'), '');
-    
-    if (trimmedFraction.isEmpty) {
-      return whole.toString();
-    }
-    
-    return '$whole.$trimmedFraction';
+
+    if (fraction == BigInt.zero) return whole.toString();
+
+    final trimmed = fraction
+        .toString()
+        .padLeft(decimals, '0')
+        .replaceAll(RegExp(r'0+$'), '');
+    return trimmed.isEmpty ? whole.toString() : '$whole.$trimmed';
   }
 
   /// Get USD value

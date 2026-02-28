@@ -33,11 +33,7 @@ mixin WalletConnectConnection on ChangeNotifier {
   /// Suppresses the DApp-disconnect Toast from onSessionDelete in that window.
   bool disconnectingByUser = false;
 
-  Trustdart? _trustdart;
-  Trustdart get trustdart {
-    _trustdart ??= Trustdart();
-    return _trustdart!;
-  }
+  late final Trustdart trustdart = Trustdart();
 
   // ── Reconnect timer ───────────────────────────────────────────────────────
 
@@ -206,45 +202,38 @@ mixin WalletConnectConnection on ChangeNotifier {
   }
 
   Future<bool> web3clientInitFromChainId(String eip155) async {
-    final chainId = eip155.split(":")[1];
-    final chainIndex = coinModels.indexWhere((element) {
-      final eChainId = (element.isTest
-              ? element.coin['chainId_test']
-              : element.coin['chainId'])
-          .toString();
-      return eChainId == chainId;
+    final chainId = eip155.split(':')[1];
+    final chainIndex = coinModels.indexWhere((cm) {
+      final id = (cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId']).toString();
+      return id == chainId;
     });
     if (chainIndex == -1) {
-      viewStateDeal(WalletConnectState.error, params: "Error");
+      viewStateDeal(WalletConnectState.error, params: 'Error');
       return false;
     }
-    if (coinModelsIndex != chainIndex) {
-      setCoinModelsIndex(chainIndex);
-      return await web3clientInit();
-    }
-    if (web3client == null) {
-      return await web3clientInit();
-    }
-    return true;
+    final needsReinit = coinModelsIndex != chainIndex || web3client == null;
+    if (coinModelsIndex != chainIndex) setCoinModelsIndex(chainIndex);
+    return needsReinit ? await web3clientInit() : true;
   }
 
   void coinModelInit({int chainId = -1}) {
     try {
-      final cms = globalWapAdapter.coinModels;
-      coinModels = [];
-      for (final cm in cms) {
-        if (cm.coin['blockchainType'] != BlockchainType.Ethereum.name) continue;
-        coinModels.add(cm);
-        if (chainId != -1) {
-          final cmChainId = cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId'];
-          if (cmChainId == chainId) {
-            setCoinModelsIndex(coinModels.length - 1);
-          }
-        }
-      }
-      if (coinModels.isNotEmpty && chainId == -1) {
+      coinModels = globalWapAdapter.coinModels
+          .where((cm) => cm.coin['blockchainType'] == BlockchainType.Ethereum.name)
+          .toList();
+
+      if (coinModels.isEmpty) return;
+
+      if (chainId == -1) {
         setCoinModelsIndex(0);
+        return;
       }
+      // 按指定 chainId 查找匹配项
+      final matchIndex = coinModels.indexWhere((cm) {
+        final cmChainId = cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId'];
+        return cmChainId == chainId;
+      });
+      if (matchIndex != -1) setCoinModelsIndex(matchIndex);
     } catch (e) {
       viewStateDeal(WalletConnectState.error, params: e.toString());
     }
@@ -252,17 +241,17 @@ mixin WalletConnectConnection on ChangeNotifier {
 
   /// Find a coin model matching the given WalletConnect chain ID string.
   CoinModel? coinModelFind(String chainId) {
-    final index = coinModels.indexWhere((element) {
+    return coinModels.where((element) {
       final blockchainType = element.coin['blockchainType'];
       if (blockchainType == BlockchainType.Ethereum.name) {
         final id = element.isTest ? element.coin['chainId_test'] : element.coin['chainId'];
-        return "eip155:$id" == chainId;
-      } else if (blockchainType == BlockchainType.Tron.name) {
-        return "tron:0x2b6653dc" == chainId;
+        return 'eip155:$id' == chainId;
+      }
+      if (blockchainType == BlockchainType.Tron.name) {
+        return 'tron:0x2b6653dc' == chainId;
       }
       return false;
-    });
-    return index == -1 ? null : coinModels[index];
+    }).firstOrNull;
   }
 
   /// Fetch TRON wallet credentials from IWalletService.

@@ -29,13 +29,13 @@ class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
   final FocusNode _uPasswordFocusNode = FocusNode();
   final FocusNode _uPasswordConfirmFocusNode = FocusNode();
   final FocusNode _lPasswordFocusNode = FocusNode();
-  String uPasswordErrorMessage="";
-  String uPasswordConfirmErrorMessage="";
-  String lPasswordErrorMessage="";
-  bool showPwd1=true;
-  bool showPwd2=true;
-  bool showPwd=true;//显示密码
-  Load load=Load.finish;
+  String uPasswordErrorMessage = "";
+  String uPasswordConfirmErrorMessage = "";
+  String lPasswordErrorMessage = "";
+  bool showPwd1 = true;
+  bool showPwd2 = true;
+  bool showPwd = true;
+  Load load = Load.finish;
 
   @override
   void dispose() {
@@ -95,10 +95,69 @@ class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
     );
   }
 
-  /// 显示验证错误并 toast 提示
-  void _showValidationError(String Function() setError) {
-    final msg = setError();
-    ToastUtils.show(msg);
+  void _setErrorAndToast(String field, String message) {
+    setState(() {
+      if (field == 'new') {
+        uPasswordErrorMessage = message;
+      } else if (field == 'confirm') {
+        uPasswordConfirmErrorMessage = message;
+      } else {
+        lPasswordErrorMessage = message;
+      }
+    });
+    ToastUtils.show(message);
+  }
+
+  Future<void> _onSubmit() async {
+    final s = S.of(context);
+    final password = _uPasswordController.text.trim();
+    final rPassword = _uPasswordConfirmController.text.trim();
+    final lPassword = _lPasswordController.text.trim();
+
+    if (password.isEmpty) {
+      _setErrorAndToast('new', s.g_key_21);
+      return;
+    }
+    if (!Regular().isPassword(password)) {
+      _setErrorAndToast('new', s.rest_Choose_password);
+      return;
+    }
+    setState(() => uPasswordErrorMessage = "");
+
+    if (rPassword.isEmpty) {
+      _setErrorAndToast('confirm', s.g_key_21);
+      return;
+    }
+    if (password != rPassword) {
+      _setErrorAndToast('confirm', s.g_key_25);
+      return;
+    }
+    setState(() => uPasswordConfirmErrorMessage = "");
+
+    if (lPassword.isEmpty) {
+      _setErrorAndToast('old', s.g_key_21);
+      return;
+    }
+    if (widget.walletInfo.password != lPassword) {
+      _setErrorAndToast('old', s.g_key_146);
+      return;
+    }
+    setState(() => lPasswordErrorMessage = "");
+
+    try {
+      setState(() => load = Load.loading);
+      widget.walletInfo.password = password;
+      final wap = ref.read(wapBridgeProvider);
+      final successMessage = s.g_key_185;
+      await wap.saveWalletInfo(widget.walletInfo, widget.walletIndex);
+      if (!context.mounted) return;
+      ToastUtils.show(successMessage);
+      Navigator.pop(context, widget.walletInfo);
+    } catch (err) {
+      ToastUtils.show(err.toString());
+    } finally {
+      setState(() => load = Load.finish);
+    }
   }
 
   @override
@@ -177,53 +236,7 @@ class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
                     width: double.infinity,
                     child: buttonStyle6(context,
-                      () async {
-                        // 数据的校验
-                        final password = _uPasswordController.text.trim();
-                        final rPassword = _uPasswordConfirmController.text.trim();
-                        final lPassword = _lPasswordController.text.trim();
-                        if (password.isEmpty) {
-                          _showValidationError(() => uPasswordErrorMessage = S.of(context).g_key_21);
-                          return;
-                        }
-                        if (!Regular().isPassword(password)) {
-                          _showValidationError(() => uPasswordErrorMessage = S.of(context).rest_Choose_password);
-                          return;
-                        }
-                        setState(() => uPasswordErrorMessage = "");
-                        if (rPassword.isEmpty) {
-                          _showValidationError(() => uPasswordConfirmErrorMessage = S.of(context).g_key_21);
-                          return;
-                        }
-                        if (password != rPassword) {
-                          _showValidationError(() => uPasswordConfirmErrorMessage = S.of(context).g_key_25);
-                          return;
-                        }
-                        setState(() => uPasswordConfirmErrorMessage = "");
-                        if (lPassword.isEmpty) {
-                          _showValidationError(() => lPasswordErrorMessage = S.of(context).g_key_21);
-                          return;
-                        }
-                        if (widget.walletInfo.password != lPassword) {
-                          _showValidationError(() => lPasswordErrorMessage = S.of(context).g_key_146);
-                          return;
-                        }
-                        setState(() => lPasswordErrorMessage = "");
-                        try {
-                          setState(() => load = Load.loading);
-                          widget.walletInfo.password = password;
-                          final wap = ref.read(wapBridgeProvider);
-                          final successMessage = S.of(context).g_key_185;
-                          await wap.saveWalletInfo(widget.walletInfo, widget.walletIndex);
-                          if (!context.mounted) return;
-                          ToastUtils.show(successMessage);
-                          Navigator.pop(context, widget.walletInfo);
-                        } catch (err) {
-                          ToastUtils.show(err.toString());
-                        } finally {
-                          setState(() => load = Load.finish);
-                        }
-                      },
+                      _onSubmit,
                       S.of(context).g_key_115,
                       AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
                       AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),

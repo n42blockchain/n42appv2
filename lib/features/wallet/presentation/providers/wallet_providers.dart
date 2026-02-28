@@ -205,15 +205,10 @@ class WalletListNotifier extends AsyncNotifier<List<WalletInfoData>> {
 
     // Parse wallet list
     final List<dynamic> walletInfos = walletUser['wallet'] ?? [];
-    final List<WalletInfoData> wallets = [];
-
-    for (final walletJson in walletInfos) {
-      if (walletJson is Map<String, dynamic>) {
-        wallets.add(WalletInfoData.fromLegacyJson(walletJson));
-      }
-    }
-
-    return wallets;
+    return walletInfos
+        .whereType<Map<String, dynamic>>()
+        .map(WalletInfoData.fromLegacyJson)
+        .toList();
   }
 
   /// Refresh wallet list from storage
@@ -337,16 +332,18 @@ class SelectedWalletIndexNotifier extends _WalletIndexNotifier {
   String get storageKey => 'index';
 }
 
+/// Derive a wallet by index from the wallet list.
+WalletInfoData? _walletAtIndex(AsyncValue<List<WalletInfoData>> wallets, int index) {
+  return wallets.whenOrNull(
+    data: (list) => (index >= 0 && index < list.length) ? list[index] : null,
+  );
+}
+
 /// Current Wallet Provider (Derived)
 final currentWalletProvider = Provider<WalletInfoData?>((ref) {
-  final wallets = ref.watch(walletListProvider);
-  final index = ref.watch(selectedWalletIndexProvider);
-
-  return wallets.whenOrNull(
-    data: (list) {
-      if (index < 0 || index >= list.length) return null;
-      return list[index];
-    },
+  return _walletAtIndex(
+    ref.watch(walletListProvider),
+    ref.watch(selectedWalletIndexProvider),
   );
 });
 
@@ -380,51 +377,39 @@ class CoinListNotifier extends AsyncNotifier<List<CoinBalanceData>> {
     if (wallet == null) return [];
 
     // Build coin list from wallet's coinInfo
-    final List<CoinBalanceData> coins = [];
     final coinInfo = wallet.coinInfo;
+    if (coinInfo == null) return [];
 
-    if (coinInfo != null) {
-      // Build O(1) lookup map from legacy coin models (O-1 optimisation + A-4 guard)
-      Map<String, dynamic> modelMap = {};
-      try {
-        modelMap = {
-          for (final c in globalWapAdapter.coinModels)
-            (c.coin['coinType'] as String? ?? ''): c,
-        };
-      } catch (_) {}
+    // Build O(1) lookup map from legacy coin models (O-1 optimisation + A-4 guard)
+    Map<String, dynamic> modelMap = {};
+    try {
+      modelMap = {
+        for (final c in globalWapAdapter.coinModels)
+          (c.coin['coinType'] as String? ?? ''): c,
+      };
+    } catch (_) {}
 
-      for (final entry in coinInfo.entries) {
-        final coinKey = entry.key;
-        final coinData = entry.value as Map<String, dynamic>?;
-
-        if (coinData != null && coinData['baseInfo'] != null) {
-          final baseInfo = coinData['baseInfo'] as Map<String, dynamic>;
-          double balance = 0.0;
-          double balanceUsd = 0.0;
-          double price = 0.0;
-          double priceChange = 0.0;
+    return coinInfo.entries
+        .where((e) {
+          final data = e.value as Map<String, dynamic>?;
+          return data != null && data['baseInfo'] != null;
+        })
+        .map((e) {
+          final coinKey = e.key;
+          final baseInfo = (e.value as Map<String, dynamic>)['baseInfo'] as Map<String, dynamic>;
           final legacyCoin = modelMap[coinKey];
-          if (legacyCoin != null) {
-            balance = legacyCoin.balanceDoubleAll();
-            price = legacyCoin.coinPrice;
-            priceChange = legacyCoin.percentage;
-            balanceUsd = legacyCoin.value;
-          }
-          coins.add(CoinBalanceData(
+          return CoinBalanceData(
             symbol: coinKey,
             name: baseInfo['name']?.toString() ?? coinKey,
             iconUrl: baseInfo['icon']?.toString() ?? '',
-            balance: balance,
-            balanceUsd: balanceUsd,
-            price: price,
-            priceChange24h: priceChange,
+            balance: legacyCoin?.balanceDoubleAll() ?? 0.0,
+            balanceUsd: legacyCoin?.value ?? 0.0,
+            price: legacyCoin?.coinPrice ?? 0.0,
+            priceChange24h: legacyCoin?.percentage ?? 0.0,
             chainType: coinKey,
-          ));
-        }
-      }
-    }
-
-    return coins;
+          );
+        })
+        .toList();
   }
 
   Future<void> refresh() async {
@@ -456,14 +441,9 @@ class MiningWalletIndexNotifier extends _WalletIndexNotifier {
 
 /// Mining Wallet Provider (Derived)
 final miningWalletProvider = Provider<WalletInfoData?>((ref) {
-  final wallets = ref.watch(walletListProvider);
-  final index = ref.watch(miningWalletIndexProvider);
-
-  return wallets.whenOrNull(
-    data: (list) {
-      if (index < 0 || index >= list.length) return null;
-      return list[index];
-    },
+  return _walletAtIndex(
+    ref.watch(walletListProvider),
+    ref.watch(miningWalletIndexProvider),
   );
 });
 

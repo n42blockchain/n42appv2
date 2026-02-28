@@ -17,6 +17,16 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 /// Contains all UI builder methods for step views and shared input helpers.
 mixin ChangeEmailPageWidgetsMixin on State<ChangeEmailPage>,
     ChangeEmailPageLogicMixin {
+  /// Theme color shortcut
+  Color _tc(String key) => AppThemeUtils.getColorByKey(context, key);
+
+  /// Reusable error box decoration (red-tinted border + background)
+  BoxDecoration _errorBoxDecoration(Color errorColor) => BoxDecoration(
+        color: errorColor.withAlpha(20),
+        borderRadius: BorderRadius.circular(8.r),
+        border: Border.all(color: errorColor.withAlpha(80)),
+      );
+
   // ── Step 0 ──────────────────────────────────────────────────────────────────
 
   Widget buildStep0(Color textColor, Color subColor, Color accentColor,
@@ -70,8 +80,7 @@ mixin ChangeEmailPageWidgetsMixin on State<ChangeEmailPage>,
           Container(
             padding: EdgeInsets.all(14.w),
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor2.name),
+              color: _tc(AppThemeKeys.itemBgColor2.name),
               borderRadius: BorderRadius.circular(10.r),
             ),
             child: Column(
@@ -108,8 +117,7 @@ mixin ChangeEmailPageWidgetsMixin on State<ChangeEmailPage>,
                 if (chatSyncEnabled) ...[
                   SizedBox(height: 12.h),
                   Divider(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.dividerColor.name),
+                      color: _tc(AppThemeKeys.dividerColor.name),
                       height: 1),
                   SizedBox(height: 12.h),
                   Align(
@@ -125,8 +133,7 @@ mixin ChangeEmailPageWidgetsMixin on State<ChangeEmailPage>,
                     style: TextStyle(fontSize: 15.sp, color: textColor),
                     decoration: changeEmailInputDeco(
                       hint: S.of(context).g_email_pwd_hint,
-                      fillColor: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemBgColor.name),
+                      fillColor: _tc(AppThemeKeys.itemBgColor.name),
                       accentColor: accentColor,
                       subColor: subColor,
                       errorText: passwordError,
@@ -315,11 +322,7 @@ mixin ChangeEmailPageWidgetsMixin on State<ChangeEmailPage>,
     return [
       Container(
         padding: EdgeInsets.all(12.w),
-        decoration: BoxDecoration(
-          color: errorColor.withAlpha(20),
-          borderRadius: BorderRadius.circular(8.r),
-          border: Border.all(color: errorColor.withAlpha(80)),
-        ),
+        decoration: _errorBoxDecoration(errorColor),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -415,11 +418,7 @@ mixin ChangeEmailPageWidgetsMixin on State<ChangeEmailPage>,
         SizedBox(height: 8.h),
         Container(
           padding: EdgeInsets.all(10.w),
-          decoration: BoxDecoration(
-            color: errorColor.withAlpha(20),
-            borderRadius: BorderRadius.circular(8.r),
-            border: Border.all(color: errorColor.withAlpha(80)),
-          ),
+          decoration: _errorBoxDecoration(errorColor),
           child: Row(
             children: [
               Icon(Icons.error_outline, color: errorColor, size: 14.sp),

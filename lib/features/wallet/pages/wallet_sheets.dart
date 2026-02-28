@@ -24,21 +24,21 @@ void showAddressSheet(
   WidgetRef ref,
   WalletActionProvider walletValue,
 ) {
-  final childs = <Widget>[
-    _AddressSheetHeader(),
-    Divider(
-      height: ScreenUtil().setWidth(1),
-      color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.dividerColor.name),
-    ),
-    _WalletAddressList(walletValue: walletValue, ref: ref),
-    CreateWalletButton(),
-  ];
-
   sheetBottom(
     context,
     "",
-    Column(children: childs),
+    Column(
+      children: [
+        _AddressSheetHeader(),
+        Divider(
+          height: ScreenUtil().setWidth(1),
+          color: AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.dividerColor.name),
+        ),
+        _WalletAddressList(walletValue: walletValue, ref: ref),
+        CreateWalletButton(),
+      ],
+    ),
   );
 }
 
@@ -106,11 +106,12 @@ class _WalletAddressList extends StatelessWidget {
         itemBuilder: (context, index) {
           final wInfo = walletValue.walletInfoLsit[index];
           final isSelected = index == walletValue.walletIndex;
-          final walletColor = isSelected
-              ? AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonBgColor.name)
-              : AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name);
+          final walletColor = AppThemeUtils.getColorByKey(
+            context,
+            isSelected
+                ? AppThemeKeys.mainButtonBgColor.name
+                : AppThemeKeys.itemSubtitleTextColor.name,
+          );
           final isLocked = wInfo.mainWallet || isSelected;
 
           return InkWell(
@@ -137,7 +138,7 @@ class _WalletAddressList extends StatelessWidget {
                     )
                   else
                     Text(
-                      wInfo.mainWallet == true
+                      wInfo.mainWallet
                           ? S.of(context).g_key_14
                           : S.of(context).g_key_6,
                       style: TextStyle(
@@ -296,6 +297,11 @@ class _AddTokenMenuItem extends StatelessWidget {
 
 /// 展示 AST 购买 / DEX Swap 两种模式选择的底部弹窗。
 void showSwapModeSheet(BuildContext context) {
+  void pushAndClose(Widget page) {
+    Navigator.pop(context);
+    Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+  }
+
   sheetBottom(
     context,
     'Select Swap Mode',
@@ -307,13 +313,7 @@ void showSwapModeSheet(BuildContext context) {
           title: const Text('Buy N'),
           subtitle: const Text('Purchase N via AST protocol'),
           trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => SwapAstHome()),
-            );
-          },
+          onTap: () => pushAndClose(SwapAstHome()),
         ),
         const Divider(height: 1),
         ListTile(
@@ -321,13 +321,7 @@ void showSwapModeSheet(BuildContext context) {
           title: const Text('DEX Swap'),
           subtitle: const Text('Swap any token via Uniswap / 1inch / Jupiter'),
           trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const DexSwapHome()),
-            );
-          },
+          onTap: () => pushAndClose(const DexSwapHome()),
         ),
       ],
     ),

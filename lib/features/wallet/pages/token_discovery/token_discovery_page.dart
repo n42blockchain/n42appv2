@@ -45,8 +45,6 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
         .toList();
   }
 
-  // ── Helpers ────────────────────────────────────────────────────────────────
-
   List<DiscoveredToken> get _selected =>
       _tokens.where((t) => t.isSelected).toList();
 
@@ -68,8 +66,7 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
   }
 
   Future<void> _addSelected() async {
-    final toAdd = _selected; // snapshot before mutation (_selected returns a new list)
-    for (final token in toAdd) {
+    for (final token in _selected) {
       await _addToken(token);
     }
   }
@@ -83,7 +80,8 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
     Navigator.of(context).pop(_anyAdded);
   }
 
-  // ── Build ──────────────────────────────────────────────────────────────────
+  Color _color(AppThemeKeys key) =>
+      AppThemeUtils.getColorByKey(context, key.name);
 
   @override
   Widget build(BuildContext context) {
@@ -112,8 +110,7 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
         S.of(context).g_key_token_discovery_empty,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(30),
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name),
+          color: _color(AppThemeKeys.itemSubtitleTextColor),
         ),
       ),
     );
@@ -141,153 +138,121 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
   }
 
   Widget _buildChainSection(String chainType, List<DiscoveredToken> tokens) {
+    final su = ScreenUtil();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Chain header
         Padding(
-          padding: EdgeInsets.only(
-            top: ScreenUtil().setWidth(20),
-            bottom: ScreenUtil().setWidth(10),
-          ),
+          padding: EdgeInsets.only(top: su.setWidth(20), bottom: su.setWidth(10)),
           child: Text(
             chainType,
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
+              fontSize: su.setSp(24),
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: _color(AppThemeKeys.itemSubtitleTextColor),
               letterSpacing: 1.0,
             ),
           ),
         ),
-        ...tokens.map((t) => _buildTokenRow(t)),
+        ...tokens.map(_buildTokenRow),
       ],
     );
   }
 
   Widget _buildTokenRow(DiscoveredToken token) {
-    final selectedColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+    final su = ScreenUtil();
+    final Color accent = _color(AppThemeKeys.mainBlueColor);
+    final s = S.of(context);
+
     return Container(
-      margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
+      margin: EdgeInsets.only(bottom: su.setWidth(12)),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(24),
-        vertical: ScreenUtil().setWidth(18),
+        horizontal: su.setWidth(24),
+        vertical: su.setWidth(18),
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        color: _color(AppThemeKeys.itemBgColor),
+        borderRadius: BorderRadius.circular(su.setWidth(12)),
       ),
       child: Row(
         children: [
-          // Selection checkbox
           GestureDetector(
             onTap: () => setState(() => token.isSelected = !token.isSelected),
             child: Container(
-              width: ScreenUtil().setWidth(40),
-              height: ScreenUtil().setWidth(40),
+              width: su.setWidth(40),
+              height: su.setWidth(40),
               decoration: BoxDecoration(
-                color: token.isSelected
-                    ? selectedColor
-                    : Colors.transparent,
+                color: token.isSelected ? accent : Colors.transparent,
                 border: Border.all(
                   color: token.isSelected
-                      ? selectedColor
-                      : AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.dividerColor.name),
+                      ? accent
+                      : _color(AppThemeKeys.dividerColor),
                   width: 1.5,
                 ),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                borderRadius: BorderRadius.circular(su.setWidth(8)),
               ),
               child: token.isSelected
                   ? Icon(Icons.check_rounded,
-                      color: Colors.white, size: ScreenUtil().setWidth(24))
+                      color: Colors.white, size: su.setWidth(24))
                   : null,
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
-          // Token info
+          SizedBox(width: su.setWidth(16)),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  token.displaySymbol,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(30),
-                    fontWeight: FontWeight.w600,
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                  ),
-                ),
-                SizedBox(height: ScreenUtil().setWidth(4)),
-                Text(
-                  token.displayName,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                Text(token.displaySymbol,
+                    style: TextStyle(
+                        fontSize: su.setSp(30),
+                        fontWeight: FontWeight.w600,
+                        color: _color(AppThemeKeys.mainTextColor))),
+                SizedBox(height: su.setWidth(4)),
+                Text(token.displayName,
+                    style: TextStyle(
+                        fontSize: su.setSp(24),
+                        color: _color(AppThemeKeys.itemSubtitleTextColor)),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis),
               ],
             ),
           ),
-          // Balance + actions
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(
-                token.humanBalance,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  fontWeight: FontWeight.w500,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                ),
-              ),
-              SizedBox(height: ScreenUtil().setWidth(8)),
+              Text(token.humanBalance,
+                  style: TextStyle(
+                      fontSize: su.setSp(28),
+                      fontWeight: FontWeight.w500,
+                      color: _color(AppThemeKeys.mainTextColor))),
+              SizedBox(height: su.setWidth(8)),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Ignore button
                   GestureDetector(
                     onTap: () => _ignoreToken(token),
-                    child: Text(
-                      S.of(context).g_key_token_discovery_ignore,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(22),
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.itemSubtitleTextColor.name),
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
+                    child: Text(s.g_key_token_discovery_ignore,
+                        style: TextStyle(
+                            fontSize: su.setSp(22),
+                            color: _color(AppThemeKeys.itemSubtitleTextColor),
+                            decoration: TextDecoration.underline)),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(16)),
-                  // Add single token button
+                  SizedBox(width: su.setWidth(16)),
                   GestureDetector(
                     onTap: () => _addToken(token),
                     child: Container(
                       padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(20),
-                        vertical: ScreenUtil().setWidth(8),
-                      ),
+                          horizontal: su.setWidth(20),
+                          vertical: su.setWidth(8)),
                       decoration: BoxDecoration(
-                        color: selectedColor,
-                        borderRadius:
-                            BorderRadius.circular(ScreenUtil().setWidth(8)),
+                        color: accent,
+                        borderRadius: BorderRadius.circular(su.setWidth(8)),
                       ),
-                      child: Text(
-                        S.of(context).g_key_token_discovery_add,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(22),
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                      child: Text(s.g_key_token_discovery_add,
+                          style: TextStyle(
+                              fontSize: su.setSp(22),
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500)),
                     ),
                   ),
                 ],
@@ -300,17 +265,17 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
   }
 
   Widget _buildBottomBar() {
+    final su = ScreenUtil();
     final selectedCount = _selected.length;
+    final allSelected = selectedCount == _tokens.length;
+    final s = S.of(context);
+
     return Container(
       padding: EdgeInsets.fromLTRB(
-        ScreenUtil().setWidth(30),
-        ScreenUtil().setWidth(16),
-        ScreenUtil().setWidth(30),
-        ScreenUtil().setWidth(36),
+        su.setWidth(30), su.setWidth(16), su.setWidth(30), su.setWidth(36),
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.backGroundColor.name),
+        color: _color(AppThemeKeys.backGroundColor),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.06),
@@ -321,35 +286,29 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
       ),
       child: Row(
         children: [
-          // Select-all toggle
           GestureDetector(
-            onTap: () {
-              final allSelected = selectedCount == _tokens.length;
-              setState(() {
-                for (final t in _tokens) {
-                  t.isSelected = !allSelected;
-                }
-              });
-            },
+            onTap: () => setState(() {
+              for (final t in _tokens) {
+                t.isSelected = !allSelected;
+              }
+            }),
             child: Text(
-              selectedCount == _tokens.length
-                  ? S.of(context).g_key_token_discovery_deselect_all
-                  : S.of(context).g_key_token_discovery_select_all,
+              allSelected
+                  ? s.g_key_token_discovery_deselect_all
+                  : s.g_key_token_discovery_select_all,
               style: TextStyle(
-                fontSize: ScreenUtil().setSp(26),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                fontSize: su.setSp(26),
+                color: _color(AppThemeKeys.mainBlueColor),
               ),
             ),
           ),
           const Spacer(),
-          // Add selected button
           SizedBox(
-            height: ScreenUtil().setWidth(80),
+            height: su.setWidth(80),
             child: buttonStyle2(
               context,
               selectedCount > 0 ? _addSelected : null,
-              S.of(context).g_key_token_discovery_add_selected(selectedCount),
+              s.g_key_token_discovery_add_selected(selectedCount),
             ),
           ),
         ],

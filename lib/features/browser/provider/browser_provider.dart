@@ -64,6 +64,15 @@ class BrowserProvider extends ChangeNotifier {
   FocusNode? titleFocusNode;
   ConnectDAPP? connectDAPPCallBack;
 
+  /// Shortcut: URL of the currently active tab, or empty string
+  String get _currentUrl {
+    if (wListIndex < 0 || wListIndex >= wInfoList.length) return '';
+    return wInfoList[wListIndex]['openUrl'] as String? ?? '';
+  }
+
+  /// Shortcut: WebViewController of the currently active tab
+  WebViewController get _currentController => wvcList[wListIndex];
+
   /// Set by [BrowserPage] to display a phishing warning dialog.
   /// Cleared in [BrowserPage.dispose] to prevent stale context usage.
   PhishingWarning? phishingCallBack;
@@ -248,20 +257,19 @@ class BrowserProvider extends ChangeNotifier {
     }
     if(url=="")return;
     url=checkHttp(url);
-    WebViewController wv=wvcList[wListIndex];
-    wv.loadRequest(Uri.parse(url));
+    _currentController.loadRequest(Uri.parse(url));
     wInfoList[wListIndex]['openUrl']=url;
   }
   //显示webView
   void wListShow(int index) {
     wListIndex=index;
     showWList=false;
-    titleEditingController?.text=wInfoList[wListIndex]['openUrl'] ?? '';
+    titleEditingController?.text=_currentUrl;
     // Notify immediately so the UI switches tab right away
     notifyListeners();
     // Then async-update navigation and bookmark state
     checkCanGo();
-    getCollectionUrl(wInfoList[wListIndex]['openUrl'] ?? '');
+    getCollectionUrl(_currentUrl);
   }
   //删除一个 webView
   void wListDelete(int index) {
@@ -273,19 +281,17 @@ class BrowserProvider extends ChangeNotifier {
     if(wList.isEmpty){
       wListAdd();
       return;
-    }else if(index < wListIndex){
+    }
+    if (index < wListIndex) {
       wListIndex--;
-    }else if(index == wListIndex){
-      // 当前页被删除，显示前一个或第一个
-      if(wListIndex >= wList.length){
-        wListIndex=wList.length-1;
-      }
+    } else if (index == wListIndex && wListIndex >= wList.length) {
+      wListIndex = wList.length - 1;
     }
     // Sync URL bar and navigation state with the new current tab
     if (wListIndex >= 0 && wListIndex < wInfoList.length) {
-      titleEditingController?.text = wInfoList[wListIndex]['openUrl'] ?? '';
+      titleEditingController?.text = _currentUrl;
       checkCanGo();
-      getCollectionUrl(wInfoList[wListIndex]['openUrl'] ?? '');
+      getCollectionUrl(_currentUrl);
     }
     notifyListeners();
   }
@@ -296,8 +302,7 @@ class BrowserProvider extends ChangeNotifier {
     notifyListeners();
   }
   Future<void> getTitle()async{
-    WebViewController wv=wvcList[wListIndex];
-    String? t=await wv.getTitle();
+    final t = await _currentController.getTitle();
     if(t !=null){
       wInfoList[wListIndex]['title']=t;
       notifyListeners();
@@ -305,11 +310,20 @@ class BrowserProvider extends ChangeNotifier {
   }
   //检查是否可以 上一页，或者下一页
   Future<void> checkCanGo()async{
-    WebViewController wv=wvcList[wListIndex];
-    canBack=await wv.canGoBack();
-    canForward=await wv.canGoForward();
+    canBack=await _currentController.canGoBack();
+    canForward=await _currentController.canGoForward();
     notifyListeners();
   }
+  /// Try to handle a WalletConnect URI; returns true if handled.
+  bool _tryHandleWalletConnect(String wcUri) {
+    if (!wcUri.contains('relay-protocol') || !wcUri.contains('symKey')) {
+      return false;
+    }
+    if (connectDAPPCallBack == null) return false;
+    connectDAPPCallBack!(wcUri, browser['connectDApp']);
+    return true;
+  }
+
   bool checkUrl(String url) {
     final uri = Uri.parse(url);
     // 拦截危险 URL 协议：javascript: 可用于 XSS；data: / blob: 可绕过 CSP；file: 可读本地文件
@@ -317,22 +331,10 @@ class BrowserProvider extends ChangeNotifier {
     if (blockedSchemes.contains(uri.scheme)) return false;
 
     if (uri.scheme == "wc") {
-      if (url.contains('relay-protocol') && url.contains('symKey')) {
-        if (connectDAPPCallBack != null) {
-          connectDAPPCallBack!(url, browser['connectDApp']);
-          return false;
-        }
-      }
-    } else if (uri.scheme == "amazeapp") {
-      if (uri.path == "/wc") {
-        final param = uri.queryParameters['uri'] ?? "";
-        if (param.contains('relay-protocol') && param.contains('symKey')) {
-          if (connectDAPPCallBack != null) {
-            connectDAPPCallBack!(param, browser['connectDApp']);
-            return false;
-          }
-        }
-      }
+      if (_tryHandleWalletConnect(url)) return false;
+    } else if (uri.scheme == "amazeapp" && uri.path == "/wc") {
+      final param = uri.queryParameters['uri'] ?? "";
+      if (_tryHandleWalletConnect(param)) return false;
     }
 
     // ── Phishing detection (http / https only) ────────────────────────────
@@ -361,17 +363,17 @@ class BrowserProvider extends ChangeNotifier {
   }
   //删除收藏url
   Future<void> deleteBrowserCollectionUrl()async{
-    await browserApi.deleteBrowserCollectionUrl(wInfoList[wListIndex]['openUrl']);
-    getCollectionUrl(wInfoList[wListIndex]['openUrl']);
+    final url = _currentUrl;
+    await browserApi.deleteBrowserCollectionUrl(url);
+    getCollectionUrl(url);
   }
   //添加收藏
   Future<void> addBrowserCollection(BuildContext context) async {
-    WebViewController wv=wvcList[wListIndex];
-    String? currentUrl=await wv.currentUrl();
-    String? title=await wv.getTitle();
+    String? currentUrl=await _currentController.currentUrl();
+    String? title=await _currentController.getTitle();
     if (!context.mounted) return;
     await Navigator.push(context, MaterialPageRoute(builder: (context)=>BrowserCollection(title ?? "",currentUrl ?? "",)));
-    getCollectionUrl(wInfoList[wListIndex]['openUrl']);
+    getCollectionUrl(_currentUrl);
   }
   /// Handle incoming DApp JSON-RPC messages from the JavaScript channel.
   ///
@@ -387,11 +389,12 @@ class BrowserProvider extends ChangeNotifier {
       final method = data['method'] as String;
       final params = (data['params'] as List<dynamic>?) ?? [];
 
-      // Track permission usage for this DApp origin (fire-and-forget)
-      final currentUrl = wListIndex >= 0 && wListIndex < wInfoList.length
-          ? wInfoList[wListIndex]['openUrl'] as String? ?? ''
-          : '';
-      final origin = Uri.tryParse(currentUrl)?.host ?? '';
+      // Track permission usage for the WebView that actually emitted the request.
+      final idx = _indexOfController(controller);
+      final tabUrl = idx >= 0
+          ? wInfoList[idx]['openUrl'] as String? ?? ''
+          : await controller.currentUrl() ?? '';
+      final origin = Uri.tryParse(tabUrl)?.host ?? '';
       unawaited(DAppPermissionsTracker.record(origin, method));
 
       try {

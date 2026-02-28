@@ -1,6 +1,5 @@
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/address_book_api.dart';
@@ -23,7 +22,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddAddressPage extends ConsumerStatefulWidget {
-  /// 从列表页「扫码添加」流程传入，预填地址输入框
   final String? initialAddress;
   const AddAddressPage({this.initialAddress, super.key});
 
@@ -36,41 +34,40 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
   final nameController = TextEditingController();
   final descController = TextEditingController();
 
-  final addressFocusNode= FocusNode();
-  final nameFocusNode= FocusNode();
-  final descFocusNode= FocusNode();
+  final addressFocusNode = FocusNode();
+  final nameFocusNode = FocusNode();
+  final descFocusNode = FocusNode();
 
   var coinName = 'BTC';
-  var coinFullName= "Bitcoin";
+  var coinFullName = "Bitcoin";
   var coinType = 'BTC';
   var coinIcon = '';
-  var blockchainType=BlockchainType.Bitcoin.name;
+  var blockchainType = BlockchainType.Bitcoin.name;
 
-  String errorMessage="";
+  String errorMessage = "";
+
+  Color _themeColor(AppThemeKeys key) =>
+      AppThemeUtils.getColorByKey(context, key.name);
+
   @override
   void initState() {
     super.initState();
-    // 预填地址（来自扫码添加流程）
-    if (widget.initialAddress != null && widget.initialAddress!.isNotEmpty) {
-      addressController.text = widget.initialAddress!;
+    final initial = widget.initialAddress;
+    if (initial != null && initial.isNotEmpty) {
+      addressController.text = initial;
     }
     Future.microtask(() async {
       if (!mounted) return;
-      List<CoinModel> list =
-          ref.read(wapBridgeProvider)
-              .coinModels;
-      debugPrint("list ===${list.length}");
-      if (list.isNotEmpty) {
-        if (mounted) {
-          setState(() {
-            coinName = list[0].coin["coinType"];
-            coinIcon = list[0].coin["icon"];
-            blockchainType=list[0].coin["blockchainType"];
-          });
-        }
-      }
+      final list = ref.read(wapBridgeProvider).coinModels;
+      if (list.isEmpty || !mounted) return;
+      setState(() {
+        coinName = list[0].coin["coinType"];
+        coinIcon = list[0].coin["icon"];
+        blockchainType = list[0].coin["blockchainType"];
+      });
     });
   }
+
   @override
   void dispose() {
     addressController.dispose();
@@ -83,41 +80,32 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
   }
 
   Future<String?> addressCheck(String addr) async {
-    if(addr==""){
-      errorMessage=S.current.g_key_41;
-      setState(() {});
-      return null;
-    }else{
-      List<String> addrList=addr.split(":");
-      if(addrList.length==2){
-        addr=addrList[1];
-      }
-      bool check=await Trustdart().validateAddress(coinType, addr);
-      if(check){
-        errorMessage="";
-        setState(() {});
-        return addr;
-      }else{
-        if(coinType==CoinType.ETH.name){
-          TokenViewApi tokenViewApi=TokenViewApi();
-          MessageModel rmm=await tokenViewApi.getEnsResolve(addr);
-          if(rmm.error){
-            errorMessage=S.current.g_key_t_50;
-            setState(() {});
-            return null;
-          }else{
-            errorMessage="";
-            setState(() {});
-            return rmm.data;
-          }
-        }else{
-          errorMessage=S.current.g_key_t_50;
-          setState(() {});
-          return null;
-        }
+    String? result;
 
+    if (addr.isEmpty) {
+      errorMessage = S.current.g_key_41;
+    } else {
+      final parts = addr.split(":");
+      if (parts.length == 2) addr = parts[1];
+
+      if (await Trustdart().validateAddress(coinType, addr)) {
+        errorMessage = "";
+        result = addr;
+      } else if (coinType == CoinType.ETH.name) {
+        final rmm = await TokenViewApi().getEnsResolve(addr);
+        if (!rmm.error) {
+          errorMessage = "";
+          result = rmm.data;
+        } else {
+          errorMessage = S.current.g_key_t_50;
+        }
+      } else {
+        errorMessage = S.current.g_key_t_50;
       }
     }
+
+    setState(() {});
+    return result;
   }
 
   @override
@@ -127,6 +115,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
         text: S.of(context).g_key_112,
         actions: [
           GestureDetector(
+            onTap: handlerData,
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
               color: Colors.transparent,
@@ -134,16 +123,12 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
                 child: Text(
                   S.of(context).g_key_115,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainBlueColor.name),
+                    color: _themeColor(AppThemeKeys.mainBlueColor),
                     fontSize: ScreenUtil().setSp(30.0),
                   ),
                 ),
               ),
             ),
-            onTap: () {
-              handlerData();
-            },
           )
         ],
       ),
@@ -164,8 +149,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
           Text(
             S.of(context).address_Information,
             style: TextStyle(
-              color:
-              AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              color: _themeColor(AppThemeKeys.mainTextColor),
               fontSize: ScreenUtil().setSp(28.0),
             ),
           ),
@@ -181,20 +165,18 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
   Widget _buildSelectItem() {
     return GestureDetector(
       onTap: () async {
-        final CoinModel? data = await Navigator
-            .push(context,MaterialPageRoute(builder: (_) => const ChooseCoinsPage()));
-        if (!mounted) return;
-        debugPrint("data -name--->${data?.coin['name']}");
-        if (data != null) {
-          setState(() {
-            // coinName = data.coin["name"];
-            coinType = data.coin["coinType"];
-            coinName = data.coin["miniName"];
-            coinFullName= data.coin['name'];
-            coinIcon = data.coin["icon"]??"";
-            blockchainType=data.coin["blockchainType"];
-          });
-        }
+        final data = await Navigator.push<CoinModel>(
+          context,
+          MaterialPageRoute(builder: (_) => const ChooseCoinsPage()),
+        );
+        if (!mounted || data == null) return;
+        setState(() {
+          coinType = data.coin["coinType"];
+          coinName = data.coin["miniName"];
+          coinFullName = data.coin['name'];
+          coinIcon = data.coin["icon"] ?? "";
+          blockchainType = data.coin["blockchainType"];
+        });
       },
       child: containerStyle1(
         context,
@@ -221,7 +203,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
             Text(
               '$coinFullName ($coinName)',
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                color: _themeColor(AppThemeKeys.mainTextColor),
                 fontSize: ScreenUtil().setWidth(32.0),
               ),
             ),
@@ -229,7 +211,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
             Icon(
               Icons.arrow_forward_ios,
               size: ScreenUtil().setWidth(40.0),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
             ),
           ],
         ),
@@ -281,64 +263,59 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
         FocusScope.of(context).requestFocus(nameFocusNode);
       },
       boxShadow: _noShadow,
-      bgColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+      bgColor: _themeColor(AppThemeKeys.itemBgColor),
       messageMargin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
-      rightWidget3: blockchainType==BlockchainType.Ethereum.name?Container(
+      rightWidget3: blockchainType == BlockchainType.Ethereum.name ? Container(
         width: ScreenUtil().setWidth(60.0),
         height: ScreenUtil().setWidth(60.0),
         padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
         child: Icon(
           Icons.face_outlined,
           size: ScreenUtil().setWidth(50.0),
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+          color: _themeColor(AppThemeKeys.mainBlueColor),
         ),
-      ):null,
-      rightOnTap3: blockchainType==BlockchainType.Ethereum.name?faceMatchTypeWidget:null,
+      ) : null,
+      rightOnTap3: blockchainType == BlockchainType.Ethereum.name ? faceMatchTypeWidget : null,
       rightWidget1: Container(
         width: ScreenUtil().setWidth(60.0),
         height: ScreenUtil().setWidth(60.0),
         padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
         child: Image.asset(
           "assets/wallet/scan.png",
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainBlueColor.name),
+          color: _themeColor(AppThemeKeys.mainBlueColor),
           width: ScreenUtil().setWidth(50.0),
           height: ScreenUtil().setWidth(50.0),
         ),
       ),
       rightOnTap1: () async {
-        String? data = await Navigator
-            .push(context,MaterialPageRoute(builder: (_) => ScanPage()));
-        if (!mounted) return;
-        if(data != null){
-          setState(() {
-            addressController.text = data;
-          });
-        }
+        final data = await Navigator.push<String>(
+          context,
+          MaterialPageRoute(builder: (_) => ScanPage()),
+        );
+        if (!mounted || data == null) return;
+        setState(() => addressController.text = data);
       },
       rightWidget2: Container(
         padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
         height: ScreenUtil().setWidth(60.0),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name),
+            color: _themeColor(AppThemeKeys.mainBlueColor),
             borderRadius: BorderRadius.all(Radius.circular(60.0))
         ),
         child: Text(
           S.of(context).g_key_166,
           style: TextStyle(
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
+            color: _themeColor(AppThemeKeys.mainWhiteColor),
             fontSize: ScreenUtil().setSp(26.0),
           ),
         ),
       ),
       rightOnTap2: () async {
-        ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
-        if (data != null) {
-          if (data.text != null && data.text != "null") {
-            addressController.text = data.text!;
-          }
+        final data = await Clipboard.getData(Clipboard.kTextPlain);
+        final text = data?.text;
+        if (text != null && text != "null") {
+          addressController.text = text;
         }
       },
     );
@@ -351,10 +328,8 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       focusNode: nameFocusNode,
       hintText: S.of(context).g_key_nft_2,
       boxShadow: _noShadow,
-      bgColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-      onEditingComplete: (){
-        FocusScope.of(context).requestFocus(descFocusNode);
-      },
+      bgColor: _themeColor(AppThemeKeys.itemBgColor),
+      onEditingComplete: () => FocusScope.of(context).requestFocus(descFocusNode),
     );
   }
 
@@ -365,23 +340,17 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       focusNode: descFocusNode,
       hintText: S.of(context).descO,
       boxShadow: _noShadow,
-      bgColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-      onEditingComplete: (){
-        FocusScope.of(context).requestFocus(addressFocusNode);
-      },
+      bgColor: _themeColor(AppThemeKeys.itemBgColor),
+      onEditingComplete: () => FocusScope.of(context).requestFocus(addressFocusNode),
     );
   }
 
   void handlerData() async {
     final name = nameController.text.trim();
     final desc = descController.text.trim();
-    String? address = addressController.text.trim();
+    final address = await addressCheck(addressController.text.trim());
+    if (!mounted || address == null) return;
 
-    address=await addressCheck(address);
-    if (!mounted) return;
-    if(address==null){
-      return;
-    }
     if (coinType.isEmpty) {
       ToastUtils.show(S.of(context).g_key_address_3);
       return;
@@ -411,10 +380,13 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
     } catch (_) {}
   }
   void faceMatchTypeWidget() {
+    final su = ScreenUtil();
+    final textColor = _themeColor(AppThemeKeys.mainTextColor);
+
     Widget buildFaceOption(String label, int matchType) {
       return InkWell(
         onTap: () async {
-          String? address = await Navigator.push(
+          final address = await Navigator.push<String>(
             context,
             MaterialPageRoute(builder: (_) => FaceMatch(matchType)),
           );
@@ -425,14 +397,11 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
           Navigator.pop(context);
         },
         child: SizedBox(
-          height: ScreenUtil().setWidth(88.0),
+          height: su.setWidth(88.0),
           width: double.infinity,
           child: Text(
             label,
-            style: TextStyle(
-              fontSize: ScreenUtil().setWidth(32.0),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-            ),
+            style: TextStyle(fontSize: su.setWidth(32.0), color: textColor),
             textAlign: TextAlign.center,
           ),
         ),

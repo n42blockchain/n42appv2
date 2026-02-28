@@ -9,9 +9,6 @@ import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
-// ── 切换网络底部弹窗 ─────────────────────────────────────────────────────────
-
-/// 展示网络选择列表的底部弹窗。
 void showNetworkSheet(
   BuildContext context,
   WalletActionProvider walletValue,
@@ -28,22 +25,44 @@ void showNetworkSheet(
   );
 }
 
+BoxDecoration _itemBorderDecoration(BuildContext context) {
+  return BoxDecoration(
+    border: Border(
+      bottom: BorderSide(
+        width: ScreenUtil().setWidth(1.0),
+        color: AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.itemLineColor.name),
+      ),
+    ),
+  );
+}
+
+Widget _buildCheckIcon(BuildContext context) {
+  return Icon(
+    Icons.check,
+    size: ScreenUtil().setWidth(40.0),
+    color: AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name),
+  );
+}
+
 class _NetworkSheetHeader extends StatelessWidget {
   const _NetworkSheetHeader();
 
   @override
   Widget build(BuildContext context) {
+    final scr = ScreenUtil();
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(20),
-        vertical: ScreenUtil().setWidth(8),
+        horizontal: scr.setWidth(20),
+        vertical: scr.setWidth(8),
       ),
       child: Row(
         children: [
           Text(
             S.of(context).g_token_m_key_4,
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(32),
+              fontSize: scr.setSp(32),
               fontWeight: FontWeight.bold,
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.mainTextColor.name),
@@ -55,7 +74,7 @@ class _NetworkSheetHeader extends StatelessWidget {
               Icons.tune_rounded,
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.mainBlueColor.name),
-              size: ScreenUtil().setWidth(40),
+              size: scr.setWidth(40),
             ),
             tooltip: S.of(context).g_key_manage_chains,
             onPressed: () {
@@ -83,7 +102,7 @@ class _NetworkList extends StatelessWidget {
       constraints: BoxConstraints(maxHeight: ScreenUtil().setWidth(600.0)),
       child: ListView.separated(
         itemCount: walletValue.coinModels.length + 1,
-        separatorBuilder: (context, index) =>
+        separatorBuilder: (_, _) =>
             Divider(height: ScreenUtil().setWidth(1.0)),
         itemBuilder: (context, index) {
           if (index == 0) {
@@ -95,13 +114,12 @@ class _NetworkList extends StatelessWidget {
               },
             );
           }
-          final coinInfo = walletValue.coinModels[index - 1];
-          final selected = walletValue.walletInfo.networkIndex == index - 1;
+          final realIndex = index - 1;
           return _NetworkCoinItem(
-            coinInfo: coinInfo,
-            selected: selected,
+            coinInfo: walletValue.coinModels[realIndex],
+            selected: walletValue.walletInfo.networkIndex == realIndex,
             onTap: () {
-              walletValue.setNetworkIndex(index - 1);
+              walletValue.setNetworkIndex(realIndex);
               Navigator.pop(context);
             },
           );
@@ -119,40 +137,28 @@ class _NetworkAllItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scr = ScreenUtil();
     return InkWell(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          vertical: ScreenUtil().setWidth(30.0),
-          horizontal: ScreenUtil().setWidth(20.0),
+          vertical: scr.setWidth(30.0),
+          horizontal: scr.setWidth(20.0),
         ),
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              width: ScreenUtil().setWidth(1.0),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemLineColor.name),
-            ),
-          ),
-        ),
+        decoration: _itemBorderDecoration(context),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               S.of(context).g_token_m_key_4,
               style: TextStyle(
-                fontSize: ScreenUtil().setSp(30.0),
-                color: AppThemeUtils.getColorByKey(context, "mainTextColor"),
+                fontSize: scr.setSp(30.0),
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainTextColor.name),
                 fontWeight: FontWeight.bold,
               ),
             ),
-            if (selected)
-              Icon(
-                Icons.check,
-                size: ScreenUtil().setWidth(40.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-              ),
+            if (selected) _buildCheckIcon(context),
           ],
         ),
       ),
@@ -173,7 +179,8 @@ class _NetworkCoinItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget image = coinInfo.coin['miniName'] == CoinType.N.name
+    final scr = ScreenUtil();
+    final image = coinInfo.coin['miniName'] == CoinType.N.name
         ? Image.asset('assets/img/ast.png')
         : ImageNetWork(
             imageUrl: coinInfo.coin['icon'],
@@ -184,27 +191,18 @@ class _NetworkCoinItem extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          vertical: ScreenUtil().setWidth(30.0),
-          horizontal: ScreenUtil().setWidth(20.0),
+          vertical: scr.setWidth(30.0),
+          horizontal: scr.setWidth(20.0),
         ),
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              width: ScreenUtil().setWidth(1.0),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemLineColor.name),
-            ),
-          ),
-        ),
+        decoration: _itemBorderDecoration(context),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              width: ScreenUtil().setWidth(52.0),
-              height: ScreenUtil().setWidth(52.0),
-              margin: EdgeInsets.only(right: ScreenUtil().setWidth(10.0)),
+            SizedBox(
+              width: scr.setWidth(52.0),
+              height: scr.setWidth(52.0),
               child: image,
             ),
+            SizedBox(width: scr.setWidth(10.0)),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,16 +211,16 @@ class _NetworkCoinItem extends StatelessWidget {
                   Text(
                     coinInfo.coin['miniName'],
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(30.0),
+                      fontSize: scr.setSp(30.0),
                       color: AppThemeUtils.getColorByKey(
-                          context, "mainTextColor"),
+                          context, AppThemeKeys.mainTextColor.name),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     coinInfo.coin['name'],
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(30.0),
+                      fontSize: scr.setSp(30.0),
                       color: AppThemeUtils.getColorByKey(
                           context, AppThemeKeys.itemSubtitleTextColor.name),
                     ),
@@ -230,13 +228,7 @@ class _NetworkCoinItem extends StatelessWidget {
                 ],
               ),
             ),
-            if (selected)
-              Icon(
-                Icons.check,
-                size: ScreenUtil().setWidth(40.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-              ),
+            if (selected) _buildCheckIcon(context),
           ],
         ),
       ),

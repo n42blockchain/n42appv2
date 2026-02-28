@@ -15,7 +15,6 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
-/// 代币列表单行：包含滑动删除、图标、名称、价格、涨跌幅、图钉按钮。
 class WalletCoinItem extends ConsumerWidget {
   WalletCoinItem({
     required this.coinInfo,
@@ -27,80 +26,62 @@ class WalletCoinItem extends ConsumerWidget {
   final String itemKey;
   final String group;
 
-  final _oCcy = NumberFormat("#,##0.0#", "en_US");
-  final _regular = Regular();
+  static final _oCcy = NumberFormat('#,##0.0#', 'en_US');
+  static final _regular = Regular();
 
-  String _formatBalance(double balance) {
-    if (balance >= 1000000000) return _regular.getMoneyAbbreviation(balance);
-    if (balance > 0 && balance < 0.0000000009) {
-      return _regular.getMoneyAbbreviationDecimal(balance);
-    }
-    return _oCcy.format(balance);
+  String _abbreviate(double value, {String? fallback}) {
+    if (value >= 1000000000) return _regular.getMoneyAbbreviation(value);
+    if (value > 0 && value < 0.0000000009) return _regular.getMoneyAbbreviationDecimal(value);
+    return fallback ?? _oCcy.format(value);
   }
 
-  String _formatTokenBalance(CoinModel coin) {
-    final balance = coin.balanceDoubleAll();
-    if (balance > 1000000000) return _regular.getMoneyAbbreviation(balance);
-    if (balance > 0 && balance < 0.0000000009) {
-      return _regular.getMoneyAbbreviationDecimal(balance);
-    }
-    return coin.balanceString();
-  }
+  String _formatBalance(double balance) => _abbreviate(balance);
+
+  String _formatTokenBalance(CoinModel coin) =>
+      _abbreviate(coin.balanceDoubleAll(), fallback: coin.balanceString());
 
   void _onTap(BuildContext context) {
     if (coinInfo.coin['isAggregated'] == true) {
       ToastUtils.show(S.of(context).g_key_aa_coming_soon);
       return;
     }
-    if (coinInfo.coin['coinType'] == CoinType.XRP.name) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => WalletChainInfoXRP(coinInfo)),
-      );
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => WalletChainInfo(coinInfo)),
-      );
-    }
+    final page = coinInfo.coin['coinType'] == CoinType.XRP.name
+        ? WalletChainInfoXRP(coinInfo)
+        : WalletChainInfo(coinInfo);
+    Navigator.push(context, MaterialPageRoute(builder: (_) => page));
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final su = ScreenUtil();
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final coin = coinInfo.coin;
     final balanceStr = _formatBalance(coinInfo.value);
     final tokenBalanceStr = _formatTokenBalance(coinInfo);
 
-    final coinIcon = coinInfo.coin['icon'] ?? '';
+    const defaultImg = 'assets/img/list_default.png';
+    final coinIcon = coin['icon'] ?? '';
     final Widget image = coinIcon.isEmpty
-        ? Image.asset("assets/img/list_default.png")
-        : ImageNetWork(
-            imageUrl: coinIcon,
-            placeholder: "assets/img/list_default.png",
-          );
+        ? Image.asset(defaultImg)
+        : ImageNetWork(imageUrl: coinIcon, placeholder: defaultImg);
 
-    final Widget? mainImage = coinInfo.coin['isContract'] == true
-        ? ImageNetWork(
-            imageUrl: coinInfo.mainCoinIcon ?? "",
-            placeholder: "assets/img/list_default.png",
-          )
+    final Widget? mainImage = coin['isContract'] == true
+        ? ImageNetWork(imageUrl: coinInfo.mainCoinIcon ?? '', placeholder: defaultImg)
         : null;
 
-    final canEdit = coinInfo.coin['canEdit'] == true;
+    final canEdit = coin['canEdit'] == true;
     final deleteColor = canEdit
-        ? AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorTextColor.name)
+        ? AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name)
         : const Color(0xFF6B6B6B);
 
     final Widget refreshWidget = coinInfo.loadError
         ? Container(
-            height: ScreenUtil().setWidth(30.0),
-            width: ScreenUtil().setWidth(30.0),
-            margin: EdgeInsets.only(right: ScreenUtil().setWidth(6.0)),
+            height: su.setWidth(30.0),
+            width: su.setWidth(30.0),
+            margin: EdgeInsets.only(right: su.setWidth(6.0)),
             child: Image.asset(
-              "assets/img/error.png",
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.textColorOrange.name),
+              'assets/img/error.png',
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name),
             ),
           )
         : const SizedBox();
@@ -118,17 +99,15 @@ class WalletCoinItem extends ConsumerWidget {
             SlidableAction(
               onPressed: (_) {
                 if (!canEdit) return;
-                if (coinInfo.coin['isContract'] == true) {
-                  ref.read(wapBridgeProvider).removeWalletChainToken(
-                    coinInfo.coin,
-                    symbol: coinInfo.coin["coinType"],
-                    miniName: coinInfo.coin['miniName'],
+                final wap = ref.read(wapBridgeProvider);
+                if (coin['isContract'] == true) {
+                  wap.removeWalletChainToken(
+                    coin,
+                    symbol: coin['coinType'],
+                    miniName: coin['miniName'],
                   );
                 } else {
-                  ref.read(wapBridgeProvider).removeWalletChain(
-                    coinInfo.coin['mKey'],
-                    coinInfo.coin['unit'],
-                  );
+                  wap.removeWalletChain(coin['mKey'], coin['unit']);
                 }
               },
               backgroundColor: deleteColor,
@@ -139,33 +118,20 @@ class WalletCoinItem extends ConsumerWidget {
           ],
         ),
         child: Container(
-          margin: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(24),
-            vertical: ScreenUtil().setWidth(4),
-          ),
-          padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(16),
-            vertical: ScreenUtil().setWidth(14),
-          ),
+          margin: EdgeInsets.symmetric(horizontal: su.setWidth(24), vertical: su.setWidth(4)),
+          padding: EdgeInsets.symmetric(horizontal: su.setWidth(16), vertical: su.setWidth(14)),
           decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemBgColor.name),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+            borderRadius: BorderRadius.circular(su.setWidth(16)),
             border: Border.all(
-              color: isDark
-                  ? Colors.white.withAlpha(10)
-                  : Colors.black.withAlpha(6),
+              color: isDark ? Colors.white.withAlpha(10) : Colors.black.withAlpha(6),
               width: 0.8,
             ),
           ),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               refreshWidget,
-              _CoinIcon(
-                image: image,
-                mainImage: mainImage,
-              ),
+              _CoinIcon(image: image, mainImage: mainImage),
               Expanded(
                 child: _CoinInfo(
                   coinInfo: coinInfo,
@@ -173,11 +139,10 @@ class WalletCoinItem extends ConsumerWidget {
                   tokenBalanceStr: tokenBalanceStr,
                 ),
               ),
-              if (coinInfo.coin['isAggregated'] != true)
+              if (coin['isAggregated'] != true)
                 WalletPinIconButton(
                   isPinned: coinInfo.isPinned,
-                  onTap: () =>
-                      ref.read(wapBridgeProvider).togglePinCoin(coinInfo),
+                  onTap: () => ref.read(wapBridgeProvider).togglePinCoin(coinInfo),
                 ),
             ],
           ),
@@ -186,8 +151,6 @@ class WalletCoinItem extends ConsumerWidget {
     );
   }
 }
-
-// ── 代币图标（支持主链小图标叠加）────────────────────────────────────────────
 
 class _CoinIcon extends StatelessWidget {
   const _CoinIcon({required this.image, this.mainImage});
@@ -246,8 +209,6 @@ class _CoinIcon extends StatelessWidget {
   }
 }
 
-// ── 代币名称、价格、涨跌幅信息列 ─────────────────────────────────────────────
-
 class _CoinInfo extends StatelessWidget {
   const _CoinInfo({
     required this.coinInfo,
@@ -261,6 +222,10 @@ class _CoinInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final su = ScreenUtil();
+    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final subtitleText = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -270,21 +235,19 @@ class _CoinInfo extends StatelessWidget {
           children: [
             if (coinInfo.isPinned)
               Padding(
-                padding: EdgeInsets.only(right: ScreenUtil().setWidth(6)),
+                padding: EdgeInsets.only(right: su.setWidth(6)),
                 child: Icon(
                   Icons.push_pin,
-                  size: ScreenUtil().setWidth(22),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
+                  size: su.setWidth(22),
+                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
                 ),
               ),
             Expanded(
               child: Text(
                 coinInfo.coin['miniName'] ?? '',
                 style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                  fontSize: su.setSp(28),
+                  color: mainText,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.3,
                 ),
@@ -293,16 +256,15 @@ class _CoinInfo extends StatelessWidget {
             Text(
               tokenBalanceStr,
               style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                fontSize: su.setSp(28),
+                color: mainText,
                 fontWeight: FontWeight.w600,
               ),
               textAlign: TextAlign.right,
             ),
           ],
         ),
-        SizedBox(height: ScreenUtil().setWidth(6)),
+        SizedBox(height: su.setWidth(6)),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -311,23 +273,15 @@ class _CoinInfo extends StatelessWidget {
               children: [
                 Text(
                   "\$${coinInfo.coinPriceString()}",
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
-                  ),
+                  style: TextStyle(fontSize: su.setSp(22), color: subtitleText),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(8)),
+                SizedBox(width: su.setWidth(8)),
                 CoinPercentageBadge(percentage: coinInfo.percentage),
               ],
             ),
             Text(
               "\$$balanceStr",
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
-              ),
+              style: TextStyle(fontSize: su.setSp(22), color: subtitleText),
             ),
           ],
         ),
@@ -336,8 +290,6 @@ class _CoinInfo extends StatelessWidget {
   }
 }
 
-// ── 涨跌幅 Badge ─────────────────────────────────────────────────────────────
-
 class CoinPercentageBadge extends StatelessWidget {
   const CoinPercentageBadge({super.key, required this.percentage});
 
@@ -345,26 +297,24 @@ class CoinPercentageBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final su = ScreenUtil();
     final isPositive = percentage >= 0;
-    final color = isPositive
-        ? AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.rightTextColor.name)
-        : AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorTextColor.name);
+    final colorKey = isPositive ? AppThemeKeys.rightTextColor : AppThemeKeys.errorTextColor;
+    final color = AppThemeUtils.getColorByKey(context, colorKey.name);
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(8),
-        vertical: ScreenUtil().setWidth(3),
+        horizontal: su.setWidth(8),
+        vertical: su.setWidth(3),
       ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+        borderRadius: BorderRadius.circular(su.setWidth(6)),
       ),
       child: Text(
         "${isPositive ? '+' : ''}${percentage.toStringAsFixed(2)}%",
         style: TextStyle(
-          fontSize: ScreenUtil().setSp(22),
+          fontSize: su.setSp(22),
           color: color,
           fontWeight: FontWeight.w600,
         ),

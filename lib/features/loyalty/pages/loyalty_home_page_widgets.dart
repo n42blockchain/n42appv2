@@ -12,10 +12,18 @@ part of 'loyalty_home_page.dart';
 mixin _WidgetsMixin on _LogicMixin {
   TabController get _tabController;
 
+  // ── Theme helper ──────────────────────────────────────────────────────
+
+  Color _themeColor(BuildContext context, AppThemeKeys key) {
+    return AppThemeUtils.getColorByKey(context, key.name);
+  }
+
   // ── Points card ─────────────────────────────────────────────────────────
 
   Widget _buildPointsCard(BuildContext context, LoyaltyProvider provider) {
     final tierColor = Color(provider.getTierColorValue());
+    final blueColor = _themeColor(context, AppThemeKeys.mainBlueColor);
+    final account = provider.account;
 
     return Container(
       margin: EdgeInsets.all(ScreenUtil().setWidth(20)),
@@ -23,9 +31,8 @@ mixin _WidgetsMixin on _LogicMixin {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-                .withValues(alpha: 180 / 255),
+            blueColor,
+            blueColor.withValues(alpha: 180 / 255),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -33,8 +40,7 @@ mixin _WidgetsMixin on _LogicMixin {
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
         boxShadow: [
           BoxShadow(
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-                .withValues(alpha: 50 / 255),
+            color: blueColor.withValues(alpha: 50 / 255),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -60,12 +66,12 @@ mixin _WidgetsMixin on _LogicMixin {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      provider.account.tierEmoji,
+                      account.tierEmoji,
                       style: TextStyle(fontSize: ScreenUtil().setSp(24)),
                     ),
                     SizedBox(width: ScreenUtil().setWidth(6)),
                     Text(
-                      provider.account.tierName,
+                      account.tierName,
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(24),
                         color: Colors.white,
@@ -114,7 +120,7 @@ mixin _WidgetsMixin on _LogicMixin {
 
           // Points value
           Text(
-            '${provider.account.availablePoints}',
+            '${account.availablePoints}',
             style: TextStyle(
               fontSize: ScreenUtil().setSp(64),
               fontWeight: FontWeight.bold,
@@ -138,7 +144,7 @@ mixin _WidgetsMixin on _LogicMixin {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Next: ${_getNextTierName(provider.account.tier)}',
+                    'Next: ${_getNextTierName(account.tier)}',
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(22),
                       color: Colors.white70,
@@ -147,16 +153,16 @@ mixin _WidgetsMixin on _LogicMixin {
                   Row(
                     children: [
                       Text(
-                        '${provider.account.tierProgress}%',
+                        '${account.tierProgress}%',
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(22),
                           color: Colors.white70,
                         ),
                       ),
-                      if (provider.account.nextTierPoints > 0 &&
-                          provider.account.tier != LoyaltyTier.diamond) ...[
+                      if (account.nextTierPoints > 0 &&
+                          account.tier != LoyaltyTier.diamond) ...[
                         Text(
-                          ' · ${provider.account.nextTierPoints} pts to go',
+                          ' · ${account.nextTierPoints} pts to go',
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(20),
                             color: Colors.white54,
@@ -171,7 +177,7 @@ mixin _WidgetsMixin on _LogicMixin {
               ClipRRect(
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
                 child: LinearProgressIndicator(
-                  value: provider.account.tierProgress / 100,
+                  value: account.tierProgress / 100,
                   backgroundColor: Colors.white24,
                   valueColor: AlwaysStoppedAnimation(tierColor),
                   minHeight: ScreenUtil().setWidth(8),
@@ -186,13 +192,13 @@ mixin _WidgetsMixin on _LogicMixin {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildStatItem('Total Earned', '${provider.account.totalPoints}'),
+              _buildStatItem('Total Earned', '${account.totalPoints}'),
               Container(
                 width: 1,
                 height: ScreenUtil().setWidth(40),
                 color: Colors.white24,
               ),
-              _buildStatItem('Used', '${provider.account.usedPoints}'),
+              _buildStatItem('Used', '${account.usedPoints}'),
             ],
           ),
         ],
@@ -226,12 +232,14 @@ mixin _WidgetsMixin on _LogicMixin {
 
   Widget _buildCheckInCard(BuildContext context, LoyaltyProvider provider) {
     final hasCheckedIn = provider.hasCheckedInToday;
+    final s = S.of(context);
+    final statusColor = hasCheckedIn ? Colors.green : Colors.amber;
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: _themeColor(context, AppThemeKeys.itemBgColor),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
       ),
       child: Row(
@@ -240,13 +248,12 @@ mixin _WidgetsMixin on _LogicMixin {
             width: ScreenUtil().setWidth(56),
             height: ScreenUtil().setWidth(56),
             decoration: BoxDecoration(
-              color: (hasCheckedIn ? Colors.green : Colors.amber)
-                  .withValues(alpha: 30 / 255),
+              color: statusColor.withValues(alpha: 30 / 255),
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
             ),
             child: Icon(
               hasCheckedIn ? Icons.check_circle : Icons.calendar_today,
-              color: hasCheckedIn ? Colors.green : Colors.amber,
+              color: statusColor,
               size: ScreenUtil().setWidth(32),
             ),
           ),
@@ -256,26 +263,20 @@ mixin _WidgetsMixin on _LogicMixin {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  S.of(context).g_key_loyalty_daily_checkin,
+                  s.g_key_loyalty_daily_checkin,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(28),
                     fontWeight: FontWeight.w600,
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
+                    color: _themeColor(context, AppThemeKeys.mainTextColor),
                   ),
                 ),
                 Text(
                   hasCheckedIn
-                      ? S.of(context).g_key_loyalty_checked_today
-                      : S.of(context).g_key_loyalty_earn_points(10),
+                      ? s.g_key_loyalty_checked_today
+                      : s.g_key_loyalty_earn_points(10),
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
+                    color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
                   ),
                 ),
               ],
@@ -292,8 +293,8 @@ mixin _WidgetsMixin on _LogicMixin {
             ),
             child: Text(
               hasCheckedIn
-                  ? S.of(context).g_key_loyalty_checkin_done
-                  : S.of(context).g_key_loyalty_checkin_btn,
+                  ? s.g_key_loyalty_checkin_done
+                  : s.g_key_loyalty_checkin_btn,
             ),
           ),
         ],
@@ -304,6 +305,8 @@ mixin _WidgetsMixin on _LogicMixin {
   // ── Quick actions ───────────────────────────────────────────────────────
 
   Widget _buildQuickActions(BuildContext context, LoyaltyProvider provider) {
+    final s = S.of(context);
+
     return Padding(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       child: Row(
@@ -311,7 +314,7 @@ mixin _WidgetsMixin on _LogicMixin {
           Expanded(
             child: _buildQuickAction(
               context,
-              S.of(context).g_key_loyalty_tasks,
+              s.g_key_loyalty_tasks,
               '${provider.availableTasks.length}',
               Icons.assignment,
               Colors.blue,
@@ -322,7 +325,7 @@ mixin _WidgetsMixin on _LogicMixin {
           Expanded(
             child: _buildQuickAction(
               context,
-              S.of(context).g_key_loyalty_rewards,
+              s.g_key_loyalty_rewards,
               '${provider.rewards.length}',
               Icons.card_giftcard,
               Colors.purple,
@@ -333,7 +336,7 @@ mixin _WidgetsMixin on _LogicMixin {
           Expanded(
             child: _buildQuickAction(
               context,
-              S.of(context).g_key_loyalty_invite,
+              s.g_key_loyalty_invite,
               '+100',
               Icons.person_add,
               Colors.green,
@@ -358,7 +361,7 @@ mixin _WidgetsMixin on _LogicMixin {
       child: Container(
         padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: _themeColor(context, AppThemeKeys.itemBgColor),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
         ),
         child: Column(
@@ -404,10 +407,7 @@ mixin _WidgetsMixin on _LogicMixin {
               label,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(24),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: _themeColor(context, AppThemeKeys.mainTextColor),
               ),
             ),
           ],

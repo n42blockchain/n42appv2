@@ -54,22 +54,13 @@ class CreateSessionKeySheet extends StatefulWidget {
 }
 
 class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
-  // ── Step 1: preset ────────────────────────────────────────────────────────
   SessionKeyPermission _preset = SessionKeyPermission.transfer;
-
-  // ── Step 2: DApp label ────────────────────────────────────────────────────
   final TextEditingController _labelCtrl = TextEditingController();
   final FocusNode _labelFocus = FocusNode();
-
-  // ── Step 3: expiry ────────────────────────────────────────────────────────
   Duration _expiry = const Duration(days: 1);
-
-  // ── Step 4: spending limit (transfer preset only) ─────────────────────────
   final TextEditingController _amountCtrl = TextEditingController();
   String _amountToken = 'ETH';
   bool _noLimit = true;
-
-  // ── Step 5: risk confirmation ─────────────────────────────────────────────
   bool _riskConfirmed = false;
   bool _isSaving = false;
 
@@ -81,33 +72,26 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
     super.dispose();
   }
 
-  // ── Preset metadata helper ────────────────────────────────────────────────
-
   /// Returns (label, riskColor) for the given [preset] in the current locale.
-  ({String label, Color riskColor}) _presetInfo(SessionKeyPermission preset) {
-    switch (preset) {
-      case SessionKeyPermission.transfer:
-        return (
+  ({String label, Color riskColor}) _presetInfo(SessionKeyPermission preset) =>
+      switch (preset) {
+        SessionKeyPermission.transfer => (
           label: S.of(context).g_key_aa_session_preset_transfer,
           riskColor: Colors.green,
-        );
-      case SessionKeyPermission.contractCall:
-        return (
+        ),
+        SessionKeyPermission.contractCall => (
           label: S.of(context).g_key_aa_session_preset_contract,
           riskColor: Colors.orange,
-        );
-      case SessionKeyPermission.full:
-        return (
+        ),
+        SessionKeyPermission.full => (
           label: S.of(context).g_key_aa_session_preset_full,
           riskColor: Colors.red,
-        );
-      case SessionKeyPermission.approve:
-        return (
+        ),
+        SessionKeyPermission.approve => (
           label: S.of(context).g_key_aa_approve,
           riskColor: Colors.orange,
-        );
-    }
-  }
+        ),
+      };
 
   static const _expiryOptions = [
     (label: '1h', duration: Duration(hours: 1)),
@@ -116,14 +100,15 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
     (label: '30d', duration: Duration(days: 30)),
   ];
 
-  String _expiryI18n(Duration d) {
-    if (d.inHours == 1) return S.of(context).g_key_aa_session_1h;
-    if (d.inDays == 1) return S.of(context).g_key_aa_session_1d;
-    if (d.inDays == 7) return S.of(context).g_key_aa_session_7d;
-    return S.of(context).g_key_aa_session_30d;
-  }
+  String _expiryI18n(Duration d) => switch (d.inHours) {
+        1 => S.of(context).g_key_aa_session_1h,
+        24 => S.of(context).g_key_aa_session_1d,
+        168 => S.of(context).g_key_aa_session_7d,
+        _ => S.of(context).g_key_aa_session_30d,
+      };
 
-  // ── Build ─────────────────────────────────────────────────────────────────
+  Color _themeColor(String key) =>
+      AppThemeUtils.getColorByKey(context, key);
 
   @override
   Widget build(BuildContext context) {
@@ -133,8 +118,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
       maxChildSize: 0.96,
       builder: (context, scrollController) => Container(
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemBgColor.name),
+          color: _themeColor(AppThemeKeys.itemBgColor.name),
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(ScreenUtil().setWidth(24)),
           ),
@@ -161,9 +145,8 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
 
   List<Widget> _buildFormBody(BuildContext context) {
     final info = _presetInfo(_preset);
-    final dappStr = _labelCtrl.text.trim().isNotEmpty
-        ? _labelCtrl.text.trim()
-        : '?';
+    final trimmed = _labelCtrl.text.trim();
+    final dappStr = trimmed.isNotEmpty ? trimmed : '?';
     final spendingLine = (_preset == SessionKeyPermission.transfer &&
             !_noLimit &&
             _amountCtrl.text.isNotEmpty)
@@ -250,10 +233,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(32),
                 fontWeight: FontWeight.bold,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: _themeColor(AppThemeKeys.mainTextColor.name),
               ),
             ),
           ),
@@ -272,15 +252,10 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
       style: TextStyle(
         fontSize: ScreenUtil().setSp(26),
         fontWeight: FontWeight.w700,
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.mainTextColor.name,
-        ),
+        color: _themeColor(AppThemeKeys.mainTextColor.name),
       ),
     );
   }
-
-  // ── Step 2: Label ─────────────────────────────────────────────────────────
 
   Widget _buildLabelField() {
     return TextFormField(
@@ -302,11 +277,8 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
     );
   }
 
-  // ── Step 3: Expiry chips ──────────────────────────────────────────────────
-
   Widget _buildExpiryChips() {
-    final blueColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final blueColor = _themeColor(AppThemeKeys.mainBlueColor.name);
 
     return Wrap(
       spacing: ScreenUtil().setWidth(10),
@@ -336,10 +308,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
                 fontWeight: FontWeight.w600,
                 color: isSelected
                     ? blueColor
-                    : AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ),
+                    : _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
               ),
             ),
           ),
@@ -347,8 +316,6 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
       }).toList(),
     );
   }
-
-  // ── Create button ─────────────────────────────────────────────────────────
 
   Widget _buildCreateButton() {
     final canCreate = _riskConfirmed && !_isSaving;
@@ -360,10 +327,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
           child: ElevatedButton(
             onPressed: canCreate ? _submit : null,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ),
+              backgroundColor: _themeColor(AppThemeKeys.mainBlueColor.name),
               foregroundColor: Colors.white,
               disabledBackgroundColor: Colors.grey.withAlpha(50),
               padding:
@@ -395,15 +359,12 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
     );
   }
 
-  // ── Submit ────────────────────────────────────────────────────────────────
-
   Future<void> _submit() async {
     setState(() => _isSaving = true);
 
+    final trimmedLabel = _labelCtrl.text.trim();
     final info = _presetInfo(_preset);
-    final label = _labelCtrl.text.trim().isNotEmpty
-        ? _labelCtrl.text.trim()
-        : info.label;
+    final label = trimmedLabel.isNotEmpty ? trimmedLabel : info.label;
 
     BigInt? spendingLimit;
     if (_preset == SessionKeyPermission.transfer &&
@@ -446,13 +407,6 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
     }
   }
 
-  // ── Helpers ───────────────────────────────────────────────────────────────
-
-  /// Generate a random-looking Ethereum address for the new session key.
-  ///
-  /// In production, this would be derived from the HD wallet using a
-  /// dedicated derivation path (e.g. m/44'/60'/0'/1/index) or generated
-  /// by the smart contract account system.
   static String _generateKeyAddress() {
     final rng = Random.secure();
     final bytes = List.generate(20, (_) => rng.nextInt(256));

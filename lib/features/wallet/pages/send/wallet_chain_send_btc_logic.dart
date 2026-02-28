@@ -61,12 +61,12 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
 
   Map<String, dynamic> gasFeeLevel = {
     'error': false,
-    'averageValue': 5, // server-provided average sat/byte rate
+    'averageValue': 5,
     'loading': false,
-    'gasFeeRate': 5, // user-selected sat/byte rate
-    'gasFees': 0, // calculated total fee in satoshis
-    'signByteSize': 0, // serialized tx byte count
-    'maxValue': 0, // satoshi amount when sending max
+    'gasFeeRate': 5,
+    'gasFees': 0,
+    'signByteSize': 0,
+    'maxValue': 0,
   };
 
   // -- Initialization --
@@ -77,7 +77,6 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
     await getBalance();
   }
 
-  // Verify whether the last transaction succeeded.
   Future<void> checkLastTx() async {
     final checkLastModel = await transferApi.checkLastTxBtc(
       widget.coinModel.coin['coinType'],
@@ -89,7 +88,6 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
     setState(() {});
   }
 
-  // Fetch the BTC gas fee levels from the server.
   Future<void> getGasFeeBtc() async {
     if (widget.coinModel.coin['coinType'] == CoinType.BTC.name) {
       if (gasFeeLevel['loading'] as bool) return;
@@ -117,7 +115,6 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
     setState(() {});
   }
 
-  /// Build Slow/Standard/Fast fee model using ~250 bytes as a typical BTC tx estimate.
   void _buildBtcFeeModel() {
     final avgRate = gasFeeLevel['averageValue'] as int;
     final coinType = widget.coinModel.coin['coinType']?.toString() ?? 'BTC';
@@ -132,7 +129,6 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
     );
   }
 
-  /// Open the non-EVM gas settings page and apply the selection result.
   Future<void> _openBtcGasSettings() async {
     if (_btcFeeModel == null) return;
     final result = await Navigator.push<NonEvmGasResult>(
@@ -141,31 +137,23 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
         builder: (_) => NonEvmGasSettingsPage(feeModel: _btcFeeModel!),
       ),
     );
-    if (result != null && mounted) {
-      _btcFeeModel = result.feeModel;
-      final rate = result.effectiveFeeRate ??
-          _btcFeeModel!.currentOption.feeRate ??
-          (gasFeeLevel['averageValue'] as int);
-      gasFeeLevel['gasFeeRate'] = rate;
-      byteFeeTextEditingController.text = rate.toString();
-      setState(() {});
-      calculateGasFee();
-    }
+    if (result == null || !mounted) return;
+    _btcFeeModel = result.feeModel;
+    final rate = result.effectiveFeeRate ??
+        _btcFeeModel!.currentOption.feeRate ??
+        (gasFeeLevel['averageValue'] as int);
+    gasFeeLevel['gasFeeRate'] = rate;
+    byteFeeTextEditingController.text = rate.toString();
+    setState(() {});
+    calculateGasFee();
   }
 
-  /// Speed level label for the fee selector.
-  String _btcSpeedLabel(NonEvmFeeSpeed speed) {
-    switch (speed) {
-      case NonEvmFeeSpeed.slow:
-        return S.current.g_key_gas_slow;
-      case NonEvmFeeSpeed.standard:
-        return S.current.g_key_gas_standard;
-      case NonEvmFeeSpeed.fast:
-        return S.current.g_key_gas_fast;
-    }
-  }
+  String _btcSpeedLabel(NonEvmFeeSpeed speed) => switch (speed) {
+    NonEvmFeeSpeed.slow => S.current.g_key_gas_slow,
+    NonEvmFeeSpeed.standard => S.current.g_key_gas_standard,
+    NonEvmFeeSpeed.fast => S.current.g_key_gas_fast,
+  };
 
-  // Refresh wallet balance.
   Future<void> getBalance() async {
     try {
       final isOk = await widget.coinModel.getBalance();
@@ -187,69 +175,59 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
 
   // -- Abstract methods provided by _BtcSendTxMixin --
 
-  /// Recalculates the gas fee whenever price or fee rate changes.
   Future<void> calculateGasFee();
-
-  /// Sets the send amount to the maximum spendable value after fees.
   Future<void> maxTag();
 
   // -- Input validation --
 
-  // Validate the recipient address.
   Future<void> toAddressCheck(String addr) async {
     if (widget.coinModel.isTest) return;
-    if (addr == '') {
+    if (addr.isEmpty) {
       toErrorMessage = S.current.g_key_41;
-    } else {
-      final check = await Trustdart()
-          .validateAddress(widget.coinModel.coin['coinType'], addr);
-      if (check) {
-        if (addr.toUpperCase() == widget.coinModel.address.toUpperCase()) {
-          toErrorMessage = S.current.g_key_t_50;
-        } else {
-          toErrorMessage = '';
-        }
-      } else {
-        toErrorMessage = S.current.g_key_t_50;
-      }
+      setState(() {});
+      return;
     }
+    final valid = await Trustdart()
+        .validateAddress(widget.coinModel.coin['coinType'], addr);
+
+    final isSelfAddress = addr.toUpperCase() == widget.coinModel.address.toUpperCase();
+    toErrorMessage = (valid && !isSelfAddress) ? '' : S.current.g_key_t_50;
     setState(() {});
   }
 
-  // Validate the transfer amount field.
+  void _setAmountError(String msg) {
+    amountErrorMessage = msg;
+    setState(() {});
+  }
+
   void amountCheck({String value = ''}) {
     if (gasFeeLevel['maxValue'] != 0) return;
-    if (value == '') {
-      value = valueTextEditingController.text;
-    }
+    if (value.isEmpty) value = valueTextEditingController.text;
+
     if (value.isEmpty) {
-      amountErrorMessage = S.of(context).g_key_46(0);
-      setState(() {});
+      _setAmountError(S.of(context).g_key_46(0));
       return;
     }
     final checkValue = regular.regularDouble(value);
-    final checkValue1 = regular.regularNums(value);
+    final checkInt = regular.regularNums(value);
+    if (!checkValue && !checkInt) {
+      _setAmountError(S.of(context).g_key_134);
+      return;
+    }
+    if (double.parse(value) <= 0) {
+      _setAmountError(S.of(context).g_key_46(0));
+      return;
+    }
     final transactionTotal = dec.Decimal.parse(value) +
         dec.Decimal.parse(
             toEther(gasFeeLevel['gasFees'].toString(), 8).toString());
-    if (!checkValue && !checkValue1) {
-      amountErrorMessage = S.of(context).g_key_134;
-      setState(() {});
-      return;
-    } else if (double.parse(value) <= 0) {
-      amountErrorMessage = S.of(context).g_key_46(0);
-      setState(() {});
-      return;
-    } else if (transactionTotal.toDouble() >
-        widget.coinModel.balanceDoubleAll()) {
-      amountErrorMessage = S.of(context).g_key_47;
-      setState(() {});
+    if (transactionTotal.toDouble() > widget.coinModel.balanceDoubleAll()) {
+      _setAmountError(S.of(context).g_key_47);
       return;
     }
     if (widget.coinModel.coin['coinType'] == CoinType.BTC.name) {
       if (double.parse(value) < 0.00001) {
-        amountErrorMessage = S.of(context).g_key_135(0.00001);
-        setState(() {});
+        _setAmountError(S.of(context).g_key_135(0.00001));
         return;
       }
     }
@@ -260,25 +238,19 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
     setState(() {});
   }
 
-  // Validate the byte fee field.
   void byteFeeCheck({String value = ''}) {
-    if (value == '') {
-      value = byteFeeTextEditingController.text;
-    }
+    if (value.isEmpty) value = byteFeeTextEditingController.text;
     if (value.isEmpty) {
-      amountErrorMessage = S.of(context).g_key_46(0);
-      setState(() {});
+      _setAmountError(S.of(context).g_key_46(0));
       return;
     }
     if (!isInt(value)) {
-      amountErrorMessage = S.of(context).g_key_t_43;
-      setState(() {});
+      _setAmountError(S.of(context).g_key_t_43);
       return;
     }
     final valueInt = int.parse(value);
     if (valueInt <= 0) {
-      amountErrorMessage = S.of(context).g_key_t_43;
-      setState(() {});
+      _setAmountError(S.of(context).g_key_t_43);
       return;
     }
     gasFeeLevel['gasFeeRate'] = valueInt;

@@ -80,112 +80,100 @@ extension WalletActionProviderMarket on WalletActionProvider {
 
   ///获取钱包 币的基本数据，成功后初始化主页币列表
   Future<void> getCoinInfo() async {
-    try{
-      //钱包币列表，默认查询币种的当前价格等基本信息
-      String coinSelectPriceKeys="";
-      for(CoinModel cm in coinList){
-        coinSelectPriceKeys+="${cm.coin['miniName'].toString().toLowerCase()},";
-      }
+    //钱包币列表，默认查询币种的当前价格等基本信息
+    final coinSelectPriceKeys = coinList
+        .map((cm) => cm.coin['miniName'].toString().toLowerCase())
+        .join(',');
 
-      // 先获取稳定币价格（从 CoinGecko，含 CNY 汇率推导，有 5 分钟缓存）
-      await _fetchStablecoinPrices();
+    // 先获取稳定币价格（从 CoinGecko，含 CNY 汇率推导，有 5 分钟缓存）
+    await _fetchStablecoinPrices();
 
-      // 市场数据防重复请求：30s 内已有新鲜数据则跳过网络请求，直接用缓存重算总余额
-      final now = DateTime.now();
-      final marketDataFresh = _coinMarketInfoFetchTime != null &&
-          now.difference(_coinMarketInfoFetchTime!) < WalletActionProvider._marketInfoMinInterval &&
-          _coinMarketInfo.isNotEmpty;
+    // 市场数据防重复请求：30s 内已有新鲜数据则跳过网络请求，直接用缓存重算总余额
+    final now = DateTime.now();
+    final marketDataFresh = _coinMarketInfoFetchTime != null &&
+        now.difference(_coinMarketInfoFetchTime!) < WalletActionProvider._marketInfoMinInterval &&
+        _coinMarketInfo.isNotEmpty;
 
-      if (!marketDataFresh) {
-        //查询coins中的币种信息
-        var list = await MarketApi().getWalletCoinsInfo(coinSelectPriceKeys);
-        if (list['error'] == true) {
-          debugPrint('WalletActionProvider: getCoinInfo failed: ${list['data']}');
-          // 静默失败：保留旧缓存价格，不打扰用户（仅首次无数据时才 Toast）
-          if (_coinMarketInfo.isEmpty) {
-            ToastUtils.show(S.current.g_key_5);
-          }
-        } else {
-          final data = list['data'];
-          if (data != null && data['data'] != null) {
-            _coinMarketInfo = data['data'];
-            _coinMarketInfoFetchTime = now;
-            debugPrint('WalletActionProvider: Loaded ${_coinMarketInfo.length} coins market info');
-          }
+    if (!marketDataFresh) {
+      //查询coins中的币种信息
+      var list = await MarketApi().getWalletCoinsInfo(coinSelectPriceKeys);
+      if (list['error'] == true) {
+        debugPrint('WalletActionProvider: getCoinInfo failed: ${list['data']}');
+        // 静默失败：保留旧缓存价格，不打扰用户（仅首次无数据时才 Toast）
+        if (_coinMarketInfo.isEmpty) {
+          ToastUtils.show(S.current.g_key_5);
         }
       } else {
-        debugPrint('WalletActionProvider: Market data fresh (${now.difference(_coinMarketInfoFetchTime!).inSeconds}s old), skip fetch');
+        final data = list['data'];
+        if (data != null && data['data'] != null) {
+          _coinMarketInfo = data['data'];
+          _coinMarketInfoFetchTime = now;
+          debugPrint('WalletActionProvider: Loaded ${_coinMarketInfo.length} coins market info');
+        }
       }
-
-      // 无论是否重新拉取，都用最新缓存重算价格和总余额
-      for(CoinModel cm in coinList){
-        getCoinPrice(cm);
-      }
-      calculateBalanceWidthCoinModel();
-      // 记录本次成功更新时间（用于 UI 展示"更新于 X 分钟前"）
-      _priceLastUpdated = now;
-      refresh();
-
-      addCoinRefreshMap();
-    }catch(e){
-      print(e.toString());
+    } else {
+      debugPrint('WalletActionProvider: Market data fresh (${now.difference(_coinMarketInfoFetchTime!).inSeconds}s old), skip fetch');
     }
+
+    // 无论是否重新拉取，都用最新缓存重算价格和总余额
+    for(CoinModel cm in coinList){
+      getCoinPrice(cm);
+    }
+    calculateBalanceWidthCoinModel();
+    // 记录本次成功更新时间（用于 UI 展示"更新于 X 分钟前"）
+    _priceLastUpdated = now;
+    refresh();
+
+    addCoinRefreshMap();
   }
 
   //获取币的 美元价格
   void getCoinPrice(CoinModel cm) {
     // 使用 unit 作为主要匹配键（与原始实现保持一致）
     // miniName 用于请求，unit 用于匹配响应
-    String unit = cm.coin['unit']?.toString().toLowerCase() ?? '';
-    String miniName = cm.coin['miniName']?.toString().toLowerCase() ?? '';
+    final unit = cm.coin['unit']?.toString().toLowerCase() ?? '';
+    final miniName = cm.coin['miniName']?.toString().toLowerCase() ?? '';
 
     // 稳定币使用 CoinGecko 获取的价格
-    final stablecoinKey = WalletActionProvider._stablecoins.contains(unit) ? unit : (WalletActionProvider._stablecoins.contains(miniName) ? miniName : null);
+    final stablecoinKey = WalletActionProvider._stablecoins.contains(unit)
+        ? unit
+        : WalletActionProvider._stablecoins.contains(miniName)
+            ? miniName
+            : null;
     if (stablecoinKey != null) {
       final priceData = _stablecoinPrices[stablecoinKey];
-      if (priceData != null) {
-        cm.coinPrice = priceData['price'] ?? 1.0;
-        cm.percentage = priceData['change'] ?? 0.0;
-      } else {
-        // 如果 CoinGecko 没有返回数据，使用默认值 1.0
-        cm.coinPrice = 1.0;
-        cm.percentage = 0.0;
-      }
-      cm.coin['coinPrice'] = cm.coinPrice;
-      cm.coin['percentage'] = cm.percentage;
-      cm.value = cm.balanceDoubleAll() * cm.coinPrice;
+      cm.coinPrice = priceData?['price'] ?? 1.0;
+      cm.percentage = priceData?['change'] ?? 0.0;
+      _syncCoinPriceFields(cm);
       return;
     }
 
-    for (var element in _coinMarketInfo) {
-      String coinSymbol = element['coin']?.toString().toLowerCase() ?? '';
+    for (final element in _coinMarketInfo) {
+      final coinSymbol = element['coin']?.toString().toLowerCase() ?? '';
 
       // 优先使用 unit 匹配（与原始逻辑一致），然后使用 miniName
       if (coinSymbol == unit || coinSymbol == miniName) {
-        // 更新图标
         if (element['image'] != null) {
           cm.coin["icon"] = element['image'];
         }
-
-        // 设置币价
         cm.coinPrice = element['price'] * 1.0;
-        // 设置涨跌幅
         cm.percentage = element['price_change_per_24h'] * 1.0;
-
-        // 更新 coin 对象中的价格信息（供其他地方使用）
-        cm.coin['coinPrice'] = cm.coinPrice;
-        cm.coin['percentage'] = cm.percentage;
-
-        // 重新计算价值 (余额 * 币价)
-        cm.value = cm.balanceDoubleAll() * cm.coinPrice;
+        _syncCoinPriceFields(cm);
         break;
       }
     }
   }
 
+  /// 将 coinPrice/percentage 同步到 coin Map 并重算 value
+  void _syncCoinPriceFields(CoinModel cm) {
+    cm.coin['coinPrice'] = cm.coinPrice;
+    cm.coin['percentage'] = cm.percentage;
+    cm.value = cm.balanceDoubleAll() * cm.coinPrice;
+  }
+
   //获取币的 美元价格
   Map<String,dynamic>? getCoinPriceWithUnit(String unit) {
-    String keyStr = unit.toLowerCase();
+    final keyStr = unit.toLowerCase();
 
     // 稳定币使用 CoinGecko 获取的价格
     if (WalletActionProvider._stablecoins.contains(keyStr)) {
@@ -197,18 +185,16 @@ extension WalletActionProviderMarket on WalletActionProvider {
       };
     }
 
-    for (var element in _coinMarketInfo) {
-      if (element['coin'].toString().toLowerCase() == keyStr) {
-        Map<String,dynamic> rMap={};
-        rMap["icon"] = element['image'];
-        //设置币价
-        final price = Decimal.parse(element['price'].toString()).toDouble();
-        final percentage = Decimal.parse(element['price_change_per_24h'].toString()).toDouble();
-        rMap['coinPrice'] = price;
-        rMap['percentage'] = percentage;
-        debugPrint('WalletActionProvider: getCoinPriceWithUnit($unit) -> price=\$$price, change=$percentage%');
-        return rMap;
-      }
+    for (final element in _coinMarketInfo) {
+      if (element['coin'].toString().toLowerCase() != keyStr) continue;
+      final price = Decimal.parse(element['price'].toString()).toDouble();
+      final percentage = Decimal.parse(element['price_change_per_24h'].toString()).toDouble();
+      debugPrint('WalletActionProvider: getCoinPriceWithUnit($unit) -> price=\$$price, change=$percentage%');
+      return {
+        'icon': element['image'],
+        'coinPrice': price,
+        'percentage': percentage,
+      };
     }
     debugPrint('WalletActionProvider: getCoinPriceWithUnit($unit) -> NOT FOUND in ${_coinMarketInfo.length} items');
     return null;
@@ -216,8 +202,8 @@ extension WalletActionProviderMarket on WalletActionProvider {
 
   //获取币的 全部信息
   Map<String,dynamic>? getCoinPriceWithUnitAll(String unit) {
-    String keyStr = unit.toLowerCase();
-    for (var element in _coinMarketInfo) {
+    final keyStr = unit.toLowerCase();
+    for (final element in _coinMarketInfo) {
       if (element['coin'].toString().toLowerCase() == keyStr) {
         return element;
       }
@@ -227,12 +213,9 @@ extension WalletActionProviderMarket on WalletActionProvider {
 
   //获取币的基本信息
   Future<dynamic> getCoinsBaseInfo(String coinName)async{
-    Map<String,dynamic> m=await MarketApi().getWalletCoinsBaseInfo(coinName);
-    if(m['error']){
-      return null;
-    }else{
-      return m['data'];
-    }
+    final m = await MarketApi().getWalletCoinsBaseInfo(coinName);
+    if(m['error']) return null;
+    return m['data'];
   }
 
   //refresh 是否刷新
@@ -266,41 +249,35 @@ extension WalletActionProviderMarket on WalletActionProvider {
     }
 
     //获取 合约地址
-    String contract="";
-    if(coinModel.isTest){
-      contract=coinModel.coin['contract_test'];
-    }else{
-      contract=coinModel.coin['contract'];
-    }
-    CoinModel? chainCoinModel=getCoinModelWithCoinType(coinModel.coin['coinType']);
+    final contract = coinModel.isTest ? coinModel.coin['contract_test'] : coinModel.coin['contract'];
+    final chainCoinModel = getCoinModelWithCoinType(coinModel.coin['coinType']);
     if(chainCoinModel==null){
       coinModel.isRefresh=false;
       coinModel.loadError=true;
       refresh();
       return true;
     }
-    BigInt balance=BigInt.zero;
-    MessageModel rBalance=await tokenViewApi.getBalance(BlockchainType.Algorand.name, coinModel.coin['coinType'], coinModel.address.toString(),contract: contract,isTest: coinModel.isTest) ?? MessageModel.error();
+
+    final rBalance = await tokenViewApi.getBalance(BlockchainType.Algorand.name, coinModel.coin['coinType'], coinModel.address.toString(),contract: contract,isTest: coinModel.isTest) ?? MessageModel.error();
     if(rBalance.error){
       coinModel.isRefresh=false;
       coinModel.loadError=true;
       refresh();
       return true;
-    }else{
-      balance=rBalance.data['balance'];
-      coinModel.other=AlgoModel.fromCode(rBalance.data['code']);
     }
-    Map<String,dynamic>? coinInfo=getCoinPriceWithUnit(coinModel.coin['unit'].toString());
+
+    final balance = rBalance.data['balance'] as BigInt;
+    coinModel.other=AlgoModel.fromCode(rBalance.data['code']);
+
+    final coinInfo = getCoinPriceWithUnit(coinModel.coin['unit'].toString());
     if(coinInfo != null){
       coinModel.coin['percentage']=coinInfo['percentage'];
       coinModel.coin['coinPrice']=coinModel.isTest?0.0:coinInfo['coinPrice'];
       coinModel.coin['icon']=coinInfo['icon'];
     }
-    if(coinModel.isTest){
-      coinModel.coin['balance_test']=balance.toString();
-    }else{
-      coinModel.coin['balance']=balance.toString();
-    }
+
+    final balanceKey = coinModel.isTest ? 'balance_test' : 'balance';
+    coinModel.coin[balanceKey] = balance.toString();
 
     _safeUpdateWalletMap(coinModel);
     coinModel.getBalanceDefault();
@@ -309,20 +286,19 @@ extension WalletActionProviderMarket on WalletActionProvider {
 
   void addCoinRefreshMap(){
     if(coinRefreshMap[walletIndex] !=null)return;
-    List<CoinModel> rList=[];
-    for(int i=0;i<coinList.length;i++){
-      // 跳过聚合代币（AggregatedCoinModel），它们有自己的余额获取逻辑
-      if (coinList[i] is AggregatedCoinModel) {
-        continue;
+
+    // 标记不支持的代币为加载错误
+    for (final cm in coinList) {
+      if (cm is! AggregatedCoinModel && cm.address == null) {
+        debugPrint('WalletActionProvider: Skipping ${cm.coin['miniName']} in refresh - address is null');
+        cm.loadError = true;
       }
-      // 跳过 address 为 null 的代币（不支持的链）
-      if (coinList[i].address == null) {
-        debugPrint('WalletActionProvider: Skipping ${coinList[i].coin['miniName']} in refresh - address is null');
-        coinList[i].loadError = true; // 标记为加载错误
-        continue;
-      }
-      rList.add(coinList[i]);
     }
+
+    final rList = coinList
+        .where((cm) => cm is! AggregatedCoinModel && cm.address != null)
+        .toList();
+
     coinRefreshMap[walletIndex]={
       "coinList":rList,
     };

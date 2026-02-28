@@ -40,6 +40,16 @@ class SPUtil {
     }
   }
 
+  /// 解析存储的 JSON 字符串为 Map，失败时返回 null
+  Map<String, dynamic>? _decodeJsonMap(String? raw) {
+    if (raw == null || raw.isEmpty) return null;
+    try {
+      return json.decode(raw) as Map<String, dynamic>;
+    } catch (_) {
+      return null;
+    }
+  }
+
   // ==================== 非敏感设置 ====================
 
   // 是否阅读了登录、安全条款
@@ -279,13 +289,7 @@ class SPUtil {
   /// 格式：{ address: { miningType: String, miningValue: {...} } }
   Future<Map<String, dynamic>?> getMiningStautus() async {
     await initPrefs();
-    final raw = prefs?.getString(SPkey.miningV1Status.name);
-    if (raw == null || raw.isEmpty) return null;
-    try {
-      return json.decode(raw) as Map<String, dynamic>;
-    } catch (_) {
-      return null;
-    }
+    return _decodeJsonMap(prefs?.getString(SPkey.miningV1Status.name));
   }
 
   /// 设置某地址的 V1 挖矿状态
@@ -315,13 +319,7 @@ class SPUtil {
   /// 获取当前选中的 V1 挖矿节点
   Future<Map<String, dynamic>?> getCurrNodeAddress() async {
     await initPrefs();
-    final raw = prefs?.getString(SPkey.miningV1NodeAddress.name);
-    if (raw == null || raw.isEmpty) return null;
-    try {
-      return json.decode(raw) as Map<String, dynamic>;
-    } catch (_) {
-      return null;
-    }
+    return _decodeJsonMap(prefs?.getString(SPkey.miningV1NodeAddress.name));
   }
 
   /// 设置当前选中的 V1 挖矿节点
@@ -400,9 +398,7 @@ class SPUtil {
   Future<void> addIgnoredTokenContracts(Iterable<String> contracts) async {
     await initPrefs();
     final existing = await getIgnoredTokenContracts();
-    for (final c in contracts) {
-      existing.add(c.toLowerCase());
-    }
+    existing.addAll(contracts.map((c) => c.toLowerCase()));
     await prefs?.setString(
         SPkey.ignoredTokenContracts.name, json.encode(existing.toList()));
   }

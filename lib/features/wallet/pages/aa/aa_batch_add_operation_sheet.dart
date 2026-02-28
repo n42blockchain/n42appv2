@@ -9,10 +9,6 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/batch_operation_item.dart';
 
-/// 添加单个批量操作的底部弹层
-///
-/// 支持四种操作类型：Transfer、Approve、Swap、Custom。
-/// 根据选中类型动态显示/隐藏 Token 地址、金额、Calldata 等字段。
 class AddOperationSheet extends StatefulWidget {
   final ValueChanged<BatchOperation> onAdd;
 
@@ -77,23 +73,23 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
     final amount = double.tryParse(_amountController.text.trim()) ?? 0;
     const decimals = 18;
     final amountWei = BigInt.from((amount * 1e18).round());
+    final isCustom = _selectedType == BatchOperationType.custom;
 
     final isErc20 = _selectedType == BatchOperationType.transfer &&
         !_ethLikeTokens.contains(_selectedToken) &&
         _tokenAddressController.text.trim().isNotEmpty;
 
+    final needsTokenAddress =
+        isErc20 || _selectedType == BatchOperationType.approve;
+
     final operation = BatchOperation(
       type: _selectedType,
       targetAddress: to,
-      tokenSymbol: _selectedType == BatchOperationType.custom ? null : _selectedToken,
-      tokenAddress: (isErc20 || _selectedType == BatchOperationType.approve)
-          ? _tokenAddressController.text.trim()
-          : null,
-      amount: _selectedType == BatchOperationType.custom ? null : amountWei,
-      decimals: _selectedType == BatchOperationType.custom ? null : decimals,
-      customData: _selectedType == BatchOperationType.custom
-          ? _calldataController.text.trim()
-          : null,
+      tokenSymbol: isCustom ? null : _selectedToken,
+      tokenAddress: needsTokenAddress ? _tokenAddressController.text.trim() : null,
+      amount: isCustom ? null : amountWei,
+      decimals: isCustom ? null : decimals,
+      customData: isCustom ? _calldataController.text.trim() : null,
     );
 
     widget.onAdd(operation);
@@ -241,16 +237,11 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
     );
   }
 
-  String _typeName(BuildContext context, BatchOperationType type) {
-    switch (type) {
-      case BatchOperationType.transfer:
-        return S.of(context).g_key_37;
-      case BatchOperationType.approve:
-        return S.of(context).g_key_aa_approve;
-      case BatchOperationType.swap:
-        return S.of(context).g_swap_key_35;
-      case BatchOperationType.custom:
-        return S.of(context).g_key_aa_custom;
-    }
-  }
+  String _typeName(BuildContext context, BatchOperationType type) =>
+      switch (type) {
+        BatchOperationType.transfer => S.of(context).g_key_37,
+        BatchOperationType.approve => S.of(context).g_key_aa_approve,
+        BatchOperationType.swap => S.of(context).g_swap_key_35,
+        BatchOperationType.custom => S.of(context).g_key_aa_custom,
+      };
 }

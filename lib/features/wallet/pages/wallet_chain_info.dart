@@ -44,13 +44,8 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
         WalletChainInfoActionsMixin<WalletChainInfo> {
   // ── DB accessor ───────────────────────────────────────────────────────────
 
-  AppDatabase? _dbInstance;
-
   @override
-  AppDatabase get db {
-    _dbInstance ??= AppDatabase();
-    return _dbInstance!;
-  }
+  late final AppDatabase db = AppDatabase();
 
   // ── Display state ─────────────────────────────────────────────────────────
 
@@ -125,12 +120,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
 
   @override
   Future<void> handleSend({bool closeSheet = false}) async {
-    if (!await ensureWalletBackedUp()) {
-      if (!mounted) return;
-      if (closeSheet) Navigator.pop(context);
-      return;
-    }
-    if (!mounted) return;
+    if (!await _guardBackup(closeSheet)) return;
     await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => UnifiedSendPage(widget.coinModel)),
@@ -142,12 +132,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
 
   @override
   Future<void> handleReceive({bool closeSheet = false}) async {
-    if (!await ensureWalletBackedUp()) {
-      if (!mounted) return;
-      if (closeSheet) Navigator.pop(context);
-      return;
-    }
-    if (!mounted) return;
+    if (!await _guardBackup(closeSheet)) return;
     await Navigator.push(
       context,
       MaterialPageRoute(
@@ -159,6 +144,17 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
     );
     if (!mounted) return;
     if (closeSheet) Navigator.pop(context);
+  }
+
+  /// Shared guard: ensures wallet is backed up and pops sheet on failure.
+  Future<bool> _guardBackup(bool closeSheet) async {
+    if (!await ensureWalletBackedUp()) {
+      if (!mounted) return false;
+      if (closeSheet) Navigator.pop(context);
+      return false;
+    }
+    if (!mounted) return false;
+    return true;
   }
 
   @override
@@ -215,41 +211,54 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
   }
 
   void _initData() {
-    if (widget.coinModel.coin['isContract'] == true) {
-      final cIndex = ref.read(wapBridgeProvider).coinModels.indexWhere(
-            (e) => e.coin['coinType'] == widget.coinModel.coin['coinType'],
-          );
-      _chainCoinModel = ref.read(wapBridgeProvider).coinModels[cIndex];
+    final cm = widget.coinModel;
+    final coin = cm.coin;
+    final isContract = coin['isContract'] == true;
+
+    if (isContract) {
+      final wap = ref.read(wapBridgeProvider);
+      final cIndex = wap.coinModels.indexWhere(
+        (e) => e.coin['coinType'] == coin['coinType'],
+      );
+      _chainCoinModel = wap.coinModels[cIndex];
       _chainName = _chainCoinModel?.coin['name'];
       _chainSymbol = _chainCoinModel?.coin['miniName'];
-      _tokenName = widget.coinModel.coin['name'];
-      _tokenSymbol = widget.coinModel.coin['miniName'];
+      _tokenName = coin['name'];
+      _tokenSymbol = coin['miniName'];
       browserUrl = getBrowserTokenAddress(
-        widget.coinModel.coin['coinType'],
-        widget.coinModel.address,
-        widget.coinModel.coin['contract'],
-        isTest: widget.coinModel.isTest,
+        coin['coinType'], cm.address, coin['contract'],
+        isTest: cm.isTest,
       );
     } else {
-      _chainName = widget.coinModel.coin['name'];
-      _chainSymbol = widget.coinModel.coin['miniName'];
+      _chainName = coin['name'];
+      _chainSymbol = coin['miniName'];
       browserUrl = getBrowserAddress(
-        widget.coinModel.coin['coinType'],
-        widget.coinModel.address,
-        isTest: widget.coinModel.isTest,
+        coin['coinType'], cm.address,
+        isTest: cm.isTest,
       );
     }
+
     marketInfo = ref
         .read(wapBridgeProvider)
-        .getCoinPriceWithUnitAll(widget.coinModel.coin['unit']);
+        .getCoinPriceWithUnitAll(coin['unit']);
     getTransactionData(Load.refresh);
     getTransactionDataNetwork(Load.refresh);
   }
+
+  // ── Theme helpers ────────────────────────────────────────────────────────
+
+  Color _themeColor(String key) =>
+      AppThemeUtils.getColorByKey(context, key);
 
   // ── Build ─────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
+    final su = ScreenUtil();
+    final textColor = _themeColor(AppThemeKeys.mainTextColor.name);
+    final blueColor = _themeColor(AppThemeKeys.mainBlueColor.name);
+    final cm = widget.coinModel;
+
     return Scaffold(
       appBar: AppBarWidget(
         titleWidget: Column(
@@ -259,9 +268,8 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
             Text(
               '$_chainSymbol ($_chainName)',
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(32.0),
+                color: textColor,
+                fontSize: su.setSp(32.0),
                 fontWeight: FontWeight.bold,
               ),
               maxLines: 1,
@@ -271,9 +279,8 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
               Text(
                 '$_tokenSymbol($_tokenName)',
                 style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(24.0),
+                  color: textColor,
+                  fontSize: su.setSp(24.0),
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -284,117 +291,107 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
           InkWell(
             onTap: showActionButtonListWidget,
             child: Container(
-              width: ScreenUtil().setWidth(40.0),
-              height: ScreenUtil().setWidth(40.0),
+              width: su.setWidth(40.0),
+              height: su.setWidth(40.0),
               margin: EdgeInsets.only(
-                right: ScreenUtil().setWidth(40.0),
-                left: ScreenUtil().setWidth(20.0),
+                right: su.setWidth(40.0),
+                left: su.setWidth(20.0),
               ),
               child: Image.asset(
                 'assets/wallet/w_actions.png',
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                color: blueColor,
               ),
             ),
           ),
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  await getTransactionData(Load.refresh);
-                  await getTransactionDataNetwork(Load.refresh);
-                  await widget.coinModel.getBalance();
-                  setState(() {});
-                },
-                backgroundColor: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainButtonBgColor.name),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainWhiteColor.name),
-                displacement: ScreenUtil().setWidth(72.0),
-                child: ListView(
-                  controller: _scrollController,
-                  padding: EdgeInsets.zero,
-                  children: [
-                    WalletChainInfoBoard(
-                      address: widget.coinModel.address,
-                      coinType: widget.coinModel.coin['coinType'],
-                      balanceStr:
-                          '${widget.coinModel.balanceStringAll()}${widget.coinModel.coin['unit'].toString().toUpperCase()}',
-                      balanceDollarStr: '\$${widget.coinModel.valueString()}',
-                      marketValueStr:
-                          '\$${widget.coinModel.coinPriceString()}',
-                      lockAmountStr: null,
-                      xmlLockInfoTap: null,
-                      tokenAddTap: null,
-                      swapAddTap: null,
-                      sellAddTap: null,
-                      sendTap: handleSend,
-                      receiveTap: handleReceive,
-                      browserTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BrowserPage(browserUrl),
-                          ),
-                        );
-                      },
+        child: RefreshIndicator(
+          onRefresh: () async {
+            await getTransactionData(Load.refresh);
+            await getTransactionDataNetwork(Load.refresh);
+            await cm.getBalance();
+            setState(() {});
+          },
+          backgroundColor: _themeColor(AppThemeKeys.mainButtonBgColor.name),
+          color: _themeColor(AppThemeKeys.mainWhiteColor.name),
+          displacement: su.setWidth(72.0),
+          child: ListView(
+            controller: _scrollController,
+            padding: EdgeInsets.zero,
+            children: [
+              WalletChainInfoBoard(
+                address: cm.address,
+                coinType: cm.coin['coinType'],
+                balanceStr:
+                    '${cm.balanceStringAll()}${cm.coin['unit'].toString().toUpperCase()}',
+                balanceDollarStr: '\$${cm.valueString()}',
+                marketValueStr: '\$${cm.coinPriceString()}',
+                lockAmountStr: null,
+                xmlLockInfoTap: null,
+                tokenAddTap: null,
+                swapAddTap: null,
+                sellAddTap: null,
+                sendTap: handleSend,
+                receiveTap: handleReceive,
+                browserTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BrowserPage(browserUrl),
                     ),
-                    Divider(height: ScreenUtil().setWidth(1)),
-                    _buildTransactionHeader(),
-                    _buildTransactionsWidget(),
-                  ],
-                ),
+                  );
+                },
               ),
-            ),
-          ],
+              Divider(height: su.setWidth(1)),
+              _buildTransactionHeader(),
+              _buildTransactionsWidget(),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildTransactionHeader() {
+    final su = ScreenUtil();
+    final cm = widget.coinModel;
+    final isEth = cm.coin['blockchainType'] == BlockchainType.Ethereum.name;
+
     return Container(
       alignment: Alignment.centerLeft,
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.symmetric(vertical: su.setWidth(20.0)),
+      margin: EdgeInsets.symmetric(horizontal: su.setWidth(30.0)),
       child: Row(
         children: [
           Expanded(
             child: Text(
               S.of(context).g_coin_key_1,
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(30.0),
+                color: _themeColor(AppThemeKeys.mainTextColor.name),
+                fontSize: su.setSp(30.0),
               ),
             ),
           ),
-          if (widget.coinModel.coin['blockchainType'] ==
-              BlockchainType.Ethereum.name)
+          if (isEth)
             InkWell(
               onTap: () async {
-                final isN42 = widget.coinModel.coin['coinType'] == CoinType.N.name;
-                final page = isN42
-                    ? TransactionRetry(widget.coinModel, '')
-                    : TransactionDetailEth(widget.coinModel, '');
+                final Widget page = cm.coin['coinType'] == CoinType.N.name
+                    ? TransactionRetry(cm, '')
+                    : TransactionDetailEth(cm, '');
                 final r = await Navigator.push<bool>(
                   context,
-                  MaterialPageRoute(builder: (context) => page),
+                  MaterialPageRoute(builder: (_) => page),
                 );
                 if (r == true) getTransactionData(Load.refresh);
               },
               child: Container(
-                height: ScreenUtil().setWidth(50),
-                width: ScreenUtil().setWidth(50),
-                padding: EdgeInsets.all(ScreenUtil().setWidth(5)),
+                height: su.setWidth(50),
+                width: su.setWidth(50),
+                padding: EdgeInsets.all(su.setWidth(5)),
                 child: Icon(
                   Icons.search,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
+                  color: _themeColor(AppThemeKeys.mainBlueColor.name),
                 ),
               ),
             ),
@@ -408,11 +405,14 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
       return IntrinsicHeight(child: Center(child: EmptyView()));
     }
 
+    final su = ScreenUtil();
+    final cm = widget.coinModel;
+    final isBtc = cm.coin['blockchainType'] == BlockchainType.Bitcoin.name;
+
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      padding:
-          EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.symmetric(horizontal: su.setWidth(30.0)),
       itemCount: transactionList.length + 1,
       itemBuilder: (context, int index) {
         if (index == transactionList.length) {
@@ -421,31 +421,27 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      TransactionHistoryList(widget.coinModel),
+                  builder: (context) => TransactionHistoryList(cm),
                 ),
               );
             },
             child: Container(
-              height: ScreenUtil().setWidth(80.0),
+              height: su.setWidth(80.0),
               width: double.infinity,
               alignment: Alignment.center,
               child: Text(
                 S.of(context).g_mining_key_49,
                 style: TextStyle(
-                  fontSize: ScreenUtil().setSp(30.0),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
+                  fontSize: su.setSp(30.0),
+                  color: _themeColor(AppThemeKeys.mainBlueColor.name),
                 ),
               ),
             ),
           );
         }
 
-        final isBtc = widget.coinModel.coin['blockchainType'] ==
-            BlockchainType.Bitcoin.name;
         return WalletChainInfoTransactionsItem(
-          coinModel: widget.coinModel,
+          coinModel: cm,
           type: isBtc ? 0 : 1,
           transactionModel: transactionList[index],
           onBack: () => getTransactionData(Load.refresh),

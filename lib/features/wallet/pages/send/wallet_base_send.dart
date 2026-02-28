@@ -38,36 +38,31 @@ class WalletBaseSend extends StatefulWidget {
 }
 
 class _WalletBaseSendState extends State<WalletBaseSend> {
-  Map<String,dynamic> coinInfo={};
-  String gasPrice="";
+  Map<String, dynamic> coinInfo = {};
+  String gasPrice = "";
   TxSimulationResult _simResult = TxSimulationResult.simulating();
 
-  // GoPlus 合约安全检查结果
+  Color _themeColor(AppThemeKeys key) =>
+      AppThemeUtils.getColorByKey(context, key.name);
+
   GoplusSecurityResult? _goplResult;
   bool _goplLoading = false;
 
-  //账号安全
-  Map<String,dynamic> securityMap={
-    "email":false,
-    //"google":false,
-    "face":false,
+  Map<String, dynamic> securityMap = {
+    "email": false,
+    "face": false,
   };
   @override
   void initState() {
     super.initState();
-    if(widget.btcTransactionRecodeModel!=null){
-      coinInfo=widget.btcTransactionRecodeModel!.coin;
-    }
-    if(widget.transationRecordModel!=null){
-      coinInfo=widget.transationRecordModel!.coin;
-    }
+    coinInfo = widget.transationRecordModel?.coin
+        ?? widget.btcTransactionRecodeModel?.coin
+        ?? {};
     init();
     initSecurity();
     _runSimulation();
     _runGoplusCheck();
   }
-  /// 各链原生币 gas 价格精度（小数位数）
-  /// null 表示该链无 gas 费用（显示 "0"）
   static const Map<BlockchainType, int?> _gasDecimals = {
     BlockchainType.Bitcoin: 8,
     BlockchainType.Ethereum: 18,
@@ -106,29 +101,24 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     BlockchainType.Hive: null,    // Hive uses resource credits
   };
 
-  void init(){
-    //计算gasPrice
-    BlockchainType bt=BlockchainType.values.firstWhere((element) => element.name==coinInfo['blockchainType']?true:false);
+  void init() {
+    final bt = BlockchainType.values.firstWhere((e) => e.name == coinInfo['blockchainType']);
     final int? decimals = _gasDecimals[bt];
     if (decimals == null) {
       gasPrice = '0';
       return;
     }
-    // Bitcoin 使用 btcTransactionRecodeModel，其余使用 transationRecordModel
     final rawGas = bt == BlockchainType.Bitcoin
         ? widget.btcTransactionRecodeModel!.gasPrice.toString()
         : widget.transationRecordModel!.gasPrice.toString();
     gasPrice = '${toEther(rawGas, decimals)} ${widget.mainCoinUnit}';
   }
-  Future<void> initSecurity()async{
-    Map<String,dynamic>? s=await SPUtil().getSecurity();
-    if(s!=null){
-      Map<String,dynamic>? userSecurityMap=s[AppGlobals.userInfo?.uuid??""];
-      if(userSecurityMap!=null){
-        setState(() {
-          securityMap=userSecurityMap;
-        });
-      }
+  Future<void> initSecurity() async {
+    final s = await SPUtil().getSecurity();
+    if (s == null) return;
+    final userSecurityMap = s[AppGlobals.userInfo?.uuid ?? ""];
+    if (userSecurityMap != null) {
+      setState(() => securityMap = userSecurityMap);
     }
   }
 
@@ -160,7 +150,6 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     if (mounted) setState(() => _simResult = result);
   }
 
-  /// GoPlus 合约安全检查（仅 EVM + ERC-20 合约，fail-open 设计）
   Future<void> _runGoplusCheck() async {
     final bt = coinInfo['blockchainType'] as String? ?? '';
     if (bt != 'Ethereum') return;
@@ -183,59 +172,46 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     }
   }
 
-  /// Reconstruct calldata from [TransationRecordModel]:
-  /// - Native transfer (contract empty) → "0x"
-  /// - ERC-20 transfer(address,uint256) → "0xa9059cbb" + padded address + padded amount
-  /// - NFT or unknown contract call → "0x" (degraded, no revert detection)
   String _buildCalldata(TransationRecordModel m) {
-    if (m.contract.isEmpty) {
-      // Native token transfer — no calldata
-      return '0x';
-    }
-    if (widget.isNft) {
-      // Cannot reconstruct NFT calldata without full ABI — degrade gracefully
-      return '0x';
-    }
-    // Standard ERC-20 transfer(address,uint256)
-    // m.to1 may or may not have a leading "0x" — strip it safely.
+    if (m.contract.isEmpty || widget.isNft) return '0x';
+
     final raw = m.to1.toLowerCase();
-    final toAddress = raw.startsWith('0x') ? raw.substring(2) : raw;
-    final paddedTo = toAddress.padLeft(64, '0');
-    // m.price is already BigInt — no toString/parse round-trip needed.
+    final toAddress = (raw.startsWith('0x') ? raw.substring(2) : raw).padLeft(64, '0');
     final paddedAmount = m.price.toRadixString(16).padLeft(64, '0');
-    return '0xa9059cbb$paddedTo$paddedAmount';
+    return '0xa9059cbb$toAddress$paddedAmount';
   }
 
-  //关闭键盘
-  void closeKeyboard(){
-    FocusScope.of(context).requestFocus(FocusNode());
-  }
-  Future<bool> _pageBack(){
-    if(Navigator.canPop(context)){
-      Navigator.pop(context,false);
-    }else{
+  void closeKeyboard() => FocusScope.of(context).requestFocus(FocusNode());
+
+  Future<bool> _pageBack() {
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context, false);
+    } else {
       SystemNavigator.pop();
     }
     return Future.value(false);
   }
   @override
   Widget build(BuildContext context) {
-    String from="";
-    String to="";
-    String price="";
-    if(widget.btcTransactionRecodeModel!=null){
-      from=widget.btcTransactionRecodeModel!.address;
-      to=widget.btcTransactionRecodeModel!.to1;
-      price='${widget.btcTransactionRecodeModel!.priceDouble()} ${coinInfo['unit']}';
-    }
-    if(widget.transationRecordModel!=null){
-      from=widget.transationRecordModel!.from1;
-      to=widget.transationRecordModel!.to1;
-      if(widget.isNft){
-        price='${int.parse(widget.transationRecordModel!.priceDouble().toString())}';
-      }else{
-        price='${widget.transationRecordModel!.priceDouble()} ${coinInfo['unit']}';
-      }
+    final String from;
+    final String to;
+    final String price;
+    final unit = coinInfo['unit'] ?? '';
+
+    if (widget.transationRecordModel case final m?) {
+      from = m.from1;
+      to = m.to1;
+      price = widget.isNft
+          ? '${int.parse(m.priceDouble().toString())}'
+          : '${m.priceDouble()} $unit';
+    } else if (widget.btcTransactionRecodeModel case final btc?) {
+      from = btc.address;
+      to = btc.to1;
+      price = '${btc.priceDouble()} $unit';
+    } else {
+      from = '';
+      to = '';
+      price = '';
     }
     return PopScope(
       canPop: false,
@@ -249,9 +225,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
         ),
         body: SafeArea(
           child: GestureDetector(
-            onTap: (){
-              closeKeyboard();
-            },
+            onTap: closeKeyboard,
             child: Stack(
               children: [
                 Positioned.fill(
@@ -277,7 +251,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                             S.of(context).g_key_202,
                             style: TextStyle(
                               fontSize: ScreenUtil().setWidth(28.0),
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                              color: _themeColor(AppThemeKeys.mainTextColor),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -286,7 +260,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                           padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16.0),horizontal: ScreenUtil().setWidth(30.0)),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(20.0))),
-                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+                            color: _themeColor(AppThemeKeys.itemBgColor),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -314,35 +288,40 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                         endIndent: 0,
                       ),
                       Container(
-                        padding: EdgeInsets.all( ScreenUtil().setWidth(30.0)),
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+                        padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                        color: _themeColor(AppThemeKeys.backGroundColor),
                         height: ScreenUtil().setWidth(148),
                         child: Row(
                           children: [
-                            Expanded(child: SizedBox(
-                              width: double.infinity,
-                              height: ScreenUtil().setWidth(88.0),
-                              child: buttonStyle5(context, (){
-                                Navigator.pop(context,false);
-                              },
-                                S.of(context).g_key_79,
-                                AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
-                                AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
-                                borderColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
+                            Expanded(
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: ScreenUtil().setWidth(88.0),
+                                child: buttonStyle5(
+                                  context,
+                                  () => Navigator.pop(context, false),
+                                  S.of(context).g_key_79,
+                                  _themeColor(AppThemeKeys.mainButtonTextColor),
+                                  _themeColor(AppThemeKeys.mainButtonBgColor),
+                                  borderColor: _themeColor(AppThemeKeys.mainButtonBgColor),
+                                ),
                               ),
-                            ),),
-                            SizedBox(width: ScreenUtil().setWidth(30.0),),
-                            Expanded(child: SizedBox(
-                              width: double.infinity,
-                              height: ScreenUtil().setWidth(88.0),
-                              child: buttonStyle2(context, ()async{
-                                bool r=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletSecurityVerification()));
-                                if (!context.mounted) return;
-                                if(r){
-                                  Navigator.pop(context,true);
-                                }
-                              }, S.of(context).g_key_t_31,),
-                            ),),
+                            ),
+                            SizedBox(width: ScreenUtil().setWidth(30.0)),
+                            Expanded(
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: ScreenUtil().setWidth(88.0),
+                                child: buttonStyle2(context, () async {
+                                  final r = await Navigator.push<bool>(
+                                    context,
+                                    MaterialPageRoute(builder: (_) => WalletSecurityVerification()),
+                                  );
+                                  if (!context.mounted) return;
+                                  if (r == true) Navigator.pop(context, true);
+                                }, S.of(context).g_key_t_31),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -357,90 +336,83 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     );
   }
 
-  //带标签的label 控件
-  /// 构建地址标签（支持 ENS 显示）
   Widget _buildAddressLabel(String title, String address) {
+    final su = ScreenUtil();
     return Container(
-      margin: EdgeInsets.only(
-        bottom: ScreenUtil().setWidth(16.0),
-        top: ScreenUtil().setWidth(16.0),
-      ),
+      margin: EdgeInsets.symmetric(vertical: su.setWidth(16.0)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-              fontSize: ScreenUtil().setSp(28.0),
+              color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+              fontSize: su.setSp(28.0),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(10.0)),
+          SizedBox(height: su.setWidth(10.0)),
           EnsAddressDisplay(
             address: address,
             coinType: coinInfo['coinType'] ?? 'ETH',
             style: EnsDisplayStyle.full,
             showAvatar: true,
             showCopy: true,
-            fontSize: ScreenUtil().setSp(28.0),
+            fontSize: su.setSp(28.0),
           ),
         ],
       ),
     );
   }
 
-  Widget tapLabelWidget(String title,String value,{bool copy=false}){
+  Widget tapLabelWidget(String title, String value, {bool copy = false}) {
+    final su = ScreenUtil();
     return Container(
-      margin: EdgeInsets.only(
-        bottom: ScreenUtil().setWidth(16.0),
-        top: ScreenUtil().setWidth(16.0),
-      ),
+      margin: EdgeInsets.symmetric(vertical: su.setWidth(16.0)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-              fontSize: ScreenUtil().setSp(28.0),
+              color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+              fontSize: su.setSp(28.0),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(10.0),),
+          SizedBox(height: su.setWidth(10.0)),
           Row(
             children: [
               Expanded(
-                flex: 1,
                 child: Text(
                   value,
                   style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(30.0),
+                    color: _themeColor(AppThemeKeys.mainTextColor),
+                    fontSize: su.setSp(30.0),
                   ),
                 ),
               ),
-              if(copy)
+              if (copy)
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     ToastUtils.init(context);
                     Clipboard.setData(ClipboardData(text: value));
-                    ToastUtils.showFtToast(child:successViewV1(S.of(context).copy),duration: 3);
+                    ToastUtils.showFtToast(child: successViewV1(S.of(context).copy), duration: 3);
                   },
                   child: Container(
-                    margin: EdgeInsets.only(left: ScreenUtil().setWidth(20.0)),
-                    width: ScreenUtil().setWidth(40.0),
-                    height: ScreenUtil().setWidth(40.0),
+                    margin: EdgeInsets.only(left: su.setWidth(20.0)),
+                    width: su.setWidth(40.0),
+                    height: su.setWidth(40.0),
                     child: Icon(
                       Icons.copy,
-                      size: ScreenUtil().setWidth(40.0),
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                      size: su.setWidth(40.0),
+                      color: _themeColor(AppThemeKeys.mainBlueColor),
                     ),
                   ),
                 ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(10.0),),
+          SizedBox(height: su.setWidth(10.0)),
           Divider(
-            height: ScreenUtil().setWidth(1.0),
+            height: su.setWidth(1.0),
             indent: 0,
             endIndent: 0,
           ),

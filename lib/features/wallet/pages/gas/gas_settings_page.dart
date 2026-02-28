@@ -40,11 +40,13 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
   late GasSpeed _selectedSpeed;
   bool _isCustomMode = false;
 
-  // 自定义输入控制器
-  final TextEditingController _gasLimitController = TextEditingController();
-  final TextEditingController _gasPriceController = TextEditingController();
-  final TextEditingController _maxPriorityFeeController = TextEditingController();
-  final TextEditingController _maxFeeController = TextEditingController();
+  final _gasLimitController = TextEditingController();
+  final _gasPriceController = TextEditingController();
+  final _maxPriorityFeeController = TextEditingController();
+  final _maxFeeController = TextEditingController();
+
+  Color _themeColor(BuildContext context, AppThemeKeys key) =>
+      AppThemeUtils.getColorByKey(context, key.name);
 
   @override
   void initState() {
@@ -85,10 +87,7 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
   }
 
   void _onConfirm() {
-    if (_isCustomMode) {
-      // 应用自定义值
-      _applyCustomValues();
-    }
+    if (_isCustomMode) _applyCustomValues();
     Navigator.pop(context, _gasEstimate);
   }
 
@@ -154,11 +153,8 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 网络状态指示
                     _buildNetworkStatus(context),
                     SizedBox(height: ScreenUtil().setWidth(30)),
-
-                    // Gas 速度选择器
                     GasSelectorWidget(
                       gasEstimate: _gasEstimate,
                       onSpeedChanged: _onSpeedChanged,
@@ -169,7 +165,6 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
 
                     SizedBox(height: ScreenUtil().setWidth(30)),
 
-                    // 自定义模式开关
                     if (widget.allowCustom) ...[
                       _buildCustomToggle(context),
                       if (_isCustomMode) ...[
@@ -182,7 +177,6 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
               ),
             ),
 
-            // 确认按钮
             _buildConfirmButton(context),
           ],
         ),
@@ -190,64 +184,57 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
     );
   }
 
+  ({String text, Color color, IconData icon}) _resolveNetworkStatus(BuildContext context) {
+    final baseFee = _gasEstimate.baseFee;
+    final l10n = S.of(context);
+    if (baseFee == null) {
+      return (text: l10n.g_key_gas_network_normal, color: Colors.green, icon: Icons.check_circle);
+    }
+    final baseFeeGwei = baseFee ~/ GasConstants.gweiInWei;
+    if (baseFeeGwei < BigInt.from(GasConstants.networkIdleThresholdGwei)) {
+      return (text: l10n.g_key_gas_network_idle, color: Colors.green, icon: Icons.check_circle);
+    }
+    if (baseFeeGwei < BigInt.from(GasConstants.networkBusyThresholdGwei)) {
+      return (text: l10n.g_key_gas_network_normal, color: Colors.orange, icon: Icons.info);
+    }
+    return (text: l10n.g_key_gas_network_busy, color: Colors.red, icon: Icons.warning);
+  }
+
   Widget _buildNetworkStatus(BuildContext context) {
     final baseFee = _gasEstimate.baseFee;
-    String statusText;
-    Color statusColor;
-    IconData statusIcon;
-
-    if (baseFee == null) {
-      statusText = S.of(context).g_key_gas_network_normal;
-      statusColor = Colors.green;
-      statusIcon = Icons.check_circle;
-    } else {
-      // 根据 base fee 判断网络拥堵程度
-      final baseFeeGwei = baseFee ~/ GasConstants.gweiInWei;
-      if (baseFeeGwei < BigInt.from(GasConstants.networkIdleThresholdGwei)) {
-        statusText = S.of(context).g_key_gas_network_idle;
-        statusColor = Colors.green;
-        statusIcon = Icons.check_circle;
-      } else if (baseFeeGwei < BigInt.from(GasConstants.networkBusyThresholdGwei)) {
-        statusText = S.of(context).g_key_gas_network_normal;
-        statusColor = Colors.orange;
-        statusIcon = Icons.info;
-      } else {
-        statusText = S.of(context).g_key_gas_network_busy;
-        statusColor = Colors.red;
-        statusIcon = Icons.warning;
-      }
-    }
+    final status = _resolveNetworkStatus(context);
+    final su = ScreenUtil();
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      margin: EdgeInsets.symmetric(horizontal: su.setWidth(30)),
+      padding: EdgeInsets.all(su.setWidth(20)),
       decoration: BoxDecoration(
-        color: statusColor.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        border: Border.all(color: statusColor.withValues(alpha: 0.3)),
+        color: status.color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(su.setWidth(12)),
+        border: Border.all(color: status.color.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
-          Icon(statusIcon, color: statusColor, size: ScreenUtil().setWidth(40)),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          Icon(status.icon, color: status.color, size: su.setWidth(40)),
+          SizedBox(width: su.setWidth(12)),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  statusText,
+                  status.text,
                   style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                    fontSize: su.setSp(28),
                     fontWeight: FontWeight.bold,
-                    color: statusColor,
+                    color: status.color,
                   ),
                 ),
                 if (baseFee != null)
                   Text(
                     'Base Fee: ${_formatGwei(baseFee)} Gwei',
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                      fontSize: su.setSp(24),
+                      color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
                     ),
                   ),
               ],
@@ -259,6 +246,7 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
   }
 
   Widget _buildCustomToggle(BuildContext context) {
+    final blueColor = _themeColor(context, AppThemeKeys.mainBlueColor);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       child: Row(
@@ -269,18 +257,14 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(30),
               fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              color: _themeColor(context, AppThemeKeys.mainTextColor),
             ),
           ),
           Switch(
             value: _isCustomMode,
-            onChanged: (value) {
-              setState(() {
-                _isCustomMode = value;
-              });
-            },
-            activeTrackColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha: 0.5),
-            activeThumbColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+            onChanged: (value) => setState(() => _isCustomMode = value),
+            activeTrackColor: blueColor.withValues(alpha: 0.5),
+            activeThumbColor: blueColor,
           ),
         ],
       ),
@@ -288,44 +272,27 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
   }
 
   Widget _buildCustomInputs(BuildContext context) {
+    final su = ScreenUtil();
+    final l10n = S.of(context);
+    final gap = SizedBox(height: su.setWidth(20));
+
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      margin: EdgeInsets.symmetric(horizontal: su.setWidth(30)),
+      padding: EdgeInsets.all(su.setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        color: _themeColor(context, AppThemeKeys.itemBgColor),
+        borderRadius: BorderRadius.circular(su.setWidth(16)),
       ),
       child: Column(
         children: [
-          _buildInputField(
-            context,
-            label: S.of(context).g_key_101, // Gas Limit
-            controller: _gasLimitController,
-            suffix: '',
-          ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          _buildInputField(context, label: l10n.g_key_101, controller: _gasLimitController, suffix: ''),
+          gap,
           if (_gasEstimate.supportsEIP1559) ...[
-            _buildInputField(
-              context,
-              label: S.of(context).g_key_gas_priority_fee,
-              controller: _maxPriorityFeeController,
-              suffix: 'Gwei',
-            ),
-            SizedBox(height: ScreenUtil().setWidth(20)),
-            _buildInputField(
-              context,
-              label: S.of(context).g_key_gas_max_fee,
-              controller: _maxFeeController,
-              suffix: 'Gwei',
-            ),
-          ] else ...[
-            _buildInputField(
-              context,
-              label: S.of(context).g_key_t_17, // Gas Price
-              controller: _gasPriceController,
-              suffix: 'Gwei',
-            ),
-          ],
+            _buildInputField(context, label: l10n.g_key_gas_priority_fee, controller: _maxPriorityFeeController, suffix: 'Gwei'),
+            gap,
+            _buildInputField(context, label: l10n.g_key_gas_max_fee, controller: _maxFeeController, suffix: 'Gwei'),
+          ] else
+            _buildInputField(context, label: l10n.g_key_t_17, controller: _gasPriceController, suffix: 'Gwei'),
         ],
       ),
     );
@@ -337,17 +304,17 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
     required TextEditingController controller,
     required String suffix,
   }) {
+    final su = ScreenUtil();
+    final subtitleColor = _themeColor(context, AppThemeKeys.itemSubtitleTextColor);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-          ),
+          style: TextStyle(fontSize: su.setSp(26), color: subtitleColor),
         ),
-        SizedBox(height: ScreenUtil().setWidth(8)),
+        SizedBox(height: su.setWidth(8)),
         TextField(
           controller: controller,
           keyboardType: TextInputType.numberWithOptions(decimal: true),
@@ -356,46 +323,40 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
           ],
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(20),
-              vertical: ScreenUtil().setWidth(16),
+              horizontal: su.setWidth(20),
+              vertical: su.setWidth(16),
             ),
             filled: true,
-            fillColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+            fillColor: _themeColor(context, AppThemeKeys.backGroundColor),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+              borderRadius: BorderRadius.circular(su.setWidth(12)),
               borderSide: BorderSide.none,
             ),
             suffixText: suffix,
-            suffixStyle: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-            ),
+            suffixStyle: TextStyle(fontSize: su.setSp(26), color: subtitleColor),
           ),
           style: TextStyle(
-            fontSize: ScreenUtil().setSp(28),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+            fontSize: su.setSp(28),
+            color: _themeColor(context, AppThemeKeys.mainTextColor),
           ),
-          onChanged: (_) {
-            setState(() {});
-          },
+          onChanged: (_) => setState(() {}),
         ),
       ],
     );
   }
 
   Widget _buildConfirmButton(BuildContext context) {
-    // 计算当前总费用
     final totalFee = _calculateTotalFee();
     final formatted = toEther(totalFee.toString(), _gasEstimate.decimals);
+    final su = ScreenUtil();
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.all(su.setWidth(30)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+        color: _themeColor(context, AppThemeKeys.backGroundColor),
         border: Border(
           top: BorderSide(
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
-            width: 1,
+            color: _themeColor(context, AppThemeKeys.dividerColor),
           ),
         ),
       ),
@@ -405,31 +366,27 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                S.of(context).g_key_t_16, // Total Gas Fee
+                S.of(context).g_key_t_16,
                 style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                  fontSize: su.setSp(28),
+                  color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
                 ),
               ),
               Text(
                 '${Decimal.parse(formatted.toString())} ${_gasEstimate.unit}',
                 style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32),
+                  fontSize: su.setSp(32),
                   fontWeight: FontWeight.bold,
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                  color: _themeColor(context, AppThemeKeys.mainBlueColor),
                 ),
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: su.setWidth(20)),
           SizedBox(
             width: double.infinity,
-            height: ScreenUtil().setWidth(88),
-            child: buttonStyle2(
-              context,
-              _onConfirm,
-              S.of(context).g_key_78, // Confirm
-            ),
+            height: su.setWidth(88),
+            child: buttonStyle2(context, _onConfirm, S.of(context).g_key_78),
           ),
         ],
       ),
@@ -437,17 +394,10 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
   }
 
   BigInt _calculateTotalFee() {
-    if (_isCustomMode) {
-      final gasLimit = BigInt.tryParse(_gasLimitController.text) ?? _gasEstimate.gasLimit;
-      BigInt gasPrice;
-      if (_gasEstimate.supportsEIP1559) {
-        gasPrice = _gweiToWei(_maxFeeController.text);
-      } else {
-        gasPrice = _gweiToWei(_gasPriceController.text);
-      }
-      return gasLimit * gasPrice;
-    } else {
-      return _gasEstimate.currentTotalFee;
-    }
+    if (!_isCustomMode) return _gasEstimate.currentTotalFee;
+
+    final gasLimit = BigInt.tryParse(_gasLimitController.text) ?? _gasEstimate.gasLimit;
+    final controller = _gasEstimate.supportsEIP1559 ? _maxFeeController : _gasPriceController;
+    return gasLimit * _gweiToWei(controller.text);
   }
 }

@@ -52,6 +52,8 @@ class TransferApi
         _TransferCosmosFamilyMixin,
         _TransferOthersMixin {
 
+  // ── Helpers ───────────────────────────────────────────────────────────────
+
   /// 交易成功后延迟上报活动事件
   void _pushTransactionActivity(String coinType, dynamic txData, String network) {
     final pushMap = {
@@ -63,389 +65,372 @@ class TransferApi
     ActivityApi().collectDelayPush(json.encode(pushMap), event: "transaction");
   }
 
-  ///转账方法
+  /// Convert isTest flag (0/1) to network string.
+  static String _networkStr(int isTest) => isTest == 0 ? "main" : "test";
+
+  /// Build derivation path from a transaction record model.
+  static String _txPath(dynamic trModel, int pathIndex) =>
+      getPathWithIndex(trModel.coin['path'][trModel.addrType], pathIndex);
+
+  /// 转账方法
   /// chainSymbol 链缩写 例如：Bitcoin:btc或BTC都可以
   /// fromAddress 转出地址
   /// toAddress 转入地址
   /// value 转账金额 double类型
   /// maxValue 是否是最大转账金额，默认 是最大转账金额
-  /// contractAddeess 合约地址 ，如果是合约币转账，传入合约地址
+  /// contractAddress 合约地址，如果是合约币转账，传入合约地址
   Future<MessageModel> transfer(
-      String chainSymbol ,String toAddress, double value,
-      {String contractAddress = "", String fromAddress = "",bool isTest=false,bool maxValue=true,String? message}) async {
-    WalletActionProvider wap = globalWapAdapter;
-    chainSymbol=symbolDealWith(chainSymbol);
-    Map<String, dynamic>? txChainMap =
-    wap.walletMap[chainSymbol.toString().toUpperCase()];
+    String chainSymbol,
+    String toAddress,
+    double value, {
+    String contractAddress = "",
+    String fromAddress = "",
+    bool isTest = false,
+    bool maxValue = true,
+    String? message,
+  }) async {
+    final WalletActionProvider wap = globalWapAdapter;
+    chainSymbol = symbolDealWith(chainSymbol);
+    final Map<String, dynamic>? txChainMap =
+        wap.walletMap[chainSymbol.toString().toUpperCase()];
     if (txChainMap == null) {
-      MessageModel mm = MessageModel.error();
-      mm.data = S.current.g_key_wallet_m1(chainSymbol);
-      return mm;
+      return MessageModel.error()..data = S.current.g_key_wallet_m1(chainSymbol);
     }
+
     Map<String, dynamic>? token;
     if (contractAddress != "") {
-      if(isTest){
+      final contractKey = contractAddress.toString().toUpperCase();
+      if (isTest) {
         if (txChainMap['testnets']['testnetContract'].length != 0) {
-          token = txChainMap['testnets']['testnetContract'][contractAddress.toString().toUpperCase()];
+          token = txChainMap['testnets']['testnetContract'][contractKey];
         }
-      }else{
+      } else {
         if (txChainMap['mainnets'].length != 0) {
-          token = txChainMap['mainnets'][contractAddress.toString().toUpperCase()];
+          token = txChainMap['mainnets'][contractKey];
         }
       }
-
       if (token == null) {
-        MessageModel mm = MessageModel.error();
-        mm.data = S.current.g_key_wallet_m2;
-        return mm;
+        return MessageModel.error()..data = S.current.g_key_wallet_m2;
       }
     }
 
     if (fromAddress == "") {
-      String? fAddress = wap.getAddress(txChainMap['baseInfo']['coinType'],
-          addrType: txChainMap['addrType']);
+      final String? fAddress = wap.getAddress(
+        txChainMap['baseInfo']['coinType'],
+        addrType: txChainMap['addrType'],
+      );
       if (fAddress == null) {
-        MessageModel mm = MessageModel.error();
-        mm.data = S.current.g_key_wallet_m3(txChainMap['baseInfo']['coinType']);
-        return mm;
-      } else {
-        fromAddress = fAddress;
+        return MessageModel.error()
+          ..data = S.current.g_key_wallet_m3(txChainMap['baseInfo']['coinType']);
       }
+      fromAddress = fAddress;
     }
-    String blockchain = txChainMap['baseInfo']['blockchainType'];
-    String path=txChainMap['baseInfo']['path'][txChainMap['addrType']];
-    int pathIndex=txChainMap["pathIndex"]??0;
-    path=getPathWithIndex(path, pathIndex);
-    String coinType=txChainMap['baseInfo']['coinType'];
-    MessageModel txmm=MessageModel();
+
+    final String blockchain = txChainMap['baseInfo']['blockchainType'];
+    final int pathIndex = txChainMap["pathIndex"] ?? 0;
+    final String path = getPathWithIndex(
+      txChainMap['baseInfo']['path'][txChainMap['addrType']],
+      pathIndex,
+    );
+    final String coinType = txChainMap['baseInfo']['coinType'];
+    final baseInfo = txChainMap['baseInfo'];
+    final int tokenDecimals = token == null ? 0 : token['decimals'];
+    final String networkStr = isTest ? "test" : "main";
+    MessageModel txmm = MessageModel();
+
     switch (blockchain) {
       case "Bitcoin":
-        txmm= await transferBtc(
-            txChainMap['baseInfo']['coinType'],
-            fromAddress,
-            toAddress,
-            value,
-            path,
-            maxValue: maxValue,
-            isTest:isTest?"test":"main",
-
+        txmm = await transferBtc(
+          coinType, fromAddress, toAddress, value, path,
+          maxValue: maxValue, isTest: networkStr,
         );
-        break;
+
       case "Ethereum":
-        txmm= await transferEth(
-          isTest?txChainMap['baseInfo']['chainId_test']:txChainMap['baseInfo']['chainId'],
-          txChainMap['baseInfo']['coinType'],
-          fromAddress,
-          toAddress,
-          value,
-          txChainMap['baseInfo']['decimals'],
-          path,
-
+        txmm = await transferEth(
+          isTest ? baseInfo['chainId_test'] : baseInfo['chainId'],
+          coinType, fromAddress, toAddress, value,
+          baseInfo['decimals'], path,
           contractAddress: contractAddress,
-          tokenDecimals: token==null?0:token['decimals'],
-          isTest:isTest,
-          maxValue: maxValue,
-          message: message,
+          tokenDecimals: tokenDecimals,
+          isTest: isTest, maxValue: maxValue, message: message,
         );
-        break;
+
       case "Solana":
-        txmm= await transferSol(
-            txChainMap,
-            fromAddress,
-            toAddress,
-            value,
-            txChainMap['baseInfo']['decimals'],
-            path,
-
-            contractAddress: contractAddress,tokenDecimals: token==null?0:token['decimals'],
-            maxValue: maxValue
+        txmm = await transferSol(
+          txChainMap, fromAddress, toAddress, value,
+          baseInfo['decimals'], path,
+          contractAddress: contractAddress,
+          tokenDecimals: tokenDecimals, maxValue: maxValue,
         );
-        break;
+
       case "Tron":
-        txmm= await transferTrx(
-            fromAddress,
-            toAddress,
-            value,
-            txChainMap['baseInfo']['decimals'],
-            path,
-
-            contractAddress: contractAddress,tokenDecimals: token==null?0:token['decimals'],
-            maxValue: maxValue
+        txmm = await transferTrx(
+          fromAddress, toAddress, value, baseInfo['decimals'], path,
+          contractAddress: contractAddress,
+          tokenDecimals: tokenDecimals, maxValue: maxValue,
         );
-        break;
+
       case "Algorand":
         return await transferAlgo(
-          fromAddress,
-          toAddress,
-          value,
-          txChainMap['baseInfo']['decimals'],
-          path,
-
+          fromAddress, toAddress, value, baseInfo['decimals'], path,
           maxValue: maxValue,
         );
+
       case "Tezos":
         return await transferXtz(
-            fromAddress,
-            toAddress,
-            value,
-            txChainMap['baseInfo']['decimals'],
-            path,
-
-            maxValue: maxValue
+          fromAddress, toAddress, value, baseInfo['decimals'], path,
+          maxValue: maxValue,
         );
+
       case "Ripple":
         return await transferXrp(
-            fromAddress,
-            toAddress,
-            value,
-            txChainMap['baseInfo']['decimals'],
-            path,
-
-            maxValue: maxValue
+          fromAddress, toAddress, value, baseInfo['decimals'], path,
+          maxValue: maxValue,
         );
+
       case "Cosmos":
         return await transferAtom(
-          fromAddress,
-          toAddress,
-          value,
-          txChainMap['baseInfo']['decimals'],
-          path,
+          fromAddress, toAddress, value, baseInfo['decimals'], path,
           maxValue: maxValue,
         );
     }
+
     if (txmm.error == false) {
-      _pushTransactionActivity(coinType, txmm.data['txHash'], isTest ? "test" : "main");
+      _pushTransactionActivity(coinType, txmm.data['txHash'], networkStr);
     }
     return txmm;
   }
 
-  //钱包转账使用，此方法无需检测币是否存在，也无需检测转账是否无误
-  Future<MessageModel> transferWallet({TransationRecordModel? trModel,BtcTransactionRecodeModel? trModelBtc,String? privateKey,int pathIndex=0})async{
-    String blockchain = "";
-    if(trModel==null){
-      blockchain=trModelBtc!.coin['blockchainType'];
-    }else{
-      blockchain=trModel.coin['blockchainType'];
-    }
-    MessageModel txmm=MessageModel();
-    String coinType="";
-    String network="main";
+  /// 钱包转账使用，此方法无需检测币是否存在，也无需检测转账是否无误
+  Future<MessageModel> transferWallet({
+    TransationRecordModel? trModel,
+    BtcTransactionRecodeModel? trModelBtc,
+    String? privateKey,
+    int pathIndex = 0,
+  }) async {
+    final String blockchain = trModel == null
+        ? trModelBtc!.coin['blockchainType']
+        : trModel.coin['blockchainType'];
+    MessageModel txmm = MessageModel();
+    String coinType = "";
+    String network = "main";
+
     switch (blockchain) {
       case "Bitcoin":
-        List<Map<String,dynamic>> utxo=[];
-        for(InputModel im in trModelBtc!.inputModelsList){
-          utxo.add(im.toMap());
-        }
-        coinType=trModelBtc.coin['coinType'];
-        network=trModelBtc.isTest==0?"main":"test";
-        txmm= await transferBtcSend(
+        coinType = trModelBtc!.coin['coinType'];
+        network = _networkStr(trModelBtc.isTest);
+        txmm = await transferBtcSend(
           trModelBtc.coin['coinType'],
           trModelBtc.address,
           trModelBtc.to1,
           trModelBtc.price,
-          getPathWithIndex(trModelBtc.coin['path'][trModelBtc.addrType], pathIndex),
+          _txPath(trModelBtc, pathIndex),
           trModelBtc.gas,
           trModelBtc.gasPrice,
           trModelBtc.inputModelsMap(),
           max: trModelBtc.max,
           privateKey: privateKey,
-          isTest: trModelBtc.isTest==0?"main":"test",
+          isTest: network,
         );
-        break;
+
       case "Ethereum":
-        coinType=trModel!.coin['coinType'];
-        network=trModel.isTest==0?"main":"test";
-        double gasPrice2Double=toEther(trModel.gasPriceValue.toString(), trModel.coin['decimals']).toDouble();
-        gasPrice2Double=gasPrice2Double/2;
-        Decimal rValue=Decimal.parse(gasPrice2Double.toString());
-        BigInt gasPrice2=ethToWeiString(rValue.toString(), trModel.coin['decimals']);
-        String? rpc;
-        if(trModel.isTest==0){
-          rpc=trModel.coin['service'];
-        }else{
-          rpc=trModel.coin['service_test'];
-        }
-        txmm= await transferEthSend(
+        coinType = trModel!.coin['coinType'];
+        network = _networkStr(trModel.isTest);
+        final path = _txPath(trModel, pathIndex);
+        final gasPrice2Double = toEther(
+          trModel.gasPriceValue.toString(),
+          trModel.coin['decimals'],
+        ).toDouble() / 2;
+        final BigInt gasPrice2 = ethToWeiString(
+          Decimal.parse(gasPrice2Double.toString()).toString(),
+          trModel.coin['decimals'],
+        );
+        final String? rpc = trModel.isTest == 0
+            ? trModel.coin['service']
+            : trModel.coin['service_test'];
+        txmm = await transferEthSend(
           trModel.from1,
           trModel.to1,
           trModel.price,
-          getPathWithIndex(trModel.coin['path'][trModel.addrType], pathIndex),
+          path,
           trModel.gasPriceValue,
           gasPrice2,
-          trModel.gas,//gas
+          trModel.gas,
           trModel.coin['coinType'],
-          trModel.isTest==0?trModel.coin['chainId']:trModel.coin['chainId_test'],
+          trModel.isTest == 0 ? trModel.coin['chainId'] : trModel.coin['chainId_test'],
           contractAddress: trModel.contract,
-          isTest: trModel.isTest==0?"main":"test",
+          isTest: network,
           privateKey: privateKey,
           nonce: trModel.nonce,
           message: trModel.message,
-          erc721Or1155:trModel.erc721Or1155,
-          returnSignHash:trModel.returnSignHash,
+          erc721Or1155: trModel.erc721Or1155,
+          returnSignHash: trModel.returnSignHash,
           rpc: rpc,
         );
-        break;
+
       case "Solana":
-        coinType=CoinType.SOL.name;
-        network=trModel!.isTest==0?"main":"test";
-        txmm= await transferSolSend(
+        coinType = CoinType.SOL.name;
+        network = _networkStr(trModel!.isTest);
+        txmm = await transferSolSend(
           trModel.from1,
           trModel.to1,
           trModel.price,
-          getPathWithIndex(trModel.coin['path'][trModel.addrType], pathIndex),
+          _txPath(trModel, pathIndex),
           trModel.gasPrice,
           contractAddress: trModel.contract,
           tokenDecimals: trModel.coin['decimals'],
-          isTest:trModel.isTest==0?"main":"test",
+          isTest: network,
           privateKey: privateKey,
         );
-        break;
+
       case "Tron":
-        coinType=CoinType.TRX.name;
-        network=trModel!.isTest==0?"main":"test";
-        txmm= await transferTrxSend(
+        coinType = CoinType.TRX.name;
+        network = _networkStr(trModel!.isTest);
+        txmm = await transferTrxSend(
           trModel.from1,
           trModel.to1,
           trModel.price,
-          getPathWithIndex(trModel.coin['path'][trModel.addrType], pathIndex),
+          _txPath(trModel, pathIndex),
           trModel.gasPrice,
           contractAddress: trModel.contract,
-          isTest:trModel.isTest==0?"main":"test",
+          isTest: network,
           privateKey: privateKey,
         );
-        break;
+
       case "Algorand":
-        coinType=CoinType.ALGO.name;
-        network=trModel!.isTest==0?"main":"test";
-        String type="ALGO";
-        if(trModel.contract !=""){
-          type="Asset";
-        }
-        if(trModel.other !=null){
-          type=trModel.other.type;
-        }
-        txmm= await transferAlgoSend(trModel.from1,
+        coinType = CoinType.ALGO.name;
+        network = _networkStr(trModel!.isTest);
+        String type = "ALGO";
+        if (trModel.contract != "") type = "Asset";
+        if (trModel.other != null) type = trModel.other.type;
+        txmm = await transferAlgoSend(
+          trModel.from1,
           trModel.to1,
           trModel.price.toString(),
-          getPathWithIndex(trModel.coin['path'][trModel.addrType], pathIndex),
-          isTest: trModel.isTest==0?"main":"test",
+          _txPath(trModel, pathIndex),
+          isTest: network,
           privateKey: privateKey,
           contractAddress: trModel.contract,
           type: type,
         );
-        break;
+
       case "Tezos":
-        coinType=CoinType.XTZ.name;
-        network=trModel!.isTest==0?"main":"test";
-        txmm= await transferXtzSend(
+        coinType = CoinType.XTZ.name;
+        network = _networkStr(trModel!.isTest);
+        txmm = await transferXtzSend(
           trModel.from1,
           trModel.to1,
           trModel.price.toInt(),
-          getPathWithIndex(trModel.coin['path'][trModel.addrType], pathIndex),
-          isTest: trModel.isTest==0?false:true,
+          _txPath(trModel, pathIndex),
+          isTest: trModel.isTest != 0,
           privateKey: privateKey,
         );
-        break;
+
       case "Ripple":
-        coinType=CoinType.XRP.name;
-        network=trModel!.isTest==0?"main":"test";
-        txmm= await transferXrpSend(trModel.from1,
+        coinType = CoinType.XRP.name;
+        network = _networkStr(trModel!.isTest);
+        txmm = await transferXrpSend(
+          trModel.from1,
           trModel.to1,
           trModel.price,
           trModel.gasPrice,
-          getPathWithIndex(trModel.coin['path'][trModel.addrType], pathIndex),
+          _txPath(trModel, pathIndex),
           trModel.other.sequence,
-          isTest: trModel.isTest==0?false:true,
+          isTest: trModel.isTest != 0,
           privateKey: privateKey,
           destinationTag: trModel.other.destinationTag,
         );
-        break;
+
       case "Filecoin":
-        coinType=CoinType.FIL.name;
-        network=trModel!.isTest==0?"main":"test";
-        txmm=await transferFilSend(
-            trModel.from1,
-            trModel.to1,
-            trModel.price,
-            trModel.gasPrice,
-            getPathWithIndex(trModel.coin['path'][trModel.addrType], pathIndex),
-            trModel.nonce??"0",
-            trModel.gas.toString(),
-            trModel.other.gasFeeCap,
-            trModel.other.gasPremium,isTest:trModel.isTest==0?false:true);
-        break;
-      case "Cosmos":
-        coinType=CoinType.ATOM.name;
-        network=trModel!.isTest==0?"main":"test";
-        txmm= await transferAtomSend(
+        coinType = CoinType.FIL.name;
+        network = _networkStr(trModel!.isTest);
+        txmm = await transferFilSend(
           trModel.from1,
           trModel.to1,
           trModel.price,
-          getPathWithIndex(trModel.coin['path'][trModel.addrType], pathIndex),
+          trModel.gasPrice,
+          _txPath(trModel, pathIndex),
+          trModel.nonce ?? "0",
+          trModel.gas.toString(),
+          trModel.other.gasFeeCap,
+          trModel.other.gasPremium,
+          isTest: trModel.isTest != 0,
+        );
+
+      case "Cosmos":
+        coinType = CoinType.ATOM.name;
+        network = _networkStr(trModel!.isTest);
+        txmm = await transferAtomSend(
+          trModel.from1,
+          trModel.to1,
+          trModel.price,
+          _txPath(trModel, pathIndex),
           trModel.gasPrice,
           contractAddress: trModel.contract,
-          isTest:trModel.isTest==0?"main":"test",
+          isTest: network,
           privateKey: privateKey,
         );
-        break;
+
       case "Polkadot":
-        coinType=trModel!.coin['coinType'];
-        network=trModel.isTest==0?"main":"test";
-        txmm= await transferDotSend(
+        coinType = trModel!.coin['coinType'];
+        network = _networkStr(trModel.isTest);
+        txmm = await transferDotSend(
           trModel.from1,
           trModel.to1,
           trModel.price,
-          getPathWithIndex(trModel.coin['path'][trModel.addrType], pathIndex),
+          _txPath(trModel, pathIndex),
           trModel.gasPrice,
           coinType,
           contractAddress: trModel.contract,
-          isTest:trModel.isTest==0?"main":"test",
+          isTest: network,
           privateKey: privateKey,
-          returnSignHash:trModel.returnSignHash,
+          returnSignHash: trModel.returnSignHash,
         );
-        break;
+
       case "Aptos":
-        coinType=trModel!.coin['coinType'];
-        network=trModel.isTest==0?"main":"test";
-        txmm=await transferAptSend(
-            trModel.from1,
-            trModel.to1,
-            trModel.price,
-            getPathWithIndex(trModel.coin['path'][trModel.addrType], pathIndex),
-            trModel.gas,
-            trModel.gasPrice,
-            coinType, trModel.coinId);
-        break;
-      case "TheOpenNetwork":
-        coinType=trModel!.coin['coinType'];
-        network=trModel.isTest==0?"main":"test";
-        txmm=await transferTonSend(
-            trModel.from1,
-            trModel.to1,
-            trModel.price,
-            getPathWithIndex(trModel.coin['path'][trModel.addrType], pathIndex),
-            trModel.gas,
-            trModel.gasPrice,
-            coinType,
-          isTest: trModel.isTest==0?"main":"test",
+        coinType = trModel!.coin['coinType'];
+        network = _networkStr(trModel.isTest);
+        txmm = await transferAptSend(
+          trModel.from1,
+          trModel.to1,
+          trModel.price,
+          _txPath(trModel, pathIndex),
+          trModel.gas,
+          trModel.gasPrice,
+          coinType,
+          trModel.coinId,
         );
-        break;
+
+      case "TheOpenNetwork":
+        coinType = trModel!.coin['coinType'];
+        network = _networkStr(trModel.isTest);
+        txmm = await transferTonSend(
+          trModel.from1,
+          trModel.to1,
+          trModel.price,
+          _txPath(trModel, pathIndex),
+          trModel.gas,
+          trModel.gasPrice,
+          coinType,
+          isTest: network,
+        );
+
       case "Zilliqa":
-        coinType=trModel!.coin['coinType'];
-        network=trModel.isTest==0?"main":"test";
-        txmm=await transferZilSend(
-            trModel.from1,
-            trModel.to1,
-            trModel.price,
-            getPathWithIndex(trModel.coin['path'][trModel.addrType], pathIndex),
-            trModel.gas,
-            trModel.gasPrice,
-            coinType,
-          isTest: trModel.isTest==0?"main":"test",
+        coinType = trModel!.coin['coinType'];
+        network = _networkStr(trModel.isTest);
+        txmm = await transferZilSend(
+          trModel.from1,
+          trModel.to1,
+          trModel.price,
+          _txPath(trModel, pathIndex),
+          trModel.gas,
+          trModel.gasPrice,
+          coinType,
+          isTest: network,
           privateKey: privateKey,
         );
-        break;
     }
+
     if (txmm.error == false) {
       _pushTransactionActivity(coinType, txmm.data, network);
     }

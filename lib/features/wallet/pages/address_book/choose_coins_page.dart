@@ -21,7 +21,6 @@ class ChooseCoinsPage extends ConsumerStatefulWidget {
 class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
   var selectIndex = -1;
   var isSearch = false;
-  var cleanable = true;
   final controller = TextEditingController();
   List<CoinModel> mList = [];
   List<CoinModel> allList = [];
@@ -29,217 +28,168 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
   @override
   void initState() {
     super.initState();
-    initData();
+    allList = ref.read(wapBridgeProvider).coinModels;
+    mList = allList;
 
     controller.addListener(() {
-      final text = controller.text.trim();
-      if (text.isEmpty) {
-        mList = allList;
-        setState(() {});
+      if (controller.text.trim().isEmpty) {
+        setState(() => mList = allList);
       }
     });
   }
 
-  Future<void> initData() async {
-    List<CoinModel> list =
-        ref.read(wapBridgeProvider)
-            .coinModels;
-    allList = list;
-    mList = list;
-    if (mounted) {
-      setState(() {});
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final scr = ScreenUtil();
     return Scaffold(
       appBar: AppBar(
         title: isSearch
-            ? buildSearch()
+            ? _buildSearchField(scr)
             : Text(
-          S.of(context).g_key_address_6,
-          style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(32.0)),
-        ),
+                S.of(context).g_key_address_6,
+                style: TextStyle(
+                  color: AppThemeUtils.getColorByKey(
+                      context, AppThemeKeys.mainTextColor.name),
+                  fontSize: scr.setSp(32.0),
+                ),
+              ),
         centerTitle: true,
         backgroundColor:
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+            AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
         actions: [
           IconButton(
             onPressed: () {
               if (isSearch) {
-                final text = controller.text.trim();
-                searchData(text);
+                _searchData(controller.text.trim());
               } else {
-                setState(() {
-                  isSearch = true;
-                });
+                setState(() => isSearch = true);
               }
             },
-            icon: Icon(
-              Icons.search,
-              size: ScreenUtil().setWidth(48.0),
-            ),
+            icon: Icon(Icons.search, size: scr.setWidth(48.0)),
           )
         ],
       ),
-      body: buildContentList(context),
-    );
-  }
-
-  /// 搜索框
-  Row buildSearch() {
-    return Row(
-      children: [
-        Expanded(
-          child: CupertinoTextField(
-            decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemBgColor.name),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30.0)),
+      body: mList.isEmpty
+          ? const Center(child: EmptyView())
+          : ListView.builder(
+              itemCount: mList.length,
+              itemBuilder: (_, index) => _buildCoinItem(index),
             ),
-            padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16.0), horizontal: ScreenUtil().setWidth(24.0)),
-            style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(32.0)),
-            placeholder: S.of(context).g_key_address_7,
-            placeholderStyle: TextStyle(color: Color(0xffcccccc), fontSize: ScreenUtil().setSp(32.0)),
-            controller: controller,
-            inputFormatters: [LengthLimitingTextInputFormatter(32)],
-          ),
-        ),
-      ],
     );
   }
 
-  Widget buildContentList(BuildContext context) {
-    if (mList.isEmpty) {
-      return const Center(
-        child: EmptyView(),
-      );
-    }
-    return ListView.builder(
-        itemCount: mList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return _buildItem(context, index, mList);
-        });
+  Widget _buildSearchField(ScreenUtil scr) {
+    return CupertinoTextField(
+      decoration: BoxDecoration(
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        borderRadius: BorderRadius.circular(scr.setWidth(30.0)),
+      ),
+      padding: EdgeInsets.symmetric(
+        vertical: scr.setWidth(16.0),
+        horizontal: scr.setWidth(24.0),
+      ),
+      style: TextStyle(
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+        fontSize: scr.setSp(32.0),
+      ),
+      placeholder: S.of(context).g_key_address_7,
+      placeholderStyle: TextStyle(
+        color: const Color(0xffcccccc),
+        fontSize: scr.setSp(32.0),
+      ),
+      controller: controller,
+      inputFormatters: [LengthLimitingTextInputFormatter(32)],
+    );
   }
 
-  Widget _buildItem(BuildContext context, int index, List<CoinModel> list) {
-    CoinModel model = list[index];
-    return item(context, model.coin['icon'] ?? "", model.coin['name'] ?? "",
-        model.coin['miniName'] ?? "", index == selectIndex, () {
-          setState(() {
-            selectIndex = index;
-            Navigator.of(context).pop(model);
-          });
-        });
-  }
+  Widget _buildCoinItem(int index) {
+    final model = mList[index];
+    final coin = model.coin;
+    final miniName = coin['miniName'] ?? '';
+    final scr = ScreenUtil();
+    final isSelected = index == selectIndex;
 
-  Widget item(BuildContext context, String path, String g, String l, bool isSelected,
-      VoidCallback callback) {
     return GestureDetector(
-      onTap: callback,
+      onTap: () {
+        setState(() => selectIndex = index);
+        Navigator.of(context).pop(model);
+      },
       child: Container(
         color: Colors.transparent,
         child: Column(
           children: [
-            SizedBox(
-              height: ScreenUtil().setWidth(26.0),
-            ),
+            SizedBox(height: scr.setWidth(26.0)),
             Row(
               children: [
+                SizedBox(width: scr.setWidth(36.0)),
                 SizedBox(
-                  width: ScreenUtil().setWidth(36.0),
+                  width: scr.setWidth(56.0),
+                  height: scr.setWidth(56.0),
+                  child: miniName == CoinType.N.name
+                      ? Image.asset('assets/img/ast.png')
+                      : ImageNetWork(
+                          imageUrl: coin['icon'] ?? '',
+                          placeholder: "assets/img/list_default.png",
+                        ),
                 ),
-                SizedBox(
-                  width: ScreenUtil().setWidth(56.0),
-                  height: ScreenUtil().setWidth(56.0),
-                  child: l==CoinType.N.name?Image.asset('assets/img/ast.png'):
-                  ImageNetWork(imageUrl:
-                    path,
-                    placeholder: "assets/img/list_default.png",
-                  ),
-                ),
-                // NftImageNetWork(imageUrl: path,width: 28,height: 28,),
-                SizedBox(
-                  width: ScreenUtil().setWidth(30.0),
-                ),
+                SizedBox(width: scr.setWidth(30.0)),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      g,
+                      coin['name'] ?? '',
                       style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
-                          fontSize: ScreenUtil().setSp(32.0)),
+                        color: AppThemeUtils.getColorByKey(
+                            context, AppThemeKeys.mainTextColor.name),
+                        fontSize: scr.setSp(32.0),
+                      ),
                     ),
-                    SizedBox(
-                      height: ScreenUtil().setWidth(20.0),
-                    ),
+                    SizedBox(height: scr.setWidth(20.0)),
                     Text(
-                      l,
+                      miniName,
                       style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.itemSubtitleTextColor.name),
-                          fontSize: ScreenUtil().setWidth(32.0)),
-                    )
+                        color: AppThemeUtils.getColorByKey(
+                            context, AppThemeKeys.itemSubtitleTextColor.name),
+                        fontSize: scr.setWidth(32.0),
+                      ),
+                    ),
                   ],
                 ),
                 const Spacer(),
-                isSelected
-                    ? Icon(
-                  Icons.check,
-                  size: ScreenUtil().setWidth(48.0),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                )
-                    : SizedBox(
-                  width: ScreenUtil().setWidth(48.0),
-                ),
-                SizedBox(
-                  width: ScreenUtil().setWidth(40.0),
-                )
+                if (isSelected)
+                  Icon(
+                    Icons.check,
+                    size: scr.setWidth(48.0),
+                    color: AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.mainBlueColor.name),
+                  )
+                else
+                  SizedBox(width: scr.setWidth(48.0)),
+                SizedBox(width: scr.setWidth(40.0)),
               ],
             ),
-            SizedBox(
-              height: ScreenUtil().setWidth(26.0),
-            ),
+            SizedBox(height: scr.setWidth(26.0)),
             Divider(
-              height: ScreenUtil().setWidth(1.0),
+              height: scr.setWidth(1.0),
               color: AppThemeUtils.getColorByKey(
                   context, AppThemeKeys.dividerColor.name),
-            )
+            ),
           ],
         ),
       ),
     );
   }
 
-  /// 根据name 进行匹配
-  void searchData(String text) {
-    debugPrint("text $text");
-    if (text.isEmpty) {
-      return;
-    }
-    mList = allList.where((element) {
-      final name = element.coin["name"];
-      debugPrint("key $text name $name");
-      if ((name as String).contains(text)) {
-        return true;
-      }
-      return false;
-    }).toList();
-    debugPrint("mList size ${mList.length}");
-    if (mList.isNotEmpty) {
-      isSearch = false;
-      setState(() {});
+  void _searchData(String text) {
+    if (text.isEmpty) return;
+    final results = allList
+        .where((e) => (e.coin['name'] as String).contains(text))
+        .toList();
+    if (results.isNotEmpty) {
+      setState(() {
+        mList = results;
+        isSearch = false;
+      });
     }
   }
 }

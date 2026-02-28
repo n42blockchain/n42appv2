@@ -6,10 +6,19 @@ part of 'wallet_search_coin.dart';
 /// preserving all public API and logic unchanged.
 extension _CoinItemWidgets on _WalletSearchCoinState {
   Widget coinItemWidget(CoinModel coinInfo, WalletActionProvider waValue) {
+    final su = ScreenUtil();
+    final mainColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainTextColor.name);
+    final subColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final lineColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemLineColor.name);
+
     final balance = coinInfo.value;
     final balanceStr = balance >= 1000000000
         ? _regular.getMoneyAbbreviation(balance)
         : _oCcy.format(balance);
+    final sp30 = su.setSp(30.0);
 
     final Widget image = coinInfo.coin['miniName'] == ""
         ? Image.asset('assets/images/list_default.png')
@@ -27,9 +36,9 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
 
     final Widget errorBadge = coinInfo.loadError
         ? Container(
-            height: ScreenUtil().setWidth(30.0),
-            width: ScreenUtil().setWidth(30.0),
-            margin: EdgeInsets.only(right: ScreenUtil().setWidth(6.0)),
+            height: su.setWidth(30.0),
+            width: su.setWidth(30.0),
+            margin: EdgeInsets.only(right: su.setWidth(6.0)),
             child: Image.asset(
               "assets/img/error.png",
               color: AppThemeUtils.getColorByKey(
@@ -50,16 +59,12 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
       },
       child: Container(
         padding: EdgeInsets.symmetric(
-          vertical: ScreenUtil().setWidth(30.0),
-          horizontal: ScreenUtil().setWidth(20.0),
+          vertical: su.setWidth(30.0),
+          horizontal: su.setWidth(20.0),
         ),
         decoration: BoxDecoration(
           border: Border(
-            bottom: BorderSide(
-              width: ScreenUtil().setWidth(1.0),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemLineColor.name),
-            ),
+            bottom: BorderSide(width: su.setWidth(1.0), color: lineColor),
           ),
         ),
         child: Row(
@@ -67,14 +72,14 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
           children: [
             errorBadge,
             Container(
-              width: ScreenUtil().setWidth(52.0),
-              height: ScreenUtil().setWidth(72.0),
-              margin: EdgeInsets.only(right: ScreenUtil().setWidth(10.0)),
+              width: su.setWidth(52.0),
+              height: su.setWidth(72.0),
+              margin: EdgeInsets.only(right: su.setWidth(10.0)),
               child: Stack(
                 children: [
                   Positioned(
-                    top: ScreenUtil().setWidth(10.0),
-                    bottom: ScreenUtil().setWidth(10.0),
+                    top: su.setWidth(10.0),
+                    bottom: su.setWidth(10.0),
                     left: 0,
                     right: 0,
                     child: image,
@@ -83,8 +88,8 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
                     Positioned(
                       top: 0,
                       left: 0,
-                      height: ScreenUtil().setWidth(22.0),
-                      width: ScreenUtil().setWidth(22.0),
+                      height: su.setWidth(22.0),
+                      width: su.setWidth(22.0),
                       child: mainImage,
                     ),
                 ],
@@ -101,20 +106,15 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
                         child: Text(
                           coinInfo.coin['miniName'],
                           style: TextStyle(
-                            fontSize: ScreenUtil().setSp(30.0),
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.mainTextColor.name),
+                            fontSize: sp30,
+                            color: mainColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                       Text(
                         '\$$balanceStr',
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(30.0),
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
-                        ),
+                        style: TextStyle(fontSize: sp30, color: mainColor),
                       ),
                     ],
                   ),
@@ -123,13 +123,9 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
                     children: [
                       Text(
                         _formatAddress(coinInfo.address),
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(30.0),
-                          color: AppThemeUtils.getColorByKey(context,
-                              AppThemeKeys.itemSubtitleTextColor.name),
-                        ),
+                        style: TextStyle(fontSize: sp30, color: subColor),
                       ),
-                      Expanded(child: Container()),
+                      const Spacer(),
                       _percentageWidget(coinInfo.percentage),
                     ],
                   ),
@@ -143,11 +139,15 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
   }
 
   Widget buildHistorySection(WalletActionProvider waValue) {
+    final su = ScreenUtil();
+    final subColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
+
     return Padding(
       padding: EdgeInsets.only(
-        left: ScreenUtil().setWidth(20.0),
-        right: ScreenUtil().setWidth(10.0),
-        bottom: ScreenUtil().setWidth(8.0),
+        left: su.setWidth(20.0),
+        right: su.setWidth(10.0),
+        bottom: su.setWidth(8.0),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,9 +158,8 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
               Text(
                 S.of(context).g_key_coin_search_recent,
                 style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24.0),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                  fontSize: su.setSp(24.0),
+                  color: subColor,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -168,8 +167,8 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
                 onPressed: _clearHistory,
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(16.0),
-                    vertical: ScreenUtil().setWidth(6.0),
+                    horizontal: su.setWidth(16.0),
+                    vertical: su.setWidth(6.0),
                   ),
                   minimumSize: Size.zero,
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -177,42 +176,47 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
                 child: Text(
                   S.of(context).g_key_batch_clear_all,
                   style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22.0),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                    fontSize: su.setSp(22.0),
+                    color: subColor,
                   ),
                 ),
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(8.0)),
+          SizedBox(height: su.setWidth(8.0)),
           Wrap(
-            spacing: ScreenUtil().setWidth(12.0),
-            runSpacing: ScreenUtil().setWidth(10.0),
+            spacing: su.setWidth(12.0),
+            runSpacing: su.setWidth(10.0),
             children: _history.map((kw) => _historyChip(kw, waValue)).toList(),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16.0)),
+          SizedBox(height: su.setWidth(16.0)),
           Divider(
             height: 1,
             color: AppThemeUtils.getColorByKey(
                 context, AppThemeKeys.dividerColor.name),
           ),
-          SizedBox(height: ScreenUtil().setWidth(4.0)),
+          SizedBox(height: su.setWidth(4.0)),
         ],
       ),
     );
   }
 
   Widget _historyChip(String keyword, WalletActionProvider waValue) {
+    final su = ScreenUtil();
+    final mainColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainTextColor.name);
+    final subColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
+
     return GestureDetector(
       onTap: () => _applyHistoryKeyword(keyword, waValue),
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(20.0),
-          vertical: ScreenUtil().setWidth(10.0),
+          horizontal: su.setWidth(20.0),
+          vertical: su.setWidth(10.0),
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30.0)),
+          borderRadius: BorderRadius.circular(su.setWidth(30.0)),
           color: AppThemeUtils.getColorByKey(
               context, AppThemeKeys.itemBgColor.name),
           border: Border.all(
@@ -226,21 +230,19 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
             Text(
               keyword,
               style: TextStyle(
-                fontSize: ScreenUtil().setSp(24.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                fontSize: su.setSp(24.0),
+                color: mainColor,
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(8.0)),
+            SizedBox(width: su.setWidth(8.0)),
             // 单独点击 X 只删除这条历史，不影响其他 chip
             GestureDetector(
               onTap: () => _removeFromHistory(keyword),
               behavior: HitTestBehavior.opaque,
               child: Icon(
                 Icons.close,
-                size: ScreenUtil().setWidth(24.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                size: su.setWidth(24.0),
+                color: subColor,
               ),
             ),
           ],

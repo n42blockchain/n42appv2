@@ -6,8 +6,6 @@ import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart'
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
-// ── 代币列表 Header（SliverPersistentHeader）────────────────────────────────
-
 /// 固定在顶部的代币列表标题栏：包含网络选择、排序、小额过滤。
 class WalletCoinListHeader extends StatelessWidget {
   const WalletCoinListHeader({
@@ -83,8 +81,6 @@ class WalletCoinListHeader extends StatelessWidget {
   }
 }
 
-// ── 顶部行：Tokens 标题 + 添加 + 投资组合 + 网络选择 ────────────────────────
-
 class _TopRow extends StatelessWidget {
   const _TopRow({
     required this.waValue,
@@ -100,42 +96,43 @@ class _TopRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final su = ScreenUtil();
+    final blueColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name);
+
     return Row(
       children: [
         Text(
           S.of(context).g_token_m_key_11,
           style: TextStyle(
-            fontSize: ScreenUtil().setSp(32),
+            fontSize: su.setSp(32),
             fontWeight: FontWeight.w600,
             color: AppThemeUtils.getColorByKey(
                 context, AppThemeKeys.mainTextColor.name),
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(12)),
-        // 添加代币按钮
+        SizedBox(width: su.setWidth(12)),
         Material(
           color: Colors.transparent,
           child: InkWell(
             onTap: onAddToken,
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+            borderRadius: BorderRadius.circular(su.setWidth(16)),
             child: Container(
-              width: ScreenUtil().setWidth(36),
-              height: ScreenUtil().setWidth(36),
+              width: su.setWidth(36),
+              height: su.setWidth(36),
               decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                color: blueColor,
+                borderRadius: BorderRadius.circular(su.setWidth(12)),
               ),
               child: Icon(
                 Icons.add_rounded,
                 color: Colors.white,
-                size: ScreenUtil().setWidth(22),
+                size: su.setWidth(22),
               ),
             ),
           ),
         ),
         const Spacer(),
-        // 投资组合分析入口
         Material(
           color: Colors.transparent,
           child: InkWell(
@@ -143,38 +140,35 @@ class _TopRow extends StatelessWidget {
               context,
               MaterialPageRoute(builder: (_) => const PortfolioPage()),
             ),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+            borderRadius: BorderRadius.circular(su.setWidth(16)),
             child: Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(10),
-                vertical: ScreenUtil().setWidth(6),
+                horizontal: su.setWidth(10),
+                vertical: su.setWidth(6),
               ),
               child: Icon(
                 Icons.donut_large_rounded,
-                size: ScreenUtil().setWidth(36),
+                size: su.setWidth(36),
                 color: AppThemeUtils.getColorByKey(
                     context, AppThemeKeys.itemSubtitleTextColor.name),
               ),
             ),
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(4)),
-        // 网络选择器
+        SizedBox(width: su.setWidth(4)),
         Material(
           color: Colors.transparent,
           child: InkWell(
             onTap: onChangeNetwork,
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+            borderRadius: BorderRadius.circular(su.setWidth(20)),
             child: Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(14),
-                vertical: ScreenUtil().setWidth(8),
+                horizontal: su.setWidth(14),
+                vertical: su.setWidth(8),
               ),
               decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainBlueColor.name)
-                    .withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                color: blueColor.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(su.setWidth(20)),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -182,17 +176,15 @@ class _TopRow extends StatelessWidget {
                   Text(
                     networkLabel,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
+                      fontSize: su.setSp(24),
                       fontWeight: FontWeight.w500,
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
+                      color: blueColor,
                     ),
                   ),
                   Icon(
                     Icons.keyboard_arrow_down_rounded,
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainBlueColor.name),
-                    size: ScreenUtil().setWidth(22),
+                    color: blueColor,
+                    size: su.setWidth(22),
                   ),
                 ],
               ),
@@ -203,8 +195,6 @@ class _TopRow extends StatelessWidget {
     );
   }
 }
-
-// ── 底部行：排序 + 小额过滤 ──────────────────────────────────────────────────
 
 class _BottomRow extends StatelessWidget {
   const _BottomRow({
@@ -250,8 +240,6 @@ class _BottomRow extends StatelessWidget {
     );
   }
 }
-
-// ── 排序按钮 ─────────────────────────────────────────────────────────────────
 
 class _SortButton extends StatelessWidget {
   const _SortButton({
@@ -305,8 +293,6 @@ class _SortButton extends StatelessWidget {
     );
   }
 }
-
-// ── 小额资产阈值按钮 ─────────────────────────────────────────────────────────
 
 class _ThresholdButton extends StatelessWidget {
   const _ThresholdButton({

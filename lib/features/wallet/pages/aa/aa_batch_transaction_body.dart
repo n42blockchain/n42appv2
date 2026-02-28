@@ -52,6 +52,10 @@ class AABatchTransactionBody extends StatelessWidget {
     required this.onClearAll,
   });
 
+  /// 主题色快捷访问
+  Color _themeColor(BuildContext context, AppThemeKeys key) =>
+      AppThemeUtils.getColorByKey(context, key.name);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,7 +131,7 @@ class AABatchTransactionBody extends StatelessWidget {
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(28),
                   fontWeight: FontWeight.w600,
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                  color: _themeColor(context, AppThemeKeys.mainTextColor),
                 ),
               ),
             ],
@@ -137,10 +141,7 @@ class AABatchTransactionBody extends StatelessWidget {
             S.of(context).g_key_aa_batch_description,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(24),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
@@ -162,10 +163,7 @@ class AABatchTransactionBody extends StatelessWidget {
             text,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(22),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
             ),
           ),
         ],
@@ -178,13 +176,11 @@ class AABatchTransactionBody extends StatelessWidget {
       return Container(
         padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: _themeColor(context, AppThemeKeys.itemBgColor),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
           border: Border.all(
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ).withAlpha(30),
+            color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor)
+                .withAlpha(30),
           ),
         ),
         child: Column(
@@ -192,20 +188,15 @@ class AABatchTransactionBody extends StatelessWidget {
             Icon(
               Icons.add_circle_outline,
               size: ScreenUtil().setWidth(56),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ).withAlpha(100),
+              color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor)
+                  .withAlpha(100),
             ),
             SizedBox(height: ScreenUtil().setWidth(12)),
             Text(
               S.of(context).g_key_aa_no_operations,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(26),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+                color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
               ),
             ),
             SizedBox(height: ScreenUtil().setWidth(4)),
@@ -213,10 +204,8 @@ class AABatchTransactionBody extends StatelessWidget {
               S.of(context).g_key_aa_add_first_operation,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(22),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ).withAlpha(150),
+                color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor)
+                    .withAlpha(150),
               ),
             ),
           ],
@@ -235,7 +224,7 @@ class AABatchTransactionBody extends StatelessWidget {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(26),
                 fontWeight: FontWeight.w600,
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                color: _themeColor(context, AppThemeKeys.mainTextColor),
               ),
             ),
             TextButton(
@@ -278,7 +267,7 @@ class AABatchTransactionBody extends StatelessWidget {
       icon: Icon(Icons.bookmark_add_outlined, size: ScreenUtil().setWidth(20)),
       label: Text(S.of(context).g_key_aa_batch_save_template),
       style: TextButton.styleFrom(
-        foregroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+        foregroundColor: _themeColor(context, AppThemeKeys.mainBlueColor),
         alignment: Alignment.centerLeft,
       ),
     );
@@ -302,7 +291,7 @@ class AABatchTransactionBody extends StatelessWidget {
       decoration: BoxDecoration(
         color: isSponsored
             ? Colors.green.withAlpha(15)
-            : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+            : _themeColor(context, AppThemeKeys.itemBgColor),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
         border: isSponsored ? Border.all(color: Colors.green.withAlpha(30)) : null,
       ),
@@ -315,40 +304,10 @@ class AABatchTransactionBody extends StatelessWidget {
                 S.of(context).g_key_aa_total_gas,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(24),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
+                  color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
                 ),
               ),
-              if (isEstimating)
-                SizedBox(
-                  width: ScreenUtil().setWidth(20),
-                  height: ScreenUtil().setWidth(20),
-                  child: const CircularProgressIndicator(strokeWidth: 2),
-                )
-              else if (estimatedTotalGas != null)
-                Text(
-                  isSponsored ? S.of(context).g_key_aa_free : formatGasCost(),
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
-                    fontWeight: FontWeight.w600,
-                    color: isSponsored
-                        ? Colors.green
-                        : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                  ),
-                )
-              else
-                Text(
-                  '-',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
-                  ),
-                ),
+              _buildGasValue(context, isSponsored),
             ],
           ),
           if (isSponsored && estimatedTotalGas != null) ...[
@@ -356,6 +315,36 @@ class AABatchTransactionBody extends StatelessWidget {
             GasSponsorshipBadge(isSponsored: true, savedAmount: formatGasCost()),
           ],
         ],
+      ),
+    );
+  }
+
+  Widget _buildGasValue(BuildContext context, bool isSponsored) {
+    if (isEstimating) {
+      final size = ScreenUtil().setWidth(20);
+      return SizedBox(
+        width: size,
+        height: size,
+        child: const CircularProgressIndicator(strokeWidth: 2),
+      );
+    }
+    if (estimatedTotalGas != null) {
+      return Text(
+        isSponsored ? S.of(context).g_key_aa_free : formatGasCost(),
+        style: TextStyle(
+          fontSize: ScreenUtil().setSp(26),
+          fontWeight: FontWeight.w600,
+          color: isSponsored
+              ? Colors.green
+              : _themeColor(context, AppThemeKeys.mainTextColor),
+        ),
+      );
+    }
+    return Text(
+      '-',
+      style: TextStyle(
+        fontSize: ScreenUtil().setSp(26),
+        color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
       ),
     );
   }
@@ -386,7 +375,7 @@ class AABatchTransactionBody extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: _themeColor(context, AppThemeKeys.itemBgColor),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha(10),

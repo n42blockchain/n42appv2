@@ -154,10 +154,12 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
   void _retryRegistration() {
     _waitTimer?.cancel();
 
-    if (_commitResult == null || _commitResult!.isExpired || _commitmentExpiredOnRegister) {
-      // 承诺不存在或已过期 → 通知服务端回滚（best-effort），然后从步骤 0 重新开始
+    final bool needsFullRestart =
+        _commitResult == null || _commitResult!.isExpired || _commitmentExpiredOnRegister;
+
+    if (needsFullRestart) {
       if (_commitmentExpiredOnRegister || _commitResult?.isExpired == true) {
-        _ensService.rollbackCommit(widget.name); // intentionally not awaited (best-effort)
+        _ensService.rollbackCommit(widget.name);
       }
       setState(() {
         _currentStep = 0;
@@ -166,20 +168,20 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
         _registerResult = null;
         _commitmentExpiredOnRegister = false;
       });
-    } else if (_commitResult!.canRegister) {
-      // 承诺仍在有效窗口内 → 跳过 commit 步骤，直接重试 register
-      setState(() {
-        _errorMessage = null;
-        _commitmentExpiredOnRegister = false;
-      });
+      return;
+    }
+
+    // 共享重置
+    _errorMessage = null;
+    _commitmentExpiredOnRegister = false;
+
+    if (_commitResult!.canRegister) {
+      setState(() {});
       _executeRegister();
     } else {
-      // 承诺已提交但仍在等待期 → 恢复倒计时
       setState(() {
         _currentStep = 2;
-        _errorMessage = null;
         _remainingSeconds = _commitResult!.remainingWaitTime;
-        _commitmentExpiredOnRegister = false;
       });
       _startWaitTimer();
     }
@@ -234,45 +236,41 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
   }
 
   Widget _buildDomainCard() {
+    final s = S.of(context);
+    final su = ScreenUtil();
     final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
     final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final yearLabel = widget.years == 1 ? s.g_key_ens_year : s.g_key_ens_years;
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(su.setWidth(24)),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [blueColor.withAlpha(30), blueColor.withAlpha(10)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: BorderRadius.circular(su.setWidth(20)),
       ),
       child: Column(
         children: [
           Text(
             '${widget.name}.eth',
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(40),
+              fontSize: su.setSp(40),
               fontWeight: FontWeight.bold,
               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: su.setWidth(8)),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.access_time,
-                size: ScreenUtil().setWidth(20),
-                color: subtitleColor,
-              ),
-              SizedBox(width: ScreenUtil().setWidth(6)),
+              Icon(Icons.access_time, size: su.setWidth(20), color: subtitleColor),
+              SizedBox(width: su.setWidth(6)),
               Text(
-                '${widget.years} ${widget.years == 1 ? S.of(context).g_key_ens_year : S.of(context).g_key_ens_years}',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
-                  color: subtitleColor,
-                ),
+                '${widget.years} $yearLabel',
+                style: TextStyle(fontSize: su.setSp(26), color: subtitleColor),
               ),
             ],
           ),

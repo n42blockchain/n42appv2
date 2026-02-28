@@ -17,11 +17,7 @@ class BrowserHistoryPage extends StatefulWidget {
 }
 
 class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
-  BrowserApi? _browserApi;
-  BrowserApi get browserApi {
-    _browserApi ??= BrowserApi();
-    return _browserApi!;
-  }
+  late final BrowserApi browserApi = BrowserApi();
 
   List<BrowserHistoryModel> historyList = [];
   int pageSize = 20;
@@ -55,7 +51,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
   }
 
   Future<void> getHistoryList() async {
-    List<BrowserHistoryModel> list = await browserApi.selectBrowserHistory(
+    final list = await browserApi.selectBrowserHistory(
         pageNum: pageNum, pageSize: pageSize);
     if (list.length < pageSize) {
       lastPage = true;
@@ -64,7 +60,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
   }
 
   Future<void> deleteHistory(int index) async {
-    BrowserHistoryModel bhm = historyList[index];
+    final bhm = historyList[index];
     if (bhm.id != null) {
       await browserApi.deleteBrowserHistoryById(bhm.id!);
     }
@@ -91,22 +87,28 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
         ],
       ),
     );
-    if (confirmed == true) {
-      await browserApi.clearBrowserHistory();
-      historyList.clear();
-      setState(() {});
-      if (!mounted) return;
-      ToastUtils.show(s.g_browser_key21);
-    }
+    if (confirmed != true) return;
+
+    await browserApi.clearBrowserHistory();
+    historyList.clear();
+    setState(() {});
+    if (!mounted) return;
+    ToastUtils.show(s.g_browser_key21);
+  }
+
+  /// Parse the timestamp string into a DateTime, or null if invalid.
+  DateTime? _parseTimestamp(BrowserHistoryModel item) {
+    if (item.time == null) return null;
+    final ts = int.tryParse(item.time!);
+    if (ts == null) return null;
+    return DateTime.fromMillisecondsSinceEpoch(ts * 1000);
   }
 
   /// Group label for a history entry based on its timestamp
   String _dateLabel(BrowserHistoryModel item) {
+    final date = _parseTimestamp(item);
+    if (date == null) return '';
     final s = S.of(context);
-    if (item.time == null) return '';
-    final ts = int.tryParse(item.time!);
-    if (ts == null) return '';
-    final date = DateTime.fromMillisecondsSinceEpoch(ts * 1000);
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final yesterday = today.subtract(const Duration(days: 1));
@@ -117,16 +119,16 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
   }
 
   String _timeLabel(BrowserHistoryModel item) {
-    if (item.time == null) return '';
-    final ts = int.tryParse(item.time!);
-    if (ts == null) return '';
-    final date = DateTime.fromMillisecondsSinceEpoch(ts * 1000);
+    final date = _parseTimestamp(item);
+    if (date == null) return '';
     return '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
   }
 
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
+    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+
     return Scaffold(
       appBar: AppBarWidget(
         text: s.g_browser_key18,
@@ -134,11 +136,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
           if (historyList.isNotEmpty)
             IconButton(
               onPressed: clearAllHistory,
-              icon: Icon(
-                Icons.delete_sweep,
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-              ),
+              icon: Icon(Icons.delete_sweep, color: mainText),
             ),
         ],
       ),
@@ -149,13 +147,18 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
         color: AppThemeUtils.getColorByKey(
             context, AppThemeKeys.mainButtonTextColor.name),
         displacement: ScreenUtil().setWidth(72.0),
-        child: historyList.isEmpty ? noDataWidget() : listWidget(),
+        child: historyList.isEmpty ? _noDataWidget() : _listWidget(),
       ),
     );
   }
 
-  Widget listWidget() {
+  Widget _listWidget() {
     final s = S.of(context);
+    final su = ScreenUtil();
+    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final itemBg = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
+
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {
         if (notification is ScrollEndNotification &&
@@ -168,52 +171,14 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
         return false;
       },
       child: ListView.builder(
-        padding:
-            EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+        padding: EdgeInsets.symmetric(horizontal: su.setWidth(30.0)),
         itemCount: historyList.length + 1,
         itemBuilder: (context, int index) {
           if (index == historyList.length) {
-            Widget child;
-            if (lastPage) {
-              child = Text(
-                s.g_key_105,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
-                  fontSize: ScreenUtil().setSp(26.0),
-                ),
-              );
-            } else {
-              child = Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        right: ScreenUtil().setWidth(10.0)),
-                    height: ScreenUtil().setWidth(40.0),
-                    width: ScreenUtil().setWidth(40.0),
-                    child: const CircularProgressIndicator(),
-                  ),
-                  Text(
-                    s.g_key_106,
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemSubtitleTextColor.name),
-                      fontSize: ScreenUtil().setSp(26.0),
-                    ),
-                  ),
-                ],
-              );
-            }
-            return Container(
-              alignment: Alignment.center,
-              height: ScreenUtil().setWidth(50.0),
-              child: child,
-            );
+            return _buildFooter(s, su, subtitleColor);
           }
 
           final item = historyList[index];
-          // Show date group header if first item or date changed
           final showHeader = index == 0 ||
               _dateLabel(item) != _dateLabel(historyList[index - 1]);
 
@@ -223,15 +188,14 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
               if (showHeader)
                 Padding(
                   padding: EdgeInsets.only(
-                    top: ScreenUtil().setWidth(20.0),
-                    bottom: ScreenUtil().setWidth(10.0),
+                    top: su.setWidth(20.0),
+                    bottom: su.setWidth(10.0),
                   ),
                   child: Text(
                     _dateLabel(item),
                     style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(28.0),
+                      color: mainText,
+                      fontSize: su.setSp(28.0),
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -241,29 +205,22 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
                 direction: DismissDirection.endToStart,
                 background: Container(
                   alignment: Alignment.centerRight,
-                  padding:
-                      EdgeInsets.only(right: ScreenUtil().setWidth(30.0)),
+                  padding: EdgeInsets.only(right: su.setWidth(30.0)),
                   color: Colors.red,
                   child: const Icon(Icons.delete, color: Colors.white),
                 ),
-                onDismissed: (_) {
-                  deleteHistory(index);
-                },
+                onDismissed: (_) => deleteHistory(index),
                 child: InkWell(
-                  onTap: () {
-                    Navigator.pop(context, item.url);
-                  },
+                  onTap: () => Navigator.pop(context, item.url),
                   child: Container(
-                    margin: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(6.0)),
+                    margin: EdgeInsets.symmetric(vertical: su.setWidth(6.0)),
                     padding: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(16.0),
-                        horizontal: ScreenUtil().setWidth(20.0)),
+                      vertical: su.setWidth(16.0),
+                      horizontal: su.setWidth(20.0),
+                    ),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                          Radius.circular(ScreenUtil().setWidth(16.0))),
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemBgColor.name),
+                      borderRadius: BorderRadius.circular(su.setWidth(16.0)),
+                      color: itemBg,
                     ),
                     child: Row(
                       children: [
@@ -272,27 +229,22 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                (item.title != null && item.title!.isNotEmpty)
+                                (item.title?.isNotEmpty ?? false)
                                     ? item.title!
                                     : (item.url ?? ''),
                                 style: TextStyle(
-                                  color: AppThemeUtils.getColorByKey(context,
-                                      AppThemeKeys.mainTextColor.name),
-                                  fontSize: ScreenUtil().setSp(28.0),
+                                  color: mainText,
+                                  fontSize: su.setSp(28.0),
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              SizedBox(
-                                  height: ScreenUtil().setWidth(6.0)),
+                              SizedBox(height: su.setWidth(6.0)),
                               Text(
                                 item.url ?? '',
                                 style: TextStyle(
-                                  color: AppThemeUtils.getColorByKey(
-                                      context,
-                                      AppThemeKeys
-                                          .itemSubtitleTextColor.name),
-                                  fontSize: ScreenUtil().setSp(24.0),
+                                  color: subtitleColor,
+                                  fontSize: su.setSp(24.0),
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -300,13 +252,12 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
                             ],
                           ),
                         ),
-                        SizedBox(width: ScreenUtil().setWidth(10.0)),
+                        SizedBox(width: su.setWidth(10.0)),
                         Text(
                           _timeLabel(item),
                           style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(context,
-                                AppThemeKeys.itemSubtitleTextColor.name),
-                            fontSize: ScreenUtil().setSp(24.0),
+                            color: subtitleColor,
+                            fontSize: su.setSp(24.0),
                           ),
                         ),
                       ],
@@ -321,7 +272,44 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
     );
   }
 
-  Widget noDataWidget() {
+  Widget _buildFooter(S s, ScreenUtil su, Color subtitleColor) {
+    final Widget child;
+    if (lastPage) {
+      child = Text(
+        s.g_key_105,
+        style: TextStyle(
+          color: subtitleColor,
+          fontSize: su.setSp(26.0),
+        ),
+      );
+    } else {
+      child = Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            margin: EdgeInsets.only(right: su.setWidth(10.0)),
+            height: su.setWidth(40.0),
+            width: su.setWidth(40.0),
+            child: const CircularProgressIndicator(),
+          ),
+          Text(
+            s.g_key_106,
+            style: TextStyle(
+              color: subtitleColor,
+              fontSize: su.setSp(26.0),
+            ),
+          ),
+        ],
+      );
+    }
+    return Container(
+      alignment: Alignment.center,
+      height: su.setWidth(50.0),
+      child: child,
+    );
+  }
+
+  Widget _noDataWidget() {
     return EmptyView(
       type: EmptyType.noData,
       canRefresh: true,

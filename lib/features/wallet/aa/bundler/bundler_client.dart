@@ -313,13 +313,13 @@ class GasEstimateResult {
       verificationGasLimit: _parseBigInt(json['verificationGasLimit']),
       callGasLimit: _parseBigInt(json['callGasLimit']),
       preVerificationGas: _parseBigInt(json['preVerificationGas']),
-      paymasterVerificationGasLimit: _parseOptionalBigInt(json['paymasterVerificationGasLimit']),
-      paymasterPostOpGasLimit: _parseOptionalBigInt(json['paymasterPostOpGasLimit']),
+      paymasterVerificationGasLimit: json['paymasterVerificationGasLimit'] != null
+          ? _parseBigInt(json['paymasterVerificationGasLimit'])
+          : null,
+      paymasterPostOpGasLimit: json['paymasterPostOpGasLimit'] != null
+          ? _parseBigInt(json['paymasterPostOpGasLimit'])
+          : null,
     );
-  }
-
-  static BigInt? _parseOptionalBigInt(dynamic value) {
-    return value != null ? _parseBigInt(value) : null;
   }
 
   static BigInt _parseBigInt(dynamic value) {
@@ -338,17 +338,14 @@ class GasEstimateResult {
     final mult = BigInt.from((multiplier * 100).round());
     final div = BigInt.from(100);
     BigInt applyBuffer(BigInt v) => v * mult ~/ div;
+    BigInt? applyOptional(BigInt? v) => v != null ? applyBuffer(v) : null;
 
     return GasEstimateResult(
       verificationGasLimit: applyBuffer(verificationGasLimit),
       callGasLimit: applyBuffer(callGasLimit),
       preVerificationGas: applyBuffer(preVerificationGas),
-      paymasterVerificationGasLimit: paymasterVerificationGasLimit != null
-          ? applyBuffer(paymasterVerificationGasLimit!)
-          : null,
-      paymasterPostOpGasLimit: paymasterPostOpGasLimit != null
-          ? applyBuffer(paymasterPostOpGasLimit!)
-          : null,
+      paymasterVerificationGasLimit: applyOptional(paymasterVerificationGasLimit),
+      paymasterPostOpGasLimit: applyOptional(paymasterPostOpGasLimit),
     );
   }
 
@@ -435,6 +432,7 @@ class BundlerClientBuilder {
   BundlerClient build() {
     final version = _version ?? AAConfig.defaultVersion;
 
+    // Direct URL + entryPoint configuration
     if (_bundlerUrl != null && _entryPoint != null) {
       return BundlerClient(
         bundlerUrl: _bundlerUrl!,
@@ -445,25 +443,27 @@ class BundlerClientBuilder {
       );
     }
 
-    if (_chainSymbol != null) {
-      final config = AAConfig.getChainConfig(_chainSymbol!, version: version);
-      if (config == null) {
-        throw AAUnsupportedChainError(_chainSymbol!);
-      }
-
-      final url = _useBackup && config.backupBundlerUrl != null
-          ? config.backupBundlerUrl!
-          : config.getBundlerUrlWithKey(_apiKey);
-
-      return BundlerClient(
-        bundlerUrl: url,
-        entryPoint: config.entryPoint,
-        apiKey: _apiKey,
-        timeout: _timeout,
-        version: config.version,
-      );
+    // Chain-based configuration
+    final symbol = _chainSymbol;
+    if (symbol == null) {
+      throw AAConfigurationError('Either chain symbol or bundler URL must be provided');
     }
 
-    throw AAConfigurationError('Either chain symbol or bundler URL must be provided');
+    final config = AAConfig.getChainConfig(symbol, version: version);
+    if (config == null) {
+      throw AAUnsupportedChainError(symbol);
+    }
+
+    final url = _useBackup && config.backupBundlerUrl != null
+        ? config.backupBundlerUrl!
+        : config.getBundlerUrlWithKey(_apiKey);
+
+    return BundlerClient(
+      bundlerUrl: url,
+      entryPoint: config.entryPoint,
+      apiKey: _apiKey,
+      timeout: _timeout,
+      version: config.version,
+    );
   }
 }

@@ -44,7 +44,6 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
     }
   }
 
-  //检查主链币，或者代币是否已经添加
   bool checkSymbol(String contract, String symbol) {
     final chain = chains![symbol.toUpperCase()];
     if (chain == null) return false;
@@ -52,7 +51,6 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
     return chain['mainnets'][contract] != null;
   }
 
-  //处理主链币的数据
   Map<String, dynamic>? dealChain(
     Map<String, dynamic> chainMap,
   ) {
@@ -102,22 +100,17 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
       supportTest = false;
     }
     final fullname = chainMap['fullname'] as String;
-    String icon;
-    if (fullname == "LoveCoin") {
-      icon = chainMap['icon'];
-    } else if (fullname == "Base") {
-      icon =
-          "${AppConfig.apiUrl['walletamazeBrowser']}/static/${chainMap['coin_name']}.png";
-    } else {
-      icon =
-          "https://api-wallet.walletamaze.com/market/v1/r/coinImage/$fullname.png";
-    }
+    final icon = switch (fullname) {
+      'LoveCoin' => chainMap['icon'] as String,
+      'Base' => "${AppConfig.apiUrl['walletamazeBrowser']}/static/${chainMap['coin_name']}.png",
+      _ => "https://api-wallet.walletamaze.com/market/v1/r/coinImage/$fullname.png",
+    };
     Map<String, dynamic> chainInfoMap = {
-      "isTest": coinType == "ZETA", //是否是正式链
-      "supportTest": supportTest, //是否支持测试地址
-      "addrType": addrType, //地址类型
-      "pathIndex": 0, //path具体的账号节点
-      "pathList": [0], //path数量
+      "isTest": coinType == "ZETA",
+      "supportTest": supportTest,
+      "addrType": addrType,
+      "pathIndex": 0,
+      "pathList": [0],
       "baseInfo": {
         "blockchainType": blockchainType,
         "coinType": coinType,
@@ -144,7 +137,7 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
       },
       "mainnetChainID": mainChainId,
       "testnetChainID": testChainId,
-      "testnetIndex": 0, //当前选择的测试网络 索引值
+      "testnetIndex": 0,
       "testnets": [
         {
           "testnetWS": "",
@@ -195,7 +188,6 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
     }).toList();
   }
 
-  //链 币 数据处理
   void coinDeal(List<dynamic> returnData, Map<String, dynamic> chains,
       {String rules = "", String chainName = "", String symbol = ""}) {
     for (Map<String, dynamic> r in returnData) {
@@ -204,7 +196,7 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
             widget.coinType != r['coin_name'].toString().toUpperCase()) {
           continue;
         }
-        Map<String, dynamic>? chain = dealChain(r);
+        final chain = dealChain(r);
         if (chain != null) {
           netChains[r['coin_name'].toString().toUpperCase()] = chain;
         }
@@ -215,27 +207,22 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
       if (rules != "") r['rules'] = rules;
       if (symbol != "") r['symbol'] = symbol;
 
-      final checkStr =
-          chainName == "" ? r['coin_name'].toString() : symbol;
-      r['isAdd'] =
-          checkSymbol(r['contract'].toString().toUpperCase(), checkStr);
+      final checkStr = chainName == "" ? r['coin_name'].toString() : symbol;
+      final isAdd = checkSymbol(r['contract'].toString().toUpperCase(), checkStr);
+      r['isAdd'] = isAdd;
       r['edit'] = false;
-      if (r['isAdd']) {
+
+      if (isAdd) {
         final chainMap = chains[checkStr.toUpperCase()];
-        if (chainMap == null) {
-          r['canEdit'] = false;
-        } else {
-          r['canEdit'] =
-              chainName != "" ? true : chainMap['baseInfo']['canEdit'];
-        }
-      } else {
-        r['canEdit'] = true;
-      }
-      if (r['isAdd']) {
+        r['canEdit'] = chainMap == null
+            ? false
+            : (chainName != "" || chainMap['baseInfo']['canEdit'] == true);
         coinlist.insert(0, r);
       } else {
+        r['canEdit'] = true;
         coinlist.add(r);
       }
+
       final coins = r['coins'] as List<dynamic>?;
       if (coins != null) {
         coinDeal(coins, chains,

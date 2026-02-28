@@ -254,43 +254,67 @@ class EnsService {
     _avatarCache.clear();
   }
 
+  // ── 私有：通用 API 调用辅助 ──────────────────────────────────────────────
+
+  /// 封装正向解析的通用模式：调用 API → 检查结果 → 包装为 [EnsResolutionResult]
+  Future<EnsResolutionResult?> _resolveForward({
+    required Future<dynamic> Function() apiCall,
+    required String domain,
+    required String sourceChain,
+    required DomainProtocol protocol,
+    required String debugLabel,
+  }) async {
+    try {
+      final result = await apiCall();
+      if (!result.error && result.data != null) {
+        return EnsResolutionResult.success(
+          address: result.data as String,
+          ensName: domain,
+          sourceChain: sourceChain,
+          protocol: protocol,
+        );
+      }
+    } catch (e) {
+      debugPrint('[DomainService] $debugLabel failed: $e');
+    }
+    return null;
+  }
+
+  /// 封装反向解析 / 头像获取的通用模式：调用 API → 检查结果 → 返回 String?
+  Future<String?> _fetchStringResult(
+    Future<dynamic> Function() apiCall,
+    String debugLabel,
+  ) async {
+    try {
+      final result = await apiCall();
+      if (!result.error && result.data != null) return result.data as String;
+    } catch (e) {
+      debugPrint('[DomainService] $debugLabel failed: $e');
+    }
+    return null;
+  }
+
   // ── 私有：各协议解析实现 ─────────────────────────────────────────────────
 
   /// N42 Name Service 正向解析
-  Future<EnsResolutionResult?> _resolveWithN42(String domain) async {
-    try {
-      final result = await _tokenViewApi.getN42EnsResolve(domain);
-      if (!result.error && result.data != null) {
-        return EnsResolutionResult.success(
-          address: result.data as String,
-          ensName: domain,
-          sourceChain: 'N42',
-          protocol: DomainProtocol.n42,
-        );
-      }
-    } catch (e) {
-      debugPrint('[DomainService] N42 NS failed: $e');
-    }
-    return null;
-  }
+  Future<EnsResolutionResult?> _resolveWithN42(String domain) =>
+      _resolveForward(
+        apiCall: () => _tokenViewApi.getN42EnsResolve(domain),
+        domain: domain,
+        sourceChain: 'N42',
+        protocol: DomainProtocol.n42,
+        debugLabel: 'N42 NS',
+      );
 
   /// Ethereum Name Service 正向解析
-  Future<EnsResolutionResult?> _resolveWithEns(String domain) async {
-    try {
-      final result = await _tokenViewApi.getEnsResolve(domain);
-      if (!result.error && result.data != null) {
-        return EnsResolutionResult.success(
-          address: result.data as String,
-          ensName: domain,
-          sourceChain: 'ETH',
-          protocol: DomainProtocol.ens,
-        );
-      }
-    } catch (e) {
-      debugPrint('[DomainService] ETH ENS failed: $e');
-    }
-    return null;
-  }
+  Future<EnsResolutionResult?> _resolveWithEns(String domain) =>
+      _resolveForward(
+        apiCall: () => _tokenViewApi.getEnsResolve(domain),
+        domain: domain,
+        sourceChain: 'ETH',
+        protocol: DomainProtocol.ens,
+        debugLabel: 'ETH ENS',
+      );
 
   /// Unstoppable Domains 正向解析
   ///
@@ -300,99 +324,64 @@ class EnsService {
   Future<EnsResolutionResult?> _resolveWithUd(
     String domain,
     String? preferredChain,
-  ) async {
-    try {
-      final ticker = EnsProtocolUtils.coinTypeToUdTicker(preferredChain);
-      final result = await _tokenViewApi.getUdResolve(domain, ticker: ticker);
-      if (!result.error && result.data != null) {
-        return EnsResolutionResult.success(
-          address: result.data as String,
-          ensName: domain,
-          sourceChain: 'UD',
-          protocol: DomainProtocol.unstoppableDomains,
-        );
-      }
-    } catch (e) {
-      debugPrint('[DomainService] Unstoppable Domains failed: $e');
-    }
-    return null;
+  ) {
+    final ticker = EnsProtocolUtils.coinTypeToUdTicker(preferredChain);
+    return _resolveForward(
+      apiCall: () => _tokenViewApi.getUdResolve(domain, ticker: ticker),
+      domain: domain,
+      sourceChain: 'UD',
+      protocol: DomainProtocol.unstoppableDomains,
+      debugLabel: 'Unstoppable Domains',
+    );
   }
 
   /// Solana Name Service 正向解析
   ///
   /// [domain] — .sol 域名（如 alice.sol）
-  Future<EnsResolutionResult?> _resolveWithSns(String domain) async {
-    try {
-      final result = await _tokenViewApi.getSnsResolve(domain);
-      if (!result.error && result.data != null) {
-        return EnsResolutionResult.success(
-          address: result.data as String,
-          ensName: domain,
-          sourceChain: 'SNS',
-          protocol: DomainProtocol.sns,
-        );
-      }
-    } catch (e) {
-      debugPrint('[DomainService] SNS failed: $e');
-    }
-    return null;
-  }
+  Future<EnsResolutionResult?> _resolveWithSns(String domain) =>
+      _resolveForward(
+        apiCall: () => _tokenViewApi.getSnsResolve(domain),
+        domain: domain,
+        sourceChain: 'SNS',
+        protocol: DomainProtocol.sns,
+        debugLabel: 'SNS',
+      );
 
   // ── 私有：各协议反向解析 ────────────────────────────────────────────────
 
-  Future<String?> _reverseResolveN42(String address) async {
-    try {
-      final result = await _tokenViewApi.getN42ReverseResolve(address);
-      if (!result.error && result.data != null) return result.data as String;
-    } catch (e) {
-      debugPrint('[DomainService] N42 reverse failed: $e');
-    }
-    return null;
+  Future<String?> _reverseResolveN42(String address) =>
+      _fetchStringResult(
+        () => _tokenViewApi.getN42ReverseResolve(address),
+        'N42 reverse',
+      );
+
+  Future<String?> _reverseResolveEns(String address) =>
+      _fetchStringResult(
+        () => _tokenViewApi.getEnsReverseResolve(address),
+        'ENS reverse',
+      );
+
+  Future<String?> _reverseResolveUd(String address, String coinType) {
+    final ticker = EnsProtocolUtils.coinTypeToUdTicker(coinType);
+    return _fetchStringResult(
+      () => _tokenViewApi.getUdReverseResolve(address, ticker: ticker),
+      'UD reverse',
+    );
   }
 
-  Future<String?> _reverseResolveEns(String address) async {
-    try {
-      final result = await _tokenViewApi.getEnsReverseResolve(address);
-      if (!result.error && result.data != null) return result.data as String;
-    } catch (e) {
-      debugPrint('[DomainService] ENS reverse failed: $e');
-    }
-    return null;
-  }
-
-  Future<String?> _reverseResolveUd(String address, String coinType) async {
-    try {
-      final ticker = EnsProtocolUtils.coinTypeToUdTicker(coinType);
-      final result =
-          await _tokenViewApi.getUdReverseResolve(address, ticker: ticker);
-      if (!result.error && result.data != null) return result.data as String;
-    } catch (e) {
-      debugPrint('[DomainService] UD reverse failed: $e');
-    }
-    return null;
-  }
-
-  Future<String?> _reverseResolveSns(String address) async {
-    try {
-      final result = await _tokenViewApi.getSnsReverseResolve(address);
-      if (!result.error && result.data != null) return result.data as String;
-    } catch (e) {
-      debugPrint('[DomainService] SNS reverse failed: $e');
-    }
-    return null;
-  }
+  Future<String?> _reverseResolveSns(String address) =>
+      _fetchStringResult(
+        () => _tokenViewApi.getSnsReverseResolve(address),
+        'SNS reverse',
+      );
 
   // ── 私有：头像 ────────────────────────────────────────────────────────────
 
-  Future<String?> _fetchEnsAvatar(String domainName) async {
-    try {
-      final result = await _tokenViewApi.getEnsAvatar(domainName);
-      if (!result.error && result.data != null) return result.data as String;
-    } catch (e) {
-      debugPrint('[DomainService] avatar fetch failed: $e');
-    }
-    return null;
-  }
+  Future<String?> _fetchEnsAvatar(String domainName) =>
+      _fetchStringResult(
+        () => _tokenViewApi.getEnsAvatar(domainName),
+        'avatar fetch',
+      );
 
   // ── 私有：缓存操作 ────────────────────────────────────────────────────────
 

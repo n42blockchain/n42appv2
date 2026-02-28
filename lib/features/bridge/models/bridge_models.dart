@@ -199,7 +199,7 @@ class BridgeRoute {
 
   factory BridgeRoute.fromJson(Map<String, dynamic> json) {
     final steps = (json['steps'] as List<dynamic>?)
-            ?.map((s) => BridgeRouteStep.fromJson(s))
+            ?.map((s) => BridgeRouteStep.fromJson(s as Map<String, dynamic>))
             .toList() ??
         [];
 
@@ -261,10 +261,10 @@ class BridgeQuoteResponse {
   /// 获取推荐路由
   BridgeRoute? get recommendedRoute {
     if (routes.isEmpty) return null;
-    return routes.cast<BridgeRoute?>().firstWhere(
-          (r) => r!.isRecommended,
-          orElse: () => routes.first,
-        );
+    for (final r in routes) {
+      if (r.isRecommended) return r;
+    }
+    return routes.first;
   }
 }
 

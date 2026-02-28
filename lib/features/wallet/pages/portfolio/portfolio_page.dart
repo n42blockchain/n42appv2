@@ -227,20 +227,11 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
       highlighted = sliceRecords[_touchedIndex];
     }
 
-    return Container(
-      decoration: BoxDecoration(
-        color: itemBg,
-        borderRadius: BorderRadius.circular(16.r),
-      ),
-      padding: EdgeInsets.all(16.w),
+    return _sectionContainer(itemBg,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            S.of(context).g_portfolio_allocation,
-            style: TextStyle(
-                fontSize: 15.sp, fontWeight: FontWeight.bold, color: textColor),
-          ),
+          _sectionTitle(S.of(context).g_portfolio_allocation, textColor),
           SizedBox(height: 16.h),
           SizedBox(
             height: 220.h,
@@ -275,44 +266,12 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
                         ),
                       ),
                       // Center label
-                      if (highlighted != null)
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              highlighted.symbol.toUpperCase(),
-                              style: TextStyle(
-                                  fontSize: 13.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: textColor),
-                            ),
-                            Text(
-                              fmtUsd(highlighted.value),
-                              style: TextStyle(
-                                  fontSize: 11.sp,
-                                  color: textColor.withAlpha(178)),
-                            ),
-                          ],
-                        )
-                      else
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              S.of(context).g_portfolio_pie_total,
-                              style: TextStyle(
-                                  fontSize: 12.sp,
-                                  color: textColor.withAlpha(153)),
-                            ),
-                            Text(
-                              fmtUsd(totalValue),
-                              style: TextStyle(
-                                  fontSize: 13.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: textColor),
-                            ),
-                          ],
-                        ),
+                      _buildCenterLabel(
+                        context,
+                        highlighted: highlighted,
+                        totalValue: totalValue,
+                        textColor: textColor,
+                      ),
                     ],
                   ),
                 ),
@@ -356,6 +315,74 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
     );
   }
 
+  /// Center label for the donut chart – shows the highlighted coin or the total.
+  Widget _buildCenterLabel(
+    BuildContext context, {
+    required CoinRecord? highlighted,
+    required double totalValue,
+    required Color textColor,
+  }) {
+    if (highlighted != null) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            highlighted.symbol.toUpperCase(),
+            style: TextStyle(
+                fontSize: 13.sp,
+                fontWeight: FontWeight.bold,
+                color: textColor),
+          ),
+          Text(
+            fmtUsd(highlighted.value),
+            style: TextStyle(
+                fontSize: 11.sp, color: textColor.withAlpha(178)),
+          ),
+        ],
+      );
+    }
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          S.of(context).g_portfolio_pie_total,
+          style: TextStyle(
+              fontSize: 12.sp, color: textColor.withAlpha(153)),
+        ),
+        Text(
+          fmtUsd(totalValue),
+          style: TextStyle(
+              fontSize: 13.sp,
+              fontWeight: FontWeight.bold,
+              color: textColor),
+        ),
+      ],
+    );
+  }
+
+  // ─── Shared section helpers ─────────────────────────────────────────────
+
+  /// Wraps [child] in a rounded container with the standard section decoration.
+  Widget _sectionContainer(Color itemBg, {required Widget child}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: itemBg,
+        borderRadius: BorderRadius.circular(16.r),
+      ),
+      padding: EdgeInsets.all(16.w),
+      child: child,
+    );
+  }
+
+  /// Standard section heading used by pie, movers, and holdings sections.
+  Widget _sectionTitle(String title, Color textColor) {
+    return Text(
+      title,
+      style: TextStyle(
+          fontSize: 15.sp, fontWeight: FontWeight.bold, color: textColor),
+    );
+  }
+
   // ─── 24h Movers ────────────────────────────────────────────────────────────
 
   Widget _buildMoversSection(
@@ -386,20 +413,11 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
 
     if (gainers.isEmpty && losers.isEmpty) return const SizedBox();
 
-    return Container(
-      decoration: BoxDecoration(
-        color: itemBg,
-        borderRadius: BorderRadius.circular(16.r),
-      ),
-      padding: EdgeInsets.all(16.w),
+    return _sectionContainer(itemBg,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            S.of(context).g_portfolio_movers,
-            style: TextStyle(
-                fontSize: 15.sp, fontWeight: FontWeight.bold, color: textColor),
-          ),
+          _sectionTitle(S.of(context).g_portfolio_movers, textColor),
           SizedBox(height: 12.h),
           if (gainers.isNotEmpty)
             MoverRow(
@@ -434,20 +452,11 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
     Color textColor,
     Color accentColor,
   ) {
-    return Container(
-      decoration: BoxDecoration(
-        color: itemBg,
-        borderRadius: BorderRadius.circular(16.r),
-      ),
-      padding: EdgeInsets.all(16.w),
+    return _sectionContainer(itemBg,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            S.of(context).g_portfolio_all_holdings,
-            style: TextStyle(
-                fontSize: 15.sp, fontWeight: FontWeight.bold, color: textColor),
-          ),
+          _sectionTitle(S.of(context).g_portfolio_all_holdings, textColor),
           SizedBox(height: 8.h),
           for (var i = 0; i < records.length; i++) ...[
             HoldingRow(

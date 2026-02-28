@@ -5,10 +5,6 @@
 
 part of 'gas_tracker_page.dart';
 
-// ══════════════════════════════════════════════════════════
-// 页面局部构建方法（网络卡片、sparkline、Gas 行、状态标签等）
-// ══════════════════════════════════════════════════════════
-
 extension _GasTrackerCardBuilders on _GasTrackerPageState {
   Widget buildHeader() {
     final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
@@ -78,7 +74,6 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── 网络标题行 ───────────────────────────────
           Row(
             children: [
               _NetworkIcon(network: network, size: 44, iconSize: 24),
@@ -104,7 +99,6 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
                   ],
                 ),
               ),
-              // 提醒铃铛（已配置则高亮）
               GestureDetector(
                 onTap: () => _showAlertSheet(network),
                 child: Icon(
@@ -118,10 +112,8 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
             ],
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
-
-          // ── Gas 费用数据行 ───────────────────────────
           if (data != null) ...[
-            buildGasRow(S.of(context).g_key_t_17, // Gas Price
+            buildGasRow(S.of(context).g_key_t_17,
                 '${data.gasPrice.toStringAsFixed(2)} Gwei', network.color),
             if (data.baseFee != null)
               buildGasRow(S.of(context).g_key_gas_base_fee,
@@ -141,8 +133,6 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
                 ),
               ),
             ),
-
-          // ── 价格走势 sparkline ───────────────────────
           if (history.length >= 3) ...[
             SizedBox(height: ScreenUtil().setWidth(12)),
             buildSparkline(history, network),
@@ -155,7 +145,6 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
   Widget buildSparkline(List<double> history, NetworkConfig network) {
     final minY = history.reduce((a, b) => a < b ? a : b);
     final maxY = history.reduce((a, b) => a > b ? a : b);
-    // 添加小边距防止线条被裁剪
     final padding = (maxY - minY) * 0.1 + 0.5;
     final subtitleColor =
         AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
@@ -165,18 +154,11 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
       children: [
         Row(
           children: [
-            Icon(
-              Icons.show_chart,
-              size: ScreenUtil().setWidth(28),
-              color: subtitleColor,
-            ),
+            Icon(Icons.show_chart, size: ScreenUtil().setWidth(28), color: subtitleColor),
             SizedBox(width: ScreenUtil().setWidth(6)),
             Text(
               S.of(context).g_key_gas_price_trend,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: subtitleColor,
-              ),
+              style: TextStyle(fontSize: ScreenUtil().setSp(22), color: subtitleColor),
             ),
             const Spacer(),
             Text(
@@ -260,22 +242,12 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
   }
 
   Widget buildNetworkStatus(double? gasPrice) {
-    String statusText;
-    Color statusColor;
-
-    if (gasPrice == null) {
-      statusText = '...';
-      statusColor = Colors.grey;
-    } else if (gasPrice < 20) {
-      statusText = S.of(context).g_key_gas_network_idle;
-      statusColor = Colors.green;
-    } else if (gasPrice < 50) {
-      statusText = S.of(context).g_key_gas_network_normal;
-      statusColor = Colors.orange;
-    } else {
-      statusText = S.of(context).g_key_gas_network_busy;
-      statusColor = Colors.red;
-    }
+    final (statusText, statusColor) = switch (gasPrice) {
+      null => ('...', Colors.grey),
+      < 20 => (S.of(context).g_key_gas_network_idle, Colors.green),
+      < 50 => (S.of(context).g_key_gas_network_normal, Colors.orange),
+      _ => (S.of(context).g_key_gas_network_busy, Colors.red),
+    };
 
     return Container(
       constraints: BoxConstraints(maxWidth: ScreenUtil().setWidth(140)),

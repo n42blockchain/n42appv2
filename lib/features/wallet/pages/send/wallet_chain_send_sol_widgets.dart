@@ -61,7 +61,7 @@ mixin _SolSendWidgetsMixin on _SolSendLogicMixin {
                 ),
               ),
               SizedBox(width: ScreenUtil().setWidth(20.0)),
-              Expanded(flex: 1, child: amountBalanceWidget()),
+              Expanded(child: amountBalanceWidget()),
             ],
           ),
           Container(
@@ -73,12 +73,10 @@ mixin _SolSendWidgetsMixin on _SolSendLogicMixin {
                   context, AppThemeKeys.itemBgColor.name),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xff101828)
-                      .withAlpha((0.05 * 255).round()),
+                  color: const Color(0xff101828).withAlpha(13),
                   offset: const Offset(0, 1),
                   blurRadius: ScreenUtil().setWidth(4.0),
-                  spreadRadius: 0,
-                )
+                ),
               ],
             ),
             child: Column(
@@ -96,22 +94,14 @@ mixin _SolSendWidgetsMixin on _SolSendLogicMixin {
                   ),
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
-                  onChanged: (value) {
-                    amountCheck(value: value);
-                  },
+                  onChanged: (value) => amountCheck(value: value),
                   onEditingComplete: () {
                     amountCheck();
                     FocusScope.of(context).requestFocus(toNode);
                   },
                   fontSize: ScreenUtil().setWidth(70.0),
                   height: ScreenUtil().setWidth(120.0),
-                  boxShadow: BoxShadow(
-                    color: const Color(0xff101828)
-                        .withAlpha((0 * 255).round()),
-                    offset: const Offset(0, 0),
-                    blurRadius: ScreenUtil().setWidth(0),
-                    spreadRadius: 0,
-                  ),
+                  boxShadow: const BoxShadow(color: Color(0x00101828)),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(ScreenUtil().setWidth(16.0)),
                     topRight: Radius.circular(ScreenUtil().setWidth(16.0)),
@@ -143,9 +133,7 @@ mixin _SolSendWidgetsMixin on _SolSendLogicMixin {
                       ),
                     ),
                   ),
-                  rightOnTap1: () {
-                    maxTag();
-                  },
+                  rightOnTap1: maxTag,
                 ),
                 Divider(
                   height: ScreenUtil().setWidth(1.0),
@@ -182,12 +170,10 @@ mixin _SolSendWidgetsMixin on _SolSendLogicMixin {
   Widget ownerAddress() {
     final String addr =
         dataUtils.addressFarmat(widget.coinModel.address.toString());
-    return Container(
-      padding: EdgeInsets.only(
-        top: ScreenUtil().setWidth(20.0),
-        bottom: ScreenUtil().setWidth(20.0),
-        right: ScreenUtil().setWidth(30.0),
-        left: ScreenUtil().setWidth(30.0),
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: ScreenUtil().setWidth(20.0),
+        horizontal: ScreenUtil().setWidth(30.0),
       ),
       child: Text(
         addr,
@@ -202,7 +188,6 @@ mixin _SolSendWidgetsMixin on _SolSendLogicMixin {
     );
   }
 
-  // 矿工费
   Widget minerFeeWidget() {
     final bool isContract = widget.coinModel.coin['isContract'] == true;
     final int decimals = isContract
@@ -252,17 +237,14 @@ mixin _SolSendWidgetsMixin on _SolSendLogicMixin {
   }
 
   Widget errorMessageWidget() {
-    if (errorMessage == "") return const SizedBox.shrink();
+    if (errorMessage.isEmpty) return const SizedBox.shrink();
     return Container(
       margin: EdgeInsets.only(
         top: ScreenUtil().setWidth(20.0),
         left: ScreenUtil().setWidth(30),
         right: ScreenUtil().setWidth(30),
       ),
-      padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(30.0),
-      ),
+      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius:
@@ -281,9 +263,7 @@ mixin _SolSendWidgetsMixin on _SolSendLogicMixin {
     );
   }
 
-  // 提交按钮
   Widget sendButtonWidget() {
-    final String title = S.of(context).g_key_48;
     final bool isLoading = load == Load.loading;
     return Positioned(
       left: 0,
@@ -299,10 +279,8 @@ mixin _SolSendWidgetsMixin on _SolSendLogicMixin {
                 context, AppThemeKeys.backGroundColor.name),
             child: buttonStyle6(
               context,
-              () async {
-                sendTransaction();
-              },
-              isLoading ? '${S.of(context).g_key_106}...' : title,
+              sendTransaction,
+              isLoading ? '${S.of(context).g_key_106}...' : S.of(context).g_key_48,
               AppThemeUtils.getColorByKey(
                 context,
                 isLoading

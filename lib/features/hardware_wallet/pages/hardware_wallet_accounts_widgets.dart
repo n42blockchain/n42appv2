@@ -5,6 +5,16 @@
 
 part of 'hardware_wallet_accounts_page.dart';
 
+/// 常用主题色快捷方法
+Color _hwSubtitleColor(BuildContext context) =>
+    AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+
+Color _hwBlueColor(BuildContext context) =>
+    AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+
+Color _hwTextColor(BuildContext context) =>
+    AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+
 /// 未连接状态视图
 class _HWNotConnectedView extends StatelessWidget {
   final VoidCallback onGoBack;
@@ -14,30 +24,26 @@ class _HWNotConnectedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
+    final subtitle = _hwSubtitleColor(context);
+    final su = ScreenUtil();
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             Icons.bluetooth_disabled,
-            size: ScreenUtil().setWidth(80),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+            size: su.setWidth(80),
+            color: subtitle,
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: su.setWidth(20)),
           Text(
             s.g_key_hw_not_connected,
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(30),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              fontSize: su.setSp(30),
+              color: subtitle,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: su.setWidth(20)),
           ElevatedButton(
             onPressed: onGoBack,
             child: Text(s.g_key_hw_go_back),
@@ -56,29 +62,30 @@ class _HWDeviceInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final su = ScreenUtil();
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      margin: EdgeInsets.all(su.setWidth(30)),
+      padding: EdgeInsets.all(su.setWidth(20)),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: BorderRadius.circular(su.setWidth(12)),
       ),
       child: Row(
         children: [
           Container(
-            width: ScreenUtil().setWidth(48),
-            height: ScreenUtil().setWidth(48),
+            width: su.setWidth(48),
+            height: su.setWidth(48),
             decoration: BoxDecoration(
               color: Colors.green.withAlpha(30),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+              borderRadius: BorderRadius.circular(su.setWidth(12)),
             ),
             child: Icon(
               Icons.check_circle,
               color: Colors.green,
-              size: ScreenUtil().setWidth(28),
+              size: su.setWidth(28),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: su.setWidth(16)),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,18 +93,15 @@ class _HWDeviceInfoCard extends StatelessWidget {
                 Text(
                   device.name,
                   style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                    fontSize: su.setSp(28),
                     fontWeight: FontWeight.w600,
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
+                    color: _hwTextColor(context),
                   ),
                 ),
                 Text(
                   S.of(context).g_key_hw_connected,
                   style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
+                    fontSize: su.setSp(24),
                     color: Colors.green,
                   ),
                 ),
@@ -124,9 +128,14 @@ class _HWCoinSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final blueColor = _hwBlueColor(context);
+    final textColor = _hwTextColor(context);
+    final subtitle = _hwSubtitleColor(context);
+    final su = ScreenUtil();
+
     return Container(
-      height: ScreenUtil().setWidth(80),
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      height: su.setWidth(80),
+      margin: EdgeInsets.symmetric(horizontal: su.setWidth(30)),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: coins.length,
@@ -137,22 +146,16 @@ class _HWCoinSelector extends StatelessWidget {
           return GestureDetector(
             onTap: () => onCoinSelected(coin['symbol']!),
             child: Container(
-              margin: EdgeInsets.only(right: ScreenUtil().setWidth(12)),
+              margin: EdgeInsets.only(right: su.setWidth(12)),
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(20),
-                vertical: ScreenUtil().setWidth(12),
+                horizontal: su.setWidth(20),
+                vertical: su.setWidth(12),
               ),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainBlueColor.name,
-                      )
-                    : AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemBgColor.name,
-                      ),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                    ? blueColor
+                    : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+                borderRadius: BorderRadius.circular(su.setWidth(20)),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -160,27 +163,17 @@ class _HWCoinSelector extends StatelessWidget {
                   Text(
                     coin['symbol']!,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(26),
+                      fontSize: su.setSp(26),
                       fontWeight: FontWeight.w600,
-                      color: isSelected
-                          ? Colors.white
-                          : AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainTextColor.name,
-                            ),
+                      color: isSelected ? Colors.white : textColor,
                     ),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(8)),
+                  SizedBox(width: su.setWidth(8)),
                   Text(
                     coin['name']!,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: isSelected
-                          ? Colors.white70
-                          : AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.itemSubtitleTextColor.name,
-                            ),
+                      fontSize: su.setSp(22),
+                      color: isSelected ? Colors.white70 : subtitle,
                     ),
                   ),
                 ],
@@ -200,33 +193,29 @@ class _HWLoadingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
+    final subtitle = _hwSubtitleColor(context);
+    final su = ScreenUtil();
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const CircularProgressIndicator(),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: su.setWidth(20)),
           Text(
             s.g_key_hw_loading_accounts,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              fontSize: su.setSp(26),
+              color: subtitle,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: su.setWidth(8)),
           Text(
             s.g_key_hw_loading_hint,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(22),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              fontSize: su.setSp(22),
+              color: subtitle,
             ),
           ),
         ],
@@ -247,42 +236,35 @@ class _HWEmptyAccountsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final subtitle = _hwSubtitleColor(context);
+    final su = ScreenUtil();
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             Icons.account_balance_wallet_outlined,
-            size: ScreenUtil().setWidth(60),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+            size: su.setWidth(60),
+            color: subtitle,
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: su.setWidth(16)),
           Text(
             S.of(context).g_key_hw_no_accounts_found,
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              fontSize: su.setSp(28),
+              color: subtitle,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: su.setWidth(8)),
           Text(
             S.of(context).g_key_hw_open_ledger_app_hint(appName),
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              fontSize: su.setSp(24),
+              color: subtitle,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: su.setWidth(20)),
           ElevatedButton(
             onPressed: onRetry,
             child: Text(S.of(context).g_key_aa_retry),
@@ -305,8 +287,9 @@ class _HWLoadMoreButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final su = ScreenUtil();
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.symmetric(vertical: su.setWidth(16)),
       child: isLoading
           ? Center(child: CircularProgressIndicator(strokeWidth: 2))
           : TextButton(
@@ -314,11 +297,8 @@ class _HWLoadMoreButton extends StatelessWidget {
               child: Text(
                 S.of(context).g_key_hw_load_more,
                 style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
+                  fontSize: su.setSp(26),
+                  color: _hwBlueColor(context),
                 ),
               ),
             ),
@@ -340,12 +320,16 @@ class _HWAccountItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final blueColor = _hwBlueColor(context);
+    final textColor = _hwTextColor(context);
+    final su = ScreenUtil();
+
     return Container(
-      margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      margin: EdgeInsets.only(bottom: su.setWidth(12)),
+      padding: EdgeInsets.all(su.setWidth(20)),
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: BorderRadius.circular(su.setWidth(12)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -353,30 +337,24 @@ class _HWAccountItem extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: ScreenUtil().setWidth(40),
-                height: ScreenUtil().setWidth(40),
+                width: su.setWidth(40),
+                height: su.setWidth(40),
                 decoration: BoxDecoration(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ).withAlpha(30),
+                  color: blueColor.withAlpha(30),
                   shape: BoxShape.circle,
                 ),
                 child: Center(
                   child: Text(
                     '${account.index + 1}',
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
+                      fontSize: su.setSp(24),
                       fontWeight: FontWeight.bold,
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainBlueColor.name,
-                      ),
+                      color: blueColor,
                     ),
                   ),
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(12)),
+              SizedBox(width: su.setWidth(12)),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -384,23 +362,17 @@ class _HWAccountItem extends StatelessWidget {
                     Text(
                       account.displayName,
                       style: TextStyle(
-                        fontSize: ScreenUtil().setSp(28),
+                        fontSize: su.setSp(28),
                         fontWeight: FontWeight.w600,
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.mainTextColor.name,
-                        ),
+                        color: textColor,
                       ),
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(4)),
+                    SizedBox(height: su.setWidth(4)),
                     Text(
                       account.derivationPath,
                       style: TextStyle(
-                        fontSize: ScreenUtil().setSp(22),
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.itemSubtitleTextColor.name,
-                        ),
+                        fontSize: su.setSp(22),
+                        color: _hwSubtitleColor(context),
                       ),
                     ),
                   ],
@@ -410,11 +382,8 @@ class _HWAccountItem extends StatelessWidget {
                 onPressed: () => onCopy(account.address),
                 icon: Icon(
                   Icons.copy,
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
-                  size: ScreenUtil().setWidth(28),
+                  color: blueColor,
+                  size: su.setWidth(28),
                 ),
               ),
               IconButton(
@@ -422,31 +391,25 @@ class _HWAccountItem extends StatelessWidget {
                 icon: Icon(
                   Icons.add_circle_outline,
                   color: Colors.green,
-                  size: ScreenUtil().setWidth(28),
+                  size: su.setWidth(28),
                 ),
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: su.setWidth(12)),
           Container(
             width: double.infinity,
-            padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
+            padding: EdgeInsets.all(su.setWidth(12)),
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ).withAlpha(10),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+              color: blueColor.withAlpha(10),
+              borderRadius: BorderRadius.circular(su.setWidth(8)),
             ),
             child: Text(
               account.address,
               style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+                fontSize: su.setSp(22),
                 fontFamily: 'monospace',
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: textColor,
               ),
             ),
           ),

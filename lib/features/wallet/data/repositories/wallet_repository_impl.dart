@@ -24,19 +24,12 @@ class WalletRepositoryImpl implements WalletRepository {
 
   WalletRepositoryImpl(this._localDataSource, this._remoteDataSource);
 
-  @override
-  Future<Either<Failure, WalletEntity>> createWallet({
-    required String name,
-    required String password,
-    required ChainType chainType,
-  }) async {
+  // ─── Error-handling guards ──────────────────────────────────────────────────
+
+  /// Local operations that may throw [CacheException].
+  Future<Either<Failure, T>> _guardCache<T>(Future<T> Function() action) async {
     try {
-      final wallet = await _localDataSource.createWallet(
-        name: name,
-        password: password,
-        chainType: chainType,
-      );
-      return Right(wallet);
+      return Right(await action());
     } on CacheException catch (e) {
       return Left(CacheFailure(message: e.message));
     } catch (e) {
@@ -44,85 +37,23 @@ class WalletRepositoryImpl implements WalletRepository {
     }
   }
 
-  @override
-  Future<Either<Failure, WalletEntity>> importFromMnemonic({
-    required String mnemonic,
-    required String name,
-    required String password,
-    required ChainType chainType,
-  }) async {
+  /// Local operations that may throw [CacheException] or [AuthException].
+  Future<Either<Failure, T>> _guardCacheAuth<T>(Future<T> Function() action) async {
     try {
-      final wallet = await _localDataSource.importFromMnemonic(
-        mnemonic: mnemonic,
-        name: name,
-        password: password,
-        chainType: chainType,
-      );
-      return Right(wallet);
+      return Right(await action());
     } on CacheException catch (e) {
       return Left(CacheFailure(message: e.message));
+    } on AuthException catch (e) {
+      return Left(AuthFailure(message: e.message));
     } catch (e) {
       return Left(UnexpectedFailure(message: e.toString()));
     }
   }
 
-  @override
-  Future<Either<Failure, WalletEntity>> importFromPrivateKey({
-    required String privateKey,
-    required String name,
-    required String password,
-    required ChainType chainType,
-  }) async {
+  /// Remote operations that may throw [ServerException] or [NetworkException].
+  Future<Either<Failure, T>> _guardRemote<T>(Future<T> Function() action) async {
     try {
-      final wallet = await _localDataSource.importFromPrivateKey(
-        privateKey: privateKey,
-        name: name,
-        password: password,
-        chainType: chainType,
-      );
-      return Right(wallet);
-    } on CacheException catch (e) {
-      return Left(CacheFailure(message: e.message));
-    } catch (e) {
-      return Left(UnexpectedFailure(message: e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<WalletEntity>>> getWallets() async {
-    try {
-      final wallets = await _localDataSource.getWallets();
-      return Right(wallets);
-    } on CacheException catch (e) {
-      return Left(CacheFailure(message: e.message));
-    } catch (e) {
-      return Left(UnexpectedFailure(message: e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, WalletEntity?>> getWalletByAddress(String address) async {
-    try {
-      final wallet = await _localDataSource.getWalletByAddress(address);
-      return Right(wallet);
-    } on CacheException catch (e) {
-      return Left(CacheFailure(message: e.message));
-    } catch (e) {
-      return Left(UnexpectedFailure(message: e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<AssetEntity>>> getAssets({
-    required String address,
-    ChainType? chainType,
-  }) async {
-    try {
-      final assets = await _remoteDataSource.getAssets(
-        address: address,
-        chainType: chainType,
-      );
-      return Right(assets);
+      return Right(await action());
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message));
     } on NetworkException catch (e) {
@@ -132,134 +63,109 @@ class WalletRepositoryImpl implements WalletRepository {
     }
   }
 
-  @override
-  Future<Either<Failure, AssetEntity?>> getTokenBalance({
-    required String address,
-    required String tokenAddress,
-    required ChainType chainType,
-  }) async {
-    try {
-      final asset = await _remoteDataSource.getTokenBalance(
-        address: address,
-        tokenAddress: tokenAddress,
-        chainType: chainType,
-      );
-      return Right(asset);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(message: e.message));
-    } catch (e) {
-      return Left(UnexpectedFailure(message: e.toString()));
-    }
-  }
+  // ─── Wallet CRUD ────────────────────────────────────────────────────────────
 
   @override
-  Future<Either<Failure, void>> deleteWallet(String address) async {
-    try {
-      await _localDataSource.deleteWallet(address);
-      return const Right(null);
-    } on CacheException catch (e) {
-      return Left(CacheFailure(message: e.message));
-    } catch (e) {
-      return Left(UnexpectedFailure(message: e.toString()));
-    }
-  }
+  Future<Either<Failure, WalletEntity>> createWallet({
+    required String name,
+    required String password,
+    required ChainType chainType,
+  }) =>
+      _guardCache(() => _localDataSource.createWallet(
+            name: name, password: password, chainType: chainType));
+
+  @override
+  Future<Either<Failure, WalletEntity>> importFromMnemonic({
+    required String mnemonic,
+    required String name,
+    required String password,
+    required ChainType chainType,
+  }) =>
+      _guardCache(() => _localDataSource.importFromMnemonic(
+            mnemonic: mnemonic, name: name, password: password, chainType: chainType));
+
+  @override
+  Future<Either<Failure, WalletEntity>> importFromPrivateKey({
+    required String privateKey,
+    required String name,
+    required String password,
+    required ChainType chainType,
+  }) =>
+      _guardCache(() => _localDataSource.importFromPrivateKey(
+            privateKey: privateKey, name: name, password: password, chainType: chainType));
+
+  @override
+  Future<Either<Failure, List<WalletEntity>>> getWallets() =>
+      _guardCache(() => _localDataSource.getWallets());
+
+  @override
+  Future<Either<Failure, WalletEntity?>> getWalletByAddress(String address) =>
+      _guardCache(() => _localDataSource.getWalletByAddress(address));
+
+  @override
+  Future<Either<Failure, void>> deleteWallet(String address) =>
+      _guardCache(() => _localDataSource.deleteWallet(address));
 
   @override
   Future<Either<Failure, WalletEntity>> updateWalletName({
     required String address,
     required String newName,
-  }) async {
-    try {
-      final wallet = await _localDataSource.updateWalletName(
-        address: address,
-        newName: newName,
-      );
-      return Right(wallet);
-    } on CacheException catch (e) {
-      return Left(CacheFailure(message: e.message));
-    } catch (e) {
-      return Left(UnexpectedFailure(message: e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, String>> exportMnemonic({
-    required String address,
-    required String password,
-  }) async {
-    try {
-      final mnemonic = await _localDataSource.exportMnemonic(
-        address: address,
-        password: password,
-      );
-      return Right(mnemonic);
-    } on CacheException catch (e) {
-      return Left(CacheFailure(message: e.message));
-    } on AuthException catch (e) {
-      return Left(AuthFailure(message: e.message));
-    } catch (e) {
-      return Left(UnexpectedFailure(message: e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, String>> exportPrivateKey({
-    required String address,
-    required String password,
-  }) async {
-    try {
-      final privateKey = await _localDataSource.exportPrivateKey(
-        address: address,
-        password: password,
-      );
-      return Right(privateKey);
-    } on CacheException catch (e) {
-      return Left(CacheFailure(message: e.message));
-    } on AuthException catch (e) {
-      return Left(AuthFailure(message: e.message));
-    } catch (e) {
-      return Left(UnexpectedFailure(message: e.toString()));
-    }
-  }
+  }) =>
+      _guardCache(() => _localDataSource.updateWalletName(
+            address: address, newName: newName));
 
   @override
   Future<Either<Failure, bool>> verifyPassword({
     required String address,
     required String password,
-  }) async {
-    try {
-      final isValid = await _localDataSource.verifyPassword(
-        address: address,
-        password: password,
-      );
-      return Right(isValid);
-    } on CacheException catch (e) {
-      return Left(CacheFailure(message: e.message));
-    } catch (e) {
-      return Left(UnexpectedFailure(message: e.toString()));
-    }
-  }
+  }) =>
+      _guardCache(() => _localDataSource.verifyPassword(
+            address: address, password: password));
+
+  // ─── Asset queries (remote) ─────────────────────────────────────────────────
+
+  @override
+  Future<Either<Failure, List<AssetEntity>>> getAssets({
+    required String address,
+    ChainType? chainType,
+  }) =>
+      _guardRemote(() => _remoteDataSource.getAssets(
+            address: address, chainType: chainType));
+
+  @override
+  Future<Either<Failure, AssetEntity?>> getTokenBalance({
+    required String address,
+    required String tokenAddress,
+    required ChainType chainType,
+  }) =>
+      _guardRemote(() => _remoteDataSource.getTokenBalance(
+            address: address, tokenAddress: tokenAddress, chainType: chainType));
+
+  // ─── Auth-sensitive operations ──────────────────────────────────────────────
+
+  @override
+  Future<Either<Failure, String>> exportMnemonic({
+    required String address,
+    required String password,
+  }) =>
+      _guardCacheAuth(() => _localDataSource.exportMnemonic(
+            address: address, password: password));
+
+  @override
+  Future<Either<Failure, String>> exportPrivateKey({
+    required String address,
+    required String password,
+  }) =>
+      _guardCacheAuth(() => _localDataSource.exportPrivateKey(
+            address: address, password: password));
 
   @override
   Future<Either<Failure, void>> changePassword({
     required String address,
     required String oldPassword,
     required String newPassword,
-  }) async {
-    try {
-      await _localDataSource.changePassword(
-        address: address,
-        oldPassword: oldPassword,
-        newPassword: newPassword,
-      );
-      return const Right(null);
-    } on CacheException catch (e) {
-      return Left(CacheFailure(message: e.message));
-    } on AuthException catch (e) {
-      return Left(AuthFailure(message: e.message));
-    } catch (e) {
-      return Left(UnexpectedFailure(message: e.toString()));
-    }
-  }
+  }) =>
+      _guardCacheAuth(() => _localDataSource.changePassword(
+            address: address, oldPassword: oldPassword, newPassword: newPassword));
 }
 

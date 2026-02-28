@@ -1,4 +1,4 @@
-﻿import 'package:n42_wallet/core/providers/core_providers.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -8,25 +8,26 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LockScreenResetPassword extends ConsumerStatefulWidget{
-  final int type;//0 设置新密码，1重设密码
-  const LockScreenResetPassword(this.type,{super.key});
+class LockScreenResetPassword extends ConsumerStatefulWidget {
+  final int type; //0 设置新密码，1重设密码
+  const LockScreenResetPassword(this.type, {super.key});
   @override
-  ConsumerState<LockScreenResetPassword> createState()=>_LockScreenResetPasswordState();
+  ConsumerState<LockScreenResetPassword> createState() => _LockScreenResetPasswordState();
 }
-class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPassword>{
-  TextEditingController oldEditingController=TextEditingController();//旧密码
-  TextEditingController newEditingController=TextEditingController();//新密码
-  TextEditingController confirmEditingController=TextEditingController();//确认密码
-  FocusNode oldFocusNode=FocusNode();
-  FocusNode newFocusNode=FocusNode();
-  FocusNode confirmFocusNode=FocusNode();
-  bool obscureOld=true;
-  bool obscureNew=true;
-  bool obscureConfirm=true;
-  String oldErrorMessage="";
-  String newErrorMessage="";
-  String confirmErrorMessage="";
+
+class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPassword> {
+  final oldEditingController = TextEditingController();
+  final newEditingController = TextEditingController();
+  final confirmEditingController = TextEditingController();
+  final oldFocusNode = FocusNode();
+  final newFocusNode = FocusNode();
+  final confirmFocusNode = FocusNode();
+  bool obscureOld = true;
+  bool obscureNew = true;
+  bool obscureConfirm = true;
+  String oldErrorMessage = "";
+  String newErrorMessage = "";
+  String confirmErrorMessage = "";
 
   @override
   void dispose() {
@@ -38,70 +39,72 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
     confirmFocusNode.dispose();
     super.dispose();
   }
+
   /// Validate a field: check length and numeric format.
   /// Returns an error message or empty string on success.
   String _validatePassword(String value) {
-    if (!checkStrLength(value)) return S.of(context).g_lock_key13;
+    if (!_checkStrLength(value)) return S.of(context).g_lock_key13;
     if (!Regular().regularNums(value)) return S.of(context).g_lock_key13;
     return "";
   }
 
-  void sure(){
+  void sure() {
     final screenLockState = ref.read(screenLockProvider);
 
-    if(widget.type==1){
-      //旧密码
+    if (widget.type == 1) {
       final oldStr = oldEditingController.text;
-      oldErrorMessage = checkStrLength(oldStr) ? "" : S.of(context).g_lock_key13;
-      if(oldErrorMessage.isEmpty && oldStr != screenLockState.lockPassword){
+      oldErrorMessage = _checkStrLength(oldStr) ? "" : S.of(context).g_lock_key13;
+      if (oldErrorMessage.isEmpty && oldStr != screenLockState.lockPassword) {
         oldErrorMessage = S.of(context).g_key_t_34;
       }
-      if(oldErrorMessage.isNotEmpty){ setState(() {}); return; }
+      if (oldErrorMessage.isNotEmpty) { setState(() {}); return; }
     }
-    //新密码
+
     final newStr = newEditingController.text;
     newErrorMessage = _validatePassword(newStr);
-    if(newErrorMessage.isNotEmpty){ setState(() {}); return; }
+    if (newErrorMessage.isNotEmpty) { setState(() {}); return; }
 
-    //确认密码
     final confirmStr = confirmEditingController.text;
     confirmErrorMessage = _validatePassword(confirmStr);
-    if(confirmErrorMessage.isEmpty && newStr != confirmStr){
+    if (confirmErrorMessage.isEmpty && newStr != confirmStr) {
       confirmErrorMessage = S.of(context).password_diff;
     }
-    if(confirmErrorMessage.isNotEmpty){ setState(() {}); return; }
+    if (confirmErrorMessage.isNotEmpty) { setState(() {}); return; }
 
     ref.read(screenLockProvider.notifier).setLockPassword(confirmStr);
-    Navigator.pop(context,true);
+    Navigator.pop(context, true);
   }
-  //检查输入字符串的位数
-  bool checkStrLength(String inputStr) => inputStr.length == 6;
+
+  bool _checkStrLength(String inputStr) => inputStr.length == 6;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBarWidget(
-          text: S.of(context).g_lock_key9,
-        ),
-        body: SafeArea(
-          child: oldWidget(),
-        ),
-
+      appBar: AppBarWidget(
+        text: S.of(context).g_lock_key9,
+      ),
+      body: SafeArea(
+        child: _buildContent(),
+      ),
     );
   }
-  Widget oldWidget(){
+
+  Widget _buildContent() {
+    final scr = ScreenUtil();
+    final bgColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name);
+
     return Stack(
       children: [
         Positioned.fill(
           child: SingleChildScrollView(
             padding: EdgeInsets.only(
-              left: ScreenUtil().setWidth(30.0),
-              right: ScreenUtil().setWidth(30.0),
-              top: ScreenUtil().setWidth(60.0),
+              left: scr.setWidth(30.0),
+              right: scr.setWidth(30.0),
+              top: scr.setWidth(60.0),
             ),
             child: Column(
               children: [
-                if(widget.type==1)
-                  oldPWWidget(),
+                if (widget.type == 1) oldPWWidget(),
                 newPWWidget(),
                 confirmPWWidget(),
               ],
@@ -115,17 +118,15 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
           child: Column(
             children: [
               Divider(
-                height: ScreenUtil().setWidth(1),
+                height: scr.setWidth(1),
                 indent: 0,
                 endIndent: 0,
               ),
               Container(
-                height: ScreenUtil().setWidth(148.0),
+                height: scr.setWidth(148.0),
                 width: double.infinity,
-                padding: EdgeInsets.all(
-                  ScreenUtil().setWidth(30.0),
-                ),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+                padding: EdgeInsets.all(scr.setWidth(30.0)),
+                color: bgColor,
                 child: buttonStyle2(context, sure, S.of(context).g_key_78),
               ),
             ],
@@ -134,6 +135,7 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
       ],
     );
   }
+
   /// Builds a password field section with title, input, error, and divider.
   Widget _buildPasswordSection({
     required String title,
@@ -145,15 +147,16 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
     required VoidCallback onToggleObscure,
     required String errorMessage,
   }) {
+    final scr = ScreenUtil();
     return Container(
-      margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20.0)),
+      margin: EdgeInsets.only(bottom: scr.setWidth(20.0)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          titleWidget(title),
-          passwordWidget(controller, focusNode, hintStr, obscure, onFinish, onToggleObscure),
-          errorMessageWidget(errorMessage),
-          Divider(height: ScreenUtil().setWidth(1.0), indent: 0, endIndent: 0),
+          _titleWidget(title),
+          _passwordWidget(controller, focusNode, hintStr, obscure, onFinish, onToggleObscure),
+          _errorMessageWidget(errorMessage),
+          Divider(height: scr.setWidth(1.0), indent: 0, endIndent: 0),
         ],
       ),
     );
@@ -193,7 +196,8 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
     onToggleObscure: () => setState(() => obscureConfirm = !obscureConfirm),
     errorMessage: confirmErrorMessage,
   );
-  Widget titleWidget(String title){
+
+  Widget _titleWidget(String title) {
     return Text(
       title,
       style: TextStyle(
@@ -202,20 +206,25 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
       ),
     );
   }
-  Widget passwordWidget(
-      TextEditingController controller,
-      FocusNode fn,
-      String hintStr,
-      bool obscure,
-      VoidCallback finishTap,
-      VoidCallback obscureChange,
-      ){
+
+  Widget _passwordWidget(
+    TextEditingController controller,
+    FocusNode fn,
+    String hintStr,
+    bool obscure,
+    VoidCallback finishTap,
+    VoidCallback obscureChange,
+  ) {
+    final scr = ScreenUtil();
+    final mainTextColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+
     return SizedBox(
-      height: ScreenUtil().setWidth(72.0),
+      height: scr.setWidth(72.0),
       child: TextField(
         style: TextStyle(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-          fontSize: ScreenUtil().setSp(30.0),
+          color: mainTextColor,
+          fontSize: scr.setSp(30.0),
         ),
         obscureText: obscure,
         controller: controller,
@@ -228,15 +237,15 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
           errorBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
           isCollapsed: true,
-          contentPadding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
+          contentPadding: EdgeInsets.symmetric(vertical: scr.setWidth(10.0)),
           suffix: InkWell(
             onTap: obscureChange,
             child: SizedBox(
-              height: ScreenUtil().setSp(40.0),
-              width: ScreenUtil().setSp(40.0),
+              height: scr.setSp(40.0),
+              width: scr.setSp(40.0),
               child: Image.asset(
                 "assets/login/${obscure ? 'icon_denglu_yincang' : 'icon_denglu_xianshi'}.png",
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: subtitleColor,
               ),
             ),
           ),
@@ -246,8 +255,9 @@ class _LockScreenResetPasswordState extends ConsumerState<LockScreenResetPasswor
       ),
     );
   }
-  Widget errorMessageWidget(String message){
-    if(message.isEmpty) return const SizedBox.shrink();
+
+  Widget _errorMessageWidget(String message) {
+    if (message.isEmpty) return const SizedBox.shrink();
     return Text(
       message,
       style: TextStyle(

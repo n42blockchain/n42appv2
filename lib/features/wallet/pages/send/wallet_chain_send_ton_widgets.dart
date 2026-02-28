@@ -46,8 +46,9 @@ mixin _TonSendWidgetsMixin on _TonSendLogicMixin {
   }
 
   Widget noteWidget() {
-    if (widget.coinModel.coin['blockchainType'] != BlockchainType.Ethereum.name ||
-        widget.coinModel.coin['isContract'] != false) {
+    final coin = widget.coinModel.coin;
+    if (coin['blockchainType'] != BlockchainType.Ethereum.name ||
+        coin['isContract'] != false) {
       return const SizedBox.shrink();
     }
     return Container(
@@ -71,7 +72,7 @@ mixin _TonSendWidgetsMixin on _TonSendLogicMixin {
             hintText: S.of(context).nicknameMessage(100),
             errorMessage: noteErrorMessage,
             suffix: Text(
-              "${noteTextEditingController.text.length}/100",
+              '${noteTextEditingController.text.length}/100',
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(20.0),
                 color: AppThemeUtils.getColorByKey(
@@ -82,11 +83,9 @@ mixin _TonSendWidgetsMixin on _TonSendLogicMixin {
               FocusScope.of(context).requestFocus(toNode);
             },
             onChanged: (String value) {
-              if (value.length > 100) {
-                noteErrorMessage = S.of(context).nicknameMessage(100);
-              } else {
-                noteErrorMessage = "";
-              }
+              noteErrorMessage = value.length > 100
+                  ? S.of(context).nicknameMessage(100)
+                  : '';
               setState(() {});
             },
             maxLines: 2,
@@ -122,7 +121,7 @@ mixin _TonSendWidgetsMixin on _TonSendLogicMixin {
                   ),
                 ),
                 SizedBox(width: ScreenUtil().setWidth(20.0)),
-                Expanded(flex: 1, child: amountBalanceWidget()),
+                Expanded(child: amountBalanceWidget()),
               ],
             ),
           ),
@@ -157,9 +156,7 @@ mixin _TonSendWidgetsMixin on _TonSendLogicMixin {
                   ),
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
-                  onChanged: (value) {
-                    amountCheck(value: value);
-                  },
+                  onChanged: (value) => amountCheck(value: value),
                   onEditingComplete: () {
                     amountCheck();
                     FocusScope.of(context).requestFocus(toNode);
@@ -238,14 +235,11 @@ mixin _TonSendWidgetsMixin on _TonSendLogicMixin {
   }
 
   Widget ownerAddress() {
-    final String addr =
-        dataUtils.addressFarmat(widget.coinModel.address.toString());
+    final addr = dataUtils.addressFarmat(widget.coinModel.address.toString());
     return Container(
-      padding: EdgeInsets.only(
-        top: ScreenUtil().setWidth(20.0),
-        bottom: ScreenUtil().setWidth(20.0),
-        right: ScreenUtil().setWidth(30.0),
-        left: ScreenUtil().setWidth(30.0),
+      padding: EdgeInsets.symmetric(
+        vertical: ScreenUtil().setWidth(20.0),
+        horizontal: ScreenUtil().setWidth(30.0),
       ),
       child: Text(
         addr,
@@ -260,14 +254,13 @@ mixin _TonSendWidgetsMixin on _TonSendLogicMixin {
     );
   }
 
-  // 矿工费
   Widget minerFeeWidget() {
-    final bool isContract = widget.coinModel.coin['isContract'] == true;
+    final coin = widget.coinModel.coin;
+    final bool isContract = coin['isContract'] == true;
     final int decimals = isContract
         ? (chainModel?.coin['decimals'] ?? 0)
-        : widget.coinModel.coin['decimals'] as int;
-    final String title =
-        widget.coinModel.coin['coinType']?.toString() ?? '';
+        : coin['decimals'] as int;
+    final String title = coin['coinType']?.toString() ?? '';
     final String feeText =
         '${toEther(totalGasPrice.toString(), decimals)} $title';
 
@@ -311,28 +304,25 @@ mixin _TonSendWidgetsMixin on _TonSendLogicMixin {
   }
 
   Widget errorMessageWidget() {
-    if (errorMessage == "") return const SizedBox.shrink();
+    if (errorMessage.isEmpty) return const SizedBox.shrink();
+    final su = ScreenUtil();
     return Container(
       margin: EdgeInsets.only(
-        top: ScreenUtil().setWidth(20.0),
-        left: ScreenUtil().setWidth(30),
-        right: ScreenUtil().setWidth(30),
+        top: su.setWidth(20.0),
+        left: su.setWidth(30),
+        right: su.setWidth(30),
       ),
-      padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(30.0),
-      ),
+      padding: EdgeInsets.all(su.setWidth(30.0)),
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
+        borderRadius: BorderRadius.all(Radius.circular(su.setWidth(16.0))),
         color: AppThemeUtils.getColorByKey(
             context, AppThemeKeys.errorBgColor2.name),
       ),
       child: Text(
         errorMessage,
         style: TextStyle(
-          fontSize: ScreenUtil().setSp(28.0),
+          fontSize: su.setSp(28.0),
           color: AppThemeUtils.getColorByKey(
               context, AppThemeKeys.errorTextColor.name),
         ),

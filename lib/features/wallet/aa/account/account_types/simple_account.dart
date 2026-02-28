@@ -145,19 +145,18 @@ class SimpleAccountHelper {
     String? label,
     int? chainId,
   }) {
-    final accountSalt = salt ?? BigInt.zero;
-    final address = calculateAddress(owner: owner, salt: accountSalt);
-
-    final config = AAConfig.getChainConfig('ETH'); // Default to ETH
-    final cid = chainId ?? config?.chainId ?? 1;
+    final effectiveSalt = salt ?? BigInt.zero;
+    final address = calculateAddress(owner: owner, salt: effectiveSalt);
+    final effectiveChainId =
+        chainId ?? AAConfig.getChainConfig('ETH')?.chainId ?? 1;
 
     return SmartAccount(
       address: address,
       type: SmartAccountType.simpleAccount,
       ownerAddress: owner,
       state: SmartAccountState.notDeployed,
-      chainId: cid,
-      salt: accountSalt,
+      chainId: effectiveChainId,
+      salt: effectiveSalt,
       factoryAddress: factoryAddress,
       createdAt: DateTime.now(),
       label: label,
@@ -176,7 +175,7 @@ class SimpleAccountHelper {
   Uint8List _bigIntToBytes32(BigInt value) {
     final bytes = Uint8List(32);
     final valueBytes = intToBytes(value);
-    if (valueBytes.isNotEmpty && valueBytes.length <= 32) {
+    if (valueBytes.length <= 32) {
       bytes.setAll(32 - valueBytes.length, valueBytes);
     }
     return bytes;

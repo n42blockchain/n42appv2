@@ -24,7 +24,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
   String uuid = "";
   Load load = Load.finish;
   String errorMessage = "";
-  bool _isLoading = false; // 并发加载守卫
+  bool _isLoading = false;
   final DateFormat _dateFmt = DateFormat("MM-dd HH:mm");
 
   @override
@@ -35,7 +35,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
   }
 
   Future<void> loadHistory() async {
-    if (!mounted || _isLoading) return; // 防止并发重复请求
+    if (!mounted || _isLoading) return;
     _isLoading = true;
     setState(() {
       load = Load.loading;
@@ -70,13 +70,11 @@ class _PaymentHistoryState extends State<PaymentHistory> {
     }
   }
 
-  /// 将时间戳（秒或毫秒）格式化为可读字符串
   String _formatTime(dynamic txTime) {
     if (txTime == null) return "";
     try {
       int ts = int.parse(txTime.toString());
-      // 秒级时间戳转毫秒
-      if (ts < 9999999999) ts = ts * 1000;
+      if (ts < 9999999999) ts *= 1000;
       return _dateFmt.format(DateTime.fromMillisecondsSinceEpoch(ts));
     } catch (_) {
       return "";
@@ -98,34 +96,29 @@ class _PaymentHistoryState extends State<PaymentHistory> {
           ),
         ],
       ),
-      body: _bodyWidget(),
+      body: _buildBody(),
     );
   }
 
-  Widget _bodyWidget() {
-    if (load == Load.loading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    if (load == Load.error) {
-      return _errorWidget();
-    }
-    if (dataList.isEmpty) {
-      return const Center(child: EmptyView());
-    }
-    return RefreshIndicator(
-      onRefresh: loadHistory,
-      child: ListView.builder(
-        padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30),
-          vertical: ScreenUtil().setWidth(15),
-        ),
-        itemCount: dataList.length,
-        itemBuilder: (context, index) => _itemWidget(dataList[index]),
-      ),
-    );
-  }
+  Widget _buildBody() => switch (load) {
+    Load.loading => const Center(child: CircularProgressIndicator()),
+    Load.error => _buildError(),
+    _ => dataList.isEmpty
+        ? const Center(child: EmptyView())
+        : RefreshIndicator(
+            onRefresh: loadHistory,
+            child: ListView.builder(
+              padding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(30),
+                vertical: ScreenUtil().setWidth(15),
+              ),
+              itemCount: dataList.length,
+              itemBuilder: (_, index) => _buildItem(dataList[index]),
+            ),
+          ),
+  };
 
-  Widget _errorWidget() {
+  Widget _buildError() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -158,29 +151,14 @@ class _PaymentHistoryState extends State<PaymentHistory> {
     );
   }
 
-  Widget _itemWidget(Map<String, dynamic> data) {
+  Widget _buildItem(Map<String, dynamic> data) {
     final bool isIncoming = data["toUuid"]?.toString() == uuid;
     final String timeStr = _formatTime(data['txTime']);
-    final String dirColorKey = isIncoming
-        ? AppThemeKeys.rightTextColor.name
-        : AppThemeKeys.textColorOrange.name;
-    final Color dirColor = AppThemeUtils.getColorByKey(context, dirColorKey);
-
-    final Widget dirIcon = Icon(
-      isIncoming ? Icons.input_outlined : Icons.output_outlined,
-      size: ScreenUtil().setWidth(40),
-      color: dirColor,
-    );
-    final Widget dirLabel = Container(
-      margin:
-          EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-      child: Text(
-        isIncoming ? S.of(context).g_key_payment_incoming : S.of(context).g_key_payment_outgoing,
-        style: TextStyle(
-          color: dirColor,
-          fontSize: ScreenUtil().setSp(28),
-        ),
-      ),
+    final Color dirColor = AppThemeUtils.getColorByKey(
+      context,
+      isIncoming
+          ? AppThemeKeys.rightTextColor.name
+          : AppThemeKeys.textColorOrange.name,
     );
 
     return Container(
@@ -193,119 +171,145 @@ class _PaymentHistoryState extends State<PaymentHistory> {
       ),
       child: Column(
         children: [
-          // 第一行：方向图标 + 交易哈希 + 时间
-          Row(
-            children: [
-              dirIcon,
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    final String openUrl = getBrowserTxHash(
-                      data['chainSymbol'] ?? "",
-                      data['txHash'] ?? "",
-                    );
-                    if (openUrl.isNotEmpty) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => BrowserPage(openUrl)),
-                      );
-                    }
-                  },
-                  child: Text(
-                    data['txHash'] ?? "",
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
-                      fontSize: ScreenUtil().setSp(28),
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ),
-              if (timeStr.isNotEmpty)
-                Text(
-                  timeStr,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name),
-                    fontSize: ScreenUtil().setSp(24),
-                  ),
-                ),
-            ],
-          ),
+          _buildTxHashRow(data, timeStr, dirColor, isIncoming),
           Divider(height: ScreenUtil().setWidth(16)),
-          // 第二行：金额 + 方向标签
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  margin:
-                      EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "\$ ${data['amount'] ?? ""}",
-                        style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.itemTextColor.name),
-                          fontSize: ScreenUtil().setSp(40),
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      if ((data['tokenAmount'] ?? "").toString().isNotEmpty)
-                        Text(
-                          S.of(context).g_key_payment_approx_token(
-                            data['tokenAmount'].toString(),
-                            data['token']?.toString() ?? "",
-                          ),
-                          style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.itemSubtitleTextColor.name),
-                            fontSize: ScreenUtil().setSp(28),
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-              dirLabel,
-            ],
-          ),
+          _buildAmountRow(data, dirColor, isIncoming),
           Divider(height: ScreenUtil().setWidth(16)),
-          // 第三行：代币/链信息 + 价格
-          Row(
-            children: [
-              Text(
-                "${data['token'] ?? ""}(${data['chainSymbol'] ?? ""})",
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemTextColor.name),
-                  fontSize: ScreenUtil().setSp(28),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  (data['tokenPrice'] ?? "").toString().isNotEmpty
-                      ? "\$ ${data['tokenPrice']}"
-                      : "",
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemTextColor.name),
-                    fontSize: ScreenUtil().setSp(28),
-                  ),
-                  textAlign: TextAlign.right,
-                ),
-              ),
-            ],
-          ),
+          _buildTokenInfoRow(data),
         ],
       ),
+    );
+  }
+
+  Widget _buildTxHashRow(
+      Map<String, dynamic> data, String timeStr, Color dirColor, bool isIncoming) {
+    return Row(
+      children: [
+        Icon(
+          isIncoming ? Icons.input_outlined : Icons.output_outlined,
+          size: ScreenUtil().setWidth(40),
+          color: dirColor,
+        ),
+        Expanded(
+          child: InkWell(
+            onTap: () {
+              final openUrl = getBrowserTxHash(
+                data['chainSymbol'] ?? "",
+                data['txHash'] ?? "",
+              );
+              if (openUrl.isNotEmpty) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => BrowserPage(openUrl)),
+                );
+              }
+            },
+            child: Text(
+              data['txHash'] ?? "",
+              style: TextStyle(
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainBlueColor.name),
+                fontSize: ScreenUtil().setSp(28),
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ),
+        if (timeStr.isNotEmpty)
+          Text(
+            timeStr,
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              fontSize: ScreenUtil().setSp(24),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildAmountRow(
+      Map<String, dynamic> data, Color dirColor, bool isIncoming) {
+    final itemTextColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemTextColor.name);
+    final subtitleColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
+
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "\$ ${data['amount'] ?? ""}",
+                  style: TextStyle(
+                    color: itemTextColor,
+                    fontSize: ScreenUtil().setSp(40),
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                if ((data['tokenAmount'] ?? "").toString().isNotEmpty)
+                  Text(
+                    S.of(context).g_key_payment_approx_token(
+                      data['tokenAmount'].toString(),
+                      data['token']?.toString() ?? "",
+                    ),
+                    style: TextStyle(
+                      color: subtitleColor,
+                      fontSize: ScreenUtil().setSp(28),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+              ],
+            ),
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+          child: Text(
+            isIncoming
+                ? S.of(context).g_key_payment_incoming
+                : S.of(context).g_key_payment_outgoing,
+            style: TextStyle(
+              color: dirColor,
+              fontSize: ScreenUtil().setSp(28),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTokenInfoRow(Map<String, dynamic> data) {
+    final itemTextColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemTextColor.name);
+    final tokenPrice = (data['tokenPrice'] ?? "").toString();
+
+    return Row(
+      children: [
+        Text(
+          "${data['token'] ?? ""}(${data['chainSymbol'] ?? ""})",
+          style: TextStyle(
+            color: itemTextColor,
+            fontSize: ScreenUtil().setSp(28),
+          ),
+        ),
+        Expanded(
+          child: Text(
+            tokenPrice.isNotEmpty ? "\$ $tokenPrice" : "",
+            style: TextStyle(
+              color: itemTextColor,
+              fontSize: ScreenUtil().setSp(28),
+            ),
+            textAlign: TextAlign.right,
+          ),
+        ),
+      ],
     );
   }
 }

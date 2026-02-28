@@ -56,7 +56,7 @@ class SessionKeyCard extends StatelessWidget {
           SizedBox(height: ScreenUtil().setWidth(14)),
           _buildAddressRow(context),
           SizedBox(height: ScreenUtil().setWidth(14)),
-          _buildChipsRow(context),
+          _buildChipsRow(context, permColor),
           if (keyData.spendingLimit != null && keyData.isActive) ...[
             SizedBox(height: ScreenUtil().setWidth(14)),
             _buildSpendingProgress(context),
@@ -165,6 +165,8 @@ class SessionKeyCard extends StatelessWidget {
   }
 
   Widget _buildAddressRow(BuildContext context) {
+    final subtitleColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
     return GestureDetector(
       onTap: () {
         Clipboard.setData(ClipboardData(text: keyData.keyAddress));
@@ -193,10 +195,7 @@ class SessionKeyCard extends StatelessWidget {
             Icon(
               Icons.key,
               size: ScreenUtil().setWidth(16),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: subtitleColor,
             ),
             SizedBox(width: ScreenUtil().setWidth(8)),
             Text(
@@ -214,10 +213,7 @@ class SessionKeyCard extends StatelessWidget {
             Icon(
               Icons.copy,
               size: ScreenUtil().setWidth(14),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: subtitleColor,
             ),
           ],
         ),
@@ -225,8 +221,7 @@ class SessionKeyCard extends StatelessWidget {
     );
   }
 
-  Widget _buildChipsRow(BuildContext context) {
-    final permColor = sessionKeyPermissionColor(keyData.permission);
+  Widget _buildChipsRow(BuildContext context, Color permColor) {
     return Wrap(
       spacing: ScreenUtil().setWidth(8),
       runSpacing: ScreenUtil().setWidth(6),
@@ -412,43 +407,32 @@ class SessionKeyCard extends StatelessWidget {
 // ════════════════════════════════════════════════════════════════════════════
 
 /// Maps [SessionKeyStatus] to a display colour.
-Color sessionKeyStatusColor(SessionKeyStatus status) {
-  switch (status) {
-    case SessionKeyStatus.active:
-      return Colors.green;
-    case SessionKeyStatus.expired:
-      return Colors.orange;
-    case SessionKeyStatus.revoked:
-      return Colors.red;
-  }
-}
+Color sessionKeyStatusColor(SessionKeyStatus status) => switch (status) {
+      SessionKeyStatus.active => Colors.green,
+      SessionKeyStatus.expired => Colors.orange,
+      SessionKeyStatus.revoked => Colors.red,
+    };
 
 /// Returns a localised label for [status].
-String sessionKeyStatusLabel(BuildContext context, SessionKeyStatus status) {
-  switch (status) {
-    case SessionKeyStatus.active:
-      return S.of(context).g_key_aa_active;
-    case SessionKeyStatus.expired:
-      return S.of(context).g_key_aa_expired;
-    case SessionKeyStatus.revoked:
-      return S.of(context).g_key_aa_revoked_status;
-  }
-}
+String sessionKeyStatusLabel(BuildContext context, SessionKeyStatus status) =>
+    switch (status) {
+      SessionKeyStatus.active => S.of(context).g_key_aa_active,
+      SessionKeyStatus.expired => S.of(context).g_key_aa_expired,
+      SessionKeyStatus.revoked => S.of(context).g_key_aa_revoked_status,
+    };
 
 /// Returns a localised label for [permission].
 String sessionKeyPermissionLabel(
-    BuildContext context, SessionKeyPermission permission) {
-  switch (permission) {
-    case SessionKeyPermission.transfer:
-      return S.of(context).g_key_aa_session_preset_transfer;
-    case SessionKeyPermission.approve:
-      return S.of(context).g_key_aa_approve;
-    case SessionKeyPermission.contractCall:
-      return S.of(context).g_key_aa_session_preset_contract;
-    case SessionKeyPermission.full:
-      return S.of(context).g_key_aa_session_preset_full;
-  }
-}
+        BuildContext context, SessionKeyPermission permission) =>
+    switch (permission) {
+      SessionKeyPermission.transfer =>
+        S.of(context).g_key_aa_session_preset_transfer,
+      SessionKeyPermission.approve => S.of(context).g_key_aa_approve,
+      SessionKeyPermission.contractCall =>
+        S.of(context).g_key_aa_session_preset_contract,
+      SessionKeyPermission.full =>
+        S.of(context).g_key_aa_session_preset_full,
+    };
 
 /// Returns a compact human-readable string for [d] (e.g. "3d", "5h", "12m").
 String sessionKeyFormatRemainingTime(Duration d) {

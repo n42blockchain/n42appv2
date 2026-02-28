@@ -1,10 +1,27 @@
 part of 'wallet_security_verification.dart';
 
-// 安全验证页面 — 四个验证项 Section Widget
+/// Common input text style used across all verification sections.
+TextStyle _inputTextStyle(BuildContext context) => TextStyle(
+      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+      fontSize: ScreenUtil().setSp(28.0),
+    );
 
-// ---------------------------------------------------------------------------
-// 钱包密码区块
-// ---------------------------------------------------------------------------
+/// Common hint text style used across all verification sections.
+TextStyle _hintTextStyle(BuildContext context) => TextStyle(
+      fontSize: ScreenUtil().setSp(28.0),
+      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+    );
+
+/// Common InputDecoration with no borders.
+InputDecoration _noBorderDecoration(BuildContext context, String hintText, {String? counterText}) =>
+    InputDecoration(
+      hintText: hintText,
+      hintStyle: _hintTextStyle(context),
+      border: InputBorder.none,
+      errorBorder: InputBorder.none,
+      focusedBorder: InputBorder.none,
+      counterText: counterText,
+    );
 
 class _WalletPasswordSection extends StatelessWidget {
   const _WalletPasswordSection({
@@ -57,25 +74,11 @@ class _WalletPasswordSection extends StatelessWidget {
         children: [
           Expanded(
             child: TextField(
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(28.0),
-              ),
+              style: _inputTextStyle(context),
               obscureText: obscure,
               controller: pwdController,
               textInputAction: TextInputAction.done,
-              decoration: InputDecoration(
-                hintText: S.of(context).g_key_t_35,
-                hintStyle: TextStyle(
-                  fontSize: ScreenUtil().setSp(28.0),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
-                ),
-                border: InputBorder.none,
-                errorBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-              ),
+              decoration: _noBorderDecoration(context, S.of(context).g_key_t_35),
               maxLines: 1,
               onEditingComplete: onEditingComplete,
             ),
@@ -87,8 +90,7 @@ class _WalletPasswordSection extends StatelessWidget {
               width: ScreenUtil().setWidth(40.0),
               child: Image.asset(
                 'assets/login/${obscure ? 'icon_denglu_yincang' : 'icon_denglu_xianshi'}.png',
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: _hintTextStyle(context).color,
               ),
             ),
           ),
@@ -97,10 +99,6 @@ class _WalletPasswordSection extends StatelessWidget {
     );
   }
 }
-
-// ---------------------------------------------------------------------------
-// 邮箱验证区块
-// ---------------------------------------------------------------------------
 
 class _EmailSection extends StatelessWidget {
   const _EmailSection({
@@ -157,26 +155,12 @@ class _EmailSection extends StatelessWidget {
         children: [
           Expanded(
             child: TextField(
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(28.0),
-              ),
+              style: _inputTextStyle(context),
               controller: emailController,
               textInputAction: TextInputAction.done,
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(
-                hintText: S.of(context).rest_Please_enter,
-                hintStyle: TextStyle(
-                  fontSize: ScreenUtil().setSp(28.0),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
-                ),
-                border: InputBorder.none,
-                errorBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-              ),
+              decoration: _noBorderDecoration(context, S.of(context).rest_Please_enter),
               maxLines: 1,
               onEditingComplete: onEditingComplete,
             ),
@@ -193,7 +177,6 @@ class _EmailSection extends StatelessWidget {
   }
 }
 
-/// 发送验证码按钮（含 loading / 倒计时状态）
 class _EmailSendButton extends StatelessWidget {
   const _EmailSendButton({
     required this.emailLoad,
@@ -216,15 +199,15 @@ class _EmailSendButton extends StatelessWidget {
         : AppThemeUtils.getColorByKey(
             context, AppThemeKeys.mainButtonBgColor.name);
 
-    Widget? prefixWidget;
+    final btnTextColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainButtonTextColor.name);
+
+    final Widget? prefixWidget;
     if (emailLoad == Load.loading) {
       prefixWidget = SizedBox(
         height: ScreenUtil().setWidth(30.0),
         width: ScreenUtil().setWidth(30.0),
-        child: CircularProgressIndicator(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainButtonTextColor.name),
-        ),
+        child: CircularProgressIndicator(color: btnTextColor),
       );
     } else if (emailSendWait) {
       prefixWidget = Padding(
@@ -233,11 +216,12 @@ class _EmailSendButton extends StatelessWidget {
           '($emailSendWaitNum)',
           style: TextStyle(
             fontSize: ScreenUtil().setSp(24.0),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainButtonTextColor.name),
+            color: btnTextColor,
           ),
         ),
       );
+    } else {
+      prefixWidget = null;
     }
 
     return InkWell(
@@ -260,8 +244,7 @@ class _EmailSendButton extends StatelessWidget {
               S.of(context).Verification,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(24.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainButtonTextColor.name),
+                color: btnTextColor,
               ),
             ),
           ],
@@ -270,10 +253,6 @@ class _EmailSendButton extends StatelessWidget {
     );
   }
 }
-
-// ---------------------------------------------------------------------------
-// Google 验证码区块
-// ---------------------------------------------------------------------------
 
 class _GoogleSection extends StatelessWidget {
   const _GoogleSection({
@@ -327,25 +306,14 @@ class _GoogleSection extends StatelessWidget {
         children: [
           Expanded(
             child: TextField(
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(28.0),
-              ),
+              style: _inputTextStyle(context),
               controller: googleController,
               textInputAction: TextInputAction.done,
               keyboardType: TextInputType.number,
               maxLength: 6,
-              decoration: InputDecoration(
-                hintText: S.of(context).google_verification_message19,
-                hintStyle: TextStyle(
-                  fontSize: ScreenUtil().setSp(28.0),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
-                ),
-                border: InputBorder.none,
-                errorBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
+              decoration: _noBorderDecoration(
+                context,
+                S.of(context).google_verification_message19,
                 counterText: '',
               ),
               maxLines: 1,
@@ -358,10 +326,6 @@ class _GoogleSection extends StatelessWidget {
     );
   }
 }
-
-// ---------------------------------------------------------------------------
-// 生物识别区块
-// ---------------------------------------------------------------------------
 
 class _FaceSection extends StatelessWidget {
   const _FaceSection({
@@ -403,12 +367,11 @@ class _FaceSection extends StatelessWidget {
   }
 
   Widget _buildFaceRow(BuildContext context) {
-    String statusText = '';
-    if (faceCheck == 1) {
-      statusText = S.of(context).g_lock_key5;
-    } else if (faceCheck == 2) {
-      statusText = S.of(context).g_lock_key6;
-    }
+    final statusText = switch (faceCheck) {
+      1 => S.of(context).g_lock_key5,
+      2 => S.of(context).g_lock_key6,
+      _ => '',
+    };
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(32.0)),
@@ -419,9 +382,7 @@ class _FaceSection extends StatelessWidget {
           Expanded(
             child: Text(
               statusText,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+              style: _inputTextStyle(context).copyWith(
                 fontSize: ScreenUtil().setSp(24.0),
               ),
             ),

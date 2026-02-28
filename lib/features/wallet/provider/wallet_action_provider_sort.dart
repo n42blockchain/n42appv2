@@ -10,29 +10,17 @@ extension WalletActionProviderSort on WalletActionProvider {
   void _applyPriorityOrder() {
     if (coinList.isEmpty) return;
 
-    // 分离优先级币种和其他币种
-    final priorityItems = <dynamic>[];
-    final otherItems = <dynamic>[];
-
-    for (final coin in coinList) {
-      final symbol = _getCoinSymbol(coin);
-      final priorityIndex = _priorityCoins.indexOf(symbol);
-      if (priorityIndex != -1) {
-        priorityItems.add({'index': priorityIndex, 'coin': coin});
-      } else {
-        otherItems.add(coin);
-      }
-    }
-
-    // 按优先级排序
-    priorityItems.sort((a, b) => (a['index'] as int).compareTo(b['index'] as int));
-
-    // 重建 coinList
-    coinList.clear();
-    for (final item in priorityItems) {
-      coinList.add(item['coin']);
-    }
-    coinList.addAll(otherItems);
+    coinList.sort((a, b) {
+      final ai = _priorityCoins.indexOf(_getCoinSymbol(a));
+      final bi = _priorityCoins.indexOf(_getCoinSymbol(b));
+      // 两个都不是优先币种 → 保持原序
+      if (ai == -1 && bi == -1) return 0;
+      // 只有一个是优先币种 → 优先币种在前
+      if (ai == -1) return 1;
+      if (bi == -1) return -1;
+      // 两个都是优先币种 → 按优先级排序
+      return ai.compareTo(bi);
+    });
   }
 
   /// 获取币种符号（支持 CoinModel 和 AggregatedCoinModel）
@@ -56,40 +44,28 @@ extension WalletActionProviderSort on WalletActionProvider {
   /// [insertIndex] 参数已废弃，现在使用 _applyPriorityOrder 进行排序
   Future<void> _insertAggregatedTokensAt(int insertIndex) async {
     // 获取各链地址
-    final addressByChain = <String, String>{};
-    for (final cm in _coinModels) {
-      final coinType = cm.coin['coinType'] as String?;
-      if (coinType != null && cm.address != null) {
-        addressByChain[coinType] = cm.address.toString();
-      }
-    }
+    final addressByChain = {
+      for (final cm in _coinModels)
+        if (cm.coin['coinType'] != null && cm.address != null)
+          cm.coin['coinType'] as String: cm.address.toString(),
+    };
 
     // 收集 coinList 中所有代币的符号（用于去重）
-    final existingTokenSymbols = <String>{};
-    for (final coin in coinList) {
-      if (coin is CoinModel) {
-        final miniName = (coin.coin['miniName'] ?? '').toString().toUpperCase();
-        if (miniName.isNotEmpty) {
-          existingTokenSymbols.add(miniName);
-        }
-      }
-    }
+    final existingTokenSymbols = coinList
+        .whereType<CoinModel>()
+        .map((c) => (c.coin['miniName'] ?? '').toString().toUpperCase())
+        .where((s) => s.isNotEmpty)
+        .toSet();
+
+    // 已存在的聚合代币符号
+    final existingAggregatedSymbols =
+        _aggregatedCoins.map((c) => c.tokenConfig.symbol).toSet();
 
     // 创建聚合代币（跳过已存在的）
     final toAdd = <AggregatedCoinModel>[];
     for (final tokenConfig in AggregatedTokens.all) {
-      // 检查是否已存在相同符号的聚合代币
-      final alreadyExists = _aggregatedCoins.any(
-        (coin) => coin.tokenConfig.symbol == tokenConfig.symbol
-      );
-      if (alreadyExists) {
-        continue; // 跳过已存在的聚合代币
-      }
-
-      // 检查 coinList 中是否已存在相同符号的代币
-      if (existingTokenSymbols.contains(tokenConfig.symbol.toUpperCase())) {
-        continue; // 跳过已存在的代币
-      }
+      if (existingAggregatedSymbols.contains(tokenConfig.symbol)) continue;
+      if (existingTokenSymbols.contains(tokenConfig.symbol.toUpperCase())) continue;
 
       final aggregatedCoin = AggregatedCoinModel(tokenConfig: tokenConfig);
       _aggregatedCoins.add(aggregatedCoin);
@@ -101,80 +77,66 @@ extension WalletActionProviderSort on WalletActionProvider {
       });
     }
 
-    // 添加聚合代币到列表（后续由 _applyPriorityOrder 排序）
     if (toAdd.isNotEmpty) {
       coinList.addAll(toAdd);
     }
   }
 
-  //币列表排序
-  void setCoinSortAssets(String type){
-    if(type=="assets"){
-      if(walletInfo.coinSort['assets'] == 0){
-        walletInfo.coinSort['assets']=1;
-      }else if(walletInfo.coinSort['assets'] == 1){
-        walletInfo.coinSort['assets']=0;
-      }else{
-        walletInfo.coinSort['assets']=1;
-      }
-      walletInfo.coinSort['name']=-1;
-      walletInfo.coinSort['change']=-1;
-    }else if(type=="name"){
-      if(walletInfo.coinSort['name'] == 0){
-        walletInfo.coinSort['name']=1;
-      }else if(walletInfo.coinSort['name'] == 1){
-        walletInfo.coinSort['name']=0;
-      }else{
-        walletInfo.coinSort['name']=1;
-      }
-      walletInfo.coinSort['assets']=-1;
-      walletInfo.coinSort['change']=-1;
-    }else if(type=="change"){
-      // change 循环：-1→0→1→-1（-1=不排序, 0=降序, 1=升序）
-      final cur = walletInfo.coinSort['change'] ?? -1;
-      if(cur == -1){
-        walletInfo.coinSort['change']=0;
-      }else if(cur == 0){
-        walletInfo.coinSort['change']=1;
-      }else{
-        walletInfo.coinSort['change']=-1;
-      }
-      walletInfo.coinSort['assets']=-1;
-      walletInfo.coinSort['name']=-1;
+  /// 在 cycle 值之间循环切换：按给定顺序轮转
+  int _cycleSortValue(int current, List<int> cycle) {
+    final idx = cycle.indexOf(current);
+    return cycle[(idx + 1) % cycle.length];
+  }
+
+  /// 币列表排序
+  void setCoinSortAssets(String type) {
+    final sort = walletInfo.coinSort;
+    // assets/name: -1→1→0→-1（-1=不排序, 1=升序, 0=降序）
+    // change:      -1→0→1→-1（-1=不排序, 0=降序, 1=升序）
+    const allFields = ['assets', 'name', 'change'];
+    final cycle = (type == 'change') ? [-1, 0, 1] : [-1, 1, 0];
+
+    sort[type] = _cycleSortValue(sort[type] ?? -1, cycle);
+
+    // 重置其他排序字段
+    for (final field in allFields) {
+      if (field != type) sort[field] = -1;
     }
 
     coinSortAssets();
     refresh();
   }
 
-  //排序type all\keystore\main
-  void coinSortAssets(){
-    if(walletInfo.coinSort['assets']==0){
-      coinList.sort((a, b,)=>(b.value).compareTo(a.value));
-    }else if(walletInfo.coinSort['assets']==1){
-      coinList.sort((a, b,)=>(a.value).compareTo(b.value));
+  /// 排序 coinList（支持 assets / name / change 三种维度）
+  void coinSortAssets() {
+    final sort = walletInfo.coinSort;
+
+    // 按资产价值排序
+    final assetsSort = sort['assets'] ?? -1;
+    if (assetsSort == 0) {
+      coinList.sort((a, b) => b.value.compareTo(a.value));
+    } else if (assetsSort == 1) {
+      coinList.sort((a, b) => a.value.compareTo(b.value));
     }
-    if(walletInfo.coinSort['name']==0){
-      coinList.sort((a, b,){
-        String aName=a.coin['miniName'];
-        String bName=b.coin['miniName'];
-        return sortString(aName, bName);
-      });
-    }else if(walletInfo.coinSort['name']==1){
-      coinList.sort((a, b,){
-        String aName=a.coin['miniName'];
-        String bName=b.coin['miniName'];
-        return sortString(bName,aName);
+
+    // 按名称排序（0=降序, 1=升序）
+    final nameSort = sort['name'] ?? -1;
+    if (nameSort == 0 || nameSort == 1) {
+      coinList.sort((a, b) {
+        final aName = a.coin['miniName'] as String;
+        final bName = b.coin['miniName'] as String;
+        return nameSort == 0 ? aName.compareTo(bName) : bName.compareTo(aName);
       });
     }
-    final changeSort = walletInfo.coinSort['change'] ?? -1;
-    if(changeSort == 0){
-      // 按 24h 涨跌幅降序（涨幅最大在前）
+
+    // 按 24h 涨跌幅排序（0=降序, 1=升序）
+    final changeSort = sort['change'] ?? -1;
+    if (changeSort == 0) {
       coinList.sort((a, b) => (b.percentage as double).compareTo(a.percentage as double));
-    }else if(changeSort == 1){
-      // 按 24h 涨跌幅升序（涨幅最小在前）
+    } else if (changeSort == 1) {
       coinList.sort((a, b) => (a.percentage as double).compareTo(b.percentage as double));
     }
+
     // 任何排序后，置顶代币始终在最前面
     _elevatePinnedToTop();
   }
@@ -260,25 +222,6 @@ extension WalletActionProviderSort on WalletActionProvider {
     refresh();
   }
 
-  int sortString(String aName,String bName){
-    int minCount=min(aName.length, bName.length);
-    for(int i=0;i<minCount;i++){
-      final l1=aName.codeUnitAt(i);
-      final l2=bName.codeUnitAt(i);
-      if(l1>l2){
-        return 1;
-      }else if(l1<l2){
-        return -1;
-      }else{
-        continue;
-      }
-    }
-    if(aName.length>bName.length){
-      return 1;
-    }else if(aName.length<bName.length){
-      return -1;
-    }else{
-      return 0;
-    }
-  }
+  /// 字符串字典序比较（等价于 String.compareTo）
+  int sortString(String aName, String bName) => aName.compareTo(bName);
 }

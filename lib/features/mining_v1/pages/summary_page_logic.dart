@@ -6,12 +6,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
   Load load = Load.finish;
 
   DataUtils? _dataUtils;
-  DataUtils get dataUtils {
-    if (_dataUtils == null) {
-      _dataUtils = DataUtils();
-    }
-    return _dataUtils!;
-  }
+  DataUtils get dataUtils => _dataUtils ??= DataUtils();
 
   List<dynamic> rewardsList = [];
   String? astAddress;
@@ -38,12 +33,10 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
 
   //显示默认柱状图
   bool isShowDefaultBar = true;
-  var eventBusFn;
+  dynamic eventBusFn;
 
-  initData({bool forcedRefresh = false}) async {
+  Future<void> initData({bool forcedRefresh = false}) async {
     astAddress = globalMiningV1.address ?? "";
-    if (globalMiningV1.miningType == null) {
-    }
     if (globalMiningV1.miningType == MiningType.N) {
       getLockTime(astAddress ?? '');
     }
@@ -53,7 +46,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
     miningBarchartData();
   }
 
-  totalValueData() async {
+  Future<void> totalValueData() async {
     await getAstPrice();
     await getTotalValue(astAddress ?? '');
     await getAccountRewardUnpaid(astAddress ?? '');
@@ -66,7 +59,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
   }
 
   //七天挖矿数据
-  miningBarchartData() async {
+  Future<void> miningBarchartData() async {
     try {
       setState(() {
         isLoading7DayData = true;
@@ -113,7 +106,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
   }
 
   /// 将秒数转换为时分秒格式的字符串，并补齐两位
-  formatElapsedTime(int seconds) {
+  String formatElapsedTime(int seconds) {
     int hours = seconds ~/ 3600;
     int minutes = (seconds % 3600) ~/ 60;
     int remainingSeconds = seconds % 60;
@@ -124,69 +117,48 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
   }
 
   //生成图标点击事件展示数据
-  generateBarTipData() {
-    if (barValues.isNotEmpty && barValues.length == 7) {
-      alertMessageList = [];
-      final stackAstNum = globalMiningV1.depositsNum;
-      for (var element in barValues) {
-        int times = (element * 8).toInt();
-        final timeData = formatElapsedTime(times);
-        final value =
-        computeRewardsValueByTaskNum(element.toInt(), stackAstNum);
-        alertMessageList.add(
-          AlertMessageGroup(
-            titles: [
-              S.of(context).g_mining_key_23,
-              "$timeData",
-              "",
-              S.of(context).g_mining_key_24,
-              "${dataUtils.formatNum(value, 4)} ${CoinType.N.name}"
-            ],
-            styles: [
-              TextStyle(
-                fontSize: ScreenUtil().setSp(20),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
-              ),
-              TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-              TextStyle(
-                fontSize: ScreenUtil().setSp(10),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemTextColor.name),
-              ),
-              TextStyle(
-                fontSize: ScreenUtil().setSp(20),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
-              ),
-              TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-              TextStyle(
-                fontSize: ScreenUtil().setSp(10),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemTextColor.name),
-              ),
-              TextStyle(
-                fontSize: ScreenUtil().setSp(20),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
-              ),
-              TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ],
-          ),
-        );
-      }
+  void generateBarTipData() {
+    if (barValues.length != 7) return;
+
+    final subtitleStyle = TextStyle(
+      fontSize: ScreenUtil().setSp(20),
+      color: AppThemeUtils.getColorByKey(
+          context, AppThemeKeys.itemSubtitleTextColor.name),
+    );
+    final boldStyle = TextStyle(
+      fontSize: ScreenUtil().setSp(22),
+      color: Colors.black,
+      fontWeight: FontWeight.bold,
+    );
+    final spacerStyle = TextStyle(
+      fontSize: ScreenUtil().setSp(10),
+      color: AppThemeUtils.getColorByKey(
+          context, AppThemeKeys.itemTextColor.name),
+    );
+    final repeatedStyles = [
+      subtitleStyle, boldStyle, spacerStyle,
+      subtitleStyle, boldStyle, spacerStyle,
+      subtitleStyle, boldStyle,
+    ];
+
+    alertMessageList = [];
+    final stackAstNum = globalMiningV1.depositsNum;
+    for (final element in barValues) {
+      final timeData = formatElapsedTime((element * 8).toInt());
+      final value =
+          computeRewardsValueByTaskNum(element.toInt(), stackAstNum);
+      alertMessageList.add(
+        AlertMessageGroup(
+          titles: [
+            S.of(context).g_mining_key_23,
+            timeData,
+            "",
+            S.of(context).g_mining_key_24,
+            "${dataUtils.formatNum(value, 4)} ${CoinType.N.name}",
+          ],
+          styles: repeatedStyles,
+        ),
+      );
     }
   }
 
@@ -230,7 +202,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
     return rewardValue;
   }
 
-  getMaxRewardIndex() {
+  int getMaxRewardIndex() {
     if (epochList.isEmpty) return -1;
     double maxVerifyCount = 0;
     int maxVerifyCountIndex = -1;
@@ -260,7 +232,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
   }
 
   //获取锁仓时间
-  getLockTime(String address) async {
+  Future<void> getLockTime(String address) async {
     try {
       final lockTime = await MiningApi.lockTime(address);
       isCanUnlock = DateTime.now().millisecondsSinceEpoch ~/ 1000 >
@@ -302,7 +274,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
   }
 
   //已经发放奖励
-  getTotalValue(String address) async {
+  Future<void> getTotalValue(String address) async {
     try {
       final totalData = await MiningApi.getTotalMiningValue(address);
       if (totalData["result"] != null) {
@@ -315,7 +287,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
   }
 
   //未发放金额
-  getAccountRewardUnpaid(String address) async {
+  Future<void> getAccountRewardUnpaid(String address) async {
     try {
       final totalData = await MiningApi.getAccountRewardUnpaid(address);
       if (totalData["result"] != null) {
@@ -327,7 +299,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
     }
   }
 
-  getAstPrice() async {
+  Future<void> getAstPrice() async {
     final data =
     globalWapAdapter.getCoinPriceWithUnit(CoinType.N.name);
     if (data != null) {
@@ -336,28 +308,20 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
     }
   }
 
-  getRewardsList() async {
+  Future<void> getRewardsList() async {
     try {
       final data = await MiningApi.getAllRewardsList(astAddress ?? '');
-      if (data != null && data["result"] != null) {
-        rewardsList = data["result"]["data"] ?? [];
-      } else {
-        rewardsList = [];
-      }
-      if (mounted) {
-        setState(() {});
-      }
+      rewardsList = data?["result"]?["data"] as List<dynamic>? ?? [];
     } catch (err) {
       rewardsList = [];
       debugPrint("err:${err.toString()}");
-      if (mounted) {
-        setState(() {});
-      }
+    } finally {
+      if (mounted) setState(() {});
     }
   }
 
   ///解除质押
-  unLockAstMining() {
+  void unLockAstMining() {
     if (isCanUnlock) {
       showDialog<void>(
         context: context,
@@ -393,7 +357,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
                       data = await MiningApi.unlock();
                     }
                     if (AppConfig.isMainChainMining == false) {
-                      miningValueKey = miningValueKey + 'test';
+                      miningValueKey = '${miningValueKey}test';
                     }
                     debugPrint("unlock data：$data");
                     if (data != null) {

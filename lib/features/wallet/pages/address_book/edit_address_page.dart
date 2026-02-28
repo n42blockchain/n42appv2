@@ -31,20 +31,17 @@ class _EditAddressPageState extends State<EditAddressPage> {
   final nameController = TextEditingController();
   final descController = TextEditingController();
 
-  final addressFocusNode= FocusNode();
-  final nameFocusNode= FocusNode();
-  final descFocusNode= FocusNode();
+  final addressFocusNode = FocusNode();
+  final nameFocusNode = FocusNode();
+  final descFocusNode = FocusNode();
 
   late AddressBookModel info;
+  String coinName = 'BTC';
+  String coinIcon = '';
+  bool editStatus = true;
+  String errorMessage = "";
 
-  /// 默认的coin
-  var coinName = 'BTC';
-  var coinIcon = '';
-  bool editStatus = true;  // 默认为编辑状态，直接显示 Save
-  String errorMessage="";
-
-  /// 无阴影效果的 BoxShadow，复用于各输入框
-  static final _noShadow = BoxShadow(
+  static const _noShadow = BoxShadow(
     color: Color(0x00101828),
     offset: Offset.zero,
     blurRadius: 0,
@@ -73,34 +70,29 @@ class _EditAddressPageState extends State<EditAddressPage> {
   }
 
   Future<String?> addressCheck(String addr) async {
-    if(addr.isEmpty){
-      errorMessage=S.current.g_key_41;
-      setState(() {});
+    if (addr.isEmpty) {
+      setState(() => errorMessage = S.current.g_key_41);
       return null;
     }
 
     final parts = addr.split(":");
-    if(parts.length==2) addr = parts[1];
+    if (parts.length == 2) addr = parts[1];
 
     final valid = await Trustdart().validateAddress(coinName, addr);
-    if(valid){
-      errorMessage="";
-      setState(() {});
+    if (valid) {
+      setState(() => errorMessage = "");
       return addr;
     }
 
-    // 地址无效时，若为 ETH 链则尝试 ENS 解析
-    if(coinName==CoinType.ETH.name){
+    if (coinName == CoinType.ETH.name) {
       final rmm = await TokenViewApi().getEnsResolve(addr);
-      if(!rmm.error){
-        errorMessage="";
-        setState(() {});
+      if (!rmm.error) {
+        setState(() => errorMessage = "");
         return rmm.data;
       }
     }
 
-    errorMessage=S.current.g_key_t_50;
-    setState(() {});
+    setState(() => errorMessage = S.current.g_key_t_50);
     return null;
   }
   @override
@@ -176,7 +168,6 @@ class _EditAddressPageState extends State<EditAddressPage> {
         final CoinModel? data = await Navigator.push(context,
             MaterialPageRoute(builder: (_) => const ChooseCoinsPage()));
         if (!mounted) return;
-        debugPrint("data ---->${data?.coin['icon']}");
         if (data != null) {
           setState(() {
             coinName = data.coin["name"];
@@ -276,15 +267,10 @@ class _EditAddressPageState extends State<EditAddressPage> {
         height: ScreenUtil().setWidth(50.0),
       ),
       rightOnTap1: () async {
-        /// 扫描
-        String? data = await Navigator
-            .push(context,MaterialPageRoute(builder: (_) => ScanPage()));
+        final data = await Navigator.push(
+            context, MaterialPageRoute(builder: (_) => ScanPage()));
         if (!mounted) return;
-        if(data != null){
-          setState(() {
-            addressController.text = data;
-          });
-        }
+        if (data != null) setState(() => addressController.text = data);
       },
       rightWidget2: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12,),
@@ -305,13 +291,9 @@ class _EditAddressPageState extends State<EditAddressPage> {
         ),
       ),
       rightOnTap2: () async {
-        //复制
-        //读取剪切板
-        ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
-        if (data != null) {
-          if (data.text != null && data.text != "null") {
-            addressController.text = data.text!;
-          }
+        final data = await Clipboard.getData(Clipboard.kTextPlain);
+        if (data?.text != null && data!.text != "null") {
+          addressController.text = data.text!;
         }
       },
     );
@@ -346,54 +328,38 @@ class _EditAddressPageState extends State<EditAddressPage> {
   Future<void> handlerData() async {
     final name = nameController.text.trim();
     final desc = descController.text.trim();
-    String? address = addressController.text.trim();
+    final address = await addressCheck(addressController.text.trim());
+    if (!mounted || address == null) return;
 
-    address=await addressCheck(address);
-    if (!mounted) return;
-    if(address==null){
-      return;
-    }
-    if (coinName.isEmpty) {
-      ///选择币类型
-      ToastUtils.show(S.of(context).g_key_address_3);
-      return;
-    }
-    if (address.isEmpty) {
-      ToastUtils.show(S.of(context).g_key_address_2);
-      return;
-    }
-    if (name.isEmpty) {
-      ToastUtils.show(S.of(context).g_key_address_1);
-      return;
-    }
+    if (coinName.isEmpty) { ToastUtils.show(S.of(context).g_key_address_3); return; }
+    if (address.isEmpty) { ToastUtils.show(S.of(context).g_key_address_2); return; }
+    if (name.isEmpty) { ToastUtils.show(S.of(context).g_key_address_1); return; }
 
-    info.coinName = coinName;
-    info.coinIcon = coinIcon;
-    info.address = address;
-    info.name = name;
-    info.desc = desc;
+    info
+      ..coinName = coinName
+      ..coinIcon = coinIcon
+      ..address = address
+      ..name = name
+      ..desc = desc;
+
     try {
-      ///更新数据
       final code = await AddressBookApi().updateAddressBookItem(info);
       if (!mounted) return;
       if (code != 0) {
         eventBus.fire(EventPublic(EventPublicType.refreshData));
         Navigator.of(context).pop(true);
-      } else {
-        //保存失败
       }
     } catch (_) {
-      // 错误安全忽略
+      // safe to ignore
     }
   }
 
   Widget delete() {
     return GestureDetector(
-      onTap: () async{
-        // 删除数据
+      onTap: () async {
         final data = await AddressBookApi().deleteAddressBookItem(info);
         if (!mounted) return;
-        if(data != 0){
+        if (data != 0) {
           ToastUtils.show(S.of(context).g_key_address_5);
           eventBus.fire(EventPublic(EventPublicType.refreshData));
           Navigator.of(context).pop(true);
@@ -401,14 +367,19 @@ class _EditAddressPageState extends State<EditAddressPage> {
       },
       child: Container(
         height: ScreenUtil().setWidth(80.0),
-        alignment:Alignment.center,
+        alignment: Alignment.center,
         decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0))),
+          color: AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.errorTextColor.name),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
+        ),
         child: Text(
           S.of(context).g_key_113,
-          style: TextStyle(color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
-              fontSize: ScreenUtil().setSp(32.0)),
+          style: TextStyle(
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.mainWhiteColor.name),
+            fontSize: ScreenUtil().setSp(32.0),
+          ),
         ),
       ),
     );

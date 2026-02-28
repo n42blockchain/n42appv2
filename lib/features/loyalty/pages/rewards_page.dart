@@ -22,9 +22,14 @@ class RewardsPage extends StatelessWidget {
     required this.provider,
   });
 
+  /// 主题色辅助方法
+  Color _themeColor(BuildContext context, AppThemeKeys key) =>
+      AppThemeUtils.getColorByKey(context, key.name);
+
   @override
   Widget build(BuildContext context) {
     if (rewards.isEmpty) {
+      final subtitleColor = _themeColor(context, AppThemeKeys.itemSubtitleTextColor);
       return Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -32,20 +37,14 @@ class RewardsPage extends StatelessWidget {
             Icon(
               Icons.card_giftcard,
               size: ScreenUtil().setWidth(80),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: subtitleColor,
             ),
             SizedBox(height: ScreenUtil().setWidth(16)),
             Text(
               'No rewards available',
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(28),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+                color: subtitleColor,
               ),
             ),
           ],
@@ -130,10 +129,7 @@ class RewardsPage extends StatelessWidget {
         style: TextStyle(
           fontSize: ScreenUtil().setSp(28),
           fontWeight: FontWeight.bold,
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainTextColor.name,
-          ),
+          color: _themeColor(context, AppThemeKeys.mainTextColor),
         ),
       ),
     );
@@ -145,7 +141,7 @@ class RewardsPage extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: _themeColor(context, AppThemeKeys.itemBgColor),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
         border: canRedeem
             ? Border.all(color: Colors.green.withValues(alpha: 100 / 255), width: 1)
@@ -185,10 +181,7 @@ class RewardsPage extends StatelessWidget {
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(28),
                           fontWeight: FontWeight.w600,
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
+                          color: _themeColor(context, AppThemeKeys.mainTextColor),
                         ),
                       ),
                     ),
@@ -219,10 +212,7 @@ class RewardsPage extends StatelessWidget {
                   reward.description,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
+                    color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
                   ),
                 ),
 
@@ -327,43 +317,25 @@ class RewardsPage extends StatelessWidget {
     );
   }
 
-  Color _getRewardColor(RewardType type) {
-    switch (type) {
-      case RewardType.gasDiscount:
-        return Colors.blue;
-      case RewardType.feeDiscount:
-        return Colors.green;
-      case RewardType.nft:
-        return Colors.purple;
-      case RewardType.token:
-        return Colors.orange;
-      case RewardType.membership:
-        return Colors.indigo;
-      case RewardType.raffle:
-        return Colors.pink;
-      case RewardType.other:
-        return Colors.teal;
-    }
-  }
+  Color _getRewardColor(RewardType type) => switch (type) {
+        RewardType.gasDiscount => Colors.blue,
+        RewardType.feeDiscount => Colors.green,
+        RewardType.nft => Colors.purple,
+        RewardType.token => Colors.orange,
+        RewardType.membership => Colors.indigo,
+        RewardType.raffle => Colors.pink,
+        RewardType.other => Colors.teal,
+      };
 
-  String _getRewardEmoji(RewardType type) {
-    switch (type) {
-      case RewardType.gasDiscount:
-        return '⛽';
-      case RewardType.feeDiscount:
-        return '💰';
-      case RewardType.nft:
-        return '🖼️';
-      case RewardType.token:
-        return '🪙';
-      case RewardType.membership:
-        return '👑';
-      case RewardType.raffle:
-        return '🎟️';
-      case RewardType.other:
-        return '🎁';
-    }
-  }
+  String _getRewardEmoji(RewardType type) => switch (type) {
+        RewardType.gasDiscount => '⛽',
+        RewardType.feeDiscount => '💰',
+        RewardType.nft => '🖼️',
+        RewardType.token => '🪙',
+        RewardType.membership => '👑',
+        RewardType.raffle => '🎟️',
+        RewardType.other => '🎁',
+      };
 
   String _getButtonText(Reward reward, bool canAfford) {
     if (!reward.canRedeem) {
@@ -386,11 +358,8 @@ class RewardsPage extends StatelessWidget {
     final expiringSoon = diff.inDays <= 3;
     final expiryColor = expiringSoon
         ? Colors.orange
-        : AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemSubtitleTextColor.name,
-          );
-    String expiryText;
+        : _themeColor(context, AppThemeKeys.itemSubtitleTextColor);
+    final String expiryText;
     if (diff.isNegative) {
       expiryText = 'Expired';
     } else if (diff.inHours < 24) {
@@ -417,7 +386,7 @@ class RewardsPage extends StatelessWidget {
     );
   }
 
-  void _handleRedeem(BuildContext context, Reward reward) async {
+  Future<void> _handleRedeem(BuildContext context, Reward reward) async {
     // 显示确认对话框
     final confirmed = await showDialog<bool>(
       context: context,

@@ -42,11 +42,12 @@ class AppDatabase {
 
   /// 给 where 子句追加 selectType 过滤条件
   /// selectType: 0=全部, 1=已完成(state=1), 2=未完成(state=0)
-  static String appendStateFilter(String whereClause, int selectType) {
-    if (selectType == 1) return '$whereClause and state=1';
-    if (selectType == 2) return '$whereClause and state=0';
-    return whereClause;
-  }
+  static String appendStateFilter(String whereClause, int selectType) =>
+      switch (selectType) {
+        1 => '$whereClause and state=1',
+        2 => '$whereClause and state=0',
+        _ => whereClause,
+      };
   Future<Database> getDatabaseInstance() async {
     final directory = await getDatabasesPath();
     final path = join(directory, "astranet.db");

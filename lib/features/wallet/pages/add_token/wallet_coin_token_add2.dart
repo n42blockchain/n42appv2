@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:n42_wallet/features/component/enums/load.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
@@ -17,269 +16,194 @@ import 'package:n42_wallet/generated/l10n.dart';
 
 class WalletCoinTokenAdd2 extends ConsumerStatefulWidget {
   final CoinModel coinModel;
-  const WalletCoinTokenAdd2(this.coinModel,{super.key});
+
+  const WalletCoinTokenAdd2(this.coinModel, {super.key});
 
   @override
-  ConsumerState<WalletCoinTokenAdd2> createState() => _WalletCoinTokenAdd2State();
+  ConsumerState<WalletCoinTokenAdd2> createState() =>
+      _WalletCoinTokenAdd2State();
 }
 
 class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
-  TextEditingController inputEditingController=TextEditingController();
-  List<dynamic> coinlist=[];
-  List<dynamic> coinlistSeach=[];
-  Load load=Load.finish;
-  List<String> symbols=[];
-  String addSymbol="";//添加的代币
-  bool removeSymbol=false;//是否移除了代币
+  final TextEditingController inputEditingController = TextEditingController();
+  List<dynamic> coinlist = [];
+  List<dynamic> coinlistSeach = [];
+  Load load = Load.finish;
+  List<String> symbols = [];
+  String addSymbol = '';
+  bool removeSymbol = false;
+
+  Color _themeColor(AppThemeKeys key) =>
+      AppThemeUtils.getColorByKey(context, key.name);
+
+  double _sw(double v) => ScreenUtil().setWidth(v);
+
   @override
   void initState() {
+    super.initState();
     getTokenList();
     init();
-    super.initState();
   }
+
   @override
   void dispose() {
     inputEditingController.dispose();
     super.dispose();
   }
-  void init(){
-    if(widget.coinModel.tokens.isNotEmpty) {
-      symbols=widget.coinModel.tokens.keys.toList();
+
+  void init() {
+    if (widget.coinModel.tokens.isNotEmpty) {
+      symbols = widget.coinModel.tokens.keys.toList();
     }
   }
-  bool checkSymbol(String symStr){
+
+  bool checkSymbol(String symStr) {
     return symbols.any((e) => e.toUpperCase() == symStr.toUpperCase());
   }
-  Future<void> addCoin(Map<String,dynamic> coinMap)async{
+
+  Future<void> addCoin(Map<String, dynamic> coinMap) async {
+    if (coinMap['edit'] == true) return;
+    setState(() => coinMap['edit'] = true);
     try {
-      if(coinMap['edit']==true)return;
-      setState(() {
-        coinMap['edit']=true;
-      });
-      WalletActionProvider wap=ref.read(wapBridgeProvider);
-      String baseTokenStr=json.encode(widget.coinModel.coin);
-      Map<String,dynamic>baseToken=json.decode(baseTokenStr);
-      baseToken['isContract']=true;
-      baseToken['contract']=coinMap['contract'].toString();
-      baseToken['contract_test']="";
-      baseToken['balance']="0";
-      baseToken['balance_test']="0";
-      baseToken['coinPrice']=0.0;
-      baseToken['percentage']=0.0;
-      baseToken['icon']=coinMap['icon'];
-      baseToken['name']=coinMap['fullname'];
-      baseToken['miniName']=coinMap['coin_name'].toString();
-      baseToken['mKey']=coinMap['contract'].toString().toUpperCase();
-      baseToken['unit']=coinMap['coin_name'].toString();
-      baseToken['decimals']=coinMap['decimals'];
-      baseToken['canEdit']=true;
-      addSymbol='$addSymbol,${coinMap['coin_name'].toString()}';
+      final wap = ref.read(wapBridgeProvider);
+      final baseToken =
+          json.decode(json.encode(widget.coinModel.coin)) as Map<String, dynamic>;
+      baseToken
+        ..['isContract'] = true
+        ..['contract'] = coinMap['contract'].toString()
+        ..['contract_test'] = ''
+        ..['balance'] = '0'
+        ..['balance_test'] = '0'
+        ..['coinPrice'] = 0.0
+        ..['percentage'] = 0.0
+        ..['icon'] = coinMap['icon']
+        ..['name'] = coinMap['fullname']
+        ..['miniName'] = coinMap['coin_name'].toString()
+        ..['mKey'] = coinMap['contract'].toString().toUpperCase()
+        ..['unit'] = coinMap['coin_name'].toString()
+        ..['decimals'] = coinMap['decimals']
+        ..['canEdit'] = true;
+      addSymbol = '$addSymbol,${coinMap['coin_name']}';
       wap.addWalletChainToken(baseToken);
       setState(() {
-        coinMap['isAdd']=true;
-        coinMap['edit']=false;
+        coinMap['isAdd'] = true;
+        coinMap['edit'] = false;
       });
-    }catch(e){
+    } catch (e) {
       ToastUtils.show(e.toString());
-      setState(() {
-        coinMap['edit']=false;
-      });
+      setState(() => coinMap['edit'] = false);
     }
   }
-  Future<void> removeCoin(Map<String,dynamic> coinMap)async{
-    try{
-      if(coinMap['edit']==true)return;
-      setState(() {
-        coinMap['edit']=true;
-      });
-      WalletActionProvider wap=ref.read(wapBridgeProvider);
-      wap.removeWalletChainToken(coinMap);
-      coinMap['isAdd']=false;
-      removeSymbol=true;
 
-      setState(() {
-        coinMap['edit']=false;
-      });
-    }catch(e){
+  Future<void> removeCoin(Map<String, dynamic> coinMap) async {
+    if (coinMap['edit'] == true) return;
+    setState(() => coinMap['edit'] = true);
+    try {
+      ref.read(wapBridgeProvider).removeWalletChainToken(coinMap);
+      coinMap['isAdd'] = false;
+      removeSymbol = true;
+      setState(() => coinMap['edit'] = false);
+    } catch (e) {
       ToastUtils.show(e.toString());
-      setState(() {
-        coinMap['edit']=false;
-      });
+      setState(() => coinMap['edit'] = false);
     }
   }
-  //查询方法
-  Future<void> seachCoin()async{
-    if(inputEditingController.text.isNotEmpty){
-      try{
+
+  Future<void> seachCoin() async {
+    if (inputEditingController.text.isNotEmpty) {
+      try {
         final inputStr = inputEditingController.text.toLowerCase();
-        coinlistSeach = coinlist.where((m){
+        coinlistSeach = coinlist.where((m) {
           final fullname = m['fullname'].toString().toLowerCase();
           final symbol = m['coin_name'].toString().toLowerCase();
           return fullname.contains(inputStr) || symbol.contains(inputStr);
         }).toList();
-      }catch(e){
+      } catch (e) {
         ToastUtils.show(e.toString());
       }
     }
     setState(() {});
   }
-  Future<void> getTokenList()async{
-    setState(() {
-      load=Load.loading;
-    });
-    TokenViewApi tokenViewApi=TokenViewApi();
-    String fullname=widget.coinModel.coin['name'];
-    if(fullname == "AmazeToken"){
-      fullname="Amaze Chain";
-    }
-    MessageModel coinsData=await tokenViewApi.getTokenListFullname(fullname);
-    if(coinsData.error){
+
+  Future<void> getTokenList() async {
+    setState(() => load = Load.loading);
+    final tokenViewApi = TokenViewApi();
+    String fullname = widget.coinModel.coin['name'];
+    if (fullname == 'AmazeToken') fullname = 'Amaze Chain';
+
+    final coinsData = await tokenViewApi.getTokenListFullname(fullname);
+    if (coinsData.error) {
       ToastUtils.show(coinsData.data);
-    }else{
-      coinlist=[];
-      List<dynamic> returnData=coinsData.data;
-      for(Map<String,dynamic> r in returnData){
-        if(r['contract']=="") continue;
-        r['isAdd']=checkSymbol(r['contract'].toString().toUpperCase());
-        r['edit']=false;
-        if(r['isAdd']){
-          coinlist.insert(0, r);
-        }else{
-          coinlist.add(r);
-        }
-      }
-      setState(() {
-        load=Load.finish;
-      });
+      return;
     }
+
+    coinlist = [];
+    for (final Map<String, dynamic> r in coinsData.data) {
+      if (r['contract'] == '') continue;
+      r['isAdd'] = checkSymbol(r['contract'].toString().toUpperCase());
+      r['edit'] = false;
+      if (r['isAdd'] as bool) {
+        coinlist.insert(0, r);
+      } else {
+        coinlist.add(r);
+      }
+    }
+    setState(() => load = Load.finish);
   }
-  //关闭键盘
-  void closeKeyboard(){
+
+  void closeKeyboard() {
     FocusScope.of(context).requestFocus(FocusNode());
   }
-  Future<bool> _pageBack(){
-    if(Navigator.canPop(context)){
-      bool rValue=removeSymbol;
-      if(addSymbol!=""){
-        rValue=true;
-      }
-      Navigator.pop(context,rValue);
-    }else{
+
+  Future<bool> _pageBack() {
+    if (Navigator.canPop(context)) {
+      final rValue = removeSymbol || addSymbol.isNotEmpty;
+      Navigator.pop(context, rValue);
+    } else {
       SystemNavigator.pop();
     }
     return Future.value(false);
   }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
-        if (didPop) return;
-        _pageBack();
+        if (!didPop) _pageBack();
       },
       child: Scaffold(
-        backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+        backgroundColor: _themeColor(AppThemeKeys.backGroundColor),
         appBar: AppBar(
           title: Text(
             S.of(context).g_key_9,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              color: _themeColor(AppThemeKeys.mainTextColor),
               fontSize: ScreenUtil().setSp(32.0),
             ),
           ),
           actions: [
-            load==Load.loading?Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.only(right: ScreenUtil().setWidth(30.0)),
-              child: SizedBox(
-                height: ScreenUtil().setWidth(40.0),
-                width: ScreenUtil().setWidth(40.0),
-                child: CircularProgressIndicator(),
+            if (load == Load.loading)
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(right: _sw(30.0)),
+                child: SizedBox(
+                  height: _sw(40.0),
+                  width: _sw(40.0),
+                  child: const CircularProgressIndicator(),
+                ),
               ),
-            ):Container()
           ],
         ),
         body: SafeArea(
           child: InkWell(
-            onTap: (){
-              closeKeyboard();
-            },
+            onTap: closeKeyboard,
             child: Container(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+              padding: EdgeInsets.all(_sw(30.0)),
               child: Column(
                 children: [
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
-                    margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
-                    constraints: BoxConstraints(
-                        minHeight: ScreenUtil().setWidth(100.0),
-                        maxHeight: ScreenUtil().setWidth(100.0)
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(20.0))),
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          flex:1,
-                          child: TextField(
-                            controller: inputEditingController,
-                            style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                              fontSize: ScreenUtil().setWidth(30.0),
-                            ),
-                            textInputAction: TextInputAction.search,
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(26.0)),
-                              isCollapsed: true,
-                              hintText: S.of(context).g_key_163,
-                              hintStyle: TextStyle(
-                                fontSize: ScreenUtil().setWidth(30.0),
-                                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                              ),
-                              border: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                            ),
-                            onSubmitted: (value){
-                              seachCoin();
-                            },
-                          ),
-                        ),
-                        InkWell(
-                          onTap: (){
-                            closeKeyboard();
-                            seachCoin();
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: ScreenUtil().setWidth(20.0),
-                            ),
-                            height: ScreenUtil().setWidth(60.0),
-                            decoration: BoxDecoration(
-                              color: AppThemeUtils.getColorByKey(context,AppThemeKeys.mainButtonBgColor.name),
-                              borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(60.0))),
-                            ),
-                            alignment: Alignment.center,
-                            child: Text(S.of(context).search,
-                              style: TextStyle(
-                                fontSize: ScreenUtil().setSp(26.0),
-                                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: coinListWidget(),
-                  )
+                  _buildSearchBar(),
+                  Expanded(child: _buildCoinList()),
                 ],
               ),
             ),
@@ -288,121 +212,179 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
       ),
     );
   }
-  Widget _buildCoinListView(List<dynamic> items){
-    return ListView.separated(
-      itemCount: items.length,
-      itemBuilder: (context, index) => coinItem(items[index]),
-      separatorBuilder: (context, index) => Divider(
-        height: ScreenUtil().setWidth(1.0),
-        indent: 0,
-        endIndent: 0,
+
+  Widget _buildSearchBar() {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(horizontal: _sw(20.0)),
+      margin: EdgeInsets.symmetric(vertical: _sw(20.0)),
+      constraints: BoxConstraints(
+        minHeight: _sw(100.0),
+        maxHeight: _sw(100.0),
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(_sw(20.0)),
+        color: _themeColor(AppThemeKeys.itemBgColor),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: TextField(
+              controller: inputEditingController,
+              style: TextStyle(
+                color: _themeColor(AppThemeKeys.mainTextColor),
+                fontSize: _sw(30.0),
+              ),
+              textInputAction: TextInputAction.search,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.symmetric(vertical: _sw(26.0)),
+                isCollapsed: true,
+                hintText: S.of(context).g_key_163,
+                hintStyle: TextStyle(
+                  fontSize: _sw(30.0),
+                  color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+                ),
+                border: InputBorder.none,
+                errorBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+              ),
+              onSubmitted: (_) => seachCoin(),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              closeKeyboard();
+              seachCoin();
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: _sw(20.0)),
+              height: _sw(60.0),
+              decoration: BoxDecoration(
+                color: _themeColor(AppThemeKeys.mainButtonBgColor),
+                borderRadius: BorderRadius.circular(_sw(60.0)),
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                S.of(context).search,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(26.0),
+                  color: _themeColor(AppThemeKeys.mainButtonTextColor),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget coinListWidget(){
+  Widget _buildCoinListView(List<dynamic> items) {
+    return ListView.separated(
+      itemCount: items.length,
+      itemBuilder: (_, index) => _buildCoinItem(items[index]),
+      separatorBuilder: (context, index) => Divider(height: _sw(1.0), indent: 0, endIndent: 0),
+    );
+  }
+
+  Widget _buildCoinList() {
     final isSearching = inputEditingController.text.isNotEmpty;
 
-    if(!isSearching){
+    if (!isSearching) {
       return RefreshIndicator(
-        onRefresh: ()async{
-          if(load==Load.finish) {
-            await getTokenList();
-          }
+        onRefresh: () async {
+          if (load == Load.finish) await getTokenList();
         },
-        backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
-        displacement: ScreenUtil().setWidth(72.0),
+        backgroundColor: _themeColor(AppThemeKeys.mainButtonBgColor),
+        color: _themeColor(AppThemeKeys.mainButtonTextColor),
+        displacement: _sw(72.0),
         child: _buildCoinListView(coinlist),
       );
     }
 
-    if(coinlistSeach.isEmpty) return const EmptyView();
+    if (coinlistSeach.isEmpty) return const EmptyView();
     return _buildCoinListView(coinlistSeach);
   }
-  Widget coinItem(Map<String,dynamic> rowValue){
-    String icon='https://api-wallet.walletamaze.com/market/v1/r/coinImage/${rowValue['coin_name']}.png';
-    String fullname = rowValue['fullname'];
-    if(fullname=="LoveCoin"){
-      icon=rowValue['icon'];
-    }
-    Widget imgWidget = ImageNetWork(imageUrl: icon,placeholder: "assets/img/list_default.png",);
-    if(rowValue['fullname']=="N42"){
-      imgWidget=Image.asset('assets/img/ast.png');
-    }
+
+  Widget _buildCoinItem(Map<String, dynamic> rowValue) {
+    final coinName = rowValue['coin_name'].toString();
+    String icon =
+        'https://api-wallet.walletamaze.com/market/v1/r/coinImage/$coinName.png';
+    if (rowValue['fullname'] == 'LoveCoin') icon = rowValue['icon'];
+
+    final imgWidget = rowValue['fullname'] == 'N42'
+        ? Image.asset('assets/img/ast.png')
+        : ImageNetWork(imageUrl: icon, placeholder: 'assets/img/list_default.png');
+
+    final bool isEditing = rowValue['edit'] == true;
+    final bool isAdded = rowValue['isAdd'] == true;
 
     return Container(
       padding: EdgeInsets.only(
-        left: ScreenUtil().setWidth(20.0),
-        top: ScreenUtil().setWidth(20.0),
-        bottom: ScreenUtil().setWidth(20.0),
+        left: _sw(20.0),
+        top: _sw(20.0),
+        bottom: _sw(20.0),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            width: ScreenUtil().setWidth(50.0),
-            height: ScreenUtil().setWidth(50.0),
-            margin: EdgeInsets.only(
-                right: ScreenUtil().setWidth(30.0)),
+            width: _sw(50.0),
+            height: _sw(50.0),
+            margin: EdgeInsets.only(right: _sw(30.0)),
             child: imgWidget,
           ),
           Expanded(
-            flex: 1,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(rowValue['fullname'],
+                Text(
+                  rowValue['fullname'],
                   style: TextStyle(
-                    fontSize: ScreenUtil().setWidth(30.0),
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    fontSize: _sw(30.0),
+                    color: _themeColor(AppThemeKeys.mainTextColor),
                     height: 1.3,
                   ),
                 ),
                 Text(
-                  '${rowValue['coin_name'].toString()}  ',
+                  '$coinName  ',
                   style: TextStyle(
-                    fontSize: ScreenUtil().setWidth(26.0),
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                    fontSize: _sw(26.0),
+                    color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
                     height: 1.3,
                   ),
                 ),
               ],
             ),
           ),
-          if(rowValue['edit'])
-            Container(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(19.0)),
-              width: ScreenUtil().setWidth(78.0),
-              height: ScreenUtil().setWidth(78.0),
-              child: CircularProgressIndicator(),
-            ),
-          if(rowValue['isAdd']==false && rowValue['edit']==false)
-            InkWell(
-              onTap: (){
-                addCoin(rowValue);
-              },
-              child: Container(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(19.0)),
-                width: ScreenUtil().setWidth(78.0),
-                height: ScreenUtil().setWidth(78.0),
-                child: Icon(Icons.add,color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),),
-              ),
-            ),
-          if(rowValue['isAdd'] && rowValue['edit']==false)
-            InkWell(
-              onTap: (){
-                removeCoin(rowValue);
-              },
-              child: Container(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(20.0)),
-                width: ScreenUtil().setWidth(80.0),
-                height: ScreenUtil().setWidth(80.0),
-                child: Icon(Icons.remove,color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),),
-              ),
-            ),
+          _buildActionButton(rowValue, isEditing, isAdded),
         ],
+      ),
+    );
+  }
+
+  Widget _buildActionButton(
+      Map<String, dynamic> rowValue, bool isEditing, bool isAdded) {
+    if (isEditing) {
+      return Container(
+        padding: EdgeInsets.all(_sw(19.0)),
+        width: _sw(78.0),
+        height: _sw(78.0),
+        child: const CircularProgressIndicator(),
+      );
+    }
+
+    return InkWell(
+      onTap: () => isAdded ? removeCoin(rowValue) : addCoin(rowValue),
+      child: Container(
+        padding: EdgeInsets.all(_sw(isAdded ? 20.0 : 19.0)),
+        width: _sw(isAdded ? 80.0 : 78.0),
+        height: _sw(isAdded ? 80.0 : 78.0),
+        child: Icon(
+          isAdded ? Icons.remove : Icons.add,
+          color: _themeColor(AppThemeKeys.mainButtonBgColor),
+        ),
       ),
     );
   }

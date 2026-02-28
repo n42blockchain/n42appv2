@@ -96,9 +96,7 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
       ),
       body: Column(
         children: [
-          // 筛选器
           _buildFilters(),
-          // 账户列表
           Expanded(
             child: _filteredAccounts.isEmpty
                 ? _buildEmptyState()
@@ -133,7 +131,6 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 链筛选
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -148,7 +145,6 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
-          // 状态筛选
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -186,17 +182,16 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
     );
   }
 
-  Widget _buildStatusChip(SmartAccountState? status, String label) {
-    const statusColors = {
-      SmartAccountState.deployed: Colors.green,
-      SmartAccountState.notDeployed: Colors.grey,
-      SmartAccountState.deploying: Colors.orange,
-      SmartAccountState.error: Colors.red,
-    };
-    final chipColor = status == null
-        ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-        : statusColors[status]!;
+  Color _statusColor(SmartAccountState? status) => switch (status) {
+    null => AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+    SmartAccountState.deployed => Colors.green,
+    SmartAccountState.notDeployed => Colors.grey,
+    SmartAccountState.deploying => Colors.orange,
+    SmartAccountState.error => Colors.red,
+  };
 
+  Widget _buildStatusChip(SmartAccountState? status, String label) {
+    final chipColor = _statusColor(status);
     return _buildFilterChip(
       label: label,
       isSelected: _filterStatus == status,

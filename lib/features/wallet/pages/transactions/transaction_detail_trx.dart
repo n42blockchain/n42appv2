@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/wallet/utils/browser/browser_txhash.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
@@ -24,121 +23,100 @@ import 'package:n42_wallet/generated/l10n.dart';
 class TransactionDetailTrx extends StatefulWidget {
   final String txHash;
   final CoinModel coinModel;
-  const TransactionDetailTrx(this.coinModel,this.txHash,{super.key});
+  const TransactionDetailTrx(this.coinModel, this.txHash, {super.key});
 
   @override
   State<TransactionDetailTrx> createState() => _TransactionDetailTrxState();
 }
 
 class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
-  TransactionApi? _transactionApi;
-  TransactionApi get transactionApi{
-    _transactionApi ??= TransactionApi();
-    return _transactionApi!;
-  }
-  AppDatabase? _db;
-  AppDatabase get db{
-    _db ??= AppDatabase();
-    return _db!;
-  }
-  TextEditingController searchEditingController=TextEditingController();
-  Load load=Load.finish;
-  String errorMessage="";
-  TransationRecordModel trm=TransationRecordModel();
-  TokenViewApi? _tokenViewApi;
-  TokenViewApi get tokenViewApi{
-    _tokenViewApi ??= TokenViewApi();
-    return _tokenViewApi!;
-  }
+  late final TransactionApi transactionApi = TransactionApi();
+  late final AppDatabase db = AppDatabase();
+  late final TokenViewApi tokenViewApi = TokenViewApi();
+
+  final searchEditingController = TextEditingController();
+  Load load = Load.finish;
+  String errorMessage = "";
+  TransationRecordModel trm = TransationRecordModel();
   late String _txHash;
   Timer? _pollingTimer;
   late String _explorerUrl;
+
   @override
   void initState() {
+    super.initState();
     _txHash = widget.txHash;
-    searchEditingController.text=_txHash;
+    searchEditingController.text = _txHash;
     _explorerUrl = getBrowserTxHash(
       widget.coinModel.coin['coinType'],
       _txHash,
       isTest: widget.coinModel.isTest,
     );
     init();
-    super.initState();
   }
+
   @override
   void dispose() {
     _pollingTimer?.cancel();
     super.dispose();
   }
-  Future<void> init()async{
-    if(_txHash==""){
-      _txHash=searchEditingController.text;
-    }
-    if(_txHash==""){
-      owner=false;
+  Map<String, dynamic>? transactionInfo;
+  String resultStr = "Pending";
+  String value = '';
+  String gasPrice = '';
+  bool owner = true;
+
+  Future<void> init() async {
+    if (_txHash.isEmpty) _txHash = searchEditingController.text;
+    if (_txHash.isEmpty) {
+      owner = false;
       return;
     }
-    if (mounted) {
-      setState(() {
-        load=Load.loading;
-      });
-    }
-    List<TransationRecordModel> trModelList=await db.selectTransationRecordTxHash(_txHash,widget.coinModel.address);
-    if(trModelList.isNotEmpty){
-      trm=trModelList[0];
-    }
-    bool r=await getTransactionByHash();
+    if (mounted) setState(() => load = Load.loading);
+
+    final trModelList = await db.selectTransationRecordTxHash(
+        _txHash, widget.coinModel.address);
+    if (trModelList.isNotEmpty) trm = trModelList[0];
+
+    final ok = await getTransactionByHash();
     if (!mounted) return;
-    if(r){
-      setState(() {
-        load=Load.finish;
-      });
-    }else{
-      setState(() {
-        load=Load.error;
-      });
-    }
+    setState(() => load = ok ? Load.finish : Load.error);
   }
-  Map<String,dynamic>? transactionInfo;
-  String resultStr="Pending";
-  String value='';
-  String gasPrice='';
-  String gasLimit='';
-  String nonce="";
-  bool owner=true;//是否时自己的交易信息
-  Future<bool> getTransactionByHash()async{
-    MessageModel rData=await transactionApi.trxTransactionInfoHash(
-        _txHash);
-    if(rData.error==false){
-      if(rData.data==null){
-        errorMessage="Not found";
-        owner=false;
-        return false;
-      }
-      transactionInfo=rData.data;
-      trm.gas=transactionInfo?['cost']?['net_fee_cost']??0;
-      trm.gasPriceValue=BigInt.from(transactionInfo?['cost']?['fee']??0);
-      if(transactionInfo?['confirmed']==true){
-        resultStr="Success";
-        _stopPolling();
-      }else{
-        resultStr="Pending";
-        _startPolling();
-      }
-      value='${toEther(trm.price.toString(), widget.coinModel.coin['decimals'])} ${widget.coinModel.coin['unit']}';
-      gasPrice='${toEther(trm.gasPrice.toString(), widget.coinModel.coin['decimals'])} ${widget.coinModel.coin['unit']}';
-      if(trm.from1.toLowerCase() != (transactionInfo?['from']??"").toString().toLowerCase()){
-        owner=false;
-      }else{
-        owner=true;
-      }
-      return true;
-    }else{
-      errorMessage=rData.data.toString();
-      owner=false;
+
+  Future<bool> getTransactionByHash() async {
+    final rData = await transactionApi.trxTransactionInfoHash(_txHash);
+    if (rData.error) {
+      errorMessage = rData.data.toString();
+      owner = false;
       return false;
     }
+    if (rData.data == null) {
+      errorMessage = "Not found";
+      owner = false;
+      return false;
+    }
+
+    transactionInfo = rData.data;
+    trm.gas = transactionInfo?['cost']?['net_fee_cost'] ?? 0;
+    trm.gasPriceValue = BigInt.from(transactionInfo?['cost']?['fee'] ?? 0);
+
+    final confirmed = transactionInfo?['confirmed'] == true;
+    resultStr = confirmed ? "Success" : "Pending";
+    if (confirmed) {
+      _stopPolling();
+    } else {
+      _startPolling();
+    }
+
+    final unit = widget.coinModel.coin['unit'];
+    final decimals = widget.coinModel.coin['decimals'];
+    value = '${toEther(trm.price.toString(), decimals)} $unit';
+    gasPrice = '${toEther(trm.gasPrice.toString(), decimals)} $unit';
+    owner = trm.from1.toLowerCase() ==
+        (transactionInfo?['from'] ?? "").toString().toLowerCase();
+    return true;
   }
+
   void _startPolling() {
     _pollingTimer?.cancel();
     _pollingTimer = Timer(const Duration(seconds: 3), () async {
@@ -146,11 +124,13 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       if (mounted) setState(() {});
     });
   }
+
   void _stopPolling() {
     _pollingTimer?.cancel();
     _pollingTimer = null;
   }
-  void closeKeyboard(){
+
+  void closeKeyboard() {
     FocusScope.of(context).requestFocus(FocusNode());
   }
   @override
@@ -170,118 +150,104 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       body: bodyWidget(),
     );
   }
-  Widget bodyWidget(){
+  Widget bodyWidget() {
     return SafeArea(
       child: Column(
         children: [
           searchWidget(),
           Expanded(
-            child: load==Load.error?errorWidget():
-            txDataWidget(),
+            child: load == Load.error ? errorWidget() : txDataWidget(),
           ),
         ],
       ),
     );
   }
-  Widget errorWidget(){
+
+  Widget errorWidget() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         InkWell(
-          onTap: (){
-            init();
-          },
+          onTap: init,
           child: Container(
             height: ScreenUtil().setWidth(80),
             width: ScreenUtil().setWidth(80),
             padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
-            child: Icon(Icons.refresh,color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),),
+            child: Icon(
+              Icons.refresh,
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.mainBlueColor.name),
+            ),
           ),
         ),
         errorMessageWidget(),
       ],
     );
   }
-  Widget txDataWidget(){
-    if(transactionInfo==null){
-      return const IntrinsicHeight(
-        child: Center(
-          child: EmptyView(),
-        ),
+  Widget _divider() => Divider(
+        height: ScreenUtil().setWidth(1),
+        indent: 0,
+        endIndent: 0,
       );
+
+  Widget txDataWidget() {
+    if (transactionInfo == null) {
+      return const IntrinsicHeight(child: Center(child: EmptyView()));
     }
+    final s = S.of(context);
+    final info = transactionInfo!;
     return SingleChildScrollView(
       child: Column(
         children: [
-          itemWidget(S.of(context).g_key_wallet_k37,transactionInfo?['hash']??"",copy: true),
-          Divider(
-            height: ScreenUtil().setWidth(1),
-            indent: 0,
-            endIndent: 0,
-          ),
-          itemWidget(S.of(context).g_key_wallet_k33,resultStr),
-          Divider(
-            height: ScreenUtil().setWidth(1),
-            indent: 0,
-            endIndent: 0,
-          ),
-          itemWidget(S.of(context).g_key_wallet_k54,(transactionInfo?['block']).toString(),copy: true),
-          Divider(
-            height: ScreenUtil().setWidth(1),
-            indent: 0,
-            endIndent: 0,
-          ),
-          addressItemWidget(S.of(context).g_key_75,transactionInfo?['ownerAddress']??""),
-          Divider(
-            height: ScreenUtil().setWidth(1),
-            indent: 0,
-            endIndent: 0,
-          ),
-          addressItemWidget(S.of(context).g_key_38,trm.to1),
-          Divider(
-            height: ScreenUtil().setWidth(1),
-            indent: 0,
-            endIndent: 0,
-          ),
-          itemWidget(S.of(context).g_key_wallet_k55,value),
-          Divider(
-            height: ScreenUtil().setWidth(1),
-            indent: 0,
-            endIndent: 0,
-          ),
-          itemWidget(S.of(context).g_key_t_15,gasPrice),
+          itemWidget(s.g_key_wallet_k37, info['hash'] ?? "", copy: true),
+          _divider(),
+          itemWidget(s.g_key_wallet_k33, resultStr),
+          _divider(),
+          itemWidget(s.g_key_wallet_k54, info['block'].toString(), copy: true),
+          _divider(),
+          addressItemWidget(s.g_key_75, info['ownerAddress'] ?? ""),
+          _divider(),
+          addressItemWidget(s.g_key_38, trm.to1),
+          _divider(),
+          itemWidget(s.g_key_wallet_k55, value),
+          _divider(),
+          itemWidget(s.g_key_t_15, gasPrice),
           errorMessageWidget(),
-          SizedBox(height: ScreenUtil().setWidth(140),),
+          SizedBox(height: ScreenUtil().setWidth(140)),
         ],
       ),
     );
   }
-  Widget searchWidget(){
+  void _searchAndReload() {
+    closeKeyboard();
+    init();
+  }
+
+  Widget searchWidget() {
     return Container(
       margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
       padding: EdgeInsets.only(left: ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(8.0))),
+        color: AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.itemBgColor.name),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
       ),
-      constraints: BoxConstraints(
-        maxHeight: ScreenUtil().setWidth(72.0),
-        minHeight: ScreenUtil().setWidth(72.0),
-      ),
+      height: ScreenUtil().setWidth(72.0),
       child: Row(
         children: [
           Expanded(
             child: TextField(
               style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainTextColor.name),
                 fontSize: ScreenUtil().setSp(26.0),
               ),
               controller: searchEditingController,
               textInputAction: TextInputAction.search,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: ScreenUtil().setWidth(10.0)),
                 hintText: S.of(context).search,
                 border: InputBorder.none,
                 errorBorder: InputBorder.none,
@@ -289,24 +255,18 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
                 isCollapsed: true,
               ),
               maxLines: 1,
-              onEditingComplete: (){
-                closeKeyboard();
-                init();
-              },
+              onEditingComplete: _searchAndReload,
             ),
           ),
           InkWell(
-            onTap: (){
-              closeKeyboard();
-              init();
-            },
-            child: Container(
+            onTap: _searchAndReload,
+            child: SizedBox(
               width: ScreenUtil().setWidth(60.0),
               height: ScreenUtil().setWidth(60.0),
-              alignment: Alignment.center,
               child: Icon(
                 Icons.search,
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                color: AppThemeUtils.getColorByKey(
+                    context, AppThemeKeys.mainBlueColor.name),
                 size: ScreenUtil().setWidth(30.0),
               ),
             ),
@@ -315,28 +275,36 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       ),
     );
   }
-  Widget errorMessageWidget(){
-    if(errorMessage.isEmpty) return const SizedBox.shrink();
+  Widget errorMessageWidget() {
+    if (errorMessage.isEmpty) return const SizedBox.shrink();
     return Container(
-      margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0),left: ScreenUtil().setWidth(30),right: ScreenUtil().setWidth(30)),
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0),vertical: ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.only(
+        top: ScreenUtil().setWidth(20.0),
+        left: ScreenUtil().setWidth(30),
+        right: ScreenUtil().setWidth(30),
+      ),
+      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
       width: double.infinity,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(20.0))),
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorBgColor2.name),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20.0)),
+        color: AppThemeUtils.getColorByKey(
+            context, AppThemeKeys.errorBgColor2.name),
       ),
       child: Text(
         errorMessage,
         style: TextStyle(
           fontSize: ScreenUtil().setSp(28.0),
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+          color: AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.errorTextColor.name),
         ),
         textAlign: TextAlign.center,
       ),
     );
   }
-  Widget itemWidget(String title,String value,{bool copy=false}){
+  Widget itemWidget(String title, String value, {bool copy = false}) {
+    final blueColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
@@ -347,34 +315,34 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
           Text(
             title,
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              color: AppThemeUtils.getColorByKey(
+                  context, AppThemeKeys.mainTextColor.name),
               fontSize: ScreenUtil().setSp(28),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20),),
+          SizedBox(height: ScreenUtil().setWidth(20)),
           Row(
             children: [
               Expanded(
                 child: Text(
                   value,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                    fontSize: ScreenUtil().setSp(28),
-                  ),
+                  style: TextStyle(color: blueColor, fontSize: ScreenUtil().setSp(28)),
                 ),
               ),
-              if(copy)
+              if (copy)
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     ToastUtils.init(context);
                     Clipboard.setData(ClipboardData(text: value));
-                    ToastUtils.showFtToast(child:successViewV1(S.of(context).copy),duration: 3);
+                    ToastUtils.showFtToast(
+                      child: successViewV1(S.of(context).copy),
+                      duration: 3,
+                    );
                   },
-                  child: Container(
+                  child: SizedBox(
                     height: ScreenUtil().setWidth(50),
                     width: ScreenUtil().setWidth(50),
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(5)),
-                    child: Icon(Icons.copy,color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),),
+                    child: Icon(Icons.copy, color: blueColor),
                   ),
                 ),
             ],

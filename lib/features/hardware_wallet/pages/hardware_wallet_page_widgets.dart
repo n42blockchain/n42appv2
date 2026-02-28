@@ -18,6 +18,9 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
   ) {
     final isConnected = provider.isConnected;
     final device = provider.currentDevice;
+    final itemBgColor = _themeColor(context, AppThemeKeys.itemBgColor);
+    final subtitleColor = _themeColor(context, AppThemeKeys.itemSubtitleTextColor);
+    final mainTextColor = _themeColor(context, AppThemeKeys.mainTextColor);
 
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
@@ -25,12 +28,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
         gradient: LinearGradient(
           colors: isConnected
               ? [Colors.green.shade600, Colors.green.shade400]
-              : [
-                  AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemBgColor.name),
-                  AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemBgColor.name),
-                ],
+              : [itemBgColor, itemBgColor],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -43,10 +41,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
             children: [
               Icon(
                 _statusIcon(isConnected, device),
-                color: isConnected
-                    ? Colors.white
-                    : AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: isConnected ? Colors.white : subtitleColor,
                 size: ScreenUtil().setWidth(40),
               ),
               SizedBox(width: ScreenUtil().setWidth(12)),
@@ -61,10 +56,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(32),
                         fontWeight: FontWeight.bold,
-                        color: isConnected
-                            ? Colors.white
-                            : AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.mainTextColor.name),
+                        color: isConnected ? Colors.white : mainTextColor,
                       ),
                     ),
                     if (isConnected && device != null) ...[
@@ -189,13 +181,15 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
   ) {
     final isCurrentDevice = provider.currentDevice?.id == device.id;
     final isConnected = isCurrentDevice && provider.isConnected;
+    final blueColor = _themeColor(context, AppThemeKeys.mainBlueColor);
+    final mainTextColor = _themeColor(context, AppThemeKeys.mainTextColor);
+    final subtitleColor = _themeColor(context, AppThemeKeys.itemSubtitleTextColor);
 
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: _themeColor(context, AppThemeKeys.itemBgColor),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
         border: isConnected ? Border.all(color: Colors.green, width: 2) : null,
       ),
@@ -206,16 +200,13 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
             width: ScreenUtil().setWidth(56),
             height: ScreenUtil().setWidth(56),
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name)
-                  .withAlpha(30),
+              color: blueColor.withAlpha(30),
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
             ),
             child: Center(
               child: Icon(
                 _deviceIcon(device.type),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                color: blueColor,
                 size: ScreenUtil().setWidth(32),
               ),
             ),
@@ -236,8 +227,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(28),
                           fontWeight: FontWeight.w600,
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
+                          color: mainTextColor,
                         ),
                       ),
                     ),
@@ -268,8 +258,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                   device.typeDisplayName,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                    color: subtitleColor,
                   ),
                 ),
                 if (device.lastConnectedAt != null) ...[
@@ -280,8 +269,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                     ),
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(22),
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemSubtitleTextColor.name),
+                      color: subtitleColor,
                     ),
                   ),
                 ],
@@ -296,8 +284,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                   _connectSavedDevice(context, s, provider, device),
               icon: Icon(
                 _connectionIcon(device.type),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                color: blueColor,
               ),
             ),
             IconButton(
@@ -375,26 +362,22 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
     required String label,
     required VoidCallback onTap,
   }) {
+    final blueColor = _themeColor(context, AppThemeKeys.mainBlueColor);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
         decoration: BoxDecoration(
-          color:
-              AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: _themeColor(context, AppThemeKeys.itemBgColor),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-          border: Border.all(
-            color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name)
-                .withAlpha(80),
-          ),
+          border: Border.all(color: blueColor.withAlpha(80)),
         ),
         child: Row(
           children: [
             Icon(
               icon,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
+              color: blueColor,
               size: ScreenUtil().setWidth(32),
             ),
             SizedBox(width: ScreenUtil().setWidth(16)),
@@ -404,15 +387,13 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(28),
                   fontWeight: FontWeight.w500,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                  color: _themeColor(context, AppThemeKeys.mainTextColor),
                 ),
               ),
             ),
             Icon(
               Icons.chevron_right,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
               size: ScreenUtil().setWidth(28),
             ),
           ],
@@ -421,4 +402,9 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
     );
   }
 
+  // ==================== Theme helper ====================
+
+  Color _themeColor(BuildContext context, AppThemeKeys key) {
+    return AppThemeUtils.getColorByKey(context, key.name);
+  }
 }

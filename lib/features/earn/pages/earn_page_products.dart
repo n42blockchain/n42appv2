@@ -18,18 +18,26 @@ import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 /// 产品区域 mixin：活跃产品列表、推荐产品列表
 mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
     EarnPageLogicMixin {
+
+  void _pushStaking(BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (_) => const StakingHomePage()));
+  }
+
   // ──────────────────────────────────────────────────────────────────────────
   //  已质押/活跃产品（始终展示，空时显示引导）
   // ──────────────────────────────────────────────────────────────────────────
 
   Widget buildActiveProducts(BuildContext context, EarnState earnState) {
+    final su = ScreenUtil();
+    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final subtitle = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final blue = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
     final loading = earnState.positionsLoading;
     final active = earnState.onlyActive;
     final unbonding = earnState.unbondingPositions;
 
     return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.symmetric(horizontal: su.setWidth(24)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -39,30 +47,24 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
               Text(
                 S.of(context).g_key_earn_active_products,
                 style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32),
+                  fontSize: su.setSp(32),
                   fontWeight: FontWeight.bold,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                  color: mainText,
                 ),
               ),
               TextButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => const StakingHomePage()),
-                ),
+                onPressed: () => _pushStaking(context),
                 child: Text(
                   S.of(context).g_key_earn_view_all,
                   style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainBlueColor.name),
+                    fontSize: su.setSp(26),
+                    color: blue,
                   ),
                 ),
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: su.setWidth(12)),
           if (loading)
             _buildPositionsLoading()
           else if (active.isEmpty && unbonding.isEmpty)
@@ -71,17 +73,16 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
             ...active.map(
                 (p) => _buildActivePositionItem(context, earnState, p)),
             if (unbonding.isNotEmpty) ...[
-              SizedBox(height: ScreenUtil().setWidth(8)),
+              SizedBox(height: su.setWidth(8)),
               Text(
                 S.of(context).g_key_stake_unstake,
                 style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
+                  fontSize: su.setSp(26),
                   fontWeight: FontWeight.w600,
-                  color: AppThemeUtils.getColorByKey(context,
-                      AppThemeKeys.itemSubtitleTextColor.name),
+                  color: subtitle,
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(8)),
+              SizedBox(height: su.setWidth(8)),
               ...unbonding.map(
                   (p) => _buildActivePositionItem(context, earnState, p)),
             ],
@@ -92,54 +93,45 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
   }
 
   Widget _buildPositionsLoading() {
+    final su = ScreenUtil();
     return Container(
-      height: ScreenUtil().setWidth(80),
+      height: su.setWidth(80),
       alignment: Alignment.center,
       child: SizedBox(
-        width: ScreenUtil().setWidth(24),
-        height: ScreenUtil().setWidth(24),
+        width: su.setWidth(24),
+        height: su.setWidth(24),
         child: const CircularProgressIndicator(strokeWidth: 2),
       ),
     );
   }
 
   Widget _buildNoPositions(BuildContext context) {
+    final su = ScreenUtil();
+    final subtitle = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final blue = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.symmetric(vertical: su.setWidth(24)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
             Icons.account_balance_wallet_outlined,
-            size: ScreenUtil().setWidth(48),
-            color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name)
-                .withAlpha(100),
+            size: su.setWidth(48),
+            color: subtitle.withAlpha(100),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: su.setWidth(12)),
           Text(
             S.of(context).g_key_earn_no_positions,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
-            ),
+            style: TextStyle(fontSize: su.setSp(26), color: subtitle),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: su.setWidth(12)),
           TextButton(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => const StakingHomePage()),
-            ),
+            onPressed: () => _pushStaking(context),
             child: Text(
               S.of(context).g_key_earn_go_staking,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(26),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-              ),
+              style: TextStyle(fontSize: su.setSp(26), color: blue),
             ),
           ),
         ],
@@ -149,27 +141,27 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
 
   Widget _buildActivePositionItem(
       BuildContext context, EarnState earnState, StakingPosition position) {
+    final su = ScreenUtil();
+    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final subtitle = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final itemBg = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
+    final blue = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+
     final protocol = position.protocol;
     final isUnbonding = position.status == StakingPositionStatus.unbonding;
     final liveApyValue = liveApy(earnState, protocol.chainType);
     final apyStr = '${liveApyValue.toStringAsFixed(1)}% APY';
     final color = chainColor(protocol.chainType);
     final hasPendingRewards = position.pendingRewards > BigInt.zero;
+    final borderColor = isUnbonding ? Colors.orange : blue;
 
     return Container(
-      margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      margin: EdgeInsets.only(bottom: su.setWidth(12)),
+      padding: EdgeInsets.all(su.setWidth(16)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-        border: Border.all(
-          color: (isUnbonding
-                  ? Colors.orange
-                  : AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name))
-              .withAlpha(50),
-        ),
+        color: itemBg,
+        borderRadius: BorderRadius.circular(su.setWidth(16)),
+        border: Border.all(color: borderColor.withAlpha(50)),
         boxShadow: [
           BoxShadow(
             color: (isUnbonding ? Colors.orange : color).withAlpha(18),
@@ -181,25 +173,24 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
       child: Row(
         children: [
           Container(
-            width: ScreenUtil().setWidth(48),
-            height: ScreenUtil().setWidth(48),
+            width: su.setWidth(48),
+            height: su.setWidth(48),
             decoration: BoxDecoration(
               color: color.withAlpha(30),
-              borderRadius:
-                  BorderRadius.circular(ScreenUtil().setWidth(12)),
+              borderRadius: BorderRadius.circular(su.setWidth(12)),
             ),
             child: Center(
               child: Text(
                 protocol.chainSymbol,
                 style: TextStyle(
-                  fontSize: ScreenUtil().setSp(20),
+                  fontSize: su.setSp(20),
                   fontWeight: FontWeight.bold,
                   color: color,
                 ),
               ),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: su.setWidth(12)),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,33 +201,28 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
                       child: Text(
                         protocol.name,
                         style: TextStyle(
-                          fontSize: ScreenUtil().setSp(28),
+                          fontSize: su.setSp(28),
                           fontWeight: FontWeight.w600,
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
+                          color: mainText,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     if (isUnbonding) ...[
-                      SizedBox(width: ScreenUtil().setWidth(6)),
+                      SizedBox(width: su.setWidth(6)),
                       Container(
                         padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(8),
-                          vertical: ScreenUtil().setWidth(2),
+                          horizontal: su.setWidth(8),
+                          vertical: su.setWidth(2),
                         ),
                         decoration: BoxDecoration(
                           color: Colors.orange.withAlpha(30),
-                          borderRadius: BorderRadius.circular(
-                              ScreenUtil().setWidth(8)),
+                          borderRadius: BorderRadius.circular(su.setWidth(8)),
                         ),
                         child: Text(
                           'Unbonding',
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(18),
-                            color: Colors.orange,
-                          ),
+                          style: TextStyle(fontSize: su.setSp(18), color: Colors.orange),
                         ),
                       ),
                     ],
@@ -244,19 +230,12 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
                 ),
                 Text(
                   protocol.chainSymbol,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
-                    color: AppThemeUtils.getColorByKey(context,
-                        AppThemeKeys.itemSubtitleTextColor.name),
-                  ),
+                  style: TextStyle(fontSize: su.setSp(22), color: subtitle),
                 ),
                 if (hasPendingRewards)
                   Text(
                     '+${formatBigIntForChain(position.pendingRewards, protocol.chainType, protocol.chainSymbol)}',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(20),
-                      color: Colors.green,
-                    ),
+                    style: TextStyle(fontSize: su.setSp(20), color: Colors.green),
                   ),
               ],
             ),
@@ -268,19 +247,15 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
                 formatBigIntForChain(position.stakedAmount,
                     protocol.chainType, protocol.chainSymbol),
                 style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
+                  fontSize: su.setSp(28),
                   fontWeight: FontWeight.w600,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                  color: mainText,
                 ),
               ),
               if (!isUnbonding)
                 Text(
                   apyStr,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
-                    color: Colors.green,
-                  ),
+                  style: TextStyle(fontSize: su.setSp(22), color: Colors.green),
                 ),
             ],
           ),
@@ -295,55 +270,46 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
 
   Widget buildRecommendedProducts(
       BuildContext context, EarnState earnState) {
+    final su = ScreenUtil();
+    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
     final s = S.of(context);
-    final ethApyStr = earnState.apyLoading
+
+    String apyStr(double value) => earnState.apyLoading
         ? '...'
-        : '~${earnState.ethApy.toStringAsFixed(1)}% ${s.g_key_stake_apy}';
-    final solApyStr = earnState.apyLoading
-        ? '...'
-        : '~${earnState.solApy.toStringAsFixed(1)}% ${s.g_key_stake_apy}';
+        : '~${value.toStringAsFixed(1)}% ${s.g_key_stake_apy}';
 
     return Padding(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(su.setWidth(24)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             s.g_key_earn_recommended,
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(30),
+              fontSize: su.setSp(30),
               fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: mainText,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: su.setWidth(16)),
           _buildRecommendedItem(
             context,
             name: 'ETH ${s.g_key_stake_title}',
             description: s.g_key_earn_stake_eth_lido,
-            apy: ethApyStr,
+            apy: apyStr(earnState.ethApy),
             color: const Color(0xFF627EEA),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => const StakingHomePage()),
-            ),
+            onTap: () => _pushStaking(context),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: su.setWidth(12)),
           _buildRecommendedItem(
             context,
             name: 'SOL ${s.g_key_stake_title}',
             description: s.g_key_earn_native_sol,
-            apy: solApyStr,
+            apy: apyStr(earnState.solApy),
             color: const Color(0xFF9945FF),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => const StakingHomePage()),
-            ),
+            onTap: () => _pushStaking(context),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: su.setWidth(12)),
           _buildRecommendedItem(
             context,
             name: s.g_key_loyalty_daily_checkin,
@@ -353,8 +319,7 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (_) =>
-                      LoyaltyHomePage(walletAddress: walletAddress)),
+                  builder: (_) => LoyaltyHomePage(walletAddress: walletAddress)),
             ),
           ),
         ],
@@ -370,30 +335,32 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
     required Color color,
     VoidCallback? onTap,
   }) {
+    final su = ScreenUtil();
+    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final subtitle = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final itemBg = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+        padding: EdgeInsets.all(su.setWidth(16)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemBgColor.name),
-          borderRadius:
-              BorderRadius.circular(ScreenUtil().setWidth(16)),
+          color: itemBg,
+          borderRadius: BorderRadius.circular(su.setWidth(16)),
         ),
         child: Row(
           children: [
             Container(
-              width: ScreenUtil().setWidth(52),
-              height: ScreenUtil().setWidth(52),
+              width: su.setWidth(52),
+              height: su.setWidth(52),
               decoration: BoxDecoration(
                 color: color.withAlpha(30),
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(14)),
+                borderRadius: BorderRadius.circular(su.setWidth(14)),
               ),
               child: Icon(Icons.account_balance,
-                  color: color, size: ScreenUtil().setWidth(28)),
+                  color: color, size: su.setWidth(28)),
             ),
-            SizedBox(width: ScreenUtil().setWidth(12)),
+            SizedBox(width: su.setWidth(12)),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -401,21 +368,16 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
                   Text(
                     name,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
+                      fontSize: su.setSp(28),
                       fontWeight: FontWeight.w600,
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
+                      color: mainText,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     description,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: AppThemeUtils.getColorByKey(context,
-                          AppThemeKeys.itemSubtitleTextColor.name),
-                    ),
+                    style: TextStyle(fontSize: su.setSp(22), color: subtitle),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -424,29 +386,24 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>,
             ),
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(12),
-                vertical: ScreenUtil().setWidth(6),
+                horizontal: su.setWidth(12),
+                vertical: su.setWidth(6),
               ),
               decoration: BoxDecoration(
                 color: Colors.green.withAlpha(20),
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(8)),
+                borderRadius: BorderRadius.circular(su.setWidth(8)),
               ),
               child: Text(
                 apy,
                 style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
+                  fontSize: su.setSp(24),
                   fontWeight: FontWeight.w600,
                   color: Colors.green,
                 ),
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(8)),
-            Icon(
-              Icons.chevron_right,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
-            ),
+            SizedBox(width: su.setWidth(8)),
+            Icon(Icons.chevron_right, color: subtitle),
           ],
         ),
       ),

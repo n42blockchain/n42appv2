@@ -67,36 +67,22 @@ class LoyaltyAccount {
   });
 
   /// 等级名称
-  String get tierName {
-    switch (tier) {
-      case LoyaltyTier.bronze:
-        return 'Bronze';
-      case LoyaltyTier.silver:
-        return 'Silver';
-      case LoyaltyTier.gold:
-        return 'Gold';
-      case LoyaltyTier.platinum:
-        return 'Platinum';
-      case LoyaltyTier.diamond:
-        return 'Diamond';
-    }
-  }
+  String get tierName => switch (tier) {
+        LoyaltyTier.bronze => 'Bronze',
+        LoyaltyTier.silver => 'Silver',
+        LoyaltyTier.gold => 'Gold',
+        LoyaltyTier.platinum => 'Platinum',
+        LoyaltyTier.diamond => 'Diamond',
+      };
 
   /// 等级图标 emoji
-  String get tierEmoji {
-    switch (tier) {
-      case LoyaltyTier.bronze:
-        return '🥉';
-      case LoyaltyTier.silver:
-        return '🥈';
-      case LoyaltyTier.gold:
-        return '🥇';
-      case LoyaltyTier.platinum:
-        return '💎';
-      case LoyaltyTier.diamond:
-        return '👑';
-    }
-  }
+  String get tierEmoji => switch (tier) {
+        LoyaltyTier.bronze => '🥉',
+        LoyaltyTier.silver => '🥈',
+        LoyaltyTier.gold => '🥇',
+        LoyaltyTier.platinum => '💎',
+        LoyaltyTier.diamond => '👑',
+      };
 
   factory LoyaltyAccount.fromJson(Map<String, dynamic> json) {
     return LoyaltyAccount(
@@ -110,12 +96,8 @@ class LoyaltyAccount {
       ),
       tierProgress: json['tier_progress'] ?? 0,
       nextTierPoints: json['next_tier_points'] ?? 1000,
-      createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'])
-          : DateTime.now(),
-      updatedAt: json['updated_at'] != null
-          ? DateTime.parse(json['updated_at'])
-          : DateTime.now(),
+      createdAt: _parseDate(json['created_at']),
+      updatedAt: _parseDate(json['updated_at']),
     );
   }
 
@@ -179,24 +161,15 @@ class LoyaltyTask {
   }
 
   /// 任务图标
-  String get icon {
-    switch (type) {
-      case TaskType.dailyCheckIn:
-        return '📅';
-      case TaskType.transaction:
-        return '💸';
-      case TaskType.referral:
-        return '👥';
-      case TaskType.staking:
-        return '🔒';
-      case TaskType.dappUsage:
-        return '📱';
-      case TaskType.social:
-        return '🐦';
-      case TaskType.special:
-        return '⭐';
-    }
-  }
+  String get icon => switch (type) {
+        TaskType.dailyCheckIn => '📅',
+        TaskType.transaction => '💸',
+        TaskType.referral => '👥',
+        TaskType.staking => '🔒',
+        TaskType.dappUsage => '📱',
+        TaskType.social => '🐦',
+        TaskType.special => '⭐',
+      };
 
   factory LoyaltyTask.fromJson(Map<String, dynamic> json) {
     return LoyaltyTask(
@@ -214,12 +187,8 @@ class LoyaltyTask {
       points: json['points'] ?? 0,
       maxCompletions: json['max_completions'],
       completedCount: json['completed_count'] ?? 0,
-      expiresAt: json['expires_at'] != null
-          ? DateTime.parse(json['expires_at'])
-          : null,
-      lastCompletedAt: json['last_completed_at'] != null
-          ? DateTime.parse(json['last_completed_at'])
-          : null,
+      expiresAt: _parseDateOrNull(json['expires_at']),
+      lastCompletedAt: _parseDateOrNull(json['last_completed_at']),
       requirements: json['requirements'],
       actionUrl: json['action_url'],
     );
@@ -257,9 +226,7 @@ class PointsHistory {
       description: json['description'] ?? '',
       taskId: json['task_id'],
       txHash: json['tx_hash'],
-      createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'])
-          : DateTime.now(),
+      createdAt: _parseDate(json['created_at']),
     );
   }
 }
@@ -327,9 +294,7 @@ class Reward {
       stock: json['stock'],
       userLimit: json['user_limit'],
       userRedeemed: json['user_redeemed'] ?? 0,
-      expiresAt: json['expires_at'] != null
-          ? DateTime.parse(json['expires_at'])
-          : null,
+      expiresAt: _parseDateOrNull(json['expires_at']),
       isAvailable: json['is_available'] ?? true,
     );
   }
@@ -381,9 +346,7 @@ class ReferralRecord {
         (e) => e.name == json['status'],
         orElse: () => ReferralStatus.pending,
       ),
-      createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'])
-          : DateTime.now(),
+      createdAt: _parseDate(json['created_at']),
     );
   }
 }
@@ -436,3 +399,11 @@ class PointsRule {
     );
   }
 }
+
+/// Parses an ISO 8601 date string, returning [DateTime.now] if null.
+DateTime _parseDate(String? value) =>
+    value != null ? DateTime.parse(value) : DateTime.now();
+
+/// Parses an optional ISO 8601 date string, returning null if absent.
+DateTime? _parseDateOrNull(String? value) =>
+    value != null ? DateTime.parse(value) : null;

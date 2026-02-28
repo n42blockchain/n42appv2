@@ -24,15 +24,15 @@ mixin _ZilSendLogicMixin on ConsumerState<WalletChainSendZil> {
   final FocusNode valueNode = FocusNode();
   final FocusNode noteNode = FocusNode();
 
-  String toErrorMessage = "";
-  String noteErrorMessage = "";
-  String amountErrorMessage = "";
-  String errorMessage = "";
+  String toErrorMessage = '';
+  String noteErrorMessage = '';
+  String amountErrorMessage = '';
+  String errorMessage = '';
 
   BigInt totalGasPrice = BigInt.zero;
   BigInt gasPrice = BigInt.zero;
   BigInt gas = BigInt.zero;
-  BigInt transferValue = BigInt.zero; //转账金额
+  BigInt transferValue = BigInt.zero;
 
   Load load = Load.loading;
   Load gasLimitLoad = Load.finish;
@@ -41,56 +41,43 @@ mixin _ZilSendLogicMixin on ConsumerState<WalletChainSendZil> {
   TokenViewApi get tokenViewApi => _logicTokenViewApi ??= TokenViewApi();
 
   Future<void> initData() async {
-    //判断是否是代币
-    if (widget.coinModel.coin['isContract']) {
-      final WalletActionProvider wap = ref.read(wapBridgeProvider);
-      final int cIndex = wap.coinModels.indexWhere((element) {
-        if (element.coin['coinType'] != widget.coinModel.coin['coinType']) {
-          return false;
-        }
-        if (widget.coinModel.privateKey != null) {
-          return element.privateKey == widget.coinModel.privateKey;
-        }
-        return true;
-      });
+    final coin = widget.coinModel.coin;
+    if (coin['isContract']) {
+      final wap = ref.read(wapBridgeProvider);
+      final cIndex = wap.coinModels.indexWhere((e) =>
+          e.coin['coinType'] == coin['coinType'] &&
+          (widget.coinModel.privateKey == null ||
+              e.privateKey == widget.coinModel.privateKey));
       chainModel = wap.coinModels[cIndex];
       await chainModel?.getBalance();
       if (!mounted) return;
       setState(() {});
     }
     gas = BigInt.from(getCoinGas(
-      widget.coinModel.coin['coinType'],
-      contract: widget.coinModel.coin['isContract'],
+      coin['coinType'],
+      contract: coin['isContract'],
     ));
     await getBalance();
     await getGasPrice();
   }
 
-  //获取余额
   Future<void> getBalance() async {
-    setState(() {
-      load = Load.loading;
-    });
-    final bool isOk = await widget.coinModel.getBalance(getToken: false);
+    setState(() => load = Load.loading);
+    final isOk = await widget.coinModel.getBalance(getToken: false);
     if (!mounted) return;
-    if (isOk == false) {
+    if (!isOk) {
       errorMessage = S.current.g_key_t_44;
-      ToastUtils.show(S.current.g_key_t_44);
+      ToastUtils.show(errorMessage);
     }
-    setState(() {
-      load = Load.finish;
-    });
+    setState(() => load = Load.finish);
   }
 
-  //获取旷工费
   Future<void> getGasPrice() async {
-    setState(() {
-      load = Load.loading;
-    });
-    final ZilApi zilApi = ZilApi(isTest: widget.coinModel.isTest);
-    final MessageModel mm = await zilApi.getMinimumGasPrice();
+    setState(() => load = Load.loading);
+    final zilApi = ZilApi(isTest: widget.coinModel.isTest);
+    final mm = await zilApi.getMinimumGasPrice();
     if (!mounted) return;
-    if (mm.error == false) {
+    if (!mm.error) {
       gasPrice = mm.data;
     } else {
       errorMessage = mm.data.toString();
@@ -101,162 +88,141 @@ mixin _ZilSendLogicMixin on ConsumerState<WalletChainSendZil> {
     setState(() {});
   }
 
-  //检查 amount 输入是否正确
-  void amountCheck({String value = ""}) {
-    if (value == "") {
-      value = valueTextEditingController.text;
-    }
-    int minValue = 0;
-    if (widget.coinModel.coin['decimals'] == 0) {
-      minValue = 1;
-    }
+  void amountCheck({String value = ''}) {
+    if (value.isEmpty) value = valueTextEditingController.text;
+
+    final coin = widget.coinModel.coin;
+    final int decimals = coin['decimals'];
+    final int minValue = decimals == 0 ? 1 : 0;
+
+    // Empty input
     if (value.isEmpty) {
-      amountErrorMessage = S.of(context).g_key_46(minValue);
-      setState(() {});
+      _setAmountError(S.of(context).g_key_46(minValue));
       return;
     }
-    bool checkValue1 = false;
-    if (widget.coinModel.coin['decimals'] == 0) {
-      checkValue1 = _regular.regularNums(value.toString());
-      if (checkValue1 == false) {
-        amountErrorMessage = S.of(context).g_key_134;
-        setState(() {});
-        return;
-      }
-    } else {
-      checkValue1 = _regular.regularNums(value.toString());
-    }
-    final bool checkValue = _regular.regularDouble(value.toString());
-    final double dValue = double.parse(value);
-    if (checkValue == false && checkValue1 == false) {
-      amountErrorMessage = S.of(context).g_key_134;
-      setState(() {});
-      return;
-    } else if (dValue < minValue) {
-      amountErrorMessage = S.of(context).g_key_46(minValue);
-      setState(() {});
-      return;
-    } else if (dValue == 0) {
-      amountErrorMessage = S.of(context).g_key_46(minValue);
-      setState(() {});
+
+    // Integer-only check when decimals == 0
+    final isValidInt = _regular.regularNums(value);
+    if (decimals == 0 && !isValidInt) {
+      _setAmountError(S.of(context).g_key_134);
       return;
     }
-    final BigInt valueBi =
-        ethToWeiString(value, widget.coinModel.coin['decimals']);
-    if (widget.coinModel.coin['isContract'] == false) {
-      if (valueBi + totalGasPrice > widget.coinModel.balance) {
-        amountErrorMessage = S.of(context).g_key_47;
-        setState(() {});
-        return;
-      }
+
+    // Numeric format check
+    final isValidDouble = _regular.regularDouble(value);
+    if (!isValidDouble && !isValidInt) {
+      _setAmountError(S.of(context).g_key_134);
+      return;
     }
+
+    // Value range check
+    final dValue = double.parse(value);
+    if (dValue <= 0 || dValue < minValue) {
+      _setAmountError(S.of(context).g_key_46(minValue));
+      return;
+    }
+
+    // Balance check for non-contract coins
+    final valueBi = ethToWeiString(value, decimals);
+    if (coin['isContract'] == false &&
+        valueBi + totalGasPrice > widget.coinModel.balance) {
+      _setAmountError(S.of(context).g_key_47);
+      return;
+    }
+
     transferValue = valueBi;
-    amountErrorMessage = "";
+    _setAmountError('');
+  }
+
+  void _setAmountError(String msg) {
+    amountErrorMessage = msg;
     setState(() {});
   }
 
-  //检查转账地址是否正确
   Future<String?> toAddressCheck(String addr) async {
-    if (addr == "") {
+    if (addr.isEmpty) {
       toErrorMessage = S.current.g_key_41;
       setState(() {});
       return null;
     }
-    final List<String> addrList = addr.split(":");
-    if (addrList.length == 2) {
-      addr = addrList[1];
-    }
-    final bool check = await Trustdart()
+    final parts = addr.split(':');
+    if (parts.length == 2) addr = parts[1];
+
+    final isValid = await Trustdart()
         .validateAddress(widget.coinModel.coin['coinType'], addr);
     if (!mounted) return null;
-    if (check) {
-      if (addr.toUpperCase() ==
-          widget.coinModel.address.toString().toUpperCase()) {
-        toErrorMessage = S.current.g_key_t_50;
-        setState(() {});
-        return null;
-      } else {
-        toErrorMessage = "";
-        setState(() {});
-        return addr;
-      }
-    } else {
+
+    final isSelfSend = addr.toUpperCase() ==
+        widget.coinModel.address.toString().toUpperCase();
+    if (!isValid || isSelfSend) {
       toErrorMessage = S.current.g_key_t_50;
       setState(() {});
       return null;
     }
+
+    toErrorMessage = '';
+    setState(() {});
+    return addr;
   }
 
   Future<void> sendTransaction() async {
     if (load == Load.loading) {
-      ToastUtils.show("loading");
+      ToastUtils.show('loading');
       return;
     }
-    if (amountErrorMessage != "") return;
+    if (amountErrorMessage.isNotEmpty) return;
     closeKeyboard();
     amountCheck();
-    if (amountErrorMessage != "") return;
-    setState(() {
-      load = Load.loading;
-    });
-    final String? toAddr =
-        await toAddressCheck(toTextEditingController.text.trim());
+    if (amountErrorMessage.isNotEmpty) return;
+
+    setState(() => load = Load.loading);
+    final toAddr = await toAddressCheck(toTextEditingController.text.trim());
     if (!mounted) return;
     if (toAddr == null) {
-      setState(() {
-        load = Load.finish;
-      });
+      setState(() => load = Load.finish);
       return;
     }
 
-    BigInt uBalance = widget.coinModel.balance;
-    if (widget.coinModel.coin['isContract']) {
-      uBalance = chainModel?.balance ?? BigInt.zero;
-    }
-    if (totalGasPrice > uBalance) {
-      setState(() {
-        load = Load.finish;
-      });
+    final coin = widget.coinModel.coin;
+    final uBalance = coin['isContract']
+        ? (chainModel?.balance ?? BigInt.zero)
+        : widget.coinModel.balance;
+    if (totalGasPrice > uBalance || widget.coinModel.balance == BigInt.zero) {
+      setState(() => load = Load.finish);
       return;
     }
-    if (widget.coinModel.balance == BigInt.zero) {
-      setState(() {
-        load = Load.finish;
-      });
-      return;
-    }
-    final TransationRecordModel trModel = TransationRecordModel();
-    trModel.address = widget.coinModel.address.toString();
-    trModel.from1 = widget.coinModel.address.toString();
-    trModel.to1 = toAddr;
-    trModel.addrType = widget.coinModel.addrType;
-    trModel.coin = widget.coinModel.coin;
-    trModel.coinMiniName = widget.coinModel.coin['coinType'];
-    trModel.walletIndex = ref.read(wapBridgeProvider).walletIndex;
-    trModel.contract = widget.coinModel.isTest
-        ? widget.coinModel.coin['contract_test']
-        : widget.coinModel.coin['contract'];
-    trModel.isTest = widget.coinModel.isTest ? 1 : 0;
-    trModel.gasPrice = totalGasPrice;
-    trModel.gas = gas.toInt();
-    trModel.gasPriceValue = gasPrice;
-    trModel.price = transferValue;
-    final String feeUnit = chainModel == null
-        ? widget.coinModel.coin['unit'].toString().toUpperCase()
-        : chainModel!.coin['unit'].toString().toUpperCase();
-    final bool check = await Navigator.push(
+
+    final ownerAddr = widget.coinModel.address.toString();
+    final trModel = TransationRecordModel()
+      ..address = ownerAddr
+      ..from1 = ownerAddr
+      ..to1 = toAddr
+      ..addrType = widget.coinModel.addrType
+      ..coin = coin
+      ..coinMiniName = coin['coinType']
+      ..walletIndex = ref.read(wapBridgeProvider).walletIndex
+      ..contract = widget.coinModel.isTest
+          ? coin['contract_test']
+          : coin['contract']
+      ..isTest = widget.coinModel.isTest ? 1 : 0
+      ..gasPrice = totalGasPrice
+      ..gas = gas.toInt()
+      ..gasPriceValue = gasPrice
+      ..price = transferValue;
+
+    final feeUnit =
+        (chainModel ?? widget.coinModel).coin['unit'].toString().toUpperCase();
+    final confirmed = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
-        builder: (context) => WalletBaseSend(trModel, null, feeUnit),
+        builder: (_) => WalletBaseSend(trModel, null, feeUnit),
       ),
     );
     if (!mounted) return;
-    if (check) {
+    if (confirmed == true) {
       signTx(trModel);
     } else {
-      setState(() {
-        load = Load.finish;
-      });
+      setState(() => load = Load.finish);
     }
   }
 
@@ -294,10 +260,10 @@ mixin _ZilSendLogicMixin on ConsumerState<WalletChainSendZil> {
     }
   }
 
-  void scanQR() async {
-    final String? scanValue = await Navigator.push(
+  Future<void> scanQR() async {
+    final scanValue = await Navigator.push<String>(
       context,
-      MaterialPageRoute(builder: (context) => ScanPage()),
+      MaterialPageRoute(builder: (_) => ScanPage()),
     );
     if (!mounted) return;
     if (scanValue != null) {
@@ -319,11 +285,10 @@ mixin _ZilSendLogicMixin on ConsumerState<WalletChainSendZil> {
         widget.coinModel.coin['decimals'],
       ).toString();
     }
-    amountErrorMessage = "";
+    amountErrorMessage = '';
     setState(() {});
   }
 
-  //关闭键盘
   void closeKeyboard() {
     FocusScope.of(context).requestFocus(FocusNode());
   }

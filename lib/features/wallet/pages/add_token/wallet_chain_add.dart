@@ -1,7 +1,6 @@
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/component/enums/load.dart';
 import 'package:n42_wallet/features/login/widgets/login_title.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
@@ -26,85 +25,65 @@ class WalletChainAdd extends ConsumerStatefulWidget {
 }
 
 class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
-  late TextEditingController nameController;
-  late TextEditingController symbolController;
-  late TextEditingController decimalController;
-  late TextEditingController chainIdController;
-  late TextEditingController rpcController;
-  late FocusNode nameNode;
-  late FocusNode symbolNode;
-  late FocusNode decimalNode;
-  late FocusNode chainIdNode;
-  late FocusNode rpcNode;
-  String nameErrorMessage="";
-  String symbolErrorMessage="";
-  String decimalErrorMessage="";
-  String chainIdErrorMessage="";
-  String rpcErrorMessage="";
-  String errorMessage="";
-  Load load=Load.finish;
-  Map<String,dynamic> ethMap={
-    "showList":true,//主链币是否显示在主页列表中
-    "isTest":false,//是否时正式链
-    "supportTest":true,//是否可以使用测试网络
-    "addrType":"legacy",//地址类型
-    "pathIndex":0,//path具体的账号节点
-    "pathList":[0],//path数量
-    "baseInfo":{
+  late final nameController = TextEditingController();
+  late final symbolController = TextEditingController();
+  late final decimalController = TextEditingController();
+  late final chainIdController = TextEditingController();
+  late final rpcController = TextEditingController();
+  late final nameNode = FocusNode();
+  late final symbolNode = FocusNode();
+  late final decimalNode = FocusNode();
+  late final chainIdNode = FocusNode();
+  late final rpcNode = FocusNode();
+
+  String nameErrorMessage = "";
+  String symbolErrorMessage = "";
+  String decimalErrorMessage = "";
+  String chainIdErrorMessage = "";
+  String rpcErrorMessage = "";
+  String errorMessage = "";
+  Load load = Load.finish;
+
+  final Map<String, dynamic> ethMap = {
+    "showList": true,
+    "isTest": false,
+    "supportTest": true,
+    "addrType": "legacy",
+    "pathIndex": 0,
+    "pathList": [0],
+    "baseInfo": {
       "mKey": "ETH",
-      "blockchainType": BlockchainType.Ethereum.name,//链类型 字符串类型 Ethereum、Bitcoin、Solana、Tron等
-      "coinType": CoinType.ETH.name,//是那种币，ETH、BNB、等
-      "icon": "",//图标地址
-      "name": "Ethereum",//链全名
-      "miniName": "ETH",//链 的symbol，
-      "unit":"ETH",
-      "decimals": 18,//小数位数
-      "balance":"0",
-      "balance_test":"0",
-      "coinPrice":0.0,
-      "percentage":0.0,
+      "blockchainType": BlockchainType.Ethereum.name,
+      "coinType": CoinType.ETH.name,
+      "icon": "",
+      "name": "Ethereum",
+      "miniName": "ETH",
+      "unit": "ETH",
+      "decimals": 18,
+      "balance": "0",
+      "balance_test": "0",
+      "coinPrice": 0.0,
+      "percentage": 0.0,
       "isContract": false,
-      "path": {
-        "legacy":"m/44'/60'/0'/0/0",//链path，
-      },
-      "service": "",//主网rpc地址
-      "service_test": "",//测试网rpc地址，如果没有传""
-      "chainId": 1,//主网链id
-      "chainId_test": 3,//测试网链id
+      "path": {"legacy": "m/44'/60'/0'/0/0"},
+      "service": "",
+      "service_test": "",
+      "chainId": 1,
+      "chainId_test": 3,
       "contract": "",
       "contract_test": "",
-      "canEdit": true,//是否可以修改
-      "rules": "ERC20",//代币的类型 eth 是ERC20，BNB是BEP20，TRX 是TRC20
+      "canEdit": true,
+      "rules": "ERC20",
     },
-    "mainnetChainID":1,
-    "testnetChainID":3,
-    "testnetIndex":0,//当前选择的测试网络 索引值
-    "testnets":[
-      {
-        "testnetWS":"",
-        "testnetRPC":"",
-        "testnetChainID":3,
-        "testnetContract":{
-        }
-      },
+    "mainnetChainID": 1,
+    "testnetChainID": 3,
+    "testnetIndex": 0,
+    "testnets": [
+      {"testnetWS": "", "testnetRPC": "", "testnetChainID": 3, "testnetContract": {}},
     ],
-    "mainnets":{
-    },
+    "mainnets": {},
   };
-  @override
-  void initState() {
-    nameController=TextEditingController();
-    symbolController=TextEditingController();
-    decimalController=TextEditingController();
-    chainIdController=TextEditingController();
-    rpcController=TextEditingController();
-    nameNode=FocusNode();
-    symbolNode=FocusNode();
-    decimalNode=FocusNode();
-    chainIdNode=FocusNode();
-    rpcNode=FocusNode();
-    super.initState();
-  }
+
   @override
   void dispose() {
     nameController.dispose();
@@ -119,124 +98,140 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     rpcNode.dispose();
     super.dispose();
   }
-  Future<void> addChain()async{
-    String mKey=symbolController.text.toUpperCase();
-    String chainIdStr=chainIdController.text;
-    String name=nameController.text.toUpperCase();
-    String decimalStr=decimalController.text;
-    String rpcStr=rpcController.text;
-    Regular reg=Regular();
-    if(name.isEmpty || name.length>30){
-      setState(() {
-        nameErrorMessage=S.of(context).g_token_m_key_1(30);
-      });
-      return;
+
+  /// Sets a field error and returns false (for early-return validation).
+  bool _setFieldError(void Function(String) setter, String msg) {
+    setState(() => setter(msg));
+    return false;
+  }
+
+  bool _validateInputs(String name, String mKey, String chainIdStr, String decimalStr, String rpcStr) {
+    final reg = Regular();
+    final s = S.of(context);
+
+    if (name.isEmpty || name.length > 30) return _setFieldError((v) => nameErrorMessage = v, s.g_token_m_key_1(30));
+    if (mKey.isEmpty || mKey.length > 10) return _setFieldError((v) => symbolErrorMessage = v, s.g_token_m_key_1(10));
+    if (!reg.regularNums(chainIdStr) || chainIdStr.length > 10 || int.parse(chainIdStr) <= 0) {
+      return _setFieldError((v) => chainIdErrorMessage = v, s.g_token_m_key_21);
     }
-    if(mKey.isEmpty || mKey.length>10){
-      setState(() {
-        symbolErrorMessage=S.of(context).g_token_m_key_1(10);
-      });
-      return;
-    }
-    int chainId=int.parse(chainIdStr);
-    if(!reg.regularNums(chainIdStr)){
-      setState(() {
-        chainIdErrorMessage=S.of(context).g_token_m_key_21;
-      });
-      return;
-    }
-    if(chainId<=0){
-      setState(() {
-        chainIdErrorMessage=S.of(context).g_token_m_key_21;
-      });
-      return;
-    }
-    if(chainIdStr.length>10){
-      setState(() {
-        chainIdErrorMessage=S.of(context).g_token_m_key_21;
-      });
-      return;
-    }
-    if(!reg.regularNums(decimalStr)){
-      setState(() {
-        decimalErrorMessage=S.of(context).g_token_m_key_21;
-      });
-      return;
-    }
-    int decimal=int.parse(decimalStr);
-    if((decimal<=18 && decimal>=0)==false){
-      setState(() {
-        decimalErrorMessage=S.of(context).g_token_m_key_2;
-      });
-      return;
-    }
-    if(!isURL(rpcStr)){
-      setState(() {
-        rpcErrorMessage=S.of(context).g_token_m_key_21;
-      });
-      return;
-    }
-    bool exist=await checkChain(mKey,chainId);
-    if (!mounted) return;
-    if(exist){
-      errorMessage=S.of(context).g_token_m_key_22(name);
-      bool? r=await tipsDialog2(context, S.of(context).g_token_m_key_23(name),);
+    if (!reg.regularNums(decimalStr)) return _setFieldError((v) => decimalErrorMessage = v, s.g_token_m_key_21);
+    final decimal = int.parse(decimalStr);
+    if (decimal < 0 || decimal > 18) return _setFieldError((v) => decimalErrorMessage = v, s.g_token_m_key_2);
+    if (!isURL(rpcStr)) return _setFieldError((v) => rpcErrorMessage = v, s.g_token_m_key_21);
+    return true;
+  }
+
+  Future<void> addChain() async {
+    final mKey = symbolController.text.toUpperCase();
+    final chainIdStr = chainIdController.text;
+    final name = nameController.text.toUpperCase();
+    final decimalStr = decimalController.text;
+    final rpcStr = rpcController.text;
+
+    if (!_validateInputs(name, mKey, chainIdStr, decimalStr, rpcStr)) return;
+
+    final chainId = int.parse(chainIdStr);
+    final decimal = int.parse(decimalStr);
+
+    if (allChainUrlMap[mKey] != null) {
+      errorMessage = S.of(context).g_token_m_key_22(name);
+      final r = await tipsDialog2(context, S.of(context).g_token_m_key_23(name));
       if (!mounted) return;
-      if(r==true){
-        await addDefaultChain(mKey);
+      if (r == true) {
+        await ref.read(wapBridgeProvider).addWalletChain(allChainUrlMap[mKey]);
         if (!mounted) return;
-        Navigator.pop(context,true);
+        Navigator.pop(context, true);
       }
       return;
-    }else{
-      errorMessage="";
     }
-    setState(() {
-      load=Load.loading;
-    });
-    MessageModel rmm=await EthAPI.init(null, rpcController.text, null).getGasPrice();
+    errorMessage = "";
+
+    setState(() => load = Load.loading);
+    final rmm = await EthAPI.init(null, rpcStr, null).getGasPrice();
     if (!mounted) return;
-    if(rmm.error==false){
-      errorMessage="";
-    }else{
+    if (rmm.error) {
       setState(() {
-        errorMessage=S.of(context).g_token_m_key_24(S.of(context).g_token_m_key_17);
-        load=Load.finish;
+        errorMessage = S.of(context).g_token_m_key_24(S.of(context).g_token_m_key_17);
+        load = Load.finish;
       });
       ToastUtils.show(errorMessage);
       return;
     }
-    ethMap['baseInfo']['mKey']=mKey;
-    ethMap['baseInfo']['custom']=true;
-    ethMap['baseInfo']['coinType']=mKey;
-    ethMap['baseInfo']['miniName']=mKey;
-    ethMap['baseInfo']['unit']=mKey;
-    ethMap['baseInfo']['name']=name;
-    ethMap['baseInfo']['decimals']=decimal;
-    ethMap['baseInfo']['chainId']=chainId;
-    ethMap['baseInfo']['service']=rpcStr;
+
+    final baseInfo = ethMap['baseInfo'] as Map<String, dynamic>;
+    baseInfo
+      ..['mKey'] = mKey
+      ..['custom'] = true
+      ..['coinType'] = mKey
+      ..['miniName'] = mKey
+      ..['unit'] = mKey
+      ..['name'] = name
+      ..['decimals'] = decimal
+      ..['chainId'] = chainId
+      ..['service'] = rpcStr;
+
     await ref.read(wapBridgeProvider).addWalletChain(ethMap);
     if (!mounted) return;
-    setState(() {
-      load=Load.finish;
-    });
-    Navigator.pop(context,true);
+    setState(() => load = Load.finish);
+    Navigator.pop(context, true);
   }
-  Future<bool> checkChain(String symbol,int chainId)async{
-    return allChainUrlMap[symbol] != null;
+  Widget _buildField({
+    required String title,
+    required TextEditingController controller,
+    required FocusNode focusNode,
+    required String hintText,
+    required String errorMsg,
+    required FocusNode? nextFocus,
+    int? maxLengths,
+    bool useStyle3 = true,
+  }) {
+    final h = ScreenUtil().setWidth(useStyle3 ? 120.0 : 88.0);
+    final field = useStyle3
+        ? textFieldStyle3(
+            context,
+            controller: controller,
+            focusNode: focusNode,
+            hintText: hintText,
+            maxLines: 1,
+            maxLengths: maxLengths ?? 30,
+            height: h,
+            errorMessage: errorMsg,
+            onEditingComplete: () =>
+                FocusScope.of(context).requestFocus(nextFocus ?? FocusNode()),
+            onChanged: (_) {},
+          )
+        : textFieldStyle2(
+            context,
+            controller: controller,
+            focusNode: focusNode,
+            hintText: hintText,
+            maxLines: 1,
+            height: h,
+            errorMessage: errorMsg,
+            onEditingComplete: () =>
+                FocusScope.of(context).requestFocus(nextFocus ?? FocusNode()),
+            onChanged: (_) {},
+          );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        LoginTitle(title: title, must: true),
+        SizedBox(height: ScreenUtil().setWidth(10)),
+        field,
+        SizedBox(height: ScreenUtil().setWidth(20)),
+      ],
+    );
   }
-  Future<void> addDefaultChain(String symbol)async{
-    await ref.read(wapBridgeProvider).addWalletChain(allChainUrlMap[symbol]);
-    if (!mounted) return;
-    Navigator.pop(context,true);
-  }
+
   @override
   Widget build(BuildContext context) {
+    final s = S.of(context);
+    final bgColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name);
+
     return Scaffold(
-      backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-      appBar: AppBarWidget(
-        text: S.of(context).g_token_m_key_19,
-      ),
+      backgroundColor: bgColor,
+      appBar: AppBarWidget(text: s.g_token_m_key_19),
       body: SafeArea(
         child: Stack(
           children: [
@@ -244,116 +239,68 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
               child: SingleChildScrollView(
                 padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    LoginTitle(title: S.of(context).g_token_m_key_13,must: true,),
-                    SizedBox(height: ScreenUtil().setWidth(10),),
-                    textFieldStyle3(
-                      context,
+                    _buildField(
+                      title: s.g_token_m_key_13,
                       controller: nameController,
                       focusNode: nameNode,
-                      hintText: S.of(context).g_token_m_key_1(30),
-                      maxLines: 1,
+                      hintText: s.g_token_m_key_1(30),
+                      errorMsg: nameErrorMessage,
+                      nextFocus: symbolNode,
                       maxLengths: 30,
-                      height: ScreenUtil().setWidth(120.0),
-                      errorMessage: nameErrorMessage,
-                      onEditingComplete: (){
-                        FocusScope.of(context).requestFocus(symbolNode);
-                      },
-                      onChanged: (value){
-
-                      }
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(20),),
-                    LoginTitle(title: S.of(context).g_token_m_key_14,must: true,),
-                    SizedBox(height: ScreenUtil().setWidth(10),),
-                    textFieldStyle3(
-                        context,
-                        controller: symbolController,
-                        focusNode: symbolNode,
-                        hintText: S.of(context).g_token_m_key_1(10),
-                        maxLines: 1,
-                        maxLengths: 10,
-                        height: ScreenUtil().setWidth(120.0),
-                        errorMessage: symbolErrorMessage,
-                        onEditingComplete: (){
-                          FocusScope.of(context).requestFocus(chainIdNode);
-                        },
-                        onChanged: (value){
-
-                        }
+                    _buildField(
+                      title: s.g_token_m_key_14,
+                      controller: symbolController,
+                      focusNode: symbolNode,
+                      hintText: s.g_token_m_key_1(10),
+                      errorMsg: symbolErrorMessage,
+                      nextFocus: chainIdNode,
+                      maxLengths: 10,
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(20),),
-                    LoginTitle(title: S.of(context).g_token_m_key_15,must: true,),
-                    SizedBox(height: ScreenUtil().setWidth(10),),
-                    textFieldStyle3(
-                        context,
-                        controller: chainIdController,
-                        focusNode: chainIdNode,
-                        hintText: S.of(context).g_token_m_key_15,
-                        maxLines: 1,
-                        maxLengths: 10,
-                        height: ScreenUtil().setWidth(120.0),
-                        errorMessage: chainIdErrorMessage,
-                        onEditingComplete: (){
-                          FocusScope.of(context).requestFocus(decimalNode);
-                        },
-                        onChanged: (value){
-
-                        }
+                    _buildField(
+                      title: s.g_token_m_key_15,
+                      controller: chainIdController,
+                      focusNode: chainIdNode,
+                      hintText: s.g_token_m_key_15,
+                      errorMsg: chainIdErrorMessage,
+                      nextFocus: decimalNode,
+                      maxLengths: 10,
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(20),),
-                    LoginTitle(title: S.of(context).g_token_m_key_16,must: true,),
-                    SizedBox(height: ScreenUtil().setWidth(10),),
-                    textFieldStyle2(
-                        context,
-                        controller: decimalController,
-                        focusNode: decimalNode,
-                        hintText: S.of(context).g_token_m_key_2,
-                        maxLines: 1,
-                        height: ScreenUtil().setWidth(88.0),
-                        errorMessage: decimalErrorMessage,
-                        onEditingComplete: (){
-                          FocusScope.of(context).requestFocus(rpcNode);
-                        },
-                        onChanged: (value){
-
-                        }
+                    _buildField(
+                      title: s.g_token_m_key_16,
+                      controller: decimalController,
+                      focusNode: decimalNode,
+                      hintText: s.g_token_m_key_2,
+                      errorMsg: decimalErrorMessage,
+                      nextFocus: rpcNode,
+                      useStyle3: false,
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(20),),
-                    LoginTitle(title: S.of(context).g_token_m_key_17,must: true,),
-                    SizedBox(height: ScreenUtil().setWidth(10),),
-                    textFieldStyle2(
-                        context,
-                        controller: rpcController,
-                        focusNode: rpcNode,
-                        hintText: S.of(context).g_token_m_key_17,
-                        maxLines: 1,
-                        height: ScreenUtil().setWidth(88.0),
-                        errorMessage: rpcErrorMessage,
-                        onEditingComplete: (){
-                          FocusScope.of(context).requestFocus(FocusNode());
-                        },
-                        onChanged: (value){
-
-                        }
+                    _buildField(
+                      title: s.g_token_m_key_17,
+                      controller: rpcController,
+                      focusNode: rpcNode,
+                      hintText: s.g_token_m_key_17,
+                      errorMsg: rpcErrorMessage,
+                      nextFocus: null,
+                      useStyle3: false,
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(30),),
-                    if(errorMessage !="")
-                    Container(
-                      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                      alignment: Alignment.center,
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorBgColor.name),
-                      child: Text(
-                        errorMessage,
-                        style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
-                          fontSize: ScreenUtil().setSp(30),
+                    SizedBox(height: ScreenUtil().setWidth(10)),
+                    if (errorMessage.isNotEmpty)
+                      Container(
+                        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                        alignment: Alignment.center,
+                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorBgColor.name),
+                        child: Text(
+                          errorMessage,
+                          style: TextStyle(
+                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+                            fontSize: ScreenUtil().setSp(30),
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: ScreenUtil().setWidth(148),),
+                    SizedBox(height: ScreenUtil().setWidth(148)),
                   ],
                 ),
               ),
@@ -363,23 +310,17 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
               left: 0,
               right: 0,
               child: Container(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+                color: bgColor,
                 child: Column(
                   children: [
-                    Divider(
-                      height: ScreenUtil().setWidth(1),
-                      endIndent: 0,
-                      indent: 0,
-                    ),
+                    Divider(height: ScreenUtil().setWidth(1), endIndent: 0, indent: 0),
                     Container(
                       margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
                       height: ScreenUtil().setWidth(88),
                       child: buttonStyle6(
                         context,
-                        (){
-                          addChain();
-                        },
-                        S.of(context).g_key_159,
+                        addChain,
+                        s.g_key_159,
                         AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
                         AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
                         false,

@@ -27,6 +27,12 @@ mixin BridgeExecutionMixin on ChangeNotifier {
   void _startStatusPolling();
   Future<void> _savePersisted();
 
+  /// 构造错误 MessageModel 并设置内部错误状态
+  MessageModel _errorResult(String message) {
+    _setError(message);
+    return MessageModel.error()..data = _errorMessage;
+  }
+
   /// 执行跨链转账
   ///
   /// 返回交易哈希或错误信息
@@ -43,7 +49,6 @@ mixin BridgeExecutionMixin on ChangeNotifier {
     _clearError();
 
     try {
-      // 获取第一步的交易数据
       final step = _selectedRoute!.steps.first;
       final stepJson = {
         'type': step.type,
@@ -61,17 +66,14 @@ mixin BridgeExecutionMixin on ChangeNotifier {
       };
 
       final txResult = await _lifiApi.getStepTransaction(step: stepJson);
-
       if (txResult.error) {
-        _setError(txResult.data?.toString() ?? 'Failed to get transaction');
-        return MessageModel.error()..data = _errorMessage;
+        return _errorResult(
+            txResult.data?.toString() ?? 'Failed to get transaction');
       }
 
       final txResponse = txResult.data as BridgeTransactionResponse;
-
       if (!txResponse.isSuccess || txResponse.txData == null) {
-        _setError(txResponse.error ?? 'Invalid transaction data');
-        return MessageModel.error()..data = _errorMessage;
+        return _errorResult(txResponse.error ?? 'Invalid transaction data');
       }
 
       // ERC-20 授权检查：原生代币无需授权
@@ -83,15 +85,11 @@ mixin BridgeExecutionMixin on ChangeNotifier {
         _setState(BridgeState.executing);
       }
 
-      // 签名并发送交易
       final txHash = await signAndSend(txResponse.txData!);
-
       if (txHash == null) {
-        _setError('Transaction cancelled or failed');
-        return MessageModel.error()..data = _errorMessage;
+        return _errorResult('Transaction cancelled or failed');
       }
 
-      // 创建交易记录
       final transaction = BridgeTransaction(
         txHash: txHash,
         fromChainId: _fromChain!.chainId,
@@ -110,19 +108,14 @@ mixin BridgeExecutionMixin on ChangeNotifier {
       _transactions.insert(0, transaction);
       _pendingTxHashes.add(transaction.txHash);
       _setState(BridgeState.completed);
-
-      // 持久化新交易记录
       unawaited(_savePersisted());
-
-      // 启动后台轮询，每 10s 检查一次交易状态，超时 10 分钟后停止
       _startStatusPolling();
 
       return MessageModel()
         ..error = false
         ..data = txHash;
     } catch (e) {
-      _setError(e.toString());
-      return MessageModel.error()..data = _errorMessage;
+      return _errorResult(e.toString());
     }
   }
 
@@ -208,6 +201,11 @@ mixin BridgeExecutionMixin on ChangeNotifier {
     return BigInt.tryParse(raw) ?? BigInt.zero;
   }
 
+  /// 判断交易状态是否为终态（完成或失败）
+  bool _isTerminalStatus(BridgeTransactionStatus status) =>
+      status == BridgeTransactionStatus.completed ||
+      status == BridgeTransactionStatus.failed;
+
   /// 检查单笔交易状态，更新记录并在终态时触发回调+持久化
   Future<void> checkTransactionStatus(BridgeTransaction transaction) async {
     final result = await _lifiApi.getStatus(
@@ -216,49 +214,42 @@ mixin BridgeExecutionMixin on ChangeNotifier {
       toChainId: transaction.toChainId,
       bridge: transaction.bridgeTool ?? '',
     );
+    if (result.error) return;
 
-    if (!result.error) {
-      final statusResp = result.data as BridgeStatusResponse;
-      final index = _transactions.indexWhere((t) => t.txHash == transaction.txHash);
+    final statusResp = result.data as BridgeStatusResponse;
+    final index =
+        _transactions.indexWhere((t) => t.txHash == transaction.txHash);
+    if (index < 0) return;
 
-      if (index >= 0) {
-        final oldStatus = _transactions[index].status;
-        final newStatus = statusResp.status;
+    final oldStatus = _transactions[index].status;
+    final newStatus = statusResp.status;
 
-        final updated = BridgeTransaction(
-          txHash: transaction.txHash,
-          fromChainId: transaction.fromChainId,
-          toChainId: transaction.toChainId,
-          fromToken: transaction.fromToken,
-          toToken: transaction.toToken,
-          fromAmount: transaction.fromAmount,
-          toAmount: transaction.toAmount,
-          fromAddress: transaction.fromAddress,
-          toAddress: transaction.toAddress,
-          status: newStatus,
-          createdAt: transaction.createdAt,
-          bridgeTool: transaction.bridgeTool,
-          destinationTxHash: statusResp.destinationTxHash,
-        );
-        _transactions[index] = updated;
+    final updated = BridgeTransaction(
+      txHash: transaction.txHash,
+      fromChainId: transaction.fromChainId,
+      toChainId: transaction.toChainId,
+      fromToken: transaction.fromToken,
+      toToken: transaction.toToken,
+      fromAmount: transaction.fromAmount,
+      toAmount: transaction.toAmount,
+      fromAddress: transaction.fromAddress,
+      toAddress: transaction.toAddress,
+      status: newStatus,
+      createdAt: transaction.createdAt,
+      bridgeTool: transaction.bridgeTool,
+      destinationTxHash: statusResp.destinationTxHash,
+    );
+    _transactions[index] = updated;
 
-        final isTerminal = newStatus == BridgeTransactionStatus.completed ||
-            newStatus == BridgeTransactionStatus.failed;
-
-        if (isTerminal) {
-          _pendingTxHashes.remove(transaction.txHash);
-          // 终态才持久化（避免频繁写盘）
-          unawaited(_savePersisted());
-        }
-
-        // 状态真正发生变化且到达终态时通知 UI（如发送通知）
-        if (newStatus != oldStatus && isTerminal) {
-          onStatusChanged?.call(updated, newStatus);
-        }
-
-        notifyListeners();
+    if (_isTerminalStatus(newStatus)) {
+      _pendingTxHashes.remove(transaction.txHash);
+      unawaited(_savePersisted());
+      if (newStatus != oldStatus) {
+        onStatusChanged?.call(updated, newStatus);
       }
     }
+
+    notifyListeners();
   }
 
   /// 主动刷新所有 pending/inProgress 交易状态（供下拉刷新使用）
