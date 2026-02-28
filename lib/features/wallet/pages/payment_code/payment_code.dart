@@ -10,140 +10,151 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class PaymentCode extends StatefulWidget {
-  final Map<String,String>? amount;
-  const PaymentCode({this.amount,super.key});
+  final Map<String, String>? amount;
+  const PaymentCode({this.amount, super.key});
 
   @override
   State<PaymentCode> createState() => _PaymentCodeState();
 }
 
 class _PaymentCodeState extends State<PaymentCode> {
-  Map<String,String>? amount;
+  Map<String, String>? amount;
+
   @override
   void initState() {
-    amount=widget.amount;
     super.initState();
+    amount = widget.amount;
   }
+
+  String _buildQrData() {
+    final base = AppConfig.apiUrl['walletamazeBrowser'] ?? '';
+    final amt = amount?['amount'] ?? '';
+    final coinType = amount?['coinType'] ?? '';
+    final address = amount?['address'] ?? '';
+    final uuid = AppGlobals.userInfo?.uuid ?? '';
+    return '$base?type=payment&amount=$amt&coinType=$coinType&address=$address&user=$uuid';
+  }
+
+  Color _color(String key) =>
+      AppThemeUtils.getColorByKey(context, key);
+
   @override
   Widget build(BuildContext context) {
+    final su = ScreenUtil();
+    final bgColor = _color(AppThemeKeys.rightTextColor.name);
+    final whiteColor = _color(AppThemeKeys.mainWhiteColor.name);
+    final blockColor = _color(AppThemeKeys.mainBlockColor.name);
+
     return Scaffold(
-      backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.rightTextColor.name),
+      backgroundColor: bgColor,
       appBar: AppBarWidget(
-        backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.rightTextColor.name),
+        backgroundColor: bgColor,
         text: S.of(context).g_key_payment_code_title,
         style: TextStyle(
           fontWeight: FontWeight.normal,
-          fontSize: ScreenUtil().setSp(32.0),
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
+          fontSize: su.setSp(32.0),
+          color: whiteColor,
         ),
         actions: [
           TextButton(
-            onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentHistory()));
-            },
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => PaymentHistory()),
+            ),
             child: Text(
               S.of(context).g_key_payment_history_btn,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
-                fontSize: ScreenUtil().setSp(30.0),
-              ),
+              style: TextStyle(color: whiteColor, fontSize: su.setSp(30.0)),
             ),
           ),
         ],
       ),
       body: SafeArea(
-        child: Container(
-          height: double.infinity,
-          width: double.infinity,
-          padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                decoration: BoxDecoration(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-                ),
-                child: Column(
-                  children: [
-                    if((AppGlobals.userInfo?.name??"") !="")
-                    Container(
-                      padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(30)),
-                      alignment: Alignment.center,
-                      child: Text(
-                        AppGlobals.userInfo?.name ?? S.of(context).g_key_payment_name_not_set,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(30),
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlockColor.name),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    if(amount !=null)
-                      Container(
-                        padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(30)),
-                        alignment: Alignment.center,
-                        child: Text(
-                          "\$ ${amount?["amount"]??""}",
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(50),
-                            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlockColor.name),
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    Container(
-                      width: 300,
-                      height: 300,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(40.0)),
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
-                      ),
-                      clipBehavior: Clip.hardEdge,
-                      child: QrImageView(
-                        padding: EdgeInsets.all(20.0),
-                        backgroundColor: const Color(0xffffffff),
-                        data: "${AppConfig.apiUrl['walletamazeBrowser']}?type=payment&amount=${amount?['amount']??""}&coinType=${amount?['coinType']??""}&address=${amount?['address']??""}&user=${AppGlobals.userInfo?.uuid??""}",
-                        version: QrVersions.min + 7,
-                        embeddedImage:Image.network("${AppConfig.apiUrl['walletamazeBrowser']}/static/ast.png").image,
-                        embeddedImageStyle: QrEmbeddedImageStyle(
-                          size: Size(ScreenUtil().setWidth(80.0), ScreenUtil().setWidth(80.0)),
-                        ),
-                      ),
-                    ),
-                    Divider(
-                      height: ScreenUtil().setWidth(60),
-                      indent: 0,
-                      endIndent: 0,
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
-                    ),
-                    TextButton(
-                      onPressed: ()async{
-                        Map<String,String>? rAmount=await Navigator.push(context, MaterialPageRoute(builder: (context)=>SetAmount(type: 1,amount: amount,)));
-                        if(rAmount !=null){
-                          setState(() {
-                            amount=rAmount;
-                          });
-                        }
-                      },
-                      child: Text(
-                        S.of(context).g_key_payment_set_amount_title,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(32),
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-              ),
-            ],
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.all(su.setWidth(30)),
+            child: _buildQrCard(su, whiteColor, blockColor),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildQrCard(ScreenUtil su, Color whiteColor, Color blockColor) {
+    final userName = AppGlobals.userInfo?.name ?? '';
+    return Container(
+      padding: EdgeInsets.all(su.setWidth(30)),
+      decoration: BoxDecoration(
+        color: whiteColor,
+        borderRadius: BorderRadius.circular(su.setWidth(16)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (userName.isNotEmpty)
+            Padding(
+              padding: EdgeInsets.only(bottom: su.setWidth(30)),
+              child: Text(
+                userName,
+                style: TextStyle(
+                  fontSize: su.setSp(30),
+                  color: blockColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          if (amount != null)
+            Padding(
+              padding: EdgeInsets.only(bottom: su.setWidth(30)),
+              child: Text(
+                "\$ ${amount?["amount"] ?? ""}",
+                style: TextStyle(fontSize: su.setSp(50), color: blockColor),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          Container(
+            width: 300,
+            height: 300,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(su.setWidth(40.0)),
+              color: whiteColor,
+            ),
+            clipBehavior: Clip.hardEdge,
+            child: QrImageView(
+              padding: const EdgeInsets.all(20.0),
+              backgroundColor: const Color(0xffffffff),
+              data: _buildQrData(),
+              version: QrVersions.min + 7,
+              embeddedImage: Image.network(
+                "${AppConfig.apiUrl['walletamazeBrowser']}/static/ast.png",
+              ).image,
+              embeddedImageStyle: QrEmbeddedImageStyle(
+                size: Size(su.setWidth(80.0), su.setWidth(80.0)),
+              ),
+            ),
+          ),
+          Divider(
+            height: su.setWidth(60),
+            color: _color(AppThemeKeys.dividerColor.name),
+          ),
+          TextButton(
+            onPressed: () async {
+              final rAmount = await Navigator.push<Map<String, String>>(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => SetAmount(type: 1, amount: amount),
+                ),
+              );
+              if (rAmount != null) setState(() => amount = rAmount);
+            },
+            child: Text(
+              S.of(context).g_key_payment_set_amount_title,
+              style: TextStyle(
+                fontSize: su.setSp(32),
+                color: _color(AppThemeKeys.mainBlueColor.name),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

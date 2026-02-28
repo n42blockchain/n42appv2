@@ -61,21 +61,22 @@ class _WalletChainSendFilState extends ConsumerState<WalletChainSendFil>
   }
 
   Widget coinTypeWidget() {
-    final List<Widget> cChildren = [
-      RecentAddressBar(
-        coinType: widget.coinModel.coin['coinType'] ?? '',
-        onSelected: (addr) {
-          toTextEditingController.text = addr;
-          toAddressCheck(addr);
-        },
-      ),
-      toWidget(),
-      amountWidget(),
-      minerFeeWidget(),
-      errorMessageWidget(),
-      const SizedBox(height: 100),
-    ];
-    return Column(children: cChildren);
+    return Column(
+      children: [
+        RecentAddressBar(
+          coinType: widget.coinModel.coin['coinType'] ?? '',
+          onSelected: (addr) {
+            toTextEditingController.text = addr;
+            toAddressCheck(addr);
+          },
+        ),
+        toWidget(),
+        amountWidget(),
+        minerFeeWidget(),
+        errorMessageWidget(),
+        const SizedBox(height: 100),
+      ],
+    );
   }
 
   @override
@@ -85,19 +86,16 @@ class _WalletChainSendFilState extends ConsumerState<WalletChainSendFil>
         text: "${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}",
         actions: [
           InkWell(
-            onTap: () {
-              Navigator.push(
+            onTap: () async {
+              final value = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AddressBookList(
+                  builder: (_) => AddressBookList(
                     coinName: widget.coinModel.coin['coinType'],
                   ),
                 ),
-              ).then((value) async {
-                if (value != null) {
-                  toTextEditingController.text = value;
-                }
-              });
+              );
+              if (value != null) toTextEditingController.text = value;
             },
             child: Container(
               width: ScreenUtil().setWidth(40.0),

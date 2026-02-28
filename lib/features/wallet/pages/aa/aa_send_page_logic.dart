@@ -1,10 +1,6 @@
 part of 'aa_send_page.dart';
 
 /// State fields and business logic mixin for [_AASendPageState].
-///
-/// Holds all mutable state, controllers, and business logic methods.
-/// Applied before [_AASendWidgetsMixin] in the with-clause so that
-/// widget builders can access state and logic directly.
 mixin _AASendLogicMixin on State<AASendPage> {
   final TextEditingController toController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
@@ -26,21 +22,18 @@ mixin _AASendLogicMixin on State<AASendPage> {
     amountFocusNode.dispose();
   }
 
-  /// 将 chainId 转换为链符号
-  String _chainSymbol() {
-    final entry = AAConfig.chainIds.entries.firstWhere(
-      (e) => e.value == widget.account.chainId,
-      orElse: () => const MapEntry('ETH', 1),
-    );
-    return entry.key;
-  }
+  String _chainSymbol() => AAConfig.chainIds.entries
+      .firstWhere(
+        (e) => e.value == widget.account.chainId,
+        orElse: () => const MapEntry('ETH', 1),
+      )
+      .key;
 
-  /// 构建 ETH 转账的 callData
   Uint8List _buildCallData() {
     final toAddress = toController.text.trim();
-    final amountText = amountController.text.trim();
-    final amountEth = double.tryParse(amountText) ?? 0.0;
-    final amountWei = BigInt.from((amountEth * 1e18).toInt());
+    final amountWei = BigInt.from(
+      ((double.tryParse(amountController.text.trim()) ?? 0.0) * 1e18).toInt(),
+    );
     return CalldataBuilder.buildExecute(
       target: toAddress.isEmpty
           ? '0x0000000000000000000000000000000000000000'
@@ -55,8 +48,7 @@ mixin _AASendLogicMixin on State<AASendPage> {
 
     setState(() => isEstimating = true);
 
-    // 默认 gas 价格（20 Gwei baseFee + 2 Gwei priority）
-    const defaultMaxFeePerGas = 22 * 1000000000; // 22 Gwei
+    const defaultMaxFeePerGas = 22 * 1000000000;
     try {
       final chainSymbol = _chainSymbol();
       final bundler = BundlerClient.forChain(chainSymbol);
@@ -77,7 +69,6 @@ mixin _AASendLogicMixin on State<AASendPage> {
       });
     } catch (e) {
       if (!mounted) return;
-      // 估算失败时使用保守默认值，发送按钮仍可用
       setState(() {
         estimatedGas = BigInt.from(150000);
         maxFeePerGas = BigInt.from(defaultMaxFeePerGas);
@@ -90,17 +81,16 @@ mixin _AASendLogicMixin on State<AASendPage> {
     }
   }
 
-  void selectPaymaster() async {
+  Future<void> selectPaymaster() async {
     final result = await Navigator.push<PaymasterOption>(
       context,
       MaterialPageRoute(
-        builder: (context) => PaymasterSelectPage(
+        builder: (_) => PaymasterSelectPage(
           currentOption: selectedPaymaster,
           chainId: widget.account.chainId,
         ),
       ),
     );
-
     if (result != null) {
       setState(() => selectedPaymaster = result);
       estimateGas();
@@ -134,7 +124,6 @@ mixin _AASendLogicMixin on State<AASendPage> {
   Future<void> _sendTransaction() async {
     setState(() => isSending = true);
 
-    // 模拟发送交易
     await Future.delayed(const Duration(seconds: 2));
 
     if (mounted) {

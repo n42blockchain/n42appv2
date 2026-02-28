@@ -18,112 +18,87 @@ part 'create_finish_content.dart';
 
 class CreateFinish extends ConsumerStatefulWidget {
   final WalletInfo? wInfo;
-  final String createMetod;//Create,Import,PrivateKey
-  const CreateFinish({this.wInfo,this.createMetod="Create",super.key});
+  final String createMetod;
+  const CreateFinish({this.wInfo, this.createMetod = "Create", super.key});
 
   @override
   ConsumerState<CreateFinish> createState() => _CreateFinishState();
 }
 
-class _CreateFinishState extends ConsumerState<CreateFinish> with _CreateFinishContentMixin {
+class _CreateFinishState extends ConsumerState<CreateFinish>
+    with _CreateFinishContentMixin {
   @override
-  Load load=Load.loading;
+  Load load = Load.loading;
   @override
-  bool exportKeystore=false;
-  //bool isSelectedUserProtocol = false;
+  bool exportKeystore = false;
   @override
-  String pageName="/CreateOne";
+  String pageName = "/CreateOne";
   WalletInfo? _wInfo;
 
-  Future<bool> _pageBack(){
-    if(Navigator.canPop(context)){
-      if(load==Load.finish){
-        //eventBus.fire(EventPublic(EventPublicType.finishPage));
-        Navigator.popUntil(context,ModalRoute.withName(pageName));
+  Future<bool> _pageBack() {
+    if (Navigator.canPop(context)) {
+      if (load == Load.finish) {
+        Navigator.popUntil(context, ModalRoute.withName(pageName));
       }
       return Future.value(false);
-    }else{
-      SystemNavigator.pop();
     }
+    SystemNavigator.pop();
     return Future.value(false);
   }
-  Future<void> createWallet()async{
-    _wInfo=widget.wInfo;
-    final walletActionProvider =ref.read(wapBridgeProvider);
-    if(_wInfo==null){
-      _wInfo=WalletInfo(
+
+  Future<void> createWallet() async {
+    _wInfo = widget.wInfo;
+    final walletActionProvider = ref.read(wapBridgeProvider);
+
+    if (_wInfo == null) {
+      _wInfo = WalletInfo(
         walletName: "",
         password: "",
         walletUuid: walletActionProvider.userUUID,
       );
-      _wInfo!.mnemonic= await Trustdart().generateMnemonic();
+      _wInfo!.mnemonic = await Trustdart().generateMnemonic();
     }
-    //String walletName="Account${walletActionProvider.walletMap.length}";
-    if(_wInfo!.walletName==""){
-      _wInfo!.walletName="Account${walletActionProvider.walletInfoLsit.length+1}";
+
+    if (_wInfo!.walletName == "") {
+      _wInfo!.walletName =
+          "Account${walletActionProvider.walletInfoLsit.length + 1}";
     }
-    if(_wInfo!.coinInfo==null){
-      _wInfo!.coinInfo = chainUrlMap;
-    }
-    //根据导入时间设置时间戳 标记钱包的唯一标识
+    _wInfo!.coinInfo ??= chainUrlMap;
     _wInfo!.timestamp = "${DateTime.now().millisecondsSinceEpoch}";
 
-    ///生成钱包
     int code = -1;
     try {
-      setState(() {
-        load=Load.loading;
-      });
-      //await Future.delayed(const Duration(microseconds: 600), () {});
-      if(widget.createMetod=="Import"){
-        code = await walletActionProvider.checkWalletMnemonic(_wInfo!);
-      }else{
-        code=0;
-      }
+      setState(() => load = Load.loading);
+
+      code = widget.createMetod == "Import"
+          ? await walletActionProvider.checkWalletMnemonic(_wInfo!)
+          : 0;
 
       if (code == 0) {
-        //本地安全存储助记词
-        //await info.saveMnemonicToStorage();
-
-        ///更新一下provider中的数据
         await walletActionProvider.addWalletInfo(_wInfo!);
-        //walletActionProvider.addDefaultToken();
-        //刷新一下首页的nft 和wallet 数据
-        //walletActionProvider.notifyWalletState(true);
-        ///创建成功
-        //ToastUtils.showFtToast(child: successView('Success'));
-        //eventBus.fire(EventPublic(EventPublicType.finishPage));
-
-        //埋点用户导入钱包
-        //AmplitudeUtils.walletActive(WalletStatus.imported);
       } else {
-        //Provider.of<WalletActionProvider>(context, listen: false).deleteWalletInfo();
-        //失败
-        //AmplitudeUtils.walletActive(WalletStatus.missing);
         debugPrint("create wallet err: ");
-        ToastUtils.showFtToast(
-            child: createWalletErrView('error'));
+        ToastUtils.showFtToast(child: createWalletErrView('error'));
       }
     } catch (err) {
       ToastUtils.show(err.toString());
-      debugPrint("create wallet err: ${err.toString()}");
+      debugPrint("create wallet err: $err");
     } finally {
-      setState(() {
-        load=Load.finish;
-      });
+      setState(() => load = Load.finish);
     }
   }
+
   @override
   void initState() {
     super.initState();
-    _wInfo = _wInfo;
-    if(widget.createMetod=="Import"){
-      pageName="/ImportOne";
-    }else if(widget.createMetod=="PrivateKey"){
-      pageName="/ImportPrivatekey";
-    }
+    pageName = switch (widget.createMetod) {
+      "Import" => "/ImportOne",
+      "PrivateKey" => "/ImportPrivatekey",
+      _ => pageName,
+    };
     createWallet();
   }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -133,20 +108,20 @@ class _CreateFinishState extends ConsumerState<CreateFinish> with _CreateFinishC
         _pageBack();
       },
       child: Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-        actions: [
-          SizedBox(width: ScreenUtil().setWidth(130.0),),
-        ],
-        leadingWidth: ScreenUtil().setWidth(130.0),
-        leading: SizedBox(),
-        title: _buildProgressIndicator(),
+        appBar: AppBar(
+          backgroundColor: AppThemeUtils.getColorByKey(
+              context, AppThemeKeys.backGroundColor.name),
+          actions: [SizedBox(width: ScreenUtil().setWidth(130.0))],
+          leadingWidth: ScreenUtil().setWidth(130.0),
+          leading: const SizedBox(),
+          title: _buildProgressIndicator(),
+        ),
+        body: SafeArea(
+          child: exportKeystore
+              ? _buildExportKeystoreContent()
+              : _buildMainContent(),
+        ),
       ),
-      body: SafeArea(
-        child: exportKeystore?
-        _buildExportKeystoreContent():
-        _buildMainContent(),
-      ),
-    ));
+    );
   }
 }

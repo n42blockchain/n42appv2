@@ -226,9 +226,7 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     }
   }
 
-  bool signTxCheck() {
-    return true;
-  }
+  bool signTxCheck() => true;
 
   Future<bool?> estimateGasEthLocal() async {
     closeKeyboard();
@@ -269,16 +267,14 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     }
   }
 
-  void scanQR() async {
-    final String? scanValue = await Navigator.push(
+  Future<void> scanQR() async {
+    final scanValue = await Navigator.push<String>(
       context,
-      MaterialPageRoute(builder: (context) => ScanPage()),
+      MaterialPageRoute(builder: (_) => ScanPage()),
     );
-    if (!mounted) return;
-    if (scanValue != null) {
-      toTextEditingController.text = scanValue;
-      toAddressCheck(scanValue);
-    }
+    if (!mounted || scanValue == null) return;
+    toTextEditingController.text = scanValue;
+    toAddressCheck(scanValue);
   }
 
   Future<void> maxTag() async {

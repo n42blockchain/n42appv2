@@ -1,9 +1,6 @@
 part of 'wallet_chain_send_ton.dart';
 
 /// Business logic mixin for [_WalletChainSendTonState].
-///
-/// Declares all shared state fields and contains initialization, balance
-/// loading, gas fetching, input validation, and transaction submission.
 mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
   CoinModel? chainModel;
 
@@ -29,12 +26,10 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
   BigInt gasPriceEth = BigInt.zero;
   BigInt gas = BigInt.zero;
   BigInt gasEth = BigInt.zero;
-  BigInt transferValue = BigInt.zero; // 转账金额
+  BigInt transferValue = BigInt.zero;
 
   Load load = Load.loading;
   Load gasLimitLoad = Load.finish;
-
-  // ── Coin property helpers ─────────────────────────────────────────────
 
   Map<String, dynamic> get _coin => widget.coinModel.coin;
   String get _coinType => _coin['coinType'] as String;
@@ -49,8 +44,6 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
   static const _noLatestCoinTypes = {
     'OKT', 'MTR', 'METIS', 'VIC', 'BOBA', 'OP', 'GO',
   };
-
-  // ── Initialization ────────────────────────────────────────────────────
 
   Future<void> initData() async {
     if (_isContract) {

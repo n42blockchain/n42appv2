@@ -83,7 +83,6 @@ class _WalletChainSendTonState extends ConsumerState<WalletChainSendTon>
     );
   }
 
-  // 提交按钮
   Widget sendButtonWidget() {
     final String title = S.of(context).g_key_48;
     final bool isLoading = load == Load.loading;
@@ -106,9 +105,7 @@ class _WalletChainSendTonState extends ConsumerState<WalletChainSendTon>
                 context, AppThemeKeys.backGroundColor.name),
             child: buttonStyle6(
               context,
-              () async {
-                sendTransaction();
-              },
+              sendTransaction,
               isLoading ? '${S.of(context).g_key_106}...' : title,
               AppThemeUtils.getColorByKey(
                 context,
