@@ -5,6 +5,11 @@ import 'package:n42_wallet/features/widgets/line_chart.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
+// ── Shared theme helper ──────────────────────────────────────────────────
+
+Color _dexColor(BuildContext context, AppThemeKeys key) =>
+    AppThemeUtils.getColorByKey(context, key.name);
+
 // ── Chain selector ─────────────────────────────────────────────────────────
 
 /// Horizontal chip row for selecting the active DEX chain.
@@ -20,24 +25,23 @@ class DexChainChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final btnBg = _dexColor(context, AppThemeKeys.mainButtonBgColor);
+    final itemBg = _dexColor(context, AppThemeKeys.itemBgColor);
+    final btnText = _dexColor(context, AppThemeKeys.mainButtonTextColor);
+    final mainText = _dexColor(context, AppThemeKeys.mainTextColor);
+
     return Wrap(
       spacing: ScreenUtil().setWidth(12),
       runSpacing: ScreenUtil().setWidth(8),
       children: kDexSupportedChains.map((c) {
-        final bool selected = c['value'] == selectedChain;
+        final selected = c['value'] == selectedChain;
         return ChoiceChip(
           label: Text(c['label']!),
           selected: selected,
-          selectedColor: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainButtonBgColor.name),
-          backgroundColor: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemBgColor.name),
+          selectedColor: btnBg,
+          backgroundColor: itemBg,
           labelStyle: TextStyle(
-            color: selected
-                ? AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainButtonTextColor.name)
-                : AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+            color: selected ? btnText : mainText,
             fontSize: ScreenUtil().setSp(24),
           ),
           onSelected: (_) => onChainChanged(c['value']!),
@@ -64,16 +68,18 @@ class DexSlippageRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final s = S.of(context);
+    final btnBg = _dexColor(context, AppThemeKeys.mainButtonBgColor);
+    final itemBg = _dexColor(context, AppThemeKeys.itemBgColor);
+    final btnText = _dexColor(context, AppThemeKeys.mainButtonTextColor);
+    final mainText = _dexColor(context, AppThemeKeys.mainTextColor);
+    final divider = _dexColor(context, AppThemeKeys.dividerColor);
+    final subText = _dexColor(context, AppThemeKeys.itemSubtitleTextColor);
+
     return Row(
       children: [
         Text(
-          s.g_key_dex_slippage_label,
-          style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name),
-            fontSize: ScreenUtil().setSp(24),
-          ),
+          S.of(context).g_key_dex_slippage_label,
+          style: TextStyle(color: subText, fontSize: ScreenUtil().setSp(24)),
         ),
         SizedBox(width: ScreenUtil().setWidth(16)),
         ...slippageOptions.map((bps) {
@@ -87,29 +93,14 @@ class DexSlippageRow extends StatelessWidget {
                 vertical: ScreenUtil().setWidth(6),
               ),
               decoration: BoxDecoration(
-                color: selected
-                    ? AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainButtonBgColor.name)
-                    : AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemBgColor.name),
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(6)),
-                border: Border.all(
-                  color: selected
-                      ? AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainButtonBgColor.name)
-                      : AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.dividerColor.name),
-                ),
+                color: selected ? btnBg : itemBg,
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+                border: Border.all(color: selected ? btnBg : divider),
               ),
               child: Text(
                 '${(bps / 100).toStringAsFixed(bps % 100 == 0 ? 0 : 1)}%',
                 style: TextStyle(
-                  color: selected
-                      ? AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainButtonTextColor.name)
-                      : AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
+                  color: selected ? btnText : mainText,
                   fontSize: ScreenUtil().setSp(22),
                   fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
                 ),
@@ -138,14 +129,12 @@ class DexSwapArrow extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
           decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainButtonBgColor.name),
+            color: _dexColor(context, AppThemeKeys.mainButtonBgColor),
             shape: BoxShape.circle,
           ),
           child: Icon(
             Icons.swap_vert,
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainButtonTextColor.name),
+            color: _dexColor(context, AppThemeKeys.mainButtonTextColor),
             size: ScreenUtil().setWidth(36),
           ),
         ),
@@ -167,15 +156,13 @@ class DexErrorBanner extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorBgColor.name),
+        color: _dexColor(context, AppThemeKeys.errorBgColor),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
       ),
       child: Text(
         message,
         style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.errorTextColor.name),
+          color: _dexColor(context, AppThemeKeys.errorTextColor),
           fontSize: ScreenUtil().setSp(26),
         ),
         textAlign: TextAlign.center,
@@ -212,18 +199,14 @@ class DexPriceChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
-    final blueColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final subText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final mainText =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final blueColor = _dexColor(context, AppThemeKeys.mainBlueColor);
+    final subText = _dexColor(context, AppThemeKeys.itemSubtitleTextColor);
+    final mainText = _dexColor(context, AppThemeKeys.mainTextColor);
 
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor4.name),
+        color: _dexColor(context, AppThemeKeys.itemBgColor4),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
       ),
       child: Column(
@@ -361,6 +344,10 @@ class DexAppBarActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final blue = _dexColor(context, AppThemeKeys.mainBlueColor);
+    final sub = _dexColor(context, AppThemeKeys.itemSubtitleTextColor);
+    final iconSize = ScreenUtil().setWidth(48);
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -370,12 +357,8 @@ class DexAppBarActions extends StatelessWidget {
             margin: EdgeInsets.only(right: ScreenUtil().setWidth(16)),
             child: Icon(
               Icons.show_chart_rounded,
-              color: showChart
-                  ? AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name)
-                  : AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
-              size: ScreenUtil().setWidth(48),
+              color: showChart ? blue : sub,
+              size: iconSize,
             ),
           ),
         ),
@@ -383,12 +366,7 @@ class DexAppBarActions extends StatelessWidget {
           onTap: onOpenHistory,
           child: Container(
             margin: EdgeInsets.only(right: ScreenUtil().setWidth(30)),
-            child: Icon(
-              Icons.history,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
-              size: ScreenUtil().setWidth(48),
-            ),
+            child: Icon(Icons.history, color: blue, size: iconSize),
           ),
         ),
       ],

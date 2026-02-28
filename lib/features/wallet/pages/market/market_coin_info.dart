@@ -30,45 +30,35 @@ class MarketCoinInfo extends ConsumerStatefulWidget {
 }
 
 class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
-  // ─── formatters ────────────────────────────────────────────────────────────
   final _regular = Regular();
-
-  // ─── live coin data ────────────────────────────────────────────────────────
   late Map<String, dynamic> _coin;
   double _priceChange24h = 0.0;
-
-  // ─── gecko coin info ───────────────────────────────────────────────────────
   Map<String, dynamic>? _coinInfo;
   Load _infoLoad = Load.loading;
 
-  // ─── social links (parsed once after info arrives) ─────────────────────────
-  String       _website  = '';
+  // Social links (parsed once after info arrives)
+  String _website = '';
   List<String> _browsers = [];
-  String?      _reddit;
-  String?      _twitter;
-  String?      _facebook;
+  String? _reddit;
+  String? _twitter;
+  String? _facebook;
   final String _lang = 'en';
 
-  // ─── cached market metrics ─────────────────────────────────────────────────
+  // Cached market metrics
   double _high24h = 0, _low24h = 0, _fdv = 0;
   double _ath = 0, _atl = 0;
   double _pct7d = 0, _pct30d = 0, _liquidityScore = 0;
-  int    _rank = 0;
+  int _rank = 0;
 
-  // ─── chart state ──────────────────────────────────────────────────────────
-  int             _periodIndex = 0;
-  List<OhlcPoint> _ohlcvData   = [];
-  List<double>    _volumeData  = [];
-  bool _chartLoading  = false;
-  int  _chartGeneration = 0; // stale-response cancellation counter
+  // Chart state
+  int _periodIndex = 0;
+  List<OhlcPoint> _ohlcvData = [];
+  List<double> _volumeData = [];
+  bool _chartLoading = false;
+  int _chartGeneration = 0;
 
-  // ─── price alert state ────────────────────────────────────────────────────
   CoinPriceAlertConfig? _alertConfig;
-
-  // ─── portfolio P&L state ──────────────────────────────────────────────────
   List<PortfolioTrade> _trades = [];
-
-  // ─── lifecycle ─────────────────────────────────────────────────────────────
 
   @override
   void initState() {
@@ -91,13 +81,9 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
     super.dispose();
   }
 
-  // ─── coin field helpers ─────────────────────────────────────────────────────
-
   String get _coinId => (_coin['coin_gecko_id'] ?? '').toString().trim();
   String get _coinSymbol => (_coin['coin'] ?? '').toString().trim();
   String get _coinName => (_coin['name'] ?? '').toString().trim();
-
-  // ─── data fetching ─────────────────────────────────────────────────────────
 
   Future<void> _loadAlertConfig() async {
     if (_coinId.isEmpty) return;
@@ -213,8 +199,6 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
     _fetchChartData();
   }
 
-  // ─── data helpers ──────────────────────────────────────────────────────────
-
   void _parseSocialLinks() {
     final links = _coinInfo?['links'];
     if (links is! Map) return;
@@ -256,15 +240,13 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
     _pct30d         = toDouble(_marketData?['price_change_percentage_30d']);
     _liquidityScore = toDouble(_coinInfo?['liquidity_score']);
 
-    // 将 market_data 里的市值/成交量/供应量回填到 _coin，供市场统计卡使用
     final md = _marketData;
     if (md != null) {
-      _coin['market_cap']         = _marketDouble('market_cap');
-      _coin['volume_24h']         = _marketDouble('total_volume');
-      _coin['total_supply']       = toDouble(md['total_supply']);
+      _coin['market_cap'] = _marketDouble('market_cap');
+      _coin['volume_24h'] = _marketDouble('total_volume');
+      _coin['total_supply'] = toDouble(md['total_supply']);
       _coin['circulating_supply'] = toDouble(md['circulating_supply']);
 
-      // 提取 7 日 sparkline 作为图表兜底数据
       final sparkline = md['sparkline_7d'];
       if (sparkline is Map) {
         final prices = sparkline['price'];
@@ -275,14 +257,11 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
     }
   }
 
-  /// Convenience accessor — avoids repeating the null + type guard everywhere.
   Map? get _marketData {
     final md = _coinInfo?['market_data'];
     return md is Map ? md : null;
   }
 
-  /// Reads a market_data value that may be currency-indexed (`{usd: x}`)
-  /// or a plain number.
   double _marketDouble(String key, [String currency = 'usd']) {
     final node = _marketData?[key];
     if (node is Map) return toDouble(node[currency]);
@@ -296,8 +275,6 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
       MaterialPageRoute(builder: (_) => BrowserPage(url)),
     );
   }
-
-  // ─── build ─────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {

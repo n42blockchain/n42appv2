@@ -72,7 +72,6 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Bug 2 fix: was g_key_17 (wrong key), now g_key_aa_select_chain
         _buildSectionTitle(S.of(context).g_key_aa_select_chain),
         SizedBox(height: 12.w),
         Wrap(
@@ -111,8 +110,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
   }
 
   Widget _buildTypeSelector() {
-    // Bug 3 fix: added biconomy to the type list
-    final types = [
+    const types = [
       SmartAccountType.simpleAccount,
       SmartAccountType.safe,
       SmartAccountType.biconomy,
@@ -131,7 +129,6 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
 
   Widget _buildTypeOption(SmartAccountType type) {
     final isSelected = selectedType == type;
-    // Bug 4 fix: SimpleAccount, Safe, Biconomy are all available; Kernel is coming soon
     final isAvailable = type == SmartAccountType.simpleAccount ||
         type == SmartAccountType.safe ||
         type == SmartAccountType.biconomy;

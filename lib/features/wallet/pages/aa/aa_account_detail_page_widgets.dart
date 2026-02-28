@@ -71,8 +71,6 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
             ],
           ),
           SizedBox(height: ScreenUtil().setWidth(20)),
-
-          // 地址
           Container(
             padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
             decoration: BoxDecoration(
@@ -317,15 +315,12 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                 ),
               ),
               TextButton(
-                onPressed: () {
-                  // 查看全部交易
-                },
+                onPressed: () {},
                 child: Text(S.of(context).g_key_aa_view_all),
               ),
             ],
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
-          // 空状态
           Center(
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(24)),

@@ -8,15 +8,11 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
   set exportKeystore(bool value);
   String get pageName;
 
-  // ── 辅助：判断是否为导入模式 ────────────────────────────────────────────────
   bool get _isImport =>
       widget.createMetod == "Import" || widget.createMetod == "PrivateKey";
 
-  // ── 辅助：主题色局部缓存 ──────────────────────────────────────────────────
   Color _themeColor(String key) =>
       AppThemeUtils.getColorByKey(context, key);
-
-  // ── 辅助：标题文本（56sp 粗体） ────────────────────────────────────────────
   Widget _titleText(String text, {TextAlign? textAlign}) {
     return Container(
       alignment: Alignment.center,
@@ -36,7 +32,6 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
     );
   }
 
-  // ── 辅助：副标题文本（32sp 粗体） ──────────────────────────────────────────
   Widget _subtitleText(String text, {String? colorKey, TextAlign? textAlign}) {
     return Container(
       alignment: Alignment.center,
@@ -56,7 +51,6 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
     );
   }
 
-  // ── 辅助：底部链接按钮（带下划线蓝色文字） ────────────────────────────────
   Widget _bottomLinkButton(String label, VoidCallback onTap) {
     final blueColor = _themeColor(AppThemeKeys.mainBlueColor.name);
     return InkWell(
@@ -78,7 +72,6 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
     );
   }
 
-  // ── 辅助：底部按钮栏容器 ──────────────────────────────────────────────────
   Widget _bottomButtonBar({
     required String buttonLabel,
     required VoidCallback onPressed,
@@ -107,7 +100,6 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
     );
   }
 
-  // ── 辅助：居中图片容器 ────────────────────────────────────────────────────
   Widget _centeredImage(String asset, double size) {
     final w = ScreenUtil().setWidth(size);
     return Container(
@@ -122,8 +114,6 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
       ),
     );
   }
-
-  // ── 进度指示器 ────────────────────────────────────────────────────────────
 
   Widget _buildProgressIndicator() {
     if (load == Load.finish) return SizedBox();
@@ -155,71 +145,63 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
     );
   }
 
-  // ── 主内容 ────────────────────────────────────────────────────────────────
+  Widget _visibleLayer(bool visible, Widget child) {
+    return Positioned.fill(child: Visibility(visible: visible, child: child));
+  }
 
   Widget _buildMainContent() {
     return Stack(
       children: [
-        // Loading 状态
-        Positioned.fill(
-          child: Visibility(
-            visible: load == Load.loading,
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
-                  alignment: Alignment.center,
-                  child: Text(
-                    _isImport
-                        ? S.of(context).g_key_wallet_c13
-                        : S.of(context).g_key_wallet_c14,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(40.0),
-                      color: _themeColor(AppThemeKeys.mainTextColor.name),
-                      fontWeight: FontWeight.bold,
-                    ),
+        _visibleLayer(
+          load == Load.loading,
+          Column(
+            children: [
+              Container(
+                margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                alignment: Alignment.center,
+                child: Text(
+                  _isImport
+                      ? S.of(context).g_key_wallet_c13
+                      : S.of(context).g_key_wallet_c14,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(40.0),
+                    color: _themeColor(AppThemeKeys.mainTextColor.name),
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                Expanded(child: _buildLoadingSpinner()),
+              ),
+              Expanded(child: _buildLoadingSpinner()),
+            ],
+          ),
+        ),
+        if (_isImport)
+          _visibleLayer(
+            load == Load.finish,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildImportFinishImage(),
+                _titleText(S.of(context).g_key_wallet_c15),
+                _subtitleText(S.of(context).g_key_wallet_c16),
+                Spacer(),
               ],
             ),
           ),
-        ),
-        // 导入完成
-        if (_isImport)
-          Positioned.fill(
-            child: Visibility(
-              visible: load == Load.finish,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildImportFinishImage(),
-                  _titleText(S.of(context).g_key_wallet_c15),
-                  _subtitleText(S.of(context).g_key_wallet_c16),
-                  Spacer(),
-                ],
-              ),
-            ),
-          ),
-        // 创建完成
         if (widget.createMetod == "Create")
-          Positioned.fill(
-            child: Visibility(
-              visible: load == Load.finish,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _centeredImage("assets/home/create_successful.png", 320.0),
-                  _titleText(S.of(context).g_key_wallet_c22),
-                  _subtitleText(S.of(context).g_key_wallet_c23),
-                  SizedBox(height: ScreenUtil().setWidth(248)),
-                ],
-              ),
+          _visibleLayer(
+            load == Load.finish,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _centeredImage("assets/home/create_successful.png", 320.0),
+                _titleText(S.of(context).g_key_wallet_c22),
+                _subtitleText(S.of(context).g_key_wallet_c23),
+                SizedBox(height: ScreenUtil().setWidth(248)),
+              ],
             ),
           ),
-        // 底部按钮
         _bottomButtonBar(
           buttonLabel: S.of(context).g_key_wallet_c17,
           onPressed: () => Navigator.popUntil(
@@ -236,8 +218,6 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
       ],
     );
   }
-
-  // ── Loading 旋转动画 ──────────────────────────────────────────────────────
 
   Widget _buildLoadingSpinner() {
     final spinnerSize = ScreenUtil().setWidth(100.0);
@@ -292,8 +272,6 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
     );
   }
 
-  // ── 导入完成图片 ──────────────────────────────────────────────────────────
-
   Widget _buildImportFinishImage() {
     return SizedBox(
       height: ScreenUtil().setWidth(560.0),
@@ -327,8 +305,6 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
       ),
     );
   }
-
-  // ── 导出 Keystore 页面 ────────────────────────────────────────────────────
 
   Widget _buildExportKeystoreContent() {
     final hintStyle = TextStyle(

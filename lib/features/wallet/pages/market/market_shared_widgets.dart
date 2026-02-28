@@ -26,37 +26,25 @@ class _CoinTile extends StatelessWidget {
     required this.onSetAlert,
   });
 
-  String get _coinId {
-    switch (source) {
-      case _CoinSource.trending:
-      case _CoinSource.search:
-        return coin['id']?.toString() ?? '';
-      case _CoinSource.watchlist:
-        return coin['coin_gecko_id']?.toString() ?? '';
-    }
-  }
+  String get _coinId => switch (source) {
+    _CoinSource.trending || _CoinSource.search => coin['id']?.toString() ?? '',
+    _CoinSource.watchlist => coin['coin_gecko_id']?.toString() ?? '',
+  };
 
-  String get _symbol {
-    switch (source) {
-      case _CoinSource.trending:
-      case _CoinSource.search:
-        return (coin['symbol'] ?? '').toString().toLowerCase();
-      case _CoinSource.watchlist:
-        return (coin['coin'] ?? '').toString().toLowerCase();
-    }
-  }
+  String get _symbol => switch (source) {
+    _CoinSource.trending || _CoinSource.search =>
+      (coin['symbol'] ?? '').toString().toLowerCase(),
+    _CoinSource.watchlist =>
+      (coin['coin'] ?? '').toString().toLowerCase(),
+  };
 
   String get _name => (coin['name'] ?? '').toString();
 
-  String get _imageUrl {
-    switch (source) {
-      case _CoinSource.trending:
-      case _CoinSource.search:
-        return coin['large'] ?? coin['thumb'] ?? '';
-      case _CoinSource.watchlist:
-        return coin['image'] ?? '';
-    }
-  }
+  String get _imageUrl => switch (source) {
+    _CoinSource.trending || _CoinSource.search =>
+      coin['large'] ?? coin['thumb'] ?? '',
+    _CoinSource.watchlist => coin['image'] ?? '',
+  };
 
   int? get _rank {
     final r = coin['market_cap_rank'];
@@ -66,37 +54,27 @@ class _CoinTile extends StatelessWidget {
     return int.tryParse(r.toString());
   }
 
-  double get _price {
-    switch (source) {
-      case _CoinSource.trending:
-        final s = (coin['data']?['price'] ?? '')
-            .toString()
-            .replaceAll(r'$', '')
-            .replaceAll(',', '');
-        return double.tryParse(s) ?? 0.0;
-      case _CoinSource.search:
-        return 0.0;
-      case _CoinSource.watchlist:
-        final v = coin['price'];
-        if (v is num) return v.toDouble();
-        return double.tryParse(v?.toString() ?? '') ?? 0.0;
-    }
-  }
+  double get _price => switch (source) {
+    _CoinSource.trending => double.tryParse(
+      (coin['data']?['price'] ?? '')
+          .toString()
+          .replaceAll(r'$', '')
+          .replaceAll(',', ''),
+    ) ?? 0.0,
+    _CoinSource.search => 0.0,
+    _CoinSource.watchlist => _toDouble(coin['price']),
+  };
 
-  double get _pct24h {
-    switch (source) {
-      case _CoinSource.trending:
-        final v =
-            coin['data']?['price_change_percentage_24h']?['usd'];
-        if (v is num) return v.toDouble();
-        return double.tryParse(v?.toString() ?? '') ?? 0.0;
-      case _CoinSource.search:
-        return 0.0;
-      case _CoinSource.watchlist:
-        final v = coin['price_change_per_24h'];
-        if (v is num) return v.toDouble();
-        return double.tryParse(v?.toString() ?? '') ?? 0.0;
-    }
+  double get _pct24h => switch (source) {
+    _CoinSource.trending =>
+      _toDouble(coin['data']?['price_change_percentage_24h']?['usd']),
+    _CoinSource.search => 0.0,
+    _CoinSource.watchlist => _toDouble(coin['price_change_per_24h']),
+  };
+
+  static double _toDouble(dynamic v) {
+    if (v is num) return v.toDouble();
+    return double.tryParse(v?.toString() ?? '') ?? 0.0;
   }
 
   @override
@@ -121,7 +99,6 @@ class _CoinTile extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
         child: Row(
           children: [
-            // Coin icon with circular clip
             Container(
               width: 52.w,
               height: 52.w,
@@ -139,7 +116,6 @@ class _CoinTile extends StatelessWidget {
               ),
             ),
             SizedBox(width: 12.w),
-            // Rank + name/symbol
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -189,7 +165,6 @@ class _CoinTile extends StatelessWidget {
                 ],
               ),
             ),
-            // Price / pct
             if (showPrice) ...[
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -222,7 +197,6 @@ class _CoinTile extends StatelessWidget {
               ),
               SizedBox(width: 6.w),
             ],
-            // Bell icon (price alert)
             if (_coinId.isNotEmpty)
               GestureDetector(
                 onTap: () => onSetAlert(context, coin),
@@ -241,7 +215,6 @@ class _CoinTile extends StatelessWidget {
                 ),
               ),
             SizedBox(width: 2.w),
-            // Star (watchlist)
             GestureDetector(
               onTap: () => onToggleWatchlist(_symbol),
               child: Icon(

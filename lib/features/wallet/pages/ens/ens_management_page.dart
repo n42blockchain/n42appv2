@@ -47,31 +47,17 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
   final EnsRegistrationService _ensService = EnsRegistrationServiceProvider.instance;
 
   bool _isLoading = false;
-
-  // ── 链信息（自动从域名推断）────────────────────────
   late EnsChainConfig _domainChain;
-
-  // ── 解析地址 ────────────────────────────────────
   late TextEditingController _resolvedAddressController;
-
-  // ── 文本记录 ────────────────────────────────────
   final Map<String, TextEditingController> _recordControllers = {};
-
-  static const List<String> _commonRecordKeys = [
-    'email',
-    'url',
-    'com.twitter',
-    'com.github',
-    'com.discord',
-    'org.telegram',
-    'description',
-  ];
-
-  // ── 子域名 ───────────────────────────────────────
   List<SubdomainInfo> _subdomains = [];
   bool _subdomainsLoading = false;
 
-  // ── 以太坊地址正则 ─────────────────────────────
+  static const List<String> _commonRecordKeys = [
+    'email', 'url', 'com.twitter', 'com.github',
+    'com.discord', 'org.telegram', 'description',
+  ];
+
   static final _hexAddrRegex = RegExp(r'^0x[0-9a-fA-F]{40}$');
 
   @override
@@ -102,31 +88,21 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
     super.dispose();
   }
 
-  // ── 工具方法 ─────────────────────────────────────
-
   bool _isValidAddress(String addr) => _hexAddrRegex.hasMatch(addr.trim());
 
   void _copyToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text));
+    _showSnack(S.of(context).g_key_119);
+  }
+
+  void _showSnack(String msg, {Color? bg}) {
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(S.of(context).g_key_119),
-        duration: const Duration(seconds: 1),
+        content: Text(msg),
+        backgroundColor: bg,
+        duration: const Duration(seconds: 2),
       ),
-    );
-  }
-
-  void _showError(String msg) {
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(msg), backgroundColor: Colors.red),
-    );
-  }
-
-  void _showSuccess(String msg) {
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(msg), backgroundColor: Colors.green),
     );
   }
 
@@ -141,15 +117,13 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
     if (mounted) {
       setState(() => _isLoading = false);
       if (!result.error) {
-        _showSuccess(successMessage);
+        _showSnack(successMessage, bg: Colors.green);
         onSuccess?.call();
       } else {
-        _showError(result.data?.toString() ?? S.of(context).g_key_error_3);
+        _showSnack(result.data?.toString() ?? S.of(context).g_key_error_3, bg: Colors.red);
       }
     }
   }
-
-  // ── 导航 ─────────────────────────────────────────
 
   void _navigateToRenew() {
     Navigator.push(
@@ -163,12 +137,10 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
     );
   }
 
-  // ── 解析地址 ─────────────────────────────────────
-
   Future<void> _saveResolvedAddress() async {
     final addr = _resolvedAddressController.text.trim();
     if (addr.isNotEmpty && !_isValidAddress(addr)) {
-      _showError(S.of(context).g_key_ens_invalid_address);
+      _showSnack(S.of(context).g_key_ens_invalid_address, bg: Colors.red);
       return;
     }
     await _runWithLoading(
@@ -177,22 +149,17 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
     );
   }
 
-  // ── 文本记录 ─────────────────────────────────────
-
   Future<void> _saveTextRecords() async {
-    final records = <String, String>{};
-    for (final entry in _recordControllers.entries) {
-      if (entry.value.text.isNotEmpty) {
-        records[entry.key] = entry.value.text;
-      }
-    }
+    final records = Map.fromEntries(
+      _recordControllers.entries
+          .where((e) => e.value.text.isNotEmpty)
+          .map((e) => MapEntry(e.key, e.value.text)),
+    );
     await _runWithLoading(
       action: () => _ensService.setTextRecords(widget.ownedEns.name, records),
       successMessage: S.of(context).g_key_185,
     );
   }
-
-  // ── 主要名称 ─────────────────────────────────────
 
   Future<void> _setPrimaryName() async {
     await _runWithLoading(
@@ -200,8 +167,6 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
       successMessage: S.of(context).g_key_ens_primary_set,
     );
   }
-
-  // ── 子域名 ───────────────────────────────────────
 
   Future<void> _loadSubdomains() async {
     setState(() => _subdomainsLoading = true);
@@ -260,8 +225,6 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
       onSuccess: _loadSubdomains,
     );
   }
-
-  // ── 转移 ─────────────────────────────────────────
 
   Future<void> _showTransferDialog() async {
     final controller = TextEditingController();
@@ -334,8 +297,6 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
       onSuccess: () => Navigator.pop(context, true),
     );
   }
-
-  // ── Build ─────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
