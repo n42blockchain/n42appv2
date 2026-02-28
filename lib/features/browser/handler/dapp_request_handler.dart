@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:n42_wallet/core/di/service_locator_setup.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
@@ -236,12 +235,11 @@ class DAppRequestHandler {
 
     final transaction = _buildTransaction(txMap);
     final cm = ethCoinModels[_selectedChainIndex];
-    final txHash = await web3client.sendTransaction(
+    return web3client.sendTransaction(
       privateKey,
       transaction,
       chainId: cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId'],
     );
-    return txHash;
   }
 
   Future<String> _handleSignTransaction(List<dynamic> params) async {
@@ -259,8 +257,8 @@ class DAppRequestHandler {
     final web3client = await _getWeb3Client();
 
     final transaction = _buildTransaction(txMap);
-    final sig = await web3client.signTransaction(privateKey, transaction);
-    return bytesToHex(sig, include0x: true);
+    final signed = await web3client.signTransaction(privateKey, transaction);
+    return bytesToHex(signed, include0x: true);
   }
 
   // ── RPC forwarding ─────────────────────────────────────────────────────────
@@ -294,9 +292,9 @@ class DAppRequestHandler {
     required String origin,
     required String method,
     required Map<String, dynamic> details,
-  }) async {
-    if (onSigningRequest == null) return false;
-    return await onSigningRequest!(
+  }) {
+    if (onSigningRequest == null) return Future.value(false);
+    return onSigningRequest!(
       origin: origin,
       method: method,
       details: details,

@@ -203,23 +203,31 @@ class UserOpBuilder {
 
   /// Apply a gas buffer multiplier to all gas fields
   UserOpBuilder applyGasBuffer(double multiplier) {
-    _verificationGasLimit = (_verificationGasLimit * BigInt.from((multiplier * 100).round())) ~/ BigInt.from(100);
-    _callGasLimit = (_callGasLimit * BigInt.from((multiplier * 100).round())) ~/ BigInt.from(100);
-    _preVerificationGas = (_preVerificationGas * BigInt.from((multiplier * 100).round())) ~/ BigInt.from(100);
+    final scale = BigInt.from((multiplier * 100).round());
+    final hundred = BigInt.from(100);
+    _verificationGasLimit = (_verificationGasLimit * scale) ~/ hundred;
+    _callGasLimit = (_callGasLimit * scale) ~/ hundred;
+    _preVerificationGas = (_preVerificationGas * scale) ~/ hundred;
     return this;
+  }
+
+  /// Validate required fields shared by build() and buildForEstimation()
+  void _validateCore({String suffix = ''}) {
+    final label = suffix.isEmpty ? '' : ' $suffix';
+    if (_sender == null || _sender!.isEmpty) {
+      throw UserOperationBuildError('Sender address is required$label');
+    }
+    if (_nonce == null) {
+      throw UserOperationBuildError('Nonce is required$label');
+    }
+    if (_callData == null || _callData!.isEmpty) {
+      throw UserOperationBuildError('Call data is required$label');
+    }
   }
 
   /// Validate the builder state before building
   void _validate() {
-    if (_sender == null || _sender!.isEmpty) {
-      throw UserOperationBuildError('Sender address is required');
-    }
-    if (_nonce == null) {
-      throw UserOperationBuildError('Nonce is required');
-    }
-    if (_callData == null || _callData!.isEmpty) {
-      throw UserOperationBuildError('Call data is required');
-    }
+    _validateCore();
     if (_maxFeePerGas == BigInt.zero) {
       throw UserOperationBuildError('Gas fees are required');
     }
@@ -261,15 +269,7 @@ class UserOpBuilder {
   /// The caller must have set sender, nonce, and callData before calling this.
   UserOperation buildForEstimation() {
     // Minimal validation — gas fees are intentionally excluded.
-    if (_sender == null || _sender!.isEmpty) {
-      throw UserOperationBuildError('Sender address is required for estimation');
-    }
-    if (_nonce == null) {
-      throw UserOperationBuildError('Nonce is required for estimation');
-    }
-    if (_callData == null || _callData!.isEmpty) {
-      throw UserOperationBuildError('Call data is required for estimation');
-    }
+    _validateCore(suffix: 'for estimation');
 
     // Temporarily replace signature without permanently mutating builder state.
     final savedSignature = _signature;

@@ -190,14 +190,11 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
         ? records.skip(maxSlices).fold(0.0, (sum, r) => sum + r.value)
         : 0.0;
 
-    final sections = <PieChartSectionData>[];
-    for (var i = 0; i < sliceRecords.length; i++) {
-      final r = sliceRecords[i];
-      final pct = totalValue > 0 ? r.value / totalValue * 100 : 0.0;
-      final isTouched = i == _touchedIndex;
-      sections.add(PieChartSectionData(
+    PieChartSectionData buildSlice(int index, double pct, Color color) {
+      final isTouched = index == _touchedIndex;
+      return PieChartSectionData(
         value: pct,
-        color: portfolioSliceColors[i % portfolioSliceColors.length],
+        color: color,
         radius: isTouched ? 70.r : 56.r,
         title: isTouched ? '${pct.toStringAsFixed(1)}%' : '',
         titleStyle: TextStyle(
@@ -206,24 +203,23 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
             color: Colors.white,
             shadows: const [Shadow(blurRadius: 4, color: Colors.black26)]),
         titlePositionPercentageOffset: 0.6,
-      ));
+      );
     }
-    if (othersValue > 0) {
-      final pct = totalValue > 0 ? othersValue / totalValue * 100 : 0.0;
-      final idx = sliceRecords.length;
-      final isTouched = idx == _touchedIndex;
-      sections.add(PieChartSectionData(
-        value: pct,
-        color: portfolioSliceColors.last,
-        radius: isTouched ? 70.r : 56.r,
-        title: isTouched ? '${pct.toStringAsFixed(1)}%' : '',
-        titleStyle: TextStyle(
-            fontSize: 12.sp,
-            fontWeight: FontWeight.bold,
-            color: Colors.white),
-        titlePositionPercentageOffset: 0.6,
-      ));
-    }
+
+    final sections = <PieChartSectionData>[
+      for (var i = 0; i < sliceRecords.length; i++)
+        buildSlice(
+          i,
+          totalValue > 0 ? sliceRecords[i].value / totalValue * 100 : 0.0,
+          portfolioSliceColors[i % portfolioSliceColors.length],
+        ),
+      if (othersValue > 0)
+        buildSlice(
+          sliceRecords.length,
+          totalValue > 0 ? othersValue / totalValue * 100 : 0.0,
+          portfolioSliceColors.last,
+        ),
+    ];
 
     // What's currently highlighted
     CoinRecord? highlighted;
@@ -463,9 +459,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
               accentColor: accentColor,
               textColor: textColor,
               sliceColor: portfolioSliceColors[
-                  i < portfolioSliceColors.length - 1
-                      ? i
-                      : portfolioSliceColors.length - 1],
+                  i.clamp(0, portfolioSliceColors.length - 1)],
             ),
             if (i < records.length - 1)
               Divider(

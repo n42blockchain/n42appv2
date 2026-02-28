@@ -208,30 +208,26 @@ class EIP7702Handler {
   }
 
   static Uint8List _rlpEncodeList(List<Uint8List> items) {
-    var totalLength = 0;
-    for (final item in items) {
-      totalLength += item.length;
-    }
+    final totalLength = items.fold<int>(0, (sum, item) => sum + item.length);
 
-    Uint8List result;
+    // Build header: short form (totalLength <= 55) or long form
+    Uint8List header;
     if (totalLength <= 55) {
-      result = Uint8List(1 + totalLength);
-      result[0] = 0xc0 + totalLength;
-      var offset = 1;
-      for (final item in items) {
-        result.setAll(offset, item);
-        offset += item.length;
-      }
+      header = Uint8List.fromList([0xc0 + totalLength]);
     } else {
       final lengthBytes = _encodeLength(totalLength);
-      result = Uint8List(1 + lengthBytes.length + totalLength);
-      result[0] = 0xf7 + lengthBytes.length;
-      result.setAll(1, lengthBytes);
-      var offset = 1 + lengthBytes.length;
-      for (final item in items) {
-        result.setAll(offset, item);
-        offset += item.length;
-      }
+      header = Uint8List(1 + lengthBytes.length);
+      header[0] = 0xf7 + lengthBytes.length;
+      header.setAll(1, lengthBytes);
+    }
+
+    // Concatenate header + items
+    final result = Uint8List(header.length + totalLength);
+    result.setAll(0, header);
+    var offset = header.length;
+    for (final item in items) {
+      result.setAll(offset, item);
+      offset += item.length;
     }
 
     return result;
@@ -368,7 +364,7 @@ class EntryPointVersionAdapter {
     }
 
     // Clamp to zero — negative savings would be misleading to callers
-    return savings < BigInt.zero ? BigInt.zero : savings;
+    return savings.isNegative ? BigInt.zero : savings;
   }
 }
 

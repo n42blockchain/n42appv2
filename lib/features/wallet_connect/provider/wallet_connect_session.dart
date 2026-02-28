@@ -38,6 +38,11 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
   /// Standard events exposed to DApps via WalletConnect namespaces.
   static const _namespaceEvents = ['chainChanged', 'accountsChanged'];
 
+  /// Cached user-disconnect reason to avoid repeated construction.
+  static final _userDisconnectReason = wallet_connect.Errors.getSdkError(
+    wallet_connect.Errors.USER_DISCONNECTED,
+  ).toSignError();
+
   // ── Multi-session management ──────────────────────────────────────────────
 
   /// Returns all active WalletConnect sessions from the SDK's persistent store.
@@ -57,9 +62,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     try {
       await signClient!.disconnectSession(
         topic: topic,
-        reason: wallet_connect.Errors.getSdkError(
-          wallet_connect.Errors.USER_DISCONNECTED,
-        ).toSignError(),
+        reason: _userDisconnectReason,
       );
     } catch (e) {
       if (kDebugMode) debugPrint('[WalletConnect] disconnectSession($topic) error: $e');
@@ -77,9 +80,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
       try {
         await signClient!.disconnectSession(
           topic: topic,
-          reason: wallet_connect.Errors.getSdkError(
-            wallet_connect.Errors.USER_DISCONNECTED,
-          ).toSignError(),
+          reason: _userDisconnectReason,
         );
       } catch (e) {
         if (kDebugMode) debugPrint('[WalletConnect] disconnectAll($topic) error: $e');
@@ -238,16 +239,6 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     switch (eventData.method) {
       // ── Message signing methods ─────────────────────────────────────────
       case "personal_sign":
-        final params = (eventData.params! as List).cast<String>();
-        if (params.length < 2) {
-          viewStateDeal(WalletConnectState.error,
-              params: 'Invalid personal_sign params: expected 2, got ${params.length}');
-          return;
-        }
-        // personal_sign: data at [0], address at [1] (reversed from eth_sign)
-        actionDataMap = _buildMessageData(networkName, params[1], params[0]);
-        viewStateDeal(WalletConnectState.messageSignOK);
-
       case "eth_sign":
       case "eth_signTypedData":
       case "eth_signTypedData_v3":
@@ -258,8 +249,11 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
               params: 'Invalid ${eventData.method} params: expected 2, got ${params.length}');
           return;
         }
-        // eth_sign / signTypedData: address at [0], data at [1]
-        actionDataMap = _buildMessageData(networkName, params[0], params[1]);
+        // personal_sign: data at [0], address at [1] (reversed from eth_sign)
+        final isPersonalSign = eventData.method == "personal_sign";
+        final address = isPersonalSign ? params[1] : params[0];
+        final data = isPersonalSign ? params[0] : params[1];
+        actionDataMap = _buildMessageData(networkName, address, data);
         viewStateDeal(WalletConnectState.messageSignOK);
 
       case "tron_signMessage":

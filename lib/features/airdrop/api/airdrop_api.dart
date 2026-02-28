@@ -30,19 +30,15 @@ class AirdropApi {
         pageSize: pageSize,
       );
 
-      if (!result.error && result.data != null) {
-        return result;
-      }
-
-      // 后端无数据，返回网络错误
-      return MessageModel()
-        ..error = true
-        ..data = 'Network unavailable';
-    } catch (e) {
-      return MessageModel()
-        ..error = true
-        ..data = 'Network unavailable';
+      if (!result.error && result.data != null) return result;
+    } catch (_) {
+      // fall through to error
     }
+
+    // 后端无数据或网络异常
+    return MessageModel()
+      ..error = true
+      ..data = 'Network unavailable';
   }
 
   /// 从后端获取空投数据
@@ -63,13 +59,13 @@ class AirdropApi {
       }
 
       if (filter != null) {
-        if (filter.statuses != null && filter.statuses!.isNotEmpty) {
+        if (filter.statuses?.isNotEmpty ?? false) {
           queryParams['statuses'] = filter.statuses!.map((e) => e.name).join(',');
         }
-        if (filter.types != null && filter.types!.isNotEmpty) {
+        if (filter.types?.isNotEmpty ?? false) {
           queryParams['types'] = filter.types!.map((e) => e.name).join(',');
         }
-        if (filter.chains != null && filter.chains!.isNotEmpty) {
+        if (filter.chains?.isNotEmpty ?? false) {
           queryParams['chains'] = filter.chains!.join(',');
         }
         if (filter.onlyEligible == true) {
@@ -141,15 +137,13 @@ class AirdropApi {
           ..error = false
           ..data = AirdropStats.fromJson(response['data']);
       }
-
-      return MessageModel()
-        ..error = true
-        ..data = 'Stats unavailable';
-    } catch (e) {
-      return MessageModel()
-        ..error = true
-        ..data = 'Stats unavailable';
+    } catch (_) {
+      // fall through to error
     }
+
+    return MessageModel()
+      ..error = true
+      ..data = 'Stats unavailable';
   }
 
   /// 获取热门空投项目
@@ -168,16 +162,14 @@ class AirdropApi {
           ..error = false
           ..data = airdrops;
       }
-
-      // 返回模拟热门空投
-      return MessageModel()
-        ..error = false
-        ..data = _getTrendingMockAirdrops();
-    } catch (e) {
-      return MessageModel()
-        ..error = false
-        ..data = _getTrendingMockAirdrops();
+    } catch (_) {
+      // fall through to mock data
     }
+
+    // 返回模拟热门空投
+    return MessageModel()
+      ..error = false
+      ..data = _getTrendingMockAirdrops();
   }
 
   /// 标记空投为已领取

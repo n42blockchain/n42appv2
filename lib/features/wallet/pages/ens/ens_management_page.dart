@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_chain_config.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_management_widgets.dart';
@@ -129,6 +130,25 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
     );
   }
 
+  /// 通用的带 loading 状态执行异步操作，处理结果并显示反馈
+  Future<void> _runWithLoading({
+    required Future<MessageModel> Function() action,
+    required String successMessage,
+    VoidCallback? onSuccess,
+  }) async {
+    setState(() => _isLoading = true);
+    final result = await action();
+    if (mounted) {
+      setState(() => _isLoading = false);
+      if (!result.error) {
+        _showSuccess(successMessage);
+        onSuccess?.call();
+      } else {
+        _showError(result.data?.toString() ?? S.of(context).g_key_error_3);
+      }
+    }
+  }
+
   // ── 导航 ─────────────────────────────────────────
 
   void _navigateToRenew() {
@@ -151,57 +171,34 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
       _showError(S.of(context).g_key_ens_invalid_address);
       return;
     }
-    setState(() => _isLoading = true);
-    final result = await _ensService.setAddress(widget.ownedEns.name, addr);
-    if (mounted) {
-      setState(() => _isLoading = false);
-      if (!result.error) {
-        _showSuccess(S.of(context).g_key_ens_address_updated);
-      } else {
-        _showError(result.data?.toString() ?? S.of(context).g_key_error_3);
-      }
-    }
+    await _runWithLoading(
+      action: () => _ensService.setAddress(widget.ownedEns.name, addr),
+      successMessage: S.of(context).g_key_ens_address_updated,
+    );
   }
 
   // ── 文本记录 ─────────────────────────────────────
 
   Future<void> _saveTextRecords() async {
-    setState(() => _isLoading = true);
-
     final records = <String, String>{};
     for (final entry in _recordControllers.entries) {
       if (entry.value.text.isNotEmpty) {
         records[entry.key] = entry.value.text;
       }
     }
-
-    final result = await _ensService.setTextRecords(widget.ownedEns.name, records);
-    if (mounted) {
-      setState(() => _isLoading = false);
-      if (!result.error) {
-        _showSuccess(S.of(context).g_key_185);
-      } else {
-        _showError(result.data?.toString() ?? S.of(context).g_key_error_3);
-      }
-    }
+    await _runWithLoading(
+      action: () => _ensService.setTextRecords(widget.ownedEns.name, records),
+      successMessage: S.of(context).g_key_185,
+    );
   }
 
   // ── 主要名称 ─────────────────────────────────────
 
   Future<void> _setPrimaryName() async {
-    setState(() => _isLoading = true);
-    final result = await _ensService.setPrimaryName(
-      widget.ownedEns.name,
-      widget.walletAddress,
+    await _runWithLoading(
+      action: () => _ensService.setPrimaryName(widget.ownedEns.name, widget.walletAddress),
+      successMessage: S.of(context).g_key_ens_primary_set,
     );
-    if (mounted) {
-      setState(() => _isLoading = false);
-      if (!result.error) {
-        _showSuccess(S.of(context).g_key_ens_primary_set);
-      } else {
-        _showError(result.data?.toString() ?? S.of(context).g_key_error_3);
-      }
-    }
   }
 
   // ── 子域名 ───────────────────────────────────────
@@ -257,17 +254,11 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
 
     if (confirm != true) return;
 
-    setState(() => _isLoading = true);
-    final result = await _ensService.deleteSubdomain(widget.ownedEns.name, sub.label);
-    if (mounted) {
-      setState(() => _isLoading = false);
-      if (!result.error) {
-        _showSuccess(S.of(context).g_key_ens_subdomain_deleted);
-        _loadSubdomains();
-      } else {
-        _showError(result.data?.toString() ?? S.of(context).g_key_error_3);
-      }
-    }
+    await _runWithLoading(
+      action: () => _ensService.deleteSubdomain(widget.ownedEns.name, sub.label),
+      successMessage: S.of(context).g_key_ens_subdomain_deleted,
+      onSuccess: _loadSubdomains,
+    );
   }
 
   // ── 转移 ─────────────────────────────────────────
@@ -337,17 +328,11 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
   }
 
   Future<void> _transferDomain(String newOwner) async {
-    setState(() => _isLoading = true);
-    final result = await _ensService.transfer(widget.ownedEns.name, newOwner);
-    if (mounted) {
-      setState(() => _isLoading = false);
-      if (!result.error) {
-        _showSuccess(S.of(context).g_key_ens_transfer_success);
-        Navigator.pop(context, true);
-      } else {
-        _showError(result.data?.toString() ?? S.of(context).g_key_error_3);
-      }
-    }
+    await _runWithLoading(
+      action: () => _ensService.transfer(widget.ownedEns.name, newOwner),
+      successMessage: S.of(context).g_key_ens_transfer_success,
+      onSuccess: () => Navigator.pop(context, true),
+    );
   }
 
   // ── Build ─────────────────────────────────────────

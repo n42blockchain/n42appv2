@@ -143,29 +143,52 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
     return null;
   }
 
+  // ── Shared helper ──────────────────────────────────────────────────────────
+
+  /// 校验操作列表并构建 ExecuteCall，返回 null 表示失败（已通过 [onError] 报告）。
+  List<ExecuteCall>? _validateAndBuildCalls({required void Function(String) onError}) {
+    final validationError = _validateOperations();
+    if (validationError != null) {
+      onError(validationError);
+      return null;
+    }
+    final calls = _buildExecuteCalls();
+    if (calls == null || calls.isEmpty) {
+      onError('Failed to build operations');
+      return null;
+    }
+    return calls;
+  }
+
+  AATransferParams _buildTransferParams(List<ExecuteCall> calls) {
+    return AATransferParams(
+      chainSymbol: _chainSymbol,
+      fromAddress: widget.walletAddress,
+      toAddress: widget.account.address,
+      value: 0,
+      smartAccount: widget.account,
+      batchCalls: calls,
+    );
+  }
+
+  void _clearGasEstimation() {
+    _estimatedTotalGas = null;
+    _estimatedMaxFeePerGas = null;
+    _estimateError = null;
+  }
+
   // ── Gas Estimation ─────────────────────────────────────────────────────────
 
   Future<void> _estimateGas() async {
     if (_operations.isEmpty) {
-      setState(() {
-        _estimatedTotalGas = null;
-        _estimatedMaxFeePerGas = null;
-        _estimateError = null;
-      });
+      setState(_clearGasEstimation);
       return;
     }
 
-    final validationError = _validateOperations();
-    if (validationError != null) {
-      setState(() => _estimateError = validationError);
-      return;
-    }
-
-    final calls = _buildExecuteCalls();
-    if (calls == null || calls.isEmpty) {
-      setState(() => _estimateError = 'Failed to build operations');
-      return;
-    }
+    final calls = _validateAndBuildCalls(
+      onError: (msg) => setState(() => _estimateError = msg),
+    );
+    if (calls == null) return;
 
     setState(() {
       _isEstimating = true;
@@ -173,17 +196,7 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
     });
 
     try {
-      final params = AATransferParams(
-        chainSymbol: _chainSymbol,
-        fromAddress: widget.walletAddress,
-        toAddress: widget.account.address,
-        value: 0,
-        smartAccount: widget.account,
-        batchCalls: calls,
-      );
-
-      final estimation = await _handler.estimateGas(params);
-
+      final estimation = await _handler.estimateGas(_buildTransferParams(calls));
       if (!mounted) return;
 
       if (estimation.errorMessage != null && estimation.errorMessage!.isNotEmpty) {
@@ -216,17 +229,8 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
   // ── Send Batch ─────────────────────────────────────────────────────────────
 
   Future<void> _sendBatch() async {
-    final validationError = _validateOperations();
-    if (validationError != null) {
-      _showErrorSnackBar(validationError);
-      return;
-    }
-
-    final calls = _buildExecuteCalls();
-    if (calls == null || calls.isEmpty) {
-      _showErrorSnackBar('Failed to build operations');
-      return;
-    }
+    final calls = _validateAndBuildCalls(onError: _showErrorSnackBar);
+    if (calls == null) return;
 
     setState(() {
       _isSending = true;
@@ -234,17 +238,7 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
     });
 
     try {
-      final params = AATransferParams(
-        chainSymbol: _chainSymbol,
-        fromAddress: widget.walletAddress,
-        toAddress: widget.account.address,
-        value: 0,
-        smartAccount: widget.account,
-        batchCalls: calls,
-      );
-
-      final result = await _handler.transfer(params);
-
+      final result = await _handler.transfer(_buildTransferParams(calls));
       if (!mounted) return;
 
       if (!result.error) {

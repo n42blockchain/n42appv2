@@ -395,16 +395,19 @@ class _DirectionChip extends StatelessWidget {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
+/// Remove trailing zeros and a dangling decimal point.
+String _trimTrailingZeros(String s) {
+  return s.replaceAll(RegExp(r'0+$'), '').replaceAll(RegExp(r'\.$'), '');
+}
+
 String _fmtPrice(double price) {
   if (price >= 1000) return price.toStringAsFixed(2);
   if (price >= 1) return price.toStringAsFixed(4);
-  return price.toStringAsPrecision(4)
-      .replaceAll(RegExp(r'0+$'), '')
-      .replaceAll(RegExp(r'\.$'), '');
+  return _trimTrailingZeros(price.toStringAsPrecision(4));
 }
 
 String _fmtForInput(double price) {
   if (price >= 1000) return price.toStringAsFixed(2);
   if (price >= 1) return price.toStringAsFixed(4);
-  return price.toStringAsFixed(8).replaceAll(RegExp(r'0+$'), '').replaceAll(RegExp(r'\.$'), '');
+  return _trimTrailingZeros(price.toStringAsFixed(8));
 }

@@ -12,7 +12,6 @@ import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
-import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
@@ -41,11 +40,7 @@ class WalletCoinAddAll extends ConsumerStatefulWidget {
 }
 
 class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
-  Regular? _regular;
-  Regular get regular{
-    _regular ??= Regular();
-    return _regular!;
-  }
+  late final Regular regular = Regular();
   TextEditingController inputEditingController = TextEditingController();
   TextEditingController tokenEditingController = TextEditingController();
   TextEditingController symbolEditingController = TextEditingController();
@@ -60,13 +55,11 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
   List<dynamic> coinlistToken = [];
   Load load = Load.finish;
 
-  //List<String> symbols=[];
   String addSymbol = ""; //添加的主链币
   bool isEdit = false;
   late Map<String, dynamic> chainsToken;
   Map<String, dynamic>? chains; //现有的主链币
   Map<String, dynamic> netChains = {}; //api获取的主链币
-  //int sort=0;//当前列表中最后一个币的sort
   int networkIndex = -1;
   String networkName = "";
   int networkIndexToken = 0;
@@ -136,9 +129,7 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
                 ),
               ),
               InkWell(
-                onTap: () {
-                  showChangeNetwork();
-                },
+                onTap: showChangeNetwork,
                 child: Container(
                   width: double.infinity,
                   alignment: Alignment.center,
@@ -187,14 +178,11 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
         ),
         body: SafeArea(
           child: InkWell(
-            onTap: () {
-              closeKeyboard();
-            },
+            onTap: closeKeyboard,
             child: Column(
               children: [
                 tagWidget(),
                 Expanded(
-                  flex: 1,
                   child: Stack(
                     children: [
                       Positioned(
@@ -212,9 +200,6 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
                                     horizontal: ScreenUtil().setWidth(20.0)),
                                 margin: EdgeInsets.symmetric(
                                     vertical: ScreenUtil().setWidth(20.0)),
-                                /*constraints: BoxConstraints(
-                        minHeight: scr.setWidth(100.0),
-                      ),*/
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.all(
                                       Radius.circular(ScreenUtil().setWidth(20.0))),
@@ -230,7 +215,6 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
                                   MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
-                                      flex: 1,
                                       child: TextField(
                                         controller: inputEditingController,
                                         style: TextStyle(
@@ -257,17 +241,12 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
                                           errorBorder: InputBorder.none,
                                           focusedBorder: InputBorder.none,
                                         ),
-                                        onChanged: (String value) {},
-                                        onSubmitted: (value) {
-                                          seachCoin();
-                                        },
+                                        onChanged: (_) {},
+                                        onSubmitted: (_) => seachCoin(),
                                       ),
                                     ),
                                     InkWell(
-                                      onTap: () {
-                                        closeKeyboard();
-                                        seachCoin();
-                                      },
+                                      onTap: () { closeKeyboard(); seachCoin(); },
                                       child: Container(
                                         padding: EdgeInsets.symmetric(
                                           horizontal: ScreenUtil().setWidth(20.0),
@@ -297,10 +276,7 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
                                   ],
                                 ),
                               ),
-                              Expanded(
-                                flex: 1,
-                                child: coinListWidget(),
-                              )
+                              Expanded(child: coinListWidget())
                             ],
                           ),
                         ),
@@ -338,79 +314,46 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
                       context, AppThemeKeys.itemBorderColor.name)))),
       child: Row(
         children: [
-          Expanded(
-            flex: 1,
-            child: InkWell(
-              onTap: () {
-                if (importType == 0) return;
-                setState(() {
-                  importType = 0;
-                });
-              },
-              child: Container(
-                width: double.infinity,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(
-                          width: ScreenUtil().setWidth(2.0),
-                          color: importType == 0
-                              ? AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainBlueColor.name)
-                              : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name),
-                        ))),
-                child: Text(
-                  S.of(context).search,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context,
-                        importType == 0
-                            ? AppThemeKeys.mainBlueColor.name
-                            : AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setWidth(30.0),
-                    fontWeight: importType == 0 ? FontWeight.w600 : FontWeight.normal,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: InkWell(
-              onTap: () {
-                if (importType == 1) return;
-                setState(() {
-                  importType = 1;
-                });
-              },
-              child: Container(
-                width: double.infinity,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(
-                          width: ScreenUtil().setWidth(2.0),
-                          color: importType == 1
-                              ? AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainBlueColor.name)
-                              : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name),
-                        ))),
-                child: Text(
-                  S.of(context).g_token_m_key_5,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context,
-                        importType == 1
-                            ? AppThemeKeys.mainBlueColor.name
-                            : AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setWidth(30.0),
-                    fontWeight: importType == 1 ? FontWeight.w600 : FontWeight.normal,
-                  ),
-                ),
-              ),
-            ),
-          ),
+          _buildTab(index: 0, label: S.of(context).search),
+          _buildTab(index: 1, label: S.of(context).g_token_m_key_5),
         ],
+      ),
+    );
+  }
+
+  Widget _buildTab({required int index, required String label}) {
+    final bool selected = importType == index;
+    return Expanded(
+      child: InkWell(
+        onTap: () {
+          if (selected) return;
+          setState(() => importType = index);
+        },
+        child: Container(
+          width: double.infinity,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              border: Border(
+                  bottom: BorderSide(
+                    width: ScreenUtil().setWidth(2.0),
+                    color: selected
+                        ? AppThemeUtils.getColorByKey(
+                        context, AppThemeKeys.mainBlueColor.name)
+                        : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name),
+                  ))),
+          child: Text(
+            label,
+            style: TextStyle(
+              color: AppThemeUtils.getColorByKey(
+                  context,
+                  selected
+                      ? AppThemeKeys.mainBlueColor.name
+                      : AppThemeKeys.mainTextColor.name),
+              fontSize: ScreenUtil().setWidth(30.0),
+              fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+            ),
+          ),
+        ),
       ),
     );
   }

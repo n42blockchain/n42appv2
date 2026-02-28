@@ -20,7 +20,6 @@ import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_quote_card.da
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_token_card.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_token_select.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
-import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
@@ -385,11 +384,8 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   void _swapTokenDirection() {
     if (_tokenIn == null && _tokenOut == null) return;
     _clearQuote();
-    setState(() {
-      final tmp = _tokenIn;
-      _tokenIn = _tokenOut;
-      _tokenOut = tmp;
-    });
+    final tmp = _tokenIn;
+    setState(() { _tokenIn = _tokenOut; _tokenOut = tmp; });
     _onAmountChanged();
   }
 

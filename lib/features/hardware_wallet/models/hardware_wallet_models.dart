@@ -144,36 +144,33 @@ class HardwareWalletDevice {
     );
   }
 
+  static const _typeNames = {
+    HardwareWalletType.ledgerNanoX: 'Ledger Nano X',
+    HardwareWalletType.ledgerNanoSPlus: 'Ledger Nano S Plus',
+    HardwareWalletType.ledgerStax: 'Ledger Stax',
+    HardwareWalletType.trezorModelT: 'Trezor Model T',
+    HardwareWalletType.trezorOne: 'Trezor One',
+    HardwareWalletType.keystoneModel: 'Keystone',
+  };
+
   /// 获取设备类型显示名称
-  String get typeDisplayName {
-    switch (type) {
-      case HardwareWalletType.ledgerNanoX:
-        return 'Ledger Nano X';
-      case HardwareWalletType.ledgerNanoSPlus:
-        return 'Ledger Nano S Plus';
-      case HardwareWalletType.ledgerStax:
-        return 'Ledger Stax';
-      case HardwareWalletType.trezorModelT:
-        return 'Trezor Model T';
-      case HardwareWalletType.trezorOne:
-        return 'Trezor One';
-      case HardwareWalletType.keystoneModel:
-        return 'Keystone';
-    }
-  }
+  String get typeDisplayName => _typeNames[type] ?? type.name;
+
+  static const _ledgerTypes = {
+    HardwareWalletType.ledgerNanoX,
+    HardwareWalletType.ledgerNanoSPlus,
+    HardwareWalletType.ledgerStax,
+  };
+  static const _trezorTypes = {
+    HardwareWalletType.trezorModelT,
+    HardwareWalletType.trezorOne,
+  };
 
   /// 是否为 Ledger 设备
-  bool get isLedger {
-    return type == HardwareWalletType.ledgerNanoX ||
-        type == HardwareWalletType.ledgerNanoSPlus ||
-        type == HardwareWalletType.ledgerStax;
-  }
+  bool get isLedger => _ledgerTypes.contains(type);
 
   /// 是否为 Trezor 设备
-  bool get isTrezor {
-    return type == HardwareWalletType.trezorModelT ||
-        type == HardwareWalletType.trezorOne;
-  }
+  bool get isTrezor => _trezorTypes.contains(type);
 
   /// 是否为 Keystone 设备（气隙 QR 签名）
   bool get isKeystone => type == HardwareWalletType.keystoneModel;
@@ -320,36 +317,19 @@ class LedgerApps {
   static const String polkadot = 'Polkadot';
   static const String tron = 'Tron';
 
+  static const _coinToApp = {
+    'ETH': ethereum, 'BNB': ethereum, 'MATIC': ethereum,
+    'AVAX': ethereum, 'FTM': ethereum, 'OP': ethereum,
+    'ARB': ethereum, 'BASE': ethereum,
+    'BTC': bitcoin, 'LTC': bitcoin, 'DOGE': bitcoin, 'BCH': bitcoin,
+    'SOL': solana,
+    'ATOM': cosmos,
+    'DOT': polkadot,
+    'TRX': tron,
+  };
+
   /// 根据 coinType 获取对应的 Ledger 应用名称
-  static String? getAppName(String coinType) {
-    final coin = coinType.toUpperCase();
-    switch (coin) {
-      case 'ETH':
-      case 'BNB':
-      case 'MATIC':
-      case 'AVAX':
-      case 'FTM':
-      case 'OP':
-      case 'ARB':
-      case 'BASE':
-        return ethereum;
-      case 'BTC':
-      case 'LTC':
-      case 'DOGE':
-      case 'BCH':
-        return bitcoin;
-      case 'SOL':
-        return solana;
-      case 'ATOM':
-        return cosmos;
-      case 'DOT':
-        return polkadot;
-      case 'TRX':
-        return tron;
-      default:
-        return null;
-    }
-  }
+  static String? getAppName(String coinType) => _coinToApp[coinType.toUpperCase()];
 }
 
 /// 硬件钱包操作错误
@@ -381,31 +361,19 @@ class HardwareWalletError {
   @override
   String toString() => '$code: $message';
 
+  static const _friendlyMessages = {
+    bluetoothDisabled: 'Please enable Bluetooth on your device',
+    deviceNotFound: 'Hardware wallet not found. Make sure it is turned on and nearby',
+    connectionFailed: 'Failed to connect to hardware wallet. Please try again',
+    connectionTimeout: 'Connection timed out. Please try again',
+    appNotOpen: 'Please open the corresponding app on your hardware wallet',
+    userRejected: 'Transaction was rejected on the hardware wallet',
+    signingFailed: 'Failed to sign transaction. Please try again',
+    invalidTransaction: 'Invalid transaction data',
+    deviceLocked: 'Hardware wallet is locked. Please unlock it first',
+    unsupportedCoin: 'This coin is not supported by the hardware wallet',
+  };
+
   /// 获取用户友好的错误消息
-  String get userFriendlyMessage {
-    switch (code) {
-      case bluetoothDisabled:
-        return 'Please enable Bluetooth on your device';
-      case deviceNotFound:
-        return 'Hardware wallet not found. Make sure it is turned on and nearby';
-      case connectionFailed:
-        return 'Failed to connect to hardware wallet. Please try again';
-      case connectionTimeout:
-        return 'Connection timed out. Please try again';
-      case appNotOpen:
-        return 'Please open the corresponding app on your hardware wallet';
-      case userRejected:
-        return 'Transaction was rejected on the hardware wallet';
-      case signingFailed:
-        return 'Failed to sign transaction. Please try again';
-      case invalidTransaction:
-        return 'Invalid transaction data';
-      case deviceLocked:
-        return 'Hardware wallet is locked. Please unlock it first';
-      case unsupportedCoin:
-        return 'This coin is not supported by the hardware wallet';
-      default:
-        return message;
-    }
-  }
+  String get userFriendlyMessage => _friendlyMessages[code] ?? message;
 }

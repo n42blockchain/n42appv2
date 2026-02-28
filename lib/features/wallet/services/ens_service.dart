@@ -436,10 +436,7 @@ class _CacheEntry<T> {
 class EnsServiceProvider {
   static EnsService? _instance;
 
-  static EnsService get instance {
-    _instance ??= EnsService();
-    return _instance!;
-  }
+  static EnsService get instance => _instance ??= EnsService();
 
   /// 重置实例（用于测试）
   static void reset() {
