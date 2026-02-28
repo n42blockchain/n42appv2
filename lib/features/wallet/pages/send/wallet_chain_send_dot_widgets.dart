@@ -45,59 +45,6 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
             rightOnTap1: searchToAddressWidget,
             bgColor: AppThemeUtils.getColorByKey(
                 context, AppThemeKeys.itemBgColor.name),
-            /*
-            rightWidget3: widget.coinModel.coin['blockchainType']==BlockchainType.Ethereum.name?Container(
-              width: ScreenUtil().setWidth(60.0),
-              height: ScreenUtil().setWidth(60.0),
-              padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
-              child: Icon(
-                Icons.face_outlined,
-                size: ScreenUtil().setWidth(50.0),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-              ),
-            ):null,
-            rightOnTap3: widget.coinModel.coin['blockchainType']==BlockchainType.Ethereum.name?faceMatchTypeWidget:null,
-            rightWidget1: Container(
-              width: ScreenUtil().setWidth(60.0),
-              height: ScreenUtil().setWidth(60.0),
-              padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
-              child: Image.asset(
-                "assets/wallet/scan.png",
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                width: ScreenUtil().setWidth(50.0),
-                height: ScreenUtil().setWidth(50.0),
-              ),
-            ),
-            rightWidget2: Container(
-              //margin: EdgeInsets.only(left: scr.setWidth(10.0)),
-              height: ScreenUtil().setWidth(60.0),
-              padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
-              decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(60.0),)),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                S.of(context).g_key_166,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26.0),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainWhiteColor.name),
-                ),
-              ),
-            ),
-            rightOnTap1: scanQR,
-            rightOnTap2: ()async{
-              ClipboardData? cd = await Clipboard.getData(Clipboard.kTextPlain);
-              if(cd !=null){
-                if(cd.text !=null && cd.text != "null"){
-                  toTextEditingController.text=cd.text??"";
-                  setState(() {
-                  });
-                  toAddressCheck(cd.text??"");
-                }
-              }
-            },
-            */
           ),
         ],
       ),
@@ -160,16 +107,19 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
   }
 
   Widget amountWidget() {
+    final su = ScreenUtil();
+    final itemBg = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
+
     return containerStyle1(
       context,
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.all(su.setWidth(30.0)),
       child: Column(
         children: [
           Padding(
             padding: EdgeInsets.only(
-              left: ScreenUtil().setWidth(30.0),
-              right: ScreenUtil().setWidth(30.0),
-              top: ScreenUtil().setWidth(30.0),
+              left: su.setWidth(30.0),
+              right: su.setWidth(30.0),
+              top: su.setWidth(30.0),
             ),
             child: Row(
               children: [
@@ -178,30 +128,19 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
                   style: TextStyle(
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(28.0),
+                    fontSize: su.setSp(28.0),
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(20.0)),
-                Expanded(flex: 1, child: amountBalanceWidget()),
+                SizedBox(width: su.setWidth(20.0)),
+                Expanded(child: amountBalanceWidget()),
               ],
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
+            margin: EdgeInsets.only(top: su.setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                  Radius.circular(ScreenUtil().setWidth(16.0))),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor.name),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xff101828)
-                      .withAlpha((0 * 255).round()), // 底色,阴影颜色
-                  offset: const Offset(0, 1), // 阴影位置,从什么位置开始
-                  blurRadius: ScreenUtil().setWidth(4.0), // 阴影模糊层度
-                  spreadRadius: 0,
-                )
-              ],
+              borderRadius: BorderRadius.all(Radius.circular(su.setWidth(16.0))),
+              color: itemBg,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -212,67 +151,51 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
                   focusNode: valueNode,
                   hintText: S.of(context).g_key_44,
                   hintStyle: TextStyle(
-                    fontSize: ScreenUtil().setSp(54.0),
+                    fontSize: su.setSp(54.0),
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.textFieldHintColor.name),
                   ),
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  onChanged: (value) {
-                    amountCheck(value: value);
-                  },
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  onChanged: (value) => amountCheck(value: value),
                   onEditingComplete: () {
                     amountCheck();
                     FocusScope.of(context).requestFocus(toNode);
                   },
-                  fontSize: ScreenUtil().setWidth(70.0),
-                  height: ScreenUtil().setWidth(120.0),
-                  boxShadow: BoxShadow(
-                    color: const Color(0xff101828)
-                        .withAlpha((0 * 255).round()), // 底色,阴影颜色
-                    offset: const Offset(0, 0), // 阴影位置,从什么位置开始
-                    blurRadius: ScreenUtil().setWidth(0), // 阴影模糊层度
-                    spreadRadius: 0,
-                  ),
+                  fontSize: su.setWidth(70.0),
+                  height: su.setWidth(120.0),
+                  boxShadow: const BoxShadow(color: Colors.transparent),
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(ScreenUtil().setWidth(16.0)),
-                    topRight: Radius.circular(ScreenUtil().setWidth(16.0)),
+                    topLeft: Radius.circular(su.setWidth(16.0)),
+                    topRight: Radius.circular(su.setWidth(16.0)),
                   ),
-                  bgColor: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemBgColor.name),
+                  bgColor: itemBg,
                   errorMessage: amountErrorMessage,
-                  messageMargin: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(30.0)),
+                  messageMargin: EdgeInsets.symmetric(horizontal: su.setWidth(30.0)),
                   rightWidget1: Container(
-                    margin:
-                        EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
-                    height: ScreenUtil().setWidth(60.0),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(20.0)),
+                    margin: EdgeInsets.only(left: su.setWidth(10.0)),
+                    height: su.setWidth(60.0),
+                    padding: EdgeInsets.symmetric(horizontal: su.setWidth(20.0)),
                     decoration: BoxDecoration(
                       color: AppThemeUtils.getColorByKey(
                           context, AppThemeKeys.mainBlueColor.name),
-                      borderRadius: BorderRadius.all(
-                          Radius.circular(ScreenUtil().setWidth(60.0))),
+                      borderRadius: BorderRadius.all(Radius.circular(su.setWidth(60.0))),
                     ),
                     alignment: Alignment.center,
                     child: Text(
                       S.of(context).g_key_197,
                       style: TextStyle(
-                        fontSize: ScreenUtil().setSp(26.0),
+                        fontSize: su.setSp(26.0),
                         color: AppThemeUtils.getColorByKey(
                             context, AppThemeKeys.mainWhiteColor.name),
                       ),
                     ),
                   ),
-                  rightOnTap1: () {
-                    maxTag();
-                  },
+                  rightOnTap1: maxTag,
                 ),
                 Divider(
-                  height: ScreenUtil().setWidth(1.0),
-                  indent: ScreenUtil().setWidth(30.0),
-                  endIndent: ScreenUtil().setWidth(30.0),
+                  height: su.setWidth(1.0),
+                  indent: su.setWidth(30.0),
+                  endIndent: su.setWidth(30.0),
                 ),
                 ownerAddress(),
               ],
@@ -299,23 +222,20 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
     );
   }
 
-  // 返回账户地址
   Widget ownerAddress() {
-    final String addr =
-        dataUtils.addressFarmat(widget.coinModel.address.toString());
-    return Container(
-      padding: EdgeInsets.only(
-        top: ScreenUtil().setWidth(20.0),
-        bottom: ScreenUtil().setWidth(20.0),
-        right: ScreenUtil().setWidth(30.0),
-        left: ScreenUtil().setWidth(30.0),
+    final su = ScreenUtil();
+    final addr = dataUtils.addressFarmat(widget.coinModel.address.toString());
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: su.setWidth(20.0),
+        horizontal: su.setWidth(30.0),
       ),
       child: Text(
         addr,
         style: TextStyle(
           color: AppThemeUtils.getColorByKey(
               context, AppThemeKeys.itemSubtitleTextColor.name),
-          fontSize: ScreenUtil().setSp(30.0),
+          fontSize: su.setSp(30.0),
         ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
@@ -323,7 +243,6 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
     );
   }
 
-  // 旷工费
   Widget minerFeeWidget() {
     final bool isContract = widget.coinModel.coin['isContract'] == true;
     final int decimals = isContract

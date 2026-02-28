@@ -39,13 +39,10 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
   Load gasLimitLoad = Load.finish;
 
   Future<void> initData() async {
-    // 判断是否是代币
     if (widget.coinModel.coin['isContract']) {
-      final WalletActionProvider wap = ref.read(wapBridgeProvider);
-      final int cIndex = wap.coinModels.indexWhere((element) {
-        if (element.coin['coinType'] != widget.coinModel.coin['coinType']) {
-          return false;
-        }
+      final wap = ref.read(wapBridgeProvider);
+      final cIndex = wap.coinModels.indexWhere((element) {
+        if (element.coin['coinType'] != widget.coinModel.coin['coinType']) return false;
         if (widget.coinModel.privateKey != null) {
           return element.privateKey == widget.coinModel.privateKey;
         }
@@ -63,10 +60,9 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
     await getBalance();
   }
 
-  // 获取余额
   Future<void> getBalance() async {
     setState(() => load = Load.loading);
-    final bool isOk = await widget.coinModel.getBalance(getToken: false);
+    final isOk = await widget.coinModel.getBalance(getToken: false);
     if (!mounted) return;
     if (!isOk) {
       errorMessage = S.current.g_key_t_44;
@@ -75,26 +71,18 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
     setState(() => load = Load.finish);
   }
 
-  // 获取旷工费
   Future<void> getGasPrice(String txHash) async {
-    setState(() {
-      load = Load.loading;
-    });
-    final MessageModel rmm = await dotApi.getGasPrice(
-      txHash,
-      isTest: widget.coinModel.isTest,
-    );
+    setState(() => load = Load.loading);
+    final rmm = await dotApi.getGasPrice(txHash, isTest: widget.coinModel.isTest);
     if (!mounted) return;
-    if (rmm.error == false) {
+    if (!rmm.error) {
       totalGasPrice = BigInt.parse(rmm.data['partialFee']);
     } else {
       errorMessage = rmm.data;
     }
-    load = Load.finish;
-    setState(() {});
+    setState(() => load = Load.finish);
   }
 
-  // 检查 amount 输入是否正确
   void amountCheck({String value = ""}) {
     if (value.isEmpty) value = valueTextEditingController.text;
     final int decimals = widget.coinModel.coin['decimals'] as int;
@@ -106,7 +94,6 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
     }
 
     final bool isInteger = _regular.regularNums(value);
-    // 整数精度币种输入非整数时直接拒绝
     if (decimals == 0 && !isInteger) {
       _setAmountError(S.of(context).g_key_134);
       return;
@@ -142,7 +129,6 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
     setState(() {});
   }
 
-  // 检查转账地址是否正确
   Future<String?> toAddressCheck(String addr) async {
     if (addr.isEmpty) {
       toErrorMessage = S.current.g_key_41;
@@ -172,13 +158,11 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
       ToastUtils.show("loading");
       return;
     }
-    if (amountErrorMessage != "") return;
+    if (amountErrorMessage.isNotEmpty) return;
     closeKeyboard();
     amountCheck();
-    if (amountErrorMessage != "") return;
-    setState(() {
-      load = Load.loading;
-    });
+    if (amountErrorMessage.isNotEmpty) return;
+    setState(() => load = Load.loading);
     final String? toAddr =
         await toAddressCheck(toTextEditingController.text.trim());
     if (!mounted) return;
@@ -279,10 +263,10 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
     }
   }
 
-  void scanQR() async {
-    final String? scanValue = await Navigator.push(
+  Future<void> scanQR() async {
+    final scanValue = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ScanPage()),
+      MaterialPageRoute(builder: (_) => ScanPage()),
     );
     if (!mounted) return;
     if (scanValue != null) {
@@ -294,14 +278,13 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
 
   Future<void> maxTag() async {
     if (gasLimitLoad == Load.loading) return;
-    valueTextEditingController.text = widget.coinModel.balanceStringAll();
     if (widget.coinModel.coin['isContract']) {
+      valueTextEditingController.text = widget.coinModel.balanceStringAll();
       transferValue = widget.coinModel.balance;
     } else {
       transferValue = widget.coinModel.balance - totalGasPrice;
       valueTextEditingController.text = _regular.formartNum(
-        toEther(transferValue.toString(), widget.coinModel.coin['decimals'])
-            .toDouble(),
+        toEther(transferValue.toString(), widget.coinModel.coin['decimals']).toDouble(),
         14,
         isCrop: true,
         isFill0: false,
@@ -311,7 +294,6 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
     setState(() {});
   }
 
-  // 关闭键盘
   void closeKeyboard() {
     FocusScope.of(context).requestFocus(FocusNode());
   }

@@ -33,193 +33,124 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
 
   CoinModel get coinModel;
 
-  // ── Action sheet ──────────────────────────────────────────────────────────
-
   void showActionButtonListWidget() {
-    final List<Widget> childs = [];
+    final su = ScreenUtil();
+    final s = S.of(context);
+    final bool isTest = coinModel.isTest;
 
-    // Send
-    childs.add(_buildSheetItem(
-      icon: Image.asset('assets/wallet/w_send.png', color: _blue),
-      label: S.of(context).g_key_48,
-      onTap: () async => handleSend(closeSheet: true),
-    ));
-    childs.add(_divider());
+    Future<void> pushThenPop(Widget page) async {
+      await Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+      if (mounted) Navigator.pop(context);
+    }
 
-    // Receive
-    childs.add(_buildSheetItem(
-      icon: Image.asset('assets/wallet/w_receive.png', color: _blue),
-      label: S.of(context).g_key_33,
-      onTap: () async => handleReceive(closeSheet: true),
-    ));
-    childs.add(_divider());
+    final items = <Widget>[
+      _buildSheetItem(
+        icon: Image.asset('assets/wallet/w_send.png', color: _blue),
+        label: s.g_key_48,
+        onTap: () async => handleSend(closeSheet: true),
+      ),
+      _buildSheetItem(
+        icon: Image.asset('assets/wallet/w_receive.png', color: _blue),
+        label: s.g_key_33,
+        onTap: () async => handleReceive(closeSheet: true),
+      ),
+      _buildSheetItem(
+        icon: Image.asset('assets/wallet/w_explorer.png', color: _blue),
+        label: s.g_key_196,
+        onTap: () => pushThenPop(BrowserPage(browserUrl)),
+      ),
+      _buildSheetItem(
+        icon: Image.asset('assets/wallet/w_buy.png', color: _blue),
+        label: s.g_key_211,
+        onTap: () => pushThenPop(Moonpay(coinModel: coinModel)),
+      ),
+      _buildSheetItem(
+        icon: Image.asset('assets/wallet/w_sell.png', color: _blue),
+        label: s.g_key_212,
+        onTap: () => pushThenPop(Moonpay(coinModel: coinModel, type: 1)),
+      ),
+    ];
 
-    // Explorer
-    childs.add(_buildSheetItem(
-      icon: Image.asset('assets/wallet/w_explorer.png', color: _blue),
-      label: S.of(context).g_key_196,
-      onTap: () async {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => BrowserPage(browserUrl)),
-        );
-        if (!mounted) return;
-        Navigator.pop(context);
-      },
-    ));
-    childs.add(_divider());
-
-    // Buy
-    childs.add(_buildSheetItem(
-      icon: Image.asset('assets/wallet/w_buy.png', color: _blue),
-      label: S.of(context).g_key_211,
-      onTap: () async {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Moonpay(coinModel: coinModel)),
-        );
-        if (!mounted) return;
-        Navigator.pop(context);
-      },
-    ));
-    childs.add(_divider());
-
-    // Sell
-    childs.add(_buildSheetItem(
-      icon: Image.asset('assets/wallet/w_sell.png', color: _blue),
-      label: S.of(context).g_key_212,
-      onTap: () async {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Moonpay(coinModel: coinModel, type: 1)),
-        );
-        if (!mounted) return;
-        Navigator.pop(context);
-      },
-    ));
-
-    // Add Token — not available for imported keys, BTC, or contract tokens
-    final bool canAddToken = coinModel.privateKey == null ||
-        coinModel.coin['blockchainType'] == BlockchainType.Bitcoin.name ||
-        coinModel.coin['isContract'] == true;
-    if (!canAddToken) {
-      childs.add(_divider());
-      childs.add(_buildSheetItem(
+    final bool showAddToken = coinModel.privateKey != null &&
+        coinModel.coin['blockchainType'] != BlockchainType.Bitcoin.name &&
+        coinModel.coin['isContract'] != true;
+    if (showAddToken) {
+      items.add(_buildSheetItem(
         icon: Image.asset('assets/wallet/addToken.png', color: _blue),
-        label: S.of(context).g_token_m_key_11,
+        label: s.g_token_m_key_11,
         onTap: () async {
           final bool r = await Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) => WalletCoinTokenAdd2(coinModel)),
+            MaterialPageRoute(builder: (_) => WalletCoinTokenAdd2(coinModel)),
           );
           if (!mounted) return;
-          if (r) {
-            ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
-          }
+          if (r) ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
           Navigator.pop(context);
         },
       ));
     }
 
-    // Network switch
-    final bool isTest = coinModel.isTest;
-    final Color mainColor = isTest
-        ? AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemSubtitleTextColor.name)
-        : AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainButtonBgColor.name);
-    final Color testColor = isTest
-        ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-        : AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemSubtitleTextColor.name);
+    final subtitleColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final activeColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainButtonBgColor.name);
+    final blueColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name);
+    final mainColor = isTest ? subtitleColor : activeColor;
+    final testColor = isTest ? blueColor : subtitleColor;
 
-    childs.add(_divider());
-    childs.add(Row(
-      children: [
-        Expanded(
-          child: InkWell(
-            onTap: () {
-              if (isTest) changeNet(false, Load.refresh);
-              Navigator.pop(context);
-            },
-            child: Container(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-              alignment: Alignment.centerLeft,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: ScreenUtil().setWidth(40.0),
-                    height: ScreenUtil().setWidth(40.0),
-                    child:
-                        Image.asset('assets/wallet/mainnet.png', color: mainColor),
-                  ),
-                  SizedBox(width: ScreenUtil().setWidth(20.0)),
-                  Text(
-                    S.of(context).g_key_148,
-                    style: TextStyle(
-                        color: mainColor, fontSize: ScreenUtil().setSp(30.0)),
-                  ),
-                ],
-              ),
+    Widget networkButton(String asset, String label, Color color, VoidCallback onTap) {
+      return Expanded(
+        child: InkWell(
+          onTap: onTap,
+          child: Container(
+            padding: EdgeInsets.all(su.setWidth(30)),
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                SizedBox(
+                  width: su.setWidth(40.0),
+                  height: su.setWidth(40.0),
+                  child: Image.asset(asset, color: color),
+                ),
+                SizedBox(width: su.setWidth(20.0)),
+                Text(label, style: TextStyle(color: color, fontSize: su.setSp(30.0))),
+              ],
             ),
           ),
         ),
-        Expanded(
-          child: InkWell(
-            onTap: () {
-              if (!isTest) changeNet(true, Load.refresh);
-              Navigator.pop(context);
-            },
-            child: Container(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-              alignment: Alignment.centerLeft,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: ScreenUtil().setWidth(40.0),
-                    height: ScreenUtil().setWidth(40.0),
-                    child: Image.asset('assets/wallet/testnet.png',
-                        color: testColor),
-                  ),
-                  SizedBox(width: ScreenUtil().setWidth(20.0)),
-                  Text(
-                    S.of(context).g_key_147,
-                    style: TextStyle(
-                        color: testColor, fontSize: ScreenUtil().setSp(30.0)),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    ));
+      );
+    }
 
-    // Coin Market Info
+    final networkRow = Row(children: [
+      networkButton('assets/wallet/mainnet.png', s.g_key_148, mainColor, () {
+        if (isTest) changeNet(false, Load.refresh);
+        Navigator.pop(context);
+      }),
+      networkButton('assets/wallet/testnet.png', s.g_key_147, testColor, () {
+        if (!isTest) changeNet(true, Load.refresh);
+        Navigator.pop(context);
+      }),
+    ]);
+
+    final childs = <Widget>[];
+    for (int i = 0; i < items.length; i++) {
+      childs.add(items[i]);
+      childs.add(_divider());
+    }
+    childs.add(networkRow);
+
     if (marketInfo != null && marketInfo!['coin_gecko_id'] != '') {
       childs.add(_divider());
       childs.add(_buildSheetItem(
         icon: Image.asset('assets/wallet/marketInfo.png', color: _blue),
-        label: S.of(context).g_key_213,
-        onTap: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MarketCoinInfo(marketInfo ?? {})),
-          );
-          if (!mounted) return;
-          Navigator.pop(context);
-        },
+        label: s.g_key_213,
+        onTap: () => pushThenPop(MarketCoinInfo(marketInfo ?? {})),
       ));
     }
 
     sheetBottom(context, '', Column(children: childs));
   }
-
-  // ── XRP lock-amount info sheet ─────────────────────────────────────────────
 
   void showXMLLockAmountWidget() {
     final NumberFormat oCcy = NumberFormat('#,##0.####', 'en_US');
@@ -262,8 +193,6 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
     sheetBottom(context, '', Column(children: childs));
   }
 
-  // ── Receive navigation (used by handleReceive in main state) ───────────────
-
   Future<void> navigateToReceive() async {
     await Navigator.push(
       context,
@@ -275,8 +204,6 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
       ),
     );
   }
-
-  // ── Private helpers ───────────────────────────────────────────────────────
 
   Color get _blue =>
       AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);

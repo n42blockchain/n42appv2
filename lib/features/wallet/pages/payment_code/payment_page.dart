@@ -38,22 +38,21 @@ class PaymentPage extends ConsumerStatefulWidget {
 }
 
 class _PaymentPageState extends ConsumerState<PaymentPage> {
-  String amount="";
-  String address="";
-  String coinType="";
-  String uuid="";
+  String amount = "";
+  String address = "";
+  String coinType = "";
+  String uuid = "";
   UserInfo? userInfo;
-  Map<String,dynamic>? usdtInfo;
-  String usdtAmount="";
-  List<CoinModel> coinModels=[];
+  Map<String, dynamic>? usdtInfo;
+  String usdtAmount = "";
+  List<CoinModel> coinModels = [];
   CoinModel? coinMain;
-  int coinModelIndex=-1;
-  Load load=Load.refresh;
-  String errorMessage="";
+  int coinModelIndex = -1;
+  Load load = Load.refresh;
+  String errorMessage = "";
   late final Regular regular = Regular();
   final UserInfoApi _userInfoApi = UserInfoApi();
   final oCcy = NumberFormat("#,##0.0#", "en_US");
-  /// UUID v4 格式正则（仅接受标准格式，防止注入任意字符串）
   static final _uuidRe = RegExp(
     r'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
     caseSensitive: false,
@@ -61,33 +60,30 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
 
   @override
   void initState() {
-    if(widget.amount!=null){
-      // 校验 amount：必须为正有限数，防止注入 NaN/Infinity/负数
+    super.initState();
+    if (widget.amount != null) {
       final double? parsedAmount = double.tryParse(widget.amount!);
       if (parsedAmount != null && parsedAmount.isFinite && parsedAmount > 0) {
         amount = widget.amount!;
       }
-      address  = widget.address  ?? "";
+      address = widget.address ?? "";
       coinType = widget.coinType ?? "";
-      // 校验 UUID 格式，非标准格式则不使用（不发 push，不发 API）
       final String rawUuid = widget.uuid ?? "";
       uuid = _uuidRe.hasMatch(rawUuid) ? rawUuid : "";
     }
-    initData();
-    super.initState();
+    _initData();
   }
-  Future<void> initData()async{
-    initUserInfo();
-    await initCoinInfo();
-    initCoinModel();
+
+  Future<void> _initData() async {
+    _initUserInfo();
+    await _initCoinInfo();
+    _initCoinModel();
   }
-  Future<void> initUserInfo() async {
-    if (uuid.isEmpty) {
-      setState(() {});
-      return;
-    }
-    MessageModel mm = await _userInfoApi.getUserInfoWithUUID(uuid);
-    if (mm.error == false && mm.data != null) {
+
+  Future<void> _initUserInfo() async {
+    if (uuid.isEmpty) return;
+    final mm = await _userInfoApi.getUserInfoWithUUID(uuid);
+    if (!mm.error && mm.data != null) {
       try {
         userInfo = UserInfo.fromJson(Map<String, dynamic>.from(mm.data as Map));
       } catch (e) {
@@ -96,17 +92,16 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
     }
     if (mounted) setState(() {});
   }
-  Future<void> initCoinInfo()async{
-    usdtInfo=ref.read(wapBridgeProvider).getCoinPriceWithUnit("usdt");
-    var list = await MarketApi().getWalletCoinsInfo("usdt");
+
+  Future<void> _initCoinInfo() async {
+    usdtInfo = ref.read(wapBridgeProvider).getCoinPriceWithUnit("usdt");
+    final list = await MarketApi().getWalletCoinsInfo("usdt");
     if (list['error']) {
-      errorMessage=S.current.g_key_5;
-      setState(() {
-        load=Load.finish;
-      });
+      errorMessage = S.current.g_key_5;
+      setState(() => load = Load.finish);
     } else {
-      List<dynamic> coinMarketInfo = list['data']['data'];
-      for (var element in coinMarketInfo) {
+      final List<dynamic> coinMarketInfo = list['data']['data'];
+      for (final element in coinMarketInfo) {
         if (element['coin'].toString().toLowerCase() == "usdt") {
           usdtInfo = {
             "icon": element['image'],
@@ -117,95 +112,83 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
         }
       }
     }
-    double uAmount=0;
-    double coinPrice=usdtInfo?['coinPrice']??0.0;
+    final double coinPrice = usdtInfo?['coinPrice'] ?? 0.0;
     final double amountVal = double.tryParse(amount) ?? 0.0;
-    if(coinPrice>1){
-      uAmount=amountVal*coinPrice;
-    }else{
-      uAmount=amountVal+amountVal*(1-coinPrice);
-    }
-    usdtAmount=DataUtils().formatNum(uAmount,2);
+    final double uAmount = coinPrice > 1
+        ? amountVal * coinPrice
+        : amountVal + amountVal * (1 - coinPrice);
+    usdtAmount = DataUtils().formatNum(uAmount, 2);
     setState(() {});
   }
-  void initCoinModel(){
-    WalletActionProvider wap =ref.read(wapBridgeProvider);
-    for(CoinModel cm in wap.coinList){
-      if(cm.coin['coinType'].toString().toLowerCase()==coinType.toLowerCase()){
-        if(cm.coin['miniName'].toString().toLowerCase()=="usdt"){
-          coinModels.add(cm);
-        }
+
+  void _initCoinModel() {
+    final wap = ref.read(wapBridgeProvider);
+    for (final cm in wap.coinList) {
+      if (cm.coin['coinType'].toString().toLowerCase() == coinType.toLowerCase() &&
+          cm.coin['miniName'].toString().toLowerCase() == "usdt") {
+        coinModels.add(cm);
       }
     }
-    if(coinModels.isNotEmpty){
-      coinModelIndex=0;
-      double c1=coinModels[coinModelIndex].balanceDoubleAll();
-      double c2=double.parse(usdtAmount);
-      if(c1<c2){
-        errorMessage=S.current.g_key_payment_usdt_insufficient;
+    if (coinModels.isNotEmpty) {
+      coinModelIndex = 0;
+      final double balance = coinModels[coinModelIndex].balanceDoubleAll();
+      final double required = double.parse(usdtAmount);
+      if (balance < required) {
+        errorMessage = S.current.g_key_payment_usdt_insufficient;
       }
-      initCoinMainModel();
-    }else{
-      errorMessage=S.current.g_key_payment_usdt_not_found;
+      _initCoinMainModel();
+    } else {
+      errorMessage = S.current.g_key_payment_usdt_not_found;
     }
-    setState(() {
-      load=Load.finish;
-    });
+    setState(() => load = Load.finish);
   }
-  Future<void> initCoinMainModel()async{
-    WalletActionProvider wap=ref.read(wapBridgeProvider);
+
+  Future<void> _initCoinMainModel() async {
+    final wap = ref.read(wapBridgeProvider);
     final selectedCoin = coinModels[coinModelIndex];
-    int cIndex=wap.coinModels.indexWhere((element){
-      if(element.coin['coinType'] != selectedCoin.coin['coinType']) return false;
-      if(selectedCoin.privateKey == null) return true;
+    final cIndex = wap.coinModels.indexWhere((element) {
+      if (element.coin['coinType'] != selectedCoin.coin['coinType']) return false;
+      if (selectedCoin.privateKey == null) return true;
       return element.privateKey == selectedCoin.privateKey;
     });
-    if(cIndex !=-1){
-      coinMain=wap.coinModels[cIndex];
+    if (cIndex != -1) {
+      coinMain = wap.coinModels[cIndex];
       await coinMain?.getBalance();
-      if(coinMain!.balance==BigInt.zero){
-        errorMessage=S.current.g_key_payment_native_insufficient;
+      if (coinMain!.balance == BigInt.zero) {
+        errorMessage = S.current.g_key_payment_native_insufficient;
       }
-    }else{
-      errorMessage=S.current.g_key_payment_native_not_found;
+    } else {
+      errorMessage = S.current.g_key_payment_native_not_found;
     }
     setState(() {});
   }
 
   Future<void> web3Transaction() async {
-    setState(() { load = Load.loading; });
+    setState(() => load = Load.loading);
     try {
-      final CoinModel payToken = coinModels[coinModelIndex];
-      // 优先使用 USDT 等值金额；tryParse 防止 NaN/Infinity 崩溃
+      final payToken = coinModels[coinModelIndex];
       final double transferAmount = usdtAmount.isNotEmpty
           ? (double.tryParse(usdtAmount) ?? 0.0)
           : (double.tryParse(amount) ?? 0.0);
-      // 二次守卫：金额必须为正有限数
       if (!transferAmount.isFinite || transferAmount <= 0) {
         errorMessage = S.current.g_key_payment_amount_invalid;
-        setState(() { load = Load.finish; });
+        setState(() => load = Load.finish);
         return;
       }
-      TransferApi transferApi = TransferApi();
-      MessageModel rData = await transferApi.transfer(
+      final rData = await TransferApi().transfer(
         payToken.coin['coinType'],
         address,
         transferAmount,
         fromAddress: payToken.address,
-        // 修复：根据 isTest 选择正确的合约地址
         contractAddress: payToken.isTest
             ? (payToken.coin['contract_test'] ?? payToken.coin['contract'])
             : payToken.coin['contract'],
-        // 修复：isTest 不再硬编码 false
         isTest: payToken.isTest,
       );
       if (rData.error) {
         errorMessage = rData.data;
-        setState(() { load = Load.finish; });
       } else {
         errorMessage = "";
-        setState(() { load = Load.finish; });
-        // 通知收款方（fire-and-forget，不阻塞支付成功 UX）
         if (uuid.isNotEmpty) {
           _notifyPayee(
             txHash: rData.data?.toString() ?? "",
@@ -218,11 +201,11 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
       }
     } catch (e) {
       errorMessage = e.toString();
-      setState(() { load = Load.finish; });
+    } finally {
+      if (mounted) setState(() => load = Load.finish);
     }
   }
 
-  /// 向收款方发送"已收款"通知（fire-and-forget，不阻塞 UI）
   void _notifyPayee({required String txHash, required String coinType}) {
     _userInfoApi.sendPaymentReceipt(
       toUuid: uuid,
@@ -240,13 +223,11 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
   Color _themeColor(AppThemeKeys key) =>
       AppThemeUtils.getColorByKey(context, key.name);
 
-  String get _buttonLabel {
-    switch (load) {
-      case Load.loading: return 'Paying...';
-      case Load.refresh: return 'Loading...';
-      default: return 'Payment';
-    }
-  }
+  String get _buttonLabel => switch (load) {
+    Load.loading => 'Paying...',
+    Load.refresh => 'Loading...',
+    _ => 'Payment',
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -349,19 +330,21 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                     height: su.setWidth(148.0),
                     color: bgColor,
                     child: buttonStyle6(
-                      context, ()async{
-                        if(errorMessage.isNotEmpty && load !=Load.refresh)return;
-                      bool? r=await Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletSecurityVerification()));
-                      if(r==true){
-                        web3Transaction();
-                      }
-                    },
+                      context,
+                      () async {
+                        if (errorMessage.isNotEmpty && load != Load.refresh) return;
+                        final r = await Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => WalletSecurityVerification()),
+                        );
+                        if (r == true) web3Transaction();
+                      },
                       _buttonLabel,
-                      _themeColor(load==Load.finish
+                      _themeColor(load == Load.finish
                           ? AppThemeKeys.mainButtonBgColor
                           : AppThemeKeys.mainButtonBgColor3),
                       _themeColor(AppThemeKeys.mainButtonTextColor),
-                      (load==Load.loading || load==Load.refresh),
+                      load == Load.loading || load == Load.refresh,
                     ),
                   ),
                 ],

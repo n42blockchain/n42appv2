@@ -88,36 +88,25 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
   }
 
   Future<void> _performRevoke(SessionKeyData key) async {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(S.of(context).g_key_aa_revoking),
-        duration: const Duration(seconds: 2),
-      ),
-    );
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(S.of(context).g_key_aa_revoking),
+      duration: const Duration(seconds: 2),
+    ));
 
-    // Optimistic UI update
-    final idx =
-        _sessionKeys.indexWhere((k) => k.keyAddress == key.keyAddress);
+    final idx = _sessionKeys.indexWhere((k) => k.keyAddress == key.keyAddress);
     if (idx >= 0 && mounted) {
-      setState(() {
-        _sessionKeys[idx] = key.copyWith(status: SessionKeyStatus.revoked);
-      });
+      setState(() => _sessionKeys[idx] = key.copyWith(status: SessionKeyStatus.revoked));
     }
 
-    // Persist to SQLite
-    final ok =
-        await _repository.revokeKey(key.keyAddress, widget.account.chainId);
+    final ok = await _repository.revokeKey(key.keyAddress, widget.account.chainId);
+    if (!mounted) return;
 
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(ok
-              ? S.of(context).g_key_aa_revoked
-              : S.of(context).g_key_aa_session_create_failed),
-          backgroundColor: ok ? Colors.green : Colors.red,
-        ),
-      );
-    }
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(ok
+          ? S.of(context).g_key_aa_revoked
+          : S.of(context).g_key_aa_session_create_failed),
+      backgroundColor: ok ? Colors.green : Colors.red,
+    ));
   }
 
   @override
@@ -153,12 +142,8 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
     );
   }
 
-  // ── Theme helper ─────────────────────────────────────────────────────────
-
   Color _themeColor(AppThemeKeys key) =>
       AppThemeUtils.getColorByKey(context, key.name);
-
-  // ── Info header ──────────────────────────────────────────────────────────
 
   Widget _buildInfoHeader(
     S s,
@@ -270,8 +255,6 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
     );
   }
 
-  // ── Tab bar ──────────────────────────────────────────────────────────────
-
   Widget _buildTabBar(
     S s,
     Color blueColor,
@@ -308,8 +291,6 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
       ),
     );
   }
-
-  // ── Tab content ──────────────────────────────────────────────────────────
 
   Widget _buildTabContent(
     List<SessionKeyData> activeKeys,

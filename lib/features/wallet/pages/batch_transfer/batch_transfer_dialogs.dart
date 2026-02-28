@@ -11,8 +11,6 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/provider/batch_transfer_provider.dart';
 import 'package:n42_wallet/features/wallet/pages/batch_transfer/batch_transfer_list_widgets.dart';
 
-// ─── ConfirmDialog ────────────────────────────────────────────────────────────
-
 /// 转账确认对话框。返回 true 表示用户确认，false/null 表示取消。
 class BatchConfirmDialog extends StatelessWidget {
   final BatchTransferProvider provider;
@@ -81,7 +79,7 @@ class BatchConfirmDialog extends StatelessWidget {
         TextButton(
           onPressed: () => Navigator.pop(context, false),
           child: Text(
-            S.of(context).g_key_79, // Cancel
+            S.of(context).g_key_79,
             style: TextStyle(
               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
             ),
@@ -93,7 +91,7 @@ class BatchConfirmDialog extends StatelessWidget {
             backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
           ),
           child: Text(
-            S.of(context).g_key_78, // Confirm
+            S.of(context).g_key_78,
             style: const TextStyle(color: Colors.white),
           ),
         ),
@@ -101,8 +99,6 @@ class BatchConfirmDialog extends StatelessWidget {
     );
   }
 }
-
-// ─── ResultSheet ──────────────────────────────────────────────────────────────
 
 /// 转账成功后的底部结果面板
 class BatchResultSheet extends StatelessWidget {
@@ -130,7 +126,6 @@ class BatchResultSheet extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // 把手
             Container(
               width: ScreenUtil().setWidth(60),
               height: ScreenUtil().setWidth(5),
@@ -140,13 +135,10 @@ class BatchResultSheet extends StatelessWidget {
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(3)),
               ),
             ),
-
-            // 成功图标
             Icon(Icons.check_circle_rounded, color: Colors.green, size: ScreenUtil().setWidth(72)),
             SizedBox(height: ScreenUtil().setWidth(12)),
-
             Text(
-              S.of(context).g_key_140, // "Transaction successful"
+              S.of(context).g_key_140,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(36),
                 fontWeight: FontWeight.w700,
@@ -154,8 +146,6 @@ class BatchResultSheet extends StatelessWidget {
               ),
             ),
             SizedBox(height: ScreenUtil().setWidth(24)),
-
-            // 汇总信息
             Container(
               padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
               decoration: BoxDecoration(
@@ -208,8 +198,6 @@ class BatchResultSheet extends StatelessWidget {
               ),
             ),
             SizedBox(height: ScreenUtil().setWidth(24)),
-
-            // 导出报告按钮
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -231,8 +219,6 @@ class BatchResultSheet extends StatelessWidget {
               ),
             ),
             SizedBox(height: ScreenUtil().setWidth(12)),
-
-            // 关闭按钮
             SizedBox(
               width: double.infinity,
               child: OutlinedButton(
@@ -252,8 +238,6 @@ class BatchResultSheet extends StatelessWidget {
     );
   }
 }
-
-// ─── HelpDialog ───────────────────────────────────────────────────────────────
 
 /// 帮助说明对话框
 class BatchHelpDialog extends StatelessWidget {
@@ -326,8 +310,6 @@ class BatchHelpDialog extends StatelessWidget {
     );
   }
 }
-
-// ─── _ResultRow (private helper widget) ──────────────────────────────────────
 
 class _ResultRow extends StatelessWidget {
   final String label;

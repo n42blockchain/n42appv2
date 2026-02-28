@@ -66,33 +66,27 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
   }
 
   Widget buildAmountField() {
-    final unit =
-        (widget.coinModel.coin['unit'] as String? ?? '').toUpperCase();
+    final su = ScreenUtil();
+    final unit = (widget.coinModel.coin['unit'] as String? ?? '').toUpperCase();
     final balance = '${widget.coinModel.balanceStringAll()} $unit';
+    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final itemBg = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
 
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.all(su.setWidth(30.0)),
       child: Column(
         children: [
           Row(
             children: [
               Text(
                 S.of(context).g_key_44,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(28.0),
-                ),
+                style: TextStyle(color: mainText, fontSize: su.setSp(28.0)),
               ),
-              SizedBox(width: ScreenUtil().setWidth(20.0)),
+              SizedBox(width: su.setWidth(20.0)),
               Expanded(
                 child: Text(
                   balance,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(28.0),
-                  ),
+                  style: TextStyle(color: mainText, fontSize: su.setSp(28.0)),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.right,
@@ -101,20 +95,16 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
             ],
           ),
           Container(
-            margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
+            margin: EdgeInsets.only(top: su.setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                  Radius.circular(ScreenUtil().setWidth(16.0))),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor.name),
+              borderRadius: BorderRadius.all(Radius.circular(su.setWidth(16.0))),
+              color: itemBg,
               boxShadow: [
                 BoxShadow(
-                  color:
-                      const Color(0xff101828).withAlpha((0.05 * 255).round()),
+                  color: const Color(0xff101828).withAlpha(13),
                   offset: const Offset(0, 1),
-                  blurRadius: ScreenUtil().setWidth(4.0),
-                  spreadRadius: 0,
-                )
+                  blurRadius: su.setWidth(4.0),
+                ),
               ],
             ),
             child: Column(
@@ -126,51 +116,40 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
                   focusNode: valueNode,
                   hintText: S.of(context).g_key_44,
                   hintStyle: TextStyle(
-                    fontSize: ScreenUtil().setSp(54.0),
+                    fontSize: su.setSp(54.0),
                     color: AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.textFieldHintColor.name),
                   ),
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   onChanged: (v) => amountCheck(value: v),
                   onEditingComplete: () {
                     amountCheck();
                     FocusScope.of(context).requestFocus(toNode);
                   },
-                  fontSize: ScreenUtil().setWidth(70.0),
-                  height: ScreenUtil().setWidth(120.0),
-                  boxShadow: BoxShadow(
-                    color: const Color(0xff101828).withAlpha(0),
-                    offset: Offset.zero,
-                    blurRadius: 0,
-                    spreadRadius: 0,
-                  ),
+                  fontSize: su.setWidth(70.0),
+                  height: su.setWidth(120.0),
+                  boxShadow: const BoxShadow(color: Colors.transparent),
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(ScreenUtil().setWidth(16.0)),
-                    topRight: Radius.circular(ScreenUtil().setWidth(16.0)),
+                    topLeft: Radius.circular(su.setWidth(16.0)),
+                    topRight: Radius.circular(su.setWidth(16.0)),
                   ),
-                  bgColor: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemBgColor.name),
+                  bgColor: itemBg,
                   errorMessage: amountError,
-                  messageMargin: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(30.0)),
+                  messageMargin: EdgeInsets.symmetric(horizontal: su.setWidth(30.0)),
                   rightWidget1: Container(
-                    margin:
-                        EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
-                    height: ScreenUtil().setWidth(60.0),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(20.0)),
+                    margin: EdgeInsets.only(left: su.setWidth(10.0)),
+                    height: su.setWidth(60.0),
+                    padding: EdgeInsets.symmetric(horizontal: su.setWidth(20.0)),
                     decoration: BoxDecoration(
                       color: AppThemeUtils.getColorByKey(
                           context, AppThemeKeys.mainBlueColor.name),
-                      borderRadius: BorderRadius.all(
-                          Radius.circular(ScreenUtil().setWidth(60.0))),
+                      borderRadius: BorderRadius.all(Radius.circular(su.setWidth(60.0))),
                     ),
                     alignment: Alignment.center,
                     child: Text(
                       S.of(context).g_key_197,
                       style: TextStyle(
-                        fontSize: ScreenUtil().setSp(26.0),
+                        fontSize: su.setSp(26.0),
                         color: AppThemeUtils.getColorByKey(
                             context, AppThemeKeys.mainWhiteColor.name),
                       ),
@@ -179,13 +158,12 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
                   rightOnTap1: maxTag,
                 ),
                 Divider(
-                  height: ScreenUtil().setWidth(1.0),
-                  indent: ScreenUtil().setWidth(20.0),
-                  endIndent: ScreenUtil().setWidth(20.0),
+                  height: su.setWidth(1.0),
+                  indent: su.setWidth(20.0),
+                  endIndent: su.setWidth(20.0),
                 ),
                 buildOwnerAddress(),
-                buildUsdEquivalent(
-                    context, valueCtrl.text, widget.coinModel.coinPrice),
+                buildUsdEquivalent(context, valueCtrl.text, widget.coinModel.coinPrice),
               ],
             ),
           ),
@@ -195,21 +173,19 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
   }
 
   Widget buildOwnerAddress() {
-    final addr =
-        dataUtils.addressFarmat(widget.coinModel.address.toString());
-    return Container(
-      padding: EdgeInsets.only(
-        top: ScreenUtil().setWidth(20.0),
-        bottom: ScreenUtil().setWidth(20.0),
-        right: ScreenUtil().setWidth(30.0),
-        left: ScreenUtil().setWidth(30.0),
+    final su = ScreenUtil();
+    final addr = dataUtils.addressFarmat(widget.coinModel.address.toString());
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: su.setWidth(20.0),
+        horizontal: su.setWidth(30.0),
       ),
       child: Text(
         addr,
         style: TextStyle(
           color: AppThemeUtils.getColorByKey(
               context, AppThemeKeys.itemSubtitleTextColor.name),
-          fontSize: ScreenUtil().setSp(30.0),
+          fontSize: su.setSp(30.0),
         ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
