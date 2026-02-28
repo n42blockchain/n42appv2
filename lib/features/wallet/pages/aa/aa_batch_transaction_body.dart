@@ -307,31 +307,7 @@ class AABatchTransactionBody extends StatelessWidget {
                   color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
                 ),
               ),
-              if (isEstimating)
-                SizedBox(
-                  width: ScreenUtil().setWidth(20),
-                  height: ScreenUtil().setWidth(20),
-                  child: const CircularProgressIndicator(strokeWidth: 2),
-                )
-              else if (estimatedTotalGas != null)
-                Text(
-                  isSponsored ? S.of(context).g_key_aa_free : formatGasCost(),
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
-                    fontWeight: FontWeight.w600,
-                    color: isSponsored
-                        ? Colors.green
-                        : _themeColor(context, AppThemeKeys.mainTextColor),
-                  ),
-                )
-              else
-                Text(
-                  '-',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
-                    color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
-                  ),
-                ),
+              _buildGasValue(context, isSponsored),
             ],
           ),
           if (isSponsored && estimatedTotalGas != null) ...[
@@ -339,6 +315,36 @@ class AABatchTransactionBody extends StatelessWidget {
             GasSponsorshipBadge(isSponsored: true, savedAmount: formatGasCost()),
           ],
         ],
+      ),
+    );
+  }
+
+  Widget _buildGasValue(BuildContext context, bool isSponsored) {
+    if (isEstimating) {
+      final size = ScreenUtil().setWidth(20);
+      return SizedBox(
+        width: size,
+        height: size,
+        child: const CircularProgressIndicator(strokeWidth: 2),
+      );
+    }
+    if (estimatedTotalGas != null) {
+      return Text(
+        isSponsored ? S.of(context).g_key_aa_free : formatGasCost(),
+        style: TextStyle(
+          fontSize: ScreenUtil().setSp(26),
+          fontWeight: FontWeight.w600,
+          color: isSponsored
+              ? Colors.green
+              : _themeColor(context, AppThemeKeys.mainTextColor),
+        ),
+      );
+    }
+    return Text(
+      '-',
+      style: TextStyle(
+        fontSize: ScreenUtil().setSp(26),
+        color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
       ),
     );
   }

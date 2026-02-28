@@ -32,7 +32,11 @@ class EnsRenewPage extends StatefulWidget {
 }
 
 class _EnsRenewPageState extends State<EnsRenewPage> {
-  final EnsRegistrationService _ensService = EnsRegistrationServiceProvider.instance;
+  final EnsRegistrationService _ensService =
+      EnsRegistrationServiceProvider.instance;
+
+  Color _color(AppThemeKeys key) =>
+      AppThemeUtils.getColorByKey(context, key.name);
 
   int _selectedYears = 1;
   EnsPrice? _priceInfo;
@@ -73,27 +77,26 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
     });
 
     final result = await _ensService.renew(widget.ownedEns.name, _selectedYears);
+    if (!mounted) return;
 
-    if (mounted) {
-      setState(() {
-        _isRenewing = false;
-        _renewResult = result.data;
-      });
+    setState(() {
+      _isRenewing = false;
+      _renewResult = result.data;
+    });
 
-      if (result.error || result.data == null || !result.data!.success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(result.data?.error ?? S.of(context).g_key_error_3),
-            backgroundColor: Colors.red,
-          ),
-        );
-      } else if (result.data!.newExpiresAt != null) {
-        // 续费成功：自动注册到期提醒
-        await EnsExpiryReminderService.setReminder(
-          widget.ownedEns.name,
-          result.data!.newExpiresAt!,
-        );
-      }
+    final data = result.data;
+    if (result.error || data == null || !data.success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(data?.error ?? S.of(context).g_key_error_3),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } else if (data.newExpiresAt != null) {
+      await EnsExpiryReminderService.setReminder(
+        widget.ownedEns.name,
+        data.newExpiresAt!,
+      );
     }
   }
 
@@ -147,33 +150,22 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
   }
 
   Widget _buildDomainCard() {
-    final isExpiringSoon = widget.ownedEns.isExpiringSoon;
-    final isExpired = widget.ownedEns.isExpired;
-
-    final Color statusColor;
-    final IconData statusIcon;
-    final List<Color> gradientColors;
-
-    if (isExpired) {
-      statusColor = Colors.red;
-      statusIcon = Icons.error;
-      gradientColors = [Colors.red.withAlpha(30), Colors.red.withAlpha(10)];
-    } else if (isExpiringSoon) {
-      statusColor = Colors.orange;
-      statusIcon = Icons.warning;
-      gradientColors = [Colors.orange.withAlpha(30), Colors.orange.withAlpha(10)];
-    } else {
-      statusColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-      statusIcon = Icons.access_time;
-      final blue = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-      gradientColors = [blue.withAlpha(30), blue.withAlpha(10)];
-    }
+    final ens = widget.ownedEns;
+    final (statusColor, statusIcon, baseColor) = switch ((ens.isExpired, ens.isExpiringSoon)) {
+      (true, _) => (Colors.red, Icons.error, Colors.red),
+      (_, true) => (Colors.orange, Icons.warning, Colors.orange),
+      _ => (
+          _color(AppThemeKeys.itemSubtitleTextColor),
+          Icons.access_time,
+          _color(AppThemeKeys.mainBlueColor),
+        ),
+    };
 
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: gradientColors,
+          colors: [baseColor.withAlpha(30), baseColor.withAlpha(10)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -182,14 +174,11 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
       child: Column(
         children: [
           Text(
-            widget.ownedEns.name,
+            ens.name,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(36),
               fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: _color(AppThemeKeys.mainTextColor),
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(12)),
@@ -199,9 +188,9 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
               Icon(statusIcon, size: ScreenUtil().setWidth(20), color: statusColor),
               SizedBox(width: ScreenUtil().setWidth(6)),
               Text(
-                isExpired
+                ens.isExpired
                     ? S.of(context).g_key_ens_expired
-                    : '${S.of(context).g_key_ens_expires}: ${widget.ownedEns.formattedExpiresAt}',
+                    : '${S.of(context).g_key_ens_expires}: ${ens.formattedExpiresAt}',
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(24),
                   color: statusColor,
@@ -223,10 +212,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
           style: TextStyle(
             fontSize: ScreenUtil().setSp(28),
             fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
+            color: _color(AppThemeKeys.mainTextColor),
           ),
         ),
         SizedBox(height: ScreenUtil().setWidth(16)),
@@ -244,26 +230,14 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                     vertical: ScreenUtil().setWidth(16),
                   ),
                   decoration: BoxDecoration(
-                    color: isSelected
-                        ? AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainBlueColor.name,
-                          )
-                        : AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemBgColor.name,
-                          ),
+                    color: _color(isSelected
+                        ? AppThemeKeys.mainBlueColor
+                        : AppThemeKeys.itemBgColor),
                     borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
                     border: Border.all(
                       color: isSelected
-                          ? AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainBlueColor.name,
-                            )
-                          : AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.itemSubtitleTextColor.name,
-                            ).withAlpha(50),
+                          ? _color(AppThemeKeys.mainBlueColor)
+                          : _color(AppThemeKeys.itemSubtitleTextColor).withAlpha(50),
                     ),
                   ),
                   child: Text(
@@ -273,10 +247,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                       fontWeight: FontWeight.w600,
                       color: isSelected
                           ? Colors.white
-                          : AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainTextColor.name,
-                            ),
+                          : _color(AppThemeKeys.mainTextColor),
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -309,20 +280,14 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                 S.of(context).g_key_ens_current_expiry,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(24),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
+                  color: _color(AppThemeKeys.itemSubtitleTextColor),
                 ),
               ),
               Text(
                 _formatDate(currentExpiry),
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(24),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
+                  color: _color(AppThemeKeys.mainTextColor),
                 ),
               ),
             ],
@@ -382,10 +347,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
     return ElevatedButton(
       onPressed: _priceInfo != null && !_isRenewing ? _executeRenew : null,
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.mainBlueColor.name,
-        ),
+        backgroundColor: _color(AppThemeKeys.mainBlueColor),
         foregroundColor: Colors.white,
         padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
         shape: RoundedRectangleBorder(

@@ -27,12 +27,15 @@ class SelfCustody extends StatefulWidget {
 class _SelfCustodyState extends State<SelfCustody> {
   bool _acknowledged = false;
 
+  Color _color(BuildContext context, AppThemeKeys key) =>
+      AppThemeUtils.getColorByKey(context, key.name);
+
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
     return Scaffold(
       backgroundColor:
-          AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+          _color(context, AppThemeKeys.backGroundColor),
       appBar: AppBarWidget(text: s.g_key_btc_stake_title),
       body: SafeArea(
         child: Stack(
@@ -72,8 +75,7 @@ class _SelfCustodyState extends State<SelfCustody> {
                   Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
                   Container(
                     padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.backGroundColor.name),
+                    color: _color(context, AppThemeKeys.backGroundColor),
                     height: ScreenUtil().setWidth(148),
                     child: buttonStyle6(
                       context,
@@ -87,14 +89,13 @@ class _SelfCustodyState extends State<SelfCustody> {
                         );
                       },
                       s.g_key_btc_stake_continue,
-                      AppThemeUtils.getColorByKey(
+                      _color(
                         context,
                         _acknowledged
-                            ? AppThemeKeys.mainButtonBgColor.name
-                            : AppThemeKeys.mainButtonBgColor3.name,
+                            ? AppThemeKeys.mainButtonBgColor
+                            : AppThemeKeys.mainButtonBgColor3,
                       ),
-                      AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainButtonTextColor.name),
+                      _color(context, AppThemeKeys.mainButtonTextColor),
                       false,
                     ),
                   ),
@@ -107,9 +108,6 @@ class _SelfCustodyState extends State<SelfCustody> {
     );
   }
 
-  // ──────────────────────────────────────────────────────────────
-  //  代币头部：图标 + 名称 + 余额
-  // ──────────────────────────────────────────────────────────────
   Widget _buildCoinHeader(BuildContext context) {
     return Row(
       children: [
@@ -127,7 +125,7 @@ class _SelfCustodyState extends State<SelfCustody> {
           style: TextStyle(
             fontSize: ScreenUtil().setSp(32),
             fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+            color: _color(context, AppThemeKeys.mainTextColor),
           ),
         ),
         Expanded(
@@ -136,8 +134,7 @@ class _SelfCustodyState extends State<SelfCustody> {
             textAlign: TextAlign.right,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(28),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: _color(context, AppThemeKeys.itemSubtitleTextColor),
             ),
           ),
         ),
@@ -145,9 +142,6 @@ class _SelfCustodyState extends State<SelfCustody> {
     );
   }
 
-  // ──────────────────────────────────────────────────────────────
-  //  "How It Works" — 4 步流程说明
-  // ──────────────────────────────────────────────────────────────
   Widget _buildHowItWorks(BuildContext context, S s) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,7 +151,7 @@ class _SelfCustodyState extends State<SelfCustody> {
           style: TextStyle(
             fontSize: ScreenUtil().setSp(30),
             fontWeight: FontWeight.bold,
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+            color: _color(context, AppThemeKeys.mainTextColor),
           ),
         ),
         SizedBox(height: ScreenUtil().setWidth(16)),
@@ -228,8 +222,7 @@ class _SelfCustodyState extends State<SelfCustody> {
                   child: Container(
                     width: ScreenUtil().setWidth(2),
                     margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(4)),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name)
+                    color: _color(context, AppThemeKeys.itemSubtitleTextColor)
                         .withAlpha(60),
                   ),
                 ),
@@ -269,8 +262,7 @@ class _SelfCustodyState extends State<SelfCustody> {
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(28),
                           fontWeight: FontWeight.w600,
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
+                          color: _color(context, AppThemeKeys.mainTextColor),
                         ),
                       ),
                     ],
@@ -280,8 +272,7 @@ class _SelfCustodyState extends State<SelfCustody> {
                     desc,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(24),
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemSubtitleTextColor.name),
+                      color: _color(context, AppThemeKeys.itemSubtitleTextColor),
                       height: 1.5,
                     ),
                   ),
@@ -294,9 +285,6 @@ class _SelfCustodyState extends State<SelfCustody> {
     );
   }
 
-  // ──────────────────────────────────────────────────────────────
-  //  风险提示卡
-  // ──────────────────────────────────────────────────────────────
   Widget _buildRiskWarning(BuildContext context, S s) {
     return Container(
       width: double.infinity,
@@ -365,9 +353,6 @@ class _SelfCustodyState extends State<SelfCustody> {
     );
   }
 
-  // ──────────────────────────────────────────────────────────────
-  //  "我已了解风险" 勾选框
-  // ──────────────────────────────────────────────────────────────
   Widget _buildAcknowledgment(BuildContext context, S s) {
     return GestureDetector(
       onTap: () => setState(() => _acknowledged = !_acknowledged),
@@ -381,16 +366,16 @@ class _SelfCustodyState extends State<SelfCustody> {
             height: ScreenUtil().setWidth(44),
             decoration: BoxDecoration(
               color: _acknowledged
-                  ? AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name)
+                  ? _color(context, AppThemeKeys.mainBlueColor)
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
               border: Border.all(
-                color: _acknowledged
-                    ? AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainBlueColor.name)
-                    : AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: _color(
+                  context,
+                  _acknowledged
+                      ? AppThemeKeys.mainBlueColor
+                      : AppThemeKeys.itemSubtitleTextColor,
+                ),
                 width: 2,
               ),
             ),
@@ -405,8 +390,7 @@ class _SelfCustodyState extends State<SelfCustody> {
               s.g_key_btc_stake_acknowledge,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(26),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                color: _color(context, AppThemeKeys.mainTextColor),
                 height: 1.4,
               ),
             ),

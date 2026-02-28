@@ -39,8 +39,7 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
   Load gasLimitLoad = Load.finish;
 
   Future<void> initData() async {
-    // 判断是否是代币
-    if (widget.coinModel.coin['isContract']) {
+      if (widget.coinModel.coin['isContract']) {
       final WalletActionProvider wap = ref.read(wapBridgeProvider);
       final int cIndex = wap.coinModels.indexWhere((element) {
         if (element.coin['coinType'] != widget.coinModel.coin['coinType']) {
@@ -65,7 +64,6 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
     await getOwnerObjects();
   }
 
-  // 获取余额
   Future<void> getBalance() async {
     setState(() => load = Load.loading);
     final bool isOk = await widget.coinModel.getBalance(getToken: false);
@@ -78,29 +76,26 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
     }
   }
 
-  // 获取旷工费
   Future<void> getGasPrice() async {
     setState(() => load = Load.loading);
-    final String? rpc = widget.coinModel.coin['custom'] == true
-        ? widget.coinModel.coin['service']
-        : null;
-    final MessageModel mm = await tokenViewApi.getGasPrice(
-          widget.coinModel.coin['blockchainType'],
-          widget.coinModel.coin['coinType'],
+    final coin = widget.coinModel.coin;
+    final rpc = coin['custom'] == true ? coin['service'] as String? : null;
+    final mm = await tokenViewApi.getGasPrice(
+          coin['blockchainType'],
+          coin['coinType'],
           isTest: widget.coinModel.isTest,
           rpc: rpc,
         ) ??
         MessageModel.error();
     if (!mounted) return;
-    if (mm.error == false) {
+    if (!mm.error) {
       gasPrice = mm.data;
     } else {
       errorMessage = mm.data.toString();
       ToastUtils.show(errorMessage);
     }
     totalGasPrice = gasPrice * gas;
-    load = Load.finish;
-    setState(() {});
+    setState(() => load = Load.finish);
   }
 
   /// 获取持有的所有可用 SUI 资产 (Coin objects)
@@ -119,7 +114,6 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
     ];
   }
 
-  // eth 模拟交易
   Future<dynamic> estimateGasEthLocal({bool checkAddress = true}) async {
     closeKeyboard();
     if (gasLimitLoad == Load.loading) return;
@@ -134,15 +128,15 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
       } else {
         toAddr = toTextEditingController.text.trim();
       }
-      if (toErrorMessage != "") return;
-      final String price = valueTextEditingController.text;
-      if (price == "") return;
+      if (toErrorMessage.isNotEmpty) return;
+      final price = valueTextEditingController.text;
+      if (price.isEmpty) return;
 
-      final Map<String, dynamic> signData = {
+      final signData = <String, dynamic>{
         "referenceGasPrice": totalGasPrice,
         "gasBudget": totalGasPrice.toInt() * 1.2,
         "toAddress": toTextEditingController.text,
-        "amount": BigInt.parse(valueTextEditingController.text),
+        "amount": BigInt.parse(price),
         "utxo": utxos,
       };
       final SuiApi suiApi = SuiApi(isTest: widget.coinModel.isTest);
@@ -164,15 +158,14 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
           await suiApi.dryRunTransactionBlock(signStr);
       if (!mounted) return false;
 
-      if (suiMessage.error == false) {
+      if (!suiMessage.error) {
         gasPrice = suiMessage.data;
         totalGasPrice = gasPrice;
         errorMessage = "";
         return true;
-      } else {
-        errorMessage = suiMessage.data;
-        return false;
       }
+      errorMessage = suiMessage.data;
+      return false;
     } catch (e) {
       errorMessage = e.toString();
       return false;
@@ -183,44 +176,28 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
     }
   }
 
-  // 检查 amount 输入是否正确
   void amountCheck({String value = ""}) {
     if (value.isEmpty) value = valueTextEditingController.text;
-
-    final int minValue = widget.coinModel.coin['decimals'] == 0 ? 1 : 0;
+    final coin = widget.coinModel.coin;
+    final int minValue = coin['decimals'] == 0 ? 1 : 0;
 
     void setError(String msg) {
       amountErrorMessage = msg;
       setState(() {});
     }
 
-    if (value.isEmpty) {
-      setError(S.of(context).g_key_46(minValue));
-      return;
-    }
+    if (value.isEmpty) { setError(S.of(context).g_key_46(minValue)); return; }
 
-    final bool checkNums = regular.regularNums(value);
-    if (widget.coinModel.coin['decimals'] == 0 && !checkNums) {
-      setError(S.of(context).g_key_134);
-      return;
-    }
+    final isInt = regular.regularNums(value);
+    final isDouble = regular.regularDouble(value);
+    if (coin['decimals'] == 0 && !isInt) { setError(S.of(context).g_key_134); return; }
+    if (!isDouble && !isInt) { setError(S.of(context).g_key_134); return; }
 
-    final bool checkDouble = regular.regularDouble(value);
-    final double dValue = double.parse(value);
+    final dValue = double.parse(value);
+    if (dValue <= 0 || dValue < minValue) { setError(S.of(context).g_key_46(minValue)); return; }
 
-    if (!checkDouble && !checkNums) {
-      setError(S.of(context).g_key_134);
-      return;
-    }
-    if (dValue <= 0 || dValue < minValue) {
-      setError(S.of(context).g_key_46(minValue));
-      return;
-    }
-
-    final BigInt valueBi =
-        ethToWeiString(value, widget.coinModel.coin['decimals']);
-    if (!widget.coinModel.coin['isContract'] &&
-        valueBi + totalGasPrice > widget.coinModel.balance) {
+    final valueBi = ethToWeiString(value, coin['decimals']);
+    if (!coin['isContract'] && valueBi + totalGasPrice > widget.coinModel.balance) {
       setError(S.of(context).g_key_47);
       return;
     }
@@ -230,7 +207,6 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
     setState(() {});
   }
 
-  // 检查转账地址是否正确
   Future<String?> toAddressCheck(String addr) async {
     if (addr.isEmpty) {
       toErrorMessage = S.current.g_key_41;
@@ -398,7 +374,6 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
     setState(() {});
   }
 
-  // 关闭键盘
   void closeKeyboard() {
     FocusScope.of(context).requestFocus(FocusNode());
   }

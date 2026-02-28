@@ -8,7 +8,6 @@ import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/face_api.dart';
-import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/provider/trustdart.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
@@ -45,10 +44,7 @@ class _FaceBindingState extends ConsumerState<FaceBinding>
   bool _openedSystemSettings = false;
   bool _isUsingCamera = false;
 
-  // ── SDK 初始化 ────────────────────────────────────────────────────────────
-  //
-  // 若 assets/regula.license 存在，使用离线许可证初始化（支持离线匹配）。
-  // 否则无证书初始化（需要联网激活）。
+  /// SDK 初始化：若 assets/regula.license 存在则使用离线许可证。
   Future<bool> initialize() async {
     final license = await _loadAssetIfExists('assets/regula.license');
     InitConfig? config;
@@ -207,55 +203,54 @@ class _FaceBindingState extends ConsumerState<FaceBinding>
 
   // ── 后端通信 ──────────────────────────────────────────────────────────────
 
-  /// 绑定流程（type=1）：将人脸图像与钱包地址关联
-  Future<void> _bindingFlow(Uint8List img) async {
-    // 确定钱包地址
-    String addr;
-    if (widget.address != null) {
-      addr = widget.address!;
-    } else {
-      final CoinModel? cm =
-          ref.read(wapBridgeProvider).getCoinModelWithCoinType(CoinType.N.name);
-      if (cm == null) {
-        if (!mounted) return;
-        ToastUtils.show(S.of(context).g_face_match_key5);
-        Navigator.pop(context);
-        return;
-      }
-      addr = cm.address;
-    }
-
-    if (!mounted) return;
+  void _startLoading(Uint8List img) {
     setState(() {
       load = Load.loading;
       img1 = Image.memory(img);
     });
+  }
 
-    final MessageModel rmm =
-        await FaceApi().binding(addr, img, 'face2.jpg', type: 1);
-    if (!mounted) return;
-
+  /// 校验 API 响应，失败时 pop 并返回 null。成功时返回 data Map。
+  Map<dynamic, dynamic>? _validateApiResponse(MessageModel rmm) {
     if (rmm.error) {
-      // 网络或服务器错误 → 弹出错误，返回 null（调用方检测 null 表示失败）
       ToastUtils.show(S.of(context).g_face_network_error);
       Navigator.pop(context);
-      return;
+      return null;
     }
-
     final data = rmm.data;
     if (data is! Map) {
       ToastUtils.show(S.of(context).g_face_match_key3);
       Navigator.pop(context);
+      return null;
+    }
+    return data;
+  }
+
+  /// 绑定流程（type=1）：将人脸图像与钱包地址关联
+  Future<void> _bindingFlow(Uint8List img) async {
+    final addr = widget.address ??
+        ref.read(wapBridgeProvider).getCoinModelWithCoinType(CoinType.N.name)?.address;
+    if (addr == null) {
+      if (!mounted) return;
+      ToastUtils.show(S.of(context).g_face_match_key5);
+      Navigator.pop(context);
       return;
     }
 
+    if (!mounted) return;
+    _startLoading(img);
+
+    final rmm = await FaceApi().binding(addr, img, 'face2.jpg', type: 1);
+    if (!mounted) return;
+
+    final data = _validateApiResponse(rmm);
+    if (data == null) return;
+
     if (data['match'] == true) {
-      // 该人脸已绑定到另一个地址
       final mm = MessageModel.error();
       mm.data = S.of(context).g_face_match_key10(data['address'] ?? '');
       Navigator.pop(context, mm);
     } else {
-      // 绑定成功
       ref.read(wapBridgeProvider).setWalletFaceBinding(widget.walletIndex);
       if (!mounted) return;
       final mm = MessageModel();
@@ -267,27 +262,13 @@ class _FaceBindingState extends ConsumerState<FaceBinding>
   /// 验证流程（type=2）：检测人脸并返回匹配的钱包地址
   Future<void> _matchFlow(Uint8List img) async {
     if (!mounted) return;
-    setState(() {
-      load = Load.loading;
-      img1 = Image.memory(img);
-    });
+    _startLoading(img);
 
-    final MessageModel rmm =
-        await FaceApi().match(img, 'face2.jpg', type: 1);
+    final rmm = await FaceApi().match(img, 'face2.jpg', type: 1);
     if (!mounted) return;
 
-    if (rmm.error) {
-      ToastUtils.show(S.of(context).g_face_network_error);
-      Navigator.pop(context); // null → 调用方视为失败
-      return;
-    }
-
-    final data = rmm.data;
-    if (data is! Map) {
-      ToastUtils.show(S.of(context).g_face_match_key3);
-      Navigator.pop(context); // null
-      return;
-    }
+    final data = _validateApiResponse(rmm);
+    if (data == null) return;
 
     if (data['match'] == true) {
       final mm = MessageModel();
@@ -295,7 +276,7 @@ class _FaceBindingState extends ConsumerState<FaceBinding>
       Navigator.pop(context, mm);
     } else {
       ToastUtils.show(S.of(context).g_face_match_key3);
-      Navigator.pop(context); // null → 调用方检测 null 表示未匹配
+      Navigator.pop(context);
     }
   }
 

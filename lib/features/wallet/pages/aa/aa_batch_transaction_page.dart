@@ -91,45 +91,42 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
   /// 将 BatchOperation 列表转换为 ExecuteCall 列表（用于 CalldataBuilder）
   List<ExecuteCall>? _buildExecuteCalls() {
     try {
-      return _operations.map((op) {
-        switch (op.type) {
-          case BatchOperationType.transfer:
-            if (op.tokenAddress != null && op.tokenAddress!.isNotEmpty) {
-              // ERC-20 transfer
-              return ExecuteCall.erc20Transfer(
-                token: op.tokenAddress!,
-                to: op.targetAddress,
-                amount: op.amount ?? BigInt.zero,
-              );
-            } else {
-              // ETH transfer
-              return ExecuteCall.ethTransfer(op.targetAddress, op.amount ?? BigInt.zero);
-            }
-          case BatchOperationType.approve:
-            return ExecuteCall.erc20Approve(
-              token: op.tokenAddress ?? op.targetAddress,
-              spender: op.targetAddress,
-              amount: op.amount ?? BigInt.zero,
-            );
-          case BatchOperationType.swap:
-          case BatchOperationType.custom:
-            Uint8List calldata = Uint8List(0);
-            if (op.customData != null && op.customData!.startsWith('0x')) {
-              final hex = op.customData!.substring(2);
-              if (hex.isNotEmpty && hex.length.isEven) {
-                calldata = hexToBytes(hex);
-              }
-            }
-            return ExecuteCall.contractCall(
-              contract: op.targetAddress,
-              data: calldata,
-              value: op.amount,
-            );
-        }
-      }).toList();
+      return _operations.map(_operationToCall).toList();
     } catch (e) {
       return null;
     }
+  }
+
+  static ExecuteCall _operationToCall(BatchOperation op) {
+    final amount = op.amount ?? BigInt.zero;
+    return switch (op.type) {
+      BatchOperationType.transfer when op.tokenAddress?.isNotEmpty == true =>
+        ExecuteCall.erc20Transfer(
+          token: op.tokenAddress!,
+          to: op.targetAddress,
+          amount: amount,
+        ),
+      BatchOperationType.transfer =>
+        ExecuteCall.ethTransfer(op.targetAddress, amount),
+      BatchOperationType.approve => ExecuteCall.erc20Approve(
+          token: op.tokenAddress ?? op.targetAddress,
+          spender: op.targetAddress,
+          amount: amount,
+        ),
+      BatchOperationType.swap || BatchOperationType.custom =>
+        ExecuteCall.contractCall(
+          contract: op.targetAddress,
+          data: _parseCalldata(op.customData),
+          value: op.amount,
+        ),
+    };
+  }
+
+  static Uint8List _parseCalldata(String? data) {
+    if (data == null || !data.startsWith('0x')) return Uint8List(0);
+    final hex = data.substring(2);
+    if (hex.isEmpty || hex.length.isOdd) return Uint8List(0);
+    return hexToBytes(hex);
   }
 
   /// 验证所有操作，返回第一个错误消息，null 表示通过
@@ -199,21 +196,12 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
       final estimation = await _handler.estimateGas(_buildTransferParams(calls));
       if (!mounted) return;
 
-      if (estimation.errorMessage != null && estimation.errorMessage!.isNotEmpty) {
-        setState(() {
-          _isEstimating = false;
-          _estimateError = estimation.errorMessage;
-          _estimatedTotalGas = null;
-          _estimatedMaxFeePerGas = null;
-        });
-        return;
-      }
-
+      final hasError = estimation.errorMessage?.isNotEmpty == true;
       setState(() {
         _isEstimating = false;
-        _estimatedTotalGas = estimation.gasLimit;
-        _estimatedMaxFeePerGas = estimation.gasPrice;
-        _estimateError = null;
+        _estimateError = hasError ? estimation.errorMessage : null;
+        _estimatedTotalGas = hasError ? null : estimation.gasLimit;
+        _estimatedMaxFeePerGas = hasError ? null : estimation.gasPrice;
       });
     } catch (e) {
       if (!mounted) return;
