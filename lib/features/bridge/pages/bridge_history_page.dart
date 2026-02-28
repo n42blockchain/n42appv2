@@ -107,6 +107,14 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
     BridgeTransaction tx,
   ) {
     final dateFormat = DateFormat('yyyy-MM-dd HH:mm');
+    final subtitleColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final blueColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name);
+    final hasBridgeTool = tx.bridgeTool?.isNotEmpty == true;
+    final hasDestTx = tx.destinationTxHash?.isNotEmpty == true;
+    final isPending = tx.status == BridgeTransactionStatus.pending ||
+        tx.status == BridgeTransactionStatus.inProgress;
 
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
@@ -128,8 +136,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
                 dateFormat.format(tx.createdAt),
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(24),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                  color: subtitleColor,
                 ),
               ),
             ],
@@ -143,22 +150,17 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
           SizedBox(height: ScreenUtil().setWidth(16)),
 
           // 桥接协议
-          if (tx.bridgeTool != null && tx.bridgeTool!.isNotEmpty) ...[
+          if (hasBridgeTool) ...[
             Row(
               children: [
-                Icon(
-                  Icons.link,
-                  size: ScreenUtil().setWidth(28),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
-                ),
+                Icon(Icons.link,
+                    size: ScreenUtil().setWidth(28), color: subtitleColor),
                 SizedBox(width: ScreenUtil().setWidth(6)),
                 Text(
                   tx.bridgeTool!,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                    color: subtitleColor,
                   ),
                 ),
               ],
@@ -175,8 +177,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
           ),
 
           // 目标链 tx hash（完成后才有）
-          if (tx.destinationTxHash != null &&
-              tx.destinationTxHash!.isNotEmpty) ...[
+          if (hasDestTx) ...[
             SizedBox(height: ScreenUtil().setWidth(8)),
             _buildTxHashRow(
               context,
@@ -187,8 +188,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
           ],
 
           // 进行中时显示手动刷新按钮
-          if (tx.status == BridgeTransactionStatus.pending ||
-              tx.status == BridgeTransactionStatus.inProgress) ...[
+          if (isPending) ...[
             SizedBox(height: ScreenUtil().setWidth(12)),
             Align(
               alignment: Alignment.centerRight,
@@ -202,8 +202,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
                     vertical: ScreenUtil().setWidth(8),
                   ),
                   decoration: BoxDecoration(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainBlueColor.name),
+                    color: blueColor,
                     borderRadius:
                         BorderRadius.circular(ScreenUtil().setWidth(8)),
                   ),
@@ -228,28 +227,11 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
       children: [
         // 源链
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                BridgeChainIds.getChainName(tx.fromChainId),
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
-                ),
-              ),
-              SizedBox(height: ScreenUtil().setWidth(4)),
-              Text(
-                '${tx.fromAmount} ${tx.fromToken.symbol}',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  fontWeight: FontWeight.bold,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                ),
-              ),
-            ],
+          child: _buildChainColumn(
+            context,
+            chainName: BridgeChainIds.getChainName(tx.fromChainId),
+            amountText: '${tx.fromAmount} ${tx.fromToken.symbol}',
+            alignment: CrossAxisAlignment.start,
           ),
         ),
 
@@ -267,28 +249,43 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
 
         // 目标链
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                BridgeChainIds.getChainName(tx.toChainId),
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
-                ),
-              ),
-              SizedBox(height: ScreenUtil().setWidth(4)),
-              Text(
-                '${tx.toAmount} ${tx.toToken.symbol}',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  fontWeight: FontWeight.bold,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                ),
-              ),
-            ],
+          child: _buildChainColumn(
+            context,
+            chainName: BridgeChainIds.getChainName(tx.toChainId),
+            amountText: '${tx.toAmount} ${tx.toToken.symbol}',
+            alignment: CrossAxisAlignment.end,
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// 链信息列（链名 + 金额），源链/目标链共用
+  Widget _buildChainColumn(
+    BuildContext context, {
+    required String chainName,
+    required String amountText,
+    required CrossAxisAlignment alignment,
+  }) {
+    return Column(
+      crossAxisAlignment: alignment,
+      children: [
+        Text(
+          chainName,
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(24),
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.itemSubtitleTextColor.name),
+          ),
+        ),
+        SizedBox(height: ScreenUtil().setWidth(4)),
+        Text(
+          amountText,
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(28),
+            fontWeight: FontWeight.bold,
+            color: AppThemeUtils.getColorByKey(
+                context, AppThemeKeys.mainTextColor.name),
           ),
         ),
       ],

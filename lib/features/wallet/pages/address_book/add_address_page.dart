@@ -40,7 +40,6 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
   final nameFocusNode= FocusNode();
   final descFocusNode= FocusNode();
 
-  /// 默认的coin
   var coinName = 'BTC';
   var coinFullName= "Bitcoin";
   var coinType = 'BTC';
@@ -55,7 +54,6 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
     if (widget.initialAddress != null && widget.initialAddress!.isNotEmpty) {
       addressController.text = widget.initialAddress!;
     }
-    /// 取出第一个币 作为本页默认的币种
     Future.microtask(() async {
       if (!mounted) return;
       List<CoinModel> list =
@@ -193,7 +191,6 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
             coinType = data.coin["coinType"];
             coinName = data.coin["miniName"];
             coinFullName= data.coin['name'];
-            //MTC 单独设置icon
             coinIcon = data.coin["icon"]??"";
             blockchainType=data.coin["blockchainType"];
           });
@@ -205,7 +202,6 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
         height: ScreenUtil().setWidth(88.0),
         child: Row(
           children: [
-            //mtc单独处理了一下icon
             (coinType == CoinType.N.name)
                 ? Image.asset(
               'assets/img/ast.png',
@@ -266,6 +262,14 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
     );
   }
 
+  /// Transparent box shadow used to disable default shadow in textFieldStyle2
+  static const _noShadow = BoxShadow(
+    color: Color(0x00101828),
+    offset: Offset(0, 0),
+    blurRadius: 0,
+    spreadRadius: 0,
+  );
+
   Widget scanItem() {
     return textFieldStyle2(
       context,
@@ -276,11 +280,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       onEditingComplete: (){
         FocusScope.of(context).requestFocus(nameFocusNode);
       },
-      boxShadow:BoxShadow(
-        color: Color(0xff101828).withAlpha((0 * 255).round()),  //底色,阴影颜色
-        offset: Offset(0, 0), //阴影位置,从什么位置开始
-        blurRadius: ScreenUtil().setWidth(0),  // 阴影模糊层度
-        spreadRadius: 0, ),
+      boxShadow: _noShadow,
       bgColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
       messageMargin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
       rightWidget3: blockchainType==BlockchainType.Ethereum.name?Container(
@@ -294,7 +294,6 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
         ),
       ):null,
       rightOnTap3: blockchainType==BlockchainType.Ethereum.name?faceMatchTypeWidget:null,
-
       rightWidget1: Container(
         width: ScreenUtil().setWidth(60.0),
         height: ScreenUtil().setWidth(60.0),
@@ -308,7 +307,6 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
         ),
       ),
       rightOnTap1: () async {
-        /// 扫描
         String? data = await Navigator
             .push(context,MaterialPageRoute(builder: (_) => ScanPage()));
         if (!mounted) return;
@@ -320,7 +318,6 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       },
       rightWidget2: Container(
         padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
-        //margin: EdgeInsets.only(left: 10,),
         height: ScreenUtil().setWidth(60.0),
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -337,8 +334,6 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
         ),
       ),
       rightOnTap2: () async {
-        //复制
-        //读取剪切板
         ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
         if (data != null) {
           if (data.text != null && data.text != "null") {
@@ -355,11 +350,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       controller: nameController,
       focusNode: nameFocusNode,
       hintText: S.of(context).g_key_nft_2,
-      boxShadow:BoxShadow(
-        color: Color(0xff101828).withAlpha((0 * 255).round()),  //底色,阴影颜色
-        offset: Offset(0, 0), //阴影位置,从什么位置开始
-        blurRadius: ScreenUtil().setWidth(0),  // 阴影模糊层度
-        spreadRadius: 0, ),
+      boxShadow: _noShadow,
       bgColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
       onEditingComplete: (){
         FocusScope.of(context).requestFocus(descFocusNode);
@@ -373,11 +364,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       controller: descController,
       focusNode: descFocusNode,
       hintText: S.of(context).descO,
-      boxShadow:BoxShadow(
-        color: Color(0xff101828).withAlpha((0 * 255).round()),  //底色,阴影颜色
-        offset: Offset(0, 0), //阴影位置,从什么位置开始
-        blurRadius: ScreenUtil().setWidth(0),  // 阴影模糊层度
-        spreadRadius: 0, ),
+      boxShadow: _noShadow,
       bgColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
       onEditingComplete: (){
         FocusScope.of(context).requestFocus(addressFocusNode);
@@ -396,7 +383,6 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       return;
     }
     if (coinType.isEmpty) {
-      ///选择币类型
       ToastUtils.show(S.of(context).g_key_address_3);
       return;
     }
@@ -417,70 +403,47 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
     info.desc = desc;
 
     try {
-      /// save 到数据库中去
       final code = await AddressBookApi().saveAddressBookItem(info);
       if (!mounted) return;
       if (code != 0) {
         Navigator.of(context).pop(true);
-      } else {
-        //保存失败
       }
-    } catch (_) {
-      // 错误安全忽略
-    }
+    } catch (_) {}
   }
   void faceMatchTypeWidget() {
-    Widget child=Column(
+    Widget buildFaceOption(String label, int matchType) {
+      return InkWell(
+        onTap: () async {
+          String? address = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => FaceMatch(matchType)),
+          );
+          if (!mounted) return;
+          if (address != null) {
+            setState(() => addressController.text = address);
+          }
+          Navigator.pop(context);
+        },
+        child: SizedBox(
+          height: ScreenUtil().setWidth(88.0),
+          width: double.infinity,
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: ScreenUtil().setWidth(32.0),
+              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
+
+    final child = Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        InkWell(
-          onTap: ()async{
-            String? address=await Navigator.push(context,
-                MaterialPageRoute(builder: (_) => FaceMatch(1)));
-            if (!mounted) return;
-            if(address !=null){
-              setState(() {
-                addressController.text = address;
-              });
-            }
-            Navigator.pop(context);
-          },
-          child: SizedBox(
-            height: ScreenUtil().setWidth(88.0),
-            width: double.infinity,
-            child: Text(
-              S.of(context).photograph,
-              style: TextStyle(
-                fontSize: ScreenUtil().setWidth(32.0),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-        InkWell(
-          onTap: ()async{
-            String? address=await Navigator.push(context,
-                MaterialPageRoute(builder: (_) => FaceMatch(2)));
-            if (!mounted) return;
-            if(address !=null){
-              addressController.text = address;
-            }
-            Navigator.pop(context);
-          },
-          child: SizedBox(
-            height: ScreenUtil().setWidth(88.0),
-            width: double.infinity,
-            child: Text(
-              S.of(context).g_key_nft_16,
-              style: TextStyle(
-                fontSize: ScreenUtil().setWidth(32.0),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
+        buildFaceOption(S.of(context).photograph, 1),
+        buildFaceOption(S.of(context).g_key_nft_16, 2),
       ],
     );
     sheetBottom(context, S.of(context).g_face_match_key1, child);

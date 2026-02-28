@@ -95,51 +95,33 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
   void _applyCustomValues() {
     final gasLimit = BigInt.tryParse(_gasLimitController.text) ?? _gasEstimate.gasLimit;
 
+    final GasOption customOption;
     if (_gasEstimate.supportsEIP1559) {
-      final maxPriorityFee = _gweiToWei(_maxPriorityFeeController.text);
-      final maxFee = _gweiToWei(_maxFeeController.text);
-
-      // 创建自定义的 GasOption
-      final customOption = GasOption.eip1559(
-        maxPriorityFeePerGas: maxPriorityFee,
-        maxFeePerGas: maxFee,
+      customOption = GasOption.eip1559(
+        maxPriorityFeePerGas: _gweiToWei(_maxPriorityFeeController.text),
+        maxFeePerGas: _gweiToWei(_maxFeeController.text),
         baseFee: _gasEstimate.baseFee ?? BigInt.zero,
-        estimatedSeconds: 30, // 自定义模式无法预测时间
-      );
-
-      // 更新到当前选择的速度档位
-      _gasEstimate = GasEstimateModel(
-        supportsEIP1559: true,
-        slow: _selectedSpeed == GasSpeed.slow ? customOption : _gasEstimate.slow,
-        standard: _selectedSpeed == GasSpeed.standard ? customOption : _gasEstimate.standard,
-        fast: _selectedSpeed == GasSpeed.fast ? customOption : _gasEstimate.fast,
-        baseFee: _gasEstimate.baseFee,
-        gasLimit: gasLimit,
-        chainSymbol: _gasEstimate.chainSymbol,
-        decimals: _gasEstimate.decimals,
-        unit: _gasEstimate.unit,
-        selectedSpeed: _selectedSpeed,
+        estimatedSeconds: 30,
       );
     } else {
-      final gasPrice = _gweiToWei(_gasPriceController.text);
-
-      final customOption = GasOption.legacy(
-        gasPrice: gasPrice,
+      customOption = GasOption.legacy(
+        gasPrice: _gweiToWei(_gasPriceController.text),
         estimatedSeconds: 60,
       );
-
-      _gasEstimate = GasEstimateModel(
-        supportsEIP1559: false,
-        slow: _selectedSpeed == GasSpeed.slow ? customOption : _gasEstimate.slow,
-        standard: _selectedSpeed == GasSpeed.standard ? customOption : _gasEstimate.standard,
-        fast: _selectedSpeed == GasSpeed.fast ? customOption : _gasEstimate.fast,
-        gasLimit: gasLimit,
-        chainSymbol: _gasEstimate.chainSymbol,
-        decimals: _gasEstimate.decimals,
-        unit: _gasEstimate.unit,
-        selectedSpeed: _selectedSpeed,
-      );
     }
+
+    _gasEstimate = GasEstimateModel(
+      supportsEIP1559: _gasEstimate.supportsEIP1559,
+      slow: _selectedSpeed == GasSpeed.slow ? customOption : _gasEstimate.slow,
+      standard: _selectedSpeed == GasSpeed.standard ? customOption : _gasEstimate.standard,
+      fast: _selectedSpeed == GasSpeed.fast ? customOption : _gasEstimate.fast,
+      baseFee: _gasEstimate.baseFee,
+      gasLimit: gasLimit,
+      chainSymbol: _gasEstimate.chainSymbol,
+      decimals: _gasEstimate.decimals,
+      unit: _gasEstimate.unit,
+      selectedSpeed: _selectedSpeed,
+    );
   }
 
   BigInt _gweiToWei(String gwei) {

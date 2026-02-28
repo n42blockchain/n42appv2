@@ -165,18 +165,11 @@ class Simple7702AccountHelper {
     if (value == BigInt.zero) {
       return Uint8List.fromList([0x80]); // Empty string in RLP
     }
-
-    final bytes = intToBytes(value);
-    if (bytes.length == 1 && bytes[0] < 0x80) {
-      return bytes; // Single byte < 0x80 is its own RLP encoding
-    }
-
-    return _encodeRlpBytes(bytes);
+    return _encodeRlpBytes(intToBytes(value));
   }
 
   Uint8List _encodeRlpAddress(String address) {
-    final addrBytes = hexToBytes(address.replaceFirst('0x', ''));
-    return _encodeRlpBytes(addrBytes);
+    return _encodeRlpBytes(hexToBytes(address.replaceFirst('0x', '')));
   }
 
   Uint8List _encodeRlpBytes(Uint8List bytes) {
@@ -209,27 +202,25 @@ class Simple7702AccountHelper {
       totalLength += item.length;
     }
 
-    Uint8List result;
+    // Build header: short list (1 byte) or long list (1 + lengthBytes)
+    Uint8List header;
     if (totalLength <= 55) {
-      result = Uint8List(1 + totalLength);
-      result[0] = 0xc0 + totalLength;
-      var offset = 1;
-      for (final item in items) {
-        result.setAll(offset, item);
-        offset += item.length;
-      }
+      header = Uint8List.fromList([0xc0 + totalLength]);
     } else {
       final lengthBytes = _encodeLength(totalLength);
-      result = Uint8List(1 + lengthBytes.length + totalLength);
-      result[0] = 0xf7 + lengthBytes.length;
-      result.setAll(1, lengthBytes);
-      var offset = 1 + lengthBytes.length;
-      for (final item in items) {
-        result.setAll(offset, item);
-        offset += item.length;
-      }
+      header = Uint8List(1 + lengthBytes.length);
+      header[0] = 0xf7 + lengthBytes.length;
+      header.setAll(1, lengthBytes);
     }
 
+    // Concatenate header + all items
+    final result = Uint8List(header.length + totalLength);
+    result.setAll(0, header);
+    var offset = header.length;
+    for (final item in items) {
+      result.setAll(offset, item);
+      offset += item.length;
+    }
     return result;
   }
 

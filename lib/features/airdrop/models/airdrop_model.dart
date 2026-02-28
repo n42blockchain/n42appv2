@@ -3,6 +3,17 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+// ─── 辅助函数 ─────────────────────────────────────────────────────────────
+
+/// 安全解析可空 DateTime 字符串
+DateTime? _parseDateTime(dynamic value) {
+  if (value == null) return null;
+  return DateTime.parse(value as String);
+}
+
+/// 安全提取 double，默认 0
+double _toDouble(dynamic value) => (value ?? 0).toDouble();
+
 /// 空投状态
 enum AirdropStatus {
   /// 即将开始
@@ -175,15 +186,9 @@ class AirdropModel {
       tokenAddress: json['token_address'],
       estimatedValueUsd: json['estimated_value_usd']?.toDouble(),
       amount: json['amount'],
-      startDate: json['start_date'] != null
-          ? DateTime.parse(json['start_date'])
-          : null,
-      endDate: json['end_date'] != null
-          ? DateTime.parse(json['end_date'])
-          : null,
-      claimDeadline: json['claim_deadline'] != null
-          ? DateTime.parse(json['claim_deadline'])
-          : null,
+      startDate: _parseDateTime(json['start_date']),
+      endDate: _parseDateTime(json['end_date']),
+      claimDeadline: _parseDateTime(json['claim_deadline']),
       requirements: (json['requirements'] as List<dynamic>?)
               ?.map((e) => AirdropRequirement.fromJson(e))
               .toList() ??
@@ -196,12 +201,8 @@ class AirdropModel {
           ? Map<String, String>.from(json['social_links'])
           : null,
       tags: (json['tags'] as List<dynamic>?)?.cast<String>() ?? [],
-      createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'])
-          : DateTime.now(),
-      updatedAt: json['updated_at'] != null
-          ? DateTime.parse(json['updated_at'])
-          : DateTime.now(),
+      createdAt: _parseDateTime(json['created_at']) ?? DateTime.now(),
+      updatedAt: _parseDateTime(json['updated_at']) ?? DateTime.now(),
     );
   }
 
@@ -378,9 +379,9 @@ class AirdropStats {
       totalAirdrops: json['total_airdrops'] ?? 0,
       eligibleAirdrops: json['eligible_airdrops'] ?? 0,
       claimedAirdrops: json['claimed_airdrops'] ?? 0,
-      totalValueUsd: (json['total_value_usd'] ?? 0).toDouble(),
-      claimedValueUsd: (json['claimed_value_usd'] ?? 0).toDouble(),
-      pendingValueUsd: (json['pending_value_usd'] ?? 0).toDouble(),
+      totalValueUsd: _toDouble(json['total_value_usd']),
+      claimedValueUsd: _toDouble(json['claimed_value_usd']),
+      pendingValueUsd: _toDouble(json['pending_value_usd']),
     );
   }
 }

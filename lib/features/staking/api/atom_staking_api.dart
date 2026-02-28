@@ -18,6 +18,43 @@ class AtomStakingApi {
     'Accept': 'application/json',
   };
 
+  /// 解析 uatom 金额字符串（可能含小数），截取整数部分
+  BigInt _parseUatomAmount(String? amountStr) {
+    final str = amountStr ?? '0';
+    final dotIndex = str.indexOf('.');
+    final intPart = dotIndex > 0 ? str.substring(0, dotIndex) : str;
+    return BigInt.tryParse(intPart) ?? BigInt.zero;
+  }
+
+  /// 构建占位验证者对象（用于委托/解绑列表中仅有地址时）
+  Validator _placeholderValidator({
+    required String address,
+    required bool isActive,
+  }) {
+    return Validator(
+      address: address,
+      name: shortenStakingAddress(address),
+      description: '',
+      logoUri: '',
+      commission: 0,
+      apy: isActive ? 15.0 : 0,
+      totalStaked: BigInt.zero,
+      delegatorCount: 0,
+      isActive: isActive,
+      uptime: isActive ? 100.0 : 0,
+    );
+  }
+
+  /// 构建交易消息并包装为 MessageModel 返回
+  MessageModel _buildTxMessage(Map<String, dynamic> msg) {
+    return MessageModel()
+      ..error = false
+      ..data = StakingTransactionResponse.success(
+        txHash: '',
+        txData: {'messages': [msg]},
+      );
+  }
+
   /// 获取验证者列表
   Future<MessageModel> getValidators({
     String status = 'BOND_STATUS_BONDED',
@@ -105,18 +142,7 @@ class AtomStakingApi {
           positions.add(StakingPosition(
             id: '${delegatorAddress}_$validatorAddress',
             protocol: StakingProtocols.atomNative,
-            validator: Validator(
-              address: validatorAddress,
-              name: shortenStakingAddress(validatorAddress),
-              description: '',
-              logoUri: '',
-              commission: 0,
-              apy: 15.0,
-              totalStaked: BigInt.zero,
-              delegatorCount: 0,
-              isActive: true,
-              uptime: 100,
-            ),
+            validator: _placeholderValidator(address: validatorAddress, isActive: true),
             stakedAmount: stakedAmount,
             rewardsEarned: BigInt.zero,
             pendingRewards: BigInt.zero,
@@ -166,18 +192,7 @@ class AtomStakingApi {
             positions.add(StakingPosition(
               id: '${delegatorAddress}_${validatorAddress}_unbonding',
               protocol: StakingProtocols.atomNative,
-              validator: Validator(
-                address: validatorAddress,
-                name: shortenStakingAddress(validatorAddress),
-                description: '',
-                logoUri: '',
-                commission: 0,
-                apy: 0,
-                totalStaked: BigInt.zero,
-                delegatorCount: 0,
-                isActive: false,
-                uptime: 0,
-              ),
+              validator: _placeholderValidator(address: validatorAddress, isActive: false),
               stakedAmount: balance,
               rewardsEarned: BigInt.zero,
               pendingRewards: BigInt.zero,
@@ -223,11 +238,7 @@ class AtomStakingApi {
           BigInt totalReward = BigInt.zero;
           for (final reward in rewardList) {
             if (reward['denom'] == 'uatom') {
-              // 去掉小数部分
-              final amountStr = reward['amount']?.toString() ?? '0';
-              final dotIndex = amountStr.indexOf('.');
-              final intPart = dotIndex > 0 ? amountStr.substring(0, dotIndex) : amountStr;
-              totalReward += BigInt.tryParse(intPart) ?? BigInt.zero;
+              totalReward += _parseUatomAmount(reward['amount']?.toString());
             }
           }
 
@@ -241,10 +252,7 @@ class AtomStakingApi {
         final total = response['total'] as List<dynamic>? ?? [];
         for (final t in total) {
           if (t['denom'] == 'uatom') {
-            final amountStr = t['amount']?.toString() ?? '0';
-            final dotIndex = amountStr.indexOf('.');
-            final intPart = dotIndex > 0 ? amountStr.substring(0, dotIndex) : amountStr;
-            totalRewards += BigInt.tryParse(intPart) ?? BigInt.zero;
+            totalRewards += _parseUatomAmount(t['amount']?.toString());
           }
         }
 
@@ -358,22 +366,12 @@ class AtomStakingApi {
     required BigInt amount,
   }) async {
     try {
-      final msg = {
+      return _buildTxMessage({
         '@type': '/cosmos.staking.v1beta1.MsgDelegate',
         'delegator_address': delegatorAddress,
         'validator_address': validatorAddress,
-        'amount': {
-          'denom': 'uatom',
-          'amount': amount.toString(),
-        },
-      };
-
-      return MessageModel()
-        ..error = false
-        ..data = StakingTransactionResponse.success(
-          txHash: '',
-          txData: {'messages': [msg]},
-        );
+        'amount': {'denom': 'uatom', 'amount': amount.toString()},
+      });
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
@@ -386,22 +384,12 @@ class AtomStakingApi {
     required BigInt amount,
   }) async {
     try {
-      final msg = {
+      return _buildTxMessage({
         '@type': '/cosmos.staking.v1beta1.MsgUndelegate',
         'delegator_address': delegatorAddress,
         'validator_address': validatorAddress,
-        'amount': {
-          'denom': 'uatom',
-          'amount': amount.toString(),
-        },
-      };
-
-      return MessageModel()
-        ..error = false
-        ..data = StakingTransactionResponse.success(
-          txHash: '',
-          txData: {'messages': [msg]},
-        );
+        'amount': {'denom': 'uatom', 'amount': amount.toString()},
+      });
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
@@ -413,18 +401,11 @@ class AtomStakingApi {
     required String validatorAddress,
   }) async {
     try {
-      final msg = {
+      return _buildTxMessage({
         '@type': '/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward',
         'delegator_address': delegatorAddress,
         'validator_address': validatorAddress,
-      };
-
-      return MessageModel()
-        ..error = false
-        ..data = StakingTransactionResponse.success(
-          txHash: '',
-          txData: {'messages': [msg]},
-        );
+      });
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
@@ -438,23 +419,13 @@ class AtomStakingApi {
     required BigInt amount,
   }) async {
     try {
-      final msg = {
+      return _buildTxMessage({
         '@type': '/cosmos.staking.v1beta1.MsgBeginRedelegate',
         'delegator_address': delegatorAddress,
         'validator_src_address': srcValidatorAddress,
         'validator_dst_address': dstValidatorAddress,
-        'amount': {
-          'denom': 'uatom',
-          'amount': amount.toString(),
-        },
-      };
-
-      return MessageModel()
-        ..error = false
-        ..data = StakingTransactionResponse.success(
-          txHash: '',
-          txData: {'messages': [msg]},
-        );
+        'amount': {'denom': 'uatom', 'amount': amount.toString()},
+      });
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }

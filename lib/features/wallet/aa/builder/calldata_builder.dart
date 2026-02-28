@@ -115,16 +115,7 @@ class CalldataBuilder {
     required String to,
     required BigInt amount,
   }) {
-    final selector = hexToBytes(AAConstants.erc20TransferSelector.replaceFirst('0x', ''));
-    final toEncoded = _encodeAddress(to);
-    final amountEncoded = _encodeUint256(amount);
-
-    final result = Uint8List(4 + 64);
-    result.setAll(0, selector);
-    result.setAll(4, toEncoded);
-    result.setAll(36, amountEncoded);
-
-    return result;
+    return _encodeAddressUint256Call(AAConstants.erc20TransferSelector, to, amount);
   }
 
   /// Build ERC20 approve call data
@@ -134,16 +125,7 @@ class CalldataBuilder {
     required String spender,
     required BigInt amount,
   }) {
-    final selector = hexToBytes(AAConstants.erc20ApproveSelector.replaceFirst('0x', ''));
-    final spenderEncoded = _encodeAddress(spender);
-    final amountEncoded = _encodeUint256(amount);
-
-    final result = Uint8List(4 + 64);
-    result.setAll(0, selector);
-    result.setAll(4, spenderEncoded);
-    result.setAll(36, amountEncoded);
-
-    return result;
+    return _encodeAddressUint256Call(AAConstants.erc20ApproveSelector, spender, amount);
   }
 
   // ==================== Factory Functions ====================
@@ -155,16 +137,7 @@ class CalldataBuilder {
     required String owner,
     required BigInt salt,
   }) {
-    final selector = hexToBytes(AAConstants.createAccountSelector.replaceFirst('0x', ''));
-    final ownerEncoded = _encodeAddress(owner);
-    final saltEncoded = _encodeUint256(salt);
-
-    final result = Uint8List(4 + 64);
-    result.setAll(0, selector);
-    result.setAll(4, ownerEncoded);
-    result.setAll(36, saltEncoded);
-
-    return result;
+    return _encodeAddressUint256Call(AAConstants.createAccountSelector, owner, salt);
   }
 
   /// Build getAddress call data for SimpleAccountFactory
@@ -174,16 +147,7 @@ class CalldataBuilder {
     required String owner,
     required BigInt salt,
   }) {
-    final selector = hexToBytes(AAConstants.getAddressSelector.replaceFirst('0x', ''));
-    final ownerEncoded = _encodeAddress(owner);
-    final saltEncoded = _encodeUint256(salt);
-
-    final result = Uint8List(4 + 64);
-    result.setAll(0, selector);
-    result.setAll(4, ownerEncoded);
-    result.setAll(36, saltEncoded);
-
-    return result;
+    return _encodeAddressUint256Call(AAConstants.getAddressSelector, owner, salt);
   }
 
   // ==================== EntryPoint Functions ====================
@@ -195,16 +159,7 @@ class CalldataBuilder {
     required String sender,
     BigInt? key,
   }) {
-    final selector = hexToBytes(AAConstants.getNonceSelector.replaceFirst('0x', ''));
-    final senderEncoded = _encodeAddress(sender);
-    final keyEncoded = _encodeUint256(key ?? BigInt.zero);
-
-    final result = Uint8List(4 + 64);
-    result.setAll(0, selector);
-    result.setAll(4, senderEncoded);
-    result.setAll(36, keyEncoded);
-
-    return result;
+    return _encodeAddressUint256Call(AAConstants.getNonceSelector, sender, key ?? BigInt.zero);
   }
 
   // ==================== Init Code ====================
@@ -226,6 +181,18 @@ class CalldataBuilder {
   }
 
   // ==================== Encoding Helpers ====================
+
+  /// Encode a call with selector(address, uint256) pattern
+  ///
+  /// Common pattern used by ERC20 transfer/approve, factory createAccount/getAddress, etc.
+  static Uint8List _encodeAddressUint256Call(String selectorHex, String address, BigInt value) {
+    final selector = hexToBytes(selectorHex.replaceFirst('0x', ''));
+    final result = Uint8List(4 + 64);
+    result.setAll(0, selector);
+    result.setAll(4, _encodeAddress(address));
+    result.setAll(36, _encodeUint256(value));
+    return result;
+  }
 
   /// Encode an address to 32 bytes (left-padded)
   static Uint8List _encodeAddress(String address) {

@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/features/staking/api/atom_staking_api.dart';
 import 'package:n42_wallet/features/staking/api/eth_staking_api.dart';
 import 'package:n42_wallet/features/staking/api/sol_staking_api.dart';
@@ -300,6 +301,16 @@ class StakingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// 从 API 结果中提取交易响应，统一处理成功/失败逻辑
+  StakingTransactionResponse _extractTxResponse(MessageModel result) {
+    if (!result.error && result.data != null) {
+      return result.data as StakingTransactionResponse;
+    }
+    return StakingTransactionResponse.error(
+      result.data?.toString() ?? 'Failed to build transaction',
+    );
+  }
+
   /// 构建质押交易
   Future<StakingTransactionResponse?> buildStakeTransaction({
     required String fromAddress,
@@ -316,10 +327,7 @@ class StakingProvider extends ChangeNotifier {
             fromAddress: fromAddress,
             amount: amount,
           );
-          if (!result.error && result.data != null) {
-            return result.data as StakingTransactionResponse;
-          }
-          return StakingTransactionResponse.error(result.data?.toString() ?? 'Failed to build transaction');
+          return _extractTxResponse(result);
 
         case StakingChainType.solana:
           if (_selectedValidator == null) {
@@ -330,10 +338,7 @@ class StakingProvider extends ChangeNotifier {
             validatorAddress: _selectedValidator!.address,
             amount: amount,
           );
-          if (!result.error && result.data != null) {
-            return result.data as StakingTransactionResponse;
-          }
-          return StakingTransactionResponse.error(result.data?.toString() ?? 'Failed to build transaction');
+          return _extractTxResponse(result);
 
         case StakingChainType.cosmos:
           if (_selectedValidator == null) {
@@ -344,10 +349,7 @@ class StakingProvider extends ChangeNotifier {
             validatorAddress: _selectedValidator!.address,
             amount: amount,
           );
-          if (!result.error && result.data != null) {
-            return result.data as StakingTransactionResponse;
-          }
-          return StakingTransactionResponse.error(result.data?.toString() ?? 'Failed to build transaction');
+          return _extractTxResponse(result);
 
         case StakingChainType.polkadot:
           return StakingTransactionResponse.error('DOT staking not yet implemented');
@@ -376,10 +378,7 @@ class StakingProvider extends ChangeNotifier {
             stakeAccountAddress: position.id,
             fromAddress: fromAddress,
           );
-          if (!result.error && result.data != null) {
-            return result.data as StakingTransactionResponse;
-          }
-          return StakingTransactionResponse.error(result.data?.toString() ?? 'Failed to build transaction');
+          return _extractTxResponse(result);
 
         case StakingChainType.cosmos:
           if (position.validator == null) {
@@ -390,10 +389,7 @@ class StakingProvider extends ChangeNotifier {
             validatorAddress: position.validator!.address,
             amount: amount,
           );
-          if (!result.error && result.data != null) {
-            return result.data as StakingTransactionResponse;
-          }
-          return StakingTransactionResponse.error(result.data?.toString() ?? 'Failed to build transaction');
+          return _extractTxResponse(result);
 
         case StakingChainType.polkadot:
           return StakingTransactionResponse.error('DOT unstaking not yet implemented');
@@ -430,10 +426,7 @@ class StakingProvider extends ChangeNotifier {
             delegatorAddress: fromAddress,
             validatorAddress: position.validator!.address,
           );
-          if (!result.error && result.data != null) {
-            return result.data as StakingTransactionResponse;
-          }
-          return StakingTransactionResponse.error(result.data?.toString() ?? 'Failed to build transaction');
+          return _extractTxResponse(result);
 
         case StakingChainType.polkadot:
           return StakingTransactionResponse.error('DOT claim not yet implemented');

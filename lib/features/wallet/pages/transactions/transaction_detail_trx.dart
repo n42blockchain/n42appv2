@@ -150,7 +150,6 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
     _pollingTimer?.cancel();
     _pollingTimer = null;
   }
-  //关闭键盘
   void closeKeyboard(){
     FocusScope.of(context).requestFocus(FocusNode());
   }
@@ -173,19 +172,12 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
   }
   Widget bodyWidget(){
     return SafeArea(
-      child: Stack(
+      child: Column(
         children: [
-          Positioned.fill(
-            child: Column(
-              children: [
-                searchWidget(),
-                Expanded(
-                  flex: 1,
-                  child: load==Load.error?errorWidget():
-                  txDataWidget(),
-                ),
-              ],
-            ),
+          searchWidget(),
+          Expanded(
+            child: load==Load.error?errorWidget():
+            txDataWidget(),
           ),
         ],
       ),
@@ -259,30 +251,6 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
             endIndent: 0,
           ),
           itemWidget(S.of(context).g_key_t_15,gasPrice),
-          Divider(
-            height: ScreenUtil().setWidth(1),
-            indent: 0,
-            endIndent: 0,
-          ),
-          /*itemWidget(S.of(context).g_key_101,gasLimit),
-          Divider(
-            height: ScreenUtil().setWidth(1),
-            indent: 0,
-            endIndent: 0,
-          ),
-          itemWidget(S.of(context).g_key_wallet_k56,nonce),
-          Divider(
-            height: ScreenUtil().setWidth(1),
-            indent: 0,
-            endIndent: 0,
-          ),
-          itemWidget(S.of(context).g_key_wallet_k58,trm.message??""),
-          Divider(
-            height: ScreenUtil().setWidth(1),
-            indent: 0,
-            endIndent: 0,
-          ),
-          */
           errorMessageWidget(),
           SizedBox(height: ScreenUtil().setWidth(140),),
         ],
@@ -304,7 +272,6 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       child: Row(
         children: [
           Expanded(
-            flex: 1,
             child: TextField(
               style: TextStyle(
                 color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
@@ -349,29 +316,25 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
     );
   }
   Widget errorMessageWidget(){
-    if(errorMessage==""){
-      return SizedBox();
-    }else{
-      return Container(
-        margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0),left: ScreenUtil().setWidth(30),right: ScreenUtil().setWidth(30)),
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0),vertical: ScreenUtil().setWidth(30.0)),
-        width: double.infinity,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(20.0))),
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorBgColor2.name),
+    if(errorMessage.isEmpty) return const SizedBox.shrink();
+    return Container(
+      margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0),left: ScreenUtil().setWidth(30),right: ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0),vertical: ScreenUtil().setWidth(30.0)),
+      width: double.infinity,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(20.0))),
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorBgColor2.name),
+      ),
+      child: Text(
+        errorMessage,
+        style: TextStyle(
+          fontSize: ScreenUtil().setSp(28.0),
+          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
         ),
-        child: Text(
-          errorMessage,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(28.0),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
-          ),
-          textAlign: TextAlign.center,
-        ),
-      );
-    }
-
+        textAlign: TextAlign.center,
+      ),
+    );
   }
   Widget itemWidget(String title,String value,{bool copy=false}){
     return Container(
@@ -392,7 +355,6 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
           Row(
             children: [
               Expanded(
-                flex: 1,
                 child: Text(
                   value,
                   style: TextStyle(

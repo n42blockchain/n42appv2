@@ -6,11 +6,46 @@ import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class AppDatabase{
+class AppDatabase {
   Database? _database;
+
   Future<Database> get database async {
     _database ??= await getDatabaseInstance();
     return _database!;
+  }
+
+  // ─── 通用辅助方法 ──────────────────────────────────────────────────────────
+
+  /// 通用查询：执行 query 后用 [fromMap] 映射每一行
+  Future<List<T>> _queryList<T>(
+    String table,
+    T Function(Map<String, dynamic>) fromMap, {
+    bool? distinct,
+    List<String>? columns,
+    String? where,
+    List<Object?>? whereArgs,
+    String? orderBy,
+    int? limit,
+    int? offset,
+  }) async {
+    final db = await database;
+    final rows = await db.query(table,
+        distinct: distinct,
+        columns: columns,
+        where: where,
+        whereArgs: whereArgs,
+        orderBy: orderBy,
+        limit: limit,
+        offset: offset);
+    return rows.map(fromMap).toList();
+  }
+
+  /// 给 where 子句追加 selectType 过滤条件
+  /// selectType: 0=全部, 1=已完成(state=1), 2=未完成(state=0)
+  static String appendStateFilter(String whereClause, int selectType) {
+    if (selectType == 1) return '$whereClause and state=1';
+    if (selectType == 2) return '$whereClause and state=0';
+    return whereClause;
   }
   Future<Database> getDatabaseInstance() async {
     var directory = await getDatabasesPath();
@@ -232,32 +267,23 @@ class AppDatabase{
   //插入btc交易记录
   Future<int> insertBtcTransactionRecord(BtcTransactionRecodeModel btcm) async {
     final db = await database;
-    var raw = await db.insert("BtcTransactionRecord", btcm.toMapDb(),
+    return db.insert("BtcTransactionRecord", btcm.toMapDb(),
         conflictAlgorithm: ConflictAlgorithm.rollback);
-    return raw;
   }
+
   //查询btc交易记录
   //type，查询类型，0：查询全部，1查询完成的，2查询未完成的
   Future<List<BtcTransactionRecodeModel>> selectBtcTransationRecord(
       String userUuid, String address, String coinKey, int selectType,
       {int pageSize = 10, int pageNum = 1}) async {
-    final db = await database;
-    String whereClause = 'coinMiniName=? and address=?';
-    List<dynamic> whereArgs = [coinKey, address];
-    if (selectType == 1) {
-      whereClause += ' and state=1';
-    } else if (selectType == 2) {
-      whereClause += ' and state=0';
-    }
-    var response = await db.query("BtcTransactionRecord",
+    final whereClause =
+        appendStateFilter('coinMiniName=? and address=?', selectType);
+    return _queryList("BtcTransactionRecord", BtcTransactionRecodeModel.fromMap,
         where: whereClause,
-        whereArgs: whereArgs,
+        whereArgs: [coinKey, address],
         orderBy: "txTime desc",
         limit: pageSize,
         offset: (pageNum - 1) * pageSize);
-    List<BtcTransactionRecodeModel> list =
-    response.map((c) => BtcTransactionRecodeModel.fromMap(c)).toList();
-    return list;
   }
   //查询交易记录,contract合约地址，主链币没有合约地址，默认为空字符串
   Future<List<TransationRecordModel>> selectTransationRecordMiniName(
@@ -266,111 +292,83 @@ class AppDatabase{
         int pageSize = 10,
         int pageNum = 1,
         int isTest = 0}) async {
-    final db = await database;
-    String whereClause = 'address=? and contract=? and isTest=? and coinMiniName=?';
-    List<dynamic> whereArgs = [address, contract.toLowerCase(), isTest, miniName];
-    if (selectType == 1) {
-      whereClause += ' and state=1';
-    } else if (selectType == 2) {
-      whereClause += ' and state=0';
-    }
-    var response = await db.query("TransationRecord",
+    final whereClause = appendStateFilter(
+        'address=? and contract=? and isTest=? and coinMiniName=?', selectType);
+    return _queryList("TransationRecord", TransationRecordModel.fromMap,
         where: whereClause,
-        whereArgs: whereArgs,
+        whereArgs: [address, contract.toLowerCase(), isTest, miniName],
         orderBy: "txTime desc",
         limit: pageSize,
         offset: (pageNum - 1) * pageSize);
-    List<TransationRecordModel> list =
-    response.map((c) => TransationRecordModel.fromMap(c)).toList();
-    return list;
   }
   //创建一个交易记录
   Future<int> insertTransationRecord(TransationRecordModel trm) async {
     final db = await database;
-    var raw = await db.insert("TransationRecord", trm.toMapDb(),
+    return db.insert("TransationRecord", trm.toMapDb(),
         conflictAlgorithm: ConflictAlgorithm.rollback);
-    return raw;
   }
+
   //修改交易记录
   Future<int> updateTransationRecord(TransationRecordModel trm) async {
     final db = await database;
-    var response = await db.update("TransationRecord", trm.toMapDb(),
+    return db.update("TransationRecord", trm.toMapDb(),
         where: "trId=?", whereArgs: [trm.trId]);
-    return response;
   }
+
   Future<int> updateTransationRecordTxhash(TransationRecordModel trm) async {
     final db = await database;
-    var response = await db.update("TransationRecord", trm.toMapDb(),
+    return db.update("TransationRecord", trm.toMapDb(),
         where: 'txHash=?', whereArgs: [trm.txHash]);
-    return response;
   }
+
   //修改btc交易记录
   Future<int> updateBtcTransactionRecord(BtcTransactionRecodeModel btcm) async {
     final db = await database;
-    var response = await db.update("BtcTransactionRecord", btcm.toMapDb(),
+    return db.update("BtcTransactionRecord", btcm.toMapDb(),
         where: "trId=?", whereArgs: [btcm.trId]);
-    return response;
   }
+
   //查询交易记录，txhash交易hash
   Future<List<TransationRecordModel>> selectTransationRecordTxHash(
-      String txHash,String address) async {
-    final db = await database;
-    var response =
-    await db.query("TransationRecord", where: 'txHash=? and address=?', whereArgs: [txHash, address]);
-    List<TransationRecordModel> list =
-    response.map((c) => TransationRecordModel.fromMap(c)).toList();
-    return list;
+      String txHash, String address) async {
+    return _queryList("TransationRecord", TransationRecordModel.fromMap,
+        where: 'txHash=? and address=?', whereArgs: [txHash, address]);
   }
+
   //查询交易记录，全部未完成的
   Future<List<TransationRecordModel>> selectTransationRecordUnDone(
       String userUuid) async {
-    final db = await database;
-    var response = await db.query("TransationRecord",
+    return _queryList("TransationRecord", TransationRecordModel.fromMap,
         where: 'state=0 and userUuid=?', whereArgs: [userUuid]);
-    List<TransationRecordModel> list =
-    response.map((c) => TransationRecordModel.fromMap(c)).toList();
-    return list;
   }
+
   Future<List<BtcTransactionRecodeModel>> selectBtcTransationRecordByUUID(
       String userUuid, int selectType) async {
-    final db = await database;
-    String whereClause = 'userUuid=?';
-    List<dynamic> whereArgs = [userUuid];
-    if (selectType == 1) {
-      whereClause += ' and state=1';
-    } else if (selectType == 2) {
-      whereClause += ' and state=0';
-    }
-    var response = await db.query("BtcTransactionRecord",
-        where: whereClause, whereArgs: whereArgs, orderBy: "trId desc");
-    List<BtcTransactionRecodeModel> list =
-    response.map((c) => BtcTransactionRecodeModel.fromMap(c)).toList();
-    return list;
+    final whereClause = appendStateFilter('userUuid=?', selectType);
+    return _queryList(
+        "BtcTransactionRecord", BtcTransactionRecodeModel.fromMap,
+        where: whereClause, whereArgs: [userUuid], orderBy: "trId desc");
   }
+
   Future<List<BtcTransactionRecodeModel>> selectBtcTransationRecordTxHash(
       String txHash) async {
-    final db = await database;
-    var response = await db.query("BtcTransactionRecord",
+    return _queryList(
+        "BtcTransactionRecord", BtcTransactionRecodeModel.fromMap,
         where: 'txHash=?', whereArgs: [txHash]);
-    List<BtcTransactionRecodeModel> list =
-    response.map((c) => BtcTransactionRecodeModel.fromMap(c)).toList();
-    return list;
   }
 
   //添加浏览器收藏表
   Future<int> insertBrowserCollection(Map<String, dynamic> map) async {
     final db = await database;
-    var raw = await db.insert("browserCollection", map,
+    return db.insert("browserCollection", map,
         conflictAlgorithm: ConflictAlgorithm.rollback);
-    return raw;
   }
 
   //修改浏览器收藏表
   Future<int> updateBrowserCollection(Map<String, dynamic> map, int id) async {
     final db = await database;
-    var response = await db.update("browserCollection", map,
+    return db.update("browserCollection", map,
         where: "id=?", whereArgs: [id]);
-    return response;
   }
 
   //删除浏览器收藏表
@@ -381,38 +379,34 @@ class AppDatabase{
 
   Future<int> deleteBrowserCollectionUrl(String url) async {
     final db = await database;
-    return await db.delete("browserCollection", where: 'url=?', whereArgs: [url]);
+    return db.delete("browserCollection", where: 'url=?', whereArgs: [url]);
   }
 
-  Future<List<BrowserCollectionModel>> selectBrowserCollection({int pageSize = 10, int pageNum = 1}) async {
-    final db = await database;
-    var response = await db.query("browserCollection",
-        orderBy: "id desc", limit: pageSize, offset: (pageNum - 1) * pageSize);
-    List<BrowserCollectionModel> list =
-    response.map((c) => BrowserCollectionModel.fromJson(c)).toList();
-    return list;
+  Future<List<BrowserCollectionModel>> selectBrowserCollection(
+      {int pageSize = 10, int pageNum = 1}) async {
+    return _queryList("browserCollection", BrowserCollectionModel.fromJson,
+        orderBy: "id desc",
+        limit: pageSize,
+        offset: (pageNum - 1) * pageSize);
   }
 
-  Future<List<BrowserCollectionModel>> selectBrowserCollectionUrl(String url) async {
-    final db = await database;
-    var response = await db.query("browserCollection", where: 'url=?', whereArgs: [url]);
-    List<BrowserCollectionModel> list =
-    response.map((c) => BrowserCollectionModel.fromJson(c)).toList();
-    return list;
+  Future<List<BrowserCollectionModel>> selectBrowserCollectionUrl(
+      String url) async {
+    return _queryList("browserCollection", BrowserCollectionModel.fromJson,
+        where: 'url=?', whereArgs: [url]);
   }
 
   //添加浏览器浏览历史
   Future<int> insertBrowserHistory(Map<String, dynamic> map) async {
     final db = await database;
-    var raw = await db.insert("browserHistory", map,
+    return db.insert("browserHistory", map,
         conflictAlgorithm: ConflictAlgorithm.rollback);
-    return raw;
   }
+
   //查询 浏览器历史
   Future<List<BrowserHistoryModel>> selectBrowserHistoryLike(String urlStr,
       {int pageSize = 10, int pageNum = 1}) async {
-    final db = await database;
-    var response = await db.query("browserHistory",
+    return _queryList("browserHistory", BrowserHistoryModel.fromJson,
         columns: ["url"],
         distinct: true,
         where: 'url like ?',
@@ -420,21 +414,16 @@ class AppDatabase{
         orderBy: "id desc",
         limit: pageSize,
         offset: (pageNum - 1) * pageSize);
-    List<BrowserHistoryModel> list =
-    response.map((c) => BrowserHistoryModel.fromJson(c)).toList();
-    return list;
   }
 
   //查询搜索历史
-  Future<List<BrowserSearchHistoryModel>> selectBrowserSearchHistory({int pageSize = 10, int pageNum = 1}) async {
-    final db = await database;
-    var response = await db.query("browserSearchHistory",
+  Future<List<BrowserSearchHistoryModel>> selectBrowserSearchHistory(
+      {int pageSize = 10, int pageNum = 1}) async {
+    return _queryList(
+        "browserSearchHistory", BrowserSearchHistoryModel.fromJson,
         orderBy: "searchCount desc",
         limit: pageSize,
         offset: (pageNum - 1) * pageSize);
-    List<BrowserSearchHistoryModel> list =
-    response.map((c) => BrowserSearchHistoryModel.fromJson(c)).toList();
-    return list;
   }
   //添加搜索历史
   Future<int?> insertBrowserSearchHistory(Map<String, dynamic> map) async {
@@ -463,21 +452,16 @@ class AppDatabase{
   //删除搜索历史
   Future<int> deleteBrowserSearchHistory() async {
     final db = await database;
-    var raw = await db.delete('browserSearchHistory');
-    return raw;
+    return db.delete('browserSearchHistory');
   }
 
   //分页查询浏览历史（按时间降序）
   Future<List<BrowserHistoryModel>> selectBrowserHistory(
       {int pageSize = 20, int pageNum = 1}) async {
-    final db = await database;
-    var response = await db.query("browserHistory",
+    return _queryList("browserHistory", BrowserHistoryModel.fromJson,
         orderBy: "time desc",
         limit: pageSize,
         offset: (pageNum - 1) * pageSize);
-    List<BrowserHistoryModel> list =
-        response.map((c) => BrowserHistoryModel.fromJson(c)).toList();
-    return list;
   }
 
   //删除单条浏览历史
@@ -489,6 +473,6 @@ class AppDatabase{
   //清空浏览历史
   Future<int> clearBrowserHistory() async {
     final db = await database;
-    return await db.delete("browserHistory");
+    return db.delete("browserHistory");
   }
 }

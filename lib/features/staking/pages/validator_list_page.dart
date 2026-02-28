@@ -72,21 +72,12 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
 
   void _sortValidators() {
     _filteredValidators.sort((a, b) {
-      int comparison;
-      switch (_sortBy) {
-        case ValidatorSortBy.apy:
-          comparison = a.apy.compareTo(b.apy);
-          break;
-        case ValidatorSortBy.commission:
-          comparison = a.commission.compareTo(b.commission);
-          break;
-        case ValidatorSortBy.totalStaked:
-          comparison = a.totalStaked.compareTo(b.totalStaked);
-          break;
-        case ValidatorSortBy.name:
-          comparison = a.name.compareTo(b.name);
-          break;
-      }
+      final comparison = switch (_sortBy) {
+        ValidatorSortBy.apy => a.apy.compareTo(b.apy),
+        ValidatorSortBy.commission => a.commission.compareTo(b.commission),
+        ValidatorSortBy.totalStaked => a.totalStaked.compareTo(b.totalStaked),
+        ValidatorSortBy.name => a.name.compareTo(b.name),
+      };
       return _sortAscending ? comparison : -comparison;
     });
   }
@@ -464,17 +455,11 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
     );
   }
 
-  Color _getRankColor(int rank) {
-    switch (rank) {
-      case 1:
-        return Color(0xFFFFD700); // Gold
-      case 2:
-        return Color(0xFFC0C0C0); // Silver
-      case 3:
-        return Color(0xFFCD7F32); // Bronze
-      default:
-        return Colors.grey;
-    }
-  }
+  Color _getRankColor(int rank) => switch (rank) {
+    1 => Color(0xFFFFD700), // Gold
+    2 => Color(0xFFC0C0C0), // Silver
+    3 => Color(0xFFCD7F32), // Bronze
+    _ => Colors.grey,
+  };
 
 }

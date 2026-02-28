@@ -180,12 +180,10 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
     }
   }
 
-  Future<void> _validateAddress(String address) async {
+  void _validateAddress(String address) {
     // 简单的地址格式检查（0x + 40 hex）
-    final isValidFormat =
-        address.startsWith('0x') && address.length == 42 &&
-        RegExp(r'^0x[0-9a-fA-F]{40}$').hasMatch(address);
-    widget.onAddressValidated?.call(isValidFormat ? address : null, false);
+    final isValid = RegExp(r'^0x[0-9a-fA-F]{40}$').hasMatch(address);
+    widget.onAddressValidated?.call(isValid ? address : null, false);
   }
 
   void _updateStatus(EnsResolveStatus status, EnsResolutionResult? result) {
@@ -300,16 +298,18 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
         return const Color(0xFF4CAF50);
       case EnsResolveStatus.failed:
         return Colors.orange;
-      default:
+      case EnsResolveStatus.idle:
         return defaultColor.withValues(alpha: 0.3);
     }
   }
 
   Widget _buildStatusIndicator(Color blueColor, Color subtitleColor) {
+    final rightPadding = EdgeInsets.only(right: ScreenUtil().setWidth(12));
+
     switch (_status) {
       case EnsResolveStatus.resolving:
         return Padding(
-          padding: EdgeInsets.only(right: ScreenUtil().setWidth(12)),
+          padding: rightPadding,
           child: SizedBox(
             width: ScreenUtil().setWidth(24),
             height: ScreenUtil().setWidth(24),
@@ -322,7 +322,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
 
       case EnsResolveStatus.resolved:
         return Padding(
-          padding: EdgeInsets.only(right: ScreenUtil().setWidth(12)),
+          padding: rightPadding,
           child: Icon(
             Icons.check_circle,
             color: const Color(0xFF4CAF50),
@@ -332,7 +332,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
 
       case EnsResolveStatus.failed:
         return Padding(
-          padding: EdgeInsets.only(right: ScreenUtil().setWidth(12)),
+          padding: rightPadding,
           child: Icon(
             Icons.warning_amber_rounded,
             color: Colors.orange,
@@ -340,7 +340,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
           ),
         );
 
-      default:
+      case EnsResolveStatus.idle:
         return const SizedBox.shrink();
     }
   }

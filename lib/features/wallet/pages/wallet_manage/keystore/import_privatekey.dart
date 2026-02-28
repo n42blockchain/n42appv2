@@ -40,8 +40,6 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
   Map<String,dynamic> selectChain=allChainUrlMap[CoinType.N.name];
   @override
   void initState() {
-    //_keystoreController.text=bytesToHex(base64Decode("pa0i0UL4y7cgG6j5WDf3GPRATxZ/c37tzcn1GdGsfYk="));
-    //_keystoreController.text='CVFM5HyKx2b35Z2eLvGQ4QDLA5mB7mCowYmqwPtx12k';
     super.initState();
   }
   /// Enhanced private key validation
@@ -210,7 +208,6 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
     return Scaffold(
       appBar: AppBarWidget(
         text: S.of(context).g_key_wallet_m22,
-        //"Import ${widget.model.coin['miniName']} Wallet",
       ),
       body: SafeArea(
         child: Stack(
@@ -225,7 +222,6 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                     Row(
                       children: [
                         Expanded(
-                          flex: 1,
                           child: Text(
                             S.of(context).g_key_209,
                             style: TextStyle(
@@ -247,7 +243,6 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
-                            //margin: EdgeInsets.only(left: 10,),
                             height: ScreenUtil().setWidth(60.0),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -305,7 +300,6 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                             child: ImageNetWork(imageUrl: selectChain['baseInfo']['icon']),
                           ),
                           Expanded(
-                            flex: 1,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -391,27 +385,23 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                             () async {
                           if(load==Load.loading)return;
                           FocusScope.of(context).requestFocus(FocusNode());
-                          // 导入逻辑处理
                           String keystoreJson = _keystoreController.text.trim();
 
                           if (keystoreJson.isEmpty) {
                             errorMessage=S.of(context).g_key_210;
                             setState(() {});
-                            //请输入keystore文件内容
                             ToastUtils.show(errorMessage);
                             return;
                           }
                           MessageModel mm=await checkPraviteKey(keystoreJson);
                           if (!mounted) return;
                           if(mm.error){
-                            errorMessage=S.of(this.context).g_key_210;
+                            errorMessage=S.of(context).g_key_210;
                             setState(() {});
                             ToastUtils.show(errorMessage);
                             return;
                           }
                           keystoreJson=mm.data;
-                          //Uint8List uint8List = Uint8List.fromList(utf8.encode(keystoreJson));
-                          //String pk=base64Encode(uint8List);
                           Map<Object?, Object?> rm= await Trustdart().generateAddress(
                             CoinType.N.name,
                             selectChain['baseInfo']['path'][selectChain['addrType']],
@@ -426,16 +416,14 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                             String base64Str=base64Encode(ksjByte);
                             WalletInfo? findWalletInfo=ref.read(wapBridgeProvider).findWallet(pk: base64Str);
                             if(findWalletInfo != null){
-                              errorMessage=S.of(this.context).g_key_214(findWalletInfo.walletName??"");
+                              errorMessage=S.of(context).g_key_214(findWalletInfo.walletName??"");
                               setState(() {});
-                              //The wallet already exists, the wallet name is "Armani"
                               ToastUtils.show(errorMessage);
                               return;
                             }
                             WalletInfo wInfo = WalletInfo(
                                 walletName: "",
                                 password: "",
-                                //path: WalletPath.init(),
                                 walletUuid: ref.read(wapBridgeProvider).userUUID,
                                 mnemonic: "",
                               privateKey: base64Str,
@@ -443,12 +431,12 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                             );
                             errorMessage="";
                             setState(() {});
-                            await Navigator.push(this.context,MaterialPageRoute(
+                            await Navigator.push(context,MaterialPageRoute(
                                 builder: (_) => CreatePassword(wInfo, createMetod: "PrivateKey",)));
                             if (!mounted) return;
-                            Navigator.of(this.context).pop(true);
+                            Navigator.of(context).pop(true);
                           }else{
-                            errorMessage=S.of(this.context).g_key_210;
+                            errorMessage=S.of(context).g_key_210;
                             setState(() {});
                             ToastUtils.show(errorMessage);
                           }

@@ -64,7 +64,6 @@ class _RedeemState extends ConsumerState<Redeem> {
   }
   @override
   void initState() {
-    //testData();
     late final PlatformWebViewControllerCreationParams params;
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
       params = WebKitWebViewControllerCreationParams(
@@ -78,7 +77,7 @@ class _RedeemState extends ConsumerState<Redeem> {
         WebViewController.fromPlatformCreationParams(params);
     _controller
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor( const Color(0xFF121212))
+      ..setBackgroundColor(const Color(0xFF121212))
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {
@@ -87,19 +86,8 @@ class _RedeemState extends ConsumerState<Redeem> {
           onPageStarted: (String url) {
             debugPrint('Page started loading: $url');
           },
-          onPageFinished: (String url) {
-          },
-          onWebResourceError: (WebResourceError error) {
-          },
           onNavigationRequest: (NavigationRequest request) {
-            bool r=true;
-            if(r==true){
-              return NavigationDecision.navigate;
-            }else{
-              return NavigationDecision.prevent;
-            }
-          },
-          onUrlChange: (UrlChange change) {
+            return NavigationDecision.navigate;
           },
         ),
       )
@@ -120,39 +108,18 @@ class _RedeemState extends ConsumerState<Redeem> {
       });
     super.initState();
   }
-  Future<void> testData()async{
-    await redeem("tb1q229k7jwjlq6n3tdc0gmmhyxylze24ddvl9qext78sd2t3cyj9xvql3r07k",1742812372);
-    //await redeem("tb1qxk5fqvludl0ec3zuy7m90u6w0v8sw993738qudpr68dad9ctaxjs5lavda");
-  }
   int gasFeeRate=4;
   int gasFees=0;
   int input2Price=0;//实际输入金额
   bool inputValueOK=false;
   List<Map<String,dynamic>> inputUTXO=[];
   Future<String> redeem(String address,int lockTime)async{
-    //await redeemEth(address);
     await getGasFeeBtc();
-    //address="tb1qw39qrupll6xwmazqplpjgaclexjsd48jms2gwzk2xeuhqen9qxusem966j";
-    //lockTime=1743160567;
     await getUTXO(address);
-    /*inputUTXO.add({
-      "vout":0,
-      "script":"00144fe5e7b8c67c15609841d8cae2173e3e9f9193a8",
-      "txid":"c93120b7b5cd46f5691310f42a2362336c04d49ed213f75b3467a70970050388",
-      "value":"100000",
-    });*/
     String witnessScriptValue=await createP2WSH(lockTime);
     inputUTXO[0]['witnessValue']=witnessScriptValue;
     inputUTXO[0]['lockTime']=lockTime;
     return await signP2WSH();
-    /*BtcTransactionRecodeModel trModel=BtcTransactionRecodeModel();//交易数据
-    trModel.address=widget.coinModel.address;
-    trModel.to1=widget.coinModel.address;
-    trModel.coin=widget.coinModel.coin;
-    trModel.coinMiniName=widget.coinModel.coin['coinType'];
-    trModel.walletIndex=ref.read(wapBridgeProvider).walletIndex;
-    trModel.price=100000;
-    transatroinBuilder1To1(trModel,);*/
   }
   Future<void> redeemEth(String p2wshAddress)async{
     String serviceUrl=RequestUrl().getUrl2(CoinType.ETH.name, 'rpc',isTest: widget.coinModel.isTest);
@@ -170,28 +137,11 @@ class _RedeemState extends ConsumerState<Redeem> {
     if (kDebugMode) debugPrint(rData);
   }
   Future<String> createP2WSH(int lockTime,{String? uPubKey,String? cPubKey})async{
-    // 1️⃣ 用户 & Canister 公钥 (HEX 格式)
     if(uPubKey==null){
-      //ref.read(wapBridgeProvider).walletInfo.mnemonic;
-      //String pk=await Trustdart().getPrivateKey(ref.read(wapBridgeProvider).walletInfo.mnemonic??"", CoinType.BTC.name, "m/84'/4'/0'/0/0");
       String pubKey=await Trustdart().getPublicKey(CoinType.BTC.name, "m/84'/4'/0'/0/0",mnemonic: ref.read(wapBridgeProvider).walletInfo.mnemonic??"",pk: ref.read(wapBridgeProvider).walletInfo.privateKey??"");
       uPubKey=bytesToHex(base64Decode(pubKey));
-      //String privatKey1=await Trustdart().getPrivateKey(ref.read(wapBridgeProvider).walletInfo.mnemonic??"",CoinType.BTC.name, "m/84'/4'/0'/0/0",);
-      //String privatKeyStr=bytesToHex(base64Decode(privatKey1));
-      
-      //privateKey!.getPublic().toHex();
-      //03ed20061b9a0417a06ab80d063962c12ed80c9924b1d4da3628705b5b9ac9cecb
-      //93fc44de3a7f96887b4159bc9b860ab701afa2e006ba03c720a640b30c5afd81
-      //k/xE3jp/loh7QVm8m4YKtwGvouAGugPHIKZAswxa/YE=
-      //1743037697
     }
     cPubKey ??= '02a075b5988699e95802fe94590908de9370588cacc750d6f538d76fe6e9b8d6ad';
-    //cPubKey='03ed20061b9a0417a06ab80d063962c12ed80c9924b1d4da3628705b5b9ac9cecb';
-    // 2️⃣ 质押时间（秒级时间戳）
-    //int stakeTime = 1742981833; // 例如: 2023-11-14 12:00:00 UTC
-    //03a7460e0d1a959592022042d57e165ead714a788415a898a59a541079a81da2a1
-    //02a075b5988699e95802fe94590908de9370588cacc750d6f538d76fe6e9b8d6ad
-    // 3️⃣ 生成 lock_script
     Script newScript =
     Script(script: [
       lockTime,
@@ -204,7 +154,6 @@ class _RedeemState extends ConsumerState<Redeem> {
       'OP_CHECKMULTISIG']);
     return newScript.toHex();
   }
-  //获取 比特币的gasFee等级
   Future<void> getGasFeeBtc()async{
     MessageModel gasFeeMM=await tokenViewApi.getGasFeeBtc(isTest: widget.coinModel.isTest);
     if(gasFeeMM.error){
@@ -227,8 +176,6 @@ class _RedeemState extends ConsumerState<Redeem> {
     if (kDebugMode) debugPrint(json.encode(btcTxMap));
     return await Trustdart().signTransactionBtcP2wsh(CoinType.BTC.name, "m/84'/4'/0'/0/0", btcTxMap,pk: ref.read(wapBridgeProvider).walletInfo.privateKey??"");
   }
-  //交易打包
-  //unspents 未消费列表
   Future<BtcTransactionRecodeModel> transatroinBuilder1To1(BtcTransactionRecodeModel btcTransactionRecodeModel)async{
     try{
       Map<String,dynamic> btcTxMap={
@@ -239,7 +186,6 @@ class _RedeemState extends ConsumerState<Redeem> {
         "changeAddress":btcTransactionRecodeModel.address,
         "change":0,
       };
-      //List<Map<String,dynamic>> utxos=[];//输出账单
       btcTransactionRecodeModel.inputModels=[];
       for(Map<String,dynamic> unspent in inputUTXO){
         input2Price+=int.parse(unspent['value']);
@@ -252,11 +198,8 @@ class _RedeemState extends ConsumerState<Redeem> {
           lockTime: unspent['lockTime'],
         );
         im.address=[widget.coinModel.address.toString()];
-        btcTransactionRecodeModel.inputModels!.add(
-          im,
-        );
+        btcTransactionRecodeModel.inputModels!.add(im);
       }
-      //int gasFees=await getSignByteSize(inputUTXO);
       btcTxMap['change']=0;
       btcTxMap['fees']=gasFees;
       btcTxMap['utxo']=inputUTXO;
@@ -277,22 +220,15 @@ class _RedeemState extends ConsumerState<Redeem> {
       }else{
         btcTransactionRecodeModel.txHash=rmm.data;
       }
-      /*
-      WalletInfo wi=ProviderUtil.walletActionProvider().walletInfoLsit[ProviderUtil.walletActionProvider().walletIndex];
-      String signStr=await Trustdart.signTransaction(wi.mnemonic!, _trModel.coin['coinType'], _trModel.coin['path'][_coinModel!.addrType], btcTxMap,"","");
-      btcTransactionRecodeModel.signStr=signStr;
-       */
       return btcTransactionRecodeModel;
     }catch(e){
       return btcTransactionRecodeModel;
     }
   }
   Future<int> getSignByteSize(List<Map<String,dynamic>> utxos,{bool max=true})async{
-    //await toAddress_check(toTextEditingController.text);
-    //if(toErrorMessage !="")return;
     Map<String,dynamic> btcTxMap={
       "utxo":utxos,
-      "toAddress":widget.coinModel.address,//toTextEditingController.text,
+      "toAddress":widget.coinModel.address,
       "amount":0.001,
       "byteFee":gasFeeRate,
       "changeAddress":widget.coinModel.address,
@@ -311,7 +247,6 @@ class _RedeemState extends ConsumerState<Redeem> {
       return int.parse(signByteSize);
     }
   }
-//获取 账簿
   Future<void> getUTXO(String address)async{
     try{
       MessageModel mm=await tokenViewApi.getUTXOBtc(widget.coinModel.coin['coinType'], address,pageSize: 1,pageNum: 10,isTest: widget.coinModel.isTest);
@@ -327,7 +262,7 @@ class _RedeemState extends ConsumerState<Redeem> {
     }
   }
   Future<void> calculateGasFee(List<dynamic> unspents)async{
-    List<Map<String,dynamic>> utxos=[];//输出账单
+    List<Map<String,dynamic>> utxos=[];
     for(Map<String,dynamic> unspent in unspents){
       if(widget.coinModel.isTest){
         if(unspent['hex']==null){
@@ -349,13 +284,12 @@ class _RedeemState extends ConsumerState<Redeem> {
         input2Price+=amount.toInt();
         utxos.add({
           "txid":unspent['txid'],
-          "vout":unspent['output_no'],//
-          "value": amount.toString(),//BigInt.from(amount*100000000).toString(),
-          "script": unspent['hex'],//unspent['script]
+          "vout":unspent['output_no'],
+          "value": amount.toString(),
+          "script": unspent['hex'],
         });
       }
       int byteSize=338;
-      //await getSignByteSize(utxos);
       if(byteSize !=0){
         gasFees=byteSize*gasFeeRate;
         inputValueOK=true;

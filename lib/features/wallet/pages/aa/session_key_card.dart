@@ -37,7 +37,6 @@ class SessionKeyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final permColor = sessionKeyPermissionColor(keyData.permission);
-    final statusColor = sessionKeyStatusColor(keyData.status);
 
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
@@ -46,7 +45,9 @@ class SessionKeyCard extends StatelessWidget {
         color: AppThemeUtils.getColorByKey(
             context, AppThemeKeys.itemBgColor.name),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-        border: Border.all(color: statusColor.withAlpha(40)),
+        border: Border.all(
+          color: sessionKeyStatusColor(keyData.status).withAlpha(40),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
