@@ -192,7 +192,11 @@ class _FaceBindingState extends ConsumerState<FaceBinding>
 
     if (image != null) {
       setState(() => errorMessage = '');
-      _sendToBackend(image);
+      if (widget.type == 1) {
+        _bindingFlow(image);
+      } else {
+        _matchFlow(image);
+      }
     } else {
       // image 为 null：用户取消、活体检测未通过或相机采集失败
       setState(() {
@@ -202,14 +206,6 @@ class _FaceBindingState extends ConsumerState<FaceBinding>
   }
 
   // ── 后端通信 ──────────────────────────────────────────────────────────────
-
-  Future<void> _sendToBackend(Uint8List img) async {
-    if (widget.type == 1) {
-      await _bindingFlow(img);
-    } else {
-      await _matchFlow(img);
-    }
-  }
 
   /// 绑定流程（type=1）：将人脸图像与钱包地址关联
   Future<void> _bindingFlow(Uint8List img) async {

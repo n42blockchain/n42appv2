@@ -155,15 +155,20 @@ class DeepLinkService {
   /// - n42://user/{userId} - 打开用户主页
   /// - n42://group/{groupId} - 打开群组
   DeepLinkData _parseN42Uri(Uri uri) {
+    const actionConfig = {
+      'chat': (type: DeepLinkType.chat, key: 'roomId'),
+      'user': (type: DeepLinkType.user, key: 'userId'),
+      'group': (type: DeepLinkType.group, key: 'groupId'),
+    };
+
     // Dart Uri 解析 n42://chat/roomId 时，host='chat', path='/roomId'
     // 优先使用 host 作为 action（这是 n42://action/id 格式的标准行为）
-    const knownActions = {'chat', 'user', 'group'};
     final host = uri.host;
 
     String action;
     String id;
 
-    if (host.isNotEmpty && knownActions.contains(host)) {
+    if (host.isNotEmpty && actionConfig.containsKey(host)) {
       action = host;
       id = uri.pathSegments.isNotEmpty ? uri.pathSegments.first : '';
     } else if (uri.pathSegments.isNotEmpty) {
@@ -173,28 +178,14 @@ class DeepLinkService {
       return _unknownLink(uri, uri.queryParameters);
     }
 
-    switch (action) {
-      case 'chat':
-        return DeepLinkData(
-          type: DeepLinkType.chat,
-          uri: uri,
-          params: {'roomId': id, ...uri.queryParameters},
-        );
-      case 'user':
-        return DeepLinkData(
-          type: DeepLinkType.user,
-          uri: uri,
-          params: {'userId': id, ...uri.queryParameters},
-        );
-      case 'group':
-        return DeepLinkData(
-          type: DeepLinkType.group,
-          uri: uri,
-          params: {'groupId': id, ...uri.queryParameters},
-        );
-      default:
-        return _unknownLink(uri, uri.queryParameters);
-    }
+    final config = actionConfig[action];
+    if (config == null) return _unknownLink(uri, uri.queryParameters);
+
+    return DeepLinkData(
+      type: config.type,
+      uri: uri,
+      params: {config.key: id, ...uri.queryParameters},
+    );
   }
 
   DeepLinkData _unknownLink(Uri uri, Map<String, String> params) =>

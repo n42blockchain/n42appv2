@@ -165,11 +165,12 @@ class TokenDiscoveryService {
     for (final tx in txList) {
       if (tx is! Map) continue;
       final contract = (tx['contractAddress'] as String?)?.toLowerCase() ?? '';
-      if (contract.isEmpty) continue;
-      if (seen.contains(contract)) continue;
-      if (knownContracts.contains(contract)) continue;
-      if (ignoredContracts.contains(contract)) continue;
-      seen.add(contract);
+      if (contract.isEmpty ||
+          !seen.add(contract) ||
+          knownContracts.contains(contract) ||
+          ignoredContracts.contains(contract)) {
+        continue;
+      }
 
       candidates.add(_EvmCandidate(
         contract: tx['contractAddress'] as String,
@@ -190,9 +191,7 @@ class TokenDiscoveryService {
         (c) => _verifyEvmBalance(coinType: coinType, address: address, candidate: c),
       );
       final batchResults = await Future.wait(futures, eagerError: false);
-      for (final r in batchResults) {
-        if (r != null) results.add(r);
-      }
+      results.addAll(batchResults.nonNulls);
     }
     return results;
   }
@@ -267,42 +266,50 @@ class TokenDiscoveryService {
 
     final data = result.valueOrNull!;
     final accounts = data['value'] as List<dynamic>? ?? [];
-    final results = <DiscoveredToken>[];
+    return accounts
+        .map((a) => _parseSolanaAccount(a, knownContracts, ignoredContracts))
+        .nonNulls
+        .toList();
+  }
 
-    for (final account in accounts) {
-      try {
-        final parsed =
-            account['account']['data']['parsed'] as Map<String, dynamic>?;
-        if (parsed == null) continue;
-        final info = parsed['info'] as Map<String, dynamic>? ?? {};
+  /// Parse a single Solana token account into a [DiscoveredToken], or null
+  /// if it should be skipped (zero balance, already known, parse error).
+  static DiscoveredToken? _parseSolanaAccount(
+    dynamic account,
+    Set<String> knownContracts,
+    Set<String> ignoredContracts,
+  ) {
+    try {
+      final parsed =
+          account['account']['data']['parsed'] as Map<String, dynamic>?;
+      if (parsed == null) return null;
+      final info = parsed['info'] as Map<String, dynamic>? ?? {};
 
-        final mint = info['mint'] as String? ?? '';
-        if (mint.isEmpty) continue;
-        if (knownContracts.contains(mint)) continue;
-        if (ignoredContracts.contains(mint)) continue;
+      final mint = info['mint'] as String? ?? '';
+      if (mint.isEmpty) return null;
+      if (knownContracts.contains(mint)) return null;
+      if (ignoredContracts.contains(mint)) return null;
 
-        final tokenAmount = info['tokenAmount'] as Map<String, dynamic>? ?? {};
-        final amountStr = tokenAmount['amount'] as String? ?? '0';
-        final decimals = (tokenAmount['decimals'] as num?)?.toInt() ?? 0;
-        final balance = BigInt.tryParse(amountStr) ?? BigInt.zero;
-        if (balance == BigInt.zero) continue;
+      final tokenAmount = info['tokenAmount'] as Map<String, dynamic>? ?? {};
+      final amountStr = tokenAmount['amount'] as String? ?? '0';
+      final decimals = (tokenAmount['decimals'] as num?)?.toInt() ?? 0;
+      final balance = BigInt.tryParse(amountStr) ?? BigInt.zero;
+      if (balance == BigInt.zero) return null;
 
-        // Symbol/name: SPL tokens don't embed metadata in token accounts.
-        // We leave them empty; the discovery UI shows the truncated mint address.
-        results.add(DiscoveredToken(
-          coinType: 'SOL',
-          blockchainType: 'Solana',
-          contractAddress: mint,
-          symbol: '',
-          name: '',
-          decimals: decimals,
-          rawBalance: balance,
-        ));
-      } catch (_) {
-        continue;
-      }
+      // SPL tokens don't embed metadata in token accounts.
+      // The discovery UI shows the truncated mint address instead.
+      return DiscoveredToken(
+        coinType: 'SOL',
+        blockchainType: 'Solana',
+        contractAddress: mint,
+        symbol: '',
+        name: '',
+        decimals: decimals,
+        rawBalance: balance,
+      );
+    } catch (_) {
+      return null;
     }
-    return results;
   }
 }
 

@@ -91,6 +91,10 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
   }
 
   Widget _buildHeader(BuildContext context) {
+    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final subtitleText = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+
     return InkWell(
       onTap: widget.expandable ? () => setState(() => _isExpanded = !_isExpanded) : null,
       child: Padding(
@@ -103,7 +107,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
                 Icon(
                   Icons.local_gas_station,
                   size: ScreenUtil().setWidth(40),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                  color: blueColor,
                 ),
                 SizedBox(width: ScreenUtil().setWidth(16)),
                 Text(
@@ -111,7 +115,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(30),
                     fontWeight: FontWeight.bold,
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    color: mainText,
                   ),
                 ),
               ],
@@ -122,7 +126,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
                   _formatTotalFee(),
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(28),
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    color: mainText,
                   ),
                 ),
                 if (widget.expandable) ...[
@@ -130,7 +134,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
                   Icon(
                     _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
                     size: ScreenUtil().setWidth(40),
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                    color: subtitleText,
                   ),
                 ],
               ],
@@ -161,6 +165,11 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
     final option = _getOption(speed);
     final estimatedTime = GasTrackerApi.formatEstimatedTime(option.estimatedSeconds);
 
+    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final subtitleText = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final dividerColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name);
+
     return Expanded(
       child: GestureDetector(
         onTap: () => _onSpeedSelected(speed),
@@ -170,14 +179,10 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
             horizontal: ScreenUtil().setWidth(16),
           ),
           decoration: BoxDecoration(
-            color: isSelected
-                ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withAlpha(25)
-                : Colors.transparent,
+            color: isSelected ? blueColor.withAlpha(25) : Colors.transparent,
             borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
             border: Border.all(
-              color: isSelected
-                  ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-                  : AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
+              color: isSelected ? blueColor : dividerColor,
               width: isSelected ? 2 : 1,
             ),
           ),
@@ -186,9 +191,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
               Icon(
                 icon,
                 size: ScreenUtil().setWidth(36),
-                color: isSelected
-                    ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-                    : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: isSelected ? blueColor : subtitleText,
               ),
               SizedBox(height: ScreenUtil().setWidth(8)),
               Text(
@@ -196,9 +199,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(24),
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  color: isSelected
-                      ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-                      : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                  color: isSelected ? blueColor : mainText,
                 ),
               ),
               SizedBox(height: ScreenUtil().setWidth(4)),
@@ -206,7 +207,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
                 estimatedTime,
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(22),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                  color: subtitleText,
                 ),
               ),
             ],
@@ -219,6 +220,8 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
   Widget _buildDetails(BuildContext context) {
     final currentOption = widget.gasEstimate.currentOption;
     final gasLimit = widget.gasEstimate.gasLimit;
+    final s = S.of(context);
+    final spacing = SizedBox(height: ScreenUtil().setWidth(16));
 
     return Container(
       margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
@@ -229,52 +232,36 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
       ),
       child: Column(
         children: [
-          _buildDetailRow(
-            context,
-            S.of(context).g_key_101, // Gas Limit
-            gasLimit.toString(),
-          ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          _buildDetailRow(context, s.g_key_101, gasLimit.toString()),
+          spacing,
           if (widget.gasEstimate.supportsEIP1559 && currentOption.eip1559 != null) ...[
-            _buildDetailRow(
-              context,
-              S.of(context).g_key_gas_base_fee,
-              '${_formatGwei(widget.gasEstimate.baseFee ?? BigInt.zero)} Gwei',
-            ),
-            SizedBox(height: ScreenUtil().setWidth(16)),
-            _buildDetailRow(
-              context,
-              S.of(context).g_key_gas_priority_fee,
-              '${_formatGwei(currentOption.maxPriorityFeePerGas)} Gwei',
-            ),
-            SizedBox(height: ScreenUtil().setWidth(16)),
-            _buildDetailRow(
-              context,
-              S.of(context).g_key_gas_max_fee,
-              '${_formatGwei(currentOption.effectiveGasPrice)} Gwei',
-            ),
+            _buildDetailRow(context, s.g_key_gas_base_fee,
+                '${_formatGwei(widget.gasEstimate.baseFee ?? BigInt.zero)} Gwei'),
+            spacing,
+            _buildDetailRow(context, s.g_key_gas_priority_fee,
+                '${_formatGwei(currentOption.maxPriorityFeePerGas)} Gwei'),
+            spacing,
+            _buildDetailRow(context, s.g_key_gas_max_fee,
+                '${_formatGwei(currentOption.effectiveGasPrice)} Gwei'),
           ] else ...[
-            _buildDetailRow(
-              context,
-              S.of(context).g_key_t_17, // Gas Price
-              '${_formatGwei(currentOption.effectiveGasPrice)} Gwei',
-            ),
+            _buildDetailRow(context, s.g_key_t_17,
+                '${_formatGwei(currentOption.effectiveGasPrice)} Gwei'),
           ],
-          SizedBox(height: ScreenUtil().setWidth(16)),
-          Divider(height: 1),
-          SizedBox(height: ScreenUtil().setWidth(16)),
-          _buildDetailRow(
-            context,
-            S.of(context).g_key_t_16, // Total Fee
-            _formatTotalFee(),
-            isTotal: true,
-          ),
+          spacing,
+          const Divider(height: 1),
+          spacing,
+          _buildDetailRow(context, s.g_key_t_16, _formatTotalFee(), isTotal: true),
         ],
       ),
     );
   }
 
   Widget _buildDetailRow(BuildContext context, String label, String value, {bool isTotal = false}) {
+    final subtitleText = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final valueColor = isTotal
+        ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
+        : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -282,7 +269,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
           label,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(26),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+            color: subtitleText,
           ),
         ),
         Text(
@@ -290,9 +277,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
           style: TextStyle(
             fontSize: ScreenUtil().setSp(26),
             fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-            color: isTotal
-                ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-                : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+            color: valueColor,
           ),
         ),
       ],
@@ -319,8 +304,7 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
   }
 
   String _formatGwei(BigInt wei) {
-    final gwei = toGWei(wei.toString());
-    return Decimal.parse(gwei.toString()).toString();
+    return Decimal.parse(toGWei(wei.toString()).toString()).toString();
   }
 }
 
@@ -341,8 +325,12 @@ class GasSelectorCompact extends StatelessWidget {
     final totalFee = gasEstimate.currentTotalFee;
     final decimals = gasEstimate.decimals;
     final unit = gasEstimate.unit;
-    final formatted = toEther(totalFee.toString(), decimals);
+    final formatted = Decimal.parse(toEther(totalFee.toString(), decimals).toString());
     final estimatedTime = GasTrackerApi.formatEstimatedTime(currentOption.estimatedSeconds);
+
+    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final subtitleText = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
 
     return InkWell(
       onTap: onTap,
@@ -363,7 +351,7 @@ class GasSelectorCompact extends StatelessWidget {
                 Icon(
                   Icons.local_gas_station,
                   size: ScreenUtil().setWidth(36),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                  color: blueColor,
                 ),
                 SizedBox(width: ScreenUtil().setWidth(12)),
                 Column(
@@ -374,14 +362,14 @@ class GasSelectorCompact extends StatelessWidget {
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(28),
                         fontWeight: FontWeight.bold,
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                        color: mainText,
                       ),
                     ),
                     Text(
                       estimatedTime,
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(24),
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                        color: subtitleText,
                       ),
                     ),
                   ],
@@ -391,10 +379,10 @@ class GasSelectorCompact extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  '${Decimal.parse(formatted.toString())} $unit',
+                  '$formatted $unit',
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(28),
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    color: mainText,
                   ),
                 ),
                 if (onTap != null) ...[
@@ -402,7 +390,7 @@ class GasSelectorCompact extends StatelessWidget {
                   Icon(
                     Icons.edit,
                     size: ScreenUtil().setWidth(32),
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                    color: blueColor,
                   ),
                 ],
               ],

@@ -369,7 +369,7 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
       child: Column(
         children: [
           // 费率（仅 BTC 类）
-          if (option.feeRate != null)
+          if (option.feeRate != null) ...[
             _detailRow(
               context,
               S.of(context).g_key_t_36, // "Gas Fee Rate"
@@ -377,8 +377,8 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
               mainText: mainText,
               subtitleText: subtitleText,
             ),
-          if (option.feeRate != null)
             SizedBox(height: ScreenUtil().setWidth(16)),
+          ],
           const Divider(height: 1),
           SizedBox(height: ScreenUtil().setWidth(16)),
           _detailRow(

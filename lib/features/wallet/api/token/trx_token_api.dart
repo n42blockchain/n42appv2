@@ -15,30 +15,39 @@ import 'token_api_base.dart';
 /// Provides balance, transaction, and gas fee methods
 /// for Tron blockchain and TRC tokens.
 mixin TrxTokenApiMixin on TokenApiBase {
+  /// Helper: POST to TRX API, check code 200, extract data
+  Future<MessageModel> _trxPost(
+    String endpoint,
+    Map<String, dynamic> params,
+    dynamic Function(dynamic data) extractor,
+  ) async {
+    try {
+      final a = await httpClient.post('${url}$endpoint', params: params, data: params, header: header);
+      final mm = MessageModel.error();
+      if (a['code'] == 200) {
+        mm.error = false;
+        mm.data = extractor(a['data']);
+      } else {
+        mm.data = errorMessage(a['code']);
+      }
+      return mm;
+    } catch (e) {
+      return createError(e.toString());
+    }
+  }
+
   /// Get gas price for Tron
-  ///
-  /// Returns the current gas price for the Tron network
-  /// [isTest] - Use testnet
   Future<MessageModel> getGasPriceTrx({bool isTest = false}) async {
     try {
-      final params = <String, dynamic>{
-        'net_mode': isTest ? 'test' : 'main',
-      };
-      final a = await httpClient.post(
-        '${url}v1/trx/gas/price',
-        params: params,
-        data: params,
-        header: header,
-      );
-
+      final params = <String, dynamic>{'net_mode': isTest ? 'test' : 'main'};
+      final a = await httpClient.post('${url}v1/trx/gas/price', params: params, data: params, header: header);
       final mm = MessageModel.error();
       if (a['code'] == 200) {
         if (a['data']['error']['code'] != 0) {
           mm.data = a['data']['error']['message'];
         } else {
           mm.error = false;
-          final BigInt value = hexToInt(a['data']['result'].toString());
-          mm.data = value;
+          mm.data = hexToInt(a['data']['result'].toString());
         }
       } else {
         mm.data = errorMessage(a['code']);
@@ -50,136 +59,34 @@ mixin TrxTokenApiMixin on TokenApiBase {
   }
 
   /// Get transaction receipt for Tron
-  ///
-  /// Returns the transaction receipt for the given hash
-  /// [txHash] - Transaction hash
-  /// [isTest] - Use testnet
-  Future<MessageModel> getTransactionReceiptTrx(
-    String txHash, {
-    bool isTest = false,
-  }) async {
-    try {
-      final params = <String, dynamic>{
-        'tx_hash': txHash,
-        'net_mode': isTest ? 'test' : 'main',
-      };
-      final a = await httpClient.post(
-        '${url}v1/trx/transaction/receipt',
-        params: params,
-        data: params,
-        header: header,
-      );
-
-      final mm = MessageModel.error();
-      if (a['code'] == 200) {
-        mm.error = false;
-        mm.data = a['data'];
-      } else {
-        mm.data = errorMessage(a['code']);
-      }
-      return mm;
-    } catch (e) {
-      return createError(e.toString());
-    }
+  Future<MessageModel> getTransactionReceiptTrx(String txHash, {bool isTest = false}) async {
+    return _trxPost('v1/trx/transaction/receipt',
+        {'tx_hash': txHash, 'net_mode': isTest ? 'test' : 'main'}, (d) => d);
   }
 
   /// Get latest block number for Tron
-  ///
-  /// Returns the latest block information
-  /// [isTest] - Use testnet
   Future<MessageModel> getLatestBlockNumberTrx({bool isTest = false}) async {
-    try {
-      final params = <String, dynamic>{
-        'net_mode': isTest ? 'test' : 'main',
-      };
-      final a = await httpClient.post(
-        '${url}v1/trx/latest/block',
-        params: params,
-        data: params,
-        header: header,
-      );
-
-      final mm = MessageModel.error();
-      if (a['code'] == 200) {
-        mm.error = false;
-        mm.data = a['data'];
-      } else {
-        mm.data = errorMessage(a['code']);
-      }
-      return mm;
-    } catch (e) {
-      return createError(e.toString());
-    }
+    return _trxPost('v1/trx/latest/block',
+        {'net_mode': isTest ? 'test' : 'main'}, (d) => d);
   }
 
   /// Create Tron transaction
-  ///
-  /// Creates an unsigned transaction for TRX transfer
-  /// [sendAddress] - Sender address
-  /// [toAddress] - Recipient address
-  /// [amount] - Amount in sun (1 TRX = 1,000,000 sun)
-  /// [netMode] - Network mode ('main' or 'test')
   Future<MessageModel> createTxTrx(
-    String sendAddress,
-    String toAddress,
-    int amount,
-    dynamic netMode,
+    String sendAddress, String toAddress, int amount, dynamic netMode,
   ) async {
-    try {
-      final params = <String, dynamic>{
-        'coin': 'trx',
-        'owner_address': sendAddress,
-        'to_address': toAddress,
-        'visible': false,
-        'amount': amount,
-      };
-      final a = await httpClient.post(
-        '${url}v1/vipapi/onchainwallet/transaction',
-        params: params,
-        data: params,
-        header: header,
-      );
-
-      final mm = MessageModel.error();
-      if (a['code'] == 200) {
-        mm.error = false;
-        mm.data = a['data']['raw_data_hex'];
-      } else {
-        mm.data = errorMessage(a['code']);
-      }
-      return mm;
-    } catch (e) {
-      return createError(e.toString());
-    }
+    return _trxPost('v1/vipapi/onchainwallet/transaction', {
+      'coin': 'trx', 'owner_address': sendAddress, 'to_address': toAddress,
+      'visible': false, 'amount': amount,
+    }, (d) => d['raw_data_hex']);
   }
 
   /// Send Tron transaction
-  ///
-  /// Broadcasts a signed transaction to the Tron network
-  /// [signHash] - Signed transaction JSON string
-  /// [netMode] - Network mode ('main' or 'test')
   Future<MessageModel> sendTxTrx(String signHash, String netMode) async {
     try {
-      final Map<String, dynamic> sign =
-          json.decode(signHash) as Map<String, dynamic>;
+      final sign = json.decode(signHash) as Map<String, dynamic>;
       sign['visible'] = false;
       sign['net_mode'] = 'main';
-
-      final a = await httpClient.post(
-        '${url}v1/trx/broadcast/transaction',
-        params: sign,
-        data: sign,
-        header: header,
-      );
-
-      final mm = MessageModel.error();
-      if (a['code'] == 200) {
-        mm.error = false;
-        mm.data = a['data'];
-      } else {
-        mm.data = errorMessage(a['code']);
-      }
-      return mm;
+      return _trxPost('v1/trx/broadcast/transaction', sign, (d) => d);
     } catch (e) {
       return createError(e.toString());
     }

@@ -251,23 +251,10 @@ class AATransferHandler extends BaseTransferHandler {
 
     final path = chainMap['path'] as String? ?? "m/44'/60'/0'/0/0";
 
-    // Sign using trustdart
-    String signatureHex;
-    if (params.privateKey != null) {
-      signatureHex = await trustdart.signMessage(
-        params.chainSymbol,
-        path,
-        hashHex,
-        pk: params.privateKey!,
-      );
-    } else {
-      signatureHex = await trustdart.signMessage(
-        params.chainSymbol,
-        path,
-        hashHex,
-        mnemonic: walletProvider.walletInfo.mnemonic ?? '',
-      );
-    }
+    // Sign using trustdart (prefer private key, fallback to mnemonic)
+    final signatureHex = params.privateKey != null
+        ? await trustdart.signMessage(params.chainSymbol, path, hashHex, pk: params.privateKey!)
+        : await trustdart.signMessage(params.chainSymbol, path, hashHex, mnemonic: walletProvider.walletInfo.mnemonic ?? '');
 
     if (signatureHex.isEmpty) {
       throw SignatureError('Failed to sign UserOperation');
@@ -296,14 +283,9 @@ class AATransferHandler extends BaseTransferHandler {
         data,
       );
 
-      if (!result.error && result.data != null) {
-        final hex = result.data.toString().replaceFirst('0x', '');
-        if (hex.isNotEmpty && hex != '0') {
-          return BigInt.parse(hex, radix: 16);
-        }
-      }
-
-      return BigInt.zero;
+      if (result.error || result.data == null) return BigInt.zero;
+      final hex = result.data.toString().replaceFirst('0x', '');
+      return (hex.isNotEmpty && hex != '0') ? BigInt.parse(hex, radix: 16) : BigInt.zero;
     } catch (e) {
       debugPrint('Error getting nonce: $e');
       return BigInt.zero;
@@ -312,11 +294,9 @@ class AATransferHandler extends BaseTransferHandler {
 
   /// Get RPC URL for the chain
   String _getRpcUrl() {
-    final chainMap = getChainMap(_chainSymbol);
-    if (chainMap != null) {
-      return chainMap['service'] as String? ?? '';
-    }
-    return chainUrlMap[_chainSymbol]?['baseInfo']?['service'] as String? ?? '';
+    return getChainMap(_chainSymbol)?['service'] as String?
+        ?? chainUrlMap[_chainSymbol]?['baseInfo']?['service'] as String?
+        ?? '';
   }
 
   /// Get gas prices
@@ -349,53 +329,34 @@ class AATransferHandler extends BaseTransferHandler {
     return valueBigInt * multiplier ~/ BigInt.from(1e18.round());
   }
 
+  static GasEstimation _gasError(String message) => GasEstimation(
+        gasLimit: BigInt.zero,
+        gasPrice: BigInt.zero,
+        totalFee: BigInt.zero,
+        errorMessage: message,
+      );
+
   @override
   Future<GasEstimation> estimateGas(TransferParams params) async {
     try {
-      if (params is! AATransferParams) {
-        return GasEstimation(
-          gasLimit: BigInt.zero,
-          gasPrice: BigInt.zero,
-          totalFee: BigInt.zero,
-          errorMessage: 'Invalid parameters',
-        );
-      }
+      if (params is! AATransferParams) return _gasError('Invalid parameters');
 
       final chainConfig = AAConfig.getChainConfig(params.chainSymbol);
-      if (chainConfig == null) {
-        return GasEstimation(
-          gasLimit: BigInt.zero,
-          gasPrice: BigInt.zero,
-          totalFee: BigInt.zero,
-          errorMessage: 'Chain not supported',
-        );
-      }
+      if (chainConfig == null) return _gasError('Chain not supported');
 
-      // Build UserOp for estimation
       final userOp = await _buildUserOperation(params, chainConfig);
-
-      // Get gas estimate from bundler
       final bundler = _getBundlerClient();
       final estimate = await bundler.estimateUserOperationGas(userOp);
-
-      // Get gas prices
       final gasPrices = await _getGasPrices(params.chainSymbol);
-
       final totalGas = estimate.totalGas;
-      final totalFee = totalGas * gasPrices.maxFeePerGas;
 
       return GasEstimation(
         gasLimit: totalGas,
         gasPrice: gasPrices.maxFeePerGas,
-        totalFee: totalFee,
+        totalFee: totalGas * gasPrices.maxFeePerGas,
       );
     } catch (e) {
-      return GasEstimation(
-        gasLimit: BigInt.zero,
-        gasPrice: BigInt.zero,
-        totalFee: BigInt.zero,
-        errorMessage: e.toString(),
-      );
+      return _gasError(e.toString());
     }
   }
 

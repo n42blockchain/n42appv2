@@ -14,6 +14,26 @@ import 'token_api_base.dart';
 /// Provides balance, UTXO, transaction, and gas fee methods
 /// for Bitcoin and similar UTXO-based chains (LTC, DOGE, BCH, etc.)
 mixin BtcTokenApiMixin on TokenApiBase {
+  /// Helper: GET a BTC list endpoint, handle 200/404 codes
+  Future<MessageModel> _btcListGet(String path) async {
+    try {
+      final a = await httpClient.get('${url}$path', params: <String, dynamic>{}, header: header);
+      final mm = MessageModel.error();
+      if (a['code'] == 200) {
+        mm.error = false;
+        mm.data = a['data'];
+      } else if (a['code'] == 404) {
+        mm.error = false;
+        mm.data = [];
+      } else {
+        mm.data = errorMessage(a['code']);
+      }
+      return mm;
+    } catch (e) {
+      return createError(e.toString());
+    }
+  }
+
   /// Get Bitcoin gas fee levels
   ///
   /// Returns fee rates for different priority levels (fast, medium, slow)
@@ -77,11 +97,6 @@ mixin BtcTokenApiMixin on TokenApiBase {
   }
 
   /// Get UTXOs for BTC-like chains
-  ///
-  /// [coinType] - Chain symbol
-  /// [address] - Wallet address
-  /// [pageSize] - Number of UTXOs per page
-  /// [pageNum] - Page number
   Future<MessageModel> getUTXOBtc(
     String coinType,
     String address, {
@@ -89,66 +104,22 @@ mixin BtcTokenApiMixin on TokenApiBase {
     int pageNum = 1,
     bool isTest = false,
   }) async {
-    try {
-      if (isTest) {
-        return await BtcApi(test: isTest).getUtxos(address);
-      }
-
-      final a = await httpClient.get(
-        '${url}v1/vipapi/utxo/tx/list?coin=${coinType.toLowerCase()}&addr=$address&page=$pageNum&page_size=$pageSize',
-        params: <String, dynamic>{},
-        header: header,
-      );
-
-      final mm = MessageModel.error();
-      if (a['code'] == 200) {
-        mm.error = false;
-        mm.data = a['data'];
-      } else if (a['code'] == 404) {
-        mm.error = false;
-        mm.data = [];
-      } else {
-        mm.data = errorMessage(a['code']);
-      }
-      return mm;
-    } catch (e) {
-      return createError(e.toString());
-    }
+    if (isTest) return BtcApi(test: isTest).getUtxos(address);
+    return _btcListGet(
+      'v1/vipapi/utxo/tx/list?coin=${coinType.toLowerCase()}&addr=$address&page=$pageNum&page_size=$pageSize',
+    );
   }
 
   /// Get transaction list for BTC-like chains
-  ///
-  /// [coinType] - Chain symbol
-  /// [address] - Wallet address
-  /// [pageSize] - Number of transactions per page
-  /// [pageNum] - Page number
   Future<MessageModel> getTxListBtc(
     String coinType,
     String address, {
     int pageSize = 20,
     int pageNum = 1,
   }) async {
-    try {
-      final a = await httpClient.get(
-        '${url}v1/vipapi/address/tx/list?coin=${coinType.toLowerCase()}&addr=$address&page=$pageNum&page_size=$pageSize',
-        params: <String, dynamic>{},
-        header: header,
-      );
-
-      final mm = MessageModel.error();
-      if (a['code'] == 200) {
-        mm.error = false;
-        mm.data = a['data'];
-      } else if (a['code'] == 404) {
-        mm.error = false;
-        mm.data = [];
-      } else {
-        mm.data = errorMessage(a['code']);
-      }
-      return mm;
-    } catch (e) {
-      return createError(e.toString());
-    }
+    return _btcListGet(
+      'v1/vipapi/address/tx/list?coin=${coinType.toLowerCase()}&addr=$address&page=$pageNum&page_size=$pageSize',
+    );
   }
 
   /// Broadcast transaction for BTC-like chains

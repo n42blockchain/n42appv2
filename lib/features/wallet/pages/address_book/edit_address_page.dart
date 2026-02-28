@@ -1,6 +1,5 @@
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
-import 'package:n42_wallet/features/models/message_model.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
@@ -43,19 +42,24 @@ class _EditAddressPageState extends State<EditAddressPage> {
   var coinIcon = '';
   bool editStatus = true;  // 默认为编辑状态，直接显示 Save
   String errorMessage="";
+
+  /// 无阴影效果的 BoxShadow，复用于各输入框
+  static final _noShadow = BoxShadow(
+    color: Color(0x00101828),
+    offset: Offset.zero,
+    blurRadius: 0,
+    spreadRadius: 0,
+  );
+
   @override
   void initState() {
     super.initState();
     info = widget.info;
-    setState(() {
-      coinName = info.coinName ?? "BTC";
-      coinIcon = info.coinIcon ?? "";
-      addressController.text = info.address ?? "";
-      nameController.text = info.name ?? "";
-      if (info.desc != null) {
-        descController.text = info.desc ?? '';
-      }
-    });
+    coinName = info.coinName ?? "BTC";
+    coinIcon = info.coinIcon ?? "";
+    addressController.text = info.address ?? "";
+    nameController.text = info.name ?? "";
+    descController.text = info.desc ?? '';
   }
   @override
   void dispose() {
@@ -69,41 +73,35 @@ class _EditAddressPageState extends State<EditAddressPage> {
   }
 
   Future<String?> addressCheck(String addr) async {
-    if(addr==""){
+    if(addr.isEmpty){
       errorMessage=S.current.g_key_41;
       setState(() {});
       return null;
-    }else{
-      List<String> addrList=addr.split(":");
-      if(addrList.length==2){
-        addr=addrList[1];
-      }
-      bool check=await Trustdart().validateAddress(coinName, addr);
-      if(check){
+    }
+
+    final parts = addr.split(":");
+    if(parts.length==2) addr = parts[1];
+
+    final valid = await Trustdart().validateAddress(coinName, addr);
+    if(valid){
+      errorMessage="";
+      setState(() {});
+      return addr;
+    }
+
+    // 地址无效时，若为 ETH 链则尝试 ENS 解析
+    if(coinName==CoinType.ETH.name){
+      final rmm = await TokenViewApi().getEnsResolve(addr);
+      if(!rmm.error){
         errorMessage="";
         setState(() {});
-        return addr;
-      }else{
-        if(coinName==CoinType.ETH.name){
-          TokenViewApi tokenViewApi=TokenViewApi();
-          MessageModel rmm=await tokenViewApi.getEnsResolve(addr);
-          if(rmm.error){
-            errorMessage=S.current.g_key_t_50;
-            setState(() {});
-            return null;
-          }else{
-            errorMessage="";
-            setState(() {});
-            return rmm.data;
-          }
-        }else{
-          errorMessage=S.current.g_key_t_50;
-          setState(() {});
-          return null;
-        }
-
+        return rmm.data;
       }
     }
+
+    errorMessage=S.current.g_key_t_50;
+    setState(() {});
+    return null;
   }
   @override
   Widget build(BuildContext context) {
@@ -191,10 +189,6 @@ class _EditAddressPageState extends State<EditAddressPage> {
         context,
         padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0),),
         height: ScreenUtil().setWidth(88.0),
-        /*decoration: BoxDecoration(
-            color:
-                AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBoxColor),
-            borderRadius: BorderRadius.circular(scr.setWidth(16.0))),*/
         child: Row(
           children: [
             SizedBox(
@@ -272,11 +266,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
       onEditingComplete: (){
         FocusScope.of(context).requestFocus(nameFocusNode);
       },
-      boxShadow:BoxShadow(
-        color: Color(0xff101828).withAlpha((0 * 255).round()),  //底色,阴影颜色
-        offset: Offset(0, 0), //阴影位置,从什么位置开始
-        blurRadius: ScreenUtil().setWidth(0),  // 阴影模糊层度
-        spreadRadius: 0, ),
+      boxShadow: _noShadow,
       messageMargin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
       rightWidget1: Image.asset(
         "assets/wallet/scan.png",
@@ -333,11 +323,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
       controller: nameController,
       focusNode: nameFocusNode,
       hintText: S.of(context).g_key_nft_2,
-      boxShadow:BoxShadow(
-        color: Color(0xff101828).withAlpha((0 * 255).round()),  //底色,阴影颜色
-        offset: Offset(0, 0), //阴影位置,从什么位置开始
-        blurRadius: ScreenUtil().setWidth(0),  // 阴影模糊层度
-        spreadRadius: 0, ),
+      boxShadow: _noShadow,
       onEditingComplete: (){
         FocusScope.of(context).requestFocus(descFocusNode);
       },
@@ -350,11 +336,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
       controller: descController,
       focusNode: descFocusNode,
       hintText: S.of(context).descO,
-      boxShadow:BoxShadow(
-        color: Color(0xff101828).withAlpha((0 * 255).round()),  //底色,阴影颜色
-        offset: Offset(0, 0), //阴影位置,从什么位置开始
-        blurRadius: ScreenUtil().setWidth(0),  // 阴影模糊层度
-        spreadRadius: 0, ),
+      boxShadow: _noShadow,
       onEditingComplete: (){
         FocusScope.of(context).requestFocus(addressFocusNode);
       },

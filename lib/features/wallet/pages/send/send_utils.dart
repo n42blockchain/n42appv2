@@ -121,94 +121,78 @@ Future<void> showAddressPickerSheet(
 
   final scanAction = onScanQR ?? defaultScanQR;
 
+  // 构建弹窗中每一行的通用布局
+  Widget buildSheetRow(BuildContext context, {
+    required Widget iconWidget,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    final blueColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainBlueColor.name);
+    final iconSize = ScreenUtil().setWidth(48);
+    return InkWell(
+      onTap: onTap,
+      child: SizedBox(
+        height: ScreenUtil().setWidth(88),
+        width: double.infinity,
+        child: Row(
+          children: [
+            Container(
+              height: iconSize,
+              width: iconSize,
+              margin: EdgeInsets.only(right: ScreenUtil().setWidth(20)),
+              child: iconWidget,
+            ),
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: blueColor,
+                  fontSize: ScreenUtil().setSp(30),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  final blueColor = AppThemeUtils.getColorByKey(
+      context, AppThemeKeys.mainBlueColor.name);
+  final divider = Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0);
+  final iconSize = ScreenUtil().setWidth(48);
+
   final List<Widget> childs = [
     // ── 地址簿 ──────────────────────────────────────
-    InkWell(
+    buildSheetRow(context,
+      iconWidget: Image.asset('assets/wallet/addressBook.png',
+          color: blueColor, height: iconSize, width: iconSize),
+      label: S.of(context).g_key_108,
       onTap: () async {
-        final value = await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) =>
-                AddressBookList(coinName: coinModel.coin['coinType']),
-          ),
-        );
+        final value = await Navigator.push(context,
+          MaterialPageRoute(builder: (_) =>
+              AddressBookList(coinName: coinModel.coin['coinType'])));
         if (!context.mounted) return;
-        if (value != null) {
-          onAddressSelected(value as String);
-        }
+        if (value != null) onAddressSelected(value as String);
         if (context.mounted) Navigator.pop(context);
       },
-      child: SizedBox(
-        height: ScreenUtil().setWidth(88),
-        width: double.infinity,
-        child: Row(
-          children: [
-            Container(
-              height: ScreenUtil().setWidth(48),
-              width: ScreenUtil().setWidth(48),
-              margin: EdgeInsets.only(right: ScreenUtil().setWidth(20)),
-              child: Image.asset(
-                'assets/wallet/addressBook.png',
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-                height: ScreenUtil().setWidth(48),
-                width: ScreenUtil().setWidth(48),
-              ),
-            ),
-            Expanded(
-              child: Text(
-                S.of(context).g_key_108,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
-                  fontSize: ScreenUtil().setSp(30),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     ),
-    Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
+    divider,
 
     // ── 扫码 ────────────────────────────────────────
-    InkWell(
+    buildSheetRow(context,
+      iconWidget: Image.asset('assets/wallet/scan.png',
+          color: blueColor, height: iconSize, width: iconSize),
+      label: S.of(context).g_key_4,
       onTap: scanAction,
-      child: SizedBox(
-        height: ScreenUtil().setWidth(88),
-        width: double.infinity,
-        child: Row(
-          children: [
-            Container(
-              height: ScreenUtil().setWidth(48),
-              width: ScreenUtil().setWidth(48),
-              margin: EdgeInsets.only(right: ScreenUtil().setWidth(20)),
-              child: Image.asset(
-                'assets/wallet/scan.png',
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-                height: ScreenUtil().setWidth(48),
-                width: ScreenUtil().setWidth(48),
-              ),
-            ),
-            Expanded(
-              child: Text(
-                S.of(context).g_key_4,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
-                  fontSize: ScreenUtil().setSp(30),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     ),
-    Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
+    divider,
 
     // ── 粘贴 ────────────────────────────────────────
-    InkWell(
+    buildSheetRow(context,
+      iconWidget: Icon(Icons.paste_outlined, color: blueColor, size: iconSize),
+      label: S.of(context).g_key_166,
       onTap: () async {
         final cd = await Clipboard.getData(Clipboard.kTextPlain);
         if (!context.mounted) return;
@@ -217,122 +201,31 @@ Future<void> showAddressPickerSheet(
         }
         if (context.mounted) Navigator.pop(context);
       },
-      child: SizedBox(
-        height: ScreenUtil().setWidth(88),
-        width: double.infinity,
-        child: Row(
-          children: [
-            Container(
-              height: ScreenUtil().setWidth(48),
-              width: ScreenUtil().setWidth(48),
-              margin: EdgeInsets.only(right: ScreenUtil().setWidth(20)),
-              child: Icon(
-                Icons.paste_outlined,
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-                size: ScreenUtil().setWidth(48),
-              ),
-            ),
-            Expanded(
-              child: Text(
-                S.of(context).g_key_166,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
-                  fontSize: ScreenUtil().setSp(30),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     ),
-    Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
+    divider,
   ];
 
   // ── EVM 专属：人脸识别（拍照 / 相册） ──────────────
   if (isEvm) {
+    Future<void> faceMatchAction(int type) async {
+      final address = await Navigator.push<String>(
+          context, MaterialPageRoute(builder: (_) => FaceMatch(type)));
+      if (!context.mounted) return;
+      if (address != null) onAddressSelected(address);
+      if (context.mounted) Navigator.pop(context);
+    }
+
     childs.addAll([
-      InkWell(
-        onTap: () async {
-          final address = await Navigator.push<String>(
-              context, MaterialPageRoute(builder: (_) => FaceMatch(1)));
-          if (!context.mounted) return;
-          if (address != null) {
-            onAddressSelected(address);
-          }
-          if (context.mounted) Navigator.pop(context);
-        },
-        child: SizedBox(
-          height: ScreenUtil().setWidth(88),
-          width: double.infinity,
-          child: Row(
-            children: [
-              Container(
-                height: ScreenUtil().setWidth(48),
-                width: ScreenUtil().setWidth(48),
-                margin: EdgeInsets.only(right: ScreenUtil().setWidth(20)),
-                child: Icon(
-                  Icons.photo_album_outlined,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
-                  size: ScreenUtil().setWidth(48),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  '${S.of(context).g_face_match_key1}(${S.of(context).photograph})',
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainBlueColor.name),
-                    fontSize: ScreenUtil().setSp(30),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+      buildSheetRow(context,
+        iconWidget: Icon(Icons.photo_album_outlined, color: blueColor, size: iconSize),
+        label: '${S.of(context).g_face_match_key1}(${S.of(context).photograph})',
+        onTap: () => faceMatchAction(1),
       ),
-      Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
-      InkWell(
-        onTap: () async {
-          final address = await Navigator.push<String>(
-              context, MaterialPageRoute(builder: (_) => FaceMatch(2)));
-          if (!context.mounted) return;
-          if (address != null) {
-            onAddressSelected(address);
-          }
-          if (context.mounted) Navigator.pop(context);
-        },
-        child: SizedBox(
-          height: ScreenUtil().setWidth(88),
-          width: double.infinity,
-          child: Row(
-            children: [
-              Container(
-                height: ScreenUtil().setWidth(48),
-                width: ScreenUtil().setWidth(48),
-                margin: EdgeInsets.only(right: ScreenUtil().setWidth(20)),
-                child: Icon(
-                  Icons.face_outlined,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
-                  size: ScreenUtil().setWidth(48),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  '${S.of(context).g_face_match_key1}(${S.of(context).g_key_nft_16})',
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainBlueColor.name),
-                    fontSize: ScreenUtil().setSp(30),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+      divider,
+      buildSheetRow(context,
+        iconWidget: Icon(Icons.face_outlined, color: blueColor, size: iconSize),
+        label: '${S.of(context).g_face_match_key1}(${S.of(context).g_key_nft_16})',
+        onTap: () => faceMatchAction(2),
       ),
     ]);
   }

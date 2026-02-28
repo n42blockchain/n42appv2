@@ -226,7 +226,6 @@ sealed class AppError {
   String toString() => '$runtimeType: $message${code != null ? ' ($code)' : ''}';
 }
 
-/// Network error
 final class NetworkError extends AppError {
   const NetworkError(
     String message, {
@@ -236,7 +235,6 @@ final class NetworkError extends AppError {
   }) : super._(message: message);
 }
 
-/// Authentication error
 final class AuthError extends AppError {
   const AuthError(
     String message, {
@@ -246,7 +244,6 @@ final class AuthError extends AppError {
   }) : super._(message: message);
 }
 
-/// Validation error
 final class ValidationError extends AppError {
   const ValidationError(
     String message, {
@@ -256,7 +253,6 @@ final class ValidationError extends AppError {
   }) : super._(message: message);
 }
 
-/// Business logic error
 final class BusinessError extends AppError {
   const BusinessError(
     String message, {
@@ -266,7 +262,6 @@ final class BusinessError extends AppError {
   }) : super._(message: message);
 }
 
-/// Storage/database error
 final class StorageError extends AppError {
   const StorageError(
     String message, {
@@ -276,7 +271,6 @@ final class StorageError extends AppError {
   }) : super._(message: message);
 }
 
-/// Blockchain/wallet error
 final class BlockchainError extends AppError {
   const BlockchainError(
     String message, {
@@ -286,7 +280,6 @@ final class BlockchainError extends AppError {
   }) : super._(message: message);
 }
 
-/// Unknown error
 final class UnknownError extends AppError {
   const UnknownError(
     String message, {

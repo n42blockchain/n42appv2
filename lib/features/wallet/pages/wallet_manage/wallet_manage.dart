@@ -34,7 +34,6 @@ class WalletManage extends ConsumerStatefulWidget {
 class _WalletManageState extends ConsumerState<WalletManage> {
   WalletInfo? walletInfo;
   List<CoinModel>? coinList;
-  //String? mnemonic;
   bool showDelete=false;
   bool deleteUnlock=false;//删除解锁
   Load load=Load.finish;
@@ -57,54 +56,36 @@ class _WalletManageState extends ConsumerState<WalletManage> {
   }
   @override
   void dispose() {
-    super.dispose();
     eventBusFn?.cancel();
+    super.dispose();
   }
   Future<void> initData() async {
-    // final list = ProviderUtil.walletActionProvider().walletInfoLsit;
-    //coinList = ProviderUtil.walletActionProvider().coinModels_main;
     walletInfo = widget.walletInfo;
-    /*int index=await Provider.of<WalletActionProvider>(context,listen: false).walletInfoLsit.indexWhere((element) {
-      if(walletInfo==element){
-        return true;
-      }else{
-        return false;
-      }
-    });*/
-    if(ref.read(wapBridgeProvider).walletIndex != widget.walletIndex){
-      showDelete=true;
-    }
-    //mnemonic = walletInfo?.mnemonic;
-    //debugPrint("mnemonic $mnemonic");
-    //bomb business wage crowd also real pencil excess soldier hurdle media frost
-    if(walletInfo?.mainWallet==false){
-      List<String>? keys = walletInfo?.coinInfo?.keys.toList();
-      if(keys !=null){
-        int index=keys.indexWhere((e)=>e.toString()==CoinType.N.name);
-        if(index !=-1){
-          showMainWallet=true;
-        }
-      }
-    }
-    if(showMainWallet==false){
-      showDelete=false;
-    }
+
+    final isNonCurrentWallet = ref.read(wapBridgeProvider).walletIndex != widget.walletIndex;
+    final hasN42Coin = walletInfo?.mainWallet == false &&
+        (walletInfo?.coinInfo?.keys.any((e) => e.toString() == CoinType.N.name) ?? false);
+
+    showMainWallet = hasN42Coin;
+    showDelete = isNonCurrentWallet && hasN42Coin;
+
     setCoinList();
     setState(() {});
   }
   Future<void> setCoinList()async{
-    List<dynamic> keym =walletInfo!.coinInfo!.keys.toList();
+    final keys = walletInfo!.coinInfo!.keys.toList();
     coinList=[];
-    for (int i = 0; i < keym.length; i++) {
-      CoinModel cm = CoinModel.fromMap(walletInfo!.coinInfo![keym[i]]['baseInfo']);
-      cm.isTest=walletInfo!.coinInfo![keym[i]]['isTest'];
-      cm.addrType=walletInfo!.coinInfo![keym[i]]['addrType'];
-      cm.pathIndex=walletInfo!.coinInfo![keym[i]]['pathIndex']??0;
-      cm.privateKey=walletInfo!.privateKey;
-      await cm.buildWallet(setAddress: false,walletIndex: widget.walletIndex);
+    for (final key in keys) {
+      final coinInfo = walletInfo!.coinInfo![key];
+      CoinModel cm = CoinModel.fromMap(coinInfo['baseInfo']);
+      cm.isTest = coinInfo['isTest'];
+      cm.addrType = coinInfo['addrType'];
+      cm.pathIndex = coinInfo['pathIndex'] ?? 0;
+      cm.privateKey = walletInfo!.privateKey;
+      await cm.buildWallet(setAddress: false, walletIndex: widget.walletIndex);
       coinList!.add(cm);
-      setState(() { });
     }
+    setState(() {});
   }
   void deleteWalletAlert(){
     showDialog(
@@ -141,8 +122,6 @@ class _WalletManageState extends ConsumerState<WalletManage> {
             TextButton(
               onPressed: (){
                 deleteWallet();
-                //删除钱包埋点：
-                // AmplitudeUtils.walletActive(WalletStatus.missing);
                 Navigator.pop(context);
               },
               child: Text(
@@ -221,8 +200,6 @@ class _WalletManageState extends ConsumerState<WalletManage> {
                       await Navigator.push(context,MaterialPageRoute(
                           builder: (_) => BackupOne(walletInfo!,widget.walletIndex)));
                     }),
-                  //_mnemonic(context, "${S.of(context).g_key_85}: ", mnemonic ?? ""),
-                  //_buildWalletInfo(context),
                   _buildCoinList(context),
                   SizedBox(
                     height: ScreenUtil().setWidth(148.0),
@@ -313,49 +290,9 @@ class _WalletManageState extends ConsumerState<WalletManage> {
       ),
     );
   }
-/*
-  _walletPassword(BuildContext context, String title, ) {
+  Widget _itemWidget(String title, VoidCallback onTap) {
     return InkWell(
-      onTap: (){
-        ///单独设置一个编辑页面
-        Navigator.push(context,MaterialPageRoute(
-            builder: (_) => EditWalletPassword(walletInfo!,widget.walletIndex)));
-      },
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0), vertical: ScreenUtil().setWidth(10.0)),
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0),horizontal: ScreenUtil().setWidth(30.0)),
-        decoration: BoxDecoration(
-            color:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBoxColor.name),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0))),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(32.0),),
-            ),
-            Spacer(),
-            Icon(
-              Icons.arrow_forward_ios_sharp,
-              size: ScreenUtil().setWidth(30.0),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-  */
-  Widget _itemWidget(String title,Function onTap) {
-    return InkWell(
-      onTap: (){
-        ///单独设置一个编辑页面
-        onTap();
-      },
+      onTap: onTap,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0), vertical: ScreenUtil().setWidth(10.0)),
         padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0),horizontal: ScreenUtil().setWidth(30.0)),

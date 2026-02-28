@@ -62,6 +62,7 @@ class EnsConfirmDialog extends StatelessWidget {
         AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
     final blueColor =
         AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    const successGreen = Color(0xFF4CAF50);
 
     return AlertDialog(
       backgroundColor: bgColor,
@@ -104,17 +105,17 @@ class EnsConfirmDialog extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
               decoration: BoxDecoration(
-                color: const Color(0xFF4CAF50).withValues(alpha: 0.1),
+                color: successGreen.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
                 border: Border.all(
-                  color: const Color(0xFF4CAF50).withValues(alpha: 0.3),
+                  color: successGreen.withValues(alpha: 0.3),
                 ),
               ),
               child: Row(
                 children: [
                   Icon(
                     Icons.check_circle_outline,
-                    color: const Color(0xFF4CAF50),
+                    color: successGreen,
                     size: ScreenUtil().setWidth(28),
                   ),
                   SizedBox(width: ScreenUtil().setWidth(8)),
@@ -124,7 +125,7 @@ class EnsConfirmDialog extends StatelessWidget {
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(26),
                         fontWeight: FontWeight.w600,
-                        color: const Color(0xFF4CAF50),
+                        color: successGreen,
                       ),
                     ),
                   ),

@@ -3,8 +3,6 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'dart:typed_data';
-
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/models/message_model.dart';
@@ -154,55 +152,57 @@ mixin EthTokenApiMixin on TokenApiBase {
   }) async {
     // Special handling for TRX
     if (coinType == CoinType.TRX.name) {
-      final trxApi = TrxApi();
-      return await trxApi.getGasEstimateTrx(
-        from,
-        to,
-        gasPrice,
-        value,
-        gas,
-        contract: contract,
-        isTest: isTest,
-      );
+      return TrxApi().getGasEstimateTrx(from, to, gasPrice, value, gas, contract: contract, isTest: isTest);
     }
 
     final gasPriceHex = '0x${gasPrice.toRadixString(16)}';
-    final gasPriceKey =
-        get1559WithChainSymbol(coinType) ? 'maxFeePerGas' : 'gasPrice';
+    final gasPriceKey = get1559WithChainSymbol(coinType) ? 'maxFeePerGas' : 'gasPrice';
+    final gasHex = '0x${gas.toRadixString(16)}';
+    final netMode = isTest ? 'test' : 'main';
 
     final Map<String, dynamic> params;
-
     if (contract.isEmpty) {
       params = {
-        'from': from,
-        'to': to,
-        'gas': '0x${gas.toRadixString(16)}',
-        gasPriceKey: gasPriceHex,
-        'coin': coinType,
-        'net_mode': isTest ? 'test' : 'main',
+        'from': from, 'to': to, 'gas': gasHex,
+        gasPriceKey: gasPriceHex, 'coin': coinType, 'net_mode': netMode,
         'id': AppGlobals.nextId,
         if (data.isNotEmpty) 'data': data,
       };
     } else {
       final toAddress = strip0x(to);
-      var methodSig = bytesToHex(keccakAscii('transfer(address,uint256)'));
-      methodSig = methodSig.substring(0, 8).toLowerCase();
-      final Uint8List valueList = padUint8ListTo32(unsignedIntToBytes(value));
-      final valueHex = bytesToHex(valueList);
-
+      final methodSig = bytesToHex(keccakAscii('transfer(address,uint256)')).substring(0, 8).toLowerCase();
+      final valueHex = bytesToHex(padUint8ListTo32(unsignedIntToBytes(value)));
       params = {
-        'from': from,
-        'to': contract,
-        'gas': '0x${gas.toRadixString(16)}',
+        'from': from, 'to': contract, 'gas': gasHex,
         'data': '0x${methodSig}000000000000000000000000$toAddress$valueHex',
-        gasPriceKey: gasPriceHex,
-        'coin': coinType,
-        'net_mode': isTest ? 'test' : 'main',
+        gasPriceKey: gasPriceHex, 'coin': coinType, 'net_mode': netMode,
         'id': AppGlobals.nextId,
       };
     }
 
-    return await getGasEstimateEth(params);
+    return getGasEstimateEth(params);
+  }
+
+  /// Helper: POST to API with code 200 + error code check, extract result string
+  Future<MessageModel> _postWithErrorCheck(
+    String endpoint,
+    Map<String, dynamic> params, {
+    bool parseHex = false,
+  }) async {
+    final a = await httpClient.post('${url}$endpoint', params: params, data: params, header: header);
+    final mm = MessageModel.error();
+    if (a['code'] == 200) {
+      if (a['data']['error']['code'] != 0) {
+        mm.data = a['data']['error']['message'];
+      } else {
+        mm.error = false;
+        final result = a['data']['result'].toString();
+        mm.data = parseHex ? hexToInt(result) : result;
+      }
+    } else {
+      mm.data = errorMessage(a['code']);
+    }
+    return mm;
   }
 
   /// Get transaction count (nonce) for ETH address
@@ -213,37 +213,10 @@ mixin EthTokenApiMixin on TokenApiBase {
     String? rpc,
   }) async {
     try {
-      if (rpc == null) {
-        final params = <String, dynamic>{
-          'coin': coinType.toLowerCase(),
-          'hex_address': address,
-          'net_mode': netMode,
-          'tag': 'pending',
-        };
-
-        final a = await httpClient.post(
-          '${url}v2/eth/transaction/count',
-          params: params,
-          data: params,
-          header: header,
-        );
-
-        final mm = MessageModel.error();
-        if (a['code'] == 200) {
-          final result = a['data']['result'].toString();
-          if (a['data']['error']['code'] != 0) {
-            mm.data = a['data']['error']['message'];
-          } else {
-            mm.error = false;
-            mm.data = hexToInt(result);
-          }
-        } else {
-          mm.data = errorMessage(a['code']);
-        }
-        return mm;
-      } else {
-        return await EthAPI.init(null, rpc, null).getTransactionCount(address);
-      }
+      if (rpc != null) return EthAPI.init(null, rpc, null).getTransactionCount(address);
+      return _postWithErrorCheck('v2/eth/transaction/count', {
+        'coin': coinType.toLowerCase(), 'hex_address': address, 'net_mode': netMode, 'tag': 'pending',
+      }, parseHex: true);
     } catch (e) {
       return createError(e.toString());
     }
@@ -257,36 +230,10 @@ mixin EthTokenApiMixin on TokenApiBase {
     String? rpc,
   }) async {
     try {
-      if (rpc == null) {
-        final params = <String, dynamic>{
-          'coin': coinType,
-          'signed_tx': signHash,
-          'net_mode': netMode,
-        };
-
-        final a = await httpClient.post(
-          '${url}v2/eth/raw/transaction',
-          params: params,
-          data: params,
-          header: header,
-        );
-
-        final mm = MessageModel.error();
-        if (a['code'] == 200) {
-          final result = a['data']['result'].toString();
-          if (a['data']['error']['code'] != 0) {
-            mm.data = a['data']['error']['message'];
-          } else {
-            mm.error = false;
-            mm.data = result;
-          }
-        } else {
-          mm.data = errorMessage(a['code']);
-        }
-        return mm;
-      } else {
-        return await EthAPI.init(null, rpc, null).sendTransaction(signHash);
-      }
+      if (rpc != null) return EthAPI.init(null, rpc, null).sendTransaction(signHash);
+      return _postWithErrorCheck('v2/eth/raw/transaction', {
+        'coin': coinType, 'signed_tx': signHash, 'net_mode': netMode,
+      });
     } catch (e) {
       return createError(e.toString());
     }
@@ -300,31 +247,19 @@ mixin EthTokenApiMixin on TokenApiBase {
     String? rpc,
   }) async {
     try {
-      if (rpc == null) {
-        final params = <String, dynamic>{
-          'tx_hash': txHash,
-          'coin': coinType,
-          'net_mode': isTest ? 'test' : 'main',
-        };
-
-        final a = await httpClient.post(
-          '${url}v2/eth/transaction/receipt',
-          params: params,
-          data: params,
-          header: header,
-        );
-
-        final mm = MessageModel.error();
-        if (a['code'] == 200) {
-          mm.error = false;
-          mm.data = a['data'];
-        } else {
-          mm.data = errorMessage(a['code']);
-        }
-        return mm;
+      if (rpc != null) return EthAPI.init(null, rpc, null).getTransactionReceipt(txHash);
+      final params = <String, dynamic>{
+        'tx_hash': txHash, 'coin': coinType, 'net_mode': isTest ? 'test' : 'main',
+      };
+      final a = await httpClient.post('${url}v2/eth/transaction/receipt', params: params, data: params, header: header);
+      final mm = MessageModel.error();
+      if (a['code'] == 200) {
+        mm.error = false;
+        mm.data = a['data'];
       } else {
-        return await EthAPI.init(null, rpc, null).getTransactionReceipt(txHash);
+        mm.data = errorMessage(a['code']);
       }
+      return mm;
     } catch (e) {
       return createError(e.toString());
     }
@@ -337,34 +272,10 @@ mixin EthTokenApiMixin on TokenApiBase {
     String? rpc,
   }) async {
     try {
-      if (rpc == null) {
-        final params = <String, dynamic>{
-          'coin': coinType,
-          'net_mode': isTest ? 'test' : 'main',
-        };
-
-        final a = await httpClient.post(
-          '${url}v2/eth/gas/price',
-          params: params,
-          data: params,
-          header: header,
-        );
-
-        final mm = MessageModel.error();
-        if (a['code'] == 200) {
-          if (a['data']['error']['code'] != 0) {
-            mm.data = a['data']['error']['message'];
-          } else {
-            mm.error = false;
-            mm.data = hexToInt(a['data']['result'].toString());
-          }
-        } else {
-          mm.data = errorMessage(a['code']);
-        }
-        return mm;
-      } else {
-        return await EthAPI.init(null, rpc, null).getGasPrice();
-      }
+      if (rpc != null) return EthAPI.init(null, rpc, null).getGasPrice();
+      return _postWithErrorCheck('v2/eth/gas/price', {
+        'coin': coinType, 'net_mode': isTest ? 'test' : 'main',
+      }, parseHex: true);
     } catch (e) {
       return createError(e.toString());
     }

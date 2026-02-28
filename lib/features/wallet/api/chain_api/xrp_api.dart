@@ -18,16 +18,28 @@ class XrpApi {
     return data as Map<String, dynamic>;
   }
 
-  static MessageModel _errorMm(dynamic e) {
-    final mm = MessageModel.error();
-    mm.data = e;
-    return mm;
-  }
+  static MessageModel _errorMm(dynamic e) => MessageModel.error()..data = e;
 
-  static MessageModel _rpcError(Map<String, dynamic> result) {
-    final mm = MessageModel.error();
-    mm.data = result['error'];
-    return mm;
+  static MessageModel _rpcError(Map<String, dynamic> result) =>
+      MessageModel.error()..data = result['error'];
+
+  /// Helper: execute RPC, check status == 'success', extract data via [extractor].
+  Future<MessageModel> _rpcCall(
+    String method,
+    List<dynamic> params,
+    bool isTest,
+    dynamic Function(Map<String, dynamic> result) extractor,
+  ) async {
+    try {
+      final data = await _rpc(method, params, isTest);
+      final result = data['result'] as Map<String, dynamic>;
+      if (result['status'] == 'success') {
+        return MessageModel()..data = extractor(result);
+      }
+      return _rpcError(result);
+    } catch (e) {
+      return _errorMm(e);
+    }
   }
 
   Future<MessageModel> getAccountInfoXrp(String address, bool isTest) async {
@@ -67,80 +79,36 @@ class XrpApi {
   }
 
   Future<MessageModel> getGasPriceXrp(bool isTest) async {
-    try {
-      final data = await _rpc('fee', [{}], isTest);
-      final result = data['result'] as Map<String, dynamic>;
-      if (result['status'] == 'success') {
-        return MessageModel()
-          ..data = BigInt.parse(result['drops']['minimum_level']); //minimum_level\median_fee
-      }
-      return _rpcError(result);
-    } catch (e) {
-      return _errorMm(e);
-    }
+    return _rpcCall('fee', [{}], isTest,
+        (r) => BigInt.parse(r['drops']['minimum_level'])); //minimum_level\median_fee
   }
 
   Future<MessageModel> getTxInfoXrp(String txHash, bool isTest) async {
-    try {
-      final data = await _rpc(
-        'tx',
-        [{'transaction': txHash, 'binary': false}],
-        isTest,
-      );
-      final result = data['result'] as Map<String, dynamic>;
-      if (result['status'] == 'success') {
-        return MessageModel()..data = result['meta']['TransactionResult'];
-      }
-      return _rpcError(result);
-    } catch (e) {
-      return _errorMm(e);
-    }
+    return _rpcCall('tx', [{'transaction': txHash, 'binary': false}], isTest,
+        (r) => r['meta']['TransactionResult']);
   }
 
   //获取服务器信息
   Future<MessageModel> getServerStateXrp({bool isTest = false}) async {
-    try {
-      final data = await _rpc(
-        'server_state',
-        [{'ledger_index': 'current'}],
-        isTest,
-      );
-      final result = data['result'] as Map<String, dynamic>;
-      if (result['status'] == 'success') {
-        final ledger = result['state']['validated_ledger'] as Map<String, dynamic>;
-        return MessageModel()
-          ..data = {
-            'reserve_base': ledger['reserve_base'], //激活账户必须持有的最小值
-            //每添加一个对象（如 trust line、挂单、payment channel）需加锁
-            'reserve_inc': ledger['reserve_inc'],
-            'base_fee': ledger['base_fee'], //理论最低手续费单位（网络空闲时）
-            'load_base': result['state']['load_base'], //固定值，表示最小负载因子基准，一般为 256（不能变）
-            //当前节点对费用的整体乘数因子，用来估算"标准"费用。
-            // 计算：实际费用 = base_fee × (load_factor / load_base)
-            'load_factor': result['state']['load_factor'],
-          };
-      }
-      return _rpcError(result);
-    } catch (e) {
-      return _errorMm(e);
-    }
+    return _rpcCall('server_state', [{'ledger_index': 'current'}], isTest, (r) {
+      final ledger = r['state']['validated_ledger'] as Map<String, dynamic>;
+      return {
+        'reserve_base': ledger['reserve_base'], //激活账户必须持有的最小值
+        //每添加一个对象（如 trust line、挂单、payment channel）需加锁
+        'reserve_inc': ledger['reserve_inc'],
+        'base_fee': ledger['base_fee'], //理论最低手续费单位（网络空闲时）
+        'load_base': r['state']['load_base'], //固定值，表示最小负载因子基准，一般为 256（不能变）
+        //当前节点对费用的整体乘数因子，用来估算"标准"费用。
+        // 计算：实际费用 = base_fee × (load_factor / load_base)
+        'load_factor': r['state']['load_factor'],
+      };
+    });
   }
 
   //获取当前账本信息
   Future<MessageModel> getLedgerXrp({bool isTest = false}) async {
-    try {
-      final data = await _rpc(
-        'ledger',
-        [{'ledger_index': 'current'}],
-        isTest,
-      );
-      if (data['status'] == 'success') {
-        return MessageModel()..data = data['result']['ledger_current_index'];
-      }
-      return _rpcError(data['result'] as Map<String, dynamic>);
-    } catch (e) {
-      return _errorMm(e);
-    }
+    return _rpcCall('ledger', [{'ledger_index': 'current'}], isTest,
+        (r) => r['ledger_current_index']);
   }
 
   //获取全部交易记录
@@ -169,20 +137,12 @@ Fee: 交易费用（10-12 drops）*/
     int limit = 10,
     bool isTest = false,
   }) async {
-    try {
-      final data = await _rpc(
-        'account_tx',
-        [{'account': 'rUserAddress', 'ledger_index_min': ledgerIndexMin, 'ledger_index_max': -1, 'limit': limit}],
-        isTest,
-      );
-      final result = data['result'] as Map<String, dynamic>;
-      if (result['status'] == 'success') {
-        return MessageModel()..data = result['transactions'];
-      }
-      return _rpcError(result);
-    } catch (e) {
-      return _errorMm(e);
-    }
+    return _rpcCall(
+      'account_tx',
+      [{'account': 'rUserAddress', 'ledger_index_min': ledgerIndexMin, 'ledger_index_max': -1, 'limit': limit}],
+      isTest,
+      (r) => r['transactions'],
+    );
   }
 
   //广播
@@ -228,20 +188,8 @@ Fee: 交易费用（10-12 drops）*/
 HookParameters: 传递给合约的参数
 Flags: 合约的状态标志*/
   Future<MessageModel> getHookInfo(String address, {bool isTest = false}) async {
-    try {
-      final data = await _rpc(
-        'account_objects',
-        [{'account': address, 'type': 'hook'}],
-        isTest,
-      );
-      final result = data['result'] as Map<String, dynamic>;
-      if (result['status'] == 'success') {
-        return MessageModel()..data = BigInt.parse(result['account_objects']);
-      }
-      return _rpcError(result);
-    } catch (e) {
-      return _errorMm(e);
-    }
+    return _rpcCall('account_objects', [{'account': address, 'type': 'hook'}], isTest,
+        (r) => BigInt.parse(r['account_objects']));
   }
 
   //获取AMM合约信息
@@ -273,16 +221,8 @@ TradingFee: 交易费用（单位 basis points，即 30 = 0.3%）*/
       },
       "asset2": { "currency": "USDT", "issuer": "rIssuerAddress" }
     };*/
-    try {
-      final data = await _rpc('amm_info', [ammInfo], isTest);
-      final result = data['result'] as Map<String, dynamic>;
-      if (result['status'] == 'success') {
-        return MessageModel()..data = BigInt.parse(result['amm']);
-      }
-      return _rpcError(result);
-    } catch (e) {
-      return _errorMm(e);
-    }
+    return _rpcCall('amm_info', [ammInfo], isTest,
+        (r) => BigInt.parse(r['amm']));
   }
 
   //获取 Trustline 代币（IOU）合约信息
@@ -306,16 +246,8 @@ account: 代币发行者
 balance: 账户持有的 USDT 数量
 limit: 账户信任额度（最多持有 1000 USDT）*/
   Future<MessageModel> getTrustline(String address, {bool isTest = false}) async {
-    try {
-      final data = await _rpc('account_lines', [{address}], isTest);
-      final result = data['result'] as Map<String, dynamic>;
-      if (result['status'] == 'success') {
-        return MessageModel()..data = BigInt.parse(result['lines']);
-      }
-      return _rpcError(result);
-    } catch (e) {
-      return _errorMm(e);
-    }
+    return _rpcCall('account_lines', [{address}], isTest,
+        (r) => BigInt.parse(r['lines']));
   }
 
   Future<MessageModel> getTxHistory(
@@ -323,20 +255,7 @@ limit: 账户信任额度（最多持有 1000 USDT）*/
     int limit = 10,
     bool isTest = false,
   }) async {
-    //tx_history
-    try {
-      final data = await _rpc(
-        'account_tx',
-        [{'account': address, 'limit': limit}],
-        isTest,
-      );
-      final result = data['result'] as Map<String, dynamic>;
-      if (result['status'] == 'success') {
-        return MessageModel()..data = result['transactions'];
-      }
-      return _rpcError(result);
-    } catch (e) {
-      return _errorMm(e);
-    }
+    return _rpcCall('account_tx', [{'account': address, 'limit': limit}], isTest,
+        (r) => r['transactions']);
   }
 }

@@ -86,211 +86,110 @@ mixin SolTokenApiMixin on TokenApiBase {
     }
   }
 
+  /// Helper: POST to Solana API, check code 200, extract data via [extractor]
+  Future<MessageModel> _solPost(
+    String endpoint,
+    Map<String, dynamic> params,
+    dynamic Function(dynamic data) extractor, {
+    int successCode = 200,
+  }) async {
+    try {
+      final a = await httpClient.post('${url}$endpoint', params: params, data: params, header: header);
+      final mm = MessageModel.error();
+      if (a['code'] == successCode) {
+        mm.error = false;
+        mm.data = extractor(a['data']);
+      } else {
+        mm.data = errorMessage(a['code']);
+      }
+      return mm;
+    } catch (e) {
+      return createError(e.toString());
+    }
+  }
+
+  /// Helper: POST with inner error code check (data.error.code != 0 means failure)
+  Future<MessageModel> _solPostWithErrorCheck(
+    String endpoint,
+    Map<String, dynamic> params,
+    dynamic Function(dynamic data) extractor, {
+    int successCode = 200,
+  }) async {
+    try {
+      final a = await httpClient.post('${url}$endpoint', params: params, data: params, header: header);
+      final mm = MessageModel.error();
+      if (a['code'] == successCode) {
+        if (a['data']['error']['code'] != 0) {
+          mm.data = a['data']['error']['message'];
+        } else {
+          mm.error = false;
+          mm.data = extractor(a['data']);
+        }
+      } else {
+        mm.data = errorMessage(a['code']);
+      }
+      return mm;
+    } catch (e) {
+      return createError(e.toString());
+    }
+  }
+
   /// Get token accounts by owner for Solana
-  ///
-  /// Returns all token accounts for a specific contract owned by the address
-  /// [address] - Wallet address
-  /// [contract] - Token contract address
-  /// [isTest] - Use testnet
   Future<MessageModel> getTokenAccountsByOwnerSolana(
     String address,
     String contract, {
     bool isTest = false,
   }) async {
-    try {
-      final params = <String, dynamic>{
-        'mint': contract,
-        'net_mode': isTest ? 'test' : 'main',
-        'pubkey': address,
-      };
-      final a = await httpClient.post(
-        '${url}v1/sol/token/accounts/by/owner',
-        params: params,
-        data: params,
-        header: header,
-      );
-
-      final mm = MessageModel.error();
-      if (a['code'] == 200) {
-        if (a['data']['error']['code'] != 0) {
-          mm.data = a['data']['error']['message'];
-        } else {
-          mm.error = false;
-          mm.data = a['data']['result']['value'];
-        }
-      } else {
-        mm.data = errorMessage(a['code']);
-      }
-      return mm;
-    } catch (e) {
-      return createError(e.toString());
-    }
+    return _solPostWithErrorCheck(
+      'v1/sol/token/accounts/by/owner',
+      {'mint': contract, 'net_mode': isTest ? 'test' : 'main', 'pubkey': address},
+      (d) => d['result']['value'],
+    );
   }
 
   /// Get account info for Solana address
-  ///
-  /// Returns account data for the specified address
-  /// [address] - Wallet address
-  /// [isTest] - Use testnet
-  Future<MessageModel> getAccountInfoSolana(
-    String address, {
-    bool isTest = false,
-  }) async {
-    try {
-      final params = <String, dynamic>{
-        'net_mode': isTest ? 'test' : 'main',
-        'pubkey': address,
-      };
-      final a = await httpClient.post(
-        '${url}v1/sol/account/info',
-        params: params,
-        data: params,
-        header: header,
-      );
-
-      final mm = MessageModel.error();
-      if (a['code'] == 200) {
-        mm.error = false;
-        mm.data = a['data']['result']['value']['data'];
-      } else {
-        mm.data = errorMessage(a['code']);
-      }
-      return mm;
-    } catch (e) {
-      return createError(e.toString());
-    }
+  Future<MessageModel> getAccountInfoSolana(String address, {bool isTest = false}) async {
+    return _solPost(
+      'v1/sol/account/info',
+      {'net_mode': isTest ? 'test' : 'main', 'pubkey': address},
+      (d) => d['result']['value']['data'],
+    );
   }
 
   /// Get recent blockhash for Solana
-  ///
-  /// Returns the most recent blockhash for transaction signing
-  /// [isTest] - Use testnet
   Future<MessageModel> getRecentBlockhashSolana({bool isTest = false}) async {
-    try {
-      final params = <String, dynamic>{
-        'net_mode': isTest ? 'test' : 'main',
-      };
-      final a = await httpClient.post(
-        '${url}v1/sol/recent/block/hash',
-        params: params,
-        data: params,
-        header: header,
-      );
-
-      final mm = MessageModel.error();
-      if (a['code'] == 200) {
-        mm.error = false;
-        mm.data = a['data']['result']['value']['blockhash'];
-      } else {
-        mm.data = errorMessage(a['code']);
-      }
-      return mm;
-    } catch (e) {
-      return createError(e.toString());
-    }
+    return _solPost(
+      'v1/sol/recent/block/hash',
+      {'net_mode': isTest ? 'test' : 'main'},
+      (d) => d['result']['value']['blockhash'],
+    );
   }
 
   /// Send Solana transaction
-  ///
-  /// Broadcasts a signed transaction to the Solana network
-  /// [signHash] - Signed transaction hash
-  /// [netMode] - Network mode ('main' or 'test')
   Future<MessageModel> sendTxSolana(String signHash, String netMode) async {
-    try {
-      final params = <String, dynamic>{
-        'net_mode': netMode,
-        'tx_hash': signHash,
-      };
-      final a = await httpClient.post(
-        '${url}v1/sol/tx/send',
-        params: params,
-        data: params,
-        header: header,
-      );
-
-      final mm = MessageModel.error();
-      if (a['code'] == 200) {
-        if (a['data']['error']['code'] != 0) {
-          mm.data = a['data']['error']['message'];
-        } else {
-          mm.error = false;
-          mm.data = a['data']['result'];
-        }
-      } else {
-        mm.data = errorMessage(a['code']);
-      }
-      return mm;
-    } catch (e) {
-      return createError(e.toString());
-    }
+    return _solPostWithErrorCheck(
+      'v1/sol/tx/send',
+      {'net_mode': netMode, 'tx_hash': signHash},
+      (d) => d['result'],
+    );
   }
 
-  /// Get gas fee for Solana
-  ///
-  /// Returns the current fee calculator (lamports per signature)
-  /// [isTest] - Use testnet
+  /// Get gas fee for Solana (lamports per signature)
   Future<MessageModel> getGasPriceSolana({bool isTest = false}) async {
-    try {
-      final params = <String, dynamic>{
-        'net_mode': isTest ? 'test' : 'main',
-      };
-      final a = await httpClient.post(
-        '${url}v1/sol/fees',
-        params: params,
-        data: params,
-        header: header,
-      );
-
-      final mm = MessageModel.error();
-      if (a['code'] == 200) {
-        mm.error = false;
-        mm.data = BigInt.from(
-          a['data']['result']['value']['feeCalculator']['lamportsPerSignature'],
-        );
-      } else {
-        mm.data = errorMessage(a['code']);
-      }
-      return mm;
-    } catch (e) {
-      return createError(e.toString());
-    }
+    return _solPost(
+      'v1/sol/fees',
+      {'net_mode': isTest ? 'test' : 'main'},
+      (d) => BigInt.from(d['result']['value']['feeCalculator']['lamportsPerSignature']),
+    );
   }
 
   /// Get transaction by hash for Solana
-  ///
-  /// Returns transaction information for the given hash
-  /// [txHash] - Transaction signature
-  /// [netMode] - Network mode ('main' or 'test')
-  Future<MessageModel> getTransactionSolana(
-    String txHash,
-    String netMode,
-  ) async {
-    try {
-      final params = <String, dynamic>{
-        'net_mode': netMode,
-        'tx_sign': txHash,
-      };
-      final a = await httpClient.post(
-        '${url}v1/sol/transaction',
-        params: params,
-        data: params,
-        header: header,
-      );
-
-      final mm = MessageModel.error();
-      if (a['code'] == 0) {
-        if (a['data']['error']['code'] != 0) {
-          mm.data = a['data']['error']['message'];
-        } else {
-          mm.error = false;
-          mm.data = a['data']['result']['meta']['status'];
-        }
-      } else {
-        mm.data = errorMessage(a['code']);
-      }
-      return mm;
-    } catch (e) {
-      return createError(e.toString());
-    }
+  Future<MessageModel> getTransactionSolana(String txHash, String netMode) async {
+    return _solPostWithErrorCheck(
+      'v1/sol/transaction',
+      {'net_mode': netMode, 'tx_sign': txHash},
+      (d) => d['result']['meta']['status'],
+      successCode: 0,
+    );
   }
 }

@@ -24,6 +24,27 @@ class ZilApi {
 
   static MessageModel _errorMm(dynamic e) => MessageModel.error()..data = e.toString();
 
+  /// Helper: execute RPC and extract result, with optional error message
+  Future<MessageModel> _rpcResult(
+    String method,
+    List<dynamic> params,
+    dynamic Function(dynamic result) extractor, {
+    String errorMsg = 'RPC error',
+  }) async {
+    try {
+      final response = await _rpc(method, params);
+      if (response != null && response['result'] != null) {
+        return MessageModel()..data = extractor(response['result']);
+      }
+      if (response != null && response['error'] != null) {
+        return MessageModel()..error = true..data = response['error']['message'] ?? errorMsg;
+      }
+      return MessageModel()..error = true..data = errorMsg;
+    } catch (e) {
+      return _errorMm(e);
+    }
+  }
+
   /// Get account balance
   Future<MessageModel> getBalance(String address, {bool nonce = false}) async {
     try {
@@ -59,106 +80,39 @@ class ZilApi {
 
   /// Get minimum gas price
   Future<MessageModel> getMinimumGasPrice() async {
-    try {
-      final response = await _rpc('GetMinimumGasPrice', []);
-      final mm = MessageModel();
-      if (response != null && response['result'] != null) {
-        mm.data = BigInt.parse(response['result']);
-      } else {
-        mm.error = true;
-        mm.data = 'Failed to get gas price';
-      }
-      return mm;
-    } catch (e) {
-      return _errorMm(e);
-    }
+    return _rpcResult('GetMinimumGasPrice', [], (r) => BigInt.parse(r),
+        errorMsg: 'Failed to get gas price');
   }
 
   /// Get network ID
   Future<MessageModel> getNetworkId() async {
-    try {
-      final response = await _rpc('GetNetworkId', []);
-      final mm = MessageModel();
-      if (response != null && response['result'] != null) {
-        mm.data = response['result'];
-      } else {
-        mm.error = true;
-        mm.data = 'Failed to get network ID';
-      }
-      return mm;
-    } catch (e) {
-      return _errorMm(e);
-    }
+    return _rpcResult('GetNetworkId', [], (r) => r,
+        errorMsg: 'Failed to get network ID');
   }
 
   /// Get latest block number
   Future<MessageModel> getLatestTxBlock() async {
-    try {
-      final response = await _rpc('GetLatestTxBlock', []);
-      final mm = MessageModel();
-      if (response != null && response['result'] != null) {
-        mm.data = {
-          'header': response['result']['header'],
-          'body': response['result']['body'],
-        };
-      } else {
-        mm.error = true;
-        mm.data = 'Failed to get latest block';
-      }
-      return mm;
-    } catch (e) {
-      return _errorMm(e);
-    }
+    return _rpcResult('GetLatestTxBlock', [], (r) => {'header': r['header'], 'body': r['body']},
+        errorMsg: 'Failed to get latest block');
   }
 
   /// Send signed transaction
   Future<MessageModel> createTransaction(Map<String, dynamic> txParams) async {
-    try {
-      final response = await _rpc('CreateTransaction', [txParams]);
-      final mm = MessageModel();
-      if (response != null && response['result'] != null) {
-        mm.data = response['result']['TranID'];
-      } else if (response != null && response['error'] != null) {
-        mm.error = true;
-        mm.data = response['error']['message'] ?? 'Transaction failed';
-      } else {
-        mm.error = true;
-        mm.data = 'Unknown error';
-      }
-      return mm;
-    } catch (e) {
-      return _errorMm(e);
-    }
+    return _rpcResult('CreateTransaction', [txParams], (r) => r['TranID'],
+        errorMsg: 'Transaction failed');
   }
 
   /// Get transaction by hash
   Future<MessageModel> getTransaction(String txHash) async {
-    try {
-      final response = await _rpc('GetTransaction', [txHash]);
-      final mm = MessageModel();
-      if (response != null && response['result'] != null) {
-        mm.data = response['result'];
-      } else {
-        mm.error = true;
-        mm.data = 'Transaction not found';
-      }
-      return mm;
-    } catch (e) {
-      return _errorMm(e);
-    }
+    return _rpcResult('GetTransaction', [txHash], (r) => r,
+        errorMsg: 'Transaction not found');
   }
 
   /// Get transactions for address
   Future<MessageModel> getTransactionsForTxBlock(String blockNum) async {
     try {
       final response = await _rpc('GetTransactionsForTxBlock', [blockNum]);
-      final mm = MessageModel();
-      if (response != null && response['result'] != null) {
-        mm.data = response['result'];
-      } else {
-        mm.data = [];
-      }
-      return mm;
+      return MessageModel()..data = response?['result'] ?? [];
     } catch (e) {
       return _errorMm(e);
     }

@@ -6,7 +6,6 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
-import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +16,7 @@ import 'package:n42_wallet/features/wallet/presentation/providers/wallet_provide
 import 'package:n42_wallet/generated/l10n.dart';
 
 class WalletCoinTokenAdd2 extends ConsumerStatefulWidget {
-  //Map<String,dynamic> coinMap;
   final CoinModel coinModel;
-  //int isImport;
   const WalletCoinTokenAdd2(this.coinModel,{super.key});
 
   @override
@@ -51,15 +48,7 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
     }
   }
   bool checkSymbol(String symStr){
-    var checks=symbols.where((element){
-      if(element.toUpperCase()==symStr.toUpperCase()){
-        return true;
-      }else{
-        return false;
-      }
-    });
-    if(checks.isEmpty)return false;
-    return true;
+    return symbols.any((e) => e.toUpperCase() == symStr.toUpperCase());
   }
   Future<void> addCoin(Map<String,dynamic> coinMap)async{
     try {
@@ -120,24 +109,19 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
   }
   //查询方法
   Future<void> seachCoin()async{
-    if(inputEditingController.text!=""){
+    if(inputEditingController.text.isNotEmpty){
       try{
-        coinlistSeach=[];
-        String inputStr=inputEditingController.text.toLowerCase();
-        for(Map<String,dynamic> m in coinlist){
-          int fullnameIndex=m['fullname'].toString().indexOf(inputStr);
-          String symbolStr=m['coin_name'].toString();
-          int symbolIndex=symbolStr.indexOf(inputStr);
-          if(symbolIndex!=-1 || fullnameIndex!=-1){
-            coinlistSeach.add(m);
-          }
-        }
+        final inputStr = inputEditingController.text.toLowerCase();
+        coinlistSeach = coinlist.where((m){
+          final fullname = m['fullname'].toString().toLowerCase();
+          final symbol = m['coin_name'].toString().toLowerCase();
+          return fullname.contains(inputStr) || symbol.contains(inputStr);
+        }).toList();
       }catch(e){
         ToastUtils.show(e.toString());
       }
     }
-    setState(() {
-    });
+    setState(() {});
   }
   Future<void> getTokenList()async{
     setState(() {
@@ -154,18 +138,14 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
     }else{
       coinlist=[];
       List<dynamic> returnData=coinsData.data;
-      //Map<String,dynamic>chains= ProviderUtil.walletActionProvider().walletMap;
       for(Map<String,dynamic> r in returnData){
-        if(r['contract']==""){
-          continue;
+        if(r['contract']=="") continue;
+        r['isAdd']=checkSymbol(r['contract'].toString().toUpperCase());
+        r['edit']=false;
+        if(r['isAdd']){
+          coinlist.insert(0, r);
         }else{
-          r['isAdd']=checkSymbol(r['contract'].toString().toUpperCase());
-          r['edit']=false;
-          if(r['isAdd']){
-            coinlist.insert(0, r);
-          }else{
-            coinlist.add(r);
-          }
+          coinlist.add(r);
         }
       }
       setState(() {
@@ -265,9 +245,6 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
                               errorBorder: InputBorder.none,
                               focusedBorder: InputBorder.none,
                             ),
-                            onChanged: (String value){
-
-                            },
                             onSubmitted: (value){
                               seachCoin();
                             },
@@ -311,8 +288,22 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
       ),
     );
   }
+  Widget _buildCoinListView(List<dynamic> items){
+    return ListView.separated(
+      itemCount: items.length,
+      itemBuilder: (context, index) => coinItem(items[index]),
+      separatorBuilder: (context, index) => Divider(
+        height: ScreenUtil().setWidth(1.0),
+        indent: 0,
+        endIndent: 0,
+      ),
+    );
+  }
+
   Widget coinListWidget(){
-    if(inputEditingController.text==""){
+    final isSearching = inputEditingController.text.isNotEmpty;
+
+    if(!isSearching){
       return RefreshIndicator(
         onRefresh: ()async{
           if(load==Load.finish) {
@@ -322,41 +313,12 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
         backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
         displacement: ScreenUtil().setWidth(72.0),
-        child: ListView.separated(
-          itemCount: coinlist.length,
-          itemBuilder: (context,int index){
-            Map<String,dynamic> rowValue = coinlist[index];
-            return coinItem(rowValue);
-          },
-          separatorBuilder: (context,int index){
-            return Divider(
-              height: ScreenUtil().setWidth(1.0),
-              indent: 0,
-              endIndent: 0,
-            );
-          },
-        ),
+        child: _buildCoinListView(coinlist),
       );
     }
-    else{
-      if(coinlistSeach.isEmpty) {
-        return const EmptyView();
-      }
-      return ListView.separated(
-        itemCount: coinlistSeach.length,
-        itemBuilder: (context,int index){
-          Map<String,dynamic> rowValue = coinlistSeach[index];
-          return coinItem(rowValue);
-        },
-        separatorBuilder: (context,int index){
-          return Divider(
-            height: ScreenUtil().setWidth(1.0),
-            indent: 0,
-            endIndent: 0,
-          );
-        },
-      );
-    }
+
+    if(coinlistSeach.isEmpty) return const EmptyView();
+    return _buildCoinListView(coinlistSeach);
   }
   Widget coinItem(Map<String,dynamic> rowValue){
     String icon='https://api-wallet.walletamaze.com/market/v1/r/coinImage/${rowValue['coin_name']}.png';
@@ -375,7 +337,6 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
         top: ScreenUtil().setWidth(20.0),
         bottom: ScreenUtil().setWidth(20.0),
       ),
-      //color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor2),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [

@@ -8,6 +8,21 @@ class AtomApi {
 
   String _uri() => RequestUrl().getUrl2(CoinType.ATOM.name, 'api', isTest: false);
 
+  /// Helper: GET a Cosmos REST endpoint, extract [field] from response
+  Future<MessageModel> _getEndpoint(String path, String field) async {
+    try {
+      final data = await BaseApi.requestEmptyH.get(
+        '${_uri()}$path',
+        params: {},
+        defaultReturn: false,
+        header: _jsonHeader,
+      );
+      return MessageModel()..data = data[field];
+    } catch (e) {
+      return MessageModel.error()..data = e;
+    }
+  }
+
   Future<MessageModel> getBalance(String address, String token) async {
     try {
       final data = await BaseApi.requestEmptyH.get(
@@ -33,44 +48,31 @@ class AtomApi {
 
   //cosmos/auth/v1beta1/accounts/
   Future<MessageModel> getAccounts(String address) async {
-    try {
-      final data = await BaseApi.requestEmptyH.get(
-        '${_uri()}cosmos/auth/v1beta1/accounts/$address',
-        params: {},
-        defaultReturn: false,
-        header: _jsonHeader,
-      );
-      return MessageModel()..data = data['account'];
-    } catch (e) {
-      return MessageModel.error()..data = e;
-    }
+    return _getEndpoint('cosmos/auth/v1beta1/accounts/$address', 'account');
   }
 
   //cosmos/bank/v1beta1/denoms_metadata/
   Future<MessageModel> getMetadata(String denom) async {
-    try {
-      final data = await BaseApi.requestEmptyH.get(
-        '${_uri()}cosmos/bank/v1beta1/denoms_metadata/$denom',
-        params: {},
-        defaultReturn: false,
-        header: _jsonHeader,
-      );
-      return MessageModel()..data = data['metadata'];
-    } catch (e) {
-      return MessageModel.error()..data = e;
-    }
+    return _getEndpoint('cosmos/bank/v1beta1/denoms_metadata/$denom', 'metadata');
   }
 
   //cosmos/tx/v1beta1/txs/
   Future<MessageModel> getTxs(String txHash) async {
+    return _getEndpoint('cosmos/tx/v1beta1/txs/$txHash', 'metadata');
+  }
+
+  /// 发送或模拟交易的通用方法
+  Future<MessageModel> _postTx(String endpoint, dynamic rawTx) async {
     try {
-      final data = await BaseApi.requestEmptyH.get(
-        '${_uri()}cosmos/tx/v1beta1/txs/$txHash',
+      final data = await BaseApi.requestEmptyH.post(
+        '${_uri()}$endpoint',
         params: {},
+        data: {'tx_bytes': rawTx, 'mode': 'BROADCAST_MODE_SYNC'},
         defaultReturn: false,
         header: _jsonHeader,
       );
-      return MessageModel()..data = data['metadata'];
+      return MessageModel()
+        ..data = data['tx_response'] == null ? data['message'] : data['tx_response']['txhash'];
     } catch (e) {
       return MessageModel.error()..data = e;
     }
@@ -78,38 +80,12 @@ class AtomApi {
 
   //cosmos/tx/v1beta1/txs
   Future<MessageModel> sendTxs(dynamic rawTx) async {
-    try {
-      final data = await BaseApi.requestEmptyH.post(
-        '${_uri()}cosmos/tx/v1beta1/txs',
-        params: {},
-        data: {'tx_bytes': rawTx, 'mode': 'BROADCAST_MODE_SYNC'},
-        defaultReturn: false,
-        header: _jsonHeader,
-      );
-      final mm = MessageModel();
-      mm.data = data['tx_response'] == null ? data['message'] : data['tx_response']['txhash'];
-      return mm;
-    } catch (e) {
-      return MessageModel.error()..data = e;
-    }
+    return _postTx('cosmos/tx/v1beta1/txs', rawTx);
   }
 
   //cosmos/tx/v1beta1/simulate
   Future<MessageModel> sendTxsSimulate(dynamic rawTx) async {
-    try {
-      final data = await BaseApi.requestEmptyH.post(
-        '${_uri()}cosmos/tx/v1beta1/simulate',
-        params: {},
-        data: {'tx_bytes': rawTx, 'mode': 'BROADCAST_MODE_SYNC'},
-        defaultReturn: false,
-        header: _jsonHeader,
-      );
-      final mm = MessageModel();
-      mm.data = data['tx_response'] == null ? data['message'] : data['tx_response']['txhash'];
-      return mm;
-    } catch (e) {
-      return MessageModel.error()..data = e;
-    }
+    return _postTx('cosmos/tx/v1beta1/simulate', rawTx);
   }
 
   /*
@@ -138,16 +114,6 @@ version: IBC 协议的版本，通常会标明使用的版本号（如 ics20-1�
         * */
   ///ibc/core/channel/v1/channels
   Future<MessageModel> getChannels() async {
-    try {
-      final data = await BaseApi.requestEmptyH.get(
-        '${_uri()}ibc/core/channel/v1/channels',
-        params: {},
-        defaultReturn: false,
-        header: _jsonHeader,
-      );
-      return MessageModel()..data = data['channels'];
-    } catch (e) {
-      return MessageModel.error()..data = e;
-    }
+    return _getEndpoint('ibc/core/channel/v1/channels', 'channels');
   }
 }

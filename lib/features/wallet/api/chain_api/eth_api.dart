@@ -20,23 +20,22 @@ class EthAPI {
 
   /// 获取余额（native 或 ERC-20 合约）
   Future<MessageModel> getBalance(String address, String contract, {bool isTest = false, String? coinType}) async {
+    final coin = coinType ?? cType;
+    final Result<dynamic, AppError> result;
     if (contract == '') {
-      final result = await baseRPCEth('eth_getBalance', [address, 'latest'], coinType: coinType ?? cType, isTest: isTest);
-      final mm = resultToMessageModel(result);
-      if (mm.error == false) mm.data = hexToInt(mm.data);
-      return mm;
+      result = await baseRPCEth('eth_getBalance', [address, 'latest'], coinType: coin, isTest: isTest);
     } else {
       final addr = strip0x(address);
-      final result = await baseRPCEth(
+      result = await baseRPCEth(
         'eth_call',
         [{'from': address, 'to': contract, 'data': '0x70a08231000000000000000000000000$addr'}, 'latest'],
-        coinType: coinType ?? cType,
+        coinType: coin,
         isTest: isTest,
       );
-      final mm = resultToMessageModel(result);
-      if (mm.error == false) mm.data = hexToInt(mm.data);
-      return mm;
     }
+    final mm = resultToMessageModel(result);
+    if (mm.error == false) mm.data = hexToInt(mm.data);
+    return mm;
   }
 
   /// 获取 gasPrice
@@ -60,44 +59,38 @@ class EthAPI {
     bool isTest = false,
     bool addLatest = true,
   }) async {
+    final coin = coinType ?? cType;
+    final gasPriceHex = '0x${gasPrice.toRadixString(16)}';
+    final gasPriceKey = get1559WithChainSymbol(coin ?? '') ? 'maxFeePerGas' : 'gasPrice';
+
+    final Map<String, dynamic> params;
     if (contract == '') {
-      final params = <String, dynamic>{
+      params = {
         'from': from,
         'to': to,
         'gas': '0x${gas.toRadixString(16)}',
         'value': '0x${value.toRadixString(16)}',
+        gasPriceKey: gasPriceHex,
+        if (data != '') 'data': data,
       };
-      if (get1559WithChainSymbol(coinType ?? cType ?? '')) {
-        params['maxFeePerGas'] = '0x${gasPrice.toRadixString(16)}';
-      } else {
-        params['gasPrice'] = '0x${gasPrice.toRadixString(16)}';
-      }
-      if (data != '') params['data'] = data;
-      final result = await baseRPCEth('eth_estimateGas', [params, 'latest'], coinType: coinType ?? cType, isTest: isTest);
-      final mm = resultToMessageModel(result);
-      if (mm.error == false) mm.data = hexToInt(mm.data);
-      return mm;
     } else {
       final toAddress = strip0x(to);
       final selector = bytesToHex(keccakAscii('transfer(address,uint256)')).substring(0, 8).toLowerCase();
       final valueHex = bytesToHex(padUint8ListTo32(unsignedIntToBytes(value)));
-      final params = <String, dynamic>{
+      params = {
         'from': from,
         'to': contract,
         'gas': '0x${gas.toRadixString(16)}',
         'data': '0x${selector}000000000000000000000000$toAddress$valueHex',
         'id': AppGlobals.nextId,
+        gasPriceKey: gasPriceHex,
       };
-      if (get1559WithChainSymbol(coinType ?? cType ?? '')) {
-        params['maxFeePerGas'] = '0x${gasPrice.toRadixString(16)}';
-      } else {
-        params['gasPrice'] = '0x${gasPrice.toRadixString(16)}';
-      }
-      final result = await baseRPCEth('eth_estimateGas', [params, 'latest'], isTest: isTest, coinType: coinType ?? cType);
-      final mm = resultToMessageModel(result);
-      if (mm.error == false) mm.data = hexToInt(mm.data);
-      return mm;
     }
+
+    final result = await baseRPCEth('eth_estimateGas', [params, 'latest'], coinType: coin, isTest: isTest);
+    final mm = resultToMessageModel(result);
+    if (mm.error == false) mm.data = hexToInt(mm.data);
+    return mm;
   }
 
   Future<MessageModel> getGasLimitByMap(Map<String, dynamic> map, {String? coinType, bool isTest = false, bool addLatest = true}) async {
@@ -278,19 +271,17 @@ class EthAPI {
     int offset = 10,
   }) async {
     try {
-      final mm = MessageModel();
-      final params = contractAddress == ''
-          ? {'address': address, 'action': 'txlist', 'module': 'account', 'page': page, 'offset': offset}
-          : {'address': address, 'action': 'tokentx', 'module': 'account', 'page': page, 'offset': offset, 'contractaddress': contractAddress};
-      final url = coinType == null ? (api ?? '') : RequestUrl().getUrl2(coinType, 'api', isTest: isTest);
-      final data = await BaseApi.requestEmptyH.get(url, params: params);
+      final action = contractAddress == '' ? 'txlist' : 'tokentx';
+      final params = <String, dynamic>{
+        'address': address, 'action': action, 'module': 'account', 'page': page, 'offset': offset,
+        if (contractAddress != '') 'contractaddress': contractAddress,
+      };
+      final apiUrl = coinType == null ? (api ?? '') : RequestUrl().getUrl2(coinType, 'api', isTest: isTest);
+      final data = await BaseApi.requestEmptyH.get(apiUrl, params: params);
       if (data.containsKey('error')) {
-        mm.error = true;
-        mm.data = data['error'];
-      } else {
-        mm.data = data['result'];
+        return MessageModel()..error = true..data = data['error'];
       }
-      return mm;
+      return MessageModel()..data = data['result'];
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
