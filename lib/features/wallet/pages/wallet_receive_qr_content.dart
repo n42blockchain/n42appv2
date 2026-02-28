@@ -1,12 +1,6 @@
 part of 'wallet_receive_qr.dart';
 
-/// UI builder widgets for [_WalletReceiveQrState].
-///
-/// Extracted from the main file to keep each file under 500 lines.
-/// All methods here are private extensions of [_WalletReceiveQrState].
 extension _WalletReceiveQrContent on _WalletReceiveQrState {
-  // ─── 链选择器（横向滚动 chip 列表）─────────────────────────────────────────
-
   Widget buildChainSelector(
       List<CoinModel> chains, Color blueColor, Color mainText) {
     // 过滤掉地址为空的链（通常代表还未初始化）
@@ -77,8 +71,6 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
     );
   }
 
-  // ─── QR 卡片（RepaintBoundary 仅包裹此区域，用于截图分享）────────────────
-
   Widget buildQrCard({
     required Color bgColor,
     required Color mainText,
@@ -96,7 +88,6 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // 链图标 + 网络名称
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -119,7 +110,6 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
             ),
             SizedBox(height: ScreenUtil().setWidth(16)),
 
-            // 链品牌色标签（彩色边框胶囊）
             Container(
               padding: EdgeInsets.symmetric(
                 horizontal: ScreenUtil().setWidth(28),
@@ -144,7 +134,6 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
             ),
             SizedBox(height: ScreenUtil().setWidth(40)),
 
-            // QR 码（数据随金额实时更新）
             Container(
               width: ScreenUtil().setWidth(360.0),
               height: ScreenUtil().setWidth(360.0),
@@ -166,18 +155,16 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
             ),
             SizedBox(height: ScreenUtil().setWidth(24)),
 
-            // ENS 名称 + 地址（详细模式，内建复制按钮关闭）
             EnsAddressDisplay(
               address: address,
               coinType: coinType,
               style: EnsDisplayStyle.detailed,
               showAvatar: true,
-              showCopy: false, // 使用下方独立复制按钮
+              showCopy: false,
               fontSize: ScreenUtil().setSp(26.0),
             ),
             SizedBox(height: ScreenUtil().setWidth(24)),
 
-            // 警告文本（"只能在同一网络发送..."）
             Text(
               S.of(context).g_app_share_key_1,
               style: TextStyle(
@@ -188,7 +175,6 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
             ),
             SizedBox(height: ScreenUtil().setWidth(12)),
 
-            // "扫码收款"
             Text(
               S.of(context).g_app_share_key_2,
               style: TextStyle(
@@ -203,8 +189,6 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
       ),
     );
   }
-
-  // ─── 交互区（不包含在截图内）─────────────────────────────────────────────
 
   Widget buildInteractionArea({
     required Color mainText,
@@ -227,11 +211,10 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // 显眼的复制地址按钮
           ElevatedButton.icon(
             onPressed: copyAddress,
             icon: Icon(Icons.copy_outlined, size: iconSize),
-            label: Text(S.of(context).g_key_119), // "Copy"
+            label: Text(S.of(context).g_key_119),
             style: ElevatedButton.styleFrom(
               backgroundColor: blueColor,
               foregroundColor: Colors.white,
@@ -242,7 +225,6 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
           ),
           SizedBox(height: ScreenUtil().setWidth(20)),
 
-          // 分享链接按钮（分享地址文本 / payment URI）
           OutlinedButton.icon(
             onPressed: shareLink,
             icon: Icon(Icons.link_rounded, size: iconSize),
@@ -257,9 +239,8 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
           ),
           SizedBox(height: ScreenUtil().setWidth(36)),
 
-          // 金额预填标签
           Text(
-            '${S.of(context).g_key_44} ($symbol)', // "Amount (SOL)"
+            '${S.of(context).g_key_44} ($symbol)',
             style: TextStyle(
               color: mainText,
               fontSize: ScreenUtil().setSp(28),
@@ -268,14 +249,11 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
 
-          // 金额输入框（实时刷新 QR）
           _buildAmountField(mainText: mainText, blueColor: blueColor),
         ],
       ),
     );
   }
-
-  // ─── 金额输入框 ─────────────────────────────────────────────────────────────
 
   Widget _buildAmountField({
     required Color mainText,

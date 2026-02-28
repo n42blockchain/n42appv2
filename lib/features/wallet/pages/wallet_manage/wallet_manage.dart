@@ -61,31 +61,26 @@ class _WalletManageState extends ConsumerState<WalletManage> {
 
   Future<void> initData() async {
     walletInfo = widget.walletInfo;
-
     final hasN42Coin = walletInfo?.mainWallet == false &&
         (walletInfo?.coinInfo?.keys.any((e) => e.toString() == CoinType.N.name) ?? false);
-    final isNonCurrentWallet = ref.read(wapBridgeProvider).walletIndex != widget.walletIndex;
-
     showMainWallet = hasN42Coin;
-    showDelete = isNonCurrentWallet && hasN42Coin;
-
-    setCoinList();
+    showDelete = ref.read(wapBridgeProvider).walletIndex != widget.walletIndex && hasN42Coin;
+    await _buildCoinModels();
     setState(() {});
   }
-  Future<void> setCoinList() async {
-    final keys = walletInfo!.coinInfo!.keys.toList();
+
+  Future<void> _buildCoinModels() async {
     coinList = [];
-    for (final key in keys) {
-      final coinInfo = walletInfo!.coinInfo![key];
-      final cm = CoinModel.fromMap(coinInfo['baseInfo'])
-        ..isTest = coinInfo['isTest']
-        ..addrType = coinInfo['addrType']
-        ..pathIndex = coinInfo['pathIndex'] ?? 0
+    for (final key in walletInfo!.coinInfo!.keys) {
+      final info = walletInfo!.coinInfo![key];
+      final cm = CoinModel.fromMap(info['baseInfo'])
+        ..isTest = info['isTest']
+        ..addrType = info['addrType']
+        ..pathIndex = info['pathIndex'] ?? 0
         ..privateKey = walletInfo!.privateKey;
       await cm.buildWallet(setAddress: false, walletIndex: widget.walletIndex);
       coinList!.add(cm);
     }
-    setState(() {});
   }
   void deleteWalletAlert() {
     showDialog(
@@ -166,14 +161,14 @@ class _WalletManageState extends ConsumerState<WalletManage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _walletName(context, "${S.of(context).g_key_nft_2}: ", walletInfo!.walletName ?? ""),
-                  if (walletInfo!.password != "")
+                  _walletName(context, '${S.of(context).g_key_nft_2}: ', walletInfo!.walletName ?? ''),
+                  if (walletInfo!.password != '')
                     _itemWidget(S.of(context).g_key_206, () async {
                       final info = await Navigator.push<WalletInfo>(context, MaterialPageRoute(
                           builder: (_) => EditWalletPassword(walletInfo!, widget.walletIndex)));
                       if (info != null) setState(() => walletInfo = info);
                     }),
-                  if (walletInfo!.password == "")
+                  if (walletInfo!.password == '')
                     _itemWidget(S.of(context).g_key_wallet_c38, () async {
                       initEventBus();
                       await Navigator.push(context, MaterialPageRoute(
@@ -216,7 +211,6 @@ class _WalletManageState extends ConsumerState<WalletManage> {
     );
   }
 
-  /// 公共 tile 容器装饰
   BoxDecoration get _tileDecoration => BoxDecoration(
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
@@ -237,7 +231,6 @@ class _WalletManageState extends ConsumerState<WalletManage> {
 
     return InkWell(
       onTap: () async {
-        ///单独设置一个编辑页面
         final res = await Navigator.push(context, MaterialPageRoute(
             builder: (_) => EditWallet(walletInfo: walletInfo!, walletIndex: widget.walletIndex)));
         if (res != null) {
@@ -306,12 +299,11 @@ class _WalletManageState extends ConsumerState<WalletManage> {
       itemBuilder: (context, index) {
         final model = coinList![index];
         return ItemWallet(
-          iconPath: model.coin['icon'] ?? "",
-          coinAddress: model.address ?? "",
-          coinType: model.coin['miniName'] ?? "",
-          fullName: model.coin['name'] ?? "",
+          iconPath: model.coin['icon'] ?? '',
+          coinAddress: model.address ?? '',
+          coinType: model.coin['miniName'] ?? '',
+          fullName: model.coin['name'] ?? '',
           onTap: () async {
-            // 点击 进入详情
             final isEdit = await Navigator.push<bool>(context, MaterialPageRoute(
                 builder: (_) => OneCoinWalletManage(
                   walletInfo: widget.walletInfo,

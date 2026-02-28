@@ -15,7 +15,6 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
-/// 代币列表单行：包含滑动删除、图标、名称、价格、涨跌幅、图钉按钮。
 class WalletCoinItem extends ConsumerWidget {
   WalletCoinItem({
     required this.coinInfo,
@@ -27,10 +26,9 @@ class WalletCoinItem extends ConsumerWidget {
   final String itemKey;
   final String group;
 
-  final _oCcy = NumberFormat("#,##0.0#", "en_US");
-  final _regular = Regular();
+  static final _oCcy = NumberFormat('#,##0.0#', 'en_US');
+  static final _regular = Regular();
 
-  /// Returns abbreviated string if [value] is extremely large or small.
   String _abbreviate(double value, {String? fallback}) {
     if (value >= 1000000000) return _regular.getMoneyAbbreviation(value);
     if (value > 0 && value < 0.0000000009) return _regular.getMoneyAbbreviationDecimal(value);
@@ -57,19 +55,21 @@ class WalletCoinItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final su = ScreenUtil();
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final coin = coinInfo.coin;
     final balanceStr = _formatBalance(coinInfo.value);
     final tokenBalanceStr = _formatTokenBalance(coinInfo);
 
-    final coinIcon = coinInfo.coin['icon'] ?? '';
+    const defaultImg = 'assets/img/list_default.png';
+    final coinIcon = coin['icon'] ?? '';
     final Widget image = coinIcon.isEmpty
-        ? Image.asset("assets/img/list_default.png")
-        : ImageNetWork(imageUrl: coinIcon, placeholder: "assets/img/list_default.png");
+        ? Image.asset(defaultImg)
+        : ImageNetWork(imageUrl: coinIcon, placeholder: defaultImg);
 
-    final Widget? mainImage = coinInfo.coin['isContract'] == true
-        ? ImageNetWork(imageUrl: coinInfo.mainCoinIcon ?? "", placeholder: "assets/img/list_default.png")
+    final Widget? mainImage = coin['isContract'] == true
+        ? ImageNetWork(imageUrl: coinInfo.mainCoinIcon ?? '', placeholder: defaultImg)
         : null;
 
-    final canEdit = coinInfo.coin['canEdit'] == true;
+    final canEdit = coin['canEdit'] == true;
     final deleteColor = canEdit
         ? AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name)
         : const Color(0xFF6B6B6B);
@@ -80,7 +80,7 @@ class WalletCoinItem extends ConsumerWidget {
             width: su.setWidth(30.0),
             margin: EdgeInsets.only(right: su.setWidth(6.0)),
             child: Image.asset(
-              "assets/img/error.png",
+              'assets/img/error.png',
               color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name),
             ),
           )
@@ -100,14 +100,14 @@ class WalletCoinItem extends ConsumerWidget {
               onPressed: (_) {
                 if (!canEdit) return;
                 final wap = ref.read(wapBridgeProvider);
-                if (coinInfo.coin['isContract'] == true) {
+                if (coin['isContract'] == true) {
                   wap.removeWalletChainToken(
-                    coinInfo.coin,
-                    symbol: coinInfo.coin["coinType"],
-                    miniName: coinInfo.coin['miniName'],
+                    coin,
+                    symbol: coin['coinType'],
+                    miniName: coin['miniName'],
                   );
                 } else {
-                  wap.removeWalletChain(coinInfo.coin['mKey'], coinInfo.coin['unit']);
+                  wap.removeWalletChain(coin['mKey'], coin['unit']);
                 }
               },
               backgroundColor: deleteColor,
@@ -129,7 +129,6 @@ class WalletCoinItem extends ConsumerWidget {
             ),
           ),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               refreshWidget,
               _CoinIcon(image: image, mainImage: mainImage),
@@ -140,7 +139,7 @@ class WalletCoinItem extends ConsumerWidget {
                   tokenBalanceStr: tokenBalanceStr,
                 ),
               ),
-              if (coinInfo.coin['isAggregated'] != true)
+              if (coin['isAggregated'] != true)
                 WalletPinIconButton(
                   isPinned: coinInfo.isPinned,
                   onTap: () => ref.read(wapBridgeProvider).togglePinCoin(coinInfo),
@@ -152,8 +151,6 @@ class WalletCoinItem extends ConsumerWidget {
     );
   }
 }
-
-// ── 代币图标（支持主链小图标叠加）────────────────────────────────────────────
 
 class _CoinIcon extends StatelessWidget {
   const _CoinIcon({required this.image, this.mainImage});
@@ -211,8 +208,6 @@ class _CoinIcon extends StatelessWidget {
     );
   }
 }
-
-// ── 代币名称、价格、涨跌幅信息列 ─────────────────────────────────────────────
 
 class _CoinInfo extends StatelessWidget {
   const _CoinInfo({
@@ -294,8 +289,6 @@ class _CoinInfo extends StatelessWidget {
     );
   }
 }
-
-// ── 涨跌幅 Badge ─────────────────────────────────────────────────────────────
 
 class CoinPercentageBadge extends StatelessWidget {
   const CoinPercentageBadge({super.key, required this.percentage});

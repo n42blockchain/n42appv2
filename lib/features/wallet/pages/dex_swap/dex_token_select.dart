@@ -24,7 +24,6 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
   bool _loading = true;
   String _error = '';
 
-  // 地址搜索状态（当本地无结果且输入像合约地址时触发）
   bool _remoteSearching = false;
   List<DexTokenModel> _remoteResults = [];
   String _remoteError = '';
@@ -42,7 +41,6 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
     super.dispose();
   }
 
-  /// 从 API 响应中解析 token 列表
   List<DexTokenModel> _parseTokens(dynamic data) {
     return ((data as List?) ?? [])
         .map((e) => DexTokenModel.fromJson(e as Map<String, dynamic>))
@@ -50,39 +48,26 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
   }
 
   Future<void> _loadTokens() async {
-    setState(() {
-      _loading = true;
-      _error = '';
-    });
+    setState(() { _loading = true; _error = ''; });
     final res = await _api.getTokens(widget.chain);
     if (!mounted) return;
     if (res.error) {
-      setState(() {
-        _loading = false;
-        _error = res.data?.toString() ?? 'Load failed';
-      });
-    } else {
-      final list = _parseTokens(res.data);
-      setState(() {
-        _loading = false;
-        _all = list;
-        _filtered = list;
-      });
+      setState(() { _loading = false; _error = res.data?.toString() ?? 'Load failed'; });
+      return;
     }
+    final list = _parseTokens(res.data);
+    setState(() { _loading = false; _all = list; _filtered = list; });
   }
 
-  /// 判断输入字符串是否像一个合约地址
-  /// - EVM：0x 开头 + 40 个 hex 字符（共 42 字符）
-  /// - Solana：base58，通常 32-50 字符，不含 0x 前缀
+  static final _evmHexRe = RegExp(r'^[0-9a-fA-F]{40}$');
+  static final _solBase58Re = RegExp(r'^[1-9A-HJ-NP-Za-km-z]+$');
+
   bool _isAddressLike(String q) {
     if (q.startsWith('0x') && q.length == 42) {
-      // 简单 hex 校验
-      final hex = q.substring(2);
-      return RegExp(r'^[0-9a-fA-F]+$').hasMatch(hex);
+      return _evmHexRe.hasMatch(q.substring(2));
     }
-    // Solana base58 地址（含字母和数字，不含 0/O/I/l 等歧义字符）
     if (!q.startsWith('0x') && q.length >= 32 && q.length <= 50) {
-      return RegExp(r'^[1-9A-HJ-NP-Za-km-z]+$').hasMatch(q);
+      return _solBase58Re.hasMatch(q);
     }
     return false;
   }
@@ -91,17 +76,13 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
     final raw = _searchCtrl.text.trim();
     final q = raw.toLowerCase();
 
-    // 本地过滤
     final local = q.isEmpty
         ? _all
-        : _all
-            .where((t) =>
-                t.symbol.toLowerCase().contains(q) ||
-                t.name.toLowerCase().contains(q) ||
-                t.address.toLowerCase().contains(q))
-            .toList();
+        : _all.where((t) =>
+            t.symbol.toLowerCase().contains(q) ||
+            t.name.toLowerCase().contains(q) ||
+            t.address.toLowerCase().contains(q)).toList();
 
-    // 重置地址搜索状态 + 更新本地过滤结果
     setState(() {
       _remoteResults = [];
       _remoteError = '';
@@ -109,35 +90,23 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
       _filtered = local;
     });
 
-    // 当本地无结果且输入看起来是合约地址时，向后端查询
-    if (local.isEmpty && _isAddressLike(raw)) {
-      _searchByAddress(raw);
-    }
+    if (local.isEmpty && _isAddressLike(raw)) _searchByAddress(raw);
   }
 
-  /// 用完整地址向后端搜索（后端精确匹配 address 字段）
   Future<void> _searchByAddress(String address) async {
     if (!mounted) return;
     setState(() => _remoteSearching = true);
-
     final res = await _api.getTokens(widget.chain, q: address);
-
     if (!mounted) return;
     if (res.error) {
-      setState(() {
-        _remoteSearching = false;
-        _remoteError = 'Search failed';
-      });
+      setState(() { _remoteSearching = false; _remoteError = 'Search failed'; });
       return;
     }
-
     final results = _parseTokens(res.data);
     setState(() {
       _remoteSearching = false;
       _remoteResults = results;
-      if (results.isEmpty) {
-        _remoteError = 'Token not found';
-      }
+      if (results.isEmpty) _remoteError = 'Token not found';
     });
   }
 
@@ -203,7 +172,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
   }
 
   Widget _buildBody() {
-    if (_loading) {
+    if (_loading || _remoteSearching) {
       return const Center(child: CircularProgressIndicator());
     }
     if (_error.isNotEmpty) {
@@ -221,44 +190,18 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
         ),
       );
     }
+    if (_filtered.isNotEmpty) return _buildList(_filtered);
+    if (_remoteResults.isNotEmpty) return _buildList(_remoteResults);
 
-    // 有本地结果 → 直接展示
-    if (_filtered.isNotEmpty) {
-      return _buildList(_filtered);
-    }
-
-    // 正在做地址远程搜索
-    if (_remoteSearching) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    // 远程搜索有结果
-    if (_remoteResults.isNotEmpty) {
-      return _buildList(_remoteResults);
-    }
-
-    // 远程搜索无结果
-    if (_remoteError.isNotEmpty) {
-      return Center(
-        child: Text(
-          _remoteError,
-          style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name)),
-        ),
-      );
-    }
-
-    // 本地无结果且输入不像地址
-    return Center(
-      child: Text(
-        _searchCtrl.text.isEmpty
+    final subtitleColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final message = _remoteError.isNotEmpty
+        ? _remoteError
+        : _searchCtrl.text.isEmpty
             ? S.of(context).g_key_dex_no_tokens
-            : S.of(context).g_key_dex_no_tokens_found,
-        style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name)),
-      ),
+            : S.of(context).g_key_dex_no_tokens_found;
+    return Center(
+      child: Text(message, style: TextStyle(color: subtitleColor)),
     );
   }
 
@@ -318,7 +261,6 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
                     ],
                   ),
                 ),
-                // 地址缩略展示
                 Text(
                   _shortenAddress(token.address),
                   style: TextStyle(

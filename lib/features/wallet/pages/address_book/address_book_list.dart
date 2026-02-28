@@ -24,7 +24,6 @@ import 'package:n42_wallet/features/widgets/image_network.dart';
 
 part 'address_book_list_item.dart';
 
-// ─── 联系人头像色盘（基于姓名首字符确定性哈希）────────────────────────────
 const List<Color> _kAvatarColors = [
   Color(0xFF5B86E5),
   Color(0xFF36D1C4),
@@ -41,13 +40,6 @@ Color _avatarColor(String? name) {
   return _kAvatarColors[name.codeUnitAt(0) % _kAvatarColors.length];
 }
 
-/// 从 QR 字符串中提取地址部分
-///
-/// 支持格式：
-///   - 纯地址: `0xABC...` / `So1Abc...`
-///   - EIP-681: `ethereum:0xABC...?value=1.0`
-///   - BIP-21:  `bitcoin:1BvBM...?amount=0.5`
-///   - TON:     `ton:transfer/EQ...?amount=5`
 String _parseAddressFromQr(String qrData) {
   final colonIdx = qrData.indexOf(':');
   if (colonIdx < 0) return qrData.trim();
@@ -63,10 +55,7 @@ String _parseAddressFromQr(String qrData) {
   return rest.trim();
 }
 
-// ─── Widget ───────────────────────────────────────────────────────────────────
-
 class AddressBookList extends StatefulWidget {
-  /// 非空时：只显示对应链的地址，点击直接返回选中地址（选择器模式）
   final String coinName;
 
   const AddressBookList({this.coinName = '', super.key});
@@ -77,16 +66,13 @@ class AddressBookList extends StatefulWidget {
 
 class _AddressBookListState extends State<AddressBookList>
     with _AddressBookListItemMixin {
-  // ─── 数据 ────────────────────────────────────────────────────────────────
   final _api = AddressBookApi();
   List<AddressBookModel> _allItems = [];
   List<AddressBookModel> _filteredItems = [];
   StreamSubscription? _eventSub;
 
-  // ─── 搜索 ────────────────────────────────────────────────────────────────
   final _searchCtrl = TextEditingController();
 
-  // ─── 选择器模式（从发送页调起，点击直接返回地址） ────────────────────────
   @override
   bool get isPickerMode => widget.coinName.isNotEmpty;
 
@@ -101,8 +87,6 @@ class _AddressBookListState extends State<AddressBookList>
 
   @override
   Future<void> Function(AddressBookModel info) get deleteItem => _deleteItem;
-
-  // ─── 生命周期 ─────────────────────────────────────────────────────────────
 
   @override
   void initState() {
@@ -124,8 +108,6 @@ class _AddressBookListState extends State<AddressBookList>
     _searchCtrl.dispose();
     super.dispose();
   }
-
-  // ─── 数据 ─────────────────────────────────────────────────────────────────
 
   Future<void> _loadData() async {
     try {
@@ -153,8 +135,6 @@ class _AddressBookListState extends State<AddressBookList>
           (item.coinName?.toLowerCase().contains(q) ?? false);
     }).toList();
   }
-
-  // ─── 操作 ─────────────────────────────────────────────────────────────────
 
   Future<void> _scanToAdd() async {
     final qrData = await Navigator.push<String>(
@@ -223,8 +203,6 @@ class _AddressBookListState extends State<AddressBookList>
     if (mounted) _loadData();
   }
 
-  // ─── Build ────────────────────────────────────────────────────────────────
-
   @override
   Widget build(BuildContext context) {
     final blueColor =
@@ -238,32 +216,22 @@ class _AddressBookListState extends State<AddressBookList>
       appBar: AppBarWidget(
         text: S.of(context).g_key_108,
         actions: [
-          // 扫码添加联系人
           IconButton(
             onPressed: _scanToAdd,
-            icon: Icon(
-              Icons.qr_code_scanner_outlined,
-              color: blueColor,
-            ),
+            icon: Icon(Icons.qr_code_scanner_outlined, color: blueColor),
             tooltip: S.of(context).g_key_4,
           ),
-          // 手动新建联系人
           IconButton(
             onPressed: _navigateToAdd,
-            icon: Icon(
-              Icons.add_circle_outline,
-              color: blueColor,
-            ),
+            icon: Icon(Icons.add_circle_outline, color: blueColor),
             tooltip: S.of(context).g_key_112,
           ),
         ],
       ),
       body: Column(
         children: [
-          // 搜索栏
           _buildSearchBar(mainText, blueColor, itemBg),
 
-          // 联系人列表
           Expanded(
             child: _filteredItems.isEmpty
                 ? const Center(child: EmptyView())
