@@ -1,10 +1,9 @@
 part of 'wallet_list.dart';
 
-/// 人脸绑定区块的状态字段与方法，混入 [_WalletListState]。
 mixin _WalletListFaceMixin on ConsumerState<WalletList> {
   int fbwIndex = -1;
-  bool fbwCheck = true; // 验证钱包地址是否成功，默认成功
-  String fbwCheckAddress = ""; // 验证钱包地址后，返回的地址
+  bool fbwCheck = true;
+  String fbwCheckAddress = "";
 
   _WalletListState get _state => this as _WalletListState;
 
@@ -15,7 +14,6 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
     fbwIndex = _state.walletList.indexWhere((e) => e.faceBinding == true);
   }
 
-  /// 根据钱包信息生成 legacy 地址
   Future<String> _generateLegacyAddress(WalletInfo info) async {
     final Map coinInfo = info.coinInfo?[CoinType.N.name];
     final pathIndex = coinInfo['pathIndex'] ?? 0;
@@ -31,7 +29,6 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
     return addressMap['legacy'].toString();
   }
 
-  /// 人脸匹配导航，返回 null 表示匹配失败或未返回
   Future<String?> _matchFace() async {
     if (_state.load == Load.loading) return null;
     final rData = await Navigator.push<String>(
@@ -102,120 +99,98 @@ mixin _WalletListFaceMixin on ConsumerState<WalletList> {
     }
   }
 
-  // ── 人脸绑定区块 UI ──────────────────────────────────────────────────────
+  // ── UI ────────────────────────────────────────────────────────────────────
+
+  Widget _faceButtonRow(String leftLabel, VoidCallback onLeft,
+      String rightLabel, VoidCallback onRight) {
+    return Row(
+      children: [
+        Expanded(child: faceBindButton(leftLabel, onLeft)),
+        SizedBox(width: ScreenUtil().setWidth(30)),
+        Expanded(child: faceBindButton(rightLabel, onRight)),
+      ],
+    );
+  }
 
   Widget _buildFaceBind() {
     final List<Widget> cList = [];
 
     if (_state.fbwIndex == -1) {
       if (_state.fbwCheck) {
-        // 未绑定且验证通过 → 显示绑定 + 验证按钮
-        final Widget c4 = Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: faceBindButton(S.of(context).g_face_match_key13, bind),
-            ),
-            SizedBox(width: ScreenUtil().setWidth(30)),
-            Expanded(
-              flex: 1,
-              child: faceBindButton(S.of(context).g_face_match_key14, verify),
-            ),
-          ],
-        );
         cList.addAll([
           faceBindText(
             S.of(context).g_face_match_key15,
             margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
           ),
-          c4,
+          _faceButtonRow(
+            S.of(context).g_face_match_key13,
+            bind,
+            S.of(context).g_face_match_key14,
+            verify,
+          ),
         ]);
       } else {
-        // 验证失败 → 显示地址 + 导入 + 绑定按钮
-        final Widget c1 = SizedBox(
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              faceBindText(
-                "${S.of(context).g_key_address}:",
-                margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
-              ),
-              faceBindText(
-                _state.fbwCheckAddress,
-                margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
-              ),
-            ],
-          ),
-        );
-        final Widget c4 = Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: faceBindButton(
-                S.of(context).g_token_m_key_9,
-                () async {
-                  await Navigator.pushNamed(context, '/ImportOne');
-                  await _state.initData();
-                },
-              ),
-            ),
-            SizedBox(width: ScreenUtil().setWidth(30)),
-            Expanded(
-              flex: 1,
-              child:
-                  faceBindButton(S.of(context).g_face_match_key12, bind),
-            ),
-          ],
-        );
         cList.addAll([
           faceBindText(
             S.of(context).g_face_match_key16,
             margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
           ),
-          c1,
-          c4,
+          SizedBox(
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                faceBindText(
+                  "${S.of(context).g_key_address}:",
+                  margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
+                ),
+                faceBindText(
+                  _state.fbwCheckAddress,
+                  margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
+                ),
+              ],
+            ),
+          ),
+          _faceButtonRow(
+            S.of(context).g_token_m_key_9,
+            () async {
+              await Navigator.pushNamed(context, '/ImportOne');
+              await _state.initData();
+            },
+            S.of(context).g_face_match_key12,
+            bind,
+          ),
         ]);
       }
     } else {
-      // 已绑定 → 显示绑定的钱包名 + 重绑 + 解绑按钮
       WalletInfo info = _state.walletList[_state.fbwIndex];
-      final Widget c5 = Row(
-        children: [
-          Image.asset(
-            "assets/img/ast.png",
-            width: ScreenUtil().setWidth(70.0),
-          ),
-          SizedBox(width: ScreenUtil().setWidth(20.0)),
-          Expanded(
-            flex: 1,
-            child: Text(
-              info.walletName ?? "-",
-              style: TextStyle(
+      cList.addAll([
+        Row(
+          children: [
+            Image.asset(
+              "assets/img/ast.png",
+              width: ScreenUtil().setWidth(70.0),
+            ),
+            SizedBox(width: ScreenUtil().setWidth(20.0)),
+            Expanded(
+              child: Text(
+                info.walletName ?? "-",
+                style: TextStyle(
                   color: AppThemeUtils.getColorByKey(
                       context, AppThemeKeys.itemTextColor.name),
                   fontSize: ScreenUtil().setSp(40.0),
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-        ],
-      );
-      cList.addAll([
-        c5,
-        faceBindText(S.of(context).g_face_match_key17),
-        Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: faceBindButton(S.of(context).g_face_match_key12, bind),
-            ),
-            SizedBox(width: ScreenUtil().setWidth(30)),
-            Expanded(
-              flex: 1,
-              child:
-                  faceBindButton(S.of(context).g_face_match_key33, unbind),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
+        ),
+        faceBindText(S.of(context).g_face_match_key17),
+        _faceButtonRow(
+          S.of(context).g_face_match_key12,
+          bind,
+          S.of(context).g_face_match_key33,
+          unbind,
         ),
       ]);
     }

@@ -25,12 +25,6 @@ import 'package:n42_wallet/generated/l10n.dart';
 
 part 'transaction_detail_eth_sections.dart';
 
-/// EVM eth_getTransactionReceipt 返回的 status 字段格式不统一：
-/// - 标准节点: "0x1" / "0x0"
-/// - 部分节点: "0x01" / "0x00"（带前导零）
-/// - 部分节点: 整数 1 / 0
-/// - 旧格式:   bool true / false
-/// 统一解析，1 == 成功，其他均为失败。
 bool _isReceiptSuccess(dynamic status) {
   if (status == null) return false;
   if (status is bool) return status;
@@ -85,31 +79,25 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
 
   Future<void> init() async {
     errorMessage = "";
-    if (_txHash == "") {
-      _txHash = searchEditingController.text;
-    }
-    if (_txHash == "") {
+    if (_txHash.isEmpty) _txHash = searchEditingController.text;
+    if (_txHash.isEmpty) {
       owner = false;
       return;
     }
-    if (mounted) {
-      setState(() {
-        load = Load.loading;
-      });
-    }
+    if (mounted) setState(() => load = Load.loading);
     final trModelList = await db.selectTransationRecordTxHash(_txHash, widget.coinModel.address);
     if (trModelList.isNotEmpty) {
       trm = trModelList[0];
     }
     final success = await getTransactionByHash();
     if (!mounted) return;
-    if (success) {
-      await getTransactionReceipt();
-      if (!mounted) return;
-      setState(() { load = Load.finish; });
-    } else {
-      setState(() { load = Load.error; });
+    if (!success) {
+      setState(() => load = Load.error);
+      return;
     }
+    await getTransactionReceipt();
+    if (!mounted) return;
+    setState(() => load = Load.finish);
   }
 
   Map<String, dynamic>? transactionInfo;
@@ -163,9 +151,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
         trm.to1 = "0x${input.substring(34, 74)}";
         trm.price = hexToInt(input.substring(74, 138));
         value = '${toEther(trm.price.toString(), decimals)} $unit';
-      } catch (_) {
-        // 合约 input 解析失败时安全忽略
-      }
+      } catch (_) {}
     }
     owner = trm.from1.toLowerCase() == (transactionInfo?['from'] ?? "").toString().toLowerCase();
     return true;
@@ -182,13 +168,11 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     }
     transactionInfoReceipt = rData.data;
     if (transactionInfoReceipt != null) {
-      // receipt 非 null 表示交易已上链确认，停止轮询
       resultStr = _isReceiptSuccess(transactionInfoReceipt!['status'])
           ? "Success"
-          : "Failed"; // 0x0 = 链上 revert
+          : "Failed";
       return;
     }
-    // receipt 为 null 表示交易仍在 mempool，继续轮询
     errorMessage = "";
     _startPolling();
   }
@@ -243,7 +227,6 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
               ],
             ),
           ),
-          // 交易 Pending 且是自己发出的交易时，显示加速 / 取消操作栏
           if (resultStr == "Pending" && owner && load == Load.finish)
             buildPendingActionBar(),
         ],

@@ -1,11 +1,6 @@
 part of 'wallet_chain_send_btc.dart';
 
-/// UTXO selection, transaction building, signing, and navigation helpers
-/// for [_WalletChainSendBtcState].
-///
-/// Depends on [_BtcSendLogicMixin] for all shared state fields.
 mixin _BtcSendTxMixin on _BtcSendLogicMixin {
-  // Fetch UTXO list (paginated). Pass allUTXO=true to load all pages.
   Future<void> getUTXO({bool allUTXO = false}) async {
     if (utxoLoad == Load.loading || utxoLastPage) return;
     utxoLoad = Load.loading;
@@ -22,10 +17,7 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
         isTest: widget.coinModel.isTest,
       );
       if (mm.error) {
-        errorMessage = mm.data;
-        ToastUtils.show(errorMessage);
-        utxoLoad = Load.finish;
-        setState(() {});
+        _showUtxoError(mm.data);
         return;
       }
       unspents.addAll(mm.data);
@@ -42,14 +34,41 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
         calculateGasFee();
       }
     } catch (e) {
-      errorMessage = e.toString();
-      ToastUtils.show(errorMessage);
-      utxoLoad = Load.finish;
-      setState(() {});
+      _showUtxoError(e.toString());
     }
   }
 
-  // Calculate gas fee based on current price, UTXOs, and fee rate.
+  void _showUtxoError(String msg) {
+    errorMessage = msg;
+    ToastUtils.show(errorMessage);
+    utxoLoad = Load.finish;
+    setState(() {});
+  }
+
+  Map<String, dynamic> _buildUtxoEntry(Map<String, dynamic> unspent) {
+    if (widget.coinModel.isTest) {
+      return {
+        'txid': unspent['txid'],
+        'vout': unspent['vout'],
+        'value': (unspent['value'] as int).toString(),
+        'script': unspent['hex'],
+      };
+    }
+    final BigInt amount =
+        ethToWeiString(double.parse(unspent['value']).toString(), 8);
+    return {
+      'txid': unspent['txid'],
+      'vout': unspent['output_no'],
+      'value': amount.toString(),
+      'script': unspent['hex'],
+    };
+  }
+
+  int _utxoAmount(Map<String, dynamic> unspent) {
+    if (widget.coinModel.isTest) return unspent['value'] as int;
+    return ethToWeiString(double.parse(unspent['value']).toString(), 8).toInt();
+  }
+
   @override
   Future<void> calculateGasFee() async {
     if (price == 0) {
@@ -66,40 +85,20 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
     bool inputValueOK = false;
 
     for (final Map<String, dynamic> unspent in unspents) {
-      if (widget.coinModel.isTest) {
-        if (unspent['hex'] == null) {
-          final utxoTx =
-              await BtcApi(test: true).getUTXOTxid(unspent['txid']);
-          if (utxoTx.error == false) {
-            unspent['hex'] =
-                utxoTx.data['vout']?[unspent['vout']]?['scriptpubkey'];
-          }
+      if (widget.coinModel.isTest && unspent['hex'] == null) {
+        final utxoTx = await BtcApi(test: true).getUTXOTxid(unspent['txid']);
+        if (utxoTx.error == false) {
+          unspent['hex'] =
+              utxoTx.data['vout']?[unspent['vout']]?['scriptpubkey'];
         }
-        final int amount = unspent['value'];
-        input2Price += amount;
-        utxos.add({
-          'txid': unspent['txid'],
-          'vout': unspent['vout'],
-          'value': amount.toString(),
-          'script': unspent['hex'],
-        });
-      } else {
-        final BigInt amount =
-            ethToWeiString(double.parse(unspent['value']).toString(), 8);
-        input2Price += amount.toInt();
-        utxos.add({
-          'txid': unspent['txid'],
-          'vout': unspent['output_no'],
-          'value': amount.toString(),
-          'script': unspent['hex'],
-        });
       }
+      input2Price += _utxoAmount(unspent);
+      utxos.add(_buildUtxoEntry(unspent));
 
       if (price < input2Price) {
         final byteSize = await getSignByteSize(utxos);
         if (byteSize != 0) {
-          final int gasFee = gasFeeLevel['gasFeeRate'];
-          gasFeeLevel['gasFees'] = byteSize * gasFee;
+          gasFeeLevel['gasFees'] = byteSize * (gasFeeLevel['gasFeeRate'] as int);
           inputValueOK = true;
           break;
         }
@@ -107,12 +106,9 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
     }
     inputUTXO = utxos;
     setState(() {});
-    if (!inputValueOK) {
-      getUTXO();
-    }
+    if (!inputValueOK) getUTXO();
   }
 
-  // Sign and broadcast the transaction.
   Future<void> signTx(BtcTransactionRecodeModel trModel) async {
     load = Load.loading;
     setState(() {});
@@ -139,31 +135,27 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
     Navigator.pop(context, toTextFieldEnabel ? null : trModel.txHash);
   }
 
-  // Build and sign a 1-to-1 BTC transaction from the UTXO list.
   Future<BtcTransactionRecodeModel> transatroinBuilder1To1(
     BtcTransactionRecodeModel btcTransactionRecodeModel,
     List<dynamic> unspents,
   ) async {
     try {
-      btcTransactionRecodeModel.inputModels = [];
+      btcTransactionRecodeModel.inputModels = [
+        for (final Map<String, dynamic> unspent in inputUTXO)
+          InputModel(
+            txid: unspent['txid'],
+            vout: unspent['vout'],
+            value: int.parse(unspent['value']),
+            script: unspent['script'],
+          )..address = [widget.coinModel.address.toString()],
+      ];
 
-      for (final Map<String, dynamic> unspent in inputUTXO) {
-        final im = InputModel(
-          txid: unspent['txid'],
-          vout: unspent['vout'],
-          value: int.parse(unspent['value']),
-          script: unspent['script'],
-        );
-        im.address = [widget.coinModel.address.toString()];
-        btcTransactionRecodeModel.inputModels!.add(im);
-      }
-
-      final int gasFees = gasFeeLevel['gasFees'] as int;
-      btcTransactionRecodeModel.gas = gasFeeLevel['gasFeeRate'];
-      btcTransactionRecodeModel.gasPrice = gasFees;
-      btcTransactionRecodeModel.addrType = widget.coinModel.addrType;
-      btcTransactionRecodeModel.max = gasFeeLevel['maxValue'] != 0;
-      btcTransactionRecodeModel.isTest = widget.coinModel.isTest ? 1 : 0;
+      btcTransactionRecodeModel
+        ..gas = gasFeeLevel['gasFeeRate']
+        ..gasPrice = gasFeeLevel['gasFees'] as int
+        ..addrType = widget.coinModel.addrType
+        ..max = gasFeeLevel['maxValue'] != 0
+        ..isTest = widget.coinModel.isTest ? 1 : 0;
 
       final rmm = await transferApi.transferWallet(
         trModelBtc: btcTransactionRecodeModel,
@@ -181,23 +173,15 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
     }
   }
 
-  // Set amount to the maximum spendable value after fees.
   @override
   Future<void> maxTag() async {
     price = widget.coinModel.balance.toInt();
     await getUTXO(allUTXO: true);
     if (errorMessage != '') return;
-    final List<Map<String, dynamic>> utxos = [];
-    for (final Map<String, dynamic> unspent in unspents) {
-      final BigInt amount =
-          ethToWeiString(double.parse(unspent['value']).toString(), 8);
-      utxos.add({
-        'txid': unspent['txid'],
-        'vout': unspent['output_no'],
-        'value': amount.toString(),
-        'script': unspent['hex'],
-      });
-    }
+    final utxos = [
+      for (final Map<String, dynamic> unspent in unspents)
+        _buildUtxoEntry(unspent),
+    ];
     inputUTXO = utxos;
     final byteSize = await getSignByteSize(utxos, max: true);
     final int gasFee = gasFeeLevel['gasFeeRate'];
@@ -209,14 +193,12 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
     setState(() {});
   }
 
-  // Dry-run sign to obtain the serialized byte size for fee estimation.
   Future<int> getSignByteSize(
     List<Map<String, dynamic>> utxos, {
     bool max = false,
   }) async {
     final btcTxMap = {
       'utxo': utxos,
-      // Placeholder address — only used for byte-size estimation.
       'toAddress': 'bc1q4q83qn0r4ndkpldfkypttncfrjxu4zdeeuz40s',
       'amount': price,
       'byteFee': gasFeeLevel['gasFeeRate'],
@@ -237,9 +219,7 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
     return int.parse(signByteSize);
   }
 
-  // -- Navigation & keyboard helpers --
-
-  void scanQR() async {
+  Future<void> scanQR() async {
     final String? scanValue = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => ScanPage()),

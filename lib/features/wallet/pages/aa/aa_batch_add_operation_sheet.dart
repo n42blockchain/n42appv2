@@ -9,10 +9,6 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/batch_operation_item.dart';
 
-/// 添加单个批量操作的底部弹层
-///
-/// 支持四种操作类型：Transfer、Approve、Swap、Custom。
-/// 根据选中类型动态显示/隐藏 Token 地址、金额、Calldata 等字段。
 class AddOperationSheet extends StatefulWidget {
   final ValueChanged<BatchOperation> onAdd;
 
@@ -241,16 +237,11 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
     );
   }
 
-  String _typeName(BuildContext context, BatchOperationType type) {
-    switch (type) {
-      case BatchOperationType.transfer:
-        return S.of(context).g_key_37;
-      case BatchOperationType.approve:
-        return S.of(context).g_key_aa_approve;
-      case BatchOperationType.swap:
-        return S.of(context).g_swap_key_35;
-      case BatchOperationType.custom:
-        return S.of(context).g_key_aa_custom;
-    }
-  }
+  String _typeName(BuildContext context, BatchOperationType type) =>
+      switch (type) {
+        BatchOperationType.transfer => S.of(context).g_key_37,
+        BatchOperationType.approve => S.of(context).g_key_aa_approve,
+        BatchOperationType.swap => S.of(context).g_swap_key_35,
+        BatchOperationType.custom => S.of(context).g_key_aa_custom,
+      };
 }

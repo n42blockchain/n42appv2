@@ -20,33 +20,26 @@ class SessionKeyPresetCards extends StatelessWidget {
     required this.onChanged,
   });
 
-  // ── Preset metadata (label + risk colour) ─────────────────────────────────
-
   static ({String label, Color riskColor}) _presetInfo(
-      BuildContext context, SessionKeyPermission preset) {
-    switch (preset) {
-      case SessionKeyPermission.transfer:
-        return (
+      BuildContext context, SessionKeyPermission preset) =>
+      switch (preset) {
+        SessionKeyPermission.transfer => (
           label: S.of(context).g_key_aa_session_preset_transfer,
           riskColor: Colors.green,
-        );
-      case SessionKeyPermission.contractCall:
-        return (
+        ),
+        SessionKeyPermission.contractCall => (
           label: S.of(context).g_key_aa_session_preset_contract,
           riskColor: Colors.orange,
-        );
-      case SessionKeyPermission.full:
-        return (
+        ),
+        SessionKeyPermission.full => (
           label: S.of(context).g_key_aa_session_preset_full,
           riskColor: Colors.red,
-        );
-      case SessionKeyPermission.approve:
-        return (
+        ),
+        SessionKeyPermission.approve => (
           label: S.of(context).g_key_aa_approve,
           riskColor: Colors.orange,
-        );
-    }
-  }
+        ),
+      };
 
   @override
   Widget build(BuildContext context) {
@@ -89,8 +82,6 @@ class SessionKeyPresetCards extends StatelessWidget {
     );
   }
 }
-
-// ── Private single-preset card ─────────────────────────────────────────────
 
 class _PresetCard extends StatelessWidget {
   final SessionKeyPermission preset;
@@ -178,7 +169,6 @@ class _PresetCard extends StatelessWidget {
             ),
           ),
         ),
-        // Risk badge
         Container(
           padding: EdgeInsets.symmetric(
             horizontal: ScreenUtil().setWidth(8),
