@@ -6,12 +6,28 @@ part of 'aa_send_page.dart';
 /// Requires [_AASendLogicMixin] to be applied first so that
 /// state fields and logic methods are accessible.
 mixin _AASendWidgetsMixin on _AASendLogicMixin {
+  // ─── Theme helpers ──────────────────────────────────────────────────
+
+  Color _themeColor(String key) =>
+      AppThemeUtils.getColorByKey(context, key);
+
+  Color get _mainText => _themeColor(AppThemeKeys.mainTextColor.name);
+  Color get _subText => _themeColor(AppThemeKeys.itemSubtitleTextColor.name);
+  Color get _itemBg => _themeColor(AppThemeKeys.itemBgColor.name);
+
+  TextStyle _sectionTitleStyle() => TextStyle(
+        fontSize: ScreenUtil().setSp(26),
+        fontWeight: FontWeight.w600,
+        color: _mainText,
+      );
+
+  // ─── From Section ───────────────────────────────────────────────────
+
   Widget buildFromSection() {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
+        color: _itemBg,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
       ),
       child: Column(
@@ -21,10 +37,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
             S.of(context).g_key_75,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(24),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: _subText,
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(10)),
@@ -54,10 +67,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(26),
                         fontWeight: FontWeight.w600,
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.mainTextColor.name,
-                        ),
+                        color: _mainText,
                       ),
                     ),
                     Text(
@@ -65,10 +75,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(22),
                         fontFamily: 'monospace',
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.itemSubtitleTextColor.name,
-                        ),
+                        color: _subText,
                       ),
                     ),
                   ],
@@ -100,21 +107,13 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
     );
   }
 
+  // ─── To Section ─────────────────────────────────────────────────────
+
   Widget buildToSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          S.of(context).g_key_38,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
-            fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
-          ),
-        ),
+        Text(S.of(context).g_key_38, style: _sectionTitleStyle()),
         SizedBox(height: ScreenUtil().setWidth(12)),
         TextField(
           controller: toController,
@@ -150,6 +149,8 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
     );
   }
 
+  // ─── Amount Section ─────────────────────────────────────────────────
+
   Widget buildAmountSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,27 +158,14 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              S.of(context).g_key_44,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(26),
-                fontWeight: FontWeight.w600,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
-              ),
-            ),
+            Text(S.of(context).g_key_44, style: _sectionTitleStyle()),
             Row(
               children: [
                 Text(
                   '${S.of(context).g_key_43}: 1.5 $selectedToken',
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(22),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
+                    color: _subText,
                   ),
                 ),
                 TextButton(
@@ -221,18 +209,10 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                 vertical: ScreenUtil().setWidth(14),
               ),
               decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemBgColor.name,
-                ),
+                color: _itemBg,
                 borderRadius:
                     BorderRadius.circular(ScreenUtil().setWidth(12)),
-                border: Border.all(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ).withAlpha(30),
-                ),
+                border: Border.all(color: _subText.withAlpha(30)),
               ),
               child: Row(
                 children: [
@@ -241,19 +221,10 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(28),
                       fontWeight: FontWeight.w600,
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor.name,
-                      ),
+                      color: _mainText,
                     ),
                   ),
-                  Icon(
-                    Icons.arrow_drop_down,
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
-                  ),
+                  Icon(Icons.arrow_drop_down, color: _subText),
                 ],
               ),
             ),
@@ -262,6 +233,8 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
       ],
     );
   }
+
+  // ─── Paymaster Section ──────────────────────────────────────────────
 
   Widget buildPaymasterSection() {
     return Column(
@@ -272,14 +245,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
           children: [
             Text(
               S.of(context).g_key_aa_gas_payment,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(26),
-                fontWeight: FontWeight.w600,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
-              ),
+              style: _sectionTitleStyle(),
             ),
             TextButton(
               onPressed: selectPaymaster,
@@ -299,18 +265,15 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
     );
   }
 
+  // ─── Gas Section ────────────────────────────────────────────────────
+
   Widget buildGasSection() {
     final isSponsored = selectedPaymaster.type == PaymasterType.sponsored;
 
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
       decoration: BoxDecoration(
-        color: isSponsored
-            ? Colors.green.withAlpha(15)
-            : AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemBgColor.name,
-              ),
+        color: isSponsored ? Colors.green.withAlpha(15) : _itemBg,
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
         border: isSponsored
             ? Border.all(color: Colors.green.withAlpha(30))
@@ -326,20 +289,14 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                   Icon(
                     Icons.local_gas_station,
                     size: ScreenUtil().setWidth(22),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
+                    color: _subText,
                   ),
                   SizedBox(width: ScreenUtil().setWidth(8)),
                   Text(
                     S.of(context).g_key_aa_estimated_gas,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(24),
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ),
+                      color: _subText,
                     ),
                   ),
                 ],
@@ -373,12 +330,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
         style: TextStyle(
           fontSize: ScreenUtil().setSp(26),
           fontWeight: FontWeight.w600,
-          color: isSponsored
-              ? Colors.green
-              : AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+          color: isSponsored ? Colors.green : _mainText,
         ),
       );
     }
@@ -386,13 +338,12 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
       '-',
       style: TextStyle(
         fontSize: ScreenUtil().setSp(26),
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemSubtitleTextColor.name,
-        ),
+        color: _subText,
       ),
     );
   }
+
+  // ─── Send Button ────────────────────────────────────────────────────
 
   Widget buildSendButton() {
     final canSend = toController.text.isNotEmpty &&
@@ -404,10 +355,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
     return ElevatedButton(
       onPressed: canSend ? showTransactionPreview : null,
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.mainBlueColor.name,
-        ),
+        backgroundColor: _themeColor(AppThemeKeys.mainBlueColor.name),
         foregroundColor: Colors.white,
         padding:
             EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),

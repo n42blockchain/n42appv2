@@ -7,17 +7,10 @@ part of 'wallet_chain_send_dot.dart';
 mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
   CoinModel? chainModel;
 
-  Regular? _logicRegular;
-  Regular get _regular => _logicRegular ??= Regular();
-
-  DataUtils? _logicDataUtils;
-  DataUtils get dataUtils => _logicDataUtils ??= DataUtils();
-
-  DotApi? _logicDotApi;
-  DotApi get dotApi => _logicDotApi ??= DotApi();
-
-  TokenViewApi? _logicTokenViewApi;
-  TokenViewApi get tokenViewApi => _logicTokenViewApi ??= TokenViewApi();
+  final Regular _regular = Regular();
+  final DataUtils dataUtils = DataUtils();
+  final DotApi dotApi = DotApi();
+  final TokenViewApi tokenViewApi = TokenViewApi();
 
   final NumberFormat oCcy = NumberFormat("#,##0.00########", "en_US");
 
@@ -68,28 +61,18 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
       contract: widget.coinModel.coin['isContract'],
     ));
     await getBalance();
-    /*await getGasPrice();
-    if(getEthLayer2(widget.coinModel.coin['coinType'])){
-      gasEth=BigInt.from(getCoinGas(CoinType.ETH.name));
-      await getGasPrice_layer2();
-    }*/
   }
 
   // 获取余额
   Future<void> getBalance() async {
-    setState(() {
-      load = Load.loading;
-    });
+    setState(() => load = Load.loading);
     final bool isOk = await widget.coinModel.getBalance(getToken: false);
     if (!mounted) return;
-    if (isOk == false) {
-      load = Load.finish;
+    if (!isOk) {
       errorMessage = S.current.g_key_t_44;
       ToastUtils.show(S.current.g_key_t_44);
     }
-    setState(() {
-      load = Load.finish;
-    });
+    setState(() => load = Load.finish);
   }
 
   // 获取旷工费
@@ -113,90 +96,75 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
 
   // 检查 amount 输入是否正确
   void amountCheck({String value = ""}) {
-    if (value == "") {
-      value = valueTextEditingController.text;
-    }
-    int minValue = 0;
-    if (widget.coinModel.coin['decimals'] == 0) {
-      minValue = 1;
-    }
+    if (value.isEmpty) value = valueTextEditingController.text;
+    final int decimals = widget.coinModel.coin['decimals'] as int;
+    final int minValue = decimals == 0 ? 1 : 0;
+
     if (value.isEmpty) {
-      amountErrorMessage = S.of(context).g_key_46(minValue);
-      setState(() {});
+      _setAmountError(S.of(context).g_key_46(minValue));
       return;
     }
-    bool checkValue1 = false;
-    if (widget.coinModel.coin['decimals'] == 0) {
-      checkValue1 = _regular.regularNums(value.toString());
-      if (checkValue1 == false) {
-        amountErrorMessage = S.of(context).g_key_134;
-        setState(() {});
-        return;
-      }
-    } else {
-      checkValue1 = _regular.regularNums(value.toString());
+
+    final bool isInteger = _regular.regularNums(value);
+    // 整数精度币种输入非整数时直接拒绝
+    if (decimals == 0 && !isInteger) {
+      _setAmountError(S.of(context).g_key_134);
+      return;
     }
-    final bool checkValue = _regular.regularDouble(value.toString());
+
+    final bool isDouble = _regular.regularDouble(value);
+    if (!isDouble && !isInteger) {
+      _setAmountError(S.of(context).g_key_134);
+      return;
+    }
+
     final double dValue = double.parse(value);
-    if (checkValue == false && checkValue1 == false) {
-      amountErrorMessage = S.of(context).g_key_134;
-      setState(() {});
-      return;
-    } else if (dValue < minValue) {
-      amountErrorMessage = S.of(context).g_key_46(minValue);
-      setState(() {});
-      return;
-    } else if (dValue == 0) {
-      amountErrorMessage = S.of(context).g_key_46(minValue);
-      setState(() {});
+    if (dValue <= 0 || dValue < minValue) {
+      _setAmountError(S.of(context).g_key_46(minValue));
       return;
     }
+
     final BigInt valueBi =
         ethToWeiString(value, widget.coinModel.coin['decimals']);
-    if (widget.coinModel.coin['isContract'] == false) {
-      if (valueBi + totalGasPrice > widget.coinModel.balance) {
-        amountErrorMessage = S.of(context).g_key_47;
-        setState(() {});
-        return;
-      }
+    if (!widget.coinModel.coin['isContract'] &&
+        valueBi + totalGasPrice > widget.coinModel.balance) {
+      _setAmountError(S.of(context).g_key_47);
+      return;
     }
+
     transferValue = valueBi;
     amountErrorMessage = "";
     setState(() {});
   }
 
+  void _setAmountError(String message) {
+    amountErrorMessage = message;
+    setState(() {});
+  }
+
   // 检查转账地址是否正确
   Future<String?> toAddressCheck(String addr) async {
-    if (addr == "") {
+    if (addr.isEmpty) {
       toErrorMessage = S.current.g_key_41;
       setState(() {});
       return null;
     }
     final List<String> addrList = addr.split(":");
-    if (addrList.length == 2) {
-      addr = addrList[1];
-    }
-    final bool check = await Trustdart()
+    if (addrList.length == 2) addr = addrList[1];
+
+    final bool valid = await Trustdart()
         .validateAddress(widget.coinModel.coin['coinType'], addr);
-    if (check) {
-      if (addr.toUpperCase() ==
-          widget.coinModel.address.toString().toUpperCase()) {
-        toErrorMessage = S.current.g_key_t_50;
-        setState(() {});
-        return null;
-      } else {
-        /*if(widget.coinModel.coin['blockchainType']==BlockchainType.Tezos.name){
-          checkAccount_XTZ(addr);
-        }*/
-        toErrorMessage = "";
-        setState(() {});
-        return addr;
-      }
-    } else {
+    if (!valid ||
+        addr.toUpperCase() ==
+            widget.coinModel.address.toString().toUpperCase()) {
       toErrorMessage = S.current.g_key_t_50;
       setState(() {});
       return null;
     }
+
+    toErrorMessage = "";
+    setState(() {});
+    return addr;
   }
 
   Future<void> sendTransaction() async {
@@ -215,58 +183,46 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
         await toAddressCheck(toTextEditingController.text.trim());
     if (!mounted) return;
     if (toAddr == null) {
-      setState(() {
-        load = Load.finish;
-      });
+      _finishLoading();
       return;
     }
 
-    final TransationRecordModel trModel = TransationRecordModel();
-    trModel.address = widget.coinModel.address.toString();
-    trModel.from1 = widget.coinModel.address.toString();
-    trModel.to1 = toAddr; // toTextEditingController.text;
-    trModel.addrType = widget.coinModel.addrType;
-    trModel.coin = widget.coinModel.coin;
-    trModel.coinMiniName = widget.coinModel.coin['coinType'];
-    trModel.walletIndex = ref.read(wapBridgeProvider).walletIndex;
-    trModel.contract = widget.coinModel.isTest
-        ? widget.coinModel.coin['contract_test']
-        : widget.coinModel.coin['contract'];
-    trModel.isTest = widget.coinModel.isTest ? 1 : 0;
-    trModel.gasPrice = totalGasPrice;
-    trModel.gas = gas.toInt();
-    trModel.gasPriceValue = gasPrice;
-    trModel.price = transferValue;
-    trModel.returnSignHash = true;
+    final TransationRecordModel trModel = TransationRecordModel()
+      ..address = widget.coinModel.address.toString()
+      ..from1 = widget.coinModel.address.toString()
+      ..to1 = toAddr
+      ..addrType = widget.coinModel.addrType
+      ..coin = widget.coinModel.coin
+      ..coinMiniName = widget.coinModel.coin['coinType']
+      ..walletIndex = ref.read(wapBridgeProvider).walletIndex
+      ..contract = widget.coinModel.isTest
+          ? widget.coinModel.coin['contract_test']
+          : widget.coinModel.coin['contract']
+      ..isTest = widget.coinModel.isTest ? 1 : 0
+      ..gasPrice = totalGasPrice
+      ..gas = gas.toInt()
+      ..gasPriceValue = gasPrice
+      ..price = transferValue
+      ..returnSignHash = true;
+
     final String txHash = await signTx(trModel);
     await getGasPrice(txHash);
     if (!mounted) return;
-    if (errorMessage != "") {
-      setState(() {
-        load = Load.finish;
-      });
-      return;
-    }
-    BigInt uBalance = widget.coinModel.balance;
-    if (widget.coinModel.coin['isContract']) {
-      uBalance = chainModel?.balance ?? BigInt.zero;
-    }
-    if (totalGasPrice > uBalance) {
-      setState(() {
-        load = Load.finish;
-      });
-      return;
-    }
-    if (widget.coinModel.balance == BigInt.zero) {
-      setState(() {
-        load = Load.finish;
-      });
+    if (errorMessage.isNotEmpty) {
+      _finishLoading();
       return;
     }
 
-    final String feeUnit = chainModel == null
-        ? widget.coinModel.coin['unit'].toString().toUpperCase()
-        : chainModel!.coin['unit'].toString().toUpperCase();
+    final BigInt uBalance = widget.coinModel.coin['isContract']
+        ? (chainModel?.balance ?? BigInt.zero)
+        : widget.coinModel.balance;
+    if (totalGasPrice > uBalance || widget.coinModel.balance == BigInt.zero) {
+      _finishLoading();
+      return;
+    }
+
+    final String feeUnit =
+        (chainModel ?? widget.coinModel).coin['unit'].toString().toUpperCase();
     final bool check = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -278,16 +234,15 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
     if (check) {
       signTx(trModel);
     } else {
-      setState(() {
-        load = Load.finish;
-      });
+      _finishLoading();
     }
   }
 
+  void _finishLoading() => setState(() => load = Load.finish);
+
   Future<dynamic> signTx(TransationRecordModel trModel) async {
     try {
-      final TransferApi transferApi = TransferApi();
-      final MessageModel mm = await transferApi.transferWallet(
+      final MessageModel mm = await TransferApi().transferWallet(
         trModel: trModel,
         privateKey: widget.coinModel.privateKey,
         pathIndex: widget.coinModel.pathIndex,
@@ -298,7 +253,7 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
           return "";
         }
       } else {
-        if (trModel.returnSignHash == false) {
+        if (!trModel.returnSignHash) {
           trModel.txHash = mm.data;
           final AppDatabase appDatabase = AppDatabase();
           trModel.trId = await appDatabase.insertTransationRecord(trModel);
@@ -339,23 +294,18 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
 
   Future<void> maxTag() async {
     if (gasLimitLoad == Load.loading) return;
+    valueTextEditingController.text = widget.coinModel.balanceStringAll();
     if (widget.coinModel.coin['isContract']) {
-      valueTextEditingController.text = widget.coinModel.balanceStringAll();
       transferValue = widget.coinModel.balance;
-      // estimateGas_eth_local();
     } else {
-      valueTextEditingController.text = widget.coinModel.balanceStringAll();
-      const bool rOK = true; // await estimateGas_eth_local();
-      if (rOK) {
-        transferValue = widget.coinModel.balance - totalGasPrice;
-        valueTextEditingController.text = _regular.formartNum(
-          toEther(transferValue.toString(), widget.coinModel.coin['decimals'])
-              .toDouble(),
-          14,
-          isCrop: true,
-          isFill0: false,
-        );
-      }
+      transferValue = widget.coinModel.balance - totalGasPrice;
+      valueTextEditingController.text = _regular.formartNum(
+        toEther(transferValue.toString(), widget.coinModel.coin['decimals'])
+            .toDouble(),
+        14,
+        isCrop: true,
+        isFill0: false,
+      );
     }
     amountErrorMessage = "";
     setState(() {});
@@ -367,63 +317,40 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
   }
 
   void faceMatchTypeWidget() {
+    final textColor =
+        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final textStyle = TextStyle(
+      fontSize: ScreenUtil().setWidth(32.0),
+      color: textColor,
+    );
+
+    Widget faceOption(int type, String label) {
+      return InkWell(
+        onTap: () async {
+          final String? address = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => FaceMatch(type)),
+          );
+          if (!mounted) return;
+          if (address != null) {
+            toTextEditingController.text = address;
+            toAddressCheck(address);
+          }
+          Navigator.pop(context);
+        },
+        child: SizedBox(
+          height: ScreenUtil().setWidth(88.0),
+          width: double.infinity,
+          child: Text(label, style: textStyle, textAlign: TextAlign.center),
+        ),
+      );
+    }
+
     final Widget child = Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        InkWell(
-          onTap: () async {
-            final String? address = await Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => FaceMatch(1)),
-            );
-            if (!mounted) return;
-            if (address != null) {
-              toTextEditingController.text = address;
-              toAddressCheck(address);
-            }
-            Navigator.pop(context);
-          },
-          child: SizedBox(
-            height: ScreenUtil().setWidth(88.0),
-            width: double.infinity,
-            child: Text(
-              S.of(context).photograph,
-              style: TextStyle(
-                fontSize: ScreenUtil().setWidth(32.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-        InkWell(
-          onTap: () async {
-            final String? address = await Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => FaceMatch(2)),
-            );
-            if (!mounted) return;
-            if (address != null) {
-              toTextEditingController.text = address;
-              toAddressCheck(address);
-            }
-            Navigator.pop(context);
-          },
-          child: SizedBox(
-            height: ScreenUtil().setWidth(88.0),
-            width: double.infinity,
-            child: Text(
-              S.of(context).g_key_nft_16,
-              style: TextStyle(
-                fontSize: ScreenUtil().setWidth(32.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
+        faceOption(1, S.of(context).photograph),
+        faceOption(2, S.of(context).g_key_nft_16),
       ],
     );
     sheetBottom(context, S.of(context).g_face_match_key1, child);

@@ -69,13 +69,9 @@ class UrCodec {
   ];
 
   /// Build reverse lookup map (word → byte value)
-  static final Map<String, int> _wordToIndex = () {
-    final m = <String, int>{};
-    for (var i = 0; i < _wordList.length; i++) {
-      m[_wordList[i]] = i;
-    }
-    return m;
-  }();
+  static final Map<String, int> _wordToIndex = {
+    for (var i = 0; i < _wordList.length; i++) _wordList[i]: i,
+  };
 
   // ==================== CRC-32 ====================
 
@@ -312,34 +308,29 @@ class EthSignRequest {
     }).toList();
   }
 
+  /// Helper to create a CBOR int key
+  static CborIntValue _key(int k) => CborIntValue(k);
+
   /// Encode to CBOR bytes
   Uint8List toCbor() {
     final map = <CborObject, CborObject>{
-      CborIntValue(EthSignRequestKeys.requestId): CborBytesValue(requestId),
-      CborIntValue(EthSignRequestKeys.signData): CborBytesValue(signData),
-      CborIntValue(EthSignRequestKeys.dataType): CborIntValue(dataType.value),
+      _key(EthSignRequestKeys.requestId): CborBytesValue(requestId),
+      _key(EthSignRequestKeys.signData): CborBytesValue(signData),
+      _key(EthSignRequestKeys.dataType): CborIntValue(dataType.value),
+      if (chainId != null)
+        _key(EthSignRequestKeys.chainId): CborIntValue(chainId!),
+      _key(EthSignRequestKeys.derivationPath): CborListValue.definite(
+        derivationPath.map((i) => CborIntValue(i) as CborObject).toList(),
+      ),
+      if (address case final addr?)
+        _key(EthSignRequestKeys.address): CborBytesValue(
+          BytesUtils.fromHexString(
+            addr.startsWith('0x') ? addr.substring(2) : addr,
+          ),
+        ),
+      if (origin case final org?)
+        _key(EthSignRequestKeys.origin): CborStringValue(org),
     };
-
-    if (chainId != null) {
-      map[CborIntValue(EthSignRequestKeys.chainId)] = CborIntValue(chainId!);
-    }
-
-    // Derivation path as CBOR array
-    map[CborIntValue(EthSignRequestKeys.derivationPath)] =
-        CborListValue.definite(
-          derivationPath.map((i) => CborIntValue(i) as CborObject).toList(),
-        );
-
-    if (address != null) {
-      map[CborIntValue(EthSignRequestKeys.address)] =
-          CborBytesValue(BytesUtils.fromHexString(
-        address!.startsWith('0x') ? address!.substring(2) : address!,
-      ));
-    }
-
-    if (origin != null) {
-      map[CborIntValue(EthSignRequestKeys.origin)] = CborStringValue(origin!);
-    }
 
     final cborMap = CborMapValue.definite(map);
     return Uint8List.fromList(cborMap.encode());

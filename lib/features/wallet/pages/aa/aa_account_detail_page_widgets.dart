@@ -9,17 +9,30 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
   // Provided by _AAAccountDetailPageState
   void copyAddress();
 
+  // ─── Theme helpers ──────────────────────────────────────────────────
+
+  Color _themeColor(String key) =>
+      AppThemeUtils.getColorByKey(context, key);
+
+  Color get _mainText => _themeColor(AppThemeKeys.mainTextColor.name);
+  Color get _subText => _themeColor(AppThemeKeys.itemSubtitleTextColor.name);
+  Color get _itemBg => _themeColor(AppThemeKeys.itemBgColor.name);
+
+  BoxDecoration _sectionDecoration() => BoxDecoration(
+        color: _itemBg,
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+      );
+
   // ─── Account Card ─────────────────────────────────────────────────────
 
   Widget buildAccountCard() {
+    final typeColor = _getAccountTypeColor();
+
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            _getAccountTypeColor().withAlpha(30),
-            _getAccountTypeColor().withAlpha(10),
-          ],
+          colors: [typeColor.withAlpha(30), typeColor.withAlpha(10)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -40,10 +53,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(32),
                         fontWeight: FontWeight.bold,
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.mainTextColor.name,
-                        ),
+                        color: _mainText,
                       ),
                     ),
                     SizedBox(height: ScreenUtil().setWidth(4)),
@@ -51,10 +61,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                       widget.account.type.displayName,
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(24),
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.itemSubtitleTextColor.name,
-                        ),
+                        color: _subText,
                       ),
                     ),
                   ],
@@ -69,11 +76,10 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
           Container(
             padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.backGroundColor.name,
-              ).withAlpha(100),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+              color: _themeColor(AppThemeKeys.backGroundColor.name)
+                  .withAlpha(100),
+              borderRadius:
+                  BorderRadius.circular(ScreenUtil().setWidth(12)),
             ),
             child: Row(
               children: [
@@ -85,10 +91,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                         S.of(context).g_key_155,
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(20),
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemSubtitleTextColor.name,
-                          ),
+                          color: _subText,
                         ),
                       ),
                       SizedBox(height: ScreenUtil().setWidth(4)),
@@ -97,10 +100,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(22),
                           fontFamily: 'monospace',
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
+                          color: _mainText,
                         ),
                       ),
                     ],
@@ -111,10 +111,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                   icon: Icon(
                     Icons.copy,
                     size: ScreenUtil().setWidth(24),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainBlueColor.name,
-                    ),
+                    color: _themeColor(AppThemeKeys.mainBlueColor.name),
                   ),
                 ),
               ],
@@ -126,18 +123,20 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
   }
 
   Widget _buildAccountIcon() {
+    final typeColor = _getAccountTypeColor();
+
     return Container(
       width: ScreenUtil().setWidth(64),
       height: ScreenUtil().setWidth(64),
       decoration: BoxDecoration(
-        color: _getAccountTypeColor().withAlpha(30),
+        color: typeColor.withAlpha(30),
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(18)),
       ),
       child: Center(
         child: Icon(
           _getAccountTypeIcon(),
           size: ScreenUtil().setWidth(36),
-          color: _getAccountTypeColor(),
+          color: typeColor,
         ),
       ),
     );
@@ -192,6 +191,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
     bool isLoading = false,
   }) {
     final isDisabled = onTap == null && !isLoading;
+    final effectiveColor = isDisabled ? Colors.grey : color;
 
     return GestureDetector(
       onTap: onTap,
@@ -200,12 +200,10 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
           vertical: ScreenUtil().setWidth(16),
         ),
         decoration: BoxDecoration(
-          color: isDisabled
-              ? Colors.grey.withAlpha(20)
-              : color.withAlpha(20),
+          color: effectiveColor.withAlpha(20),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
           border: Border.all(
-            color: isDisabled ? Colors.grey.withAlpha(30) : color.withAlpha(40),
+            color: effectiveColor.withAlpha(isDisabled ? 30 : 40),
           ),
         ),
         child: Column(
@@ -223,7 +221,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
               Icon(
                 icon,
                 size: ScreenUtil().setWidth(28),
-                color: isDisabled ? Colors.grey : color,
+                color: effectiveColor,
               ),
             SizedBox(height: ScreenUtil().setWidth(6)),
             Text(
@@ -231,12 +229,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(22),
                 fontWeight: FontWeight.w500,
-                color: isDisabled
-                    ? Colors.grey
-                    : AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor.name,
-                      ),
+                color: isDisabled ? Colors.grey : _mainText,
               ),
             ),
           ],
@@ -250,10 +243,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
   Widget buildDetailsSection() {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-      decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-      ),
+      decoration: _sectionDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -262,10 +252,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(28),
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: _mainText,
             ),
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
@@ -293,10 +280,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
             label,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(24),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: _subText,
             ),
           ),
           Text(
@@ -304,10 +288,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
             style: TextStyle(
               fontSize: ScreenUtil().setSp(24),
               fontWeight: FontWeight.w500,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: _mainText,
             ),
           ),
         ],
@@ -320,10 +301,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
   Widget buildTransactionHistory() {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-      decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-      ),
+      decoration: _sectionDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -335,10 +313,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(28),
                   fontWeight: FontWeight.w600,
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
+                  color: _mainText,
                 ),
               ),
               TextButton(
@@ -359,20 +334,14 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                   Icon(
                     Icons.history,
                     size: ScreenUtil().setWidth(48),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ).withAlpha(100),
+                    color: _subText.withAlpha(100),
                   ),
                   SizedBox(height: ScreenUtil().setWidth(12)),
                   Text(
                     S.of(context).g_key_132,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(24),
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ),
+                      color: _subText,
                     ),
                   ),
                 ],
@@ -387,37 +356,25 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
   // ─── Helpers ──────────────────────────────────────────────────────────
 
   Color _getAccountTypeColor() {
-    switch (widget.account.type) {
-      case SmartAccountType.simpleAccount:
-        return const Color(0xFF5E97F6);
-      case SmartAccountType.simple7702Account:
-        return const Color(0xFF9333EA);
-      case SmartAccountType.safe:
-        return const Color(0xFF12A87B);
-      case SmartAccountType.kernel:
-        return const Color(0xFF8B5CF6);
-      case SmartAccountType.biconomy:
-        return const Color(0xFFFF6B4A);
-      case SmartAccountType.custom:
-        return const Color(0xFF6B7280);
-    }
+    return switch (widget.account.type) {
+      SmartAccountType.simpleAccount => const Color(0xFF5E97F6),
+      SmartAccountType.simple7702Account => const Color(0xFF9333EA),
+      SmartAccountType.safe => const Color(0xFF12A87B),
+      SmartAccountType.kernel => const Color(0xFF8B5CF6),
+      SmartAccountType.biconomy => const Color(0xFFFF6B4A),
+      SmartAccountType.custom => const Color(0xFF6B7280),
+    };
   }
 
   IconData _getAccountTypeIcon() {
-    switch (widget.account.type) {
-      case SmartAccountType.simpleAccount:
-        return Icons.account_balance_wallet;
-      case SmartAccountType.simple7702Account:
-        return Icons.flash_on;
-      case SmartAccountType.safe:
-        return Icons.security;
-      case SmartAccountType.kernel:
-        return Icons.memory;
-      case SmartAccountType.biconomy:
-        return Icons.auto_awesome;
-      case SmartAccountType.custom:
-        return Icons.code;
-    }
+    return switch (widget.account.type) {
+      SmartAccountType.simpleAccount => Icons.account_balance_wallet,
+      SmartAccountType.simple7702Account => Icons.flash_on,
+      SmartAccountType.safe => Icons.security,
+      SmartAccountType.kernel => Icons.memory,
+      SmartAccountType.biconomy => Icons.auto_awesome,
+      SmartAccountType.custom => Icons.code,
+    };
   }
 
   String _shortenAddress(String address) {

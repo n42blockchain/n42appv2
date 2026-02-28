@@ -21,6 +21,11 @@ Widget buildCoinInfoHeader(
   required VoidCallback onAlertTap,
 }) {
   final alertActive = alertConfig != null && alertConfig.enabled;
+  final textColor = AppThemeUtils.getColorByKey(
+      context, AppThemeKeys.mainTextColor.name);
+  final iconSize = ScreenUtil().setWidth(44);
+  final touchSize = ScreenUtil().setWidth(80);
+
   return SizedBox(
     height: ScreenUtil().setWidth(100),
     child: Padding(
@@ -30,19 +35,14 @@ Widget buildCoinInfoHeader(
           InkWell(
             onTap: onBack,
             child: SizedBox(
-              width: ScreenUtil().setWidth(80),
-              height: ScreenUtil().setWidth(80),
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                size: ScreenUtil().setWidth(44),
-              ),
+              width: touchSize,
+              height: touchSize,
+              child: Icon(Icons.arrow_back_ios, color: textColor, size: iconSize),
             ),
           ),
           SizedBox(
-            width: ScreenUtil().setWidth(80),
-            height: ScreenUtil().setWidth(80),
+            width: touchSize,
+            height: touchSize,
             child: Padding(
               padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
               child: ImageNetWork(
@@ -54,8 +54,7 @@ Widget buildCoinInfoHeader(
           Text(
             (coin['coin'] ?? '').toString().toUpperCase(),
             style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: textColor,
               fontSize: ScreenUtil().setSp(36),
               fontWeight: FontWeight.w600,
             ),
@@ -73,7 +72,6 @@ Widget buildCoinInfoHeader(
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          // Price alert bell
           InkWell(
             onTap: onAlertTap,
             borderRadius: BorderRadius.circular(20),
@@ -86,9 +84,8 @@ Widget buildCoinInfoHeader(
                 color: alertActive
                     ? AppThemeUtils.getColorByKey(
                         context, AppThemeKeys.mainBlueColor.name)
-                    : AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                size: ScreenUtil().setWidth(44),
+                    : textColor,
+                size: iconSize,
               ),
             ),
           ),
@@ -383,28 +380,31 @@ Widget buildAboutSection(
   final desc    = (descMap is Map ? descMap[lang]?.toString() : null) ?? '';
   if (desc.isEmpty) return const SizedBox.shrink();
 
+  final s = S.of(context);
+  final hPad = ScreenUtil().setWidth(30);
+  final radius = ScreenUtil().setWidth(16);
+
   return Container(
     margin: EdgeInsets.only(
       top: ScreenUtil().setWidth(24),
-      left: ScreenUtil().setWidth(30),
-      right: ScreenUtil().setWidth(30),
+      left: hPad,
+      right: hPad,
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        coinInfoSectionTitle(context, S.of(context).g_key_m_6),
+        coinInfoSectionTitle(context, s.g_key_m_6),
         SizedBox(height: ScreenUtil().setWidth(16)),
         Container(
           padding: EdgeInsets.only(
-            left: ScreenUtil().setWidth(30),
-            right: ScreenUtil().setWidth(30),
+            left: hPad,
+            right: hPad,
             top: ScreenUtil().setWidth(24),
           ),
           decoration: BoxDecoration(
             color: AppThemeUtils.getColorByKey(
                 context, AppThemeKeys.itemBgColor.name),
-            borderRadius:
-                BorderRadius.circular(ScreenUtil().setWidth(16)),
+            borderRadius: BorderRadius.circular(radius),
           ),
           child: Column(
             children: [
@@ -421,17 +421,16 @@ Widget buildAboutSection(
               Align(
                 alignment: Alignment.centerRight,
                 child: InkWell(
-                  onTap: () => aboutShowDialog(
-                      context, desc, S.of(context).g_key_m_6),
+                  onTap: () => aboutShowDialog(context, desc, s.g_key_m_6),
                   child: Container(
                     padding: EdgeInsets.symmetric(
                       vertical: ScreenUtil().setWidth(15),
-                      horizontal: ScreenUtil().setWidth(30),
+                      horizontal: hPad,
                     ),
                     margin: EdgeInsets.symmetric(
                         vertical: ScreenUtil().setWidth(10)),
                     child: Text(
-                      S.of(context).g_key_m_7,
+                      s.g_key_m_7,
                       style: TextStyle(
                         color: AppThemeUtils.getColorByKey(context,
                             AppThemeKeys.mainButtonBgColor.name),

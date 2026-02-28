@@ -216,15 +216,15 @@ class _EmailSendButton extends StatelessWidget {
         : AppThemeUtils.getColorByKey(
             context, AppThemeKeys.mainButtonBgColor.name);
 
-    Widget? prefixWidget;
+    final btnTextColor = AppThemeUtils.getColorByKey(
+        context, AppThemeKeys.mainButtonTextColor.name);
+
+    final Widget? prefixWidget;
     if (emailLoad == Load.loading) {
       prefixWidget = SizedBox(
         height: ScreenUtil().setWidth(30.0),
         width: ScreenUtil().setWidth(30.0),
-        child: CircularProgressIndicator(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainButtonTextColor.name),
-        ),
+        child: CircularProgressIndicator(color: btnTextColor),
       );
     } else if (emailSendWait) {
       prefixWidget = Padding(
@@ -233,11 +233,12 @@ class _EmailSendButton extends StatelessWidget {
           '($emailSendWaitNum)',
           style: TextStyle(
             fontSize: ScreenUtil().setSp(24.0),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainButtonTextColor.name),
+            color: btnTextColor,
           ),
         ),
       );
+    } else {
+      prefixWidget = null;
     }
 
     return InkWell(
@@ -260,8 +261,7 @@ class _EmailSendButton extends StatelessWidget {
               S.of(context).Verification,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(24.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainButtonTextColor.name),
+                color: btnTextColor,
               ),
             ),
           ],
@@ -403,12 +403,11 @@ class _FaceSection extends StatelessWidget {
   }
 
   Widget _buildFaceRow(BuildContext context) {
-    String statusText = '';
-    if (faceCheck == 1) {
-      statusText = S.of(context).g_lock_key5;
-    } else if (faceCheck == 2) {
-      statusText = S.of(context).g_lock_key6;
-    }
+    final statusText = switch (faceCheck) {
+      1 => S.of(context).g_lock_key5,
+      2 => S.of(context).g_lock_key6,
+      _ => '',
+    };
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(32.0)),

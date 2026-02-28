@@ -8,6 +8,26 @@ part of 'airdrop_detail_page.dart';
 /// Widgets mixin: section builder methods for [AirdropDetailPage].
 mixin AirdropDetailWidgetsMixin
     on State<AirdropDetailPage>, AirdropDetailLogicMixin, AirdropDetailActionsMixin {
+  // ─── Theme helpers ──────────────────────────────────────────────────
+
+  Color _themeColor(String key) =>
+      AppThemeUtils.getColorByKey(context, key);
+
+  Color get _mainText => _themeColor(AppThemeKeys.mainTextColor.name);
+  Color get _subText => _themeColor(AppThemeKeys.itemSubtitleTextColor.name);
+  Color get _blueAccent => _themeColor(AppThemeKeys.mainBlueColor.name);
+
+  BoxDecoration _sectionDecoration() => BoxDecoration(
+        color: _themeColor(AppThemeKeys.itemBgColor.name),
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+      );
+
+  TextStyle _sectionTitleStyle() => TextStyle(
+        fontSize: ScreenUtil().setSp(28),
+        fontWeight: FontWeight.bold,
+        color: _mainText,
+      );
+
   // ---------------------------------------------------------------------------
   // Header
   // ---------------------------------------------------------------------------
@@ -24,7 +44,7 @@ mixin AirdropDetailWidgetsMixin
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(36),
                   fontWeight: FontWeight.bold,
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                  color: _mainText,
                 ),
               ),
             ),
@@ -52,10 +72,7 @@ mixin AirdropDetailWidgetsMixin
                   airdrop.tokenSymbol!,
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(22),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
+                    color: _subText,
                   ),
                 ),
               ),
@@ -73,10 +90,7 @@ mixin AirdropDetailWidgetsMixin
   Widget buildValueCard(BuildContext context, AirdropModel airdrop) {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-      decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-      ),
+      decoration: _sectionDecoration(),
       child: Row(
         children: [
           Expanded(
@@ -87,10 +101,7 @@ mixin AirdropDetailWidgetsMixin
                   'Estimated Value',
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
+                    color: _subText,
                   ),
                 ),
                 SizedBox(height: ScreenUtil().setWidth(4)),
@@ -116,10 +127,7 @@ mixin AirdropDetailWidgetsMixin
                     'Amount',
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(24),
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ),
+                      color: _subText,
                     ),
                   ),
                   SizedBox(height: ScreenUtil().setWidth(4)),
@@ -128,10 +136,7 @@ mixin AirdropDetailWidgetsMixin
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(32),
                       fontWeight: FontWeight.bold,
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor.name,
-                      ),
+                      color: _mainText,
                     ),
                   ),
                 ],
@@ -149,10 +154,7 @@ mixin AirdropDetailWidgetsMixin
   Widget buildTimeInfo(BuildContext context, AirdropModel airdrop) {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-      decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-      ),
+      decoration: _sectionDecoration(),
       child: Column(
         children: [
           if (airdrop.startDate != null)
@@ -167,42 +169,46 @@ mixin AirdropDetailWidgetsMixin
               isUrgent: airdrop.isExpiringSoon,
             ),
             if (airdrop.daysLeft != null && airdrop.daysLeft! >= 0)
-              Padding(
-                padding: EdgeInsets.only(top: ScreenUtil().setWidth(8)),
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(12),
-                    vertical: ScreenUtil().setWidth(8),
-                  ),
-                  decoration: BoxDecoration(
-                    color: airdrop.isExpiringSoon
-                        ? Colors.orange.withValues(alpha: 20 / 255)
-                        : Colors.green.withValues(alpha: 20 / 255),
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.access_time,
-                        color: airdrop.isExpiringSoon ? Colors.orange : Colors.green,
-                        size: ScreenUtil().setWidth(24),
-                      ),
-                      SizedBox(width: ScreenUtil().setWidth(8)),
-                      Text(
-                        '${airdrop.daysLeft} days remaining',
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(24),
-                          color: airdrop.isExpiringSoon ? Colors.orange : Colors.green,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              _buildDaysRemainingBadge(airdrop),
           ],
         ],
+      ),
+    );
+  }
+
+  Widget _buildDaysRemainingBadge(AirdropModel airdrop) {
+    final urgencyColor = airdrop.isExpiringSoon ? Colors.orange : Colors.green;
+
+    return Padding(
+      padding: EdgeInsets.only(top: ScreenUtil().setWidth(8)),
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtil().setWidth(12),
+          vertical: ScreenUtil().setWidth(8),
+        ),
+        decoration: BoxDecoration(
+          color: urgencyColor.withValues(alpha: 20 / 255),
+          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.access_time,
+              color: urgencyColor,
+              size: ScreenUtil().setWidth(24),
+            ),
+            SizedBox(width: ScreenUtil().setWidth(8)),
+            Text(
+              '${airdrop.daysLeft} days remaining',
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(24),
+                color: urgencyColor,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -218,10 +224,7 @@ mixin AirdropDetailWidgetsMixin
             label,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: _subText,
             ),
           ),
           Text(
@@ -229,9 +232,7 @@ mixin AirdropDetailWidgetsMixin
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
               fontWeight: FontWeight.w600,
-              color: isUrgent
-                  ? Colors.orange
-                  : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              color: isUrgent ? Colors.orange : _mainText,
             ),
           ),
         ],
@@ -246,30 +247,17 @@ mixin AirdropDetailWidgetsMixin
   Widget buildDescription(BuildContext context, AirdropModel airdrop) {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-      decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-      ),
+      decoration: _sectionDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'About',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-            ),
-          ),
+          Text('About', style: _sectionTitleStyle()),
           SizedBox(height: ScreenUtil().setWidth(12)),
           Text(
             airdrop.description,
             style: TextStyle(
               fontSize: ScreenUtil().setSp(26),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: _subText,
               height: 1.5,
             ),
           ),
@@ -287,21 +275,11 @@ mixin AirdropDetailWidgetsMixin
 
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-      decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-      ),
+      decoration: _sectionDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Requirements',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-            ),
-          ),
+          Text('Requirements', style: _sectionTitleStyle()),
           SizedBox(height: ScreenUtil().setWidth(12)),
           ...airdrop.requirements.map((req) => _buildRequirementItem(context, req)),
         ],
@@ -310,19 +288,11 @@ mixin AirdropDetailWidgetsMixin
   }
 
   Widget _buildRequirementItem(BuildContext context, AirdropRequirement req) {
-    Color statusColor;
-    IconData statusIcon;
-
-    if (req.isMet == null) {
-      statusColor = Colors.grey;
-      statusIcon = Icons.help_outline;
-    } else if (req.isMet!) {
-      statusColor = Colors.green;
-      statusIcon = Icons.check_circle;
-    } else {
-      statusColor = Colors.red;
-      statusIcon = Icons.cancel;
-    }
+    final (Color statusColor, IconData statusIcon) = switch (req.isMet) {
+      null => (Colors.grey, Icons.help_outline),
+      true => (Colors.green, Icons.check_circle),
+      false => (Colors.red, Icons.cancel),
+    };
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8)),
@@ -335,10 +305,7 @@ mixin AirdropDetailWidgetsMixin
               req.description,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(26),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: _mainText,
               ),
             ),
           ),
@@ -354,21 +321,11 @@ mixin AirdropDetailWidgetsMixin
   Widget buildSocialLinks(BuildContext context, AirdropModel airdrop) {
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-      decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-      ),
+      decoration: _sectionDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Links',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-            ),
-          ),
+          Text('Links', style: _sectionTitleStyle()),
           SizedBox(height: ScreenUtil().setWidth(12)),
           Wrap(
             spacing: ScreenUtil().setWidth(12),
@@ -400,8 +357,7 @@ mixin AirdropDetailWidgetsMixin
           vertical: ScreenUtil().setWidth(10),
         ),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-              .withValues(alpha: 20 / 255),
+          color: _blueAccent.withValues(alpha: 20 / 255),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
         ),
         child: Row(
@@ -410,14 +366,14 @@ mixin AirdropDetailWidgetsMixin
             Icon(
               icon,
               size: ScreenUtil().setWidth(24),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+              color: _blueAccent,
             ),
             SizedBox(width: ScreenUtil().setWidth(8)),
             Text(
               label,
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(24),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                color: _blueAccent,
                 fontWeight: FontWeight.w500,
               ),
             ),

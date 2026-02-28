@@ -389,8 +389,12 @@ class BrowserProvider extends ChangeNotifier {
       final method = data['method'] as String;
       final params = (data['params'] as List<dynamic>?) ?? [];
 
-      // Track permission usage for this DApp origin (fire-and-forget)
-      final origin = Uri.tryParse(_currentUrl)?.host ?? '';
+      // Track permission usage for the WebView that actually emitted the request.
+      final idx = _indexOfController(controller);
+      final tabUrl = idx >= 0
+          ? wInfoList[idx]['openUrl'] as String? ?? ''
+          : await controller.currentUrl() ?? '';
+      final origin = Uri.tryParse(tabUrl)?.host ?? '';
       unawaited(DAppPermissionsTracker.record(origin, method));
 
       try {

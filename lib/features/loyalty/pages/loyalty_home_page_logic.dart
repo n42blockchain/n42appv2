@@ -50,27 +50,10 @@ mixin _LogicMixin on State<LoyaltyHomePage> {
         minChildSize: 0.4,
         maxChildSize: 0.9,
         builder: (_, scrollController) => Container(
-          decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(ScreenUtil().setWidth(20)),
-            ),
-          ),
+          decoration: _sheetDecoration(),
           child: Column(
             children: [
-              // Drag handle
-              Padding(
-                padding: EdgeInsets.only(top: ScreenUtil().setWidth(12)),
-                child: Container(
-                  width: ScreenUtil().setWidth(40),
-                  height: ScreenUtil().setWidth(4),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withValues(alpha: 0.4),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-
+              _dragHandle(),
               Expanded(
                 child: ListView(
                   controller: scrollController,
@@ -272,26 +255,10 @@ mixin _LogicMixin on State<LoyaltyHomePage> {
           minChildSize: 0.5,
           maxChildSize: 0.95,
           builder: (_, scrollController) => Container(
-            decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(ScreenUtil().setWidth(20)),
-              ),
-            ),
+            decoration: _sheetDecoration(),
             child: Column(
               children: [
-                // Drag handle
-                Padding(
-                  padding: EdgeInsets.only(top: ScreenUtil().setWidth(12)),
-                  child: Container(
-                    width: ScreenUtil().setWidth(40),
-                    height: ScreenUtil().setWidth(4),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withValues(alpha: 0.4),
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                ),
+                _dragHandle(),
 
                 // Title
                 Padding(
@@ -390,37 +357,44 @@ mixin _LogicMixin on State<LoyaltyHomePage> {
     );
   }
 
+  // ── Shared sheet helpers ────────────────────────────────────────────────
+
+  BoxDecoration _sheetDecoration() => BoxDecoration(
+        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(ScreenUtil().setWidth(20)),
+        ),
+      );
+
+  Widget _dragHandle() => Padding(
+        padding: EdgeInsets.only(top: ScreenUtil().setWidth(12)),
+        child: Container(
+          width: ScreenUtil().setWidth(40),
+          height: ScreenUtil().setWidth(4),
+          decoration: BoxDecoration(
+            color: Colors.grey.withValues(alpha: 0.4),
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+      );
+
   // ── Utility methods ─────────────────────────────────────────────────────
 
-  String _getNextTierName(LoyaltyTier currentTier) {
-    switch (currentTier) {
-      case LoyaltyTier.bronze:
-        return 'Silver';
-      case LoyaltyTier.silver:
-        return 'Gold';
-      case LoyaltyTier.gold:
-        return 'Platinum';
-      case LoyaltyTier.platinum:
-        return 'Diamond';
-      case LoyaltyTier.diamond:
-        return 'Max Level';
-    }
-  }
+  String _getNextTierName(LoyaltyTier currentTier) => switch (currentTier) {
+        LoyaltyTier.bronze => 'Silver',
+        LoyaltyTier.silver => 'Gold',
+        LoyaltyTier.gold => 'Platinum',
+        LoyaltyTier.platinum => 'Diamond',
+        LoyaltyTier.diamond => 'Max Level',
+      };
 
-  Color _tierColor(LoyaltyTier tier) {
-    switch (tier) {
-      case LoyaltyTier.bronze:
-        return const Color(0xFFCD7F32);
-      case LoyaltyTier.silver:
-        return const Color(0xFFC0C0C0);
-      case LoyaltyTier.gold:
-        return const Color(0xFFFFD700);
-      case LoyaltyTier.platinum:
-        return const Color(0xFF8B8FA8);
-      case LoyaltyTier.diamond:
-        return const Color(0xFF6DD5FA);
-    }
-  }
+  Color _tierColor(LoyaltyTier tier) => switch (tier) {
+        LoyaltyTier.bronze => const Color(0xFFCD7F32),
+        LoyaltyTier.silver => const Color(0xFFC0C0C0),
+        LoyaltyTier.gold => const Color(0xFFFFD700),
+        LoyaltyTier.platinum => const Color(0xFF8B8FA8),
+        LoyaltyTier.diamond => const Color(0xFF6DD5FA),
+      };
 
   String _formatPts(int pts) {
     if (pts >= 1000) return '${pts ~/ 1000}K';
