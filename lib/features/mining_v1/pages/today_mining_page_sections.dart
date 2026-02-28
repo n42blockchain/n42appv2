@@ -8,7 +8,7 @@ part of 'today_mining_page.dart';
 mixin _SectionsMixin on _WidgetsMixin {
   Widget backgroundMiningWidget(MiningProvider mpValue) {
     if (mpValue.depositsEnable == false) {
-      return SizedBox();
+      return const SizedBox.shrink();
     }
     return Container(
       padding: EdgeInsets.symmetric(
@@ -87,9 +87,7 @@ mixin _SectionsMixin on _WidgetsMixin {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(
-              height: ScreenUtil().setWidth(40),
-            ),
+            SizedBox(height: ScreenUtil().setWidth(40)),
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
@@ -189,7 +187,6 @@ mixin _SectionsMixin on _WidgetsMixin {
                                         padding: EdgeInsets.symmetric(
                                             horizontal:
                                                 ScreenUtil().setWidth(20)),
-                                        // //{blockNumber: 0x235, timestamp: 1671526039, reward: 0x1}
                                         child: TaskItem(
                                           taskId:
                                               "${BigInt.tryParse(item["blockNumber"])}",

@@ -113,23 +113,15 @@ class MiningProvider extends ChangeNotifier {
   Future<bool> checkAddressIsDepositAst(String address) async {
     try {
       final depositsOfResponse = await MiningApi.depositsOf(address);
-      debugPrint("checkAddressIsDepositAst data:$depositsOfResponse");
       if (depositsOfResponse != null && depositsOfResponse is List) {
-        final astNum = depositsOfResponse[0];
-        if (astNum != BigInt.zero) {
-          return true;
-        }
+        return depositsOfResponse[0] != BigInt.zero;
       }
-    } catch (err) {
+    } catch (_) {
       return false;
     }
     return false;
   }
 
-
-
-  /// 抱团挖矿/质押NFT/质押AST
-  /// 新增：FUJI NFT 质押
   /// Check whether the wallet at [wIndex] has an active mining deposit.
   ///
   /// First checks the local cache (SPUtil), then falls back to on-chain query.
@@ -137,14 +129,14 @@ class MiningProvider extends ChangeNotifier {
     try {
       if (wIndex == -1) wIndex = walletIndex;
 
-      WalletActionProvider wap = globalWapAdapter;
-      Map<String, dynamic>? cInfo = wap.walletInfoLsit[wIndex].coinInfo?[CoinType.N.name];
+      final WalletActionProvider wap = globalWapAdapter;
+      final cInfo = wap.walletInfoLsit[wIndex].coinInfo?[CoinType.N.name];
       if (cInfo == null) {
         walletIndex = wap.walletInfoLsit.indexWhere((e) => e.mainWallet == true);
         address = await wap.getMainWalletAddressAsync(CoinType.N.name);
       } else {
         walletIndex = wIndex;
-        WalletInfo info = wap.walletInfoLsit[walletIndex];
+        final WalletInfo info = wap.walletInfoLsit[walletIndex];
         Map<String, dynamic> pathMap = cInfo['baseInfo']['path'];
         var rm = await Trustdart().generateAddress(
           CoinType.N.name,
@@ -160,30 +152,20 @@ class MiningProvider extends ChangeNotifier {
 
       setLoadingDeposits(true);
       bool finalResult = false;
-      bool needsOnChainCheck = false;
 
-      // Check local cache first
-      Map<String, dynamic>? ms = await SPUtil().getMiningStautus();
-      if (ms != null) {
-        String? mType = ms[address]?['miningType'];
-        if (mType == null) {
-          needsOnChainCheck = true;
-        } else {
-          final key = AppConfig.isMainChainMining ? mType.toLowerCase() : '${mType.toLowerCase()}test';
-          int? value = ms[address]?['miningValue']?[key];
-          if (value != null && value != 0) {
-            finalResult = true;
-            if (mType == MiningType.N.name) _miningType = MiningType.N;
-          } else {
-            needsOnChainCheck = true;
-          }
+      // Check local cache first, fall back to on-chain query
+      final ms = await SPUtil().getMiningStautus();
+      final mType = ms?[address]?['miningType'] as String?;
+      if (mType != null) {
+        final key = AppConfig.isMainChainMining ? mType.toLowerCase() : '${mType.toLowerCase()}test';
+        final value = ms?[address]?['miningValue']?[key] as int?;
+        if (value != null && value != 0) {
+          finalResult = true;
+          if (mType == MiningType.N.name) _miningType = MiningType.N;
         }
-      } else {
-        needsOnChainCheck = true;
       }
 
-      // Fall back to on-chain deposit check
-      if (needsOnChainCheck) {
+      if (!finalResult) {
         finalResult = await checkAddressIsDepositAst(address ?? "");
         if (finalResult) {
           _miningType = MiningType.N;

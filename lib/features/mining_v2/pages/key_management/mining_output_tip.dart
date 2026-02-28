@@ -30,7 +30,6 @@ class MiningOutputTip extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 顶部图标
               Center(
                 child: Container(
                   width: ScreenUtil().setWidth(120),
@@ -56,7 +55,6 @@ class MiningOutputTip extends StatelessWidget {
                 ),
               ),
               SizedBox(height: ScreenUtil().setWidth(40)),
-              // 标题
               Text(
                 S.of(context).g_mining_key_90,
                 style: TextStyle(
@@ -67,7 +65,6 @@ class MiningOutputTip extends StatelessWidget {
                 ),
               ),
               SizedBox(height: ScreenUtil().setWidth(36)),
-              // 提示内容卡片
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
@@ -119,7 +116,6 @@ class MiningOutputTip extends StatelessWidget {
             ],
           ),
         ),
-        // 底部固定按钮
         bottomNavigationBar: SafeArea(
           child: Container(
             margin: EdgeInsets.all(ScreenUtil().setWidth(30)),

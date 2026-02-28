@@ -45,7 +45,6 @@ mixin _LogicMixin on State<TodayMiningPage> {
         return;
       }
 
-      //更新时间
       getCurrentMiningTimeByBlockApi();
     });
   }

@@ -70,8 +70,6 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
     );
   }
 
-  // ── Status header card ──────────────────────────────────────────────────
-
   Widget _buildStatusHeader(
     BuildContext context,
     MiningV2Provider mpValue,
@@ -90,7 +88,6 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Status badge row
           Row(
             children: [
               Container(
@@ -137,7 +134,6 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
             ],
           ),
           SizedBox(height: ScreenUtil().setWidth(16)),
-          // Pubkey row
           Row(
             children: [
               Text(
@@ -182,8 +178,6 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
       ),
     );
   }
-
-  // ── Empty state ────────────────────────────────────────────────────────
 
   Widget _buildEmpty(BuildContext context) {
     final subColor = AppThemeUtils.getColorByKey(

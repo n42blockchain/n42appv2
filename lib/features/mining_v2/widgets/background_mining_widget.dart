@@ -112,11 +112,11 @@ class BackgroundMiningWidget extends StatelessWidget {
 
   Widget _buildLaunchButton(BuildContext context, bool isEnabled, bool isDark) {
     final disabledBgColor = isDark
-        ? const Color(0xFF3A4A5C)  // 暗色主题：深蓝灰色
-        : const Color(0xFFE0E0E0); // 亮色主题：浅灰色
+        ? const Color(0xFF3A4A5C)
+        : const Color(0xFFE0E0E0);
     final disabledTextColor = isDark
-        ? const Color(0xFF8A9AAC)  // 暗色主题：中灰色，清晰可见
-        : const Color(0xFF9E9E9E); // 亮色主题：深灰色
+        ? const Color(0xFF8A9AAC)
+        : const Color(0xFF9E9E9E);
 
     return Material(
       color: Colors.transparent,

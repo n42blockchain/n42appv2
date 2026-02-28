@@ -20,16 +20,11 @@ class _MiningPlansState extends State<MiningPlans> {
   int currentPage = 0;
   final List<int> depositsList = [50, 100, 500];
 
-  String _titleForPage(int page) {
-    switch (page) {
-      case 0:
-        return S.of(context).g_mining_key_62;
-      case 1:
-        return S.of(context).g_mining_key_61;
-      default:
-        return S.of(context).g_mining_key_63;
-    }
-  }
+  String _titleForPage(int page) => switch (page) {
+    0 => S.of(context).g_mining_key_62,
+    1 => S.of(context).g_mining_key_61,
+    _ => S.of(context).g_mining_key_63,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -108,9 +103,7 @@ class _MiningPlansState extends State<MiningPlans> {
                                     context, AppThemeKeys.ff888888.name),
                               ),
                             ),
-                            SizedBox(
-                              width: ScreenUtil().setWidth(40),
-                            ),
+                            SizedBox(width: ScreenUtil().setWidth(40)),
                             GestureDetector(
                               onTap: () {
                                 if (currentPage < lastPage) {
